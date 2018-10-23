@@ -60,7 +60,7 @@
         },
         data () {
             return {
-                msg: 'aaaaaaaaa'
+                msg: 'bbbbbbb'
             }
         }
     }

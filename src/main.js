@@ -9,8 +9,14 @@ import 'element-ui/lib/theme-chalk/index.css'
 import $ from 'jquery'
 import axios from 'axios'
 import vueGridLayout from 'vue-grid-layout';
+// import './jquery/dist/jquery.min.js'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
+// import './assets/bootstrap/bootstrap.min.css'
+// import './assets/bootstrap/bootstrap.min.js'
+
+
+
 
 Vue.config.productionTip = false
 Vue.prototype.$echarts = echarts 
@@ -18,7 +24,6 @@ Vue.prototype.$axios= axios
 Vue.use(ElementUI)
 Vue.use(vueGridLayout);
 
-/* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,

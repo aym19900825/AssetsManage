@@ -23,12 +23,14 @@
 <script>
 </script>
 
-<style>
-	body{
+<style scoped>
+	@import '../../assets/hxqheam-fonts.css';
+	/*body{
     width:100%;
     height:100%;
     background:#F5F8FB;
-}
+}*/
+
 .heder{
     width:100%;
     height:60px;
@@ -39,10 +41,10 @@
 }
 .hederbg {
     height:60px;
-    background: url(../img/head_rt.png) top right no-repeat;}
+    background: url(../../assets/img/head_rt.png) top right no-repeat;}
 
 .logo{
-    background-image: url(../img/logo-white.png);
+    background-image: url(../../assets/img/logo-white.png);
     background-size: 100%;
     width: 113px;
     min-height: 34px;
@@ -136,7 +138,7 @@
 .userimg{
     width:40px;
     height:36px;
-    background-image: url(../img/portrait-female.png);
+    background-image: url(../../assets/img/portrait-female.png);
     background-size: 100%;
     background-repeat: no-repeat;
 }
@@ -148,5 +150,4 @@
     font-size: 14px;
     left: 50px;
     top: 8px;
-}
-</style>
+}</style>

@@ -17,16 +17,16 @@
     text-align: right;
     padding-right: 20px;
 }
-.nav>li {
+.navs>li {
     margin: 0px 10px;
 }
-.nav > li > a {
+.navs > li > a {
     color: #fff;
     padding: 14px 15px 14px 15px;
 }
-.nav > li > a i[class*=icon-] {
+.navs > li > a i[class*=icon-] {
     font-size: 16px;
 }
-.nav > li > a i {
+.navs > li > a i {
     margin-right: 6px;
 }

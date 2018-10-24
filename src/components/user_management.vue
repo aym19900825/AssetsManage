@@ -1,12 +1,66 @@
 <template>
-	<div>qqqqqqqq</div>
-
+	<div>
+		<vheader></vheader>
+		<navs_header></navs_header>
+		<navs></navs>
+		<div class="wrapper wrapper-content">
+			<div class="ibox-content">
+			<navs_button></navs_button>
+				<div class="row">
+					
+					<div class="col-sm-3">
+						<ztree></ztree>
+					</div>
+					<div class="col-sm-9">
+						<tablediv></tablediv>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+	
 </template>
 
 <script>
 import vheader from './common/vheader.vue'
-import nav from './common/nav/nav.vue'
+import navs from './common/navs/navs.vue'
+import navs_header from './common/navs_header.vue'
+import navs_button from './common/navs_button.vue'
+import ztree from './common/ztree.vue'
+import tablediv from './common/tablediv.vue'
+export default {
+    name: 'user_management',
+    components: {
+      vheader,
+      navs_header,
+      navs,
+      navs_button,
+      ztree,
+      tablediv
+    },
+    created: function () {
+     
+    }
+  }
 </script>
 
-<style>
+<style scoped>
+	@import '../assets/reset.css';
+.wrapper {
+   	margin-left:220px;
+   	background-color: #F5F8FB;
+    height: 100%;
+}
+.ibox-content {
+    background-color: #F5F8FB;
+    color: inherit;
+    padding: 0px 20px 20px 10px;
+    border-color: #e7eaec;
+    -webkit-border-image: none;
+    -o-border-image: none;
+    border-image: none;
+    border-style: solid solid none;
+    border-width: 1px 0px;
+    }
 </style>

@@ -45,6 +45,7 @@
 </template>
 
 <script>
+    import qs from "qs"
     export default {
         name: 'login',
         methods: {
@@ -60,14 +61,14 @@
               // }).catch((wrong) => {
                   
               // })
-                this.$axios.post(url,{
+                this.$axios.post(url,qs.stringify({
                     grant_type:'password',
                     scope:'app',
                     client_id:'webApp',
                     client_secret:'webApp',
                     username: this.userinfo.username,
                     password: this.userinfo.password
-                }).then((res) => {
+                })).then((res) => {
                     console.log(1);
                 }).catch((wrong) => {
                     this.$message({

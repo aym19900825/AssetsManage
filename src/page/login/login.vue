@@ -72,8 +72,6 @@
              blur1(){
                 if (this.userinfo.username == '') {
                     this.ername = "必填信息";
-                }else if(this.userinfo.username == 'admin'){
-                    this.ername = "正确";
                 }else{
                     this.ername = "用户名错误";
                 }
@@ -81,8 +79,6 @@
              blur2(){
                 if (this.userinfo.password == '') {
                     this.erpass = "必填信息";
-                }else if(this.userinfo.password == 'admin'){
-                    this.erpass = "正确";
                 }else{
                     this.erpass = "密码错误";
                 }

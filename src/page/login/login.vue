@@ -12,14 +12,14 @@
                             <label for="username">用户名</label>
                             <input type="text" id="username" v-model="userinfo.username" @blur="blur1()">
                             <div class="bottom-line"></div>
-                            <span class="wrong">{{ername}}</span>
+                            <span :class="{correct:a,wrong:b}">{{ername}}</span>
                         </div>
 
                         <div class="input-group">
                             <label for="password">密码</label>
                             <input type="password" id="password" v-model="userinfo.password" @blur="blur2()">
                             <div class="bottom-line"></div>
-                            <span class="correct">{{erpass}}</span>
+                            <span :class="{correct:c,wrong:d}">{{erpass}}</span>
                         </div>
                         
                         <div class="input-group check-box">
@@ -70,7 +70,7 @@
                     password: this.userinfo.password
                 })).then((res) => {
                     console.log(1);
-                }).catch((wrong) => {
+                }).catch((err) => {
                     this.$message({
                         type: 'error',
                         message: '网络错误，请重试',
@@ -81,19 +81,31 @@
              blur1(){
                 if (this.userinfo.username == '') {
                     this.ername = "必填信息";
+                    this.a = false;
+                    this.b = true;
                 }else if(this.userinfo.username == 'admin'){
                     this.ername = "正确";
+                    this.a = true;
+                    this.b = false;
                 }else{
                     this.ername = "用户名错误";
+                    this.a = false;
+                    this.b = true;
                 }
              }, 
              blur2(){
                 if (this.userinfo.password == '') {
                     this.erpass = "必填信息";
+                    this.c = false;
+                    this.d = true;
                 }else if(this.userinfo.password == 'admin'){
                     this.erpass = "正确";
+                    this.c = true;
+                    this.d = false;
                 }else{
                     this.erpass = "密码错误";
+                    this.c = false;
+                    this.d = true;
                 }
              }      
         },
@@ -102,6 +114,8 @@
                 msg: 'EAM2.0',
                 ername:"",
                 erpass:"",
+                a:"",
+                b:"",
                 userinfo:{},
             }
         }

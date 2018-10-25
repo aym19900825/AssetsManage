@@ -1,7 +1,7 @@
-.contmain {width: 1100px; margin: 0px auto;}
+.contmain {width: 1080px; margin: 0px auto;}
 .centerDiv { width:100%; 
     height:350px; 
-    top:20%; 
+    top:80px; 
     position:absolute;}
     
 .hiddenDiv { height:100%; 
@@ -18,7 +18,7 @@
 
 #login{height: 100%;
     background: url(../../assets/img/loginbg.png) #F5F8FB right bottom no-repeat;
-    background-size: cover;
+    /*background-size: cover;*/
 }
 
 /*左侧图片*/
@@ -132,7 +132,7 @@
     line-height: 40px;
     z-index: 100;
     position: fixed;
-    bottom: 30px;
+    bottom: 20px;
     color: #FBFDFF;
 }
 

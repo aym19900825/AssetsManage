@@ -13,13 +13,13 @@
                         <div class="input-group">
                             <input type="text" id="username" placeholder="用户名" v-model="userinfo.username" @blur="blur1()">
                             <div class="bottom-line"></div>
-                            <span :class="{correct:a,wrong:b}">{{ername}}</span>
+                            <span v-show="null1" class="wrong">{{ername}}</span>
                         </div>
 
                         <div class="input-group">
                             <input type="password" id="password" placeholder="密码" v-model="userinfo.password" @blur="blur2()">
                             <div class="bottom-line"></div>
-                            <span :class="{correct:c,wrong:d}">{{erpass}}</span>
+                            <span v-show="null2" class="wrong">{{erpass}}</span>
                         </div>
                         
                         <div class="input-group">
@@ -76,20 +76,36 @@
              blur1(){
                 if (this.userinfo.username == '') {
                     this.ername = "必填信息";
+                    this.null1 = true;
                 }else{
-                    this.ername = "用户名错误";
-                    this.a = false;
-                    this.b = true;
+                    this.null1 = false;
                 }
+                // else if(this.userinfo.username == 'admin'){
+                //     this.ername = "正确";
+                //     this.a = true;
+                //     this.b = false;
+                // }else{
+                //     this.ername = "用户名错误";
+                //     this.a = false;
+                //     this.b = true;
+                // }
              }, 
              blur2(){
                 if (this.userinfo.password == '') {
                     this.erpass = "必填信息";
+                    this.null2 = true;
                 }else{
-                    this.erpass = "密码错误";
-                    this.c = false;
-                    this.d = true;
+                    this.null2 = false;
                 }
+                // else if(this.userinfo.password == 'admin'){
+                //     this.erpass = "正确";
+                //     this.c = true;
+                //     this.d = false;
+                // }else{
+                //     this.erpass = "密码错误";
+                //     this.c = false;
+                //     this.d = true;
+                // }
              }      
         },
         data () {
@@ -97,10 +113,8 @@
                 msg: 'EAM2.0',
                 ername:"",
                 erpass:"",
-                a:"",
-                b:"",
-                c:"",
-                d:"",
+                null1:false,
+                null2:false,
                 userinfo:{},
             }
         }

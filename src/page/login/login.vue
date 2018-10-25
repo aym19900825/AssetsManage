@@ -7,7 +7,7 @@
                 <div class="logo"></div>
                 <div class="login_box">
                     <font>用户登录</font>
-                    <form class="login_form" ref="loginForm" :model="userinfo" :role="rules" method="post">
+                    <form class="login_form" ref="loginForm" :model="userinfo" method="post">
                         <div class="input-group">
                             <label for="username">用户名</label>
                             <input type="text" id="username" v-model="userinfo.username" @blur="blur1()">
@@ -50,33 +50,25 @@
         name: 'login',
         methods: {
             login() {
-              // var submitData = {"grant_type": "password","scope":  "app","client_id": "webApp","client_secret": "webApp","username": "admin","password": "admin"};
-              //   // var url = '/api/api-auth/oauth/token';
-              //   var url = '/api/api-auth/oauth/token?grant_type=password&scope=app&client_id=webApp&client_secret=webApp&username=admin&password=admin';
-              //    this.$axios({
-              //       method:"post",
-              //       url: url,
-              //     }).then((res)=>{
-                  
-              // }).catch((wrong) => {
-                  
-              // })
-                this.$axios.post(url,qs.stringify({
-                    grant_type:'password',
-                    scope:'app',
-                    client_id:'webApp',
-                    client_secret:'webApp',
-                    username: this.userinfo.username,
-                    password: this.userinfo.password
-                })).then((res) => {
-                    console.log(1);
-                }).catch((err) => {
-                    this.$message({
-                        type: 'error',
-                        message: '网络错误，请重试',
-                        showClose: true
-                    })
-                })
+                var url = '/api/api-auth/oauth/token?grant_type=password&scope=app&client_id=webApp&client_secret=webApp&username=' 
+                        + this.userinfo.username   
+                        + '&password=' 
+                        + this.userinfo.password;
+
+                 this.$axios({
+                    method:"post",
+                    url: url,
+                  }).then((res)=>{
+                        if(res.data.access_token){
+                            sessionStorage.setItem('access_token',res.data.access_token);
+                            sessionStorage.setItem('expires_in',res.data.expires_in);
+                            sessionStorage.setItem('refresh_token',res.data.refresh_token);
+                            this.$router.push('/user_management')
+                        }
+
+                  }).catch((wrong) => {
+                      
+                  })
              }, 
              blur1(){
                 if (this.userinfo.username == '') {

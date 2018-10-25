@@ -110,7 +110,7 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 	width: 20px;
 	height: 20px;
 	line-height: 20px;
-	content: "\e904";
+	content: "\ea3f";
 	font-family: "hxqheam";
     display: inline-block;
     position: absolute;
@@ -122,5 +122,5 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
     color: #00D983;
   }
 .correct:after {
-	content: "\e91e";
+	content: "\e9de";
 }

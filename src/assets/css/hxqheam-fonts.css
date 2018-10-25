@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'hxqheam';
-  src:  url('../fonts/hxqheam.eot?zastwm');
-  src:  url('../fonts/hxqheam.eot?zastwm#iefix') format('embedded-opentype'),
-    url('../fonts/hxqheam.ttf?zastwm') format('truetype'),
-    url('../fonts/hxqheam.woff?zastwm') format('woff'),
-    url('../fonts/hxqheam.svg?zastwm#hxqheam') format('svg');
+  src:  url('../fonts/hxqheam.eot?b59nib');
+  src:  url('../fonts/hxqheam.eot?b59nib#iefix') format('embedded-opentype'),
+    url('../fonts/hxqheam.ttf?b59nib') format('truetype'),
+    url('../fonts/hxqheam.woff?b59nib') format('woff'),
+    url('../fonts/hxqheam.svg?b59nib#hxqheam') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -24,6 +24,15 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-wrong:before {
+  content: "\ea3f";
+}
+.icon-correct1:before {
+  content: "\e9de";
+}
+.icon-date-limit:before {
+  content: "\ea6f";
+}
 .icon-arrow2-down:before {
   content: "\e90a";
 }

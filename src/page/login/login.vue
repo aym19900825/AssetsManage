@@ -71,19 +71,15 @@
              }, 
              blur1(){
                 if (this.userinfo.username == '') {
-                    // alert("1");
                     this.ername = "必填信息";
                 }else if(this.userinfo.username == 'admin'){
-                    this.erclass = "c";
                     this.ername = "正确";
                 }else{
                     this.ername = "用户名错误";
                 }
-
              }, 
              blur2(){
                 if (this.userinfo.password == '') {
-                    // alert("2");
                     this.erpass = "必填信息";
                 }else if(this.userinfo.password == 'admin'){
                     this.erpass = "正确";

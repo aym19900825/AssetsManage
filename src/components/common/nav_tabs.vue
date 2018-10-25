@@ -33,9 +33,7 @@
 <script>
 </script>
 
-<style scoped>
-	@import '../../assets/font-awesome.min.css';
-	
+<style scoped>	
 .content-tabs {
     position: relative;
     height: 42px;

@@ -77,7 +77,6 @@
 </script>
 
 <style scoped>
-@import '../../assets/hxqheam-fonts.css';
 .btn-green {
     background-color: #37CCB1;
     border-color: #37CCB1;
@@ -115,6 +114,5 @@
     margin-bottom: 10px;
     line-height: 34px;
 }
-
 
 </style>

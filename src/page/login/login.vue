@@ -95,8 +95,7 @@
         data () {
             return {
 
-                msg: 'EAM2.0'
-
+                msg: 'EAM2.0',
                 ername:"",
                 erpass:"",
                 userinfo:{},

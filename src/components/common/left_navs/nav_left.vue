@@ -131,8 +131,6 @@
 </script>
 
 <style scoped>
-		@import '../../../assets/hxqheam-fonts.css';
-		@import '../../../assets/reset.css';
 	.navbar-static-side{
 	position:fixed;
     width: 220px;

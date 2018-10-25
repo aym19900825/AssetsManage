@@ -8,7 +8,7 @@
                 <div class="login_box">
                     <font>用户登录</font>
 
-                    <form class="login_form" ref="loginForm" :model="userinfo" :role="rules" method="post" autocomplete="off">
+                    <form class="login_form" ref="loginForm" :model="userinfo" method="post" autocomplete="off">
                         
                         <div class="input-group">
                             <input type="text" id="username" placeholder="用户名" v-model="userinfo.username" @blur="blur1()">
@@ -29,7 +29,7 @@
                                     <label for="rembpas">记住密码</label>
                                 </span>
                             </div>
-
+                            
                             <div class="pull-right forget"><a href="#">忘记密码？</a></div>
                         </div>
                         

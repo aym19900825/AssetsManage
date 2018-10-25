@@ -10,6 +10,7 @@ import './assets/css/reset.css'
 import './assets/css/hxqheam-fonts.css'
 import './assets/css/forms.css'
 import './assets/css/tablelist.css'
+import './assets/css/grid.css'
 import $ from 'jquery'
 import './axios'
 import vueGridLayout from 'vue-grid-layout';

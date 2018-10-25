@@ -1,16 +1,19 @@
 body,ol,ul,h1,h2,h3,h4,h5,h6,p,th,td,dl,dd,form,fieldset,legend,input,textarea,select{
-margin:0;
-padding:0;
+	margin:0;
+	padding:0;
+	font:14px,"Microsoft YaHei","PingFang SC Regular","MicrosoftJhengHei",STHeiti,MingLiu,Arial;
 }
-html{
+body,html{
 	height:100%;
+	width:100%;
 }
+
 body{
-font:12px,"Arial Narrow",HELVETICA;
-background-color: #F5F8FB!important;
--webkit-text-size-adjust:100%;
-font-family: "Microsoft YaHei",微软雅黑,"MicrosoftJhengHei",华文细黑,STHeiti,MingLiu,Arial
+	background-color: #F5F8FB;
+	-webkit-text-size-adjust:100%;
 }
+#app {height: 100%;}
+
 a{
 color:#2d374b;
 text-decoration:none;
@@ -59,3 +62,65 @@ textarea {
     font: 14px/1.8 "PingFangSC-Regular", "HelveticaNeue-Light", "Helvetica Neue Light", "Microsoft YaHei","sans-serif";
 }
 
+
+/*------------------------文本框默认内容提示字颜色 By Heliping------------------------*/
+input::-webkit-input-placeholder {
+	/* placeholder颜色  */
+	color: #C6CED6;
+	/* placeholder字体大小  */
+	font-size: 14px;
+	/* placeholder位置  */
+	text-align: left;
+}
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color:#C6CED6;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   color:#C6CED6;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color:#C6CED6;
+}
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color:#C6CED6;
+}
+
+input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
+    background-color: #FFFFFF !important;
+    background-image: none !important;
+    color: #000000 !important;
+}
+
+
+
+/*必填信息为错时 By Heliping*/
+.wrong,.correct{
+    color: #FF6663;
+    min-height: 30px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    line-height: 20px;
+    display: inline-block;
+    position: absolute;
+    right: 5px;
+    top: 15px;
+    padding-right: 25px;
+  }
+.wrong:after,.correct:after {
+	width: 20px;
+	height: 20px;
+	line-height: 20px;
+	content: "\e904";
+	font-family: "hxqheam";
+    display: inline-block;
+    position: absolute;
+    right: 0px;
+}
+
+/*必填信息为对时 By Heliping*/
+.correct{
+    color: #00D983;
+  }
+.correct:after {
+	content: "\e91e";
+}

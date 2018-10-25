@@ -49,18 +49,18 @@
         name: 'login',
         methods: {
             login() {
-              var submitData = {"grant_type": "password","scope":  "app","client_id": "webApp","client_secret": "webApp","username": "admin","password": "admin"};
-                // var url = '/api/api-auth/oauth/token';
-                var url = '/api/api-auth/oauth/token?grant_type=password&scope=app&client_id=webApp&client_secret=webApp&username=admin&password=admin';
-                 this.$axios({
-                    method:"post",
-                    url: url,
-                  }).then((res)=>{
+              // var submitData = {"grant_type": "password","scope":  "app","client_id": "webApp","client_secret": "webApp","username": "admin","password": "admin"};
+              //   // var url = '/api/api-auth/oauth/token';
+              //   var url = '/api/api-auth/oauth/token?grant_type=password&scope=app&client_id=webApp&client_secret=webApp&username=admin&password=admin';
+              //    this.$axios({
+              //       method:"post",
+              //       url: url,
+              //     }).then((res)=>{
                   
-              }).catch((wrong) => {
+              // }).catch((wrong) => {
                   
-              })
-               /* this.$axios.post(url,{
+              // })
+                this.$axios.post(url,{
                     grant_type:'password',
                     scope:'app',
                     client_id:'webApp',
@@ -75,14 +75,12 @@
                         message: '网络错误，请重试',
                         showClose: true
                     })
-                })*/
+                })
              }, 
              blur1(){
                 if (this.userinfo.username == '') {
-                    // alert("1");
                     this.ername = "必填信息";
                 }else if(this.userinfo.username == 'admin'){
-                    this.erclass = "c";
                     this.ername = "正确";
                 }else{
                     this.ername = "用户名错误";
@@ -90,7 +88,6 @@
              }, 
              blur2(){
                 if (this.userinfo.password == '') {
-                    // alert("2");
                     this.erpass = "必填信息";
                 }else if(this.userinfo.password == 'admin'){
                     this.erpass = "正确";
@@ -105,22 +102,6 @@
                 ername:"",
                 erpass:"",
                 userinfo:{},
-                // rules: {
-                //     username:[
-                //         {
-                //             required: true,
-                //             message: '必填信息',
-                //             trigger: 'blur',
-                //         }
-                //     ],
-                //     password:[
-                //         {
-                //             required: true,
-                //             message: '必填信息',
-                //             trigger: 'blur',
-                //         }
-                //     ]
-                // }
             }
         }
     }

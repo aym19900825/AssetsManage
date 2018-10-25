@@ -1,19 +1,21 @@
 <template>
 	<div class="row content-tabs">
-		<button class="roll-nav roll-left J_tabLeft"><i class="icon-skip-back"></i>
-            </button>
+		<button class="roll-nav roll-left J_tabLeft">
+			<i class="icon-skip-back"></i>
+        </button>
 		<div class="page-tabs J_menuTabs">
 			<div class="page-tabs-content">
 				<a href="javascript:;" class="active J_menuTab" data-id="/blackboard">首页</a>
 			</div>
 		</div>
-		<button class="roll-nav roll-right J_tabRight"><i class="icon-skip-forward"></i>
-            </button>
+		<button class="roll-nav roll-right J_tabRight">
+			<i class="icon-skip-forward"></i>
+        </button>
 		<div class="btn-group roll-nav roll-right">
 			<button class="dropdown J_tabClose" data-toggle="dropdown">关闭操作<span class="caret"></span>
 
                 </button>
-			<!--<ul role="menu" class="dropdown-menu dropdown-menu-right">
+			<ul role="menu" class="dropdown-menu dropdown-menu-right">
 				<li class="J_tabShowActive">
 					<a>定位当前选项卡</a>
 				</li>
@@ -24,7 +26,7 @@
 				<li class="J_tabCloseOther">
 					<a>关闭其他选项卡</a>
 				</li>
-			</ul>-->
+			</ul>
 		</div>
 		<a href="./login.html" class="roll-nav roll-right J_tabExit"><i class="icon-back"></i>返回</a>
 	</div>

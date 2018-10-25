@@ -1,61 +1,133 @@
 body,ol,ul,h1,h2,h3,h4,h5,h6,p,th,td,dl,dd,form,fieldset,legend,input,textarea,select{
-margin:0;
-padding:0;
+	margin:0;
+	padding:0;
+	font:14px,"Microsoft YaHei","PingFang SC Regular","MicrosoftJhengHei",STHeiti,MingLiu,Arial;
 }
-html{
+body,html{
 	height:100%;
+	width:100%;
 }
+
 body{
-font:12px,"Arial Narrow",HELVETICA;
-background-color: #F5F8FB!important;
--webkit-text-size-adjust:100%;
-font-family: "Microsoft YaHei",微软雅黑,"MicrosoftJhengHei",华文细黑,STHeiti,MingLiu,Arial
+	background-color: #F5F8FB;
+	-webkit-text-size-adjust:100%;
 }
+#app {height: 100%;}
+
 a{
-color:#2d374b;
-text-decoration:none;
+	color:#6585DF;
+	text-decoration:none;
 }
 a:hover{
-color:#cd0200;
-text-decoration:underline;
+	color:#9153f1;
 }
+
 em{
-font-style:normal;
-color:red;
+	font-style:normal;
+	color:red;
 }
 li{
-list-style:none;
+	list-style:none;
 }
 img{
-border:0;
-vertical-align:middle;
+	border:0;
+	vertical-align:middle;
 }
 table{
-border-collapse:collapse;
-border-spacing:0;
+	border-collapse:collapse;
+	border-spacing:0;
 }
 p{
-word-wrap:break-word
+	word-wrap:break-word
 }
+
 .clearfix { 
-*zoom: 1; 
+	*zoom: 1; 
 } 
 .clearfix:before, .clearfix:after { 
-display: table; 
-line-height: 0; 
-content: ""; 
+	display: table; 
+	line-height: 0; 
+	content: ""; 
 } 
 .clearfix:after { 
-clear: both; 
+	clear: both; 
 } 
-a:hover{
-text-decoration: none;
-}
+
+
 [v-cloak] {
   display: none !important;
 }
-textarea {
-    outline: none;
-    font: 14px/1.8 "PingFangSC-Regular", "HelveticaNeue-Light", "Helvetica Neue Light", "Microsoft YaHei","sans-serif";
+
+hr {
+	margin-top: 20px;
+	margin-bottom: 20px;
+	border: 0;
+	border-top: 1px solid #eee
 }
 
+i, cite, em, var, address, dfn {
+    font-style: italic;
+}
+
+
+.text-left {
+	text-align: left
+}
+
+.text-right {
+	text-align: right
+}
+
+.text-center {
+	text-align: center
+}
+
+.pull-right {
+	float: right!important
+}
+
+.pull-left {
+	float: left!important
+}
+
+.hide {
+	display: none!important
+}
+
+.show {
+	display: block!important
+}
+
+
+
+/*必填信息为错时 By Heliping*/
+.wrong,.correct{
+    color: #FF6663;
+    min-height: 30px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    line-height: 20px;
+    display: inline-block;
+    position: absolute;
+    right: 5px;
+    top: 15px;
+    padding-right: 25px;
+  }
+.wrong:after,.correct:after {
+	width: 20px;
+	height: 20px;
+	line-height: 20px;
+	content: "\ea3f";
+	font-family: "hxqheam";
+    display: inline-block;
+    position: absolute;
+    right: 0px;
+}
+
+/*必填信息为对时 By Heliping*/
+.correct{
+    color: #00D983;
+  }
+.correct:after {
+	content: "\e9de";
+}

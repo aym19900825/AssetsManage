@@ -1,14 +1,14 @@
 <template>
 	<div>
-		<div class="mask"></div>
-		<div class="mask_div">
+		<div class="mask" v-if="show"></div>
+		<div class="mask_div" v-if="show">
 			<!---->
 			<div class="mask_title_div clearfix">
 				<div class="mask_title">添加用户</div>
 				<div class="mask_anniu">
 					<span class="mask_span"><i class="icon-minimize"></i></span>
 					<span class="mask_span mask_max"><i class="icon-maximization"></i></span>
-					<span class="mask_span"><i class="icon-close1"></i></span>
+					<span class="mask_span" @click='close'><i class="icon-close1"></i></span>
 				</div>
 			</div>
 			<div class="accordion" id="information">
@@ -210,14 +210,22 @@
 <script>
 	export default {
 		name: 'masks',
-		methods: {
-
-		},
 		data() {
 			return {
-
+				show:false,
 			}
+		},
+		methods: {
+	    //点击按钮显示弹窗
+         childMethods(){
+         	this.show = !this.show;
+         },
+         //点击关闭按钮
+         close(){
+         	this.show = false;
+         }
 		}
+		
 	}
 </script>
 

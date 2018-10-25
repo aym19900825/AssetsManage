@@ -3,7 +3,7 @@
 	<div class="fixed-table-toolbar clearfix">
 		<div class="bs-bars pull-left">
 			<div class="hidden-xs" id="roleTableToolbar" role="group">
-				<button type="button" class="btn btn-green" onclick="openAddMgr()" id="">
+				<button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 <i class="icon-add"></i>&nbsp;添加
                        </button>
 				<button type="button" class="btn btn-bule button-margin" onclick="MgrUser.openChangeUser()" id="">
@@ -74,6 +74,19 @@
 </template>
 
 <script>
+	export default {
+		name: 'masks',
+		methods: {
+         openAddMgr(){
+         	this.show = !this.show;
+         }
+		},
+		data() {
+			return {
+				show:false,
+			}
+		}
+	}
 </script>
 
 <style scoped>

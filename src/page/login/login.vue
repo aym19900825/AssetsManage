@@ -1,121 +1,121 @@
 <template>
-  <div id="login">
-  <div class="img-bg">
-    <div class="bottom-img"></div>
-    <div class="left-img"></div>   
-    <div class="middle-box loginscreen">
-        <div class="logo-img"></div>
-        
-        <div class="centerDiv">
-            <font>用户登录</font>
-            <form class="m-t" ref="loginForm" :model="userinfo" :role="rules" method="post">
-                <div class="form-group">
-                    <input type="text" id="username" class="form-control" placeholder="用户名" v-model="userinfo.username" @blur="blur1()">
-                    <span class="err">{{ername}}</span>
-                </div>
-                <div class="form-group">
-                    <input type="password" id="password" class="form-control" placeholder="密码" v-model="userinfo.password" @blur="blur2()">
-                    <span class="err">{{erpass}}</span>
-                </div>
-                
-                <div class="check-box clearfix">
-                    <span class="mind">
-                      <input type="checkbox" name="remember">&nbsp;
-                       <label>记住密码</label>
-                    </span>
-                       <span class="forget"><label>忘记密码？</label></span>
-                </div>    
-               
+<div id="login">
+    <div class="centerDiv">
+        <div class="contmain">
+            <div class="left-img"></div> 
+            <div class="middle-box loginscreen">
+                <div class="logo"></div>
+                <div class="login_box">
+                    <font>用户登录</font>
 
-                <button type="button" class="btn-login block full-width m-b" @click="login">登 录</button>                
-            </form>
+                    <form class="login_form" ref="loginForm" :model="userinfo" :role="rules" method="post" autocomplete="off">
+                        
+                        <div class="input-group">
+                            <input type="text" id="username" placeholder="用户名" v-model="userinfo.username" @blur="blur1()">
+                            <div class="bottom-line"></div>
+                            <span v-show="null1" class="wrong">{{ername}}</span>
+                        </div>
+
+                        <div class="input-group">
+                            <input type="password" id="password" placeholder="密码" v-model="userinfo.password" @blur="blur2()">
+                            <div class="bottom-line"></div>
+                            <span v-show="null2" class="wrong">{{erpass}}</span>
+                        </div>
+                        
+                        <div class="input-group">
+                            <div class="pull-left remember checkbox-group">
+                                <span>
+                                    <input type="checkbox" name="rembpas" id="rembpas">
+                                    <label for="rembpas">记住密码</label>
+                                </span>
+                            </div>
+
+                            <div class="pull-right forget"><a href="#">忘记密码？</a></div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <button type="button" class="btn-login" @click="login">登 录</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-      <div class="hiddenDiv"></div>
     </div>
-</div>
+    <div class="hiddenDiv"></div>
+
+    <div class="footer-content">Copyright &#169 北京恒信启华信息技术股份有限公司 All Rights Reserved.</div>
 </div>
 </template>
 
 <script>
+    import qs from "qs"
     export default {
         name: 'login',
         methods: {
             login() {
-              var submitData = {"grant_type": "password","scope":  "app","client_id": "webApp","client_secret": "webApp","username": "admin","password": "admin"};
-                // var url = '/api/api-auth/oauth/token';
-                var url = '/api/api-auth/oauth/token?grant_type=password&scope=app&client_id=webApp&client_secret=webApp&username=admin&password=admin';
+                var url = '/api/api-auth/oauth/token?grant_type=password&scope=app&client_id=webApp&client_secret=webApp&username=' 
+                        + this.userinfo.username   
+                        + '&password=' 
+                        + this.userinfo.password;
+
                  this.$axios({
                     method:"post",
                     url: url,
                   }).then((res)=>{
-                  
+                        if(res.data.access_token){
+                            sessionStorage.setItem('access_token',res.data.access_token);
+                            sessionStorage.setItem('expires_in',res.data.expires_in);
+                            sessionStorage.setItem('refresh_token',res.data.refresh_token);
+                            this.$router.push('/user_management')
+                        }
 
-              }).catch((err) => {
-                  
-              })
-               /* this.$axios.post(url,{
-                    grant_type:'password',
-                    scope:'app',
-                    client_id:'webApp',
-                    client_secret:'webApp',
-                    username: this.userinfo.username,
-                    password: this.userinfo.password
-                }).then((res) => {
-                    console.log(1);
-                }).catch((err) => {
-                    this.$message({
-                        type: 'error',
-                        message: '网络错误，请重试',
-                        showClose: true
-                    })
-                })*/
+                  }).catch((wrong) => {
+                      
+                  })
              }, 
              blur1(){
                 if (this.userinfo.username == '') {
-                    // alert("1");
                     this.ername = "必填信息";
-                }else if(this.userinfo.username == 'admin'){
-                    this.ername = "正确";
+                    this.null1 = true;
                 }else{
-                    this.ername = "用户名错误";
+                    this.null1 = false;
                 }
-
+                // else if(this.userinfo.username == 'admin'){
+                //     this.ername = "正确";
+                //     this.a = true;
+                //     this.b = false;
+                // }else{
+                //     this.ername = "用户名错误";
+                //     this.a = false;
+                //     this.b = true;
+                // }
              }, 
              blur2(){
                 if (this.userinfo.password == '') {
-                    // alert("2");
                     this.erpass = "必填信息";
-                }else if(this.userinfo.password == 'admin'){
-                    this.erpass = "正确";
+                    this.null2 = true;
                 }else{
-                    this.erpass = "密码错误";
+                    this.null2 = false;
                 }
+                // else if(this.userinfo.password == 'admin'){
+                //     this.erpass = "正确";
+                //     this.c = true;
+                //     this.d = false;
+                // }else{
+                //     this.erpass = "密码错误";
+                //     this.c = false;
+                //     this.d = true;
+                // }
              }      
         },
         data () {
             return {
-
                 msg: 'EAM2.0',
                 ername:"",
                 erpass:"",
+                null1:false,
+                null2:false,
                 userinfo:{},
-                // rules: {
-                //     username:[
-                //         {
-                //             required: true,
-                //             message: '必填信息',
-                //             trigger: 'blur',
-                //         }
-                //     ],
-                //     password:[
-                //         {
-                //             required: true,
-                //             message: '必填信息',
-                //             trigger: 'blur',
-                //         }
-                //     ]
-                // }
-
             }
         }
     }
@@ -123,12 +123,4 @@
 
 <style scoped>
   @import './login.css';
-  .err{
-    color: red;
-    margin: -top;
-    display: inline-block;
-    position: absolute;
-    top: 10px;
-    right: 2px;
-  }
 </style>

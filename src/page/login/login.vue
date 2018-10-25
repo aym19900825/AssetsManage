@@ -12,14 +12,14 @@
                             <label for="username">用户名</label>
                             <input type="text" id="username" v-model="userinfo.username" @blur="blur1()">
                             <div class="bottom-line"></div>
-                            <span class="wrong">{{ername}}</span>
+                            <span :class="{correct:a,wrong:b}">{{ername}}</span>
                         </div>
 
                         <div class="input-group">
                             <label for="password">密码</label>
                             <input type="password" id="password" v-model="userinfo.password" @blur="blur2()">
                             <div class="bottom-line"></div>
-                            <span class="correct">{{erpass}}</span>
+                            <span :class="{correct:c,wrong:d}">{{erpass}}</span>
                         </div>
                         
                         <div class="input-group check-box">
@@ -45,6 +45,7 @@
 </template>
 
 <script>
+    import qs from "qs"
     export default {
         name: 'login',
         methods: {
@@ -72,15 +73,37 @@
              blur1(){
                 if (this.userinfo.username == '') {
                     this.ername = "必填信息";
+<<<<<<< HEAD
+=======
+                    this.a = false;
+                    this.b = true;
+                }else if(this.userinfo.username == 'admin'){
+                    this.ername = "正确";
+                    this.a = true;
+                    this.b = false;
+>>>>>>> 3de35fbd3d9325006a5165d335948308fd93eec9
                 }else{
                     this.ername = "用户名错误";
+                    this.a = false;
+                    this.b = true;
                 }
              }, 
              blur2(){
                 if (this.userinfo.password == '') {
                     this.erpass = "必填信息";
+<<<<<<< HEAD
+=======
+                    this.c = false;
+                    this.d = true;
+                }else if(this.userinfo.password == 'admin'){
+                    this.erpass = "正确";
+                    this.c = true;
+                    this.d = false;
+>>>>>>> 3de35fbd3d9325006a5165d335948308fd93eec9
                 }else{
                     this.erpass = "密码错误";
+                    this.c = false;
+                    this.d = true;
                 }
              }      
         },
@@ -89,6 +112,10 @@
                 msg: 'EAM2.0',
                 ername:"",
                 erpass:"",
+                a:"",
+                b:"",
+                c:"",
+                d:"",
                 userinfo:{},
             }
         }

@@ -7,27 +7,28 @@
                 <div class="logo"></div>
                 <div class="login_box">
                     <font>用户登录</font>
-                    <form class="login_form" ref="loginForm" :model="userinfo" :role="rules" method="post">
+                    <form class="login_form" ref="loginForm" :model="userinfo" :role="rules" method="post" autocomplete="off">
                         <div class="input-group">
-                            <label for="username">用户名</label>
-                            <input type="text" id="username" v-model="userinfo.username" @blur="blur1()">
+                            <input type="text" id="username" placeholder="用户名" v-model="userinfo.username" @blur="blur1()">
                             <div class="bottom-line"></div>
                             <span class="wrong">{{ername}}</span>
                         </div>
 
                         <div class="input-group">
-                            <label for="password">密码</label>
-                            <input type="password" id="password" v-model="userinfo.password" @blur="blur2()">
+                            <input type="password" id="password" placeholder="密码" v-model="userinfo.password" @blur="blur2()">
                             <div class="bottom-line"></div>
                             <span class="correct">{{erpass}}</span>
                         </div>
                         
-                        <div class="input-group check-box">
-                            <span class="mind">
-                              <input type="checkbox" name="rememberpassword" id="rembpas">
-                               <label for="rembpas">记住密码</label>
-                            </span>
-                               <span class="forget"><label>忘记密码？</label></span>
+                        <div class="input-group">
+                            <div class="pull-left remember checkbox-group">
+                                <span>
+                                    <input type="checkbox" name="rembpas" id="rembpas">
+                                    <label for="rembpas">记住密码</label>
+                                </span>
+                            </div>
+
+                            <div class="pull-right forget"><a href="#">忘记密码？</a></div>
                         </div>
                         
                         <div class="input-group">

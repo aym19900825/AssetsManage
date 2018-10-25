@@ -82,6 +82,7 @@
 /*Login Form*/
 .input-group {
     width:100%;
+    min-height: 30px;
     padding-top:10px;
     padding-bottom:10px;
     position: relative;
@@ -120,9 +121,17 @@
 }
 
 .login_form input[type="text"]:focus,
-.login_form input[type="password"]:focus { 
-    background-color:#dbfdfe;
+.login_form input[type="password"]:focus {
+    border: none;
+    outline:none;
+    border-bottom: 1px solid #D7DAE6;
 }
+.remember { width:120px; }
+
+.login_form .checkbox-group label{ line-height:20px;}
+.forget {color:#6585DF;}
+
+
 
 /*Login Copyright*/
 .footer-content{
@@ -141,8 +150,9 @@
 
 @media only screen and (max-width:1920px)
 {
-.contmain {width: 1160px;}
-.centerDiv {top:18%;}
+.contmain {width: 1100px;}
+.centerDiv {top:15%;}
+.middle-box { margin-right: 5%; }
 .footer-content {bottom: 30px;}
-
+#login {background-size: cover;}
 }

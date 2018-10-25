@@ -15,80 +15,87 @@ body{
 #app {height: 100%;}
 
 a{
-color:#2d374b;
-text-decoration:none;
+	color:#6585DF;
+	text-decoration:none;
 }
 a:hover{
-color:#cd0200;
-text-decoration:underline;
+	color:#9153f1;
 }
+
 em{
-font-style:normal;
-color:red;
+	font-style:normal;
+	color:red;
 }
 li{
-list-style:none;
+	list-style:none;
 }
 img{
-border:0;
-vertical-align:middle;
+	border:0;
+	vertical-align:middle;
 }
 table{
-border-collapse:collapse;
-border-spacing:0;
+	border-collapse:collapse;
+	border-spacing:0;
 }
 p{
-word-wrap:break-word
+	word-wrap:break-word
 }
+
 .clearfix { 
-*zoom: 1; 
+	*zoom: 1; 
 } 
 .clearfix:before, .clearfix:after { 
-display: table; 
-line-height: 0; 
-content: ""; 
+	display: table; 
+	line-height: 0; 
+	content: ""; 
 } 
 .clearfix:after { 
-clear: both; 
+	clear: both; 
 } 
-a:hover{
-text-decoration: none;
-}
+
+
 [v-cloak] {
   display: none !important;
 }
-textarea {
-    outline: none;
-    font: 14px/1.8 "PingFangSC-Regular", "HelveticaNeue-Light", "Helvetica Neue Light", "Microsoft YaHei","sans-serif";
+
+hr {
+	margin-top: 20px;
+	margin-bottom: 20px;
+	border: 0;
+	border-top: 1px solid #eee
+}
+
+i, cite, em, var, address, dfn {
+    font-style: italic;
 }
 
 
-/*------------------------文本框默认内容提示字颜色 By Heliping------------------------*/
-input::-webkit-input-placeholder {
-	/* placeholder颜色  */
-	color: #C6CED6;
-	/* placeholder字体大小  */
-	font-size: 14px;
-	/* placeholder位置  */
-	text-align: left;
-}
-::-webkit-input-placeholder { /* WebKit, Blink, Edge */
-    color:#C6CED6;
-}
-:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-   color:#C6CED6;
-}
-::-moz-placeholder { /* Mozilla Firefox 19+ */
-   color:#C6CED6;
-}
-:-ms-input-placeholder { /* Internet Explorer 10-11 */
-   color:#C6CED6;
+.text-left {
+	text-align: left
 }
 
-input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
-    background-color: #FFFFFF !important;
-    background-image: none !important;
-    color: #000000 !important;
+.text-right {
+	text-align: right
+}
+
+.text-center {
+	text-align: center
+}
+
+.pull-right {
+	float: right!important
+}
+
+.pull-left {
+	float: left!important
+}
+
+.hide {
+	display: none!important
+}
+
+.show {
+	display: block!important
 }
 
 

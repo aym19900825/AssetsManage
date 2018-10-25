@@ -8,6 +8,8 @@ import ElementUI from 'element-ui'
 //import 'element-ui/lib/theme-chalk/index.css'
 import './assets/css/reset.css'
 import './assets/css/hxqheam-fonts.css'
+import './assets/css/forms.css'
+import './assets/css/tablelist.css'
 import $ from 'jquery'
 import axios from 'axios'
 import vueGridLayout from 'vue-grid-layout';

@@ -1,5 +1,5 @@
 <template>
-	 <!-- <table class="table table-bordered table-striped text-center">
+   <!-- <table class="table table-bordered table-striped text-center">
                 <thead>
                     <tr>
                         <th>全选</th>
@@ -29,29 +29,35 @@
                 </tbody>
      </table> -->
 
-  <el-table
-    style="width: 100%"
-    :default-sort = "{prop: 'date', order: 'descending'}"
-    >
-    <el-table-column
-      prop="date"
-      label="日期"
-      sortable
-      width="180">
-    </el-table-column>
-    <el-table-column
-      prop="name"
-      label="姓名"
-      sortable
-      width="180">
-    </el-table-column>
-    <el-table-column
-      prop="address"
-      label="地址"
-      :formatter="formatter">
-    </el-table-column>
-  </el-table>
+  <el-table :data="userList" style="width: 96%;margin: 0 auto;" :default-sort = "{prop: 
 
+'userList', order: 'descending'}">
+                <el-table-column type="selection" width="55">
+                </el-table-column>
+                <el-table-column label="账号" width="80" prop="username">                  
+
+  
+                </el-table-column>
+                <el-table-column label="姓名" width="100" prop="nickname">                 
+
+  
+                </el-table-column>                
+                <el-table-column label="性别" width="200" prop="sex">
+                </el-table-column>
+                <el-table-column label="角色" width="100" prop="roleId">
+                </el-table-column>
+                <el-table-column label="部门" width="100" prop="deptId">
+                </el-table-column>
+                <el-table-column label="状态" width="100" prop="enabled">
+                </el-table-column>
+                <el-table-column label="创建时间" width="250" prop="createTime" :formatter="formatter">
+                </el-table-column>
+            </el-table>
+
+            <!-- <el-pagination background layout="prev, pager, next"
+  :total="10">
+</el-pagination>
+ -->
 </template>
 
 <script>
@@ -59,7 +65,9 @@ export default {
   name: 'tablediv',
   data () {
     return {
-      user: {'checkbox': '', 'account': '','name':'','sex':'','role':'','department':'','state':'', 'great_time': ''},
+      user: {'checkbox': '', 'account': 
+
+'','name':'','sex':'','role':'','department':'','state':'', 'great_time': ''},
       userList: []
     }
   },
@@ -83,6 +91,9 @@ export default {
       }).catch((wrong) => {
           
       })
+    },
+    formatter(row, column) {
+        return row.enabled;
     }
   },
   mounted(){

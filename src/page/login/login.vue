@@ -1,38 +1,46 @@
 <template>
-  <div id="login">
-  <div class="img-bg">
-    <div class="bottom-img"></div>
-    <div class="left-img"></div>   
-    <div class="middle-box loginscreen">
-        <div class="logo-img"></div>
-        
-        <div class="centerDiv">
-            <font>用户登录</font>
-            <form class="m-t" ref="loginForm" :model="userinfo" :role="rules" method="post">
-                <div class="form-group">
-                    <input type="text" id="username" class="form-control" placeholder="用户名" v-model="userinfo.username" @blur="blur1()">
-                    <span class="err">{{ername}}</span>
-                </div>
-                <div class="form-group">
-                    <input type="password" id="password" class="form-control" placeholder="密码" v-model="userinfo.password" @blur="blur2()">
-                    <span class="err">{{erpass}}</span>
-                </div>
-                
-                <div class="check-box clearfix">
-                    <span class="mind">
-                      <input type="checkbox" name="remember">&nbsp;
-                       <label>记住密码</label>
-                    </span>
-                       <span class="forget"><label>忘记密码？</label></span>
-                </div>    
-               
+<div id="login">
+    <div class="centerDiv">
+        <div class="contmain">
+            <div class="left-img"></div> 
+            <div class="middle-box loginscreen">
+                <div class="logo"></div>
+                <div class="login_box">
+                    <font>用户登录</font>
+                    <form class="login_form" ref="loginForm" :model="userinfo" :role="rules" method="post">
+                        <div class="input-group">
+                            <label for="username">用户名</label>
+                            <input type="text" id="username" v-model="userinfo.username" @blur="blur1()">
+                            <div class="bottom-line"></div>
+                            <span class="wrong">{{ername}}</span>
+                        </div>
 
-                <button type="button" class="btn-login block full-width m-b" @click="login">登 录</button>                
-            </form>
+                        <div class="input-group">
+                            <label for="password">密码</label>
+                            <input type="password" id="password" v-model="userinfo.password" @blur="blur2()">
+                            <div class="bottom-line"></div>
+                            <span class="correct">{{erpass}}</span>
+                        </div>
+                        
+                        <div class="input-group check-box">
+                            <span class="mind">
+                              <input type="checkbox" name="rememberpassword" id="rembpas">
+                               <label for="rembpas">记住密码</label>
+                            </span>
+                               <span class="forget"><label>忘记密码？</label></span>
+                        </div>
+                        
+                        <div class="input-group">
+                            <button type="button" class="btn-login" @click="login">登 录</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-      <div class="hiddenDiv"></div>
     </div>
-</div>
+    <div class="hiddenDiv"></div>
+
+    <div class="footer-content">Copyright &#169 北京恒信启华信息技术股份有限公司 All Rights Reserved.</div>
 </div>
 </template>
 
@@ -50,7 +58,7 @@
                   }).then((res)=>{
                   
 
-              }).catch((err) => {
+              }).catch((wrong) => {
                   
               })
                /* this.$axios.post(url,{
@@ -62,7 +70,7 @@
                     password: this.userinfo.password
                 }).then((res) => {
                     console.log(1);
-                }).catch((err) => {
+                }).catch((wrong) => {
                     this.$message({
                         type: 'error',
                         message: '网络错误，请重试',
@@ -75,6 +83,7 @@
                     // alert("1");
                     this.ername = "必填信息";
                 }else if(this.userinfo.username == 'admin'){
+                    this.erclass = "c";
                     this.ername = "正确";
                 }else{
                     this.ername = "用户名错误";
@@ -123,12 +132,4 @@
 
 <style scoped>
   @import './login.css';
-  .err{
-    color: red;
-    margin: -top;
-    display: inline-block;
-    position: absolute;
-    top: 10px;
-    right: 2px;
-  }
 </style>

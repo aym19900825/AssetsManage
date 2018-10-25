@@ -14,7 +14,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for ="(user,index) in users">
+                    <tr v-for ="(user,index) in userList">
                       <td>{{user.value}}</td>
                       <td>{{user.account}}</td>
                       <td>{{user.name}}</td>
@@ -44,12 +44,7 @@ export default {
   data () {
     return {
       user: {'checkbox': '', 'account': '','name':'','sex':'','role':'','department':'','state':'', 'great_time': ''},
-      users: [
-      {'value': '1', 'account': 'aaa','name':'a1','sex':'男','role':'管理员','department':'总公司','state':'启用', 'great_time': '2018-9-25'},
-        {'value': '1', 'account': 'aaa','name':'a1','sex':'男','role':'管理员','department':'总公司','state':'启用', 'great_time': '2018-9-25'},
-        {'value': '1', 'account': 'aaa','name':'a1','sex':'男','role':'管理员','department':'总公司','state':'启用', 'great_time': '2018-9-25'},
-       {'value': '1', 'account': 'aaa','name':'a1','sex':'男','role':'管理员','department':'总公司','state':'启用', 'great_time': '2018-9-25'}
-      ]
+      userList: []
     }
   },
   methods: {
@@ -58,7 +53,24 @@ export default {
     },
     remove: function (index) {
       this.users.splice(index, 1)
+    },
+    requestData: function (index) {
+      var data = {
+          params:{
+            page: 1,
+            limit: 2
+          } 
+      }
+      var url = '/api/api-user/users';
+      this.$axios.get(url,data).then((res)=>{
+        this.userList = res.data.data;
+      }).catch((wrong) => {
+          
+      })
     }
+  },
+  mounted(){
+    this.requestData();
   }
 }
 </script>

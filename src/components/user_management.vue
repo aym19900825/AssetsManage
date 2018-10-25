@@ -5,7 +5,7 @@
 		<navs></navs>
 		<div class="wrapper wrapper-content">
 			<div class="ibox-content">
-			<navs_button></navs_button>
+				<navs_button></navs_button>
 				<div class="row">
 					
 					<div class="col-sm-3">
@@ -17,8 +17,11 @@
 				</div>
 			</div>
 		</div>
+	    <usermask></usermask>
+	</div>	
 		
-	</div>
+		
+	
 	
 </template>
 
@@ -29,6 +32,7 @@ import navs_header from './common/nav_tabs.vue'
 import navs_button from './common/func_btn.vue'
 import ztree from './common/ztree.vue'
 import tablediv from './common/tablelist.vue'
+import usermask from './common/user_mask.vue'
 export default {
     name: 'user_management',
     components: {
@@ -37,7 +41,8 @@ export default {
       navs,
       navs_button,
       ztree,
-      tablediv
+      tablediv,
+      usermask
     },
     created: function () {
      
@@ -46,6 +51,7 @@ export default {
 </script>
 
 <style scoped>
+ 	
 .wrapper {
    	margin-left:220px;
    	background-color: #F5F8FB;
@@ -62,4 +68,6 @@ export default {
     border-style: solid solid none;
     border-width: 1px 0px;
     }
+    
+    
 </style>

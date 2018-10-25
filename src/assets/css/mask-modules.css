@@ -1,0 +1,208 @@
+.mask{
+	width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .5);
+    position: absolute;
+    display: block;
+    top: 0px;
+    z-index: 1000;
+}
+.mask_div{
+    position: absolute;
+    z-index: 1001;
+    width: 80%;
+    margin: 7% 10%;
+    background:#F3F6FA;	
+    border-radius: 0px;
+    height: 80%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    top: 0px;
+    bottom: 0px;
+}
+.mask_title_div{
+	width:100%;
+	height:40px;
+	background:#F3F6FA;	
+}
+.accordion{
+	
+}
+.mask_title{
+	height:25px;
+	font-size:18px;
+	font-family:PingFangSC-Regular;
+	font-weight:400;
+	color:#3B424E;
+	line-height:25px;
+	float:left;
+	padding:8px 0px 7px 15px;
+}
+.mask_anniu{
+	float: right;
+	height:14px;
+	line-height:14px;
+	padding:15px 15px 14px 0px;
+	cursor: pointer;
+}
+.clearfix{zoom:1}    
+.clearfix:after{
+	content:"";
+	clear:both;
+} 
+.mask_span{
+	display: inline-block;
+	
+}
+.mask_max{
+	margin-right:15px;
+	margin-left:15px;
+}
+
+.accordion-heading {
+    border-bottom: 0;
+}
+.accordion-heading .accordion-toggle {
+    display: block;
+    padding: 8px 15px;
+}
+
+.accordion-inner {
+    padding: 9px 15px;
+   
+    border-right:1px solid #e5e5e5;
+    border-left:1px solid #e5e5e5;
+    border-bottom:1px solid #e5e5e5;
+}
+.mask_tab-block{
+    margin-left: 12px;
+    margin-right: 12px;
+    margin-bottom: 15px;
+    background:#fff;
+    border-radius: 4px;
+    -webkit-border-radius:4px;
+}
+.mask_tab-head{
+	height:36px;
+    border-radius:4px 4px 0px 0px;
+}
+.col_but{
+	height: 6px;
+    float: right;
+    margin: 10px 10px 18px 0px;
+	cursor: pointer;
+}
+.row-group{
+    padding:8px;
+}  
+
+.row-groups {
+    margin: 10px 0 10px 0;
+}
+
+.control-label  label{
+	/*text-align: right;
+	min-height: 20px;
+	/*width:120px;*/
+	/*font-size:14px;
+	color:#666B74;
+	line-height:20px;
+	padding-right: 10px;
+	padding-top:8px;
+	padding-bottom:8px;*/
+	display: block;
+	max-width: 100%;
+	text-align: left;
+	font-weight:normal;
+	margin-top:5px;
+}  
+.control-label  input{
+	display: block;	
+}
+
+
+
+
+
+.accordion_title{
+	float:left;
+	border-top:2px solid #6585DF;
+}
+.accordion_title span{
+	height:20px;
+	font-size:14px;
+	font-family:PingFangSC-Semibold;
+	font-weight:600;
+	color:rgba(59,66,78,1);
+	line-height:20px;
+	padding: 8px 0px 8px 10px;
+    display: inline-block;
+}
+.tab-content{
+     background:#fff;
+     margin: 0 15px 15px 15px;
+     padding-bottom:15px;
+}
+/*input最小*/
+.input-small{
+	width:300px;
+	height:35px;
+}
+/*最大 有背景的*/
+.input-large{
+	width: 98%;
+	height:35px;
+}
+/*最大 没有背景的*/
+.input-larges{
+	width: 98%;
+	height:35px;
+}
+/*最小*/
+.input-smalls{
+	width:170px;
+	height:35px;
+}
+/*中间*/
+.input-xlarge{
+	width:480px;
+	height:35px;
+}
+.row-groups span {
+    font-size: 14px;
+    line-height: 35px;
+    margin-right: 40px;
+}
+
+element.style {
+}
+.group, #authornametag, #righternametag, .authordelete, .form-horizontal .editor-checkbox-group span, .form-horizontal .editor-radio-group span {
+    display: inline-block;
+}
+.form-horizontal .editor-checkbox-group span, .form-horizontal .editor-radio-group span {
+    margin-right: 40px;
+}
+.editor-groups span {
+    font-size: 14px;
+    line-height: 36px;
+}
+.editor-checkbox-group span, .editor-radio-group span {
+    position: relative;
+    line-height: initial !important;
+    height: auto;
+}
+.editor-checkbox-group span input[type="checkbox"], .editor-radio-group span input[type="radio"] {
+    cursor: pointer;
+  }
+.editor-checkbox-group span label, .editor-radio-group span label {
+    cursor: pointer;
+    line-height: 1.2;
+    font-weight: normal;
+    margin-bottom: 0;
+    text-align: left;
+    height: auto;
+    }
+.content-footer{
+	text-align: center;
+	margin-bottom: 26px;
+}  

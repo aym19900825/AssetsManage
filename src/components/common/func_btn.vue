@@ -38,7 +38,7 @@
                 					<i class="glyphicon glyphicon-list"></i> 
                 					<span class="caret"></span>
                 				</button>
-				<ul class="dropdown-menu" role="menu">
+				<!--<ul class="dropdown-menu" role="menu">
 					<li role="menuitem">
 						<label>
                 							<input type="checkbox" data-field="id" value="1"> id
@@ -66,7 +66,7 @@
                 							<input type="checkbox" data-field="tips" value="6" checked="checked"> 名</label>
 					</li>
 
-				</ul>
+				</ul>-->
 			</div>
 		</div>
 	</div>

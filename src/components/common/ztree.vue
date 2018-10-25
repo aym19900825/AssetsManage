@@ -71,12 +71,12 @@
       methods:{
       	
         freshArea:function(){
-//          $.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
+//        $.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
         }
       },
       mounted(){
       	console.log($.fn.zTree);
-//      $.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
+//    $.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
       }
     }
 </script>

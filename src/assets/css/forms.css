@@ -1,0 +1,198 @@
+
+button,html input[type="button"],input[type="reset"],input[type="submit"] {
+    cursor: pointer;
+    -webkit-appearance: button
+}
+
+button[disabled],html input[disabled] {
+    cursor: default
+}
+
+input[type="checkbox"],input[type="radio"] {
+    padding: 0;
+    box-sizing: border-box
+}
+
+
+
+button:-moz-focus-inner,input:-moz-focus-inner {
+    padding: 0;
+    border: 0
+}
+
+textarea {
+    overflow: auto;
+    vertical-align: top
+}
+
+
+input[type="text"],textarea{height:30px; padding:0px 5px;
+background-color:#FFFFFF;
+border-radius:3px;
+border:1px solid #D8DEE6;}
+
+input[type="text"]:focus,input[type="password"]:focus {
+    outline:none;
+    -webkit-appearance: none;
+    box-shadow:0px 5px 10px 0px rgba(243,244,250,1);
+    border-radius:3px;
+    border:1px solid rgba(164,172,231,1);
+}
+
+
+
+
+/*------------------------文本框默认内容提示字颜色 By Heliping------------------------*/
+textarea {
+    outline: none;
+    font: 14px/1.8 "PingFangSC-Regular", "HelveticaNeue-Light", "Helvetica Neue Light", "Microsoft YaHei","sans-serif";
+}
+input:-webkit-input-placeholder {/* WebKit, Blink, Edge */
+    /* placeholder颜色  */
+    color: #C6CED6;
+    /* placeholder字体大小  */
+    font-size: 14px;
+    /* placeholder位置  */
+    text-align: left;
+}
+
+input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   color:#C6CED6;
+}
+input:-moz-placeholder { /* Mozilla Firefox 19+ */
+   color:#C6CED6;
+}
+input:-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color:#C6CED6;
+}
+
+input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
+    background-color: #FFFFFF !important;
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
+    background-image: none !important;
+    color: #000000 !important;
+}
+
+
+
+
+/* ----------------------------------渲染新的复选框和单选框 By Heliping---------------------------------- */
+/* 将初始的checkbox的样式改变 */
+.checkbox-group,.radio-group,.checkbox-group span,.radio-group span {height: 30px; line-height:30px; display: block; position: relative;}
+.checkbox-group span input[type="checkbox"],.radio-group span input[type="radio"] {
+    opacity: 0;/*将初始的checkbox隐藏起来*/
+    position: absolute;
+    cursor: pointer;
+    padding: 4px;
+    width: 20px;
+    height: 20px;
+    z-index: 2;
+    top: 0px;
+    left: 0px;
+    margin-left: 3px!important;
+}
+
+
+/* 渲染新的复选框和单选框 */
+.checkbox-group span label:before,.radio-group span label:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0px;
+    margin-top: -9px;
+    width: 19px;
+    height: 18px;
+    display: inline-block;
+    border-radius: 3px;
+    border: 1px solid #b4d2ea;
+    background: #fff;
+}
+
+
+/* 点击初始的checkbox，将新的checkbox关联起来 */
+.checkbox-group span input[type="checkbox"]:checked +label:after,.radio-group span input[type="radio"]:checked +label:after {
+    position: absolute;
+    display: inline-block;
+    content: '';
+    top: 50%;
+    left: 0px;
+    margin-top: -9px;
+    *margin-top: 15px;
+    font-size: 12px;
+    line-height: 15px;
+    width: 19px;
+    height: 18px;
+    color: #56a8ec;
+    border: 2px solid #56a8ec;
+    content: '√';/*\e931*/
+    font-weight: bold;
+    text-align: center;
+    font-family: "Microsoft YaHei";
+    border-radius: 3px;
+}
+
+.radio-group span label:before,.radio-group span input[type="radio"]:checked +label:after {
+    width: 18px;
+    border-radius: 100%;
+}
+
+.radio-group span input[type="radio"]:checked +label:after {
+    content: '●';/*\e930*/
+    text-align: center;
+    border: 2px solid #FF9900;
+    line-height: 12px;
+    color: #FF9900;
+}
+
+.checkbox-group span label,.radio-group span label {
+    cursor: pointer;
+    line-height: 1.2;
+    font-weight: normal;
+    margin-bottom: 0;
+    text-align: left;
+    height: auto;
+    padding-left: 30px;
+}
+
+.checkbox-group.option-list-item span input[type="checkbox"],.radio-group.option-list-item span input[type="radio"] {
+    margin-top: -12px;
+    margin-top: -14px\0;
+    *margin-top: -14px;
+}
+
+.checkbox-group.option-list-item span label,.radio-group.option-list-item span label {
+    margin-left: 10px;
+}
+
+.checkbox-group.option-list-item span label:before, .radio-group.option-list-item span label:before {
+    margin-top: -15px;
+}
+
+.checkbox-group.option-list-item span input[type="checkbox"]:checked +label:after, .radio-group.option-list-item span input[type="radio"]:checked +label:after {
+    margin-top: -15px;
+}
+
+.checkbox-group span input[type="checkbox"]:disabled +label:before,.checkbox-group span input[type="checkbox"]:disabled +label:after,.radio-group span input[type="radio"]:disabled +label:before,.radio-group span input[type="radio"]:disabled +label:after {
+    color: #848484!important;
+    background-color: #EEE !important;
+    border: 1px solid #CCC !important;
+}
+
+.checkbox-group span input[type="checkbox"]:checked:disabled +label:before,.checkbox-group span input[type="checkbox"]:checked:disabled +label:after {
+    content: '√';
+    color: "#999999";
+    border: 2px solid #cccccc;
+}
+
+.radio-group span input[type="radio"]:checked:disabled +label:before,.radio-group span input[type="radio"]:checked:disabled +label:after {
+    content: '●';
+    line-height: 15px;
+    color: "#999999";
+    border: 2px solid #cccccc;
+}
+
+.checkbox-group span input[type="checkbox"]:disabled +label:after,.radio-group span input[type="radio"]:disabled +label:after {
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(0,0,0,0.3);
+    -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(0,0,0,0.3);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(0,0,0,0.3)
+}

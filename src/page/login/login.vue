@@ -73,15 +73,6 @@
              blur1(){
                 if (this.userinfo.username == '') {
                     this.ername = "必填信息";
-<<<<<<< HEAD
-=======
-                    this.a = false;
-                    this.b = true;
-                }else if(this.userinfo.username == 'admin'){
-                    this.ername = "正确";
-                    this.a = true;
-                    this.b = false;
->>>>>>> 3de35fbd3d9325006a5165d335948308fd93eec9
                 }else{
                     this.ername = "用户名错误";
                     this.a = false;
@@ -91,15 +82,6 @@
              blur2(){
                 if (this.userinfo.password == '') {
                     this.erpass = "必填信息";
-<<<<<<< HEAD
-=======
-                    this.c = false;
-                    this.d = true;
-                }else if(this.userinfo.password == 'admin'){
-                    this.erpass = "正确";
-                    this.c = true;
-                    this.d = false;
->>>>>>> 3de35fbd3d9325006a5165d335948308fd93eec9
                 }else{
                     this.erpass = "密码错误";
                     this.c = false;

@@ -12,6 +12,7 @@
                 <div class="form-group">
                     <input type="text" id="username" class="form-control" placeholder="用户名" v-model="userinfo.username" @blur="blur1()">
                     <span class="err">{{ername}}</span>
+                    <span><i class="icon-alert-triangle"></i></span>
                 </div>
                 <div class="form-group">
                     <input type="password" id="password" class="form-control" placeholder="密码" v-model="userinfo.password" @blur="blur2()">
@@ -74,9 +75,11 @@
                 if (this.userinfo.username == '') {
                     // alert("1");
                     this.ername = "必填信息";
-                }else if(this.userinfo.username == 'admin'){
-                    this.ername = "正确";
-                }else{
+                }
+                // else if(this.userinfo.username == 'admin'){
+                //     this.ername = "正确";
+                // }
+                else{
                     this.ername = "用户名错误";
                 }
 
@@ -85,9 +88,11 @@
                 if (this.userinfo.password == '') {
                     // alert("2");
                     this.erpass = "必填信息";
-                }else if(this.userinfo.password == 'admin'){
-                    this.erpass = "正确";
-                }else{
+                }
+                // else if(this.userinfo.password == 'admin'){
+                //     this.erpass = "正确";
+                // }
+                else{
                     this.erpass = "密码错误";
                 }
              }      

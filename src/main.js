@@ -11,7 +11,7 @@ import './assets/css/hxqheam-fonts.css'
 import './assets/css/forms.css'
 import './assets/css/tablelist.css'
 import $ from 'jquery'
-import axios from 'axios'
+import './axios'
 import vueGridLayout from 'vue-grid-layout';
 //import './jquery/dist/jquery.min.js'
 //import 'bootstrap/dist/css/bootstrap.min.css'
@@ -29,7 +29,6 @@ import vueGridLayout from 'vue-grid-layout';
 
 Vue.config.productionTip = false
 Vue.prototype.$echarts = echarts 
-Vue.prototype.$axios= axios
 Vue.use(ElementUI)
 Vue.use(vueGridLayout);  
 new Vue({

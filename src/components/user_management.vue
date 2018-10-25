@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<vheader></vheader>
-		<navs_header></navs_header>
+		<!-- <navs_header></navs_header> -->
 		<navs></navs>
 		<div class="wrapper wrapper-content">
 			<div class="ibox-content">
@@ -9,7 +9,7 @@
 				<div class="row">
 					
 					<div class="col-sm-3">
-						<ztree></ztree>
+						<!-- <ztree></ztree> -->
 					</div>
 					<div class="col-sm-9">
 						<tablediv></tablediv>
@@ -27,7 +27,7 @@ import vheader from './common/vheader.vue'
 import navs from './common/left_navs/nav_left.vue'
 import navs_header from './common/nav_tabs.vue'
 import navs_button from './common/func_btn.vue'
-import ztree from './common/ztree.vue'
+// import ztree from './common/ztree.vue'
 import tablediv from './common/tablelist.vue'
 export default {
     name: 'user_management',
@@ -36,7 +36,7 @@ export default {
       navs_header,
       navs,
       navs_button,
-      ztree,
+      // ztree,
       tablediv
     },
     created: function () {

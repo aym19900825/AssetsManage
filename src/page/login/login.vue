@@ -7,17 +7,19 @@
                 <div class="logo"></div>
                 <div class="login_box">
                     <font>用户登录</font>
+
                     <form class="login_form" ref="loginForm" :model="userinfo" :role="rules" method="post" autocomplete="off">
+                        
                         <div class="input-group">
                             <input type="text" id="username" placeholder="用户名" v-model="userinfo.username" @blur="blur1()">
                             <div class="bottom-line"></div>
-                            <span class="wrong">{{ername}}</span>
+                            <span :class="{correct:a,wrong:b}">{{ername}}</span>
                         </div>
 
                         <div class="input-group">
                             <input type="password" id="password" placeholder="密码" v-model="userinfo.password" @blur="blur2()">
                             <div class="bottom-line"></div>
-                            <span class="correct">{{erpass}}</span>
+                            <span :class="{correct:c,wrong:d}">{{erpass}}</span>
                         </div>
                         
                         <div class="input-group">
@@ -46,54 +48,47 @@
 </template>
 
 <script>
+    import qs from "qs"
     export default {
         name: 'login',
         methods: {
             login() {
-              // var submitData = {"grant_type": "password","scope":  "app","client_id": "webApp","client_secret": "webApp","username": "admin","password": "admin"};
-              //   // var url = '/api/api-auth/oauth/token';
-              //   var url = '/api/api-auth/oauth/token?grant_type=password&scope=app&client_id=webApp&client_secret=webApp&username=admin&password=admin';
-              //    this.$axios({
-              //       method:"post",
-              //       url: url,
-              //     }).then((res)=>{
-                  
-              // }).catch((wrong) => {
-                  
-              // })
-                this.$axios.post(url,{
-                    grant_type:'password',
-                    scope:'app',
-                    client_id:'webApp',
-                    client_secret:'webApp',
-                    username: this.userinfo.username,
-                    password: this.userinfo.password
-                }).then((res) => {
-                    console.log(1);
-                }).catch((wrong) => {
-                    this.$message({
-                        type: 'error',
-                        message: '网络错误，请重试',
-                        showClose: true
-                    })
-                })
+                var url = '/api/api-auth/oauth/token?grant_type=password&scope=app&client_id=webApp&client_secret=webApp&username=' 
+                        + this.userinfo.username   
+                        + '&password=' 
+                        + this.userinfo.password;
+
+                 this.$axios({
+                    method:"post",
+                    url: url,
+                  }).then((res)=>{
+                        if(res.data.access_token){
+                            sessionStorage.setItem('access_token',res.data.access_token);
+                            sessionStorage.setItem('expires_in',res.data.expires_in);
+                            sessionStorage.setItem('refresh_token',res.data.refresh_token);
+                            this.$router.push('/user_management')
+                        }
+
+                  }).catch((wrong) => {
+                      
+                  })
              }, 
              blur1(){
                 if (this.userinfo.username == '') {
                     this.ername = "必填信息";
-                }else if(this.userinfo.username == 'admin'){
-                    this.ername = "正确";
                 }else{
                     this.ername = "用户名错误";
+                    this.a = false;
+                    this.b = true;
                 }
              }, 
              blur2(){
                 if (this.userinfo.password == '') {
                     this.erpass = "必填信息";
-                }else if(this.userinfo.password == 'admin'){
-                    this.erpass = "正确";
                 }else{
                     this.erpass = "密码错误";
+                    this.c = false;
+                    this.d = true;
                 }
              }      
         },
@@ -102,6 +97,10 @@
                 msg: 'EAM2.0',
                 ername:"",
                 erpass:"",
+                a:"",
+                b:"",
+                c:"",
+                d:"",
                 userinfo:{},
             }
         }

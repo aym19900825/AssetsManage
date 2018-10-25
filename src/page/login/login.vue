@@ -60,7 +60,7 @@
         },
         data () {
             return {
-                msg: 'bbbbbbb'
+                msg: 'EAM2.0'
             }
         }
     }

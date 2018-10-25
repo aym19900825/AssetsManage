@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<vheader></vheader>
+		<!-- <vheader></vheader>
 		<navs_header></navs_header>
 		<navs></navs>
 		<div class="wrapper wrapper-content">
@@ -16,7 +16,7 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</div> -->
 		
 	</div>
 	

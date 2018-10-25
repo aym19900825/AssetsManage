@@ -1,37 +1,4 @@
 <template>
-<<<<<<< HEAD
-	<div class="row content-tabs">
-		<button class="roll-nav roll-left J_tabLeft">
-			<i class="icon-skip-back"></i>
-        </button>
-		<div class="page-tabs J_menuTabs">
-			<div class="page-tabs-content">
-				<a href="javascript:;" class="active J_menuTab" data-id="/blackboard">首页</a>
-			</div>
-		</div>
-		<button class="roll-nav roll-right J_tabRight">
-			<i class="icon-skip-forward"></i>
-        </button>
-		<div class="btn-group roll-nav roll-right">
-			<button class="dropdown J_tabClose" data-toggle="dropdown">关闭操作<span class="caret"></span>
-
-                </button>
-			<ul role="menu" class="dropdown-menu dropdown-menu-right">
-				<li class="J_tabShowActive">
-					<a>定位当前选项卡</a>
-				</li>
-				<li class="divider"></li>
-				<li class="J_tabCloseAll">
-					<a>关闭全部选项卡</a>
-				</li>
-				<li class="J_tabCloseOther">
-					<a>关闭其他选项卡</a>
-				</li>
-			</ul>
-		</div>
-		<a href="./login.html" class="roll-nav roll-right J_tabExit"><i class="icon-back"></i>返回</a>
-	</div>
-=======
     <div>
         <div class="content-tabs">
             <button class="roll-nav roll-left J_tabLeft"><i class="icon-previous"></i></button>
@@ -59,7 +26,6 @@
             <a href="./login.html" class="roll-nav roll-right J_tabExit"><i class="icon-back"></i>返回</a>
         </div>
     </div>
->>>>>>> e7bda18cfbccd83339514ffa4b6de08f0ae9acdd
 </template>
 
 <script>
@@ -91,15 +57,7 @@
     top: 0;
     margin-left: 10px;
 }
-<<<<<<< HEAD
-..roll-right.btn-group button {
-    width: 80px;
-}
-.content-tabs button {
-    background: #fff;
-=======
 .content-tabs button,.roll-right.J_tabExit {
->>>>>>> e7bda18cfbccd83339514ffa4b6de08f0ae9acdd
     border: 0;
     height: 37px;
     background:linear-gradient(360deg,rgba(232,236,240,1) 0%,rgba(255,255,255,1) 100%);
@@ -119,7 +77,7 @@
     border-left: solid 1px #d1d8de;
 }
 .content-tabs .roll-nav, .page-tabs-list {
-    position:absolute;
+    position: absolute;
     width: 40px;
     height: 39px;
     text-align: center;
@@ -166,12 +124,5 @@
 }
 .page-tabs .J_menuTab{
     border-radius: 4px 4px 0px 0px;
-}
-.content-tabs button {
-    background: #fff;
-    border: 0;
-    height: 40px;
-    width: 80px;
-    outline: none;
 }
 </style>

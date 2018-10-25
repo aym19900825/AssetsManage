@@ -9,7 +9,7 @@
 				<div class="fixed-table-toolbar clearfix">
 					<div class="bs-bars pull-left">
 						<div class="hidden-xs" id="roleTableToolbar" role="group">
-							<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+							<button type="button" class="btn btn-green" @click="openAddMgr">
                                 <i class="icon-add"></i>&nbsp;添加
                        </button>
 							<button type="button" class="btn btn-bule button-margin" onclick="MgrUser.openChangeUser()" id="">
@@ -37,9 +37,9 @@
 						</div>
 					</div>
 					<div class="columns columns-right btn-group pull-right">
-						<button class="btn btn-default btn-outline" type="button" name="refresh" aria-label="refresh" title="刷新">
+						<button class="btn btn-default btn-outline" type="button" name="refresh" aria-label="refresh" title="ˢ��">
                 			<i class="glyphicon glyphicon-repeat"></i></button>
-						<div class="keep-open btn-group" title="列">
+						<div class="keep-open btn-group" title="��">
 							<button type="button" aria-label="columns" class="btn btn-default btn-outline dropdown-toggle" data-toggle="dropdown">
                 					<i class="glyphicon glyphicon-list"></i> 
                 					<span class="caret"></span>
@@ -52,24 +52,24 @@
 					</li>
 					<li role="menuitem">
 						<label>
-                							<input type="checkbox" data-field="name" value="2" checked="checked"> 名称
+                							<input type="checkbox" data-field="name" value="2" checked="checked"> ���
                 						</label>
 					</li>
 					<li role="menuitem">
 						<label>
-                							<input type="checkbox" data-field="pName" value="3" checked="checked"> 上级角色</label>
+                							<input type="checkbox" data-field="pName" value="3" checked="checked"> �ϼ���ɫ</label>
 					</li>
 					<li role="menuitem">
 						<label>
-                							<input type="checkbox" data-field="deptName" value="4" checked="checked"> 所在部门</label>
+                							<input type="checkbox" data-field="deptName" value="4" checked="checked"> ���ڲ���</label>
 					</li>
 					<li role="menuitem">
 						<label>
-                							<input type="checkbox" data-field="companyName" value="5" checked="checked"> 所在公司</label>
+                							<input type="checkbox" data-field="companyName" value="5" checked="checked"> ���ڹ�˾</label>
 					</li>
 					<li role="menuitem">
 						<label>
-                							<input type="checkbox" data-field="tips" value="6" checked="checked"> 名</label>
+                							<input type="checkbox" data-field="tips" value="6" checked="checked"> ��</label>
 					</li>
 
 				</ul>-->
@@ -116,7 +116,7 @@
 		},
 		methods: {
 		    openAddMgr(){	
-			       	this.$refs.child.childMethods(); // 方法2
+			       	this.$refs.child.childMethods(); // ����2
 			      } 
 		},
 		data() {

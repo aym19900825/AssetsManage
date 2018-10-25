@@ -1,15 +1,9 @@
-<template>
-	
+<template>	
 	<div class="fixed-table-toolbar clearfix">
 		<div class="bs-bars pull-left">
 			<div class="hidden-xs" id="roleTableToolbar" role="group">
-<<<<<<< HEAD
-				<button type="button" class="btn btn-green" @click="openAddMgr" id="">
-                                <i class="icon-add"></i>&nbsp;添加
-=======
 				<button type="button" class="btn btn-green" onclick="openAddMgr()" id="">
                                 <i class="icon-add"></i>添加
->>>>>>> e7bda18cfbccd83339514ffa4b6de08f0ae9acdd
                        </button>
 				<button type="button" class="btn btn-bule button-margin" onclick="MgrUser.openChangeUser()" id="">
 						    <i class="icon-edit"></i>修改
@@ -39,18 +33,11 @@
 			<button class="btn btn-default btn-outline" type="button" name="refresh" aria-label="refresh" title="刷新"><i class="icon-refresh"></i></button>
 			<div class="keep-open btn-group" title="列">
 				<button type="button" aria-label="columns" class="btn btn-default btn-outline dropdown-toggle" data-toggle="dropdown">
-<<<<<<< HEAD
-                					<i class="glyphicon glyphicon-list"></i> 
-                					<span class="caret"></span>
-                				</button>
-				<!--<ul class="dropdown-menu" role="menu">
-=======
 					<i class="icon-menu3"></i> 
 					<i class="icon-arrow2-down"></i>
                 </button>
 
 				<ul class="dropdown-menu" role="menu">
->>>>>>> e7bda18cfbccd83339514ffa4b6de08f0ae9acdd
 					<li role="menuitem">
 						<label>
 							<input type="checkbox" data-field="id" value="1"> id
@@ -82,7 +69,7 @@
                 		</span>
 					</li>
 
-				</ul>-->
+				</ul>
 			</div>
 		</div>
 	</div>
@@ -90,19 +77,6 @@
 </template>
 
 <script>
-	export default {
-		name: 'masks',
-		methods: {
-         openAddMgr(){
-         	this.show = !this.show;
-         }
-		},
-		data() {
-			return {
-				show:false,
-			}
-		}
-	}
 </script>
 
 <style scoped>

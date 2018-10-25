@@ -1,5 +1,5 @@
 <template>
-	 <table class="table table-bordered table-striped text-center">
+	 <!-- <table class="table table-bordered table-striped text-center">
                 <thead>
                     <tr>
                         <th>全选</th>
@@ -23,19 +23,35 @@
                       <td>{{user.department}}</td>
                       <td>{{user.state}}</td>
                       <td>{{user.great_time}}</td>
-                      <!--<td>{{user.age}}</td>
-                      <td>{{user.school}}</td>
-                      <td><button v-on:click="remove(index)">remove</button></td>-->
                     </tr>
                     <tr>
-                      <!--<td></td>
-                      <td><input type="text"  id="name" v-model="user.name"/></td>
-                      <td><input type="text" id="age"v-model="user.age"/></td>
-                      <td><input type="text" id="school"v-model="user.school"/></td>
-                      <td><button @click="insert">insert</button></td>-->
                     </tr>
                 </tbody>
-     </table>
+     </table> -->
+
+  <el-table
+    style="width: 100%"
+    :default-sort = "{prop: 'date', order: 'descending'}"
+    >
+    <el-table-column
+      prop="date"
+      label="日期"
+      sortable
+      width="180">
+    </el-table-column>
+    <el-table-column
+      prop="name"
+      label="姓名"
+      sortable
+      width="180">
+    </el-table-column>
+    <el-table-column
+      prop="address"
+      label="地址"
+      :formatter="formatter">
+    </el-table-column>
+  </el-table>
+
 </template>
 
 <script>

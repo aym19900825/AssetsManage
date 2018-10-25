@@ -99,6 +99,8 @@
         },
         data () {
             return {
+
+                msg: 'EAM2.0',
                 ername:"",
                 erpass:"",
                 userinfo:{},
@@ -118,6 +120,7 @@
                 //         }
                 //     ]
                 // }
+
             }
         }
     }

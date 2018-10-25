@@ -24,13 +24,6 @@
 </script>
 
 <style scoped>
-	@import '../../assets/hxqheam-fonts.css';
-	/*body{
-    width:100%;
-    height:100%;
-    background:#F5F8FB;
-}*/
-
 .heder{
     width:100%;
     height:60px;
@@ -77,7 +70,7 @@
     border-top:2px solid #FFF;    
     font-weight:bold;
     color:#FFFFFF;
-    background-color:rgba(255,255,255,.1);
+    background-color:#ffffff;
 }
 .nav-right{
     height:36px;
@@ -138,7 +131,7 @@
 .userimg{
     width:40px;
     height:36px;
-    background-image: url(../../assets/img/portrait-female.png);
+    background-image: url(../../assets/img/female.png);
     background-size: 100%;
     background-repeat: no-repeat;
 }

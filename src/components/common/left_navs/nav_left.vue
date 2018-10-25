@@ -1,5 +1,5 @@
 <template>
-	<div  id="aaa" class="navbar-default navbar-static-side" >
+	<div id="aaa" class="navbar-default navbar-static-side" >
 		<div id="sidebar-collapse">
 			<div class="navbarbg">
 				<a class="navbar-minimalize minimalize-styl-2" @click="minmax"><i class="icon-menu1"></i> </a>
@@ -160,7 +160,11 @@
     color: #fff;
     display: block;
     padding: 14px 15px 14px 15px;
+    border-radius:5px;
 }
+
+.navs > li > a:hover,.navs > li > a.current{background:rgba(97,131,226,.7);}
+
 .navs > li > a i[class*=icon-] {
     font-size: 16px;
 }

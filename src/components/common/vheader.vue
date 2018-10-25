@@ -1,26 +1,42 @@
 <template>
-	<div class="heder clearfix">
+	<div class="heder clearfix white">
         <div class="logo"></div>
-            <ul class="nav-head pull-left">
-                    <li class="current">应用中心</li>
-                    <li>程序设计器</li>
-                    <li>权限管理</li>
-                    <li>系统配置</li>
-            </ul>
-            <div class="nav-head pull-right nav-right">
-                    <div class="userimg"><i class="icon-order-down"></i></div>
-                    <div class="userInfo">Admin,您好</div>
-                    <div class="lingdang">
-                   <!-- 	<a href="" target="" title="待办任务">-->
-                    		<span class="tips_red" id="todotipscount">5</span>
-                    		<i class="icon-notice"></i>	
-                    <!--	</a>-->
-                    </div>
-            </div>
+        <ul class="nav-head pull-left">
+                <li class="current"><router-link :to="{path:'/dashboardList'}" >应用中心</router-link></li>
+                <li><router-link :to="{path:'/dashboardList'}" >程序设计器</router-link></li>
+                <li><router-link :to="{path:'/dashboardList'}" >权限管理</router-link></li>
+                <li>
+                    <router-link :to="{path:'/dashboardList'}" >系统配置</router-link>
+                </li>
+        </ul>
+        <div class="nav-head pull-right nav-right">
+                <div class="userimg"><i class="icon-order-down"></i></div>
+                <div class="userInfo">Admin,您好</div>
+                <div class="lingdang">
+                	<a href="#" title="待办任务">
+                		<span class="tips_red" id="todotipscount">5</span>
+                		<i class="icon-notice"></i>	
+                    </a>
+                </div>
+        </div>
     </div>
 </template>
 
 <script>
+export default {
+    name: 'nav',
+      data(){
+        return {
+            
+        }
+    },
+    methods: {
+        
+    },
+    mounted(){
+
+    }
+}
 </script>
 
 <style scoped>
@@ -38,40 +54,35 @@
 
 .logo{
     background-image: url(../../assets/img/logo-white.png);
-    background-size: 100%;
-    width: 113px;
-    min-height: 34px;
+    background-repeat: no-repeat;
+    background-position: left center;
+    width: 195px;
+    min-height: 60px;
     float: left;
-    margin-top: 12px;
     position: relative;
     z-index: 998;
-    margin-left: 20px;
+    margin-left: 25px;
     
 }
-.nav-head{
-    padding-left: 70px!important;
-}
-
-.nav-head div{cursor: pointer;}
 
 .nav-head li{
     float: left;
-    height:60px;
+    height:58px;
     font-size:15px;
-    color:#FBFDFF;
-    line-height:60px;
+    line-height:58px;
     padding-left:20px;
     padding-right:20px;
-
-    list-style: none;
-    cursor: pointer;
+    margin: 0px 10px;
+    border-top:2px solid transparent;
 }
-.nav-head .current{
+.nav-head li:hover,.nav-head .current{
     border-top:2px solid #FFF;    
     font-weight:bold;
     color:#FFFFFF;
-    background-color:#ffffff;
+    background-color:rgba(255,255,255,.1);
 }
+
+
 .nav-right{
     height:36px;
     line-height:36px;
@@ -122,7 +133,6 @@
     width:84px;
     height:20px;
     font-size:14px;
-    font-family:PingFangSC-Regular;
     font-weight:400;
     color:rgba(251,253,255,1);
     line-height: 37px;
@@ -143,4 +153,5 @@
     font-size: 14px;
     left: 50px;
     top: 8px;
-}</style>
+}
+</style>

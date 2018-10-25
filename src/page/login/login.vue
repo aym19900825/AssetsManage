@@ -29,16 +29,7 @@
                                     <label for="rembpas">记住密码</label>
                                 </span>
                             </div>
-                            <div class="pull-left remember radio-group">
-                                <span>
-                                    <input type="radio" name="rembpas2" disabled="disabled" id="rembpas2">
-                                    <label for="rembpas2">记住密码</label>
-                                </span>
-                                <span>
-                                    <input type="radio" name="rembpas2" disabled="disabled" checked="checked" id="rembpas3">
-                                    <label for="rembpas3">记码3</label>
-                                </span>
-                            </div>
+                            
                             <div class="pull-right forget"><a href="#">忘记密码？</a></div>
                         </div>
                         

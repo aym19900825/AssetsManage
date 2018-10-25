@@ -12,6 +12,11 @@ import vueGridLayout from 'vue-grid-layout';
 // import './jquery/dist/jquery.min.js'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
+import 'metismenu/dist/metisMenu.js'
+import 'slimscroll/example/ssmaster/jquery.slimscroll.min.js'
+//import 'ztree/js/jquery.ztree.all.min.js'
+import 'ztree/js/jquery.ztree.core.js'
+import 'ztree/css/zTreeStyle/zTreeStyle.css'
 // import './assets/bootstrap/bootstrap.min.css'
 // import './assets/bootstrap/bootstrap.min.js'
 
@@ -22,8 +27,7 @@ Vue.config.productionTip = false
 Vue.prototype.$echarts = echarts 
 Vue.prototype.$axios= axios
 Vue.use(ElementUI)
-Vue.use(vueGridLayout);
-
+Vue.use(vueGridLayout);  
 new Vue({
   el: '#app',
   router,

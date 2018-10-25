@@ -136,3 +136,13 @@
     color: #FBFDFF;
 }
 
+
+
+
+@media only screen and (max-width:1920px)
+{
+.contmain {width: 1160px;}
+.centerDiv {top:18%;}
+.footer-content {bottom: 30px;}
+
+}

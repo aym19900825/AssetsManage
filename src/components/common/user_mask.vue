@@ -125,7 +125,11 @@
 
 							<div class="col-sm-4">
 								<label for="">出生日期</label>
+<<<<<<< HEAD
 								<input id="test1" class="col-sm-12" name="" maxlength="200" type="text" value="">
+=======
+								<input id="test1" class="col-sm-12" name="" type="text" value="">
+>>>>>>> 3eec48ea63f592b197a67759598e2f948afb075f
 							</div>
 
 							<div class="col-sm-4">
@@ -142,7 +146,11 @@
 
 							<div class="col-sm-4">
 								<label for="">入职日期</label>
+<<<<<<< HEAD
 								<input id="test1" class="col-sm-12" name="" maxlength="200" type="text" value="">
+=======
+								<input id="test1" class="col-sm-12" name="" type="text" value="">
+>>>>>>> 3eec48ea63f592b197a67759598e2f948afb075f
 							</div>
 
 							<div class="col-sm-4">
@@ -159,7 +167,11 @@
 
 							<div class="col-sm-4">
 								<label for="">参加工作时间</label>
+<<<<<<< HEAD
 								<input id="test1" class="col-sm-12" maxlength="200" type="text" name="" value="">
+=======
+								<input id="test1" class="col-sm-12" name="" type="text" value="">
+>>>>>>> 3eec48ea63f592b197a67759598e2f948afb075f
 							</div>
 
 							<div class="col-sm-4">
@@ -209,8 +221,8 @@
 			</div>
 			<!--底部-->
 			<div class="content-footer">
-				<button class="btn btn-default">取消</button>
-				<button class="btn btn-primarys">提交</button>
+				<button class="btn btn-default btn-large">取消</button>
+				<button class="btn btn-primarys btn-large">提交</button>
 			</div>
 
 		</div>

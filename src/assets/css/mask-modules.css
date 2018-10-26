@@ -45,11 +45,7 @@
 	padding:15px 15px 14px 0px;
 	cursor: pointer;
 }
-.clearfix{zoom:1}    
-.clearfix:after{
-	content:"";
-	clear:both;
-} 
+
 .mask_span{
 	display: inline-block;
 	
@@ -75,21 +71,21 @@
     border-bottom:1px solid #e5e5e5;
 }
 .mask_tab-block{
-    margin-left: 12px;
-    margin-right: 12px;
-    margin-bottom: 15px;
+    margin-left: 15px;
+    margin-right: 15px;
     background:#fff;
     border-radius: 4px;
     -webkit-border-radius:4px;
+    box-shadow:0px 5px 10px 0px rgba(223,229,234,1);
 }
 .mask_tab-head{
-	height:36px;
+	height:45px;
     border-radius:4px 4px 0px 0px;
 }
 .col_but{
 	height: 6px;
     float: right;
-    margin: 10px 10px 18px 0px;
+    padding: 15px;
 	cursor: pointer;
 }
 .row-group{
@@ -101,20 +97,14 @@
 }
 
 .control-label  label{
-	/*text-align: right;
-	min-height: 20px;
-	/*width:120px;*/
-	/*font-size:14px;
+	font-size:14px;
 	color:#666B74;
-	line-height:20px;
-	padding-right: 10px;
-	padding-top:8px;
-	padding-bottom:8px;*/
 	display: block;
+	min-height: 20px;
 	max-width: 100%;
 	text-align: left;
-	font-weight:normal;
-	margin-top:5px;
+	padding-top:20px;
+	padding-bottom:5px;
 }  
 .control-label  input{
 	display: block;	
@@ -126,17 +116,27 @@
 
 .accordion_title{
 	float:left;
-	border-top:2px solid #6585DF;
+	
 }
+.accordion_title:before{
+	width: 20px;
+	height: 3px;
+	display: table;
+	margin-left: 15px;
+    line-height: 0;
+	content: '';
+	background-color: #6585DF;
+}
+
 .accordion_title span{
-	height:20px;
+	min-height:20px;
 	font-size:14px;
-	font-family:PingFangSC-Semibold;
-	font-weight:600;
+	font-weight: bold;
 	color:rgba(59,66,78,1);
 	line-height:20px;
-	padding: 8px 0px 8px 10px;
-    display: inline-block;
+	margin-left: 15px;
+	padding-top: 15px;
+    display: block;
 }
 .tab-content{
      background:#fff;
@@ -206,3 +206,11 @@ element.style {
 	text-align: center;
 	margin-bottom: 26px;
 }  
+
+
+
+/*详情页背景样式*/
+.accordion {
+	padding-top: 15px; 
+	padding-bottom: 15px;
+}

@@ -1,7 +1,11 @@
 <template>
 	<div>
-		<vheader></vheader>
-		<navs_header></navs_header>
+		<div class="headerbg">
+      <vheader></vheader>
+  		<navs_header></navs_header>
+    </div>
+
+    <div class="contentbg">
 		<navs></navs>
 		<div class="wrapper wrapper-content">
 			<div class="ibox-content">
@@ -93,8 +97,9 @@
 			</div>
 		</div>
 		<usermask ref="child"></usermask>
+  </div>
+  
 	</div>
-
 </template>
 
 <script>
@@ -168,10 +173,13 @@
 </script>
 
 <style scoped>
+.headerbg { width:100%; height:100px; position: fixed; z-index: 999;}
+.contentbg { padding-top: 100px; height: 100%; }
 	.wrapper {
-		margin-left: 220px;
-		background-color: #F5F8FB;
-		height: 100%;
+		width: 100%;
+    height: 100%;
+    padding-left: 220px;
+    position: relative;
 	}
 	
 	.ibox-content {
@@ -220,7 +228,7 @@
 	position: relative;
     padding-top: 10px;
     padding-bottom: 12px;
-    min-height: 30px;
+    height: 55px;
     line-height: 30px;
 }
 

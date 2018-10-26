@@ -13,7 +13,7 @@ module.exports = {
     proxyTable: {
         '/api': {
             // target: 'http://192.168.1.140:8090/',//设置你调用的接口域名和端口号 别忘了加http
-            target: 'http://192.168.1.106:9200/',//设置你调用的接口域名和端口号 别忘了加http
+            target: 'http://192.168.1.169:9100/',//设置你调用的接口域名和端口号 别忘了加http
             changeOrigin: true,
             pathRewrite: {
               '^/api': '/'

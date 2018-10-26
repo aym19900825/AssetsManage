@@ -38,12 +38,8 @@
                 <el-table-column type="selection" width="55">
                 </el-table-column>
                 <el-table-column label="账号" sortable width="80" prop="username">                  
-
-  
                 </el-table-column>
                 <el-table-column label="姓名" sortable width="100" prop="nickname">                 
-
-  
                 </el-table-column>                
                 <el-table-column label="性别" sortable width="80" prop="sex">
                 </el-table-column>
@@ -56,12 +52,12 @@
                 <el-table-column label="创建时间" width="180" prop="createTime" sortable>
                 </el-table-column>
             </el-table>
-    <span class="demonstration">显示总数</span>
+    <!-- <span class="demonstration">显示总数</span> -->
     <el-pagination
-      :page-size="100"
-      layout="total, prev, pager, next"
-      :total="1000">
-    </el-pagination>
+  background
+  layout="prev, pager, next"
+  :total="1000" style="float:right;margin-top:10px;">
+</el-pagination>
      </div>        
 
 </template>

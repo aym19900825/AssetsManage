@@ -23,11 +23,8 @@
                         </div>
                         
                         <div class="input-group">
-                            <div class="pull-left remember checkbox-group">
-                                <span>
-                                    <input type="checkbox" name="rembpas" id="rembpas">
-                                    <label for="rembpas">记住密码</label>
-                                </span>
+                            <div class="pull-left remember">
+                                <el-checkbox v-model="checked">记住密码</el-checkbox>
                             </div>
                             
                             <div class="pull-right forget"><a href="#">忘记密码？</a></div>
@@ -50,6 +47,12 @@
 <script>
     import qs from "qs"
     export default {
+        //记住密码
+        data() {
+          return {
+            checked: true
+          };
+        },
         name: 'login',
         methods: {
             login() {

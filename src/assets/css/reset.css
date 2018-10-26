@@ -98,6 +98,7 @@ i, cite, em, var, address, dfn {
 	display: block!important
 }
 
+
 /*字体颜色 By Heliping*/
 .white,.white a {color:#FBFDFF;}
 .white a {color:#ffffff;}
@@ -184,30 +185,6 @@ i, cite, em, var, address, dfn {
 
 
 
-/*下拉菜单*/
-.dropdown-menu {
-    border: medium none;
-    display: none;
-    float: left;
-    font-size: 12px;
-    left: 0;
-    list-style: none outside none;
-    padding: 0;
-    position: absolute;
-    text-shadow: none;
-    top: 100%;
-    z-index: 1000;
-    border-radius: 0;
-    box-shadow: 0 0 3px rgba(86, 96, 117, 0.3);
-}
-
-.dropdown-menu .divider {
-    height: 1px;
-    margin: 9px 0;
-    overflow: hidden;
-    background-color: #e5e5e5;
-}
-
 
 
 
@@ -225,14 +202,26 @@ i, cite, em, var, address, dfn {
 
 
 
-/*Checkbox*/
+/*Checkbox by heliping*/
 .el-checkbox__inner {
 	width: 18px; 
 	height: 18px; 
 	border-radius:4px; 
-	border-color: #C7CED6 !important;
-	background-color: #DFE5EA !important;
+	border-color: #C7CED6;
+	/*background-color: #FFFFFF !important;
+	background-color: #DFE5EA !important;*/
 }
-
-
+.el-checkbox__input.is-focus .el-checkbox__inner {
+	border-color:#8996F1;
+}
+.el-checkbox__inner::after {
+	left: 6px;
+	top: 3px;
+}
+.el-checkbox__input.is-checked .el-checkbox__inner,
+.el-checkbox__input.is-indeterminate .el-checkbox__inner
+{
+	background-color: #8996F1;
+	border-color: #8996F1;
+}
 

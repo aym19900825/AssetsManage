@@ -28,36 +28,42 @@
                     </tr>
                 </tbody>
      </table> -->
+<div>
+    
+  
 
   <el-table :data="userList" style="width: 96%;margin: 0 auto;" :default-sort = "{prop: 
 
 'userList', order: 'descending'}">
                 <el-table-column type="selection" width="55">
                 </el-table-column>
-                <el-table-column label="账号" width="80" prop="username">                  
+                <el-table-column label="账号" sortable width="80" prop="username">                  
 
   
                 </el-table-column>
-                <el-table-column label="姓名" width="100" prop="nickname">                 
+                <el-table-column label="姓名" sortable width="100" prop="nickname">                 
 
   
                 </el-table-column>                
-                <el-table-column label="性别" width="200" prop="sex">
+                <el-table-column label="性别" sortable width="80" prop="sex">
                 </el-table-column>
-                <el-table-column label="角色" width="100" prop="roleId">
+                <el-table-column label="角色" sortable width="100" prop="roleId">
                 </el-table-column>
-                <el-table-column label="部门" width="100" prop="deptId">
+                <el-table-column label="部门" sortable width="100" prop="deptId">
                 </el-table-column>
-                <el-table-column label="状态" width="100" prop="enabled">
+                <el-table-column label="状态" sortable width="100" prop="enabled">
                 </el-table-column>
-                <el-table-column label="创建时间" width="250" prop="createTime" :formatter="formatter">
+                <el-table-column label="创建时间" width="180" prop="createTime" sortable>
                 </el-table-column>
             </el-table>
+    <span class="demonstration">显示总数</span>
+    <el-pagination
+      :page-size="100"
+      layout="total, prev, pager, next"
+      :total="1000">
+    </el-pagination>
+     </div>        
 
-            <!-- <el-pagination background layout="prev, pager, next"
-  :total="10">
-</el-pagination>
- -->
 </template>
 
 <script>

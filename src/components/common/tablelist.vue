@@ -1,5 +1,5 @@
 <template>
-	 <table class="table table-bordered table-striped text-center">
+   <!-- <table class="table table-bordered table-striped text-center">
                 <thead>
                     <tr>
                         <th>全选</th>
@@ -23,19 +23,47 @@
                       <td>{{user.department}}</td>
                       <td>{{user.state}}</td>
                       <td>{{user.great_time}}</td>
-                      <!--<td>{{user.age}}</td>
-                      <td>{{user.school}}</td>
-                      <td><button v-on:click="remove(index)">remove</button></td>-->
                     </tr>
                     <tr>
-                      <!--<td></td>
-                      <td><input type="text"  id="name" v-model="user.name"/></td>
-                      <td><input type="text" id="age"v-model="user.age"/></td>
-                      <td><input type="text" id="school"v-model="user.school"/></td>
-                      <td><button @click="insert">insert</button></td>-->
                     </tr>
                 </tbody>
-     </table>
+     </table> -->
+<div>
+    
+  
+
+  <el-table :data="userList" style="width: 96%;margin: 0 auto;" :default-sort = "{prop: 
+
+'userList', order: 'descending'}">
+                <el-table-column type="selection" width="55">
+                </el-table-column>
+                <el-table-column label="账号" sortable width="80" prop="username">                  
+
+  
+                </el-table-column>
+                <el-table-column label="姓名" sortable width="100" prop="nickname">                 
+
+  
+                </el-table-column>                
+                <el-table-column label="性别" sortable width="80" prop="sex">
+                </el-table-column>
+                <el-table-column label="角色" sortable width="100" prop="roleId">
+                </el-table-column>
+                <el-table-column label="部门" sortable width="100" prop="deptId">
+                </el-table-column>
+                <el-table-column label="状态" sortable width="100" prop="enabled">
+                </el-table-column>
+                <el-table-column label="创建时间" width="180" prop="createTime" sortable>
+                </el-table-column>
+            </el-table>
+    <span class="demonstration">显示总数</span>
+    <el-pagination
+      :page-size="100"
+      layout="total, prev, pager, next"
+      :total="1000">
+    </el-pagination>
+     </div>        
+
 </template>
 
 <script>
@@ -43,7 +71,9 @@ export default {
   name: 'tablediv',
   data () {
     return {
-      user: {'checkbox': '', 'account': '','name':'','sex':'','role':'','department':'','state':'', 'great_time': ''},
+      user: {'checkbox': '', 'account': 
+
+'','name':'','sex':'','role':'','department':'','state':'', 'great_time': ''},
       userList: []
     }
   },
@@ -67,6 +97,9 @@ export default {
       }).catch((wrong) => {
           
       })
+    },
+    formatter(row, column) {
+        return row.enabled;
     }
   },
   mounted(){

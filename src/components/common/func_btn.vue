@@ -1,5 +1,4 @@
-<template>
-	
+<template>	
 	<div class="fixed-table-toolbar clearfix">
 		<div class="bs-bars pull-left">
 			<div class="hidden-xs" id="roleTableToolbar" role="group">

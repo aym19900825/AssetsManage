@@ -39,8 +39,9 @@ textarea{
     height:35px; padding:0px 5px;
     background-color:#FFFFFF;
     border-radius:3px;
-    border: none;
-    border-bottom:1px solid #DFE5EA;
+    border:1px solid #DFE5EA;
+    /* border: none;
+    border-bottom:1px solid #DFE5EA; */
 }
 
 input[type="text"]:focus,

@@ -132,9 +132,10 @@
 
 <style scoped>
 	.navbar-static-side{
-	position:fixed;
+	float: left;
     width: 220px;
     height: 100%;
+    position: fixed;
     background: linear-gradient(360deg,rgba(160, 120, 240, 1) 0%,rgba(65, 105, 218, 1) 100%);
 }
 

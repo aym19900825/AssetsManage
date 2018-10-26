@@ -121,7 +121,7 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 .checkbox-group,
 .radio-group,
 .checkbox-group span,
-.radio-group span {height: 30px; line-height:30px; display: block; position: relative;}
+.radio-group span {height: 20px; line-height:20px; display: block; position: relative;}
 
 .checkbox-group span input[type="checkbox"],
 .radio-group span input[type="radio"] {

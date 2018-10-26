@@ -44,12 +44,12 @@ p{
 .clearfix,.row { 
 	*zoom: 1; 
 } 
-.clearfix:before, .clearfix:after,.row:after,.mask_tab-block:after { 
+.clearfix:before,.input-group:after, .clearfix:after,.row:after,.mask_tab-block:after { 
 	display: table; 
 	line-height: 0; 
 	content: ""; 
 } 
-.clearfix:after,.row:after,.mask_tab-block:after { 
+.clearfix:after,.input-group:after,.row:after,.mask_tab-block:after { 
 	clear: both; 
 } 
 

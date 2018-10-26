@@ -6,9 +6,19 @@
 			<div class="mask_title_div clearfix">
 				<div class="mask_title">添加用户</div>
 				<div class="mask_anniu">
-					<span class="mask_span"><i class="icon-minimize"></i></span>
-					<span class="mask_span mask_max"><i class="icon-maximization"></i></span>
-					<span class="mask_span" @click='close'><i class="icon-close1"></i></span>
+					<span class="mask_span">
+						<i class="icon-minimize"></i>
+					</span>
+					<!--icon-maximization,icon-restore-->
+					<span class="mask_span mask_max" @click='toggle'>
+						 <!--v-bind:class="{ active: isActive, 'text-danger': hasError }">-->
+						 
+						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
+						<!--<i v-if="ok2" class="icon-restore"></i>-->
+					</span>
+					<span class="mask_span" @click='close'>
+						<i class="icon-close1"></i>
+					</span>
 				</div>
 			</div>
 			<div class="accordion" id="information">
@@ -115,7 +125,7 @@
 
 							<div class="col-sm-4">
 								<label for="">出生日期</label>
-								<input id="test1" class="col-sm-12" name="" value="">
+								<input id="test1" class="col-sm-12" name="" maxlength="200" type="text" value="">
 							</div>
 
 							<div class="col-sm-4">
@@ -132,7 +142,7 @@
 
 							<div class="col-sm-4">
 								<label for="">入职日期</label>
-								<input id="test1" class="col-sm-12" name="" value="">
+								<input id="test1" class="col-sm-12" name="" maxlength="200" type="text" value="">
 							</div>
 
 							<div class="col-sm-4">
@@ -149,7 +159,7 @@
 
 							<div class="col-sm-4">
 								<label for="">参加工作时间</label>
-								<input id="test1" class="col-sm-12" name="" value="">
+								<input id="test1" class="col-sm-12" maxlength="200" type="text" name="" value="">
 							</div>
 
 							<div class="col-sm-4">
@@ -212,20 +222,53 @@
 		name: 'masks',
 		data() {
 			return {
-				show:false,
+				show: false,
+				isok1:true,
+				isok2:false
 			}
 		},
 		methods: {
-	    //点击按钮显示弹窗
-         childMethods(){
-         	this.show = !this.show;
-         },
-         //点击关闭按钮
-         close(){
-         	this.show = false;
-         }
+			//点击按钮显示弹窗
+			childMethods() {
+				this.show = !this.show;
+			},
+			//点击关闭按钮
+			close() {
+				this.show = false;
+			},
+			toggle(e) {
+			    if(this.isok1==true){
+			    	this.maxDialog();
+			    	console.log(111);
+			    }else{
+			    	console.log(1122);
+				this.rebackDialog();
+				}
+			},
+		    maxDialog(e) {
+		    	this.isok1=false;
+				this.isok2=true;
+				$(".mask_div").width(document.body.clientWidth);
+				$(".mask_div").height(document.body.clientHeight - 60);
+				$(".mask_div").css("margin", "0%");
+				$(".mask_div").css("top", "60px");
+
+				
+			},
+			//还原按钮
+			rebackDialog() {
+				this.isok1=true;
+				this.isok2=false;
+				$(".mask_div").css("width", "80%");
+				$(".mask_div").css("height", "80%");
+				$(".mask_div").css("margin", "7% 10%");
+				$(".mask_div").css("top", "0");
+				
+
+			}
+			
 		}
-		
+
 	}
 </script>
 

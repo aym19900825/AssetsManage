@@ -29,7 +29,8 @@ axios.interceptors.response.use(
           console.log('401');
           // router.push({ path: '/' });
         case 403:
-          router.push({ path: '/' });
+          console.log('401');
+          // router.push({ path: '/' });
       }
     }
     return Promise.reject(error.response.data)

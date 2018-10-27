@@ -91,7 +91,7 @@
 						<!-- <ztree></ztree> -->
 					</div>
 					<div class="col-sm-9">
-						<tablediv></tablediv>
+						<tablediv ref="tableList"></tablediv>
 					</div>
 				</div>
 			</div>
@@ -139,29 +139,18 @@
         },
         // 重置
         resetPwd(){
-
+            console.log("========重置=========");
+            this.$refs.tableList.resetPass();
         }, 
         // 启用
         unfreeze(){
-            // var url = '/api/api-user/users';
-      // this.$axios.get('/api/api-user/users',data).then((res)=>{
-      //   this.userList = res.data.data;
-      //   console.log(this.userList);
-      // }).catch((wrong) => {
-          
-      // })
-      // console.log(1);
-            var url = '/api/api-user/users/updateEnabled?id=16&enabled=1';
-            this.$axios.get(url,{
-                // id:16,
-                // enabled:1
-            }).then(()=>{
-              
-            });
+            console.log("========启动=========");
+            this.$refs.tableList.unfreezeStatus();
         },
         // 冻结
         freezeAccount(){
-
+            console.log("========冻结=========");
+            this.$refs.tableList.freezeStatus();
         }
 		},
 		data() {

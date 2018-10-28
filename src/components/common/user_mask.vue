@@ -27,11 +27,11 @@
 						<div class="accordion_title">
 							<span class="accordion-toggle">基本信息</span>
 						</div>
-						<div class="col_but">
+						<div class="col_but" @click="col_but('col_but1')">
 							<i class="icon-arrow1-down"></i>
 						</div>
 					</div>
-					<div class="accordion-body tab-content " id="tab-content2">
+					<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
 						<div class="row control-label">
 							<div class="col-sm-12">
 								<label for="">所属组织</label>
@@ -111,11 +111,11 @@
 						<div class="accordion_title">
 							<span class="accordion-toggle">用户基本资料</span>
 						</div>
-						<div class="col_but">
+						<div class="col_but" @click="col_but('col_but2')">
 							<i class="icon-arrow1-down"></i>
 						</div>
 					</div>
-					<div class="accordion-body in collapse tab-content " id="tab-content2">
+					<div class="accordion-body in collapse tab-content " v-show="col_but2" id="tab-content2">
 
 						<div class="row control-label">
 							<div class="col-sm-4">
@@ -225,12 +225,23 @@
 		name: 'masks',
 		data() {
 			return {
+				col_but1:true,
+				col_but2:true,
 				show: false,
 				isok1:true,
 				isok2:false
 			}
 		},
 		methods: {
+			col_but(col_but){
+				//alert(col_but)
+				if(col_but=='col_but1'){
+					this.col_but1=!this.col_but1;
+				}
+				if(col_but=='col_but2'){
+					this.col_but2=!this.col_but2;
+				}
+			},
 			//点击按钮显示弹窗
 			childMethods() {
 				this.show = !this.show;

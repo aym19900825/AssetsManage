@@ -52,8 +52,8 @@
                   <el-dropdown-menu slot="dropdown">
                     <el-checkbox-group v-model="checkedTabNames" @change="handleCheckedTabNamesChange">
                     	
-                    	<el-dropdown-item>
-					    	<el-checkbox v-model="checked" v-for="tabname in tabnames" :label="tabname" :key="tabname">{{tabname}}</el-checkbox>
+                    	<el-dropdown-item v-for="tabname in tabnames">
+					    	<el-checkbox v-model="checked" :label="tabname" :key="tabname">{{tabname}}</el-checkbox>
 						</el-dropdown-item>
 
 					  </el-checkbox-group>

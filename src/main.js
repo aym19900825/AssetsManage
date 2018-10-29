@@ -32,7 +32,7 @@ import moment from "moment";
 
 Vue.config.productionTip = false
 Vue.prototype.$echarts = echarts 
-Vue.prototype.$moment = moment;//赋值使用
+Vue.prototype.$moment = moment//赋值使用
 Vue.use(ElementUI)
 Vue.use(vueGridLayout);  
 new Vue({

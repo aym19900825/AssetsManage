@@ -18,7 +18,7 @@
 				<button type="button" class="btn btn-bule button-margin" onclick="MgrUser.openChangeUser()" id="">
 						    <i class="icon-edit"></i>修改
 						</button>
-				<button type="button" class="btn btn-red button-margin" id="">
+				<button type="button" class="btn btn-red button-margin" id="" @click="deluserinfo">
 						    <i class="icon-trash"></i>删除
 						</button>
 				<button type="button" class="btn btn-primarys button-margin" @click="resetPwd()" id="">
@@ -35,7 +35,7 @@
 						    <i class="icon-role-site"></i>角色分配
 						</button>
 				<button type="button" class="btn btn-primarys button-margin" @click="modestsearch" id="">
-						    <i class="icon-search"></i>高级查询<i class="icon-arrow1-down"></i>
+						    <i class="icon-search"></i>高级查询<i class="icon-arrow1-down" v-show="down"></i><i class="icon-arrow1-up" v-show="up"></i>
 						</button>
 			</div>
 		</div>
@@ -85,29 +85,30 @@
 	</div>
 			<!-- 高级查询划出 -->
 			<div v-show="search">
-				<el-form status-icon ref="personinfo" :model="personinfo" label-width="80px">
-					 	<!-- 第一行 -->
-					 	<el-row :gutter="70">
-					 		<el-col :span="8">
-					 			 <el-form-item label="用户称谓">
-								    <el-input></el-input>
+				<el-form status-icon :model="searchList" label-width="70px">
+					 	<el-row :gutter="10">
+					 		<el-col :span="5">
+					 			 <el-form-item label="用户名">
+								    <el-input v-model="searchList.nickname"></el-input>
 								  </el-form-item>	
 					 		</el-col>
-					 		<el-col :span="8">
-					 			 <el-form-item label="出生日期">
-				                      <el-date-picker
-								      type="date"
-							      placeholder="选择日期" value-format="yyyy-MM-dd">
-								    </el-date-picker>
-				                </el-form-item>		
+					 		<el-col :span="5">
+					 			 <el-form-item label="角色">
+								    <el-input v-model="searchList.role"></el-input>
+								  </el-form-item>	
 					 		</el-col>
-					 		<el-col :span="8">
-					 			<el-form-item label="性别">
-					 				<el-radio label="男">男
-					 				</el-radio>
-	  								<el-radio label="女">女
-	  								</el-radio>
-					 			</el-form-item>
+					 		<el-col :span="5">
+					 			 <el-form-item label="状态">
+								    <el-input  v-model="searchList.enabled"></el-input>
+								  </el-form-item>	
+					 		</el-col>
+					 		<el-col :span="4">
+					 			 <el-form-item label="创建时间">
+								    <el-input v-model="searchList.createTime"></el-input>
+								  </el-form-item>	
+					 		</el-col>
+					 		<el-col :span="2">
+					 			 <el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>	
 					 		</el-col>
 					 	</el-row>
 					 </el-form>
@@ -119,7 +120,35 @@
 						<!-- <ztree></ztree> -->
 					</div>
 					<div class="col-sm-9">
-						<tablediv ref="tableList"></tablediv>
+						<!-- <tablediv ref="tableList"></tablediv> -->
+						<!-- 表格 -->
+						<el-table :data="userList" style="width: 96%;margin: 0 auto;" :default-sort = "{prop: 
+
+    'userList', order: 'descending'}"  @selection-change="SelChange">
+                <el-table-column type="selection" width="55">
+                </el-table-column>
+                <el-table-column label="账号" sortable width="80" prop="username">                  
+                </el-table-column>
+                <el-table-column label="姓名" sortable width="100" prop="nickname">                 
+                </el-table-column>                
+                 <el-table-column label="性别" sortable width="80" prop="sex">
+                </el-table-column>
+                <el-table-column label="角色" sortable width="100" prop="role">
+                </el-table-column>
+                <el-table-column label="部门" sortable width="100" prop="deptId">
+                </el-table-column>
+                  <el-table-column label="状态" sortable width="100" prop="enabled" :formatter="judge">
+                </el-table-column>
+                 <el-table-column label="创建时间" width="180" prop="createTime" sortable  :formatter="dateFormat">
+                </el-table-column> 
+            </el-table>
+    <!-- <span class="demonstration">显示总数</span>" -->
+    <el-pagination
+  background
+  layout="prev, pager, next"
+  :total="2" style="float:right;margin-top:10px;">
+</el-pagination>
+						<!-- 表格 -->
 					</div>
 				</div>
 			</div>
@@ -136,7 +165,7 @@
 	import navs_header from './common/nav_tabs.vue'
 	//import navs_button from './common/func_btn.vue'
 	// import ztree from './common/ztree.vue'
-	import tablediv from './common/tablelist.vue'
+	// import tablediv from './common/tablelist.vue'
 	import usermask from './common/user_mask.vue'
 
 	export default {
@@ -146,33 +175,66 @@
 			navs_header,
 			navs,
 //			navs_button,
-
-			tablediv,
-			usermask,
-			tablediv
+			// tablediv,
+			usermask
 		},
     data(){
       return{
+      	  selUser: [],
+      	  '启用':true,
+      	  '冻结':false,
           userList: [],
           search:false,
-          personinfo:[]
+          show:false,
+          down:true,
+          up:false,
+          searchList:{
+          	nickname:'',
+          	// role:'',
+          	enabled:'',
+          	createTime:'',
+          	// searchKey:''
+          }
       }
     },
-		methods: {
-			
+	methods: {
+		searchinfo(index) {
+	      var data = {
+	        params:{
+	           page: 1,
+	           limit: 10,
+	           nickname: this.searchList.nickname,
+          	 //   role:'',
+          	   enabled:this.searchList.enabled,
+          	   searchKey:'createTime',
+          	   searchValue:this.searchList.createTime,
+	      	} 
+      	};
+      var url = '/api/api-user/users';
+      this.$axios.get(url,data).then((res)=>{
+        this.userList = res.data.data;
+        console.log("================");
+        console.log(res.data.data);
+      }).catch((wrong) => {
+          
+      })      
+    },
 
-		    openAddMgr(){	
-			       	this.$refs.child.childMethods(); //
-			      },
+	  	openAddMgr(){	
+       		this.$refs.child.childMethods(); //
+      	},
 		//高级查询
 		modestsearch(){
-			this.search = true;
+			console.log("========高级查询=========");
+			this.search = !this.search;
+			this.down = !this.down,
+          	this.up = !this.up	
 		},
         // 删除
-        // delMgrUser(){
-        // 	console.log("========删除=========");
-        //     this.$refs.tableList.deluser();
-        // },
+        deluserinfo(){
+        	console.log("========删除=========");
+            this.$refs.tableList.deluser();
+        },
         // 重置
         resetPwd(){
             console.log("========重置=========");
@@ -187,13 +249,209 @@
         freezeAccount(){
             console.log("========冻结=========");
             this.$refs.tableList.freezeStatus();
+        },
+		judge(data){     
+        //taxStatus 布尔值
+        console.log(data.enabled);
+        return data.enabled ? '启用' : '冻结'
+    },
+     //时间格式化  
+    dateFormat(row, column) {  
+         var date = row[column.property];  
+          if (date == undefined) {  
+             return "";  
+          }  
+          return this.$moment(date).format("YYYY-MM-DD");
+          // return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
+      },  
+    insert() {
+      console.log("aaaaaaaaaaaaaa");
+      this.users.push(this.user)
+    },
+    remove(index) {
+      this.users.splice(index, 1)
+    },
+    SelChange(val){
+      this.selUser = val;
+    },
+    deluser(){
+      var selData = this.selUser;
+      if(selData.length == 0){
+        this.$message({
+          message:'请您选择要删除的用户',
+          type:'warning'
+        });
+        return;
+      }else if(selData.length > 1){
+          this.$message({
+          message: '不可同时删除多个用户',
+          type: 'warning'
+        });
+        return;
+      }else{
+        var changeUser = selData[0];
+        var id = changeUser.id;
+        var url = '/api/api-user/users/'+id;
+        this.$axios.delete(url,{
+        }).then((res)=>{
+            console.log(res.data);
+            //resp_code == 0是后台返回的请求成功的信息
+            if(res.data.resp_code == 0){
+              this.$message({
+                message: '删除成功',
+                type: 'success'
+              });
+              this.requestData();
+            }
+          }).catch((err) => {
+            this.$message({
+              message: '网络错误，请重试',
+              type: 'error'
+            });
+          });
         }
+    },
+    resetPass(){
+      var selData = this.selUser;
+      if(selData.length == 0 ){
+        this.$message({
+          message: '请您选择要重置密码的用户',
+          type: 'warning'
+        });
+        return;
+      }else if(selData.length > 1){
+        this.$message({
+          message: '不可同时多个用户进行重置',
+          type: 'warning'
+        });
+        return;
+      }else{
+        var changeUser = selData[0];
+        var id = changeUser.id;
+        var url = '/api/api-user/users/'+id+'/resetPassword';
+        this.$axios.post(url,{
+        }).then((res)=>{
+            //resp_code == 0是后台返回的请求成功的信息
+            if(res.data.resp_code == 0){
+              this.$message({
+                message: '重置成功',
+                type: 'success'
+              });
+              this.requestData();
+            }
+          }).catch((err) => {
+            this.$message({
+              message: '网络错误，请重试',
+              type: 'error'
+            });
+          });
+        }
+    },
+    unfreezeStatus(){
+      var selData = this.selUser;
+      if(selData.length == 0 ){
+        this.$message({
+          message: '请您选择您要启动的用户',
+          type: 'warning'
+        });
+        return;
+      }else if(selData.length > 1){
+        this.$message({
+          message: '不可同时启动多个用户',
+          type: 'warning'
+        });
+        return;
+      }else{
+        var changeUser = selData[0];
+        console.log(changeUser);
+        var url = '/api/api-user/users/updateEnabled?id='+changeUser.id+'&enabled=true';
+        console.log(url);
+        this.$axios.get(url,{
+        }).then((res)=>{
+            console.log(res.data);
+            //resp_code == 0是后台返回的请求成功的信息
+            if(res.data.resp_code == 0){
+              this.$message({
+                message: '启动成功',
+                type: 'success'
+              });
+              this.requestData();
+            }
+          }).catch((err) => {
+            this.$message({
+              message: '网络错误，请重试',
+              type: 'error'
+            });
+          });
+        }
+    },
+    freezeStatus(){
+      var selData = this.selUser;
+      if(selData.length == 0 ){
+        this.$message({
+          message: '请您选择您要冻结的用户',
+          type: 'warning'
+        });
+        return;
+      }else if(selData.length > 1){
+        this.$message({
+          message: '不可同时冻结多个用户',
+          type: 'warning'
+        });
+        return;
+      }else{
+        var changeUser = selData[0];
+        var url = '/api/api-user/users/updateEnabled?id='+changeUser.id+'&enabled=false';
+        this.$axios.get(url,{
+        }).then((res)=>{
+            //resp_code == 0是后台返回的请求成功的信息
+            if(res.data.resp_code == 0){
+              this.$message({
+                message: '冻结成功',
+                type: 'success'
+              });
+              this.requestData();
+            }
+          }).catch((err) => {
+            this.$message({
+              message: '网络错误，请重试',
+              type: 'error'
+            });
+          });
+        }
+    },
+    requestData(index) {
+      var data = {
+          params:{
+            page: 1,
+            limit: 10,
+
+          } 
+      }
+      var url = '/api/api-user/users';
+      this.$axios.get(url,data).then((res)=>{
+        this.userList = res.data.data;
+        console.log(res.data.data);
+      }).catch((wrong) => {
+          
+      })
+      this.userList.forEach((item,index)=>{
+          var id = item.id;
+          this.$axios.get('/users/'+id+'/roles',id).then((res)=>{
+          this.userList.role = res.data.roles[0].name;
+      }).catch((wrong) => {
+          
+      })
+      })
+      
+    },
+    formatter(row, column) {
+        return row.enabled;
+    }
+  },
+		mounted(){
+		   this.requestData();
 		},
-		data() {
-				return {
-				    show:false,
-						}
-		}
 	}
 </script>
 

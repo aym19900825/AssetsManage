@@ -174,8 +174,6 @@
 			vheader,
 			navs_header,
 			navs,
-//			navs_button,
-			// tablediv,
 			usermask
 		},
     data(){
@@ -437,7 +435,7 @@
       })
       this.userList.forEach((item,index)=>{
           var id = item.id;
-          this.$axios.get('/users/'+id+'/roles',id).then((res)=>{
+          this.$axios.get('/users/'+id+'/roles',data).then((res)=>{
           this.userList.role = res.data.roles[0].name;
       }).catch((wrong) => {
           

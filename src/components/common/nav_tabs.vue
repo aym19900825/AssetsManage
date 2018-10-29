@@ -8,21 +8,19 @@
                 </div>
             </div>
             <button class="roll-nav roll-right J_tabRight"><i class="icon-next"></i></button>
-            <div class="btn-group roll-nav roll-right">
-                <button class="dropdown J_tabClose" data-toggle="dropdown">关闭操作<i class="icon-arrow2-down"></i></button>
-                <ul role="menu" class="dropdown-menu dropdown-menu-right">
-                    <li class="J_tabShowActive">
-                        <a>定位当前选项卡</a>
-                    </li>
-                    <li class="divider"></li>
-                    <li class="J_tabCloseAll">
-                        <a>关闭全部选项卡</a>
-                    </li>
-                    <li class="J_tabCloseOther">
-                        <a>关闭其他选项卡</a>
-                    </li>
-                </ul>
-            </div>
+            <button class="btn-group roll-nav roll-right">
+                <el-dropdown placement="top" trigger="click">
+                  <span class="el-dropdown-link">
+                    <font class="pr10 J_tabClose">关闭操作</font>
+                    <i class="el-icon-arrow-down icon-arrow2-down"></i>
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item class="divider">定位当前选项卡</el-dropdown-item>
+                    <el-dropdown-item divided="true" class="J_tabCloseAll">关闭全部选项卡</el-dropdown-item>
+                    <el-dropdown-item class="J_tabCloseOther">关闭其他选项卡</el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+            </button>
             <a href="./login.html" class="roll-nav roll-right J_tabExit"><i class="icon-back"></i>返回</a>
         </div>
     </div>

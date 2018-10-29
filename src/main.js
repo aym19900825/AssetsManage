@@ -14,8 +14,8 @@ import './assets/css/tablelist.css'
 import './assets/css/grid.css'
 import $ from 'jquery'
 import './axios'
-import vueGridLayout from 'vue-grid-layout';
-import moment from "moment";
+import vueGridLayout from 'vue-grid-layout'
+import moment from 'moment'
 //import './jquery/dist/jquery.min.js'
 //import 'bootstrap/dist/css/bootstrap.min.css'
 //import 'bootstrap/dist/js/bootstrap.min.js'
@@ -24,8 +24,8 @@ import moment from "moment";
 //import 'ztree/js/jquery.ztree.all.min.js'
 //import 'ztree/js/jquery.ztree.core.js'
 //import 'ztree/css/zTreeStyle/zTreeStyle.css'
-// import './assets/bootstrap/bootstrap.min.css'
-// import './assets/bootstrap/bootstrap.min.js'
+//import './assets/bootstrap/bootstrap.min.css'
+//import './assets/bootstrap/bootstrap.min.js'
 
 
 
@@ -34,7 +34,7 @@ Vue.config.productionTip = false
 Vue.prototype.$echarts = echarts 
 Vue.prototype.$moment = moment//赋值使用
 Vue.use(ElementUI)
-Vue.use(vueGridLayout);  
+Vue.use(vueGridLayout)
 new Vue({
   el: '#app',
   router,

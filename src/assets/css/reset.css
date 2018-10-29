@@ -1,7 +1,9 @@
 body,ol,ul,h1,h2,h3,h4,h5,h6,p,th,td,dl,dd,form,fieldset,legend,input,textarea,select{
 	margin:0;
 	padding:0;
-	font:14px,"Microsoft YaHei","PingFang SC Regular","MicrosoftJhengHei",STHeiti,MingLiu,Arial;
+	font-size: 14px;
+	font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+/* 	font:14px,"Microsoft YaHei","PingFang SC Regular","MicrosoftJhengHei",STHeiti,MingLiu,Arial; */
 }
 body,html{
 	height:100%;
@@ -64,6 +66,11 @@ hr {
 	border: 0;
 	border-top: 1px solid #eee
 }
+.border-lineb {
+	border-bottom: 1px solid #DFE5EA
+}
+
+
 
 i, cite, em, var, address, dfn {
     font-style: italic;
@@ -224,4 +231,21 @@ i, cite, em, var, address, dfn {
 	background-color: #8996F1;
 	border-color: #8996F1;
 }
+
+/*Radio by heliping*/
+.el-radio__inner {
+	width: 18px; 
+	height: 18px;
+}
+.el-radio__inner::after {
+    width: 8px;
+    height: 8px;
+}
+
+/*表单页标题调整 heliping*/
+.el-form--label-top .el-form-item__label {padding-top: 20px; padding-bottom: 5px; line-height:20px;}
+.el-form-item {
+    margin-bottom: 5px;
+}
+.el-textarea__inner {padding-left: 5px; padding-right: 5px;}
 

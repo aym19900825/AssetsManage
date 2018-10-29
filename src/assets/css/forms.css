@@ -43,7 +43,7 @@ textarea{
     /* border: none;
     border-bottom:1px solid #DFE5EA; */
 }
-
+textarea { height: auto; }
 input[type="text"]:focus,
 input[type="password"]:focus,
 textarea:focus,button:focus {

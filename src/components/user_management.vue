@@ -231,49 +231,7 @@
         // 删除
         deluserinfo(){
         	console.log("========删除=========");
-            this.$refs.tableList.deluser();
-        },
-        // 重置
-        resetPwd(){
-            console.log("========重置=========");
-            this.$refs.tableList.resetPass();
-        }, 
-        // 启用
-        unfreeze(){
-            console.log("========启动=========");
-            this.$refs.tableList.unfreezeStatus();
-        },
-        // 冻结
-        freezeAccount(){
-            console.log("========冻结=========");
-            this.$refs.tableList.freezeStatus();
-        },
-		judge(data){     
-        //taxStatus 布尔值
-        console.log(data.enabled);
-        return data.enabled ? '启用' : '冻结'
-    },
-     //时间格式化  
-    dateFormat(row, column) {  
-         var date = row[column.property];  
-          if (date == undefined) {  
-             return "";  
-          }  
-          return this.$moment(date).format("YYYY-MM-DD");
-          // return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
-      },  
-    insert() {
-      console.log("aaaaaaaaaaaaaa");
-      this.users.push(this.user)
-    },
-    remove(index) {
-      this.users.splice(index, 1)
-    },
-    SelChange(val){
-      this.selUser = val;
-    },
-    deluser(){
-      var selData = this.selUser;
+            var selData = this.selUser;
       if(selData.length == 0){
         this.$message({
           message:'请您选择要删除的用户',
@@ -308,115 +266,148 @@
             });
           });
         }
+        },
+        // 重置
+        resetPwd(){
+            console.log("========重置=========");
+            
+		      var selData = this.selUser;
+		      if(selData.length == 0 ){
+		        this.$message({
+		          message: '请您选择要重置密码的用户',
+		          type: 'warning'
+		        });
+		        return;
+		      }else if(selData.length > 1){
+		        this.$message({
+		          message: '不可同时多个用户进行重置',
+		          type: 'warning'
+		        });
+		        return;
+		      }else{
+		        var changeUser = selData[0];
+		        var id = changeUser.id;
+		        var url = '/api/api-user/users/'+id+'/resetPassword';
+		        this.$axios.post(url,{
+		        }).then((res)=>{
+		            //resp_code == 0是后台返回的请求成功的信息
+		            if(res.data.resp_code == 0){
+		              this.$message({
+		                message: '重置成功',
+		                type: 'success'
+		              });
+		              this.requestData();
+		            }
+		          }).catch((err) => {
+		            this.$message({
+		              message: '网络错误，请重试',
+		              type: 'error'
+		            });
+		          });
+		       } 
+    
+        }, 
+        // 启用
+        unfreeze(){
+            console.log("========启动=========");
+            
+		      var selData = this.selUser;
+		      if(selData.length == 0 ){
+		        this.$message({
+		          message: '请您选择您要启动的用户',
+		          type: 'warning'
+		        });
+		        return;
+		      }else if(selData.length > 1){
+		        this.$message({
+		          message: '不可同时启动多个用户',
+		          type: 'warning'
+		        });
+		        return;
+		      }else{
+		        var changeUser = selData[0];
+		        console.log(changeUser);
+		        var url = '/api/api-user/users/updateEnabled?id='+changeUser.id+'&enabled=true';
+		        console.log(url);
+		        this.$axios.get(url,{
+		        }).then((res)=>{
+		            console.log(res.data);
+		            //resp_code == 0是后台返回的请求成功的信息
+		            if(res.data.resp_code == 0){
+		              this.$message({
+		                message: '启动成功',
+		                type: 'success'
+		              });
+		              this.requestData();
+		            }
+		          }).catch((err) => {
+		            this.$message({
+		              message: '网络错误，请重试',
+		              type: 'error'
+		            });
+		          });
+		        }
+        },
+        // 冻结
+        freezeAccount(){
+            console.log("========冻结=========");
+		      var selData = this.selUser;
+		      if(selData.length == 0 ){
+		        this.$message({
+		          message: '请您选择您要冻结的用户',
+		          type: 'warning'
+		        });
+		        return;
+		      }else if(selData.length > 1){
+		        this.$message({
+		          message: '不可同时冻结多个用户',
+		          type: 'warning'
+		        });
+		        return;
+		      }else{
+		        var changeUser = selData[0];
+		        var url = '/api/api-user/users/updateEnabled?id='+changeUser.id+'&enabled=false';
+		        this.$axios.get(url,{
+		        }).then((res)=>{
+		            //resp_code == 0是后台返回的请求成功的信息
+		            if(res.data.resp_code == 0){
+		              this.$message({
+		                message: '冻结成功',
+		                type: 'success'
+		              });
+		              this.requestData();
+		            }
+		          }).catch((err) => {
+		            this.$message({
+		              message: '网络错误，请重试',
+		              type: 'error'
+		            });
+		          });
+		        }
+        },
+		judge(data){     
+        //taxStatus 布尔值
+        console.log(data.enabled);
+        return data.enabled ? '启用' : '冻结'
     },
-    resetPass(){
-      var selData = this.selUser;
-      if(selData.length == 0 ){
-        this.$message({
-          message: '请您选择要重置密码的用户',
-          type: 'warning'
-        });
-        return;
-      }else if(selData.length > 1){
-        this.$message({
-          message: '不可同时多个用户进行重置',
-          type: 'warning'
-        });
-        return;
-      }else{
-        var changeUser = selData[0];
-        var id = changeUser.id;
-        var url = '/api/api-user/users/'+id+'/resetPassword';
-        this.$axios.post(url,{
-        }).then((res)=>{
-            //resp_code == 0是后台返回的请求成功的信息
-            if(res.data.resp_code == 0){
-              this.$message({
-                message: '重置成功',
-                type: 'success'
-              });
-              this.requestData();
-            }
-          }).catch((err) => {
-            this.$message({
-              message: '网络错误，请重试',
-              type: 'error'
-            });
-          });
-        }
+     //时间格式化  
+    dateFormat(row, column) {  
+         var date = row[column.property];  
+          if (date == undefined) {  
+             return "";  
+          }  
+          return this.$moment(date).format("YYYY-MM-DD");
+          // return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
+      },  
+    insert() {
+      console.log("aaaaaaaaaaaaaa");
+      this.users.push(this.user)
     },
-    unfreezeStatus(){
-      var selData = this.selUser;
-      if(selData.length == 0 ){
-        this.$message({
-          message: '请您选择您要启动的用户',
-          type: 'warning'
-        });
-        return;
-      }else if(selData.length > 1){
-        this.$message({
-          message: '不可同时启动多个用户',
-          type: 'warning'
-        });
-        return;
-      }else{
-        var changeUser = selData[0];
-        console.log(changeUser);
-        var url = '/api/api-user/users/updateEnabled?id='+changeUser.id+'&enabled=true';
-        console.log(url);
-        this.$axios.get(url,{
-        }).then((res)=>{
-            console.log(res.data);
-            //resp_code == 0是后台返回的请求成功的信息
-            if(res.data.resp_code == 0){
-              this.$message({
-                message: '启动成功',
-                type: 'success'
-              });
-              this.requestData();
-            }
-          }).catch((err) => {
-            this.$message({
-              message: '网络错误，请重试',
-              type: 'error'
-            });
-          });
-        }
+    remove(index) {
+      this.users.splice(index, 1)
     },
-    freezeStatus(){
-      var selData = this.selUser;
-      if(selData.length == 0 ){
-        this.$message({
-          message: '请您选择您要冻结的用户',
-          type: 'warning'
-        });
-        return;
-      }else if(selData.length > 1){
-        this.$message({
-          message: '不可同时冻结多个用户',
-          type: 'warning'
-        });
-        return;
-      }else{
-        var changeUser = selData[0];
-        var url = '/api/api-user/users/updateEnabled?id='+changeUser.id+'&enabled=false';
-        this.$axios.get(url,{
-        }).then((res)=>{
-            //resp_code == 0是后台返回的请求成功的信息
-            if(res.data.resp_code == 0){
-              this.$message({
-                message: '冻结成功',
-                type: 'success'
-              });
-              this.requestData();
-            }
-          }).catch((err) => {
-            this.$message({
-              message: '网络错误，请重试',
-              type: 'error'
-            });
-          });
-        }
+    SelChange(val){
+      this.selUser = val;
     },
     requestData(index) {
       var data = {

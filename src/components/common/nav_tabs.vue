@@ -46,7 +46,6 @@
     left: 0;
     border-right: solid 1px #d1d8de;
 }
-
 .content-tabs .roll-nav, .page-tabs-list {
     position: absolute;
     width: 40px;
@@ -62,7 +61,6 @@
     height: 37px;
     background:linear-gradient(360deg,rgba(232,236,240,1) 0%,rgba(255,255,255,1) 100%);
 }
-
 .page-tabs {
     position: absolute;
     margin-left: 40px;
@@ -81,7 +79,6 @@
     width: 40px;
     height: 39px;
     text-align: center;
-
     z-index: 2;
     top: 0;
     margin-left: 0px;

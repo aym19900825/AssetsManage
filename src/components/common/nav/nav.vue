@@ -1,6 +1,6 @@
 <template>
   <div>
-   		<nav>
+   		
 			<span class="logo">Dashboard</span>
 			<ul>
 				<li>
@@ -16,7 +16,7 @@
           <router-link :to="{path:'/dashboardList'}" >模块</router-link>
 				</li>
 			</ul>
-		</nav>
+		
   </div>
 </template>
 

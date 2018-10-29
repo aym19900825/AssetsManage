@@ -36,10 +36,12 @@ textarea {
 input[type="text"],
 input[type="password"],
 textarea{
-    height:30px; padding:0px 5px;
+    height:35px; padding:0px 5px;
     background-color:#FFFFFF;
     border-radius:3px;
-    border:1px solid #D8DEE6;
+    border:1px solid #DFE5EA;
+    /* border: none;
+    border-bottom:1px solid #DFE5EA; */
 }
 
 input[type="text"]:focus,
@@ -47,12 +49,37 @@ input[type="password"]:focus,
 textarea:focus,button:focus {
     outline:none;
     -webkit-appearance: none;
-    box-shadow:0px 5px 10px 0px #F3F4FA;
+    box-shadow:0px 5px 10px 0px #f1f4ff;
     border-radius:3px;
     border-color: #A4ACE7;
 }
 
+[class*=" btn-"],[class^="btn-"]{
+    color: #FFF;
+}
 
+[class*=" btn-"]:focus,[class^="btn-"]:focus {
+    color: #FBFDFF;
+}
+
+[class*=" btn-large"],[class^="btn-large"]{
+    height:36px;
+    font-size: 16px;
+    line-height:20px;
+    padding-left: 25px;
+    padding-right: 25px;
+    border-radius:6px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+
+.btn-default {
+    background:rgba(162,174,190,1);
+}
+.btn-primarys {
+    background:rgba(101,133,223,1);
+}
 
 
 /*------------------------文本框默认内容提示字颜色 By Heliping------------------------*/
@@ -89,116 +116,3 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 
 
 
-/* ----------------------------------渲染新的复选框和单选框 By Heliping---------------------------------- */
-/* 将初始的checkbox的样式改变 */
-.checkbox-group,
-.radio-group,
-.checkbox-group span,
-.radio-group span {height: 30px; line-height:30px; display: block; position: relative;}
-
-.checkbox-group span input[type="checkbox"],
-.radio-group span input[type="radio"] {
-    opacity: 0;/*将初始的checkbox隐藏起来*/
-    position: absolute;
-    cursor: pointer;
-    padding: 4px;
-    width: 20px;
-    height: 20px;
-    z-index: 2;
-    top: 0px;
-    left: 0px;
-    margin-left: 3px!important;
-}
-
-
-/* 渲染新的复选框和单选框 */
-.checkbox-group span label:before,
-.radio-group span label:before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 0px;
-    margin-top: -9px;
-    width: 18px;
-    height: 18px;
-    display: inline-block;
-    border-radius: 4px;
-    border: 1px solid #A2ABBF;
-    background: #fff;
-}
-
-
-/* 点击初始的checkbox，将新的checkbox关联起来 */
-.checkbox-group span input[type="checkbox"]:checked +label:after,
-.radio-group span input[type="radio"]:checked +label:after {
-    position: absolute;
-    display: inline-block;
-    top: 50%;
-    left: 0px;
-    margin-top: -9px;
-    *margin-top: 15px;
-    font-size: 14px;
-    line-height: 18px;
-    width: 18px;
-    height: 18px;
-    color: #FFFFFF;
-    background-color: #6585DF;
-    border: 1px solid #6585DF;
-    font-family: "hxqheam";
-    content: '\e91a';
-    text-align: center;
-    border-radius: 4px;
-}
-
-.radio-group span label:before,
-.radio-group span input[type="radio"]:checked +label:after {
-    border-radius: 100%;
-}
-
-.radio-group span input[type="radio"]:checked +label:after {
-    content: '●';/
-    line-height: 14px;
-    font-size: 18px;
-}
-
-.checkbox-group span label,.radio-group span label {
-    cursor: pointer;
-    text-align: left;
-    height: auto;
-    padding-left: 30px;
-}
-.checkbox-group span input[type="checkbox"]:disabled +label,
-.radio-group span input[type="radio"]:disabled +label
-{
-    cursor: default;
-}
-
-
-.checkbox-group span input[type="checkbox"]:disabled +label:before,
-.checkbox-group span input[type="checkbox"]:disabled +label:after,
-.radio-group span input[type="radio"]:disabled +label:before,
-.radio-group span input[type="radio"]:disabled +label:after {
-    color: #929CA6!important;
-    background-color: #DFE5EA !important;
-    border: 1px solid #C7CED6 !important;
-}
-
-.checkbox-group span input[type="checkbox"]:checked:disabled +label:before,
-.checkbox-group span input[type="checkbox"]:checked:disabled +label:after {
-    font-family: "hxqheam";
-    content: '\e91a';
-}
-
-.radio-group span input[type="radio"]:checked:disabled +label:before,
-.radio-group span input[type="radio"]:checked:disabled +label:after {
-    content: '●';
-    line-height: 14px;
-    font-size: 18px;
-}
-
-.checkbox-group span input[type="checkbox"]:disabled +label:after,
-.radio-group span input[type="radio"]:disabled +label:after {
-    -webkit-box-shadow: inset 0 1px 1px rgba(145,155,165,0.5),0 2px 9px rgba(145,155,165,0.5);
-    -moz-box-shadow: inset 0 1px 1px rgba(145,155,165,0.5),0 2px 9px rgba(145,155,165,0.5);
-    box-shadow: inset 0 1px 1px rgba(145,155,165,0.5),0 2px 9px rgba(145,155,165,0.5)
-}

@@ -129,6 +129,7 @@
       }
     },
 		methods: {
+			
 
 		    openAddMgr(){	
 			       	this.$refs.child.childMethods(); //

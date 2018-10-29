@@ -9,12 +9,12 @@
                 </el-table-column>
                 <el-table-column label="姓名" sortable width="100" prop="nickname">                 
                 </el-table-column>                
-                <!-- <el-table-column label="性别" sortable width="80" prop="sex">
+                 <el-table-column label="性别" sortable width="80" prop="sex">
                 </el-table-column>
                 <el-table-column label="角色" sortable width="100" prop="roleId">
                 </el-table-column>
                 <el-table-column label="部门" sortable width="100" prop="deptId">
-                </el-table-column>-->
+                </el-table-column>
                 <el-table-column label="状态" sortable width="100" prop="enabled" :formatter="judge">
                 </el-table-column>
                  <el-table-column label="创建时间" width="180" prop="createTime" sortable  :formatter="dateFormat">
@@ -39,14 +39,20 @@ export default {
       {
         "username":"pangsq",
         "nickname":"庞思齐",
+        "sex":"女",
+        "roleId":"管理员",
+        "deptId":"研发部",
         "enabled":true,
         "createTime":1491559642000
       },
       {
         "username":"zhangdd",
         "nickname":"张丹丹",
+        "sex":"女",
+        "roleId":"超级管理员",
+        "deptId":"研发部",
         "enabled":false,
-         "createTime":1491559642000
+        "createTime":1491559642000
       }
     ],
       selUser: []
@@ -76,6 +82,24 @@ export default {
     SelChange(val){
       this.selUser = val;
     },
+    // deluser(){
+    //   var selData = this.selUser;
+    //   if(selData.length == 0){
+    //     this.$message({
+    //       message:'请您选择要删除的用户'，
+    //       type:'warning'
+    //     });
+    //     return;
+    //   }else if(selData.length > 1){
+    //       this.$message({
+    //       message: '不可同时多个用户进行重置',
+    //       type: 'warning'
+    //     });
+    //     return;
+    //   }else{
+          
+    //   }
+    // },
     resetPass(){
       var selData = this.selUser;
       if(selData.length == 0 ){

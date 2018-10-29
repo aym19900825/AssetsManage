@@ -11,7 +11,7 @@
                 </el-table-column>                
                  <el-table-column label="性别" sortable width="80" prop="sex">
                 </el-table-column>
-                <el-table-column label="角色" sortable width="100" prop="roleId">
+                <el-table-column label="角色" sortable width="100" prop="role">
                 </el-table-column>
                 <el-table-column label="部门" sortable width="100" prop="deptId">
                 </el-table-column>
@@ -39,33 +39,13 @@ export default {
       selUser: [],
       '启用':true,
       '冻结':false,
-      // {
-      //   "username":"pangsq",
-      //   "nickname":"庞思齐",
-      //   "sex":"女",
-      //   "roleId":"管理员",
-      //   "deptId":"研发部",
-      //   "enabled":true,
-      //   "createTime":1491559642000
-      // },
-      // {
-      //   "username":"zhangdd",
-      //   "nickname":"张丹丹",
-      //   "sex":"女",
-      //   "roleId":"超级管理员",
-      //   "deptId":"研发部",
-      //   "enabled":false,
-      //   "createTime":1491559642000
-      // }
     }
   },
   methods: {
-    judge(data){
-      
+    judge(data){     
         //taxStatus 布尔值
         console.log(data.enabled);
         return data.enabled ? '启用' : '冻结'
-
     },
      //时间格式化  
     dateFormat(row, column) {  
@@ -73,8 +53,8 @@ export default {
           if (date == undefined) {  
              return "";  
           }  
-          return this.$moment(date).format("YYYY-MM-DD HH:mm:ss"); 
-         // return util.formatDate.format(new Date(date), 'yyyy-MM-dd'); 
+          return this.$moment(date).format("YYYY-MM-DD");
+          // return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
       },  
     insert() {
       console.log("aaaaaaaaaaaaaa");
@@ -86,42 +66,43 @@ export default {
     SelChange(val){
       this.selUser = val;
     },
-    // deluser(){
-    //   var selData = this.selUser;
-    //   if(selData.length == 0){
-    //     this.$message({
-    //       message:'请您选择要删除的用户',
-    //       type:'warning'
-    //     });
-    //     return;
-    //   }else if(selData.length > 1){
-    //       this.$message({
-    //       message: '不可同时多个用户进行重置',
-    //       type: 'warning'
-    //     });
-    //     return;
-    //   }else{
-    //     var changeUser = selData[0];
-    //     var id = changeUser.id;
-    //     var url = '/api/api-user/users/'+id+'/resetPassword';
-    //     this.$axios.post(url,{
-    //     }).then((res)=>{
-    //         //resp_code == 0是后台返回的请求成功的信息
-    //         if(res.data.resp_code == 0){
-    //           this.$message({
-    //             message: '重置成功',
-    //             type: 'success'
-    //           });
-    //           this.requestData();
-    //         }
-    //       }).catch((err) => {
-    //         this.$message({
-    //           message: '网络错误，请重试',
-    //           type: 'error'
-    //         });
-    //       });
-    //     }
-    // },
+    deluser(){
+      var selData = this.selUser;
+      if(selData.length == 0){
+        this.$message({
+          message:'请您选择要删除的用户',
+          type:'warning'
+        });
+        return;
+      }else if(selData.length > 1){
+          this.$message({
+          message: '不可同时删除多个用户',
+          type: 'warning'
+        });
+        return;
+      }else{
+        var changeUser = selData[0];
+        var id = changeUser.id;
+        var url = '/api/api-user/users/'+id;
+        this.$axios.delete(url,{
+        }).then((res)=>{
+            console.log(res.data);
+            //resp_code == 0是后台返回的请求成功的信息
+            if(res.data.resp_code == 0){
+              this.$message({
+                message: '删除成功',
+                type: 'success'
+              });
+              this.requestData();
+            }
+          }).catch((err) => {
+            this.$message({
+              message: '网络错误，请重试',
+              type: 'error'
+            });
+          });
+        }
+    },
     resetPass(){
       var selData = this.selUser;
       if(selData.length == 0 ){
@@ -235,15 +216,26 @@ export default {
       var data = {
           params:{
             page: 1,
-            limit: 2
+            limit: 10,
+
           } 
       }
       var url = '/api/api-user/users';
       this.$axios.get(url,data).then((res)=>{
         this.userList = res.data.data;
+        console.log(res.data.data);
       }).catch((wrong) => {
           
       })
+      // this.userList.forEach((item,index)=>{
+      //     var id = item.id;
+      //     this.$axios.get('/users/'+id+'/roles',data).then((res)=>{
+      //     this.userList.role = res.data.roles[0].name;
+      // }).catch((wrong) => {
+          
+      // })
+      // })
+      
     },
     formatter(row, column) {
         return row.enabled;

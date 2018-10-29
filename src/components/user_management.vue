@@ -1,10 +1,9 @@
 <template>
 	<div>
 		<div class="headerbg">
-      <vheader></vheader>
-  		<navs_header></navs_header>
-    </div>
-
+      		<vheader></vheader>
+  			<navs_header></navs_header>
+    	</div>
     <div class="contentbg">
 		<navs></navs>
 		<div class="wrapper wrapper-content">

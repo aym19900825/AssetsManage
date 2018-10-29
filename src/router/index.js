@@ -34,7 +34,6 @@ Vue.use(Router)
 
 
 const router = new Router({
-  // mode:'history',  没有后端配合，打包index.html页面为空
   routes: routes
 })
 router.beforeEach((to, from, next) => {

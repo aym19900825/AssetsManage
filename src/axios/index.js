@@ -26,8 +26,7 @@ axios.interceptors.response.use(
     if (error.response) {
       switch (error.response.status) {
         case 401:
-          console.log('401');
-          // router.push({ path: '/' });
+          router.push({ path: '/' });
         case 403:
           router.push({ path: '/' });
       }

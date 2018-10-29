@@ -225,3 +225,20 @@ i, cite, em, var, address, dfn {
 	border-color: #8996F1;
 }
 
+/*Radio by heliping*/
+.el-radio__inner {
+	width: 18px; 
+	height: 18px;
+}
+.el-radio__inner::after {
+    width: 8px;
+    height: 8px;
+}
+
+/*表单页标题调整 heliping*/
+.el-form--label-top .el-form-item__label {padding-top: 20px; padding-bottom: 5px; line-height:20px;}
+.el-form-item {
+    margin-bottom: 5px;
+}
+.el-textarea__inner {padding-left: 5px; padding-right: 5px;}
+

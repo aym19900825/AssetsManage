@@ -15,7 +15,7 @@
                 </el-table-column>
                 <el-table-column label="部门" sortable width="100" prop="deptId">
                 </el-table-column>
-                <el-table-column label="状态" sortable width="100" prop="enabled" :formatter="judge">
+                  <el-table-column label="状态" sortable width="100" prop="enabled" :formatter="judge">
                 </el-table-column>
                  <el-table-column label="创建时间" width="180" prop="createTime" sortable  :formatter="dateFormat">
                 </el-table-column> 
@@ -24,7 +24,7 @@
     <el-pagination
   background
   layout="prev, pager, next"
-  :total="1000" style="float:right;margin-top:10px;">
+  :total="2" style="float:right;margin-top:10px;">
 </el-pagination>
      </div>        
 
@@ -35,33 +35,37 @@ export default {
   name: 'tablediv',
   data () {
     return {
-      userList: [
-      {
-        "username":"pangsq",
-        "nickname":"庞思齐",
-        "sex":"女",
-        "roleId":"管理员",
-        "deptId":"研发部",
-        "enabled":true,
-        "createTime":1491559642000
-      },
-      {
-        "username":"zhangdd",
-        "nickname":"张丹丹",
-        "sex":"女",
-        "roleId":"超级管理员",
-        "deptId":"研发部",
-        "enabled":false,
-        "createTime":1491559642000
-      }
-    ],
-      selUser: []
+      userList: [],
+      selUser: [],
+      '启用':true,
+      '冻结':false,
+      // {
+      //   "username":"pangsq",
+      //   "nickname":"庞思齐",
+      //   "sex":"女",
+      //   "roleId":"管理员",
+      //   "deptId":"研发部",
+      //   "enabled":true,
+      //   "createTime":1491559642000
+      // },
+      // {
+      //   "username":"zhangdd",
+      //   "nickname":"张丹丹",
+      //   "sex":"女",
+      //   "roleId":"超级管理员",
+      //   "deptId":"研发部",
+      //   "enabled":false,
+      //   "createTime":1491559642000
+      // }
     }
   },
   methods: {
     judge(data){
+      
         //taxStatus 布尔值
+        console.log(data.enabled);
         return data.enabled ? '启用' : '冻结'
+
     },
      //时间格式化  
     dateFormat(row, column) {  
@@ -86,7 +90,7 @@ export default {
     //   var selData = this.selUser;
     //   if(selData.length == 0){
     //     this.$message({
-    //       message:'请您选择要删除的用户'，
+    //       message:'请您选择要删除的用户',
     //       type:'warning'
     //     });
     //     return;
@@ -97,8 +101,26 @@ export default {
     //     });
     //     return;
     //   }else{
-          
-    //   }
+    //     var changeUser = selData[0];
+    //     var id = changeUser.id;
+    //     var url = '/api/api-user/users/'+id+'/resetPassword';
+    //     this.$axios.post(url,{
+    //     }).then((res)=>{
+    //         //resp_code == 0是后台返回的请求成功的信息
+    //         if(res.data.resp_code == 0){
+    //           this.$message({
+    //             message: '重置成功',
+    //             type: 'success'
+    //           });
+    //           this.requestData();
+    //         }
+    //       }).catch((err) => {
+    //         this.$message({
+    //           message: '网络错误，请重试',
+    //           type: 'error'
+    //         });
+    //       });
+    //     }
     // },
     resetPass(){
       var selData = this.selUser;
@@ -152,11 +174,12 @@ export default {
         return;
       }else{
         var changeUser = selData[0];
-        var url = '/api/api-user/users/updateEnabled?id='+changeUser.id+'&enabled=1';
+        console.log(changeUser);
+        var url = '/api/api-user/users/updateEnabled?id='+changeUser.id+'&enabled=true';
+        console.log(url);
         this.$axios.get(url,{
         }).then((res)=>{
-
-          // console.log(createTime);
+            console.log(res.data);
             //resp_code == 0是后台返回的请求成功的信息
             if(res.data.resp_code == 0){
               this.$message({
@@ -189,7 +212,7 @@ export default {
         return;
       }else{
         var changeUser = selData[0];
-        var url = '/api/api-user/users/updateEnabled?id='+changeUser.id+'&enabled=0';
+        var url = '/api/api-user/users/updateEnabled?id='+changeUser.id+'&enabled=false';
         this.$axios.get(url,{
         }).then((res)=>{
             //resp_code == 0是后台返回的请求成功的信息

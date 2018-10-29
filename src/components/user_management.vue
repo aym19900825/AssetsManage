@@ -18,7 +18,7 @@
 				<button type="button" class="btn btn-bule button-margin" onclick="MgrUser.openChangeUser()" id="">
 						    <i class="icon-edit"></i>修改
 						</button>
-				<button type="button" class="btn btn-red button-margin" @click="delMgrUser()" id="">
+				<button type="button" class="btn btn-red button-margin" id="">
 						    <i class="icon-trash"></i>删除
 						</button>
 				<button type="button" class="btn btn-primarys button-margin" @click="resetPwd()" id="">
@@ -31,10 +31,10 @@
 						    <i class="icon-stop"></i>冻结
 						</button>
 
-				<button type="button" class="btn btn-primarys button-margin" onclick="MgrUser.roleAssign()" id="">
+				<button type="button" class="btn btn-primarys button-margin" id="">
 						    <i class="icon-role-site"></i>角色分配
 						</button>
-				<button type="button" class="btn btn-primarys button-margin" onclick="MgrUser.roleAssign()" id="">
+				<button type="button" class="btn btn-primarys button-margin" @click="modestsearch" id="">
 						    <i class="icon-search"></i>高级查询<i class="icon-arrow1-down"></i>
 						</button>
 			</div>
@@ -83,7 +83,36 @@
 			</div>
 		</div>
 	</div>
-
+			<!-- 高级查询划出 -->
+			<div v-show="search">
+				<el-form status-icon ref="personinfo" :model="personinfo" label-width="80px">
+					 	<!-- 第一行 -->
+					 	<el-row :gutter="70">
+					 		<el-col :span="8">
+					 			 <el-form-item label="用户称谓">
+								    <el-input></el-input>
+								  </el-form-item>	
+					 		</el-col>
+					 		<el-col :span="8">
+					 			 <el-form-item label="出生日期">
+				                      <el-date-picker
+								      type="date"
+							      placeholder="选择日期" value-format="yyyy-MM-dd">
+								    </el-date-picker>
+				                </el-form-item>		
+					 		</el-col>
+					 		<el-col :span="8">
+					 			<el-form-item label="性别">
+					 				<el-radio label="男">男
+					 				</el-radio>
+	  								<el-radio label="女">女
+	  								</el-radio>
+					 			</el-form-item>
+					 		</el-col>
+					 	</el-row>
+					 </el-form>
+			</div>
+			<!-- 高级查询划出 -->
 				<div class="row">
 
 					<div class="col-sm-3">
@@ -124,7 +153,9 @@
 		},
     data(){
       return{
-          userList: []
+          userList: [],
+          search:false,
+          personinfo:[]
       }
     },
 		methods: {
@@ -133,10 +164,15 @@
 		    openAddMgr(){	
 			       	this.$refs.child.childMethods(); //
 			      },
+		//高级查询
+		modestsearch(){
+			this.search = true;
+		},
         // 删除
-        delMgrUser(){
-
-        },
+        // delMgrUser(){
+        // 	console.log("========删除=========");
+        //     this.$refs.tableList.deluser();
+        // },
         // 重置
         resetPwd(){
             console.log("========重置=========");

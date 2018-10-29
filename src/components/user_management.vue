@@ -40,47 +40,27 @@
 			</div>
 		</div>
 		<div class="columns columns-right btn-group pull-right">
+			
 			<button class="btn btn-default btn-outline" type="button" name="refresh" aria-label="refresh" title="刷新"><i class="icon-refresh"></i></button>
+			
 			<div class="keep-open btn-group" title="列">
-				<button type="button" aria-label="columns" class="btn btn-default btn-outline dropdown-toggle" data-toggle="dropdown">
-					<i class="icon-menu3"></i> 
-					<i class="icon-arrow2-down"></i>
-                </button>
+				<el-dropdown :hide-on-click="false" class="btn btn-default btn-outline" placement="top-start" trigger="click">
+                  <span class="el-dropdown-link">
+                    <font class="pl10 J_tabClose"><i class="icon-menu3"></i></font>
+                    <i class="el-icon-arrow-down icon-arrow2-down"></i>
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-checkbox-group v-model="checkedTabNames" @change="handleCheckedTabNamesChange">
+                    	
+                    	<el-dropdown-item>
+					    	<el-checkbox v-model="checked" v-for="tabname in tabnames" :label="tabname" :key="tabname">{{tabname}}</el-checkbox>
+						</el-dropdown-item>
 
-				<ul class="dropdown-menu" role="menu">
-					<li role="menuitem">
-						<label>
-							<input type="checkbox" data-field="id" value="1"> id
-						</label>
-					</li>
-					<li role="menuitem" class="checkbox-group">
-						<span>
-							<input type="checkbox" data-field="name" value="2" checked="checked"><label>名称</label>
-						</span>
-					</li>
-					<li role="menuitem" class="checkbox-group">
-						<span>
-                			<input type="checkbox" data-field="pName" value="3" checked="checked"><label>上级角色</label>
-                		</span>
-					</li>
-					<li role="menuitem" class="checkbox-group">
-						<span>
-                			<input type="checkbox" data-field="deptName" value="4" checked="checked"><label>所在部门</label>
-                		</span>
-					</li>
-					<li role="menuitem" class="checkbox-group">
-						<span>
-                			<input type="checkbox" data-field="companyName" value="5" checked="checked"><label>所在公司</label>
-                		</span>
-					</li>
-					<li role="menuitem" class="checkbox-group">
-						<span>
-                			<input type="checkbox" data-field="tips" value="6" checked="checked"><label>名</label>
-                		</span>
-					</li>
-
-				</ul>
+					  </el-checkbox-group>
+                  </el-dropdown-menu>
+                </el-dropdown>
 			</div>
+
 		</div>
 	</div>
 			<!-- 高级查询划出 -->
@@ -139,6 +119,9 @@
 	import tablediv from './common/tablelist.vue'
 	import usermask from './common/user_mask.vue'
 
+	//Table表格数据名称
+	const tabnameOptions = ['账号', '姓名', '性别', '角色', '部门', '状态', '创建时间'];
+
 	export default {
 		name: 'user_management',
 		components: {
@@ -146,54 +129,60 @@
 			navs_header,
 			navs,
 //			navs_button,
-
 			tablediv,
 			usermask,
 			tablediv
 		},
-    data(){
-      return{
-          userList: [],
-          search:false,
-          personinfo:[]
-      }
-    },
-		methods: {
-			
 
+		methods: {
 		    openAddMgr(){	
 			       	this.$refs.child.childMethods(); //
 			      },
-		//高级查询
-		modestsearch(){
-			this.search = true;
-		},
-        // 删除
-        // delMgrUser(){
-        // 	console.log("========删除=========");
-        //     this.$refs.tableList.deluser();
-        // },
-        // 重置
-        resetPwd(){
-            console.log("========重置=========");
-            this.$refs.tableList.resetPass();
-        }, 
-        // 启用
-        unfreeze(){
-            console.log("========启动=========");
-            this.$refs.tableList.unfreezeStatus();
-        },
-        // 冻结
-        freezeAccount(){
-            console.log("========冻结=========");
-            this.$refs.tableList.freezeStatus();
-        }
+			//高级查询
+			modestsearch(){
+				this.search = true;
+			},
+	        // 删除
+	        // delMgrUser(){
+	        // 	console.log("========删除=========");
+	        //     this.$refs.tableList.deluser();
+	        // },
+	        // 重置
+	        resetPwd(){
+	            console.log("========重置=========");
+	            this.$refs.tableList.resetPass();
+	        }, 
+	        // 启用
+	        unfreeze(){
+	            console.log("========启动=========");
+	            this.$refs.tableList.unfreezeStatus();
+	        },
+	        // 冻结
+	        freezeAccount(){
+	            console.log("========冻结=========");
+	            this.$refs.tableList.freezeStatus();
+	        },
+
+	        //Table表格名称判断显示
+	        handleCheckAllChange(val) {
+		        this.checkedTabNames = val ? tabnameOptions : [];
+		        this.isIndeterminate = false;
+		    }
 		},
 		data() {
-				return {
-				    show:false,
-						}
+			return {
+				userList: [],
+				search:false,
+				personinfo:[],
+				show:false,
+				checked: false,//Checkbox 默认不选中状态
+				checkedTabNames: ['账号', '姓名', '性别', '角色', '部门', '状态'],//Checkbox 此数据选中状态
+				tabnames: tabnameOptions,
+			    isIndeterminate: true
+			};
 		}
+
+		
 	}
 </script>
 

@@ -10,14 +10,27 @@
                 </li>
         </ul>
         <div class="nav-head pull-right nav-right">
-                <div class="userimg"><i class="icon-order-down"></i></div>
-                <div class="userInfo">Admin,您好</div>
-                <div class="lingdang">
-                	<a href="#" title="待办任务">
-                		<span class="tips_red" id="todotipscount">5</span>
-                		<i class="icon-notice"></i>	
-                    </a>
-                </div>
+            <div class="lingdang mr30">
+            	<a href="#" title="待办任务">
+            		<span class="tips_red" id="todotipscount">5</span>
+            		<i class="icon-notice"></i>
+                </a>
+            </div>
+
+            <el-dropdown placement="top" trigger="click">
+              <span class="el-dropdown-link white">
+                <font class="pr10">Admin，您好</font>
+                <font><img class="userimg" /></font>
+                <i class="el-icon-arrow-down icon-arrow2-down"></i>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item><i class="icon-role-site mr10"></i>账号设置</el-dropdown-item>
+                <el-dropdown-item><i class="icon-user mr10"></i>个人资料</el-dropdown-item>
+                <el-dropdown-item><i class="icon-key mr10"></i>修改密码</el-dropdown-item>
+                <el-dropdown-item divided="true"><i class="icon-log-out mr10"></i>退出</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+
         </div>
     </div>
 </template>
@@ -94,15 +107,15 @@ export default {
     height: 20px;
     border-radius: 50px;
     position: absolute;
-    left: 14px;
-    top: -2px;
+    right: -10px;
+    top: -10px;
     background: #f34949;
     line-height: 20px;
     text-align: center;
     color: #fff;
     font-size: 12px;
 }
-.nav-right div{float: right;}
+
 .lingdang{
 	position: relative;
     width:24px;
@@ -110,7 +123,7 @@ export default {
     color:#fff;
     font-size:20px;
     line-height: 20px;
-    padding-top:10px;
+    display: inline-block;
 } 
 .lindang  .icon-notice{
 	color:#fff;

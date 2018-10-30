@@ -13,26 +13,20 @@
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
 								<button type="button" class="btn btn-green" @click="openAddMgr()" id="">
-		                                <i class="icon-add"></i>添加
-		                       </button>
+                                <i class="icon-add"></i>添加
+                       </button>
 								<button type="button" class="btn btn-bule button-margin" onclick="MgrUser.openChangeUser()" id="">
-								    <i class="icon-edit"></i>修改
-								</button>
+						    <i class="icon-edit"></i>修改
+						</button>
 								<button type="button" class="btn btn-red button-margin" id="" @click="deluserinfo">
-								    <i class="icon-trash"></i>删除
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="resetPwd()" id="">
-								    <i class="icon-refresh"></i>重置密码
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="unfreeze()" id="">
-								    <i class="icon-start"></i>启用
-								</button>
+						    <i class="icon-trash"></i>删除
+						</button>
+								<!-- <button type="button" class="btn btn-primarys button-margin" @click="unfreeze()" id="">
+						    <i class="icon-start"></i>启用
+						</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="freezeAccount()" id="">
-								    <i class="icon-stop"></i>冻结
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" id="">
-								    <i class="icon-role-site"></i>角色分配
-								</button>
+						    <i class="icon-stop"></i>冻结
+						</button> -->
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch" id="">
 						    <i class="icon-search"></i>高级查询<i class="icon-arrow1-down" v-show="down"></i><i class="icon-arrow1-up" v-show="up"></i>
 						</button>
@@ -84,26 +78,11 @@
 					</div>
 					<!-- 高级查询划出 -->
 					<div v-show="search">
-						<el-form status-icon :model="searchList" label-width="70px">
+						<el-form status-icon :model="searchDept" label-width="70px">
 							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-form-item label="用户名">
-										<el-input v-model="searchList.nickname"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="5">
-									<el-form-item label="角色">
-										<el-input v-model="searchList.role"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="5">
-									<el-form-item label="状态">
-										<el-input v-model="searchList.enabled"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="4">
-									<el-form-item label="创建时间">
-										<el-input v-model="searchList.createTime"></el-input>
+									<el-form-item label="部门名称">
+										<el-input v-model="searchDept.simplename"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="2">
@@ -119,29 +98,23 @@
 							<!-- <ztree></ztree> -->
 						</div>
 						<div class="col-sm-9">
-							<!-- <tablediv ref="tableList"></tablediv> -->
 							<!-- 表格 -->
-							<el-table :data="userList" style="width: 96%;margin: 0 auto;" :default-sort="{prop: 
+							<el-table :data="deptList" style="width: 96%;margin: 0 auto;" :default-sort="{prop: 
 
-    'userList', order: 'descending'}" @selection-change="SelChange">
+    'deptList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55">
 								</el-table-column>
-								<el-table-column label="账号" sortable width="80" prop="username">
+								<el-table-column label="ID" sortable width="80" prop="id">
 								</el-table-column>
-								<el-table-column label="姓名" sortable width="100" prop="nickname">
+								<el-table-column label="部门简称" sortable width="300" prop="simplename">
 								</el-table-column>
-								<el-table-column label="性别" sortable width="80" prop="sex">
+								<el-table-column label="类型" sortable width="110" prop="type">
 								</el-table-column>
-								<el-table-column label="角色" sortable width="100" prop="role">
-								</el-table-column>
-								<el-table-column label="部门" sortable width="100" prop="deptId">
-								</el-table-column>
-								<el-table-column label="状态" sortable width="100" prop="enabled" :formatter="judge">
-								</el-table-column>
-								<el-table-column label="创建时间" width="180" prop="createTime" sortable :formatter="dateFormat">
+								<!-- <el-table-column label="状态" sortable width="110" prop="enabled">
+								</el-table-column -->>
+								<el-table-column label="备注" sortable width="110" prop="tips">
 								</el-table-column>
 							</el-table>
-							<!-- <span class="demonstration">显示总数</span>" -->
 							<el-pagination background layout="prev, pager, next" :total="2" style="float:right;margin-top:10px;">
 							</el-pagination>
 							<!-- 表格 -->
@@ -149,7 +122,7 @@
 					</div>
 				</div>
 			</div>
-			<usermask ref="child"></usermask>
+			<deptmask ref="child"></deptmask>
 		</div>
 
 	</div>
@@ -162,7 +135,7 @@
 	//import navs_button from './common/func_btn.vue'
 	// import ztree from './common/ztree.vue'
 	// import tablediv from './common/tablelist.vue'
-	import usermask from './common/user_mask.vue'
+	import deptmask from './common/dept_mask.vue'
 
 	export default {
 		name: 'user_management',
@@ -170,24 +143,20 @@
 			vheader,
 			navs_header,
 			navs,
-			usermask
+			deptmask
 		},
 		data() {
 			return {
-				selUser: [],
+				selDept: [],
 				'启用': true,
 				'冻结': false,
-				userList: [],
+				deptList: [],
 				search: false,
 				show: false,
 				down: true,
 				up: false,
-				searchList: {
-					nickname: '',
-					// role:'',
-					enabled: '',
-					createTime: '',
-					// searchKey:''
+				searchDept: {
+					simplename: ''
 				}
 			}
 		},
@@ -197,16 +166,12 @@
 					params: {
 						page: 1,
 						limit: 10,
-						nickname: this.searchList.nickname,
-						//   role:'',
-						enabled: this.searchList.enabled,
-						searchKey: 'createTime',
-						searchValue: this.searchList.createTime,
+						simplename: this.searchDept.simplename
 					}
 				};
-				var url = '/api/api-user/users';
+				var url = '/api/api-user/depts';
 				this.$axios.get(url, data).then((res) => {
-					this.userList = res.data.data;
+					this.deptList = res.data.data;
 					console.log("================");
 					console.log(res.data.data);
 				}).catch((wrong) => {
@@ -225,7 +190,7 @@
 			},
 			// 删除
 			deluserinfo() {
-				var selData = this.selUser;
+				var selData = this.selDept;
 				if(selData.length == 0) {
 					this.$message({
 						message: '请您选择要删除的用户',
@@ -239,9 +204,9 @@
 					});
 					return;
 				} else {
-					var changeUser = selData[0];
-					var id = changeUser.id;
-					var url = '/api/api-user/users/' + id;
+					var changeDept = selData[0];
+					var id = changeDept.id;
+					var url = '/api/api-user/depts/' + id;
 					this.$axios.delete(url, {}).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -261,7 +226,7 @@
 			},
 			// 重置
 			resetPwd() {
-				var selData = this.selUser;
+				var selData = this.selDept;
 				if(selData.length == 0) {
 					this.$message({
 						message: '请您选择要重置密码的用户',
@@ -300,7 +265,7 @@
 			unfreeze() {
 				console.log("========启动=========");
 
-				var selData = this.selUser;
+				var selData = this.selDept;
 				if(selData.length == 0) {
 					this.$message({
 						message: '请您选择您要启动的用户',
@@ -339,7 +304,7 @@
 			// 冻结
 			freezeAccount() {
 				console.log("========冻结=========");
-				var selData = this.selUser;
+				var selData = this.selDept;
 				if(selData.length == 0) {
 					this.$message({
 						message: '请您选择您要冻结的用户',
@@ -394,7 +359,7 @@
 				this.users.splice(index, 1)
 			},
 			SelChange(val) {
-				this.selUser = val;
+				this.selDept = val;
 			},
 			requestData(index) {
 				var data = {
@@ -404,21 +369,21 @@
 
 					}
 				}
-				var url = '/api/api-user/users';
+				var url = '/api/api-user/depts';
 				this.$axios.get(url, data).then((res) => {
-					this.userList = res.data.data;
+					this.deptList = res.data.data;
 					console.log(res.data.data);
 				}).catch((wrong) => {
 
 				})
-				this.userList.forEach((item, index) => {
-					var id = item.id;
-					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
-						this.userList.role = res.data.roles[0].name;
-					}).catch((wrong) => {
+				// this.deptList.forEach((item, index) => {
+				// 	var id = item.id;
+				// 	this.$axios.get('/users/' + id + '/roles', data).then((res) => {
+				// 		this.userList.role = res.data.roles[0].name;
+				// 	}).catch((wrong) => {
 
-					})
-				})
+				// 	})
+				// })
 
 			},
 			formatter(row, column) {

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/page/login/login'
 import user_management from '@/components/user_management' 
+import dept_management from '@/components/dept_management'
 import personinfo from '@/components/personinfo'
 import ztree from '@/components/common/ztree' 
 Vue.use(Router)
@@ -18,6 +19,11 @@ Vue.use(Router)
     	name: 'user_management',
     	component: user_management
   	},
+    {
+      path: '/dept_management',
+      name: 'dept_management',
+      component: dept_management
+    },
     {
       path: '/personinfo',
       name: 'personinfo',

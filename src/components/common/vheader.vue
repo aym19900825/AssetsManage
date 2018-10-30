@@ -27,7 +27,7 @@
                 <el-dropdown-item><i class="icon-role-site mr10"></i>账号设置</el-dropdown-item>
                 <el-dropdown-item><i class="icon-user mr10"></i>个人资料</el-dropdown-item>
                 <el-dropdown-item><i class="icon-key mr10"></i>修改密码</el-dropdown-item>
-                <el-dropdown-item divided="true"><i class="icon-log-out mr10"></i>退出</el-dropdown-item>
+                <el-dropdown-item  ><i class="icon-log-out mr10"></i>退出</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
 
@@ -37,10 +37,10 @@
 
 <script>
 export default {
-    name: 'nav',
+//  name: 'nav',
       data(){
         return {
-            
+         
         }
     },
     methods: {

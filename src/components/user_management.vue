@@ -13,19 +13,11 @@
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
 								<button type="button" class="btn btn-green" @click="openAddMgr()" id="">
-<<<<<<< HEAD
                                 <i class="icon-add"></i>添加
                        </button>
 								<button type="button" class="btn btn-bule button-margin" @click="modify()">
-						    <i class="icon-edit"></i>修改
-						</button>
-=======
-		                                <i class="icon-add"></i>添加
-		                       </button>
-								<button type="button" class="btn btn-bule button-margin" onclick="MgrUser.openChangeUser()" id="">
 								    <i class="icon-edit"></i>修改
 								</button>
->>>>>>> c8ea1b0a37fa7d30ac0ccf9041f16cfc163fac7a
 								<button type="button" class="btn btn-red button-margin" id="" @click="deluserinfo">
 								    <i class="icon-trash"></i>删除
 								</button>
@@ -180,7 +172,7 @@
 			navs,
 			usermask
 		},
-		
+
 		data() {
 			return {
 				selUser: [],
@@ -199,7 +191,6 @@
 					// searchKey:''
 				},
 				//要修改
-	
 
 			}
 		},
@@ -219,14 +210,14 @@
 				var url = '/api/api-user/users';
 				this.$axios.get(url, data).then((res) => {
 					this.userList = res.data.data;
-					
+
 				}).catch((wrong) => {
 
 				})
 			},
 			//添加用戶
 			openAddMgr() {
-				this.$refs.child.childMethods(); //
+				this.$refs.child.childMethods();
 			},
 			//修改用戶
 			modify() {
@@ -251,7 +242,7 @@
 			modestsearch() {
 				this.search = !this.search;
 				this.down = !this.down,
-				this.up = !this.up
+					this.up = !this.up
 			},
 			// 删除
 			deluserinfo() {
@@ -328,7 +319,7 @@
 			},
 			// 启用
 			unfreeze() {
-				
+
 				var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({
@@ -364,7 +355,7 @@
 			},
 			// 冻结
 			freezeAccount() {
-				
+
 				var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({
@@ -447,7 +438,7 @@
 			formatter(row, column) {
 				return row.enabled;
 			},
-			testemit(str){
+			testemit(str) {
 				//this.requestData();
 				alert(str);
 			}
@@ -455,9 +446,9 @@
 		mounted() {
 			this.requestData();
 		},
-//		created(){
-//			this.requestData();
-//		}
+		//		created(){
+		//			this.requestData();
+		//		}
 	}
 </script>
 

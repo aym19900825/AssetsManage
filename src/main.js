@@ -13,6 +13,7 @@ import './assets/css/forms.css'
 import './assets/css/tablelist.css'
 import './assets/css/grid.css'
 import $ from 'jquery'
+import moment from 'moment'
 import './axios'
 import vueGridLayout from 'vue-grid-layout'
 //import './jquery/dist/jquery.min.js'
@@ -31,6 +32,7 @@ import vueGridLayout from 'vue-grid-layout'
 
 Vue.config.productionTip = false
 Vue.prototype.$echarts = echarts 
+Vue.prototype.$moment = moment//赋值使用
 Vue.use(ElementUI)
 new Vue({
   el: '#app',

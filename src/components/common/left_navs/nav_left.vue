@@ -109,13 +109,13 @@
 	   		
 		    maxDialog(e) {
 		    	$(".navbar-static-side").css("width", "60px");
-				
+				$(".wrapper").css("padding-left","60px");
 				
 			},
 			//还原按钮
 			rebackDialog() {
 					$(".navbar-static-side").css("width", "220px");
-					
+					$(".wrapper").css("padding-left","220px");
 
 			},
 	   		 SmoothlyMenu:function () {

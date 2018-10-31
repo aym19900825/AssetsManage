@@ -90,12 +90,7 @@
 									<el-form-item label="用户名">
 										<el-input v-model="searchList.nickname"></el-input>
 									</el-form-item>
-								</el-col>
-								<el-col :span="5">
-									<el-form-item label="角色">
-										<el-input v-model="searchList.role"></el-input>
-									</el-form-item>
-								</el-col>
+								</el-col>>
 								<el-col :span="5">
 									<el-form-item label="状态">
 										<el-input v-model="searchList.enabled"></el-input>
@@ -123,7 +118,6 @@
 							<!-- <tablediv ref="tableList"></tablediv> -->
 							<!-- 表格 -->
 							<el-table :data="userList" style="width: 96%;margin: 0 auto;" :default-sort="{prop: 
-
     'userList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55">
 								</el-table-column>
@@ -133,9 +127,10 @@
 								</el-table-column>
 								<el-table-column label="性别" sortable width="80" prop="sex">
 								</el-table-column>
-								<el-table-column label="角色" sortable width="100" prop="role">
 								</el-table-column>
-								<el-table-column label="部门" sortable width="100" prop="deptId">
+								<el-table-column label="部门" sortable width="100" prop="deptName">
+								</el-table-column>
+								<el-table-column label="公司" sortable width="100" prop="companyName">
 								</el-table-column>
 								<el-table-column label="状态" sortable width="100" prop="enabled" :formatter="judge">
 								</el-table-column>
@@ -164,7 +159,6 @@
 	//	import ztree from './common/ztree.vue'
 	// import tablediv from './common/tablelist.vue'
 	import usermask from './common/user_mask.vue'
-
 	export default {
 		name: 'user_management',
 		components: {
@@ -173,7 +167,6 @@
 			navs,
 			usermask
 		},
-
 		data() {
 			return {
 				selUser: [],
@@ -187,10 +180,8 @@
 				up: false,
 				searchList: {
 					nickname: '',
-					// role:'',
 					enabled: '',
-					createTime: '',
-					// searchKey:''
+					createTime: ''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -199,7 +190,7 @@
 				resourceProps: {
 					children: "subDepts",
 					label: "simplename"
-				}
+				},
 
 			}
 		},
@@ -210,18 +201,15 @@
 						page: 1,
 						limit: 10,
 						nickname: this.searchList.nickname,
-						//   role:'',
 						enabled: this.searchList.enabled,
 						searchKey: 'createTime',
-						searchValue: this.searchList.createTime,
+						searchValue: this.searchList.createTime
 					}
 				};
 				var url = '/api/api-user/users';
 				this.$axios.get(url, data).then((res) => {
 					this.userList = res.data.data;
-
 				}).catch((wrong) => {
-
 				})
 			},
 			//添加用戶
@@ -324,11 +312,9 @@
 						});
 					});
 				}
-
 			},
 			// 启用
 			unfreeze() {
-
 				var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({
@@ -364,7 +350,6 @@
 			},
 			// 冻结
 			freezeAccount() {
-
 				var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({
@@ -425,24 +410,20 @@
 					params: {
 						page: 1,
 						limit: 10,
-
 					}
 				}
 				var url = '/api/api-user/users';
 				this.$axios.get(url, data).then((res) => {
 					this.userList = res.data.data;
 				}).catch((wrong) => {
-
 				})
 				this.userList.forEach((item, index) => {
 					var id = item.id;
 					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
 						this.userList.role = res.data.roles[0].name;
 					}).catch((wrong) => {
-
 					})
 				})
-
 			},
 			//机构树
 			getKey() {

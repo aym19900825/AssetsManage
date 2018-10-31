@@ -2,19 +2,14 @@
 	<div>
 		<div class="mask" v-if="show"></div>
 		<div class="mask_div" v-if="show">
-			<!---->
 			<div class="mask_title_div clearfix">
 				<div class="mask_title">添加部门</div>
 				<div class="mask_anniu">
 					<span class="mask_span">
 						<i class="icon-minimize"></i>
 					</span>
-					<!--icon-maximization,icon-restore-->
-					<span class="mask_span mask_max" @click='toggle'>
-						 <!--v-bind:class="{ active: isActive, 'text-danger': hasError }">-->
-						 
+					<span class="mask_span mask_max" @click='toggle'>						 
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
-						<!--<i v-if="ok2" class="icon-restore"></i>-->
 					</span>
 					<span class="mask_span" @click='close'>
 						<i class="icon-close1"></i>
@@ -36,8 +31,8 @@
 						<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
 							<el-row :gutter="70">
 								<el-col :span="24">
-									<el-form-item label="所属上级" prop="companyId">
-										<el-input v-model="adddeptForm.companyId">
+									<el-form-item label="所属上级" prop="pid">
+										<el-input v-model="adddeptForm.pid">
 											<el-button slot="append" icon="el-icon-search"></el-button>
 										</el-input>
 									</el-form-item>
@@ -45,52 +40,32 @@
 							</el-row>
 							<el-row :gutter="70">
 								<el-col :span="8">
-									<el-form-item label="部门名称" prop="username">
-										<el-input v-model="adddeptForm.username"></el-input>
+									<el-form-item label="部门名称" prop="fullname">
+										<el-input v-model="adddeptForm.fullname"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="8">
-									<el-form-item label="单位简称" prop="password">
-										<el-input v-model="adddeptForm.password"></el-input>
+									<el-form-item label="单位简称" prop="simplename">
+										<el-input v-model="adddeptForm.simplename"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="8">
-									<el-form-item label="类型">
-									    <el-select v-model="formInline.region">
-									      <el-option label="部门" value="shanghai"></el-option>
-									      <el-option label="公司" value="beijing"></el-option>
-									    </el-select>
-									  </el-form-item>
+									<el-form-item label="类型" prop="type">
+										<el-input v-model="adddeptForm.type"></el-input>
+									</el-form-item>
 								</el-col>
 							</el-row>
 							<el-row :gutter="70">
 								<el-col :span="8">
-									<el-form-item label="机构编码" prop="companyId">
-										<el-input v-model="adddeptForm.companyId">
+									<el-form-item label="机构编码" prop="code">
+										<el-input v-model="adddeptForm.code">
 											<el-button slot="append" icon="el-icon-search"></el-button>
 										</el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="8">
-									<el-form-item label="电话">
-									    <el-select v-model="formInline.region">
-									      <el-option label="电话一" value="shanghai"></el-option>
-									      <el-option label="电话二" value="beijing"></el-option>
-									    </el-select>
-									  </el-form-item>
-								</el-col>
-								<el-col :span="8">
-									<el-form-item label="配置状态">
-					 				<el-switch v-model="value11" active-color="#13ce66" inactive-color="#ff4949">
-									</el-switch>
-					 			</el-form-item>
-								</el-col>
-							</el-row>
-							<el-row :gutter="70">
-								<el-col :span="8">
-									<el-form-item label="电话" prop="companyId">
-										<el-input v-model="adddeptForm.username" placeholder="请输入"></el-input>
-										</el-input>
+									<el-form-item label="电话" prop="teltphone">
+										<el-input v-model="adddeptForm.teltphone"></el-input>
 									</el-form-item>
 								</el-col>
 							</el-row>
@@ -106,8 +81,8 @@
 					</div>
 				</div>
 				<el-form-item>
-					<el-button @click="resetForm('adddeptForm')">取消</el-button>
-					<el-button type="primary" @click="submitForm('adddeptForm')">提交</el-button>
+					<el-button @click="cancelForm('adddeptForm')">取消</el-button>
+					<el-button type="primary" @click="submitForm">提交</el-button>
 				</el-form-item>
 			</el-form>
 
@@ -138,22 +113,13 @@
 				isok2: false,
 				labelPosition: 'top',
 				adddeptForm: {
-					companyId: '',
-					deptId: '',
-					password: '',
-					birthdate: '',
-					sex: '0',
-					phone: '',
-					enabled: '',
-					birthday: '',
-					workernumber: '',
-					nickname: '',
-					idnumber: '',
-					entrytime: '',
-					address: '',
-					tips: '',
-					username: ''
-
+					pid:'',
+					fullname:'',
+					simplename:'',
+					type:'',
+					code:'',
+					teltphone:'',
+					tips:''
 				},
 				rules: {
 					region: [{
@@ -179,16 +145,35 @@
 			childMethods() {
 				this.show = !this.show;
 			},
+			//修改
+			detail(deptid) {
+				var url = '/api/api-user/depts/' +deptid;
+				this.$axios.get(url, {}).then((res) => {
+					//console.log(res)
+					this.adddeptForm = res.data;
+					this.show = true;
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+			},
 			//点击关闭按钮
 			close() {
+				this.show = false;
+			},
+			cancelForm(){
+				this.show = false;
+				this.reset();
+			},
+			reset() {
 				this.show = false;
 			},
 			toggle(e) {
 				if(this.isok1 == true) {
 					this.maxDialog();
-					console.log(111);
 				} else {
-					console.log(1122);
 					this.rebackDialog();
 				}
 			},
@@ -211,17 +196,22 @@
 				$(".mask_div").css("top", "0");
 
 			},
-			//保存users/saveOrUpdate
+			//保存
 			submitForm() {
+				console.log("1");
 				var url = '/api/api-user/depts/saveOrUpdate';
-				this.$axios.post(url, {}).then((res) => {
+				this.$axios.post(url, this.adddeptForm).then((res) => {
+					 console.log("-------------");
+					// console.log(res.data);
 					//resp_code == 0是后台返回的请求成功的信息
 					if(res.data.resp_code == 0) {
 						this.$message({
 							message: '保存成功',
 							type: 'success'
 						});
-						this.requestData();
+						this.show = false;
+						//重新加载数据
+						this.$emit('request')
 					}
 				}).catch((err) => {
 					this.$message({
@@ -229,11 +219,8 @@
 						type: 'error'
 					});
 				});
-
 			}
-
 		}
-
 	}
 </script>
 

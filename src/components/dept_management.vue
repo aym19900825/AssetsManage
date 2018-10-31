@@ -15,7 +15,7 @@
 								<button type="button" class="btn btn-green" @click="openAddMgr()" id="">
                                 <i class="icon-add"></i>添加
                        </button>
-								<button type="button" class="btn btn-bule button-margin" onclick="MgrUser.openChangeUser()" id="">
+								<button type="button" class="btn btn-bule button-margin" @click="modify()" id="">
 						    <i class="icon-edit"></i>修改
 						</button>
 								<button type="button" class="btn btn-red button-margin" id="" @click="deluserinfo">
@@ -122,7 +122,7 @@
 					</div>
 				</div>
 			</div>
-			<deptmask ref="child"></deptmask>
+			<deptmask ref="child" @request="requestData"></deptmask>
 		</div>
 
 	</div>
@@ -172,8 +172,8 @@
 				var url = '/api/api-user/depts';
 				this.$axios.get(url, data).then((res) => {
 					this.deptList = res.data.data;
-					console.log("================");
-					console.log(res.data.data);
+					// console.log("================");
+					// console.log(res.data.data);
 				}).catch((wrong) => {
 
 				})
@@ -181,6 +181,26 @@
 
 			openAddMgr() {
 				this.$refs.child.childMethods(); //
+			},
+			modify() {
+				var selData = this.selDept;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请您选择要修改的信息',
+						type: 'warning'
+					});
+					return;
+				} else if(selData.length > 1) {
+					this.$message({
+						message: '不可同时修改多条信息',
+						type: 'warning'
+					});
+					return;
+				} else {
+					// console.log(selData[0].id);
+					this.$refs.child.detail(selData[0].id);
+					
+				}
 			},
 			//高级查询
 			modestsearch() {
@@ -212,119 +232,6 @@
 						if(res.data.resp_code == 0) {
 							this.$message({
 								message: '删除成功',
-								type: 'success'
-							});
-							this.requestData();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
-					});
-				}
-			},
-			// 重置
-			resetPwd() {
-				var selData = this.selDept;
-				if(selData.length == 0) {
-					this.$message({
-						message: '请您选择要重置密码的用户',
-						type: 'warning'
-					});
-					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时多个用户进行重置',
-						type: 'warning'
-					});
-					return;
-				} else {
-					var changeUser = selData[0];
-					var id = changeUser.id;
-					var url = '/api/api-user/users/' + id + '/resetPassword';
-					this.$axios.post(url, {}).then((res) => {
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '重置成功',
-								type: 'success'
-							});
-							this.requestData();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
-					});
-				}
-
-			},
-			// 启用
-			unfreeze() {
-				console.log("========启动=========");
-
-				var selData = this.selDept;
-				if(selData.length == 0) {
-					this.$message({
-						message: '请您选择您要启动的用户',
-						type: 'warning'
-					});
-					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时启动多个用户',
-						type: 'warning'
-					});
-					return;
-				} else {
-					var changeUser = selData[0];
-					console.log(changeUser);
-					var url = '/api/api-user/users/updateEnabled?id=' + changeUser.id + '&enabled=true';
-					console.log(url);
-					this.$axios.get(url, {}).then((res) => {
-						console.log(res.data);
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '启动成功',
-								type: 'success'
-							});
-							this.requestData();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
-					});
-				}
-			},
-			// 冻结
-			freezeAccount() {
-				console.log("========冻结=========");
-				var selData = this.selDept;
-				if(selData.length == 0) {
-					this.$message({
-						message: '请您选择您要冻结的用户',
-						type: 'warning'
-					});
-					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时冻结多个用户',
-						type: 'warning'
-					});
-					return;
-				} else {
-					var changeUser = selData[0];
-					var url = '/api/api-user/users/updateEnabled?id=' + changeUser.id + '&enabled=false';
-					this.$axios.get(url, {}).then((res) => {
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '冻结成功',
 								type: 'success'
 							});
 							this.requestData();
@@ -376,15 +283,6 @@
 				}).catch((wrong) => {
 
 				})
-				// this.deptList.forEach((item, index) => {
-				// 	var id = item.id;
-				// 	this.$axios.get('/users/' + id + '/roles', data).then((res) => {
-				// 		this.userList.role = res.data.roles[0].name;
-				// 	}).catch((wrong) => {
-
-				// 	})
-				// })
-
 			},
 			formatter(row, column) {
 				return row.enabled;

@@ -183,7 +183,6 @@
 <script>
 	export default {
 		name: 'masks',
-
 		data() {
 			return {
 				col_but1: true,
@@ -211,7 +210,6 @@
 					username: '',
 					roleId: '',
 					id: ''
-
 				},
 				rules: {
 					region: [{
@@ -219,10 +217,8 @@
 						message: '请选择活动区域',
 						trigger: 'change'
 					}],
-
 				}
 			};
-
 		},
 		methods: {
 			col_but(col_but) {
@@ -245,7 +241,6 @@
 					//console.log(res)
 					this.user = res.data;
 					this.show = true;
-
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -269,7 +264,6 @@
 				$(".mask_div").height(document.body.clientHeight - 60);
 				$(".mask_div").css("margin", "0%");
 				$(".mask_div").css("top", "60px");
-
 			},
 			//还原按钮
 			rebackDialog() {
@@ -279,12 +273,10 @@
 				$(".mask_div").css("height", "80%");
 				$(".mask_div").css("margin", "7% 10%");
 				$(".mask_div").css("top", "0");
-
 			},
-			
+
 			//保存users/saveOrUpdate
 			submitForm() {
-
 				var url = '/api/api-user/users/saveOrUpdate';
 				this.$axios.post(url, this.user).then((res) => {
 					if(res.data.resp_code == 0) {
@@ -295,7 +287,6 @@
 						this.show = false;
 						//重新加载数据
 						this.$emit('request')
-
 					}
 				}).catch((err) => {
 					this.$message({
@@ -303,15 +294,15 @@
 						type: 'error'
 					});
 				});
-
 			},
+
 			//查找公司
 			companyLookup(){
 				
 			}
 
-		},
 
+		},
 	}
 </script>
 

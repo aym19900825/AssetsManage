@@ -180,7 +180,6 @@
 <script>
 	export default {
 		name: 'masks',
-
 		data() {
 			return {
 				col_but1: true,
@@ -197,9 +196,9 @@
 					sex: '',
 					email: '',
 					phone: '',
-					enabled: '',
+					enabled: 1,
 					birthday: '',
-					workernumber: '',
+					worknumber: '',
 					nickname: '',
 					idnumber: '',
 					entrytime: '',
@@ -215,10 +214,8 @@
 						message: '请选择活动区域',
 						trigger: 'change'
 					}],
-
 				}
 			};
-
 		},
 		methods: {
 			col_but(col_but) {
@@ -241,7 +238,6 @@
 					//console.log(res)
 					this.user = res.data;
 					this.show = true;
-
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -265,7 +261,6 @@
 				$(".mask_div").height(document.body.clientHeight - 60);
 				$(".mask_div").css("margin", "0%");
 				$(".mask_div").css("top", "60px");
-
 			},
 			//还原按钮
 			rebackDialog() {
@@ -275,31 +270,26 @@
 				$(".mask_div").css("height", "80%");
 				$(".mask_div").css("margin", "7% 10%");
 				$(".mask_div").css("top", "0");
-
 			},
 			requestData(index) {
 				var data = {
 					params: {
 						page: 1,
 						limit: 10,
-
 					}
 				}
 				var url = '/api/api-user/users';
 				this.$axios.get(url, data).then((res) => {
 					this.useritem = res.data.data;
 				}).catch((wrong) => {
-
 				})
 				this.useritem.forEach((item, index) => {
 					var id = item.id;
 					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
 						this.useritem.role = res.data.roles[0].name;
 					}).catch((wrong) => {
-
 					})
 				})
-
 			},
 			//保存users/saveOrUpdate
 			submitForm() {
@@ -320,11 +310,8 @@
 						type: 'error'
 					});
 				});
-
 			},
-
 		},
-
 	}
 </script>
 

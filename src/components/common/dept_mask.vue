@@ -2,19 +2,14 @@
 	<div>
 		<div class="mask" v-if="show"></div>
 		<div class="mask_div" v-if="show">
-			<!---->
 			<div class="mask_title_div clearfix">
 				<div class="mask_title">添加部门</div>
 				<div class="mask_anniu">
 					<span class="mask_span">
 						<i class="icon-minimize"></i>
 					</span>
-					<!--icon-maximization,icon-restore-->
-					<span class="mask_span mask_max" @click='toggle'>
-						 <!--v-bind:class="{ active: isActive, 'text-danger': hasError }">-->
-						 
+					<span class="mask_span mask_max" @click='toggle'>						 
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
-						<!--<i v-if="ok2" class="icon-restore"></i>-->
 					</span>
 					<span class="mask_span" @click='close'>
 						<i class="icon-close1"></i>
@@ -69,8 +64,8 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="8">
-									<el-form-item label="电话" prop="telephone">
-										<el-input v-model="adddeptForm.telephone"></el-input>
+									<el-form-item label="电话" prop="teltphone">
+										<el-input v-model="adddeptForm.teltphone"></el-input>
 									</el-form-item>
 								</el-col>
 							</el-row>
@@ -117,7 +112,15 @@
 				isok1: true,
 				isok2: false,
 				labelPosition: 'top',
-				adddeptForm: [],
+				adddeptForm: {
+					pid:'',
+					fullname:'',
+					simplename:'',
+					type:'',
+					code:'',
+					teltphone:'',
+					tips:''
+				},
 				rules: {
 					region: [{
 						required: true,
@@ -142,6 +145,20 @@
 			childMethods() {
 				this.show = !this.show;
 			},
+			//修改
+			detail(deptid) {
+				var url = '/api/api-user/depts/' +deptid;
+				this.$axios.get(url, {}).then((res) => {
+					//console.log(res)
+					this.adddeptForm = res.data;
+					this.show = true;
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+			},
 			//点击关闭按钮
 			close() {
 				this.show = false;
@@ -156,9 +173,7 @@
 			toggle(e) {
 				if(this.isok1 == true) {
 					this.maxDialog();
-					console.log(111);
 				} else {
-					console.log(1122);
 					this.rebackDialog();
 				}
 			},
@@ -181,17 +196,22 @@
 				$(".mask_div").css("top", "0");
 
 			},
-			//保存users/saveOrUpdate
+			//保存
 			submitForm() {
+				console.log("1");
 				var url = '/api/api-user/depts/saveOrUpdate';
-				this.$axios.post(url, {}).then((res) => {
+				this.$axios.post(url, this.adddeptForm).then((res) => {
+					 console.log("-------------");
+					// console.log(res.data);
 					//resp_code == 0是后台返回的请求成功的信息
 					if(res.data.resp_code == 0) {
 						this.$message({
 							message: '保存成功',
 							type: 'success'
 						});
-						this.requestData();
+						this.show = false;
+						//重新加载数据
+						this.$emit('request')
 					}
 				}).catch((err) => {
 					this.$message({
@@ -199,11 +219,8 @@
 						type: 'error'
 					});
 				});
-
 			}
-
 		}
-
 	}
 </script>
 

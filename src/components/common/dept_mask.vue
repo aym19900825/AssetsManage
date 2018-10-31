@@ -11,7 +11,7 @@
 					<span class="mask_span mask_max" @click='toggle'>						 
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
 					</span>
-					<span class="mask_span" @click='close'>
+					<span class="mask_span" @click='close' :before-close="handleClose">
 						<i class="icon-close1"></i>
 					</span>
 				</div>
@@ -100,6 +100,18 @@
 	export default {
 		name: 'masks',
 		data() {
+			var validatePass1 = (rule, value, callback) => {
+                // var regTele ="^(0\\d{2}-\\d{8}(-\\d{1,4})?)|(0\\d{3}-\\d{7,8}(-\\d{1,4})?)$"; 
+                // console.log(value);
+                if (value === '') {
+                    callback(new Error('请填写数字'));}
+                // else if (!teltphone.test(this.adddeptForm.teltphone)) {
+                //      callback(new Error('真实姓名填写有误'));
+                // } 
+                else {
+                    callback();
+                }
+            };
 			return {
 				value11:true,
 				formInline: {
@@ -121,14 +133,15 @@
 					teltphone:'',
 					tips:''
 				},
-				rules: {
-					region: [{
-						required: true,
-						message: '请选择活动区域',
-						trigger: 'change'
-					}],
-
-				}
+				rules:{
+		          	teltphone:[
+		          		{
+		          			required: true,
+		                    validator: validatePass1,
+		                    trigger: 'blur'
+		          		}
+		          	]
+	          	}
 			};
 		},
 		methods: {

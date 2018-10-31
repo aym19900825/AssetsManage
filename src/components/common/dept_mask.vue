@@ -36,8 +36,8 @@
 						<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
 							<el-row :gutter="70">
 								<el-col :span="24">
-									<el-form-item label="所属上级" prop="companyId">
-										<el-input v-model="adddeptForm.companyId">
+									<el-form-item label="所属上级" prop="pid">
+										<el-input v-model="adddeptForm.pid">
 											<el-button slot="append" icon="el-icon-search"></el-button>
 										</el-input>
 									</el-form-item>
@@ -45,52 +45,32 @@
 							</el-row>
 							<el-row :gutter="70">
 								<el-col :span="8">
-									<el-form-item label="部门名称" prop="username">
-										<el-input v-model="adddeptForm.username"></el-input>
+									<el-form-item label="部门名称" prop="fullname">
+										<el-input v-model="adddeptForm.fullname"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="8">
-									<el-form-item label="单位简称" prop="password">
-										<el-input v-model="adddeptForm.password"></el-input>
+									<el-form-item label="单位简称" prop="simplename">
+										<el-input v-model="adddeptForm.simplename"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="8">
-									<el-form-item label="类型">
-									    <el-select v-model="formInline.region">
-									      <el-option label="部门" value="shanghai"></el-option>
-									      <el-option label="公司" value="beijing"></el-option>
-									    </el-select>
-									  </el-form-item>
+									<el-form-item label="类型" prop="type">
+										<el-input v-model="adddeptForm.type"></el-input>
+									</el-form-item>
 								</el-col>
 							</el-row>
 							<el-row :gutter="70">
 								<el-col :span="8">
-									<el-form-item label="机构编码" prop="companyId">
-										<el-input v-model="adddeptForm.companyId">
+									<el-form-item label="机构编码" prop="code">
+										<el-input v-model="adddeptForm.code">
 											<el-button slot="append" icon="el-icon-search"></el-button>
 										</el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="8">
-									<el-form-item label="电话">
-									    <el-select v-model="formInline.region">
-									      <el-option label="电话一" value="shanghai"></el-option>
-									      <el-option label="电话二" value="beijing"></el-option>
-									    </el-select>
-									  </el-form-item>
-								</el-col>
-								<el-col :span="8">
-									<el-form-item label="配置状态">
-					 				<el-switch v-model="value11" active-color="#13ce66" inactive-color="#ff4949">
-									</el-switch>
-					 			</el-form-item>
-								</el-col>
-							</el-row>
-							<el-row :gutter="70">
-								<el-col :span="8">
-									<el-form-item label="电话" prop="companyId">
-										<el-input v-model="adddeptForm.username" placeholder="请输入"></el-input>
-										</el-input>
+									<el-form-item label="电话" prop="telephone">
+										<el-input v-model="adddeptForm.telephone"></el-input>
 									</el-form-item>
 								</el-col>
 							</el-row>
@@ -106,8 +86,8 @@
 					</div>
 				</div>
 				<el-form-item>
-					<el-button @click="resetForm('adddeptForm')">取消</el-button>
-					<el-button type="primary" @click="submitForm('adddeptForm')">提交</el-button>
+					<el-button @click="cancelForm('adddeptForm')">取消</el-button>
+					<el-button type="primary" @click="submitForm">提交</el-button>
 				</el-form-item>
 			</el-form>
 
@@ -137,24 +117,7 @@
 				isok1: true,
 				isok2: false,
 				labelPosition: 'top',
-				adddeptForm: {
-					companyId: '',
-					deptId: '',
-					password: '',
-					birthdate: '',
-					sex: '0',
-					phone: '',
-					enabled: '',
-					birthday: '',
-					workernumber: '',
-					nickname: '',
-					idnumber: '',
-					entrytime: '',
-					address: '',
-					tips: '',
-					username: ''
-
-				},
+				adddeptForm: [],
 				rules: {
 					region: [{
 						required: true,
@@ -181,6 +144,13 @@
 			},
 			//点击关闭按钮
 			close() {
+				this.show = false;
+			},
+			cancelForm(){
+				this.show = false;
+				this.reset();
+			},
+			reset() {
 				this.show = false;
 			},
 			toggle(e) {

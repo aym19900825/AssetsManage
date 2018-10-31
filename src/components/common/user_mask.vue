@@ -65,7 +65,7 @@
 									</el-form-item>
 								</el-col>
 							</el-row>
-							<!--<el-row :gutter="70">
+							<el-row :gutter="70">
 								<el-col :span="12">
 									<el-form-item label="配置状态" prop="enabled">
 										<el-radio-group v-model="adduserForm.enabled">
@@ -74,7 +74,7 @@
 										</el-radio-group>
 									</el-form-item>
 								</el-col>
-							</el-row>-->
+							</el-row>
 
 						</div>
 					</div>
@@ -101,15 +101,14 @@
 								</el-col>
 								<el-col :span="8">
 									<el-form-item label="出生日期" prop="birthday">
-										<el-date-picker v-model="adduserForm.birthday" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
-										</el-date-picker>
+										<el-input v-model="adduserForm.birthday"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="8">
 									<el-form-item label="性別" prop="sex">
 										<el-radio-group v-model="adduserForm.sex">
-											<el-radio label="0"></el-radio>
-											<el-radio label="1"></el-radio>
+											<el-radio label="男"></el-radio>
+											<el-radio label="女"></el-radio>
 										</el-radio-group>
 									</el-form-item>
 								</el-col>
@@ -123,13 +122,7 @@
 								</el-col>
 								<el-col :span="8">
 									<el-form-item label="入职时间" prop="entrytime">
-										<el-date-picker v-model="adduserForm.entrytime" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
-										</el-date-picker>
-									</el-form-item>
-								</el-col>
-								<el-col :span="8">
-									<el-form-item label="角色" prop="roleId">
-										<el-input v-model="adduserForm.roleId"></el-input>
+										<el-input v-model="adduserForm.entrytime"></el-input>
 									</el-form-item>
 								</el-col>
 							</el-row>
@@ -137,7 +130,7 @@
 							<el-row :gutter="70">
 								<el-col :span="8">
 									<el-form-item label="工号" prop="worknumber">
-										<el-input v-model="adduserForm.worknumber"></el-input>
+										<el-input v-model="adduserForm.workernumber"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="8">
@@ -210,19 +203,18 @@
 					companyId: '',
 					deptId: '',
 					password: '',
-					sex: '',
-					email:'',
+					birthdate: '',
+					sex: '0',
 					phone: '',
-					enabled: 1,
+					enabled: '',
 					birthday: '',
-					worknumber: '',
+					workernumber: '',
 					nickname: '',
 					idnumber: '',
 					entrytime: '',
 					address: '',
 					tips: '',
-					username: '',
-					roleId:''
+					username: ''
 
 				},
 				rules: {
@@ -283,13 +275,15 @@
 			},
 			//保存users/saveOrUpdate
 			submitForm() {
-				this.$axios.post('/api/api-user/users/saveOrUpdate',this.adduserForm).then((res) => {
+				var url = '/api/api-user/users/saveOrUpdate';
+				this.$axios.post(url, {}).then((res) => {
 					//resp_code == 0是后台返回的请求成功的信息
 					if(res.data.resp_code == 0) {
 						this.$message({
-							message: '保存成功',
+							message: '重置成功',
 							type: 'success'
 						});
+						this.requestData();
 					}
 				}).catch((err) => {
 					this.$message({

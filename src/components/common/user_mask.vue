@@ -36,7 +36,7 @@
 								<el-col :span="24">
 									<el-form-item label="所属组织" prop="companyId">
 										<el-input v-model="user.companyId">
-											<el-button slot="append" icon="el-icon-search"></el-button>
+											<el-button slot="append" icon="el-icon-search" @click='companyLookup'></el-button>
 										</el-input>
 									</el-form-item>
 								</el-col>
@@ -174,6 +174,9 @@
 			</div>-->
 
 		</div>
+	
+	//弹出
+	
 	</div>
 </template>
 
@@ -232,7 +235,7 @@
 				}
 			},
 			//点击按钮显示弹窗
-			childMethods() {
+			visible() {
 				this.show = true;
 			},
 			// 这里是修改
@@ -278,30 +281,7 @@
 				$(".mask_div").css("top", "0");
 
 			},
-			requestData(index) {
-				var data = {
-					params: {
-						page: 1,
-						limit: 10,
-
-					}
-				}
-				var url = '/api/api-user/users';
-				this.$axios.get(url, data).then((res) => {
-					this.useritem = res.data.data;
-				}).catch((wrong) => {
-
-				})
-				this.useritem.forEach((item, index) => {
-					var id = item.id;
-					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
-						this.useritem.role = res.data.roles[0].name;
-					}).catch((wrong) => {
-
-					})
-				})
-
-			},
+			
 			//保存users/saveOrUpdate
 			submitForm() {
 
@@ -325,6 +305,10 @@
 				});
 
 			},
+			//查找公司
+			companyLookup(){
+				
+			}
 
 		},
 

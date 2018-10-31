@@ -116,7 +116,8 @@
 					<div class="row">
 
 						<div class="col-sm-3">
-							<!-- <ztree></ztree> -->
+							<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps">
+							</el-tree>
 						</div>
 						<div class="col-sm-9">
 							<!-- <tablediv ref="tableList"></tablediv> -->
@@ -160,7 +161,7 @@
 	import navs from './common/left_navs/nav_left.vue'
 	import navs_header from './common/nav_tabs.vue'
 	//import navs_button from './common/func_btn.vue'
-	// import ztree from './common/ztree.vue'
+	//	import ztree from './common/ztree.vue'
 	// import tablediv from './common/tablelist.vue'
 	import usermask from './common/user_mask.vue'
 
@@ -179,6 +180,7 @@
 				'启用': true,
 				'冻结': false,
 				userList: [],
+				deptTree: [], //树
 				search: false,
 				show: false,
 				down: true,
@@ -190,7 +192,14 @@
 					createTime: '',
 					// searchKey:''
 				},
-				//要修改
+				//tree
+				resourceData: [], //数组，我这里是通过接口获取数据，
+				resourceDialogisShow: false,
+				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
+				resourceProps: {
+					children: "subDepts",
+					label: "simplename"
+				}
 
 			}
 		},
@@ -217,7 +226,7 @@
 			},
 			//添加用戶
 			openAddMgr() {
-				this.$refs.child.childMethods();
+				this.$refs.child.visible();
 			},
 			//修改用戶
 			modify() {
@@ -435,20 +444,27 @@
 				})
 
 			},
+			//机构树
+			getKey() {
+				let that = this;
+				var url = '/api/api-user/depts/tree';
+				this.$axios.get(url, {}).then((res) => {
+					this.resourceData = res.data;
+				});
+			},
+			handleNodeClick(data) {
+				console.log(data);
+			},
 			formatter(row, column) {
 				return row.enabled;
 			},
-			testemit(str) {
-				//this.requestData();
-				alert(str);
-			}
+
 		},
 		mounted() {
 			this.requestData();
+			this.getKey();
 		},
-		//		created(){
-		//			this.requestData();
-		//		}
+
 	}
 </script>
 

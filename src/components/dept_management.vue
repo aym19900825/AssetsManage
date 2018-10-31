@@ -21,12 +21,6 @@
 								<button type="button" class="btn btn-red button-margin" id="" @click="deluserinfo">
 						    <i class="icon-trash"></i>删除
 						</button>
-								<!-- <button type="button" class="btn btn-primarys button-margin" @click="unfreeze()" id="">
-						    <i class="icon-start"></i>启用
-						</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="freezeAccount()" id="">
-						    <i class="icon-stop"></i>冻结
-						</button> -->
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch" id="">
 						    <i class="icon-search"></i>高级查询<i class="icon-arrow1-down" v-show="down"></i><i class="icon-arrow1-up" v-show="up"></i>
 						</button>
@@ -71,7 +65,6 @@
                 			<input type="checkbox" data-field="tips" value="6" checked="checked"><label>名</label>
                 		</span>
 									</li>
-
 								</ul>
 							</div>
 						</div>
@@ -93,9 +86,9 @@
 					</div>
 					<!-- 高级查询划出 -->
 					<div class="row">
-
 						<div class="col-sm-3">
-							<!-- <ztree></ztree> -->
+							<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps">
+							</el-tree>
 						</div>
 						<div class="col-sm-9">
 							<!-- 表格 -->
@@ -110,12 +103,10 @@
 								</el-table-column>
 								<el-table-column label="类型" sortable width="110" prop="type">
 								</el-table-column>
-								<!-- <el-table-column label="状态" sortable width="110" prop="enabled">
-								</el-table-column -->>
 								<el-table-column label="备注" sortable width="110" prop="tips">
 								</el-table-column>
 							</el-table>
-							<el-pagination background layout="prev, pager, next" :total="2" style="float:right;margin-top:10px;">
+							<el-pagination @current-change="aTable" background layout="prev, pager, next" :total="total" style="float:right;margin-top:10px;">
 							</el-pagination>
 							<!-- 表格 -->
 						</div>
@@ -148,6 +139,8 @@
 		data() {
 			return {
 				selDept: [],
+				page:'1',
+				total:'0',
 				'启用': true,
 				'冻结': false,
 				deptList: [],
@@ -157,10 +150,25 @@
 				up: false,
 				searchDept: {
 					simplename: ''
-				}
+				},
+				//tree
+				resourceData: [], //数组，我这里是通过接口获取数据，
+				resourceDialogisShow: false,
+				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
+				resourceProps: {
+					children: "subDepts",
+					label: "simplename"
+				},
 			}
 		},
 		methods: {
+			//分页功能
+			aTable(val){ 
+				console.log(val);
+				this.page = val; 
+				console.log(this.page);
+				this.requestData();
+			}, 
 			searchinfo(index) {
 				var data = {
 					params: {
@@ -172,8 +180,7 @@
 				var url = '/api/api-user/depts';
 				this.$axios.get(url, data).then((res) => {
 					this.deptList = res.data.data;
-					// console.log("================");
-					// console.log(res.data.data);
+					console.log(res.data.data);
 				}).catch((wrong) => {
 
 				})
@@ -190,14 +197,13 @@
 						type: 'warning'
 					});
 					return;
-				} else if(selData.length > 1) {
+				}else if(selData.length > 1) {
 					this.$message({
 						message: '不可同时修改多条信息',
 						type: 'warning'
 					});
 					return;
 				} else {
-					// console.log(selData[0].id);
 					this.$refs.child.detail(selData[0].id);
 					
 				}
@@ -271,18 +277,29 @@
 			requestData(index) {
 				var data = {
 					params: {
-						page: 1,
+						page: this.page,
 						limit: 10,
-
 					}
 				}
 				var url = '/api/api-user/depts';
 				this.$axios.get(url, data).then((res) => {
 					this.deptList = res.data.data;
-					console.log(res.data.data);
+					this.total = res.data.count;
+					// this.pagenum = this.total
 				}).catch((wrong) => {
 
 				})
+			},
+			//机构树
+			getKey() {
+				let that = this;
+				var url = '/api/api-user/depts/tree';
+				this.$axios.get(url, {}).then((res) => {
+					this.resourceData = res.data;
+				});
+			},
+			handleNodeClick(data) {
+				console.log(data);
 			},
 			formatter(row, column) {
 				return row.enabled;
@@ -290,6 +307,7 @@
 		},
 		mounted() {
 			this.requestData();
+			this.getKey();
 		},
 	}
 </script>

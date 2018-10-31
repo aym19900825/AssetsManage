@@ -38,7 +38,7 @@
 							<div class="mask_tab-block">
 								<div class="mask_tab-head clearfix">
 									<div class="accordion_title">
-										<span class="accordion-toggle">基本资料</span>
+										<span class="accordion-toggle">修改密码</span>
 									</div>
 									<div class="col_but">
 										<i class="icon-arrow1-down"></i>
@@ -148,14 +148,7 @@
 											  </el-form-item>
 								 		</el-col>
 								 	</el-row>
-								 	<!-- 第六行 -->
-								 	<el-row :gutter="70">
-								 		<el-col :span="24">
-								 			 <el-form-item label="备注">
-										    <el-input  type="textarea" :rows="3" v-model="personinfo.note"></el-input>
-										  </el-form-item>	
-								 		</el-col>
-								 	</el-row>
+								 	
 								 </el-form>	
 							</div>
 
@@ -183,7 +176,7 @@
 	import usermask from './common/user_mask.vue'
 
 	export default {
-		name: 'personinfo',
+		name: 'passwordedit',
 		components: {
 			vheader,
 			navs_header,

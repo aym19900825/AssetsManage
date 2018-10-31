@@ -2,7 +2,7 @@
 	<div>
 	<div class="headerbg">
   		<vheader></vheader>
-			<navs_header></navs_header>
+		<navs_header></navs_header>
 	</div>
     <div class="contentbg">
 		<div class="navbar-default navbar-static-side">
@@ -30,7 +30,6 @@
 
 
 		<div class="wrapper wrapper-content">
-			
 				<EasyScrollbar>
         			<div id="wrapper" ref="homePagess" style="height: 600px;">
 						<div id="information" style="height: inherit;">
@@ -38,7 +37,7 @@
 							<div class="mask_tab-block">
 								<div class="mask_tab-head clearfix">
 									<div class="accordion_title">
-										<span class="accordion-toggle">基本资料</span>
+										<span class="accordion-toggle">账号设置</span>
 									</div>
 									<div class="col_but">
 										<i class="icon-arrow1-down"></i>
@@ -47,31 +46,7 @@
 
 
 								 <el-form status-icon ref="personinfo" :model="personinfo" :rules="rules" label-width="80px" :label-position="labelPosition">
-								 	<!-- 第一行 -->
-								 	<el-row :gutter="70">
-								 		<el-col :span="8">
-								 			 <el-form-item label="用户称谓" prop="name">
-											    <el-input v-model="personinfo.name"></el-input>
-											  </el-form-item>	
-								 		</el-col>
-								 		<el-col :span="8">
-								 			 <el-form-item label="出生日期">
-							                      <el-date-picker
-											      v-model="personinfo.birthdate"
-											      type="date"
-										      placeholder="选择日期" value-format="yyyy-MM-dd">
-											    </el-date-picker>
-							                </el-form-item>		
-								 		</el-col>
-								 		<el-col :span="8">
-								 			<el-form-item label="性别">
-								 				<el-radio v-model="personinfo.sex" label="男">男
-								 				</el-radio>
-				  								<el-radio v-model="personinfo.sex" label="女">女
-				  								</el-radio>
-								 			</el-form-item>
-								 		</el-col>
-								 	</el-row>
+								 	
 								 	<!-- 第二行 -->
 								 	<el-row :gutter="70">
 								 		<el-col :span="8">
@@ -183,7 +158,7 @@
 	import usermask from './common/user_mask.vue'
 
 	export default {
-		name: 'personinfo',
+		name: 'accuntsettings',
 		components: {
 			vheader,
 			navs_header,

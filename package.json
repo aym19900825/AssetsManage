@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "bootstrap": "^3.3.6",
+    "easyscroll": "^1.0.1",
     "echarts": "^4.2.0-rc.1",
     "element-ui": "^2.4.8",
     "gridstack": "^0.4.0",

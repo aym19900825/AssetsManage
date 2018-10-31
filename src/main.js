@@ -13,9 +13,10 @@ import './assets/css/forms.css'
 import './assets/css/tablelist.css'
 import './assets/css/grid.css'
 import $ from 'jquery'
+import moment from 'moment'
 import './axios'
 import vueGridLayout from 'vue-grid-layout'
-import moment from 'moment'
+import EasyScroll from 'easyscroll';//自定义滚动条
 //import './jquery/dist/jquery.min.js'
 //import 'bootstrap/dist/css/bootstrap.min.css'
 //import 'bootstrap/dist/js/bootstrap.min.js'
@@ -34,7 +35,7 @@ Vue.config.productionTip = false
 Vue.prototype.$echarts = echarts 
 Vue.prototype.$moment = moment//赋值使用
 Vue.use(ElementUI)
-Vue.use(vueGridLayout)
+Vue.use(EasyScroll)//自定义滚动条
 new Vue({
   el: '#app',
   router,

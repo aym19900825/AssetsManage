@@ -10,12 +10,10 @@
                 </li>
         </ul>
         <div class="nav-head pull-right nav-right">
-            <div class="lingdang mr30">
-            	<a href="#" title="待办任务">
-            		<span class="tips_red" id="todotipscount">5</span>
-            		<i class="icon-notice"></i>
-                </a>
-            </div>
+            <el-badge :value="200" :max="99" class="item mr30">
+                <a href="#"><i class="icon-notice"></i></a>
+            </el-badge>
+            
 
             <el-dropdown placement="top" trigger="click">
               <span class="el-dropdown-link white">
@@ -100,20 +98,6 @@ export default {
     height:36px;
     line-height:36px;
     margin: 12px 40px;
-}
-.tips_red{
-	min-width: 12px;
-    padding: 0 6px;
-    height: 20px;
-    border-radius: 50px;
-    position: absolute;
-    right: -10px;
-    top: -10px;
-    background: #f34949;
-    line-height: 20px;
-    text-align: center;
-    color: #fff;
-    font-size: 12px;
 }
 
 .lingdang{

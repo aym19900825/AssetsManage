@@ -13,9 +13,9 @@
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
 								<button type="button" class="btn btn-green" @click="openAddMgr()" id="">
-		                                <i class="icon-add"></i>添加
-		                       </button>
-								<button type="button" class="btn btn-bule button-margin" onclick="MgrUser.openChangeUser()" id="">
+                                <i class="icon-add"></i>添加
+                       </button>
+								<button type="button" class="btn btn-bule button-margin" @click="modify()">
 								    <i class="icon-edit"></i>修改
 								</button>
 								<button type="button" class="btn btn-red button-margin" id="" @click="deluserinfo">
@@ -149,7 +149,7 @@
 					</div>
 				</div>
 			</div>
-			<usermask ref="child"></usermask>
+			<usermask ref="child" @request="requestData"></usermask>
 		</div>
 
 	</div>
@@ -172,6 +172,7 @@
 			navs,
 			usermask
 		},
+
 		data() {
 			return {
 				selUser: [],
@@ -188,7 +189,9 @@
 					enabled: '',
 					createTime: '',
 					// searchKey:''
-				}
+				},
+				//要修改
+
 			}
 		},
 		methods: {
@@ -207,21 +210,39 @@
 				var url = '/api/api-user/users';
 				this.$axios.get(url, data).then((res) => {
 					this.userList = res.data.data;
-					console.log("================");
-					console.log(res.data.data);
+
 				}).catch((wrong) => {
 
 				})
 			},
-
+			//添加用戶
 			openAddMgr() {
-				this.$refs.child.childMethods(); //
+				this.$refs.child.childMethods();
+			},
+			//修改用戶
+			modify() {
+				var selData = this.selUser;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请您选择要修改的用户',
+						type: 'warning'
+					});
+					return;
+				} else if(selData.length > 1) {
+					this.$message({
+						message: '不可同时修改多个用户',
+						type: 'warning'
+					});
+					return;
+				} else {
+					this.$refs.child.detail(selData[0].id);
+				}
 			},
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
 				this.down = !this.down,
-				this.up = !this.up
+					this.up = !this.up
 			},
 			// 删除
 			deluserinfo() {
@@ -298,7 +319,6 @@
 			},
 			// 启用
 			unfreeze() {
-				console.log("========启动=========");
 
 				var selData = this.selUser;
 				if(selData.length == 0) {
@@ -315,11 +335,8 @@
 					return;
 				} else {
 					var changeUser = selData[0];
-					console.log(changeUser);
 					var url = '/api/api-user/users/updateEnabled?id=' + changeUser.id + '&enabled=true';
-					console.log(url);
 					this.$axios.get(url, {}).then((res) => {
-						console.log(res.data);
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -338,7 +355,7 @@
 			},
 			// 冻结
 			freezeAccount() {
-				console.log("========冻结=========");
+
 				var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({
@@ -374,7 +391,6 @@
 			},
 			judge(data) {
 				//taxStatus 布尔值
-				console.log(data.enabled);
 				return data.enabled ? '启用' : '冻结'
 			},
 			//时间格式化  
@@ -387,7 +403,6 @@
 				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
 			},
 			insert() {
-				console.log("aaaaaaaaaaaaaa");
 				this.users.push(this.user)
 			},
 			remove(index) {
@@ -407,7 +422,6 @@
 				var url = '/api/api-user/users';
 				this.$axios.get(url, data).then((res) => {
 					this.userList = res.data.data;
-					console.log(res.data.data);
 				}).catch((wrong) => {
 
 				})
@@ -423,11 +437,18 @@
 			},
 			formatter(row, column) {
 				return row.enabled;
+			},
+			testemit(str) {
+				//this.requestData();
+				alert(str);
 			}
 		},
 		mounted() {
 			this.requestData();
 		},
+		//		created(){
+		//			this.requestData();
+		//		}
 	}
 </script>
 

@@ -1,7 +1,7 @@
 <template>
 	<div>
-		<div class="mask" v-if="show"></div>
-		<div class="mask_div" v-if="show">
+		<div class="mask" v-show="show"></div>
+		<div class="mask_div" v-show="show">
 			<!---->
 			<div class="mask_title_div clearfix">
 				<div class="mask_title">添加用户</div>
@@ -11,17 +11,15 @@
 					</span>
 					<!--icon-maximization,icon-restore-->
 					<span class="mask_span mask_max" @click='toggle'>
-						 <!--v-bind:class="{ active: isActive, 'text-danger': hasError }">-->
 						 
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
-						<!--<i v-if="ok2" class="icon-restore"></i>-->
 					</span>
 					<span class="mask_span" @click='close'>
 						<i class="icon-close1"></i>
 					</span>
 				</div>
 			</div>
-			<el-form v-model="adduserForm" :label-position="labelPosition" :rules="rules" ref="adduserForm" label-width="100px" class="demo-adduserForm">
+			<el-form v-model="user" :label-position="labelPosition" :rules="rules" ref="user" label-width="100px" class="demo-user">
 
 				<div class="accordion" id="information">
 					<div class="mask_tab-block">
@@ -37,7 +35,7 @@
 							<el-row :gutter="70">
 								<el-col :span="24">
 									<el-form-item label="所属组织" prop="companyId">
-										<el-input v-model="adduserForm.companyId">
+										<el-input v-model="user.companyId">
 											<el-button slot="append" icon="el-icon-search"></el-button>
 										</el-input>
 									</el-form-item>
@@ -46,7 +44,7 @@
 							<el-row :gutter="70">
 								<el-col :span="24">
 									<el-form-item label="所属部门" prop="deptId">
-										<el-input v-model="adduserForm.deptId">
+										<el-input v-model="user.deptId">
 											<el-button slot="append" icon="el-icon-search"></el-button>
 										</el-input>
 									</el-form-item>
@@ -56,26 +54,15 @@
 							<el-row :gutter="70">
 								<el-col :span="12">
 									<el-form-item label="登录名称" prop="username">
-										<el-input v-model="adduserForm.username"></el-input>
+										<el-input v-model="user.username"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="12">
 									<el-form-item label="登录口令" prop="password">
-										<el-input v-model="adduserForm.password"></el-input>
+										<el-input v-model="user.password"></el-input>
 									</el-form-item>
 								</el-col>
 							</el-row>
-							<el-row :gutter="70">
-								<el-col :span="12">
-									<el-form-item label="配置状态" prop="enabled">
-										<el-radio-group v-model="adduserForm.enabled">
-											<el-radio label="启用"></el-radio>
-											<el-radio label="冻结"></el-radio>
-										</el-radio-group>
-									</el-form-item>
-								</el-col>
-							</el-row>
-
 						</div>
 					</div>
 				</div>
@@ -96,19 +83,20 @@
 							<el-row :gutter="70">
 								<el-col :span="8">
 									<el-form-item label="姓名" prop="nickname">
-										<el-input v-model="adduserForm.nickname"></el-input>
+										<el-input v-model="user.nickname"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="8">
 									<el-form-item label="出生日期" prop="birthday">
-										<el-input v-model="adduserForm.birthday"></el-input>
+										<el-date-picker v-model="user.birthday" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+										</el-date-picker>
 									</el-form-item>
 								</el-col>
 								<el-col :span="8">
 									<el-form-item label="性別" prop="sex">
-										<el-radio-group v-model="adduserForm.sex">
-											<el-radio label="男"></el-radio>
-											<el-radio label="女"></el-radio>
+										<el-radio-group v-model="user.sex">
+											<el-radio label="0"></el-radio>
+											<el-radio label="1"></el-radio>
 										</el-radio-group>
 									</el-form-item>
 								</el-col>
@@ -117,12 +105,18 @@
 
 								<el-col :span="8">
 									<el-form-item label="身份证号" prop="idnumber">
-										<el-input v-model="adduserForm.idnumber"></el-input>
+										<el-input v-model="user.idnumber"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="8">
 									<el-form-item label="入职时间" prop="entrytime">
-										<el-input v-model="adduserForm.entrytime"></el-input>
+										<el-date-picker v-model="user.entrytime" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+										</el-date-picker>
+									</el-form-item>
+								</el-col>
+								<el-col :span="8">
+									<el-form-item label="角色" prop="roleId">
+										<el-input v-model="user.roleId"></el-input>
 									</el-form-item>
 								</el-col>
 							</el-row>
@@ -130,30 +124,25 @@
 							<el-row :gutter="70">
 								<el-col :span="8">
 									<el-form-item label="工号" prop="worknumber">
-										<el-input v-model="adduserForm.workernumber"></el-input>
+										<el-input v-model="user.worknumber"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="8">
 									<el-form-item label="手机号" prop="phone">
-										<el-input v-model="adduserForm.phone"></el-input>
+										<el-input v-model="user.phone"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="8">
 									<el-form-item label="电子邮箱" prop="email">
-										<el-input v-model="adduserForm.email"></el-input>
+										<el-input v-model="user.email"></el-input>
 									</el-form-item>
 								</el-col>
 
 							</el-row>
 							<el-row :gutter="70">
-								<!--<el-col :span="8">
-									<el-form-item label="默认身份" prop="name">
-										<el-input v-model="adduserForm.name"></el-input>
-									</el-form-item>
-								</el-col>-->
 								<el-col :span="16">
 									<el-form-item label="地址" prop="address">
-										<el-input v-model="adduserForm.address"></el-input>
+										<el-input v-model="user.address"></el-input>
 									</el-form-item>
 								</el-col>
 
@@ -162,7 +151,7 @@
 							<el-row :gutter="70">
 								<el-col :span="24">
 									<el-form-item label="备注" prop="tips">
-										<el-input type="textarea" v-model="adduserForm.tips"></el-input>
+										<el-input type="textarea" v-model="user.tips"></el-input>
 
 									</el-form-item>
 								</el-col>
@@ -173,8 +162,8 @@
 				</div>
 
 				<el-form-item>
-					<el-button @click="resetForm('adduserForm')">取消</el-button>
-					<el-button type="primary" @click="submitForm('adduserForm')">提交</el-button>
+					<el-button @click='close'>取消</el-button>
+					<el-button type="primary" @click='submitForm()'>提交</el-button>
 				</el-form-item>
 			</el-form>
 
@@ -191,6 +180,7 @@
 <script>
 	export default {
 		name: 'masks',
+
 		data() {
 			return {
 				col_but1: true,
@@ -198,13 +188,14 @@
 				show: false,
 				isok1: true,
 				isok2: false,
+				useritem: [],
 				labelPosition: 'top',
-				adduserForm: {
+				user: {
 					companyId: '',
 					deptId: '',
 					password: '',
-					birthdate: '',
-					sex: '0',
+					sex: '',
+					email: '',
 					phone: '',
 					enabled: '',
 					birthday: '',
@@ -214,8 +205,9 @@
 					entrytime: '',
 					address: '',
 					tips: '',
-					username: ''
-
+					username: '',
+					roleId: '',
+					id: ''
 				},
 				rules: {
 					region: [{
@@ -226,6 +218,7 @@
 
 				}
 			};
+
 		},
 		methods: {
 			col_but(col_but) {
@@ -239,7 +232,22 @@
 			},
 			//点击按钮显示弹窗
 			childMethods() {
-				this.show = !this.show;
+				this.show = true;
+			},
+			// 这里是修改
+			detail(userid) {
+				var url = '/api/api-user/users/' + userid;
+				this.$axios.get(url, {}).then((res) => {
+					//console.log(res)
+					this.user = res.data;
+					this.show = true;
+
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
 			},
 			//点击关闭按钮
 			close() {
@@ -248,11 +256,7 @@
 			toggle(e) {
 				if(this.isok1 == true) {
 					this.maxDialog();
-					console.log(111);
-				} else {
-					console.log(1122);
-					this.rebackDialog();
-				}
+				} else {}
 			},
 			maxDialog(e) {
 				this.isok1 = false;
@@ -273,17 +277,42 @@
 				$(".mask_div").css("top", "0");
 
 			},
+			requestData(index) {
+				var data = {
+					params: {
+						page: 1,
+						limit: 10,
+
+					}
+				}
+				var url = '/api/api-user/users';
+				this.$axios.get(url, data).then((res) => {
+					this.useritem = res.data.data;
+				}).catch((wrong) => {
+
+				})
+				this.useritem.forEach((item, index) => {
+					var id = item.id;
+					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
+						this.useritem.role = res.data.roles[0].name;
+					}).catch((wrong) => {
+
+					})
+				})
+
+			},
 			//保存users/saveOrUpdate
 			submitForm() {
 				var url = '/api/api-user/users/saveOrUpdate';
-				this.$axios.post(url, {}).then((res) => {
-					//resp_code == 0是后台返回的请求成功的信息
+				this.$axios.post(url, this.user).then((res) => {
 					if(res.data.resp_code == 0) {
 						this.$message({
-							message: '重置成功',
-							type: 'success'
+							message: '保存成功',
+							type: 'success',
 						});
-						this.requestData();
+						this.show = false;
+						//重新加载数据
+						this.$emit('request')
 					}
 				}).catch((err) => {
 					this.$message({
@@ -292,9 +321,9 @@
 					});
 				});
 
-			}
+			},
 
-		}
+		},
 
 	}
 </script>

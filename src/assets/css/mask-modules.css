@@ -172,7 +172,9 @@
     line-height: 35px;
     margin-right: 40px;
 }
-
+.aa{
+	display: none;
+}
 element.style {
 }
 .group, #authornametag, #righternametag, .authordelete, .form-horizontal .editor-checkbox-group span, .form-horizontal .editor-radio-group span {

@@ -90,7 +90,7 @@
 									<el-form-item label="用户名">
 										<el-input v-model="searchList.nickname"></el-input>
 									</el-form-item>
-								</el-col>>
+								</el-col>
 								<el-col :span="5">
 									<el-form-item label="状态">
 										<el-input v-model="searchList.enabled"></el-input>
@@ -145,7 +145,7 @@
 					</div>
 				</div>
 			</div>
-			<usermask ref="child" @request="requestData"></usermask>
+			<usermask ref="child" @request="requestData" @requestTree="getKey"></usermask>
 		</div>
 
 	</div>
@@ -173,7 +173,7 @@
 				'启用': true,
 				'冻结': false,
 				userList: [],
-				deptTree: [], //树
+				//				deptTree: [], //树
 				search: false,
 				show: false,
 				down: true,
@@ -209,8 +209,7 @@
 				var url = '/api/api-user/users';
 				this.$axios.get(url, data).then((res) => {
 					this.userList = res.data.data;
-				}).catch((wrong) => {
-				})
+				}).catch((wrong) => {})
 			},
 			//添加用戶
 			openAddMgr() {
@@ -415,14 +414,12 @@
 				var url = '/api/api-user/users';
 				this.$axios.get(url, data).then((res) => {
 					this.userList = res.data.data;
-				}).catch((wrong) => {
-				})
+				}).catch((wrong) => {})
 				this.userList.forEach((item, index) => {
 					var id = item.id;
 					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
 						this.userList.role = res.data.roles[0].name;
-					}).catch((wrong) => {
-					})
+					}).catch((wrong) => {})
 				})
 			},
 			//机构树
@@ -434,7 +431,7 @@
 				});
 			},
 			handleNodeClick(data) {
-				console.log(data);
+
 			},
 			formatter(row, column) {
 				return row.enabled;

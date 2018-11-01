@@ -259,7 +259,7 @@
 					var changeUser = selData[0];
 					var id = changeUser.id;
 					var url = '/api/api-user/users/' + id;
-					this.$axios.delete(url, {}).then((res) => {
+					this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({

@@ -22,10 +22,26 @@
                 <i class="el-icon-arrow-down icon-arrow2-down"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item><i class="icon-role-site mr10"></i>账号设置</el-dropdown-item>
-                <el-dropdown-item><i class="icon-user mr10"></i>个人资料</el-dropdown-item>
-                <el-dropdown-item><i class="icon-key mr10"></i>修改密码</el-dropdown-item>
-                <el-dropdown-item  ><i class="icon-log-out mr10"></i>退出</el-dropdown-item>
+                <el-dropdown-item>
+                    <router-link to="/accuntsettings">
+                        <i class="icon-role-site mr10"></i>账号设置
+                    </router-link>
+                </el-dropdown-item>
+                <el-dropdown-item>
+                    <router-link to="/personinfo">
+                        <i class="icon-user mr10"></i>个人资料
+                    </router-link>
+                </el-dropdown-item>
+                <el-dropdown-item>
+                    <router-link to="/passwordedit">
+                        <i class="icon-key mr10"></i>修改密码
+                    </router-link>
+                </el-dropdown-item>
+                <el-dropdown-item>
+                    <router-link to="/user_management">
+                        <i class="icon-log-out mr10"></i>退出
+                    </router-link>
+                </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
 

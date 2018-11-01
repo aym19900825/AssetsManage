@@ -19,7 +19,7 @@ body{
 #app {height: 100%;}
 
 a{
-	color:#6585DF;
+	color:#666B74;
 	text-decoration:none;
 }
 a:hover{
@@ -224,7 +224,7 @@ i, cite, em, var, address, dfn {
 
 
 
-
+.el-dropdown {cursor: pointer;}
 
 
 /*增删改查按钮操作行*/

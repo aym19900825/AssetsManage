@@ -34,23 +34,6 @@
     			<div id="wrapper" ref="homePagess" style="height: 600px;">
 					<div id="information" style="height: inherit;">
 						<div class="ibox-content">
-							<div class="mask_tab-block mb20">
-								<el-row :gutter="70">
-									<el-col :span="4" class="pt20">
-										<el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
-  :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
-										  <img v-if="imageUrl" :src="imageUrl" class="avatar">
-										  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-										</el-upload>
-									</el-col>
-									<el-col :span="20">
-										
-									</el-col>
-								</el-row>
-							</div>
-
-
-
 							<div class="mask_tab-block">
 								<div class="mask_tab-head clearfix">
 									<div class="accordion_title">
@@ -61,41 +44,52 @@
 									</div>
 								</div>
 
-								 <el-form status-icon ref="accuntsettings" :model="accuntsettings" :rules="rules" label-width="80px" :label-position="labelPosition">
-								 	
+								 <el-form status-icon ref="accuntsetting" :model="accuntsetting" :rules="rules" label-width="80px" :label-position="labelPosition">
+								 	<el-row :gutter="70">
+										<el-col :span="12">
+										 	<el-row :gutter="70">
+										 		<el-col :span="24">
+										 			 <el-form-item label="人员姓名">
+												    <el-input v-model="accuntsetting.personname"></el-input>
+												  </el-form-item>	
+										 		</el-col>
+										 	</el-row>
+										 	<el-row :gutter="70">
+										 		<el-col :span="24">
+										 			<el-form-item label="排序号">
+													    <el-input v-model="accuntsetting.orders" placeholder="数字越大越在前"></el-input>
+													  </el-form-item>
+										 		</el-col>
+										 	</el-row>
+										</el-col>
+										<el-col :span="12" class="pt20">
+											<el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
+	  :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload" title="上传头像">
+											  <img v-if="imageUrl" :src="imageUrl" class="avatar">
+											  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+											</el-upload>
+										</el-col>
+									</el-row>
+
 								 	<el-row :gutter="70">
 										<el-col :span="24">
 											<el-form-item label="所属组织" prop="companyId">
-												<el-input v-model="accuntsettings.companyId" disabled>
+												<el-input v-model="accuntsetting.companyId" disabled>
 													<el-button slot="append" icon="el-icon-search" @click='companyLookup'></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
-
-								 	<!-- 第二行 -->
-								 	<el-row :gutter="70">
-								 		<el-col :span="12">
-								 			 <el-form-item label="人员姓名">
-										    <el-input v-model="accuntsettings.personname"></el-input>
-										  </el-form-item>	
-								 		</el-col>
-								 		<el-col :span="12">
-								 			<el-form-item label="排序号">
-											    <el-input v-model="accuntsettings.orders" placeholder="数字越大越在前"></el-input>
-											  </el-form-item>
-								 		</el-col>
-								 	</el-row>
 								 	<!-- 第三行 -->
 								 	<el-row :gutter="70">
 								 		<el-col :span="12">
 								 			 <el-form-item label="登录名称">
-								 				<el-input v-model="accuntsettings.username" disabled></el-input>
+								 				<el-input v-model="accuntsetting.username" disabled></el-input>
 								 			</el-form-item>	
 								 		</el-col>
 								 		<el-col :span="12">
 								 			 <el-form-item label="登录口令">
-							                      <el-input type="password" v-model="accuntsettings.password" disabled></el-input>
+							                      <el-input type="password" v-model="accuntsetting.password" disabled></el-input>
 							                </el-form-item>		
 								 		</el-col>
 								 	</el-row>
@@ -103,13 +97,13 @@
 								 	<el-row :gutter="70">
 								 		<el-col :span="12">
 								 			 <el-form-item label="配置状态">
-										    	<el-radio disabled v-model="accuntsettings.configstate" label="1">启用</el-radio>
-  												<el-radio disabled v-model="accuntsettings.configstate" label="2">冻结</el-radio>
+										    	<el-radio disabled v-model="accuntsetting.configstate" label="1">启用</el-radio>
+  												<el-radio disabled v-model="accuntsetting.configstate" label="2">冻结</el-radio>
 										  </el-form-item>	
 								 		</el-col>
 								 		<el-col :span="12">
 								 			 <el-form-item label="登录方式">
-											    <el-checkbox-group v-model="accuntsettings.logintype">
+											    <el-checkbox-group v-model="accuntsetting.logintype">
 										      <el-checkbox label="口令登录" name="type"></el-checkbox>
 										      <el-checkbox label="uKey" name="type"></el-checkbox>
 										      <el-checkbox label="数字证书" name="type"></el-checkbox>
@@ -144,7 +138,7 @@
 	import usermask from './common/user_mask.vue'
 
 	export default {
-		name: 'accuntsettings',
+		name: 'accuntsetting',
 		components: {
 			vheader,
 			navs_header,
@@ -160,7 +154,7 @@
                 console.log(value);
                 if (value === '') {
                     callback(new Error('必填'));}
-                // } else if (!name.test(this.accuntsettings.name)) {
+                // } else if (!name.test(this.accuntsetting.name)) {
                 //     callback(new Error('真实姓名填写有误'));
                 // } 
                 else {
@@ -181,7 +175,7 @@
 	          value1:true,
 	          value2: true,
 	          labelPosition: 'top',
-	          accuntsettings:
+	          accuntsetting:
 	          	{
 	          		companyId: '北京恒信启华信息技术股份有限公司',
 	          		personname:'超级管理员',
@@ -204,7 +198,7 @@
 				{//leftNavs左侧菜单数据
 		            navicon: 'icon-role-site',
 		            navtitle: '账号设置',
-		            navherf: '/accuntsettings'
+		            navherf: '/accuntsetting'
 		          }, {
 		            navicon: 'icon-user',
 		            navtitle: '个人资料',
@@ -271,7 +265,7 @@
 				$(".navs>li").css("margin", "0px 10px");
 			},
 			saveinfo(){
-				console.log(this.accuntsettings);
+				console.log(this.accuntsetting);
 			}
 		},
 	}
@@ -281,6 +275,8 @@
 @import '../assets/css/mask-modules.css';
  .avatar-uploader {
     border: 1px dashed #d9d9d9;
+    padding-top: 10px;
+    padding-bottom: 10px;
     border-radius: 6px;
     cursor: pointer;
     text-align: center;
@@ -302,7 +298,6 @@
     width: 140px;
     height: 140px;
     display: block;
-    border: 1px dashed #d9d9d9;
   }
  .avatar i {font-size: 50px; line-height:130px; color: #c0c4cc;}
 

@@ -154,7 +154,7 @@
 				{//leftNavs左侧菜单数据
 		            navicon: 'icon-role-site',
 		            navtitle: '账号设置',
-		            navherf: '/accuntsettings'
+		            navherf: '/accuntsetting'
 		          }, {
 		            navicon: 'icon-user',
 		            navtitle: '个人资料',

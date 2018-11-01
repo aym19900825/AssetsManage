@@ -335,7 +335,7 @@ i, cite, em, var, address, dfn {
     border-radius:4px;
 }
 
-.navs > li > a:hover,.navs > li > a.current{background:rgba(97,131,226,.7);}
+.navs > li > a:hover,.navs > li > a.router-link-active{background:rgba(97,131,226,.7);}
 
 .navs > li > a i[class*=icon-] {
     font-size: 16px;

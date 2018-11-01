@@ -87,7 +87,7 @@
 					<!-- 高级查询划出 -->
 					<div class="row">
 						<div class="col-sm-3">
-							<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps">
+							<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" :getCurrentNode="currentTree">
 							</el-tree>
 						</div>
 						<div class="col-sm-9">
@@ -162,11 +162,12 @@
 			}
 		},
 		methods: {
+			currentTree(val){
+				console.log(val);
+			},
 			//分页功能
 			aTable(val){ 
-				console.log(val);
 				this.page = val; 
-				console.log(this.page);
 				this.requestData();
 			}, 
 			searchinfo(index) {

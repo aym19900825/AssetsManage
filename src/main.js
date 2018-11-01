@@ -16,6 +16,9 @@ import $ from 'jquery'
 import moment from 'moment'
 import './axios'
 import vueGridLayout from 'vue-grid-layout'
+
+import vueztree from 'vue-ztree-2.0/dist/vue-ztree-2.0.umd.min.js'
+// import 'vue-ztree-2.0/dist/vue-ztree-2.0.css'
 //import './jquery/dist/jquery.min.js'
 //import 'bootstrap/dist/css/bootstrap.min.css'
 //import 'bootstrap/dist/js/bootstrap.min.js'
@@ -34,6 +37,7 @@ Vue.config.productionTip = false
 Vue.prototype.$echarts = echarts 
 Vue.prototype.$moment = moment//赋值使用
 Vue.use(ElementUI)
+Vue.use(vueztree)
 new Vue({
   el: '#app',
   router,

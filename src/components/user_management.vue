@@ -12,72 +12,80 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button type="button" class="btn btn-green" @click="openAddMgr()" id="">
-                                <i class="icon-add"></i>添加
-                       </button>
-								<button type="button" class="btn btn-bule button-margin" @click="modify()">
+								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+                                	<i class="icon-add"></i>添加
+                      			 </button>
+								<button type="button" class="btn btn-bule button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改
 								</button>
-								<button type="button" class="btn btn-red button-margin" id="" @click="deluserinfo">
+								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
 								    <i class="icon-trash"></i>删除
 								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="resetPwd()" id="">
+								<button type="button" class="btn btn-primarys button-margin" @click="resetPwd">
 								    <i class="icon-refresh"></i>重置密码
 								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="unfreeze()" id="">
+								<button type="button" class="btn btn-primarys button-margin" @click="unfreeze">
 								    <i class="icon-start"></i>启用
 								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="freezeAccount()" id="">
+								<button type="button" class="btn btn-primarys button-margin" @click="freezeAccount">
 								    <i class="icon-stop"></i>冻结
 								</button>
-								<button type="button" class="btn btn-primarys button-margin" id="">
+								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-role-site"></i>角色分配
 								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch" id="">
-						    <i class="icon-search"></i>高级查询<i class="icon-arrow1-down" v-show="down"></i><i class="icon-arrow1-up" v-show="up"></i>
-						</button>
+								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
+						    		<i class="icon-search"></i>高级查询
+						    		<i class="icon-arrow1-down" v-show="down"></i>
+						    		<i class="icon-arrow1-up" v-show="up"></i>
+								</button>
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
-							<button class="btn btn-default btn-outline" type="button" name="refresh" aria-label="refresh" title="刷新"><i class="icon-refresh"></i></button>
+							<button class="btn btn-default btn-outline" type="button" name="refresh" aria-label="refresh" title="刷新">
+								<i class="icon-refresh"></i>
+							</button>
 							<div class="keep-open btn-group" title="列">
 								<button type="button" aria-label="columns" class="btn btn-default btn-outline dropdown-toggle" data-toggle="dropdown">
-					<i class="icon-menu3"></i> 
-					<i class="icon-arrow2-down"></i>
-                </button>
+									<i class="icon-menu3"></i> 
+									<i class="icon-arrow2-down"></i>
+                				</button>
 
 								<ul class="dropdown-menu" role="menu">
 									<li role="menuitem">
 										<label>
-							<input type="checkbox" data-field="id" value="1"> id
-						</label>
+											<input type="checkbox" data-field="id" value="1"> id
+										</label>
 									</li>
 									<li role="menuitem" class="checkbox-group">
 										<span>
-							<input type="checkbox" data-field="name" value="2" checked="checked"><label>名称</label>
-						</span>
+											<input type="checkbox" data-field="name" value="2" checked="checked">
+											<label>名称</label>
+										</span>
 									</li>
 									<li role="menuitem" class="checkbox-group">
 										<span>
-                			<input type="checkbox" data-field="pName" value="3" checked="checked"><label>上级角色</label>
-                		</span>
+                							<input type="checkbox" data-field="pName" value="3" checked="checked">
+                							<label>上级角色</label>
+                						</span>
 									</li>
 									<li role="menuitem" class="checkbox-group">
 										<span>
-                			<input type="checkbox" data-field="deptName" value="4" checked="checked"><label>所在部门</label>
-                		</span>
+                							<input type="checkbox" data-field="deptName" value="4" checked="checked">
+                							<label>所在部门</label>
+                						</span>
 									</li>
 									<li role="menuitem" class="checkbox-group">
 										<span>
-                			<input type="checkbox" data-field="companyName" value="5" checked="checked"><label>所在公司</label>
-                		</span>
+                							<input type="checkbox" data-field="companyName" value="5" checked="checked">
+                							<label>所在公司</label>
+                						</span>
 									</li>
 									<li role="menuitem" class="checkbox-group">
 										<span>
-                			<input type="checkbox" data-field="tips" value="6" checked="checked"><label>名</label>
-                		</span>
+                							<input type="checkbox" data-field="tips" value="6" checked="checked">
+                							<label>名</label>
+                						</span>
 									</li>
-
 								</ul>
 							</div>
 						</div>
@@ -109,16 +117,13 @@
 					</div>
 					<!-- 高级查询划出 -->
 					<div class="row">
-
 						<div class="col-sm-3">
-							<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps">
-							</el-tree>
+							<v-assetsTree  :listData="treeData" v-on:getTreeId="getTreeId"></v-assetsTree>
 						</div>
 						<div class="col-sm-9">
 							<!-- <tablediv ref="tableList"></tablediv> -->
 							<!-- 表格 -->
-							<el-table :data="userList" style="width: 96%;margin: 0 auto;" :default-sort="{prop: 
-    'userList', order: 'descending'}" @selection-change="SelChange">
+							<el-table :data="userList" style="width: 96%;margin: 0 auto;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55">
 								</el-table-column>
 								<el-table-column label="账号" sortable width="80" prop="username">
@@ -138,8 +143,17 @@
 								</el-table-column>
 							</el-table>
 							<!-- <span class="demonstration">显示总数</span>" -->
-							<el-pagination background layout="prev, pager, next" :total="2" style="float:right;margin-top:10px;">
-							</el-pagination>
+							<!-- <el-pagination background layout="prev, pager, next" :total="2" style="float:right;margin-top:10px;"> -->
+							</el-pagination style="float:right;margin-top:10px;">
+							<el-pagination
+					            @size-change="sizeChange"
+					            @current-change="currentChange"
+					            :current-page="page.currentPage"
+					            :page-sizes="[10, 20, 30, 40]"
+					            :page-size="page.pageSize"
+					            layout="total, sizes, prev, pager, next"
+					            :total="page.totalCount">
+					        </el-pagination>
 							<!-- 表格 -->
 						</div>
 					</div>
@@ -147,14 +161,13 @@
 			</div>
 			<usermask ref="child" @request="requestData" @requestTree="getKey"></usermask>
 		</div>
-
 	</div>
 </template>
-
 <script>
 	import vheader from './common/vheader.vue'
 	import navs from './common/left_navs/nav_left.vue'
 	import navs_header from './common/nav_tabs.vue'
+	import assetsTree from './plugin/vue-tree/tree.vue'
 	//import navs_button from './common/func_btn.vue'
 	//	import ztree from './common/ztree.vue'
 	// import tablediv from './common/tablelist.vue'
@@ -162,10 +175,11 @@
 	export default {
 		name: 'user_management',
 		components: {
-			vheader,
-			navs_header,
-			navs,
-			usermask
+			'vheader': vheader,
+			'navs_header': navs_header,
+			'navs': navs,
+			'usermask': usermask,
+			'v-assetsTree': assetsTree
 		},
 		data() {
 			return {
@@ -191,25 +205,43 @@
 					children: "subDepts",
 					label: "simplename"
 				},
+				treeData: [],
+
+				page: {
+					currentPage: 1,
+					pageSize: 10,
+					totalCount: 0
+				}
 
 			}
 		},
 		methods: {
+			sizeChange(val) {
+		      this.page.pageSize = val;
+		      this.requestData();
+		    },
+		    currentChange(val) {
+		      this.page.currentPage = val;
+		      this.requestData();
+		    },
 			searchinfo(index) {
-				var data = {
-					params: {
-						page: 1,
-						limit: 10,
-						nickname: this.searchList.nickname,
-						enabled: this.searchList.enabled,
-						searchKey: 'createTime',
-						searchValue: this.searchList.createTime
-					}
-				};
-				var url = '/api/api-user/users';
-				this.$axios.get(url, data).then((res) => {
-					this.userList = res.data.data;
-				}).catch((wrong) => {})
+				this.page.currentPage = 1;
+				this.page.pageSize = 10;
+				this.requestData();
+				// var data = {
+				// 	params: {
+				// 		page: 1,
+				// 		limit: 10,
+				// 		nickname: this.searchList.nickname,
+				// 		enabled: this.searchList.enabled,
+				// 		searchKey: 'createTime',
+				// 		searchValue: this.searchList.createTime
+				// 	}
+				// };
+				// var url = '/api/api-user/users';
+				// this.$axios.get(url, data).then((res) => {
+				// 	this.userList = res.data.data;
+				// }).catch((wrong) => {})
 			},
 			//添加用戶
 			openAddMgr() {
@@ -405,15 +437,27 @@
 				this.selUser = val;
 			},
 			requestData(index) {
+				// var data = {
+				// 	params: {
+				// 		page: 1,
+				// 		limit: 10,
+				// 	}
+				// }
 				var data = {
-					params: {
-						page: 1,
-						limit: 10,
-					}
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+					nickname: this.searchList.nickname,
+					enabled: this.searchList.enabled,
+					searchKey: 'createTime',
+					searchValue: this.searchList.createTime
 				}
+				console.log(data);
 				var url = '/api/api-user/users';
-				this.$axios.get(url, data).then((res) => {
+				this.$axios.get(url, {
+					params: data
+				}).then((res) => {
 					this.userList = res.data.data;
+					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
 				this.userList.forEach((item, index) => {
 					var id = item.id;
@@ -428,7 +472,25 @@
 				var url = '/api/api-user/depts/tree';
 				this.$axios.get(url, {}).then((res) => {
 					this.resourceData = res.data;
+					this.treeData = this.transformTree(this.resourceData);
 				});
+			},
+			transformTree(data){
+				for(var i=0; i<data.length; i++){
+					data[i].name = data[i].fullname;
+					if(!data[i].pid || $.isArray(data[i].subDepts)){
+						data[i].iconClass = 'icon-file-normal';
+					}else{
+						data[i].iconClass = 'icon-file-text';
+					}
+					if($.isArray(data[i].subDepts)){
+						data[i].children = this.transformTree(data[i].subDepts);
+					}
+				}
+				return data;
+			},
+			getTreeId(data){
+				console.log("============="+data);
 			},
 			handleNodeClick(data) {
 

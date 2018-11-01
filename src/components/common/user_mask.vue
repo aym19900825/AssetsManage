@@ -34,9 +34,8 @@
 						<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
 							<el-row :gutter="70">
 								<el-col :span="24">
-									<el-form-item label="所属组织" prop="companyId">
-										<el-input v-show="up" v-model="user.id"></el-input>
-										<el-input v-show="down" v-model="user.companyId">
+									<el-form-item label="所属组织" prop="companyName">
+										<el-input v-show="down" v-model="user.companyName">
 											<el-button slot="append" icon="el-icon-search" @click="getCompany"></el-button>
 										</el-input>
 									</el-form-item>
@@ -44,8 +43,8 @@
 							</el-row>
 							<el-row :gutter="70">
 								<el-col :span="24">
-									<el-form-item label="所属部门" prop="deptId">
-										<el-input v-model="user.deptId">
+									<el-form-item label="所属部门" prop="deptName">
+										<el-input v-model="user.deptName">
 											<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
 										</el-input>
 									</el-form-item>
@@ -243,6 +242,9 @@
 					children: "subDepts",
 					label: "simplename"
 				},
+
+				depts: [],
+				companys: []
 			};
 		},
 		methods: {
@@ -304,10 +306,14 @@
 				$(".mask_div").css("margin", "7% 10%");
 				$(".mask_div").css("top", "0");
 			},
+			getCheckedNodes() {
+				this.checkedNodes = this.$refs.tree.getCheckedNodes()
+			},
 
 			//保存users/saveOrUpdate
 			submitForm() {
 				var url = '/api/api-user/users/saveOrUpdate';
+				console.log( this.user);
 				this.$axios.post(url, this.user).then((res) => {
 					if(res.data.resp_code == 0) {
 						this.$message({
@@ -359,18 +365,17 @@
 					this.dialogVisible = true;
 				});
 			},
-			getCheckedNodes() {
-				this.checkedNodes = this.$refs.tree.getCheckedNodes()
-			},
+
 			queding() {
 				this.getCheckedNodes();
 				this.placetext = false;
 				this.dialogVisible = false;
 				if(this.editSearch == 'company') {
-					this.user.companyId = this.checkedNodes[0].simplename;
 					this.user.companyId = this.checkedNodes[0].id;
+					this.user.companyName = this.checkedNodes[0].simplename;
 				} else {
-					this.user.deptId = this.checkedNodes[0].simplename;
+					this.user.deptId = this.checkedNodes[0].id;
+					this.user.deptName = this.checkedNodes[0].simplename;
 				}
 
 			},
@@ -383,7 +388,7 @@
 					.catch(_ => {});
 			}
 
-		},
+		}
 	}
 </script>
 

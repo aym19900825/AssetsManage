@@ -5,19 +5,15 @@
 			<div class="mask_title_div clearfix">
 				<div class="mask_title">添加部门</div>
 				<div class="mask_anniu">
-					<span class="mask_span">
-						<i class="icon-minimize"></i>
-					</span>
-					<span class="mask_span mask_max" @click='toggle'>						 
+					<span class="mask_span mask_max" @click='toggle'>				 
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
 					</span>
-					<span class="mask_span" @click='close' :before-close="handleClose">
+					<span class="mask_span" @click='close'>
 						<i class="icon-close1"></i>
 					</span>
 				</div>
 			</div>
-			<el-form v-model="adddeptForm" :label-position="labelPosition" :rules="rules" ref="adddeptForm" label-width="100px" class="demo-adduserForm">
-
+			<el-form :model="adddeptForm" :label-position="labelPosition" :rules="rules" ref="adddeptForm" label-width="100px" class="demo-adduserForm">
 				<div class="accordion" id="information">
 					<div class="mask_tab-block">
 						<div class="mask_tab-head clearfix">
@@ -31,9 +27,9 @@
 						<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
 							<el-row :gutter="70">
 								<el-col :span="24">
-									<el-form-item label="所属上级" prop="pid">
-										<el-input v-model="adddeptForm.pid">
-											<el-button slot="append" icon="el-icon-search"></el-button>
+									<el-form-item label="所属上级" prop="pName">
+										<el-input v-model="adddeptForm.pName">
+											<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
 										</el-input>
 									</el-form-item>
 								</el-col>
@@ -73,7 +69,6 @@
 								<el-col :span="24">
 									<el-form-item label="备注" prop="tips">
 										<el-input :rows="3" type="textarea" v-model="adddeptForm.tips" placeholder="请输入"></el-input>
-
 									</el-form-item>
 								</el-col>
 							</el-row>
@@ -81,18 +76,20 @@
 					</div>
 				</div>
 				<el-form-item>
-					<el-button @click="cancelForm('adddeptForm')">取消</el-button>
-					<el-button type="primary" @click="submitForm">提交</el-button>
+					<el-button @click="cancelForm">取消</el-button>
+					<el-button type="primary" @click="submitForm('adddeptForm')">提交</el-button>
 				</el-form-item>
 			</el-form>
-
-			<!--底部-->
-			<!--<div class="content-footer">
-				<button class="btn btn-default btn-large">取消</button>
-				<button class="btn btn-primarys btn-large">提交</button>
-			</div>-->
-
 		</div>
+		<!-- 弹出 -->
+		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps">
+			</el-tree>
+			<span slot="footer" class="dialog-footer">
+		       <el-button @click="dialogVisible = false">取 消</el-button>
+		       <el-button type="primary" @click="queding();" >确 定</el-button>
+		    </span>
+		</el-dialog>
 	</div>
 </template>
 
@@ -100,24 +97,39 @@
 	export default {
 		name: 'masks',
 		data() {
-			var validatePass1 = (rule, value, callback) => {
-                // var regTele ="^(0\\d{2}-\\d{8}(-\\d{1,4})?)|(0\\d{3}-\\d{7,8}(-\\d{1,4})?)$"; 
-                // console.log(value);
+			var validatename1 = (rule, value, callback) => {
                 if (value === '') {
-                    callback(new Error('请填写数字'));}
-                // else if (!teltphone.test(this.adddeptForm.teltphone)) {
-                //      callback(new Error('真实姓名填写有误'));
-                // } 
-                else {
+                    callback(new Error('请填写单位简称'));
+                }else {
                     callback();
                 }
             };
+            var validatename2 = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请填写部门名称'));
+                }else {
+                    callback();
+                }
+            };
+            var validatetype = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请填写类型'));
+                }else {
+                    callback();
+                }
+            };
+            var validatecode = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请选择机构编码'));
+                }else {
+                    callback();
+                }
+            };
+
 			return {
+				dialogVisible: false, //对话框
 				value11:true,
-				formInline: {
-		          user: '',
-		          region: ''
-		        },
+				editSearch: '',
 				col_but1: true,
 				col_but2: true,
 				show: false,
@@ -134,17 +146,63 @@
 					tips:''
 				},
 				rules:{
-		          	teltphone:[
-		          		{
-		          			required: true,
-		                    validator: validatePass1,
-		                    trigger: 'blur'
-		          		}
-		          	]
-	          	}
+		          	simplename: [{ 
+       						required: true,
+       						validator: validatename1,
+       						trigger: 'blur' 
+       					}],
+          			fullname: [{ 
+       						required: true,
+       						validator: validatename2,
+       						trigger: 'blur' 
+       					}],
+          			type:[{ 
+       						required: true,
+       						validator: validatetype,
+       						trigger: 'blur' 
+       					}],
+          			code:[{ 
+       						required: true,
+       						validator: validatecode,
+       						trigger: 'blur' 
+       					}],
+	          	},
+	          	//tree
+				resourceData: [], //数组，我这里是通过接口获取数据
+				resourceDialogisShow: false,
+				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
+				resourceProps: {
+					children: "subDepts",
+					label: "simplename"
+				},
 			};
 		},
 		methods: {
+			//所属上级
+			getDept() {
+				var data = {
+					params: {
+						page: 1,
+						limit: 10,
+					}
+				}
+				let that = this;
+				var url = '/api/api-user/depts/dept';
+				this.$axios.get(url, {}).then((res) => {
+					this.resourceData = res.data.data;
+					this.dialogVisible = true;
+				});
+			},
+			queding() {
+				this.getCheckedNodes();
+				this.placetext = false;
+				this.dialogVisible = false;
+					this.adddeptForm.pid = this.checkedNodes[0].id;
+					this.adddeptForm.pName = this.checkedNodes[0].simplepame;//此处赋值只为页面显示，不在数据中定义
+			},
+			getCheckedNodes() {
+				this.checkedNodes = this.$refs.tree.getCheckedNodes()
+			},
 			col_but(col_but) {
 				//alert(col_but)
 				if(col_but == 'col_but1') {
@@ -210,12 +268,12 @@
 
 			},
 			//保存
-			submitForm() {
-				console.log("1");
+			submitForm(adddeptForm) {
+				this.$refs[adddeptForm].validate((valid) => {
+		          if (valid) {
+		          		console.log("1");
 				var url = '/api/api-user/depts/saveOrUpdate';
 				this.$axios.post(url, this.adddeptForm).then((res) => {
-					 console.log("-------------");
-					// console.log(res.data);
 					//resp_code == 0是后台返回的请求成功的信息
 					if(res.data.resp_code == 0) {
 						this.$message({
@@ -232,6 +290,18 @@
 						type: 'error'
 					});
 				});
+		          } else {
+		            return false;
+		          }
+		        });
+				
+			},
+			handleClose(done) {
+				this.$confirm('确认关闭？')
+					.then(_ => {
+						done();
+					})
+					.catch(_ => {});
 			}
 		}
 	}

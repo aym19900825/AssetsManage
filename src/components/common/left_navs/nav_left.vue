@@ -7,8 +7,16 @@
 				</span>
 			</div>
 			<ul class="navs" id="side-menu" v-show="!isShow" >
+				
+				<li v-for="item in leftNavs">
+					<a class="J_menuItem" :href="item.navherf" name="tabMenuItem" :key="index">
+						<i :class="item.navicon"></i>
+						<span class="nav-label" v-show="ismin">{{item.navtitle}}</span>
+					</a>
+				</li>
 
-				<li>
+
+				<!-- <li>
 					<a class="J_menuItem" href="/notice/hello" name="tabMenuItem">
 						<i class="icon-user"></i>
 						<span class="nav-label" v-show="ismin">用户管理</span>
@@ -62,7 +70,7 @@
 						<span class="nav-label" v-show="ismin">通知管理</span>
 					</a>
 				</li>
-
+				
 				<li>
 					<a class="J_menuItem" href="/notice/hello" name="tabMenuItem">
 						<i class="icon-data"></i>
@@ -80,7 +88,7 @@
 						<i class="icon-word"></i>
 						<span class="nav-label" v-show="ismin">word测试</span>
 					</a>
-				</li>
+				</li> -->
 			</ul>
 		</div>
 	</div>
@@ -88,29 +96,102 @@
 
 <script>
 //	import {hplus} from '../../../assets/js/hplus.js' 
+//	
+
 	export default {
+
 		name: 'navs',
 		data(){
 			return{
 				isShow:false,
 				ismin:true,
+
+				leftNavs: [
+				{//leftNavs左侧菜单数据
+		            navicon: 'icon-user',
+		            navtitle: '用户管理',
+		            navherf: '#1'
+		          }, {
+		            navicon: 'icon-role-site',
+		            navtitle: '角色管理',
+		            navherf: '#2'
+		          }, {
+		            navicon: 'icon-department',
+		            navtitle: '部门管理',
+		            navherf: '#3'
+		          }, {
+		            navicon: 'icon-menu2',
+		            navtitle: '菜单管理',
+		            navherf: '#4'
+		          }, {
+		            navicon: 'icon-book',
+		            navtitle: '字典管理',
+		            navherf: '#4'
+		          }, {
+		            navicon: 'icon-log',
+		            navtitle: '业务日志',
+		            navherf: '#4'
+		          }, {
+		            navicon: 'icon-menu2',
+		            navtitle: '菜单管理',
+		            navherf: '#4'
+		          }, {
+		            navicon: 'icon-login-log',
+		            navtitle: '登陆日志',
+		            navherf: '#4'
+		          }, {
+		            navicon: 'icon-monitor',
+		            navtitle: '监控管理',
+		            navherf: '#4'
+		          }, {
+		            navicon: 'icon-notice',
+		            navtitle: '通知管理',
+		            navherf: '#4'
+		          }, {
+		            navicon: 'icon-menu2',
+		            navtitle: '菜单管理',
+		            navherf: '#4'
+		          }, {
+		            navicon: 'icon-data',
+		            navtitle: '数据库配置',
+		            navherf: '#4'
+		          }, {
+		            navicon: 'icon-time',
+		            navtitle: '定时任务',
+		            navherf: '#4'
+		          }, {
+		            navicon: 'icon-word',
+		            navtitle: 'Word测试',
+		            navherf: '#4'
+		          }
+		        ]
+
 			}
 		},
 		methods: {
 			min2max(){ 
 	        	if($(".navbar-static-side").width()=="220"){
+			    	$(".wrapper").css("padding-left", "220px");
+			    	$(".navs>li").css("margin", "0px 10px");
 			    	this.maxDialog();
-			    }else if($(".navbar-static-side").width()=="60"){
-				this.rebackDialog();
+			    }else if($(".navbar-static-side").width()=="40"){
+					$(".wrapper").css("padding-left", "40px");
+					$(".navs>li").css("margin", "0");
+					this.rebackDialog();
 				}
 			    this.ismin=!this.ismin;
-	        
 	   		},
 	   		
 		    maxDialog(e) {
-		    	$(".navbar-static-side").css("width", "60px");
-				$(".wrapper").css("padding-left","60px");
-				
+		    	$(".navbar-static-side").css("width", "40px");
+				$(".wrapper").css("padding-left", "40px");
+				$(".navs>li").css("margin", "0");
+			},
+			//还原按钮
+			rebackDialog() {
+				$(".navbar-static-side").css("width", "220px");
+				$(".wrapper").css("padding-left", "220px");
+				$(".navs>li").css("margin", "0px 10px");
 			},
 			//还原按钮
 			rebackDialog() {
@@ -139,7 +220,9 @@
 			    } else {
 			        $('#side-menu').removeAttr('style');
 			    }
+
 			}
+	   		
 
 		},
 		mounted() {
@@ -149,62 +232,7 @@
 </script>
 
 <style scoped>
-	.navbar-static-side{
-	float: left;
-    width: 220px;
-    height: 100%;
-    position: fixed;
-    background: linear-gradient(360deg,rgba(160, 120, 240, 1) 0%,rgba(65, 105, 218, 1) 100%);
-    z-index: 1000;
-}
 
-.slimScrollDiv{
-	position: relative;
-    width: auto;
-    height: 92%;
-}
 
-.navbarbg, .navbarbg a {
-    color: #FFF;
-}
 
-.navbarbg {
-    height: 40px;
-    text-align: right;
-    padding-right: 20px;
-}
-.navs>li {
-    margin: 0px 10px;
-}
-.navs > li > a {
-    color: #fff;
-    display: block;
-    padding: 14px 15px 14px 15px;
-    border-radius:5px;
-}
-
-.navs > li > a:hover,.navs > li > a.current{background:rgba(97,131,226,.7);}
-
-.navs > li > a i[class*=icon-] {
-    font-size: 16px;
-}
-.navs > li > a i {
-    margin-right: 6px;
-}
-.minimalize-styl-2 {
-    font-size: 14px;
-    color: #FFFFFF;
-    line-height: 40px;
-    cursor: pointer;
-}
-.nav>li {
-    margin: 0px 10px;
-}
-.nav > li > a i[class*=icon-] {
-    font-size: 16px;
-}
-
-.nav > li > a i {
-    margin-right: 6px;
-}
 </style>

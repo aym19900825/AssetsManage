@@ -18,7 +18,7 @@ import './axios'
 import vueGridLayout from 'vue-grid-layout'
 
 import vueztree from 'vue-ztree-2.0/dist/vue-ztree-2.0.umd.min.js'
-// import 'vue-ztree-2.0/dist/vue-ztree-2.0.css'
+import EasyScroll from 'easyscroll'//自定义滚动条
 //import './jquery/dist/jquery.min.js'
 //import 'bootstrap/dist/css/bootstrap.min.css'
 //import 'bootstrap/dist/js/bootstrap.min.js'
@@ -38,6 +38,8 @@ Vue.prototype.$echarts = echarts
 Vue.prototype.$moment = moment//赋值使用
 Vue.use(ElementUI)
 Vue.use(vueztree)
+Vue.use(EasyScroll)//自定义滚动条
+
 new Vue({
   el: '#app',
   router,

@@ -12,58 +12,63 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button type="button" class="btn btn-green" @click="openAddMgr()" id="">
-                                <i class="icon-add"></i>添加
-                       </button>
-								<button type="button" class="btn btn-bule button-margin" @click="modify()" id="">
-						    <i class="icon-edit"></i>修改
-						</button>
+								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+                                	<i class="icon-add"></i>添加
+                       			</button>
+								<button type="button" class="btn btn-bule button-margin" @click="modify" id="">
+						    		<i class="icon-edit"></i>修改
+								</button>
 								<button type="button" class="btn btn-red button-margin" id="" @click="deluserinfo">
-						    <i class="icon-trash"></i>删除
-						</button>
+						    		<i class="icon-trash"></i>删除
+								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch" id="">
-						    <i class="icon-search"></i>高级查询<i class="icon-arrow1-down" v-show="down"></i><i class="icon-arrow1-up" v-show="up"></i>
-						</button>
+						    		<i class="icon-search"></i>高级查询<i class="icon-arrow1-down" v-show="down"></i><i class="icon-arrow1-up" v-show="up"></i>
+								</button>
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
 							<button class="btn btn-default btn-outline" type="button" name="refresh" aria-label="refresh" title="刷新"><i class="icon-refresh"></i></button>
 							<div class="keep-open btn-group" title="列">
 								<button type="button" aria-label="columns" class="btn btn-default btn-outline dropdown-toggle" data-toggle="dropdown">
-					<i class="icon-menu3"></i> 
-					<i class="icon-arrow2-down"></i>
-                </button>
+									<i class="icon-menu3"></i> 
+									<i class="icon-arrow2-down"></i>
+                				</button>
 
 								<ul class="dropdown-menu" role="menu">
 									<li role="menuitem">
 										<label>
-							<input type="checkbox" data-field="id" value="1"> id
-						</label>
+											<input type="checkbox" data-field="id" value="1"> id
+										</label>
 									</li>
 									<li role="menuitem" class="checkbox-group">
 										<span>
-							<input type="checkbox" data-field="name" value="2" checked="checked"><label>名称</label>
-						</span>
+											<input type="checkbox" data-field="name" value="2" checked="checked">
+											<label>名称</label>
+										</span>
 									</li>
 									<li role="menuitem" class="checkbox-group">
 										<span>
-                			<input type="checkbox" data-field="pName" value="3" checked="checked"><label>上级角色</label>
-                		</span>
+                							<input type="checkbox" data-field="pName" value="3" checked="checked">
+                							<label>上级角色</label>
+                						</span>
 									</li>
 									<li role="menuitem" class="checkbox-group">
 										<span>
-                			<input type="checkbox" data-field="deptName" value="4" checked="checked"><label>所在部门</label>
-                		</span>
+                							<input type="checkbox" data-field="deptName" value="4" checked="checked">
+                							<label>所在部门</label>
+                						</span>
 									</li>
 									<li role="menuitem" class="checkbox-group">
 										<span>
-                			<input type="checkbox" data-field="companyName" value="5" checked="checked"><label>所在公司</label>
-                		</span>
+                							<input type="checkbox" data-field="companyName" value="5" checked="checked">
+                							<label>所在公司</label>
+                						</span>
 									</li>
 									<li role="menuitem" class="checkbox-group">
 										<span>
-                			<input type="checkbox" data-field="tips" value="6" checked="checked"><label>名</label>
-                		</span>
+                							<input type="checkbox" data-field="tips" value="6" checked="checked">
+                							<label>名</label>
+                						</span>
 									</li>
 								</ul>
 							</div>
@@ -87,14 +92,12 @@
 					<!-- 高级查询划出 -->
 					<div class="row">
 						<div class="col-sm-3">
-							<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps">
+							<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" :getCurrentNode="currentTree">
 							</el-tree>
 						</div>
 						<div class="col-sm-9">
 							<!-- 表格 -->
-							<el-table :data="deptList" style="width: 96%;margin: 0 auto;" :default-sort="{prop: 
-
-    'deptList', order: 'descending'}" @selection-change="SelChange">
+							<el-table :data="deptList" style="width: 96%;margin: 0 auto;" :default-sort="{prop: 'deptList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55">
 								</el-table-column>
 								<el-table-column label="ID" sortable width="80" prop="id">
@@ -115,7 +118,6 @@
 			</div>
 			<deptmask ref="child" @request="requestData"></deptmask>
 		</div>
-
 	</div>
 </template>
 
@@ -140,7 +142,7 @@
 			return {
 				selDept: [],
 				page:'1',
-				total:'0',
+				total:0,
 				'启用': true,
 				'冻结': false,
 				deptList: [],
@@ -162,11 +164,12 @@
 			}
 		},
 		methods: {
+			currentTree(val){
+				console.log(val);
+			},
 			//分页功能
 			aTable(val){ 
-				console.log(val);
 				this.page = val; 
-				console.log(this.page);
 				this.requestData();
 			}, 
 			searchinfo(index) {
@@ -185,10 +188,11 @@
 
 				})
 			},
-
+			//添加
 			openAddMgr() {
-				this.$refs.child.childMethods(); //
+				this.$refs.child.childMethods(); 
 			},
+			//修改
 			modify() {
 				var selData = this.selDept;
 				if(selData.length == 0) {
@@ -203,9 +207,8 @@
 						type: 'warning'
 					});
 					return;
-				} else {
+				}else{
 					this.$refs.child.detail(selData[0].id);
-					
 				}
 			},
 			//高级查询
@@ -252,7 +255,6 @@
 			},
 			judge(data) {
 				//taxStatus 布尔值
-				console.log(data.enabled);
 				return data.enabled ? '启用' : '冻结'
 			},
 			//时间格式化  
@@ -265,7 +267,6 @@
 				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
 			},
 			insert() {
-				console.log("aaaaaaaaaaaaaa");
 				this.users.push(this.user)
 			},
 			remove(index) {
@@ -285,7 +286,6 @@
 				this.$axios.get(url, data).then((res) => {
 					this.deptList = res.data.data;
 					this.total = res.data.count;
-					// this.pagenum = this.total
 				}).catch((wrong) => {
 
 				})

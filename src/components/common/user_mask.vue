@@ -19,7 +19,7 @@
 					</span>
 				</div>
 			</div>
-			<el-form v-model="user" :label-position="labelPosition" :rules="rules" ref="user" label-width="100px" class="demo-user">
+			<el-form :model="user" :label-position="labelPosition" :rules="rules" ref="user" label-width="100px" class="demo-user">
 
 				<div class="accordion" id="information">
 					<div class="mask_tab-block">
@@ -35,7 +35,7 @@
 							<el-row :gutter="70">
 								<el-col :span="24">
 									<el-form-item label="所属组织" prop="companyName">
-										<el-input v-show="down" v-model="user.companyName">
+										<el-input v-model="user.companyName" :disabled="edit">
 											<el-button slot="append" icon="el-icon-search" @click="getCompany"></el-button>
 										</el-input>
 									</el-form-item>
@@ -44,7 +44,7 @@
 							<el-row :gutter="70">
 								<el-col :span="24">
 									<el-form-item label="所属部门" prop="deptName">
-										<el-input v-model="user.deptName">
+										<el-input v-model="user.deptName" :disabled="edit">
 											<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
 										</el-input>
 									</el-form-item>
@@ -95,8 +95,8 @@
 								<el-col :span="8">
 									<el-form-item label="性別" prop="sex">
 										<el-radio-group v-model="user.sex">
-											<el-radio label="0"></el-radio>
-											<el-radio label="1"></el-radio>
+											<el-radio label="男"></el-radio>
+											<el-radio label="女"></el-radio>
 										</el-radio-group>
 									</el-form-item>
 								</el-col>
@@ -116,7 +116,9 @@
 								</el-col>
 								<el-col :span="8">
 									<el-form-item label="角色" prop="roleId">
-										<el-input v-model="user.roleId"></el-input>
+										<el-input v-model="user.roleId">
+											<el-button slot="append" icon="el-icon-search" @click="getCompany"></el-button>
+										</el-input>
 									</el-form-item>
 								</el-col>
 							</el-row>
@@ -196,8 +198,46 @@
 	export default {
 		name: 'masks',
 		data() {
+			var validatePass1 = (rule, value, callback) => {
+				if(value === '') {
+					callback(new Error('必填'));
+				} else {
+					callback();
+				}
+			};
+			var validatePass2 = (rule, value, callback) => {
+				if(value === '') {
+					callback(new Error('必填'));
+				} else {
+					callback();
+				}
+			};
+			var validatePass3 = (rule, value, callback) => {
+				if(value === '') {
+					callback(new Error('必填'));
+				} else {
+					callback();
+				}
+			};
+			var validatePass4 = (rule, value, callback) => {
+				if(value === '') {
+					callback(new Error('必填'));
+				} else {
+					callback();
+				}
+			};
+			var validatePass5 = (rule, value, callback) => {
+				if(value === '') {
+					callback(new Error('必填'));
+				} else {
+					callback();
+				}
+			};
 			return {
 				editSearch: '',
+				edit: true, //禁填
+				'男': true,
+				'女': false,
 				col_but1: true,
 				col_but2: true,
 				show: false,
@@ -228,11 +268,31 @@
 					id: ''
 				},
 				rules: {
-					region: [{
+					companyName: [{
 						required: true,
-						message: '请选择活动区域',
-						trigger: 'change'
+						//						trigger: 'change',
+						validator: validatePass1,
 					}],
+					deptName: [{
+						required: true,
+						//						trigger: 'change',
+						validator: validatePass2,
+					}],
+					roleId: [{
+						required: true,
+						trigger: 'blur',
+						validator: validatePass3,
+					}],
+					username: [{
+						required: true,
+						trigger: 'blur',
+						validator: validatePass4,
+					}],
+					password: [{
+						required: true,
+						trigger: 'blur',
+						validator: validatePass5,
+					}]
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -242,9 +302,6 @@
 					children: "subDepts",
 					label: "simplename"
 				},
-
-				depts: [],
-				companys: []
 			};
 		},
 		methods: {
@@ -312,24 +369,35 @@
 
 			//保存users/saveOrUpdate
 			submitForm() {
-				var url = '/api/api-user/users/saveOrUpdate';
-				console.log( this.user);
-				this.$axios.post(url, this.user).then((res) => {
-					if(res.data.resp_code == 0) {
-						this.$message({
-							message: '保存成功',
-							type: 'success',
+				this.$refs.user.validate((valid) => {
+					if(valid) {
+						if(this.user.sexName == "男") {
+							this.user.sex = flase;
+						} else {
+							this.user.sex = true;
+						}
+						var url = '/api/api-user/users/saveOrUpdate';
+
+						this.$axios.post(url, this.user).then((res) => {
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '保存成功',
+									type: 'success',
+								});
+								this.show = false;
+								//重新加载数据
+								this.$emit('request')
+							}
+						}).catch((err) => {
+							this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
 						});
-						this.show = false;
-						//重新加载数据
-						this.$emit('request')
+					} else {
+						return false;
 					}
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
+				})
 			},
 			//所属组织
 			getCompany() {
@@ -388,7 +456,7 @@
 					.catch(_ => {});
 			}
 
-		},
+		}
 	}
 </script>
 

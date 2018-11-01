@@ -130,7 +130,7 @@
 								</el-table-column>
 								<el-table-column label="姓名" sortable width="100" prop="nickname">
 								</el-table-column>
-								<el-table-column label="性别" sortable width="80" prop="sex">
+								<el-table-column label="性别" sortable width="80" prop="sex" :formatter="sexName">
 								</el-table-column>
 								</el-table-column>
 								<el-table-column label="部门" sortable width="100" prop="deptName">
@@ -186,6 +186,8 @@
 				selUser: [],
 				'启用': true,
 				'冻结': false,
+				'男': true,
+				'女': false,
 				userList: [],
 				//				deptTree: [], //树
 				search: false,
@@ -291,7 +293,7 @@
 					var changeUser = selData[0];
 					var id = changeUser.id;
 					var url = '/api/api-user/users/' + id;
-					this.$axios.delete(url, {}).then((res) => {
+					this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -417,7 +419,12 @@
 			judge(data) {
 				//taxStatus 布尔值
 				return data.enabled ? '启用' : '冻结'
+
 			},
+			sexName(data) {
+				return data.sex ? '男' : '女'
+			},
+
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];

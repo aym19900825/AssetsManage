@@ -38,7 +38,7 @@
 							<div class="mask_tab-block">
 								<div class="mask_tab-head clearfix">
 									<div class="accordion_title">
-										<span class="accordion-toggle">基本资料</span>
+										<span class="accordion-toggle">修改密码</span>
 									</div>
 									<div class="col_but">
 										<i class="icon-arrow1-down"></i>
@@ -46,116 +46,32 @@
 								</div>
 
 
-								 <el-form status-icon ref="personinfo" :model="personinfo" :rules="rules" label-width="80px" :label-position="labelPosition">
+								 <el-form status-icon ref="passwordedit" :model="passwordedit" :rules="rules" label-width="80px" :label-position="labelPosition">
 								 	<!-- 第一行 -->
 								 	<el-row :gutter="70">
-								 		<el-col :span="8">
-								 			 <el-form-item label="用户称谓" prop="name">
-											    <el-input v-model="personinfo.name"></el-input>
+								 		<el-col :span="24">
+								 			 <el-form-item label="原始密码" prop="name">
+											    <el-input v-model="passwordedit.password" type="password"></el-input>
 											  </el-form-item>	
-								 		</el-col>
-								 		<el-col :span="8">
-								 			 <el-form-item label="出生日期">
-							                      <el-date-picker
-											      v-model="personinfo.birthdate"
-											      type="date"
-										      placeholder="选择日期" value-format="yyyy-MM-dd">
-											    </el-date-picker>
-							                </el-form-item>		
-								 		</el-col>
-								 		<el-col :span="8">
-								 			<el-form-item label="性别">
-								 				<el-radio v-model="personinfo.sex" label="男">男
-								 				</el-radio>
-				  								<el-radio v-model="personinfo.sex" label="女">女
-				  								</el-radio>
-								 			</el-form-item>
 								 		</el-col>
 								 	</el-row>
 								 	<!-- 第二行 -->
 								 	<el-row :gutter="70">
-								 		<el-col :span="8">
-								 			 <el-form-item label="工号">
-										    <el-input v-model="personinfo.id"></el-input>
+								 		<el-col :span="24">
+								 			 <el-form-item label="新密码">
+										    <el-input v-model="passwordedit.newpassword" type="password"></el-input>
 										  </el-form-item>	
-								 		</el-col>
-								 		<el-col :span="8">
-								 			 <el-form-item label="入职日期">
-							                      <el-date-picker
-											      v-model="personinfo.workdate"
-											      type="date"
-										      placeholder="选择日期" value-format="yyyy-MM-dd">
-											    </el-date-picker>
-							                </el-form-item>		
-								 		</el-col>
-								 		<el-col :span="8">
-								 			<el-form-item label="身份证号">
-											    <el-input v-model="personinfo.digital"></el-input>
-											  </el-form-item>
 								 		</el-col>
 								 	</el-row>
 								 	<!-- 第三行 -->
 								 	<el-row :gutter="70">
-								 		<el-col :span="8">
-								 			 <el-form-item label="默认身份">
-								 				<el-switch v-model="personinfo.defdigital" active-color="#13ce66" inactive-color="#ff4949">
-												</el-switch>
+								 		<el-col :span="24">
+								 			 <el-form-item label="新密码确认">
+								 				<el-input v-model="passwordedit.newpassword2" type="password"></el-input>
 								 			</el-form-item>	
 								 		</el-col>
-								 		<el-col :span="8">
-								 			 <el-form-item label="参加工作时间">
-							                      <el-date-picker
-											      v-model="personinfo.joindate"
-											      type="date"
-										      placeholder="选择日期" value-format="yyyy-MM-dd">
-											    </el-date-picker>
-							                </el-form-item>		
-								 		</el-col>
-								 		<el-col :span="8">
-								 			<el-form-item label="电子邮箱">
-											    <el-input v-model="personinfo.email"></el-input>
-											  </el-form-item>
-								 		</el-col>
 								 	</el-row>
-								 	<!-- 第四行 -->
-								 	<el-row :gutter="70">
-								 		<el-col :span="8">
-								 			 <el-form-item label="联系电话">
-										    <el-input v-model="personinfo.tele"></el-input>
-										  </el-form-item>	
-								 		</el-col>
-								 		<el-col :span="8">
-								 			 <el-form-item label="手机号">
-										    <el-input v-model="personinfo.phone"></el-input>
-										  </el-form-item>	
-								 		</el-col>
-								 		<el-col :span="8">
-								 			<el-form-item label="传真号">
-											    <el-input v-model="personinfo.rex"></el-input>
-											  </el-form-item>
-								 		</el-col>
-								 	</el-row>
-								 	<!-- 第五行 -->
-								 	<el-row :gutter="70">
-								 		<el-col :span="16">
-								 			 <el-form-item label="地址">
-										    <el-input v-model="personinfo.address"></el-input>
-										  </el-form-item>	
-								 		</el-col>
-								 		<el-col :span="8">
-								 			<el-form-item label="邮编">
-											    <el-input v-model="personinfo.code"></el-input>
-											  </el-form-item>
-								 		</el-col>
-								 	</el-row>
-								 	<!-- 第六行 -->
-								 	<el-row :gutter="70">
-								 		<el-col :span="24">
-								 			 <el-form-item label="备注">
-										    <el-input  type="textarea" :rows="3" v-model="personinfo.note"></el-input>
-										  </el-form-item>	
-								 		</el-col>
-								 	</el-row>
+
 								 </el-form>	
 							</div>
 
@@ -183,7 +99,7 @@
 	import usermask from './common/user_mask.vue'
 
 	export default {
-		name: 'personinfo',
+		name: 'passwordedit',
 		components: {
 			vheader,
 			navs_header,
@@ -199,7 +115,7 @@
                 console.log(value);
                 if (value === '') {
                     callback(new Error('必填'));}
-                // } else if (!name.test(this.personinfo.name)) {
+                // } else if (!name.test(this.passwordedit.name)) {
                 //     callback(new Error('真实姓名填写有误'));
                 // } 
                 else {
@@ -219,23 +135,11 @@
 	          value1:true,
 	          value2: true,
 	          labelPosition: 'top',
-	          personinfo:
+	          passwordedit:
 	          	{
-	          		name:'pangsq',
-	          		birthdate:'2018-10-28',
-	          		sex:'女',
-	          		id:'2018011865',
-	          		workdate:'2018-10-29',
-	          		digital:'130181178712341234',
-	          		defdigital:'',
-	          		joindate:'2018-11-01',
-	          		email:'765676543@qq.com',
-	          		tele:'010-2345746',
-	          		phone:'13634567890',
-	          		rex:'2134567',
-	          		address:'北京市海淀区',
-	          		code:'050000',
-	          		note:'这是备注的描述',
+	          		password:'admin',
+	          		newpassword:'',
+	          		newpassword2:'',
 	          	},
 	          rules:{
 	          	name:[
@@ -254,7 +158,7 @@
 		          }, {
 		            navicon: 'icon-user',
 		            navtitle: '个人资料',
-		            navherf: '/personinfo'
+		            navherf: '/passwordedit'
 		          }, {
 		            navicon: 'icon-edit',
 		            navtitle: '修改密码',
@@ -301,7 +205,7 @@
 				$(".navs>li").css("margin", "0px 10px");
 			},
 			saveinfo(){
-				console.log(this.personinfo);
+				console.log(this.passwordedit);
 			}
 		},
 	}

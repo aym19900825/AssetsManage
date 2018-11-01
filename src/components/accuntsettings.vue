@@ -2,7 +2,7 @@
 	<div>
 	<div class="headerbg">
   		<vheader></vheader>
-			<navs_header></navs_header>
+		<navs_header></navs_header>
 	</div>
     <div class="contentbg">
 		<div class="navbar-default navbar-static-side">
@@ -30,129 +30,90 @@
 
 
 		<div class="wrapper wrapper-content">
-			
-				<EasyScrollbar>
-        			<div id="wrapper" ref="homePagess" style="height: 600px;">
-						<div id="information" style="height: inherit;">
-							<div class="ibox-content">
+			<EasyScrollbar>
+    			<div id="wrapper" ref="homePagess" style="height: 600px;">
+					<div id="information" style="height: inherit;">
+						<div class="ibox-content">
+							<div class="mask_tab-block mb20">
+								<el-row :gutter="70">
+									<el-col :span="4" class="pt20">
+										<el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
+  :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+										  <img v-if="imageUrl" :src="imageUrl" class="avatar">
+										  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+										</el-upload>
+									</el-col>
+									<el-col :span="20">
+										
+									</el-col>
+								</el-row>
+							</div>
+
+
+
 							<div class="mask_tab-block">
 								<div class="mask_tab-head clearfix">
 									<div class="accordion_title">
-										<span class="accordion-toggle">基本资料</span>
+										<span class="accordion-toggle">账号设置</span>
 									</div>
 									<div class="col_but">
 										<i class="icon-arrow1-down"></i>
 									</div>
 								</div>
 
-
-								 <el-form status-icon ref="personinfo" :model="personinfo" :rules="rules" label-width="80px" :label-position="labelPosition">
-								 	<!-- 第一行 -->
+								 <el-form status-icon ref="accuntsettings" :model="accuntsettings" :rules="rules" label-width="80px" :label-position="labelPosition">
+								 	
 								 	<el-row :gutter="70">
-								 		<el-col :span="8">
-								 			 <el-form-item label="用户称谓" prop="name">
-											    <el-input v-model="personinfo.name"></el-input>
-											  </el-form-item>	
-								 		</el-col>
-								 		<el-col :span="8">
-								 			 <el-form-item label="出生日期">
-							                      <el-date-picker
-											      v-model="personinfo.birthdate"
-											      type="date"
-										      placeholder="选择日期" value-format="yyyy-MM-dd">
-											    </el-date-picker>
-							                </el-form-item>		
-								 		</el-col>
-								 		<el-col :span="8">
-								 			<el-form-item label="性别">
-								 				<el-radio v-model="personinfo.sex" label="男">男
-								 				</el-radio>
-				  								<el-radio v-model="personinfo.sex" label="女">女
-				  								</el-radio>
-								 			</el-form-item>
-								 		</el-col>
-								 	</el-row>
+										<el-col :span="24">
+											<el-form-item label="所属组织" prop="companyId">
+												<el-input v-model="accuntsettings.companyId" disabled>
+													<el-button slot="append" icon="el-icon-search" @click='companyLookup'></el-button>
+												</el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+
 								 	<!-- 第二行 -->
 								 	<el-row :gutter="70">
-								 		<el-col :span="8">
-								 			 <el-form-item label="工号">
-										    <el-input v-model="personinfo.id"></el-input>
+								 		<el-col :span="12">
+								 			 <el-form-item label="人员姓名">
+										    <el-input v-model="accuntsettings.personname"></el-input>
 										  </el-form-item>	
 								 		</el-col>
-								 		<el-col :span="8">
-								 			 <el-form-item label="入职日期">
-							                      <el-date-picker
-											      v-model="personinfo.workdate"
-											      type="date"
-										      placeholder="选择日期" value-format="yyyy-MM-dd">
-											    </el-date-picker>
-							                </el-form-item>		
-								 		</el-col>
-								 		<el-col :span="8">
-								 			<el-form-item label="身份证号">
-											    <el-input v-model="personinfo.digital"></el-input>
+								 		<el-col :span="12">
+								 			<el-form-item label="排序号">
+											    <el-input v-model="accuntsettings.orders" placeholder="数字越大越在前"></el-input>
 											  </el-form-item>
 								 		</el-col>
 								 	</el-row>
 								 	<!-- 第三行 -->
 								 	<el-row :gutter="70">
-								 		<el-col :span="8">
-								 			 <el-form-item label="默认身份">
-								 				<el-switch v-model="personinfo.defdigital" active-color="#13ce66" inactive-color="#ff4949">
-												</el-switch>
+								 		<el-col :span="12">
+								 			 <el-form-item label="登录名称">
+								 				<el-input v-model="accuntsettings.username" disabled></el-input>
 								 			</el-form-item>	
 								 		</el-col>
-								 		<el-col :span="8">
-								 			 <el-form-item label="参加工作时间">
-							                      <el-date-picker
-											      v-model="personinfo.joindate"
-											      type="date"
-										      placeholder="选择日期" value-format="yyyy-MM-dd">
-											    </el-date-picker>
+								 		<el-col :span="12">
+								 			 <el-form-item label="登录口令">
+							                      <el-input type="password" v-model="accuntsettings.password" disabled></el-input>
 							                </el-form-item>		
-								 		</el-col>
-								 		<el-col :span="8">
-								 			<el-form-item label="电子邮箱">
-											    <el-input v-model="personinfo.email"></el-input>
-											  </el-form-item>
 								 		</el-col>
 								 	</el-row>
 								 	<!-- 第四行 -->
 								 	<el-row :gutter="70">
-								 		<el-col :span="8">
-								 			 <el-form-item label="联系电话">
-										    <el-input v-model="personinfo.tele"></el-input>
+								 		<el-col :span="12">
+								 			 <el-form-item label="配置状态">
+										    	<el-radio disabled v-model="accuntsettings.configstate" label="1">启用</el-radio>
+  												<el-radio disabled v-model="accuntsettings.configstate" label="2">冻结</el-radio>
 										  </el-form-item>	
 								 		</el-col>
-								 		<el-col :span="8">
-								 			 <el-form-item label="手机号">
-										    <el-input v-model="personinfo.phone"></el-input>
-										  </el-form-item>	
-								 		</el-col>
-								 		<el-col :span="8">
-								 			<el-form-item label="传真号">
-											    <el-input v-model="personinfo.rex"></el-input>
-											  </el-form-item>
-								 		</el-col>
-								 	</el-row>
-								 	<!-- 第五行 -->
-								 	<el-row :gutter="70">
-								 		<el-col :span="16">
-								 			 <el-form-item label="地址">
-										    <el-input v-model="personinfo.address"></el-input>
-										  </el-form-item>	
-								 		</el-col>
-								 		<el-col :span="8">
-								 			<el-form-item label="邮编">
-											    <el-input v-model="personinfo.code"></el-input>
-											  </el-form-item>
-								 		</el-col>
-								 	</el-row>
-								 	<!-- 第六行 -->
-								 	<el-row :gutter="70">
-								 		<el-col :span="24">
-								 			 <el-form-item label="备注">
-										    <el-input  type="textarea" :rows="3" v-model="personinfo.note"></el-input>
+								 		<el-col :span="12">
+								 			 <el-form-item label="登录方式">
+											    <el-checkbox-group v-model="accuntsettings.logintype">
+										      <el-checkbox label="口令登录" name="type"></el-checkbox>
+										      <el-checkbox label="uKey" name="type"></el-checkbox>
+										      <el-checkbox label="数字证书" name="type"></el-checkbox>
+										    </el-checkbox-group>
 										  </el-form-item>	
 								 		</el-col>
 								 	</el-row>
@@ -183,7 +144,7 @@
 	import usermask from './common/user_mask.vue'
 
 	export default {
-		name: 'personinfo',
+		name: 'accuntsettings',
 		components: {
 			vheader,
 			navs_header,
@@ -199,7 +160,7 @@
                 console.log(value);
                 if (value === '') {
                     callback(new Error('必填'));}
-                // } else if (!name.test(this.personinfo.name)) {
+                // } else if (!name.test(this.accuntsettings.name)) {
                 //     callback(new Error('真实姓名填写有误'));
                 // } 
                 else {
@@ -212,6 +173,7 @@
 	          isShow: false,
 	          ismin:true,
 	          clientHeight:'',//获取浏览器高度
+	          imageUrl: '',//头像上传
 	          radio: '1',
 	          value3: '',
 	          value4: '',
@@ -219,23 +181,15 @@
 	          value1:true,
 	          value2: true,
 	          labelPosition: 'top',
-	          personinfo:
+	          accuntsettings:
 	          	{
-	          		name:'pangsq',
-	          		birthdate:'2018-10-28',
-	          		sex:'女',
-	          		id:'2018011865',
-	          		workdate:'2018-10-29',
-	          		digital:'130181178712341234',
-	          		defdigital:'',
-	          		joindate:'2018-11-01',
-	          		email:'765676543@qq.com',
-	          		tele:'010-2345746',
-	          		phone:'13634567890',
-	          		rex:'2134567',
-	          		address:'北京市海淀区',
-	          		code:'050000',
-	          		note:'这是备注的描述',
+	          		companyId: '北京恒信启华信息技术股份有限公司',
+	          		personname:'超级管理员',
+	          		orders:'10',
+	          		username:'admin',
+	          		configstate:'1',
+	          		password:'admin',
+	          		logintype: [],
 	          	},
 	          rules:{
 	          	name:[
@@ -276,6 +230,22 @@
 	    },
 		
 		methods: {  
+			handleAvatarSuccess(res, file) {
+		        this.imageUrl = URL.createObjectURL(file.raw);
+		      },
+		      beforeAvatarUpload(file) {
+		        const isJPG = file.type === 'image/jpeg';
+		        const isLt2M = file.size / 1024 / 1024 < 2;
+
+		        if (!isJPG) {
+		          this.$message.error('上传头像图片只能是 JPG 格式!');
+		        }
+		        if (!isLt2M) {
+		          this.$message.error('上传头像图片大小不能超过 2MB!');
+		        }
+		        return isJPG && isLt2M;
+		      },
+
 			min2max(){ 
 	        	if($(".navbar-static-side").width()=="220"){
 			    	$(".wrapper").css("padding-left", "220px");
@@ -301,7 +271,7 @@
 				$(".navs>li").css("margin", "0px 10px");
 			},
 			saveinfo(){
-				console.log(this.personinfo);
+				console.log(this.accuntsettings);
 			}
 		},
 	}
@@ -309,8 +279,32 @@
 
 <style scoped>
 @import '../assets/css/mask-modules.css';
-
-
+ .avatar-uploader {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 140px;
+    height: 140px;
+    line-height: 140px;
+    text-align: center;
+  }
+  .avatar {
+    width: 140px;
+    height: 140px;
+    display: block;
+    border: 1px dashed #d9d9d9;
+  }
+ .avatar i {font-size: 50px; line-height:130px; color: #c0c4cc;}
 
 </style>
 

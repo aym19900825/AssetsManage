@@ -10,8 +10,10 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "ajv": "^6.0.0",
     "axios": "^0.18.0",
     "bootstrap": "^3.3.6",
+    "easyscroll": "^1.0.1",
     "echarts": "^4.2.0-rc.1",
     "element-ui": "^2.4.8",
     "gridstack": "^0.4.0",
@@ -24,6 +26,7 @@
     "vue": "^2.5.2",
     "vue-grid-layout": "^2.2.0",
     "vue-router": "^3.0.1",
+    "vue-ztree-2.0": "^1.0.2",
     "ztree": "^3.5.24"
   },
   "devDependencies": {

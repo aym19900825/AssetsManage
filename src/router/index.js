@@ -4,6 +4,8 @@ import Login from '@/page/login/login'
 import user_management from '@/components/user_management' 
 import dept_management from '@/components/dept_management'
 import personinfo from '@/components/personinfo'
+import accuntsetting from '@/components/accuntsetting'
+import passwordedit from '@/components/passwordedit'
 import ztree from '@/components/common/ztree' 
 Vue.use(Router)
 
@@ -29,13 +31,22 @@ Vue.use(Router)
       name: 'personinfo',
       component: personinfo
     },
+    {
+      path: '/accuntsetting',
+      name: 'accuntsetting',
+      component: accuntsetting
+    },
+    {
+      path: '/passwordedit',
+      name: 'passwordedit',
+      component: passwordedit
+    },
   	{
     	path: '/ztree',
     	name: 'ztree',
-    	component:ztree
-    
-   
+    	component:ztree  
   	},
+
   ];
 
 

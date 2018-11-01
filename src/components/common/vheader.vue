@@ -10,12 +10,10 @@
                 </li>
         </ul>
         <div class="nav-head pull-right nav-right">
-            <div class="lingdang mr30">
-            	<a href="#" title="待办任务">
-            		<span class="tips_red" id="todotipscount">5</span>
-            		<i class="icon-notice"></i>
-                </a>
-            </div>
+            <el-badge :value="200" :max="99" class="item mr30">
+                <a href="#"><i class="icon-notice"></i></a>
+            </el-badge>
+            
 
             <el-dropdown placement="top" trigger="click">
               <span class="el-dropdown-link white">
@@ -24,10 +22,26 @@
                 <i class="el-icon-arrow-down icon-arrow2-down"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item><i class="icon-role-site mr10"></i>账号设置</el-dropdown-item>
-                <el-dropdown-item><i class="icon-user mr10"></i>个人资料</el-dropdown-item>
-                <el-dropdown-item><i class="icon-key mr10"></i>修改密码</el-dropdown-item>
-                <el-dropdown-item  ><i class="icon-log-out mr10"></i>退出</el-dropdown-item>
+                <el-dropdown-item>
+                    <router-link to="/accuntsetting">
+                        <i class="icon-role-site mr10"></i>账号设置
+                    </router-link>
+                </el-dropdown-item>
+                <el-dropdown-item>
+                    <router-link to="/personinfo">
+                        <i class="icon-user mr10"></i>个人资料
+                    </router-link>
+                </el-dropdown-item>
+                <el-dropdown-item>
+                    <router-link to="/passwordedit">
+                        <i class="icon-key mr10"></i>修改密码
+                    </router-link>
+                </el-dropdown-item>
+                <el-dropdown-item>
+                    <router-link to="/user_management">
+                        <i class="icon-log-out mr10"></i>退出
+                    </router-link>
+                </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
 
@@ -100,20 +114,6 @@ export default {
     height:36px;
     line-height:36px;
     margin: 12px 40px;
-}
-.tips_red{
-	min-width: 12px;
-    padding: 0 6px;
-    height: 20px;
-    border-radius: 50px;
-    position: absolute;
-    right: -10px;
-    top: -10px;
-    background: #f34949;
-    line-height: 20px;
-    text-align: center;
-    color: #fff;
-    font-size: 12px;
 }
 
 .lingdang{

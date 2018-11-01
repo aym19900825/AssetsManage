@@ -16,7 +16,7 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item class="divider">定位当前选项卡</el-dropdown-item>
-                    <el-dropdown-item divided="true" class="J_tabCloseAll">关闭全部选项卡</el-dropdown-item>
+                    <el-dropdown-item <!--divided="true"--> class="J_tabCloseAll">关闭全部选项卡</el-dropdown-item>
                     <el-dropdown-item class="J_tabCloseOther">关闭其他选项卡</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>

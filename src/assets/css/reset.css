@@ -202,7 +202,7 @@ i, cite, em, var, address, dfn {
 		padding-left: 220px;
 		position: relative;
 	}
-	
+	.accordion {margin:15px; margin-bottom: 20px;}
 	.ibox-content {
 		background-color: #F5F8FB;
 		color: inherit;

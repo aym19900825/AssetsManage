@@ -192,6 +192,35 @@
 				$(".navbar-static-side").css("width", "220px");
 				$(".wrapper").css("padding-left", "220px");
 				$(".navs>li").css("margin", "0px 10px");
+			},
+			//还原按钮
+			rebackDialog() {
+					$(".navbar-static-side").css("width", "220px");
+					$(".wrapper").css("padding-left","220px");
+
+			},
+	   		 SmoothlyMenu:function () {
+	   		 	console.log(12121);
+			    if (!$('#aaa').hasClass('mini-navbar')) {
+			    	console.log(1)
+			    	$('#side-menu').hide();
+			       
+			        console.log(2);
+			        setTimeout(
+			            function () {
+			                $('#side-menu').fadeIn(500);
+			            }, 100);
+			    } else if ($('#aaa').hasClass('fixed-sidebar')) {
+		        $('#side-menu').hide();
+// 				     isShow
+			        setTimeout(
+			            function () {
+			                $('#side-menu').fadeIn(500);
+			            }, 300);
+			    } else {
+			        $('#side-menu').removeAttr('style');
+			    }
+
 			}
 	   		
 

@@ -8,7 +8,7 @@ axios.interceptors.request.use(
   request => {
     var token = sessionStorage.getItem('access_token');
     if (token) {
-        request.headers.Authorization = 'Bearer ' + `${token}`;
+        request.headers.Authorization = 'Bearer ' + '${token}';
     }
     return request;
   },
@@ -19,10 +19,10 @@ axios.interceptors.request.use(
 
 // http response 拦截器
 axios.interceptors.response.use(
-  response => {
+response => {
     return response
-  },
-  error => {
+},
+error => {
     if (error.response) {
       switch (error.response.status) {
         case 401:
@@ -32,7 +32,7 @@ axios.interceptors.response.use(
       }
     }
     return Promise.reject(error.response.data)
-  },
+},
 )
 
 Vue.prototype.$axios = axios

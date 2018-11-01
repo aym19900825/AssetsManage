@@ -117,7 +117,7 @@
 								<el-col :span="8">
 									<el-form-item label="角色" prop="roleId">
 										<el-input v-model="user.roleId">
-											<el-button slot="append" icon="el-icon-search" @click="getCompany"></el-button>
+											<el-button slot="append" icon="el-icon-search" @click="getRole"></el-button>
 										</el-input>
 									</el-form-item>
 								</el-col>
@@ -432,6 +432,25 @@
 					this.resourceData = res.data.data;
 					this.dialogVisible = true;
 				});
+			},
+			//角色
+			getRole() {
+				this.editSearch = 'role';
+				var data = {
+					params: {
+						page: 1,
+						limit: 10,
+					}
+				}
+				let that = this;
+				var url = '/api/api-user/roles';
+				
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+					this.resourceData = res.data.data;
+					this.dialogVisible = true;
+				});
+
 			},
 
 			queding() {

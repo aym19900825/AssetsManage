@@ -208,6 +208,7 @@
 					});
 					return;
 				}else{
+					console.log(selData[0]);
 					this.$refs.child.detail(selData[0].id);
 				}
 			},

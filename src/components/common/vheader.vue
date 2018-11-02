@@ -2,19 +2,17 @@
 	<div class="heder clearfix white">
         <div class="logo"></div>
         <ul class="nav-head pull-left">
-                <li class="current"><router-link :to="{path:'/dashboardList'}" >应用中心</router-link></li>
-                <li><router-link :to="{path:'/dashboardList'}" >程序设计器</router-link></li>
-                <li><router-link :to="{path:'/dashboardList'}" >权限管理</router-link></li>
-                <li>
-                    <router-link :to="{path:'/dashboardList'}" >系统配置</router-link>
-                </li>
+            <li class="current"><router-link :to="{path:'/dashboardList'}">应用中心</router-link></li>
+            <li><router-link :to="{path:'/dashboardList'}" >程序设计器</router-link></li>
+            <li><router-link :to="{path:'/dashboardList'}" >权限管理</router-link></li>
+            <li>
+                <router-link :to="{path:'/dashboardList'}" >系统配置</router-link>
+            </li>
         </ul>
         <div class="nav-head pull-right nav-right">
             <el-badge :value="200" :max="99" class="item mr30">
                 <a href="#"><i class="icon-notice"></i></a>
             </el-badge>
-            
-
             <el-dropdown placement="top" trigger="click">
               <span class="el-dropdown-link white">
                 <font class="pr10">Admin，您好</font>
@@ -27,21 +25,25 @@
                         <i class="icon-role-site mr10"></i>账号设置
                     </router-link>
                 </el-dropdown-item>
+
                 <el-dropdown-item>
                     <router-link to="/personinfo">
                         <i class="icon-user mr10"></i>个人资料
                     </router-link>
                 </el-dropdown-item>
+
                 <el-dropdown-item>
                     <router-link to="/passwordedit">
                         <i class="icon-key mr10"></i>修改密码
                     </router-link>
                 </el-dropdown-item>
+
                 <el-dropdown-item>
-                    <router-link to="/user_management">
+                    <router-link to="/">
                         <i class="icon-log-out mr10"></i>退出
                     </router-link>
                 </el-dropdown-item>
+
               </el-dropdown-menu>
             </el-dropdown>
 
@@ -89,7 +91,6 @@ export default {
     position: relative;
     z-index: 998;
     margin-left: 25px;
-    
 }
 
 .nav-head li{

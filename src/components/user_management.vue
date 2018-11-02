@@ -208,13 +208,11 @@
 					label: "simplename"
 				},
 				treeData: [],
-
 				page: {
 					currentPage: 1,
 					pageSize: 10,
 					totalCount: 0
 				}
-
 			}
 		},
 		methods: {
@@ -419,12 +417,10 @@
 			judge(data) {
 				//taxStatus 布尔值
 				return data.enabled ? '启用' : '冻结'
-
 			},
 			sexName(data) {
 				return data.sex ? '男' : '女'
 			},
-
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -500,18 +496,15 @@
 				console.log("============="+data);
 			},
 			handleNodeClick(data) {
-
 			},
 			formatter(row, column) {
 				return row.enabled;
 			},
-
 		},
 		mounted() {
 			this.requestData();
 			this.getKey();
 		},
-
 	}
 </script>
 

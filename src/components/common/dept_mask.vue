@@ -75,10 +75,12 @@
 						</div>
 					</div>
 				</div>
-				<el-form-item>
-					<el-button @click="cancelForm">取消</el-button>
-					<el-button type="primary" @click="submitForm('adddeptForm')">提交</el-button>
-				</el-form-item>
+				<div class="el-dialog__footer">
+					<el-form-item>
+						<el-button @click="cancelForm">取消</el-button>
+						<el-button type="primary" @click="submitForm('adddeptForm')">提交</el-button>
+					</el-form-item>
+				</div>
 			</el-form>
 		</div>
 		<!-- 弹出 -->
@@ -198,7 +200,9 @@
 				this.placetext = false;
 				this.dialogVisible = false;
 					this.adddeptForm.pid = this.checkedNodes[0].id;
-					this.adddeptForm.pName = this.checkedNodes[0].simplepame;//此处赋值只为页面显示，不在数据中定义
+					this.adddeptForm.pName = this.checkedNodes[0].pName;//此处赋值只为页面显示，不在数据中定义
+					console.log("================");
+					console.log(this.adddeptForm.pName);
 			},
 			getCheckedNodes() {
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()

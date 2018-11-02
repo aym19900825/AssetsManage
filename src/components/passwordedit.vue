@@ -45,11 +45,14 @@
 											<i class="icon-arrow1-down"></i>
 										</div>
 									</div>
+									  <el-form-item label="当前用户" prop="username">
+									    <el-input v-model.number="passwordedit.username" disabled></el-input>
+									  </el-form-item>
 									  <el-form-item label="原始密码" prop="oldpassword">
 									    <el-input type="password" v-model.number="passwordedit.oldpassword"></el-input>
 									  </el-form-item>
-									  <el-form-item label="密码" prop="pass">
-									    <el-input type="password" v-model="passwordedit.pass" autocomplete="off"></el-input>
+									  <el-form-item label="密码" prop="newpassword">
+									    <el-input type="password" v-model="passwordedit.newpassword" autocomplete="off"></el-input>
 									  </el-form-item>
 									  <el-form-item label="确认密码" prop="checkPass">
 									    <el-input type="password" v-model="passwordedit.checkPass" autocomplete="off"></el-input>
@@ -116,7 +119,7 @@ export default {
       var validatePass2 = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请再次输入密码'));
-        } else if (value !== this.passwordedit.pass) {
+        } else if (value !== this.passwordedit.newpassword) {
           callback(new Error('两次输入密码不一致!'));
         } else {
           callback();
@@ -131,15 +134,16 @@ export default {
 
         labelPosition: 'top',
         passwordedit: {
-          oldpassword: '',//原始密码
-          pass: '',//新密码
-          checkPass: ''//确认新密码
+        	username: '',
+			oldpassword: '',//原始密码
+			newpassword: '',//新密码
+			checkPass: ''//确认新密码
         },
         rules2: {
            oldpassword: [
             { validator: checkOldpassword, trigger: 'blur' }
           ],
-          pass: [
+          newpassword: [
             { validator: validatePass, trigger: 'blur' }
           ],
           checkPass: [
@@ -173,13 +177,34 @@ export default {
 	        var clientHeight = $(window).height() - 100;
 	        _this.$refs.homePagess.style.height = clientHeight + 'px';
 	      };
+	      this.getData();
 	    },
     methods: {
+    	getData(){
+    		var url = '/api/auth-server/oauth/userinfo';
+    		this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+				this.passwordedit.username = res.data.user.username;
+				this.passwordedit.id = res.data.user.id;
+			}).catch((err) => {
+				this.$message({
+					message: '网络错误，请重试',
+					type: 'error'
+				});
+			});
+    	},
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
+          	console.log(this.passwordedit);
+            var userid = this.passwordedit.id;
+            var oldpassword = this.passwordedit.oldpassword;
+            var newpassword= this.passwordedit.newpassword;
             var url = '/api/api-user/users/password';
-            this.$axios.put(url, {}).then((res) => {
+            this.$axios.put(url, {
+            		id: userid,
+            		oldPassword: oldpassword,
+            		newPassword: newpassword
+            }).then((res) => {
             	console.log(res);
 				//resp_code == 0是后台返回的请求成功的信息
 				if(res.data.resp_code == 0) {
@@ -187,7 +212,16 @@ export default {
 						message: '修改成功',
 						type: 'success'
 					});
+				} else {
+					if(res.data.resp_code == 1) {
+						this.$message({
+							message: res.data.resp_msg,
+							type: 'error'
+						});
+					}
 				}
+
+
 			}).catch((err) => {
 				this.$message({
 					message: '网络错误，请重试',

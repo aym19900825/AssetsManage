@@ -144,7 +144,7 @@
 							</el-table>
 							<!-- <span class="demonstration">显示总数</span>" -->
 							<!-- <el-pagination background layout="prev, pager, next" :total="2" style="float:right;margin-top:10px;"> -->
-							</el-pagination style="float:right;margin-top:10px;">
+							<!-- </el-pagination style="float:right;margin-top:10px;"> -->
 							<el-pagination
 					            @size-change="sizeChange"
 					            @current-change="currentChange"
@@ -159,7 +159,7 @@
 					</div>
 				</div>
 			</div>
-			<usermask ref="child" @request="requestData" @requestTree="getKey"></usermask>
+			<usermask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></usermask>
 		</div>
 	</div>
 </template>

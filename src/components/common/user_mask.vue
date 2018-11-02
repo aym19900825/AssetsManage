@@ -117,7 +117,7 @@
 								<el-col :span="8">
 									<el-form-item label="角色" prop="roleId">
 										<el-input v-model="user.roleId">
-											<el-button slot="append" icon="el-icon-search" @click="getCompany"></el-button>
+											<el-button slot="append" icon="el-icon-search" @click="getRole"></el-button>
 										</el-input>
 									</el-form-item>
 								</el-col>
@@ -197,7 +197,13 @@
 <script>
 	export default {
 		name: 'masks',
+		props: {
+			page: {
+				type: Object,
+			}
+		},
 		data() {
+			console.log(this.page);
 			var validatePass1 = (rule, value, callback) => {
 				if(value === '') {
 					callback(new Error('必填'));
@@ -402,15 +408,20 @@
 			//所属组织
 			getCompany() {
 				this.editSearch = 'company';
-				var data = {
+				var page = this.page.currentPage;
+				var limit = this.page.pageSize;
+				var type = 1;
+				console.log(this.page.currentPage);
+				console.log(this.page.pageSize);
+				var url = '/api/api-user/depts/type';
+				this.$axios.get(url, {
 					params: {
-						page: 1,
-						limit: 10,
-					}
-				}
-				let that = this;
-				var url = '/api/api-user/depts/company';
-				this.$axios.get(url, {}).then((res) => {
+						page: page,
+						limit: limit,
+						type: type
+					},
+				}).then((res) => {
+					console.log(res.data.data);
 					this.resourceData = res.data.data;
 					this.dialogVisible = true;
 				});
@@ -420,6 +431,24 @@
 			//所属部门
 			getDept() {
 				this.editSearch = 'dept';
+				var page = this.page.currentPage;
+				var limit = this.page.pageSize;
+				var type = 2;
+				var url = '/api/api-user/depts/type';
+				this.$axios.get(url, {
+					params: {
+						page: page,
+						limit: limit,
+						type: type
+					},
+				}).then((res) => {
+					this.resourceData = res.data.data;
+					this.dialogVisible = true;
+				});
+			},
+			//角色
+			getRole() {
+				this.editSearch = 'role';
 				var data = {
 					params: {
 						page: 1,
@@ -427,11 +456,16 @@
 					}
 				}
 				let that = this;
-				var url = '/api/api-user/depts/dept';
-				this.$axios.get(url, {}).then((res) => {
+				var url = '/api/api-user/roles';
+
+				this.$axios.get(url, {
+					
+				}).then((res) => {
+					console.log(res);
 					this.resourceData = res.data.data;
 					this.dialogVisible = true;
 				});
+
 			},
 
 			queding() {
@@ -457,6 +491,7 @@
 			}
 
 		}
+
 	}
 </script>
 

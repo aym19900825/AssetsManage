@@ -159,7 +159,7 @@
 					</div>
 				</div>
 			</div>
-			<usermask ref="child" @request="requestData" @requestTree="getKey"></usermask>
+			<usermask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></usermask>
 		</div>
 	</div>
 </template>

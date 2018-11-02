@@ -326,7 +326,7 @@ i, cite, em, var, address, dfn {
     padding-right: 15px;
 }
 .navs>li {
-    margin: 0px 10px;
+    margin: 5px 10px;
 }
 .navs > li > a {
     color: #fff;

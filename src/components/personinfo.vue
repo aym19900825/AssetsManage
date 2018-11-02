@@ -35,6 +35,89 @@
         			<div id="wrapper" ref="homePagess" style="height: 600px;">
 						<div id="information" style="height: inherit;">
 							<div class="ibox-content">
+								<el-form status-icon ref="personinfo" :model="personinfo" :rules="rules" label-width="80px" :label-position="labelPosition">
+								<div class="mask_tab-block mb20">
+									<div class="mask_tab-head clearfix">
+										<div class="accordion_title">
+											<span class="accordion-toggle">账号设置</span>
+										</div>
+										<div class="col_but">
+											<i class="icon-arrow1-down"></i>
+										</div>
+									</div>
+
+									<el-row :gutter="70">
+										<el-col :span="12">
+										 	<el-row :gutter="70">
+										 		<el-col :span="24">
+										 			 <el-form-item label="人员姓名" prop="nickname">
+												    <el-input v-model="personinfo.nickname"></el-input>
+												  </el-form-item>	
+										 		</el-col>
+										 	</el-row>
+										 	<el-row :gutter="70">
+										 		<el-col :span="24">
+										 			<el-form-item label="排序号" prop="orders">
+													    <el-input v-model="personinfo.orders" placeholder="数字越大越在前"></el-input>
+													  </el-form-item>
+										 		</el-col>
+										 	</el-row>
+										</el-col>
+										<el-col :span="12" class="pt20">
+											<el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
+	  :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload" title="上传头像">
+											  <img v-if="headImgUrl" :src="headImgUrl" class="avatar">
+											  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+											</el-upload>
+										</el-col>
+									</el-row>
+
+									<el-row :gutter="70">
+										<el-col :span="24">
+											<el-form-item label="所属组织">
+												<el-input v-model="personinfo.companyId" disabled>
+												<el-button slot="append" icon="icon-search" @click=''></el-button>
+												</el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+								 	<!-- 第三行 -->
+								 	<el-row :gutter="70">
+								 		<el-col :span="12">
+								 			 <el-form-item label="登录名称">
+								 				<el-input v-model="personinfo.username" disabled></el-input>
+								 			</el-form-item>	
+								 		</el-col>
+								 		<el-col :span="12">
+								 			 <el-form-item label="登录口令">
+							                      <el-input type="password" v-model="personinfo.password" disabled>
+							                      <el-button slot="append" icon="icon-edit" @click='editpassword'></el-button>
+							                      </el-input>
+
+							                </el-form-item>		
+								 		</el-col>
+								 	</el-row>
+								 	<!-- 第四行 -->
+								 	<el-row :gutter="70">
+								 		<el-col :span="12">
+								 			 <el-form-item label="配置状态">
+										    	<el-radio disabled v-model="personinfo.enabled" label="1">启用</el-radio>
+  												<el-radio disabled v-model="personinfo.enabled" label="2">冻结</el-radio>
+										  </el-form-item>	
+								 		</el-col>
+								 		<el-col :span="12">
+								 			 <el-form-item label="登录方式">
+											    <el-checkbox-group v-model="personinfo.logintype">
+										      <el-checkbox label="口令登录" name="type" checked disabled></el-checkbox>
+										      <el-checkbox label="uKey" name="type" disabled></el-checkbox>
+										      <el-checkbox label="数字证书" name="type" disabled></el-checkbox>
+										    </el-checkbox-group>
+										  </el-form-item>	
+								 		</el-col>
+								 	</el-row>
+
+								</div>
+
 							<div class="mask_tab-block">
 								<div class="mask_tab-head clearfix">
 									<div class="accordion_title">
@@ -44,121 +127,108 @@
 										<i class="icon-arrow1-down"></i>
 									</div>
 								</div>
-
-
-								 <el-form status-icon ref="personinfo" :model="personinfo" :rules="rules" label-width="80px" :label-position="labelPosition">
-								 	<!-- 第一行 -->
-								 	<el-row :gutter="70">
-								 		<el-col :span="8">
-								 			 <el-form-item label="用户称谓" prop="name">
-											    <el-input v-model="personinfo.name"></el-input>
-											  </el-form-item>	
-								 		</el-col>
-								 		<el-col :span="8">
-								 			 <el-form-item label="出生日期">
-							                      <el-date-picker
-											      v-model="personinfo.birthdate"
-											      type="date"
-										      placeholder="选择日期" value-format="yyyy-MM-dd">
-											    </el-date-picker>
-							                </el-form-item>		
-								 		</el-col>
-								 		<el-col :span="8">
-								 			<el-form-item label="性别">
-								 				<el-radio v-model="personinfo.sex" label="男">男
-								 				</el-radio>
-				  								<el-radio v-model="personinfo.sex" label="女">女
-				  								</el-radio>
-								 			</el-form-item>
-								 		</el-col>
-								 	</el-row>
-								 	<!-- 第二行 -->
-								 	<el-row :gutter="70">
-								 		<el-col :span="8">
-								 			 <el-form-item label="工号">
-										    <el-input v-model="personinfo.id"></el-input>
-										  </el-form-item>	
-								 		</el-col>
-								 		<el-col :span="8">
-								 			 <el-form-item label="入职日期">
-							                      <el-date-picker
-											      v-model="personinfo.workdate"
-											      type="date"
-										      placeholder="选择日期" value-format="yyyy-MM-dd">
-											    </el-date-picker>
-							                </el-form-item>		
-								 		</el-col>
-								 		<el-col :span="8">
-								 			<el-form-item label="身份证号">
-											    <el-input v-model="personinfo.digital"></el-input>
-											  </el-form-item>
-								 		</el-col>
-								 	</el-row>
-								 	<!-- 第三行 -->
-								 	<el-row :gutter="70">
-								 		<el-col :span="8">
-								 			 <el-form-item label="默认身份">
-								 				<el-switch v-model="personinfo.defdigital" active-color="#13ce66" inactive-color="#ff4949">
-												</el-switch>
-								 			</el-form-item>	
-								 		</el-col>
-								 		<el-col :span="8">
-								 			 <el-form-item label="参加工作时间">
-							                      <el-date-picker
-											      v-model="personinfo.joindate"
-											      type="date"
-										      placeholder="选择日期" value-format="yyyy-MM-dd">
-											    </el-date-picker>
-							                </el-form-item>		
-								 		</el-col>
-								 		<el-col :span="8">
-								 			<el-form-item label="电子邮箱">
-											    <el-input v-model="personinfo.email"></el-input>
-											  </el-form-item>
-								 		</el-col>
-								 	</el-row>
-								 	<!-- 第四行 -->
-								 	<el-row :gutter="70">
-								 		<el-col :span="8">
-								 			 <el-form-item label="联系电话">
-										    <el-input v-model="personinfo.tele"></el-input>
-										  </el-form-item>	
-								 		</el-col>
-								 		<el-col :span="8">
-								 			 <el-form-item label="手机号">
-										    <el-input v-model="personinfo.phone"></el-input>
-										  </el-form-item>	
-								 		</el-col>
-								 		<el-col :span="8">
-								 			<el-form-item label="传真号">
-											    <el-input v-model="personinfo.rex"></el-input>
-											  </el-form-item>
-								 		</el-col>
-								 	</el-row>
-								 	<!-- 第五行 -->
-								 	<el-row :gutter="70">
-								 		<el-col :span="16">
-								 			 <el-form-item label="地址">
-										    <el-input v-model="personinfo.address"></el-input>
-										  </el-form-item>	
-								 		</el-col>
-								 		<el-col :span="8">
-								 			<el-form-item label="邮编">
-											    <el-input v-model="personinfo.code"></el-input>
-											  </el-form-item>
-								 		</el-col>
-								 	</el-row>
-								 	<!-- 第六行 -->
-								 	<el-row :gutter="70">
-								 		<el-col :span="24">
-								 			 <el-form-item label="备注">
-										    <el-input  type="textarea" :rows="3" v-model="personinfo.note"></el-input>
-										  </el-form-item>	
-								 		</el-col>
-								 	</el-row>
-								 </el-form>	
-							</div>
-
+							 	<!-- 第一行 -->
+							 	<el-row :gutter="70">
+							 		<el-col :span="8">
+							 			 <el-form-item label="工号" prop="worknumber">
+									    <el-input v-model="personinfo.worknumber"></el-input>
+									  </el-form-item>	
+							 		</el-col>
+							 		<el-col :span="8">
+							 			 <el-form-item label="出生日期">
+						                      <el-date-picker
+										      v-model="personinfo.birthday"
+										      type="date"
+									      placeholder="选择日期" value-format="yyyy-MM-dd">
+										    </el-date-picker>
+						                </el-form-item>
+							 		</el-col>
+							 		<el-col :span="8">
+							 			 <el-form-item label="角色">
+							 				<el-input v-model="personinfo.roles" disabled></el-input>
+											</el-switch>
+							 			</el-form-item>	
+							 		</el-col>
+							 	</el-row>
+							 	<!-- 第二行 -->
+							 	<el-row :gutter="70">
+							 		<el-col :span="8">
+							 			<el-form-item label="身份证号">
+										    <el-input v-model="personinfo.idnumber"></el-input>
+										  </el-form-item>
+							 		</el-col>
+							 		<el-col :span="8">
+							 			 <el-form-item label="性别">
+							 				<el-radio v-model="personinfo.sex" label="男">男
+							 				</el-radio>
+			  								<el-radio v-model="personinfo.sex" label="女">女
+			  								</el-radio>
+							 			</el-form-item>
+							 		</el-col>
+							 		
+							 		
+							 	</el-row>
+							 	<!-- 第三行 -->
+							 	<el-row :gutter="70">
+							 		<el-col :span="8">
+							 			 <el-form-item label="入职日期">
+						                      <el-date-picker v-model="personinfo.workdate" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+										    </el-date-picker>
+						                </el-form-item>		
+							 		</el-col>
+							 		<el-col :span="8">
+							 			 <el-form-item label="参加工作时间">
+						                      <el-date-picker v-model="personinfo.entrytime" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+										    </el-date-picker>
+						                </el-form-item>		
+							 		</el-col>
+							 		<el-col :span="8">
+							 			<el-form-item label="电子邮箱" prop="email">
+										    <el-input v-model="personinfo.email"></el-input>
+										  </el-form-item>
+							 		</el-col>
+							 	</el-row>
+							 	<!-- 第四行 -->
+							 	<el-row :gutter="70">
+							 		<el-col :span="8">
+							 			 <el-form-item label="联系电话">
+									    <el-input v-model="personinfo.tele"></el-input>
+									  </el-form-item>	
+							 		</el-col>
+							 		<el-col :span="8">
+							 			 <el-form-item label="手机号" prop="phone">
+									    <el-input v-model="personinfo.phone"></el-input>
+									  </el-form-item>	
+							 		</el-col>
+							 		<el-col :span="8">
+							 			<el-form-item label="传真号">
+										    <el-input v-model="personinfo.rex"></el-input>
+										  </el-form-item>
+							 		</el-col>
+							 	</el-row>
+							 	<!-- 第五行 -->
+							 	<el-row :gutter="70">
+							 		<el-col :span="16">
+							 			 <el-form-item label="地址">
+									    <el-input v-model="personinfo.address"></el-input>
+									  </el-form-item>	
+							 		</el-col>
+							 		<el-col :span="8">
+							 			<el-form-item label="邮编">
+										    <el-input v-model="personinfo.code"></el-input>
+										  </el-form-item>
+							 		</el-col>
+							 	</el-row>
+							 	<!-- 第六行 -->
+							 	<el-row :gutter="70">
+							 		<el-col :span="24">
+							 			 <el-form-item label="备注">
+									    <el-input  type="textarea" :rows="3" v-model="personinfo.tips"></el-input>
+									  </el-form-item>	
+							 		</el-col>
+							 	</el-row>
+								</div>
+							</el-form>
 							<div class="content-footer">
 								<button class="btn btn-default btn-large">取消</button>
 								<button class="btn btn-primarys btn-large" @click="saveinfo">保存</button>
@@ -194,24 +264,80 @@
 			tablediv
 		},
 		data() {
-			var validatePass1 = (rule, value, callback) => {
-                // var regName =/^[\u4e00-\u9fa5]{2,4}$/; 
-                console.log(value);
-                if (value === '') {
-                    callback(new Error('必填'));}
-                // } else if (!name.test(this.personinfo.name)) {
-                //     callback(new Error('真实姓名填写有误'));
-                // } 
-                else {
-                    callback();
-                }
-            };
+		      var checknickname= (rule, value, callback) => {
+		        if (value === '') {
+		          return callback(new Error('人员姓名不能为空'));
+		        }
+		        setTimeout(() => {
+		          if (!/^.{5,16}$/g.test(value)) {
+		            callback(new Error('密码长度不能少于5个字符且不能大于16个字符'));
+		          } else {
+		              callback();
+		          }
+		        }, 1000);
+		      };
+
+		      var checkorders = (rule, value, callback) => {
+		        if (value === '') {
+		          return callback(new Error('排序号不能为空'));
+		        }
+		        setTimeout(() => {
+		          if (!Number.isInteger(value)) {
+		            callback(new Error('请输入数字值'));
+		          } else {
+		              callback();
+		          }
+		        }, 1000);
+		      };
+
+		      var checkworkid = (rule, value, callback) => {
+		        if (!value) {
+		          return callback(new Error('工号不能为空'));
+		        }
+		        setTimeout(() => {
+		          if (!/^.{4,18}$/g.test(value)) {
+		            callback(new Error('工号长度不能少于4个字符且大于18个字符'));
+		          } else {
+		              callback();
+		          }
+		        }, 1000);
+		      };
+
+		      var checkemail = (rule, value, callback) => {
+		       if (value === '') {
+		          callback(new Error('电子邮箱不能为空'));
+			        } else if (value !== '') {
+			          var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+			            if(!reg.test(value)){
+			              callback(new Error('请输入有效的邮箱'));
+			            }
+			        } else {
+			          callback();
+			        }
+		        };
+
+
+		      var checkphone = (rule, value, callback) => {
+		        if (value === '') {
+		          return callback(new Error('手机号不能为空'));
+		        }
+		        setTimeout(() => {
+		          if (value !== '') {
+		            var reg=/^1[3456789]\d{9}$/;
+			            if(!reg.test(value)){
+			              callback(new Error('请输入有效的手机号码'));
+			            }
+		              callback();
+		          }
+		        }, 1000);
+		      };
 			return {
 			  show:false,			  
 		      userList: [],
 	          isShow: false,
 	          ismin:true,
 	          clientHeight:'',//获取浏览器高度
+	          headImgUrl: '',//头像上传
 	          radio: '1',
 	          value3: '',
 	          value4: '',
@@ -221,30 +347,45 @@
 	          labelPosition: 'top',
 	          personinfo:
 	          	{
-	          		name:'pangsq',
-	          		birthdate:'2018-10-28',
-	          		sex:'女',
-	          		id:'2018011865',
-	          		workdate:'2018-10-29',
-	          		digital:'130181178712341234',
-	          		defdigital:'',
-	          		joindate:'2018-11-01',
-	          		email:'765676543@qq.com',
-	          		tele:'010-2345746',
-	          		phone:'13634567890',
-	          		rex:'2134567',
-	          		address:'北京市海淀区',
-	          		code:'050000',
-	          		note:'这是备注的描述',
+	          		worknumber:'',//当前用户ID号
+	          		companyId: '',//所属组织
+	          		nickname:'',//人员姓名
+	          		username:'',//登录名称
+	          		enabled:'',//配置状态
+	          		password:'',//登录口令
+	          		logintype: [],//登录方式
+	          		birthday:'',//出生日期
+	          		sex:'',//性别
+	          		idnumber:'',//身份证号
+	          		roles:'',//角色
+	          		entrytime:'',//入职日
+	          		email:'',//邮箱
+	          		phone:'',//手机
+	          		address:'',//地址
+	          		tips:'',//备注
+	          		//rex:'',//传真号
+	          		//orders:'',//排序号
+	          		//workdate:'',//参加工作时间
+	          		//tele:'',//联系电话
+	          		//code:'',//邮编
 	          	},
+	          	
 	          rules:{
-	          	name:[
-	          		{
-	          			required: true,
-	                    validator: validatePass1,
-	                    trigger: 'blur'
-	          		}
-	          	]
+	          	worknumber: [
+		            { validator: checkworkid, trigger: 'blur' }
+		          ],
+		        nickname: [
+		            { validator: checknickname, trigger: 'blur' }
+		          ],
+		        orders: [
+		            { validator: checkorders, trigger: 'blur' }
+		          ],
+		        email: [
+		            { validator: checkemail, trigger: 'blur' }
+		          ],
+		        phone: [
+		            { validator: checkphone, trigger: 'blur' }
+		          ]
 	          },
 	          leftNavs: [
 				{//leftNavs左侧菜单数据
@@ -273,9 +414,89 @@
 	        var clientHeight = $(window).height() - 100;
 	        _this.$refs.homePagess.style.height = clientHeight + 'px';
 	      };
+	      this.getData();//调用getData
 	    },
 		
 		methods: {  
+			getData(){
+    		var url = '/api/auth-server/oauth/userinfo';
+    		this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+    			console.log(res.data.user);
+    			this.personinfo=res.data.user;
+				// this.personinfo.id = res.data.user.id;
+				// this.personinfo.username = res.data.user.username;
+				// this.personinfo.password = res.data.user.password;
+			}).catch((err) => {
+				this.$message({
+					message: '网络错误，请重试',
+					type: 'error'
+				});
+			});
+    	},
+    	submitForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+          	console.log(this.personinfo);
+            var userid = this.personinfo.id;
+            var username = this.personinfo.username;
+            var url = '/api/api-user/users/password';
+            this.$axios.put(url, {
+            		id: userid,
+            		username: username
+            }).then((res) => {
+            	console.log(res);
+				//resp_code == 0是后台返回的请求成功的信息
+				if(res.data.resp_code == 0) {
+					this.$message({
+						message: '修改成功',
+						type: 'success'
+					});
+				} else {
+					if(res.data.resp_code == 1) {
+						this.$message({
+							message: res.data.resp_msg,
+							type: 'error'
+						});
+					}
+				}
+
+
+			}).catch((err) => {
+				this.$message({
+					message: '网络错误，请重试',
+					type: 'error'
+				});
+			});
+
+
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      },
+      resetForm(formName) {
+        this.$refs[formName].resetFields();
+      },
+
+			handleAvatarSuccess(res, file) {//上传头像
+		        this.headImgUrl = URL.createObjectURL(file.raw);
+		    },
+		      beforeAvatarUpload(file) {
+		        const isJPG = file.type === 'image/jpeg';
+		        const isLt2M = file.size / 1024 / 1024 < 2;
+
+		        if (!isJPG) {
+		          this.$message.error('上传头像图片只能是 JPG 格式!');
+		        }
+		        if (!isLt2M) {
+		          this.$message.error('上传头像图片大小不能超过 2MB!');
+		        }
+		        return isJPG && isLt2M;
+		      },
+		      editpassword(){//点击按钮跳转到修改密码页
+		      	this.$router.push({path: '/passwordedit'})
+		      },
 			min2max(){ 
 	        	if($(".navbar-static-side").width()=="220"){
 			    	$(".wrapper").css("padding-left", "220px");
@@ -310,6 +531,33 @@
 <style scoped>
 @import '../assets/css/mask-modules.css';
 
+.avatar-uploader {
+    border: 1px dashed #d9d9d9;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 140px;
+    height: 140px;
+    line-height: 140px;
+    text-align: center;
+  }
+  .avatar {
+    width: 140px;
+    height: 140px;
+    display: block;
+  }
+ .avatar i {font-size: 50px; line-height:130px; color: #c0c4cc;}
 
 
 </style>

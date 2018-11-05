@@ -142,7 +142,7 @@
 					</div>
 				</div>
 			</div>
-			<usermask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></usermask>
+			<datamask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></datamask>
 		</div>
 	</div>
 </template>
@@ -151,14 +151,14 @@
 	import navs from './common/left_navs/nav_left.vue'
 	import navs_header from './common/nav_tabs.vue'
 	import assetsTree from './plugin/vue-tree/tree.vue'
-	import usermask from './common/user_mask.vue'
+	import datamask from './common/data_mask.vue'
 	export default {
-		name: 'user_management',
+		name: 'data_management',
 		components: {
 			'vheader': vheader,
 			'navs_header': navs_header,
 			'navs': navs,
-			'usermask': usermask,
+			'datamask': datamask,
 			'v-assetsTree': assetsTree
 		},
 		data() {

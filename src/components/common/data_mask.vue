@@ -4,7 +4,7 @@
 		<div class="mask_div" v-show="show">
 			<!---->
 			<div class="mask_title_div clearfix">
-				<div class="mask_title">添加用户</div>
+				<div class="mask_title">添加数据库表</div>
 				<div class="mask_anniu">
 					<!--<span class="mask_span">
 						<i class="icon-minimize"></i>
@@ -71,7 +71,7 @@
 					<div class="mask_tab-block">
 						<div class="mask_tab-head clearfix">
 							<div class="accordion_title">
-								<span class="accordion-toggle">用户基本资料</span>
+								<span class="accordion-toggle">字段列表</span>
 							</div>
 							<div class="col_but" @click="col_but('col_but2')">
 								<i class="icon-arrow1-down"></i>
@@ -383,7 +383,7 @@
 							this.user.sex = true;
 						}
 						var url = '/api/api-user/users/saveOrUpdate';
-                              console.log(this.user);
+
 						this.$axios.post(url, this.user).then((res) => {
 							if(res.data.resp_code == 0) {
 								this.$message({

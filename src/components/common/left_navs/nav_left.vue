@@ -115,7 +115,8 @@
 		            navicon: 'icon-role-site',
 		            navtitle: '角色管理',
 		            navherf: '#2'
-		          }, {
+		          },
+		           {
 		            navicon: 'icon-department',
 		            navtitle: '部门管理',
 		            navherf: '#3'
@@ -131,11 +132,7 @@
 		            navicon: 'icon-log',
 		            navtitle: '业务日志',
 		            navherf: '#4'
-		          }, {
-		            navicon: 'icon-menu2',
-		            navtitle: '菜单管理',
-		            navherf: '#4'
-		          }, {
+		          },  {
 		            navicon: 'icon-login-log',
 		            navtitle: '登陆日志',
 		            navherf: '#4'
@@ -147,11 +144,9 @@
 		            navicon: 'icon-notice',
 		            navtitle: '通知管理',
 		            navherf: '#4'
-		          }, {
-		            navicon: 'icon-menu2',
-		            navtitle: '菜单管理',
-		            navherf: '#4'
-		          }, {
+		          }, 
+		      
+		          {
 		            navicon: 'icon-data',
 		            navtitle: '数据库配置',
 		            navherf: '#4'

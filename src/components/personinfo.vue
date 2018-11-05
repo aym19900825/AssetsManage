@@ -57,9 +57,9 @@
 										 	</el-row>
 										 	<el-row :gutter="70">
 										 		<el-col :span="24">
-										 			<el-form-item label="排序号" prop="orders">
-													    <el-input v-model="personinfo.orders" placeholder="数字越大越在前"></el-input>
-													  </el-form-item>
+										 			<el-form-item label="工号" prop="worknumber">
+												    	<el-input v-model="personinfo.worknumber"></el-input>
+													</el-form-item>	
 										 		</el-col>
 										 	</el-row>
 										</el-col>
@@ -100,9 +100,14 @@
 								 	<!-- 第四行 -->
 								 	<el-row :gutter="70">
 								 		<el-col :span="12">
-								 			 <el-form-item label="配置状态">
-										    	<el-radio disabled v-model="personinfo.enabled" label="1">启用</el-radio>
-  												<el-radio disabled v-model="personinfo.enabled" label="2">冻结</el-radio>
+								 			 <el-form-item label="配置状态" v-model="personinfo.enabledname">
+								 			 	<el-radio-group v-model="personinfo.enabledname">
+											    	
+											    	<el-radio label="启用" ></el-radio>
+													
+	  												<el-radio label="冻结" ></el-radio>
+	  												
+	  											</el-radio-group>
 										  </el-form-item>	
 								 		</el-col>
 								 		<el-col :span="12">
@@ -129,11 +134,7 @@
 								</div>
 							 	<!-- 第一行 -->
 							 	<el-row :gutter="70">
-							 		<el-col :span="8">
-							 			 <el-form-item label="工号" prop="worknumber">
-									    <el-input v-model="personinfo.worknumber"></el-input>
-									  </el-form-item>	
-							 		</el-col>
+							 		
 							 		<el-col :span="8">
 							 			 <el-form-item label="出生日期">
 						                      <el-date-picker
@@ -158,11 +159,11 @@
 										  </el-form-item>
 							 		</el-col>
 							 		<el-col :span="8">
-							 			 <el-form-item label="性别">
-							 				<el-radio v-model="personinfo.sex" label="男">男
-							 				</el-radio>
-			  								<el-radio v-model="personinfo.sex" label="女">女
-			  								</el-radio>
+							 			 <el-form-item label="性别" prop="sex">
+							 			 	<el-radio-group v-model="personinfo.sexname">
+								 				<el-radio label="男"></el-radio>
+								 				<el-radio label="女"></el-radio>
+								 			</el-radio-group>
 							 			</el-form-item>
 							 		</el-col>
 							 		
@@ -264,33 +265,18 @@
 			tablediv
 		},
 		data() {
+		    
+
 		      var checknickname= (rule, value, callback) => {
 		        if (value === '') {
 		          return callback(new Error('人员姓名不能为空'));
 		        }
 		        setTimeout(() => {
-		          if (!/^.{5,16}$/g.test(value)) {
-		            callback(new Error('密码长度不能少于5个字符且不能大于16个字符'));
-		          } else {
-		              callback();
-		          }
+		          callback();
 		        }, 1000);
 		      };
 
-		      var checkorders = (rule, value, callback) => {
-		        if (value === '') {
-		          return callback(new Error('排序号不能为空'));
-		        }
-		        setTimeout(() => {
-		          if (!Number.isInteger(value)) {
-		            callback(new Error('请输入数字值'));
-		          } else {
-		              callback();
-		          }
-		        }, 1000);
-		      };
-
-		      var checkworkid = (rule, value, callback) => {
+		      var checkworknumber = (rule, value, callback) => {
 		        if (!value) {
 		          return callback(new Error('工号不能为空'));
 		        }
@@ -332,18 +318,12 @@
 		        }, 1000);
 		      };
 			return {
-			  show:false,			  
-		      userList: [],
-	          isShow: false,
-	          ismin:true,
-	          clientHeight:'',//获取浏览器高度
-	          headImgUrl: '',//头像上传
-	          radio: '1',
-	          value3: '',
-	          value4: '',
-	          value5: '',
-	          value1:true,
-	          value2: true,
+				show:false,			  
+				userList: [],
+				isShow: false,
+				ismin:true,
+				clientHeight:'',//获取浏览器高度
+				headImgUrl: '',//头像上传
 	          labelPosition: 'top',
 	          personinfo:
 	          	{
@@ -352,10 +332,12 @@
 	          		nickname:'',//人员姓名
 	          		username:'',//登录名称
 	          		enabled:'',//配置状态
+	          		enabledname:'',//配置状态名称
 	          		password:'',//登录口令
 	          		logintype: [],//登录方式
 	          		birthday:'',//出生日期
 	          		sex:'',//性别
+	          		sexname:'',//性别名称
 	          		idnumber:'',//身份证号
 	          		roles:'',//角色
 	          		entrytime:'',//入职日
@@ -371,14 +353,11 @@
 	          	},
 	          	
 	          rules:{
-	          	worknumber: [
-		            { validator: checkworkid, trigger: 'blur' }
-		          ],
 		        nickname: [
 		            { validator: checknickname, trigger: 'blur' }
 		          ],
-		        orders: [
-		            { validator: checkorders, trigger: 'blur' }
+	          	worknumber: [
+		            { validator: checkworknumber, trigger: 'blur' }
 		          ],
 		        email: [
 		            { validator: checkemail, trigger: 'blur' }
@@ -415,6 +394,7 @@
 	        _this.$refs.homePagess.style.height = clientHeight + 'px';
 	      };
 	      this.getData();//调用getData
+	      
 	    },
 		
 		methods: {  
@@ -423,9 +403,6 @@
     		this.$axios.get(url, {}).then((res) => {//获取当前用户信息
     			console.log(res.data.user);
     			this.personinfo=res.data.user;
-				// this.personinfo.id = res.data.user.id;
-				// this.personinfo.username = res.data.user.username;
-				// this.personinfo.password = res.data.user.password;
 			}).catch((err) => {
 				this.$message({
 					message: '网络错误，请重试',
@@ -433,13 +410,14 @@
 				});
 			});
     	},
+    	
     	submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
           	console.log(this.personinfo);
             var userid = this.personinfo.id;
             var username = this.personinfo.username;
-            var url = '/api/api-user/users/password';
+            var url = '/api/api-user/users/me';
             this.$axios.put(url, {
             		id: userid,
             		username: username

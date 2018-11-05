@@ -231,8 +231,8 @@
 								</div>
 							</el-form>
 							<div class="content-footer">
-								<button class="btn btn-default btn-large">取消</button>
-								<button class="btn btn-primarys btn-large" @click="saveinfo">保存</button>
+								<button class="btn btn-default btn-large" @click="resetForm('personinfo')">取消</button>
+								<button class="btn btn-primarys btn-large" @click="submitForm('personinfo')">保存</button>
 							</div>
 							</div>
 						</div>
@@ -250,7 +250,6 @@
 	import vheader from './common/vheader.vue'
 	import navs from './common/left_navs/nav_left.vue'
 	import navs_header from './common/nav_tabs.vue'
-	import tablediv from './common/tablelist.vue'
 	import usermask from './common/user_mask.vue'
 
 	export default {
@@ -259,10 +258,7 @@
 			vheader,
 			navs_header,
 			navs,
-//			navs_button,
-			tablediv,
-			usermask,
-			tablediv
+			usermask
 		},
 		data() {
 		    
@@ -398,9 +394,9 @@
 	    },
 		
 		methods: {  
-			getData(){
+			getData(){//获取当前用户信息
     		var url = '/api/auth-server/oauth/userinfo';
-    		this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+    		this.$axios.get(url, {}).then((res) => {
     			console.log(res.data.user);
     			this.personinfo=res.data.user;
 			}).catch((err) => {
@@ -411,22 +407,25 @@
 			});
     	},
     	
-    	submitForm(formName) {
+    	submitForm() {//修改当前用户信息
+    		console.log(123);
         this.$refs[formName].validate((valid) => {
+          console.log(1234567899809);
           if (valid) {
-          	console.log(this.personinfo);
             var userid = this.personinfo.id;
             var username = this.personinfo.username;
             var url = '/api/api-user/users/me';
             this.$axios.put(url, {
             		id: userid,
-            		username: username
+            		username: username,
+            		user: this.personinfo
             }).then((res) => {
+            	
             	console.log(res);
 				//resp_code == 0是后台返回的请求成功的信息
 				if(res.data.resp_code == 0) {
 					this.$message({
-						message: '修改成功',
+						message: '保存成功',
 						type: 'success'
 					});
 				} else {
@@ -498,9 +497,6 @@
 				$(".navbar-static-side").css("width", "220px");
 				$(".wrapper").css("padding-left", "220px");
 				$(".navs>li").css("margin", "0px 10px");
-			},
-			saveinfo(){
-				console.log(this.personinfo);
 			}
 		},
 	}

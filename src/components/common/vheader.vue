@@ -38,7 +38,7 @@
                     </router-link>
                 </el-dropdown-item>
 
-                <el-dropdown-item divided="true">
+                <el-dropdown-item>
                     <router-link to="/">
                         <i class="icon-log-out mr10"></i>退出
                     </router-link>

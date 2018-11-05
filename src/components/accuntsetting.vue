@@ -111,12 +111,14 @@
 										  </el-form-item>	
 								 		</el-col>
 								 	</el-row>
+
+
 								 </el-form>	
 							</div>
 
 							<div class="content-footer">
-								<button class="btn btn-default btn-large">取消</button>
-								<button class="btn btn-primarys btn-large" @click="saveinfo">保存</button>
+								<button class="btn btn-default btn-large" @click="resetForm('accuntsetting')">重置</button>
+							    <button class="btn btn-primarys btn-large" @click="submitForm('accuntsetting')">保存</button>
 							</div>
 							</div>
 						</div>
@@ -134,7 +136,6 @@
 	import vheader from './common/vheader.vue'
 	import navs from './common/left_navs/nav_left.vue'
 	import navs_header from './common/nav_tabs.vue'
-	import tablediv from './common/tablelist.vue'
 	import usermask from './common/user_mask.vue'
 
 	export default {
@@ -144,9 +145,7 @@
 			navs_header,
 			navs,
 //			navs_button,
-			tablediv,
-			usermask,
-			tablediv
+			usermask
 		},
 		data() {
 			var validatePass1 = (rule, value, callback) => {
@@ -224,7 +223,7 @@
 	    },
 		
 		methods: {  
-			handleAvatarSuccess(res, file) {
+			handleAvatarSuccess(res, file) {//上传头像
 		        this.imageUrl = URL.createObjectURL(file.raw);
 		      },
 		      beforeAvatarUpload(file) {

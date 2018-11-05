@@ -15,7 +15,7 @@
             </el-badge>
             <el-dropdown placement="top" trigger="click">
               <span class="el-dropdown-link white">
-                <font class="pr10">Admin，您好</font>
+                <font class="pr10">{{username}}，您好</font>
                 <font><img class="userimg" /></font>
                 <i class="el-icon-arrow-down icon-arrow2-down"></i>
               </span>
@@ -38,7 +38,7 @@
                     </router-link>
                 </el-dropdown-item>
 
-                <el-dropdown-item>
+                <el-dropdown-item divided="true">
                     <router-link to="/">
                         <i class="icon-log-out mr10"></i>退出
                     </router-link>
@@ -56,14 +56,27 @@ export default {
 //  name: 'nav',
       data(){
         return {
-         
+         username: '',
         }
     },
     methods: {
-        
+        getData(){
+            var url = '/api/auth-server/oauth/userinfo';
+            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+                this.username = res.data.user.username;
+                this.userid = res.data.user.id;
+            }).catch((err) => {
+                this.$message({
+                    message: '网络错误，请重试',
+                    type: 'error'
+                });
+                var userid = this.personinfo.id;
+                var username = this.personinfo.username;
+            });
+        }
     },
     mounted(){
-
+        this.getData();//调用getData
     }
 }
 </script>

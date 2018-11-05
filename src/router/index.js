@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Login from '@/page/login/login'
 import user_management from '@/components/user_management' 
 import dept_management from '@/components/dept_management'
+import data_management from '@/components/data_management'
 import personinfo from '@/components/personinfo'
 import accuntsetting from '@/components/accuntsetting'
 import passwordedit from '@/components/passwordedit'
@@ -25,6 +26,11 @@ Vue.use(Router)
       path: '/dept_management',
       name: 'dept_management',
       component: dept_management
+    },
+    {
+      path: '/data_management',
+      name: 'data_management',
+      component: data_management
     },
     {
       path: '/personinfo',

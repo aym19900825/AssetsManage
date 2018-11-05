@@ -28,7 +28,7 @@
 							<el-row :gutter="70">
 								<el-col :span="24">
 									<el-form-item label="所属上级" prop="pName">
-										<el-input v-model="adddeptForm.pName">
+										<el-input v-model="adddeptForm.pName" :disabled="edit">
 											<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
 										</el-input>
 									</el-form-item>
@@ -85,8 +85,10 @@
 		</div>
 		<!-- 弹出 -->
 		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+
 			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps">
 			</el-tree>
+
 			<span slot="footer" class="dialog-footer">
 		       <el-button @click="dialogVisible = false">取 消</el-button>
 		       <el-button type="primary" @click="queding();" >确 定</el-button>
@@ -98,6 +100,11 @@
 <script>
 	export default {
 		name: 'masks',
+		props: {
+			page: {
+				type: Object,
+			}
+		},
 		data() {
 			var validatename1 = (rule, value, callback) => {
                 if (value === '') {
@@ -130,6 +137,7 @@
 
 			return {
 				dialogVisible: false, //对话框
+				edit: true, //禁填
 				value11:true,
 				editSearch: '',
 				col_but1: true,
@@ -182,15 +190,19 @@
 		methods: {
 			//所属上级
 			getDept() {
-				var data = {
-					params: {
-						page: 1,
-						limit: 10,
-					}
-				}
-				let that = this;
-				var url = '/api/api-user/depts/dept';
-				this.$axios.get(url, {}).then((res) => {
+				var page = this.page.currentPage;
+				var limit = this.page.pageSize;
+				// var type = 2;
+				var url = '/api/api-user/depts/type';
+				this.$axios.get(url, {
+					// params: {
+					// 	page: page,
+					// 	limit: limit,
+					// 	// type: type
+					// },
+
+				}).then((res) => {
+					console.log(res.data.data);
 					this.resourceData = res.data.data;
 					this.dialogVisible = true;
 				});
@@ -198,11 +210,10 @@
 			queding() {
 				this.getCheckedNodes();
 				this.placetext = false;
-				this.dialogVisible = false;
-					this.adddeptForm.pid = this.checkedNodes[0].id;
-					this.adddeptForm.pName = this.checkedNodes[0].pName;//此处赋值只为页面显示，不在数据中定义
-					console.log("================");
-					console.log(this.adddeptForm.pName);
+				this.dialogVisible = false;				
+				this.adddeptForm.pid = this.checkedNodes[0].id;
+				this.adddeptForm.pName = this.checkedNodes[0].simplename;
+				
 			},
 			getCheckedNodes() {
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()

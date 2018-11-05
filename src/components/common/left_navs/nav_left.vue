@@ -125,7 +125,7 @@
 		            navtitle: '菜单管理',
 		            navherf: '#4'
 		          }, {
-		            navicon: 'icon-book',
+		            navicon: 'icon-wordbook',
 		            navtitle: '字典管理',
 		            navherf: '#4'
 		          }, {
@@ -134,7 +134,7 @@
 		            navherf: '#4'
 		          },  {
 		            navicon: 'icon-login-log',
-		            navtitle: '登陆日志',
+		            navtitle: '登录日志',
 		            navherf: '#4'
 		          }, {
 		            navicon: 'icon-monitor',

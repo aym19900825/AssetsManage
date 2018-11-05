@@ -74,7 +74,7 @@
                   }).catch((wrong) => {
                       this.$message({
                                 message: '用户名或密码错误',
-                                type: 'warning'
+                                type: 'error'
                             });
                   })
              }, 

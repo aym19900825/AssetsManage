@@ -6,7 +6,7 @@
             <li><router-link :to="{path:'/dashboardList'}" >程序设计器</router-link></li>
             <li><router-link :to="{path:'/dashboardList'}" >权限管理</router-link></li>
             <li>
-                <router-link :to="{path:'/dashboardList'}" >系统配置</router-link>
+                <router-link :to="{path:'/user_management'}" >系统配置</router-link>
             </li>
         </ul>
         <div class="nav-head pull-right nav-right">

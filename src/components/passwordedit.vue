@@ -60,7 +60,7 @@
 								</el-form>
 							</div>
 							<div class="content-footer">
-							    <button class="btn btn-default btn-large" @click="resetForm('passwordedit')">重置</button>
+							    <button class="btn btn-default btn-large" @click="tips('passwordedit')">重置</button>
 							    <button class="btn btn-primarys btn-large" @click="submitForm('passwordedit')">保存</button>
 							</div>
 						</div>
@@ -69,7 +69,7 @@
 			</EasyScrollbar>
 
 		</div>
-		<usermask ref="child"></usermask>
+		
 
 	</div>
 
@@ -80,15 +80,13 @@
 import vheader from './common/vheader.vue'
 import navs from './common/left_navs/nav_left.vue'
 import navs_header from './common/nav_tabs.vue'
-import usermask from './common/user_mask.vue'
 
 export default {
 	name: 'passwordedit',
 	components: {
 	vheader,
 	navs_header,
-	navs,
-	usermask
+	navs
 	},
     data() {
       var checkOldpassword = (rule, value, callback) => {
@@ -181,7 +179,7 @@ export default {
 	    },
     methods: {
     	getData(){
-    		var url = '/api/auth-server/oauth/userinfo';
+    		var url = '/api/api-user/users/currentMap';
     		this.$axios.get(url, {}).then((res) => {//获取当前用户信息
 				this.passwordedit.username = res.data.user.username;
 				this.passwordedit.id = res.data.user.id;
@@ -236,7 +234,7 @@ export default {
           }
         });
       },
-      resetForm(formName) {
+      tips(formName) {
         this.$refs[formName].resetFields();
       },
       

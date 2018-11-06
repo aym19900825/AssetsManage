@@ -15,7 +15,7 @@
 					</span>
 				</div>
 			</div>
-			<el-form :model="user" :label-position="labelPosition" :rules="rules" ref="user" label-width="100px" class="demo-user">
+			<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
 
 				<div class="accordion" id="information">
 					<div class="mask_tab-block">
@@ -30,18 +30,13 @@
 						<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
 							<el-row :gutter="70">
 								<el-col :span="8">
-									<el-form-item label="表名" prop="tableName">
-										<el-input v-model="user.tableName"></el-input>
+									<el-form-item label="表名">
+										<el-input></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="8">
-									<el-form-item label="描述" prop="decri">
-										<el-input v-model="user.decri"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="8">
-									<el-form-item label="类名" prop="className">
-										<el-input v-model="user.className"></el-input>
+									<el-form-item label="描述">
+										<el-input></el-input>
 									</el-form-item>
 								</el-col>
 							</el-row>
@@ -55,28 +50,49 @@
 							<div class="accordion_title">
 								<span class="accordion-toggle">字段列表</span>
 							</div>
-							<div style="float: right">
-								<el-button type="primary"><i class="icon-upload-cloud"></i>&nbsp;导入</el-button>
-								<el-button type="success">+</el-button>
-							</div>							
-							<div class="col_but " @click="col_but('col_but2')">
-								<i class="icon-arrow1-down"></i>
+							<div style="float:right">
+								<div style="float: left;margin-right: 25px;margin-top: 8px;">
+									<el-button type="primary" size="mini" round  @click="importdia"><i class="icon-upload-cloud"></i>&nbsp;导入</el-button>
+									<el-button type="success" icon="el-icon-plus" circle size="mini" @click="addfield"></el-button>
+								</div>							
+								<div class="col_but " @click="col_but('col_but2')">
+									<i class="icon-arrow1-down"></i>
+								</div>
 							</div>
 						</div>
 						<div class="accordion-body tab-content" v-show="col_but2" id="tab-content2">
 							<!-- 表格 -->
-							<el-table :data="dataList" style="width: 96%;margin: 0 auto;" :default-sort="{prop:'dataList', order: 'descending'}" @selection-change="SelChange">
-								<el-table-column label="编号" sortable width="100" prop="tableName">
+							<el-table :data="fieldList" style="width: 96%;margin: 0 auto;" :default-sort="{prop:'fieldList', order: 'descending'}">
+								<el-table-column label="编号" width="100" prop="code">
+									<template slot-scope="scope">
+        								<el-input v-model="scope.$index+1" :disabled="edit"></el-input>
+      								</template> 
 								</el-table-column>
-								<el-table-column label="字段名" sortable width="100" prop="decri">
+								<el-table-column label="字段名" sortable width="100" prop="name">
+									<template slot-scope="scope">
+        								<el-input v-model="scope.row.name"></el-input>
+      								</template> 
 								</el-table-column>
-								<el-table-column label="字段描述" sortable width="180" prop="className" :formatter="className">
+								<el-table-column label="字段描述" sortable width="180" prop="decri">
+									<template slot-scope="scope">
+        								<el-input v-model="scope.row.decri"></el-input>
+      								</template>
 								</el-table-column>
-								<el-table-column label="字段类型" sortable width="180" prop="className" :formatter="className">
+								<el-table-column label="字段类型" sortable width="180" prop="type">
+									<template slot-scope="scope">
+        								<el-input v-model="scope.row.type"></el-input>
+      								</template>
 								</el-table-column>
-								<el-table-column label="字段长度" sortable width="180" prop="className" :formatter="className">
+								<el-table-column label="字段长度" sortable width="180" prop="length" >
+									<template slot-scope="scope">
+        								<el-input v-model="scope.row.length"></el-input>
+      								</template>
 								</el-table-column>
-								<el-table-column label="操作" sortable width="180" prop="className" :formatter="className">
+								<el-table-column label="操作" width="180">
+									<template slot-scope="scope">
+        								<i class="el-icon-edit" style="color: #46ACE3"></i>&nbsp;
+										<i class="el-icon-delete" @click="delfield(scope.row,scope.$index)" style="color: red"></i>
+      								</template>									
 								</el-table-column>
 							</el-table>
 							<!-- 表格 -->
@@ -91,14 +107,39 @@
 			</el-form>
 		</div>
 
-		//弹出
-		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps">
-			</el-tree>
-
+		<!-- 弹出 -->
+		<el-dialog title="添加数据库表" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
+			<div class="accordion" id="information">
+					<div class="mask_tab-block">
+						<div class="mask_tab-head clearfix">
+							<div class="accordion_title">
+								<span class="accordion-toggle">导入标准字段</span>
+							</div>
+							<div class="col_but" @click="col_but('col_but1')">
+								<i class="icon-arrow1-down" v-show="down"></i><i class="icon-arrow1-up" v-show="up"></i>
+							</div>
+						</div>
+						<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
+						<!-- 第二层弹出的表格 -->
+							<el-table :data="dataList" style="width: 100%;margin: 0 auto;" :default-sort="{prop:'dataList', order: 'descending'}" @selection-change="SelChange">
+								<el-table-column type="selection" width="55">
+								</el-table-column>
+								<el-table-column label="字段名称" sortable width="230">
+								</el-table-column>
+								<el-table-column label="字段描述" sortable width="230">
+								</el-table-column>
+								<el-table-column label="字段类型" sortable width="150">
+								</el-table-column>
+								<el-table-column label="缺省值" sortable width="210">
+								</el-table-column>
+							</el-table>
+							<!-- 表格 -->
+						</div>
+					</div>
+				</div>
 			<span slot="footer" class="dialog-footer">
 		       <el-button @click="dialogVisible = false">取 消</el-button>
-		       <el-button type="primary" @click="queding();">确 定</el-button>
+		       <el-button type="primary">确 定</el-button>
 		    </span>
 		</el-dialog>
 	</div>
@@ -107,50 +148,8 @@
 <script>
 	export default {
 		name: 'masks',
-		props: {
-			page: {
-				type: Object,
-			}
-		},
 		data() {
-			console.log(this.page);
-			var validatePass1 = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('必填'));
-				} else {
-					callback();
-				}
-			};
-			var validatePass2 = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('必填'));
-				} else {
-					callback();
-				}
-			};
-			var validatePass3 = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('必填'));
-				} else {
-					callback();
-				}
-			};
-			var validatePass4 = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('必填'));
-				} else {
-					callback();
-				}
-			};
-			var validatePass5 = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('必填'));
-				} else {
-					callback();
-				}
-			};
 			return {
-				editSearch: '',
 				edit: true, //禁填
 				'男': true,
 				'女': false,
@@ -164,51 +163,26 @@
 				useritem: [],
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
-				user: {
-					companyId: '',
-					deptId: '',
-					password: '',
-					sex: '',
-					email: '',
-					phone: '',
-					enabled: 1,
-					birthday: '',
-					worknumber: '',
-					nickname: '',
-					idnumber: '',
-					entrytime: '',
-					address: '',
-					tips: '',
-					username: '',
-					roleId: '',
-					id: ''
+				dataList:[{
+					objectName:'',
+					description:''
+				}],
+				dataInfo: {
+
 				},
+				fieldList:[{
+					// code: '',
+					name: '',
+					decri: '',
+					type: '',
+					length: '',
+				}],
 				rules: {
 					companyName: [{
 						required: true,
-						//						trigger: 'change',
-						validator: validatePass1,
+						//trigger: 'change',
+						// validator: validatePass1,
 					}],
-					deptName: [{
-						required: true,
-						//						trigger: 'change',
-						validator: validatePass2,
-					}],
-					roleId: [{
-						required: true,
-						trigger: 'blur',
-						validator: validatePass3,
-					}],
-					username: [{
-						required: true,
-						trigger: 'blur',
-						validator: validatePass4,
-					}],
-					password: [{
-						required: true,
-						trigger: 'blur',
-						validator: validatePass5,
-					}]
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -221,6 +195,19 @@
 			};
 		},
 		methods: {
+			addfield(){
+				var obj = {
+                    // code: '',
+					name: '',
+					decri: '',
+					type: '',
+					length: '',
+                };
+                this.fieldList.push(obj);
+			},
+			delfield(item){
+                this.fieldList.splice(index,1);
+			},
 			col_but(col_but) {
 				//alert(col_but)
 				if(col_but == 'col_but1') {
@@ -234,13 +221,19 @@
 						this.up = !this.up
 				}
 			},
+			SelChange(val) {
+				this.selUser = val;
+			},
+			importdia(){
+				this.dialogVisible = true;
+			},
 			//点击按钮显示弹窗
 			visible() {
 				this.show = true;
 			},
 			// 这里是修改
 			detail(userid) {
-				var url = '/api/api-user/users/' + userid;
+				var url = '/api/apps-center/objectcfg/' + userid;
 				this.$axios.get(url, {}).then((res) => {
 					this.user = res.data;
 					this.show = true;
@@ -279,11 +272,9 @@
 				$(".mask_div").css("margin", "7% 10%");
 				$(".mask_div").css("top", "0");
 			},
-			getCheckedNodes() {
-				this.checkedNodes = this.$refs.tree.getCheckedNodes()
-			},
+			
 
-			//保存users/saveOrUpdate
+			// 保存users/saveOrUpdate
 			submitForm() {
 				this.$refs.user.validate((valid) => {
 					if(valid) {
@@ -315,7 +306,7 @@
 					}
 				})
 			},
-			//所属组织
+			// 所属组织
 			getCompany() {
 				this.editSearch = 'company';
 				var page = this.page.currentPage;
@@ -338,7 +329,7 @@
 
 			},
 
-			//所属部门
+			// 所属部门
 			getDept() {
 				this.editSearch = 'dept';
 				var page = this.page.currentPage;
@@ -356,7 +347,7 @@
 					this.dialogVisible = true;
 				});
 			},
-			//角色
+			// 角色
 			getRole() {
 				this.editSearch = 'role';
 				var data = {

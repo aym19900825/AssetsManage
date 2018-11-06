@@ -18,7 +18,7 @@
 								<button type="button" class="btn btn-bule button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改
 								</button>
-								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
+								<button type="button" class="btn btn-red button-margin" @click="deldata">
 								    <i class="icon-trash"></i>删除
 								</button>
 								<button type="button" class="btn btn-primarys button-margin">
@@ -29,7 +29,7 @@
 						    		<i class="icon-arrow1-down" v-show="down"></i>
 						    		<i class="icon-arrow1-up" v-show="up"></i>
 								</button>
-								<button type="button" class="btn btn-primarys button-margin">
+								<button type="button" class="btn btn-primarys button-margin" @click="createtable">
 								    <i class="icon-refresh-cw"></i>生成表
 								</button>
 							</div>
@@ -90,12 +90,12 @@
 							<el-row :gutter="10" style="margin-left:-34px">
 								<el-col :span="5">
 									<el-form-item label="表名">
-										<el-input v-model="searchList.tableName"></el-input>
+										<el-input v-model="searchList.objectName"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
 									<el-form-item label="描述">
-										<el-input v-model="searchList.decri"></el-input>
+										<el-input v-model="searchList.description"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="2">
@@ -106,21 +106,17 @@
 					</div>
 					<!-- 高级查询划出 -->
 					<div class="row">
-						<div class="col-sm-3">
-							<v-assetsTree  :listData="treeData" v-on:getTreeId="getTreeId"></v-assetsTree>
-						</div>
-						<div class="col-sm-9">
-							<!-- <tablediv ref="tableList"></tablediv> -->
+						<div class="col-sm-12">
 							<!-- 表格 -->
 							<el-table :data="dataList" style="width: 96%;margin: 0 auto;" :default-sort="{prop:'dataList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55">
 								</el-table-column>
-								<el-table-column label="表名" sortable width="200" prop="tableName">
+								<el-table-column label="表名" sortable width="320" prop="objectName">
 								</el-table-column>
-								<el-table-column label="描述" sortable width="350" prop="decri">
+								<el-table-column label="描述" sortable width="480" prop="description">
 								</el-table-column>
-								<el-table-column label="类名" sortable width="180" prop="className" :formatter="className">
-								</el-table-column>
+								<!-- <el-table-column label="类名" sortable width="210" prop="" :formatter="className">
+								</el-table-column> -->
 							</el-table>
 							<el-pagination
 					            @size-change="sizeChange"
@@ -162,36 +158,36 @@
 				'冻结': false,
 				'男': true,
 				'女': false,
-				dataList: [
-					{
-						tableName:'COPYRIGHTASSET1',
-						decri:'资产信息表1',
-						className:'assets'
-					},
-					{
-						tableName:'COPYRIGHTASSET2',
-						decri:'资产信息表2',
-						className:'assets'
-					},
-					{
-						tableName:'COPYRIGHTASSET3',
-						decri:'资产信息表3',
-						className:'assets'
-					},
-					{
-						tableName:'COPYRIGHTASSET4',
-						decri:'资产信息表4',
-						className:'assets'
-					}
-				],
+				// dataList: [
+				// 	{
+				// 		tableName:'COPYRIGHTASSET1',
+				// 		decri:'资产信息表1',
+				// 		className:'assets'
+				// 	},
+				// 	{
+				// 		tableName:'COPYRIGHTASSET2',
+				// 		decri:'资产信息表2',
+				// 		className:'assets'
+				// 	},
+				// 	{
+				// 		tableName:'COPYRIGHTASSET3',
+				// 		decri:'资产信息表3',
+				// 		className:'assets'
+				// 	},
+				// 	{
+				// 		tableName:'COPYRIGHTASSET4',
+				// 		decri:'资产信息表4',
+				// 		className:'assets'
+				// 	}
+				// ],
 				//				deptTree: [], //树
 				search: false,
 				show: false,
 				down: true,
 				up: false,
 				searchList: {
-					tableName:'',
-					decri:''
+					objectName:'',
+					description:''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -206,7 +202,8 @@
 					currentPage: 1,
 					pageSize: 10,
 					totalCount: 0
-				}
+				},
+				dataList:[]
 			}
 		},
 		methods: {
@@ -253,29 +250,65 @@
 					this.up = !this.up
 			},
 			// 删除
-			deluserinfo() {
+			deldata() {
 				var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({
-						message: '请您选择要删除的用户',
+						message: '请您选择要删除的数据',
 						type: 'warning'
 					});
 					return;
 				} else if(selData.length > 1) {
 					this.$message({
-						message: '不可同时删除多个用户',
+						message: '不可同时删除多个数据',
 						type: 'warning'
 					});
 					return;
 				} else {
 					var changeUser = selData[0];
 					var id = changeUser.id;
-					var url = '/api/api-user/users/' + id;
+					var url = '/api/apps-center/objectcfg/' + id;
 					this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
 								message: '删除成功',
+								type: 'success'
+							});
+							this.requestData();
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+				}
+			},
+			//生成表
+			createtable() {
+				var selData = this.selUser;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请您选择要生成表的数据',
+						type: 'warning'
+					});
+					return;
+				} else if(selData.length > 1) {
+					this.$message({
+						message: '不可同时将多个数据生成表',
+						type: 'warning'
+					});
+					return;
+				} else {
+					var changeUser = selData[0];
+					var id = changeUser.id;
+					var url = '/api/apps-center/objectcfg/create/' + id;
+					this.$axios.get(url, {}).then((res) => {//.delete 传数据方法
+						//resp_code == 0是后台返回的请求成功的信息
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '生成表成功',
 								type: 'success'
 							});
 							this.requestData();
@@ -314,32 +347,28 @@
 				this.selUser = val;
 			},
 			requestData(index) {
-				// var data = {
-				// 	params: {
-				// 		page: 1,
-				// 		limit: 10,
-				// 	}
-				// }
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					nickname: this.searchList.tableName,
-					enabled: this.searchList.decri,
+					objectName: this.searchList.objectName,
+					description: this.searchList.description,
 				}
-				console.log(data);
-				var url = '/api/api-user/users';
+				 console.log(111);
+				var url = '/api/apps-center/objectcfg';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					this.userList = res.data.data;
+					
+					this.dataList = res.data.data;
 					this.page.totalCount = res.data.count;
+					console.log(this.dataList);
 				}).catch((wrong) => {})
-				this.userList.forEach((item, index) => {
-					var id = item.id;
-					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
-						this.userList.role = res.data.roles[0].name;
-					}).catch((wrong) => {})
-				})
+				// this.userList.forEach((item, index) => {
+				// 	var id = item.id;
+				// 	this.$axios.get('/users/' + id + '/roles', data).then((res) => {
+				// 		this.userList.role = res.data.roles[0].name;
+				// 	}).catch((wrong) => {})
+				// })
 			},
 			//机构树
 			getKey() {

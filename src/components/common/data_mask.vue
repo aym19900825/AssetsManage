@@ -6,10 +6,6 @@
 			<div class="mask_title_div clearfix">
 				<div class="mask_title">添加数据库表</div>
 				<div class="mask_anniu">
-					<!--<span class="mask_span">
-						<i class="icon-minimize"></i>
-					</span>-->
-					<!--icon-maximization,icon-restore-->
 					<span class="mask_span mask_max" @click='toggle'>
 						 
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -33,33 +29,19 @@
 						</div>
 						<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
 							<el-row :gutter="70">
-								<el-col :span="24">
-									<el-form-item label="所属组织" prop="companyName">
-										<el-input v-model="user.companyName" :disabled="edit">
-											<el-button slot="append" icon="el-icon-search" @click="getCompany"></el-button>
-										</el-input>
+								<el-col :span="8">
+									<el-form-item label="表名" prop="tableName">
+										<el-input v-model="user.tableName"></el-input>
 									</el-form-item>
 								</el-col>
-							</el-row>
-							<el-row :gutter="70">
-								<el-col :span="24">
-									<el-form-item label="所属部门" prop="deptName">
-										<el-input v-model="user.deptName" :disabled="edit">
-											<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
-										</el-input>
+								<el-col :span="8">
+									<el-form-item label="描述" prop="decri">
+										<el-input v-model="user.decri"></el-input>
 									</el-form-item>
 								</el-col>
-							</el-row>
-
-							<el-row :gutter="70">
-								<el-col :span="12">
-									<el-form-item label="登录名称" prop="username">
-										<el-input v-model="user.username"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="12">
-									<el-form-item label="登录口令" prop="password">
-										<el-input v-model="user.password"></el-input>
+								<el-col :span="8">
+									<el-form-item label="类名" prop="className">
+										<el-input v-model="user.className"></el-input>
 									</el-form-item>
 								</el-col>
 							</el-row>
@@ -73,124 +55,52 @@
 							<div class="accordion_title">
 								<span class="accordion-toggle">字段列表</span>
 							</div>
-							<div class="col_but" @click="col_but('col_but2')">
+							<div style="float: right">
+								<el-button type="primary"><i class="icon-upload-cloud"></i>&nbsp;导入</el-button>
+								<el-button type="success">+</el-button>
+							</div>							
+							<div class="col_but " @click="col_but('col_but2')">
 								<i class="icon-arrow1-down"></i>
 							</div>
 						</div>
 						<div class="accordion-body tab-content" v-show="col_but2" id="tab-content2">
-
-							<!-- 第一行 -->
-							<el-row :gutter="70">
-								<el-col :span="8">
-									<el-form-item label="姓名" prop="nickname">
-										<el-input v-model="user.nickname"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="8">
-									<el-form-item label="出生日期" prop="birthday">
-										<el-date-picker v-model="user.birthday" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
-										</el-date-picker>
-									</el-form-item>
-								</el-col>
-								<el-col :span="8">
-									<el-form-item label="性別" prop="sex">
-										<el-radio-group v-model="user.sex">
-											<el-radio label="男"></el-radio>
-											<el-radio label="女"></el-radio>
-										</el-radio-group>
-									</el-form-item>
-								</el-col>
-							</el-row>
-							<el-row :gutter="70">
-
-								<el-col :span="8">
-									<el-form-item label="身份证号" prop="idnumber">
-										<el-input v-model="user.idnumber"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="8">
-									<el-form-item label="入职时间" prop="entrytime">
-										<el-date-picker v-model="user.entrytime" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
-										</el-date-picker>
-									</el-form-item>
-								</el-col>
-								<el-col :span="8">
-									<el-form-item label="角色" prop="roleId">
-										<el-input v-model="user.roleId">
-											<el-button slot="append" icon="el-icon-search" @click="getRole"></el-button>
-										</el-input>
-									</el-form-item>
-								</el-col>
-							</el-row>
-
-							<el-row :gutter="70">
-								<el-col :span="8">
-									<el-form-item label="工号" prop="worknumber">
-										<el-input v-model="user.worknumber"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="8">
-									<el-form-item label="手机号" prop="phone">
-										<el-input v-model="user.phone"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="8">
-									<el-form-item label="电子邮箱" prop="email">
-										<el-input v-model="user.email"></el-input>
-									</el-form-item>
-								</el-col>
-
-							</el-row>
-							<el-row :gutter="70">
-								<el-col :span="16">
-									<el-form-item label="地址" prop="address">
-										<el-input v-model="user.address"></el-input>
-									</el-form-item>
-								</el-col>
-
-							</el-row>
-
-							<el-row :gutter="70">
-								<el-col :span="24">
-									<el-form-item label="备注" prop="tips">
-										<el-input type="textarea" v-model="user.tips"></el-input>
-
-									</el-form-item>
-								</el-col>
-							</el-row>
-
+							<!-- 表格 -->
+							<el-table :data="dataList" style="width: 96%;margin: 0 auto;" :default-sort="{prop:'dataList', order: 'descending'}" @selection-change="SelChange">
+								<el-table-column label="编号" sortable width="100" prop="tableName">
+								</el-table-column>
+								<el-table-column label="字段名" sortable width="100" prop="decri">
+								</el-table-column>
+								<el-table-column label="字段描述" sortable width="180" prop="className" :formatter="className">
+								</el-table-column>
+								<el-table-column label="字段类型" sortable width="180" prop="className" :formatter="className">
+								</el-table-column>
+								<el-table-column label="字段长度" sortable width="180" prop="className" :formatter="className">
+								</el-table-column>
+								<el-table-column label="操作" sortable width="180" prop="className" :formatter="className">
+								</el-table-column>
+							</el-table>
+							<!-- 表格 -->
 						</div>
 					</div>
 				</div>
 
 				<div class="el-dialog__footer">
-					<!-- <span slot="footer" class="dialog-footer">-->
 					<el-button @click='close'>取消</el-button>
 					<el-button type="primary" @click='submitForm()'>提交</el-button>
-					<!-- </span>-->
 				</div>
 			</el-form>
-
-			<!--底部-->
-			<!--<div class="content-footer">
-				<button class="btn btn-default btn-large">取消</button>
-				<button class="btn btn-primarys btn-large">提交</button>
-			</div>-->
-
 		</div>
 
 		//弹出
 		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-
 			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps">
 			</el-tree>
 
 			<span slot="footer" class="dialog-footer">
 		       <el-button @click="dialogVisible = false">取 消</el-button>
-		       <el-button type="primary" @click="queding();" >确 定</el-button>
+		       <el-button type="primary" @click="queding();">确 定</el-button>
 		    </span>
 		</el-dialog>
-
 	</div>
 </template>
 

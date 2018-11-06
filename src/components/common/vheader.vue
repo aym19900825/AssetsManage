@@ -21,12 +21,6 @@
               </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item>
-                    <router-link to="/accuntsetting">
-                        <i class="icon-role-site mr10"></i>账号设置
-                    </router-link>
-                </el-dropdown-item>
-
-                <el-dropdown-item>
                     <router-link to="/personinfo">
                         <i class="icon-user mr10"></i>个人资料
                     </router-link>

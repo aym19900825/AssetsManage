@@ -9,86 +9,11 @@
 			<ul class="navs" id="side-menu" v-show="!isShow" >
 				
 				<li v-for="item in leftNavs">
-					<a class="J_menuItem" :href="item.navherf" name="tabMenuItem" :key="index">
+					<router-link :to="item.navherf">
 						<i :class="item.navicon"></i>
 						<span class="nav-label" v-show="ismin">{{item.navtitle}}</span>
-					</a>
+					</router-link>
 				</li>
-
-
-				<!-- <li>
-					<a class="J_menuItem" href="/notice/hello" name="tabMenuItem">
-						<i class="icon-user"></i>
-						<span class="nav-label" v-show="ismin">用户管理</span>
-					</a>
-				</li>
-				<li>
-					<a class="J_menuItem" href="/swagger-ui.html" name="tabMenuItem">
-						<i class="icon-role-site"></i>
-						<span class="nav-label" v-show="ismin">角色管理</span>
-					</a>
-				</li>
-				<li>
-					<a class="J_menuItem" href="./system/code/code.html" name="tabMenuItem">
-						<i class="icon-department"></i>
-						<span class="nav-label" v-show="ismin">部门管理</span>
-					</a>
-				</li>
-				<li>
-					<a class="J_menuItem" href="./system/code/code.html" name="tabMenuItem">
-						<i class="icon-menu2"></i>
-						<span class="nav-label" v-show="ismin">菜单管理</span>
-					</a>
-				</li>
-				<li>
-					<a class="J_menuItem" href="./system/code/code.html" name="tabMenuItem">
-						<i class="icon-book"></i>
-						<span class="nav-label" v-show="ismin">字典管理</span>
-					</a>
-				</li>
-				<li>
-					<a class="J_menuItem" href="./system/code/code.html" name="tabMenuItem">
-						<i class="icon-log"></i>
-						<span class="nav-label" v-show="ismin">业务日志</span>
-					</a>
-				</li>
-				<li>
-					<a class="J_menuItem" href="./system/code/code.html" name="tabMenuItem">
-						<i class="icon-login-log"></i>
-						<span class="nav-label" v-show="ismin">登陆日志</span>
-					</a>
-				</li>
-				<li>
-					<a class="J_menuItem" href="./system/code/code.html" name="tabMenuItem">
-						<i class="icon-monitor"></i>
-						<span class="nav-label" v-show="ismin">监控管理</span>
-					</a>
-				</li>
-				<li>
-					<a class="J_menuItem" href="./system/code/code.html" name="tabMenuItem">
-						<i class="icon-notice"></i>
-						<span class="nav-label" v-show="ismin">通知管理</span>
-					</a>
-				</li>
-				
-				<li>
-					<a class="J_menuItem" href="/notice/hello" name="tabMenuItem">
-						<i class="icon-data"></i>
-						<span class="nav-label" v-show="ismin">数据库配置</span>
-					</a>
-				</li>
-				<li>
-					<a class="J_menuItem" href="/swagger-ui.html" name="tabMenuItem">
-						<i class="icon-time"></i>
-						<span class="nav-label" v-show="ismin">定时任务</span>
-					</a>
-				</li>
-				<li>
-					<a class="J_menuItem" href="./system/code/code.html" name="tabMenuItem">
-						<i class="icon-word"></i>
-						<span class="nav-label" v-show="ismin">word测试</span>
-					</a>
-				</li> -->
 			</ul>
 		</div>
 	</div>
@@ -110,7 +35,7 @@
 				{//leftNavs左侧菜单数据
 		            navicon: 'icon-user',
 		            navtitle: '用户管理',
-		            navherf: '#1'
+		            navherf: '/user_management'
 		          }, {
 		            navicon: 'icon-role-site',
 		            navtitle: '角色管理',
@@ -119,11 +44,11 @@
 		           {
 		            navicon: 'icon-department',
 		            navtitle: '部门管理',
-		            navherf: '#3'
+		            navherf: '/dept_management'
 		          }, {
 		            navicon: 'icon-menu2',
 		            navtitle: '菜单管理',
-		            navherf: '#4'
+		            navherf: '/menu_management'
 		          }, {
 		            navicon: 'icon-wordbook',
 		            navtitle: '字典管理',
@@ -149,7 +74,7 @@
 		          {
 		            navicon: 'icon-data',
 		            navtitle: '数据库配置',
-		            navherf: '#4'
+		            navherf: '/data_management'
 		          }, {
 		            navicon: 'icon-time',
 		            navtitle: '定时任务',
@@ -158,7 +83,12 @@
 		            navicon: 'icon-word',
 		            navtitle: 'Word测试',
 		            navherf: '#4'
+		          }, {
+		            navicon: 'icon-safe',
+		            navtitle: '安全管理',
+		            navherf: '/safe_management'
 		          }
+
 		        ]
 
 			}

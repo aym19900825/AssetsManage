@@ -4,8 +4,8 @@ import Login from '@/page/login/login'
 import user_management from '@/components/user_management' 
 import dept_management from '@/components/dept_management'
 import data_management from '@/components/data_management'
+import safe_management from '@/components/safe_management'
 import personinfo from '@/components/personinfo'
-import accuntsetting from '@/components/accuntsetting'
 import passwordedit from '@/components/passwordedit'
 import ztree from '@/components/common/ztree' 
 Vue.use(Router)
@@ -33,14 +33,14 @@ Vue.use(Router)
       component: data_management
     },
     {
+      path: '/safe_management',
+      name: 'safe_management',
+      component: safe_management
+    },
+    {
       path: '/personinfo',
       name: 'personinfo',
       component: personinfo
-    },
-    {
-      path: '/accuntsetting',
-      name: 'accuntsetting',
-      component: accuntsetting
     },
     {
       path: '/passwordedit',

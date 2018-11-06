@@ -69,7 +69,8 @@ hr {
 	border-top: 1px solid #eee
 }
 .border-lineb {
-	border-bottom: 1px solid #DFE5EA
+	border-bottom: 1px solid #DFE5EA;
+	margin-bottom: 5px;
 }
 
 

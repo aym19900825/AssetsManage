@@ -33,7 +33,7 @@
 			
 				<EasyScrollbar>
         			<div id="wrapper" ref="homePagess" style="height: 600px;">
-						<div id="information" style="height: inherit;">
+						<div id="information" style="height: 1300px;">
 							<div class="ibox-content">
 								<el-form status-icon ref="personinfo" :model="personinfo" :rules="rules" label-width="80px" :label-position="labelPosition">
 								<div class="mask_tab-block mb20">
@@ -75,7 +75,7 @@
 									<el-row :gutter="70">
 										<el-col :span="24">
 											<el-form-item label="所属组织">
-												<el-input v-model="personinfo.companyId" disabled>
+												<el-input v-model="personinfo.companyName" disabled>
 												<el-button slot="append" icon="icon-search" @click=''></el-button>
 												</el-input>
 											</el-form-item>
@@ -100,22 +100,19 @@
 								 	<!-- 第四行 -->
 								 	<el-row :gutter="70">
 								 		<el-col :span="12">
-								 			 <el-form-item label="配置状态" v-model="personinfo.enabledname">
-								 			 	<el-radio-group v-model="personinfo.enabledname">
-											    	
+								 			 <el-form-item label="配置状态" v-model="personinfo.enabledName">
+								 			 	<el-radio-group v-model="personinfo.enabledName">
 											    	<el-radio label="启用" ></el-radio>
-													
 	  												<el-radio label="冻结" ></el-radio>
-	  												
 	  											</el-radio-group>
 										  </el-form-item>	
 								 		</el-col>
 								 		<el-col :span="12">
 								 			 <el-form-item label="登录方式">
 											    <el-checkbox-group v-model="personinfo.logintype">
-										      <el-checkbox label="口令登录" name="type" checked disabled></el-checkbox>
-										      <el-checkbox label="uKey" name="type" disabled></el-checkbox>
-										      <el-checkbox label="数字证书" name="type" disabled></el-checkbox>
+											      <el-checkbox label="口令登录" name="type" checked disabled></el-checkbox>
+											      <el-checkbox label="uKey" name="type" disabled></el-checkbox>
+											      <el-checkbox label="数字证书" name="type" disabled></el-checkbox>
 										    </el-checkbox-group>
 										  </el-form-item>	
 								 		</el-col>
@@ -150,6 +147,11 @@
 											</el-switch>
 							 			</el-form-item>	
 							 		</el-col>
+							 		<el-col :span="8">
+							 			<el-form-item label="电子邮箱" prop="email">
+										    <el-input v-model="personinfo.email"></el-input>
+										  </el-form-item>
+							 		</el-col>
 							 	</el-row>
 							 	<!-- 第二行 -->
 							 	<el-row :gutter="70">
@@ -159,37 +161,22 @@
 										  </el-form-item>
 							 		</el-col>
 							 		<el-col :span="8">
-							 			 <el-form-item label="性别" prop="sex">
-							 			 	<el-radio-group v-model="personinfo.sexname">
+							 			 <el-form-item label="性别">
+							 			 	<el-radio-group v-model="personinfo.sexName">
 								 				<el-radio label="男"></el-radio>
 								 				<el-radio label="女"></el-radio>
 								 			</el-radio-group>
 							 			</el-form-item>
 							 		</el-col>
 							 		
-							 		
-							 	</el-row>
-							 	<!-- 第三行 -->
-							 	<el-row :gutter="70">
 							 		<el-col :span="8">
 							 			 <el-form-item label="入职日期">
 						                      <el-date-picker v-model="personinfo.workdate" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
 										    </el-date-picker>
 						                </el-form-item>		
 							 		</el-col>
-							 		<el-col :span="8">
-							 			 <el-form-item label="参加工作时间">
-						                      <el-date-picker v-model="personinfo.entrytime" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
-										    </el-date-picker>
-						                </el-form-item>		
-							 		</el-col>
-							 		<el-col :span="8">
-							 			<el-form-item label="电子邮箱" prop="email">
-										    <el-input v-model="personinfo.email"></el-input>
-										  </el-form-item>
-							 		</el-col>
 							 	</el-row>
-							 	<!-- 第四行 -->
+							 	<!-- 第三行 -->
 							 	<el-row :gutter="70">
 							 		<el-col :span="8">
 							 			 <el-form-item label="联系电话">
@@ -201,13 +188,9 @@
 									    <el-input v-model="personinfo.phone"></el-input>
 									  </el-form-item>	
 							 		</el-col>
-							 		<el-col :span="8">
-							 			<el-form-item label="传真号">
-										    <el-input v-model="personinfo.rex"></el-input>
-										  </el-form-item>
-							 		</el-col>
+							 		
 							 	</el-row>
-							 	<!-- 第五行 -->
+							 	<!-- 第四行 -->
 							 	<el-row :gutter="70">
 							 		<el-col :span="16">
 							 			 <el-form-item label="地址">
@@ -220,7 +203,7 @@
 										  </el-form-item>
 							 		</el-col>
 							 	</el-row>
-							 	<!-- 第六行 -->
+							 	<!-- 第五行 -->
 							 	<el-row :gutter="70">
 							 		<el-col :span="24">
 							 			 <el-form-item label="备注">
@@ -285,18 +268,18 @@
 		        }, 1000);
 		      };
 
-		      var checkemail = (rule, value, callback) => {
-		       if (value === '') {
-		          callback(new Error('电子邮箱不能为空'));
-			        } else if (value !== '') {
-			          var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-			            if(!reg.test(value)){
-			              callback(new Error('请输入有效的邮箱'));
-			            }
-			        } else {
-			          callback();
+		    var checkemail = (rule, value, callback) => {
+		        if (value === '') {
+		            callback(new Error('电子邮箱不能为空'));
+		        }else{
+			        var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+			        if(!reg.test(value)){
+			            callback(new Error('请输入有效的邮箱'));
+			        }else{
+			        	callback();
 			        }
-		        };
+		        }
+		    };
 
 
 		      var checkphone = (rule, value, callback) => {
@@ -314,26 +297,31 @@
 		        }, 1000);
 		      };
 			return {
+				'启用': 1,
+				'冻结': 0,
+				'男': 1,
+				'女': 0,
 				show:false,			  
 				userList: [],
 				isShow: false,
 				ismin:true,
 				clientHeight:'',//获取浏览器高度
 				headImgUrl: '',//头像上传
-	          labelPosition: 'top',
-	          personinfo:
+	            labelPosition: 'top',
+	            personinfo:
 	          	{
-	          		worknumber:'',//当前用户ID号
+	          		worknumber:'',//工号
 	          		companyId: '',//所属组织
+	          		companyName: '',//所属组织
 	          		nickname:'',//人员姓名
 	          		username:'',//登录名称
 	          		enabled:'',//配置状态
-	          		enabledname:'',//配置状态名称
+	          		enabledName:'',//配置状态名称
 	          		password:'',//登录口令
-	          		logintype: [],//登录方式
+	          		//logintype: [],//登录方式
 	          		birthday:'',//出生日期
 	          		sex:'',//性别
-	          		sexname:'',//性别名称
+	          		sexName:'',//性别名称
 	          		idnumber:'',//身份证号
 	          		roles:'',//角色
 	          		entrytime:'',//入职日
@@ -390,15 +378,16 @@
 	        _this.$refs.homePagess.style.height = clientHeight + 'px';
 	      };
 	      this.getData();//调用getData
-	      
 	    },
 		
 		methods: {  
 			getData(){//获取当前用户信息
-    		var url = '/api/auth-server/oauth/userinfo';
+    		var url = '/api/api-user/users/currentMap';
     		this.$axios.get(url, {}).then((res) => {
-    			console.log(res.data.user);
-    			this.personinfo=res.data.user;
+    			console.log(res.data);
+    			//res.data.enabled ? '启用' : '冻结';
+    			//res.data.sex ? '男' : '女';
+    			this.personinfo=res.data;
 			}).catch((err) => {
 				this.$message({
 					message: '网络错误，请重试',
@@ -407,50 +396,35 @@
 			});
     	},
     	
-    	submitForm() {//修改当前用户信息
-    		console.log(123);
-        this.$refs[formName].validate((valid) => {
-          console.log(1234567899809);
-          if (valid) {
-            var userid = this.personinfo.id;
-            var username = this.personinfo.username;
-            var url = '/api/api-user/users/me';
-            this.$axios.put(url, {
-            		id: userid,
-            		username: username,
-            		user: this.personinfo
-            }).then((res) => {
-            	
-            	console.log(res);
-				//resp_code == 0是后台返回的请求成功的信息
-				if(res.data.resp_code == 0) {
-					this.$message({
-						message: '保存成功',
-						type: 'success'
-					});
-				} else {
-					if(res.data.resp_code == 1) {
+    	submitForm(formName) {//修改当前用户信息
+	        this.$refs[formName].validate((valid) => {
+	          if (valid) {
+	            var url = '/api/api-user/users/me';
+	            var personinfo=this.personinfo;
+	            personinfo.sex = personinfo.sexName == '男' ? 1 : 0;
+	            personinfo.enabled = personinfo.enabledName == '启用' ? 1 : 0;
+	            console.log(this.personinfo)
+	            this.$axios.put(url, this.personinfo).then((res) => {
+					console.log(res.data.resp_code);
+					//resp_code == 0是后台返回的请求成功的信息
+					if(res.data.resp_code == 0) {
 						this.$message({
-							message: res.data.resp_msg,
-							type: 'error'
+							message: '保存成功',
+							type: 'success'
 						});
-					}
-				}
-
-
-			}).catch((err) => {
-				this.$message({
-					message: '网络错误，请重试',
-					type: 'error'
+						this.$emit('request')//重新加载数据
+					} 
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
 				});
-			});
 
-
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
+	          } else {
+					return false;
+				}
+	        });
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();

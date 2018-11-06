@@ -181,8 +181,8 @@ export default {
     	getData(){
     		var url = '/api/api-user/users/currentMap';
     		this.$axios.get(url, {}).then((res) => {//获取当前用户信息
-				this.passwordedit.username = res.data.user.username;
-				this.passwordedit.id = res.data.user.id;
+				this.passwordedit.username = res.data.username;
+				this.passwordedit.id = res.data.id;
 			}).catch((err) => {
 				this.$message({
 					message: '网络错误，请重试',
@@ -193,7 +193,6 @@ export default {
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-          	console.log(this.passwordedit);
             var userid = this.passwordedit.id;
             var oldpassword = this.passwordedit.oldpassword;
             var newpassword= this.passwordedit.newpassword;
@@ -203,7 +202,6 @@ export default {
             		oldPassword: oldpassword,
             		newPassword: newpassword
             }).then((res) => {
-            	console.log(res);
 				//resp_code == 0是后台返回的请求成功的信息
 				if(res.data.resp_code == 0) {
 					this.$message({
@@ -218,7 +216,6 @@ export default {
 						});
 					}
 				}
-
 
 			}).catch((err) => {
 				this.$message({

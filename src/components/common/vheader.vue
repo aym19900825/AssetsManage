@@ -32,7 +32,7 @@
                     </router-link>
                 </el-dropdown-item>
 
-                <el-dropdown-item>
+                <el-dropdown-item class="border-lineb">
                     <router-link to="/passwordedit">
                         <i class="icon-key mr10"></i>修改密码
                     </router-link>
@@ -61,17 +61,15 @@ export default {
     },
     methods: {
         getData(){
-            var url = '/api/auth-server/oauth/userinfo';
+            var url = '/api/api-user/users/currentMap';
             this.$axios.get(url, {}).then((res) => {//获取当前用户信息
-                this.username = res.data.user.username;
-                this.userid = res.data.user.id;
+                    this.username = res.data.username;
+                    this.userid = res.data.id;
             }).catch((err) => {
                 this.$message({
                     message: '网络错误，请重试',
                     type: 'error'
                 });
-                var userid = this.personinfo.id;
-                var username = this.personinfo.username;
             });
         }
     },

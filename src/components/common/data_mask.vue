@@ -16,89 +16,97 @@
 				</div>
 			</div>
 			<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
-
 				<div class="accordion" id="information">
-					<div class="mask_tab-block">
-						<div class="mask_tab-head clearfix">
-							<div class="accordion_title">
-								<span class="accordion-toggle">基本信息</span>
-							</div>
-							<div class="col_but" @click="col_but('col_but1')">
-								<i class="icon-arrow1-down" v-show="down"></i><i class="icon-arrow1-up" v-show="up"></i>
-							</div>
-						</div>
-						<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
-							<el-row :gutter="70">
-								<el-col :span="8">
-									<el-form-item label="表名">
-										<el-input></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="8">
-									<el-form-item label="描述">
-										<el-input></el-input>
-									</el-form-item>
-								</el-col>
-							</el-row>
-						</div>
-					</div>
-				</div>
-
-				<div class="accordion" id="information">
-					<div class="mask_tab-block">
-						<div class="mask_tab-head clearfix">
-							<div class="accordion_title">
-								<span class="accordion-toggle">字段列表</span>
-							</div>
-							<div style="float:right">
-								<div style="float: left;margin-right: 25px;margin-top: 8px;">
-									<el-button type="primary" size="mini" round  @click="importdia"><i class="icon-upload-cloud"></i>&nbsp;导入</el-button>
-									<el-button type="success" icon="el-icon-plus" circle size="mini" @click="addfield"></el-button>
-								</div>							
-								<div class="col_but " @click="col_but('col_but2')">
-									<i class="icon-arrow1-down"></i>
+					<!-- <div class="mask_tab-block"> -->
+						<el-collapse v-model="activeNames" @change="handleChange">
+							<el-collapse-item title="基本信息" name="1">
+								<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
+									<el-row :gutter="70">
+										<el-col :span="8">
+											<el-form-item label="表名">
+												<el-input v-model="dataInfo.objectName"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="描述">
+												<el-input v-model="dataInfo.description"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
 								</div>
-							</div>
-						</div>
-						<div class="accordion-body tab-content" v-show="col_but2" id="tab-content2">
-							<!-- 表格 -->
-							<el-table :data="fieldList" style="width: 96%;margin: 0 auto;" :default-sort="{prop:'fieldList', order: 'descending'}">
-								<el-table-column label="编号" width="100" prop="code">
-									<template slot-scope="scope">
-        								<el-input v-model="scope.$index+1" :disabled="edit"></el-input>
-      								</template> 
-								</el-table-column>
-								<el-table-column label="字段名" sortable width="100" prop="name">
-									<template slot-scope="scope">
-        								<el-input v-model="scope.row.name"></el-input>
-      								</template> 
-								</el-table-column>
-								<el-table-column label="字段描述" sortable width="180" prop="decri">
-									<template slot-scope="scope">
-        								<el-input v-model="scope.row.decri"></el-input>
-      								</template>
-								</el-table-column>
-								<el-table-column label="字段类型" sortable width="180" prop="type">
-									<template slot-scope="scope">
-        								<el-input v-model="scope.row.type"></el-input>
-      								</template>
-								</el-table-column>
-								<el-table-column label="字段长度" sortable width="180" prop="length" >
-									<template slot-scope="scope">
-        								<el-input v-model="scope.row.length"></el-input>
-      								</template>
-								</el-table-column>
-								<el-table-column label="操作" width="180">
-									<template slot-scope="scope">
-        								<i class="el-icon-edit" style="color: #46ACE3"></i>&nbsp;
-										<i class="el-icon-delete" @click="delfield(scope.row,scope.$index)" style="color: red"></i>
-      								</template>									
-								</el-table-column>
-							</el-table>
-							<!-- 表格 -->
-						</div>
-					</div>
+							</el-collapse-item>
+							<el-collapse-item title="字段列表" name="2">
+								<!-- 字段列表 Begin-->
+								<div class="table-func">
+									<el-button type="primary" size="mini" round  @click="importdia">
+										<i class="icon-upload-cloud"></i>
+										<font>导入</font>
+									</el-button>
+									<el-button type="success" size="mini" round @click="addfield">
+										<i class="icon-add"></i>
+										<font>新建</font>
+									</el-button>
+								</div>
+								<el-form :data="fieldList">
+				                <el-form-item>
+				                	<el-row :gutter="20">
+				                		<el-col :span="4">
+				                            <el-form-item label="字段名"></el-form-item>
+				                        </el-col>
+				                        <el-col :span="4">
+				                            <el-form-item label="字段描述"></el-form-item>
+				                        </el-col>
+				                        <el-col :span="4">
+				                            <el-form-item label="字段类型"></el-form-item>
+				                        </el-col>
+				                        <el-col :span="4">
+				                            <el-form-item label="小数点位数"></el-form-item>
+				                        </el-col>
+				                        <el-col :span="4">
+				                            <el-form-item label="长度"></el-form-item>
+				                        </el-col>
+				                        <el-col :span="4">
+				                            <el-form-item label="操作"></el-form-item>
+				                        </el-col>
+				                	</el-row>
+				                    <el-row :gutter="20" v-for="(item,index) in fieldList">
+				                        <el-col :span="4">
+				                            <el-input type="text"  placeholder="请输入人物" v-model="item.leadname"></el-input>
+				                        </el-col>
+				                        <el-col :span="4">
+				                            <el-input type="text"  placeholder="请输入关系" v-model="item.leaddecri"></el-input>
+				                        </el-col>
+				                        <el-col :span="4">
+				                            <!-- <el-input type="text"  placeholder="请输入关系" v-model="item.leadtype"></el-input> -->
+				                            <el-select v-model="item.leadtype" placeholder="选择字段类型">
+										      <el-option label="字符串(string)" value="string"></el-option>
+										      <el-option label="浮点类型(float)" value="float"></el-option>
+										      <el-option label="整数(int)" value="int"></el-option>
+										      <el-option label="长整型(long)" value="long"></el-option>
+										      <el-option label="双精度(double)" value="double"></el-option>
+										      <el-option label="日期(date)" value="date"></el-option>
+										      <el-option label="时间(time)" value="time"></el-option>
+										    </el-select>
+				                        </el-col>
+				                        <el-col :span="4">
+				                            <el-input type="text"  placeholder="请输入关系" v-model="item.leadprecision"></el-input>
+				                        </el-col>
+				                        <el-col :span="4">
+				                            <el-input type="text"  placeholder="请输入关系" v-model="item.leadlength"></el-input>
+				                        </el-col>
+				                        <el-col :span="4">
+				                            <i class="el-icon-delete" @click="delfield(item)" style="color: red"></i>
+				                        </el-col>
+				                    </el-row>
+				                </el-form-item>
+				            </el-form>
+							<!-- 字段列表 End -->
+							</el-collapse-item>
+						</el-collapse>
+					<!-- </div> -->
 				</div>
+
+				
 
 				<div class="el-dialog__footer">
 					<el-button @click='close'>取消</el-button>
@@ -121,16 +129,18 @@
 						</div>
 						<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
 						<!-- 第二层弹出的表格 -->
-							<el-table :data="dataList" style="width: 100%;margin: 0 auto;" :default-sort="{prop:'dataList', order: 'descending'}" @selection-change="SelChange">
-								<el-table-column type="selection" width="55">
+							<el-table :data="leaddata" style="width: 100%;margin: 0 auto;" :default-sort="{prop:'leaddata', order: 'descending'}" @selection-change="SelChange">
+								<el-table-column type="selection" width="55" >
 								</el-table-column>
-								<el-table-column label="字段名称" sortable width="230">
+								<el-table-column label="字段名称" sortable width="150" prop="leadname">
 								</el-table-column>
-								<el-table-column label="字段描述" sortable width="230">
+								<el-table-column label="字段描述" sortable width="200" prop="leaddecri">
 								</el-table-column>
-								<el-table-column label="字段类型" sortable width="150">
+								<el-table-column label="字段类型" sortable width="150" prop="leadtype">
 								</el-table-column>
-								<el-table-column label="缺省值" sortable width="210">
+								<el-table-column label="小数点位数" sortable width="180" prop="leadprecision">
+								</el-table-column>
+								<el-table-column label="字段长度" sortable width="100" prop="leadlength">
 								</el-table-column>
 							</el-table>
 							<!-- 表格 -->
@@ -139,7 +149,7 @@
 				</div>
 			<span slot="footer" class="dialog-footer">
 		       <el-button @click="dialogVisible = false">取 消</el-button>
-		       <el-button type="primary">确 定</el-button>
+		       <el-button type="primary" @click="leadadddata">确 定</el-button>
 		    </span>
 		</el-dialog>
 	</div>
@@ -150,6 +160,7 @@
 		name: 'masks',
 		data() {
 			return {
+				selUser:[],
 				edit: true, //禁填
 				'男': true,
 				'女': false,
@@ -161,21 +172,53 @@
 				down: true,
 				up: false,
 				useritem: [],
+				activeNames: ['1','2'],//手风琴数量
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				dataList:[{
 					objectName:'',
 					description:''
 				}],
-				dataInfo: {
-
+				leaddata:[//导入数据的表格
+				{
+					leadname:'author',
+					leaddecri:'作者姓名',
+					leadtype:'字符串(string)',
+					leadprecision:'',
+					leadlength:'6'
 				},
-				fieldList:[{
-					// code: '',
-					name: '',
-					decri: '',
-					type: '',
-					length: '',
+				{
+					leadname:'author',
+					leaddecri:'作者姓名',
+					leadtype:'字符串(string)',
+					leadprecision:'',
+					leadlength:'6'
+				},
+				{
+					leadname:'author',
+					leaddecri:'作者姓名',
+					leadtype:'字符串(string)',
+					leadprecision:'',
+					leadlength:'6'
+				},
+				{
+					leadname:'author',
+					leaddecri:'作者姓名',
+					leadtype:'字符串(string)',
+					leadprecision:'',
+					leadlength:'6'
+				}],
+				dataInfo: {//添加数据库列表信息
+					objectName:'',
+					description:'',
+					fieldList:[]
+				},
+				fieldList:[{//字段列表
+					leadname: '',
+					leaddecri: '',
+					leadtype:'',
+					leadprecision: '',
+					leadlength: ''
 				}],
 				rules: {
 					companyName: [{
@@ -195,18 +238,49 @@
 			};
 		},
 		methods: {
+			handleChange(val) {//手风琴开关效果调用
+				console.log(val);
+			},
+			//获取导入表格勾选信息
+			SelChange(val) {
+				this.selUser = val;
+			},
+			//导入添加数据按钮
+			leadadddata(){
+				var selData = this.selUser;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请您选择数据',
+						type: 'warning'
+					});
+					return;
+				} else if(selData.length > 1) {
+					this.$message({
+						message: '不可同时选择多条数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					this.fieldList.push(selData[0]);
+					this.dialogVisible = false;
+				}
+			},
 			addfield(){
 				var obj = {
-                    // code: '',
-					name: '',
-					decri: '',
-					type: '',
-					length: '',
+                    leadname: '',
+					leaddecri: '',
+					leadtype:'',
+					leadprecision: '',
+					leadlength: ''
                 };
                 this.fieldList.push(obj);
 			},
 			delfield(item){
-                this.fieldList.splice(index,1);
+                // this.fieldList.splice(index,1);
+                var index = this.fieldList.indexOf(item);
+                if (index !== -1) {
+                    this.fieldList.splice(index, 1)
+                }
 			},
 			col_but(col_but) {
 				//alert(col_but)
@@ -221,9 +295,9 @@
 						this.up = !this.up
 				}
 			},
-			SelChange(val) {
-				this.selUser = val;
-			},
+			// SelChange(val) {
+			// 	this.selUser = val;
+			// },
 			importdia(){
 				this.dialogVisible = true;
 			},
@@ -276,35 +350,9 @@
 
 			// 保存users/saveOrUpdate
 			submitForm() {
-				this.$refs.user.validate((valid) => {
-					if(valid) {
-						if(this.user.sexName == "男") {
-							this.user.sex = flase;
-						} else {
-							this.user.sex = true;
-						}
-						var url = '/api/api-user/users/saveOrUpdate';
-
-						this.$axios.post(url, this.user).then((res) => {
-							if(res.data.resp_code == 0) {
-								this.$message({
-									message: '保存成功',
-									type: 'success',
-								});
-								this.show = false;
-								//重新加载数据
-								this.$emit('request')
-							}
-						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
-						});
-					} else {
-						return false;
-					}
-				})
+				this.dataInfo.fieldList.push(this.fieldList);
+				console.log(this.dataInfo);
+				this.show = false;
 			},
 			// 所属组织
 			getCompany() {
@@ -398,4 +446,14 @@
 
 <style scoped>
 	@import '../../assets/css/mask-modules.css';
+
+	/*.el-collapse-item{
+		position: relative;
+	}
+	.table-func {position: absolute; top: 10px; right: 40px;}
+	.table-func button {width: 45px; transition: width 400ms ease, background 400ms ease;}
+	.table-func button span {display: none;}
+
+	.table-func button:hover {width: 80px;}
+	.table-func button:hover span {display: inline-block;}*/
 </style>

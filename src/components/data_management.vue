@@ -158,29 +158,6 @@
 				'冻结': false,
 				'男': true,
 				'女': false,
-				// dataList: [
-				// 	{
-				// 		tableName:'COPYRIGHTASSET1',
-				// 		decri:'资产信息表1',
-				// 		className:'assets'
-				// 	},
-				// 	{
-				// 		tableName:'COPYRIGHTASSET2',
-				// 		decri:'资产信息表2',
-				// 		className:'assets'
-				// 	},
-				// 	{
-				// 		tableName:'COPYRIGHTASSET3',
-				// 		decri:'资产信息表3',
-				// 		className:'assets'
-				// 	},
-				// 	{
-				// 		tableName:'COPYRIGHTASSET4',
-				// 		decri:'资产信息表4',
-				// 		className:'assets'
-				// 	}
-				// ],
-				//				deptTree: [], //树
 				search: false,
 				show: false,
 				down: true,

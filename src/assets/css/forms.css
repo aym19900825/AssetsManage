@@ -43,10 +43,23 @@ textarea{
     /* border: none;
     border-bottom:1px solid #DFE5EA; */
 }
+
+/*Select 样式调整*/
+.el-select .el-input .el-select__caret { font-weight: bold;}
+.el-select .el-input .el-select__caret.is-reverse {color:#6585DF;}
+.el-select-dropdown__item.selected {color: #6585DF;}
+.el-select-dropdown__item.hover, .el-select-dropdown__item:hover {
+    background-color: #F1F3FD; color: #576FAE;
+}
+.el-select .el-input__inner:focus {border-color: #A4ACE7;}
+
+
+/*文本框样式调整*/
 textarea { height: auto; }
 input[type="text"]:focus,
 input[type="password"]:focus,
-textarea:focus,button:focus {
+textarea:focus,button:focus,
+.el-select .el-input.is-focus .el-input__inner {
     outline:none;
     -webkit-appearance: none;
     box-shadow:0px 5px 10px 0px #f1f4ff;
@@ -109,7 +122,7 @@ textarea:focus,button:focus {
     border: 1px solid #dfe5ea;
 }
 .btn-default:hover { color: #576FAE; }
-
+.btn-refresh {padding-top: 7px; padding-bottom: 6px;}
 
 /右侧对Table操作项按钮/
 

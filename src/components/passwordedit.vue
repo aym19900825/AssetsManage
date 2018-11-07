@@ -207,7 +207,7 @@ export default {
 				}
 			});
 		},
-		tips(formName) {
+		tips(formName) {//重置按钮
 			this.$refs[formName].resetFields();
 		},
   		min2max(){//左侧菜单正常和变小切换

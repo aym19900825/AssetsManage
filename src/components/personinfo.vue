@@ -409,16 +409,16 @@
 		
 		},
 		mounted(){
-	      // 获取浏览器可视区域高度
-	      var _this = this;
-	      var clientHeight = $(window).height() - 100;    //document.body.clientWidth;
-	      _this.$refs.homePagess.style.height = clientHeight + 'px';
-	      window.onresize = function() {
-	        var clientHeight = $(window).height() - 100;
-	        _this.$refs.homePagess.style.height = clientHeight + 'px';
-	      };
-	      this.getData();//调用getData
-	    },
+			// 获取浏览器可视区域高度
+			var _this = this;
+			var clientHeight = $(window).height() - 100;    //document.body.clientWidth;
+			_this.$refs.homePagess.style.height = clientHeight + 'px';
+			window.onresize = function() {
+				var clientHeight = $(window).height() - 100;
+				_this.$refs.homePagess.style.height = clientHeight + 'px';
+			};
+			this.getData();
+		},
 		
 		methods: {  
 			getData(){//获取当前用户信息

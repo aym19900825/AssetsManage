@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Login from '@/page/login/login'
 import user_management from '@/components/user_management' 
 import dept_management from '@/components/dept_management'
+import menu_management from '@/components/menu_management'
 import personinfo from '@/components/personinfo'
 import accuntsetting from '@/components/accuntsetting'
 import passwordedit from '@/components/passwordedit'
@@ -46,6 +47,11 @@ Vue.use(Router)
     	name: 'ztree',
     	component:ztree  
   	},
+  	{
+      path: '/menu_management',
+      name: 'menu_management',
+      component: menu_management
+    },
 
   ];
 

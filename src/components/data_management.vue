@@ -8,7 +8,6 @@
 			<navs></navs>
 			<div class="wrapper wrapper-content">
 				<div class="ibox-content">
-					<!--<navs_button></navs_button>-->
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
@@ -43,7 +42,6 @@
 									<i class="icon-menu3"></i> 
 									<i class="icon-arrow2-down"></i>
                 				</button>
-
 								<ul class="dropdown-menu" role="menu">
 									<li role="menuitem">
 										<label>
@@ -84,7 +82,7 @@
 							</div>
 						</div>
 					</div>
-					<!-- 高级查询划出 -->
+					<!-- 高级查询划出begin -->
 					<div v-show="search">
 						<el-form status-icon :model="searchList" label-width="70px">
 							<el-row :gutter="10" style="margin-left:-34px">
@@ -104,10 +102,10 @@
 							</el-row>
 						</el-form>
 					</div>
-					<!-- 高级查询划出 -->
+					<!-- 高级查询划出end -->
 					<div class="row">
 						<div class="col-sm-12">
-							<!-- 表格 -->
+							<!-- 表格begin-->
 							<el-table :data="dataList" style="width: 100%;margin: 0 auto;" :default-sort="{prop:'dataList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55">
 								</el-table-column>
@@ -115,10 +113,8 @@
 								</el-table-column>
 								<el-table-column label="描述" sortable width="480" prop="description">
 								</el-table-column>
-								<!-- <el-table-column label="类名" sortable width="210" prop="" :formatter="className">
-								</el-table-column> -->
 							</el-table>
-							<el-pagination
+							<el-pagination class="pull-right"
 					            @size-change="sizeChange"
 					            @current-change="currentChange"
 					            :current-page="page.currentPage"
@@ -127,7 +123,7 @@
 					            layout="total, sizes, prev, pager, next"
 					            :total="page.totalCount">
 					        </el-pagination>
-							<!-- 表格 -->
+							<!-- 表格end -->
 						</div>
 					</div>
 				</div>
@@ -306,22 +302,6 @@
 					});
 				}
 			},
-			judge(data) {
-				//taxStatus 布尔值
-				return data.enabled ? '启用' : '冻结'
-			},
-			sexName(data) {
-				return data.sex ? '男' : '女'
-			},
-			//时间格式化  
-			dateFormat(row, column) {
-				var date = row[column.property];
-				if(date == undefined) {
-					return "";
-				}
-				return this.$moment(date).format("YYYY-MM-DD");
-				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
-			},
 			insert() {
 				this.users.push(this.user)
 			},
@@ -338,7 +318,6 @@
 					objectName: this.searchList.objectName,
 					description: this.searchList.description,
 				}
-				 console.log(111);
 				var url = '/api/apps-center/objectcfg';
 				this.$axios.get(url, {
 					params: data
@@ -348,12 +327,6 @@
 					this.page.totalCount = res.data.count;
 					console.log(this.dataList);
 				}).catch((wrong) => {})
-				// this.userList.forEach((item, index) => {
-				// 	var id = item.id;
-				// 	this.$axios.get('/users/' + id + '/roles', data).then((res) => {
-				// 		this.userList.role = res.data.roles[0].name;
-				// 	}).catch((wrong) => {})
-				// })
 			},
 			//机构树
 			getKey() {

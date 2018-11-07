@@ -2,12 +2,10 @@
 	<div>
 		<div class="mask" v-show="show"></div>
 		<div class="mask_div" v-show="show">
-			<!---->
 			<div class="mask_title_div clearfix">
 				<div class="mask_title">添加数据库表</div>
 				<div class="mask_anniu">
-					<span class="mask_span mask_max" @click='toggle'>
-						 
+					<span class="mask_span mask_max" @click='toggle'>						 
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
 					</span>
 					<span class="mask_span" @click='close'>
@@ -17,7 +15,6 @@
 			</div>
 			<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
 				<div class="accordion" id="information">
-					<!-- <div class="mask_tab-block"> -->
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="基本信息" name="1">
 								<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
@@ -103,50 +100,45 @@
 							<!-- 字段列表 End -->
 							</el-collapse-item>
 						</el-collapse>
-					<!-- </div> -->
-				</div>
-
-				
-
+				</div>			
 				<div class="el-dialog__footer">
 					<el-button @click='close'>取消</el-button>
 					<el-button type="primary" @click='submitForm()'>提交</el-button>
 				</div>
 			</el-form>
 		</div>
-
 		<!-- 弹出 -->
 		<el-dialog title="添加数据库表" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
 			<div class="accordion" id="information">
-					<div class="mask_tab-block">
-						<div class="mask_tab-head clearfix">
-							<div class="accordion_title">
-								<span class="accordion-toggle">导入标准字段</span>
-							</div>
-							<div class="col_but" @click="col_but('col_but1')">
-								<i class="icon-arrow1-down" v-show="down"></i><i class="icon-arrow1-up" v-show="up"></i>
-							</div>
+				<div class="mask_tab-block">
+					<div class="mask_tab-head clearfix">
+						<div class="accordion_title">
+							<span class="accordion-toggle">导入标准字段</span>
 						</div>
-						<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
-						<!-- 第二层弹出的表格 -->
-							<el-table :data="leaddata" style="width: 100%;margin: 0 auto;" :default-sort="{prop:'leaddata', order: 'descending'}" @selection-change="SelChange">
-								<el-table-column type="selection" width="55" >
-								</el-table-column>
-								<el-table-column label="字段名称" sortable width="150" prop="leadname">
-								</el-table-column>
-								<el-table-column label="字段描述" sortable width="200" prop="leaddecri">
-								</el-table-column>
-								<el-table-column label="字段类型" sortable width="150" prop="leadtype">
-								</el-table-column>
-								<el-table-column label="小数点位数" sortable width="180" prop="leadprecision">
-								</el-table-column>
-								<el-table-column label="字段长度" sortable width="100" prop="leadlength">
-								</el-table-column>
-							</el-table>
-							<!-- 表格 -->
+						<div class="col_but" @click="col_but('col_but1')">
+							<i class="icon-arrow1-down" v-show="down"></i><i class="icon-arrow1-up" v-show="up"></i>
 						</div>
 					</div>
+					<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
+					<!-- 第二层弹出的表格 -->
+						<el-table :data="leaddata" style="width: 100%;margin: 0 auto;" :default-sort="{prop:'leaddata', order: 'descending'}" @selection-change="SelChange">
+							<el-table-column type="selection" width="55" >
+							</el-table-column>
+							<el-table-column label="字段名称" sortable width="150" prop="leadname">
+							</el-table-column>
+							<el-table-column label="字段描述" sortable width="200" prop="leaddecri">
+							</el-table-column>
+							<el-table-column label="字段类型" sortable width="150" prop="leadtype">
+							</el-table-column>
+							<el-table-column label="小数点位数" sortable width="180" prop="leadprecision">
+							</el-table-column>
+							<el-table-column label="字段长度" sortable width="100" prop="leadlength">
+							</el-table-column>
+						</el-table>
+						<!-- 表格 -->
+					</div>
 				</div>
+			</div>
 			<span slot="footer" class="dialog-footer">
 		       <el-button @click="dialogVisible = false">取 消</el-button>
 		       <el-button type="primary" @click="leadadddata">确 定</el-button>
@@ -310,9 +302,6 @@
 						this.up = !this.up
 				}
 			},
-			// SelChange(val) {
-			// 	this.selUser = val;
-			// },
 			importdia(){
 				this.dialogVisible = true;
 			},
@@ -361,8 +350,6 @@
 				$(".mask_div").css("margin", "7% 10%");
 				$(".mask_div").css("top", "0");
 			},
-			
-
 			// 保存users/saveOrUpdate
 			submitForm() {
 				this.dataInfo.fieldList.push(this.fieldList);
@@ -391,7 +378,6 @@
 				});
 
 			},
-
 			// 所属部门
 			getDept() {
 				this.editSearch = 'dept';
@@ -429,9 +415,7 @@
 					this.resourceData = res.data.data;
 					this.dialogVisible = true;
 				});
-
 			},
-
 			queding() {
 				this.getCheckedNodes();
 				this.placetext = false;
@@ -443,9 +427,7 @@
 					this.user.deptId = this.checkedNodes[0].id;
 					this.user.deptName = this.checkedNodes[0].simplename;
 				}
-
 			},
-
 			handleClose(done) {
 				this.$confirm('确认关闭？')
 					.then(_ => {
@@ -453,9 +435,7 @@
 					})
 					.catch(_ => {});
 			}
-
 		}
-
 	}
 </script>
 

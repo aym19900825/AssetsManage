@@ -166,10 +166,8 @@
 				</div>
 
 				<div class="el-dialog__footer">
-					<!-- <span slot="footer" class="dialog-footer">-->
 					<el-button @click='close'>取消</el-button>
 					<el-button type="primary" @click='submitForm()'>提交</el-button>
-					<!-- </span>-->
 				</div>
 			</el-form>
 
@@ -458,9 +456,9 @@
 						user.roleId = user.roleId.join(',');
 // 						user.roleId = JSON.stringify(user.roleId);	
 						var url = '/api/api-user/users/saveOrUpdate';
-							console.log(user);
-							
-						this.$axios.post(url, user).then((res) => {
+								 console.log(this.user);
+						this.$axios.post(url, this.user).then((res) => {
+
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',

@@ -6,7 +6,7 @@
             <li><router-link :to="{path:'/dashboardList'}" >程序设计器</router-link></li>
             <li><router-link :to="{path:'/dashboardList'}" >权限管理</router-link></li>
             <li>
-                <router-link :to="{path:'/dashboardList'}" >系统配置</router-link>
+                <router-link :to="{path:'/user_management'}" >系统配置</router-link>
             </li>
         </ul>
         <div class="nav-head pull-right nav-right">
@@ -15,24 +15,18 @@
             </el-badge>
             <el-dropdown placement="top" trigger="click">
               <span class="el-dropdown-link white">
-                <font class="pr10">Admin，您好</font>
+                <font class="pr10">{{username}}，您好</font>
                 <font><img class="userimg" /></font>
                 <i class="el-icon-arrow-down icon-arrow2-down"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>
-                    <router-link to="/accuntsetting">
-                        <i class="icon-role-site mr10"></i>账号设置
-                    </router-link>
-                </el-dropdown-item>
-
                 <el-dropdown-item>
                     <router-link to="/personinfo">
                         <i class="icon-user mr10"></i>个人资料
                     </router-link>
                 </el-dropdown-item>
 
-                <el-dropdown-item>
+                <el-dropdown-item class="border-lineb">
                     <router-link to="/passwordedit">
                         <i class="icon-key mr10"></i>修改密码
                     </router-link>
@@ -56,14 +50,25 @@ export default {
 //  name: 'nav',
       data(){
         return {
-         
+         username: '',
         }
     },
     methods: {
-        
+        getData(){
+            var url = '/api/api-user/users/currentMap';
+            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+                    this.username = res.data.username;
+                    this.userid = res.data.id;
+            }).catch((err) => {
+                this.$message({
+                    message: '网络错误，请重试',
+                    type: 'error'
+                });
+            });
+        }
     },
     mounted(){
-
+        this.getData();//调用getData
     }
 }
 </script>

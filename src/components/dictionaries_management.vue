@@ -16,77 +16,27 @@
 				<div id="wrapper" ref="homePagess" style="height: 600px;">
 					<div id="information" style="height: inherit;">
 						<div class="ibox-content">
-							<el-form status-icon ref="safemanage" :model="safemanage" :rules="rules" label-width="80px" :label-position="labelPosition">
+							<el-form status-icon ref="dictionaries" :model="dictionaries" :rules="rules" label-width="80px" :label-position="labelPosition">
 								<el-collapse v-model="activeNames" @change="handleChange">
-									<el-collapse-item title="安全管理" name="1">
+									<el-collapse-item title="字典管理" name="1">
 										<el-row :gutter="70">
 									 		<el-col :span="12">
-												<el-form-item label="是滞包含大写字母">
-													<el-select v-model="safemanage.emptyuppercase" filterable placeholder="请选择">
-														<el-option v-for="item01 in uppercase" :key="item01.value" :label="item01.label" :value="item01.value"></el-option>
-													</el-select>
-												</el-form-item>
+												
 									 		</el-col>
 									 	
 									 		<el-col :span="12">
-									 			<el-form-item label="是否包含小写字母">
-											    	<el-select v-model="safemanage.emptylowercase" filterable placeholder="请选择">
-														<el-option v-for="item02 in lowercase" :key="item02.value" :label="item02.label" :value="item02.value"></el-option>
-													</el-select>
-												</el-form-item>	
+									 			
 									 		</el-col>
 									 	</el-row>
 									 	
-										<el-row :gutter="70">
-											<el-col :span="12" >
-												<el-form-item label="是否包含特殊字符">
-													<el-select v-model="safemanage.emptycharacter" filterable placeholder="请选择">
-														<el-option v-for="item03 in character" :key="item03.value" :label="item03.label" :value="item03.value"></el-option>
-													</el-select>
-												</el-form-item>
-											</el-col>
-
-											<el-col :span="12">
-												<el-form-item label="密码长度">
-													<el-select v-model="safemanage.emptylengths" filterable placeholder="请选择">
-														<el-option v-for="item04 in lengths" :key="item04.value" :label="item04.label" :value="item04.value"></el-option>
-													</el-select>
-												</el-form-item>
-											</el-col>
-										</el-row>
-									 	<!-- 第三行 -->
-									 	<el-row :gutter="70">
-									 		<el-col :span="12">
-									 			 <el-form-item label="密码过期天数">
-									 				<el-select v-model="safemanage.emptyexpired" filterable placeholder="请选择">
-														<el-option v-for="item05 in expired" :key="item05.value" :label="item05.label" :value="item05.value"></el-option>
-													</el-select>
-									 			</el-form-item>	
-									 		</el-col>
-									 		<el-col :span="12">
-									 			 <el-form-item label="Session过期时间">
-								                      <el-select v-model="safemanage.emptysession" filterable placeholder="请选择">
-														<el-option v-for="item06 in session" :key="item06.value" :label="item06.label" :value="item06.value"></el-option>
-													</el-select>
-								                </el-form-item>		
-									 		</el-col>
-									 	</el-row>
-									 	<!-- 第四行 -->
-									 	<el-row :gutter="70">
-									 		<el-col :span="12">
-									 			<el-form-item label="密码输错次数">
-									 			 	<el-select v-model="safemanage.emptyerrortimes" filterable placeholder="请选择">
-														<el-option v-for="item07 in errortimes" :key="item07.value" :label="item07.label" :value="item07.value"></el-option>
-													</el-select>
-												</el-form-item>	
-									 		</el-col>
-									 	</el-row>
+										
+									 	
 									</el-collapse-item>
 								</el-collapse>
 							</el-form>
 							<div class="content-footer">
-								<button class="btn btn-default btn-large" @click="resetForm('safemanage')">重置</button>
-								<button class="btn btn-primarys btn-large" @click="submitForm('safemanage')">保存</button>
+								<button class="btn btn-default btn-large" @click="resetForm('dictionaries')">重置</button>
+								<button class="btn btn-primarys btn-large" @click="submitForm('dictionaries')">保存</button>
 							</div>
 						</div>
 					</div>
@@ -105,7 +55,7 @@ import navs_header from './common/nav_tabs.vue'
 import navs from './common/left_navs/nav_left.vue'
 
 export default {
-	name: 'safemanage',
+	name: 'dictionaries',
 		components: {
 			vheader,
 			navs_header,
@@ -193,7 +143,7 @@ export default {
 			value: '8',
 			label: '8次'
 		}],
-		safemanage:{
+		dictionaries:{
 			emptyuppercase: '0',//是滞包含大写字母
 			emptylowercase: '0',//是否包含小写字母
 			emptycharacter: '0',//是否包含特殊字符

@@ -50,7 +50,7 @@ export default {
 				}, {
 		            navicon: 'icon-wordbook',
 		            navtitle: '字典管理',
-		            navherf: '#4'
+		            navherf: '/dictionaries_management'
 				}, {
 		            navicon: 'icon-log',
 		            navtitle: '业务日志',

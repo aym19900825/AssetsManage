@@ -5,6 +5,8 @@ import user_management from '@/components/user_management'
 import dept_management from '@/components/dept_management'
 import data_management from '@/components/data_management'
 import safe_management from '@/components/safe_management'
+import dictionaries_management from '@/components/dictionaries_management'
+
 import personinfo from '@/components/personinfo'
 import passwordedit from '@/components/passwordedit'
 import ztree from '@/components/common/ztree' 
@@ -36,6 +38,11 @@ Vue.use(Router)
       path: '/safe_management',
       name: 'safe_management',
       component: safe_management
+    },
+    {
+      path: '/dictionaries_management',
+      name: 'dictionaries_management',
+      component: dictionaries_management
     },
     {
       path: '/personinfo',

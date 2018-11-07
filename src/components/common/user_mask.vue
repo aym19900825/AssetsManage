@@ -59,7 +59,7 @@
 								</el-col>
 								<el-col :span="12">
 									<el-form-item label="登录口令" prop="password">
-										<el-input v-model="user.password"></el-input>
+										<el-input type="password" v-model="user.password"></el-input>
 									</el-form-item>
 								</el-col>
 							</el-row>
@@ -94,7 +94,7 @@
 								</el-col>
 								<el-col :span="8">
 									<el-form-item label="性別" prop="sex">
-										<el-radio-group v-model="user.sex">
+										<el-radio-group v-model="user.sexName">
 											<el-radio label="男"></el-radio>
 											<el-radio label="女"></el-radio>
 										</el-radio-group>
@@ -116,11 +116,13 @@
 								</el-col>
 								<el-col :span="8">
 									<el-form-item label="角色" prop="roleId">
-										<el-input v-model="user.roleId">
-											<el-button slot="append" icon="el-icon-search" @click="getRole"></el-button>
-										</el-input>
+										<el-select v-model="user.roleId" multiple @change="changeRole">
+											<el-option v-for="data in selectData" :key="data.name" :value="data.id" :label="data.name"></el-option>
+											
+										</el-select>
 									</el-form-item>
 								</el-col>
+								
 							</el-row>
 
 							<el-row :gutter="70">
@@ -196,12 +198,37 @@
 	export default {
 		name: 'masks',
 		props: {
-			page: {
+			user: {
 				type: Object,
-			}
+				default: function(){
+					return {
+						companyId: '',
+						deptId: '',
+						password: '',
+						sex: '',
+						email: '',
+						phone: '',
+						enabled: 1,
+						birthday: '',
+						worknumber: '',
+						nickname: '',
+						idnumber: '',
+						entrytime: '',
+						address: '',
+						tips: '',
+						username: '',
+						companyName:'',
+						roleId: '',//角色
+//						roles: [],//角色
+						id: '',
+					}
+				}
+			},
+			page: Object ,
 		},
+//		props: ['user','page'],
+		
 		data() {
-			console.log(this.page);
 			var validatePass1 = (rule, value, callback) => {
 				if(value === '') {
 					callback(new Error('必填'));
@@ -217,6 +244,7 @@
 				}
 			};
 			var validatePass3 = (rule, value, callback) => {
+				console.log(value)
 				if(value === '') {
 					callback(new Error('必填'));
 				} else {
@@ -237,6 +265,30 @@
 					callback();
 				}
 			};
+			var validatePass6 = (rule, value, callback) => {
+                var regidnumber = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/; 
+                if (!regidnumber.test(this.user.idnumber)) {
+                   callback(new Error('身份证号填写有误'));
+                } else {
+                    callback();
+                }
+            };
+            var validatePass7 = (rule, value, callback) => {
+                var regphone = 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/; 
+                 if(!regphone.test(this.user.phone)){
+                   callback(new Error('手机格式不正确'));
+                }else{
+                    callback();
+                }
+            };
+            var validatePass8 = (rule, value, callback) => {
+                  var regEmail= /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+                 if(!regEmail.test(this.user.email)){
+                   callback(new Error('邮箱格式不正确'));
+                }else{
+                    callback();
+                }
+            };
 			return {
 				editSearch: '',
 				edit: true, //禁填
@@ -252,25 +304,27 @@
 				useritem: [],
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
-				user: {
-					companyId: '',
-					deptId: '',
-					password: '',
-					sex: '',
-					email: '',
-					phone: '',
-					enabled: 1,
-					birthday: '',
-					worknumber: '',
-					nickname: '',
-					idnumber: '',
-					entrytime: '',
-					address: '',
-					tips: '',
-					username: '',
-					roleId: '',
-					id: ''
-				},
+//				user:{
+//					companyId: '',
+//					deptId: '',
+//					password: '',
+//					sex: '',
+//					email: '',
+//					phone: '',
+//					enabled: 1,
+//					birthday: '',
+//					worknumber: '',
+//					nickname: '',
+//					idnumber: '',
+//					entrytime: '',
+//					address: '',
+//					tips: '',
+//					username: '',
+//					companyName:'',
+//					roleId: '',//角色
+//					roles: [],//角色
+//					id: '',
+//				},
 				rules: {
 					companyName: [{
 						required: true,
@@ -283,6 +337,7 @@
 						validator: validatePass2,
 					}],
 					roleId: [{
+						
 						required: true,
 						trigger: 'blur',
 						validator: validatePass3,
@@ -296,6 +351,21 @@
 						required: true,
 						trigger: 'blur',
 						validator: validatePass5,
+					}],
+					idnumber: [{
+//						required: true,
+						trigger: 'blur',
+						validator: validatePass6,
+					}],
+					phone: [{
+//						required: true,
+						trigger: 'blur',
+						validator: validatePass7,
+					}],
+					email: [{
+//						required: true,
+						trigger: 'blur',
+						validator: validatePass8,
 					}]
 				},
 				//tree
@@ -306,6 +376,8 @@
 					children: "subDepts",
 					label: "simplename"
 				},
+				selectData: [],//
+//				aaaData:[]
 			};
 		},
 		methods: {
@@ -327,11 +399,15 @@
 				this.show = true;
 			},
 			// 这里是修改
-			detail(userid) {
+			detail() {
+				this.show = true;
+				console.log(this.user);
 				var url = '/api/api-user/users/' + userid;
 				this.$axios.get(url, {}).then((res) => {
 					this.user = res.data;
 					this.show = true;
+					console.log(this.user);
+					console.log(this.user.roles);
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -375,14 +451,14 @@
 			submitForm() {
 				this.$refs.user.validate((valid) => {
 					if(valid) {
-						if(this.user.sexName == "男") {
-							this.user.sex = flase;
-						} else {
-							this.user.sex = true;
-						}
+						var user = this.user;
+						user.sex = user.sexName == '男' ? 1 : 0;
+						user.roleId = user.roleId.join(',');
+// 						user.roleId = JSON.stringify(user.roleId);	
 						var url = '/api/api-user/users/saveOrUpdate';
-                              console.log(this.user);
+								 console.log(this.user);
 						this.$axios.post(url, this.user).then((res) => {
+
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',
@@ -409,8 +485,6 @@
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
 				var type = 1;
-				console.log(this.page.currentPage);
-				console.log(this.page.pageSize);
 				var url = '/api/api-user/depts/type';
 				this.$axios.get(url, {
 					params: {
@@ -447,25 +521,51 @@
 			//角色
 			getRole() {
 				this.editSearch = 'role';
-				var data = {
-					params: {
-						page: 1,
-						limit: 10,
-					}
-				}
-				let that = this;
+				var page = this.page.currentPage;
+				var limit = this.page.pageSize;
 				var url = '/api/api-user/roles';
-
 				this.$axios.get(url, {
-					
+					params: {
+						page: page,
+						limit: limit,
+					},
 				}).then((res) => {
-					console.log(res);
-					this.resourceData = res.data.data;
-					this.dialogVisible = true;
-				});
-
+					this.selectData = res.data.data;
+					console.log(res.data.data);
+					console.log(this.selectData);
+//					for(var item in this.selectData){
+//						//建立空的对象，建立自定义的属性，将其push在options中
+//						var select = {};
+//						select.value = this.selectData[item].name;
+//						this.options.push(select);
+//						console.log(select);
+//					}
+					}).catch(error =>{
+				    console.log('请求失败');
+				})
 			},
+		  	changeRole(event){
+		  		console.log(event);
+		  		console.log(111);
+		  	 	this.user.roleId=[]
+		  	 	for (var i=0;i<event.length;i++){	
+		  	 		this.user.roleId.push(event[i])
+		  	 	}
+		  	 	
+		  	 	console.log(this.user.roleId);
+//			  	for (var i=0;i<this.selectData.length;i++){	
+//			  		
+//						console.log(this.selectData[i].name);
+//					if(this.selectData[i].name==parseInt(val)){
+//						console.log(222);
+//						console.log(this.selectData[i].id);
+//	                	this.user.roleId.push(this.selectData[i].id);
+//	                	console.log(this.user.roleId);
+//	              	}							
+//				}
 
+
+          	},
 			queding() {
 				this.getCheckedNodes();
 				this.placetext = false;
@@ -488,7 +588,10 @@
 					.catch(_ => {});
 			}
 
-		}
+		},
+		mounted() {
+			this.getRole();
+		},
 
 	}
 </script>

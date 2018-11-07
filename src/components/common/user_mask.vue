@@ -394,6 +394,27 @@
 						this.up = !this.up
 				}
 			},
+			//form表单内容清空
+			resetNew(){
+                this.user = {
+					companyName:'',
+					deptName:'',
+					username:'',
+					password:'',
+					nickname:'',
+					birthday:'',
+					sexName:'',
+					idnumber:'',
+					entrytime:'',
+					roleId:'',
+					worknumber:'',
+					phone:'',
+					email:'',
+					address:'',
+					tips:''
+				}
+                this.$refs["user"].resetFields();
+            },
 			//点击按钮显示弹窗
 			visible() {
 				this.show = true;

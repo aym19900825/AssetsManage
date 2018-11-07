@@ -19,7 +19,7 @@
 				<div class="accordion" id="information">
 					<!-- <div class="mask_tab-block"> -->
 						<el-collapse v-model="activeNames" @change="handleChange">
-							<el-collapse-item title="基本信息" name="1">
+							<!-- <el-collapse-item title="基本信息" name="1">
 								<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
 									<el-row :gutter="70">
 										<el-col :span="8">
@@ -34,14 +34,14 @@
 										</el-col>
 									</el-row>
 								</div>
-							</el-collapse-item>
-							<el-collapse-item title="字段列表" name="2">
+							</el-collapse-item> -->
+							<el-collapse-item title="配置关系" name="2">
 								<!-- 字段列表 Begin-->
 								<div class="table-func">
-									<el-button type="primary" size="mini" round  @click="importdia">
+									<!-- <el-button type="primary" size="mini" round  @click="importdia">
 										<i class="icon-upload-cloud"></i>
 										<font>导入</font>
-									</el-button>
+									</el-button> -->
 									<el-button type="success" size="mini" round @click="addfield">
 										<i class="icon-add"></i>
 										<font>新建</font>
@@ -51,12 +51,12 @@
 				                <el-form-item>
 				                	<el-row :gutter="20">
 				                		<el-col :span="4">
-				                            <el-form-item label="字段名"></el-form-item>
+				                            <el-form-item label="关系名称"></el-form-item>
 				                        </el-col>
-				                        <el-col :span="4">
+				                        <el-col :span="5">
 				                            <el-form-item label="字段描述"></el-form-item>
 				                        </el-col>
-				                        <el-col :span="4">
+				                        <el-col :span="5">
 				                            <el-form-item label="字段类型"></el-form-item>
 				                        </el-col>
 				                        <el-col :span="4">
@@ -65,7 +65,7 @@
 				                        <el-col :span="4">
 				                            <el-form-item label="长度"></el-form-item>
 				                        </el-col>
-				                        <el-col :span="4">
+				                        <el-col :span="2">
 				                            <el-form-item label="操作"></el-form-item>
 				                        </el-col>
 				                	</el-row>
@@ -73,10 +73,13 @@
 				                        <el-col :span="4">
 				                            <el-input type="text"  placeholder="请输入人物" v-model="item.leadname"></el-input>
 				                        </el-col>
-				                        <el-col :span="4">
+				                        <el-col :span="5">
 				                            <el-input type="text"  placeholder="请输入关系" v-model="item.leaddecri"></el-input>
+				                            <!-- <el-input v-model="item.leaddecri" :disabled="true">
+											<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button> -->
+										</el-input>
 				                        </el-col>
-				                        <el-col :span="4">
+				                        <el-col :span="5">
 				                            <!-- <el-input type="text"  placeholder="请输入关系" v-model="item.leadtype"></el-input> -->
 				                            <el-select v-model="item.leadtype" placeholder="选择字段类型">
 										      <el-option label="字符串(string)" value="string"></el-option>
@@ -94,7 +97,7 @@
 				                        <el-col :span="4">
 				                            <el-input type="text"  placeholder="请输入关系" v-model="item.leadlength"></el-input>
 				                        </el-col>
-				                        <el-col :span="4">
+				                        <el-col :span="2">
 				                            <i class="el-icon-delete" @click="delfield(item)" style="color: red"></i>
 				                        </el-col>
 				                    </el-row>
@@ -238,21 +241,6 @@
 			};
 		},
 		methods: {
-			resetNew(){
-                this.dataInfo = {//添加数据库列表信息
-					objectName:'',
-					description:'',
-					fieldList:[]
-				},
-                this.fieldList = [{//字段列表
-					leadname: '',
-					leaddecri: '',
-					leadtype:'',
-					leadprecision: '',
-					leadlength: ''
-				}],
-                this.$refs["dataInfo"].resetFields();
-            },
 			handleChange(val) {//手风琴开关效果调用
 				console.log(val);
 			},

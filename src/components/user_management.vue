@@ -224,6 +224,7 @@
 			},
 			//添加用戶
 			openAddMgr() {
+				this.$refs.child.resetNew();
 				this.$refs.child.visible();
 			},
 			//修改用戶

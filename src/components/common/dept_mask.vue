@@ -188,6 +188,19 @@
 			};
 		},
 		methods: {
+			//form表单内容清空
+			resetNew(){
+                this.adddeptForm = {
+					pName:'',
+					fullname:'',
+					simplename:'',
+					type:'',
+					code:'',
+					teltphone:'',
+					tips:''
+				}
+                // this.$refs["adddeptForm"].resetFields();
+            },
 			//所属上级
 			getDept() {
 				var page = this.page.currentPage;

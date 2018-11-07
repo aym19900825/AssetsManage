@@ -21,7 +21,7 @@
 								<button type="button" class="btn btn-red button-margin" @click="deldata">
 								    <i class="icon-trash"></i>删除
 								</button>
-								<button type="button" class="btn btn-primarys button-margin">
+								<button type="button" class="btn btn-primarys button-margin" @click="setrelation">
 								    <i class="icon-cpu"></i>配置关系
 								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
@@ -108,7 +108,7 @@
 					<div class="row">
 						<div class="col-sm-12">
 							<!-- 表格 -->
-							<el-table :data="dataList" style="width: 96%;margin: 0 auto;" :default-sort="{prop:'dataList', order: 'descending'}" @selection-change="SelChange">
+							<el-table :data="dataList" style="width: 100%;margin: 0 auto;" :default-sort="{prop:'dataList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55">
 								</el-table-column>
 								<el-table-column label="表名" sortable width="320" prop="objectName">
@@ -133,6 +133,7 @@
 				</div>
 			</div>
 			<datamask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></datamask>
+			<relamask ref="rela" @request="requestData" v-bind:page=page></relamask>
 		</div>
 	</div>
 </template>
@@ -142,6 +143,7 @@
 	import navs_header from './common/nav_tabs.vue'
 	import assetsTree from './plugin/vue-tree/tree.vue'
 	import datamask from './common/data_mask.vue'
+	import relamask from './common/rela_mask.vue'
 	export default {
 		name: 'data_management',
 		components: {
@@ -149,6 +151,7 @@
 			'navs_header': navs_header,
 			'navs': navs,
 			'datamask': datamask,
+			'relamask': relamask,
 			'v-assetsTree': assetsTree
 		},
 		data() {
@@ -184,6 +187,10 @@
 			}
 		},
 		methods: {
+			//配置关系
+			setrelation(){
+				this.$refs.rela.visible();
+			},
 			sizeChange(val) {
 		      this.page.pageSize = val;
 		      this.requestData();
@@ -199,6 +206,7 @@
 			},
 			//添加用戶
 			openAddMgr() {
+				this.$refs.child.resetNew();
 				this.$refs.child.visible();
 			},
 			//修改用戶

@@ -206,6 +206,7 @@
 			},
 			//添加
 			openAddMgr() {
+				this.$refs.child.resetNew();
 				this.$refs.child.childMethods(); 
 			},
 			//修改

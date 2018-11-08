@@ -5,14 +5,14 @@ import user_management from '@/components/user_management'
 import dept_management from '@/components/dept_management'
 import menu_management from '@/components/menu_management'
 import data_management from '@/components/data_management'
+import role_management from '@/components/role_management'
 import safe_management from '@/components/safe_management'
 import dictionaries_management from '@/components/dictionaries_management'
-
+// import test from '@/components/test'
 import personinfo from '@/components/personinfo'
 import passwordedit from '@/components/passwordedit'
 import ztree from '@/components/common/ztree' 
 Vue.use(Router)
-
 
   const routes = [
     {
@@ -65,6 +65,16 @@ Vue.use(Router)
       name: 'menu_management',
       component: menu_management
     },
+    {
+      path: '/role_management',
+      name: 'role_management',
+      component: role_management
+    },
+    // {
+    //   path: '/test',
+    //   name: 'test',
+    //   component: test
+    // },
 
   ];
 

@@ -21,17 +21,14 @@
 								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
 								    <i class="icon-trash"></i>删除
 								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="resetPwd">
-								    <i class="icon-refresh"></i>重置密码
-								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="unfreeze">
-								    <i class="icon-start"></i>启用
+								    <i class="icon-key"></i>权限配置
 								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="freezeAccount">
-								    <i class="icon-stop"></i>冻结
+								    <i class="icon-data"></i>数据范围
 								</button>
 								<button type="button" class="btn btn-primarys button-margin">
-								    <i class="icon-role-site"></i>角色分配
+								    <i class="icon-date-limit1"></i>数据限制
 								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 						    		<i class="icon-search"></i>高级查询

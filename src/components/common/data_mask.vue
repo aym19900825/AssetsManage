@@ -20,12 +20,12 @@
 								<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
 									<el-row :gutter="70">
 										<el-col :span="8">
-											<el-form-item label="表名">
+											<el-form-item label="表名" prop="objectName">
 												<el-input v-model="dataInfo.objectName"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="描述">
+											<el-form-item label="描述" prop="description">
 												<el-input v-model="dataInfo.description"></el-input>
 											</el-form-item>
 										</el-col>
@@ -44,23 +44,23 @@
 										<font>新建</font>
 									</el-button>
 								</div>
-								<el-form :data="fieldList">
+								<el-form :model="fieldList" :rules="rules" ref="fieldList">
 				                <el-form-item>
 				                	<el-row :gutter="20">
 				                		<el-col :span="4">
-				                            <el-form-item label="字段名"></el-form-item>
+				                            <el-form-item label="字段名" prop="leadname"></el-form-item>
 				                        </el-col>
 				                        <el-col :span="4">
-				                            <el-form-item label="字段描述"></el-form-item>
+				                            <el-form-item label="字段描述" prop="leaddecri"></el-form-item>
 				                        </el-col>
 				                        <el-col :span="4">
-				                            <el-form-item label="字段类型"></el-form-item>
+				                            <el-form-item label="字段类型" prop="leadtype"></el-form-item>
 				                        </el-col>
 				                        <el-col :span="4">
 				                            <el-form-item label="小数点位数"></el-form-item>
 				                        </el-col>
 				                        <el-col :span="4">
-				                            <el-form-item label="长度"></el-form-item>
+				                            <el-form-item label="长度" prop="leadlength"></el-form-item>
 				                        </el-col>
 				                        <el-col :span="4">
 				                            <el-form-item label="操作"></el-form-item>
@@ -74,7 +74,6 @@
 				                            <el-input type="text"  placeholder="请输入关系" v-model="item.leaddecri"></el-input>
 				                        </el-col>
 				                        <el-col :span="4">
-				                            <!-- <el-input type="text"  placeholder="请输入关系" v-model="item.leadtype"></el-input> -->
 				                            <el-select v-model="item.leadtype" placeholder="选择字段类型">
 										      <el-option label="字符串(string)" value="string"></el-option>
 										      <el-option label="浮点类型(float)" value="float"></el-option>
@@ -103,7 +102,7 @@
 				</div>			
 				<div class="el-dialog__footer">
 					<el-button @click='close'>取消</el-button>
-					<el-button type="primary" @click='submitForm()'>提交</el-button>
+					<el-button type="primary" @click="submitForm('dataInfo')">提交</el-button>
 				</div>
 			</el-form>
 		</div>
@@ -151,6 +150,20 @@
 	export default {
 		name: 'masks',
 		data() {
+			var validateName = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请填写表名'));
+                }else {
+                    callback();
+                }
+            };
+            var validateDecri = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请填写描述'));
+                }else {
+                    callback();
+                }
+            };
 			return {
 				selUser:[],
 				edit: true, //禁填
@@ -213,10 +226,20 @@
 					leadlength: ''
 				}],
 				rules: {
-					companyName: [{
+					objectName: [{
 						required: true,
-						//trigger: 'change',
-						// validator: validatePass1,
+						trigger: 'blur',
+						validator: validateName,
+					}],
+					description: [{
+						required: true,
+						trigger: 'blur',
+						validator: validateDecri,
+					}],
+					leadname: [{
+						required: true,
+						trigger: 'blur',
+						validator: validateDecri,
 					}],
 				},
 				//tree
@@ -231,7 +254,7 @@
 		},
 		methods: {
 			resetNew(){
-                this.dataInfo = {//添加数据库列表信息
+                this.dataInfo = {//数据库列表
 					objectName:'',
 					description:'',
 					fieldList:[]
@@ -351,10 +374,16 @@
 				$(".mask_div").css("top", "0");
 			},
 			// 保存users/saveOrUpdate
-			submitForm() {
-				this.dataInfo.fieldList.push(this.fieldList);
-				console.log(this.dataInfo);
-				this.show = false;
+			submitForm(dataInfo) {
+				this.$refs[dataInfo].validate((valid) => {
+		          if (valid) {
+					this.dataInfo.fieldList.push(this.fieldList);
+					console.log(this.dataInfo);
+					this.show = false;
+		          }else {
+		            return false;
+		          }
+		        });
 			},
 			// 所属组织
 			getCompany() {

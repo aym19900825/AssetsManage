@@ -44,30 +44,7 @@
 							<button class="btn btn-default btn-outline" type="button" name="refresh" aria-label="refresh" title="刷新">
 								<i class="icon-refresh"></i>
 							</button>
-							<div class="keep-open btn-group" title="列">
-								<el-dropdown :hide-on-click="false" class="pl10 btn btn-default btn-outline">
-									<span class="el-dropdown-link">
-										<font class="J_tabClose"><i class="icon-menu3"></i></font>
-										<i class="el-icon-arrow-down icon-arrow2-down"></i>
-									</span>
-									<el-dropdown-menu slot="dropdown">
-										<el-checkbox-group v-model="checkedName" @change="test">
-											<el-dropdown-item  v-for="item in tableHeader">
-												<el-checkbox :label="item.label" name="type"></el-checkbox>
-											</el-dropdown-item>
-										</el-checkbox-group>
-										<!-- <el-dropdown-item>
-											<el-checkbox label="所在部门" name="type"></el-checkbox>
-										</el-dropdown-item>
-										<el-dropdown-item>
-											<el-checkbox label="所在公司" name="type"></el-checkbox>
-										</el-dropdown-item>
-										<el-dropdown-item>
-											<el-checkbox label="所在部门" name="type"></el-checkbox>
-										</el-dropdown-item> -->
-									</el-dropdown-menu>
-								</el-dropdown>
-							</div>
+							<v-table-controle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></v-table-controle>
 						</div>
 					</div>
 					<!-- 高级查询划出 -->
@@ -148,9 +125,7 @@
 	import navs from './common/left_navs/nav_left.vue'
 	import navs_header from './common/nav_tabs.vue'
 	import assetsTree from './plugin/vue-tree/tree.vue'
-	//import navs_button from './common/func_btn.vue'
-	//	import ztree from './common/ztree.vue'
-	// import tablediv from './common/tablelist.vue'
+	import tableControle from './plugin/table-controle/controle.vue'
 	import usermask from './common/user_mask.vue'
 	export default {
 		name: 'user_management',
@@ -159,7 +134,8 @@
 			'navs_header': navs_header,
 			'navs': navs,
 			'usermask': usermask,
-			'v-assetsTree': assetsTree
+			'v-assetsTree': assetsTree,
+			'v-table-controle':tableControle
 		},
 		data() {
 			return {
@@ -234,8 +210,8 @@
 			}
 		},
 		methods: {
-			test(){
-				console.log(this.checkedName.indexOf('账号')!=-1);
+			tableControle(data){
+				this.checkedName = data;
 			},
 			sizeChange(val) {
 		      this.page.pageSize = val;

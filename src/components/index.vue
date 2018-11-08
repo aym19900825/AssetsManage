@@ -1,8 +1,7 @@
 <template>
-<div>
+<div style="height: 100%">
 	<div class="headerbg">
-			<vheader></vheader>
-		<navs_header></navs_header>
+		<vheader></vheader>
 	</div>
 
     <div class="contentbg">
@@ -10,10 +9,12 @@
 		<div class="wrapper-content">
 			<EasyScrollbar>
 				<div id="wrapper" ref="homePagess" style="height: 600px;">
-					<div id="information" style="height: inherit;">
-						<div class="ibox-content">
+					<div id="information" style="height: auto;">
+						<div class="ibox-content pl20 pr20">
+							<!--我的应用 Begin-->
+							<h3>我的应用</h3>
 							<el-row :gutter="20" class="applist">
-								<!--APP应用列表 Begin-->
+								<!--APPList Begin-->
 								<el-col :span="4" v-for="item in applistdata">
 									<div class="applistbg">
 										<router-link :to="item.navherf">
@@ -22,8 +23,37 @@
 										</router-link>
 									</div>
 								</el-col>
-								<!--APP应用列表 End-->
+								<!--APPList End-->
 							</el-row>
+							<!--我的应用 End-->
+
+							<!--工作统计 Begin-->
+							<h3 class="pt30">工作统计</h3>
+							<el-row :gutter="20" class="applist">
+								<!--APPList Begin-->
+								<el-col :span="6">
+									<div class="statisticsbg">
+										
+									</div>
+								</el-col>
+								<el-col :span="6">
+									<div class="statisticsbg">
+										
+									</div>
+								</el-col>
+								<el-col :span="6">
+									<div class="statisticsbg">
+										
+									</div>
+								</el-col>
+								<el-col :span="6">
+									<div class="statisticsbg">
+										
+									</div>
+								</el-col>
+								<!--APPList End-->
+							</el-row>
+							<!--工作统计 End-->
 						</div>
 					</div>
 				</div>
@@ -52,6 +82,10 @@ export default {
 		clientHeight:'',//获取浏览器高度
 		applistdata: [//APP应用数据
 			{
+				navicon: 'icon-data',
+				navtitle: '主数据',
+				navherf: '/maindata'
+			}, {
 				navicon: 'icon-device',
 				navtitle: '设备管理',
 				navherf: '/personinfo'
@@ -114,10 +148,10 @@ export default {
     mounted(){
 		// 获取浏览器可视区域高度
 		var _this = this;
-		var clientHeight = $(window).height() - 100;    //document.body.clientWidth;
+		var clientHeight = $(window).height() - 60;    //document.body.clientWidth;
 		_this.$refs.homePagess.style.height = clientHeight + 'px';
 		window.onresize = function() {
-			var clientHeight = $(window).height() - 100;
+			var clientHeight = $(window).height() - 60;
 			_this.$refs.homePagess.style.height = clientHeight + 'px';
 		};
 		this.getData();
@@ -133,7 +167,8 @@ export default {
 
 <style scoped>
 @import '../assets/css/mask-modules.css';
-
+.headerbg {height: 60px}
+.contentbg {padding-top:60px;}
 
 </style>
 

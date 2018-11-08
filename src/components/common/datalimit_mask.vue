@@ -1,7 +1,8 @@
 <template>
 	<div>
-		<div class="mask" v-show="show"></div>
-		<div class="mask_div"  v-show="show">
+		<div class="mask" v-show="show1"></div>
+		<div class="mask_div"  v-show="show1">
+			<!---->
 			<div class="mask_title_div clearfix">
 				<div class="mask_title">添加角色</div>
 				<div class="mask_anniu">
@@ -20,29 +21,39 @@
 						<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
 							<el-row :gutter="70">
 								<el-col :span="12">
-									<el-form-item label="角色名称" prop="password">
-										<el-input type="password" v-model="user.password"></el-input>
+									<el-form-item label="应用名称" prop="companyName">
+										<el-input v-model="user.companyName" :disabled="edit">
+											<el-button slot="append" icon="el-icon-search" @click="getCompany"></el-button>
+										</el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="12">
-									<el-form-item label="别名" prop="password">
-										<el-input type="password" v-model="user.password" placeholder="请填写"></el-input>
+									<el-form-item label="表名称" prop="companyName">
+										<el-input v-model="user.companyName" :disabled="edit">
+											<el-button slot="append" icon="el-icon-search" @click="getCompany"></el-button>
+										</el-input>
 									</el-form-item>
 								</el-col>
 							</el-row>
 							<el-row :gutter="70">
-								<el-col :span="24">
-									<el-form-item label="所在部门" prop="deptName">
+								<el-col :span="12">
+									<el-form-item label="限制方式" prop="deptName">
 										<el-input v-model="user.deptName" :disabled="edit">
 											<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
 										</el-input>
 									</el-form-item>
 								</el-col>
-								
+								<el-col :span="12">
+									<el-form-item label="字段名" prop="deptName">
+										<el-input v-model="user.deptName" :disabled="edit">
+											<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
+										</el-input>
+									</el-form-item>
+								</el-col>
 							</el-row>
 							<el-row :gutter="70">
 								<el-col :span="24">
-									<el-form-item label="备注" prop="password">
+									<el-form-item label="限制范围" prop="password">
 										<el-input type="textarea" v-model="user.password" placeholder="请填写"></el-input>
 									</el-form-item>
 								</el-col>
@@ -160,7 +171,6 @@
 				'女': false,
 				col_but1: true,
 				col_but2: true,
-				show: false,
 				show1:false,
 				isok1: true,
 				isok2: false,
@@ -224,12 +234,12 @@
 				if(col_but == 'col_but1') {
 					this.col_but1 = !this.col_but1;
 					this.down = !this.down,
-						this.up = !this.up
+					this.up = !this.up
 				}
 				if(col_but == 'col_but2') {
 					this.col_but2 = !this.col_but2;
 					this.down = !this.down,
-						this.up = !this.up
+					this.up = !this.up
 				}
 			},
 			//form表单内容清空
@@ -253,9 +263,9 @@
 				}
                 this.$refs["user"].resetFields();
             },
-			//点击按钮显示弹窗
-			visible() {
-				this.show = true;
+			//数据限制
+			showdatalimit(){
+				this.show1 = true;
 			},
 			// 这里是修改
 			detail() {
@@ -276,7 +286,7 @@
 			},
 			//点击关闭按钮
 			close() {
-				this.show = false;
+				this.show1 = false;
 			},
 			toggle(e) {
 				if(this.isok1 == true) {

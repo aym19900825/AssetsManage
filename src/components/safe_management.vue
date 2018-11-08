@@ -39,11 +39,12 @@
 
 									<div class="columns columns-right btn-group pull-right">
 										<button class="btn btn-default btn-outline btn-refresh" type="button" name="refresh" title="刷新"><i class="icon-refresh"></i></button>
+										
 										<div class="keep-open btn-group" title="列">
 											<el-dropdown :hide-on-click="false" class="pl10 btn btn-default btn-outline">
 												<span class="el-dropdown-link">
 													<font class="J_tabClose"><i class="icon-menu3"></i></font>
-													<i class="el-icon-arrow-down icon-arrow2-down"></i>
+													<i class="icon-arrow2-down"></i>
 												</span>
 												<el-dropdown-menu slot="dropdown">
 													<el-dropdown-item>

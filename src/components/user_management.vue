@@ -41,9 +41,7 @@
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
-							<button class="btn btn-default btn-outline" type="button" name="refresh" aria-label="refresh" title="刷新">
-								<i class="icon-refresh"></i>
-							</button>
+							<button class="btn btn-default btn-outline btn-refresh" type="button" name="refresh" title="刷新"><i class="icon-refresh"></i></button>
 							<v-table-controle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></v-table-controle>
 						</div>
 					</div>

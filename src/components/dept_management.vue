@@ -142,12 +142,17 @@
 		},
 		data() {
 			return {
+				companyId: '',
+				deptId: '',
+
 				selDept: [],
+
 				page: {
 					currentPage: 1,
 					pageSize: 10,
 					totalCount: 0
 				},
+	
 				total:0,
 				'启用': true,
 				'冻结': false,
@@ -297,6 +302,8 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 					simplename: this.searchDept.simplename,
+					companyId: this.companyId,
+					deptId: this.deptId
 				}
 				var url = '/api/api-user/depts';
 				this.$axios.get(url, {
@@ -332,7 +339,14 @@
 				return data;
 			},
 			getTreeId(data){
-				console.log("============="+data);
+				if(data.type == '1'){
+					this.companyId = data.id;
+					this.deptId = '';
+				}else{
+					this.deptId = data.id;
+					this.companyId = '';
+				}
+				this.requestData();
 			},
 			handleNodeClick(data) {
 				console.log(data);

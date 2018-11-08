@@ -48,9 +48,9 @@
 <script>
 export default {
 //  name: 'nav',
-      data(){
+    data(){
         return {
-         username: '',
+            username: '',
         }
     },
     methods: {

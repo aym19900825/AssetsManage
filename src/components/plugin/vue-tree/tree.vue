@@ -62,7 +62,6 @@ export default {
     methods:{
         // 点击节点
         nodeClick:function(m){
-            console.log(m.iconClass);
             if(m.iconClass!='icon-file-text'){
                 if( m.iconClass == 'icon-file-normal'){
                     m.iconClass = 'icon-file-open';
@@ -70,7 +69,7 @@ export default {
                     m.iconClass = 'icon-file-normal';
                 }
             }
-            this.$emit("getTreeId", m.id);
+            this.$emit("getTreeId", m);
         },
         expandClick:function(m){
             if(m.iconClass!='icon-file-text'){
@@ -86,9 +85,9 @@ export default {
     props: [
         'listData'
     ],
-    mounted(){
-        console.log(this.listData);
-    }
+    // mounted(){
+    //     console.log(this.listData);
+    // }
 }
 </script>
 

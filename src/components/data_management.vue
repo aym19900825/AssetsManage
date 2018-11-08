@@ -37,49 +37,7 @@
 							<button class="btn btn-default btn-outline" type="button" name="refresh" aria-label="refresh" title="刷新">
 								<i class="icon-refresh"></i>
 							</button>
-							<div class="keep-open btn-group" title="列">
-								<button type="button" aria-label="columns" class="btn btn-default btn-outline dropdown-toggle" data-toggle="dropdown">
-									<i class="icon-menu3"></i> 
-									<i class="icon-arrow2-down"></i>
-                				</button>
-								<ul class="dropdown-menu" role="menu">
-									<li role="menuitem">
-										<label>
-											<input type="checkbox" data-field="id" value="1"> id
-										</label>
-									</li>
-									<li role="menuitem" class="checkbox-group">
-										<span>
-											<input type="checkbox" data-field="name" value="2" checked="checked">
-											<label>名称</label>
-										</span>
-									</li>
-									<li role="menuitem" class="checkbox-group">
-										<span>
-                							<input type="checkbox" data-field="pName" value="3" checked="checked">
-                							<label>上级角色</label>
-                						</span>
-									</li>
-									<li role="menuitem" class="checkbox-group">
-										<span>
-                							<input type="checkbox" data-field="deptName" value="4" checked="checked">
-                							<label>所在部门</label>
-                						</span>
-									</li>
-									<li role="menuitem" class="checkbox-group">
-										<span>
-                							<input type="checkbox" data-field="companyName" value="5" checked="checked">
-                							<label>所在公司</label>
-                						</span>
-									</li>
-									<li role="menuitem" class="checkbox-group">
-										<span>
-                							<input type="checkbox" data-field="tips" value="6" checked="checked">
-                							<label>名</label>
-                						</span>
-									</li>
-								</ul>
-							</div>
+							<v-table-controle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></v-table-controle>
 						</div>
 					</div>
 					<!-- 高级查询划出begin -->
@@ -109,12 +67,12 @@
 							<el-table :data="dataList" style="width: 100%;margin: 0 auto;" :default-sort="{prop:'dataList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55">
 								</el-table-column>
-								<el-table-column label="表名" sortable width="320" prop="objectName">
+								<el-table-column label="表名" sortable width="320" prop="objectName"  v-if="this.checkedName.indexOf('表名')!=-1">
 								</el-table-column>
-								<el-table-column label="描述" sortable width="480" prop="description">
+								<el-table-column label="描述" sortable width="480" prop="description"  v-if="this.checkedName.indexOf('描述')!=-1">
 								</el-table-column>
 							</el-table>
-							<el-pagination class="pull-right"
+							<el-pagination v-if="this.checkedName.length>0" class="pull-right"
 					            @size-change="sizeChange"
 					            @current-change="currentChange"
 					            :current-page="page.currentPage"
@@ -140,6 +98,7 @@
 	import assetsTree from './plugin/vue-tree/tree.vue'
 	import datamask from './common/data_mask.vue'
 	import relamask from './common/rela_mask.vue'
+	import tableControle from './plugin/table-controle/controle.vue'
 	export default {
 		name: 'data_management',
 		components: {
@@ -148,7 +107,8 @@
 			'navs': navs,
 			'datamask': datamask,
 			'relamask': relamask,
-			'v-assetsTree': assetsTree
+			'v-assetsTree': assetsTree,
+			'v-table-controle':tableControle
 		},
 		data() {
 			return {
@@ -165,6 +125,20 @@
 					objectName:'',
 					description:''
 				},
+				checkedName: [
+					'表名',
+					'描述'
+				],
+				tableHeader: [
+					{
+						label: '表名',
+						prop: 'objectName'
+					},
+					{
+						label: '描述',
+						prop: 'description'
+					}
+				],
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
 				resourceDialogisShow: false,
@@ -183,6 +157,9 @@
 			}
 		},
 		methods: {
+			tableControle(data){
+				this.checkedName = data;
+			},
 			//配置关系
 			setrelation(){
 				this.$refs.rela.visible();

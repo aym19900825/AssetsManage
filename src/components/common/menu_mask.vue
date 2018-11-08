@@ -69,7 +69,7 @@
 								<el-col :span="8">
 									<el-form-item label="菜单图标" prop="css">
 										<el-input v-model="menu.css" :disabled="edit">
-											<el-button slot="append" icon="el-icon-search" @click="getParentId"></el-button>
+											<el-button slot="append" icon="el-icon-search" @click="getCss"></el-button>
 										</el-input>
 									</el-form-item>
 								</el-col>
@@ -97,13 +97,39 @@
 		       <el-button type="primary" @click="confirm();" >确 定</el-button>
 		    </span>
 		</el-dialog>
-
+		//圖標彈出
+        <div class="mask" v-show="show"></div>
+		<div class="mask_div" v-show="show">
+			<!---->
+			<div class="mask_title_div clearfix">
+				<div class="mask_anniu">
+					<span class="mask_span mask_max" @click='toggle'>
+						 
+						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
+					</span>
+					<span class="mask_span" @click='close'>
+						<i class="icon-close1"></i>
+					</span>
+				</div>
+			</div>
+           <all_icons></all_icons>
+                
+			<span slot="footer" class="dialog-footer">
+		       <el-button @click="dialogVisible = false">取 消</el-button>
+		       <el-button type="primary" @click="confirm();" >确 定</el-button>
+		    </span>
+	</div>	    
+		</el-dialog>
 	</div>
 </template>
 
 <script>
+	import all_icons from './all_icons.vue'//弹出框
 	export default {
 		name: 'masks',
+		components: {
+			'all_icons':all_icons,
+		},
 		props: {
 			menu: {
 				type: Object,
@@ -287,6 +313,10 @@
 					this.dialogVisible = true;
 				});
 
+			},
+			//图标
+			getCss(){
+				this.dialogVisible = true;
 			},
 
 			confirm() {

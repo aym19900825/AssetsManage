@@ -80,7 +80,7 @@
 						<div class="col-sm-9">
 							<!-- <tablediv ref="tableList"></tablediv> -->
 							<!-- 表格 -->
-							<el-table :data="userList" style="width: 96%;margin: 0 auto;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
+							<el-table :data="userList" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="账号" sortable prop="username" v-if="this.checkedName.indexOf('账号')!=-1">
@@ -228,7 +228,7 @@
 			},
 			//添加用戶
 			openAddMgr() {
-				this.$refs.child.resetNew();
+//				this.$refs.child.resetNew();
 				this.$refs.child.visible();
 			},
 			//修改用戶

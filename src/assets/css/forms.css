@@ -121,7 +121,12 @@ textarea:focus,button:focus,
     border: 1px solid #dfe5ea;
 }
 .btn-default:hover { color: #576FAE; }
-.btn-refresh {padding-top: 7px; padding-bottom: 6px;}
+.btn-refresh {
+    padding-top: 7px;
+    padding-bottom: 6px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
 
 /右侧对Table操作项按钮/
 

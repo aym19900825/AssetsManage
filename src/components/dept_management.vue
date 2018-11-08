@@ -27,7 +27,7 @@
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
-							<button class="btn btn-default btn-outline" type="button" name="refresh" aria-label="refresh" title="刷新"><i class="icon-refresh"></i></button>
+							<button class="btn btn-default btn-outline btn-refresh" type="button" name="refresh" aria-label="refresh" title="刷新"><i class="icon-refresh"></i></button>
 							<!-- <div class="keep-open btn-group" title="列">
 								<button type="button" aria-label="columns" class="btn btn-default btn-outline dropdown-toggle" data-toggle="dropdown">
 									<i class="icon-menu3"></i> 

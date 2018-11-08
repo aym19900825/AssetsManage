@@ -4,7 +4,8 @@
             <button class="roll-nav roll-left J_tabLeft"><i class="icon-previous"></i></button>
             <div class="page-tabs J_menuTabs">
                 <div class="page-tabs-content">
-                    <a href="javascript:;" class="active J_menuTab" data-id="/blackboard">首页</a>
+                    <a href="javascript:;" class="active J_menuTab" data-id="/blackboard">首页 <i class="icon-close2"></i></a>
+                    <a href="javascript:;" class="J_menuTab" data-id="/blackboard">用户管理 <i class="icon-close2"></i></a>
                 </div>
             </div>
             <button class="roll-nav roll-right J_tabRight"><i class="icon-next"></i></button>
@@ -106,17 +107,33 @@
     margin-top: 5px;
     margin-left: 10px;
     background:linear-gradient(360deg,rgba(234,239,243,1) 0%,rgba(255,255,255,1) 100%);
-    box-shadow:0px -2px 3px 0px rgba(176,192,237,0.2);
+    box-shadow:0px -2px 5px 0px rgba(176,192,237,0.5);
+
 }
 .page-tabs a {
     display: block;
     float: left;
-    background-color: #FFFFFF;
+    background-color: #eaedf1;
     border: solid 1px #d1d8de;
     padding: 0 15px;
     height: 35px;
+    margin-top: 8px;
+    margin-right: 5px;
     line-height: 35px;
+    position: relative;
 }
+.page-tabs a .icon-close2 {
+    color: #97A3B4;
+}
+.page-tabs a.active .icon-close2 {
+    color: #E97A9B;
+}
+.page-tabs a:hover .icon-close2,.page-tabs a:hover.active .icon-close2{
+    color: #9153f1;
+}
+
+
+
 .page-tabs .J_menuTab{
     border-radius: 4px 4px 0px 0px;
 }

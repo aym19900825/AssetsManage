@@ -20,11 +20,6 @@
 
 <script>
 export default {
-  data () {
-    return {
-      checkedName: []
-    }
-  },
   methods:{
     checkedChange(){
       this.$emit('tableControle',this.checkedName);

@@ -114,7 +114,7 @@
     float: left;
     background-color: #eaedf1;
     border: solid 1px #d1d8de;
-    padding: 0 15px;
+    padding: 0 12px;
     height: 35px;
     margin-top: 8px;
     margin-left: 5px;

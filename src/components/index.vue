@@ -2,6 +2,7 @@
 <div style="height: 100%">
 	<div class="headerbg">
 		<vheader></vheader>
+		<navs_header></navs_header>
 	</div>
 
     <div class="contentbg">
@@ -148,10 +149,10 @@ export default {
     mounted(){
 		// 获取浏览器可视区域高度
 		var _this = this;
-		var clientHeight = $(window).height() - 60;    //document.body.clientWidth;
+		var clientHeight = $(window).height() - 100;    //document.body.clientWidth;
 		_this.$refs.homePagess.style.height = clientHeight + 'px';
 		window.onresize = function() {
-			var clientHeight = $(window).height() - 60;
+			var clientHeight = $(window).height() - 100;
 			_this.$refs.homePagess.style.height = clientHeight + 'px';
 		};
 		this.getData();
@@ -167,8 +168,6 @@ export default {
 
 <style scoped>
 @import '../assets/css/mask-modules.css';
-.headerbg {height: 60px}
-.contentbg {padding-top:60px;}
 
 </style>
 

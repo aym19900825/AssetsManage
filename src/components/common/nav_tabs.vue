@@ -4,8 +4,8 @@
             <button class="roll-nav roll-left J_tabLeft"><i class="icon-previous"></i></button>
             <div class="page-tabs J_menuTabs">
                 <div class="page-tabs-content">
-                    <a href="javascript:;" class="active J_menuTab" data-id="/blackboard">首页 <i class="icon-close2"></i></a>
-                    <a href="javascript:;" class="J_menuTab" data-id="/blackboard">用户管理 <i class="icon-close2"></i></a>
+                    <router-link to="/index" class="J_menuTab">首页 <i class="icon-close2"></i></router-link>
+                    <router-link to="/user_management" class="J_menuTab active" >用户管理 <i class="icon-close2"></i></router-link>
                 </div>
             </div>
             <button class="roll-nav roll-right J_tabRight"><i class="icon-next"></i></button>
@@ -22,7 +22,7 @@
                   </el-dropdown-menu>
                 </el-dropdown>
             </button>
-            <a href="./login.html" class="roll-nav roll-right J_tabExit"><i class="icon-back"></i>返回</a>
+            <a href="/" class="roll-nav roll-right J_tabExit"><i class="icon-back"></i>返回</a>
         </div>
     </div>
 </template>
@@ -105,7 +105,6 @@
 .page-tabs a.active {
     color: #6585DF;
     margin-top: 5px;
-    margin-left: 10px;
     background:linear-gradient(360deg,rgba(234,239,243,1) 0%,rgba(255,255,255,1) 100%);
     box-shadow:0px -2px 5px 0px rgba(176,192,237,0.5);
 
@@ -118,7 +117,7 @@
     padding: 0 15px;
     height: 35px;
     margin-top: 8px;
-    margin-right: 5px;
+    margin-left: 5px;
     line-height: 35px;
     position: relative;
 }
@@ -128,6 +127,7 @@
 .page-tabs a.active .icon-close2 {
     color: #E97A9B;
 }
+.page-tabs a:hover {background-color: #F5F8FB;}
 .page-tabs a:hover .icon-close2,.page-tabs a:hover.active .icon-close2{
     color: #9153f1;
 }

@@ -25,26 +25,20 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="12">
-									<el-form-item label="上级角色" prop="companyName">
-										<el-input v-model="user.companyName" :disabled="edit">
-											<el-button slot="append" icon="el-icon-search" @click="getCompany"></el-button>
-										</el-input>
+									<el-form-item label="别名" prop="password">
+										<el-input type="password" v-model="user.password" placeholder="请填写"></el-input>
 									</el-form-item>
 								</el-col>
 							</el-row>
 							<el-row :gutter="70">
-								<el-col :span="12">
+								<el-col :span="24">
 									<el-form-item label="所在部门" prop="deptName">
 										<el-input v-model="user.deptName" :disabled="edit">
 											<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
 										</el-input>
 									</el-form-item>
 								</el-col>
-								<el-col :span="12">
-									<el-form-item label="别名" prop="password">
-										<el-input type="password" v-model="user.password" placeholder="请填写"></el-input>
-									</el-form-item>
-								</el-col>
+								
 							</el-row>
 							<el-row :gutter="70">
 								<el-col :span="24">

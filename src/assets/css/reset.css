@@ -221,8 +221,8 @@ i, cite, em, var, address, dfn {
 		padding: 10px 10px 20px 10px;
 	} */
 
-.el-collapse-item__header {border-bottom: none; font-size: 14px; font-weight: bold; color: rgba(59,66,78,1);}
-.el-collapse-item__header:before {
+.applistbglapse-item__header {border-bottom: none; font-size: 14px; font-weight: bold; color: rgba(59,66,78,1);}
+.applistbglapse-item__header:before {
     width: 20px;
     height: 3px;
     display: table;
@@ -230,7 +230,7 @@ i, cite, em, var, address, dfn {
     content: '';
     background-color: #6585DF;
 }
-.el-collapse-item {
+.applistbglapse-item {
 	padding-left: 25px;
     padding-right: 7px;
     background-color: #FFF;
@@ -238,7 +238,7 @@ i, cite, em, var, address, dfn {
 	border-radius:4px;
 	margin-bottom: 20px;
 }
-.el-collapse-item__arrow {font-weight: bold;}
+.applistbglapse-item__arrow {font-weight: bold;}
 
 .el-dropdown {cursor: pointer;}
 
@@ -255,6 +255,81 @@ i, cite, em, var, address, dfn {
     position: relative;
     height: 30px;
 }
+
+
+/*首页样式*/
+
+.el-col {margin-top: 5px; margin-bottom: 10px;}
+.applist .applistbg { 
+	text-align: center;
+	height:130px;
+	*height:110px;
+	padding-top:20px;
+	color: #6585DF;
+	position: relative;
+    z-index: 1;
+	background:rgba(255,255,255,1);
+	box-shadow:0px 1px 15px 1px rgba(176,192,237,0.42);
+	border-radius:6px;
+	-webkit-transition: -webkit-transform ease-out .1s,background .2s;
+	-moz-transition: -moz-transform ease-out .1s,background .2s;
+	transition: transform ease-out .1s,background .2s
+}
+.applist .applistbg a {color: #6585DF; display: block;}
+.applist .applistbg:after {
+	position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+    content: '';
+	top: 0;
+	left: 0;
+	padding: 0;
+	z-index: -1;
+	box-shadow: 0px 1px 15px 1px rgba(255,255,255,.1);
+	opacity: 0;
+	-webkit-transform: scale(.9);
+	-moz-transform: scale(.9);
+	-ms-transform: scale(.9);
+	transform: scale(.9)
+}
+
+.applist .applistbg:hover {
+	background:rgba(137,150,241,1);
+	box-shadow:0px 1px 15px 1px rgba(176,192,237,0.62);
+	color: #FFFFFF;
+	-webkit-transform: scale(.93);
+	-moz-transform: scale(.93);
+	-ms-transform: scale(.93);
+	transform: scale(.93);
+}
+.applist .applistbg:hover a {color: #FFFFFF;}
+.applist .applistbg span {
+	width:56px;
+	height:56px;
+	line-height:63px;
+	border-radius:100%;
+	background:rgba(255,255,255,1);
+	box-shadow:10px 10px 30px 0px rgba(222,229,246,1);
+	border:2px solid #6585DF;
+	display: block;
+	margin: 0px auto 15px auto;
+}
+.applist .applistbg:hover span {
+	color: #6585DF;
+	border-color:#FFFFFF;
+	box-shadow:10px 10px 30px 0px rgba(101,133,223,1);
+}
+
+.applist .applistbg i[class^="icon-"] { font-size: 26px; }
+.applist .applistbg font {
+	display: block;
+	font-size: 14px;
+}
+
+
+
+
 
 
 
@@ -314,6 +389,29 @@ i, cite, em, var, address, dfn {
     margin-bottom: 5px;
 }
 .el-textarea__inner {padding-left: 5px; padding-right: 5px;}
+
+
+/**/
+.searchlist{
+	background:rgba(255,255,255,1);
+	box-shadow:0px 5px 10px 0px rgba(243,244,250,1);
+	border-radius:3px;
+	border:1px solid #D8DEE6;
+}
+.searchlist .el-form-item__label {
+	background-color: #F3F6FA;
+	border-right: 1px solid #D8DEE6;
+	border-top-left-radius: 3px;
+	border-bottom-left-radius: 3px;
+}
+.searchlist input {border:none !important; border-radius:none !important;}
+.searchlist input:focus { color: #6585DF; }
+
+
+
+
+
+
 
 
 /*------------------------左侧菜单样式调整 By Heliping------------------------*/

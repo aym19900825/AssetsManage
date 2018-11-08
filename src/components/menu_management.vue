@@ -76,49 +76,27 @@
 					<div class="row">
 
 						<div class="col-sm-12">
-							<!-- <tablediv ref="tableList"></tablediv> -->
-							<!-- 表格 -->
-							<el-table :data="menuList" style="width: 96%;margin: 0 auto;" :default-sort="{prop:'menuList', order: 'descending'}" @selection-change="SelChange">
-
-								<el-table-column type="selection" width="55">
-								</el-table-column>
-								<!--<el-table-column label="ID" sortable width="80" prop="id">
-								</el-table-column>-->
-								<el-table-column label="菜单名称" sortable width="220" prop="name">
-								</el-table-column>
-								<el-table-column label="菜单url" sortable width="200" prop="url">
-								</el-table-column>
-								<!--<el-table-column label="菜单父编号" sortable width="140" prop="sex" :formatter="sexName">-->
-								</el-table-column>
-								</el-table-column>
-								<el-table-column label="样式" sortable width="200" prop="css">
-								</el-table-column>
-								<el-table-column label="排序" sortable width="200" prop="sort">
-								</el-table-column>
-								<el-table-column label="类型" sortable width="200" prop="isMenu" :formatter="judge">
-								</el-table-column>
-
-							</el-table>
+							 <tree_grid :columns="columns" :tree-structure="true" :data-source="menuList" v-on:childByValue="childByValue"></tree_grid>
+							 
+							
 							<el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
-							<!-- 表格 -->
+							
 						</div>
 					</div>
 				</div>
 			</div>
-			<menumask :user="aaaData[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></menumask>
+			<menumask :menu="selMenu[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></menumask>
 		</div>
 	</div>
 </template>
 <script>
+	import tree_grid from './common/TreeGrid.vue'//树表格
 	import vheader from './common/vheader.vue'
 	import navs from './common/left_navs/nav_left.vue'
 	import navs_header from './common/nav_tabs.vue'
 	import assetsTree from './plugin/vue-tree/tree.vue'
-	//import navs_button from './common/func_btn.vue'
-	//	import ztree from './common/ztree.vue'
-	// import tablediv from './common/tablelist.vue'
-	import menumask from './common/menu_mask.vue'
+	import menumask from './common/menu_mask.vue'//弹出框
 	export default {
 		name: 'user_management',
 		components: {
@@ -126,26 +104,43 @@
 			'navs_header': navs_header,
 			'navs': navs,
 			'menumask': menumask,
-			'v-assetsTree': assetsTree
+			'v-assetsTree': assetsTree,
+			'tree_grid':tree_grid,
 		},
 		data() {
 			return {
-				selUser: [],
+			columns: [{
+	            text: '菜单名称',
+	            dataIndex: 'name'
+	          },
+	          {
+	            text: '菜单url',
+	            dataIndex: 'url'
+	          },
+	          {
+	            text: '样式',
+	            dataIndex: 'css'
+	          },
+	          {
+	          	text: '排序',
+	          	dataIndex: 'sort'
+	          },
+	          {
+	            text: '类型',
+	            dataIndex: 'isMenu'
+	          },
+	        ],
+				selMenu: [],
 				'启用': true,
 				'冻结': false,
 				'男': true,
 				'女': false,
 				menuList: [],
-				//				deptTree: [], //树
+				//deptTree: [], //树
 				search: false,
 				show: false,
 				down: true,
 				up: false,
-				searchList: {
-					nickname: '',
-					enabled: '',
-					createTime: ''
-				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
 				resourceDialogisShow: false,
@@ -155,7 +150,6 @@
 					label: "simplename"
 				},
 				treeData: [],
-				userData: [],
 				page: {
 					currentPage: 1,
 					pageSize: 10,
@@ -165,6 +159,10 @@
 			}
 		},
 		methods: {
+			childByValue: function (childValue) {
+		        // childValue就是子组件传过来的
+		        this.selMenu = childValue
+		    },
 			sizeChange(val) {
 				this.page.pageSize = val;
 				this.requestData();
@@ -174,34 +172,33 @@
 				this.requestData();
 			},
 			
-			//添加用戶
+			//添加菜单
 			openAddMenu() {
 				this.$refs.child.visible();
 			},
-			//修改用戶
+			//修改
 			modify() {
-				this.aaaData = this.selUser;
-				if(this.aaaData.length == 0) {
+				var selData = this.selMenu;
+				if(selData.length == 0) {
 					this.$message({
 						message: '请您选择要修改的用户',
 						type: 'warning'
 					});
 					return;
-				} else if(this.aaaData.length > 1) {
+				} else if(selData.length > 1) {
 					this.$message({
 						message: '不可同时修改多个用户',
 						type: 'warning'
 					});
 					return;
 				} else {
-					console.log(this.aaaData[0]);
-					this.$refs.child.detail();
+					this.$refs.child.detail(selData[0].id);
 				}
 			},
 
 			// 删除
 			delmenu() {
-				var selData = this.selUser;
+				var selData = this.selMenu;
 				if(selData.length == 0) {
 					this.$message({
 						message: '请您选择要删除的菜单',
@@ -215,8 +212,14 @@
 					});
 					return;
 				} else {
-					var changeUser = selData[0];
-					var id = changeUser.id;
+					var changeMenu = selData[0];
+					if(changeMenu.children.length>0){
+						this.$message({
+							message: '先删除子菜单',
+							type: 'error'
+						});
+					}else{
+					var id = changeMenu.id;
 					var url = '/api/api-user/menus/' + id;
 					this.$axios.delete(url, {}).then((res) => { //.delete 传数据方法
 						//resp_code == 0是后台返回的请求成功的信息
@@ -234,126 +237,17 @@
 						});
 					});
 				}
+				}
 			},
 
-			// 启用
-			unfreeze() {
-				var selData = this.selUser;
-				if(selData.length == 0) {
-					this.$message({
-						message: '请您选择您要启动的用户',
-						type: 'warning'
-					});
-					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时启动多个用户',
-						type: 'warning'
-					});
-					return;
-				} else {
-					var changeUser = selData[0];
-					var url = '/api/api-user/users/updateEnabled?id=' + changeUser.id + '&enabled=true';
-					this.$axios.get(url, {}).then((res) => {
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '启动成功',
-								type: 'success'
-							});
-							this.requestData();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
-					});
-				}
-			},
-			// 冻结
-			freezeAccount() {
-				var selData = this.selUser;
-				if(selData.length == 0) {
-					this.$message({
-						message: '请您选择您要冻结的用户',
-						type: 'warning'
-					});
-					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时冻结多个用户',
-						type: 'warning'
-					});
-					return;
-				} else {
-					var changeUser = selData[0];
-					var url = '/api/api-user/users/updateEnabled?id=' + changeUser.id + '&enabled=false';
-					this.$axios.get(url, {}).then((res) => {
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '冻结成功',
-								type: 'success'
-							});
-							this.requestData();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
-					});
-				}
-			},
-			judge(data) {
-				console.log(data.parentId);
-				if(data.parentId == "-1" || data.parentId == "null") {
-					return data.isMenu = "目录"
-				} else {
-					return data.isMenu = "菜单"
-				}
-				//				return data.enabled ? '启用' : '冻结'
-			},
-
-			//时间格式化  
-			dateFormat(row, column) {
-				var date = row[column.property];
-				if(date == undefined) {
-					return "";
-				}
-				return this.$moment(date).format("YYYY-MM-DD");
-				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
-			},
-			insert() {
-				this.users.push(this.user)
-			},
-			remove(index) {
-				this.users.splice(index, 1)
-			},
-			SelChange(val) {
-				this.selUser = val;
-			},
-			requestData(index) {
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-				}
-				var url = '/api/api-user/menus/findAlls';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					console.log(res.data.data);
-					this.menuList = res.data.data;
-					this.page.totalCount = res.data.count;
-				}).catch((wrong) => {})
-				//				this.menuList.forEach((item, index) => {
-				//					var id = item.id;
-				//					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
-				//						this.menuList.role = res.data.roles[0].name;
-				//					}).catch((wrong) => {})
-				//				})
-			},
+//			显示目录
+//			judge(data) {
+//				if(data.parentId == "-1" || data.parentId == "null") {
+//					return data.isMenu = "目录"
+//				} else {
+//					return data.isMenu = "菜单"
+//				}
+//			},
 			//机构树
 			getKey() {
 				let that = this;
@@ -363,19 +257,27 @@
 					this.treeData = this.transformTree(this.resourceData);
 				});
 			},
-			transformTree(data) {
-				for(var i = 0; i < data.length; i++) {
-					data[i].name = data[i].fullname;
-					if(!data[i].pid || $.isArray(data[i].subDepts)) {
-						data[i].iconClass = 'icon-file-normal';
-					} else {
-						data[i].iconClass = 'icon-file-text';
-					}
-					if($.isArray(data[i].subDepts)) {
-						data[i].children = this.transformTree(data[i].subDepts);
-					}
+			SelChange(val) {
+				this.selMenu = val;
+			},
+			requestData(index) {
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
 				}
-				return data;
+				var url = '/api/api-user/menus/findTreeAlls';
+				this.$axios.get(url, {
+					params: data
+				}).then((res) => {
+					let result=res.data.data
+					for(let i=0;i<result.length;i++){
+						if(result[i].subMenus.length>0){
+							result[i].children=result[i].subMenus
+						}
+					}
+					this.menuList = result;
+					this.page.totalCount = res.data.count;
+				}).catch((wrong) => {})
 			},
 
 			handleNodeClick(data) {},

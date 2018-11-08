@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/page/login/login'
+import index from '@/components/index' 
 import user_management from '@/components/user_management' 
 import dept_management from '@/components/dept_management'
 import menu_management from '@/components/menu_management'
@@ -19,6 +20,11 @@ Vue.use(Router)
       path: '/',
       name: 'Login',
       component: Login
+    },
+    {
+      path: '/index',
+      name: 'index',
+      component: index
     },
     {
     	path: '/user_management',

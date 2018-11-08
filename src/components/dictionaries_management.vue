@@ -1,0 +1,177 @@
+<template>
+<div>
+	<div class="headerbg">
+			<vheader></vheader>
+		<navs_header></navs_header>
+	</div>
+
+    <div class="contentbg">
+		<!--左侧菜单调用 Begin-->
+		<navs></navs>
+		<!--左侧菜单调用 End-->
+
+		<!--右侧内容显示 Begin-->
+		<div class="wrapper wrapper-content">
+			<EasyScrollbar>
+				<div id="wrapper" ref="homePagess" style="height: 600px;">
+					<div id="information" style="height: inherit;">
+						<div class="ibox-content">
+							<el-form status-icon ref="dictionaries" :model="dictionaries" :rules="rules" label-width="80px" :label-position="labelPosition">
+								<el-collapse v-model="activeNames" @change="handleChange">
+									<el-collapse-item title="字典管理" name="1">
+										<el-row :gutter="70">
+									 		<el-col :span="12">
+												
+									 		</el-col>
+									 	
+									 		<el-col :span="12">
+									 			
+									 		</el-col>
+									 	</el-row>
+									 	
+										
+									 	
+									</el-collapse-item>
+								</el-collapse>
+							</el-form>
+							<div class="content-footer">
+								<button class="btn btn-default btn-large" @click="resetForm('dictionaries')">重置</button>
+								<button class="btn btn-primarys btn-large" @click="submitForm('dictionaries')">保存</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</EasyScrollbar>
+		</div>
+	</div>
+	<!--右侧内容显示 End-->
+  	
+</div>
+</template>
+
+<script>
+import vheader from './common/vheader.vue'
+import navs_header from './common/nav_tabs.vue'
+import navs from './common/left_navs/nav_left.vue'
+
+export default {
+	name: 'dictionaries',
+		components: {
+			vheader,
+			navs_header,
+			navs,
+		},
+
+    data() {
+      return {
+        activeNames: ['1'],//手风琴数量
+		clientHeight:'',//获取浏览器高度
+        labelPosition: 'top',//表单标题在上方显示
+		uppercase: [{//是滞包含大写字母
+			value: '1',
+			label: '是'
+		}, {
+			value: '0',
+			label: '否'
+		}],
+        lowercase: [{//是否包含小写字母
+			value: '1',
+			label: '是'
+		}, {
+			value: '0',
+			label: '否'
+		}],
+		character: [{//是否包含特殊字符
+			value: '1',
+			label: '是'
+		}, {
+			value: '0',
+			label: '否'
+		}],
+		lengths: [{//密码长度
+			value: '6',
+			label: '6位'
+		}, {
+			value: '8',
+			label: '8位'
+		}, {
+			value: '16',
+			label: '16位'
+		}, {
+			value: '22',
+			label: '22位'
+		}],
+        expired: [{//密码过期天数
+			value: '5',
+			label: '5天'
+		}, {
+			value: '10',
+			label: '10天'
+		}, {
+			value: '20',
+			label: '20天'
+		}, {
+			value: '30',
+			label: '30天'
+		}],
+		session: [{//Session过期时间
+			value: '3',
+			label: '3分钟'
+		}, {
+			value: '5',
+			label: '5分钟'
+		}, {
+			value: '10',
+			label: '10分钟'
+		}, {
+			value: '15',
+			label: '15分钟'
+		}, {
+			value: '25',
+			label: '25分钟'
+		}, {
+			value: '30',
+			label: '30分钟'
+		}],
+		errortimes: [{//密码输错次数
+			value: '3',
+			label: '3次'
+		}, {
+			value: '5',
+			label: '5次'
+		}, {
+			value: '8',
+			label: '8次'
+		}],
+		dictionaries:{
+			emptyuppercase: '0',//是滞包含大写字母
+			emptylowercase: '0',//是否包含小写字母
+			emptycharacter: '0',//是否包含特殊字符
+			emptylengths: '6',//密码长度
+			emptyexpired: '30',//密码过期天数
+			emptysession: '5',//Session过期时间
+			emptyerrortimes: '5',//密码输错次数
+		}
+      }
+    },
+    mounted(){
+			// 获取浏览器可视区域高度
+			var _this = this;
+			var clientHeight = $(window).height() - 100;    //document.body.clientWidth;
+			_this.$refs.homePagess.style.height = clientHeight + 'px';
+			window.onresize = function() {
+				var clientHeight = $(window).height() - 100;
+				_this.$refs.homePagess.style.height = clientHeight + 'px';
+			};
+			this.getData();
+		},
+  }
+
+</script>
+
+<style scoped>
+@import '../assets/css/mask-modules.css';
+
+
+</style>
+

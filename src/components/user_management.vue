@@ -45,48 +45,28 @@
 								<i class="icon-refresh"></i>
 							</button>
 							<div class="keep-open btn-group" title="列">
-								<button type="button" aria-label="columns" class="btn btn-default btn-outline dropdown-toggle" data-toggle="dropdown">
-									<i class="icon-menu3"></i> 
-									<i class="icon-arrow2-down"></i>
-                				</button>
-
-								<ul class="dropdown-menu" role="menu">
-									<li role="menuitem">
-										<label>
-											<input type="checkbox" data-field="id" value="1"> id
-										</label>
-									</li>
-									<li role="menuitem" class="checkbox-group">
-										<span>
-											<input type="checkbox" data-field="name" value="2" checked="checked">
-											<label>名称</label>
-										</span>
-									</li>
-									<li role="menuitem" class="checkbox-group">
-										<span>
-                							<input type="checkbox" data-field="pName" value="3" checked="checked">
-                							<label>上级角色</label>
-                						</span>
-									</li>
-									<li role="menuitem" class="checkbox-group">
-										<span>
-                							<input type="checkbox" data-field="deptName" value="4" checked="checked">
-                							<label>所在部门</label>
-                						</span>
-									</li>
-									<li role="menuitem" class="checkbox-group">
-										<span>
-                							<input type="checkbox" data-field="companyName" value="5" checked="checked">
-                							<label>所在公司</label>
-                						</span>
-									</li>
-									<li role="menuitem" class="checkbox-group">
-										<span>
-                							<input type="checkbox" data-field="tips" value="6" checked="checked">
-                							<label>名</label>
-                						</span>
-									</li>
-								</ul>
+								<el-dropdown :hide-on-click="false" class="pl10 btn btn-default btn-outline">
+									<span class="el-dropdown-link">
+										<font class="J_tabClose"><i class="icon-menu3"></i></font>
+										<i class="el-icon-arrow-down icon-arrow2-down"></i>
+									</span>
+									<el-dropdown-menu slot="dropdown">
+										<el-checkbox-group v-model="checkedName" @change="test">
+											<el-dropdown-item  v-for="item in tableHeader">
+												<el-checkbox :label="item.label" name="type"></el-checkbox>
+											</el-dropdown-item>
+										</el-checkbox-group>
+										<!-- <el-dropdown-item>
+											<el-checkbox label="所在部门" name="type"></el-checkbox>
+										</el-dropdown-item>
+										<el-dropdown-item>
+											<el-checkbox label="所在公司" name="type"></el-checkbox>
+										</el-dropdown-item>
+										<el-dropdown-item>
+											<el-checkbox label="所在部门" name="type"></el-checkbox>
+										</el-dropdown-item> -->
+									</el-dropdown-menu>
+								</el-dropdown>
 							</div>
 						</div>
 					</div>
@@ -124,28 +104,28 @@
 							<!-- <tablediv ref="tableList"></tablediv> -->
 							<!-- 表格 -->
 							<el-table :data="userList" style="width: 96%;margin: 0 auto;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
-								<el-table-column type="selection" width="55">
+								<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="账号" sortable width="80" prop="username">
+								<el-table-column label="账号" sortable prop="username" v-if="this.checkedName.indexOf('账号')!=-1">
 								</el-table-column>
-								<el-table-column label="姓名" sortable width="100" prop="nickname">
+								<el-table-column label="姓名" sortable prop="nickname" v-if="this.checkedName.indexOf('姓名')!=-1">
 								</el-table-column>
-								<el-table-column label="性别" sortable width="80" prop="sex" :formatter="sexName">
+								<el-table-column label="性别" sortable prop="sex" :formatter="sexName" v-if="this.checkedName.indexOf('性别')!=-1">
 								</el-table-column>
 								</el-table-column>
-								<el-table-column label="部门" sortable width="100" prop="deptName">
+								<el-table-column label="部门" sortable prop="deptName" v-if="this.checkedName.indexOf('部门')!=-1">
 								</el-table-column>
-								<el-table-column label="公司" sortable width="100" prop="companyName">
+								<el-table-column label="公司" sortable prop="companyName" v-if="this.checkedName.indexOf('公司')!=-1">
 								</el-table-column>
-								<el-table-column label="状态" sortable width="100" prop="enabled" :formatter="judge">
+								<el-table-column label="状态" sortable prop="enabled" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
-								<el-table-column label="创建时间" width="180" prop="createTime" sortable :formatter="dateFormat">
+								<el-table-column label="创建时间" prop="createTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('创建时间')!=-1">
 								</el-table-column>
 							</el-table>
 							<!-- <span class="demonstration">显示总数</span>" -->
 							<!-- <el-pagination background layout="prev, pager, next" :total="2" style="float:right;margin-top:10px;"> -->
 							<!-- </el-pagination style="float:right;margin-top:10px;"> -->
-							<el-pagination
+							<el-pagination v-if="this.checkedName.length>0"
 					            @size-change="sizeChange"
 					            @current-change="currentChange"
 					            :current-page="page.currentPage"
@@ -183,13 +163,49 @@
 		},
 		data() {
 			return {
+				checkedName: [
+					'账号',
+					'姓名',
+					'性别',
+					'部门',
+					'状态',
+					'创建时间'
+				],
+				tableHeader: [
+					{
+						label: '账号',
+						prop: 'username'
+					},
+					{
+						label: '姓名',
+						prop: 'nickname'
+					},
+					{
+						label: '性别',
+						prop: 'sexName'
+					},
+					{
+						label: '部门',
+						prop: 'deptName'
+					},
+					{
+						label: '状态',
+						prop: 'enabled'
+					},
+					{
+						label: '创建时间',
+						prop: 'createTime'
+					}
+				],
+
+				companyId: '',
+				deptId: '',
 				selUser: [],
 				'启用': true,
 				'冻结': false,
 				'男': true,
 				'女': false,
 				userList: [],
-				//				deptTree: [], //树
 				search: false,
 				show: false,
 				down: true,
@@ -218,6 +234,9 @@
 			}
 		},
 		methods: {
+			test(){
+				console.log(this.checkedName.indexOf('账号')!=-1);
+			},
 			sizeChange(val) {
 		      this.page.pageSize = val;
 		      this.requestData();
@@ -230,23 +249,10 @@
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
 				this.requestData();
-				// var data = {
-				// 	params: {
-				// 		page: 1,
-				// 		limit: 10,
-				// 		nickname: this.searchList.nickname,
-				// 		enabled: this.searchList.enabled,
-				// 		searchKey: 'createTime',
-				// 		searchValue: this.searchList.createTime
-				// 	}
-				// };
-				// var url = '/api/api-user/users';
-				// this.$axios.get(url, data).then((res) => {
-				// 	this.userList = res.data.data;
-				// }).catch((wrong) => {})
 			},
 			//添加用戶
 			openAddMgr() {
+				this.$refs.child.resetNew();
 				this.$refs.child.visible();
 			},
 			//修改用戶
@@ -265,7 +271,6 @@
 					});
 					return;
 				} else {
-					console.log(this.aaaData[0]);
 					this.$refs.child.detail();
 				}
 			},
@@ -443,25 +448,20 @@
 				this.selUser = val;
 			},
 			requestData(index) {
-				// var data = {
-				// 	params: {
-				// 		page: 1,
-				// 		limit: 10,
-				// 	}
-				// }
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 					nickname: this.searchList.nickname,
 					enabled: this.searchList.enabled,
 					searchKey: 'createTime',
-					searchValue: this.searchList.createTime
+					searchValue: this.searchList.createTime,
+					companyId: this.companyId,
+					deptId: this.deptId
 				}
 				var url = '/api/api-user/users';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-//					console.log(res.data.data);
 					this.userList = res.data.data;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
@@ -496,7 +496,14 @@
 				return data;
 			},
 			getTreeId(data){
-				console.log("============="+data);
+				if(data.type == '1'){
+					this.companyId = data.id;
+					this.deptId = '';
+				}else{
+					this.deptId = data.id;
+					this.companyId = '';
+				}
+				this.requestData();
 			},
 			handleNodeClick(data) {
 			},

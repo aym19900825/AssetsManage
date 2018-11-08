@@ -63,7 +63,6 @@ textarea:focus,button:focus,
     outline:none;
     -webkit-appearance: none;
     box-shadow:0px 5px 10px 0px #f1f4ff;
-    border-radius:3px;
     border-color: #A4ACE7;
 }
 
@@ -122,7 +121,7 @@ textarea:focus,button:focus,
     border: 1px solid #dfe5ea;
 }
 .btn-default:hover { color: #576FAE; }
-
+.btn-refresh {padding-top: 7px; padding-bottom: 6px;}
 
 /右侧对Table操作项按钮/
 
@@ -186,6 +185,27 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
     -webkit-box-shadow: 0 0 0px 1000px white inset;
     background-image: none !important;
     color: #000000 !important;
+}
+
+/*按钮图标划出效果显示按钮文字*/
+.el-collapse-item{
+    position: relative;
+}
+.table-func {
+    position: absolute; top: 10px; right: 40px;
+}
+.table-func button {
+    width: 45px; transition: width 400ms ease, background 400ms ease;
+}
+.table-func button font {
+    display: none;
+}
+
+.table-func button:hover {
+    width: 80px;
+}
+.table-func button:hover font {
+    display: inline-block;
 }
 
 

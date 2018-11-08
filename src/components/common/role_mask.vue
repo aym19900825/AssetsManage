@@ -226,6 +226,7 @@
 			},
 			page: Object ,
 		},
+//		props: ['user','page'],
 		
 		data() {
 			var validatePass1 = (rule, value, callback) => {

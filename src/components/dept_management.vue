@@ -33,7 +33,6 @@
 									<i class="icon-menu3"></i> 
 									<i class="icon-arrow2-down"></i>
                 				</button>
-
 								<ul class="dropdown-menu" role="menu">
 									<li role="menuitem">
 										<label>
@@ -108,7 +107,7 @@
 								<el-table-column label="备注" sortable width="110" prop="tips">
 								</el-table-column>
 							</el-table>
-							<el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]"
+							<el-pagination class="pull-right" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]"
 					            :page-size="page.pageSize" layout="total, sizes, prev, pager, next"
 					            :total="page.totalCount">
 							</el-pagination>
@@ -143,12 +142,17 @@
 		},
 		data() {
 			return {
+				companyId: '',
+				deptId: '',
+
 				selDept: [],
+
 				page: {
 					currentPage: 1,
 					pageSize: 10,
 					totalCount: 0
 				},
+	
 				total:0,
 				'启用': true,
 				'冻结': false,
@@ -206,6 +210,7 @@
 			},
 			//添加
 			openAddMgr() {
+				this.$refs.child.resetNew();
 				this.$refs.child.childMethods(); 
 			},
 			//修改
@@ -293,16 +298,12 @@
 				this.selDept = val;
 			},
 			requestData(index) {
-				// var data = {
-				// 	params: {
-				// 		page: this.page,
-				// 		limit: 10,
-				// 	}
-				// }
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 					simplename: this.searchDept.simplename,
+					companyId: this.companyId,
+					deptId: this.deptId
 				}
 				var url = '/api/api-user/depts';
 				this.$axios.get(url, {
@@ -338,7 +339,14 @@
 				return data;
 			},
 			getTreeId(data){
-				console.log("============="+data);
+				if(data.type == '1'){
+					this.companyId = data.id;
+					this.deptId = '';
+				}else{
+					this.deptId = data.id;
+					this.companyId = '';
+				}
+				this.requestData();
 			},
 			handleNodeClick(data) {
 				console.log(data);

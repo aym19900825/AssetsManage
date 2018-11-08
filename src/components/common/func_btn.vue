@@ -30,8 +30,7 @@
 			</div>
 		</div>
 		<div class="columns columns-right btn-group pull-right">
-			<button class="btn btn-default btn-outline" type="button" name="refresh" title="刷新"><i class="icon-refresh"></i></button>
-
+			<button class="btn btn-default btn-outline btn-refresh" type="button" name="refresh" title="刷新"><i class="icon-refresh"></i></button>
 			<div class="keep-open btn-group" title="列">
 				<el-dropdown trigger="click">
                   <span class="el-dropdown-link">

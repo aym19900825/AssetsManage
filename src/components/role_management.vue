@@ -8,6 +8,7 @@
 			<navs></navs>
 			<div class="wrapper wrapper-content">
 				<div class="ibox-content">
+					<!--<navs_button></navs_button>-->
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
@@ -17,19 +18,22 @@
 								<button type="button" class="btn btn-bule button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改
 								</button>
-								<button type="button" class="btn btn-red button-margin" @click="deldata">
+								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
 								    <i class="icon-trash"></i>删除
 								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="setrelation">
-								    <i class="icon-cpu"></i>配置关系
+								<button type="button" class="btn btn-primarys button-margin" @click="unfreeze">
+								    <i class="icon-key"></i>权限配置
+								</button>
+								<button type="button" class="btn btn-primarys button-margin" @click="freezeAccount">
+								    <i class="icon-data"></i>数据范围
+								</button>
+								<button type="button" class="btn btn-primarys button-margin">
+								    <i class="icon-date-limit"></i>数据限制
 								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 						    		<i class="icon-search"></i>高级查询
 						    		<i class="icon-arrow1-down" v-show="down"></i>
 						    		<i class="icon-arrow1-up" v-show="up"></i>
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="createtable">
-								    <i class="icon-refresh-cw"></i>生成表
 								</button>
 							</div>
 						</div>
@@ -42,6 +46,7 @@
 									<i class="icon-menu3"></i> 
 									<i class="icon-arrow2-down"></i>
                 				</button>
+
 								<ul class="dropdown-menu" role="menu">
 									<li role="menuitem">
 										<label>
@@ -82,18 +87,13 @@
 							</div>
 						</div>
 					</div>
-					<!-- 高级查询划出begin -->
+					<!-- 高级查询划出 -->
 					<div v-show="search">
 						<el-form status-icon :model="searchList" label-width="70px">
-							<el-row :gutter="10" style="margin-left:-34px">
+							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-form-item label="表名">
-										<el-input v-model="searchList.objectName"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="5">
-									<el-form-item label="描述">
-										<el-input v-model="searchList.description"></el-input>
+									<el-form-item label="角色名称">
+										<el-input v-model="searchList.nickname"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="2">
@@ -102,24 +102,25 @@
 							</el-row>
 						</el-form>
 					</div>
-					<!-- 高级查询划出end -->
+					<!-- 高级查询划出 -->
 					<div class="row">
 						<div class="col-sm-12">
-							<!-- 表格begin-->
-							<el-table :data="dataList" style="width: 100%;margin: 0 auto;" :default-sort="{prop:'dataList', order: 'descending'}" @selection-change="SelChange">
+							<!-- 表格begin -->
+							<el-table :data="userList" style="width: 100%;margin: 0 auto;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55">
 								</el-table-column>
-								<el-table-column label="表名" sortable width="320" prop="objectName">
+								<el-table-column label="角色名称" sortable width="250" prop="username">
 								</el-table-column>
-								<el-table-column label="描述" sortable width="480" prop="description">
+								<el-table-column label="上级角色" sortable width="250" prop="nickname">
+								</el-table-column>
+								<el-table-column label="所在部门" sortable width="250" prop="sex" :formatter="sexName">
+								</el-table-column>
+								</el-table-column>
+								<el-table-column label="别名" sortable width="310" prop="deptName">
 								</el-table-column>
 							</el-table>
-							<el-pagination class="pull-right"
-					            @size-change="sizeChange"
-					            @current-change="currentChange"
-					            :current-page="page.currentPage"
-					            :page-sizes="[10, 20, 30, 40]"
-					            :page-size="page.pageSize"
+							<el-pagination class=
+							"pull-right" @size-change="sizeChange" @current-change="currentChange"  :current-page="page.currentPage"    :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize"
 					            layout="total, sizes, prev, pager, next"
 					            :total="page.totalCount">
 					        </el-pagination>
@@ -128,8 +129,7 @@
 					</div>
 				</div>
 			</div>
-			<datamask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></datamask>
-			<relamask ref="rela" @request="requestData" v-bind:page=page></relamask>
+			<rolemask :user="aaaData[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></rolemask>
 		</div>
 	</div>
 </template>
@@ -138,16 +138,17 @@
 	import navs from './common/left_navs/nav_left.vue'
 	import navs_header from './common/nav_tabs.vue'
 	import assetsTree from './plugin/vue-tree/tree.vue'
-	import datamask from './common/data_mask.vue'
-	import relamask from './common/rela_mask.vue'
+	//import navs_button from './common/func_btn.vue'
+	//	import ztree from './common/ztree.vue'
+	// import tablediv from './common/tablelist.vue'
+	import rolemask from './common/role_mask.vue'
 	export default {
-		name: 'data_management',
+		name: 'user_management',
 		components: {
 			'vheader': vheader,
 			'navs_header': navs_header,
 			'navs': navs,
-			'datamask': datamask,
-			'relamask': relamask,
+			'rolemask': rolemask,
 			'v-assetsTree': assetsTree
 		},
 		data() {
@@ -157,13 +158,16 @@
 				'冻结': false,
 				'男': true,
 				'女': false,
+				userList: [],
+				//				deptTree: [], //树
 				search: false,
 				show: false,
 				down: true,
 				up: false,
 				searchList: {
-					objectName:'',
-					description:''
+					nickname: '',
+					enabled: '',
+					createTime: ''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -174,19 +178,16 @@
 					label: "simplename"
 				},
 				treeData: [],
+				userData:[],
 				page: {
 					currentPage: 1,
 					pageSize: 10,
 					totalCount: 0
 				},
-				dataList:[]
+				aaaData:[],
 			}
 		},
 		methods: {
-			//配置关系
-			setrelation(){
-				this.$refs.rela.visible();
-			},
 			sizeChange(val) {
 		      this.page.pageSize = val;
 		      this.requestData();
@@ -199,6 +200,20 @@
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
 				this.requestData();
+				// var data = {
+				// 	params: {
+				// 		page: 1,
+				// 		limit: 10,
+				// 		nickname: this.searchList.nickname,
+				// 		enabled: this.searchList.enabled,
+				// 		searchKey: 'createTime',
+				// 		searchValue: this.searchList.createTime
+				// 	}
+				// };
+				// var url = '/api/api-user/users';
+				// this.$axios.get(url, data).then((res) => {
+				// 	this.userList = res.data.data;
+				// }).catch((wrong) => {})
 			},
 			//添加用戶
 			openAddMgr() {
@@ -207,21 +222,22 @@
 			},
 			//修改用戶
 			modify() {
-				var selData = this.selUser;
-				if(selData.length == 0) {
+				this.aaaData = this.selUser;
+				if(this.aaaData.length == 0) {
 					this.$message({
 						message: '请您选择要修改的用户',
 						type: 'warning'
 					});
 					return;
-				} else if(selData.length > 1) {
+				} else if(this.aaaData.length > 1) {
 					this.$message({
 						message: '不可同时修改多个用户',
 						type: 'warning'
 					});
 					return;
 				} else {
-					this.$refs.child.detail(selData[0].id);
+					console.log(this.aaaData[0]);
+					this.$refs.child.detail();
 				}
 			},
 			//高级查询
@@ -231,24 +247,24 @@
 					this.up = !this.up
 			},
 			// 删除
-			deldata() {
+			deluserinfo() {
 				var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({
-						message: '请您选择要删除的数据',
+						message: '请您选择要删除的用户',
 						type: 'warning'
 					});
 					return;
 				} else if(selData.length > 1) {
 					this.$message({
-						message: '不可同时删除多个数据',
+						message: '不可同时删除多个用户',
 						type: 'warning'
 					});
 					return;
 				} else {
 					var changeUser = selData[0];
 					var id = changeUser.id;
-					var url = '/api/apps-center/objectcfg/' + id;
+					var url = '/api/api-user/users/' + id;
 					this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -266,30 +282,30 @@
 					});
 				}
 			},
-			//生成表
-			createtable() {
+			// 重置
+			resetPwd() {
 				var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({
-						message: '请您选择要生成表的数据',
+						message: '请您选择要重置密码的用户',
 						type: 'warning'
 					});
 					return;
 				} else if(selData.length > 1) {
 					this.$message({
-						message: '不可同时将多个数据生成表',
+						message: '不可同时多个用户进行重置',
 						type: 'warning'
 					});
 					return;
 				} else {
 					var changeUser = selData[0];
 					var id = changeUser.id;
-					var url = '/api/apps-center/objectcfg/create/' + id;
-					this.$axios.get(url, {}).then((res) => {//.delete 传数据方法
+					var url = '/api/api-user/users/' + id + '/resetPassword';
+					this.$axios.post(url, {}).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
-								message: '生成表成功',
+								message: '重置成功',
 								type: 'success'
 							});
 							this.requestData();
@@ -302,6 +318,92 @@
 					});
 				}
 			},
+			// 启用
+			unfreeze() {
+				var selData = this.selUser;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请您选择您要启动的用户',
+						type: 'warning'
+					});
+					return;
+				} else if(selData.length > 1) {
+					this.$message({
+						message: '不可同时启动多个用户',
+						type: 'warning'
+					});
+					return;
+				} else {
+					var changeUser = selData[0];
+					var url = '/api/api-user/users/updateEnabled?id=' + changeUser.id + '&enabled=true';
+					this.$axios.get(url, {}).then((res) => {
+						//resp_code == 0是后台返回的请求成功的信息
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '启动成功',
+								type: 'success'
+							});
+							this.requestData();
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+				}
+			},
+			// 冻结
+			freezeAccount() {
+				var selData = this.selUser;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请您选择您要冻结的用户',
+						type: 'warning'
+					});
+					return;
+				} else if(selData.length > 1) {
+					this.$message({
+						message: '不可同时冻结多个用户',
+						type: 'warning'
+					});
+					return;
+				} else {
+					var changeUser = selData[0];
+					var url = '/api/api-user/users/updateEnabled?id=' + changeUser.id + '&enabled=false';
+					this.$axios.get(url, {}).then((res) => {
+						//resp_code == 0是后台返回的请求成功的信息
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '冻结成功',
+								type: 'success'
+							});
+							this.requestData();
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+				}
+			},
+			judge(data) {
+				//taxStatus 布尔值
+				return data.enabled ? '启用' : '冻结'
+			},
+			sexName(data) {
+				return data.sex ? '男' : '女'
+			},
+			//时间格式化  
+			dateFormat(row, column) {
+				var date = row[column.property];
+				if(date == undefined) {
+					return "";
+				}
+				return this.$moment(date).format("YYYY-MM-DD");
+				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
+			},
 			insert() {
 				this.users.push(this.user)
 			},
@@ -312,21 +414,34 @@
 				this.selUser = val;
 			},
 			requestData(index) {
+				// var data = {
+				// 	params: {
+				// 		page: 1,
+				// 		limit: 10,
+				// 	}
+				// }
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					objectName: this.searchList.objectName,
-					description: this.searchList.description,
+					nickname: this.searchList.nickname,
+					enabled: this.searchList.enabled,
+					searchKey: 'createTime',
+					searchValue: this.searchList.createTime
 				}
-				var url = '/api/apps-center/objectcfg';
+				var url = '/api/api-user/users';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					
-					this.dataList = res.data.data;
+//					console.log(res.data.data);
+					this.userList = res.data.data;
 					this.page.totalCount = res.data.count;
-					console.log(this.dataList);
 				}).catch((wrong) => {})
+				this.userList.forEach((item, index) => {
+					var id = item.id;
+					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
+						this.userList.role = res.data.roles[0].name;
+					}).catch((wrong) => {})
+				})
 			},
 			//机构树
 			getKey() {

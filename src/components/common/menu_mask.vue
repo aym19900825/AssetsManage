@@ -176,6 +176,18 @@
 			};
 		},
 		methods: {
+			//清空表單
+			resetNew(){
+                this.adddeptForm = {
+					parentId:'',
+					name:'',
+					url:'',
+					sort:'',
+					hidden:'',
+					css:''
+				}
+                // this.$refs["adddeptForm"].resetFields();
+            },
 			col_but(col_but) {
 				if(col_but == 'col_but1') {
 					this.col_but1 = !this.col_but1;

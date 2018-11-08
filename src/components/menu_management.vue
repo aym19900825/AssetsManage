@@ -174,6 +174,7 @@
 			
 			//添加菜单
 			openAddMenu() {
+				this.$refs.child.resetNew();
 				this.$refs.child.visible();
 			},
 			//修改

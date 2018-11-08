@@ -2,7 +2,7 @@
 	<div class="heder clearfix white">
         <div class="logo"></div>
         <ul class="nav-head pull-left">
-            <li class="current"><router-link :to="{path:'/dashboardList'}">应用中心</router-link></li>
+            <li class="current"><router-link :to="{path:'/index'}">应用中心</router-link></li>
             <li><router-link :to="{path:'/dashboardList'}" >程序设计器</router-link></li>
             <li><router-link :to="{path:'/dashboardList'}" >权限管理</router-link></li>
             <li>

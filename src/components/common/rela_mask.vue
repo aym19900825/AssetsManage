@@ -3,7 +3,7 @@
 		<div class="mask" v-show="show"></div>
 		<div class="mask_div" v-show="show">
 			<div class="mask_title_div clearfix">
-				<div class="mask_title">添加数据库表</div>
+				<div class="mask_title">配置关系</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>						 
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -31,39 +31,34 @@
 				                            <el-form-item label="关系名称"></el-form-item>
 				                        </el-col>
 				                        <el-col :span="5">
-				                            <el-form-item label="字段描述"></el-form-item>
+				                            <el-form-item label="父表对象"></el-form-item>
 				                        </el-col>
 				                        <el-col :span="5">
-				                            <el-form-item label="字段类型"></el-form-item>
+				                            <el-form-item label="字表对象"></el-form-item>
 				                        </el-col>
 				                        <el-col :span="4">
-				                            <el-form-item label="小数点位数"></el-form-item>
+				                            <el-form-item label="where子句"></el-form-item>
 				                        </el-col>
 				                        <el-col :span="4">
-				                            <el-form-item label="长度"></el-form-item>
+				                            <el-form-item label="备注"></el-form-item>
 				                        </el-col>
 				                        <el-col :span="2">
 				                            <el-form-item label="操作"></el-form-item>
 				                        </el-col>
 				                	</el-row>
-				                    <el-row :gutter="20" v-for="(item,index) in fieldList">
+				                    <el-row :gutter="20" v-for="(item,key) in fieldList" :key="key"><!-- ：key避免重复 -->
 				                        <el-col :span="4">
 				                            <el-input type="text"  placeholder="请输入人物" v-model="item.leadname"></el-input>
 				                        </el-col>
 				                        <el-col :span="5">
-				                            <el-input type="text"  placeholder="请输入关系" v-model="item.leaddecri"></el-input>
+				                            <el-input v-model="item.leaddecri" :disabled="edit">
+											<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
 										</el-input>
 				                        </el-col>
 				                        <el-col :span="5">
-				                            <el-select v-model="item.leadtype" placeholder="选择字段类型">
-										      <el-option label="字符串(string)" value="string"></el-option>
-										      <el-option label="浮点类型(float)" value="float"></el-option>
-										      <el-option label="整数(int)" value="int"></el-option>
-										      <el-option label="长整型(long)" value="long"></el-option>
-										      <el-option label="双精度(double)" value="double"></el-option>
-										      <el-option label="日期(date)" value="date"></el-option>
-										      <el-option label="时间(time)" value="time"></el-option>
-										    </el-select>
+				                            <el-input v-model="item.leaddecri" :disabled="edit">
+											<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
+											</el-input>
 				                        </el-col>
 				                        <el-col :span="4">
 				                            <el-input type="text"  placeholder="请输入关系" v-model="item.leadprecision"></el-input>

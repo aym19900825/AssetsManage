@@ -28,7 +28,7 @@
 						</div>
 						<div class="columns columns-right btn-group pull-right">
 							<button class="btn btn-default btn-outline" type="button" name="refresh" aria-label="refresh" title="刷新"><i class="icon-refresh"></i></button>
-							<div class="keep-open btn-group" title="列">
+							<!-- <div class="keep-open btn-group" title="列">
 								<button type="button" aria-label="columns" class="btn btn-default btn-outline dropdown-toggle" data-toggle="dropdown">
 									<i class="icon-menu3"></i> 
 									<i class="icon-arrow2-down"></i>
@@ -70,7 +70,8 @@
                 						</span>
 									</li>
 								</ul>
-							</div>
+							</div> -->
+							<v-table-controle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></v-table-controle>
 						</div>
 					</div>
 					<!-- 高级查询划出 -->
@@ -96,20 +97,26 @@
 						<div class="col-sm-9">
 							<!-- 表格 -->
 							<el-table :data="deptList" style="width: 96%;margin: 0 auto;" :default-sort="{prop: 'deptList', order: 'descending'}" @selection-change="SelChange">
-								<el-table-column type="selection" width="55">
+								<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="ID" sortable width="80" prop="id">
+								<el-table-column label="ID" sortable prop="id" v-if="this.checkedName.indexOf('ID')!=-1">
 								</el-table-column>
-								<el-table-column label="部门简称" sortable width="300" prop="simplename">
+								<el-table-column label="部门简称" sortable prop="simplename" v-if="this.checkedName.indexOf('部门简称')!=-1">
 								</el-table-column>
-								<el-table-column label="类型" sortable width="110" prop="type">
+								<el-table-column label="类型" sortable prop="type" v-if="this.checkedName.indexOf('类型')!=-1">
 								</el-table-column>
-								<el-table-column label="备注" sortable width="110" prop="tips">
+								<el-table-column label="备注" sortable prop="tips" v-if="this.checkedName.indexOf('备注')!=-1">
 								</el-table-column>
 							</el-table>
-							<el-pagination class="pull-right" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]"
-					            :page-size="page.pageSize" layout="total, sizes, prev, pager, next"
-					            :total="page.totalCount">
+							<el-pagination v-if="this.checkedName.length>0"
+							   class="pull-right" 
+							   @size-change="sizeChange" 
+							   @current-change="currentChange" 
+							   :current-page="page.currentPage" 
+							   :page-sizes="[10, 20, 30, 40]"
+					           :page-size="page.pageSize" 
+					           layout="total, sizes, prev, pager, next"
+					           :total="page.totalCount">
 							</el-pagination>
 							<!-- 表格 -->
 						</div>
@@ -126,9 +133,7 @@
 	import navs from './common/left_navs/nav_left.vue'
 	import navs_header from './common/nav_tabs.vue'
 	import assetsTree from './plugin/vue-tree/tree.vue'
-	//import navs_button from './common/func_btn.vue'
-	// import ztree from './common/ztree.vue'
-	// import tablediv from './common/tablelist.vue'
+	import tableControle from './plugin/table-controle/controle.vue'
 	import deptmask from './common/dept_mask.vue'
 
 	export default {
@@ -138,10 +143,36 @@
 			'navs_header': navs_header,
 			'navs': navs,
 			'deptmask': deptmask,
-			'v-assetsTree': assetsTree
+			'v-assetsTree': assetsTree,
+			'v-table-controle':tableControle
 		},
 		data() {
 			return {
+				checkedName: [
+					'ID',
+					'部门简称',
+					'类型',
+					'备注',
+				],
+				tableHeader: [
+					{
+						label: 'ID',
+						prop: 'id'
+					},
+					{
+						label: '部门简称',
+						prop: 'simplename'
+					},
+					{
+						label: '类型',
+						prop: 'type'
+					},
+					{
+						label: '备注',
+						prop: 'tips'
+					}
+				],
+
 				companyId: '',
 				deptId: '',
 
@@ -176,6 +207,9 @@
 			}
 		},
 		methods: {
+			tableControle(data){
+			  this.checkedName = data;
+			},
 			sizeChange(val) {
 		      this.page.pageSize = val;
 		      this.requestData();

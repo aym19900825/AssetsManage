@@ -119,7 +119,7 @@ export default {
 .nav-right{
     height:36px;
     line-height:36px;
-    margin: 12px 40px;
+    margin: 12px 20px;
 }
 
 .lingdang{
@@ -163,6 +163,7 @@ export default {
     background-image: url(../../assets/img/female.png);
     background-size: 100%;
     background-repeat: no-repeat;
+    border-radius:6px;
 }
 .icon-order-down{
 	position: absolute;

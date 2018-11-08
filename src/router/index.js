@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/page/login/login'
-import index from '@/components/index' 
+import index from '@/components/index'
+import all_icons from '@/components/all_icons'
+import maindata from '@/components/maindata' 
 import user_management from '@/components/user_management' 
 import dept_management from '@/components/dept_management'
 import menu_management from '@/components/menu_management'
@@ -25,6 +27,15 @@ Vue.use(Router)
       path: '/index',
       name: 'index',
       component: index
+    },{
+      path: '/all_icons',
+      name: 'all_icons',
+      component: all_icons
+    },
+    {
+      path: '/maindata',
+      name: 'maindata',
+      component: maindata
     },
     {
     	path: '/user_management',

@@ -41,7 +41,7 @@
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
-							<button class="btn btn-default btn-outline btn-refresh" type="button" name="refresh" title="刷新"><i class="icon-refresh"></i></button>
+							<div class="btn btn-default btn-refresh" id="refresh" title="刷新"><i class="icon-refresh"></i></div>
 							<v-table-controle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></v-table-controle>
 						</div>
 					</div>
@@ -568,6 +568,7 @@
 		background-color: #ffffff;
 		color: #5B6371;
 		border: 1px solid #dfe5ea;
+		margin-right: -1px;
 	}
 	
 	.btn-default:hover {

@@ -112,10 +112,10 @@
 							 		<el-col :span="12">
 							 			 <el-form-item label="登录方式">
 										    <el-checkbox-group v-model="personinfo.logintype">
-										      <el-checkbox label="口令登录" name="type" checked disabled></el-checkbox>
-										      <el-checkbox label="uKey" name="type" disabled></el-checkbox>
-										      <el-checkbox label="数字证书" name="type" disabled></el-checkbox>
-									    </el-checkbox-group>
+												<el-checkbox label="口令登录" name="type" checked disabled></el-checkbox>
+												<el-checkbox label="uKey" name="type" disabled></el-checkbox>
+												<el-checkbox label="数字证书" name="type" disabled></el-checkbox>
+									    	</el-checkbox-group>
 									  </el-form-item>	
 							 		</el-col>
 							 	</el-row>

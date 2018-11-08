@@ -85,9 +85,6 @@ export default {
     props: [
         'listData'
     ],
-    // mounted(){
-    //     console.log(this.listData);
-    // }
 }
 </script>
 

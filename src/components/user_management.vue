@@ -78,8 +78,7 @@
 							<v-assetsTree  :listData="treeData" v-on:getTreeId="getTreeId"></v-assetsTree>
 						</div>
 						<div class="col-sm-9">
-							<!-- <tablediv ref="tableList"></tablediv> -->
-							<!-- 表格 -->
+							<!-- <v-table :checkedName="checkedName" :tableHeader="tableHeader" :url="dataUrl" :searchData="searchData"></v-table> -->
 							<el-table :data="userList" style="width: 96%;margin: 0 auto;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 								</el-table-column>
@@ -99,9 +98,6 @@
 								<el-table-column label="创建时间" prop="createTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('创建时间')!=-1">
 								</el-table-column>
 							</el-table>
-							<!-- <span class="demonstration">显示总数</span>" -->
-							<!-- <el-pagination background layout="prev, pager, next" :total="2" style="float:right;margin-top:10px;"> -->
-							<!-- </el-pagination style="float:right;margin-top:10px;"> -->
 							<el-pagination v-if="this.checkedName.length>0"
 					            @size-change="sizeChange"
 					            @current-change="currentChange"
@@ -125,6 +121,7 @@
 	import navs from './common/left_navs/nav_left.vue'
 	import navs_header from './common/nav_tabs.vue'
 	import assetsTree from './plugin/vue-tree/tree.vue'
+	import table from './plugin/table/table-normal.vue'
 	import tableControle from './plugin/table-controle/controle.vue'
 	import usermask from './common/user_mask.vue'
 	export default {
@@ -135,10 +132,22 @@
 			'navs': navs,
 			'usermask': usermask,
 			'v-assetsTree': assetsTree,
-			'v-table-controle':tableControle
+			'v-table-controle':tableControle,
+			'v-table':table,
 		},
 		data() {
 			return {
+				dataUrl: '/api/api-user/users',
+				searchData: {
+			        page: 1,
+			        limit: 10,
+			        nickname: '',
+			        enabled: '',
+			        searchKey: '',
+			        searchValue: '',
+			        companyId: '',
+			        deptId: ''
+		        },
 				checkedName: [
 					'账号',
 					'姓名',

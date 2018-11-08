@@ -37,14 +37,14 @@
 									<el-col :span="12">
 									 	<el-row :gutter="70">
 									 		<el-col :span="24">
-									 			 <el-form-item label="人员姓名" prop="nickname">
+									 			<el-form-item label="人员姓名" prop="nickname" :rules="[{ required: true, message: '人员姓名不能为空'}]">
 											    <el-input v-model="personinfo.nickname"></el-input>
 											  </el-form-item>	
 									 		</el-col>
 									 	</el-row>
 									 	<el-row :gutter="70">
 									 		<el-col :span="24">
-									 			<el-form-item label="工号" prop="worknumber">
+									 			<el-form-item label="工号" prop="worknumber" required="true">
 											    	<el-input v-model="personinfo.worknumber"></el-input>
 												</el-form-item>	
 									 		</el-col>
@@ -140,7 +140,7 @@
 								 			</el-form-item>	
 								 		</el-col>
 								 		<el-col :span="8">
-								 			<el-form-item label="电子邮箱" prop="email">
+								 			<el-form-item label="电子邮箱" prop="email" required="true">
 											    <el-input v-model="personinfo.email"></el-input>
 											  </el-form-item>
 								 		</el-col>
@@ -176,7 +176,7 @@
 										  </el-form-item>	
 								 		</el-col>
 								 		<el-col :span="8">
-								 			 <el-form-item label="手机号" prop="phone">
+								 			 <el-form-item label="手机号" prop="phone" required="true">
 										    <el-input v-model="personinfo.phone"></el-input>
 										  </el-form-item>	
 								 		</el-col>

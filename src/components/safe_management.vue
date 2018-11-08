@@ -16,78 +16,71 @@
 				<div id="wrapper" ref="homePagess" style="height: 600px;">
 					<div id="information" style="height: inherit;">
 						<div class="ibox-content">
-							<el-form status-icon ref="safemanage" :model="safemanage" :rules="rules" label-width="80px" :label-position="labelPosition">
-								<el-collapse v-model="activeNames" @change="handleChange">
-									<el-collapse-item title="安全管理" name="1">
-										<el-row :gutter="70">
-									 		<el-col :span="12">
-												<el-form-item label="是滞包含大写字母">
-													<el-select v-model="safemanage.emptyuppercase" filterable placeholder="请选择">
-														<el-option v-for="item01 in uppercase" :key="item01.value" :label="item01.label" :value="item01.value"></el-option>
-													</el-select>
-												</el-form-item>
-									 		</el-col>
-									 	
-									 		<el-col :span="12">
-									 			<el-form-item label="是否包含小写字母">
-											    	<el-select v-model="safemanage.emptylowercase" filterable placeholder="请选择">
-														<el-option v-for="item02 in lowercase" :key="item02.value" :label="item02.label" :value="item02.value"></el-option>
-													</el-select>
-												</el-form-item>	
-									 		</el-col>
-									 	</el-row>
-									 	
-										<el-row :gutter="70">
-											<el-col :span="12" >
-												<el-form-item label="是否包含特殊字符">
-													<el-select v-model="safemanage.emptycharacter" filterable placeholder="请选择">
-														<el-option v-for="item03 in character" :key="item03.value" :label="item03.label" :value="item03.value"></el-option>
-													</el-select>
-												</el-form-item>
-											</el-col>
+							<!--按钮操作行 Begin-->
+								<div class="fixed-table-toolbar clearfix">
+									<div class="bs-bars pull-left">
+										<div class="hidden-xs" id="roleTableToolbar" role="group">
+											<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+			                                	<i class="icon-add"></i>添加
+			                      			 </button>
+											<button type="button" class="btn btn-bule button-margin" @click="modify">
+											    <i class="icon-edit"></i>修改
+											</button>
+											<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
+											    <i class="icon-trash"></i>删除
+											</button>
+											<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
+									    		<i class="icon-search"></i>高级查询
+									    		<i class="icon-arrow1-down" v-show="down"></i>
+									    		<i class="icon-arrow1-up" v-show="up"></i>
+											</button>
+										</div>
+									</div>
 
-											<el-col :span="12">
-												<el-form-item label="密码长度">
-													<el-select v-model="safemanage.emptylengths" filterable placeholder="请选择">
-														<el-option v-for="item04 in lengths" :key="item04.value" :label="item04.label" :value="item04.value"></el-option>
-													</el-select>
-												</el-form-item>
-											</el-col>
-										</el-row>
-									 	<!-- 第三行 -->
-									 	<el-row :gutter="70">
-									 		<el-col :span="12">
-									 			 <el-form-item label="密码过期天数">
-									 				<el-select v-model="safemanage.emptyexpired" filterable placeholder="请选择">
-														<el-option v-for="item05 in expired" :key="item05.value" :label="item05.label" :value="item05.value"></el-option>
-													</el-select>
-									 			</el-form-item>	
-									 		</el-col>
-									 		<el-col :span="12">
-									 			 <el-form-item label="Session过期时间">
-								                      <el-select v-model="safemanage.emptysession" filterable placeholder="请选择">
-														<el-option v-for="item06 in session" :key="item06.value" :label="item06.label" :value="item06.value"></el-option>
-													</el-select>
-								                </el-form-item>		
-									 		</el-col>
-									 	</el-row>
-									 	<!-- 第四行 -->
-									 	<el-row :gutter="70">
-									 		<el-col :span="12">
-									 			<el-form-item label="密码输错次数">
-									 			 	<el-select v-model="safemanage.emptyerrortimes" filterable placeholder="请选择">
-														<el-option v-for="item07 in errortimes" :key="item07.value" :label="item07.label" :value="item07.value"></el-option>
-													</el-select>
-												</el-form-item>	
-									 		</el-col>
-									 	</el-row>
-									</el-collapse-item>
-								</el-collapse>
-							</el-form>
-							<div class="content-footer">
-								<button class="btn btn-default btn-large" @click="resetForm('safemanage')">重置</button>
-								<button class="btn btn-primarys btn-large" @click="submitForm('safemanage')">保存</button>
+									<div class="columns columns-right btn-group pull-right">
+										<button class="btn btn-default btn-outline btn-refresh" type="button" name="refresh" title="刷新"><i class="icon-refresh"></i></button>
+										<div class="keep-open btn-group" title="列">
+											<el-dropdown :hide-on-click="false" class="pl10 btn btn-default btn-outline">
+												<span class="el-dropdown-link">
+													<font class="J_tabClose"><i class="icon-menu3"></i></font>
+													<i class="el-icon-arrow-down icon-arrow2-down"></i>
+												</span>
+												<el-dropdown-menu slot="dropdown">
+													<el-dropdown-item>
+														<el-checkbox label="名称" name="type"></el-checkbox>
+													</el-dropdown-item>
+													<el-dropdown-item>
+														<el-checkbox label="所在部门" name="type"></el-checkbox>
+													</el-dropdown-item>
+													<el-dropdown-item>
+														<el-checkbox label="所在公司" name="type"></el-checkbox>
+													</el-dropdown-item>
+													<el-dropdown-item>
+														<el-checkbox label="所在部门" name="type"></el-checkbox>
+													</el-dropdown-item>
+												</el-dropdown-menu>
+											</el-dropdown>
+										</div>
+									</div>
+								</div>
+							<!--按钮操作行 End-->
+
+							<!-- 高级查询划出 Begin-->
+							<div v-show="search">
+								<el-form status-icon :model="searchList" label-width="70px">
+									<el-row :gutter="10">
+										<el-col :span="5">
+											<el-form-item label="类型名称" class="searchlist" label-width="85px">
+												<el-input v-model="searchList.typename"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="2">
+											<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+										</el-col>
+									</el-row>
+								</el-form>
 							</div>
+							<!-- 高级查询划出 End-->
 						</div>
 					</div>
 				</div>
@@ -114,94 +107,17 @@ export default {
 
     data() {
       return {
+        show: false,
+        down: true,
+		up: false,
+		searchList: {
+			typename: ''
+		},
         activeNames: ['1'],//手风琴数量
 		clientHeight:'',//获取浏览器高度
         labelPosition: 'top',//表单标题在上方显示
-		uppercase: [{//是滞包含大写字母
-			value: '1',
-			label: '是'
-		}, {
-			value: '0',
-			label: '否'
-		}],
-        lowercase: [{//是否包含小写字母
-			value: '1',
-			label: '是'
-		}, {
-			value: '0',
-			label: '否'
-		}],
-		character: [{//是否包含特殊字符
-			value: '1',
-			label: '是'
-		}, {
-			value: '0',
-			label: '否'
-		}],
-		lengths: [{//密码长度
-			value: '6',
-			label: '6位'
-		}, {
-			value: '8',
-			label: '8位'
-		}, {
-			value: '16',
-			label: '16位'
-		}, {
-			value: '22',
-			label: '22位'
-		}],
-        expired: [{//密码过期天数
-			value: '5',
-			label: '5天'
-		}, {
-			value: '10',
-			label: '10天'
-		}, {
-			value: '20',
-			label: '20天'
-		}, {
-			value: '30',
-			label: '30天'
-		}],
-		session: [{//Session过期时间
-			value: '3',
-			label: '3分钟'
-		}, {
-			value: '5',
-			label: '5分钟'
-		}, {
-			value: '10',
-			label: '10分钟'
-		}, {
-			value: '15',
-			label: '15分钟'
-		}, {
-			value: '25',
-			label: '25分钟'
-		}, {
-			value: '30',
-			label: '30分钟'
-		}],
-		errortimes: [{//密码输错次数
-			value: '3',
-			label: '3次'
-		}, {
-			value: '5',
-			label: '5次'
-		}, {
-			value: '8',
-			label: '8次'
-		}],
-		safemanage:{
-			emptyuppercase: '0',//是滞包含大写字母
-			emptylowercase: '0',//是否包含小写字母
-			emptycharacter: '0',//是否包含特殊字符
-			emptylengths: '6',//密码长度
-			emptyexpired: '30',//密码过期天数
-			emptysession: '5',//Session过期时间
-			emptyerrortimes: '5',//密码输错次数
-		}
+		
+		
       }
     },
     mounted(){
@@ -215,7 +131,89 @@ export default {
 			};
 			this.getData();
 		},
-  }
+	methods: {
+		sizeChange(val) {
+			this.page.pageSize = val;
+			this.requestData();
+	    },
+		currentChange(val) {
+			this.page.currentPage = val;
+			this.requestData();
+		},
+		searchinfo(index) {
+			this.page.currentPage = 1;
+			this.page.pageSize = 10;
+			this.requestData();
+		},
+		//添加用戶
+		openAddMgr() {
+			this.$refs.child.visible();
+		},
+		//修改用戶
+		modify() {
+			this.aaaData = this.selUser;
+			if(this.aaaData.length == 0) {
+				this.$message({
+					message: '请您选择要修改的字典数据',
+					type: 'warning'
+				});
+				return;
+			} else if(this.aaaData.length > 1) {
+				this.$message({
+					message: '不可同时修改多个字典数据',
+					type: 'warning'
+				});
+				return;
+			} else {
+				console.log(this.aaaData[0]);
+				this.$refs.child.detail();
+			}
+		},
+		//高级查询
+		modestsearch() {
+			this.search = !this.search;
+			this.down = !this.down,
+				this.up = !this.up
+		},
+		// 删除
+		deluserinfo() {
+			var selData = this.selUser;
+			if(selData.length == 0) {
+				this.$message({
+					message: '请您选择要删除的字典数据',
+					type: 'warning'
+				});
+				return;
+			} else if(selData.length > 1) {
+				this.$message({
+					message: '不可同时删除多个字典数据',
+					type: 'warning'
+				});
+				return;
+			} else {
+				var changeUser = selData[0];
+				var id = changeUser.id;
+				var url = '/api/api-user/users/' + id;
+				this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
+					//resp_code == 0是后台返回的请求成功的信息
+					if(res.data.resp_code == 0) {
+						this.$message({
+							message: '删除成功',
+							type: 'success'
+						});
+						this.requestData();
+					}
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+			}
+		},
+
+	}
+}
 
 </script>
 

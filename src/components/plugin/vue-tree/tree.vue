@@ -91,7 +91,7 @@ export default {
 }
 </script>
 
-<style>
+<style scope>
 div.ztree_content_wrap {
     height:380px
 }

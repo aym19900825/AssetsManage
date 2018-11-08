@@ -28,7 +28,7 @@
 								    <i class="icon-data"></i>数据范围
 								</button>
 								<button type="button" class="btn btn-primarys button-margin">
-								    <i class="icon-date-limit1"></i>数据限制
+								    <i class="icon-date-limit"></i>数据限制
 								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 						    		<i class="icon-search"></i>高级查询
@@ -92,18 +92,8 @@
 						<el-form status-icon :model="searchList" label-width="70px">
 							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-form-item label="用户名">
+									<el-form-item label="角色名称">
 										<el-input v-model="searchList.nickname"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="5">
-									<el-form-item label="状态">
-										<el-input v-model="searchList.enabled"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="4">
-									<el-form-item label="创建时间">
-										<el-input v-model="searchList.createTime"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="2">
@@ -114,49 +104,32 @@
 					</div>
 					<!-- 高级查询划出 -->
 					<div class="row">
-						<div class="col-sm-3">
-							<v-assetsTree  :listData="treeData" v-on:getTreeId="getTreeId"></v-assetsTree>
-						</div>
-						<div class="col-sm-9">
-							<!-- <tablediv ref="tableList"></tablediv> -->
-							<!-- 表格 -->
-							<el-table :data="userList" style="width: 96%;margin: 0 auto;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
+						<div class="col-sm-12">
+							<!-- 表格begin -->
+							<el-table :data="userList" style="width: 100%;margin: 0 auto;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55">
 								</el-table-column>
-								<el-table-column label="账号" sortable width="80" prop="username">
+								<el-table-column label="角色名称" sortable width="250" prop="username">
 								</el-table-column>
-								<el-table-column label="姓名" sortable width="100" prop="nickname">
+								<el-table-column label="上级角色" sortable width="250" prop="nickname">
 								</el-table-column>
-								<el-table-column label="性别" sortable width="80" prop="sex" :formatter="sexName">
+								<el-table-column label="所在部门" sortable width="250" prop="sex" :formatter="sexName">
 								</el-table-column>
 								</el-table-column>
-								<el-table-column label="部门" sortable width="100" prop="deptName">
-								</el-table-column>
-								<el-table-column label="公司" sortable width="100" prop="companyName">
-								</el-table-column>
-								<el-table-column label="状态" sortable width="100" prop="enabled" :formatter="judge">
-								</el-table-column>
-								<el-table-column label="创建时间" width="180" prop="createTime" sortable :formatter="dateFormat">
+								<el-table-column label="别名" sortable width="310" prop="deptName">
 								</el-table-column>
 							</el-table>
-							<!-- <span class="demonstration">显示总数</span>" -->
-							<!-- <el-pagination background layout="prev, pager, next" :total="2" style="float:right;margin-top:10px;"> -->
-							<!-- </el-pagination style="float:right;margin-top:10px;"> -->
-							<el-pagination
-					            @size-change="sizeChange"
-					            @current-change="currentChange"
-					            :current-page="page.currentPage"
-					            :page-sizes="[10, 20, 30, 40]"
-					            :page-size="page.pageSize"
+							<el-pagination class=
+							"pull-right" @size-change="sizeChange" @current-change="currentChange"  :current-page="page.currentPage"    :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize"
 					            layout="total, sizes, prev, pager, next"
 					            :total="page.totalCount">
 					        </el-pagination>
-							<!-- 表格 -->
+							<!-- 表格end -->
 						</div>
 					</div>
 				</div>
 			</div>
-			<usermask :user="aaaData[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></usermask>
+			<rolemask :user="aaaData[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></rolemask>
 		</div>
 	</div>
 </template>
@@ -168,14 +141,14 @@
 	//import navs_button from './common/func_btn.vue'
 	//	import ztree from './common/ztree.vue'
 	// import tablediv from './common/tablelist.vue'
-	import usermask from './common/user_mask.vue'
+	import rolemask from './common/role_mask.vue'
 	export default {
 		name: 'user_management',
 		components: {
 			'vheader': vheader,
 			'navs_header': navs_header,
 			'navs': navs,
-			'usermask': usermask,
+			'rolemask': rolemask,
 			'v-assetsTree': assetsTree
 		},
 		data() {

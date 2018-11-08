@@ -66,7 +66,7 @@
 				                            <el-form-item label="操作"></el-form-item>
 				                        </el-col>
 				                	</el-row>
-				                    <el-row :gutter="20" v-for="(item,index) in fieldList">
+				                    <el-row :gutter="20" v-for="(item,key) in fieldList" :key="key">
 				                        <el-col :span="4">
 				                            <el-input type="text"  placeholder="请输入人物" v-model="item.leadname"></el-input>
 				                        </el-col>

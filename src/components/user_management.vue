@@ -160,6 +160,8 @@
 		},
 		data() {
 			return {
+				companyId: '',
+				deptId: '',
 				selUser: [],
 				'启用': true,
 				'冻结': false,
@@ -207,20 +209,6 @@
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
 				this.requestData();
-				// var data = {
-				// 	params: {
-				// 		page: 1,
-				// 		limit: 10,
-				// 		nickname: this.searchList.nickname,
-				// 		enabled: this.searchList.enabled,
-				// 		searchKey: 'createTime',
-				// 		searchValue: this.searchList.createTime
-				// 	}
-				// };
-				// var url = '/api/api-user/users';
-				// this.$axios.get(url, data).then((res) => {
-				// 	this.userList = res.data.data;
-				// }).catch((wrong) => {})
 			},
 			//添加用戶
 			openAddMgr() {
@@ -243,7 +231,6 @@
 					});
 					return;
 				} else {
-					console.log(this.aaaData[0]);
 					this.$refs.child.detail();
 				}
 			},
@@ -421,25 +408,20 @@
 				this.selUser = val;
 			},
 			requestData(index) {
-				// var data = {
-				// 	params: {
-				// 		page: 1,
-				// 		limit: 10,
-				// 	}
-				// }
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 					nickname: this.searchList.nickname,
 					enabled: this.searchList.enabled,
 					searchKey: 'createTime',
-					searchValue: this.searchList.createTime
+					searchValue: this.searchList.createTime,
+					companyId: this.companyId,
+					deptId: this.deptId
 				}
 				var url = '/api/api-user/users';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-//					console.log(res.data.data);
 					this.userList = res.data.data;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
@@ -474,7 +456,14 @@
 				return data;
 			},
 			getTreeId(data){
-				console.log("============="+data);
+				if(data.type == '1'){
+					this.companyId = data.id;
+					this.deptId = '';
+				}else{
+					this.deptId = data.id;
+					this.companyId = '';
+				}
+				this.requestData();
 			},
 			handleNodeClick(data) {
 			},

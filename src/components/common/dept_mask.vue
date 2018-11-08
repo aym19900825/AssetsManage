@@ -85,10 +85,8 @@
 		</div>
 		<!-- 弹出 -->
 		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-
 			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps">
 			</el-tree>
-
 			<span slot="footer" class="dialog-footer">
 		       <el-button @click="dialogVisible = false">取 消</el-button>
 		       <el-button type="primary" @click="queding();" >确 定</el-button>
@@ -188,6 +186,19 @@
 			};
 		},
 		methods: {
+			//form表单内容清空
+			resetNew(){
+                this.adddeptForm = {
+					pName:'',
+					fullname:'',
+					simplename:'',
+					type:'',
+					code:'',
+					teltphone:'',
+					tips:''
+				}
+                // this.$refs["adddeptForm"].resetFields();
+            },
 			//所属上级
 			getDept() {
 				var page = this.page.currentPage;
@@ -219,7 +230,6 @@
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
 			},
 			col_but(col_but) {
-				//alert(col_but)
 				if(col_but == 'col_but1') {
 					this.col_but1 = !this.col_but1;
 				}

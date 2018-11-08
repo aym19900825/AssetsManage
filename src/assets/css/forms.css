@@ -187,6 +187,27 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
     color: #000000 !important;
 }
 
+/*按钮图标划出效果显示按钮文字*/
+.el-collapse-item{
+    position: relative;
+}
+.table-func {
+    position: absolute; top: 10px; right: 40px;
+}
+.table-func button {
+    width: 45px; transition: width 400ms ease, background 400ms ease;
+}
+.table-func button font {
+    display: none;
+}
+
+.table-func button:hover {
+    width: 80px;
+}
+.table-func button:hover font {
+    display: inline-block;
+}
+
 
 
 

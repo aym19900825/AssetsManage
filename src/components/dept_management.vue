@@ -33,7 +33,6 @@
 									<i class="icon-menu3"></i> 
 									<i class="icon-arrow2-down"></i>
                 				</button>
-
 								<ul class="dropdown-menu" role="menu">
 									<li role="menuitem">
 										<label>
@@ -108,7 +107,7 @@
 								<el-table-column label="备注" sortable width="110" prop="tips">
 								</el-table-column>
 							</el-table>
-							<el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]"
+							<el-pagination class="pull-right" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]"
 					            :page-size="page.pageSize" layout="total, sizes, prev, pager, next"
 					            :total="page.totalCount">
 							</el-pagination>
@@ -206,6 +205,7 @@
 			},
 			//添加
 			openAddMgr() {
+				this.$refs.child.resetNew();
 				this.$refs.child.childMethods(); 
 			},
 			//修改
@@ -293,12 +293,6 @@
 				this.selDept = val;
 			},
 			requestData(index) {
-				// var data = {
-				// 	params: {
-				// 		page: this.page,
-				// 		limit: 10,
-				// 	}
-				// }
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,

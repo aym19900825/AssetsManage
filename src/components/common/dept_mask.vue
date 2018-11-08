@@ -245,7 +245,7 @@
 			detail(deptid) {
 				var url = '/api/api-user/depts/' +deptid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res)
+					console.log(res);
 					this.adddeptForm = res.data;
 					this.show = true;
 				}).catch((err) => {

@@ -265,7 +265,7 @@ h3 {
 
 /*-------------------首页APP-List样式*/
 
-.el-col {margin-top: 10px;}
+.applist .el-col {margin-top: 10px;}
 .applist .applistbg,.statisticsbg { 
 	text-align: center;
 	min-height:120px;

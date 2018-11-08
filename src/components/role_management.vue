@@ -8,26 +8,25 @@
 			<navs></navs>
 			<div class="wrapper wrapper-content">
 				<div class="ibox-content">
-					<!--<navs_button></navs_button>-->
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
 								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加
-                      			 </button>
+                      			</button>
 								<button type="button" class="btn btn-bule button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改
 								</button>
-								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
+								<button type="button" class="btn btn-red button-margin" @click="delroleinfo">
 								    <i class="icon-trash"></i>删除
 								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="unfreeze">
+								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-key"></i>权限配置
 								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="freezeAccount">
+								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-data"></i>数据范围
 								</button>
-								<button type="button" class="btn btn-primarys button-margin">
+								<button type="button" class="btn btn-primarys button-margin" @click="datalimit">
 								    <i class="icon-date-limit"></i>数据限制
 								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
@@ -45,8 +44,7 @@
 								<button type="button" aria-label="columns" class="btn btn-default btn-outline dropdown-toggle" data-toggle="dropdown">
 									<i class="icon-menu3"></i> 
 									<i class="icon-arrow2-down"></i>
-                				</button>
-
+                				</button>                    
 								<ul class="dropdown-menu" role="menu">
 									<li role="menuitem">
 										<label>
@@ -106,17 +104,16 @@
 					<div class="row">
 						<div class="col-sm-12">
 							<!-- 表格begin -->
-							<el-table :data="userList" style="width: 100%;margin: 0 auto;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
+							<el-table :data="roleList" style="width: 100%;margin: 0 auto;" :default-sort="{prop:'roleList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55">
 								</el-table-column>
-								<el-table-column label="角色名称" sortable width="250" prop="username">
+								<el-table-column label="角色名称" sortable width="250" prop="name">
 								</el-table-column>
-								<el-table-column label="上级角色" sortable width="250" prop="nickname">
+								<el-table-column label="所在部门" sortable width="250" >
 								</el-table-column>
-								<el-table-column label="所在部门" sortable width="250" prop="sex" :formatter="sexName">
+								<el-table-column label="别名" sortable width="250" prop="code">
 								</el-table-column>
-								</el-table-column>
-								<el-table-column label="别名" sortable width="310" prop="deptName">
+								<el-table-column label="备注" sortable width="310" prop="tips">
 								</el-table-column>
 							</el-table>
 							<el-pagination class=
@@ -130,6 +127,7 @@
 				</div>
 			</div>
 			<rolemask :user="aaaData[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></rolemask>
+			<datalimitmask ref="aaa" v-bind:page=page></datalimitmask>
 		</div>
 	</div>
 </template>
@@ -138,10 +136,8 @@
 	import navs from './common/left_navs/nav_left.vue'
 	import navs_header from './common/nav_tabs.vue'
 	import assetsTree from './plugin/vue-tree/tree.vue'
-	//import navs_button from './common/func_btn.vue'
-	//	import ztree from './common/ztree.vue'
-	// import tablediv from './common/tablelist.vue'
 	import rolemask from './common/role_mask.vue'
+	import datalimitmask from './common/datalimit_mask.vue'
 	export default {
 		name: 'user_management',
 		components: {
@@ -149,6 +145,7 @@
 			'navs_header': navs_header,
 			'navs': navs,
 			'rolemask': rolemask,
+			'datalimitmask': datalimitmask,
 			'v-assetsTree': assetsTree
 		},
 		data() {
@@ -158,8 +155,38 @@
 				'冻结': false,
 				'男': true,
 				'女': false,
-				userList: [],
-				//				deptTree: [], //树
+				roleList: [
+					{
+						rolename:'超级管理员',
+						prole:'',
+						dept:'总公司',
+						nickname:'administrator'
+					},
+					{
+						rolename:'临时',
+						prole:'超级管理员',
+						dept:'运营部',
+						nickname:'temp'
+					},
+					{
+						rolename:'工作流管理员',
+						prole:'',
+						dept:'总公司',
+						nickname:'flowAdmin'
+					},
+					{
+						rolename:'部门负责人',
+						prole:'工作流管理员',
+						dept:'总公司',
+						nickname:'bmfzr'
+					},
+					{
+						rolename:'分公司管理员',
+						prole:'超级管理员',
+						dept:'测试分公司',
+						nickname:'分公司管理员'
+					},
+				],
 				search: false,
 				show: false,
 				down: true,
@@ -190,35 +217,25 @@
 		methods: {
 			sizeChange(val) {
 		      this.page.pageSize = val;
-		      this.requestData();
+		      // this.requestData();
 		    },
 		    currentChange(val) {
 		      this.page.currentPage = val;
-		      this.requestData();
+		      // this.requestData();
 		    },
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
-				this.requestData();
-				// var data = {
-				// 	params: {
-				// 		page: 1,
-				// 		limit: 10,
-				// 		nickname: this.searchList.nickname,
-				// 		enabled: this.searchList.enabled,
-				// 		searchKey: 'createTime',
-				// 		searchValue: this.searchList.createTime
-				// 	}
-				// };
-				// var url = '/api/api-user/users';
-				// this.$axios.get(url, data).then((res) => {
-				// 	this.userList = res.data.data;
-				// }).catch((wrong) => {})
+				// this.requestData();
 			},
 			//添加用戶
 			openAddMgr() {
 				this.$refs.child.resetNew();
 				this.$refs.child.visible();
+			},
+			//数据限制
+			datalimit() {
+				this.$refs.aaa.showdatalimit();
 			},
 			//修改用戶
 			modify() {
@@ -244,138 +261,32 @@
 			modestsearch() {
 				this.search = !this.search;
 				this.down = !this.down,
-					this.up = !this.up
+				this.up = !this.up
 			},
 			// 删除
-			deluserinfo() {
+			delroleinfo() {
 				var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({
-						message: '请您选择要删除的用户',
+						message: '请您选择要删除的角色',
 						type: 'warning'
 					});
 					return;
 				} else if(selData.length > 1) {
 					this.$message({
-						message: '不可同时删除多个用户',
+						message: '不可同时删除多个角色',
 						type: 'warning'
 					});
 					return;
 				} else {
 					var changeUser = selData[0];
 					var id = changeUser.id;
-					var url = '/api/api-user/users/' + id;
+					var url = '/api/api-user/roles/' + id;
 					this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
 								message: '删除成功',
-								type: 'success'
-							});
-							this.requestData();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
-					});
-				}
-			},
-			// 重置
-			resetPwd() {
-				var selData = this.selUser;
-				if(selData.length == 0) {
-					this.$message({
-						message: '请您选择要重置密码的用户',
-						type: 'warning'
-					});
-					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时多个用户进行重置',
-						type: 'warning'
-					});
-					return;
-				} else {
-					var changeUser = selData[0];
-					var id = changeUser.id;
-					var url = '/api/api-user/users/' + id + '/resetPassword';
-					this.$axios.post(url, {}).then((res) => {
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '重置成功',
-								type: 'success'
-							});
-							this.requestData();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
-					});
-				}
-			},
-			// 启用
-			unfreeze() {
-				var selData = this.selUser;
-				if(selData.length == 0) {
-					this.$message({
-						message: '请您选择您要启动的用户',
-						type: 'warning'
-					});
-					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时启动多个用户',
-						type: 'warning'
-					});
-					return;
-				} else {
-					var changeUser = selData[0];
-					var url = '/api/api-user/users/updateEnabled?id=' + changeUser.id + '&enabled=true';
-					this.$axios.get(url, {}).then((res) => {
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '启动成功',
-								type: 'success'
-							});
-							this.requestData();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
-					});
-				}
-			},
-			// 冻结
-			freezeAccount() {
-				var selData = this.selUser;
-				if(selData.length == 0) {
-					this.$message({
-						message: '请您选择您要冻结的用户',
-						type: 'warning'
-					});
-					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时冻结多个用户',
-						type: 'warning'
-					});
-					return;
-				} else {
-					var changeUser = selData[0];
-					var url = '/api/api-user/users/updateEnabled?id=' + changeUser.id + '&enabled=false';
-					this.$axios.get(url, {}).then((res) => {
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '冻结成功',
 								type: 'success'
 							});
 							this.requestData();
@@ -401,8 +312,7 @@
 				if(date == undefined) {
 					return "";
 				}
-				return this.$moment(date).format("YYYY-MM-DD");
-				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
+				return this.$moment(date).format("YYYY-MM-DD"); 
 			},
 			insert() {
 				this.users.push(this.user)
@@ -414,34 +324,23 @@
 				this.selUser = val;
 			},
 			requestData(index) {
-				// var data = {
-				// 	params: {
-				// 		page: 1,
-				// 		limit: 10,
-				// 	}
-				// }
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					nickname: this.searchList.nickname,
-					enabled: this.searchList.enabled,
-					searchKey: 'createTime',
-					searchValue: this.searchList.createTime
 				}
-				var url = '/api/api-user/users';
+				var url = '/api/api-user/roles';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-//					console.log(res.data.data);
-					this.userList = res.data.data;
+					this.roleList = res.data.data;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
-				this.userList.forEach((item, index) => {
-					var id = item.id;
-					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
-						this.userList.role = res.data.roles[0].name;
-					}).catch((wrong) => {})
-				})
+				// this.roleList.forEach((item, index) => {
+				// 	var id = item.id;
+				// 	this.$axios.get('/users/' + id + '/roles', data).then((res) => {
+				// 		this.roleList.role = res.data.roles[0].name;
+				// 	}).catch((wrong) => {})
+				// })
 			},
 			//机构树
 			getKey() {

@@ -6,10 +6,6 @@
 			<div class="mask_title_div clearfix">
 				<div class="mask_title">添加用户</div>
 				<div class="mask_anniu">
-					<!--<span class="mask_span">
-						<i class="icon-minimize"></i>
-					</span>-->
-					<!--icon-maximization,icon-restore-->
 					<span class="mask_span mask_max" @click='toggle'>
 						 
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -55,8 +51,8 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="8">
-									<el-form-item label="排序" prop="soft">
-										<el-input v-model="menu.soft">
+									<el-form-item label="排序" prop="sort">
+										<el-input v-model="menu.sort">
 										</el-input>
 									</el-form-item>
 								</el-col>
@@ -83,10 +79,8 @@
 				</div>
 
 				<div class="el-dialog__footer">
-					<!-- <span slot="footer" class="dialog-footer">-->
 					<el-button @click='close'>取消</el-button>
-					<el-button type="primary" @click='submitForm()'>提交</el-button>
-					<!-- </span>-->
+					<el-button type="primary" @click='submitForm'>提交</el-button>
 				</div>
 			</el-form>
 
@@ -100,7 +94,7 @@
 
 			<span slot="footer" class="dialog-footer">
 		       <el-button @click="dialogVisible = false">取 消</el-button>
-		       <el-button type="primary" @click="queding();" >确 定</el-button>
+		       <el-button type="primary" @click="confirm();" >确 定</el-button>
 		    </span>
 		</el-dialog>
 
@@ -110,36 +104,22 @@
 <script>
 	export default {
 		name: 'masks',
-		//		props: {
-		//			menu: {
-		//				type: Object,
-		//				default: function(){
-		//					return {
-		//						companyId: '',
-		//						deptId: '',
-		//						password: '',
-		//						sex: '',
-		//						email: '',
-		//						phone: '',
-		//						enabled: 1,
-		//						birthday: '',
-		//						worknumber: '',
-		//						nickname: '',
-		//						idnumber: '',
-		//						entrytime: '',
-		//						address: '',
-		//						tips: '',
-		//						username: '',
-		//						companyName:'',
-		//						roleId: '',//角色
-		//						roles: [],//角色
-		//						id: '',
-		//					}
-		//				}
-		//			},
-		//			page: Object ,
-		//		},
-		//		props: ['user','page'],
+		props: {
+			menu: {
+				type: Object,
+				default: function() {
+					return {
+						parentId: '',
+						name: '',
+						url: '',
+						sort: '',
+						hidden: '',
+						css: '',
+					}
+				}
+			},
+
+		},
 
 		data() {
 			var validatePass1 = (rule, value, callback) => {
@@ -159,7 +139,6 @@
 
 			return {
 				hidden: true,
-				menu: {},
 				edit: true, //禁填
 				col_but1: true,
 				col_but2: true,
@@ -198,7 +177,6 @@
 		},
 		methods: {
 			col_but(col_but) {
-				//alert(col_but)
 				if(col_but == 'col_but1') {
 					this.col_but1 = !this.col_but1;
 					this.down = !this.down,
@@ -214,15 +192,13 @@
 			visible() {
 				this.show = true;
 			},
-			//			 这里是修改
-			detail() {
-				this.show = true;
-				var url = '/api/api-user/users/' + userid;
-				this.$axios.get(url, {}).then((res) => {
-					this.user = res.data;
+			// 这里是修改
+			detail(deptid) {
+				var url = '/api/api-user/menus/saveOrUpdate';
+				this.$axios.post(url, {}).then((res) => {
+					//					console.log(res)
+					this.adddeptForm = res.data;
 					this.show = true;
-					console.log(this.user);
-					console.log(this.user.roles);
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -230,7 +206,7 @@
 					});
 				});
 			},
-			//			点击关闭按钮
+			//点击关闭按钮
 			close() {
 				this.show = false;
 			},
@@ -265,44 +241,43 @@
 			//保存users/saveOrUpdate
 			submitForm() {
 				this.$refs.menu.validate((valid) => {
-					//					if(valid) {
-					var url = '/api/api-user/menus/saveOrUpdate';
-					console.log(this.menu);
-					this.$axios.post(url, {}).then((res) => {
-						if(res.data.resp_code == 0) {
+					if(valid) {
+						var url = '/api/api-user/menus/saveOrUpdate';
+						this.$axios.post(url, this.menu).then((res) => {
+							console.log(res);
+							if(res.data.resp_code == 0) {
+
+								this.$message({
+									message: '保存成功',
+									type: 'success',
+								});
+								this.show = false;
+								//重新加载数据
+								this.$emit('request')
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '保存成功',
-								type: 'success',
+
+								message: '网络错误，请重试',
+								type: 'error'
 							});
-							this.show = false;
-							//重新加载数据
-							this.$emit('request')
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
-					});
-					//					} else {
-					//						return false;
-					//					}
+					} else {
+						return false;
+					}
 				})
 			},
 			//所属上级
 			getParentId() {
 				var url = '/api/api-user/menus/findOnes';
-				this.$axios.get(url, {
-
-				}).then((res) => {
-					console.log(res.data.data);
+				this.$axios.get(url, {}).then((res) => {
 					this.resourceData = res.data.data;
 					this.dialogVisible = true;
 				});
 
 			},
 
-			queding() {
+			confirm() {
 				this.getCheckedNodes();
 				this.placetext = false;
 				this.dialogVisible = false;

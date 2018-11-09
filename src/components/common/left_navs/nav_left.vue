@@ -38,7 +38,7 @@ export default {
 				}, {
 		            navicon: 'icon-role-site',
 		            navtitle: '角色管理',
-		            navherf: '#2'
+		            navherf: '/role_management'
 				}, {
 		            navicon: 'icon-department',
 		            navtitle: '部门管理',

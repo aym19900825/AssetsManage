@@ -333,10 +333,10 @@
 				this.show = true;
 			},
 			// 这里是修改
-			detail(userid) {
-				var url = '/api/apps-center/objectcfg/' + userid;
+			detail(dataid) {
+				var url = '/api/apps-center/objectcfg/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
-					this.user = res.data;
+					this.dataInfo = res.data;
 					this.show = true;
 				}).catch((err) => {
 					this.$message({

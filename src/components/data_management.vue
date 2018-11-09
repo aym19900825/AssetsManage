@@ -175,12 +175,12 @@
 				this.page.pageSize = 10;
 				this.requestData();
 			},
-			//添加用戶
+			//添加数据
 			openAddMgr() {
 				this.$refs.child.resetNew();
 				this.$refs.child.visible();
 			},
-			//修改用戶
+			//修改数据
 			modify() {
 				var selData = this.selUser;
 				if(selData.length == 0) {
@@ -205,7 +205,7 @@
 				this.down = !this.down,
 					this.up = !this.up
 			},
-			// 删除
+			// 删除数据
 			deldata() {
 				var selData = this.selUser;
 				if(selData.length == 0) {

@@ -121,15 +121,29 @@ textarea:focus,button:focus,
     border: 1px solid #dfe5ea;
 }
 .btn-default:hover { color: #576FAE; }
-.btn-refresh {padding-top: 7px; padding-bottom: 6px;}
-
-/右侧对Table操作项按钮/
 
 
-.btn-group>.btn:first-child:not(:last-child):not(.dropdown-toggle) {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
+
+/*右侧对Table操作项按钮*/
+.btn-refresh,.btn-outline {
+    height: 32px;
+    padding-right: 10px;
+    padding-left: 10px;
+    line-height: 27px;
+    padding-top: 3px;
+    cursor: pointer;
 }
+.btn-refresh{
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+.btn-outline {
+    padding-right: 5px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+
 .fixed-table-toolbar .btn-group>.btn-group {
     display: inline-block;
     margin-left: -1px!important;
@@ -142,10 +156,7 @@ textarea:focus,button:focus,
     display: inline-block;
     vertical-align: middle;
 }
-.btn-group>.btn-group:last-child:not(:first-child)>.btn:first-child {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-}
+
 .fixed-table-toolbar .btn-group>.btn-group:last-child>.btn {
     border-top-right-radius: 4px;
     border-bottom-right-radius: 4px;

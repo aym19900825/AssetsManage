@@ -95,7 +95,6 @@
 	import vheader from './common/vheader.vue'
 	import navs from './common/left_navs/nav_left.vue'
 	import navs_header from './common/nav_tabs.vue'
-	import assetsTree from './plugin/vue-tree/tree.vue'
 	import datamask from './common/data_mask.vue'
 	import relamask from './common/rela_mask.vue'
 	import tableControle from './plugin/table-controle/controle.vue'
@@ -107,7 +106,6 @@
 			'navs': navs,
 			'datamask': datamask,
 			'relamask': relamask,
-			'v-assetsTree': assetsTree,
 			'v-table-controle':tableControle
 		},
 		data() {

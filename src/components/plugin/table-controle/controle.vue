@@ -1,7 +1,7 @@
 <template>
-  <div id="app">
+  <div>
    <div class="keep-open btn-group" title="显示隐藏列">
-      <el-dropdown :hide-on-click="false" class="pl10 btn btn-default btn-outline">
+      <el-dropdown :hide-on-click="false" class="btn btn-default btn-outline">
         <span class="el-dropdown-link">
           <font class="J_tabClose"><i class="icon-menu3"></i></font>
           <i class="icon-arrow2-down"></i>

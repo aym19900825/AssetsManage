@@ -24,52 +24,20 @@
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
-							<button class="btn btn-default btn-outline" type="button" name="refresh" aria-label="refresh" title="刷新">
-								<i class="icon-refresh"></i>
-							</button>
-							<div class="keep-open btn-group" title="列">
-								<button type="button" aria-label="columns" class="btn btn-default btn-outline dropdown-toggle" data-toggle="dropdown">
-									<i class="icon-menu3"></i> 
-									<i class="icon-arrow2-down"></i>
-                				</button>
+							<div class="btn btn-default btn-refresh" id="refresh" title="刷新"><i class="icon-refresh"></i></div>
 
-								<ul class="dropdown-menu" role="menu">
-									<li role="menuitem">
-										<label>
-											<input type="checkbox" data-field="id" value="1"> id
-										</label>
-									</li>
-									<li role="menuitem" class="checkbox-group">
-										<span>
-											<input type="checkbox" data-field="name" value="2" checked="checked">
-											<label>名称</label>
-										</span>
-									</li>
-									<li role="menuitem" class="checkbox-group">
-										<span>
-                							<input type="checkbox" data-field="pName" value="3" checked="checked">
-                							<label>上级角色</label>
-                						</span>
-									</li>
-									<li role="menuitem" class="checkbox-group">
-										<span>
-                							<input type="checkbox" data-field="deptName" value="4" checked="checked">
-                							<label>所在部门</label>
-                						</span>
-									</li>
-									<li role="menuitem" class="checkbox-group">
-										<span>
-                							<input type="checkbox" data-field="companyName" value="5" checked="checked">
-                							<label>所在公司</label>
-                						</span>
-									</li>
-									<li role="menuitem" class="checkbox-group">
-										<span>
-                							<input type="checkbox" data-field="tips" value="6" checked="checked">
-                							<label>名</label>
-                						</span>
-									</li>
-								</ul>
+							<div class="keep-open btn-group" title="显示隐藏列">
+								<el-dropdown :hide-on-click="false" class="btn btn-default btn-outline">
+									<span class="el-dropdown-link">
+							          <font class="J_tabClose"><i class="icon-menu3"></i></font>
+							          <i class="icon-arrow2-down"></i>
+							        </span>
+							        <el-dropdown-menu slot="dropdown">
+										<el-dropdown-item>
+											<el-checkbox label="栏目名称一"></el-checkbox>
+										</el-dropdown-item>
+							        </el-dropdown-menu>
+								</el-dropdown>
 							</div>
 						</div>
 					</div>
@@ -174,6 +142,7 @@
 			
 			//添加菜单
 			openAddMenu() {
+				this.$refs.child.resetNew();
 				this.$refs.child.visible();
 			},
 			//修改

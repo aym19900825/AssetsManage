@@ -41,7 +41,7 @@
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
-							<button class="btn btn-default btn-outline btn-refresh" type="button" name="refresh" title="刷新"><i class="icon-refresh"></i></button>
+							<div class="btn btn-default btn-refresh" id="refresh" title="刷新"><i class="icon-refresh"></i></div>
 							<v-table-controle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></v-table-controle>
 						</div>
 					</div>
@@ -76,8 +76,11 @@
 							<v-assetsTree  :listData="treeData" v-on:getTreeId="getTreeId"></v-assetsTree>
 						</div>
 						<div class="col-sm-9">
-							<!-- <v-table :checkedName="checkedName" :tableHeader="tableHeader" :url="dataUrl" :searchData="searchData"></v-table> -->
-							<el-table :data="userList" style="width: 96%;margin: 0 auto;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
+							<!-- <tablediv ref="tableList"></tablediv> -->
+							<!-- 表格 -->
+							<el-table :data="userList" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
+
+
 								<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="账号" sortable prop="username" v-if="this.checkedName.indexOf('账号')!=-1">
@@ -235,7 +238,7 @@
 			},
 			//添加用戶
 			openAddMgr() {
-				this.$refs.child.resetNew();
+//				this.$refs.child.resetNew();
 				this.$refs.child.visible();
 			},
 			//修改用戶
@@ -568,6 +571,7 @@
 		background-color: #ffffff;
 		color: #5B6371;
 		border: 1px solid #dfe5ea;
+		margin-right: -1px;
 	}
 	
 	.btn-default:hover {

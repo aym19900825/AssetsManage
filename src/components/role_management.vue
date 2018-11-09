@@ -40,49 +40,7 @@
 							<button class="btn btn-default btn-outline" type="button" name="refresh" aria-label="refresh" title="刷新">
 								<i class="icon-refresh"></i>
 							</button>
-							<div class="keep-open btn-group" title="列">
-								<button type="button" aria-label="columns" class="btn btn-default btn-outline dropdown-toggle" data-toggle="dropdown">
-									<i class="icon-menu3"></i> 
-									<i class="icon-arrow2-down"></i>
-                				</button>                    
-								<ul class="dropdown-menu" role="menu">
-									<li role="menuitem">
-										<label>
-											<input type="checkbox" data-field="id" value="1"> id
-										</label>
-									</li>
-									<li role="menuitem" class="checkbox-group">
-										<span>
-											<input type="checkbox" data-field="name" value="2" checked="checked">
-											<label>名称</label>
-										</span>
-									</li>
-									<li role="menuitem" class="checkbox-group">
-										<span>
-                							<input type="checkbox" data-field="pName" value="3" checked="checked">
-                							<label>上级角色</label>
-                						</span>
-									</li>
-									<li role="menuitem" class="checkbox-group">
-										<span>
-                							<input type="checkbox" data-field="deptName" value="4" checked="checked">
-                							<label>所在部门</label>
-                						</span>
-									</li>
-									<li role="menuitem" class="checkbox-group">
-										<span>
-                							<input type="checkbox" data-field="companyName" value="5" checked="checked">
-                							<label>所在公司</label>
-                						</span>
-									</li>
-									<li role="menuitem" class="checkbox-group">
-										<span>
-                							<input type="checkbox" data-field="tips" value="6" checked="checked">
-                							<label>名</label>
-                						</span>
-									</li>
-								</ul>
-							</div>
+							<v-table-controle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></v-table-controle>
 						</div>
 					</div>
 					<!-- 高级查询划出 -->
@@ -107,16 +65,16 @@
 							<el-table :data="roleList" style="width: 100%;margin: 0 auto;" :default-sort="{prop:'roleList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55">
 								</el-table-column>
-								<el-table-column label="角色名称" sortable width="250" prop="name">
+								<el-table-column label="角色名称" sortable width="250" prop="name" this.checkedName.indexOf('角色名称')!=-1">
 								</el-table-column>
-								<el-table-column label="所在部门" sortable width="250" >
+								<el-table-column label="所在部门" sortable width="250" prop="deptName" this.checkedName.indexOf('所在部门')!=-1">
 								</el-table-column>
-								<el-table-column label="别名" sortable width="250" prop="code">
+								<el-table-column label="别名" sortable width="250" prop="code" this.checkedName.indexOf('别名')!=-1">
 								</el-table-column>
-								<el-table-column label="备注" sortable width="310" prop="tips">
+								<el-table-column label="备注" sortable width="310" prop="tips" this.checkedName.indexOf('备注')!=-1">
 								</el-table-column>
 							</el-table>
-							<el-pagination class=
+							<el-pagination v-if="this.checkedName.length>0" class=
 							"pull-right" @size-change="sizeChange" @current-change="currentChange"  :current-page="page.currentPage"    :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize"
 					            layout="total, sizes, prev, pager, next"
 					            :total="page.totalCount">
@@ -138,6 +96,7 @@
 	import assetsTree from './plugin/vue-tree/tree.vue'
 	import rolemask from './common/role_mask.vue'
 	import datalimitmask from './common/datalimit_mask.vue'
+	import tableControle from './plugin/table-controle/controle.vue'
 	export default {
 		name: 'user_management',
 		components: {
@@ -146,7 +105,8 @@
 			'navs': navs,
 			'rolemask': rolemask,
 			'datalimitmask': datalimitmask,
-			'v-assetsTree': assetsTree
+			'v-assetsTree': assetsTree,
+			'v-table-controle':tableControle
 		},
 		data() {
 			return {
@@ -155,6 +115,30 @@
 				'冻结': false,
 				'男': true,
 				'女': false,
+				checkedName: [
+					'角色名称',
+					'所在部门',
+					'别名',
+					'备注'
+				],
+				tableHeader: [
+					{
+						label: '角色名称',
+						prop: 'name'
+					},
+					{
+						label: '所在部门',
+						prop: 'deptName'
+					},
+					{
+						label: '别名',
+						prop: 'code'
+					},
+					{
+						label: '备注',
+						prop: 'tips'
+					},
+				],
 				roleList: [
 					{
 						rolename:'超级管理员',
@@ -215,6 +199,9 @@
 			}
 		},
 		methods: {
+			tableControle(data){
+				this.checkedName = data;
+			},
 			sizeChange(val) {
 		      this.page.pageSize = val;
 		      // this.requestData();

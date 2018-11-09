@@ -20,8 +20,8 @@
 								<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
 									<el-row :gutter="70">
 										<el-col :span="8">
-											<el-form-item label="表名" prop="objectName">
-												<el-input v-model="dataInfo.objectName"></el-input>
+											<el-form-item label="表名" prop="name">
+												<el-input v-model="dataInfo.name"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -48,33 +48,33 @@
 				                <el-form-item>
 				                	<el-row :gutter="20">
 				                		<el-col :span="4">
-				                            <el-form-item label="字段名" prop="leadname"></el-form-item>
+				                            <el-form-item label="字段名" prop="columnname"></el-form-item>
 				                        </el-col>
 				                        <el-col :span="4">
-				                            <el-form-item label="字段描述" prop="leaddecri"></el-form-item>
+				                            <el-form-item label="字段描述" prop="description"></el-form-item>
 				                        </el-col>
 				                        <el-col :span="4">
-				                            <el-form-item label="字段类型" prop="leadtype"></el-form-item>
+				                            <el-form-item label="字段类型" prop="type"></el-form-item>
 				                        </el-col>
 				                        <el-col :span="4">
-				                            <el-form-item label="小数点位数"></el-form-item>
+				                            <el-form-item label="长度" prop="length"></el-form-item>
 				                        </el-col>
 				                        <el-col :span="4">
-				                            <el-form-item label="长度" prop="leadlength"></el-form-item>
-				                        </el-col>
+				                            <el-form-item label="小数点位数" prop="retain"></el-form-item>
+				                        </el-col>			                        
 				                        <el-col :span="4">
 				                            <el-form-item label="操作"></el-form-item>
 				                        </el-col>
 				                	</el-row>
 				                    <el-row :gutter="20" v-for="(item,key) in fieldList" :key="key">
 				                        <el-col :span="4">
-				                            <el-input type="text"  placeholder="请输入人物" v-model="item.leadname"></el-input>
+				                            <el-input type="text"  placeholder="请输入字段名" v-model="item.columnname"></el-input>
 				                        </el-col>
 				                        <el-col :span="4">
-				                            <el-input type="text"  placeholder="请输入关系" v-model="item.leaddecri"></el-input>
+				                            <el-input type="text"  placeholder="请输入字段描述" v-model="item.description"></el-input>
 				                        </el-col>
 				                        <el-col :span="4">
-				                            <el-select v-model="item.leadtype" placeholder="选择字段类型">
+				                            <el-select v-model="item.type" placeholder="选择字段类型">
 										      <el-option label="字符串(string)" value="string"></el-option>
 										      <el-option label="浮点类型(float)" value="float"></el-option>
 										      <el-option label="整数(int)" value="int"></el-option>
@@ -85,11 +85,11 @@
 										    </el-select>
 				                        </el-col>
 				                        <el-col :span="4">
-				                            <el-input type="text"  placeholder="请输入关系" v-model="item.leadprecision"></el-input>
+				                            <el-input type="text"  placeholder="请输入长度" v-model="item.length"></el-input>
 				                        </el-col>
 				                        <el-col :span="4">
-				                            <el-input type="text"  placeholder="请输入关系" v-model="item.leadlength"></el-input>
-				                        </el-col>
+				                            <el-input type="text"  placeholder="请输入小数点位数" v-model="item.retain"></el-input>
+				                        </el-col>			                        
 				                        <el-col :span="4">
 				                            <i class="el-icon-delete" @click="delfield(item)" style="color: red"></i>
 				                        </el-col>
@@ -123,16 +123,16 @@
 						<el-table :data="leaddata" style="width: 100%;margin: 0 auto;" :default-sort="{prop:'leaddata', order: 'descending'}" @selection-change="SelChange">
 							<el-table-column type="selection" width="55" >
 							</el-table-column>
-							<el-table-column label="字段名称" sortable width="150" prop="leadname">
+							<el-table-column label="字段名称" sortable width="150" prop="columnname">
 							</el-table-column>
-							<el-table-column label="字段描述" sortable width="200" prop="leaddecri">
+							<el-table-column label="字段描述" sortable width="200" prop="description">
 							</el-table-column>
-							<el-table-column label="字段类型" sortable width="150" prop="leadtype">
+							<el-table-column label="字段类型" sortable width="150" prop="type">
 							</el-table-column>
-							<el-table-column label="小数点位数" sortable width="180" prop="leadprecision">
+							<el-table-column label="字段长度" sortable width="100" prop="length">
 							</el-table-column>
-							<el-table-column label="字段长度" sortable width="100" prop="leadlength">
-							</el-table-column>
+							<el-table-column label="小数点位数" sortable width="180" prop="retain">
+							</el-table-column>							
 						</el-table>
 						<!-- 表格 -->
 					</div>
@@ -181,52 +181,52 @@
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				dataList:[{
-					objectName:'',
+					name:'',
 					description:''
 				}],
 				leaddata:[//导入数据的表格
 				{
-					leadname:'author',
-					leaddecri:'作者姓名',
-					leadtype:'字符串(string)',
-					leadprecision:'',
-					leadlength:'6'
+					columnname:'author',
+					description:'作者姓名',
+					type:'字符串(string)',
+					length:'6',
+					retain:''
 				},
 				{
-					leadname:'author',
-					leaddecri:'作者姓名',
-					leadtype:'字符串(string)',
-					leadprecision:'',
-					leadlength:'6'
+					columnname:'author',
+					description:'作者姓名',
+					type:'字符串(string)',
+					length:'6',
+					retain:''
 				},
 				{
-					leadname:'author',
-					leaddecri:'作者姓名',
-					leadtype:'字符串(string)',
-					leadprecision:'',
-					leadlength:'6'
+					columnname:'author',
+					description:'作者姓名',
+					type:'字符串(string)',
+					length:'6',
+					retain:''
 				},
 				{
-					leadname:'author',
-					leaddecri:'作者姓名',
-					leadtype:'字符串(string)',
-					leadprecision:'',
-					leadlength:'6'
+					columnname:'author',
+					description:'作者姓名',
+					type:'字符串(string)',
+					length:'6',
+					retain:''
 				}],
 				dataInfo: {//添加数据库列表信息
-					objectName:'',
+					name:'',
 					description:'',
 					fieldList:[]
 				},
 				fieldList:[{//字段列表
-					leadname: '',
-					leaddecri: '',
-					leadtype:'',
-					leadprecision: '',
-					leadlength: ''
+					columnname: '',
+					description: '',
+					type:'',
+					length: '',
+					retain: ''
 				}],
 				rules: {
-					objectName: [{
+					name: [{
 						required: true,
 						trigger: 'blur',
 						validator: validateName,
@@ -255,16 +255,16 @@
 		methods: {
 			resetNew(){
                 this.dataInfo = {//数据库列表
-					objectName:'',
+					name:'',
 					description:'',
 					fieldList:[]
 				},
                 this.fieldList = [{//字段列表
-					leadname: '',
-					leaddecri: '',
-					leadtype:'',
-					leadprecision: '',
-					leadlength: ''
+					columnname: '',
+					description: '',
+					type:'',
+					length: '',
+					retain: ''
 				}],
                 this.$refs["dataInfo"].resetFields();
             },
@@ -297,11 +297,11 @@
 			},
 			addfield(){
 				var obj = {
-                    leadname: '',
-					leaddecri: '',
-					leadtype:'',
-					leadprecision: '',
-					leadlength: ''
+                    columnname: '',
+					description: '',
+					type:'',
+					length: '',
+					retain: ''
                 };
                 this.fieldList.push(obj);
 			},
@@ -333,10 +333,10 @@
 				this.show = true;
 			},
 			// 这里是修改
-			detail(userid) {
-				var url = '/api/apps-center/objectcfg/' + userid;
+			detail(dataid) {
+				var url = '/api/apps-center/objectcfg/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
-					this.user = res.data;
+					this.dataInfo = res.data;
 					this.show = true;
 				}).catch((err) => {
 					this.$message({
@@ -377,13 +377,34 @@
 			submitForm(dataInfo) {
 				this.$refs[dataInfo].validate((valid) => {
 		          if (valid) {
+					var url = '/api/apps-center/objectcfg/saveOrUpdate';
 					this.dataInfo.fieldList.push(this.fieldList);
-					console.log(this.dataInfo);
-					this.show = false;
-		          }else {
-		            return false;
-		          }
-		        });
+					console.log(this.fieldList);
+					console.log(this.dataInfo);	
+
+                var dataInfo = JSON.parse(JSON.stringify(this.dataInfo));				
+                console.log(this.dataInfo);
+					this.$axios.post(url, this.dataInfo).then((res) => {
+						//resp_code == 0是后台返回的请求成功的信息
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '保存成功',
+								type: 'success'
+							});
+							this.show = false;
+							//重新加载数据
+							this.$emit('request')
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+			          } else {
+			            return false;
+			          }
+			        });
 			},
 			// 所属组织
 			getCompany() {

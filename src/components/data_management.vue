@@ -46,7 +46,7 @@
 							<el-row :gutter="10" style="margin-left:-34px">
 								<el-col :span="5">
 									<el-form-item label="表名">
-										<el-input v-model="searchList.objectName"></el-input>
+										<el-input v-model="searchList.name"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
@@ -67,7 +67,7 @@
 							<el-table :data="dataList" style="width: 100%;margin: 0 auto;" :default-sort="{prop:'dataList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55">
 								</el-table-column>
-								<el-table-column label="表名" sortable width="320" prop="objectName"  v-if="this.checkedName.indexOf('表名')!=-1">
+								<el-table-column label="表名" sortable width="320" prop="name"  v-if="this.checkedName.indexOf('表名')!=-1">
 								</el-table-column>
 								<el-table-column label="描述" sortable width="480" prop="description"  v-if="this.checkedName.indexOf('描述')!=-1">
 								</el-table-column>
@@ -120,7 +120,7 @@
 				down: true,
 				up: false,
 				searchList: {
-					objectName:'',
+					name:'',
 					description:''
 				},
 				checkedName: [
@@ -130,7 +130,7 @@
 				tableHeader: [
 					{
 						label: '表名',
-						prop: 'objectName'
+						prop: 'name'
 					},
 					{
 						label: '描述',
@@ -259,8 +259,10 @@
 				} else {
 					var changeUser = selData[0];
 					var id = changeUser.id;
+					console.log(id);
 					var url = '/api/apps-center/objectcfg/create/' + id;
 					this.$axios.get(url, {}).then((res) => {//.delete 传数据方法
+						console.log(res);
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -290,8 +292,8 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					objectName: this.searchList.objectName,
-					description: this.searchList.description,
+					name: this.searchList.name,
+					description: this.searchList.description
 				}
 				var url = '/api/apps-center/objectcfg';
 				this.$axios.get(url, {

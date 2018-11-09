@@ -28,49 +28,6 @@
 						</div>
 						<div class="columns columns-right btn-group pull-right">
 							<button class="btn btn-default btn-outline btn-refresh" type="button" name="refresh" aria-label="refresh" title="刷新"><i class="icon-refresh"></i></button>
-							<!-- <div class="keep-open btn-group" title="列">
-								<button type="button" aria-label="columns" class="btn btn-default btn-outline dropdown-toggle" data-toggle="dropdown">
-									<i class="icon-menu3"></i> 
-									<i class="icon-arrow2-down"></i>
-                				</button>
-								<ul class="dropdown-menu" role="menu">
-									<li role="menuitem">
-										<label>
-											<input type="checkbox" data-field="id" value="1"> id
-										</label>
-									</li>
-									<li role="menuitem" class="checkbox-group">
-										<span>
-											<input type="checkbox" data-field="name" value="2" checked="checked">
-											<label>名称</label>
-										</span>
-									</li>
-									<li role="menuitem" class="checkbox-group">
-										<span>
-                							<input type="checkbox" data-field="pName" value="3" checked="checked">
-                							<label>上级角色</label>
-                						</span>
-									</li>
-									<li role="menuitem" class="checkbox-group">
-										<span>
-                							<input type="checkbox" data-field="deptName" value="4" checked="checked">
-                							<label>所在部门</label>
-                						</span>
-									</li>
-									<li role="menuitem" class="checkbox-group">
-										<span>
-                							<input type="checkbox" data-field="companyName" value="5" checked="checked">
-                							<label>所在公司</label>
-                						</span>
-									</li>
-									<li role="menuitem" class="checkbox-group">
-										<span>
-                							<input type="checkbox" data-field="tips" value="6" checked="checked">
-                							<label>名</label>
-                						</span>
-									</li>
-								</ul>
-							</div> -->
 							<v-table-controle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></v-table-controle>
 						</div>
 					</div>
@@ -94,8 +51,12 @@
 						<div class="col-sm-3">
 							<v-assetsTree  :listData="treeData" v-on:getTreeId="getTreeId"></v-assetsTree>
 						</div>
+						<!--滚动条begin-->
+						<!-- <EasyScrollbar>
+							<div id="wrapper" ref="homePagess3" style="height: 600px;">
+          					<div id="information" style="height: inherit;"> -->
 						<div class="col-sm-9">
-							<!-- 表格 -->
+							<!-- 表格begin -->
 							<el-table :data="deptList" style="width: 96%;margin: 0 auto;" :default-sort="{prop: 'deptList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 								</el-table-column>
@@ -118,8 +79,11 @@
 					           layout="total, sizes, prev, pager, next"
 					           :total="page.totalCount">
 							</el-pagination>
-							<!-- 表格 -->
+							<!-- 表格end -->
+						<!-- </div></div> -->
 						</div>
+						<!-- </EasyScrollbar> -->
+						<!--滚动条end-->
 					</div>
 				</div>
 			</div>
@@ -148,6 +112,7 @@
 		},
 		data() {
 			return {
+				clientHeight2:'',//获取浏览器高度
 				checkedName: [
 					'ID',
 					'部门简称',
@@ -392,7 +357,15 @@
 		mounted() {
 			this.requestData();
 			this.getKey();
-		},
+			  // 获取浏览器可视区域高度
+		      var _this = this;
+		      var clientHeight2 = $(window).height() - 100;    //document.body.clientWidth;
+		      _this.$refs.homePagess3.style.height = clientHeight2 + 'px';
+		      window.onresize = function() {
+		        var clientHeight2 = $(window).height() - 100;
+		        _this.$refs.homePagess3.style.height = clientHeight2 + 'px';
+		      };
+			},
 	}
 </script>
 

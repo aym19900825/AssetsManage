@@ -17,7 +17,7 @@
                         </div>
 
                         <div class="input-group">
-                            <input type="password" id="password" placeholder="密码" v-model="userinfo.password" @blur="blur2()">
+                            <input type="password" id="password" placeholder="密码" v-model="userinfo.password" @blur="blur2()" @keyup.enter="login">
                             <div class="bottom-line"></div>
                             <span v-show="null2" class="wrong">{{erpass}}</span>
                         </div>

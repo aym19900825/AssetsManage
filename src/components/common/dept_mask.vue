@@ -5,7 +5,7 @@
 			<div class="mask_title_div clearfix">
 				<div class="mask_title">添加部门</div>
 				<div class="mask_anniu">
-					<span class="mask_span mask_max" @click='toggle'>				 
+					<span class="mask_span mask_max" @click='toggle'>
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
 					</span>
 					<span class="mask_span" @click='close'>
@@ -203,18 +203,15 @@
 			getDept() {
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
-				// var type = 2;
-				var url = '/api/api-user/depts/type';
+				var url = '/api/api-user/depts/treeByType';
 				this.$axios.get(url, {
 					// params: {
 					// 	page: page,
 					// 	limit: limit,
 					// 	// type: type
 					// },
-
 				}).then((res) => {
-					console.log(res.data.data);
-					this.resourceData = res.data.data;
+					this.resourceData = res.data;
 					this.dialogVisible = true;
 				});
 			},

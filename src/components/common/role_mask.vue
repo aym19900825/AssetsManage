@@ -1,6 +1,8 @@
 <template>
 	<div>
+		
 		<div class="mask" v-show="show"></div>
+		<!-- <EasyScrollbar> -->
 		<div class="mask_div"  v-show="show">
 			<div class="mask_title_div clearfix">
 				<div class="mask_title">添加角色</div>
@@ -15,8 +17,9 @@
 				</div>
 			</div>
 			<el-form :model="user" :label-position="labelPosition" :rules="rules" ref="user" label-width="100px" class="demo-user">
-				<div class="accordion" id="information">
-					<div class="mask_tab-block">
+				<EasyScrollbar>
+				<div ref="homePagess" class="accordion" id="information" style="height: 600px;">
+					<div class="mask_tab-block" style="height: auto;">
 						<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
 							<el-row :gutter="70">
 								<el-col :span="12">
@@ -38,7 +41,6 @@
 										</el-input>
 									</el-form-item>
 								</el-col>
-								
 							</el-row>
 							<el-row :gutter="70">
 								<el-col :span="24">
@@ -47,16 +49,18 @@
 									</el-form-item>
 								</el-col>
 							</el-row>
+
 						</div>
 					</div>
+					<div class="el-dialog__footer">
+						<el-button @click='close'>取消</el-button>
+						<el-button type="primary" @click='submitForm()'>保存</el-button>
+					</div>
 				</div>
-
-				<div class="el-dialog__footer">
-					<el-button @click='close'>取消</el-button>
-					<el-button type="primary" @click='submitForm()'>保存</el-button>
-				</div>
+				</EasyScrollbar>
 			</el-form>
 		</div>
+	<!-- </EasyScrollbar> -->
 	</div>
 </template>
 
@@ -167,6 +171,7 @@
 				down: true,
 				up: false,
 				useritem: [],
+				clientHeight:'',//获取浏览器高度
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				rules: {
@@ -217,6 +222,17 @@
 					label: "simplename"
 				},
 				selectData: [],
+			};
+		},
+		mounted() {
+			this.getRole();
+			// 获取浏览器可视区域高度
+			var _this = this;
+			var clientHeight = $(window).height() - 100;    //document.body.clientWidth;
+			_this.$refs.homePagess.style.height = clientHeight + 'px';
+			window.onresize = function() {
+				var clientHeight = $(window).height() - 100;
+				_this.$refs.homePagess.style.height = clientHeight + 'px';
 			};
 		},
 		methods: {
@@ -420,10 +436,7 @@
 					})
 					.catch(_ => {});
 			}
-		},
-		mounted() {
-			this.getRole();
-		},
+		}
 	}
 </script>
 

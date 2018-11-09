@@ -4,7 +4,7 @@
 		<div class="mask_div"  v-show="show1">
 			<!---->
 			<div class="mask_title_div clearfix">
-				<div class="mask_title">添加角色</div>
+				<div class="mask_title">{{}}-数据限制</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>
 						 
@@ -37,10 +37,11 @@
 							</el-row>
 							<el-row :gutter="70">
 								<el-col :span="12">
-									<el-form-item label="限制方式" prop="deptName">
-										<el-input v-model="user.deptName" :disabled="edit">
-											<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
-										</el-input>
+									<el-form-item label="限制方式" prop="sex">
+										<el-radio-group v-model="user.sexName">
+											<el-radio label="默认"></el-radio>
+											<el-radio label="自定义"></el-radio>
+										</el-radio-group>
 									</el-form-item>
 								</el-col>
 								<el-col :span="12">

@@ -111,14 +111,28 @@ i, cite, em, var, address, dfn {
 
 /*字体颜色 By Heliping*/
 .white,.white a {color:#dae2ea;}
-.white a {color:#ffffff;}
+.white a:hover {color:#ffffff;}
+.blue,.blue a {color:#2196F3;}
+.blue a:hover {color:#6585DF;}
 
-h3 {
+.font13 {font-size: 13px;}
+
+h3,h6 {
 	font-size:18px;
 	font-weight:normal;
 	color:#121958;
-	line-height:35px;
+	line-height:30px;
 }
+h6 {
+	font-size:14px;
+	color:#4C6072;
+}
+
+
+
+
+
+
 
 
 /*必填信息为错时 By Heliping*/
@@ -281,7 +295,7 @@ h3 {
 	-moz-transition: -moz-transform ease-out .1s,background .2s;
 	transition: transform ease-out .1s,background .2s
 }
-.statisticsbg {min-height:170px;}
+.statisticsbg {min-height:170px; text-align: left; padding:15px;}
 .applist .applistbg a {color: #6585DF; display: block;}
 
 .applist .applistbg:hover {
@@ -303,7 +317,7 @@ h3 {
 	box-shadow:10px 10px 30px 0px rgba(222,229,246,1);
 	border:2px solid #6585DF;
 	display: block;
-	margin: 0px auto 15px auto;
+	margin: 0px auto 10px auto;
 }
 .applist .applistbg:hover span {
 	color: #6585DF;

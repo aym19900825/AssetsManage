@@ -54,7 +54,7 @@
 					</div>
 				</div>
 			</div>
-			<menumask :menu="selMenu[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></menumask>
+			<menumask :menu="selMenu[0]" ref="child" @request="requestData" v-bind:page=page></menumask>
 		</div>
 	</div>
 </template>
@@ -218,14 +218,14 @@
 //				}
 //			},
 			//机构树
-			getKey() {
-				let that = this;
-				var url = '/api/api-user/depts/tree';
-				this.$axios.get(url, {}).then((res) => {
-					this.resourceData = res.data;
-					this.treeData = this.transformTree(this.resourceData);
-				});
-			},
+//			getKey() {
+//				let that = this;
+//				var url = '/api/api-user/depts/tree';
+//				this.$axios.get(url, {}).then((res) => {
+//					this.resourceData = res.data;
+//					this.treeData = this.transformTree(this.resourceData);
+//				});
+//			},
 			SelChange(val) {
 				this.selMenu = val;
 			},
@@ -254,7 +254,7 @@
 		},
 		mounted() {
 			this.requestData();
-			this.getKey();
+//			this.getKey();
 		},
 	}
 </script>

@@ -53,7 +53,7 @@
 												</el-dropdown-menu>
 											</el-dropdown>
 										</div>
-										<div class="clearfix">
+										<div class="pt40 clearfix">
 											<div class="pull-left">
 												<p class="big_numb">283</p>
 												<p class="small_font">工作总计</p>
@@ -92,7 +92,7 @@
 												</el-dropdown-menu>
 											</el-dropdown>
 										</div>
-										<div id="main" style="width: 100%; height: 100px;"></div>
+										<div id="main" style="width: 100%; height: 170px;"></div>
 									</div>
 								</el-col>
 								<el-col :span="6">
@@ -127,6 +127,7 @@
 <script>
 import vheader from './common/vheader.vue'
 import navs_header from './common/nav_tabs.vue'
+import  'echarts/theme/macarons.js'
 
 export default {
 	name: 'index',
@@ -218,7 +219,7 @@ export default {
 	},
 	methods: {
 		initEchart(){//引入饼状图图表
-			var myChart = this.$echarts.init(document.getElementById('main'));
+			var myChart = this.$echarts.init(document.getElementById('main'),'macarons');
 	        // 指定图表的配置项和数据
 	        var option = {
 	             xAxis: {
@@ -247,7 +248,16 @@ export default {
 @import '../assets/css/mask-modules.css';
 
 /*工作统计*/
-.echart_title {line-height:20px; padding-bottom: 10px;}
+.echart_title {
+	left: 15px;
+	right: 15px;
+	line-height:20px;
+	padding-bottom: 10px;
+	height: 35px;
+	position: absolute;
+	top: 15px;
+	z-index: 80;
+}
 .big_numb { color: #333333; font-size: 28px; line-height:32px; }
 .small_font { color: #BDBDBD; font-size:10px; line-height:15px;}
 .middle_font { color: #121958; font-size: 12px;  line-height:20px;}

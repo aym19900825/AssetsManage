@@ -226,6 +226,7 @@
 			},
 			page: Object ,
 		},
+//		props: ['user','page'],
 		
 		data() {
 			var validatePass1 = (rule, value, callback) => {
@@ -393,27 +394,6 @@
 						this.up = !this.up
 				}
 			},
-			//form表单内容清空
-			resetNew(){
-                this.user = {
-					companyName:'',
-					deptName:'',
-					username:'',
-					password:'',
-					nickname:'',
-					birthday:'',
-					sexName:'',
-					idnumber:'',
-					entrytime:'',
-					roleId:'',
-					worknumber:'',
-					phone:'',
-					email:'',
-					address:'',
-					tips:''
-				}
-                this.$refs["user"].resetFields();
-            },
 			//点击按钮显示弹窗
 			visible() {
 				this.show = true;
@@ -505,16 +485,14 @@
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
 				var type = 1;
-				var url = '/api/api-user/depts/type';
+				var url = '/api/api-user/depts/treeByType';
 				this.$axios.get(url, {
 					params: {
-						page: page,
-						limit: limit,
 						type: type
 					},
 				}).then((res) => {
 					console.log(res.data.data);
-					this.resourceData = res.data.data;
+					this.resourceData = res.data;
 					this.dialogVisible = true;
 				});
 
@@ -526,15 +504,13 @@
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
 				var type = 2;
-				var url = '/api/api-user/depts/type';
+				var url = '/api/api-user/depts/treeByType';
 				this.$axios.get(url, {
 					params: {
-						page: page,
-						limit: limit,
 						type: type
 					},
 				}).then((res) => {
-					this.resourceData = res.data.data;
+					this.resourceData = res.data;
 					this.dialogVisible = true;
 				});
 			},

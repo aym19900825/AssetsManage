@@ -10,7 +10,7 @@
 		<div class="wrapper-content">
 			<EasyScrollbar>
 				<div id="wrapper" ref="homePagess" style="height: 600px;">
-					<div id="information" style="height: 760px;">
+					<div id="information" style="height: 720px;">
 						<div class="ibox-content pl20 pr20">
 							<!--我的应用 Begin-->
 							<div class="clearfix">
@@ -92,7 +92,7 @@
 												</el-dropdown-menu>
 											</el-dropdown>
 										</div>
-										<div id="main" style="width: 100%; height: 170px;"></div>
+										<div id="main" style="width: 100%; height: 140px;"></div>
 									</div>
 								</el-col>
 								<el-col :span="6">

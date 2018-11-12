@@ -36,7 +36,7 @@
 							<el-row :gutter="70">
 								<el-col :span="24">
 									<el-form-item label="所在部门" prop="deptName">
-										<el-input v-model="roleList.deptName">
+										<el-input v-model="roleList.deptName" :disabled="edit">
 											<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
 										</el-input>
 									</el-form-item>
@@ -61,6 +61,17 @@
 			</el-form>
 		</div>
 	<!-- </EasyScrollbar> -->
+	    <!-- 弹出 -->
+		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+
+			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick"  @check-change="handleCheckChange">
+			</el-tree>
+
+			<span slot="footer" class="dialog-footer">
+		       <el-button @click="dialogVisible = false">取 消</el-button>
+		       <el-button type="primary" @click="queding();" >确 定</el-button>
+		    </span>
+		</el-dialog>
 	</div>
 </template>
 
@@ -75,61 +86,8 @@
 					callback();
 				}
 			};
-			var validatePass2 = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('必填'));
-				} else {
-					callback();
-				}
-			};
-			var validatePass3 = (rule, value, callback) => {
-				console.log(value)
-				if(value === '') {
-					callback(new Error('必填'));
-				} else {
-					callback();
-				}
-			};
-			var validatePass4 = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('必填'));
-				} else {
-					callback();
-				}
-			};
-			var validatePass5 = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('必填'));
-				} else {
-					callback();
-				}
-			};
-			var validatePass6 = (rule, value, callback) => {
-                var regidnumber = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/; 
-                if (!regidnumber.test(this.user.idnumber)) {
-                   callback(new Error('身份证号填写有误'));
-                } else {
-                    callback();
-                }
-            };
-            var validatePass7 = (rule, value, callback) => {
-                var regphone = 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/; 
-                 if(!regphone.test(this.user.phone)){
-                   callback(new Error('手机格式不正确'));
-                }else{
-                    callback();
-                }
-            };
-            var validatePass8 = (rule, value, callback) => {
-                  var regEmail= /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
-                 if(!regEmail.test(this.user.email)){
-                   callback(new Error('邮箱格式不正确'));
-                }else{
-                    callback();
-                }
-            };
 			return {
-				editSearch: '',
+			
 				edit: true, //禁填
 				'男': true,
 				'女': false,
@@ -147,43 +105,11 @@
 				dialogVisible: false, //对话框
 				roleList:[],
 				rules: {
-					companyName: [{
+					name: [{
 						required: true,
-						//						trigger: 'change',
+						trigger: 'blur',
 						validator: validatePass1,
 					}],
-					deptName: [{
-						required: true,
-						//						trigger: 'change',
-						validator: validatePass2,
-					}],
-					roleId: [{						
-						required: true,
-						trigger: 'blur',
-						validator: validatePass3,
-					}],
-					username: [{
-						required: true,
-						trigger: 'blur',
-						validator: validatePass4,
-					}],
-					password: [{
-						required: true,
-						trigger: 'blur',
-						validator: validatePass5,
-					}],
-					idnumber: [{
-						trigger: 'blur',
-						validator: validatePass6,
-					}],
-					phone: [{
-						trigger: 'blur',
-						validator: validatePass7,
-					}],
-					email: [{
-						trigger: 'blur',
-						validator: validatePass8,
-					}]
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -194,10 +120,10 @@
 					label: "simplename"
 				},
 				selectData: [],
+				checkedNodes:{}
 			};
 		},
 		mounted() {
-			this.getRole();
 			// 获取浏览器可视区域高度
 			var _this = this;
 			var clientHeight = $(window).height() - 100;    //document.body.clientWidth;
@@ -208,6 +134,13 @@
 			};
 		},
 		methods: {
+			handleCheckChange(data, checked, indeterminate) {
+		        this.checkedNodes=data;
+		    },
+		    handleNodeClick(data) {
+		   		console.log(111);
+             	console.log(data);
+            },
 			col_but(col_but) {
 				if(col_but == 'col_but1') {
 					this.col_but1 = !this.col_but1;
@@ -235,19 +168,20 @@
 				this.show = true;
 			},
 			// 这里是修改
-			detail() {
-				this.show = true;
-				var url = '/api/api-user/roles/' + id;
-				this.$axios.get(url, {}).then((res) => {
-					console.log(res.data);
-					this.roleList = res.data;
+			detail(val) {
+				// this.show = true;
+				// // var url = '/api/api-user/roles/' + id;
+				// this.$axios.get(url, {}).then((res) => {
+					console.log(val);
+					this.roleList = val;
+					console.log(this.roleList);
 					this.show = true;
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
+				// }).catch((err) => {
+				// 	this.$message({
+				// 		message: '网络错误，请重试',
+				// 		type: 'error'
+				// 	});
+				// });
 			},
 			//点击关闭按钮
 			close() {
@@ -282,6 +216,7 @@
 			},
 			//保存users/saveOrUpdate
 			submitForm() {
+				console.log(this.roleList);
 				this.$refs.roleList.validate((valid) => {
 					if(valid) {	
 						var url = '/api/api-user/roles/saveOrUpdate';
@@ -306,82 +241,28 @@
 					}
 				})
 			},
-			//所属组织
-			getCompany() {
-				this.editSearch = 'company';
-				var page = this.page.currentPage;
-				var limit = this.page.pageSize;
-				var type = 1;
-				var url = '/api/api-user/depts/type';
-				this.$axios.get(url, {
-					params: {
-						page: page,
-						limit: limit,
-						type: type
-					},
-				}).then((res) => {
-					console.log(res.data.data);
-					this.resourceData = res.data.data;
-					this.dialogVisible = true;
-				});
-			},  
-			//所属部门
-			getDept() {
-				this.editSearch = 'dept';
-				var page = this.page.currentPage;
-				var limit = this.page.pageSize;
+			//所在部门
+			getDept() {				
+				// this.editSearch = 'dept';
 				var type = 2;
-				var url = '/api/api-user/depts/type';
+				var url = '/api/api-user/depts/treeByType';
 				this.$axios.get(url, {
 					params: {
-						page: page,
-						limit: limit,
 						type: type
-					},
+					},					
 				}).then((res) => {
-					this.resourceData = res.data.data;
+					console.log(res);
+					console.log(res.data);
+					this.resourceData = res.data;
 					this.dialogVisible = true;
 				});
 			},
-			//角色
-			getRole() {
-				this.editSearch = 'role';
-				var page = this.page.currentPage;
-				var limit = this.page.pageSize;
-				var url = '/api/api-user/roles';
-				this.$axios.get(url, {
-					params: {
-						page: page,
-						limit: limit,
-					},
-				}).then((res) => {
-					this.selectData = res.data.data;
-					console.log(res.data.data);
-					console.log(this.selectData);
-					}).catch(error =>{
-				    console.log('请求失败');
-				})
-			},
-		  	changeRole(event){
-		  		console.log(event);
-		  		console.log(111);
-		  	 	this.user.roleId=[]
-		  	 	for (var i=0;i<event.length;i++){	
-		  	 		this.user.roleId.push(event[i])
-		  	 	}		  	 	
-		  	 	console.log(this.user.roleId);
-          	},
 			queding() {
 				this.getCheckedNodes();
 				this.placetext = false;
 				this.dialogVisible = false;
-				if(this.editSearch == 'company') {
-					this.user.companyId = this.checkedNodes[0].id;
-					this.user.companyName = this.checkedNodes[0].simplename;
-				} else {
-					this.user.deptId = this.checkedNodes[0].id;
-					this.user.deptName = this.checkedNodes[0].simplename;
-				}
+				this.roleList.id = this.checkedNodes[0].id;
+				this.roleList.deptName = this.checkedNodes[0].simplename;
 			},
 			handleClose(done) {
 				this.$confirm('确认关闭？')

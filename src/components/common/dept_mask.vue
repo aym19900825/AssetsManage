@@ -14,73 +14,79 @@
 				</div>
 			</div>
 			<el-form :model="adddeptForm" :label-position="labelPosition" :rules="rules" ref="adddeptForm" label-width="100px" class="demo-adduserForm">
-				<div class="accordion" id="information">
-					<div class="mask_tab-block">
-						<div class="mask_tab-head clearfix">
-							<div class="accordion_title">
-								<span class="accordion-toggle">添加部门信息</span>
+				<EasyScrollbar>
+					<div ref="homePagess" class="accordion" id="information" style="height: 425px;">
+						<div style="height: auto;">
+					<div class="accordion">
+						<div class="mask_tab-block">
+							<div class="mask_tab-head clearfix">
+								<div class="accordion_title">
+									<span class="accordion-toggle">添加部门信息</span>
+								</div>
+								<div class="col_but" @click="col_but('col_but1')">
+									<i class="icon-arrow1-down"></i>
+								</div>
 							</div>
-							<div class="col_but" @click="col_but('col_but1')">
-								<i class="icon-arrow1-down"></i>
+							<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
+								<el-row :gutter="70">
+									<el-col :span="24">
+										<el-form-item label="所属上级" prop="pName">
+											<el-input v-model="adddeptForm.pName" :disabled="edit">
+												<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
+											</el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="8">
+										<el-form-item label="部门名称" prop="fullname">
+											<el-input v-model="adddeptForm.fullname"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="单位简称" prop="simplename">
+											<el-input v-model="adddeptForm.simplename"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="类型" prop="type">
+											<el-input v-model="adddeptForm.type"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="8"  v-show="showcode">
+										<el-form-item label="机构编码" prop="code">
+											<el-input v-model="adddeptForm.code" :disabled="edit">
+												<el-button slot="append" icon="el-icon-search"></el-button>
+											</el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="电话" prop="teltphone">
+											<el-input v-model="adddeptForm.teltphone"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="24">
+										<el-form-item label="备注" prop="tips">
+											<el-input :rows="3" type="textarea" v-model="adddeptForm.tips" placeholder="请输入"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
 							</div>
-						</div>
-						<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
-							<el-row :gutter="70">
-								<el-col :span="24">
-									<el-form-item label="所属上级" prop="pName">
-										<el-input v-model="adddeptForm.pName" :disabled="edit">
-											<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
-										</el-input>
-									</el-form-item>
-								</el-col>
-							</el-row>
-							<el-row :gutter="70">
-								<el-col :span="8">
-									<el-form-item label="部门名称" prop="fullname">
-										<el-input v-model="adddeptForm.fullname"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="8">
-									<el-form-item label="单位简称" prop="simplename">
-										<el-input v-model="adddeptForm.simplename"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="8">
-									<el-form-item label="类型" prop="type">
-										<el-input v-model="adddeptForm.type"></el-input>
-									</el-form-item>
-								</el-col>
-							</el-row>
-							<el-row :gutter="70">
-								<el-col :span="8">
-									<el-form-item label="机构编码" prop="code">
-										<el-input v-model="adddeptForm.code">
-											<el-button slot="append" icon="el-icon-search"></el-button>
-										</el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="8">
-									<el-form-item label="电话" prop="teltphone">
-										<el-input v-model="adddeptForm.teltphone"></el-input>
-									</el-form-item>
-								</el-col>
-							</el-row>
-							<el-row :gutter="70">
-								<el-col :span="24">
-									<el-form-item label="备注" prop="tips">
-										<el-input :rows="3" type="textarea" v-model="adddeptForm.tips" placeholder="请输入"></el-input>
-									</el-form-item>
-								</el-col>
-							</el-row>
 						</div>
 					</div>
+					<div class="el-dialog__footer">
+						<el-form-item>
+							<el-button @click="cancelForm">取消</el-button>
+							<el-button type="primary" @click="submitForm('adddeptForm')">提交</el-button>
+						</el-form-item>
+					</div>
 				</div>
-				<div class="el-dialog__footer">
-					<el-form-item>
-						<el-button @click="cancelForm">取消</el-button>
-						<el-button type="primary" @click="submitForm('adddeptForm')">提交</el-button>
-					</el-form-item>
-				</div>
+			</div>
+		</EasyScrollbar>
 			</el-form>
 		</div>
 		<!-- 弹出 -->
@@ -125,21 +131,23 @@
                     callback();
                 }
             };
-            var validatecode = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请选择机构编码'));
-                }else {
-                    callback();
-                }
-            };
+            // var validatecode = (rule, value, callback) => {
+            //     if (value === '') {
+            //         callback(new Error('请选择机构编码'));
+            //     }else {
+            //         callback();
+            //     }
+            // };
 
 			return {
+				showcode:true,
 				dialogVisible: false, //对话框
 				edit: true, //禁填
 				value11:true,
 				editSearch: '',
 				col_but1: true,
 				col_but2: true,
+				clientHeight:'',//获取浏览器高度
 				show: false,
 				isok1: true,
 				isok2: false,
@@ -169,11 +177,11 @@
        						validator: validatetype,
        						trigger: 'blur' 
        					}],
-          			code:[{ 
-       						required: true,
-       						validator: validatecode,
-       						trigger: 'blur' 
-       					}],
+          		// 	code:[{ 
+       					// 	required: true,
+       					// 	validator: validatecode,
+       					// 	trigger: 'blur' 
+       					// }],
 	          	},
 	          	//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -236,10 +244,12 @@
 			},
 			//点击按钮显示弹窗
 			childMethods() {
+				this.showcode = false;
 				this.show = !this.show;
 			},
 			//修改
 			detail(deptid) {
+				this.showcode = true;
 				var url = '/api/api-user/depts/' +deptid;
 				this.$axios.get(url, {}).then((res) => {
 					console.log(res);
@@ -325,6 +335,16 @@
 					})
 					.catch(_ => {});
 			}
+		},
+		mounted() {
+			// 获取浏览器可视区域高度
+			var _this = this;
+			var clientHeight = $(window).height() - 100;    //document.body.clientWidth;
+			_this.$refs.homePagess.style.height = clientHeight + 'px';
+			window.onresize = function() {
+				var clientHeight = $(window).height() - 100;
+				_this.$refs.homePagess.style.height = clientHeight + 'px';
+			};
 		}
 	}
 </script>

@@ -36,31 +36,11 @@
 								</button>
 							</div>
 						</div>
-						<!-- <div class="columns columns-right btn-group pull-right">
-							<button class="btn btn-default btn-outline" type="button" name="refresh" aria-label="refresh" title="刷新">
-								<i class="icon-refresh"></i>
-							</button>
-							<v-table-controle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></v-table-controle>
-						</div> -->
 						<div class="columns columns-right btn-group pull-right">
 							<button class="btn btn-default btn-outline" type="button" name="refresh" aria-label="refresh" title="刷新">
 								<i class="icon-refresh"></i>
 							</button>
-							<div class="keep-open btn-group" title="列">
-								<el-dropdown :hide-on-click="false" class="pl10 btn btn-default btn-outline">
-									<span class="el-dropdown-link">
-										<font class="J_tabClose"><i class="icon-menu3"></i></font>
-										<i class="el-icon-arrow-down icon-arrow2-down"></i>
-									</span>
-									<el-dropdown-menu slot="dropdown">
-										<el-checkbox-group >
-											<el-dropdown-item  v-for="item in tableHeader">
-												<el-checkbox :label="item.label" name="type"></el-checkbox>
-											</el-dropdown-item>
-										</el-checkbox-group>
-									</el-dropdown-menu>
-								</el-dropdown>
-							</div>
+							<v-table-controle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></v-table-controle>
 						</div>
 					</div>
 					<!-- 高级查询划出 -->
@@ -83,19 +63,23 @@
 						<div class="col-sm-12">
 							<!-- 表格begin -->
 							<el-table :data="roleList" style="width: 100%;margin: 0 auto;" :default-sort="{prop:'roleList', order: 'descending'}" @selection-change="SelChange">
-								<el-table-column type="selection" width="55">
+								<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="角色名称" sortable width="250" prop="name">
+								<el-table-column label="角色名称" sortable width="250" prop="name" v-if="this.checkedName.indexOf('角色名称')!=-1">
 								</el-table-column>
-								<el-table-column label="所在部门" sortable width="250" prop="deptName">
+								<el-table-column label="所在部门" sortable width="250" prop="deptName" v-if="this.checkedName.indexOf('所在部门')!=-1">
 								</el-table-column>
-								<el-table-column label="别名" sortable width="250" prop="code">
+								<el-table-column label="别名" sortable width="250" prop="code" v-if="this.checkedName.indexOf('别名')!=-1">
 								</el-table-column>
-								<el-table-column label="备注" sortable width="310" prop="tips" >
+								<el-table-column label="备注" sortable width="310" prop="tips" v-if="this.checkedName.indexOf('备注')!=-1">
 								</el-table-column>
 							</el-table>
-							<el-pagination  class=
-							"pull-right" @size-change="sizeChange" @current-change="currentChange"  :current-page="page.currentPage"    :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize"
+							<el-pagination class="pull-right" v-if="this.checkedName.length>0"
+					            @size-change="sizeChange"
+					            @current-change="currentChange"
+					            :current-page="page.currentPage"
+					            :page-sizes="[10, 20, 30, 40]"
+					            :page-size="page.pageSize"
 					            layout="total, sizes, prev, pager, next"
 					            :total="page.totalCount">
 					        </el-pagination>
@@ -135,12 +119,12 @@
 				'冻结': false,
 				'男': true,
 				'女': false,
-				// checkedName: [
-				// 	'角色名称',
-				// 	'所在部门',
-				// 	'别名',
-				// 	'备注'
-				// ],
+				checkedName: [
+					'角色名称',
+					'所在部门',
+					'别名',
+					'备注'
+				],
 				tableHeader: [
 					{
 						label: '角色名称',
@@ -191,16 +175,16 @@
 			},
 			sizeChange(val) {
 		      this.page.pageSize = val;
-		      // this.requestData();
+		      this.requestData();
 		    },
 		    currentChange(val) {
 		      this.page.currentPage = val;
-		      // this.requestData();
+		      this.requestData();
 		    },
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
-				// this.requestData();
+				this.requestData();
 			},
 			//添加用戶
 			openAddMgr() {
@@ -227,8 +211,7 @@
 					});
 					return;
 				} else {
-					console.log(this.aaaData[0]);
-					this.$refs.child.detail();
+					this.$refs.child.detail(this.aaaData);
 				}
 			},
 			//高级查询

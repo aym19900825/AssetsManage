@@ -389,8 +389,7 @@
 		   	handleNodeClick(data) {
 		   		console.log(111);
              	//console.log(node)
-             	console.log(data)
-       
+             	console.log(data);
             },
 			
 			col_but(col_but) {

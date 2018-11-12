@@ -97,6 +97,11 @@ Vue.use(Router)
       name: 'safe_management',
       component: safe_management
     },
+    {//安全管理
+      path: '/dept_management',
+      name: 'dept_management',
+      component: dept_management
+    },
     {//字典管理
       path: '/dictionaries_management',
       name: 'dictionaries_management',

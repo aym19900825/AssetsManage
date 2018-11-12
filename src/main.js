@@ -46,7 +46,8 @@ new Vue({
   components: { App },
   template: '<App/>'
 })
-window.Vue.directive('loadmore', {
+
+/*window.Vue.directive('loadmore', {
   	bind(el, binding) {
     	const selectWrap = el.querySelector('.el-table__body-wrapper')
     	selectWrap.addEventListener('scroll', function() {
@@ -57,4 +58,4 @@ window.Vue.directive('loadmore', {
      	    }
     	})
   	}
-})
+})*/

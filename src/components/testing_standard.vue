@@ -97,38 +97,6 @@
 								</el-form>
 							</div>
 							<!-- 高级查询划出 End-->
-							<!-- 表格 Begin-->
-							<el-table :data="userList" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
-
-								<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
-								</el-table-column>
-								<el-table-column label="账号" sortable prop="username" v-if="this.checkedName.indexOf('账号')!=-1">
-								</el-table-column>
-								<el-table-column label="姓名" sortable prop="nickname" v-if="this.checkedName.indexOf('姓名')!=-1">
-								</el-table-column>
-								<el-table-column label="性别" sortable prop="sex" :formatter="sexName" v-if="this.checkedName.indexOf('性别')!=-1">
-								</el-table-column>
-								</el-table-column>
-								<el-table-column label="部门" sortable prop="deptName" v-if="this.checkedName.indexOf('部门')!=-1">
-								</el-table-column>
-								<el-table-column label="公司" sortable prop="companyName" v-if="this.checkedName.indexOf('公司')!=-1">
-								</el-table-column>
-								<el-table-column label="状态" sortable prop="enabled" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
-								</el-table-column>
-								<el-table-column label="创建时间" prop="createTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('创建时间')!=-1">
-								</el-table-column>
-							</el-table>
-							<el-pagination v-if="this.checkedName.length>0"
-					            @size-change="sizeChange"
-					            @current-change="currentChange"
-					            :current-page="page.currentPage"
-					            :page-sizes="[10, 20, 30, 40]"
-					            :page-size="page.pageSize"
-					            layout="total, sizes, prev, pager, next"
-					            :total="page.totalCount">
-					        </el-pagination>
-							<!-- 表格 End-->
-
 						</div>
 					</div>
 				</div>
@@ -198,11 +166,11 @@ export default {
 			}, {
 				navicon: 'icon-file-text',
 				navtitle: '检验/检测项目',
-				navherf: '/testing_standard'
+				navherf: '/testing_projects'
 			}, {
 				navicon: 'icon-file-text',
 				navtitle: '检验/检测方法',
-				navherf: '/test_method'
+				navherf: '/testing_methods'
 			}, {
 				navicon: 'icon-file-text',
 				navtitle: '自动编号设置',

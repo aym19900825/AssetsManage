@@ -448,6 +448,7 @@ i[class*=" icon-"]:before,i[class^="icon-"]:before {
 	border-radius:4px;
 	padding:5px;
 	cursor: pointer;
+	margin-bottom: 5px;
 }
 .el-col span:hover,.el-col span.current {
 	background:rgba(241,243,253,1); color:#576FAE;

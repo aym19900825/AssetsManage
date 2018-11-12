@@ -116,7 +116,7 @@
 								</el-col>
 								<el-col :span="8">
 									<el-form-item label="角色" prop="roleId">
-										<el-select v-model="user.roleId" multiple @change="changeRole">
+										<el-select v-model="user.roles" multiple @change="changeRole">
 											<el-option v-for="data in selectData" :key="data.name" :value="data.id" :label="data.name"></el-option>
 											
 										</el-select>
@@ -219,7 +219,7 @@
 						username: '',
 						companyName:'',
 						roleId: '',//角色
-//						roles: [],//角色
+						roles: [],//角色
 						id: '',
 					}
 				}

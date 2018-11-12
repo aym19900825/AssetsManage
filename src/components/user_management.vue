@@ -24,7 +24,7 @@
 								<button type="button" class="btn btn-primarys button-margin" @click="resetPwd">
 								    <i class="icon-refresh"></i>重置密码
 								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="unfreeze">
+				<br />				<button type="button" class="btn btn-primarys button-margin" @click="unfreeze">
 								    <i class="icon-start"></i>启用
 								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="freezeAccount">

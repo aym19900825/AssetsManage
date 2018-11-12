@@ -56,7 +56,7 @@
 					</div>
 				</div>
 			</div>
-			<menumask :menu="selMenu[0]" ref="child" @request="requestData" v-bind:page=page></menumask>
+			<menumask :menu="this.selMenu" ref="child" @request="requestData" v-bind:page=page></menumask>
 		</div>
 	</div>
 </template>
@@ -153,9 +153,12 @@
 					}
 				}
 			},
+			//表格传过来
 			childByValue: function (childValue) {
 		        // childValue就是子组件传过来的
+		        console.log(childValue);
 		        this.selMenu = childValue
+		        console.log(this.selMenu );
 		    },
 			sizeChange(val) {
 				this.page.pageSize = val;
@@ -187,7 +190,7 @@
 					});
 					return;
 				} else {
-					this.$refs.child.detail(selData[0].id);
+					this.$refs.child.detail(selData[0]);
 				}
 			},
 
@@ -237,24 +240,6 @@
 					}
 				}
 			},
-
-//			显示目录
-//			judge(data) {
-//				if(data.parentId == "-1" || data.parentId == "null") {
-//					return data.isMenu = "目录"
-//				} else {
-//					return data.isMenu = "菜单"
-//				}
-//			},
-			//机构树
-//			getKey() {
-//				let that = this;
-//				var url = '/api/api-user/depts/tree';
-//				this.$axios.get(url, {}).then((res) => {
-//					this.resourceData = res.data;
-//					this.treeData = this.transformTree(this.resourceData);
-//				});
-//			},
 			SelChange(val) {
 				this.selMenu = val;
 			},
@@ -267,7 +252,8 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					let result=res.data.data
+					let result=res.data
+					console.log(result);
 					for(let i=0;i<result.length;i++){
 						if(result[i].parentId == "-1" || result[i].parentId == "null") {
 							result[i].isMenu = "目录"

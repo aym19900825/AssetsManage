@@ -30,8 +30,8 @@
 						<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
 							<el-row :gutter="70">
 								<el-col :span="24">
-									<el-form-item label="所属上级" prop="parentId">
-										<el-input v-model="menu.parentId" :disabled="edit">
+									<el-form-item label="所属上级" prop="pName">
+										<el-input v-model="menu.pName" :disabled="edit">
 											<el-button slot="append" icon="el-icon-search" @click="getParentId"></el-button>
 										</el-input>
 									</el-form-item>
@@ -62,7 +62,7 @@
 								<!--是否影藏-->
 								<el-col :span="8">
 									<el-form-item label="是否显示" prop="hidden">
-										<el-switch on-text="是" off-text="否" on-color="#5B7BFA" off-color="#dadde5" v-model="menu.hidden" @change=change()>
+										<el-switch on-text="是" off-text="否" on-color="#5B7BFA" off-color="#dadde5" v-model="menu.hidden" @change="changeval">
 										</el-switch>
 									</el-form-item>
 								</el-col>
@@ -131,19 +131,20 @@
 			'all_icons':all_icons,
 		},
 		props: {
-			menu: {
-				type: Object,
-				default: function() {
-					return {
-						parentId: '',
-						name: '',
-						url: '',
-						sort: '',
-						hidden: '',
-						css: '',
-					}
-				}
-			},
+			menu: Array,
+//			menu: [
+//				type:array,
+//				default: function() {
+//					return {
+//						parentId: '',
+//						name: '',
+//						url: '',
+//						sort: '',
+//						hidden: '',
+//						css: '',
+//					}
+//				}
+//			],
 
 		},
 
@@ -206,7 +207,7 @@
 		
 			//清空表單
 			resetNew(){
-                this.adddeptForm = {
+                this.menu = {
 					parentId:'',
 					name:'',
 					url:'',
@@ -234,17 +235,10 @@
 			},
 			
 			// 这里是修改
-			detail(deptid) {
-				var url = '/api/api-user/menus/saveOrUpdate';
-				this.$axios.post(url, {}).then((res) => {
-					this.adddeptForm = res.data;
+			detail(val) {
+                	
+					this.menu = val;
 					this.show = true;
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
 			},
 			//点击关闭按钮
 			close() {
@@ -284,22 +278,22 @@
 //					if(valid) {
 
 						var url = '/api/api-user/menus/saveOrUpdate';
-						if(typeof(this.menu._expanded )!='undefined'){
-							delete this.menu._expanded
-						}
-						if(typeof(this.menu._level )!='undefined'){
-							delete this.menu._level
-						}
-						if(typeof(this.menu._parent )!='undefined'){
-							delete this.menu._parent
-						}
-						if(typeof(this.menu._show )!='undefined'){
-							delete this.menu._show
-						}
-						console.log(this.menu);
+//						if(typeof(this.menu._expanded )!='undefined'){
+//							delete this.menu._expanded
+//						}
+//						if(typeof(this.menu._level )!='undefined'){
+//							delete this.menu._level
+//						}
+//						if(typeof(this.menu._parent )!='undefined'){
+//							delete this.menu._parent
+//						}
+//						if(typeof(this.menu._show )!='undefined'){
+//							delete this.menu._show
+//						}
+					
 						//return false;
 						this.$axios.post(url, this.menu).then((res) => {
-							console.log(res);							
+													
 							if(res.data.resp_code == 0) {
 
 								this.$message({
@@ -350,15 +344,14 @@
 		
 		    childByValue: function (childValue) {
 		        // childValue就是子组件传过来的值
-		        console.log(111);
-		        console.log(childValue);
+		      
 		        this.sendchildValue = childValue;
-		        console.log(childValue);
+		      
 		    },
 			//图标的带值
 			confirm2() {
 				this.menu.css = this.sendchildValue;
-				console.log(111);
+				
 				this.show2 = false;
 
 			},
@@ -369,6 +362,9 @@
 						done();
 					})
 					.catch(_ => {});
+			},
+			changeval(Callback){
+				
 			}
 
 		},

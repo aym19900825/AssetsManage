@@ -3,7 +3,7 @@
     :data="data"
     style="width: 100%;margin: 0 auto;"
     :row-style="showTr" @selection-change="SelChange">
-    <el-table-column type="selection" width="55" v-if="checkedName.length>0">
+    <el-table-column type="selection" width="55">
 		</el-table-column>
     <el-table-column  v-for="(column, index) in columns" :key="column.dataIndex"
       :label="column.text" v-if="column.isShow">
@@ -98,6 +98,7 @@
       }
     },
     methods: {
+    	//改变的值
     	SelChange(val) {
 				this.selUser = val;
 				//子给父传值

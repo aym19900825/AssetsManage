@@ -490,6 +490,7 @@
 							user.roleId = '';
 							user.roles = [];
 						}
+						console.log(this.user);
 						var url = '/api/api-user/users/saveOrUpdate';
 						this.$axios.post(url, this.user).then((res) => {
 

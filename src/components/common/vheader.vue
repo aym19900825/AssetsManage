@@ -6,7 +6,7 @@
             <li><router-link :to="{path:'/dashboardList'}" >程序设计器</router-link></li>
             <li><router-link :to="{path:'/dashboardList'}" >权限管理</router-link></li>
             <li>
-                <router-link :to="{path:'/user_management'}" >系统配置</router-link>
+                <router-link :to="{path:'/user_management'}" @click.native = "setTabs">系统配置</router-link>
             </li>
         </ul>
         <div class="nav-head pull-right nav-right">
@@ -65,6 +65,32 @@ export default {
                     type: 'error'
                 });
             });
+        },
+        setTabs(){
+            if(!sessionStorage.getItem('clickedNav')){
+                sessionStorage.setItem('clickedNav',JSON.stringify({arr:[]}));
+            }
+            var clickedNav = JSON.parse(sessionStorage.getItem('clickedNav')).arr;
+            var flag = true;
+            for(var i = 0; i < clickedNav.length; i++){
+                if(clickedNav[i].navtitle == "用户管理"){
+                    flag = false;
+                }
+            }
+            if(flag){
+                clickedNav.push({
+                    navicon: 'icon-user',
+                    navtitle: '用户管理',
+                    navherf: '/user_management'
+                });
+            }
+            sessionStorage.setItem('clickedNav',JSON.stringify({arr:clickedNav}));
+
+            sessionStorage.setItem('selectedNav',JSON.stringify({
+                navicon: 'icon-user',
+                navtitle: '用户管理',
+                navherf: '/user_management'
+            }));
         }
     },
     mounted(){

@@ -9,7 +9,7 @@
 						</span>
 					</div>
 					<ul class="navs" id="side-menu" v-show="!isShow" >
-						<li v-for="item in leftNavs">
+						<li v-for="item in leftNavs" @click="addClickNav(item)">
 							<router-link :to="item.navherf">
 								<i :class="item.navicon"></i>
 								<span class="nav-label" v-show="ismin">{{item.navtitle}}</span>
@@ -84,12 +84,36 @@ export default {
 		            navtitle: '安全管理',
 		            navherf: '/safe_management'
 				}
-	        ]
-
+	        ],
+	        selectedNav: {}
 		}
 	},
 	
 	methods: {
+		addClickNav(item){
+			if(!sessionStorage.getItem('clickedNav')){
+				sessionStorage.setItem('clickedNav',JSON.stringify({arr:[]}));
+			}
+			var clickedNav = JSON.parse(sessionStorage.getItem('clickedNav')).arr;
+			var flag = true;
+			for(var i = 0; i < clickedNav.length; i++){
+				if(item.navtitle == clickedNav[i].navtitle){
+					flag = false;
+				}
+			}
+			if(flag){
+				clickedNav.push(item);
+			}
+
+			if(!sessionStorage.getItem('selectedNav')){
+				sessionStorage.setItem('selectedNav',JSON.stringify({}));
+			}
+			var selectedNav = JSON.parse(sessionStorage.getItem('selectedNav'));
+			
+			selectedNav = item;
+			sessionStorage.setItem('selectedNav',JSON.stringify(selectedNav));
+			sessionStorage.setItem('clickedNav',JSON.stringify({arr:clickedNav}));
+		},
 		min2max(){//左侧菜单正常和变小切换
         	if($(".navbar-static-side").width()=="220"){
 		    	$(".wrapper").css("padding-left", "220px");

@@ -84,7 +84,6 @@
         let me = this
         if (me.treeStructure) {
           let data = Utils.MSDataTransfer.treeToArray(me.dataSource, null, null, me.defaultExpandAll)
-          console.log(data)
           return data
           
         }
@@ -94,8 +93,6 @@
     methods: {
     	SelChange(val) {
 				this.selUser = val;
-				console.log(222);
-				console.log(this.selUser);
 				//子给父传值
 				// childByValue是在父组件on监听的方法
         // 第二个参数this.childValue是需要传的值

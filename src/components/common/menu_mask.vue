@@ -98,28 +98,28 @@
 		    </span>
 		</el-dialog>
 		//圖標彈出
-        <div class="mask" v-show="show"></div>
-		<div class="mask_div" v-show="show">
+        <div class="mask" v-show="show2"></div>
+		<div class="mask_div" v-show="show2">
 			<!---->
 			<div class="mask_title_div clearfix">
+				<div class="mask_title">应用中心图标</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>
 						 
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
 					</span>
-					<span class="mask_span" @click='close'>
+					<span class="mask_span" @click='close1'>
 						<i class="icon-close1"></i>
 					</span>
 				</div>
 			</div>
-           <all_icons></all_icons>
+           <all_icons v-on:childByValue="childByValue"></all_icons>
                 
 			<span slot="footer" class="dialog-footer">
 		       <el-button @click="dialogVisible = false">取 消</el-button>
-		       <el-button type="primary" @click="confirm();" >确 定</el-button>
+		       <el-button type="primary" @click="confirm2();" >确 定</el-button>
 		    </span>
 	</div>	    
-		</el-dialog>
 	</div>
 </template>
 
@@ -169,6 +169,7 @@
 				col_but1: true,
 				col_but2: true,
 				show: false,
+				show2:false,
 				isok1: true,
 				isok2: false,
 				down: true,
@@ -198,10 +199,11 @@
 					label: "name"
 				},
 				selectData: [], //
-				//				aaaData:[]
+				 
 			};
 		},
 		methods: {
+		
 			//清空表單
 			resetNew(){
                 this.adddeptForm = {
@@ -212,7 +214,7 @@
 					hidden:'',
 					css:''
 				}
-                // this.$refs["adddeptForm"].resetFields();
+                   this.$refs["menu"].resetFields();
             },
 			col_but(col_but) {
 				if(col_but == 'col_but1') {
@@ -230,11 +232,11 @@
 			visible() {
 				this.show = true;
 			},
+			
 			// 这里是修改
 			detail(deptid) {
 				var url = '/api/api-user/menus/saveOrUpdate';
 				this.$axios.post(url, {}).then((res) => {
-					//					console.log(res)
 					this.adddeptForm = res.data;
 					this.show = true;
 				}).catch((err) => {
@@ -316,7 +318,7 @@
 			},
 			//图标
 			getCss(){
-				this.dialogVisible = true;
+				this.show2 = true;
 			},
 
 			confirm() {
@@ -325,6 +327,24 @@
 				this.dialogVisible = false;
 				this.menu.parentId = this.checkedNodes[0].id;
 				this.menu.pName = this.checkedNodes[0].name;
+
+			},
+			close1(){
+				this.show2 = false;
+			},
+		
+		    childByValue: function (childValue) {
+		        // childValue就是子组件传过来的值
+		        console.log(111);
+		        console.log(childValue);
+		        this.sendchildValue = childValue;
+		        console.log(childValue);
+		    },
+			//图标的带值
+			confirm2() {
+				this.menu.css = this.sendchildValue;
+				console.log(111);
+				this.show2 = false;
 
 			},
 

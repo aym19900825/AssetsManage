@@ -281,10 +281,25 @@
 			//保存users/saveOrUpdate
 			submitForm() {
 				this.$refs.menu.validate((valid) => {
-					if(valid) {
+//					if(valid) {
+
 						var url = '/api/api-user/menus/saveOrUpdate';
+						if(typeof(this.menu._expanded )!='undefined'){
+							delete this.menu._expanded
+						}
+						if(typeof(this.menu._level )!='undefined'){
+							delete this.menu._level
+						}
+						if(typeof(this.menu._parent )!='undefined'){
+							delete this.menu._parent
+						}
+						if(typeof(this.menu._show )!='undefined'){
+							delete this.menu._show
+						}
+						console.log(this.menu);
+						//return false;
 						this.$axios.post(url, this.menu).then((res) => {
-							console.log(res);
+							console.log(res);							
 							if(res.data.resp_code == 0) {
 
 								this.$message({
@@ -302,9 +317,9 @@
 								type: 'error'
 							});
 						});
-					} else {
-						return false;
-					}
+//					} else {
+//						return false;
+//					}
 				})
 			},
 			//所属上级

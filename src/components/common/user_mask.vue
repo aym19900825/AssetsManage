@@ -115,14 +115,12 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="8">
-									<el-form-item label="角色" prop="roleId">
-										<el-select v-model="user.roles" multiple @change="changeRole">
-											<el-option v-for="data in selectData" :key="data.name" :value="data.id" :label="data.name"></el-option>
-											
+									<el-form-item label="角色">
+										<el-select v-model="user.roleId" multiple>
+											<el-option v-for="data in selectData" :key="data.id" :value="data.id" :label="data.name"></el-option>
 										</el-select>
 									</el-form-item>
 								</el-col>
-								
 							</el-row>
 
 							<el-row :gutter="70">
@@ -218,7 +216,7 @@
 						tips: '',
 						username: '',
 						companyName:'',
-						roleId: '',//角色
+						roleId: [],
 						roles: [],//角色
 						id: '',
 					}
@@ -420,7 +418,8 @@
 					sexName:'',
 					idnumber:'',
 					entrytime:'',
-					roleId:'',
+					roleId:[],
+					roles: [],
 					worknumber:'',
 					phone:'',
 					email:'',
@@ -436,19 +435,6 @@
 			// 这里是修改
 			detail() {
 				this.show = true;
-				console.log(this.user);
-				var url = '/api/api-user/users/' + userid;
-				this.$axios.get(url, {}).then((res) => {
-					this.user = res.data;
-					this.show = true;
-					console.log(this.user);
-					console.log(this.user.roles);
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
 			},
 			//点击关闭按钮
 			close() {
@@ -484,14 +470,28 @@
 
 			//保存users/saveOrUpdate
 			submitForm() {
+				var _this = this;
 				this.$refs.user.validate((valid) => {
 					if(valid) {
 						var user = this.user;
 						user.sex = user.sexName == '男' ? 1 : 0;
-						user.roleId = user.roleId.join(',');
-// 						user.roleId = JSON.stringify(user.roleId);	
+						if(user.roleId.length>0){
+							var arr = [];
+							user.roleId.forEach(function(item){
+								var roles = _this.selectData;
+								for(var j = 0; j < roles.length; j++){
+									if(roles[j].id == item){
+										arr.push(roles[j]);
+									}
+								}
+							});
+							user.roleId = user.roleId.join(',');
+							user.roles = arr;
+						}else{
+							user.roleId = '';
+							user.roles = [];
+						}
 						var url = '/api/api-user/users/saveOrUpdate';
-								 console.log(this.user);
 						this.$axios.post(url, this.user).then((res) => {
 
 							if(res.data.resp_code == 0) {
@@ -574,28 +574,6 @@
 				    console.log('请求失败');
 				})
 			},
-		  	changeRole(event){
-		  		console.log(event);
-		  		console.log(111);
-		  	 	this.user.roleId=[]
-		  	 	for (var i=0;i<event.length;i++){	
-		  	 		this.user.roleId.push(event[i])
-		  	 	}
-		  	 	
-		  	 	console.log(this.user.roleId);
-//			  	for (var i=0;i<this.selectData.length;i++){	
-//			  		
-//						console.log(this.selectData[i].name);
-//					if(this.selectData[i].name==parseInt(val)){
-//						console.log(222);
-//						console.log(this.selectData[i].id);
-//	                	this.user.roleId.push(this.selectData[i].id);
-//	                	console.log(this.user.roleId);
-//	              	}							
-//				}
-
-
-          	},
 			queding() {
 				this.getCheckedNodes();
 				this.placetext = false;

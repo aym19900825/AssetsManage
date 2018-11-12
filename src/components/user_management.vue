@@ -148,9 +148,6 @@
 	import navs from './common/left_navs/nav_left.vue'
 	import navs_header from './common/nav_tabs.vue'
 	import assetsTree from './plugin/vue-tree/tree.vue'
-	//import navs_button from './common/func_btn.vue'
-	//	import ztree from './common/ztree.vue'
-	// import tablediv from './common/tablelist.vue'
 	import usermask from './common/user_mask.vue'
 	export default {
 		name: 'user_management',
@@ -252,8 +249,27 @@
 			},
 			//添加用戶
 			openAddMgr() {
-				this.$refs.child.resetNew();
-				this.$refs.child.visible();
+				this.aaaData = [
+					{
+						companyName:'',
+						deptName:'',
+						username:'',
+						password:'',
+						nickname:'',
+						birthday:'',
+						sexName:'',
+						idnumber:'',
+						entrytime:'',
+						roleId:[],
+						roles: [],
+						worknumber:'',
+						phone:'',
+						email:'',
+						address:'',
+						tips:''
+					}
+				];
+				this.$refs.child.detail();
 			},
 			//修改用戶
 			modify() {
@@ -271,6 +287,12 @@
 					});
 					return;
 				} else {
+					this.aaaData[0].roleId = [];
+					var roles = this.aaaData[0].roles;
+					for(var i = 0; i < roles.length; i++){
+						this.aaaData[0].roleId.push(roles[i].id);
+					}
+					console.log(this.aaaData[0].roleId);
 					this.$refs.child.detail();
 				}
 			},

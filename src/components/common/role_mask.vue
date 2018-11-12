@@ -120,7 +120,7 @@
 					label: "simplename"
 				},
 				selectData: [],
-				checkedNodes:{}
+				cccData:{}
 			};
 		},
 		mounted() {
@@ -135,7 +135,7 @@
 		},
 		methods: {
 			handleCheckChange(data, checked, indeterminate) {
-		        this.checkedNodes=data;
+		        this.cccData=data;
 		    },
 		    handleNodeClick(data) {
 		   		console.log(111);
@@ -212,7 +212,7 @@
 				$(".mask_div").css("top", "0");
 			},
 			getCheckedNodes() {
-				this.checkedNodes = this.$refs.tree.getCheckedNodes()
+				this.cccData = this.$refs.tree.getCheckedNodes()
 			},
 			//保存users/saveOrUpdate
 			submitForm() {
@@ -262,8 +262,8 @@
 				this.getCheckedNodes();
 				this.placetext = false;
 				this.dialogVisible = false;
-				 // this.roleList.id = this.checkedNodes[0].id;
-				this.roleList.deptName = this.checkedNodes[0].simplename;
+				this.roleList.deptId = this.cccData[0].id;
+				this.roleList.deptName = this.cccData[0].simplename;
 			},
 			handleClose(done) {
 				this.$confirm('确认关闭？')

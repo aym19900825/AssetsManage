@@ -36,11 +36,31 @@
 								</button>
 							</div>
 						</div>
-						<div class="columns columns-right btn-group pull-right">
+						<!-- <div class="columns columns-right btn-group pull-right">
 							<button class="btn btn-default btn-outline" type="button" name="refresh" aria-label="refresh" title="刷新">
 								<i class="icon-refresh"></i>
 							</button>
 							<v-table-controle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></v-table-controle>
+						</div> -->
+						<div class="columns columns-right btn-group pull-right">
+							<button class="btn btn-default btn-outline" type="button" name="refresh" aria-label="refresh" title="刷新">
+								<i class="icon-refresh"></i>
+							</button>
+							<div class="keep-open btn-group" title="列">
+								<el-dropdown :hide-on-click="false" class="pl10 btn btn-default btn-outline">
+									<span class="el-dropdown-link">
+										<font class="J_tabClose"><i class="icon-menu3"></i></font>
+										<i class="el-icon-arrow-down icon-arrow2-down"></i>
+									</span>
+									<el-dropdown-menu slot="dropdown">
+										<el-checkbox-group >
+											<el-dropdown-item  v-for="item in tableHeader">
+												<el-checkbox :label="item.label" name="type"></el-checkbox>
+											</el-dropdown-item>
+										</el-checkbox-group>
+									</el-dropdown-menu>
+								</el-dropdown>
+							</div>
 						</div>
 					</div>
 					<!-- 高级查询划出 -->
@@ -49,7 +69,7 @@
 							<el-row :gutter="10">
 								<el-col :span="5">
 									<el-form-item label="角色名称">
-										<el-input v-model="searchList.nickname"></el-input>
+										<el-input v-model="searchList.name"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="2">
@@ -65,16 +85,16 @@
 							<el-table :data="roleList" style="width: 100%;margin: 0 auto;" :default-sort="{prop:'roleList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55">
 								</el-table-column>
-								<el-table-column label="角色名称" sortable width="250" prop="name" this.checkedName.indexOf('角色名称')!=-1">
+								<el-table-column label="角色名称" sortable width="250" prop="name">
 								</el-table-column>
-								<el-table-column label="所在部门" sortable width="250" prop="deptName" this.checkedName.indexOf('所在部门')!=-1">
+								<el-table-column label="所在部门" sortable width="250" prop="deptName">
 								</el-table-column>
-								<el-table-column label="别名" sortable width="250" prop="code" this.checkedName.indexOf('别名')!=-1">
+								<el-table-column label="别名" sortable width="250" prop="code">
 								</el-table-column>
-								<el-table-column label="备注" sortable width="310" prop="tips" this.checkedName.indexOf('备注')!=-1">
+								<el-table-column label="备注" sortable width="310" prop="tips" >
 								</el-table-column>
 							</el-table>
-							<el-pagination v-if="this.checkedName.length>0" class=
+							<el-pagination  class=
 							"pull-right" @size-change="sizeChange" @current-change="currentChange"  :current-page="page.currentPage"    :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize"
 					            layout="total, sizes, prev, pager, next"
 					            :total="page.totalCount">
@@ -115,12 +135,12 @@
 				'冻结': false,
 				'男': true,
 				'女': false,
-				checkedName: [
-					'角色名称',
-					'所在部门',
-					'别名',
-					'备注'
-				],
+				// checkedName: [
+				// 	'角色名称',
+				// 	'所在部门',
+				// 	'别名',
+				// 	'备注'
+				// ],
 				tableHeader: [
 					{
 						label: '角色名称',
@@ -139,46 +159,13 @@
 						prop: 'tips'
 					},
 				],
-				roleList: [
-					{
-						rolename:'超级管理员',
-						prole:'',
-						dept:'总公司',
-						nickname:'administrator'
-					},
-					{
-						rolename:'临时',
-						prole:'超级管理员',
-						dept:'运营部',
-						nickname:'temp'
-					},
-					{
-						rolename:'工作流管理员',
-						prole:'',
-						dept:'总公司',
-						nickname:'flowAdmin'
-					},
-					{
-						rolename:'部门负责人',
-						prole:'工作流管理员',
-						dept:'总公司',
-						nickname:'bmfzr'
-					},
-					{
-						rolename:'分公司管理员',
-						prole:'超级管理员',
-						dept:'测试分公司',
-						nickname:'分公司管理员'
-					},
-				],
+				roleList: [],
 				search: false,
 				show: false,
 				down: true,
 				up: false,
 				searchList: {
-					nickname: '',
-					enabled: '',
-					createTime: ''
+					name: ''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -314,6 +301,7 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
+					name: this.searchList.name
 				}
 				var url = '/api/api-user/roles';
 				this.$axios.get(url, {
@@ -322,12 +310,6 @@
 					this.roleList = res.data.data;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
-				// this.roleList.forEach((item, index) => {
-				// 	var id = item.id;
-				// 	this.$axios.get('/users/' + id + '/roles', data).then((res) => {
-				// 		this.roleList.role = res.data.roles[0].name;
-				// 	}).catch((wrong) => {})
-				// })
 			},
 			//机构树
 			getKey() {

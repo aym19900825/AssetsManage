@@ -197,6 +197,7 @@
 					return;
 				} else {
 					this.$refs.child.detail(selData[0].id);
+					console.log(selData);
 				}
 			},
 			//高级查询
@@ -261,8 +262,8 @@
 					var id = changeUser.id;
 					console.log(id);
 					var url = '/api/apps-center/objectcfg/create/' + id;
-					this.$axios.get(url, {}).then((res) => {//.delete 传数据方法
-						console.log(res);
+					this.$axios.get(url, {}).then((res) => {
+						console.log(res.data);
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({

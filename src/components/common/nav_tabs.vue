@@ -4,8 +4,8 @@
             <button class="roll-nav roll-left J_tabLeft"><i class="icon-previous"></i></button>
             <div class="page-tabs J_menuTabs">
                 <div class="page-tabs-content">
-                    <router-link to="/index" class="J_menuTab">首页 <i class="icon-close2"></i></router-link>
-                    <router-link to="/user_management" class="J_menuTab active" >用户管理 <i class="icon-close2"></i></router-link>
+                    <span v-for="item in tabs" :class="item.navtitle==selectedTab.navtitle?'active':'J_menuTab'" @click="showSelected(item)">{{item.navtitle}} <i class="icon-close2" @click.stop="closeTab(item, $event)"></i></span>
+                    <!-- <router-link to="/user_management" class="J_menuTab active" >用户管理 <i class="icon-close2"></i></router-link> -->
                 </div>
             </div>
             <button class="roll-nav roll-right J_tabRight"><i class="icon-next"></i></button>
@@ -28,7 +28,64 @@
 </template>
 
 <script>
-    
+export default {
+    name: 'nav_tabs',
+      data(){
+        return {
+           tabs: [],
+           selectedTab: {}
+        }
+    },
+    methods: {
+        closeTab(tab, event){
+            if (event) event.preventDefault();
+            var _this = this;
+            var tabs = _this.tabs;
+            if(tabs.length == 1){
+                //只有一个选项卡
+                this.$router.push({path: '/index'});
+                sessionStorage.setItem('clickedNav',JSON.stringify({arr:[{
+                    navtitle: '首页',
+                    navherf: '/index'
+                }]}));
+                sessionStorage.setItem('selectedNav',JSON.stringify({
+                    navicon: 'icon-user',
+                    navtitle: '首页',
+                    navherf: '/index'}));
+            }else{
+                var selectedIndex = 0;
+                _this.tabs = _this.tabs.filter(function(item,index){
+                    if(item.navtitle != tab.navtitle){
+                        selectedIndex = index;
+                    }
+                    return item.navtitle != tab.navtitle;
+                });
+                console.log(selectedIndex);
+                //关闭当前显示的选项卡
+                if(tab.navtitle == _this.selectedTab.navtitle){
+                    if(selectedIndex==_this.tabs.length){
+                        selectedIndex = 0;
+                    }
+                    var selTab = _this.tabs[selectedIndex];
+                    _this.selectedTab = JSON.parse(JSON.stringify(selTab));
+                }
+                sessionStorage.setItem('clickedNav',JSON.stringify({arr:_this.tabs}));
+                sessionStorage.setItem('selectedNav',JSON.stringify(_this.selectedTab));
+                this.$router.push({path: _this.selectedTab.navherf});
+                return false;
+            }
+        },
+        showSelected(item){
+            this.selectedTab = item;
+            sessionStorage.setItem('selectedNav',JSON.stringify(this.selectedTab));
+            this.$router.push({path: item.navherf});
+        }
+    },
+    mounted(){
+        this.tabs = JSON.parse(sessionStorage.getItem('clickedNav')).arr;
+        this.selectedTab = JSON.parse(sessionStorage.getItem('selectedNav'));
+    }
+}
 </script>
 
 <style scoped>  
@@ -102,7 +159,7 @@
 .roll-right.J_tabRight {
     right: 160px;
 }
-.page-tabs a.active {
+/*.page-tabs a.active {
     color: #6585DF;
     margin-top: 5px;
     background:linear-gradient(360deg,rgba(234,239,243,1) 0%,rgba(255,255,255,1) 100%);
@@ -120,7 +177,7 @@
     margin-left: 5px;
     line-height: 35px;
     position: relative;
-}
+}*/
 .page-tabs a .icon-close2 {
     color: #97A3B4;
 }
@@ -131,10 +188,26 @@
 .page-tabs a:hover .icon-close2,.page-tabs a:hover.active .icon-close2{
     color: #9153f1;
 }
-
-
-
 .page-tabs .J_menuTab{
     border-radius: 4px 4px 0px 0px;
+}
+.page-tabs-content span{
+    display: block;
+    float: left;
+    background-color: #eaedf1;
+    border: solid 1px #d1d8de;
+    padding: 0 12px;
+    height: 35px;
+    margin-top: 8px;
+    margin-left: 5px;
+    line-height: 35px;
+    position: relative;
+    cursor: pointer;
+}
+.page-tabs span.active {
+    color: #6585DF;
+    margin-top: 5px;
+    background:linear-gradient(360deg,rgba(234,239,243,1) 0%,rgba(255,255,255,1) 100%);
+    box-shadow:0px -2px 5px 0px rgba(176,192,237,0.5);
 }
 </style>

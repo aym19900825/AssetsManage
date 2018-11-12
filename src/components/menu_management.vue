@@ -26,17 +26,19 @@
 						<div class="columns columns-right btn-group pull-right">
 							<div class="btn btn-default btn-refresh" id="refresh" title="刷新"><i class="icon-refresh"></i></div>
 
-							<div class="keep-open btn-group" title="显示隐藏列">
-								<el-dropdown :hide-on-click="false" class="btn btn-default btn-outline">
+							<div class="keep-open btn-group" title="列">
+								<el-dropdown :hide-on-click="false" class="pl10 btn btn-default btn-outline">
 									<span class="el-dropdown-link">
-							          <font class="J_tabClose"><i class="icon-menu3"></i></font>
-							          <i class="icon-arrow2-down"></i>
-							        </span>
-							        <el-dropdown-menu slot="dropdown">
-										<el-dropdown-item>
-											<el-checkbox label="栏目名称一"></el-checkbox>
-										</el-dropdown-item>
-							        </el-dropdown-menu>
+										<font class="J_tabClose"><i class="icon-menu3"></i></font>
+										<i class="el-icon-arrow-down icon-arrow2-down"></i>
+									</span>
+									<el-dropdown-menu slot="dropdown">
+										<el-checkbox-group v-model="checkedName" @change="changeCheckedName">
+											<el-dropdown-item  v-for="item in columns">
+												<el-checkbox :label="item.text" name="type"></el-checkbox>
+											</el-dropdown-item>
+										</el-checkbox-group>
+									</el-dropdown-menu>
 								</el-dropdown>
 							</div>
 						</div>
@@ -54,7 +56,7 @@
 					</div>
 				</div>
 			</div>
-			<menumask :menu="selMenu[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></menumask>
+			<menumask :menu="this.selMenu" ref="child" @request="requestData" v-bind:page=page></menumask>
 		</div>
 	</div>
 </template>
@@ -77,25 +79,37 @@
 		},
 		data() {
 			return {
+		    checkedName: [
+					'菜单名称',
+					'菜单url',
+					'样式',
+					'排序',
+					'类型'
+				],
 			columns: [{
 	            text: '菜单名称',
-	            dataIndex: 'name'
+	            dataIndex: 'name',
+	            isShow:true,
 	          },
 	          {
 	            text: '菜单url',
-	            dataIndex: 'url'
+	            dataIndex: 'url',
+	            isShow:true,
 	          },
 	          {
 	            text: '样式',
-	            dataIndex: 'css'
+	            dataIndex: 'css',
+	            isShow:true,
 	          },
 	          {
 	          	text: '排序',
-	          	dataIndex: 'sort'
+	          	dataIndex: 'sort',
+	          	isShow:true,
 	          },
 	          {
 	            text: '类型',
-	            dataIndex: 'isMenu'
+	            dataIndex: 'isMenu',
+	            isShow:true,
 	          },
 	        ],
 				selMenu: [],
@@ -127,6 +141,19 @@
 			}
 		},
 		methods: {
+			changeCheckedName(value){
+				
+				this.checkedName=value
+				let str=value.toString()
+				for(let i=0;i<this.columns.length;i++){
+					if(str.indexOf(this.columns[i].text) != -1){
+						this.columns[i].isShow=true
+					}else{
+						this.columns[i].isShow=false
+					}
+				}
+			},
+			//表格传过来
 			childByValue: function (childValue) {
 		        // childValue就是子组件传过来的
 		        this.selMenu = childValue
@@ -161,7 +188,7 @@
 					});
 					return;
 				} else {
-					this.$refs.child.detail(selData[0].id);
+					this.$refs.child.detail(selData[0]);
 				}
 			},
 
@@ -181,50 +208,33 @@
 					});
 					return;
 				} else {
+					
 					var changeMenu = selData[0];
-					if(changeMenu.children.length>0){
+					if(typeof(changeMenu.children)!='undefined' && changeMenu.children.length>0){
 						this.$message({
 							message: '先删除子菜单',
 							type: 'error'
 						});
-					}else{
-					var id = changeMenu.id;
-					var url = '/api/api-user/menus/' + id;
-					this.$axios.delete(url, {}).then((res) => { //.delete 传数据方法
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
+					}else {
+						var id = changeMenu.id;
+						var url = '/api/api-user/menus/' + id;
+						this.$axios.delete(url, {}).then((res) => { //.delete 传数据方法
+							//resp_code == 0是后台返回的请求成功的信息
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '删除成功',
-								type: 'success'
+								message: '网络错误，请重试',
+								type: 'error'
 							});
-							this.requestData();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
-					});
+					}
 				}
-				}
-			},
-
-//			显示目录
-//			judge(data) {
-//				if(data.parentId == "-1" || data.parentId == "null") {
-//					return data.isMenu = "目录"
-//				} else {
-//					return data.isMenu = "菜单"
-//				}
-//			},
-			//机构树
-			getKey() {
-				let that = this;
-				var url = '/api/api-user/depts/tree';
-				this.$axios.get(url, {}).then((res) => {
-					this.resourceData = res.data;
-					this.treeData = this.transformTree(this.resourceData);
-				});
 			},
 			SelChange(val) {
 				this.selMenu = val;
@@ -238,10 +248,26 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					let result=res.data.data
+					let result=res.data
 					for(let i=0;i<result.length;i++){
+						if(result[i].parentId == "-1" || result[i].parentId == "null") {
+							result[i].isMenu = "目录"
+						} else {
+							result[i].isMenu = "菜单"
+						}						
 						if(result[i].subMenus.length>0){
-							result[i].children=result[i].subMenus
+							let subMenus=result[i].subMenus
+							for(let j=0;j<subMenus.length;j++){
+								if(subMenus[j].parentId == "-1" || subMenus[j].parentId == "null") {
+									subMenus[j].isMenu = "目录"
+								} else {
+									subMenus[j].isMenu = "菜单"
+								}						
+//								if(subMenus[j].subMenus.length>0){
+//									subMenus[j].children=subMenus[j].subMenus
+//								}
+							}
+							result[i].children=subMenus
 						}
 					}
 					this.menuList = result;
@@ -254,7 +280,7 @@
 		},
 		mounted() {
 			this.requestData();
-			this.getKey();
+//			this.getKey();
 		},
 	}
 </script>

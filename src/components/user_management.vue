@@ -41,8 +41,33 @@
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
-							<div class="btn btn-default btn-refresh" id="refresh" title="刷新"><i class="icon-refresh"></i></div>
-							<v-table-controle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></v-table-controle>
+							<button class="btn btn-default btn-outline" type="button" name="refresh" aria-label="refresh" title="刷新">
+								<i class="icon-refresh"></i>
+							</button>
+							<div class="keep-open btn-group" title="列">
+								<el-dropdown :hide-on-click="false" class="pl10 btn btn-default btn-outline">
+									<span class="el-dropdown-link">
+										<font class="J_tabClose"><i class="icon-menu3"></i></font>
+										<i class="el-icon-arrow-down icon-arrow2-down"></i>
+									</span>
+									<el-dropdown-menu slot="dropdown">
+										<el-checkbox-group v-model="checkedName" @change="test">
+											<el-dropdown-item  v-for="item in tableHeader">
+												<el-checkbox :label="item.label" name="type"></el-checkbox>
+											</el-dropdown-item>
+										</el-checkbox-group>
+										<!-- <el-dropdown-item>
+											<el-checkbox label="所在部门" name="type"></el-checkbox>
+										</el-dropdown-item>
+										<el-dropdown-item>
+											<el-checkbox label="所在公司" name="type"></el-checkbox>
+										</el-dropdown-item>
+										<el-dropdown-item>
+											<el-checkbox label="所在部门" name="type"></el-checkbox>
+										</el-dropdown-item> -->
+									</el-dropdown-menu>
+								</el-dropdown>
+							</div>
 						</div>
 					</div>
 					<!-- 高级查询划出 Begin-->
@@ -78,9 +103,7 @@
 						<div class="col-sm-9">
 							<!-- <tablediv ref="tableList"></tablediv> -->
 							<!-- 表格 -->
-							<el-table :data="userList" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
-
-
+							<el-table :data="userList" style="width: 96%;margin: 0 auto;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="账号" sortable prop="username" v-if="this.checkedName.indexOf('账号')!=-1">
@@ -99,6 +122,9 @@
 								<el-table-column label="创建时间" prop="createTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('创建时间')!=-1">
 								</el-table-column>
 							</el-table>
+							<!-- <span class="demonstration">显示总数</span>" -->
+							<!-- <el-pagination background layout="prev, pager, next" :total="2" style="float:right;margin-top:10px;"> -->
+							<!-- </el-pagination style="float:right;margin-top:10px;"> -->
 							<el-pagination v-if="this.checkedName.length>0"
 					            @size-change="sizeChange"
 					            @current-change="currentChange"
@@ -122,8 +148,9 @@
 	import navs from './common/left_navs/nav_left.vue'
 	import navs_header from './common/nav_tabs.vue'
 	import assetsTree from './plugin/vue-tree/tree.vue'
-	import table from './plugin/table/table-normal.vue'
-	import tableControle from './plugin/table-controle/controle.vue'
+	//import navs_button from './common/func_btn.vue'
+	//	import ztree from './common/ztree.vue'
+	// import tablediv from './common/tablelist.vue'
 	import usermask from './common/user_mask.vue'
 	export default {
 		name: 'user_management',
@@ -132,23 +159,10 @@
 			'navs_header': navs_header,
 			'navs': navs,
 			'usermask': usermask,
-			'v-assetsTree': assetsTree,
-			'v-table-controle':tableControle,
-			'v-table':table,
+			'v-assetsTree': assetsTree
 		},
 		data() {
 			return {
-				dataUrl: '/api/api-user/users',
-				searchData: {
-			        page: 1,
-			        limit: 10,
-			        nickname: '',
-			        enabled: '',
-			        searchKey: '',
-			        searchValue: '',
-			        companyId: '',
-			        deptId: ''
-		        },
 				checkedName: [
 					'账号',
 					'姓名',
@@ -220,8 +234,8 @@
 			}
 		},
 		methods: {
-			tableControle(data){
-				this.checkedName = data;
+			test(){
+				console.log(this.checkedName.indexOf('账号')!=-1);
 			},
 			sizeChange(val) {
 		      this.page.pageSize = val;
@@ -238,7 +252,7 @@
 			},
 			//添加用戶
 			openAddMgr() {
-//				this.$refs.child.resetNew();
+				this.$refs.child.resetNew();
 				this.$refs.child.visible();
 			},
 			//修改用戶
@@ -505,5 +519,124 @@
 </script>
 
 <style scoped>
+<<<<<<< HEAD
 
+=======
+	.headerbg {
+		width: 100%;
+		height: 100px;
+		position: fixed;
+		z-index: 999;
+	}
+	
+	.contentbg {
+		padding-top: 100px;
+		height: 100%;
+	}
+	
+	.wrapper {
+		width: 100%;
+		height: 100%;
+		padding-left: 220px;
+		position: relative;
+	}
+	
+	.ibox-content {
+		background-color: #F5F8FB;
+		color: inherit;
+		padding: 0px 20px 20px 10px;
+		border-color: #e7eaec;
+		-webkit-border-image: none;
+		-o-border-image: none;
+		border-image: none;
+		border-style: solid solid none;
+		border-width: 1px 0px;
+	}
+	
+	[class*=" btn-"],
+	[class^="btn-"] {
+		color: #FFFFFF;
+		font-size: 14px;
+	}
+	
+	[class*=" btn-"] i,
+	[class^="btn-"] i {
+		margin-right: 5px;
+	}
+	
+	.btn-green {
+		background-color: #25b99e;
+		border-color: #25b99e;
+	}
+	
+	.btn-bule {
+		background-color: #2fa5e5;
+		border-color: #2fa5e5;
+	}
+	
+	.btn-red {
+		background-color: #e3517c;
+		border-color: #e3517c;
+	}
+	
+	.btn-primarys {
+		background-color: #5d7fde;
+		border-color: #5d7fde;
+	}
+	
+	.btn-default {
+		background-color: #ffffff;
+		color: #5B6371;
+		border: 1px solid #dfe5ea;
+	}
+	
+	.btn-default:hover {
+		color: #576FAE;
+	}
+	
+	.fixed-table-toolbar {
+		position: relative;
+		padding-top: 10px;
+		padding-bottom: 12px;
+		height: 55px;
+		line-height: 30px;
+	}
+	
+	.fixed-table-toolbar .columns {
+		position: relative;
+		height: 30px;
+	}
+	
+	.btn-group>.btn:first-child:not(:last-child):not(.dropdown-toggle) {
+		border-top-right-radius: 0;
+		border-bottom-right-radius: 0;
+	}
+	
+	.fixed-table-toolbar .btn-group>.btn-group {
+		display: inline-block;
+		margin-left: -1px!important;
+	}
+	
+	.btn-group>.btn-group,
+	.btn-group>.btn {
+		float: left;
+	}
+	
+	.btn-group,
+	.btn-group-vertical {
+		position: relative;
+		display: inline-block;
+		vertical-align: middle;
+	}
+	
+	.btn-group>.btn-group:last-child:not(:first-child)>.btn:first-child {
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
+	}
+	
+	.fixed-table-toolbar .btn-group>.btn-group:last-child>.btn {
+		border-top-right-radius: 4px;
+		border-bottom-right-radius: 4px;
+	}
+>>>>>>> 77ea2d7dd08b8e68679da74bc65dede4c2625635
 </style>

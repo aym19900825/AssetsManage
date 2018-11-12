@@ -20,8 +20,8 @@
 								<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
 									<el-row :gutter="70">
 										<el-col :span="8">
-											<el-form-item label="表名" prop="objectName">
-												<el-input v-model="dataInfo.objectName"></el-input>
+											<el-form-item label="表名" prop="name">
+												<el-input v-model="dataInfo.name"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -44,37 +44,38 @@
 										<font>新建</font>
 									</el-button>
 								</div>
-								<el-form :model="fieldList" :rules="rules" ref="fieldList">
+								<!-- :rules="rules" ref="attributes" -->
+								<el-form :model="dataInfo.attributes">
 				                <el-form-item>
 				                	<el-row :gutter="20">
 				                		<el-col :span="4">
-				                            <el-form-item label="字段名" prop="leadname"></el-form-item>
+				                            <el-form-item label="字段名" ></el-form-item>
 				                        </el-col>
 				                        <el-col :span="4">
-				                            <el-form-item label="字段描述" prop="leaddecri"></el-form-item>
+				                            <el-form-item label="字段描述" ></el-form-item>
 				                        </el-col>
 				                        <el-col :span="4">
-				                            <el-form-item label="字段类型" prop="leadtype"></el-form-item>
+				                            <el-form-item label="字段类型" ></el-form-item>
 				                        </el-col>
 				                        <el-col :span="4">
-				                            <el-form-item label="小数点位数"></el-form-item>
+				                            <el-form-item label="长度" ></el-form-item>
 				                        </el-col>
 				                        <el-col :span="4">
-				                            <el-form-item label="长度" prop="leadlength"></el-form-item>
-				                        </el-col>
+				                            <el-form-item label="小数点位数" ></el-form-item>
+				                        </el-col>			                        
 				                        <el-col :span="4">
 				                            <el-form-item label="操作"></el-form-item>
 				                        </el-col>
 				                	</el-row>
-				                    <el-row :gutter="20" v-for="(item,key) in fieldList" :key="key">
+				                    <el-row :gutter="20" v-for="(item,key) in dataInfo.attributes" :key="key">
 				                        <el-col :span="4">
-				                            <el-input type="text"  placeholder="请输入人物" v-model="item.leadname"></el-input>
+				                            <el-input type="text"  placeholder="请输入字段名" v-model="item.columnname"></el-input>
 				                        </el-col>
 				                        <el-col :span="4">
-				                            <el-input type="text"  placeholder="请输入关系" v-model="item.leaddecri"></el-input>
+				                            <el-input type="text"  placeholder="请输入字段描述" v-model="item.description"></el-input>
 				                        </el-col>
 				                        <el-col :span="4">
-				                            <el-select v-model="item.leadtype" placeholder="选择字段类型">
+				                            <el-select v-model="item.type" placeholder="选择字段类型">
 										      <el-option label="字符串(string)" value="string"></el-option>
 										      <el-option label="浮点类型(float)" value="float"></el-option>
 										      <el-option label="整数(int)" value="int"></el-option>
@@ -85,11 +86,11 @@
 										    </el-select>
 				                        </el-col>
 				                        <el-col :span="4">
-				                            <el-input type="text"  placeholder="请输入关系" v-model="item.leadprecision"></el-input>
+				                            <el-input type="text"  placeholder="请输入长度" v-model="item.length"></el-input>
 				                        </el-col>
 				                        <el-col :span="4">
-				                            <el-input type="text"  placeholder="请输入关系" v-model="item.leadlength"></el-input>
-				                        </el-col>
+				                            <el-input type="text"  placeholder="请输入小数点位数" v-model="item.retain"></el-input>
+				                        </el-col>			                        
 				                        <el-col :span="4">
 				                            <i class="el-icon-delete" @click="delfield(item)" style="color: red"></i>
 				                        </el-col>
@@ -123,16 +124,16 @@
 						<el-table :data="leaddata" style="width: 100%;margin: 0 auto;" :default-sort="{prop:'leaddata', order: 'descending'}" @selection-change="SelChange">
 							<el-table-column type="selection" width="55" >
 							</el-table-column>
-							<el-table-column label="字段名称" sortable width="150" prop="leadname">
+							<el-table-column label="字段名称" sortable width="150" prop="columnname">
 							</el-table-column>
-							<el-table-column label="字段描述" sortable width="200" prop="leaddecri">
+							<el-table-column label="字段描述" sortable width="200" prop="description">
 							</el-table-column>
-							<el-table-column label="字段类型" sortable width="150" prop="leadtype">
+							<el-table-column label="字段类型" sortable width="150" prop="type">
 							</el-table-column>
-							<el-table-column label="小数点位数" sortable width="180" prop="leadprecision">
+							<el-table-column label="字段长度" sortable width="100" prop="length">
 							</el-table-column>
-							<el-table-column label="字段长度" sortable width="100" prop="leadlength">
-							</el-table-column>
+							<el-table-column label="小数点位数" sortable width="180" prop="retain">
+							</el-table-column>							
 						</el-table>
 						<!-- 表格 -->
 					</div>
@@ -152,7 +153,7 @@
 		data() {
 			var validateName = (rule, value, callback) => {
                 if (value === '') {
-                    callback(new Error('请填写表名'));
+                    callback(new Error('请英文填写表名'));
                 }else {
                     callback();
                 }
@@ -167,8 +168,6 @@
 			return {
 				selUser:[],
 				edit: true, //禁填
-				'男': true,
-				'女': false,
 				col_but1: true,
 				col_but2: true,
 				show: false,
@@ -176,57 +175,62 @@
 				isok2: false,
 				down: true,
 				up: false,
-				useritem: [],
 				activeNames: ['1','2'],//手风琴数量
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				dataList:[{
-					objectName:'',
+					name:'',
 					description:''
 				}],
 				leaddata:[//导入数据的表格
 				{
-					leadname:'author',
-					leaddecri:'作者姓名',
-					leadtype:'字符串(string)',
-					leadprecision:'',
-					leadlength:'6'
+					columnname:'author',
+					description:'作者姓名',
+					type:'字符串(string)',
+					length:'6',
+					retain:''
 				},
 				{
-					leadname:'author',
-					leaddecri:'作者姓名',
-					leadtype:'字符串(string)',
-					leadprecision:'',
-					leadlength:'6'
+					columnname:'author',
+					description:'作者姓名',
+					type:'字符串(string)',
+					length:'6',
+					retain:''
 				},
 				{
-					leadname:'author',
-					leaddecri:'作者姓名',
-					leadtype:'字符串(string)',
-					leadprecision:'',
-					leadlength:'6'
+					columnname:'author',
+					description:'作者姓名',
+					type:'字符串(string)',
+					length:'6',
+					retain:''
 				},
 				{
-					leadname:'author',
-					leaddecri:'作者姓名',
-					leadtype:'字符串(string)',
-					leadprecision:'',
-					leadlength:'6'
+					columnname:'author',
+					description:'作者姓名',
+					type:'字符串(string)',
+					length:'6',
+					retain:''
 				}],
 				dataInfo: {//添加数据库列表信息
-					objectName:'',
+					name:'',
 					description:'',
-					fieldList:[]
+					attributes:[{//字段列表
+					columnname: '',
+					description: '',
+					type:'',
+					length: '',
+					retain: ''
+				}]
 				},
-				fieldList:[{//字段列表
-					leadname: '',
-					leaddecri: '',
-					leadtype:'',
-					leadprecision: '',
-					leadlength: ''
-				}],
+				/*attributes:[{//字段列表
+					columnname: '',
+					description: '',
+					type:'',
+					length: '',
+					retain: ''
+				}],*/
 				rules: {
-					objectName: [{
+					name: [{
 						required: true,
 						trigger: 'blur',
 						validator: validateName,
@@ -243,29 +247,29 @@
 					}],
 				},
 				//tree
-				resourceData: [], //数组，我这里是通过接口获取数据，
-				resourceDialogisShow: false,
-				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
-				resourceProps: {
-					children: "subDepts",
-					label: "simplename"
-				},
+				resourceData: [], //数组，我这里是通过接口获取数据
 			};
 		},
 		methods: {
 			resetNew(){
                 this.dataInfo = {//数据库列表
-					objectName:'',
+					name:'',
 					description:'',
-					fieldList:[]
+					attributes:[{//字段列表
+					columnname: '',
+					description: '',
+					type:'',
+					length: '',
+					retain: ''
+				}]
 				},
-                this.fieldList = [{//字段列表
-					leadname: '',
-					leaddecri: '',
-					leadtype:'',
-					leadprecision: '',
-					leadlength: ''
-				}],
+                /*this.attributes = [{//字段列表
+					columnname: '',
+					description: '',
+					type:'',
+					length: '',
+					retain: ''
+				}],*/
                 this.$refs["dataInfo"].resetFields();
             },
 			handleChange(val) {//手风琴开关效果调用
@@ -291,25 +295,27 @@
 					});
 					return;
 				} else {
-					this.fieldList.push(selData[0]);
+					//this.attributes.push(selData[0]);
+					this.dataInfo.attributes.push(selData[0]);
 					this.dialogVisible = false;
 				}
 			},
 			addfield(){
 				var obj = {
-                    leadname: '',
-					leaddecri: '',
-					leadtype:'',
-					leadprecision: '',
-					leadlength: ''
+                    columnname: '',
+					description: '',
+					type:'',
+					length: '',
+					retain: ''
                 };
-                this.fieldList.push(obj);
+                //this.attributes.push(obj);
+                this.dataInfo.attributes.push(obj);
 			},
 			delfield(item){
-                // this.fieldList.splice(index,1);
-                var index = this.fieldList.indexOf(item);
+                var index = this.dataInfo.attributes.indexOf(item);
                 if (index !== -1) {
-                    this.fieldList.splice(index, 1)
+                    //this.attributes.splice(index, 1)
+                    this.dataInfo.attributes.splice(index, 1);
                 }
 			},
 			col_but(col_but) {
@@ -337,6 +343,7 @@
 				var url = '/api/apps-center/objectcfg/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
 					this.dataInfo = res.data;
+					//this.attributes=this.dataInfo.attributes;
 					this.show = true;
 				}).catch((err) => {
 					this.$message({
@@ -377,13 +384,38 @@
 			submitForm(dataInfo) {
 				this.$refs[dataInfo].validate((valid) => {
 		          if (valid) {
-					this.dataInfo.fieldList.push(this.fieldList);
-					console.log(this.dataInfo);
-					this.show = false;
-		          }else {
-		            return false;
-		          }
-		        });
+					var url = '/api/apps-center/objectcfg/saveOrUpdate';
+					//this.dataInfo.attributes=this.attributes;
+	               /* $.each(this.attributes,function(i,n){
+	                    this.dataInfo.attributes.push(n.columnname +" ，"+n.description+" ，"+n.type+" ，"+n.length+" ，"+n.retain+");
+	                });*/
+					//console.log(this.attributes);
+					console.log(this.dataInfo);	
+
+                // var dataInfo = JSON.parse(JSON.stringify(this.dataInfo));	
+                console.log("================");			
+                console.log(this.dataInfo);
+					this.$axios.post(url, this.dataInfo).then((res) => {
+						//resp_code == 0是后台返回的请求成功的信息
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '保存成功',
+								type: 'success'
+							});
+							this.show = false;
+							//重新加载数据
+							this.$emit('request')
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+			          } else {
+			            return false;
+			          }
+			        });
 			},
 			// 所属组织
 			getCompany() {

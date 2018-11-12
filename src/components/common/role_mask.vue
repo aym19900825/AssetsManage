@@ -16,27 +16,27 @@
 					</span>
 				</div>
 			</div>
-			<el-form :model="user" :label-position="labelPosition" :rules="rules" ref="user" label-width="100px" class="demo-user">
+			<el-form :model="roleList" :label-position="labelPosition" :rules="rules" ref="roleList" label-width="100px" class="demo-user">
 				<EasyScrollbar>
 				<div ref="homePagess" class="accordion" id="information" style="height: 600px;">
 					<div class="mask_tab-block" style="height: auto;">
 						<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
 							<el-row :gutter="70">
 								<el-col :span="12">
-									<el-form-item label="角色名称" prop="password">
-										<el-input type="password" v-model="user.password"></el-input>
+									<el-form-item label="角色名称" prop="name">
+										<el-input v-model="roleList.name"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="12">
-									<el-form-item label="别名" prop="password">
-										<el-input type="password" v-model="user.password" placeholder="请填写"></el-input>
+									<el-form-item label="别名" prop="code">
+										<el-input v-model="roleList.code" placeholder="请填写"></el-input>
 									</el-form-item>
 								</el-col>
 							</el-row>
 							<el-row :gutter="70">
 								<el-col :span="24">
 									<el-form-item label="所在部门" prop="deptName">
-										<el-input v-model="user.deptName" :disabled="edit">
+										<el-input v-model="roleList.deptName">
 											<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
 										</el-input>
 									</el-form-item>
@@ -44,8 +44,8 @@
 							</el-row>
 							<el-row :gutter="70">
 								<el-col :span="24">
-									<el-form-item label="备注" prop="password">
-										<el-input type="textarea" v-model="user.password" placeholder="请填写"></el-input>
+									<el-form-item label="备注" prop="tips">
+										<el-input type="textarea" v-model="roleList.tips" placeholder="请填写"></el-input>
 									</el-form-item>
 								</el-col>
 							</el-row>
@@ -66,36 +66,7 @@
 
 <script>
 	export default {
-		name: 'masks',
-		props: {
-			user: {
-				type: Object,
-				default: function(){
-					return {
-						companyId: '',
-						deptId: '',
-						password: '',
-						sex: '',
-						email: '',
-						phone: '',
-						enabled: 1,
-						birthday: '',
-						worknumber: '',
-						nickname: '',
-						idnumber: '',
-						entrytime: '',
-						address: '',
-						tips: '',
-						username: '',
-						companyName:'',
-						roleId: '',//角色
-//						roles: [],//角色
-						id: '',
-					}
-				}
-			},
-			page: Object ,
-		},		
+		name: 'masks',		
 		data() {
 			var validatePass1 = (rule, value, callback) => {
 				if(value === '') {
@@ -174,6 +145,7 @@
 				clientHeight:'',//获取浏览器高度
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
+				roleList:[],
 				rules: {
 					companyName: [{
 						required: true,
@@ -250,24 +222,13 @@
 			},
 			//form表单内容清空
 			resetNew(){
-                this.user = {
-					companyName:'',
+                this.roleList = {
+					name:'',
+					code:'',
 					deptName:'',
-					username:'',
-					password:'',
-					nickname:'',
-					birthday:'',
-					sexName:'',
-					idnumber:'',
-					entrytime:'',
-					roleId:'',
-					worknumber:'',
-					phone:'',
-					email:'',
-					address:'',
 					tips:''
 				}
-                this.$refs["user"].resetFields();
+                this.$refs["roleList"].resetFields();
             },
 			//点击按钮显示弹窗
 			visible() {
@@ -276,13 +237,11 @@
 			// 这里是修改
 			detail() {
 				this.show = true;
-				console.log(this.user);
-				var url = '/api/api-user/users/' + userid;
+				var url = '/api/api-user/roles/' + id;
 				this.$axios.get(url, {}).then((res) => {
-					this.user = res.data;
+					console.log(res.data);
+					this.roleList = res.data;
 					this.show = true;
-					console.log(this.user);
-					console.log(this.user.roles);
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -323,15 +282,10 @@
 			},
 			//保存users/saveOrUpdate
 			submitForm() {
-				this.$refs.user.validate((valid) => {
-					if(valid) {
-						var user = this.user;
-						user.sex = user.sexName == '男' ? 1 : 0;
-						user.roleId = user.roleId.join(',');	
-						var url = '/api/api-user/users/saveOrUpdate';
-								 console.log(this.user);
-						this.$axios.post(url, this.user).then((res) => {
-
+				this.$refs.roleList.validate((valid) => {
+					if(valid) {	
+						var url = '/api/api-user/roles/saveOrUpdate';
+						this.$axios.post(url, this.roleList).then((res) => {
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',

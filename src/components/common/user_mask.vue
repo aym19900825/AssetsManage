@@ -116,7 +116,7 @@
 								</el-col>
 								<el-col :span="8">
 									<el-form-item label="角色" prop="roleId">
-										<el-select v-model="user.roleId" multiple @change="changeRole">
+										<el-select v-model="user.roles" multiple @change="changeRole">
 											<el-option v-for="data in selectData" :key="data.name" :value="data.id" :label="data.name"></el-option>
 											
 										</el-select>
@@ -182,7 +182,7 @@
 		//弹出
 		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
 
-			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps">
+			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick"  @check-change="handleCheckChange">
 			</el-tree>
 
 			<span slot="footer" class="dialog-footer">
@@ -219,7 +219,7 @@
 						username: '',
 						companyName:'',
 						roleId: '',//角色
-//						roles: [],//角色
+						roles: [],//角色
 						id: '',
 					}
 				}
@@ -377,10 +377,24 @@
 					label: "simplename"
 				},
 				selectData: [],//
+				bbbData:{},
 //				aaaData:[]
 			};
 		},
 		methods: {
+			//
+			handleCheckChange(data, checked, indeterminate) {
+		        console.log(data, checked, indeterminate);
+		        this.bbbData=data;
+		    },
+		    //
+		   	handleNodeClick(data) {
+		   		console.log(111);
+             	//console.log(node)
+             	console.log(data)
+       
+            },
+			
 			col_but(col_but) {
 				//alert(col_but)
 				if(col_but == 'col_but1') {
@@ -394,6 +408,27 @@
 						this.up = !this.up
 				}
 			},
+			//form表单内容清空
+			resetNew(){
+                this.user = {
+					companyName:'',
+					deptName:'',
+					username:'',
+					password:'',
+					nickname:'',
+					birthday:'',
+					sexName:'',
+					idnumber:'',
+					entrytime:'',
+					roleId:'',
+					worknumber:'',
+					phone:'',
+					email:'',
+					address:'',
+					tips:''
+				}
+                this.$refs["user"].resetFields();
+            },
 			//点击按钮显示弹窗
 			visible() {
 				this.show = true;
@@ -491,7 +526,6 @@
 						type: type
 					},
 				}).then((res) => {
-					console.log(res.data.data);
 					this.resourceData = res.data;
 					this.dialogVisible = true;
 				});
@@ -566,12 +600,13 @@
 				this.getCheckedNodes();
 				this.placetext = false;
 				this.dialogVisible = false;
+			
 				if(this.editSearch == 'company') {
-					this.user.companyId = this.checkedNodes[0].id;
-					this.user.companyName = this.checkedNodes[0].simplename;
+					this.user.companyId = this.bbbData.id;
+					this.user.companyName = this.bbbData.simplename;
 				} else {
-					this.user.deptId = this.checkedNodes[0].id;
-					this.user.deptName = this.checkedNodes[0].simplename;
+					this.user.deptId = this.bbbData.id;
+					this.user.deptName = this.bbbData.simplename;
 				}
 
 			},

@@ -6,7 +6,7 @@
     <el-table-column type="selection" width="55">
 		</el-table-column>
     <el-table-column  v-for="(column, index) in columns" :key="column.dataIndex"
-      :label="column.text">
+      :label="column.text" v-if="column.isShow">
       <template slot-scope="scope">
         <span v-if="spaceIconShow(index)" v-for="(space, levelIndex) in scope.row._level" class="ms-tree-space"></span>
         <span class="button is-outlined is-primary is-small" v-if="toggleIconShow(index,scope.row)" @click="toggle(scope.$index)">
@@ -34,6 +34,12 @@
       },
 // 这是相应的字段展示
       columns: {
+        type: Array,
+        default: function () {
+          return []
+        }
+      },
+      checkedName: {
         type: Array,
         default: function () {
           return []
@@ -92,10 +98,9 @@
       }
     },
     methods: {
+    	//改变的值
     	SelChange(val) {
 				this.selUser = val;
-				console.log(222);
-				console.log(this.selUser);
 				//子给父传值
 				// childByValue是在父组件on监听的方法
         // 第二个参数this.childValue是需要传的值

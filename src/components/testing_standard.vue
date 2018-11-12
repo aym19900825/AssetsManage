@@ -194,7 +194,7 @@ export default {
 			}, {
 				navicon: 'icon-file-text',
 				navtitle: '检验/检测标准',
-				navherf: '/passwordedit'
+				navherf: '/testing_standard'
 			}, {
 				navicon: 'icon-file-text',
 				navtitle: '检验/检测项目',

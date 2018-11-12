@@ -56,7 +56,7 @@
 					</div>
 				</div>
 			</div>
-			<menumask :menu="this.selMenu" ref="child" @request="requestData" v-bind:page=page></menumask>
+			<menumask :menu="selMenu[0]" ref="child" @request="requestData" v-bind:page=page></menumask>
 		</div>
 	</div>
 </template>
@@ -142,7 +142,7 @@
 		},
 		methods: {
 			changeCheckedName(value){
-				
+				console.log(value);
 				this.checkedName=value
 				let str=value.toString()
 				for(let i=0;i<this.columns.length;i++){
@@ -153,7 +153,6 @@
 					}
 				}
 			},
-			//表格传过来
 			childByValue: function (childValue) {
 		        // childValue就是子组件传过来的
 		        this.selMenu = childValue
@@ -188,7 +187,7 @@
 					});
 					return;
 				} else {
-					this.$refs.child.detail(selData[0]);
+					this.$refs.child.detail(selData[0].id);
 				}
 			},
 
@@ -210,12 +209,14 @@
 				} else {
 					
 					var changeMenu = selData[0];
+					console.log(changeMenu);
 					if(typeof(changeMenu.children)!='undefined' && changeMenu.children.length>0){
 						this.$message({
 							message: '先删除子菜单',
 							type: 'error'
 						});
 					}else {
+							console.log(changeMenu);
 						var id = changeMenu.id;
 						var url = '/api/api-user/menus/' + id;
 						this.$axios.delete(url, {}).then((res) => { //.delete 传数据方法
@@ -236,6 +237,24 @@
 					}
 				}
 			},
+
+//			显示目录
+//			judge(data) {
+//				if(data.parentId == "-1" || data.parentId == "null") {
+//					return data.isMenu = "目录"
+//				} else {
+//					return data.isMenu = "菜单"
+//				}
+//			},
+			//机构树
+//			getKey() {
+//				let that = this;
+//				var url = '/api/api-user/depts/tree';
+//				this.$axios.get(url, {}).then((res) => {
+//					this.resourceData = res.data;
+//					this.treeData = this.transformTree(this.resourceData);
+//				});
+//			},
 			SelChange(val) {
 				this.selMenu = val;
 			},
@@ -248,29 +267,34 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
+					console.log(res);
 					let result=res.data
+					console.log(result);
 					for(let i=0;i<result.length;i++){
-						if(result[i].parentId == "-1" || result[i].parentId == "null") {
-							result[i].isMenu = "目录"
-						} else {
-							result[i].isMenu = "菜单"
-						}						
-						if(result[i].subMenus.length>0){
+//						if(result[i].parentId == "-1" || result[i].parentId == "null") {
+//							result[i].isMenu = "目录"
+//						} else {
+//							result[i].isMenu = "菜单"
+//						}
+//						if(typeof(result[i].subDepts)!="undefined"&&result[i].subDepts.length>0){
+						if(typeof(result[i].subMenus)!="undefined"&&result[i].subMenus.length>0){
 							let subMenus=result[i].subMenus
-							for(let j=0;j<subMenus.length;j++){
-								if(subMenus[j].parentId == "-1" || subMenus[j].parentId == "null") {
-									subMenus[j].isMenu = "目录"
-								} else {
-									subMenus[j].isMenu = "菜单"
-								}						
+//							for(let j=0;j<subMenus.length;j++){
+//								if(subMenus[j].parentId == "-1" || subMenus[j].parentId == "null") {
+//									subMenus[j].isMenu = "目录"
+//								} else {
+//									subMenus[j].isMenu = "菜单"
+//								}						
 //								if(subMenus[j].subMenus.length>0){
 //									subMenus[j].children=subMenus[j].subMenus
 //								}
-							}
+//							}
 							result[i].children=subMenus
 						}
 					}
 					this.menuList = result;
+					
+					console.log(this.menuList);
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
 			},

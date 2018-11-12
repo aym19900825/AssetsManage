@@ -66,35 +66,7 @@
 
 <script>
 	export default {
-		name: 'masks',
-		props: {
-			user: {
-				type: Object,
-				default: function(){
-					return {
-						companyId: '',
-						deptId: '',
-						password: '',
-						sex: '',
-						email: '',
-						phone: '',
-						enabled: 1,
-						birthday: '',
-						worknumber: '',
-						nickname: '',
-						idnumber: '',
-						entrytime: '',
-						address: '',
-						tips: '',
-						username: '',
-						companyName:'',
-						roleId: '',//角色
-						id: '',
-					}
-				}
-			},
-			page: Object ,
-		},		
+		name: 'masks',		
 		data() {
 			var validatePass1 = (rule, value, callback) => {
 				if(value === '') {
@@ -265,13 +237,11 @@
 			// 这里是修改
 			detail() {
 				this.show = true;
-				console.log(this.user);
-				var url = '/api/api-user/users/' + userid;
+				var url = '/api/api-user/roles/' + id;
 				this.$axios.get(url, {}).then((res) => {
-					this.user = res.data;
+					console.log(res.data);
+					this.roleList = res.data;
 					this.show = true;
-					console.log(this.user);
-					console.log(this.user.roles);
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',

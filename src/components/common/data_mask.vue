@@ -44,29 +44,30 @@
 										<font>新建</font>
 									</el-button>
 								</div>
-								<el-form :model="fieldList" :rules="rules" ref="fieldList">
+								<!-- :rules="rules" ref="attributes" -->
+								<el-form :model="dataInfo.attributes">
 				                <el-form-item>
 				                	<el-row :gutter="20">
 				                		<el-col :span="4">
-				                            <el-form-item label="字段名" prop="columnname"></el-form-item>
+				                            <el-form-item label="字段名" ></el-form-item>
 				                        </el-col>
 				                        <el-col :span="4">
-				                            <el-form-item label="字段描述" prop="description"></el-form-item>
+				                            <el-form-item label="字段描述" ></el-form-item>
 				                        </el-col>
 				                        <el-col :span="4">
-				                            <el-form-item label="字段类型" prop="type"></el-form-item>
+				                            <el-form-item label="字段类型" ></el-form-item>
 				                        </el-col>
 				                        <el-col :span="4">
-				                            <el-form-item label="长度" prop="length"></el-form-item>
+				                            <el-form-item label="长度" ></el-form-item>
 				                        </el-col>
 				                        <el-col :span="4">
-				                            <el-form-item label="小数点位数" prop="retain"></el-form-item>
+				                            <el-form-item label="小数点位数" ></el-form-item>
 				                        </el-col>			                        
 				                        <el-col :span="4">
 				                            <el-form-item label="操作"></el-form-item>
 				                        </el-col>
 				                	</el-row>
-				                    <el-row :gutter="20" v-for="(item,key) in fieldList" :key="key">
+				                    <el-row :gutter="20" v-for="(item,key) in dataInfo.attributes" :key="key">
 				                        <el-col :span="4">
 				                            <el-input type="text"  placeholder="请输入字段名" v-model="item.columnname"></el-input>
 				                        </el-col>
@@ -152,7 +153,7 @@
 		data() {
 			var validateName = (rule, value, callback) => {
                 if (value === '') {
-                    callback(new Error('请填写表名'));
+                    callback(new Error('请英文填写表名'));
                 }else {
                     callback();
                 }
@@ -167,8 +168,6 @@
 			return {
 				selUser:[],
 				edit: true, //禁填
-				'男': true,
-				'女': false,
 				col_but1: true,
 				col_but2: true,
 				show: false,
@@ -176,7 +175,6 @@
 				isok2: false,
 				down: true,
 				up: false,
-				useritem: [],
 				activeNames: ['1','2'],//手风琴数量
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
@@ -216,15 +214,21 @@
 				dataInfo: {//添加数据库列表信息
 					name:'',
 					description:'',
-					fieldList:[]
-				},
-				fieldList:[{//字段列表
+					attributes:[{//字段列表
 					columnname: '',
 					description: '',
 					type:'',
 					length: '',
 					retain: ''
-				}],
+				}]
+				},
+				/*attributes:[{//字段列表
+					columnname: '',
+					description: '',
+					type:'',
+					length: '',
+					retain: ''
+				}],*/
 				rules: {
 					name: [{
 						required: true,
@@ -243,13 +247,7 @@
 					}],
 				},
 				//tree
-				resourceData: [], //数组，我这里是通过接口获取数据，
-				resourceDialogisShow: false,
-				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
-				resourceProps: {
-					children: "subDepts",
-					label: "simplename"
-				},
+				resourceData: [], //数组，我这里是通过接口获取数据
 			};
 		},
 		methods: {
@@ -257,15 +255,21 @@
                 this.dataInfo = {//数据库列表
 					name:'',
 					description:'',
-					fieldList:[]
-				},
-                this.fieldList = [{//字段列表
+					attributes:[{//字段列表
 					columnname: '',
 					description: '',
 					type:'',
 					length: '',
 					retain: ''
-				}],
+				}]
+				},
+                /*this.attributes = [{//字段列表
+					columnname: '',
+					description: '',
+					type:'',
+					length: '',
+					retain: ''
+				}],*/
                 this.$refs["dataInfo"].resetFields();
             },
 			handleChange(val) {//手风琴开关效果调用
@@ -291,7 +295,8 @@
 					});
 					return;
 				} else {
-					this.fieldList.push(selData[0]);
+					//this.attributes.push(selData[0]);
+					this.dataInfo.attributes.push(selData[0]);
 					this.dialogVisible = false;
 				}
 			},
@@ -303,13 +308,14 @@
 					length: '',
 					retain: ''
                 };
-                this.fieldList.push(obj);
+                //this.attributes.push(obj);
+                this.dataInfo.attributes.push(obj);
 			},
 			delfield(item){
-                // this.fieldList.splice(index,1);
-                var index = this.fieldList.indexOf(item);
+                var index = this.dataInfo.attributes.indexOf(item);
                 if (index !== -1) {
-                    this.fieldList.splice(index, 1)
+                    //this.attributes.splice(index, 1)
+                    this.dataInfo.attributes.splice(index, 1);
                 }
 			},
 			col_but(col_but) {
@@ -337,6 +343,7 @@
 				var url = '/api/apps-center/objectcfg/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
 					this.dataInfo = res.data;
+					//this.attributes=this.dataInfo.attributes;
 					this.show = true;
 				}).catch((err) => {
 					this.$message({
@@ -378,11 +385,15 @@
 				this.$refs[dataInfo].validate((valid) => {
 		          if (valid) {
 					var url = '/api/apps-center/objectcfg/saveOrUpdate';
-					this.dataInfo.fieldList.push(this.fieldList);
-					console.log(this.fieldList);
+					//this.dataInfo.attributes=this.attributes;
+	               /* $.each(this.attributes,function(i,n){
+	                    this.dataInfo.attributes.push(n.columnname +" ，"+n.description+" ，"+n.type+" ，"+n.length+" ，"+n.retain+");
+	                });*/
+					//console.log(this.attributes);
 					console.log(this.dataInfo);	
 
-                var dataInfo = JSON.parse(JSON.stringify(this.dataInfo));				
+                // var dataInfo = JSON.parse(JSON.stringify(this.dataInfo));	
+                console.log("================");			
                 console.log(this.dataInfo);
 					this.$axios.post(url, this.dataInfo).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息

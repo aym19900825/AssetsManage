@@ -164,18 +164,14 @@
 						isShow:true,
 					}
 				],
-
 				companyId: '',
 				deptId: '',
-
 				selDept: [],
-
 				page: {
 					currentPage: 1,
 					pageSize: 10,
 					totalCount: 0
 				},
-	
 				total:0,
 				'启用': true,
 				'冻结': false,

@@ -133,6 +133,7 @@ export default {
 		},
         activeNames: ['1'],//手风琴数量
 		clientHeight:'',//获取浏览器高度
+        labelPosition: 'top',//表单标题在上方显示
 		leftNavs: [//leftNavs左侧菜单数据
 			{
 				navicon: 'icon-user',
@@ -161,15 +162,15 @@ export default {
 			}, {
 				navicon: 'icon-file-text',
 				navtitle: '检验/检测标准',
-				navherf: '/testing_standard'
+				navherf: '/passwordedit'
 			}, {
 				navicon: 'icon-file-text',
 				navtitle: '检验/检测项目',
-				navherf: '/testing_projects'
+				navherf: '/testing_standard'
 			}, {
 				navicon: 'icon-file-text',
 				navtitle: '检验/检测方法',
-				navherf: '/testing_methods'
+				navherf: '/test_method'
 			}, {
 				navicon: 'icon-file-text',
 				navtitle: '自动编号设置',

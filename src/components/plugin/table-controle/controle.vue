@@ -33,7 +33,7 @@ export default {
 </script>
 <style scope>
   .fixed-table-toolbar .columns{
-    width: 120px;
+    width: 100px;
   }
 </style>
 

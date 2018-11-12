@@ -198,41 +198,11 @@ export default {
 .roll-right.J_tabRight {
     right: 160px;
 }
-/*.page-tabs a.active {
-    color: #6585DF;
-    margin-top: 5px;
-    background:linear-gradient(360deg,rgba(234,239,243,1) 0%,rgba(255,255,255,1) 100%);
-    box-shadow:0px -2px 5px 0px rgba(176,192,237,0.5);
 
-}
-.page-tabs a {
-    display: block;
-    float: left;
-    background-color: #eaedf1;
-    border: solid 1px #d1d8de;
-    padding: 0 12px;
-    height: 35px;
-    margin-top: 8px;
-    margin-left: 5px;
-    line-height: 35px;
-    position: relative;
-}*/
-.page-tabs a .icon-close2 {
-    color: #97A3B4;
-}
-.page-tabs a.active .icon-close2 {
-    color: #E97A9B;
-}
-.page-tabs a:hover {background-color: #F5F8FB;}
-.page-tabs a:hover .icon-close2,.page-tabs a:hover.active .icon-close2{
-    color: #9153f1;
-}
-.page-tabs .J_menuTab{
-    border-radius: 4px 4px 0px 0px;
-}
 .page-tabs-content span{
     display: block;
     float: left;
+    color: #97A3B4;
     background-color: #eaedf1;
     border: solid 1px #d1d8de;
     padding: 0 12px;
@@ -249,4 +219,20 @@ export default {
     background:linear-gradient(360deg,rgba(234,239,243,1) 0%,rgba(255,255,255,1) 100%);
     box-shadow:0px -2px 5px 0px rgba(176,192,237,0.5);
 }
+
+.page-tabs span .icon-close2 {
+    color: #97A3B4;
+}
+.page-tabs span.active .icon-close2 {
+    color: #E97A9B;
+}
+.page-tabs span:hover {color: #9153f1; background-color: #F5F8FB;}
+.page-tabs span:hover .icon-close2,.page-tabs span:hover.active .icon-close2{
+    color: #9153f1;
+}
+.page-tabs .J_menuTab{
+    border-radius: 4px 4px 0px 0px;
+}
+
+
 </style>

@@ -10,7 +10,7 @@
 		<div class="wrapper-content">
 			<EasyScrollbar>
 				<div id="wrapper" ref="homePagess" style="height: 600px;">
-					<div id="information" style="height: 710px;">
+					<div id="information" style="height: 760px;">
 						<div class="ibox-content pl20 pr20">
 							<!--我的应用 Begin-->
 							<div class="clearfix">

@@ -168,20 +168,20 @@
 				this.show = true;
 			},
 			// 这里是修改
-			detail(val) {
-				// this.show = true;
-				// // var url = '/api/api-user/roles/' + id;
-				// this.$axios.get(url, {}).then((res) => {
-					console.log(val);
-					this.roleList = val;
-					console.log(this.roleList);
+			detail(id) {
+				this.show = true;
+				var url = '/api/api-user/roles/' + id;
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res.data);
+					this.roleList = res.data;
+
 					this.show = true;
-				// }).catch((err) => {
-				// 	this.$message({
-				// 		message: '网络错误，请重试',
-				// 		type: 'error'
-				// 	});
-				// });
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
 			},
 			//点击关闭按钮
 			close() {
@@ -264,6 +264,8 @@
 				this.dialogVisible = false;
 				this.roleList.deptId = this.cccData[0].id;
 				this.roleList.deptName = this.cccData[0].simplename;
+				console.log(this.cccData[0].simplename);
+				console.log(this.roleList.deptName);
 			},
 			handleClose(done) {
 				this.$confirm('确认关闭？')

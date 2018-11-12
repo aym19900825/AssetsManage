@@ -218,9 +218,10 @@
 			submitForm() {
 				console.log(this.roleList);
 				this.$refs.roleList.validate((valid) => {
-					if(valid) {	
+					// if(valid) {	
 						var url = '/api/api-user/roles/saveOrUpdate';
 						this.$axios.post(url, this.roleList).then((res) => {
+							console.log(res);
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',
@@ -236,9 +237,9 @@
 								type: 'error'
 							});
 						});
-					} else {
-						return false;
-					}
+					// } else {
+					// 	return false;
+					// }
 				})
 			},
 			//所在部门
@@ -261,7 +262,7 @@
 				this.getCheckedNodes();
 				this.placetext = false;
 				this.dialogVisible = false;
-				this.roleList.id = this.checkedNodes[0].id;
+				 // this.roleList.id = this.checkedNodes[0].id;
 				this.roleList.deptName = this.checkedNodes[0].simplename;
 			},
 			handleClose(done) {

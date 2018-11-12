@@ -26,9 +26,28 @@
 								</button>
 							</div>
 						</div>
-						<div class="columns columns-right btn-group pull-right">
+						<!--<div class="columns columns-right btn-group pull-right">
 							<button class="btn btn-default btn-outline btn-refresh" type="button" name="refresh" aria-label="refresh" title="刷新"><i class="icon-refresh"></i></button>
 							<v-table-controle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></v-table-controle>
+						</div>-->
+						<div class="columns columns-right btn-group pull-right">
+							<div class="btn btn-default btn-refresh" id="refresh" title="刷新"><i class="icon-refresh"></i></div>
+
+							<div class="keep-open btn-group" title="列">
+								<el-dropdown :hide-on-click="false" class="pl10 btn btn-default btn-outline">
+									<span class="el-dropdown-link">
+										<font class="J_tabClose"><i class="icon-menu3"></i></font>
+										<i class="el-icon-arrow-down icon-arrow2-down"></i>
+									</span>
+									<el-dropdown-menu slot="dropdown">
+										<el-checkbox-group v-model="checkedName" @change="changeCheckedName">
+											<el-dropdown-item  v-for="item in columns">
+												<el-checkbox :label="item.text" name="type"></el-checkbox>
+											</el-dropdown-item>
+										</el-checkbox-group>
+									</el-dropdown-menu>
+								</el-dropdown>
+							</div>
 						</div>
 					</div>
 					<!-- 高级查询划出 -->
@@ -41,23 +60,23 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="2">
-									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+									<el-button type="primary" @click="searchinfo" size="small" >搜索</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
 					</div>
 					<!-- 高级查询划出 -->
 					<div class="row">
-						<div class="col-sm-3">
+						<!--<div class="col-sm-3">
 							<v-assetsTree  :listData="treeData" v-on:getTreeId="getTreeId"></v-assetsTree>
-						</div>
+						</div>-->
 						<!--滚动条begin-->
 						<!-- <EasyScrollbar>
 							<div id="wrapper" ref="homePagess3" style="height: 600px;">
           					<div id="information" style="height: inherit;"> -->
-						<div class="col-sm-9">
+						<div class="12">
 							<!-- 表格begin -->
-							<el-table :data="deptList" style="width: 96%;margin: 0 auto;" :default-sort="{prop: 'deptList', order: 'descending'}" @selection-change="SelChange">
+							<!--<el-table :data="deptList" style="width:100%;margin: 0 auto;" :default-sort="{prop: 'deptList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="ID" sortable prop="id" v-if="this.checkedName.indexOf('ID')!=-1">
@@ -69,6 +88,9 @@
 								<el-table-column label="备注" sortable prop="tips" v-if="this.checkedName.indexOf('备注')!=-1">
 								</el-table-column>
 							</el-table>
+							-->
+							<tree_grid :columns="columns" :tree-structure="true" :data-source="deptList" v-on:childByValue="childByValue"></tree_grid>
+							
 							<el-pagination v-if="this.checkedName.length>0"
 							   class="pull-right" 
 							   @size-change="sizeChange" 
@@ -93,11 +115,12 @@
 </template>
 
 <script>
+	import tree_grid from './common/TreeGrid.vue'//树表格
 	import vheader from './common/vheader.vue'
 	import navs from './common/left_navs/nav_left.vue'
 	import navs_header from './common/nav_tabs.vue'
-	import assetsTree from './plugin/vue-tree/tree.vue'
-	import tableControle from './plugin/table-controle/controle.vue'
+//	import assetsTree from './plugin/vue-tree/tree.vue'
+//	import tableControle from './plugin/table-controle/controle.vue'
 	import deptmask from './common/dept_mask.vue'
 
 	export default {
@@ -107,34 +130,38 @@
 			'navs_header': navs_header,
 			'navs': navs,
 			'deptmask': deptmask,
-			'v-assetsTree': assetsTree,
-			'v-table-controle':tableControle
+			'tree_grid':tree_grid,
 		},
 		data() {
 			return {
 				clientHeight2:'',//获取浏览器高度
+				
 				checkedName: [
 					'ID',
 					'部门简称',
 					'类型',
 					'备注',
 				],
-				tableHeader: [
+				columns: [
 					{
-						label: 'ID',
-						prop: 'id'
+						text: 'ID',
+						dataIndex: 'id',
+						isShow:true,
 					},
 					{
-						label: '部门简称',
-						prop: 'simplename'
+						text: '部门简称',
+						dataIndex: 'simplename',
+						isShow:true,
 					},
 					{
-						label: '类型',
-						prop: 'type'
+						text: '类型',
+						dataIndex: 'type',
+						isShow:true,
 					},
 					{
-						label: '备注',
-						prop: 'tips'
+						text: '备注',
+						dataIndex: 'tips',
+						isShow:true,
 					}
 				],
 				companyId: '',
@@ -168,6 +195,22 @@
 			}
 		},
 		methods: {
+			changeCheckedName(value){
+				this.checkedName=value
+				let str=value.toString()
+				for(let i=0;i<this.columns.length;i++){
+					if(str.indexOf(this.columns[i].text) != -1){
+						this.columns[i].isShow=true
+					}else{
+						this.columns[i].isShow=false
+					}
+				}
+			},
+			//表格传过来
+			childByValue: function (childValue) {
+		        // childValue就是子组件传过来的
+		        this.selMenu = childValue
+		    },
 			tableControle(data){
 			  this.checkedName = data;
 			},
@@ -292,23 +335,45 @@
 			SelChange(val) {
 				this.selDept = val;
 			},
+//			requestData(index) {
+//				var data = {
+//					page: this.page.currentPage,
+//					limit: this.page.pageSize,
+//					simplename: this.searchDept.simplename,
+//					companyId: this.companyId,
+//					deptId: this.deptId
+//				}
+//				var url = '/api/api-user/depts';
+//				this.$axios.get(url, {
+//					params: data
+//				}).then((res) => {
+//					this.deptList = res.data.data;
+//					this.page.totalCount = res.data.count;
+//				}).catch((wrong) => {
+//
+//				})
+//			},
 			requestData(index) {
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-					simplename: this.searchDept.simplename,
-					companyId: this.companyId,
-					deptId: this.deptId
-				}
-				var url = '/api/api-user/depts';
+//				var data = {
+//					
+//				}
+				var url = '/api/api-user/depts/treeMap';
 				this.$axios.get(url, {
-					params: data
+//					params: data
 				}).then((res) => {
-					this.deptList = res.data.data;
-					this.page.totalCount = res.data.count;
-				}).catch((wrong) => {
-
-				})
+					let result=res.data
+					console.log(result);
+					for(let i=0;i<result.length;i++){
+						if(typeof(result[i].subDepts)!="undefined"&&result[i].subDepts.length>0){
+							let subDepts=result[i].subDepts;
+							result[i].children=subDepts;
+							//console.log(result[i].children);
+						}	
+					}
+					console.log(result);
+					this.deptList = result;
+//					this.page.totalCount = res.data.count;
+				}).catch((wrong) => {})
 			},
 			//机构树
 			getKey() {

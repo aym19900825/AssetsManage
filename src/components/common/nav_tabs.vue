@@ -1,14 +1,14 @@
 <template>
     <div>
         <div class="content-tabs">
-            <button class="roll-nav roll-left J_tabLeft"><i class="icon-previous"></i></button>
+            <button class="roll-nav roll-left J_tabLeft"  @click="tabLeft"><i class="icon-previous"></i></button>
             <div class="page-tabs J_menuTabs">
                 <div class="page-tabs-content">
                     <span v-for="item in tabs" :class="item.navtitle==selectedTab.navtitle?'active':'J_menuTab'" @click="showSelected(item)">{{item.navtitle}} <i class="icon-close2" @click.stop="closeTab(item, $event)"></i></span>
                     <!-- <router-link to="/user_management" class="J_menuTab active" >用户管理 <i class="icon-close2"></i></router-link> -->
                 </div>
             </div>
-            <button class="roll-nav roll-right J_tabRight"><i class="icon-next"></i></button>
+            <button class="roll-nav roll-right J_tabRight"  @click="tabRight"><i class="icon-next"></i></button>
             <button class="btn-group roll-nav roll-right">
                 <el-dropdown placement="top" trigger="click">
                   <span class="el-dropdown-link">
@@ -37,6 +37,27 @@ export default {
         }
     },
     methods: {
+        tabLeft(){
+            var left = $('.page-tabs').offset().left; 
+            //tab宽度
+            var tabW = $('.page-tabs').width();
+            //总宽度
+            var contentW = $('.content-tabs').width();
+            if(tabW-left+80 < contentW){
+                $('.page-tabs').offset({
+                    left: left - 110
+                });
+            }
+            
+        },
+        tabRight(){
+            var left = $('.page-tabs').offset().left; 
+            if(left < 0){
+                $('.page-tabs').offset({
+                    left: left + 110
+                });
+            }
+        },
         closeTab(tab, event){
             if (event) event.preventDefault();
             var _this = this;

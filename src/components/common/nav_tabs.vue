@@ -16,9 +16,9 @@
                     <i class="el-icon-arrow-down icon-arrow2-down"></i>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item class="divider">定位当前选项卡</el-dropdown-item>
-                    <el-dropdown-item class="J_tabCloseAll border-lineb">关闭全部选项卡</el-dropdown-item>
-                    <el-dropdown-item class="J_tabCloseOther">关闭其他选项卡</el-dropdown-item>
+                    <el-dropdown-item class="divider"><span @click="closeSel">定位当前选项卡</span></el-dropdown-item>
+                    <el-dropdown-item class="J_tabCloseAll border-lineb"><span @click="closeAll">关闭全部选项卡</span></el-dropdown-item>
+                    <el-dropdown-item class="J_tabCloseOther"><span @click="closeOther">关闭其他选项卡</span></el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
             </button>
@@ -74,6 +74,24 @@ export default {
                 this.$router.push({path: _this.selectedTab.navherf});
                 return false;
             }
+        },
+        closeSel(){
+            this.closeTab( this.selectedTab);
+        },
+        closeAll(){
+            sessionStorage.setItem('clickedNav',JSON.stringify({arr:[{
+                navtitle: '首页',
+                navherf: '/index'
+            }]}));
+            sessionStorage.setItem('selectedNav',JSON.stringify({
+                navicon: 'icon-user',
+                navtitle: '首页',
+                navherf: '/index'}));
+            this.$router.push({path: '/index'});
+        },
+        closeOther(){
+            this.tabs = [this.selectedTab];
+            sessionStorage.setItem('clickedNav',JSON.stringify({arr:this.tabs}));
         },
         showSelected(item){
             this.selectedTab = item;

@@ -162,15 +162,15 @@ export default {
 			}, {
 				navicon: 'icon-file-text',
 				navtitle: '检验/检测标准',
-				navherf: '/passwordedit'
-			}, {
-				navicon: 'icon-file-text',
-				navtitle: '检验/检测项目',
 				navherf: '/testing_standard'
 			}, {
 				navicon: 'icon-file-text',
+				navtitle: '检验/检测项目',
+				navherf: '/testing_projects'
+			}, {
+				navicon: 'icon-file-text',
 				navtitle: '检验/检测方法',
-				navherf: '/test_method'
+				navherf: '/testing_methods'
 			}, {
 				navicon: 'icon-file-text',
 				navtitle: '自动编号设置',

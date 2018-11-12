@@ -88,7 +88,7 @@
 					</div>
 				</div>
 			</div>
-			<rolemask :user="aaaData[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></rolemask>
+			<rolemask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></rolemask>
 			<datalimitmask ref="aaa" v-bind:page=page></datalimitmask>
 		</div>
 	</div>
@@ -166,7 +166,7 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-				aaaData:[],
+				selData:[],
 			}
 		},
 		methods: {
@@ -197,21 +197,21 @@
 			},
 			//修改用戶
 			modify() {
-				this.aaaData = this.selUser;
-				if(this.aaaData.length == 0) {
+				this.selData = this.selUser;
+				if(this.selData.length == 0) {
 					this.$message({
 						message: '请您选择要修改的用户',
 						type: 'warning'
 					});
 					return;
-				} else if(this.aaaData.length > 1) {
+				} else if(this.selData.length > 1) {
 					this.$message({
 						message: '不可同时修改多个用户',
 						type: 'warning'
 					});
 					return;
 				} else {
-					this.$refs.child.detail(this.aaaData);
+					this.$refs.child.detail(this.selData[0].id);
 				}
 			},
 			//高级查询
@@ -270,12 +270,6 @@
 					return "";
 				}
 				return this.$moment(date).format("YYYY-MM-DD"); 
-			},
-			insert() {
-				this.users.push(this.user)
-			},
-			remove(index) {
-				this.users.splice(index, 1)
 			},
 			SelChange(val) {
 				this.selUser = val;

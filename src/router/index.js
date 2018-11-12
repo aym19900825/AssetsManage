@@ -97,10 +97,15 @@ Vue.use(Router)
       name: 'safe_management',
       component: safe_management
     },
-    {//安全管理
+    {//部门管理
       path: '/dept_management',
       name: 'dept_management',
       component: dept_management
+    },
+    {//数据管理
+      path: '/data_management',
+      name: 'data_management',
+      component: data_management
     },
     {//字典管理
       path: '/dictionaries_management',
@@ -126,6 +131,11 @@ Vue.use(Router)
       path: '/menu_management',
       name: 'menu_management',
       component: menu_management
+    },
+    {
+      path: '/dept_management',
+      name: 'dept_management',
+      component: dept_management
     },
     {//角色管理
       path: '/role_management',

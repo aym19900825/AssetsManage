@@ -401,7 +401,7 @@ ul.ztree {
     position:relative;
     width:16px
 }
-.icon-file-normal,.icon-file-text,.icon-file-open{
+.ztree .icon-file-normal,.ztree .icon-file-text,.ztree .icon-file-open{
     color: #6585DF;
 }
 </style>

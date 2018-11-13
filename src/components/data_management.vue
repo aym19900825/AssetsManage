@@ -64,12 +64,12 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格begin-->
-							<el-table :data="dataList" border stripe height="550" style="width: 100%; margin: 0 auto;" :default-sort="{prop:'dataList', order: 'descending'}" @selection-change="SelChange">
-								<el-table-column type="selection" width="55">
+							<el-table :data="dataList" border stripe height="400" style="width: 100%; margin: 0 auto;" :default-sort="{prop:'dataList', order: 'descending'}" @selection-change="SelChange">
+								<el-table-column fixed type="selection" width="55">
 								</el-table-column>
 								<el-table-column label="表名" sortable width="320" prop="name"  v-if="this.checkedName.indexOf('表名')!=-1">
 								</el-table-column>
-								<el-table-column label="描述" sortable prop="description"  v-if="this.checkedName.indexOf('描述')!=-1">
+								<el-table-column label="描述" sortable prop="description" width="820"  v-if="this.checkedName.indexOf('描述')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination v-if="this.checkedName.length>0" class="pull-right"

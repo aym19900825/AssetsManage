@@ -1,8 +1,8 @@
 <template>
   <el-table
     :data="data"
-    style="width: 100%;margin: 0 auto;"
-    :row-style="showTr" @selection-change="SelChange">
+    style="width: 100%; margin: 0 auto;"
+    :row-style="showTr" border stripe height="550" @selection-change="SelChange">
     <el-table-column type="selection" width="55">
 		</el-table-column>
     <el-table-column  v-for="(column, index) in columns" :key="column.dataIndex"

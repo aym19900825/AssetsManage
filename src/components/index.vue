@@ -148,43 +148,43 @@ export default {
 			}, {
 				navicon: 'icon-plan',
 				navtitle: '年度计划',
-				navherf: '/passwordedit'
+				navherf: '/annual_plan'
 			}, {
 				navicon: 'icon-contract',
 				navtitle: '工作任务通知书',
-				navherf: '/passwordedit'
+				navherf: '/notifications'
 			}, {
 				navicon: 'icon-contract',
 				navtitle: '委托书管理',
-				navherf: '/passwordedit'
+				navherf: '/proxies'
 			}, {
 				navicon: 'icon-purchase',
 				navtitle: '样品管理',
-				navherf: '/passwordedit'
+				navherf: '/samples'
 			}, {
 				navicon: 'icon-worklist',
 				navtitle: '工作任务单',
-				navherf: '/passwordedit'
+				navherf: '/workorders'
 			}, {
 				navicon: 'icon-device',
 				navtitle: '设备管理',
-				navherf: '/personinfo'
+				navherf: '/devices'
 			}, {
 				navicon: 'icon-inventory',
 				navtitle: '检验/检测项目管理',
-				navherf: '/passwordedit'
+				navherf: '/inspection_project'
 			}, {
 				navicon: 'icon-preventive',
 				navtitle: '文件查询',
-				navherf: '/passwordedit'
+				navherf: '/files_search'
 			}, {
 				navicon: 'icon-safe',
 				navtitle: '接口',
-				navherf: '/passwordedit'
+				navherf: '/interfaces'
 			}, {
 				navicon: 'icon-inspection',
 				navtitle: '报表管理',
-				navherf: '/passwordedit'
+				navherf: '/reports'
 			}
 		]
       }

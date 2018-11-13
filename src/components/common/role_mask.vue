@@ -34,7 +34,7 @@
 								</el-row>
 								<el-row :gutter="70">
 									<el-col :span="24">
-										<el-form-item label="所在部门" prop="deptName">
+										<el-form-item label="所在机构" prop="deptName">
 											<el-input v-model="roleList.deptName" :disabled="edit">
 												<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
 											</el-input>
@@ -137,8 +137,6 @@
 		        this.cccData=data;
 		    },
 		    handleNodeClick(data) {
-		   		console.log(111);
-             	console.log(data);
             },
 			col_but(col_but) {
 				if(col_but == 'col_but1') {
@@ -171,7 +169,6 @@
 				this.show = true;
 				var url = '/api/api-user/roles/' + id;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res.data);
 					this.roleList = res.data;
 
 					this.show = true;
@@ -215,12 +212,10 @@
 			},
 			//保存users/saveOrUpdate
 			submitForm() {
-				console.log(this.roleList);
 				this.$refs.roleList.validate((valid) => {
 					// if(valid) {	
 						var url = '/api/api-user/roles/saveOrUpdate';
 						this.$axios.post(url, this.roleList).then((res) => {
-							console.log(res);
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',
@@ -241,7 +236,7 @@
 					// }
 				})
 			},
-			//所在部门
+			//所在机构
 			getDept() {				
 				// this.editSearch = 'dept';
 				var type = 2;
@@ -251,8 +246,6 @@
 						type: type
 					},					
 				}).then((res) => {
-					console.log(res);
-					console.log(res.data);
 					this.resourceData = res.data;
 					this.dialogVisible = true;
 				});
@@ -261,7 +254,6 @@
 				this.getCheckedNodes();
 				this.placetext = false;
 				this.dialogVisible = false;
-				console.log(this.roleList);
 				this.roleList.deptId = this.cccData[0].id;
 				this.roleList.deptName = this.cccData[0].simplename;
 			},

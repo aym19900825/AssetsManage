@@ -66,13 +66,13 @@
 														<el-checkbox label="名称" name="type"></el-checkbox>
 													</el-dropdown-item>
 													<el-dropdown-item>
-														<el-checkbox label="所在部门" name="type"></el-checkbox>
+														<el-checkbox label="所在机构" name="type"></el-checkbox>
 													</el-dropdown-item>
 													<el-dropdown-item>
 														<el-checkbox label="所在公司" name="type"></el-checkbox>
 													</el-dropdown-item>
 													<el-dropdown-item>
-														<el-checkbox label="所在部门" name="type"></el-checkbox>
+														<el-checkbox label="所在机构" name="type"></el-checkbox>
 													</el-dropdown-item>
 												</el-dropdown-menu>
 											</el-dropdown>

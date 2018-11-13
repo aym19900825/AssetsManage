@@ -57,13 +57,13 @@
 											</el-dropdown-item>
 										</el-checkbox-group>
 										<!-- <el-dropdown-item>
-											<el-checkbox label="所在部门" name="type"></el-checkbox>
+											<el-checkbox label="所在机构" name="type"></el-checkbox>
 										</el-dropdown-item>
 										<el-dropdown-item>
 											<el-checkbox label="所在公司" name="type"></el-checkbox>
 										</el-dropdown-item>
 										<el-dropdown-item>
-											<el-checkbox label="所在部门" name="type"></el-checkbox>
+											<el-checkbox label="所在机构" name="type"></el-checkbox>
 										</el-dropdown-item> -->
 									</el-dropdown-menu>
 								</el-dropdown>
@@ -113,7 +113,7 @@
 								<el-table-column label="性别" sortable prop="sex" :formatter="sexName" v-if="this.checkedName.indexOf('性别')!=-1">
 								</el-table-column>
 								</el-table-column>
-								<el-table-column label="部门" sortable prop="deptName" v-if="this.checkedName.indexOf('部门')!=-1">
+								<el-table-column label="机构" sortable prop="deptName" v-if="this.checkedName.indexOf('机构')!=-1">
 								</el-table-column>
 								<el-table-column label="公司" sortable prop="companyName" v-if="this.checkedName.indexOf('公司')!=-1">
 								</el-table-column>
@@ -165,7 +165,7 @@
 					'账号',
 					'姓名',
 					'性别',
-					'部门',
+					'机构',
 					'状态',
 					'创建时间'
 				],
@@ -183,7 +183,7 @@
 						prop: 'sexName'
 					},
 					{
-						label: '部门',
+						label: '机构',
 						prop: 'deptName'
 					},
 					{

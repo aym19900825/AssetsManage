@@ -67,7 +67,7 @@
 								</el-table-column>
 								<el-table-column label="角色名称" sortable width="250" prop="name" v-if="this.checkedName.indexOf('角色名称')!=-1">
 								</el-table-column>
-								<el-table-column label="所在部门" sortable width="250" prop="deptName" v-if="this.checkedName.indexOf('所在部门')!=-1">
+								<el-table-column label="所在机构" sortable width="250" prop="deptName" v-if="this.checkedName.indexOf('所在机构')!=-1">
 								</el-table-column>
 								<el-table-column label="别名" sortable width="250" prop="code" v-if="this.checkedName.indexOf('别名')!=-1">
 								</el-table-column>
@@ -121,7 +121,7 @@
 				'女': false,
 				checkedName: [
 					'角色名称',
-					'所在部门',
+					'所在机构',
 					'别名',
 					'备注'
 				],
@@ -131,7 +131,7 @@
 						prop: 'name'
 					},
 					{
-						label: '所在部门',
+						label: '所在机构',
 						prop: 'deptName'
 					},
 					{
@@ -312,7 +312,6 @@
 				return data;
 			},
 			getTreeId(data){
-				console.log("============="+data);
 			},
 			handleNodeClick(data) {
 			},

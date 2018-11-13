@@ -40,9 +40,9 @@
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item>名称</el-dropdown-item>
                     <el-dropdown-item>上级角色</el-dropdown-item>
-                    <el-dropdown-item>所在部门</el-dropdown-item>
+                    <el-dropdown-item>所在机构</el-dropdown-item>
                     <el-dropdown-item>所在公司</el-dropdown-item>
-                    <el-dropdown-item>所在部门</el-dropdown-item>
+                    <el-dropdown-item>所在机构</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
 			</div>

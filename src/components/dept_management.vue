@@ -50,7 +50,7 @@
 						<el-form status-icon :model="searchDept" label-width="70px">
 							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-form-item label="部门名称">
+									<el-form-item label="机构名称">
 										<el-input v-model="searchDept.simplename"></el-input>
 									</el-form-item>
 								</el-col>
@@ -108,7 +108,7 @@
 				clientHeight2:'',//获取浏览器高度
 				checkedName: [
 					'ID',
-					'部门简称',
+					'机构简称',
 					'类型',
 					'备注',
 				],
@@ -119,7 +119,7 @@
 						isShow:true,
 					},
 					{
-						text: '部门简称',
+						text: '机构简称',
 						dataIndex: 'simplename',
 						isShow:true,
 					},
@@ -198,7 +198,6 @@
 		      this.requestData();
 		    },
 			currentTree(val){
-				console.log(val);
 			},
 			//分页功能
 			aTable(val){ 
@@ -216,7 +215,6 @@
 				var url = '/api/api-user/depts';
 				this.$axios.get(url, data).then((res) => {
 					this.deptList = res.data.data;
-					console.log(res.data.data);
 				}).catch((wrong) => {
 
 				})
@@ -228,17 +226,16 @@
 			},
 			//修改
 			modify() {
-				console.log(this.selMenu)
 				var selData = this.selMenu;
 				if(selData.length == 0) {
 					this.$message({
-						message: '请您选择要修改的部门',
+						message: '请您选择要修改的机构',
 						type: 'warning'
 					});
 					return;
 				} else if(selData.length > 1) {
 					this.$message({
-						message: '不可同时修改多个部门',
+						message: '不可同时修改多个机构',
 						type: 'warning'
 					});
 					return;
@@ -257,26 +254,24 @@
 				var selData = this.selMenu;
 				if(selData.length == 0) {
 					this.$message({
-						message: '请您选择要删除的部门',
+						message: '请您选择要删除的机构',
 						type: 'warning'
 					});
 					return;
 				} else if(selData.length > 1) {
 					this.$message({
-						message: '不可同时删除多个部门',
+						message: '不可同时删除多个机构',
 						type: 'warning'
 					});
 					return;
 				} else {
 					var changeMenu = selData[0];
-					console.log(changeMenu);
 					if(typeof(changeMenu.children)!='undefined' && changeMenu.children.length>0){
 						this.$message({
-							message: '先删除子部门',
+							message: '先删除子机构',
 							type: 'error'
 						});
 					}else {
-						console.log(changeMenu);
 						var id = changeMenu.id;
 						var url = '/api/api-user/depts/' + id;
 						this.$axios.delete(url, {}).then((res) => {
@@ -346,14 +341,12 @@
 //					params: data
 				}).then((res) => {
 					let result=res.data
-					console.log(result);
 					for(let i=0;i<result.length;i++){
 						if(typeof(result[i].subDepts)!="undefined"&&result[i].subDepts.length>0){
 							let subDepts=result[i].subDepts;
 							result[i].children=subDepts;
 						}	
 					}
-					console.log(result);
 					this.deptList = result;
 //					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
@@ -392,7 +385,6 @@
 				this.requestData();
 			},
 			handleNodeClick(data) {
-				console.log(data);
 			},
 			formatter(row, column) {
 				return row.enabled;

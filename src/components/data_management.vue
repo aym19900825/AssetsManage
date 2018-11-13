@@ -197,7 +197,6 @@
 					return;
 				} else {
 					this.$refs.child.detail(selData[0].id);
-					console.log(selData);
 				}
 			},
 			//高级查询
@@ -260,10 +259,8 @@
 				} else {
 					var changeUser = selData[0];
 					var id = changeUser.id;
-					console.log(id);
 					var url = '/api/apps-center/objectcfg/create/' + id;
 					this.$axios.get(url, {}).then((res) => {
-						console.log(res.data);
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -303,7 +300,6 @@
 					
 					this.dataList = res.data.data;
 					this.page.totalCount = res.data.count;
-					console.log(this.dataList);
 				}).catch((wrong) => {})
 			},
 			//机构树
@@ -330,7 +326,6 @@
 				return data;
 			},
 			getTreeId(data){
-				console.log("============="+data);
 			},
 			handleNodeClick(data) {
 			},

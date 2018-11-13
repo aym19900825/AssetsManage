@@ -270,8 +270,6 @@
 
 			//保存users/saveOrUpdate
 			submitForm() {
-				console.log(this.menu);
-				console.log(this.menu._expanded);
 				this.$refs.menu.validate((valid) => {
 //					if(valid) {
 

@@ -140,7 +140,6 @@
 		},
 		methods: {
 			changeCheckedName(value){
-				console.log(value);
 				this.checkedName=value
 				let str=value.toString()
 				for(let i=0;i<this.columns.length;i++){
@@ -182,7 +181,6 @@
 			},
 			//修改
 			modify() {
-				console.log(this.selMenu)
 				var selData = this.selMenu;
 				if(selData.length == 0) {
 					this.$message({
@@ -219,14 +217,12 @@
 				} else {
 					
 					var changeMenu = selData[0];
-					console.log(changeMenu);
 					if(typeof(changeMenu.children)!='undefined' && changeMenu.children.length>0){
 						this.$message({
 							message: '先删除子菜单',
 							type: 'error'
 						});
 					}else {
-							console.log(changeMenu);
 						var id = changeMenu.id;
 						var url = '/api/api-user/menus/' + id;
 						this.$axios.delete(url, {}).then((res) => { //.delete 传数据方法

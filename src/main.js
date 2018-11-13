@@ -39,8 +39,8 @@ Vue.prototype.$echarts = echarts
 Vue.prototype.$moment = moment//赋值使用
 Vue.use(ElementUI)
 Vue.use(vueztree)
-//Vue.use(EasyScroll)//自定义滚动条
-Vue.use(infiniteScroll)
+Vue.use(EasyScroll)//自定义滚动条
+//Vue.use(infiniteScroll)
 
 new Vue({
   el: '#app',

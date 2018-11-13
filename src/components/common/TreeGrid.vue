@@ -2,10 +2,10 @@
   <el-table
     :data="data"
     style="width: 100%; margin: 0 auto;"
-    :row-style="showTr" border stripe height="550" @selection-change="SelChange">
-    <el-table-column type="selection" width="55">
+    :row-style="showTr" border stripe height="400" @selection-change="SelChange">
+    <el-table-column type="selection" width="55" fixed>
 		</el-table-column>
-    <el-table-column  v-for="(column, index) in columns" :key="column.dataIndex"
+    <el-table-column width="300px"  v-for="(column, index) in columns" :key="column.dataIndex"
       :label="column.text" v-if="column.isShow">
       <template slot-scope="scope">
         <span v-if="spaceIconShow(index)" v-for="(space, levelIndex) in scope.row._level" class="ms-tree-space"></span>

@@ -103,23 +103,23 @@
 						<el-col :span="18">
 							<!-- <tablediv ref="tableList"></tablediv> -->
 							<!-- 表格 -->
-							<el-table :data="userList" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
-								<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
+							<el-table :data="userList"  border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
+								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="账号" sortable prop="username" v-if="this.checkedName.indexOf('账号')!=-1">
+								<el-table-column label="账号" sortable width="100px" prop="username" v-if="this.checkedName.indexOf('账号')!=-1">
 								</el-table-column>
-								<el-table-column label="姓名" sortable prop="nickname" v-if="this.checkedName.indexOf('姓名')!=-1">
+								<el-table-column label="姓名" sortable width="200px" prop="nickname" v-if="this.checkedName.indexOf('姓名')!=-1">
 								</el-table-column>
-								<el-table-column label="性别" sortable prop="sex" :formatter="sexName" v-if="this.checkedName.indexOf('性别')!=-1">
+								<el-table-column label="性别" sortable width="100px" prop="sex" :formatter="sexName" v-if="this.checkedName.indexOf('性别')!=-1">
 								</el-table-column>
 								</el-table-column>
-								<el-table-column label="机构" sortable prop="deptName" v-if="this.checkedName.indexOf('机构')!=-1">
+								<el-table-column label="机构" sortable width="200px" prop="deptName" v-if="this.checkedName.indexOf('机构')!=-1">
 								</el-table-column>
-								<el-table-column label="公司" sortable prop="companyName" v-if="this.checkedName.indexOf('公司')!=-1">
+								<el-table-column label="公司" sortable width="200px" prop="companyName" v-if="this.checkedName.indexOf('公司')!=-1">
 								</el-table-column>
-								<el-table-column label="状态" sortable prop="enabled" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
+								<el-table-column label="状态" sortable width="200px" prop="enabled" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
-								<el-table-column label="创建时间" prop="createTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('创建时间')!=-1">
+								<el-table-column label="创建时间" width="200px" prop="createTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('创建时间')!=-1">
 								</el-table-column>
 							</el-table>
 							<!-- <span class="demonstration">显示总数</span>" -->

@@ -166,11 +166,23 @@
 			
 			//添加菜单
 			openAddMenu() {
-				this.$refs.child.resetNew();
-				this.$refs.child.visible();
+				this.selData = [
+					{
+					parentId:'',
+					name:'',
+					url:'',
+					sort:'',
+					hidden:'',
+					css:''
+					}
+				];
+				this.$refs.child.detail();
+//				this.$refs.child.resetNew();
+//				this.$refs.child.visible();
 			},
 			//修改
 			modify() {
+				console.log(this.selMenu)
 				var selData = this.selMenu;
 				if(selData.length == 0) {
 					this.$message({
@@ -185,7 +197,7 @@
 					});
 					return;
 				} else {
-					this.$refs.child.detail(selData[0].id);
+					this.$refs.child.detail();
 				}
 			},
 
@@ -236,23 +248,6 @@
 				}
 			},
 
-//			显示目录
-//			judge(data) {
-//				if(data.parentId == "-1" || data.parentId == "null") {
-//					return data.isMenu = "目录"
-//				} else {
-//					return data.isMenu = "菜单"
-//				}
-//			},
-			//机构树
-//			getKey() {
-//				let that = this;
-//				var url = '/api/api-user/depts/tree';
-//				this.$axios.get(url, {}).then((res) => {
-//					this.resourceData = res.data;
-//					this.treeData = this.transformTree(this.resourceData);
-//				});
-//			},
 			SelChange(val) {
 				this.selMenu = val;
 			},
@@ -265,17 +260,14 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(res);
 					let result=res.data
-					console.log(result);
 					for(let i=0;i<result.length;i++){
 //						if(result[i].parentId == "-1" || result[i].parentId == "null") {
 //							result[i].isMenu = "目录"
 //						} else {
 //							result[i].isMenu = "菜单"
-//						}
-//						if(typeof(result[i].subDepts)!="undefined"&&result[i].subDepts.length>0){
-						if(typeof(result[i].subMenus)!="undefined"&&result[i].subMenus.length>0){
+//						}						
+						if(result[i].subMenus.length>0){
 							let subMenus=result[i].subMenus
 //							for(let j=0;j<subMenus.length;j++){
 //								if(subMenus[j].parentId == "-1" || subMenus[j].parentId == "null") {
@@ -283,16 +275,14 @@
 //								} else {
 //									subMenus[j].isMenu = "菜单"
 //								}						
-//								if(subMenus[j].subMenus.length>0){
-//									subMenus[j].children=subMenus[j].subMenus
-//								}
+////								if(subMenus[j].subMenus.length>0){
+////									subMenus[j].children=subMenus[j].subMenus
+////								}
 //							}
 							result[i].children=subMenus
 						}
 					}
 					this.menuList = result;
-					
-					console.log(this.menuList);
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
 			},

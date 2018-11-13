@@ -19,9 +19,24 @@ import data_management from '@/components/data_management'//数据管理
 import role_management from '@/components/role_management'//角色管理
 import safe_management from '@/components/safe_management'//安全管理
 import dictionaries_management from '@/components/dictionaries_management'//字典管理
+
+import annual_plan from '@/components/annual_plan'//年度计划
+// import notifications from '@/components/notifications'//工作任务通知书
+// import proxies from '@/components/proxies'//委托书管理
+// import samples from '@/components/samples'//样品管理
+// import workorders from '@/components/workorders'//工作任务单
+// import devices from '@/components/devices'//设备管理
+// import inspection_project from '@/components/inspection_project'//检验/检测项目管理
+// import files_search from '@/components/files_search'//文件查询
+// import interfaces from '@/components/interfaces'//接口
+// import reports from '@/components/reports'//报表管理
+
 import personinfo from '@/components/personinfo'//个人资料
 import passwordedit from '@/components/passwordedit'//修改密码
 import ztree from '@/components/common/ztree' //树菜单 
+
+
+
 // import test from '@/components/test'
 // 
 Vue.use(Router)
@@ -37,6 +52,16 @@ Vue.use(Router)
       name: 'index',
       component: index
     },
+    {//年度计划
+      path: '/annual_plan',
+      name: 'annual_plan',
+      component: annual_plan
+    },
+    // {//工作任务通知书
+    //   path: '/notifications',
+    //   name: 'notifications',
+    //   component: notifications
+    // },
     {//Demo
       path: '/demo',
       name: 'demo',
@@ -87,16 +112,6 @@ Vue.use(Router)
       name: 'number_settings',
       component: number_settings
     },
-    {//用户管理
-    	path: '/user_management',
-    	name: 'user_management',
-    	component: user_management
-  	},
-    {//安全管理
-      path: '/safe_management',
-      name: 'safe_management',
-      component: safe_management
-    },
     {//机构管理
       path: '/dept_management',
       name: 'dept_management',
@@ -122,17 +137,17 @@ Vue.use(Router)
       name: 'passwordedit',
       component: passwordedit
     },
-  	{//树菜单
-    	path: '/ztree',
-    	name: 'ztree',
-    	component:ztree  
-  	},
-  	{//菜单管理
+    {//树菜单
+      path: '/ztree',
+      name: 'ztree',
+      component:ztree  
+    },
+    {//菜单管理
       path: '/menu_management',
       name: 'menu_management',
       component: menu_management
     },
-    {
+    {//部门管理
       path: '/dept_management',
       name: 'dept_management',
       component: dept_management
@@ -142,6 +157,56 @@ Vue.use(Router)
       name: 'role_management',
       component: role_management
     },
+     {//用户管理
+      path: '/user_management',
+      name: 'user_management',
+      component: user_management
+    },
+    {//安全管理
+      path: '/safe_management',
+      name: 'safe_management',
+      component: safe_management
+    },
+    // {//委托书管理
+    //   path: '/proxies',
+    //   name: 'proxies',
+    //   component: proxies
+    // },
+    // {//样品管理
+    //   path: '/samples',
+    //   name: 'samples',
+    //   component: samples
+    // },
+    // {//工作任务单
+    //   path: '/workorders',
+    //   name: 'workorders',
+    //   component: workorders
+    // },
+    // {//设备管理
+    //   path: '/devices',
+    //   name: 'devices',
+    //   component: devices
+    // },
+    // {//检验/检测项目管理
+    //   path: '/inspection_project',
+    //   name: 'inspection_project',
+    //   component: inspection_project
+    // },
+    // {//文件查询
+    //   path: '/files_search',
+    //   name: 'files_search',
+    //   component: files_search
+    // },
+    // {//接口
+    //   path: '/interfaces',
+    //   name: 'interfaces',
+    //   component: interfaces
+    // },
+    // {//报表管理
+    //   path: '/reports',
+    //   name: 'reports',
+    //   component: reports
+    // }
     // {
     //   path: '/test',
     //   name: 'test',

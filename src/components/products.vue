@@ -63,7 +63,7 @@
 					</div>
 				</div>
 				<!--按钮操作行 End-->
-				
+
 				<!-- 高级查询划出 Begin-->
 				<div v-show="search">
 					<el-form status-icon :model="searchList" label-width="70px">
@@ -83,7 +83,7 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :data="userList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
+						<el-table :data="userList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
 							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 							</el-table-column>
 							<el-table-column label="产品编号" sortable prop="PRO_NUM" v-if="this.checkedName.indexOf('产品编号')!=-1">

@@ -64,7 +64,6 @@
 					<el-row :gutter="10">
 						<el-col :span="24">
 							<tree_grid :columns="columns" :tree-structure="true" :data-source="deptList" v-on:childByValue="childByValue"></tree_grid>
-							
 							<el-pagination v-if="this.checkedName.length>0"
 							   class="pull-right" 
 							   @size-change="sizeChange" 

@@ -248,6 +248,7 @@
 			},
 
 			SelChange(val) {
+				console.log(val)
 				this.selMenu = val;
 			},
 			requestData(index) {
@@ -259,7 +260,7 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					
+
 					let result=res.data
 //					for(let i=0;i<result.length;i++){
 //						if(result[i].parentId == "-1" || result[i].parentId == "null") {

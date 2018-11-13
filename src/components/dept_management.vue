@@ -25,10 +25,6 @@
 								</button>
 							</div>
 						</div>
-						<!--<div class="columns columns-right btn-group pull-right">
-							<button class="btn btn-default btn-outline btn-refresh" type="button" name="refresh" aria-label="refresh" title="刷新"><i class="icon-refresh"></i></button>
-							<v-table-controle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></v-table-controle>
-						</div>-->
 						<div class="columns columns-right btn-group pull-right">
 							<div class="btn btn-default btn-refresh" id="refresh" title="刷新"><i class="icon-refresh"></i></div>
 
@@ -54,7 +50,7 @@
 						<el-form status-icon :model="searchDept" label-width="70px">
 							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-form-item label="部门名称">
+									<el-form-item label="机构名称">
 										<el-input v-model="searchDept.simplename"></el-input>
 									</el-form-item>
 								</el-col>
@@ -68,7 +64,6 @@
 					<el-row :gutter="10">
 						<el-col :span="24">
 							<tree_grid :columns="columns" :tree-structure="true" :data-source="deptList" v-on:childByValue="childByValue"></tree_grid>
-							
 							<el-pagination v-if="this.checkedName.length>0"
 							   class="pull-right" 
 							   @size-change="sizeChange" 
@@ -84,7 +79,7 @@
 					</div>
 				</div>
 			</div>
-			<deptmask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></deptmask>
+			<deptmask :adddeptForm="selMenu[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></deptmask>
 		</div>
 	</div>
 </template>
@@ -110,10 +105,9 @@
 		data() {
 			return {
 				clientHeight2:'',//获取浏览器高度
-				
 				checkedName: [
 					'ID',
-					'部门简称',
+					'机构简称',
 					'类型',
 					'备注',
 				],
@@ -124,7 +118,7 @@
 						isShow:true,
 					},
 					{
-						text: '部门简称',
+						text: '机构简称',
 						dataIndex: 'simplename',
 						isShow:true,
 					},
@@ -155,6 +149,7 @@
 				'启用': true,
 				'冻结': false,
 				deptList: [],
+				selMenu:[],
 				search: false,
 				show: false,
 				down: true,
@@ -202,7 +197,6 @@
 		      this.requestData();
 		    },
 			currentTree(val){
-				console.log(val);
 			},
 			//分页功能
 			aTable(val){ 
@@ -220,7 +214,6 @@
 				var url = '/api/api-user/depts';
 				this.$axios.get(url, data).then((res) => {
 					this.deptList = res.data.data;
-					console.log(res.data.data);
 				}).catch((wrong) => {
 
 				})
@@ -232,22 +225,21 @@
 			},
 			//修改
 			modify() {
-				var selData = this.selDept;
+				var selData = this.selMenu;
 				if(selData.length == 0) {
 					this.$message({
-						message: '请您选择要修改的信息',
+						message: '请您选择要修改的机构',
 						type: 'warning'
 					});
 					return;
-				}else if(selData.length > 1) {
+				} else if(selData.length > 1) {
 					this.$message({
-						message: '不可同时修改多条信息',
+						message: '不可同时修改多个机构',
 						type: 'warning'
 					});
 					return;
-				}else{
-					console.log(selData[0]);
-					this.$refs.child.detail(selData[0].id);
+				} else {
+					this.$refs.child.detail();
 				}
 			},
 			//高级查询
@@ -258,38 +250,45 @@
 			},
 			// 删除
 			deluserinfo() {
-				var selData = this.selDept;
+				var selData = this.selMenu;
 				if(selData.length == 0) {
 					this.$message({
-						message: '请您选择要删除的用户',
+						message: '请您选择要删除的机构',
 						type: 'warning'
 					});
 					return;
 				} else if(selData.length > 1) {
 					this.$message({
-						message: '不可同时删除多个用户',
+						message: '不可同时删除多个机构',
 						type: 'warning'
 					});
 					return;
 				} else {
-					var changeDept = selData[0];
-					var id = changeDept.id;
-					var url = '/api/api-user/depts/' + id;
-					this.$axios.delete(url, {}).then((res) => {
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '删除成功',
-								type: 'success'
-							});
-							this.requestData();
-						}
-					}).catch((err) => {
+					var changeMenu = selData[0];
+					if(typeof(changeMenu.children)!='undefined' && changeMenu.children.length>0){
 						this.$message({
-							message: '网络错误，请重试',
+							message: '先删除子机构',
 							type: 'error'
 						});
-					});
+					}else {
+						var id = changeMenu.id;
+						var url = '/api/api-user/depts/' + id;
+						this.$axios.delete(url, {}).then((res) => {
+							//resp_code == 0是后台返回的请求成功的信息
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
+							this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+						});
+					}
 				}
 			},
 			judge(data) {
@@ -342,15 +341,12 @@
 				}).then((res) => {
 					console.log(res)
 					let result=res.data
-					console.log(result);
-//					for(let i=0;i<result.length;i++){
-//						if(typeof(result[i].subDepts)!="undefined"&&result[i].subDepts.length>0){
-//							let subDepts=result[i].subDepts;
-//							result[i].children=subDepts;
-//							//console.log(result[i].children);
-//						}	
-//					}
-//					console.log(result);
+					for(let i=0;i<result.length;i++){
+						if(typeof(result[i].subDepts)!="undefined"&&result[i].subDepts.length>0){
+							let subDepts=result[i].subDepts;
+							result[i].children=subDepts;
+						}	
+					}
 					this.deptList = result;
 //					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
@@ -389,7 +385,6 @@
 				this.requestData();
 			},
 			handleNodeClick(data) {
-				console.log(data);
 			},
 			formatter(row, column) {
 				return row.enabled;

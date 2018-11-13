@@ -7,8 +7,7 @@
 			<div class="mask_title_div clearfix">
 				<div class="mask_title">添加角色</div>
 				<div class="mask_anniu">
-					<span class="mask_span mask_max" @click='toggle'>
-						 
+					<span class="mask_span mask_max" @click='toggle'> 
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
 					</span>
 					<span class="mask_span" @click='close'>
@@ -18,55 +17,51 @@
 			</div>
 			<el-form :model="roleList" :label-position="labelPosition" :rules="rules" ref="roleList" label-width="100px" class="demo-user">
 				<EasyScrollbar>
-				<div ref="homePagess" class="accordion" id="information" style="height: 600px;">
-					<div class="mask_tab-block" style="height: auto;">
-						<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
-							<el-row :gutter="70">
-								<el-col :span="12">
-									<el-form-item label="角色名称" prop="name">
-										<el-input v-model="roleList.name"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="12">
-									<el-form-item label="别名" prop="code">
-										<el-input v-model="roleList.code" placeholder="请填写"></el-input>
-									</el-form-item>
-								</el-col>
-							</el-row>
-							<el-row :gutter="70">
-								<el-col :span="24">
-									<el-form-item label="所在部门" prop="deptName">
-										<el-input v-model="roleList.deptName" :disabled="edit">
-											<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
-										</el-input>
-									</el-form-item>
-								</el-col>
-							</el-row>
-							<el-row :gutter="70">
-								<el-col :span="24">
-									<el-form-item label="备注" prop="tips">
-										<el-input type="textarea" v-model="roleList.tips" placeholder="请填写"></el-input>
-									</el-form-item>
-								</el-col>
-							</el-row>
-
+					<div ref="homePagess" class="accordion" id="information" style="height: 600px;">
+						<div class="mask_tab-block" style="height: auto;">
+							<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
+								<el-row :gutter="70">
+									<el-col :span="12">
+										<el-form-item label="角色名称" prop="name">
+											<el-input v-model="roleList.name"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="12">
+										<el-form-item label="别名" prop="code">
+											<el-input v-model="roleList.code" placeholder="请填写"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="24">
+										<el-form-item label="所在机构" prop="deptName">
+											<el-input v-model="roleList.deptName" :disabled="edit">
+												<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
+											</el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="24">
+										<el-form-item label="备注" prop="tips">
+											<el-input type="textarea" v-model="roleList.tips" placeholder="请填写"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+							</div>
+						</div>
+						<div class="el-dialog__footer">
+							<el-button @click='close'>取消</el-button>
+							<el-button type="primary" @click='submitForm()'>保存</el-button>
 						</div>
 					</div>
-					<div class="el-dialog__footer">
-						<el-button @click='close'>取消</el-button>
-						<el-button type="primary" @click='submitForm()'>保存</el-button>
-					</div>
-				</div>
 				</EasyScrollbar>
 			</el-form>
 		</div>
-	<!-- </EasyScrollbar> -->
 	    <!-- 弹出 -->
 		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-
 			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick"  @check-change="handleCheckChange">
 			</el-tree>
-
 			<span slot="footer" class="dialog-footer">
 		       <el-button @click="dialogVisible = false">取 消</el-button>
 		       <el-button type="primary" @click="queding();" >确 定</el-button>
@@ -87,7 +82,6 @@
 				}
 			};
 			return {
-			
 				edit: true, //禁填
 				'男': true,
 				'女': false,
@@ -103,7 +97,12 @@
 				clientHeight:'',//获取浏览器高度
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
-				roleList:[],
+				roleList:{
+					name:'',
+					code:'',
+					deptId:'',
+					tips:''
+				},
 				rules: {
 					name: [{
 						required: true,
@@ -138,8 +137,6 @@
 		        this.cccData=data;
 		    },
 		    handleNodeClick(data) {
-		   		console.log(111);
-             	console.log(data);
             },
 			col_but(col_but) {
 				if(col_but == 'col_but1') {
@@ -172,7 +169,6 @@
 				this.show = true;
 				var url = '/api/api-user/roles/' + id;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res.data);
 					this.roleList = res.data;
 
 					this.show = true;
@@ -216,12 +212,10 @@
 			},
 			//保存users/saveOrUpdate
 			submitForm() {
-				console.log(this.roleList);
 				this.$refs.roleList.validate((valid) => {
 					// if(valid) {	
 						var url = '/api/api-user/roles/saveOrUpdate';
 						this.$axios.post(url, this.roleList).then((res) => {
-							console.log(res);
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',
@@ -242,7 +236,7 @@
 					// }
 				})
 			},
-			//所在部门
+			//所在机构
 			getDept() {				
 				// this.editSearch = 'dept';
 				var type = 2;
@@ -252,8 +246,6 @@
 						type: type
 					},					
 				}).then((res) => {
-					console.log(res);
-					console.log(res.data);
 					this.resourceData = res.data;
 					this.dialogVisible = true;
 				});
@@ -264,8 +256,6 @@
 				this.dialogVisible = false;
 				this.roleList.deptId = this.cccData[0].id;
 				this.roleList.deptName = this.cccData[0].simplename;
-				console.log(this.cccData[0].simplename);
-				console.log(this.roleList.deptName);
 			},
 			handleClose(done) {
 				this.$confirm('确认关闭？')

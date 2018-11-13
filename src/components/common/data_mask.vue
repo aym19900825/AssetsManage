@@ -273,7 +273,6 @@
                 this.$refs["dataInfo"].resetFields();
             },
 			handleChange(val) {//手风琴开关效果调用
-				console.log(val);
 			},
 			//获取导入表格勾选信息
 			SelChange(val) {
@@ -388,13 +387,9 @@
 					//this.dataInfo.attributes=this.attributes;
 	               /* $.each(this.attributes,function(i,n){
 	                    this.dataInfo.attributes.push(n.columnname +" ，"+n.description+" ，"+n.type+" ，"+n.length+" ，"+n.retain+");
-	                });*/
-					//console.log(this.attributes);
-					console.log(this.dataInfo);	
+	                });*/	
 
-                // var dataInfo = JSON.parse(JSON.stringify(this.dataInfo));	
-                console.log("================");			
-                console.log(this.dataInfo);
+                // var dataInfo = JSON.parse(JSON.stringify(this.dataInfo));				
 					this.$axios.post(url, this.dataInfo).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -423,8 +418,6 @@
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
 				var type = 1;
-				console.log(this.page.currentPage);
-				console.log(this.page.pageSize);
 				var url = '/api/api-user/depts/type';
 				this.$axios.get(url, {
 					params: {
@@ -433,13 +426,12 @@
 						type: type
 					},
 				}).then((res) => {
-					console.log(res.data.data);
 					this.resourceData = res.data.data;
 					this.dialogVisible = true;
 				});
 
 			},
-			// 所属部门
+			// 所属机构
 			getDept() {
 				this.editSearch = 'dept';
 				var page = this.page.currentPage;
@@ -472,7 +464,6 @@
 				this.$axios.get(url, {
 					
 				}).then((res) => {
-					console.log(res);
 					this.resourceData = res.data.data;
 					this.dialogVisible = true;
 				});

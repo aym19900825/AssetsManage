@@ -58,7 +58,7 @@
 					</div>
 					<div class="columns columns-right btn-group pull-right">
 						<div class="btn btn-default btn-refresh" id="refresh" title="刷新"><i class="icon-refresh"></i></div>
-						<v-table-controle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></v-table-controle>
+						<tableControle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></tableControle>
 					</div>
 				</div>
 				<!-- 高级查询划出 Begin-->
@@ -80,7 +80,7 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :data="userList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+						<el-table :data="userList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 							</el-table-column>
 							<el-table-column label="组织机构代码" sortable prop="username" v-if="this.checkedName.indexOf('组织机构代码')!=-1">
@@ -124,10 +124,10 @@
 	export default {
 		name: 'user_management',
 		components: {
-			'vheader': vheader,
-			'navs_header': navs_header,
-			'v-table-controle':tableControle,
-			'v-table':table,
+			vheader,
+			navs_header,
+			tableControle,
+			table
 		},
 		data() {
 			return {
@@ -220,8 +220,6 @@
 				selUser: [],
 				'启用': true,
 				'冻结': false,
-				'男': true,
-				'女': false,
 				userList: [],
 				search: false,
 				show: false,

@@ -13,7 +13,7 @@ import testing_projects from '@/components/testing_projects'//检验/检测项�
 import testing_methods from '@/components/testing_methods'//检验/检测方法
 import number_settings from '@/components/number_settings'//自动编号设置
 import user_management from '@/components/user_management'//用户管理
-import dept_management from '@/components/dept_management'//部门管理
+import dept_management from '@/components/dept_management'//机构管理
 import menu_management from '@/components/menu_management'//菜单管理
 import data_management from '@/components/data_management'//数据管理
 import role_management from '@/components/role_management'//角色管理
@@ -97,7 +97,7 @@ Vue.use(Router)
       name: 'safe_management',
       component: safe_management
     },
-    {//部门管理
+    {//机构管理
       path: '/dept_management',
       name: 'dept_management',
       component: dept_management

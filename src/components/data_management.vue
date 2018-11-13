@@ -61,15 +61,15 @@
 						</el-form>
 					</div>
 					<!-- 高级查询划出end -->
-					<div class="row">
-						<div class="col-sm-12">
+					<el-row :gutter="0">
+						<el-col :span="24">
 							<!-- 表格begin-->
-							<el-table :data="dataList" style="width: 100%;margin: 0 auto;" :default-sort="{prop:'dataList', order: 'descending'}" @selection-change="SelChange">
-								<el-table-column type="selection" width="55">
+							<el-table :data="dataList" border stripe height="400" style="width: 100%; margin: 0 auto;" :default-sort="{prop:'dataList', order: 'descending'}" @selection-change="SelChange">
+								<el-table-column fixed type="selection" width="55">
 								</el-table-column>
 								<el-table-column label="表名" sortable width="320" prop="name"  v-if="this.checkedName.indexOf('表名')!=-1">
 								</el-table-column>
-								<el-table-column label="描述" sortable width="480" prop="description"  v-if="this.checkedName.indexOf('描述')!=-1">
+								<el-table-column label="描述" sortable prop="description" width="820"  v-if="this.checkedName.indexOf('描述')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination v-if="this.checkedName.length>0" class="pull-right"
@@ -82,8 +82,8 @@
 					            :total="page.totalCount">
 					        </el-pagination>
 							<!-- 表格end -->
-						</div>
-					</div>
+						</el-col>
+					</el-row>
 				</div>
 			</div>
 			<datamask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></datamask>
@@ -197,7 +197,6 @@
 					return;
 				} else {
 					this.$refs.child.detail(selData[0].id);
-					console.log(selData);
 				}
 			},
 			//高级查询
@@ -260,10 +259,8 @@
 				} else {
 					var changeUser = selData[0];
 					var id = changeUser.id;
-					console.log(id);
 					var url = '/api/apps-center/objectcfg/create/' + id;
 					this.$axios.get(url, {}).then((res) => {
-						console.log(res.data);
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -303,7 +300,6 @@
 					
 					this.dataList = res.data.data;
 					this.page.totalCount = res.data.count;
-					console.log(this.dataList);
 				}).catch((wrong) => {})
 			},
 			//机构树
@@ -330,7 +326,6 @@
 				return data;
 			},
 			getTreeId(data){
-				console.log("============="+data);
 			},
 			handleNodeClick(data) {
 			},
@@ -346,120 +341,5 @@
 </script>
 
 <style scoped>
-	.headerbg {
-		width: 100%;
-		height: 100px;
-		position: fixed;
-		z-index: 999;
-	}
-	
-	.contentbg {
-		padding-top: 100px;
-		height: 100%;
-	}
-	
-	.wrapper {
-		width: 100%;
-		height: 100%;
-		padding-left: 220px;
-		position: relative;
-	}
-	
-	.ibox-content {
-		background-color: #F5F8FB;
-		color: inherit;
-		padding: 0px 20px 20px 10px;
-		border-color: #e7eaec;
-		-webkit-border-image: none;
-		-o-border-image: none;
-		border-image: none;
-		border-style: solid solid none;
-		border-width: 1px 0px;
-	}
-	
-	[class*=" btn-"],
-	[class^="btn-"] {
-		color: #FFFFFF;
-		font-size: 14px;
-	}
-	
-	[class*=" btn-"] i,
-	[class^="btn-"] i {
-		margin-right: 5px;
-	}
-	
-	.btn-green {
-		background-color: #25b99e;
-		border-color: #25b99e;
-	}
-	
-	.btn-bule {
-		background-color: #2fa5e5;
-		border-color: #2fa5e5;
-	}
-	
-	.btn-red {
-		background-color: #e3517c;
-		border-color: #e3517c;
-	}
-	
-	.btn-primarys {
-		background-color: #5d7fde;
-		border-color: #5d7fde;
-	}
-	
-	.btn-default {
-		background-color: #ffffff;
-		color: #5B6371;
-		border: 1px solid #dfe5ea;
-	}
-	
-	.btn-default:hover {
-		color: #576FAE;
-	}
-	
-	.fixed-table-toolbar {
-		position: relative;
-		padding-top: 10px;
-		padding-bottom: 12px;
-		height: 55px;
-		line-height: 30px;
-	}
-	
-	.fixed-table-toolbar .columns {
-		position: relative;
-		height: 30px;
-	}
-	
-	.btn-group>.btn:first-child:not(:last-child):not(.dropdown-toggle) {
-		border-top-right-radius: 0;
-		border-bottom-right-radius: 0;
-	}
-	
-	.fixed-table-toolbar .btn-group>.btn-group {
-		display: inline-block;
-		margin-left: -1px!important;
-	}
-	
-	.btn-group>.btn-group,
-	.btn-group>.btn {
-		float: left;
-	}
-	
-	.btn-group,
-	.btn-group-vertical {
-		position: relative;
-		display: inline-block;
-		vertical-align: middle;
-	}
-	
-	.btn-group>.btn-group:last-child:not(:first-child)>.btn:first-child {
-		border-top-left-radius: 0;
-		border-bottom-left-radius: 0;
-	}
-	
-	.fixed-table-toolbar .btn-group>.btn-group:last-child>.btn {
-		border-top-right-radius: 4px;
-		border-bottom-right-radius: 4px;
-	}
+
 </style>

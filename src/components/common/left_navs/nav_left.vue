@@ -41,7 +41,7 @@ export default {
 		            navherf: '/role_management'
 				}, {
 		            navicon: 'icon-department',
-		            navtitle: '部门管理',
+		            navtitle: '机构管理',
 		            navherf: '/dept_management'
 				}, {
 		            navicon: 'icon-menu2',

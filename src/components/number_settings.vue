@@ -1,11 +1,10 @@
 <template>
 <div>
 	<div class="headerbg">
-			<vheader></vheader>
+		<vheader></vheader>
 		<navs_header></navs_header>
 	</div>
-
-    <div class="contentbg">
+	<div class="contentbg">
 		<!--左侧菜单内容显示 Begin-->
 		<div class="navbar-default navbar-static-side">
 			<div id="sidebar-collapse">
@@ -15,10 +14,10 @@
 					</span>
 				</div>
 				<ul class="navs" id="side-menu" v-show="!isShow" >
-					<li v-for="item in leftNavs">
-						<router-link :to="item.navherf">
-							<i :class="item.navicon"></i>
-							<span class="nav-label" v-show="ismin">{{item.navtitle}}</span>
+					<li v-for="itemnav in leftNavs">
+						<router-link :to="itemnav.navherf">
+							<i :class="itemnav.navicon"></i>
+							<span class="nav-label" v-show="ismin">{{itemnav.navtitle}}</span>
 						</router-link>
 					</li>
 				</ul>
@@ -30,7 +29,7 @@
 		<div class="wrapper wrapper-content">
 			<EasyScrollbar>
 				<div id="wrapper" ref="homePagess" style="height: 600px;">
-					<div id="information" style="height: inherit;">
+					<div id="information" style="height: auto;">
 						<div class="ibox-content">
 							<!--按钮操作行 Begin-->
 								<div class="fixed-table-toolbar clearfix">
@@ -54,29 +53,8 @@
 									</div>
 
 									<div class="columns columns-right btn-group pull-right">
-										<button class="btn btn-default btn-outline btn-refresh" type="button" name="refresh" title="刷新"><i class="icon-refresh"></i></button>
-										<div class="keep-open btn-group" title="列">
-											<el-dropdown :hide-on-click="false" class="pl10 btn btn-default btn-outline">
-												<span class="el-dropdown-link">
-													<font class="J_tabClose"><i class="icon-menu3"></i></font>
-													<i class="el-icon-arrow-down icon-arrow2-down"></i>
-												</span>
-												<el-dropdown-menu slot="dropdown">
-													<el-dropdown-item>
-														<el-checkbox label="名称" name="type"></el-checkbox>
-													</el-dropdown-item>
-													<el-dropdown-item>
-														<el-checkbox label="所在部门" name="type"></el-checkbox>
-													</el-dropdown-item>
-													<el-dropdown-item>
-														<el-checkbox label="所在公司" name="type"></el-checkbox>
-													</el-dropdown-item>
-													<el-dropdown-item>
-														<el-checkbox label="所在部门" name="type"></el-checkbox>
-													</el-dropdown-item>
-												</el-dropdown-menu>
-											</el-dropdown>
-										</div>
+										<div class="btn btn-default btn-refresh" id="refresh" title="刷新"><i class="icon-refresh"></i></div>
+										<tableControle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></tableControle>
 									</div>
 								</div>
 							<!--按钮操作行 End-->
@@ -97,90 +75,172 @@
 								</el-form>
 							</div>
 							<!-- 高级查询划出 End-->
+							<el-row :gutter="0">
+								<el-col :span="24">
+									<!-- 表格 Begin-->
+									<el-table :data="userList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+										<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
+										</el-table-column>
+										<el-table-column label="自动编号名称" sortable prop="AUTOKEY" v-if="this.checkedName.indexOf('自动编号名称')!=-1">
+										</el-table-column>
+										<el-table-column label="起始数" sortable prop="S_NUM" v-if="this.checkedName.indexOf('起始数')!=-1">
+										</el-table-column>
+										<el-table-column label="前缀" sortable prop="PREFIX" v-if="this.checkedName.indexOf('前缀')!=-1">
+										</el-table-column>
+										<el-table-column label="备注" sortable prop="MEMO" v-if="this.checkedName.indexOf('备注')!=-1">
+										</el-table-column>
+									</el-table>
+									<el-pagination class="pull-right pt10 pb10" v-if="this.checkedName.length>0"
+							            @size-change="sizeChange"
+							            @current-change="currentChange"
+							            :current-page="page.currentPage"
+							            :page-sizes="[10, 20, 30, 40]"
+							            :page-size="page.pageSize"
+							            layout="total, sizes, prev, pager, next"
+							            :total="page.totalCount">
+							        </el-pagination>
+									<!-- 表格 End-->
+								</el-col>
+							</el-row>
 						</div>
 					</div>
+					<!--右侧内容显示 End-->
 				</div>
 			</EasyScrollbar>
 		</div>
 	</div>
-	<!--右侧内容显示 End-->
-  	
 </div>
 </template>
-
 <script>
-import vheader from './common/vheader.vue'
-import navs_header from './common/nav_tabs.vue'
-import navs from './common/left_navs/nav_left.vue'
-
-export default {
-	name: 'safemanage',
+	import vheader from './common/vheader.vue'
+	import navs_header from './common/nav_tabs.vue'
+	import table from './plugin/table/table-normal.vue'
+	import tableControle from './plugin/table-controle/controle.vue'
+	export default {
+		name: 'user_management',
 		components: {
 			vheader,
 			navs_header,
-			navs,
+			tableControle,
+			table
+		},
+		data() {
+			return {
+				dataUrl: '/api/api-user/users',
+				searchData: {
+			        page: 1,
+			        limit: 10,//分页显示数
+			        S_NUM: '',
+			        enabled: '',
+			        searchKey: '',
+			        searchValue: '',
+			        companyId: '',
+			        deptId: ''
+		        },
+				checkedName: [
+					'自动编号名称',
+					'起始数',
+					'前缀',
+					'备注',
+				],
+				tableHeader: [
+					{
+						label: '自动编号名称',
+						prop: 'AUTOKEY'
+					},
+					{
+						label: '起始数',
+						prop: 'S_NUM'
+					},
+					{
+						label: '前缀',
+						prop: 'enabled'
+					},
+					{
+						label: '备注',
+						prop: 'MEMO'
+					}
+				],
+				leftNavs: [//leftNavs左侧菜单数据
+					{
+						navicon: 'icon-user',
+						navtitle: '用户管理',
+						navherf: '/personinfo'
+					}, {
+						navicon: 'icon-edit',
+						navtitle: '机构管理',
+						navherf: '/dept_management'
+					}, {
+						navicon: 'icon-role-site',
+						navtitle: '角色管理',
+						navherf: '/role_management'
+					}, {
+						navicon: 'icon-file-text',
+						navtitle: '客户管理',
+						navherf: '/customer_management'
+					}, {
+						navicon: 'icon-file-text',
+						navtitle: '产品类别',
+						navherf: '/products_category'
+					}, {
+						navicon: 'icon-file-text',
+						navtitle: '产品',
+						navherf: '/products'
+					}, {
+						navicon: 'icon-file-text',
+						navtitle: '检验/检测标准',
+						navherf: '/testing_standard'
+					}, {
+						navicon: 'icon-file-text',
+						navtitle: '检验/检测项目',
+						navherf: '/testing_projects'
+					}, {
+						navicon: 'icon-file-text',
+						navtitle: '检验/检测方法',
+						navherf: '/testing_methods'
+					}, {
+						navicon: 'icon-file-text',
+						navtitle: '自动编号设置',
+						navherf: '/number_settings'
+					}
+				],
+				companyId: '',
+				deptId: '',
+				selUser: [],
+				'启用': true,
+				'冻结': false,
+				userList: [],
+				search: false,
+				show: false,
+				down: true,
+				up: false,
+				isShow: false,
+				ismin:true,
+				clientHeight:'',//获取浏览器高度
+				searchList: {
+					S_NUM: '',
+					enabled: '',
+					createTime: ''
+				},
+				//tree
+				resourceData: [], //数组，我这里是通过接口获取数据，
+				resourceDialogisShow: false,
+				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
+				resourceProps: {
+					children: "subDepts",
+					label: "simplename"
+				},
+				userData:[],
+				page: {//分页显示
+					currentPage: 1,
+					pageSize: 10,
+					totalCount: 0
+				},
+				aaaData:[],
+			}
 		},
 
-    data() {
-      return {
-        show: false,
-        down: true,
-		up: false,
-		isShow: false,
-		ismin:true,
-		searchList: {
-			typename: ''
-		},
-        activeNames: ['1'],//手风琴数量
-		clientHeight:'',//获取浏览器高度
-        labelPosition: 'top',//表单标题在上方显示
-		leftNavs: [//leftNavs左侧菜单数据
-			{
-				navicon: 'icon-user',
-				navtitle: '用户管理',
-				navherf: '/personinfo'
-			}, {
-				navicon: 'icon-edit',
-				navtitle: '机构管理',
-				navherf: '/dept_management'
-			}, {
-				navicon: 'icon-role-site',
-				navtitle: '角色管理',
-				navherf: '/role_management'
-			}, {
-				navicon: 'icon-file-text',
-				navtitle: '客户管理',
-				navherf: '/customer_management'
-			}, {
-				navicon: 'icon-file-text',
-				navtitle: '产品类别',
-				navherf: '/products_category'
-			}, {
-				navicon: 'icon-file-text',
-				navtitle: '产品',
-				navherf: '/products'
-			}, {
-				navicon: 'icon-file-text',
-				navtitle: '检验/检测标准',
-				navherf: '/testing_standard'
-			}, {
-				navicon: 'icon-file-text',
-				navtitle: '检验/检测项目',
-				navherf: '/testing_projects'
-			}, {
-				navicon: 'icon-file-text',
-				navtitle: '检验/检测方法',
-				navherf: '/testing_methods'
-			}, {
-				navicon: 'icon-file-text',
-				navtitle: '自动编号设置',
-				navherf: '/number_settings'
-			}
-		]
-		
-      }
-    },
-    mounted(){
+		mounted(){
 			// 获取浏览器可视区域高度
 			var _this = this;
 			var clientHeight = $(window).height() - 100;    //document.body.clientWidth;
@@ -189,118 +249,185 @@ export default {
 				var clientHeight = $(window).height() - 100;
 				_this.$refs.homePagess.style.height = clientHeight + 'px';
 			};
-			this.getData();
-		},
-	methods: {
-		sizeChange(val) {
-			this.page.pageSize = val;
-			this.requestData();
-	    },
-		currentChange(val) {
-			this.page.currentPage = val;
-			this.requestData();
-		},
-		searchinfo(index) {
-			this.page.currentPage = 1;
-			this.page.pageSize = 10;
-			this.requestData();
-		},
-		//添加用戶
-		openAddMgr() {
-			this.$refs.child.visible();
-		},
-		//修改用戶
-		modify() {
-			this.aaaData = this.selUser;
-			if(this.aaaData.length == 0) {
-				this.$message({
-					message: '请您选择要修改的字典数据',
-					type: 'warning'
-				});
-				return;
-			} else if(this.aaaData.length > 1) {
-				this.$message({
-					message: '不可同时修改多个字典数据',
-					type: 'warning'
-				});
-				return;
-			} else {
-				console.log(this.aaaData[0]);
-				this.$refs.child.detail();
-			}
-		},
-		//高级查询
-		modestsearch() {
-			this.search = !this.search;
-			this.down = !this.down,
-				this.up = !this.up
-		},
-		// 删除
-		deluserinfo() {
-			var selData = this.selUser;
-			if(selData.length == 0) {
-				this.$message({
-					message: '请您选择要删除的字典数据',
-					type: 'warning'
-				});
-				return;
-			} else if(selData.length > 1) {
-				this.$message({
-					message: '不可同时删除多个字典数据',
-					type: 'warning'
-				});
-				return;
-			} else {
-				var changeUser = selData[0];
-				var id = changeUser.id;
-				var url = '/api/api-user/users/' + id;
-				this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
-					//resp_code == 0是后台返回的请求成功的信息
-					if(res.data.resp_code == 0) {
-						this.$message({
-							message: '删除成功',
-							type: 'success'
-						});
-						this.requestData();
-					}
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
-			}
-		},
-		min2max(){//左侧菜单正常和变小切换
-        	if($(".navbar-static-side").width()=="220"){
-		    	$(".wrapper").css("padding-left", "220px");
-		    	$(".navs>li").css("margin", "0px 10px");
-		    	this.maxDialog();
-		    }else if($(".navbar-static-side").width()=="40"){
-				$(".wrapper").css("padding-left", "40px");
-				$(".navs>li").css("margin", "0");
-				this.rebackDialog();
-			}
-		    this.ismin=!this.ismin;
-   		},
-	    maxDialog(e) {//右侧内容跟着左侧菜单正常和变小切换
-	    	$(".navbar-static-side").css("width", "40px");
-			$(".wrapper").css("padding-left", "40px");
-			$(".navs>li").css("margin", "0");
-		},
-		rebackDialog() {//左侧菜单正常
-			$(".navbar-static-side").css("width", "220px");
-			$(".wrapper").css("padding-left", "220px");
-			$(".navs>li").css("margin", "0px 10px");
-		}
-	}
-}
 
+			
+		},
+		methods: {
+			tableControle(data){
+				this.checkedName = data;
+			},
+			sizeChange(val) {
+		      this.page.pageSize = val;
+		      this.requestData();
+		    },
+		    currentChange(val) {
+		      this.page.currentPage = val;
+		      this.requestData();
+		    },
+			searchinfo(index) {
+				this.page.currentPage = 1;
+				this.page.pageSize = 10;
+				this.requestData();
+			},
+			//添加用戶
+			openAddMgr() {
+//				this.$refs.child.resetNew();
+				this.$refs.child.visible();
+			},
+			//修改用戶
+			modify() {
+				this.aaaData = this.selUser;
+				if(this.aaaData.length == 0) {
+					this.$message({
+						message: '请您选择要修改的用户',
+						type: 'warning'
+					});
+					return;
+				} else if(this.aaaData.length > 1) {
+					this.$message({
+						message: '不可同时修改多个用户',
+						type: 'warning'
+					});
+					return;
+				} else {
+					this.$refs.child.detail();
+				}
+			},
+			//高级查询
+			modestsearch() {
+				this.search = !this.search;
+				this.down = !this.down,
+					this.up = !this.up
+			},
+			// 删除
+			deluserinfo() {
+				var selData = this.selUser;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请您选择要删除的用户',
+						type: 'warning'
+					});
+					return;
+				} else if(selData.length > 1) {
+					this.$message({
+						message: '不可同时删除多个用户',
+						type: 'warning'
+					});
+					return;
+				} else {
+					var changeUser = selData[0];
+					var id = changeUser.id;
+					var url = '/api/api-user/users/' + id;
+					this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
+						//resp_code == 0是后台返回的请求成功的信息
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '删除成功',
+								type: 'success'
+							});
+							this.requestData();
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+				}
+			},
+			// 导入
+			importData() {
+				
+			},
+			// 导出
+			exportData() {
+				
+			},
+			// 打印
+			Printing() {
+				
+			},
+			judge(data) {
+				//taxStatus 布尔值
+				return data.enabled ? '启用' : '冻结'
+			},
+			//时间格式化  
+			dateFormat(row, column) {
+				var date = row[column.property];
+				if(date == undefined) {
+					return "";
+				}
+				return this.$moment(date).format("YYYY-MM-DD");
+				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
+			},
+			insert() {
+				this.users.push(this.user)
+			},
+			remove(index) {
+				this.users.splice(index, 1)
+			},
+			SelChange(val) {
+				this.selUser = val;
+			},
+			requestData(index) {
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+					S_NUM: this.searchList.S_NUM,
+					enabled: this.searchList.enabled,
+					searchKey: 'createTime',
+					searchValue: this.searchList.createTime,
+					companyId: this.companyId,
+					deptId: this.deptId
+				}
+				var url = '/api/api-user/users';
+				this.$axios.get(url, {
+					params: data
+				}).then((res) => {
+					this.userList = res.data.data;
+					this.page.totalCount = res.data.count;
+				}).catch((wrong) => {})
+				this.userList.forEach((item, index) => {
+					var id = item.id;
+					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
+						this.userList.role = res.data.roles[0].name;
+					}).catch((wrong) => {})
+				})
+			},
+			loadMore () {
+			   if (this.loadSign) {
+			     this.loadSign = false
+			     this.page++
+			     if (this.page > 10) {
+			       return
+			     }
+			     setTimeout(() => {
+			       this.loadSign = true
+			     }, 1000)
+			     console.log('到底了', this.page)
+			   }
+			 },
+			handleNodeClick(data) {
+			},
+			formatter(row, column) {
+				return row.enabled;
+			},
+		},
+		mounted(){
+             // 注册scroll事件并监听  
+             let self = this;
+              $(".div-table").scroll(function(){
+                self.loadMore();
+            })
+        },
+
+
+		mounted() {
+			this.requestData();
+		},
+	}
 </script>
 
 <style scoped>
-@import '../assets/css/mask-modules.css';
-
 
 </style>
-

@@ -3,7 +3,8 @@
 		<div class="mask" v-if="show"></div>
 		<div class="mask_div" v-if="show">
 			<div class="mask_title_div clearfix">
-				<div class="mask_title">添加机构</div>
+				<div class="mask_title" v-show="addtitle">添加机构</div>
+				<div class="mask_title" v-show="modifytitle">修改机构</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -166,6 +167,8 @@
 				isok1: true,
 				isok2: false,
 				labelPosition: 'top',
+				addtitle:true,
+				modifytitle:false,
 				// adddeptFormtest: {
 				// 	pid:'',
 				// 	fullname:'',
@@ -263,7 +266,9 @@
 			},
 			//修改
 			detail() {
-					this.show = true;
+				this.addtitle = false;
+				this.modifytitle = true;
+				this.show = true;
 			},
 			//点击关闭按钮
 			close() {

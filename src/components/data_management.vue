@@ -5,7 +5,7 @@
 			<navs_header></navs_header>
 		</div>
 		<div class="contentbg">
-			<navs></navs>
+			<navs_left></navs_left>
 			<div class="wrapper wrapper-content">
 				<div class="ibox-content">
 					<div class="fixed-table-toolbar clearfix">
@@ -93,7 +93,7 @@
 </template>
 <script>
 	import vheader from './common/vheader.vue'
-	import navs from './common/left_navs/nav_left.vue'
+	import navs_left from './common/left_navs/nav_left.vue'
 	import navs_header from './common/nav_tabs.vue'
 	import datamask from './common/data_mask.vue'
 	import relamask from './common/rela_mask.vue'
@@ -103,7 +103,7 @@
 		components: {
 			'vheader': vheader,
 			'navs_header': navs_header,
-			'navs': navs,
+			'navs_left': navs_left,
 			'datamask': datamask,
 			'relamask': relamask,
 			'v-table-controle':tableControle

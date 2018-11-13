@@ -5,7 +5,7 @@
 			<navs_header></navs_header>
 		</div>
 		<div class="contentbg">
-			<navs></navs>
+			<navs_left></navs_left>
 			<div class="wrapper wrapper-content">
 				<div class="ibox-content">
 					<div class="fixed-table-toolbar clearfix">
@@ -95,7 +95,7 @@
 </template>
 <script>
 	import vheader from './common/vheader.vue'
-	import navs from './common/left_navs/nav_left.vue'
+	import navs_left from './common/left_navs/nav_left.vue'
 	import navs_header from './common/nav_tabs.vue'
 	import rolemask from './common/role_mask.vue'
 	import datalimitmask from './common/datalimit_mask.vue'
@@ -105,10 +105,10 @@
 		components: {
 			'vheader': vheader,
 			'navs_header': navs_header,
-			'navs': navs,
+			'navs_left': navs_left,
 			'rolemask': rolemask,
 			'datalimitmask': datalimitmask,
-			tableControle,
+			'tableControle': tableControle,
 		},
 		data() {
 			return {

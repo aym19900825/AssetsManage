@@ -5,7 +5,7 @@
 			<navs_header></navs_header>
 		</div>
 		<div class="contentbg">
-			<navs></navs>
+			<navs_left></navs_left>
 			<div class="wrapper wrapper-content">
 				<div class="ibox-content">
 					<div class="fixed-table-toolbar clearfix">
@@ -87,7 +87,7 @@
 <script>
 	import tree_grid from './common/TreeGrid.vue'//树表格
 	import vheader from './common/vheader.vue'
-	import navs from './common/left_navs/nav_left.vue'
+	import navs_left from './common/left_navs/nav_left.vue'
 	import navs_header from './common/nav_tabs.vue'
 //	import assetsTree from './plugin/vue-tree/tree.vue'
 //	import tableControle from './plugin/table-controle/controle.vue'
@@ -98,7 +98,7 @@
 		components: {
 			'vheader': vheader,
 			'navs_header': navs_header,
-			'navs': navs,
+			'navs_left': navs_left,
 			'deptmask': deptmask,
 			'tree_grid':tree_grid,
 		},

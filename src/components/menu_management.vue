@@ -5,7 +5,10 @@
 			<navs_header></navs_header>
 		</div>
 		<div class="contentbg">
-			<navs></navs>
+		<!--左侧菜单内容显示 Begin-->
+		<navs_left></navs_left>
+		<!--左侧菜单内容显示 End-->
+		
 			<div class="wrapper wrapper-content">
 				<div class="ibox-content">
 					<div class="fixed-table-toolbar clearfix">
@@ -61,7 +64,7 @@
 <script>
 	import tree_grid from './common/TreeGrid.vue'//树表格
 	import vheader from './common/vheader.vue'
-	import navs from './common/left_navs/nav_left.vue'
+	import navs_left from './common/left_navs/nav_left.vue'
 	import navs_header from './common/nav_tabs.vue'
 	import assetsTree from './plugin/vue-tree/tree.vue'
 	import menumask from './common/menu_mask.vue'//弹出框
@@ -70,7 +73,7 @@
 		components: {
 			'vheader': vheader,
 			'navs_header': navs_header,
-			'navs': navs,
+			'navs_left': navs_left,
 			'menumask': menumask,
 			'v-assetsTree': assetsTree,
 			'tree_grid':tree_grid,
@@ -140,6 +143,7 @@
 		},
 		methods: {
 			changeCheckedName(value){
+				console.log(value);
 				this.checkedName=value
 				let str=value.toString()
 				for(let i=0;i<this.columns.length;i++){
@@ -153,6 +157,9 @@
 			childByValue: function (childValue) {
 		        // childValue就是子组件传过来的
 		        this.selMenu = childValue
+		       
+		        this.selMenu[0].hidden ? '1' : '0'
+		        
 		    },
 			sizeChange(val) {
 				this.page.pageSize = val;
@@ -181,6 +188,7 @@
 			},
 			//修改
 			modify() {
+				console.log(this.selMenu)
 				var selData = this.selMenu;
 				if(selData.length == 0) {
 					this.$message({
@@ -217,12 +225,14 @@
 				} else {
 					
 					var changeMenu = selData[0];
+					console.log(changeMenu);
 					if(typeof(changeMenu.children)!='undefined' && changeMenu.children.length>0){
 						this.$message({
 							message: '先删除子菜单',
 							type: 'error'
 						});
 					}else {
+							console.log(changeMenu);
 						var id = changeMenu.id;
 						var url = '/api/api-user/menus/' + id;
 						this.$axios.delete(url, {}).then((res) => { //.delete 传数据方法
@@ -245,6 +255,7 @@
 			},
 
 			SelChange(val) {
+				console.log(val)
 				this.selMenu = val;
 			},
 			requestData(index) {
@@ -256,15 +267,16 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
+					console.log(res);
 					let result=res.data
-					for(let i=0;i<result.length;i++){
+//					for(let i=0;i<result.length;i++){
 //						if(result[i].parentId == "-1" || result[i].parentId == "null") {
 //							result[i].isMenu = "目录"
 //						} else {
 //							result[i].isMenu = "菜单"
 //						}						
-						if(result[i].subMenus.length>0){
-							let subMenus=result[i].subMenus
+//						if(result[i].subMenus.length>0){
+//							let subMenus=result[i].subMenus
 //							for(let j=0;j<subMenus.length;j++){
 //								if(subMenus[j].parentId == "-1" || subMenus[j].parentId == "null") {
 //									subMenus[j].isMenu = "目录"
@@ -275,9 +287,9 @@
 ////									subMenus[j].children=subMenus[j].subMenus
 ////								}
 //							}
-							result[i].children=subMenus
-						}
-					}
+//							result[i].children=subMenus
+//						}
+//					}
 					this.menuList = result;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})

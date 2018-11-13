@@ -58,7 +58,7 @@
 					</div>
 					<div class="columns columns-right btn-group pull-right">
 						<div class="btn btn-default btn-refresh" id="refresh" title="刷新"><i class="icon-refresh"></i></div>
-						<v-table-controle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></v-table-controle>
+						<tableControle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></tableControle>
 					</div>
 				</div>
 				<!-- 高级查询划出 Begin-->
@@ -80,7 +80,7 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :data="userList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
+						<el-table :data="userList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 							</el-table-column>
 							<el-table-column label="组织机构代码" sortable prop="username" v-if="this.checkedName.indexOf('组织机构代码')!=-1">
@@ -91,6 +91,8 @@
 							<el-table-column label="联系地址" sortable prop="deptName" v-if="this.checkedName.indexOf('联系地址')!=-1">
 							</el-table-column>
 							<el-table-column label="联系电话" sortable prop="companyName" v-if="this.checkedName.indexOf('联系电话')!=-1">
+							</el-table-column>
+							<el-table-column label="状态" sortable prop="enabled" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
 							</el-table-column>
 							<el-table-column label="创建时间" prop="createTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('创建时间')!=-1">
 							</el-table-column>
@@ -120,12 +122,12 @@
 	import table from './plugin/table/table-normal.vue'
 	import tableControle from './plugin/table-controle/controle.vue'
 	export default {
-		name: 'customer_management',
+		name: 'user_management',
 		components: {
-			'vheader': vheader,
-			'navs_header': navs_header,
-			'v-table-controle':tableControle,
-			'v-table':table,
+			vheader,
+			navs_header,
+			tableControle,
+			table
 		},
 		data() {
 			return {
@@ -143,6 +145,7 @@
 				checkedName: [
 					'组织机构代码',
 					'单位名称',
+					'性别',
 					'联系地址',
 					'状态',
 					'创建时间'
@@ -217,8 +220,6 @@
 				selUser: [],
 				'启用': true,
 				'冻结': false,
-				'男': true,
-				'女': false,
 				userList: [],
 				search: false,
 				show: false,
@@ -227,7 +228,7 @@
 				isShow: false,
 				ismin:true,
 				clientHeight:'',//获取浏览器高度
-				searchList: {//点击高级搜索后显示的内容
+				searchList: {
 					nickname: '',
 					enabled: '',
 					createTime: ''
@@ -259,7 +260,7 @@
 				var clientHeight = $(window).height() - 100;
 				_this.$refs.homePagess.style.height = clientHeight + 'px';
 			};
-			this.requestData();
+
 			
 		},
 		methods: {
@@ -404,13 +405,37 @@
 					}).catch((wrong) => {})
 				})
 			},
+			loadMore () {
+			   if (this.loadSign) {
+			     this.loadSign = false
+			     this.page++
+			     if (this.page > 10) {
+			       return
+			     }
+			     setTimeout(() => {
+			       this.loadSign = true
+			     }, 1000)
+			     console.log('到底了', this.page)
+			   }
+			 },
 			handleNodeClick(data) {
 			},
 			formatter(row, column) {
 				return row.enabled;
 			},
 		},
-		
+		mounted(){
+             // 注册scroll事件并监听  
+             let self = this;
+              $(".div-table").scroll(function(){
+                self.loadMore();
+            })
+        },
+
+
+		mounted() {
+			this.requestData();
+		},
 	}
 </script>
 

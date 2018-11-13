@@ -58,7 +58,7 @@
 					</div>
 					<div class="columns columns-right btn-group pull-right">
 						<div class="btn btn-default btn-refresh" id="refresh" title="刷新"><i class="icon-refresh"></i></div>
-						<v-table-controle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></v-table-controle>
+						<tableControle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></tableControle>
 					</div>
 				</div>
 				<!-- 高级查询划出 Begin-->
@@ -83,24 +83,24 @@
 						<el-table :data="userList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
 							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 							</el-table-column>
-							<el-table-column label="产品编号" sortable prop="products_number" v-if="this.checkedName.indexOf('产品编号')!=-1">
+							<el-table-column label="产品编号" sortable prop="PRO_NUM" v-if="this.checkedName.indexOf('产品编号')!=-1">
 							</el-table-column>
-							<el-table-column label="产品名称" sortable prop="products_name" v-if="this.checkedName.indexOf('产品名称')!=-1">
+							<el-table-column label="产品名称" sortable prop="PRO_NAME" v-if="this.checkedName.indexOf('产品名称')!=-1">
 							</el-table-column>
 							</el-table-column>
-							<el-table-column label="状态" sortable prop="products_state" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
+							<el-table-column label="状态" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
 							</el-table-column>
-							<el-table-column label="版本" sortable prop="products_mechanism" v-if="this.checkedName.indexOf('版本')!=-1">
+							<el-table-column label="版本" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1">
 							</el-table-column>
-							<el-table-column label="机构" sortable prop="products_edition" v-if="this.checkedName.indexOf('机构')!=-1">
+							<el-table-column label="机构" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('机构')!=-1">
 							</el-table-column>
-							<el-table-column label="录入人" prop="entering" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入人')!=-1">
+							<el-table-column label="录入人" prop="ENTERBY" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入人')!=-1">
 							</el-table-column>
-							<el-table-column label="录入时间" prop="entering_date" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
+							<el-table-column label="录入时间" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 							</el-table-column>
-							<el-table-column label="修改人" prop="revise" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改人')!=-1">
+							<el-table-column label="修改人" prop="CHANGEBY" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改人')!=-1">
 							</el-table-column>
-							<el-table-column label="修改时间" prop="revise_date" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
+							<el-table-column label="修改时间" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
 							</el-table-column>
 						</el-table>
 						<el-pagination class="pull-right pt10 pb10" v-if="this.checkedName.length>0"
@@ -130,10 +130,10 @@
 	export default {
 		name: 'customer_management',
 		components: {
-			'vheader': vheader,
-			'navs_header': navs_header,
-			'v-table-controle':tableControle,
-			'v-table':table,
+			vheader,
+			navs_header,
+			tableControle,
+			table,
 		},
 		data() {
 			return {
@@ -162,39 +162,39 @@
 				tableHeader: [
 					{
 						label: '产品编号',
-						prop: 'products_number'
+						prop: 'PRO_NUM'
 					},
 					{
 						label: '产品名称',
-						prop: 'products_name'
+						prop: 'PRO_NAME'
 					},
 					{
 						label: '机构',
-						prop: 'products_edition'
+						prop: 'DEPARTMENT'
 					},
 					{
 						label: '状态',
-						prop: 'products_state'
+						prop: 'STATUS'
 					},
 					{
 						label: '版本',
-						prop: 'products_mechanism'
+						prop: 'VERSION'
 					},
 					{
 						label: '录入人',
-						prop: 'entering'
+						prop: 'ENTERBY'
 					},
 					{
 						label: '录入时间',
-						prop: 'entering_date'
+						prop: 'ENTERDATE'
 					},
 					{
 						label: '修改人',
-						prop: 'revise'
+						prop: 'CHANGEBY'
 					},
 					{
 						label: '修改时间',
-						prop: 'revise_date'
+						prop: 'CHANGEDATE'
 					}
 				],
 				leftNavs: [//leftNavs左侧菜单数据
@@ -245,8 +245,6 @@
 				selUser: [],
 				'启用': true,
 				'冻结': false,
-				'男': true,
-				'女': false,
 				userList: [],
 				search: false,
 				show: false,
@@ -287,7 +285,6 @@
 				var clientHeight = $(window).height() - 100;
 				_this.$refs.homePagess.style.height = clientHeight + 'px';
 			};
-			this.requestData();
 			
 		},
 		methods: {
@@ -438,7 +435,9 @@
 				return row.enabled;
 			},
 		},
-		
+		mounted() {
+			this.requestData();
+		},
 	}
 </script>
 

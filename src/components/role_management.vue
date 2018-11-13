@@ -40,7 +40,7 @@
 							<button class="btn btn-default btn-outline" type="button" name="refresh" aria-label="refresh" title="刷新">
 								<i class="icon-refresh"></i>
 							</button>
-							<v-table-controle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></v-table-controle>
+							<tableControle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></tableControle>
 						</div>
 					</div>
 					<!-- 高级查询划出 -->
@@ -62,16 +62,16 @@
 					<div class="row">
 						<div class="col-sm-12">
 							<!-- 表格begin -->
-							<el-table :data="roleList" style="width: 100%;margin: 0 auto;" :default-sort="{prop:'roleList', order: 'descending'}" @selection-change="SelChange">
+							<el-table :data="roleList" height="550" border stripe style="width: 100%; margin: 0 auto;" :default-sort="{prop:'roleList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="角色名称" sortable width="250" prop="name" v-if="this.checkedName.indexOf('角色名称')!=-1">
 								</el-table-column>
-								<el-table-column label="所在部门" sortable width="250" prop="deptName" v-if="this.checkedName.indexOf('所在部门')!=-1">
+								<el-table-column label="所在部门" sortable prop="deptName" v-if="this.checkedName.indexOf('所在部门')!=-1">
 								</el-table-column>
-								<el-table-column label="别名" sortable width="250" prop="code" v-if="this.checkedName.indexOf('别名')!=-1">
+								<el-table-column label="别名" sortable prop="code" v-if="this.checkedName.indexOf('别名')!=-1">
 								</el-table-column>
-								<el-table-column label="备注" sortable width="310" prop="tips" v-if="this.checkedName.indexOf('备注')!=-1">
+								<el-table-column label="备注" sortable prop="tips" v-if="this.checkedName.indexOf('备注')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination class="pull-right" v-if="this.checkedName.length>0"
@@ -97,7 +97,6 @@
 	import vheader from './common/vheader.vue'
 	import navs from './common/left_navs/nav_left.vue'
 	import navs_header from './common/nav_tabs.vue'
-	import assetsTree from './plugin/vue-tree/tree.vue'
 	import rolemask from './common/role_mask.vue'
 	import datalimitmask from './common/datalimit_mask.vue'
 	import tableControle from './plugin/table-controle/controle.vue'
@@ -109,8 +108,7 @@
 			'navs': navs,
 			'rolemask': rolemask,
 			'datalimitmask': datalimitmask,
-			'v-assetsTree': assetsTree,
-			'v-table-controle':tableControle
+			tableControle,
 		},
 		data() {
 			return {

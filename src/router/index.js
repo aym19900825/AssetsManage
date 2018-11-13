@@ -29,7 +29,7 @@ import annual_plan from '@/components/annual_plan'//年度计划
 // import inspection_project from '@/components/inspection_project'//检验/检测项目管理
 // import files_search from '@/components/files_search'//文件查询
 // import interfaces from '@/components/interfaces'//接口
-// import reports from '@/components/reports'//报表管理
+// import reports from '@/components/reports'//报表管理                               
 
 import personinfo from '@/components/personinfo'//个人资料
 import passwordedit from '@/components/passwordedit'//修改密码

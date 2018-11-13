@@ -58,15 +58,6 @@
 												<el-checkbox :label="item.label" name="type"></el-checkbox>
 											</el-dropdown-item>
 										</el-checkbox-group>
-										<!-- <el-dropdown-item>
-											<el-checkbox label="所在机构" name="type"></el-checkbox>
-										</el-dropdown-item>
-										<el-dropdown-item>
-											<el-checkbox label="所在公司" name="type"></el-checkbox>
-										</el-dropdown-item>
-										<el-dropdown-item>
-											<el-checkbox label="所在机构" name="type"></el-checkbox>
-										</el-dropdown-item> -->
 									</el-dropdown-menu>
 								</el-dropdown>
 							</div>
@@ -148,7 +139,7 @@
 </template>
 <script>
 	import vheader from './common/vheader.vue'
-	import navs_left from './common/left_navs/nav_left.vue'
+	import navs_left from './common/left_navs/nav_left2.vue'
 	import navs_header from './common/nav_tabs.vue'
 	import assetsTree from './plugin/vue-tree/tree.vue'
 	import usermask from './common/user_mask.vue'

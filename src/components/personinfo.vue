@@ -72,12 +72,12 @@
 									</el-col>
 
 									<el-col :span="12">
-										<el-form-item label="所属部门" prop="deptName" v-if="personinfo.username === 'admin'">
+										<el-form-item label="所属机构" prop="deptName" v-if="personinfo.username === 'admin'">
 											<el-input v-model="personinfo.deptName" disabled>
 											<el-button slot="append" icon="icon-search" @click="getDept"></el-button>
 											</el-input>
 										</el-form-item>
-										<el-form-item label="所属部门" prop="deptName" v-else>
+										<el-form-item label="所属机构" prop="deptName" v-else>
 											<el-input v-model="personinfo.deptName" disabled>
 											</el-input>
 										</el-form-item>
@@ -340,8 +340,8 @@
 	          		worknumber:'',//工号
 	          		companyId: '',//所属组织ID
 	          		companyName: '',//所属组织
-	          		deptId: '',//所属部门ID
-	          		deptName: '',//所属部门
+	          		deptId: '',//所属机构ID
+	          		deptName: '',//所属机构
 	          		nickname:'',//人员姓名
 	          		username:'',//登录名称
 	          		enabled:'',//配置状态
@@ -449,7 +449,7 @@
 				});
 
 			},
-			getDept() {//所属部门
+			getDept() {//所属机构
 				this.editSearch = 'dept';
 				var url = '/api/api-user/depts/type';
 				this.$axios.get(url, {

@@ -366,7 +366,7 @@
 					this.dialogVisible = true;
 				});
 			},  
-			//所属部门
+			//所属机构
 			getDept() {
 				this.editSearch = 'dept';
 				var page = this.page.currentPage;

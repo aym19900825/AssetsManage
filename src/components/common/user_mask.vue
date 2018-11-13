@@ -43,7 +43,7 @@
 							</el-row>
 							<el-row :gutter="70">
 								<el-col :span="24">
-									<el-form-item label="所属部门" prop="deptName">
+									<el-form-item label="所属机构" prop="deptName">
 										<el-input v-model="user.deptName" :disabled="edit">
 											<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
 										</el-input>
@@ -532,7 +532,7 @@
 
 			},
 
-			//所属部门
+			//所属机构
 			getDept() {
 				this.editSearch = 'dept';
 				var page = this.page.currentPage;

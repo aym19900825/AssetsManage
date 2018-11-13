@@ -27,87 +27,87 @@
 
 		<!--右侧内容显示 Begin-->
 		<div class="wrapper wrapper-content">
-			<div class="ibox-content">
-				<div class="fixed-table-toolbar clearfix">
-					<div class="bs-bars pull-left">
-						<div class="hidden-xs" id="roleTableToolbar" role="group">
-							<button type="button" class="btn btn-green" @click="openAddMgr" id="">
-	                        	<i class="icon-add"></i>添加
-	              			 </button>
-							<button type="button" class="btn btn-bule button-margin" @click="modify">
-							    <i class="icon-edit"></i>修改
-							</button>
-							<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
-							    <i class="icon-trash"></i>删除
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="importData">
-							    <i class="icon-upload-cloud"></i>导入
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="exportData">
-							    <i class="icon-download-cloud"></i>导出
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="Printing">
-							    <i class="icon-print"></i>打印
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-					    		<i class="icon-search"></i>高级查询
-					    		<i class="icon-arrow1-down" v-show="down"></i>
-					    		<i class="icon-arrow1-up" v-show="up"></i>
-							</button>
+			<EasyScrollbar>
+				<div id="wrapper" ref="homePagess" style="height: 600px;">
+					<div id="information" style="height: auto;">
+						<div class="ibox-content">
+							<!--按钮操作行 Begin-->
+								<div class="fixed-table-toolbar clearfix">
+									<div class="bs-bars pull-left">
+										<div class="hidden-xs" id="roleTableToolbar" role="group">
+											<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+			                                	<i class="icon-add"></i>添加
+			                      			 </button>
+											<button type="button" class="btn btn-bule button-margin" @click="modify">
+											    <i class="icon-edit"></i>修改
+											</button>
+											<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
+											    <i class="icon-trash"></i>删除
+											</button>
+											<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
+									    		<i class="icon-search"></i>高级查询
+									    		<i class="icon-arrow1-down" v-show="down"></i>
+									    		<i class="icon-arrow1-up" v-show="up"></i>
+											</button>
+										</div>
+									</div>
+
+									<div class="columns columns-right btn-group pull-right">
+										<div class="btn btn-default btn-refresh" id="refresh" title="刷新"><i class="icon-refresh"></i></div>
+										<tableControle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></tableControle>
+									</div>
+								</div>
+							<!--按钮操作行 End-->
+
+							<!-- 高级查询划出 Begin-->
+							<div v-show="search">
+								<el-form status-icon :model="searchList" label-width="70px">
+									<el-row :gutter="10">
+										<el-col :span="5">
+											<el-form-item label="类型名称" class="searchlist" label-width="85px">
+												<el-input v-model="searchList.typename"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="2">
+											<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+										</el-col>
+									</el-row>
+								</el-form>
+							</div>
+							<!-- 高级查询划出 End-->
+							<el-row :gutter="0">
+								<el-col :span="24">
+									<!-- 表格 Begin-->
+									<el-table :data="userList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+										<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
+										</el-table-column>
+										<el-table-column label="自动编号名称" sortable prop="AUTOKEY" v-if="this.checkedName.indexOf('自动编号名称')!=-1">
+										</el-table-column>
+										<el-table-column label="起始数" sortable prop="S_NUM" v-if="this.checkedName.indexOf('起始数')!=-1">
+										</el-table-column>
+										<el-table-column label="前缀" sortable prop="PREFIX" v-if="this.checkedName.indexOf('前缀')!=-1">
+										</el-table-column>
+										<el-table-column label="备注" sortable prop="MEMO" v-if="this.checkedName.indexOf('备注')!=-1">
+										</el-table-column>
+									</el-table>
+									<el-pagination class="pull-right pt10 pb10" v-if="this.checkedName.length>0"
+							            @size-change="sizeChange"
+							            @current-change="currentChange"
+							            :current-page="page.currentPage"
+							            :page-sizes="[10, 20, 30, 40]"
+							            :page-size="page.pageSize"
+							            layout="total, sizes, prev, pager, next"
+							            :total="page.totalCount">
+							        </el-pagination>
+									<!-- 表格 End-->
+								</el-col>
+							</el-row>
 						</div>
 					</div>
-					<div class="columns columns-right btn-group pull-right">
-						<div class="btn btn-default btn-refresh" id="refresh" title="刷新"><i class="icon-refresh"></i></div>
-						<tableControle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></tableControle>
-					</div>
+					<!--右侧内容显示 End-->
 				</div>
-				<!-- 高级查询划出 Begin-->
-				<div v-show="search">
-					<el-form status-icon :model="searchList" label-width="70px">
-						<el-row :gutter="10">
-							<el-col :span="5">
-								<el-form-item label="类型名称" class="searchlist" label-width="85px">
-									<el-input v-model="searchList.typename"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="2">
-								<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
-							</el-col>
-						</el-row>
-					</el-form>
-				</div>
-				<!-- 高级查询划出 End-->
-				<el-row :gutter="0">
-					<el-col :span="24">
-						<!-- 表格 Begin-->
-						<el-table :data="userList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
-							</el-table-column>
-							<el-table-column label="自动编号名称" sortable prop="AUTOKEY" v-if="this.checkedName.indexOf('自动编号名称')!=-1">
-							</el-table-column>
-							<el-table-column label="起始数" sortable prop="S_NUM" v-if="this.checkedName.indexOf('起始数')!=-1">
-							</el-table-column>
-							<el-table-column label="前缀" sortable prop="PREFIX" v-if="this.checkedName.indexOf('前缀')!=-1">
-							</el-table-column>
-							<el-table-column label="备注" sortable prop="MEMO" v-if="this.checkedName.indexOf('备注')!=-1">
-							</el-table-column>
-						</el-table>
-						<el-pagination class="pull-right pt10 pb10" v-if="this.checkedName.length>0"
-				            @size-change="sizeChange"
-				            @current-change="currentChange"
-				            :current-page="page.currentPage"
-				            :page-sizes="[10, 20, 30, 40]"
-				            :page-size="page.pageSize"
-				            layout="total, sizes, prev, pager, next"
-				            :total="page.totalCount">
-				        </el-pagination>
-						<!-- 表格 End-->
-					</el-col>
-				</el-row>
-							
-			</div>
+			</EasyScrollbar>
 		</div>
-		<!--右侧内容显示 End-->
 	</div>
 </div>
 </template>

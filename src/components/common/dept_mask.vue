@@ -3,7 +3,8 @@
 		<div class="mask" v-if="show"></div>
 		<div class="mask_div" v-if="show">
 			<div class="mask_title_div clearfix">
-				<div class="mask_title">添加部门</div>
+				<div class="mask_title" v-show="addtitle">添加机构</div>
+				<div class="mask_title" v-show="modifytitle">修改机构</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -21,7 +22,7 @@
 								<div class="mask_tab-block">
 									<div class="mask_tab-head clearfix">
 										<div class="accordion_title">
-											<span class="accordion-toggle">添加部门信息</span>
+											<span class="accordion-toggle">添加机构信息</span>
 										</div>
 										<div class="col_but" @click="col_but('col_but1')">
 											<i class="icon-arrow1-down"></i>
@@ -39,7 +40,7 @@
 										</el-row>
 										<el-row :gutter="70">
 											<el-col :span="8">
-												<el-form-item label="部门名称" prop="fullname">
+												<el-form-item label="机构名称" prop="fullname">
 													<el-input v-model="adddeptForm.fullname"></el-input>
 												</el-form-item>
 											</el-col>
@@ -133,7 +134,7 @@
             };
             var validatename2 = (rule, value, callback) => {
                 if (value === '') {
-                    callback(new Error('请填写部门名称'));
+                    callback(new Error('请填写机构名称'));
                 }else {
                     callback();
                 }
@@ -166,15 +167,17 @@
 				isok1: true,
 				isok2: false,
 				labelPosition: 'top',
-				adddeptForm: {
-					pid:'',
-					fullname:'',
-					simplename:'',
-					type:'',
-					code:'',
-					teltphone:'',
-					tips:''
-				},
+				addtitle:true,
+				modifytitle:false,
+				// adddeptFormtest: {
+				// 	pid:'',
+				// 	fullname:'',
+				// 	simplename:'',
+				// 	type:'',
+				// 	code:'',
+				// 	teltphone:'',
+				// 	tips:''
+				// },
 				rules:{
 		          	simplename: [{ 
        						required: true,
@@ -263,7 +266,9 @@
 			},
 			//修改
 			detail() {
-					this.show = true;
+				this.addtitle = false;
+				this.modifytitle = true;
+				this.show = true;
 			},
 			//点击关闭按钮
 			close() {
@@ -306,9 +311,18 @@
 			submitForm(adddeptForm) {
 				this.$refs[adddeptForm].validate((valid) => {
 		          if (valid) {
-		          	console.log("1");
 					var url = '/api/api-user/depts/saveOrUpdate';
-					this.$axios.post(url, this.adddeptForm).then((res) => {
+					this.adddeptFormtest = {
+						"id":this.adddeptForm.id,
+						"pid":this.adddeptForm.pid,
+						"fullname":this.adddeptForm.fullname,
+					    "simplename":this.adddeptForm.simplename,
+					    "type":this.adddeptForm.type,
+					    "code":this.adddeptForm.code,
+					    "teltphone":this.adddeptForm.teltphone,
+					    "tips":this.adddeptForm.tips
+					}
+					this.$axios.post(url, this.adddeptFormtest).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({

@@ -67,7 +67,7 @@
 								</el-table-column>
 								<el-table-column label="角色名称" sortable width="250" prop="name" v-if="this.checkedName.indexOf('角色名称')!=-1">
 								</el-table-column>
-								<el-table-column label="所在部门" sortable prop="deptName" v-if="this.checkedName.indexOf('所在部门')!=-1">
+								<el-table-column label="所在机构" sortable width="250" prop="deptName" v-if="this.checkedName.indexOf('所在机构')!=-1">
 								</el-table-column>
 								<el-table-column label="别名" sortable prop="code" v-if="this.checkedName.indexOf('别名')!=-1">
 								</el-table-column>
@@ -119,7 +119,7 @@
 				'女': false,
 				checkedName: [
 					'角色名称',
-					'所在部门',
+					'所在机构',
 					'别名',
 					'备注'
 				],
@@ -129,7 +129,7 @@
 						prop: 'name'
 					},
 					{
-						label: '所在部门',
+						label: '所在机构',
 						prop: 'deptName'
 					},
 					{
@@ -310,7 +310,6 @@
 				return data;
 			},
 			getTreeId(data){
-				console.log("============="+data);
 			},
 			handleNodeClick(data) {
 			},
@@ -326,120 +325,5 @@
 </script>
 
 <style scoped>
-	.headerbg {
-		width: 100%;
-		height: 100px;
-		position: fixed;
-		z-index: 999;
-	}
-	
-	.contentbg {
-		padding-top: 100px;
-		height: 100%;
-	}
-	
-	.wrapper {
-		width: 100%;
-		height: 100%;
-		padding-left: 220px;
-		position: relative;
-	}
-	
-	.ibox-content {
-		background-color: #F5F8FB;
-		color: inherit;
-		padding: 0px 20px 20px 10px;
-		border-color: #e7eaec;
-		-webkit-border-image: none;
-		-o-border-image: none;
-		border-image: none;
-		border-style: solid solid none;
-		border-width: 1px 0px;
-	}
-	
-	[class*=" btn-"],
-	[class^="btn-"] {
-		color: #FFFFFF;
-		font-size: 14px;
-	}
-	
-	[class*=" btn-"] i,
-	[class^="btn-"] i {
-		margin-right: 5px;
-	}
-	
-	.btn-green {
-		background-color: #25b99e;
-		border-color: #25b99e;
-	}
-	
-	.btn-bule {
-		background-color: #2fa5e5;
-		border-color: #2fa5e5;
-	}
-	
-	.btn-red {
-		background-color: #e3517c;
-		border-color: #e3517c;
-	}
-	
-	.btn-primarys {
-		background-color: #5d7fde;
-		border-color: #5d7fde;
-	}
-	
-	.btn-default {
-		background-color: #ffffff;
-		color: #5B6371;
-		border: 1px solid #dfe5ea;
-	}
-	
-	.btn-default:hover {
-		color: #576FAE;
-	}
-	
-	.fixed-table-toolbar {
-		position: relative;
-		padding-top: 10px;
-		padding-bottom: 12px;
-		height: 55px;
-		line-height: 30px;
-	}
-	
-	.fixed-table-toolbar .columns {
-		position: relative;
-		height: 30px;
-	}
-	
-	.btn-group>.btn:first-child:not(:last-child):not(.dropdown-toggle) {
-		border-top-right-radius: 0;
-		border-bottom-right-radius: 0;
-	}
-	
-	.fixed-table-toolbar .btn-group>.btn-group {
-		display: inline-block;
-		margin-left: -1px!important;
-	}
-	
-	.btn-group>.btn-group,
-	.btn-group>.btn {
-		float: left;
-	}
-	
-	.btn-group,
-	.btn-group-vertical {
-		position: relative;
-		display: inline-block;
-		vertical-align: middle;
-	}
-	
-	.btn-group>.btn-group:last-child:not(:first-child)>.btn:first-child {
-		border-top-left-radius: 0;
-		border-bottom-left-radius: 0;
-	}
-	
-	.fixed-table-toolbar .btn-group>.btn-group:last-child>.btn {
-		border-top-right-radius: 4px;
-		border-bottom-right-radius: 4px;
-	}
+
 </style>

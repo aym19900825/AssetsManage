@@ -28,6 +28,7 @@
 		<!--右侧内容显示 Begin-->
 		<div class="wrapper wrapper-content">
 			<div class="ibox-content">
+				<!--按钮操作行 Begin-->
 				<div class="fixed-table-toolbar clearfix">
 					<div class="bs-bars pull-left">
 						<div class="hidden-xs" id="roleTableToolbar" role="group">
@@ -61,6 +62,8 @@
 						<tableControle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></tableControle>
 					</div>
 				</div>
+				<!--按钮操作行 End-->
+				
 				<!-- 高级查询划出 Begin-->
 				<div v-show="search">
 					<el-form status-icon :model="searchList" label-width="70px">

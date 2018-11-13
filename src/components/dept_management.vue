@@ -332,7 +332,7 @@
 //
 //				})
 //			},
-			requestData(index) {
+			requestData() {
 //				var data = {
 //					
 //				}
@@ -340,16 +340,17 @@
 				this.$axios.get(url, {
 //					params: data
 				}).then((res) => {
+					console.log(res)
 					let result=res.data
 					console.log(result);
-					for(let i=0;i<result.length;i++){
-						if(typeof(result[i].subDepts)!="undefined"&&result[i].subDepts.length>0){
-							let subDepts=result[i].subDepts;
-							result[i].children=subDepts;
-							//console.log(result[i].children);
-						}	
-					}
-					console.log(result);
+//					for(let i=0;i<result.length;i++){
+//						if(typeof(result[i].subDepts)!="undefined"&&result[i].subDepts.length>0){
+//							let subDepts=result[i].subDepts;
+//							result[i].children=subDepts;
+//							//console.log(result[i].children);
+//						}	
+//					}
+//					console.log(result);
 					this.deptList = result;
 //					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})

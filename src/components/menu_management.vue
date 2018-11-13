@@ -140,7 +140,6 @@
 		},
 		methods: {
 			changeCheckedName(value){
-				console.log(value);
 				this.checkedName=value
 				let str=value.toString()
 				for(let i=0;i<this.columns.length;i++){
@@ -154,6 +153,9 @@
 			childByValue: function (childValue) {
 		        // childValue就是子组件传过来的
 		        this.selMenu = childValue
+		       
+		        this.selMenu[0].hidden ? '1' : '0'
+		        
 		    },
 			sizeChange(val) {
 				this.page.pageSize = val;
@@ -182,7 +184,6 @@
 			},
 			//修改
 			modify() {
-				console.log(this.selMenu)
 				var selData = this.selMenu;
 				if(selData.length == 0) {
 					this.$message({
@@ -219,14 +220,12 @@
 				} else {
 					
 					var changeMenu = selData[0];
-					console.log(changeMenu);
 					if(typeof(changeMenu.children)!='undefined' && changeMenu.children.length>0){
 						this.$message({
 							message: '先删除子菜单',
 							type: 'error'
 						});
 					}else {
-							console.log(changeMenu);
 						var id = changeMenu.id;
 						var url = '/api/api-user/menus/' + id;
 						this.$axios.delete(url, {}).then((res) => { //.delete 传数据方法
@@ -260,15 +259,16 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
+					
 					let result=res.data
-					for(let i=0;i<result.length;i++){
+//					for(let i=0;i<result.length;i++){
 //						if(result[i].parentId == "-1" || result[i].parentId == "null") {
 //							result[i].isMenu = "目录"
 //						} else {
 //							result[i].isMenu = "菜单"
 //						}						
-						if(result[i].subMenus.length>0){
-							let subMenus=result[i].subMenus
+//						if(result[i].subMenus.length>0){
+//							let subMenus=result[i].subMenus
 //							for(let j=0;j<subMenus.length;j++){
 //								if(subMenus[j].parentId == "-1" || subMenus[j].parentId == "null") {
 //									subMenus[j].isMenu = "目录"
@@ -279,9 +279,9 @@
 ////									subMenus[j].children=subMenus[j].subMenus
 ////								}
 //							}
-							result[i].children=subMenus
-						}
-					}
+//							result[i].children=subMenus
+//						}
+//					}
 					this.menuList = result;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})

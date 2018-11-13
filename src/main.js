@@ -16,6 +16,7 @@ import $ from 'jquery'
 import moment from 'moment'
 import './axios'
 import vueGridLayout from 'vue-grid-layout'
+//import infiniteScroll from 'vue-infinite-scroll'//滚动加载更多
 
 import vueztree from 'vue-ztree-2.0/dist/vue-ztree-2.0.umd.min.js'
 import EasyScroll from 'easyscroll'//自定义滚动条
@@ -38,7 +39,8 @@ Vue.prototype.$echarts = echarts
 Vue.prototype.$moment = moment//赋值使用
 Vue.use(ElementUI)
 Vue.use(vueztree)
-Vue.use(EasyScroll)//自定义滚动条
+//Vue.use(EasyScroll)//自定义滚动条
+Vue.use(infiniteScroll)
 
 new Vue({
   el: '#app',

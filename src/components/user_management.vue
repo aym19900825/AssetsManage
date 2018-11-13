@@ -96,14 +96,14 @@
 						</el-form>
 					</div>
 					<!-- 高级查询划出 End-->
-					<div class="row">
-						<div class="col-sm-3">
+					<el-row :gutter="10">
+						<el-col :span="6">
 							<v-assetsTree  :listData="treeData" v-on:getTreeId="getTreeId"></v-assetsTree>
-						</div>
-						<div class="col-sm-9">
+						</el-col>
+						<el-col :span="18">
 							<!-- <tablediv ref="tableList"></tablediv> -->
 							<!-- 表格 -->
-							<el-table :data="userList" style="width: 96%;margin: 0 auto;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
+							<el-table :data="userList" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="账号" sortable prop="username" v-if="this.checkedName.indexOf('账号')!=-1">
@@ -135,7 +135,8 @@
 					            :total="page.totalCount">
 					        </el-pagination>
 							<!-- 表格 -->
-						</div>
+						</el-col>
+					</el-row>
 					</div>
 				</div>
 			</div>

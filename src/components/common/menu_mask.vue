@@ -131,21 +131,19 @@
 			'all_icons':all_icons,
 		},
 		props: {
-			menu: Array,
-//			menu: [
-//				type:array,
-//				default: function() {
-//					return {
-//						parentId: '',
-//						name: '',
-//						url: '',
-//						sort: '',
-//						hidden: '',
-//						css: '',
-//					}
-//				}
-//			],
-
+			menu: {
+				type: Object,
+				default: function(){
+					return {
+						parentId: '',
+						name: '',
+						url: '',
+						sort: '',
+						hidden: '',
+						css: '',
+					}
+				}
+			},
 		},
 
 		data() {
@@ -235,9 +233,7 @@
 			},
 			
 			// 这里是修改
-			detail(val) {
-                	
-					this.menu = val;
+			detail() {
 					this.show = true;
 			},
 			//点击关闭按钮
@@ -274,6 +270,8 @@
 
 			//保存users/saveOrUpdate
 			submitForm() {
+				console.log(this.menu);
+				console.log(this.menu._expanded);
 				this.$refs.menu.validate((valid) => {
 //					if(valid) {
 

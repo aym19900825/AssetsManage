@@ -8,7 +8,6 @@
 			<navs></navs>
 			<div class="wrapper wrapper-content">
 				<div class="ibox-content">
-					<!--<navs_button></navs_button>-->
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
@@ -66,29 +65,8 @@
 						</el-form>
 					</div>
 					<!-- 高级查询划出 -->
-					<div class="row">
-						<!--<div class="col-sm-3">
-							<v-assetsTree  :listData="treeData" v-on:getTreeId="getTreeId"></v-assetsTree>
-						</div>-->
-						<!--滚动条begin-->
-						<!-- <EasyScrollbar>
-							<div id="wrapper" ref="homePagess3" style="height: 600px;">
-          					<div id="information" style="height: inherit;"> -->
-						<div class="12">
-							<!-- 表格begin -->
-							<!--<el-table :data="deptList" style="width:100%;margin: 0 auto;" :default-sort="{prop: 'deptList', order: 'descending'}" @selection-change="SelChange">
-								<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
-								</el-table-column>
-								<el-table-column label="ID" sortable prop="id" v-if="this.checkedName.indexOf('ID')!=-1">
-								</el-table-column>
-								<el-table-column label="部门简称" sortable prop="simplename" v-if="this.checkedName.indexOf('部门简称')!=-1">
-								</el-table-column>
-								<el-table-column label="类型" sortable prop="type" v-if="this.checkedName.indexOf('类型')!=-1">
-								</el-table-column>
-								<el-table-column label="备注" sortable prop="tips" v-if="this.checkedName.indexOf('备注')!=-1">
-								</el-table-column>
-							</el-table>
-							-->
+					<el-row :gutter="10">
+						<el-col :span="24">
 							<tree_grid :columns="columns" :tree-structure="true" :data-source="deptList" v-on:childByValue="childByValue"></tree_grid>
 							
 							<el-pagination v-if="this.checkedName.length>0"
@@ -101,11 +79,8 @@
 					           layout="total, sizes, prev, pager, next"
 					           :total="page.totalCount">
 							</el-pagination>
-							<!-- 表格end -->
-						<!-- </div></div> -->
-						</div>
-						<!-- </EasyScrollbar> -->
-						<!--滚动条end-->
+						</el-col>
+					</el-row>
 					</div>
 				</div>
 			</div>
@@ -435,120 +410,5 @@
 </script>
 
 <style scoped>
-	.headerbg {
-		width: 100%;
-		height: 100px;
-		position: fixed;
-		z-index: 999;
-	}
 	
-	.contentbg {
-		padding-top: 100px;
-		height: 100%;
-	}
-	
-	.wrapper {
-		width: 100%;
-		height: 100%;
-		padding-left: 220px;
-		position: relative;
-	}
-	
-	.ibox-content {
-		background-color: #F5F8FB;
-		color: inherit;
-		padding: 0px 20px 20px 10px;
-		border-color: #e7eaec;
-		-webkit-border-image: none;
-		-o-border-image: none;
-		border-image: none;
-		border-style: solid solid none;
-		border-width: 1px 0px;
-	}
-	
-	[class*=" btn-"],
-	[class^="btn-"] {
-		color: #FFFFFF;
-		font-size: 14px;
-	}
-	
-	[class*=" btn-"] i,
-	[class^="btn-"] i {
-		margin-right: 5px;
-	}
-	
-	.btn-green {
-		background-color: #25b99e;
-		border-color: #25b99e;
-	}
-	
-	.btn-bule {
-		background-color: #2fa5e5;
-		border-color: #2fa5e5;
-	}
-	
-	.btn-red {
-		background-color: #e3517c;
-		border-color: #e3517c;
-	}
-	
-	.btn-primarys {
-		background-color: #5d7fde;
-		border-color: #5d7fde;
-	}
-	
-	.btn-default {
-		background-color: #ffffff;
-		color: #5B6371;
-		border: 1px solid #dfe5ea;
-	}
-	
-	.btn-default:hover {
-		color: #576FAE;
-	}
-	
-	.fixed-table-toolbar {
-		position: relative;
-		padding-top: 10px;
-		padding-bottom: 12px;
-		height: 55px;
-		line-height: 30px;
-	}
-	
-	.fixed-table-toolbar .columns {
-		position: relative;
-		height: 30px;
-	}
-	
-	.btn-group>.btn:first-child:not(:last-child):not(.dropdown-toggle) {
-		border-top-right-radius: 0;
-		border-bottom-right-radius: 0;
-	}
-	
-	.fixed-table-toolbar .btn-group>.btn-group {
-		display: inline-block;
-		margin-left: -1px!important;
-	}
-	
-	.btn-group>.btn-group,
-	.btn-group>.btn {
-		float: left;
-	}
-	
-	.btn-group,
-	.btn-group-vertical {
-		position: relative;
-		display: inline-block;
-		vertical-align: middle;
-	}
-	
-	.btn-group>.btn-group:last-child:not(:first-child)>.btn:first-child {
-		border-top-left-radius: 0;
-		border-bottom-left-radius: 0;
-	}
-	
-	.fixed-table-toolbar .btn-group>.btn-group:last-child>.btn {
-		border-top-right-radius: 4px;
-		border-bottom-right-radius: 4px;
-	}
 </style>

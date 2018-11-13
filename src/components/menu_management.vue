@@ -43,17 +43,15 @@
 							</div>
 						</div>
 					</div>
-					<div class="row">
-
-						<div class="col-sm-12">
+					<el-row :gutter="10">
+						<el-col :span="24">
 							 <tree_grid :columns="columns" :tree-structure="true" :data-source="menuList" v-on:childByValue="childByValue"></tree_grid>
 							 
-							
 							<el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
 							
-						</div>
-					</div>
+						</el-col>
+					</el-row>
 				</div>
 			</div>
 			<menumask :menu="selMenu[0]" ref="child" @request="requestData" v-bind:page=page></menumask>
@@ -168,11 +166,23 @@
 			
 			//添加菜单
 			openAddMenu() {
-				this.$refs.child.resetNew();
-				this.$refs.child.visible();
+				this.selData = [
+					{
+					parentId:'',
+					name:'',
+					url:'',
+					sort:'',
+					hidden:'',
+					css:''
+					}
+				];
+				this.$refs.child.detail();
+//				this.$refs.child.resetNew();
+//				this.$refs.child.visible();
 			},
 			//修改
 			modify() {
+				console.log(this.selMenu)
 				var selData = this.selMenu;
 				if(selData.length == 0) {
 					this.$message({
@@ -187,7 +197,7 @@
 					});
 					return;
 				} else {
-					this.$refs.child.detail(selData[0].id);
+					this.$refs.child.detail();
 				}
 			},
 
@@ -238,23 +248,6 @@
 				}
 			},
 
-//			显示目录
-//			judge(data) {
-//				if(data.parentId == "-1" || data.parentId == "null") {
-//					return data.isMenu = "目录"
-//				} else {
-//					return data.isMenu = "菜单"
-//				}
-//			},
-			//机构树
-//			getKey() {
-//				let that = this;
-//				var url = '/api/api-user/depts/tree';
-//				this.$axios.get(url, {}).then((res) => {
-//					this.resourceData = res.data;
-//					this.treeData = this.transformTree(this.resourceData);
-//				});
-//			},
 			SelChange(val) {
 				this.selMenu = val;
 			},
@@ -267,17 +260,14 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(res);
 					let result=res.data
-					console.log(result);
 					for(let i=0;i<result.length;i++){
 //						if(result[i].parentId == "-1" || result[i].parentId == "null") {
 //							result[i].isMenu = "目录"
 //						} else {
 //							result[i].isMenu = "菜单"
-//						}
-//						if(typeof(result[i].subDepts)!="undefined"&&result[i].subDepts.length>0){
-						if(typeof(result[i].subMenus)!="undefined"&&result[i].subMenus.length>0){
+//						}						
+						if(result[i].subMenus.length>0){
 							let subMenus=result[i].subMenus
 //							for(let j=0;j<subMenus.length;j++){
 //								if(subMenus[j].parentId == "-1" || subMenus[j].parentId == "null") {
@@ -285,16 +275,14 @@
 //								} else {
 //									subMenus[j].isMenu = "菜单"
 //								}						
-//								if(subMenus[j].subMenus.length>0){
-//									subMenus[j].children=subMenus[j].subMenus
-//								}
+////								if(subMenus[j].subMenus.length>0){
+////									subMenus[j].children=subMenus[j].subMenus
+////								}
 //							}
 							result[i].children=subMenus
 						}
 					}
 					this.menuList = result;
-					
-					console.log(this.menuList);
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
 			},
@@ -310,120 +298,5 @@
 </script>
 
 <style scoped>
-	.headerbg {
-		width: 100%;
-		height: 100px;
-		position: fixed;
-		z-index: 999;
-	}
-	
-	.contentbg {
-		padding-top: 100px;
-		height: 100%;
-	}
-	
-	.wrapper {
-		width: 100%;
-		height: 100%;
-		padding-left: 220px;
-		position: relative;
-	}
-	
-	.ibox-content {
-		background-color: #F5F8FB;
-		color: inherit;
-		padding: 0px 20px 20px 10px;
-		border-color: #e7eaec;
-		-webkit-border-image: none;
-		-o-border-image: none;
-		border-image: none;
-		border-style: solid solid none;
-		border-width: 1px 0px;
-	}
-	
-	[class*=" btn-"],
-	[class^="btn-"] {
-		color: #FFFFFF;
-		font-size: 14px;
-	}
-	
-	[class*=" btn-"] i,
-	[class^="btn-"] i {
-		margin-right: 5px;
-	}
-	
-	.btn-green {
-		background-color: #25b99e;
-		border-color: #25b99e;
-	}
-	
-	.btn-bule {
-		background-color: #2fa5e5;
-		border-color: #2fa5e5;
-	}
-	
-	.btn-red {
-		background-color: #e3517c;
-		border-color: #e3517c;
-	}
-	
-	.btn-primarys {
-		background-color: #5d7fde;
-		border-color: #5d7fde;
-	}
-	
-	.btn-default {
-		background-color: #ffffff;
-		color: #5B6371;
-		border: 1px solid #dfe5ea;
-	}
-	
-	.btn-default:hover {
-		color: #576FAE;
-	}
-	
-	.fixed-table-toolbar {
-		position: relative;
-		padding-top: 10px;
-		padding-bottom: 12px;
-		height: 55px;
-		line-height: 30px;
-	}
-	
-	.fixed-table-toolbar .columns {
-		position: relative;
-		height: 30px;
-	}
-	
-	.btn-group>.btn:first-child:not(:last-child):not(.dropdown-toggle) {
-		border-top-right-radius: 0;
-		border-bottom-right-radius: 0;
-	}
-	
-	.fixed-table-toolbar .btn-group>.btn-group {
-		display: inline-block;
-		margin-left: -1px!important;
-	}
-	
-	.btn-group>.btn-group,
-	.btn-group>.btn {
-		float: left;
-	}
-	
-	.btn-group,
-	.btn-group-vertical {
-		position: relative;
-		display: inline-block;
-		vertical-align: middle;
-	}
-	
-	.btn-group>.btn-group:last-child:not(:first-child)>.btn:first-child {
-		border-top-left-radius: 0;
-		border-bottom-left-radius: 0;
-	}
-	
-	.fixed-table-toolbar .btn-group>.btn-group:last-child>.btn {
-		border-top-right-radius: 4px;
-		border-bottom-right-radius: 4px;
-	}
+
 </style>

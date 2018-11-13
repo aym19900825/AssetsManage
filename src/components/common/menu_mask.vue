@@ -4,7 +4,7 @@
 		<div class="mask_div" v-show="show">
 			<!---->
 			<div class="mask_title_div clearfix">
-				<div class="mask_title">添加用户</div>
+				<div class="mask_title">添加菜单</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>
 						 
@@ -62,7 +62,8 @@
 								<!--是否影藏-->
 								<el-col :span="8">
 									<el-form-item label="是否显示" prop="hidden">
-										<el-switch on-text="是" off-text="否" on-color="#5B7BFA" off-color="#dadde5" v-model="menu.hidden" @change="changeval">
+										<el-switch on-text="是" off-text="否" on-color="#5B7BFA" off-color="#dadde5" v-model="menu.hidden" on-value="1"
+    off-value="0" @change="changeval" @click.native="toggleStatus">
 										</el-switch>
 									</el-form-item>
 								</el-col>
@@ -133,14 +134,17 @@
 		props: {
 			menu: {
 				type: Object,
-				default: function(){
+				default: function(res){
+					
 					return {
-						parentId: '',
+						parentId:'' ,
 						name: '',
 						url: '',
 						sort: '',
-						hidden: '',
+						hidden:true ,
 						css: '',
+						isMenu: 0,
+						roled:0,
 					}
 				}
 			},
@@ -210,7 +214,7 @@
 					name:'',
 					url:'',
 					sort:'',
-					hidden:'',
+					hidden:true,
 					css:''
 				}
                    this.$refs["menu"].resetFields();
@@ -272,24 +276,25 @@
 			submitForm() {
 				this.$refs.menu.validate((valid) => {
 //					if(valid) {
+						var menu = this.menu;
+//	                    menu.hidden = this.Callbackvaule  == 'false'? 0: 1;
 
 						var url = '/api/api-user/menus/saveOrUpdate';
-//						if(typeof(this.menu._expanded )!='undefined'){
-//							delete this.menu._expanded
-//						}
-//						if(typeof(this.menu._level )!='undefined'){
-//							delete this.menu._level
-//						}
-//						if(typeof(this.menu._parent )!='undefined'){
-//							delete this.menu._parent
-//						}
-//						if(typeof(this.menu._show )!='undefined'){
-//							delete this.menu._show
-//						}
+						this.menutest={
+								"id":this.menu.id,
+								"parentId":this.menu.parentId ,
+								"name":this.menu.name,
+								"url":this.menu.url,
+								"sort":this.menu.sort,
+								"hidden":this.menu.hidden,
+								"css":this.menu.css ,
+							}
 					
 						//return false;
-						this.$axios.post(url, this.menu).then((res) => {
-													
+					
+						this.$axios.post(url, this.menutest).then((res) => {
+							
+							
 							if(res.data.resp_code == 0) {
 
 								this.$message({
@@ -359,8 +364,12 @@
 					})
 					.catch(_ => {});
 			},
-			changeval(Callback){
-				
+			changeval(Callbackvaule){
+			
+				this.menu.hidden=Callbackvaule?1:0
+			},
+			toggleStatus(state){
+			
 			}
 
 		},

@@ -331,7 +331,7 @@
 //
 //				})
 //			},
-			requestData(index) {
+			requestData() {
 //				var data = {
 //					
 //				}
@@ -339,6 +339,7 @@
 				this.$axios.get(url, {
 //					params: data
 				}).then((res) => {
+					console.log(res)
 					let result=res.data
 					for(let i=0;i<result.length;i++){
 						if(typeof(result[i].subDepts)!="undefined"&&result[i].subDepts.length>0){

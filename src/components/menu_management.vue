@@ -267,7 +267,7 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(res);
+
 					let result=res.data
 //					for(let i=0;i<result.length;i++){
 //						if(result[i].parentId == "-1" || result[i].parentId == "null") {

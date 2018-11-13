@@ -103,7 +103,12 @@
 				clientHeight:'',//获取浏览器高度
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
-				roleList:[],
+				roleList:{
+					name:'',
+					code:'',
+					deptId:'',
+					tips:''
+				},
 				rules: {
 					name: [{
 						required: true,
@@ -262,10 +267,9 @@
 				this.getCheckedNodes();
 				this.placetext = false;
 				this.dialogVisible = false;
+				console.log(this.roleList);
 				this.roleList.deptId = this.cccData[0].id;
 				this.roleList.deptName = this.cccData[0].simplename;
-				console.log(this.cccData[0].simplename);
-				console.log(this.roleList.deptName);
 			},
 			handleClose(done) {
 				this.$confirm('确认关闭？')

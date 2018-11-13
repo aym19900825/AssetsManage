@@ -146,60 +146,44 @@ export default {
 				navtitle: '主数据',
 				navherf: '/maindata'
 			}, {
+				navicon: 'icon-plan',
+				navtitle: '年度计划',
+				navherf: '/passwordedit'
+			}, {
+				navicon: 'icon-contract',
+				navtitle: '工作任务通知书',
+				navherf: '/passwordedit'
+			}, {
+				navicon: 'icon-contract',
+				navtitle: '委托书管理',
+				navherf: '/passwordedit'
+			}, {
+				navicon: 'icon-purchase',
+				navtitle: '样品管理',
+				navherf: '/passwordedit'
+			}, {
+				navicon: 'icon-worklist',
+				navtitle: '工作任务单',
+				navherf: '/passwordedit'
+			}, {
 				navicon: 'icon-device',
 				navtitle: '设备管理',
 				navherf: '/personinfo'
 			}, {
-				navicon: 'icon-purchase',
-				navtitle: '采购管理',
-				navherf: '/passwordedit'
-			}, {
-				navicon: 'icon-worklist',
-				navtitle: '工单管理',
-				navherf: '/passwordedit'
-			}, {
 				navicon: 'icon-inventory',
-				navtitle: '库存管理',
+				navtitle: '检验/检测项目管理',
 				navherf: '/passwordedit'
 			}, {
 				navicon: 'icon-preventive',
-				navtitle: '预防性维护',
+				navtitle: '文件查询',
 				navherf: '/passwordedit'
 			}, {
 				navicon: 'icon-safe',
-				navtitle: '安全管理',
-				navherf: '/passwordedit'
-			}, {
-				navicon: 'icon-contract',
-				navtitle: '合同管理',
+				navtitle: '接口',
 				navherf: '/passwordedit'
 			}, {
 				navicon: 'icon-inspection',
-				navtitle: '点巡检',
-				navherf: '/passwordedit'
-			}, {
-				navicon: 'icon-reporting',
-				navtitle: '故障提报',
-				navherf: '/passwordedit'
-			}, {
-				navicon: 'icon-plan',
-				navtitle: '作业计划',
-				navherf: '/passwordedit'
-			}, {
-				navicon: 'icon-kpi',
-				navtitle: 'KPI统计',
-				navherf: '/passwordedit'
-			}, {
-				navicon: 'icon-distribution',
-				navtitle: '派工管理',
-				navherf: '/passwordedit'
-			}, {
-				navicon: 'icon-project',
-				navtitle: '项目管理',
-				navherf: '/passwordedit'
-			}, {
-				navicon: 'icon-map',
-				navtitle: '地图',
+				navtitle: '报表管理',
 				navherf: '/passwordedit'
 			}
 		]

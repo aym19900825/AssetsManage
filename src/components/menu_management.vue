@@ -5,7 +5,10 @@
 			<navs_header></navs_header>
 		</div>
 		<div class="contentbg">
-			<navs></navs>
+		<!--左侧菜单内容显示 Begin-->
+		<navs_left></navs_left>
+		<!--左侧菜单内容显示 End-->
+		
 			<div class="wrapper wrapper-content">
 				<div class="ibox-content">
 					<div class="fixed-table-toolbar clearfix">
@@ -61,7 +64,7 @@
 <script>
 	import tree_grid from './common/TreeGrid.vue'//树表格
 	import vheader from './common/vheader.vue'
-	import navs from './common/left_navs/nav_left.vue'
+	import navs_left from './common/left_navs/nav_left.vue'
 	import navs_header from './common/nav_tabs.vue'
 	import assetsTree from './plugin/vue-tree/tree.vue'
 	import menumask from './common/menu_mask.vue'//弹出框
@@ -70,7 +73,7 @@
 		components: {
 			'vheader': vheader,
 			'navs_header': navs_header,
-			'navs': navs,
+			'navs_left': navs_left,
 			'menumask': menumask,
 			'v-assetsTree': assetsTree,
 			'tree_grid':tree_grid,
@@ -264,7 +267,7 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(res);
+
 					let result=res.data
 //					for(let i=0;i<result.length;i++){
 //						if(result[i].parentId == "-1" || result[i].parentId == "null") {

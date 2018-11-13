@@ -5,7 +5,9 @@
 			<navs_header></navs_header>
 		</div>
 		<div class="contentbg">
-			<navs></navs>
+			<!--左侧菜单调用 Begin-->
+			<navs_left></navs_left>
+			<!--左侧菜单调用 End-->
 			<div class="wrapper wrapper-content">
 				<div class="ibox-content">
 					<!--<navs_button></navs_button>-->
@@ -146,7 +148,7 @@
 </template>
 <script>
 	import vheader from './common/vheader.vue'
-	import navs from './common/left_navs/nav_left.vue'
+	import navs_left from './common/left_navs/nav_left.vue'
 	import navs_header from './common/nav_tabs.vue'
 	import assetsTree from './plugin/vue-tree/tree.vue'
 	import usermask from './common/user_mask.vue'
@@ -155,7 +157,7 @@
 		components: {
 			'vheader': vheader,
 			'navs_header': navs_header,
-			'navs': navs,
+			'navs_left': navs_left,
 			'usermask': usermask,
 			'v-assetsTree': assetsTree
 		},

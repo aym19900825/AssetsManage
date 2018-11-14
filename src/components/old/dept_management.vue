@@ -5,10 +5,7 @@
 			<navs_header></navs_header>
 		</div>
 		<div class="contentbg">
-			<!--左侧菜单调用 Begin-->
 			<navs_left></navs_left>
-			<!--左侧菜单调用 End-->
-			<!--右侧内容显示 Begin-->
 			<div class="wrapper wrapper-content">
 				<div class="ibox-content">
 					<div class="fixed-table-toolbar clearfix">
@@ -83,7 +80,6 @@
 				</div>
 			</div>
 			<deptmask :adddeptForm="selMenu[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></deptmask>
-			<!--右侧内容显示 End-->
 		</div>
 	</div>
 </template>
@@ -91,7 +87,7 @@
 <script>
 	import tree_grid from './common/TreeGrid.vue'//树表格
 	import vheader from './common/vheader.vue'
-	import navs_left from './common/left_navs/nav_left2.vue'
+	import navs_left from './common/left_navs/nav_left.vue'
 	import navs_header from './common/nav_tabs.vue'
 //	import assetsTree from './plugin/vue-tree/tree.vue'
 //	import tableControle from './plugin/table-controle/controle.vue'

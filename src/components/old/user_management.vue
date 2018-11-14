@@ -56,6 +56,15 @@
 												<el-checkbox :label="item.label" name="type"></el-checkbox>
 											</el-dropdown-item>
 										</el-checkbox-group>
+										<!-- <el-dropdown-item>
+											<el-checkbox label="所在机构" name="type"></el-checkbox>
+										</el-dropdown-item>
+										<el-dropdown-item>
+											<el-checkbox label="所在公司" name="type"></el-checkbox>
+										</el-dropdown-item>
+										<el-dropdown-item>
+											<el-checkbox label="所在机构" name="type"></el-checkbox>
+										</el-dropdown-item> -->
 									</el-dropdown-menu>
 								</el-dropdown>
 							</div>
@@ -116,7 +125,7 @@
 							<!-- <span class="demonstration">显示总数</span>" -->
 							<!-- <el-pagination background layout="prev, pager, next" :total="2" style="float:right;margin-top:10px;"> -->
 							<!-- </el-pagination style="float:right;margin-top:10px;"> -->
-							<el-pagination class="pull-right" v-if="this.checkedName.length>0"
+							<el-pagination v-if="this.checkedName.length>0"
 					            @size-change="sizeChange"
 					            @current-change="currentChange"
 					            :current-page="page.currentPage"
@@ -137,7 +146,7 @@
 </template>
 <script>
 	import vheader from './common/vheader.vue'
-	import navs_left from './common/left_navs/nav_left2.vue'
+	import navs_left from './common/left_navs/nav_left.vue'
 	import navs_header from './common/nav_tabs.vue'
 	import assetsTree from './plugin/vue-tree/tree.vue'
 	import usermask from './common/user_mask.vue'

@@ -34,7 +34,7 @@ export default {
 				{
 					navicon: 'icon-user',
 					navtitle: '用户管理',
-					navherf: '/personinfo'
+					navherf: '/user_management'
 				}, {
 					navicon: 'icon-edit',
 					navtitle: '机构管理',

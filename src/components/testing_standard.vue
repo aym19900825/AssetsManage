@@ -9,7 +9,6 @@
 		<navs_left></navs_left>
 		<!--左侧菜单内容显示 End-->
 
-
 		<!--右侧内容显示 Begin-->
 		<div class="wrapper wrapper-content">
 			<EasyScrollbar>
@@ -46,8 +45,8 @@
 									</div>
 								</div>
 								<div class="columns columns-right btn-group pull-right">
-									<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
-									<tableControle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></tableControle>
+									<div class="btn btn-default btn-refresh" id="refresh" title="刷新"><i class="icon-refresh"></i></div>
+									<v-table-controle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></v-table-controle>
 								</div>
 							</div>
 							<!--按钮操作行 End-->
@@ -118,7 +117,7 @@
 			</EasyScrollbar>
 		</div>
 		<!--右侧内容显示 End-->
-		<standardmask :user="aaaData[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></standardmask>
+		<standardmask ref="child" v-bind:page=page></standardmask>
 	</div>
 </div>
 </template>
@@ -133,10 +132,11 @@
 		name: 'customer_management',
 		components: {
 			vheader,
-			navs_left,
 			navs_header,
 			tableControle,
 			table,
+			navs_left,
+			standardmask
 		},
 		data() {
 			return {
@@ -215,49 +215,7 @@
 						prop: 'CHANGEDATE'
 					}
 				],
-				leftNavs: [//leftNavs左侧菜单数据
-					{
-						navicon: 'icon-user',
-						navtitle: '用户管理',
-						navherf: '/personinfo'
-					}, {
-						navicon: 'icon-edit',
-						navtitle: '标准名称管理',
-						navherf: '/dept_management'
-					}, {
-						navicon: 'icon-role-site',
-						navtitle: '角色管理',
-						navherf: '/role_management'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '客户管理',
-						navherf: '/customer_management'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '产品类别',
-						navherf: '/products_category'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '产品',
-						navherf: '/products'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测标准',
-						navherf: '/testing_standard'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测项目',
-						navherf: '/testing_projects'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测方法',
-						navherf: '/testing_methods'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '自动编号设置',
-						navherf: '/number_settings'
-					}
-				],
+				
 				companyId: '',
 				deptId: '',
 				selUser: [],
@@ -277,13 +235,13 @@
 					createTime: ''
 				},
 				//tree
-//				resourceData: [], //数组，我这里是通过接口获取数据，
-//				resourceDialogisShow: false,
-//				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
-//				resourceProps: {
-//					children: "subDepts",
-//					label: "simplename"
-//				},
+				resourceData: [], //数组，我这里是通过接口获取数据，
+				resourceDialogisShow: false,
+				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
+				resourceProps: {
+					children: "subDepts",
+					label: "simplename"
+				},
 				userData:[],
 				page: {//分页显示
 					currentPage: 1,

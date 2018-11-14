@@ -133,6 +133,7 @@
 			</EasyScrollbar>
 		</div>
 		<!--右侧内容显示 End-->
+		<standardmask :user="aaaData[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></standardmask>
 	</div>
 </div>
 </template>
@@ -141,6 +142,7 @@
 	import navs_header from './common/nav_tabs.vue'
 	import table from './plugin/table/table-normal.vue'
 	import tableControle from './plugin/table-controle/controle.vue'
+	import standardmask from './common/testing_standardMask.vue'
 	export default {
 		name: 'customer_management',
 		components: {
@@ -288,13 +290,13 @@
 					createTime: ''
 				},
 				//tree
-				resourceData: [], //数组，我这里是通过接口获取数据，
-				resourceDialogisShow: false,
-				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
-				resourceProps: {
-					children: "subDepts",
-					label: "simplename"
-				},
+//				resourceData: [], //数组，我这里是通过接口获取数据，
+//				resourceDialogisShow: false,
+//				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
+//				resourceProps: {
+//					children: "subDepts",
+//					label: "simplename"
+//				},
 				userData:[],
 				page: {//分页显示
 					currentPage: 1,

@@ -3,8 +3,8 @@
 		<div class="mask" v-if="show"></div>
 		<div class="mask_div" v-if="show">
 			<div class="mask_title_div clearfix">
-				<div class="mask_title" v-show="addtitle">添加客户</div>
-				<div class="mask_title" v-show="modifytitle">修改客户</div>
+				<div class="mask_title" v-show="addtitle">添加产品</div>
+				<div class="mask_title" v-show="modifytitle">修改产品</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -20,166 +20,77 @@
 						<div style="height: auto;">
 							<div class="accordion" id="information">
 								<el-collapse v-model="activeNames" @change="handleChange">
-									<el-collapse-item title="基本信息" name="1">
+									<el-collapse-item title="产品名称" name="1">
 										<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
 											<el-row :gutter="70">
 												<el-col :span="8">
-													<el-form-item label="组织机构代码" prop="CODE">
+													<el-form-item label="产品编号" prop="CODE">
 														<el-input v-model="CUSTOMER.CODE" :disabled="edit"></el-input>
 													</el-form-item>
 												</el-col>
 												<el-col :span="8">
-													<el-form-item label="单位名称" prop="NAME">
-														<el-input v-model="CUSTOMER.NAME" :disabled="edit"></el-input>
+													<el-form-item label="产品名称" prop="NAME">
+														<el-input v-model="CUSTOMER.NAME"></el-input>
 													</el-form-item>
 												</el-col>
 												<el-col :span="8">
-													<el-form-item label="联系电话" prop="PHONE">
+													<el-form-item label="状态" prop="PHONE">
 														<el-input v-model="CUSTOMER.PHONE"></el-input>
 													</el-form-item>
 												</el-col>
 											</el-row>
 											<el-row :gutter="70">
 												<el-col :span="8">
-													<el-form-item label="联系地址" prop="CONTACT_ADDRESS">
-														<el-input v-model="CUSTOMER.CONTACT_ADDRESS"></el-input>
+													<el-form-item label="版本" prop="CONTACT_ADDRESS">
+														<el-input v-model="CUSTOMER.CONTACT_ADDRESS"  :disabled="edit"></el-input>
 													</el-form-item>
 												</el-col>
 												<el-col :span="8">
-													<el-form-item label="邮政编码" prop="ZIPCODE">
-														<el-input v-model="CUSTOMER.ZIPCODE"></el-input>
+													<el-form-item label="机构" prop="ZIPCODE">
+														<el-input v-model="CUSTOMER.ZIPCODE"  :disabled="edit"></el-input>
 													</el-form-item>
 												</el-col>
 												<el-col :span="8">
-													<el-form-item label="状态" prop="STATUS">
+													<el-form-item label="发布单位" prop="STATUS">
 														<!-- <el-select  multiple> -->
 															<!-- <el-option v-for="data in selectData" :key="data.id" :value="data.id" :label="data.name"></el-option> -->
 														<!-- </el-select> -->
-														<el-input v-model="CUSTOMER.STATUS"></el-input>
+														<el-input v-model="CUSTOMER.STATUS" :disabled="edit"></el-input>
 													</el-form-item>
 												</el-col>
 											</el-row>
 											<el-row :gutter="70">
 												<el-col :span="8">
-													<el-form-item label="传真" prop="FAX">
-														<el-input v-model="CUSTOMER.FAX"></el-input>
+													<el-form-item label="录入人" prop="FAX">
+														<el-input v-model="CUSTOMER.FAX" :disabled="edit"></el-input>
 													</el-form-item>
 												</el-col>
 												<el-col :span="8">
-													<el-form-item label="邮箱" prop="EMAIL">
-														<el-input v-model="CUSTOMER.EMAIL"></el-input>
+													<el-form-item label="录入时间" prop="EMAIL">
+														<el-input v-model="CUSTOMER.EMAIL"  :disabled="edit"></el-input>
 													</el-form-item>
 												</el-col>
 												<el-col :span="8">
-													<el-form-item label="录入人" prop="ENERBY">
-														<el-input v-model="CUSTOMER.ENERBY" placeholder="当前录入人" :disabled="edit"></el-input>
+													<el-form-item label="修改人" prop="ENERBY">
+														<el-input v-model="CUSTOMER.ENERBY" placeholder="当前录入人" :disabled="edit" ></el-input>
 													</el-form-item>
 												</el-col>
 											</el-row>
 											<el-row :gutter="70">
 												<el-col :span="8">
-													<el-form-item label="录入日期" prop="ENERDATE">
+													<el-form-item label="修改时间" prop="ENERDATE">
 														<el-input v-model="CUSTOMER.ENERDATE" placeholder="当前录入日期" :disabled="edit"></el-input>
 													</el-form-item>
 												</el-col>
-												<el-col :span="8">
-													<el-form-item label="修改人" prop="CHANGEBY">
-														<el-input v-model="CUSTOMER.CHANGEBY" placeholder="记录当前修改人" :disabled="edit"></el-input>
-													</el-form-item>
-												</el-col>
-												<el-col :span="8">
-													<el-form-item label="修改时间" prop="CHANGEDATE">
-														<el-input v-model="CUSTOMER.CHANGEDATE" placeholder="自动记录当前修改时间" :disabled="edit"></el-input>
-													</el-form-item>
-												</el-col>
-											</el-row>
-											<el-row :gutter="70">
-												<el-col :span="24">
-													<el-form-item label="备注" prop="MEMO">
-														<el-input v-model="CUSTOMER.MEMO" type="textarea"></el-input>
-													</el-form-item>
-												</el-col>
 											</el-row>
 										</div>
-									</el-collapse-item>
-									<el-collapse-item title="资质信息" name="2">
-										<!-- 资质信息 Begin-->
-										<div class="table-func">
-											<!-- <el-button type="primary" size="mini" round  @click="importdia">
-												<i class="icon-upload-cloud"></i>
-												<font>导入</font>
-											</el-button> -->
-											<el-button type="success" size="mini" round @click="addfield">
-												<i class="icon-add"></i>
-												<font>新建行</font>
-											</el-button>
-										</div>
-										<el-form :model="CUSTOMER.CUSTOMER_QUALIFICATION">
-							                <el-form-item>
-							                	<el-row :gutter="20">
-							                		<el-col :span="3">
-							                            <el-form-item label="序号" ></el-form-item>
-							                        </el-col>
-							                        <el-col :span="3">
-							                            <el-form-item label="证书编号" ></el-form-item>
-							                        </el-col>
-							                        <el-col :span="3">
-							                            <el-form-item label="证书名称" ></el-form-item>
-							                        </el-col>
-							                        <el-col :span="3">
-							                            <el-form-item label="资质有效期" ></el-form-item>
-							                        </el-col>
-							                        <el-col :span="3">
-							                            <el-form-item label="状态" ></el-form-item>
-							                        </el-col>
-							                        <el-col :span="3">
-							                            <el-form-item label="备注" ></el-form-item>
-							                        </el-col>
-							                        <el-col :span="3">
-							                            <el-form-item label="附件" ></el-form-item>
-							                        </el-col>		                        
-							                        <el-col :span="3">
-							                            <el-form-item label="操作"></el-form-item>
-							                        </el-col>
-							                	</el-row>
-							                    <el-row :gutter="10" v-for="(item,key) in CUSTOMER.CUSTOMER_QUALIFICATION" :key="key">
-							                        <el-col :span="3">
-							                            <el-input type="text"  placeholder="序号" v-model="item.STEP"></el-input>
-							                        </el-col>
-							                        <el-col :span="3">
-							                            <el-input type="text"  placeholder="证书编号" v-model="item.CERTIFICATE_NUM"></el-input>
-							                        </el-col>
-							                        <el-col :span="3">
-							                        	<el-input type="text"  placeholder="证书名称" v-model="item.CERTIFICATE_NAME"></el-input>
-							                        </el-col>
-							                        <el-col :span="3">
-							                            <el-input type="text"  placeholder="资质有效期" v-model="item.ACTIVE_DATE"></el-input>
-							                        </el-col>
-							                        <el-col :span="3">
-							                            <el-input type="text"  placeholder="状态" v-model="item.STATUS"></el-input>
-							                        </el-col> 
-							                        <el-col :span="3">
-							                            <el-input type="text"  placeholder="备注" v-model="item.MEMO"></el-input>
-							                        </el-col>
-							                        <el-col :span="3" v-model="item.FUJIAN">
-							                            <button type="button" class="btn btn-primarys button-margin text-center">
-														    <i class="icon-add"></i>
-														</button>
-							                        </el-col>                
-							                        <el-col :span="2">
-							                            <i class="el-icon-delete" @click="delfield(item)" style="color: red;text-align:center"></i>
-							                        </el-col>
-							                    </el-row>
-							                </el-form-item>
-						            	</el-form>
-									<!-- 资质信息 End -->
 									</el-collapse-item>
 								</el-collapse>
 							</div>
 							<div class="el-dialog__footer">
 								<el-form-item>
-									<el-button @click='close'>取消</el-button>
-									<el-button type="primary" class="btn-primarys" @click="submitForm('adddeptForm')">提交</el-button>
+									<el-button type="primary" class="btn-primarys" @click="submitForm('adddeptForm')">保存</el-button>
+									<el-button type="primary" class="btn-primarys">修订</el-button>
 								</el-form-item>
 							</div>
 						</div>

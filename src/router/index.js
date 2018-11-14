@@ -19,7 +19,6 @@ import data_management from '@/components/data_management'//数据管理
 import role_management from '@/components/role_management'//角色管理
 import safe_management from '@/components/safe_management'//安全管理
 import dictionaries_management from '@/components/dictionaries_management'//字典管理
-
 import personinfo from '@/components/personinfo'//个人资料
 import passwordedit from '@/components/passwordedit'//修改密码
 import ztree from '@/components/common/ztree' //树菜单
@@ -39,15 +38,12 @@ import reports from '@/components/reports'//报表管理
 import inspect_proxy from '@/components/inspect_proxy'//检验委托书
 import dept_proxy from '@/components/dept_proxy'//检测委托书
 import subc_agreement from '@/components/subc_agreement'//分包协议
-
-
 import instruments from '@/components/instruments'//仪器和计量器具
 import usag_tending_records from '@/components/usag_tending_records'//使用/维护保养记录
 import traceability_plan from '@/components/traceability_plan'//溯源计划
 import traceability_records from '@/components/traceability_records'//溯源记录
 import verification_plan from '@/components/verification_plan'//期间核查计划
 import verification_records from '@/components/verification_records'//期间核查记录   
-
 
 // 
 Vue.use(Router)
@@ -263,9 +259,7 @@ Vue.use(Router)
       name: 'reports',
       component: reports
     }
-   
   ];
-
 
 const router = new Router({
   routes: routes

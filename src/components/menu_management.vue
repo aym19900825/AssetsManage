@@ -158,7 +158,7 @@
 		        // childValue就是子组件传过来的
 		        this.selMenu = childValue
 		       
-		        this.selMenu[0].hidden ? '1' : '0'
+//		        this.selMenu[0].hidden ? '1' : '0'
 		        
 		    },
 			sizeChange(val) {
@@ -178,7 +178,7 @@
 					name:'',
 					url:'',
 					sort:'',
-					hidden:'',
+					hidden:1,
 					css:''
 					}
 				];
@@ -267,29 +267,30 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-
 					let result=res.data
-//					for(let i=0;i<result.length;i++){
-//						if(result[i].parentId == "-1" || result[i].parentId == "null") {
-//							result[i].isMenu = "目录"
-//						} else {
-//							result[i].isMenu = "菜单"
-//						}						
-//						if(result[i].subMenus.length>0){
-//							let subMenus=result[i].subMenus
-//							for(let j=0;j<subMenus.length;j++){
-//								if(subMenus[j].parentId == "-1" || subMenus[j].parentId == "null") {
-//									subMenus[j].isMenu = "目录"
-//								} else {
-//									subMenus[j].isMenu = "菜单"
-//								}						
-////								if(subMenus[j].subMenus.length>0){
-////									subMenus[j].children=subMenus[j].subMenus
-////								}
-//							}
-//							result[i].children=subMenus
-//						}
-//					}
+					console.log(result);
+					for(let i=0;i<result.length;i++){
+						if(result[i].parentId == "-1" || result[i].parentId == "null") {
+							result[i].isMenu = "目录"
+						} else {
+							result[i].isMenu = "菜单"
+						}	
+						result[i].hidden=result[i].hidden?true:false
+						if(result[i].children.length>0){
+							let children=result[i].children
+							for(let j=0;j<children.length;j++){
+								if(children[j].parentId == "-1" || children[j].parentId == "null") {
+									children[j].isMenu = "目录"
+								} else {
+									children[j].isMenu = "菜单"
+								}
+								children[j].hidden=children[j].hidden?true:false
+							}
+							
+							result[i].children=children
+						}
+					}
+					console.log(result);
 					this.menuList = result;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})

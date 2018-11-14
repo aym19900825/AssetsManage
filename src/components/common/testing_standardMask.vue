@@ -13,164 +13,166 @@
 					</span>
 				</div>
 			</div>
-			<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
-				<div class="accordion" id="information">
-					<el-collapse v-model="activeNames" @change="handleChange">
-						<el-collapse-item title="基本信息" name="1">
-							<el-row :gutter="20">
-								<el-col :span="5" class="pull-right">
-									<el-input v-model="dataInfo.typename" :disabled="true">
-										<template slot="prepend">主键编号</template>
-									</el-input>
-								</el-col>
-								<el-col :span="5" class="pull-right pt5">
-									<el-select v-model="dataInfo.value" placeholder="请选择状态">
-										<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-										</el-option>
-									</el-select>
-								</el-col>
-								<el-col :span="5" class="pull-right">
-									<el-input v-model="dataInfo.typename" :disabled="true">
-										<template slot="prepend">版本</template>
-									</el-input>
-								</el-col>
-							</el-row>
-							<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
-								<el-row :gutter="70">
-									<el-col :span="8">
-										<el-form-item label="标准编码" prop="name">
-											<el-input v-model="dataInfo.name"></el-input>
-										</el-form-item>
+			<div class="mask_content">
+				<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
+					<div class="accordion" id="information">
+						<el-collapse v-model="activeNames" @change="handleChange">
+							<el-collapse-item title="基本信息" name="1">
+								<el-row :gutter="20">
+									<el-col :span="5" class="pull-right">
+										<el-input v-model="dataInfo.typename" :disabled="true">
+											<template slot="prepend">主键编号</template>
+										</el-input>
 									</el-col>
-									<el-col :span="8">
-										<el-form-item label="标准名称" prop="description">
-											<el-input v-model="dataInfo.description"></el-input>
-										</el-form-item>
+									<el-col :span="5" class="pull-right pt5">
+										<el-select v-model="dataInfo.value" placeholder="请选择状态">
+											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+											</el-option>
+										</el-select>
 									</el-col>
-									<el-col :span="8">
-										<el-form-item label="发布时间" prop="description">
+									<el-col :span="5" class="pull-right">
+										<el-input v-model="dataInfo.typename" :disabled="true">
+											<template slot="prepend">版本</template>
+										</el-input>
+									</el-col>
+								</el-row>
+								<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
+									<el-row :gutter="70">
+										<el-col :span="8">
+											<el-form-item label="标准编码" prop="name">
+												<el-input v-model="dataInfo.name"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="标准名称" prop="description">
+												<el-input v-model="dataInfo.description"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="发布时间" prop="description">
+												<el-date-picker v-model="dataInfo.description" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+											</el-date-picker>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row :gutter="70">
+										<el-col :span="8">
+										<el-form-item label="启用时间" prop="description">
 											<el-date-picker v-model="dataInfo.description" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
-										</el-date-picker>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row :gutter="70">
-									<el-col :span="8">
-									<el-form-item label="启用时间" prop="description">
-										<el-date-picker v-model="dataInfo.description" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
-										</el-date-picker>
-									</el-form-item>
-								</el-col>
-								<el-col :span="8">
-										<el-form-item label="发布单位" prop="name">
-											<el-input v-model="dataInfo.name" :disabled="true"></el-input>
-										</el-form-item> 
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="机构" prop="description">
-											<el-input v-model="dataInfo.description" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row :gutter="70">
-									<el-col :span="8">
-									<el-form-item label="录入人" prop="description">
-										<el-input v-model="dataInfo.description" :disabled="true"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="8">
-										<el-form-item label="录入时间" prop="name">
-											<el-input v-model="dataInfo.name" :disabled="true" ></el-input>
+											</el-date-picker>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="修改人" prop="description">
-											<el-input v-model="dataInfo.description" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row :gutter="70">
-									<el-col :span="8">
-										<el-form-item label="修改时间" prop="description">
-											<el-input v-model="dataInfo.description" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-							</div>
-						</el-collapse-item>
-						<el-collapse-item title="文档" name="2">
-							<!-- 字段列表 Begin-->
-							<div class="table-func">
-								<el-button type="primary" size="mini" round @click="importdia">
-									<i class="icon-upload-cloud"></i>
-									<font>导入</font>
-								</el-button>
-								<el-button type="success" size="mini" round @click="addfield">
-									<i class="icon-add"></i>
-									<font>新建</font>
-								</el-button>
-							</div>
-							<!-- :rules="rules" ref="attributes" -->
-							<el-form :model="dataInfo.attributes">
-								<el-form-item>
-									<el-row :gutter="20">
-										<el-col :span="3">
-											<el-form-item label="序号"></el-form-item>
+											<el-form-item label="发布单位" prop="name">
+												<el-input v-model="dataInfo.name" :disabled="true"></el-input>
+											</el-form-item> 
 										</el-col>
-										<el-col :span="3">
-											<el-form-item label="文档编号"></el-form-item>
-										</el-col>
-										<el-col :span="6">
-											<el-form-item label="文档描述"></el-form-item>
-										</el-col>
-										<el-col :span="3">
-											<el-form-item label="创建人"></el-form-item>
-										</el-col>
-										<el-col :span="3">
-											<el-form-item label="创建日期"></el-form-item>
-										</el-col>
-										<el-col :span="3">
-											<el-form-item label="附件"></el-form-item>
-										</el-col>
-										<el-col :span="3">
-				                            <el-form-item label="操作"></el-form-item>
-				                        </el-col>
-									</el-row>
-									<el-row :gutter="20" v-for="(item,key) in dataInfo.attributes" :key="key">
-										<el-col :span="3">
-											<el-input type="text" placeholder="请输入序号" v-model="item.columnname"></el-input>
-										</el-col>
-										<el-col :span="3">
-											<el-input type="text" placeholder="请输入文档编号" v-model="item.description"></el-input>
-										</el-col>
-										<el-col :span="6">
-											<el-input type="text" placeholder="文档描述" v-model="item.description"></el-input>
-										</el-col>
-										
-										<el-col :span="3">
-											<el-input type="text" placeholder="创建人" v-model="item.length"></el-input>
-										</el-col>
-										<el-col :span="3">
-											<el-input type="text" placeholder="创建日期" v-model="item.retain"></el-input>
-										</el-col>
-										<el-col :span="3">
-											<el-input type="text" placeholder="附件" v-model="item.files"></el-input>
-										</el-col>
-										<el-col :span="2">
-											<i class="el-icon-delete" @click="delfield(item)" style="color: red"></i>
+										<el-col :span="8">
+											<el-form-item label="机构" prop="description">
+												<el-input v-model="dataInfo.description" :disabled="true"></el-input>
+											</el-form-item>
 										</el-col>
 									</el-row>
-								</el-form-item>
-							</el-form>
-							<!-- 字段列表 End -->
-						</el-collapse-item>
-					</el-collapse>
-				</div>
-				<div class="el-dialog__footer">
-					<el-button @click='close'>取消</el-button>
-					<el-button type="primary" @click="submitForm('dataInfo')">提交</el-button>
-				</div>
-			</el-form>
+									<el-row :gutter="70">
+										<el-col :span="8">
+										<el-form-item label="录入人" prop="description">
+											<el-input v-model="dataInfo.description" :disabled="true"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+											<el-form-item label="录入时间" prop="name">
+												<el-input v-model="dataInfo.name" :disabled="true" ></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="修改人" prop="description">
+												<el-input v-model="dataInfo.description" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row :gutter="70">
+										<el-col :span="8">
+											<el-form-item label="修改时间" prop="description">
+												<el-input v-model="dataInfo.description" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+								</div>
+							</el-collapse-item>
+							<el-collapse-item title="文档" name="2">
+								<!-- 字段列表 Begin-->
+								<div class="table-func">
+									<el-button type="primary" size="mini" round @click="importdia">
+										<i class="icon-upload-cloud"></i>
+										<font>导入</font>
+									</el-button>
+									<el-button type="success" size="mini" round @click="addfield">
+										<i class="icon-add"></i>
+										<font>新建</font>
+									</el-button>
+								</div>
+								<!-- :rules="rules" ref="attributes" -->
+								<el-form :model="dataInfo.attributes">
+									<el-form-item>
+										<el-row :gutter="20">
+											<el-col :span="3">
+												<el-form-item label="序号"></el-form-item>
+											</el-col>
+											<el-col :span="3">
+												<el-form-item label="文档编号"></el-form-item>
+											</el-col>
+											<el-col :span="6">
+												<el-form-item label="文档描述"></el-form-item>
+											</el-col>
+											<el-col :span="3">
+												<el-form-item label="创建人"></el-form-item>
+											</el-col>
+											<el-col :span="3">
+												<el-form-item label="创建日期"></el-form-item>
+											</el-col>
+											<el-col :span="3">
+												<el-form-item label="附件"></el-form-item>
+											</el-col>
+											<el-col :span="3">
+					                            <el-form-item label="操作"></el-form-item>
+					                        </el-col>
+										</el-row>
+										<el-row :gutter="20" v-for="(item,key) in dataInfo.attributes" :key="key">
+											<el-col :span="3">
+												<el-input type="text" placeholder="请输入序号" v-model="item.columnname"></el-input>
+											</el-col>
+											<el-col :span="3">
+												<el-input type="text" placeholder="请输入文档编号" v-model="item.description"></el-input>
+											</el-col>
+											<el-col :span="6">
+												<el-input type="text" placeholder="文档描述" v-model="item.description"></el-input>
+											</el-col>
+											
+											<el-col :span="3">
+												<el-input type="text" placeholder="创建人" v-model="item.length"></el-input>
+											</el-col>
+											<el-col :span="3">
+												<el-input type="text" placeholder="创建日期" v-model="item.retain"></el-input>
+											</el-col>
+											<el-col :span="3">
+												<el-input type="text" placeholder="附件" v-model="item.files"></el-input>
+											</el-col>
+											<el-col :span="2">
+												<i class="el-icon-delete" @click="delfield(item)" style="color: red"></i>
+											</el-col>
+										</el-row>
+									</el-form-item>
+								</el-form>
+								<!-- 字段列表 End -->
+							</el-collapse-item>
+						</el-collapse>
+					</div>
+					<div class="el-dialog__footer">
+						<el-button @click='close'>取消</el-button>
+						<el-button type="primary" @click="submitForm('dataInfo')">提交</el-button>
+					</div>
+				</el-form>
+			</div>
 		</div>
 		
 	</div>

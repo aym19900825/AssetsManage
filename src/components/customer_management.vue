@@ -49,45 +49,36 @@
 				<div v-show="search" class="pb10">
 					<el-form status-icon :model="searchList" label-width="70px">
 						<el-row :gutter="10">
-							<el-col :span="6">
-								<el-form-item label="标准编号" class="searchlist" label-width="85px">
-									<el-input v-model="searchList.typename"></el-input>
-								</el-form-item>
+							<el-col :span="5">
+								<el-input v-model="searchList.NAME">
+									<template slot="prepend">单位名称</template>
+								</el-input>
 							</el-col>
-							<el-col :span="6">
-								<el-form-item label="状态" class="searchlist" label-width="85px">
-									<el-input v-model="searchList.typename"></el-input>
-								</el-form-item>
+							<el-col :span="5">
+								<el-input v-model="searchList.CODE">
+									<template slot="prepend">组织机构代码</template>
+								</el-input>
 							</el-col>
-							<el-col :span="6">
-								<el-form-item label="机构" class="searchlist" label-width="85px">
-									<el-input v-model="searchList.typename"></el-input>
-								</el-form-item>
+							<el-col :span="5">
+								<el-input v-model="searchList.PHONE">
+									<template slot="prepend">联系电话</template>
+								</el-input>
 							</el-col>
-							<el-col :span="6">
-								<el-form-item label="发布时间" class="searchlist" label-width="85px">
-									<el-input v-model="searchList.typename"></el-input>
-								</el-form-item>
+							<el-col :span="5">
+								<el-input v-model="searchList.CONTACT_ADDRESS">
+									<template slot="prepend">联系地址</template>
+								</el-input>
 							</el-col>
-						</el-row>
-						<el-row :gutter="10">
-							<el-col :span="6">
-								<el-form-item label="标准名称" class="searchlist" label-width="85px">
-									<el-input v-model="searchList.typename"></el-input>
-								</el-form-item>
+							<el-col :span="2" style="padding-top: 3px">
+								<el-select v-model="searchList.STATUS" placeholder="状态">
+								      <el-option label="活动" value="1">	
+								      </el-option>
+								      <el-option label="不活动" value="0">
+								      </el-option>
+								    </el-select>
 							</el-col>
-							<el-col :span="6">
-								<el-form-item label="版本" class="searchlist" label-width="85px">
-									<el-input v-model="searchList.typename"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="6">
-								<el-form-item label="启用时间" class="searchlist" label-width="85px">
-									<el-input v-model="searchList.typename"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="2"  class="pull-right">
-								<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+							<el-col :span="2">
+								<el-button class="pull-right" type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
@@ -169,23 +160,23 @@
 				tableHeader: [
 					{
 						label: '组织机构代码',
-						prop: 'username'
+						prop: 'CODE'
 					},
 					{
 						label: '单位名称',
-						prop: 'nickname'
+						prop: 'NAME'
 					},
 					{
 						label: '联系地址',
-						prop: 'deptName'
+						prop: 'CONTACT_ADDRESS'
 					},
 					{
 						label: '联系电话',
-						prop: 'telephone'
+						prop: 'PHONE'
 					},
 					{
 						label: '状态',
-						prop: 'enabled'
+						prop: 'STATUS'
 					}
 				],
 				leftNavs: [//leftNavs左侧菜单数据
@@ -245,9 +236,11 @@
 				ismin:true,
 				clientHeight:'',//获取浏览器高度
 				searchList: {
-					nickname: '',
-					enabled: '',
-					createTime: ''
+					NAME: '',
+					CODE: '',
+					PHONE: '',
+					CONTACT_ADDRESS:'',
+					STATUS:''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -298,21 +291,25 @@
 			},
 			//添加用戶
 			openAddMgr() {
-//				this.$refs.child.resetNew();
+				this.addtitle = true;
+				this.modifytitle = false;
+				this.$refs.child.resetNew();
 				this.$refs.child.visible();
 			},
 			//修改用戶
 			modify() {
+				this.addtitle = false;
+				this.modifytitle = true;
 				this.aaaData = this.selUser;
 				if(this.aaaData.length == 0) {
 					this.$message({
-						message: '请您选择要修改的用户',
+						message: '请您选择要修改的客户',
 						type: 'warning'
 					});
 					return;
 				} else if(this.aaaData.length > 1) {
 					this.$message({
-						message: '不可同时修改多个用户',
+						message: '不可同时修改多个客户',
 						type: 'warning'
 					});
 					return;
@@ -331,13 +328,13 @@
 				var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({
-						message: '请您选择要删除的用户',
+						message: '请您选择要删除的客户',
 						type: 'warning'
 					});
 					return;
 				} else if(selData.length > 1) {
 					this.$message({
-						message: '不可同时删除多个用户',
+						message: '不可同时删除多个客户',
 						type: 'warning'
 					});
 					return;

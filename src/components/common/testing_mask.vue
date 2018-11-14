@@ -3,8 +3,8 @@
 		<div class="mask" v-if="show"></div>
 		<div class="mask_div" v-if="show">
 			<div class="mask_title_div clearfix">
-				<div class="mask_title" v-show="addtitle">添加自动编号设置</div>
-				<div class="mask_title" v-show="modifytitle">修改自动编号设置</div>
+				<div class="mask_title" v-show="addtitle">添加检验/检测方法</div>
+				<div class="mask_title" v-show="modifytitle">修改检验/检测方法</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -16,7 +16,7 @@
 			</div>
 			<el-form :model="addnumbersettingForm" :label-position="labelPosition" :rules="rules" ref="addnumbersettingForm" label-width="100px" class="demo-adduserForm">
 				<EasyScrollbar>
-					<div ref="homePagess" class="accordion" id="information" style="height: 360px;">
+					<div ref="homePagess" class="accordion" id="information" style="height: 460px;">
 						<div style="height: auto;">
 							<div class="accordion">
 								<div class="mask_tab-block">

@@ -32,45 +32,17 @@ export default {
 			clientHeight2:'',//获取浏览器高度
 			leftNavs: [//leftNavs左侧菜单数据
 				{
-					navicon: 'icon-user',
-					navtitle: '用户管理',
-					navherf: '/user_management'
-				}, {
-					navicon: 'icon-department',
-					navtitle: '机构管理',
-					navherf: '/dept_management'
-				}, {
-					navicon: 'icon-role-site',
-					navtitle: '角色管理',
-					navherf: '/role_management'
-				}, {
-					navicon: 'icon-distribution',
-					navtitle: '客户管理',
-					navherf: '/customer_management'
+					navicon: 'icon-file-text',
+					navtitle: '检验委托书',
+					navherf: '/inspect_proxy'
 				}, {
 					navicon: 'icon-file-text',
-					navtitle: '产品类别',
-					navherf: '/products_category'
+					navtitle: '检测委托书',
+					navherf: '/dept_proxy'
 				}, {
-					navicon: 'icon-file-text',
-					navtitle: '产品名称',
-					navherf: '/products'
-				}, {
-					navicon: 'icon-file-text',
-					navtitle: '检验/检测标准',
-					navherf: '/testing_standard'
-				}, {
-					navicon: 'icon-file-text',
-					navtitle: '检验/检测项目',
-					navherf: '/testing_projects'
-				}, {
-					navicon: 'icon-file-text',
-					navtitle: '检验/检测方法',
-					navherf: '/testing_methods'
-				}, {
-					navicon: 'icon-file-text',
-					navtitle: '自动编号设置',
-					navherf: '/number_settings'
+					navicon: 'icon-wordbook',
+					navtitle: '分包协议',
+					navherf: '/subc_agreement'
 				}
 			],
         selectedNav: {}

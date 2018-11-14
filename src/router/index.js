@@ -20,6 +20,10 @@ import role_management from '@/components/role_management'//角色管理
 import safe_management from '@/components/safe_management'//安全管理
 import dictionaries_management from '@/components/dictionaries_management'//字典管理
 
+import personinfo from '@/components/personinfo'//个人资料
+import passwordedit from '@/components/passwordedit'//修改密码
+import ztree from '@/components/common/ztree' //树菜单
+
 import annual_plan from '@/components/annual_plan'//年度计划
 import notifications from '@/components/notifications'//工作任务通知书
 import proxies from '@/components/proxies'//委托书管理
@@ -29,12 +33,20 @@ import devices from '@/components/devices'//设备管理
 import inspection_project from '@/components/inspection_project'//检验/检测项目管理
 import files_search from '@/components/files_search'//文件查询
 import interfaces from '@/components/interfaces'//接口
-import reports from '@/components/reports'//报表管理                               
+import reports from '@/components/reports'//报表管理
 
-import personinfo from '@/components/personinfo'//个人资料
-import passwordedit from '@/components/passwordedit'//修改密码
-import ztree from '@/components/common/ztree' //树菜单
 
+import inspect_proxy from '@/components/inspect_proxy'//检验委托书
+import dept_proxy from '@/components/dept_proxy'//检测委托书
+import subc_agreement from '@/components/subc_agreement'//分包协议
+
+
+import instruments from '@/components/instruments'//仪器和计量器具
+import usag_tending_records from '@/components/usag_tending_records'//使用/维护保养记录
+import traceability_plan from '@/components/traceability_plan'//溯源计划
+import traceability_records from '@/components/traceability_records'//溯源记录
+import verification_plan from '@/components/verification_plan'//期间核查计划
+import verification_records from '@/components/verification_records'//期间核查记录   
 
 
 // 
@@ -125,6 +137,51 @@ Vue.use(Router)
       path: '/dictionaries_management',
       name: 'dictionaries_management',
       component: dictionaries_management
+    },
+    {//检验委托书
+      path: '/inspect_proxy',
+      name: 'inspect_proxy',
+      component: inspect_proxy
+    },
+    {//检测委托书
+      path: '/dept_proxy',
+      name: 'dept_proxy',
+      component: dept_proxy
+    },
+    {//分包协议
+      path: '/subc_agreement',
+      name: 'subc_agreement',
+      component: subc_agreement
+    },
+    {//仪器和计量器具
+      path: '/instruments',
+      name: 'instruments',
+      component: instruments
+    },
+    {//使用/维护保养记录
+      path: '/usag_tending_records',
+      name: 'usag_tending_records',
+      component: usag_tending_records
+    },
+    {//溯源计划
+      path: '/traceability_plan',
+      name: 'traceability_plan',
+      component: traceability_plan
+    },
+    {//溯源记录
+      path: '/traceability_records',
+      name: 'traceability_records',
+      component: traceability_records
+    },
+    {//期间核查计划
+      path: '/verification_plan',
+      name: 'verification_plan',
+      component: verification_plan
+    },
+    {//期间核查记录
+      path: '/verification_records',
+      name: 'verification_records',
+      component: verification_records
     },
     {//个人资料
       path: '/personinfo',

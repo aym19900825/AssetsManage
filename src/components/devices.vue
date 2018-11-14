@@ -47,7 +47,7 @@
 								</div>
 								<div class="columns columns-right btn-group pull-right">
 									<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
-									<v-table-controle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></v-table-controle>
+									<tableControle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></tableControle>
 								</div>
 							</div>
 							<!--按钮操作行 End-->
@@ -97,7 +97,7 @@
 										<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
 										</el-table-column>
 									</el-table>
-									<el-pagination class="pull-right pt10 pb10" v-if="this.checkedName.length>0"
+									<el-pagination background class="pull-right pt10 pb10" v-if="this.checkedName.length>0"
 							            @size-change="sizeChange"
 							            @current-change="currentChange"
 							            :current-page="page.currentPage"
@@ -120,7 +120,7 @@
 </template>
 <script>
 	import vheader from './common/vheader.vue'
-	import navs_left from './common/left_navs/nav_left2.vue'
+	import navs_left from './common/left_navs/nav_left4.vue'
 	import navs_header from './common/nav_tabs.vue'
 	import table from './plugin/table/table-normal.vue'
 	import tableControle from './plugin/table-controle/controle.vue'

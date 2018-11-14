@@ -451,7 +451,19 @@ h6 {
 }
 
 
-
+/*分页样式调整*/
+.el-pagination.is-background .btn-next, .el-pagination.is-background .btn-prev,
+.el-pagination.is-background .el-pager li
+{
+	color: #97A3B4;
+	background-color: #FFFFFF;
+    border: solid 1px #d1d8de;
+    border-radius:3px;
+}
+.el-pagination__sizes .el-input .el-input__inner:hover,
+.el-pagination.is-background .el-pager li:not(.disabled):hover
+ { border-color: #6585DF; color: #6585DF;}
+.el-pagination.is-background .el-pager li:not(.disabled).active {background-color: #6585DF; color: #FFFFFF;}
 
 /*表单页标题调整 heliping*/
 .el-form--label-top .el-form-item__label {padding-top: 20px; padding-bottom: 5px; line-height:20px;}

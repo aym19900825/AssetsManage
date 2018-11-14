@@ -35,7 +35,7 @@
 						</div>
 						<div class="columns columns-right btn-group pull-right">
 							<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
-							<v-table-controle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></v-table-controle>
+							<tableControle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></tableControle>
 						</div>
 					</div>
 					<!-- 高级查询划出begin -->
@@ -104,7 +104,7 @@
 			'navs_left': navs_left,
 			'datamask': datamask,
 			'relamask': relamask,
-			'v-table-controle':tableControle
+			'tableControle':tableControle
 		},
 		data() {
 			return {

@@ -97,7 +97,7 @@
 										<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
 										</el-table-column>
 									</el-table>
-									<el-pagination class="pull-right pt10 pb10" v-if="this.checkedName.length>0"
+									<el-pagination background class="pull-right pt10 pb10" v-if="this.checkedName.length>0"
 							            @size-change="sizeChange"
 							            @current-change="currentChange"
 							            :current-page="page.currentPage"

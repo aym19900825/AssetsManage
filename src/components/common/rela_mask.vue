@@ -13,75 +13,77 @@
 					</span>
 				</div>
 			</div>
-			<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
-				<div class="accordion" id="information">
-						<el-collapse v-model="activeNames" @change="handleChange">
-							<el-collapse-item title="配置关系" name="2">
-								<!-- 字段列表 Begin-->
-								<div class="table-func">
-									<el-button type="success" size="mini" round @click="addfield">
-										<i class="icon-add"></i>
-										<font>新建</font>
-									</el-button>
-								</div>
-								<el-form :data="fieldList">
-				                <el-form-item>
-				                	<el-row :gutter="20">
-				                		<el-col :span="4">
-				                            <el-form-item label="关系名称"></el-form-item>
-				                        </el-col>
-				                        <el-col :span="5">
-				                            <el-form-item label="父表对象"></el-form-item>
-				                        </el-col>
-				                        <el-col :span="5">
-				                            <el-form-item label="字表对象"></el-form-item>
-				                        </el-col>
-				                        <el-col :span="4">
-				                            <el-form-item label="where子句"></el-form-item>
-				                        </el-col>
-				                        <el-col :span="4">
-				                            <el-form-item label="备注"></el-form-item>
-				                        </el-col>
-				                        <el-col :span="2">
-				                            <el-form-item label="操作"></el-form-item>
-				                        </el-col>
-				                	</el-row>
-				                    <el-row :gutter="20" v-for="(item,key) in fieldList" :key="key"><!-- ：key避免重复 -->
-				                        <el-col :span="4">
-				                            <el-input type="text"  placeholder="请输入人物" v-model="item.leadname"></el-input>
-				                        </el-col>
-				                        <el-col :span="5">
-				                            <el-input v-model="item.leaddecri" :disabled="edit">
-											<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
-										</el-input>
-				                        </el-col>
-				                        <el-col :span="5">
-				                            <el-input v-model="item.leaddecri" :disabled="edit">
-											<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
+			<div class="mask_content">
+				<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
+					<div class="accordion" id="information">
+							<el-collapse v-model="activeNames" @change="handleChange">
+								<el-collapse-item title="配置关系" name="2">
+									<!-- 字段列表 Begin-->
+									<div class="table-func">
+										<el-button type="success" size="mini" round @click="addfield">
+											<i class="icon-add"></i>
+											<font>新建</font>
+										</el-button>
+									</div>
+									<el-form :data="fieldList">
+					                <el-form-item>
+					                	<el-row :gutter="20">
+					                		<el-col :span="4">
+					                            <el-form-item label="关系名称"></el-form-item>
+					                        </el-col>
+					                        <el-col :span="5">
+					                            <el-form-item label="父表对象"></el-form-item>
+					                        </el-col>
+					                        <el-col :span="5">
+					                            <el-form-item label="字表对象"></el-form-item>
+					                        </el-col>
+					                        <el-col :span="4">
+					                            <el-form-item label="where子句"></el-form-item>
+					                        </el-col>
+					                        <el-col :span="4">
+					                            <el-form-item label="备注"></el-form-item>
+					                        </el-col>
+					                        <el-col :span="2">
+					                            <el-form-item label="操作"></el-form-item>
+					                        </el-col>
+					                	</el-row>
+					                    <el-row :gutter="20" v-for="(item,key) in fieldList" :key="key"><!-- ：key避免重复 -->
+					                        <el-col :span="4">
+					                            <el-input type="text"  placeholder="请输入人物" v-model="item.leadname"></el-input>
+					                        </el-col>
+					                        <el-col :span="5">
+					                            <el-input v-model="item.leaddecri" :disabled="edit">
+												<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
 											</el-input>
-				                        </el-col>
-				                        <el-col :span="4">
-				                            <el-input type="text"  placeholder="请输入关系" v-model="item.leadprecision"></el-input>
-				                        </el-col>
-				                        <el-col :span="4">
-				                            <el-input type="text"  placeholder="请输入关系" v-model="item.leadlength"></el-input>
-				                        </el-col>
-				                        <el-col :span="2">
-				                            <i class="el-icon-delete" @click="delfield(item)" style="color: red"></i>
-				                        </el-col>
-				                    </el-row>
-				                </el-form-item>
-				            </el-form>
-							<!-- 字段列表 End -->
-							</el-collapse-item>
-						</el-collapse>
-					<!-- </div> -->
-				</div>	
-				<div class="el-dialog__footer">
-					<el-button @click='close'>取消</el-button>
-					<el-button type="primary" @click='submitForm()'>提交</el-button>
-				</div>
-			</el-form>
+					                        </el-col>
+					                        <el-col :span="5">
+					                            <el-input v-model="item.leaddecri" :disabled="edit">
+												<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
+												</el-input>
+					                        </el-col>
+					                        <el-col :span="4">
+					                            <el-input type="text"  placeholder="请输入关系" v-model="item.leadprecision"></el-input>
+					                        </el-col>
+					                        <el-col :span="4">
+					                            <el-input type="text"  placeholder="请输入关系" v-model="item.leadlength"></el-input>
+					                        </el-col>
+					                        <el-col :span="2">
+					                            <i class="el-icon-delete" @click="delfield(item)" style="color: red"></i>
+					                        </el-col>
+					                    </el-row>
+					                </el-form-item>
+					            </el-form>
+								<!-- 字段列表 End -->
+								</el-collapse-item>
+							</el-collapse>
+						<!-- </div> -->
+					</div>	
+					<div class="el-dialog__footer">
+						<el-button @click='close'>取消</el-button>
+						<el-button type="primary" @click='submitForm()'>提交</el-button>
+					</div>
+				</el-form>
+			</div>
 		</div>
 		<!-- 弹出 -->
 		<el-dialog title="添加数据库表" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">

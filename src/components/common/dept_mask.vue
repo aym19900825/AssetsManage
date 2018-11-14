@@ -261,6 +261,8 @@
 			},
 			//点击按钮显示弹窗
 			childMethods() {
+				this.addtitle = true;
+				this.modifytitle = false;
 				this.showcode = false;
 				this.show = !this.show;
 			},

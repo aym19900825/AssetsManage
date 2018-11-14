@@ -16,7 +16,7 @@
     background:#F3F6FA;	
     border-radius: 0px;
     height: 80%;
-    overflow-y: scroll;
+    overflow-y: hidden;
     overflow-x: hidden;
     top: 0px;
     bottom: 0px;

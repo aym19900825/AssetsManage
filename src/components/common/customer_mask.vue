@@ -56,6 +56,7 @@
 															<!-- <el-option v-for="data in selectData" :key="data.id" :value="data.id" :label="data.name"></el-option> -->
 														<!-- </el-select> -->
 														<el-input v-model="CUSTOMER.STATUS"></el-input>
+														
 													</el-form-item>
 												</el-col>
 											</el-row>
@@ -187,15 +188,6 @@
 				</EasyScrollbar>
 			</el-form>
 		</div>
-		<!-- 弹出 -->
-		<!-- <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps">
-			</el-tree>
-			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible = false">取 消</el-button>
-		       <el-button type="primary" @click="queding();" >确 定</el-button>
-		    </span>
-		</el-dialog> -->
 	</div>
 </template>
 
@@ -260,8 +252,8 @@
 				isok2: false,
 				down: true,
 				up: false,
-				addtitle:true,
-				modifytitle:false,
+				addtitle:true,//添加弹出框titile
+				modifytitle:false,//修改弹出框titile
 				activeNames: ['1','2'],//手风琴数量
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
@@ -350,8 +342,8 @@
 						MEMO:'',
 						FIJIAN:''
 					}]
-				},
-                this.$refs["CUSTOMER"].resetFields();
+				}
+                // this.$refs["CUSTOMER"].resetFields();
             },
 			handleChange(val) {//手风琴开关效果调用
 			},
@@ -410,12 +402,14 @@
 						this.up = !this.up
 				}
 			},
-			//点击按钮显示弹窗
+			//点击添加，修改按钮显示弹窗
 			visible() {
+
 				this.show = true;
 			},
 			// 这里是修改
 			detail(dataid) {
+
 				var url = '/api/apps-center/objectcfg/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
 					this.dataInfo = res.data;

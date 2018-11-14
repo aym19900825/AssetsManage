@@ -20,7 +20,7 @@
 								<div class="fixed-table-toolbar clearfix">
 									<div class="bs-bars pull-left">
 										<div class="hidden-xs" id="roleTableToolbar" role="group">
-											<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+											<button type="button" v-model="name" class="btn btn-green" @click="openAddMgr" id="">
 			                                	<i class="icon-add"></i>添加
 			                      			 </button>
 											<button type="button" class="btn btn-bule button-margin" @click="modify">
@@ -90,11 +90,12 @@
 							</el-row>
 						</div>
 					</div>
-					<!--右侧内容显示 End-->
+					
 				</div>
 			</EasyScrollbar>
 		</div>
-		<deptmask :adddeptForm="selMenu[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></deptmask>
+		<!--右侧内容显示 End-->
+		<numbsetmask :adddeptForm="selMenu[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></numbsetmask>
 	</div>
 </div>
 </template>
@@ -104,7 +105,7 @@
 	import navs_header from './common/nav_tabs.vue'
 	import table from './plugin/table/table-normal.vue'
 	import tableControle from './plugin/table-controle/controle.vue'
-	import deptmask from './common/numbersetting_mask.vue'
+	import numbsetmask from './common/numbersetting_mask.vue'
 	export default {
 		name: 'number_settings',
 		components: {
@@ -113,7 +114,7 @@
 			navs_header,
 			tableControle,
 			table,
-			deptmask,
+			numbsetmask,
 		},
 		data() {
 			return {
@@ -221,7 +222,7 @@
 			//添加自动编号设置
 			openAddMgr() {
 				this.$refs.child.resetNew();
-				this.$refs.child.childMethods(); 
+				this.$refs.child.childMethods();
 			},
 			//修改自动编号设置
 			modify() {

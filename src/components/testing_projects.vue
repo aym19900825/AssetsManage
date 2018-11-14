@@ -53,13 +53,13 @@
 							<!--按钮操作行 End-->
 
 							<!-- 高级查询划出 Begin-->
-							<div v-show="search">
+							<div v-show="search" class="pb10">
 								<el-form status-icon :model="searchList" label-width="70px">
 									<el-row :gutter="10">
 										<el-col :span="5">
-											<el-form-item label="类型名称" class="searchlist" label-width="85px">
-												<el-input v-model="searchList.typename"></el-input>
-											</el-form-item>
+											<el-input v-model="searchList.typename">
+												<template slot="prepend">类型名称</template>
+											</el-input>
 										</el-col>
 										<el-col :span="2">
 											<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
@@ -120,6 +120,7 @@
 			</EasyScrollbar>
 		</div>
 		<!--右侧内容显示 End-->
+		<projectmask ref="child" v-bind:page=page></projectmask>
 	</div>
 </div>
 </template>
@@ -129,6 +130,7 @@
 	import navs_header from './common/nav_tabs.vue'
 	import table from './plugin/table/table-normal.vue'
 	import tableControle from './plugin/table-controle/controle.vue'
+	import projectmask from './common/testing_projectMask.vue'
 	export default {
 		name: 'customer_management',
 		components: {
@@ -137,6 +139,7 @@
 			navs_header,
 			tableControle,
 			table,
+			projectmask
 		},
 		data() {
 			return {
@@ -220,49 +223,7 @@
 						prop: 'CHANGEDATE'
 					}
 				],
-				leftNavs: [//leftNavs左侧菜单数据
-					{
-						navicon: 'icon-user',
-						navtitle: '用户管理',
-						navherf: '/personinfo'
-					}, {
-						navicon: 'icon-edit',
-						navtitle: '人员资质管理',
-						navherf: '/dept_management'
-					}, {
-						navicon: 'icon-role-site',
-						navtitle: '角色管理',
-						navherf: '/role_management'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '客户管理',
-						navherf: '/customer_management'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '产品类别',
-						navherf: '/products_category'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '产品',
-						navherf: '/products'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测标准',
-						navherf: '/testing_standard'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测项目',
-						navherf: '/testing_projects'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测方法',
-						navherf: '/testing_methods'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '自动编号设置',
-						navherf: '/number_settings'
-					}
-				],
+				
 				companyId: '',
 				deptId: '',
 				selUser: [],

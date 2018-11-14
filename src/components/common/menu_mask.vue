@@ -62,8 +62,7 @@
 								<!--是否影藏-->
 								<el-col :span="8">
 									<el-form-item label="是否显示" prop="hidden">
-										<el-switch on-text="是" off-text="否" on-color="#5B7BFA" off-color="#dadde5" v-model="menu.hidden" on-value="1"
-    off-value="0" @change="changeval" @click.native="toggleStatus">
+										<el-switch  active-color="#5B7BFA" inactive-color="#dadde5" v-model="menu.hidden"  @change="changeval">
 										</el-switch>
 									</el-form-item>
 								</el-col>
@@ -134,14 +133,14 @@
 		props: {
 			menu: {
 				type: Object,
-				default: function(res){
+				default: function(){
 					
 					return {
 						parentId:'' ,
 						name: '',
 						url: '',
 						sort: '',
-						hidden:true ,
+						hidden:1 ,
 						css: '',
 						isMenu: 0,
 						roled:0,
@@ -167,7 +166,6 @@
 			};
 
 			return {
-				hidden: true,
 				edit: true, //禁填
 				col_but1: true,
 				col_but2: true,
@@ -214,7 +212,7 @@
 					name:'',
 					url:'',
 					sort:'',
-					hidden:true,
+					hidden:1,
 					css:''
 				}
                    this.$refs["menu"].resetFields();
@@ -276,9 +274,9 @@
 			submitForm() {
 				this.$refs.menu.validate((valid) => {
 //					if(valid) {
-						var menu = this.menu;
-//	                    menu.hidden = this.Callbackvaule  == 'false'? 0: 1;
-
+						this.menu.hidden=this.menu.hidden?1:0
+						var menu = this.menu;						
+						console.log(menu)
 						var url = '/api/api-user/menus/saveOrUpdate';
 						this.menutest={
 								"id":this.menu.id,
@@ -366,7 +364,7 @@
 			},
 			changeval(Callbackvaule){
 			
-				this.menu.hidden=Callbackvaule?1:0
+//				this.menu.hidden=Callbackvaule?1:0
 			},
 			toggleStatus(state){
 			

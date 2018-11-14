@@ -5,7 +5,10 @@
 			<navs_header></navs_header>
 		</div>
 		<div class="contentbg">
-			<navs></navs>
+		<!--左侧菜单内容显示 Begin-->
+		<navs_left></navs_left>
+		<!--左侧菜单内容显示 End-->
+		
 			<div class="wrapper wrapper-content">
 				<div class="ibox-content">
 					<div class="fixed-table-toolbar clearfix">
@@ -24,7 +27,7 @@
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
-							<div class="btn btn-default btn-refresh" id="refresh" title="刷新"><i class="icon-refresh"></i></div>
+							<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
 
 							<div class="keep-open btn-group" title="列">
 								<el-dropdown :hide-on-click="false" class="pl10 btn btn-default btn-outline">
@@ -47,7 +50,7 @@
 						<el-col :span="24">
 							 <tree_grid :columns="columns" :tree-structure="true" :data-source="menuList" v-on:childByValue="childByValue"></tree_grid>
 							 
-							<el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							<el-pagination class="pull-right" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
 							
 						</el-col>
@@ -61,7 +64,7 @@
 <script>
 	import tree_grid from './common/TreeGrid.vue'//树表格
 	import vheader from './common/vheader.vue'
-	import navs from './common/left_navs/nav_left.vue'
+	import navs_left from './common/left_navs/nav_left.vue'
 	import navs_header from './common/nav_tabs.vue'
 	import assetsTree from './plugin/vue-tree/tree.vue'
 	import menumask from './common/menu_mask.vue'//弹出框
@@ -70,7 +73,7 @@
 		components: {
 			'vheader': vheader,
 			'navs_header': navs_header,
-			'navs': navs,
+			'navs_left': navs_left,
 			'menumask': menumask,
 			'v-assetsTree': assetsTree,
 			'tree_grid':tree_grid,
@@ -140,6 +143,7 @@
 		},
 		methods: {
 			changeCheckedName(value){
+				console.log(value);
 				this.checkedName=value
 				let str=value.toString()
 				for(let i=0;i<this.columns.length;i++){
@@ -184,6 +188,7 @@
 			},
 			//修改
 			modify() {
+				console.log(this.selMenu)
 				var selData = this.selMenu;
 				if(selData.length == 0) {
 					this.$message({
@@ -220,12 +225,14 @@
 				} else {
 					
 					var changeMenu = selData[0];
+					console.log(changeMenu);
 					if(typeof(changeMenu.children)!='undefined' && changeMenu.children.length>0){
 						this.$message({
 							message: '先删除子菜单',
 							type: 'error'
 						});
 					}else {
+							console.log(changeMenu);
 						var id = changeMenu.id;
 						var url = '/api/api-user/menus/' + id;
 						this.$axios.delete(url, {}).then((res) => { //.delete 传数据方法

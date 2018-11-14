@@ -8,7 +8,6 @@
 			<!--左侧菜单调用 Begin-->
 			<navs_left></navs_left>
 			<!--左侧菜单调用 End-->
-			<!--右侧内容显示 Begin-->
 			<div class="wrapper wrapper-content">
 				<div class="ibox-content">
 					<!--<navs_button></navs_button>-->
@@ -57,15 +56,6 @@
 												<el-checkbox :label="item.label" name="type"></el-checkbox>
 											</el-dropdown-item>
 										</el-checkbox-group>
-										<!-- <el-dropdown-item>
-											<el-checkbox label="所在机构" name="type"></el-checkbox>
-										</el-dropdown-item>
-										<el-dropdown-item>
-											<el-checkbox label="所在公司" name="type"></el-checkbox>
-										</el-dropdown-item>
-										<el-dropdown-item>
-											<el-checkbox label="所在机构" name="type"></el-checkbox>
-										</el-dropdown-item> -->
 									</el-dropdown-menu>
 								</el-dropdown>
 							</div>
@@ -142,7 +132,6 @@
 				</div>
 			</div>
 			<usermask :user="aaaData[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></usermask>
-			<!--右侧内容显示 End-->
 		</div>
 	</div>
 </template>

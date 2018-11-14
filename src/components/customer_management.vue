@@ -6,23 +6,7 @@
 	</div>
 	<div class="contentbg">
 		<!--左侧菜单内容显示 Begin-->
-		<div class="navbar-default navbar-static-side">
-			<div id="sidebar-collapse">
-				<div class="navbarbg">
-					<span class="navbar-minimalize minimalize-styl-2" @click="min2max()">
-						<i class="icon-menu1"></i> 
-					</span>
-				</div>
-				<ul class="navs" id="side-menu" v-show="!isShow" >
-					<li v-for="itemnav in leftNavs">
-						<router-link :to="itemnav.navherf">
-							<i :class="itemnav.navicon"></i>
-							<span class="nav-label" v-show="ismin">{{itemnav.navtitle}}</span>
-						</router-link>
-					</li>
-				</ul>
-			</div>
-		</div>
+		<navs_left></navs_left>
 		<!--左侧菜单内容显示 End-->
 
 		<!--右侧内容显示 Begin-->
@@ -57,7 +41,7 @@
 						</div>
 					</div>
 					<div class="columns columns-right btn-group pull-right">
-						<div class="btn btn-default btn-refresh" id="refresh" title="刷新"><i class="icon-refresh"></i></div>
+						<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
 						<tableControle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></tableControle>
 					</div>
 				</div>
@@ -83,18 +67,15 @@
 						<el-table :data="userList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 							</el-table-column>
-							<el-table-column label="组织机构代码" sortable prop="username" v-if="this.checkedName.indexOf('组织机构代码')!=-1">
+							<el-table-column label="组织机构代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('组织机构代码')!=-1">
 							</el-table-column>
-							<el-table-column label="单位名称" sortable prop="nickname" v-if="this.checkedName.indexOf('单位名称')!=-1">
+							<el-table-column label="单位名称" width="200" sortable prop="NAME" v-if="this.checkedName.indexOf('单位名称')!=-1">
 							</el-table-column>
+							<el-table-column label="联系电话" sortable prop="PHONE" v-if="this.checkedName.indexOf('联系电话')!=-1">
 							</el-table-column>
-							<el-table-column label="联系地址" sortable prop="deptName" v-if="this.checkedName.indexOf('联系地址')!=-1">
-							</el-table-column>
-							<el-table-column label="联系电话" sortable prop="companyName" v-if="this.checkedName.indexOf('联系电话')!=-1">
-							</el-table-column>
-							<el-table-column label="状态" sortable prop="enabled" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
-							</el-table-column>
-							<el-table-column label="创建时间" prop="createTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('创建时间')!=-1">
+							<el-table-column label="联系地址" sortable prop="CONTACT_ADDRESS" v-if="this.checkedName.indexOf('联系地址')!=-1">
+							</el-table-column>						
+							<el-table-column label="状态" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
 							</el-table-column>
 						</el-table>
 						<el-pagination class="pull-right pt10 pb10" v-if="this.checkedName.length>0"
@@ -109,24 +90,28 @@
 						<!-- 表格 End-->
 					</el-col>
 				</el-row>
-							
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
+		<customermask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></customermask>
 	</div>
 </div>
 </template>
 <script>
 	import vheader from './common/vheader.vue'
+	import navs_left from './common/left_navs/nav_left2.vue'
 	import navs_header from './common/nav_tabs.vue'
+	import customermask from './common/customer_mask.vue'
 	import table from './plugin/table/table-normal.vue'
 	import tableControle from './plugin/table-controle/controle.vue'
 	export default {
 		name: 'user_management',
 		components: {
 			vheader,
+			navs_left,
 			navs_header,
 			tableControle,
+			customermask,
 			table
 		},
 		data() {
@@ -146,9 +131,9 @@
 					'组织机构代码',
 					'单位名称',
 					'性别',
+					'联系电话',
 					'联系地址',
-					'状态',
-					'创建时间'
+					'状态'
 				],
 				tableHeader: [
 					{
@@ -160,16 +145,16 @@
 						prop: 'nickname'
 					},
 					{
+						label: '联系电话',
+						prop: 'telephone'
+					},
+					{
 						label: '联系地址',
 						prop: 'deptName'
 					},
 					{
 						label: '状态',
 						prop: 'enabled'
-					},
-					{
-						label: '创建时间',
-						prop: 'createTime'
 					}
 				],
 				leftNavs: [//leftNavs左侧菜单数据
@@ -435,6 +420,7 @@
 
 		mounted() {
 			this.requestData();
+			this.getKey();
 		},
 	}
 </script>

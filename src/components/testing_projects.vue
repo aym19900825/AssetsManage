@@ -6,24 +6,9 @@
 	</div>
 	<div class="contentbg">
 		<!--左侧菜单内容显示 Begin-->
-		<div class="navbar-default navbar-static-side">
-			<div id="sidebar-collapse">
-				<div class="navbarbg">
-					<span class="navbar-minimalize minimalize-styl-2" @click="min2max()">
-						<i class="icon-menu1"></i> 
-					</span>
-				</div>
-				<ul class="navs" id="side-menu" v-show="!isShow" >
-					<li v-for="itemnav in leftNavs">
-						<router-link :to="itemnav.navherf">
-							<i :class="itemnav.navicon"></i>
-							<span class="nav-label" v-show="ismin">{{itemnav.navtitle}}</span>
-						</router-link>
-					</li>
-				</ul>
-			</div>
-		</div>
+		<navs_left></navs_left>
 		<!--左侧菜单内容显示 End-->
+
 
 		<!--右侧内容显示 Begin-->
 		<div class="wrapper wrapper-content">
@@ -61,8 +46,8 @@
 									</div>
 								</div>
 								<div class="columns columns-right btn-group pull-right">
-									<div class="btn btn-default btn-refresh" id="refresh" title="刷新"><i class="icon-refresh"></i></div>
-									<v-table-controle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></v-table-controle>
+									<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
+									<tableControle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></tableControle>
 								</div>
 							</div>
 							<!--按钮操作行 End-->
@@ -140,6 +125,7 @@
 </template>
 <script>
 	import vheader from './common/vheader.vue'
+	import navs_left from './common/left_navs/nav_left2.vue'
 	import navs_header from './common/nav_tabs.vue'
 	import table from './plugin/table/table-normal.vue'
 	import tableControle from './plugin/table-controle/controle.vue'
@@ -147,6 +133,7 @@
 		name: 'customer_management',
 		components: {
 			vheader,
+			navs_left,
 			navs_header,
 			tableControle,
 			table,

@@ -15,7 +15,6 @@
 							<!--我的应用 Begin-->
 							<div class="clearfix">
 								<h3 class="pull-left">我的应用</h3>
-								
 							</div>
 							<el-row :gutter="20" class="applist">
 								<!--APPList Begin-->
@@ -146,61 +145,45 @@ export default {
 				navtitle: '主数据',
 				navherf: '/maindata'
 			}, {
-				navicon: 'icon-device',
-				navtitle: '设备管理',
-				navherf: '/personinfo'
-			}, {
-				navicon: 'icon-purchase',
-				navtitle: '采购管理',
-				navherf: '/passwordedit'
-			}, {
-				navicon: 'icon-worklist',
-				navtitle: '工单管理',
-				navherf: '/passwordedit'
-			}, {
-				navicon: 'icon-inventory',
-				navtitle: '库存管理',
-				navherf: '/passwordedit'
-			}, {
-				navicon: 'icon-preventive',
-				navtitle: '预防性维护',
-				navherf: '/passwordedit'
-			}, {
-				navicon: 'icon-safe',
-				navtitle: '安全管理',
-				navherf: '/passwordedit'
+				navicon: 'icon-plan',
+				navtitle: '年度计划',
+				navherf: '/annual_plan'
 			}, {
 				navicon: 'icon-contract',
-				navtitle: '合同管理',
-				navherf: '/passwordedit'
+				navtitle: '工作任务通知书',
+				navherf: '/notifications'
+			}, {
+				navicon: 'icon-contract',
+				navtitle: '委托书管理',
+				navherf: '/proxies'
+			}, {
+				navicon: 'icon-purchase',
+				navtitle: '样品管理',
+				navherf: '/samples'
+			}, {
+				navicon: 'icon-worklist',
+				navtitle: '工作任务单',
+				navherf: '/workorders'
+			}, {
+				navicon: 'icon-device',
+				navtitle: '设备管理',
+				navherf: '/devices'
+			}, {
+				navicon: 'icon-inventory',
+				navtitle: '检验/检测项目管理',
+				navherf: '/inspection_project'
+			}, {
+				navicon: 'icon-preventive',
+				navtitle: '文件查询',
+				navherf: '/files_search'
+			}, {
+				navicon: 'icon-safe',
+				navtitle: '接口',
+				navherf: '/interfaces'
 			}, {
 				navicon: 'icon-inspection',
-				navtitle: '点巡检',
-				navherf: '/passwordedit'
-			}, {
-				navicon: 'icon-reporting',
-				navtitle: '故障提报',
-				navherf: '/passwordedit'
-			}, {
-				navicon: 'icon-plan',
-				navtitle: '作业计划',
-				navherf: '/passwordedit'
-			}, {
-				navicon: 'icon-kpi',
-				navtitle: 'KPI统计',
-				navherf: '/passwordedit'
-			}, {
-				navicon: 'icon-distribution',
-				navtitle: '派工管理',
-				navherf: '/passwordedit'
-			}, {
-				navicon: 'icon-project',
-				navtitle: '项目管理',
-				navherf: '/passwordedit'
-			}, {
-				navicon: 'icon-map',
-				navtitle: '地图',
-				navherf: '/passwordedit'
+				navtitle: '报表管理',
+				navherf: '/reports'
 			}
 		]
       }

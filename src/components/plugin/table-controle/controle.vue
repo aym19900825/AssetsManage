@@ -1,5 +1,4 @@
 <template>
-  <div>
    <div class="keep-open btn-group" title="显示隐藏列">
       <el-dropdown :hide-on-click="false" class="btn btn-default btn-outline">
         <span class="el-dropdown-link">
@@ -15,7 +14,6 @@
         </el-dropdown-menu>
       </el-dropdown>
     </div>
-  </div>
 </template>
 
 <script>

@@ -3,11 +3,11 @@
         <div class="logo"></div>
         <ul class="nav-head pull-left">
             <li class="current"><router-link :to="{path:'/index'}">应用中心</router-link></li>
-            <li><router-link :to="{path:'/dashboardList'}" >程序设计器</router-link></li>
+            <!-- <li><router-link :to="{path:'/dashboardList'}" >程序设计器</router-link></li>
             <li><router-link :to="{path:'/dashboardList'}" >权限管理</router-link></li>
             <li>
                 <router-link :to="{path:'/user_management'}" @click.native = "setTabs">系统配置</router-link>
-            </li>
+            </li> -->
         </ul>
         <div class="nav-head pull-right nav-right">
             <el-badge :value="200" :max="99" class="item mr30">

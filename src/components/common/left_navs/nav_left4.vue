@@ -32,45 +32,29 @@ export default {
 			clientHeight2:'',//获取浏览器高度
 			leftNavs: [//leftNavs左侧菜单数据
 				{
-					navicon: 'icon-user',
-					navtitle: '用户管理',
-					navherf: '/user_management'
-				}, {
-					navicon: 'icon-department',
-					navtitle: '机构管理',
-					navherf: '/dept_management'
-				}, {
-					navicon: 'icon-role-site',
-					navtitle: '角色管理',
-					navherf: '/role_management'
-				}, {
-					navicon: 'icon-distribution',
-					navtitle: '客户管理',
-					navherf: '/customer_management'
+					navicon: 'icon-file-text',
+					navtitle: '仪器和计量器具',
+					navherf: '/instruments'
 				}, {
 					navicon: 'icon-file-text',
-					navtitle: '产品类别',
-					navherf: '/products_category'
+					navtitle: '使用/维护保养记录',
+					navherf: '/usag_tending_records'
 				}, {
-					navicon: 'icon-file-text',
-					navtitle: '产品名称',
-					navherf: '/products'
+					navicon: 'icon-task',
+					navtitle: '溯源计划',
+					navherf: '/traceability_plan'
 				}, {
-					navicon: 'icon-file-text',
-					navtitle: '检验/检测标准',
-					navherf: '/testing_standard'
+					navicon: 'icon-task',
+					navtitle: '溯源记录',
+					navherf: '/traceability_records'
 				}, {
-					navicon: 'icon-file-text',
-					navtitle: '检验/检测项目',
-					navherf: '/testing_projects'
+					navicon: 'icon-log',
+					navtitle: '期间核查计划',
+					navherf: '/verification_plan'
 				}, {
-					navicon: 'icon-file-text',
-					navtitle: '检验/检测方法',
-					navherf: '/testing_methods'
-				}, {
-					navicon: 'icon-file-text',
-					navtitle: '自动编号设置',
-					navherf: '/number_settings'
+					navicon: 'icon-log',
+					navtitle: '期间核查记录',
+					navherf: '/verification_records'
 				}
 			],
         selectedNav: {}

@@ -45,13 +45,13 @@
 							<!--按钮操作行 End-->
 
 							<!-- 高级查询划出 Begin-->
-							<div v-show="search">
+							<div v-show="search" class="pb10">
 								<el-form status-icon :model="searchList" label-width="70px">
 									<el-row :gutter="10">
 										<el-col :span="5">
-											<el-form-item label="类型名称" class="searchlist" label-width="85px">
-												<el-input v-model="searchList.typename"></el-input>
-											</el-form-item>
+											<el-input v-model="searchList.typename">
+												<template slot="prepend">类型名称</template>
+											</el-input>
 										</el-col>
 										<el-col :span="2">
 											<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>

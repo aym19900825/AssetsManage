@@ -45,13 +45,13 @@
 							<!--按钮操作行 End-->
 
 							<!-- 高级查询划出 Begin-->
-							<div v-show="search">
+							<div v-show="search" class="pb10">
 								<el-form status-icon :model="searchList" label-width="70px">
 									<el-row :gutter="10">
 										<el-col :span="5">
-											<el-form-item label="类型名称" class="searchlist" label-width="85px">
-												<el-input v-model="searchList.typename"></el-input>
-											</el-form-item>
+											<el-input v-model="searchList.typename">
+												<template slot="prepend">自动编号名称</template>
+											</el-input>
 										</el-col>
 										<el-col :span="2">
 											<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
@@ -76,7 +76,7 @@
 										<el-table-column label="备注" sortable prop="MEMO" v-if="this.checkedName.indexOf('备注')!=-1">
 										</el-table-column>
 									</el-table>
-									<el-pagination class="pull-right pt10 pb10" v-if="this.checkedName.length>0"
+									<el-pagination background class="pull-right pt10 pb10" v-if="this.checkedName.length>0"
 							            @size-change="sizeChange"
 							            @current-change="currentChange"
 							            :current-page="page.currentPage"
@@ -94,6 +94,7 @@
 				</div>
 			</EasyScrollbar>
 		</div>
+		<deptmask :adddeptForm="selMenu[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></deptmask>
 	</div>
 </div>
 </template>
@@ -103,14 +104,16 @@
 	import navs_header from './common/nav_tabs.vue'
 	import table from './plugin/table/table-normal.vue'
 	import tableControle from './plugin/table-controle/controle.vue'
+	import deptmask from './common/numbersetting_mask.vue'
 	export default {
-		name: 'user_management',
+		name: 'number_settings',
 		components: {
 			vheader,
 			navs_left,
 			navs_header,
 			tableControle,
-			table
+			table,
+			deptmask,
 		},
 		data() {
 			return {
@@ -149,55 +152,13 @@
 						prop: 'MEMO'
 					}
 				],
-				leftNavs: [//leftNavs左侧菜单数据
-					{
-						navicon: 'icon-user',
-						navtitle: '用户管理',
-						navherf: '/personinfo'
-					}, {
-						navicon: 'icon-edit',
-						navtitle: '机构管理',
-						navherf: '/dept_management'
-					}, {
-						navicon: 'icon-role-site',
-						navtitle: '角色管理',
-						navherf: '/role_management'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '客户管理',
-						navherf: '/customer_management'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '产品类别',
-						navherf: '/products_category'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '产品',
-						navherf: '/products'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测标准',
-						navherf: '/testing_standard'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测项目',
-						navherf: '/testing_projects'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测方法',
-						navherf: '/testing_methods'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '自动编号设置',
-						navherf: '/number_settings'
-					}
-				],
 				companyId: '',
 				deptId: '',
 				selUser: [],
 				'启用': true,
 				'冻结': false,
 				userList: [],
+				selMenu:[],
 				search: false,
 				show: false,
 				down: true,
@@ -257,23 +218,23 @@
 				this.page.pageSize = 10;
 				this.requestData();
 			},
-			//添加用戶
+			//添加自动编号设置
 			openAddMgr() {
-//				this.$refs.child.resetNew();
-				this.$refs.child.visible();
+				this.$refs.child.resetNew();
+				this.$refs.child.childMethods(); 
 			},
-			//修改用戶
+			//修改自动编号设置
 			modify() {
 				this.aaaData = this.selUser;
 				if(this.aaaData.length == 0) {
 					this.$message({
-						message: '请您选择要修改的用户',
+						message: '请您选择要修改的数据',
 						type: 'warning'
 					});
 					return;
 				} else if(this.aaaData.length > 1) {
 					this.$message({
-						message: '不可同时修改多个用户',
+						message: '不可同时修改多条数据',
 						type: 'warning'
 					});
 					return;
@@ -292,13 +253,13 @@
 				var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({
-						message: '请您选择要删除的用户',
+						message: '请您选择要删除的数据',
 						type: 'warning'
 					});
 					return;
 				} else if(selData.length > 1) {
 					this.$message({
-						message: '不可同时删除多个用户',
+						message: '不可同时删除多条数据',
 						type: 'warning'
 					});
 					return;

@@ -54,19 +54,40 @@
 
 							<!-- 高级查询划出 Begin-->
 							<div v-show="search" class="pb10">
-								<el-form status-icon :model="searchList" label-width="70px">
-									<el-row :gutter="10">
-										<el-col :span="5">
-											<el-input v-model="searchList.typename">
-												<template slot="prepend">类型名称</template>
-											</el-input>
-										</el-col>
-										<el-col :span="2">
-											<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
-										</el-col>
-									</el-row>
-								</el-form>
-							</div>
+									<el-form status-icon :model="searchList" label-width="70px">
+										<el-row :gutter="10">
+											<el-col :span="5">
+												<el-input v-model="searchList.typename">
+													<template slot="prepend">项目编号</template>
+												</el-input>
+											</el-col>
+											<el-col :span="5">
+												<el-input v-model="searchList.typename">
+													<template slot="prepend">认证机构</template>
+												</el-input>
+											</el-col>
+											<el-col :span="5">
+												<el-input v-model="searchList.typename">
+													<template slot="prepend">项目名称</template>
+												</el-input>
+											</el-col>
+											<el-col :span="4">
+												<el-input v-model="searchList.typename">
+													<template slot="prepend">版本</template>
+												</el-input>
+											</el-col>
+											<el-col :span="3" class="pt5">
+												<el-select v-model="searchList.value" placeholder="请选择状态">
+													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+													</el-option>
+												</el-select>
+											</el-col>
+											<el-col :span="2">
+												<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+											</el-col>
+										</el-row>
+									</el-form>
+								</div>
 							<!-- 高级查询划出 End-->
 
 							<el-row :gutter="0">

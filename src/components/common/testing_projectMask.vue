@@ -97,7 +97,7 @@
 									</el-col>
 								</el-row>
 							</div>
-					</el-collapse-item>
+						</el-collapse-item>
 					</el-collapse>
 				</div>
 				<div class="el-dialog__footer">

@@ -14,89 +14,85 @@
 					</span>
 				</div>
 			</div>
-			<el-form :model="CUSTOMER" :label-position="labelPosition" :rules="rules" ref="CUSTOMER" label-width="100px" class="demo-adduserForm">
-				<EasyScrollbar>
-					<div ref="homePagess" class="accordion" id="information" style="height: 425px;">
-						<div style="height: auto;">
-							<div class="accordion" id="information">
-								<el-collapse v-model="activeNames" @change="handleChange">
-									<el-collapse-item title="产品类别" name="1">
-										<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
-											<el-row :gutter="70">
-												<el-col :span="8">
-													<el-form-item label="产品类别编号" prop="CODE">
-														<el-input v-model="CUSTOMER.CODE" :disabled="edit"></el-input>
-													</el-form-item>
-												</el-col>
-												<el-col :span="8">
-													<el-form-item label="产品类别名称" prop="NAME">
-														<el-input v-model="CUSTOMER.NAME"></el-input>
-													</el-form-item>
-												</el-col>
-												<el-col :span="8">
-													<el-form-item label="状态" prop="PHONE">
-														<el-input v-model="CUSTOMER.PHONE"></el-input>
-													</el-form-item>
-												</el-col>
-											</el-row>
-											<el-row :gutter="70">
-												<el-col :span="8">
-													<el-form-item label="版本" prop="CONTACT_ADDRESS">
-														<el-input v-model="CUSTOMER.CONTACT_ADDRESS"  :disabled="edit"></el-input>
-													</el-form-item>
-												</el-col>
-												<el-col :span="8">
-													<el-form-item label="机构" prop="ZIPCODE">
-														<el-input v-model="CUSTOMER.ZIPCODE"  :disabled="edit"></el-input>
-													</el-form-item>
-												</el-col>
-												<el-col :span="8">
-													<el-form-item label="发布单位" prop="STATUS">
-														<!-- <el-select  multiple> -->
-															<!-- <el-option v-for="data in selectData" :key="data.id" :value="data.id" :label="data.name"></el-option> -->
-														<!-- </el-select> -->
-														<el-input v-model="CUSTOMER.STATUS" :disabled="edit"></el-input>
-													</el-form-item>
-												</el-col>
-											</el-row>
-											<el-row :gutter="70">
-												<el-col :span="8">
-													<el-form-item label="录入人" prop="FAX">
-														<el-input v-model="CUSTOMER.FAX" :disabled="edit"></el-input>
-													</el-form-item>
-												</el-col>
-												<el-col :span="8">
-													<el-form-item label="录入时间" prop="EMAIL">
-														<el-input v-model="CUSTOMER.EMAIL"  :disabled="edit"></el-input>
-													</el-form-item>
-												</el-col>
-												<el-col :span="8">
-													<el-form-item label="修改人" prop="ENERBY">
-														<el-input v-model="CUSTOMER.ENERBY" placeholder="当前录入人" :disabled="edit" ></el-input>
-													</el-form-item>
-												</el-col>
-											</el-row>
-											<el-row :gutter="70">
-												<el-col :span="8">
-													<el-form-item label="修改时间" prop="ENERDATE">
-														<el-input v-model="CUSTOMER.ENERDATE" placeholder="当前录入日期" :disabled="edit"></el-input>
-													</el-form-item>
-												</el-col>
-											</el-row>
-										</div>
-									</el-collapse-item>
-								</el-collapse>
-							</div>
-							<div class="el-dialog__footer">
-								<el-form-item>
-									<el-button type="primary" class="btn-primarys" @click="submitForm('adddeptForm')">保存</el-button>
-									<el-button type="primary" class="btn-primarys">修订</el-button>
-								</el-form-item>
-							</div>
-						</div>
+			<div class="mask_content">
+				<el-form :model="CUSTOMER" :label-position="labelPosition" :rules="rules" ref="CUSTOMER" label-width="100px" class="demo-adduserForm">
+					<div class="accordion" id="information">
+						<el-collapse v-model="activeNames" @change="handleChange">
+							<el-collapse-item title="产品类别" name="1">
+								<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
+									<el-row :gutter="70">
+										<el-col :span="8">
+											<el-form-item label="产品类别编号" prop="CODE">
+												<el-input v-model="CUSTOMER.CODE" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="产品类别名称" prop="NAME">
+												<el-input v-model="CUSTOMER.NAME"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="状态" prop="PHONE">
+												<el-input v-model="CUSTOMER.PHONE"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row :gutter="70">
+										<el-col :span="8">
+											<el-form-item label="版本" prop="CONTACT_ADDRESS">
+												<el-input v-model="CUSTOMER.CONTACT_ADDRESS"  :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="机构" prop="ZIPCODE">
+												<el-input v-model="CUSTOMER.ZIPCODE"  :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="发布单位" prop="STATUS">
+												<!-- <el-select  multiple> -->
+													<!-- <el-option v-for="data in selectData" :key="data.id" :value="data.id" :label="data.name"></el-option> -->
+												<!-- </el-select> -->
+												<el-input v-model="CUSTOMER.STATUS" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row :gutter="70">
+										<el-col :span="8">
+											<el-form-item label="录入人" prop="FAX">
+												<el-input v-model="CUSTOMER.FAX" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="录入时间" prop="EMAIL">
+												<el-input v-model="CUSTOMER.EMAIL"  :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="修改人" prop="ENERBY">
+												<el-input v-model="CUSTOMER.ENERBY" placeholder="当前录入人" :disabled="edit" ></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row :gutter="70">
+										<el-col :span="8">
+											<el-form-item label="修改时间" prop="ENERDATE">
+												<el-input v-model="CUSTOMER.ENERDATE" placeholder="当前录入日期" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+								</div>
+							</el-collapse-item>
+						</el-collapse>
 					</div>
-				</EasyScrollbar>
-			</el-form>
+					<div class="el-dialog__footer">
+						<el-form-item>
+							<el-button type="primary" class="btn-primarys" @click="submitForm('adddeptForm')">保存</el-button>
+							<el-button type="primary" class="btn-primarys">修订</el-button>
+						</el-form-item>
+					</div>
+				</el-form>
+			</div>
 		</div>
 		<!-- 弹出 -->
 		<!-- <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">

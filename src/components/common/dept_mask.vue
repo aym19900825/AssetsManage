@@ -14,81 +14,77 @@
 					</span>
 				</div>
 			</div>
-			<el-form :model="adddeptForm" :label-position="labelPosition" :rules="rules" ref="adddeptForm" label-width="100px" class="demo-adduserForm">
-				<EasyScrollbar>
-					<div ref="homePagess" class="accordion" id="information" style="height: 425px;">
-						<div style="height: auto;">
-							<div class="accordion">
-								<div class="mask_tab-block">
-									<div class="mask_tab-head clearfix">
-										<div class="accordion_title">
-											<span class="accordion-toggle">添加机构信息</span>
-										</div>
-										<div class="col_but" @click="col_but('col_but1')">
-											<i class="icon-arrow1-down"></i>
-										</div>
-									</div>
-									<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
-										<el-row :gutter="70">
-											<el-col :span="24">
-												<el-form-item label="所属上级" prop="pName">
-													<el-input v-model="adddeptForm.pName" :disabled="edit">
-														<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
-													</el-input>
-												</el-form-item>
-											</el-col>
-										</el-row>
-										<el-row :gutter="70">
-											<el-col :span="8">
-												<el-form-item label="机构名称" prop="fullname">
-													<el-input v-model="adddeptForm.fullname"></el-input>
-												</el-form-item>
-											</el-col>
-											<el-col :span="8">
-												<el-form-item label="单位简称" prop="simplename">
-													<el-input v-model="adddeptForm.simplename"></el-input>
-												</el-form-item>
-											</el-col>
-											<el-col :span="8">
-												<el-form-item label="类型" prop="type">
-													<el-input v-model="adddeptForm.type"></el-input>
-												</el-form-item>
-											</el-col>
-										</el-row>
-										<el-row :gutter="70">
-											<el-col :span="8"  v-show="showcode">
-												<el-form-item label="机构编码" prop="code">
-													<el-input v-model="adddeptForm.code" :disabled="edit">
-														<el-button slot="append" icon="el-icon-search"></el-button>
-													</el-input>
-												</el-form-item>
-											</el-col>
-											<el-col :span="8">
-												<el-form-item label="电话" prop="teltphone">
-													<el-input v-model="adddeptForm.teltphone"></el-input>
-												</el-form-item>
-											</el-col>
-										</el-row>
-										<el-row :gutter="70">
-											<el-col :span="24">
-												<el-form-item label="备注" prop="tips">
-													<el-input :rows="3" type="textarea" v-model="adddeptForm.tips" placeholder="请输入"></el-input>
-												</el-form-item>
-											</el-col>
-										</el-row>
-									</div>
+			<div class="mask_content">
+				<el-form :model="adddeptForm" :label-position="labelPosition" :rules="rules" ref="adddeptForm" label-width="100px" class="demo-adduserForm">
+					<div class="accordion">
+						<div class="mask_tab-block">
+							<div class="mask_tab-head clearfix">
+								<div class="accordion_title">
+									<span class="accordion-toggle">添加机构信息</span>
+								</div>
+								<div class="col_but" @click="col_but('col_but1')">
+									<i class="icon-arrow1-down"></i>
 								</div>
 							</div>
-							<div class="el-dialog__footer">
-								<el-form-item>
-									<el-button @click="cancelForm">取消</el-button>
-									<el-button type="primary" @click="submitForm('adddeptForm')">提交</el-button>
-								</el-form-item>
+							<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
+								<el-row :gutter="70">
+									<el-col :span="24">
+										<el-form-item label="所属上级" prop="pName">
+											<el-input v-model="adddeptForm.pName" :disabled="edit">
+												<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
+											</el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="8">
+										<el-form-item label="机构名称" prop="fullname">
+											<el-input v-model="adddeptForm.fullname"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="单位简称" prop="simplename">
+											<el-input v-model="adddeptForm.simplename"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="类型" prop="type">
+											<el-input v-model="adddeptForm.type"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="8"  v-show="showcode">
+										<el-form-item label="机构编码" prop="code">
+											<el-input v-model="adddeptForm.code" :disabled="edit">
+												<el-button slot="append" icon="el-icon-search"></el-button>
+											</el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="电话" prop="teltphone">
+											<el-input v-model="adddeptForm.teltphone"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="24">
+										<el-form-item label="备注" prop="tips">
+											<el-input :rows="3" type="textarea" v-model="adddeptForm.tips" placeholder="请输入"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
 							</div>
 						</div>
 					</div>
-				</EasyScrollbar>
-			</el-form>
+					<div class="el-dialog__footer">
+						<el-form-item>
+							<el-button @click="cancelForm">取消</el-button>
+							<el-button type="primary" @click="submitForm('adddeptForm')">提交</el-button>
+						</el-form-item>
+					</div>
+				</el-form>
+			</div>
 		</div>
 		<!-- 弹出 -->
 		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">

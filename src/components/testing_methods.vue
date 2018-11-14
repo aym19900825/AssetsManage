@@ -114,7 +114,7 @@
 			</EasyScrollbar>
 		</div>
 		<!--右侧内容显示 End-->
-		<testingmask :adddeptForm="selMenu[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></testingmask>
+		<testingmask :adddeptForm="selMenu[0]" ref="child" @request="requestData" v-bind:page=page></testingmask>
 	</div>
 </div>
 </template>
@@ -272,14 +272,7 @@
 					createTime: ''
 				},
 				//tree
-				resourceData: [], //数组，我这里是通过接口获取数据，
-				resourceDialogisShow: false,
-				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
-				resourceProps: {
-					children: "subDepts",
-					label: "simplename"
-				},
-				userData:[],
+				
 				page: {//分页显示
 					currentPage: 1,
 					pageSize: 10,

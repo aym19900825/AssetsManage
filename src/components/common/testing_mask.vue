@@ -14,58 +14,155 @@
 					</span>
 				</div>
 			</div>
-			<el-form :model="addnumbersettingForm" :label-position="labelPosition" :rules="rules" ref="addnumbersettingForm" label-width="100px" class="demo-adduserForm">
-				<EasyScrollbar>
-					<div ref="homePagess" class="accordion" id="information" style="height: 460px;">
-						<div style="height: auto;">
-							<div class="accordion">
-								<div class="mask_tab-block">
-									<div class="mask_tab-head clearfix">
-										<div class="accordion_title">
-											<span class="accordion-toggle">基础信息</span>
-										</div>
-										<div class="col_but" @click="col_but('col_but1')">
-											<i class="icon-arrow1-down"></i>
-										</div>
-									</div>
-									<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
-										<el-row :gutter="70">
-											<el-col :span="8">
-												<el-form-item label="自动编号名称" prop="AUTOKEY">
-													<el-input v-model="addnumbersettingForm.AUTOKEY"></el-input>
-												</el-form-item>
-											</el-col>
-											<el-col :span="8">
-												<el-form-item label="前缀">
-													<el-input v-model="addnumbersettingForm.PREFIX"></el-input>
-												</el-form-item>
-											</el-col>
-											<el-col :span="8">
-												<el-form-item label="起始数" prop="S_NUM">
-													<el-input v-model="addnumbersettingForm.S_NUM"></el-input>
-												</el-form-item>
-											</el-col>
-										</el-row>
-										<el-row :gutter="70">
-											<el-col :span="24">
-												<el-form-item label="备注" prop="MEMO">
-													<el-input type="textarea" v-model="addnumbersettingForm.MEMO"></el-input>
-												</el-form-item>
-											</el-col>
-										</el-row>
-									</div>
+			<div class="mask_content">
+				<el-form :model="testingForm" :label-position="labelPosition" :rules="rules" ref="testingForm" label-width="100px" class="demo-adduserForm">
+					<div class="accordion">
+						<el-collapse v-model="activeNames" @change="handleChange">
+							<el-collapse-item title="基础信息" name="1">
+								<el-row :gutter="20" class="pb10">
+									<el-col :span="3" class="pull-right">
+										<el-input v-model="testingForm.VERSION" :disabled="true">
+											<template slot="prepend">版本</template>
+										</el-input>
+									</el-col>
+									<el-col :span="3" class="pull-right">
+										<el-select v-model="testingForm.STATUS" placeholder="请选择状态">
+											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+											</el-option>
+										</el-select>
+									</el-col>
+									<el-col :span="7" class="pull-right">
+										<el-input v-model="testingForm.M_NUM" :disabled="true">
+											<template slot="prepend">检验/检测方法编号</template>
+										</el-input>
+									</el-col>
+								</el-row>
+								
+									<el-row :gutter="70">
+										<el-col :span="8">
+											<el-form-item label="中文名称" prop="M_NAME">
+												<el-input v-model="testingForm.M_NAME"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="英文名称" prop="M_ENAME">
+												<el-input v-model="testingForm.M_ENAME"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="类别" prop="M_TYPE">
+												<el-input v-model="testingForm.M_TYPE"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									
+									<el-row :gutter="70">
+										<el-col :span="8">
+											<el-form-item label="机构" prop="DEPARTMENT">
+												<el-input v-model="testingForm.DEPARTMENT" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="录入人" prop="ENTERBY">
+												<el-input v-model="testingForm.ENTERBY" :disabled="true">{{username}}</el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="录入时间" prop="ENTERDATE">
+												<el-input v-model="testingForm.ENTERDATE" :disabled="true" ></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row :gutter="70">
+										<el-col :span="8">
+											<el-form-item label="修改人" prop="CHANGEBY">
+												<el-input v-model="testingForm.CHANGEBY" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="修改时间" prop="CHANGEDATE">
+												<el-input v-model="testingForm.CHANGEDATE" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+
+									</el-row>
+								
+							</el-collapse-item>
+							<el-collapse-item title="文档" name="2">
+								<!-- 字段列表 Begin-->
+								<div class="table-func">
+									<el-button type="primary" size="mini" round @click="importdia">
+										<i class="icon-upload-cloud"></i>
+										<font>导入</font>
+									</el-button>
+									<el-button type="success" size="mini" round @click="addfield">
+										<i class="icon-add"></i>
+										<font>新建</font>
+									</el-button>
 								</div>
-							</div>
-							<div class="content-footer">
-								<el-form-item>
-									<button @click="cancelForm" class="btn btn-default btn-large">取消</button>
-									<button type="primary" class="btn btn-primarys btn-large" @click="submitForm('addnumbersettingForm')">提交</button>
-								</el-form-item>
-							</div>
-						</div>
+								
+								<el-form :model="testingForm.attributes">
+									<el-form-item>
+										<el-row :gutter="20">
+											<el-col :span="3">
+												<el-form-item label="序号"></el-form-item>
+											</el-col>
+											<el-col :span="3">
+												<el-form-item label="文档编号"></el-form-item>
+											</el-col>
+											<el-col :span="7">
+												<el-form-item label="文档描述"></el-form-item>
+											</el-col>
+											<el-col :span="3">
+												<el-form-item label="创建人"></el-form-item>
+											</el-col>
+											<el-col :span="3">
+												<el-form-item label="创建日期"></el-form-item>
+											</el-col>
+											<el-col :span="3">
+												<el-form-item label="附件"></el-form-item>
+											</el-col>
+											<el-col :span="2">
+					                            <el-form-item label="操作"></el-form-item>
+					                        </el-col>
+										</el-row>
+										<el-row :gutter="20" v-for="(item,key) in testingForm.attributes" :key="key">
+											<el-col :span="3">
+												<el-input type="text" placeholder="请输入序号" v-model="item.COLUMNID"></el-input>
+											</el-col>
+											<el-col :span="3">
+												<el-input type="text" placeholder="请输入文档编号" v-model="item.FILESNUMBER"></el-input>
+											</el-col>
+											<el-col :span="7">
+												<el-input type="text" placeholder="文档描述" v-model="item.FILSEDESC"></el-input>
+											</el-col>
+											<el-col :span="3">
+												<el-input type="text" placeholder="创建人" v-model="item.ENTERB"></el-input>
+											</el-col>
+											<el-col :span="3">
+												<el-input type="text" placeholder="创建日期" v-model="item.ENTERDATE"></el-input>
+											</el-col>
+											<el-col :span="3">
+												<el-input type="text" placeholder="附件" v-model="item.FILESURL"></el-input>
+											</el-col>
+											<el-col :span="2">
+												<i class="el-icon-delete red" @click="delfield(item)"></i>
+											</el-col>
+										</el-row>
+									</el-form-item>
+								</el-form>
+								<!-- 字段列表 End -->
+							</el-collapse-item>
+						</el-collapse>
 					</div>
-				</EasyScrollbar>
-			</el-form>
+					<div class="content-footer">
+						<el-form-item>
+							<button @click="cancelForm" class="btn btn-default btn-large">取消</button>
+							<button type="primary" class="btn btn-primarys btn-large" @click="submitForm('testingForm')">提交</button>
+						</el-form-item>
+					</div>
+				</el-form>
+			</div>
 		</div>
 		<!-- 弹出 -->
 		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
@@ -81,101 +178,156 @@
 
 <script>
 	export default {
-		name: 'masks',
+		name: 'testing_mask',
 		props: {
 			page: {
 				type: Object,
 			},
-			addnumbersettingForm: {
-				type: Object,
-				default: function(){
-					return {
-						ID:'',
-						AUTOKEY:'',
-						S_NUM:'',
-						PREFIX:'',
-						MEMO:''
-					}
-				}
-			}
+			
 		},
 		data() {
-			var validateAUTOKEY = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请填写自动编号名称'));
-                }else {
-                    callback();
-                }
-            };
-            var validateS_NUM = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请填写起始数'));
-                }else {
-                	var targ=/^([0-9]*|[0-9]{1}\d*\.\d{1}?\d*)$/;
-                	if (!targ.test(value)) {
-                		callback(new Error('起始数须为数字'));
-                	}
-                    callback();
-                }
-            };
+			var validateM_NAME = (rule, value, callback) => {
+				if(value === '') {
+					callback(new Error('请填写中文名称'));
+				} else {
+					callback();
+				}
+			};
+			var validateM_ENAME = (rule, value, callback) => {
+				if(value === '') {
+					callback(new Error('请填写英文名称'));
+				} else {
+					callback();
+				}
+			};
+			var validateM_TYPE = (rule, value, callback) => {
+				if(value === '') {
+					callback(new Error('请填写类别'));
+				} else {
+					callback();
+				}
+			};
            
 			return {
+				options: [{
+          			value: '选项1',
+          			label: '活动'
+        		}, {
+          			value: '选项2',
+          			label: '活动2'
+        		}, {
+          			value: '选项3',
+          			label: '活动3'
+        		}, {
+          			value: '选项4',
+          			label: '活动4'
+        		}],
+        		value: '',
 				showcode:true,
-				dialogVisible: false, //对话框
 				edit: true, //禁填
 				value11:true,
-				editSearch: '',
-				col_but1: true,
-				col_but2: true,
-				clientHeight:'',//获取浏览器高度
 				show: false,
 				isok1: true,
 				isok2: false,
-				labelPosition: 'top',
+				down: true,
+				up: false,
+				dialogVisible: false, //对话框
+				activeNames: ['1', '2'], //手风琴数量
+				labelPosition: 'top', //表单标题在上方
 				addtitle:true,
 				modifytitle:false,
-				/*addnumbersettingFormtest: {
-					ID:'',
-					AUTOKEY:'',
-					S_NUM:'',
-					PREFIX:'',
-					MEMO:''
-				},*/
-				rules:{
-          			AUTOKEY: [{ 
-       						required: true,
-       						validator: validateAUTOKEY,
-       						trigger: 'blur' 
-       					}],
-          			S_NUM:[{ 
-       						required: true,
-       						validator: validateS_NUM,
-       						trigger: 'blur' 
-       					}]
-          		
-	          	},
+
+				testingForm: { //接收表单中填写的数据信息
+					VERSION: '',
+					STATUS: '',
+					M_NUM: '',
+					M_NAME: '',
+					M_ENAME: '',
+					M_TYPE: '',
+					DEPARTMENT: '',
+					ENTERBY: '',
+					ENTERDATE: '',
+					CHANGEBY: '',
+					CHANGEDATE: '',
+					attributes: [{ //行字段列表信息
+						COLUMNID: '',
+						FILESNUMBER: '',
+						FILSEDESC: '',
+						ENTERB: '',
+						ENTERDATE: '',
+						FILESURL: ''
+					}]
+				},
+				rules: {//定义需要校验数据的名称
+					M_NAME: [{
+						required: true,
+						trigger: 'blur',
+						validator: validateM_NAME,
+					}],
+					M_ENAME: [{
+						required: true,
+						trigger: 'blur',
+						validator: validateM_ENAME,
+					}],
+					M_TYPE: [{
+						required: true,
+						trigger: 'blur',
+						validator: validateM_TYPE,
+					}],
+				},
 	          	//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
-				resourceDialogisShow: false,
-				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
-				resourceProps: {
-					children: "subDepts",
-					label: "PREFIX"
-				},
 			};
 		},
 		methods: {
 			//form表单内容清空
-			resetNew(){
-                this.addnumbersettingForm = {
-					ID:'',
-					AUTOKEY:'',
-					S_NUM:'',
-					PREFIX:'',
-					MEMO:''
+			resetNew() {
+				this.testingForm = { //给表单数据渲染值
+						VERSION: '1',
+						STATUS: '活动',
+						M_NUM: 'TRO100012',
+						M_NAME: '',
+						M_ENAME: '',
+						M_TYPE: '',
+						DEPARTMENT: '',
+						ENTERBY: '',
+						ENTERDATE: '',
+						CHANGEBY: '',
+						CHANGEDATE: '',
+						attributes: [{ //字段列表
+							COLUMNID: '',
+							FILESNUMBER: '',
+							FILSEDESC: '',
+							ENTERB: '',
+							ENTERDATE: '',
+							FILESURL: ''
+						}]
+					}
+					//this.$refs["testingForm"].resetFields();
+			},
+            handleChange(val) { //手风琴开关效果调用
+			},
+			
+
+			addfield() {//添加文档行信息
+				var obj = {
+					COLUMNID: '',
+					FILESNUMBER: '',
+					FILSEDESC: '',
+					ENTERB: '',
+					ENTERDATE: '',
+					FILESURL: ''
+				};
+				//this.attributes.push(obj);
+				this.testingForm.attributes.push(obj);
+			},
+			delfield(item) {
+				var index = this.testingForm.attributes.indexOf(item);
+				if(index !== -1) {
+					//this.attributes.splice(index, 1)
+					this.testingForm.attributes.splice(index, 1);
 				}
-                // this.$refs["addnumbersettingForm"].resetFields();
-            },
+			},
 			//所属上级
 			getDept() {
 				var page = this.page.currentPage;
@@ -192,34 +344,26 @@
 					this.dialogVisible = true;
 				});
 			},
-			queding() {
+			queding() {//弹出框中的确定按钮
 				this.getCheckedNodes();
 				this.placetext = false;
 				this.dialogVisible = false;				
-				this.addnumbersettingForm.pid = this.checkedNodes[0].id;
-				this.addnumbersettingForm.pName = this.checkedNodes[0].PREFIX;
+				this.testingForm.pid = this.checkedNodes[0].id;
+				this.testingForm.pName = this.checkedNodes[0].PREFIX;
 				
 			},
 			getCheckedNodes() {
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
 			},
-			col_but(col_but) {
-				if(col_but == 'col_but1') {
-					this.col_but1 = !this.col_but1;
-				}
-				if(col_but == 'col_but2') {
-					this.col_but2 = !this.col_but2;
-				}
-			},
 			
-			childMethods() {//
+			childMethods() {//添加时标题判断显示
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.showcode = false;
 				this.show = !this.show;
 			},
-			//修改
-			detail() {
+			
+			detail() {//修改时标题判断显示
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.show = true;
@@ -242,7 +386,7 @@
 					this.rebackDialog();
 				}
 			},
-			maxDialog(e) {
+			maxDialog(e) {//大弹出框距离头部少60px
 				this.isok1 = false;
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
@@ -262,19 +406,19 @@
 
 			},
 			//保存
-			submitForm(addnumbersettingForm) {
-				this.$refs[addnumbersettingForm].validate((valid) => {
+			submitForm(testingForm) {
+				this.$refs[testingForm].validate((valid) => {
 		          if (valid) {
 					var url = '/api/api-user/depts/saveOrUpdate';
-					this.addnumbersettingFormtest = {
-						"ID":this.addnumbersettingForm.ID,
-						"pid":this.addnumbersettingForm.pid,
-						"AUTOKEY":this.addnumbersettingForm.AUTOKEY,
-					    "PREFIX":this.addnumbersettingForm.PREFIX,
-					    "PREFIX":this.addnumbersettingForm.PREFIX,
+					this.testingFormtest = {
+						"ID":this.testingForm.ID,
+						"pid":this.testingForm.pid,
+						"AUTOKEY":this.testingForm.AUTOKEY,
+					    "PREFIX":this.testingForm.PREFIX,
+					    "PREFIX":this.testingForm.PREFIX,
 					   
 					}
-					this.$axios.post(url, this.addnumbersettingFormtest).then((res) => {
+					this.$axios.post(url, this.testingFormtest).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -297,7 +441,7 @@
 		        });
 				
 			},
-			handleClose(done) {
+			handleClose(done) {//大弹出框确定关闭按钮
 				this.$confirm('确认关闭？')
 					.then(_ => {
 						done();
@@ -305,16 +449,7 @@
 					.catch(_ => {});
 			}
 		},
-		mounted() {
-			// 获取浏览器可视区域高度
-			var _this = this;
-			var clientHeight = $(window).height() - 100;    //document.body.clientWidth;
-			_this.$refs.homePagess.style.height = clientHeight + 'px';
-			window.onresize = function() {
-				var clientHeight = $(window).height() - 100;
-				_this.$refs.homePagess.style.height = clientHeight + 'px';
-			};
-		}
+		
 	}
 </script>
 

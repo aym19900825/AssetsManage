@@ -76,7 +76,6 @@
 									<el-col :span="8">
 									<el-form-item label="录入人" prop="description">
 										<el-input v-model="dataInfo.description" :disabled="true"></el-input>
-										</el-date-picker>
 									</el-form-item>
 								</el-col>
 								<el-col :span="8">
@@ -155,7 +154,7 @@
 											<el-input type="text" placeholder="创建日期" v-model="item.retain"></el-input>
 										</el-col>
 										<el-col :span="3">
-											<el-input type="text" placeholder="附件" v-model="item.retain"></el-input>
+											<el-input type="text" placeholder="附件" v-model="item.files"></el-input>
 										</el-col>
 										<el-col :span="2">
 											<i class="el-icon-delete" @click="delfield(item)" style="color: red"></i>
@@ -319,7 +318,7 @@
 				this.selUser = val;
 			},
 
-			addfield() {
+			addfield() {//添加行信息
 				var obj = {
 					columnname: '',
 					description: '',

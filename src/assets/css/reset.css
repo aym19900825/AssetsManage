@@ -153,6 +153,12 @@ i, cite, em, var, address, dfn {
 .blue,.blue a {color:#2196F3;}
 .blue a:hover {color:#6585DF;}
 
+.red,.red a {color:#ea4074;}
+.red a:hover {color:#E97A9B;}
+
+
+
+
 .font13 {font-size: 13px;}
 
 h3,h6 {
@@ -415,6 +421,20 @@ h6 {
 .el-message {
 	top:35%;
 }
+
+/*表单提交按钮居中显示*/
+.el-dialog__footer {text-align: center;}
+
+/*横向表单信息样式调整 by heliping*/
+.el-input-group__append, .el-input-group__prepend {
+    background-color: #F3F6FA;
+    color: #5B6371;
+    border-color: #D8DEE6;
+	padding: 0 15px;
+}
+.el-input.is-disabled .el-input__inner {border-color: #D8DEE6;}
+
+.el-input.is-disabled .el-input__inner {color: #97A3B4;}
 
 
 /*Checkbox by heliping*/

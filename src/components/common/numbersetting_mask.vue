@@ -14,58 +14,54 @@
 					</span>
 				</div>
 			</div>
-			<el-form :model="addnumbersettingForm" :label-position="labelPosition" :rules="rules" ref="addnumbersettingForm" label-width="100px" class="demo-adduserForm">
-				<EasyScrollbar>
-					<div ref="homePagess" class="accordion" id="information" style="height: 360px;">
-						<div style="height: auto;">
-							<div class="accordion">
-								<div class="mask_tab-block">
-									<div class="mask_tab-head clearfix">
-										<div class="accordion_title">
-											<span class="accordion-toggle">基础信息</span>
-										</div>
-										<div class="col_but" @click="col_but('col_but1')">
-											<i class="icon-arrow1-down"></i>
-										</div>
-									</div>
-									<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
-										<el-row :gutter="70">
-											<el-col :span="8">
-												<el-form-item label="自动编号名称" prop="AUTOKEY">
-													<el-input v-model="addnumbersettingForm.AUTOKEY"></el-input>
-												</el-form-item>
-											</el-col>
-											<el-col :span="8">
-												<el-form-item label="前缀">
-													<el-input v-model="addnumbersettingForm.PREFIX"></el-input>
-												</el-form-item>
-											</el-col>
-											<el-col :span="8">
-												<el-form-item label="起始数" prop="S_NUM">
-													<el-input v-model="addnumbersettingForm.S_NUM"></el-input>
-												</el-form-item>
-											</el-col>
-										</el-row>
-										<el-row :gutter="70">
-											<el-col :span="24">
-												<el-form-item label="备注" prop="MEMO">
-													<el-input type="textarea" v-model="addnumbersettingForm.MEMO"></el-input>
-												</el-form-item>
-											</el-col>
-										</el-row>
-									</div>
+			<div class="mask_content">
+				<el-form :model="addnumbersettingForm" :label-position="labelPosition" :rules="rules" ref="addnumbersettingForm" label-width="100px" class="demo-adduserForm">
+					<div class="accordion">
+						<div class="mask_tab-block">
+							<div class="mask_tab-head clearfix">
+								<div class="accordion_title">
+									<span class="accordion-toggle">基础信息</span>
+								</div>
+								<div class="col_but" @click="col_but('col_but1')">
+									<i class="icon-arrow1-down"></i>
 								</div>
 							</div>
-							<div class="content-footer">
-								<el-form-item>
-									<button @click="cancelForm" class="btn btn-default btn-large">取消</button>
-									<button type="primary" class="btn btn-primarys btn-large" @click="submitForm('addnumbersettingForm')">提交</button>
-								</el-form-item>
+							<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
+								<el-row :gutter="70">
+									<el-col :span="8">
+										<el-form-item label="自动编号名称" prop="AUTOKEY">
+											<el-input v-model="addnumbersettingForm.AUTOKEY"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="前缀">
+											<el-input v-model="addnumbersettingForm.PREFIX"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="起始数" prop="S_NUM">
+											<el-input v-model="addnumbersettingForm.S_NUM"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="24">
+										<el-form-item label="备注" prop="MEMO">
+											<el-input type="textarea" v-model="addnumbersettingForm.MEMO"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
 							</div>
 						</div>
 					</div>
-				</EasyScrollbar>
-			</el-form>
+					<div class="content-footer">
+						<el-form-item>
+							<button @click="cancelForm" class="btn btn-default btn-large">取消</button>
+							<button type="primary" class="btn btn-primarys btn-large" @click="submitForm('addnumbersettingForm')">提交</button>
+						</el-form-item>
+					</div>
+				</el-form>
+			</div>
 		</div>
 		<!-- 弹出 -->
 		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">

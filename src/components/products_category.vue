@@ -41,14 +41,14 @@
 						</div>
 					</div>
 					<div class="columns columns-right btn-group pull-right">
-						<div class="btn btn-default btn-refresh" id="refresh" title="刷新"><i class="icon-refresh"></i></div>
+						<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
 						<tableControle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></tableControle>
 					</div>
 				</div>
 				<!--按钮操作行 End-->
 
 				<!-- 高级查询划出 Begin-->
-				<div v-show="search">
+				<div v-show="search" class="pb10">
 					<el-form status-icon :model="searchList" label-width="70px">
 						<el-row :gutter="10">
 							<el-col :span="7">
@@ -111,7 +111,7 @@
 							<el-table-column label="修改时间" width="155" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
 							</el-table-column>
 						</el-table>
-						<el-pagination class="pull-right pt10 pb10" v-if="this.checkedName.length>0"
+						<el-pagination background class="pull-right pt10 pb10" v-if="this.checkedName.length>0"
 				            @size-change="sizeChange"
 				            @current-change="currentChange"
 				            :current-page="page.currentPage"

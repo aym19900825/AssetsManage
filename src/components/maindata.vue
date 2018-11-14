@@ -7,23 +7,7 @@
 
     <div class="contentbg">
 		<!--左侧菜单内容显示 Begin-->
-		<div class="navbar-default navbar-static-side">
-			<div id="sidebar-collapse">
-				<div class="navbarbg">
-					<span class="navbar-minimalize minimalize-styl-2" @click="min2max()">
-						<i class="icon-menu1"></i> 
-					</span>
-				</div>
-				<ul class="navs" id="side-menu" v-show="!isShow" >
-					<li v-for="item in leftNavs">
-						<router-link :to="item.navherf">
-							<i :class="item.navicon"></i>
-							<span class="nav-label" v-show="ismin">{{item.navtitle}}</span>
-						</router-link>
-					</li>
-				</ul>
-			</div>
-		</div>
+		<navs_left></navs_left>
 		<!--左侧菜单内容显示 End-->
 
 		<!--右侧内容显示 Begin-->
@@ -54,29 +38,8 @@
 									</div>
 
 									<div class="columns columns-right btn-group pull-right">
-										<button class="btn btn-default btn-outline btn-refresh" type="button" name="refresh" title="刷新"><i class="icon-refresh"></i></button>
-										<div class="keep-open btn-group" title="列">
-											<el-dropdown :hide-on-click="false" class="pl10 btn btn-default btn-outline">
-												<span class="el-dropdown-link">
-													<font class="J_tabClose"><i class="icon-menu3"></i></font>
-													<i class="el-icon-arrow-down icon-arrow2-down"></i>
-												</span>
-												<el-dropdown-menu slot="dropdown">
-													<el-dropdown-item>
-														<el-checkbox label="名称" name="type"></el-checkbox>
-													</el-dropdown-item>
-													<el-dropdown-item>
-														<el-checkbox label="所在机构" name="type"></el-checkbox>
-													</el-dropdown-item>
-													<el-dropdown-item>
-														<el-checkbox label="所在公司" name="type"></el-checkbox>
-													</el-dropdown-item>
-													<el-dropdown-item>
-														<el-checkbox label="所在机构" name="type"></el-checkbox>
-													</el-dropdown-item>
-												</el-dropdown-menu>
-											</el-dropdown>
-										</div>
+										<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
+										<tableControle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></tableControle>
 									</div>
 								</div>
 							<!--按钮操作行 End-->
@@ -111,14 +74,16 @@
 <script>
 import vheader from './common/vheader.vue'
 import navs_header from './common/nav_tabs.vue'
-import navs from './common/left_navs/nav_left.vue'
+import navs_left from './common/left_navs/nav_left2.vue'
+import tableControle from './plugin/table-controle/controle.vue'
 
 export default {
 	name: 'safemanage',
 		components: {
 			vheader,
 			navs_header,
-			navs,
+			tableControle,
+			navs_left,
 		},
 
     data() {

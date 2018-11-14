@@ -5,7 +5,11 @@
 			<navs_header></navs_header>
 		</div>
 		<div class="contentbg">
+			<!--左侧菜单调用 Begin-->
 			<navs_left></navs_left>
+			<!--左侧菜单调用 End-->
+
+			<!--右侧内容显示 Begin-->
 			<div class="wrapper wrapper-content">
 				<div class="ibox-content">
 					<div class="fixed-table-toolbar clearfix">
@@ -37,9 +41,7 @@
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
-							<button class="btn btn-default btn-outline" type="button" name="refresh" aria-label="refresh" title="刷新">
-								<i class="icon-refresh"></i>
-							</button>
+							<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
 							<tableControle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></tableControle>
 						</div>
 					</div>
@@ -74,7 +76,7 @@
 								<el-table-column label="备注" sortable  width="290" prop="tips" v-if="this.checkedName.indexOf('备注')!=-1">
 								</el-table-column>
 							</el-table>
-							<el-pagination class="pull-right" v-if="this.checkedName.length>0"
+							<el-pagination background class="pull-right" v-if="this.checkedName.length>0"
 					            @size-change="sizeChange"
 					            @current-change="currentChange"
 					            :current-page="page.currentPage"
@@ -90,12 +92,13 @@
 			</div>
 			<rolemask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></rolemask>
 			<datalimitmask ref="aaa" v-bind:page=page></datalimitmask>
+			<!--右侧内容显示 End-->
 		</div>
 	</div>
 </template>
 <script>
 	import vheader from './common/vheader.vue'
-	import navs_left from './common/left_navs/nav_left.vue'
+	import navs_left from './common/left_navs/nav_left2.vue'
 	import navs_header from './common/nav_tabs.vue'
 	import rolemask from './common/role_mask.vue'
 	import datalimitmask from './common/datalimit_mask.vue'

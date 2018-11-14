@@ -38,7 +38,7 @@
 									</div>
 
 									<div class="columns columns-right btn-group pull-right">
-										<div class="btn btn-default btn-refresh" id="refresh" title="刷新"><i class="icon-refresh"></i></div>
+										<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
 										<tableControle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></tableControle>
 									</div>
 								</div>
@@ -76,7 +76,7 @@
 										<el-table-column label="备注" sortable prop="MEMO" v-if="this.checkedName.indexOf('备注')!=-1">
 										</el-table-column>
 									</el-table>
-									<el-pagination class="pull-right pt10 pb10" v-if="this.checkedName.length>0"
+									<el-pagination background class="pull-right pt10 pb10" v-if="this.checkedName.length>0"
 							            @size-change="sizeChange"
 							            @current-change="currentChange"
 							            :current-page="page.currentPage"

@@ -15,7 +15,6 @@
 							<!--我的应用 Begin-->
 							<div class="clearfix">
 								<h3 class="pull-left">我的应用</h3>
-								
 							</div>
 							<el-row :gutter="20" class="applist">
 								<!--APPList Begin-->

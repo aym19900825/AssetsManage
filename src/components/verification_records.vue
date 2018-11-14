@@ -49,44 +49,12 @@
 				<div v-show="search" class="pb10">
 					<el-form status-icon :model="searchList" label-width="70px">
 						<el-row :gutter="10">
-							<el-col :span="6">
-								<el-form-item label="标准编号" class="searchlist" label-width="85px">
-									<el-input v-model="searchList.typename"></el-input>
-								</el-form-item>
+							<el-col :span="5">
+								<el-input v-model="searchList.typename">
+									<template slot="prepend">类型名称</template>
+								</el-input>
 							</el-col>
-							<el-col :span="6">
-								<el-form-item label="状态" class="searchlist" label-width="85px">
-									<el-input v-model="searchList.typename"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="6">
-								<el-form-item label="机构" class="searchlist" label-width="85px">
-									<el-input v-model="searchList.typename"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="6">
-								<el-form-item label="发布时间" class="searchlist" label-width="85px">
-									<el-input v-model="searchList.typename"></el-input>
-								</el-form-item>
-							</el-col>
-						</el-row>
-						<el-row :gutter="10">
-							<el-col :span="6">
-								<el-form-item label="标准名称" class="searchlist" label-width="85px">
-									<el-input v-model="searchList.typename"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="6">
-								<el-form-item label="版本" class="searchlist" label-width="85px">
-									<el-input v-model="searchList.typename"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="6">
-								<el-form-item label="启用时间" class="searchlist" label-width="85px">
-									<el-input v-model="searchList.typename"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="2"  class="pull-right">
+							<el-col :span="2">
 								<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
 							</el-col>
 						</el-row>
@@ -96,17 +64,17 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :data="userList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
+						<el-table :data="userList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 							</el-table-column>
 							<el-table-column label="组织机构代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('组织机构代码')!=-1">
 							</el-table-column>
-							<el-table-column label="单位名称" width="300" sortable prop="NAME" v-if="this.checkedName.indexOf('单位名称')!=-1">
+							<el-table-column label="单位名称" width="200" sortable prop="NAME" v-if="this.checkedName.indexOf('单位名称')!=-1">
 							</el-table-column>
-							<el-table-column label="联系地址" sortable width="300" prop="CONTACT_ADDRESS" v-if="this.checkedName.indexOf('联系地址')!=-1">
+							<el-table-column label="联系电话" sortable prop="PHONE" v-if="this.checkedName.indexOf('联系电话')!=-1">
 							</el-table-column>
-							<el-table-column label="联系电话" sortable width="200" prop="PHONE" v-if="this.checkedName.indexOf('联系电话')!=-1">
-							</el-table-column>	
+							<el-table-column label="联系地址" sortable prop="CONTACT_ADDRESS" v-if="this.checkedName.indexOf('联系地址')!=-1">
+							</el-table-column>						
 							<el-table-column label="状态" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
 							</el-table-column>
 						</el-table>
@@ -125,13 +93,13 @@
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
-		<customermask ref="child" @request="requestData" v-bind:page=page></customermask>
+		<customermask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></customermask>
 	</div>
 </div>
 </template>
 <script>
 	import vheader from './common/vheader.vue'
-	import navs_left from './common/left_navs/nav_left2.vue'
+	import navs_left from './common/left_navs/nav_left4.vue'
 	import navs_header from './common/nav_tabs.vue'
 	import customermask from './common/customer_mask.vue'
 	import table from './plugin/table/table-normal.vue'
@@ -148,6 +116,7 @@
 		},
 		data() {
 			return {
+				dataUrl: '/api/api-user/users',
 				searchData: {
 			        page: 1,
 			        limit: 10,//分页显示数
@@ -162,8 +131,8 @@
 					'组织机构代码',
 					'单位名称',
 					'性别',
-					'联系地址',
 					'联系电话',
+					'联系地址',
 					'状态'
 				],
 				tableHeader: [
@@ -176,12 +145,12 @@
 						prop: 'nickname'
 					},
 					{
-						label: '联系地址',
-						prop: 'deptName'
-					},
-					{
 						label: '联系电话',
 						prop: 'telephone'
+					},
+					{
+						label: '联系地址',
+						prop: 'deptName'
 					},
 					{
 						label: '状态',
@@ -451,6 +420,7 @@
 
 		mounted() {
 			this.requestData();
+			this.getKey();
 		},
 	}
 </script>

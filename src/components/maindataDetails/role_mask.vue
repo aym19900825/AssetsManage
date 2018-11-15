@@ -176,6 +176,7 @@
 					this.rebackDialog();
 				}
 			},
+			//放大按钮
 			maxDialog(e) {
 				this.isok1 = false;
 				this.isok2 = true;
@@ -196,7 +197,7 @@
 			getCheckedNodes() {
 				this.cccData = this.$refs.tree.getCheckedNodes()
 			},
-			//保存users/saveOrUpdate
+			//保存信息
 			submitForm() {
 				this.$refs.roleList.validate((valid) => {
 					// if(valid) {	
@@ -236,7 +237,7 @@
 					this.dialogVisible = true;
 				});
 			},
-			//
+			//确定按钮
 			queding() {
 				this.getCheckedNodes();
 				this.placetext = false;

@@ -105,7 +105,7 @@
 	import tableControle from './plugin/table-controle/controle.vue'
 	export default {
 		name: 'user_management',
-		components: {
+		components: {//引用组件标签命名
 			'vheader': vheader,
 			'navs_header': navs_header,
 			'navs_left': navs_left,
@@ -120,13 +120,13 @@
 				'冻结': false,
 				'男': true,
 				'女': false,
-				checkedName: [
+				checkedName: [//控制表格列的显示隐藏相关数据
 					'角色名称',
 					'所在机构',
 					'别名',
 					'备注'
 				],
-				tableHeader: [
+				tableHeader: [//控制表格列的显示隐藏相关数据
 					{
 						label: '角色名称',
 						prop: 'name'
@@ -144,25 +144,17 @@
 						prop: 'tips'
 					},
 				],
-				roleList: [],
+				roleList: [],//表格数据
 				search: false,
-				show: false,
 				down: true,
 				up: false,
-				searchList: {
+				searchList: {//高级查询数据
 					name: ''
 				},
 				//tree
-				resourceData: [], //数组，我这里是通过接口获取数据，
-				resourceDialogisShow: false,
-				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
-				resourceProps: {
-					children: "subDepts",
-					label: "simplename"
-				},
-				treeData: [],
-				userData:[],
-				page: {
+				resourceData: [], //数组，我这里是通过接口获取数据
+				treeData: [],//树
+				page: {//页码
 					currentPage: 1,
 					pageSize: 10,
 					totalCount: 0
@@ -171,13 +163,16 @@
 			}
 		},
 		methods: {
+			//控制列的显示隐藏调用函数
 			tableControle(data){
 				this.checkedName = data;
 			},
+			//获取pageSize
 			sizeChange(val) {
 		      this.page.pageSize = val;
 		      this.requestData();
 		    },
+		    //获取currentPage
 		    currentChange(val) {
 		      this.page.currentPage = val;
 		      this.requestData();
@@ -240,7 +235,8 @@
 					var changeUser = selData[0];
 					var id = changeUser.id;
 					var url = '/api/api-user/roles/' + id;
-					this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
+					//.delete 传数据方法
+					this.$axios.delete(url, {}).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -258,7 +254,7 @@
 				}
 			},
 			judge(data) {
-				//taxStatus 布尔值
+				//布尔值判断
 				return data.enabled ? '启用' : '冻结'
 			},
 			sexName(data) {
@@ -272,9 +268,11 @@
 				}
 				return this.$moment(date).format("YYYY-MM-DD"); 
 			},
+			//表格勾选获取的一行的值
 			SelChange(val) {
 				this.selUser = val;
 			},
+			//页面加载数据
 			requestData(index) {
 				var data = {
 					page: this.page.currentPage,
@@ -312,13 +310,13 @@
 				}
 				return data;
 			},
-			getTreeId(data){
-			},
-			handleNodeClick(data) {
-			},
-			formatter(row, column) {
-				return row.enabled;
-			},
+			// getTreeId(data){
+			// },
+			// handleNodeClick(data) {
+			// },
+			// formatter(row, column) {
+			// 	return row.enabled;
+			// },
 		},
 		mounted() {
 			this.requestData();

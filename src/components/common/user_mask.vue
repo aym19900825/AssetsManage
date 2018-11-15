@@ -236,14 +236,21 @@
 					callback();
 				}
 			};
-			var validatePass6 = (rule, value, callback) => {
-                var regidnumber = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/; 
-                if (!regidnumber.test(this.user.idnumber)) {
-                   callback(new Error('身份证号填写有误'));
-                } else {
-                    callback();
-                }
-            };
+//			var validatePass6 = (rule, value, callback) => {
+//              var regidnumber = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/; 
+//              if (!regidnumber.test(this.user.idnumber)) {
+//                 callback(new Error('身份证号填写有误'));
+//              } else {
+//                  callback();
+//              }
+//          };
+            var validatePass6 = (rule, value, callback) => {//验证身份证号
+				if (value && (!(/\d{17}[\d|x]|\d{15}/).test(value) || (value.length !== 15 && value.length !== 18))) {
+  				    callback(new Error('身份证号码不符合规范'))
+  				} else {
+  				    callback()
+  				}
+		    };
             var validatePass7 = (rule, value, callback) => {
                 var regphone = 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/; 
                  if(!regphone.test(this.user.phone)){
@@ -306,7 +313,7 @@
 					}],
 					idnumber: [{
 //						required: true,
-						trigger: 'blur',
+//						trigger: 'blur',
 						validator: validatePass6,
 					}],
 					phone: [{

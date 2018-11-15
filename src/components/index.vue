@@ -143,7 +143,7 @@ export default {
 			{
 				navicon: 'icon-data',
 				navtitle: '主数据',
-				navherf: '/maindata'
+				navherf: '/user_management'
 			}, {
 				navicon: 'icon-plan',
 				navtitle: '年度计划',
@@ -184,6 +184,10 @@ export default {
 				navicon: 'icon-inspection',
 				navtitle: '报表管理',
 				navherf: '/reports'
+			}, {
+				navicon: 'icon-settings',
+				navtitle: '系统设置',
+				navherf: '/menu_management'
 			}
 		]
       }

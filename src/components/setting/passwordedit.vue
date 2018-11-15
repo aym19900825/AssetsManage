@@ -65,9 +65,9 @@
 </template>
 
 <script>
-import vheader from './common/vheader.vue'
-import navs from './common/left_navs/nav_left.vue'
-import navs_header from './common/nav_tabs.vue'
+import vheader from '../common/vheader.vue'
+import navs from '../common/left_navs/nav_left.vue'
+import navs_header from '../common/nav_tabs.vue'
 
 export default {
 	name: 'passwordedit',
@@ -237,6 +237,6 @@ export default {
 </script>
 
 <style scoped>
-@import '../assets/css/mask-modules.css';
+@import '../../assets/css/mask-modules.css';
 
 </style>

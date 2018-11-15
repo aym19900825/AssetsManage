@@ -167,7 +167,7 @@
 	import navs_header from '../common/nav_tabs.vue'
 	import table from '../plugin/table/table-normal.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
-	import standardmask from '../common/testing_standardMask.vue'
+	import standardmask from '../maindataDetails/testing_standardMask.vue'
 	export default {
 		name: 'customer_management',
 		components: {

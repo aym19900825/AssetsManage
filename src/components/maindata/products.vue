@@ -1,4 +1,4 @@
-<template>
+maindataDetails<template>
 <div>
 	<div class="headerbg">
 		<vheader></vheader>
@@ -140,7 +140,7 @@
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left2.vue'
 	import navs_header from '../common/nav_tabs.vue'
-	import productmask from '../common/product_mask.vue'
+	import productmask from '../maindataDetails/product_mask.vue'
 	import table from '../plugin/table/table-normal.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	export default {

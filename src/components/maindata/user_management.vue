@@ -144,7 +144,7 @@
 	import navs_left from '../common/left_navs/nav_left2.vue'
 	import navs_header from '../common/nav_tabs.vue'
 	import assetsTree from '../plugin/vue-tree/tree.vue'
-	import usermask from '../common/user_mask.vue'
+	import usermask from '../maindataDetails/user_mask.vue'
 	export default {
 		name: 'user_management',
 		components: {

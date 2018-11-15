@@ -95,7 +95,7 @@
 	import navs_header from '../common/nav_tabs.vue'
 //	import assetsTree from '../plugin/vue-tree/tree.vue'
 //	import tableControle from '../plugin/table-controle/controle.vue'
-	import deptmask from '../common/dept_mask.vue'
+	import deptmask from '../maindataDetails/dept_mask.vue'
 
 	export default {
 		name: 'dept_management',

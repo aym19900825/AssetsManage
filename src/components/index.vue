@@ -18,7 +18,7 @@
 							</div>
 							<el-row :gutter="20" class="applist">
 								<!--APPList Begin-->
-								<el-col :span="4" v-for="item in applistdata">
+								<el-col :span="4" v-for="(item,index) in applistdata" key="index">
 									<div class="applistbg">
 										<router-link :to="item.navherf">
 											<span><i :class="item.navicon"></i></span>

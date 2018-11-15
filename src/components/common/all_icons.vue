@@ -5,7 +5,7 @@
           <div id="information" style="height: auto;">
 			<div class="pl20 pr20">
 				<el-row :gutter="30">
-					<el-col :span="6" v-for="item in classLists">
+					<el-col :span="6" v-for="(item,index) in classLists" key="index">
 						<span @click="spantext($event)"   :class="currentItem==item?'current':'' "><i :class="item">{{item}}</i></span>
 					</el-col>
 				</el-row>
@@ -13,7 +13,7 @@
 				
 				<h3 class="pt30">其它</h3>
 				<el-row :gutter="30">
-					<el-col :span="6" v-for="item in classLists1">
+					<el-col :span="6" v-for="item in classLists1" key="items">
 						<span @click="spantext($event)"><i :class="item">{{item}}</i></span>
 					</el-col>
 					

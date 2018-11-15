@@ -57,7 +57,7 @@
 								<el-input v-model="searchList.PRO_NUM">
 									<template slot="prepend">产品编号</template>
 								</el-input>
-								<el-button slot="append" icon="el-icon-search" @click="getCompany"></el-button>
+								<el-button slot="append" icon="el-icon-search" ></el-button>
 							</el-col>
 							<el-col :span="2" style="padding-top: 3px">
 									<el-select v-model="searchList.STATUS" placeholder="状态">

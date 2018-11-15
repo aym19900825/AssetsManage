@@ -511,14 +511,7 @@
 					}
 					
 					this.userList = newarr;
-				
-				
-				
-				
-				})
-				
-				
-				.catch((wrong) => {})
+				}).catch((wrong) => {})
 				this.userList.forEach((item, index) => {
 					var id = item.id;
 					this.$axios.get('/users/' + id + '/roles', data).then((res) => {

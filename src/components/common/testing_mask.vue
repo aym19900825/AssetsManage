@@ -15,7 +15,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="testingForm" :label-position="labelPosition" :rules="rules" ref="testingForm" label-width="100px" class="demo-adduserForm">
+				<el-form status-icon :model="testingForm" :label-position="labelPosition" :rules="rules" ref="testingForm" label-width="100px" class="demo-adduserForm">
 					<div class="accordion">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="基础信息" name="1">
@@ -40,7 +40,7 @@
 								
 									<el-row :gutter="70">
 										<el-col :span="8">
-											<el-form-item label="中文名称" prop="M_NAME">
+											<el-form-item label="中文名称" prop="M_NAME" required="true">
 												<el-input v-model="testingForm.M_NAME"></el-input>
 											</el-form-item>
 										</el-col>

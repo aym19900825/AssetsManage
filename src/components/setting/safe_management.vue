@@ -104,9 +104,9 @@
 </template>
 
 <script>
-import vheader from './common/vheader.vue'
-import navs_header from './common/nav_tabs.vue'
-import navs_left from './common/left_navs/nav_left.vue'
+import vheader from '../common/vheader.vue'
+import navs_header from '../common/nav_tabs.vue'
+import navs_left from '../common/left_navs/nav_left5.vue'
 
 export default {
 	name: 'safemanage',
@@ -283,7 +283,7 @@ export default {
 </script>
 
 <style scoped>
-@import '../assets/css/mask-modules.css';
+@import '../../assets/css/mask-modules.css';
 
 
 </style>

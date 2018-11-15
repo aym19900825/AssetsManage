@@ -90,12 +90,12 @@
 	</div>
 </template>
 <script>
-	import vheader from './common/vheader.vue'
-	import navs_left from './common/left_navs/nav_left.vue'
-	import navs_header from './common/nav_tabs.vue'
-	import datamask from './common/data_mask.vue'
-	import relamask from './common/rela_mask.vue'
-	import tableControle from './plugin/table-controle/controle.vue'
+	import vheader from '../common/vheader.vue'
+	import navs_left from '../common/left_navs/nav_left5.vue'
+	import navs_header from '../common/nav_tabs.vue'
+	import datamask from '../common/data_mask.vue'
+	import relamask from '../common/rela_mask.vue'
+	import tableControle from '../plugin/table-controle/controle.vue'
 	export default {
 		name: 'data_management',
 		components: {

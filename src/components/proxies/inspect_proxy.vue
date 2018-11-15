@@ -50,35 +50,12 @@
 					<el-form status-icon :model="searchList" label-width="70px">
 						<el-row :gutter="10">
 							<el-col :span="5">
-								<el-input v-model="searchList.NAME">
-									<template slot="prepend">单位名称</template>
+								<el-input v-model="searchList.typename">
+									<template slot="prepend">类型名称</template>
 								</el-input>
-							</el-col>
-							<el-col :span="5">
-								<el-input v-model="searchList.CODE">
-									<template slot="prepend">组织机构代码</template>
-								</el-input>
-							</el-col>
-							<el-col :span="5">
-								<el-input v-model="searchList.PHONE">
-									<template slot="prepend">联系电话</template>
-								</el-input>
-							</el-col>
-							<el-col :span="5">
-								<el-input v-model="searchList.CONTACT_ADDRESS">
-									<template slot="prepend">联系地址</template>
-								</el-input>
-							</el-col>
-							<el-col :span="2" style="padding-top: 3px">
-								<el-select v-model="searchList.STATUS" placeholder="状态">
-								      <el-option label="活动" value="1">	
-								      </el-option>
-								      <el-option label="不活动" value="0">
-								      </el-option>
-								    </el-select>
 							</el-col>
 							<el-col :span="2">
-								<el-button class="pull-right" type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+								<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
@@ -87,17 +64,17 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :data="userList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
+						<el-table :data="userList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 							</el-table-column>
 							<el-table-column label="组织机构代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('组织机构代码')!=-1">
 							</el-table-column>
-							<el-table-column label="单位名称" width="300" sortable prop="NAME" v-if="this.checkedName.indexOf('单位名称')!=-1">
+							<el-table-column label="单位名称" width="200" sortable prop="NAME" v-if="this.checkedName.indexOf('单位名称')!=-1">
 							</el-table-column>
-							<el-table-column label="联系地址" sortable width="300" prop="CONTACT_ADDRESS" v-if="this.checkedName.indexOf('联系地址')!=-1">
+							<el-table-column label="联系电话" sortable prop="PHONE" v-if="this.checkedName.indexOf('联系电话')!=-1">
 							</el-table-column>
-							<el-table-column label="联系电话" sortable width="200" prop="PHONE" v-if="this.checkedName.indexOf('联系电话')!=-1">
-							</el-table-column>	
+							<el-table-column label="联系地址" sortable prop="CONTACT_ADDRESS" v-if="this.checkedName.indexOf('联系地址')!=-1">
+							</el-table-column>						
 							<el-table-column label="状态" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
 							</el-table-column>
 						</el-table>
@@ -116,17 +93,17 @@
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
-		<customermask ref="child" @request="requestData" v-bind:page=page></customermask>
+		<customermask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></customermask>
 	</div>
 </div>
 </template>
 <script>
-	import vheader from './common/vheader.vue'
-	import navs_left from './common/left_navs/nav_left2.vue'
-	import navs_header from './common/nav_tabs.vue'
-	import customermask from './common/customer_mask.vue'
-	import table from './plugin/table/table-normal.vue'
-	import tableControle from './plugin/table-controle/controle.vue'
+	import vheader from '../common/vheader.vue'
+	import navs_left from '../common/left_navs/nav_left3.vue'
+	import navs_header from '../common/nav_tabs.vue'
+	import customermask from '../common/customer_mask.vue'
+	import table from '../plugin/table/table-normal.vue'
+	import tableControle from '../plugin/table-controle/controle.vue'
 	export default {
 		name: 'user_management',
 		components: {
@@ -139,6 +116,7 @@
 		},
 		data() {
 			return {
+				dataUrl: '/api/api-user/users',
 				searchData: {
 			        page: 1,
 			        limit: 10,//分页显示数
@@ -153,30 +131,30 @@
 					'组织机构代码',
 					'单位名称',
 					'性别',
-					'联系地址',
 					'联系电话',
+					'联系地址',
 					'状态'
 				],
 				tableHeader: [
 					{
 						label: '组织机构代码',
-						prop: 'CODE'
+						prop: 'username'
 					},
 					{
 						label: '单位名称',
-						prop: 'NAME'
-					},
-					{
-						label: '联系地址',
-						prop: 'CONTACT_ADDRESS'
+						prop: 'nickname'
 					},
 					{
 						label: '联系电话',
-						prop: 'PHONE'
+						prop: 'telephone'
+					},
+					{
+						label: '联系地址',
+						prop: 'deptName'
 					},
 					{
 						label: '状态',
-						prop: 'STATUS'
+						prop: 'enabled'
 					}
 				],
 				leftNavs: [//leftNavs左侧菜单数据
@@ -236,11 +214,9 @@
 				ismin:true,
 				clientHeight:'',//获取浏览器高度
 				searchList: {
-					NAME: '',
-					CODE: '',
-					PHONE: '',
-					CONTACT_ADDRESS:'',
-					STATUS:''
+					nickname: '',
+					enabled: '',
+					createTime: ''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -291,25 +267,21 @@
 			},
 			//添加用戶
 			openAddMgr() {
-				this.addtitle = true;
-				this.modifytitle = false;
-				this.$refs.child.resetNew();
+//				this.$refs.child.resetNew();
 				this.$refs.child.visible();
 			},
 			//修改用戶
 			modify() {
-				this.addtitle = false;
-				this.modifytitle = true;
 				this.aaaData = this.selUser;
 				if(this.aaaData.length == 0) {
 					this.$message({
-						message: '请您选择要修改的客户',
+						message: '请您选择要修改的用户',
 						type: 'warning'
 					});
 					return;
 				} else if(this.aaaData.length > 1) {
 					this.$message({
-						message: '不可同时修改多个客户',
+						message: '不可同时修改多个用户',
 						type: 'warning'
 					});
 					return;
@@ -328,13 +300,13 @@
 				var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({
-						message: '请您选择要删除的客户',
+						message: '请您选择要删除的用户',
 						type: 'warning'
 					});
 					return;
 				} else if(selData.length > 1) {
 					this.$message({
-						message: '不可同时删除多个客户',
+						message: '不可同时删除多个用户',
 						type: 'warning'
 					});
 					return;
@@ -448,6 +420,7 @@
 
 		mounted() {
 			this.requestData();
+			this.getKey();
 		},
 	}
 </script>

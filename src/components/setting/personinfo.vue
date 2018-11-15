@@ -233,10 +233,10 @@
 </template>
 
 <script>
-	import vheader from './common/vheader.vue'
-	import navs from './common/left_navs/nav_left.vue'
-	import navs_header from './common/nav_tabs.vue'
-	import usermask from './common/user_mask.vue'
+	import vheader from '../common/vheader.vue'
+	import navs from '../common/left_navs/nav_left.vue'
+	import navs_header from '../common/nav_tabs.vue'
+	import usermask from '../common/user_mask.vue'
 
 	export default {
 		name: 'personinfo',
@@ -569,7 +569,7 @@
 </script>
 
 <style scoped>
-@import '../assets/css/mask-modules.css';
+@import '../../assets/css/mask-modules.css';
 
 .avatar-uploader {
     border: 1px dashed #d9d9d9;

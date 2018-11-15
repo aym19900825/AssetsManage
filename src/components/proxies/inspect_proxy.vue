@@ -111,7 +111,6 @@
 			navs_left,
 			navs_header,
 			tableControle,
-			// customermask,
 			table
 		},
 		data() {

@@ -64,16 +64,16 @@
 					<div class="row">
 						<div class="col-sm-12">
 							<!-- 表格begin -->
-							<el-table :data="roleList" height="400" border stripe style="width: 100%; margin: 0 auto;" :default-sort="{prop:'roleList', order: 'descending'}" @selection-change="SelChange">
+							<el-table :data="roleList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'roleList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="角色名称" sortable width="290" prop="name" v-if="this.checkedName.indexOf('角色名称')!=-1">
+								<el-table-column label="角色名称" sortable prop="name" v-if="this.checkedName.indexOf('角色名称')!=-1">
 								</el-table-column>
-								<el-table-column label="所在机构" sortable width="290" prop="deptName" v-if="this.checkedName.indexOf('所在机构')!=-1">
+								<el-table-column label="所在机构" sortable prop="deptName" v-if="this.checkedName.indexOf('所在机构')!=-1">
 								</el-table-column>
-								<el-table-column label="别名" sortable  width="290" prop="code" v-if="this.checkedName.indexOf('别名')!=-1">
+								<el-table-column label="别名" sortable prop="code" v-if="this.checkedName.indexOf('别名')!=-1">
 								</el-table-column>
-								<el-table-column label="备注" sortable  width="290" prop="tips" v-if="this.checkedName.indexOf('备注')!=-1">
+								<el-table-column label="备注" sortable prop="tips" v-if="this.checkedName.indexOf('备注')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="pull-right" v-if="this.checkedName.length>0"

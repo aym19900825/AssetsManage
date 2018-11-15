@@ -49,7 +49,7 @@
 								<el-form status-icon :model="searchList" label-width="70px">
 									<el-row :gutter="10">
 										<el-col :span="5">
-											<el-input v-model="searchList.typename">
+											<el-input v-model="searchList.AUTOKEY">
 												<template slot="prepend">自动编号名称</template>
 											</el-input>
 										</el-col>
@@ -64,7 +64,7 @@
 							<el-row :gutter="0">
 								<el-col :span="24">
 									<!-- 表格 Begin-->
-									<el-table :data="userList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+									<el-table :data="userList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
 										<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 										</el-table-column>
 										<el-table-column label="自动编号名称" sortable prop="AUTOKEY" v-if="this.checkedName.indexOf('自动编号名称')!=-1">
@@ -168,8 +168,7 @@
 				ismin:true,
 				clientHeight:'',//获取浏览器高度
 				searchList: {
-					S_NUM: '',
-					enabled: '',
+					AUTOKEY: '',
 					createTime: ''
 				},
 				//tree
@@ -199,8 +198,6 @@
 				var clientHeight = $(window).height() - 100;
 				_this.$refs.homePagess.style.height = clientHeight + 'px';
 			};
-
-			
 		},
 		methods: {
 			tableControle(data){
@@ -323,12 +320,8 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					S_NUM: this.searchList.S_NUM,
-					enabled: this.searchList.enabled,
-					searchKey: 'createTime',
-					searchValue: this.searchList.createTime,
-					companyId: this.companyId,
-					deptId: this.deptId
+					S_NUM: this.searchList.AUTOKEY,
+					searchValue: this.searchList.createTime
 				}
 				var url = '/api/api-user/users';
 				this.$axios.get(url, {
@@ -344,34 +337,14 @@
 					}).catch((wrong) => {})
 				})
 			},
-			loadMore () {
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page++
-			     if (this.page > 10) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     console.log('到底了', this.page)
-			   }
-			 },
+			
 			handleNodeClick(data) {
 			},
 			formatter(row, column) {
 				return row.enabled;
 			},
 		},
-		mounted(){
-             // 注册scroll事件并监听  
-             let self = this;
-              $(".div-table").scroll(function(){
-                self.loadMore();
-            })
-        },
-
-
+		
 		mounted() {
 			this.requestData();
 		},

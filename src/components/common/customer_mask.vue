@@ -14,8 +14,8 @@
 					</span>
 				</div>
 			</div>
-			<div class="mask_content">
-				<el-form :model="CUSTOMER" :label-position="labelPosition" :rules="rules" ref="CUSTOMER" label-width="100px" class="demo-adduserForm">
+			<div class="mask_content"><!-- status-icon验证后小对号 -->
+				<el-form status-icon :model="CUSTOMER" :label-position="labelPosition" :rules="rules" ref="CUSTOMER" label-width="100px" class="demo-adduserForm">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="基本信息" name="1">

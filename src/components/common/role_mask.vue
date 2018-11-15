@@ -2,7 +2,6 @@
 	<div>
 		
 		<div class="mask" v-show="show"></div>
-		<!-- <EasyScrollbar> -->
 		<div class="mask_div"  v-show="show">
 			<div class="mask_title_div clearfix">
 				<div class="mask_title">添加角色</div>
@@ -74,6 +73,7 @@
 	export default {
 		name: 'masks',		
 		data() {
+			//验证name
 			var validatePass1 = (rule, value, callback) => {
 				if(value === '') {
 					callback(new Error('必填'));
@@ -85,26 +85,22 @@
 				edit: true, //禁填
 				'男': true,
 				'女': false,
-				col_but1: true,
-				col_but2: true,
-				show: false,
-				show1:false,
-				isok1: true,
-				isok2: false,
-				down: true,
-				up: false,
-				useritem: [],
+				show: false,//控制弹出框显示隐藏
+				isok1: true,//控制弹出框放大还原
+				isok2: false,//控制弹出框放大还原
+				down: true,//控制高级查询划出收起
+				up: false,//控制高级查询划出收起
 				activeNames: ['1'], //手风琴数量
 				clientHeight:'',//获取浏览器高度
-				labelPosition: 'top', //表格
+				labelPosition: 'top', //表单label位置
 				dialogVisible: false, //对话框
-				roleList:{
+				roleList:{//表格数据
 					name:'',
 					code:'',
 					deptId:'',
 					tips:''
 				},
-				rules: {
+				rules: {//验证表单
 					name: [{
 						required: true,
 						trigger: 'blur',
@@ -119,7 +115,6 @@
 					children: "subDepts",
 					label: "simplename"
 				},
-				selectData: [],
 				cccData:{}
 			};
 		},
@@ -141,18 +136,6 @@
 		    },
 		    handleNodeClick(data) {
             },
-			col_but(col_but) {
-				if(col_but == 'col_but1') {
-					this.col_but1 = !this.col_but1;
-					this.down = !this.down,
-						this.up = !this.up
-				}
-				if(col_but == 'col_but2') {
-					this.col_but2 = !this.col_but2;
-					this.down = !this.down,
-						this.up = !this.up
-				}
-			},
 			//form表单内容清空
 			resetNew(){
                 this.roleList = {
@@ -253,6 +236,7 @@
 					this.dialogVisible = true;
 				});
 			},
+			//
 			queding() {
 				this.getCheckedNodes();
 				this.placetext = false;

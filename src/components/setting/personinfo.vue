@@ -14,7 +14,7 @@
 					</span>
 				</div>
 				<ul class="navs" id="side-menu" v-show="!isShow" >
-					<li v-for="item in leftNavs">
+					<li v-for="(item,index) in leftNavs" :key="index">
 						<router-link :to="item.navherf">
 							<i :class="item.navicon"></i>
 							<span class="nav-label" v-show="ismin">{{item.navtitle}}</span>

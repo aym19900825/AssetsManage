@@ -124,7 +124,7 @@
 	import navs_header from '../common/nav_tabs.vue'
 	import table from '../plugin/table/table-normal.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
-	import testingmask from '../common/testing_mask.vue'
+	import testingmask from '../common/testing_methodsMask.vue'
 	export default {
 		name: 'testing_methods',
 		components: {

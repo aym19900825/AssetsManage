@@ -3,7 +3,7 @@
     <el-table :data="tableData" style="width: 96%;margin: 0 auto;" :default-sort="{prop:'tableData', order: 'descending'}" @selection-change="selChange">
       <el-table-column type="selection" width="55" v-if="checkedName.length>0">
       </el-table-column>
-      <el-table-column v-for="item in tableHeader" :label="item.label" sortable :prop="item.prop" v-if="checkedName.indexOf(item.label)!=-1">
+      <el-table-column v-for="(item,index) in tableHeader" :label="item.label"  :key="index" sortable :prop="item.prop" v-if="checkedName.indexOf(item.label)!=-1">
       </el-table-column>
     </el-table>
     <el-pagination v-if="this.checkedName.length>0"

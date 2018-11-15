@@ -15,59 +15,61 @@
 					</span>
 				</div>
 			</div>
-			<el-form :model="user" :label-position="labelPosition" :rules="rules" ref="user" label-width="100px" class="demo-user">
-				<div class="accordion" id="information">
-					<div class="mask_tab-block">
-						<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
-							<el-row :gutter="70">
-								<el-col :span="12">
-									<el-form-item label="应用名称" prop="companyName">
-										<el-input v-model="user.companyName" :disabled="edit">
-											<el-button slot="append" icon="el-icon-search" @click="getCompany"></el-button>
-										</el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="12">
-									<el-form-item label="表名称" prop="companyName">
-										<el-input v-model="user.companyName" :disabled="edit">
-											<el-button slot="append" icon="el-icon-search" @click="getCompany"></el-button>
-										</el-input>
-									</el-form-item>
-								</el-col>
-							</el-row>
-							<el-row :gutter="70">
-								<el-col :span="12">
-									<el-form-item label="限制方式" prop="sex">
-										<el-radio-group v-model="user.sexName">
-											<el-radio label="默认"></el-radio>
-											<el-radio label="自定义"></el-radio>
-										</el-radio-group>
-									</el-form-item>
-								</el-col>
-								<el-col :span="12">
-									<el-form-item label="字段名" prop="deptName">
-										<el-input v-model="user.deptName" :disabled="edit">
-											<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
-										</el-input>
-									</el-form-item>
-								</el-col>
-							</el-row>
-							<el-row :gutter="70">
-								<el-col :span="24">
-									<el-form-item label="限制范围" prop="password">
-										<el-input type="textarea" v-model="user.password" placeholder="请填写"></el-input>
-									</el-form-item>
-								</el-col>
-							</el-row>
+			<div class="mask_content">
+				<el-form :model="user" :label-position="labelPosition" :rules="rules" ref="user" label-width="100px" class="demo-user">
+					<div class="accordion" id="information">
+						<div class="mask_tab-block">
+							<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
+								<el-row :gutter="70">
+									<el-col :span="12">
+										<el-form-item label="应用名称" prop="companyName">
+											<el-input v-model="user.companyName" :disabled="edit">
+												<el-button slot="append" icon="el-icon-search" @click="getCompany"></el-button>
+											</el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="12">
+										<el-form-item label="表名称" prop="companyName">
+											<el-input v-model="user.companyName" :disabled="edit">
+												<el-button slot="append" icon="el-icon-search" @click="getCompany"></el-button>
+											</el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="12">
+										<el-form-item label="限制方式" prop="sex">
+											<el-radio-group v-model="user.sexName">
+												<el-radio label="默认"></el-radio>
+												<el-radio label="自定义"></el-radio>
+											</el-radio-group>
+										</el-form-item>
+									</el-col>
+									<el-col :span="12">
+										<el-form-item label="字段名" prop="deptName">
+											<el-input v-model="user.deptName" :disabled="edit">
+												<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
+											</el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="24">
+										<el-form-item label="限制范围" prop="password">
+											<el-input type="textarea" v-model="user.password" placeholder="请填写"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+							</div>
 						</div>
 					</div>
-				</div>
 
-				<div class="el-dialog__footer">
-					<el-button @click='close'>取消</el-button>
-					<el-button type="primary" @click='submitForm()'>保存</el-button>
-				</div>
-			</el-form>
+					<div class="el-dialog__footer">
+						<el-button @click='close'>取消</el-button>
+						<el-button type="primary" @click='submitForm()'>保存</el-button>
+					</div>
+				</el-form>
+			</div>
 		</div>
 	</div>
 </template>

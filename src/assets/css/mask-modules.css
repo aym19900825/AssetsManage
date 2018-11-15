@@ -16,19 +16,23 @@
     background:#F3F6FA;	
     border-radius: 0px;
     height: 80%;
-    overflow-y: scroll;
-    overflow-x: hidden;
     top: 0px;
     bottom: 0px;
+    overflow: hidden;
 }
 .mask_title_div{
 	width:100%;
 	height:40px;
 	background:#F3F6FA;	
 }
-.accordion{
-	
+.mask_content{
+    width: 100%;
+    height: 95%;
+    position: absolute;
+	z-index: 15;
+    overflow-y: auto;
 }
+
 .mask_title{
 	height:25px;
 	font-size:18px;

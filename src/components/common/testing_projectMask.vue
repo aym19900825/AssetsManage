@@ -13,98 +13,100 @@
 					</span>
 				</div>
 			</div>
-			<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
-				<div class="accordion" id="information">
-					<el-collapse v-model="activeNames" @change="handleChange">
-						<el-collapse-item title="基本信息" name="1">
-							<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
-								<el-row :gutter="70">
-									<el-col :span="8">
-										<el-form-item label="检验检测项目编号" prop="P_NUM">
-											<el-input v-model="dataInfo.P_NUM" :disabled="true"></el-input>
+			<div class="mask_content">
+				<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
+					<div class="accordion" id="information">
+						<el-collapse v-model="activeNames" @change="handleChange">
+							<el-collapse-item title="基本信息" name="1">
+								<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
+									<el-row :gutter="70">
+										<el-col :span="8">
+											<el-form-item label="检验检测项目编号" prop="P_NUM">
+												<el-input v-model="dataInfo.P_NUM" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="项目名称" prop="P_NAME">
+												<el-input v-model="dataInfo.P_NAME"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="状态" prop="STATUS">
+												<el-input v-model="dataInfo.STATUS" :disabled="true"></el-input>
+											</el-form-item>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row :gutter="70">
+										<el-col :span="8">
+										<el-form-item label="版本" prop="VERSION">
+											<el-input v-model="dataInfo.VERSION" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="项目名称" prop="P_NAME">
-											<el-input v-model="dataInfo.P_NAME"></el-input>
+											<el-form-item label="人员资质" prop="QUALIFICATION">
+												<el-input v-model="dataInfo.QUALIFICATION"></el-input>
+											</el-form-item> 
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="领域" prop="FIELD">
+												<el-input v-model="dataInfo.FIELD"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row :gutter="70">
+										<el-col :span="8">
+										<el-form-item label="子领域" prop="CHILD_FIELD">
+											<el-input v-model="dataInfo.CHILD_FIELD"></el-input>
+											</el-date-picker>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="状态" prop="STATUS">
-											<el-input v-model="dataInfo.STATUS" :disabled="true"></el-input>
-										</el-form-item>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row :gutter="70">
-									<el-col :span="8">
-									<el-form-item label="版本" prop="VERSION">
-										<el-input v-model="dataInfo.VERSION" :disabled="true"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="8">
-										<el-form-item label="人员资质" prop="QUALIFICATION">
-											<el-input v-model="dataInfo.QUALIFICATION"></el-input>
-										</el-form-item> 
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="领域" prop="FIELD">
-											<el-input v-model="dataInfo.FIELD"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row :gutter="70">
-									<el-col :span="8">
-									<el-form-item label="子领域" prop="CHILD_FIELD">
-										<el-input v-model="dataInfo.CHILD_FIELD"></el-input>
-										</el-date-picker>
-									</el-form-item>
-								</el-col>
-								<el-col :span="8">
-										<el-form-item label="文档" prop="DOCLINKS_NUM">
-											<el-input v-model="dataInfo.DOCLINKS_NUM"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="机构" prop="DEPT">
-											<el-input v-model="dataInfo.DEPT" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row :gutter="70">
-									<el-col :span="8">
-										<el-form-item label="录入人" prop="description">
-											<el-input v-model="dataInfo.description" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="录入时间" prop="description">
-											<el-input v-model="dataInfo.description" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="修改人" prop="description">
-											<el-input v-model="dataInfo.description" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
-									
-								</el-row>
-								<el-row :gutter="70">
-									<el-col :span="8">
-										<el-form-item label="修改时间" prop="description">
-											<el-input v-model="dataInfo.description" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-							</div>
-					</el-collapse-item>
-					</el-collapse>
-				</div>
-				<div class="el-dialog__footer">
-					<el-button @click='close'>取消</el-button>
-					<el-button type="primary" @click="submitForm('dataInfo')">提交</el-button>
-				</div>
-			</el-form>
+											<el-form-item label="文档" prop="DOCLINKS_NUM">
+												<el-input v-model="dataInfo.DOCLINKS_NUM"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="机构" prop="DEPT">
+												<el-input v-model="dataInfo.DEPT" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row :gutter="70">
+										<el-col :span="8">
+											<el-form-item label="录入人" prop="description">
+												<el-input v-model="dataInfo.description" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="录入时间" prop="description">
+												<el-input v-model="dataInfo.description" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="修改人" prop="description">
+												<el-input v-model="dataInfo.description" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										
+									</el-row>
+									<el-row :gutter="70">
+										<el-col :span="8">
+											<el-form-item label="修改时间" prop="description">
+												<el-input v-model="dataInfo.description" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+								</div>
+							</el-collapse-item>
+						</el-collapse>
+					</div>
+					<div class="el-dialog__footer">
+						<el-button @click='close'>取消</el-button>
+						<el-button type="primary" @click="submitForm('dataInfo')">提交</el-button>
+					</div>
+				</el-form>
+			</div>
 		</div>
 		
 	</div>

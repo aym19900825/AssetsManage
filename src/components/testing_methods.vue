@@ -9,7 +9,6 @@
 		<navs_left></navs_left>
 		<!--左侧菜单内容显示 End-->
 
-
 		<!--右侧内容显示 Begin-->
 		<div class="wrapper wrapper-content">
 			<EasyScrollbar>
@@ -115,6 +114,7 @@
 			</EasyScrollbar>
 		</div>
 		<!--右侧内容显示 End-->
+		<testingmask :adddeptForm="selMenu[0]" ref="child" @request="requestData" v-bind:page=page></testingmask>
 	</div>
 </div>
 </template>
@@ -124,14 +124,16 @@
 	import navs_header from './common/nav_tabs.vue'
 	import table from './plugin/table/table-normal.vue'
 	import tableControle from './plugin/table-controle/controle.vue'
+	import testingmask from './common/testing_mask.vue'
 	export default {
-		name: 'customer_management',
+		name: 'testing_methods',
 		components: {
 			vheader,
 			navs_left,
 			navs_header,
 			tableControle,
 			table,
+			testingmask
 		},
 		data() {
 			return {
@@ -221,7 +223,7 @@
 					}, {
 						navicon: 'icon-file-text',
 						navtitle: '客户管理',
-						navherf: '/customer_management'
+						navherf: '/testing_methods'
 					}, {
 						navicon: 'icon-file-text',
 						navtitle: '产品类别',
@@ -256,6 +258,7 @@
 				'男': true,
 				'女': false,
 				userList: [],
+				selMenu:[],
 				search: false,
 				show: false,
 				down: true,
@@ -269,14 +272,7 @@
 					createTime: ''
 				},
 				//tree
-				resourceData: [], //数组，我这里是通过接口获取数据，
-				resourceDialogisShow: false,
-				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
-				resourceProps: {
-					children: "subDepts",
-					label: "simplename"
-				},
-				userData:[],
+				
 				page: {//分页显示
 					currentPage: 1,
 					pageSize: 10,
@@ -314,23 +310,23 @@
 				this.page.pageSize = 10;
 				this.requestData();
 			},
-			//添加用戶
+			//添加检验/检测方法编号
 			openAddMgr() {
-//				this.$refs.child.resetNew();
-				this.$refs.child.visible();
+				this.$refs.child.resetNew();
+				this.$refs.child.childMethods();
 			},
-			//修改用戶
+			//修改检验/检测方法编号
 			modify() {
 				this.aaaData = this.selUser;
 				if(this.aaaData.length == 0) {
 					this.$message({
-						message: '请您选择要修改的用户',
+						message: '请您选择要修改的数据',
 						type: 'warning'
 					});
 					return;
 				} else if(this.aaaData.length > 1) {
 					this.$message({
-						message: '不可同时修改多个用户',
+						message: '不可同时修改多条数据',
 						type: 'warning'
 					});
 					return;
@@ -349,13 +345,13 @@
 				var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({
-						message: '请您选择要删除的用户',
+						message: '请您选择要删除的数据',
 						type: 'warning'
 					});
 					return;
 				} else if(selData.length > 1) {
 					this.$message({
-						message: '不可同时删除多个用户',
+						message: '不可同时删除多条数据',
 						type: 'warning'
 					});
 					return;

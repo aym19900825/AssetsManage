@@ -51,35 +51,36 @@
 				<div v-show="search" class="pb10">
 					<el-form status-icon :model="searchList" label-width="70px">
 						<el-row :gutter="10">
-							<el-col :span="7">
-								<el-form-item label="产品类别名称" class="searchlist" label-width="115px">
-									<el-input v-model="searchList.typename"></el-input>
-								</el-form-item>
+							<el-col :span="5">
+								<el-input v-model="searchList.TYPE">
+									<template slot="prepend">类别名称</template>
+								</el-input>
 							</el-col>
-							<el-col :span="6">
-								<el-form-item label="单位名称" class="searchlist" label-width="85px">
-									<el-input v-model="searchList.typename"></el-input>
-								</el-form-item>
+							<el-col :span="5">
+								<el-input v-model="searchList.NAME">
+									<template slot="prepend">单位名称</template>
+								</el-input>
 							</el-col>
-							<el-col :span="6">
-								<el-form-item label="联系电话" class="searchlist" label-width="85px">
-									<el-input v-model="searchList.typename"></el-input>
-								</el-form-item>
+							<el-col :span="5">
+								<el-input v-model="searchList.PHONE">
+									<template slot="prepend">联系电话</template>
+								</el-input>
 							</el-col>
-						</el-row>
-						<el-row :gutter="10">
-							<el-col :span="7">
-								<el-form-item label="联系地址" class="searchlist" label-width="85px">
-									<el-input v-model="searchList.typename"></el-input>
-								</el-form-item>
+							<el-col :span="5">
+								<el-input v-model="searchList.CONTACT_ADDRESS">
+									<template slot="prepend">联系地址</template>
+								</el-input>
 							</el-col>
-							<el-col :span="6">
-								<el-form-item label="状态" class="searchlist" label-width="85px">
-									<el-input v-model="searchList.typename"></el-input>
-								</el-form-item>
+							<el-col :span="2" style="padding-top: 3px">
+								<el-select v-model="searchList.STATUS" placeholder="状态">
+								      <el-option label="活动" value="1">	
+								      </el-option>
+								      <el-option label="不活动" value="0">
+								      </el-option>
+								    </el-select>
 							</el-col>
-							<el-col :span="6">
-								<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+							<el-col :span="2">
+								<el-button class="pull-right" type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
@@ -266,9 +267,11 @@
 				ismin:true,
 				clientHeight:'',//获取浏览器高度
 				searchList: {//点击高级搜索后显示的内容
-					nickname: '',
-					enabled: '',
-					createTime: ''
+					TYPE: '',
+					NAME: '',
+					PHONE: '',
+					CONTACT_ADDRESS:'',
+					STATUS:''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，

@@ -53,35 +53,38 @@
 				<div v-show="search" class="pb10">
 					<el-form status-icon :model="searchList" label-width="70px">
 						<el-row :gutter="10">
-							<el-col :span="6">
-								<el-form-item label="产品类别名称" class="searchlist" label-width="85px">
-									<el-input v-model="searchList.typename"></el-input>
-								</el-form-item>
+							<el-col :span="5">
+								<el-input v-model="searchList.PRO_NUM">
+									<template slot="prepend">产品编号</template>
+								</el-input>
+								<el-button slot="append" icon="el-icon-search" @click="getCompany"></el-button>
 							</el-col>
-							<el-col :span="6">
-								<el-form-item label="单位名称" class="searchlist" label-width="85px">
-									<el-input v-model="searchList.typename"></el-input>
-								</el-form-item>
+							<el-col :span="2" style="padding-top: 3px">
+									<el-select v-model="searchList.STATUS" placeholder="状态">
+								      <el-option label="活动" value="1">	
+								      </el-option>
+								      <el-option label="不活动" value="0">
+								      </el-option>
+								    </el-select>
 							</el-col>
-							<el-col :span="6">
-								<el-form-item label="联系电话" class="searchlist" label-width="85px">
-									<el-input v-model="searchList.typename"></el-input>
-								</el-form-item>
+							<el-col :span="5">
+								<el-input v-model="searchList.DEPARTMENT">
+									<template slot="prepend">机构</template>
+								</el-input>
 							</el-col>
-						</el-row>
-						<el-row :gutter="10">
-							<el-col :span="6">
-								<el-form-item label="联系地址" class="searchlist" label-width="85px">
-									<el-input v-model="searchList.typename"></el-input>
-								</el-form-item>
+							<el-col :span="5">
+								<el-input v-model="searchList.PRO_NAME">
+									<template slot="prepend">产品名称</template>
+								</el-input>
 							</el-col>
-							<el-col :span="6">
-								<el-form-item label="状态" class="searchlist" label-width="85px">
-									<el-input v-model="searchList.typename"></el-input>
-								</el-form-item>
+							<el-col :span="5">
+								<el-input v-model="searchList.VERSION">
+									<template slot="prepend">版本</template>
+								</el-input>
 							</el-col>
-							<el-col :span="6">
-								<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+							
+							<el-col :span="2">
+								<el-button  class="pull-right" type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
@@ -268,9 +271,11 @@
 				ismin:true,
 				clientHeight:'',//获取浏览器高度
 				searchList: {//点击高级搜索后显示的内容
-					nickname: '',
-					enabled: '',
-					createTime: ''
+					PRO_NUM: '',
+					STATUS: '',
+					DEPARTMENT: '',
+					PRO_NAME:'',
+					VERSION:''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，

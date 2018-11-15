@@ -15,75 +15,67 @@
 					</span>
 				</div>
 			</div>
-			<el-form :model="menu" :label-position="labelPosition" :rules="rules" ref="menu" label-width="100px" class="demo-user">
+			<div class="mask_content">
+				<el-form :model="menu" :label-position="labelPosition" :rules="rules" ref="menu" label-width="100px" class="demo-user">
+					<div class="accordion">
+						<el-collapse v-model="activeNames" @change="handleChange">
+							<el-collapse-item title="基础信息" name="1">
+								<el-row :gutter="70">
+									<el-col :span="24">
+										<el-form-item label="所属上级" prop="pName">
+											<el-input v-model="menu.pName" :disabled="edit">
+												<el-button slot="append" icon="el-icon-search" @click="getParentId"></el-button>
+											</el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="8">
+										<el-form-item label="菜单名称" prop="name">
+											<el-input v-model="menu.name">
+											</el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="链接地址" prop="url">
+											<el-input v-model="menu.url">
+											</el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="排序" prop="sort">
+											<el-input v-model="menu.sort">
+											</el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
 
-				<div class="accordion" id="information">
-					<div class="mask_tab-block">
-						<div class="mask_tab-head clearfix">
-							<div class="accordion_title">
-								<span class="accordion-toggle">基本信息</span>
-							</div>
-							<div class="col_but" @click="col_but('col_but1')">
-								<i class="icon-arrow1-down" v-show="down"></i><i class="icon-arrow1-up" v-show="up"></i>
-							</div>
-						</div>
-						<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
-							<el-row :gutter="70">
-								<el-col :span="24">
-									<el-form-item label="所属上级" prop="pName">
-										<el-input v-model="menu.pName" :disabled="edit">
-											<el-button slot="append" icon="el-icon-search" @click="getParentId"></el-button>
-										</el-input>
-									</el-form-item>
-								</el-col>
-							</el-row>
-							<el-row :gutter="70">
-								<el-col :span="8">
-									<el-form-item label="菜单名称" prop="name">
-										<el-input v-model="menu.name">
-										</el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="8">
-									<el-form-item label="链接地址" prop="url">
-										<el-input v-model="menu.url">
-										</el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="8">
-									<el-form-item label="排序" prop="sort">
-										<el-input v-model="menu.sort">
-										</el-input>
-									</el-form-item>
-								</el-col>
-							</el-row>
-
-							<el-row :gutter="70">
-								<!--是否影藏-->
-								<el-col :span="8">
-									<el-form-item label="是否显示" prop="hidden">
-										<el-switch  active-color="#5B7BFA" inactive-color="#dadde5" v-model="menu.hidden"  @change="changeval">
-										</el-switch>
-									</el-form-item>
-								</el-col>
-								<el-col :span="8">
-									<el-form-item label="菜单图标" prop="css">
-										<el-input v-model="menu.css" :disabled="edit">
-											<el-button slot="append" icon="el-icon-search" @click="getCss"></el-button>
-										</el-input>
-									</el-form-item>
-								</el-col>
-							</el-row>
-						</div>
+								<el-row :gutter="70">
+									<!--是否影藏-->
+									<el-col :span="8">
+										<el-form-item label="是否显示" prop="hidden">
+											<el-switch  active-color="#5B7BFA" inactive-color="#dadde5" v-model="menu.hidden"  @change="changeval">
+											</el-switch>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="菜单图标" prop="css">
+											<el-input v-model="menu.css" :disabled="edit">
+												<el-button slot="append" icon="el-icon-search" @click="getCss"></el-button>
+											</el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+							</el-collapse-item>
+						</el-collapse>
 					</div>
-				</div>
 
-				<div class="el-dialog__footer">
-					<el-button @click='close'>取消</el-button>
-					<el-button type="primary" @click='submitForm'>提交</el-button>
-				</div>
-			</el-form>
-
+					<div class="el-dialog__footer">
+						<el-button @click='close'>取消</el-button>
+						<el-button type="primary" @click='submitForm'>提交</el-button>
+					</div>
+				</el-form>
+			</div>
 		</div>
 
 		//弹出
@@ -176,6 +168,7 @@
 				down: true,
 				up: false,
 				useritem: [],
+				activeNames: ['1'], //手风琴数量
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 
@@ -204,7 +197,8 @@
 			};
 		},
 		methods: {
-		
+			handleChange(val) { //手风琴开关效果调用
+			},
 			//清空表單
 			resetNew(){
                 this.menu = {

@@ -19,162 +19,135 @@
 					</span>
 				</div>
 			</div>
-			<el-form :model="user" :label-position="labelPosition" :rules="rules" ref="user" label-width="100px" class="demo-user">
+			<div class="mask_content">
+				<el-form :model="user" :label-position="labelPosition" :rules="rules" ref="user" label-width="100px" class="demo-user">
+					<div class="accordion">
+						<el-collapse v-model="activeNames" @change="handleChange">
+							<el-collapse-item title="基础信息" name="1">
+								<el-row :gutter="70">
+									<el-col :span="24">
+										<el-form-item label="所属组织" prop="companyName">
+											<el-input v-model="user.companyName" :disabled="edit">
+												<el-button slot="append" icon="el-icon-search" @click="getCompany"></el-button>
+											</el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="24">
+										<el-form-item label="所属机构" prop="deptName">
+											<el-input v-model="user.deptName" :disabled="edit">
+												<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
+											</el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
 
-				<div class="accordion" id="information">
-					<div class="mask_tab-block">
-						<div class="mask_tab-head clearfix">
-							<div class="accordion_title">
-								<span class="accordion-toggle">基本信息</span>
-							</div>
-							<div class="col_but" @click="col_but('col_but1')">
-								<i class="icon-arrow1-down" v-show="down"></i><i class="icon-arrow1-up" v-show="up"></i>
-							</div>
-						</div>
-						<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
-							<el-row :gutter="70">
-								<el-col :span="24">
-									<el-form-item label="所属组织" prop="companyName">
-										<el-input v-model="user.companyName" :disabled="edit">
-											<el-button slot="append" icon="el-icon-search" @click="getCompany"></el-button>
-										</el-input>
-									</el-form-item>
-								</el-col>
-							</el-row>
-							<el-row :gutter="70">
-								<el-col :span="24">
-									<el-form-item label="所属机构" prop="deptName">
-										<el-input v-model="user.deptName" :disabled="edit">
-											<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
-										</el-input>
-									</el-form-item>
-								</el-col>
-							</el-row>
+								<el-row :gutter="70">
+									<el-col :span="12">
+										<el-form-item label="登录名称" prop="username">
+											<el-input v-model="user.username"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="12">
+										<el-form-item label="登录口令" prop="password">
+											<el-input type="password" v-model="user.password"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+							</el-collapse-item>
 
-							<el-row :gutter="70">
-								<el-col :span="12">
-									<el-form-item label="登录名称" prop="username">
-										<el-input v-model="user.username"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="12">
-									<el-form-item label="登录口令" prop="password">
-										<el-input type="password" v-model="user.password"></el-input>
-									</el-form-item>
-								</el-col>
-							</el-row>
-						</div>
+							<el-collapse-item title="用户基本资料" name="2">
+								<!-- 第一行 -->
+								<el-row :gutter="70">
+									<el-col :span="8">
+										<el-form-item label="姓名" prop="nickname">
+											<el-input v-model="user.nickname"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="出生日期" prop="birthday">
+											<el-date-picker v-model="user.birthday" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+											</el-date-picker>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="性別" prop="sex">
+											<el-radio-group v-model="user.sexName">
+												<el-radio label="男"></el-radio>
+												<el-radio label="女"></el-radio>
+											</el-radio-group>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="70">
+
+									<el-col :span="8">
+										<el-form-item label="身份证号" prop="idnumber">
+											<el-input v-model="user.idnumber"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="入职时间" prop="entrytime">
+											<el-date-picker v-model="user.entrytime" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+											</el-date-picker>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="角色">
+											<el-select v-model="user.roleId" multiple>
+												<el-option v-for="data in selectData" :key="data.id" :value="data.id" :label="data.name"></el-option>
+											</el-select>
+										</el-form-item>
+									</el-col>
+								</el-row>
+
+								<el-row :gutter="70">
+									<el-col :span="8">
+										<el-form-item label="工号" prop="worknumber">
+											<el-input v-model="user.worknumber"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="手机号" prop="phone">
+											<el-input v-model="user.phone"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="电子邮箱" prop="email">
+											<el-input v-model="user.email"></el-input>
+										</el-form-item>
+									</el-col>
+
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="16">
+										<el-form-item label="地址" prop="address">
+											<el-input v-model="user.address"></el-input>
+										</el-form-item>
+									</el-col>
+
+								</el-row>
+
+								<el-row :gutter="70">
+									<el-col :span="24">
+										<el-form-item label="备注" prop="tips">
+											<el-input type="textarea" v-model="user.tips"></el-input>
+
+										</el-form-item>
+									</el-col>
+								</el-row>
+							</el-collapse-item>
+						</el-collapse>
 					</div>
-				</div>
 
-				<div class="accordion" id="information">
-					<div class="mask_tab-block">
-						<div class="mask_tab-head clearfix">
-							<div class="accordion_title">
-								<span class="accordion-toggle">用户基本资料</span>
-							</div>
-							<div class="col_but" @click="col_but('col_but2')">
-								<i class="icon-arrow1-down"></i>
-							</div>
-						</div>
-						<div class="accordion-body tab-content" v-show="col_but2" id="tab-content2">
-
-							<!-- 第一行 -->
-							<el-row :gutter="70">
-								<el-col :span="8">
-									<el-form-item label="姓名" prop="nickname">
-										<el-input v-model="user.nickname"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="8">
-									<el-form-item label="出生日期" prop="birthday">
-										<el-date-picker v-model="user.birthday" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
-										</el-date-picker>
-									</el-form-item>
-								</el-col>
-								<el-col :span="8">
-									<el-form-item label="性別" prop="sex">
-										<el-radio-group v-model="user.sexName">
-											<el-radio label="男"></el-radio>
-											<el-radio label="女"></el-radio>
-										</el-radio-group>
-									</el-form-item>
-								</el-col>
-							</el-row>
-							<el-row :gutter="70">
-
-								<el-col :span="8">
-									<el-form-item label="身份证号" prop="idnumber">
-										<el-input v-model="user.idnumber"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="8">
-									<el-form-item label="入职时间" prop="entrytime">
-										<el-date-picker v-model="user.entrytime" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
-										</el-date-picker>
-									</el-form-item>
-								</el-col>
-								<el-col :span="8">
-									<el-form-item label="角色">
-										<el-select v-model="user.roleId" multiple>
-											<el-option v-for="data in selectData" :key="data.id" :value="data.id" :label="data.name"></el-option>
-										</el-select>
-									</el-form-item>
-								</el-col>
-							</el-row>
-
-							<el-row :gutter="70">
-								<el-col :span="8">
-									<el-form-item label="工号" prop="worknumber">
-										<el-input v-model="user.worknumber"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="8">
-									<el-form-item label="手机号" prop="phone">
-										<el-input v-model="user.phone"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="8">
-									<el-form-item label="电子邮箱" prop="email">
-										<el-input v-model="user.email"></el-input>
-									</el-form-item>
-								</el-col>
-
-							</el-row>
-							<el-row :gutter="70">
-								<el-col :span="16">
-									<el-form-item label="地址" prop="address">
-										<el-input v-model="user.address"></el-input>
-									</el-form-item>
-								</el-col>
-
-							</el-row>
-
-							<el-row :gutter="70">
-								<el-col :span="24">
-									<el-form-item label="备注" prop="tips">
-										<el-input type="textarea" v-model="user.tips"></el-input>
-
-									</el-form-item>
-								</el-col>
-							</el-row>
-
-						</div>
+					<div class="el-dialog__footer">
+						<el-button @click='close'>取消</el-button>
+						<el-button type="primary" @click='submitForm()'>提交</el-button>
 					</div>
-				</div>
-
-				<div class="el-dialog__footer">
-					<el-button @click='close'>取消</el-button>
-					<el-button type="primary" @click='submitForm()'>提交</el-button>
-				</div>
-			</el-form>
-
+				</el-form>
+			</div>
 			<!--底部-->
-			<!--<div class="content-footer">
-				<button class="btn btn-default btn-large">取消</button>
-				<button class="btn btn-primarys btn-large">提交</button>
-			</div>-->
-
 		</div>
 
 		//弹出
@@ -300,29 +273,10 @@
 				down: true,
 				up: false,
 				useritem: [],
+				activeNames: ['1', '2'], //手风琴数量
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
-//				user:{
-//					companyId: '',
-//					deptId: '',
-//					password: '',
-//					sex: '',
-//					email: '',
-//					phone: '',
-//					enabled: 1,
-//					birthday: '',
-//					worknumber: '',
-//					nickname: '',
-//					idnumber: '',
-//					entrytime: '',
-//					address: '',
-//					tips: '',
-//					username: '',
-//					companyName:'',
-//					roleId: '',//角色
-//					roles: [],//角色
-//					id: '',
-//				},
+
 				rules: {
 					companyName: [{
 						required: true,
@@ -380,6 +334,8 @@
 			};
 		},
 		methods: {
+			handleChange(val) { //手风琴开关效果调用
+			},
 			//
 			handleCheckChange(data, checked, indeterminate) {
 		        console.log(data, checked, indeterminate);

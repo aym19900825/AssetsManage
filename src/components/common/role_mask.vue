@@ -15,11 +15,11 @@
 					</span>
 				</div>
 			</div>
-			<el-form :model="roleList" :label-position="labelPosition" :rules="rules" ref="roleList" label-width="100px" class="demo-user">
-				<EasyScrollbar>
-					<div ref="homePagess" class="accordion" id="information" style="height: 600px;">
-						<div class="mask_tab-block" style="height: auto;">
-							<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
+			<div class="mask_content">
+				<el-form :model="roleList" :label-position="labelPosition" :rules="rules" ref="roleList" label-width="100px" class="demo-user">
+					<div class="accordion">
+						<el-collapse v-model="activeNames" @change="handleChange">
+							<el-collapse-item title="基础信息" name="1">
 								<el-row :gutter="70">
 									<el-col :span="12">
 										<el-form-item label="角色名称" prop="name">
@@ -48,15 +48,15 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-							</div>
-						</div>
-						<div class="el-dialog__footer">
-							<el-button @click='close'>取消</el-button>
-							<el-button type="primary" @click='submitForm()'>保存</el-button>
-						</div>
+							</el-collapse-item>
+						</el-collapse>
 					</div>
-				</EasyScrollbar>
-			</el-form>
+					<div class="el-dialog__footer">
+						<el-button @click='close'>取消</el-button>
+						<el-button type="primary" @click='submitForm()'>保存</el-button>
+					</div>
+				</el-form>
+			</div>
 		</div>
 	    <!-- 弹出 -->
 		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
@@ -94,6 +94,7 @@
 				down: true,
 				up: false,
 				useritem: [],
+				activeNames: ['1'], //手风琴数量
 				clientHeight:'',//获取浏览器高度
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
@@ -133,6 +134,8 @@
 			};
 		},
 		methods: {
+			handleChange(val) { //手风琴开关效果调用
+			},
 			handleCheckChange(data, checked, indeterminate) {
 		        this.cccData=data;
 		    },

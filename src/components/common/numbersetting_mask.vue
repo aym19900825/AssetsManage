@@ -14,51 +14,54 @@
 					</span>
 				</div>
 			</div>
-			<el-form :model="adddeptForm" :label-position="labelPosition" :rules="rules" ref="adddeptForm" label-width="100px" class="demo-adduserForm">
-				<EasyScrollbar>
-					<div ref="homePagess" class="accordion" id="information" style="height: 425px;">
-						<div style="height: auto;">
-							<div class="accordion">
-								<div class="mask_tab-block">
-									<div class="mask_tab-head clearfix">
-										<div class="accordion_title">
-											<span class="accordion-toggle">添加机构信息</span>
-										</div>
-										<div class="col_but" @click="col_but('col_but1')">
-											<i class="icon-arrow1-down"></i>
-										</div>
-									</div>
-									<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
-										<el-row :gutter="70">
-											<el-col :span="8">
-												<el-form-item label="自动编号名称" prop="AUTOKEY">
-													<el-input v-model="adddeptForm.AUTOKEY"></el-input>
-												</el-form-item>
-											</el-col>
-											<el-col :span="8">
-												<el-form-item label="前缀" prop="PREFIX">
-													<el-input v-model="adddeptForm.PREFIX"></el-input>
-												</el-form-item>
-											</el-col>
-											<el-col :span="8">
-												<el-form-item label="起始数" prop="PREFIX">
-													<el-input v-model="adddeptForm.PREFIX"></el-input>
-												</el-form-item>
-											</el-col>
-										</el-row>
-									</div>
+			<div class="mask_content">
+				<el-form :model="addnumbersettingForm" :label-position="labelPosition" :rules="rules" ref="addnumbersettingForm" label-width="100px" class="demo-adduserForm">
+					<div class="accordion">
+						<div class="mask_tab-block">
+							<div class="mask_tab-head clearfix">
+								<div class="accordion_title">
+									<span class="accordion-toggle">基础信息</span>
+								</div>
+								<div class="col_but" @click="col_but('col_but1')">
+									<i class="icon-arrow1-down"></i>
 								</div>
 							</div>
-							<div class="content-footer">
-								<el-form-item>
-									<button @click="cancelForm" class="btn btn-default btn-large">取消</button>
-									<button type="primary" class="btn btn-primarys btn-large" @click="submitForm('adddeptForm')">提交</button>
-								</el-form-item>
+							<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
+								<el-row :gutter="70">
+									<el-col :span="8">
+										<el-form-item label="自动编号名称" prop="AUTOKEY">
+											<el-input v-model="addnumbersettingForm.AUTOKEY"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="前缀">
+											<el-input v-model="addnumbersettingForm.PREFIX"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="起始数" prop="S_NUM">
+											<el-input v-model="addnumbersettingForm.S_NUM"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="24">
+										<el-form-item label="备注" prop="MEMO">
+											<el-input type="textarea" v-model="addnumbersettingForm.MEMO"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
 							</div>
 						</div>
 					</div>
-				</EasyScrollbar>
-			</el-form>
+					<div class="content-footer">
+						<el-form-item>
+							<button @click="cancelForm" class="btn btn-default btn-large">取消</button>
+							<button type="primary" class="btn btn-primarys btn-large" @click="submitForm('addnumbersettingForm')">提交</button>
+						</el-form-item>
+					</div>
+				</el-form>
+			</div>
 		</div>
 		<!-- 弹出 -->
 		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
@@ -79,14 +82,15 @@
 			page: {
 				type: Object,
 			},
-			adddeptForm: {
+			addnumbersettingForm: {
 				type: Object,
 				default: function(){
 					return {
 						ID:'',
 						AUTOKEY:'',
+						S_NUM:'',
 						PREFIX:'',
-						PREFIX:''
+						MEMO:''
 					}
 				}
 			}
@@ -103,24 +107,14 @@
                 if (value === '') {
                     callback(new Error('请填写起始数'));
                 }else {
+                	var targ=/^([0-9]*|[0-9]{1}\d*\.\d{1}?\d*)$/;
+                	if (!targ.test(value)) {
+                		callback(new Error('起始数须为数字'));
+                	}
                     callback();
                 }
             };
-            var validatePREFIX = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请填写前缀'));
-                }else {
-                    callback();
-                }
-            };
-            // var validatecode = (rule, value, callback) => {
-            //     if (value === '') {
-            //         callback(new Error('请选择机构编码'));
-            //     }else {
-            //         callback();
-            //     }
-            // };
-
+           
 			return {
 				showcode:true,
 				dialogVisible: false, //对话框
@@ -136,23 +130,22 @@
 				labelPosition: 'top',
 				addtitle:true,
 				modifytitle:false,
-				// adddeptFormtest: {
-				// 	AUTOKEY:'',
-				// 	PREFIX:'',
-				// 	type:'',
-				// 	code:'',
-				// 	teltphone:'',
-				// 	tips:''
-				// },
+				/*addnumbersettingFormtest: {
+					ID:'',
+					AUTOKEY:'',
+					S_NUM:'',
+					PREFIX:'',
+					MEMO:''
+				},*/
 				rules:{
           			AUTOKEY: [{ 
        						required: true,
-       						validator: validatename2,
+       						validator: validateAUTOKEY,
        						trigger: 'blur' 
        					}],
-          			PREFIX:[{ 
+          			S_NUM:[{ 
        						required: true,
-       						validator: validateprefix,
+       						validator: validateS_NUM,
        						trigger: 'blur' 
        					}]
           		
@@ -170,14 +163,14 @@
 		methods: {
 			//form表单内容清空
 			resetNew(){
-                this.adddeptForm = {
+                this.addnumbersettingForm = {
 					ID:'',
 					AUTOKEY:'',
 					S_NUM:'',
 					PREFIX:'',
 					MEMO:''
 				}
-                // this.$refs["adddeptForm"].resetFields();
+                // this.$refs["addnumbersettingForm"].resetFields();
             },
 			//所属上级
 			getDept() {
@@ -199,8 +192,8 @@
 				this.getCheckedNodes();
 				this.placetext = false;
 				this.dialogVisible = false;				
-				this.adddeptForm.pid = this.checkedNodes[0].id;
-				this.adddeptForm.pName = this.checkedNodes[0].PREFIX;
+				this.addnumbersettingForm.pid = this.checkedNodes[0].id;
+				this.addnumbersettingForm.pName = this.checkedNodes[0].PREFIX;
 				
 			},
 			getCheckedNodes() {
@@ -214,8 +207,10 @@
 					this.col_but2 = !this.col_but2;
 				}
 			},
-			//点击按钮显示弹窗
-			childMethods() {
+			
+			childMethods() {//
+				this.addtitle = true;
+				this.modifytitle = false;
 				this.showcode = false;
 				this.show = !this.show;
 			},
@@ -263,19 +258,19 @@
 
 			},
 			//保存
-			submitForm(adddeptForm) {
-				this.$refs[adddeptForm].validate((valid) => {
+			submitForm(addnumbersettingForm) {
+				this.$refs[addnumbersettingForm].validate((valid) => {
 		          if (valid) {
 					var url = '/api/api-user/depts/saveOrUpdate';
-					this.adddeptFormtest = {
-						"ID":this.adddeptForm.ID,
-						"pid":this.adddeptForm.pid,
-						"AUTOKEY":this.adddeptForm.AUTOKEY,
-					    "PREFIX":this.adddeptForm.PREFIX,
-					    "PREFIX":this.adddeptForm.PREFIX,
+					this.addnumbersettingFormtest = {
+						"ID":this.addnumbersettingForm.ID,
+						"pid":this.addnumbersettingForm.pid,
+						"AUTOKEY":this.addnumbersettingForm.AUTOKEY,
+					    "PREFIX":this.addnumbersettingForm.PREFIX,
+					    "PREFIX":this.addnumbersettingForm.PREFIX,
 					   
 					}
-					this.$axios.post(url, this.adddeptFormtest).then((res) => {
+					this.$axios.post(url, this.addnumbersettingFormtest).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({

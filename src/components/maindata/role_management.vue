@@ -100,8 +100,8 @@
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left2.vue'
 	import navs_header from '../common/nav_tabs.vue'
-	import rolemask from '../common/role_mask.vue'
-	import datalimitmask from '../common/datalimit_mask.vue'
+	import rolemask from '../maindataDetails/role_mask.vue'
+	import datalimitmask from '../maindataDetails/datalimit_mask.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	export default {
 		name: 'user_management',

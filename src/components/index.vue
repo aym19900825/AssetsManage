@@ -141,7 +141,7 @@ export default {
 		clientHeight:'',//获取浏览器高度
 		applistdata: [//APP应用数据
 			{
-				navicon: 'icon-data',
+				navicon: 'icon-data3',
 				navtitle: '主数据',
 				navherf: '/user_management'
 			}, {
@@ -149,7 +149,7 @@ export default {
 				navtitle: '年度计划',
 				navherf: '/annual_plan'
 			}, {
-				navicon: 'icon-contract',
+				navicon: 'icon-reminding3',
 				navtitle: '工作任务通知书',
 				navherf: '/notifications'
 			}, {
@@ -157,7 +157,7 @@ export default {
 				navtitle: '委托书管理',
 				navherf: '/proxies'
 			}, {
-				navicon: 'icon-purchase',
+				navicon: 'icon-sample3',
 				navtitle: '样品管理',
 				navherf: '/samples'
 			}, {
@@ -169,23 +169,23 @@ export default {
 				navtitle: '设备管理',
 				navherf: '/devices'
 			}, {
-				navicon: 'icon-inventory',
+				navicon: 'icon-testing3',
 				navtitle: '检验/检测项目管理',
 				navherf: '/inspection_project'
 			}, {
-				navicon: 'icon-preventive',
+				navicon: 'icon-search3',
 				navtitle: '文件查询',
 				navherf: '/files_search'
 			}, {
-				navicon: 'icon-safe',
+				navicon: 'icon-ports3',
 				navtitle: '接口',
 				navherf: '/interfaces'
 			}, {
-				navicon: 'icon-inspection',
+				navicon: 'icon-report2',
 				navtitle: '报表管理',
 				navherf: '/reports'
 			}, {
-				navicon: 'icon-settings',
+				navicon: 'icon-setting3',
 				navtitle: '系统设置',
 				navherf: '/menu_management'
 			}

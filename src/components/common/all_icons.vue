@@ -35,6 +35,14 @@
 			return {
 				clientHeight:'',//获取浏览器高度
 				classLists:[
+					'icon-setting3',
+					'icon-data3',
+					'icon-ports3',
+					'icon-reminding3',
+					'icon-report2',
+					'icon-sample3',
+					'icon-search3',
+					'icon-testing3',
 					'icon-correct1',
 //					'icon-date-limit1',
 					'icon-date-limit',

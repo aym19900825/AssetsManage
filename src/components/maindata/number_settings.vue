@@ -64,7 +64,7 @@
 							<el-row :gutter="0">
 								<el-col :span="24">
 									<!-- 表格 Begin-->
-									<el-table :data="userList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
+									<el-table :data="numberList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'numberList', order: 'descending'}" @selection-change="SelChange">
 										<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 										</el-table-column>
 										<el-table-column label="自动编号名称" sortable prop="AUTOKEY" v-if="this.checkedName.indexOf('自动编号名称')!=-1">
@@ -158,7 +158,7 @@
 				selUser: [],
 				'启用': true,
 				'冻结': false,
-				userList: [],
+				numberList: [],
 				selMenu:[],
 				search: false,
 				show: false,
@@ -327,13 +327,13 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					this.userList = res.data.data;
+					this.numberList = res.data.data;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
-				this.userList.forEach((item, index) => {
+				this.numberList.forEach((item, index) => {
 					var id = item.id;
 					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
-						this.userList.role = res.data.roles[0].name;
+						this.numberList.role = res.data.roles[0].name;
 					}).catch((wrong) => {})
 				})
 			},

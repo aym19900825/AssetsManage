@@ -7,7 +7,7 @@
         </span>
         <el-dropdown-menu slot="dropdown">
           <el-checkbox-group v-model="checkedName" @change="checkedChange">
-            <el-dropdown-item  v-for="item in tableHeader">
+            <el-dropdown-item  v-for="(item,index) in tableHeader" :key="index">
               <el-checkbox :label="item.label" name="type"></el-checkbox>
             </el-dropdown-item>
           </el-checkbox-group>

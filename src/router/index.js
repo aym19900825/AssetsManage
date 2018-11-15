@@ -3,25 +3,27 @@ import Router from 'vue-router'
 import Login from '@/page/login/login'//登录页
 import index from '@/components/index'//首页
 import all_icons from '@/components/common/all_icons'//所有图标
-import maindata from '@/components/maindata'//主数据
-import demo from '@/components/demo'//demo
-import customer_management from '@/components/customer_management'//客户管理
-import products_category from '@/components/products_category'//产品类别
-import products from '@/components/products'//产品
-import testing_standard from '@/components/testing_standard'//检验/检测标准
-import testing_projects from '@/components/testing_projects'//检验/检测项目
-import testing_methods from '@/components/testing_methods'//检验/检测方法
-import number_settings from '@/components/number_settings'//自动编号设置
-import user_management from '@/components/user_management'//用户管理
-import dept_management from '@/components/dept_management'//机构管理
-import menu_management from '@/components/menu_management'//菜单管理
-import data_management from '@/components/data_management'//数据管理
-import role_management from '@/components/role_management'//角色管理
-import safe_management from '@/components/safe_management'//安全管理
-import dictionaries_management from '@/components/dictionaries_management'//字典管理
-import personinfo from '@/components/personinfo'//个人资料
-import passwordedit from '@/components/passwordedit'//修改密码
 import ztree from '@/components/common/ztree' //树菜单
+
+import customer_management from '@/components/maindata/customer_management'//客户管理
+import products_category from '@/components/maindata/products_category'//产品类别
+import products from '@/components/maindata/products'//产品
+import testing_standard from '@/components/maindata/testing_standard'//检验/检测标准
+import testing_projects from '@/components/maindata/testing_projects'//检验/检测项目
+import testing_methods from '@/components/maindata/testing_methods'//检验/检测方法
+import number_settings from '@/components/maindata/number_settings'//自动编号设置
+import user_management from '@/components/maindata/user_management'//用户管理
+import dept_management from '@/components/maindata/dept_management'//机构管理
+import role_management from '@/components/maindata/role_management'//角色管理
+
+import menu_management from '@/components/setting/menu_management'//菜单管理
+import data_management from '@/components/setting/data_management'//数据管理
+import safe_management from '@/components/setting/safe_management'//安全管理
+import dictionaries_management from '@/components/setting/dictionaries_management'//字典管理
+import personinfo from '@/components/setting/personinfo'//个人资料
+import passwordedit from '@/components/setting/passwordedit'//修改密码
+
+
 
 import annual_plan from '@/components/annual_plan'//年度计划
 import notifications from '@/components/notifications'//工作任务通知书
@@ -35,15 +37,16 @@ import interfaces from '@/components/interfaces'//接口
 import reports from '@/components/reports'//报表管理
 
 
-import inspect_proxy from '@/components/inspect_proxy'//检验委托书
-import dept_proxy from '@/components/dept_proxy'//检测委托书
-import subc_agreement from '@/components/subc_agreement'//分包协议
-import instruments from '@/components/instruments'//仪器和计量器具
-import usag_tending_records from '@/components/usag_tending_records'//使用/维护保养记录
-import traceability_plan from '@/components/traceability_plan'//溯源计划
-import traceability_records from '@/components/traceability_records'//溯源记录
-import verification_plan from '@/components/verification_plan'//期间核查计划
-import verification_records from '@/components/verification_records'//期间核查记录   
+import inspect_proxy from '@/components/proxies/inspect_proxy'//检验委托书
+import dept_proxy from '@/components/proxies/dept_proxy'//检测委托书
+import subc_agreement from '@/components/proxies/subc_agreement'//分包协议
+
+import instruments from '@/components/equipments/instruments'//仪器和计量器具
+import usag_tending_records from '@/components/equipments/usag_tending_records'//使用/维护保养记录
+import traceability_plan from '@/components/equipments/traceability_plan'//溯源计划
+import traceability_records from '@/components/equipments/traceability_records'//溯源记录
+import verification_plan from '@/components/equipments/verification_plan'//期间核查计划
+import verification_records from '@/components/equipments/verification_records'//期间核查记录   
 
 // 
 Vue.use(Router)
@@ -69,20 +72,10 @@ Vue.use(Router)
       name: 'notifications',
       component: notifications
     },
-    {//Demo
-      path: '/demo',
-      name: 'demo',
-      component: demo
-    },
     {//所有图标
       path: '/all_icons',
       name: 'all_icons',
       component: all_icons
-    },
-    {//主数据
-      path: '/maindata',
-      name: 'maindata',
-      component: maindata
     },
     {//客户管理
       path: '/customer_management',

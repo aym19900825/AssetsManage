@@ -5,16 +5,16 @@
           <div id="information" style="height: auto;">
 			<div class="pl20 pr20">
 				<el-row :gutter="30">
-					<el-col :span="6" v-for="item in classLists">
-						<span @click="spantext($event)"   :class="currentItem==item?'current':'' "><i :class="item">{{item}}</i></span>
+					<el-col :span="6" v-for="(item,index) in classLists" :key="index">
+						<span @click="spantext($event)"  :class="currentItem==item?'current':'' "><i :class="item">{{item}}</i></span>
 					</el-col>
 				</el-row>
 				
 				
 				<h3 class="pt30">其它</h3>
 				<el-row :gutter="30">
-					<el-col :span="6" v-for="item in classLists1">
-						<span @click="spantext($event)"><i :class="item">{{item}}</i></span>
+					<el-col :span="6" v-for="(item,index) in classLists1" key="index">
+						<span @click="spantext($event)" :class="currentItem==item?'current':'' "><i :class="item">{{item}}</i></span>
 					</el-col>
 					
 				</el-row>
@@ -35,6 +35,14 @@
 			return {
 				clientHeight:'',//获取浏览器高度
 				classLists:[
+					'icon-setting3',
+					'icon-data3',
+					'icon-ports3',
+					'icon-reminding3',
+					'icon-report2',
+					'icon-sample3',
+					'icon-search3',
+					'icon-testing3',
 					'icon-correct1',
 //					'icon-date-limit1',
 					'icon-date-limit',

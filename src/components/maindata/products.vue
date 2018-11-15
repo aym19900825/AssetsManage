@@ -9,9 +9,11 @@
 		<navs_left></navs_left>
 		<!--左侧菜单内容显示 End-->
 
+
 		<!--右侧内容显示 Begin-->
 		<div class="wrapper wrapper-content">
 			<div class="ibox-content">
+				<!--按钮操作行 Begin-->
 				<div class="fixed-table-toolbar clearfix">
 					<div class="bs-bars pull-left">
 						<div class="hidden-xs" id="roleTableToolbar" role="group">
@@ -45,17 +47,44 @@
 						<tableControle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></tableControle>
 					</div>
 				</div>
+				<!--按钮操作行 End-->
+
 				<!-- 高级查询划出 Begin-->
 				<div v-show="search" class="pb10">
 					<el-form status-icon :model="searchList" label-width="70px">
 						<el-row :gutter="10">
 							<el-col :span="5">
-								<el-input v-model="searchList.typename">
-									<template slot="prepend">类型名称</template>
+								<el-input v-model="searchList.PRO_NUM">
+									<template slot="prepend">产品编号</template>
+								</el-input>
+								<el-button slot="append" icon="el-icon-search" ></el-button>
+							</el-col>
+							<el-col :span="2" style="padding-top: 3px">
+									<el-select v-model="searchList.STATUS" placeholder="状态">
+								      <el-option label="活动" value="1">	
+								      </el-option>
+								      <el-option label="不活动" value="0">
+								      </el-option>
+								    </el-select>
+							</el-col>
+							<el-col :span="5">
+								<el-input v-model="searchList.DEPARTMENT">
+									<template slot="prepend">机构</template>
 								</el-input>
 							</el-col>
+							<el-col :span="5">
+								<el-input v-model="searchList.PRO_NAME">
+									<template slot="prepend">产品名称</template>
+								</el-input>
+							</el-col>
+							<el-col :span="5">
+								<el-input v-model="searchList.VERSION">
+									<template slot="prepend">版本</template>
+								</el-input>
+							</el-col>
+							
 							<el-col :span="2">
-								<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+								<el-button  class="pull-right" type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
@@ -64,18 +93,27 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :data="userList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
+						<el-table :data="userList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
+							<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0">
 							</el-table-column>
-							<el-table-column label="组织机构代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('组织机构代码')!=-1">
+							<el-table-column label="产品编号" width="155" sortable prop="PRO_NUM" v-if="this.checkedName.indexOf('产品编号')!=-1">
 							</el-table-column>
-							<el-table-column label="单位名称" width="200" sortable prop="NAME" v-if="this.checkedName.indexOf('单位名称')!=-1">
+							<el-table-column label="产品名称" width="155" sortable prop="PRO_NAME" v-if="this.checkedName.indexOf('产品名称')!=-1">
 							</el-table-column>
-							<el-table-column label="联系电话" sortable prop="PHONE" v-if="this.checkedName.indexOf('联系电话')!=-1">
 							</el-table-column>
-							<el-table-column label="联系地址" sortable prop="CONTACT_ADDRESS" v-if="this.checkedName.indexOf('联系地址')!=-1">
-							</el-table-column>						
-							<el-table-column label="状态" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
+							<el-table-column label="状态" width="155" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
+							</el-table-column>
+							<el-table-column label="版本" width="155" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1">
+							</el-table-column>
+							<el-table-column label="机构" width="155" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('机构')!=-1">
+							</el-table-column>
+							<el-table-column label="录入人" width="155" prop="ENTERBY" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入人')!=-1">
+							</el-table-column>
+							<el-table-column label="录入时间" width="155" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
+							</el-table-column>
+							<el-table-column label="修改人" width="155" prop="CHANGEBY" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改人')!=-1">
+							</el-table-column>
+							<el-table-column label="修改时间" width="155" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
 							</el-table-column>
 						</el-table>
 						<el-pagination background class="pull-right pt10 pb10" v-if="this.checkedName.length>0"
@@ -90,33 +128,33 @@
 						<!-- 表格 End-->
 					</el-col>
 				</el-row>
+							
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
-		<customermask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></customermask>
+		<productmask ref="child" @request="requestData" v-bind:page=page></productmask>
 	</div>
 </div>
 </template>
 <script>
-	import vheader from './common/vheader.vue'
-	import navs_left from './common/left_navs/nav_left4.vue'
-	import navs_header from './common/nav_tabs.vue'
-	import customermask from './common/customer_mask.vue'
-	import table from './plugin/table/table-normal.vue'
-	import tableControle from './plugin/table-controle/controle.vue'
+	import vheader from '../common/vheader.vue'
+	import navs_left from '../common/left_navs/nav_left2.vue'
+	import navs_header from '../common/nav_tabs.vue'
+	import productmask from '../common/product_mask.vue'
+	import table from '../plugin/table/table-normal.vue'
+	import tableControle from '../plugin/table-controle/controle.vue'
 	export default {
-		name: 'user_management',
+		name: 'customer_management',
 		components: {
 			vheader,
 			navs_left,
 			navs_header,
+			productmask,
 			tableControle,
-			customermask,
-			table
+			table,
 		},
 		data() {
 			return {
-				dataUrl: '/api/api-user/users',
 				searchData: {
 			        page: 1,
 			        limit: 10,//分页显示数
@@ -128,33 +166,52 @@
 			        deptId: ''
 		        },
 				checkedName: [
-					'组织机构代码',
-					'单位名称',
-					'性别',
-					'联系电话',
-					'联系地址',
-					'状态'
+					'产品编号',
+					'产品名称',
+					'机构',
+					'状态',
+					'版本',
+					'录入人',
+					'录入时间',
+					'修改人',
+					'修改时间'
 				],
 				tableHeader: [
 					{
-						label: '组织机构代码',
-						prop: 'username'
+						label: '产品编号',
+						prop: 'PRO_NUM'
 					},
 					{
-						label: '单位名称',
-						prop: 'nickname'
+						label: '产品名称',
+						prop: 'PRO_NAME'
 					},
 					{
-						label: '联系电话',
-						prop: 'telephone'
-					},
-					{
-						label: '联系地址',
-						prop: 'deptName'
+						label: '机构',
+						prop: 'DEPARTMENT'
 					},
 					{
 						label: '状态',
-						prop: 'enabled'
+						prop: 'STATUS'
+					},
+					{
+						label: '版本',
+						prop: 'VERSION'
+					},
+					{
+						label: '录入人',
+						prop: 'ENTERBY'
+					},
+					{
+						label: '录入时间',
+						prop: 'ENTERDATE'
+					},
+					{
+						label: '修改人',
+						prop: 'CHANGEBY'
+					},
+					{
+						label: '修改时间',
+						prop: 'CHANGEDATE'
 					}
 				],
 				leftNavs: [//leftNavs左侧菜单数据
@@ -213,10 +270,12 @@
 				isShow: false,
 				ismin:true,
 				clientHeight:'',//获取浏览器高度
-				searchList: {
-					nickname: '',
-					enabled: '',
-					createTime: ''
+				searchList: {//点击高级搜索后显示的内容
+					PRO_NUM: '',
+					STATUS: '',
+					DEPARTMENT: '',
+					PRO_NAME:'',
+					VERSION:''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -245,7 +304,6 @@
 				var clientHeight = $(window).height() - 100;
 				_this.$refs.homePagess.style.height = clientHeight + 'px';
 			};
-
 			
 		},
 		methods: {
@@ -390,37 +448,14 @@
 					}).catch((wrong) => {})
 				})
 			},
-			loadMore () {
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page++
-			     if (this.page > 10) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     console.log('到底了', this.page)
-			   }
-			 },
 			handleNodeClick(data) {
 			},
 			formatter(row, column) {
 				return row.enabled;
 			},
 		},
-		mounted(){
-             // 注册scroll事件并监听  
-             let self = this;
-              $(".div-table").scroll(function(){
-                self.loadMore();
-            })
-        },
-
-
 		mounted() {
 			this.requestData();
-			this.getKey();
 		},
 	}
 </script>

@@ -23,6 +23,30 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.icon-setting3:before {
+  content: "\ea70";
+}
+.icon-data3:before {
+  content: "\ea71";
+}
+.icon-ports3:before {
+  content: "\ea72";
+}
+.icon-reminding3:before {
+  content: "\ea73";
+}
+.icon-report2:before {
+  content: "\ea74";
+}
+.icon-sample3:before {
+  content: "\ea75";
+}
+.icon-search3:before {
+  content: "\ea76";
+}
+.icon-testing3:before {
+  content: "\ea77";
+}
 
 .icon-wrong:before {
   content: "\ea3f";

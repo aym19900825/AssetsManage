@@ -14,7 +14,7 @@
 					</span>
 				</div>
 				<ul class="navs" id="side-menu" v-show="!isShow" >
-					<li v-for="item in leftNavs">
+					<li v-for="(item,index) in leftNavs" :key="index">
 						<router-link :to="item.navherf">
 							<i :class="item.navicon"></i>
 							<span class="nav-label" v-show="ismin">{{item.navtitle}}</span>
@@ -37,14 +37,14 @@
 									<el-col :span="12">
 									 	<el-row :gutter="70">
 									 		<el-col :span="24">
-									 			<el-form-item label="人员姓名" prop="nickname" :rules="[{ required: true, message: '人员姓名不能为空'}]">
+									 			<el-form-item label="人员姓名" prop="nickname">
 											    <el-input v-model="personinfo.nickname"></el-input>
 											  </el-form-item>	
 									 		</el-col>
 									 	</el-row>
 									 	<el-row :gutter="70">
 									 		<el-col :span="24">
-									 			<el-form-item label="工号" prop="worknumber" required="true">
+									 			<el-form-item label="工号" prop="worknumber">
 											    	<el-input v-model="personinfo.worknumber"></el-input>
 												</el-form-item>	
 									 		</el-col>
@@ -140,7 +140,7 @@
 								 			</el-form-item>	
 								 		</el-col>
 								 		<el-col :span="8">
-								 			<el-form-item label="电子邮箱" prop="email" required="true">
+								 			<el-form-item label="电子邮箱" prop="email">
 											    <el-input v-model="personinfo.email"></el-input>
 											  </el-form-item>
 								 		</el-col>
@@ -176,7 +176,7 @@
 										  </el-form-item>	
 								 		</el-col>
 								 		<el-col :span="8">
-								 			 <el-form-item label="手机号" prop="phone" required="true">
+								 			 <el-form-item label="手机号" prop="phone">
 										    <el-input v-model="personinfo.phone"></el-input>
 										  </el-form-item>	
 								 		</el-col>
@@ -233,10 +233,10 @@
 </template>
 
 <script>
-	import vheader from './common/vheader.vue'
-	import navs from './common/left_navs/nav_left.vue'
-	import navs_header from './common/nav_tabs.vue'
-	import usermask from './common/user_mask.vue'
+	import vheader from '../common/vheader.vue'
+	import navs from '../common/left_navs/nav_left.vue'
+	import navs_header from '../common/nav_tabs.vue'
+	import usermask from '../common/user_mask.vue'
 
 	export default {
 		name: 'personinfo',
@@ -245,11 +245,6 @@
 			navs_header,
 			navs,
 			usermask
-		},
-		props: {
-			page: {
-				type: Object,
-			}
 		},
 		data() {
 		    var checknickname= (rule, value, callback) => {//验证人员姓名
@@ -284,10 +279,12 @@
 		        }
 		    };
 	    	var checktelephone = (rule, value, callback) => {//验证电话号码
-	        	if (value && (!(/^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/).test(value))) {
-			      callback(new Error('请输入有效的电话号码，格式为：0000-0000000'))
+	        	var reg = /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/;
+	        	if (!reg.test(value)) {
+			    	console.log(reg)
+			    	callback(new Error('请输入有效的电话号码，格式为：0000-0000000'));
 			    } else {
-			      callback()
+			    	callback();
 			    }
 		      };
 
@@ -295,14 +292,14 @@
 		        if (value === '') {
 		          return callback(new Error('手机号不能为空'));
 		        } else {
-		          		if (value !== '') {
-		            		var reg=/^1[3456789]\d{9}$/;
-				            if(!reg.test(value)){
-				            	callback(new Error('请输入有效的手机号码'));
-				            }
-		            		callback();
-		        		}
-		        	}
+	          		if (value !== '') {
+	            		var reg=/^1[3456789]\d{9}$/;
+			            if(!reg.test(value)){
+			            	callback(new Error('请输入有效的手机号码'));
+			            }
+	            		callback();
+	        		}
+	        	}
 		    };
 
 			var checkidnumber = (rule, value, callback) => {//验证身份证号
@@ -319,7 +316,6 @@
   				    callback()
   				}
 		    };
-
 
 			return {
 				editSearch: '',
@@ -372,20 +368,20 @@
 					label: "simplename"
 				},
 	          rules:{
-		        nickname: [
-		            { validator: checknickname, trigger: 'blur' }
+		        nickname: [//required: true,必填标题加红*
+		            { required: true, validator: checknickname, trigger: 'blur' }
 		          ],
 	          	worknumber: [
-		            { validator: checkworknumber, trigger: 'blur' }
+		            { required: true, validator: checkworknumber, trigger: 'blur' }
 		          ],
 		        email: [
-		            { validator: checkemail, trigger: 'blur' }
+		            { required: true, validator: checkemail, trigger: 'blur' }
 		          ],
 		        telephone: [
 		            { validator: checktelephone, trigger: 'blur' }
 		          ],
 		        phone: [
-		            { validator: checkphone, trigger: 'blur' }
+		            { required: true, validator: checkphone, trigger: 'blur' }
 		          ],
 		        idnumber: [
 		            { validator: checkidnumber, trigger: 'blur' }
@@ -468,7 +464,7 @@
 					this.dialogVisible = true;
 				});
 			},
-			getCheckedNodes() {//
+			getCheckedNodes() {//获取树菜单节点
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
 			},
 			confirms() {//弹出框确定按钮调用数据
@@ -506,7 +502,7 @@
 									message: '保存成功',
 									type: 'success'
 								});
-								this.$emit('request')//重新加载数据
+								//this.$emit('request')//重新加载数据
 							} 
 						}).catch((err) => {
 							this.$message({
@@ -569,7 +565,7 @@
 </script>
 
 <style scoped>
-@import '../assets/css/mask-modules.css';
+@import '../../assets/css/mask-modules.css';
 
 .avatar-uploader {
     border: 1px dashed #d9d9d9;

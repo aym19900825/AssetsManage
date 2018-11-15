@@ -23,7 +23,7 @@
 									 		<el-col :span="12">
 												<el-form-item label="是滞包含大写字母">
 													<el-select v-model="safemanage.emptyuppercase" filterable placeholder="请选择">
-														<el-option v-for="item01 in uppercase" :label="item01.label" :value="item01.value"></el-option>
+														<el-option v-for="item01 in uppercase" :label="item01.label" :value="item01.value" key="item01s"></el-option>
 													</el-select>
 												</el-form-item>
 									 		</el-col>
@@ -104,9 +104,9 @@
 </template>
 
 <script>
-import vheader from './common/vheader.vue'
-import navs_header from './common/nav_tabs.vue'
-import navs_left from './common/left_navs/nav_left.vue'
+import vheader from '../common/vheader.vue'
+import navs_header from '../common/nav_tabs.vue'
+import navs_left from '../common/left_navs/nav_left5.vue'
 
 export default {
 	name: 'safemanage',
@@ -283,7 +283,7 @@ export default {
 </script>
 
 <style scoped>
-@import '../assets/css/mask-modules.css';
+@import '../../assets/css/mask-modules.css';
 
 
 </style>

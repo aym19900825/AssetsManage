@@ -37,7 +37,7 @@
 									</span>
 									<el-dropdown-menu slot="dropdown">
 										<el-checkbox-group v-model="checkedName" @change="changeCheckedName">
-											<el-dropdown-item  v-for="item in columns">
+											<el-dropdown-item  v-for="(item,index) in columns" :key="index">
 												<el-checkbox :label="item.text" name="type"></el-checkbox>
 											</el-dropdown-item>
 										</el-checkbox-group>
@@ -62,12 +62,12 @@
 	</div>
 </template>
 <script>
-	import tree_grid from './common/TreeGrid.vue'//树表格
-	import vheader from './common/vheader.vue'
-	import navs_left from './common/left_navs/nav_left.vue'
-	import navs_header from './common/nav_tabs.vue'
-	import assetsTree from './plugin/vue-tree/tree.vue'
-	import menumask from './common/menu_mask.vue'//弹出框
+	import tree_grid from '../common/TreeGrid.vue'//树表格
+	import vheader from '../common/vheader.vue'
+	import navs_left from '../common/left_navs/nav_left5.vue'
+	import navs_header from '../common/nav_tabs.vue'
+	import assetsTree from '../plugin/vue-tree/tree.vue'
+	import menumask from '../common/menu_mask.vue'//弹出框
 	export default {
 		name: 'user_management',
 		components: {

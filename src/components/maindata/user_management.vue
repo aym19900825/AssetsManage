@@ -53,7 +53,7 @@
 									</span>
 									<el-dropdown-menu slot="dropdown">
 										<el-checkbox-group v-model="checkedName" @change="test">
-											<el-dropdown-item v-for="item in tableHeader">
+											<el-dropdown-item v-for="(item,index) in tableHeader" :key="index">
 												<el-checkbox :label="item.label" name="type"></el-checkbox>
 											</el-dropdown-item>
 										</el-checkbox-group>
@@ -140,11 +140,11 @@
 	</div>
 </template>
 <script>
-	import vheader from './common/vheader.vue'
-	import navs_left from './common/left_navs/nav_left2.vue'
-	import navs_header from './common/nav_tabs.vue'
-	import assetsTree from './plugin/vue-tree/tree.vue'
-	import usermask from './common/user_mask.vue'
+	import vheader from '../common/vheader.vue'
+	import navs_left from '../common/left_navs/nav_left2.vue'
+	import navs_header from '../common/nav_tabs.vue'
+	import assetsTree from '../plugin/vue-tree/tree.vue'
+	import usermask from '../common/user_mask.vue'
 	export default {
 		name: 'user_management',
 		components: {
@@ -511,14 +511,7 @@
 					}
 					
 					this.userList = newarr;
-				
-				
-				
-				
-				})
-				
-				
-				.catch((wrong) => {})
+				}).catch((wrong) => {})
 				this.userList.forEach((item, index) => {
 					var id = item.id;
 					this.$axios.get('/users/' + id + '/roles', data).then((res) => {

@@ -20,7 +20,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="user" :label-position="labelPosition" :rules="rules" ref="user" label-width="100px" class="demo-user">
+				<el-form status-icon :model="user" :label-position="labelPosition" :rules="rules" ref="user" label-width="100px" class="demo-user">
 					<div class="accordion">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="基础信息" name="1">
@@ -96,7 +96,7 @@
 									<el-col :span="8">
 										<el-form-item label="角色">
 											<el-select v-model="user.roleId" multiple>
-												<el-option v-for="data in selectData" :key="data.id" :value="data.id" :label="data.name"></el-option>
+												<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.name"></el-option>
 											</el-select>
 										</el-form-item>
 									</el-col>
@@ -158,7 +158,7 @@
 
 			<span slot="footer" class="dialog-footer">
 		       <el-button @click="dialogVisible = false">取 消</el-button>
-		       <el-button type="primary" @click="queding();" >确 定</el-button>
+		       <el-button type="primary" @click="dailogconfirm();" >确 定</el-button>
 		    </span>
 		</el-dialog>
 
@@ -236,37 +236,46 @@
 					callback();
 				}
 			};
-			var validatePass6 = (rule, value, callback) => {
-                var regidnumber = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/; 
-                if (!regidnumber.test(this.user.idnumber)) {
-                   callback(new Error('身份证号填写有误'));
-                } else {
-                    callback();
-                }
-            };
+//			var validatePass6 = (rule, value, callback) => {
+//              var regidnumber = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/; 
+//              if (!regidnumber.test(this.user.idnumber)) {
+//                 callback(new Error('身份证号填写有误'));
+//              } else {
+//                  callback();
+//              }
+//          };
+            var validatePass6 = (rule, value, callback) => {//验证身份证号
+				if (value && (!(/\d{17}[\d|x]|\d{15}/).test(value) || (value.length !== 15 && value.length !== 18))) {
+  				    callback(new Error('身份证号码不符合规范'))
+  				} else {
+  				    callback()
+  				}
+		    };
             var validatePass7 = (rule, value, callback) => {
-                var regphone = 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/; 
-                 if(!regphone.test(this.user.phone)){
-                   callback(new Error('手机格式不正确'));
-                }else{
-                    callback();
-                }
+               if (value === '') {
+		          return callback(new Error('手机号不能为空'));
+		        } else {
+		          		if (value !== '') {
+		            		var reg=/^1[3456789]\d{9}$/;
+				            if(!reg.test(value)){
+				            	callback(new Error('请输入有效的手机号码'));
+				            }
+		            		callback();
+		        		}
+		        	}
             };
             var validatePass8 = (rule, value, callback) => {
-                  var regEmail= /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
-                 if(!regEmail.test(this.user.email)){
-                   callback(new Error('邮箱格式不正确'));
-                }else{
-                    callback();
-                }
+                if (value && (!(/^[0-9]{6}$/).test(value))) {
+  				    callback(new Error('邮政编码不符合规范'))
+  				} else {
+  				    callback()
+  				}
             };
 			return {
 				editSearch: '',
 				edit: true, //禁填
 				'男': true,
 				'女': false,
-				col_but1: true,
-				col_but2: true,
 				show: false,
 				isok1: true,
 				isok2: false,
@@ -279,24 +288,23 @@
 
 				rules: {
 					companyName: [{
-						required: true,
-						//						trigger: 'change',
+						required: true,//必填标题加红*
+						//trigger: 'change',
 						validator: validatePass1,
 					}],
 					deptName: [{
-						required: true,
-						//						trigger: 'change',
+						required: true,//必填标题加红*
+						//trigger: 'change',
 						validator: validatePass2,
 					}],
 					roleId: [{
-						
 						required: true,
-						trigger: 'blur',
+						trigger: 'blur',//触发事件，blur是鼠标移除是触发，change是值变动时触发。
 						validator: validatePass3,
 					}],
 					username: [{
 						required: true,
-						trigger: 'blur',
+						trigger: 'blur',//触发事件，blur是鼠标移除是触发，change是值变动时触发。
 						validator: validatePass4,
 					}],
 					password: [{
@@ -310,7 +318,7 @@
 						validator: validatePass6,
 					}],
 					phone: [{
-//						required: true,
+						required: true,
 						trigger: 'blur',
 						validator: validatePass7,
 					}],
@@ -329,7 +337,7 @@
 					label: "simplename"
 				},
 				selectData: [],//
-				bbbData:{},
+				getCheckboxData:{},
 //				aaaData:[]
 			};
 		},
@@ -339,28 +347,14 @@
 			//
 			handleCheckChange(data, checked, indeterminate) {
 		        console.log(data, checked, indeterminate);
-		        this.bbbData=data;
+		        this.getCheckboxData=data;
 		    },
 		    //
-		   	handleNodeClick(data) {
-		   		console.log(111);
-             	//console.log(node)
+		   	handleNodeClick(data) {//获取勾选树菜单节点
              	console.log(data);
             },
 			
-			col_but(col_but) {
-				//alert(col_but)
-				if(col_but == 'col_but1') {
-					this.col_but1 = !this.col_but1;
-					this.down = !this.down,
-						this.up = !this.up
-				}
-				if(col_but == 'col_but2') {
-					this.col_but2 = !this.col_but2;
-					this.down = !this.down,
-						this.up = !this.up
-				}
-			},
+			
 			//form表单内容清空
 			resetNew(){
                 this.user = {
@@ -395,14 +389,14 @@
 			close() {
 				this.show = false;
 			},
-			toggle(e) {
+			toggle(e) {//大弹出框大小切换
 				if(this.isok1 == true) {
 					this.maxDialog();
 				} else {
 					this.rebackDialog();
 				}
 			},
-			maxDialog(e) {
+			maxDialog(e) {//定义大弹出框一个默认大小
 				this.isok1 = false;
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
@@ -410,8 +404,8 @@
 				$(".mask_div").css("margin", "0%");
 				$(".mask_div").css("top", "60px");
 			},
-			//还原按钮
-			rebackDialog() {
+			
+			rebackDialog() {//大弹出框还原成默认大小
 				this.isok1 = true;
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
@@ -419,7 +413,7 @@
 				$(".mask_div").css("margin", "7% 10%");
 				$(".mask_div").css("top", "0");
 			},
-			getCheckedNodes() {
+			getCheckedNodes() {//获取树菜单节点
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
 			},
 
@@ -519,30 +513,21 @@
 					this.selectData = res.data.data;
 					console.log(res.data.data);
 					console.log(this.selectData);
-//					for(var item in this.selectData){
-//						//建立空的对象，建立自定义的属性，将其push在options中
-//						var select = {};
-//						select.value = this.selectData[item].name;
-//						this.options.push(select);
-//						console.log(select);
-//					}
 					}).catch(error =>{
 				    console.log('请求失败');
 				})
 			},
-			queding() {
+			dailogconfirm() {//小弹出框确认按钮事件
 				this.getCheckedNodes();
 				this.placetext = false;
 				this.dialogVisible = false;
-			
 				if(this.editSearch == 'company') {
-					this.user.companyId = this.bbbData.id;
-					this.user.companyName = this.bbbData.simplename;
+					this.user.companyId = this.getCheckboxData.id;
+					this.user.companyName = this.getCheckboxData.simplename;
 				} else {
-					this.user.deptId = this.bbbData.id;
-					this.user.deptName = this.bbbData.simplename;
+					this.user.deptId = this.getCheckboxData.id;
+					this.user.deptName = this.getCheckboxData.simplename;
 				}
-
 			},
 
 			handleClose(done) {

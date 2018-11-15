@@ -53,7 +53,7 @@
 									</span>
 									<el-dropdown-menu slot="dropdown">
 										<el-checkbox-group v-model="checkedName" @change="test">
-											<el-dropdown-item  v-for="item in tableHeader">
+											<el-dropdown-item v-for="item in tableHeader">
 												<el-checkbox :label="item.label" name="type"></el-checkbox>
 											</el-dropdown-item>
 										</el-checkbox-group>
@@ -99,12 +99,12 @@
 					<!-- 高级查询划出 End-->
 					<el-row :gutter="10">
 						<el-col :span="6">
-							<v-assetsTree  :listData="treeData" v-on:getTreeId="getTreeId"></v-assetsTree>
+							<v-assetsTree :listData="treeData" v-on:getTreeId="getTreeId"></v-assetsTree>
 						</el-col>
 						<el-col :span="18">
 							<!-- <tablediv ref="tableList"></tablediv> -->
 							<!-- 表格 -->
-							<el-table :data="userList"  border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
+							<el-table :data="userList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="账号" sortable width="100px" prop="username" v-if="this.checkedName.indexOf('账号')!=-1">
@@ -126,24 +126,17 @@
 							<!-- <span class="demonstration">显示总数</span>" -->
 							<!-- <el-pagination background layout="prev, pager, next" :total="2" style="float:right;margin-top:10px;"> -->
 							<!-- </el-pagination style="float:right;margin-top:10px;"> -->
-							<el-pagination background class="pull-right" v-if="this.checkedName.length>0"
-					            @size-change="sizeChange"
-					            @current-change="currentChange"
-					            :current-page="page.currentPage"
-					            :page-sizes="[10, 20, 30, 40]"
-					            :page-size="page.pageSize"
-					            layout="total, sizes, prev, pager, next"
-					            :total="page.totalCount">
-					        </el-pagination>
+							<el-pagination background class="pull-right" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							</el-pagination>
 							<!-- 表格 -->
 						</el-col>
 					</el-row>
-					</div>
 				</div>
 			</div>
-			<usermask :user="aaaData[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></usermask>
-			<!--右侧内容显示 End-->
 		</div>
+		<usermask :user="aaaData[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></usermask>
+		<!--右侧内容显示 End-->
+	</div>
 	</div>
 </template>
 <script>
@@ -163,6 +156,8 @@
 		},
 		data() {
 			return {
+				loadSign:true,//加载
+				commentArr:{},
 				checkedName: [
 					'账号',
 					'姓名',
@@ -171,8 +166,7 @@
 					'状态',
 					'创建时间'
 				],
-				tableHeader: [
-					{
+				tableHeader: [{
 						label: '账号',
 						prop: 'username'
 					},
@@ -224,27 +218,41 @@
 					label: "simplename"
 				},
 				treeData: [],
-				userData:[],
+				userData: [],
 				page: {
 					currentPage: 1,
 					pageSize: 10,
 					totalCount: 0
 				},
-				aaaData:[],
+				aaaData: [],
 			}
 		},
 		methods: {
-			test(){
-				console.log(this.checkedName.indexOf('账号')!=-1);
+			loadMore () {
+			   if (this.loadSign) {
+			     this.loadSign = false
+			     this.page.currentPage++
+			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+			       return
+			     }
+			     setTimeout(() => {
+			       this.loadSign = true
+			     }, 1000)
+			     this.requestData()
+//			     console.log('到底了', this.page.currentPage)
+			   }
+			 },
+			test() {
+				console.log(this.checkedName.indexOf('账号') != -1);
 			},
 			sizeChange(val) {
-		      this.page.pageSize = val;
-		      this.requestData();
-		    },
-		    currentChange(val) {
-		      this.page.currentPage = val;
-		      this.requestData();
-		    },
+				this.page.pageSize = val;
+				this.requestData();
+			},
+			currentChange(val) {
+				this.page.currentPage = val;
+				this.requestData();
+			},
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
@@ -252,26 +260,24 @@
 			},
 			//添加用戶
 			openAddMgr() {
-				this.aaaData = [
-					{
-						companyName:'',
-						deptName:'',
-						username:'',
-						password:'',
-						nickname:'',
-						birthday:'',
-						sexName:'',
-						idnumber:'',
-						entrytime:'',
-						roleId:[],
-						roles: [],
-						worknumber:'',
-						phone:'',
-						email:'',
-						address:'',
-						tips:''
-					}
-				];
+				this.aaaData = [{
+					companyName: '',
+					deptName: '',
+					username: '',
+					password: '',
+					nickname: '',
+					birthday: '',
+					sexName: '',
+					idnumber: '',
+					entrytime: '',
+					roleId: [],
+					roles: [],
+					worknumber: '',
+					phone: '',
+					email: '',
+					address: '',
+					tips: ''
+				}];
 				this.$refs.child.detail();
 			},
 			//修改用戶
@@ -292,10 +298,10 @@
 				} else {
 					this.aaaData[0].roleId = [];
 					var roles = this.aaaData[0].roles;
-					for(var i = 0; i < roles.length; i++){
+					for(var i = 0; i < roles.length; i++) {
 						this.aaaData[0].roleId.push(roles[i].id);
 					}
-					console.log(this.aaaData[0].roleId);
+//					console.log(this.aaaData[0].roleId);
 					this.$refs.child.detail();
 				}
 			},
@@ -324,7 +330,7 @@
 					var changeUser = selData[0];
 					var id = changeUser.id;
 					var url = '/api/api-user/users/' + id;
-					this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
+					this.$axios.delete(url, {}).then((res) => { //.delete 传数据方法
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -426,7 +432,7 @@
 						message: '不可同时冻结多个用户',
 						type: 'warning'
 					});
-					return;
+					return
 				} else {
 					var changeUser = selData[0];
 					var url = '/api/api-user/users/updateEnabled?id=' + changeUser.id + '&enabled=false';
@@ -463,12 +469,7 @@
 				return this.$moment(date).format("YYYY-MM-DD");
 				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
 			},
-			insert() {
-				this.users.push(this.user)
-			},
-			remove(index) {
-				this.users.splice(index, 1)
-			},
+
 			SelChange(val) {
 				this.selUser = val;
 			},
@@ -487,14 +488,62 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					this.userList = res.data.data;
-					this.page.totalCount = res.data.count;
-				}).catch((wrong) => {})
+//					console.log(res)
+//					this.userList = res.data.data;
+					this.page.totalCount = res.data.count;	
+					//总的页数
+					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
+					if(this.page.currentPage >= totalPage){
+						 this.loadSign = false
+					}else{
+						this.loadSign=true
+					}
+					this.commentArr[this.page.currentPage]=res.data.data
+					let newarr=[]
+					for(var i = 1; i <= totalPage; i++){
+					
+						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
+							
+							for(var j = 0; j < this.commentArr[i].length; j++){
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					
+					this.userList = newarr;
+				
+				
+				
+				
+				})
+				
+				
+				.catch((wrong) => {})
 				this.userList.forEach((item, index) => {
 					var id = item.id;
 					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
 						this.userList.role = res.data.roles[0].name;
 					}).catch((wrong) => {})
+				})
+			},
+			
+			getlist(){
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+					nickname: this.searchList.nickname,
+					enabled: this.searchList.enabled,
+					searchKey: 'createTime',
+					searchValue: this.searchList.createTime,
+					companyId: this.companyId,
+					deptId: this.deptId
+				}
+				var url = '/api/api-user/users';
+				this.$axios.get(url, {
+					params: data
+				}).then((res) => {
+					userList = res.data.data;
+					isLoading = false
 				})
 			},
 			//机构树
@@ -506,39 +555,45 @@
 					this.treeData = this.transformTree(this.resourceData);
 				});
 			},
-			transformTree(data){
-				for(var i=0; i<data.length; i++){
+			transformTree(data) {
+				for(var i = 0; i < data.length; i++) {
 					data[i].name = data[i].fullname;
-					if(!data[i].pid || $.isArray(data[i].subDepts)){
+					if(!data[i].pid || $.isArray(data[i].subDepts)) {
 						data[i].iconClass = 'icon-file-normal';
-					}else{
+					} else {
 						data[i].iconClass = 'icon-file-text';
 					}
-					if($.isArray(data[i].subDepts)){
+					if($.isArray(data[i].subDepts)) {
 						data[i].children = this.transformTree(data[i].subDepts);
 					}
 				}
 				return data;
 			},
-			getTreeId(data){
-				if(data.type == '1'){
+			getTreeId(data) {
+				if(data.type == '1') {
 					this.companyId = data.id;
 					this.deptId = '';
-				}else{
+				} else {
 					this.deptId = data.id;
 					this.companyId = '';
 				}
 				this.requestData();
 			},
-			handleNodeClick(data) {
-			},
+			handleNodeClick(data) {},
 			formatter(row, column) {
 				return row.enabled;
 			},
+			
+
 		},
-		mounted() {
+		beforeMount() {
+			// 在页面挂载前就发起请求
 			this.requestData();
 			this.getKey();
+		},
+		mounted() {
+		
+
 		},
 	}
 </script>

@@ -32,7 +32,18 @@ import EasyScroll from 'easyscroll'//自定义滚动条
 //import './assets/bootstrap/bootstrap.min.js'
 
 
-
+Vue.directive('loadmore', {
+	bind(el, binding) {
+	    const selectWrap = el.querySelector('.el-table__body-wrapper')
+	    selectWrap.addEventListener('scroll', function() {
+	      let sign = 100
+	      const scrollDistance = this.scrollHeight - this.scrollTop - this.clientHeight
+	      if (scrollDistance <= sign) {
+	        binding.value()
+	      }
+	    })
+	}
+})
 
 Vue.config.productionTip = false
 Vue.prototype.$echarts = echarts 

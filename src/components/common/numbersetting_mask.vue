@@ -268,7 +268,6 @@
 						"AUTOKEY":this.addnumbersettingForm.AUTOKEY,
 					    "PREFIX":this.addnumbersettingForm.PREFIX,
 					    "PREFIX":this.addnumbersettingForm.PREFIX,
-					   
 					}
 					this.$axios.post(url, this.addnumbersettingFormtest).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息

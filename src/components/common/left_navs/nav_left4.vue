@@ -3,8 +3,8 @@
 		<EasyScrollbar>
 			<div ref="homePagess2" style="height: 600px;">
 				<div id="information" style="height: inherit;">
-					<div class="navbarbg">
-						<span class="navbar-minimalize minimalize-styl-2" @click="min2max()">
+					<div class="navbarbg" @click="min2max()">
+						<span class="navbar-minimalize minimalize-styl-2">
 							<i class="icon-menu1"></i> 
 						</span>
 					</div>

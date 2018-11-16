@@ -9,7 +9,6 @@
 		<navs_left></navs_left>
 		<!--左侧菜单内容显示 End-->
 
-
 		<!--右侧内容显示 Begin-->
 		<div class="wrapper wrapper-content">
 			<EasyScrollbar>
@@ -20,7 +19,7 @@
 								<div class="fixed-table-toolbar clearfix">
 									<div class="bs-bars pull-left">
 										<div class="hidden-xs" id="roleTableToolbar" role="group">
-											<button type="button" v-model="name" class="btn btn-green" @click="openAddMgr" id="">
+											<button type="button" class="btn btn-green" @click="openAddMgr" id="">
 			                                	<i class="icon-add"></i>添加
 			                      			 </button>
 											<button type="button" class="btn btn-bule button-margin" @click="modify">
@@ -95,7 +94,7 @@
 			</EasyScrollbar>
 		</div>
 		<!--右侧内容显示 End-->
-		<numbsetmask :adddeptForm="selMenu[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></numbsetmask>
+		<numbsetmask :adddeptForm="selMenu[0]" ref="child" @request="requestData" v-bind:page=page></numbsetmask>
 	</div>
 </div>
 </template>
@@ -118,24 +117,13 @@
 		},
 		data() {
 			return {
-				dataUrl: '/api/api-user/users',
-				searchData: {
-			        page: 1,
-			        limit: 10,//分页显示数
-			        S_NUM: '',
-			        enabled: '',
-			        searchKey: '',
-			        searchValue: '',
-			        companyId: '',
-			        deptId: ''
-		        },
-				checkedName: [
+				checkedName: [//控制Table-列显示和隐藏
 					'自动编号名称',
 					'起始数',
 					'前缀',
 					'备注',
 				],
-				tableHeader: [
+				tableHeader: [//控制Table-列头标题名称
 					{
 						label: '自动编号名称',
 						prop: 'AUTOKEY'
@@ -153,8 +141,6 @@
 						prop: 'MEMO'
 					}
 				],
-				companyId: '',
-				deptId: '',
 				selUser: [],
 				'启用': true,
 				'冻结': false,
@@ -169,17 +155,7 @@
 				clientHeight:'',//获取浏览器高度
 				searchList: {
 					AUTOKEY: '',
-					createTime: ''
 				},
-				//tree
-				resourceData: [], //数组，我这里是通过接口获取数据，
-				resourceDialogisShow: false,
-				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
-				resourceProps: {
-					children: "subDepts",
-					label: "simplename"
-				},
-				userData:[],
 				page: {//分页显示
 					currentPage: 1,
 					pageSize: 10,
@@ -200,29 +176,27 @@
 			};
 		},
 		methods: {
-			tableControle(data){
+			tableControle(data){//控制表格列显示隐藏
 				this.checkedName = data;
 			},
-			sizeChange(val) {
+			sizeChange(val) {//分页，总页数
 		      this.page.pageSize = val;
 		      this.requestData();
 		    },
-		    currentChange(val) {
+		    currentChange(val) {//分页，当前页
 		      this.page.currentPage = val;
 		      this.requestData();
 		    },
-			searchinfo(index) {
+			searchinfo(index) {//高级查询
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
 				this.requestData();
 			},
-			//添加自动编号设置
-			openAddMgr() {
+			openAddMgr() {//添加自动编号设置
 				this.$refs.child.resetNew();
 				this.$refs.child.childMethods();
 			},
-			//修改自动编号设置
-			modify() {
+			modify() {//修改自动编号设置
 				this.aaaData = this.selUser;
 				if(this.aaaData.length == 0) {
 					this.$message({
@@ -264,7 +238,7 @@
 				} else {
 					var changeUser = selData[0];
 					var id = changeUser.id;
-					var url = '/api/api-user/users/' + id;
+					var url = '/api/api-apps/app/autokey/' + id;
 					this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -294,25 +268,7 @@
 			Printing() {
 				
 			},
-			judge(data) {
-				//taxStatus 布尔值
-				return data.enabled ? '启用' : '冻结'
-			},
-			//时间格式化  
-			dateFormat(row, column) {
-				var date = row[column.property];
-				if(date == undefined) {
-					return "";
-				}
-				return this.$moment(date).format("YYYY-MM-DD");
-				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
-			},
-			insert() {
-				this.users.push(this.user)
-			},
-			remove(index) {
-				this.users.splice(index, 1)
-			},
+			
 			SelChange(val) {
 				this.selUser = val;
 			},
@@ -320,29 +276,22 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					S_NUM: this.searchList.AUTOKEY,
-					searchValue: this.searchList.createTime
 				}
-				var url = '/api/api-user/users';
+				var url = '/api/api-apps/app/autokey';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
 					this.numberList = res.data.data;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
-				this.numberList.forEach((item, index) => {
+				/*this.numberList.forEach((item, index) => {
 					var id = item.id;
 					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
 						this.numberList.role = res.data.roles[0].name;
 					}).catch((wrong) => {})
-				})
+				})*/
 			},
 			
-			handleNodeClick(data) {
-			},
-			formatter(row, column) {
-				return row.enabled;
-			},
 		},
 		
 		mounted() {

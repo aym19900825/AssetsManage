@@ -75,20 +75,27 @@
 					<div v-show="search">
 						<el-form status-icon :model="searchList" label-width="70px">
 							<el-row :gutter="10">
+								<!--<el-col :span="5">
+
+												<el-input v-model="searchList.typename">
+													<template slot="prepend">标准编号</template>
+												</el-input>
+
+											</el-col>-->
 								<el-col :span="5">
-									<el-form-item label="用户名">
-										<el-input v-model="searchList.nickname"></el-input>
-									</el-form-item>
+									<el-input v-model="searchList.nickname">
+										<template slot="prepend">用户名</template>
+									</el-input>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="状态">
-										<el-input v-model="searchList.enabled"></el-input>
-									</el-form-item>
+									<el-input v-model="searchList.enabled">
+										<template slot="prepend">状态</template>
+									</el-input>
 								</el-col>
 								<el-col :span="4">
-									<el-form-item label="创建时间">
-										<el-input v-model="searchList.createTime"></el-input>
-									</el-form-item>
+									<el-input v-model="searchList.createTime">
+										<template slot="prepend">创建时间</template>
+									</el-input>
 								</el-col>
 								<el-col :span="2">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
@@ -144,7 +151,7 @@
 	import navs_left from '../common/left_navs/nav_left2.vue'
 	import navs_header from '../common/nav_tabs.vue'
 	import assetsTree from '../plugin/vue-tree/tree.vue'
-	import usermask from '../common/user_mask.vue'
+	import usermask from '../maindataDetails/user_mask.vue'
 	export default {
 		name: 'user_management',
 		components: {

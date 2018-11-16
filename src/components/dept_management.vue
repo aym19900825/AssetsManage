@@ -30,7 +30,7 @@
 						</div>
 						<div class="columns columns-right btn-group pull-right">
 							<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
-
+							<!-- 表格列的显示隐藏 -->
 							<div class="keep-open btn-group" title="列">
 								<el-dropdown :hide-on-click="false" class="pl10 btn btn-default btn-outline">
 									<span class="el-dropdown-link">
@@ -39,7 +39,7 @@
 									</span>
 									<el-dropdown-menu slot="dropdown">
 										<el-checkbox-group v-model="checkedName" @change="changeCheckedName">
-											<el-dropdown-item  v-for="(item,index) in columns" key="index">
+											<el-dropdown-item  v-for="item in columns">
 												<el-checkbox :label="item.text" name="type"></el-checkbox>
 											</el-dropdown-item>
 										</el-checkbox-group>
@@ -48,7 +48,7 @@
 							</div>
 						</div>
 					</div>
-					<!-- 高级查询划出 -->
+					<!-- 高级查询划出begin -->
 					<div v-show="search">
 						<el-form status-icon :model="searchDept" label-width="70px">
 							<el-row :gutter="10">
@@ -63,10 +63,12 @@
 							</el-row>
 						</el-form>
 					</div>
-					<!-- 高级查询划出 -->
+					<!-- 高级查询划出end -->
 					<el-row :gutter="10">
 						<el-col :span="24">
+							<!-- 树表格 -->
 							<tree_grid :columns="columns" :tree-structure="true" :data-source="deptList" v-on:childByValue="childByValue"></tree_grid>
+							<!-- 页码 -->
 							<el-pagination v-if="this.checkedName.length>0"
 							   class="pull-right" 
 							   @size-change="sizeChange" 
@@ -82,6 +84,8 @@
 					</div>
 				</div>
 			</div>
+			<!-- :adddeptForm="selMenu[0]"向子组件传值 -->
+			<!-- @requestTree="getKey"子组件调用方法 -->
 			<deptmask :adddeptForm="selMenu[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></deptmask>
 			<!--右侧内容显示 End-->
 		</div>
@@ -89,13 +93,11 @@
 </template>
 
 <script>
-	import tree_grid from '../common/TreeGrid.vue'//树表格
-	import vheader from '../common/vheader.vue'
-	import navs_left from '../common/left_navs/nav_left2.vue'
-	import navs_header from '../common/nav_tabs.vue'
-//	import assetsTree from '../plugin/vue-tree/tree.vue'
-//	import tableControle from '../plugin/table-controle/controle.vue'
-	import deptmask from '../maindataDetails/dept_mask.vue'
+	import tree_grid from './common/TreeGrid.vue'//树表格
+	import vheader from './common/vheader.vue'
+	import navs_left from './common/left_navs/nav_left2.vue'
+	import navs_header from './common/nav_tabs.vue'
+	import deptmask from './common/dept_mask.vue'
 
 	export default {
 		name: 'dept_management',
@@ -317,24 +319,6 @@
 			SelChange(val) {
 				this.selDept = val;
 			},
-//			requestData(index) {
-//				var data = {
-//					page: this.page.currentPage,
-//					limit: this.page.pageSize,
-//					simplename: this.searchDept.simplename,
-//					companyId: this.companyId,
-//					deptId: this.deptId
-//				}
-//				var url = '/api/api-user/depts';
-//				this.$axios.get(url, {
-//					params: data
-//				}).then((res) => {
-//					this.deptList = res.data.data;
-//					this.page.totalCount = res.data.count;
-//				}).catch((wrong) => {
-//
-//				})
-//			},
 			requestData() {
 //				var data = {
 //					
@@ -397,15 +381,15 @@
 		mounted() {
 			this.requestData();
 			this.getKey();
-			  // 获取浏览器可视区域高度
-		      var _this = this;
-		      var clientHeight2 = $(window).height() - 100;    //document.body.clientWidth;
-		      _this.$refs.homePagess3.style.height = clientHeight2 + 'px';
-		      window.onresize = function() {
-		        var clientHeight2 = $(window).height() - 100;
-		        _this.$refs.homePagess3.style.height = clientHeight2 + 'px';
-		      };
-			},
+		    // 获取浏览器可视区域高度
+	        var _this = this;
+	        var clientHeight2 = $(window).height() - 100;    
+	        _this.$refs.homePagess3.style.height = clientHeight2 + 'px';
+	        window.onresize = function() {
+	           var clientHeight2 = $(window).height() - 100;
+	           _this.$refs.homePagess3.style.height = clientHeight2 + 'px';
+	        };
+		},
 	}
 </script>
 

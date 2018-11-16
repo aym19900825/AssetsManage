@@ -270,6 +270,7 @@ h6 {
 		padding-left: 220px;
 		position: relative;
 	}
+	 .wrapperall {padding-left: 0px;}
 	.accordion {margin:15px; margin-bottom: 20px;}
 	.ibox-content {
 		background-color: #F5F8FB;

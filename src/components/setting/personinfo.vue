@@ -234,17 +234,13 @@
 
 <script>
 	import vheader from '../common/vheader.vue'
-	import navs from '../common/left_navs/nav_left.vue'
 	import navs_header from '../common/nav_tabs.vue'
-	import usermask from '../common/user_mask.vue'
 
 	export default {
 		name: 'personinfo',
 		components: {
 			vheader,
 			navs_header,
-			navs,
-			usermask
 		},
 		data() {
 		    var checknickname= (rule, value, callback) => {//验证人员姓名

@@ -104,7 +104,7 @@
 	import navs_header from '../common/nav_tabs.vue'
 	import table from '../plugin/table/table-normal.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
-	import numbsetmask from '../common/numbersetting_mask.vue'
+	import numbsetmask from '../maindataDetails/numbersetting_mask.vue'
 	export default {
 		name: 'number_settings',
 		components: {

@@ -39,61 +39,61 @@
 								<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
 									<el-row :gutter="70">
 										<el-col :span="8">
-											<el-form-item label="标准编码" prop="name">
-												<el-input v-model="dataInfo.name"></el-input>
+											<el-form-item label="标准编码" prop="S_NUM">
+												<el-input v-model="dataInfo.S_NUM"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="标准名称" prop="description">
-												<el-input v-model="dataInfo.description"></el-input>
+											<el-form-item label="标准名称" prop="S_NAME">
+												<el-input v-model="dataInfo.S_NAME"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="发布时间" prop="description">
-												<el-date-picker v-model="dataInfo.description" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+											<el-form-item label="发布时间" prop="RELEASETIME">
+												<el-date-picker v-model="dataInfo.RELEASETIME" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
 											</el-date-picker>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row :gutter="70">
 										<el-col :span="8">
-										<el-form-item label="启用时间" prop="description">
-											<el-date-picker v-model="dataInfo.description" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+										<el-form-item label="启用时间" prop="STARTETIME">
+											<el-date-picker v-model="dataInfo.STARTETIME" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
 											</el-date-picker>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-											<el-form-item label="发布单位" prop="name">
-												<el-input v-model="dataInfo.name" :disabled="true"></el-input>
+											<el-form-item label="发布单位" prop="RELEASE_UNIT">
+												<el-input v-model="dataInfo.RELEASE_UNIT" :disabled="true"></el-input>
 											</el-form-item> 
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="机构" prop="description">
-												<el-input v-model="dataInfo.description" :disabled="true"></el-input>
+											<el-form-item label="机构" prop="DEPARTMENT">
+												<el-input v-model="dataInfo.DEPARTMENT" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row :gutter="70">
 										<el-col :span="8">
-										<el-form-item label="录入人" prop="description">
-											<el-input v-model="dataInfo.description" :disabled="true"></el-input>
+										<el-form-item label="录入人" prop="ENTERBY">
+											<el-input v-model="dataInfo.ENTERBY" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-											<el-form-item label="录入时间" prop="name">
-												<el-input v-model="dataInfo.name" :disabled="true" ></el-input>
+											<el-form-item label="录入时间" prop="ENTERDATE">
+												<el-input v-model="dataInfo.ENTERDATE" :disabled="true" ></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改人" prop="description">
-												<el-input v-model="dataInfo.description" :disabled="true"></el-input>
+											<el-form-item label="修改人" prop="CHANGEBY">
+												<el-input v-model="dataInfo.CHANGEBY" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row :gutter="70">
 										<el-col :span="8">
-											<el-form-item label="修改时间" prop="description">
-												<el-input v-model="dataInfo.description" :disabled="true"></el-input>
+											<el-form-item label="修改时间" prop="CHANGEDATE">
+												<el-input v-model="dataInfo.CHANGEDATE" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -258,8 +258,16 @@
 					}
 				],
 				dataInfo: { //添加数据库列表信息
-					name: '',
-					description: '',
+					S_NUM: '',
+					S_NAME: '',
+					RELEASETIME:'',
+					STARTETIME:'',
+					RELEASE_UNIT: '',
+					DEPARTMENT: '',
+					ENTERBY:'',
+					ENTERDATE:'',
+					CHANGEBY: '',
+					CHANGEDATE:'',
 					attributes: [{ //字段列表
 						columnname: '',
 						description: '',
@@ -269,13 +277,6 @@
 						typename: ''
 					}]
 				},
-				/*attributes:[{//字段列表
-					columnname: '',
-					description: '',
-					type:'',
-					length: '',
-					retain: ''
-				}],*/
 				rules: {
 					name: [{
 						required: true,
@@ -300,8 +301,16 @@
 		methods: {
 			resetNew() {
 				this.dataInfo = { //数据库列表
-						name: '',
-						description: '',
+						S_NUM: '',
+					S_NAME: '',
+					RELEASETIME:'',
+					STARTETIME:'',
+					RELEASE_UNIT: '',
+					DEPARTMENT: '',
+					ENTERBY:'',
+					ENTERDATE:'',
+					CHANGEBY: '',
+					CHANGEDATE:'',
 						attributes: [{ //字段列表
 							columnname: '',
 							description: '',
@@ -360,18 +369,8 @@
 				this.show = true;
 			},
 			// 这里是修改
-			detail(dataid) {
-				var url = '/api/apps-center/objectcfg/' + dataid;
-				this.$axios.get(url, {}).then((res) => {
-					this.dataInfo = res.data;
-					//this.attributes=this.dataInfo.attributes;
-					this.show = true;
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
+			detail() {
+				this.show = true;
 			},
 			//点击关闭按钮
 			close() {

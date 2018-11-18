@@ -157,7 +157,7 @@
 				</EasyScrollbar>
 			</div>
 			<!--右侧内容显示 End-->
-			<standardmask ref="child" v-bind:page=page></standardmask>
+			<standardmask :dataInfo="aaaData[0]" ref="child" v-bind:page=page></standardmask>
 		</div>
 	</div>
 </template>

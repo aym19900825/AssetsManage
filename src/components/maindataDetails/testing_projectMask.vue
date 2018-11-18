@@ -115,6 +115,29 @@
 <script>
 	export default {
 		name: 'masks',
+		props: {
+			dataInfo: {
+				type: Object,
+				default: function(){
+					return {
+					P_NUM: '',
+					P_NAME: '',
+					STATUS: '',
+					VERSION: '',
+					QUALIFICATION: '',
+					FIELD: '',
+					CHILD_FIELD: '',
+					DOCLINKS_NUM: '',
+					DEPT: '',
+					ENTERBY:'',
+					ENTERDATE: '',
+					CHANGEBY: '',
+					CHANGEDATE:'',
+					}
+				}
+			},
+			page: Object ,
+		},
 		data() {
 			var validateName = (rule, value, callback) => {
 				if(value === '') {
@@ -131,20 +154,6 @@
 				}
 			};
 			return {
-				 options: [{
-          			value: '选项1',
-          			label: '活动'
-        		}, {
-          			value: '选项2',
-          			label: '活动2'
-        		}, {
-          			value: '选项3',
-          			label: '活动3'
-        		}, {
-          			value: '选项4',
-          			label: '活动4'
-        		}],
-        		value: '',
 				selUser: [],
 				edit: true, //禁填
 				col_but1: true,
@@ -157,21 +166,7 @@
 				activeNames: ['1', '2'], //手风琴数量
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
-				dataInfo: { //添加数据库列表信息
-					P_NUM:'',
-					P_NAME: '',
-					STATUS: '',
-					VERSION:'',
-					QUALIFICATION: '',
-					FIELD: '',
-					CHILD_FIELD: '',
-					DEPT:'',
-					ENTERBY: '',
-					ENTERDATE: '',
-					CHANGEBY: '',
-					CHANGEDATE: ''
-					
-				},
+
 				rules: {
 					name: [{
 						required: true,
@@ -196,18 +191,19 @@
 		methods: {
 			resetNew() {
 				this.dataInfo = { //数据库列表
-					P_NUM:'',
+					P_NUM: '',
 					P_NAME: '',
 					STATUS: '',
-					VERSION:'',
+					VERSION: '',
 					QUALIFICATION: '',
 					FIELD: '',
 					CHILD_FIELD: '',
-					DEPT:'',
-					ENTERBY: '',
+					DOCLINKS_NUM: '',
+					DEPT: '',
+					ENTERBY:'',
 					ENTERDATE: '',
 					CHANGEBY: '',
-					CHANGEDATE: ''
+					CHANGEDATE:'',
 						
 					},
 
@@ -220,7 +216,6 @@
 				this.selUser = val;
 			},
 
-			
 			delfield(item) {
 				var index = this.dataInfo.attributes.indexOf(item);
 				if(index !== -1) {
@@ -250,30 +245,18 @@
 					console.log(res);
 					this.dataInfo.ENTERBY=res.data.nickname;
 					this.dataInfo.ENTERDATE=res.data.createTime;
-					
 				}).catch((err)=>{
 					this.$message({
 						message:'网络错误，请重试',
 						type:'error'
-					});
-				});
+					})
+				})
 				this.show = true;
-				
 			},
 			// 这里是修改
 			detail() {
 				this.show = true;
-//				var url = '/api/apps-center/objectcfg/' + dataid;
-//				this.$axios.get(url, {}).then((res) => {
-//					this.dataInfo = res.data;
-//					//this.attributes=this.dataInfo.attributes;
-//					this.show = true;
-//				}).catch((err) => {
-//					this.$message({
-//						message: '网络错误，请重试',
-//						type: 'error'
-//					});
-//				});
+				
 			},
 			//点击关闭按钮
 			close() {
@@ -307,9 +290,8 @@
 			submitForm(dataInfo) {
 				this.$refs[dataInfo].validate((valid) => {
 					//		          if (valid) {
-					
+						console.log(this.dataInfo);
 					var url = '/api/api-apps/app/inspectionPro/saveOrUpdate';
-					console.log(this.dataInfo);
 					this.$axios.post(url, this.dataInfo).then((res) => {
 						if(res.data.resp_code == 0) {
 							this.$message({

@@ -124,7 +124,8 @@ ul.ztree {
     height:auto;
     overflow-x:auto;
     overflow-y:scroll;
-    width:100%
+    width:100%;
+    height: 100%;
 }
 .ztree * {
     font-family:Verdana,Arial,Helvetica,AppleGothic,sans-serif;

@@ -23,17 +23,14 @@
 								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
 								    <i class="icon-trash"></i>删除
 								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="resetPwd">
-								    <i class="icon-refresh"></i>重置密码
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="unfreeze">
-								    <i class="icon-start"></i>启用
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="freezeAccount">
-								    <i class="icon-stop"></i>冻结
+								<button type="button" class="btn btn-primarys button-margin">
+								    <i class="icon-inventory-line-callout"></i>导出
 								</button>
 								<button type="button" class="btn btn-primarys button-margin">
-								    <i class="icon-role-site"></i>角色分配
+								    <i class="icon-send"></i>发布
+								</button>
+								<button type="button" class="btn btn-primarys button-margin">
+								    <i class="icon-close1"></i>取消
 								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 						    		<i class="icon-search"></i>高级查询
@@ -62,60 +59,89 @@
 						</div>
 					</div>
 					<!-- 高级查询划出 Begin-->
-					<div v-show="search">
-						<el-form status-icon :model="searchList" label-width="70px">
-							<el-row :gutter="10">
-								<el-col :span="5">
-									<el-form-item label="用户名">
-										<el-input v-model="searchList.nickname"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="5">
-									<el-form-item label="状态">
-										<el-input v-model="searchList.enabled"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="4">
-									<el-form-item label="创建时间">
-										<el-input v-model="searchList.createTime"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="2">
-									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
-								</el-col>
-							</el-row>
-						</el-form>
-					</div>
-					<!-- 高级查询划出 End-->
+				<div v-show="search" class="pb10">
+					<el-form status-icon :model="searchList" label-width="70px">
+						<el-row :gutter="10">
+							<el-col :span="5">
+								<el-input v-model="searchList.WP_NUM">
+									<template slot="prepend">计划编号</template>
+								</el-input>
+							</el-col>
+							<el-col :span="5">
+								<el-input v-model="searchList.DESCRIPTION">
+									<template slot="prepend">描述</template>
+								</el-input>
+							</el-col>
+							<el-col :span="5">
+								<el-select v-model="searchList.TYPE" placeholder="类型">
+								      <el-option label="监督审查" value="1">	
+								      </el-option>
+								      <el-option label="质量抽查" value="0">
+								      </el-option>
+								    </el-select>
+							</el-col>
+							<el-col :span="5">
+								<el-input v-model="searchList.YEAR">
+									<template slot="prepend">年度</template>
+								</el-input>
+							</el-col>
+						</el-row>
+						<el-row :gutter="10" class="pt5">
+							<el-col :span="5">
+								<div class="block">
+								    <el-date-picker
+								      v-model="searchList.ENTERDATE"
+								      type="date"
+								      placeholder="录入日期">
+								    </el-date-picker>
+								  </div>
+							</el-col>
+							<el-col :span="5">
+								<el-select v-model="searchList.ENERBY" placeholder="录入人">
+								    <el-option label="张强" value="1"></el-option>
+								    <el-option label="贾庆林" value="0"></el-option>
+								    <el-option label="李国富" value="0"></el-option>
+								</el-select>
+							</el-col>
+							<el-col :span="5" style="padding-top: 3px">
+								<el-select v-model="searchList.STATUS" placeholder="状态">
+								    <el-option label="草稿" value="1"></el-option>
+								    <el-option label="审批中" value="0"></el-option>
+								    <el-option label="驳回" value="0"></el-option>
+								    <el-option label="已发布" value="0"></el-option>
+								    <el-option label="已取消" value="0"></el-option>
+								</el-select>
+							</el-col>
+							<el-col :span="5">
+								<el-button class="pull-right" type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+							</el-col>
+						</el-row>
+					</el-form>
+				</div>
+				<!-- 高级查询划出 End-->
 					<el-row :gutter="10">
 						<el-col :span="6">
 							<v-assetsTree  :listData="treeData" v-on:getTreeId="getTreeId"></v-assetsTree>
 						</el-col>
 						<el-col :span="18">
-							<!-- <tablediv ref="tableList"></tablediv> -->
 							<!-- 表格 -->
 							<el-table :data="userList"  border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="账号" sortable width="100px" prop="username" v-if="this.checkedName.indexOf('账号')!=-1">
+								<el-table-column label="计划编号" sortable width="100px" prop="WP_NUM" v-if="this.checkedName.indexOf('计划编号')!=-1">
 								</el-table-column>
-								<el-table-column label="姓名" sortable width="200px" prop="nickname" v-if="this.checkedName.indexOf('姓名')!=-1">
+								<el-table-column label="计划描述" sortable width="200px" prop="DESCRIPTION" v-if="this.checkedName.indexOf('计划描述')!=-1">
 								</el-table-column>
-								<el-table-column label="性别" sortable width="100px" prop="sex" :formatter="sexName" v-if="this.checkedName.indexOf('性别')!=-1">
+								<el-table-column label="年度" sortable width="100px" prop="YEAR" v-if="this.checkedName.indexOf('年度')!=-1">
 								</el-table-column>
 								</el-table-column>
-								<el-table-column label="机构" sortable width="200px" prop="deptName" v-if="this.checkedName.indexOf('机构')!=-1">
+								<el-table-column label="录入人" sortable width="200px" prop="ENERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
 								</el-table-column>
-								<el-table-column label="公司" sortable width="200px" prop="companyName" v-if="this.checkedName.indexOf('公司')!=-1">
+								<el-table-column label="录入日期" sortable width="200px" prop="ENTERDATE" v-if="this.checkedName.indexOf('录入日期')!=-1">
 								</el-table-column>
-								<el-table-column label="状态" sortable width="200px" prop="enabled" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
-								</el-table-column>
-								<el-table-column label="创建时间" width="200px" prop="createTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('创建时间')!=-1">
+								<el-table-column label="状态" sortable width="200px" prop="STATUS" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
 							</el-table>
-							<!-- <span class="demonstration">显示总数</span>" -->
-							<!-- <el-pagination background layout="prev, pager, next" :total="2" style="float:right;margin-top:10px;"> -->
-							<!-- </el-pagination style="float:right;margin-top:10px;"> -->
 							<el-pagination background class="pull-right" v-if="this.checkedName.length>0"
 					            @size-change="sizeChange"
 					            @current-change="currentChange"
@@ -131,7 +157,7 @@
 					</div>
 				</div>
 			</div>
-			<usermask :user="aaaData[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></usermask>
+			<annualmask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></annualmask>
 		</div>
 	</div>
 </template>
@@ -139,49 +165,51 @@
 	import vheader from './common/vheader.vue'
 	import navs_left from './common/left_navs/nav_left2.vue'
 	import navs_header from './common/nav_tabs.vue'
+	import annualmask from './common/annual_mask.vue'
 	import assetsTree from './plugin/vue-tree/tree.vue'
 	export default {
-		name: 'user_management',
+		name: 'annual_plan',
 		components: {
 			'vheader': vheader,
 			'navs_header': navs_header,
 			'navs_left': navs_left,
-			'v-assetsTree': assetsTree
+			'v-assetsTree': assetsTree,
+			'annualmask': annualmask
 		},
 		data() {
 			return {
 				checkedName: [
-					'账号',
-					'姓名',
-					'性别',
-					'机构',
-					'状态',
-					'创建时间'
+					'计划编号',
+					'计划描述',
+					'年度',
+					'录入人',
+					'录入日期',
+					'状态'
 				],
 				tableHeader: [
 					{
-						label: '账号',
-						prop: 'username'
+						label: '计划编号',
+						prop: 'WP_NUM'
 					},
 					{
-						label: '姓名',
-						prop: 'nickname'
+						label: '计划描述',
+						prop: 'DESCRIPTION'
 					},
 					{
-						label: '性别',
-						prop: 'sexName'
+						label: '年度',
+						prop: 'YEAR'
 					},
 					{
-						label: '机构',
-						prop: 'deptName'
+						label: '录入人',
+						prop: 'ENTERBY'
+					},
+					{
+						label: '录入日期',
+						prop: 'ENTERDATE'
 					},
 					{
 						label: '状态',
-						prop: 'enabled'
-					},
-					{
-						label: '创建时间',
-						prop: 'createTime'
+						prop: 'STATUS'
 					}
 				],
 
@@ -198,9 +226,13 @@
 				down: true,
 				up: false,
 				searchList: {
-					nickname: '',
-					enabled: '',
-					createTime: ''
+					WP_NUM: '',
+					DESCRIPTION: '',
+					TYPE: '',
+					YEAR: '',
+					ENTERDATE:'',
+					ENTERBY:'',
+					STATUS:''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -239,27 +271,8 @@
 			},
 			//添加用戶
 			openAddMgr() {
-				this.aaaData = [
-					{
-						companyName:'',
-						deptName:'',
-						username:'',
-						password:'',
-						nickname:'',
-						birthday:'',
-						sexName:'',
-						idnumber:'',
-						entrytime:'',
-						roleId:[],
-						roles: [],
-						worknumber:'',
-						phone:'',
-						email:'',
-						address:'',
-						tips:''
-					}
-				];
-				this.$refs.child.detail();
+				this.$refs.child.resetNew();
+				this.$refs.child.visible();
 			},
 			//修改用戶
 			modify() {
@@ -290,7 +303,7 @@
 			modestsearch() {
 				this.search = !this.search;
 				this.down = !this.down,
-					this.up = !this.up
+				this.up = !this.up
 			},
 			// 删除
 			deluserinfo() {
@@ -316,112 +329,6 @@
 						if(res.data.resp_code == 0) {
 							this.$message({
 								message: '删除成功',
-								type: 'success'
-							});
-							this.requestData();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
-					});
-				}
-			},
-			// 重置
-			resetPwd() {
-				var selData = this.selUser;
-				if(selData.length == 0) {
-					this.$message({
-						message: '请您选择要重置密码的用户',
-						type: 'warning'
-					});
-					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时多个用户进行重置',
-						type: 'warning'
-					});
-					return;
-				} else {
-					var changeUser = selData[0];
-					var id = changeUser.id;
-					var url = '/api/api-user/users/' + id + '/resetPassword';
-					this.$axios.post(url, {}).then((res) => {
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '重置成功',
-								type: 'success'
-							});
-							this.requestData();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
-					});
-				}
-			},
-			// 启用
-			unfreeze() {
-				var selData = this.selUser;
-				if(selData.length == 0) {
-					this.$message({
-						message: '请您选择您要启动的用户',
-						type: 'warning'
-					});
-					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时启动多个用户',
-						type: 'warning'
-					});
-					return;
-				} else {
-					var changeUser = selData[0];
-					var url = '/api/api-user/users/updateEnabled?id=' + changeUser.id + '&enabled=true';
-					this.$axios.get(url, {}).then((res) => {
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '启动成功',
-								type: 'success'
-							});
-							this.requestData();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
-					});
-				}
-			},
-			// 冻结
-			freezeAccount() {
-				var selData = this.selUser;
-				if(selData.length == 0) {
-					this.$message({
-						message: '请您选择您要冻结的用户',
-						type: 'warning'
-					});
-					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时冻结多个用户',
-						type: 'warning'
-					});
-					return;
-				} else {
-					var changeUser = selData[0];
-					var url = '/api/api-user/users/updateEnabled?id=' + changeUser.id + '&enabled=false';
-					this.$axios.get(url, {}).then((res) => {
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '冻结成功',
 								type: 'success'
 							});
 							this.requestData();

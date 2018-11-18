@@ -3,8 +3,8 @@
 		<div class="mask" v-if="show"></div>
 		<div class="mask_div" v-if="show">
 			<div class="mask_title_div clearfix">
-				<div class="mask_title" v-show="addtitle">添加自动编号设置</div>
-				<div class="mask_title" v-show="modifytitle">修改自动编号设置</div>
+				<div class="mask_title" v-show="addtitle">添加机构</div>
+				<div class="mask_title" v-show="modifytitle">修改机构</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -15,12 +15,12 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="addnumbersettingForm" :label-position="labelPosition" :rules="rules" ref="addnumbersettingForm" label-width="100px" class="demo-adduserForm">
+				<el-form :model="adddeptForm" :label-position="labelPosition" :rules="rules" ref="adddeptForm" label-width="100px" class="demo-adduserForm">
 					<div class="accordion">
 						<div class="mask_tab-block">
 							<div class="mask_tab-head clearfix">
 								<div class="accordion_title">
-									<span class="accordion-toggle">基础信息</span>
+									<span class="accordion-toggle">添加机构信息</span>
 								</div>
 								<div class="col_but" @click="col_but('col_but1')">
 									<i class="icon-arrow1-down"></i>
@@ -28,36 +28,59 @@
 							</div>
 							<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
 								<el-row :gutter="70">
+									<el-col :span="24">
+										<el-form-item label="所属上级" prop="pName">
+											<el-input v-model="adddeptForm.pName" :disabled="edit">
+												<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
+											</el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="70">
 									<el-col :span="8">
-										<el-form-item label="自动编号名称" prop="AUTOKEY">
-											<el-input v-model="addnumbersettingForm.AUTOKEY"></el-input>
+										<el-form-item label="机构名称" prop="fullname">
+											<el-input v-model="adddeptForm.fullname"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="前缀">
-											<el-input v-model="addnumbersettingForm.PREFIX"></el-input>
+										<el-form-item label="单位简称" prop="simplename">
+											<el-input v-model="adddeptForm.simplename"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="起始数" prop="S_NUM">
-											<el-input v-model="addnumbersettingForm.S_NUM"></el-input>
+										<el-form-item label="类型" prop="type">
+											<el-input v-model="adddeptForm.type"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="8"  v-show="showcode">
+										<el-form-item label="机构编码" prop="code">
+											<el-input v-model="adddeptForm.code" :disabled="edit">
+												<el-button slot="append" icon="el-icon-search"></el-button>
+											</el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="电话" prop="teltphone">
+											<el-input v-model="adddeptForm.teltphone"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row :gutter="70">
 									<el-col :span="24">
-										<el-form-item label="备注" prop="MEMO">
-											<el-input type="textarea" v-model="addnumbersettingForm.MEMO"></el-input>
+										<el-form-item label="备注" prop="tips">
+											<el-input :rows="3" type="textarea" v-model="adddeptForm.tips" placeholder="请输入"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 							</div>
 						</div>
 					</div>
-					<div class="content-footer">
+					<div class="el-dialog__footer">
 						<el-form-item>
-							<button @click="cancelForm" class="btn btn-default btn-large">取消</button>
-							<button type="primary" class="btn btn-primarys btn-large" @click="submitForm('addnumbersettingForm')">提交</button>
+							<el-button @click="cancelForm">取消</el-button>
+							<el-button type="primary" @click="submitForm('adddeptForm')">提交</el-button>
 						</el-form-item>
 					</div>
 				</el-form>
@@ -82,39 +105,51 @@
 			page: {
 				type: Object,
 			},
-			addnumbersettingForm: {
+			adddeptForm: {
 				type: Object,
 				default: function(){
 					return {
-						ID:'',
-						AUTOKEY:'',
-						S_NUM:'',
-						PREFIX:'',
-						MEMO:''
+						pid:'',
+						fullname:'',
+						simplename:'',
+						type:'',
+						code:'',
+						teltphone:'',
+						tips:''
 					}
 				}
 			}
 		},
 		data() {
-			var validateAUTOKEY = (rule, value, callback) => {
+			var validatename1 = (rule, value, callback) => {
                 if (value === '') {
-                    callback(new Error('请填写自动编号名称'));
+                    callback(new Error('请填写单位简称'));
                 }else {
                     callback();
                 }
             };
-            var validateS_NUM = (rule, value, callback) => {
+            var validatename2 = (rule, value, callback) => {
                 if (value === '') {
-                    callback(new Error('请填写起始数'));
+                    callback(new Error('请填写机构名称'));
                 }else {
-                	var targ=/^([0-9]*|[0-9]{1}\d*\.\d{1}?\d*)$/;
-                	if (!targ.test(value)) {
-                		callback(new Error('起始数须为数字'));
-                	}
                     callback();
                 }
             };
-           
+            var validatetype = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请填写类型'));
+                }else {
+                    callback();
+                }
+            };
+            // var validatecode = (rule, value, callback) => {
+            //     if (value === '') {
+            //         callback(new Error('请选择机构编码'));
+            //     }else {
+            //         callback();
+            //     }
+            // };
+
 			return {
 				showcode:true,
 				dialogVisible: false, //对话框
@@ -130,25 +165,36 @@
 				labelPosition: 'top',
 				addtitle:true,
 				modifytitle:false,
-				/*addnumbersettingFormtest: {
-					ID:'',
-					AUTOKEY:'',
-					S_NUM:'',
-					PREFIX:'',
-					MEMO:''
-				},*/
+				// adddeptFormtest: {
+				// 	pid:'',
+				// 	fullname:'',
+				// 	simplename:'',
+				// 	type:'',
+				// 	code:'',
+				// 	teltphone:'',
+				// 	tips:''
+				// },
 				rules:{
-          			AUTOKEY: [{ 
+		          	simplename: [{ 
        						required: true,
-       						validator: validateAUTOKEY,
+       						validator: validatename1,
        						trigger: 'blur' 
        					}],
-          			S_NUM:[{ 
+          			fullname: [{ 
        						required: true,
-       						validator: validateS_NUM,
+       						validator: validatename2,
        						trigger: 'blur' 
-       					}]
-          		
+       					}],
+          			type:[{ 
+       						required: true,
+       						validator: validatetype,
+       						trigger: 'blur' 
+       					}],
+          		// 	code:[{ 
+       					// 	required: true,
+       					// 	validator: validatecode,
+       					// 	trigger: 'blur' 
+       					// }],
 	          	},
 	          	//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -156,21 +202,23 @@
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
 				resourceProps: {
 					children: "subDepts",
-					label: "PREFIX"
+					label: "simplename"
 				},
 			};
 		},
 		methods: {
 			//form表单内容清空
 			resetNew(){
-                this.addnumbersettingForm = {
-					ID:'',
-					AUTOKEY:'',
-					S_NUM:'',
-					PREFIX:'',
-					MEMO:''
+                this.adddeptForm = {
+					pName:'',
+					fullname:'',
+					simplename:'',
+					type:'',
+					code:'',
+					teltphone:'',
+					tips:''
 				}
-                // this.$refs["addnumbersettingForm"].resetFields();
+                // this.$refs["adddeptForm"].resetFields();
             },
 			//所属上级
 			getDept() {
@@ -192,8 +240,8 @@
 				this.getCheckedNodes();
 				this.placetext = false;
 				this.dialogVisible = false;				
-				this.addnumbersettingForm.pid = this.checkedNodes[0].id;
-				this.addnumbersettingForm.pName = this.checkedNodes[0].PREFIX;
+				this.adddeptForm.pid = this.checkedNodes[0].id;
+				this.adddeptForm.pName = this.checkedNodes[0].simplename;
 				
 			},
 			getCheckedNodes() {
@@ -207,8 +255,8 @@
 					this.col_but2 = !this.col_but2;
 				}
 			},
-			
-			childMethods() {//
+			//点击按钮显示弹窗
+			childMethods() {
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.showcode = false;
@@ -258,18 +306,21 @@
 
 			},
 			//保存
-			submitForm(addnumbersettingForm) {
-				this.$refs[addnumbersettingForm].validate((valid) => {
+			submitForm(adddeptForm) {
+				this.$refs[adddeptForm].validate((valid) => {
 		          if (valid) {
 					var url = '/api/api-user/depts/saveOrUpdate';
-					this.addnumbersettingFormtest = {
-						"ID":this.addnumbersettingForm.ID,
-						"pid":this.addnumbersettingForm.pid,
-						"AUTOKEY":this.addnumbersettingForm.AUTOKEY,
-					    "PREFIX":this.addnumbersettingForm.PREFIX,
-					    "PREFIX":this.addnumbersettingForm.PREFIX,
+					this.adddeptFormtest = {
+						"id":this.adddeptForm.id,
+						"pid":this.adddeptForm.pid,
+						"fullname":this.adddeptForm.fullname,
+					    "simplename":this.adddeptForm.simplename,
+					    "type":this.adddeptForm.type,
+					    "code":this.adddeptForm.code,
+					    "teltphone":this.adddeptForm.teltphone,
+					    "tips":this.adddeptForm.tips
 					}
-					this.$axios.post(url, this.addnumbersettingFormtest).then((res) => {
+					this.$axios.post(url, this.adddeptFormtest).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({

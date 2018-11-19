@@ -16,18 +16,18 @@
 			<div class="mask_content">
 				<el-row :gutter="20" style="margin-right: 5px;">
 					<el-col :span="5" class="pull-right">
-						<el-input v-model="dataInfo.typename" :disabled="true">
+						<el-input v-model="dataInfo.ID" :disabled="true">
 							<template slot="prepend">主键编号</template>
 						</el-input>
 					</el-col>
 					<el-col :span="5" class="pull-right pt5">
-						<el-select v-model="dataInfo.value" placeholder="请选择状态">
+						<el-select v-model="dataInfo.STATUS" placeholder="请选择状态">
 							<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 							</el-option>
 						</el-select>
 					</el-col>
 					<el-col :span="5" class="pull-right">
-						<el-input v-model="dataInfo.typename" :disabled="true">
+						<el-input v-model="dataInfo.VERSION" :disabled="true">
 							<template slot="prepend">版本</template>
 						</el-input>
 					</el-col>
@@ -50,13 +50,19 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
+											<el-form-item label="英文名称" prop="S_ENGNAME">
+												<el-input v-model="dataInfo.S_ENGNAME"></el-input>
+											</el-form-item>
+										</el-col>
+										
+									</el-row>
+									<el-row :gutter="70">
+										<el-col :span="8">
 											<el-form-item label="发布时间" prop="RELEASETIME">
 												<el-date-picker v-model="dataInfo.RELEASETIME" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
 												</el-date-picker>
 											</el-form-item>
 										</el-col>
-									</el-row>
-									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="启用时间" prop="STARTETIME">
 												<el-date-picker v-model="dataInfo.STARTETIME" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
@@ -68,13 +74,15 @@
 												<el-input v-model="dataInfo.RELEASE_UNIT" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
+										
+									</el-row>
+									<el-row :gutter="70">
+										
 										<el-col :span="8">
 											<el-form-item label="机构" prop="DEPARTMENT">
 												<el-input v-model="dataInfo.DEPARTMENT" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
-									</el-row>
-									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="录入人" prop="ENTERBY">
 												<el-input v-model="dataInfo.ENTERBY" :disabled="true"></el-input>
@@ -85,15 +93,17 @@
 												<el-input v-model="dataInfo.ENTERDATE" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
+										
+									</el-row>
+									<el-row :gutter="70">
+										
 										<el-col :span="8">
-											<el-form-item label="修改人" prop="CHANGEBY">
+											<el-form-item v-if="modify" label="修改人" prop="CHANGEBY">
 												<el-input v-model="dataInfo.CHANGEBY" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
-									</el-row>
-									<el-row :gutter="70">
 										<el-col :span="8">
-											<el-form-item label="修改时间" prop="CHANGEDATE">
+											<el-form-item v-if="modify" label="修改时间" prop="CHANGEDATE">
 												<el-input v-model="dataInfo.CHANGEDATE" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
@@ -169,8 +179,8 @@
 						</el-collapse>
 					</div>
 					<div class="el-dialog__footer">
-						<el-button @click='close'>取消</el-button>
-						<el-button type="primary" @click="submitForm('dataInfo')">提交</el-button>
+						<el-button type="primary" class="btn-primarys" v-if="modify" @click='modifyversion'>修订</el-button>
+						<el-button type="primary" class="btn-primarys" @click="submitForm('dataInfo')">提交</el-button>
 					</div>
 				</el-form>
 			</div>
@@ -187,16 +197,20 @@
 				type: Object,
 				default: function(){
 					return {
+					ID:'',
 					S_NUM: '',
 					S_NAME: '',
+					S_ENGNAME: '',
 					RELEASETIME: '',
 					STARTETIME: '',
+					VERSION:'1',
 					RELEASE_UNIT: '',
 					DEPARTMENT: '',
 					ENTERBY: '',
 					ENTERDATE: '',
 					CHANGEBY: '',
 					CHANGEDATE: '',
+					modify:'',
 					}
 				}
 			},
@@ -219,17 +233,11 @@
 			};
 			return {
 				options: [{
-					value: '选项1',
+					value: '1',
 					label: '活动'
 				}, {
-					value: '选项2',
-					label: '活动2'
-				}, {
-					value: '选项3',
-					label: '活动3'
-				}, {
-					value: '选项4',
-					label: '活动4'
+					value: '0',
+					label: '不活动'
 				}],
 				value: '',
 				selUser: [],
@@ -281,8 +289,10 @@
 				dataInfo: { //添加数据库列表信息
 					S_NUM: '',
 					S_NAME: '',
+					S_ENGNAME: '',
 					RELEASETIME: '',
 					STARTETIME: '',
+					VERSION:'1',
 					RELEASE_UNIT: '',
 					DEPARTMENT: '',
 					ENTERBY: '',
@@ -324,8 +334,10 @@
 				this.dataInfo = { //数据库列表
 						S_NUM: '',
 						S_NAME: '',
+						S_ENGNAME: '',
 						RELEASETIME: '',
 						STARTETIME: '',
+						VERSION:'1',
 						RELEASE_UNIT: '',
 						DEPARTMENT: '',
 						ENTERBY: '',
@@ -349,7 +361,9 @@
 			SelChange(val) {
 				this.selUser = val;
 			},
-
+			modifyversion(){
+				this.dataInfo.VERSION = this.dataInfo.VERSION + 1;
+			},
 			addfield() { //添加行信息
 				var obj = {
 					columnname: '',
@@ -386,10 +400,30 @@
 			},
 			//点击按钮显示弹窗
 			visible() {
+				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+					this.dataInfo.ENTERBY=res.data.nickname;
+					this.dataInfo.ENTERDATE = this.$moment(res.data.createTime).format("YYYY-MM-DD");
+				}).catch((err)=>{
+					this.$message({
+						message:'网络错误，请重试',
+						type:'error'
+					})
+				})
+				this.modify=false;
 				this.show = true;
 			},
 			// 这里是修改
 			detail() {
+				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+					this.dataInfo.CHANGEBY=res.data.nickname;
+					this.dataInfo.CHANGEDATE = this.$moment(res.data.createTime).format("YYYY-MM-DD");
+				}).catch((err)=>{
+					this.$message({
+						message:'网络错误，请重试',
+						type:'error'
+					})
+				})
+				this.modify=true;
 				this.show = true;
 			},
 			//点击关闭按钮
@@ -423,8 +457,8 @@
 			// 保存users/saveOrUpdate
 			submitForm(dataInfo) {
 				this.$refs[dataInfo].validate((valid) => {
-						console.log(111111111111);
-						console.log(this.dataInfo);
+						this.dataInfo.RELEASETIME =  this.$moment(this.dataInfo.RELEASETIME).format("YYYY-MM-DD");
+						this.dataInfo.STARTETIME = this.$moment(this.dataInfo.STARTETIME).format("YYYY-MM-DD");
 					//		          if (valid) {
 					
 					var url = '/api/api-apps/app/inspectionSta/saveOrUpdate';

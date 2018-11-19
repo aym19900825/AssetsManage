@@ -61,11 +61,11 @@
 											</el-date-picker>
 										</el-form-item>
 									</el-col>
-									<el-col :span="8">
+									<!--<el-col :span="8">
 											<el-form-item label="文档" prop="DOCLINKS_NUM">
 												<el-input v-model="dataInfo.DOCLINKS_NUM"></el-input>
 											</el-form-item>
-										</el-col>
+										</el-col>-->
 										<el-col :span="8">
 											<el-form-item label="机构" prop="DEPT">
 												<el-input v-model="dataInfo.DEPT" :disabled="true"></el-input>
@@ -84,7 +84,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改人" prop="CHANGEBY">
+											<el-form-item v-if="modify" label="修改人" prop="CHANGEBY">
 												<el-input v-model="dataInfo.CHANGEBY" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
@@ -92,7 +92,7 @@
 									</el-row>
 									<el-row :gutter="70">
 										<el-col :span="8">
-											<el-form-item label="修改时间" prop="CHANGEDATE">
+											<el-form-item  v-if="modify" label="修改时间" prop="CHANGEDATE">
 												<el-input v-model="dataInfo.CHANGEDATE" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
@@ -123,7 +123,7 @@
 					P_NUM: '',
 					P_NAME: '',
 					STATUS: '',
-					VERSION: '',
+					VERSION: '1',
 					QUALIFICATION: '',
 					FIELD: '',
 					CHILD_FIELD: '',
@@ -242,20 +242,29 @@
 			//点击按钮显示弹窗
 			visible() {
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
-					console.log(res);
 					this.dataInfo.ENTERBY=res.data.nickname;
-					this.dataInfo.ENTERDATE=res.data.createTime;
+					this.dataInfo.ENTERDATE = this.$moment(res.data.createTime).format("YYYY-MM-DD");
 				}).catch((err)=>{
 					this.$message({
 						message:'网络错误，请重试',
 						type:'error'
 					})
 				})
+				this.modify=false;
 				this.show = true;
 			},
 			// 这里是修改
 			detail() {
-			
+				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+						this.dataInfo.CHANGEBY=res.data.nickname;
+						this.dataInfo.CHANGEDATE = this.$moment(res.data.createTime).format("YYYY-MM-DD");
+					}).catch((err)=>{
+						this.$message({
+							message:'网络错误，请重试',
+							type:'error'
+						})
+					})
+				this.modify=true;
 				this.show = true;
 				
 			},
@@ -291,9 +300,9 @@
 			// 保存users/saveOrUpdate
 			submitForm(dataInfo) {
 				this.$refs[dataInfo].validate((valid) => {
+					this.dataInfo.CHANGEDATE =  this.$moment(this.dataInfo.CHANGEDATE).format("YYYY-MM-DD");
+					this.dataInfo.ENTERDATE = this.$moment(this.dataInfo.ENTERDATE).format("YYYY-MM-DD");
 					//		          if (valid) {
-						console.log(111111111111);
-						console.log(this.dataInfo);
 					var url = '/api/api-apps/app/inspectionPro/saveOrUpdate';
 					this.$axios.post(url, this.dataInfo).then((res) => {
 						if(res.data.resp_code == 0) {

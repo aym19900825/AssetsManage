@@ -104,7 +104,7 @@
 										</el-table-column>
 										<el-table-column label="状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
 										</el-table-column>
-										<el-table-column label="文档" width="120" sortable prop="DOCLINKP_NAME" v-if="this.checkedName.indexOf('文档')!=-1">
+										<!--<el-table-column label="文档" width="120" sortable prop="DOCLINKP_NAME" v-if="this.checkedName.indexOf('文档')!=-1">-->
 										</el-table-column>
 										<el-table-column label="领域" width="120" sortable prop="STARTETIME" v-if="this.checkedName.indexOf('领域')!=-1">
 										</el-table-column>
@@ -114,11 +114,11 @@
 										</el-table-column>
 										<el-table-column label="机构" width="180" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('机构')!=-1">
 										</el-table-column>
-										<el-table-column label="录入人" width="120" prop="ENTERBY" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入人')!=-1">
+										<el-table-column label="录入人" width="120" prop="ENTERBY" sortable  v-if="this.checkedName.indexOf('录入人')!=-1">
 										</el-table-column>
 										<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 										</el-table-column>
-										<el-table-column label="修改人" width="120" prop="CHANGEBY" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改人')!=-1">
+										<el-table-column label="修改人" width="120" prop="CHANGEBY" sortable  v-if="this.checkedName.indexOf('修改人')!=-1">
 										</el-table-column>
 										<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
 										</el-table-column>
@@ -141,7 +141,7 @@
 			</EasyScrollbar>
 		</div>
 		<!--右侧内容显示 End-->
-		<projectmask :dataInfo="aaaData[0]" ref="child" v-bind:page=page ></projectmask>
+		<projectmask :dataInfo="aaaData[0]" @request="requestData" ref="child" v-bind:page=page ></projectmask>
 	
 	</div>
 </div>
@@ -165,10 +165,10 @@
 			return {
 				value: '',
 				options: [{
-					value: '选项1',
+					value: '1',
 					label: '活动'
 				}, {
-					value: '选项2',
+					value: '0',
 					label: '不活动'
 				}],
 				
@@ -177,7 +177,6 @@
 					'项目名称',
 					'人员资质',
 					'状态',
-					'文档',
 					'领域',
 					'子领域',
 					'版本',
@@ -196,6 +195,7 @@
 						label: '项目名称',
 						prop: 'P_NAME'
 					},
+					
 					{
 						label: '人员资质',
 						prop: 'QUALIFICATION'
@@ -203,10 +203,6 @@
 					{
 						label: '状态',
 						prop: 'STATUS'
-					},
-					{
-						label: '文档',
-						prop: 'DOCLINKP_NAME'
 					},
 					{
 						label: '领域',
@@ -330,7 +326,6 @@
 					return;
 				} else {
 					this.$refs.child.detail();
-					console.log(this.aaaData[0]);
 				}
 			},
 			//高级查询
@@ -356,8 +351,8 @@
 					return;
 				} else {
 					var changeUser = selData[0];
-					var id = changeUser.id;
-					var url = '/api/api-apps/app/inspectionPro' + id;
+					var id = changeUser.ID;
+					var url = '/api/api-apps/app/inspectionPro/' + id;
 					this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {

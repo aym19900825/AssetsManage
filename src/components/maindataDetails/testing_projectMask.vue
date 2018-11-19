@@ -3,7 +3,8 @@
 		<div class="mask" v-show="show"></div>
 		<div class="mask_div" v-show="show">
 			<div class="mask_title_div clearfix">
-				<div class="mask_title">添加数据库表</div>
+				<div class="mask_title" v-show="addtitle">添加检验/检测项目</div>
+				<div class="mask_title" v-show="modifytitle">修改检验/检测项目</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>						 
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -166,6 +167,9 @@
 				activeNames: ['1', '2'], //手风琴数量
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
+				addtitle: true,
+				modifytitle: false,
+				modify:true,
 
 				rules: {
 					name: [{
@@ -243,13 +247,16 @@
 			visible() {
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
 					this.dataInfo.ENTERBY=res.data.nickname;
-					this.dataInfo.ENTERDATE = this.$moment(res.data.createTime).format("YYYY-MM-DD");
+					var date=new Date();
+					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 				}).catch((err)=>{
 					this.$message({
 						message:'网络错误，请重试',
 						type:'error'
 					})
 				})
+				this.addtitle = true;
+				this.modifytitle = false;
 				this.modify=false;
 				this.show = true;
 			},
@@ -257,13 +264,16 @@
 			detail() {
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
 						this.dataInfo.CHANGEBY=res.data.nickname;
-						this.dataInfo.CHANGEDATE = this.$moment(res.data.createTime).format("YYYY-MM-DD");
+						var date=new Date();
+						this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
 					}).catch((err)=>{
 						this.$message({
 							message:'网络错误，请重试',
 							type:'error'
 						})
 					})
+				this.addtitle = false;
+				this.modifytitle = true;
 				this.modify=true;
 				this.show = true;
 				

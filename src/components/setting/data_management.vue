@@ -295,7 +295,7 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					
+					console.log(res);
 					this.dataList = res.data.data;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})

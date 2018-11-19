@@ -1,4 +1,4 @@
-maindataDetails<template>
+<template>
 <div>
 	<div class="headerbg">
 		<vheader></vheader>
@@ -107,11 +107,11 @@ maindataDetails<template>
 							</el-table-column>
 							<el-table-column label="机构" width="155" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('机构')!=-1">
 							</el-table-column>
-							<el-table-column label="录入人" width="155" prop="ENTERBY" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入人')!=-1">
+							<el-table-column label="录入人" width="155" prop="ENTERBY" sortable v-if="this.checkedName.indexOf('录入人')!=-1">
 							</el-table-column>
 							<el-table-column label="录入时间" width="155" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 							</el-table-column>
-							<el-table-column label="修改人" width="155" prop="CHANGEBY" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改人')!=-1">
+							<el-table-column label="修改人" width="155" prop="CHANGEBY" sortablev-if="this.checkedName.indexOf('修改人')!=-1">
 							</el-table-column>
 							<el-table-column label="修改时间" width="155" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
 							</el-table-column>
@@ -132,7 +132,7 @@ maindataDetails<template>
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
-		<productmask ref="child" @request="requestData" v-bind:page=page></productmask>
+		<productmask :PRODUCT="aaaData[0]" ref="child" @request="requestData" v-bind:page=page></productmask>
 	</div>
 </div>
 </template>
@@ -141,7 +141,7 @@ maindataDetails<template>
 	import navs_left from '../common/left_navs/nav_left2.vue'
 	import navs_header from '../common/nav_tabs.vue'
 	import productmask from '../maindataDetails/product_mask.vue'
-	import table from '../plugin/table/table-normal.vue'
+	
 	import tableControle from '../plugin/table-controle/controle.vue'
 	export default {
 		name: 'customer_management',
@@ -151,7 +151,7 @@ maindataDetails<template>
 			navs_header,
 			productmask,
 			tableControle,
-			table,
+			
 		},
 		data() {
 			return {
@@ -310,6 +310,15 @@ maindataDetails<template>
 			tableControle(data){
 				this.checkedName = data;
 			},
+			//时间格式化  
+			dateFormat(row, column) {
+				var date = row[column.property];
+				if(date == undefined) {
+					return "";
+				}
+				return this.$moment(date).format("YYYY-MM-DD");
+				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
+			},
 			sizeChange(val) {
 		      this.page.pageSize = val;
 		      this.requestData();
@@ -344,7 +353,7 @@ maindataDetails<template>
 					});
 					return;
 				} else {
-					this.$refs.child.detail();
+					this.$refs.child.detail(this.aaaData[0].ID);
 				}
 			},
 			//高级查询
@@ -370,9 +379,10 @@ maindataDetails<template>
 					return;
 				} else {
 					var changeUser = selData[0];
-					var id = changeUser.id;
-					var url = '/api/api-user/users/' + id;
+					var id = changeUser.ID;
+					var url = '/api/api-apps/app/product/' + id;
 					this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
+						console.log(res.data.resp_code);
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -402,8 +412,7 @@ maindataDetails<template>
 				
 			},
 			judge(data) {
-				//taxStatus 布尔值
-				return data.enabled ? '启用' : '冻结'
+				return data.STATUS=="1" ? '活动' : '不活动'
 			},
 			//时间格式化  
 			dateFormat(row, column) {
@@ -424,29 +433,30 @@ maindataDetails<template>
 				this.selUser = val;
 			},
 			requestData(index) {
+				console.log(this.searchList.STATUS);
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					nickname: this.searchList.nickname,
-					enabled: this.searchList.enabled,
-					searchKey: 'createTime',
-					searchValue: this.searchList.createTime,
-					companyId: this.companyId,
-					deptId: this.deptId
+					PRO_NUM: this.searchList.PRO_NUM,
+					STATUS: this.searchList.STATUS,
+					DEPARTMENT: this.searchList.DEPARTMENT,
+					PRO_NAME: this.searchList.PRO_NAME,
+					VERSION: this.searchList.VERSION,
 				}
-				var url = '/api/api-user/users';
+				var url = '/api/api-apps/app/product';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
 					this.userList = res.data.data;
+					console.log(this.userList);
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
-				this.userList.forEach((item, index) => {
-					var id = item.id;
-					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
-						this.userList.role = res.data.roles[0].name;
-					}).catch((wrong) => {})
-				})
+				// this.userList.forEach((item, index) => {
+				// 	var id = item.id;
+				// 	this.$axios.get('/users/' + id + '/roles', data).then((res) => {
+				// 		this.userList.role = res.data.roles[0].name;
+				// 	}).catch((wrong) => {})
+				// })
 			},
 			handleNodeClick(data) {
 			},

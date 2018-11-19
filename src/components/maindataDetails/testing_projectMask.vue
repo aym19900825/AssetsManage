@@ -32,7 +32,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="状态" prop="STATUS">
-												<el-input v-model="dataInfo.STATUS" :disabled="true"></el-input>
+												<el-input v-model="dataInfo.STATUS" :disabled="true"  ></el-input>
 											</el-form-item>
 											</el-form-item>
 										</el-col>
@@ -190,22 +190,22 @@
 		},
 		methods: {
 			resetNew() {
-				this.dataInfo = { //数据库列表
-					P_NUM: '',
-					P_NAME: '',
-					STATUS: '',
-					VERSION: '',
-					QUALIFICATION: '',
-					FIELD: '',
-					CHILD_FIELD: '',
-					DOCLINKS_NUM: '',
-					DEPT: '',
-					ENTERBY:'',
-					ENTERDATE: '',
-					CHANGEBY: '',
-					CHANGEDATE:'',
-						
-					},
+//				this.dataInfo = { //数据库列表
+//					P_NUM: '',
+//					P_NAME: '',
+//					STATUS: '',
+//					VERSION: '',
+//					QUALIFICATION: '',
+//					FIELD: '',
+//					CHILD_FIELD: '',
+//					DOCLINKS_NUM: '',
+//					DEPT: '',
+//					ENTERBY:'',
+//					ENTERDATE: '',
+//					CHANGEBY: '',
+//					CHANGEDATE:'',
+//						
+//					},
 
 					this.$refs["dataInfo"].resetFields();
 			},
@@ -255,9 +255,11 @@
 			},
 			// 这里是修改
 			detail() {
+			
 				this.show = true;
 				
 			},
+			
 			//点击关闭按钮
 			close() {
 				this.show = false;
@@ -290,6 +292,7 @@
 			submitForm(dataInfo) {
 				this.$refs[dataInfo].validate((valid) => {
 					//		          if (valid) {
+						console.log(111111111111);
 						console.log(this.dataInfo);
 					var url = '/api/api-apps/app/inspectionPro/saveOrUpdate';
 					this.$axios.post(url, this.dataInfo).then((res) => {

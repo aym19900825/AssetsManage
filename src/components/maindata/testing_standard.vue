@@ -170,6 +170,7 @@
 	import standardmask from '../maindataDetails/testing_standardMask.vue'
 	export default {
 		name: 'testing_standard',
+		
 		components: {
 			vheader,
 			navs_header,

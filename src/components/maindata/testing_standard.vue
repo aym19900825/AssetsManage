@@ -71,6 +71,13 @@
 											</el-col>
 											<el-col :span="5">
 
+												<el-input v-model="searchList.S_ENGNAME">
+													<template slot="prepend">英文名称</template>
+												</el-input>
+
+											</el-col>
+											<el-col :span="5">
+
 												<el-input v-model="searchList.VERSION">
 													<template slot="prepend">版本</template>
 												</el-input>
@@ -127,6 +134,9 @@
 											</el-table-column>
 											<el-table-column label="标准名称" width="220" sortable prop="S_NAME" v-if="this.checkedName.indexOf('标准名称')!=-1">
 											</el-table-column>
+											</el-table-column>
+											<el-table-column label="英文名称" width="220" sortable prop="S_ENGNAME" v-if="this.checkedName.indexOf('英文名称')!=-1">
+											</el-table-column>
 											<el-table-column label="状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
 											</el-table-column>
 											<el-table-column label="发布时间" width="120" sortable prop="RELEASETIME" :formatter="dateFormat" v-if="this.checkedName.indexOf('发布时间')!=-1">
@@ -139,7 +149,7 @@
 											</el-table-column>
 											<el-table-column label="录入人" width="120" prop="ENTERBY" sortable v-if="this.checkedName.indexOf('录入人')!=-1">
 											</el-table-column>
-											<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable v-if="this.checkedName.indexOf('录入时间')!=-1">
+											<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 											</el-table-column>
 											<el-table-column label="修改人" width="120" prop="CHANGEBY" sortable v-if="this.checkedName.indexOf('修改人')!=-1">
 											</el-table-column>
@@ -157,7 +167,7 @@
 				</EasyScrollbar>
 			</div>
 			<!--右侧内容显示 End-->
-			<standardmask :dataInfo="aaaData[0]" ref="child" v-bind:page=page></standardmask>
+			<standardmask :dataInfo="aaaData[0]" ref="child" @request="requestData" v-bind:page=page></standardmask>
 		</div>
 	</div>
 </template>
@@ -170,7 +180,7 @@
 	import standardmask from '../maindataDetails/testing_standardMask.vue'
 	export default {
 		name: 'testing_standard',
-		
+
 		components: {
 			vheader,
 			navs_header,
@@ -183,17 +193,17 @@
 			return {
 				value: '',
 				options: [{
-					value: '选项1',
+					value: '1',
 					label: '活动'
 				}, {
-					value: '选项2',
+					value: '0',
 					label: '不活动'
 				}],
 
 				searchData: {
 					page: 1,
 					limit: 10, //分页显示数
-					
+
 					searchKey: '',
 					searchValue: '',
 					companyId: '',
@@ -203,6 +213,7 @@
 					'主键编号',
 					'标准编号',
 					'标准名称',
+					'英文名称',
 					'状态',
 					'发布时间',
 					'启用时间',
@@ -224,6 +235,10 @@
 					{
 						label: '标准名称',
 						prop: 'S_NAME'
+					},
+					{
+						label: '英文名称',
+						prop: 'S_ENGNAME'
 					},
 					{
 						label: '状态',
@@ -278,10 +293,10 @@
 					S_NUM: '',
 					S_NAME: '',
 					VERSION: '',
-					DEPARTMENT:'',
-					RELEASETIME:'',
+					DEPARTMENT: '',
+					RELEASETIME: '',
 					STARTETIME: '',
-					STATUS:'',
+					STATUS: '',
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -376,8 +391,8 @@
 					return;
 				} else {
 					var changeUser = selData[0];
-					var id = changeUser.id;
-					var url = '/api/api-user/users/' + id;
+					var id = changeUser.ID;
+					var url = '/api/api-apps/app/inspectionSta/' + id;
 					this.$axios.delete(url, {}).then((res) => { //.delete 传数据方法
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -408,8 +423,7 @@
 
 			},
 			judge(data) {
-				console.log(data.STATUS);
-				return data.STATUS=="1" ? '活动' : '不活动'
+				return data.STATUS == "1" ? '活动' : '不活动'
 
 			},
 			//时间格式化  
@@ -430,20 +444,19 @@
 					S_NUM: this.searchList.S_NUM,
 					S_NAME: this.searchList.S_NAME,
 					VERSION: this.searchList.VERSION,
-					DEPARTMENT:this.searchList.DEPARTMENT,
-					RELEASETIME:this.searchList.RELEASETIME,
+					DEPARTMENT: this.searchList.DEPARTMENT,
+					RELEASETIME: this.searchList.RELEASETIME,
 					STARTETIME: this.searchList.STARTETIME,
-					STATUS:this.searchList.STATUS,
+					STATUS: this.searchList.STATUS,
 				}
 				var url = '/api/api-apps/app/inspectionSta';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(res);
 					this.standardList = res.data.data;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
-				
+
 			},
 			handleNodeClick(data) {},
 			formatter(row, column) {

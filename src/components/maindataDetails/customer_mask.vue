@@ -33,7 +33,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="类型" prop="TYPE">
-												<el-select style="width: 100%;" v-model="CUSTOMER.TYPE" placeholder="状态">
+												<el-select style="width: 100%;" v-model="CUSTOMER.TYPE" placeholder="类型">
 											      	<el-option label="委托" value="委托">	
 											      	</el-option>
 											      	<el-option label="分包" value="分包">
@@ -70,34 +70,36 @@
 										<el-col :span="8">
 											<el-form-item label="状态" prop="STATUS">
 												<el-input v-if="statusshow1" v-model="CUSTOMER.STATUS" :disabled="edit"></el-input>
-												<el-select v-if="statusshow2" style="width: 100%;" v-model="CUSTOMER.STATUS" placeholder="状态">
+												<!-- <el-select v-if="statusshow2" style="width: 100%;" v-model="CUSTOMER.STATUS" placeholder="状态">
 											      	<el-option label="活动" value="1">	
 											      	</el-option>
 											      	<el-option label="不活动" value="0">
 											      	</el-option>
-											    </el-select>
+											    </el-select> -->
+											    <el-select v-if="statusshow2" style="width: 100%;" v-model="CUSTOMER.STATUS" placeholder="请选择状态">
+													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+
+													</el-option>
+												</el-select>
 											</el-form-item>
 										</el-col>
-									</el-row>
-									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="传真" prop="FAX">
 												<el-input v-model="CUSTOMER.FAX"></el-input>
 											</el-form-item>
 										</el-col>
+									</el-row>
+									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="邮箱" prop="EMAIL">
 												<el-input v-model="CUSTOMER.EMAIL"></el-input>
 											</el-form-item>
 										</el-col>
-										
-									</el-row>
-									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="录入人" prop="ENERBY">
 												<el-input v-model="CUSTOMER.ENERBY" placeholder="当前录入人" :disabled="edit"></el-input>
 											</el-form-item>
-										</el-col> -->
+										</el-col>
 										<el-col :span="8">
 											<el-form-item label="录入日期" prop="ENERDATE">
 												<el-input v-model="CUSTOMER.ENERDATE" placeholder="当前录入日期" :disabled="edit"></el-input>
@@ -108,8 +110,6 @@
 												<el-input v-model="CUSTOMER.CHANGEBY" placeholder="记录当前修改人" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
-									</el-row>
-									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="修改时间" prop="CHANGEDATE" v-if="modify">
 												<el-input v-model="CUSTOMER.CHANGEDATE" placeholder="自动记录当前修改时间" :disabled="edit"></el-input>
@@ -346,12 +346,14 @@
                 }
             };
 			return {
-
-				test:[{
-					id:'1',
-       				name:'123',
-       				isEditing: true
-     			}],
+				value: '',
+				options: [{
+					value: '1',
+					label: '活动'
+				}, {
+					value: '0',
+					label: '不活动'
+				}],
 
 				selUser:[],
 				modify:false,

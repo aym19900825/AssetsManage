@@ -57,28 +57,28 @@
 										<el-row :gutter="10" class="pb10">
 											<el-col :span="5">
 
-												<el-input v-model="searchList.typename">
+												<el-input v-model="searchList.S_NUM">
 													<template slot="prepend">标准编号</template>
 												</el-input>
 
 											</el-col>
 											<el-col :span="5">
 
-												<el-input v-model="searchList.typename">
+												<el-input v-model="searchList.S_NAME">
 													<template slot="prepend">标准名称</template>
 												</el-input>
 
 											</el-col>
 											<el-col :span="5">
 
-												<el-input v-model="searchList.typename">
+												<el-input v-model="searchList.VERSION">
 													<template slot="prepend">版本</template>
 												</el-input>
 
 											</el-col>
 											<el-col :span="4">
 
-												<el-input v-model="searchList.typename">
+												<el-input v-model="searchList.DEPARTMENT">
 													<template slot="prepend">机构</template>
 												</el-input>
 
@@ -87,20 +87,20 @@
 										<el-row :gutter="20">
 											<el-col :span="5">
 
-												<el-date-picker v-model="searchList.description" type="date" placeholder="发布时间" value-format="yyyy-MM-dd">
+												<el-date-picker v-model="searchList.RELEASETIME" type="date" placeholder="发布时间" value-format="yyyy-MM-dd">
 
 												</el-date-picker>
 
 											</el-col>
 											<el-col :span="5">
 
-												<el-date-picker v-model="searchList.description" type="date" placeholder="启用时间" value-format="yyyy-MM-dd">
+												<el-date-picker v-model="searchList.STARTETIME" type="date" placeholder="启用时间" value-format="yyyy-MM-dd">
 												</el-date-picker>
 
 											</el-col>
 											<el-col :span="3" class="pt5">
 
-												<el-select v-model="searchList.value" placeholder="请选择状态">
+												<el-select v-model="searchList.STATUS" placeholder="请选择状态">
 													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 
 													</el-option>
@@ -118,7 +118,7 @@
 								<el-row :gutter="0">
 									<el-col :span="24">
 										<!-- 表格 Begin-->
-										<el-table :data="userList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
+										<el-table :data="standardList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'standardList', order: 'descending'}" @selection-change="SelChange">
 											<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 											</el-table-column>
 											<el-table-column label="主键编号" width="120" sortable prop="ID" v-if="this.checkedName.indexOf('主键编号')!=-1">
@@ -129,19 +129,19 @@
 											</el-table-column>
 											<el-table-column label="状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
 											</el-table-column>
-											<el-table-column label="发布时间" width="120" sortable prop="RELEASETIME" v-if="this.checkedName.indexOf('发布时间')!=-1">
+											<el-table-column label="发布时间" width="120" sortable prop="RELEASETIME" :formatter="dateFormat" v-if="this.checkedName.indexOf('发布时间')!=-1">
 											</el-table-column>
-											<el-table-column label="启用时间" width="120" sortable prop="STARTETIME" v-if="this.checkedName.indexOf('启用时间')!=-1">
+											<el-table-column label="启用时间" width="120" sortable prop="STARTETIME" :formatter="dateFormat" v-if="this.checkedName.indexOf('启用时间')!=-1">
 											</el-table-column>
 											<el-table-column label="版本" width="100" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1">
 											</el-table-column>
 											<el-table-column label="机构" width="180" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('机构')!=-1">
 											</el-table-column>
-											<el-table-column label="录入人" width="120" prop="ENTERBY" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入人')!=-1">
+											<el-table-column label="录入人" width="120" prop="ENTERBY" sortable v-if="this.checkedName.indexOf('录入人')!=-1">
 											</el-table-column>
-											<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
+											<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable v-if="this.checkedName.indexOf('录入时间')!=-1">
 											</el-table-column>
-											<el-table-column label="修改人" width="120" prop="CHANGEBY" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改人')!=-1">
+											<el-table-column label="修改人" width="120" prop="CHANGEBY" sortable v-if="this.checkedName.indexOf('修改人')!=-1">
 											</el-table-column>
 											<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
 											</el-table-column>
@@ -157,7 +157,7 @@
 				</EasyScrollbar>
 			</div>
 			<!--右侧内容显示 End-->
-			<standardmask ref="child" v-bind:page=page></standardmask>
+			<standardmask :dataInfo="aaaData[0]" ref="child" v-bind:page=page></standardmask>
 		</div>
 	</div>
 </template>
@@ -165,16 +165,17 @@
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left2.vue'
 	import navs_header from '../common/nav_tabs.vue'
-	import table from '../plugin/table/table-normal.vue'
+	//	import table from '../plugin/table/table-normal.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import standardmask from '../maindataDetails/testing_standardMask.vue'
 	export default {
-		name: 'customer_management',
+		name: 'testing_standard',
+		
 		components: {
 			vheader,
 			navs_header,
 			tableControle,
-			table,
+			//			table,
 			navs_left,
 			standardmask
 		},
@@ -189,12 +190,10 @@
 					label: '不活动'
 				}],
 
-				dataUrl: '/api/api-user/users',
 				searchData: {
 					page: 1,
 					limit: 10, //分页显示数
-					nickname: '',
-					enabled: '',
+					
 					searchKey: '',
 					searchValue: '',
 					companyId: '',
@@ -267,9 +266,7 @@
 				companyId: '',
 				deptId: '',
 				selUser: [],
-				'活动': true,
-				'不活动': false,
-				userList: [],
+				standardList: [],
 				search: false,
 				show: false,
 				down: true,
@@ -278,9 +275,13 @@
 				ismin: true,
 				clientHeight: '', //获取浏览器高度
 				searchList: { //点击高级搜索后显示的内容
-					nickname: '',
-					enabled: '',
-					createTime: ''
+					S_NUM: '',
+					S_NAME: '',
+					VERSION: '',
+					DEPARTMENT:'',
+					RELEASETIME:'',
+					STARTETIME: '',
+					STATUS:'',
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -328,12 +329,12 @@
 				this.page.pageSize = 10;
 				this.requestData();
 			},
-			//添加用戶
+			//添加
 			openAddMgr() {
 				//				this.$refs.child.resetNew();
 				this.$refs.child.visible();
 			},
-			//修改用戶
+			//修改
 			modify() {
 				this.aaaData = this.selUser;
 				if(this.aaaData.length == 0) {
@@ -407,8 +408,9 @@
 
 			},
 			judge(data) {
-				//taxStatus 布尔值
-				return data.enabled ? '活动' : '不活动'
+				console.log(data.STATUS);
+				return data.STATUS=="1" ? '活动' : '不活动'
+
 			},
 			//时间格式化  
 			dateFormat(row, column) {
@@ -417,13 +419,6 @@
 					return "";
 				}
 				return this.$moment(date).format("YYYY-MM-DD");
-				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
-			},
-			insert() {
-				this.users.push(this.user)
-			},
-			remove(index) {
-				this.users.splice(index, 1)
 			},
 			SelChange(val) {
 				this.selUser = val;
@@ -432,26 +427,23 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					nickname: this.searchList.nickname,
-					enabled: this.searchList.enabled,
-					searchKey: 'createTime',
-					searchValue: this.searchList.createTime,
-					companyId: this.companyId,
-					deptId: this.deptId
+					S_NUM: this.searchList.S_NUM,
+					S_NAME: this.searchList.S_NAME,
+					VERSION: this.searchList.VERSION,
+					DEPARTMENT:this.searchList.DEPARTMENT,
+					RELEASETIME:this.searchList.RELEASETIME,
+					STARTETIME: this.searchList.STARTETIME,
+					STATUS:this.searchList.STATUS,
 				}
-				var url = '/api/api-user/users';
+				var url = '/api/api-apps/app/inspectionSta';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					this.userList = res.data.data;
+					console.log(res);
+					this.standardList = res.data.data;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
-				this.userList.forEach((item, index) => {
-					var id = item.id;
-					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
-						this.userList.role = res.data.roles[0].name;
-					}).catch((wrong) => {})
-				})
+				
 			},
 			handleNodeClick(data) {},
 			formatter(row, column) {

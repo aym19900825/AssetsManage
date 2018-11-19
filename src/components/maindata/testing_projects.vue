@@ -20,7 +20,7 @@
 							<div class="fixed-table-toolbar clearfix">
 								<div class="bs-bars pull-left">
 									<div class="hidden-xs" id="roleTableToolbar" role="group">
-										<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+										<button type="button" class="btn btn-green" @click="openAddMgr">
 				                        	<i class="icon-add"></i>添加
 				              			 </button>
 										<button type="button" class="btn btn-bule button-margin" @click="modify">
@@ -57,27 +57,27 @@
 									<el-form status-icon :model="searchList" label-width="70px">
 										<el-row :gutter="10">
 											<el-col :span="5">
-												<el-input v-model="searchList.typename">
+												<el-input v-model="searchList.P_NUM">
 													<template slot="prepend">项目编号</template>
 												</el-input>
 											</el-col>
 											<el-col :span="5">
-												<el-input v-model="searchList.typename">
+												<el-input v-model="searchList.DEPARTMENT">
 													<template slot="prepend">认证机构</template>
 												</el-input>
 											</el-col>
 											<el-col :span="5">
-												<el-input v-model="searchList.typename">
+												<el-input v-model="searchList.P_NAME">
 													<template slot="prepend">项目名称</template>
 												</el-input>
 											</el-col>
 											<el-col :span="4">
-												<el-input v-model="searchList.typename">
+												<el-input v-model="searchList.VERSION">
 													<template slot="prepend">版本</template>
 												</el-input>
 											</el-col>
 											<el-col :span="3" class="pt5">
-												<el-select v-model="searchList.value" placeholder="请选择状态">
+												<el-select v-model="searchList.STATUS" placeholder="请选择状态">
 													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 													</el-option>
 												</el-select>
@@ -93,7 +93,7 @@
 							<el-row :gutter="0">
 								<el-col :span="24">
 									<!-- 表格 Begin-->
-									<el-table :data="userList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
+									<el-table :data="projectList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'projectList', order: 'descending'}" @selection-change="SelChange">
 										<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 										</el-table-column>
 										<el-table-column label="检验/检测项编号" width="150" sortable prop="P_NUM" v-if="this.checkedName.indexOf('检验/检测项编号')!=-1">
@@ -141,7 +141,8 @@
 			</EasyScrollbar>
 		</div>
 		<!--右侧内容显示 End-->
-		<projectmask ref="child" v-bind:page=page></projectmask>
+		<projectmask :dataInfo="aaaData[0]" ref="child" v-bind:page=page ></projectmask>
+	
 	</div>
 </div>
 </template>
@@ -149,32 +150,28 @@
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left2.vue'
 	import navs_header from '../common/nav_tabs.vue'
-	import table from '../plugin/table/table-normal.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import projectmask from '../maindataDetails/testing_projectMask.vue'
 	export default {
-		name: 'customer_management',
+		name: 'testing_projects',
 		components: {
 			vheader,
 			navs_left,
 			navs_header,
 			tableControle,
-			table,
 			projectmask
 		},
 		data() {
 			return {
-				dataUrl: '/api/api-user/users',
-				searchData: {
-			        page: 1,
-			        limit: 10,//分页显示数
-			        nickname: '',
-			        enabled: '',
-			        searchKey: '',
-			        searchValue: '',
-			        companyId: '',
-			        deptId: ''
-		        },
+				value: '',
+				options: [{
+					value: '选项1',
+					label: '活动'
+				}, {
+					value: '选项2',
+					label: '不活动'
+				}],
+				
 				checkedName: [
 					'检验/检测项编号',
 					'项目名称',
@@ -250,7 +247,7 @@
 				selUser: [],
 				'活动': true,
 				'不活动': false,
-				userList: [],
+				projectList: [],
 				search: false,
 				show: false,
 				down: true,
@@ -258,10 +255,12 @@
 				isShow: false,
 				ismin:true,
 				clientHeight:'',//获取浏览器高度
-				searchList: {//点击高级搜索后显示的内容
-					nickname: '',
-					enabled: '',
-					createTime: ''
+				searchList: { //点击高级搜索后显示的内容
+					P_NUM: '',
+					DEPARTMENT:'',
+					P_NAME: '',
+					VERSION: '',
+					STATUS:'',
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -311,7 +310,7 @@
 			},
 			//添加用戶
 			openAddMgr() {
-//				this.$refs.child.resetNew();
+				this.$refs.child.resetNew();
 				this.$refs.child.visible();
 			},
 			//修改用戶
@@ -331,6 +330,7 @@
 					return;
 				} else {
 					this.$refs.child.detail();
+					console.log(this.aaaData[0]);
 				}
 			},
 			//高级查询
@@ -357,7 +357,7 @@
 				} else {
 					var changeUser = selData[0];
 					var id = changeUser.id;
-					var url = '/api/api-user/users/' + id;
+					var url = '/api/api-apps/app/inspectionPro' + id;
 					this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -388,8 +388,7 @@
 				
 			},
 			judge(data) {
-				//taxStatus 布尔值
-				return data.enabled ? '活动' : '不活动'
+				return data.STATUS=="1" ? '活动' : '不活动'
 			},
 			//时间格式化  
 			dateFormat(row, column) {
@@ -398,14 +397,8 @@
 					return "";
 				}
 				return this.$moment(date).format("YYYY-MM-DD");
-				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
 			},
-			insert() {
-				this.users.push(this.user)
-			},
-			remove(index) {
-				this.users.splice(index, 1)
-			},
+			
 			SelChange(val) {
 				this.selUser = val;
 			},
@@ -413,26 +406,19 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					nickname: this.searchList.nickname,
-					enabled: this.searchList.enabled,
-					searchKey: 'createTime',
-					searchValue: this.searchList.createTime,
-					companyId: this.companyId,
-					deptId: this.deptId
+					P_NUM: this.searchList.P_NUM,
+					DEPARTMENT: this.searchList.DEPARTMENT,
+					P_NAME: this.searchList.P_NAME,
+					VERSION: this.searchList.VERSION,
+					STATUS: this.searchList.STATUS,
 				}
-				var url = '/api/api-user/users';
+				var url = '/api/api-apps/app/inspectionPro';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					this.userList = res.data.data;
+					this.projectList = res.data.data;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
-				this.userList.forEach((item, index) => {
-					var id = item.id;
-					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
-						this.userList.role = res.data.roles[0].name;
-					}).catch((wrong) => {})
-				})
 			},
 			handleNodeClick(data) {
 			},

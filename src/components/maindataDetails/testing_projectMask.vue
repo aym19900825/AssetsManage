@@ -32,7 +32,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="状态" prop="STATUS">
-												<el-input v-model="dataInfo.STATUS" :disabled="true"></el-input>
+												<el-input v-model="dataInfo.STATUS" :disabled="true"  ></el-input>
 											</el-form-item>
 											</el-form-item>
 										</el-col>
@@ -74,26 +74,26 @@
 									</el-row>
 									<el-row :gutter="70">
 										<el-col :span="8">
-											<el-form-item label="录入人" prop="description">
-												<el-input v-model="dataInfo.description" :disabled="true"></el-input>
+											<el-form-item label="录入人" prop="ENTERBY">
+												<el-input v-model="dataInfo.ENTERBY" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="录入时间" prop="description">
-												<el-input v-model="dataInfo.description" :disabled="true"></el-input>
+											<el-form-item label="录入时间" prop="ENTERDATE">
+												<el-input v-model="dataInfo.ENTERDATE" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改人" prop="description">
-												<el-input v-model="dataInfo.description" :disabled="true"></el-input>
+											<el-form-item label="修改人" prop="CHANGEBY">
+												<el-input v-model="dataInfo.CHANGEBY" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										
 									</el-row>
 									<el-row :gutter="70">
 										<el-col :span="8">
-											<el-form-item label="修改时间" prop="description">
-												<el-input v-model="dataInfo.description" :disabled="true"></el-input>
+											<el-form-item label="修改时间" prop="CHANGEDATE">
+												<el-input v-model="dataInfo.CHANGEDATE" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -115,6 +115,29 @@
 <script>
 	export default {
 		name: 'masks',
+		props: {
+			dataInfo: {
+				type: Object,
+				default: function(){
+					return {
+					P_NUM: '',
+					P_NAME: '',
+					STATUS: '',
+					VERSION: '',
+					QUALIFICATION: '',
+					FIELD: '',
+					CHILD_FIELD: '',
+					DOCLINKS_NUM: '',
+					DEPT: '',
+					ENTERBY:'',
+					ENTERDATE: '',
+					CHANGEBY: '',
+					CHANGEDATE:'',
+					}
+				}
+			},
+			page: Object ,
+		},
 		data() {
 			var validateName = (rule, value, callback) => {
 				if(value === '') {
@@ -131,20 +154,6 @@
 				}
 			};
 			return {
-				 options: [{
-          			value: '选项1',
-          			label: '活动'
-        		}, {
-          			value: '选项2',
-          			label: '活动2'
-        		}, {
-          			value: '选项3',
-          			label: '活动3'
-        		}, {
-          			value: '选项4',
-          			label: '活动4'
-        		}],
-        		value: '',
 				selUser: [],
 				edit: true, //禁填
 				col_but1: true,
@@ -157,59 +166,7 @@
 				activeNames: ['1', '2'], //手风琴数量
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
-				dataList: [{
-					name: '',
-					description: ''
-				}],
-				leaddata: [ //导入数据的表格
-					{
-						columnname: 'author',
-						description: '作者姓名',
-						type: '字符串(string)',
-						length: '6',
-						retain: ''
-					},
-					{
-						columnname: 'author',
-						description: '作者姓名',
-						type: '字符串(string)',
-						length: '6',
-						retain: ''
-					},
-					{
-						columnname: 'author',
-						description: '作者姓名',
-						type: '字符串(string)',
-						length: '6',
-						retain: ''
-					},
-					{
-						columnname: 'author',
-						description: '作者姓名',
-						type: '字符串(string)',
-						length: '6',
-						retain: ''
-					}
-				],
-				dataInfo: { //添加数据库列表信息
-					name: '',
-					description: '',
-					attributes: [{ //字段列表
-						columnname: '',
-						description: '',
-						type: '',
-						length: '',
-						retain: '',
-						typename: ''
-					}]
-				},
-				/*attributes:[{//字段列表
-					columnname: '',
-					description: '',
-					type:'',
-					length: '',
-					retain: ''
-				}],*/
+
 				rules: {
 					name: [{
 						required: true,
@@ -233,17 +190,22 @@
 		},
 		methods: {
 			resetNew() {
-				this.dataInfo = { //数据库列表
-						name: '',
-						description: '',
-						attributes: [{ //字段列表
-							columnname: '',
-							description: '',
-							type: '',
-							length: '',
-							retain: ''
-						}]
-					},
+//				this.dataInfo = { //数据库列表
+//					P_NUM: '',
+//					P_NAME: '',
+//					STATUS: '',
+//					VERSION: '',
+//					QUALIFICATION: '',
+//					FIELD: '',
+//					CHILD_FIELD: '',
+//					DOCLINKS_NUM: '',
+//					DEPT: '',
+//					ENTERBY:'',
+//					ENTERDATE: '',
+//					CHANGEBY: '',
+//					CHANGEDATE:'',
+//						
+//					},
 
 					this.$refs["dataInfo"].resetFields();
 			},
@@ -254,17 +216,6 @@
 				this.selUser = val;
 			},
 
-			addfield() {
-				var obj = {
-					columnname: '',
-					description: '',
-					type: '',
-					length: '',
-					retain: ''
-				};
-				//this.attributes.push(obj);
-				this.dataInfo.attributes.push(obj);
-			},
 			delfield(item) {
 				var index = this.dataInfo.attributes.indexOf(item);
 				if(index !== -1) {
@@ -290,23 +241,25 @@
 			},
 			//点击按钮显示弹窗
 			visible() {
-				console.log(111);
+				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+					console.log(res);
+					this.dataInfo.ENTERBY=res.data.nickname;
+					this.dataInfo.ENTERDATE=res.data.createTime;
+				}).catch((err)=>{
+					this.$message({
+						message:'网络错误，请重试',
+						type:'error'
+					})
+				})
 				this.show = true;
 			},
 			// 这里是修改
-			detail(dataid) {
-				var url = '/api/apps-center/objectcfg/' + dataid;
-				this.$axios.get(url, {}).then((res) => {
-					this.dataInfo = res.data;
-					//this.attributes=this.dataInfo.attributes;
-					this.show = true;
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
+			detail() {
+			
+				this.show = true;
+				
 			},
+			
 			//点击关闭按钮
 			close() {
 				this.show = false;
@@ -339,7 +292,9 @@
 			submitForm(dataInfo) {
 				this.$refs[dataInfo].validate((valid) => {
 					//		          if (valid) {
-					var url = '/api/apps-center/objectcfg/saveOrUpdate';
+						console.log(111111111111);
+						console.log(this.dataInfo);
+					var url = '/api/api-apps/app/inspectionPro/saveOrUpdate';
 					this.$axios.post(url, this.dataInfo).then((res) => {
 						if(res.data.resp_code == 0) {
 							this.$message({

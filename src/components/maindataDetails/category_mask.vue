@@ -57,7 +57,7 @@
 									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="录入人" prop="FAX">
-												<el-input v-model="CATEGORY.ENTERBY" :disabled="edit"></el-input>
+												<el-input v-model="CATEGORY.ENERBY" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -108,7 +108,7 @@
 						STATUS:'活动',
 						VERSION:'1',
 						DEPARTMENT:'',
-						ENTERBY:'',
+						ENERBY:'',
 						ENERDATE:'',
 						CHANGEBY:'',
 						CHANGEDATE:''
@@ -243,7 +243,7 @@
 					STATUS:'活动',
 					VERSION:'1',
 					DEPARTMENT:'',
-					ENTERBY:'',
+					ENERBY:'',
 					ENERDATE:'',
 					CHANGEBY:'',
 					CHANGEDATE:''
@@ -271,9 +271,9 @@
 			//点击按钮显示弹窗
 			visible() {
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
-	    			this.CATEGORY.ENTERBY = res.data.nickname;
-	    			this.CATEGORY.ENERDATE = this.$moment(res.data.createTime).format("YYYY-MM-DD");
-	    			// this.CATEGORY.STATUS = '活动';
+	    			this.CATEGORY.ENERBY = res.data.nickname;
+	    			var date = new Date();
+					this.CATEGORY.ENERDATE = this.$moment(date).format("YYYY-MM-DD");
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -292,11 +292,10 @@
 				this.modifytitle = true;
 				this.statusshow1 = false;
 				this.statusshow2 = true;
-				this.CATEGORY.STATUS
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
 	    			this.CATEGORY.CHANGEBY = res.data.nickname;
-	    			this.CATEGORY.CHANGEDATE = this.$moment(res.data.createTime).format("YYYY-MM-DD");
-	    			console.log(this.CATEGORY.CHANGEDATE);
+	    			var date=new Date();
+					this.CATEGORY.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',

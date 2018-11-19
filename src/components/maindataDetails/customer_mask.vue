@@ -511,37 +511,41 @@
 				this.statusshow1 = true;
 				this.statusshow2 = false;
 				this.modify = false;
-				// this.CUSTOMER.STATUS = '1';
-				// this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
-	   //  			this.CUSTOMER.ENERBY = res.data.nickname;
-	   //  			this.CUSTOMER.ENERDATE = this.$moment(res.data.createTime).format("YYYY-MM-DD");
-				// }).catch((err) => {
-				// 	this.$message({
-				// 		message: '网络错误，请重试',
-				// 		type: 'error'
-				// 	});
-				// });
-				this.show = true;
-			},
-			// 这里是修改
-			detail(dataid) {
-				console.log(dataid);
-				this.addtitle = false;
-				this.modifytitle = true;
-				this.statusshow1 = false;
-				this.statusshow2 = true;
-				this.modify = true;
+				this.CUSTOMER.STATUS = '1';
+				var date = new Date();
+				this.CUSTOMER.ENERDATE = this.$moment(date).format("YYYY-MM-DD");
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
-	    			this.CUSTOMER.CHANGEBY = res.data.nickname;
-	    			this.CUSTOMER.CHANGEDATE = res.data.createTime;
+	    			this.CUSTOMER.ENERBY = res.data.nickname;
+	    			
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
 						type: 'error'
 					});
 				});
-				var url = '/api/api-apps/app/customer/' + dataid;
-				this.$axios.get(url, {}).then((res) => {
+				this.show = true;
+			},
+			// 这里是修改
+			detail(dataid) {
+				this.addtitle = false;
+				this.modifytitle = true;
+				this.statusshow1 = false;
+				this.statusshow2 = true;
+				this.modify = true;
+				
+				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
+	    			this.CUSTOMER.CHANGEBY = res.data.nickname;
+	    			var date = new Date();
+					this.CUSTOMER.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+				console.log(this.CUSTOMER.CHANGEDATE);
+				// var url = '/api/api-apps/app/customer/' + dataid;
+				this.$axios.get('/api/api-apps/app/customer/' + dataid, {}).then((res) => {
 					console.log(res);
 					this.CUSTOMER = res.data;
 					console.log(1234);

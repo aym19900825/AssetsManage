@@ -265,38 +265,6 @@
 <script>
 	export default {
 		name: 'customer_masks',
-		// props: {
-		// 	CUSTOMER: {
-		// 		type: Object,
-		// 		default: function(){
-		// 			return {
-		// 				ID:'',
-		// 				CODE:'',
-		// 				NAME:'',
-		// 				PHONE:'',
-		// 				CONTACT_ADDRESS:'',
-		// 				ZIPCODE:'',
-		// 				STATUS:'1',
-		// 				FAX:'',
-		// 				EMAIL:'',
-		// 				// ENERBY:'',
-		// 				// ENERDATE:'',
-		// 				// CHANGEBY:'',
-		// 				// CHANGEDATE:'',
-		// 				MEMO:'',
-		// 				CUSTOMER_QUALIFICATIONList:[{
-		// 					STEP:'',
-		// 					CERTIFICATE_NUM:'',
-		// 					CERTIFICATE_NAME:'',
-		// 					ACTIVE_DATE:'',
-		// 					STATUS:'',
-		// 					MEMO:''
-		// 				}]
-		// 			}
-		// 		}
-		// 	},
-		// 	page: Object ,
-		// },
 		data() {
 			var validateCode = (rule, value, callback) => {
                 if (value === '') {
@@ -511,7 +479,7 @@
 				this.statusshow1 = true;
 				this.statusshow2 = false;
 				this.modify = false;
-				this.CUSTOMER.STATUS = '1';
+				// this.CUSTOMER.STATUS = '1';
 				var date = new Date();
 				this.CUSTOMER.ENERDATE = this.$moment(date).format("YYYY-MM-DD");
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {

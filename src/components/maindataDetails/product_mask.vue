@@ -180,6 +180,8 @@
 				show: false,
 				isok1: true,
 				isok2: false,
+				statusshow1:true,
+				statusshow2:false,
 				down: true,
 				up: false,
 				addtitle:true,
@@ -221,17 +223,17 @@
 		},
 		methods: {
 			resetNew(){
-                this.PRODUCT = {
-					PRO_NUM:'',
-					PRO_NAME:'',
-					STATUS:'活动',
-					VERSION:'1',
-					ENTERBY:'',
-					ENTERDATE:'',
-					CHANGEBY:'',
-					CHANGEDATE:''
-				};
-                // this.$refs["PRODUCT"].resetFields();
+    //             this.PRODUCT = {
+				// 	PRO_NUM:'',
+				// 	PRO_NAME:'',
+				// 	STATUS:'活动',
+				// 	VERSION:'1',
+				// 	ENTERBY:'',
+				// 	ENTERDATE:'',
+				// 	CHANGEBY:'',
+				// 	CHANGEDATE:''
+				// };
+                this.$refs["PRODUCT"].resetFields();
             },
 			handleChange(val) {//手风琴开关效果调用
 			},

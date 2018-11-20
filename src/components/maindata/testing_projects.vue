@@ -105,7 +105,6 @@
 										<el-table-column label="状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
 										</el-table-column>
 										<!--<el-table-column label="文档" width="120" sortable prop="DOCLINKP_NAME" v-if="this.checkedName.indexOf('文档')!=-1">-->
-										</el-table-column>
 										<el-table-column label="领域" width="120" sortable prop="FIELD" v-if="this.checkedName.indexOf('领域')!=-1">
 										</el-table-column>
 										<el-table-column label="子领域" width="120" sortable prop="CHILD_FIELD" v-if="this.checkedName.indexOf('子领域')!=-1">
@@ -242,8 +241,6 @@
 				companyId: '',
 				deptId: '',
 				selUser: [],
-				'活动': true,
-				'不活动': false,
 				projectList: [],
 				search: false,
 				show: false,

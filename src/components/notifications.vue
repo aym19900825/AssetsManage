@@ -101,7 +101,7 @@
 								<el-row :gutter="0">
 									<el-col :span="24">
 										<!-- 表格 Begin-->
-										<el-table :data="nitificationsList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'nitificationsList', order: 'descending'}" @selection-change="SelChange">
+										<el-table :data="nitificationsList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'nitificationsList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 											<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 											</el-table-column>
 											<el-table-column label="工作任务通知书编号" width="200" sortable prop="N_CODE" v-if="this.checkedName.indexOf('工作任务通知书编号')!=-1">
@@ -140,7 +140,7 @@
 				</EasyScrollbar>
 			</div>
 			<!--右侧内容显示 End-->
-			<notificationsmask ref="child" v-bind:page=page></notificationsmask>
+			<notificationsmask :dataInfo="aaaData[0]" ref="child" v-bind:page=page></notificationsmask>
 		</div>
 	</div>
 </template>
@@ -167,18 +167,9 @@
 					value: '选项2',
 					label: '不活动'
 				}],
-
-				dataUrl: '/api/api-user/users',
-				searchData: {
-					page: 1,
-					limit: 10, //分页显示数
-					nickname: '',
-					enabled: '',
-					searchKey: '',
-					searchValue: '',
-					companyId: '',
-					deptId: ''
-				},
+				loadSign:true,//加载
+				commentArr:{},
+				
 				checkedName: [
 					'工作任务通知书编号',
 					'类型',
@@ -253,9 +244,13 @@
 				ismin: true,
 				clientHeight: '', //获取浏览器高度
 				searchList: { //点击高级搜索后显示的内容
-					nickname: '',
-					enabled: '',
-					createTime: ''
+					N_CODE: '',
+					ITEM_NAME: '',
+					CJDW: '',
+					TYPE: '',
+					XD_DATE: '',
+					COMPDATE: '',
+					STATUS:''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -287,6 +282,19 @@
 
 		},
 		methods: {
+			loadMore () {
+			   if (this.loadSign) {
+			     this.loadSign = false
+			     this.page.currentPage++
+			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+			       return
+			     }
+			     setTimeout(() => {
+			       this.loadSign = true
+			     }, 1000)
+			     this.requestData()
+			   }
+			 },
 			tableControle(data) {
 				this.checkedName = data;
 			},
@@ -383,7 +391,7 @@
 			},
 			judge(data) {
 				//taxStatus 布尔值
-				return data.enabled ? '活动' : '不活动'
+				return data.STATUS=="1"? '活动' : '不活动'
 			},
 			//时间格式化  
 			dateFormat(row, column) {
@@ -400,27 +408,43 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					nickname: this.searchList.nickname,
-					enabled: this.searchList.enabled,
-					searchKey: 'createTime',
-					searchValue: this.searchList.createTime,
-					companyId: this.companyId,
-					deptId: this.deptId
+					N_CODE: this.searchList.N_CODE,
+					ITEM_NAME: this.searchList.ITEM_NAME,
+					CJDW: this.searchList.CJDW,
+					TYPE: this.searchList.TYPE,
+					XD_DATE: this.searchList.XD_DATE,
+					COMPDATE: this.searchList.COMPDATE,
+					STATUS: this.searchList.STATUS,
 				}
-				var url = '/api/api-user/users';
+				var url = '/api/api-apps/app/workNot';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					this.nitificationsList = res.data.data;
-					this.page.totalCount = res.data.count;
+					console.log(res)
+					this.page.totalCount = res.data.count;	
+					//总的页数
+					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
+					if(this.page.currentPage >= totalPage){
+						 this.loadSign = false
+					}else{
+						this.loadSign=true
+					}
+					this.commentArr[this.page.currentPage]=res.data.data
+					let newarr=[]
+					for(var i = 1; i <= totalPage; i++){
+					
+						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
+							
+							for(var j = 0; j < this.commentArr[i].length; j++){
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					
+					this.nitificationsList = newarr;
 				}).catch((wrong) => {})
-				this.nitificationsList.forEach((item, index) => {
-					var id = item.id;
-					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
-						this.nitificationsList.role = res.data.roles[0].name;
-					}).catch((wrong) => {})
-				})
 			},
+
 			handleNodeClick(data) {},
 			formatter(row, column) {
 				return row.enabled;

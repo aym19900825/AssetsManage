@@ -26,39 +26,39 @@
 						</el-input>
 					</el-col>
 				</el-row>
-				<el-form :model="nitificationsInfo" :label-position="labelPosition" :rules="rules" ref="nitificationsInfo" label-width="100px" class="demo-user">
+				<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="类别" name="1">
 
 								<div class="accordion-body tab-content">
-									<el-radio-group v-model="TYPE">
+									<el-radio-group v-model="dataInfo.TYPE">
 										<el-row :gutter="70">
 										<el-col :span="6">
-											<el-radio v-model="radio" label="1">监督抽查</el-radio>
+											<el-radio  label="1">监督抽查</el-radio>
 										</el-col>
 										<el-col :span="6">
-											<el-radio v-model="radio" label="2">监督抽查复查</el-radio>
+											<el-radio  label="2">监督抽查复查</el-radio>
 										</el-col>
 										<el-col :span="6">
-											<el-radio v-model="radio" label="3">质量抽查</el-radio>
+											<el-radio  label="3">质量抽查</el-radio>
 										</el-col>
 										<el-col :span="6">
-											<el-radio v-model="radio" label="4">质量抽查复查</el-radio>
+											<el-radio  label="4">质量抽查复查</el-radio>
 										</el-col>
 									</el-row>
 									<el-row :gutter="70">
 										<el-col :span="6">
-											<el-radio v-model="radio" label="1">监督抽查</el-radio>
+											<el-radio label="1">监督抽查</el-radio>
 										</el-col>
 										<el-col :span="6">
-											<el-radio v-model="radio" label="2">监督抽查复查</el-radio>
+											<el-radio  label="2">监督抽查复查</el-radio>
 										</el-col>
 										<el-col :span="6">
-											<el-radio v-model="radio" label="3">质量抽查</el-radio>
+											<el-radio  label="3">质量抽查</el-radio>
 										</el-col>
 										<el-col :span="6">
-											<el-radio v-model="radio" label="4">质量抽查复查</el-radio>
+											<el-radio  label="4">质量抽查复查</el-radio>
 										</el-col>
 									</el-row>
 									<el-row :gutter="70">
@@ -94,26 +94,26 @@
 									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="计划编号" prop="WP_NUM">
-												<el-input v-model="nitificationsInfo.WP_NUM" :disabledd="true">
+												<el-input v-model="dataInfo.WP_NUM" :disabledd="true">
 												<el-button slot="append" icon="el-icon-search"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="任务号" prop="TASKNUM">
-												<el-input v-model="nitificationsInfo.TASKNUM"></el-input>
+												<el-input v-model="dataInfo.TASKNUM"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="承检单位" prop="CJDW">
-												<el-input v-model="nitificationsInfo.CJDW"></el-input>
+												<el-input v-model="dataInfo.CJDW"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="项目负责人" prop="P_LEADER">
-												<el-input v-model="nitificationsInfo.P_LEADER" :disabledd="true">
+												<el-input v-model="dataInfo.P_LEADER" :disabledd="true">
 													<el-button slot="append" icon="el-icon-search"></el-button>
 												</el-input>
 												
@@ -121,12 +121,12 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="受检产品名称" prop="ITEM_NAME">
-												<el-input v-model="nitificationsInfo.ITEM_NAME"></el-input>
+												<el-input v-model="dataInfo.ITEM_NAME"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="受检产品型号" prop="ITEM_MODEL">
-												<el-input v-model="nitificationsInfo.ITEM_MODEL"></el-input>
+												<el-input v-model="dataInfo.ITEM_MODEL"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -166,7 +166,7 @@
 												<el-form-item label="操作"></el-form-item>
 											</el-col>
 										</el-row>
-										<el-row :gutter="20" v-for="(item,key) in nitificationsInfo.attributes" :key="key">
+										<el-row :gutter="20" v-for="(item,key) in dataInfo.attributes" :key="key">
 											<el-col :span="3">
 												<el-input type="text" placeholder="请输入序号" v-model="item.NUMBER"></el-input>
 											</el-col>
@@ -196,22 +196,22 @@
 									<el-row :gutter="70">
 										<el-col :span="6">
 											<el-form-item label="受检企业" prop="V_NAME">
-												<el-input v-model="nitificationsInfo.V_NAME" disabled="true"></el-input>
+												<el-input v-model="dataInfo.V_NAME" disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="6">
 											<el-form-item label="抽样方案" prop="SOLUTION">
-												<el-input v-model="nitificationsInfo.SOLUTION" disabled="true"></el-input>
+												<el-input v-model="dataInfo.SOLUTION" disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="6">
 											<el-form-item label="样品数量" prop="QUALITY">
-												<el-input v-model="nitificationsInfo.QUALITY" disabled="true"></el-input>
+												<el-input v-model="dataInfo.QUALITY" disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="6">
 											<el-form-item label="接收人" prop="ACCEPT_PERSON">
-												<el-input v-model="nitificationsInfo.ACCEPT_PERSON" disabled="true">
+												<el-input v-model="dataInfo.ACCEPT_PERSON" disabled="true">
 													<el-button slot="append" icon="el-icon-search"></el-button>
 												</el-input>
 												
@@ -234,7 +234,7 @@
 									</el-button>
 								</div>
 								<!-- :rules="rules" ref="attributes" -->
-								<el-form :model="nitificationsInfo.attributes">
+								<el-form :model="dataInfo.attributes">
 									<el-form-item>
 										<el-row :gutter="20">
 											<el-col :span="3">
@@ -259,7 +259,7 @@
 												<el-form-item label="操作"></el-form-item>
 											</el-col>
 										</el-row>
-										<el-row :gutter="20" v-for="(item,key) in nitificationsInfo.attributes" :key="key">
+										<el-row :gutter="20" v-for="(item,key) in dataInfo.attributes" :key="key">
 											<el-col :span="3">
 												<el-input type="text" placeholder="请输入序号" v-model="item.NUMBER"></el-input>
 											</el-col>
@@ -289,18 +289,18 @@
 									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="完成日期" prop="COMPDATE">
-												<el-date-picker v-model="nitificationsInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+												<el-date-picker v-model="dataInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
 												</el-date-picker>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="检验检测费用" prop="CHECTCOST">
-												<el-input v-model="nitificationsInfo.CHECTCOST"></el-input>
+												<el-input v-model="dataInfo.CHECTCOST"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="下达日期" prop="XD_DATE">
-												<el-date-picker v-model="nitificationsInfo.XD_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+												<el-date-picker v-model="dataInfo.XD_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
 											</el-date-picker>
 											</el-form-item>
 										</el-col>
@@ -308,7 +308,7 @@
 									<el-row :gutter="70">
 										<el-col :span="24">
 											<el-form-item label="备注" prop="MEMO">
-												<el-input v-model="nitificationsInfo.MEMO"></el-input>
+												<el-input v-model="dataInfo.MEMO"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -319,29 +319,29 @@
 									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="录入人111" prop="ENTERBY">
-												<el-input v-model="nitificationsInfo.ENTERBY" disabled="true"></el-input>
+												<el-input v-model="dataInfo.ENTERBY" disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="录入日期" prop="ENERDATE">
-												<el-input v-model="nitificationsInfo.ENERDATE" disabled="true"></el-input>
+												<el-input v-model="dataInfo.ENERDATE" disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="录入人机构" prop="ORGID">
-												<el-input v-model="nitificationsInfo.ORGID" disabled="true"></el-input>
+												<el-input v-model="dataInfo.ORGID" disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="修改人" prop="CHANGEBY">
-												<el-input v-model="nitificationsInfo.CHANGEBY" disabled="true"></el-input>
+												<el-input v-model="dataInfo.CHANGEBY" disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="修改日期" prop="CHANGEDATE">
-												<el-input v-model="nitificationsInfo.CHANGEDATE" disabled="true"></el-input>
+												<el-input v-model="dataInfo.CHANGEDATE" disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 
@@ -364,6 +364,28 @@
 <script>
 	export default {
 		name: 'masks',
+		props: {
+			dataInfo: {
+				type: Object,
+				default: function(){
+					return {
+					N_CODE: '',
+					TYPE: '',
+					XD_DATE: '',
+					ITEM_NAME: '',
+					ITEM_MODEL: '',
+					VENDOR: '',
+					CJDW: '',
+					TASKNUM: '',
+					SOLUTION: '',
+					COMPDATE:'',
+					STATUS: '',
+					ENTERBY: '',
+					}
+				}
+			},
+			page: Object ,
+		},
 		data() {
 			var validateName = (rule, value, callback) => {
 				if(value === '') {
@@ -381,21 +403,15 @@
 			};
 			return {
 				options: [{
-					value: '选项1',
+					value: '1',
 					label: '活动'
 				}, {
-					value: '选项2',
-					label: '活动2'
-				}, {
-					value: '选项3',
-					label: '活动3'
-				}, {
-					value: '选项4',
-					label: '活动4'
+					value: '0',
+					label: '不活动'
 				}],
 				value: '',
 				selUser: [],
-				edit: true, //禁填
+				disabled: true, //禁填
 				col_but1: true,
 				col_but2: true,
 				show: false,
@@ -531,18 +547,9 @@
 				this.show = true;
 			},
 			// 这里是修改
-			detail(dataid) {
-				var url = '/api/apps-center/objectcfg/' + dataid;
-				this.$axios.get(url, {}).then((res) => {
-					this.nitificationsInfo = res.data;
-					//this.attributes=this.nitificationsInfo.attributes;
-					this.show = true;
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
+			detail() {
+				
+				this.show = true;
 			},
 			//点击关闭按钮
 			close() {

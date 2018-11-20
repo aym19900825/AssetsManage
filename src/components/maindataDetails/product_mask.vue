@@ -48,7 +48,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="16">
-											<el-form-item label="机构" prop="DEPARTMENT">
+											<el-form-item label="录入人机构" prop="DEPARTMENT">
 												<el-input v-model="PRODUCT.DEPARTMENT"></el-input>
 											</el-form-item>
 										</el-col>
@@ -60,7 +60,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="录入时间" prop="ENTERDATE">
+											<el-form-item label="录入日期" prop="ENTERDATE">
 												<el-input v-model="PRODUCT.ENTERDATE"  :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -72,8 +72,8 @@
 									</el-row>
 									<el-row :gutter="70">
 										<el-col :span="8">
-											<el-form-item v-if="modify" label="修改时间" prop="CHANGEDATE">
-												<el-input v-model="PRODUCT.CHANGEDATE" placeholder="当前修改时间" :disabled="edit"></el-input>
+											<el-form-item v-if="modify" label="修改日期" prop="CHANGEDATE">
+												<el-input v-model="PRODUCT.CHANGEDATE" placeholder="当前修改日期" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -222,22 +222,22 @@
 			};
 		},
 		methods: {
-			resetNew(){
-    //             this.PRODUCT = {
-				// 	PRO_NUM:'',
-				// 	PRO_NAME:'',
-				// 	STATUS:'活动',
-				// 	VERSION:'1',
-				// 	ENTERBY:'',
-				// 	ENTERDATE:'',
-				// 	CHANGEBY:'',
-				// 	CHANGEDATE:''
-				// };
-				if (this.$refs["PRODUCT"]!==undefined) {
-				    this.$refs["PRODUCT"].resetFields();
-				}
-                 // this.$refs["PRODUCT"].resetFields();
-   		    },
+			// resetNew(){
+   //              this.PRODUCT = {
+			// 		PRO_NUM:'',
+			// 		PRO_NAME:'',
+			// 		STATUS:'活动',
+			// 		VERSION:'1',
+			// 		ENTERBY:'',
+			// 		ENTERDATE:'',
+			// 		CHANGEBY:'',
+			// 		CHANGEDATE:''
+			// 	};
+			// 	if (this.$refs["PRODUCT"]!==undefined) {
+			// 	    this.$refs["PRODUCT"].resetFields();
+			// 	}
+   //               // this.$refs["PRODUCT"].resetFields();
+   // 		    },
 		 //    resetNew(){
 			// 	if (this.$refs["PRODUCT"]!==undefined) {
 			// 	    this.$refs["PRODUCT"].resetFields();
@@ -286,6 +286,8 @@
 			visible() {
 				this.statusshow1 = true;
 				this.statusshow2 = false;
+				this.addtitle = true;
+				this.modifytitle = false;
 				this.modify = false;
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
 	     			this.PRODUCT.ENTERBY = res.data.nickname;

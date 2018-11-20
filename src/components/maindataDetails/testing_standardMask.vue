@@ -21,7 +21,7 @@
 							<template slot="prepend">主键编号</template>
 						</el-input>
 					</el-col>
-					<el-col :span="5" class="pull-right pt5">
+					<el-col :span="5" class="pull-right">
 						<el-select v-model="dataInfo.STATUS" placeholder="请选择状态">
 							<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 							</el-option>
@@ -80,7 +80,7 @@
 									<el-row :gutter="70">
 										
 										<el-col :span="8">
-											<el-form-item label="机构" prop="DEPARTMENT">
+											<el-form-item label="录入人机构" prop="DEPARTMENT">
 												<el-input v-model="dataInfo.DEPARTMENT" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
@@ -400,6 +400,7 @@
 			//点击按钮显示弹窗
 			visible() {
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+					this.dataInfo.DEPARTMENT=res.data.deptName;
 					this.dataInfo.ENTERBY=res.data.nickname;
 					var date=new Date();
 					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");

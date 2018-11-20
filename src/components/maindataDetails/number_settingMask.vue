@@ -20,14 +20,11 @@
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="基础信息" name="1">
 								<el-row :gutter="70">
-									<el-col :span="8">
-										<el-form-item label="状态" prop="STATUS">
-											<el-input v-if="statusshow1" v-model="addnumbsetForm.STATUS"  :disabled="edit"></el-input>
-										    <el-select v-if="statusshow2" style="width: 100%;" v-model="addnumbsetForm.STATUS" placeholder="请选择状态">
-												<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-												</el-option>
-											</el-select>
-										</el-form-item>
+									<el-col :span="8" class="pull-right">
+										<el-select v-model="addnumbsetForm.STATUS" placeholder="请选择状态">
+											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+											</el-option>
+										</el-select>
 									</el-col>
 								</el-row>
 								<el-row :gutter="70">
@@ -51,6 +48,35 @@
 									<el-col :span="24">
 										<el-form-item label="备注" prop="MEMO">
 											<el-input type="textarea" v-model="addnumbsetForm.MEMO"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="70">
+										<el-col :span="8">
+											<el-form-item label="录入人机构">
+												<el-input v-model="addnumbsetForm.DEPT" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="录入人" prop="ENERBY">
+												<el-input v-model="addnumbsetForm.ENERBY" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="录入时间" prop="ENERDATE">
+												<el-input v-model="addnumbsetForm.ENERDATE" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="8">
+										<el-form-item v-if="modify" label="修改人" prop="CHANGEBY">
+											<el-input v-model="addnumbsetForm.CHANGEBY" :disabled="true"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item v-if="modify" label="修改时间" prop="CHANGEDATE">
+											<el-input v-model="addnumbsetForm.CHANGEDATE" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -82,11 +108,16 @@
 				default: function(){
 					return {
 						ID:'',
-						STATUS:'活动',
+						STATUS:'',
 						AUTOKEY:'',
 						PREFIX:'',
 						S_NUM:'',
-						MEMO:''
+						MEMO:'',
+						DEPT:'',
+						ENERBY:'',
+						ENERDATE:'',
+						CHANGEBY:'',
+						CHANGEDATE:'',
 					}
 				}
 			}
@@ -120,7 +151,7 @@
 					value: '0',
 					label: '不活动'
 				}],
-				modify:false,//修订、修改人、修改时间
+				modify:true,//修订、修改人、修改时间
 				statusshow1:true,
 				statusshow2:false,
 				selMenu:[],
@@ -137,23 +168,28 @@
 				modifytitle:false,
 				selectData:[],
 				addnumbsetForm: {
-					STATUS:'活动',
+					STATUS:'',
 					AUTOKEY:'',
 					PREFIX:'',
 					S_NUM:'',
-					MEMO:''
+					MEMO:'',
+					DEPT:'',
+					ENERBY:'',
+					ENERDATE:'',
+					CHANGEBY:'',
+					CHANGEDATE:''
 				},
 				rules:{
           			AUTOKEY: [{ 
-       						required: true,
-       						validator: validateAUTOKEY,
-       						trigger: 'blur' 
-       					}],
+   						required: true,
+   						validator: validateAUTOKEY,
+   						trigger: 'blur' 
+   					}],
           			S_NUM:[{ 
-       						required: true,
-       						validator: validateS_NUM,
-       						trigger: 'blur' 
-       					}]
+   						required: true,
+   						validator: validateS_NUM,
+   						trigger: 'blur' 
+   					}]
           		
 	          	},
 			};
@@ -168,18 +204,46 @@
 					AUTOKEY:'',
 					PREFIX:'',
 					S_NUM:'',
-					MEMO:''
+					MEMO:'',
+					DEPT:'',
+					ENERBY:'',
+					ENERDATE:'',
+					CHANGEBY:'',
+					CHANGEDATE:''
 				}
                 //this.$refs["addnumbsetForm"].resetFields();
             },
             childMethods() {//添加内容时从父组件带过来的
+            	this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+					this.addnumbsetForm.DEPT=res.data.deptName;
+					this.addnumbsetForm.ENERBY=res.data.nickname;
+					var date=new Date();
+					this.addnumbsetForm.ENERDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
+				}).catch((err)=>{
+					this.$message({
+						message:'网络错误，请重试',
+						type:'error'
+					})
+				})
             	this.addtitle = true;
             	this.modifytitle = false;
+            	this.modify=false;
             	this.show = !this.show;
             },
             detail() {//修改内容时从父组件带过来的
+            	this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+					this.addnumbsetForm.CHANGEBY=res.data.nickname;
+					var date=new Date();
+					this.addnumbsetForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+				}).catch((err)=>{
+					this.$message({
+						message:'网络错误，请重试',
+						type:'error'
+					})
+				})
             	this.addtitle = false;
             	this.modifytitle = true;
+            	this.modify=true;
             	this.show = true;
             },
 			//点击关闭按钮

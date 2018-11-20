@@ -48,7 +48,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="16">
-											<el-form-item label="机构" prop="DEPARTMENT">
+											<el-form-item label="录入人机构" prop="DEPARTMENT">
 												<el-input v-model="CATEGORY.DEPARTMENT"></el-input>
 											</el-form-item>
 										</el-col>
@@ -60,7 +60,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="录入时间" prop="ENERDATE">
+											<el-form-item label="录入日期" prop="ENERDATE">
 												<el-input v-model="CATEGORY.ENERDATE"  :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -72,7 +72,7 @@
 									</el-row>
 									<el-row :gutter="70">
 										<el-col :span="8">
-											<el-form-item label="修改时间" prop="CHANGEDATE" v-if="modify">
+											<el-form-item label="修改日期" prop="CHANGEDATE" v-if="modify">
 												<el-input v-model="CATEGORY.CHANGEDATE" placeholder="当前修改日期" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -223,20 +223,20 @@
 			};
 		},
 		methods: {
-			resetNew(){
-                this.CATEGORY = {
-					NUM:'',
-					TYPE:'',
-					STATUS:'活动',
-					VERSION:'1',
-					DEPARTMENT:'',
-					ENERBY:'',
-					ENERDATE:'',
-					CHANGEBY:'',
-					CHANGEDATE:''
-				};
-                // this.$refs["CUSTOMER"].resetFields();
-            },
+			// resetNew(){
+   //              this.CATEGORY = {
+			// 		NUM:'',
+			// 		TYPE:'',
+			// 		STATUS:'活动',
+			// 		VERSION:'1',
+			// 		DEPARTMENT:'',
+			// 		ENERBY:'',
+			// 		ENERDATE:'',
+			// 		CHANGEBY:'',
+			// 		CHANGEDATE:''
+			// 	};
+   //              // this.$refs["CUSTOMER"].resetFields();
+   //          },
 			handleChange(val) {//手风琴开关效果调用
 			},
 			//获取导入表格勾选信息
@@ -269,6 +269,8 @@
 				});
 				this.statusshow1 = true;
 				this.statusshow2 = false;
+				this.addtitle = true;
+				this.modifytitle = false;
 				this.modify = false;
 				this.show = true;
 			},

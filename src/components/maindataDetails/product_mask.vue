@@ -223,18 +223,26 @@
 		},
 		methods: {
 			resetNew(){
-                this.PRODUCT = {
-					PRO_NUM:'',
-					PRO_NAME:'',
-					STATUS:'活动',
-					VERSION:'1',
-					ENTERBY:'',
-					ENTERDATE:'',
-					CHANGEBY:'',
-					CHANGEDATE:''
-				};
-                // this.$refs["PRODUCT"].resetFields();
-            },
+    //             this.PRODUCT = {
+				// 	PRO_NUM:'',
+				// 	PRO_NAME:'',
+				// 	STATUS:'活动',
+				// 	VERSION:'1',
+				// 	ENTERBY:'',
+				// 	ENTERDATE:'',
+				// 	CHANGEBY:'',
+				// 	CHANGEDATE:''
+				// };
+				if (this.$refs["PRODUCT"]!==undefined) {
+				    this.$refs["PRODUCT"].resetFields();
+				}
+                 // this.$refs["PRODUCT"].resetFields();
+   		    },
+		 //    resetNew(){
+			// 	if (this.$refs["PRODUCT"]!==undefined) {
+			// 	    this.$refs["PRODUCT"].resetFields();
+			// 	}
+			// },
 			handleChange(val) {//手风琴开关效果调用
 			},
 			//获取导入表格勾选信息

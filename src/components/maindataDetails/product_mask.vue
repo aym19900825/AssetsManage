@@ -34,15 +34,8 @@
 										<el-col :span="8">
 											<el-form-item label="状态" prop="STATUS">
 												<el-input v-if="statusshow1" v-model="PRODUCT.STATUS" :disabled="edit"></el-input>
-												<!-- <el-select v-if="statusshow2" v-model="PRODUCT.STATUS" placeholder="状态">
-											      <el-option label="活动" value="1">	
-											      </el-option>
-											      <el-option label="不活动" value="0">
-											      </el-option>
-											    </el-select> -->
 											    <el-select v-if="statusshow2" style="width: 100%;" v-model="PRODUCT.STATUS" placeholder="请选择状态">
 													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-
 													</el-option>
 												</el-select>
 											</el-form-item>
@@ -187,6 +180,8 @@
 				show: false,
 				isok1: true,
 				isok2: false,
+				statusshow1:true,
+				statusshow2:false,
 				down: true,
 				up: false,
 				addtitle:true,
@@ -195,16 +190,6 @@
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				selectData:[],
-				// PRODUCT:{
-				// 	PRO_NUM:'',
-				// 	PRO_NAME:'',
-				// 	STATUS:'',
-				// 	VERSION:'',
-				// 	ENTERBY:'',
-				// 	ENTERDATE:'',
-				// 	CHANGEBY:'',
-				// 	CHANGEDATE:''
-				// },
 				rules: {
 					CODE: [{
 						required: true,
@@ -238,17 +223,17 @@
 		},
 		methods: {
 			resetNew(){
-                this.PRODUCT = {
-					PRO_NUM:'',
-					PRO_NAME:'',
-					STATUS:'活动',
-					VERSION:'1',
-					ENTERBY:'',
-					ENTERDATE:'',
-					CHANGEBY:'',
-					CHANGEDATE:''
-				};
-                // this.$refs["PRODUCT"].resetFields();
+    //             this.PRODUCT = {
+				// 	PRO_NUM:'',
+				// 	PRO_NAME:'',
+				// 	STATUS:'活动',
+				// 	VERSION:'1',
+				// 	ENTERBY:'',
+				// 	ENTERDATE:'',
+				// 	CHANGEBY:'',
+				// 	CHANGEDATE:''
+				// };
+                this.$refs["PRODUCT"].resetFields();
             },
 			handleChange(val) {//手风琴开关效果调用
 			},

@@ -39,8 +39,8 @@
 									</span>
 									<el-dropdown-menu slot="dropdown">
 										<el-checkbox-group v-model="checkedName" @change="changeCheckedName">
-											<el-dropdown-item  v-for="(item,index) in columns" key="index">
-												<el-checkbox :label="item.text" name="type"></el-checkbox>
+											<el-dropdown-item  v-for="(item,index) in columns">
+												<el-checkbox :label="item.text" :key="index" name="type"></el-checkbox>
 											</el-dropdown-item>
 										</el-checkbox-group>
 									</el-dropdown-menu>
@@ -269,7 +269,8 @@
 					return;
 				} else {
 					var changeMenu = selData[0];
-					if(typeof(changeMenu.children)!='undefined' && changeMenu.children.length>0){
+					console.log(changeMenu.children);
+					if(changeMenu.children!=null && typeof(changeMenu.children)!='undefined' && changeMenu.children.length>0){
 						this.$message({
 							message: '先删除子机构',
 							type: 'error'
@@ -308,37 +309,11 @@
 				return this.$moment(date).format("YYYY-MM-DD");
 				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
 			},
-			insert() {
-				this.users.push(this.user)
-			},
-			remove(index) {
-				this.users.splice(index, 1)
-			},
 			SelChange(val) {
 				this.selDept = val;
 			},
-//			requestData(index) {
-//				var data = {
-//					page: this.page.currentPage,
-//					limit: this.page.pageSize,
-//					simplename: this.searchDept.simplename,
-//					companyId: this.companyId,
-//					deptId: this.deptId
-//				}
-//				var url = '/api/api-user/depts';
-//				this.$axios.get(url, {
-//					params: data
-//				}).then((res) => {
-//					this.deptList = res.data.data;
-//					this.page.totalCount = res.data.count;
-//				}).catch((wrong) => {
-//
-//				})
-//			},
+
 			requestData() {
-//				var data = {
-//					
-//				}
 				var url = '/api/api-user/depts/treeMap';
 				this.$axios.get(url, {
 //					params: data

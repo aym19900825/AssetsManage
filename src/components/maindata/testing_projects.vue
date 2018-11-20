@@ -462,8 +462,6 @@
 					}
 					
 					this.projectList = newarr;
-//					this.projectList = res.data.data;
-//					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
 			},
 			handleNodeClick(data) {

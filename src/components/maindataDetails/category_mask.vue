@@ -34,12 +34,11 @@
 										<el-col :span="8">
 											<el-form-item label="状态" prop="STATUS">
 												<el-input v-if="statusshow1" v-model="CATEGORY.STATUS"  :disabled="edit"></el-input>
-												<el-select v-if="statusshow2" v-model="CATEGORY.STATUS" placeholder="状态">
-											      <el-option label="活动" value="1">	
-											      </el-option>
-											      <el-option label="不活动" value="0">
-											      </el-option>
-											    </el-select>
+											    <el-select v-if="statusshow2" style="width: 100%;" v-model="CATEGORY.STATUS" placeholder="请选择状态">
+													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+
+													</el-option>
+												</el-select>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -49,7 +48,7 @@
 												<el-input v-model="CATEGORY.VERSION"  :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8">
+										<el-col :span="16">
 											<el-form-item label="机构" prop="DEPARTMENT">
 												<el-input v-model="CATEGORY.DEPARTMENT"></el-input>
 											</el-form-item>
@@ -58,7 +57,7 @@
 									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="录入人" prop="FAX">
-												<el-input v-model="CATEGORY.ENTERBY" :disabled="edit"></el-input>
+												<el-input v-model="CATEGORY.ENERBY" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -109,7 +108,7 @@
 						STATUS:'活动',
 						VERSION:'1',
 						DEPARTMENT:'',
-						ENTERBY:'',
+						ENERBY:'',
 						ENERDATE:'',
 						CHANGEBY:'',
 						CHANGEDATE:''
@@ -167,6 +166,14 @@
                 }
             };
 			return {
+				value: '',
+				options: [{
+					value: '1',
+					label: '活动'
+				}, {
+					value: '0',
+					label: '不活动'
+				}],
 				modify:false,//修订、修改人、修改时间
 				statusshow1:true,
 				statusshow2:false,
@@ -236,7 +243,7 @@
 					STATUS:'活动',
 					VERSION:'1',
 					DEPARTMENT:'',
-					ENTERBY:'',
+					ENERBY:'',
 					ENERDATE:'',
 					CHANGEBY:'',
 					CHANGEDATE:''
@@ -264,9 +271,9 @@
 			//点击按钮显示弹窗
 			visible() {
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
-	    			this.CATEGORY.ENTERBY = res.data.nickname;
-	    			this.CATEGORY.ENERDATE = this.$moment(res.data.createTime).format("YYYY-MM-DD");
-	    			// this.CATEGORY.STATUS = '活动';
+	    			this.CATEGORY.ENERBY = res.data.nickname;
+	    			var date = new Date();
+					this.CATEGORY.ENERDATE = this.$moment(date).format("YYYY-MM-DD");
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -285,10 +292,10 @@
 				this.modifytitle = true;
 				this.statusshow1 = false;
 				this.statusshow2 = true;
-				this.CATEGORY.STATUS
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
 	    			this.CATEGORY.CHANGEBY = res.data.nickname;
-	    			this.CATEGORY.CHANGEDATE = this.$moment(res.data.createTime).format("YYYY-MM-DD");
+	    			var date=new Date();
+					this.CATEGORY.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',

@@ -74,12 +74,12 @@
 									</el-col>
 								</el-row>
 								<el-row :gutter="70">
-									<el-col :span="8">
+									<el-col :span="8" v-if="modify">
 										<el-form-item label="修改人" prop="CHANGEBY">
 											<el-input v-model="testingForm.CHANGEBY" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
-									<el-col :span="8">
+									<el-col :span="8" v-if="modify">
 										<el-form-item label="修改时间" prop="CHANGEDATE">
 											<el-input v-model="testingForm.CHANGEDATE" :disabled="true"></el-input>
 										</el-form-item>
@@ -157,8 +157,9 @@
 					</div>
 					<div class="content-footer">
 						<el-form-item>
-							<button @click="cancelForm" class="btn btn-default btn-large">取消</button>
+							<!-- <button @click="cancelForm" class="btn btn-default btn-large">取消</button> -->
 							<button type="primary" class="btn btn-primarys btn-large" @click="submitForm('testingForm')">提交</button>
+							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion">修订</el-button>
 						</el-form-item>
 					</div>
 				</el-form>
@@ -350,13 +351,19 @@
 			},
 			//点击按钮显示弹窗
 			visible() {
+				this.modify = false;
 				this.show = true;
 			},
 
 			detail() { //修改时标题判断显示
 				this.addtitle = false;
 				this.modifytitle = true;
+				this.modify = true;
 				this.show = true;
+			},
+			//点击修订按钮
+			modifyversion(){
+				this.testingForm.VERSION = this.testingForm.VERSION + 1;
 			},
 			//点击关闭按钮
 			close() {

@@ -34,12 +34,17 @@
 										<el-col :span="8">
 											<el-form-item label="状态" prop="STATUS">
 												<el-input v-if="statusshow1" v-model="PRODUCT.STATUS" :disabled="edit"></el-input>
-												<el-select v-if="statusshow2" v-model="PRODUCT.STATUS" placeholder="状态">
+												<!-- <el-select v-if="statusshow2" v-model="PRODUCT.STATUS" placeholder="状态">
 											      <el-option label="活动" value="1">	
 											      </el-option>
 											      <el-option label="不活动" value="0">
 											      </el-option>
-											    </el-select>
+											    </el-select> -->
+											    <el-select v-if="statusshow2" style="width: 100%;" v-model="PRODUCT.STATUS" placeholder="请选择状态">
+													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+
+													</el-option>
+												</el-select>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -49,7 +54,7 @@
 												<el-input v-model="PRODUCT.VERSION"  :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8">
+										<el-col :span="16">
 											<el-form-item label="机构" prop="DEPARTMENT">
 												<el-input v-model="PRODUCT.DEPARTMENT"></el-input>
 											</el-form-item>
@@ -166,6 +171,14 @@
                 }
             };
 			return {
+				value: '',
+				options: [{
+					value: '1',
+					label: '活动'
+				}, {
+					value: '0',
+					label: '不活动'
+				}],
 				selUser:[],
 				modify:false,//修订、修改人、修改时间
 				edit: true, //禁填
@@ -230,8 +243,8 @@
 					PRO_NAME:'',
 					STATUS:'活动',
 					VERSION:'1',
-					ENERBY:'',
-					ENERDATE:'',
+					ENTERBY:'',
+					ENTERDATE:'',
 					CHANGEBY:'',
 					CHANGEDATE:''
 				};
@@ -283,7 +296,8 @@
 				this.modify = false;
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
 	     			this.PRODUCT.ENTERBY = res.data.nickname;
-	     			this.PRODUCT.ENTERDATE = this.$moment(res.data.createTime).format("YYYY-MM-DD");
+	     			var date=new Date();
+					this.PRODUCT.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 	     			this.PRODUCT.STATUS = '活动';
 				 }).catch((err) => {
 				 	this.$message({
@@ -302,7 +316,10 @@
 				this.statusshow2 = true;
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
 	    			this.PRODUCT.CHANGEBY = res.data.nickname;
-	    			this.PRODUCT.CHANGEDATE =  this.$moment(res.data.createTime).format("YYYY-MM-DD");
+	    			// this.PRODUCT.CHANGEDATE =  this.$moment(res.data.createTime).format("YYYY-MM-DD");
+	    			var date=new Date();
+					this.PRODUCT.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
+
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',

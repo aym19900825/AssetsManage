@@ -33,7 +33,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="类型" prop="TYPE">
-												<el-select style="width: 100%;" v-model="CUSTOMER.TYPE" placeholder="状态">
+												<el-select style="width: 100%;" v-model="CUSTOMER.TYPE" placeholder="类型">
 											      	<el-option label="委托" value="委托">	
 											      	</el-option>
 											      	<el-option label="分包" value="分包">
@@ -70,34 +70,36 @@
 										<el-col :span="8">
 											<el-form-item label="状态" prop="STATUS">
 												<el-input v-if="statusshow1" v-model="CUSTOMER.STATUS" :disabled="edit"></el-input>
-												<el-select v-if="statusshow2" style="width: 100%;" v-model="CUSTOMER.STATUS" placeholder="状态">
+												<!-- <el-select v-if="statusshow2" style="width: 100%;" v-model="CUSTOMER.STATUS" placeholder="状态">
 											      	<el-option label="活动" value="1">	
 											      	</el-option>
 											      	<el-option label="不活动" value="0">
 											      	</el-option>
-											    </el-select>
+											    </el-select> -->
+											    <el-select v-if="statusshow2" style="width: 100%;" v-model="CUSTOMER.STATUS" placeholder="请选择状态">
+													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+
+													</el-option>
+												</el-select>
 											</el-form-item>
 										</el-col>
-									</el-row>
-									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="传真" prop="FAX">
 												<el-input v-model="CUSTOMER.FAX"></el-input>
 											</el-form-item>
 										</el-col>
+									</el-row>
+									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="邮箱" prop="EMAIL">
 												<el-input v-model="CUSTOMER.EMAIL"></el-input>
 											</el-form-item>
 										</el-col>
-										
-									</el-row>
-									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="录入人" prop="ENERBY">
 												<el-input v-model="CUSTOMER.ENERBY" placeholder="当前录入人" :disabled="edit"></el-input>
 											</el-form-item>
-										</el-col> -->
+										</el-col>
 										<el-col :span="8">
 											<el-form-item label="录入日期" prop="ENERDATE">
 												<el-input v-model="CUSTOMER.ENERDATE" placeholder="当前录入日期" :disabled="edit"></el-input>
@@ -108,8 +110,6 @@
 												<el-input v-model="CUSTOMER.CHANGEBY" placeholder="记录当前修改人" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
-									</el-row>
-									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="修改时间" prop="CHANGEDATE" v-if="modify">
 												<el-input v-model="CUSTOMER.CHANGEDATE" placeholder="自动记录当前修改时间" :disabled="edit"></el-input>
@@ -265,38 +265,6 @@
 <script>
 	export default {
 		name: 'customer_masks',
-		// props: {
-		// 	CUSTOMER: {
-		// 		type: Object,
-		// 		default: function(){
-		// 			return {
-		// 				ID:'',
-		// 				CODE:'',
-		// 				NAME:'',
-		// 				PHONE:'',
-		// 				CONTACT_ADDRESS:'',
-		// 				ZIPCODE:'',
-		// 				STATUS:'1',
-		// 				FAX:'',
-		// 				EMAIL:'',
-		// 				// ENERBY:'',
-		// 				// ENERDATE:'',
-		// 				// CHANGEBY:'',
-		// 				// CHANGEDATE:'',
-		// 				MEMO:'',
-		// 				CUSTOMER_QUALIFICATIONList:[{
-		// 					STEP:'',
-		// 					CERTIFICATE_NUM:'',
-		// 					CERTIFICATE_NAME:'',
-		// 					ACTIVE_DATE:'',
-		// 					STATUS:'',
-		// 					MEMO:''
-		// 				}]
-		// 			}
-		// 		}
-		// 	},
-		// 	page: Object ,
-		// },
 		data() {
 			var validateCode = (rule, value, callback) => {
                 if (value === '') {
@@ -346,12 +314,14 @@
                 }
             };
 			return {
-
-				test:[{
-					id:'1',
-       				name:'123',
-       				isEditing: true
-     			}],
+				value: '',
+				options: [{
+					value: '1',
+					label: '活动'
+				}, {
+					value: '0',
+					label: '不活动'
+				}],
 
 				selUser:[],
 				modify:false,
@@ -510,36 +480,40 @@
 				this.statusshow2 = false;
 				this.modify = false;
 				// this.CUSTOMER.STATUS = '1';
-				// this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
-	   //  			this.CUSTOMER.ENERBY = res.data.nickname;
-	   //  			this.CUSTOMER.ENERDATE = this.$moment(res.data.createTime).format("YYYY-MM-DD");
-				// }).catch((err) => {
-				// 	this.$message({
-				// 		message: '网络错误，请重试',
-				// 		type: 'error'
-				// 	});
-				// });
-				this.show = true;
-			},
-			// 这里是修改
-			detail(dataid) {
-				console.log(dataid);
-				this.addtitle = false;
-				this.modifytitle = true;
-				this.statusshow1 = false;
-				this.statusshow2 = true;
-				this.modify = true;
+				var date = new Date();
+				this.CUSTOMER.ENERDATE = this.$moment(date).format("YYYY-MM-DD");
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
-	    			this.CUSTOMER.CHANGEBY = res.data.nickname;
-	    			this.CUSTOMER.CHANGEDATE = res.data.createTime;
+	    			this.CUSTOMER.ENERBY = res.data.nickname;
+	    			
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
 						type: 'error'
 					});
 				});
-				var url = '/api/api-apps/app/customer/' + dataid;
-				this.$axios.get(url, {}).then((res) => {
+				this.show = true;
+			},
+			// 这里是修改
+			detail(dataid) {
+				this.addtitle = false;
+				this.modifytitle = true;
+				this.statusshow1 = false;
+				this.statusshow2 = true;
+				this.modify = true;
+				
+				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
+	    			this.CUSTOMER.CHANGEBY = res.data.nickname;
+	    			var date = new Date();
+					this.CUSTOMER.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+				console.log(this.CUSTOMER.CHANGEDATE);
+				// var url = '/api/api-apps/app/customer/' + dataid;
+				this.$axios.get('/api/api-apps/app/customer/' + dataid, {}).then((res) => {
 					console.log(res);
 					this.CUSTOMER = res.data;
 					console.log(1234);

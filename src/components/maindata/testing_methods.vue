@@ -163,6 +163,19 @@
 		},
 		data() {
 			return {
+
+				dataUrl: '/api/api-apps/app/inspectionMet',
+				searchData: {
+			        page: 1,
+			        limit: 10,//分页显示数
+			        nickname: '',
+			        enabled: '',
+			        searchKey: '',
+			        searchValue: '',
+			        companyId: '',
+			        deptId: ''
+		        },
+
 				value: '',
 				options: [{
 					value: '选项1',
@@ -171,6 +184,7 @@
 					value: '选项2',
 					label: '不活动'
 				}],
+
 				checkedName: [
 					'检验/检测方法编号',
 					'中文名称',
@@ -337,8 +351,8 @@
 				} else {
 					var changeUser = selData[0];
 					var id = changeUser.id;
-					var url = '/api/api-apps/app/inspectionMet' + id;
-					this.$axios.delete(url, {}).then((res) => { //.delete 传数据方法
+					var url = '/api/api-apps/app/inspectionMet/' + id;
+					this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -386,6 +400,7 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
+
 					M_NUM: this.searchList.M_NUM,
 					M_NAME: this.searchList.M_NAME,
 					VERSION: this.searchList.VERSION,
@@ -393,6 +408,7 @@
 					M_ENAME: this.searchList.M_ENAME,
 					M_TYPE: this.searchList.M_TYPE,
 					STATUS: this.searchList.STATUS,
+
 				}
 				var url = '/api/api-apps/app/inspectionMet';
 				this.$axios.get(url, {
@@ -402,7 +418,14 @@
 					this.methodsList = res.data.data;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
+				/*this.userList.forEach((item, index) => {
+					var id = item.id;
+					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
+						this.userList.role = res.data.roles[0].name;
+					}).catch((wrong) => {})
+				})*/
 			},
+
 			handleNodeClick(data) {},
 			formatter(row, column) {
 				return row.enabled;

@@ -119,10 +119,10 @@
 											<el-col :span="3">
 												<el-form-item label="创建日期"></el-form-item>
 											</el-col>
-											<el-col :span="3">
+											<el-col :span="4">
 												<el-form-item label="附件"></el-form-item>
 											</el-col>
-											<el-col :span="2">
+											<el-col :span="1">
 												<el-form-item label="操作"></el-form-item>
 											</el-col>
 										</el-row>
@@ -142,10 +142,21 @@
 											<el-col :span="3">
 												<el-input type="text" placeholder="创建日期" v-model="item.ENTERDATE"></el-input>
 											</el-col>
-											<el-col :span="3">
-												<el-input type="text" placeholder="附件" v-model="item.FILESURL"></el-input>
+											<el-col :span="4">
+												<el-upload
+													class="upload-demo"
+													action="https://jsonplaceholder.typicode.com/posts/"
+													:on-preview="handlePreview"
+													:on-remove="handleRemove"
+													:before-remove="beforeRemove"
+													multiple
+													:limit="3"
+													:on-exceed="handleExceed"
+													:file-list="fileList">
+													<el-button size="small" type="primary">点击上传</el-button>
+												</el-upload>
 											</el-col>
-											<el-col :span="2">
+											<el-col :span="1">
 												<i class="el-icon-delete red" @click="delfield(item)"></i>
 											</el-col>
 										</el-row>
@@ -255,7 +266,7 @@
 				labelPosition: 'top', //表单标题在上方
 				addtitle: true,
 				modifytitle: false,
-
+				fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
 				//				testingForm: { //接收表单中填写的数据信息
 				//					VERSION: '',
 				//					STATUS: '',
@@ -324,12 +335,26 @@
 				}
 				//this.$refs["testingForm"].resetFields();
 			},
+				//上传文件 Begin
+				handleRemove(file, fileList) {
+					console.log(file, fileList);
+				},
+				handlePreview(file) {
+					console.log(file);
+				},
+				handleExceed(files, fileList) {
+					this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+				},
+				beforeRemove(file, fileList) {
+					return this.$confirm(`确定移除 ${ file.name }？`);
+				},
+				//上传文件 End
+			     
 			importdia() {
 				this.dialogVisible = true;
 			},
 			handleChange(val) { //手风琴开关效果调用
 			},
-
 			addfield() { //添加文档行信息
 				var obj = {
 					COLUMNID: '',

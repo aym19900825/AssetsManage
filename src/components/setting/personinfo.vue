@@ -416,7 +416,7 @@
 			getData(){//获取当前用户信息
 	    		var url = '/api/api-user/users/currentMap';
 	    		this.$axios.get(url, {}).then((res) => {
-	    			console.log(res.data);
+	    			//console.log(res.data);
 	    			//res.data.enabled ? '启用' : '冻结';
 	    			//res.data.sex ? '男' : '女';
 	    			this.personinfo=res.data;

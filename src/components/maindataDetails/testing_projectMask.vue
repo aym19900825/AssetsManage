@@ -32,9 +32,16 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="状态" prop="STATUS">
+											<!--<el-form-item label="状态" prop="STATUS">
 												<el-input v-model="dataInfo.STATUS" :disabled="true"  ></el-input>
-											</el-form-item>
+											</el-form-item>-->
+											<el-form-item label="状态" prop="STATUS">
+												<el-input v-if="statusshow1" v-model="dataInfo.STATUS" :disabled="edit"></el-input>
+											    <el-select v-if="statusshow2" style="width: 100%;" v-model="dataInfo.STATUS" placeholder="请选择状态">
+													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+
+													</el-option>
+												</el-select>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -140,6 +147,7 @@
 			page: Object ,
 		},
 		data() {
+			
 			var validateName = (rule, value, callback) => {
 				if(value === '') {
 					callback(new Error('请英文填写表名'));
@@ -155,6 +163,14 @@
 				}
 			};
 			return {
+				value: '',
+				options: [{
+					value: '1',
+					label: '活动'
+				}, {
+					value: '0',
+					label: '不活动'
+				}],
 				selUser: [],
 				edit: true, //禁填
 				col_but1: true,
@@ -170,7 +186,8 @@
 				addtitle: true,
 				modifytitle: false,
 				modify:true,
-
+				statusshow1:true,
+				statusshow2:true,
 				rules: {
 					name: [{
 						required: true,
@@ -255,6 +272,8 @@
 						type:'error'
 					})
 				})
+				this.statusshow1 = true;
+				this.statusshow2 = false;
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.modify=false;
@@ -272,6 +291,8 @@
 							type:'error'
 						})
 					})
+				this.statusshow1 = false;//
+				this.statusshow2 = true;
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.modify=true;

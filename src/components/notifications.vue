@@ -118,7 +118,7 @@
 											</el-table-column>
 											<el-table-column label="承检单位" width="180" sortable prop="CJDW" v-if="this.checkedName.indexOf('承检单位')!=-1">
 											</el-table-column>
-											<el-table-column label="任务号" width="120" prop="SOLUTION" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('任务号')!=-1">
+											<el-table-column label="任务号" width="120" prop="TASKNUM" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('任务号')!=-1">
 											</el-table-column>
 											<el-table-column label="抽样方案" width="120" prop="SOLUTION" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('抽样方案')!=-1">
 											</el-table-column>
@@ -140,6 +140,7 @@
 				</EasyScrollbar>
 			</div>
 			<!--右侧内容显示 End-->
+			<notificationsmask ref="child" v-bind:page=page></notificationsmask>
 		</div>
 	</div>
 </template>
@@ -147,15 +148,26 @@
 	import vheader from './common/vheader.vue'
 	import navs_header from './common/nav_tabs.vue'
 	import tableControle from './plugin/table-controle/controle.vue'
+	import notificationsmask from './common/notification_mask.vue'
 	export default {
 		name: 'notifications',
 		components: {
 			vheader,
 			navs_header,
-			tableControle
+			tableControle,
+			notificationsmask
 		},
 		data() {
 			return {
+				value: '',
+				options: [{
+					value: '选项1',
+					label: '活动'
+				}, {
+					value: '选项2',
+					label: '不活动'
+				}],
+
 				dataUrl: '/api/api-user/users',
 				searchData: {
 					page: 1,
@@ -211,7 +223,7 @@
 					},
 					{
 						label: '任务号',
-						prop: 'SOLUTION'
+						prop: 'TASKNUM'
 					},
 					{
 						label: '抽样方案',

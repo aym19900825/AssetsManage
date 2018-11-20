@@ -70,12 +70,11 @@
 								</el-input>
 							</el-col>
 							<el-col :span="2" style="padding-top: 3px">
-								<el-select v-model="searchList.STATUS" placeholder="状态">
-								      <el-option label="活动" value="1">	
-								      </el-option>
-								      <el-option label="不活动" value="0">
-								      </el-option>
-								    </el-select>
+								<el-select v-model="searchList.STATUS" placeholder="请选择状态">
+													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+
+													</el-option>
+												</el-select>
 							</el-col>
 							<el-col :span="2">
 								<el-button class="pull-right" type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
@@ -139,6 +138,14 @@
 		},
 		data() {
 			return {
+				value: '',
+				options: [{
+					value: '1',
+					label: '活动'
+				}, {
+					value: '0',
+					label: '不活动'
+				}],
 				searchData: {
 			        page: 1,
 			        limit: 10,//分页显示数
@@ -239,8 +246,8 @@
 					NAME: '',
 					CODE: '',
 					PHONE: '',
-					CONTACT_ADDRESS:'',
-					STATUS:''
+					CONTACT_ADDRESS: '',
+					STATUS: ''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -276,10 +283,12 @@
 			tableControle(data){
 				this.checkedName = data;
 			},
+			//获取pageSize
 			sizeChange(val) {
 		      this.page.pageSize = val;
 		      this.requestData();
 		    },
+		    //获取currentPage
 		    currentChange(val) {
 		      this.page.currentPage = val;
 		      this.requestData();
@@ -291,15 +300,11 @@
 			},
 			//添加用戶
 			openAddMgr() {
-				this.addtitle = true;
-				this.modifytitle = false;
 				this.$refs.child.resetNew();
 				this.$refs.child.visible();
 			},
 			//修改用戶
 			modify() {
-				this.addtitle = false;
-				this.modifytitle = true;
 				this.aaaData = this.selUser;
 				if(this.aaaData.length == 0) {
 					this.$message({
@@ -314,7 +319,7 @@
 					});
 					return;
 				} else {
-					this.$refs.child.detail();
+					this.$refs.child.detail(this.selUser[0].ID);
 				}
 			},
 			//高级查询
@@ -340,8 +345,8 @@
 					return;
 				} else {
 					var changeUser = selData[0];
-					var id = changeUser.id;
-					var url = '/api/api-user/users/' + id;
+					var id = changeUser.ID;
+					var url = '/api/api-apps/app/customer/' + id;
 					this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -372,8 +377,7 @@
 				
 			},
 			judge(data) {
-				//taxStatus 布尔值
-				return data.enabled ? '启用' : '冻结'
+				return data.STATUS=="1" ? '活动' : '不活动'
 			},
 			//时间格式化  
 			dateFormat(row, column) {
@@ -382,13 +386,6 @@
 					return "";
 				}
 				return this.$moment(date).format("YYYY-MM-DD");
-				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
-			},
-			insert() {
-				this.users.push(this.user)
-			},
-			remove(index) {
-				this.users.splice(index, 1)
 			},
 			SelChange(val) {
 				this.selUser = val;
@@ -397,26 +394,33 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					nickname: this.searchList.nickname,
-					enabled: this.searchList.enabled,
-					searchKey: 'createTime',
-					searchValue: this.searchList.createTime,
-					companyId: this.companyId,
-					deptId: this.deptId
+					NAME: this.searchList.NAME,
+					CODE: this.searchList.CODE,
+					PHONE: this.searchList.PHONE,
+					CONTACT_ADDRESS: this.searchList.CONTACT_ADDRESS,
+					STATUS: this.searchList.STATUS
+					// nickname: this.searchList.nickname,
+					// enabled: this.searchList.enabled,
+					// searchKey: 'createTime',
+					// searchValue: this.searchList.createTime,
+					// companyId: this.companyId,
+					// deptId: this.deptId
 				}
-				var url = '/api/api-user/users';
+				var url = '/api/api-apps/app/customer';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
+					console.log(res);
 					this.userList = res.data.data;
+
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
-				this.userList.forEach((item, index) => {
-					var id = item.id;
-					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
-						this.userList.role = res.data.roles[0].name;
-					}).catch((wrong) => {})
-				})
+				// this.userList.forEach((item, index) => {
+				// 	var id = item.id;
+				// 	this.$axios.get('/users/' + id + '/roles', data).then((res) => {
+				// 		this.userList.role = res.data.roles[0].name;
+				// 	}).catch((wrong) => {})
+				// })
 			},
 			loadMore () {
 			   if (this.loadSign) {

@@ -102,7 +102,7 @@
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left2.vue'
 	import navs_header from '../common/nav_tabs.vue'
-	import table from '../plugin/table/table-normal.vue'
+	// import table from '../plugin/table/table-normal.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import numbsetmask from '../maindataDetails/numbersetting_mask.vue'
 	export default {
@@ -112,7 +112,7 @@
 			navs_left,
 			navs_header,
 			tableControle,
-			table,
+			// table,
 			numbsetmask,
 		},
 		data() {
@@ -134,7 +134,7 @@
 					},
 					{
 						label: '前缀',
-						prop: 'enabled'
+						prop: 'PREFIX'
 					},
 					{
 						label: '备注',
@@ -279,6 +279,7 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
+					console.log(res);
 					this.numberList = res.data.data;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})

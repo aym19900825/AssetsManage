@@ -37,56 +37,56 @@
 										</el-input>
 									</el-col>
 								</el-row>
-								
-									<el-row :gutter="70">
-										<el-col :span="8">
-											<el-form-item label="中文名称" prop="M_NAME" required="true">
-												<el-input v-model="testingForm.M_NAME"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="英文名称" prop="M_ENAME">
-												<el-input v-model="testingForm.M_ENAME"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="类别" prop="M_TYPE">
-												<el-input v-model="testingForm.M_TYPE"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									
-									<el-row :gutter="70">
-										<el-col :span="8">
-											<el-form-item label="机构" prop="DEPARTMENT">
-												<el-input v-model="testingForm.DEPARTMENT" :disabled="true"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="录入人" prop="ENTERBY">
-												<el-input v-model="testingForm.ENTERBY" :disabled="true">{{username}}</el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="录入时间" prop="ENTERDATE">
-												<el-input v-model="testingForm.ENTERDATE" :disabled="true" ></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<el-row :gutter="70">
-										<el-col :span="8">
-											<el-form-item label="修改人" prop="CHANGEBY">
-												<el-input v-model="testingForm.CHANGEBY" :disabled="true"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="修改时间" prop="CHANGEDATE">
-												<el-input v-model="testingForm.CHANGEDATE" :disabled="true"></el-input>
-											</el-form-item>
-										</el-col>
 
-									</el-row>
-								
+								<el-row :gutter="70">
+									<el-col :span="8">
+										<el-form-item label="中文名称" prop="M_NAME" required="true">
+											<el-input v-model="testingForm.M_NAME"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="英文名称" prop="M_ENAME">
+											<el-input v-model="testingForm.M_ENAME"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="类别" prop="M_TYPE">
+											<el-input v-model="testingForm.M_TYPE"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+
+								<el-row :gutter="70">
+									<el-col :span="8">
+										<el-form-item label="机构" prop="DEPARTMENT">
+											<el-input v-model="testingForm.DEPARTMENT" :disabled="true"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="录入人" prop="ENTERBY">
+											<el-input v-model="testingForm.ENTERBY" :disabled="true"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="录入时间" prop="ENTERDATE">
+											<el-input v-model="testingForm.ENTERDATE" :disabled="true"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="8" v-if="modify">
+										<el-form-item label="修改人" prop="CHANGEBY">
+											<el-input v-model="testingForm.CHANGEBY" :disabled="true"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8" v-if="modify">
+										<el-form-item label="修改时间" prop="CHANGEDATE">
+											<el-input v-model="testingForm.CHANGEDATE" :disabled="true"></el-input>
+										</el-form-item>
+									</el-col>
+
+								</el-row>
+
 							</el-collapse-item>
 							<el-collapse-item title="文档" name="2">
 								<!-- 字段列表 Begin-->
@@ -100,7 +100,7 @@
 										<font>新建</font>
 									</el-button>
 								</div>
-								
+
 								<el-form :model="testingForm.attributes">
 									<el-form-item>
 										<el-row :gutter="20">
@@ -119,12 +119,12 @@
 											<el-col :span="3">
 												<el-form-item label="创建日期"></el-form-item>
 											</el-col>
-											<el-col :span="3">
+											<el-col :span="4">
 												<el-form-item label="附件"></el-form-item>
 											</el-col>
-											<el-col :span="2">
-					                            <el-form-item label="操作"></el-form-item>
-					                        </el-col>
+											<el-col :span="1">
+												<el-form-item label="操作"></el-form-item>
+											</el-col>
 										</el-row>
 										<el-row :gutter="20" v-for="(item,key) in testingForm.attributes" :key="key">
 											<el-col :span="3">
@@ -142,10 +142,21 @@
 											<el-col :span="3">
 												<el-input type="text" placeholder="创建日期" v-model="item.ENTERDATE"></el-input>
 											</el-col>
-											<el-col :span="3">
-												<el-input type="text" placeholder="附件" v-model="item.FILESURL"></el-input>
+											<el-col :span="4">
+												<el-upload
+													class="upload-demo"
+													action="https://jsonplaceholder.typicode.com/posts/"
+													:on-preview="handlePreview"
+													:on-remove="handleRemove"
+													:before-remove="beforeRemove"
+													multiple
+													:limit="3"
+													:on-exceed="handleExceed"
+													:file-list="fileList">
+													<el-button size="small" type="primary">点击上传</el-button>
+												</el-upload>
 											</el-col>
-											<el-col :span="2">
+											<el-col :span="1">
 												<i class="el-icon-delete red" @click="delfield(item)"></i>
 											</el-col>
 										</el-row>
@@ -157,22 +168,15 @@
 					</div>
 					<div class="content-footer">
 						<el-form-item>
-							<button @click="cancelForm" class="btn btn-default btn-large">取消</button>
+							<!-- <button @click="cancelForm" class="btn btn-default btn-large">取消</button> -->
 							<button type="primary" class="btn btn-primarys btn-large" @click="submitForm('testingForm')">提交</button>
+							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion">修订</el-button>
 						</el-form-item>
 					</div>
 				</el-form>
 			</div>
 		</div>
-		<!-- 弹出 -->
-		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps">
-			</el-tree>
-			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible = false">取 消</el-button>
-		       <el-button type="primary" @click="queding();" >确 定</el-button>
-		    </span>
-		</el-dialog>
+
 	</div>
 </template>
 
@@ -180,10 +184,36 @@
 	export default {
 		name: 'testing_mask',
 		props: {
+			testingForm: { //接收表单中填写的数据信息
+				type: Object,
+				default: function() {
+					return {
+						VERSION: '',
+						STATUS: '',
+						M_NUM: '',
+						M_NAME: '',
+						M_ENAME: '',
+						M_TYPE: '',
+						DEPARTMENT: '',
+						ENTERBY: '',
+						ENTERDATE: '',
+						CHANGEBY: '',
+						CHANGEDATE: '',
+						//					attributes: [{ //行字段列表信息
+						//						COLUMNID: '',
+						//						FILESNUMBER: '',
+						//						FILSEDESC: '',
+						//						ENTERB: '',
+						//						ENTERDATE: '',
+						//						FILESURL: ''
+						//				}]
+					}
+				}
+			},
 			page: {
 				type: Object,
 			},
-			
+
 		},
 		data() {
 			var validateM_NAME = (rule, value, callback) => {
@@ -207,25 +237,25 @@
 					callback();
 				}
 			};
-           
+
 			return {
 				options: [{
-          			value: '选项1',
-          			label: '活动'
-        		}, {
-          			value: '选项2',
-          			label: '活动2'
-        		}, {
-          			value: '选项3',
-          			label: '活动3'
-        		}, {
-          			value: '选项4',
-          			label: '活动4'
-        		}],
-        		value: '',
-				showcode:true,
+					value: '选项1',
+					label: '活动'
+				}, {
+					value: '选项2',
+					label: '活动2'
+				}, {
+					value: '选项3',
+					label: '活动3'
+				}, {
+					value: '选项4',
+					label: '活动4'
+				}],
+				value: '',
+				showcode: true,
 				edit: true, //禁填
-				value11:true,
+				value11: true,
 				show: false,
 				isok1: true,
 				isok2: false,
@@ -234,31 +264,31 @@
 				dialogVisible: false, //对话框
 				activeNames: ['1', '2'], //手风琴数量
 				labelPosition: 'top', //表单标题在上方
-				addtitle:true,
-				modifytitle:false,
-
-				testingForm: { //接收表单中填写的数据信息
-					VERSION: '',
-					STATUS: '',
-					M_NUM: '',
-					M_NAME: '',
-					M_ENAME: '',
-					M_TYPE: '',
-					DEPARTMENT: '',
-					ENTERBY: '',
-					ENTERDATE: '',
-					CHANGEBY: '',
-					CHANGEDATE: '',
-					attributes: [{ //行字段列表信息
-						COLUMNID: '',
-						FILESNUMBER: '',
-						FILSEDESC: '',
-						ENTERB: '',
-						ENTERDATE: '',
-						FILESURL: ''
-					}]
-				},
-				rules: {//定义需要校验数据的名称
+				addtitle: true,
+				modifytitle: false,
+				fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
+				//				testingForm: { //接收表单中填写的数据信息
+				//					VERSION: '',
+				//					STATUS: '',
+				//					M_NUM: '',
+				//					M_NAME: '',
+				//					M_ENAME: '',
+				//					M_TYPE: '',
+				//					DEPARTMENT: '',
+				//					ENTERBY: '',
+				//					ENTERDATE: '',
+				//					CHANGEBY: '',
+				//					CHANGEDATE: '',
+				//					attributes: [{ //行字段列表信息
+				//						COLUMNID: '',
+				//						FILESNUMBER: '',
+				//						FILSEDESC: '',
+				//						ENTERB: '',
+				//						ENTERDATE: '',
+				//						FILESURL: ''
+				//					}]
+				//				},
+				rules: { //定义需要校验数据的名称
 					M_NAME: [{
 						required: true,
 						trigger: 'blur',
@@ -275,7 +305,7 @@
 						validator: validateM_TYPE,
 					}],
 				},
-	          	//tree
+				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
 			};
 		},
@@ -283,33 +313,49 @@
 			//form表单内容清空
 			resetNew() {
 				this.testingForm = { //给表单数据渲染值
-						VERSION: '1',
-						STATUS: '活动',
-						M_NUM: 'TRO100012',
-						M_NAME: '',
-						M_ENAME: '',
-						M_TYPE: '',
-						DEPARTMENT: '',
-						ENTERBY: '',
+					VERSION: '1',
+					STATUS: '活动',
+					M_NUM: 'TRO100012',
+					M_NAME: '',
+					M_ENAME: '',
+					M_TYPE: '',
+					DEPARTMENT: '',
+					ENTERBY: '',
+					ENTERDATE: '',
+					CHANGEBY: '',
+					CHANGEDATE: '',
+					attributes: [{ //字段列表
+						COLUMNID: '',
+						FILESNUMBER: '',
+						FILSEDESC: '',
+						ENTERB: '',
 						ENTERDATE: '',
-						CHANGEBY: '',
-						CHANGEDATE: '',
-						attributes: [{ //字段列表
-							COLUMNID: '',
-							FILESNUMBER: '',
-							FILSEDESC: '',
-							ENTERB: '',
-							ENTERDATE: '',
-							FILESURL: ''
-						}]
-					}
-					//this.$refs["testingForm"].resetFields();
+						FILESURL: ''
+					}]
+				}
+				//this.$refs["testingForm"].resetFields();
 			},
-            handleChange(val) { //手风琴开关效果调用
+				//上传文件 Begin
+				handleRemove(file, fileList) {
+					console.log(file, fileList);
+				},
+				handlePreview(file) {
+					console.log(file);
+				},
+				handleExceed(files, fileList) {
+					this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+				},
+				beforeRemove(file, fileList) {
+					return this.$confirm(`确定移除 ${ file.name }？`);
+				},
+				//上传文件 End
+			     
+			importdia() {
+				this.dialogVisible = true;
 			},
-			
-
-			addfield() {//添加文档行信息
+			handleChange(val) { //手风琴开关效果调用
+			},
+			addfield() { //添加文档行信息
 				var obj = {
 					COLUMNID: '',
 					FILESNUMBER: '',
@@ -328,51 +374,27 @@
 					this.testingForm.attributes.splice(index, 1);
 				}
 			},
-			//所属上级
-			getDept() {
-				var page = this.page.currentPage;
-				var limit = this.page.pageSize;
-				var url = '/api/api-user/depts/treeByType';
-				this.$axios.get(url, {
-					// params: {
-					// 	page: page,
-					// 	limit: limit,
-					// 	// type: type
-					// },
-				}).then((res) => {
-					this.resourceData = res.data;
-					this.dialogVisible = true;
-				});
+			//点击按钮显示弹窗
+			visible() {
+				this.modify = false;
+				this.show = true;
 			},
-			queding() {//弹出框中的确定按钮
-				this.getCheckedNodes();
-				this.placetext = false;
-				this.dialogVisible = false;				
-				this.testingForm.pid = this.checkedNodes[0].id;
-				this.testingForm.pName = this.checkedNodes[0].PREFIX;
-				
-			},
-			getCheckedNodes() {
-				this.checkedNodes = this.$refs.tree.getCheckedNodes()
-			},
-			
-			childMethods() {//添加时标题判断显示
-				this.addtitle = true;
-				this.modifytitle = false;
-				this.showcode = false;
-				this.show = !this.show;
-			},
-			
-			detail() {//修改时标题判断显示
+
+			detail() { //修改时标题判断显示
 				this.addtitle = false;
 				this.modifytitle = true;
+				this.modify = true;
 				this.show = true;
+			},
+			//点击修订按钮
+			modifyversion(){
+				this.testingForm.VERSION = this.testingForm.VERSION + 1;
 			},
 			//点击关闭按钮
 			close() {
 				this.show = false;
 			},
-			cancelForm(){
+			cancelForm() {
 				this.show = false;
 				this.reset();
 			},
@@ -386,7 +408,7 @@
 					this.rebackDialog();
 				}
 			},
-			maxDialog(e) {//大弹出框距离头部少60px
+			maxDialog(e) { //大弹出框距离头部少60px
 				this.isok1 = false;
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
@@ -408,40 +430,33 @@
 			//保存
 			submitForm(testingForm) {
 				this.$refs[testingForm].validate((valid) => {
-		          if (valid) {
-					var url = '/api/api-user/depts/saveOrUpdate';
-					this.testingFormtest = {
-						"ID":this.testingForm.ID,
-						"pid":this.testingForm.pid,
-						"AUTOKEY":this.testingForm.AUTOKEY,
-					    "PREFIX":this.testingForm.PREFIX,
-					    "PREFIX":this.testingForm.PREFIX,
-					   
-					}
-					this.$axios.post(url, this.testingFormtest).then((res) => {
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
+//					if(valid) {
+						var url = '/api/api-apps/app/inspectionMet/saveOrUpdate';
+           
+						this.$axios.post(url, this.testingForm).then((res) => {
+							//resp_code == 0是后台返回的请求成功的信息
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '保存成功',
+									type: 'success'
+								});
+								this.show = false;
+								//重新加载数据
+								this.$emit('request')
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '保存成功',
-								type: 'success'
+								message: '网络错误，请重试',
+								type: 'error'
 							});
-							this.show = false;
-							//重新加载数据
-							this.$emit('request')
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
-					});
-		          } else {
-		            return false;
-		          }
-		        });
-				
+//					} else {
+//						return false;
+//					}
+				});
+
 			},
-			handleClose(done) {//大弹出框确定关闭按钮
+			handleClose(done) { //大弹出框确定关闭按钮
 				this.$confirm('确认关闭？')
 					.then(_ => {
 						done();
@@ -449,7 +464,7 @@
 					.catch(_ => {});
 			}
 		},
-		
+
 	}
 </script>
 

@@ -15,69 +15,72 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="CUSTOMER" :label-position="labelPosition" :rules="rules" ref="CUSTOMER" label-width="100px" class="demo-adduserForm">
+				<el-form :model="PRODUCT" :label-position="labelPosition" :rules="rules" ref="PRODUCT" label-width="100px" class="demo-adduserForm">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="产品名称" name="1">
 								<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
 									<el-row :gutter="70">
 										<el-col :span="8">
-											<el-form-item label="产品编号" prop="CODE">
-												<el-input v-model="CUSTOMER.CODE" :disabled="edit"></el-input>
+											<el-form-item label="产品编号" prop="PRO_NUM">
+												<el-input v-model="PRODUCT.PRO_NUM"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="产品名称" prop="NAME">
-												<el-input v-model="CUSTOMER.NAME"></el-input>
+											<el-form-item label="产品名称" prop="PRO_NAME">
+												<el-input v-model="PRODUCT.PRO_NAME"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="状态" prop="PHONE">
-												<el-input v-model="CUSTOMER.PHONE"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<el-row :gutter="70">
-										<el-col :span="8">
-											<el-form-item label="版本" prop="CONTACT_ADDRESS">
-												<el-input v-model="CUSTOMER.CONTACT_ADDRESS"  :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="机构" prop="ZIPCODE">
-												<el-input v-model="CUSTOMER.ZIPCODE"  :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="发布单位" prop="STATUS">
-												<!-- <el-select  multiple> -->
-													<!-- <el-option v-for="data in selectData" :key="data.id" :value="data.id" :label="data.name"></el-option> -->
-												<!-- </el-select> -->
-												<el-input v-model="CUSTOMER.STATUS" :disabled="edit"></el-input>
+											<el-form-item label="状态" prop="STATUS">
+												<el-input v-if="statusshow1" v-model="PRODUCT.STATUS" :disabled="edit"></el-input>
+												<!-- <el-select v-if="statusshow2" v-model="PRODUCT.STATUS" placeholder="状态">
+											      <el-option label="活动" value="1">	
+											      </el-option>
+											      <el-option label="不活动" value="0">
+											      </el-option>
+											    </el-select> -->
+											    <el-select v-if="statusshow2" style="width: 100%;" v-model="PRODUCT.STATUS" placeholder="请选择状态">
+													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+
+													</el-option>
+												</el-select>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row :gutter="70">
 										<el-col :span="8">
-											<el-form-item label="录入人" prop="FAX">
-												<el-input v-model="CUSTOMER.FAX" :disabled="edit"></el-input>
+											<el-form-item label="版本" prop="VERSION">
+												<el-input v-model="PRODUCT.VERSION"  :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8">
-											<el-form-item label="录入时间" prop="EMAIL">
-												<el-input v-model="CUSTOMER.EMAIL"  :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="修改人" prop="ENERBY">
-												<el-input v-model="CUSTOMER.ENERBY" placeholder="当前录入人" :disabled="edit" ></el-input>
+										<el-col :span="16">
+											<el-form-item label="机构" prop="DEPARTMENT">
+												<el-input v-model="PRODUCT.DEPARTMENT"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row :gutter="70">
 										<el-col :span="8">
-											<el-form-item label="修改时间" prop="ENERDATE">
-												<el-input v-model="CUSTOMER.ENERDATE" placeholder="当前录入日期" :disabled="edit"></el-input>
+											<el-form-item label="录入人" prop="ENTERBY">
+												<el-input v-model="PRODUCT.ENTERBY" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="录入时间" prop="ENTERDATE">
+												<el-input v-model="PRODUCT.ENTERDATE"  :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item v-if="modify" label="修改人" prop="CHANGEBY">
+												<el-input v-model="PRODUCT.CHANGEBY" placeholder="当前修改人" :disabled="edit" ></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row :gutter="70">
+										<el-col :span="8">
+											<el-form-item v-if="modify" label="修改时间" prop="CHANGEDATE">
+												<el-input v-model="PRODUCT.CHANGEDATE" placeholder="当前修改时间" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -87,28 +90,38 @@
 					</div>
 					<div class="el-dialog__footer">
 						<el-form-item>
-							<el-button type="primary" class="btn-primarys" @click="submitForm('adddeptForm')">保存</el-button>
-							<el-button type="primary" class="btn-primarys">修订</el-button>
+							<el-button type="primary" class="btn-primarys" @click="submitForm('PRODUCT')">保存</el-button>
+							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion">修订</el-button>
 						</el-form-item>
 					</div>
 				</el-form>
 			</div>
 		</div>
-		<!-- 弹出 -->
-		<!-- <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps">
-			</el-tree>
-			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible = false">取 消</el-button>
-		       <el-button type="primary" @click="queding();" >确 定</el-button>
-		    </span>
-		</el-dialog> -->
 	</div>
 </template>
 
 <script>
 	export default {
 		name: 'masks',
+		props: {
+			PRODUCT: {
+				type: Object,
+				default: function(){
+					return {
+						ID:'',
+						PRO_NUM:'',
+						PRO_NAME:'',
+						STATUS:'活动',
+						VERSION:'1',
+						ENTERBY:'',
+						ENTERDATE:'',
+						CHANGEBY:'',
+						CHANGEDATE:''
+					}
+				}
+			},
+			page: Object ,
+		},
 		data() {
 			var validateCode = (rule, value, callback) => {
                 if (value === '') {
@@ -158,7 +171,16 @@
                 }
             };
 			return {
+				value: '',
+				options: [{
+					value: '1',
+					label: '活动'
+				}, {
+					value: '0',
+					label: '不活动'
+				}],
 				selUser:[],
+				modify:false,//修订、修改人、修改时间
 				edit: true, //禁填
 				col_but1: true,
 				col_but2: true,
@@ -172,35 +194,17 @@
 				activeNames: ['1','2'],//手风琴数量
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
-				dataList:[{
-					name:'',
-					description:''
-				}],
 				selectData:[],
-				CUSTOMER:{
-					CODE:'',
-					NAME:'',
-					CONTACT_ADDRESS:'',
-					PHONE:'',
-					ZIPCODE:'',
-					STATUS:'',
-					FAX:'',
-					EMAIL:'',
-					ENERBY:'',
-					ENERDATE:'',
-					CHANGEBY:'',
-					CHANGEDATE:'',
-					MEMO:'',
-					CUSTOMER_QUALIFICATION:[{
-						STEP:'',
-						CERTIFICATE_NUM:'',
-						CERTIFICATE_NAME:'',
-						ACTIVE_DATE:'',
-						STATUS:'',
-						MEMO:'',
-						FIJIAN:''
-					}]
-				},
+				// PRODUCT:{
+				// 	PRO_NUM:'',
+				// 	PRO_NAME:'',
+				// 	STATUS:'',
+				// 	VERSION:'',
+				// 	ENTERBY:'',
+				// 	ENTERDATE:'',
+				// 	CHANGEBY:'',
+				// 	CHANGEDATE:''
+				// },
 				rules: {
 					CODE: [{
 						required: true,
@@ -234,31 +238,17 @@
 		},
 		methods: {
 			resetNew(){
-                this.CUSTOMER = {
-					CODE:'',
-					NAME:'',
-					CONTACT_ADDRESS:'',
-					PHONE:'',
-					ZIPCODE:'',
-					STATUS:'',
-					FAX:'',
-					EMAIL:'',
-					ENERBY:'',
-					ENERDATE:'',
+                this.PRODUCT = {
+					PRO_NUM:'',
+					PRO_NAME:'',
+					STATUS:'活动',
+					VERSION:'1',
+					ENTERBY:'',
+					ENTERDATE:'',
 					CHANGEBY:'',
-					CHANGEDATE:'',
-					MEMO:'',
-					CUSTOMER_QUALIFICATION:[{
-						STEP:'',
-						CERTIFICATE_NUM:'',
-						CERTIFICATE_NAME:'',
-						ACTIVE_DATE:'',
-						STATUS:'',
-						MEMO:'',
-						FIJIAN:''
-					}]
-				},
-                this.$refs["CUSTOMER"].resetFields();
+					CHANGEDATE:''
+				};
+                // this.$refs["PRODUCT"].resetFields();
             },
 			handleChange(val) {//手风琴开关效果调用
 			},
@@ -286,24 +276,6 @@
 					this.dialogVisible = false;
 				}
 			},
-			addfield(){
-				var obj = {
-                    STEP:'',
-					CERTIFICATE_NUM:'',
-					CERTIFICATE_NAME:'',
-					ACTIVE_DATE:'',
-					STATUS:'',
-					MEMO:''
-                };
-                this.CUSTOMER.CUSTOMER_QUALIFICATION.push(obj);
-			},
-			delfield(item){
-                var index = this.CUSTOMER.CUSTOMER_QUALIFICATION.indexOf(item);
-                if (index !== -1) {
-                    //this.attributes.splice(index, 1)
-                    this.CUSTOMER.CUSTOMER_QUALIFICATION.splice(index, 1);
-                }
-			},
 			col_but(col_but) {
 				//alert(col_but)
 				if(col_but == 'col_but1') {
@@ -319,21 +291,74 @@
 			},
 			//点击按钮显示弹窗
 			visible() {
+				this.statusshow1 = true;
+				this.statusshow2 = false;
+				this.modify = false;
+				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
+	     			this.PRODUCT.ENTERBY = res.data.nickname;
+	     			var date=new Date();
+					this.PRODUCT.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
+	     			this.PRODUCT.STATUS = '活动';
+				 }).catch((err) => {
+				 	this.$message({
+				 		message: '网络错误，请重试',
+				 		type: 'error'
+				 	});
+				});				
 				this.show = true;
 			},
 			// 这里是修改
-			detail(dataid) {
-				var url = '/api/apps-center/objectcfg/' + dataid;
-				this.$axios.get(url, {}).then((res) => {
-					this.dataInfo = res.data;
-					//this.attributes=this.dataInfo.attributes;
-					this.show = true;
+			detail() {
+				this.modify = true;
+				this.addtitle = false;
+				this.modifytitle = true;
+				this.statusshow1 = false;
+				this.statusshow2 = true;
+				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
+	    			this.PRODUCT.CHANGEBY = res.data.nickname;
+	    			// this.PRODUCT.CHANGEDATE =  this.$moment(res.data.createTime).format("YYYY-MM-DD");
+	    			var date=new Date();
+					this.PRODUCT.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
+
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
 						type: 'error'
 					});
-				});
+				});		
+				this.show = true;
+			},
+			// 保存users/saveOrUpdate
+			submitForm(PRODUCT) {
+				 // this.$refs[PRODUCT].validate((valid) => {
+		  //         if (valid) {
+					var url = '/api/api-apps/app/product/saveOrUpdate';		
+					this.$axios.post(url,this.PRODUCT).then((res) => {
+						//resp_code == 0是后台返回的请求成功的信息
+						console.log(this.PRODUCT);
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '保存成功',
+								type: 'success'
+							});
+							this.show = false;
+							//重新加载数据
+							this.$emit('request')
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+			        //   } else {
+			        //     return false;
+			        //   }
+			    // });
+			},
+			//点击修订按钮
+			modifyversion(){
+				this.PRODUCT.VERSION = this.PRODUCT.VERSION + 1;
 			},
 			//点击关闭按钮
 			close() {
@@ -364,101 +389,6 @@
 				$(".mask_div").css("margin", "7% 10%");
 				$(".mask_div").css("top", "0");
 			},
-			// 保存users/saveOrUpdate
-			// submitForm(dataInfo) {
-			// 	this.$refs[dataInfo].validate((valid) => {
-		 //          if (valid) {
-			// 		var url = '/api/apps-center/objectcfg/saveOrUpdate';		
-			// 		this.$axios.post(url, this.dataInfo).then((res) => {
-			// 			//resp_code == 0是后台返回的请求成功的信息
-			// 			if(res.data.resp_code == 0) {
-			// 				this.$message({
-			// 					message: '保存成功',
-			// 					type: 'success'
-			// 				});
-			// 				this.show = false;
-			// 				//重新加载数据
-			// 				this.$emit('request')
-			// 			}
-			// 		}).catch((err) => {
-			// 			this.$message({
-			// 				message: '网络错误，请重试',
-			// 				type: 'error'
-			// 			});
-			// 		});
-			//           } else {
-			//             return false;
-			//           }
-			//         });
-			// },
-			// 所属组织
-			// getCompany() {
-			// 	this.editSearch = 'company';
-			// 	var page = this.page.currentPage;
-			// 	var limit = this.page.pageSize;
-			// 	var type = 1;
-			// 	var url = '/api/api-user/depts/type';
-			// 	this.$axios.get(url, {
-			// 		params: {
-			// 			page: page,
-			// 			limit: limit,
-			// 			type: type
-			// 		},
-			// 	}).then((res) => {
-			// 		this.resourceData = res.data.data;
-			// 		this.dialogVisible = true;
-			// 	});
-
-			// },
-			// // 所属机构
-			// getDept() {
-			// 	this.editSearch = 'dept';
-			// 	var page = this.page.currentPage;
-			// 	var limit = this.page.pageSize;
-			// 	var type = 2;
-			// 	var url = '/api/api-user/depts/type';
-			// 	this.$axios.get(url, {
-			// 		params: {
-			// 			page: page,
-			// 			limit: limit,
-			// 			type: type
-			// 		},
-			// 	}).then((res) => {
-			// 		this.resourceData = res.data.data;
-			// 		this.dialogVisible = true;
-			// 	});
-			// },
-			// // 角色
-			// getRole() {
-			// 	this.editSearch = 'role';
-			// 	var data = {
-			// 		params: {
-			// 			page: 1,
-			// 			limit: 10,
-			// 		}
-			// 	}
-			// 	let that = this;
-			// 	var url = '/api/api-user/roles';
-
-			// 	this.$axios.get(url, {
-					
-			// 	}).then((res) => {
-			// 		this.resourceData = res.data.data;
-			// 		this.dialogVisible = true;
-			// 	});
-			// },
-			// queding() {
-			// 	this.getCheckedNodes();
-			// 	this.placetext = false;
-			// 	this.dialogVisible = false;
-			// 	if(this.editSearch == 'company') {
-			// 		this.user.companyId = this.checkedNodes[0].id;
-			// 		this.user.companyName = this.checkedNodes[0].simplename;
-			// 	} else {
-			// 		this.user.deptId = this.checkedNodes[0].id;
-			// 		this.user.deptName = this.checkedNodes[0].simplename;
-			// 	}
-			// },
 			handleClose(done) {
 				this.$confirm('确认关闭？')
 					.then(_ => {

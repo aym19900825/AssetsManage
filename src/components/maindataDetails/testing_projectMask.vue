@@ -3,7 +3,8 @@
 		<div class="mask" v-show="show"></div>
 		<div class="mask_div" v-show="show">
 			<div class="mask_title_div clearfix">
-				<div class="mask_title">添加数据库表</div>
+				<div class="mask_title" v-show="addtitle">添加检验/检测项目</div>
+				<div class="mask_title" v-show="modifytitle">修改检验/检测项目</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>						 
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -32,7 +33,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="状态" prop="STATUS">
-												<el-input v-model="dataInfo.STATUS" :disabled="true"></el-input>
+												<el-input v-model="dataInfo.STATUS" :disabled="true"  ></el-input>
 											</el-form-item>
 											</el-form-item>
 										</el-col>
@@ -61,11 +62,11 @@
 											</el-date-picker>
 										</el-form-item>
 									</el-col>
-									<el-col :span="8">
+									<!--<el-col :span="8">
 											<el-form-item label="文档" prop="DOCLINKS_NUM">
 												<el-input v-model="dataInfo.DOCLINKS_NUM"></el-input>
 											</el-form-item>
-										</el-col>
+										</el-col>-->
 										<el-col :span="8">
 											<el-form-item label="机构" prop="DEPT">
 												<el-input v-model="dataInfo.DEPT" :disabled="true"></el-input>
@@ -74,26 +75,26 @@
 									</el-row>
 									<el-row :gutter="70">
 										<el-col :span="8">
-											<el-form-item label="录入人" prop="description">
-												<el-input v-model="dataInfo.description" :disabled="true"></el-input>
+											<el-form-item label="录入人" prop="ENTERBY">
+												<el-input v-model="dataInfo.ENTERBY" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="录入时间" prop="description">
-												<el-input v-model="dataInfo.description" :disabled="true"></el-input>
+											<el-form-item label="录入时间" prop="ENTERDATE">
+												<el-input v-model="dataInfo.ENTERDATE" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改人" prop="description">
-												<el-input v-model="dataInfo.description" :disabled="true"></el-input>
+											<el-form-item v-if="modify" label="修改人" prop="CHANGEBY">
+												<el-input v-model="dataInfo.CHANGEBY" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										
 									</el-row>
 									<el-row :gutter="70">
 										<el-col :span="8">
-											<el-form-item label="修改时间" prop="description">
-												<el-input v-model="dataInfo.description" :disabled="true"></el-input>
+											<el-form-item  v-if="modify" label="修改时间" prop="CHANGEDATE">
+												<el-input v-model="dataInfo.CHANGEDATE" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -115,6 +116,29 @@
 <script>
 	export default {
 		name: 'masks',
+		props: {
+			dataInfo: {
+				type: Object,
+				default: function(){
+					return {
+					P_NUM: '',
+					P_NAME: '',
+					STATUS: '',
+					VERSION: '1',
+					QUALIFICATION: '',
+					FIELD: '',
+					CHILD_FIELD: '',
+					DOCLINKS_NUM: '',
+					DEPT: '',
+					ENTERBY:'',
+					ENTERDATE: '',
+					CHANGEBY: '',
+					CHANGEDATE:'',
+					}
+				}
+			},
+			page: Object ,
+		},
 		data() {
 			var validateName = (rule, value, callback) => {
 				if(value === '') {
@@ -131,20 +155,6 @@
 				}
 			};
 			return {
-				 options: [{
-          			value: '选项1',
-          			label: '活动'
-        		}, {
-          			value: '选项2',
-          			label: '活动2'
-        		}, {
-          			value: '选项3',
-          			label: '活动3'
-        		}, {
-          			value: '选项4',
-          			label: '活动4'
-        		}],
-        		value: '',
 				selUser: [],
 				edit: true, //禁填
 				col_but1: true,
@@ -157,59 +167,10 @@
 				activeNames: ['1', '2'], //手风琴数量
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
-				dataList: [{
-					name: '',
-					description: ''
-				}],
-				leaddata: [ //导入数据的表格
-					{
-						columnname: 'author',
-						description: '作者姓名',
-						type: '字符串(string)',
-						length: '6',
-						retain: ''
-					},
-					{
-						columnname: 'author',
-						description: '作者姓名',
-						type: '字符串(string)',
-						length: '6',
-						retain: ''
-					},
-					{
-						columnname: 'author',
-						description: '作者姓名',
-						type: '字符串(string)',
-						length: '6',
-						retain: ''
-					},
-					{
-						columnname: 'author',
-						description: '作者姓名',
-						type: '字符串(string)',
-						length: '6',
-						retain: ''
-					}
-				],
-				dataInfo: { //添加数据库列表信息
-					name: '',
-					description: '',
-					attributes: [{ //字段列表
-						columnname: '',
-						description: '',
-						type: '',
-						length: '',
-						retain: '',
-						typename: ''
-					}]
-				},
-				/*attributes:[{//字段列表
-					columnname: '',
-					description: '',
-					type:'',
-					length: '',
-					retain: ''
-				}],*/
+				addtitle: true,
+				modifytitle: false,
+				modify:true,
+
 				rules: {
 					name: [{
 						required: true,
@@ -233,17 +194,22 @@
 		},
 		methods: {
 			resetNew() {
-				this.dataInfo = { //数据库列表
-						name: '',
-						description: '',
-						attributes: [{ //字段列表
-							columnname: '',
-							description: '',
-							type: '',
-							length: '',
-							retain: ''
-						}]
-					},
+//				this.dataInfo = { //数据库列表
+//					P_NUM: '',
+//					P_NAME: '',
+//					STATUS: '',
+//					VERSION: '',
+//					QUALIFICATION: '',
+//					FIELD: '',
+//					CHILD_FIELD: '',
+//					DOCLINKS_NUM: '',
+//					DEPT: '',
+//					ENTERBY:'',
+//					ENTERDATE: '',
+//					CHANGEBY: '',
+//					CHANGEDATE:'',
+//						
+//					},
 
 					this.$refs["dataInfo"].resetFields();
 			},
@@ -254,17 +220,6 @@
 				this.selUser = val;
 			},
 
-			addfield() {
-				var obj = {
-					columnname: '',
-					description: '',
-					type: '',
-					length: '',
-					retain: ''
-				};
-				//this.attributes.push(obj);
-				this.dataInfo.attributes.push(obj);
-			},
 			delfield(item) {
 				var index = this.dataInfo.attributes.indexOf(item);
 				if(index !== -1) {
@@ -290,23 +245,40 @@
 			},
 			//点击按钮显示弹窗
 			visible() {
-				console.log(111);
+				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+					this.dataInfo.ENTERBY=res.data.nickname;
+					var date=new Date();
+					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
+				}).catch((err)=>{
+					this.$message({
+						message:'网络错误，请重试',
+						type:'error'
+					})
+				})
+				this.addtitle = true;
+				this.modifytitle = false;
+				this.modify=false;
 				this.show = true;
 			},
 			// 这里是修改
-			detail(dataid) {
-				var url = '/api/apps-center/objectcfg/' + dataid;
-				this.$axios.get(url, {}).then((res) => {
-					this.dataInfo = res.data;
-					//this.attributes=this.dataInfo.attributes;
-					this.show = true;
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
+			detail() {
+				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+						this.dataInfo.CHANGEBY=res.data.nickname;
+						var date=new Date();
+						this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
+					}).catch((err)=>{
+						this.$message({
+							message:'网络错误，请重试',
+							type:'error'
+						})
+					})
+				this.addtitle = false;
+				this.modifytitle = true;
+				this.modify=true;
+				this.show = true;
+				
 			},
+			
 			//点击关闭按钮
 			close() {
 				this.show = false;
@@ -338,8 +310,10 @@
 			// 保存users/saveOrUpdate
 			submitForm(dataInfo) {
 				this.$refs[dataInfo].validate((valid) => {
+					this.dataInfo.CHANGEDATE =  this.$moment(this.dataInfo.CHANGEDATE).format("YYYY-MM-DD");
+					this.dataInfo.ENTERDATE = this.$moment(this.dataInfo.ENTERDATE).format("YYYY-MM-DD");
 					//		          if (valid) {
-					var url = '/api/apps-center/objectcfg/saveOrUpdate';
+					var url = '/api/api-apps/app/inspectionPro/saveOrUpdate';
 					this.$axios.post(url, this.dataInfo).then((res) => {
 						if(res.data.resp_code == 0) {
 							this.$message({

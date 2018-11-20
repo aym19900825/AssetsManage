@@ -15,25 +15,25 @@
 				</div>
 			</div>
 			<div class="mask_content"><!-- status-icon验证后小对号 -->
-				<el-form status-icon :model="CUSTOMER" :label-position="labelPosition" :rules="rules" ref="CUSTOMER" label-width="100px" class="demo-adduserForm">
+				<el-form status-icon :model="WORKPLAN" :label-position="labelPosition" :rules="rules" ref="WORKPLAN" label-width="100px" class="demo-adduserForm">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="基本信息" name="1">
 								<el-row :gutter="20">
 									<el-col :span="5" class="pull-right">
-									<el-input placeholder="草稿" v-model="CUSTOMER.CODE" :disabled="true">
+									<el-input placeholder="草稿" v-model="WORKPLAN.TYPE" :disabled="true">
 											<template slot="prepend">状态</template>
 									</el-input>
 								</el-col>
 								
 								<el-col :span="5" class="pull-right">
-									<el-select v-model="CUSTOMER.CODE" placeholder="类别">
+									<el-select v-model="WORKPLAN.CODE" placeholder="类别">
 								    	<el-option label="监督抽查" value="1"></el-option>
 								    	<el-option label="质量抽查" value="0"></el-option>
 									</el-select>
 								</el-col>
 								<el-col :span="5" class="pull-right">
-									<el-input placeholder="2018-1001" v-model="CUSTOMER.CODE" :disabled="true">
+									<el-input placeholder="2018-1001" v-model="WORKPLAN.WP_NUM" :disabled="true">
 											<template slot="prepend">计划编号</template>
 									</el-input>
 								</el-col>
@@ -41,48 +41,48 @@
 								<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
 									<el-row :gutter="70">
 										<el-col :span="6">
-											<el-form-item label="提出单位" prop="CODE">
-												<el-select v-model="CUSTOMER.CODE" placeholder="类别">
-											    	<el-option label="监督抽查" value="1"></el-option>
-											    	<el-option label="质量抽查" value="0"></el-option>
+											<el-form-item label="提出单位" prop="PROP_UNIT">
+												<el-select v-model="WORKPLAN.PROP_UNIT" placeholder="请选择">
+											    	<el-option label="金化站" value="1"></el-option>
+											    	<el-option label="运包站" value="0"></el-option>
 												</el-select>
 											</el-form-item>
 										</el-col>
 										<el-col :span="6">
-											<el-form-item label="产品类别" prop="NAME">
-												<el-input v-model="CUSTOMER.NAME" :disabled="edit">
+											<el-form-item label="产品类别" prop="ITEMTYPE">
+												<el-input v-model="WORKPLAN.ITEMTYPE" :disabled="edit">
 													<el-button slot="append" icon="el-icon-search"></el-button>
 												</el-input>
 
 											</el-form-item>
 										</el-col>
 										<el-col :span="12">
-											<el-form-item label="计划描述" prop="PHONE">
-												<el-input v-model="CUSTOMER.PHONE"></el-input>
+											<el-form-item label="计划描述" prop="DESCRIPTION">
+												<el-input v-model="WORKPLAN.DESCRIPTION"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row :gutter="70">
 										<el-col :span="6">
-											<el-form-item label="编制人" prop="CONTACT_ADDRESS">
-												<el-input v-model="CUSTOMER.CONTACT_ADDRESS"></el-input>
+											<el-form-item label="编制人" prop="COMPACTOR">
+												<el-input v-model="WORKPLAN.COMPACTOR"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="6">
-											<el-form-item label="审核人" prop="ZIPCODE">
-												<el-input v-model="CUSTOMER.ZIPCODE"></el-input>
+											<el-form-item label="审核人" prop="C_PERSON">
+												<el-input v-model="WORKPLAN.ZIPCODE"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="6">
 											<el-form-item label="批准人" prop="ZIPCODE">
-												<el-input v-model="CUSTOMER.ZIPCODE"></el-input>
+												<el-input v-model="WORKPLAN.C_PERSON"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="6">
-											<el-form-item label="提报日期" prop="ZIPCODE">
+											<el-form-item label="提报日期" prop="REPORTDATE">
 											<div class="block">
 											    <el-date-picker
-											      v-model="CUSTOMER.ZIPCODE"
+											      v-model="WORKPLAN.REPORTDATE"
 											      type="date"
 											      placeholder="选择日期">
 											    </el-date-picker>
@@ -95,16 +95,16 @@
 							<el-collapse-item title="年度计划列表" name="2">
 								<!-- 资质信息 Begin-->
 								<div class="table-func">
-									<el-button type="primary" size="mini" round  @click="importdia">
+									<el-button type="primary" size="mini" round>
 										<i class="icon-upload-cloud"></i>
 										<font>导入</font>
 									</el-button>
-									<el-button type="success" size="mini" round @click="addfield">
+									<el-button type="success" size="mini" round @click="addfield1">
 										<i class="icon-add"></i>
 										<font>新建行</font>
 									</el-button>
 								</div>
-								<el-form :model="CUSTOMER.CUSTOMER_QUALIFICATION">
+								<el-form :model="WORKPLAN.WORLPLANLINE">
 					                <el-form-item>
 					                	<el-row :gutter="20">
 					                		<el-col :span="2">
@@ -138,36 +138,36 @@
 					                            <el-form-item label="操作"></el-form-item>
 					                        </el-col>
 					                	</el-row>
-					                    <el-row :gutter="10" v-for="(item,key) in CUSTOMER.CUSTOMER_QUALIFICATION" :key="key">
+					                    <el-row :gutter="10" v-for="(item,key) in WORKPLAN.WORLPLANLINE" :key="key">
 					                        <el-col :span="2">
-					                            <el-input type="text"  placeholder="序号" v-model="item.STEP"></el-input>
+					                            <el-input type="text"  placeholder="序号" v-model="item.WP_LINENUM"></el-input>
 					                        </el-col>
 					                        <el-col :span="2">
-					                            <el-input type="text"  placeholder="产品名称" v-model="item.CERTIFICATE_NUM"></el-input>
+					                            <el-input type="text"  placeholder="产品名称" v-model="item.ITEM_NAME"></el-input>
 					                        </el-col>
 					                        <el-col :span="2">
-					                        	<el-input type="text"  placeholder="规格型号" v-model="item.CERTIFICATE_NAME"></el-input>
+					                        	<el-input type="text"  placeholder="规格型号" v-model="item.MODEL"></el-input>
 					                        </el-col>
 					                        <el-col :span="3">
-					                            <el-input type="text"  placeholder="生产企业名称" v-model="item.ACTIVE_DATE"></el-input>
+					                            <el-input type="text"  placeholder="生产企业名称" v-model="item.V_NAME"></el-input>
 					                        </el-col>
 					                        <el-col :span="2">
-					                            <el-input type="text"  placeholder="检验依据" v-model="item.STATUS"></el-input>
+					                            <el-input type="text"  placeholder="检验依据" v-model="item.BASIS"></el-input>
 					                        </el-col> 
 					                        <el-col :span="2">
-					                            <el-input type="text"  placeholder="检测项目" v-model="item.MEMO"></el-input>
+					                            <el-input type="text"  placeholder="检测项目" v-model="item.P_NAME"></el-input>
 					                        </el-col>
 					                        <el-col :span="2">
-					                            <el-input type="text"  placeholder="检测费用" v-model="item.MEMO"></el-input>
+					                            <el-input type="text"  placeholder="检测费用" v-model="item.CHECKCOST"></el-input>
 					                        </el-col>
 					                        <el-col :span="3">
-					                            <el-input type="text"  placeholder="项目提出理由" v-model="item.MEMO"></el-input>
+					                            <el-input type="text"  placeholder="项目提出理由" v-model="item.REASION"></el-input>
 					                        </el-col>
 					                        <el-col :span="4">
 					                            <el-input type="text"  placeholder="近三年监督抽查情况" v-model="item.MEMO"></el-input>
 					                        </el-col>                
 					                        <el-col :span="2">
-					                            <i class="el-icon-delete" @click="delfield(item)" style="color: red;text-align:center"></i>
+					                            <i class="el-icon-delete" @click="delfield1(item)" style="color: red;text-align:center"></i>
 					                        </el-col>
 					                    </el-row>
 					                </el-form-item>
@@ -177,12 +177,12 @@
 							<el-collapse-item title="文档编号列表" name="3">
 								<!-- 文档编号列表 Begin-->
 								<div class="table-func">
-									<el-button type="success" size="mini" round @click="addfield">
+									<el-button type="success" size="mini" round @click="addfield2">
 										<i class="icon-add"></i>
 										<font>新建行</font>
 									</el-button>
 								</div>
-								<el-form :model="CUSTOMER.CUSTOMER_QUALIFICATION">
+								<el-form :model="WORKPLAN.wendang">
 					                <el-form-item>
 					                	<el-row :gutter="20">
 					                		<el-col :span="2">
@@ -207,7 +207,7 @@
 					                            <el-form-item label="操作"></el-form-item>
 					                        </el-col>
 					                	</el-row>
-					                    <el-row :gutter="10" v-for="(item,key) in CUSTOMER.CUSTOMER_QUALIFICATION" :key="key">
+					                    <el-row :gutter="10" v-for="(item,key) in WORKPLAN.wendang" :key="key">
 					                        <el-col :span="2">
 					                            <el-input type="text"  placeholder="序号" v-model="item.STEP"></el-input>
 					                        </el-col>
@@ -241,17 +241,17 @@
 									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="姓名" prop="CODE">
-												<el-input v-model="CUSTOMER.CODE" :disabled="edit"></el-input>
+												<el-input v-model="WORKPLAN.CODE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="部门" prop="NAME">
-												<el-input v-model="CUSTOMER.NAME" :disabled="edit"></el-input>
+												<el-input v-model="WORKPLAN.NAME" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="联系电话" prop="PHONE">
-												<el-input v-model="CUSTOMER.PHONE" :disabled="edit"></el-input>
+												<el-input v-model="WORKPLAN.PHONE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -261,35 +261,35 @@
 								<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
 									<el-row :gutter="70">
 										<el-col :span="8">
-											<el-form-item label="姓名" prop="CODE">
-												<el-input v-model="CUSTOMER.CODE" :disabled="edit"></el-input>
+											<el-form-item label="姓名" prop="NAME">
+												<el-input v-model="WORKPLAN.NAME" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="部门" prop="NAME">
-												<el-input v-model="CUSTOMER.NAME" :disabled="edit"></el-input>
+												<el-input v-model="WORKPLAN.NAME" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="联系电话" prop="PHONE">
-												<el-input v-model="CUSTOMER.PHONE" :disabled="edit"></el-input>
+												<el-input v-model="WORKPLAN.PHONE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row :gutter="70">
 										<el-col :span="8">
-											<el-form-item label="录入日期" prop="CONTACT_ADDRESS">
-												<el-input v-model="CUSTOMER.CONTACT_ADDRESS" :disabled="edit"></el-input>
+											<el-form-item label="录入日期" prop="ENTERDATE">
+												<el-input v-model="WORKPLAN.ENTERDATE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改日期" prop="ZIPCODE">
-												<el-input v-model="CUSTOMER.ZIPCODE" :disabled="edit"></el-input>
+											<el-form-item label="修改日期" prop="CHANGEDATE">
+												<el-input v-model="WORKPLAN.CHANGEDATE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="状态日期" prop="ZIPCODE">
-												<el-input v-model="CUSTOMER.ZIPCODE" :disabled="edit"></el-input>
+											<el-form-item label="状态日期" prop="STATUSDATE">
+												<el-input v-model="WORKPLAN.STATUSDATE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -380,7 +380,7 @@
 					description:''
 				}],
 				selectData:[],
-				CUSTOMER:{
+				WORKPLAN:{
 					CODE:'',
 					NAME:'',
 					CONTACT_ADDRESS:'',
@@ -394,14 +394,16 @@
 					CHANGEBY:'',
 					CHANGEDATE:'',
 					MEMO:'',
-					CUSTOMER_QUALIFICATION:[{
-						STEP:'',
-						CERTIFICATE_NUM:'',
-						CERTIFICATE_NAME:'',
-						ACTIVE_DATE:'',
-						STATUS:'',
+					WORLPLANLINE:[{
+						WP_LINENUM:'',
+						ITEM_NAME:'',
+						MODEL:'',
+						V_NAME:'',
+						BASIS:'',
 						MEMO:'',
-						FIJIAN:''
+						CHECKCOST:'',
+						REASION:'',
+						MEMO:''
 					}]
 				},
 				rules: {
@@ -437,7 +439,7 @@
 		},
 		methods: {
 			resetNew(){
-                this.CUSTOMER = {
+                this.WORKPLAN = {
 					CODE:'',
 					NAME:'',
 					CONTACT_ADDRESS:'',
@@ -451,17 +453,19 @@
 					CHANGEBY:'',
 					CHANGEDATE:'',
 					MEMO:'',
-					CUSTOMER_QUALIFICATION:[{
-						STEP:'',
-						CERTIFICATE_NUM:'',
-						CERTIFICATE_NAME:'',
-						ACTIVE_DATE:'',
-						STATUS:'',
-						MEMO:'',
-						FIJIAN:''
+					WORLPLANLINE:[{
+						WP_LINENUM:'',
+						ITEM_NAME:'',
+						MODEL:'',
+						V_NAME:'',
+						BASIS:'',
+						P_NAME:'',
+						CHECKCOST:'',
+						REASION:'',
+						MEMO:''
 					}]
 				}
-                // this.$refs["CUSTOMER"].resetFields();
+                // this.$refs["WORKPLAN"].resetFields();
             },
 			handleChange(val) {//手风琴开关效果调用
 			},
@@ -470,7 +474,7 @@
 				this.selUser = val;
 			},
 			//导入添加数据按钮
-			leadadddata(){
+			leaddata(){
 				var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({
@@ -489,8 +493,22 @@
 					this.dialogVisible = false;
 				}
 			},
-			addfield(){
-				var obj = {
+			addfield1(){//年度计划列表新建行
+				var obj1 = {
+                    WP_LINENUM:'',
+					ITEM_NAME:'',
+					MODEL:'',
+					V_NAME:'',
+					BASIS:'',
+					P_NAME:'',
+					CHECKCOST:'',
+					REASION:'',
+					MEMO:''
+                };
+                this.WORKPLAN.WORLPLANLINE.push(obj1);
+			},
+			addfield2(){//文档编号列表新建行
+				var obj2 = {
                     STEP:'',
 					CERTIFICATE_NUM:'',
 					CERTIFICATE_NAME:'',
@@ -498,13 +516,13 @@
 					STATUS:'',
 					MEMO:''
                 };
-                this.CUSTOMER.CUSTOMER_QUALIFICATION.push(obj);
+                // this.WORKPLAN.WORLPLANLINE.push(obj2);
 			},
-			delfield(item){
-                var index = this.CUSTOMER.CUSTOMER_QUALIFICATION.indexOf(item);
+			delfield1(item){//年度计划列表删除行
+                var index = this.WORKPLAN.WORLPLANLINE.indexOf(item);
                 if (index !== -1) {
                     //this.attributes.splice(index, 1)
-                    this.CUSTOMER.CUSTOMER_QUALIFICATION.splice(index, 1);
+                    this.WORKPLAN.WORLPLANLINE.splice(index, 1);
                 }
 			},
 			col_but(col_but) {

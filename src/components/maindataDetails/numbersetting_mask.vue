@@ -21,8 +21,12 @@
 							<el-collapse-item title="基础信息" name="1">
 								<el-row :gutter="70">
 									<el-col :span="8">
-										<el-form-item label="状态">
-											<el-input v-model="addnumbsetForm.STATUS" value="435yuew"></el-input>
+										<el-form-item label="状态" prop="STATUS">
+											<el-input v-if="statusshow1" v-model="addnumbsetForm.STATUS"  :disabled="edit"></el-input>
+										    <el-select v-if="statusshow2" style="width: 100%;" v-model="addnumbsetForm.STATUS" placeholder="请选择状态">
+												<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+												</el-option>
+											</el-select>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -70,14 +74,15 @@
 	export default {
 		name: 'masks',
 		props: {
-			page: {
+			/*page: {
 				type: Object,
-			},
+			},*/
 			addnumbsetForm: {
 				type: Object,
 				default: function(){
 					return {
-						STATUS:'',
+						ID:'',
+						STATUS:'活动',
 						AUTOKEY:'',
 						PREFIX:'',
 						S_NUM:'',
@@ -107,6 +112,18 @@
             };
            
 			return {
+				value: '',
+				options: [{
+					value: '1',
+					label: '活动'
+				}, {
+					value: '0',
+					label: '不活动'
+				}],
+				modify:false,//修订、修改人、修改时间
+				statusshow1:true,
+				statusshow2:false,
+				selMenu:[],
 				showcode:true,
 				dialogVisible: false, //对话框
 				edit: true, //禁填
@@ -118,8 +135,9 @@
 				labelPosition: 'top',
 				addtitle:true,
 				modifytitle:false,
+				selectData:[],
 				addnumbsetForm: {
-					STATUS:'1',
+					STATUS:'活动',
 					AUTOKEY:'',
 					PREFIX:'',
 					S_NUM:'',
@@ -146,20 +164,20 @@
 			//form表单内容清空
 			resetNew(){
                 this.addnumbsetForm = {
-					STATUS:'',
+					STATUS:'活动',//添加时默认显示状态
 					AUTOKEY:'',
 					PREFIX:'',
 					S_NUM:'',
 					MEMO:''
 				}
-                // this.$refs["addnumbsetForm"].resetFields();
+                //this.$refs["addnumbsetForm"].resetFields();
             },
-            childMethods() {//添加内容
+            childMethods() {//添加内容时从父组件带过来的
             	this.addtitle = true;
             	this.modifytitle = false;
             	this.show = !this.show;
             },
-            detail() {//修改内容
+            detail() {//修改内容时从父组件带过来的
             	this.addtitle = false;
             	this.modifytitle = true;
             	this.show = true;

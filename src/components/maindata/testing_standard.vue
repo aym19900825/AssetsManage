@@ -94,18 +94,18 @@
 										<el-row :gutter="20">
 											<el-col :span="5">
 
-												<el-date-picker v-model="searchList.RELEASETIME" type="date" placeholder="发布时间" value-format="yyyy-MM-dd">
+												<el-date-picker v-model="searchList.RELEASETIME" type="date" placeholder="发布时间" value-format="yyyy-MM-dd HH:mm:ss">
 
 												</el-date-picker>
 
 											</el-col>
 											<el-col :span="5">
 
-												<el-date-picker v-model="searchList.STARTETIME" type="date" placeholder="启用时间" value-format="yyyy-MM-dd">
+												<el-date-picker v-model="searchList.STARTETIME" type="date" placeholder="启用时间" value-format="yyyy-MM-dd HH:mm:ss">
 												</el-date-picker>
 
 											</el-col>
-											<el-col :span="3" class="pt5">
+											<el-col :span="3">
 
 												<el-select v-model="searchList.STATUS" placeholder="请选择状态">
 													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
@@ -447,12 +447,12 @@
 				if(date == undefined) {
 					return "";
 				}
-				return this.$moment(date).format("YYYY-MM-DD");
+				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 			},
-			SelChange(val) {
+			SelChange(val) {//选中值后赋值给一个自定义的数组：selUser
 				this.selUser = val;
 			},
-			requestData(index) {
+			requestData(index) {//高级查询字段
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,

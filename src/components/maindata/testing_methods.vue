@@ -411,11 +411,10 @@
 			SelChange(val) {
 				this.selUser = val;
 			},
-			requestData(index) {
+			requestData(index) {//高级查询字段
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-
 					M_NUM: this.searchList.M_NUM,
 					M_NAME: this.searchList.M_NAME,
 					VERSION: this.searchList.VERSION,

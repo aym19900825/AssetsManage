@@ -210,26 +210,6 @@
 			};
 		},
 		methods: {
-			resetNew() {
-//				this.dataInfo = { //数据库列表
-//					P_NUM: '',
-//					P_NAME: '',
-//					STATUS: '',
-//					VERSION: '',
-//					QUALIFICATION: '',
-//					FIELD: '',
-//					CHILD_FIELD: '',
-//					DOCLINKS_NUM: '',
-//					DEPT: '',
-//					ENTERBY:'',
-//					ENTERDATE: '',
-//					CHANGEBY: '',
-//					CHANGEDATE:'',
-//						
-//					},
-
-					this.$refs["dataInfo"].resetFields();
-			},
 			handleChange(val) { //手风琴开关效果调用
 			},
 			//获取导入表格勾选信息

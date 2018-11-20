@@ -290,6 +290,8 @@
 				isShow: false,
 				ismin: true,
 				clientHeight: '', //获取浏览器高度
+				statusshow1:true,
+				statusshow2:true,
 				searchList: { //点击高级搜索后显示的内容
 					S_NUM: '',
 					S_NAME: '',
@@ -361,8 +363,22 @@
 			},
 			//添加
 			openAddMgr() {
-				this.$refs.child.resetNew();
-				this.$refs.child.visible();
+				this.aaaData = [{
+					ID: '',
+					S_NUM: '',
+					S_NAME: '',
+					S_ENGNAME: '',
+					STATUS: '',
+					RELEASETIME: '',
+					STARTETIME: '',
+					VERSION: '',
+					DEPARTMENT: '',
+					ENTERBY: '',
+					ENTERDATE: '',
+					CHANGEBY: '',
+					CHANGEDATE: ''
+				}];
+				this.$refs.child.detail();
 			},
 			//修改
 			modify() {

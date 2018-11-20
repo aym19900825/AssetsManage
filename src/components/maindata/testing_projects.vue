@@ -320,7 +320,22 @@
 			},
 			//添加用戶
 			openAddMgr() {
-				this.$refs.child.resetNew();
+        this.aaaData = { //数据库列表
+					P_NUM: '',
+					P_NAME: '',
+					STATUS: '',
+					VERSION: '',
+					QUALIFICATION: '',
+					FIELD: '',
+					CHILD_FIELD: '',
+					DOCLINKS_NUM: '',
+					DEPT: '',
+					ENTERBY:'',
+					ENTERDATE: '',
+					CHANGEBY: '',
+					CHANGEDATE:'',	
+					},
+
 				this.$refs.child.visible();
 			},
 			//修改用戶

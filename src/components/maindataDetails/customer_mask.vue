@@ -104,8 +104,8 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改时间" prop="CHANGEDATE" v-if="modify">
-												<el-input v-model="CUSTOMER.CHANGEDATE" placeholder="自动记录当前修改时间" :disabled="edit"></el-input>
+											<el-form-item label="修改日期" prop="CHANGEDATE" v-if="modify">
+												<el-input v-model="CUSTOMER.CHANGEDATE" placeholder="自动记录当前修改日期" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -484,7 +484,9 @@
 				this.modify = false;
 				// this.CUSTOMER.STATUS = '1';
 				var date = new Date();
-				this.CUSTOMER.ENERDATE = this.$moment(date).format("YYYY-MM-DD");
+				console.log(date);
+				this.CUSTOMER.ENERDATE = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
+				console.log(this.CUSTOMER.ENERDATE);
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
 	    			this.CUSTOMER.ENERBY = res.data.nickname;
 	    			
@@ -507,7 +509,7 @@
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
 	    			this.CUSTOMER.CHANGEBY = res.data.nickname;
 	    			var date = new Date();
-					this.CUSTOMER.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
+					this.CUSTOMER.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',

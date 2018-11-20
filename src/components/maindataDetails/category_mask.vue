@@ -36,7 +36,6 @@
 												<el-input v-if="statusshow1" v-model="CATEGORY.STATUS"  :disabled="edit"></el-input>
 											    <el-select v-if="statusshow2" style="width: 100%;" v-model="CATEGORY.STATUS" placeholder="请选择状态">
 													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-
 													</el-option>
 												</el-select>
 											</el-form-item>
@@ -192,18 +191,6 @@
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				selectData:[],
-				// "CATEGORY":{
-				// 	"ID":"",
-				// 	"NUM":"",
-				// 	"TYPE":"",
-				// 	"STATUS":"",
-				// 	"VERSION":"1",
-				// 	"DEPARTMENT":"",
-				// 	"ENTERBY":"",
-				// 	"ENERDATE":"",
-				// 	"CHANGEBY":"",
-				// 	"CHANGEDATE":""
-				// },
 				rules: {
 					CODE: [{
 						required: true,

@@ -71,10 +71,9 @@
 							</el-col>
 							<el-col :span="2" style="padding-top: 3px">
 								<el-select v-model="searchList.STATUS" placeholder="请选择状态">
-													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-
-													</el-option>
-												</el-select>
+									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+									</el-option>
+								</el-select>
 							</el-col>
 							<el-col :span="2">
 								<el-button class="pull-right" type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
@@ -399,12 +398,6 @@
 					PHONE: this.searchList.PHONE,
 					CONTACT_ADDRESS: this.searchList.CONTACT_ADDRESS,
 					STATUS: this.searchList.STATUS
-					// nickname: this.searchList.nickname,
-					// enabled: this.searchList.enabled,
-					// searchKey: 'createTime',
-					// searchValue: this.searchList.createTime,
-					// companyId: this.companyId,
-					// deptId: this.deptId
 				}
 				var url = '/api/api-apps/app/customer';
 				this.$axios.get(url, {
@@ -415,12 +408,6 @@
 
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
-				// this.userList.forEach((item, index) => {
-				// 	var id = item.id;
-				// 	this.$axios.get('/users/' + id + '/roles', data).then((res) => {
-				// 		this.userList.role = res.data.roles[0].name;
-				// 	}).catch((wrong) => {})
-				// })
 			},
 			loadMore () {
 			   if (this.loadSign) {

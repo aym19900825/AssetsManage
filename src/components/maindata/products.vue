@@ -9,7 +9,6 @@
 		<navs_left></navs_left>
 		<!--左侧菜单内容显示 End-->
 
-
 		<!--右侧内容显示 Begin-->
 		<div class="wrapper wrapper-content">
 			<div class="ibox-content">
@@ -43,7 +42,9 @@
 						</div>
 					</div>
 					<div class="columns columns-right btn-group pull-right">
-						<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
+						<div id="refresh" title="刷新" class="btn btn-default btn-refresh">
+							<i class="icon-refresh"></i>
+						</div>
 						<tableControle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></tableControle>
 					</div>
 				</div>
@@ -60,15 +61,9 @@
 								<el-button slot="append" icon="el-icon-search" ></el-button>
 							</el-col>
 							<el-col :span="2" style="padding-top: 3px">
-									<!-- <el-select v-model="searchList.STATUS" placeholder="状态">
-								      <el-option label="活动" value="1">	
-								      </el-option>
-								      <el-option label="不活动" value="0">
-								      </el-option>
-								    </el-select> -->
 								    <el-select v-model="searchList.STATUS" placeholder="请选择状态">
-													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-													</el-option>
+										<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+										</el-option>
 									</el-select>
 							</el-col>
 							<el-col :span="5">
@@ -144,8 +139,7 @@
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left2.vue'
 	import navs_header from '../common/nav_tabs.vue'
-	import productmask from '../maindataDetails/product_mask.vue'
-	
+	import productmask from '../maindataDetails/product_mask.vue'	
 	import tableControle from '../plugin/table-controle/controle.vue'
 	export default {
 		name: 'customer_management',
@@ -154,8 +148,7 @@
 			navs_left,
 			navs_header,
 			productmask,
-			tableControle,
-			
+			tableControle,			
 		},
 		data() {
 			return {
@@ -463,12 +456,6 @@
 					console.log(this.userList);
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
-				// this.userList.forEach((item, index) => {
-				// 	var id = item.id;
-				// 	this.$axios.get('/users/' + id + '/roles', data).then((res) => {
-				// 		this.userList.role = res.data.roles[0].name;
-				// 	}).catch((wrong) => {})
-				// })
 			},
 			handleNodeClick(data) {
 			},

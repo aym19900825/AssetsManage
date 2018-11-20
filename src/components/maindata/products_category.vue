@@ -41,7 +41,9 @@
 						</div>
 					</div>
 					<div class="columns columns-right btn-group pull-right">
-						<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
+						<div id="refresh" title="刷新" class="btn btn-default btn-refresh">
+							<i class="icon-refresh"></i>
+						</div>
 						<tableControle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></tableControle>
 					</div>
 				</div>
@@ -72,10 +74,10 @@
 								</el-input>
 							</el-col>
 							<el-col :span="2" style="padding-top: 3px">
-								    <el-select v-model="searchList.STATUS" placeholder="请选择状态">
-													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-													</el-option>
-									</el-select>
+								<el-select v-model="searchList.STATUS" placeholder="请选择状态">
+									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+									</el-option>
+								</el-select>
 							</el-col>
 							<el-col :span="2">
 								<el-button class="pull-right" type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
@@ -121,8 +123,7 @@
 				        </el-pagination>
 						<!-- 表格 End-->
 					</el-col>
-				</el-row>
-							
+				</el-row>							
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
@@ -135,7 +136,6 @@
 	import navs_left from '../common/left_navs/nav_left2.vue'
 	import navs_header from '../common/nav_tabs.vue'
 	import categorymask from '../maindataDetails/category_mask.vue'
-	// import table from '../plugin/table/table-normal.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	export default {
 		name: 'customer_management',
@@ -145,7 +145,6 @@
 			navs_header,
 			categorymask,
 			tableControle,
-			// table,
 		},
 		data() {
 			return {

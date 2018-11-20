@@ -5,7 +5,9 @@
     </div>-->
     <div class="left_treebg">
       <div class="p15">
-        <el-tree class="filter-tree" :data="data2" node-key="id" show-checkbox draggable indent="22" default-expand-all :props="defaultProps" :render-content="renderContent"></el-tree>
+        <!--<el-tree class="filter-tree" :data="data2" node-key="id" show-checkbox draggable indent="22" default-expand-all :props="defaultProps" :render-content="renderContent"></el-tree>-->
+         <vue-ztree :list.sync='listData'  :func='nodeClick' :expand='expandClick' show-checkbox draggable>
+    </vue-ztree>
       </div>
     </div>
   </div>
@@ -13,6 +15,116 @@
 
 <script>
 export default {
+    
+    data() {
+      return {
+//      filterText: '',
+//      data2: [
+//      {
+//        id: 1,
+//        label: '一级 1',
+//        className: 'icon-file-normal',
+//        children: [{
+//          id: 4,
+//          label: '二级 1-1',
+//          className: 'icon-file-normal',
+//          children: [{
+//            id: 9,
+//            label: '三级 1-1-1',
+//            className: 'icon-file-text'
+//          }, {
+//            id: 29,
+//            label: '三级 1-1-2',
+//            className: 'icon-file-text'
+//          }, {
+//            id: 10,
+//            label: '三级 1-1-3',
+//            className: 'icon-file-normal',
+//            children: [{
+//              id: 329,
+//              label: '四级 1-1-1',
+//              className: 'icon-file-text'}, {
+//              id: 319,
+//              label: '四级 1-1-2',
+//              className: 'icon-file-normal',
+//              children: [{
+//                id: 201,
+//                label: '五级 21-1',
+//                className: 'icon-file-text'}, {
+//                id: 202,
+//                label: '五级 21-2',
+//                className: 'icon-file-text'}, {
+//                id: 204,
+//                label: '五级 21-3',
+//                className: 'icon-file-normal',
+//                children: [{
+//                  id: 207,
+//                  label: '六级六级六级六级六级六级 33-1',
+//                  className: 'icon-file-text'
+//                }, {
+//                  id: 208,
+//                  label: '六级 33-2',
+//                  className: 'icon-file-text'
+//                }]
+//              }, {
+//                id: 206,
+//                label: '五级 21-4',
+//                className: 'icon-file-text'}]
+//            }, {
+//                id: 207,
+//                label: '四级 21-2',
+//                className: 'icon-file-text'}]
+//          }, {
+//                id: 102,
+//                label: '三级 21-2',
+//                className: 'icon-file-text'}]
+//        }, {
+//        id: 24,
+//        label: '二级 21-1',
+//        className: 'icon-file-normal',
+//        children: [{
+//          id: 27,
+//          label: '三级 33-1',
+//          className: 'icon-file-text'
+//        }, {
+//          id: 28,
+//          label: '三级 33-2',
+//          className: 'icon-file-text'
+//        }]
+//      }
+//        ]
+//      }, {
+//        id: 2,
+//        label: '一级 2',
+//        className: 'icon-file-normal',
+//        children: [{
+//          id: 5,
+//          label: '二级 2-1',
+//          className: 'icon-file-text'
+//        }, {
+//          id: 6,
+//          label: '二级 2-2',
+//          className: 'icon-file-text'
+//        }]
+//      }, {
+//        id: 3,
+//        label: '一级 33',
+//        className: 'icon-file-normal',
+//        children: [{
+//          id: 7,
+//          label: '二级 33-1',
+//          className: 'icon-file-text'
+//        }, {
+//          id: 8,
+//          label: '二级 33-2',
+//          className: 'icon-file-text'
+//        }]
+//      }],
+      };
+    },
+    props: [
+        'listData'
+    ],
     methods:{
         renderContent(h, { node, data, store }) //自定义Element树菜单显示图标
         {
@@ -22,121 +134,30 @@ export default {
               <span>{node.label}</span>
             </span>
           );
+        },
+        // 点击节点
+        nodeClick:function(m){
+            if(m.iconClass!='icon-file-text'){
+                if( m.iconClass == 'icon-file-normal'){
+                    m.iconClass = 'icon-file-open';
+                }else{
+                    m.iconClass = 'icon-file-normal';
+                }
+            }
+            this.$emit("getTreeId", m);
+        },
+        expandClick:function(m){
+            if(m.iconClass!='icon-file-text'){
+                if( m.iconClass == 'icon-file-normal'){
+                    m.iconClass = 'icon-file-open';
+                }else{
+                    m.iconClass = 'icon-file-normal';
+                }
+            }
+            m.isFolder = !m.isFolder; 
         }
+
     },
-    data() {
-      return {
-        filterText: '',
-        data2: [
-        {
-          id: 1,
-          label: '一级 1',
-          className: 'icon-file-normal',
-          children: [{
-            id: 4,
-            label: '二级 1-1',
-            className: 'icon-file-normal',
-            children: [{
-              id: 9,
-              label: '三级 1-1-1',
-              className: 'icon-file-text'
-            }, {
-              id: 29,
-              label: '三级 1-1-2',
-              className: 'icon-file-text'
-            }, {
-              id: 10,
-              label: '三级 1-1-3',
-              className: 'icon-file-normal',
-              children: [{
-                id: 329,
-                label: '四级 1-1-1',
-                className: 'icon-file-text'}, {
-                id: 319,
-                label: '四级 1-1-2',
-                className: 'icon-file-normal',
-                children: [{
-                  id: 201,
-                  label: '五级 21-1',
-                  className: 'icon-file-text'}, {
-                  id: 202,
-                  label: '五级 21-2',
-                  className: 'icon-file-text'}, {
-                  id: 204,
-                  label: '五级 21-3',
-                  className: 'icon-file-normal',
-                  children: [{
-                    id: 207,
-                    label: '六级六级六级六级六级六级 33-1',
-                    className: 'icon-file-text'
-                  }, {
-                    id: 208,
-                    label: '六级 33-2',
-                    className: 'icon-file-text'
-                  }]
-                }, {
-                  id: 206,
-                  label: '五级 21-4',
-                  className: 'icon-file-text'}]
-              }, {
-                  id: 207,
-                  label: '四级 21-2',
-                  className: 'icon-file-text'}]
-            }, {
-                  id: 102,
-                  label: '三级 21-2',
-                  className: 'icon-file-text'}]
-          }, {
-          id: 24,
-          label: '二级 21-1',
-          className: 'icon-file-normal',
-          children: [{
-            id: 27,
-            label: '三级 33-1',
-            className: 'icon-file-text'
-          }, {
-            id: 28,
-            label: '三级 33-2',
-            className: 'icon-file-text'
-          }]
-        }
-          ]
-        }, {
-          id: 2,
-          label: '一级 2',
-          className: 'icon-file-normal',
-          children: [{
-            id: 5,
-            label: '二级 2-1',
-            className: 'icon-file-text'
-          }, {
-            id: 6,
-            label: '二级 2-2',
-            className: 'icon-file-text'
-          }]
-        }, {
-          id: 3,
-          label: '一级 33',
-          className: 'icon-file-normal',
-          children: [{
-            id: 7,
-            label: '二级 33-1',
-            className: 'icon-file-text'
-          }, {
-            id: 8,
-            label: '二级 33-2',
-            className: 'icon-file-text'
-          }]
-        }],
-        defaultProps: {
-          children: 'children',
-          label: 'label'
-        }
-      };
-    },
-    props: [
-        'listData'
-    ],
 }
 </script>
 

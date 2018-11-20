@@ -105,7 +105,7 @@
 								<el-row :gutter="0">
 									<el-col :span="24">
 										<!-- 表格 Begin-->
-										<el-table :data="methodsList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'methodsList', order: 'descending'}" @selection-change="SelChange">
+										<el-table :data="methodsList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'methodsList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 											<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 											</el-table-column>
 											<el-table-column label="检验/检测方法编号" width="150" sortable prop="M_NUM" v-if="this.checkedName.indexOf('检验/检测方法编号')!=-1">
@@ -184,7 +184,8 @@
 					value: '选项2',
 					label: '不活动'
 				}],
-
+				loadSign:true,//加载
+				commentArr:{},
 				checkedName: [
 					'检验/检测方法编号',
 					'中文名称',
@@ -287,6 +288,20 @@
 
 		},
 		methods: {
+			loadMore () {
+			   if (this.loadSign) {
+			     this.loadSign = false
+			     this.page.currentPage++
+			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+			       return
+			     }
+			     setTimeout(() => {
+			       this.loadSign = true
+			     }, 1000)
+			     this.requestData()
+//			     console.log('到底了', this.page.currentPage)
+			   }
+			 },
 			tableControle(data) {
 				this.checkedName = data;
 			},
@@ -415,15 +430,31 @@
 					params: data
 				}).then((res) => {
 					console.log(res);
-					this.methodsList = res.data.data;
-					this.page.totalCount = res.data.count;
+					this.page.totalCount = res.data.count;	
+					//总的页数
+					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
+					if(this.page.currentPage >= totalPage){
+						 this.loadSign = false
+					}else{
+						this.loadSign=true
+					}
+					this.commentArr[this.page.currentPage]=res.data.data
+					let newarr=[]
+					for(var i = 1; i <= totalPage; i++){
+					
+						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
+							
+							for(var j = 0; j < this.commentArr[i].length; j++){
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					
+					this.methodsList = newarr;
+//					this.methodsList = res.data.data;
+//					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
-				/*this.userList.forEach((item, index) => {
-					var id = item.id;
-					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
-						this.userList.role = res.data.roles[0].name;
-					}).catch((wrong) => {})
-				})*/
+				
 			},
 
 			handleNodeClick(data) {},

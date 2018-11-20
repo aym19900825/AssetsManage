@@ -229,9 +229,18 @@
 					                            <el-input type="text"  placeholder="备注" v-model="item.MEMO"></el-input>
 					                        </el-col>
 					                        <el-col :span="3" >
-					                            <button type="button" class="btn btn-primarys button-margin text-center">
-												    <i class="icon-add"></i>
-												</button>
+					                            <el-upload
+													class="upload-demo"
+													action="https://jsonplaceholder.typicode.com/posts/"
+													:on-preview="handlePreview"
+													:on-remove="handleRemove"
+													:before-remove="beforeRemove"
+													multiple
+													:limit="3"
+													:on-exceed="handleExceed"
+													:file-list="fileList">
+													<el-button size="small" type="primary">点击上传</el-button>
+												</el-upload>
 					                        </el-col>                
 					                        <el-col :span="2">
 					                            <i class="el-icon-delete" @click="delfield(item)" style="color: red;text-align:center"></i>
@@ -334,6 +343,7 @@
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				selectData:[],
+				fileList: [],
 				CUSTOMER:{
 					ID:'',
 					CODE:'',
@@ -518,6 +528,20 @@
 					});
 				});
 			},
+			//上传文件 Begin
+			handleRemove(file, fileList) {
+				console.log(file, fileList);
+			},
+			handlePreview(file) {
+				console.log(file);
+			},
+			handleExceed(files, fileList) {
+				this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+			},
+			beforeRemove(file, fileList) {
+				return this.$confirm(`确定移除 ${ file.name }？`);
+			},
+			//上传文件 End
 			//点击关闭
 			close() {
 				this.show = false;

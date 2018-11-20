@@ -223,20 +223,20 @@
 			};
 		},
 		methods: {
-			resetNew(){
-                this.CATEGORY = {
-					NUM:'',
-					TYPE:'',
-					STATUS:'活动',
-					VERSION:'1',
-					DEPARTMENT:'',
-					ENERBY:'',
-					ENERDATE:'',
-					CHANGEBY:'',
-					CHANGEDATE:''
-				};
-                // this.$refs["CUSTOMER"].resetFields();
-            },
+			// resetNew(){
+   //              this.CATEGORY = {
+			// 		NUM:'',
+			// 		TYPE:'',
+			// 		STATUS:'活动',
+			// 		VERSION:'1',
+			// 		DEPARTMENT:'',
+			// 		ENERBY:'',
+			// 		ENERDATE:'',
+			// 		CHANGEBY:'',
+			// 		CHANGEDATE:''
+			// 	};
+   //              // this.$refs["CUSTOMER"].resetFields();
+   //          },
 			handleChange(val) {//手风琴开关效果调用
 			},
 			//获取导入表格勾选信息
@@ -269,6 +269,8 @@
 				});
 				this.statusshow1 = true;
 				this.statusshow2 = false;
+				this.addtitle = true;
+				this.modifytitle = false;
 				this.modify = false;
 				this.show = true;
 			},

@@ -342,7 +342,17 @@
 			},
 			//添加用戶
 			openAddMgr() {
-				this.$refs.child.resetNew();
+				// this.$refs.child.resetNew();
+				this.aaaData = {
+					PRO_NUM:'',
+					PRO_NAME:'',
+					STATUS:'活动',
+					VERSION:'1',
+					ENTERBY:'',
+					ENTERDATE:'',
+					CHANGEBY:'',
+					CHANGEDATE:''
+				};
 				this.$refs.child.visible();
 			},
 			//修改用戶

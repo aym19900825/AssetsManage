@@ -222,22 +222,22 @@
 			};
 		},
 		methods: {
-			resetNew(){
-                this.PRODUCT = {
-					PRO_NUM:'',
-					PRO_NAME:'',
-					STATUS:'活动',
-					VERSION:'1',
-					ENTERBY:'',
-					ENTERDATE:'',
-					CHANGEBY:'',
-					CHANGEDATE:''
-				};
-				if (this.$refs["PRODUCT"]!==undefined) {
-				    this.$refs["PRODUCT"].resetFields();
-				}
-                 // this.$refs["PRODUCT"].resetFields();
-   		    },
+			// resetNew(){
+   //              this.PRODUCT = {
+			// 		PRO_NUM:'',
+			// 		PRO_NAME:'',
+			// 		STATUS:'活动',
+			// 		VERSION:'1',
+			// 		ENTERBY:'',
+			// 		ENTERDATE:'',
+			// 		CHANGEBY:'',
+			// 		CHANGEDATE:''
+			// 	};
+			// 	if (this.$refs["PRODUCT"]!==undefined) {
+			// 	    this.$refs["PRODUCT"].resetFields();
+			// 	}
+   //               // this.$refs["PRODUCT"].resetFields();
+   // 		    },
 		 //    resetNew(){
 			// 	if (this.$refs["PRODUCT"]!==undefined) {
 			// 	    this.$refs["PRODUCT"].resetFields();
@@ -286,6 +286,8 @@
 			visible() {
 				this.statusshow1 = true;
 				this.statusshow2 = false;
+				this.addtitle = true;
+				this.modifytitle = false;
 				this.modify = false;
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
 	     			this.PRODUCT.ENTERBY = res.data.nickname;

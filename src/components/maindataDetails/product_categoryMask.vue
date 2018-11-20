@@ -60,7 +60,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="录入时间" prop="ENERDATE">
+											<el-form-item label="录入日期" prop="ENERDATE">
 												<el-input v-model="CATEGORY.ENERDATE"  :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -72,7 +72,7 @@
 									</el-row>
 									<el-row :gutter="70">
 										<el-col :span="8">
-											<el-form-item label="修改时间" prop="CHANGEDATE" v-if="modify">
+											<el-form-item label="修改日期" prop="CHANGEDATE" v-if="modify">
 												<el-input v-model="CATEGORY.CHANGEDATE" placeholder="当前修改日期" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>

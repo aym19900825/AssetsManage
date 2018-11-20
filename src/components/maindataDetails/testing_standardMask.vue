@@ -21,7 +21,7 @@
 							<template slot="prepend">主键编号</template>
 						</el-input>
 					</el-col>
-					<el-col :span="5" class="pull-right pt5">
+					<el-col :span="5" class="pull-right">
 						<el-select v-model="dataInfo.STATUS" placeholder="请选择状态">
 							<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 							</el-option>

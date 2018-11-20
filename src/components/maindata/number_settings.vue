@@ -64,15 +64,27 @@
 								<el-col :span="24">
 									<!-- 表格 Begin-->
 									<el-table :data="numberList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'numberList', order: 'descending'}" @selection-change="SelChange"  v-loadmore="loadMore">
-										<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
+										<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 										</el-table-column>
-										<el-table-column label="自动编号名称" sortable prop="AUTOKEY" v-if="this.checkedName.indexOf('自动编号名称')!=-1">
+										<el-table-column label="自动编号名称" width="140" sortable prop="AUTOKEY" v-if="this.checkedName.indexOf('自动编号名称')!=-1">
 										</el-table-column>
-										<el-table-column label="起始数" sortable prop="S_NUM" v-if="this.checkedName.indexOf('起始数')!=-1">
+										<el-table-column label="起始数" width="140" sortable prop="S_NUM" v-if="this.checkedName.indexOf('起始数')!=-1">
 										</el-table-column>
-										<el-table-column label="前缀" sortable prop="PREFIX" v-if="this.checkedName.indexOf('前缀')!=-1">
+										<el-table-column label="前缀" width="140" sortable prop="PREFIX" v-if="this.checkedName.indexOf('前缀')!=-1">
 										</el-table-column>
-										<el-table-column label="备注" sortable prop="MEMO" v-if="this.checkedName.indexOf('备注')!=-1">
+										<el-table-column label="备注" width="200" sortable prop="MEMO" v-if="this.checkedName.indexOf('备注')!=-1">
+										</el-table-column>
+										<el-table-column label="状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
+										</el-table-column>
+										<el-table-column label="机构" width="180" sortable prop="DEPT" v-if="this.checkedName.indexOf('机构')!=-1">
+										</el-table-column>
+										<el-table-column label="录入人" width="140" sortable prop="ENERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
+										</el-table-column>
+										<el-table-column label="录入日期" width="160" prop="ENERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入日期')!=-1">
+										</el-table-column>
+										<el-table-column label="修改人" width="140" prop="CHANGEBY" sortable v-if="this.checkedName.indexOf('修改人')!=-1">
+										</el-table-column>
+										<el-table-column label="修改日期" width="160" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改日期')!=-1">
 										</el-table-column>
 									</el-table>
 									<el-pagination background class="pull-right pt10 pb10" v-if="this.checkedName.length>0"
@@ -104,7 +116,7 @@
 	import navs_header from '../common/nav_tabs.vue'
 	// import table from '../plugin/table/table-normal.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
-	import numbsetmask from '../maindataDetails/numbersetting_mask.vue'
+	import numbsetmask from '../maindataDetails/number_settingMask.vue'
 	export default {
 		name: 'number_settings',
 		components: {
@@ -117,11 +129,25 @@
 		},
 		data() {
 			return {
+				value: '',
+				options: [{
+					value: '1',
+					label: '活动'
+				}, {
+					value: '0',
+					label: '不活动'
+				}],
 				checkedName: [//控制Table-列显示和隐藏
 					'自动编号名称',
 					'起始数',
 					'前缀',
+					'状态',
 					'备注',
+					'机构',
+					'录入人',
+					'录入日期',
+					'修改人',
+					'修改日期',
 				],
 				tableHeader: [//控制Table-列头标题名称
 					{
@@ -137,8 +163,32 @@
 						prop: 'PREFIX'
 					},
 					{
+						label: '状态',
+						prop: 'STATUS'
+					},
+					{
 						label: '备注',
 						prop: 'MEMO'
+					},
+					{
+						label: '机构',
+						prop: 'DEPT'
+					},
+					{
+						label: '录入人',
+						prop: 'ENERBY'
+					},
+					{
+						label: '录入日期',
+						prop: 'ENERDATE'
+					},
+					{
+						label: '修改人',
+						prop: 'CHANGEBY'
+					},
+					{
+						label: '修改日期',
+						prop: 'CHANGEDATE'
 					}
 				],
 				loadSign:true,//加载
@@ -283,10 +333,22 @@
 			Printing() {
 				
 			},
+			judge(data) {
+				return data.STATUS == "1" ? '活动' : '不活动'
+
+			},
+			//时间格式化  
+			dateFormat(row, column) {
+				var date = row[column.property];
+				if(date == undefined) {
+					return "";
+				}
+				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+			},
 			SelChange(val) {//选中值后赋值给一个自定义的数组：selMenu
 				this.selMenu = val;
 			},
-			requestData(index) {
+			requestData(index) {//高级查询字段
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,

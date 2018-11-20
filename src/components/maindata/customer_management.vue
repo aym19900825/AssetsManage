@@ -96,8 +96,12 @@
 							</el-table-column>
 							<el-table-column label="联系电话" sortable width="200" prop="PHONE" v-if="this.checkedName.indexOf('联系电话')!=-1">
 							</el-table-column>	
-							<el-table-column label="状态" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
+							<el-table-column label="状态" sortable width="100" prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
 							</el-table-column>
+							<!-- <el-table-column label="录入人" sortable width="120" prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
+							</el-table-column>
+							<el-table-column label="录入人时间" sortable width="160" prop="ENTERDATE" v-if="this.checkedName.indexOf('录入人时间')!=-1">
+							</el-table-column> -->
 						</el-table>
 						<el-pagination background class="pull-right pt10 pb10" v-if="this.checkedName.length>0"
 				            @size-change="sizeChange"
@@ -123,7 +127,7 @@
 	import navs_left from '../common/left_navs/nav_left2.vue'
 	import navs_header from '../common/nav_tabs.vue'
 	import customermask from '../maindataDetails/customer_mask.vue'
-	import table from '../plugin/table/table-normal.vue'
+	// import table from '../plugin/table/table-normal.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	export default {
 		name: 'user_management',
@@ -133,7 +137,7 @@
 			navs_header,
 			tableControle,
 			customermask,
-			table
+			// table
 		},
 		data() {
 			return {
@@ -163,7 +167,9 @@
 					'性别',
 					'联系地址',
 					'联系电话',
-					'状态'
+					'状态',
+					// '录入人',
+					// '录入时间',
 				],
 				tableHeader: [
 					{
@@ -185,51 +191,17 @@
 					{
 						label: '状态',
 						prop: 'STATUS'
-					}
+					},
+					// {
+					// 	label: '录入人',
+					// 	prop: 'ENTERBY'
+					// },
+					// {
+					// 	label: '录入时间',
+					// 	prop: 'ENTERDATE'
+					// }
 				],
-				leftNavs: [//leftNavs左侧菜单数据
-					{
-						navicon: 'icon-user',
-						navtitle: '用户管理',
-						navherf: '/personinfo'
-					}, {
-						navicon: 'icon-edit',
-						navtitle: '机构管理',
-						navherf: '/dept_management'
-					}, {
-						navicon: 'icon-role-site',
-						navtitle: '角色管理',
-						navherf: '/role_management'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '客户管理',
-						navherf: '/customer_management'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '产品类别',
-						navherf: '/products_category'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '产品',
-						navherf: '/products'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测标准',
-						navherf: '/testing_standard'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测项目',
-						navherf: '/testing_projects'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测方法',
-						navherf: '/testing_methods'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '自动编号设置',
-						navherf: '/number_settings'
-					}
-				],
+				
 				companyId: '',
 				deptId: '',
 				selUser: [],
@@ -389,7 +361,7 @@
 				if(date == undefined) {
 					return "";
 				}
-				return this.$moment(date).format("YYYY-MM-DD");
+				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 			},
 			SelChange(val) {
 				this.selUser = val;

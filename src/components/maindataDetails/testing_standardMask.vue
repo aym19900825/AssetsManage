@@ -37,7 +37,6 @@
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="基本信息" name="1">
-
 								<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
 									<el-row :gutter="70">
 										<el-col :span="8">
@@ -55,7 +54,6 @@
 												<el-input v-model="dataInfo.S_ENGNAME"></el-input>
 											</el-form-item>
 										</el-col>
-										
 									</el-row>
 									<el-row :gutter="70">
 										<el-col :span="8">
@@ -75,10 +73,8 @@
 												<el-input v-model="dataInfo.RELEASE_UNIT" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
-										
 									</el-row>
 									<el-row :gutter="70">
-										
 										<el-col :span="8">
 											<el-form-item label="录入人机构" prop="DEPARTMENT">
 												<el-input v-model="dataInfo.DEPARTMENT" :disabled="true"></el-input>
@@ -94,10 +90,8 @@
 												<el-input v-model="dataInfo.ENTERDATE" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
-										
 									</el-row>
 									<el-row :gutter="70">
-										
 										<el-col :span="8">
 											<el-form-item v-if="modify" label="修改人" prop="CHANGEBY">
 												<el-input v-model="dataInfo.CHANGEBY" :disabled="true"></el-input>
@@ -403,7 +397,7 @@
 					this.dataInfo.DEPARTMENT=res.data.deptName;
 					this.dataInfo.ENTERBY=res.data.nickname;
 					var date=new Date();
-					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
+					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{
 					this.$message({
 						message:'网络错误，请重试',
@@ -420,7 +414,7 @@
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
 					this.dataInfo.CHANGEBY=res.data.nickname;
 					var date=new Date();
-					this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
+					this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{
 					this.$message({
 						message:'网络错误，请重试',
@@ -463,8 +457,8 @@
 			// 保存users/saveOrUpdate
 			submitForm(dataInfo) {
 				this.$refs[dataInfo].validate((valid) => {
-						this.dataInfo.RELEASETIME =  this.$moment(this.dataInfo.RELEASETIME).format("YYYY-MM-DD");
-						this.dataInfo.STARTETIME = this.$moment(this.dataInfo.STARTETIME).format("YYYY-MM-DD");
+						this.dataInfo.RELEASETIME =  this.$moment(this.dataInfo.RELEASETIME).format("YYYY-MM-DD HH:mm:ss");
+						this.dataInfo.STARTETIME = this.$moment(this.dataInfo.STARTETIME).format("YYYY-MM-DD HH:mm:ss");
 					//		          if (valid) {
 					
 					var url = '/api/api-apps/app/inspectionSta/saveOrUpdate';

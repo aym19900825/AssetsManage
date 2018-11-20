@@ -19,8 +19,8 @@
 					<div class="accordion">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="基础信息" name="1">
-								<el-row :gutter="70">
-									<el-col :span="8" class="pull-right">
+								<el-row :gutter="20">
+									<el-col :span="4" class="pull-right">
 										<el-select v-model="addnumbsetForm.STATUS" placeholder="请选择状态">
 											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>

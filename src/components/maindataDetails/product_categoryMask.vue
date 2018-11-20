@@ -60,7 +60,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="录入日期" prop="ENERDATE">
+											<el-form-item label="录入时间" prop="ENERDATE">
 												<el-input v-model="CATEGORY.ENERDATE"  :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -72,8 +72,8 @@
 									</el-row>
 									<el-row :gutter="70">
 										<el-col :span="8">
-											<el-form-item label="修改日期" prop="CHANGEDATE" v-if="modify">
-												<el-input v-model="CATEGORY.CHANGEDATE" placeholder="当前修改日期" :disabled="edit"></el-input>
+											<el-form-item label="修改时间" prop="CHANGEDATE" v-if="modify">
+												<el-input v-model="CATEGORY.CHANGEDATE" placeholder="当前修改时间" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -260,7 +260,7 @@
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
 	    			this.CATEGORY.ENERBY = res.data.nickname;
 	    			var date = new Date();
-					this.CATEGORY.ENERDATE = this.$moment(date).format("YYYY-MM-DD");
+					this.CATEGORY.ENERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -282,7 +282,7 @@
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
 	    			this.CATEGORY.CHANGEBY = res.data.nickname;
 	    			var date=new Date();
-					this.CATEGORY.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
+					this.CATEGORY.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -359,7 +359,7 @@
 				if(date == undefined) {
 					return "";
 				}
-				// return this.$moment(date).format("YYYY-MM-DD");
+				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
 			},
 			handleClose(done) {

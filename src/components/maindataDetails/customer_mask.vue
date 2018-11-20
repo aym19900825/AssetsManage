@@ -89,13 +89,13 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="录入人" prop="ENERBY">
-												<el-input v-model="CUSTOMER.ENERBY" placeholder="当前录入人" :disabled="edit"></el-input>
+											<el-form-item label="录入人" prop="ENTERBY">
+												<el-input v-model="CUSTOMER.ENTERBY" placeholder="当前录入人" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="录入日期" prop="ENERDATE">
-												<el-input v-model="CUSTOMER.ENERDATE" placeholder="当前录入日期" :disabled="edit"></el-input>
+											<el-form-item label="录入时间" prop="ENTERDATE">
+												<el-input v-model="CUSTOMER.ENTERDATE" placeholder="当前录入时间" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -104,8 +104,8 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改日期" prop="CHANGEDATE" v-if="modify">
-												<el-input v-model="CUSTOMER.CHANGEDATE" placeholder="自动记录当前修改日期" :disabled="edit"></el-input>
+											<el-form-item label="修改时间" prop="CHANGEDATE" v-if="modify">
+												<el-input v-model="CUSTOMER.CHANGEDATE" placeholder="自动记录当前修改时间" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -356,8 +356,8 @@
 					STATUS:'活动',
 					FAX:'',
 					EMAIL:'',
-					ENERBY:'',
-					ENERDATE:'',
+					ENTERBY:'',
+					ENTERDATE:'',
 					CHANGEBY:'',
 					CHANGEDATE:'',
 					MEMO:'',
@@ -420,8 +420,8 @@
 					STATUS:'活动',
 					FAX:'',
 					EMAIL:'',
-					ENERBY:'',
-					ENERDATE:'',
+					ENTERBY:'',
+					ENTERDATE:'',
 					CHANGEBY:'',
 					CHANGEDATE:'',
 					MEMO:'',
@@ -485,10 +485,10 @@
 				// this.CUSTOMER.STATUS = '1';
 				var date = new Date();
 				console.log(date);
-				this.CUSTOMER.ENERDATE = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
-				console.log(this.CUSTOMER.ENERDATE);
+				this.CUSTOMER.ENTERDATE = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
+				console.log(this.CUSTOMER.ENTERDATE);
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
-	    			this.CUSTOMER.ENERBY = res.data.nickname;
+	    			this.CUSTOMER.ENTERBY = res.data.nickname;
 	    			
 				}).catch((err) => {
 					this.$message({

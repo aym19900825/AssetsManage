@@ -92,7 +92,7 @@
 								    <el-date-picker
 								      v-model="searchList.ENTERDATE"
 								      type="date"
-								      placeholder="录入日期">
+								      placeholder="录入时间">
 								    </el-date-picker>
 								  </div>
 							</el-col>
@@ -137,7 +137,7 @@
 								</el-table-column>
 								<el-table-column label="录入人" sortable width="200px" prop="ENERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
 								</el-table-column>
-								<el-table-column label="录入日期" sortable width="200px" prop="ENTERDATE" v-if="this.checkedName.indexOf('录入日期')!=-1">
+								<el-table-column label="录入时间" sortable width="200px" prop="ENTERDATE" v-if="this.checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>
 								<el-table-column label="状态" sortable width="200px" prop="STATUS" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
@@ -183,7 +183,7 @@
 					'计划描述',
 					'年度',
 					'录入人',
-					'录入日期',
+					'录入时间',
 					'状态'
 				],
 				tableHeader: [
@@ -204,7 +204,7 @@
 						prop: 'ENTERBY'
 					},
 					{
-						label: '录入日期',
+						label: '录入时间',
 						prop: 'ENTERDATE'
 					},
 					{
@@ -354,7 +354,7 @@
 				if(date == undefined) {
 					return "";
 				}
-				return this.$moment(date).format("YYYY-MM-DD");
+				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
 			},
 			insert() {

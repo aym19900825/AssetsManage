@@ -57,15 +57,6 @@
 												<el-checkbox :label="item.label" name="type"></el-checkbox>
 											</el-dropdown-item>
 										</el-checkbox-group>
-										<!-- <el-dropdown-item>
-											<el-checkbox label="所在机构" name="type"></el-checkbox>
-										</el-dropdown-item>
-										<el-dropdown-item>
-											<el-checkbox label="所在公司" name="type"></el-checkbox>
-										</el-dropdown-item>
-										<el-dropdown-item>
-											<el-checkbox label="所在机构" name="type"></el-checkbox>
-										</el-dropdown-item> -->
 									</el-dropdown-menu>
 								</el-dropdown>
 							</div>
@@ -75,27 +66,20 @@
 					<div v-show="search">
 						<el-form status-icon :model="searchList" label-width="70px">
 							<el-row :gutter="10">
-								<!--<el-col :span="5">
-
-												<el-input v-model="searchList.typename">
-													<template slot="prepend">标准编号</template>
-												</el-input>
-
-											</el-col>-->
 								<el-col :span="5">
-									<el-input v-model="searchList.nickname">
-										<template slot="prepend">用户名</template>
-									</el-input>
+									<el-form-item label="用户名">
+										<el-input v-model="searchList.nickname"></el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-input v-model="searchList.enabled">
-										<template slot="prepend">状态</template>
-									</el-input>
+									<el-form-item label="状态">
+										<el-input v-model="searchList.enabled"></el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="4">
-									<el-input v-model="searchList.createTime">
-										<template slot="prepend">创建时间</template>
-									</el-input>
+									<el-form-item label="创建时间">
+										<el-input v-model="searchList.createTime"></el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="2">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
@@ -104,12 +88,25 @@
 						</el-form>
 					</div>
 					<!-- 高级查询划出 End-->
+
 					<el-row :gutter="10">
-						<el-col :span="6">
-							<v-assetsTree :listData="treeData" v-on:getTreeId="getTreeId"></v-assetsTree>
+						<el-col :span="5" class="lefttree">
+							<div class="lefttreebg">
+								<div class="left_tree_title clearfix" @click="min3max()">
+									<div class="pull-left pr20" v-if="ismin">组织机构</div>
+									<span class="pull-right navbar-minimalize minimalize-styl-2">
+										<i class="icon-doubleok icon-double-angle-left blue"></i>
+									</span>
+								</div>
+								<div class="left_treebg">
+									<div class="p15" v-if="ismin">
+										<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all indent="22" :render-content="renderContent"  :props="resourceProps" @node-click="handleNodeClick">
+										</el-tree>
+									</div>
+								</div>
+							</div>
 						</el-col>
-						<el-col :span="18">
-							<!-- <tablediv ref="tableList"></tablediv> -->
+						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
 							<el-table :data="userList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
@@ -119,7 +116,6 @@
 								<el-table-column label="姓名" sortable width="200px" prop="nickname" v-if="this.checkedName.indexOf('姓名')!=-1">
 								</el-table-column>
 								<el-table-column label="性别" sortable width="100px" prop="sex" :formatter="sexName" v-if="this.checkedName.indexOf('性别')!=-1">
-								</el-table-column>
 								</el-table-column>
 								<el-table-column label="机构" sortable width="200px" prop="deptName" v-if="this.checkedName.indexOf('机构')!=-1">
 								</el-table-column>
@@ -150,7 +146,7 @@
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left2.vue'
 	import navs_header from '../common/nav_tabs.vue'
-	import assetsTree from '../plugin/vue-tree/tree.vue'
+//	import assetsTree from '../plugin/vue-tree/tree2.vue'
 	import usermask from '../maindataDetails/user_mask.vue'
 	export default {
 		name: 'user_management',
@@ -159,12 +155,14 @@
 			'navs_header': navs_header,
 			'navs_left': navs_left,
 			'usermask': usermask,
-			'v-assetsTree': assetsTree
+//			'v-assetsTree': assetsTree
 		},
 		data() {
 			return {
-				loadSign:true,//加载
-				commentArr:{},
+				isShow: false,
+				ismin: true,
+				loadSign: true, //加载
+				commentArr: {},
 				checkedName: [
 					'账号',
 					'姓名',
@@ -235,20 +233,55 @@
 			}
 		},
 		methods: {
-			loadMore () {
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page.currentPage++
-			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     this.requestData()
-//			     console.log('到底了', this.page.currentPage)
-			   }
-			 },
+			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
+				console.log();
+				return(
+			<span>
+              <i class={data.iconClass}></i>
+              <span>{node.label}</span>
+            </span>
+				);
+			},
+			// 点击节点
+			nodeClick: function(m) {
+				if(m.iconClass != 'icon-file-text') {
+					if(m.iconClass == 'icon-file-normal') {
+						m.iconClass = 'icon-file-open';
+					} else {
+						m.iconClass = 'icon-file-normal';
+					}
+				}
+				this.handleNodeClick();
+			},
+			expandClick: function(m) {
+				if(m.iconClass != 'icon-file-text') {
+					if(m.iconClass == 'icon-file-normal') {
+						m.iconClass = 'icon-file-open';
+					} else {
+						m.iconClass = 'icon-file-normal';
+					}
+				}
+				m.isFolder = !m.isFolder;
+			},
+
+			filterHandler(value, row, column) {
+				const property = column['property'];
+				return row[property] === value;
+			},
+			loadMore() {
+				if(this.loadSign) {
+					this.loadSign = false
+					this.page.currentPage++
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							return
+						}
+					setTimeout(() => {
+						this.loadSign = true
+					}, 1000)
+					this.requestData()
+					//			     console.log('到底了', this.page.currentPage)
+				}
+			},
 			test() {
 				console.log(this.checkedName.indexOf('账号') != -1);
 			},
@@ -308,7 +341,7 @@
 					for(var i = 0; i < roles.length; i++) {
 						this.aaaData[0].roleId.push(roles[i].id);
 					}
-//					console.log(this.aaaData[0].roleId);
+					//					console.log(this.aaaData[0].roleId);
 					this.$refs.child.detail();
 				}
 			},
@@ -473,8 +506,7 @@
 				if(date == undefined) {
 					return "";
 				}
-				return this.$moment(date).format("YYYY-MM-DD");
-				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
+				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss"); 
 			},
 
 			SelChange(val) {
@@ -495,28 +527,28 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-//					console.log(res)
-//					this.userList = res.data.data;
-					this.page.totalCount = res.data.count;	
+					//					console.log(res)
+					//					this.userList = res.data.data;
+					this.page.totalCount = res.data.count;
 					//总的页数
-					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
-					if(this.page.currentPage >= totalPage){
-						 this.loadSign = false
-					}else{
-						this.loadSign=true
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
 					}
-					this.commentArr[this.page.currentPage]=res.data.data
-					let newarr=[]
-					for(var i = 1; i <= totalPage; i++){
-					
-						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
-							
-							for(var j = 0; j < this.commentArr[i].length; j++){
+					this.commentArr[this.page.currentPage] = res.data.data
+					let newarr = []
+					for(var i = 1; i <= totalPage; i++) {
+
+						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+
+							for(var j = 0; j < this.commentArr[i].length; j++) {
 								newarr.push(this.commentArr[i][j])
 							}
 						}
 					}
-					
+
 					this.userList = newarr;
 				}).catch((wrong) => {})
 				this.userList.forEach((item, index) => {
@@ -526,8 +558,8 @@
 					}).catch((wrong) => {})
 				})
 			},
-			
-			getlist(){
+
+			getlist() {
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -556,6 +588,7 @@
 				});
 			},
 			transformTree(data) {
+				
 				for(var i = 0; i < data.length; i++) {
 					data[i].name = data[i].fullname;
 					if(!data[i].pid || $.isArray(data[i].subDepts)) {
@@ -567,10 +600,13 @@
 						data[i].children = this.transformTree(data[i].subDepts);
 					}
 				}
-				return data;
-			},
-			getTreeId(data) {
+				console.log(111222);
 				console.log(data);
+				return data;
+				
+			},
+			handleNodeClick(data) {
+				console.log(111);
 				if(data.type == '1') {
 					this.companyId = data.id;
 					this.deptId = '';
@@ -580,12 +616,25 @@
 				}
 				this.requestData();
 			},
-			handleNodeClick(data) {},
-			formatter(row, column) {
-				return row.enabled;
-			},
-			
 
+			min3max() { //左侧菜单正常和变小切换
+				if($(".lefttree").hasClass("el-col-5")) {
+					$(".lefttree").removeClass("el-col-5");
+					$(".lefttree").addClass("el-col-1");
+					$(".leftcont").removeClass("el-col-19");
+					$(".leftcont").addClass("el-col-23");
+					$(".icon-doubleok").removeClass("icon-double-angle-left");
+					$(".icon-doubleok").addClass("icon-double-angle-right");
+				} else {
+					$(".lefttree").removeClass("el-col-1");
+					$(".lefttree").addClass("el-col-5");
+					$(".leftcont").removeClass("el-col-23");
+					$(".leftcont").addClass("el-col-19");
+					$(".icon-doubleok").removeClass("icon-double-angle-right");
+					$(".icon-doubleok").addClass("icon-double-angle-left");
+				}
+				this.ismin = !this.ismin;
+			}
 		},
 		beforeMount() {
 			// 在页面挂载前就发起请求
@@ -593,12 +642,128 @@
 			this.getKey();
 		},
 		mounted() {
-		
 
 		},
 	}
 </script>
 
-<style scoped>
+<style scope>
+.el-tree .el-tree-node__content>.el-tree-node__expand-icon {
+  padding: 2px;
+}
+.el-tree .el-icon-caret-right { 
+  font-size: 14px;
+  width: 17px;
+  height: 17px;
+  line-height:12px;
+  font-weight: lighter;
+  color: #A2ABBF;
+  /*background: #FFF;
+  border:1px solid #A2ABBF;*/
+  border-radius: 3px;
+  margin-top: -2px;
+  margin-right: 5px;
+  position: relative;
+  z-index: 30;
+}
 
+
+.el-tree .el-icon-caret-right:before {/*图标加号*/
+    font-family: 'hxqheam';
+    content: "\e9bc";
+    position: absolute;
+    z-index: 22;
+}
+.el-tree .el-icon-caret-right:after {
+  content: "";
+  width: 10px;
+  position: absolute;
+  /*border-bottom: 1px dashed #C7CED6;*/
+  top: 7px;
+  right: -4px;
+  z-index: 1;
+}
+
+
+
+.el-tree .el-tree-node__expand-icon.is-leaf,.el-tree .el-tree-node__expand-icon.is-leaf:before {
+  border:none;
+  background:transparent;
+  content: "";
+}
+
+
+.el-tree .el-tree-node__expand-icon.expanded {/*图标加号点击后不旋转，原Element会旋转*/
+  -webkit-transform: rotate(0deg);
+  transform: rotate(0deg);
+}
+
+.el-tree .el-tree-node__expand-icon.expanded:before {/*图标减号*/
+    font-family: 'hxqheam';
+    content: "\e99f";
+}
+.el-tree .el-tree-node .icon-file-normal {/*文件夹合并时图标*/
+  color: #6585DF;
+  font-family: 'hxqheam';
+  content: "\e9fa";
+  font-size: 20px;
+}
+.el-tree .el-tree-node.is-expanded>.el-tree-node__content .icon-file-normal:before {/*文件夹打开时图标*/
+  font-family: 'hxqheam';
+  content: "\e9fb";
+}
+.el-tree .el-tree-node>.el-tree-node__content .icon-file-text {/*最后子级图标颜色*/
+  color: #92BDFF;
+}
+
+.el-tree-node [class^="icon-"], .el-tree-node [class*=" icon-"] {margin-right: 5px;}
+
+[role=group].el-tree-node__children,
+[role=group].el-tree-node__children [role=group].el-tree-node__children,
+[role=group].el-tree-node__children .el-tree-node__content {position: relative;}
+
+[role=group].el-tree-node__children:before,
+[role=group].el-tree-node__children [role=group].el-tree-node__children:before,
+[role=group].el-tree-node__children .el-tree-node__content:before{
+  content: "";
+  top: 0px;
+  position: absolute;
+  width: 9px;
+  height: 100%;
+  border-right: 1px dashed #C7CED6;
+}
+
+
+[role=group].el-tree-node__children [role=group].el-tree-node__children:before {
+  left: 22px;
+}
+
+[role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children:before {
+  left: 44px;
+}
+
+[role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children:before {
+  left: 66px;
+}
+
+[role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children:before {
+  left: 88px;
+}
+
+[role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children:before {
+  left: 110px;
+}
+
+
+[role=group].el-tree-node__children .el-tree-node__content:before{
+  top:-15px;
+}
+
+.el-tree>div[role=treeitem]:nth-last-child(2)>div[role=group]:before,
+.el-tree>div[role=treeitem] div[role=treeitem]:nth-last-child(1)>div[role=group]:before
+{
+  display: none;
+}
+
+.p15 {padding:10px 15px;}
 </style>

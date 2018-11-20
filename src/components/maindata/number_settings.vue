@@ -80,11 +80,11 @@
 										</el-table-column>
 										<el-table-column label="录入人" width="140" sortable prop="ENERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
 										</el-table-column>
-										<el-table-column label="录入日期" width="160" prop="ENERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入日期')!=-1">
+										<el-table-column label="录入时间" width="160" prop="ENERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 										</el-table-column>
 										<el-table-column label="修改人" width="140" prop="CHANGEBY" sortable v-if="this.checkedName.indexOf('修改人')!=-1">
 										</el-table-column>
-										<el-table-column label="修改日期" width="160" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改日期')!=-1">
+										<el-table-column label="修改时间" width="160" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
 										</el-table-column>
 									</el-table>
 									<el-pagination background class="pull-right pt10 pb10" v-if="this.checkedName.length>0"
@@ -145,9 +145,9 @@
 					'备注',
 					'录入人机构',
 					'录入人',
-					'录入日期',
+					'录入时间',
 					'修改人',
-					'修改日期',
+					'修改时间',
 				],
 				tableHeader: [//控制Table-列头标题名称
 					{
@@ -179,7 +179,7 @@
 						prop: 'ENERBY'
 					},
 					{
-						label: '录入日期',
+						label: '录入时间',
 						prop: 'ENERDATE'
 					},
 					{
@@ -187,7 +187,7 @@
 						prop: 'CHANGEBY'
 					},
 					{
-						label: '修改日期',
+						label: '修改时间',
 						prop: 'CHANGEDATE'
 					}
 				],

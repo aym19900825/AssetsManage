@@ -60,7 +60,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="录入日期" prop="ENTERDATE">
+											<el-form-item label="录入时间" prop="ENTERDATE">
 												<el-input v-model="PRODUCT.ENTERDATE"  :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -72,8 +72,8 @@
 									</el-row>
 									<el-row :gutter="70">
 										<el-col :span="8">
-											<el-form-item v-if="modify" label="修改日期" prop="CHANGEDATE">
-												<el-input v-model="PRODUCT.CHANGEDATE" placeholder="当前修改日期" :disabled="edit"></el-input>
+											<el-form-item v-if="modify" label="修改时间" prop="CHANGEDATE">
+												<el-input v-model="PRODUCT.CHANGEDATE" placeholder="当前修改时间" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -290,7 +290,7 @@
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
 	     			this.PRODUCT.ENTERBY = res.data.nickname;
 	     			var date=new Date();
-					this.PRODUCT.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
+					this.PRODUCT.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 	     			this.PRODUCT.STATUS = '活动';
 				 }).catch((err) => {
 				 	this.$message({
@@ -309,9 +309,9 @@
 				this.statusshow2 = true;
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
 	    			this.PRODUCT.CHANGEBY = res.data.nickname;
-	    			// this.PRODUCT.CHANGEDATE =  this.$moment(res.data.createTime).format("YYYY-MM-DD");
+	    			// this.PRODUCT.CHANGEDATE =  this.$moment(res.data.createTime).format("YYYY-MM-DD HH:mm:ss");
 	    			var date=new Date();
-					this.PRODUCT.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
+					this.PRODUCT.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 
 				}).catch((err) => {
 					this.$message({

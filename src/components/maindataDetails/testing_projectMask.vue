@@ -15,103 +15,95 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
-					<div class="accordion" id="information">
+				<el-form status-icon :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="100px">
+					<div class="accordion">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="基本信息" name="1">
-								<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
-									<el-row :gutter="70">
-										<el-col :span="8">
-											<el-form-item label="检验检测项目编号" prop="P_NUM">
-												<el-input v-model="dataInfo.P_NUM" :disabled="true"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="项目名称" prop="P_NAME">
-												<el-input v-model="dataInfo.P_NAME"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<!--<el-form-item label="状态" prop="STATUS">
-												<el-input v-model="dataInfo.STATUS" :disabled="true"  ></el-input>
-											</el-form-item>-->
-											<el-form-item label="状态" prop="STATUS">
-												<el-input v-if="statusshow1" v-model="dataInfo.STATUS" :disabled="edit"></el-input>
-											    <el-select v-if="statusshow2" style="width: 100%;" v-model="dataInfo.STATUS" placeholder="请选择状态">
-													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+								<el-row :gutter="20" class="pb10">
+									<el-col :span="3" class="pull-right">
+										<el-input v-model="dataInfo.VERSION" :disabled="true">
+											<template slot="prepend">版本</template>
+										</el-input>
+									</el-col>
+									<el-col :span="3" class="pull-right">
+										<el-select v-model="dataInfo.STATUS" placeholder="请选择状态">
+											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+											</el-option>
+										</el-select>
+									</el-col>
+									<el-col :span="7" class="pull-right">
+										<el-input v-model="dataInfo.P_NUM" :disabled="true">
+											<template slot="prepend">检验检测项目编号</template>
+										</el-input>
+									</el-col>
+								</el-row>
 
-													</el-option>
-												</el-select>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<el-row :gutter="70">
-										<el-col :span="8">
-										<el-form-item label="版本" prop="VERSION">
-											<el-input v-model="dataInfo.VERSION" :disabled="true"></el-input>
+								<el-row :gutter="70">
+									<el-col :span="8">
+										<el-form-item label="项目名称" prop="P_NAME">
+											<el-input v-model="dataInfo.P_NAME"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="8">
+										<el-form-item label="人员资质" prop="QUALIFICATION">
+											<el-input v-model="dataInfo.QUALIFICATION"></el-input>
+										</el-form-item> 
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="领域" prop="FIELD">
+											<el-input v-model="dataInfo.FIELD"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-											<el-form-item label="人员资质" prop="QUALIFICATION">
-												<el-input v-model="dataInfo.QUALIFICATION"></el-input>
-											</el-form-item> 
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="领域" prop="FIELD">
-												<el-input v-model="dataInfo.FIELD"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<el-row :gutter="70">
-										<el-col :span="8">
 										<el-form-item label="子领域" prop="CHILD_FIELD">
 											<el-input v-model="dataInfo.CHILD_FIELD"></el-input>
-											</el-date-picker>
 										</el-form-item>
 									</el-col>
-									<!--<el-col :span="8">
-											<el-form-item label="文档" prop="DOCLINKS_NUM">
-												<el-input v-model="dataInfo.DOCLINKS_NUM"></el-input>
-											</el-form-item>
-										</el-col>-->
-										<el-col :span="8">
-											<el-form-item label="录入人机构" prop="DEPT">
-												<el-input v-model="dataInfo.DEPT" :disabled="true"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<el-row :gutter="70">
-										<el-col :span="8">
-											<el-form-item label="录入人" prop="ENTERBY">
-												<el-input v-model="dataInfo.ENTERBY" :disabled="true"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="录入时间" prop="ENTERDATE">
-												<el-input v-model="dataInfo.ENTERDATE" :disabled="true"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item v-if="modify" label="修改人" prop="CHANGEBY">
-												<el-input v-model="dataInfo.CHANGEBY" :disabled="true"></el-input>
-											</el-form-item>
-										</el-col>
-										
-									</el-row>
-									<el-row :gutter="70">
-										<el-col :span="8">
-											<el-form-item  v-if="modify" label="修改时间" prop="CHANGEDATE">
-												<el-input v-model="dataInfo.CHANGEDATE" :disabled="true"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-								</div>
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="8">
+										<el-form-item label="文档" prop="DOCLINKS_NUM">
+											<el-input v-model="dataInfo.DOCLINKS_NUM"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="8">
+										<el-form-item label="录入人机构" prop="DEPT">
+											<el-input v-model="dataInfo.DEPT" :disabled="true"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="录入人" prop="ENTERBY">
+											<el-input v-model="dataInfo.ENTERBY" :disabled="true"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="录入时间" prop="ENTERDATE">
+											<el-input v-model="dataInfo.ENTERDATE" :disabled="true"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="8">
+										<el-form-item v-if="modify" label="修改人" prop="CHANGEBY">
+											<el-input v-model="dataInfo.CHANGEBY" :disabled="true"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item  v-if="modify" label="修改时间" prop="CHANGEDATE">
+											<el-input v-model="dataInfo.CHANGEDATE" :disabled="true"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
 							</el-collapse-item>
 						</el-collapse>
 					</div>
 					<div class="el-dialog__footer">
-						<el-button @click='close'>取消</el-button>
-						<el-button type="primary" @click="submitForm('dataInfo')">提交</el-button>
+						<el-button @click='close' class="btn btn-default btn-large">取消</el-button>
+						<el-button type="primary" class="btn btn-primarys btn-large" @click="submitForm('dataInfo')">提交</el-button>
 					</div>
 				</el-form>
 			</div>
@@ -180,7 +172,7 @@
 				isok2: false,
 				down: true,
 				up: false,
-				activeNames: ['1', '2'], //手风琴数量
+				activeNames: ['1'], //手风琴数量
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				addtitle: true,
@@ -211,22 +203,22 @@
 		},
 		methods: {
 			resetNew() {
-//				this.dataInfo = { //数据库列表
-//					P_NUM: '',
-//					P_NAME: '',
-//					STATUS: '',
-//					VERSION: '',
-//					QUALIFICATION: '',
-//					FIELD: '',
-//					CHILD_FIELD: '',
-//					DOCLINKS_NUM: '',
-//					DEPT: '',
-//					ENTERBY:'',
-//					ENTERDATE: '',
-//					CHANGEBY: '',
-//					CHANGEDATE:'',
-//						
-//					},
+				this.dataInfo = { //数据库列表
+					VERSION: '1',
+					P_NUM: 'PRO100012',
+					P_NAME: '',
+					STATUS: '活动',
+					QUALIFICATION: '',
+					FIELD: '',
+					CHILD_FIELD: '',
+					DOCLINKS_NUM: '',
+					DEPT: '',
+					ENTERBY:'',
+					ENTERDATE: '',
+					CHANGEBY: '',
+					CHANGEDATE:'',
+						
+					},
 
 					this.$refs["dataInfo"].resetFields();
 			},
@@ -265,7 +257,7 @@
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
 					this.dataInfo.ENTERBY=res.data.nickname;
 					var date=new Date();
-					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
+					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{
 					this.$message({
 						message:'网络错误，请重试',
@@ -284,7 +276,7 @@
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
 						this.dataInfo.CHANGEBY=res.data.nickname;
 						var date=new Date();
-						this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
+						this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 					}).catch((err)=>{
 						this.$message({
 							message:'网络错误，请重试',
@@ -331,8 +323,8 @@
 			// 保存users/saveOrUpdate
 			submitForm(dataInfo) {
 				this.$refs[dataInfo].validate((valid) => {
-					this.dataInfo.CHANGEDATE =  this.$moment(this.dataInfo.CHANGEDATE).format("YYYY-MM-DD");
-					this.dataInfo.ENTERDATE = this.$moment(this.dataInfo.ENTERDATE).format("YYYY-MM-DD");
+					this.dataInfo.CHANGEDATE =  this.$moment(this.dataInfo.CHANGEDATE).format("YYYY-MM-DD HH:mm:ss");
+					this.dataInfo.ENTERDATE = this.$moment(this.dataInfo.ENTERDATE).format("YYYY-MM-DD HH:mm:ss");
 					//		          if (valid) {
 					var url = '/api/api-apps/app/inspectionPro/saveOrUpdate';
 					this.$axios.post(url, this.dataInfo).then((res) => {

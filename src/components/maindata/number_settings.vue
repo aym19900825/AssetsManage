@@ -94,7 +94,7 @@
 			</EasyScrollbar>
 		</div>
 		<!--右侧内容显示 End-->
-		<numbsetmask :adddeptForm="selMenu[0]" ref="child" @request="requestData" v-bind:page=page></numbsetmask>
+		<numbsetmask :addnumbsetForm="selMenu[0]" ref="child" @request="requestData" v-bind:page=page></numbsetmask>
 	</div>
 </div>
 </template>
@@ -141,11 +141,10 @@
 						prop: 'MEMO'
 					}
 				],
-				selUser: [],
+				selMenu: [],
 				'启用': true,
 				'冻结': false,
 				numberList: [],
-				selMenu:[],
 				search: false,
 				show: false,
 				down: true,
@@ -197,7 +196,7 @@
 				this.$refs.child.childMethods();
 			},
 			modify() {//修改自动编号设置
-				this.aaaData = this.selUser;
+				this.aaaData = this.selMenu;
 				if(this.aaaData.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
@@ -222,7 +221,7 @@
 			},
 			// 删除
 			deluserinfo() {
-				var selData = this.selUser;
+				var selData = this.selMenu;
 				if(selData.length == 0) {
 					this.$message({
 						message: '请您选择要删除的数据',
@@ -268,9 +267,8 @@
 			Printing() {
 				
 			},
-			
-			SelChange(val) {
-				this.selUser = val;
+			SelChange(val) {//选中值后赋值给一个自定义的数组：selMenu
+				this.selMenu = val;
 			},
 			requestData(index) {
 				var data = {

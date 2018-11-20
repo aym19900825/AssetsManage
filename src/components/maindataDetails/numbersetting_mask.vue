@@ -15,63 +15,54 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="addnumbersettingForm" :label-position="labelPosition" :rules="rules" ref="addnumbersettingForm" label-width="100px" class="demo-adduserForm">
+				<el-form :model="addnumbsetForm" :label-position="labelPosition" :rules="rules" ref="addnumbsetForm" label-width="100px">
 					<div class="accordion">
-						<div class="mask_tab-block">
-							<div class="mask_tab-head clearfix">
-								<div class="accordion_title">
-									<span class="accordion-toggle">基础信息</span>
-								</div>
-								<div class="col_but" @click="col_but('col_but1')">
-									<i class="icon-arrow1-down"></i>
-								</div>
-							</div>
-							<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
+						<el-collapse v-model="activeNames" @change="handleChange">
+							<el-collapse-item title="基础信息" name="1">
+								<el-row :gutter="70">
+									<el-col :span="8">
+										<el-form-item label="状态">
+											<el-input v-model="addnumbsetForm.STATUS" value="435yuew"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
 								<el-row :gutter="70">
 									<el-col :span="8">
 										<el-form-item label="自动编号名称" prop="AUTOKEY">
-											<el-input v-model="addnumbersettingForm.AUTOKEY"></el-input>
+											<el-input v-model="addnumbsetForm.AUTOKEY"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="前缀">
-											<el-input v-model="addnumbersettingForm.PREFIX"></el-input>
+											<el-input v-model="addnumbsetForm.PREFIX"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="起始数" prop="S_NUM">
-											<el-input v-model="addnumbersettingForm.S_NUM"></el-input>
+											<el-input v-model="addnumbsetForm.S_NUM"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row :gutter="70">
 									<el-col :span="24">
 										<el-form-item label="备注" prop="MEMO">
-											<el-input type="textarea" v-model="addnumbersettingForm.MEMO"></el-input>
+											<el-input type="textarea" v-model="addnumbsetForm.MEMO"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
-							</div>
-						</div>
+							</el-collapse-item>
+						</el-collapse>
 					</div>
 					<div class="content-footer">
 						<el-form-item>
 							<button @click="cancelForm" class="btn btn-default btn-large">取消</button>
-							<button type="primary" class="btn btn-primarys btn-large" @click="submitForm('addnumbersettingForm')">提交</button>
+							<button type="primary" class="btn btn-primarys btn-large" @click="submitForm('addnumbsetForm')">提交</button>
 						</el-form-item>
 					</div>
 				</el-form>
 			</div>
 		</div>
 		<!-- 弹出 -->
-		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps">
-			</el-tree>
-			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible = false">取 消</el-button>
-		       <el-button type="primary" @click="queding();" >确 定</el-button>
-		    </span>
-		</el-dialog>
 	</div>
 </template>
 
@@ -82,14 +73,14 @@
 			page: {
 				type: Object,
 			},
-			addnumbersettingForm: {
+			addnumbsetForm: {
 				type: Object,
 				default: function(){
 					return {
-						ID:'',
+						STATUS:'',
 						AUTOKEY:'',
-						S_NUM:'',
 						PREFIX:'',
+						S_NUM:'',
 						MEMO:''
 					}
 				}
@@ -119,10 +110,7 @@
 				showcode:true,
 				dialogVisible: false, //对话框
 				edit: true, //禁填
-				value11:true,
-				editSearch: '',
-				col_but1: true,
-				col_but2: true,
+				activeNames: ['1'], //手风琴数量
 				clientHeight:'',//获取浏览器高度
 				show: false,
 				isok1: true,
@@ -130,13 +118,13 @@
 				labelPosition: 'top',
 				addtitle:true,
 				modifytitle:false,
-				/*addnumbersettingFormtest: {
-					ID:'',
+				addnumbsetForm: {
+					STATUS:'1',
 					AUTOKEY:'',
-					S_NUM:'',
 					PREFIX:'',
+					S_NUM:'',
 					MEMO:''
-				},*/
+				},
 				rules:{
           			AUTOKEY: [{ 
        						required: true,
@@ -150,76 +138,32 @@
        					}]
           		
 	          	},
-	          	//tree
-				resourceData: [], //数组，我这里是通过接口获取数据
-				resourceDialogisShow: false,
-				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
-				resourceProps: {
-					children: "subDepts",
-					label: "PREFIX"
-				},
 			};
 		},
 		methods: {
+			handleChange(val) { //手风琴开关效果调用
+			},
 			//form表单内容清空
 			resetNew(){
-                this.addnumbersettingForm = {
-					ID:'',
+                this.addnumbsetForm = {
+					STATUS:'',
 					AUTOKEY:'',
-					S_NUM:'',
 					PREFIX:'',
+					S_NUM:'',
 					MEMO:''
 				}
-                // this.$refs["addnumbersettingForm"].resetFields();
+                // this.$refs["addnumbsetForm"].resetFields();
             },
-			//所属上级
-			getDept() {
-				var page = this.page.currentPage;
-				var limit = this.page.pageSize;
-				var url = '/api/api-user/depts/treeByType';
-				this.$axios.get(url, {
-					// params: {
-					// 	page: page,
-					// 	limit: limit,
-					// 	// type: type
-					// },
-				}).then((res) => {
-					this.resourceData = res.data;
-					this.dialogVisible = true;
-				});
-			},
-			queding() {
-				this.getCheckedNodes();
-				this.placetext = false;
-				this.dialogVisible = false;				
-				this.addnumbersettingForm.pid = this.checkedNodes[0].id;
-				this.addnumbersettingForm.pName = this.checkedNodes[0].PREFIX;
-				
-			},
-			getCheckedNodes() {
-				this.checkedNodes = this.$refs.tree.getCheckedNodes()
-			},
-			col_but(col_but) {
-				if(col_but == 'col_but1') {
-					this.col_but1 = !this.col_but1;
-				}
-				if(col_but == 'col_but2') {
-					this.col_but2 = !this.col_but2;
-				}
-			},
-			
-			childMethods() {//
-				this.addtitle = true;
-				this.modifytitle = false;
-				this.showcode = false;
-				this.show = !this.show;
-			},
-			//修改
-			detail() {
-				this.addtitle = false;
-				this.modifytitle = true;
-				this.show = true;
-			},
+            childMethods() {//添加内容
+            	this.addtitle = true;
+            	this.modifytitle = false;
+            	this.show = !this.show;
+            },
+            detail() {//修改内容
+            	this.addtitle = false;
+            	this.modifytitle = true;
+            	this.show = true;
+            },
 			//点击关闭按钮
 			close() {
 				this.show = false;
@@ -258,18 +202,11 @@
 
 			},
 			//保存
-			submitForm(addnumbersettingForm) {
-				this.$refs[addnumbersettingForm].validate((valid) => {
+			submitForm(addnumbsetForm) {
+				this.$refs[addnumbsetForm].validate((valid) => {
 		          if (valid) {
-					var url = '/api/api-user/depts/saveOrUpdate';
-					this.addnumbersettingFormtest = {
-						"ID":this.addnumbersettingForm.ID,
-						"pid":this.addnumbersettingForm.pid,
-						"AUTOKEY":this.addnumbersettingForm.AUTOKEY,
-					    "PREFIX":this.addnumbersettingForm.PREFIX,
-					    "PREFIX":this.addnumbersettingForm.PREFIX,
-					}
-					this.$axios.post(url, this.addnumbersettingFormtest).then((res) => {
+					var url = '/api/api-apps/app/autokey/saveOrUpdate';
+					this.$axios.post(url, this.addnumbsetForm).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({

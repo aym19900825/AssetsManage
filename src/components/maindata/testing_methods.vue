@@ -137,7 +137,7 @@
 		},
 		data() {
 			return {
-				dataUrl: '/api/api-user/users',
+				dataUrl: '/api/api-apps/app/inspectionMet',
 				searchData: {
 			        page: 1,
 			        limit: 10,//分页显示数
@@ -315,7 +315,7 @@
 				} else {
 					var changeUser = selData[0];
 					var id = changeUser.id;
-					var url = '/api/api-user/users/' + id;
+					var url = '/api/api-apps/app/inspectionMet/' + id;
 					this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -371,26 +371,20 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					nickname: this.searchList.nickname,
-					enabled: this.searchList.enabled,
-					searchKey: 'createTime',
-					searchValue: this.searchList.createTime,
-					companyId: this.companyId,
-					deptId: this.deptId
 				}
-				var url = '/api/api-user/users';
+				var url = '/api/api-apps/app/inspectionMet';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
 					this.userList = res.data.data;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
-				this.userList.forEach((item, index) => {
+				/*this.userList.forEach((item, index) => {
 					var id = item.id;
 					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
 						this.userList.role = res.data.roles[0].name;
 					}).catch((wrong) => {})
-				})
+				})*/
 			},
 			handleNodeClick(data) {
 			},

@@ -72,7 +72,7 @@
 											</el-col>
 											<el-col :span="4">
 												<el-input v-model="searchList.DEPARTMENT">
-													<template slot="prepend">机构</template>
+													<template slot="prepend">录入人机构</template>
 												</el-input>
 											</el-col>
 										</el-row>
@@ -120,7 +120,7 @@
 											</el-table-column>
 											<el-table-column label="版本" width="100" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1">
 											</el-table-column>
-											<el-table-column label="机构" width="180" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('机构')!=-1">
+											<el-table-column label="录入人机构" width="180" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('录入人机构')!=-1">
 											</el-table-column>
 											<el-table-column label="录入人" width="120" prop="ENTERBY" sortable v-if="this.checkedName.indexOf('录入人')!=-1">
 											</el-table-column>
@@ -193,7 +193,7 @@
 					'类别',
 					'状态',
 					'版本',
-					'机构',
+					'录入人机构',
 					'录入人',
 					'录入时间',
 					'修改人',
@@ -224,7 +224,7 @@
 						prop: 'VERSION'
 					},
 					{
-						label: '机构',
+						label: '录入人机构',
 						prop: 'DEPARTMENT'
 					},
 					{

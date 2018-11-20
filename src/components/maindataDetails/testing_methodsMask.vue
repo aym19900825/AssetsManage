@@ -58,7 +58,7 @@
 
 								<el-row :gutter="70">
 									<el-col :span="8">
-										<el-form-item label="机构" prop="DEPARTMENT">
+										<el-form-item label="录入人机构" prop="DEPARTMENT">
 											<el-input v-model="testingForm.DEPARTMENT" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
@@ -199,14 +199,6 @@
 						ENTERDATE: '',
 						CHANGEBY: '',
 						CHANGEDATE: '',
-						//					attributes: [{ //行字段列表信息
-						//						COLUMNID: '',
-						//						FILESNUMBER: '',
-						//						FILSEDESC: '',
-						//						ENTERB: '',
-						//						ENTERDATE: '',
-						//						FILESURL: ''
-						//				}]
 					}
 				}
 			},
@@ -266,28 +258,29 @@
 				labelPosition: 'top', //表单标题在上方
 				addtitle: true,
 				modifytitle: false,
+				modify:true,//修订、修改人、修改时间
 				fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
-				//				testingForm: { //接收表单中填写的数据信息
-				//					VERSION: '',
-				//					STATUS: '',
-				//					M_NUM: '',
-				//					M_NAME: '',
-				//					M_ENAME: '',
-				//					M_TYPE: '',
-				//					DEPARTMENT: '',
-				//					ENTERBY: '',
-				//					ENTERDATE: '',
-				//					CHANGEBY: '',
-				//					CHANGEDATE: '',
-				//					attributes: [{ //行字段列表信息
-				//						COLUMNID: '',
-				//						FILESNUMBER: '',
-				//						FILSEDESC: '',
-				//						ENTERB: '',
-				//						ENTERDATE: '',
-				//						FILESURL: ''
-				//					}]
-				//				},
+				testingForm: { //接收表单中填写的数据信息
+					VERSION: '',
+					STATUS: '',
+					M_NUM: '',
+					M_NAME: '',
+					M_ENAME: '',
+					M_TYPE: '',
+					DEPARTMENT: '',
+					ENTERBY: '',
+					ENTERDATE: '',
+					CHANGEBY: '',
+					CHANGEDATE: '',
+					attributes: [{ //行字段列表信息
+						COLUMNID: '',
+						FILESNUMBER: '',
+						FILSEDESC: '',
+						ENTERB: '',
+						ENTERDATE: '',
+						FILESURL: ''
+					}]
+				},
 				rules: { //定义需要校验数据的名称
 					M_NAME: [{
 						required: true,
@@ -374,13 +367,36 @@
 					this.testingForm.attributes.splice(index, 1);
 				}
 			},
-			//点击按钮显示弹窗
+			//添加内容时从父组件带过来的
 			visible() {
-				this.modify = false;
-				this.show = true;
+				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+					this.testingForm.DEPARTMENT=res.data.deptName;
+					this.testingForm.ENTERBY=res.data.nickname;
+					var date=new Date();
+					this.testingForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
+				}).catch((err)=>{
+					this.$message({
+						message:'网络错误，请重试',
+						type:'error'
+					})
+				})
+				this.addtitle = true;
+            	this.modifytitle = false;
+            	this.modify=false;
+            	this.show = !this.show;
 			},
 
-			detail() { //修改时标题判断显示
+			detail() { //修改内容时从父组件带过来的
+				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+					this.testingForm.CHANGEBY=res.data.nickname;
+					var date=new Date();
+					this.testingForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+				}).catch((err)=>{
+					this.$message({
+						message:'网络错误，请重试',
+						type:'error'
+					})
+				})
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.modify = true;

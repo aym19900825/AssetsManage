@@ -48,7 +48,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="16">
-											<el-form-item label="机构" prop="DEPARTMENT">
+											<el-form-item label="录入人机构" prop="DEPARTMENT">
 												<el-input v-model="PRODUCT.DEPARTMENT"></el-input>
 											</el-form-item>
 										</el-col>

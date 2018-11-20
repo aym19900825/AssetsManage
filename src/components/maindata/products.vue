@@ -104,7 +104,7 @@
 							</el-table-column>
 							<el-table-column label="版本" width="155" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1">
 							</el-table-column>
-							<el-table-column label="机构" width="155" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('机构')!=-1">
+							<el-table-column label="录入人机构" width="155" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('录入人机构')!=-1">
 							</el-table-column>
 							<el-table-column label="录入人" width="155" prop="ENTERBY" sortable v-if="this.checkedName.indexOf('录入人')!=-1">
 							</el-table-column>
@@ -175,7 +175,7 @@
 				checkedName: [
 					'产品编号',
 					'产品名称',
-					'机构',
+					'录入人机构',
 					'状态',
 					'版本',
 					'录入人',
@@ -193,7 +193,7 @@
 						prop: 'PRO_NAME'
 					},
 					{
-						label: '机构',
+						label: '录入人机构',
 						prop: 'DEPARTMENT'
 					},
 					{

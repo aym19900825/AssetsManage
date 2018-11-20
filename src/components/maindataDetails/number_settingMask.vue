@@ -53,7 +53,7 @@
 								</el-row>
 								<el-row :gutter="70">
 										<el-col :span="8">
-											<el-form-item label="机构">
+											<el-form-item label="录入人机构">
 												<el-input v-model="addnumbsetForm.DEPT" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
@@ -200,7 +200,7 @@
 			//form表单内容清空
 			resetNew(){
                 this.addnumbsetForm = {
-					STATUS:'',//添加时默认显示状态
+					STATUS:'活动',//添加时默认显示状态
 					AUTOKEY:'',
 					PREFIX:'',
 					S_NUM:'',
@@ -215,6 +215,7 @@
             },
             childMethods() {//添加内容时从父组件带过来的
             	this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+					this.addnumbsetForm.DEPT=res.data.deptName;
 					this.addnumbsetForm.ENERBY=res.data.nickname;
 					var date=new Date();
 					this.addnumbsetForm.ENERDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");

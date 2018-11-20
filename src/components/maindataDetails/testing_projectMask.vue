@@ -75,7 +75,7 @@
 											</el-form-item>
 										</el-col>-->
 										<el-col :span="8">
-											<el-form-item label="机构" prop="DEPT">
+											<el-form-item label="录入人机构" prop="DEPT">
 												<el-input v-model="dataInfo.DEPT" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>

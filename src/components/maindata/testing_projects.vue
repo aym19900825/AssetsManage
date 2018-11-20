@@ -63,7 +63,7 @@
 											</el-col>
 											<el-col :span="5">
 												<el-input v-model="searchList.DEPARTMENT">
-													<template slot="prepend">认证机构</template>
+													<template slot="prepend">录入人机构</template>
 												</el-input>
 											</el-col>
 											<el-col :span="5">
@@ -76,7 +76,7 @@
 													<template slot="prepend">版本</template>
 												</el-input>
 											</el-col>
-											<el-col :span="3" class="pt5">
+											<el-col :span="3">
 												<el-select v-model="searchList.STATUS" placeholder="请选择状态">
 													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 													</el-option>
@@ -112,7 +112,7 @@
 										</el-table-column>
 										<el-table-column label="版本" width="100" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1">
 										</el-table-column>
-										<el-table-column label="机构" width="180" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('机构')!=-1">
+										<el-table-column label="录入人机构" width="180" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('录入人机构')!=-1">
 										</el-table-column>
 										<el-table-column label="录入人" width="120" prop="ENTERBY" sortable  v-if="this.checkedName.indexOf('录入人')!=-1">
 										</el-table-column>
@@ -181,7 +181,7 @@
 					'领域',
 					'子领域',
 					'版本',
-					'机构',
+					'录入人机构',
 					'录入人',
 					'录入时间',
 					'修改人',
@@ -218,7 +218,7 @@
 						prop: 'VERSION'
 					},
 					{
-						label: '机构',
+						label: '录入人机构',
 						prop: 'DEPARTMENT'
 					},
 					{

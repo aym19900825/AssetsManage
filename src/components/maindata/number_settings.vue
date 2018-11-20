@@ -76,7 +76,7 @@
 										</el-table-column>
 										<el-table-column label="状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
 										</el-table-column>
-										<el-table-column label="机构" width="180" sortable prop="DEPT" v-if="this.checkedName.indexOf('机构')!=-1">
+										<el-table-column label="录入人机构" width="180" sortable prop="DEPT" v-if="this.checkedName.indexOf('录入人机构')!=-1">
 										</el-table-column>
 										<el-table-column label="录入人" width="140" sortable prop="ENERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
 										</el-table-column>
@@ -143,7 +143,7 @@
 					'前缀',
 					'状态',
 					'备注',
-					'机构',
+					'录入人机构',
 					'录入人',
 					'录入日期',
 					'修改人',
@@ -171,7 +171,7 @@
 						prop: 'MEMO'
 					},
 					{
-						label: '机构',
+						label: '录入人机构',
 						prop: 'DEPT'
 					},
 					{
@@ -357,7 +357,7 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					// console.log(res);
+					 // console.log(res);
 					// this.numberList = res.data.data;
 					// this.page.totalCount = res.data.count;
 					this.page.totalCount = res.data.count;	

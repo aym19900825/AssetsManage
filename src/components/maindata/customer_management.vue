@@ -276,7 +276,33 @@
 			},
 			//添加用戶
 			openAddMgr() {
-				this.$refs.child.resetNew();
+				// this.$refs.child.resetNew();
+				 this.aaaData = {
+				 	ID:'',
+					CODE:'',
+					NAME:'',
+					PHONE:'',
+					PERSON:'',
+					TYPE:'',
+					CONTACT_ADDRESS:'',
+					ZIPCODE:'',
+					STATUS:'活动',
+					FAX:'',
+					EMAIL:'',
+					ENERBY:'',
+					ENERDATE:'',
+					CHANGEBY:'',
+					CHANGEDATE:'',
+					MEMO:'',
+					// CUSTOMER_QUALIFICATIONList:[{
+					// 	STEP:'',
+					// 	CERTIFICATE_NUM:'',
+					// 	CERTIFICATE_NAME:'',
+					// 	ACTIVE_DATE:'',
+					// 	STATUS:'',
+					// 	MEMO:''
+					// }]
+				}
 				this.$refs.child.visible();
 			},
 			//修改用戶

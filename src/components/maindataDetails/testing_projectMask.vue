@@ -31,18 +31,27 @@
 											</el-option>
 										</el-select>
 									</el-col>
-									<el-col :span="7" class="pull-right">
-										<el-input v-model="dataInfo.P_NUM" :disabled="true">
-											<template slot="prepend">检验检测项目编号</template>
-										</el-input>
-									</el-col>
 								</el-row>
 
 								<el-row :gutter="70">
 									<el-col :span="8">
+										<el-form-item label="检验/检测项目编号" prop="P_NUM">
+											<el-input v-model="dataInfo.P_NUM"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="16">
 										<el-form-item label="项目名称" prop="P_NAME">
 											<el-input v-model="dataInfo.P_NAME"></el-input>
 										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="24">
+										<el-form-item label="文档" prop="DOCLINKS_NUM">
+										<el-input v-model="dataInfo.DOCLINKS_NUM" disabled>
+											<el-button slot="append" icon="icon-search" @click="getCompany"></el-button>
+										</el-input>
+									</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row :gutter="70">
@@ -59,13 +68,6 @@
 									<el-col :span="8">
 										<el-form-item label="子领域" prop="CHILD_FIELD">
 											<el-input v-model="dataInfo.CHILD_FIELD"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row :gutter="70">
-									<el-col :span="8">
-										<el-form-item label="文档" prop="DOCLINKS_NUM">
-											<el-input v-model="dataInfo.DOCLINKS_NUM"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -108,7 +110,16 @@
 				</el-form>
 			</div>
 		</div>
-		
+		<!--弹出框内容显示 Begin-->
+		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps">
+			</el-tree>
+			<span slot="footer" class="dialog-footer">
+				<el-button @click="dialogVisible = false">取 消</el-button>
+				<el-button type="primary" @click="confirms();" >确 定</el-button>
+		    </span>
+		</el-dialog>
+		<!--弹出框内容显示 End-->
 	</div>
 </template>
 
@@ -120,9 +131,9 @@
 				type: Object,
 				default: function(){
 					return {
-					P_NUM: '',
+					P_NUM: 'PR10001',
 					P_NAME: '',
-					STATUS: '',
+					STATUS: '活动',
 					VERSION: '1',
 					QUALIFICATION: '',
 					FIELD: '',
@@ -139,7 +150,6 @@
 			page: Object ,
 		},
 		data() {
-			
 			var validateName = (rule, value, callback) => {
 				if(value === '') {
 					callback(new Error('请英文填写表名'));
@@ -155,6 +165,7 @@
 				}
 			};
 			return {
+				editSearch: '',
 				value: '',
 				options: [{
 					value: '1',
@@ -165,8 +176,6 @@
 				}],
 				selUser: [],
 				edit: true, //禁填
-				col_but1: true,
-				col_but2: true,
 				show: false,
 				isok1: true,
 				isok2: false,
@@ -199,28 +208,42 @@
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
+				resourceDialogisShow: false,
+				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
+				resourceProps: {
+					children: "subDepts",
+					label: "simplename"
+				},
 			};
 		},
 		methods: {
-			resetNew() {
-				this.dataInfo = { //数据库列表
-					VERSION: '1',
-					P_NUM: 'PRO100012',
-					P_NAME: '',
-					STATUS: '活动',
-					QUALIFICATION: '',
-					FIELD: '',
-					CHILD_FIELD: '',
-					DOCLINKS_NUM: '',
-					DEPT: '',
-					ENTERBY:'',
-					ENTERDATE: '',
-					CHANGEBY: '',
-					CHANGEDATE:'',
-						
-					},
-
-					this.$refs["dataInfo"].resetFields();
+			getCompany() {//文档查询接口，暂无通，待修改
+				this.editSearch = 'DOCLINKS';
+				var url = '/api/api-user/depts/type';//文件接口不对
+				this.$axios.get(url, {
+				}).then((res) => {
+					console.log(res.data.data);
+					this.resourceData = res.data.data;
+					this.dialogVisible = true;
+				});
+			},
+			getCheckedNodes() {//获取树菜单节点
+				this.checkedNodes = this.$refs.tree.getCheckedNodes()
+			},
+			confirms() {//弹出框确定按钮调用数据
+				this.getCheckedNodes();
+				this.dialogVisible = false;
+				if(this.editSearch == 'DOCLINKS') {
+					this.dataInfo.DOCLINKSId = this.checkedNodes[0].id;
+					this.dataInfo.DOCLINKS_NUM = this.checkedNodes[0].simplename;
+				}
+			},
+			handleClose(done) {//确认框关闭
+				this.$confirm('确认关闭？')
+					.then(_ => {
+						done();
+					})
+					.catch(_ => {});
 			},
 			handleChange(val) { //手风琴开关效果调用
 			},
@@ -236,25 +259,13 @@
 					this.dataInfo.attributes.splice(index, 1);
 				}
 			},
-			col_but(col_but) {
-				//alert(col_but)
-				if(col_but == 'col_but1') {
-					this.col_but1 = !this.col_but1;
-					this.down = !this.down,
-						this.up = !this.up
-				}
-				if(col_but == 'col_but2') {
-					this.col_but2 = !this.col_but2;
-					this.down = !this.down,
-						this.up = !this.up
-				}
-			},
 			importdia() {
 				this.dialogVisible = true;
 			},
 			//点击按钮显示弹窗
 			visible() {
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+					this.dataInfo.DEPT=res.data.deptName;
 					this.dataInfo.ENTERBY=res.data.nickname;
 					var date=new Date();
 					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");

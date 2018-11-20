@@ -295,7 +295,18 @@
 			},
 			//添加用戶
 			openAddMgr() {
-				this.$refs.child.resetNew();
+				this.aaaData = {
+					ID:'',
+					NUM:'',
+					TYPE:'',
+					STATUS:'活动',
+					VERSION:'1',
+					DEPARTMENT:'',
+					ENTERBY:'',
+					ENTERDATE:'',
+					CHANGEBY:'',
+					CHANGEDATE:''
+				};
 				this.$refs.child.visible();
 			},
 			//修改用戶

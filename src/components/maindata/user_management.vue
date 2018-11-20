@@ -111,7 +111,7 @@
 							<el-table :data="userList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="账号" sortable width="100px" prop="username" v-if="this.checkedName.indexOf('账号')!=-1">
+								<el-table-column label="账号" sortable width="140px" prop="username" v-if="this.checkedName.indexOf('账号')!=-1">
 								</el-table-column>
 								<el-table-column label="姓名" sortable width="200px" prop="nickname" v-if="this.checkedName.indexOf('姓名')!=-1">
 								</el-table-column>

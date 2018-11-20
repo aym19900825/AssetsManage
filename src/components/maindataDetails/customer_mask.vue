@@ -19,104 +19,106 @@
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="基本信息" name="1">
-								<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
-									<el-row :gutter="70">
-										<el-col :span="8">
-											<el-form-item label="组织机构代码" prop="CODE">
-												<el-input v-model="CUSTOMER.CODE"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="单位名称" prop="NAME">
-												<el-input v-model="CUSTOMER.NAME"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="类型" prop="TYPE">
-												<el-select style="width: 100%;" v-model="CUSTOMER.TYPE" placeholder="类型">
-											      	<el-option label="委托" value="委托">	
-											      	</el-option>
-											      	<el-option label="分包" value="分包">
-											      	</el-option>
-											      	<el-option label="两者皆是" value="两者皆是">	
-											      	</el-option>
-											    </el-select>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<el-row :gutter="70">
-										<el-col :span="8">
-											<el-form-item label="联系人" prop="PERSON">
-												<el-input v-model="CUSTOMER.PERSON"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="联系电话" prop="PHONE">
-												<el-input v-model="CUSTOMER.PHONE"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="联系地址" prop="CONTACT_ADDRESS">
-												<el-input v-model="CUSTOMER.CONTACT_ADDRESS"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<el-row :gutter="70">
-										<el-col :span="8">
-											<el-form-item label="邮政编码" prop="ZIPCODE">
-												<el-input v-model="CUSTOMER.ZIPCODE"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="状态" prop="STATUS">
-												<el-input v-if="statusshow1" v-model="CUSTOMER.STATUS" :disabled="edit"></el-input>
-											    <el-select v-if="statusshow2" style="width: 100%;" v-model="CUSTOMER.STATUS" placeholder="请选择状态">
-													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-													</el-option>
-												</el-select>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="传真" prop="FAX">
-												<el-input v-model="CUSTOMER.FAX"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<el-row :gutter="70">
-										<el-col :span="8">
-											<el-form-item label="邮箱" prop="EMAIL">
-												<el-input v-model="CUSTOMER.EMAIL"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="录入人" prop="ENTERBY">
-												<el-input v-model="CUSTOMER.ENTERBY" placeholder="当前录入人" :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="录入时间" prop="ENTERDATE">
-												<el-input v-model="CUSTOMER.ENTERDATE" placeholder="当前录入时间" :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="修改人" prop="CHANGEBY" v-if="modify">
-												<el-input v-model="CUSTOMER.CHANGEBY" placeholder="记录当前修改人" :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="修改时间" prop="CHANGEDATE" v-if="modify">
-												<el-input v-model="CUSTOMER.CHANGEDATE" placeholder="自动记录当前修改时间" :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<el-row :gutter="70">
-										<el-col :span="24">
-											<el-form-item label="备注" prop="MEMO">
-												<el-input v-model="CUSTOMER.MEMO" type="textarea"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-								</div>
+								<el-row :gutter="20" class="pb10">
+									<el-col :span="3" class="pull-right">
+										<el-select v-model="CUSTOMER.STATUS" placeholder="请选择状态">
+											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+											</el-option>
+										</el-select>
+									</el-col>
+									
+								</el-row>
+
+								<el-row :gutter="70">
+									<el-col :span="8">
+										<el-form-item label="组织机构代码" prop="CODE">
+											<el-input v-model="CUSTOMER.CODE"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="单位名称" prop="NAME">
+											<el-input v-model="CUSTOMER.NAME"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="类型" prop="TYPE">
+											<el-select style="width: 100%;" v-model="CUSTOMER.TYPE" placeholder="类型">
+										      	<el-option label="委托" value="委托">	
+										      	</el-option>
+										      	<el-option label="分包" value="分包">
+										      	</el-option>
+										      	<el-option label="两者皆是" value="两者皆是">	
+										      	</el-option>
+										    </el-select>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="8">
+										<el-form-item label="联系人" prop="PERSON">
+											<el-input v-model="CUSTOMER.PERSON"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="联系电话" prop="PHONE">
+											<el-input v-model="CUSTOMER.PHONE"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="邮箱" prop="EMAIL">
+											<el-input v-model="CUSTOMER.EMAIL"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="8">
+										<el-form-item label="联系地址" prop="CONTACT_ADDRESS">
+											<el-input v-model="CUSTOMER.CONTACT_ADDRESS"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="邮政编码" prop="ZIPCODE">
+											<el-input v-model="CUSTOMER.ZIPCODE"></el-input>
+										</el-form-item>
+									</el-col>
+
+									<el-col :span="8">
+										<el-form-item label="传真" prop="FAX">
+											<el-input v-model="CUSTOMER.FAX"></el-input>
+										</el-form-item>
+									</el-col>
+
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="24">
+										<el-form-item label="备注" prop="MEMO">
+											<el-input v-model="CUSTOMER.MEMO" type="textarea"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="8">
+										<el-form-item label="录入人" prop="ENTERBY">
+											<el-input v-model="CUSTOMER.ENTERBY" placeholder="当前录入人" :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="录入时间" prop="ENTERDATE">
+											<el-input v-model="CUSTOMER.ENTERDATE" placeholder="当前录入时间" :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="修改人" prop="CHANGEBY" v-if="modify">
+											<el-input v-model="CUSTOMER.CHANGEBY" placeholder="记录当前修改人" :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="修改时间" prop="CHANGEDATE" v-if="modify">
+											<el-input v-model="CUSTOMER.CHANGEDATE" placeholder="自动记录当前修改时间" :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								
 							</el-collapse-item>
 							<!-- 资质信息 Begin-->
 							<el-collapse-item title="资质信息" name="2">								
@@ -282,6 +284,14 @@
                     callback();
                 }
             };
+            var validatePerson = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
+            
             var validateAddress = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error('请填写联系地址'));
@@ -386,6 +396,11 @@
 						trigger: 'blur',
 						validator: validateAddress,
 					}],
+					PERSON:[{
+						required: true,
+						trigger: 'blur',
+						validator: validatePerson,
+					}],
 					PHONE:[{
 						required: true,
 						trigger: 'blur',
@@ -407,35 +422,8 @@
 		          row.isEditing = !row.isEditing
 		        }
 		    },
-			//新建时，清空页面信息
-			resetNew(){
-                this.CUSTOMER = {
-					CODE:'',
-					NAME:'',
-					PHONE:'',
-					PERSON:'',
-					TYPE:'',
-					CONTACT_ADDRESS:'',
-					ZIPCODE:'',
-					STATUS:'活动',
-					FAX:'',
-					EMAIL:'',
-					ENTERBY:'',
-					ENTERDATE:'',
-					CHANGEBY:'',
-					CHANGEDATE:'',
-					MEMO:'',
-					CUSTOMER_QUALIFICATIONList:[{
-						STEP:'',
-						CERTIFICATE_NUM:'',
-						CERTIFICATE_NAME:'',
-						ACTIVE_DATE:'',
-						STATUS:'',
-						MEMO:''
-					}]
-				}
-                // this.$refs["CUSTOMER"].resetFields();
-            },
+			
+
             //手风琴开关效果调用
 			handleChange(val) {
 			},

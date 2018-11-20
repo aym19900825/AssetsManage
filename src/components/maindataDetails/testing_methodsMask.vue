@@ -31,14 +31,19 @@
 											</el-option>
 										</el-select>
 									</el-col>
-									<el-col :span="7" class="pull-right">
+									<!-- <el-col :span="7" class="pull-right">
 										<el-input v-model="testingForm.M_NUM" :disabled="true">
 											<template slot="prepend">检验/检测方法编号</template>
 										</el-input>
-									</el-col>
+									</el-col> -->
 								</el-row>
 
 								<el-row :gutter="70">
+									<el-col :span="8">
+										<el-form-item label="检验/检测方法编号" prop="M_NUM" required="true">
+											<el-input v-model="testingForm.M_NUM"></el-input>
+										</el-form-item>
+									</el-col>
 									<el-col :span="8">
 										<el-form-item label="中文名称" prop="M_NAME" required="true">
 											<el-input v-model="testingForm.M_NAME"></el-input>
@@ -49,13 +54,16 @@
 											<el-input v-model="testingForm.M_ENAME"></el-input>
 										</el-form-item>
 									</el-col>
-									<el-col :span="8">
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="24">
 										<el-form-item label="类别" prop="M_TYPE">
-											<el-input v-model="testingForm.M_TYPE"></el-input>
+											<el-input v-model="testingForm.M_TYPE" disabled>
+											<el-button slot="append" icon="icon-search"></el-button>
+											</el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
-
 								<el-row :gutter="70">
 									<el-col :span="8">
 										<el-form-item label="录入人机构" prop="DEPARTMENT">
@@ -188,9 +196,9 @@
 				type: Object,
 				default: function() {
 					return {
-						VERSION: '',
-						STATUS: '',
-						M_NUM: '',
+						VERSION: '1',
+						STATUS: '活动',
+						M_NUM: 'TRO100012',
 						M_NAME: '',
 						M_ENAME: '',
 						M_TYPE: '',
@@ -303,31 +311,6 @@
 			};
 		},
 		methods: {
-			//form表单内容清空
-			resetNew() {
-				this.testingForm = { //给表单数据渲染值
-					VERSION: '1',
-					STATUS: '活动',
-					M_NUM: 'TRO100012',
-					M_NAME: '',
-					M_ENAME: '',
-					M_TYPE: '',
-					DEPARTMENT: '',
-					ENTERBY: '',
-					ENTERDATE: '',
-					CHANGEBY: '',
-					CHANGEDATE: '',
-					attributes: [{ //字段列表
-						COLUMNID: '',
-						FILESNUMBER: '',
-						FILSEDESC: '',
-						ENTERB: '',
-						ENTERDATE: '',
-						FILESURL: ''
-					}]
-				}
-				//this.$refs["testingForm"].resetFields();
-			},
 				//上传文件 Begin
 				handleRemove(file, fileList) {
 					console.log(file, fileList);

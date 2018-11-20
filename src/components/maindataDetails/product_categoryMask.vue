@@ -19,65 +19,66 @@
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="产品类别" name="1">
-								<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
-									<el-row :gutter="70">
-										<el-col :span="8">
-											<el-form-item label="产品类别编号" prop="NUM">
-												<el-input v-model="CATEGORY.NUM"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="产品类别名称" prop="TYPE">
-												<el-input v-model="CATEGORY.TYPE"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="状态" prop="STATUS">
-												<el-input v-if="statusshow1" v-model="CATEGORY.STATUS"  :disabled="edit"></el-input>
-											    <el-select v-if="statusshow2" style="width: 100%;" v-model="CATEGORY.STATUS" placeholder="请选择状态">
-													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-													</el-option>
-												</el-select>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<el-row :gutter="70">
-										<el-col :span="8">
-											<el-form-item label="版本" prop="VERSION">
-												<el-input v-model="CATEGORY.VERSION"  :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="16">
-											<el-form-item label="录入人机构" prop="DEPARTMENT">
-												<el-input v-model="CATEGORY.DEPARTMENT"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<el-row :gutter="70">
-										<el-col :span="8">
-											<el-form-item label="录入人" prop="FAX">
-												<el-input v-model="CATEGORY.ENERBY" :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="录入时间" prop="ENERDATE">
-												<el-input v-model="CATEGORY.ENERDATE"  :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="修改人" prop="CHANGEBY" v-if="modify">
-												<el-input v-model="CATEGORY.CHANGEBY" placeholder="当前修改人" :disabled="edit" ></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<el-row :gutter="70">
-										<el-col :span="8">
-											<el-form-item label="修改时间" prop="CHANGEDATE" v-if="modify">
-												<el-input v-model="CATEGORY.CHANGEDATE" placeholder="当前修改时间" :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-								</div>
+								<el-row :gutter="20" class="pb10">
+									<el-col :span="3" class="pull-right">
+										<el-input v-model="CATEGORY.VERSION" :disabled="true">
+											<template slot="prepend">版本</template>
+										</el-input>
+									</el-col>
+									<el-col :span="3" class="pull-right">
+										<el-select v-model="CATEGORY.STATUS" placeholder="请选择状态">
+											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+											</el-option>
+										</el-select>
+									</el-col>
+									<!-- <el-col :span="7" class="pull-right">
+										<el-input v-model="CATEGORY.NUM" :disabled="true">
+											<template slot="prepend">产品类别编号</template>
+										</el-input>
+									</el-col> -->
+								</el-row>
+
+								<el-row :gutter="70">
+									<el-col :span="8">
+										<el-form-item label="产品类别编号" prop="NUM">
+											<el-input v-model="CATEGORY.NUM"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="16">
+										<el-form-item label="产品类别名称" prop="TYPE">
+											<el-input v-model="CATEGORY.TYPE"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="8">
+										<el-form-item label="录入人机构" prop="DEPARTMENT">
+											<el-input v-model="CATEGORY.DEPARTMENT"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="录入人" prop="FAX">
+											<el-input v-model="CATEGORY.ENTERBY" :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="录入时间" prop="ENTERDATE">
+											<el-input v-model="CATEGORY.ENTERDATE"  :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="8">
+										<el-form-item label="修改人" prop="CHANGEBY" v-if="modify">
+											<el-input v-model="CATEGORY.CHANGEBY" placeholder="当前修改人" :disabled="edit" ></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="修改时间" prop="CHANGEDATE" v-if="modify">
+											<el-input v-model="CATEGORY.CHANGEDATE" placeholder="当前修改时间" :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
 							</el-collapse-item>
 						</el-collapse>
 					</div>
@@ -107,8 +108,8 @@
 						STATUS:'活动',
 						VERSION:'1',
 						DEPARTMENT:'',
-						ENERBY:'',
-						ENERDATE:'',
+						ENTERBY:'',
+						ENTERDATE:'',
 						CHANGEBY:'',
 						CHANGEDATE:''
 					}
@@ -178,8 +179,6 @@
 				statusshow2:false,
 				selUser:[],
 				edit: true, //禁填
-				col_but1: true,
-				col_but2: true,
 				show: false,
 				isok1: true,
 				isok2: false,
@@ -187,7 +186,7 @@
 				up: false,
 				addtitle:true,
 				modifytitle:false,
-				activeNames: ['1','2'],//手风琴数量
+				activeNames: ['1'],//手风琴数量
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				selectData:[],
@@ -223,44 +222,32 @@
 			};
 		},
 		methods: {
-			resetNew(){
-                this.CATEGORY = {
-					NUM:'',
-					TYPE:'',
-					STATUS:'活动',
-					VERSION:'1',
-					DEPARTMENT:'',
-					ENERBY:'',
-					ENERDATE:'',
-					CHANGEBY:'',
-					CHANGEDATE:''
-				};
-                // this.$refs["CUSTOMER"].resetFields();
-            },
+			// resetNew(){
+   //              this.CATEGORY = {
+			// 		NUM:'',
+			// 		TYPE:'',
+			// 		STATUS:'活动',
+			// 		VERSION:'1',
+			// 		DEPARTMENT:'',
+			// 		ENTERBY:'',
+			// 		ENTERDATE:'',
+			// 		CHANGEBY:'',
+			// 		CHANGEDATE:''
+			// 	};
+   //              // this.$refs["CUSTOMER"].resetFields();
+   //          },
 			handleChange(val) {//手风琴开关效果调用
 			},
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selUser = val;
 			},
-			col_but(col_but) {
-				if(col_but == 'col_but1') {
-					this.col_but1 = !this.col_but1;
-					this.down = !this.down,
-					this.up = !this.up
-				}
-				if(col_but == 'col_but2') {
-					this.col_but2 = !this.col_but2;
-					this.down = !this.down,
-					this.up = !this.up
-				}
-			},
 			//点击按钮显示弹窗
 			visible() {
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
-	    			this.CATEGORY.ENERBY = res.data.nickname;
+	    			this.CATEGORY.ENTERBY = res.data.nickname;
 	    			var date = new Date();
-					this.CATEGORY.ENERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					this.CATEGORY.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -269,6 +256,8 @@
 				});
 				this.statusshow1 = true;
 				this.statusshow2 = false;
+				this.addtitle = true;
+				this.modifytitle = false;
 				this.modify = false;
 				this.show = true;
 			},

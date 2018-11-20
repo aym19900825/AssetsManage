@@ -15,13 +15,13 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="addnumbsetForm" :label-position="labelPosition" :rules="rules" ref="addnumbsetForm" label-width="100px">
+				<el-form :model="numbsetForm" :label-position="labelPosition" :rules="rules" ref="numbsetForm" label-width="100px">
 					<div class="accordion">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="基础信息" name="1">
 								<el-row :gutter="20">
 									<el-col :span="4" class="pull-right">
-										<el-select v-model="addnumbsetForm.STATUS" placeholder="请选择状态">
+										<el-select v-model="numbsetForm.STATUS" placeholder="请选择状态">
 											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
 										</el-select>
@@ -30,53 +30,53 @@
 								<el-row :gutter="70">
 									<el-col :span="8">
 										<el-form-item label="自动编号名称" prop="AUTOKEY">
-											<el-input v-model="addnumbsetForm.AUTOKEY"></el-input>
+											<el-input v-model="numbsetForm.AUTOKEY"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="前缀">
-											<el-input v-model="addnumbsetForm.PREFIX"></el-input>
+											<el-input v-model="numbsetForm.PREFIX"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="起始数" prop="S_NUM">
-											<el-input v-model="addnumbsetForm.S_NUM"></el-input>
+											<el-input v-model="numbsetForm.S_NUM"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row :gutter="70">
 									<el-col :span="24">
 										<el-form-item label="备注" prop="MEMO">
-											<el-input type="textarea" v-model="addnumbsetForm.MEMO"></el-input>
+											<el-input type="textarea" v-model="numbsetForm.MEMO"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="录入人机构">
-												<el-input v-model="addnumbsetForm.DEPT" :disabled="true"></el-input>
+												<el-input v-model="numbsetForm.DEPT" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="录入人" prop="ENERBY">
-												<el-input v-model="addnumbsetForm.ENERBY" :disabled="true"></el-input>
+											<el-form-item label="录入人" prop="ENTERBY">
+												<el-input v-model="numbsetForm.ENTERBY" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="录入时间" prop="ENERDATE">
-												<el-input v-model="addnumbsetForm.ENERDATE" :disabled="true"></el-input>
+											<el-form-item label="录入时间" prop="ENTERDATE">
+												<el-input v-model="numbsetForm.ENTERDATE" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 								</el-row>
 								<el-row :gutter="70">
 									<el-col :span="8">
 										<el-form-item v-if="modify" label="修改人" prop="CHANGEBY">
-											<el-input v-model="addnumbsetForm.CHANGEBY" :disabled="true"></el-input>
+											<el-input v-model="numbsetForm.CHANGEBY" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item v-if="modify" label="修改时间" prop="CHANGEDATE">
-											<el-input v-model="addnumbsetForm.CHANGEDATE" :disabled="true"></el-input>
+											<el-input v-model="numbsetForm.CHANGEDATE" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -86,7 +86,7 @@
 					<div class="content-footer">
 						<el-form-item>
 							<button @click="cancelForm" class="btn btn-default btn-large">取消</button>
-							<button type="primary" class="btn btn-primarys btn-large" @click="submitForm('addnumbsetForm')">提交</button>
+							<button type="primary" class="btn btn-primarys btn-large" @click="submitForm('numbsetForm')">提交</button>
 						</el-form-item>
 					</div>
 				</el-form>
@@ -103,7 +103,7 @@
 			/*page: {
 				type: Object,
 			},*/
-			addnumbsetForm: {
+			numbsetForm: {
 				type: Object,
 				default: function(){
 					return {
@@ -114,8 +114,8 @@
 						S_NUM:'',
 						MEMO:'',
 						DEPT:'',
-						ENERBY:'',
-						ENERDATE:'',
+						ENTERBY:'',
+						ENTERDATE:'',
 						CHANGEBY:'',
 						CHANGEDATE:'',
 					}
@@ -167,15 +167,15 @@
 				addtitle:true,
 				modifytitle:false,
 				selectData:[],
-				addnumbsetForm: {
+				numbsetForm: {
 					STATUS:'',
 					AUTOKEY:'',
 					PREFIX:'',
 					S_NUM:'',
 					MEMO:'',
 					DEPT:'',
-					ENERBY:'',
-					ENERDATE:'',
+					ENTERBY:'',
+					ENTERDATE:'',
 					CHANGEBY:'',
 					CHANGEDATE:''
 				},
@@ -199,26 +199,26 @@
 			},
 			//form表单内容清空
 			resetNew(){
-                this.addnumbsetForm = {
+                this.numbsetForm = {
 					STATUS:'活动',//添加时默认显示状态
 					AUTOKEY:'',
 					PREFIX:'',
 					S_NUM:'',
 					MEMO:'',
 					DEPT:'',
-					ENERBY:'',
-					ENERDATE:'',
+					ENTERBY:'',
+					ENTERDATE:'',
 					CHANGEBY:'',
 					CHANGEDATE:''
 				}
-                //this.$refs["addnumbsetForm"].resetFields();
+                //this.$refs["numbsetForm"].resetFields();
             },
             childMethods() {//添加内容时从父组件带过来的
             	this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
-					this.addnumbsetForm.DEPT=res.data.deptName;
-					this.addnumbsetForm.ENERBY=res.data.nickname;
+					this.numbsetForm.DEPT=res.data.deptName;
+					this.numbsetForm.ENTERBY=res.data.nickname;
 					var date=new Date();
-					this.addnumbsetForm.ENERDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
+					this.numbsetForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 				}).catch((err)=>{
 					this.$message({
 						message:'网络错误，请重试',
@@ -232,9 +232,9 @@
             },
             detail() {//修改内容时从父组件带过来的
             	this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
-					this.addnumbsetForm.CHANGEBY=res.data.nickname;
+					this.numbsetForm.CHANGEBY=res.data.nickname;
 					var date=new Date();
-					this.addnumbsetForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					this.numbsetForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{
 					this.$message({
 						message:'网络错误，请重试',
@@ -284,11 +284,11 @@
 
 			},
 			//保存
-			submitForm(addnumbsetForm) {
-				this.$refs[addnumbsetForm].validate((valid) => {
+			submitForm(numbsetForm) {
+				this.$refs[numbsetForm].validate((valid) => {
 		          if (valid) {
 					var url = '/api/api-apps/app/autokey/saveOrUpdate';
-					this.$axios.post(url, this.addnumbsetForm).then((res) => {
+					this.$axios.post(url, this.numbsetForm).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({

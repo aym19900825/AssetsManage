@@ -320,7 +320,19 @@
 			},
 			//添加检验/检测方法编号
 			openAddMgr() {
-				this.$refs.child.resetNew();
+				this.aaaData = [{
+					VERSION: '1',
+					STATUS: '活动',
+					M_NUM: 'TRO10001',
+					M_NAME: '',
+					M_ENAME: '',
+					M_TYPE: '',
+					DEPARTMENT: '',
+					ENTERBY: '',
+					ENTERDATE: '',
+					CHANGEBY: '',
+					CHANGEDATE: '',
+				}];
 				this.$refs.child.visible();
 			},
 			//修改检验/检测方法编号

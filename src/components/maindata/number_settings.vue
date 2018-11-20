@@ -78,9 +78,9 @@
 										</el-table-column>
 										<el-table-column label="录入人机构" width="180" sortable prop="DEPT" v-if="this.checkedName.indexOf('录入人机构')!=-1">
 										</el-table-column>
-										<el-table-column label="录入人" width="140" sortable prop="ENERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
+										<el-table-column label="录入人" width="140" sortable prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
 										</el-table-column>
-										<el-table-column label="录入时间" width="160" prop="ENERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
+										<el-table-column label="录入时间" width="160" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 										</el-table-column>
 										<el-table-column label="修改人" width="140" prop="CHANGEBY" sortable v-if="this.checkedName.indexOf('修改人')!=-1">
 										</el-table-column>
@@ -106,7 +106,7 @@
 			</EasyScrollbar>
 		</div>
 		<!--右侧内容显示 End-->
-		<numbsetmask :addnumbsetForm="selMenu[0]" ref="child" @request="requestData" v-bind:page=page></numbsetmask>
+		<numbsetmask :numbsetForm="selMenu[0]" ref="child" @request="requestData" v-bind:page=page></numbsetmask>
 	</div>
 </div>
 </template>
@@ -176,11 +176,11 @@
 					},
 					{
 						label: '录入人',
-						prop: 'ENERBY'
+						prop: 'ENTERBY'
 					},
 					{
 						label: '录入时间',
-						prop: 'ENERDATE'
+						prop: 'ENTERDATE'
 					},
 					{
 						label: '修改人',

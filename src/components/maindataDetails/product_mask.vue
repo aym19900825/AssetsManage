@@ -19,65 +19,67 @@
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="产品名称" name="1">
-								<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
-									<el-row :gutter="70">
-										<el-col :span="8">
-											<el-form-item label="产品编号" prop="PRO_NUM">
-												<el-input v-model="PRODUCT.PRO_NUM"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="产品名称" prop="PRO_NAME">
-												<el-input v-model="PRODUCT.PRO_NAME"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="状态" prop="STATUS">
-												<el-input v-if="statusshow1" v-model="PRODUCT.STATUS" :disabled="edit"></el-input>
-											    <el-select v-if="statusshow2" style="width: 100%;" v-model="PRODUCT.STATUS" placeholder="请选择状态">
-													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-													</el-option>
-												</el-select>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<el-row :gutter="70">
-										<el-col :span="8">
-											<el-form-item label="版本" prop="VERSION">
-												<el-input v-model="PRODUCT.VERSION"  :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="16">
-											<el-form-item label="录入人机构" prop="DEPARTMENT">
-												<el-input v-model="PRODUCT.DEPARTMENT"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<el-row :gutter="70">
-										<el-col :span="8">
-											<el-form-item label="录入人" prop="ENTERBY">
-												<el-input v-model="PRODUCT.ENTERBY" :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="录入时间" prop="ENTERDATE">
-												<el-input v-model="PRODUCT.ENTERDATE"  :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item v-if="modify" label="修改人" prop="CHANGEBY">
-												<el-input v-model="PRODUCT.CHANGEBY" placeholder="当前修改人" :disabled="edit" ></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<el-row :gutter="70">
-										<el-col :span="8">
-											<el-form-item v-if="modify" label="修改时间" prop="CHANGEDATE">
-												<el-input v-model="PRODUCT.CHANGEDATE" placeholder="当前修改时间" :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-								</div>
+								<el-row :gutter="20" class="pb10">
+									<el-col :span="3" class="pull-right">
+										<el-input v-model="PRODUCT.VERSION" :disabled="true">
+											<template slot="prepend">版本</template>
+										</el-input>
+									</el-col>
+									<el-col :span="3" class="pull-right">
+										<el-select v-model="PRODUCT.STATUS" placeholder="请选择状态">
+											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+											</el-option>
+										</el-select>
+									</el-col>
+									<!-- <el-col :span="7" class="pull-right">
+										<el-input v-model="PRODUCT.PRO_NUM">
+											<template slot="prepend">产品编号</template>
+										</el-input>
+									</el-col> -->
+								</el-row>
+
+								<el-row :gutter="70">
+									<el-col :span="8">
+										<el-form-item label="产品编号" prop="PRO_NUM">
+											<el-input v-model="PRODUCT.PRO_NUM"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="16">
+										<el-form-item label="产品名称" prop="PRO_NAME">
+											<el-input v-model="PRODUCT.PRO_NAME"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="8">
+										<el-form-item label="录入人机构" prop="DEPARTMENT">
+											<el-input v-model="PRODUCT.DEPARTMENT" :disabled="true"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="录入人" prop="ENTERBY">
+											<el-input v-model="PRODUCT.ENTERBY" :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="录入时间" prop="ENTERDATE">
+											<el-input v-model="PRODUCT.ENTERDATE"  :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+									
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="8">
+										<el-form-item v-if="modify" label="修改人" prop="CHANGEBY">
+											<el-input v-model="PRODUCT.CHANGEBY" placeholder="当前修改人" :disabled="edit" ></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item v-if="modify" label="修改时间" prop="CHANGEDATE">
+											<el-input v-model="PRODUCT.CHANGEDATE" placeholder="当前修改时间" :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
 							</el-collapse-item>
 						</el-collapse>
 					</div>
@@ -102,7 +104,7 @@
 				default: function(){
 					return {
 						ID:'',
-						PRO_NUM:'',
+						PRO_NUM:'PRO10001',
 						PRO_NAME:'',
 						STATUS:'活动',
 						VERSION:'1',
@@ -175,8 +177,6 @@
 				selUser:[],
 				modify:false,//修订、修改人、修改时间
 				edit: true, //禁填
-				col_but1: true,
-				col_but2: true,
 				show: false,
 				isok1: true,
 				isok2: false,
@@ -222,22 +222,22 @@
 			};
 		},
 		methods: {
-			resetNew(){
-                this.PRODUCT = {
-					PRO_NUM:'',
-					PRO_NAME:'',
-					STATUS:'活动',
-					VERSION:'1',
-					ENTERBY:'',
-					ENTERDATE:'',
-					CHANGEBY:'',
-					CHANGEDATE:''
-				};
-				if (this.$refs["PRODUCT"]!==undefined) {
-				    this.$refs["PRODUCT"].resetFields();
-				}
-                 // this.$refs["PRODUCT"].resetFields();
-   		    },
+			// resetNew(){
+   //              this.PRODUCT = {
+			// 		PRO_NUM:'',
+			// 		PRO_NAME:'',
+			// 		STATUS:'活动',
+			// 		VERSION:'1',
+			// 		ENTERBY:'',
+			// 		ENTERDATE:'',
+			// 		CHANGEBY:'',
+			// 		CHANGEDATE:''
+			// 	};
+			// 	if (this.$refs["PRODUCT"]!==undefined) {
+			// 	    this.$refs["PRODUCT"].resetFields();
+			// 	}
+   //               // this.$refs["PRODUCT"].resetFields();
+   // 		    },
 		 //    resetNew(){
 			// 	if (this.$refs["PRODUCT"]!==undefined) {
 			// 	    this.$refs["PRODUCT"].resetFields();
@@ -269,25 +269,15 @@
 					this.dialogVisible = false;
 				}
 			},
-			col_but(col_but) {
-				//alert(col_but)
-				if(col_but == 'col_but1') {
-					this.col_but1 = !this.col_but1;
-					this.down = !this.down,
-						this.up = !this.up
-				}
-				if(col_but == 'col_but2') {
-					this.col_but2 = !this.col_but2;
-					this.down = !this.down,
-						this.up = !this.up
-				}
-			},
 			//点击按钮显示弹窗
 			visible() {
 				this.statusshow1 = true;
 				this.statusshow2 = false;
+				this.addtitle = true;
+				this.modifytitle = false;
 				this.modify = false;
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
+	     			this.PRODUCT.DEPARTMENT=res.data.deptName;
 	     			this.PRODUCT.ENTERBY = res.data.nickname;
 	     			var date=new Date();
 					this.PRODUCT.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");

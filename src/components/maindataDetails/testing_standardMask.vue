@@ -15,95 +15,94 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-row :gutter="20" style="margin-right: 5px;">
-					<el-col :span="5" class="pull-right">
-						<el-input v-model="dataInfo.ID" :disabled="true">
-							<template slot="prepend">主键编号</template>
-						</el-input>
-					</el-col>
-					<el-col :span="5" class="pull-right">
-						<el-select v-model="dataInfo.STATUS" placeholder="请选择状态">
-							<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-							</el-option>
-						</el-select>
-					</el-col>
-					<el-col :span="5" class="pull-right">
-						<el-input v-model="dataInfo.VERSION" :disabled="true">
-							<template slot="prepend">版本</template>
-						</el-input>
-					</el-col>
-				</el-row>
 				<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="基本信息" name="1">
-								<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
-									<el-row :gutter="70">
-										<el-col :span="8">
-											<el-form-item label="标准编码" prop="S_NUM">
-												<el-input v-model="dataInfo.S_NUM"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="标准名称" prop="S_NAME">
-												<el-input v-model="dataInfo.S_NAME"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="英文名称" prop="S_ENGNAME">
-												<el-input v-model="dataInfo.S_ENGNAME"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<el-row :gutter="70">
-										<el-col :span="8">
-											<el-form-item label="发布时间" prop="RELEASETIME">
-												<el-date-picker v-model="dataInfo.RELEASETIME" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
-												</el-date-picker>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="启用时间" prop="STARTETIME">
-												<el-date-picker v-model="dataInfo.STARTETIME" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
-												</el-date-picker>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="发布单位" prop="RELEASE_UNIT">
-												<el-input v-model="dataInfo.RELEASE_UNIT" :disabled="true"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<el-row :gutter="70">
-										<el-col :span="8">
-											<el-form-item label="录入人机构" prop="DEPARTMENT">
-												<el-input v-model="dataInfo.DEPARTMENT" :disabled="true"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="录入人" prop="ENTERBY">
-												<el-input v-model="dataInfo.ENTERBY" :disabled="true"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="录入时间" prop="ENTERDATE">
-												<el-input v-model="dataInfo.ENTERDATE" :disabled="true"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<el-row :gutter="70">
-										<el-col :span="8">
-											<el-form-item v-if="modify" label="修改人" prop="CHANGEBY">
-												<el-input v-model="dataInfo.CHANGEBY" :disabled="true"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item v-if="modify" label="修改时间" prop="CHANGEDATE">
-												<el-input v-model="dataInfo.CHANGEDATE" :disabled="true"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-								</div>
+								<el-row :gutter="20" style="margin-right: 5px;">
+									<el-col :span="3" class="pull-right">
+										<el-input v-model="dataInfo.VERSION" :disabled="true">
+											<template slot="prepend">版本</template>
+										</el-input>
+									</el-col>
+									<el-col :span="3" class="pull-right">
+										<el-select v-model="dataInfo.STATUS" placeholder="请选择状态">
+											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+											</el-option>
+										</el-select>
+									</el-col>
+									<!-- <el-col :span="7" class="pull-right">
+										<el-input v-model="dataInfo.S_NUM" :disabled="true">
+											<template slot="prepend">主键编号</template>
+										</el-input>
+									</el-col> -->
+								</el-row>
+
+								<el-row :gutter="70">
+									<el-col :span="8">
+										<el-form-item label="标准编码" prop="S_NUM">
+											<el-input v-model="dataInfo.S_NUM"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="标准名称" prop="S_NAME">
+											<el-input v-model="dataInfo.S_NAME"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="英文名称" prop="S_ENGNAME">
+											<el-input v-model="dataInfo.S_ENGNAME"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="8">
+										<el-form-item label="发布时间" prop="RELEASETIME">
+											<el-date-picker v-model="dataInfo.RELEASETIME" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+											</el-date-picker>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="启用时间" prop="STARTETIME">
+											<el-date-picker v-model="dataInfo.STARTETIME" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+											</el-date-picker>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="发布单位" prop="RELEASE_UNIT">
+											<el-input v-model="dataInfo.RELEASE_UNIT" :disabled="true"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="8">
+										<el-form-item label="录入人机构" prop="DEPARTMENT">
+											<el-input v-model="dataInfo.DEPARTMENT" :disabled="true"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="录入人" prop="ENTERBY">
+											<el-input v-model="dataInfo.ENTERBY" :disabled="true"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="录入时间" prop="ENTERDATE">
+											<el-input v-model="dataInfo.ENTERDATE" :disabled="true"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="70">
+									<el-col :span="8">
+										<el-form-item v-if="modify" label="修改人" prop="CHANGEBY">
+											<el-input v-model="dataInfo.CHANGEBY" :disabled="true"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item v-if="modify" label="修改时间" prop="CHANGEDATE">
+											<el-input v-model="dataInfo.CHANGEDATE" :disabled="true"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
 							</el-collapse-item>
 							<el-collapse-item title="文档" name="2">
 								<!-- 字段列表 Begin-->
@@ -192,19 +191,19 @@
 				type: Object,
 				default: function(){
 					return {
-					ID:'',
-					S_NUM: '',
-					S_NAME: '',
-					S_ENGNAME: '',
-					RELEASETIME: '',
-					STARTETIME: '',
-					VERSION:'1',
-					RELEASE_UNIT: '',
-					DEPARTMENT: '',
-					ENTERBY: '',
-					ENTERDATE: '',
-					CHANGEBY: '',
-					CHANGEDATE: '',
+						ID:'',
+						S_NUM: '',
+						S_NAME: '',
+						S_ENGNAME: '',
+						RELEASETIME: '',
+						STARTETIME: '',
+						VERSION:'1',
+						RELEASE_UNIT: '',
+						DEPARTMENT: '',
+						ENTERBY: '',
+						ENTERDATE: '',
+						CHANGEBY: '',
+						CHANGEDATE: '',
 					}
 				}
 			},
@@ -236,8 +235,6 @@
 				value: '',
 				selUser: [],
 				edit: true, //禁填
-				col_but1: true,
-				col_but2: true,
 				show: false,
 				isok1: true,
 				isok2: false,
@@ -323,31 +320,6 @@
 			};
 		},
 		methods: {
-			resetNew() {
-				this.dataInfo = { //数据库列表
-						S_NUM: '',
-						S_NAME: '',
-						S_ENGNAME: '',
-						RELEASETIME: '',
-						STARTETIME: '',
-						VERSION:'1',
-						RELEASE_UNIT: '',
-						DEPARTMENT: '',
-						ENTERBY: '',
-						ENTERDATE: '',
-						CHANGEBY: '',
-						CHANGEDATE: '',
-						attributes: [{ //字段列表
-							columnname: '',
-							description: '',
-							type: '',
-							length: '',
-							retain: ''
-						}]
-					},
-
-					this.$refs["dataInfo"].resetFields();
-			},
 			handleChange(val) { //手风琴开关效果调用
 			},
 			//获取导入表格勾选信息
@@ -375,23 +347,10 @@
 					this.dataInfo.attributes.splice(index, 1);
 				}
 			},
-			col_but(col_but) {
-				//alert(col_but)
-				if(col_but == 'col_but1') {
-					this.col_but1 = !this.col_but1;
-					this.down = !this.down,
-						this.up = !this.up
-				}
-				if(col_but == 'col_but2') {
-					this.col_but2 = !this.col_but2;
-					this.down = !this.down,
-						this.up = !this.up
-				}
-			},
 			importdia() {
 				this.dialogVisible = true;
 			},
-			//点击按钮显示弹窗
+			//添加点击按钮显示弹窗
 			visible() {
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
 					this.dataInfo.DEPARTMENT=res.data.deptName;

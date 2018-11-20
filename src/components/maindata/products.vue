@@ -92,7 +92,7 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :data="userList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
+						<el-table :data="productList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 							<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0">
 							</el-table-column>
 							<el-table-column label="产品编号" width="155" sortable prop="PRO_NUM" v-if="this.checkedName.indexOf('产品编号')!=-1">
@@ -152,6 +152,8 @@
 		},
 		data() {
 			return {
+				loadSign:true,//加载
+				commentArr:{},
 				value: '',
 				options: [{
 					value: '1',
@@ -267,7 +269,7 @@
 				selUser: [],
 				'启用': true,
 				'冻结': false,
-				userList: [],
+				productList: [],
 				search: false,
 				show: false,
 				down: true,
@@ -299,19 +301,21 @@
 				aaaData:[],
 			}
 		},
-
-		mounted(){
-			// 获取浏览器可视区域高度
-			var _this = this;
-			var clientHeight = $(window).height() - 100;    //document.body.clientWidth;
-			_this.$refs.homePagess.style.height = clientHeight + 'px';
-			window.onresize = function() {
-				var clientHeight = $(window).height() - 100;
-				_this.$refs.homePagess.style.height = clientHeight + 'px';
-			};
-			
-		},
 		methods: {
+			//表格滚动加载
+			loadMore () {
+			   if (this.loadSign) {
+			     this.loadSign = false
+			     this.page.currentPage++
+			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+			       return
+			     }
+			     setTimeout(() => {
+			       this.loadSign = true
+			     }, 1000)
+			     this.requestData()
+			   }
+			 },
 			tableControle(data){
 				this.checkedName = data;
 			},
@@ -321,8 +325,7 @@
 				if(date == undefined) {
 					return "";
 				}
-				return this.$moment(date).format("YYYY-MM-DD");
-				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
+				return this.$moment(date).format("YYYY-MM-DD"); 
 			},
 			sizeChange(val) {
 		      this.page.pageSize = val;
@@ -339,7 +342,7 @@
 			},
 			//添加用戶
 			openAddMgr() {
-//				this.$refs.child.resetNew();
+				this.$refs.child.resetNew();
 				this.$refs.child.visible();
 			},
 			//修改用戶
@@ -452,9 +455,27 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					this.userList = res.data.data;
-					console.log(this.userList);
-					this.page.totalCount = res.data.count;
+					this.page.totalCount = res.data.count;	
+					//总的页数
+					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
+					if(this.page.currentPage >= totalPage){
+						 this.loadSign = false
+					}else{
+						this.loadSign=true
+					}
+					this.commentArr[this.page.currentPage]=res.data.data
+					let newarr=[]
+					for(var i = 1; i <= totalPage; i++){
+					
+						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
+							
+							for(var j = 0; j < this.commentArr[i].length; j++){
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					
+					this.productList = newarr;
 				}).catch((wrong) => {})
 			},
 			handleNodeClick(data) {
@@ -465,6 +486,15 @@
 		},
 		mounted() {
 			this.requestData();
+			// 获取浏览器可视区域高度
+			var _this = this;
+			var clientHeight = $(window).height() - 100;    //document.body.clientWidth;
+			_this.$refs.homePagess.style.height = clientHeight + 'px';
+			window.onresize = function() {
+				var clientHeight = $(window).height() - 100;
+				_this.$refs.homePagess.style.height = clientHeight + 'px';
+			};
+			
 		},
 	}
 </script>

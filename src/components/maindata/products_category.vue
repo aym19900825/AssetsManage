@@ -344,8 +344,7 @@
 						type: 'warning'
 					});
 					return;
-				} 
-				else {
+				}else {
 					var url = '/api/api-apps/app/productType/deletes';
 					//changeUser为勾选的数据
 					var changeUser = selData;

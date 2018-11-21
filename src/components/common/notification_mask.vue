@@ -3,7 +3,8 @@
 		<div class="mask" v-show="show"></div>
 		<div class="mask_div" v-show="show">
 			<div class="mask_title_div clearfix">
-				<div class="mask_title">工作任务通知书</div>
+				<div class="mask_title" v-show="addtitle">添加工作任务通知书</div>
+				<div class="mask_title" v-show="modifytitle">修改工作任务通知书</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>						 
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -16,12 +17,12 @@
 			<div class="mask_content">
 				<el-row :gutter="20" style="margin-right: 5px;">
 					<el-col :span="5" class="pull-right">
-						<el-input v-model="nitificationsInfo.typename" :disabled="true">
+						<el-input v-model="dataInfo.typename" :disabled="true">
 							<template slot="prepend">编号</template>
 						</el-input>
 					</el-col>
 					<el-col :span="5" class="pull-right">
-						<el-input v-model="nitificationsInfo.typename" :disabled="true">
+						<el-input v-model="dataInfo.typename" :disabled="true">
 							<template slot="prepend">状态</template>
 						</el-input>
 					</el-col>
@@ -34,58 +35,58 @@
 								<div class="accordion-body tab-content">
 									<el-radio-group v-model="dataInfo.TYPE">
 										<el-row :gutter="70">
-										<el-col :span="6">
-											<el-radio  label="1">监督抽查</el-radio>
-										</el-col>
-										<el-col :span="6">
-											<el-radio  label="2">监督抽查复查</el-radio>
-										</el-col>
-										<el-col :span="6">
-											<el-radio  label="3">质量抽查</el-radio>
-										</el-col>
-										<el-col :span="6">
-											<el-radio  label="4">质量抽查复查</el-radio>
-										</el-col>
-									</el-row>
-									<el-row :gutter="70">
-										<el-col :span="6">
-											<el-radio label="1">监督抽查</el-radio>
-										</el-col>
-										<el-col :span="6">
-											<el-radio  label="2">监督抽查复查</el-radio>
-										</el-col>
-										<el-col :span="6">
-											<el-radio  label="3">质量抽查</el-radio>
-										</el-col>
-										<el-col :span="6">
-											<el-radio  label="4">质量抽查复查</el-radio>
-										</el-col>
-									</el-row>
-									<el-row :gutter="70">
-										<el-col :span="6">
-											<el-radio label="5">生产许可证</el-radio>
-										</el-col>
-										<el-col :span="6">
-											<el-radio label="6">认定检验检测</el-radio>
-										</el-col>
-										<el-col :span="6">
-											<el-radio label="7">鉴定试验</el-radio>
-										</el-col>
-										<el-col :span="6">
-											<el-radio label="8">委托检验检测</el-radio>
-										</el-col>
-									</el-row>
-									<el-row :gutter="70">
-										<el-col :span="6">
-											<el-radio label="9">专项抽查</el-radio>
-										</el-col>
-										<el-col :span="6">
-											<el-radio label="10">专项抽查复查</el-radio>
-										</el-col>
-										<el-col :span="6">
-											<el-radio label="11">其它</el-radio>
-										</el-col>
-									</el-row>
+											<el-col :span="6">
+												<el-radio label="1">监督抽查</el-radio>
+											</el-col>
+											<el-col :span="6">
+												<el-radio label="2">监督抽查复查</el-radio>
+											</el-col>
+											<el-col :span="6">
+												<el-radio label="3">质量抽查</el-radio>
+											</el-col>
+											<el-col :span="6">
+												<el-radio label="4">质量抽查复查</el-radio>
+											</el-col>
+										</el-row>
+										<el-row :gutter="70">
+											<el-col :span="6">
+												<el-radio label="1">监督抽查</el-radio>
+											</el-col>
+											<el-col :span="6">
+												<el-radio label="2">监督抽查复查</el-radio>
+											</el-col>
+											<el-col :span="6">
+												<el-radio label="3">质量抽查</el-radio>
+											</el-col>
+											<el-col :span="6">
+												<el-radio label="4">质量抽查复查</el-radio>
+											</el-col>
+										</el-row>
+										<el-row :gutter="70">
+											<el-col :span="6">
+												<el-radio label="5">生产许可证</el-radio>
+											</el-col>
+											<el-col :span="6">
+												<el-radio label="6">认定检验检测</el-radio>
+											</el-col>
+											<el-col :span="6">
+												<el-radio label="7">鉴定试验</el-radio>
+											</el-col>
+											<el-col :span="6">
+												<el-radio label="8">委托检验检测</el-radio>
+											</el-col>
+										</el-row>
+										<el-row :gutter="70">
+											<el-col :span="6">
+												<el-radio label="9">专项抽查</el-radio>
+											</el-col>
+											<el-col :span="6">
+												<el-radio label="10">专项抽查复查</el-radio>
+											</el-col>
+											<el-col :span="6">
+												<el-radio label="11">其它</el-radio>
+											</el-col>
+										</el-row>
 									</el-radio-group>
 								</div>
 							</el-collapse-item>
@@ -95,7 +96,7 @@
 										<el-col :span="8">
 											<el-form-item label="计划编号" prop="WP_NUM">
 												<el-input v-model="dataInfo.WP_NUM" :disabledd="true">
-												<el-button slot="append" icon="el-icon-search"></el-button>
+													<el-button slot="append" icon="el-icon-search"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -116,7 +117,7 @@
 												<el-input v-model="dataInfo.P_LEADER" :disabledd="true">
 													<el-button slot="append" icon="el-icon-search"></el-button>
 												</el-input>
-												
+
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -139,12 +140,12 @@
 										<i class="icon-upload-cloud"></i>
 										<font>导入</font>
 									</el-button>
-									<el-button type="success" size="mini" round @click="addfield">
+									<el-button type="success" size="mini" round @click="addfieldBasis">
 										<i class="icon-add"></i>
 										<font>新建</font>
 									</el-button>
 								</div>
-								<el-form :model="nitificationsInfo.attributes">
+								<el-form :model="dataInfo.WORK_NOTICE_CHECKBASISList">
 									<el-form-item>
 										<el-row :gutter="20">
 											<el-col :span="3">
@@ -166,7 +167,7 @@
 												<el-form-item label="操作"></el-form-item>
 											</el-col>
 										</el-row>
-										<el-row :gutter="20" v-for="(item,key) in dataInfo.attributes" :key="key">
+										<el-row :gutter="20" v-for="(item,key) in dataInfo.WORK_NOTICE_CHECKBASISList" :key="key">
 											<el-col :span="3">
 												<el-input type="text" placeholder="请输入序号" v-model="item.NUMBER"></el-input>
 											</el-col>
@@ -181,10 +182,10 @@
 												<el-input type="text" placeholder="请输入版本" v-model="item.VERSION"></el-input>
 											</el-col>
 											<el-col :span="3">
-												<el-input type="text" placeholder="附件" v-model="item.VERSION"></el-input>
+												<el-input type="text" placeholder="附件"></el-input>
 											</el-col>
 											<el-col :span="2">
-												<i class="el-icon-delete" @click="delfield(item)" style="color: red"></i>
+												<i class="el-icon-delete" @click="delfieldBasis(item)" style="color: red"></i>
 											</el-col>
 										</el-row>
 									</el-form-item>
@@ -214,8 +215,7 @@
 												<el-input v-model="dataInfo.ACCEPT_PERSON" disabled="true">
 													<el-button slot="append" icon="el-icon-search"></el-button>
 												</el-input>
-												
-												
+
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -228,13 +228,13 @@
 										<i class="icon-upload-cloud"></i>
 										<font>导入</font>
 									</el-button>
-									<el-button type="success" size="mini" round @click="addfield">
+									<el-button type="success" size="mini" round @click="addfieldProject">
 										<i class="icon-add"></i>
 										<font>新建</font>
 									</el-button>
 								</div>
 								<!-- :rules="rules" ref="attributes" -->
-								<el-form :model="dataInfo.attributes">
+								<el-form :model="dataInfo.WORK_NOTICE_CHECKPROJECTList">
 									<el-form-item>
 										<el-row :gutter="20">
 											<el-col :span="3">
@@ -259,7 +259,7 @@
 												<el-form-item label="操作"></el-form-item>
 											</el-col>
 										</el-row>
-										<el-row :gutter="20" v-for="(item,key) in dataInfo.attributes" :key="key">
+										<el-row :gutter="20" v-for="(item,key) in dataInfo.WORK_NOTICE_CHECKPROJECTList" :key="key">
 											<el-col :span="3">
 												<el-input type="text" placeholder="请输入序号" v-model="item.NUMBER"></el-input>
 											</el-col>
@@ -267,17 +267,19 @@
 												<el-input type="text" placeholder="请输入检验检测项目编号" v-model="item.P_NUM"></el-input>
 											</el-col>
 											<el-col :span="6">
-												<el-input type="text" placeholder="请输入检验检测项目内容" v-model="item.P_NUM"></el-input>
+												<el-input type="text" placeholder="请输入检验检测项目内容" v-model="item.P_DESC"></el-input>
 											</el-col>
-
+											<el-col :span="3">
+												<el-input type="text" placeholder="请输入要求" v-model="item.REMARKS"></el-input>
+											</el-col>
 											<el-col :span="3">
 												<el-input type="text" placeholder="请输入版本" v-model="item.VERSION"></el-input>
 											</el-col>
 											<el-col :span="3">
-												<el-input type="text" placeholder="附件" v-model="item.files"></el-input>
+												<el-input type="text" placeholder="附件"></el-input>
 											</el-col>
 											<el-col :span="2">
-												<i class="el-icon-delete" @click="delfield(item)" style="color: red"></i>
+												<i class="el-icon-delete" @click="delfieldProject(item)" style="color: red"></i>
 											</el-col>
 										</el-row>
 									</el-form-item>
@@ -301,7 +303,7 @@
 										<el-col :span="8">
 											<el-form-item label="下达日期" prop="XD_DATE">
 												<el-date-picker v-model="dataInfo.XD_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
-											</el-date-picker>
+												</el-date-picker>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -324,7 +326,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="录入时间" prop="ENTERDATE">
-												<el-input v-model="nitificationsInfo.ENTERDATE" disabled="true"></el-input>
+												<el-input v-model="dataInfo.ENTERDATE" disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -341,7 +343,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="修改时间" prop="CHANGEDATE">
-												<el-input v-model="nitificationsInfo.CHANGEDATE" disabled="true"></el-input>
+												<el-input v-model="dataInfo.CHANGEDATE" disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 
@@ -352,7 +354,7 @@
 					</div>
 					<div class="el-dialog__footer">
 						<el-button @click='close'>取消</el-button>
-						<el-button type="primary" @click="submitForm('nitificationsInfo')">提交</el-button>
+						<el-button type="primary" @click="submitForm('dataInfo')">提交</el-button>
 					</div>
 				</el-form>
 			</div>
@@ -364,28 +366,28 @@
 <script>
 	export default {
 		name: 'masks',
-		props: {
-			dataInfo: {
-				type: Object,
-				default: function(){
-					return {
-					N_CODE: '',
-					TYPE: '',
-					XD_DATE: '',
-					ITEM_NAME: '',
-					ITEM_MODEL: '',
-					VENDOR: '',
-					CJDW: '',
-					TASKNUM: '',
-					SOLUTION: '',
-					COMPDATE:'',
-					STATUS: '',
-					ENTERBY: '',
-					}
-				}
-			},
-			page: Object ,
-		},
+		//		props: {
+		//			dataInfo: {
+		//				type: Object,
+		//				default: function(){
+		//					return {
+		//					N_CODE: '',
+		//					TYPE: '',
+		//					XD_DATE: '',
+		//					ITEM_NAME: '',
+		//					ITEM_MODEL: '',
+		//					VENDOR: '',
+		//					CJDW: '',
+		//					TASKNUM: '',
+		//					SOLUTION: '',
+		//					COMPDATE:'',
+		//					STATUS: '',
+		//					ENTERBY: '',
+		//					}
+		//				}
+		//			},
+		//			page: Object ,
+		//		},
 		data() {
 			var validateName = (rule, value, callback) => {
 				if(value === '') {
@@ -419,6 +421,8 @@
 				isok2: false,
 				down: true,
 				up: false,
+				addtitle: true, //添加弹出框titile
+				modifytitle: false, //修改弹出框titile
 				activeNames: ['1', '2', '3', '4', '5', '6', '7'], //手风琴数量
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
@@ -456,25 +460,34 @@
 						retain: ''
 					}
 				],
-				nitificationsInfo: { //添加数据库列表信息
-					name: '',
-					description: '',
-					attributes: [{ //字段列表
-						columnname: '',
-						description: '',
-						type: '',
-						length: '',
-						retain: '',
-						typename: ''
+				dataInfo: { //添加数据库列表信息
+					N_CODE: '',
+					TYPE: '',
+					XD_DATE: '',
+					ITEM_NAME: '',
+					ITEM_MODEL: '',
+					VENDOR: '',
+					CJDW: '',
+					TASKNUM: '',
+					SOLUTION: '',
+					COMPDATE: '',
+					STATUS: '活动',
+					ENTERBY: '',
+					WORK_NOTICE_CHECKBASISList: [{ //字段列表
+						NUMBER: '',
+						S_NUM: '',
+						S_DESC: '',
+						VERSION: '',
+						STATUS: '',
+					}],
+					WORK_NOTICE_CHECKPROJECTList: [{
+						NUMBER: '',
+						P_NUM: '',
+						P_DESC: '',
+						REMARKS: '',
+						VERSION: '',
 					}]
 				},
-				/*attributes:[{//字段列表
-					columnname: '',
-					description: '',
-					type:'',
-					length: '',
-					retain: ''
-				}],*/
 				rules: {
 					name: [{
 						required: true,
@@ -498,7 +511,7 @@
 		},
 		methods: {
 			resetNew() {
-				this.nitificationsInfo = { //数据库列表
+				this.dataInfo = { //数据库列表
 						name: '',
 						description: '',
 						attributes: [{ //字段列表
@@ -510,7 +523,7 @@
 						}]
 					},
 
-					this.$refs["nitificationsInfo"].resetFields();
+					this.$refs["dataInfo"].resetFields();
 			},
 			handleChange(val) { //手风琴开关效果调用
 			},
@@ -519,25 +532,43 @@
 				this.selUser = val;
 			},
 
-			addfield() { //添加行信息
+			//新建行
+			addfieldBasis() {
 				var obj = {
-					columnname: '',
-					description: '',
-					type: '',
-					length: '',
-					retain: ''
+					NUMBER: '',
+					S_NUM: '',
+					S_DESC: '',
+					VERSION: '',
+					STATUS: '',
 				};
-				//this.attributes.push(obj);
-				this.nitificationsInfo.attributes.push(obj);
+				this.dataInfo.WORK_NOTICE_CHECKBASISList.push(obj);
 			},
-			delfield(item) {
-				var index = this.nitificationsInfo.attributes.indexOf(item);
+			addfieldProject() {
+				var obj = {
+					NUMBER: '',
+					P_NUM: '',
+					P_DESC: '',
+					REMARKS: '',
+					VERSION: '',
+				};
+				this.dataInfo.WORK_NOTICE_CHECKPROJECTList.push(obj);
+			},
+			//刪除新建行
+			delfieldBasis(item) {
+				var index = this.dataInfo.WORK_NOTICE_CHECKBASISList.indexOf(item);
 				if(index !== -1) {
 					//this.attributes.splice(index, 1)
-					this.nitificationsInfo.attributes.splice(index, 1);
+					this.dataInfo.WORK_NOTICE_CHECKBASISList.splice(index, 1);
 				}
 			},
-
+			//刪除新建行
+			delfieldProject(item) {
+				var index = this.dataInfo.WORK_NOTICE_CHECKPROJECTList.indexOf(item);
+				if(index !== -1) {
+					//this.attributes.splice(index, 1)
+					this.dataInfo.WORK_NOTICE_CHECKPROJECTList.splice(index, 1);
+				}
+			},
 			importdia() {
 				this.dialogVisible = true;
 			},
@@ -547,9 +578,34 @@
 				this.show = true;
 			},
 			// 这里是修改
-			detail() {
-				
-				this.show = true;
+			detail(dataid) {
+				this.addtitle = false;
+				this.modifytitle = true;
+				this.statusshow1 = false;
+				this.statusshow2 = true;
+				this.modify = true;
+				//				   var usersUrl='/api/api-user/users/currentMap'
+				//				this.$axios.get(usersUrl, {}).then((res) => {
+				//	    			this.dataInfo.CHANGEBY = res.data.nickname;
+				//	    			var date = new Date();
+				//					this.dataInfo.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
+				//				}).catch((err) => {
+				//					this.$message({
+				//						message: '网络错误，请重试',
+				//						type: 'error'
+				//					});
+				//				});
+				//				console.log(this.CUSTOMER.CHANGEDATE);
+				var url = '/api/api-apps/app/workNot/' + dataid;
+				this.$axios.get(url, {}).then((res) => {
+					this.dataInfo = res.data;
+					this.show = true;
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
 			},
 			//点击关闭按钮
 			close() {
@@ -580,11 +636,13 @@
 				$(".mask_div").css("top", "0");
 			},
 			// 保存users/saveOrUpdate
-			submitForm(nitificationsInfo) {
-				this.$refs[nitificationsInfo].validate((valid) => {
+			submitForm(dataInfo) {
+				this.$refs[dataInfo].validate((valid) => {
 					//		          if (valid) {
-					var url = '/api/apps-center/objectcfg/saveOrUpdate';
-					this.$axios.post(url, this.nitificationsInfo).then((res) => {
+					var url = '/api/apps-center/workNot/saveOrUpdate';
+					console.log(this.dataInfo);
+					this.$axios.post(url, this.dataInfo).then((res) => {
+						console.log(res);
 						if(res.data.resp_code == 0) {
 							this.$message({
 								message: '保存成功',

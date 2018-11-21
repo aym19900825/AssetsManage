@@ -39,8 +39,8 @@
 									</span>
 									<el-dropdown-menu slot="dropdown">
 										<el-checkbox-group v-model="checkedName" @change="changeCheckedName">
-											<el-dropdown-item  v-for="(item,index) in columns">
-												<el-checkbox :label="item.text" :key="index" name="type"></el-checkbox>
+											<el-dropdown-item  v-for="(item,index) in columns" :key="index">
+												<el-checkbox :label="item.text"  name="type"></el-checkbox>
 											</el-dropdown-item>
 										</el-checkbox-group>
 									</el-dropdown-menu>

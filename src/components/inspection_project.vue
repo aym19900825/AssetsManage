@@ -5,122 +5,55 @@
 		<navs_header></navs_header>
 	</div>
 	<div class="contentbg">
-		<!--左侧菜单内容显示 Begin-->
-		<navs_left></navs_left>
-		<!--左侧菜单内容显示 End-->
-
-
 		<!--右侧内容显示 Begin-->
-		<div class="wrapper wrapper-content">
-			<EasyScrollbar>
-				<div id="wrapper" ref="homePagess" style="height: 600px;">
-					<div id="information" style="height: inherit;">
-						<div class="ibox-content">
-							<!--按钮操作行 Begin-->
-							<div class="fixed-table-toolbar clearfix">
-								<div class="bs-bars pull-left">
-									<div class="hidden-xs" id="roleTableToolbar" role="group">
-										<button type="button" class="btn btn-green" @click="openAddMgr" id="">
-				                        	<i class="icon-add"></i>添加
-				              			 </button>
-										<button type="button" class="btn btn-bule button-margin" @click="modify">
-										    <i class="icon-edit"></i>修改
-										</button>
-										<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
-										    <i class="icon-trash"></i>删除
-										</button>
-										<button type="button" class="btn btn-primarys button-margin" @click="importData">
-										    <i class="icon-upload-cloud"></i>导入
-										</button>
-										<button type="button" class="btn btn-primarys button-margin" @click="exportData">
-										    <i class="icon-download-cloud"></i>导出
-										</button>
-										<button type="button" class="btn btn-primarys button-margin" @click="Printing">
-										    <i class="icon-print"></i>打印
-										</button>
-										<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-								    		<i class="icon-search"></i>高级查询
-								    		<i class="icon-arrow1-down" v-show="down"></i>
-								    		<i class="icon-arrow1-up" v-show="up"></i>
-										</button>
-									</div>
-								</div>
-								<div class="columns columns-right btn-group pull-right">
-									<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
-									<tableControle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></tableControle>
-								</div>
-							</div>
-							<!--按钮操作行 End-->
-
-							<!-- 高级查询划出 Begin-->
-							<div v-show="search" class="pb10">
-								<el-form status-icon :model="searchList" label-width="70px">
-									<el-row :gutter="10">
-										<el-col :span="5">
-											<el-input v-model="searchList.typename">
-												<template slot="prepend">类型名称</template>
-											</el-input>
-										</el-col>
-										<el-col :span="2">
-											<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
-										</el-col>
-									</el-row>
-								</el-form>
-							</div>
-							<!-- 高级查询划出 End-->
-							<el-row :gutter="0">
-								<el-col :span="24">
-									<!-- 表格 Begin-->
-									<el-table :data="userList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
-										<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
-										</el-table-column>
-										<el-table-column label="检验/检测方法编号" width="150" sortable prop="M_NUM" v-if="this.checkedName.indexOf('检验/检测方法编号')!=-1">
-										</el-table-column>
-										<el-table-column label="中文名称" width="220" sortable prop="M_NAME" v-if="this.checkedName.indexOf('中文名称')!=-1">
-										</el-table-column>
-										<el-table-column label="英文名称" width="180" sortable prop="M_ENAME" v-if="this.checkedName.indexOf('英文名称')!=-1">
-										</el-table-column>
-										<el-table-column label="类别" width="120" sortable prop="M_TYPE" v-if="this.checkedName.indexOf('类别')!=-1">
-										</el-table-column>
-										<el-table-column label="状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
-										</el-table-column>
-										<el-table-column label="版本" width="100" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1">
-										</el-table-column>
-										<el-table-column label="机构" width="180" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('机构')!=-1">
-										</el-table-column>
-										<el-table-column label="录入人" width="120" prop="ENTERBY" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入人')!=-1">
-										</el-table-column>
-										<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
-										</el-table-column>
-										<el-table-column label="修改人" width="120" prop="CHANGEBY" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改人')!=-1">
-										</el-table-column>
-										<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
-										</el-table-column>
-									</el-table>
-									<el-pagination background class="pull-right pt10 pb10" v-if="this.checkedName.length>0"
-							            @size-change="sizeChange"
-							            @current-change="currentChange"
-							            :current-page="page.currentPage"
-							            :page-sizes="[10, 20, 30, 40]"
-							            :page-size="page.pageSize"
-							            layout="total, sizes, prev, pager, next"
-							            :total="page.totalCount">
-							        </el-pagination>
-									<!-- 表格 End-->
-								</el-col>
-							</el-row>
-						</div>
+		<div class="wrapper wrapper-content wrapperall">
+			<el-card class="box-card">
+				<div slot="header" class="clearfix">
+					<span>产品类型</span>
+					<!--按钮操作行 Begin-->
+					<div class="columns columns-right btn-group pull-right">
+						<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
+						<tableControle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></tableControle>
 					</div>
+					<!--按钮操作行 End-->
 				</div>
-			</EasyScrollbar>
+				<div class="text item">
+					<el-row :gutter="0">
+						<el-col :span="24">
+							<!-- 表格 Begin-->
+							<el-table :data="inspectionList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'inspectionList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
+								</el-table-column>
+								<el-table-column label="产品类型" width="150" sortable prop="PRO_NAME" v-if="this.checkedName.indexOf('产品类型')!=-1">
+								</el-table-column>
+								<el-table-column label="状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
+								</el-table-column>
+								<el-table-column label="状态修改人" width="120" prop="CHANGEBY" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('状态修改人')!=-1">
+								</el-table-column>
+								<el-table-column label="状态修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('状态修改时间')!=-1">
+								</el-table-column>
+							</el-table>
+							<el-pagination background class="pull-right pt10 pb10" v-if="this.checkedName.length>0"
+					            @size-change="sizeChange"
+					            @current-change="currentChange"
+					            :current-page="page.currentPage"
+					            :page-sizes="[10, 20, 30, 40]"
+					            :page-size="page.pageSize"
+					            layout="total, sizes, prev, pager, next"
+					            :total="page.totalCount">
+					        </el-pagination>
+							<!-- 表格 End-->
+						</el-col>
+					</el-row>
+				</div>
+			</el-card>
 		</div>
-		<!--右侧内容显示 End-->
+	<!--右侧内容显示 End-->
 	</div>
 </div>
 </template>
 <script>
 	import vheader from './common/vheader.vue'
-	import navs_left from './common/left_navs/nav_left2.vue'
 	import navs_header from './common/nav_tabs.vue'
 	import table from './plugin/table/table-normal.vue'
 	import tableControle from './plugin/table-controle/controle.vue'
@@ -128,134 +61,55 @@
 		name: 'customer_management',
 		components: {
 			vheader,
-			navs_left,
 			navs_header,
 			tableControle,
 			table,
 		},
 		data() {
 			return {
-				dataUrl: '/api/api-user/users',
+				loadSign:true,//加载
+				commentArr:{},//下拉加载
+				value: '',
+				options: [{
+					value: '1',
+					label: '活动'
+				}, {
+					value: '0',
+					label: '不活动'
+				}],
 				searchData: {
 			        page: 1,
 			        limit: 10,//分页显示数
-			        nickname: '',
-			        enabled: '',
-			        searchKey: '',
-			        searchValue: '',
-			        companyId: '',
-			        deptId: ''
+			        enabled: '',//状态
 		        },
 				checkedName: [
-					'检验/检测方法编号',
-					'中文名称',
-					'英文名称',
-					'类别',
+					'产品类型',
 					'状态',
-					'版本',
-					'机构',
-					'录入人',
-					'录入时间',
-					'修改人',
-					'修改时间'
+					'状态修改人',
+					'状态修改时间'
 				],
 				tableHeader: [
 					{
-						label: '检验/检测方法编号',
+						label: '产品类型',
 						prop: 'M_NUM'
-					},
-					{
-						label: '中文名称',
-						prop: 'M_NAME'
-					},
-					{
-						label: '英文名称',
-						prop: 'M_ENAME'
-					},
-					{
-						label: '类别',
-						prop: 'M_TYPE'
 					},
 					{
 						label: '状态',
 						prop: 'STATUS'
 					},
 					{
-						label: '版本',
-						prop: 'VERSION'
-					},
-					{
-						label: '机构',
-						prop: 'DEPARTMENT'
-					},
-					{
-						label: '录入人',
-						prop: 'ENTERBY'
-					},
-					{
-						label: '录入时间',
-						prop: 'ENTERDATE'
-					},
-					{
-						label: '修改人',
+						label: '状态修改人',
 						prop: 'CHANGEBY'
 					},
 					{
-						label: '修改时间',
+						label: '状态修改时间',
 						prop: 'CHANGEDATE'
 					}
 				],
-				leftNavs: [//leftNavs左侧菜单数据
-					{
-						navicon: 'icon-user',
-						navtitle: '用户管理',
-						navherf: '/personinfo'
-					}, {
-						navicon: 'icon-edit',
-						navtitle: '英文名称管理',
-						navherf: '/dept_management'
-					}, {
-						navicon: 'icon-role-site',
-						navtitle: '角色管理',
-						navherf: '/role_management'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '客户管理',
-						navherf: '/customer_management'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '产品类别',
-						navherf: '/products_category'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '产品',
-						navherf: '/products'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测标准',
-						navherf: '/testing_standard'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测项目',
-						navherf: '/testing_projects'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测方法',
-						navherf: '/testing_methods'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '自动编号设置',
-						navherf: '/number_settings'
-					}
-				],
-				companyId: '',
-				deptId: '',
 				selUser: [],
 				'活动': true,
 				'不活动': false,
-				'男': true,
-				'女': false,
-				userList: [],
+				inspectionList: [],
 				search: false,
 				show: false,
 				down: true,
@@ -264,9 +118,11 @@
 				ismin:true,
 				clientHeight:'',//获取浏览器高度
 				searchList: {//点击高级搜索后显示的内容
-					nickname: '',
-					enabled: '',
-					createTime: ''
+					PRO_NUM: '',
+					STATUS: '',
+					DEPARTMENT: '',
+					PRO_NAME:'',
+					VERSION:''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -276,7 +132,7 @@
 					children: "subDepts",
 					label: "simplename"
 				},
-				userData:[],
+				inspectionData:[],
 				page: {//分页显示
 					currentPage: 1,
 					pageSize: 10,
@@ -285,21 +141,30 @@
 				aaaData:[],
 			}
 		},
-
-		mounted(){
-			// 获取浏览器可视区域高度
-			var _this = this;
-			var clientHeight = $(window).height() - 100;    //document.body.clientWidth;
-			_this.$refs.homePagess.style.height = clientHeight + 'px';
-			window.onresize = function() {
-				var clientHeight = $(window).height() - 100;
-				_this.$refs.homePagess.style.height = clientHeight + 'px';
-			};
-			
-		},
 		methods: {
+			loadMore () {//表格滚动加载
+			   if (this.loadSign) {
+			     this.loadSign = false
+			     this.page.currentPage++
+			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+			       return
+			     }
+			     setTimeout(() => {
+			       this.loadSign = true
+			     }, 1000)
+			     this.requestData()
+			   }
+			 },
 			tableControle(data){
 				this.checkedName = data;
+			},
+			//时间格式化  
+			dateFormat(row, column) {
+				var date = row[column.property];
+				if(date == undefined) {
+					return "";
+				}
+				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss"); 
 			},
 			sizeChange(val) {
 		      this.page.pageSize = val;
@@ -314,12 +179,22 @@
 				this.page.pageSize = 10;
 				this.requestData();
 			},
-			//添加用戶
+			//添加数据内容
 			openAddMgr() {
-//				this.$refs.child.resetNew();
+				// this.$refs.child.resetNew();
+				this.aaaData = {
+					PRO_NUM:'',
+					PRO_NAME:'',
+					STATUS:'活动',
+					VERSION:'1',
+					ENTERBY:'',
+					ENTERDATE:'',
+					CHANGEBY:'',
+					CHANGEDATE:''
+				};
 				this.$refs.child.visible();
 			},
-			//修改用戶
+			//修改数据内容
 			modify() {
 				this.aaaData = this.selUser;
 				if(this.aaaData.length == 0) {
@@ -335,7 +210,7 @@
 					});
 					return;
 				} else {
-					this.$refs.child.detail();
+					this.$refs.child.detail(this.aaaData[0].ID);
 				}
 			},
 			//高级查询
@@ -344,26 +219,27 @@
 				this.down = !this.down,
 					this.up = !this.up
 			},
-			// 删除
-			deluserinfo() {
+			// 删除数据内容
+			delinspectioninfo() {
 				var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({
-						message: '请您选择要删除的用户',
+						message: '请您选择要删除的数据',
 						type: 'warning'
 					});
 					return;
 				} else if(selData.length > 1) {
 					this.$message({
-						message: '不可同时删除多个用户',
+						message: '不可同时删除多条数据',
 						type: 'warning'
 					});
 					return;
 				} else {
 					var changeUser = selData[0];
-					var id = changeUser.id;
-					var url = '/api/api-user/users/' + id;
+					var id = changeUser.ID;
+					var url = '/api/api-apps/app/product/' + id;
 					this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
+						console.log(res.data.resp_code);
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -380,36 +256,17 @@
 					});
 				}
 			},
-			// 导入
-			importData() {
-				
-			},
-			// 导出
-			exportData() {
-				
-			},
-			// 打印
-			Printing() {
-				
-			},
+			
 			judge(data) {
-				//taxStatus 布尔值
+				//taxStatus 状态布尔值
 				return data.enabled ? '活动' : '不活动'
 			},
-			//时间格式化  
-			dateFormat(row, column) {
-				var date = row[column.property];
-				if(date == undefined) {
-					return "";
-				}
-				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
-			},
+			
 			insert() {
-				this.users.push(this.user)
+				this.inspections.push(this.inspection)
 			},
 			remove(index) {
-				this.users.splice(index, 1)
+				this.inspections.splice(index, 1)
 			},
 			SelChange(val) {
 				this.selUser = val;
@@ -418,26 +275,39 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					nickname: this.searchList.nickname,
-					enabled: this.searchList.enabled,
-					searchKey: 'createTime',
-					searchValue: this.searchList.createTime,
-					companyId: this.companyId,
-					deptId: this.deptId
+
+					PRO_NUM: this.searchList.PRO_NUM,
+					STATUS: this.searchList.STATUS,
+					DEPARTMENT: this.searchList.DEPARTMENT,
+					PRO_NAME: this.searchList.PRO_NAME,
+					VERSION: this.searchList.VERSION,
 				}
-				var url = '/api/api-user/users';
+				var url = '/api/api-apps/app/product';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					this.userList = res.data.data;
-					this.page.totalCount = res.data.count;
+					this.page.totalCount = res.data.count;	
+					//总的页数
+					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
+					if(this.page.currentPage >= totalPage){
+						 this.loadSign = false
+					}else{
+						this.loadSign=true
+					}
+					this.commentArr[this.page.currentPage]=res.data.data
+					let newarr=[]
+					for(var i = 1; i <= totalPage; i++){
+					
+						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
+							
+							for(var j = 0; j < this.commentArr[i].length; j++){
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					
+					this.inspectionList = newarr;
 				}).catch((wrong) => {})
-				this.userList.forEach((item, index) => {
-					var id = item.id;
-					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
-						this.userList.role = res.data.roles[0].name;
-					}).catch((wrong) => {})
-				})
 			},
 			handleNodeClick(data) {
 			},
@@ -447,10 +317,38 @@
 		},
 		mounted() {
 			this.requestData();
+			// 获取浏览器可视区域高度
+			var _this = this;
+			var clientHeight = $(window).height() - 100;    //document.body.clientWidth;
+			_this.$refs.homePagess.style.height = clientHeight + 'px';
+			window.onresize = function() {
+				var clientHeight = $(window).height() - 100;
+				_this.$refs.homePagess.style.height = clientHeight + 'px';
+			};
 		},
+
 	}
 </script>
 
 <style scoped>
+.text {
+    font-size: 14px;
+  }
 
+  .item {
+    margin-bottom: 18px;
+  }
+
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: "";
+  }
+  .clearfix:after {
+    clear: both
+  }
+
+  .box-card {
+    width: 480px;
+  }
 </style>

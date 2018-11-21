@@ -76,7 +76,7 @@
 										</el-table-column>
 										<el-table-column label="状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
 										</el-table-column>
-										<el-table-column label="录入人机构" width="180" sortable prop="DEPT" v-if="this.checkedName.indexOf('录入人机构')!=-1">
+										<el-table-column label="录入人机构" width="180" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('录入人机构')!=-1">
 										</el-table-column>
 										<el-table-column label="录入人" width="140" sortable prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
 										</el-table-column>
@@ -172,7 +172,7 @@
 					},
 					{
 						label: '录入人机构',
-						prop: 'DEPT'
+						prop: 'DEPARTMENT'
 					},
 					{
 						label: '录入人',
@@ -294,31 +294,43 @@
 						type: 'warning'
 					});
 					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时删除多条数据',
-						type: 'warning'
-					});
-					return;
-				} else {
-					var changeUser = selData[0];
-					var id = changeUser.id;
-					var url = '/api/api-apps/app/autokey/' + id;
-					this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
+				}else {
+					var url = '/api/api-apps/app/autokey/deletes';
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					for (var i = 0; i < changeUser.length; i++) {
+						deleteid.push(changeUser[i].ID);
+					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+                    var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除此产品类别吗？', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                    }).then(({ value }) => {
+                        this.$axios.delete(url, {params: data}).then((res) => {//.delete 传数据方法
 						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '删除成功',
-								type: 'success'
+								message: '网络错误，请重试',
+								type: 'error'
 							});
-							this.requestData();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
-					});
+                    }).catch(() => {
+
+                	});
 				}
 			},
 			// 导入

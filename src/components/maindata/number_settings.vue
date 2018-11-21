@@ -76,7 +76,7 @@
 										</el-table-column>
 										<el-table-column label="状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
 										</el-table-column>
-										<el-table-column label="录入人机构" width="180" sortable prop="DEPT" v-if="this.checkedName.indexOf('录入人机构')!=-1">
+										<el-table-column label="录入人机构" width="180" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('录入人机构')!=-1">
 										</el-table-column>
 										<el-table-column label="录入人" width="140" sortable prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
 										</el-table-column>
@@ -172,7 +172,7 @@
 					},
 					{
 						label: '录入人机构',
-						prop: 'DEPT'
+						prop: 'DEPARTMENT'
 					},
 					{
 						label: '录入人',

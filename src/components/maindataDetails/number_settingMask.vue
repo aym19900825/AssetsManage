@@ -54,7 +54,7 @@
 								<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="录入人机构">
-												<el-input v-model="numbsetForm.DEPT" :disabled="true"></el-input>
+												<el-input v-model="numbsetForm.DEPARTMENT" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -113,7 +113,7 @@
 						PREFIX:'',
 						S_NUM:'',
 						MEMO:'',
-						DEPT:'',
+						DEPARTMENT:'',
 						ENTERBY:'',
 						ENTERDATE:'',
 						CHANGEBY:'',
@@ -173,7 +173,7 @@
 					PREFIX:'',
 					S_NUM:'',
 					MEMO:'',
-					DEPT:'',
+					DEPARTMENT:'',
 					ENTERBY:'',
 					ENTERDATE:'',
 					CHANGEBY:'',
@@ -205,7 +205,7 @@
 					PREFIX:'',
 					S_NUM:'',
 					MEMO:'',
-					DEPT:'',
+					DEPARTMENT:'',
 					ENTERBY:'',
 					ENTERDATE:'',
 					CHANGEBY:'',
@@ -215,7 +215,7 @@
             },
             childMethods() {//添加内容时从父组件带过来的
             	this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
-					this.numbsetForm.DEPT=res.data.deptName;
+					this.numbsetForm.DEPARTMENT=res.data.deptName;
 					this.numbsetForm.ENTERBY=res.data.nickname;
 					var date=new Date();
 					this.numbsetForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");

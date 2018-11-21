@@ -118,18 +118,18 @@
 											</el-table-column>
 											<el-table-column label="承检单位" width="180" sortable prop="CJDW" v-if="this.checkedName.indexOf('承检单位')!=-1">
 											</el-table-column>
-											<el-table-column label="任务号" width="120" prop="TASKNUM" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('任务号')!=-1">
+											<el-table-column label="任务号" width="120" prop="TASKNUM" sortable  v-if="this.checkedName.indexOf('任务号')!=-1">
 											</el-table-column>
-											<el-table-column label="抽样方案" width="120" prop="SOLUTION" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('抽样方案')!=-1">
+											<el-table-column label="抽样方案" width="120" prop="SOLUTION" sortable  v-if="this.checkedName.indexOf('抽样方案')!=-1">
 											</el-table-column>
 											<el-table-column label="完成日期" width="120" prop="COMPDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('完成日期')!=-1">
 											</el-table-column>
-											<el-table-column label="状态" width="120" prop="STATUS" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('状态')!=-1">
+											<el-table-column label="状态" width="120" prop="STATUS" sortable  v-if="this.checkedName.indexOf('状态')!=-1">
 											</el-table-column>
-											<el-table-column label="录入人" width="120" prop="ENTERBY" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入人')!=-1">
+											<el-table-column label="录入人" width="120" prop="ENTERBY" sortable  v-if="this.checkedName.indexOf('录入人')!=-1">
 											</el-table-column>
-											<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
-											</el-table-column>
+											<!--<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
+											</el-table-column>-->
 										</el-table>
 										<el-pagination background class="pull-right pt10 pb10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 										</el-pagination>
@@ -235,10 +235,10 @@
 						label: '录入人',
 						prop: 'ENTERBY'
 					},
-					{
-						label: '录入时间',
-						prop: 'ENTERDATE'
-					}
+//					{
+//						label: '录入时间',
+//						prop: 'ENTERDATE'
+//					}
 				],
 
 				selUser: [],

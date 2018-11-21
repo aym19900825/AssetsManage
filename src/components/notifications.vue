@@ -124,9 +124,11 @@
 											</el-table-column>
 											<el-table-column label="完成日期" width="120" prop="COMPDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('完成日期')!=-1">
 											</el-table-column>
-											<el-table-column label="状态" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('状态')!=-1">
+											<el-table-column label="状态" width="120" prop="STATUS" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('状态')!=-1">
 											</el-table-column>
-											<el-table-column label="录入人" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入人')!=-1">
+											<el-table-column label="录入人" width="120" prop="ENTERBY" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入人')!=-1">
+											</el-table-column>
+											<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 											</el-table-column>
 										</el-table>
 										<el-pagination background class="pull-right pt10 pb10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
@@ -182,7 +184,8 @@
 					'抽样方案',
 					'完成日期',
 					'状态',
-					'录入人'
+					'录入人',
+					'录入时间'
 				],
 				tableHeader: [{
 						label: '工作任务通知书编号',
@@ -231,6 +234,10 @@
 					{
 						label: '录入人',
 						prop: 'ENTERBY'
+					},
+					{
+						label: '录入时间',
+						prop: 'ENTERDATE'
 					}
 				],
 
@@ -332,7 +339,7 @@
 					});
 					return;
 				} else {
-					this.$refs.child.detail();
+					this.$refs.child.detail(this.aaaData[0].ID);
 				}
 			},
 			//高级查询

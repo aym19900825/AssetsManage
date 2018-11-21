@@ -35,58 +35,58 @@
 								<div class="accordion-body tab-content">
 									<el-radio-group v-model="dataInfo.TYPE">
 										<el-row :gutter="70">
-										<el-col :span="6">
-											<el-radio  label="1">监督抽查</el-radio>
-										</el-col>
-										<el-col :span="6">
-											<el-radio  label="2">监督抽查复查</el-radio>
-										</el-col>
-										<el-col :span="6">
-											<el-radio  label="3">质量抽查</el-radio>
-										</el-col>
-										<el-col :span="6">
-											<el-radio  label="4">质量抽查复查</el-radio>
-										</el-col>
-									</el-row>
-									<el-row :gutter="70">
-										<el-col :span="6">
-											<el-radio label="1">监督抽查</el-radio>
-										</el-col>
-										<el-col :span="6">
-											<el-radio  label="2">监督抽查复查</el-radio>
-										</el-col>
-										<el-col :span="6">
-											<el-radio  label="3">质量抽查</el-radio>
-										</el-col>
-										<el-col :span="6">
-											<el-radio  label="4">质量抽查复查</el-radio>
-										</el-col>
-									</el-row>
-									<el-row :gutter="70">
-										<el-col :span="6">
-											<el-radio label="5">生产许可证</el-radio>
-										</el-col>
-										<el-col :span="6">
-											<el-radio label="6">认定检验检测</el-radio>
-										</el-col>
-										<el-col :span="6">
-											<el-radio label="7">鉴定试验</el-radio>
-										</el-col>
-										<el-col :span="6">
-											<el-radio label="8">委托检验检测</el-radio>
-										</el-col>
-									</el-row>
-									<el-row :gutter="70">
-										<el-col :span="6">
-											<el-radio label="9">专项抽查</el-radio>
-										</el-col>
-										<el-col :span="6">
-											<el-radio label="10">专项抽查复查</el-radio>
-										</el-col>
-										<el-col :span="6">
-											<el-radio label="11">其它</el-radio>
-										</el-col>
-									</el-row>
+											<el-col :span="6">
+												<el-radio label="1">监督抽查</el-radio>
+											</el-col>
+											<el-col :span="6">
+												<el-radio label="2">监督抽查复查</el-radio>
+											</el-col>
+											<el-col :span="6">
+												<el-radio label="3">质量抽查</el-radio>
+											</el-col>
+											<el-col :span="6">
+												<el-radio label="4">质量抽查复查</el-radio>
+											</el-col>
+										</el-row>
+										<el-row :gutter="70">
+											<el-col :span="6">
+												<el-radio label="1">监督抽查</el-radio>
+											</el-col>
+											<el-col :span="6">
+												<el-radio label="2">监督抽查复查</el-radio>
+											</el-col>
+											<el-col :span="6">
+												<el-radio label="3">质量抽查</el-radio>
+											</el-col>
+											<el-col :span="6">
+												<el-radio label="4">质量抽查复查</el-radio>
+											</el-col>
+										</el-row>
+										<el-row :gutter="70">
+											<el-col :span="6">
+												<el-radio label="5">生产许可证</el-radio>
+											</el-col>
+											<el-col :span="6">
+												<el-radio label="6">认定检验检测</el-radio>
+											</el-col>
+											<el-col :span="6">
+												<el-radio label="7">鉴定试验</el-radio>
+											</el-col>
+											<el-col :span="6">
+												<el-radio label="8">委托检验检测</el-radio>
+											</el-col>
+										</el-row>
+										<el-row :gutter="70">
+											<el-col :span="6">
+												<el-radio label="9">专项抽查</el-radio>
+											</el-col>
+											<el-col :span="6">
+												<el-radio label="10">专项抽查复查</el-radio>
+											</el-col>
+											<el-col :span="6">
+												<el-radio label="11">其它</el-radio>
+											</el-col>
+										</el-row>
 									</el-radio-group>
 								</div>
 							</el-collapse-item>
@@ -96,7 +96,7 @@
 										<el-col :span="8">
 											<el-form-item label="计划编号" prop="WP_NUM">
 												<el-input v-model="dataInfo.WP_NUM" :disabledd="true">
-												<el-button slot="append" icon="el-icon-search"></el-button>
+													<el-button slot="append" icon="el-icon-search"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -117,7 +117,7 @@
 												<el-input v-model="dataInfo.P_LEADER" :disabledd="true">
 													<el-button slot="append" icon="el-icon-search"></el-button>
 												</el-input>
-												
+
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -145,7 +145,7 @@
 										<font>新建</font>
 									</el-button>
 								</div>
-								<el-form :model="dataInfo.attributes">
+								<el-form :model="dataInfo.WORK_NOTICE_CHECKBASISList">
 									<el-form-item>
 										<el-row :gutter="20">
 											<el-col :span="3">
@@ -167,7 +167,7 @@
 												<el-form-item label="操作"></el-form-item>
 											</el-col>
 										</el-row>
-										<el-row :gutter="20" v-for="(item,key) in dataInfo.addfieldBasis" :key="key">
+										<el-row :gutter="20" v-for="(item,key) in dataInfo.WORK_NOTICE_CHECKBASISList" :key="key">
 											<el-col :span="3">
 												<el-input type="text" placeholder="请输入序号" v-model="item.NUMBER"></el-input>
 											</el-col>
@@ -182,10 +182,10 @@
 												<el-input type="text" placeholder="请输入版本" v-model="item.VERSION"></el-input>
 											</el-col>
 											<el-col :span="3">
-												<el-input type="text" placeholder="附件" v-model="item.VERSION"></el-input>
+												<el-input type="text" placeholder="附件"></el-input>
 											</el-col>
 											<el-col :span="2">
-												<i class="el-icon-delete" @click="delfield(item)" style="color: red"></i>
+												<i class="el-icon-delete" @click="delfieldBasis(item)" style="color: red"></i>
 											</el-col>
 										</el-row>
 									</el-form-item>
@@ -215,8 +215,7 @@
 												<el-input v-model="dataInfo.ACCEPT_PERSON" disabled="true">
 													<el-button slot="append" icon="el-icon-search"></el-button>
 												</el-input>
-												
-												
+
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -235,7 +234,7 @@
 									</el-button>
 								</div>
 								<!-- :rules="rules" ref="attributes" -->
-								<el-form :model="dataInfo.attributes">
+								<el-form :model="dataInfo.WORK_NOTICE_CHECKPROJECTList">
 									<el-form-item>
 										<el-row :gutter="20">
 											<el-col :span="3">
@@ -260,7 +259,7 @@
 												<el-form-item label="操作"></el-form-item>
 											</el-col>
 										</el-row>
-										<el-row :gutter="20" v-for="(item,key) in dataInfo.addfieldProject" :key="key">
+										<el-row :gutter="20" v-for="(item,key) in dataInfo.WORK_NOTICE_CHECKPROJECTList" :key="key">
 											<el-col :span="3">
 												<el-input type="text" placeholder="请输入序号" v-model="item.NUMBER"></el-input>
 											</el-col>
@@ -270,15 +269,17 @@
 											<el-col :span="6">
 												<el-input type="text" placeholder="请输入检验检测项目内容" v-model="item.P_DESC"></el-input>
 											</el-col>
-
+											<el-col :span="3">
+												<el-input type="text" placeholder="请输入要求" v-model="item.REMARKS"></el-input>
+											</el-col>
 											<el-col :span="3">
 												<el-input type="text" placeholder="请输入版本" v-model="item.VERSION"></el-input>
 											</el-col>
 											<el-col :span="3">
-												<el-input type="text" placeholder="附件" v-model="item.VERSION"></el-input>
+												<el-input type="text" placeholder="附件"></el-input>
 											</el-col>
 											<el-col :span="2">
-												<i class="el-icon-delete" @click="delfield(item)" style="color: red"></i>
+												<i class="el-icon-delete" @click="delfieldProject(item)" style="color: red"></i>
 											</el-col>
 										</el-row>
 									</el-form-item>
@@ -302,7 +303,7 @@
 										<el-col :span="8">
 											<el-form-item label="下达日期" prop="XD_DATE">
 												<el-date-picker v-model="dataInfo.XD_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
-											</el-date-picker>
+												</el-date-picker>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -365,28 +366,28 @@
 <script>
 	export default {
 		name: 'masks',
-		props: {
-			dataInfo: {
-				type: Object,
-				default: function(){
-					return {
-					N_CODE: '',
-					TYPE: '',
-					XD_DATE: '',
-					ITEM_NAME: '',
-					ITEM_MODEL: '',
-					VENDOR: '',
-					CJDW: '',
-					TASKNUM: '',
-					SOLUTION: '',
-					COMPDATE:'',
-					STATUS: '',
-					ENTERBY: '',
-					}
-				}
-			},
-			page: Object ,
-		},
+		//		props: {
+		//			dataInfo: {
+		//				type: Object,
+		//				default: function(){
+		//					return {
+		//					N_CODE: '',
+		//					TYPE: '',
+		//					XD_DATE: '',
+		//					ITEM_NAME: '',
+		//					ITEM_MODEL: '',
+		//					VENDOR: '',
+		//					CJDW: '',
+		//					TASKNUM: '',
+		//					SOLUTION: '',
+		//					COMPDATE:'',
+		//					STATUS: '',
+		//					ENTERBY: '',
+		//					}
+		//				}
+		//			},
+		//			page: Object ,
+		//		},
 		data() {
 			var validateName = (rule, value, callback) => {
 				if(value === '') {
@@ -420,8 +421,8 @@
 				isok2: false,
 				down: true,
 				up: false,
-				addtitle:true,//添加弹出框titile
-				modifytitle:false,//修改弹出框titile
+				addtitle: true, //添加弹出框titile
+				modifytitle: false, //修改弹出框titile
 				activeNames: ['1', '2', '3', '4', '5', '6', '7'], //手风琴数量
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
@@ -469,33 +470,24 @@
 					CJDW: '',
 					TASKNUM: '',
 					SOLUTION: '',
-					COMPDATE:'',
-					STATUS: '',
+					COMPDATE: '',
+					STATUS: '活动',
 					ENTERBY: '',
 					WORK_NOTICE_CHECKBASISList: [{ //字段列表
-					NUMBER:'',
-					S_NUM:'',
-					S_DESC:'',
-					VERSION:'',
-					STATUS:'',
-					MEMO:''
+						NUMBER: '',
+						S_NUM: '',
+						S_DESC: '',
+						VERSION: '',
+						STATUS: '',
 					}],
-					WORK_NOTICE_CHECKPROJECTList:[{
-					NUMBER:'',
-					P_NUM:'',
-					P_DESC:'',
-					VERSION:'',
-					STATUS:'',
-					MEMO:''
+					WORK_NOTICE_CHECKPROJECTList: [{
+						NUMBER: '',
+						P_NUM: '',
+						P_DESC: '',
+						REMARKS: '',
+						VERSION: '',
 					}]
 				},
-				/*attributes:[{//字段列表
-					columnname: '',
-					description: '',
-					type:'',
-					length: '',
-					retain: ''
-				}],*/
 				rules: {
 					name: [{
 						required: true,
@@ -541,36 +533,42 @@
 			},
 
 			//新建行
-			addfieldBasis(){
+			addfieldBasis() {
 				var obj = {
-                    NUMBER:'',
-					S_NUM:'',
-					S_DESC:'',
-					VERSION:'',
-					STATUS:'',
-					MEMO:''
-                };
-                this.dataInfo.WORK_NOTICE_CHECKBASISList.push(obj);
+					NUMBER: '',
+					S_NUM: '',
+					S_DESC: '',
+					VERSION: '',
+					STATUS: '',
+				};
+				this.dataInfo.WORK_NOTICE_CHECKBASISList.push(obj);
 			},
-			addfieldProject(){
+			addfieldProject() {
 				var obj = {
-                    NUMBER:'',
-					P_NUM:'',
-					P_DESC:'',
-					VERSION:'',
-					STATUS:'',
-					MEMO:''
-                };
-                this.dataInfo.WORK_NOTICE_CHECKPROJECTList.push(obj);
+					NUMBER: '',
+					P_NUM: '',
+					P_DESC: '',
+					REMARKS: '',
+					VERSION: '',
+				};
+				this.dataInfo.WORK_NOTICE_CHECKPROJECTList.push(obj);
 			},
-			delfield(item) {
-				var index = this.dataInfo.attributes.indexOf(item);
+			//刪除新建行
+			delfieldBasis(item) {
+				var index = this.dataInfo.WORK_NOTICE_CHECKBASISList.indexOf(item);
 				if(index !== -1) {
 					//this.attributes.splice(index, 1)
-					this.dataInfo.attributes.splice(index, 1);
+					this.dataInfo.WORK_NOTICE_CHECKBASISList.splice(index, 1);
 				}
 			},
-
+			//刪除新建行
+			delfieldProject(item) {
+				var index = this.dataInfo.WORK_NOTICE_CHECKPROJECTList.indexOf(item);
+				if(index !== -1) {
+					//this.attributes.splice(index, 1)
+					this.dataInfo.WORK_NOTICE_CHECKPROJECTList.splice(index, 1);
+				}
+			},
 			importdia() {
 				this.dialogVisible = true;
 			},
@@ -586,23 +584,21 @@
 				this.statusshow1 = false;
 				this.statusshow2 = true;
 				this.modify = true;
-//				   var usersUrl='/api/api-user/users/currentMap'
-//				this.$axios.get(usersUrl, {}).then((res) => {
-//	    			this.dataInfo.CHANGEBY = res.data.nickname;
-//	    			var date = new Date();
-//					this.dataInfo.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
-//				}).catch((err) => {
-//					this.$message({
-//						message: '网络错误，请重试',
-//						type: 'error'
-//					});
-//				});
-//				console.log(this.CUSTOMER.CHANGEDATE);
-				 var url = '/api/api-apps/app/workNot/' + dataid;
+				//				   var usersUrl='/api/api-user/users/currentMap'
+				//				this.$axios.get(usersUrl, {}).then((res) => {
+				//	    			this.dataInfo.CHANGEBY = res.data.nickname;
+				//	    			var date = new Date();
+				//					this.dataInfo.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
+				//				}).catch((err) => {
+				//					this.$message({
+				//						message: '网络错误，请重试',
+				//						type: 'error'
+				//					});
+				//				});
+				//				console.log(this.CUSTOMER.CHANGEDATE);
+				var url = '/api/api-apps/app/workNot/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					this.dataInfo = res.data;
-					console.log(1234);
 					this.show = true;
 				}).catch((err) => {
 					this.$message({
@@ -643,8 +639,10 @@
 			submitForm(dataInfo) {
 				this.$refs[dataInfo].validate((valid) => {
 					//		          if (valid) {
-					var url = '/api/apps-center/objectcfg/saveOrUpdate';
+					var url = '/api/apps-center/workNot/saveOrUpdate';
+					console.log(this.dataInfo);
 					this.$axios.post(url, this.dataInfo).then((res) => {
+						console.log(res);
 						if(res.data.resp_code == 0) {
 							this.$message({
 								message: '保存成功',

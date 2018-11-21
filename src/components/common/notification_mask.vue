@@ -15,23 +15,24 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-row :gutter="20" style="margin-right: 5px;">
-					<el-col :span="5" class="pull-right">
-						<el-input v-model="dataInfo.typename" :disabled="true">
-							<template slot="prepend">编号</template>
-						</el-input>
-					</el-col>
-					<el-col :span="5" class="pull-right">
-						<el-input v-model="dataInfo.typename" :disabled="true">
-							<template slot="prepend">状态</template>
-						</el-input>
-					</el-col>
-				</el-row>
+
 				<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="类别" name="1">
-
+								<el-row :gutter="20" class="pb10">
+									<el-col :span="3" class="pull-right">
+										<el-input v-model="dataInfo.N_CODE" :disabled="true">
+											<template slot="prepend">编号</template>
+										</el-input>
+									</el-col>
+									<el-col :span="3" class="pull-right">
+										<el-select v-model="dataInfo.STATE" placeholder="请选择状态">
+											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+											</el-option>
+										</el-select>
+									</el-col>
+								</el-row>
 								<div class="accordion-body tab-content">
 									<el-radio-group v-model="dataInfo.TYPE">
 										<el-row :gutter="70">
@@ -50,41 +51,41 @@
 										</el-row>
 										<el-row :gutter="70">
 											<el-col :span="6">
-												<el-radio label="1">监督抽查</el-radio>
+												<el-radio label="5">监督抽查</el-radio>
 											</el-col>
 											<el-col :span="6">
-												<el-radio label="2">监督抽查复查</el-radio>
+												<el-radio label="6">监督抽查复查</el-radio>
 											</el-col>
 											<el-col :span="6">
-												<el-radio label="3">质量抽查</el-radio>
+												<el-radio label="7">质量抽查</el-radio>
 											</el-col>
 											<el-col :span="6">
-												<el-radio label="4">质量抽查复查</el-radio>
-											</el-col>
-										</el-row>
-										<el-row :gutter="70">
-											<el-col :span="6">
-												<el-radio label="5">生产许可证</el-radio>
-											</el-col>
-											<el-col :span="6">
-												<el-radio label="6">认定检验检测</el-radio>
-											</el-col>
-											<el-col :span="6">
-												<el-radio label="7">鉴定试验</el-radio>
-											</el-col>
-											<el-col :span="6">
-												<el-radio label="8">委托检验检测</el-radio>
+												<el-radio label="8">质量抽查复查</el-radio>
 											</el-col>
 										</el-row>
 										<el-row :gutter="70">
 											<el-col :span="6">
-												<el-radio label="9">专项抽查</el-radio>
+												<el-radio label="9">生产许可证</el-radio>
 											</el-col>
 											<el-col :span="6">
-												<el-radio label="10">专项抽查复查</el-radio>
+												<el-radio label="10">认定检验检测</el-radio>
 											</el-col>
 											<el-col :span="6">
-												<el-radio label="11">其它</el-radio>
+												<el-radio label="11">鉴定试验</el-radio>
+											</el-col>
+											<el-col :span="6">
+												<el-radio label="12">委托检验检测</el-radio>
+											</el-col>
+										</el-row>
+										<el-row :gutter="70">
+											<el-col :span="6">
+												<el-radio label="13">专项抽查</el-radio>
+											</el-col>
+											<el-col :span="6">
+												<el-radio label="14">专项抽查复查</el-radio>
+											</el-col>
+											<el-col :span="6">
+												<el-radio label="15">其它</el-radio>
 											</el-col>
 										</el-row>
 									</el-radio-group>
@@ -95,7 +96,7 @@
 									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="计划编号" prop="WP_NUM">
-												<el-input v-model="dataInfo.WP_NUM" :disabledd="true">
+												<el-input v-model="dataInfo.WP_NUM">
 													<el-button slot="append" icon="el-icon-search"></el-button>
 												</el-input>
 											</el-form-item>
@@ -114,7 +115,7 @@
 									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="项目负责人" prop="P_LEADER">
-												<el-input v-model="dataInfo.P_LEADER" :disabledd="true">
+												<el-input v-model="dataInfo.P_LEADER">
 													<el-button slot="append" icon="el-icon-search"></el-button>
 												</el-input>
 
@@ -128,6 +129,13 @@
 										<el-col :span="8">
 											<el-form-item label="受检产品型号" prop="ITEM_MODEL">
 												<el-input v-model="dataInfo.ITEM_MODEL"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="信息状态" prop="STATUS">
+												<el-input v-model="dataInfo.STATUS"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -154,11 +162,17 @@
 											<el-col :span="3">
 												<el-form-item label="检验标准编号"></el-form-item>
 											</el-col>
-											<el-col :span="8">
+											<el-col :span="3">
 												<el-form-item label="检验标准内容"></el-form-item>
+											</el-col>
+											<el-col :span="2">
+												<el-form-item label="检验标准名称"></el-form-item>
 											</el-col>
 											<el-col :span="3">
 												<el-form-item label="版本"></el-form-item>
+											</el-col>
+											<el-col :span="3">
+												<el-form-item label="信息状态"></el-form-item>
 											</el-col>
 											<el-col :span="3">
 												<el-form-item label="附件"></el-form-item>
@@ -174,12 +188,17 @@
 											<el-col :span="3">
 												<el-input type="text" placeholder="请输入检验标准编号" v-model="item.S_NUM"></el-input>
 											</el-col>
-											<el-col :span="8">
+											<el-col :span="3">
 												<el-input type="text" placeholder="请输入检验标准内容" v-model="item.S_DESC"></el-input>
 											</el-col>
-
+											<el-col :span="2">
+												<el-input type="text" placeholder="请输入标准名称" v-model="item.S_NAME"></el-input>
+											</el-col>
 											<el-col :span="3">
 												<el-input type="text" placeholder="请输入版本" v-model="item.VERSION"></el-input>
+											</el-col>
+											<el-col :span="3">
+												<el-input type="text" placeholder="请输入信息状态" v-model="item.STATUS"></el-input>
 											</el-col>
 											<el-col :span="3">
 												<el-input type="text" placeholder="附件"></el-input>
@@ -197,22 +216,22 @@
 									<el-row :gutter="70">
 										<el-col :span="6">
 											<el-form-item label="受检企业" prop="V_NAME">
-												<el-input v-model="dataInfo.V_NAME" disabled="true"></el-input>
+												<el-input v-model="dataInfo.V_NAME"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="6">
 											<el-form-item label="抽样方案" prop="SOLUTION">
-												<el-input v-model="dataInfo.SOLUTION" disabled="true"></el-input>
+												<el-input v-model="dataInfo.SOLUTION"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="6">
 											<el-form-item label="样品数量" prop="QUALITY">
-												<el-input v-model="dataInfo.QUALITY" disabled="true"></el-input>
+												<el-input v-model="dataInfo.QUALITY"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="6">
 											<el-form-item label="接收人" prop="ACCEPT_PERSON">
-												<el-input v-model="dataInfo.ACCEPT_PERSON" disabled="true">
+												<el-input v-model="dataInfo.ACCEPT_PERSON">
 													<el-button slot="append" icon="el-icon-search"></el-button>
 												</el-input>
 
@@ -243,7 +262,7 @@
 											<el-col :span="4">
 												<el-form-item label="检验检测项目编号"></el-form-item>
 											</el-col>
-											<el-col :span="6">
+											<el-col :span="4">
 												<el-form-item label="检验检测项目内容"></el-form-item>
 											</el-col>
 											<el-col :span="3">
@@ -251,6 +270,9 @@
 											</el-col>
 											<el-col :span="3">
 												<el-form-item label="版本"></el-form-item>
+											</el-col>
+											<el-col :span="2">
+												<el-form-item label="信息状态"></el-form-item>
 											</el-col>
 											<el-col :span="2">
 												<el-form-item label="附件"></el-form-item>
@@ -266,7 +288,7 @@
 											<el-col :span="4">
 												<el-input type="text" placeholder="请输入检验检测项目编号" v-model="item.P_NUM"></el-input>
 											</el-col>
-											<el-col :span="6">
+											<el-col :span="4">
 												<el-input type="text" placeholder="请输入检验检测项目内容" v-model="item.P_DESC"></el-input>
 											</el-col>
 											<el-col :span="3">
@@ -274,6 +296,9 @@
 											</el-col>
 											<el-col :span="3">
 												<el-input type="text" placeholder="请输入版本" v-model="item.VERSION"></el-input>
+											</el-col>
+											<el-col :span="2">
+												<el-input type="text" placeholder="请输入信息状态" v-model="item.STATUS"></el-input>
 											</el-col>
 											<el-col :span="3">
 												<el-input type="text" placeholder="附件"></el-input>
@@ -321,29 +346,29 @@
 									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="录入人" prop="ENTERBY">
-												<el-input v-model="dataInfo.ENTERBY" disabled="true"></el-input>
+												<el-input v-model="dataInfo.ENTERBY" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="录入时间" prop="ENTERDATE">
-												<el-input v-model="dataInfo.ENTERDATE" disabled="true"></el-input>
+												<el-input v-model="dataInfo.ENTERDATE" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="录入人机构" prop="ORGID">
-												<el-input v-model="dataInfo.ORGID" disabled="true"></el-input>
+												<el-input v-model="dataInfo.ORGID" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="修改人" prop="CHANGEBY">
-												<el-input v-model="dataInfo.CHANGEBY" disabled="true"></el-input>
+												<el-input v-model="dataInfo.CHANGEBY" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="修改时间" prop="CHANGEDATE">
-												<el-input v-model="dataInfo.CHANGEDATE" disabled="true"></el-input>
+												<el-input v-model="dataInfo.CHANGEDATE" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 
@@ -413,7 +438,7 @@
 				}],
 				value: '',
 				selUser: [],
-				disabled: true, //禁填
+				//				disabled: true, //禁填
 				col_but1: true,
 				col_but2: true,
 				show: false,
@@ -461,7 +486,7 @@
 					}
 				],
 				dataInfo: { //添加数据库列表信息
-					N_CODE: '',
+					N_CODE: '1',
 					TYPE: '',
 					XD_DATE: '',
 					ITEM_NAME: '',
@@ -471,12 +496,15 @@
 					TASKNUM: '',
 					SOLUTION: '',
 					COMPDATE: '',
-					STATUS: '活动',
+					STATE: '',
 					ENTERBY: '',
+					STATUS: '',
 					WORK_NOTICE_CHECKBASISList: [{ //字段列表
 						NUMBER: '',
 						S_NUM: '',
 						S_DESC: '',
+						S_NAME: '',
+						S_ENGNAME:'sss',
 						VERSION: '',
 						STATUS: '',
 					}],
@@ -486,6 +514,7 @@
 						P_DESC: '',
 						REMARKS: '',
 						VERSION: '',
+						STATUS: ''
 					}]
 				},
 				rules: {
@@ -539,6 +568,8 @@
 					S_NUM: '',
 					S_DESC: '',
 					VERSION: '',
+					S_NAME: '',
+				    S_ENGNAME:'sss',
 					STATUS: '',
 				};
 				this.dataInfo.WORK_NOTICE_CHECKBASISList.push(obj);
@@ -550,6 +581,7 @@
 					P_DESC: '',
 					REMARKS: '',
 					VERSION: '',
+					STATUS: '',
 				};
 				this.dataInfo.WORK_NOTICE_CHECKPROJECTList.push(obj);
 			},
@@ -574,7 +606,22 @@
 			},
 			//点击按钮显示弹窗
 			visible() {
-				console.log(111);
+				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
+					this.dataInfo.DEPT = res.data.deptName;
+					this.dataInfo.ENTERBY = res.data.nickname;
+					var date = new Date();
+					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					})
+				})
+				this.statusshow1 = true;
+				this.statusshow2 = false;
+				this.addtitle = true;
+				this.modifytitle = false;
+				this.modify = false;
 				this.show = true;
 			},
 			// 这里是修改
@@ -639,7 +686,7 @@
 			submitForm(dataInfo) {
 				this.$refs[dataInfo].validate((valid) => {
 					//		          if (valid) {
-					var url = '/api/apps-center/workNot/saveOrUpdate';
+					var url = '/api/apps-center/app/workNot/saveOrUpdate';
 					console.log(this.dataInfo);
 					this.$axios.post(url, this.dataInfo).then((res) => {
 						console.log(res);

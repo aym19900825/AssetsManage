@@ -150,7 +150,7 @@
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left2.vue'
 	import navs_header from '../common/nav_tabs.vue'
-	import assetsTree from '../plugin/vue-tree/tree.vue'
+	import assetsTree from '../plugin/vue-tree/tree2.vue'
 	import usermask from '../maindataDetails/user_mask.vue'
 	export default {
 		name: 'user_management',
@@ -527,25 +527,6 @@
 				})
 			},
 			
-			getlist(){
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-					nickname: this.searchList.nickname,
-					enabled: this.searchList.enabled,
-					searchKey: 'createTime',
-					searchValue: this.searchList.createTime,
-					companyId: this.companyId,
-					deptId: this.deptId
-				}
-				var url = '/api/api-user/users';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					userList = res.data.data;
-					isLoading = false
-				})
-			},
 			//机构树
 			getKey() {
 				let that = this;

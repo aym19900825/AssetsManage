@@ -24,7 +24,7 @@
                         
                         <div class="input-group">
                             <div class="pull-left remember">
-                                <el-checkbox v-model="checked">记住密码</el-checkbox>
+                                <el-checkbox>记住密码</el-checkbox>
                             </div>
                             
                             <div class="pull-right forget"><a href="#">忘记密码？</a></div>

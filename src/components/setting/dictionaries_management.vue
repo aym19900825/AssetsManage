@@ -13,7 +13,7 @@
 		<!--右侧内容显示 Begin-->
 		<div class="wrapper wrapper-content">
 			<EasyScrollbar>
-				<div id="wrapper" ref="homePagess" style="height: 600px;">
+				<div id="wrapper" :style="fullHeight">
 					<div id="information" style="height: inherit;">
 						<div class="ibox-content">
 							<el-form status-icon ref="dictionaries" :model="dictionaries" :rules="rules" label-width="80px" :label-position="labelPosition">
@@ -65,20 +65,20 @@ export default {
     data() {
       return {
         activeNames: ['1'],//手风琴数量
-		clientHeight:'',//获取浏览器高度
+		fullHeight:{//给浏览器高度赋值
+					height: '',
+				},
         labelPosition: 'top',//表单标题在上方显示
 		
       }
     },
     mounted(){
 			// 获取浏览器可视区域高度
-			var _this = this;
-			var clientHeight = $(window).height() - 100;    //document.body.clientWidth;
-			_this.$refs.homePagess.style.height = clientHeight + 'px';
-			window.onresize = function() {
-				var clientHeight = $(window).height() - 100;
-				_this.$refs.homePagess.style.height = clientHeight + 'px';
-			};
+			window.onresize = () => {//获取浏览器可视区域高度
+		 	return (() => {
+		 		this.fullHeight.height = document.documentElement.clientHeight - 100+'px';
+		 	})()
+		 };
 			this.getData();
 		},
   }

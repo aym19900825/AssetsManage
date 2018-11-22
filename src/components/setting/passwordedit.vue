@@ -28,7 +28,7 @@
 		<!--右侧内容显示 Begin-->
 		<div class="wrapper wrapper-content">
 			<EasyScrollbar>
-    			<div id="wrapper" ref="homePagess" style="height: 600px;">
+    			<div id="wrapper" :style="fullHeight">
 					<div id="information" style="height: inherit;">
 						<div class="ibox-content">
 							<el-collapse v-model="activeNames" @change="handleChange">
@@ -116,7 +116,9 @@ export default {
 			userList: [],
 			isShow: false,
 			ismin:true,
-			clientHeight:'',//获取浏览器高度
+			fullHeight:{//给浏览器高度赋值
+					height: '',
+				},
 			labelPosition: 'top',
 			passwordedit: {
 				username: '',

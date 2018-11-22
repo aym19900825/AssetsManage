@@ -12,7 +12,7 @@
 			<!--右侧内容显示 Begin-->
 			<div class="wrapper wrapper-content wrapperall">
 				<EasyScrollbar>
-					<div id="wrapper" ref="homePagess" style="height: 600px;">
+					<div id="wrapper" :style="fullHeight">
 						<div id="information" style="height: inherit;">
 							<div class="ibox-content">
 								<!--按钮操作行 Begin-->

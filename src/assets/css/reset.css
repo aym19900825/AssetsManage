@@ -113,8 +113,8 @@ i, cite, em, var, address, dfn {
 /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
 ::-webkit-scrollbar,#style-1::-webkit-scrollbar
 {
-    width: 7px;
-    height: 7px;
+    width: 8px;
+    height: 8px;
     background-color: #F5F5F5;
 }
  
@@ -161,7 +161,7 @@ i, cite, em, var, address, dfn {
 
 .font13 {font-size: 13px;}
 
-h3,h6 {
+h3,h6,.title {
 	font-size:18px;
 	font-weight:normal;
 	color:#121958;
@@ -171,7 +171,7 @@ h6 {
 	font-size:14px;
 	color:#4C6072;
 }
-
+.title {line-height:35px;}
 
 
 
@@ -422,6 +422,29 @@ h6 {
 .el-message {
 	top:35%;
 }
+
+.el-table--striped .el-table__body tr.el-table__row--striped.current-row td,
+.el-table__body tr.hover-row>td{background-color:#F1F3FD}
+
+/*Table当前行标识*/
+.el-table__body tr.current-row>td:first-child:before {
+	content: "";
+	width: 5px;
+	height: 5px;
+	position: absolute;
+	left:0px;
+	top:50%;
+	margin-top:-5px;
+	background-color: #6585df;
+	border-radius: 100%;
+}
+/*.el-table__body tr.current-row>td,
+.el-table__body tr.hover-row.current-row>td,
+.el-table__body tr.hover-row.el-table__row--striped.current-row>td,
+.el-table__body tr.hover-row.el-table__row--striped>td,
+.el-table__body tr.hover-row>td{background-color:#F5F7FA}*/
+
+
 
 /*表单提交按钮居中显示*/
 .el-dialog__footer {text-align: center;}

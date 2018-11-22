@@ -276,28 +276,28 @@
 						retain: ''
 					}
 				],
-				dataInfo: { //添加数据库列表信息
-					S_NUM: '',
-					S_NAME: '',
-					S_ENGNAME: '',
-					RELEASETIME: '',
-					STARTETIME: '',
-					VERSION:'1',
-					RELEASE_UNIT: '',
-					DEPARTMENT: '',
-					ENTERBY: '',
-					ENTERDATE: '',
-					CHANGEBY: '',
-					CHANGEDATE: '',
-					attributes: [{ //字段列表
-						columnname: '',
-						description: '',
-						type: '',
-						length: '',
-						retain: '',
-						typename: ''
-					}]
-				},
+				// dataInfo: { //添加数据库列表信息
+				// 	S_NUM: '',
+				// 	S_NAME: '',
+				// 	S_ENGNAME: '',
+				// 	RELEASETIME: '',
+				// 	STARTETIME: '',
+				// 	VERSION:'1',
+				// 	RELEASE_UNIT: '',
+				// 	DEPARTMENT: '',
+				// 	ENTERBY: '',
+				// 	ENTERDATE: '',
+				// 	CHANGEBY: '',
+				// 	CHANGEDATE: '',
+				// 	attributes: [{ //字段列表
+				// 		columnname: '',
+				// 		description: '',
+				// 		type: '',
+				// 		length: '',
+				// 		retain: '',
+				// 		typename: ''
+				// 	}]
+				// },
 				rules: {
 					name: [{
 						required: true,

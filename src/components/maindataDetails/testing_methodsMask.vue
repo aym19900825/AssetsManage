@@ -268,27 +268,27 @@
 				modifytitle: false,
 				modify:true,//修订、修改人、修改时间
 				fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
-				testingForm: { //接收表单中填写的数据信息
-					VERSION: '',
-					STATUS: '',
-					M_NUM: '',
-					M_NAME: '',
-					M_ENAME: '',
-					M_TYPE: '',
-					DEPARTMENT: '',
-					ENTERBY: '',
-					ENTERDATE: '',
-					CHANGEBY: '',
-					CHANGEDATE: '',
-					attributes: [{ //行字段列表信息
-						COLUMNID: '',
-						FILESNUMBER: '',
-						FILSEDESC: '',
-						ENTERB: '',
-						ENTERDATE: '',
-						FILESURL: ''
-					}]
-				},
+				// testingForm: { //接收表单中填写的数据信息
+				// 	VERSION: '',
+				// 	STATUS: '',
+				// 	M_NUM: '',
+				// 	M_NAME: '',
+				// 	M_ENAME: '',
+				// 	M_TYPE: '',
+				// 	DEPARTMENT: '',
+				// 	ENTERBY: '',
+				// 	ENTERDATE: '',
+				// 	CHANGEBY: '',
+				// 	CHANGEDATE: '',
+				// 	attributes: [{ //行字段列表信息
+				// 		COLUMNID: '',
+				// 		FILESNUMBER: '',
+				// 		FILSEDESC: '',
+				// 		ENTERB: '',
+				// 		ENTERDATE: '',
+				// 		FILESURL: ''
+				// 	}]
+				// },
 				rules: { //定义需要校验数据的名称
 					M_NAME: [{
 						required: true,

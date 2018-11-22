@@ -220,7 +220,7 @@
 				}
 			};
 			var validatePass3 = (rule, value, callback) => {
-				console.log(value)
+				//console.log(value)
 				if(value === '') {
 					callback(new Error('必填'));
 				} else {
@@ -351,7 +351,7 @@
 			},
 			//
 			handleCheckChange(data, checked, indeterminate) {
-				console.log(data, checked, indeterminate);
+				//console.log(data, checked, indeterminate);
 				this.getCheckboxData = data;
 			},
 			//
@@ -444,7 +444,7 @@
 							user.roleId = '';
 							user.roles = [];
 						}
-						console.log(this.user);
+						//console.log(this.user);
 						var url = '/api/api-user/users/saveOrUpdate';
 						this.$axios.post(url, this.user).then((res) => {
 
@@ -515,8 +515,8 @@
 					},
 				}).then((res) => {
 					this.selectData = res.data.data;
-					console.log(res.data.data);
-					console.log(this.selectData);
+					//console.log(res.data.data);
+					//console.log(this.selectData);
 				}).catch(error => {
 					console.log('请求失败');
 				})

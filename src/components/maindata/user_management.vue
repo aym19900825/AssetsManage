@@ -559,25 +559,6 @@
 				})
 			},
 
-			getlist() {
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-					nickname: this.searchList.nickname,
-					enabled: this.searchList.enabled,
-					searchKey: 'createTime',
-					searchValue: this.searchList.createTime,
-					companyId: this.companyId,
-					deptId: this.deptId
-				}
-				var url = '/api/api-user/users';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					userList = res.data.data;
-					isLoading = false
-				})
-			},
 			//机构树
 			getKey() {
 				let that = this;

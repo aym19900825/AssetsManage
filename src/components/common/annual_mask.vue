@@ -50,7 +50,7 @@
 										</el-col>
 										<el-col :span="6">
 											<el-form-item label="产品类别" prop="ITEMTYPE">
-												<el-input v-model="WORKPLAN.ITEMTYPE" :disabled="edit">
+												<el-input v-model="WORKPLAN.ITEMTYPE" >
 													<el-button slot="append" icon="el-icon-search"></el-button>
 												</el-input>
 
@@ -88,6 +88,18 @@
 											    </el-date-picker>
 											  </div>
 											 </el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="6">
+											<el-form-item label="年度" prop="YEAR">
+												<el-input v-model="WORKPLAN.YEAR"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="6">
+											<el-form-item label="信息状态" prop="MESSSTATUS">
+												<el-input v-model="WORKPLAN.MESSSTATUS"></el-input>
+											</el-form-item>
 										</el-col>
 									</el-row>
 								</div>
@@ -162,17 +174,17 @@
 				            	</el-form>
 							<!-- 年度计划列表 End -->
 							</el-collapse-item>
-							<!-- 检测依据begin -->
+							<!-- 检测依据begin WORKPLAN.WORLPLANLINE_BASISList-->
 							<el-collapse-item title="检测依据" name="3">
 								<div class="table-func">
-									<el-button type="primary" size="mini" round>
+									<el-button type="primary" size="mini" round @click="basisleadbtn">
 										<i class="icon-search"></i>
 										<font>选择</font>
 									</el-button>
-									<el-button type="success" size="mini" round @click="addfield3">
+									<!-- <el-button type="success" size="mini" round @click="addfield3">
 										<i class="icon-add"></i>
 										<font>新建行</font>
-									</el-button>
+									</el-button> -->
 								</div>
 								<el-form :model="WORKPLAN.WORLPLANLINE_BASISList">
 					                <el-form-item>
@@ -218,9 +230,9 @@
 							<el-collapse-item title="检测项目与要求" name="4">
 								<!-- 资质信息 Begin-->
 								<div class="table-func">
-									<el-button type="success" size="mini" round @click="addfield4">
-										<i class="icon-add"></i>
-										<font>新建行</font>
+									<el-button type="primary" size="mini" round @click="basisleadbtn">
+										<i class="icon-search"></i>
+										<font>选择</font>
 									</el-button>
 								</div>
 								<el-form :model="WORKPLAN.WORLPLANLINE_PROJECTList">
@@ -277,48 +289,48 @@
 										<font>新建行</font>
 									</el-button>
 								</div>
-								<el-form :model="WORKPLAN.wendang">
+								<el-form>
 					                <el-form-item>
 					                	<el-row :gutter="20">
 					                		<el-col :span="2">
 					                            <el-form-item label="序号" ></el-form-item>
 					                        </el-col>
 					                        <el-col :span="4">
-					                            <el-form-item label="文档编号" ></el-form-item>
+					                            <el-form-item label="文档编号"></el-form-item>
 					                        </el-col>
 					                        <el-col :span="6">
-					                            <el-form-item label="文档描述" ></el-form-item>
+					                            <el-form-item label="文档描述"></el-form-item>
 					                        </el-col>
 					                        <el-col :span="4">
 					                            <el-form-item label="创建人" ></el-form-item>
 					                        </el-col>
 					                        <el-col :span="4">
-					                            <el-form-item label="创建日期" ></el-form-item>
+					                            <el-form-item label="创建日期"></el-form-item>
 					                        </el-col>
 					                        <el-col :span="2">
-					                            <el-form-item label="上传" ></el-form-item>
+					                            <el-form-item label="上传"></el-form-item>
 					                        </el-col>		                        
 					                        <el-col :span="2">
 					                            <el-form-item label="操作"></el-form-item>
 					                        </el-col>
 					                	</el-row>
-					                    <el-row :gutter="10" v-for="(item,key) in WORKPLAN.wendang" :key="key">
+					                    <el-row :gutter="10">
 					                        <el-col :span="2">
-					                            <el-input type="text"  placeholder="序号" v-model="item.STEP"></el-input>
+					                            <el-input type="text"  placeholder="序号"></el-input>
 					                        </el-col>
 					                        <el-col :span="4">
-					                            <el-input type="text"  placeholder="文档编号" v-model="item.CERTIFICATE_NUM"></el-input>
+					                            <el-input type="text"  placeholder="文档编号"></el-input>
 					                        </el-col>
 					                        <el-col :span="6">
-					                        	<el-input type="text"  placeholder="文档描述" v-model="item.CERTIFICATE_NAME"></el-input>
+					                        	<el-input type="text"  placeholder="文档描述"></el-input>
 					                        </el-col>
 					                        <el-col :span="4">
-					                            <el-input type="text"  placeholder="创建人" v-model="item.ACTIVE_DATE"></el-input>
+					                            <el-input type="text"  placeholder="创建人"></el-input>
 					                        </el-col>
 					                        <el-col :span="4">
-					                            <el-input type="text"  placeholder="创建日期" v-model="item.STATUS"></el-input>
+					                            <el-input type="text"  placeholder="创建日期"></el-input>
 					                        </el-col>
-					                        <el-col :span="2" v-model="item.FUJIAN">
+					                        <el-col :span="2">
 					                            <button type="button" class="btn btn-primarys button-margin text-center">
 												    <i class="icon-add"></i>
 												</button>
@@ -374,6 +386,104 @@
 				</el-form>
 			</div>
 		</div>
+		<!-- 检测依据弹出框begin -->
+		<el-dialog title="检测依据" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
+						<!-- <el-input style="width:20%" class="pb10 pull-right" v-model="WORKPLAN.ITEMTYPE">
+							<el-button slot="append" icon="el-icon-search"></el-button>
+						</el-input> -->
+						<!-- 高级查询划出 Begin-->
+								<div class="pb10">
+									<el-form status-icon :model="searchList" label-width="70px">
+										<el-row :gutter="10" class="pb10">
+											<el-col :span="6">
+												<el-input v-model="searchList.S_NUM">
+													<template slot="prepend">标准编号</template>
+												</el-input>
+											</el-col>
+											<el-col :span="6">
+												<el-input v-model="searchList.S_NAME">
+													<template slot="prepend">标准名称</template>
+												</el-input>
+											</el-col>
+											<el-col :span="6">
+												<el-input v-model="searchList.S_ENGNAME">
+													<template slot="prepend">英文名称</template>
+												</el-input>
+											</el-col>
+											<el-col :span="6">
+												<el-input v-model="searchList.VERSION">
+													<template slot="prepend">版本</template>
+												</el-input>
+											</el-col>		
+										</el-row>
+										<el-row :gutter="20">
+											<el-col :span="6">
+												<el-input v-model="searchList.DEPARTMENT">
+													<template slot="prepend">录入人机构</template>
+												</el-input>
+											</el-col>
+											<el-col :span="6">
+												<el-date-picker style="width: 100%" v-model="searchList.RELEASETIME" type="date" placeholder="发布时间" value-format="yyyy-MM-dd HH:mm:ss">
+												</el-date-picker>
+											</el-col>
+											<el-col :span="6">
+												<el-date-picker style="width: 100%" v-model="searchList.STARTETIME" type="date" placeholder="启用时间" value-format="yyyy-MM-dd HH:mm:ss">
+												</el-date-picker>
+											</el-col>
+											<el-col :span="3">
+												<el-select style="width: 120%" v-model="searchList.STATUS" placeholder="请选择状态">
+													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+													</el-option>
+												</el-select>
+											</el-col>
+											<el-col :span="2">
+												<el-button type="primary" @click="searchinfo" size="small" style="position:absolute;right:10px;">搜索</el-button>
+											</el-col>
+										</el-row>
+									</el-form>
+								</div>
+								<!-- 高级查询划出 End-->
+					<!-- 第二层弹出的表格 -->
+						<el-table :data="standardList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'standardList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+											<el-table-column type="selection" width="55" fixed>
+											</el-table-column>
+											<el-table-column label="主键编号" width="120" sortable prop="ID">
+											</el-table-column>
+											<el-table-column label="标准编号" width="120" sortable prop="S_NUM">
+											</el-table-column>
+											<el-table-column label="标准名称" width="220" sortable prop="S_NAME">
+											</el-table-column>
+											</el-table-column>
+											<el-table-column label="英文名称" width="220" sortable prop="S_ENGNAME">
+											</el-table-column>
+											<el-table-column label="状态" width="100" sortable prop="STATUS">
+											</el-table-column>
+											<el-table-column label="发布时间" width="160" sortable prop="RELEASETIME">
+											</el-table-column>
+											<el-table-column label="启用时间" width="160" sortable prop="STARTETIME">
+											</el-table-column>
+											<el-table-column label="版本" width="100" sortable prop="VERSION">
+											</el-table-column>
+											<el-table-column label="录入人机构" width="180" sortable prop="DEPARTMENT">
+											</el-table-column>
+											<el-table-column label="录入人" width="120" prop="ENTERBY" sortable>
+											</el-table-column>
+											<el-table-column label="录入时间" width="160" prop="ENTERDATE" sortable>
+											</el-table-column>
+											<el-table-column label="修改人" width="120" prop="CHANGEBY" sortable>
+											</el-table-column>
+											<el-table-column label="修改时间" width="160" prop="CHANGEDATE" sortable>
+											</el-table-column>
+										</el-table>
+										<el-pagination background class="pull-right pt10 pb10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+										</el-pagination>
+						<!-- 表格 -->
+			<span slot="footer" class="dialog-footer">
+		       <el-button @click="dialogVisible = false" style="margin-left: 37%;">取 消</el-button>
+		       <el-button type="primary">确 定</el-button>
+		    </span>
+		</el-dialog>
+		<!-- 检测依据弹出框end -->
 	</div>
 </template>
 
@@ -429,6 +539,16 @@
                 }
             };
 			return {
+				value: '',
+				options: [{
+					value: '1',
+					label: '活动'
+				}, {
+					value: '0',
+					label: '不活动'
+				}],
+				loadSign:true,//加载
+				commentArr:{},
 				selUser:[],
 				edit: true, //禁填
 				col_but1: true,
@@ -444,15 +564,30 @@
 				activeNames: ['1','2','3','4','5','6','7'],//手风琴数量
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
+				searchList: { //点击高级搜索后显示的内容
+					S_NUM: '',
+					S_NAME: '',
+					VERSION: '',
+					DEPARTMENT: '',
+					RELEASETIME: '',
+					STARTETIME: '',
+					STATUS: '',
+				},
 				dataList:[{
 					name:'',
 					description:''
 				}],
 				selectData:[],
+				standardList: [],//检测依据数据
+				page: { //分页显示
+					currentPage: 1,
+					pageSize: 10,
+					totalCount: 0
+				},
 				WORKPLAN:{
 					WP_NUM:'',
 					TYPE:'',
-					STATUS:'',
+					STATUS:'草稿',
 					PROP_UNIT:'',
 					ITEMTYPE:'',
 					DESCRIPTION:'',
@@ -460,27 +595,44 @@
 					C_PERSON:'',
 					APPRPERSON:'',
 					REPORTDATE:'',
+					YEAR:'',
+					MESSSTATUS:'',
 					WORLPLANLINEList:[{
+						ID:'',
+						WP_NUM:'',
 						WP_LINENUM:'',
 						ITEM_NAME:'',
 						MODEL:'',
+						VERSION:'',
+						VENDOR:'',
 						V_NAME:'',
+						SJ_NAME:'',
 						CHECKCOST:'',
 						REASION:'',
-						MEMO:''
+						MEMO:'',
+						STATUS:'1'
 					}],
 					WORLPLANLINE_BASISList:[{
-						NUMBER:'',
+						ID:'',
 						S_NUM:'',
 						S_NAME:'',
-						VERSION:''
+						S_ENGNAME:'',
+						VERSION:'',
+						NUMBER:'',
+						WP_NUM:'',
+						WP_LINENUM:'',
+						STATUS:'1'
 					}],
 					WORLPLANLINE_PROJECTList:[{
-						NUMBER:'',
+						ID:'',
 						P_NUM:'',
 						P_DESC:'',
 						REMARKS:'',
-						VERSION:''
+						VERSION:'',
+						NUMBER:'',
+						WP_NUM:'',
+						WP_LINENUM:'',
+						STATUS:'1'
 					}],
 					ENTERBY:'',
 					ENTERDATE:'',
@@ -523,7 +675,7 @@
                 this.WORKPLAN = {
 					WP_NUM:'',
 					TYPE:'',
-					STATUS:'',
+					STATUS:'草稿',
 					PROP_UNIT:'',
 					ITEMTYPE:'',
 					DESCRIPTION:'',
@@ -531,27 +683,44 @@
 					C_PERSON:'',
 					APPRPERSON:'',
 					REPORTDATE:'',
+					YEAR:'',
+					MESSSTATUS:'',
 					WORLPLANLINEList:[{
+						ID:'',
+						WP_NUM:'',
 						WP_LINENUM:'',
 						ITEM_NAME:'',
 						MODEL:'',
+						VERSION:'',
+						VENDOR:'',
 						V_NAME:'',
+						SJ_NAME:'',
 						CHECKCOST:'',
 						REASION:'',
-						MEMO:''
+						MEMO:'',
+						STATUS:'1'
 					}],
 					WORLPLANLINE_BASISList:[{
-						NUMBER:'',
+						ID:'',
 						S_NUM:'',
 						S_NAME:'',
-						VERSION:''
+						S_ENGNAME:'',
+						VERSION:'',
+						NUMBER:'',
+						WP_NUM:'',
+						WP_LINENUM:'',
+						STATUS:'1'
 					}],
 					WORLPLANLINE_PROJECTList:[{
-						NUMBER:'',
+						ID:'',
 						P_NUM:'',
 						P_DESC:'',
 						REMARKS:'',
-						VERSION:''
+						VERSION:'',
+						NUMBER:'',
+						WP_NUM:'',
+						WP_LINENUM:'',
+						STATUS:'1'
 					}],
 					ENTERBY:'',
 					ENTERDATE:'',
@@ -560,6 +729,10 @@
 				}
                 // this.$refs["WORKPLAN"].resetFields();
             },
+            //检测依据弹出框
+            basisleadbtn(){
+				this.dialogVisible = true;
+			},
 			handleChange(val) {//手风琴开关效果调用
 			},
 			//获取导入表格勾选信息
@@ -611,15 +784,15 @@
                 };
                 // this.WORKPLAN.WORLPLANLINE.push(obj2);
 			},
-			addfield3(){
-				var obj3 = {
-                    NUMBER:'',
-					S_NUM:'',
-					S_NAME:'',
-					VERSION:''
-                };
-                this.WORKPLAN.WORLPLANLINE_BASISList.push(obj3);
-			},
+			// addfield3(){
+			// 	var obj3 = {
+   //                  NUMBER:'',
+			// 		S_NUM:'',
+			// 		S_NAME:'',
+			// 		VERSION:''
+   //              };
+   //              this.WORKPLAN.WORLPLANLINE_BASISList.push(obj3);
+			// },
 			addfield4(){
 				var obj4 = {
                     NUMBER:'',
@@ -739,7 +912,8 @@
 			submitForm(WORKPLAN) {
 				// this.$refs[WORKPLAN].validate((valid) => {
 		  //         if (valid) {
-					var url = '/api/apps-center/app/workplan/saveOrUpdate';		
+		  			console.log(this.WORKPLAN);
+					var url = '/api/apps-center/app/workplan/saveOrUpdate';
 					this.$axios.post(url, this.WORKPLAN).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -762,74 +936,73 @@
 			        //   }
 			        // });
 			},
-			// 所属组织
-			// getCompany() {
-			// 	this.editSearch = 'company';
-			// 	var page = this.page.currentPage;
-			// 	var limit = this.page.pageSize;
-			// 	var type = 1;
-			// 	var url = '/api/api-user/depts/type';
-			// 	this.$axios.get(url, {
-			// 		params: {
-			// 			page: page,
-			// 			limit: limit,
-			// 			type: type
-			// 		},
-			// 	}).then((res) => {
-			// 		this.resourceData = res.data.data;
-			// 		this.dialogVisible = true;
-			// 	});
-
-			// },
-			// // 所属机构
-			// getDept() {
-			// 	this.editSearch = 'dept';
-			// 	var page = this.page.currentPage;
-			// 	var limit = this.page.pageSize;
-			// 	var type = 2;
-			// 	var url = '/api/api-user/depts/type';
-			// 	this.$axios.get(url, {
-			// 		params: {
-			// 			page: page,
-			// 			limit: limit,
-			// 			type: type
-			// 		},
-			// 	}).then((res) => {
-			// 		this.resourceData = res.data.data;
-			// 		this.dialogVisible = true;
-			// 	});
-			// },
-			// // 角色
-			// getRole() {
-			// 	this.editSearch = 'role';
-			// 	var data = {
-			// 		params: {
-			// 			page: 1,
-			// 			limit: 10,
-			// 		}
-			// 	}
-			// 	let that = this;
-			// 	var url = '/api/api-user/roles';
-
-			// 	this.$axios.get(url, {
+			loadMore () {
+			   if (this.loadSign) {
+			     this.loadSign = false
+			     this.page.currentPage++
+			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+			       return
+			     }
+			     setTimeout(() => {
+			       this.loadSign = true
+			     }, 1000)
+			     this.requestData()
+//			     console.log('到底了', this.page.currentPage)
+			   }
+			 },
+			sizeChange(val) {
+				this.page.pageSize = val;
+				this.requestData();
+			},
+			currentChange(val) {
+				this.page.currentPage = val;
+				this.requestData();
+			},
+			searchinfo(index) {
+				this.page.currentPage = 1;
+				this.page.pageSize = 10;
+				this.requestData();
+			},
+			requestData(index) {//高级查询字段
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+					S_NUM: this.searchList.S_NUM,
+					S_NAME: this.searchList.S_NAME,
+					VERSION: this.searchList.VERSION,
+					DEPARTMENT: this.searchList.DEPARTMENT,
+					RELEASETIME: this.searchList.RELEASETIME,
+					STARTETIME: this.searchList.STARTETIME,
+					STATUS: this.searchList.STATUS,
+				}
+				var url = '/api/api-apps/app/inspectionSta';
+				this.$axios.get(url, {
+					params: data
+				}).then((res) => {
+					this.page.totalCount = res.data.count;	
+					//总的页数
+					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
+					if(this.page.currentPage >= totalPage){
+						 this.loadSign = false
+					}else{
+						this.loadSign=true
+					}
+					this.commentArr[this.page.currentPage]=res.data.data
+					let newarr=[]
+					for(var i = 1; i <= totalPage; i++){
 					
-			// 	}).then((res) => {
-			// 		this.resourceData = res.data.data;
-			// 		this.dialogVisible = true;
-			// 	});
-			// },
-			// queding() {
-			// 	this.getCheckedNodes();
-			// 	this.placetext = false;
-			// 	this.dialogVisible = false;
-			// 	if(this.editSearch == 'company') {
-			// 		this.user.companyId = this.checkedNodes[0].id;
-			// 		this.user.companyName = this.checkedNodes[0].simplename;
-			// 	} else {
-			// 		this.user.deptId = this.checkedNodes[0].id;
-			// 		this.user.deptName = this.checkedNodes[0].simplename;
-			// 	}
-			// },
+						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
+							
+							for(var j = 0; j < this.commentArr[i].length; j++){
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					
+					this.standardList = newarr;
+				}).catch((wrong) => {})
+
+			},
 			handleClose(done) {
 				this.$confirm('确认关闭？')
 					.then(_ => {
@@ -837,7 +1010,10 @@
 					})
 					.catch(_ => {});
 			}
-		}
+		},
+		mounted() {
+			this.requestData();
+		},
 	}
 </script>
 

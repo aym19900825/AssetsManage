@@ -347,7 +347,7 @@
 									</el-row>
 								</div>
 							</el-collapse-item>
-							<el-collapse-item title="修改人信息" name="7">
+							<el-collapse-item title="修改人信息" name="7" v-if="modify">
 								<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
 									<el-row :gutter="70">
 										<el-col :span="8">
@@ -434,6 +434,7 @@
 				col_but1: true,
 				col_but2: true,
 				show: false,
+				modify:false,
 				isok1: true,
 				isok2: false,
 				down: true,
@@ -518,34 +519,47 @@
 			};
 		},
 		methods: {
-			// resetNew(){
-   //              this.WORKPLAN = {
-			// 		WP_NUM:'',
-			// 		TYPE:'',
-			// 		STATUS:'',
-			// 		PROP_UNIT:'',
-			// 		ITEMTYPE:'',
-			// 		DESCRIPTION:'',
-			// 		COMPACTOR:'',
-			// 		C_PERSON:'',
-			// 		APPRPERSON:'',
-			// 		REPORTDATE:'',
-			// 		WORLPLANLINEList:[{
-			// 			WP_LINENUM:'',
-			// 			ITEM_NAME:'',
-			// 			MODEL:'',
-			// 			V_NAME:'',
-			// 			CHECKCOST:'',
-			// 			REASION:'',
-			// 			MEMO:''
-			// 		}],
-			// 		ENTERBY:'',
-			// 		ENTERDATE:'',
-			// 		CHANGEBY:'',
-			// 		CHANGEDATE:''
-			// 	}
-   //              // this.$refs["WORKPLAN"].resetFields();
-   //          },
+			resetNew(){
+                this.WORKPLAN = {
+					WP_NUM:'',
+					TYPE:'',
+					STATUS:'',
+					PROP_UNIT:'',
+					ITEMTYPE:'',
+					DESCRIPTION:'',
+					COMPACTOR:'',
+					C_PERSON:'',
+					APPRPERSON:'',
+					REPORTDATE:'',
+					WORLPLANLINEList:[{
+						WP_LINENUM:'',
+						ITEM_NAME:'',
+						MODEL:'',
+						V_NAME:'',
+						CHECKCOST:'',
+						REASION:'',
+						MEMO:''
+					}],
+					WORLPLANLINE_BASISList:[{
+						NUMBER:'',
+						S_NUM:'',
+						S_NAME:'',
+						VERSION:''
+					}],
+					WORLPLANLINE_PROJECTList:[{
+						NUMBER:'',
+						P_NUM:'',
+						P_DESC:'',
+						REMARKS:'',
+						VERSION:''
+					}],
+					ENTERBY:'',
+					ENTERDATE:'',
+					CHANGEBY:'',
+					CHANGEDATE:''
+				}
+                // this.$refs["WORKPLAN"].resetFields();
+            },
 			handleChange(val) {//手风琴开关效果调用
 			},
 			//获取导入表格勾选信息
@@ -651,11 +665,37 @@
 			},
 			//点击添加，修改按钮显示弹窗
 			visible() {
-
+				var date = new Date();
+				console.log(date);
+				this.WORKPLAN.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
+				console.log(this.WORKPLAN.ENTERDATE);
+				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
+	    			this.WORKPLAN.ENTERBY = res.data.nickname;
+	    			
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+				this.modify = false;
 				this.show = true;
 			},
 			// 这里是修改
 			detail(dataid) {
+				this.modify = true;
+
+				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
+	    			this.WORKPLAN.CHANGEBY = res.data.nickname;
+	    			var date = new Date();
+					this.WORKPLAN.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+
 				this.$axios.get('/api/api-apps/app/workplan/' + dataid, {}).then((res) => {
 					this.WORKPLAN = res.data;
 					this.show = true;

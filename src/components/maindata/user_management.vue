@@ -559,25 +559,6 @@
 				})
 			},
 
-			getlist() {
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-					nickname: this.searchList.nickname,
-					enabled: this.searchList.enabled,
-					searchKey: 'createTime',
-					searchValue: this.searchList.createTime,
-					companyId: this.companyId,
-					deptId: this.deptId
-				}
-				var url = '/api/api-user/users';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					userList = res.data.data;
-					isLoading = false
-				})
-			},
 			//机构树
 			getKey() {
 				let that = this;
@@ -648,24 +629,6 @@
 </script>
 
 <style scope>
-.el-tree .el-tree-node__content>.el-tree-node__expand-icon {
-  padding: 2px;
-}
-.el-tree .el-icon-caret-right { 
-  font-size: 14px;
-  width: 17px;
-  height: 17px;
-  line-height:12px;
-  font-weight: lighter;
-  color: #A2ABBF;
-  border-radius: 3px;
-  margin-top: -2px;
-  margin-right: 5px;
-  position: relative;
-  z-index: 30;
-  /*background: #FFF;
-  border:1px solid #A2ABBF;*/
-}
 
 
 /* .el-tree .el-icon-caret-right:before {图标加号
@@ -703,21 +666,7 @@
     content: "\e99f";
 } */
 
-.el-tree .el-tree-node .icon-file-normal {/*文件夹合并时图标*/
-  color: #6585DF;
-  font-family: 'hxqheam';
-  content: "\e9fa";
-  font-size: 20px;
-}
-.el-tree .el-tree-node.is-expanded>.el-tree-node__content .icon-file-normal:before {/*文件夹打开时图标*/
-  font-family: 'hxqheam';
-  content: "\e9fb";
-}
-.el-tree .el-tree-node>.el-tree-node__content .icon-file-text {/*最后子级图标颜色*/
-  color: #92BDFF;
-}
 
-.el-tree-node [class^="icon-"], .el-tree-node [class*=" icon-"] {margin-right: 5px;}
 
 /* 
 [role=group].el-tree-node__children,
@@ -767,5 +716,4 @@
   display: none;
 } */
 
-.p15 {padding:10px 15px;}
 </style>

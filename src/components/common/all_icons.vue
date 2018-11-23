@@ -1,7 +1,7 @@
 <template>
 <div>
 	<EasyScrollbar>
-        <div id="wrapper" ref="homePagess" style="height: 600px;">
+        <div id="wrapper" :style="fullHeight">
           <div id="information" style="height: auto;">
 			<div class="pl20 pr20">
 				<el-row :gutter="30">
@@ -33,7 +33,9 @@
 		},
 		data() {
 			return {
-				clientHeight:'',//获取浏览器高度
+				fullHeight:{//给浏览器高度赋值
+					height: '',
+				},
 				classLists:[
 					'icon-setting3',
 					'icon-data3',

@@ -29,7 +29,9 @@ export default {
 		return{
 			isShow:false,
 			ismin:true,
-			clientHeight2:'',//获取浏览器高度
+			fullHeight:{//给浏览器高度赋值
+					height: '',
+				},
 			leftNavs: [//leftNavs左侧菜单数据
 				{
 		            navicon: 'icon-user',

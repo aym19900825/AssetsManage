@@ -159,7 +159,9 @@
 				dialogVisible: false, //对话框
 				edit: true, //禁填
 				activeNames: ['1'], //手风琴数量
-				clientHeight:'',//获取浏览器高度
+				fullHeight:{//给浏览器高度赋值
+					height: '',
+				},
 				show: false,
 				isok1: true,
 				isok2: false,
@@ -167,18 +169,18 @@
 				addtitle:true,
 				modifytitle:false,
 				selectData:[],
-				numbsetForm: {
-					STATUS:'',
-					AUTOKEY:'',
-					PREFIX:'',
-					S_NUM:'',
-					MEMO:'',
-					DEPARTMENT:'',
-					ENTERBY:'',
-					ENTERDATE:'',
-					CHANGEBY:'',
-					CHANGEDATE:''
-				},
+				// numbsetForm: {
+				// 	STATUS:'',
+				// 	AUTOKEY:'',
+				// 	PREFIX:'',
+				// 	S_NUM:'',
+				// 	MEMO:'',
+				// 	DEPARTMENT:'',
+				// 	ENTERBY:'',
+				// 	ENTERDATE:'',
+				// 	CHANGEBY:'',
+				// 	CHANGEDATE:''
+				// },
 				rules:{
           			AUTOKEY: [{ 
    						required: true,
@@ -321,13 +323,11 @@
 		},
 		mounted() {
 			// 获取浏览器可视区域高度
-			var _this = this;
-			var clientHeight = $(window).height() - 100;    //document.body.clientWidth;
-			_this.$refs.homePagess.style.height = clientHeight + 'px';
-			window.onresize = function() {
-				var clientHeight = $(window).height() - 100;
-				_this.$refs.homePagess.style.height = clientHeight + 'px';
-			};
+			window.onresize = () => {//获取浏览器可视区域高度
+		 	return (() => {
+		 		this.fullHeight.height = document.documentElement.clientHeight - 100+'px';
+		 	})()
+		 };
 		}
 	}
 </script>

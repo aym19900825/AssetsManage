@@ -193,11 +193,6 @@ Vue.use(Router)
       name: 'menu_management',
       component: menu_management
     },
-    {//部门管理
-      path: '/dept_management',
-      name: 'dept_management',
-      component: dept_management
-    },
     {//角色管理
       path: '/role_management',
       name: 'role_management',

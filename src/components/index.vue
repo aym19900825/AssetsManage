@@ -1,5 +1,5 @@
 <template>
-<div style="height: 100%">
+<div>
 	<div class="headerbg">
 		<vheader></vheader>
 		<navs_header></navs_header>
@@ -9,7 +9,7 @@
 		<!--右侧内容显示 Begin-->
 		<div class="wrapper-content">
 			<EasyScrollbar>
-				<div id="wrapper" ref="homePagess" style="height: 600px;">
+				<div id="wrapper" :style="fullHeight">
 					<div id="information" style="height: 720px;">
 						<div class="ibox-content pl20 pr20">
 							<!--我的应用 Begin-->
@@ -18,7 +18,7 @@
 							</div>
 							<el-row :gutter="20" class="applist">
 								<!--APPList Begin-->
-								<el-col :span="4" v-for="(item,index) in applistdata" key="index">
+								<el-col :span="4" v-for="(item,index) in applistdata" :key="index">
 									<div class="applistbg">
 										<router-link :to="item.navherf">
 											<span><i :class="item.navicon"></i></span>
@@ -138,7 +138,9 @@ export default {
     data() {
       return {
         show: false,
-		clientHeight:'',//获取浏览器高度
+		fullHeight:{//给浏览器高度赋值
+			height: ''
+		},
 		applistdata: [//APP应用数据
 			{
 				navicon: 'icon-data3',
@@ -193,16 +195,13 @@ export default {
       }
     },
     mounted(){
-		// 获取浏览器可视区域高度
-		var _this = this;
-		var clientHeight = $(window).height() - 100;    //document.body.clientWidth;
-		_this.$refs.homePagess.style.height = clientHeight + 'px';
-		window.onresize = function() {
-			var clientHeight = $(window).height() - 100;
-			_this.$refs.homePagess.style.height = clientHeight + 'px';
-		};
-		// this.getData();
 		this.initEchart();//调用饼状图图表函数名称
+
+		window.onresize = () => {//获取浏览器可视区域高度
+		 	return (() => {
+		 		this.fullHeight.height = document.documentElement.clientHeight - 100+'px';
+		 	})()
+		 };
 	},
 	methods: {
 		initEchart(){//引入饼状图图表

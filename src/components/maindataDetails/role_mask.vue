@@ -91,7 +91,9 @@
 				down: true,//控制高级查询划出收起
 				up: false,//控制高级查询划出收起
 				activeNames: ['1'], //手风琴数量
-				clientHeight:'',//获取浏览器高度
+				fullHeight:{//给浏览器高度赋值
+					height: '',
+				},
 				labelPosition: 'top', //表单label位置
 				dialogVisible: false, //对话框
 				roleList:{//表格数据
@@ -120,13 +122,11 @@
 		},
 		mounted() {
 			// 获取浏览器可视区域高度
-			var _this = this;
-			var clientHeight = $(window).height() - 100;    //document.body.clientWidth;
-			_this.$refs.homePagess.style.height = clientHeight + 'px';
-			window.onresize = function() {
-				var clientHeight = $(window).height() - 100;
-				_this.$refs.homePagess.style.height = clientHeight + 'px';
-			};
+			window.onresize = () => {//获取浏览器可视区域高度
+		 	return (() => {
+		 		this.fullHeight.height = document.documentElement.clientHeight - 100+'px';
+		 	})()
+		 };
 		},
 		methods: {
 			handleChange(val) { //手风琴开关效果调用

@@ -48,7 +48,7 @@ import traceability_plan from '@/components/equipments/traceability_plan'//溯�
 import traceability_records from '@/components/equipments/traceability_records'//溯源记录
 import verification_plan from '@/components/equipments/verification_plan'//期间核查计划
 import verification_records from '@/components/equipments/verification_records'//期间核查记录   
-
+import testing from '@/components/testing'//期间核查记录
 // 
 Vue.use(Router)
 
@@ -257,6 +257,11 @@ Vue.use(Router)
       path: '/reports',
       name: 'reports',
       component: reports
+    },
+    {//机构管理
+      path: '/testing',
+      name: 'testing',
+      component: testing
     }
   ];
 

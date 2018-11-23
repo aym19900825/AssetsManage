@@ -16,7 +16,7 @@
 			</div>
 			<div class="mask_content">
 
-				<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
+				<el-form v-model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="类别" name="1">
@@ -96,8 +96,7 @@
 									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="计划编号" prop="WP_NUM">
-												<el-input v-model="dataInfo.WP_NUM">
-													<el-button slot="append" icon="el-icon-search"></el-button>
+												<el-input v-model="dataInfo.WP_NUM" :disabled="true">
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -115,8 +114,8 @@
 									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="项目负责人" prop="P_LEADER">
-												<el-input v-model="dataInfo.P_LEADER">
-													<el-button slot="append" icon="el-icon-search"></el-button>
+												<el-input v-model="dataInfo.P_LEADER" :disabled="true">
+													<el-button slot="append" icon="el-icon-search" @click="getPeople(1)"></el-button>
 												</el-input>
 
 											</el-form-item>
@@ -153,7 +152,7 @@
 										<font>新建</font>
 									</el-button>
 								</div>
-								<el-form :model="dataInfo.WORK_NOTICE_CHECKBASISList">
+								<el-form v-model="dataInfo.WORK_NOTICE_CHECKBASISList">
 									<el-form-item>
 										<el-row :gutter="20">
 											<el-col :span="3">
@@ -231,8 +230,8 @@
 										</el-col>
 										<el-col :span="6">
 											<el-form-item label="接收人" prop="ACCEPT_PERSON">
-												<el-input v-model="dataInfo.ACCEPT_PERSON">
-													<el-button slot="append" icon="el-icon-search"></el-button>
+												<el-input v-model="dataInfo.ACCEPT_PERSON" :disabled="true">
+													<el-button slot="append" icon="el-icon-search" @click="getPeople(2)"></el-button>
 												</el-input>
 
 											</el-form-item>
@@ -253,7 +252,7 @@
 									</el-button>
 								</div>
 								<!-- :rules="rules" ref="attributes" -->
-								<el-form :model="dataInfo.WORK_NOTICE_CHECKPROJECTList">
+								<el-form v-model="dataInfo.WORK_NOTICE_CHECKPROJECTList">
 									<el-form-item>
 										<el-row :gutter="20">
 											<el-col :span="3">
@@ -362,12 +361,12 @@
 									</el-row>
 									<el-row :gutter="70">
 										<el-col :span="8">
-											<el-form-item label="修改人" prop="CHANGEBY">
+											<el-form-item label="修改人" v-if="modify" prop="CHANGEBY">
 												<el-input v-model="dataInfo.CHANGEBY" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改时间" prop="CHANGEDATE">
+											<el-form-item label="修改时间" v-if="modify" prop="CHANGEDATE">
 												<el-input v-model="dataInfo.CHANGEDATE" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
@@ -384,6 +383,27 @@
 				</el-form>
 			</div>
 		</div>
+
+		<el-dialog :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
+			<el-table :data="gridData" @selection-change="SelChange">
+				<el-table-column type="selection" width="55" fixed>
+				</el-table-column>
+				<el-table-column label="ID" sortable width="50px" prop="id">
+				</el-table-column>
+				<el-table-column label="姓名" sortable width="200px" prop="nickname">
+				</el-table-column>
+				<el-table-column label="机构" sortable width="200px" prop="deptName">
+				</el-table-column>
+				<el-table-column label="公司" sortable width="200px" prop="companyName">
+				</el-table-column>
+			</el-table>
+			<el-pagination background class="pull-right" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+			</el-pagination>
+			<span slot="footer" class="dialog-footer">
+    			<el-button @click="dialogVisible = false">取 消</el-button>
+    			<el-button type="primary" @click="dailogconfirm()">确 定</el-button>
+  			</span>
+		</el-dialog>
 
 	</div>
 </template>
@@ -429,6 +449,12 @@
 				}
 			};
 			return {
+				gridData: [], //彈出框的數據
+				page: {
+					currentPage: 1,
+					pageSize: 10,
+					totalCount: 0
+				},
 				options: [{
 					value: '1',
 					label: '活动'
@@ -439,6 +465,7 @@
 				value: '',
 				selUser: [],
 				//				disabled: true, //禁填
+				editSearch: '', //判斷項目負責人和接收人
 				col_but1: true,
 				col_but2: true,
 				show: false,
@@ -446,6 +473,7 @@
 				isok2: false,
 				down: true,
 				up: false,
+				type: '',
 				addtitle: true, //添加弹出框titile
 				modifytitle: false, //修改弹出框titile
 				activeNames: ['1', '2', '3', '4', '5', '6', '7'], //手风琴数量
@@ -504,7 +532,7 @@
 						S_NUM: '',
 						S_DESC: '',
 						S_NAME: '',
-						S_ENGNAME:'sss',
+						S_ENGNAME: 'sss',
 						VERSION: '',
 						STATUS: '',
 					}],
@@ -556,11 +584,14 @@
 			},
 			handleChange(val) { //手风琴开关效果调用
 			},
-			//获取导入表格勾选信息
-			SelChange(val) {
-				this.selUser = val;
+			sizeChange(val) {
+				this.page.pageSize = val;
+				//				this.requestData();
 			},
-
+			currentChange(val) {
+				this.page.currentPage = val;
+				//				this.requestData();
+			},
 			//新建行
 			addfieldBasis() {
 				var obj = {
@@ -569,7 +600,7 @@
 					S_DESC: '',
 					VERSION: '',
 					S_NAME: '',
-				    S_ENGNAME:'sss',
+					S_ENGNAME: 'sss',
 					STATUS: '',
 				};
 				this.dataInfo.WORK_NOTICE_CHECKBASISList.push(obj);
@@ -585,11 +616,11 @@
 				};
 				this.dataInfo.WORK_NOTICE_CHECKPROJECTList.push(obj);
 			},
+
 			//刪除新建行
 			delfieldBasis(item) {
 				var index = this.dataInfo.WORK_NOTICE_CHECKBASISList.indexOf(item);
 				if(index !== -1) {
-					//this.attributes.splice(index, 1)
 					this.dataInfo.WORK_NOTICE_CHECKBASISList.splice(index, 1);
 				}
 			},
@@ -609,6 +640,8 @@
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
 					this.dataInfo.DEPT = res.data.deptName;
 					this.dataInfo.ENTERBY = res.data.nickname;
+					this.dataInfo.ORGID= res.data.deptName
+					console.log(res);
 					var date = new Date();
 					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err) => {
@@ -631,18 +664,17 @@
 				this.statusshow1 = false;
 				this.statusshow2 = true;
 				this.modify = true;
-				//				   var usersUrl='/api/api-user/users/currentMap'
-				//				this.$axios.get(usersUrl, {}).then((res) => {
-				//	    			this.dataInfo.CHANGEBY = res.data.nickname;
-				//	    			var date = new Date();
-				//					this.dataInfo.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
-				//				}).catch((err) => {
-				//					this.$message({
-				//						message: '网络错误，请重试',
-				//						type: 'error'
-				//					});
-				//				});
-				//				console.log(this.CUSTOMER.CHANGEDATE);
+				var usersUrl = '/api/api-user/users/currentMap'
+				this.$axios.get(usersUrl, {}).then((res) => {
+					this.dataInfo.CHANGEBY = res.data.nickname;
+					var date = new Date();
+					this.dataInfo.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
 				var url = '/api/api-apps/app/workNot/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
 					this.dataInfo = res.data;
@@ -687,9 +719,7 @@
 				this.$refs[dataInfo].validate((valid) => {
 					//		          if (valid) {
 					var url = '/api/apps-center/app/workNot/saveOrUpdate';
-					console.log(this.dataInfo);
 					this.$axios.post(url, this.dataInfo).then((res) => {
-						console.log(res);
 						if(res.data.resp_code == 0) {
 							this.$message({
 								message: '保存成功',
@@ -717,7 +747,44 @@
 						done();
 					})
 					.catch(_ => {});
-			}
+			},
+			//获取负责人和接收人
+			getPeople(type) {
+				// type  1 這是負責人  2 這個事接收人
+				var params = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				}
+				var url = '/api/api-user/users';
+				this.$axios.get(url, {
+					params: params
+				}).then((res) => {
+					this.page.totalCount = res.data.count;
+					this.gridData = res.data.data;
+					this.dialogVisible = true;
+					this.type = type;
+				});
+			},
+			dailogconfirm(type) { //小弹出框确认按钮事件
+				this.dialogVisible = false;
+				//				this.dataInfo.P_LEADER = this.id;
+				console.log(this.type);
+				if(this.type == '1') {
+					//					console.log(this.id);
+					this.dataInfo.P_LEADER = this.selUser[0].id;
+					//					this.dataInfo.P_LEADERDesc = this.name;
+				} else {
+					//					console.log(this.id);
+					this.dataInfo.ACCEPT_PERSON = this.selUser[0].id;
+					//					this.user.P_LEADERDesc = this.name;
+				}
+			},
+
+			SelChange(val) {
+				this.selUser = val;
+				console.log(this.selUser);
+				console.log(this.selUser[0].id);
+			},
 		}
 	}
 </script>

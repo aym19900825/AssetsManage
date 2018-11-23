@@ -322,9 +322,18 @@
 					                            <el-input type="text"  placeholder="创建日期"></el-input>
 					                        </el-col>
 					                        <el-col :span="2">
-					                            <button type="button" class="btn btn-primarys button-margin text-center">
-												    <i class="icon-add"></i>
-												</button>
+					                            <el-upload
+													class="upload-demo"
+													action="https://jsonplaceholder.typicode.com/posts/"
+													:on-preview="handlePreview"
+													:on-remove="handleRemove"
+													:before-remove="beforeRemove"
+													multiple
+													:limit="3"
+													:on-exceed="handleExceed"
+													:file-list="fileList">
+													<el-button size="small" type="primary">点击上传</el-button>
+												</el-upload>
 					                        </el-col>                
 					                        <el-col :span="2">
 					                            <i class="el-icon-delete" @click="delfield(item)" style="color: red;text-align:center"></i>

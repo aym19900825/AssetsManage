@@ -186,7 +186,7 @@
 										<font>新建行</font>
 									</el-button> -->
 								</div>
-								<el-form :model="WORKPLAN.WORLPLANLINE_BASISList">
+								<!-- <el-form :model="WORKPLAN.WORLPLANLINE_BASISList">
 					                <el-form-item>
 					                	<el-row :gutter="20">
 					                		<el-col :span="4">
@@ -223,7 +223,36 @@
 					                        </el-col>
 					                    </el-row>
 					                </el-form-item>
-				            	</el-form>
+				            	</el-form> -->
+				            	<el-table :data="WORKPLAN.WORLPLANLINE_BASISList"border stripe height="100" style="width: 100%;" :default-sort="{prop:'WORKPLAN.WORLPLANLINE_BASISList', order: 'descending'}">
+				            		<el-table-column prop="NUMBER" label="序号" sortable width="120">
+								      <template slot-scope="scope">
+								        <span>{{scope.row.NUMBER}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="S_NUM" label="标准编号" sortable width="250">
+								      <template slot-scope="scope">
+								        <span>{{scope.row.S_NUM}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="S_NAME" label="标准内容" sortable width="250">
+								      <template slot-scope="scope">
+								        <span>{{scope.row.S_NAME}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="VERSION" label="版本" sortable width="300">
+								      <template slot-scope="scope">
+								        <span>{{scope.row.VERSION}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="iconOperation" fixed="right" label="操作" width="80">
+								      <template slot-scope="scope">
+								        <el-button @click.native.prevent="deleteRow(scope.$index, WORKPLAN.WORLPLANLINE_BASISList)" type="text" size="medium" title="删除" >
+								          <i class="icon-trash red"></i>
+								        </el-button>
+								      </template>
+								    </el-table-column>
+				            	</el-table>
 							</el-collapse-item>
 							<!-- 检测依据end -->
 							<!-- 检测项目与要求begin -->
@@ -388,9 +417,6 @@
 		</div>
 		<!-- 检测依据弹出框begin -->
 		<el-dialog title="检测依据" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
-						<!-- <el-input style="width:20%" class="pb10 pull-right" v-model="WORKPLAN.ITEMTYPE">
-							<el-button slot="append" icon="el-icon-search"></el-button>
-						</el-input> -->
 						<!-- 高级查询划出 Begin-->
 								<div class="pb10">
 									<el-form status-icon :model="searchList" label-width="70px">
@@ -480,7 +506,7 @@
 						<!-- 表格 -->
 			<span slot="footer" class="dialog-footer">
 		       <el-button @click="dialogVisible = false" style="margin-left: 37%;">取 消</el-button>
-		       <el-button type="primary">确 定</el-button>
+		       <el-button type="primary" @click="addbasis">确 定</el-button>
 		    </span>
 		</el-dialog>
 		<!-- 检测依据弹出框end -->
@@ -613,14 +639,14 @@
 						STATUS:'1'
 					}],
 					WORLPLANLINE_BASISList:[{
-						ID:'',
-						S_NUM:'',
-						S_NAME:'',
-						S_ENGNAME:'',
-						VERSION:'',
-						NUMBER:'',
-						WP_NUM:'',
-						WP_LINENUM:'',
+						ID:'23',
+						S_NUM:'123',
+						S_NAME:'123',
+						S_ENGNAME:'123',
+						VERSION:'123',
+						NUMBER:'123',
+						WP_NUM:'123',
+						WP_LINENUM:'123',
 						STATUS:'1'
 					}],
 					WORLPLANLINE_PROJECTList:[{
@@ -729,6 +755,29 @@
 				}
                 // this.$refs["WORKPLAN"].resetFields();
             },
+            addbasis(){
+            	var selData = this.selUser;
+            	console.log(selData);
+				if(selData.length == 0) {
+					this.$message({
+						message: '请选择数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					this.WORKPLAN.WORLPLANLINE_BASISList.push(selData);
+					console.log(this.WORKPLAN.WORLPLANLINE_BASISList);
+					this.dialogVisible = false;
+					this.$message({
+						message: '添加成功',
+						type: 'success'
+					});
+					return;
+				}
+            },
+            deleteRow(index, rows) {//Table-操作列中的删除行
+				rows.splice(index, 1);
+			},
             //检测依据弹出框
             basisleadbtn(){
 				this.dialogVisible = true;

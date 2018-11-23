@@ -109,7 +109,7 @@
 											</div>
 											<div class="left_treebg">
 												<div class="p15" v-if="ismin">
-													<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all indent="22" :render-content="renderContent" :props="resourceProps" @node-click="handleNodeClick">
+													<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent" :props="resourceProps" @node-click="handleNodeClick">
 													</el-tree>
 												</div>
 											</div>
@@ -138,7 +138,7 @@
 											</el-table-column>
 											<el-table-column label="抽样方案" width="120" prop="SOLUTION" sortable v-if="this.checkedName.indexOf('抽样方案')!=-1">
 											</el-table-column>
-											<el-table-column label="完成日期" width="120" prop="COMPDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('完成日期')!=-1">
+											<el-table-column label="完成日期" width="180" prop="COMPDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('完成日期')!=-1">
 											</el-table-column>
 											<el-table-column label="状态" width="120" prop="STATUS" sortable v-if="this.checkedName.indexOf('状态')!=-1">
 											</el-table-column>

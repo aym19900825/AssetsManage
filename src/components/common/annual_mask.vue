@@ -93,7 +93,13 @@
 									<el-row :gutter="70">
 										<el-col :span="6">
 											<el-form-item label="年度" prop="YEAR">
-												<el-input v-model="WORKPLAN.YEAR"></el-input>
+												<div class="block">
+												    <el-date-picker
+												      v-model="WORKPLAN.YEAR"
+												      type="year"
+												      placeholder="选择年度">
+												    </el-date-picker>
+												</div>
 											</el-form-item>
 										</el-col>
 										<el-col :span="6">
@@ -665,6 +671,7 @@
 				selectData:[],
 				standardList: [],//检测依据数据
 				projectList: [],//检测项目与要求
+				fileList:[],//上传附件数据
 				page: { //分页显示
 					currentPage: 1,
 					pageSize: 10,
@@ -835,6 +842,20 @@
 			// 	}
    //              // this.$refs["WORKPLAN"].resetFields();
    //          },
+   			//上传文件 Begin
+			handleRemove(file, fileList) {
+				console.log(file, fileList);
+			},
+			handlePreview(file) {
+				console.log(file);
+			},
+			handleExceed(files, fileList) {
+				this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+			},
+			beforeRemove(file, fileList) {
+				return this.$confirm(`确定移除 ${ file.name }？`);
+			},
+			//上传文件 End
    			judge(data) {
 				return data.STATUS=="1" ? '活动' : '不活动'
 			},
@@ -1039,6 +1060,7 @@
 				});
 
 				this.$axios.get('/api/api-apps/app/workplan/' + dataid, {}).then((res) => {
+					console.log(res);
 					this.WORKPLAN = res.data;
 					this.show = true;
 				}).catch((err) => {

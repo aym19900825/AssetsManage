@@ -34,7 +34,7 @@
 								</el-row>
 								<div class="accordion-body tab-content">
 									<el-radio-group v-model="dataInfo.TYPE">
-										<el-row :gutter="70">
+										<el-row :gutter="30">
 											<el-col :span="6">
 												<el-radio label="1">监督抽查</el-radio>
 											</el-col>
@@ -48,7 +48,7 @@
 												<el-radio label="4">质量抽查复查</el-radio>
 											</el-col>
 										</el-row>
-										<el-row :gutter="70">
+										<el-row :gutter="30">
 											<el-col :span="6">
 												<el-radio label="5">生产许可证</el-radio>
 											</el-col>
@@ -62,7 +62,7 @@
 												<el-radio label="8">委托检验检测</el-radio>
 											</el-col>
 										</el-row>
-										<el-row :gutter="70">
+										<el-row :gutter="30">
 											<el-col :span="6">
 												<el-radio label="9">专项抽查</el-radio>
 											</el-col>
@@ -78,7 +78,7 @@
 							</el-collapse-item>
 							<el-collapse-item title="基本信息" name="2">
 								<div class="accordion-body tab-content">
-									<el-row :gutter="70">
+									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="计划编号" prop="WP_NUM">
 												<el-input v-model="dataInfo.WP_NUM" :disabled="true">
@@ -100,7 +100,7 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
-									<el-row :gutter="70">
+									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="项目负责人" prop="P_LEADERDesc">
 												<el-input v-model="dataInfo.P_LEADERDesc" :disabled="true">
@@ -197,7 +197,7 @@
 							</el-collapse-item>
 							<el-collapse-item title="检验检测要求" name="4">
 								<div class="accordion-body tab-content">
-									<el-row :gutter="70">
+									<el-row :gutter="30">
 										<el-col :span="6">
 											<el-form-item label="受检企业" prop="V_NAME">
 												<el-input v-model="dataInfo.V_NAME"></el-input>
@@ -293,7 +293,7 @@
 							</el-collapse-item>
 							<el-collapse-item name="6">
 								<div class="accordion-body tab-content">
-									<el-row :gutter="70">
+									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="完成日期" prop="COMPDATE">
 												<el-date-picker v-model="dataInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
@@ -312,7 +312,7 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
-									<el-row :gutter="70">
+									<el-row :gutter="30">
 										<el-col :span="24">
 											<el-form-item label="备注" prop="MEMO">
 												<el-input v-model="dataInfo.MEMO"></el-input>
@@ -323,7 +323,7 @@
 							</el-collapse-item>
 							<el-collapse-item title="其他" name="7">
 								<div class="accordion-body tab-content">
-									<el-row :gutter="70">
+									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="录入人" prop="ENTERBY">
 												<el-input v-model="dataInfo.ENTERBY" :disabled="true"></el-input>
@@ -340,7 +340,7 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
-									<el-row :gutter="70">
+									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="修改人" v-if="modify" prop="CHANGEBY">
 												<el-input v-model="dataInfo.CHANGEBY" :disabled="true"></el-input>

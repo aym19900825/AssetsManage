@@ -38,7 +38,7 @@
 									</el-col>
 								</el-row>
 								
-									<el-row :gutter="70">
+									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="中文名称" prop="M_NAME" required="true">
 												<el-input v-model="testingForm.M_NAME"></el-input>
@@ -56,7 +56,7 @@
 										</el-col>
 									</el-row>
 									
-									<el-row :gutter="70">
+									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="机构" prop="DEPARTMENT">
 												<el-input v-model="testingForm.DEPARTMENT" :disabled="true"></el-input>
@@ -73,7 +73,7 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
-									<el-row :gutter="70">
+									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="修改人" prop="CHANGEBY">
 												<el-input v-model="testingForm.CHANGEBY" :disabled="true"></el-input>

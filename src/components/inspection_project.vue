@@ -9,7 +9,7 @@
 		<div class="wrapper wrapper-content wrapperall">
 			<div class="ibox-content">
 				<!--部门名称 Begin-->
-				<el-row :gutter="70">
+				<el-row :gutter="30">
 					<el-col :span="24" class="text-center">
 						<el-form :inline="true" :model="formInline">
 							<el-form-item label="部门名称">

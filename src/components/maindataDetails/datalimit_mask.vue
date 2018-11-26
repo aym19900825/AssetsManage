@@ -19,7 +19,7 @@
 					<div class="accordion" id="information">
 						<div class="mask_tab-block">
 							<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
-								<el-row :gutter="70">
+								<el-row :gutter="30">
 									<el-col :span="12">
 										<el-form-item label="应用名称" prop="companyName">
 											<el-input v-model="user.companyName" :disabled="edit">
@@ -35,7 +35,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="70">
+								<el-row :gutter="30">
 									<el-col :span="12">
 										<el-form-item label="限制方式" prop="sex">
 											<el-radio-group v-model="user.sexName">
@@ -52,7 +52,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="70">
+								<el-row :gutter="30">
 									<el-col :span="24">
 										<el-form-item label="限制范围" prop="password">
 											<el-input type="textarea" v-model="user.password" placeholder="请填写"></el-input>

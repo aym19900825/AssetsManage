@@ -18,7 +18,7 @@
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="基本信息" name="1">
 								<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
-									<el-row :gutter="70">
+									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="表名" prop="name">
 												<el-input v-model="dataInfo.name"></el-input>

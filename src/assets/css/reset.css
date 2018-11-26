@@ -545,6 +545,8 @@ h6 {
     line-height: 0;
     content: '';
     background-color: #6585DF;
+    top: 0px;
+	position: absolute;
 }
 .el-collapse-item {
 	padding-left: 25px;

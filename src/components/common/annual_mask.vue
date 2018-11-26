@@ -703,39 +703,39 @@
 						CHECKCOST:'',
 						REASION:'',
 						MEMO:'',
-						STATUS:'1'
-					}],
-					WORLPLANLINE_BASISList:[{
-						ID:'',
-						S_NUM:'',
-						S_NAME:'',
-						S_ENGNAME:'',
-						VERSION:'',
-						NUMBER:'',
-						WP_NUM:'',
-						WP_LINENUM:'',
-						STATUS:'',
-						ENTERBY:'',
-						ENTERDATE:'',
-						CHANGEBY:'',
-						CHANGEDATE:'',
-						DEPARTMENT:'',
-						CHANGEBYDesc:'',
-						ENTERBYDesc:'',
-						RELEASETIME:'',
-						RELEASE_UNIT:'',
-						STARTETIME:''
-					}],
-					WORLPLANLINE_PROJECTList:[{
-						ID:'',
-						P_NUM:'',
-						P_DESC:'',
-						REMARKS:'',
-						VERSION:'',
-						NUMBER:'',
-						WP_NUM:'',
-						WP_LINENUM:'',
-						STATUS:'1'
+						STATUS:'1',
+						WORLPLANLINE_BASISList:[{
+							ID:'',
+							S_NUM:'',
+							S_NAME:'',
+							S_ENGNAME:'',
+							VERSION:'',
+							NUMBER:'',
+							WP_NUM:'',
+							WP_LINENUM:'',
+							STATUS:'',
+							ENTERBY:'',
+							ENTERDATE:'',
+							CHANGEBY:'',
+							CHANGEDATE:'',
+							DEPARTMENT:'',
+							CHANGEBYDesc:'',
+							ENTERBYDesc:'',
+							RELEASETIME:'',
+							RELEASE_UNIT:'',
+							STARTETIME:''
+						}],
+						WORLPLANLINE_PROJECTList:[{
+							ID:'',
+							P_NUM:'',
+							P_DESC:'',
+							REMARKS:'',
+							VERSION:'',
+							NUMBER:'',
+							WP_NUM:'',
+							WP_LINENUM:'',
+							STATUS:'1'
+						}],
 					}],
 					ENTERBY:'',
 					ENTERDATE:'',
@@ -1242,3 +1242,6 @@
 <style scoped>
 	@import '../../assets/css/mask-modules.css';
 </style>
+
+
+

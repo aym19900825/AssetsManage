@@ -64,8 +64,8 @@
 					<div class="row">
 						<div class="col-sm-12">
 							<!-- 表格begin -->
-							<el-table :data="roleList" height="400" border stripe style="width: 100%;" :default-sort="{prop:'roleList', order: 'descending'}" @selection-change="SelChange">
-								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
+							<el-table :data="roleList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'roleList', order: 'descending'}" @selection-change="SelChange">
+								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="角色名称" sortable prop="name" v-if="this.checkedName.indexOf('角色名称')!=-1">
 								</el-table-column>
@@ -97,12 +97,12 @@
 	</div>
 </template>
 <script>
-	import vheader from './common/vheader.vue'
-	import navs_left from './common/left_navs/nav_left2.vue'
-	import navs_header from './common/nav_tabs.vue'
-	import rolemask from './common/role_mask.vue'
-	import datalimitmask from './common/datalimit_mask.vue'
-	import tableControle from './plugin/table-controle/controle.vue'
+	import vheader from '../common/vheader.vue'
+	import navs_left from '../common/left_navs/nav_left5.vue'
+	import navs_header from '../common/nav_tabs.vue'
+	import rolemask from '../settingDetails/role_mask.vue'
+	import datalimitmask from '../maindataDetails/datalimit_mask.vue'
+	import tableControle from '../plugin/table-controle/controle.vue'
 	export default {
 		name: 'user_management',
 		components: {//引用组件标签命名

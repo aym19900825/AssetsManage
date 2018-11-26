@@ -144,10 +144,10 @@
 </template>
 <script>
 	import vheader from '../common/vheader.vue'
-	import navs_left from '../common/left_navs/nav_left2.vue'
+	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_header from '../common/nav_tabs.vue'
 //	import assetsTree from '../plugin/vue-tree/tree2.vue'
-	import usermask from '../maindataDetails/user_mask.vue'
+	import usermask from '../settingDetails/user_mask.vue'
 	export default {
 		name: 'user_management',
 		components: {

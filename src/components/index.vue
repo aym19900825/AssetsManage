@@ -145,7 +145,7 @@ export default {
 			{
 				navicon: 'icon-data3',
 				navtitle: '主数据',
-				navherf: '/user_management'
+				navherf: '/customer_management'
 			}, {
 				navicon: 'icon-plan',
 				navtitle: '年度计划',

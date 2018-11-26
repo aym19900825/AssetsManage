@@ -422,8 +422,6 @@
 		          row.isEditing = !row.isEditing
 		        }
 		    },
-			
-
             //手风琴开关效果调用
 			handleChange(val) {
 			},
@@ -463,6 +461,34 @@
 					this.up = !this.up
 				}
 			},
+			resetNew(){
+				this.CUSTOMER = {
+					ID:'',
+					CODE:'',
+					NAME:'',
+					CONTACT_ADDRESS:'',
+					PHONE:'',
+					PERSON:'',
+					TYPE:'',
+					ZIPCODE:'',
+					STATUS:'活动',
+					FAX:'',
+					EMAIL:'',
+					ENTERBY:'',
+					ENTERDATE:'',
+					CHANGEBY:'',
+					CHANGEDATE:'',
+					MEMO:'',
+					CUSTOMER_QUALIFICATIONList:[{
+						STEP:'',
+						CERTIFICATE_NUM:'',
+						CERTIFICATE_NAME:'',
+						ACTIVE_DATE:'',
+						STATUS:'',
+						MEMO:''
+					}]
+				}
+			},
 			//点击添加，修改按钮显示弹窗
 			visible() {
 				this.addtitle = true;
@@ -470,14 +496,10 @@
 				this.statusshow1 = true;
 				this.statusshow2 = false;
 				this.modify = false;
-				// this.CUSTOMER.STATUS = '1';
 				var date = new Date();
-				console.log(date);
-				this.CUSTOMER.ENTERDATE = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
-				console.log(this.CUSTOMER.ENTERDATE);
+				this.CUSTOMER.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
 	    			this.CUSTOMER.ENTERBY = res.data.nickname;
-	    			
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -493,7 +515,6 @@
 				this.statusshow1 = false;
 				this.statusshow2 = true;
 				this.modify = true;
-				
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
 	    			this.CUSTOMER.CHANGEBY = res.data.nickname;
 	    			var date = new Date();
@@ -504,12 +525,8 @@
 						type: 'error'
 					});
 				});
-				console.log(this.CUSTOMER.CHANGEDATE);
-				// var url = '/api/api-apps/app/customer/' + dataid;
 				this.$axios.get('/api/api-apps/app/customer/' + dataid, {}).then((res) => {
-					console.log(res);
 					this.CUSTOMER = res.data;
-					console.log(1234);
 					this.show = true;
 				}).catch((err) => {
 					this.$message({

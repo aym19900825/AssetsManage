@@ -98,10 +98,6 @@
 							</el-table-column>	
 							<el-table-column label="状态" sortable width="100" prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
 							</el-table-column>
-							<!-- <el-table-column label="录入人" sortable width="120" prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
-							</el-table-column>
-							<el-table-column label="录入人时间" sortable width="160" prop="ENTERDATE" v-if="this.checkedName.indexOf('录入人时间')!=-1">
-							</el-table-column> -->
 						</el-table>
 						<el-pagination background class="pull-right pt10 pb10" v-if="this.checkedName.length>0"
 				            @size-change="sizeChange"
@@ -168,8 +164,6 @@
 					'联系地址',
 					'联系电话',
 					'状态',
-					// '录入人',
-					// '录入时间',
 				],
 				tableHeader: [
 					{
@@ -191,15 +185,7 @@
 					{
 						label: '状态',
 						prop: 'STATUS'
-					},
-					// {
-					// 	label: '录入人',
-					// 	prop: 'ENTERBY'
-					// },
-					// {
-					// 	label: '录入时间',
-					// 	prop: 'ENTERDATE'
-					// }
+					}
 				],
 				
 				companyId: '',
@@ -214,6 +200,7 @@
 				up: false,
 				isShow: false,
 				ismin:true,
+				fileList: [],//上传附件数据
 				fullHeight:{//给浏览器高度赋值
 					height: '',
 				},
@@ -255,7 +242,6 @@
 			       this.loadSign = true
 			     }, 1000)
 			     this.requestData()
-//			     console.log('到底了', this.page.currentPage)
 			   }
 			 },
 			tableControle(data){
@@ -279,32 +265,6 @@
 			//添加用戶
 			openAddMgr() {
 				this.$refs.child.resetNew();
-				//  this.aaaData = {
-				//  	ID:'',
-				// 	CODE:'',
-				// 	NAME:'',
-				// 	PHONE:'',
-				// 	PERSON:'',
-				// 	TYPE:'',
-				// 	CONTACT_ADDRESS:'',
-				// 	ZIPCODE:'',
-				// 	STATUS:'活动',
-				// 	FAX:'',
-				// 	EMAIL:'',
-				// 	ENERBY:'',
-				// 	ENERDATE:'',
-				// 	CHANGEBY:'',
-				// 	CHANGEDATE:'',
-				// 	MEMO:'',
-				// 	// CUSTOMER_QUALIFICATIONList:[{
-				// 	// 	STEP:'',
-				// 	// 	CERTIFICATE_NUM:'',
-				// 	// 	CERTIFICATE_NAME:'',
-				// 	// 	ACTIVE_DATE:'',
-				// 	// 	STATUS:'',
-				// 	// 	MEMO:''
-				// 	// }]
-				// }
 				this.$refs.child.visible();
 			},
 			//修改用戶
@@ -330,7 +290,7 @@
 			modestsearch() {
 				this.search = !this.search;
 				this.down = !this.down,
-					this.up = !this.up
+				this.up = !this.up
 			},
 			// 删除
 			deluserinfo() {
@@ -392,6 +352,20 @@
 			Printing() {
 				
 			},
+			//上传文件 Begin
+			handleRemove(file, fileList) {
+				console.log(file, fileList);
+			},
+			handlePreview(file) {
+				console.log(file);
+			},
+			handleExceed(files, fileList) {
+				this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+			},
+			beforeRemove(file, fileList) {
+				return this.$confirm(`确定移除 ${ file.name }？`);
+			},
+			//上传文件 End
 			judge(data) {
 				return data.STATUS=="1" ? '活动' : '不活动'
 			},

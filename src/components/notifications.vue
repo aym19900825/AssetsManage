@@ -109,7 +109,7 @@
 											</div>
 											<div class="left_treebg">
 												<div class="p15" v-if="ismin">
-													<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all indent="22" :render-content="renderContent" :props="resourceProps" @node-click="handleNodeClick">
+													<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent" :props="resourceProps" @node-click="handleNodeClick">
 													</el-tree>
 												</div>
 											</div>
@@ -121,6 +121,11 @@
 											<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 											</el-table-column>
 											<el-table-column label="工作任务通知书编号" width="200" sortable prop="N_CODE" v-if="this.checkedName.indexOf('工作任务通知书编号')!=-1">
+
+												<template slot-scope="scope">
+													<p @click=view(scope.row.ID,)>{{scope.row.N_CODE}}
+													</p>
+												</template>
 											</el-table-column>
 											<el-table-column label="类型" width="150" sortable prop="TYPE" v-if="this.checkedName.indexOf('类型')!=-1">
 											</el-table-column>
@@ -138,7 +143,7 @@
 											</el-table-column>
 											<el-table-column label="抽样方案" width="120" prop="SOLUTION" sortable v-if="this.checkedName.indexOf('抽样方案')!=-1">
 											</el-table-column>
-											<el-table-column label="完成日期" width="120" prop="COMPDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('完成日期')!=-1">
+											<el-table-column label="完成日期" width="180" prop="COMPDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('完成日期')!=-1">
 											</el-table-column>
 											<el-table-column label="状态" width="120" prop="STATUS" sortable v-if="this.checkedName.indexOf('状态')!=-1">
 											</el-table-column>
@@ -167,7 +172,6 @@
 	import navs_header from './common/nav_tabs.vue'
 	import tableControle from './plugin/table-controle/controle.vue'
 	import notificationsmask from './common/notification_mask.vue'
-	
 
 	export default {
 		name: 'notifications',
@@ -176,10 +180,13 @@
 			navs_header,
 			tableControle,
 			notificationsmask,
-		
+
 		},
 		data() {
 			return {
+				fullHeight: { //给浏览器高度赋值
+					height: '',
+				},
 				value: '',
 				options: [{
 					value: '选项1',
@@ -361,6 +368,11 @@
 					this.$refs.child.detail(this.aaaData[0].ID);
 				}
 			},
+			//查看用戶
+			 view(id) {
+				this.$refs.child.detail(id);
+			},
+			
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
@@ -380,25 +392,26 @@
 					var url = '/api/api-apps/app/workNot/deletes';
 					//changeUser为勾选的数据
 					var changeUser = selData;
-					console.log(123121);
-					console.log(changeUser);
 					//deleteid为id的数组
 					var deleteid = [];
 					var ids;
-					for (var i = 0; i < changeUser.length; i++) {
+					for(var i = 0; i < changeUser.length; i++) {
 						deleteid.push(changeUser[i].ID);
 					}
 					//ids为deleteid数组用逗号拼接的字符串
 					ids = deleteid.toString(',');
-                    var data = {
+					var data = {
 						ids: ids,
 					}
 					this.$confirm('确定删除此产品类别吗？', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                    }).then(({ value }) => {
-                        this.$axios.delete(url, {params: data}).then((res) => {//.delete 传数据方法
-					console.log(res);
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {
+							params: data
+						}).then((res) => { //.delete 传数据方法
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '删除成功',
@@ -412,9 +425,9 @@
 								type: 'error'
 							});
 						});
-                    }).catch(() => {
+					}).catch(() => {
 
-                	});
+					});
 				}
 			},
 			// 导入
@@ -460,7 +473,6 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(res)
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -484,19 +496,17 @@
 					this.nitificationsList = newarr;
 				}).catch((wrong) => {})
 			},
-			
+
 			//机构树
 			getKey() {
 				let that = this;
 				var url = '/api/api-user/depts/tree';
 				this.$axios.get(url, {}).then((res) => {
 					this.resourceData = res.data;
-					console.log(1111);
-					console.log(res);
 					this.treeData = this.transformTree(this.resourceData);
 				});
 			},
-			
+
 			transformTree(data) {
 				for(var i = 0; i < data.length; i++) {
 					data[i].name = data[i].fullname;
@@ -512,7 +522,6 @@
 				return data;
 			},
 			handleNodeClick(data) {
-				console.log(111);
 				if(data.type == '1') {
 					this.companyId = data.id;
 					this.deptId = '';
@@ -522,10 +531,13 @@
 				}
 				this.requestData();
 			},
-			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
-				console.log();
+			renderContent(h, {
+				node,
+				data,
+				store
+			}) { //自定义Element树菜单显示图标
 				return(
-			<span>
+					<span>
               <i class={data.iconClass}></i>
               <span>{node.label}</span>
             </span>
@@ -554,7 +566,6 @@
 			},
 
 			getTreeId(data) {
-				console.log(data);
 				if(data.type == '1') {
 					this.companyId = data.id;
 					this.deptId = '';
@@ -577,119 +588,131 @@
 </script>
 
 <style scoped>
-.el-tree .el-tree-node__content>.el-tree-node__expand-icon {
-  padding: 2px;
-}
-.el-tree .el-icon-caret-right { 
-  font-size: 14px;
-  width: 17px;
-  height: 17px;
-  line-height:12px;
-  font-weight: lighter;
-  color: #A2ABBF;
-  border-radius: 3px;
-  margin-top: -2px;
-  margin-right: 5px;
-  position: relative;
-  z-index: 30;
-}
-
-
-.el-tree .el-icon-caret-right:before {/*图标加号*/
-    font-family: 'hxqheam';
-    content: "\e9bc";
-    position: absolute;
-    z-index: 22;
-}
-.el-tree .el-icon-caret-right:after {
-  content: "";
-  width: 10px;
-  position: absolute;
-  top: 7px;
-  right: -4px;
-  z-index: 1;
-}
-
-
-
-.el-tree .el-tree-node__expand-icon.is-leaf,.el-tree .el-tree-node__expand-icon.is-leaf:before {
-  border:none;
-  background:transparent;
-  content: "";
-}
-
-
-.el-tree .el-tree-node__expand-icon.expanded {/*图标加号点击后不旋转，原Element会旋转*/
-  -webkit-transform: rotate(0deg);
-  transform: rotate(0deg);
-}
-
-.el-tree .el-tree-node__expand-icon.expanded:before {/*图标减号*/
-    font-family: 'hxqheam';
-    content: "\e99f";
-}
-.el-tree .el-tree-node .icon-file-normal {/*文件夹合并时图标*/
-  color: #6585DF;
-  font-family: 'hxqheam';
-  content: "\e9fa";
-  font-size: 20px;
-}
-.el-tree .el-tree-node.is-expanded>.el-tree-node__content .icon-file-normal:before {/*文件夹打开时图标*/
-  font-family: 'hxqheam';
-  content: "\e9fb";
-}
-.el-tree .el-tree-node>.el-tree-node__content .icon-file-text {/*最后子级图标颜色*/
-  color: #92BDFF;
-}
-
-.el-tree-node [class^="icon-"], .el-tree-node [class*=" icon-"] {margin-right: 5px;}
-
-[role=group].el-tree-node__children,
-[role=group].el-tree-node__children [role=group].el-tree-node__children,
-[role=group].el-tree-node__children .el-tree-node__content {position: relative;}
-
-[role=group].el-tree-node__children:before,
-[role=group].el-tree-node__children [role=group].el-tree-node__children:before,
-[role=group].el-tree-node__children .el-tree-node__content:before{
-  content: "";
-  top: 0px;
-  position: absolute;
-  width: 9px;
-  height: 100%;
-  border-right: 1px dashed #C7CED6;
-}
-
-
-[role=group].el-tree-node__children [role=group].el-tree-node__children:before {
-  left: 22px;
-}
-
-[role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children:before {
-  left: 44px;
-}
-
-[role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children:before {
-  left: 66px;
-}
-
-[role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children:before {
-  left: 88px;
-}
-
-[role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children:before {
-  left: 110px;
-}
-
-
-[role=group].el-tree-node__children .el-tree-node__content:before{
-  top:-15px;
-}
-
-.el-tree>div[role=treeitem]:nth-last-child(2)>div[role=group]:before,
-.el-tree>div[role=treeitem] div[role=treeitem]:nth-last-child(1)>div[role=group]:before
-{
-  display: none;
-}
-
-.p15 {padding:10px 15px;}
+	.el-tree .el-tree-node__content>.el-tree-node__expand-icon {
+		padding: 2px;
+	}
+	
+	.el-tree .el-icon-caret-right {
+		font-size: 14px;
+		width: 17px;
+		height: 17px;
+		line-height: 12px;
+		font-weight: lighter;
+		color: #A2ABBF;
+		border-radius: 3px;
+		margin-top: -2px;
+		margin-right: 5px;
+		position: relative;
+		z-index: 30;
+	}
+	
+	.el-tree .el-icon-caret-right:before {
+		/*图标加号*/
+		font-family: 'hxqheam';
+		content: "\e9bc";
+		position: absolute;
+		z-index: 22;
+	}
+	
+	.el-tree .el-icon-caret-right:after {
+		content: "";
+		width: 10px;
+		position: absolute;
+		top: 7px;
+		right: -4px;
+		z-index: 1;
+	}
+	
+	.el-tree .el-tree-node__expand-icon.is-leaf,
+	.el-tree .el-tree-node__expand-icon.is-leaf:before {
+		border: none;
+		background: transparent;
+		content: "";
+	}
+	
+	.el-tree .el-tree-node__expand-icon.expanded {
+		/*图标加号点击后不旋转，原Element会旋转*/
+		-webkit-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+	
+	.el-tree .el-tree-node__expand-icon.expanded:before {
+		/*图标减号*/
+		font-family: 'hxqheam';
+		content: "\e99f";
+	}
+	
+	.el-tree .el-tree-node .icon-file-normal {
+		/*文件夹合并时图标*/
+		color: #6585DF;
+		font-family: 'hxqheam';
+		content: "\e9fa";
+		font-size: 20px;
+	}
+	
+	.el-tree .el-tree-node.is-expanded>.el-tree-node__content .icon-file-normal:before {
+		/*文件夹打开时图标*/
+		font-family: 'hxqheam';
+		content: "\e9fb";
+	}
+	
+	.el-tree .el-tree-node>.el-tree-node__content .icon-file-text {
+		/*最后子级图标颜色*/
+		color: #92BDFF;
+	}
+	
+	.el-tree-node [class^="icon-"],
+	.el-tree-node [class*=" icon-"] {
+		margin-right: 5px;
+	}
+	
+	[role=group].el-tree-node__children,
+	[role=group].el-tree-node__children [role=group].el-tree-node__children,
+	[role=group].el-tree-node__children .el-tree-node__content {
+		position: relative;
+	}
+	
+	[role=group].el-tree-node__children:before,
+	[role=group].el-tree-node__children [role=group].el-tree-node__children:before,
+	[role=group].el-tree-node__children .el-tree-node__content:before {
+		content: "";
+		top: 0px;
+		position: absolute;
+		width: 9px;
+		height: 100%;
+		border-right: 1px dashed #C7CED6;
+	}
+	
+	[role=group].el-tree-node__children [role=group].el-tree-node__children:before {
+		left: 22px;
+	}
+	
+	[role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children:before {
+		left: 44px;
+	}
+	
+	[role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children:before {
+		left: 66px;
+	}
+	
+	[role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children:before {
+		left: 88px;
+	}
+	
+	[role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children:before {
+		left: 110px;
+	}
+	
+	[role=group].el-tree-node__children .el-tree-node__content:before {
+		top: -15px;
+	}
+	
+	.el-tree>div[role=treeitem]:nth-last-child(2)>div[role=group]:before,
+	.el-tree>div[role=treeitem] div[role=treeitem]:nth-last-child(1)>div[role=group]:before {
+		display: none;
+	}
+	
+	.p15 {
+		padding: 10px 15px;
+	}
 </style>

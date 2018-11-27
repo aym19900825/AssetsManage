@@ -97,7 +97,7 @@
 								</div>
 								<div class="left_treebg">
 									<div class="p15" v-if="ismin">
-										<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all indent="22" :render-content="renderContent"  :props="resourceProps" @node-click="handleNodeClick">
+										<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent"  :props="resourceProps" @node-click="handleNodeClick">
 										</el-tree>
 									</div>
 								</div>
@@ -144,7 +144,7 @@
 	import navs_left from '../common/left_navs/nav_left3.vue'
 	import navs_header from '../common/nav_tabs.vue'
 //	import assetsTree from '../plugin/vue-tree/tree2.vue'
-	import usermask from '../maindataDetails/user_mask.vue'
+	import usermask from '../settingDetails/user_mask.vue'
 	export default {
 		name: 'user_management',
 		components: {

@@ -167,6 +167,7 @@
 		},
 		methods: {
 			iconOperation(row, column, cell, event){
+				console.log(column.property);
 			        if(column.property ==="iconOperation"){
 			          row.isEditing = !row.isEditing
 			        }

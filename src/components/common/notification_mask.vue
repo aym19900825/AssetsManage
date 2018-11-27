@@ -16,7 +16,7 @@
 			</div>
 			<div class="mask_content">
 
-				<el-form v-model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
+				<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="类别" name="1">
@@ -27,15 +27,14 @@
 										</el-input>
 									</el-col>
 									<el-col :span="3" class="pull-right">
-										<el-select v-model="dataInfo.STATE" placeholder="请选择状态">
-											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-											</el-option>
-										</el-select>
+										<el-input v-model="dataInfo.STATE" :disabled="true">
+											<template slot="prepend">状态</template>
+										</el-input>
 									</el-col>
 								</el-row>
 								<div class="accordion-body tab-content">
 									<el-radio-group v-model="dataInfo.TYPE">
-										<el-row :gutter="70">
+										<el-row :gutter="30">
 											<el-col :span="6">
 												<el-radio label="1">监督抽查</el-radio>
 											</el-col>
@@ -49,43 +48,29 @@
 												<el-radio label="4">质量抽查复查</el-radio>
 											</el-col>
 										</el-row>
-										<el-row :gutter="70">
+										<el-row :gutter="30">
 											<el-col :span="6">
-												<el-radio label="5">监督抽查</el-radio>
+												<el-radio label="5">生产许可证</el-radio>
 											</el-col>
 											<el-col :span="6">
-												<el-radio label="6">监督抽查复查</el-radio>
+												<el-radio label="6">认定检验检测</el-radio>
 											</el-col>
 											<el-col :span="6">
-												<el-radio label="7">质量抽查</el-radio>
+												<el-radio label="7">鉴定试验</el-radio>
 											</el-col>
 											<el-col :span="6">
-												<el-radio label="8">质量抽查复查</el-radio>
-											</el-col>
-										</el-row>
-										<el-row :gutter="70">
-											<el-col :span="6">
-												<el-radio label="9">生产许可证</el-radio>
-											</el-col>
-											<el-col :span="6">
-												<el-radio label="10">认定检验检测</el-radio>
-											</el-col>
-											<el-col :span="6">
-												<el-radio label="11">鉴定试验</el-radio>
-											</el-col>
-											<el-col :span="6">
-												<el-radio label="12">委托检验检测</el-radio>
+												<el-radio label="8">委托检验检测</el-radio>
 											</el-col>
 										</el-row>
-										<el-row :gutter="70">
+										<el-row :gutter="30">
 											<el-col :span="6">
-												<el-radio label="13">专项抽查</el-radio>
+												<el-radio label="9">专项抽查</el-radio>
 											</el-col>
 											<el-col :span="6">
-												<el-radio label="14">专项抽查复查</el-radio>
+												<el-radio label="10">专项抽查复查</el-radio>
 											</el-col>
 											<el-col :span="6">
-												<el-radio label="15">其它</el-radio>
+												<el-radio label="11">其它</el-radio>
 											</el-col>
 										</el-row>
 									</el-radio-group>
@@ -93,7 +78,7 @@
 							</el-collapse-item>
 							<el-collapse-item title="基本信息" name="2">
 								<div class="accordion-body tab-content">
-									<el-row :gutter="70">
+									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="计划编号" prop="WP_NUM">
 												<el-input v-model="dataInfo.WP_NUM" :disabled="true">
@@ -107,14 +92,18 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="承检单位" prop="CJDW">
-												<el-input v-model="dataInfo.CJDW"></el-input>
+												
+										<el-select v-model="dataInfo.CJDW" placeholder="金化站">
+											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+											</el-option>
+										</el-select>
 											</el-form-item>
 										</el-col>
 									</el-row>
-									<el-row :gutter="70">
+									<el-row :gutter="30">
 										<el-col :span="8">
-											<el-form-item label="项目负责人" prop="P_LEADER">
-												<el-input v-model="dataInfo.P_LEADER" :disabled="true">
+											<el-form-item label="项目负责人" prop="P_LEADERDesc">
+												<el-input v-model="dataInfo.P_LEADERDesc" :disabled="true">
 													<el-button slot="append" icon="el-icon-search" @click="getPeople(1)"></el-button>
 												</el-input>
 
@@ -143,16 +132,12 @@
 							<el-collapse-item title="依据" name="3">
 								<!-- 字段列表 Begin-->
 								<div class="table-func">
-									<el-button type="primary" size="mini" round @click="importdia">
-										<i class="icon-upload-cloud"></i>
-										<font>导入</font>
-									</el-button>
 									<el-button type="success" size="mini" round @click="addfieldBasis">
 										<i class="icon-add"></i>
 										<font>新建</font>
 									</el-button>
 								</div>
-								<el-form v-model="dataInfo.WORK_NOTICE_CHECKBASISList">
+								<el-form :model="dataInfo.WORK_NOTICE_CHECKBASISList">
 									<el-form-item>
 										<el-row :gutter="20">
 											<el-col :span="3">
@@ -164,10 +149,10 @@
 											<el-col :span="3">
 												<el-form-item label="检验标准内容"></el-form-item>
 											</el-col>
-											<el-col :span="2">
+											<el-col :span="3">
 												<el-form-item label="检验标准名称"></el-form-item>
 											</el-col>
-											<el-col :span="3">
+											<el-col :span="2">
 												<el-form-item label="版本"></el-form-item>
 											</el-col>
 											<el-col :span="3">
@@ -190,10 +175,10 @@
 											<el-col :span="3">
 												<el-input type="text" placeholder="请输入检验标准内容" v-model="item.S_DESC"></el-input>
 											</el-col>
-											<el-col :span="2">
+											<el-col :span="3">
 												<el-input type="text" placeholder="请输入标准名称" v-model="item.S_NAME"></el-input>
 											</el-col>
-											<el-col :span="3">
+											<el-col :span="2">
 												<el-input type="text" placeholder="请输入版本" v-model="item.VERSION"></el-input>
 											</el-col>
 											<el-col :span="3">
@@ -212,7 +197,7 @@
 							</el-collapse-item>
 							<el-collapse-item title="检验检测要求" name="4">
 								<div class="accordion-body tab-content">
-									<el-row :gutter="70">
+									<el-row :gutter="30">
 										<el-col :span="6">
 											<el-form-item label="受检企业" prop="V_NAME">
 												<el-input v-model="dataInfo.V_NAME"></el-input>
@@ -229,8 +214,8 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="6">
-											<el-form-item label="接收人" prop="ACCEPT_PERSON">
-												<el-input v-model="dataInfo.ACCEPT_PERSON" :disabled="true">
+											<el-form-item label="接收人" prop="ACCEPT_PERSONDesc">
+												<el-input v-model="dataInfo.ACCEPT_PERSONDesc" :disabled="true">
 													<el-button slot="append" icon="el-icon-search" @click="getPeople(2)"></el-button>
 												</el-input>
 
@@ -242,17 +227,13 @@
 							<el-collapse-item title="检验检测项目" name="5">
 								<!-- 字段列表 Begin-->
 								<div class="table-func">
-									<el-button type="primary" size="mini" round @click="importdia">
-										<i class="icon-upload-cloud"></i>
-										<font>导入</font>
-									</el-button>
 									<el-button type="success" size="mini" round @click="addfieldProject">
 										<i class="icon-add"></i>
 										<font>新建</font>
 									</el-button>
 								</div>
 								<!-- :rules="rules" ref="attributes" -->
-								<el-form v-model="dataInfo.WORK_NOTICE_CHECKPROJECTList">
+								<el-form :model="dataInfo.WORK_NOTICE_CHECKPROJECTList">
 									<el-form-item>
 										<el-row :gutter="20">
 											<el-col :span="3">
@@ -267,7 +248,7 @@
 											<el-col :span="3">
 												<el-form-item label="要求"></el-form-item>
 											</el-col>
-											<el-col :span="3">
+											<el-col :span="2">
 												<el-form-item label="版本"></el-form-item>
 											</el-col>
 											<el-col :span="2">
@@ -293,7 +274,7 @@
 											<el-col :span="3">
 												<el-input type="text" placeholder="请输入要求" v-model="item.REMARKS"></el-input>
 											</el-col>
-											<el-col :span="3">
+											<el-col :span="2">
 												<el-input type="text" placeholder="请输入版本" v-model="item.VERSION"></el-input>
 											</el-col>
 											<el-col :span="2">
@@ -312,7 +293,7 @@
 							</el-collapse-item>
 							<el-collapse-item name="6">
 								<div class="accordion-body tab-content">
-									<el-row :gutter="70">
+									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="完成日期" prop="COMPDATE">
 												<el-date-picker v-model="dataInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
@@ -331,7 +312,7 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
-									<el-row :gutter="70">
+									<el-row :gutter="30">
 										<el-col :span="24">
 											<el-form-item label="备注" prop="MEMO">
 												<el-input v-model="dataInfo.MEMO"></el-input>
@@ -342,7 +323,7 @@
 							</el-collapse-item>
 							<el-collapse-item title="其他" name="7">
 								<div class="accordion-body tab-content">
-									<el-row :gutter="70">
+									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="录入人" prop="ENTERBY">
 												<el-input v-model="dataInfo.ENTERBY" :disabled="true"></el-input>
@@ -359,7 +340,7 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
-									<el-row :gutter="70">
+									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="修改人" v-if="modify" prop="CHANGEBY">
 												<el-input v-model="dataInfo.CHANGEBY" :disabled="true"></el-input>
@@ -456,12 +437,26 @@
 					totalCount: 0
 				},
 				options: [{
-					value: '1',
-					label: '活动'
-				}, {
-					value: '0',
-					label: '不活动'
-				}],
+					value: '金化站',
+					label: '金化站'
+				},
+				{
+					value: '通号站',
+					label: '通号站'
+				},
+				{
+					value: '运包站',
+					label: '运包站'
+				},
+				{
+					value: '机报站',
+					label: '机报站'
+				},
+				{
+					value: '接触网站',
+					label: '接触网站'
+				},
+				],
 				value: '',
 				selUser: [],
 				//				disabled: true, //禁填
@@ -476,13 +471,11 @@
 				type: '',
 				addtitle: true, //添加弹出框titile
 				modifytitle: false, //修改弹出框titile
+				modify: false,
 				activeNames: ['1', '2', '3', '4', '5', '6', '7'], //手风琴数量
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
-				dataList: [{
-					name: '',
-					description: ''
-				}],
+			
 				leaddata: [ //导入数据的表格
 					{
 						columnname: 'author',
@@ -524,7 +517,7 @@
 					TASKNUM: '',
 					SOLUTION: '',
 					COMPDATE: '',
-					STATE: '',
+					STATE: '草稿',
 					ENTERBY: '',
 					STATUS: '',
 					WORK_NOTICE_CHECKBASISList: [{ //字段列表
@@ -567,21 +560,21 @@
 			};
 		},
 		methods: {
-			resetNew() {
-				this.dataInfo = { //数据库列表
-						name: '',
-						description: '',
-						attributes: [{ //字段列表
-							columnname: '',
-							description: '',
-							type: '',
-							length: '',
-							retain: ''
-						}]
-					},
-
-					this.$refs["dataInfo"].resetFields();
-			},
+//			resetNew() {
+//				this.dataInfo = { //数据库列表
+//						name: '',
+//						description: '',
+//						attributes: [{ //字段列表
+//							columnname: '',
+//							description: '',
+//							type: '',
+//							length: '',
+//							retain: ''
+//						}]
+//					},
+//
+//					this.$refs["dataInfo"].resetFields();
+//			},
 			handleChange(val) { //手风琴开关效果调用
 			},
 			sizeChange(val) {
@@ -640,8 +633,7 @@
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
 					this.dataInfo.DEPT = res.data.deptName;
 					this.dataInfo.ENTERBY = res.data.nickname;
-					this.dataInfo.ORGID= res.data.deptName
-					console.log(res);
+					this.dataInfo.ORGID = res.data.deptName
 					var date = new Date();
 					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err) => {
@@ -767,23 +759,18 @@
 			},
 			dailogconfirm(type) { //小弹出框确认按钮事件
 				this.dialogVisible = false;
-				//				this.dataInfo.P_LEADER = this.id;
-				console.log(this.type);
 				if(this.type == '1') {
-					//					console.log(this.id);
 					this.dataInfo.P_LEADER = this.selUser[0].id;
-					//					this.dataInfo.P_LEADERDesc = this.name;
+					this.dataInfo.P_LEADERDesc = this.selUser[0].nickname;
+					
 				} else {
-					//					console.log(this.id);
 					this.dataInfo.ACCEPT_PERSON = this.selUser[0].id;
-					//					this.user.P_LEADERDesc = this.name;
+					this.dataInfo.ACCEPT_PERSONDesc = this.selUser[0].nickname;
 				}
 			},
 
 			SelChange(val) {
 				this.selUser = val;
-				console.log(this.selUser);
-				console.log(this.selUser[0].id);
 			},
 		}
 	}

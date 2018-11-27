@@ -26,10 +26,13 @@
 										</el-input>
 									</el-col>
 									<el-col :span="3" class="pull-right">
-										<el-select v-model="CATEGORY.STATUS" placeholder="请选择状态">
+										<el-input v-model="CATEGORY.STATUS" :disabled="true">
+											<template slot="prepend">状态</template>
+										</el-input>
+										<!-- <el-select v-model="CATEGORY.STATUS" placeholder="请选择状态">
 											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
-										</el-select>
+										</el-select> -->
 									</el-col>
 									<!-- <el-col :span="7" class="pull-right">
 										<el-input v-model="CATEGORY.NUM" :disabled="true">
@@ -38,7 +41,7 @@
 									</el-col> -->
 								</el-row>
 
-								<el-row :gutter="70">
+								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="产品类别编号" prop="NUM">
 											<el-input v-model="CATEGORY.NUM"></el-input>
@@ -50,7 +53,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="70">
+								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="录入人机构" prop="DEPARTMENT">
 											<el-input v-model="CATEGORY.DEPARTMENT"></el-input>
@@ -67,7 +70,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="70">
+								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="修改人" prop="CHANGEBY" v-if="modify">
 											<el-input v-model="CATEGORY.CHANGEBY" placeholder="当前修改人" :disabled="edit" ></el-input>

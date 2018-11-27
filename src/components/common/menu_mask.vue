@@ -20,7 +20,7 @@
 					<div class="accordion">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="基础信息" name="1">
-								<el-row :gutter="70">
+								<el-row :gutter="30">
 									<el-col :span="24">
 										<el-form-item label="所属上级" prop="pName">
 											<el-input v-model="menu.pName" :disabled="edit">
@@ -29,7 +29,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="70">
+								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="菜单名称" prop="name">
 											<el-input v-model="menu.name">
@@ -50,7 +50,7 @@
 									</el-col>
 								</el-row>
 
-								<el-row :gutter="70">
+								<el-row :gutter="30">
 									<!--是否影藏-->
 									<el-col :span="8">
 										<el-form-item label="是否显示" prop="hidden">

@@ -26,10 +26,13 @@
 										</el-input>
 									</el-col>
 									<el-col :span="3" class="pull-right">
-										<el-select v-model="dataInfo.STATUS" placeholder="请选择状态">
+										<el-input v-model="dataInfo.STATUS" :disabled="true">
+											<template slot="prepend">状态</template>
+										</el-input>
+										<!-- <el-select v-model="dataInfo.STATUS" placeholder="请选择状态">
 											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
-										</el-select>
+										</el-select> -->
 									</el-col>
 									<!-- <el-col :span="7" class="pull-right">
 										<el-input v-model="dataInfo.S_NUM" :disabled="true">
@@ -38,7 +41,7 @@
 									</el-col> -->
 								</el-row>
 
-								<el-row :gutter="70">
+								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="标准编码" prop="S_NUM">
 											<el-input v-model="dataInfo.S_NUM"></el-input>
@@ -55,7 +58,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="70">
+								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="发布时间" prop="RELEASETIME">
 											<el-date-picker v-model="dataInfo.RELEASETIME" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
@@ -74,7 +77,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="70">
+								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="录入人机构" prop="DEPARTMENT">
 											<el-input v-model="dataInfo.DEPARTMENT" :disabled="true"></el-input>
@@ -91,7 +94,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="70">
+								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item v-if="modify" label="修改人" prop="CHANGEBY">
 											<el-input v-model="dataInfo.CHANGEBY" :disabled="true"></el-input>

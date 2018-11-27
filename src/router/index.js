@@ -12,11 +12,10 @@ import testing_standard from '@/components/maindata/testing_standard'//检验/�
 import testing_projects from '@/components/maindata/testing_projects'//检验/检测项目
 import testing_methods from '@/components/maindata/testing_methods'//检验/检测方法
 import number_settings from '@/components/maindata/number_settings'//自动编号设置
-import user_management from '@/components/maindata/user_management'//用户管理
-import user_management2 from '@/components/maindata/user_management2'//用户管理
-import dept_management from '@/components/maindata/dept_management'//机构管理
-import role_management from '@/components/maindata/role_management'//角色管理
 
+import user_management from '@/components/setting/user_management'//用户管理
+import dept_management from '@/components/setting/dept_management'//机构管理
+import role_management from '@/components/setting/role_management'//角色管理
 import menu_management from '@/components/setting/menu_management'//菜单管理
 import data_management from '@/components/setting/data_management'//数据管理
 import safe_management from '@/components/setting/safe_management'//安全管理
@@ -202,11 +201,6 @@ Vue.use(Router)
       path: '/user_management',
       name: 'user_management',
       component: user_management
-    },
-    {//用户管理2
-      path: '/user_management2',
-      name: 'user_management2',
-      component: user_management2
     },
     {//安全管理
       path: '/safe_management',

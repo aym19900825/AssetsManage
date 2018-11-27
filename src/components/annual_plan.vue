@@ -136,7 +136,7 @@
 								</div>
 							</div>
 						</el-col>
-						<el-col :span="19">
+						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
 							<el-table :data="userList"  border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
@@ -152,7 +152,7 @@
 								</el-table-column>
 								<el-table-column label="录入时间" sortable width="210px" prop="ENTERDATE" v-if="this.checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>
-								<el-table-column label="状态" sortable width="200px" prop="STATUS" v-if="this.checkedName.indexOf('状态')!=-1">
+								<el-table-column label="状态" sortable prop="STATUS" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="pull-right" v-if="this.checkedName.length>0"
@@ -161,8 +161,7 @@
 					            :current-page="page.currentPage"
 					            :page-sizes="[10, 20, 30, 40]"
 					            :page-size="page.pageSize"
-					            layout="total, sizes, prev, pager, next"
-					            :total="page.totalCount">
+					            layout="total, sizes, prev, pager, next" :total="page.totalCount">
 					        </el-pagination>
 							<!-- 表格 -->
 						</el-col>

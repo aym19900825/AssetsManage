@@ -34,6 +34,18 @@ export default {
 				},
 			leftNavs: [//leftNavs左侧菜单数据
 				{
+					navicon: 'icon-user',
+					navtitle: '用户管理',
+					navherf: '/user_management'
+				}, {
+					navicon: 'icon-department',
+					navtitle: '机构管理',
+					navherf: '/dept_management'
+				}, {
+					navicon: 'icon-role-site',
+					navtitle: '角色管理',
+					navherf: '/role_management'
+				}, {
 					navicon: 'icon-file-text',
 					navtitle: '菜单管理',
 					navherf: '/menu_management'

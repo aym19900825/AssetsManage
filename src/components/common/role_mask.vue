@@ -19,7 +19,7 @@
 					<div class="accordion">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="基础信息" name="1">
-								<el-row :gutter="70">
+								<el-row :gutter="30">
 									<el-col :span="12">
 										<el-form-item label="角色名称" prop="name">
 											<el-input v-model="roleList.name"></el-input>
@@ -31,7 +31,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="70">
+								<el-row :gutter="30">
 									<el-col :span="24">
 										<el-form-item label="所在机构" prop="deptName">
 											<el-input v-model="roleList.deptName" :disabled="edit">
@@ -40,7 +40,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="70">
+								<el-row :gutter="30">
 									<el-col :span="24">
 										<el-form-item label="备注" prop="tips">
 											<el-input type="textarea" v-model="roleList.tips" placeholder="请填写"></el-input>

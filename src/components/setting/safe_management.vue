@@ -19,7 +19,7 @@
 							<el-form status-icon ref="safemanage" :model="safemanage" label-width="80px" :label-position="labelPosition">
 								<el-collapse v-model="activeNames" @change="handleChange">
 									<el-collapse-item title="安全管理" name="1">
-										<el-row :gutter="70">
+										<el-row :gutter="30">
 									 		<el-col :span="12">
 												<el-form-item label="是滞包含大写字母">
 													<el-select v-model="safemanage.emptyuppercase" filterable placeholder="请选择">
@@ -38,7 +38,7 @@
 									 		</el-col>
 									 	</el-row>
 									 	
-									 	<el-row :gutter="70">
+									 	<el-row :gutter="30">
 									 		<el-col :span="12">
 												<el-form-item label="是否包含特殊字符">
 													<el-select v-model="safemanage.emptycharacter" filterable placeholder="请选择">
@@ -56,7 +56,7 @@
 									 		</el-col>
 									 	</el-row>
 
-									 	<el-row :gutter="70">
+									 	<el-row :gutter="30">
 									 		<el-col :span="12">
 												<el-form-item label="密码过期天数">
 													<el-select v-model="safemanage.emptyexpired" filterable placeholder="请选择">
@@ -74,7 +74,7 @@
 									 		</el-col>
 									 	</el-row>
 
-										<el-row :gutter="70">
+										<el-row :gutter="30">
 											<el-col :span="12" >
 												<el-form-item label="是否包含特殊字符">
 													<el-select v-model="safemanage.emptyerrortimes" filterable placeholder="请选择">

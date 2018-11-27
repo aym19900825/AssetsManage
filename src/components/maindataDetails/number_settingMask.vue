@@ -21,13 +21,16 @@
 							<el-collapse-item title="基础信息" name="1">
 								<el-row :gutter="20">
 									<el-col :span="4" class="pull-right">
-										<el-select v-model="numbsetForm.STATUS" placeholder="请选择状态">
+										<el-input v-model="numbsetForm.STATUS" :disabled="true">
+											<template slot="prepend">状态</template>
+										</el-input>
+										<!-- <el-select v-model="numbsetForm.STATUS" placeholder="请选择状态">
 											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
-										</el-select>
+										</el-select> -->
 									</el-col>
 								</el-row>
-								<el-row :gutter="70">
+								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="自动编号名称" prop="AUTOKEY">
 											<el-input v-model="numbsetForm.AUTOKEY"></el-input>
@@ -44,14 +47,14 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="70">
+								<el-row :gutter="30">
 									<el-col :span="24">
 										<el-form-item label="备注" prop="MEMO">
 											<el-input type="textarea" v-model="numbsetForm.MEMO"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="70">
+								<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="录入人机构">
 												<el-input v-model="numbsetForm.DEPARTMENT" :disabled="true"></el-input>
@@ -68,7 +71,7 @@
 											</el-form-item>
 										</el-col>
 								</el-row>
-								<el-row :gutter="70">
+								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item v-if="modify" label="修改人" prop="CHANGEBY">
 											<el-input v-model="numbsetForm.CHANGEBY" :disabled="true"></el-input>

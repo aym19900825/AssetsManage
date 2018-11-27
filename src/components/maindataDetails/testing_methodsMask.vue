@@ -26,10 +26,13 @@
 										</el-input>
 									</el-col>
 									<el-col :span="3" class="pull-right">
-										<el-select v-model="testingForm.STATUS" placeholder="请选择状态">
+										<el-input v-model="testingForm.STATUS" :disabled="true">
+											<template slot="prepend">状态</template>
+										</el-input>
+										<!-- <el-select v-model="testingForm.STATUS" placeholder="请选择状态">
 											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
-										</el-select>
+										</el-select> -->
 									</el-col>
 									<!-- <el-col :span="7" class="pull-right">
 										<el-input v-model="testingForm.M_NUM" :disabled="true">
@@ -38,7 +41,7 @@
 									</el-col> -->
 								</el-row>
 
-								<el-row :gutter="70">
+								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="检验/检测方法编号" prop="M_NUM" required="true">
 											<el-input v-model="testingForm.M_NUM"></el-input>
@@ -55,7 +58,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="70">
+								<el-row :gutter="30">
 									<el-col :span="24">
 										<el-form-item label="类别" prop="M_TYPE">
 											<el-input v-model="testingForm.M_TYPE" disabled>
@@ -64,7 +67,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="70">
+								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="录入人机构" prop="DEPARTMENT">
 											<el-input v-model="testingForm.DEPARTMENT" :disabled="true"></el-input>
@@ -81,7 +84,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="70">
+								<el-row :gutter="30">
 									<el-col :span="8" v-if="modify">
 										<el-form-item label="修改人" prop="CHANGEBY">
 											<el-input v-model="testingForm.CHANGEBY" :disabled="true"></el-input>

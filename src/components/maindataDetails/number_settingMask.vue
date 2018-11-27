@@ -54,7 +54,7 @@
 								<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="录入人机构">
-												<el-input v-model="numbsetForm.DEPT" :disabled="true"></el-input>
+												<el-input v-model="numbsetForm.DEPARTMENT" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -113,7 +113,7 @@
 						PREFIX:'',
 						S_NUM:'',
 						MEMO:'',
-						DEPT:'',
+						DEPARTMENT:'',
 						ENTERBY:'',
 						ENTERDATE:'',
 						CHANGEBY:'',
@@ -159,7 +159,9 @@
 				dialogVisible: false, //对话框
 				edit: true, //禁填
 				activeNames: ['1'], //手风琴数量
-				clientHeight:'',//获取浏览器高度
+				fullHeight:{//给浏览器高度赋值
+					height: '',
+				},
 				show: false,
 				isok1: true,
 				isok2: false,
@@ -167,18 +169,18 @@
 				addtitle:true,
 				modifytitle:false,
 				selectData:[],
-				numbsetForm: {
-					STATUS:'',
-					AUTOKEY:'',
-					PREFIX:'',
-					S_NUM:'',
-					MEMO:'',
-					DEPT:'',
-					ENTERBY:'',
-					ENTERDATE:'',
-					CHANGEBY:'',
-					CHANGEDATE:''
-				},
+				// numbsetForm: {
+				// 	STATUS:'',
+				// 	AUTOKEY:'',
+				// 	PREFIX:'',
+				// 	S_NUM:'',
+				// 	MEMO:'',
+				// 	DEPARTMENT:'',
+				// 	ENTERBY:'',
+				// 	ENTERDATE:'',
+				// 	CHANGEBY:'',
+				// 	CHANGEDATE:''
+				// },
 				rules:{
           			AUTOKEY: [{ 
    						required: true,
@@ -205,7 +207,7 @@
 					PREFIX:'',
 					S_NUM:'',
 					MEMO:'',
-					DEPT:'',
+					DEPARTMENT:'',
 					ENTERBY:'',
 					ENTERDATE:'',
 					CHANGEBY:'',
@@ -215,7 +217,7 @@
             },
             childMethods() {//添加内容时从父组件带过来的
             	this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
-					this.numbsetForm.DEPT=res.data.deptName;
+					this.numbsetForm.DEPARTMENT=res.data.deptName;
 					this.numbsetForm.ENTERBY=res.data.nickname;
 					var date=new Date();
 					this.numbsetForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
@@ -321,13 +323,11 @@
 		},
 		mounted() {
 			// 获取浏览器可视区域高度
-			var _this = this;
-			var clientHeight = $(window).height() - 100;    //document.body.clientWidth;
-			_this.$refs.homePagess.style.height = clientHeight + 'px';
-			window.onresize = function() {
-				var clientHeight = $(window).height() - 100;
-				_this.$refs.homePagess.style.height = clientHeight + 'px';
-			};
+			window.onresize = () => {//获取浏览器可视区域高度
+		 	return (() => {
+		 		this.fullHeight.height = document.documentElement.clientHeight - 100+'px';
+		 	})()
+		 };
 		}
 	}
 </script>

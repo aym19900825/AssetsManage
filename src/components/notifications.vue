@@ -12,7 +12,7 @@
 			<!--右侧内容显示 Begin-->
 			<div class="wrapper wrapper-content wrapperall">
 				<EasyScrollbar>
-					<div id="wrapper" ref="homePagess" style="height: 600px;">
+					<div id="wrapper" :style="fullHeight">
 						<div id="information" style="height: inherit;">
 							<div class="ibox-content">
 								<!--按钮操作行 Begin-->
@@ -25,7 +25,7 @@
 											<button type="button" class="btn btn-bule button-margin" @click="modify">
 										    <i class="icon-edit"></i>修改
 										</button>
-											<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
+											<button type="button" class="btn btn-red button-margin" @click="delinfo">
 										    <i class="icon-trash"></i>删除
 										</button>
 											<button type="button" class="btn btn-primarys button-margin" @click="importData">
@@ -99,7 +99,23 @@
 								</div>
 								<!-- 高级查询划出 End-->
 								<el-row :gutter="0">
-									<el-col :span="24">
+									<el-col :span="5" class="lefttree">
+										<div class="lefttreebg">
+											<div class="left_tree_title clearfix" @click="min3max()">
+												<div class="pull-left pr20" v-if="ismin">组织机构</div>
+												<span class="pull-right navbar-minimalize minimalize-styl-2">
+										<i class="icon-doubleok icon-double-angle-left blue"></i>
+									</span>
+											</div>
+											<div class="left_treebg">
+												<div class="p15" v-if="ismin">
+													<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent" :props="resourceProps" @node-click="handleNodeClick">
+													</el-tree>
+												</div>
+											</div>
+										</div>
+									</el-col>
+									<el-col :span="19">
 										<!-- 表格 Begin-->
 										<el-table :data="nitificationsList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'nitificationsList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 											<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
@@ -118,16 +134,18 @@
 											</el-table-column>
 											<el-table-column label="承检单位" width="180" sortable prop="CJDW" v-if="this.checkedName.indexOf('承检单位')!=-1">
 											</el-table-column>
-											<el-table-column label="任务号" width="120" prop="TASKNUM" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('任务号')!=-1">
+											<el-table-column label="任务号" width="120" prop="TASKNUM" sortable v-if="this.checkedName.indexOf('任务号')!=-1">
 											</el-table-column>
-											<el-table-column label="抽样方案" width="120" prop="SOLUTION" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('抽样方案')!=-1">
+											<el-table-column label="抽样方案" width="120" prop="SOLUTION" sortable v-if="this.checkedName.indexOf('抽样方案')!=-1">
 											</el-table-column>
-											<el-table-column label="完成日期" width="120" prop="COMPDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('完成日期')!=-1">
+											<el-table-column label="完成日期" width="180" prop="COMPDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('完成日期')!=-1">
 											</el-table-column>
-											<el-table-column label="状态" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('状态')!=-1">
+											<el-table-column label="状态" width="120" prop="STATUS" sortable v-if="this.checkedName.indexOf('状态')!=-1">
 											</el-table-column>
-											<el-table-column label="录入人" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入人')!=-1">
+											<el-table-column label="录入人" width="120" prop="ENTERBY" sortable v-if="this.checkedName.indexOf('录入人')!=-1">
 											</el-table-column>
+											<!--<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
+											</el-table-column>-->
 										</el-table>
 										<el-pagination background class="pull-right pt10 pb10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 										</el-pagination>
@@ -140,7 +158,7 @@
 				</EasyScrollbar>
 			</div>
 			<!--右侧内容显示 End-->
-			<notificationsmask :dataInfo="aaaData[0]" ref="child" v-bind:page=page></notificationsmask>
+			<notificationsmask :dataInfo="aaaData[0]" @request="requestData" ref="child" v-bind:page=page></notificationsmask>
 		</div>
 	</div>
 </template>
@@ -149,13 +167,16 @@
 	import navs_header from './common/nav_tabs.vue'
 	import tableControle from './plugin/table-controle/controle.vue'
 	import notificationsmask from './common/notification_mask.vue'
+	
+
 	export default {
 		name: 'notifications',
 		components: {
 			vheader,
 			navs_header,
 			tableControle,
-			notificationsmask
+			notificationsmask,
+		
 		},
 		data() {
 			return {
@@ -167,9 +188,9 @@
 					value: '选项2',
 					label: '不活动'
 				}],
-				loadSign:true,//加载
-				commentArr:{},
-				
+				loadSign: true, //加载
+				commentArr: {},
+
 				checkedName: [
 					'工作任务通知书编号',
 					'类型',
@@ -182,7 +203,8 @@
 					'抽样方案',
 					'完成日期',
 					'状态',
-					'录入人'
+					'录入人',
+					'录入时间'
 				],
 				tableHeader: [{
 						label: '工作任务通知书编号',
@@ -231,7 +253,11 @@
 					{
 						label: '录入人',
 						prop: 'ENTERBY'
-					}
+					},
+					//					{
+					//						label: '录入时间',
+					//						prop: 'ENTERDATE'
+					//					}
 				],
 
 				selUser: [],
@@ -250,7 +276,7 @@
 					TYPE: '',
 					XD_DATE: '',
 					COMPDATE: '',
-					STATUS:''
+					STATUS: ''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -260,13 +286,13 @@
 					children: "subDepts",
 					label: "simplename"
 				},
-				userData: [],
 				page: { //分页显示
 					currentPage: 1,
 					pageSize: 10,
 					totalCount: 0
 				},
 				aaaData: [],
+				treeData: [],
 			}
 		},
 
@@ -282,19 +308,19 @@
 
 		},
 		methods: {
-			loadMore () {
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page.currentPage++
-			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     this.requestData()
-			   }
-			 },
+			loadMore() {
+				if(this.loadSign) {
+					this.loadSign = false
+					this.page.currentPage++
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							return
+						}
+					setTimeout(() => {
+						this.loadSign = true
+					}, 1000)
+					this.requestData()
+				}
+			},
 			tableControle(data) {
 				this.checkedName = data;
 			},
@@ -332,7 +358,7 @@
 					});
 					return;
 				} else {
-					this.$refs.child.detail();
+					this.$refs.child.detail(this.aaaData[0].ID);
 				}
 			},
 			//高级查询
@@ -342,7 +368,7 @@
 					this.up = !this.up
 			},
 			// 删除
-			deluserinfo() {
+			delinfo() {
 				var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({
@@ -350,31 +376,45 @@
 						type: 'warning'
 					});
 					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时删除多个用户',
-						type: 'warning'
-					});
-					return;
 				} else {
-					var changeUser = selData[0];
-					var id = changeUser.id;
-					var url = '/api/api-user/users/' + id;
-					this.$axios.delete(url, {}).then((res) => { //.delete 传数据方法
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
+					var url = '/api/api-apps/app/workNot/deletes';
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					console.log(123121);
+					console.log(changeUser);
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					for (var i = 0; i < changeUser.length; i++) {
+						deleteid.push(changeUser[i].ID);
+					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+                    var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除此产品类别吗？', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                    }).then(({ value }) => {
+                        this.$axios.delete(url, {params: data}).then((res) => {//.delete 传数据方法
+					console.log(res);
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '删除成功',
-								type: 'success'
+								message: '网络错误，请重试',
+								type: 'error'
 							});
-							this.requestData();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
-					});
+                    }).catch(() => {
+
+                	});
 				}
 			},
 			// 导入
@@ -391,7 +431,7 @@
 			},
 			judge(data) {
 				//taxStatus 布尔值
-				return data.STATUS=="1"? '活动' : '不活动'
+				return data.STATUS == "1" ? '活动' : '不活动'
 			},
 			//时间格式化  
 			dateFormat(row, column) {
@@ -399,7 +439,7 @@
 				if(date == undefined) {
 					return "";
 				}
-				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss"); 
+				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 			},
 			SelChange(val) {
 				this.selUser = val;
@@ -421,30 +461,109 @@
 					params: data
 				}).then((res) => {
 					console.log(res)
-					this.page.totalCount = res.data.count;	
+					this.page.totalCount = res.data.count;
 					//总的页数
-					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
-					if(this.page.currentPage >= totalPage){
-						 this.loadSign = false
-					}else{
-						this.loadSign=true
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
 					}
-					this.commentArr[this.page.currentPage]=res.data.data
-					let newarr=[]
-					for(var i = 1; i <= totalPage; i++){
-					
-						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
-							
-							for(var j = 0; j < this.commentArr[i].length; j++){
+					this.commentArr[this.page.currentPage] = res.data.data
+					let newarr = []
+					for(var i = 1; i <= totalPage; i++) {
+
+						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+
+							for(var j = 0; j < this.commentArr[i].length; j++) {
 								newarr.push(this.commentArr[i][j])
 							}
 						}
 					}
-					
+
 					this.nitificationsList = newarr;
 				}).catch((wrong) => {})
 			},
+			
+			//机构树
+			getKey() {
+				let that = this;
+				var url = '/api/api-user/depts/tree';
+				this.$axios.get(url, {}).then((res) => {
+					this.resourceData = res.data;
+					console.log(1111);
+					console.log(res);
+					this.treeData = this.transformTree(this.resourceData);
+				});
+			},
+			
+			transformTree(data) {
+				for(var i = 0; i < data.length; i++) {
+					data[i].name = data[i].fullname;
+					if(!data[i].pid || $.isArray(data[i].subDepts)) {
+						data[i].iconClass = 'icon-file-normal';
+					} else {
+						data[i].iconClass = 'icon-file-text';
+					}
+					if($.isArray(data[i].subDepts)) {
+						data[i].children = this.transformTree(data[i].subDepts);
+					}
+				}
+				return data;
+			},
+			handleNodeClick(data) {
+				console.log(111);
+				if(data.type == '1') {
+					this.companyId = data.id;
+					this.deptId = '';
+				} else {
+					this.deptId = data.id;
+					this.companyId = '';
+				}
+				this.requestData();
+			},
+			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
+				console.log();
+				return(
+			<span>
+              <i class={data.iconClass}></i>
+              <span>{node.label}</span>
+            </span>
+				);
+			},
+			// 点击节点
+			nodeClick: function(m) {
+				if(m.iconClass != 'icon-file-text') {
+					if(m.iconClass == 'icon-file-normal') {
+						m.iconClass = 'icon-file-open';
+					} else {
+						m.iconClass = 'icon-file-normal';
+					}
+				}
+				this.handleNodeClick();
+			},
+			expandClick: function(m) {
+				if(m.iconClass != 'icon-file-text') {
+					if(m.iconClass == 'icon-file-normal') {
+						m.iconClass = 'icon-file-open';
+					} else {
+						m.iconClass = 'icon-file-normal';
+					}
+				}
+				m.isFolder = !m.isFolder;
+			},
 
+			getTreeId(data) {
+				console.log(data);
+				if(data.type == '1') {
+					this.companyId = data.id;
+					this.deptId = '';
+				} else {
+					this.deptId = data.id;
+					this.companyId = '';
+				}
+				this.requestData();
+			},
 			handleNodeClick(data) {},
 			formatter(row, column) {
 				return row.enabled;
@@ -452,10 +571,125 @@
 		},
 		mounted() {
 			this.requestData();
+			this.getKey();
 		},
 	}
 </script>
 
 <style scoped>
+.el-tree .el-tree-node__content>.el-tree-node__expand-icon {
+  padding: 2px;
+}
+.el-tree .el-icon-caret-right { 
+  font-size: 14px;
+  width: 17px;
+  height: 17px;
+  line-height:12px;
+  font-weight: lighter;
+  color: #A2ABBF;
+  border-radius: 3px;
+  margin-top: -2px;
+  margin-right: 5px;
+  position: relative;
+  z-index: 30;
+}
 
+
+.el-tree .el-icon-caret-right:before {/*图标加号*/
+    font-family: 'hxqheam';
+    content: "\e9bc";
+    position: absolute;
+    z-index: 22;
+}
+.el-tree .el-icon-caret-right:after {
+  content: "";
+  width: 10px;
+  position: absolute;
+  top: 7px;
+  right: -4px;
+  z-index: 1;
+}
+
+
+
+.el-tree .el-tree-node__expand-icon.is-leaf,.el-tree .el-tree-node__expand-icon.is-leaf:before {
+  border:none;
+  background:transparent;
+  content: "";
+}
+
+
+.el-tree .el-tree-node__expand-icon.expanded {/*图标加号点击后不旋转，原Element会旋转*/
+  -webkit-transform: rotate(0deg);
+  transform: rotate(0deg);
+}
+
+.el-tree .el-tree-node__expand-icon.expanded:before {/*图标减号*/
+    font-family: 'hxqheam';
+    content: "\e99f";
+}
+.el-tree .el-tree-node .icon-file-normal {/*文件夹合并时图标*/
+  color: #6585DF;
+  font-family: 'hxqheam';
+  content: "\e9fa";
+  font-size: 20px;
+}
+.el-tree .el-tree-node.is-expanded>.el-tree-node__content .icon-file-normal:before {/*文件夹打开时图标*/
+  font-family: 'hxqheam';
+  content: "\e9fb";
+}
+.el-tree .el-tree-node>.el-tree-node__content .icon-file-text {/*最后子级图标颜色*/
+  color: #92BDFF;
+}
+
+.el-tree-node [class^="icon-"], .el-tree-node [class*=" icon-"] {margin-right: 5px;}
+
+[role=group].el-tree-node__children,
+[role=group].el-tree-node__children [role=group].el-tree-node__children,
+[role=group].el-tree-node__children .el-tree-node__content {position: relative;}
+
+[role=group].el-tree-node__children:before,
+[role=group].el-tree-node__children [role=group].el-tree-node__children:before,
+[role=group].el-tree-node__children .el-tree-node__content:before{
+  content: "";
+  top: 0px;
+  position: absolute;
+  width: 9px;
+  height: 100%;
+  border-right: 1px dashed #C7CED6;
+}
+
+
+[role=group].el-tree-node__children [role=group].el-tree-node__children:before {
+  left: 22px;
+}
+
+[role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children:before {
+  left: 44px;
+}
+
+[role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children:before {
+  left: 66px;
+}
+
+[role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children:before {
+  left: 88px;
+}
+
+[role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children:before {
+  left: 110px;
+}
+
+
+[role=group].el-tree-node__children .el-tree-node__content:before{
+  top:-15px;
+}
+
+.el-tree>div[role=treeitem]:nth-last-child(2)>div[role=group]:before,
+.el-tree>div[role=treeitem] div[role=treeitem]:nth-last-child(1)>div[role=group]:before
+{
+  display: none;
+}
+
+.p15 {padding:10px 15px;}
 </style>

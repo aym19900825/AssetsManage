@@ -7,7 +7,6 @@
 				<div class="mask_title">{{}}-数据限制</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>
-						 
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
 					</span>
 					<span class="mask_span" @click='close'>

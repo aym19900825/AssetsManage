@@ -12,7 +12,7 @@
 			<!--右侧内容显示 Begin-->
 			<div class="wrapper wrapper-content">
 				<EasyScrollbar>
-					<div id="wrapper" ref="homePagess" style="height: 600px;">
+					<div id="wrapper" :style="fullHeight">
 						<div id="information" style="height: inherit;">
 							<div class="ibox-content">
 								<!--按钮操作行 Begin-->
@@ -163,7 +163,9 @@
 		},
 		data() {
 			return {
-
+				fullHeight:{//给浏览器高度赋值
+					height: '',
+				},
 				dataUrl: '/api/api-apps/app/inspectionMet',
 				searchData: {
 			        page: 1,
@@ -276,17 +278,6 @@
 			}
 		},
 
-		mounted() {
-			// 获取浏览器可视区域高度
-			var _this = this;
-			var clientHeight = $(window).height() - 100; //document.body.clientWidth;
-			_this.$refs.homePagess.style.height = clientHeight + 'px';
-			window.onresize = function() {
-				var clientHeight = $(window).height() - 100;
-				_this.$refs.homePagess.style.height = clientHeight + 'px';
-			};
-
-		},
 		methods: {
 			loadMore () {
 			   if (this.loadSign) {
@@ -369,31 +360,43 @@
 						type: 'warning'
 					});
 					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时删除多条数据',
-						type: 'warning'
-					});
-					return;
 				} else {
-					var changeUser = selData[0];
-					var id = changeUser.id;
-					var url = '/api/api-apps/app/inspectionMet/' + id;
-					this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
+					var url = '/api/api-apps/app/inspectionMet/deletes';
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					for (var i = 0; i < changeUser.length; i++) {
+						deleteid.push(changeUser[i].ID);
+					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+                    var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除此产品类别吗？', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                    }).then(({ value }) => {
+                        this.$axios.delete(url, {params: data}).then((res) => {//.delete 传数据方法
 						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '删除成功',
-								type: 'success'
+								message: '网络错误，请重试',
+								type: 'error'
 							});
-							this.requestData();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
-					});
+                    }).catch(() => {
+
+                	});
 				}
 			},
 			// 导入
@@ -475,6 +478,12 @@
 		},
 		mounted() {
 			this.requestData();
+			
+			window.onresize = () => {//获取浏览器可视区域高度
+			 	return (() => {
+			 		this.fullHeight.height = document.documentElement.clientHeight - 100+'px';
+			 	})()
+			};
 		},
 	}
 </script>

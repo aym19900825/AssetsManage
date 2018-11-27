@@ -39,7 +39,7 @@
 									</span>
 									<el-dropdown-menu slot="dropdown">
 										<el-checkbox-group v-model="checkedName" @change="changeCheckedName">
-											<el-dropdown-item  v-for="item in columns">
+											<el-dropdown-item  v-for="(item,index) in columns" :key="index">
 												<el-checkbox :label="item.text" name="type"></el-checkbox>
 											</el-dropdown-item>
 										</el-checkbox-group>
@@ -110,7 +110,9 @@
 		},
 		data() {
 			return {
-				clientHeight2:'',//获取浏览器高度
+				fullHeight:{//给浏览器高度赋值
+					height: '',
+				},
 				checkedName: [
 					'ID',
 					'机构简称',

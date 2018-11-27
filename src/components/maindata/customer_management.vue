@@ -98,10 +98,6 @@
 							</el-table-column>	
 							<el-table-column label="状态" sortable width="100" prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
 							</el-table-column>
-							<!-- <el-table-column label="录入人" sortable width="120" prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
-							</el-table-column>
-							<el-table-column label="录入人时间" sortable width="160" prop="ENTERDATE" v-if="this.checkedName.indexOf('录入人时间')!=-1">
-							</el-table-column> -->
 						</el-table>
 						<el-pagination background class="pull-right pt10 pb10" v-if="this.checkedName.length>0"
 				            @size-change="sizeChange"
@@ -168,8 +164,6 @@
 					'联系地址',
 					'联系电话',
 					'状态',
-					// '录入人',
-					// '录入时间',
 				],
 				tableHeader: [
 					{
@@ -191,15 +185,7 @@
 					{
 						label: '状态',
 						prop: 'STATUS'
-					},
-					// {
-					// 	label: '录入人',
-					// 	prop: 'ENTERBY'
-					// },
-					// {
-					// 	label: '录入时间',
-					// 	prop: 'ENTERDATE'
-					// }
+					}
 				],
 				
 				companyId: '',
@@ -214,7 +200,10 @@
 				up: false,
 				isShow: false,
 				ismin:true,
-				clientHeight:'',//获取浏览器高度
+				fileList: [],//上传附件数据
+				fullHeight:{//给浏览器高度赋值
+					height: '',
+				},
 				searchList: {
 					NAME: '',
 					CODE: '',
@@ -253,7 +242,6 @@
 			       this.loadSign = true
 			     }, 1000)
 			     this.requestData()
-//			     console.log('到底了', this.page.currentPage)
 			   }
 			 },
 			tableControle(data){
@@ -276,33 +264,7 @@
 			},
 			//添加用戶
 			openAddMgr() {
-				// this.$refs.child.resetNew();
-				 this.aaaData = {
-				 	ID:'',
-					CODE:'',
-					NAME:'',
-					PHONE:'',
-					PERSON:'',
-					TYPE:'',
-					CONTACT_ADDRESS:'',
-					ZIPCODE:'',
-					STATUS:'活动',
-					FAX:'',
-					EMAIL:'',
-					ENERBY:'',
-					ENERDATE:'',
-					CHANGEBY:'',
-					CHANGEDATE:'',
-					MEMO:'',
-					// CUSTOMER_QUALIFICATIONList:[{
-					// 	STEP:'',
-					// 	CERTIFICATE_NUM:'',
-					// 	CERTIFICATE_NAME:'',
-					// 	ACTIVE_DATE:'',
-					// 	STATUS:'',
-					// 	MEMO:''
-					// }]
-				}
+				this.$refs.child.resetNew();
 				this.$refs.child.visible();
 			},
 			//修改用戶
@@ -328,7 +290,7 @@
 			modestsearch() {
 				this.search = !this.search;
 				this.down = !this.down,
-					this.up = !this.up
+				this.up = !this.up
 			},
 			// 删除
 			deluserinfo() {
@@ -339,31 +301,43 @@
 						type: 'warning'
 					});
 					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时删除多个客户',
-						type: 'warning'
-					});
-					return;
 				} else {
-					var changeUser = selData[0];
-					var id = changeUser.ID;
-					var url = '/api/api-apps/app/customer/' + id;
-					this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
+					var url = '/api/api-apps/app/customer/deletes';
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					for (var i = 0; i < changeUser.length; i++) {
+						deleteid.push(changeUser[i].ID);
+					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+                    var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除此产品类别吗？', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                    }).then(({ value }) => {
+                        this.$axios.delete(url, {params: data}).then((res) => {//.delete 传数据方法
 						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '删除成功',
-								type: 'success'
+								message: '网络错误，请重试',
+								type: 'error'
 							});
-							this.requestData();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
-					});
+                    }).catch(() => {
+
+                	});
 				}
 			},
 			// 导入
@@ -378,6 +352,20 @@
 			Printing() {
 				
 			},
+			//上传文件 Begin
+			handleRemove(file, fileList) {
+				console.log(file, fileList);
+			},
+			handlePreview(file) {
+				console.log(file);
+			},
+			handleExceed(files, fileList) {
+				this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+			},
+			beforeRemove(file, fileList) {
+				return this.$confirm(`确定移除 ${ file.name }？`);
+			},
+			//上传文件 End
 			judge(data) {
 				return data.STATUS=="1" ? '活动' : '不活动'
 			},
@@ -436,14 +424,12 @@
 		},
 		mounted() {
 			this.requestData();
-			// 获取浏览器可视区域高度
-			var _this = this;
-			var clientHeight = $(window).height() - 100;    //document.body.clientWidth;
-			_this.$refs.homePagess.style.height = clientHeight + 'px';
-			window.onresize = function() {
-				var clientHeight = $(window).height() - 100;
-				_this.$refs.homePagess.style.height = clientHeight + 'px';
-			};			
+			
+			window.onresize = () => {//获取浏览器可视区域高度
+			 	return (() => {
+			 		this.fullHeight.height = document.documentElement.clientHeight - 100+'px';
+			 	})()
+			 };
 		},
 	}
 </script>

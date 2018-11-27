@@ -100,7 +100,7 @@
 								</div>
 								<div class="left_treebg">
 									<div class="p15" v-if="ismin">
-										<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all indent="22" :render-content="renderContent"  :props="resourceProps" @node-click="handleNodeClick">
+										<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent"  :props="resourceProps" @node-click="handleNodeClick">
 										</el-tree>
 									</div>
 								</div>
@@ -234,12 +234,12 @@
 		},
 		methods: {
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
-				console.log();
+				//console.log();
 				return(
-			<span>
-              <i class={data.iconClass}></i>
-              <span>{node.label}</span>
-            </span>
+					<span>
+		              <i class={data.iconClass}></i>
+		              <span>{node.label}</span>
+		            </span>
 				);
 			},
 			// 点击节点
@@ -279,7 +279,7 @@
 						this.loadSign = true
 					}, 1000)
 					this.requestData()
-					//			     console.log('到底了', this.page.currentPage)
+					//console.log('到底了', this.page.currentPage)
 				}
 			},
 			test() {
@@ -559,25 +559,6 @@
 				})
 			},
 
-			getlist() {
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-					nickname: this.searchList.nickname,
-					enabled: this.searchList.enabled,
-					searchKey: 'createTime',
-					searchValue: this.searchList.createTime,
-					companyId: this.companyId,
-					deptId: this.deptId
-				}
-				var url = '/api/api-user/users';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					userList = res.data.data;
-					isLoading = false
-				})
-			},
 			//机构树
 			getKey() {
 				let that = this;
@@ -600,13 +581,13 @@
 						data[i].children = this.transformTree(data[i].subDepts);
 					}
 				}
-				console.log(111222);
-				console.log(data);
+				//console.log(111222);
+				//console.log(data);
 				return data;
 				
 			},
 			handleNodeClick(data) {
-				console.log(111);
+				//console.log(111);
 				if(data.type == '1') {
 					this.companyId = data.id;
 					this.deptId = '';
@@ -643,32 +624,14 @@
 		},
 		mounted() {
 
-		},
+		}
 	}
 </script>
 
 <style scope>
-.el-tree .el-tree-node__content>.el-tree-node__expand-icon {
-  padding: 2px;
-}
-.el-tree .el-icon-caret-right { 
-  font-size: 14px;
-  width: 17px;
-  height: 17px;
-  line-height:12px;
-  font-weight: lighter;
-  color: #A2ABBF;
-  /*background: #FFF;
-  border:1px solid #A2ABBF;*/
-  border-radius: 3px;
-  margin-top: -2px;
-  margin-right: 5px;
-  position: relative;
-  z-index: 30;
-}
 
 
-.el-tree .el-icon-caret-right:before {/*图标加号*/
+/* .el-tree .el-icon-caret-right:before {图标加号
     font-family: 'hxqheam';
     content: "\e9bc";
     position: absolute;
@@ -678,7 +641,7 @@
   content: "";
   width: 10px;
   position: absolute;
-  /*border-bottom: 1px dashed #C7CED6;*/
+  border-bottom: 1px dashed #C7CED6;
   top: 7px;
   right: -4px;
   z-index: 1;
@@ -693,31 +656,19 @@
 }
 
 
-.el-tree .el-tree-node__expand-icon.expanded {/*图标加号点击后不旋转，原Element会旋转*/
+.el-tree .el-tree-node__expand-icon.expanded {图标加号点击后不旋转，原Element会旋转
   -webkit-transform: rotate(0deg);
   transform: rotate(0deg);
 }
 
-.el-tree .el-tree-node__expand-icon.expanded:before {/*图标减号*/
+.el-tree .el-tree-node__expand-icon.expanded:before {图标减号
     font-family: 'hxqheam';
     content: "\e99f";
-}
-.el-tree .el-tree-node .icon-file-normal {/*文件夹合并时图标*/
-  color: #6585DF;
-  font-family: 'hxqheam';
-  content: "\e9fa";
-  font-size: 20px;
-}
-.el-tree .el-tree-node.is-expanded>.el-tree-node__content .icon-file-normal:before {/*文件夹打开时图标*/
-  font-family: 'hxqheam';
-  content: "\e9fb";
-}
-.el-tree .el-tree-node>.el-tree-node__content .icon-file-text {/*最后子级图标颜色*/
-  color: #92BDFF;
-}
+} */
 
-.el-tree-node [class^="icon-"], .el-tree-node [class*=" icon-"] {margin-right: 5px;}
 
+
+/* 
 [role=group].el-tree-node__children,
 [role=group].el-tree-node__children [role=group].el-tree-node__children,
 [role=group].el-tree-node__children .el-tree-node__content {position: relative;}
@@ -763,7 +714,6 @@
 .el-tree>div[role=treeitem] div[role=treeitem]:nth-last-child(1)>div[role=group]:before
 {
   display: none;
-}
+} */
 
-.p15 {padding:10px 15px;}
 </style>

@@ -151,6 +151,306 @@
 									</el-col>
 								</el-row>
 							</el-collapse-item>
+							<!-- 资质信息 Begin-->
+							<el-collapse-item title="领样信息表" name="3">								
+								<div class="table-func">
+									<el-button type="success" size="mini" round @click="addfield">
+										<i class="icon-add"></i>
+										<font>新建行</font>
+									</el-button>
+								</div>
+								<el-form>
+					                <el-form-item>
+					                	<el-row :gutter="20">
+					                		<el-col :span="1">
+					                            <el-form-item label="序号" ></el-form-item>
+					                        </el-col>
+					                        <el-col :span="1">
+					                            <el-form-item label="类别" ></el-form-item>
+					                        </el-col>
+					                        <el-col :span="2">
+					                            <el-form-item label="委托单位" ></el-form-item>
+					                        </el-col>
+					                        <el-col :span="2">
+					                            <el-form-item label="生产单位" ></el-form-item>
+					                        </el-col>
+					                        <el-col :span="2">
+					                            <el-form-item label="样品名称" ></el-form-item>
+					                        </el-col>
+					                        <el-col :span="2">
+					                            <el-form-item label="样品型号" ></el-form-item>
+					                        </el-col>
+					                        <el-col :span="2">
+					                            <el-form-item label="样品数量" ></el-form-item>
+					                        </el-col>		                        
+					                        <el-col :span="2">
+					                            <el-form-item label="收样人"></el-form-item>
+					                        </el-col>
+					                        <el-col :span="2">
+					                            <el-form-item label="收样日期"></el-form-item>
+					                        </el-col>
+					                        <el-col :span="2">
+					                            <el-form-item label="接样人"></el-form-item>
+					                        </el-col>
+					                        <el-col :span="2">
+					                            <el-form-item label="接样日期"></el-form-item>
+					                        </el-col>
+					                        <el-col :span="2">
+					                            <el-form-item label="其他资料"></el-form-item>
+					                        </el-col>
+					                        <el-col :span="2">
+					                            <el-form-item label="备注"></el-form-item>
+					                        </el-col>
+					                	</el-row>
+					                    <el-row :gutter="10">
+					                        <el-col :span="1">
+					                            <el-input type="text"  placeholder="序号"></el-input>
+					                        </el-col>
+					                        <el-col :span="1">
+					                            <el-input type="text"  placeholder="类别"></el-input>
+					                        </el-col>
+					                        <el-col :span="2">
+					                        	<el-input type="text"  placeholder="委托单位" ></el-input>
+					                        </el-col>
+					                        <el-col :span="2">
+					                            <el-input type="text"  placeholder="生产单位"></el-input>
+					                        </el-col>
+					                        <el-col :span="2">
+					                            <el-input type="text"  placeholder="样品名称"></el-input>
+					                        </el-col> 
+					                        <el-col :span="2">
+					                            <el-input type="text"  placeholder="样品型号" ></el-input>
+					                        </el-col>
+					                           <el-col :span="2">
+					                            <el-input type="text"  placeholder="样品数量" ></el-input>
+					                        </el-col>
+					                           <el-col :span="2">
+					                            <el-input type="text"  placeholder="收样人" ></el-input>
+					                        </el-col>
+					                           <el-col :span="2">
+					                            <el-input type="text"  placeholder="收样日期" ></el-input>
+					                        </el-col>
+					                           <el-col :span="2">
+					                            <el-input type="text"  placeholder="接样人" ></el-input>
+					                        </el-col>
+					                           <el-col :span="2">
+											<el-date-picker v-model="user.birthday" type="date" placeholder="接样日期" value-format="yyyy-MM-dd">
+											</el-date-picker>
+									        </el-col>
+					                           <el-col :span="2">
+					                            <el-input type="text"  placeholder="其他资料" ></el-input>
+					                        </el-col>
+					                           <el-col :span="2">
+					                            <el-input type="text"  placeholder="备注" ></el-input>
+					                        </el-col>
+					                        <el-col :span="24" >
+					                            <el-upload
+													class="upload-demo"
+													action="https://jsonplaceholder.typicode.com/posts/"
+													:on-preview="handlePreview"
+													:on-remove="handleRemove"
+													:before-remove="beforeRemove"
+													multiple
+													:limit="3"
+													:on-exceed="handleExceed"
+													:file-list="fileList">
+												</el-upload>
+					                        </el-col>                
+					                        <el-col :span="2">
+					                            <i class="el-icon-delete" @click="delfield(item)" style="color: red;text-align:center"></i>
+					                        </el-col>
+					                    </el-row>
+					                </el-form-item>
+				            	</el-form>							
+							</el-collapse-item>
+							<el-collapse-item title="返样信息表" name="4">								
+								<div class="table-func">
+									<el-button type="success" size="mini" round @click="addfield">
+										<i class="icon-add"></i>
+										<font>新建行</font>
+									</el-button>
+								</div>
+								<el-form>
+					                <el-form-item>
+					                	<el-row :gutter="20">
+					                		<el-col :span="2">
+					                            <el-form-item label="序号" ></el-form-item>
+					                        </el-col>
+					                        <el-col :span="2">
+					                            <el-form-item label="样品编号" ></el-form-item>
+					                        </el-col>
+					                        <el-col :span="2">
+					                            <el-form-item label="样品名称" ></el-form-item>
+					                        </el-col>
+					                        <el-col :span="1">
+					                            <el-form-item label="数量" ></el-form-item>
+					                        </el-col>
+					                        <el-col :span="3">
+					                            <el-form-item label="收回入库时间" ></el-form-item>
+					                        </el-col>
+					                        <el-col :span="2">
+					                            <el-form-item label="样品承接人" ></el-form-item>
+					                        </el-col>
+					                        <el-col :span="2">
+					                            <el-form-item label="处理批准人" ></el-form-item>
+					                        </el-col>		                        
+					                        <el-col :span="2">
+					                            <el-form-item label="处理人"></el-form-item>
+					                        </el-col>
+					                        <el-col :span="2">
+					                            <el-form-item label="处理日期"></el-form-item>
+					                        </el-col>
+					                        <el-col :span="2">
+					                            <el-form-item label="备注"></el-form-item>
+					                        </el-col>
+					                	</el-row>
+					                    <el-row :gutter="10">
+					                        <el-col :span="2">
+					                            <el-input type="text"  placeholder="序号"></el-input>
+					                        </el-col>
+					                        <el-col :span="2">
+					                            <el-input type="text"  placeholder="样品编号"></el-input>
+					                        </el-col>
+					                        <el-col :span="2">
+					                        	<el-input type="text"  placeholder="样品名称" ></el-input>
+					                        </el-col>
+					                        <el-col :span="1">
+					                            <el-input type="text"  placeholder="数量"></el-input>
+					                        </el-col>
+					                        <el-col :span="3">
+					                            <el-input type="text"  placeholder="收回入库时间"></el-input>
+					                        </el-col> 
+					                        <el-col :span="2">
+					                            <el-input type="text"  placeholder="样品承接人" ></el-input>
+					                        </el-col>
+					                         <el-col :span="2">
+					                            <el-input type="text"  placeholder="处理批准人" ></el-input>
+					                        </el-col>
+					                        <el-col :span="2">
+					                            <el-input type="text"  placeholder="处理人" ></el-input>
+					                        </el-col>
+					                        <el-col :span="2">
+											<el-date-picker v-model="user.birthday" type="date" placeholder="处理日期" value-format="yyyy-MM-dd">
+											</el-date-picker>
+									        </el-col>
+					                        <el-col :span="2">
+					                            <el-input type="text"  placeholder="备注" ></el-input>
+					                        </el-col>
+					                        <el-col :span="3" >
+					                            <el-upload
+													class="upload-demo"
+													action="https://jsonplaceholder.typicode.com/posts/"
+													:on-preview="handlePreview"
+													:on-remove="handleRemove"
+													:before-remove="beforeRemove"
+													multiple
+													:limit="3"
+													:on-exceed="handleExceed"
+													:file-list="fileList">
+												</el-upload>
+					                        </el-col>                
+					                        <el-col :span="2">
+					                            <i class="el-icon-delete" @click="delfield(item)" style="color: red;text-align:center"></i>
+					                        </el-col>
+					                    </el-row>
+					                </el-form-item>
+				            	</el-form>							
+							</el-collapse-item>
+							<el-collapse-item title="样品处置信息表" name="4">						
+								<div class="table-func">
+									<el-button type="success" size="mini" round @click="addfield">
+										<i class="icon-add"></i>
+										<font>新建行</font>
+									</el-button>
+								</div>
+								<el-form>
+					                <el-form-item>
+					                	<el-row :gutter="20">
+					                		<el-col :span="2">
+					                            <el-form-item label="序号" ></el-form-item>
+					                        </el-col>
+					                        <el-col :span="2">
+					                            <el-form-item label="样品编号" ></el-form-item>
+					                        </el-col>
+					                        <el-col :span="2">
+					                            <el-form-item label="样品名称" ></el-form-item>
+					                        </el-col>
+					                        <el-col :span="1">
+					                            <el-form-item label="数量" ></el-form-item>
+					                        </el-col>
+					                        <el-col :span="3">
+					                            <el-form-item label="收回入库时间" ></el-form-item>
+					                        </el-col>
+					                        <el-col :span="2">
+					                            <el-form-item label="样品承接人" ></el-form-item>
+					                        </el-col>
+					                        <el-col :span="2">
+					                            <el-form-item label="处理批准人" ></el-form-item>
+					                        </el-col>		                        
+					                        <el-col :span="2">
+					                            <el-form-item label="处理人"></el-form-item>
+					                        </el-col>
+					                        <el-col :span="2">
+					                            <el-form-item label="处理日期"></el-form-item>
+					                        </el-col>
+					                        <el-col :span="2">
+					                            <el-form-item label="备注"></el-form-item>
+					                        </el-col>
+					                	</el-row>
+					                    <el-row :gutter="10">
+					                        <el-col :span="2">
+					                            <el-input type="text"  placeholder="序号"></el-input>
+					                        </el-col>
+					                        <el-col :span="2">
+					                            <el-input type="text"  placeholder="样品编号"></el-input>
+					                        </el-col>
+					                        <el-col :span="2">
+					                        	<el-input type="text"  placeholder="样品名称" ></el-input>
+					                        </el-col>
+					                        <el-col :span="1">
+					                            <el-input type="text"  placeholder="数量"></el-input>
+					                        </el-col>
+					                        <el-col :span="3">
+					                            <el-input type="text"  placeholder="收回入库时间"></el-input>
+					                        </el-col> 
+					                        <el-col :span="2">
+					                            <el-input type="text"  placeholder="样品承接人" ></el-input>
+					                        </el-col>
+					                         <el-col :span="2">
+					                            <el-input type="text"  placeholder="处理批准人" ></el-input>
+					                        </el-col>
+					                        <el-col :span="2">
+					                            <el-input type="text"  placeholder="处理人" ></el-input>
+					                        </el-col>
+					                        <el-col :span="2">
+											<el-date-picker v-model="user.birthday" type="date" placeholder="处理日期" value-format="yyyy-MM-dd">
+											</el-date-picker>
+									        </el-col>
+					                        <el-col :span="2">
+					                            <el-input type="text"  placeholder="备注" ></el-input>
+					                        </el-col>
+					                        <el-col :span="3" >
+					                            <el-upload
+													class="upload-demo"
+													action="https://jsonplaceholder.typicode.com/posts/"
+													:on-preview="handlePreview"
+													:on-remove="handleRemove"
+													:before-remove="beforeRemove"
+													multiple
+													:limit="3"
+													:on-exceed="handleExceed"
+													:file-list="fileList">
+												</el-upload>
+					                        </el-col>                
+					                        <el-col :span="2">
+					                            <i class="el-icon-delete" @click="delfield(item)" style="color: red;text-align:center"></i>
+					                        </el-col>
+					                    </el-row>
+					                </el-form-item>
+				            	</el-form>							
+							</el-collapse-item>
+							
+							<!-- 资质信息 End -->
 						</el-collapse>
 					</div>
 
@@ -295,7 +595,7 @@
 				down: true,
 				up: false,
 				useritem: [],
-				activeNames: ['1', '2'], //手风琴数量
+				activeNames: ['1', '2', '3', '4', '5'], //手风琴数量
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 

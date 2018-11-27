@@ -120,10 +120,23 @@
 				</div>
 				<!-- 高级查询划出 End-->
 					<el-row :gutter="10">
-						<el-col :span="6">
-							<v-assetsTree  :listData="treeData" v-on:getTreeId="getTreeId"></v-assetsTree>
+						<el-col :span="5" class="lefttree">
+							<div class="lefttreebg">
+								<div class="left_tree_title clearfix" @click="min3max()">
+									<div class="pull-left pr20" v-if="ismin">组织机构</div>
+									<span class="pull-right navbar-minimalize minimalize-styl-2">
+										<i class="icon-doubleok icon-double-angle-left blue"></i>
+									</span>
+								</div>
+								<div class="left_treebg">
+									<div class="p15" v-if="ismin">
+										<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent"  :props="resourceProps" @node-click="handleNodeClick">
+										</el-tree>
+									</div>
+								</div>
+							</div>
 						</el-col>
-						<el-col :span="18">
+						<el-col :span="19">
 							<!-- 表格 -->
 							<el-table :data="userList"  border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
@@ -135,9 +148,9 @@
 								<el-table-column label="年度" sortable width="100px" prop="YEAR" v-if="this.checkedName.indexOf('年度')!=-1">
 								</el-table-column>
 								</el-table-column>
-								<el-table-column label="录入人" sortable width="200px" prop="ENERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
+								<el-table-column label="录入人" sortable width="210px" prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
 								</el-table-column>
-								<el-table-column label="录入时间" sortable width="200px" prop="ENTERDATE" v-if="this.checkedName.indexOf('录入时间')!=-1">
+								<el-table-column label="录入时间" sortable width="210px" prop="ENTERDATE" v-if="this.checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>
 								<el-table-column label="状态" sortable width="200px" prop="STATUS" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
@@ -178,6 +191,7 @@
 		},
 		data() {
 			return {
+				ismin: true,
 				checkedName: [
 					'计划编号',
 					'计划描述',
@@ -253,6 +267,26 @@
 			}
 		},
 		methods: {
+			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
+				console.log();
+				return(
+			<span>
+              <i class={data.iconClass}></i>
+              <span>{node.label}</span>
+            </span>
+				);
+			},
+			// 点击节点
+			nodeClick: function(m) {
+				if(m.iconClass != 'icon-file-text') {
+					if(m.iconClass == 'icon-file-normal') {
+						m.iconClass = 'icon-file-open';
+					} else {
+						m.iconClass = 'icon-file-normal';
+					}
+				}
+				this.handleNodeClick();
+			},
 			test(){
 				console.log(this.checkedName.indexOf('账号')!=-1);
 			},
@@ -271,7 +305,7 @@
 			},
 			//添加用戶
 			openAddMgr() {
-				this.$refs.child.resetNew();
+				// this.$refs.child.resetNew();
 				this.$refs.child.visible();
 			},
 			//修改用戶
@@ -290,13 +324,7 @@
 					});
 					return;
 				} else {
-					this.aaaData[0].roleId = [];
-					var roles = this.aaaData[0].roles;
-					for(var i = 0; i < roles.length; i++){
-						this.aaaData[0].roleId.push(roles[i].id);
-					}
-					console.log(this.aaaData[0].roleId);
-					this.$refs.child.detail();
+					this.$refs.child.detail(this.selUser[0].ID);
 				}
 			},
 			//高级查询
@@ -314,31 +342,42 @@
 						type: 'warning'
 					});
 					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时删除多个用户',
-						type: 'warning'
-					});
-					return;
 				} else {
-					var changeUser = selData[0];
-					var id = changeUser.id;
-					var url = '/api/api-user/users/' + id;
-					this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
+					var url = '/api/api-apps/app/workplan/deletes';
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					for (var i = 0; i < changeUser.length; i++) {
+						deleteid.push(changeUser[i].ID);
+					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+                    var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除此产品类别吗？', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                    }).then(({ value }) => {
+                        this.$axios.delete(url, {params: data}).then((res) => {
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '删除成功',
-								type: 'success'
+								message: '网络错误，请重试',
+								type: 'error'
 							});
-							this.requestData();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
-					});
+                    }).catch(() => {
+
+                	});
 				}
 			},
 			judge(data) {
@@ -370,14 +409,15 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					nickname: this.searchList.nickname,
-					enabled: this.searchList.enabled,
-					searchKey: 'createTime',
-					searchValue: this.searchList.createTime,
-					companyId: this.companyId,
-					deptId: this.deptId
+					WP_NUM: this.searchList.WP_NUM,
+					DESCRIPTION: this.searchList.DESCRIPTION,
+					TYPE: this.searchList.TYPE,
+					YEAR: this.searchList.YEAR,
+					ENTERDATE:this.searchList.ENTERDATE,
+					ENTERBY:this.searchList.ENTERBY,
+					STATUS:this.searchList.STATUS
 				}
-				var url = '/api/api-user/users';
+				var url = '/api/api-apps/app/workplan';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
@@ -425,10 +465,36 @@
 				this.requestData();
 			},
 			handleNodeClick(data) {
+				if(data.type == '1') {
+					this.companyId = data.id;
+					this.deptId = '';
+				} else {
+					this.deptId = data.id;
+					this.companyId = '';
+				}
+				this.requestData();
 			},
 			formatter(row, column) {
 				return row.enabled;
 			},
+			min3max() { //左侧菜单正常和变小切换
+				if($(".lefttree").hasClass("el-col-5")) {
+					$(".lefttree").removeClass("el-col-5");
+					$(".lefttree").addClass("el-col-1");
+					$(".leftcont").removeClass("el-col-19");
+					$(".leftcont").addClass("el-col-23");
+					$(".icon-doubleok").removeClass("icon-double-angle-left");
+					$(".icon-doubleok").addClass("icon-double-angle-right");
+				} else {
+					$(".lefttree").removeClass("el-col-1");
+					$(".lefttree").addClass("el-col-5");
+					$(".leftcont").removeClass("el-col-23");
+					$(".leftcont").addClass("el-col-19");
+					$(".icon-doubleok").removeClass("icon-double-angle-right");
+					$(".icon-doubleok").addClass("icon-double-angle-left");
+				}
+				this.ismin = !this.ismin;
+			}
 		},
 		mounted() {
 			this.requestData();

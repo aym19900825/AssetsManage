@@ -39,7 +39,7 @@
 								</el-col>
 							</el-row>
 								<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
-									<el-row :gutter="70">
+									<el-row :gutter="30">
 										<el-col :span="6">
 											<el-form-item label="提出单位" prop="PROP_UNIT">
 												<el-select v-model="WORKPLAN.PROP_UNIT" placeholder="请选择">
@@ -62,7 +62,7 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
-									<el-row :gutter="70">
+									<el-row :gutter="30">
 										<el-col :span="6">
 											<el-form-item label="编制人" prop="COMPACTOR">
 												<el-input v-model="WORKPLAN.COMPACTOR"></el-input>
@@ -90,7 +90,7 @@
 											 </el-form-item>
 										</el-col>
 									</el-row>
-									<el-row :gutter="70">
+									<el-row :gutter="30">
 										<el-col :span="6">
 											<el-form-item label="年度" prop="YEAR">
 												<div class="block">
@@ -351,7 +351,7 @@
 							</el-collapse-item>
 							<el-collapse-item title="录入人信息" name="6">
 								<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
-									<el-row :gutter="70">
+									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="录入人" prop="ENTERBY">
 												<el-input v-model="WORKPLAN.ENTERBY" :disabled="edit"></el-input>
@@ -367,7 +367,7 @@
 							</el-collapse-item>
 							<el-collapse-item title="修改人信息" name="7" v-if="modify">
 								<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
-									<el-row :gutter="70">
+									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="修改人" prop="CHANGEBY">
 												<el-input v-model="WORKPLAN.CHANGEBY" :disabled="edit"></el-input>
@@ -703,39 +703,39 @@
 						CHECKCOST:'',
 						REASION:'',
 						MEMO:'',
-						STATUS:'1'
-					}],
-					WORLPLANLINE_BASISList:[{
-						ID:'',
-						S_NUM:'',
-						S_NAME:'',
-						S_ENGNAME:'',
-						VERSION:'',
-						NUMBER:'',
-						WP_NUM:'',
-						WP_LINENUM:'',
-						STATUS:'',
-						ENTERBY:'',
-						ENTERDATE:'',
-						CHANGEBY:'',
-						CHANGEDATE:'',
-						DEPARTMENT:'',
-						CHANGEBYDesc:'',
-						ENTERBYDesc:'',
-						RELEASETIME:'',
-						RELEASE_UNIT:'',
-						STARTETIME:''
-					}],
-					WORLPLANLINE_PROJECTList:[{
-						ID:'',
-						P_NUM:'',
-						P_DESC:'',
-						REMARKS:'',
-						VERSION:'',
-						NUMBER:'',
-						WP_NUM:'',
-						WP_LINENUM:'',
-						STATUS:'1'
+						STATUS:'1',
+						WORLPLANLINE_BASISList:[{
+							ID:'',
+							S_NUM:'',
+							S_NAME:'',
+							S_ENGNAME:'',
+							VERSION:'',
+							NUMBER:'',
+							WP_NUM:'',
+							WP_LINENUM:'',
+							STATUS:'',
+							ENTERBY:'',
+							ENTERDATE:'',
+							CHANGEBY:'',
+							CHANGEDATE:'',
+							DEPARTMENT:'',
+							CHANGEBYDesc:'',
+							ENTERBYDesc:'',
+							RELEASETIME:'',
+							RELEASE_UNIT:'',
+							STARTETIME:''
+						}],
+						WORLPLANLINE_PROJECTList:[{
+							ID:'',
+							P_NUM:'',
+							P_DESC:'',
+							REMARKS:'',
+							VERSION:'',
+							NUMBER:'',
+							WP_NUM:'',
+							WP_LINENUM:'',
+							STATUS:'1'
+						}],
 					}],
 					ENTERBY:'',
 					ENTERDATE:'',
@@ -1242,3 +1242,6 @@
 <style scoped>
 	@import '../../assets/css/mask-modules.css';
 </style>
+
+
+

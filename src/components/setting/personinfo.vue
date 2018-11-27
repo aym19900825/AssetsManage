@@ -33,16 +33,16 @@
 							<el-form status-icon ref="personinfo" :model="personinfo" :rules="rules" label-width="80px" :label-position="labelPosition">
 							<el-collapse v-model="activeNames" @change="handleChange">
 								<el-collapse-item title="账号设置" name="1">
-									<el-row :gutter="70">
+									<el-row :gutter="30">
 									<el-col :span="12">
-									 	<el-row :gutter="70">
+									 	<el-row :gutter="30">
 									 		<el-col :span="24">
 									 			<el-form-item label="人员姓名" prop="nickname">
 											    <el-input v-model="personinfo.nickname"></el-input>
 											  </el-form-item>	
 									 		</el-col>
 									 	</el-row>
-									 	<el-row :gutter="70">
+									 	<el-row :gutter="30">
 									 		<el-col :span="24">
 									 			<el-form-item label="工号" prop="worknumber">
 											    	<el-input v-model="personinfo.worknumber"></el-input>
@@ -59,7 +59,7 @@
 									</el-col>
 								</el-row>
 
-								<el-row :gutter="70">
+								<el-row :gutter="30">
 									<el-col :span="12" >
 										<el-form-item label="所属组织" prop="companyName" v-if="personinfo.username === 'admin'">
 											<el-input v-model="personinfo.companyName" disabled>
@@ -84,7 +84,7 @@
 									</el-col>
 								</el-row>
 							 	<!-- 第三行 -->
-							 	<el-row :gutter="70">
+							 	<el-row :gutter="30">
 							 		<el-col :span="12">
 							 			 <el-form-item label="登录名称">
 							 				<el-input v-model="personinfo.username" disabled></el-input>
@@ -100,7 +100,7 @@
 							 		</el-col>
 							 	</el-row>
 							 	<!-- 第四行 -->
-							 	<el-row :gutter="70">
+							 	<el-row :gutter="30">
 							 		<el-col :span="12">
 							 			 <el-form-item label="配置状态" v-model="personinfo.enabledName">
 							 			 	<el-radio-group v-model="personinfo.enabledName">
@@ -123,7 +123,7 @@
 								
 								<el-collapse-item title="基本资料" name="2">
 									<!-- 第一行 -->
-								 	<el-row :gutter="70">
+								 	<el-row :gutter="30">
 								 		<el-col :span="8">
 								 			 <el-form-item label="出生日期">
 							                      <el-date-picker
@@ -146,7 +146,7 @@
 								 		</el-col>
 								 	</el-row>
 								 	<!-- 第二行 -->
-								 	<el-row :gutter="70">
+								 	<el-row :gutter="30">
 								 		<el-col :span="8">
 								 			<el-form-item label="身份证号" prop="idnumber">
 											    <el-input v-model="personinfo.idnumber"></el-input>
@@ -169,7 +169,7 @@
 								 		</el-col>
 								 	</el-row>
 								 	<!-- 第三行 -->
-								 	<el-row :gutter="70">
+								 	<el-row :gutter="30">
 								 		<el-col :span="8">
 								 			 <el-form-item label="联系电话" prop="telephone">
 										    <el-input v-model="personinfo.telephone"></el-input>
@@ -183,7 +183,7 @@
 								 		
 								 	</el-row>
 								 	<!-- 第四行 -->
-								 	<el-row :gutter="70">
+								 	<el-row :gutter="30">
 								 		<el-col :span="16">
 								 			 <el-form-item label="地址">
 										    <el-input v-model="personinfo.address"></el-input>
@@ -196,7 +196,7 @@
 								 		</el-col>
 								 	</el-row>
 								 	<!-- 第五行 -->
-								 	<el-row :gutter="70">
+								 	<el-row :gutter="30">
 								 		<el-col :span="24">
 								 			 <el-form-item label="备注">
 										    <el-input  type="textarea" :rows="3" v-model="personinfo.tips"></el-input>

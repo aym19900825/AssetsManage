@@ -145,7 +145,7 @@ export default {
 			{
 				navicon: 'icon-data3',
 				navtitle: '主数据',
-				navherf: '/user_management'
+				navherf: '/customer_management'
 			}, {
 				navicon: 'icon-plan',
 				navtitle: '年度计划',
@@ -157,7 +157,7 @@ export default {
 			}, {
 				navicon: 'icon-contract',
 				navtitle: '委托书管理',
-				navherf: '/proxies'
+				navherf: '/inspect_proxy'
 			}, {
 				navicon: 'icon-sample3',
 				navtitle: '样品管理',

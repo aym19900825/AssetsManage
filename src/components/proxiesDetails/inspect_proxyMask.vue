@@ -15,8 +15,8 @@
 				</div>
 			</div>
 			<div class="mask_content">
-
-				<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
+				
+				<el-form  status-icon :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="委托单位" name="1">

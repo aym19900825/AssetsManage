@@ -189,6 +189,7 @@
 	import navs_left from '../common/left_navs/nav_left3.vue'
 	import navs_header from '../common/nav_tabs.vue'
 	import inspectmask from '../proxiesDetails/inspect_proxyMask.vue'
+
 	export default {
 		name: 'user_management',
 		components: {

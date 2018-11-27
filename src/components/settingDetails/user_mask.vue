@@ -24,7 +24,7 @@
 					<div class="accordion">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="基础信息" name="1">
-								<el-row :gutter="70">
+								<el-row :gutter="30">
 									<el-col :span="24">
 										<el-form-item label="所属组织" prop="companyName">
 											<el-input v-model="user.companyName" :disabled="edit">
@@ -33,7 +33,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="70">
+								<el-row :gutter="30">
 									<el-col :span="24">
 										<el-form-item label="所属机构" prop="deptName">
 											<el-input v-model="user.deptName" :disabled="edit">
@@ -43,7 +43,7 @@
 									</el-col>
 								</el-row>
 
-								<el-row :gutter="70">
+								<el-row :gutter="30">
 									<el-col :span="12">
 										<el-form-item label="登录名称" prop="username">
 											<el-input v-model="user.username"></el-input>
@@ -59,7 +59,7 @@
 
 							<el-collapse-item title="用户基本资料" name="2">
 								<!-- 第一行 -->
-								<el-row :gutter="70">
+								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="姓名" prop="nickname">
 											<el-input v-model="user.nickname"></el-input>
@@ -80,7 +80,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="70">
+								<el-row :gutter="30">
 
 									<el-col :span="8">
 										<el-form-item label="身份证号" prop="idnumber">
@@ -100,7 +100,7 @@
 									</el-col>
 								</el-row>
 
-								<el-row :gutter="70">
+								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="工号" prop="worknumber">
 											<el-input v-model="user.worknumber"></el-input>
@@ -118,7 +118,7 @@
 									</el-col>
 
 								</el-row>
-								<el-row :gutter="70">
+								<el-row :gutter="30">
 									<el-col :span="16">
 										<el-form-item label="地址" prop="address">
 											<el-input v-model="user.address"></el-input>
@@ -133,7 +133,7 @@
 									</el-col>
 								</el-row>
 
-								<el-row :gutter="70">
+								<el-row :gutter="30">
 									<el-col :span="24">
 										<el-form-item label="备注" prop="tips">
 											<el-input type="textarea" v-model="user.tips"></el-input>

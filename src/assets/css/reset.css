@@ -414,8 +414,8 @@ h6 {
 }
 
 .el-table td {
-	padding-top: 8px;
-	padding-bottom: 8px;
+	padding-top: 5px;
+	padding-bottom: 3px;
 }
 .el-table .ascending .sort-caret.ascending { border-bottom-color: #6585DF;}
 .el-table .descending .sort-caret.descending { border-top-color: #6585DF;}
@@ -510,7 +510,7 @@ h6 {
 .el-pagination.is-background .el-pager li:not(.disabled).active {background-color: #6585DF; color: #FFFFFF;}
 
 /*表单页标题调整 heliping*/
-.el-form--label-top .el-form-item__label {padding-top: 20px; padding-bottom: 5px; line-height:20px;}
+.el-form--label-top .el-form-item__label {padding-top: 5px; padding-bottom: 0px; line-height:20px;}
 .el-form-item {
     margin-bottom: 5px;
 }
@@ -545,6 +545,8 @@ h6 {
     line-height: 0;
     content: '';
     background-color: #6585DF;
+    top: 0px;
+	position: absolute;
 }
 .el-collapse-item {
 	padding-left: 25px;

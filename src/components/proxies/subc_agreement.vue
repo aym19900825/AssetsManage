@@ -50,22 +50,22 @@
 					<el-form status-icon :model="searchList" label-width="70px">
 						<el-row :gutter="10">
 							<el-col :span="5">
-								<el-input v-model="searchList.typename">
+								<el-input v-model="searchList.PROXY_CONTRACT_NUM">
 									<template slot="prepend">分包协议编号</template>
 								</el-input>
 							</el-col>
 							<el-col :span="5">
-								<el-input v-model="searchList.typename">
+								<el-input v-model="searchList.PROXYNUM">
 									<template slot="prepend">委托书编号</template>
 								</el-input>
 							</el-col>
 							<el-col :span="5">
-								<el-input v-model="searchList.typename">
+								<el-input v-model="searchList.VENDOR">
 									<template slot="prepend">分包单位</template>
 								</el-input>
 							</el-col>
 							<el-col :span="4">
-								<el-input v-model="searchList.typename">
+								<el-input v-model="searchList.ENTERBY">
 									<template slot="prepend">录入人</template>
 								</el-input>
 							</el-col>
@@ -85,8 +85,24 @@
 					</el-form>
 				</div>
 				<!-- 高级查询划出 End-->
-				<el-row :gutter="0">
-					<el-col :span="24">
+				<el-row :gutter="10">
+					<el-col :span="5" class="lefttree">
+						<div class="lefttreebg">
+							<div class="left_tree_title clearfix" @click="min3max()">
+								<div class="pull-left pr20" v-if="ismin">组织机构</div>
+								<span class="pull-right navbar-minimalize minimalize-styl-2">
+									<i class="icon-doubleok icon-double-angle-left blue"></i>
+								</span>
+							</div>
+							<div class="left_treebg">
+								<div class="p15" v-if="ismin">
+									<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent"  :props="resourceProps" @node-click="handleNodeClick">
+									</el-tree>
+								</div>
+							</div>
+						</div>
+					</el-col>
+					<el-col :span="19" class="leftcont v-resize">
 						<!-- 表格 Begin-->
 						<el-table :data="subagree" border stripe height="400" style="width: 100%;" :default-sort="{prop:'subagree', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
@@ -99,21 +115,21 @@
 							</el-table-column>
 							<el-table-column label="检验/检测项目内容" width="150" sortable prop="P_REMARKS" v-if="this.checkedName.indexOf('检验/检测项目内容')!=-1">
 							</el-table-column>						
-							<el-table-column label="对环境和操作人员要求" width="180" sortable prop="REQUIRE" :formatter="judge" v-if="this.checkedName.indexOf('对环境和操作人员要求')!=-1">
+							<el-table-column label="对环境和操作人员要求" width="180" sortable prop="REQUIRE" v-if="this.checkedName.indexOf('对环境和操作人员要求')!=-1">
 							</el-table-column>
-							<el-table-column label="对分包报告/证书的要求" width="180" sortable prop="Q_TYPE" :formatter="judge" v-if="this.checkedName.indexOf('对分包报告/证书的要求')!=-1">
+							<el-table-column label="对分包报告/证书的要求" width="180" sortable prop="Q_TYPE" v-if="this.checkedName.indexOf('对分包报告/证书的要求')!=-1">
 							</el-table-column>
-							<el-table-column label="检验检测费用" width="120" sortable prop="CHECKCOST" :formatter="judge" v-if="this.checkedName.indexOf('检验检测费用')!=-1">
+							<el-table-column label="检验检测费用" width="120" sortable prop="CHECKCOST" v-if="this.checkedName.indexOf('检验检测费用')!=-1">
 							</el-table-column>
-							<el-table-column label="信息状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
+							<el-table-column label="信息状态" width="100" sortable prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
 							</el-table-column>
-							<el-table-column label="录入人" width="100" sortable prop="ENTERBY" :formatter="judge" v-if="this.checkedName.indexOf('录入人')!=-1">
+							<el-table-column label="录入人" width="100" sortable prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
 							</el-table-column>
-							<el-table-column label="录入时间" width="120" sortable prop="ENTERDATE" :formatter="judge" v-if="this.checkedName.indexOf('录入时间')!=-1">
+							<el-table-column label="录入时间" width="120" sortable prop="ENTERDATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 							</el-table-column>
-							<el-table-column label="修改人" width="100" sortable prop="CHANGEBY" :formatter="judge" v-if="this.checkedName.indexOf('修改人')!=-1">
+							<el-table-column label="修改人" width="100" sortable prop="CHANGEBY" v-if="this.checkedName.indexOf('修改人')!=-1">
 							</el-table-column>
-							<el-table-column label="修改时间" width="120" sortable prop="CHANGEDATE" :formatter="judge" v-if="this.checkedName.indexOf('修改时间')!=-1">
+							<el-table-column label="修改时间" width="120" sortable prop="CHANGEDATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
 							</el-table-column>
 						</el-table>
 						<el-pagination background class="pull-right pt10 pb10" v-if="this.checkedName.length>0"
@@ -235,8 +251,8 @@
 				companyId: '',
 				deptId: '',
 				selUser: [],
-				'启用': true,
-				'冻结': false,
+				// '启用': true,
+				// '冻结': false,
 				subagree: [],
 				search: false,
 				show: false,
@@ -248,9 +264,11 @@
 					height: '',
 				},
 				searchList: {
-					nickname: '',
-					enabled: '',
-					createTime: ''
+					PROXY_CONTRACT_NUM: '',
+					PROXYNUM: '',
+					VENDOR: '',
+					ENTERBY:'',
+					ENTERDATE:''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -261,7 +279,8 @@
 					label: "simplename"
 				},
 				userData:[],
-				page: {//分页显示
+				//分页显示
+				page: {
 					currentPage: 1,
 					pageSize: 10,
 					totalCount: 0
@@ -273,12 +292,10 @@
 		mounted(){
 			// 获取浏览器可视区域高度
 			window.onresize = () => {//获取浏览器可视区域高度
-		 	return (() => {
-		 		this.fullHeight.height = document.documentElement.clientHeight - 100+'px';
-		 	})()
-		 };
-
-			
+			 	return (() => {
+			 		this.fullHeight.height = document.documentElement.clientHeight - 100+'px';
+			 	})()
+		 	};	
 		},
 		methods: {
 			tableControle(data){
@@ -318,31 +335,42 @@
 						type: 'warning'
 					});
 					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时删除多个用户',
-						type: 'warning'
-					});
-					return;
 				} else {
-					var changeUser = selData[0];
-					var id = changeUser.id;
-					var url = '/api/api-user/users/' + id;
-					this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
+					var url = '/api/api-apps/app/checkProCont2/deletes';
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					for (var i = 0; i < changeUser.length; i++) {
+						deleteid.push(changeUser[i].ID);
+					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+                    var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除该条信息吗？', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                    }).then(({ value }) => {
+                        this.$axios.delete(url, {params: data}).then((res) => {
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '删除成功',
-								type: 'success'
+								message: '网络错误，请重试',
+								type: 'error'
 							});
-							this.requestData();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
-					});
+                    }).catch(() => {
+
+                	});
 				}
 			},
 			// 导入
@@ -357,10 +385,10 @@
 			Printing() {
 				
 			},
-			judge(data) {
-				//taxStatus 布尔值
-				return data.enabled ? '启用' : '冻结'
-			},
+			// judge(data) {
+			// 	//taxStatus 布尔值
+			// 	return data.enabled ? '启用' : '冻结'
+			// },
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -369,12 +397,6 @@
 				}
 				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 			},
-			insert() {
-				this.users.push(this.user)
-			},
-			remove(index) {
-				this.users.splice(index, 1)
-			},
 			SelChange(val) {
 				this.selUser = val;
 			},
@@ -382,26 +404,27 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					nickname: this.searchList.nickname,
-					enabled: this.searchList.enabled,
-					searchKey: 'createTime',
-					searchValue: this.searchList.createTime,
-					companyId: this.companyId,
-					deptId: this.deptId
+					PROXY_CONTRACT_NUM: this.searchList.PROXY_CONTRACT_NUM,
+					PROXYNUM: this.searchList.PROXYNUM,
+					VENDOR: this.searchList.VENDOR,
+					ENTERBY: this.searchList.ENTERBY,
+					ENTERDATE: this.searchList.ENTERDATE
 				}
-				var url = '/api/api-user/users';
+				var url = '/api/api-apps/app/checkProCont2';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
+					console.log(111);
+					console.log(res);
 					this.subagree = res.data.data;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
-				this.subagree.forEach((item, index) => {
-					var id = item.id;
-					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
-						this.subagree.role = res.data.roles[0].name;
-					}).catch((wrong) => {})
-				})
+				// this.subagree.forEach((item, index) => {
+				// 	var id = item.id;
+				// 	this.$axios.get('/users/' + id + '/roles', data).then((res) => {
+				// 		this.subagree.role = res.data.roles[0].name;
+				// 	}).catch((wrong) => {})
+				// })
 			},
 			loadMore () {
 			   if (this.loadSign) {
@@ -417,10 +440,65 @@
 			   }
 			 },
 			handleNodeClick(data) {
+				if(data.type == '1') {
+					this.companyId = data.id;
+					this.deptId = '';
+				} else {
+					this.deptId = data.id;
+					this.companyId = '';
+				}
+				this.requestData();
 			},
 			formatter(row, column) {
 				return row.enabled;
 			},
+			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
+				console.log();
+				return(
+			<span>
+              <i class={data.iconClass}></i>
+              <span>{node.label}</span>
+            </span>
+				);
+			},
+			// 点击节点
+			nodeClick: function(m) {
+				if(m.iconClass != 'icon-file-text') {
+					if(m.iconClass == 'icon-file-normal') {
+						m.iconClass = 'icon-file-open';
+					} else {
+						m.iconClass = 'icon-file-normal';
+					}
+				}
+				this.handleNodeClick();
+			},
+			min3max() { //左侧菜单正常和变小切换
+				if($(".lefttree").hasClass("el-col-5")) {
+					$(".lefttree").removeClass("el-col-5");
+					$(".lefttree").addClass("el-col-1");
+					$(".leftcont").removeClass("el-col-19");
+					$(".leftcont").addClass("el-col-23");
+					$(".icon-doubleok").removeClass("icon-double-angle-left");
+					$(".icon-doubleok").addClass("icon-double-angle-right");
+				} else {
+					$(".lefttree").removeClass("el-col-1");
+					$(".lefttree").addClass("el-col-5");
+					$(".leftcont").removeClass("el-col-23");
+					$(".leftcont").addClass("el-col-19");
+					$(".icon-doubleok").removeClass("icon-double-angle-right");
+					$(".icon-doubleok").addClass("icon-double-angle-left");
+				}
+				this.ismin = !this.ismin;
+			},
+			//机构树
+			getKey() {
+				let that = this;
+				var url = '/api/api-user/depts/tree';
+				this.$axios.get(url, {}).then((res) => {
+					this.resourceData = res.data;
+					this.treeData = this.transformTree(this.resourceData);
+				});
+			}
 		},
 		mounted(){
              // 注册scroll事件并监听  
@@ -433,6 +511,7 @@
 
 		mounted() {
 			this.requestData();
+			this.getKey();
 		},
 	}
 </script>

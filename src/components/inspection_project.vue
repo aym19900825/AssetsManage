@@ -10,7 +10,7 @@
 			<div class="ibox-content">
 				<!--部门名称 Begin-->
 				<el-row :gutter="30">
-					<el-col :span="24" class="text-center">
+					<el-col :span="24" class="text-center pb10">
 						<el-form :inline="true" :model="formInline">
 							<el-form-item label="部门名称">
 								<el-select v-model="formInline.station" placeholder="请选择部门">
@@ -283,7 +283,7 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(res);
+					//console.log(res);
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -455,4 +455,15 @@
     display: inline-block;
 	cursor: pointer;
 }
+.el-card.is-never-shadow {
+	background-color: #f0f2f9;
+	-webkit-box-shadow: 0 2px 12px 0 rgba(39, 50, 173, 0.35);
+    box-shadow: 0 2px 12px 0 rgba(39, 50, 173, 0.35);
+}
+/*.el-card.is-always-shadow {
+	-webkit-box-shadow: 0 2px 12px 0 rgba(56, 124, 195, 0.35);
+    box-shadow: 0 2px 12px 0 rgba(56, 124, 195, 0.35);
+}*/
+
+
 </style>

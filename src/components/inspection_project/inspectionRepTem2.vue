@@ -2,10 +2,10 @@
 <div>
 	<el-card class="box-card" :body-style="{ padding: '10px' }" shadow="never">
 		<div slot="header" class="title clearfix">
-			<span>专业组</span>
+			<span>检验/检测报告模板</span>
 			<!--按钮操作行 Begin-->
 				<div class="columns pull-right">
-					<el-input placeholder="请输入专业组" v-model="search" class="input-with-select">
+					<el-input placeholder="请输入设备名称" v-model="search" class="input-with-select">
 						<el-button slot="append" icon="el-icon-search"></el-button>
 					</el-input>
 				</div>
@@ -15,14 +15,14 @@
 			<div class="pb10 clearfix">
 				<!-- <div class="columns pull-left"><el-button type="primary" size="small">关联父级</el-button></div> -->
 					<!-- <div class="table-func pull-right">
-					<el-button type="success" size="mini" round @click="addfield_professionGro" class="pull-right">
+					<el-button type="success" size="mini" round @click="addfield_inspectionRepTem2" class="pull-right">
 						<i class="icon-add"></i>
 						<font>新建</font>
 					</el-button>
 				</div> -->
 			</div>
-			<el-form :model="professionGroForm" ref="professionGroForm">
-			  <el-table :data="professionGroForm.inspectionList.filter(data => !search || data.PROF_GROUP.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="410" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'professionGroForm.inspectionList', order: 'descending'}" v-loadmore="loadMore">
+			<el-form :model="inspectionRepTem2Form" ref="inspectionRepTem2Form">
+			  <el-table :data="inspectionRepTem2Form.inspectionList.filter(data => !search || data.DECRIPTION.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="410" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'inspectionRepTem2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
 				<el-table-column prop="iconOperation" fixed="left" label="操作" width="80">
 			      <template slot-scope="scope">
 			        <el-button type="text" id="Edit" size="medium" @click.native.prevent="saveRow(scope.row)" v-if="scope.row.isEditing">
@@ -46,20 +46,20 @@
 			      </template>
 			    </el-table-column>
 
-			  	<el-table-column label="专业组编号" width="140" prop="PROF_NUM">
+			  	<el-table-column label="设备编号" width="140" prop="NUM">
 			      <template slot-scope="scope">
-			        <el-form-item :prop="'inspectionList.'+scope.$index + '.PROF_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROF_NUM" disabled></el-input><span v-else="v-else">{{scope.row.PROF_NUM}}</span>
+			        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" disabled></el-input><span v-else="v-else">{{scope.row.NUM}}</span>
 					</el-form-item>
 			      </template>
 			    </el-table-column>
 
-			    <el-table-column label="专业组" sortable width="200" prop="PROF_GROUP">
+			    <el-table-column label="设备名称" sortable width="200" prop="DECRIPTION">
 			      <template slot-scope="scope">
-			        <el-form-item :prop="'inspectionList.'+scope.$index + '.PROF_GROUP'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROF_GROUP" placeholder="请输入内容">
+			        <el-form-item :prop="'inspectionList.'+scope.$index + '.DECRIPTION'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DECRIPTION" placeholder="请输入内容">
 			        		<el-button slot="append" icon="icon-search"></el-button>
-			        	</el-input><span v-else="v-else">{{scope.row.PROF_GROUP}}</span>
+			        	</el-input><span v-else="v-else">{{scope.row.DECRIPTION}}</span>
 					</el-form-item>
 			      </template>
 			    </el-table-column>
@@ -118,15 +118,15 @@
 </div>
 </template>
 <script>
-	
+
 	export default {
-		name: 'professionGro',
+		name: 'inspectionRepTem2',
 		components: {
-			
+		
 		},
 		data() {
 			return {
-				professionGroForm:{
+				inspectionRepTem2Form:{
 					inspectionList: []
 				},
 				fullHeight:{//给浏览器高度赋值
@@ -186,21 +186,21 @@
 			     setTimeout(() => {
 			       this.loadSign = true
 			     }, 1000)
-			     this.requestData_professionGro()
+			     this.requestData_inspectionRepTem2()
 			   }
 			 },
 			sizeChange(val) {//页数
 		      this.page.pageSize = val;
-		      this.requestData_professionGro();
+		      this.requestData_inspectionRepTem2();
 		    },
 		    currentChange(val) {//当前页
 		      this.page.currentPage = val;
-		      this.requestData_professionGro();
+		      this.requestData_inspectionRepTem2();
 		    },
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
-				this.requestData_professionGro();
+				this.requestData_inspectionRepTem2();
 			},
 			judge(data) {//taxStatus 状态布尔值
 				return data.enabled ? '活动' : '不活动'
@@ -216,15 +216,17 @@
 			indexMethod(index) {
 				return index + 1;
 			},
-			viewfield_professionGro(ID){//点击父级筛选出子级数据
+			viewfield_inspectionRepTem2(ID){//点击父级筛选出子级数据
 				if(ID=='null'){
-					this.professionGroForm.inspectionList = []; 
+					this.inspectionRepTem2Form.inspectionList = []; 
 					return false;
 					//todo  相关数据设置
 				}
-				var url = '/api/api-apps/app/professionGro/INSPECTION_PROJECT2/' + ID;
+				var url = '/api/api-apps/app/inspectionRepTem2/INSPECTION_PROJECT2/' + ID;
+				console.log(ID);
+
 				this.$axios.get(url, {}).then((res) => {
-					//console.log(res);
+					console.log(res);
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -233,27 +235,27 @@
 					}else{
 						this.loadSign=true
 					}
-					this.professionGroForm.inspectionList=res.data.PROFESSION_GROUPList;
-					//console.log(this.professionGroForm.inspectionList[0].ID);
+					this.inspectionRepTem2Form.inspectionList=res.data.INSPECTION_REPORT_TEMPLATE2List;
+					//console.log(this.inspectionRepTem2Form.inspectionList[0].ID);
 					//默认主表第一条数据
-					// if(this.professionGroForm.inspectionList.length > 0){
-					
-					// 	this.$refs.rawDataAssetchild.viewfield_rawDataAsset(this.professionGroForm.inspectionList[0].ID);
+					// if(this.inspectionRepTem2Form.inspectionList.length > 0){
+					// 	console.log(this.inspectionRepTem2Form.inspectionList.length);
+					// 	this.$refs.professionGrochild.viewfield_inspectionPro2(this.inspectionRepTem2Form.inspectionList[0].ID);
 					// }else{
-					// 	this.$refs.rawDataAssetchild.viewfield_rawDataAsset('null');
+					// 	this.$refs.professionGrochild.viewfield_inspectionPro2('null');
 					// }
 
-					for(var j = 0; j < this.professionGroForm.inspectionList.length; j++){
-						this.professionGroForm.inspectionList[j].isEditing = false;
+					for(var j = 0; j < this.inspectionRepTem2Form.inspectionList.length; j++){
+						this.inspectionRepTem2Form.inspectionList[j].isEditing = false;
 					}
 				}).catch((wrong) => {})
 			},
-			requestData_professionGro(index) {//加载数据
+			requestData_inspectionRepTem2(index) {//加载数据
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				}
-				var url = '/api/api-apps/app/professionGro';
+				var url = '/api/api-apps/app/inspectionRepTem2';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
@@ -278,7 +280,7 @@
 						}
 					}
 					
-					this.professionGroForm.inspectionList = newarr;
+					this.inspectionRepTem2Form.inspectionList = newarr;
 				}).catch((wrong) => {})
 			},
 			handleNodeClick(data) {
@@ -286,10 +288,10 @@
 			formatter(row, column) {
 				return row.enabled;
 			},
-			addfield_professionGro(P_NUM) { //插入行到产品类型Table中
+			addfield_inspectionRepTem2(P_NUM) { //插入行到产品类型Table中
 				var isEditingflag=false;
-				for(var i=0;i<this.professionGroForm.inspectionList.length; i++){
-					if (this.professionGroForm.inspectionList[i].isEditing==false){
+				for(var i=0;i<this.inspectionRepTem2Form.inspectionList.length; i++){
+					if (this.inspectionRepTem2Form.inspectionList[i].isEditing==false){
 						isEditingflag=false;
 					}else{
                         isEditingflag=true;
@@ -304,16 +306,16 @@
 						this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 						var index=this.$moment(date).format("YYYYMMDDHHmmss");
 						var obj = {
-							"PROF_GROUP": '',
+							"DECRIPTION": '',
 							"STATUS": '活动',
 							"P_NUM": P_NUM,
-							"PROF_NUM": 'PG' + index,
+							"NUM": 'AS' + index,
 							"VERSION": 1,
 							"CHANGEBY": this.currentUser,
 							"CHANGEDATE": this.currentDate,
 							"isEditing": true,
 						};
-						this.professionGroForm.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
+						this.inspectionRepTem2Form.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
 					}).catch((err)=>{
 						this.$message({
 							message:'网络错误，请重试',
@@ -325,18 +327,18 @@
 				}
 			},
 			saveRow (row) {//Table-操作列中的保存行
-				this.$refs['professionGroForm'].validate((valid) => {
+				this.$refs['inspectionRepTem2Form'].validate((valid) => {
 					row.VERSION = row.VERSION + 1;//修改保存后版本号+1
 		          if (valid) {
-					var url = '/api/api-apps/app/professionGro/saveOrUpdate';
+					var url = '/api/api-apps/app/inspectionRepTem2/saveOrUpdate';
 					var submitData = {
 						"ID":row.ID,
 						"P_NUM": row.P_NUM,
-						"PROF_GROUP": row.PROF_GROUP,
+						"DECRIPTION": row.DECRIPTION,
 						"STATUS": row.STATUS,
 						"CHANGEBY": row.CHANGEBY,
 					    "CHANGEDATE": row.CHANGEDATE,
-					    "PROF_NUM": row.PROF_NUM,
+					    "NUM": row.NUM,
 					    "VERSION": row.VERSION,
 					}
 					this.$axios.post(url, submitData).then((res) => {
@@ -346,7 +348,7 @@
 								type: 'success'
 							});
 							//重新加载数据
-							this.requestData_professionGro();
+							this.requestData_inspectionRepTem2();
 						}
 					}).catch((err) => {
 						this.$message({
@@ -364,7 +366,7 @@
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                 }).then(({ value }) => {
-                	var url = '/api/api-apps/app/professionGro/' + row.ID;
+                	var url = '/api/api-apps/app/inspectionRepTem2/' + row.ID;
                     this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 					//resp_code == 0 是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -372,7 +374,7 @@
 								message: '删除成功',
 								type: 'success'
 							});
-							this.requestData_professionGro();
+							this.requestData_inspectionRepTem2();
 						}
 					}).catch((err) => {
 						this.$message({
@@ -384,10 +386,11 @@
 
             	});
 			},
+			
 		},
 		
 		mounted() {
-			this.requestData_professionGro();
+			this.requestData_inspectionRepTem2();
 			window.onresize = () => {//获取浏览器可视区域高度
 			 	return (() => {
 			 		this.fullHeight.height = document.documentElement.clientHeight - 180+'px';

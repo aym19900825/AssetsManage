@@ -15,8 +15,8 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				
-				<el-form  status-icon :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
+
+				<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="委托单位" name="1">
@@ -27,11 +27,11 @@
 										</el-input>
 									</el-col>
 									<el-col :span="3" class="pull-right">
-										<el-input v-model="dataInfo.VENDOR" :disabled="true">
+										<el-input v-model="dataInfo.PROXYNUM" :disabled="true">
 											<template slot="prepend">编号</template>
 										</el-input>
 									</el-col>
-								
+
 								</el-row>
 								<div class="accordion-body tab-content">
 									<el-row :gutter="70">
@@ -48,14 +48,14 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="邮编" prop="V_ZIPCODE">
-											<el-input v-model="dataInfo.V_ZIPCODE"></el-input>
+												<el-input v-model="dataInfo.V_ZIPCODE"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="联系人姓名" prop="V_PERSON">
-												<el-input v-model="dataInfo.V_PERSON" :disabled="true">
+												<el-input v-model="dataInfo.V_PERSON" :disabled="false">
 													<el-button slot="append" icon="el-icon-search" @click="getPeople()"></el-button>
 												</el-input>
 
@@ -66,26 +66,43 @@
 												<el-input v-model="dataInfo.V_PHONE"></el-input>
 											</el-form-item>
 										</el-col>
+										<el-col :span="8">
+											<el-form-item label="责任单位" prop="R_VENDOR">
+												<el-input v-model="dataInfo.R_VENDOR"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row :gutter="70">
+										<el-col :span="8">
+											<el-form-item label="版本" prop="VERSION">
+												<el-input v-model="dataInfo.VERSION"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="委托单位编号" prop="VENDOR">
+												<el-input v-model="dataInfo.VENDOR"></el-input>
+											</el-form-item>
+										</el-col>
 									</el-row>
 								</div>
 							</el-collapse-item>
 							<el-collapse-item title="生产单位" name="2">
 								<div class="accordion-body tab-content">
 									<el-form-item label="生产单位名称" prop="P_NAME">
-												<el-input v-model="dataInfo.P_NAME" :disabled="true">
-													<el-button slot="append" icon="el-icon-search" @click=""></el-button>
-												</el-input>
+										<el-input v-model="dataInfo.P_NAME" :disabled="false">
+											<el-button slot="append" icon="el-icon-search" @click=""></el-button>
+										</el-input>
 
-											</el-form-item>
+									</el-form-item>
 								</div>
 							</el-collapse-item>
 							<el-collapse-item title="样品" name="3">
 								<div class="accordion-body tab-content">
-							
+
 									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="名称" prop="ITEM_NAME">
-												<el-input v-model="dataInfo.ITEM_NAME" :disabled="true">
+												<el-input v-model="dataInfo.ITEM_NAME" :disabled="false">
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -96,11 +113,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="型号" prop="ITEM_MODEL">
-											<el-input v-model="dataInfo.ITEM_MODEL"></el-input>	
-										<!--<el-select v-model="dataInfo.CJDW" placeholder="金化站">
-											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-											</el-option>
-										</el-select>-->
+												<el-input v-model="dataInfo.ITEM_MODEL"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -125,324 +138,218 @@
 									</el-row>
 									<el-row>
 										<el-col :span="8">
-										<el-form-item label="取样方式" prop="ITEM_METHOD">
-											<el-radio-group v-model="dataInfo.ITEM_METHOD">
-												<el-radio label="委托方送样"></el-radio>
-												<el-radio label="抽样"></el-radio>
-												<el-radio label="其他"></el-radio>
-											</el-radio-group>
-										</el-form-item>
+											<el-form-item label="取样方式" prop="ITEM_METHOD">
+												<el-radio-group v-model="dataInfo.ITEM_METHOD">
+													<el-radio label="委托方送样"></el-radio>
+													<el-radio label="抽样"></el-radio>
+													<el-radio label="其他"></el-radio>
+												</el-radio-group>
+											</el-form-item>
 										</el-col>
-										<el-col :span="14">
-										<el-form-item label="检后处理" prop="ITEM_DISPOSITION">
-											<el-radio-group v-model="dataInfo.ITEM_DISPOSITION">
-												<el-radio label="自提"></el-radio>
-												<el-radio label="邮寄"></el-radio>
-												<el-radio label="报废"></el-radio>
-												<el-radio label="本中心处理"></el-radio>
-											</el-radio-group>
-										</el-form-item>
+										<el-col :span="10">
+											<el-form-item label="检后处理" prop="ITEM_DISPOSITION">
+												<el-radio-group v-model="dataInfo.ITEM_DISPOSITION">
+													<el-radio label="自提"></el-radio>
+													<el-radio label="邮寄"></el-radio>
+													<el-radio label="报废"></el-radio>
+													<el-radio label="本中心处理"></el-radio>
+												</el-radio-group>
+											</el-form-item>
 										</el-col>
 									</el-row>
 								</div>
 							</el-collapse-item>
 							<el-collapse-item title="检验" name="4">
 								<div class="accordion-body tab-content">
-										<el-form-item label="抽样方案/判定依据" prop="REMARKS">
-											<el-input v-model="dataInfo.REMARKS"></el-input>
-										</el-form-item>
+									<el-form-item label="抽样方案/判定依据" prop="REMARKS">
+										<el-input v-model="dataInfo.REMARKS"></el-input>
+									</el-form-item>
 								</div>
 							</el-collapse-item>
+
 							<el-collapse-item title="检验依据" name="5">
-								<!-- 字段列表 Begin-->
+								<!-- 资质信息 Begin-->
 								<div class="table-func">
 									<el-button type="success" size="mini" round @click="addfieldBasis">
 										<i class="icon-add"></i>
-										<font>新建</font>
+										<font>新建行</font>
 									</el-button>
 								</div>
-								<el-form :model="dataInfo.inspectProBasList">
-									<el-form-item>
-										<el-row :gutter="20">
-											<el-col :span="3">
-												<el-form-item label="序号"></el-form-item>
-											</el-col>
-											<el-col :span="3">
-												<el-form-item label="标准编号"></el-form-item>
-											</el-col>
-											<el-col :span="3">
-												<el-form-item label="标准内容"></el-form-item>
-											</el-col>
-											<!--<el-col :span="3">
-												<el-form-item label="检验标准名称"></el-form-item>
-											</el-col>-->
-											<el-col :span="2">
-												<el-form-item label="版本"></el-form-item>
-											</el-col>
-											<!--<el-col :span="3">
-												<el-form-item label="信息状态"></el-form-item>
-											</el-col>-->
-											<el-col :span="3">
-												<el-form-item label="附件"></el-form-item>
-											</el-col>
-											<el-col :span="3">
-												<el-form-item label="操作"></el-form-item>
-											</el-col>
-										</el-row>
-										<el-row :gutter="20" v-for="(item,key) in dataInfo.inspectProBasList" :key="key">
-											<el-col :span="3">
-												<el-input type="text" placeholder="请输入序号" v-model="item.NUMBER"></el-input>
-											</el-col>
-											<el-col :span="3">
-												<el-input type="text" placeholder="请输入检验标准编号" v-model="item.S_NUM"></el-input>
-											</el-col>
-											<el-col :span="3">
-												<el-input type="text" placeholder="请输入检验标准内容" v-model="item.S_DESC"></el-input>
-											</el-col>
-											<!--<el-col :span="3">
-												<el-input type="text" placeholder="请输入标准名称" v-model="item.S_NAME"></el-input>
-											</el-col>-->
-											<el-col :span="2">
-												<el-input type="text" placeholder="请输入版本" v-model="item.VERSION"></el-input>
-											</el-col>
-											<el-col :span="3">
-												<el-input type="text" placeholder="请输入信息状态" v-model="item.STATUS"></el-input>
-											</el-col>
-											<el-col :span="3">
-												<el-input type="text" placeholder="附件"></el-input>
-											</el-col>
-											<el-col :span="2">
-												<i class="el-icon-delete" @click="delfieldBasis(item)" style="color: red"></i>
-											</el-col>
-										</el-row>
-									</el-form-item>
-								</el-form>
-								<!-- 字段列表 End -->
+
+								<el-table :data="dataInfo.inspectProBasList" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.inspectProBasList', order: 'descending'}">
+
+									<el-table-column prop="iconOperation" fixed label="" width="50px">
+										<template slot-scope="scope"><i class="el-icon-check" v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else="v-else"></i></template>
+									</el-table-column>
+
+									<el-table-column prop="P_NUM" label="检验项目编号" sortable width="120px">
+										<template slot-scope="scope">
+											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="请输入委托方名称"></el-input><span v-else="v-else">{{scope.row.P_NUM}}</span>
+										</template>
+									</el-table-column>
+
+									<el-table-column prop="P_DESC" label="检验项目描述" sortable width="120px">
+										<template slot-scope="scope">
+											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入委托方名称"></el-input><span v-else="v-else">{{scope.row.P_DESC}}</span>
+										</template>
+									</el-table-column>
+
+									<el-table-column prop="REMARKS" label="内容" sortable width="120px">
+										<template slot-scope="scope">
+											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" placeholder="请输入要求"></el-input><span v-else="v-else">{{scope.row.REMARKS}}</span>
+										</template>
+									</el-table-column>
+
+									<el-table-column prop="STATUS" label="信息状态" sortable width="120px">
+										<template slot-scope="scope">
+											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入要求"></el-input><span v-else="v-else">{{scope.row.STATUS}}</span>
+										</template>
+									</el-table-column>
+
+									<el-table-column prop="VERSION" label="项目版本" sortable width="120px">
+										<template slot-scope="scope">
+											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入分包方名称"></el-input><span v-else="v-else">{{scope.row.VERSION}}</span>
+										</template>
+									</el-table-column>
+									<el-table-column fixed="right" label="操作" width="120">
+										<template slot-scope="scope">
+											<el-button @click.native.prevent="deleteRow(scope.$index,dataInfo.inspectProBasList)" type="text" size="small">
+												移除
+											</el-button>
+										</template>
+									</el-table-column>
+
+								</el-table>
 							</el-collapse-item>
-							
+
 							<el-collapse-item title="检验项目与要求" name="6">
-								<!-- 字段列表 Begin-->
+								<!-- 资质信息 Begin-->
 								<div class="table-func">
 									<el-button type="success" size="mini" round @click="addfieldProject">
 										<i class="icon-add"></i>
-										<font>新建</font>
+										<font>新建行</font>
 									</el-button>
 								</div>
-								<!-- :rules="rules" ref="attributes" -->
-								<el-form :model="dataInfo.inspectProProList">
-									<el-form-item>
-										<el-row :gutter="20">
-											<el-col :span="3">
-												<el-form-item label="序号"></el-form-item>
-											</el-col>
-											<el-col :span="4">
-												<el-form-item label="检测项目编号"></el-form-item>
-											</el-col>
-											<el-col :span="4">
-												<el-form-item label="检测项目描述"></el-form-item>
-											</el-col>
-											<el-col :span="3">
-												<el-form-item label="要求"></el-form-item>
-											</el-col>
-											<el-col :span="2">
-												<el-form-item label="版本"></el-form-item>
-											</el-col>
-											<!--<el-col :span="2">
-												<el-form-item label="信息状态"></el-form-item>
-											</el-col>-->
-											<el-col :span="2">
-												<el-form-item label="附件"></el-form-item>
-											</el-col>
-											<el-col :span="2">
-												<el-form-item label="操作"></el-form-item>
-											</el-col>
-										</el-row>
-										<el-row :gutter="20" v-for="(item,key) in dataInfo.inspectProProList" :key="key">
-											<el-col :span="3">
-												<el-input type="text" placeholder="请输入序号" v-model="item.NUMBER"></el-input>
-											</el-col>
-											<el-col :span="4">
-												<el-input type="text" placeholder="请输入检验检测项目编号" v-model="item.P_NUM"></el-input>
-											</el-col>
-											<el-col :span="4">
-												<el-input type="text" placeholder="请输入检验检测项目内容" v-model="item.P_DESC"></el-input>
-											</el-col>
-											<el-col :span="3">
-												<el-input type="text" placeholder="请输入要求" v-model="item.REMARKS"></el-input>
-											</el-col>
-											<el-col :span="2">
-												<el-input type="text" placeholder="请输入版本" v-model="item.VERSION"></el-input>
-											</el-col>
-											<!--<el-col :span="2">
-												<el-input type="text" placeholder="请输入信息状态" v-model="item.STATUS"></el-input>
-											</el-col>-->
-											<el-col :span="3">
-												<el-input type="text" placeholder="附件"></el-input>
-											</el-col>
-											<el-col :span="2">
-												<i class="el-icon-delete" @click="delfieldProject(item)" style="color: red"></i>
-											</el-col>
-										</el-row>
-									</el-form-item>
-								</el-form>
-								<!-- 字段列表 End -->
+
+								<el-table :data="dataInfo.inspectProProList" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.inspectProPro', order: 'descending'}">
+
+									<el-table-column prop="iconOperation" fixed label="" width="50px">
+										<template slot-scope="scope"><i class="el-icon-check" v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else="v-else"></i></template>
+									</el-table-column>
+
+									<el-table-column prop="S_NUM" label="标准编号" sortable width="120px">
+										<template slot-scope="scope">
+											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入委托方名称"></el-input><span v-else="v-else">{{scope.row.S_NUM}}</span>
+										</template>
+									</el-table-column>
+
+									<el-table-column prop="S_DESC" label="标准内容" sortable width="120px">
+										<template slot-scope="scope">
+											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_DESC" placeholder="请输入委托方名称"></el-input><span v-else="v-else">{{scope.row.S_DESC}}</span>
+										</template>
+									</el-table-column>
+									<el-table-column prop="STATUS" label="信息状态" sortable width="120px">
+										<template slot-scope="scope">
+											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入要求"></el-input><span v-else="v-else">{{scope.row.STATUS}}</span>
+										</template>
+									</el-table-column>
+									<el-table-column prop="VERSION" label="版本" sortable width="120px">
+										<template slot-scope="scope">
+											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入分包方名称"></el-input><span v-else="v-else">{{scope.row.VERSION}}</span>
+										</template>
+									</el-table-column>
+									<el-table-column fixed="right" label="操作" width="120">
+										<template slot-scope="scope">
+											<el-button @click.native.prevent="deleteRow(scope.$index,dataInfo.inspectProProList)" type="text" size="small">
+												移除
+											</el-button>
+										</template>
+									</el-table-column>
+
+								</el-table>
 							</el-collapse-item>
-							
-							<el-collapse-item title="检验项目与要求" name="7">
-								<!-- 字段列表 Begin-->
+
+							<el-collapse-item title="分包要求" name="7">
+								<!-- 资质信息 Begin-->
 								<div class="table-func">
-									<el-button type="success" size="mini" round @click="addfieldProject">
+									<el-button type="success" size="mini" round @click="addcheckProCont">
 										<i class="icon-add"></i>
-										<font>新建</font>
+										<font>新建行</font>
 									</el-button>
 								</div>
-								<el-form :model="dataInfo.inspectProProList">
-									<el-form-item>
-										<el-row :gutter="20">
-											<el-col :span="3">
-												<el-form-item label="序号"></el-form-item>
-											</el-col>
-											<el-col :span="4">
-												<el-form-item label="检测项目编号"></el-form-item>
-											</el-col>
-											<el-col :span="4">
-												<el-form-item label="检测项目描述"></el-form-item>
-											</el-col>
-											<el-col :span="3">
-												<el-form-item label="要求"></el-form-item>
-											</el-col>
-											<el-col :span="2">
-												<el-form-item label="版本"></el-form-item>
-											</el-col>
-											<!--<el-col :span="2">
-												<el-form-item label="信息状态"></el-form-item>
-											</el-col>-->
-											<el-col :span="2">
-												<el-form-item label="附件"></el-form-item>
-											</el-col>
-											<el-col :span="2">
-												<el-form-item label="操作"></el-form-item>
-											</el-col>
-										</el-row>
-										<el-row :gutter="20" v-for="(item,key) in dataInfo.inspectProProList" :key="key">
-											<el-col :span="3">
-												<el-input type="text" placeholder="请输入序号" v-model="item.NUMBER"></el-input>
-											</el-col>
-											<el-col :span="4">
-												<el-input type="text" placeholder="请输入检验检测项目编号" v-model="item.P_NUM"></el-input>
-											</el-col>
-											<el-col :span="4">
-												<el-input type="text" placeholder="请输入检验检测项目内容" v-model="item.P_DESC"></el-input>
-											</el-col>
-											<el-col :span="3">
-												<el-input type="text" placeholder="请输入要求" v-model="item.REMARKS"></el-input>
-											</el-col>
-											<el-col :span="2">
-												<el-input type="text" placeholder="请输入版本" v-model="item.VERSION"></el-input>
-											</el-col>
-											<!--<el-col :span="2">
-												<el-input type="text" placeholder="请输入信息状态" v-model="item.STATUS"></el-input>
-											</el-col>-->
-											<el-col :span="3">
-												<el-input type="text" placeholder="附件"></el-input>
-											</el-col>
-											<el-col :span="2">
-												<i class="el-icon-delete" @click="delfieldProject(item)" style="color: red"></i>
-											</el-col>
-										</el-row>
-									</el-form-item>
-								</el-form>
-								<!-- 字段列表 End -->
+
+								<el-table :data="dataInfo.addcheckProContList" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.addcheckProContList', order: 'descending'}">
+
+									<el-table-column prop="iconOperation" fixed label="" width="50px">
+										<template slot-scope="scope"><i class="el-icon-check" v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else="v-else"></i></template>
+									</el-table-column>
+
+									<el-table-column prop="PROXY_CONTRACT_NUM" label="分包协议编号" sortable width="120px">
+										<template slot-scope="scope">
+											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROXY_CONTRACT_NUM" placeholder=""></el-input><span v-else="v-else">{{scope.row.PROXY_CONTRACT_NUM}}</span>
+										</template>
+									</el-table-column>
+
+									<el-table-column prop="PROXYNUM" label="委托书编号" sortable width="120px">
+										<template slot-scope="scope">
+											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROXYNUM" placeholder="请输入委托方名称"></el-input><span v-else="v-else">{{scope.row.PROXYNUM}}</span>
+										</template>
+									</el-table-column>
+
+									<el-table-column prop="VENDOR" label="分包方名称" sortable width="120px">
+										<template slot-scope="scope">
+											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDOR" placeholder="请输入分包方名称"></el-input><span v-else="v-else">{{scope.row.VENDOR}}</span>
+										</template>
+									</el-table-column>
+
+									<el-table-column prop="P_REMARKS" label="检验检测项目内容" sortable width="120px">
+										<template slot-scope="scope">
+											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入"></el-input><span v-else="v-else">{{scope.row.P_REMARKS}}</span>
+										</template>
+									</el-table-column>
+
+									<el-table-column prop="BASIS" label="检验检测技术依据" sortable width="120px">
+										<template slot-scope="scope">
+											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.BASIS" placeholder="请输入"></el-input><span v-else="v-else">{{scope.row.BASIS}}</span>
+										</template>
+									</el-table-column>
+									<el-table-column prop="REQUIRE" label="对环境和操作人员要求" sortable width="120px">
+										<template slot-scope="scope">
+											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REQUIRE" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.REQUIRE}}</span>
+										</template>
+									</el-table-column>
+									<el-table-column prop="Q_TYPE" label="对分包报告/证书的要求" sortable width="120px">
+										<template slot-scope="scope">
+											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.Q_TYPE" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.Q_TYPE}}</span>
+										</template>
+									</el-table-column>
+					
+									<el-table-column prop="CHECKCOST" label="检验检测费用" sortable width="120px">
+										<template slot-scope="scope">
+											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.CHECKCOST}}</span>
+										</template>
+									</el-table-column>
+											<el-table-column prop="STATUS" label="信息状态" sortable width="120px">
+										<template slot-scope="scope">
+											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入要求"></el-input><span v-else="v-else">{{scope.row.STATUS}}</span>
+										</template>
+									</el-table-column>
+									
+
+									<el-table-column fixed="right" label="操作" width="120">
+										<template slot-scope="scope">
+											<el-button @click.native.prevent="deleteRow(scope.$index,dataInfo.addcheckProContList)" type="text" size="small">
+												移除
+											</el-button>
+										</template>
+									</el-table-column>
+
+								</el-table>
+
+								<!-- 年度计划列表 End -->
 							</el-collapse-item>
-							<el-collapse-item title="分包要求" name="8">
-								<!-- 字段列表 Begin-->
-								<div class="table-func">
-									<el-button type="success" size="mini" round @click="addfieldProject">
-										<i class="icon-add"></i>
-										<font>新建</font>
-									</el-button>
-								</div>
-								<el-form :model="dataInfo.inspectProProList">
-									<el-form-item>
-										<el-row :gutter="20">
-											<el-col :span="1">
-												<el-form-item label="序号"></el-form-item>
-											</el-col>
-											<el-col :span="2">
-												<el-form-item label="委托方名称"></el-form-item>
-											</el-col>
-											<el-col :span="2">
-												<el-form-item label="分包方名称"></el-form-item>
-											</el-col>
-											<el-col :span="2">
-												<el-form-item label="样品名称"></el-form-item>
-											</el-col>
-											<el-col :span="2">
-												<el-form-item label="样品状态"></el-form-item>
-											</el-col>
-											<el-col :span="2">
-												<el-form-item label="信息状态"></el-form-item>
-											</el-col>
-											<el-col :span="2">
-												<el-form-item label="检验检测项目内容"></el-form-item>
-											</el-col>
-											<el-col :span="2">
-												<el-form-item label="检验检测技术依据"></el-form-item>
-											</el-col>
-											<el-col :span="2">
-												<el-form-item label="对环境和操作人员要求"></el-form-item>
-											</el-col>
-											<el-col :span="2">
-												<el-form-item label="分包方资质证明"></el-form-item>
-											</el-col>
-											<el-col :span="2">
-												<el-form-item label="有效期"></el-form-item>
-											</el-col>
-											<el-col :span="2">
-												<el-form-item label="对分包报告/证书的要求"></el-form-item>
-											</el-col>
-											<el-col :span="2">
-												<el-form-item label="完成日期"></el-form-item>
-											</el-col>
-											<el-col :span="2">
-													<el-form-item label="
-检验检测费用"></el-form-item>
-											</el-col> 		
-											<el-col :span="2">
-												<el-form-item label="操作"></el-form-item>
-											</el-col>
-										</el-row>
-										<el-row :gutter="20" v-for="(item,key) in dataInfo.inspectProProList" :key="key">
-											<el-col :span="1">
-												<el-input type="text" placeholder="请输入序号" v-model="item.PROXY_CONTRACT_NUM"></el-input>
-											</el-col>
-											<el-col :span="4">
-												<el-input type="text" placeholder="委托方名称" v-model="item.P_NUM"></el-input>
-											</el-col>
-											<el-col :span="4">
-												<el-input type="text" placeholder="请输入检验检测项目内容" v-model="item.P_DESC"></el-input>
-											</el-col>
-											<el-col :span="3">
-												<el-input type="text" placeholder="请输入要求" v-model="item.REMARKS"></el-input>
-											</el-col>
-											<el-col :span="2">
-												<el-input type="text" placeholder="请输入版本" v-model="item.VERSION"></el-input>
-											</el-col>
-											<!--<el-col :span="2">
-												<el-input type="text" placeholder="请输入信息状态" v-model="item.STATUS"></el-input>
-											</el-col>-->
-											<el-col :span="3">
-												<el-input type="text" placeholder="附件"></el-input>
-											</el-col>
-											<el-col :span="2">
-												<i class="el-icon-delete" @click="delfieldProject(item)" style="color: red"></i>
-											</el-col>
-										</el-row>
-									</el-form-item>
-								</el-form>
-								<!-- 字段列表 End -->
-							</el-collapse-item>
-							<el-collapse-item name="9">
+
+							<el-collapse-item name="8">
 								<div class="accordion-body tab-content">
 									<el-row :gutter="70">
 										<el-col :span="8">
@@ -452,54 +359,150 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="检验检测费用" prop="CHECTCOST">
-												<el-input v-model="dataInfo.CHECTCOST"></el-input>
+											<el-form-item label="完成方式" prop="COMPMODE">
+												<el-radio-group v-model="dataInfo.COMPMODE">
+													<el-radio label="加急"></el-radio>
+													<el-radio label="正常"></el-radio>
+												</el-radio-group>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="下达日期" prop="XD_DATE">
-												<el-date-picker v-model="dataInfo.XD_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
-												</el-date-picker>
+											<el-form-item label="编号" prop="REPORT_NUM">
+												<el-input v-model="dataInfo.REPORT_NUM"></el-input>
+											</el-form-item>
+										</el-col>
+
+									</el-row>
+									<el-row :gutter="70">
+										<el-col :span="8">
+											<el-form-item label="交委托方分数" prop="REPORT_QUALITY">
+												<el-input v-model="dataInfo.REPORT_QUALITY"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="发送方式" prop="REPORT_MODE">
+												<el-radio-group v-model="dataInfo.REPORT_MODE">
+													<el-radio label="自提"></el-radio>
+													<el-radio label="邮寄"></el-radio>
+													<el-radio label="其他"></el-radio>
+												</el-radio-group>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="格式" prop="REPORT_FOMAT">
+												<el-radio-group v-model="dataInfo.REPORT_FOMAT">
+													<el-radio label="认证中心"></el-radio>
+													<el-radio label="国家中心"></el-radio>
+												</el-radio-group>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row :gutter="70">
+										<el-col :span="8">
+											<el-form-item label="检验收费" prop="CHECK_COST">
+												<el-input v-model="dataInfo.CHECK_COST"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="合同费用" prop="CONTRACTCOST">
+												<el-input v-model="dataInfo.CONTRACTCOST"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="实收费用" prop="ACTUALCOST">
+												<el-input v-model="dataInfo.ACTUALCOST"></el-input>
+											</el-form-item>
+										</el-col>
+
+									</el-row>
+									<el-row :gutter="70">
+										<el-col :span="8">
+											<el-form-item label="实收比例" prop="ACTUAL_PERCENT">
+												<el-input v-model="dataInfo.ACTUAL_PERCENT"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="付款方式" prop="PAYMENT_METHOD">
+												<el-select v-model="dataInfo.PAYMENT_METHOD" placeholder="请选择">
+													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+													</el-option>
+												</el-select>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="信息状态" prop="MESSSTATUS">
+													<el-input v-model="dataInfo.MESSSTATUS"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row :gutter="70">
+										<el-col :span="8">
+											<el-form-item label="标识" prop="CNAS_OR_CMA_ID">
+												<el-radio-group v-model="dataInfo.CNAS_OR_CMA_ID">
+													<el-radio label="CNAS"></el-radio>
+												</el-radio-group>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="主检组" prop="MAINGROUP">
+												<el-select v-model="dataInfo.MAINGROUP" placeholder="请选择">
+													<el-option v-for="item in option" :key="item.value" :label="item.label" :value="item.value">
+													</el-option>
+												</el-select>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="主检负责人" prop="LEADER">
+													<el-input v-model="dataInfo.LEADER"></el-input>
+											</el-form-item>
+										</el-col>
+
+									</el-row>
+									<el-row :gutter="70">
+										<el-col :span="8">
+											<el-form-item label="生产单位编号" prop="PRODUCT_UNIT">
+												<el-input v-model="dataInfo.PRODUCT_UNIT"></el-input>
+											</el-form-item>
+										</el-col>
+				
+									</el-row>
+									<el-row :gutter="70">
 										<el-col :span="24">
 											<el-form-item label="备注" prop="MEMO">
-												<el-input v-model="dataInfo.MEMO"></el-input>
+												<el-input type="textarea" v-model="dataInfo.MEMO"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 								</div>
 							</el-collapse-item>
-							<el-collapse-item title="其他" name="7">
+							<el-collapse-item title="其他" name="9">
 								<div class="accordion-body tab-content">
 									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="录入人" prop="ENTERBY">
-												<el-input v-model="dataInfo.ENTERBY" :disabled="true"></el-input>
+												<el-input v-model="dataInfo.ENTERBY" :disabled="false"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="录入时间" prop="ENTERDATE">
-												<el-input v-model="dataInfo.ENTERDATE" :disabled="true"></el-input>
+												<el-input v-model="dataInfo.ENTERDATE" :disabled="false"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="录入人机构" prop="ORGID">
-												<el-input v-model="dataInfo.ORGID" :disabled="true"></el-input>
+												<el-input v-model="dataInfo.ORGID" :disabled="false"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="修改人" v-if="modify" prop="CHANGEBY">
-												<el-input v-model="dataInfo.CHANGEBY" :disabled="true"></el-input>
+												<el-input v-model="dataInfo.CHANGEBY" :disabled="false"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="修改时间" v-if="modify" prop="CHANGEDATE">
-												<el-input v-model="dataInfo.CHANGEDATE" :disabled="true"></el-input>
+												<el-input v-model="dataInfo.CHANGEDATE" :disabled="false"></el-input>
 											</el-form-item>
 										</el-col>
 
@@ -581,6 +584,13 @@
 				}
 			};
 			return {
+				dataInfo: {
+					PROXYNUM: '1',
+					STATE: '草稿',
+					inspectProProList: [],
+					inspectProBasList: [],
+					addcheckProContList: [],
+				},
 				gridData: [], //彈出框的數據
 				page: {
 					currentPage: 1,
@@ -588,26 +598,29 @@
 					totalCount: 0
 				},
 				options: [{
-					value: '金化站',
-					label: '金化站'
-				},
-				{
-					value: '通号站',
-					label: '通号站'
-				},
-				{
-					value: '运包站',
-					label: '运包站'
-				},
-				{
-					value: '机报站',
-					label: '机报站'
-				},
-				{
-					value: '接触网站',
-					label: '接触网站'
-				},
-				],
+					value: '现金',
+					label: '现金'
+				}, {
+					value: '电汇',
+					label: '电汇'
+				}, {
+					value: '支票',
+					label: '支票'
+				}, {
+					value: '转账',
+					label: '转账'
+				}, {
+					value: '其他',
+					label: '其他'
+				}],
+				value: '',
+				option: [{
+					value: '金属组',
+					label: '金属组'
+				}, {
+					value: '涂料组',
+					label: '涂料组'
+				}],
 				value: '',
 				selUser: [],
 				//				disabled: true, //禁填
@@ -623,72 +636,10 @@
 				addtitle: true, //添加弹出框titile
 				modifytitle: false, //修改弹出框titile
 				modify: false,
-				activeNames: ['1', '2', '3', '4', '5', '6', '7'], //手风琴数量
+				activeNames: ['1', '2', '3', '4', '5', '6', '7', '8', '9'], //手风琴数量
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
-			
-				leaddata: [ //导入数据的表格
-					{
-						columnname: 'author',
-						description: '作者姓名',
-						type: '字符串(string)',
-						length: '6',
-						retain: ''
-					},
-					{
-						columnname: 'author',
-						description: '作者姓名',
-						type: '字符串(string)',
-						length: '6',
-						retain: ''
-					},
-					{
-						columnname: 'author',
-						description: '作者姓名',
-						type: '字符串(string)',
-						length: '6',
-						retain: ''
-					},
-					{
-						columnname: 'author',
-						description: '作者姓名',
-						type: '字符串(string)',
-						length: '6',
-						retain: ''
-					}
-				],
-				dataInfo: { //添加数据库列表信息
-					N_CODE: '1',
-					TYPE: '',
-					XD_DATE: '',
-					ITEM_NAME: '',
-					ITEM_MODEL: '',
-					VENDOR: '',
-					CJDW: '',
-					TASKNUM: '',
-					SOLUTION: '',
-					COMPDATE: '',
-					STATE: '草稿',
-					ENTERBY: '',
-					STATUS: '',
-					inspectProBasList: [{ //字段列表
-						NUMBER: '',
-						S_NUM: '',
-						S_DESC: '',
-						S_NAME: '',
-						S_ENGNAME: 'sss',
-						VERSION: '',
-						STATUS: '',
-					}],
-					inspectProProList: [{
-						NUMBER: '',
-						P_NUM: '',
-						P_DESC: '',
-						REMARKS: '',
-						VERSION: '',
-						STATUS: ''
-					}]
-				},
+
 				rules: {
 					name: [{
 						required: true,
@@ -711,21 +662,28 @@
 			};
 		},
 		methods: {
-//			resetNew() {
-//				this.dataInfo = { //数据库列表
-//						name: '',
-//						description: '',
-//						attributes: [{ //字段列表
-//							columnname: '',
-//							description: '',
-//							type: '',
-//							length: '',
-//							retain: ''
-//						}]
-//					},
-//
-//					this.$refs["dataInfo"].resetFields();
-//			},
+			//			resetNew() {
+			//				this.dataInfo = { //数据库列表
+			//						name: '',
+			//						description: '',
+			//						attributes: [{ //字段列表
+			//							columnname: '',
+			//							description: '',
+			//							type: '',
+			//							length: '',
+			//							retain: ''
+			//						}]
+			//					},
+			//
+			//					this.$refs["dataInfo"].resetFields();
+			//			},
+			iconOperation(row, column, cell, event) {
+				if(column.property === "iconOperation") {
+					console.log(row.isEditing);
+					row.isEditing = !row.isEditing;
+					console.log(row.isEditing);
+				}
+			},
 			handleChange(val) { //手风琴开关效果调用
 			},
 			sizeChange(val) {
@@ -739,48 +697,54 @@
 			//新建行
 			addfieldBasis() {
 				var obj = {
-					NUMBER: '',
 					S_NUM: '',
 					S_DESC: '',
 					VERSION: '',
-					S_NAME: '',
-					S_ENGNAME: 'sss',
 					STATUS: '',
+					isEditing: true
 				};
 				this.dataInfo.inspectProBasList.push(obj);
 			},
 			addfieldProject() {
 				var obj = {
-					NUMBER: '',
 					P_NUM: '',
 					P_DESC: '',
 					REMARKS: '',
 					VERSION: '',
 					STATUS: '',
+					isEditing: true
 				};
 				this.dataInfo.inspectProProList.push(obj);
 			},
+			addcheckProCont() {
+				var obj = {
+					PROXY_CONTRACT_NUM: '',
+					PROXYNUM: '',
+					VENDOR: '',
+					P_REMARKS: '',
+					BASIS: '',
+					REQUIRE: '',
+					Q_TYPE: '',
+					CHECKCOST: '',
+					STATUS:'',
+					isEditing: true
+				};
+				this.dataInfo.addcheckProContList.push(obj);
+			},
 
 			//刪除新建行
-			delfieldBasis(item) {
-				var index = this.dataInfo.inspectProBasList.indexOf(item);
-				if(index !== -1) {
-					this.dataInfo.inspectProBasList.splice(index, 1);
-				}
+			deleteRow(index,rows) {//Table-操作列中的删除行
+				rows.splice(index,1);
+
 			},
-			//刪除新建行
-			delfieldProject(item) {
-				var index = this.dataInfo.inspectProProList.indexOf(item);
-				if(index !== -1) {
-					//this.attributes.splice(index, 1)
-					this.dataInfo.inspectProProList.splice(index, 1);
-				}
-			},
+
 			importdia() {
 				this.dialogVisible = true;
 			},
 			//点击按钮显示弹窗
 			visible() {
+				//分包人数据置空
+				//				this.datatinfo.checkProCont = [];
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
 					this.dataInfo.DEPT = res.data.deptName;
 					this.dataInfo.ENTERBY = res.data.nickname;
@@ -802,6 +766,7 @@
 			},
 			// 这里是修改
 			detail(dataid) {
+				
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.statusshow1 = false;
@@ -818,7 +783,8 @@
 						type: 'error'
 					});
 				});
-				var url = '/api/api-apps/app/workNot/' + dataid;
+				
+				var url = '/api/api-apps/app/inspectPro/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
 					this.dataInfo = res.data;
 					this.show = true;
@@ -862,6 +828,7 @@
 				this.$refs[dataInfo].validate((valid) => {
 					//		          if (valid) {
 					var url = '/api/api-apps/app/inspectPro/saveOrUpdate';
+					console.log(this.dataInfo);
 					this.$axios.post(url, this.dataInfo).then((res) => {
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -913,7 +880,7 @@
 				if(this.type == '1') {
 					this.dataInfo.P_LEADER = this.selUser[0].id;
 					this.dataInfo.P_LEADERDesc = this.selUser[0].nickname;
-					
+
 				} else {
 					this.dataInfo.ACCEPT_PERSON = this.selUser[0].id;
 					this.dataInfo.ACCEPT_PERSONDesc = this.selUser[0].nickname;

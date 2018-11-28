@@ -1,224 +1,332 @@
 <template>
-<div>
-	<div class="headerbg">
-		<vheader></vheader>
-		<navs_header></navs_header>
-	</div>
-	<div class="contentbg">
-		<!--左侧菜单内容显示 Begin-->
+	<div>
+		<div class="headerbg">
+			<vheader></vheader>
+			<navs_header></navs_header>
+		</div>
+		<div class="contentbg">
+			<!--左侧菜单内容显示 Begin-->
 		<navs_left></navs_left>
 		<!--左侧菜单内容显示 End-->
-
-		<!--右侧内容显示 Begin-->
-		<div class="wrapper wrapper-content">
-			<div class="ibox-content">
-				<div class="fixed-table-toolbar clearfix">
-					<div class="bs-bars pull-left">
-						<div class="hidden-xs" id="roleTableToolbar" role="group">
-							<button type="button" class="btn btn-green" @click="openAddMgr" id="">
-	                        	<i class="icon-add"></i>添加
-	              			 </button>
-							<button type="button" class="btn btn-bule button-margin" @click="modify">
-							    <i class="icon-edit"></i>修改
-							</button>
-							<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
-							    <i class="icon-trash"></i>删除
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="importData">
-							    <i class="icon-upload-cloud"></i>导入
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="exportData">
-							    <i class="icon-download-cloud"></i>导出
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="Printing">
-							    <i class="icon-print"></i>打印
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-					    		<i class="icon-search"></i>高级查询
-					    		<i class="icon-arrow1-down" v-show="down"></i>
-					    		<i class="icon-arrow1-up" v-show="up"></i>
-							</button>
+			<!--右侧内容显示 Begin-->
+			<div class="wrapper wrapper-content">
+				<div class="ibox-content">
+					<!--<navs_button></navs_button>-->
+					<div class="fixed-table-toolbar clearfix">
+						<div class="bs-bars pull-left">
+							<div class="hidden-xs" id="roleTableToolbar" role="group">
+								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+                                	<i class="icon-add"></i>添加
+                      			 </button>
+								<button type="button" class="btn btn-bule button-margin" @click="modify">
+								    <i class="icon-edit"></i>修改
+								</button>
+								<button type="button" class="btn btn-red button-margin" @click="delinfo">
+								    <i class="icon-trash"></i>删除
+								</button>
+								<button type="button" class="btn btn-primarys button-margin">
+							    	<i class="icon-upload-cloud"></i>导入
+								</button>
+								<button type="button" class="btn btn-primarys button-margin">
+							    	<i class="icon-download-cloud"></i>导出
+								</button>
+								<button type="button" class="btn btn-primarys button-margin">
+							    	<i class="icon-print"></i>打印
+								</button>
+								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
+						    		<i class="icon-search"></i>高级查询
+						    		<i class="icon-arrow1-down" v-show="down"></i>
+						    		<i class="icon-arrow1-up" v-show="up"></i>
+								</button>
+							</div>
+						</div>
+						<div class="columns columns-right btn-group pull-right">
+							<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
+							<div class="keep-open btn-group" title="列">
+								<el-dropdown :hide-on-click="false" class="pl10 btn btn-default btn-outline">
+									<span class="el-dropdown-link">
+										<font class="J_tabClose"><i class="icon-menu3"></i></font>
+										<i class="el-icon-arrow-down icon-arrow2-down"></i>
+									</span>
+									<el-dropdown-menu slot="dropdown">
+										<el-checkbox-group v-model="checkedName">
+											<el-dropdown-item v-for="(item,index) in tableHeader" :key="index">
+												<el-checkbox :label="item.label" name="type"></el-checkbox>
+											</el-dropdown-item>
+										</el-checkbox-group>
+									</el-dropdown-menu>
+								</el-dropdown>
+							</div>
 						</div>
 					</div>
-					<div class="columns columns-right btn-group pull-right">
-						<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
-						<tableControle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></tableControle>
-					</div>
+					<!-- 高级查询划出 Begin-->
+					<div v-show="search" class="pb10">
+									<el-form status-icon :model="searchList" label-width="70px">
+										<el-row :gutter="10" class="pb10">
+											<el-col :span="5">
+												<el-input v-model="searchList.V_NAME">
+													<template slot="prepend">委托单位名称</template>
+												</el-input>
+											</el-col>
+											<el-col :span="5">
+												<el-input v-model="searchList.ITEM_NAME">
+													<template slot="prepend">样品名称</template>
+												</el-input>
+											</el-col>
+											<!--<el-col :span="5">
+												<el-input v-model="searchList.S_ENGNAME">
+													<template slot="prepend">英文名称</template>
+												</el-input>
+											</el-col>-->
+											<el-col :span="5">
+												<el-input v-model="searchList.REPORT_NUM">
+													<template slot="prepend">检测报告编号</template>
+												</el-input>
+											</el-col>
+											<el-col :span="4">
+												<el-input v-model="searchList.PROXYNUM">
+													<template slot="prepend">检测委托书编号</template>
+												</el-input>
+											</el-col>
+										</el-row>
+										<el-row :gutter="20">
+											<el-col :span="5">
+												<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd HH:mm:ss">
+												</el-date-picker>
+											</el-col>
+											<el-col :span="5">
+												<el-input v-model="searchList.ENTERBY">
+													<template slot="prepend">录入人</template>
+												</el-input>
+											</el-col>
+											<el-col :span="3">
+
+												<el-select v-model="searchList.STATUS" placeholder="请选择状态">
+													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+													</el-option>
+
+												</el-select>
+											</el-col>
+											<el-col :span="2">
+												<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+											</el-col>
+										</el-row>
+									</el-form>
+								</div>
+					<!-- 高级查询划出 End-->
+
+					<el-row :gutter="10">
+						<el-col :span="5" class="lefttree">
+							<div class="lefttreebg">
+								<div class="left_tree_title clearfix" @click="min3max()">
+									<div class="pull-left pr20" v-if="ismin">组织机构</div>
+									<span class="pull-right navbar-minimalize minimalize-styl-2">
+										<i class="icon-doubleok icon-double-angle-left blue"></i>
+									</span>
+								</div>
+								<div class="left_treebg">
+									<div class="p15" v-if="ismin">
+										<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent"  :props="resourceProps" @node-click="handleNodeClick">
+										</el-tree>
+									</div>
+								</div>
+							</div>
+						</el-col>
+						<el-col :span="19" class="leftcont v-resize">
+							<!-- 表格 -->
+							<el-table :data="inspectList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'inspectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
+								</el-table-column>
+								<el-table-column label="检验委托书编号" sortable width="140px" prop="PROXYNUM" v-if="this.checkedName.indexOf('检验委托书编号')!=-1">
+								</el-table-column>
+								<el-table-column label="委托单位名称" sortable width="140px" prop="V_NAME" v-if="this.checkedName.indexOf('委托单位名称')!=-1">
+								</el-table-column>
+								<el-table-column label="生产单位名称" sortable width="100px" prop="P_NAME" v-if="this.checkedName.indexOf('生产单位名称')!=-1">
+								</el-table-column>
+								<el-table-column label="样品名称" sortable width="200px" prop="ITEM_NAME" v-if="this.checkedName.indexOf('样品名称')!=-1">
+								</el-table-column>
+								<el-table-column label="样品型号" sortable width="200px" prop="ITEM_MODEL" v-if="this.checkedName.indexOf('样品型号')!=-1">
+								</el-table-column>
+								<el-table-column label="样品状态" sortable width="200px" prop="ITEM_STATUS" v-if="this.checkedName.indexOf('样品状态')!=-1">
+								</el-table-column>
+								<el-table-column label="检测依据" width="200px" prop="REMARKS" sortable  v-if="this.checkedName.indexOf('检测依据')!=-1">
+								</el-table-column>
+								<el-table-column label="完成日期" width="200px" prop="COMPDATE" sortable  :formatter="dateFormat" data-type = ""  v-if="this.checkedName.indexOf('完成日期')!=-1">
+								</el-table-column>
+								<el-table-column label="完成方式" width="200px" prop="COMPMODE" sortable v-if="this.checkedName.indexOf('完成方式')!=-1">
+								</el-table-column>
+								<el-table-column label="检测报告编号" width="200px" prop="REPORT_NUM" sortable  v-if="this.checkedName.indexOf('检测报告编号')!=-1">
+								</el-table-column>
+								<el-table-column label="主检组" width="200px" prop="MAINGROUP" sortable  v-if="this.checkedName.indexOf('主检组')!=-1">
+								</el-table-column>
+								<el-table-column label="状态" width="200px" prop="STATUS" sortable v-if="this.checkedName.indexOf('状态')!=-1">
+								</el-table-column>
+								<el-table-column label="录入人" width="200px" prop="ENTERBY" sortable  v-if="this.checkedName.indexOf('录入人')!=-1">
+								</el-table-column>
+								<el-table-column label="录入时间" width="200px" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
+								</el-table-column>
+								<el-table-column label="版本" width="50px" prop="VERSION" sortable  v-if="this.checkedName.indexOf('版本')!=-1">
+								</el-table-column>
+							</el-table>
+							<!-- <span class="demonstration">显示总数</span>" -->
+							<!-- <el-pagination background layout="prev, pager, next" :total="2" style="float:right;margin-top:10px;"> -->
+							<!-- </el-pagination style="float:right;margin-top:10px;"> -->
+							<el-pagination background class="pull-right" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							</el-pagination>
+							<!-- 表格 -->
+						</el-col>
+					</el-row>
 				</div>
-				<!-- 高级查询划出 Begin-->
-				<div v-show="search" class="pb10">
-					<el-form status-icon :model="searchList" label-width="70px">
-						<el-row :gutter="10">
-							<el-col :span="5">
-								<el-input v-model="searchList.typename">
-									<template slot="prepend">类型名称</template>
-								</el-input>
-							</el-col>
-							<el-col :span="2">
-								<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
-							</el-col>
-						</el-row>
-					</el-form>
-				</div>
-				<!-- 高级查询划出 End-->
-				<el-row :gutter="0">
-					<el-col :span="24">
-						<!-- 表格 Begin-->
-						<el-table :data="userList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
-							</el-table-column>
-							<el-table-column label="组织机构代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('组织机构代码')!=-1">
-							</el-table-column>
-							<el-table-column label="单位名称" width="200" sortable prop="NAME" v-if="this.checkedName.indexOf('单位名称')!=-1">
-							</el-table-column>
-							<el-table-column label="联系电话" sortable prop="PHONE" v-if="this.checkedName.indexOf('联系电话')!=-1">
-							</el-table-column>
-							<el-table-column label="联系地址" sortable prop="CONTACT_ADDRESS" v-if="this.checkedName.indexOf('联系地址')!=-1">
-							</el-table-column>						
-							<el-table-column label="状态" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
-							</el-table-column>
-						</el-table>
-						<el-pagination background class="pull-right pt10 pb10" v-if="this.checkedName.length>0"
-				            @size-change="sizeChange"
-				            @current-change="currentChange"
-				            :current-page="page.currentPage"
-				            :page-sizes="[10, 20, 30, 40]"
-				            :page-size="page.pageSize"
-				            layout="total, sizes, prev, pager, next"
-				            :total="page.totalCount">
-				        </el-pagination>
-						<!-- 表格 End-->
-					</el-col>
-				</el-row>
 			</div>
 		</div>
+		<inspectmask :user="aaaData[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></inspectmask>
 		<!--右侧内容显示 End-->
-		<customermask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></customermask>
 	</div>
-</div>
+	</div>
 </template>
 <script>
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left3.vue'
 	import navs_header from '../common/nav_tabs.vue'
-//	import customermask from '../common/customer_mask.vue'
-	import table from '../plugin/table/table-normal.vue'
-	import tableControle from '../plugin/table-controle/controle.vue'
+	import inspectmask from '../proxiesDetails/inspect_proxyMask.vue'
+
 	export default {
 		name: 'user_management',
 		components: {
-			vheader,
-			navs_left,
-			navs_header,
-			tableControle,
-//			customermask,
-			table
+			'vheader': vheader,
+			'navs_header': navs_header,
+			'navs_left': navs_left,
+			'inspectmask': inspectmask,
 		},
 		data() {
 			return {
-				dataUrl: '/api/api-user/users',
-				searchData: {
-			        page: 1,
-			        limit: 10,//分页显示数
-			        nickname: '',
-			        enabled: '',
-			        searchKey: '',
-			        searchValue: '',
-			        companyId: '',
-			        deptId: ''
-		        },
-				checkedName: [
-					'组织机构代码',
-					'单位名称',
-					'性别',
-					'联系电话',
-					'联系地址',
-					'状态'
+				value: '',
+				options: [{
+					value: '1',
+					label: '草稿'
+				}, {
+					value: '2',
+					label: '审批中'
+				},{
+					value: '3',
+					label: '已发布'
+				},
+				{
+					value: '4',
+					label: '已取消'
+				},
+				{
+					value: '0',
+					label: '驳回'
+				}
+				
 				],
-				tableHeader: [
-					{
-						label: '组织机构代码',
-						prop: 'username'
+				isShow: false,
+				ismin: true,
+				loadSign: true, //加载
+				commentArr: {},
+				checkedName: [
+					'检验委托书编号',
+					'委托单位名称',
+					'生产单位名称',
+					'样品名称',
+					'样品型号',
+					'样品状态',
+					'检测依据',
+					'完成日期',
+					'完成方式',
+					'检测报告编号',
+					'主检组',
+					'状态',
+					'录入人',
+					'录入时间',
+					'版本'
+				],
+				tableHeader: [{
+						label: '检验委托书编号',
+						prop: 'PROXYNUM'
 					},
 					{
-						label: '单位名称',
-						prop: 'nickname'
+						label: '委托单位名称',
+						prop: 'V_NAME'
 					},
 					{
-						label: '联系电话',
-						prop: 'telephone'
+						label: '生产单位名称',
+						prop: 'P_NAME'
 					},
 					{
-						label: '联系地址',
-						prop: 'deptName'
+						label: '样品名称',
+						prop: 'ITEM_NAME'
+					},
+					{
+						label: '样品型号',
+						prop: 'ITEM_MODEL'
+					},
+					{
+						label: '样品状态',
+						prop: 'ITEM_STATUS'
+					},
+					{
+						label: '检测依据',
+						prop: 'REMARKS'
+					},
+					{
+						label: '完成日期',
+						prop: 'COMPDATE'
+					},
+					{
+						label: '完成方式',
+						prop: 'COMPMODE'
+					},
+					{
+						label: '检测报告编号',
+						prop: 'REPORT_NUM'
+					},
+					{
+						label: '主检组',
+						prop: 'MAINGROUP'
 					},
 					{
 						label: '状态',
-						prop: 'enabled'
-					}
-				],
-				leftNavs: [//leftNavs左侧菜单数据
+						prop: 'STATUS'
+					},
 					{
-						navicon: 'icon-user',
-						navtitle: '用户管理',
-						navherf: '/personinfo'
-					}, {
-						navicon: 'icon-edit',
-						navtitle: '机构管理',
-						navherf: '/dept_management'
-					}, {
-						navicon: 'icon-role-site',
-						navtitle: '角色管理',
-						navherf: '/role_management'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '客户管理',
-						navherf: '/customer_management'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '产品类别',
-						navherf: '/products_category'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '产品',
-						navherf: '/products'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测标准',
-						navherf: '/testing_standard'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测项目',
-						navherf: '/testing_projects'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测方法',
-						navherf: '/testing_methods'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '自动编号设置',
-						navherf: '/number_settings'
-					}
+						label: '录入人',
+						prop: 'ENTERBY'
+					},
+					{
+						label: '录入时间',
+						prop: 'ENTERDATE'
+					},
+					{
+						label: '版本',
+						prop: 'VERSION'
+					},
 				],
+
 				companyId: '',
 				deptId: '',
 				selUser: [],
 				'启用': true,
 				'冻结': false,
-				userList: [],
+				'男': true,
+				'女': false,
+				inspectList: [],
 				search: false,
 				show: false,
 				down: true,
 				up: false,
-				isShow: false,
-				ismin:true,
 				fullHeight:{//给浏览器高度赋值
 					height: '',
 				},
 				searchList: {
-					nickname: '',
-					enabled: '',
-					createTime: ''
+					ITEM_NAME: '',
+					REPORT_NUM: '',
+					PROXYNUM: '',
+					COMPDATE: '',
+					ENTERBY: '',
+					STATUS: '',
+					
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -228,38 +336,82 @@
 					children: "subDepts",
 					label: "simplename"
 				},
-				userData:[],
-				page: {//分页显示
+				treeData: [],
+				userData: [],
+				page: {
 					currentPage: 1,
 					pageSize: 10,
 					totalCount: 0
 				},
-				aaaData:[],
+				aaaData: [],
 			}
 		},
-
 		mounted(){
 			// 获取浏览器可视区域高度
 			window.onresize = () => {//获取浏览器可视区域高度
-		 	return (() => {
-		 		this.fullHeight.height = document.documentElement.clientHeight - 100+'px';
-		 	})()
-		 };
-
-			
+			 	return (() => {
+			 		this.fullHeight.height = document.documentElement.clientHeight - 100+'px';
+			 	})()
+			 };
 		},
 		methods: {
-			tableControle(data){
-				this.checkedName = data;
+			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
+				console.log();
+				return(
+			<span>
+              <i class={data.iconClass}></i>
+              <span>{node.label}</span>
+            </span>
+				);
+			},
+			// 点击节点
+			nodeClick: function(m) {
+				if(m.iconClass != 'icon-file-text') {
+					if(m.iconClass == 'icon-file-normal') {
+						m.iconClass = 'icon-file-open';
+					} else {
+						m.iconClass = 'icon-file-normal';
+					}
+				}
+				this.handleNodeClick();
+			},
+			expandClick: function(m) {
+				if(m.iconClass != 'icon-file-text') {
+					if(m.iconClass == 'icon-file-normal') {
+						m.iconClass = 'icon-file-open';
+					} else {
+						m.iconClass = 'icon-file-normal';
+					}
+				}
+				m.isFolder = !m.isFolder;
+			},
+
+			filterHandler(value, row, column) {
+				const property = column['property'];
+				return row[property] === value;
+			},
+			loadMore() {
+				if(this.loadSign) {
+					this.loadSign = false
+					this.page.currentPage++
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							return
+						}
+					setTimeout(() => {
+						this.loadSign = true
+					}, 1000)
+					this.requestData()
+					//			     console.log('到底了', this.page.currentPage)
+				}
 			},
 			sizeChange(val) {
-		      this.page.pageSize = val;
-		      this.requestData();
-		    },
-		    currentChange(val) {
-		      this.page.currentPage = val;
-		      this.requestData();
-		    },
+				this.page.pageSize = val;
+				this.requestData();
+			},
+			currentChange(val) {
+				this.page.currentPage = val;
+				this.requestData();
+			},
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
@@ -267,7 +419,24 @@
 			},
 			//添加用戶
 			openAddMgr() {
-//				this.$refs.child.resetNew();
+//				this.aaaData = [{
+//					companyName: '',
+//					deptName: '',
+//					username: '',
+//					password: '',
+//					nickname: '',
+//					birthday: '',
+//					sexName: '',
+//					idnumber: '',
+//					entrytime: '',
+//					roleId: [],
+//					roles: [],
+//					worknumber: '',
+//					phone: '',
+//					email: '',
+//					address: '',
+//					tips: ''
+//				}];
 				this.$refs.child.visible();
 			},
 			//修改用戶
@@ -286,7 +455,7 @@
 					});
 					return;
 				} else {
-					this.$refs.child.detail();
+					this.$refs.child.detail(this.aaaData[0].ID);
 				}
 			},
 			//高级查询
@@ -296,7 +465,7 @@
 					this.up = !this.up
 			},
 			// 删除
-			deluserinfo() {
+			delinfo() {
 				var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({
@@ -304,64 +473,60 @@
 						type: 'warning'
 					});
 					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时删除多个用户',
-						type: 'warning'
-					});
-					return;
 				} else {
-					var changeUser = selData[0];
-					var id = changeUser.id;
-					var url = '/api/api-user/users/' + id;
-					this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
+					var url = '/api/api-apps/app/inspectPro/deletes';
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					for(var i = 0; i < changeUser.length; i++) {
+						deleteid.push(changeUser[i].ID);
+					}
+					console.log(deleteid);
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+					var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {
+							params: data
+						}).then((res) => { //.delete 传数据方法
+							console.log(res);
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '删除成功',
-								type: 'success'
+								message: '网络错误，请重试',
+								type: 'error'
 							});
-							this.requestData();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
+					}).catch(() => {
+
 					});
 				}
 			},
-			// 导入
-			importData() {
-				
-			},
-			// 导出
-			exportData() {
-				
-			},
-			// 打印
-			Printing() {
-				
-			},
-			judge(data) {
-				//taxStatus 布尔值
-				return data.enabled ? '启用' : '冻结'
-			},
+			
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
 				if(date == undefined) {
 					return "";
 				}
-				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
+				return this.$moment(date).format("YYYY-MM-DD"); 
 			},
-			insert() {
-				this.users.push(this.user)
-			},
-			remove(index) {
-				this.users.splice(index, 1)
-			},
+
 			SelChange(val) {
 				this.selUser = val;
 			},
@@ -369,62 +534,110 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					nickname: this.searchList.nickname,
-					enabled: this.searchList.enabled,
-					searchKey: 'createTime',
-					searchValue: this.searchList.createTime,
-					companyId: this.companyId,
-					deptId: this.deptId
+					ITEM_NAME: this.searchList.ITEM_NAME,
+					REPORT_NUM: this.searchList.REPORT_NUM,
+					PROXYNUM: this.searchList.PROXYNUM,
+					COMPDATE: this.searchList.COMPDATE,
+					ENTERBY: this.searchList.ENTERBY,
+					STATUS: this.searchList.STATUS
 				}
-				var url = '/api/api-user/users';
+				var url = '/api/api-apps/app/inspectPro';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					this.userList = res.data.data;
+					console.log(res)
+					//					this.inspectList = res.data.data;
 					this.page.totalCount = res.data.count;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
+					}
+					this.commentArr[this.page.currentPage] = res.data.data
+					let newarr = []
+					for(var i = 1; i <= totalPage; i++) {
+
+						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+
+							for(var j = 0; j < this.commentArr[i].length; j++) {
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+
+					this.inspectList = newarr;
 				}).catch((wrong) => {})
-				this.userList.forEach((item, index) => {
-					var id = item.id;
-					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
-						this.userList.role = res.data.roles[0].name;
-					}).catch((wrong) => {})
-				})
 			},
-			loadMore () {
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page++
-			     if (this.page > 10) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     console.log('到底了', this.page)
-			   }
-			 },
+
+			//机构树
+			getKey() {
+				let that = this;
+				var url = '/api/api-user/depts/tree';
+				this.$axios.get(url, {}).then((res) => {
+					this.resourceData = res.data;
+					this.treeData = this.transformTree(this.resourceData);
+				});
+			},
+			transformTree(data) {
+				
+				for(var i = 0; i < data.length; i++) {
+					data[i].name = data[i].fullname;
+					if(!data[i].pid || $.isArray(data[i].subDepts)) {
+						data[i].iconClass = 'icon-file-normal';
+					} else {
+						data[i].iconClass = 'icon-file-text';
+					}
+					if($.isArray(data[i].subDepts)) {
+						data[i].children = this.transformTree(data[i].subDepts);
+					}
+				}
+				return data;
+				
+			},
 			handleNodeClick(data) {
+				console.log(111);
+				if(data.type == '1') {
+					this.companyId = data.id;
+					this.deptId = '';
+				} else {
+					this.deptId = data.id;
+					this.companyId = '';
+				}
+				this.requestData();
 			},
-			formatter(row, column) {
-				return row.enabled;
-			},
+
+			min3max() { //左侧菜单正常和变小切换
+				if($(".lefttree").hasClass("el-col-5")) {
+					$(".lefttree").removeClass("el-col-5");
+					$(".lefttree").addClass("el-col-1");
+					$(".leftcont").removeClass("el-col-19");
+					$(".leftcont").addClass("el-col-23");
+					$(".icon-doubleok").removeClass("icon-double-angle-left");
+					$(".icon-doubleok").addClass("icon-double-angle-right");
+				} else {
+					$(".lefttree").removeClass("el-col-1");
+					$(".lefttree").addClass("el-col-5");
+					$(".leftcont").removeClass("el-col-23");
+					$(".leftcont").addClass("el-col-19");
+					$(".icon-doubleok").removeClass("icon-double-angle-right");
+					$(".icon-doubleok").addClass("icon-double-angle-left");
+				}
+				this.ismin = !this.ismin;
+			}
 		},
-		mounted(){
-             // 注册scroll事件并监听  
-             let self = this;
-              $(".div-table").scroll(function(){
-                self.loadMore();
-            })
-        },
-
-
-		mounted() {
+		beforeMount() {
+			// 在页面挂载前就发起请求
 			this.requestData();
 			this.getKey();
+		},
+		mounted() {
+
 		},
 	}
 </script>
 
-<style scoped>
+<style scope>
 
 </style>

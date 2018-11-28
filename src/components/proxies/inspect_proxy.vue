@@ -21,7 +21,7 @@
 								<button type="button" class="btn btn-bule button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改
 								</button>
-								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
+								<button type="button" class="btn btn-red button-margin" @click="delinfo">
 								    <i class="icon-trash"></i>删除
 								</button>
 								<button type="button" class="btn btn-primarys button-margin">
@@ -455,13 +455,7 @@
 					});
 					return;
 				} else {
-					this.aaaData[0].roleId = [];
-					var roles = this.aaaData[0].roles;
-					for(var i = 0; i < roles.length; i++) {
-						this.aaaData[0].roleId.push(roles[i].id);
-					}
-					//					console.log(this.aaaData[0].roleId);
-					this.$refs.child.detail();
+					this.$refs.child.detail(this.aaaData[0].ID);
 				}
 			},
 			//高级查询
@@ -471,7 +465,7 @@
 					this.up = !this.up
 			},
 			// 删除
-			deluserinfo() {
+			delinfo() {
 				var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({
@@ -479,30 +473,47 @@
 						type: 'warning'
 					});
 					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时删除多个用户',
-						type: 'warning'
-					});
-					return;
 				} else {
-					var changeUser = selData[0];
-					var id = changeUser.id;
-					var url = '/api/api-user/users/' + id;
-					this.$axios.delete(url, {}).then((res) => { //.delete 传数据方法
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
+					var url = '/api/api-apps/app/inspectPro/deletes';
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					for(var i = 0; i < changeUser.length; i++) {
+						deleteid.push(changeUser[i].ID);
+					}
+					console.log(deleteid);
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+					var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {
+							params: data
+						}).then((res) => { //.delete 传数据方法
+							console.log(res);
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '删除成功',
-								type: 'success'
+								message: '网络错误，请重试',
+								type: 'error'
 							});
-							this.requestData();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
+					}).catch(() => {
+
 					});
 				}
 			},

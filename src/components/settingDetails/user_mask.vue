@@ -46,7 +46,7 @@
 								<el-row :gutter="30">
 									<el-col :span="12">
 										<el-form-item label="登录名称" prop="username">
-											<el-input v-model="user.username"></el-input>
+											<el-input v-model="user.username" v-bind:disabled="user.id"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="12">
@@ -387,7 +387,9 @@
 			},
 			// 这里是修改
 			detail() {
+				console.log(this.user.id);
 				this.show = true;
+				
 			},
 			//点击关闭按钮
 			close() {

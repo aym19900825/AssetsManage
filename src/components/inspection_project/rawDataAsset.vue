@@ -1,6 +1,6 @@
 <template>
 <div>
-	<el-card class="box-card" :body-style="{ padding: '10px' }">
+	<el-card class="box-card" :body-style="{ padding: '10px' }" shadow="never">
 		<div slot="header" class="title clearfix">
 			<span>检测仪器</span>
 			<!--按钮操作行 Begin-->
@@ -215,7 +215,40 @@
 			},
 			indexMethod(index) {
 				return index + 1;
-				console.log(index);
+			},
+			viewfield_rawDataAsset(ID){//点击父级筛选出子级数据
+				if(ID=='null'){
+					this.rawDataAssetForm.inspectionList = []; 
+					return false;
+					//todo  相关数据设置
+				}
+				var url = '/api/api-apps/app/rawDataAsset/INSPECTION_PROJECT2/' + ID;
+				console.log(ID);
+
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+					this.page.totalCount = res.data.count;	
+					//总的页数
+					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
+					if(this.page.currentPage >= totalPage){
+						 this.loadSign = false
+					}else{
+						this.loadSign=true
+					}
+					this.rawDataAssetForm.inspectionList=res.data.RAW_DATA_ASSETList;
+					//console.log(this.rawDataAssetForm.inspectionList[0].ID);
+					//默认主表第一条数据
+					// if(this.rawDataAssetForm.inspectionList.length > 0){
+					// 	console.log(this.rawDataAssetForm.inspectionList.length);
+					// 	this.$refs.professionGrochild.viewfield_inspectionPro2(this.rawDataAssetForm.inspectionList[0].ID);
+					// }else{
+					// 	this.$refs.professionGrochild.viewfield_inspectionPro2('null');
+					// }
+
+					for(var j = 0; j < this.rawDataAssetForm.inspectionList.length; j++){
+						this.rawDataAssetForm.inspectionList[j].isEditing = false;
+					}
+				}).catch((wrong) => {})
 			},
 			requestData_rawDataAsset(index) {//加载数据
 				var data = {
@@ -254,38 +287,6 @@
 			},
 			formatter(row, column) {
 				return row.enabled;
-			},
-			viewfield_rawDataAsset(ID){//点击父级筛选出子级数据
-				if(ID=='null'){
-					this.awDataAssetForm.inspectionList = []; 
-					return false;
-					//todo  相关数据设置
-				}
-				var url = '/api/api-apps/app/awDataAsset/INSPECTION_PROJECT2/' + ID;
-				this.$axios.get(url, {}).then((res) => {
-					//console.log(res);
-					this.page.totalCount = res.data.count;	
-					//总的页数
-					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
-					if(this.page.currentPage >= totalPage){
-						 this.loadSign = false
-					}else{
-						this.loadSign=true
-					}
-					this.awDataAssetForm.inspectionList=res.data.PROFESSION_GROUPList;
-					//console.log(this.awDataAssetForm.inspectionList[0].ID);
-					//默认主表第一条数据
-					// if(this.awDataAssetForm.inspectionList.length > 0){
-					// 	console.log(this.awDataAssetForm.inspectionList.length);
-					// 	this.$refs.professionGrochild.viewfield_inspectionPro2(this.awDataAssetForm.inspectionList[0].ID);
-					// }else{
-					// 	this.$refs.professionGrochild.viewfield_inspectionPro2('null');
-					// }
-
-					for(var j = 0; j < this.awDataAssetForm.inspectionList.length; j++){
-						this.awDataAssetForm.inspectionList[j].isEditing = false;
-					}
-				}).catch((wrong) => {})
 			},
 			addfield_rawDataAsset(P_NUM) { //插入行到产品类型Table中
 				var isEditingflag=false;

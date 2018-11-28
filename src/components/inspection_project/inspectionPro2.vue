@@ -1,5 +1,5 @@
 <template>
-<div style="width:2540px">
+<div style="width:3130px">
 	<div class="pull-left ml20" style="width:500px">
 		<el-card class="box-card" :body-style="{ padding: '10px' }">
 			<div slot="header" class="title clearfix">
@@ -131,18 +131,33 @@
 		<professionGro ref="professionGrochild"></professionGro>
 	</div>
 	<div class="pull-left ml20" style="width:500px">
+		<inspectionMet2 ref="inspectionMet2child"></inspectionMet2>
+	</div>
+	<div class="pull-left ml20" style="width:500px">
+		<rawDataTem2 ref="rawDataTem2child"></rawDataTem2>
+	</div>
+	<div class="pull-left ml20" style="width:500px">
+		<inspectionRepTem2 ref="inspectionRepTem2child"></inspectionRepTem2>
+	</div>
+	<div class="pull-left ml20" style="width:500px">
 		<rawDataAsset ref="rawDataAssetchild"></rawDataAsset>
 	</div>
 </div>
 </template>
 <script>
-	import professionGro from '../inspection_project/professionGro.vue'
-	import rawDataAsset from '../inspection_project/rawDataAsset.vue'
+	import professionGro from '../inspection_project/professionGro.vue'//检验/检测项目
+	import inspectionMet2 from '../inspection_project/inspectionMet2.vue'//检验/检测方法
+	import rawDataTem2 from '../inspection_project/rawDataTem2.vue'//原始数据模板
+	import inspectionRepTem2 from '../inspection_project/inspectionRepTem2.vue'//检验/检测报告模板
+	import rawDataAsset from '../inspection_project/rawDataAsset.vue'//仪器和计量器具
 	export default {
 		name: 'inspectionPro2',
 		components: {
 			professionGro,//检验/检测项目
-			rawDataAsset//仪器和计量器具
+			inspectionMet2,//检验/检测方法
+			rawDataTem2,//原始数据模板
+			inspectionRepTem2,//检验/检测报告模板
+			rawDataAsset,//仪器和计量器具
 		},
 		data() {
 			return {
@@ -254,10 +269,10 @@
 						this.loadSign=true
 					}
 					this.inspectionPro2Form.inspectionList=res.data.INSPECTION_PROJECT2List;
-					//console.log(this.inspectionPro2Form.inspectionList[0].ID);
+					
 					//默认主表第一条数据
 					if(this.inspectionPro2Form.inspectionList.length > 0){
-						console.log(this.inspectionPro2Form.inspectionList.length);
+						
 						this.$refs.professionGrochild.viewfield_professionGro(this.inspectionPro2Form.inspectionList[0].ID);
 					}else{
 						this.$refs.professionGrochild.viewfield_professionGro('null');
@@ -407,13 +422,19 @@
             	});
 			},
 			addchildRow(row) {//添加子项数据
-				this.$refs.professionGrochild.addfield_professionGro(row.P_NUM);
-				this.$refs.rawDataAssetchild.addfield_rawDataAsset(row.P_NUM);
+				this.$refs.professionGrochild.addfield_professionGro(row.P_NUM);//专业组
+				this.$refs.inspectionMet2child.addfield_inspectionMet2(row.P_NUM);//检验/检测方法
+				this.$refs.rawDataTem2child.addfield_rawDataTem2(row.P_NUM);//原始数据模板
+				this.$refs.inspectionRepTem2child.addfield_inspectionRepTem2(row.P_NUM);//检验/检测报告模板
+				this.$refs.rawDataAssetchild.addfield_rawDataAsset(row.P_NUM);//仪器和计量器具
 				//console.log();
 			},
 			viewchildRow(ID) {//查看子项数据
-				this.$refs.professionGrochild.viewfield_professionGro(ID);
-				this.$refs.rawDataAssetchild.viewfield_rawDataAsset(ID);
+				this.$refs.professionGrochild.viewfield_professionGro(ID);//专业组
+				this.$refs.inspectionMet2child.viewfield_inspectionMet2(ID);//检验/检测方法
+				this.$refs.rawDataTem2child.viewfield_rawDataTem2(ID);//原始数据模板
+				this.$refs.inspectionRepTem2child.viewfield_inspectionRepTem2(ID);//检验/检测报告模板
+				this.$refs.rawDataAssetchild.viewfield_rawDataAsset(ID);//仪器和计量器具
 			},
 		},
 		

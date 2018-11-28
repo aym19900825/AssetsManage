@@ -1,12 +1,12 @@
 <template>
-<div style="width:3540px">
+<div style="width:2540px">
 	<div class="pull-left ml20" style="width:500px">
 		<el-card class="box-card" :body-style="{ padding: '10px' }">
 			<div slot="header" class="title clearfix">
-				<span>产品名称</span>
+				<span>检验/检测项目</span>
 				<!--按钮操作行 Begin-->
 					<div class="columns pull-right">
-						<el-input placeholder="请输入产品名称" v-model="search" class="input-with-select">
+						<el-input placeholder="请输入项目名称" v-model="search" class="input-with-select">
 							<el-button slot="append" icon="el-icon-search"></el-button>
 						</el-input>
 					</div>
@@ -16,14 +16,14 @@
 				<div class="pb10 clearfix">
 					<!-- <div class="columns pull-left"><el-button type="primary" size="small">关联父级</el-button></div> -->
 						<!-- <div class="table-func pull-right">
-						<el-button type="success" size="mini" round @click="addfield_product2" class="pull-right">
+						<el-button type="success" size="mini" round @click="addfield_inspectionPro2" class="pull-right">
 							<i class="icon-add"></i>
 							<font>新建</font>
 						</el-button>
 					</div> -->
 				</div>
-				<el-form :model="product2Form" ref="product2Form">
-				  <el-table :data="product2Form.inspectionList.filter(data => !search || data.PRO_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="410" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'product2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
+				<el-form :model="inspectionPro2Form" ref="inspectionPro2Form">
+				  <el-table :data="inspectionPro2Form.inspectionList.filter(data => !search || data.P_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="410" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'inspectionPro2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
 					<el-table-column prop="iconOperation" fixed="left" label="操作" width="50">
 				      <template slot-scope="scope">
 				        <!-- <el-button type="text" id="Edit" size="medium" @click.native.prevent="saveRow(scope.row)" v-if="scope.row.isEditing">
@@ -39,41 +39,51 @@
 				      </template>
 				    </el-table-column>
 
-				  	<el-table-column label="所属类别编号" width="120" prop="NUM">
+				  	<el-table-column label="所属标准编号" width="120" prop="S_NUM">
 				      <template slot-scope="scope">
-				        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-				        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" disabled></el-input><span v-else="v-else">{{scope.row.NUM}}</span>
+				        <el-form-item :prop="'inspectionList.'+scope.$index + '.S_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+				        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" disabled></el-input><span v-else="v-else">{{scope.row.S_NUM}}</span>
 						</el-form-item>
 				      </template>
 				    </el-table-column>
 
-				  	<el-table-column label="产品编号" width="120" prop="PRO_NUM">
+				  	<el-table-column label="检验/检测项目编号" width="140" prop="P_NUM">
 				      <template slot-scope="scope">
-				        <el-form-item :prop="'inspectionList.'+scope.$index + '.PRO_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-				        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PRO_NUM" disabled></el-input><span v-else="v-else">{{scope.row.PRO_NUM}}</span>
+				        <el-form-item :prop="'inspectionList.'+scope.$index + '.P_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+				        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" disabled></el-input><span v-else="v-else">{{scope.row.P_NUM}}</span>
 						</el-form-item>
 				      </template>
 				    </el-table-column>
 
-				    <el-table-column label="产品名称" sortable width="200" prop="PRO_NAME">
+				    <el-table-column label="项目名称" sortable width="200" prop="P_NAME">
 				      <template slot-scope="scope">
-				        <el-form-item :prop="'inspectionList.'+scope.$index + '.PRO_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-				        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PRO_NAME" placeholder="请输入内容">
+				        <el-form-item :prop="'inspectionList.'+scope.$index + '.P_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+				        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NAME" placeholder="请输入内容">
 				        		<el-button slot="append" icon="icon-search"></el-button>
-				        	</el-input><span class="blue" @click="viewchildRow(scope.row.ID)" v-else="v-else">{{scope.row.PRO_NAME}}</span>
+				        	</el-input><span class="blue" @click="viewchildRow(scope.row.ID)" v-else="v-else">{{scope.row.P_NAME}}</span>
+						</el-form-item>
+				      </template>
+				    </el-table-column>
+
+				    <el-table-column label="单价" sortable width="140" prop="UNITCOST">
+				      <template slot-scope="scope">
+				        <el-form-item :prop="'inspectionList.'+scope.$index + '.UNITCOST'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+				        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.UNITCOST" placeholder="请输入内容">
+				        		<el-button slot="append" icon="icon-search"></el-button>
+				        	</el-input><span v-else="v-else">{{scope.row.UNITCOST}}</span>
 						</el-form-item>
 				      </template>
 				    </el-table-column>
 
 					<el-table-column prop="STATUS" label="状态" sortable width="80" :formatter="judge">
 				      <template slot-scope="scope">
-				        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" disabled></el-input><span v-else="v-else">{{scope.row.STATUS}}</span>
+				         <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" disabled></el-input><span v-else="v-else">{{scope.row.STATUS}}</span>
 				      </template>
 				    </el-table-column>
 					
 					<!-- <el-table-column prop="VERSION" label="版本" sortable width="120">
 				      <template slot-scope="scope">
-				       	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" disabled></el-input><span v-else="v-else">{{scope.row.VERSION}}</span>
+				       	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" disabled></el-input><span v-else="v-else">#r{{scope.row.VERSION}}</span>
 				      </template>
 				    </el-table-column> -->
 
@@ -88,6 +98,7 @@
 				      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHANGEDATE" disabled></el-input><span v-else="v-else">{{scope.row.CHANGEDATE}}</span>
 				      </template>
 				    </el-table-column>
+
 				    <el-table-column prop="operationChild" fixed="right" align="center" label="增加子项" width="80">
 					 	<template slot-scope="scope">
 						 	<el-button type="text" id="Edit" size="medium" @click.native.prevent="saveRow(scope.row)" v-if="scope.row.isEditing">
@@ -102,7 +113,7 @@
 					 
 				  </el-table>
 				</el-form>
-				<!-- 表格分页 Begin-->
+				<!-- 表格 Begin-->
 				<el-pagination background class="pull-right pt10 pb10"
 		            @size-change="sizeChange"
 		            @current-change="currentChange"
@@ -113,27 +124,29 @@
 		            :total="page.totalCount">
 		        </el-pagination>
 				<!-- 表格 End-->
-				
 			</div>
 		</el-card>
 	</div>
-	<div class="pull-left" style="width:3000px">
-		<inspectionSta2 ref="inspectionSta2child"></inspectionSta2>
+	<div class="pull-left ml20" style="width:500px">
+		<professionGro ref="professionGrochild"></professionGro>
+	</div>
+	<div class="pull-left ml20" style="width:500px">
+		<rawDataAsset ref="rawDataAssetchild"></rawDataAsset>
 	</div>
 </div>
-
 </template>
 <script>
-	import inspectionSta2 from '../inspection_project/inspectionSta2.vue'
+	import professionGro from '../inspection_project/professionGro.vue'
+	import rawDataAsset from '../inspection_project/rawDataAsset.vue'
 	export default {
-		name: 'product2',
+		name: 'inspectionPro2',
 		components: {
-			inspectionSta2,//检验/检测标准
+			professionGro,//检验/检测项目
+			rawDataAsset//仪器和计量器具
 		},
-
 		data() {
 			return {
-				product2Form:{
+				inspectionPro2Form:{
 					inspectionList: []
 				},
 				fullHeight:{//给浏览器高度赋值
@@ -161,8 +174,6 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-
-				// childData: {}
 			}
 		},
 		methods: {
@@ -195,21 +206,21 @@
 			     setTimeout(() => {
 			       this.loadSign = true
 			     }, 1000)
-			     this.requestData_product2()
+			     this.requestData_inspectionPro2()
 			   }
 			 },
 			sizeChange(val) {//页数
 		      this.page.pageSize = val;
-		      this.requestData_product2();
+		      this.requestData_inspectionPro2();
 		    },
 		    currentChange(val) {//当前页
 		      this.page.currentPage = val;
-		      this.requestData_product2();
+		      this.requestData_inspectionPro2();
 		    },
-			searchinfo(index) {//设置默认分页数
+			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
-				this.requestData_product2();
+				this.requestData_inspectionPro2();
 			},
 			judge(data) {//taxStatus 状态布尔值
 				return data.enabled ? '活动' : '不活动'
@@ -222,10 +233,18 @@
 				}
 				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 			},
-			viewfield_product2(ID){//点击父级筛选出子级数据
-				var url = '/api/api-apps/app/productType2/' + ID;
+			indexMethod(index) {
+				return index + 1;
+			},
+			viewfield_inspectionPro2(ID){//点击父级筛选出子级数据
+				if(ID=='null'){
+					this.inspectionPro2Form.inspectionList = []; 
+					return false;
+					//todo  相关数据设置
+				}
+				var url = '/api/api-apps/app/inspectionPro2/INSPECTION_STANDARDS2/' + ID;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
+					//console.log(res);
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -234,29 +253,27 @@
 					}else{
 						this.loadSign=true
 					}
-					this.product2Form.inspectionList=res.data.PRODUCT2List;
-
+					this.inspectionPro2Form.inspectionList=res.data.INSPECTION_PROJECT2List;
+					//console.log(this.inspectionPro2Form.inspectionList[0].ID);
 					//默认主表第一条数据
-					if(this.product2Form.inspectionList.length > 0){
-						//console.log('产品名称字表调用===='+this.product2Form.inspectionList[0].ID);
-						this.$refs.inspectionSta2child.viewfield_inspectionSta2(this.product2Form.inspectionList[0].ID);
+					if(this.inspectionPro2Form.inspectionList.length > 0){
+						console.log(this.inspectionPro2Form.inspectionList.length);
+						this.$refs.professionGrochild.viewfield_professionGro(this.inspectionPro2Form.inspectionList[0].ID);
 					}else{
-						//console.log('产品名称字表调用====null');
-						this.$refs.inspectionSta2child.viewfield_inspectionSta2('null');
+						this.$refs.professionGrochild.viewfield_professionGro('null');
 					}
-					
-					
-					for(var j = 0; j < this.product2Form.inspectionList.length; j++){
-						this.product2Form.inspectionList[j].isEditing = false;
+
+					for(var j = 0; j < this.inspectionPro2Form.inspectionList.length; j++){
+						this.inspectionPro2Form.inspectionList[j].isEditing = false;
 					}
 				}).catch((wrong) => {})
 			},
-			requestData_product2(index) {//默认加载所有数据
+			requestData_inspectionPro2(index) {//加载数据
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				}
-				var url = '/api/api-apps/app/product2';
+				var url = '/api/api-apps/app/inspectionPro2';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
@@ -271,27 +288,28 @@
 					this.commentArr[this.page.currentPage]=res.data.data
 					let newarr=[]
 					for(var i = 1; i <= totalPage; i++){
+					
 						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
+							
 							for(var j = 0; j < this.commentArr[i].length; j++){
 								this.commentArr[i][j].isEditing = false;
-								//console.log("this.commentArr[i][j]++++++"+this.commentArr);
 								newarr.push(this.commentArr[i][j])
 							}
 						}
 					}
-					this.product2Form.inspectionList = newarr;//滚动加载更多
+					
+					this.inspectionPro2Form.inspectionList = newarr;
 				}).catch((wrong) => {})
 			},
-			
+			handleNodeClick(data) {
+			},
 			formatter(row, column) {
 				return row.enabled;
 			},
-
-			addfield_product2(NUM) { //插入行到产品类型Table中
-				 var isEditingflag=false;
-				console.log(this.product2Form.inspectionList);
-				for(var i=0;i<this.product2Form.inspectionList.length; i++){
-					if (this.product2Form.inspectionList[i].isEditing==false){
+			addfield_inspectionPro2(S_NUM) { //插入行到产品类型Table中
+				var isEditingflag=false;
+				for(var i=0;i<this.inspectionPro2Form.inspectionList.length; i++){
+					if (this.inspectionPro2Form.inspectionList[i].isEditing==false){
 						isEditingflag=false;
 					}else{
                         isEditingflag=true;
@@ -306,16 +324,17 @@
 						this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 						var index=this.$moment(date).format("YYYYMMDDHHmmss");
 						var obj = {
-							"PRO_NAME": '',
+							"P_NAME": '',
+							"UNITCOST": '',
 							"STATUS": '活动',
-							"NUM": NUM,
-							"PRO_NUM": 'PR' + index,
+							"S_NUM": S_NUM,
+							"P_NUM": 'PRO' + index,
 							"VERSION": 1,
 							"CHANGEBY": this.currentUser,
 							"CHANGEDATE": this.currentDate,
 							"isEditing": true,
 						};
-						this.product2Form.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
+						this.inspectionPro2Form.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
 					}).catch((err)=>{
 						this.$message({
 							message:'网络错误，请重试',
@@ -327,18 +346,19 @@
 				}
 			},
 			saveRow (row) {//Table-操作列中的保存行
-				this.$refs['product2Form'].validate((valid) => {
+				this.$refs['inspectionPro2Form'].validate((valid) => {
 					row.VERSION = row.VERSION + 1;//修改保存后版本号+1
 		          if (valid) {
-					var url = '/api/api-apps/app/product2/saveOrUpdate';
+					var url = '/api/api-apps/app/inspectionPro2/saveOrUpdate';
 					var submitData = {
 						"ID":row.ID,
-						"NUM": row.NUM,
-						"PRO_NAME": row.PRO_NAME,
+						"S_NUM": row.S_NUM,
+						"P_NAME": row.P_NAME,
+						"UNITCOST":  row.UNITCOST,
 						"STATUS": row.STATUS,
 						"CHANGEBY": row.CHANGEBY,
 					    "CHANGEDATE": row.CHANGEDATE,
-					    "PRO_NUM": row.PRO_NUM,
+					    "P_NUM": row.P_NUM,
 					    "VERSION": row.VERSION,
 					}
 					this.$axios.post(url, submitData).then((res) => {
@@ -348,7 +368,7 @@
 								type: 'success'
 							});
 							//重新加载数据
-							this.requestData_product2();
+							this.requestData_inspectionPro2();
 						}
 					}).catch((err) => {
 						this.$message({
@@ -366,7 +386,7 @@
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                 }).then(({ value }) => {
-                	var url = '/api/api-apps/app/product2/' + row.ID;
+                	var url = '/api/api-apps/app/inspectionPro2/' + row.ID;
                     this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 					//resp_code == 0 是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -374,7 +394,7 @@
 								message: '删除成功',
 								type: 'success'
 							});
-							this.requestData_product2();
+							this.requestData_inspectionPro2();
 						}
 					}).catch((err) => {
 						this.$message({
@@ -387,16 +407,18 @@
             	});
 			},
 			addchildRow(row) {//添加子项数据
-				this.$refs.inspectionSta2child.addfield_inspectionSta2(row.PRO_NUM);
+				this.$refs.professionGrochild.addfield_professionGro(row.P_NUM);
+				this.$refs.rawDataAssetchild.addfield_rawDataAsset(row.P_NUM);
 				//console.log();
 			},
 			viewchildRow(ID) {//查看子项数据
-				this.$refs.inspectionSta2child.viewfield_inspectionSta2(ID);
+				this.$refs.professionGrochild.viewfield_professionGro(ID);
+				this.$refs.rawDataAssetchild.viewfield_rawDataAsset(ID);
 			},
 		},
 		
 		mounted() {
-			this.requestData_product2();
+			this.requestData_inspectionPro2();
 			window.onresize = () => {//获取浏览器可视区域高度
 			 	return (() => {
 			 		this.fullHeight.height = document.documentElement.clientHeight - 180+'px';

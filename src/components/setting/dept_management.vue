@@ -15,10 +15,16 @@
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
 								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
-                                	<i class="icon-add"></i>添加
+                                	<i class="icon-add"></i>添加机构
                        			</button>
+                       			<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+                                	<i class="icon-add"></i>添加部门
+                       			</button>
+                       			<button type="button" class="btn btn-bule button-margin" @click="modify" id="">
+						    		<i class="icon-edit"></i>修改机构
+								</button>
 								<button type="button" class="btn btn-bule button-margin" @click="modify" id="">
-						    		<i class="icon-edit"></i>修改
+						    		<i class="icon-edit"></i>修改部门
 								</button>
 								<button type="button" class="btn btn-red button-margin" id="" @click="deluserinfo">
 						    		<i class="icon-trash"></i>删除
@@ -49,16 +55,21 @@
 						</div>
 					</div>
 					<!-- 高级查询划出 -->
-					<div v-show="search">
+					<div v-show="search" class="pb10">
 						<el-form status-icon :model="searchDept" label-width="70px">
 							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-form-item label="机构名称">
-										<el-input v-model="searchDept.simplename"></el-input>
-									</el-form-item>
+									<el-input v-model="searchDept.CODE">
+										<template slot="prepend">机构编码</template>
+									</el-input>
+								</el-col>
+								<el-col :span="5">
+									<el-input v-model="searchDept.NAME">
+										<template slot="prepend">机构名称</template>
+									</el-input>
 								</el-col>
 								<el-col :span="2">
-									<el-button type="primary" @click="searchinfo" size="small" >搜索</el-button>
+									<el-button type="primary" @click="searchinfo" size="small"  style="margin:4px">搜索</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -112,30 +123,30 @@
 					height: '',
 				},
 				checkedName: [
-					'ID',
-					'机构简称',
-					'类型',
-					'备注',
+					'机构名称',
+					'机构编码',
+					'版本',
+					'电话号',
 				],
 				columns: [
 					{
-						text: 'ID',
-						dataIndex: 'id',
+						text: '机构名称',
+						dataIndex: 'NAME',
 						isShow:true,
 					},
 					{
-						text: '机构简称',
-						dataIndex: 'simplename',
+						text: '机构编码',
+						dataIndex: 'CODE',
 						isShow:true,
 					},
 					{
-						text: '类型',
-						dataIndex: 'type',
+						text: '版本',
+						dataIndex: 'VERSION',
 						isShow:true,
 					},
 					{
-						text: '备注',
-						dataIndex: 'tips',
+						text: '电话号',
+						dataIndex: 'PHONE',
 						isShow:true,
 					}
 				],
@@ -161,7 +172,8 @@
 				down: true,
 				up: false,
 				searchDept: {
-					simplename: ''
+					CODE:'',
+					NAME:''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -214,7 +226,8 @@
 					params: {
 						page: 1,
 						limit: 10,
-						simplename: this.searchDept.simplename
+						CODE: this.searchDept.CODE,
+						NAME: this.searchDept.NAME
 					}
 				};
 				var url = '/api/api-user/depts';
@@ -320,7 +333,8 @@
 				this.$axios.get(url, {
 //					params: data
 				}).then((res) => {
-					console.log(res)
+					console.log(11111111);
+					console.log(res);
 					let result=res.data
 					for(let i=0;i<result.length;i++){
 						if(typeof(result[i].subDepts)!="undefined"&&result[i].subDepts.length>0){

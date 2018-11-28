@@ -51,8 +51,32 @@
 						<el-row :gutter="10">
 							<el-col :span="5">
 								<el-input v-model="searchList.typename">
-									<template slot="prepend">类型名称</template>
+									<template slot="prepend">分包协议编号</template>
 								</el-input>
+							</el-col>
+							<el-col :span="5">
+								<el-input v-model="searchList.typename">
+									<template slot="prepend">委托书编号</template>
+								</el-input>
+							</el-col>
+							<el-col :span="5">
+								<el-input v-model="searchList.typename">
+									<template slot="prepend">分包单位</template>
+								</el-input>
+							</el-col>
+							<el-col :span="4">
+								<el-input v-model="searchList.typename">
+									<template slot="prepend">录入人</template>
+								</el-input>
+							</el-col>
+							<el-col :span="3">
+								<div class="block">
+								    <el-date-picker
+								      v-model="searchList.ENTERDATE"
+								      type="date" style="width: 100%;padding-top:3px"
+								      placeholder="录入时间">
+								    </el-date-picker>
+								  </div>
 							</el-col>
 							<el-col :span="2">
 								<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
@@ -64,18 +88,32 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :data="userList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+						<el-table :data="subagree" border stripe height="400" style="width: 100%;" :default-sort="{prop:'subagree', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 							</el-table-column>
-							<el-table-column label="组织机构代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('组织机构代码')!=-1">
+							<el-table-column label="分包协议编号" width="150" sortable prop="PROXY_CONTRACT_NUM" v-if="this.checkedName.indexOf('分包协议编号')!=-1">
 							</el-table-column>
-							<el-table-column label="单位名称" width="200" sortable prop="NAME" v-if="this.checkedName.indexOf('单位名称')!=-1">
+							<el-table-column label="委托书编号" width="150" sortable prop="PROXYNUM" v-if="this.checkedName.indexOf('委托书编号')!=-1">
 							</el-table-column>
-							<el-table-column label="联系电话" sortable prop="PHONE" v-if="this.checkedName.indexOf('联系电话')!=-1">
+							<el-table-column label="分包单位" width="150" sortable prop="VENDOR" v-if="this.checkedName.indexOf('分包单位')!=-1">
 							</el-table-column>
-							<el-table-column label="联系地址" sortable prop="CONTACT_ADDRESS" v-if="this.checkedName.indexOf('联系地址')!=-1">
+							<el-table-column label="检验/检测项目内容" width="150" sortable prop="P_REMARKS" v-if="this.checkedName.indexOf('检验/检测项目内容')!=-1">
 							</el-table-column>						
-							<el-table-column label="状态" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
+							<el-table-column label="对环境和操作人员要求" width="180" sortable prop="REQUIRE" :formatter="judge" v-if="this.checkedName.indexOf('对环境和操作人员要求')!=-1">
+							</el-table-column>
+							<el-table-column label="对分包报告/证书的要求" width="180" sortable prop="Q_TYPE" :formatter="judge" v-if="this.checkedName.indexOf('对分包报告/证书的要求')!=-1">
+							</el-table-column>
+							<el-table-column label="检验检测费用" width="120" sortable prop="CHECKCOST" :formatter="judge" v-if="this.checkedName.indexOf('检验检测费用')!=-1">
+							</el-table-column>
+							<el-table-column label="信息状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
+							</el-table-column>
+							<el-table-column label="录入人" width="100" sortable prop="ENTERBY" :formatter="judge" v-if="this.checkedName.indexOf('录入人')!=-1">
+							</el-table-column>
+							<el-table-column label="录入时间" width="120" sortable prop="ENTERDATE" :formatter="judge" v-if="this.checkedName.indexOf('录入时间')!=-1">
+							</el-table-column>
+							<el-table-column label="修改人" width="100" sortable prop="CHANGEBY" :formatter="judge" v-if="this.checkedName.indexOf('修改人')!=-1">
+							</el-table-column>
+							<el-table-column label="修改时间" width="120" sortable prop="CHANGEDATE" :formatter="judge" v-if="this.checkedName.indexOf('修改时间')!=-1">
 							</el-table-column>
 						</el-table>
 						<el-pagination background class="pull-right pt10 pb10" v-if="this.checkedName.length>0"
@@ -93,15 +131,14 @@
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
-		<customermask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></customermask>
+		<!-- <customermask @request="requestData" v-bind:page=page></customermask> -->
 	</div>
 </div>
 </template>
 <script>
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left3.vue'
-	import navs_header from '../common/nav_tabs.vue'
-//	import customermask from '../common/customer_mask.vue'
+	import navs_header from '../common/nav_tabs.vue' 
 	import table from '../plugin/table/table-normal.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	export default {
@@ -111,12 +148,11 @@
 			navs_left,
 			navs_header,
 			tableControle,
-//			customermask,
 			table
 		},
 		data() {
 			return {
-				dataUrl: '/api/api-user/users',
+				// dataUrl: '/api/api-user/users',
 				searchData: {
 			        page: 1,
 			        limit: 10,//分页显示数
@@ -128,76 +164,72 @@
 			        deptId: ''
 		        },
 				checkedName: [
-					'组织机构代码',
-					'单位名称',
-					'性别',
-					'联系电话',
-					'联系地址',
-					'状态'
+					'分包协议编号',
+					'委托书编号',
+					'分包单位',
+					'检验/检测项目内容',
+					'检验检测项目依据',
+					'对环境和操作人员要求',
+					'对分包报告/证书的要求',
+					'检验检测费用',
+					'信息状态',
+					'录入人',
+					'录入时间',
+					'修改人',
+					'修改时间'
 				],
 				tableHeader: [
 					{
-						label: '组织机构代码',
-						prop: 'username'
+						label: '分包协议编号',
+						prop: 'PROXY_CONTRACT_NUM'
 					},
 					{
-						label: '单位名称',
-						prop: 'nickname'
+						label: '委托书编号',
+						prop: 'PROXYNUM'
 					},
 					{
-						label: '联系电话',
-						prop: 'telephone'
+						label: '分包单位',
+						prop: 'VENDOR'
 					},
 					{
-						label: '联系地址',
-						prop: 'deptName'
+						label: '检验/检测项目内容',
+						prop: 'P_REMARKS'
 					},
 					{
-						label: '状态',
-						prop: 'enabled'
-					}
-				],
-				leftNavs: [//leftNavs左侧菜单数据
+						label: '检验检测项目依据',
+						prop: 'BASIS'
+					},
 					{
-						navicon: 'icon-user',
-						navtitle: '用户管理',
-						navherf: '/personinfo'
-					}, {
-						navicon: 'icon-edit',
-						navtitle: '机构管理',
-						navherf: '/dept_management'
-					}, {
-						navicon: 'icon-role-site',
-						navtitle: '角色管理',
-						navherf: '/role_management'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '客户管理',
-						navherf: '/customer_management'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '产品类别',
-						navherf: '/products_category'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '产品',
-						navherf: '/products'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测标准',
-						navherf: '/testing_standard'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测项目',
-						navherf: '/testing_projects'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测方法',
-						navherf: '/testing_methods'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '自动编号设置',
-						navherf: '/number_settings'
+						label: '对环境和操作人员要求',
+						prop: 'REQUIRE'
+					},
+					{
+						label: '对分包报告/证书的要求',
+						prop: 'Q_TYPE'
+					},
+					{
+						label: '检验检测费用',
+						prop: 'CHECKCOST'
+					},
+					{
+						label: '信息状态',
+						prop: 'STATUS'
+					},
+					{
+						label: '录入人',
+						prop: 'ENTERBY'
+					},
+					{
+						label: '录入时间',
+						prop: 'ENTERDATE'
+					},
+					{
+						label: '修改人',
+						prop: 'CHANGEBY'
+					},
+					{
+						label: '修改时间',
+						prop: 'CHANGEDATE'
 					}
 				],
 				companyId: '',
@@ -205,7 +237,7 @@
 				selUser: [],
 				'启用': true,
 				'冻结': false,
-				userList: [],
+				subagree: [],
 				search: false,
 				show: false,
 				down: true,
@@ -265,35 +297,17 @@
 				this.page.pageSize = 10;
 				this.requestData();
 			},
-			//添加用戶
-			openAddMgr() {
-//				this.$refs.child.resetNew();
-				this.$refs.child.visible();
-			},
-			//修改用戶
-			modify() {
-				this.aaaData = this.selUser;
-				if(this.aaaData.length == 0) {
-					this.$message({
-						message: '请您选择要修改的用户',
-						type: 'warning'
-					});
-					return;
-				} else if(this.aaaData.length > 1) {
-					this.$message({
-						message: '不可同时修改多个用户',
-						type: 'warning'
-					});
-					return;
-				} else {
-					this.$refs.child.detail();
-				}
-			},
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
 				this.down = !this.down,
-					this.up = !this.up
+				this.up = !this.up
+			},
+			openAddMgr(){
+
+			},
+			modify(){
+
 			},
 			// 删除
 			deluserinfo() {
@@ -354,7 +368,6 @@
 					return "";
 				}
 				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
 			},
 			insert() {
 				this.users.push(this.user)
@@ -380,13 +393,13 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					this.userList = res.data.data;
+					this.subagree = res.data.data;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
-				this.userList.forEach((item, index) => {
+				this.subagree.forEach((item, index) => {
 					var id = item.id;
 					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
-						this.userList.role = res.data.roles[0].name;
+						this.subagree.role = res.data.roles[0].name;
 					}).catch((wrong) => {})
 				})
 			},
@@ -420,7 +433,6 @@
 
 		mounted() {
 			this.requestData();
-			this.getKey();
 		},
 	}
 </script>

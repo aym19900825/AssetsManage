@@ -81,7 +81,7 @@ export default {
                     }
                     return item.navtitle != tab.navtitle;
                 });
-                console.log(selectedIndex);
+                //console.log(selectedIndex);
                 //关闭当前显示的选项卡
                 if(tab.navtitle == _this.selectedTab.navtitle){
                     if(selectedIndex==_this.tabs.length){

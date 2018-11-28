@@ -1,6 +1,5 @@
 <template>
 	<div>
-		
 		<div class="mask" v-show="show"></div>
 		<div class="mask_div"  v-show="show">
 			<div class="mask_title_div clearfix">

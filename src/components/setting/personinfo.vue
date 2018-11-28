@@ -403,13 +403,14 @@
 		
 		},
 		mounted(){
-			// 获取浏览器可视区域高度
-			window.onresize = () => {//获取浏览器可视区域高度
-		 	return (() => {
-		 		this.fullHeight.height = document.documentElement.clientHeight - 100+'px';
-		 	})()
-		 };
 			this.getData();
+			
+			window.onresize = () => {//获取浏览器可视区域高度
+			 	return (() => {
+			 		this.fullHeight.height = document.documentElement.clientHeight - 100+'px';
+			 	})()
+			 };
+
 		},
 		
 		methods: {  

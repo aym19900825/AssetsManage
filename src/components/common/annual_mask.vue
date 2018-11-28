@@ -14,103 +14,103 @@
 					</span>
 				</div>
 			</div>
-			<div class="mask_content"><!-- status-icon验证后小对号 -->
-				<el-form status-icon :model="WORKPLAN" :label-position="labelPosition" :rules="rules" ref="WORKPLAN" label-width="100px" class="demo-adduserForm">
+			<div class="mask_content">
+				<!-- status-icon 验证后文本框上显示对勾图标 -->
+				<el-form status-icon :model="WORKPLAN" :label-position="labelPosition" :rules="rules" ref="WORKPLAN" label-width="100px">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames" @change="handleChange">
+
 							<el-collapse-item title="基本信息" name="1">
 								<el-row :gutter="20">
 									<el-col :span="5" class="pull-right">
-									<el-input placeholder="草稿" v-model="WORKPLAN.STATUS" :disabled="true">
-											<template slot="prepend">状态</template>
-									</el-input>
-								</el-col>
-								
-								<el-col :span="5" class="pull-right">
-									<el-select v-model="WORKPLAN.TYPE" placeholder="类别">
-								    	<el-option label="监督抽查" value="1"></el-option>
-								    	<el-option label="质量抽查" value="0"></el-option>
-									</el-select>
-								</el-col>
-								<el-col :span="5" class="pull-right">
-									<el-input v-model="WORKPLAN.WP_NUM" :disabled="true">
-											<template slot="prepend">计划编号</template>
-									</el-input>
-								</el-col>
-							</el-row>
-								<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
-									<el-row :gutter="30">
-										<el-col :span="6">
-											<el-form-item label="提出单位" prop="PROP_UNIT">
-												<el-select v-model="WORKPLAN.PROP_UNIT" placeholder="请选择">
-											    	<el-option label="金化站" value="1"></el-option>
-											    	<el-option label="运包站" value="0"></el-option>
-												</el-select>
-											</el-form-item>
-										</el-col>
-										<el-col :span="6">
-											<el-form-item label="产品类别" prop="ITEMTYPE">
-												<el-input v-model="WORKPLAN.ITEMTYPE" >
-													<el-button slot="append" icon="el-icon-search"></el-button>
-												</el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="12">
-											<el-form-item label="计划描述" prop="DESCRIPTION">
-												<el-input v-model="WORKPLAN.DESCRIPTION"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<el-row :gutter="30">
-										<el-col :span="6">
-											<el-form-item label="编制人" prop="COMPACTOR">
-												<el-input v-model="WORKPLAN.COMPACTOR"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="6">
-											<el-form-item label="审核人" prop="C_PERSON">
-												<el-input v-model="WORKPLAN.C_PERSON"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="6">
-											<el-form-item label="批准人" prop="APPRPERSON">
-												<el-input v-model="WORKPLAN.APPRPERSON"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="6">
-											<el-form-item label="提报日期" prop="REPORTDATE">
+										<el-input placeholder="草稿" v-model="WORKPLAN.STATUS" :disabled="true">
+												<template slot="prepend">状态</template>
+										</el-input>
+									</el-col>
+									<el-col :span="5" class="pull-right">
+										<el-select v-model="WORKPLAN.TYPE" placeholder="类别">
+									    	<el-option label="监督抽查" value="1"></el-option>
+									    	<el-option label="质量抽查" value="0"></el-option>
+										</el-select>
+									</el-col>
+									<el-col :span="5" class="pull-right">
+										<el-input v-model="WORKPLAN.WP_NUM" :disabled="true">
+												<template slot="prepend">计划编号</template>
+										</el-input>
+									</el-col>
+								</el-row>
+								<el-row :gutter="30">
+									<el-col :span="6">
+										<el-form-item label="提出单位" prop="PROP_UNIT">
+											<el-select v-model="WORKPLAN.PROP_UNIT" placeholder="请选择">
+										    	<el-option label="金化站" value="1"></el-option>
+										    	<el-option label="运包站" value="0"></el-option>
+											</el-select>
+										</el-form-item>
+									</el-col>
+									<el-col :span="6">
+										<el-form-item label="产品类别" prop="ITEMTYPE">
+											<el-input v-model="WORKPLAN.ITEMTYPE" >
+												<el-button slot="append" icon="el-icon-search"></el-button>
+											</el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="12">
+										<el-form-item label="计划描述" prop="DESCRIPTION">
+											<el-input v-model="WORKPLAN.DESCRIPTION"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="30">
+									<el-col :span="6">
+										<el-form-item label="编制人" prop="COMPACTOR">
+											<el-input v-model="WORKPLAN.COMPACTOR"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="6">
+										<el-form-item label="审核人" prop="C_PERSON">
+											<el-input v-model="WORKPLAN.C_PERSON"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="6">
+										<el-form-item label="批准人" prop="APPRPERSON">
+											<el-input v-model="WORKPLAN.APPRPERSON"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="6">
+										<el-form-item label="提报日期" prop="REPORTDATE">
+										<div class="block">
+										    <el-date-picker
+										      v-model="WORKPLAN.REPORTDATE"
+										      type="date"
+										      placeholder="选择日期" value-format="yyyy-MM-dd">
+										    </el-date-picker>
+										  </div>
+										 </el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="30">
+									<el-col :span="6">
+										<el-form-item label="年度" prop="YEAR">
 											<div class="block">
 											    <el-date-picker
-											      v-model="WORKPLAN.REPORTDATE"
-											      type="date"
-											      placeholder="选择日期" value-format="yyyy-MM-dd">
+											      v-model="WORKPLAN.YEAR"
+											      type="year"
+											      placeholder="选择年度" value-format="yyyy">
 											    </el-date-picker>
-											  </div>
-											 </el-form-item>
-										</el-col>
-									</el-row>
-									<el-row :gutter="30">
-										<el-col :span="6">
-											<el-form-item label="年度" prop="YEAR">
-												<div class="block">
-												    <el-date-picker
-												      v-model="WORKPLAN.YEAR"
-												      type="year"
-												      placeholder="选择年度" value-format="yyyy">
-												    </el-date-picker>
-												</div>
-											</el-form-item>
-										</el-col>
-										<el-col :span="6">
-											<el-form-item label="信息状态" prop="MESSSTATUS">
-												<el-input v-model="WORKPLAN.MESSSTATUS"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-								</div>
+											</div>
+										</el-form-item>
+									</el-col>
+									<el-col :span="6">
+										<el-form-item label="信息状态" prop="MESSSTATUS">
+											<el-input v-model="WORKPLAN.MESSSTATUS"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
 							</el-collapse-item>
-							<el-collapse-item title="年度计划列表" name="2">
-								<!-- 资质信息 Begin-->
+
+							<!-- 年度计划列表 Begin-->
+							<el-collapse-item title="年度计划列表" name="2" class="ml30">
 								<div class="table-func">
 									<el-button type="primary" size="mini" round>
 										<i class="icon-upload-cloud"></i>
@@ -122,75 +122,73 @@
 									</el-button>
 								</div>
 
-<el-table :data="WORKPLAN.WORLPLANLINEList" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'WORKPLAN.WORLPLANLINEList', order: 'descending'}" v-loadmore="loadMore">
+								<el-table :data="WORKPLAN.WORLPLANLINEList" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'WORKPLAN.WORLPLANLINEList', order: 'descending'}" v-loadmore="loadMore">
 
-    <el-table-column prop="iconOperation" fixed label="" width="50px">
-      <template slot-scope="scope"><i class="el-icon-check" v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else="v-else"></i></template>
-    </el-table-column>
+								    <el-table-column prop="iconOperation" fixed label="" width="50px">
+								      <template slot-scope="scope"><i class="el-icon-check" v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else="v-else"></i></template>
+								    </el-table-column>
 
-    <el-table-column label="所属计划编号" sortable width="120px" prop="WP_NUM">
-      <template slot-scope="scope">
-      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_NUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_NUM}}</span>
-      </template>
-    </el-table-column>
+								    <el-table-column label="所属计划编号" sortable width="120px" prop="WP_NUM">
+								      <template slot-scope="scope">
+								      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_NUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_NUM}}</span>
+								      </template>
+								    </el-table-column>
 
-    <el-table-column label="产品排序号" sortable width="120px" prop="WP_LINENUM">
-      <template slot-scope="scope">
-      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_LINENUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_LINENUM}}</span>
-      </template>
-    </el-table-column>
+								    <el-table-column label="产品排序号" sortable width="120px" prop="WP_LINENUM">
+								      <template slot-scope="scope">
+								      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_LINENUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_LINENUM}}</span>
+								      </template>
+								    </el-table-column>
 
-	<el-table-column prop="ITEM_NAME" label="产品名称" sortable width="120px" :formatter="judge">
-      <template slot-scope="scope">
-         <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ITEM_NAME" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.ITEM_NAME}}</span>
-      </template>
-    </el-table-column>
+									<el-table-column prop="ITEM_NAME" label="产品名称" sortable width="120px" :formatter="judge">
+								      <template slot-scope="scope">
+								         <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ITEM_NAME" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.ITEM_NAME}}</span>
+								      </template>
+								    </el-table-column>
 
-    <el-table-column prop="MODEL" label="规格型号" sortable width="120px">
-      <template slot-scope="scope">
-        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.MODEL}}</span>
-      </template>
-    </el-table-column>
+								    <el-table-column prop="MODEL" label="规格型号" sortable width="120px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.MODEL}}</span>
+								      </template>
+								    </el-table-column>
 
-    <el-table-column prop="V_NAME" label="生产企业名称" sortable width="120px">
-      <template slot-scope="scope">
-        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAME" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.V_NAME}}</span>
-      </template>
-    </el-table-column>
+								    <el-table-column prop="V_NAME" label="生产企业名称" sortable width="120px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAME" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.V_NAME}}</span>
+								      </template>
+								    </el-table-column>
 
-    <el-table-column prop="CHECKCOST" label="检测费用" sortable width="120px">
-      <template slot-scope="scope">
-        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.CHECKCOST}}</span>
-      </template>
-    </el-table-column>
+								    <el-table-column prop="CHECKCOST" label="检测费用" sortable width="120px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.CHECKCOST}}</span>
+								      </template>
+								    </el-table-column>
 
-    <el-table-column prop="REASION" label="项目提出理由" sortable width="120px">
-      <template slot-scope="scope">
-        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REASION" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.REASION}}</span>
-      </template>
-    </el-table-column>
+								    <el-table-column prop="REASION" label="项目提出理由" sortable width="120px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REASION" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.REASION}}</span>
+								      </template>
+								    </el-table-column>
 
-    <el-table-column prop="MEMO" label="近三年监督抽查情况" sortable width="160px">
-      <template slot-scope="scope">
-        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.MODEL}}</span>
-      </template>
-    </el-table-column>
+								    <el-table-column prop="MEMO" label="近三年监督抽查情况" sortable width="160px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.MODEL}}</span>
+								      </template>
+								    </el-table-column>
 
-    <el-table-column fixed="right" label="操作" width="120">
-      <template slot-scope="scope">
-        <el-button @click.native.prevent="deleteRow(scope.$index, WORKPLAN.WORLPLANLINEList)" type="text" size="small">
-          移除
-        </el-button>
-      </template>
-    </el-table-column>
-
-  </el-table>
-
-
-							<!-- 年度计划列表 End -->
+								    <el-table-column fixed="right" label="操作" width="120">
+								      <template slot-scope="scope">
+								        <el-button @click.native.prevent="deleteRow(scope.$index, WORKPLAN.WORLPLANLINEList)" type="text" size="small">
+								          移除
+								        </el-button>
+								      </template>
+								    </el-table-column>
+								  </el-table>
 							</el-collapse-item>
-							<!-- 检测依据begin WORKPLAN.WORLPLANLINE_BASISList-->
-							<el-collapse-item title="检测依据" name="3">
+							<!-- 年度计划列表 End -->
+
+							<!-- 检测依据 Begin-->
+							<el-collapse-item title="检测依据" name="3" class="ml60">
 								<div class="table-func">
 									<el-button type="primary" size="mini" round @click="basisleadbtn">
 										<i class="icon-search"></i>
@@ -222,9 +220,10 @@
 								    </el-table-column>
 				            	</el-table>
 							</el-collapse-item>
-							<!-- 检测依据end -->
-							<!-- 检测项目与要求begin -->
-							<el-collapse-item title="检测项目与要求" name="4">
+							<!-- 检测依据 End -->
+
+							<!-- 检测项目与要求 begin -->
+							<el-collapse-item title="检测项目与要求" name="4" class="ml60">
 								<!-- 资质信息 Begin-->
 								<div class="table-func">
 									<el-button type="primary" size="mini" round @click="basisleadbtn2">
@@ -259,13 +258,12 @@
 								    </el-table-column>
 				            	</el-table>
 							</el-collapse-item>
-							<!-- 检测项目end -->
+							<!-- 检测项目与要求 End -->
+
+							<!-- 文档编号列表 Begin-->
 							<el-collapse-item title="文档编号列表" name="5">
-								<!-- 文档编号列表 Begin-->
 								<div class="table-func">
-									<el-button type="success" size="mini" round @click="addfield2">
-										<i class="icon-add"></i>
-										<font>新建行</font>
+									<el-button type="success" size="mini" round @click="addfield2"><i class="icon-add"></i><font>新建行</font>
 									</el-button>
 								</div>
 								<el-form>
@@ -329,40 +327,37 @@
 					                    </el-row>
 					                </el-form-item>
 				            	</el-form>
+							</el-collapse-item>
 							<!-- 文档编号列表 End -->
-							</el-collapse-item>
+
+							<!-- 录入人信息 Begin-->
 							<el-collapse-item title="录入人信息" name="6">
-								<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
-									<el-row :gutter="30">
-										<el-col :span="8">
-											<el-form-item label="录入人" prop="ENTERBY">
-												<el-input v-model="WORKPLAN.ENTERBY" :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="录入日期" prop="ENTERDATE">
-												<el-input v-model="WORKPLAN.ENTERDATE" :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-								</div>
+								<el-row :gutter="30">
+									<el-col :span="8">
+										<el-form-item label="录入人" prop="ENTERBY">
+											<el-input v-model="WORKPLAN.ENTERBY" :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="录入日期" prop="ENTERDATE">
+											<el-input v-model="WORKPLAN.ENTERDATE" :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="30" v-if="modify">
+									<el-col :span="8">
+										<el-form-item label="修改人" prop="CHANGEBY">
+											<el-input v-model="WORKPLAN.CHANGEBY" :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="修改日期" prop="CHANGEDATE">
+											<el-input v-model="WORKPLAN.CHANGEDATE" :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
 							</el-collapse-item>
-							<el-collapse-item title="修改人信息" name="7" v-if="modify">
-								<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
-									<el-row :gutter="30">
-										<el-col :span="8">
-											<el-form-item label="修改人" prop="CHANGEBY">
-												<el-input v-model="WORKPLAN.CHANGEBY" :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="修改日期" prop="CHANGEDATE">
-												<el-input v-model="WORKPLAN.CHANGEDATE" :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-								</div>
-							</el-collapse-item>
+							<!-- 录入人信息 End -->
 						</el-collapse>
 					</div>
 					<div class="el-dialog__footer">
@@ -739,6 +734,7 @@
    			
    			//年度计划表格函数
    			iconOperation(row, column, cell, event){
+
 		        if(column.property ==="iconOperation"){
 		        	console.log(row.isEditing);
 		            row.isEditing = !row.isEditing;
@@ -1210,6 +1206,8 @@
 
 <style scoped>
 	@import '../../assets/css/mask-modules.css';
+
+	.ml60 {margin-left: 60px;}
 </style>
 
 

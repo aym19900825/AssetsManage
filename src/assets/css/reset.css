@@ -8,7 +8,7 @@ body,ol,ul,h1,h2,h3,h4,h5,h6,p,th,td,dl,dd,form,fieldset,legend,input,textarea,s
 body,html{
 	height:100%;
 	width:100%;
-	overflow: hidden;
+	/*overflow: hidden;*/
 }
 
 body{
@@ -113,8 +113,8 @@ i, cite, em, var, address, dfn {
 /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
 ::-webkit-scrollbar,#style-1::-webkit-scrollbar
 {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
     background-color: #F5F5F5;
 }
  
@@ -415,7 +415,7 @@ h6 {
 
 .el-table td {
 	padding-top: 5px;
-	padding-bottom: 3px;
+	padding-bottom: 0px;
 }
 .el-table .ascending .sort-caret.ascending { border-bottom-color: #6585DF;}
 .el-table .descending .sort-caret.descending { border-top-color: #6585DF;}
@@ -700,3 +700,17 @@ h6 {
 .el-tree-node [class^="icon-"], .el-tree-node [class*=" icon-"] {margin-right: 5px;}
 
 .p15 {padding:10px 15px;}
+
+
+
+/**/
+.el-form-item__content {
+	line-height: 20px;
+}
+.el-form-item {
+	margin-bottom:0px;
+}
+
+
+
+

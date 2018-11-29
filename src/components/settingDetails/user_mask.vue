@@ -46,7 +46,7 @@
 								<el-row :gutter="30">
 									<el-col :span="12">
 										<el-form-item label="登录名称" prop="username">
-											<el-input v-model="user.username"></el-input>
+											<el-input class = "usernames" v-model="user.username" ></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="12">
@@ -94,8 +94,11 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="學歷">
-											<el-input v-model="user.education"></el-input>	
+										<el-form-item label="学历">
+											<el-select v-model="user.education" placeholder="硕士" >
+											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+											</el-option>
+										</el-select>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -281,6 +284,41 @@
 			//				}
 			//          };
 			return {
+				options: [
+				{
+					value: '高中',
+					label: '高中'
+				},
+				{
+					value: '高中以下',
+					label: '高中以下'
+				},
+				{
+					value:'中专/技校',
+					label:'中专/技校',
+				},
+				{
+					value: '大专',
+					label: '大专'
+				},
+				{
+					value: '本科',
+					label: '本科'
+				},
+				{
+					value: '硕士',
+					label: '硕士'
+				},
+				{
+					value: '博士',
+					label: '博士'
+				},
+				{
+					value: 'MBA/EMBA',
+					label: 'MBA/EMBA'
+				},
+				],
+				value: '',
 				editSearch: '',
 				edit: true, //禁填
 				'男': true,
@@ -391,7 +429,9 @@
 			},
 			// 这里是修改
 			detail() {
+				$('.usernames .el-input__inner').attr('disabled',true);
 				this.show = true;
+				
 			},
 			//点击关闭按钮
 			close() {

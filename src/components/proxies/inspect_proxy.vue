@@ -21,7 +21,7 @@
 								<button type="button" class="btn btn-bule button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改
 								</button>
-								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
+								<button type="button" class="btn btn-red button-margin" @click="delinfo">
 								    <i class="icon-trash"></i>删除
 								</button>
 								<button type="button" class="btn btn-primarys button-margin">
@@ -49,7 +49,7 @@
 										<i class="el-icon-arrow-down icon-arrow2-down"></i>
 									</span>
 									<el-dropdown-menu slot="dropdown">
-										<el-checkbox-group v-model="checkedName" @change="test">
+										<el-checkbox-group v-model="checkedName">
 											<el-dropdown-item v-for="(item,index) in tableHeader" :key="index">
 												<el-checkbox :label="item.label" name="type"></el-checkbox>
 											</el-dropdown-item>
@@ -60,30 +60,59 @@
 						</div>
 					</div>
 					<!-- 高级查询划出 Begin-->
-					<div v-show="search">
-						<el-form status-icon :model="searchList" label-width="70px">
-							<el-row :gutter="10">
-								<el-col :span="5">
-									<el-form-item label="用户名">
-										<el-input v-model="searchList.nickname"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="5">
-									<el-form-item label="状态">
-										<el-input v-model="searchList.enabled"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="4">
-									<el-form-item label="创建时间">
-										<el-input v-model="searchList.createTime"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="2">
-									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
-								</el-col>
-							</el-row>
-						</el-form>
-					</div>
+					<div v-show="search" class="pb10">
+									<el-form status-icon :model="searchList" label-width="70px">
+										<el-row :gutter="10" class="pb10">
+											<el-col :span="5">
+												<el-input v-model="searchList.V_NAME">
+													<template slot="prepend">委托单位名称</template>
+												</el-input>
+											</el-col>
+											<el-col :span="5">
+												<el-input v-model="searchList.ITEM_NAME">
+													<template slot="prepend">样品名称</template>
+												</el-input>
+											</el-col>
+											<!--<el-col :span="5">
+												<el-input v-model="searchList.S_ENGNAME">
+													<template slot="prepend">英文名称</template>
+												</el-input>
+											</el-col>-->
+											<el-col :span="5">
+												<el-input v-model="searchList.REPORT_NUM">
+													<template slot="prepend">检测报告编号</template>
+												</el-input>
+											</el-col>
+											<el-col :span="4">
+												<el-input v-model="searchList.PROXYNUM">
+													<template slot="prepend">检测委托书编号</template>
+												</el-input>
+											</el-col>
+										</el-row>
+										<el-row :gutter="20">
+											<el-col :span="5">
+												<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd HH:mm:ss">
+												</el-date-picker>
+											</el-col>
+											<el-col :span="5">
+												<el-input v-model="searchList.ENTERBY">
+													<template slot="prepend">录入人</template>
+												</el-input>
+											</el-col>
+											<el-col :span="3">
+
+												<el-select v-model="searchList.STATUS" placeholder="请选择状态">
+													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+													</el-option>
+
+												</el-select>
+											</el-col>
+											<el-col :span="2">
+												<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+											</el-col>
+										</el-row>
+									</el-form>
+								</div>
 					<!-- 高级查询划出 End-->
 
 					<el-row :gutter="10">
@@ -105,22 +134,38 @@
 						</el-col>
 						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
-							<el-table :data="userList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table :data="inspectList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'inspectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="账号" sortable width="140px" prop="username" v-if="this.checkedName.indexOf('账号')!=-1">
+								<el-table-column label="检验委托书编号" sortable width="140px" prop="PROXYNUM" v-if="this.checkedName.indexOf('检验委托书编号')!=-1">
 								</el-table-column>
-								<el-table-column label="姓名" sortable width="200px" prop="nickname" v-if="this.checkedName.indexOf('姓名')!=-1">
+								<el-table-column label="委托单位名称" sortable width="140px" prop="V_NAME" v-if="this.checkedName.indexOf('委托单位名称')!=-1">
 								</el-table-column>
-								<el-table-column label="性别" sortable width="100px" prop="sex" :formatter="sexName" v-if="this.checkedName.indexOf('性别')!=-1">
+								<el-table-column label="生产单位名称" sortable width="100px" prop="P_NAME" v-if="this.checkedName.indexOf('生产单位名称')!=-1">
 								</el-table-column>
-								<el-table-column label="机构" sortable width="200px" prop="deptName" v-if="this.checkedName.indexOf('机构')!=-1">
+								<el-table-column label="样品名称" sortable width="200px" prop="ITEM_NAME" v-if="this.checkedName.indexOf('样品名称')!=-1">
 								</el-table-column>
-								<el-table-column label="公司" sortable width="200px" prop="companyName" v-if="this.checkedName.indexOf('公司')!=-1">
+								<el-table-column label="样品型号" sortable width="200px" prop="ITEM_MODEL" v-if="this.checkedName.indexOf('样品型号')!=-1">
 								</el-table-column>
-								<el-table-column label="状态" sortable width="200px" prop="enabled" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
+								<el-table-column label="样品状态" sortable width="200px" prop="ITEM_STATUS" v-if="this.checkedName.indexOf('样品状态')!=-1">
 								</el-table-column>
-								<el-table-column label="创建时间" width="200px" prop="createTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('创建时间')!=-1">
+								<el-table-column label="检测依据" width="200px" prop="REMARKS" sortable  v-if="this.checkedName.indexOf('检测依据')!=-1">
+								</el-table-column>
+								<el-table-column label="完成日期" width="200px" prop="COMPDATE" sortable  :formatter="dateFormat" data-type = ""  v-if="this.checkedName.indexOf('完成日期')!=-1">
+								</el-table-column>
+								<el-table-column label="完成方式" width="200px" prop="COMPMODE" sortable v-if="this.checkedName.indexOf('完成方式')!=-1">
+								</el-table-column>
+								<el-table-column label="检测报告编号" width="200px" prop="REPORT_NUM" sortable  v-if="this.checkedName.indexOf('检测报告编号')!=-1">
+								</el-table-column>
+								<el-table-column label="主检组" width="200px" prop="MAINGROUP" sortable  v-if="this.checkedName.indexOf('主检组')!=-1">
+								</el-table-column>
+								<el-table-column label="状态" width="200px" prop="STATUS" sortable v-if="this.checkedName.indexOf('状态')!=-1">
+								</el-table-column>
+								<el-table-column label="录入人" width="200px" prop="ENTERBY" sortable  v-if="this.checkedName.indexOf('录入人')!=-1">
+								</el-table-column>
+								<el-table-column label="录入时间" width="200px" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
+								</el-table-column>
+								<el-table-column label="版本" width="50px" prop="VERSION" sortable  v-if="this.checkedName.indexOf('版本')!=-1">
 								</el-table-column>
 							</el-table>
 							<!-- <span class="demonstration">显示总数</span>" -->
@@ -134,7 +179,7 @@
 				</div>
 			</div>
 		</div>
-		<usermask :user="aaaData[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></usermask>
+		<inspectmask :user="aaaData[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></inspectmask>
 		<!--右侧内容显示 End-->
 	</div>
 	</div>
@@ -143,55 +188,120 @@
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left3.vue'
 	import navs_header from '../common/nav_tabs.vue'
-//	import assetsTree from '../plugin/vue-tree/tree2.vue'
-	import usermask from '../settingDetails/user_mask.vue'
+	import inspectmask from '../proxiesDetails/inspect_proxyMask.vue'
+
 	export default {
 		name: 'user_management',
 		components: {
 			'vheader': vheader,
 			'navs_header': navs_header,
 			'navs_left': navs_left,
-			'usermask': usermask,
-//			'v-assetsTree': assetsTree
+			'inspectmask': inspectmask,
 		},
 		data() {
 			return {
+				value: '',
+				options: [{
+					value: '1',
+					label: '草稿'
+				}, {
+					value: '2',
+					label: '审批中'
+				},{
+					value: '3',
+					label: '已发布'
+				},
+				{
+					value: '4',
+					label: '已取消'
+				},
+				{
+					value: '0',
+					label: '驳回'
+				}
+				
+				],
 				isShow: false,
 				ismin: true,
 				loadSign: true, //加载
 				commentArr: {},
 				checkedName: [
-					'账号',
-					'姓名',
-					'性别',
-					'机构',
+					'检验委托书编号',
+					'委托单位名称',
+					'生产单位名称',
+					'样品名称',
+					'样品型号',
+					'样品状态',
+					'检测依据',
+					'完成日期',
+					'完成方式',
+					'检测报告编号',
+					'主检组',
 					'状态',
-					'创建时间'
+					'录入人',
+					'录入时间',
+					'版本'
 				],
 				tableHeader: [{
-						label: '账号',
-						prop: 'username'
+						label: '检验委托书编号',
+						prop: 'PROXYNUM'
 					},
 					{
-						label: '姓名',
-						prop: 'nickname'
+						label: '委托单位名称',
+						prop: 'V_NAME'
 					},
 					{
-						label: '性别',
-						prop: 'sexName'
+						label: '生产单位名称',
+						prop: 'P_NAME'
 					},
 					{
-						label: '机构',
-						prop: 'deptName'
+						label: '样品名称',
+						prop: 'ITEM_NAME'
+					},
+					{
+						label: '样品型号',
+						prop: 'ITEM_MODEL'
+					},
+					{
+						label: '样品状态',
+						prop: 'ITEM_STATUS'
+					},
+					{
+						label: '检测依据',
+						prop: 'REMARKS'
+					},
+					{
+						label: '完成日期',
+						prop: 'COMPDATE'
+					},
+					{
+						label: '完成方式',
+						prop: 'COMPMODE'
+					},
+					{
+						label: '检测报告编号',
+						prop: 'REPORT_NUM'
+					},
+					{
+						label: '主检组',
+						prop: 'MAINGROUP'
 					},
 					{
 						label: '状态',
-						prop: 'enabled'
+						prop: 'STATUS'
 					},
 					{
-						label: '创建时间',
-						prop: 'createTime'
-					}
+						label: '录入人',
+						prop: 'ENTERBY'
+					},
+					{
+						label: '录入时间',
+						prop: 'ENTERDATE'
+					},
+					{
+						label: '版本',
+						prop: 'VERSION'
+					},
 				],
 
 				companyId: '',
@@ -201,7 +311,7 @@
 				'冻结': false,
 				'男': true,
 				'女': false,
-				userList: [],
+				inspectList: [],
 				search: false,
 				show: false,
 				down: true,
@@ -210,9 +320,13 @@
 					height: '',
 				},
 				searchList: {
-					nickname: '',
-					enabled: '',
-					createTime: ''
+					ITEM_NAME: '',
+					REPORT_NUM: '',
+					PROXYNUM: '',
+					COMPDATE: '',
+					ENTERBY: '',
+					STATUS: '',
+					
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -290,9 +404,6 @@
 					//			     console.log('到底了', this.page.currentPage)
 				}
 			},
-			test() {
-				console.log(this.checkedName.indexOf('账号') != -1);
-			},
 			sizeChange(val) {
 				this.page.pageSize = val;
 				this.requestData();
@@ -308,25 +419,25 @@
 			},
 			//添加用戶
 			openAddMgr() {
-				this.aaaData = [{
-					companyName: '',
-					deptName: '',
-					username: '',
-					password: '',
-					nickname: '',
-					birthday: '',
-					sexName: '',
-					idnumber: '',
-					entrytime: '',
-					roleId: [],
-					roles: [],
-					worknumber: '',
-					phone: '',
-					email: '',
-					address: '',
-					tips: ''
-				}];
-				this.$refs.child.detail();
+//				this.aaaData = [{
+//					companyName: '',
+//					deptName: '',
+//					username: '',
+//					password: '',
+//					nickname: '',
+//					birthday: '',
+//					sexName: '',
+//					idnumber: '',
+//					entrytime: '',
+//					roleId: [],
+//					roles: [],
+//					worknumber: '',
+//					phone: '',
+//					email: '',
+//					address: '',
+//					tips: ''
+//				}];
+				this.$refs.child.visible();
 			},
 			//修改用戶
 			modify() {
@@ -344,13 +455,7 @@
 					});
 					return;
 				} else {
-					this.aaaData[0].roleId = [];
-					var roles = this.aaaData[0].roles;
-					for(var i = 0; i < roles.length; i++) {
-						this.aaaData[0].roleId.push(roles[i].id);
-					}
-					//					console.log(this.aaaData[0].roleId);
-					this.$refs.child.detail();
+					this.$refs.child.detail(this.aaaData[0].ID);
 				}
 			},
 			//高级查询
@@ -360,7 +465,7 @@
 					this.up = !this.up
 			},
 			// 删除
-			deluserinfo() {
+			delinfo() {
 				var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({
@@ -368,153 +473,58 @@
 						type: 'warning'
 					});
 					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时删除多个用户',
-						type: 'warning'
-					});
-					return;
 				} else {
-					var changeUser = selData[0];
-					var id = changeUser.id;
-					var url = '/api/api-user/users/' + id;
-					this.$axios.delete(url, {}).then((res) => { //.delete 传数据方法
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
+					var url = '/api/api-apps/app/inspectPro/deletes';
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					for(var i = 0; i < changeUser.length; i++) {
+						deleteid.push(changeUser[i].ID);
+					}
+					console.log(deleteid);
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+					var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {
+							params: data
+						}).then((res) => { //.delete 传数据方法
+							console.log(res);
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '删除成功',
-								type: 'success'
+								message: '网络错误，请重试',
+								type: 'error'
 							});
-							this.requestData();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
+					}).catch(() => {
+
 					});
 				}
 			},
-			// 重置
-			resetPwd() {
-				var selData = this.selUser;
-				if(selData.length == 0) {
-					this.$message({
-						message: '请您选择要重置密码的用户',
-						type: 'warning'
-					});
-					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时多个用户进行重置',
-						type: 'warning'
-					});
-					return;
-				} else {
-					var changeUser = selData[0];
-					var id = changeUser.id;
-					var url = '/api/api-user/users/' + id + '/resetPassword';
-					this.$axios.post(url, {}).then((res) => {
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '重置成功',
-								type: 'success'
-							});
-							this.requestData();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
-					});
-				}
-			},
-			// 启用
-			unfreeze() {
-				var selData = this.selUser;
-				if(selData.length == 0) {
-					this.$message({
-						message: '请您选择您要启动的用户',
-						type: 'warning'
-					});
-					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时启动多个用户',
-						type: 'warning'
-					});
-					return;
-				} else {
-					var changeUser = selData[0];
-					var url = '/api/api-user/users/updateEnabled?id=' + changeUser.id + '&enabled=true';
-					this.$axios.get(url, {}).then((res) => {
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '启动成功',
-								type: 'success'
-							});
-							this.requestData();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
-					});
-				}
-			},
-			// 冻结
-			freezeAccount() {
-				var selData = this.selUser;
-				if(selData.length == 0) {
-					this.$message({
-						message: '请您选择您要冻结的用户',
-						type: 'warning'
-					});
-					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时冻结多个用户',
-						type: 'warning'
-					});
-					return
-				} else {
-					var changeUser = selData[0];
-					var url = '/api/api-user/users/updateEnabled?id=' + changeUser.id + '&enabled=false';
-					this.$axios.get(url, {}).then((res) => {
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '冻结成功',
-								type: 'success'
-							});
-							this.requestData();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
-					});
-				}
-			},
-			judge(data) {
-				//taxStatus 布尔值
-				return data.enabled ? '启用' : '冻结'
-			},
-			sexName(data) {
-				return data.sex ? '男' : '女'
-			},
+			
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
 				if(date == undefined) {
 					return "";
 				}
-				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss"); 
+				return this.$moment(date).format("YYYY-MM-DD"); 
 			},
 
 			SelChange(val) {
@@ -524,19 +534,19 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					nickname: this.searchList.nickname,
-					enabled: this.searchList.enabled,
-					searchKey: 'createTime',
-					searchValue: this.searchList.createTime,
-					companyId: this.companyId,
-					deptId: this.deptId
+					ITEM_NAME: this.searchList.ITEM_NAME,
+					REPORT_NUM: this.searchList.REPORT_NUM,
+					PROXYNUM: this.searchList.PROXYNUM,
+					COMPDATE: this.searchList.COMPDATE,
+					ENTERBY: this.searchList.ENTERBY,
+					STATUS: this.searchList.STATUS
 				}
-				var url = '/api/api-user/users';
+				var url = '/api/api-apps/app/inspectPro';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					//					console.log(res)
-					//					this.userList = res.data.data;
+					console.log(res)
+					//					this.inspectList = res.data.data;
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -557,14 +567,8 @@
 						}
 					}
 
-					this.userList = newarr;
+					this.inspectList = newarr;
 				}).catch((wrong) => {})
-				this.userList.forEach((item, index) => {
-					var id = item.id;
-					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
-						this.userList.role = res.data.roles[0].name;
-					}).catch((wrong) => {})
-				})
 			},
 
 			//机构树
@@ -589,8 +593,6 @@
 						data[i].children = this.transformTree(data[i].subDepts);
 					}
 				}
-				console.log(111222);
-				console.log(data);
 				return data;
 				
 			},

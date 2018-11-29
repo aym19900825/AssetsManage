@@ -1,64 +1,72 @@
 <template>
 <div>
-	<el-card class="box-card" :body-style="{ padding: '10px' }">
+	<el-card class="box-card" :body-style="{ padding: '10px' }" shadow="never">
 		<div slot="header" class="title clearfix">
-			<span>产品类别</span>
+			<span>专业组</span>
 			<!--按钮操作行 Begin-->
-			<div class="columns pull-right">
-				<el-input placeholder="请输入产品类别名称" v-model="search" class="input-with-select">
-					<el-button slot="append" icon="el-icon-search"></el-button>
-				</el-input>
-			</div>
+				<div class="columns pull-right">
+					<el-input placeholder="请输入专业组" v-model="search" class="input-with-select">
+						<el-button slot="append" icon="el-icon-search"></el-button>
+					</el-input>
+				</div>
 			<!--按钮操作行 End-->
 		</div>
 		<div class="text item">
 			<div class="pb10 clearfix">
-				<div class="table-func pull-right">
-					<el-button type="success" size="mini" round @click="addfield_productType2" class="pull-right">
-					<i class="icon-add"></i>
-					<font>新建</font>
-				</el-button>
-				</div>
+				<!-- <div class="columns pull-left"><el-button type="primary" size="small">关联父级</el-button></div> -->
+					<!-- <div class="table-func pull-right">
+					<el-button type="success" size="mini" round @click="addfield_professionGro" class="pull-right">
+						<i class="icon-add"></i>
+						<font>新建</font>
+					</el-button>
+				</div> -->
 			</div>
-			<el-form :model="productType2Form" ref="productType2Form">
-			  <el-table :data="productType2Form.inspectionList.filter(data => !search || data.TYPE.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="380" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'productType2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
-				<el-table-column prop="iconOperation" fixed="left" label="操作" width="50">
+			<el-form :model="professionGroForm" ref="professionGroForm">
+			  <el-table :data="professionGroForm.inspectionList.filter(data => !search || data.PROF_GROUP.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="410" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'professionGroForm.inspectionList', order: 'descending'}" v-loadmore="loadMore">
+				<el-table-column prop="iconOperation" fixed="left" label="操作" width="80">
 			      <template slot-scope="scope">
-			        <!-- <el-button type="text" id="Edit" size="medium" @click.native.prevent="saveRow(scope.row)" v-if="scope.row.isEditing">
+			        <el-button type="text" id="Edit" size="medium" @click.native.prevent="saveRow(scope.row)" v-if="scope.row.isEditing">
 			        	<i class="icon-check" title="保存"></i>
-					</el-button> -->
-					<!-- <el-button type="text" size="medium" @click.native.prevent="modifyversion(scope.row)" v-else="v-else">
+					</el-button>
+					<el-button type="text" size="medium" @click.native.prevent="modifyversion(scope.row)" v-else="v-else">
 			        	<i class="icon-edit" title="修改"></i>
-					</el-button> -->
+					</el-button>
+
 			        <el-button @click="deleteRow(scope.row)" type="text" size="medium" title="删除" >
 			          <i class="icon-trash red"></i>
 			        </el-button>
 			      </template>
 			    </el-table-column>
 
-			  	<el-table-column label="产品类别编号" sortable width="140" prop="NUM">
+			  	<el-table-column label="所属项目编号" width="120" prop="P_NUM">
 			      <template slot-scope="scope">
-			        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" disabled></el-input><span v-else="v-else">{{scope.row.NUM}}</span>
+			        <el-form-item :prop="'inspectionList.'+scope.$index + '.P_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" disabled></el-input><span v-else="v-else">{{scope.row.P_NUM}}</span>
 					</el-form-item>
 			      </template>
 			    </el-table-column>
 
-			    <el-table-column label="产品类别名称" sortable width="200" prop="TYPE">
+			  	<el-table-column label="专业组编号" width="140" prop="PROF_NUM">
 			      <template slot-scope="scope">
-			        <el-form-item :prop="'inspectionList.'+scope.$index + '.TYPE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.TYPE" placeholder="请输入内容">
+			        <el-form-item :prop="'inspectionList.'+scope.$index + '.PROF_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROF_NUM" disabled></el-input><span v-else="v-else">{{scope.row.PROF_NUM}}</span>
+					</el-form-item>
+			      </template>
+			    </el-table-column>
+
+			    <el-table-column label="专业组" sortable width="200" prop="PROF_GROUP">
+			      <template slot-scope="scope">
+			        <el-form-item :prop="'inspectionList.'+scope.$index + '.PROF_GROUP'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROF_GROUP" placeholder="请输入内容">
 			        		<el-button slot="append" icon="icon-search"></el-button>
-			        	</el-input><span v-else="v-else">{{scope.row.TYPE}}</span>
+			        	</el-input><span v-else="v-else">{{scope.row.PROF_GROUP}}</span>
 					</el-form-item>
 			      </template>
 			    </el-table-column>
 
 				<el-table-column prop="STATUS" label="状态" sortable width="80" :formatter="judge">
 			      <template slot-scope="scope">
-			        <el-select v-if="scope.row.isEditing" v-model="scope.row.STATUS" placeholder="请选择">
-			          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.label"></el-option>
-			        </el-select><span v-else="v-else">{{scope.row.STATUS}}</span>
+			         <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" disabled></el-input><span v-else="v-else">{{scope.row.STATUS}}</span>
 			      </template>
 			    </el-table-column>
 				
@@ -80,14 +88,18 @@
 			      </template>
 			    </el-table-column>
 
-				 <el-table-column prop="operationChild" fixed="right" align="center" label="增加子项" width="80">
+			    <!-- <el-table-column prop="operationChild" fixed="right" align="center" label="增加子项" width="80">
 				 	<template slot-scope="scope">
-					 	<el-button type="primary" round size="mini" @click="addchildRow(scope.row)">
+					 	<el-button type="text" id="Edit" size="medium" @click.native.prevent="saveRow(scope.row)" v-if="scope.row.isEditing">
+				        	<i class="icon-check" title="保存"></i>
+						</el-button>
+
+					 	<el-button type="primary" round size="mini" @click="addchildRow(scope.row)" v-else="v-else">
 				          添加
 				        </el-button>
 				    </template>
-				 </el-table-column>
-
+				 </el-table-column> -->
+				 
 			  </el-table>
 			</el-form>
 			<!-- 表格 Begin-->
@@ -101,21 +113,20 @@
 	            :total="page.totalCount">
 	        </el-pagination>
 			<!-- 表格 End-->
-			<product2 ref="child"></product2>
 		</div>
 	</el-card>
 </div>
 </template>
 <script>
-	import product2 from '../inspection_project/product2.vue'
+	
 	export default {
-		name: 'productType2',
+		name: 'professionGro',
 		components: {
-			product2,//产品名称
+			
 		},
 		data() {
 			return {
-				productType2Form:{
+				professionGroForm:{
 					inspectionList: []
 				},
 				fullHeight:{//给浏览器高度赋值
@@ -138,7 +149,6 @@
 			        enabled: '',//状态
 		        },
 				search: '',//搜索
-				
 				page: {//分页显示
 					currentPage: 1,
 					pageSize: 10,
@@ -151,9 +161,6 @@
 				if(column.property ==="iconOperation"){
 					row.isEditing = !row.isEditing
 				}
-			},
-			operationChild(row){
-
 			},
 			modifyversion (row) {//点击修改后给当前修改人和修改时间赋值
 				 this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
@@ -179,21 +186,21 @@
 			     setTimeout(() => {
 			       this.loadSign = true
 			     }, 1000)
-			     this.requestData_productType2()
+			     this.requestData_professionGro()
 			   }
 			 },
 			sizeChange(val) {//页数
 		      this.page.pageSize = val;
-		      this.requestData_productType2();
+		      this.requestData_professionGro();
 		    },
 		    currentChange(val) {//当前页
 		      this.page.currentPage = val;
-		      this.requestData_productType2();
+		      this.requestData_professionGro();
 		    },
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
-				this.requestData_productType2();
+				this.requestData_professionGro();
 			},
 			judge(data) {//taxStatus 状态布尔值
 				return data.enabled ? '活动' : '不活动'
@@ -208,14 +215,45 @@
 			},
 			indexMethod(index) {
 				return index + 1;
-				console.log(index);
 			},
-			requestData_productType2(index) {//加载数据
+			viewfield_professionGro(ID){//点击父级筛选出子级数据
+				if(ID=='null'){
+					this.professionGroForm.inspectionList = []; 
+					return false;
+					//todo  相关数据设置
+				}
+				var url = '/api/api-apps/app/professionGro/INSPECTION_PROJECT2/' + ID;
+				this.$axios.get(url, {}).then((res) => {
+					//console.log(res);
+					this.page.totalCount = res.data.count;	
+					//总的页数
+					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
+					if(this.page.currentPage >= totalPage){
+						 this.loadSign = false
+					}else{
+						this.loadSign=true
+					}
+					this.professionGroForm.inspectionList=res.data.PROFESSION_GROUPList;
+					//console.log(this.professionGroForm.inspectionList[0].ID);
+					//默认主表第一条数据
+					// if(this.professionGroForm.inspectionList.length > 0){
+					
+					// 	this.$refs.rawDataAssetchild.viewfield_rawDataAsset(this.professionGroForm.inspectionList[0].ID);
+					// }else{
+					// 	this.$refs.rawDataAssetchild.viewfield_rawDataAsset('null');
+					// }
+
+					for(var j = 0; j < this.professionGroForm.inspectionList.length; j++){
+						this.professionGroForm.inspectionList[j].isEditing = false;
+					}
+				}).catch((wrong) => {})
+			},
+			requestData_professionGro(index) {//加载数据
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				}
-				var url = '/api/api-apps/app/productType2';
+				var url = '/api/api-apps/app/professionGro';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
@@ -240,7 +278,7 @@
 						}
 					}
 					
-					this.productType2Form.inspectionList = newarr;
+					this.professionGroForm.inspectionList = newarr;
 				}).catch((wrong) => {})
 			},
 			handleNodeClick(data) {
@@ -248,10 +286,10 @@
 			formatter(row, column) {
 				return row.enabled;
 			},
-			addfield_productType2() { //插入行到产品类别Table中
+			addfield_professionGro(P_NUM) { //插入行到产品类型Table中
 				var isEditingflag=false;
-				for(var i=0;i<this.productType2Form.inspectionList.length; i++){
-					if (this.productType2Form.inspectionList[i].isEditing==false){
+				for(var i=0;i<this.professionGroForm.inspectionList.length; i++){
+					if (this.professionGroForm.inspectionList[i].isEditing==false){
 						isEditingflag=false;
 					}else{
                         isEditingflag=true;
@@ -266,15 +304,16 @@
 						this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 						var index=this.$moment(date).format("YYYYMMDDHHmmss");
 						var obj = {
-							"TYPE": '',
+							"PROF_GROUP": '',
 							"STATUS": '活动',
-							"NUM": 'INP' + index,
+							"P_NUM": P_NUM,
+							"PROF_NUM": 'PG' + index,
 							"VERSION": 1,
 							"CHANGEBY": this.currentUser,
 							"CHANGEDATE": this.currentDate,
 							"isEditing": true,
 						};
-						this.productType2Form.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
+						this.professionGroForm.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
 					}).catch((err)=>{
 						this.$message({
 							message:'网络错误，请重试',
@@ -286,17 +325,18 @@
 				}
 			},
 			saveRow (row) {//Table-操作列中的保存行
-				this.$refs['productType2Form'].validate((valid) => {
+				this.$refs['professionGroForm'].validate((valid) => {
 					row.VERSION = row.VERSION + 1;//修改保存后版本号+1
 		          if (valid) {
-					var url = '/api/api-apps/app/productType2/saveOrUpdate';
+					var url = '/api/api-apps/app/professionGro/saveOrUpdate';
 					var submitData = {
 						"ID":row.ID,
-						"TYPE": row.TYPE,
+						"P_NUM": row.P_NUM,
+						"PROF_GROUP": row.PROF_GROUP,
 						"STATUS": row.STATUS,
 						"CHANGEBY": row.CHANGEBY,
 					    "CHANGEDATE": row.CHANGEDATE,
-					    "NUM": row.NUM,
+					    "PROF_NUM": row.PROF_NUM,
 					    "VERSION": row.VERSION,
 					}
 					this.$axios.post(url, submitData).then((res) => {
@@ -306,7 +346,7 @@
 								type: 'success'
 							});
 							//重新加载数据
-							this.requestData_productType2();
+							this.requestData_professionGro();
 						}
 					}).catch((err) => {
 						this.$message({
@@ -320,11 +360,11 @@
 		        });
 			},
 			deleteRow(row) {//Table-操作列中的删除行
-				this.$confirm('确定删除此产品类别吗？', '提示', {
+				this.$confirm('确定删除此产品类型吗？', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                 }).then(({ value }) => {
-                	var url = '/api/api-apps/app/productType2/' + row.ID;
+                	var url = '/api/api-apps/app/professionGro/' + row.ID;
                     this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 					//resp_code == 0 是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -332,7 +372,7 @@
 								message: '删除成功',
 								type: 'success'
 							});
-							this.requestData_productType2();
+							this.requestData_professionGro();
 						}
 					}).catch((err) => {
 						this.$message({
@@ -347,7 +387,7 @@
 		},
 		
 		mounted() {
-			this.requestData_productType2();
+			this.requestData_professionGro();
 			window.onresize = () => {//获取浏览器可视区域高度
 			 	return (() => {
 			 		this.fullHeight.height = document.documentElement.clientHeight - 180+'px';

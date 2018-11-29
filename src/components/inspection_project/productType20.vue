@@ -14,6 +14,7 @@
 		<div class="text item">
 			<div class="pb10 clearfix">
 				<div class="table-func pull-right">
+					
 					<el-button type="success" size="mini" round @click="addfield_productType2" class="pull-right">
 					<i class="icon-add"></i>
 					<font>新建</font>
@@ -21,22 +22,22 @@
 				</div>
 			</div>
 			<el-form :model="productType2Form" ref="productType2Form">
-			  <el-table :data="productType2Form.inspectionList.filter(data => !search || data.TYPE.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="380" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'productType2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
-				<el-table-column prop="iconOperation" fixed="left" label="操作" width="50">
+			  <el-table :data="productType2Form.inspectionList.filter(data => !search || data.TYPE.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'productType2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
+				<el-table-column prop="iconOperation" fixed="left" label="操作" width="80">
 			      <template slot-scope="scope">
-			        <!-- <el-button type="text" id="Edit" size="medium" @click.native.prevent="saveRow(scope.row)" v-if="scope.row.isEditing">
+			        <el-button type="text" id="Edit" size="medium" @click.native.prevent="saveRow(scope.row)" v-if="scope.row.isEditing">
 			        	<i class="icon-check" title="保存"></i>
-					</el-button> -->
-					<!-- <el-button type="text" size="medium" @click.native.prevent="modifyversion(scope.row)" v-else="v-else">
+					</el-button>
+					<el-button type="text" size="medium" @click.native.prevent="modifyversion(scope.row)" v-else="v-else">
 			        	<i class="icon-edit" title="修改"></i>
-					</el-button> -->
+					</el-button>
 			        <el-button @click="deleteRow(scope.row)" type="text" size="medium" title="删除" >
 			          <i class="icon-trash red"></i>
 			        </el-button>
 			      </template>
 			    </el-table-column>
 
-			  	<el-table-column label="产品类别编号" sortable width="140" prop="NUM">
+			  	<el-table-column label="产品类别编号" sortable width="120" prop="NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" disabled></el-input><span v-else="v-else">{{scope.row.NUM}}</span>
@@ -54,7 +55,7 @@
 			      </template>
 			    </el-table-column>
 
-				<el-table-column prop="STATUS" label="状态" sortable width="80" :formatter="judge">
+				<el-table-column prop="STATUS" label="状态" sortable width="120" :formatter="judge">
 			      <template slot-scope="scope">
 			        <el-select v-if="scope.row.isEditing" v-model="scope.row.STATUS" placeholder="请选择">
 			          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.label"></el-option>
@@ -62,11 +63,11 @@
 			      </template>
 			    </el-table-column>
 				
-				<!-- <el-table-column prop="VERSION" label="版本" sortable width="120">
+				<el-table-column prop="VERSION" label="版本" sortable width="120">
 			      <template slot-scope="scope">
 			       	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" disabled></el-input><span v-else="v-else">#r{{scope.row.VERSION}}</span>
 			      </template>
-			    </el-table-column> -->
+			    </el-table-column>
 
 			    <el-table-column prop="CHANGEBY" label="修改人" sortable width="120">
 			      <template slot-scope="scope">
@@ -101,25 +102,20 @@
 	            :total="page.totalCount">
 	        </el-pagination>
 			<!-- 表格 End-->
-			<product2 ref="child"></product2>
 		</div>
 	</el-card>
 </div>
 </template>
 <script>
-	import product2 from '../inspection_project/product2.vue'
 	export default {
 		name: 'productType2',
 		components: {
-			product2,//产品名称
+			
 		},
 		data() {
 			return {
 				productType2Form:{
 					inspectionList: []
-				},
-				fullHeight:{//给浏览器高度赋值
-					height: '',
 				},
 				isEditing: '',
 				loadSign:true,//加载
@@ -348,11 +344,6 @@
 		
 		mounted() {
 			this.requestData_productType2();
-			window.onresize = () => {//获取浏览器可视区域高度
-			 	return (() => {
-			 		this.fullHeight.height = document.documentElement.clientHeight - 180+'px';
-			 	})()
-			 }
 		},
 		
 

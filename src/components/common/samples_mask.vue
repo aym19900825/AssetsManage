@@ -151,306 +151,507 @@
 									</el-col>
 								</el-row>
 							</el-collapse-item>
-							<!-- 资质信息 Begin-->
-							<el-collapse-item title="领样信息表" name="3">								
+							<!-- 样品子表 Begin-->
+							<el-collapse-item title="样品子表" name="3">								
 								<div class="table-func">
 									<el-button type="success" size="mini" round @click="addfield">
 										<i class="icon-add"></i>
 										<font>新建行</font>
 									</el-button>
 								</div>
-								<el-form>
-					                <el-form-item>
-					                	<el-row :gutter="20">
-					                		<el-col :span="1">
-					                            <el-form-item label="序号" ></el-form-item>
-					                        </el-col>
-					                        <el-col :span="1">
-					                            <el-form-item label="类别" ></el-form-item>
-					                        </el-col>
-					                        <el-col :span="2">
-					                            <el-form-item label="委托单位" ></el-form-item>
-					                        </el-col>
-					                        <el-col :span="2">
-					                            <el-form-item label="生产单位" ></el-form-item>
-					                        </el-col>
-					                        <el-col :span="2">
-					                            <el-form-item label="样品名称" ></el-form-item>
-					                        </el-col>
-					                        <el-col :span="2">
-					                            <el-form-item label="样品型号" ></el-form-item>
-					                        </el-col>
-					                        <el-col :span="2">
-					                            <el-form-item label="样品数量" ></el-form-item>
-					                        </el-col>		                        
-					                        <el-col :span="2">
-					                            <el-form-item label="收样人"></el-form-item>
-					                        </el-col>
-					                        <el-col :span="2">
-					                            <el-form-item label="收样日期"></el-form-item>
-					                        </el-col>
-					                        <el-col :span="2">
-					                            <el-form-item label="接样人"></el-form-item>
-					                        </el-col>
-					                        <el-col :span="2">
-					                            <el-form-item label="接样日期"></el-form-item>
-					                        </el-col>
-					                        <el-col :span="2">
-					                            <el-form-item label="其他资料"></el-form-item>
-					                        </el-col>
-					                        <el-col :span="2">
-					                            <el-form-item label="备注"></el-form-item>
-					                        </el-col>
-					                	</el-row>
-					                    <el-row :gutter="10">
-					                        <el-col :span="1">
-					                            <el-input type="text"  placeholder="序号"></el-input>
-					                        </el-col>
-					                        <el-col :span="1">
-					                            <el-input type="text"  placeholder="类别"></el-input>
-					                        </el-col>
-					                        <el-col :span="2">
-					                        	<el-input type="text"  placeholder="委托单位" ></el-input>
-					                        </el-col>
-					                        <el-col :span="2">
-					                            <el-input type="text"  placeholder="生产单位"></el-input>
-					                        </el-col>
-					                        <el-col :span="2">
-					                            <el-input type="text"  placeholder="样品名称"></el-input>
-					                        </el-col> 
-					                        <el-col :span="2">
-					                            <el-input type="text"  placeholder="样品型号" ></el-input>
-					                        </el-col>
-					                           <el-col :span="2">
-					                            <el-input type="text"  placeholder="样品数量" ></el-input>
-					                        </el-col>
-					                           <el-col :span="2">
-					                            <el-input type="text"  placeholder="收样人" ></el-input>
-					                        </el-col>
-					                           <el-col :span="2">
-					                            <el-input type="text"  placeholder="收样日期" ></el-input>
-					                        </el-col>
-					                           <el-col :span="2">
-					                            <el-input type="text"  placeholder="接样人" ></el-input>
-					                        </el-col>
-					                           <el-col :span="2">
-											<el-date-picker v-model="user.birthday" type="date" placeholder="接样日期" value-format="yyyy-MM-dd">
+								<el-table :data="ITEM.ITEM_LINE" row-key="ID" border stripe height="300" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'ITEM.ITEM_LINE', order: 'descending'}" v-loadmore="loadMore">
+
+								    <el-table-column prop="iconOperation" fixed label="" width="50px">
+								      <template slot-scope="scope"><i class="el-icon-check" v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else="v-else"></i></template>
+								    </el-table-column>
+
+								    <el-table-column label="样品序号" sortable width="120px" prop="ITEM_STEP">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.$index + 1" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.$index + 1}}</span>
+								      </template>
+								    </el-table-column>
+
+									<el-table-column prop="ITEMNUM" label="样品编号" sortable width="120px" :formatter="judge">
+								      <template slot-scope="scope">
+								        <el-select v-if="scope.row.isEditing" v-model="scope.row.ITEMNUM" placeholder="请选择">
+								          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.label"></el-option>
+								        </el-select><span v-else="v-else">{{scope.row.ITEMNUM}}</span>
+								      </template>
+								    </el-table-column>
+
+								    <el-table-column prop="SN" label="单件码" sortable width="120px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.SN" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.SN}}</span>
+								      </template>
+								    </el-table-column>
+
+								    <el-table-column prop="STATE" label="样品状态" sortable width="120px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATE" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.STATE}}</span>
+								      </template>
+								    </el-table-column>
+
+								    <el-table-column prop="ENTERBY" label="录入人" sortable width="120px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ENTERBY" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.ENTERBY}}</span>
+								      </template>
+								    </el-table-column>
+
+								    <el-table-column prop="REASION" label="项目提出理由" sortable width="120px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REASION" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.REASION}}</span>
+								      </template>
+								    </el-table-column>
+
+								    <el-table-column prop="ENTERDATE" label="录入时间" sortable width="240px">
+								      <template slot-scope="scope">
+								        <!-- <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ENTERDATE" placeholder="请输入内容"></el-input> -->
+								        <el-date-picker  v-if="scope.row.isEditing" type="date" v-model="scope.row.ENTERDATE" size="small" placeholder="选择日期" value-format="yyyy-MM-dd">
 											</el-date-picker>
-									        </el-col>
-					                           <el-col :span="2">
-					                            <el-input type="text"  placeholder="其他资料" ></el-input>
-					                        </el-col>
-					                           <el-col :span="2">
-					                            <el-input type="text"  placeholder="备注" ></el-input>
-					                        </el-col>
-					                        <el-col :span="24" >
-					                            <el-upload
-													class="upload-demo"
-													action="https://jsonplaceholder.typicode.com/posts/"
-													:on-preview="handlePreview"
-													:on-remove="handleRemove"
-													:before-remove="beforeRemove"
-													multiple
-													:limit="3"
-													:on-exceed="handleExceed"
-													:file-list="fileList">
-												</el-upload>
-					                        </el-col>                
-					                        <el-col :span="2">
-					                            <i class="el-icon-delete" @click="delfield(item)" style="color: red;text-align:center"></i>
-					                        </el-col>
-					                    </el-row>
-					                </el-form-item>
-				            	</el-form>							
+								        <span v-else="v-else">{{scope.row.ENTERDATE}}</span>
+								      </template>
+								    </el-table-column>
+
+								    <el-table-column prop="CHANGEBY" label="修改人" sortable width="150px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHANGEBY" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.CHANGEBY}}</span>
+								      </template>
+								    </el-table-column>
+
+								    <el-table-column prop="CHANGEDATE" label="修改时间" sortable width="150px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHANGEDATE" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.CHANGEDATE}}</span>
+								      </template>
+								    </el-table-column>
+
+								    <el-table-column prop="STATUS" label="信息状态" sortable width="150px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.STATUS}}</span>
+								      </template>
+								    </el-table-column>
+
+								    <el-table-column fixed="right" label="操作" width="120px">
+								      <template slot-scope="scope">
+								        <el-button @click.native.prevent="deleteRow(scope.$index, ITEM.ITEM_LINE)" type="text" size="small">
+								          移除
+								        </el-button>
+								      </template>
+								    </el-table-column>
+
+								  </el-table>
 							</el-collapse-item>
-							<el-collapse-item title="返样信息表" name="4">								
+							<!-- 样品子表 End-->
+
+							<!-- 领样信息表 Begin-->
+							<el-collapse-item title="领样信息表" name="4">								
 								<div class="table-func">
-									<el-button type="success" size="mini" round @click="addfield">
+									<el-button type="success" size="mini" round @click="addfield02">
 										<i class="icon-add"></i>
 										<font>新建行</font>
 									</el-button>
 								</div>
-								<el-form>
-					                <el-form-item>
-					                	<el-row :gutter="20">
-					                		<el-col :span="2">
-					                            <el-form-item label="序号" ></el-form-item>
-					                        </el-col>
-					                        <el-col :span="2">
-					                            <el-form-item label="样品编号" ></el-form-item>
-					                        </el-col>
-					                        <el-col :span="2">
-					                            <el-form-item label="样品名称" ></el-form-item>
-					                        </el-col>
-					                        <el-col :span="1">
-					                            <el-form-item label="数量" ></el-form-item>
-					                        </el-col>
-					                        <el-col :span="3">
-					                            <el-form-item label="收回入库时间" ></el-form-item>
-					                        </el-col>
-					                        <el-col :span="2">
-					                            <el-form-item label="样品承接人" ></el-form-item>
-					                        </el-col>
-					                        <el-col :span="2">
-					                            <el-form-item label="处理批准人" ></el-form-item>
-					                        </el-col>		                        
-					                        <el-col :span="2">
-					                            <el-form-item label="处理人"></el-form-item>
-					                        </el-col>
-					                        <el-col :span="2">
-					                            <el-form-item label="处理日期"></el-form-item>
-					                        </el-col>
-					                        <el-col :span="2">
-					                            <el-form-item label="备注"></el-form-item>
-					                        </el-col>
-					                	</el-row>
-					                    <el-row :gutter="10">
-					                        <el-col :span="2">
-					                            <el-input type="text"  placeholder="序号"></el-input>
-					                        </el-col>
-					                        <el-col :span="2">
-					                            <el-input type="text"  placeholder="样品编号"></el-input>
-					                        </el-col>
-					                        <el-col :span="2">
-					                        	<el-input type="text"  placeholder="样品名称" ></el-input>
-					                        </el-col>
-					                        <el-col :span="1">
-					                            <el-input type="text"  placeholder="数量"></el-input>
-					                        </el-col>
-					                        <el-col :span="3">
-					                            <el-input type="text"  placeholder="收回入库时间"></el-input>
-					                        </el-col> 
-					                        <el-col :span="2">
-					                            <el-input type="text"  placeholder="样品承接人" ></el-input>
-					                        </el-col>
-					                         <el-col :span="2">
-					                            <el-input type="text"  placeholder="处理批准人" ></el-input>
-					                        </el-col>
-					                        <el-col :span="2">
-					                            <el-input type="text"  placeholder="处理人" ></el-input>
-					                        </el-col>
-					                        <el-col :span="2">
-											<el-date-picker v-model="user.birthday" type="date" placeholder="处理日期" value-format="yyyy-MM-dd">
+								<el-table :data="ITEM.ITEM_GRANT" row-key="ID" border stripe height="300" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'ITEM.ITEM_GRANT', order: 'descending'}" v-loadmore="loadMore">
+
+								 <el-table-column prop="iconOperation" fixed label="" width="50px">
+								 <template slot-scope="scope"><i class="el-icon-check" v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else="v-else"></i></template>
+								 </el-table-column>
+
+								    <el-table-column label="样品序号" sortable width="120px" prop="ITEMNUM">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.$index + 1" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.$index + 1}}</span>
+								      </template>
+								    </el-table-column>
+
+									<el-table-column prop="TYPE" label="样品类别" sortable width="120px" :formatter="judge">
+								      <template slot-scope="scope">
+								        <el-select v-if="scope.row.isEditing" v-model="scope.row.TYPE" placeholder="请选择">
+								          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.label"></el-option>
+								        </el-select><span v-else="v-else">{{scope.row.TYPE}}</span>
+								      </template>
+								    </el-table-column>
+
+								    <el-table-column prop="DESCRIPTION" label="样品名称" sortable width="120px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DESCRIPTION" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.DESCRIPTION}}</span>
+								      </template>
+								    </el-table-column>
+
+								    <el-table-column prop="MODEL" label="样品型号" sortable width="120px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.MODEL}}</span>
+								      </template>
+								    </el-table-column>
+
+								    <el-table-column prop="QUALITY" label="数量" sortable width="120px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.QUALITY" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.QUALITY}}</span>
+								      </template>
+								    </el-table-column>
+
+								    <el-table-column prop="ACCEPT_PERSON" label="收样人" sortable width="120px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ACCEPT_PERSON" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.ACCEPT_PERSON}}</span>
+								      </template>
+								    </el-table-column>
+
+								    <el-table-column prop="ACCEPT_DATE" label="收样日期" sortable width="240px">
+								      <template slot-scope="scope">
+								        <!-- <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ENTERDATE" placeholder="请输入内容"></el-input> -->
+								        <el-date-picker  v-if="scope.row.isEditing" type="date" v-model="scope.row.ACCEPT_DATE" size="small" placeholder="选择日期" value-format="yyyy-MM-dd">
 											</el-date-picker>
-									        </el-col>
-					                        <el-col :span="2">
-					                            <el-input type="text"  placeholder="备注" ></el-input>
-					                        </el-col>
-					                        <el-col :span="3" >
-					                            <el-upload
-													class="upload-demo"
-													action="https://jsonplaceholder.typicode.com/posts/"
-													:on-preview="handlePreview"
-													:on-remove="handleRemove"
-													:before-remove="beforeRemove"
-													multiple
-													:limit="3"
-													:on-exceed="handleExceed"
-													:file-list="fileList">
-												</el-upload>
-					                        </el-col>                
-					                        <el-col :span="2">
-					                            <i class="el-icon-delete" @click="delfield(item)" style="color: red;text-align:center"></i>
-					                        </el-col>
-					                    </el-row>
-					                </el-form-item>
-				            	</el-form>							
+								        <span v-else="v-else">{{scope.row.ACCEPT_DATE}}</span>
+								      </template>
+								    </el-table-column>
+
+								    <el-table-column prop="GRANT_PERSON" label="领样人" sortable width="150px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.GRANT_PERSON" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.GRANT_PERSON}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="GRANT_DATE" label="领样日期" sortable width="240px">
+								      <template slot-scope="scope">
+								        <el-date-picker  v-if="scope.row.isEditing" type="date" v-model="scope.row.GRANT_DATE" size="small" placeholder="选择日期" value-format="yyyy-MM-dd">
+											</el-date-picker>
+								        <span v-else="v-else">{{scope.row.GRANT_DATE}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="OTHER" label="其他资料" sortable width="150px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.OTHER" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.OTHER}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="MEMO" label="备注" sortable width="150px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MEMO" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.MEMO}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="STATE" label="状态" sortable width="150px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATE" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.STATE}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="STATUSDATE" label="状态日期" sortable width="240px">
+								      <template slot-scope="scope">
+								        <el-date-picker  v-if="scope.row.isEditing" type="date" v-model="scope.row.STATUSDATE" size="small" placeholder="选择日期" value-format="yyyy-MM-dd">
+											</el-date-picker>
+								        <span v-else="v-else">{{scope.row.STATUSDATE}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="ENTERBY" label="录入人" sortable width="150px">
+								      <template slot-scope="scope">
+								     <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ENTERBY" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.ENTERBY}}</span>
+								     </template>
+								    </el-table-column>
+								     <el-table-column prop="ENTERDATE" label="录入时间" sortable width="240px">
+								      <template slot-scope="scope">
+								        <el-date-picker  v-if="scope.row.isEditing" type="date" v-model="scope.row.ENTERDATE" size="small" placeholder="选择日期" value-format="yyyy-MM-dd">
+											</el-date-picker>
+								        <span v-else="v-else">{{scope.row.ENTERDATE}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="CHANGEBY" label="修改人" sortable width="150px">
+								      <template slot-scope="scope">
+								     <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHANGEBY" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.CHANGEBY}}</span>
+								     </template>
+								    </el-table-column>
+								    <el-table-column prop="CHANGEDATE" label="修改时间" sortable width="240px">
+								      <template slot-scope="scope">
+								        <el-date-picker  v-if="scope.row.isEditing" type="date" v-model="scope.row.CHANGEDATE" size="small" placeholder="选择日期" value-format="yyyy-MM-dd">
+											</el-date-picker>
+								        <span v-else="v-else">{{scope.row.CHANGEDATE}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="STATUS" label="信息状态" sortable width="150px">
+								      <template slot-scope="scope">
+								     <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.STATUS}}</span>
+								     </template>
+								    </el-table-column>
+								     <el-table-column prop="SYNCHRONIZATION_TIME" label="同步时间" sortable width="240px">
+								      <template slot-scope="scope">
+								        <el-date-picker  v-if="scope.row.isEditing" type="date" v-model="scope.row.SYNCHRONIZATION_TIME" size="small" placeholder="选择日期" value-format="yyyy-MM-dd">
+											</el-date-picker>
+								        <span v-else="v-else">{{scope.row.SYNCHRONIZATION_TIME}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column fixed="right" label="操作" width="120px">
+								      <template slot-scope="scope">
+								        <el-button @click.native.prevent="deleteRow(scope.$index, ITEM.ITEM_GRANT)" type="text" size="small">
+								          移除
+								        </el-button>
+								      </template>
+								    </el-table-column>
+
+								  </el-table>
 							</el-collapse-item>
-							<el-collapse-item title="样品处置信息表" name="4">						
+							<!-- 领样信息表 End-->
+
+							<!-- 样品返样信息表 Begin-->
+							<el-collapse-item title="样品返样信息表" name="5">						
 								<div class="table-func">
-									<el-button type="success" size="mini" round @click="addfield">
+									<el-button type="success" size="mini" round @click="addfield03">
 										<i class="icon-add"></i>
 										<font>新建行</font>
 									</el-button>
 								</div>
-								<el-form>
-					                <el-form-item>
-					                	<el-row :gutter="20">
-					                		<el-col :span="2">
-					                            <el-form-item label="序号" ></el-form-item>
-					                        </el-col>
-					                        <el-col :span="2">
-					                            <el-form-item label="样品编号" ></el-form-item>
-					                        </el-col>
-					                        <el-col :span="2">
-					                            <el-form-item label="样品名称" ></el-form-item>
-					                        </el-col>
-					                        <el-col :span="1">
-					                            <el-form-item label="数量" ></el-form-item>
-					                        </el-col>
-					                        <el-col :span="3">
-					                            <el-form-item label="收回入库时间" ></el-form-item>
-					                        </el-col>
-					                        <el-col :span="2">
-					                            <el-form-item label="样品承接人" ></el-form-item>
-					                        </el-col>
-					                        <el-col :span="2">
-					                            <el-form-item label="处理批准人" ></el-form-item>
-					                        </el-col>		                        
-					                        <el-col :span="2">
-					                            <el-form-item label="处理人"></el-form-item>
-					                        </el-col>
-					                        <el-col :span="2">
-					                            <el-form-item label="处理日期"></el-form-item>
-					                        </el-col>
-					                        <el-col :span="2">
-					                            <el-form-item label="备注"></el-form-item>
-					                        </el-col>
-					                	</el-row>
-					                    <el-row :gutter="10">
-					                        <el-col :span="2">
-					                            <el-input type="text"  placeholder="序号"></el-input>
-					                        </el-col>
-					                        <el-col :span="2">
-					                            <el-input type="text"  placeholder="样品编号"></el-input>
-					                        </el-col>
-					                        <el-col :span="2">
-					                        	<el-input type="text"  placeholder="样品名称" ></el-input>
-					                        </el-col>
-					                        <el-col :span="1">
-					                            <el-input type="text"  placeholder="数量"></el-input>
-					                        </el-col>
-					                        <el-col :span="3">
-					                            <el-input type="text"  placeholder="收回入库时间"></el-input>
-					                        </el-col> 
-					                        <el-col :span="2">
-					                            <el-input type="text"  placeholder="样品承接人" ></el-input>
-					                        </el-col>
-					                         <el-col :span="2">
-					                            <el-input type="text"  placeholder="处理批准人" ></el-input>
-					                        </el-col>
-					                        <el-col :span="2">
-					                            <el-input type="text"  placeholder="处理人" ></el-input>
-					                        </el-col>
-					                        <el-col :span="2">
-											<el-date-picker v-model="user.birthday" type="date" placeholder="处理日期" value-format="yyyy-MM-dd">
+								<el-table :data="ITEM.ITEM_RETURN" row-key="ID" border stripe height="300" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'ITEM.ITEM_RETURN', order: 'descending'}" v-loadmore="loadMore">
+								 <el-table-column prop="iconOperation" fixed label="" width="50px">
+								 <template slot-scope="scope"><i class="el-icon-check" v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else="v-else"></i></template>
+								 </el-table-column>
+								    <el-table-column label="样品序号" sortable width="120px" prop="ITEMNUM">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.$index + 1" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.$index + 1}}</span>
+								      </template>
+								    </el-table-column>
+									<el-table-column prop="QUALITY" label="数量" sortable width="120px" :formatter="judge">
+								      <template slot-scope="scope">
+								        <el-select v-if="scope.row.isEditing" v-model="scope.row.QUALITY" placeholder="请选择">
+								          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.label"></el-option>
+								        </el-select><span v-else="v-else">{{scope.row.QUALITY}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="ACCEPT_DATE" label="收回入库时间" sortable width="240px">
+								      <template slot-scope="scope">
+								        <el-date-picker  v-if="scope.row.isEditing" type="date" v-model="scope.row.ACCEPT_DATE" size="small" placeholder="选择日期" value-format="yyyy-MM-dd">
 											</el-date-picker>
-									        </el-col>
-					                        <el-col :span="2">
-					                            <el-input type="text"  placeholder="备注" ></el-input>
-					                        </el-col>
-					                        <el-col :span="3" >
-					                            <el-upload
-													class="upload-demo"
-													action="https://jsonplaceholder.typicode.com/posts/"
-													:on-preview="handlePreview"
-													:on-remove="handleRemove"
-													:before-remove="beforeRemove"
-													multiple
-													:limit="3"
-													:on-exceed="handleExceed"
-													:file-list="fileList">
-												</el-upload>
-					                        </el-col>                
-					                        <el-col :span="2">
-					                            <i class="el-icon-delete" @click="delfield(item)" style="color: red;text-align:center"></i>
-					                        </el-col>
-					                    </el-row>
-					                </el-form-item>
-				            	</el-form>							
+								        <span v-else="v-else">{{scope.row.ACCEPT_DATE}}</span>
+								      </template>
+								    </el-table-column>
+
+								    <el-table-column prop="GRANT_PERSON" label="领样人" sortable width="150px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.GRANT_PERSON" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.GRANT_PERSON}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="GRANT_DATE" label="领样日期" sortable width="240px">
+								      <template slot-scope="scope">
+								        <el-date-picker  v-if="scope.row.isEditing" type="date" v-model="scope.row.GRANT_DATE" size="small" placeholder="选择日期" value-format="yyyy-MM-dd">
+											</el-date-picker>
+								        <span v-else="v-else">{{scope.row.GRANT_DATE}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="ACCEPT_PERSON" label="样品承接人" sortable width="150px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ACCEPT_PERSON" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.ACCEPT_PERSON}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="APPR_PERSON" label="处理批准人" sortable width="150px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.APPR_PERSON" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.APPR_PERSON}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="APPR_DATE" label="批准日期" sortable width="240px">
+								      <template slot-scope="scope">
+								        <el-date-picker  v-if="scope.row.isEditing" type="date" v-model="scope.row.APPR_DATE" size="small" placeholder="选择日期" value-format="yyyy-MM-dd">
+											</el-date-picker>
+								        <span v-else="v-else">{{scope.row.APPR_DATE}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="DO_PERSON" label="处理人" sortable width="150px">
+								      <template slot-scope="scope">
+								     <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DO_PERSON" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.DO_PERSON}}</span>
+								     </template>
+								    </el-table-column>
+								     <el-table-column prop="DO_DATE" label="处理日期" sortable width="240px">
+								      <template slot-scope="scope">
+								        <el-date-picker  v-if="scope.row.isEditing" type="date" v-model="scope.row.DO_DATE" size="small" placeholder="选择日期" value-format="yyyy-MM-dd">
+											</el-date-picker>
+								        <span v-else="v-else">{{scope.row.DO_DATE}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="MEMO" label="备注" sortable width="150px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MEMO" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.MEMO}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="STATE" label="状态" sortable width="150px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATE" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.STATE}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="ENTERBY" label="录入人" sortable width="150px">
+								      <template slot-scope="scope">
+								     <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ENTERBY" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.ENTERBY}}</span>
+								     </template>
+								    </el-table-column>
+								    <el-table-column prop="ENTERDATE" label="录入时间" sortable width="240px">
+								      <template slot-scope="scope">
+								        <el-date-picker  v-if="scope.row.isEditing" type="date" v-model="scope.row.ENTERDATE" size="small" placeholder="选择日期" value-format="yyyy-MM-dd">
+											</el-date-picker>
+								        <span v-else="v-else">{{scope.row.ENTERDATE}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="CHANGEBY" label="修改人" sortable width="150px">
+								      <template slot-scope="scope">
+								     <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHANGEBY" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.CHANGEBY}}</span>
+								     </template>
+								    </el-table-column>
+								    <el-table-column prop="CHANGEDATE" label="修改时间" sortable width="240px">
+								      <template slot-scope="scope">
+								        <el-date-picker  v-if="scope.row.isEditing" type="date" v-model="scope.row.CHANGEDATE" size="small" placeholder="选择日期" value-format="yyyy-MM-dd">
+											</el-date-picker>
+								        <span v-else="v-else">{{scope.row.CHANGEDATE}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="STATUS" label="信息状态" sortable width="150px">
+								      <template slot-scope="scope">
+								     <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.STATUS}}</span>
+								     </template>
+								    </el-table-column>
+								     <el-table-column prop="SYNCHRONIZATION_TIME" label="同步时间" sortable width="240px">
+								      <template slot-scope="scope">
+								        <el-date-picker  v-if="scope.row.isEditing" type="date" v-model="scope.row.SYNCHRONIZATION_TIME" size="small" placeholder="选择日期" value-format="yyyy-MM-dd">
+											</el-date-picker>
+								        <span v-else="v-else">{{scope.row.SYNCHRONIZATION_TIME}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column fixed="right" label="操作" width="120px">
+								      <template slot-scope="scope">
+								        <el-button @click.native.prevent="deleteRow(scope.$index, ITEM.ITEM_RETURN)" type="text" size="small">
+								          移除
+								        </el-button>
+								      </template>
+								    </el-table-column>
+
+								  </el-table>
 							</el-collapse-item>
-							
-							<!-- 资质信息 End -->
+							<!-- 样品返样信息表 End -->
+
+							<!-- 样品返处置息表 Begin -->
+								<el-collapse-item title="样品处置信息表" name="6">						
+								<div class="table-func">
+									<el-button type="success" size="mini" round @click="addfield04">
+										<i class="icon-add"></i>
+										<font>新建行</font>
+									</el-button>
+								</div>
+								<el-table :data="ITEM.ITEM_DISPOSITION" row-key="ID" border stripe height="300" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'ITEM.ITEM_DISPOSITION', order: 'descending'}" v-loadmore="loadMore">
+								 <el-table-column prop="iconOperation" fixed label="" width="50px">
+								 <template slot-scope="scope"><i class="el-icon-check" v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else="v-else"></i></template>
+								 </el-table-column>
+								    <el-table-column label="样品序号" sortable width="120px" prop="ITEMNUM">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.$index + 1" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.$index + 1}}</span>
+								      </template>
+								    </el-table-column>
+									<el-table-column prop="QUALITY" label="数量" sortable width="120px" :formatter="judge">
+								      <template slot-scope="scope">
+								        <el-select v-if="scope.row.isEditing" v-model="scope.row.QUALITY" placeholder="请选择">
+								          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.label"></el-option>
+								        </el-select><span v-else="v-else">{{scope.row.QUALITY}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="ACCEPT_DATE" label="收回入库时间" sortable width="240px">
+								      <template slot-scope="scope">
+								        <el-date-picker  v-if="scope.row.isEditing" type="date" v-model="scope.row.ACCEPT_DATE" size="small" placeholder="选择日期" value-format="yyyy-MM-dd">
+											</el-date-picker>
+								        <span v-else="v-else">{{scope.row.ACCEPT_DATE}}</span>
+								      </template>
+								    </el-table-column>
+
+								    <el-table-column prop="GRANT_PERSON" label="领样人" sortable width="150px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.GRANT_PERSON" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.GRANT_PERSON}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="GRANT_DATE" label="领样日期" sortable width="240px">
+								      <template slot-scope="scope">
+								        <el-date-picker  v-if="scope.row.isEditing" type="date" v-model="scope.row.GRANT_DATE" size="small" placeholder="选择日期" value-format="yyyy-MM-dd">
+											</el-date-picker>
+								        <span v-else="v-else">{{scope.row.GRANT_DATE}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="ACCEPT_PERSON" label="样品承接人" sortable width="150px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ACCEPT_PERSON" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.ACCEPT_PERSON}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="APPR_PERSON" label="处理批准人" sortable width="150px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.APPR_PERSON" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.APPR_PERSON}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="APPR_DATE" label="批准日期" sortable width="240px">
+								      <template slot-scope="scope">
+								        <el-date-picker  v-if="scope.row.isEditing" type="date" v-model="scope.row.APPR_DATE" size="small" placeholder="选择日期" value-format="yyyy-MM-dd">
+											</el-date-picker>
+								        <span v-else="v-else">{{scope.row.APPR_DATE}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="DO_PERSON" label="处理人" sortable width="150px">
+								      <template slot-scope="scope">
+								     <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DO_PERSON" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.DO_PERSON}}</span>
+								     </template>
+								    </el-table-column>
+								     <el-table-column prop="DO_DATE" label="处理日期" sortable width="240px">
+								      <template slot-scope="scope">
+								        <el-date-picker  v-if="scope.row.isEditing" type="date" v-model="scope.row.DO_DATE" size="small" placeholder="选择日期" value-format="yyyy-MM-dd">
+											</el-date-picker>
+								        <span v-else="v-else">{{scope.row.DO_DATE}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="MEMO" label="备注" sortable width="150px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MEMO" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.MEMO}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="STATE" label="状态" sortable width="150px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATE" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.STATE}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="STATUSDATE" label="状态日期" sortable width="240px">
+								      <template slot-scope="scope">
+								        <el-date-picker  v-if="scope.row.isEditing" type="date" v-model="scope.row.STATUSDATE" size="small" placeholder="选择日期" value-format="yyyy-MM-dd">
+											</el-date-picker>
+								        <span v-else="v-else">{{scope.row.STATUSDATE}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="ENTERBY" label="录入人" sortable width="150px">
+								      <template slot-scope="scope">
+								     <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ENTERBY" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.ENTERBY}}</span>
+								     </template>
+								    </el-table-column>
+								    <el-table-column prop="ENTERDATE" label="录入时间" sortable width="240px">
+								      <template slot-scope="scope">
+								        <el-date-picker  v-if="scope.row.isEditing" type="date" v-model="scope.row.ENTERDATE" size="small" placeholder="选择日期" value-format="yyyy-MM-dd">
+											</el-date-picker>
+								        <span v-else="v-else">{{scope.row.ENTERDATE}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="CHANGEBY" label="修改人" sortable width="150px">
+								      <template slot-scope="scope">
+								     <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHANGEBY" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.CHANGEBY}}</span>
+								     </template>
+								    </el-table-column>
+								    <el-table-column prop="CHANGEDATE" label="修改时间" sortable width="240px">
+								      <template slot-scope="scope">
+								        <el-date-picker  v-if="scope.row.isEditing" type="date" v-model="scope.row.CHANGEDATE" size="small" placeholder="选择日期" value-format="yyyy-MM-dd">
+											</el-date-picker>
+								        <span v-else="v-else">{{scope.row.CHANGEDATE}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="STATUS" label="信息状态" sortable width="150px">
+								      <template slot-scope="scope">
+								     <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.STATUS}}</span>
+								     </template>
+								    </el-table-column>
+								     <el-table-column prop="SYNCHRONIZATION_TIME" label="同步时间" sortable width="240px">
+								      <template slot-scope="scope">
+								        <el-date-picker  v-if="scope.row.isEditing" type="date" v-model="scope.row.SYNCHRONIZATION_TIME" size="small" placeholder="选择日期" value-format="yyyy-MM-dd">
+											</el-date-picker>
+								        <span v-else="v-else">{{scope.row.SYNCHRONIZATION_TIME}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column fixed="right" label="操作" width="120px">
+								      <template slot-scope="scope">
+								        <el-button @click.native.prevent="deleteRow(scope.$index, ITEM.ITEM_DISPOSITION)" type="text" size="small">
+								          移除
+								        </el-button>
+								      </template>
+								    </el-table-column>
+
+								  </el-table>
+							</el-collapse-item>
 						</el-collapse>
 					</div>
 
@@ -585,10 +786,110 @@
   				}
             };
 			return {
+				ITEM:{
+					ID:'',
+					PROXYNUM:'',
+					ITEMNUM:'',
+					VENDOR:'',
+					PRODUCT_COMPANY:'',
+					V_NAME:'',
+					P_NAME:'',
+					DESCRIPTION:'',
+					PRODUCT_CODE:'',
+					MODEL:'',
+					QUATITY:'',
+					OTHER:'',
+					MEMO:'',
+					ACCEPTDATE:'',
+					ACCEPT_PERSON:'',
+					ACCEPT_DATE:'',
+					RECIP_PERSON:'',
+					RECIP_DATE:'',
+					STATE:'',
+					STATUSDATE:'',
+					ENTERBY:'',
+					ENTERDATE:'',
+					CHANGEBY:'',
+					CHANGEDATE:'',
+					TYPE:'',
+					STATUS:'',
+					ITEM_LINE:[{
+						ID:'',
+						ITEMNUM:'',
+						ITEM_STEP:'',
+						SN:'',
+						STATE:'',
+						ENTERBY:'',
+						ENTERDATE:'',
+						CHANGEBY:'',
+						CHANGEDATE:'',
+						STATUS:'',
+					}],
+					ITEM_GRANT:[{
+						ID:'',
+						ITEMNUM:'',
+						TYPE:'',
+						DESCRIPTION:'',
+						MODEL:'',
+						QUALITY:'',
+						ACCEPT_PERSON:'',
+						ACCEPT_DATE:'',
+						GRANT_PERSON:'',
+						GRANT_DATE:'',
+						OTHER:'',
+						MEMO:'',
+						STATE:'',
+						STATUSDATE:'',
+						ENTERBY:'',
+						ENTERDATE:'',
+						CHANGEBY:'',
+						CHANGEDATE:'',
+						STATUS:'',
+						SYNCHRONIZATION_TIME:'',
+					}],
+					ITEM_RETURN:[{
+						ID:'',
+						ITEMNUM:'',
+						QUALITY:'',
+						ACCEPT_DATE:'',
+						ACCEPT_PERSON:'',
+						APPR_PERSON:'',
+						APPR_DATE:'',
+						DO_PERSON:'',
+						DO_DATE:'',
+						MEMO:'',
+						STATE:'',
+						ENTERBY:'',
+						ENTERDATE:'',
+						CHANGEBY:'',
+						CHANGEDATE:'',
+						STATUS:'',
+						SYNCHRONIZATION_TIME:'',
+					}],
+					ITEM_DISPOSITION:[{
+						ID:'',
+						ITEMNUM:'',
+						QUALITY:'',
+						ACCEPT_DATE:'',
+						ACCEPT_PERSON:'',
+						APPR_PERSON:'',
+						APPR_DATE:'',
+						DO_PERSON:'',
+						DO_DATE:'',
+						MEMO:'',
+						STATE:'',
+						STATUSDATE:'',
+						ENTERBY:'',
+						ENTERDATE:'',
+						CHANGEBY:'',
+						CHANGEDATE:'',
+						STATUS:'',
+						SYNCHRONIZATION_TIME:'',
+					}],
+
+				},
 				editSearch: '',
 				edit: true, //禁填
-				'男': true,
-				'女': false,
 				show: false,
 				isok1: true,
 				isok2: false,
@@ -655,6 +956,104 @@
 			};
 		},
 		methods: {
+			//表格对当前行进行操作
+			iconOperation(row, column, cell, event){
+		        if(column.property ==="iconOperation"){
+		        	console.log(row.isEditing);
+		            row.isEditing = !row.isEditing;
+		            console.log(row.isEditing);
+		        }
+		    },
+		    deleteRow(index, rows) {//Table-操作列中的删除行
+				rows.splice(index, 1);
+			},
+			//样品子表新建行
+			addfield(){
+				var obj = {
+                    ITEMNUM:'',
+					ITEM_STEP:'',
+					SN:'',
+					STATE:'',
+					ENTERBY:'',
+					ENTERDATE:'',
+					CHANGEBY:'',
+					CHANGEDATE:'',
+					STATUS:'',
+					isEditing:true
+                };
+                this.ITEM.ITEM_LINE.unshift(obj);
+			},
+			addfield02(){
+				var obj = {
+                    ID:'',
+						ITEMNUM:'',
+						TYPE:'',
+						DESCRIPTION:'',
+						MODEL:'',
+						QUALITY:'',
+						ACCEPT_PERSON:'',
+						ACCEPT_DATE:'',
+						GRANT_PERSON:'',
+						GRANT_DATE:'',
+						OTHER:'',
+						MEMO:'',
+						STATE:'',
+						STATUSDATE:'',
+						ENTERBY:'',
+						ENTERDATE:'',
+						CHANGEBY:'',
+						CHANGEDATE:'',
+						STATUS:'',
+						SYNCHRONIZATION_TIME:'',
+					    isEditing:true
+                };
+                this.ITEM.ITEM_GRANT.unshift(obj);
+			},
+			addfield03(){
+				var obj = {
+                        ID:'',
+						ITEMNUM:'',
+						QUALITY:'',
+						ACCEPT_DATE:'',
+						ACCEPT_PERSON:'',
+						APPR_PERSON:'',
+						APPR_DATE:'',
+						DO_PERSON:'',
+						DO_DATE:'',
+						MEMO:'',
+						STATE:'',
+						ENTERBY:'',
+						ENTERDATE:'',
+						CHANGEBY:'',
+						CHANGEDATE:'',
+						STATUS:'',
+						SYNCHRONIZATION_TIME:'',
+                };
+                this.ITEM.ITEM_RETURN.unshift(obj);
+			},
+			addfield04(){
+				var obj = {
+                        ID:'',
+						ITEMNUM:'',
+						QUALITY:'',
+						ACCEPT_DATE:'',
+						ACCEPT_PERSON:'',
+						APPR_PERSON:'',
+						APPR_DATE:'',
+						DO_PERSON:'',
+						DO_DATE:'',
+						MEMO:'',
+						STATE:'',
+						STATUSDATE:'',
+						ENTERBY:'',
+						ENTERDATE:'',
+						CHANGEBY:'',
+						CHANGEDATE:'',
+						STATUS:'',
+						SYNCHRONIZATION_TIME:'',
+                };
+                this.ITEM.ITEM_DISPOSITION.unshift(obj);
+			},
 			handleChange(val) { //手风琴开关效果调用
 			},
 			//
@@ -666,32 +1065,9 @@
 		   	handleNodeClick(data) {//获取勾选树菜单节点
              	console.log(data);
             },
-			
-			
-			//form表单内容清空
-			resetNew(){
-                this.user = {
-					companyName:'',
-					deptName:'',
-					username:'',
-					password:'',
-					nickname:'',
-					birthday:'',
-					sexName:'',
-					idnumber:'',
-					entrytime:'',
-					roleId:[],
-					roles: [],
-					worknumber:'',
-					phone:'',
-					email:'',
-					address:'',
-					tips:''
-				}
-                this.$refs["user"].resetFields();
-            },
 			//点击按钮显示弹窗
 			visible() {
+				this.ITEM.ITEM_LINE = [];//显示弹出框时样品字表数据
 				this.show = true;
 			},
 			// 这里是修改

@@ -223,7 +223,7 @@
       </template>
     </el-table-column>
 
-    <el-table-column prop="MEMO" label="近三年监督抽查情况" sortable width="160px">
+    <el-table-column prop="MEMO" label="近三年监督抽查情况" sortable width="260px">
       <template slot-scope="scope">
         <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.MODEL}}</span>
       </template>

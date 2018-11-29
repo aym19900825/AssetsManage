@@ -152,7 +152,7 @@
 								</el-table-column>
 								<el-table-column label="录入时间" sortable width="210px" prop="ENTERDATE" v-if="this.checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>
-								<el-table-column label="状态" sortable prop="STATUS" v-if="this.checkedName.indexOf('状态')!=-1">
+								<el-table-column label="状态" sortable  width="380px" prop="STATUS" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="pull-right" v-if="this.checkedName.length>0"

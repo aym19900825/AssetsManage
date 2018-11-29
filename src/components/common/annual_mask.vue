@@ -122,33 +122,38 @@
 									</el-button>
 								</div>
 
-								<el-table :data="WORKPLAN.WORLPLANLINEList" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'WORKPLAN.WORLPLANLINEList', order: 'descending'}" v-loadmore="loadMore">
+								<el-table :data="worlplanlist" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'worlplanlist', order: 'descending'}" v-loadmore="loadMore">
 
-								    <el-table-column prop="iconOperation" fixed label="" width="50px">
-								      <template slot-scope="scope"><i class="el-icon-check" v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else="v-else"></i></template>
+								    <el-table-column prop="iconOperation" fixed width="50px">
+								      <template slot-scope="scope">
+								      	<i class="el-icon-check" v-show="scope.row.isEditing">
+								      	</i>
+								      	<i class="el-icon-edit" v-show="!scope.row.isEditing">
+								      	</i>
+								      </template>
 								    </el-table-column>
 
 								    <el-table-column label="所属计划编号" sortable width="120px" prop="WP_NUM">
 								      <template slot-scope="scope">
-								      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_NUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_NUM}}</span>
+								      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.WP_NUM" disabled></el-input><span v-show="!scope.row.isEditing">{{scope.row.WP_NUM}}</span>
 								      </template>
 								    </el-table-column>
 
 								    <el-table-column label="产品排序号" sortable width="120px" prop="WP_LINENUM">
 								      <template slot-scope="scope">
-								      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_LINENUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_LINENUM}}</span>
+								      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.WP_LINENUM" disabled></el-input><span v-show="!scope.row.isEditing">{{scope.row.WP_LINENUM}}</span>
 								      </template>
 								    </el-table-column>
 
 									<el-table-column prop="ITEM_NAME" label="产品名称" sortable width="120px" :formatter="judge">
 								      <template slot-scope="scope">
-								         <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ITEM_NAME" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.ITEM_NAME}}</span>
+								         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.ITEM_NAME" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.ITEM_NAME}}</span>
 								      </template>
 								    </el-table-column>
 
 								    <el-table-column prop="MODEL" label="规格型号" sortable width="120px">
 								      <template slot-scope="scope">
-								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.MODEL}}</span>
+								        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.MODEL}}</span>
 								      </template>
 								    </el-table-column>
 
@@ -161,26 +166,26 @@
 =======
 								    <el-table-column prop="V_NAME" label="生产企业名称" sortable width="120px">
 								      <template slot-scope="scope">
-								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAME" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.V_NAME}}</span>
+								        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.V_NAME" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.V_NAME}}</span>
 								      </template>
 								    </el-table-column>
 >>>>>>> 9c532c7776174749c8532b631a08cf0378bd1a70
 
 								    <el-table-column prop="CHECKCOST" label="检测费用" sortable width="120px">
 								      <template slot-scope="scope">
-								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.CHECKCOST}}</span>
+								        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.CHECKCOST}}</span>
 								      </template>
 								    </el-table-column>
 
 								    <el-table-column prop="REASION" label="项目提出理由" sortable width="120px">
 								      <template slot-scope="scope">
-								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REASION" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.REASION}}</span>
+								        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.REASION" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.REASION}}</span>
 								      </template>
 								    </el-table-column>
 
 								    <el-table-column prop="MEMO" label="近三年监督抽查情况" sortable width="160px">
 								      <template slot-scope="scope">
-								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.MODEL}}</span>
+								        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.MODEL}}</span>
 								      </template>
 								    </el-table-column>
 
@@ -198,12 +203,12 @@
 							<!-- 检测依据 Begin-->
 							<el-collapse-item title="检测依据" name="3" class="ml60">
 								<div class="table-func">
-									<el-button type="primary" size="mini" round @click="basisleadbtn">
+									<el-button type="primary" size="mini" round @click="basisleadbtn" v-show="isEditList">
 										<i class="icon-search"></i>
 										<font>选择</font>
 									</el-button>
 								</div>
-				            	<el-table :data="inspectionList_child.WORLPLANLINE_BASISList" border stripe height="200" style="width: 100%;" :default-sort="{prop:'inspectionList_child.WORLPLANLINE_BASISList', order: 'descending'}">
+				            	<el-table :data="basisList" border stripe height="200" style="width: 100%;" :default-sort="{prop:'basisList', order: 'descending'}">
 				            		<el-table-column prop="NUMBER" label="所属计划编号" width="120">
 				            			<template slot-scope="scope">
 								        	<span>{{scope.$index + 1}}</span>
@@ -219,7 +224,7 @@
 				            		<el-table-column fixed="right" label="操作" width="80">
 								      <template slot-scope="scope">
 								        <el-button
-								          @click.native.prevent="deleteRow(scope.$index, inspectionList_child.WORLPLANLINE_BASISList)"
+								          @click.native.prevent="deleteRow(index, row)"
 								          type="text"
 								          size="small">
 								          	<i class="icon-trash red"></i>
@@ -234,12 +239,12 @@
 							<el-collapse-item title="检测项目与要求" name="4" class="ml60">
 								<!-- 资质信息 Begin-->
 								<div class="table-func">
-									<el-button type="primary" size="mini" round @click="basisleadbtn2">
+									<el-button type="primary" size="mini" round @click="basisleadbtn2" v-show="isEditList">
 										<i class="icon-search"></i>
 										<font>选择</font>
 									</el-button>
 								</div>
-				            	<el-table :data="inspectionList_child.WORLPLANLINE_PROJECTList" border stripe height="200" style="width: 100%;" :default-sort="{prop:'inspectionList_child.WORLPLANLINE_PROJECTList', order: 'descending'}">
+				            	<el-table :data="proTestList" border stripe height="200" style="width: 100%;" :default-sort="{prop:'proTestList', order: 'descending'}">
 				            		<el-table-column prop="WP_NUM" label="所属计划编号" width="80">
 				            			<template slot-scope="scope">
 								        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_NUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_NUM}}</span>
@@ -474,7 +479,7 @@
 		<!-- 检测依据弹出框end -->
 
 		<!-- 检测项目与要求弹出框begin -->
-		<el-dialog title="检测项目与要求" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
+		<el-dialog title="检测项目测试与要求" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
 						<!-- 高级查询划出 Begin-->
 							<div class="pb10">
 									<el-form status-icon :model="searchList" label-width="70px">
@@ -736,26 +741,44 @@
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
+
+				worlplanlist: [], //年度计划列表
+				basisList: [], //检测依据
+				proTestList: [], //项目检测和要求
+				isEditList: false,  //年度计划列表编辑装填
+				editPlan: {}  //编辑中的内容
 			};
 		},
 		methods: {
    			
    			//年度计划表格函数
    			iconOperation(row, column, cell, event){
-
 		        if(column.property ==="iconOperation"){
-		        	console.log(row.isEditing);
 		            row.isEditing = !row.isEditing;
-		            console.log(row.isEditing);
+		            this.isEditList = row.isEditing;
+		        	
+		        	console.log(row.isEditing);
+		            if(!row.isEditing){
+		            	//保存
+		            	var worlplanlist = this.worlplanlist;
+		        		row.WORLPLANLINE_PROJECTList = JSON.parse(JSON.stringify(this.proTestList));
+		        		row.WORLPLANLINE_BASISList = JSON.parse(JSON.stringify(this.basisList));
+						console.log(row);
+		        	}else{
+		        		//编辑
+		        		this.editPlan = row;
+		        		this.proTestList = row.WORLPLANLINE_PROJECTList;
+				   		this.basisList = row.WORLPLANLINE_BASISList;
+				   		console.log(row);
+		        	}
+		        	
 		        }
 		    },
 
    			//上传文件 Begin
 			handleRemove(file, fileList) {
-				console.log(file, fileList);
 			},
 			handlePreview(file) {
-				console.log(file);
 			},
 			handleExceed(files, fileList) {
 				this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
@@ -777,7 +800,6 @@
 			},
             addbasis(){
             	var selData = this.selUser;
-            	console.log(selData);
 				if(selData.length == 0) {
 					this.$message({
 						message: '请选择数据',
@@ -799,7 +821,6 @@
             },
             addbasis2(){
             	var selData = this.selUser;
-            	console.log(selData);
 				if(selData.length == 0) {
 					this.$message({
 						message: '请选择数据',
@@ -807,15 +828,14 @@
 					});
 					return;
 				} else {
-					//循环push页面正常显示
 					for(var i = 0;i<selData.length;i++){
-						console.log(this.WORKPLAN.WORLPLANLINEList[0].WP_LINENUM);
-						//var WP_LINENUMS = this.WORKPLAN.WORLPLANLINE[0].WP_LINENUM;
-						this.inspectionList_child.WORLPLANLINE_PROJECTList.push(selData[i]);
-						this.inspectionList_child.WORLPLANLINE_PROJECTList[i].P_DESC = selData[i].P_NAME;
-						this.inspectionList_child.WORLPLANLINE_PROJECTList[i].WP_NUM = this.WORKPLAN.WP_NUM;
-						this.inspectionList_child.WORLPLANLINE_PROJECTList[i].WP_LINENUM = this.WORKPLAN.WORLPLANLINEList[0].WP_LINENUM;
-						
+						selData[i].P_DESC = selData[i].P_NAME;
+						//产品编号
+						selData[i].WP_NUM = this.editPlan.WP_NUM;
+						//产品序号
+						selData[i].WP_LINENUM = this.editPlan.WP_LINENUM;
+
+						this.proTestList.push(selData[i]);
 					}
 					this.dialogVisible2 = false;
 					this.$message({
@@ -843,59 +863,30 @@
 			},
 			
 			addfield1(){//年度计划列表新建行
-				var isEditingflag=false;
-				for(var i=0;i<this.WORKPLAN.WORLPLANLINEList.length; i++){
-					if (this.WORKPLAN.WORLPLANLINEList[i].isEditing==false){
-						isEditingflag=false;
-					}else{
-                        isEditingflag=true;
-                        break;
-					}
-				}
-				if (isEditingflag==false){
-                	this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
-						var date=new Date();
-						this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
-						var index=this.$moment(date).format("YYYYMMDDHHmmss");
-						var obj = {
-							WP_NUM:10001,
-							WP_LINENUM:index,
-							ITEM_NAME:'',
-							MODEL:'',
-							V_NAME:'',
-							BASIS:'',
-							P_NAME:'',
-							CHECKCOST:'',
-							REASION:'',
-							MEMO:'',
-							"isEditing": true,
-							// WORLPLANLINE_BASISList:[],
-							// WORLPLANLINE_PROJECTList:[]
-						};
-						this.WORKPLAN.WORLPLANLINEList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
-					}).catch((err)=>{
-						this.$message({
-							message:'网络错误，请重试',
-							type:'error'
-						})
-					})
+				if (this.isEditList == false){
+                	var date=new Date();
+					this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
+					var index=this.$moment(date).format("YYYYMMDDHHmmss");
+					var obj = {
+						'WP_NUM': 10001,
+						'WP_LINENUM': index,
+						'ITEM_NAME': '',
+						'MODEL': '',
+						'V_NAME': '',
+						'BASIS': '',
+						'P_NAME': '',
+						'CHECKCOST': '',
+						'REASION': '',
+						'MEMO': '',
+						'isEditing': true,
+					};
+					this.worlplanlist.unshift(obj);
+					this.basisList = [];
+					this.proTestList = [];
+					this.isEditList = true;
 	            } else {
 	                this.$message.warning("请先保存当前编辑项");
 				}
-
-				// var obj = {
-    //                 WP_NUM:'',
-				// 	ITEM_NAME:'',
-				// 	MODEL:'',
-				// 	V_NAME:'',
-				// 	BASIS:'',
-				// 	P_NAME:'',
-				// 	CHECKCOST:'',
-				// 	REASION:'',
-				// 	MEMO:'',
-				// 	isEditing:true
-    //             };
-                // this.WORKPLAN.WORLPLANLINE.push(obj);
 			},
 			addfield2(){//文档编号列表新建行
 				var obj2 = {
@@ -965,7 +956,6 @@
 				// this.WORKPLAN.WORLPLANLINE[0].WORLPLANLINE_BASISList = [];
 				//将检测项目与要求数据置空
 				// this.WORKPLAN.WORLPLANLINE[0].WORLPLANLINE_PROJECTList = [];
-				console.log(this.WORKPLAN.WORLPLANLINEList);
 				var date = new Date();
 				this.WORKPLAN.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
@@ -996,12 +986,10 @@
 				});
 
 				this.$axios.get('/api/api-apps/app/workplan/' + dataid, {}).then((res) => {
-					console.log(res.data);
 					this.WORKPLAN = res.data;
-					for(var i = 0;i<this.WORKPLAN.WORLPLANLINEList.length;i++){
-						this.inspectionList_child.WORLPLANLINE_BASISList = this.WORKPLAN.WORLPLANLINEList[i].WORLPLANLINE_BASISList;
-						this.inspectionList_child.WORLPLANLINE_PROJECTList = this.WORKPLAN.WORLPLANLINEList[i].WORLPLANLINE_PROJECTList;
-					}
+					this.worlplanlist = res.data.WORLPLANLINEList;
+					this.basisList = res.data.WORLPLANLINEList.length > 0 ? res.data.WORLPLANLINEList[0].WORLPLANLINE_BASISList : [];
+					this.proTestList = res.data.WORLPLANLINEList.length > 0 ? res.data.WORLPLANLINEList[0].WORLPLANLINE_PROJECTList : [];
 					
 					this.show = true;
 				}).catch((err) => {
@@ -1048,7 +1036,6 @@
 		  			this.WORKPLAN.WORLPLANLINEList[0].WORLPLANLINE_PROJECTList = this.inspectionList_child.WORLPLANLINE_PROJECTList;
 		  			// console.log(this.inspectionList_child);
 		  			// this.WORKPLAN.WORLPLANLINE.push(this.inspectionList_child);
-		  			console.log(this.WORKPLAN);
 					var url = '/api/apps-center/app/workplan/saveOrUpdate';
 					this.$axios.post(url, this.WORKPLAN).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
@@ -1109,39 +1096,13 @@
 					RELEASETIME: this.searchList.RELEASETIME,
 					STARTETIME: this.searchList.STARTETIME,
 					STATUS: this.searchList.STATUS,
+
 					P_NUM: this.searchList.P_NUM,
 					DEPARTMENT: this.searchList.DEPARTMENT,
 					P_NAME: this.searchList.P_NAME,
 					VERSION: this.searchList.VERSION,
 					STATUS: this.searchList.STATUS,
-				}
-
-				// this.$axios.get('/api/api-apps/app/product', {
-				// 	params: data
-				// }).then((res) => {
-				// 	this.page.totalCount = res.data.count;	
-				// 	//总的页数
-				// 	let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
-				// 	if(this.page.currentPage >= totalPage){
-				// 		 this.loadSign = false
-				// 	}else{
-				// 		this.loadSign=true
-				// 	}
-				// 	this.commentArr[this.page.currentPage]=res.data.data
-				// 	let newarr=[]
-				// 	for(var i = 1; i <= totalPage; i++){
-					
-				// 		if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
-							
-				// 			for(var j = 0; j < this.commentArr[i].length; j++){
-				// 				newarr.push(this.commentArr[i][j])
-				// 			}
-				// 		}
-				// 	}
-					
-				// 	this.inspectionList = newarr;
-				// }).catch((wrong) => {})
-
+				};
 				var url = '/api/api-apps/app/inspectionSta';
 				this.$axios.get(url, {
 					params: data
@@ -1165,7 +1126,6 @@
 							}
 						}
 					}
-					console.log(this.standardList);
 					this.standardList = newarr;
 				}).catch((wrong) => {})
 
@@ -1173,7 +1133,6 @@
 				this.$axios.get('/api/api-apps/app/inspectionPro', {
 					params: data
 				}).then((res) => {
-					console.log(res)
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)

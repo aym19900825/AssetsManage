@@ -179,7 +179,7 @@
 				</div>
 			</div>
 		</div>
-		<inspectmask :user="aaaData[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></inspectmask>
+		<inspectmask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></inspectmask>
 		<!--右侧内容显示 End-->
 	</div>
 	</div>
@@ -400,8 +400,7 @@
 					setTimeout(() => {
 						this.loadSign = true
 					}, 1000)
-					this.requestData()
-					//			     console.log('到底了', this.page.currentPage)
+					this.requestData();
 				}
 			},
 			sizeChange(val) {
@@ -419,25 +418,9 @@
 			},
 			//添加用戶
 			openAddMgr() {
-//				this.aaaData = [{
-//					companyName: '',
-//					deptName: '',
-//					username: '',
-//					password: '',
-//					nickname: '',
-//					birthday: '',
-//					sexName: '',
-//					idnumber: '',
-//					entrytime: '',
-//					roleId: [],
-//					roles: [],
-//					worknumber: '',
-//					phone: '',
-//					email: '',
-//					address: '',
-//					tips: ''
-//				}];
+//				this.$refs.child.resetNew();
 				this.$refs.child.visible();
+				
 			},
 			//修改用戶
 			modify() {

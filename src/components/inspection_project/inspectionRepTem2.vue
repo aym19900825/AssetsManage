@@ -223,10 +223,9 @@
 					//todo  相关数据设置
 				}
 				var url = '/api/api-apps/app/inspectionRepTem2/INSPECTION_PROJECT2/' + ID;
-				console.log(ID);
 
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
+					//console.log(res);
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -236,15 +235,7 @@
 						this.loadSign=true
 					}
 					this.inspectionRepTem2Form.inspectionList=res.data.INSPECTION_REPORT_TEMPLATE2List;
-					//console.log(this.inspectionRepTem2Form.inspectionList[0].ID);
-					//默认主表第一条数据
-					// if(this.inspectionRepTem2Form.inspectionList.length > 0){
-					// 	console.log(this.inspectionRepTem2Form.inspectionList.length);
-					// 	this.$refs.professionGrochild.viewfield_inspectionPro2(this.inspectionRepTem2Form.inspectionList[0].ID);
-					// }else{
-					// 	this.$refs.professionGrochild.viewfield_inspectionPro2('null');
-					// }
-
+					
 					for(var j = 0; j < this.inspectionRepTem2Form.inspectionList.length; j++){
 						this.inspectionRepTem2Form.inspectionList[j].isEditing = false;
 					}
@@ -391,11 +382,13 @@
 		
 		mounted() {
 			this.requestData_inspectionRepTem2();
-			window.onresize = () => {//获取浏览器可视区域高度
+			//获取浏览器可视区域高度
+			this.fullHeight.height = document.documentElement.clientHeight - 180+'px';
+			window.onresize = () => {
 			 	return (() => {
 			 		this.fullHeight.height = document.documentElement.clientHeight - 180+'px';
 			 	})()
-			 }
+			 };
 		},
 		
 
@@ -403,5 +396,10 @@
 </script>
 
 <style scoped>
-
+.el-form-item__error {
+	top: 18%;
+    left: 5px;
+    background: #FFF;
+    padding: 5px 10px;
+}
 </style>

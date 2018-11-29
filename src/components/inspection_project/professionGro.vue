@@ -219,6 +219,7 @@
 			viewfield_professionGro(ID){//点击父级筛选出子级数据
 				if(ID=='null'){
 					this.professionGroForm.inspectionList = []; 
+					// this.$refs.rawDataAssetchild.viewfield_rawDataAsset('null');
 					return false;
 					//todo  相关数据设置
 				}
@@ -237,7 +238,6 @@
 					//console.log(this.professionGroForm.inspectionList[0].ID);
 					//默认主表第一条数据
 					// if(this.professionGroForm.inspectionList.length > 0){
-					
 					// 	this.$refs.rawDataAssetchild.viewfield_rawDataAsset(this.professionGroForm.inspectionList[0].ID);
 					// }else{
 					// 	this.$refs.rawDataAssetchild.viewfield_rawDataAsset('null');
@@ -388,11 +388,13 @@
 		
 		mounted() {
 			this.requestData_professionGro();
-			window.onresize = () => {//获取浏览器可视区域高度
+			//获取浏览器可视区域高度
+			this.fullHeight.height = document.documentElement.clientHeight - 180+'px';
+			window.onresize = () => {
 			 	return (() => {
 			 		this.fullHeight.height = document.documentElement.clientHeight - 180+'px';
 			 	})()
-			 }
+			 };
 		},
 		
 
@@ -400,5 +402,10 @@
 </script>
 
 <style scoped>
-
+.el-form-item__error {
+	top: 18%;
+    left: 5px;
+    background: #FFF;
+    padding: 5px 10px;
+}
 </style>

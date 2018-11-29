@@ -234,6 +234,7 @@
 			viewfield_inspectionSta2(ID){//点击父级筛选出子级数据
 				if(ID=='null'){
 					this.inspectionSta2Form.inspectionList = []; 
+					this.$refs.inspectionPro2child.viewfield_inspectionPro2('null');
 					return false;
 					//todo  相关数据设置
 				}
@@ -413,11 +414,13 @@
 		
 		mounted() {
 			this.requestData_inspectionSta2();
-			window.onresize = () => {//获取浏览器可视区域高度
+			//获取浏览器可视区域高度
+			this.fullHeight.height = document.documentElement.clientHeight - 180+'px';
+			window.onresize = () => {
 			 	return (() => {
 			 		this.fullHeight.height = document.documentElement.clientHeight - 180+'px';
 			 	})()
-			 }
+			 };
 		},
 		
 
@@ -425,5 +428,10 @@
 </script>
 
 <style scoped>
-
+.el-form-item__error {
+	top: 18%;
+    left: 5px;
+    background: #FFF;
+    padding: 5px 10px;
+}
 </style>

@@ -8,7 +8,7 @@
 			<!--左侧菜单调用 Begin-->
 			<!-- <navs_left></navs_left> -->
 			<!--左侧菜单调用 End-->
-			<div class="wrapper wrapper-content  wrapperall">
+			<div class="wrapper wrapper-content wrapperall">
 				<div class="ibox-content">
 					<!--<navs_button></navs_button>-->
 					<div class="fixed-table-toolbar clearfix">
@@ -153,7 +153,7 @@
 								</el-table-column>
 								<el-table-column label="录入时间" sortable width="210px" prop="ENTERDATE" v-if="this.checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>
-								<el-table-column label="状态" sortable prop="STATUS" v-if="this.checkedName.indexOf('状态')!=-1">
+								<el-table-column label="状态" sortable  width="380px" prop="STATUS" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="pull-right" v-if="this.checkedName.length>0"
@@ -266,16 +266,10 @@
 				aaaData:[],
 			}
 		},
-		methods: {
-			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
-				console.log();
-				return(
-			<span>
-              <i class={data.iconClass}></i>
-              <span>{node.label}</span>
-            </span>
-				);
-			},
+	methods: {
+		renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
+			return(<span><i class={data.iconClass}></i><span>{node.label}</span></span>);
+		},
 			// 点击节点
 			nodeClick: function(m) {
 				if(m.iconClass != 'icon-file-text') {
@@ -313,7 +307,7 @@
 				this.aaaData = this.selUser;
 				if(this.aaaData.length == 0) {
 					this.$message({
-						message: '请您选择要修改的用户',
+						message: '请您选择要修改的数据',
 						type: 'warning'
 					});
 					return;
@@ -338,7 +332,7 @@
 				var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({
-						message: '请您选择要删除的用户',
+						message: '请您选择要删除的数据',
 						type: 'warning'
 					});
 					return;
@@ -357,7 +351,7 @@
                     var data = {
 						ids: ids,
 					}
-					this.$confirm('确定删除此产品类别吗？', '提示', {
+					this.$confirm('确定删除此数据吗？', '提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                     }).then(({ value }) => {

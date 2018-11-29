@@ -267,13 +267,11 @@
 			},
 			viewfield_inspectionMet2(ID){//点击父级筛选出子级数据
 				if(ID=='null'){
-					this.inspectionMet2Form.inspectionList = []; 
+					this.inspectionMet2Form.inspectionList = [];
 					return false;
 					//todo  相关数据设置
 				}
 				var url = '/api/api-apps/app/inspectionMet2/INSPECTION_PROJECT2/' + ID;
-				console.log(ID);
-
 				this.$axios.get(url, {}).then((res) => {
 					console.log(res);
 					this.page.totalCount = res.data.count;	
@@ -285,14 +283,6 @@
 						this.loadSign=true
 					}
 					this.inspectionMet2Form.inspectionList=res.data.INSPECTION_METHOD2List;
-					//console.log(this.inspectionMet2Form.inspectionList[0].ID);
-					//默认主表第一条数据
-					// if(this.inspectionMet2Form.inspectionList.length > 0){
-					// 	console.log(this.inspectionMet2Form.inspectionList.length);
-					// 	this.$refs.professionGrochild.viewfield_inspectionPro2(this.inspectionMet2Form.inspectionList[0].ID);
-					// }else{
-					// 	this.$refs.professionGrochild.viewfield_inspectionPro2('null');
-					// }
 
 					for(var j = 0; j < this.inspectionMet2Form.inspectionList.length; j++){
 						this.inspectionMet2Form.inspectionList[j].isEditing = false;
@@ -447,11 +437,13 @@
 		
 		mounted() {
 			this.requestData_inspectionMet2();
-			window.onresize = () => {//获取浏览器可视区域高度
+			//获取浏览器可视区域高度
+			this.fullHeight.height = document.documentElement.clientHeight - 180+'px';
+			window.onresize = () => {
 			 	return (() => {
 			 		this.fullHeight.height = document.documentElement.clientHeight - 180+'px';
 			 	})()
-			 }
+			 };
 		},
 		
 
@@ -459,5 +451,10 @@
 </script>
 
 <style scoped>
-
+.el-form-item__error {
+	top: 18%;
+    left: 5px;
+    background: #FFF;
+    padding: 5px 10px;
+}
 </style>

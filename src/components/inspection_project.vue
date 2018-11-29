@@ -13,18 +13,14 @@
 					<el-col :span="24" class="text-center pb10">
 						<el-form :inline="true" :model="formInline">
 							<el-form-item label="部门名称">
-								<el-select v-model="formInline.station" placeholder="请选择部门">
-									<el-option v-for="item in stations" :key="item.value" :label="item.label" :value="item.value">
-									<span style="float: left">{{ item.label }}</span>
-									<span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
-									</el-option>
+								<el-select v-model="formInline.DEPARTMENT" placeholder="请选择部门" @change="requestData_productType2">
+									<el-option v-for="item in DEPARTMENTS" :key="item.value" :label="item.label" :value="item.value">{{ item.label }}</el-option>
 								</el-select>
 							</el-form-item>
 						</el-form>
 					</el-col>
 				</el-row>
 				<!--部门名称 End-->
-				
 					<div style="width:4200px">
 						<div class="pull-left" style="width:500px">
 							<el-card class="box-card" :body-style="{ padding: '10px' }">
@@ -47,7 +43,7 @@
 										</el-button>
 										</div>
 									</div>
-									<el-form :model="productType2Form" ref="productType2Form">
+									<el-form :model="productType2Form" status-icon inline-message ref="productType2Form">
 									  <el-table :data="productType2Form.inspectionList.filter(data => !search || data.TYPE.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="380" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'productType2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
 										<el-table-column prop="iconOperation" fixed="left" label="操作" width="50">
 									      <template slot-scope="scope">
@@ -77,6 +73,16 @@
 									        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.TYPE" placeholder="请输入内容">
 									        		<el-button slot="append" icon="icon-search"></el-button>
 									        	</el-input><span v-else="v-else">{{scope.row.TYPE}}</span>
+											</el-form-item>
+									      </template>
+									    </el-table-column>
+
+									    <el-table-column label="所属部门" sortable width="200" prop="DEPARTMENT">
+									      <template slot-scope="scope">
+									        <el-form-item :prop="'inspectionList.'+scope.$index + '.DEPARTMENT'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+									        	<el-select v-if="scope.row.isEditing" v-model="scope.row.DEPARTMENT" placeholder="请选择">
+													<el-option v-for="item in DEPARTMENTS" :key="item.value" :label="item.label" :value="item.label"></el-option>
+												</el-select><span v-else="v-else">{{scope.row.DEPARTMENT}}</span>
 											</el-form-item>
 									      </template>
 									    </el-table-column>
@@ -160,32 +166,29 @@
 		},
 		data() {
 			return {
-				
-				formInline: {
-					station: '金化站'
-				},
-				stations: [{
-					value: 'Jinhua',
+				DEPARTMENTS: [{
+					value: '金化站',
 					label: '金化站'
 					}, {
-					value: 'Yunbao',
+					value: '运包站',
 					label: '运包站'
 					}, {
-					value: 'Tonghao',
+					value: '通号站',
 					label: '通号站'
 					}, {
-					value: 'Jiliang',
+					value: '机辆站',
 					label: '机辆站'
 					}, {
-					value: 'Jiechuwang',
+					value: '接触网站',
 					label: '接触网站'
-					}],
-				station: '',
+				}],
       			fullHeight:{//给浏览器高度赋值
 					height: '',
 				},
-				
-				productType2Form:{
+				formInline: {//选择站点显示数据
+					DEPARTMENT: '金化站',
+				},
+				productType2Form:{//产品类别数据组
 					inspectionList: []
 				},
 				isEditing: '',
@@ -272,12 +275,38 @@
 			},
 			indexMethod(index) {
 				return index + 1;
-				console.log(index);
 			},
+			// selectVal(ID){//点击父级筛选出子级数据
+			// 	var url = '/api/api-apps/app/productType2/' + ID;
+			// 	this.$axios.get(url, {}).then((res) => {
+			// 		console.log(res);
+			// 		this.page.totalCount = res.data.count;	
+			// 		//总的页数
+			// 		let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
+			// 		if(this.page.currentPage >= totalPage){
+			// 			 this.loadSign = false
+			// 		}else{
+			// 			this.loadSign=true
+			// 		}
+			// 		this.productType2Form.inspectionList=res.data.PRODUCT_TYPE2List;
+
+			// 		//默认主表第一条数据
+			// 		if(this.productType2Form.inspectionList.length > 0){
+			// 			this.productType2Form.inspectionList[0].ID;
+			// 		}else{
+			// 			this.productType2Form.inspectionList('null');
+			// 		}
+			// 		for(var j = 0; j < this.productType2Form.inspectionList.length; j++){
+			// 			this.productType2Form.inspectionList[j].isEditing = false;
+			// 		}
+			// 	}).catch((wrong) => {})
+			// },
+			
 			requestData_productType2(index) {//加载数据
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
+					DEPARTMENT: this.formInline.DEPARTMENT,//点击部门名称下拉菜单显示数据
 				}
 				var url = '/api/api-apps/app/productType2';
 				this.$axios.get(url, {
@@ -335,6 +364,7 @@
 							"STATUS": '活动',
 							"NUM": 'PT' + index,
 							"VERSION": 1,
+							"DEPARTMENT": '',
 							"CHANGEBY": this.currentUser,
 							"CHANGEDATE": this.currentDate,
 							"isEditing": true,
@@ -358,11 +388,12 @@
 					var submitData = {
 						"ID":row.ID,
 						"TYPE": row.TYPE,
+					    "NUM": row.NUM,
+					    "VERSION": row.VERSION,
+					    "DEPARTMENT": row.DEPARTMENT,
 						"STATUS": row.STATUS,
 						"CHANGEBY": row.CHANGEBY,
 					    "CHANGEDATE": row.CHANGEDATE,
-					    "NUM": row.NUM,
-					    "VERSION": row.VERSION,
 					}
 					this.$axios.post(url, submitData).then((res) => {
 						if(res.data.resp_code == 0) {
@@ -421,9 +452,11 @@
 		mounted() {
 			this.requestData_productType2();
 
-			window.onresize = () => {//获取浏览器可视区域高度
+			//获取浏览器可视区域高度
+			this.fullHeight.height = document.documentElement.clientHeight - 180+'px';
+			window.onresize = () => {
 			 	return (() => {
-			 		this.fullHeight.height = document.documentElement.clientHeight - 100+'px';
+			 		this.fullHeight.height = document.documentElement.clientHeight - 180+'px';
 			 	})()
 			 };
 
@@ -464,6 +497,11 @@
 	-webkit-box-shadow: 0 2px 12px 0 rgba(56, 124, 195, 0.35);
     box-shadow: 0 2px 12px 0 rgba(56, 124, 195, 0.35);
 }*/
-
-
+/*.el-form-item__error {
+	top: 18%;
+    left: 5px;
+    background: #FFF;
+    padding: 5px 10px;
+}
+*/
 </style>

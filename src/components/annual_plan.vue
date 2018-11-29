@@ -8,7 +8,7 @@
 			<!--左侧菜单调用 Begin-->
 			<!-- <navs_left></navs_left> -->
 			<!--左侧菜单调用 End-->
-			<div class="wrapper wrapper-content  wrapperall">
+			<div class="wrapper wrapper-content wrapperall">
 				<div class="ibox-content">
 					<!--<navs_button></navs_button>-->
 					<div class="fixed-table-toolbar clearfix">

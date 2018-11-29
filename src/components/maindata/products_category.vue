@@ -89,7 +89,7 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :data="categoryList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+						<el-table :data="categoryList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 							<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0">
 							</el-table-column>
 							<el-table-column label="产品类别编号" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('产品类别编号')!=-1">
@@ -112,7 +112,7 @@
 							<el-table-column label="修改时间" width="155" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
 							</el-table-column>
 						</el-table>
-						<el-pagination background class="pull-right pt10 pb10" v-if="this.checkedName.length>0"
+						<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
 				            @size-change="sizeChange"
 				            @current-change="currentChange"
 				            :current-page="page.currentPage"
@@ -225,9 +225,7 @@
 				up: false,
 				isShow: false,
 				ismin:true,
-				fullHeight:{//给浏览器高度赋值
-					height: '',
-				},
+				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: {//点击高级搜索后显示的内容
 					TYPE: '',
 					NAME: '',
@@ -254,13 +252,7 @@
 		},
 
 		mounted() {
-			//获取浏览器可视区域高度
-			this.fullHeight.height = document.documentElement.clientHeight - 180+'px';
-			window.onresize = () => {
-			 	return (() => {
-			 		this.fullHeight.height = document.documentElement.clientHeight - 180+'px';
-			 	})()
-			};
+			
 		},
 
 		methods: {

@@ -11,99 +11,92 @@
 
 		<!--右侧内容显示 Begin-->
 		<div class="wrapper wrapper-content">
-			<EasyScrollbar>
-				<div id="wrapper" :style="fullHeight">
-					<div id="information" style="height: auto;">
-						<div class="ibox-content">
-							<!--按钮操作行 Begin-->
-								<div class="fixed-table-toolbar clearfix">
-									<div class="bs-bars pull-left">
-										<div class="hidden-xs" id="roleTableToolbar" role="group">
-											<button type="button" class="btn btn-green" @click="openAddMgr" id="">
-			                                	<i class="icon-add"></i>添加
-			                      			</button>
-											<button type="button" class="btn btn-bule button-margin" @click="modify">
-											    <i class="icon-edit"></i>修改
-											</button>
-											<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
-											    <i class="icon-trash"></i>删除
-											</button>
-											<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-									    		<i class="icon-search"></i>高级查询
-									    		<i class="icon-arrow1-down" v-show="down"></i>
-									    		<i class="icon-arrow1-up" v-show="up"></i>
-											</button>
-										</div>
-									</div>
-
-									<div class="columns columns-right btn-group pull-right">
-										<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
-										<tableControle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></tableControle>
-									</div>
-								</div>
-							<!--按钮操作行 End-->
-
-							<!-- 高级查询划出 Begin-->
-							<div v-show="search" class="pb10">
-								<el-form status-icon :model="searchList" label-width="70px">
-									<el-row :gutter="10">
-										<el-col :span="5">
-											<el-input v-model="searchList.AUTOKEY">
-												<template slot="prepend">自动编号名称</template>
-											</el-input>
-										</el-col>
-										<el-col :span="2">
-											<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
-										</el-col>
-									</el-row>
-								</el-form>
+			<div class="ibox-content">
+				<!--按钮操作行 Begin-->
+					<div class="fixed-table-toolbar clearfix">
+						<div class="bs-bars pull-left">
+							<div class="hidden-xs" id="roleTableToolbar" role="group">
+								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+                                	<i class="icon-add"></i>添加
+                      			</button>
+								<button type="button" class="btn btn-bule button-margin" @click="modify">
+								    <i class="icon-edit"></i>修改
+								</button>
+								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
+								    <i class="icon-trash"></i>删除
+								</button>
+								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
+						    		<i class="icon-search"></i>高级查询
+						    		<i class="icon-arrow1-down" v-show="down"></i>
+						    		<i class="icon-arrow1-up" v-show="up"></i>
+								</button>
 							</div>
-							<!-- 高级查询划出 End-->
-							
-							<el-row :gutter="0">
-								<el-col :span="24">
-									<!-- 表格 Begin-->
-									<el-table :data="numberList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'numberList', order: 'descending'}" @selection-change="SelChange"  v-loadmore="loadMore">
-										<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
-										</el-table-column>
-										<el-table-column label="自动编号名称" width="140" sortable prop="AUTOKEY" v-if="this.checkedName.indexOf('自动编号名称')!=-1">
-										</el-table-column>
-										<el-table-column label="起始数" width="140" sortable prop="S_NUM" v-if="this.checkedName.indexOf('起始数')!=-1">
-										</el-table-column>
-										<el-table-column label="前缀" width="140" sortable prop="PREFIX" v-if="this.checkedName.indexOf('前缀')!=-1">
-										</el-table-column>
-										<el-table-column label="备注" width="200" sortable prop="MEMO" v-if="this.checkedName.indexOf('备注')!=-1">
-										</el-table-column>
-										<el-table-column label="状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
-										</el-table-column>
-										<el-table-column label="录入人机构" width="180" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('录入人机构')!=-1">
-										</el-table-column>
-										<el-table-column label="录入人" width="140" sortable prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
-										</el-table-column>
-										<el-table-column label="录入时间" width="160" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
-										</el-table-column>
-										<el-table-column label="修改人" width="140" prop="CHANGEBY" sortable v-if="this.checkedName.indexOf('修改人')!=-1">
-										</el-table-column>
-										<el-table-column label="修改时间" width="160" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
-										</el-table-column>
-									</el-table>
-									<el-pagination background class="pull-right pt10 pb10" v-if="this.checkedName.length>0"
-							            @size-change="sizeChange"
-							            @current-change="currentChange"
-							            :current-page="page.currentPage"
-							            :page-sizes="[10, 20, 30, 40]"
-							            :page-size="page.pageSize"
-							            layout="total, sizes, prev, pager, next"
-							            :total="page.totalCount">
-							        </el-pagination>
-									<!-- 表格 End-->
-								</el-col>
-							</el-row>
+						</div>
+
+						<div class="columns columns-right btn-group pull-right">
+							<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
+							<tableControle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></tableControle>
 						</div>
 					</div>
-					
+				<!--按钮操作行 End-->
+
+				<!-- 高级查询划出 Begin-->
+				<div v-show="search" class="pb10">
+					<el-form status-icon :model="searchList" label-width="70px">
+						<el-row :gutter="10">
+							<el-col :span="5">
+								<el-input v-model="searchList.AUTOKEY">
+									<template slot="prepend">自动编号名称</template>
+								</el-input>
+							</el-col>
+							<el-col :span="2">
+								<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+							</el-col>
+						</el-row>
+					</el-form>
 				</div>
-			</EasyScrollbar>
+				<!-- 高级查询划出 End-->
+				
+				<el-row :gutter="0">
+					<el-col :span="24">
+						<!-- 表格 Begin-->
+						<el-table :data="numberList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'numberList', order: 'descending'}" @selection-change="SelChange"  v-loadmore="loadMore">
+							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
+							</el-table-column>
+							<el-table-column label="自动编号名称" width="140" sortable prop="AUTOKEY" v-if="this.checkedName.indexOf('自动编号名称')!=-1">
+							</el-table-column>
+							<el-table-column label="起始数" width="140" sortable prop="S_NUM" v-if="this.checkedName.indexOf('起始数')!=-1">
+							</el-table-column>
+							<el-table-column label="前缀" width="140" sortable prop="PREFIX" v-if="this.checkedName.indexOf('前缀')!=-1">
+							</el-table-column>
+							<el-table-column label="备注" width="200" sortable prop="MEMO" v-if="this.checkedName.indexOf('备注')!=-1">
+							</el-table-column>
+							<el-table-column label="状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
+							</el-table-column>
+							<el-table-column label="录入人机构" width="180" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('录入人机构')!=-1">
+							</el-table-column>
+							<el-table-column label="录入人" width="140" sortable prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
+							</el-table-column>
+							<el-table-column label="录入时间" width="160" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
+							</el-table-column>
+							<el-table-column label="修改人" width="140" prop="CHANGEBY" sortable v-if="this.checkedName.indexOf('修改人')!=-1">
+							</el-table-column>
+							<el-table-column label="修改时间" width="160" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
+							</el-table-column>
+						</el-table>
+						<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
+				            @size-change="sizeChange"
+				            @current-change="currentChange"
+				            :current-page="page.currentPage"
+				            :page-sizes="[10, 20, 30, 40]"
+				            :page-size="page.pageSize"
+				            layout="total, sizes, prev, pager, next"
+				            :total="page.totalCount">
+				        </el-pagination>
+						<!-- 表格 End-->
+					</el-col>
+				</el-row>
+			</div>
 		</div>
 		<!--右侧内容显示 End-->
 		<numbsetmask :numbsetForm="selMenu[0]" ref="child" @request="requestData" v-bind:page=page></numbsetmask>
@@ -203,9 +196,7 @@
 				up: false,
 				isShow: false,
 				ismin:true,
-				fullHeight:{//给浏览器高度赋值
-					height: '',
-				},
+				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: {
 					AUTOKEY: '',
 				},
@@ -219,13 +210,7 @@
 		},
 
 		mounted(){
-			//获取浏览器可视区域高度
-			this.fullHeight.height = document.documentElement.clientHeight - 180+'px';
-			window.onresize = () => {
-			 	return (() => {
-			 		this.fullHeight.height = document.documentElement.clientHeight - 180+'px';
-			 	})()
-			};
+			
 		},
 		methods: {
 			//表格滚动加载

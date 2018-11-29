@@ -94,7 +94,7 @@
 									<i class="icon-doubleok icon-double-angle-left blue"></i>
 								</span>
 							</div>
-							<div class="left_treebg">
+							<div class="left_treebg" :style="{height: fullHeight}">
 								<div class="p15" v-if="ismin">
 									<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent"  :props="resourceProps" @node-click="handleNodeClick">
 									</el-tree>
@@ -104,7 +104,7 @@
 					</el-col>
 					<el-col :span="19" class="leftcont v-resize">
 						<!-- 表格 Begin-->
-						<el-table :data="subagree" border stripe height="400" style="width: 100%;" :default-sort="{prop:'subagree', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+						<el-table :data="subagree" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'subagree', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 							</el-table-column>
 							<el-table-column label="分包协议编号" width="150" sortable prop="PROXY_CONTRACT_NUM" v-if="this.checkedName.indexOf('分包协议编号')!=-1">
@@ -132,7 +132,7 @@
 							<el-table-column label="修改时间" width="120" sortable prop="CHANGEDATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
 							</el-table-column>
 						</el-table>
-						<el-pagination background class="pull-right pt10 pb10" v-if="this.checkedName.length>0"
+						<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
 				            @size-change="sizeChange"
 				            @current-change="currentChange"
 				            :current-page="page.currentPage"
@@ -260,9 +260,7 @@
 				up: false,
 				isShow: false,
 				ismin:true,
-				fullHeight:{//给浏览器高度赋值
-					height: '',
-				},
+				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: {
 					PROXY_CONTRACT_NUM: '',
 					PROXYNUM: '',

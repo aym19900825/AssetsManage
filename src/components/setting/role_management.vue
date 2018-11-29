@@ -64,7 +64,7 @@
 					<div class="row">
 						<div class="col-sm-12">
 							<!-- 表格begin -->
-							<el-table :data="roleList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'roleList', order: 'descending'}" @selection-change="SelChange">
+							<el-table :data="roleList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'roleList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="角色名称" sortable prop="name" v-if="this.checkedName.indexOf('角色名称')!=-1">
@@ -76,7 +76,7 @@
 								<el-table-column label="备注" sortable prop="tips" v-if="this.checkedName.indexOf('备注')!=-1">
 								</el-table-column>
 							</el-table>
-							<el-pagination background class="pull-right" v-if="this.checkedName.length>0"
+							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
 					            @size-change="sizeChange"
 					            @current-change="currentChange"
 					            :current-page="page.currentPage"
@@ -148,6 +148,7 @@
 				search: false,
 				down: true,
 				up: false,
+				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: {//高级查询数据
 					name: ''
 				},

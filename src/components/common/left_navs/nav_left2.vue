@@ -29,9 +29,7 @@ export default {
 		return{
 			isShow:false,
 			ismin:true,
-			fullHeight:{//给浏览器高度赋值
-					height: '',
-				},
+			fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 			leftNavs: [//leftNavs左侧菜单数据
 				{
 					navicon: 'icon-distribution',

@@ -9,7 +9,7 @@
 		<!--右侧内容显示 Begin-->
 		<div class="wrapper-content">
 			<EasyScrollbar>
-				<div id="wrapper" :style="fullHeight">
+				<div id="wrapper" :style="{height: fullHeight}">
 					<div id="information" style="height: 720px;">
 						<div class="ibox-content pl20 pr20">
 							<!--我的应用 Begin-->
@@ -138,9 +138,7 @@ export default {
     data() {
       return {
         show: false,
-		fullHeight:{//给浏览器高度赋值
-			height: ''
-		},
+		fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 		applistdata: [//APP应用数据
 			{
 				navicon: 'icon-data3',
@@ -189,21 +187,13 @@ export default {
 			}, {
 				navicon: 'icon-setting3',
 				navtitle: '系统设置',
-				navherf: '/menu_management'
+				navherf: '/user_management'
 			}
 		]
       }
     },
     mounted(){
 		this.initEchart();//调用饼状图图表函数名称
-
-		//获取浏览器可视区域高度
-		this.fullHeight.height = document.documentElement.clientHeight - 180+'px';
-		window.onresize = () => {
-		 	return (() => {
-		 		this.fullHeight.height = document.documentElement.clientHeight - 180+'px';
-		 	})()
-		 };
 	},
 	methods: {
 		initEchart(){//引入饼状图图表

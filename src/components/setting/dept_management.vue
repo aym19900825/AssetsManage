@@ -8,6 +8,7 @@
 			<!--左侧菜单调用 Begin-->
 			<navs_left></navs_left>
 			<!--左侧菜单调用 End-->
+
 			<!--右侧内容显示 Begin-->
 			<div class="wrapper wrapper-content">
 				<div class="ibox-content">
@@ -78,8 +79,8 @@
 					<el-row :gutter="10">
 						<el-col :span="24">
 							<tree_grid :columns="columns" :tree-structure="true" :data-source="deptList" v-on:childByValue="childByValue"></tree_grid>
-							<el-pagination v-if="this.checkedName.length>0"
-							   class="pull-right" 
+
+							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
 							   @size-change="sizeChange" 
 							   @current-change="currentChange" 
 							   :current-page="page.currentPage" 
@@ -93,8 +94,8 @@
 					</div>
 				</div>
 			</div>
-			<deptmask :adddeptForm="selMenu[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></deptmask>
 			<!--右侧内容显示 End-->
+			<deptmask :adddeptForm="selMenu[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></deptmask>
 		</div>
 	</div>
 </template>
@@ -119,9 +120,7 @@
 		},
 		data() {
 			return {
-				fullHeight:{//给浏览器高度赋值
-					height: '',
-				},
+				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				checkedName: [
 					'机构名称',
 					'机构编码',

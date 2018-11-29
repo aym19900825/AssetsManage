@@ -129,7 +129,7 @@
 										<i class="icon-doubleok icon-double-angle-left blue"></i>
 									</span>
 								</div>
-								<div class="left_treebg" :style="fullHeight">
+								<div class="left_treebg" :style="{height: fullHeight}">
 									<div class="p15" v-if="ismin">
 										<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent"  :props="resourceProps" @node-click="handleNodeClick">
 										</el-tree>
@@ -139,7 +139,7 @@
 						</el-col>
 						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
-							<el-table :data="userList"  border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
+							<el-table :data="userList"  border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="工作任务单编号" sortable width="100px" prop="WONUM" v-if="this.checkedName.indexOf('工作任务单编号')!=-1">
@@ -156,7 +156,7 @@
 								<el-table-column label="状态" sortable  width="380px" prop="STATUS" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
 							</el-table>
-							<el-pagination background class="pull-right" v-if="this.checkedName.length>0"
+							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
 					            @size-change="sizeChange"
 					            @current-change="currentChange"
 					            :current-page="page.currentPage"
@@ -192,9 +192,7 @@
 		data() {
 			return {
 				ismin: true,
-				fullHeight:{//给浏览器高度赋值
-					height: ''
-				},
+				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				checkedName: [
 					'工作任务单编号',
 					'样品名称',
@@ -498,13 +496,7 @@
 			this.requestData();
 			this.getKey();
 
-			//获取浏览器可视区域高度
-			this.fullHeight.height = document.documentElement.clientHeight - 180+'px';
-			window.onresize = () => {
-			 	return (() => {
-			 		this.fullHeight.height = document.documentElement.clientHeight - 180+'px';
-			 	})()
-			 };
+			
 		},
 	}
 </script>

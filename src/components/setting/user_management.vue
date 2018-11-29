@@ -98,7 +98,7 @@
 										<i class="icon-doubleok icon-double-angle-left blue"></i>
 									</span>
 								</div>
-								<div class="left_treebg">
+								<div class="left_treebg" :style="{height: fullHeight}">
 									<div class="p15" v-if="ismin">
 										<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent"  :props="resourceProps" @node-click="handleNodeClick">
 										</el-tree>
@@ -108,7 +108,7 @@
 						</el-col>
 						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
-							<el-table :data="userList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table :data="userList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="账号" sortable width="140px" prop="username" v-if="this.checkedName.indexOf('账号')!=-1">
@@ -129,7 +129,7 @@
 							<!-- <span class="demonstration">显示总数</span>" -->
 							<!-- <el-pagination background layout="prev, pager, next" :total="2" style="float:right;margin-top:10px;"> -->
 							<!-- </el-pagination style="float:right;margin-top:10px;"> -->
-							<el-pagination background class="pull-right" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
 							<!-- 表格 -->
 						</el-col>
@@ -161,6 +161,7 @@
 			return {
 				isShow: false,
 				ismin: true,
+				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				loadSign: true, //加载
 				commentArr: {},
 				checkedName: [

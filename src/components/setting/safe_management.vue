@@ -12,90 +12,83 @@
 
 		<!--右侧内容显示 Begin-->
 		<div class="wrapper wrapper-content">
-			<EasyScrollbar>
-				<div id="wrapper" :style="fullHeight">
-					<div id="information" style="height: auto;">
-						<div class="ibox-content">
-							<el-form status-icon ref="safemanage" :model="safemanage" label-width="80px" :label-position="labelPosition">
-								<el-collapse v-model="activeNames" @change="handleChange">
-									<el-collapse-item title="安全管理" name="1">
-										<el-row :gutter="30">
-									 		<el-col :span="12">
-												<el-form-item label="是滞包含大写字母">
-													<el-select v-model="safemanage.emptyuppercase" filterable placeholder="请选择">
-														<el-option v-for="item01 in uppercase" :label="item01.label" :value="item01.value" key="item01s"></el-option>
-													</el-select>
-												</el-form-item>
-									 		</el-col>
-									 
+			<div class="ibox-content">
+				<el-form status-icon ref="safemanage" :model="safemanage" label-width="80px" :label-position="labelPosition">
+					<el-collapse v-model="activeNames" @change="handleChange">
+						<el-collapse-item title="安全管理" name="1">
+							<el-row :gutter="30">
+						 		<el-col :span="12">
+									<el-form-item label="是滞包含大写字母">
+										<el-select v-model="safemanage.emptyuppercase" filterable placeholder="请选择">
+											<el-option v-for="item01 in uppercase" :label="item01.label" :value="item01.value" :key="item01.value"></el-option>
+										</el-select>
+									</el-form-item>
+						 		</el-col>
+						 
 
-									 		<el-col :span="12">
-									 			<el-form-item label="是否包含小写字母">
-											    	<el-select v-model="safemanage.emptylowercase" filterable placeholder="请选择">
-														<el-option v-for="item02 in lowercase" :key="item02.value" :label="item02.label" :value="item02.value"></el-option>
-													</el-select>
-												</el-form-item>	
-									 		</el-col>
-									 	</el-row>
-									 	
-									 	<el-row :gutter="30">
-									 		<el-col :span="12">
-												<el-form-item label="是否包含特殊字符">
-													<el-select v-model="safemanage.emptycharacter" filterable placeholder="请选择">
-														<el-option v-for="item03 in character" :key="item03.value" :label="item03.label" :value="item03.value"></el-option>
-													</el-select>
-												</el-form-item>
-									 		</el-col>
-									 	
-									 		<el-col :span="12">
-									 			<el-form-item label="密码长度">
-											    	<el-select v-model="safemanage.emptylengths" filterable placeholder="请选择">
-														<el-option v-for="item04 in lengths" :key="item04.value" :label="item04.label" :value="item04.value"></el-option>
-													</el-select>
-												</el-form-item>	
-									 		</el-col>
-									 	</el-row>
+						 		<el-col :span="12">
+						 			<el-form-item label="是否包含小写字母">
+								    	<el-select v-model="safemanage.emptylowercase" filterable placeholder="请选择">
+											<el-option v-for="item02 in lowercase" :key="item02.value" :label="item02.label" :value="item02.value"></el-option>
+										</el-select>
+									</el-form-item>	
+						 		</el-col>
+						 	</el-row>
+						 	
+						 	<el-row :gutter="30">
+						 		<el-col :span="12">
+									<el-form-item label="是否包含特殊字符">
+										<el-select v-model="safemanage.emptycharacter" filterable placeholder="请选择">
+											<el-option v-for="item03 in character" :key="item03.value" :label="item03.label" :value="item03.value"></el-option>
+										</el-select>
+									</el-form-item>
+						 		</el-col>
+						 	
+						 		<el-col :span="12">
+						 			<el-form-item label="密码长度">
+								    	<el-select v-model="safemanage.emptylengths" filterable placeholder="请选择">
+											<el-option v-for="item04 in lengths" :key="item04.value" :label="item04.label" :value="item04.value"></el-option>
+										</el-select>
+									</el-form-item>	
+						 		</el-col>
+						 	</el-row>
 
-									 	<el-row :gutter="30">
-									 		<el-col :span="12">
-												<el-form-item label="密码过期天数">
-													<el-select v-model="safemanage.emptyexpired" filterable placeholder="请选择">
-														<el-option v-for="item05 in expired" :key="item05.value" :label="item05.label" :value="item05.value"></el-option>
-													</el-select>
-												</el-form-item>
-									 		</el-col>
-									 	
-									 		<el-col :span="12">
-									 			<el-form-item label="Session过期时间">
-											    	<el-select v-model="safemanage.emptysession" filterable placeholder="请选择">
-														<el-option v-for="item06 in session" :key="item06.value" :label="item06.label" :value="item06.value"></el-option>
-													</el-select>
-												</el-form-item>	
-									 		</el-col>
-									 	</el-row>
+						 	<el-row :gutter="30">
+						 		<el-col :span="12">
+									<el-form-item label="密码过期天数">
+										<el-select v-model="safemanage.emptyexpired" filterable placeholder="请选择">
+											<el-option v-for="item05 in expired" :key="item05.value" :label="item05.label" :value="item05.value"></el-option>
+										</el-select>
+									</el-form-item>
+						 		</el-col>
+						 	
+						 		<el-col :span="12">
+						 			<el-form-item label="Session过期时间">
+								    	<el-select v-model="safemanage.emptysession" filterable placeholder="请选择">
+											<el-option v-for="item06 in session" :key="item06.value" :label="item06.label" :value="item06.value"></el-option>
+										</el-select>
+									</el-form-item>	
+						 		</el-col>
+						 	</el-row>
 
-										<el-row :gutter="30">
-											<el-col :span="12" >
-												<el-form-item label="是否包含特殊字符">
-													<el-select v-model="safemanage.emptyerrortimes" filterable placeholder="请选择">
-														<el-option v-for="item07 in errortimes" :key="item07.value" :label="item07.label" :value="item07.value"></el-option>
-													</el-select>
-												</el-form-item>
-											</el-col>
-										</el-row>
-									</el-collapse-item>
-								</el-collapse>
-							</el-form>
+							<el-row :gutter="30">
+								<el-col :span="12" >
+									<el-form-item label="是否包含特殊字符">
+										<el-select v-model="safemanage.emptyerrortimes" filterable placeholder="请选择">
+											<el-option v-for="item07 in errortimes" :key="item07.value" :label="item07.label" :value="item07.value"></el-option>
+										</el-select>
+									</el-form-item>
+								</el-col>
+							</el-row>
+						</el-collapse-item>
+					</el-collapse>
+				</el-form>
 
-							<div class="content-footer">
-								<button class="btn btn-default btn-large" @click="resetForm('safemanage')">重置</button>
-								<button class="btn btn-primarys btn-large" @click="submitForm('safemanage')">保存</button>
-							</div>
-
-						</div>
-					</div>
+				<div class="content-footer">
+					<button class="btn btn-default btn-large" @click="resetForm('safemanage')">重置</button>
+					<button class="btn btn-primarys btn-large" @click="submitForm('safemanage')">保存</button>
 				</div>
-			</EasyScrollbar>
+			</div>
 		</div>
 	</div>
 	<!--右侧内容显示 End-->
@@ -121,9 +114,7 @@ export default {
 			isShow:false,
 			ismin:true,
 			activeNames: ['1'],//手风琴数量
-			fullHeight:{//给浏览器高度赋值
-					height: '',
-				},
+			fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 	        labelPosition: 'top',//表单标题在上方显示
 			uppercase: [{//是滞包含大写字母
 				value: '1',
@@ -213,14 +204,8 @@ export default {
 		}
     },
     mounted(){
-			// 获取浏览器可视区域高度
-			window.onresize = () => {//获取浏览器可视区域高度
-		 	return (() => {
-		 		this.fullHeight.height = document.documentElement.clientHeight - 100+'px';
-		 	})()
-		 };
-			this.getData();
-		},
+
+	},
 	methods: {
 		submitForm(formName) {//修改当前用户信息
 	        this.$refs[formName].validate((valid) => {
@@ -251,6 +236,9 @@ export default {
 					return false;
 				}
 	        });
+		},
+		handleChange(val) {//手风琴开关效果调用
+			console.log(val);
 		},
 		resetForm(formName) {//重置按钮调用
 			this.$refs[formName].resetFields();

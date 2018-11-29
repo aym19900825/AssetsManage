@@ -248,7 +248,7 @@
 				dialogVisible: false, //对话框
 				addtitle: true,
 				modifytitle: false,
-				modify:true,
+				modify:false,//修订、修改人、修改时间
 				leaddata: [ //导入数据的表格
 					{
 						columnname: 'author',
@@ -355,8 +355,12 @@
 			},
 			//添加点击按钮显示弹窗
 			visible() {
+				this.addtitle = true;
+				this.modifytitle = false;
+				this.modify=false;
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
-					this.dataInfo.DEPARTMENT=res.data.deptName;
+					this.dataInfo.DEPARTMENT=res.data.companyName;
+					this.dataInfo.RELEASE_UNIT=res.data.deptName;
 					this.dataInfo.ENTERBY=res.data.nickname;
 					var date=new Date();
 					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
@@ -364,16 +368,17 @@
 					this.$message({
 						message:'网络错误，请重试',
 						type:'error'
-					})
-				})
-				this.addtitle = true;
-				this.modifytitle = false;
-				this.modify=false;
+					});
+				});
 				this.show = true;
 			},
 			// 这里是修改
 			detail() {
+				this.addtitle = false;
+				this.modifytitle = true;
+				this.modify=true;
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+					console.log(res);
 					this.dataInfo.CHANGEBY=res.data.nickname;
 					var date=new Date();
 					this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
@@ -381,11 +386,8 @@
 					this.$message({
 						message:'网络错误，请重试',
 						type:'error'
-					})
-				})
-				this.addtitle = false;
-				this.modifytitle = true;
-				this.modify=true;
+					});
+				});
 				this.show = true;
 			},
 			//点击关闭按钮

@@ -118,9 +118,7 @@
 				productType2Form:{
 					inspectionList: []
 				},
-				fullHeight:{//给浏览器高度赋值
-					height: '',
-				},
+				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				isEditing: '',
 				loadSign:true,//加载
 				commentArr:{},//下拉加载
@@ -348,13 +346,7 @@
 		
 		mounted() {
 			this.requestData_productType2();
-			//获取浏览器可视区域高度
-			this.fullHeight.height = document.documentElement.clientHeight - 180+'px';
-			window.onresize = () => {
-			 	return (() => {
-			 		this.fullHeight.height = document.documentElement.clientHeight - 180+'px';
-			 	})()
-			 };
+			
 		},
 		
 

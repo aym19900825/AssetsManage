@@ -61,58 +61,58 @@
 					</div>
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search" class="pb10">
-									<el-form status-icon :model="searchList" label-width="70px">
-										<el-row :gutter="10" class="pb10">
-											<el-col :span="5">
-												<el-input v-model="searchList.V_NAME">
-													<template slot="prepend">委托单位名称</template>
-												</el-input>
-											</el-col>
-											<el-col :span="5">
-												<el-input v-model="searchList.ITEM_NAME">
-													<template slot="prepend">样品名称</template>
-												</el-input>
-											</el-col>
-											<!--<el-col :span="5">
-												<el-input v-model="searchList.S_ENGNAME">
-													<template slot="prepend">英文名称</template>
-												</el-input>
-											</el-col>-->
-											<el-col :span="5">
-												<el-input v-model="searchList.REPORT_NUM">
-													<template slot="prepend">检测报告编号</template>
-												</el-input>
-											</el-col>
-											<el-col :span="4">
-												<el-input v-model="searchList.PROXYNUM">
-													<template slot="prepend">检测委托书编号</template>
-												</el-input>
-											</el-col>
-										</el-row>
-										<el-row :gutter="20">
-											<el-col :span="5">
-												<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd HH:mm:ss">
-												</el-date-picker>
-											</el-col>
-											<el-col :span="5">
-												<el-input v-model="searchList.ENTERBY">
-													<template slot="prepend">录入人</template>
-												</el-input>
-											</el-col>
-											<el-col :span="3">
+						<el-form status-icon :model="searchList" label-width="70px">
+							<el-row :gutter="10" class="pb10">
+								<el-col :span="5">
+									<el-input v-model="searchList.V_NAME">
+										<template slot="prepend">委托单位名称</template>
+									</el-input>
+								</el-col>
+								<el-col :span="5">
+									<el-input v-model="searchList.ITEM_NAME">
+										<template slot="prepend">样品名称</template>
+									</el-input>
+								</el-col>
+								<!--<el-col :span="5">
+									<el-input v-model="searchList.S_ENGNAME">
+										<template slot="prepend">英文名称</template>
+									</el-input>
+								</el-col>-->
+								<el-col :span="5">
+									<el-input v-model="searchList.REPORT_NUM">
+										<template slot="prepend">检测报告编号</template>
+									</el-input>
+								</el-col>
+								<el-col :span="4">
+									<el-input v-model="searchList.PROXYNUM">
+										<template slot="prepend">检测委托书编号</template>
+									</el-input>
+								</el-col>
+							</el-row>
+							<el-row :gutter="20">
+								<el-col :span="5">
+									<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd HH:mm:ss">
+									</el-date-picker>
+								</el-col>
+								<el-col :span="5">
+									<el-input v-model="searchList.ENTERBY">
+										<template slot="prepend">录入人</template>
+									</el-input>
+								</el-col>
+								<el-col :span="3">
 
-												<el-select v-model="searchList.STATUS" placeholder="请选择状态">
-													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-													</el-option>
+									<el-select v-model="searchList.STATUS" placeholder="请选择状态">
+										<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+										</el-option>
 
-												</el-select>
-											</el-col>
-											<el-col :span="2">
-												<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
-											</el-col>
-										</el-row>
-									</el-form>
-								</div>
+									</el-select>
+								</el-col>
+								<el-col :span="2">
+									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+								</el-col>
+							</el-row>
+						</el-form>
+					</div>
 					<!-- 高级查询划出 End-->
 
 					<el-row :gutter="10">
@@ -124,7 +124,7 @@
 										<i class="icon-doubleok icon-double-angle-left blue"></i>
 									</span>
 								</div>
-								<div class="left_treebg">
+								<div class="left_treebg" :style="{height: fullHeight}">
 									<div class="p15" v-if="ismin">
 										<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent"  :props="resourceProps" @node-click="handleNodeClick">
 										</el-tree>
@@ -134,7 +134,7 @@
 						</el-col>
 						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
-							<el-table :data="inspectList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'inspectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table :data="inspectList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'inspectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="检验委托书编号" sortable width="140px" prop="PROXYNUM" v-if="this.checkedName.indexOf('检验委托书编号')!=-1">
@@ -171,7 +171,7 @@
 							<!-- <span class="demonstration">显示总数</span>" -->
 							<!-- <el-pagination background layout="prev, pager, next" :total="2" style="float:right;margin-top:10px;"> -->
 							<!-- </el-pagination style="float:right;margin-top:10px;"> -->
-							<el-pagination background class="pull-right" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
 							<!-- 表格 -->
 						</el-col>
@@ -316,9 +316,7 @@
 				show: false,
 				down: true,
 				up: false,
-				fullHeight:{//给浏览器高度赋值
-					height: '',
-				},
+				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: {
 					ITEM_NAME: '',
 					REPORT_NUM: '',

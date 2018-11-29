@@ -19,18 +19,26 @@
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="基础信息" name="1">
 								<el-row :gutter="30">
-									<el-col :span="12">
+									<el-col :span="8">
+										<el-form-item label="角色编码" prop="name">
+											<el-input v-model="roleList.name" :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
 										<el-form-item label="角色名称" prop="name">
 											<el-input v-model="roleList.name"></el-input>
 										</el-form-item>
 									</el-col>
-									<el-col :span="12">
-										<el-form-item label="别名" prop="code">
-											<el-input v-model="roleList.code" placeholder="请填写"></el-input>
+									<el-col :span="8">
+										<el-form-item label="是否停用" prop="code">
+											<el-select v-model="roleList.simplename" placeholder="请选择" style="width: 100%">
+												<el-option v-for="item in stopoptions" :key="item.value" :label="item.label" :value="item.value">
+												</el-option>
+											</el-select>
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30">
+								<!-- <el-row :gutter="30">
 									<el-col :span="24">
 										<el-form-item label="所在机构" prop="deptName">
 											<el-input v-model="roleList.deptName" :disabled="edit">
@@ -38,7 +46,7 @@
 											</el-input>
 										</el-form-item>
 									</el-col>
-								</el-row>
+								</el-row> -->
 								<el-row :gutter="30">
 									<el-col :span="24">
 										<el-form-item label="备注" prop="tips">
@@ -81,6 +89,13 @@
 				}
 			};
 			return {
+				stopoptions: [{
+					value: '1',
+					label: '是'
+				}, {
+					value: '0',
+					label: '否'
+				}],
 				edit: true, //禁填
 				'男': true,
 				'女': false,

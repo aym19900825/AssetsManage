@@ -11,7 +11,6 @@
 					</span>-->
 					<!--icon-maximization,icon-restore-->
 					<span class="mask_span mask_max" @click='toggle'>
-						 
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
 					</span>
 					<span class="mask_span" @click='close'>

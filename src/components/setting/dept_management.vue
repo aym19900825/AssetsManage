@@ -15,16 +15,13 @@
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
 								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
-                                	<i class="icon-add"></i>添加机构
+                                	<i class="icon-add"></i>添加
                        			</button>
-                       			<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+                       			<!-- <button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加部门
-                       			</button>
+                       			</button> -->
                        			<button type="button" class="btn btn-bule button-margin" @click="modify" id="">
-						    		<i class="icon-edit"></i>修改机构
-								</button>
-								<button type="button" class="btn btn-bule button-margin" @click="modify" id="">
-						    		<i class="icon-edit"></i>修改部门
+						    		<i class="icon-edit"></i>修改
 								</button>
 								<button type="button" class="btn btn-red button-margin" id="" @click="deluserinfo">
 						    		<i class="icon-trash"></i>删除
@@ -59,12 +56,12 @@
 						<el-form status-icon :model="searchDept" label-width="70px">
 							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-input v-model="searchDept.CODE">
+									<el-input v-model="searchDept.simplename">
 										<template slot="prepend">机构编码</template>
 									</el-input>
 								</el-col>
 								<el-col :span="5">
-									<el-input v-model="searchDept.NAME">
+									<el-input v-model="searchDept.fullname">
 										<template slot="prepend">机构名称</template>
 									</el-input>
 								</el-col>
@@ -123,30 +120,36 @@
 					height: '',
 				},
 				checkedName: [
+					// '序号',
 					'机构名称',
 					'机构编码',
 					'版本',
 					'电话号',
 				],
 				columns: [
+					// {
+					// 	text: '序号',
+					// 	dataIndex: 'STEP',
+					// 	isShow:true,
+					// },
 					{
 						text: '机构名称',
-						dataIndex: 'NAME',
+						dataIndex: 'fullname',
 						isShow:true,
 					},
 					{
 						text: '机构编码',
-						dataIndex: 'CODE',
+						dataIndex: 'simplename',
 						isShow:true,
 					},
 					{
 						text: '版本',
-						dataIndex: 'VERSION',
+						dataIndex: 'version',
 						isShow:true,
 					},
 					{
 						text: '电话号',
-						dataIndex: 'PHONE',
+						dataIndex: 'telephone',
 						isShow:true,
 					}
 				],
@@ -172,8 +175,8 @@
 				down: true,
 				up: false,
 				searchDept: {
-					CODE:'',
-					NAME:''
+					simplename:'',
+					fullname:''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -226,8 +229,8 @@
 					params: {
 						page: 1,
 						limit: 10,
-						CODE: this.searchDept.CODE,
-						NAME: this.searchDept.NAME
+						simplename: this.searchDept.simplename,
+						fullname: this.searchDept.fullname
 					}
 				};
 				var url = '/api/api-user/depts';
@@ -239,7 +242,7 @@
 			},
 			//添加
 			openAddMgr() {
-				this.$refs.child.resetNew();
+				// this.$refs.child.resetNew();
 				this.$refs.child.childMethods(); 
 			},
 			//修改

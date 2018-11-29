@@ -202,7 +202,7 @@
 				ismin:true,
 				fileList: [],//上传附件数据
 				fullHeight:{//给浏览器高度赋值
-					height: '',
+					height: ''
 				},
 				searchList: {
 					NAME: '',
@@ -425,12 +425,26 @@
 		mounted() {
 			this.requestData();
 			
-			window.onresize = () => {//获取浏览器可视区域高度
+			//获取浏览器可视区域高度
+			this.fullHeight.height = document.documentElement.clientHeight - 180+'px';
+			window.onresize = () => {
 			 	return (() => {
-			 		this.fullHeight.height = document.documentElement.clientHeight - 100+'px';
+			 		this.fullHeight.height = document.documentElement.clientHeight - 180+'px';
 			 	})()
-			 };
+			};
 		},
+		 // watch: {
+	  //     fullHeight (val) {
+	  //       if(!this.timer) {
+	  //         this.fullHeight = val
+	  //         this.timer = true
+	  //         let that = this
+	  //         setTimeout(function (){
+	  //           that.timer = false
+	  //         },400)
+	  //       }
+	  //     }
+	  //   },
 	}
 </script>
 

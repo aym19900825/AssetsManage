@@ -219,12 +219,13 @@
 		},
 
 		mounted(){
-			// 获取浏览器可视区域高度
-			window.onresize = () => {//获取浏览器可视区域高度
-		 	return (() => {
-		 		this.fullHeight.height = document.documentElement.clientHeight - 100+'px';
-		 	})()
-		 };
+			//获取浏览器可视区域高度
+			this.fullHeight.height = document.documentElement.clientHeight - 180+'px';
+			window.onresize = () => {
+			 	return (() => {
+			 		this.fullHeight.height = document.documentElement.clientHeight - 180+'px';
+			 	})()
+			};
 		},
 		methods: {
 			//表格滚动加载

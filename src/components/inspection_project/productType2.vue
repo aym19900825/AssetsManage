@@ -348,11 +348,13 @@
 		
 		mounted() {
 			this.requestData_productType2();
-			window.onresize = () => {//获取浏览器可视区域高度
+			//获取浏览器可视区域高度
+			this.fullHeight.height = document.documentElement.clientHeight - 180+'px';
+			window.onresize = () => {
 			 	return (() => {
 			 		this.fullHeight.height = document.documentElement.clientHeight - 180+'px';
 			 	})()
-			 }
+			 };
 		},
 		
 

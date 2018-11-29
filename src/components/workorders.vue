@@ -1,199 +1,220 @@
 <template>
-<div>
-	<div class="headerbg">
-		<vheader></vheader>
-		<navs_header></navs_header>
-	</div>
-	<div class="contentbg">
-		<!--右侧内容显示 Begin-->
-		<div class="wrapper wrapper-content wrapperall">
-
-			<div class="ibox-content">
-				<!--按钮操作行 Begin-->
-				<div class="fixed-table-toolbar clearfix">
-					<div class="bs-bars pull-left">
-						<div class="hidden-xs" id="roleTableToolbar" role="group">
-							<button type="button" class="btn btn-green" @click="openAddMgr" id="">
-	                        	<i class="icon-add"></i>添加
-	              			 </button>
-							<button type="button" class="btn btn-bule button-margin" @click="modify">
-							    <i class="icon-edit"></i>修改
-							</button>
-							<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
-							    <i class="icon-trash"></i>删除
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="importData">
-							    <i class="icon-upload-cloud"></i>导入
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="exportData">
-							    <i class="icon-download-cloud"></i>导出
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="Printing">
-							    <i class="icon-print"></i>打印
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-					    		<i class="icon-search"></i>高级查询
-					    		<i class="icon-arrow1-down" v-show="down"></i>
-					    		<i class="icon-arrow1-up" v-show="up"></i>
-							</button>
+	<div>
+		<div class="headerbg">
+			<vheader></vheader>
+			<navs_header></navs_header>
+		</div>
+		<div class="contentbg">
+			<!--左侧菜单调用 Begin-->
+			<!-- <navs_left></navs_left> -->
+			<!--左侧菜单调用 End-->
+			<div class="wrapper wrapper-content wrapperall">
+				<div class="ibox-content">
+					<!--<navs_button></navs_button>-->
+					<div class="fixed-table-toolbar clearfix">
+						<div class="bs-bars pull-left">
+							<div class="hidden-xs" id="roleTableToolbar" role="group">
+								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+                                	<i class="icon-add"></i>添加
+                      			 </button>
+								<button type="button" class="btn btn-bule button-margin" @click="modify">
+								    <i class="icon-edit"></i>修改
+								</button>
+								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
+								    <i class="icon-trash"></i>删除
+								</button>
+								<button type="button" class="btn btn-primarys button-margin">
+								    <i class="icon-inventory-line-callout"></i>导出
+								</button>
+								<button type="button" class="btn btn-primarys button-margin">
+								    <i class="icon-send"></i>发布
+								</button>
+								<button type="button" class="btn btn-primarys button-margin">
+								    <i class="icon-close1"></i>取消
+								</button>
+								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
+						    		<i class="icon-search"></i>高级查询
+						    		<i class="icon-arrow1-down" v-show="down"></i>
+						    		<i class="icon-arrow1-up" v-show="up"></i>
+								</button>
+							</div>
+						</div>
+						<div class="columns columns-right btn-group pull-right">
+							<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
+							<div class="keep-open btn-group" title="列">
+								<el-dropdown :hide-on-click="false" class="pl10 btn btn-default btn-outline">
+									<span class="el-dropdown-link">
+										<font class="J_tabClose"><i class="icon-menu3"></i></font>
+										<i class="el-icon-arrow-down icon-arrow2-down"></i>
+									</span>
+									<el-dropdown-menu slot="dropdown">
+										<el-checkbox-group v-model="checkedName" @change="test">
+											<el-dropdown-item  v-for="(item,index) in tableHeader" :key="index">
+												<el-checkbox :label="item.label" name="type"></el-checkbox>
+											</el-dropdown-item>
+										</el-checkbox-group>
+									</el-dropdown-menu>
+								</el-dropdown>
+							</div>
 						</div>
 					</div>
-					<div class="columns columns-right btn-group pull-right">
-						<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
-						<tableControle :tableHeader="tableHeader" :checkedName="checkedName"  @tableControle="tableControle" ref="tableControle"></tableControle>
+					<!-- 高级查询划出 Begin-->
+					<div v-show="search" class="pb10">
+						<el-form status-icon inline-message :model="searchList" label-width="70px">
+							<el-row :gutter="10">
+								<el-col :span="5">
+									<el-input v-model="searchList.WONUM">
+										<template slot="prepend">工作任务单编号</template>
+									</el-input>
+								</el-col>
+								<el-col :span="5">
+									<el-input v-model="searchList.ITEM_NAME">
+										<template slot="prepend">描述</template>
+									</el-input>
+								</el-col>
+								<el-col :span="5">
+									<el-select v-model="searchList.TYPE" placeholder="类型">
+									      <el-option label="监督审查" value="1">	
+									      </el-option>
+									      <el-option label="质量抽查" value="0">
+									      </el-option>
+									    </el-select>
+								</el-col>
+								<el-col :span="5">
+									<el-input v-model="searchList.ITEM_MODEL">
+										<template slot="prepend">样品型号</template>
+									</el-input>
+								</el-col>
+							</el-row>
+							<el-row :gutter="10" class="pt5">
+								<el-col :span="5">
+									<div class="block">
+									    <el-date-picker
+									      v-model="searchList.ENTERDATE"
+									      type="date"
+									      placeholder="录入时间">
+									    </el-date-picker>
+									  </div>
+								</el-col>
+								<el-col :span="5">
+									<el-select v-model="searchList.ENERBY" placeholder="录入人">
+									    <el-option label="张强" value="1"></el-option>
+									    <el-option label="贾庆林" value="0"></el-option>
+									    <el-option label="李国富" value="0"></el-option>
+									</el-select>
+								</el-col>
+								<el-col :span="5" style="padding-top: 3px">
+									<el-select v-model="searchList.STATUS" placeholder="状态">
+									    <el-option label="草稿" value="1"></el-option>
+									    <el-option label="审批中" value="0"></el-option>
+									    <el-option label="驳回" value="0"></el-option>
+									    <el-option label="已发布" value="0"></el-option>
+									    <el-option label="已取消" value="0"></el-option>
+									</el-select>
+								</el-col>
+								<el-col :span="5">
+									<el-button class="pull-right" type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+								</el-col>
+							</el-row>
+						</el-form>
 					</div>
-				</div>
-				<!--按钮操作行 End-->
-
-				<!-- 高级查询划出 Begin-->
-				<div v-show="search" class="pb10">
-					<el-form status-icon :model="searchList" label-width="70px">
-						<el-row :gutter="10">
-							<el-col :span="5">
-								<el-input v-model="searchList.typename">
-									<template slot="prepend">类型名称</template>
-								</el-input>
-							</el-col>
-							<el-col :span="2">
-								<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
-							</el-col>
-						</el-row>
-					</el-form>
-				</div>
-				<!-- 高级查询划出 End-->
-				<el-row :gutter="10">
-					<el-col :span="5" class="lefttree" :style="fullHeight">
-						<div class="lefttreebg">
-							<div class="left_tree_title clearfix" @click="min3max()">
-								<div class="pull-left pr20" v-if="ismin">检索分类</div>
-								<span class="pull-right navbar-minimalize minimalize-styl-2">
-									<i class="icon-doubleok icon-double-angle-left blue"></i>
-								</span>
-							</div>
-							<div class="left_treebg">
-								<div class="p15" v-if="ismin">
-									<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent"  :props="resourceProps" @node-click="handleNodeClick">
-									</el-tree>
+					<!-- 高级查询划出 End-->
+					
+					<el-row :gutter="10">
+						<el-col :span="5" class="lefttree">
+							<div class="lefttreebg">
+								<div class="left_tree_title clearfix" @click="min3max()">
+									<div class="pull-left pr20" v-if="ismin">检索分类</div>
+									<span class="pull-right navbar-minimalize minimalize-styl-2">
+										<i class="icon-doubleok icon-double-angle-left blue"></i>
+									</span>
+								</div>
+								<div class="left_treebg" :style="fullHeight">
+									<div class="p15" v-if="ismin">
+										<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent"  :props="resourceProps" @node-click="handleNodeClick">
+										</el-tree>
+									</div>
 								</div>
 							</div>
-						</div>
-					</el-col>
-					<el-col :span="19" class="leftcont v-resize" :style="fullHeight">
-						<!-- 表格 Begin-->
-						<el-table :data="userList" border stripe height="480" style="width: 100%;":default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
-							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
-							</el-table-column>
-							<el-table-column label="检验/检测方法编号" width="150" sortable prop="M_NUM" v-if="this.checkedName.indexOf('检验/检测方法编号')!=-1">
-							</el-table-column>
-							<el-table-column label="中文名称" width="220" sortable prop="M_NAME" v-if="this.checkedName.indexOf('中文名称')!=-1">
-							</el-table-column>
-							<el-table-column label="英文名称" width="180" sortable prop="M_ENAME" v-if="this.checkedName.indexOf('英文名称')!=-1">
-							</el-table-column>
-							<el-table-column label="类别" width="120" sortable prop="M_TYPE" v-if="this.checkedName.indexOf('类别')!=-1">
-							</el-table-column>
-							<el-table-column label="状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
-							</el-table-column>
-							<el-table-column label="版本" width="100" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1">
-							</el-table-column>
-							<el-table-column label="机构" width="180" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('机构')!=-1">
-							</el-table-column>
-							<el-table-column label="录入人" width="120" prop="ENTERBY" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入人')!=-1">
-							</el-table-column>
-							<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
-							</el-table-column>
-							<el-table-column label="修改人" width="120" prop="CHANGEBY" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改人')!=-1">
-							</el-table-column>
-							<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
-							</el-table-column>
-						</el-table>
-						<el-pagination background class="pull-right pt10 pb10" v-if="this.checkedName.length>0"
-				            @size-change="sizeChange"
-				            @current-change="currentChange"
-				            :current-page="page.currentPage"
-				            :page-sizes="[10, 20, 30, 40]"
-				            :page-size="page.pageSize"
-				            layout="total, sizes, prev, pager, next"
-				            :total="page.totalCount">
-				        </el-pagination>
-						<!-- 表格 End-->
-					</el-col>
-				</el-row>
+						</el-col>
+						<el-col :span="19" class="leftcont v-resize">
+							<!-- 表格 -->
+							<el-table :data="userList"  border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
+								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
+								</el-table-column>
+								<el-table-column label="工作任务单编号" sortable width="100px" prop="WONUM" v-if="this.checkedName.indexOf('工作任务单编号')!=-1">
+								</el-table-column>
+								<el-table-column label="样品名称" sortable width="200px" prop="ITEM_NAME" v-if="this.checkedName.indexOf('样品名称')!=-1">
+								</el-table-column>
+								<el-table-column label="样品型号" sortable width="100px" prop="ITEM_MODEL" v-if="this.checkedName.indexOf('样品型号')!=-1">
+								</el-table-column>
+								</el-table-column>
+								<el-table-column label="录入人" sortable width="210px" prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
+								</el-table-column>
+								<el-table-column label="录入时间" sortable width="210px" prop="ENTERDATE" v-if="this.checkedName.indexOf('录入时间')!=-1">
+								</el-table-column>
+								<el-table-column label="状态" sortable  width="380px" prop="STATUS" v-if="this.checkedName.indexOf('状态')!=-1">
+								</el-table-column>
+							</el-table>
+							<el-pagination background class="pull-right" v-if="this.checkedName.length>0"
+					            @size-change="sizeChange"
+					            @current-change="currentChange"
+					            :current-page="page.currentPage"
+					            :page-sizes="[10, 20, 30, 40]"
+					            :page-size="page.pageSize"
+					            layout="total, sizes, prev, pager, next" :total="page.totalCount">
+					        </el-pagination>
+							<!-- 表格 -->
+						</el-col>
+					</el-row>
+					</div>
+				</div>
 			</div>
-					
+			<annualmask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></annualmask>
 		</div>
-		<!--右侧内容显示 End-->
 	</div>
-</div>
 </template>
 <script>
 	import vheader from './common/vheader.vue'
 	import navs_left from './common/left_navs/nav_left2.vue'
 	import navs_header from './common/nav_tabs.vue'
-	import table from './plugin/table/table-normal.vue'
-	import tableControle from './plugin/table-controle/controle.vue'
+	import annualmask from './common/annual_mask.vue'
+	import assetsTree from './plugin/vue-tree/tree.vue'
 	export default {
-		name: 'customer_management',
+		name: 'annual_plan',
 		components: {
-			vheader,
-			navs_left,
-			navs_header,
-			tableControle,
-			table,
+			'vheader': vheader,
+			'navs_header': navs_header,
+			'navs_left': navs_left,
+			'v-assetsTree': assetsTree,
+			'annualmask': annualmask
 		},
 		data() {
 			return {
-				dataUrl: '/api/api-user/users',
-				searchData: {
-			        page: 1,
-			        limit: 10,//分页显示数
-			        nickname: '',
-			        enabled: '',
-			        searchKey: '',
-			        searchValue: '',
-			        companyId: '',
-			        deptId: ''
-		        },
+				ismin: true,
+				fullHeight:{//给浏览器高度赋值
+					height: ''
+				},
 				checkedName: [
-					'检验/检测方法编号',
-					'中文名称',
-					'英文名称',
-					'类别',
-					'状态',
-					'版本',
-					'机构',
+					'工作任务单编号',
+					'样品名称',
+					'样品型号',
 					'录入人',
 					'录入时间',
-					'修改人',
-					'修改时间'
+					'状态'
 				],
 				tableHeader: [
 					{
-						label: '检验/检测方法编号',
-						prop: 'M_NUM'
+						label: '工作任务单编号',
+						prop: 'WONUM'
 					},
 					{
-						label: '中文名称',
-						prop: 'M_NAME'
+						label: '样品名称',
+						prop: 'ITEM_NAME'
 					},
 					{
-						label: '英文名称',
-						prop: 'M_ENAME'
-					},
-					{
-						label: '类别',
-						prop: 'M_TYPE'
-					},
-					{
-						label: '状态',
-						prop: 'STATUS'
-					},
-					{
-						label: '版本',
-						prop: 'VERSION'
-					},
-					{
-						label: '机构',
-						prop: 'DEPARTMENT'
+						label: '样品型号',
+						prop: 'ITEM_MODEL'
 					},
 					{
 						label: '录入人',
@@ -204,62 +225,16 @@
 						prop: 'ENTERDATE'
 					},
 					{
-						label: '修改人',
-						prop: 'CHANGEBY'
-					},
-					{
-						label: '修改时间',
-						prop: 'CHANGEDATE'
+						label: '状态',
+						prop: 'STATUS'
 					}
 				],
-				leftNavs: [//leftNavs左侧菜单数据
-					{
-						navicon: 'icon-user',
-						navtitle: '用户管理',
-						navherf: '/personinfo'
-					}, {
-						navicon: 'icon-edit',
-						navtitle: '英文名称管理',
-						navherf: '/dept_management'
-					}, {
-						navicon: 'icon-role-site',
-						navtitle: '角色管理',
-						navherf: '/role_management'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '客户管理',
-						navherf: '/customer_management'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '产品类别',
-						navherf: '/products_category'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '产品',
-						navherf: '/products'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测标准',
-						navherf: '/testing_standard'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测项目',
-						navherf: '/testing_projects'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测方法',
-						navherf: '/testing_methods'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '自动编号设置',
-						navherf: '/number_settings'
-					}
-				],
+
 				companyId: '',
 				deptId: '',
 				selUser: [],
-				'活动': true,
-				'不活动': false,
+				'启用': true,
+				'冻结': false,
 				'男': true,
 				'女': false,
 				userList: [],
@@ -267,15 +242,14 @@
 				show: false,
 				down: true,
 				up: false,
-				isShow: false,
-				ismin:true,
-				fullHeight:{//给浏览器高度赋值
-					height: '',
-				},
-				searchList: {//点击高级搜索后显示的内容
-					nickname: '',
-					enabled: '',
-					createTime: ''
+				searchList: {
+					WONUM: '',
+					ITEM_NAME: '',
+					TYPE: '',
+					ITEM_MODEL: '',
+					ENTERDATE:'',
+					ENTERBY:'',
+					STATUS:''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -287,7 +261,7 @@
 				},
 				treeData: [],
 				userData:[],
-				page: {//分页显示
+				page: {
 					currentPage: 1,
 					pageSize: 10,
 					totalCount: 0
@@ -295,24 +269,9 @@
 				aaaData:[],
 			}
 		},
-		mounted() {
-			this.requestData();
-
-			window.onresize = () => {//获取浏览器可视区域高度
-			 	return (() => {
-			 		this.fullHeight.height = document.documentElement.clientHeight - 180+'px';
-			 	})()
-			 }
-		},
 		methods: {
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
-				console.log();
-				return(
-			<span>
-              <i class={data.iconClass}></i>
-              <span>{node.label}</span>
-            </span>
-				);
+				return(<span><i class={data.iconClass}></i><span>{node.label}</span></span>);
 			},
 			// 点击节点
 			nodeClick: function(m) {
@@ -325,8 +284,8 @@
 				}
 				this.handleNodeClick();
 			},
-			tableControle(data){
-				this.checkedName = data;
+			test(){
+				console.log(this.checkedName.indexOf('账号')!=-1);
 			},
 			sizeChange(val) {
 		      this.page.pageSize = val;
@@ -343,7 +302,7 @@
 			},
 			//添加用戶
 			openAddMgr() {
-//				this.$refs.child.resetNew();
+				// this.$refs.child.resetNew();
 				this.$refs.child.visible();
 			},
 			//修改用戶
@@ -351,7 +310,7 @@
 				this.aaaData = this.selUser;
 				if(this.aaaData.length == 0) {
 					this.$message({
-						message: '请您选择要修改的用户',
+						message: '请您选择要修改的数据',
 						type: 'warning'
 					});
 					return;
@@ -362,66 +321,68 @@
 					});
 					return;
 				} else {
-					this.$refs.child.detail();
+					this.$refs.child.detail(this.selUser[0].ID);
 				}
 			},
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
 				this.down = !this.down,
-					this.up = !this.up
+				this.up = !this.up
 			},
 			// 删除
 			deluserinfo() {
 				var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({
-						message: '请您选择要删除的用户',
-						type: 'warning'
-					});
-					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时删除多个用户',
+						message: '请您选择要删除的数据',
 						type: 'warning'
 					});
 					return;
 				} else {
-					var changeUser = selData[0];
-					var id = changeUser.id;
-					var url = '/api/api-user/users/' + id;
-					this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
+					var url = '/api/api-apps/app/workorder/deletes';
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					for (var i = 0; i < changeUser.length; i++) {
+						deleteid.push(changeUser[i].ID);
+					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+                    var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除此数据吗？', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                    }).then(({ value }) => {
+                        this.$axios.delete(url, {params: data}).then((res) => {
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '删除成功',
-								type: 'success'
+								message: '网络错误，请重试',
+								type: 'error'
 							});
-							this.requestData();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
-					});
+                    }).catch(() => {
+
+                	});
 				}
-			},
-			// 导入
-			importData() {
-				
-			},
-			// 导出
-			exportData() {
-				
-			},
-			// 打印
-			Printing() {
-				
 			},
 			judge(data) {
 				//taxStatus 布尔值
-				return data.enabled ? '活动' : '不活动'
+				return data.enabled ? '启用' : '冻结'
+			},
+			sexName(data) {
+				return data.sex ? '男' : '女'
 			},
 			//时间格式化  
 			dateFormat(row, column) {
@@ -445,14 +406,16 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					nickname: this.searchList.nickname,
-					enabled: this.searchList.enabled,
-					searchKey: 'createTime',
-					searchValue: this.searchList.createTime,
-					companyId: this.companyId,
-					deptId: this.deptId
+
+					WONUM: this.searchList.WONUM,
+					ITEM_NAME: this.searchList.ITEM_NAME,
+					TYPE: this.searchList.TYPE,
+					ITEM_MODEL: this.searchList.ITEM_MODEL,
+					ENTERDATE:this.searchList.ENTERDATE,
+					ENTERBY:this.searchList.ENTERBY,
+					STATUS:this.searchList.STATUS
 				}
-				var url = '/api/api-user/users';
+				var url = '/api/api-apps/app/workorder';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
@@ -466,13 +429,83 @@
 					}).catch((wrong) => {})
 				})
 			},
+			//机构树
+			getKey() {
+				let that = this;
+				var url = '/api/api-user/depts/tree';
+				this.$axios.get(url, {}).then((res) => {
+					this.resourceData = res.data;
+					this.treeData = this.transformTree(this.resourceData);
+				});
+			},
+			transformTree(data){
+				for(var i=0; i<data.length; i++){
+					data[i].name = data[i].fullname;
+					if(!data[i].pid || $.isArray(data[i].subDepts)){
+						data[i].iconClass = 'icon-file-normal';
+					}else{
+						data[i].iconClass = 'icon-file-text';
+					}
+					if($.isArray(data[i].subDepts)){
+						data[i].children = this.transformTree(data[i].subDepts);
+					}
+				}
+				return data;
+			},
+			getTreeId(data){
+				if(data.type == '1'){
+					this.companyId = data.id;
+					this.deptId = '';
+				}else{
+					this.deptId = data.id;
+					this.companyId = '';
+				}
+				this.requestData();
+			},
 			handleNodeClick(data) {
+				if(data.type == '1') {
+					this.companyId = data.id;
+					this.deptId = '';
+				} else {
+					this.deptId = data.id;
+					this.companyId = '';
+				}
+				this.requestData();
 			},
 			formatter(row, column) {
 				return row.enabled;
 			},
+			min3max() { //左侧菜单正常和变小切换
+				if($(".lefttree").hasClass("el-col-5")) {
+					$(".lefttree").removeClass("el-col-5");
+					$(".lefttree").addClass("el-col-1");
+					$(".leftcont").removeClass("el-col-19");
+					$(".leftcont").addClass("el-col-23");
+					$(".icon-doubleok").removeClass("icon-double-angle-left");
+					$(".icon-doubleok").addClass("icon-double-angle-right");
+				} else {
+					$(".lefttree").removeClass("el-col-1");
+					$(".lefttree").addClass("el-col-5");
+					$(".leftcont").removeClass("el-col-23");
+					$(".leftcont").addClass("el-col-19");
+					$(".icon-doubleok").removeClass("icon-double-angle-right");
+					$(".icon-doubleok").addClass("icon-double-angle-left");
+				}
+				this.ismin = !this.ismin;
+			}
 		},
-		
+		mounted() {
+			this.requestData();
+			this.getKey();
+
+			//获取浏览器可视区域高度
+			this.fullHeight.height = document.documentElement.clientHeight - 180+'px';
+			window.onresize = () => {
+			 	return (() => {
+			 		this.fullHeight.height = document.documentElement.clientHeight - 180+'px';
+			 	})()
+			 };
+		},
 	}
 </script>
 

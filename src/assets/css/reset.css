@@ -275,7 +275,7 @@ h6 {
 	.ibox-content {
 		background-color: #F5F8FB;
 		color: inherit;
-		padding: 10px 10px 20px 10px;
+		padding: 10px;
 		border-color: #e7eaec;
 		-webkit-border-image: none;
 		-o-border-image: none;
@@ -510,7 +510,7 @@ h6 {
 .el-pagination.is-background .el-pager li:not(.disabled).active {background-color: #6585DF; color: #FFFFFF;}
 
 /*表单页标题调整 heliping*/
-.el-form--label-top .el-form-item__label {padding-top: 5px; padding-bottom: 0px; line-height:20px;}
+.el-form--label-top .el-form-item__label {padding-top: 5px; padding-bottom: 0px; line-height:25px;}
 .el-form-item {
     margin-bottom: 5px;
 }
@@ -705,10 +705,7 @@ h6 {
 
 /**/
 .el-form-item__content {
-	line-height: 20px;
-}
-.el-form-item {
-	margin-bottom:0px;
+	line-height: 25px;
 }
 
 

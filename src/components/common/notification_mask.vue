@@ -22,12 +22,12 @@
 							<el-collapse-item title="类别" name="1">
 								<el-row :gutter="20" class="pb10">
 									<el-col :span="3" class="pull-right">
-										<el-input v-model="dataInfo.N_CODE" :disabled="true">
+										<el-input v-model="dataInfo.N_CODE" :disabled="edit">
 											<template slot="prepend">编号</template>
 										</el-input>
 									</el-col>
 									<el-col :span="3" class="pull-right">
-										<el-input v-model="dataInfo.STATE" :disabled="true">
+										<el-input v-model="dataInfo.STATE" :disabled="edit">
 											<template slot="prepend">状态</template>
 										</el-input>
 									</el-col>
@@ -81,19 +81,19 @@
 									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="计划编号" prop="WP_NUM">
-												<el-input v-model="dataInfo.WP_NUM" :disabled="true">
+												<el-input v-model="dataInfo.WP_NUM" :disabled="edit">
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="任务号" prop="TASKNUM">
-												<el-input v-model="dataInfo.TASKNUM"></el-input>
+												<el-input v-model="dataInfo.TASKNUM" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="承检单位" prop="CJDW">
 												
-										<el-select v-model="dataInfo.CJDW" placeholder="金化站">
+										<el-select v-model="dataInfo.CJDW" placeholder="金化站" :disabled="noedit">
 											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
 										</el-select>
@@ -103,7 +103,7 @@
 									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="项目负责人" prop="P_LEADERDesc">
-												<el-input v-model="dataInfo.P_LEADERDesc" :disabled="true">
+												<el-input v-model="dataInfo.P_LEADERDesc" :disabled="edit">
 													<el-button slot="append" icon="el-icon-search" @click="getPeople(1)"></el-button>
 												</el-input>
 
@@ -111,19 +111,19 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="受检产品名称" prop="ITEM_NAME">
-												<el-input v-model="dataInfo.ITEM_NAME"></el-input>
+												<el-input v-model="dataInfo.ITEM_NAME" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="受检产品型号" prop="ITEM_MODEL">
-												<el-input v-model="dataInfo.ITEM_MODEL"></el-input>
+												<el-input v-model="dataInfo.ITEM_MODEL" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="信息状态" prop="STATUS">
-												<el-input v-model="dataInfo.STATUS"></el-input>
+												<el-input v-model="dataInfo.STATUS" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -200,22 +200,22 @@
 									<el-row :gutter="30">
 										<el-col :span="6">
 											<el-form-item label="受检企业" prop="V_NAME">
-												<el-input v-model="dataInfo.V_NAME"></el-input>
+												<el-input v-model="dataInfo.V_NAME" :disabled="noedit" ></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="6">
 											<el-form-item label="抽样方案" prop="SOLUTION">
-												<el-input v-model="dataInfo.SOLUTION"></el-input>
+												<el-input v-model="dataInfo.SOLUTION" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="6">
 											<el-form-item label="样品数量" prop="QUALITY">
-												<el-input v-model="dataInfo.QUALITY"></el-input>
+												<el-input v-model="dataInfo.QUALITY" :disabled="noedit">></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="6">
 											<el-form-item label="接收人" prop="ACCEPT_PERSONDesc">
-												<el-input v-model="dataInfo.ACCEPT_PERSONDesc" :disabled="true">
+												<el-input v-model="dataInfo.ACCEPT_PERSONDesc" :disabled="edit">
 													<el-button slot="append" icon="el-icon-search" @click="getPeople(2)"></el-button>
 												</el-input>
 
@@ -296,18 +296,18 @@
 									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="完成日期" prop="COMPDATE">
-												<el-date-picker v-model="dataInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+												<el-date-picker v-model="dataInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" :disabled="noedit">>
 												</el-date-picker>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="检验检测费用" prop="CHECTCOST">
-												<el-input v-model="dataInfo.CHECTCOST"></el-input>
+												<el-input v-model="dataInfo.CHECTCOST" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="下达日期" prop="XD_DATE">
-												<el-date-picker v-model="dataInfo.XD_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+												<el-date-picker v-model="dataInfo.XD_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" :disabled="noedit">>
 												</el-date-picker>
 											</el-form-item>
 										</el-col>
@@ -326,29 +326,29 @@
 									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="录入人" prop="ENTERBY">
-												<el-input v-model="dataInfo.ENTERBY" :disabled="true"></el-input>
+												<el-input v-model="dataInfo.ENTERBY" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="录入时间" prop="ENTERDATE">
-												<el-input v-model="dataInfo.ENTERDATE" :disabled="true"></el-input>
+												<el-input v-model="dataInfo.ENTERDATE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="录入人机构" prop="ORGID">
-												<el-input v-model="dataInfo.ORGID" :disabled="true"></el-input>
+												<el-input v-model="dataInfo.ORGID" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="修改人" v-if="modify" prop="CHANGEBY">
-												<el-input v-model="dataInfo.CHANGEBY" :disabled="true"></el-input>
+												<el-input v-model="dataInfo.CHANGEBY" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="修改时间" v-if="modify" prop="CHANGEDATE">
-												<el-input v-model="dataInfo.CHANGEDATE" :disabled="true"></el-input>
+												<el-input v-model="dataInfo.CHANGEDATE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 
@@ -364,7 +364,6 @@
 				</el-form>
 			</div>
 		</div>
-
 		<el-dialog :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
 			<el-table :data="gridData" @selection-change="SelChange">
 				<el-table-column type="selection" width="55" fixed>
@@ -392,28 +391,45 @@
 <script>
 	export default {
 		name: 'masks',
-		//		props: {
-		//			dataInfo: {
-		//				type: Object,
-		//				default: function(){
-		//					return {
-		//					N_CODE: '',
-		//					TYPE: '',
-		//					XD_DATE: '',
-		//					ITEM_NAME: '',
-		//					ITEM_MODEL: '',
-		//					VENDOR: '',
-		//					CJDW: '',
-		//					TASKNUM: '',
-		//					SOLUTION: '',
-		//					COMPDATE:'',
-		//					STATUS: '',
-		//					ENTERBY: '',
-		//					}
-		//				}
-		//			},
-		//			page: Object ,
-		//		},
+				props: {
+					dataInfo: {
+						type: Object,
+						default: function(){
+							return {
+							N_CODE: '',
+							TYPE: '',
+							XD_DATE: '',
+							ITEM_NAME: '',
+							ITEM_MODEL: '',
+							VENDOR: '',
+							CJDW: '',
+							TASKNUM: '',
+							SOLUTION: '',
+							COMPDATE:'',
+							STATUS: '',
+							ENTERBY: '',
+						WORK_NOTICE_CHECKBASISList: [{ //字段列表
+						NUMBER: '',
+						S_NUM: '',
+						S_DESC: '',
+						S_NAME: '',
+						S_ENGNAME: 'sss',
+						VERSION: '',
+						STATUS: '',
+					}],
+					WORK_NOTICE_CHECKPROJECTList: [{
+						NUMBER: '',
+						P_NUM: '',
+						P_DESC: '',
+						REMARKS: '',
+						VERSION: '',
+						STATUS: ''
+					}]
+							}
+						}
+					},
+//					page: Object ,
+				},
 		data() {
 			var validateName = (rule, value, callback) => {
 				if(value === '') {
@@ -458,8 +474,9 @@
 				},
 				],
 				value: '',
-				selUser: [],
-				//				disabled: true, //禁填
+				selUser: {},
+				edit: true, //禁填
+				noedit:false,
 				editSearch: '', //判斷項目負責人和接收人
 				col_but1: true,
 				col_but2: true,
@@ -506,38 +523,38 @@
 						retain: ''
 					}
 				],
-				dataInfo: { //添加数据库列表信息
-					N_CODE: '1',
-					TYPE: '',
-					XD_DATE: '',
-					ITEM_NAME: '',
-					ITEM_MODEL: '',
-					VENDOR: '',
-					CJDW: '',
-					TASKNUM: '',
-					SOLUTION: '',
-					COMPDATE: '',
-					STATE: '草稿',
-					ENTERBY: '',
-					STATUS: '',
-					WORK_NOTICE_CHECKBASISList: [{ //字段列表
-						NUMBER: '',
-						S_NUM: '',
-						S_DESC: '',
-						S_NAME: '',
-						S_ENGNAME: 'sss',
-						VERSION: '',
-						STATUS: '',
-					}],
-					WORK_NOTICE_CHECKPROJECTList: [{
-						NUMBER: '',
-						P_NUM: '',
-						P_DESC: '',
-						REMARKS: '',
-						VERSION: '',
-						STATUS: ''
-					}]
-				},
+//				dataInfo: { //添加数据库列表信息
+//					N_CODE: '1',
+//					TYPE: '',
+//					XD_DATE: '',
+//					ITEM_NAME: '',
+//					ITEM_MODEL: '',
+//					VENDOR: '',
+//					CJDW: '',
+//					TASKNUM: '',
+//					SOLUTION: '',
+//					COMPDATE: '',
+//					STATE: '草稿',
+//					ENTERBY: '',
+//					STATUS: '',
+//					WORK_NOTICE_CHECKBASISList: [{ //字段列表
+//						NUMBER: '',
+//						S_NUM: '',
+//						S_DESC: '',
+//						S_NAME: '',
+//						S_ENGNAME: 'sss',
+//						VERSION: '',
+//						STATUS: '',
+//					}],
+//					WORK_NOTICE_CHECKPROJECTList: [{
+//						NUMBER: '',
+//						P_NUM: '',
+//						P_DESC: '',
+//						REMARKS: '',
+//						VERSION: '',
+//						STATUS: ''
+//					}]
+//				},
 				rules: {
 					name: [{
 						required: true,
@@ -656,6 +673,41 @@
 				this.statusshow1 = false;
 				this.statusshow2 = true;
 				this.modify = true;
+				var usersUrl = '/api/api-user/users/currentMap'
+				this.$axios.get(usersUrl, {}).then((res) => {
+					this.dataInfo.CHANGEBY = res.data.nickname;
+					var date = new Date();
+					this.dataInfo.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+				var url = '/api/api-apps/app/workNot/' + dataid;
+				this.$axios.get(url, {}).then((res) => {
+					this.dataInfo = res.data;
+					this.show = true;
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+			},
+			//这是查看
+			view(dataid) {
+				this.addtitle = false;
+				this.modifytitle = true;
+				this.statusshow1 = false;
+				this.statusshow2 = true;
+				this.modify = true;
+				this.edit=true;
+				this.noedit=true;
+				
+				const parent = $("input").attr('disabled',true);
+				//alert(parent)
+				console.log(parent)
 				var usersUrl = '/api/api-user/users/currentMap'
 				this.$axios.get(usersUrl, {}).then((res) => {
 					this.dataInfo.CHANGEBY = res.data.nickname;

@@ -370,7 +370,7 @@
 			},
 			//查看用戶
 			 view(id) {
-				this.$refs.child.detail(id);
+				this.$refs.child.view(id);
 			},
 			
 			//高级查询

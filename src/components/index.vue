@@ -157,7 +157,7 @@ export default {
 			}, {
 				navicon: 'icon-contract',
 				navtitle: '委托书管理',
-				navherf: '/proxies'
+				navherf: '/inspect_proxy'
 			}, {
 				navicon: 'icon-sample3',
 				navtitle: '样品管理',

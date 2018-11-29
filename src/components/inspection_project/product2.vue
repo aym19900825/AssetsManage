@@ -223,9 +223,15 @@
 				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 			},
 			viewfield_product2(ID){//点击父级筛选出子级数据
+				if(ID=='null'){
+					this.product2Form.inspectionList = []; 
+					this.$refs.inspectionSta2child.viewfield_inspectionSta2('null');
+					return false;
+					//todo  相关数据设置
+				}
 				var url = '/api/api-apps/app/productType2/' + ID;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
+					//console.log(res);
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -238,10 +244,8 @@
 
 					//默认主表第一条数据
 					if(this.product2Form.inspectionList.length > 0){
-						//console.log('产品名称字表调用===='+this.product2Form.inspectionList[0].ID);
 						this.$refs.inspectionSta2child.viewfield_inspectionSta2(this.product2Form.inspectionList[0].ID);
 					}else{
-						//console.log('产品名称字表调用====null');
 						this.$refs.inspectionSta2child.viewfield_inspectionSta2('null');
 					}
 					
@@ -289,7 +293,7 @@
 
 			addfield_product2(NUM) { //插入行到产品类型Table中
 				 var isEditingflag=false;
-				console.log(this.product2Form.inspectionList);
+				//console.log(this.product2Form.inspectionList);
 				for(var i=0;i<this.product2Form.inspectionList.length; i++){
 					if (this.product2Form.inspectionList[i].isEditing==false){
 						isEditingflag=false;
@@ -409,5 +413,10 @@
 </script>
 
 <style scoped>
-
+.el-form-item__error {
+	top: 18%;
+    left: 5px;
+    background: #FFF;
+    padding: 5px 10px;
+}
 </style>

@@ -217,16 +217,15 @@
 				return index + 1;
 			},
 			viewfield_rawDataAsset(ID){//点击父级筛选出子级数据
+				console.log('==============viewfield_rawDataAsset');
 				if(ID=='null'){
 					this.rawDataAssetForm.inspectionList = []; 
 					return false;
 					//todo  相关数据设置
 				}
 				var url = '/api/api-apps/app/rawDataAsset/INSPECTION_PROJECT2/' + ID;
-				console.log(ID);
 
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -236,15 +235,7 @@
 						this.loadSign=true
 					}
 					this.rawDataAssetForm.inspectionList=res.data.RAW_DATA_ASSETList;
-					//console.log(this.rawDataAssetForm.inspectionList[0].ID);
-					//默认主表第一条数据
-					// if(this.rawDataAssetForm.inspectionList.length > 0){
-					// 	console.log(this.rawDataAssetForm.inspectionList.length);
-					// 	this.$refs.professionGrochild.viewfield_inspectionPro2(this.rawDataAssetForm.inspectionList[0].ID);
-					// }else{
-					// 	this.$refs.professionGrochild.viewfield_inspectionPro2('null');
-					// }
-
+					
 					for(var j = 0; j < this.rawDataAssetForm.inspectionList.length; j++){
 						this.rawDataAssetForm.inspectionList[j].isEditing = false;
 					}
@@ -403,5 +394,10 @@
 </script>
 
 <style scoped>
-
+.el-form-item__error {
+	top: 18%;
+    left: 5px;
+    background: #FFF;
+    padding: 5px 10px;
+}
 </style>

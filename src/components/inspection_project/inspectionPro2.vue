@@ -254,6 +254,12 @@
 			viewfield_inspectionPro2(ID){//点击父级筛选出子级数据
 				if(ID=='null'){
 					this.inspectionPro2Form.inspectionList = []; 
+					this.$refs.professionGrochild.viewfield_professionGro('null');
+					this.$refs.inspectionMet2child.viewfield_inspectionMet2('null');
+					
+					this.$refs.rawDataTem2child.viewfield_rawDataTem2('null');
+					this.$refs.inspectionRepTem2child.viewfield_inspectionRepTem2('null');
+					this.$refs.rawDataAssetchild.viewfield_rawDataAsset('null');
 					return false;
 					//todo  相关数据设置
 				}
@@ -270,13 +276,22 @@
 					}
 					this.inspectionPro2Form.inspectionList=res.data.INSPECTION_PROJECT2List;
 					
-					//默认主表第一条数据
-					if(this.inspectionPro2Form.inspectionList.length > 0){
-						
-						this.$refs.professionGrochild.viewfield_professionGro(this.inspectionPro2Form.inspectionList[0].ID);
-					}else{
-						this.$refs.professionGrochild.viewfield_professionGro('null');
-					}
+		//默认主表第一条数据
+		if(this.inspectionPro2Form.inspectionList.length > 0){
+			this.$refs.professionGrochild.viewfield_professionGro(this.inspectionPro2Form.inspectionList[0].ID);
+			this.$refs.inspectionMet2child.viewfield_inspectionMet2(this.inspectionPro2Form.inspectionList[0].ID);
+
+			this.$refs.rawDataTem2child.viewfield_rawDataTem2(this.inspectionPro2Form.inspectionList[0].ID);
+			this.$refs.inspectionRepTem2child.viewfield_inspectionRepTem2(this.inspectionPro2Form.inspectionList[0].ID);
+			this.$refs.rawDataAssetchild.viewfield_rawDataAsset(this.inspectionPro2Form.inspectionList[0].ID);
+		}else{
+			this.$refs.professionGrochild.viewfield_professionGro('null');
+			this.$refs.inspectionMet2child.viewfield_inspectionMet2('null');
+
+			this.$refs.rawDataTem2child.viewfield_rawDataTem2('null');
+			this.$refs.inspectionRepTem2child.viewfield_inspectionRepTem2('null');
+			this.$refs.rawDataAssetchild.viewfield_rawDataAsset('null');
+		}
 
 					for(var j = 0; j < this.inspectionPro2Form.inspectionList.length; j++){
 						this.inspectionPro2Form.inspectionList[j].isEditing = false;
@@ -430,6 +445,7 @@
 				//console.log();
 			},
 			viewchildRow(ID) {//查看子项数据
+
 				this.$refs.professionGrochild.viewfield_professionGro(ID);//专业组
 				this.$refs.inspectionMet2child.viewfield_inspectionMet2(ID);//检验/检测方法
 				this.$refs.rawDataTem2child.viewfield_rawDataTem2(ID);//原始数据模板
@@ -452,5 +468,10 @@
 </script>
 
 <style scoped>
-
+.el-form-item__error {
+	top: 18%;
+    left: 5px;
+    background: #FFF;
+    padding: 5px 10px;
+}
 </style>

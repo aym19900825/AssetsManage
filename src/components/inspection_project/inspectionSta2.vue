@@ -234,6 +234,7 @@
 			viewfield_inspectionSta2(ID){//点击父级筛选出子级数据
 				if(ID=='null'){
 					this.inspectionSta2Form.inspectionList = []; 
+					this.$refs.inspectionPro2child.viewfield_inspectionPro2('null');
 					return false;
 					//todo  相关数据设置
 				}
@@ -425,5 +426,10 @@
 </script>
 
 <style scoped>
-
+.el-form-item__error {
+	top: 18%;
+    left: 5px;
+    background: #FFF;
+    padding: 5px 10px;
+}
 </style>

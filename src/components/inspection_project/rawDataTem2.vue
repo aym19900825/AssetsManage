@@ -234,14 +234,6 @@
 						this.loadSign=true
 					}
 					this.rawDataTem2Form.inspectionList=res.data.INSPECTION_REPORT_TEMPLATE2List;
-					//console.log(this.rawDataTem2Form.inspectionList[0].ID);
-					//默认主表第一条数据
-					// if(this.rawDataTem2Form.inspectionList.length > 0){
-					
-					// 	this.$refs.rawDataAssetchild.viewfield_rawDataAsset(this.rawDataTem2Form.inspectionList[0].ID);
-					// }else{
-					// 	this.$refs.rawDataAssetchild.viewfield_rawDataAsset('null');
-					// }
 
 					for(var j = 0; j < this.rawDataTem2Form.inspectionList.length; j++){
 						this.rawDataTem2Form.inspectionList[j].isEditing = false;
@@ -404,5 +396,10 @@
 </script>
 
 <style scoped>
-
+.el-form-item__error {
+	top: 18%;
+    left: 5px;
+    background: #FFF;
+    padding: 5px 10px;
+}
 </style>

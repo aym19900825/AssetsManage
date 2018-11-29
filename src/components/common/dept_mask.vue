@@ -28,8 +28,31 @@
 							</div>
 							<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
 								<el-row :gutter="30">
+									<el-col :span="8">
+										<el-form-item label="机构序号" prop="pName">
+											<el-input v-model="adddeptForm.pName" :disabled="edit">
+												<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
+											</el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="机构编码" prop="pName">
+											<el-input v-model="adddeptForm.pName" :disabled="edit">
+												<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
+											</el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="机构名称" prop="pName">
+											<el-input v-model="adddeptForm.pName" :disabled="edit">
+												<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
+											</el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="30">
 									<el-col :span="24">
-										<el-form-item label="所属上级" prop="pName">
+										<el-form-item label="上级机构" prop="pName">
 											<el-input v-model="adddeptForm.pName" :disabled="edit">
 												<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
 											</el-input>
@@ -38,32 +61,103 @@
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="8">
-										<el-form-item label="机构名称" prop="fullname">
+										<el-form-item label="状态" prop="fullname">
 											<el-input v-model="adddeptForm.fullname"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="单位简称" prop="simplename">
+										<el-form-item label="版本" prop="simplename">
 											<el-input v-model="adddeptForm.simplename"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="类型" prop="type">
+										<el-form-item label="机构类型" prop="type">
 											<el-input v-model="adddeptForm.type"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="8"  v-show="showcode">
-										<el-form-item label="机构编码" prop="code">
+										<el-form-item label="机构属性" prop="code">
 											<el-input v-model="adddeptForm.code" :disabled="edit">
 												<el-button slot="append" icon="el-icon-search"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
+										<el-form-item label="是否停用" prop="teltphone">
+											<el-input v-model="adddeptForm.teltphone"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="联系地址" prop="teltphone">
+											<el-input v-model="adddeptForm.teltphone"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="30">
+									<el-col :span="8"  v-show="showcode">
+										<el-form-item label="邮政编码" prop="code">
+											<el-input v-model="adddeptForm.code" :disabled="edit">
+												<el-button slot="append" icon="el-icon-search"></el-button>
+											</el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="负责人" prop="teltphone">
+											<el-input v-model="adddeptForm.teltphone"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
 										<el-form-item label="电话" prop="teltphone">
 											<el-input v-model="adddeptForm.teltphone"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="30">
+									<el-col :span="8"  v-show="showcode">
+										<el-form-item label="传真" prop="code">
+											<el-input v-model="adddeptForm.code" :disabled="edit">
+												<el-button slot="append" icon="el-icon-search"></el-button>
+											</el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="邮箱" prop="teltphone">
+											<el-input v-model="adddeptForm.teltphone"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="录入人" prop="teltphone">
+											<el-input v-model="adddeptForm.teltphone"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="30">
+									<el-col :span="8"  v-show="showcode">
+										<el-form-item label="录入时间" prop="code">
+											<el-input v-model="adddeptForm.code" :disabled="edit">
+												<el-button slot="append" icon="el-icon-search"></el-button>
+											</el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="录入部门" prop="teltphone">
+											<el-input v-model="adddeptForm.teltphone"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label=修改人" prop="teltphone">
+											<el-input v-model="adddeptForm.teltphone"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="30">
+									<el-col :span="8"  v-show="showcode">
+										<el-form-item label="修改时间" prop="code">
+											<el-input v-model="adddeptForm.code" :disabled="edit">
+												<el-button slot="append" icon="el-icon-search"></el-button>
+											</el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>

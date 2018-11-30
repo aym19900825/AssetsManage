@@ -104,7 +104,7 @@
 								</el-col>
 								<el-col :span="3">
 
-									<el-select v-model="searchList.STATUS" placeholder="请选择状态">
+									<el-select v-model="searchList.STATUS" placeholder="请选择信息状态">
 										<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 
 										</el-option>
@@ -134,7 +134,7 @@
 								</el-table-column>
 								<el-table-column label="英文名称" width="220" sortable prop="S_ENGNAME" v-if="this.checkedName.indexOf('英文名称')!=-1">
 								</el-table-column>
-								<el-table-column label="状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
+								<el-table-column label="信息状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
 								</el-table-column>
 								<el-table-column label="发布时间" width="160" sortable prop="RELEASETIME" :formatter="dateFormat" v-if="this.checkedName.indexOf('发布时间')!=-1">
 								</el-table-column>
@@ -210,7 +210,7 @@
 					'标准编号',
 					'标准名称',
 					'英文名称',
-					'状态',
+					'信息状态',
 					'发布时间',
 					'启用时间',
 					'版本',
@@ -237,7 +237,7 @@
 						prop: 'S_ENGNAME'
 					},
 					{
-						label: '状态',
+						label: '信息状态',
 						prop: 'STATUS'
 					},
 					{
@@ -363,7 +363,7 @@
 					CHANGEBY: '',
 					CHANGEDATE: ''
 				}];
-				this.$refs.child.detail();
+				this.$refs.child.visible();
 			},
 			//修改
 			modify() {

@@ -27,9 +27,9 @@
 									</el-col>
 									<el-col :span="3" class="pull-right">
 										<el-input v-model="CATEGORY.STATUS" :disabled="true">
-											<template slot="prepend">状态</template>
+											<template slot="prepend">信息状态</template>
 										</el-input>
-										<!-- <el-select v-model="CATEGORY.STATUS" placeholder="请选择状态">
+										<!-- <el-select v-model="CATEGORY.STATUS" placeholder="请选择信息状态">
 											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
 										</el-select> -->

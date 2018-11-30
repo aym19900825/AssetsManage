@@ -70,7 +70,7 @@
 								</el-input>
 							</el-col>
 							<el-col :span="2" style="padding-top: 3px">
-								<el-select v-model="searchList.STATUS" placeholder="请选择状态">
+								<el-select v-model="searchList.STATUS" placeholder="请选择信息状态">
 									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 									</el-option>
 								</el-select>
@@ -96,7 +96,7 @@
 							</el-table-column>
 							<el-table-column label="联系电话" sortable width="200" prop="PHONE" v-if="this.checkedName.indexOf('联系电话')!=-1">
 							</el-table-column>	
-							<el-table-column label="状态" sortable width="100" prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
+							<el-table-column label="信息状态" sortable width="100" prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
 							</el-table-column>
 						</el-table>
 						<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
@@ -161,7 +161,7 @@
 					'性别',
 					'联系地址',
 					'联系电话',
-					'状态',
+					'信息状态',
 				],
 				tableHeader: [
 					{
@@ -181,7 +181,7 @@
 						prop: 'PHONE'
 					},
 					{
-						label: '状态',
+						label: '信息状态',
 						prop: 'STATUS'
 					}
 				],

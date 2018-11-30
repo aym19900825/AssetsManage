@@ -71,7 +71,7 @@
 							</el-table-column>
 							<el-table-column label="备注" width="200" sortable prop="MEMO" v-if="this.checkedName.indexOf('备注')!=-1">
 							</el-table-column>
-							<el-table-column label="状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
+							<el-table-column label="信息状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
 							</el-table-column>
 							<el-table-column label="录入人机构" width="180" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('录入人机构')!=-1">
 							</el-table-column>
@@ -99,7 +99,7 @@
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
-		<numbsetmask :numbsetForm="selMenu[0]" ref="child" @request="requestData" v-bind:page=page></numbsetmask>
+		<numbsetmask :numbsetForm="numbsetForm" ref="child" @request="requestData" v-bind:page=page></numbsetmask>
 	</div>
 </div>
 </template>
@@ -107,7 +107,6 @@
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left2.vue'
 	import navs_header from '../common/nav_tabs.vue'
-	// import table from '../plugin/table/table-normal.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import numbsetmask from '../maindataDetails/number_settingMask.vue'
 	export default {
@@ -117,7 +116,6 @@
 			navs_left,
 			navs_header,
 			tableControle,
-			// table,
 			numbsetmask,
 		},
 		data() {
@@ -134,7 +132,7 @@
 					'自动编号名称',
 					'起始数',
 					'前缀',
-					'状态',
+					'信息状态',
 					'备注',
 					'录入人机构',
 					'录入人',
@@ -156,7 +154,7 @@
 						prop: 'PREFIX'
 					},
 					{
-						label: '状态',
+						label: '信息状态',
 						prop: 'STATUS'
 					},
 					{
@@ -205,13 +203,11 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-				aaaData:[],
+				aaaData: [],
+				numbsetForm: {}//修改子组件时传递数据
 			}
 		},
 
-		mounted(){
-			
-		},
 		methods: {
 			//表格滚动加载
 			loadMore () {
@@ -243,11 +239,22 @@
 				this.page.pageSize = 10;
 				this.requestData();
 			},
-			openAddMgr() {//添加自动编号设置
-				this.$refs.child.resetNew();
+			openAddMgr() {//添加自动编号设置数据
+				this.numbsetForm = {
+					STATUS:'活动',//添加时默认显示信息状态
+					AUTOKEY:'',
+					PREFIX:'',
+					S_NUM:'',
+					MEMO:'',
+					DEPARTMENT:'',
+					ENTERBY:'',
+					ENTERDATE:'',
+					CHANGEBY:'',
+					CHANGEDATE:''
+				};
 				this.$refs.child.childMethods();
 			},
-			modify() {//修改自动编号设置
+			modify() {//修改自动编号设置数据
 				this.aaaData = this.selMenu;
 				if(this.aaaData.length == 0) {
 					this.$message({
@@ -262,6 +269,7 @@
 					});
 					return;
 				} else {
+					this.numbsetForm = this.selMenu[0]; 
 					this.$refs.child.detail();
 				}
 			},
@@ -280,7 +288,7 @@
 						type: 'warning'
 					});
 					return;
-				}else {
+				} else {
 					var url = '/api/api-apps/app/autokey/deletes';
 					//changeUser为勾选的数据
 					var changeUser = selData;
@@ -355,9 +363,6 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					 // console.log(res);
-					// this.numberList = res.data.data;
-					// this.page.totalCount = res.data.count;
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -379,12 +384,6 @@
 					}					
 					this.numberList = newarr;
 				}).catch((wrong) => {})
-				/*this.numberList.forEach((item, index) => {
-					var id = item.id;
-					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
-						this.numberList.role = res.data.roles[0].name;
-					}).catch((wrong) => {})
-				})*/
 			},
 			
 		},

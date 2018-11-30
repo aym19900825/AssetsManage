@@ -144,7 +144,7 @@
 								</el-table-column>
 								<el-table-column label="收样日期" sortable width="140px" prop="ITEMNUM" v-if="this.checkedName.indexOf('收样日期')!=-1">
 								</el-table-column>
-								<el-table-column label="状态 sortable width="140px" prop="ITEMNUM" v-if="this.checkedName.indexOf('状态')!=-1">
+								<el-table-column label="信息状态 sortable width="140px" prop="ITEMNUM" v-if="this.checkedName.indexOf('信息状态')!=-1">
 								</el-table-column>
 							</el-table>
 							<!-- <span class="demonstration">显示总数</span>" -->
@@ -192,7 +192,7 @@
 					'样品型号',
 					'收样人',
 					'收样日期',
-					'状态',
+					'信息状态',
 				],
 				tableHeader: [{
 						label: '样品编号',
@@ -227,7 +227,7 @@
 						prop: 'ACCEPT_DATE'
 					},
 					{
-						label: '状态',
+						label: '信息状态',
 						prop: 'STATE'
 					},
 				],

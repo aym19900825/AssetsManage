@@ -35,7 +35,7 @@
 									</el-col>
 									<el-col :span="4" class="pull-right">
 											<el-input v-model="adddeptForm.status" :disabled="edit" :formatter="judge">
-												<template slot="prepend">状态</template>
+												<template slot="prepend">信息状态</template>
 											</el-input>
 									</el-col>
 								</el-row>

@@ -185,7 +185,7 @@
 								      </template>
 								    </el-table-column>
 
-								    <el-table-column prop="STATE" label="样品状态" sortable width="120px">
+								    <el-table-column prop="STATE" label="样品信息状态" sortable width="120px">
 								      <template slot-scope="scope">
 								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATE" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.STATE}}</span>
 								      </template>
@@ -224,7 +224,7 @@
 								      </template>
 								    </el-table-column>
 
-								    <el-table-column prop="STATUS" label="信息状态" sortable width="150px">
+								    <el-table-column prop="STATUS" label="信息信息状态" sortable width="150px">
 								      <template slot-scope="scope">
 								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.STATUS}}</span>
 								      </template>
@@ -325,12 +325,12 @@
 								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MEMO" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.MEMO}}</span>
 								      </template>
 								    </el-table-column>
-								    <el-table-column prop="STATE" label="状态" sortable width="150px">
+								    <el-table-column prop="STATE" label="信息状态" sortable width="150px">
 								      <template slot-scope="scope">
 								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATE" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.STATE}}</span>
 								      </template>
 								    </el-table-column>
-								    <el-table-column prop="STATUSDATE" label="状态日期" sortable width="240px">
+								    <el-table-column prop="STATUSDATE" label="信息状态日期" sortable width="240px">
 								      <template slot-scope="scope">
 								        <el-date-picker  v-if="scope.row.isEditing" type="date" v-model="scope.row.STATUSDATE" size="small" placeholder="选择日期" value-format="yyyy-MM-dd">
 											</el-date-picker>
@@ -361,7 +361,7 @@
 								        <span v-else="v-else">{{scope.row.CHANGEDATE}}</span>
 								      </template>
 								    </el-table-column>
-								    <el-table-column prop="STATUS" label="信息状态" sortable width="150px">
+								    <el-table-column prop="STATUS" label="信息信息状态" sortable width="150px">
 								      <template slot-scope="scope">
 								     <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.STATUS}}</span>
 								     </template>
@@ -463,7 +463,7 @@
 								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MEMO" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.MEMO}}</span>
 								      </template>
 								    </el-table-column>
-								    <el-table-column prop="STATE" label="状态" sortable width="150px">
+								    <el-table-column prop="STATE" label="信息状态" sortable width="150px">
 								      <template slot-scope="scope">
 								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATE" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.STATE}}</span>
 								      </template>
@@ -492,7 +492,7 @@
 								        <span v-else="v-else">{{scope.row.CHANGEDATE}}</span>
 								      </template>
 								    </el-table-column>
-								    <el-table-column prop="STATUS" label="信息状态" sortable width="150px">
+								    <el-table-column prop="STATUS" label="信息信息状态" sortable width="150px">
 								      <template slot-scope="scope">
 								     <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.STATUS}}</span>
 								     </template>
@@ -594,12 +594,12 @@
 								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MEMO" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.MEMO}}</span>
 								      </template>
 								    </el-table-column>
-								    <el-table-column prop="STATE" label="状态" sortable width="150px">
+								    <el-table-column prop="STATE" label="信息状态" sortable width="150px">
 								      <template slot-scope="scope">
 								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATE" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.STATE}}</span>
 								      </template>
 								    </el-table-column>
-								    <el-table-column prop="STATUSDATE" label="状态日期" sortable width="240px">
+								    <el-table-column prop="STATUSDATE" label="信息状态日期" sortable width="240px">
 								      <template slot-scope="scope">
 								        <el-date-picker  v-if="scope.row.isEditing" type="date" v-model="scope.row.STATUSDATE" size="small" placeholder="选择日期" value-format="yyyy-MM-dd">
 											</el-date-picker>
@@ -630,7 +630,7 @@
 								        <span v-else="v-else">{{scope.row.CHANGEDATE}}</span>
 								      </template>
 								    </el-table-column>
-								    <el-table-column prop="STATUS" label="信息状态" sortable width="150px">
+								    <el-table-column prop="STATUS" label="信息信息状态" sortable width="150px">
 								      <template slot-scope="scope">
 								     <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.STATUS}}</span>
 								     </template>

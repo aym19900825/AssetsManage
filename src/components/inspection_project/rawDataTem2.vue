@@ -64,7 +64,7 @@
 			      </template>
 			    </el-table-column>
 
-				<el-table-column prop="STATUS" label="状态" sortable width="80" :formatter="judge">
+				<el-table-column prop="STATUS" label="信息状态" sortable width="80" :formatter="judge">
 			      <template slot-scope="scope">
 			         <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" disabled></el-input><span v-else="v-else">{{scope.row.STATUS}}</span>
 			      </template>
@@ -144,7 +144,7 @@
 				searchData: {
 			        page: 1,
 			        limit: 10,//分页显示数
-			        enabled: '',//状态
+			        enabled: '',//信息状态
 		        },
 				search: '',//搜索
 				page: {//分页显示
@@ -200,7 +200,7 @@
 				this.page.pageSize = 10;
 				this.requestData_rawDataTem2();
 			},
-			judge(data) {//taxStatus 状态布尔值
+			judge(data) {//taxStatus 信息状态布尔值
 				return data.enabled ? '活动' : '不活动'
 			},
 			//时间格式化  

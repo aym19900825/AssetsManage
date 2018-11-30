@@ -236,13 +236,6 @@
                     callback();
                 }
             };
-            // var validatecode = (rule, value, callback) => {
-            //     if (value === '') {
-            //         callback(new Error('请选择机构编码'));
-            //     }else {
-            //         callback();
-            //     }
-            // };
 
 			return {
 				showcode:true,
@@ -259,15 +252,6 @@
 				labelPosition: 'top',
 				addtitle:true,
 				modifytitle:false,
-				// adddeptFormtest: {
-				// 	pid:'',
-				// 	fullname:'',
-				// 	simplename:'',
-				// 	type:'',
-				// 	code:'',
-				// 	teltphone:'',
-				// 	tips:''
-				// },
 				rules:{
 		          	simplename: [{ 
        						required: true,
@@ -284,11 +268,6 @@
        						validator: validatetype,
        						trigger: 'blur' 
        					}],
-          		// 	code:[{ 
-       					// 	required: true,
-       					// 	validator: validatecode,
-       					// 	trigger: 'blur' 
-       					// }],
 	          	},
 	          	//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -397,7 +376,6 @@
 				$(".mask_div").css("height", "80%");
 				$(".mask_div").css("margin", "7% 10%");
 				$(".mask_div").css("top", "0");
-
 			},
 			//保存
 			submitForm(adddeptForm) {
@@ -435,7 +413,6 @@
 		            return false;
 		          }
 		        });
-				
 			},
 			handleClose(done) {
 				this.$confirm('确认关闭？')

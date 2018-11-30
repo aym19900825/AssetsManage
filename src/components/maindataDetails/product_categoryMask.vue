@@ -15,7 +15,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="CATEGORY" :label-position="labelPosition" :rules="rules" ref="CATEGORY" label-width="100px" class="demo-adduserForm">
+				<el-form :model="CATEGORY" inline-message :label-position="labelPosition" :rules="rules" ref="CATEGORY" label-width="100px" class="demo-adduserForm">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="产品类别" name="1">
@@ -34,29 +34,24 @@
 											</el-option>
 										</el-select> -->
 									</el-col>
-									<!-- <el-col :span="7" class="pull-right">
-										<el-input v-model="CATEGORY.NUM" :disabled="true">
-											<template slot="prepend">产品类别编号</template>
-										</el-input>
-									</el-col> -->
 								</el-row>
 
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="产品类别编号" prop="NUM">
-											<el-input v-model="CATEGORY.NUM"></el-input>
+											<el-input v-model="CATEGORY.NUM" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
-									<el-col :span="16">
+									<el-col :span="8">
 										<el-form-item label="产品类别名称" prop="TYPE">
 											<el-input v-model="CATEGORY.TYPE"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30">
+								<el-row :gutter="30" v-show="personinfo">
 									<el-col :span="8">
 										<el-form-item label="录入人机构" prop="DEPARTMENT">
-											<el-input v-model="CATEGORY.DEPARTMENT"></el-input>
+											<el-input v-model="CATEGORY.DEPARTMENT" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -70,7 +65,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30">
+								<el-row :gutter="30" v-show="personinfo">
 									<el-col :span="8">
 										<el-form-item label="修改人" prop="CHANGEBY" v-if="modify">
 											<el-input v-model="CATEGORY.CHANGEBY" placeholder="当前修改人" :disabled="edit" ></el-input>
@@ -121,54 +116,15 @@
 			page: Object ,
 		},
 		data() {
-			var validateCode = (rule, value, callback) => {
+			var validateType = (rule, value, callback) => {
                 if (value === '') {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
-            var validateName = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
-            var validateAddress = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请填写联系地址'));
-                }else {
-                    callback();
-                }
-            };
-            var validatePhone = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请填写联系电话'));
-                }else {
-                    callback();
-                }
-            };
-            var validateEmail = (rule, value, callback) => {
-                if (value === '') {
-		            callback(new Error('电子邮箱不能为空'));
-		        } else {
-			        var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-			        if(!reg.test(value)){
-			            callback(new Error('请输入有效的邮箱'));
-			        }else{
-			        	callback();
-			        }
-		        }
-            };
-            var validateName = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error(''));
+                    callback(new Error('请填写产品类别名称'));
                 }else {
                     callback();
                 }
             };
 			return {
+				personinfo:false,
 				value: '',
 				options: [{
 					value: '1',
@@ -194,30 +150,10 @@
 				dialogVisible: false, //对话框
 				selectData:[],
 				rules: {
-					CODE: [{
+					TYPE:[{
 						required: true,
 						trigger: 'blur',
-						validator: validateCode,
-					}],
-					NAME:[{
-						required: true,
-						trigger: 'blur',
-						validator: validateName,
-					}],
-					CONTACT_ADDRESS:[{
-						required: true,
-						trigger: 'blur',
-						validator: validateAddress,
-					}],
-					PHONE:[{
-						required: true,
-						trigger: 'blur',
-						validator: validatePhone,
-					}],
-					EMAIL:[{
-						required: true,
-						trigger: 'blur',
-						validator: validateEmail,
+						validator: validateType,
 					}],
 				},
 				//tree
@@ -245,9 +181,15 @@
 			SelChange(val) {
 				this.selUser = val;
 			},
+			//生成随机数函数
+			rand(min,max) {
+		        return Math.floor(Math.random()*(max-min))+min;
+		    },
 			//点击按钮显示弹窗
 			visible() {
+				this.CATEGORY.NUM =  this.rand(1000,9999);
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
+					this.CATEGORY.DEPARTMENT = res.data.companyName;
 	    			this.CATEGORY.ENTERBY = res.data.nickname;
 	    			var date = new Date();
 					this.CATEGORY.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
@@ -318,9 +260,8 @@
 			},
 			// 保存users/saveOrUpdate
 			submitForm(CATEGORY) {
-
-				// this.$refs[CATEGORY].validate((valid) => {
-		  //         if (valid) {
+				this.$refs[CATEGORY].validate((valid) => {
+		          if (valid) {
 					var url = '/api/api-apps/app/productType/saveOrUpdate';		
 					this.$axios.post(url,this.CATEGORY).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
@@ -340,10 +281,10 @@
 							type: 'error'
 						});
 					});
-			        //   } else {
-			        //     return false;
-			        //   }
-			        // });
+					} else {
+		            return false;
+		          }
+		        });
 			},
 			//时间格式化
 			dateFormat(row, column) {
@@ -351,7 +292,6 @@
 				if(date == undefined) {
 					return "";
 				}
-				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
 			},
 			handleClose(done) {

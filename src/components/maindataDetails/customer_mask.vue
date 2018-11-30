@@ -131,61 +131,6 @@
 										<font>新建行</font>
 									</el-button>
 								</div>
-								<!-- <el-table :data="CUSTOMER.CUSTOMER_QUALIFICATIONList" row-key="id" highlight-current-row style="width: 100%" @cell-click="iconOperation">
-									<el-table-column prop="iconOperation" label="" width="50px">
-										<template slot-scope="scope">
-											<i class="el-icon-check" v-if="scope.row.isEditing"></i>
-											<i class="el-icon-edit" v-else></i>
-										</template>
-									</el-table-column> 
-									<el-table-column prop="iconOperation" label="" width="50px">
-										<template slot-scope="scope">
-											<i class="el-icon-delete" @click.native.prevent="delfield(scope.$index, CUSTOMER.CUSTOMER_QUALIFICATIONList)" style="color: red;text-align:center"></i>
-										</template>
-									</el-table-column>
-        							<el-table-column prop="STEP" label="序号" width="150px">
-        									<template slot-scope="scope">
-        											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STEP" placeholder="請輸入內容">
-        											</el-input>
-        											<span v-else>{{scope.row.STEP}}</span>
-        									</template>
-        							</el-table-column>
-        							<el-table-column prop="CERTIFICATE_NUM" label="证书编号" width="150px">
-        									<template slot-scope="scope">
-        											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CERTIFICATE_NUM" placeholder="請輸入內容">
-        											</el-input>
-        											<span v-else>{{scope.row.CERTIFICATE_NUM}}</span>
-        									</template>
-        							</el-table-column>
-        							<el-table-column prop="CERTIFICATE_NAME" label="证书名称" width="150px">
-        									<template slot-scope="scope">
-        											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CERTIFICATE_NAME" placeholder="請輸入內容">
-        											</el-input>
-        											<span v-else>{{scope.row.CERTIFICATE_NAME}}</span>
-        									</template>
-        							</el-table-column>
-        							<el-table-column prop="ACTIVE_DATE" label="资质有效期" width="150px">
-        									<template slot-scope="scope">
-        											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ACTIVE_DATE" placeholder="請輸入內容">
-        											</el-input>
-        											<span v-else>{{scope.row.ACTIVE_DATE}}</span>
-        									</template>
-        							</el-table-column>
-        							<el-table-column prop="STATUS" label="状态" width="150px">
-        									<template slot-scope="scope">
-        											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="請輸入內容">
-        											</el-input>
-        											<span v-else>{{scope.row.STATUS}}</span>
-        									</template>
-        							</el-table-column>
-        							<el-table-column prop="MEMO" label="备注" width="150px">
-        									<template slot-scope="scope">
-        											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MEMO" placeholder="請輸入內容">
-        											</el-input>
-        											<span v-else>{{scope.row.MEMO}}</span>
-        									</template>
-        							</el-table-column>
-								</el-table> -->
 								<el-form :model="CUSTOMER.CUSTOMER_QUALIFICATIONList">
 					                <el-form-item>
 					                	<el-row :gutter="20">
@@ -321,6 +266,18 @@
 			        }
 		        }
             };
+            var validateZipcode = (rule, value, callback) => {
+                if (value === '') {
+		            callback(new Error('邮政编码不能为空'));
+		        } else {
+			        var reg= /^[1-9][0-9]{5}$/;
+			        if(!reg.test(value)){
+			            callback(new Error('请输入有效的邮政编码'));
+			        }else{
+			        	callback();
+			        }
+		        }
+            };
             var validateName = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error(''));
@@ -413,6 +370,11 @@
 						required: true,
 						trigger: 'blur',
 						validator: validateEmail,
+					}],
+					ZIPCODE:[{
+						required: true,
+						trigger: 'blur',
+						validator: validateZipcode,
 					}],
 				},
 				//tree

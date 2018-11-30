@@ -34,7 +34,7 @@
 										</el-select>
 									</el-col>
 									<el-col :span="5" class="pull-right">
-										<el-input v-model="WORKPLAN.WP_NUM" :disabled="true">
+										<el-input v-model="WORKPLAN.WP_NUM">
 												<template slot="prepend">计划编号</template>
 										</el-input>
 									</el-col>
@@ -96,7 +96,10 @@
 											    <el-date-picker
 											      v-model="WORKPLAN.YEAR"
 											      type="year"
-											      placeholder="选择年度" value-format="yyyy">
+											      placeholder="选择年度"
+											      value-format="yyyy"
+											      format="yyyy"
+											      :default-value="WORKPLAN.YEAR">
 											    </el-date-picker>
 											</div>
 										</el-form-item>
@@ -683,27 +686,27 @@
 					totalCount: 0
 				},
 				WORKPLAN:{
-					ID:'',
-					WP_NUM:'10001',
-					DESCRIPTION:'',
-					STATUS:'1',
-					YEAR:'',
-					TYPE:'',
-					LEADER_STATUS:'',
-					STATUSDATE:'',
-					ITEMTYPE:'',
-					PROP_UNIT:'',
-					ENTERBY:'',
-					ENTERDATE:'',
-					CHANGEBY:'',
-					CHANGEDATE:'',
-					COMPACTOR:'',
-					C_PERSON:'1',
-					APPRPERSON:'',
-					REPORTDATE:'',
-					MEMO:'',
-					MESSSTATUS:'1',
-					WORLPLANLINEList: []
+					// ID:'',
+					// WP_NUM:'10001',
+					// DESCRIPTION:'',
+					// STATUS:'1',
+					// YEAR:'',
+					// TYPE:'',
+					// LEADER_STATUS:'',
+					// STATUSDATE:'',
+					// ITEMTYPE:'',
+					// PROP_UNIT:'',
+					// ENTERBY:'',
+					// ENTERDATE:'',
+					// CHANGEBY:'',
+					// CHANGEDATE:'',
+					// COMPACTOR:'',
+					// C_PERSON:'1',
+					// APPRPERSON:'',
+					// REPORTDATE:'',
+					// MEMO:'',
+					// MESSSTATUS:'1',
+					// WORLPLANLINEList: []
 				},
 				inspectionList_child: {
 					// ID:'',
@@ -766,7 +769,6 @@
 				this.$nextTick(function(){
 					row.isEditing = !row.isEditing;
 				});
-				
 			},
 			//删除计划列表
 			delPlan(index,row,TableName,delList){
@@ -794,6 +796,7 @@
 			},
    			//年度计划表格函数
    			iconOperation(row){
+   				console.log(row);
    				row.isEditing = !row.isEditing;
 	            this.isEditList = row.isEditing;
 
@@ -820,6 +823,7 @@
 	        		this.proTestList = [];
 	        		this.basisList = [];
 	        	}
+	        	console.log(row);
 	        },
    			//上传文件 Begin
 			handleExceed(files, fileList) {
@@ -851,8 +855,17 @@
 				} else {
 					//循环push页面正常显示
 					for(var i = 0;i<selData.length;i++){
-						this.inspectionList_child.WORLPLANLINE_BASISList.push(selData[i]);
+						//新选来的数据ID为空
+						selData[i].ID = '';
+						//产品编号  与主表关联
+						selData[i].WP_NUM = this.editPlan.WP_NUM;
+						selData[i].WP_LINENUM = this.editPlan.WP_LINENUM;
+						//产品序号
+						selData[i].NUMBER = this.proTestList.length>0?this.proTestList[this.proTestList.length-1].NUMBER+i+1 :
+							1;
+						this.basisList.push(JSON.parse(JSON.stringify(selData[i])));
 					}
+
 					this.dialogVisible = false;
 					this.$message({
 						message: '添加成功',
@@ -884,7 +897,7 @@
 						//产品序号
 						selData[i].NUMBER = this.proTestList.length>0?this.proTestList[this.proTestList.length-1].NUMBER+i+1 :
 							1;
-						this.proTestList.push(selData[i]);
+						this.proTestList.push(JSON.parse(JSON.stringify(selData[i])));
 					}
 					this.dialogVisible2 = false;
 					this.$message({
@@ -992,14 +1005,36 @@
 			},
 			//点击添加，修改按钮显示弹窗
 			visible() {
-				//年度计划子表数据置空
-				// this.WORKPLAN.WORLPLANLINE = [];
-				//将检验检测数据置空
-				// this.WORKPLAN.WORLPLANLINE[0].WORLPLANLINE_BASISList = [];
-				//将检测项目与要求数据置空
-				// this.WORKPLAN.WORLPLANLINE[0].WORLPLANLINE_PROJECTList = [];
-				var date = new Date();
-				this.WORKPLAN.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
+				var myDate = new Date();
+				var date = this.$moment(date).format("YYYY-MM-DD");
+				var year = myDate.getFullYear().toString();
+				this.WORKPLAN = {
+					'ID': '',
+					'WP_NUM': '1001',
+					'DESCRIPTION': '',
+					'YEAR': year,	
+					'TYPE': '',
+					'STATUS': '草稿',
+					'LEADER_STATUS': '未开始',
+					'STATUSDATE': date,
+					'ITEMTYPE': '',
+					'PROP_UNIT': '',
+					'ENTERBY': '当前人',
+					'ENTERDATE': date,
+					'CHANGEBY': '',
+					'CHANGEDATE': '',
+					'COMPACTOR': '',
+					'C_PERSON': '',
+					'APPRPERSON': '',
+					'REPORTDATE': date,
+					'MEMO': '',
+					'MESSSTATUS': '活动',
+					'SYNCHRONIZATION_TIME': ''
+				};
+				this.worlplanlist = []; //年度计划列表
+				this.basisList = []; //检测依据
+				this.proTestList = []; //项目检测和要求
+				this.isEditList = false;
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
 	    			this.WORKPLAN.ENTERBY = res.data.nickname;
 	    			
@@ -1076,8 +1111,8 @@
 				$(".mask_div").css("top", "0");
 			},
 			// 保存users/saveOrUpdate
-			submitForm(WORKPLAN) {
-				if(this.isEditList){
+			submitForm() {
+				if(!this.isEditList){
 					this.WORKPLAN.WORLPLANLINEList = this.worlplanlist;
 					var url = '/api/apps-center/app/workplan/saveOrUpdate';
 					this.$axios.post(url, this.WORKPLAN).then((res) => {

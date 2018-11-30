@@ -113,7 +113,7 @@ i, cite, em, var, address, dfn {
 /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
 ::-webkit-scrollbar,#style-1::-webkit-scrollbar
 {
-    width: 10px;
+    width: 6px;
     height: 10px;
     background-color: #F5F5F5;
 }
@@ -415,7 +415,7 @@ h6 {
 
 .el-table td {
 	padding-top: 5px;
-	padding-bottom: 0px;
+	padding-bottom: 5px;
 }
 .el-table .ascending .sort-caret.ascending { border-bottom-color: #6585DF;}
 .el-table .descending .sort-caret.descending { border-top-color: #6585DF;}

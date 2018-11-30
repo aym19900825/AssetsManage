@@ -104,7 +104,7 @@
 								</el-select>
 							</el-col>
 							<el-col :span="5" style="padding-top: 3px">
-								<el-select v-model="searchList.STATUS" placeholder="状态">
+								<el-select v-model="searchList.STATUS" placeholder="信息状态">
 								    <el-option label="草稿" value="1"></el-option>
 								    <el-option label="审批中" value="0"></el-option>
 								    <el-option label="驳回" value="0"></el-option>
@@ -153,7 +153,7 @@
 								</el-table-column>
 								<el-table-column label="录入时间" sortable width="210px" prop="ENTERDATE" v-if="this.checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>
-								<el-table-column label="状态" sortable  width="380px" prop="STATUS" v-if="this.checkedName.indexOf('状态')!=-1">
+								<el-table-column label="信息状态" sortable  width="380px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
@@ -199,7 +199,7 @@
 					'年度',
 					'录入人',
 					'录入时间',
-					'状态'
+					'信息状态'
 				],
 				tableHeader: [
 					{
@@ -223,7 +223,7 @@
 						prop: 'ENTERDATE'
 					},
 					{
-						label: '状态',
+						label: '信息状态',
 						prop: 'STATUS'
 					}
 				],

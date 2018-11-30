@@ -54,7 +54,7 @@
 			      </template>
 			    </el-table-column>
 
-				<el-table-column prop="STATUS" label="状态" sortable width="80" :formatter="judge">
+				<el-table-column prop="STATUS" label="信息状态" sortable width="80" :formatter="judge">
 			      <template slot-scope="scope">
 			        <el-select v-if="scope.row.isEditing" v-model="scope.row.STATUS" placeholder="请选择">
 			          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.label"></el-option>
@@ -133,7 +133,7 @@
 				searchData: {
 			        page: 1,
 			        limit: 10,//分页显示数
-			        enabled: '',//状态
+			        enabled: '',//信息状态
 		        },
 				search: '',//搜索
 				
@@ -193,7 +193,7 @@
 				this.page.pageSize = 10;
 				this.requestData_productType2();
 			},
-			judge(data) {//taxStatus 状态布尔值
+			judge(data) {//taxStatus 信息状态布尔值
 				return data.enabled ? '活动' : '不活动'
 			},
 			//时间格式化  

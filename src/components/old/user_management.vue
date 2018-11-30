@@ -80,7 +80,7 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="状态">
+									<el-form-item label="信息状态">
 										<el-input v-model="searchList.enabled"></el-input>
 									</el-form-item>
 								</el-col>
@@ -117,7 +117,7 @@
 								</el-table-column>
 								<el-table-column label="公司" sortable width="200px" prop="companyName" v-if="this.checkedName.indexOf('公司')!=-1">
 								</el-table-column>
-								<el-table-column label="状态" sortable width="200px" prop="enabled" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
+								<el-table-column label="信息状态" sortable width="200px" prop="enabled" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
 								</el-table-column>
 								<el-table-column label="创建时间" width="200px" prop="createTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('创建时间')!=-1">
 								</el-table-column>
@@ -166,7 +166,7 @@
 					'姓名',
 					'性别',
 					'机构',
-					'状态',
+					'信息状态',
 					'创建时间'
 				],
 				tableHeader: [
@@ -187,7 +187,7 @@
 						prop: 'deptName'
 					},
 					{
-						label: '状态',
+						label: '信息状态',
 						prop: 'enabled'
 					},
 					{

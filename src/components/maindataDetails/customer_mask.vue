@@ -22,9 +22,9 @@
 								<el-row :gutter="20" class="pb10">
 									<el-col :span="3" class="pull-right">
 										<el-input v-model="CUSTOMER.STATUS" :disabled="true">
-											<template slot="prepend">状态</template>
+											<template slot="prepend">信息状态</template>
 										</el-input>
-										<!-- <el-select v-model="CUSTOMER.STATUS" placeholder="请选择状态">
+										<!-- <el-select v-model="CUSTOMER.STATUS" placeholder="请选择信息状态">
 											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
 										</el-select> -->
@@ -171,7 +171,7 @@
         											<span v-else>{{scope.row.ACTIVE_DATE}}</span>
         									</template>
         							</el-table-column>
-        							<el-table-column prop="STATUS" label="状态" width="150px">
+        							<el-table-column prop="STATUS" label="信息状态" width="150px">
         									<template slot-scope="scope">
         											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="請輸入內容">
         											</el-input>
@@ -202,7 +202,7 @@
 					                            <el-form-item label="资质有效期" ></el-form-item>
 					                        </el-col>
 					                        <el-col :span="3">
-					                            <el-form-item label="状态" ></el-form-item>
+					                            <el-form-item label="信息状态" ></el-form-item>
 					                        </el-col>
 					                        <el-col :span="3">
 					                            <el-form-item label="备注" ></el-form-item>
@@ -228,7 +228,7 @@
 					                            <el-input type="text"  placeholder="资质有效期" v-model="item.ACTIVE_DATE"></el-input>
 					                        </el-col>
 					                        <el-col :span="3">
-					                            <el-input type="text"  placeholder="状态" v-model="item.STATUS"></el-input>
+					                            <el-input type="text"  placeholder="信息状态" v-model="item.STATUS"></el-input>
 					                        </el-col> 
 					                        <el-col :span="3">
 					                            <el-input type="text"  placeholder="备注" v-model="item.MEMO"></el-input>

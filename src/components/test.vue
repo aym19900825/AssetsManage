@@ -10,7 +10,7 @@
    </el-row>
    <el-row :gutter="10">
     <el-col :span="12">
-     <el-form-item label="状态：">
+     <el-form-item label="信息状态：">
       <el-radio v-model="form.status" label="1">上线</el-radio>
       <el-radio v-model="form.status" label="0">下线</el-radio>
      </el-form-item>

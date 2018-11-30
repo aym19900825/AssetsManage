@@ -72,7 +72,7 @@
 								</el-input>
 							</el-col>
 							<el-col :span="2" style="padding-top: 3px">
-								<el-select v-model="searchList.STATUS" placeholder="状态">
+								<el-select v-model="searchList.STATUS" placeholder="信息状态">
 								      <el-option label="活动" value="1">	
 								      </el-option>
 								      <el-option label="不活动" value="0">
@@ -97,7 +97,7 @@
 							<el-table-column label="产品类别名称" width="155" sortable prop="TYPE" v-if="this.checkedName.indexOf('产品类别名称')!=-1">
 							</el-table-column>
 							</el-table-column>
-							<el-table-column label="状态" width="155" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
+							<el-table-column label="信息状态" width="155" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
 							</el-table-column>
 							<el-table-column label="版本" width="155" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1">
 							</el-table-column>
@@ -165,7 +165,7 @@
 					'产品类别编号',
 					'产品类别名称',
 					'机构',
-					'状态',
+					'信息状态',
 					'版本',
 					'录入人',
 					'录入时间',
@@ -186,7 +186,7 @@
 						prop: 'DEPARTMENT'
 					},
 					{
-						label: '状态',
+						label: '信息状态',
 						prop: 'STATUS'
 					},
 					{

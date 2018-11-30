@@ -79,7 +79,7 @@
 							</el-table-column>
 							<el-table-column label="类别" width="120" sortable prop="M_TYPE" v-if="this.checkedName.indexOf('类别')!=-1">
 							</el-table-column>
-							<el-table-column label="状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
+							<el-table-column label="信息状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
 							</el-table-column>
 							<el-table-column label="版本" width="100" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1">
 							</el-table-column>
@@ -145,7 +145,7 @@
 					'中文名称',
 					'英文名称',
 					'类别',
-					'状态',
+					'信息状态',
 					'版本',
 					'机构',
 					'录入人',
@@ -171,7 +171,7 @@
 						prop: 'M_TYPE'
 					},
 					{
-						label: '状态',
+						label: '信息状态',
 						prop: 'STATUS'
 					},
 					{

@@ -321,13 +321,6 @@
 				}
 				return data;
 			},
-			// getTreeId(data){
-			// },
-			// handleNodeClick(data) {
-			// },
-			// formatter(row, column) {
-			// 	return row.enabled;
-			// },
 		},
 		mounted() {
 			this.requestData();

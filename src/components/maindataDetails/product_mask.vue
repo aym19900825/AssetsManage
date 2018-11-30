@@ -15,7 +15,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="PRODUCT" :label-position="labelPosition" :rules="rules" ref="PRODUCT" label-width="100px" class="demo-adduserForm">
+				<el-form :model="PRODUCT" inline-message :label-position="labelPosition" :rules="rules" ref="PRODUCT" label-width="100px" class="demo-adduserForm">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="产品名称" name="1">
@@ -34,26 +34,21 @@
 											</el-option>
 										</el-select> -->
 									</el-col>
-									<!-- <el-col :span="7" class="pull-right">
-										<el-input v-model="PRODUCT.PRO_NUM">
-											<template slot="prepend">产品编号</template>
-										</el-input>
-									</el-col> -->
 								</el-row>
 
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="产品编号" prop="PRO_NUM">
-											<el-input v-model="PRODUCT.PRO_NUM"></el-input>
+											<el-input v-model="PRODUCT.PRO_NUM" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
-									<el-col :span="16">
+									<el-col :span="8">
 										<el-form-item label="产品名称" prop="PRO_NAME">
 											<el-input v-model="PRODUCT.PRO_NAME"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30">
+								<el-row :gutter="30" v-show="personinfo">
 									<el-col :span="8">
 										<el-form-item label="录入人机构" prop="DEPARTMENT">
 											<el-input v-model="PRODUCT.DEPARTMENT" :disabled="true"></el-input>
@@ -71,7 +66,7 @@
 									</el-col>
 									
 								</el-row>
-								<el-row :gutter="30">
+								<el-row :gutter="30" v-show="personinfo">
 									<el-col :span="8">
 										<el-form-item v-if="modify" label="修改人" prop="CHANGEBY">
 											<el-input v-model="PRODUCT.CHANGEBY" placeholder="当前修改人" :disabled="edit" ></el-input>
@@ -107,7 +102,7 @@
 				default: function(){
 					return {
 						ID:'',
-						PRO_NUM:'PRO10001',
+						PRO_NUM:'',
 						PRO_NAME:'',
 						STATUS:'活动',
 						VERSION:'1',
@@ -121,54 +116,15 @@
 			page: Object ,
 		},
 		data() {
-			var validateCode = (rule, value, callback) => {
+			var validateName = (rule, value, callback) => {
                 if (value === '') {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
-            var validateName = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
-            var validateAddress = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请填写联系地址'));
-                }else {
-                    callback();
-                }
-            };
-            var validatePhone = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请填写联系电话'));
-                }else {
-                    callback();
-                }
-            };
-            var validateEmail = (rule, value, callback) => {
-                if (value === '') {
-		            callback(new Error('电子邮箱不能为空'));
-		        } else {
-			        var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-			        if(!reg.test(value)){
-			            callback(new Error('请输入有效的邮箱'));
-			        }else{
-			        	callback();
-			        }
-		        }
-            };
-            var validateName = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error(''));
+                    callback(new Error('请填写产品名称'));
                 }else {
                     callback();
                 }
             };
 			return {
+				personinfo:false,
 				value: '',
 				options: [{
 					value: '1',
@@ -194,30 +150,10 @@
 				dialogVisible: false, //对话框
 				selectData:[],
 				rules: {
-					CODE: [{
-						required: true,
-						trigger: 'blur',
-						validator: validateCode,
-					}],
-					NAME:[{
+					PRO_NAME: [{
 						required: true,
 						trigger: 'blur',
 						validator: validateName,
-					}],
-					CONTACT_ADDRESS:[{
-						required: true,
-						trigger: 'blur',
-						validator: validateAddress,
-					}],
-					PHONE:[{
-						required: true,
-						trigger: 'blur',
-						validator: validatePhone,
-					}],
-					EMAIL:[{
-						required: true,
-						trigger: 'blur',
-						validator: validateEmail,
 					}],
 				},
 				//tree
@@ -272,8 +208,13 @@
 					this.dialogVisible = false;
 				}
 			},
+			//生成随机数函数
+			rand(min,max) {
+		        return Math.floor(Math.random()*(max-min))+min;
+		    },
 			//点击按钮显示弹窗
 			visible() {
+				this.PRODUCT.PRO_NUM =  this.rand(1000,9999);
 				this.statusshow1 = true;
 				this.statusshow2 = false;
 				this.addtitle = true;
@@ -302,7 +243,6 @@
 				this.statusshow2 = true;
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
 	    			this.PRODUCT.CHANGEBY = res.data.nickname;
-	    			// this.PRODUCT.CHANGEDATE =  this.$moment(res.data.createTime).format("YYYY-MM-DD HH:mm:ss");
 	    			var date=new Date();
 					this.PRODUCT.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 
@@ -316,8 +256,8 @@
 			},
 			// 保存users/saveOrUpdate
 			submitForm(PRODUCT) {
-				 // this.$refs[PRODUCT].validate((valid) => {
-		  //         if (valid) {
+				 this.$refs[PRODUCT].validate((valid) => {
+		          if (valid) {
 					var url = '/api/api-apps/app/product/saveOrUpdate';		
 					this.$axios.post(url,this.PRODUCT).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
@@ -337,10 +277,10 @@
 							type: 'error'
 						});
 					});
-			        //   } else {
-			        //     return false;
-			        //   }
-			    // });
+			          } else {
+			            return false;
+			          }
+			    });
 			},
 			//点击修订按钮
 			modifyversion(){

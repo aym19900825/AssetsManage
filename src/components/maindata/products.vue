@@ -335,7 +335,7 @@
 			modestsearch() {
 				this.search = !this.search;
 				this.down = !this.down,
-					this.up = !this.up
+				this.up = !this.up
 			},
 			// 删除
 			deluserinfo() {
@@ -436,15 +436,12 @@
 					this.commentArr[this.page.currentPage]=res.data.data
 					let newarr=[]
 					for(var i = 1; i <= totalPage; i++){
-					
 						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
-							
 							for(var j = 0; j < this.commentArr[i].length; j++){
 								newarr.push(this.commentArr[i][j])
 							}
 						}
 					}
-					
 					this.productList = newarr;
 				}).catch((wrong) => {})
 			},
@@ -456,8 +453,6 @@
 		},
 		mounted() {
 			this.requestData();
-			
-			
 		},
 	}
 </script>

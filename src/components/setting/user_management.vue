@@ -115,13 +115,15 @@
 								</el-table-column>
 								<el-table-column label="姓名" sortable width="200px" prop="nickname" v-if="this.checkedName.indexOf('姓名')!=-1">
 								</el-table-column>
-								<el-table-column label="性别" sortable width="100px" prop="sex" :formatter="sexName" v-if="this.checkedName.indexOf('性别')!=-1">
-								</el-table-column>
-								<el-table-column label="机构" sortable width="200px" prop="deptName" v-if="this.checkedName.indexOf('机构')!=-1">
+								<!--<el-table-column label="性别" sortable width="100px" prop="sex" :formatter="sexName" v-if="this.checkedName.indexOf('性别')!=-1">
+								</el-table-column>-->
+								<el-table-column label="机构" sortable width="150px" prop="deptName" v-if="this.checkedName.indexOf('机构')!=-1">
 								</el-table-column>
 								<el-table-column label="公司" sortable width="200px" prop="companyName" v-if="this.checkedName.indexOf('公司')!=-1">
 								</el-table-column>
+
 								<el-table-column label="信息状态" sortable width="200px" prop="enabled" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
+
 								</el-table-column>
 								<el-table-column label="创建时间" width="200px" prop="createTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('创建时间')!=-1">
 								</el-table-column>
@@ -167,7 +169,6 @@
 				checkedName: [
 					'账号',
 					'姓名',
-					'性别',
 					'机构',
 					'信息状态',
 					'创建时间'
@@ -180,10 +181,7 @@
 						label: '姓名',
 						prop: 'nickname'
 					},
-					{
-						label: '性别',
-						prop: 'sexName'
-					},
+					
 					{
 						label: '机构',
 						prop: 'deptName'
@@ -319,7 +317,7 @@
 					address: '',
 					tips: ''
 				}];
-				this.$refs.child.detail();
+				this.$refs.child.visible();
 			},
 			//修改用戶
 			modify() {
@@ -343,7 +341,7 @@
 						this.aaaData[0].roleId.push(roles[i].id);
 					}
 					//					console.log(this.aaaData[0].roleId);
-					this.$refs.child.detail();
+					this.$refs.child.detail(this.aaaData[0].id);
 				}
 			},
 			//高级查询
@@ -632,89 +630,5 @@
 <style scope>
 
 
-/* .el-tree .el-icon-caret-right:before {图标加号
-    font-family: 'hxqheam';
-    content: "\e9bc";
-    position: absolute;
-    z-index: 22;
-}
-.el-tree .el-icon-caret-right:after {
-  content: "";
-  width: 10px;
-  position: absolute;
-  border-bottom: 1px dashed #C7CED6;
-  top: 7px;
-  right: -4px;
-  z-index: 1;
-}
-
-
-
-.el-tree .el-tree-node__expand-icon.is-leaf,.el-tree .el-tree-node__expand-icon.is-leaf:before {
-  border:none;
-  background:transparent;
-  content: "";
-}
-
-
-.el-tree .el-tree-node__expand-icon.expanded {图标加号点击后不旋转，原Element会旋转
-  -webkit-transform: rotate(0deg);
-  transform: rotate(0deg);
-}
-
-.el-tree .el-tree-node__expand-icon.expanded:before {图标减号
-    font-family: 'hxqheam';
-    content: "\e99f";
-} */
-
-
-
-/* 
-[role=group].el-tree-node__children,
-[role=group].el-tree-node__children [role=group].el-tree-node__children,
-[role=group].el-tree-node__children .el-tree-node__content {position: relative;}
-
-[role=group].el-tree-node__children:before,
-[role=group].el-tree-node__children [role=group].el-tree-node__children:before,
-[role=group].el-tree-node__children .el-tree-node__content:before{
-  content: "";
-  top: 0px;
-  position: absolute;
-  width: 9px;
-  height: 100%;
-  border-right: 1px dashed #C7CED6;
-}
-
-
-[role=group].el-tree-node__children [role=group].el-tree-node__children:before {
-  left: 22px;
-}
-
-[role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children:before {
-  left: 44px;
-}
-
-[role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children:before {
-  left: 66px;
-}
-
-[role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children:before {
-  left: 88px;
-}
-
-[role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children:before {
-  left: 110px;
-}
-
-
-[role=group].el-tree-node__children .el-tree-node__content:before{
-  top:-15px;
-}
-
-.el-tree>div[role=treeitem]:nth-last-child(2)>div[role=group]:before,
-.el-tree>div[role=treeitem] div[role=treeitem]:nth-last-child(1)>div[role=group]:before
-{
-  display: none;
-} */
 
 </style>

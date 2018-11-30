@@ -131,6 +131,7 @@
 										<font>新建行</font>
 									</el-button>
 								</div>
+<<<<<<< HEAD
 								<!-- <el-table :data="CUSTOMER.CUSTOMER_QUALIFICATIONList" row-key="id" highlight-current-row style="width: 100%" @cell-click="iconOperation">
 									<el-table-column prop="iconOperation" label="" width="50px">
 										<template slot-scope="scope">
@@ -186,6 +187,8 @@
         									</template>
         							</el-table-column>
 								</el-table> -->
+=======
+>>>>>>> 6c4f006b9b44fe98a104fad12da731aebbaf981f
 								<el-form :model="CUSTOMER.CUSTOMER_QUALIFICATIONList">
 					                <el-form-item>
 					                	<el-row :gutter="20">
@@ -321,6 +324,18 @@
 			        }
 		        }
             };
+            var validateZipcode = (rule, value, callback) => {
+                if (value === '') {
+		            callback(new Error('邮政编码不能为空'));
+		        } else {
+			        var reg= /^[1-9][0-9]{5}$/;
+			        if(!reg.test(value)){
+			            callback(new Error('请输入有效的邮政编码'));
+			        }else{
+			        	callback();
+			        }
+		        }
+            };
             var validateName = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error(''));
@@ -413,6 +428,11 @@
 						required: true,
 						trigger: 'blur',
 						validator: validateEmail,
+					}],
+					ZIPCODE:[{
+						required: true,
+						trigger: 'blur',
+						validator: validateZipcode,
 					}],
 				},
 				//tree

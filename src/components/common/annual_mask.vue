@@ -156,21 +156,11 @@
 								        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.MODEL}}</span>
 								      </template>
 								    </el-table-column>
-
-<<<<<<< HEAD
-    <el-table-column prop="MEMO" label="近三年监督抽查情况" sortable width="260px">
-      <template slot-scope="scope">
-        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.MODEL}}</span>
-      </template>
-    </el-table-column>
-=======
 								    <el-table-column prop="V_NAME" label="生产企业名称" sortable width="120px">
 								      <template slot-scope="scope">
 								        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.V_NAME" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.V_NAME}}</span>
 								      </template>
 								    </el-table-column>
->>>>>>> 9c532c7776174749c8532b631a08cf0378bd1a70
-
 								    <el-table-column prop="CHECKCOST" label="检测费用" sortable width="120px">
 								      <template slot-scope="scope">
 								        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.CHECKCOST}}</span>

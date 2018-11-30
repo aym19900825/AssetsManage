@@ -3,8 +3,8 @@
 		<div class="mask" v-if="show"></div>
 		<div class="mask_div" v-if="show">
 			<div class="mask_title_div clearfix">
-				<div class="mask_title" v-show="addtitle">年度计划</div>
-				<div class="mask_title" v-show="modifytitle">年度计划</div>
+				<div class="mask_title" v-show="addtitle">添加工作任务单</div>
+				<div class="mask_title" v-show="modifytitle">修改工作任务单</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>
 						<i v-bind:class="{'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -16,25 +16,25 @@
 			</div>
 			<div class="mask_content">
 				<!-- status-icon 验证后文本框上显示对勾图标 -->
-				<el-form status-icon :model="WORKPLAN" :label-position="labelPosition" :rules="rules" ref="WORKPLAN" label-width="100px">
+				<el-form status-icon :model="workorder" :label-position="labelPosition" :rules="rules" ref="workorder" label-width="100px">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames" @change="handleChange">
 
 							<el-collapse-item title="基本信息" name="1">
 								<el-row :gutter="20">
 									<el-col :span="5" class="pull-right">
-										<el-input placeholder="草稿" v-model="WORKPLAN.STATUS" :disabled="true">
+										<el-input placeholder="草稿" v-model="workorder.STATUS" :disabled="true">
 												<template slot="prepend">信息状态</template>
 										</el-input>
 									</el-col>
 									<el-col :span="5" class="pull-right">
-										<el-select v-model="WORKPLAN.TYPE" placeholder="类别">
+										<el-select v-model="workorder.TYPE" placeholder="类别">
 									    	<el-option label="监督抽查" value="1"></el-option>
 									    	<el-option label="质量抽查" value="0"></el-option>
 										</el-select>
 									</el-col>
 									<el-col :span="5" class="pull-right">
-										<el-input v-model="WORKPLAN.WP_NUM" :disabled="true">
+										<el-input v-model="workorder.WP_NUM" :disabled="true">
 												<template slot="prepend">计划编号</template>
 										</el-input>
 									</el-col>
@@ -42,7 +42,7 @@
 								<el-row :gutter="30">
 									<el-col :span="6">
 										<el-form-item label="提出单位" prop="PROP_UNIT">
-											<el-select v-model="WORKPLAN.PROP_UNIT" placeholder="请选择">
+											<el-select v-model="workorder.PROP_UNIT" placeholder="请选择">
 										    	<el-option label="金化站" value="1"></el-option>
 										    	<el-option label="运包站" value="0"></el-option>
 											</el-select>
@@ -50,38 +50,38 @@
 									</el-col>
 									<el-col :span="6">
 										<el-form-item label="产品类别" prop="ITEMTYPE">
-											<el-input v-model="WORKPLAN.ITEMTYPE" >
+											<el-input v-model="workorder.ITEMTYPE" >
 												<el-button slot="append" icon="el-icon-search"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="12">
 										<el-form-item label="计划描述" prop="DESCRIPTION">
-											<el-input v-model="WORKPLAN.DESCRIPTION"></el-input>
+											<el-input v-model="workorder.DESCRIPTION"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="6">
 										<el-form-item label="编制人" prop="COMPACTOR">
-											<el-input v-model="WORKPLAN.COMPACTOR"></el-input>
+											<el-input v-model="workorder.COMPACTOR"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="6">
 										<el-form-item label="审核人" prop="C_PERSON">
-											<el-input v-model="WORKPLAN.C_PERSON"></el-input>
+											<el-input v-model="workorder.C_PERSON"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="6">
 										<el-form-item label="批准人" prop="APPRPERSON">
-											<el-input v-model="WORKPLAN.APPRPERSON"></el-input>
+											<el-input v-model="workorder.APPRPERSON"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="6">
 										<el-form-item label="提报日期" prop="REPORTDATE">
 										<div class="block">
 										    <el-date-picker
-										      v-model="WORKPLAN.REPORTDATE"
+										      v-model="workorder.REPORTDATE"
 										      type="date"
 										      placeholder="选择日期" value-format="yyyy-MM-dd">
 										    </el-date-picker>
@@ -94,7 +94,7 @@
 										<el-form-item label="年度" prop="YEAR">
 											<div class="block">
 											    <el-date-picker
-											      v-model="WORKPLAN.YEAR"
+											      v-model="workorder.YEAR"
 											      type="year"
 											      placeholder="选择年度" value-format="yyyy">
 											    </el-date-picker>
@@ -103,7 +103,7 @@
 									</el-col>
 									<el-col :span="6">
 										<el-form-item label="信息信息状态" prop="MESSSTATUS">
-											<el-input v-model="WORKPLAN.MESSSTATUS"></el-input>
+											<el-input v-model="workorder.MESSSTATUS"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -156,11 +156,21 @@
 								        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.MODEL}}</span>
 								      </template>
 								    </el-table-column>
+
+
+    <el-table-column prop="MEMO" label="近三年监督抽查情况" sortable width="260px">
+      <template slot-scope="scope">
+        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.MODEL}}</span>
+      </template>
+    </el-table-column>
+
 								    <el-table-column prop="V_NAME" label="生产企业名称" sortable width="120px">
 								      <template slot-scope="scope">
 								        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.V_NAME" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.V_NAME}}</span>
 								      </template>
 								    </el-table-column>
+
+
 								    <el-table-column prop="CHECKCOST" label="检测费用" sortable width="120px">
 								      <template slot-scope="scope">
 								        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.CHECKCOST}}</span>
@@ -181,7 +191,7 @@
 
 								    <el-table-column fixed="right" label="操作" width="120">
 								      <template slot-scope="scope">
-								        <el-button @click.native.prevent="deleteRow(scope.$index, WORKPLAN.WORLPLANLINEList)" type="text" size="small">
+								        <el-button @click.native.prevent="deleteRow(scope.$index, workorder.WORLPLANLINEList)" type="text" size="small">
 								          移除
 								        </el-button>
 								      </template>
@@ -338,24 +348,24 @@
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="录入人" prop="ENTERBY">
-											<el-input v-model="WORKPLAN.ENTERBY" :disabled="edit"></el-input>
+											<el-input v-model="workorder.ENTERBY" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="录入日期" prop="ENTERDATE">
-											<el-input v-model="WORKPLAN.ENTERDATE" :disabled="edit"></el-input>
+											<el-input v-model="workorder.ENTERDATE" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row :gutter="30" v-if="modify">
 									<el-col :span="8">
 										<el-form-item label="修改人" prop="CHANGEBY">
-											<el-input v-model="WORKPLAN.CHANGEBY" :disabled="edit"></el-input>
+											<el-input v-model="workorder.CHANGEBY" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="修改日期" prop="CHANGEDATE">
-											<el-input v-model="WORKPLAN.CHANGEDATE" :disabled="edit"></el-input>
+											<el-input v-model="workorder.CHANGEDATE" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -366,7 +376,7 @@
 					<div class="el-dialog__footer">
 						<el-form-item>
 							<el-button @click='close'>取消</el-button>
-							<el-button type="primary" class="btn-primarys" @click="submitForm('WORKPLAN')">提交</el-button>
+							<el-button type="primary" class="btn-primarys" @click="submitForm('workorder')">提交</el-button>
 						</el-form-item>
 					</div>
 				</el-form>
@@ -662,7 +672,7 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-				WORKPLAN:{
+				workorder:{
 					ID:'',
 					WP_NUM:'10001',
 					DESCRIPTION:'',
@@ -887,7 +897,7 @@
 					STATUS:'',
 					MEMO:''
                 };
-                // this.WORKPLAN.WORLPLANLINE.push(obj2);
+                // this.workorder.WORLPLANLINE.push(obj2);
 			},
 			// addfield3(){
 			// 	var obj3 = {
@@ -896,7 +906,7 @@
 			// 		S_NAME:'',
 			// 		VERSION:''
    //              };
-   //              this.WORKPLAN.WORLPLANLINE_BASISList.push(obj3);
+   //              this.workorder.WORLPLANLINE_BASISList.push(obj3);
 			// },
 			addfield4(){
 				var obj4 = {
@@ -906,12 +916,12 @@
 					REMARKS:'',
 					VERSION:''
                 };
-                this.WORKPLAN.WORLPLANLINE_PROJECTList.push(obj4);
+                this.workorder.WORLPLANLINE_PROJECTList.push(obj4);
 			},
 			delfield1(item){//年度计划列表删除行
-                var index = this.WORKPLAN.WORLPLANLINEList.indexOf(item);
+                var index = this.workorder.WORLPLANLINEList.indexOf(item);
                 if (index !== -1) {
-                    this.WORKPLAN.WORLPLANLINEList.splice(index, 1);
+                    this.workorder.WORLPLANLINEList.splice(index, 1);
                 }
 			},
 			delfield3(item){//年度计划列表删除行
@@ -941,15 +951,15 @@
 			//点击添加，修改按钮显示弹窗
 			visible() {
 				//年度计划子表数据置空
-				// this.WORKPLAN.WORLPLANLINE = [];
+				// this.workorder.WORLPLANLINE = [];
 				//将检验检测数据置空
-				// this.WORKPLAN.WORLPLANLINE[0].WORLPLANLINE_BASISList = [];
+				// this.workorder.WORLPLANLINE[0].WORLPLANLINE_BASISList = [];
 				//将检测项目与要求数据置空
-				// this.WORKPLAN.WORLPLANLINE[0].WORLPLANLINE_PROJECTList = [];
+				// this.workorder.WORLPLANLINE[0].WORLPLANLINE_PROJECTList = [];
 				var date = new Date();
-				this.WORKPLAN.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
+				this.workorder.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
-	    			this.WORKPLAN.ENTERBY = res.data.nickname;
+	    			this.workorder.ENTERBY = res.data.nickname;
 	    			
 				}).catch((err) => {
 					this.$message({
@@ -965,9 +975,9 @@
 				this.modify = true;
 
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
-	    			this.WORKPLAN.CHANGEBY = res.data.nickname;
+	    			this.workorder.CHANGEBY = res.data.nickname;
 	    			var date = new Date();
-					this.WORKPLAN.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
+					this.workorder.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -976,7 +986,7 @@
 				});
 
 				this.$axios.get('/api/api-apps/app/workplan/' + dataid, {}).then((res) => {
-					this.WORKPLAN = res.data;
+					this.workorder = res.data;
 					this.worlplanlist = res.data.WORLPLANLINEList;
 					this.basisList = res.data.WORLPLANLINEList.length > 0 ? res.data.WORLPLANLINEList[0].WORLPLANLINE_BASISList : [];
 					this.proTestList = res.data.WORLPLANLINEList.length > 0 ? res.data.WORLPLANLINEList[0].WORLPLANLINE_PROJECTList : [];
@@ -1019,15 +1029,15 @@
 				$(".mask_div").css("top", "0");
 			},
 			// 保存users/saveOrUpdate
-			submitForm(WORKPLAN) {
-				// this.$refs[WORKPLAN].validate((valid) => {
+			submitForm(workorder) {
+				// this.$refs[workorder].validate((valid) => {
 		  //         if (valid) {
-		  			this.WORKPLAN.WORLPLANLINEList[0].WORLPLANLINE_BASISList = this.inspectionList_child.WORLPLANLINE_BASISList;
-		  			this.WORKPLAN.WORLPLANLINEList[0].WORLPLANLINE_PROJECTList = this.inspectionList_child.WORLPLANLINE_PROJECTList;
+		  			this.workorder.WORLPLANLINEList[0].WORLPLANLINE_BASISList = this.inspectionList_child.WORLPLANLINE_BASISList;
+		  			this.workorder.WORLPLANLINEList[0].WORLPLANLINE_PROJECTList = this.inspectionList_child.WORLPLANLINE_PROJECTList;
 		  			// console.log(this.inspectionList_child);
-		  			// this.WORKPLAN.WORLPLANLINE.push(this.inspectionList_child);
+		  			// this.workorder.WORLPLANLINE.push(this.inspectionList_child);
 					var url = '/api/apps-center/app/workplan/saveOrUpdate';
-					this.$axios.post(url, this.WORKPLAN).then((res) => {
+					this.$axios.post(url, this.workorder).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({

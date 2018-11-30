@@ -35,7 +35,7 @@
 									</el-col>
 									<el-col :span="4" class="pull-right">
 											<el-input v-model="adddeptForm.status" :disabled="edit" :formatter="judge">
-												<template slot="prepend">状态</template>
+												<template slot="prepend">信息状态</template>
 											</el-input>
 									</el-col>
 								</el-row>
@@ -48,7 +48,7 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="机构编码" prop="code">
-											<el-input v-model="adddeptForm.code">
+											<el-input v-model="adddeptForm.code" :disabled="edit">
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -138,7 +138,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30">
+								<el-row :gutter="30" v-show="personinfo">
 									<el-col :span="8">
 										<el-form-item label="录入人" prop="enterby">
 											<el-input v-model="adddeptForm.enterby" :disabled="edit"></el-input>
@@ -224,13 +224,30 @@
 			}
 		},
 		data() {
-			// var validatename1 = (rule, value, callback) => {
-   //              if (value === '') {
-   //                  callback(new Error('请填写单位简称'));
-   //              }else {
-   //                  callback();
-   //              }
-   //          };
+			//验证邮箱
+			var validateEmail = (rule, value, callback) => {
+                if(value != ""){
+		             if((/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/).test(value) == false){
+		                 callback(new Error("请填写正确的手机号码"));
+		             }else{
+		                 callback();
+		             }
+		         }else{
+		             callback();
+		         }
+            };
+            //验证手机号
+			var validatePhone = (rule, value, callback) => {
+                if(value != ""){
+		             if((/^1[34578]\d{9}$/).test(value) == false){
+		                 callback(new Error("请填写正确的手机号码"));
+		             }else{
+		                 callback();
+		             }
+		         }else{
+		             callback();
+		         }
+            };
 
 			return {
 				value: '',
@@ -238,33 +255,34 @@
 					value: '1',
 					label: '活动'
 				}, {
-					value: '0',
+					value: '2',
 					label: '不活动'
 				}],
 				typeoptions: [{
-					value: '外部机构',
+					value: '1',
 					label: '外部机构'
 				}, {
-					value: '内部机构',
+					value: '2',
 					label: '内部机构'
 				}],
 				attroptions: [{
-					value: '业务部',
+					value: '1',
 					label: '业务部'
 				}, {
-					value: '检验部',
+					value: '2',
 					label: '检验部'
 				}, {
-					value: '外部机构',
+					value: '3',
 					label: '外部机构'
 				}],
 				stopoptions: [{
-					value: '是',
+					value: '1',
 					label: '是'
 				}, {
-					value: '否',
+					value: '2',
 					label: '否'
 				}],
+				personinfo:false,
 				showcode:true,
 				dialogVisible: false, //对话框
 				edit: true, //禁填
@@ -282,24 +300,25 @@
 				modify:false,
 				stopcontent:false,
 				stopselect:false,
-				// adddeptFormtest: {
-				// 	pid:'',
-				// 	fullname:'',
-				// 	simplename:'',
-				// 	type:'',
-				// 	code:'',
-				// 	teltphone:'',
-				// 	tips:''
-				// },
 				rules:{
 					step: [ 
    						 { required: true, message: '请输入机构序号', trigger: 'blur' } 
    					],
 		          	code: [ 
-   						 { required: true, message: '请输入机构编码', trigger: 'blur' }, { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }],
+   						 { required: true, message: '请输入机构编码', trigger: 'blur' }],
    					name: [ { required: true, message: '请输入机构名称', trigger: 'blur' }, { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' } ],
-          			org_range:[ { required: true, message: '请选择机构类型', trigger: 'blur' }],
-   					type:[ { required: true, message: '请选择机构属性', trigger: 'blur' }],
+          			org_range:[ { required: true, message: '请选择机构类型', trigger: 'change' }],
+   					type:[ { required: true, message: '请选择机构属性', trigger: 'change' }],
+   					email: [{
+   						required:false,
+						trigger: 'change',
+						validator: validateEmail,
+					}],
+   					telephone: [{
+   						required:false,
+						trigger: 'change',
+						validator: validatePhone,
+					}],
 	          	},
 	          	//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -376,6 +395,10 @@
 					this.col_but2 = !this.col_but2;
 				}
 			},
+			//生成随机数函数
+			rand(min,max) {
+		        return Math.floor(Math.random()*(max-min))+min;
+		    },
 			//点击按钮显示弹窗
 			childMethods() {
 				this.addtitle = true;
@@ -384,6 +407,8 @@
 				this.stopcontent = true;
 				this.stopselect = false;
 				this.showcode = false;
+				var randnum = this.rand(1000,9999);
+				this.adddeptForm.code = randnum;
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
 	     			this.adddeptForm.enterby = res.data.nickname;
 	     			console.log(this.adddeptForm.enterby);

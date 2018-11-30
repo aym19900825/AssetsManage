@@ -46,31 +46,19 @@
 						</div>
 					</div>
 					<!-- 高级查询划出 -->
-					<div v-show="search">
+					<div v-show="search" class="pb10">
 						<el-form status-icon :model="searchList" label-width="70px">
 							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-form-item label="角色名称">
-										<el-input v-model="searchList.name"></el-input>
-									</el-form-item>
+									<el-input v-model="searchList.name">
+										<template slot="prepend">角色名称</template>
+									</el-input>
 								</el-col>
-								<el-col :span="8">
-									<el-form-item label="是否停用" prop="code">
-										<el-select v-model="searchList.simplename" placeholder="请选择" style="width: 100%">
+								<el-col :span="3">
+										<el-select v-model="searchList.INACTIVE" placeholder="是否停用" style="width: 100%;padding-top: 3px">
 											<el-option v-for="item in stopoptions" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
 										</el-select>
-									</el-form-item>
-								</el-col>
-								<el-col :span="5">
-									<el-form-item label="机构名称">
-										<el-input v-model="searchList.name"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="5">
-									<el-form-item label="直属组别">
-										<el-input v-model="searchList.name"></el-input>
-									</el-form-item>
 								</el-col>
 								<el-col :span="2">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
@@ -85,13 +73,11 @@
 							<el-table :data="roleList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'roleList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0">
 								</el-table-column>
+								<el-table-column label="角色编码" sortable prop="code" v-if="this.checkedName.indexOf('角色编码')!=-1">
+								</el-table-column>
 								<el-table-column label="角色名称" sortable prop="name" v-if="this.checkedName.indexOf('角色名称')!=-1">
 								</el-table-column>
-								<el-table-column label="所在机构" sortable prop="deptName" v-if="this.checkedName.indexOf('所在机构')!=-1">
-								</el-table-column>
-								<el-table-column label="别名" sortable prop="code" v-if="this.checkedName.indexOf('别名')!=-1">
-								</el-table-column>
-								<el-table-column label="备注" sortable prop="tips" v-if="this.checkedName.indexOf('备注')!=-1">
+								<el-table-column label="是否停用" sortable prop="INACTIVE" v-if="this.checkedName.indexOf('是否停用')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
@@ -147,28 +133,23 @@
 				'男': true,
 				'女': false,
 				checkedName: [//控制表格列的显示隐藏相关数据
+					'角色编码',
 					'角色名称',
-					'所在机构',
-					'别名',
-					'备注'
+					'是否停用'
 				],
 				tableHeader: [//控制表格列的显示隐藏相关数据
+					{
+						label: '角色编码',
+						prop: 'code'
+					},
 					{
 						label: '角色名称',
 						prop: 'name'
 					},
 					{
-						label: '所在机构',
-						prop: 'deptName'
-					},
-					{
-						label: '别名',
-						prop: 'code'
-					},
-					{
-						label: '备注',
-						prop: 'tips'
-					},
+						label: '是否停用',
+						prop: 'INACTIVE'
+					}
 				],
 				roleList: [],//表格数据
 				search: false,
@@ -176,7 +157,8 @@
 				up: false,
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: {//高级查询数据
-					name: ''
+					name: '',
+					inactive:''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -304,7 +286,8 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					name: this.searchList.name
+					name: this.searchList.name,
+					inactive:this.searchList.inactive
 				}
 				var url = '/api/api-user/roles';
 				this.$axios.get(url, {

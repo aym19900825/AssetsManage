@@ -95,7 +95,7 @@
 						 	<!-- 第四行 -->
 						 	<el-row :gutter="30">
 						 		<el-col :span="12">
-						 			 <el-form-item label="配置状态" v-model="personinfo.enabledName">
+						 			 <el-form-item label="配置信息状态" v-model="personinfo.enabledName">
 						 			 	<el-radio-group v-model="personinfo.enabledName">
 									    	<el-radio label="启用" ></el-radio>
 												<el-radio label="冻结" ></el-radio>
@@ -322,8 +322,8 @@
 	          		deptName: '',//所属机构
 	          		nickname:'',//人员姓名
 	          		username:'',//登录名称
-	          		enabled:'',//配置状态
-	          		enabledName:'',//配置状态名称
+	          		enabled:'',//配置信息状态
+	          		enabledName:'',//配置信息状态名称
 	          		password:'',//登录口令
 	          		birthday:'',//出生日期
 	          		sex:'',//性别

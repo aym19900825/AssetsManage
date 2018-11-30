@@ -74,7 +74,7 @@
 									</el-input>
 								</el-col>
 								<el-col :span="3">
-									<el-select v-model="searchList.STATUS" placeholder="请选择状态">
+									<el-select v-model="searchList.STATUS" placeholder="请选择信息状态">
 										<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 										</el-option>
 									</el-select>
@@ -99,7 +99,7 @@
 							</el-table-column>
 							<el-table-column label="人员资质" width="180" sortable prop="QUALIFICATION" v-if="this.checkedName.indexOf('人员资质')!=-1">
 							</el-table-column>
-							<el-table-column label="状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
+							<el-table-column label="信息状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
 							</el-table-column>
 							<!--<el-table-column label="文档" width="120" sortable prop="DOCLINKP_NAME" v-if="this.checkedName.indexOf('文档')!=-1">-->
 							<el-table-column label="领域" width="120" sortable prop="FIELD" v-if="this.checkedName.indexOf('领域')!=-1">
@@ -170,7 +170,7 @@
 					'检验/检测项编号',
 					'项目名称',
 					'人员资质',
-					'状态',
+					'信息状态',
 					'领域',
 					'子领域',
 					'版本',
@@ -195,7 +195,7 @@
 						prop: 'QUALIFICATION'
 					},
 					{
-						label: '状态',
+						label: '信息状态',
 						prop: 'STATUS'
 					},
 					{

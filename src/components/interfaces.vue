@@ -75,7 +75,7 @@
 							</el-table-column>
 							<el-table-column label="联系地址" sortable prop="CONTACT_ADDRESS" v-if="this.checkedName.indexOf('联系地址')!=-1">
 							</el-table-column>						
-							<el-table-column label="状态" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
+							<el-table-column label="信息状态" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
 							</el-table-column>
 						</el-table>
 						<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
@@ -128,7 +128,7 @@
 					'性别',
 					'联系电话',
 					'联系地址',
-					'状态'
+					'信息状态'
 				],
 				tableHeader: [
 					{
@@ -148,7 +148,7 @@
 						prop: 'deptName'
 					},
 					{
-						label: '状态',
+						label: '信息状态',
 						prop: 'enabled'
 					}
 				],

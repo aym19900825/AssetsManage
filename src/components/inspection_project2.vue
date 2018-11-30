@@ -34,7 +34,7 @@
       </template>
     </el-table-column>
 
-	<el-table-column prop="STATUS" label="状态" sortable width="120px" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
+	<el-table-column prop="STATUS" label="信息状态" sortable width="120px" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
       <template slot-scope="scope">
         <el-select v-if="scope.row.isEditing" v-model="scope.row.STATUS" placeholder="请选择">
           <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.label"></el-option>
@@ -42,13 +42,13 @@
       </template>
     </el-table-column>
 
-    <el-table-column prop="CHANGEBY" label="状态修改人" sortable width="120px" v-if="this.checkedName.indexOf('状态修改人')!=-1">
+    <el-table-column prop="CHANGEBY" label="信息状态修改人" sortable width="120px" v-if="this.checkedName.indexOf('信息状态修改人')!=-1">
       <template slot-scope="scope">
         <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHANGEBY" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.CHANGEBY}}</span>
       </template>
     </el-table-column>
 
-     <el-table-column prop="CHANGEDATE" label="状态修改时间" sortable width="160px" :formatter="dateFormat" v-if="this.checkedName.indexOf('状态修改时间')!=-1">
+     <el-table-column prop="CHANGEDATE" label="信息状态修改时间" sortable width="160px" :formatter="dateFormat" v-if="this.checkedName.indexOf('信息状态修改时间')!=-1">
       <template slot-scope="scope">
         <el-date-picker v-if="scope.row.isEditing" type="date" placeholder="选择日期" v-model="scope.row.CHANGEDATE" value-format="yyyy-MM-dd"></el-date-picker><span v-else="v-else">{{scope.row.CHANGEDATE}}</span>
       </template>
@@ -111,13 +111,13 @@
 				searchData: {
 			        page: 1,
 			        limit: 10,//分页显示数
-			        enabled: '',//状态
+			        enabled: '',//信息状态
 		        },
 				checkedName: [
 					'产品类型',
-					'状态',
-					'状态修改人',
-					'状态修改时间'
+					'信息状态',
+					'信息状态修改人',
+					'信息状态修改时间'
 				],
 				tableHeader: [
 					{
@@ -125,15 +125,15 @@
 						prop: 'M_NUM'
 					},
 					{
-						label: '状态',
+						label: '信息状态',
 						prop: 'STATUS'
 					},
 					{
-						label: '状态修改人',
+						label: '信息状态修改人',
 						prop: 'CHANGEBY'
 					},
 					{
-						label: '状态修改时间',
+						label: '信息状态修改时间',
 						prop: 'CHANGEDATE'
 					}
 				],
@@ -232,7 +232,7 @@
 			},
 			
 			judge(data) {
-				//taxStatus 状态布尔值
+				//taxStatus 信息状态布尔值
 				return data.enabled ? '活动' : '不活动'
 			},
 			

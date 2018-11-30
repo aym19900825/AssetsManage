@@ -5,9 +5,6 @@
 			<navs_header></navs_header>
 		</div>
 		<div class="contentbg">
-			<!--左侧菜单调用 Begin-->
-			<!-- <navs_left></navs_left> -->
-			<!--左侧菜单调用 End-->
 			<div class="wrapper wrapper-content wrapperall">
 				<div class="ibox-content">
 					<!--<navs_button></navs_button>-->
@@ -104,7 +101,7 @@
 									</el-select>
 								</el-col>
 								<el-col :span="5" style="padding-top: 3px">
-									<el-select v-model="searchList.STATUS" placeholder="状态">
+									<el-select v-model="searchList.STATUS" placeholder="信息状态">
 									    <el-option label="草稿" value="1"></el-option>
 									    <el-option label="审批中" value="0"></el-option>
 									    <el-option label="驳回" value="0"></el-option>
@@ -139,21 +136,32 @@
 						</el-col>
 						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
-							<el-table :data="userList"  border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
+							<el-table :data="userList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="工作任务单编号" sortable width="100px" prop="WONUM" v-if="this.checkedName.indexOf('工作任务单编号')!=-1">
+								<el-table-column label="工作任务单编号" sortable width="280px" prop="WONUM" v-if="this.checkedName.indexOf('工作任务单编号')!=-1">
 								</el-table-column>
-								<el-table-column label="样品名称" sortable width="200px" prop="ITEM_NAME" v-if="this.checkedName.indexOf('样品名称')!=-1">
+								<el-table-column label="样品名称" sortable width="180px" prop="ITEM_NAME" v-if="this.checkedName.indexOf('样品名称')!=-1">
 								</el-table-column>
-								<el-table-column label="样品型号" sortable width="100px" prop="ITEM_MODEL" v-if="this.checkedName.indexOf('样品型号')!=-1">
+								<el-table-column label="样品型号" sortable width="200px" prop="ITEM_MODEL" v-if="this.checkedName.indexOf('样品型号')!=-1">
+								</el-table-column>
+								<el-table-column label="样品状态" sortable  width="100px" prop="ITEM_STATUS" v-if="this.checkedName.indexOf('样品状态')!=-1">
+								</el-table-column>
+								<el-table-column label="抽样方案/判定依据" sortable width="200px" prop="CHECK_BASIS" v-if="this.checkedName.indexOf('抽样方案/判定依据')!=-1">
+								</el-table-column>
+								<el-table-column label="完成日期" sortable  width="100px" prop="COMPLETE_DATE" v-if="this.checkedName.indexOf('完成日期')!=-1">
+								</el-table-column>
+								<el-table-column label="完成方式" sortable  width="100px" prop="COMPLETE_MODE" v-if="this.checkedName.indexOf('完成方式')!=-1">
+								</el-table-column>
+								<el-table-column label="委托书编号" sortable  width="120px" prop="PROXYNUM" v-if="this.checkedName.indexOf('委托书编号')!=-1">
+								</el-table-column>
+
+								<el-table-column label="信息状态" sortable  width="100px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
 								</el-table-column>
 								</el-table-column>
 								<el-table-column label="录入人" sortable width="210px" prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
 								</el-table-column>
 								<el-table-column label="录入时间" sortable width="210px" prop="ENTERDATE" v-if="this.checkedName.indexOf('录入时间')!=-1">
-								</el-table-column>
-								<el-table-column label="状态" sortable  width="380px" prop="STATUS" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
@@ -170,24 +178,20 @@
 					</div>
 				</div>
 			</div>
-			<annualmask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></annualmask>
+			<workorders_mask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></workorders_mask>
 		</div>
 	</div>
 </template>
 <script>
 	import vheader from './common/vheader.vue'
-	import navs_left from './common/left_navs/nav_left2.vue'
 	import navs_header from './common/nav_tabs.vue'
-	import annualmask from './common/annual_mask.vue'
-	import assetsTree from './plugin/vue-tree/tree.vue'
+	import workorders_mask from './common/workorders_mask.vue'
 	export default {
-		name: 'annual_plan',
+		name: 'workorders',
 		components: {
-			'vheader': vheader,
-			'navs_header': navs_header,
-			'navs_left': navs_left,
-			'v-assetsTree': assetsTree,
-			'annualmask': annualmask
+			vheader,
+			navs_header,
+			workorders_mask
 		},
 		data() {
 			return {
@@ -197,9 +201,14 @@
 					'工作任务单编号',
 					'样品名称',
 					'样品型号',
+					'样品状态',
+					'抽样方案/判定依据',
+					'完成日期',
+					'完成方式',
+					'委托书编号',
 					'录入人',
 					'录入时间',
-					'状态'
+					'信息状态'
 				],
 				tableHeader: [
 					{
@@ -215,16 +224,36 @@
 						prop: 'ITEM_MODEL'
 					},
 					{
+						label: '样品状态',
+						prop: 'ITEM_STATUS'
+					},
+					{
+						label: '抽样方案/判定依据',
+						prop: 'CHECK_BASIS'
+					},
+					{
+						label: '完成日期',
+						prop: 'COMPLETE_DATE'
+					},
+					{
+						label: '完成方式',
+						prop: 'COMPLETE_MODE'
+					},
+					{
+						label: '委托书编号',
+						prop: 'PROXYNUM'
+					},
+					{
+						label: '信息状态',
+						prop: 'STATUS'
+					},
+					{
 						label: '录入人',
 						prop: 'ENTERBY'
 					},
 					{
 						label: '录入时间',
 						prop: 'ENTERDATE'
-					},
-					{
-						label: '状态',
-						prop: 'STATUS'
 					}
 				],
 
@@ -243,11 +272,16 @@
 				searchList: {
 					WONUM: '',
 					ITEM_NAME: '',
-					TYPE: '',
 					ITEM_MODEL: '',
+					ITEM_STATUS: '',
+					CHECK_BASIS: '',
+					COMPLETE_DATE: '',
+					COMPLETE_MODE: '',
+					PROXYNUM: '',
+					TYPE: '',
+					STATUS:'',
 					ENTERDATE:'',
 					ENTERBY:'',
-					STATUS:''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，

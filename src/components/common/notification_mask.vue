@@ -28,7 +28,7 @@
 									</el-col>
 									<el-col :span="3" class="pull-right">
 										<el-input v-model="dataInfo.STATE" :disabled="edit">
-											<template slot="prepend">状态</template>
+											<template slot="prepend">信息状态</template>
 										</el-input>
 									</el-col>
 								</el-row>
@@ -122,7 +122,7 @@
 									</el-row>
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="信息状态" prop="STATUS">
+											<el-form-item label="信息信息状态" prop="STATUS">
 												<el-input v-model="dataInfo.STATUS" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -156,7 +156,7 @@
 												<el-form-item label="版本"></el-form-item>
 											</el-col>
 											<el-col :span="3">
-												<el-form-item label="信息状态"></el-form-item>
+												<el-form-item label="信息信息状态"></el-form-item>
 											</el-col>
 											<el-col :span="3">
 												<el-form-item label="附件"></el-form-item>
@@ -182,7 +182,7 @@
 												<el-input type="text" placeholder="请输入版本" v-model="item.VERSION"></el-input>
 											</el-col>
 											<el-col :span="3">
-												<el-input type="text" placeholder="请输入信息状态" v-model="item.STATUS"></el-input>
+												<el-input type="text" placeholder="请输入信息信息状态" v-model="item.STATUS"></el-input>
 											</el-col>
 											<el-col :span="3">
 												<el-input type="text" placeholder="附件"></el-input>
@@ -252,7 +252,7 @@
 												<el-form-item label="版本"></el-form-item>
 											</el-col>
 											<el-col :span="2">
-												<el-form-item label="信息状态"></el-form-item>
+												<el-form-item label="信息信息状态"></el-form-item>
 											</el-col>
 											<el-col :span="2">
 												<el-form-item label="附件"></el-form-item>
@@ -278,7 +278,7 @@
 												<el-input type="text" placeholder="请输入版本" v-model="item.VERSION"></el-input>
 											</el-col>
 											<el-col :span="2">
-												<el-input type="text" placeholder="请输入信息状态" v-model="item.STATUS"></el-input>
+												<el-input type="text" placeholder="请输入信息信息状态" v-model="item.STATUS"></el-input>
 											</el-col>
 											<el-col :span="3">
 												<el-input type="text" placeholder="附件"></el-input>

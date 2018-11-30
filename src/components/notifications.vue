@@ -83,7 +83,7 @@
 									</el-date-picker>
 								</el-col>
 								<el-col :span="3" class="pt5">
-									<el-select v-model="searchList.value" placeholder="请选择状态">
+									<el-select v-model="searchList.value" placeholder="请选择信息状态">
 										<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 										</el-option>
 									</el-select>
@@ -142,7 +142,7 @@
 								</el-table-column>
 								<el-table-column label="完成日期" width="180" prop="COMPDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('完成日期')!=-1">
 								</el-table-column>
-								<el-table-column label="状态" width="120" prop="STATUS" sortable v-if="this.checkedName.indexOf('状态')!=-1">
+								<el-table-column label="信息状态" width="120" prop="STATUS" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
 								</el-table-column>
 								<el-table-column label="录入人" width="120" prop="ENTERBY" sortable v-if="this.checkedName.indexOf('录入人')!=-1">
 								</el-table-column>
@@ -201,7 +201,7 @@
 					'任务号',
 					'抽样方案',
 					'完成日期',
-					'状态',
+					'信息状态',
 					'录入人',
 					'录入时间'
 				],
@@ -246,7 +246,7 @@
 						prop: 'COMPDATE'
 					},
 					{
-						label: '状态',
+						label: '信息状态',
 						prop: 'STATUS'
 					},
 					{

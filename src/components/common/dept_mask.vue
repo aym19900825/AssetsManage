@@ -61,7 +61,7 @@
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="8">
-										<el-form-item label="状态" prop="fullname">
+										<el-form-item label="信息状态" prop="fullname">
 											<el-input v-model="adddeptForm.fullname"></el-input>
 										</el-form-item>
 									</el-col>

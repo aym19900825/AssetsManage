@@ -16,14 +16,14 @@
 			</div>
 			<div class="mask_content">
 
-				<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" status-icon label-width="100px" class="demo-ruleForm">
+				<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" status-icon inline-message label-width="100px" class="demo-ruleForm">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="委托单位" name="1">
 								<el-row :gutter="20" class="pb10">
 									<el-col :span="3" class="pull-right">
 										<el-input v-model="dataInfo.STATUS" :disabled="true">
-											<template slot="prepend">状态</template>
+											<template slot="prepend">信息状态</template>
 										</el-input>
 									</el-col>
 									<el-col :span="3" class="pull-right">
@@ -126,7 +126,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="样品状态" prop="ITEM_STATUS">
+											<el-form-item label="样品信息状态" prop="ITEM_STATUS">
 												<el-input v-model="dataInfo.ITEM_STATUS"></el-input>
 											</el-form-item>
 										</el-col>
@@ -215,7 +215,7 @@
 										</template>
 									</el-table-column>
 
-									<el-table-column prop="STATUS" label="信息状态" sortable width="120px">
+									<el-table-column prop="STATUS" label="信息信息状态" sortable width="120px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.STATUS'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入要求">
@@ -283,7 +283,7 @@
 										</template>
 									</el-table-column>
 									
-									<el-table-column prop="STATUS" label="信息状态" sortable width="120px">
+									<el-table-column prop="STATUS" label="信息信息状态" sortable width="120px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.STATUS'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入要求">
@@ -404,7 +404,7 @@
 											</el-form-item>
 										</template>
 									</el-table-column>
-											<el-table-column prop="STATUS" label="信息状态" sortable width="120px">
+											<el-table-column prop="STATUS" label="信息信息状态" sortable width="120px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.STATUS'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入要求"></el-input>
@@ -508,7 +508,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="信息状态" prop="MESSSTATUS">
+											<el-form-item label="信息信息状态" prop="MESSSTATUS">
 													<el-input v-model="dataInfo.MESSSTATUS"></el-input>
 											</el-form-item>
 										</el-col>
@@ -704,7 +704,7 @@
 					ITEM_ID: [{ required: true, message: '必填', trigger: 'blur' }],//标识
 					ITEM_MODEL: [{ required: true, message: '必填', trigger: 'blur' }],//型号
 					ITEM_QUALITY: [{ required: true, message: '必填', trigger: 'blur' }],//数量
-					ITEM_STATUS: [{ required: true, message: '必填', trigger: 'blur' }],//样品状态
+					ITEM_STATUS: [{ required: true, message: '必填', trigger: 'blur' }],//样品信息状态
 					ITEM_SECRECY: [{ required: true, message: '必填', trigger: 'blur' }],//保密要求
 					ITEM_METHOD: [{ required: true, message: '必填', trigger: 'blur' }],//取样方式
 					ITEM_DISPOSITION: [{ required: true, message: '必填', trigger: 'blur' }],//检后处理
@@ -712,8 +712,8 @@
 					COMPDATE: [{ required: true, message: '必填', trigger: 'blur' }],//完成日期
 					PROXYNUM: [{ required: true, message: '必填', trigger: 'blur' }],//编号
 					REPORT_QUALITY: [{ required: true, message: '必填', trigger: 'blur' }],//交委托方分数
-					REPORT_MODE: [{ required: true, message: '必填', trigger: 'blur' }],//发送方式
-					REPORT_FOMAT: [{ required: true, message: '必填', trigger: 'blur' }],//格式
+					REPORT_MODE: [{ required: true, message: '必填', trigger: 'change' }],//发送方式
+					REPORT_FOMAT: [{ required: true, message: '必填', trigger: 'change' }],//格式
 					MAINGROUP: [{ required: true, message: '必填', trigger: 'change' }],//主检组
 					LEADER: [{ required: true, message: '必填', trigger: 'blur' }],//主检负责人
 					MEMO: [{ required: true, message: '必填', trigger: 'blur' }],//备注
@@ -956,11 +956,11 @@
 <style>
 @import '../../assets/css/mask-modules.css';
 
-.el-form-item__error {
+/*.el-form-item__error {
 	top: 18%;
     left: 5px;
     background: #FFF;
     padding: 5px 10px;
-}
+}*/
 
 </style>

@@ -27,9 +27,9 @@
 									</el-col>
 									<el-col :span="3" class="pull-right">
 										<el-input v-model="dataInfo.STATUS" :disabled="true">
-											<template slot="prepend">状态</template>
+											<template slot="prepend">信息状态</template>
 										</el-input>
-										<!-- <el-select v-model="dataInfo.STATUS" placeholder="请选择状态">
+										<!-- <el-select v-model="dataInfo.STATUS" placeholder="请选择信息状态">
 											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
 										</el-select> -->
@@ -200,7 +200,7 @@
 						S_ENGNAME: '',
 						RELEASETIME: '',
 						STARTETIME: '',
-						VERSION:'1',
+						VERSION:1,
 						RELEASE_UNIT: '',
 						DEPARTMENT: '',
 						ENTERBY: '',
@@ -359,7 +359,10 @@
 				this.modifytitle = false;
 				this.modify=false;
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+					console.log(res);
 					this.dataInfo.DEPARTMENT=res.data.companyName;
+					console.log(1111);
+					console.log(this.dataInfo.DEPARTMENT)
 					this.dataInfo.RELEASE_UNIT=res.data.deptName;
 					this.dataInfo.ENTERBY=res.data.nickname;
 					var date=new Date();

@@ -15,16 +15,16 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="numbsetForm" :label-position="labelPosition" :rules="rules" ref="numbsetForm" label-width="100px">
+				<el-form :model="numbsetForm" :label-position="labelPosition" :rules="rules" ref="numbsetForm" label-width="100px" status-icon>
 					<div class="accordion">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="基础信息" name="1">
 								<el-row :gutter="20">
 									<el-col :span="4" class="pull-right">
 										<el-input v-model="numbsetForm.STATUS" :disabled="true">
-											<template slot="prepend">状态</template>
+											<template slot="prepend">信息状态</template>
 										</el-input>
-										<!-- <el-select v-model="numbsetForm.STATUS" placeholder="请选择状态">
+										<!-- <el-select v-model="numbsetForm.STATUS" placeholder="请选择信息状态">
 											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
 										</el-select> -->
@@ -49,7 +49,7 @@
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="24">
-										<el-form-item label="备注" prop="MEMO">
+										<el-form-item label="备注">
 											<el-input type="textarea" v-model="numbsetForm.MEMO"></el-input>
 										</el-form-item>
 									</el-col>
@@ -61,24 +61,24 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="录入人" prop="ENTERBY">
+											<el-form-item label="录入人">
 												<el-input v-model="numbsetForm.ENTERBY" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="录入时间" prop="ENTERDATE">
+											<el-form-item label="录入时间">
 												<el-input v-model="numbsetForm.ENTERDATE" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 								</el-row>
-								<el-row :gutter="30">
+								<el-row :gutter="30" v-if="modify">
 									<el-col :span="8">
-										<el-form-item v-if="modify" label="修改人" prop="CHANGEBY">
+										<el-form-item label="修改人">
 											<el-input v-model="numbsetForm.CHANGEBY" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item v-if="modify" label="修改时间" prop="CHANGEDATE">
+										<el-form-item label="修改时间">
 											<el-input v-model="numbsetForm.CHANGEDATE" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
@@ -103,9 +103,9 @@
 	export default {
 		name: 'masks',
 		props: {
-			/*page: {
+			page: {
 				type: Object,
-			},*/
+			},
 			numbsetForm: {
 				type: Object,
 				default: function(){
@@ -154,34 +154,17 @@
 					value: '0',
 					label: '不活动'
 				}],
-				modify:true,//修订、修改人、修改时间
-				statusshow1:true,
-				statusshow2:false,
+				modify:false,//修订、修改人、修改时间
 				selMenu:[],
-				showcode:true,
 				dialogVisible: false, //对话框
 				edit: true, //禁填
 				activeNames: ['1'], //手风琴数量
-				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				show: false,
 				isok1: true,
 				isok2: false,
-				labelPosition: 'top',
+				labelPosition: 'top',//标题在上方显示
 				addtitle:true,
 				modifytitle:false,
-				selectData:[],
-				// numbsetForm: {
-				// 	STATUS:'',
-				// 	AUTOKEY:'',
-				// 	PREFIX:'',
-				// 	S_NUM:'',
-				// 	MEMO:'',
-				// 	DEPARTMENT:'',
-				// 	ENTERBY:'',
-				// 	ENTERDATE:'',
-				// 	CHANGEBY:'',
-				// 	CHANGEDATE:''
-				// },
 				rules:{
           			AUTOKEY: [{ 
    						required: true,
@@ -203,7 +186,7 @@
 			//form表单内容清空
 			resetNew(){
                 this.numbsetForm = {
-					STATUS:'活动',//添加时默认显示状态
+					STATUS:'活动',//添加时默认显示信息状态
 					AUTOKEY:'',
 					PREFIX:'',
 					S_NUM:'',
@@ -214,7 +197,6 @@
 					CHANGEBY:'',
 					CHANGEDATE:''
 				}
-                //this.$refs["numbsetForm"].resetFields();
             },
             childMethods() {//添加内容时从父组件带过来的
             	this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
@@ -314,7 +296,7 @@
 		        });
 				
 			},
-			handleClose(done) {
+			handleClose(done) {//大弹出框确定关闭按钮
 				this.$confirm('确认关闭？')
 					.then(_ => {
 						done();
@@ -322,9 +304,6 @@
 					.catch(_ => {});
 			}
 		},
-		mounted() {
-			
-		}
 	}
 </script>
 

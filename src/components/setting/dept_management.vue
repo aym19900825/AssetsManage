@@ -391,11 +391,11 @@
 			this.requestData();
 			this.getKey();
 
-			window.onresize = () => {//获取浏览器可视区域高度
-			 	return (() => {
-			 		this.fullHeight.height = document.documentElement.clientHeight - 100+'px';
-			 	})()
-			};
+			// window.onresize = () => {//获取浏览器可视区域高度
+			//  	return (() => {
+			//  		this.fullHeight.height = document.documentElement.clientHeight - 100+'px';
+			//  	})()
+			// };
 		}
 	}
 </script>

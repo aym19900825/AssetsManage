@@ -81,7 +81,7 @@
 
 								</el-col>
 								<el-col :span="3" class="pt5">
-									<el-select v-model="searchList.STATUS" placeholder="请选择状态">
+									<el-select v-model="searchList.STATUS" placeholder="请选择信息状态">
 										<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 
 										</el-option>
@@ -113,7 +113,7 @@
 								</el-table-column>
 								<el-table-column label="类别" width="120" sortable prop="M_TYPE" v-if="this.checkedName.indexOf('类别')!=-1">
 								</el-table-column>
-								<el-table-column label="状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
+								<el-table-column label="信息状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
 								</el-table-column>
 								<el-table-column label="版本" width="100" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1">
 								</el-table-column>
@@ -136,7 +136,7 @@
 				</div>
 			</div>
 			<!--右侧内容显示 End-->
-			<testingmask :testingForm="aaaData[0]" ref="child" @request="requestData" v-bind:page=page></testingmask>
+			<testingmask :testingForm="testingForm" ref="child" @request="requestData" v-bind:page=page></testingmask>
 		</div>
 	</div>
 </template>
@@ -157,19 +157,6 @@
 		},
 		data() {
 			return {
-				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
-				dataUrl: '/api/api-apps/app/inspectionMet',
-				searchData: {
-			        page: 1,
-			        limit: 10,//分页显示数
-			        nickname: '',
-			        enabled: '',
-			        searchKey: '',
-			        searchValue: '',
-			        companyId: '',
-			        deptId: ''
-		        },
-
 				value: '',
 				options: [{
 					value: '选项1',
@@ -185,7 +172,7 @@
 					'中文名称',
 					'英文名称',
 					'类别',
-					'状态',
+					'信息状态',
 					'版本',
 					'录入人机构',
 					'录入人',
@@ -210,7 +197,7 @@
 						prop: 'M_TYPE'
 					},
 					{
-						label: '状态',
+						label: '信息状态',
 						prop: 'STATUS'
 					},
 					{
@@ -240,37 +227,36 @@
 				],
 				companyId: '',
 				deptId: '',
-				selUser: [],
+				selMenu: [],
 				'活动': true,
 				'不活动': false,
 				'男': true,
 				'女': false,
 				methodsList: [],
-				selMenu: [],
 				search: false,
 				show: false,
 				down: true,
 				up: false,
 				isShow: false,
 				ismin: true,
-				
+				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: { //点击高级搜索后显示的内容
 					nickname: '',
 					enabled: '',
 					createTime: ''
 				},
-				//tree
-
 				page: { //分页显示
 					currentPage: 1,
 					pageSize: 10,
 					totalCount: 0
 				},
 				aaaData: [],
+				testingForm: {}//修改子组件时传递数据
 			}
 		},
 
 		methods: {
+			//表格滚动加载
 			loadMore () {
 			   if (this.loadSign) {
 			     this.loadSign = false
@@ -285,25 +271,24 @@
 //			     console.log('到底了', this.page.currentPage)
 			   }
 			 },
-			tableControle(data) {
+			tableControle(data) {//控制表格列显示隐藏
 				this.checkedName = data;
 			},
-			sizeChange(val) {
+			sizeChange(val) {//分页，总页数
 				this.page.pageSize = val;
 				this.requestData();
 			},
-			currentChange(val) {
+			currentChange(val) {//分页，当前页
 				this.page.currentPage = val;
 				this.requestData();
 			},
-			searchinfo(index) {
+			searchinfo(index) {//高级查询
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
 				this.requestData();
 			},
-			//添加检验/检测方法编号
-			openAddMgr() {
-				this.aaaData = [{
+			openAddMgr() {//添加检验/检测方法编号数据
+				this.testingForm = {
 					VERSION: '1',
 					STATUS: '活动',
 					M_NUM: 'TRO10001',
@@ -315,12 +300,11 @@
 					ENTERDATE: '',
 					CHANGEBY: '',
 					CHANGEDATE: '',
-				}];
-				this.$refs.child.visible();
+				};
+				this.$refs.child.childMethods();
 			},
-			//修改检验/检测方法编号
-			modify() {
-				this.aaaData = this.selUser;
+			modify() {//修改检验/检测方法编号数据
+				this.aaaData = this.selMenu;
 				if(this.aaaData.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
@@ -334,6 +318,7 @@
 					});
 					return;
 				} else {
+					this.testingForm = this.selMenu[0]; 
 					this.$refs.child.detail();
 				}
 			},
@@ -345,7 +330,7 @@
 			},
 			// 删除
 			deluserinfo() {
-				var selData = this.selUser;
+				var selData = this.selMenu;
 				if(selData.length == 0) {
 					this.$message({
 						message: '请您选择要删除的数据',
@@ -415,8 +400,8 @@
 				}
 				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 			},
-			SelChange(val) {
-				this.selUser = val;
+			SelChange(val) {//选中值后赋值给一个自定义的数组：selMenu
+				this.selMenu = val;
 			},
 			requestData(index) {//高级查询字段
 				var data = {
@@ -429,13 +414,11 @@
 					M_ENAME: this.searchList.M_ENAME,
 					M_TYPE: this.searchList.M_TYPE,
 					STATUS: this.searchList.STATUS,
-
 				}
 				var url = '/api/api-apps/app/inspectionMet';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(res);
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -457,13 +440,10 @@
 					}
 					
 					this.methodsList = newarr;
-//					this.methodsList = res.data.data;
-//					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
 				
 			},
 
-			handleNodeClick(data) {},
 			formatter(row, column) {
 				return row.enabled;
 			},

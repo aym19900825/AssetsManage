@@ -22,9 +22,9 @@
 								<el-row :gutter="20" class="pb10">
 									<el-col :span="3" class="pull-right">
 										<el-input v-model="CUSTOMER.STATUS" :disabled="true">
-											<template slot="prepend">状态</template>
+											<template slot="prepend">信息状态</template>
 										</el-input>
-										<!-- <el-select v-model="CUSTOMER.STATUS" placeholder="请选择状态">
+										<!-- <el-select v-model="CUSTOMER.STATUS" placeholder="请选择信息状态">
 											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
 										</el-select> -->
@@ -131,6 +131,7 @@
 										<font>新建行</font>
 									</el-button>
 								</div>
+<<<<<<< HEAD
 								<!-- <el-table :data="CUSTOMER.CUSTOMER_QUALIFICATIONList" row-key="id" highlight-current-row style="width: 100%" @cell-click="iconOperation">
 									<el-table-column prop="iconOperation" label="" width="50px">
 										<template slot-scope="scope">
@@ -171,7 +172,7 @@
         											<span v-else>{{scope.row.ACTIVE_DATE}}</span>
         									</template>
         							</el-table-column>
-        							<el-table-column prop="STATUS" label="状态" width="150px">
+        							<el-table-column prop="STATUS" label="信息状态" width="150px">
         									<template slot-scope="scope">
         											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="請輸入內容">
         											</el-input>
@@ -186,6 +187,8 @@
         									</template>
         							</el-table-column>
 								</el-table> -->
+=======
+>>>>>>> 6c4f006b9b44fe98a104fad12da731aebbaf981f
 								<el-form :model="CUSTOMER.CUSTOMER_QUALIFICATIONList">
 					                <el-form-item>
 					                	<el-row :gutter="20">
@@ -202,7 +205,7 @@
 					                            <el-form-item label="资质有效期" ></el-form-item>
 					                        </el-col>
 					                        <el-col :span="3">
-					                            <el-form-item label="状态" ></el-form-item>
+					                            <el-form-item label="信息状态" ></el-form-item>
 					                        </el-col>
 					                        <el-col :span="3">
 					                            <el-form-item label="备注" ></el-form-item>
@@ -228,7 +231,7 @@
 					                            <el-input type="text"  placeholder="资质有效期" v-model="item.ACTIVE_DATE"></el-input>
 					                        </el-col>
 					                        <el-col :span="3">
-					                            <el-input type="text"  placeholder="状态" v-model="item.STATUS"></el-input>
+					                            <el-input type="text"  placeholder="信息状态" v-model="item.STATUS"></el-input>
 					                        </el-col> 
 					                        <el-col :span="3">
 					                            <el-input type="text"  placeholder="备注" v-model="item.MEMO"></el-input>
@@ -316,6 +319,18 @@
 			        var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
 			        if(!reg.test(value)){
 			            callback(new Error('请输入有效的邮箱'));
+			        }else{
+			        	callback();
+			        }
+		        }
+            };
+            var validateZipcode = (rule, value, callback) => {
+                if (value === '') {
+		            callback(new Error('邮政编码不能为空'));
+		        } else {
+			        var reg= /^[1-9][0-9]{5}$/;
+			        if(!reg.test(value)){
+			            callback(new Error('请输入有效的邮政编码'));
 			        }else{
 			        	callback();
 			        }
@@ -413,6 +428,11 @@
 						required: true,
 						trigger: 'blur',
 						validator: validateEmail,
+					}],
+					ZIPCODE:[{
+						required: true,
+						trigger: 'blur',
+						validator: validateZipcode,
 					}],
 				},
 				//tree

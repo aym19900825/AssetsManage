@@ -101,7 +101,7 @@
 								</el-col>
 								<el-col :span="3">
 
-									<el-select v-model="searchList.STATUS" placeholder="请选择状态">
+									<el-select v-model="searchList.STATUS" placeholder="请选择信息状态">
 										<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 										</el-option>
 
@@ -147,7 +147,7 @@
 								</el-table-column>
 								<el-table-column label="样品型号" sortable width="200px" prop="ITEM_MODEL" v-if="this.checkedName.indexOf('样品型号')!=-1">
 								</el-table-column>
-								<el-table-column label="样品状态" sortable width="200px" prop="ITEM_STATUS" v-if="this.checkedName.indexOf('样品状态')!=-1">
+								<el-table-column label="样品信息状态" sortable width="200px" prop="ITEM_STATUS" v-if="this.checkedName.indexOf('样品信息状态')!=-1">
 								</el-table-column>
 								<el-table-column label="检测依据" width="200px" prop="REMARKS" sortable  v-if="this.checkedName.indexOf('检测依据')!=-1">
 								</el-table-column>
@@ -159,7 +159,7 @@
 								</el-table-column>
 								<el-table-column label="主检组" width="200px" prop="MAINGROUP" sortable  v-if="this.checkedName.indexOf('主检组')!=-1">
 								</el-table-column>
-								<el-table-column label="状态" width="200px" prop="STATUS" sortable v-if="this.checkedName.indexOf('状态')!=-1">
+								<el-table-column label="信息状态" width="200px" prop="STATUS" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
 								</el-table-column>
 								<el-table-column label="录入人" width="200px" prop="ENTERBY" sortable  v-if="this.checkedName.indexOf('录入人')!=-1">
 								</el-table-column>
@@ -231,13 +231,13 @@
 					'生产单位名称',
 					'样品名称',
 					'样品型号',
-					'样品状态',
+					'样品信息状态',
 					'检测依据',
 					'完成日期',
 					'完成方式',
 					'检测报告编号',
 					'主检组',
-					'状态',
+					'信息状态',
 					'录入人',
 					'录入时间',
 					'版本'
@@ -263,7 +263,7 @@
 						prop: 'ITEM_MODEL'
 					},
 					{
-						label: '样品状态',
+						label: '样品信息状态',
 						prop: 'ITEM_STATUS'
 					},
 					{
@@ -287,7 +287,7 @@
 						prop: 'MAINGROUP'
 					},
 					{
-						label: '状态',
+						label: '信息状态',
 						prop: 'STATUS'
 					},
 					{

@@ -122,13 +122,13 @@
 									</el-button>
 								</div>
 
-								<el-table :data="worlplanlist" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'worlplanlist', order: 'descending'}" v-loadmore="loadMore">
+								<el-table :data="worlplanlist" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;"  :default-sort="{prop:'worlplanlist', order: 'descending'}" v-loadmore="loadMore">
 
 								    <el-table-column prop="iconOperation" fixed width="50px">
-								      <template slot-scope="scope">
-								      	<i class="el-icon-check" v-show="scope.row.isEditing">
+								      <template slot-scope="scope" >
+								      	<i class="el-icon-check" v-show="scope.row.isEditing" @click="iconOperation(scope.row)">
 								      	</i>
-								      	<i class="el-icon-edit" v-show="!scope.row.isEditing">
+								      	<i class="el-icon-edit" v-show="!scope.row.isEditing" @click="iconOperation(scope.row)">
 								      	</i>
 								      </template>
 								    </el-table-column>
@@ -157,19 +157,11 @@
 								      </template>
 								    </el-table-column>
 
-<<<<<<< HEAD
-    <el-table-column prop="MEMO" label="近三年监督抽查情况" sortable width="260px">
-      <template slot-scope="scope">
-        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.MODEL}}</span>
-      </template>
-    </el-table-column>
-=======
-								    <el-table-column prop="V_NAME" label="生产企业名称" sortable width="120px">
+								    <el-table-column prop="MEMO" label="近三年监督抽查情况" sortable width="260px">
 								      <template slot-scope="scope">
-								        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.V_NAME" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.V_NAME}}</span>
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.MODEL}}</span>
 								      </template>
 								    </el-table-column>
->>>>>>> 9c532c7776174749c8532b631a08cf0378bd1a70
 
 								    <el-table-column prop="CHECKCOST" label="检测费用" sortable width="120px">
 								      <template slot-scope="scope">
@@ -746,35 +738,38 @@
 				basisList: [], //检测依据
 				proTestList: [], //项目检测和要求
 				isEditList: false,  //年度计划列表编辑装填
-				editPlan: {}  //编辑中的内容
+				editPlan: {},  //编辑中的内容
+				frontId: 1 //前端年度计划列表的唯一主键
 			};
 		},
 		methods: {
-   			
    			//年度计划表格函数
-   			iconOperation(row, column, cell, event){
-		        if(column.property ==="iconOperation"){
-		            row.isEditing = !row.isEditing;
-		            this.isEditList = row.isEditing;
-		        	
-		        	console.log(row.isEditing);
-		            if(!row.isEditing){
-		            	//保存
-		            	var worlplanlist = this.worlplanlist;
-		        		row.WORLPLANLINE_PROJECTList = JSON.parse(JSON.stringify(this.proTestList));
-		        		row.WORLPLANLINE_BASISList = JSON.parse(JSON.stringify(this.basisList));
-						console.log(row);
-		        	}else{
-		        		//编辑
-		        		this.editPlan = row;
-		        		this.proTestList = row.WORLPLANLINE_PROJECTList;
-				   		this.basisList = row.WORLPLANLINE_BASISList;
-				   		console.log(row);
-		        	}
-		        	
-		        }
-		    },
+   			iconOperation(row){
+   				row.isEditing = !row.isEditing;
+	            this.isEditList = row.isEditing;
 
+	            //如果有编辑状态的数据，保存上一条处于编辑状态的数据
+            	var editId = this.editPlan.frontId;
+            	if(editId){
+            		var worlplanlist = this.worlplanlist;
+	            	for(var i=0, len=worlplanlist.length; i<len; i++){
+	            		if(editId == worlplanlist[i].frontId){
+	            			worlplanlist[i].WORLPLANLINE_PROJECTList = JSON.parse(JSON.stringify(this.proTestList));
+	            			worlplanlist[i].WORLPLANLINE_BASISList = JSON.parse(JSON.stringify(this.basisList));
+	            			worlplanlist[i].isEditing = false;
+	            		}
+	            	}
+            	}
+            	
+	            if(row.isEditing){
+	            	//编辑
+	        		this.editPlan = row;
+	        		this.proTestList = row.WORLPLANLINE_PROJECTList;
+			   		this.basisList = row.WORLPLANLINE_BASISList;
+	        	}else{
+	        		this.editPlan = {};
+	        	}
+	        },
    			//上传文件 Begin
 			handleRemove(file, fileList) {
 			},
@@ -879,8 +874,10 @@
 						'REASION': '',
 						'MEMO': '',
 						'isEditing': true,
+						'frontId': this.frontId++
 					};
 					this.worlplanlist.unshift(obj);
+					this.editPlan = this.worlplanlist[0];
 					this.basisList = [];
 					this.proTestList = [];
 					this.isEditList = true;
@@ -988,6 +985,11 @@
 				this.$axios.get('/api/api-apps/app/workplan/' + dataid, {}).then((res) => {
 					this.WORKPLAN = res.data;
 					this.worlplanlist = res.data.WORLPLANLINEList;
+					var worlplanlist = res.data.WORLPLANLINEList;
+					for(var i=0, len=worlplanlist.length; i<len; i++){
+						worlplanlist[i].isEditing = false;
+						worlplanlist[i].frontId = this.frontId++;
+					}
 					this.basisList = res.data.WORLPLANLINEList.length > 0 ? res.data.WORLPLANLINEList[0].WORLPLANLINE_BASISList : [];
 					this.proTestList = res.data.WORLPLANLINEList.length > 0 ? res.data.WORLPLANLINEList[0].WORLPLANLINE_PROJECTList : [];
 					

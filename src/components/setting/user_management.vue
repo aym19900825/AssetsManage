@@ -115,13 +115,13 @@
 								</el-table-column>
 								<el-table-column label="姓名" sortable width="200px" prop="nickname" v-if="this.checkedName.indexOf('姓名')!=-1">
 								</el-table-column>
-								<el-table-column label="性别" sortable width="100px" prop="sex" :formatter="sexName" v-if="this.checkedName.indexOf('性别')!=-1">
-								</el-table-column>
-								<el-table-column label="机构" sortable width="200px" prop="deptName" v-if="this.checkedName.indexOf('机构')!=-1">
+								<!--<el-table-column label="性别" sortable width="100px" prop="sex" :formatter="sexName" v-if="this.checkedName.indexOf('性别')!=-1">
+								</el-table-column>-->
+								<el-table-column label="机构" sortable width="150px" prop="deptName" v-if="this.checkedName.indexOf('机构')!=-1">
 								</el-table-column>
 								<el-table-column label="公司" sortable width="200px" prop="companyName" v-if="this.checkedName.indexOf('公司')!=-1">
 								</el-table-column>
-								<el-table-column label="状态" sortable width="200px" prop="enabled" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
+								<el-table-column label="状态" sortable width="150px" prop="enabled" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
 								<el-table-column label="创建时间" width="200px" prop="createTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('创建时间')!=-1">
 								</el-table-column>
@@ -167,7 +167,6 @@
 				checkedName: [
 					'账号',
 					'姓名',
-					'性别',
 					'机构',
 					'状态',
 					'创建时间'
@@ -180,10 +179,7 @@
 						label: '姓名',
 						prop: 'nickname'
 					},
-					{
-						label: '性别',
-						prop: 'sexName'
-					},
+					
 					{
 						label: '机构',
 						prop: 'deptName'
@@ -319,7 +315,7 @@
 					address: '',
 					tips: ''
 				}];
-				this.$refs.child.detail();
+				this.$refs.child.visible();
 			},
 			//修改用戶
 			modify() {
@@ -343,7 +339,7 @@
 						this.aaaData[0].roleId.push(roles[i].id);
 					}
 					//					console.log(this.aaaData[0].roleId);
-					this.$refs.child.detail();
+					this.$refs.child.detail(this.aaaData[0].id);
 				}
 			},
 			//高级查询

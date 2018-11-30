@@ -363,7 +363,7 @@
 					CHANGEBY: '',
 					CHANGEDATE: ''
 				}];
-				this.$refs.child.detail();
+				this.$refs.child.visible();
 			},
 			//修改
 			modify() {

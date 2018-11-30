@@ -119,7 +119,7 @@
 									
 									<el-col :span="8">
 										<el-form-item label="性別" prop="sex">
-											<el-radio-group v-model="dataInfo.sexName">
+											<el-radio-group v-model="dataInfo.sex">
 												<el-radio label="男"></el-radio>
 												<el-radio label="女"></el-radio>
 											</el-radio-group>
@@ -224,8 +224,10 @@
 									<el-table-column prop="c_date" label="资质有效期" sortable width="120px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'qualifications.'+scope.$index + '.c_date'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.c_date" placeholder="请输入要求">		
-											</el-input>
+											<!--<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.c_date" placeholder="请输入要求">		
+											</el-input>-->
+											<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.c_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+											</el-date-picker>
 											<span v-else="v-else">{{scope.row.c_date}}</span>
 											</el-form-item>
 										</template>
@@ -332,6 +334,34 @@
 									</el-table-column>
 
 								</el-table>
+							</el-collapse-item>
+							<el-collapse-item title="其他" name="4">
+								
+								<!-- 第一行 -->
+								<el-row :gutter="30">
+									<el-col :span="8">
+										<el-form-item label="录入人" prop="ENTERBY">
+											<el-input v-model="dataInfo.ENTERBY" :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="录入时间" prop="ENERDATE">
+											<el-input v-model="dataInfo.ENERTDATE" :disabled="edit">
+											</el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="修改人" prop="changeby">
+											<el-input v-model="dataInfo.changeby" :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="修改时间" prop="changedate">
+											<el-input v-model="dataInfo.changedate" :disabled="edit">
+											</el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
 							</el-collapse-item>
 							</el-collapse>
 					</div>
@@ -507,7 +537,7 @@
 					idnumber: [{required: true,trigger: 'blur',message: '必填',}],
 					phone: [{required: true,trigger: 'blur',validator: validatePass7}],
 					email: [{required: true,trigger: 'blur',validator: validatePass8,}],
-					sex:[{required: true,trigger: 'change',message: '必填'}],
+					sex:[{required: true,trigger: 'blur',message: '必填'}],
 					ispermit_authorization:[{required: true,trigger: 'change',message: '必填'}],//授权
 					islogin:[{required: true,trigger: 'change',message: '必填'}],//登陆
 					mac_address:[{required: true,trigger: 'blur',message: '必填',}],
@@ -598,6 +628,21 @@
 			},
 			//点击按钮显示弹窗
 			visible() {
+				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+					this.dataInfo.ENTERBY=res.data.nickname;
+					var date=new Date();
+					this.dataInfo.ENERTDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+				}).catch((err)=>{
+					this.$message({
+						message:'网络错误，请重试',
+						type:'error'
+					})
+				})
+//				this.statusshow1 = true;
+//				this.statusshow2 = false;
+				this.addtitle = true;
+				this.modifytitle = false;
+				this.modify=false;
 				this.show = true;
 			},
 			// 这里是修改
@@ -672,8 +717,9 @@
 				this.$refs.dataInfo.validate((valid) => {
 					if(valid) {
 						var dataInfo = this.dataInfo;
-					dataInfo.sex = dataInfo.sexName == '男' ? 1 : 0;
-							console.log(111)
+						dataInfo.sex = dataInfo.sexName == '男' ? 1 : 0;
+					
+						
 							console.log(dataInfo.roleId);
 						if(dataInfo.roleId.length > 0) {
 							var arr = [];
@@ -692,6 +738,7 @@
 							dataInfo.roleId = '';
 							dataInfo.roles = [];
 						}
+							console.log(111);
 						console.log(this.dataInfo);
 						var url = '/api/api-user/users/saveOrUpdate';
 						this.$axios.post(url, this.dataInfo).then((res) => {
@@ -712,6 +759,8 @@
 							});
 						});
 					} else {
+						
+						console.log(this.dataInfo)
 						this.$message({
 								message: '有必填项，请重新填写',
 								type: 'error'

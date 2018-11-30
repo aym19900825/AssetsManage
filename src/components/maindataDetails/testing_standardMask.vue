@@ -200,7 +200,7 @@
 						S_ENGNAME: '',
 						RELEASETIME: '',
 						STARTETIME: '',
-						VERSION:'1',
+						VERSION:1,
 						RELEASE_UNIT: '',
 						DEPARTMENT: '',
 						ENTERBY: '',
@@ -359,7 +359,10 @@
 				this.modifytitle = false;
 				this.modify=false;
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+					console.log(res);
 					this.dataInfo.DEPARTMENT=res.data.companyName;
+					console.log(1111);
+					console.log(this.dataInfo.DEPARTMENT)
 					this.dataInfo.RELEASE_UNIT=res.data.deptName;
 					this.dataInfo.ENTERBY=res.data.nickname;
 					var date=new Date();

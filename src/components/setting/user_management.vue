@@ -339,7 +339,7 @@
 						this.aaaData[0].roleId.push(roles[i].id);
 					}
 					//					console.log(this.aaaData[0].roleId);
-					this.$refs.child.detail();
+					this.$refs.child.detail(this.aaaData[0].id);
 				}
 			},
 			//高级查询

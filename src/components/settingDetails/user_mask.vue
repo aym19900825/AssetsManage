@@ -4,7 +4,8 @@
 		<div class="mask_div" v-show="show">
 			<!---->
 			<div class="mask_title_div clearfix">
-				<div class="mask_title">添加用户</div>
+				<div class="mask_title" v-show="addtitle">添加用户</div>
+				<div class="mask_title" v-show="modifytitle">修改用户</div>
 				<div class="mask_anniu">
 					<!--<span class="mask_span">
 						<i class="icon-minimize"></i>
@@ -22,40 +23,7 @@
 				<el-form status-icon :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="100px" status-icon inline-message class="demo-dataInfo">
 					<div class="accordion">
 						<el-collapse v-model="activeNames" @change="handleChange">
-							<!--<el-collapse-item title="基础信息" name="1">
-								<el-row :gutter="30">
-									<el-col :span="24">
-										<el-form-item label="所属组织" prop="companyName">
-											<el-input v-model="dataInfo.companyName" :disabled="edit">
-												<el-button slot="append" icon="el-icon-search" @click="getCompany"></el-button>
-											</el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row :gutter="30">
-									<el-col :span="24">
-										<el-form-item label="所属机构" prop="deptName">
-											<el-input v-model="dataInfo.deptName" :disabled="edit">
-												<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
-											</el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-
-								<el-row :gutter="30">
-									<el-col :span="12">
-										<el-form-item label="登录名称" prop="dataInfoname">
-											<el-input class = "dataInfonames" v-model="dataInfo.dataInfoname" ></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="12">
-										<el-form-item label="登录口令" prop="password">
-											<el-input type="password" v-model="dataInfo.password"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-							</el-collapse-item>-->
-
+						
 							<el-collapse-item title="用户基本资料" name="1">
 								<el-row :gutter="20" class="pb10">
 									<el-col :span="3" class="pull-right">
@@ -139,7 +107,7 @@
 									</el-col>
 									<el-col :span="8">
 										
-										<el-form-item label="是否允许授权">
+										<el-form-item label="是否允许授权" prop="ispermit_authorization">
 											 <el-radio-group v-model="dataInfo.ispermit_authorization">
     											<el-radio label="是"></el-radio>
     											<el-radio label="否"></el-radio>
@@ -147,6 +115,27 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
+								<el-row :gutter="30">
+									
+									<el-col :span="8">
+										<el-form-item label="性別" prop="sex">
+											<el-radio-group v-model="dataInfo.sexName">
+												<el-radio label="男"></el-radio>
+												<el-radio label="女"></el-radio>
+											</el-radio-group>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="是否允许登录" prop="islogin">
+											<el-radio-group v-model="dataInfo.islogin">
+    											<el-radio label="是"></el-radio>
+    											<el-radio label="否"></el-radio>
+  											</el-radio-group>
+										</el-form-item>
+									</el-col>
+									
+								</el-row>
+
 								<el-row :gutter="30">
 									
 									<el-col :span="8">
@@ -158,7 +147,7 @@
 											</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="学历">
+										<el-form-item label="学历" prop="education">
 										<el-select v-model="dataInfo.education" placeholder="硕士" >
 											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
@@ -166,7 +155,7 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="角色">
+										<el-form-item label="角色" prop="roleId">
 											<el-select v-model="dataInfo.roleId" multiple>
 												<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.name"></el-option>
 											</el-select>
@@ -193,7 +182,7 @@
 									</el-button>
 								</div>
 
-								<el-table :data="dataInfo.user_qualifications" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.user_qualifications', order: 'descending'}">
+								<el-table :data="dataInfo.qualifications" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.qualifications', order: 'descending'}">
 
 									<el-table-column prop="iconOperation" fixed label="" width="50px">
 										<template slot-scope="scope">
@@ -204,7 +193,7 @@
 						            
 						            <el-table-column prop="step" label="序号" sortable width="120px">
 										<template slot-scope="scope">
-											<el-form-item :prop="'user_qualifications.'+scope.$index + '.step'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+											<el-form-item :prop="'qualifications.'+scope.$index + '.step'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.step" placeholder="请输入要求">		
 											</el-input>
 											<span v-else="v-else">{{scope.row.step}}</span>
@@ -214,7 +203,7 @@
 						            
 									<el-table-column prop="c_num" label="证书编号" sortable width="120px">
 										<template slot-scope="scope">
-											<el-form-item :prop="'user_qualifications.'+scope.$index + '.c_num'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+											<el-form-item :prop="'qualifications.'+scope.$index + '.c_num'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.c_num" placeholder="请输入委托方名称">
 											</el-input>
 											<span v-else="v-else">{{scope.row.c_num}}</span>
@@ -224,7 +213,7 @@
 
 									<el-table-column prop="P_DESC" label="证书名称" sortable width="120px">
 										<template slot-scope="scope">
-											<el-form-item :prop="'user_qualifications.'+scope.$index + '.c_name'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+											<el-form-item :prop="'qualifications.'+scope.$index + '.c_name'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.c_name" placeholder="请输入委托方名称">
 											</el-input>
 											<span v-else="v-else">{{scope.row.c_name}}</span>
@@ -234,7 +223,7 @@
 
 									<el-table-column prop="c_date" label="资质有效期" sortable width="120px">
 										<template slot-scope="scope">
-											<el-form-item :prop="'user_qualifications.'+scope.$index + '.c_date'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+											<el-form-item :prop="'qualifications.'+scope.$index + '.c_date'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.c_date" placeholder="请输入要求">		
 											</el-input>
 											<span v-else="v-else">{{scope.row.c_date}}</span>
@@ -244,7 +233,7 @@
 
 									<el-table-column prop="status" label="信息状态" sortable width="120px">
 										<template slot-scope="scope">
-											<el-form-item :prop="'user_qualifications.'+scope.$index + '.status'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+											<el-form-item :prop="'qualifications.'+scope.$index + '.status'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.status" placeholder="请输入要求">
 											</el-input>
 											<span v-else="v-else">{{scope.row.status}}</span>
@@ -263,7 +252,7 @@
 									</el-table-column>-->
 									<el-table-column fixed="right" label="操作" width="120">
 										<template slot-scope="scope">
-											<el-button @click.native.prevent="deleteRow(scope.$index,dataInfo.user_qualifications)" type="text" size="small">
+											<el-button @click.native.prevent="deleteRow(scope.$index,dataInfo.qualifications)" type="text" size="small">
 												移除
 											</el-button>
 										</template>
@@ -280,7 +269,7 @@
 									</el-button>
 								</div>
 
-								<el-table :data="dataInfo.user_traings" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.user_qualifications', order: 'descending'}">
+								<el-table :data="dataInfo.traings" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.traings', order: 'descending'}">
 
 									<el-table-column prop="iconOperation" fixed label="" width="50px">
 										<template slot-scope="scope">
@@ -291,7 +280,7 @@
 						
 									<el-table-column prop="step" label="序号" sortable width="120px">
 										<template slot-scope="scope">
-											<el-form-item :prop="'user_traings.'+scope.$index + '.step'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+											<el-form-item :prop="'traings.'+scope.$index + '.step'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.step" placeholder="请输入要求">		
 											</el-input>
 											<span v-else="v-else">{{scope.row.step}}</span>
@@ -301,9 +290,11 @@
 						
 									<el-table-column prop="t_date" label="培训时间" sortable width="120px">
 										<template slot-scope="scope">
-											<el-form-item :prop="'user_traings.'+scope.$index + '.t_date'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.t_date" placeholder="请输入委托方名称">
-											</el-input>
+											<el-form-item :prop="'traings.'+scope.$index + '.t_date'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+											<!--<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.t_date" placeholder="请输入委托方名称">
+											</el-input>-->
+											<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.t_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+											</el-date-picker>
 											<span v-else="v-else">{{scope.row.t_date}}</span>
 											</el-form-item>
 										</template>
@@ -311,7 +302,7 @@
 
 									<el-table-column prop="t_description" label="培训内容" sortable width="120px">
 										<template slot-scope="scope">
-											<el-form-item :prop="'user_traings.'+scope.$index + '.t_description'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+											<el-form-item :prop="'traings.'+scope.$index + '.t_description'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.t_description" placeholder="请输入委托方名称">
 											</el-input>
 											<span v-else="v-else">{{scope.row.t_description}}</span>
@@ -323,7 +314,7 @@
 
 									<el-table-column prop="status" label="信息状态" sortable width="120px">
 										<template slot-scope="scope">
-											<el-form-item :prop="'user_traings.'+scope.$index + '.status'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+											<el-form-item :prop="'traings.'+scope.$index + '.status'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.status" placeholder="请输入要求">
 											</el-input>
 											<span v-else="v-else">{{scope.row.status}}</span>
@@ -334,7 +325,7 @@
 									
 									<el-table-column fixed="right" label="操作" width="120">
 										<template slot-scope="scope">
-											<el-button @click.native.prevent="deleteRow(scope.$index,dataInfo.user_traings)" type="text" size="small">
+											<el-button @click.native.prevent="deleteRow(scope.$index,dataInfo.traings)" type="text" size="small">
 												移除
 											</el-button>
 										</template>
@@ -407,29 +398,6 @@
 		//		props: ['dataInfo','page'],
 
 		data() {
-			
-			var validatePass3 = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('必填'));
-				} else {
-					callback();
-				}
-			};
-			var validatePass4 = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('必填'));
-				} else {
-					callback();
-				}
-			};
-			var validatePass5 = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('必填'));
-				} else {
-					callback();
-				}
-			};
-
 			var validatePass6 = (rule, value, callback) => { //验证身份证号
 				if(value && (!(/\d{17}[\d|x]|\d{15}/).test(value) || (value.length !== 15 && value.length !== 18))) {
 					callback(new Error('身份证号码不符合规范'))
@@ -450,18 +418,24 @@
 					}
 				}
 			};
-			//          var validatePass8 = (rule, value, callback) => {
-			//              if (value && (!(/^[0-9]{6}$/).test(value))) {
-			//				    callback(new Error('邮政编码不符合规范'))
-			//				} else {
-			//				    callback()
-			//				}
-			//          };
+			        
+		 var validatePass8 = (rule, value, callback) => {//验证电子邮箱
+		        if (value === '') {
+		            callback(new Error('电子邮箱不能为空'));
+		        } else {
+			        var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+			        if(!reg.test(value)){
+			            callback(new Error('请输入有效的邮箱'));
+			        }else{
+			        	callback();
+			        }
+		        }
+		    };
 			return {
 				dataInfo: {
 					status: '活动',
-					user_traings: [],
-					user_qualifications: [],
+					traings: [],
+					qualifications: [],
 				},
 				options: [{
 					value: '高中',
@@ -520,34 +494,24 @@
 				activeNames: ['1','2','3'], //手风琴数量
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
-
+				addtitle: true, //添加弹出框titile
+				modifytitle: false, //修改弹出框titile
+				modify: false,
 				rules: {
 					deptName: [{ required: true, message: '必填', trigger: 'blur' }],//名称
+					deptName: [{ required: true, message: '必填', trigger: 'blur' }],//名称
 					education:[{required: true, message: '必填', trigger: 'change'}],
+					roleId: [{required: true,trigger: 'blur',message: '必填',}],
+					username: [{required: true,trigger: 'blur',message: '必填',}],
+					password: [{required: true,trigger: 'blur',message: '必填',}],
+					idnumber: [{required: true,trigger: 'blur',message: '必填',}],
 					phone: [{required: true,trigger: 'blur',validator: validatePass7}],
-					roleId: [{
-						required: true,trigger: 'change',validator: validatePass3,}],
-					dataInfoname: [{
-						required: true,
-						trigger: 'blur', //触发事件，blur是鼠标移除是触发，change是值变动时触发。
-						validator: validatePass4,
-					}],
-					password: [{
-						required: true,
-						trigger: 'blur',
-						validator: validatePass5,
-					}],
-					idnumber: [{
-						//						required: true,
-						trigger: 'blur',
-						validator: validatePass6,
-					}],
-					
-					//					email: [{
-					////						required: true,
-					//						trigger: 'blur',
-					//						validator: validatePass8,
-					//					}]
+					email: [{required: true,trigger: 'blur',validator: validatePass8,}],
+					sex:[{required: true,trigger: 'change',message: '必填'}],
+					ispermit_authorization:[{required: true,trigger: 'change',message: '必填'}],//授权
+					islogin:[{required: true,trigger: 'change',message: '必填'}],//登陆
+					mac_address:[{required: true,trigger: 'blur',message: '必填',}],
+					ip_address:[{required: true,trigger: 'blur',message: '必填',}]
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -581,7 +545,7 @@
 					//少附件
 					isEditing: true
 				};
-				this.dataInfo.user_qualifications.push(obj);
+				this.dataInfo.qualifications.push(obj);
 			},
 			addfield2() {
 				var obj = {
@@ -591,7 +555,7 @@
 					status: '',
 					isEditing: true
 				};
-				this.dataInfo.user_traings.push(obj);
+				this.dataInfo.traings.push(obj);
 			},
 			//刪除新建行
 			deleteRow(index,rows) {//Table-操作列中的删除行
@@ -637,10 +601,38 @@
 				this.show = true;
 			},
 			// 这里是修改
-			detail() {
+//			detail() {
+//				$('.usernames .el-input__inner').attr('disabled',true);
+//				this.show = true;
+//				
+//			},
+			detail(dataid) {
+				this.addtitle = false;
+				this.modifytitle = true;
+				this.modify = true;
 				$('.usernames .el-input__inner').attr('disabled',true);
-				this.show = true;
-				
+				var usersUrl = '/api/api-user/users/currentMap'
+				this.$axios.get(usersUrl, {}).then((res) => {
+					this.dataInfo.CHANGEBY = res.data.nickname;
+					var date = new Date();
+					this.dataInfo.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+				var url = '/api/api-user/users/' + dataid;
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+					this.dataInfo = res.data;
+					this.show = true;
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
 			},
 			//点击关闭按钮
 			close() {
@@ -680,7 +672,7 @@
 				this.$refs.dataInfo.validate((valid) => {
 					if(valid) {
 						var dataInfo = this.dataInfo;
-//						dataInfo.sex = dataInfo.sexName == '男' ? 1 : 0;
+					dataInfo.sex = dataInfo.sexName == '男' ? 1 : 0;
 							console.log(111)
 							console.log(dataInfo.roleId);
 						if(dataInfo.roleId.length > 0) {
@@ -720,7 +712,10 @@
 							});
 						});
 					} else {
-						return false;
+						this.$message({
+								message: '有必填项，请重新填写',
+								type: 'error'
+							});
 					}
 				})
 			},

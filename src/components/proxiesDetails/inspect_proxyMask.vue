@@ -712,8 +712,8 @@
 					COMPDATE: [{ required: true, message: '必填', trigger: 'blur' }],//完成日期
 					PROXYNUM: [{ required: true, message: '必填', trigger: 'blur' }],//编号
 					REPORT_QUALITY: [{ required: true, message: '必填', trigger: 'blur' }],//交委托方分数
-					REPORT_MODE: [{ required: true, message: '必填', trigger: 'blur' }],//发送方式
-					REPORT_FOMAT: [{ required: true, message: '必填', trigger: 'blur' }],//格式
+					REPORT_MODE: [{ required: true, message: '必填', trigger: 'change' }],//发送方式
+					REPORT_FOMAT: [{ required: true, message: '必填', trigger: 'change' }],//格式
 					MAINGROUP: [{ required: true, message: '必填', trigger: 'change' }],//主检组
 					LEADER: [{ required: true, message: '必填', trigger: 'blur' }],//主检负责人
 					MEMO: [{ required: true, message: '必填', trigger: 'blur' }],//备注

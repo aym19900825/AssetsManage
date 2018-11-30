@@ -26,7 +26,7 @@
 						
 							<el-collapse-item title="用户基本资料" name="1">
 								<el-row :gutter="20" class="pb10">
-									<el-col :span="3" class="pull-right">
+									<el-col :span="5" class="pull-right">
 										<el-input v-model="dataInfo.status" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
@@ -157,7 +157,7 @@
 									<el-col :span="8">
 										<el-form-item label="角色" prop="roleId">
 											<el-select v-model="dataInfo.roleId" multiple>
-												<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.name"></el-option>
+												<el-option v-for="data in selectData" :key="data.id" :value="data.id" :label="data.name"></el-option>
 											</el-select>
 										</el-form-item>
 									</el-col>
@@ -224,11 +224,27 @@
 									<el-table-column prop="c_date" label="资质有效期" sortable width="120px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'qualifications.'+scope.$index + '.c_date'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-											<!--<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.c_date" placeholder="请输入要求">		
-											</el-input>-->
 											<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.c_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
 											</el-date-picker>
 											<span v-else="v-else">{{scope.row.c_date}}</span>
+											</el-form-item>
+										</template>
+									</el-table-column>
+									<el-table-column prop="enterby" label="录入人" sortable width="120px">
+										<template slot-scope="scope">
+											<el-form-item :prop="'qualifications.'+scope.$index + '.enterby'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.enterby" placeholder="请输入要求">
+											</el-input>
+											<span v-else="v-else">{{scope.row.enterby}}</span>
+											</el-form-item>
+										</template>
+									</el-table-column>
+									<el-table-column prop="enterdate" label="录入时间" sortable width="120px">
+										<template slot-scope="scope">
+											<el-form-item :prop="'qualifications.'+scope.$index + '.enterdate'" >
+											<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.enterdate" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+											</el-date-picker>
+											<span v-else="v-else">{{scope.row.enterdate}}</span>
 											</el-form-item>
 										</template>
 									</el-table-column>
@@ -290,19 +306,19 @@
 										</template>
 									</el-table-column>
 						
-									<el-table-column prop="t_date" label="培训时间" sortable width="120px">
+									<el-table-column prop="t_date" label="培训时间" sortable width="240px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'traings.'+scope.$index + '.t_date'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 											<!--<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.t_date" placeholder="请输入委托方名称">
 											</el-input>-->
-											<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.t_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+											<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.t_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd hh:mm:ss">
 											</el-date-picker>
 											<span v-else="v-else">{{scope.row.t_date}}</span>
 											</el-form-item>
 										</template>
 									</el-table-column>
 
-									<el-table-column prop="t_description" label="培训内容" sortable width="120px">
+									<el-table-column prop="t_description" label="培训内容" sortable >
 										<template slot-scope="scope">
 											<el-form-item :prop="'traings.'+scope.$index + '.t_description'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.t_description" placeholder="请输入委托方名称">
@@ -340,24 +356,24 @@
 								<!-- 第一行 -->
 								<el-row :gutter="30">
 									<el-col :span="8">
-										<el-form-item label="录入人" prop="ENTERBY">
-											<el-input v-model="dataInfo.ENTERBY" :disabled="edit"></el-input>
+										<el-form-item label="录入人" prop="createby">
+											<el-input v-model="dataInfo.createbyName" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="录入时间" prop="ENERDATE">
-											<el-input v-model="dataInfo.ENERTDATE" :disabled="edit">
+										<el-form-item label="录入时间" prop="createTime">
+											<el-input v-model="dataInfo.createTime" :disabled="edit">
 											</el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="修改人" prop="changeby">
-											<el-input v-model="dataInfo.changeby" :disabled="edit"></el-input>
+										<el-form-item label="修改人" prop="updateby">
+											<el-input v-model="dataInfo.updateby" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="修改时间" prop="changedate">
-											<el-input v-model="dataInfo.changedate" :disabled="edit">
+										<el-form-item label="修改时间" prop="updateTime">
+											<el-input v-model="dataInfo.updateTime" :disabled="edit">
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -521,7 +537,7 @@
 				down: true,
 				up: false,
 				dataInfoitem: [],
-				activeNames: ['1','2','3'], //手风琴数量
+				activeNames: ['1','2','3','4'], //手风琴数量
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				addtitle: true, //添加弹出框titile
@@ -531,7 +547,7 @@
 					deptName: [{ required: true, message: '必填', trigger: 'blur' }],//名称
 					deptName: [{ required: true, message: '必填', trigger: 'blur' }],//名称
 					education:[{required: true, message: '必填', trigger: 'change'}],
-					roleId: [{required: true,trigger: 'blur',message: '必填',}],
+					roles: [{required: true,trigger: 'blur',message: '必填',}],
 					username: [{required: true,trigger: 'blur',message: '必填',}],
 					password: [{required: true,trigger: 'blur',message: '必填',}],
 					idnumber: [{required: true,trigger: 'blur',message: '必填',}],
@@ -551,9 +567,8 @@
 					children: "subDepts",
 					label: "simplename"
 				},
-				selectData: [], //
+				selectData: [], //角色的值
 				getCheckboxData: {},
-				//				aaaData:[]
 			};
 		},
 		methods: {
@@ -572,6 +587,8 @@
 					c_name: '',
 					c_date: '',
 					status:'',
+					enterby:'',
+					enterdate:'',
 					//少附件
 					isEditing: true
 				};
@@ -629,9 +646,10 @@
 			//点击按钮显示弹窗
 			visible() {
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
-					this.dataInfo.ENTERBY=res.data.nickname;
+					this.dataInfo.createby=res.data.id;
+					this.dataInfo.createbyName=res.data.nickname;
 					var date=new Date();
-					this.dataInfo.ENERTDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					this.dataInfo.createTime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{
 					this.$message({
 						message:'网络错误，请重试',
@@ -645,12 +663,6 @@
 				this.modify=false;
 				this.show = true;
 			},
-			// 这里是修改
-//			detail() {
-//				$('.usernames .el-input__inner').attr('disabled',true);
-//				this.show = true;
-//				
-//			},
 			detail(dataid) {
 				this.addtitle = false;
 				this.modifytitle = true;
@@ -658,9 +670,9 @@
 				$('.usernames .el-input__inner').attr('disabled',true);
 				var usersUrl = '/api/api-user/users/currentMap'
 				this.$axios.get(usersUrl, {}).then((res) => {
-					this.dataInfo.CHANGEBY = res.data.nickname;
+					this.dataInfo.changeby = res.data.nickname;
 					var date = new Date();
-					this.dataInfo.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
+					this.dataInfo.changedate = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -669,8 +681,14 @@
 				});
 				var url = '/api/api-user/users/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					this.dataInfo = res.data;
+					
+					this.dataInfo.sex=this.dataInfo.sex?'男':'女';
+					this.dataInfo.roleId = [];
+					var roles = this.dataInfo.roles;
+					for(var i = 0; i < roles.length; i++) {
+						this.dataInfo.roleId.push(roles[i].name);
+					}
 					this.show = true;
 				}).catch((err) => {
 					this.$message({

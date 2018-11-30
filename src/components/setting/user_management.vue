@@ -340,7 +340,7 @@
 					for(var i = 0; i < roles.length; i++) {
 						this.aaaData[0].roleId.push(roles[i].id);
 					}
-					//					console.log(this.aaaData[0].roleId);
+					console.log(this.aaaData[0].roleId);
 					this.$refs.child.detail(this.aaaData[0].id);
 				}
 			},
@@ -526,7 +526,7 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					//					console.log(res)
+					console.log(res)
 					//					this.userList = res.data.data;
 					this.page.totalCount = res.data.count;
 					//总的页数

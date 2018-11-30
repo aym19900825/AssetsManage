@@ -25,20 +25,16 @@
 											<template slot="prepend">版本</template>
 										</el-input>
 									</el-col>
-									<el-col :span="3" class="pull-right">
+									<el-col :span="4" class="pull-right">
 										<el-input v-model="dataInfo.STATUS" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
-										<!-- <el-select v-model="dataInfo.STATUS" placeholder="请选择信息状态">
-											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-											</el-option>
-										</el-select> -->
 									</el-col>
-									<!-- <el-col :span="7" class="pull-right">
+									 <el-col :span="6" class="pull-right">
 										<el-input v-model="dataInfo.S_NUM" :disabled="true">
-											<template slot="prepend">主键编号</template>
+											<template slot="prepend">产品编号</template>
 										</el-input>
-									</el-col> -->
+									</el-col> 
 								</el-row>
 
 								<el-row :gutter="30">
@@ -302,21 +298,10 @@
 				// 	}]
 				// },
 				rules: {
-					name: [{
-						required: true,
-						trigger: 'blur',
-						validator: validateName,
-					}],
-					description: [{
-						required: true,
-						trigger: 'blur',
-						validator: validateDecri,
-					}],
-					leadname: [{
-						required: true,
-						trigger: 'blur',
-						validator: validateDecri,
-					}],
+					S_NUM: [{ required: true, message: '必填', trigger: 'blur' }],//名称
+					S_NAME: [{ required: true, message: '必填', trigger: 'blur' }],//名称
+//					RELEASETIME:[{required: true, message: '必填', trigger: 'change'}],
+//					STARTETIME: [{required: true,trigger: 'blur',message: '必填',}],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -426,7 +411,7 @@
 				this.$refs[dataInfo].validate((valid) => {
 						this.dataInfo.RELEASETIME =  this.$moment(this.dataInfo.RELEASETIME).format("YYYY-MM-DD HH:mm:ss");
 						this.dataInfo.STARTETIME = this.$moment(this.dataInfo.STARTETIME).format("YYYY-MM-DD HH:mm:ss");
-					//		          if (valid) {
+							 if (valid) {
 					
 					var url = '/api/api-apps/app/inspectionSta/saveOrUpdate';
 					this.$axios.post(url, this.dataInfo).then((res) => {
@@ -445,9 +430,9 @@
 							type: 'error'
 						});
 					});
-					//			          } else {
-					//			            return false;
-					//			          }
+			          } else {
+			            return false;
+			          }
 				});
 			},
 

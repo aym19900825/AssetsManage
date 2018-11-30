@@ -72,7 +72,7 @@
 								<el-table-column label="备注" sortable  width="290" prop="tips" v-if="this.checkedName.indexOf('备注')!=-1">
 								</el-table-column>
 							</el-table>
-							<el-pagination background class="pull-right" v-if="this.checkedName.length>0"
+							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
 					            @size-change="sizeChange"
 					            @current-change="currentChange"
 					            :current-page="page.currentPage"

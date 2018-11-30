@@ -78,7 +78,7 @@
 							<el-table-column label="状态" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
 							</el-table-column>
 						</el-table>
-						<el-pagination background class="pull-right pt10 pb10" v-if="this.checkedName.length>0"
+						<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
 				            @size-change="sizeChange"
 				            @current-change="currentChange"
 				            :current-page="page.currentPage"
@@ -93,7 +93,6 @@
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
-		<customermask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></customermask>
 	</div>
 </div>
 </template>
@@ -101,8 +100,6 @@
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left4.vue'
 	import navs_header from '../common/nav_tabs.vue'
-//	import customermask from '../common/customer_mask.vue'
-	import table from '../plugin/table/table-normal.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	export default {
 		name: 'user_management',
@@ -111,8 +108,6 @@
 			navs_left,
 			navs_header,
 			tableControle,
-//			customermask,
-			table
 		},
 		data() {
 			return {
@@ -212,9 +207,7 @@
 				up: false,
 				isShow: false,
 				ismin:true,
-				fullHeight:{//给浏览器高度赋值
-					height: '',
-				},
+				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: {
 					nickname: '',
 					enabled: '',
@@ -239,12 +232,7 @@
 		},
 
 		mounted(){
-			// 获取浏览器可视区域高度
-			window.onresize = () => {//获取浏览器可视区域高度
-		 	return (() => {
-		 		this.fullHeight.height = document.documentElement.clientHeight - 100+'px';
-		 	})()
-		 };
+			
 
 			
 		},
@@ -383,12 +371,7 @@
 					this.userList = res.data.data;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
-				this.userList.forEach((item, index) => {
-					var id = item.id;
-					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
-						this.userList.role = res.data.roles[0].name;
-					}).catch((wrong) => {})
-				})
+				
 			},
 			loadMore () {
 			   if (this.loadSign) {
@@ -420,7 +403,6 @@
 
 		mounted() {
 			this.requestData();
-			this.getKey();
 		},
 	}
 </script>

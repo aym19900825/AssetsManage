@@ -103,7 +103,7 @@
 						<el-col :span="18">
 							<!-- <tablediv ref="tableList"></tablediv> -->
 							<!-- 表格 -->
-							<el-table :data="userList"  border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
+							<el-table :data="userList"  border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="账号" sortable width="100px" prop="username" v-if="this.checkedName.indexOf('账号')!=-1">

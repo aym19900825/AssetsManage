@@ -8,6 +8,7 @@
 			<!--左侧菜单调用 Begin-->
 			<navs_left></navs_left>
 			<!--左侧菜单调用 End-->
+
 			<!--右侧内容显示 Begin-->
 			<div class="wrapper wrapper-content">
 				<div class="ibox-content">
@@ -15,16 +16,13 @@
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
 								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
-                                	<i class="icon-add"></i>添加机构
+                                	<i class="icon-add"></i>添加
                        			</button>
-                       			<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+                       			<!-- <button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加部门
-                       			</button>
+                       			</button> -->
                        			<button type="button" class="btn btn-bule button-margin" @click="modify" id="">
-						    		<i class="icon-edit"></i>修改机构
-								</button>
-								<button type="button" class="btn btn-bule button-margin" @click="modify" id="">
-						    		<i class="icon-edit"></i>修改部门
+						    		<i class="icon-edit"></i>修改
 								</button>
 								<button type="button" class="btn btn-red button-margin" id="" @click="deluserinfo">
 						    		<i class="icon-trash"></i>删除
@@ -59,12 +57,12 @@
 						<el-form status-icon :model="searchDept" label-width="70px">
 							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-input v-model="searchDept.CODE">
+									<el-input v-model="searchDept.simplename">
 										<template slot="prepend">机构编码</template>
 									</el-input>
 								</el-col>
 								<el-col :span="5">
-									<el-input v-model="searchDept.NAME">
+									<el-input v-model="searchDept.fullname">
 										<template slot="prepend">机构名称</template>
 									</el-input>
 								</el-col>
@@ -78,8 +76,8 @@
 					<el-row :gutter="10">
 						<el-col :span="24">
 							<tree_grid :columns="columns" :tree-structure="true" :data-source="deptList" v-on:childByValue="childByValue"></tree_grid>
-							<el-pagination v-if="this.checkedName.length>0"
-							   class="pull-right" 
+
+							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
 							   @size-change="sizeChange" 
 							   @current-change="currentChange" 
 							   :current-page="page.currentPage" 
@@ -93,8 +91,8 @@
 					</div>
 				</div>
 			</div>
-			<deptmask :adddeptForm="selMenu[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></deptmask>
 			<!--右侧内容显示 End-->
+			<deptmask :adddeptForm="selMenu[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></deptmask>
 		</div>
 	</div>
 </template>
@@ -119,34 +117,38 @@
 		},
 		data() {
 			return {
-				fullHeight:{//给浏览器高度赋值
-					height: '',
-				},
+				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				checkedName: [
+					// '序号',
 					'机构名称',
 					'机构编码',
 					'版本',
 					'电话号',
 				],
 				columns: [
+					// {
+					// 	text: '序号',
+					// 	dataIndex: 'STEP',
+					// 	isShow:true,
+					// },
 					{
 						text: '机构名称',
-						dataIndex: 'NAME',
+						dataIndex: 'fullname',
 						isShow:true,
 					},
 					{
 						text: '机构编码',
-						dataIndex: 'CODE',
+						dataIndex: 'simplename',
 						isShow:true,
 					},
 					{
 						text: '版本',
-						dataIndex: 'VERSION',
+						dataIndex: 'version',
 						isShow:true,
 					},
 					{
 						text: '电话号',
-						dataIndex: 'PHONE',
+						dataIndex: 'telephone',
 						isShow:true,
 					}
 				],
@@ -172,8 +174,8 @@
 				down: true,
 				up: false,
 				searchDept: {
-					CODE:'',
-					NAME:''
+					simplename:'',
+					fullname:''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -226,8 +228,8 @@
 					params: {
 						page: 1,
 						limit: 10,
-						CODE: this.searchDept.CODE,
-						NAME: this.searchDept.NAME
+						simplename: this.searchDept.simplename,
+						fullname: this.searchDept.fullname
 					}
 				};
 				var url = '/api/api-user/depts';
@@ -239,7 +241,7 @@
 			},
 			//添加
 			openAddMgr() {
-				this.$refs.child.resetNew();
+				// this.$refs.child.resetNew();
 				this.$refs.child.childMethods(); 
 			},
 			//修改

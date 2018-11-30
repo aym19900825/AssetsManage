@@ -181,9 +181,7 @@
 					label: '接触网站'
 					}],
 				station: '',
-      			fullHeight:{//给浏览器高度赋值
-					height: '',
-				},
+      			fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				
 				productType2Form:{
 					inspectionList: []

@@ -64,7 +64,7 @@
 
   </el-table>
 							<!-- 表格 Begin-->
-							<el-pagination background class="pull-right pt10 pb10" v-if="this.checkedName.length>0"
+							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
 					            @size-change="sizeChange"
 					            @current-change="currentChange"
 					            :current-page="page.currentPage"
@@ -147,9 +147,7 @@
 				up: false,
 				isShow: false,
 				ismin:true,
-				fullHeight:{//给浏览器高度赋值
-					height: '',
-				},
+				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: {//点击高级搜索后显示的内容
 					PRO_NUM: '',
 					STATUS: '',
@@ -294,12 +292,7 @@
 		},
 		mounted() {
 			this.requestData();
-			// 获取浏览器可视区域高度
-			window.onresize = () => {//获取浏览器可视区域高度
-		 	return (() => {
-		 		this.fullHeight.height = document.documentElement.clientHeight - 100+'px';
-		 	})()
-		 };
+			
 		},
 
 	}

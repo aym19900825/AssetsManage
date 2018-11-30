@@ -1,27 +1,22 @@
 <template>
 <div>
-	<EasyScrollbar>
-        <div id="wrapper" :style="fullHeight">
-          <div id="information" style="height: auto;">
-			<div class="pl20 pr20">
-				<el-row :gutter="30">
-					<el-col :span="6" v-for="(item,index) in classLists" :key="index">
-						<span @click="spantext($event)"  :class="currentItem==item?'current':'' "><i :class="item">{{item}}</i></span>
-					</el-col>
-				</el-row>
-				
-				
-				<h3 class="pt30">其它</h3>
-				<el-row :gutter="30">
-					<el-col :span="6" v-for="(item,index) in classLists1" key="index">
-						<span @click="spantext($event)" :class="currentItem==item?'current':'' "><i :class="item">{{item}}</i></span>
-					</el-col>
-					
-				</el-row>
-			</div>
-			</div>
-		</div>
-	</EasyScrollbar>
+	
+<div class="pl20 pr20" :style="{height: fullHeight}">
+	<el-row :gutter="30">
+		<el-col :span="6" v-for="(item,index) in classLists" :key="index">
+			<span @click="spantext($event)"  :class="currentItem==item?'current':'' "><i :class="item">{{item}}</i></span>
+		</el-col>
+	</el-row>
+	
+	<h3 class="pt30">其它</h3>
+	<el-row :gutter="30">
+		<el-col :span="6" v-for="(item,index) in classLists1" :key="index">
+			<span @click="spantext($event)" :class="currentItem==item?'current':'' "><i :class="item">{{item}}</i></span>
+		</el-col>
+		
+	</el-row>
+</div>
+			
 </div>
 </template>
 <script>
@@ -33,9 +28,7 @@
 		},
 		data() {
 			return {
-				fullHeight:{//给浏览器高度赋值
-					height: '',
-				},
+				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				classLists:[
 					'icon-setting3',
 					'icon-data3',
@@ -46,7 +39,6 @@
 					'icon-search3',
 					'icon-testing3',
 					'icon-correct1',
-//					'icon-date-limit1',
 					'icon-date-limit',
 					'icon-arrow2-down',
 					'icon-arrow2-left',
@@ -423,16 +415,7 @@
 			}
 		},
 		mounted(){
-			//点击方法
 			
-			// 获取浏览器可视区域高度
-			var _this = this;
-			var clientHeight = $(window).height();    //document.body.clientWidth;
-			_this.$refs.homePagess.style.height = clientHeight + 'px';
-			window.onresize = function() {
-				var clientHeight = $(window).height();
-				_this.$refs.homePagess.style.height = clientHeight + 'px';
-			};
 		},
 		methods: {
 			spantext(event){

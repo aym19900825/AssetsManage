@@ -104,9 +104,7 @@
 		},
 		data() {
 			return {
-				fullHeight:{//给浏览器高度赋值
-					height: '',
-				},
+				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				checkedName: [
 					'ID',
 					'机构简称',

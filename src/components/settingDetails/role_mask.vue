@@ -20,8 +20,8 @@
 							<el-collapse-item title="基础信息" name="1">
 								<el-row :gutter="30">
 									<el-col :span="8">
-										<el-form-item label="角色编码" prop="name">
-											<el-input v-model="roleList.name" :disabled="edit"></el-input>
+										<el-form-item label="角色编码" prop="code">
+											<el-input v-model="roleList.code" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -30,27 +30,65 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="是否停用" prop="code">
-											<el-select v-model="roleList.simplename" placeholder="请选择" style="width: 100%">
+										<el-form-item label="是否停用" prop="INACTIVE">
+											<el-input v-if="stopshow" v-model="roleList.INACTIVE" :disabled="edit"></el-input>
+											<el-select v-if="stopselect" v-model="roleList.INACTIVE" placeholder="请选择" style="width: 100%">
 												<el-option v-for="item in stopoptions" :key="item.value" :label="item.label" :value="item.value">
 												</el-option>
 											</el-select>
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<!-- <el-row :gutter="30">
-									<el-col :span="24">
-										<el-form-item label="所在机构" prop="deptName">
-											<el-input v-model="roleList.deptName" :disabled="edit">
-												<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
-											</el-input>
-										</el-form-item>
-									</el-col>
-								</el-row> -->
 								<el-row :gutter="30">
 									<el-col :span="24">
-										<el-form-item label="备注" prop="tips">
-											<el-input type="textarea" v-model="roleList.tips" placeholder="请填写"></el-input>
+										<el-form-item label="备注" prop="MEMO">
+											<el-input type="textarea" v-model="roleList.MEMO" placeholder="请填写"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="30">
+									<el-col :span="8">
+										<el-form-item label="数据授权范围" prop="range">
+											<el-select placeholder="请选择" v-model="roleList.range" style="width: 100%">
+												<el-option v-for="item in dataoptions" :key="item.value" :label="item.label" :value="item.value">
+												</el-option>
+											</el-select>
+											<!-- 树 Begen-->
+											<div class="lefttreebg">
+												<!-- <div class="left_tree_title clearfix">
+													<div class="pull-left pr20">数据授权范围</div>
+													<span class="pull-right navbar-minimalize minimalize-styl-2">
+														<i class="icon-doubleok icon-double-angle-left blue"></i>
+													</span>
+												</div> -->
+												<div class="left_treebg" style="height: 400px">
+													<div class="p15">
+														<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent"  :props="resourceProps" @node-click="handleNodeClick">
+														</el-tree>
+													</div>
+												</div>
+											</div>
+											<!-- 树 End-->
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="角色授权" prop="roleright">
+											<!-- 树 Begen-->
+											<div class="lefttreebg">
+												<!-- <div class="left_tree_title clearfix">
+													<div class="pull-left pr20">角色授权</div>
+													<span class="pull-right navbar-minimalize minimalize-styl-2">
+														<i class="icon-doubleok icon-double-angle-left blue"></i>
+													</span>
+												</div> -->
+												<div class="left_treebg" style="height: 400px">
+													<div class="p15">
+														<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent"  :props="resourceProps" @node-click="handleNodeClick">
+														</el-tree>
+													</div>
+												</div>
+											</div>
+											<!-- 树 End-->
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -83,22 +121,48 @@
 			//验证name
 			var validatePass1 = (rule, value, callback) => {
 				if(value === '') {
-					callback(new Error('必填'));
+					callback(new Error('请填写角色名称'));
 				} else {
 					callback();
 				}
 			};
 			return {
-				stopoptions: [{
+				value:'',
+				stopoptions:[{
 					value: '1',
 					label: '是'
-				}, {
-					value: '0',
+				},{
+					value: '2',
 					label: '否'
 				}],
+
+				dataoptions: [{
+					value: '1',
+					label: '所有数据'
+				}, {
+					value: '2',
+					label: '所在公司及以下数据'
+				},{
+					value: '3',
+					label: '所在公司数据'
+				},{
+					value: '4',
+					label: '所在部门及以下数据'
+				},{
+					value: '5',
+					label: '所在部门数据'
+				},{
+					value: '6',
+					label: '仅本人数据'
+				},{
+					value: '7',
+					label: '按明细设置'
+				},],
 				edit: true, //禁填
 				'男': true,
 				'女': false,
+				stopshow:false,
+				stopselect:false,
 				show: false,//控制弹出框显示隐藏
 				isok1: true,//控制弹出框放大还原
 				isok2: false,//控制弹出框放大还原
@@ -120,6 +184,12 @@
 						trigger: 'blur',
 						validator: validatePass1,
 					}],
+					range:[ { required: true, message: '请选择机构属性', trigger: 'change' }]
+					// range: [{
+					// 	required: true,
+					// 	trigger: 'change',
+					// 	validator: validatePass2,
+					// }]
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -129,20 +199,69 @@
 					children: "subDepts",
 					label: "simplename"
 				},
+				companyId: '',
+				deptId: '',
+				treeData: [],
 				cccData:{}
 			};
 		},
 		mounted() {
-			
+			this.getKey();
 		},
 		methods: {
+			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
+			return(<span><i class={data.iconClass}></i><span>{node.label}</span></span>);
+		},
+			// 点击节点
+			nodeClick: function(m) {
+				if(m.iconClass != 'icon-file-text') {
+					if(m.iconClass == 'icon-file-normal') {
+						m.iconClass = 'icon-file-open';
+					} else {
+						m.iconClass = 'icon-file-normal';
+					}
+				}
+				this.handleNodeClick();
+			},
 			handleChange(val) { //手风琴开关效果调用
 			},
 			handleCheckChange(data, checked, indeterminate) {
 		        this.cccData=data;
 		    },
 		    handleNodeClick(data) {
-            },
+				if(data.type == '1') {
+					this.companyId = data.id;
+					this.deptId = '';
+				} else {
+					this.deptId = data.id;
+					this.companyId = '';
+				}
+				this.requestData();
+			},
+			//机构树
+			getKey() {
+				let that = this;
+				var url = '/api/api-user/depts/tree';
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+					this.resourceData = res.data;
+					this.treeData = this.transformTree(this.resourceData);
+				});
+			},
+			transformTree(data){
+				for(var i=0; i<data.length; i++){
+					data[i].name = data[i].fullname;
+					if(!data[i].pid || $.isArray(data[i].subDepts)){
+						data[i].iconClass = 'icon-file-normal';
+					}else{
+						data[i].iconClass = 'icon-file-text';
+					}
+					if($.isArray(data[i].subDepts)){
+						data[i].children = this.transformTree(data[i].subDepts);
+					}
+				}
+				return data;
+			},
 			//form表单内容清空
 			resetNew(){
                 this.roleList = {
@@ -153,13 +272,22 @@
 				}
                 this.$refs["roleList"].resetFields();
             },
+            rand(min,max) {
+		        return Math.floor(Math.random()*(max-min))+min;
+		    },
 			//点击按钮显示弹窗
 			visible() {
+				var randnum = this.rand(1000,9999);
+				this.roleList.code = randnum;
+				this.stopshow = true;
+				this.stopselect = false;
+				this.roleList.INACTIVE = '否';
 				this.show = true;
 			},
 			// 这里是修改
 			detail(id) {
-				this.show = true;
+				this.stopshow = false;
+				this.stopselect = true;
 				var url = '/api/api-user/roles/' + id;
 				this.$axios.get(url, {}).then((res) => {
 					this.roleList = res.data;
@@ -171,6 +299,7 @@
 						type: 'error'
 					});
 				});
+				this.show = true;
 			},
 			//点击关闭按钮
 			close() {

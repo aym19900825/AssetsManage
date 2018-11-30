@@ -54,6 +54,24 @@
 										<el-input v-model="searchList.name"></el-input>
 									</el-form-item>
 								</el-col>
+								<el-col :span="8">
+									<el-form-item label="是否停用" prop="code">
+										<el-select v-model="searchList.simplename" placeholder="请选择" style="width: 100%">
+											<el-option v-for="item in stopoptions" :key="item.value" :label="item.label" :value="item.value">
+											</el-option>
+										</el-select>
+									</el-form-item>
+								</el-col>
+								<el-col :span="5">
+									<el-form-item label="机构名称">
+										<el-input v-model="searchList.name"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="5">
+									<el-form-item label="直属组别">
+										<el-input v-model="searchList.name"></el-input>
+									</el-form-item>
+								</el-col>
 								<el-col :span="2">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
 								</el-col>
@@ -64,7 +82,7 @@
 					<div class="row">
 						<div class="col-sm-12">
 							<!-- 表格begin -->
-							<el-table :data="roleList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'roleList', order: 'descending'}" @selection-change="SelChange">
+							<el-table :data="roleList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'roleList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="角色名称" sortable prop="name" v-if="this.checkedName.indexOf('角色名称')!=-1">
@@ -76,7 +94,7 @@
 								<el-table-column label="备注" sortable prop="tips" v-if="this.checkedName.indexOf('备注')!=-1">
 								</el-table-column>
 							</el-table>
-							<el-pagination background class="pull-right" v-if="this.checkedName.length>0"
+							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
 					            @size-change="sizeChange"
 					            @current-change="currentChange"
 					            :current-page="page.currentPage"
@@ -115,6 +133,14 @@
 		},
 		data() {
 			return {
+				value:'',
+				stopoptions: [{
+					value: '1',
+					label: '是'
+				}, {
+					value: '0',
+					label: '否'
+				}],
 				selUser: [],
 				'启用': true,
 				'冻结': false,
@@ -148,6 +174,7 @@
 				search: false,
 				down: true,
 				up: false,
+				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: {//高级查询数据
 					name: ''
 				},
@@ -283,6 +310,7 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
+					console.log(res);
 					this.roleList = res.data.data;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})

@@ -111,9 +111,9 @@
 										<i class="icon-doubleok icon-double-angle-left blue"></i>
 									</span>
 								</div>
-								<div class="left_treebg">
+								<div class="left_treebg" :style="{height: fullHeight}">
 									<div class="p15" v-if="ismin">
-										<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent"  :props="resourceProps" @node-click="handleNodeClick">
+										<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent" :props="resourceProps" @node-click="handleNodeClick">
 										</el-tree>
 									</div>
 								</div>
@@ -123,7 +123,7 @@
 						
 						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
-							<el-table :data="userList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table :data="userList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="样品编号" sortable width="140px" prop="ITEMNUM" v-if="this.checkedName.indexOf('样品编号')!=-1">
@@ -150,7 +150,7 @@
 							<!-- <span class="demonstration">显示总数</span>" -->
 							<!-- <el-pagination background layout="prev, pager, next" :total="2" style="float:right;margin-top:10px;"> -->
 							<!-- </el-pagination style="float:right;margin-top:10px;"> -->
-							<el-pagination background class="pull-right" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
 							<!-- 表格 -->
 						</el-col>
@@ -180,6 +180,7 @@
 			return {
 				isShow: false,
 				ismin: true,
+				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				loadSign: true, //加载
 				commentArr: {},
 				checkedName: [
@@ -680,122 +681,5 @@
 </script>
 
 <style scope>
-.el-tree .el-tree-node__content>.el-tree-node__expand-icon {
-  padding: 2px;
-}
-.el-tree .el-icon-caret-right { 
-  font-size: 14px;
-  width: 17px;
-  height: 17px;
-  line-height:12px;
-  font-weight: lighter;
-  color: #A2ABBF;
-  /*background: #FFF;
-  border:1px solid #A2ABBF;*/
-  border-radius: 3px;
-  margin-top: -2px;
-  margin-right: 5px;
-  position: relative;
-  z-index: 30;
-}
-
-
-.el-tree .el-icon-caret-right:before {/*图标加号*/
-    font-family: 'hxqheam';
-    content: "\e9bc";
-    position: absolute;
-    z-index: 22;
-}
-.el-tree .el-icon-caret-right:after {
-  content: "";
-  width: 10px;
-  position: absolute;
-  /*border-bottom: 1px dashed #C7CED6;*/
-  top: 7px;
-  right: -4px;
-  z-index: 1;
-}
-
-
-
-.el-tree .el-tree-node__expand-icon.is-leaf,.el-tree .el-tree-node__expand-icon.is-leaf:before {
-  border:none;
-  background:transparent;
-  content: "";
-}
-
-
-.el-tree .el-tree-node__expand-icon.expanded {/*图标加号点击后不旋转，原Element会旋转*/
-  -webkit-transform: rotate(0deg);
-  transform: rotate(0deg);
-}
-
-.el-tree .el-tree-node__expand-icon.expanded:before {/*图标减号*/
-    font-family: 'hxqheam';
-    content: "\e99f";
-}
-.el-tree .el-tree-node .icon-file-normal {/*文件夹合并时图标*/
-  color: #6585DF;
-  font-family: 'hxqheam';
-  content: "\e9fa";
-  font-size: 20px;
-}
-.el-tree .el-tree-node.is-expanded>.el-tree-node__content .icon-file-normal:before {/*文件夹打开时图标*/
-  font-family: 'hxqheam';
-  content: "\e9fb";
-}
-.el-tree .el-tree-node>.el-tree-node__content .icon-file-text {/*最后子级图标颜色*/
-  color: #92BDFF;
-}
-
-.el-tree-node [class^="icon-"], .el-tree-node [class*=" icon-"] {margin-right: 5px;}
-
-[role=group].el-tree-node__children,
-[role=group].el-tree-node__children [role=group].el-tree-node__children,
-[role=group].el-tree-node__children .el-tree-node__content {position: relative;}
-
-[role=group].el-tree-node__children:before,
-[role=group].el-tree-node__children [role=group].el-tree-node__children:before,
-[role=group].el-tree-node__children .el-tree-node__content:before{
-  content: "";
-  top: 0px;
-  position: absolute;
-  width: 9px;
-  height: 100%;
-  border-right: 1px dashed #C7CED6;
-}
-
-
-[role=group].el-tree-node__children [role=group].el-tree-node__children:before {
-  left: 22px;
-}
-
-[role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children:before {
-  left: 44px;
-}
-
-[role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children:before {
-  left: 66px;
-}
-
-[role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children:before {
-  left: 88px;
-}
-
-[role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children:before {
-  left: 110px;
-}
-
-
-[role=group].el-tree-node__children .el-tree-node__content:before{
-  top:-15px;
-}
-
-.el-tree>div[role=treeitem]:nth-last-child(2)>div[role=group]:before,
-.el-tree>div[role=treeitem] div[role=treeitem]:nth-last-child(1)>div[role=group]:before
-{
-  display: none;
-}
-
 .p15 {padding:10px 15px;}
 </style>

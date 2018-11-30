@@ -162,9 +162,7 @@
 				dialogVisible: false, //对话框
 				edit: true, //禁填
 				activeNames: ['1'], //手风琴数量
-				fullHeight:{//给浏览器高度赋值
-					height: '',
-				},
+				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				show: false,
 				isok1: true,
 				isok2: false,
@@ -325,12 +323,7 @@
 			}
 		},
 		mounted() {
-			// 获取浏览器可视区域高度
-			window.onresize = () => {//获取浏览器可视区域高度
-		 	return (() => {
-		 		this.fullHeight.height = document.documentElement.clientHeight - 100+'px';
-		 	})()
-		 };
+			
 		}
 	}
 </script>

@@ -85,7 +85,7 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :data="customerList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'customerList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+						<el-table :data="customerList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'customerList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 							</el-table-column>
 							<el-table-column label="组织机构代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('组织机构代码')!=-1">
@@ -99,7 +99,7 @@
 							<el-table-column label="状态" sortable width="100" prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('状态')!=-1">
 							</el-table-column>
 						</el-table>
-						<el-pagination background class="pull-right pt10 pb10" v-if="this.checkedName.length>0"
+						<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
 				            @size-change="sizeChange"
 				            @current-change="currentChange"
 				            :current-page="page.currentPage"
@@ -201,9 +201,7 @@
 				isShow: false,
 				ismin:true,
 				fileList: [],//上传附件数据
-				fullHeight:{//给浏览器高度赋值
-					height: '',
-				},
+				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: {
 					NAME: '',
 					CODE: '',
@@ -425,12 +423,20 @@
 		mounted() {
 			this.requestData();
 			
-			window.onresize = () => {//获取浏览器可视区域高度
-			 	return (() => {
-			 		this.fullHeight.height = document.documentElement.clientHeight - 100+'px';
-			 	})()
-			 };
+			
 		},
+		 // watch: {
+	  //     fullHeight (val) {
+	  //       if(!this.timer) {
+	  //         this.fullHeight = val
+	  //         this.timer = true
+	  //         let that = this
+	  //         setTimeout(function (){
+	  //           that.timer = false
+	  //         },400)
+	  //       }
+	  //     }
+	  //   },
 	}
 </script>
 

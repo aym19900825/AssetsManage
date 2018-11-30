@@ -5,18 +5,18 @@
 			<navs_header></navs_header>
 		</div>
 		<div class="contentbg">
-		<!--左侧菜单内容显示 Begin-->
-		<navs_left></navs_left>
-		<!--左侧菜单内容显示 End-->
-		
+			<!--左侧菜单内容显示 Begin-->
+			<navs_left></navs_left>
+			<!--左侧菜单内容显示 End-->
+			<!--右侧内容显示 Begin-->
 			<div class="wrapper wrapper-content">
 				<div class="ibox-content">
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
 								<button type="button" class="btn btn-green" @click="openAddMenu" id="">
-                                	<i class="icon-add"></i>添加
-                      			 </button>
+	                            	<i class="icon-add"></i>添加
+	                  			 </button>
 								<button type="button" class="btn btn-bule button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改
 								</button>
@@ -49,14 +49,14 @@
 					<el-row :gutter="10">
 						<el-col :span="24">
 							 <tree_grid :columns="columns" :tree-structure="true" :data-source="menuList" v-on:childByValue="childByValue"></tree_grid>
-							 
-							<el-pagination background class="pull-right" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+
+							<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
-							
 						</el-col>
 					</el-row>
 				</div>
 			</div>
+			<!--右侧内容显示 End-->
 			<menumask :menu="selMenu[0]" ref="child" @request="requestData" v-bind:page=page></menumask>
 		</div>
 	</div>
@@ -143,7 +143,7 @@
 		},
 		methods: {
 			changeCheckedName(value){
-				console.log(value);
+				
 				this.checkedName=value
 				let str=value.toString()
 				for(let i=0;i<this.columns.length;i++){
@@ -188,7 +188,7 @@
 			},
 			//修改
 			modify() {
-				console.log(this.selMenu)
+				
 				var selData = this.selMenu;
 				if(selData.length == 0) {
 					this.$message({
@@ -225,14 +225,13 @@
 				} else {
 					
 					var changeMenu = selData[0];
-					console.log(changeMenu);
+					
 					if(typeof(changeMenu.children)!='undefined' && changeMenu.children.length>0){
 						this.$message({
 							message: '先删除子菜单',
 							type: 'error'
 						});
 					}else {
-							console.log(changeMenu);
 						var id = changeMenu.id;
 						var url = '/api/api-user/menus/' + id;
 						this.$axios.delete(url, {}).then((res) => { //.delete 传数据方法
@@ -255,7 +254,7 @@
 			},
 
 			SelChange(val) {
-				console.log(val)
+				
 				this.selMenu = val;
 			},
 			requestData(index) {
@@ -268,7 +267,7 @@
 					params: data
 				}).then((res) => {
 					let result=res.data
-					console.log(result);
+					
 					for(let i=0;i<result.length;i++){
 						if(result[i].parentId == "-1" || result[i].parentId == "null") {
 							result[i].isMenu = "目录"
@@ -290,7 +289,7 @@
 							result[i].children=children
 						}
 					}
-					console.log(result);
+					
 					this.menuList = result;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})

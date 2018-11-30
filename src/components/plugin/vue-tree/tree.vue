@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div style='width:280px;'>
-    <vue-ztree :list.sync='listData'  :func='nodeClick' :expand='expandClick'>
+    <vue-ztree :list.sync='listData' :func='nodeClick' :expand='expandClick'>
     </vue-ztree>
     </div>
   </div>

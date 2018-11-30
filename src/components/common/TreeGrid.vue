@@ -2,7 +2,7 @@
   <el-table
     :data="data"
     style="width: 100%;"
-    :row-style="showTr" border stripe height="400" @selection-change="SelChange">
+    :row-style="showTr" border stripe :height="fullHeight" @selection-change="SelChange">
     <el-table-column type="selection" width="55" fixed>
 		</el-table-column>
     <el-table-column v-for="(column, index) in columns" :key="column.dataIndex"
@@ -75,7 +75,9 @@
       }
     },
     data () {
-      return {}
+      return {
+        fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
+      }
     },
     computed: {
     // 格式化数据源
@@ -90,9 +92,7 @@
         let me = this
         if (me.treeStructure) {
           let data = Utils.MSDataTransfer.treeToArray(me.dataSource, null, null, me.defaultExpandAll)
-          console.log(data)
           return data
-          
         }
         return me.dataSource
       }
@@ -117,7 +117,6 @@
       toggle: function (trIndex) {
         let me = this
         let record = me.data[trIndex]
-        console.log(record._expanded)
         record._expanded = !record._expanded
       },
     // 显示层级关系的空格和图标

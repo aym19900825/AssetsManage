@@ -379,8 +379,7 @@
 			Printing() {
 				
 			},
-			judge(data) {
-				//taxStatus 布尔值
+			judge(data) { //taxStatus 布尔值
 				return data.enabled ? '活动' : '不活动'
 			},
 			//时间格式化  

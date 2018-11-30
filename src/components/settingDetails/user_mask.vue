@@ -673,8 +673,8 @@
 					if(valid) {
 						var dataInfo = this.dataInfo;
 					dataInfo.sex = dataInfo.sexName == '男' ? 1 : 0;
-							console.log(111)
-							console.log(dataInfo.roleId);
+							//console.log(111)
+							//console.log(dataInfo.roleId);
 						if(dataInfo.roleId.length > 0) {
 							var arr = [];
 							dataInfo.roleId.forEach(function(item) {
@@ -766,8 +766,6 @@
 					},
 				}).then((res) => {
 					this.selectData = res.data.data;
-				    console.log(1111);
-					console.log(res);
 					//console.log(this.selectData);
 				}).catch(error => {
 					console.log('请求失败');

@@ -131,7 +131,7 @@
 										<font>新建行</font>
 									</el-button>
 								</div>
-<<<<<<< HEAD
+
 								<!-- <el-table :data="CUSTOMER.CUSTOMER_QUALIFICATIONList" row-key="id" highlight-current-row style="width: 100%" @cell-click="iconOperation">
 									<el-table-column prop="iconOperation" label="" width="50px">
 										<template slot-scope="scope">
@@ -187,8 +187,7 @@
         									</template>
         							</el-table-column>
 								</el-table> -->
-=======
->>>>>>> 6c4f006b9b44fe98a104fad12da731aebbaf981f
+
 								<el-form :model="CUSTOMER.CUSTOMER_QUALIFICATIONList">
 					                <el-form-item>
 					                	<el-row :gutter="20">

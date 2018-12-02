@@ -7,9 +7,11 @@
 				<div class="mask_title" v-show="addtitle">添加用户</div>
 				<div class="mask_title" v-show="modifytitle">修改用户</div>
 				<div class="mask_anniu">
-					
+					<!--<span class="mask_span">
+						<i class="icon-minimize"></i>
+					</span>-->
+					<!--icon-maximization,icon-restore-->
 					<span class="mask_span mask_max" @click='toggle'>
-						 
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
 					</span>
 					<span class="mask_span" @click='close'>
@@ -18,82 +20,52 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form status-icon :model="user" :label-position="labelPosition" :rules="rules" ref="user" label-width="100px" class="demo-user">
+				<el-form status-icon :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="100px" status-icon inline-message class="demo-dataInfo">
 					<div class="accordion">
 						<el-collapse v-model="activeNames" @change="handleChange">
-							<!--<el-collapse-item title="基础信息" name="1">
-								<el-row :gutter="30">
-									<el-col :span="24">
-										<el-form-item label="所属组织" prop="companyName">
-											<el-input v-model="user.companyName" :disabled="edit">
-												<el-button slot="append" icon="el-icon-search" @click="getCompany"></el-button>
-											</el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row :gutter="30">
-									<el-col :span="24">
-										<el-form-item label="所属机构" prop="deptName">
-											<el-input v-model="user.deptName" :disabled="edit">
-												<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
-											</el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-
-								<el-row :gutter="30">
-									<el-col :span="12">
-										<el-form-item label="登录名称" prop="username">
-											<el-input class = "usernames" v-model="user.username" ></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="12">
-										<el-form-item label="登录口令" prop="password">
-											<el-input type="password" v-model="user.password"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-							</el-collapse-item>-->
+						
 							<el-collapse-item title="用户基本资料" name="1">
 								<el-row :gutter="20" class="pb10">
 									<el-col :span="5" class="pull-right">
-										<el-input v-model="user.status" :disabled="true">
+										<el-input v-model="dataInfo.status" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
 									</el-col>
+									
+
 								</el-row>
 								<!-- 第一行 -->
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="姓名" prop="nickname">
-											<el-input v-model="user.nickname"></el-input>
+											<el-input v-model="dataInfo.nickname"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="职务" prop="post">
-											<el-input v-model="user.post"></el-input>
+											<el-input v-model="dataInfo.post"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="登录名称" prop="username">
-											<el-input class = "usernames" v-model="user.username" ></el-input>
+											<el-input class = "usernames" v-model="dataInfo.username" ></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="登录口令" prop="password">
-											<el-input type="password" v-model="user.password"></el-input>
+											<el-input type="password" v-model="dataInfo.password"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="身份证号" prop="idnumber">
-											<el-input v-model="user.idnumber"></el-input>
+											<el-input v-model="dataInfo.idnumber"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="工号" prop="worknumber">
-											<el-input v-model="user.worknumber"></el-input>
+											<el-input v-model="dataInfo.worknumber"></el-input>
 										</el-form-item>
 									</el-col>
 									
@@ -103,18 +75,18 @@
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="IP地址" prop="ip_address">
-											<el-input v-model="user.ip_address"></el-input>
+											<el-input v-model="dataInfo.ip_address"></el-input>
 										</el-form-item>
 									</el-col>
 									
 									<el-col :span="8">
 										<el-form-item label="手机号" prop="phone">
-											<el-input v-model="user.phone"></el-input>
+											<el-input v-model="dataInfo.phone"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="MAC地址" prop="mac_address">
-											<el-input v-model="user.mac_address"></el-input>
+											<el-input v-model="dataInfo.mac_address"></el-input>
 										</el-form-item>
 									</el-col>
 									
@@ -123,20 +95,20 @@
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="电子邮箱" prop="email">
-											<el-input v-model="user.email"></el-input>
+											<el-input v-model="dataInfo.email"></el-input>
 										</el-form-item>
 									</el-col>
 									
 									<el-col :span="8">
-										<el-form-item label="用户有效期" prop="user_active_date">
-											<el-date-picker v-model="user.user_active_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+										<el-form-item label="用户有效期" prop="dataInfo_active_date">
+											<el-date-picker v-model="dataInfo.dataInfo_active_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
 											</el-date-picker>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										
 										<el-form-item label="是否允许授权" prop="ispermit_authorization">
-											 <el-radio-group v-model="user.ispermit_authorization">
+											 <el-radio-group v-model="dataInfo.ispermit_authorization">
     											<el-radio label="是"></el-radio>
     											<el-radio label="否"></el-radio>
   											</el-radio-group>
@@ -147,7 +119,7 @@
 									
 									<el-col :span="8">
 										<el-form-item label="性別" prop="sex">
-											<el-radio-group v-model="user.sex">
+											<el-radio-group v-model="dataInfo.sex">
 												<el-radio label="男"></el-radio>
 												<el-radio label="女"></el-radio>
 											</el-radio-group>
@@ -155,7 +127,7 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="是否允许登录" prop="islogin">
-											<el-radio-group v-model="user.islogin">
+											<el-radio-group v-model="dataInfo.islogin">
     											<el-radio label="是"></el-radio>
     											<el-radio label="否"></el-radio>
   											</el-radio-group>
@@ -167,8 +139,8 @@
 								<el-row :gutter="30">
 									
 									<el-col :span="8">
-										<el-form-item label="所属机构" prop="deptName" >
-												<el-select v-model="user.deptName" placeholder="请选择">
+										<el-form-item label="所属机构" prop="deptName">
+												<el-select v-model="dataInfo.deptName" placeholder="请选择">
 													<el-option v-for="item in option1" :key="item.value" :label="item.label" :value="item.value">
 													</el-option>
 												</el-select>
@@ -176,16 +148,16 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="学历" prop="education">
-										<el-select v-model="user.education" placeholder="硕士" >
+										<el-select v-model="dataInfo.education" placeholder="硕士" >
 											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
 										</el-select>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="角色">
-											<el-select v-model="user.roleId" multiple>
-												<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.name"></el-option>
+										<el-form-item label="角色" prop="roleId">
+											<el-select v-model="dataInfo.roleId" multiple>
+												<el-option v-for="data in selectData" :key="data.id" :value="data.id" :label="data.name"></el-option>
 											</el-select>
 										</el-form-item>
 									</el-col>
@@ -194,13 +166,13 @@
 								<el-row :gutter="30">
 									<el-col :span="24">
 										<el-form-item label="备注" prop="tips">
-											<el-input type="textarea" v-model="user.tips"></el-input>
+											<el-input type="textarea" v-model="dataInfo.tips"></el-input>
 
 										</el-form-item>
 									</el-col>
 								</el-row>
 							</el-collapse-item>
-
+						
 						<el-collapse-item title="资质信息" name="2">
 								<!-- 资质信息 Begin-->
 								<div class="table-func">
@@ -210,7 +182,7 @@
 									</el-button>
 								</div>
 
-								<el-table :data="user.qualifications" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.qualifications', order: 'descending'}">
+								<el-table :data="dataInfo.qualifications" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.qualifications', order: 'descending'}">
 
 									<el-table-column prop="iconOperation" fixed label="" width="50px">
 										<template slot-scope="scope">
@@ -298,7 +270,7 @@
 									</el-table-column>-->
 									<el-table-column fixed="right" label="操作" width="120">
 										<template slot-scope="scope">
-											<el-button @click.native.prevent="deleteRow(scope.$index,user.qualifications)" type="text" size="small">
+											<el-button @click.native.prevent="deleteRow(scope.$index,dataInfo.qualifications)" type="text" size="small">
 												移除
 											</el-button>
 										</template>
@@ -306,7 +278,6 @@
 
 								</el-table>
 							</el-collapse-item>
-							
 							<el-collapse-item title="培训" name="3">
 								<!-- 资质信息 Begin-->
 								<div class="table-func">
@@ -316,7 +287,7 @@
 									</el-button>
 								</div>
 
-								<el-table :data="user.traings" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.traings', order: 'descending'}">
+								<el-table :data="dataInfo.traings" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.traings', order: 'descending'}">
 
 									<el-table-column prop="iconOperation" fixed label="" width="50px">
 										<template slot-scope="scope">
@@ -372,43 +343,43 @@
 									
 									<el-table-column fixed="right" label="操作" width="120">
 										<template slot-scope="scope">
-											<el-button @click.native.prevent="deleteRow(scope.$index,user.traings)" type="text" size="small">
+											<el-button @click.native.prevent="deleteRow(scope.$index,dataInfo.traings)" type="text" size="small">
 												移除
 											</el-button>
 										</template>
 									</el-table-column>
+
 								</el-table>
 							</el-collapse-item>
-							
 							<el-collapse-item title="其他" name="4">
 								
 								<!-- 第一行 -->
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="录入人" prop="createby">
-											<el-input v-model="user.createbyName" :disabled="edit"></el-input>
+											<el-input v-model="dataInfo.createbyName" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="录入时间" prop="createTime">
-											<el-input v-model="user.createTime" :disabled="edit">
+											<el-input v-model="dataInfo.createTime" :disabled="edit">
 											</el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="修改人" prop="updateby">
-											<el-input v-model="user.updateby" :disabled="edit"></el-input>
+											<el-input v-model="dataInfo.updateby" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="修改时间" prop="updateTime">
-											<el-input v-model="user.updateTime" :disabled="edit">
+											<el-input v-model="dataInfo.updateTime" :disabled="edit">
 											</el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 							</el-collapse-item>
-						</el-collapse>
+							</el-collapse>
 					</div>
 
 					<div class="el-dialog__footer">
@@ -420,8 +391,8 @@
 			<!--底部-->
 		</div>
 
-		<!--弹出-->
 
+		<!--弹出-->
 		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
 
 			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick" @check-change="handleCheckChange">
@@ -440,19 +411,47 @@
 	export default {
 		name: 'masks',
 		props: {
+//			dataInfo: {
+//				type: Object,
+//				default: function() {
+//				return {
+//				
+//						companyId: '',
+//						deptId: '',
+//						password: '',
+//						sex: '',
+//						email: '',
+//						phone: '',
+//						enabled: 1,
+//						birthday: '',
+//						worknumber: '',
+//						nickname: '',
+//						idnumber: '',
+//						entrytime: '',
+//						address: '',
+//						tips: '',
+//						dataInfoname: '',
+//						companyName: '',
+//						education: '',
+//						roleId: [],
+//						roles: [], //角色
+//						id: '',
+//					}
+//				}
+//			},
 			page: Object,
 		},
-		//		props: ['user','page'],
+		//		props: ['dataInfo','page'],
 
 		data() {
-			var validateIdnumber = (rule, value, callback) => { //验证身份证号
+			var validatePass6 = (rule, value, callback) => { //验证身份证号
 				if(value && (!(/\d{17}[\d|x]|\d{15}/).test(value) || (value.length !== 15 && value.length !== 18))) {
 					callback(new Error('身份证号码不符合规范'))
 				} else {
 					callback()
 				}
 			};
-			var validatePhone = (rule, value, callback) => {
+			var validatePass7 = (rule, value, callback) => {
 				if(value === '') {
 					return callback(new Error('手机号不能为空'));
 				} else {
@@ -465,7 +464,8 @@
 					}
 				}
 			};
-			var validateEmail = (rule, value, callback) => {//验证电子邮箱
+			        
+		 var validatePass8 = (rule, value, callback) => {//验证电子邮箱
 		        if (value === '') {
 		            callback(new Error('电子邮箱不能为空'));
 		        } else {
@@ -478,14 +478,12 @@
 		        }
 		    };
 			return {
-				user: {
+				dataInfo: {
 					status: '活动',
-					roleId: [],
 					traings: [],
 					qualifications: [],
 				},
-				options: [
-				{
+				options: [{
 					value: '高中',
 					label: '高中'
 				},
@@ -516,9 +514,8 @@
 				{
 					value: 'MBA/EMBA',
 					label: 'MBA/EMBA'
-				},
-				],
-//				value: '',
+				}],
+				value: '',
 				option1: [{
 					value: '金化站',
 					label: '金化站'
@@ -539,25 +536,28 @@
 				isok2: false,
 				down: true,
 				up: false,
-				activeNames: ['1', '2'], //手风琴数量
+				dataInfoitem: [],
+				activeNames: ['1','2','3','4'], //手风琴数量
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				addtitle: true, //添加弹出框titile
 				modifytitle: false, //修改弹出框titile
+				modify: false,
 				rules: {
 					deptName: [{ required: true, message: '必填', trigger: 'blur' }],//名称
-					education:[{required: true, message: '必填', trigger: 'blur'}],
-					roleId: [{required: true,trigger: 'blur',message: '必填',}],
+					deptName: [{ required: true, message: '必填', trigger: 'blur' }],//名称
+					education:[{required: true, message: '必填', trigger: 'change'}],
+					roles: [{required: true,trigger: 'blur',message: '必填',}],
 					username: [{required: true,trigger: 'blur',message: '必填',}],
 					password: [{required: true,trigger: 'blur',message: '必填',}],
+					idnumber: [{required: true,trigger: 'blur',message: '必填',}],
+					phone: [{required: true,trigger: 'blur',validator: validatePass7}],
+					email: [{required: true,trigger: 'blur',validator: validatePass8,}],
 					sex:[{required: true,trigger: 'blur',message: '必填'}],
 					ispermit_authorization:[{required: true,trigger: 'change',message: '必填'}],//授权
 					islogin:[{required: true,trigger: 'change',message: '必填'}],//登陆
 					mac_address:[{required: true,trigger: 'blur',message: '必填',}],
-					ip_address:[{required: true,trigger: 'blur',message: '必填',}],
-					idnumber:[{required: true,trigger: 'blur',validator: validateIdnumber}],
-					phone: [{required: true,trigger: 'blur',validator: validatePhone}],
-					email: [{required: true,trigger: 'blur',validator: validateEmail,}],
+					ip_address:[{required: true,trigger: 'blur',message: '必填',}]
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -567,7 +567,7 @@
 					children: "subDepts",
 					label: "simplename"
 				},
-				selectData: [], //
+				selectData: [], //角色的值
 				getCheckboxData: {},
 			};
 		},
@@ -579,6 +579,7 @@
 					console.log(row.isEditing);
 				}
 			},
+			//新建行
 			addfield1() {
 				var obj = {
 					step: '',
@@ -591,7 +592,7 @@
 					//少附件
 					isEditing: true
 				};
-				this.user.qualifications.push(obj);
+				this.dataInfo.qualifications.push(obj);
 			},
 			addfield2() {
 				var obj = {
@@ -601,7 +602,7 @@
 					status: '',
 					isEditing: true
 				};
-				this.user.traings.push(obj);
+				this.dataInfo.traings.push(obj);
 			},
 			//刪除新建行
 			deleteRow(index,rows) {//Table-操作列中的删除行
@@ -613,21 +614,42 @@
 			//
 			handleCheckChange(data, checked, indeterminate) {
 				//console.log(data, checked, indeterminate);
-				this.getCheckboxData = data;s
+				this.getCheckboxData = data;
 			},
 			//
 			handleNodeClick(data) { //获取勾选树菜单节点
 				console.log(data);
 			},
 
-
+			//form表单内容清空
+			resetNew() {
+				this.dataInfo = {
+					companyName: '',
+					deptName: '',
+					dataInfoname: '',
+					password: '',
+					nickname: '',
+					birthday: '',
+					sexName: '',
+					idnumber: '',
+					entrytime: '',
+					roleId: [],
+					roles: [],
+					worknumber: '',
+					phone: '',
+					email: '',
+					address: '',
+					tips: ''
+				}
+				this.$refs["dataInfo"].resetFields();
+			},
 			//点击按钮显示弹窗
 			visible() {
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
-					this.user.createby=res.data.id;
-					this.user.createbyName=res.data.nickname;
+					this.dataInfo.createby=res.data.id;
+					this.dataInfo.createbyName=res.data.nickname;
 					var date=new Date();
-					this.user.createTime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					this.dataInfo.createTime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{
 					this.$message({
 						message:'网络错误，请重试',
@@ -641,7 +663,6 @@
 				this.modify=false;
 				this.show = true;
 			},
-			// 这里是修改
 			detail(dataid) {
 				this.addtitle = false;
 				this.modifytitle = true;
@@ -649,9 +670,9 @@
 				$('.usernames .el-input__inner').attr('disabled',true);
 				var usersUrl = '/api/api-user/users/currentMap'
 				this.$axios.get(usersUrl, {}).then((res) => {
-					this.user.changeby = res.data.nickname;
+					this.dataInfo.changeby = res.data.nickname;
 					var date = new Date();
-					this.user.changedate = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
+					this.dataInfo.changedate = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -660,13 +681,13 @@
 				});
 				var url = '/api/api-user/users/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
-					this.user = res.data;
+					this.dataInfo = res.data;
 					
-					this.user.sex=this.user.sex?'男':'女';
-					this.user.roleId = [];
-					var roles = this.user.roles;
+					this.dataInfo.sex=this.dataInfo.sex?'男':'女';
+					this.dataInfo.roleId = [];
+					var roles = this.dataInfo.roles;
 					for(var i = 0; i < roles.length; i++) {
-						this.user.roleId.push(roles[i].name);
+						this.dataInfo.roleId.push(roles[i].name);
 					}
 					this.show = true;
 				}).catch((err) => {
@@ -708,32 +729,32 @@
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
 			},
 
-//			保存users/saveOrUpdate
+			//保存dataInfos/saveOrUpdate
 			submitForm() {
 				var _this = this;
-				this.$refs.user.validate((valid) => {
+				this.$refs.dataInfo.validate((valid) => {
 					if(valid) {
-						var user = this.user;
-						user.sex = user.sexName == '男' ? 1 : 0;
-						if(typeof(user.roleId) != 'undefined' && user.roleId.length > 0) {
+						var dataInfo = this.dataInfo;
+						dataInfo.sex = dataInfo.sexName == '男' ? 1 : 0;
+						if(dataInfo.roleId.length > 0) {
 							var arr = [];
-							user.roleId.forEach(function(item) {
+							dataInfo.roleId.forEach(function(item) {
 								var roles = _this.selectData;
 								for(var j = 0; j < roles.length; j++) {
 									if(roles[j].id == item) {
 										arr.push(roles[j]);
 									}
 								}
+								console.log(arr);
 							});
-							user.roleId = user.roleId.join(',');
-							user.roles = arr;
+							dataInfo.roleId = dataInfo.roleId.join(',');
+							dataInfo.roles = arr;
 						} else {
-							user.roleId = '';
-							user.roles = [];
+							dataInfo.roleId = '';
+							dataInfo.roles = [];
 						}
-					
 						var url = '/api/api-user/users/saveOrUpdate';
-						this.$axios.post(url, this.user).then((res) => {
+						this.$axios.post(url, this.dataInfo).then((res) => {
 
 							if(res.data.resp_code == 0) {
 								this.$message({
@@ -741,7 +762,7 @@
 									type: 'success',
 								});
 								this.show = false;
-						
+								//重新加载数据
 								this.$emit('request')
 							}
 						}).catch((err) => {
@@ -751,44 +772,49 @@
 							});
 						});
 					} else {
-						return false;
+						
+						console.log(this.dataInfo)
+						this.$message({
+								message: '有必填项，请重新填写',
+								type: 'error'
+							});
 					}
 				})
 			},
 			//所属组织
-			getCompany() {
-				this.editSearch = 'company';
-				var page = this.page.currentPage;
-				var limit = this.page.pageSize;
-				var type = 1;
-				var url = '/api/api-user/depts/treeByType';
-				this.$axios.get(url, {
-					params: {
-						type: type
-					},
-				}).then((res) => {
-					this.resourceData = res.data;
-					this.dialogVisible = true;
-				});
-
-			},
+//			getCompany() {
+//				this.editSearch = 'company';
+//				var page = this.page.currentPage;
+//				var limit = this.page.pageSize;
+//				var type = 1;
+//				var url = '/api/api-dataInfo/depts/treeByType';
+//				this.$axios.get(url, {
+//					params: {
+//						type: type
+//					},
+//				}).then((res) => {
+//					this.resourceData = res.data;
+//					this.dialogVisible = true;
+//				});
+//
+//			},
 
 			//所属机构
-			getDept() {
-				this.editSearch = 'dept';
-				var page = this.page.currentPage;
-				var limit = this.page.pageSize;
-				var type = 2;
-				var url = '/api/api-user/depts/treeByType';
-				this.$axios.get(url, {
-					params: {
-						type: type
-					},
-				}).then((res) => {
-					this.resourceData = res.data;
-					this.dialogVisible = true;
-				});
-			},
+//			getDept() {
+//				this.editSearch = 'dept';
+//				var page = this.page.currentPage;
+//				var limit = this.page.pageSize;
+//				var type = 2;
+//				var url = '/api/api-dataInfo/depts/treeByType';
+//				this.$axios.get(url, {
+//					params: {
+//						type: type
+//					},
+//				}).then((res) => {
+//					this.resourceData = res.data;
+//					this.dialogVisible = true;
+//				});
+//			},
 			//角色
 			getRole() {
 				this.editSearch = 'role';
@@ -802,8 +828,6 @@
 					},
 				}).then((res) => {
 					this.selectData = res.data.data;
-					//console.log(res.data.data);
-					//console.log(this.selectData);
 				}).catch(error => {
 					console.log('请求失败');
 				})
@@ -813,11 +837,11 @@
 				this.placetext = false;
 				this.dialogVisible = false;
 				if(this.editSearch == 'company') {
-					this.user.companyId = this.getCheckboxData.id;
-					this.user.companyName = this.getCheckboxData.simplename;
+					this.dataInfo.companyId = this.getCheckboxData.id;
+					this.dataInfo.companyName = this.getCheckboxData.simplename;
 				} else {
-					this.user.deptId = this.getCheckboxData.id;
-					this.user.deptName = this.getCheckboxData.simplename;
+					this.dataInfo.deptId = this.getCheckboxData.id;
+					this.dataInfo.deptName = this.getCheckboxData.simplename;
 				}
 			},
 

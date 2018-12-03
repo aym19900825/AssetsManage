@@ -81,7 +81,7 @@ export default {
                     }
                     return item.navtitle != tab.navtitle;
                 });
-                //console.log(selectedIndex);
+            
                 //关闭当前显示的选项卡
                 if(tab.navtitle == _this.selectedTab.navtitle){
                     if(selectedIndex==_this.tabs.length){
@@ -118,11 +118,27 @@ export default {
             this.selectedTab = item;
             sessionStorage.setItem('selectedNav',JSON.stringify(this.selectedTab));
             this.$router.push({path: item.navherf});
-        }
+        },
+        showindex(){
+        	
+        	sessionStorage.setItem('clickedNav',JSON.stringify({arr:[{
+                    navtitle: '首页',
+                    navherf: '/index'
+                }]}));
+        },
     },
     mounted(){
-        this.tabs = JSON.parse(sessionStorage.getItem('clickedNav')).arr;
-        this.selectedTab = JSON.parse(sessionStorage.getItem('selectedNav'));
+    	if(sessionStorage.getItem('clickedNav') != null && sessionStorage.getItem('clickedNav').length>0){
+    		this.tabs = JSON.parse(sessionStorage.getItem('clickedNav')).arr;
+    	}else{
+    		this.showindex()
+    	}
+    	if(sessionStorage.getItem('selectedNav') != null && sessionStorage.getItem('selectedNav').length>0){
+    		this.selectedTab = JSON.parse(sessionStorage.getItem('selectedNav'));    		
+    	}
+//  	this.tabs = JSON.parse(sessionStorage.getItem('clickedNav')).arr;
+        //this.selectedTab = JSON.parse(sessionStorage.getItem('selectedNav'));
+
     }
 }
 </script>

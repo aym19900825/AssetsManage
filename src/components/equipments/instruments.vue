@@ -69,13 +69,13 @@
 							</el-table-column>
 							<el-table-column label="设备编号" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('设备编号')!=-1">
 							</el-table-column>
-							<el-table-column label="单位名称" width="200" sortable prop="NAME" v-if="this.checkedName.indexOf('单位名称')!=-1">
+							<el-table-column label="设备名称" width="200" sortable prop="NAME" v-if="this.checkedName.indexOf('设备名称')!=-1">
 							</el-table-column>
-							<el-table-column label="联系电话" sortable prop="PHONE" v-if="this.checkedName.indexOf('联系电话')!=-1">
+							<el-table-column label="型号" sortable prop="PHONE" v-if="this.checkedName.indexOf('型号')!=-1">
 							</el-table-column>
-							<el-table-column label="联系地址" sortable prop="CONTACT_ADDRESS" v-if="this.checkedName.indexOf('联系地址')!=-1">
+							<el-table-column label="技术指标" sortable prop="CONTACT_ADDRESS" v-if="this.checkedName.indexOf('技术指标')!=-1">
 							</el-table-column>						
-							<el-table-column label="信息状态" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
+							<el-table-column label="制造厂" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('制造厂')!=-1">
 							</el-table-column>
 						</el-table>
 						<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
@@ -124,11 +124,11 @@
 		        },
 				checkedName: [
 					'设备编号',
-					'单位名称',
+					'设备名称',
 					'性别',
-					'联系电话',
-					'联系地址',
-					'信息状态'
+					'型号',
+					'技术指标',
+					'制造厂'
 				],
 				tableHeader: [
 					{
@@ -136,19 +136,19 @@
 						prop: 'username'
 					},
 					{
-						label: '单位名称',
+						label: '设备名称',
 						prop: 'nickname'
 					},
 					{
-						label: '联系电话',
+						label: '型号',
 						prop: 'telephone'
 					},
 					{
-						label: '联系地址',
+						label: '技术指标',
 						prop: 'deptName'
 					},
 					{
-						label: '信息状态',
+						label: '制造厂',
 						prop: 'enabled'
 					}
 				],

@@ -1,24 +1,18 @@
 <template>
-	<div id="aaa" class="navbar-default navbar-static-side">
-		<EasyScrollbar>
-			<div ref="homePagess2" style="height: 600px;">
-				<div id="information" style="height: inherit;">
-					<div class="navbarbg" @click="min2max()">
-						<span class="navbar-minimalize minimalize-styl-2">
-							<i class="icon-menu1"></i> 
-						</span>
-					</div>
-					<ul class="navs" id="side-menu" v-show="!isShow" >
-						<li v-for="item in leftNavs" @click="addClickNav(item)">
-							<router-link :to="item.navherf">
-								<i :class="item.navicon"></i>
-								<span class="nav-label" v-show="ismin">{{item.navtitle}}</span>
-							</router-link>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</EasyScrollbar>
+	<div id="aaa" class="navbar-default navbar-static-side" :style="{height: fullHeight}">
+		<div class="navbarbg" @click="min2max()">
+			<span class="navbar-minimalize minimalize-styl-2">
+				<i class="icon-menu1"></i> 
+			</span>
+		</div>
+		<ul class="navs" id="side-menu" v-show="!isShow" >
+			<li v-for="item in leftNavs" @click="addClickNav(item)">
+				<router-link :to="item.navherf">
+					<i :class="item.navicon"></i>
+					<span class="nav-label" v-show="ismin">{{item.navtitle}}</span>
+				</router-link>
+			</li>
+		</ul>
 	</div>
 </template>
 
@@ -29,7 +23,7 @@ export default {
 		return{
 			isShow:false,
 			ismin:true,
-			fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
+			fullHeight: document.documentElement.clientHeight - 100+'px',//获取浏览器高度
 			leftNavs: [//leftNavs左侧菜单数据
 				{
 					navicon: 'icon-distribution',
@@ -114,14 +108,7 @@ export default {
 		}
 	},
 	mounted() {
-		// 获取浏览器可视区域高度
-		var _this = this;
-		var clientHeight2 = $(window).height() - 100;    //document.body.clientWidth;
-		_this.$refs.homePagess2.style.height = clientHeight2 + 'px';
-		window.onresize = function() {
-			var clientHeight2 = $(window).height() - 100;
-			_this.$refs.homePagess2.style.height = clientHeight2 + 'px';
-		};
+		
 	}
 }
 </script>

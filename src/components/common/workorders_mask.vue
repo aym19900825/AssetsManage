@@ -3,8 +3,8 @@
 		<div class="mask" v-if="show"></div>
 		<div class="mask_div" v-if="show">
 			<div class="mask_title_div clearfix">
-				<div class="mask_title" v-show="addtitle">添加工作任务单</div>
-				<div class="mask_title" v-show="modifytitle">修改工作任务单</div>
+				<div class="mask_title" v-show="addtitle">添加检验工作处理</div>
+				<div class="mask_title" v-show="modifytitle">修改检验工作处理</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>
 						<i v-bind:class="{'icon-maximization': isok1, 'icon-restore':isok2}"></i>

@@ -158,8 +158,8 @@ export default {
 				navtitle: '样品管理',
 				navherf: '/samples'
 			}, {
-				navicon: 'icon-worklist',
-				navtitle: '工作任务单',
+				navicon: 'icon-worklist',//原工作任务单 workorders.vue
+				navtitle: '检验工作处理',
 				navherf: '/workorders'
 			}, {
 				navicon: 'icon-device',

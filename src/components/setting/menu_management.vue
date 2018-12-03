@@ -67,7 +67,7 @@
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_header from '../common/nav_tabs.vue'
 	import assetsTree from '../plugin/vue-tree/tree.vue'
-	import menumask from '../common/menu_mask.vue'//弹出框
+	import menumask from '../settingDetails/menu_mask.vue'//弹出框
 	export default {
 		name: 'user_management',
 		components: {

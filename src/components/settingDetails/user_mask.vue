@@ -643,6 +643,8 @@
 			},
 			// 这里是修改
 			detail(dataid) {
+				console.log(dataid);
+				console.log(1111111111);
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.modify = true;
@@ -661,13 +663,15 @@
 				var url = '/api/api-user/users/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
 					this.user = res.data;
-					
+					consoe.log(this.user);
 					this.user.sex=this.user.sex?'男':'女';
-					this.user.roleId = [];
-					var roles = this.user.roles;
-					for(var i = 0; i < roles.length; i++) {
-						this.user.roleId.push(roles[i].name);
-					}
+//					this.user.roleId = [];
+//					var roles = this.user.roles;
+//					for(var i = 0; i < roles.length; i++) {
+//						this.user.roleId.push(roles[i].name);
+//					}
+					console.log(1234);
+//					console.log(this.user.roleId);
 					this.show = true;
 				}).catch((err) => {
 					this.$message({

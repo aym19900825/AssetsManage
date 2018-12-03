@@ -21,7 +21,7 @@
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="委托单位" name="1">
 								<el-row :gutter="20" class="pb10">
-									<el-col :span="3" class="pull-right">
+									<el-col :span="5" class="pull-right">
 										<el-input v-model="dataInfo.STATUS" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>

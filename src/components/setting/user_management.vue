@@ -335,12 +335,12 @@
 					});
 					return;
 				} else {
-					this.aaaData[0].roleId = [];
-					var roles = this.aaaData[0].roles;
-					for(var i = 0; i < roles.length; i++) {
-						this.aaaData[0].roleId.push(roles[i].id);
-					}
-					console.log(this.aaaData[0].roleId);
+//					this.aaaData[0].roleId = [];
+//					var roles = this.aaaData[0].roles;
+//					for(var i = 0; i < roles.length; i++) {
+//						this.aaaData[0].roleId.push(roles[i].id);
+//					}
+//					console.log(this.aaaData[0].roleId);
 					this.$refs.child.detail(this.aaaData[0].id);
 				}
 			},

@@ -457,7 +457,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 
 .el-card__header {
 	padding-top: 10px;

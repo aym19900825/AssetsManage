@@ -1,23 +1,20 @@
 <template>
-<div>
-	
-<div class="pl20 pr20" :style="{height: fullHeight}">
-	<el-row :gutter="30">
-		<el-col :span="6" v-for="(item,index) in classLists" :key="index">
+
+	<div class="pl20 pr20">
+		<el-row :gutter="30">
+			<el-col :span="6" v-for="(item,index) in classLists" :key="index">
 			<span @click="spantext($event)"  :class="currentItem==item?'current':'' "><i :class="item">{{item}}</i></span>
-		</el-col>
-	</el-row>
-	
-	<h3 class="pt30">其它</h3>
-	<el-row :gutter="30">
-		<el-col :span="6" v-for="(item,index) in classLists1" :key="index">
+			</el-col>
+		</el-row>
+		<h3 class="pt30">其它</h3>
+		<el-row :gutter="30">
+			<el-col :span="6" v-for="(item,index) in classLists1" :key="index">
 			<span @click="spantext($event)" :class="currentItem==item?'current':'' "><i :class="item">{{item}}</i></span>
-		</el-col>
-		
-	</el-row>
-</div>
-			
-</div>
+			</el-col>
+		</el-row>
+	</div>
+          
+
 </template>
 <script>
 
@@ -28,7 +25,6 @@
 		},
 		data() {
 			return {
-				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				classLists:[
 					'icon-setting3',
 					'icon-data3',
@@ -431,6 +427,7 @@
 </script>
 
 <style scoped>
+
 i[class*=" icon-"]:before,i[class^="icon-"]:before {
 	margin-right: 5px;
 }

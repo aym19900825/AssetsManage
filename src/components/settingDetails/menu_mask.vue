@@ -54,13 +54,14 @@
 									<!--是否影藏-->
 									<el-col :span="8">
 										<el-form-item label="是否显示" prop="hidden">
-											<el-switch  active-color="#5B7BFA" inactive-color="#dadde5" v-model="menu.hidden"  @change="changeval">
+											<el-switch active-color="#5B7BFA" inactive-color="#dadde5" v-model="menu.hidden" @change="changeval">
 											</el-switch>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="菜单图标" prop="css">
 											<el-input v-model="menu.css" :disabled="edit">
+												<i :class="menu.css" slot="prepend"></i>
 												<el-button slot="append" icon="el-icon-search" @click="getCss"></el-button>
 											</el-input>
 										</el-form-item>
@@ -78,21 +79,20 @@
 			</div>
 		</div>
 
-		//弹出
+		<!--提示弹出框 Begin-->
 		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-
 			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps">
 			</el-tree>
-
-			<span slot="footer" class="dialog-footer">
+			<div slot="footer" class="dialog__footer">
 		       <el-button @click="dialogVisible = false">取 消</el-button>
 		       <el-button type="primary" @click="confirm();" >确 定</el-button>
-		    </span>
+		    </div>
 		</el-dialog>
-		//圖標彈出
+		<!--提示弹出框 End-->
+
+		<!--图标弹出 Begin-->
         <div class="mask" v-show="show2"></div>
 		<div class="mask_div" v-show="show2">
-			<!---->
 			<div class="mask_title_div clearfix">
 				<div class="mask_title">应用中心图标</div>
 				<div class="mask_anniu">
@@ -105,18 +105,20 @@
 					</span>
 				</div>
 			</div>
-           <all_icons v-on:childByValue="childByValue"></all_icons>
-                
-			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible = false">取 消</el-button>
-		       <el-button type="primary" @click="confirm2();" >确 定</el-button>
-		    </span>
-	</div>	    
+			<div id="FHScrollbar" :style="{height: fullHeight}">
+				<all_icons v-on:childByValue="childByValue"></all_icons>
+				<div slot="footer" class="el-dialog__footer">
+					<el-button @click="dialogVisible = false">取 消</el-button>
+					<el-button type="primary" @click="confirm2();" >确 定</el-button>
+				</div>
+			</div>
+		</div>
+		<!--图标弹出 End-->	    
 	</div>
 </template>
 
 <script>
-	import all_icons from './all_icons.vue'//弹出框
+	import all_icons from '../common/all_icons.vue'//弹出框
 	export default {
 		name: 'masks',
 		components: {
@@ -171,7 +173,7 @@
 				activeNames: ['1'], //手风琴数量
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
-
+				fullHeight: document.documentElement.clientHeight - 200 +'px',//获取浏览器高度
 				rules: {
 					name: [{
 						required: true,
@@ -279,7 +281,7 @@
 								"url":this.menu.url,
 								"sort":this.menu.sort,
 								"hidden":this.menu.hidden,
-								"css":this.menu.css ,
+								"css":this.menu.css,
 							}
 					
 						//return false;
@@ -344,7 +346,6 @@
 			//图标的带值
 			confirm2() {
 				this.menu.css = this.sendchildValue;
-				
 				this.show2 = false;
 
 			},
@@ -374,4 +375,6 @@
 
 <style scoped>
 	@import '../../assets/css/mask-modules.css';
+
+	#FHScrollbar { overflow-y: scroll;}
 </style>

@@ -135,7 +135,7 @@ export default {
     data() {
       return {
         show: false,
-		fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
+		fullHeight: document.documentElement.clientHeight - 100+'px',//获取浏览器高度
 		applistdata: [//APP应用数据
 			{
 				navicon: 'icon-data3',

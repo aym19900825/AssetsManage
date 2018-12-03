@@ -193,7 +193,7 @@
 			//保存信息
 			submitForm() {
 				this.$refs.roleList.validate((valid) => {
-					// if(valid) {	
+					if(valid) {	
 						var url = '/api/api-user/roles/saveOrUpdate';
 						this.$axios.post(url, this.roleList).then((res) => {
 							if(res.data.resp_code == 0) {
@@ -211,14 +211,13 @@
 								type: 'error'
 							});
 						});
-					// } else {
-					// 	return false;
-					// }
+					} else {
+						return false;
+					}
 				})
 			},
 			//所在机构
 			getDept() {				
-				// this.editSearch = 'dept';
 				var type = 2;
 				var url = '/api/api-user/depts/treeByType';
 				this.$axios.get(url, {

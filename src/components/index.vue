@@ -8,114 +8,111 @@
     <div class="contentbg">
 		<!--右侧内容显示 Begin-->
 		<div class="wrapper-content">
-			<EasyScrollbar>
-				<div id="wrapper" :style="{height: fullHeight}">
-					<div id="information" style="height: 720px;">
-						<div class="ibox-content pl20 pr20">
-							<!--我的应用 Begin-->
-							<div class="clearfix">
-								<h3 class="pull-left">我的应用</h3>
-							</div>
-							<el-row :gutter="20" class="applist">
-								<!--APPList Begin-->
-								<el-col :span="4" v-for="(item,index) in applistdata" :key="index">
-									<div class="applistbg">
-										<router-link :to="item.navherf">
-											<span><i :class="item.navicon"></i></span>
-											<font>{{item.navtitle}}</font></a>
-										</router-link>
-									</div>
-								</el-col>
-								<!--APPList End-->
-							</el-row>
-							<!--我的应用 End-->
-
-							<!--工作统计 Begin-->
-							<h3 class="pt30">工作统计</h3>
-							<el-row :gutter="20" class="applist">
-								<!--APPList Begin-->
-								<el-col :span="6">
-									<div class="statisticsbg">
-										<div class="echart_title clearfix">
-											<div class="pull-left">
-												<h6>工作完成情况</h6>
-											</div>
-											<el-dropdown class="pull-right font13 blue">
-												<span class="el-dropdown-link">
-													近一周<i class="el-icon-arrow-down el-icon--right"></i>
-												</span>
-												<el-dropdown-menu slot="dropdown" class="pull-right">
-													<el-dropdown-item>昨天</el-dropdown-item>
-													<el-dropdown-item>近一周</el-dropdown-item>
-													<el-dropdown-item>近一月</el-dropdown-item>
-													<el-dropdown-item>近一年</el-dropdown-item>
-												</el-dropdown-menu>
-											</el-dropdown>
-										</div>
-										<div class="pt40 clearfix">
-											<div class="pull-left">
-												<p class="big_numb">283</p>
-												<p class="small_font">工作总计</p>
-												<p class="middle_font pt10">
-													待办工作: 32<br />
-													执行中: 41
-												</p>
-											</div>
-											<div class="pull-right pt10" style="width: 140px;">
-												<div class="wracircle" data-anim="base wracircle">
-													<div class="circle" data-anim="base left" style=""></div>
-													<div class="circle_font">
-														<p class="font20">46%</p>
-														<p>工作完成率</p>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</el-col>
-								<el-col :span="6">
-									<div class="statisticsbg">
-										<div class="echart_title clearfix">
-											<div class="pull-left">
-												<h6>设备故障提报量</h6>
-											</div>
-											<el-dropdown class="pull-right font13 blue">
-												<span class="el-dropdown-link">
-													近一年<i class="el-icon-arrow-down el-icon--right"></i>
-												</span>
-												<el-dropdown-menu slot="dropdown" class="pull-right">
-													<el-dropdown-item>昨天</el-dropdown-item>
-													<el-dropdown-item>近一周</el-dropdown-item>
-													<el-dropdown-item>近一月</el-dropdown-item>
-													<el-dropdown-item class="">近一年</el-dropdown-item>
-												</el-dropdown-menu>
-											</el-dropdown>
-										</div>
-										<div id="main" style="width: 100%; height: 140px;"></div>
-									</div>
-								</el-col>
-								<el-col :span="6">
-									<div class="statisticsbg">
-										<div class="echart_title clearfix">
-											<div class="pull-left">
-												<h6>注册用户人数 (1000)</h6>
-											</div>
-											
-										</div>
-									</div>
-								</el-col>
-								<el-col :span="6">
-									<div class="statisticsbg">
-										
-									</div>
-								</el-col>
-								<!--APPList End-->
-							</el-row>
-							<!--工作统计 End-->
-						</div>
+			<div id="information" :style="{height: fullHeight}">
+				<div class="ibox-content pl20 pr20">
+					<!--我的应用 Begin-->
+					<div class="clearfix">
+						<h3 class="pull-left">我的应用</h3>
 					</div>
+					<el-row :gutter="20" class="applist">
+						<!--APPList Begin-->
+						<el-col :span="4" v-for="(item,index) in applistdata" :key="index">
+							<div class="applistbg">
+								<router-link :to="item.navherf">
+									<span><i :class="item.navicon"></i></span>
+									<font>{{item.navtitle}}</font></a>
+								</router-link>
+							</div>
+						</el-col>
+						<!--APPList End-->
+					</el-row>
+					<!--我的应用 End-->
+
+					<!--工作统计 Begin-->
+					<h3 class="pt30">工作统计</h3>
+					<el-row :gutter="20" class="applist">
+						<!--APPList Begin-->
+						<el-col :span="6">
+							<div class="statisticsbg">
+								<div class="echart_title clearfix">
+									<div class="pull-left">
+										<h6>工作完成情况</h6>
+									</div>
+									<el-dropdown class="pull-right font13 blue">
+										<span class="el-dropdown-link">
+											近一周<i class="el-icon-arrow-down el-icon--right"></i>
+										</span>
+										<el-dropdown-menu slot="dropdown" class="pull-right">
+											<el-dropdown-item>昨天</el-dropdown-item>
+											<el-dropdown-item>近一周</el-dropdown-item>
+											<el-dropdown-item>近一月</el-dropdown-item>
+											<el-dropdown-item>近一年</el-dropdown-item>
+										</el-dropdown-menu>
+									</el-dropdown>
+								</div>
+								<div class="pt40 clearfix">
+									<div class="pull-left">
+										<p class="big_numb">283</p>
+										<p class="small_font">工作总计</p>
+										<p class="middle_font pt10">
+											待办工作: 32<br />
+											执行中: 41
+										</p>
+									</div>
+									<div class="pull-right pt10" style="width: 140px;">
+										<div class="wracircle" data-anim="base wracircle">
+											<div class="circle" data-anim="base left" style=""></div>
+											<div class="circle_font">
+												<p class="font20">46%</p>
+												<p>工作完成率</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</el-col>
+						<el-col :span="6">
+							<div class="statisticsbg">
+								<div class="echart_title clearfix">
+									<div class="pull-left">
+										<h6>设备故障提报量</h6>
+									</div>
+									<el-dropdown class="pull-right font13 blue">
+										<span class="el-dropdown-link">
+											近一年<i class="el-icon-arrow-down el-icon--right"></i>
+										</span>
+										<el-dropdown-menu slot="dropdown" class="pull-right">
+											<el-dropdown-item>昨天</el-dropdown-item>
+											<el-dropdown-item>近一周</el-dropdown-item>
+											<el-dropdown-item>近一月</el-dropdown-item>
+											<el-dropdown-item class="">近一年</el-dropdown-item>
+										</el-dropdown-menu>
+									</el-dropdown>
+								</div>
+								<div id="main" style="width: 100%; height: 140px;"></div>
+							</div>
+						</el-col>
+						<el-col :span="6">
+							<div class="statisticsbg">
+								<div class="echart_title clearfix">
+									<div class="pull-left">
+										<h6>注册用户人数 (1000)</h6>
+									</div>
+									
+								</div>
+							</div>
+						</el-col>
+						<el-col :span="6">
+							<div class="statisticsbg">
+								
+							</div>
+						</el-col>
+						<!--APPList End-->
+					</el-row>
+					<!--工作统计 End-->
 				</div>
-			</EasyScrollbar>
+			</div>
+				
 		</div>
 	</div>
 	<!--右侧内容显示 End-->

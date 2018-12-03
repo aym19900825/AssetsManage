@@ -30,14 +30,14 @@
 											<template slot="prepend">信息状态</template>
 										</el-input>
 									</el-col>
+									<el-col :span="8" class="pull-right">
+										<el-input v-model="testingForm.M_NUM" :disabled="true">
+											<template slot="prepend">检验/检测方法编号</template>
+										</el-input>
+									</el-col>
 								</el-row>
 
 								<el-row :gutter="30">
-									<el-col :span="8">
-										<el-form-item label="检验/检测方法编号">
-											<el-input v-model="testingForm.M_NUM" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
 									<el-col :span="8">
 										<el-form-item label="中文名称" prop="M_NAME">
 											<el-input v-model="testingForm.M_NAME"></el-input>
@@ -48,16 +48,15 @@
 											<el-input v-model="testingForm.M_ENAME"></el-input>
 										</el-form-item>
 									</el-col>
-								</el-row>
-								<el-row :gutter="30">
-									<el-col :span="24">
+									<el-col :span="8">
 										<el-form-item label="类别" prop="M_TYPE">
-											<el-input v-model="testingForm.M_TYPE" disabled>
-											<el-button slot="append" icon="icon-search"></el-button>
-											</el-input>
+											<el-select v-model="testingForm.M_TYPE" placeholder="请选择类别" style="width: 100%;">
+												<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
+											</el-select>
 										</el-form-item>
 									</el-col>
 								</el-row>
+								
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="录入人机构">
@@ -95,9 +94,9 @@
 								<div class="table-func">
 									<el-button type="primary" size="mini" round>
 										<i class="icon-upload-cloud"></i>
-										<font>导入</font>
+										<font>上传</font>
 									</el-button>
-									<el-button type="success" size="mini" round  @click="addfield_doclinks">
+									<el-button type="success" size="mini" round @click="addfield_doclinks">
 										<i class="icon-add"></i>
 										<font>新建</font>
 									</el-button>
@@ -129,39 +128,39 @@
 									      </template>
 									    </el-table-column>
 
-									    <el-table-column label="文档描述" sortable width="200" prop="DESCRIPTION">
+									    <el-table-column label="文档描述" sortable width="300" prop="DESCRIPTION">
 									      <template slot-scope="scope">
 									        <el-form-item :prop="'inspectionList.'+scope.$index + '.DESCRIPTION'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-									        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DESCRIPTION" placeholder="请输入内容">
-									        		<el-button slot="append" icon="icon-search"></el-button>
-									        	</el-input><span v-else="v-else">{{scope.row.DESCRIPTION}}</span>
+									        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DESCRIPTION" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.DESCRIPTION}}</span>
 											</el-form-item>
-									      </template>
-									    </el-table-column>
-
-									    <el-table-column prop="ENTERBY" label="上传人" sortable width="120">
-									      <template slot-scope="scope">
-									        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ENTERBY" placeholder="请输入内容" disabled></el-input><span v-else="v-else">{{scope.row.ENTERBY}}</span>
-									      </template>
-									    </el-table-column>
-
-									     <el-table-column prop="ENTERDATE" label="上传时间" sortable width="160" :formatter="dateFormat">
-									      <template slot-scope="scope">
-									      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ENTERDATE" disabled></el-input><span v-else="v-else">{{scope.row.ENTERDATE}}</span>
 									      </template>
 									    </el-table-column>
 										
 										<el-table-column prop="DOC_SIZE" label="文件大小" sortable width="120">
 									      <template slot-scope="scope">
-									        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DOC_SIZE" placeholder="请输入内容" disabled></el-input><span v-else="v-else">{{scope.row.DOC_SIZE}}</span>
+									        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DOC_SIZE" placeholder="自动获取" disabled></el-input><span v-else="v-else">{{scope.row.DOC_SIZE}}</span>
 									      </template>
 									    </el-table-column>
 
-										<el-table-column prop="ROUTE" label="预览" sortable width="120">
+									    <el-table-column prop="ENTERBY" label="上传人" sortable width="120">
 									      <template slot-scope="scope">
-									        <router-link :to="scope.row.ROUTE" class="blue">
+									        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ENTERBY" placeholder="自动获取" disabled></el-input><span v-else="v-else">{{scope.row.ENTERBY}}</span>
+									      </template>
+									    </el-table-column>
+
+									     <el-table-column prop="ENTERDATE" label="上传时间" sortable width="160" :formatter="dateFormat">
+									      <template slot-scope="scope">
+									      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ENTERDATE" placeholder="自动获取" disabled></el-input><span v-else="v-else">{{scope.row.ENTERDATE}}</span>
+									      </template>
+									    </el-table-column>
+
+										<el-table-column prop="ROUTE" label="预览" sortable>
+									      <template slot-scope="scope">
+									        <el-button size="small" type="primary" v-if="scope.row.isEditing">点击上传</el-button>
+									        <router-link :to="scope.row.ROUTE" target="_blank" class="blue font20" v-else="v-else">
 												<i class="icon-word"></i>
 											</router-link>
+
 									      </template>
 									    </el-table-column>
 
@@ -185,7 +184,7 @@
 						<el-form-item>
 							<!-- <button @click="cancelForm" class="btn btn-default btn-large">取消</button> -->
 							<button type="primary" class="btn btn-primarys btn-large" @click="submitForm('testingForm')">提交</button>
-							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion2">修订</el-button>
+							<button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion2">修订</button>
 						</el-form-item>
 					</div>
 				</el-form>
@@ -207,8 +206,8 @@
 				default: function() {
 					return {
 						VERSION: '1',
-						STATUS: '活动',
-						M_NUM: 'TRO100012',
+						STATUS: '1',
+						M_NUM: '',
 						M_NAME: '',
 						M_ENAME: '',
 						M_TYPE: '',
@@ -222,28 +221,6 @@
 			}
 		},
 		data() {
-			var validateM_NAME = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('请填写中文名称'));
-				} else {
-					callback();
-				}
-			};
-			var validateM_ENAME = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('请填写英文名称'));
-				} else {
-					callback();
-				}
-			};
-			var validateM_TYPE = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('请填写类别'));
-				} else {
-					callback();
-				}
-			};
-
 			return {
 				value: '',
 				options: [{
@@ -253,6 +230,7 @@
 					value: '0',
 					label: '不活动'
 				}],
+				selectData: [], //获取检验/检测方法类别
 				modify:false,//修订、创建人、创建日期
 				selMenu:[],
 				show: false,
@@ -266,27 +244,23 @@
 				labelPosition: 'top', //表单标题在上方
 				addtitle: true,
 				modifytitle: false,
-				testing_filesForm:{//产品类别数据组
+				testing_filesForm:{//文件文档数据组
 					inspectionList: []
 				},
 				isEditing: '',
 				commentArr:{},//下拉加载
 				rules: { //定义需要校验数据的名称
-					M_NAME: [{
-						required: true,
-						trigger: 'blur',
-						validator: validateM_NAME,
-					}],
-					M_ENAME: [{
-						required: true,
-						trigger: 'blur',
-						validator: validateM_ENAME,
-					}],
-					M_TYPE: [{
-						required: true,
-						trigger: 'blur',
-						validator: validateM_TYPE,
-					}]
+					M_NAME: [
+						{ required: true, message: '请填写中文名称', trigger: 'blur' },
+						{ min: 5, max: 35, message: '长度在 5 到 35 个字符', trigger: 'blur' }
+					],
+					M_ENAME: [
+						{ required: true, message: '请填写英文名称', trigger: 'blur' },
+						{ min: 5, max: 50, message: '长度在 5 到 15 个字符', trigger: 'blur' }
+					],
+					M_TYPE: [
+						{ required: true, message: '请选择类别', trigger: 'change' }
+					]
 				},
 			};
 		},
@@ -298,8 +272,8 @@
 			resetNew(){
                 this.testingForm = {
 					VERSION: '1',
-					STATUS: '活动',
-					M_NUM: 'TRO10001',
+					STATUS: '1',
+					M_NUM: '',
 					M_NAME: '',
 					M_ENAME: '',
 					M_TYPE: '',
@@ -364,6 +338,7 @@
 					})
 				})
 			},
+
 			loadMore () {//表格滚动加载
 			   if (this.loadSign) {
 			     this.loadSign = false
@@ -385,7 +360,7 @@
 		      this.page.currentPage = val;
 		      this.requestData_doclinks();
 		    },
-			searchinfo(index) {
+			searchinfo(index) {//查询展示出第1页数据
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
 				this.requestData_doclinks();
@@ -393,6 +368,7 @@
 			judge(data) {//taxStatus 信息状态布尔值
 				return data.enabled ? '活动' : '不活动'
 			},
+
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -401,8 +377,16 @@
 				}
 				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 			},
-			
-			addfield_doclinks() { //插入行到产品类别Table中
+			//检验/检测方法类别
+			getType() {
+				var url = '/api/api-user/dicts/findChildsByCode?code=type';
+				this.$axios.get(url, {}).then((res) => {
+					this.selectData = res.data;
+				}).catch(error => {
+					console.log('请求失败');
+				})
+			},
+			addfield_doclinks() { //插入行到文件文档Table中
 				var isEditingflag=false;
 				for(var i=0;i<this.testing_filesForm.inspectionList.length; i++){
 					if (this.testing_filesForm.inspectionList[i].isEditing==false){
@@ -420,14 +404,12 @@
 						this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 						var index=this.$moment(date).format("YYYYMMDDHHmmss");
 						var obj = {
-							"DESCRIPTION": '',
-							"STATUS": '活动',
 							"DOCLINKS": 'FLS' + index,
-							"VERSION": 1,
-							"DEPARTMENT": '',
+							"DESCRIPTION": '',
+							"DOC_SIZE": '',
 							"ROUTE": '',
-							"CHANGEBY": this.currentUser,
-							"CHANGEDATE": this.currentDate,
+							"ENTERBY": this.currentUser,
+							"ENTERDATE": this.currentDate,
 							"isEditing": true,
 						};
 						this.testing_filesForm.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
@@ -443,19 +425,17 @@
 			},
 			saveRow (row) {//Table-操作列中的保存行
 				this.$refs['testing_filesForm'].validate((valid) => {
-					row.VERSION = row.VERSION + 1;//修改保存后版本号+1
+					//row.VERSION = row.VERSION + 1;//修改保存后版本号+1
 		          if (valid) {
 					var url = '/api/api-apps/app/doclinks/saveOrUpdate';
 					var submitData = {
 						"ID":row.ID,
-						"DESCRIPTION": row.DESCRIPTION,
 					    "DOCLINKS": row.DOCLINKS,
-					    "VERSION": row.VERSION,
-					    "DEPARTMENT": row.DEPARTMENT,
-						"STATUS": row.STATUS,
+						"DESCRIPTION": row.DESCRIPTION,
+					    "DOC_SIZE": row.DOC_SIZE,
 						"ROUTE": row.ROUTE,
-						"CHANGEBY": row.CHANGEBY,
-					    "CHANGEDATE": row.CHANGEDATE,
+						"ENTERBY": row.ENTERBY,
+					    "ENTERDATE": row.ENTERDATE,
 					}
 					this.$axios.post(url, submitData).then((res) => {
 						if(res.data.resp_code == 0) {
@@ -478,7 +458,7 @@
 		        });
 			},
 			deleteRow(row) {//Table-操作列中的删除行
-				this.$confirm('确定删除此产品类别吗？', '提示', {
+				this.$confirm('确定删除此文件文档吗？', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                 }).then(({ value }) => {
@@ -545,11 +525,27 @@
 
 			},
 			//保存
-			submitForm(testingForm) {
-				this.$refs[testingForm].validate((valid) => {
-//					if(valid) {
+			submitForm(formName) {
+				this.$refs[formName].validate((valid) => {
+					if (valid) {
+						// if(testingForm.M_TYPE.length > 0) {
+						// 	var arr = [];
+						// 	testingForm.M_TYPE.forEach(function(item) {
+						// 		var roles = this.selectData;
+						// 		for(var j = 0; j < roles.length; j++) {
+						// 			if(roles[j].id == item) {
+						// 				arr.push(roles[j]);
+						// 			}
+						// 		}
+						// 		console.log(arr);
+						// 	});
+						// 	testingForm.M_TYPE = testingForm.M_TYPE.join(',');
+						// 	testingForm.roles = arr;
+						// } else {
+						// 	testingForm.M_TYPE = '';
+						// 	testingForm.roles = [];
+						// };
 						var url = '/api/api-apps/app/inspectionMet/saveOrUpdate';
-           
 						this.$axios.post(url, this.testingForm).then((res) => {
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
@@ -567,9 +563,9 @@
 								type: 'error'
 							});
 						});
-//					} else {
-//						return false;
-//					}
+					} else {
+						return false;
+					}
 				});
 
 			},
@@ -581,7 +577,9 @@
 					.catch(_ => {});
 			}
 		},
-
+		mounted() {
+			this.getType();
+		},
 	}
 </script>
 

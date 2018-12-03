@@ -720,6 +720,7 @@
 						var user = this.user;
 						user.sex = user.sexName == '男' ? 1 : 0;
 						if(typeof(user.roleId) != 'undefined' && user.roleId.length > 0) {
+
 							var arr = [];
 							user.roleId.forEach(function(item) {
 								var roles = _this.selectData;

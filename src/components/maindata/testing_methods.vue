@@ -105,7 +105,7 @@
 							<el-table :data="methodsList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'methodsList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="检验/检测方法编号" width="150" sortable prop="M_NUM" v-if="this.checkedName.indexOf('检验/检测方法编号')!=-1">
+								<el-table-column label="检验/检测方法编号" width="170" sortable prop="M_NUM" v-if="this.checkedName.indexOf('检验/检测方法编号')!=-1">
 								</el-table-column>
 								<el-table-column label="中文名称" width="220" sortable prop="M_NAME" v-if="this.checkedName.indexOf('中文名称')!=-1">
 								</el-table-column>
@@ -288,20 +288,30 @@
 				this.requestData();
 			},
 			openAddMgr() {//添加检验/检测方法编号数据
-				this.testingForm = {
-					VERSION: '1',
-					STATUS: '活动',
-					M_NUM: 'TRO10001',
-					M_NAME: '',
-					M_ENAME: '',
-					M_TYPE: '',
-					DEPARTMENT: '',
-					ENTERBY: '',
-					ENTERDATE: '',
-					CHANGEBY: '',
-					CHANGEDATE: '',
-				};
-				this.$refs.child.childMethods();
+				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+					var date=new Date();
+					var index=this.$moment(date).format("YYYYMMDDHHmmss");
+					this.testingForm = {
+						"VERSION": '1',
+						"STATUS": '1',
+						"M_NUM": 'TRO' + index,
+						"M_NAME": '',
+						"M_ENAME": '',
+						"M_TYPE": '',
+						"DEPARTMENT": '',
+						"ENTERBY": '',
+						"ENTERDATE": '',
+						"CHANGEBY": '',
+						"CHANGEDATE": '',
+					};
+					this.$refs.child.childMethods();
+
+				}).catch((err)=>{
+					this.$message({
+						message:'网络错误，请重试',
+						type:'error'
+					})
+				})
 			},
 			modify() {//修改检验/检测方法编号数据
 				this.aaaData = this.selMenu;
@@ -388,8 +398,7 @@
 			Printing() {
 
 			},
-			judge(data) {
-				//taxStatus 布尔值
+			judge(data) {//taxStatus 布尔值
 				return data.enabled ? '活动' : '不活动'
 			},
 			//时间格式化  

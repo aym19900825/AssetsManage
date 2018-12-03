@@ -260,10 +260,10 @@
 									</el-table-column>
 									<el-table-column prop="enterby" label="录入人" sortable width="120px">
 										<template slot-scope="scope">
-											<el-form-item :prop="'qualifications.'+scope.$index + '.enterby'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.enterby" placeholder="请输入要求">
+											<el-form-item :prop="'qualifications.'+scope.$index + '.enterbyName'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.enterbyName" placeholder="请输入要求">
 											</el-input>
-											<span v-else="v-else">{{scope.row.enterby}}</span>
+											<span v-else="v-else">{{scope.row.enterbyName}}</span>
 											</el-form-item>
 										</template>
 									</el-table-column>
@@ -481,6 +481,7 @@
 				user: {
 					status: '活动',
 					roleId: [],
+					roles:[],
 					traings: [],
 					qualifications: [],
 				},
@@ -574,24 +575,38 @@
 		methods: {
 			iconOperation(row, column, cell, event) {
 				if(column.property === "iconOperation") {
-					console.log(row.isEditing);
+					
 					row.isEditing = !row.isEditing;
-					console.log(row.isEditing);
+					
 				}
 			},
 			addfield1() {
-				var obj = {
+				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+				    var currentUser, currentDate;
+					this.currentUser=res.data.nickname;
+					this.enterby=res.data.id
+					var date=new Date();
+					this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
+					var obj = {
 					step: '',
 					c_num: '',
 					c_name: '',
 					c_date: '',
 					status:'',
-					enterby:'',
-					enterdate:'',
+					enterdate:this.currentDate,
+					enterbyName:this.currentUser,
+					enterby:this.enterby,
 					//少附件
 					isEditing: true
 				};
 				this.user.qualifications.push(obj);
+				}).catch((err)=>{
+					this.$message({
+						message:'网络错误，请重试',
+						type:'error'
+					})
+				})
+				
 			},
 			addfield2() {
 				var obj = {
@@ -612,8 +627,7 @@
 			},
 			//
 			handleCheckChange(data, checked, indeterminate) {
-				//console.log(data, checked, indeterminate);
-				this.getCheckboxData = data;s
+				this.getCheckboxData = data;
 			},
 			//
 			handleNodeClick(data) { //获取勾选树菜单节点
@@ -626,6 +640,8 @@
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
 					this.user.createby=res.data.id;
 					this.user.createbyName=res.data.nickname;
+					this.user.enterby=res.data.id
+					this.user.enterbyName=res.data.nickname;
 					var date=new Date();
 					this.user.createTime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{
@@ -647,7 +663,7 @@
 				this.modifytitle = true;
 				this.modify = true;
 				$('.usernames .el-input__inner').attr('disabled',true);
-				var usersUrl = '/api/api-user/users/currentMap'
+				var usersUrl = '/api/api-user/users/currentMap';
 				this.$axios.get(usersUrl, {}).then((res) => {
 					this.user.changeby = res.data.nickname;
 					var date = new Date();
@@ -660,8 +676,9 @@
 				});
 				var url = '/api/api-user/users/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
-					this.user = res.data;
 					
+					this.user = res.data;
+
 					this.user.sex=this.user.sex?'男':'女';
 					this.user.roleId = [];
 					var roles = this.user.roles;
@@ -735,7 +752,6 @@
 					
 						var url = '/api/api-user/users/saveOrUpdate';
 						this.$axios.post(url, this.user).then((res) => {
-
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',
@@ -803,8 +819,6 @@
 					},
 				}).then((res) => {
 					this.selectData = res.data.data;
-					//console.log(res.data.data);
-					//console.log(this.selectData);
 				}).catch(error => {
 					console.log('请求失败');
 				})

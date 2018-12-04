@@ -571,7 +571,7 @@
 				this.$refs[CUSTOMER].validate((valid) => {
 		          if (valid) {
 		          	this.CUSTOMER.STATUS=this.CUSTOMER.STATUS=="活动" ? '1' : '0';
-					var url = '/api/apps-center/app/customer/saveOrUpdate';		
+					var url = '/api/apps-center/app/customer/saveOrUpdate';
 					this.$axios.post(url, this.CUSTOMER).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {

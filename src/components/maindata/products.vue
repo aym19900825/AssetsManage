@@ -221,11 +221,7 @@
 						prop: 'CHANGEDATE'
 					}
 				],
-				companyId: '',
-				deptId: '',
 				selUser: [],
-				'启用': true,
-				'冻结': false,
 				productList: [],
 				search: false,
 				show: false,
@@ -328,7 +324,7 @@
 					});
 					return;
 				} else {
-					this.$refs.child.detail(this.aaaData[0].ID);
+					this.$refs.child.detail(this.aaaData[0]);
 				}
 			},
 			//高级查询
@@ -398,14 +394,7 @@
 				
 			},
 			judge(data) {
-				return data.enabled ? '活动' : '不活动'
-			},
-			
-			insert() {
-				this.users.push(this.user)
-			},
-			remove(index) {
-				this.users.splice(index, 1)
+				return data.STATUS=="1" ? '活动' : '不活动'
 			},
 			SelChange(val) {
 				this.selUser = val;
@@ -425,6 +414,7 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
+					console.log(res);
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)

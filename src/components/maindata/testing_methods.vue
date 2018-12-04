@@ -136,7 +136,7 @@
 				</div>
 			</div>
 			<!--右侧内容显示 End-->
-			<testingmask :testingForm="testingForm" ref="child" @request="requestData" v-bind:page=page></testingmask>
+			<testingmask :testingForm="aaaData[0]" ref="child" @request="requestData" v-bind:page=page></testingmask>
 		</div>
 	</div>
 </template>
@@ -225,13 +225,9 @@
 						prop: 'CHANGEDATE'
 					}
 				],
-				companyId: '',
-				deptId: '',
 				selMenu: [],
 				'活动': true,
 				'不活动': false,
-				'男': true,
-				'女': false,
 				methodsList: [],
 				search: false,
 				show: false,
@@ -290,7 +286,7 @@
 			openAddMgr() {//添加检验/检测方法编号数据
 				this.testingForm = {
 					"VERSION": 0,
-					"STATUS": 1,
+					"STATUS": '活动',
 					"M_NUM": '',
 					"M_NAME": '',
 					"M_ENAME": '',
@@ -389,7 +385,7 @@
 
 			},
 			judge(data) {//taxStatus 布尔值
-				return data.enabled ? '活动' : '不活动'
+				return data.STATUS ? '活动' : '不活动';
 			},
 			//时间格式化  
 			dateFormat(row, column) {

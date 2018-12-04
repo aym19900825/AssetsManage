@@ -286,6 +286,7 @@
             	this.show = !this.show;
 			},
 			detail() { //修改内容时从父组件带过来的
+				
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
 					this.testingForm.CHANGEBY=res.data.nickname;
 					var date=new Date();
@@ -299,7 +300,10 @@
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.modify = true;
+                this.testingForm
 				this.show = true;
+				this.testingForm.STATUS=this.testingForm.STATUS=="1"?"活动":"不活动";
+				
 			},
 
 			iconOperation(row, column, cell, event){//切换Table-操作列中的修改、保存
@@ -349,9 +353,7 @@
 				this.page.pageSize = 10;
 				this.requestData_doclinks();
 			},
-			judge(data) {//taxStatus 信息状态布尔值
-				return data.enabled ? '活动' : '不活动'
-			},
+			
 
 			//时间格式化  
 			dateFormat(row, column) {
@@ -511,6 +513,7 @@
 			submitForm(formName) {
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
+						this.testingForm.STATUS=this.testingForm.STATUS=="活动" ? '1' : '0';
 						var url = '/api/api-apps/app/inspectionMet/saveOrUpdate';
 						this.testingForm.VERSION = this.testingForm.VERSION + 1;//修改时版本+1
 						this.$axios.post(url, this.testingForm).then((res) => {

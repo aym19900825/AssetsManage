@@ -381,7 +381,7 @@
 					});
 					return;
 				} else {
-					this.$refs.child.detail();
+					this.$refs.child.detail(this.aaaData[0]);
 				}
 			},
 			//高级查询

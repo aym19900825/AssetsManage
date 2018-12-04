@@ -73,7 +73,7 @@
 							</el-table-column>
 							<el-table-column label="规格型号" sortable prop="MODEL" v-if="this.checkedName.indexOf('规格型号')!=-1">
 							</el-table-column>
-							<el-table-column label="设备状态" sortable prop="STATE" :formatter="judge"  v-if="this.checkedName.indexOf('设备状态')!=-1">
+							<el-table-column label="设备状态" sortable prop="STATUS" :formatter="judge"  v-if="this.checkedName.indexOf('设备状态')!=-1">
 							</el-table-column>						
 							<el-table-column label="保管人" sortable prop="KEEPER" v-if="this.checkedName.indexOf('信息状态')!=-1">
 							</el-table-column>
@@ -115,12 +115,12 @@
 				searchData: {
 			        page: 1,
 			        limit: 10,//分页显示数
-			        nickname: '',
-			        enabled: '',
-			        searchKey: '',
-			        searchValue: '',
-			        companyId: '',
-			        deptId: ''
+//			        nickname: '',
+//			        enabled: '',
+//			        searchKey: '',
+//			        searchValue: '',
+//			        companyId: '',
+//			        deptId: ''
 		        },
 				checkedName: [
 					'设备编号',
@@ -145,7 +145,7 @@
 					},
 					{
 						label: '设备状态',
-						prop: 'STATE'
+						prop: 'STATUS'
 					},
 					{
 						label: '保管人',

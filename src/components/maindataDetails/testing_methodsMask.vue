@@ -21,17 +21,17 @@
 							<el-collapse-item title="基础信息" name="1">
 								<el-row :gutter="20" class="pb10">
 									<el-col :span="3" class="pull-right">
-										<el-input type="number" v-model.number="testingForm.VERSION" :disabled="true">
+										<el-input placeholder="自动生成" type="number" v-model.number="testingForm.VERSION" :disabled="true">
 											<template slot="prepend">版本</template>
 										</el-input>
 									</el-col>
 									<el-col :span="4" class="pull-right">
-										<el-input v-model="testingForm.STATUS" :disabled="true">
+										<el-input placeholder="自动生成" v-model="testingForm.STATUS" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
 									</el-col>
 									<el-col :span="8" class="pull-right">
-										<el-input placeholder="自动获取" v-model="testingForm.M_NUM" :disabled="true">
+										<el-input  placeholder="自动生成" v-model="testingForm.M_NUM" :disabled="true">
 											<template slot="prepend">检验/检测方法编号</template>
 										</el-input>
 									</el-col>
@@ -138,19 +138,19 @@
 										
 										<el-table-column prop="DOC_SIZE" label="文件大小" sortable width="120">
 									      <template slot-scope="scope">
-									        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DOC_SIZE" placeholder="自动获取" disabled></el-input><span v-else="v-else">{{scope.row.DOC_SIZE}}</span>
+									        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DOC_SIZE"  placeholder="自动生成" disabled></el-input><span v-else="v-else">{{scope.row.DOC_SIZE}}</span>
 									      </template>
 									    </el-table-column>
 
 									    <el-table-column prop="ENTERBY" label="上传人" sortable width="120">
 									      <template slot-scope="scope">
-									        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ENTERBY" placeholder="自动获取" disabled></el-input><span v-else="v-else">{{scope.row.ENTERBY}}</span>
+									        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ENTERBY"  placeholder="自动生成" disabled></el-input><span v-else="v-else">{{scope.row.ENTERBY}}</span>
 									      </template>
 									    </el-table-column>
 
 									     <el-table-column prop="ENTERDATE" label="上传时间" sortable width="160" :formatter="dateFormat">
 									      <template slot-scope="scope">
-									      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ENTERDATE" placeholder="自动获取" disabled></el-input><span v-else="v-else">{{scope.row.ENTERDATE}}</span>
+									      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ENTERDATE"  placeholder="自动生成" disabled></el-input><span v-else="v-else">{{scope.row.ENTERDATE}}</span>
 									      </template>
 									    </el-table-column>
 
@@ -270,7 +270,7 @@
 			
 			childMethods() {//添加内容时从父组件带过来的
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
-					this.testingForm.DEPARTMENT=res.data.deptName;
+					this.testingForm.DEPARTMENT=res.data.companyName;
 					this.testingForm.ENTERBY=res.data.nickname;
 					var date=new Date();
 					this.testingForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");

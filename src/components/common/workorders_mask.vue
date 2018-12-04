@@ -28,12 +28,12 @@
 										</el-input>
 									</el-col>
 									<el-col :span="4" class="pull-right">
-										<el-input placeholder="自动获取" v-model="workorderForm.STATE" :disabled="true">
+										<el-input  placeholder="自动生成" v-model="workorderForm.STATE" :disabled="true">
 												<template slot="prepend">状态</template>
 										</el-input>
 									</el-col>
 									<el-col :span="6" class="pull-right">
-										<el-input placeholder="自动获取" v-model="workorderForm.WONUM" :disabled="true">
+										<el-input  placeholder="自动生成" v-model="workorderForm.WONUM" :disabled="true">
 												<template slot="prepend">工作任务单编号</template>
 										</el-input>
 									</el-col>

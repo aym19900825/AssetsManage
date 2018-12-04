@@ -21,40 +21,41 @@
 							<el-collapse-item title="基本信息" name="1">
 								<el-row :gutter="20" class="pb10">
 									<el-col :span="3" class="pull-right">
-										<el-input v-model="testing_projectForm.VERSION" :disabled="true">
+										<el-input placeholder="自动生成" v-model="testing_projectForm.VERSION" :disabled="true">
 											<template slot="prepend">版本</template>
 										</el-input>
 									</el-col>
-									<el-col :span="3" class="pull-right">
-										<el-input v-model="testing_projectForm.STATUS" :disabled="true">
+									<el-col :span="5" class="pull-right">
+										<el-input placeholder="自动生成" v-model="testing_projectForm.STATUS" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
-										<!-- <el-select v-model="testing_projectForm.STATUS" placeholder="请选择信息状态">
-											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-											</el-option>
-										</el-select> -->
+									</el-col>
+									<el-col :span="7" class="pull-right">
+										<el-input placeholder="自动生成" v-model="testing_projectForm.P_NUM" :disabled="true">
+											<template slot="prepend">检验/检测项目编号</template>
+										</el-input>
 									</el-col>
 								</el-row>
 
 								<el-row :gutter="30">
-									<el-col :span="8">
-										<el-form-item label="检验/检测项目编号" prop="P_NUM">
-											<el-input v-model="testing_projectForm.P_NUM"></el-input>
-										</el-form-item>
-									</el-col>
 									<el-col :span="16">
 										<el-form-item label="项目名称" prop="P_NAME">
 											<el-input v-model="testing_projectForm.P_NAME"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="单价(元)" prop="QUANTITY">
+											<el-input-number type="number" :precision="2" v-model.number="testing_projectForm.QUANTITY" :step="5" :max="100000" style="width: 100%;"></el-input-number>
 										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="24">
 										<el-form-item label="文档" prop="DOCLINKS_NUM">
-										<el-input v-model="testing_projectForm.DOCLINKS_NUM" disabled>
-											<el-button slot="append" icon="icon-search" @click="getCompany"></el-button>
-										</el-input>
-									</el-form-item>
+											<el-input v-model="testing_projectForm.DOCLINKS_NUM" disabled>
+												<el-button slot="append" icon="icon-search" @click="getCompany"></el-button>
+											</el-input>
+										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row :gutter="30">
@@ -76,8 +77,8 @@
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="8">
-										<el-form-item label="录入人机构" prop="DEPT">
-											<el-input v-model="testing_projectForm.DEPT" :disabled="true"></el-input>
+										<el-form-item label="录入人机构" prop="DEPARTMENT">
+											<el-input v-model="testing_projectForm.DEPARTMENT" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -91,14 +92,14 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30">
+								<el-row :gutter="30" v-if="modify">
 									<el-col :span="8">
-										<el-form-item v-if="modify" label="修改人" prop="CHANGEBY">
+										<el-form-item label="修改人" prop="CHANGEBY">
 											<el-input v-model="testing_projectForm.CHANGEBY" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item  v-if="modify" label="修改时间" prop="CHANGEDATE">
+										<el-form-item label="修改时间" prop="CHANGEDATE">
 											<el-input v-model="testing_projectForm.CHANGEDATE" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
@@ -107,8 +108,9 @@
 						</el-collapse>
 					</div>
 					<div class="el-dialog__footer">
-						<el-button @click='close' class="btn btn-default btn-large">取消</el-button>
-						<el-button type="primary" class="btn btn-primarys btn-large" @click="submitForm('testing_projectForm')">提交</el-button>
+						<button class="btn btn-default btn-large" @click="cancelForm">取消</button>
+						<button v-if="modify" type="primary" class="btn btn-primarys btn-large" @click="submitForm('testing_projectForm')">修订</button>
+						<button v-else="modify" type="primary" class="btn btn-primarys btn-large" @click="submitForm('testing_projectForm')">提交</button>
 					</div>
 				</el-form>
 			</div>
@@ -130,39 +132,63 @@
 	export default {
 		name: 'masks',
 		props: {
+			page: {
+				type: Object,
+			},
 			testing_projectForm: {
 				type: Object,
 				default: function(){
 					return {
-					P_NUM: '',
-					P_NAME: '',
-					STATUS: '',
-					VERSION: '1',
-					QUALIFICATION: '',
-					FIELD: '',
-					CHILD_FIELD: '',
-					DOCLINKS_NUM: '',
-					DEPT: '',
-					ENTERBY:'',
-					ENTERDATE: '',
-					CHANGEBY: '',
-					CHANGEDATE:'',
+						VERSION: '',
+						STATUS: '',
+						P_NUM: '',
+						P_NAME: '',
+						QUANTITY: '',
+						QUALIFICATION: '',
+						FIELD: '',
+						CHILD_FIELD: '',
+						DOCLINKS_NUM: '',
+						DEPARTMENT: '',
+						ENTERBY:'',
+						ENTERDATE: '',
+						CHANGEBY: '',
+						CHANGEDATE:'',
 					}
 				}
 			},
-			page: Object ,
 		},
 		data() {
-			var validateName = (rule, value, callback) => {
+			var validateP_NUM = (rule, value, callback) => {
 				if(value === '') {
-					callback(new Error('请英文填写表名'));
+					callback(new Error('请填写检测项目编号'));
 				} else {
 					callback();
 				}
 			};
-			var validateDecri = (rule, value, callback) => {
+			var validateP_NAME = (rule, value, callback) => {
 				if(value === '') {
-					callback(new Error('请填写描述'));
+					callback(new Error('请填写项目名称'));
+				} else {
+					callback();
+				}
+			};
+			var validateQUANTITY = (rule, value, callback) => {
+				if(value === 0.00) {
+					callback(new Error('请填写单价'));
+				} else {
+					callback();
+				}
+			};
+			var validateQUALIFICATION = (rule, value, callback) => {
+				if(value === '') {
+					callback(new Error('请填写人员资质'));
+				} else {
+					callback();
+				}
+			};
+			var validateDOCLINKS_NUM = (rule, value, callback) => {
+				if(value === '') {
+					callback(new Error('请选择文档'));
 				} else {
 					callback();
 				}
@@ -177,7 +203,6 @@
 					value: '0',
 					label: '不活动'
 				}],
-				selUser: [],
 				edit: true, //禁填
 				show: false,
 				isok1: true,
@@ -192,23 +217,34 @@
 				modify:true,
 				statusshow1:true,
 				statusshow2:true,
-				rules: {
-					name: [{
+				rules: {//需要验证的字段
+					P_NUM: [{
 						required: true,
 						trigger: 'blur',
-						validator: validateName,
+						validator: validateP_NUM,
 					}],
-					description: [{
+					P_NAME: [{
 						required: true,
 						trigger: 'blur',
-						validator: validateDecri,
+						validator: validateP_NAME,
 					}],
-					leadname: [{
+					QUANTITY: [{
+						required: true,
+						trigger: 'change',
+						validator: validateQUANTITY,
+					}],
+					QUALIFICATION: [{
 						required: true,
 						trigger: 'blur',
-						validator: validateDecri,
+						validator: validateQUALIFICATION,
+					}],
+					DOCLINKS_NUM: [{
+						required: true,
+						trigger: 'blur',
+						validator: validateDOCLINKS_NUM,
 					}],
 				},
+				//testing_projectForm:{},//检验/检测项目数据组
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
 				resourceDialogisShow: false,
@@ -220,12 +256,12 @@
 			};
 		},
 		methods: {
-			getCompany() {//文档查询接口，暂无通，待修改
+			handleChange(val) { //手风琴开关效果调用
+			},getCompany() {//文档查询接口，暂无通，待修改
 				this.editSearch = 'DOCLINKS';
 				var url = '/api/api-user/depts/type';//文件接口不对
 				this.$axios.get(url, {
 				}).then((res) => {
-					console.log(res.data.data);
 					this.resourceData = res.data.data;
 					this.dialogVisible = true;
 				});
@@ -248,27 +284,10 @@
 					})
 					.catch(_ => {});
 			},
-			handleChange(val) { //手风琴开关效果调用
-			},
-			//获取导入表格勾选信息
-			SelChange(val) {
-				this.selUser = val;
-			},
 
-			delfield(item) {
-				var index = this.testing_projectForm.attributes.indexOf(item);
-				if(index !== -1) {
-					//this.attributes.splice(index, 1)
-					this.testing_projectForm.attributes.splice(index, 1);
-				}
-			},
-			importdia() {
-				this.dialogVisible = true;
-			},
-			//点击按钮显示弹窗
-			visible() {
+			childMethods() {//添加内容时从父组件带过来的
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
-					this.testing_projectForm.DEPT=res.data.deptName;
+					this.testing_projectForm.DEPARTMENT=res.data.companyName;
 					this.testing_projectForm.ENTERBY=res.data.nickname;
 					var date=new Date();
 					this.testing_projectForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
@@ -310,6 +329,14 @@
 			close() {
 				this.show = false;
 			},
+			//点击取消按钮
+			cancelForm() {
+				this.show = false;
+				this.reset();
+			},
+			reset() {
+				this.show = false;
+			},
 			toggle(e) {
 				if(this.isok1 == true) {
 					this.maxDialog();
@@ -335,13 +362,11 @@
 				$(".mask_div").css("top", "0");
 			},
 			// 保存users/saveOrUpdate
-			submitForm(testing_projectForm) {
-				this.$refs[testing_projectForm].validate((valid) => {
-					this.testing_projectForm.VERSION = this.testing_projectForm.VERSION + 1;//修改时版本+1
-					// this.testing_projectForm.CHANGEDATE =  this.$moment(this.testing_projectForm.CHANGEDATE).format("YYYY-MM-DD HH:mm:ss");
-					// this.testing_projectForm.ENTERDATE = this.$moment(this.testing_projectForm.ENTERDATE).format("YYYY-MM-DD HH:mm:ss");
+			submitForm(formName) {
+				this.$refs[formName].validate((valid) => {
 					if (valid) {
 						var url = '/api/api-apps/app/inspectionPro/saveOrUpdate';
+						this.testing_projectForm.VERSION = this.testing_projectForm.VERSION + 1;//修改时版本+1
 						this.$axios.post(url, this.testing_projectForm).then((res) => {
 							if(res.data.resp_code == 0) {
 								this.$message({

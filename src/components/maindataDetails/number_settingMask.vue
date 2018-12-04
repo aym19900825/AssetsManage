@@ -200,7 +200,7 @@
             },
             childMethods() {//添加内容时从父组件带过来的
             	this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
-					this.numbsetForm.DEPARTMENT=res.data.deptName;
+					this.numbsetForm.DEPARTMENT=res.data.companyName;
 					this.numbsetForm.ENTERBY=res.data.nickname;
 					var date=new Date();
 					this.numbsetForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");

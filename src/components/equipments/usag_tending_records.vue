@@ -67,15 +67,15 @@
 						<el-table :data="userList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 							</el-table-column>
-							<el-table-column label="组织机构代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('组织机构代码')!=-1">
+							<el-table-column label="设备编号" width="200" sortable prop="ASSETNUM" v-if="this.checkedName.indexOf('设备编号')!=-1">
 							</el-table-column>
-							<el-table-column label="单位名称" width="200" sortable prop="NAME" v-if="this.checkedName.indexOf('单位名称')!=-1">
+							<el-table-column label="设备名称" width="200" sortable prop="DESCRIPTION" v-if="this.checkedName.indexOf('设备名称')!=-1">
 							</el-table-column>
-							<el-table-column label="联系电话" sortable prop="PHONE" v-if="this.checkedName.indexOf('联系电话')!=-1">
+							<el-table-column label="规格型号" sortable prop="MODEL" v-if="this.checkedName.indexOf('规格型号')!=-1">
 							</el-table-column>
-							<el-table-column label="联系地址" sortable prop="CONTACT_ADDRESS" v-if="this.checkedName.indexOf('联系地址')!=-1">
+							<el-table-column label="设备状态" sortable prop="STATUS" :formatter="judge"  v-if="this.checkedName.indexOf('设备状态')!=-1">
 							</el-table-column>						
-							<el-table-column label="信息状态" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
+							<el-table-column label="保管人" sortable prop="KEEPER" v-if="this.checkedName.indexOf('信息状态')!=-1">
 							</el-table-column>
 						</el-table>
 						<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
@@ -115,91 +115,47 @@
 				searchData: {
 			        page: 1,
 			        limit: 10,//分页显示数
-			        nickname: '',
-			        enabled: '',
-			        searchKey: '',
-			        searchValue: '',
-			        companyId: '',
-			        deptId: ''
+//			        nickname: '',
+//			        enabled: '',
+//			        searchKey: '',
+//			        searchValue: '',
+//			        companyId: '',
+//			        deptId: ''
 		        },
 				checkedName: [
-					'组织机构代码',
-					'单位名称',
-					'性别',
+					'设备编号',
+					'设备名称',
+					'规格型号',
 					'联系电话',
-					'联系地址',
-					'信息状态'
+					'设备状态',
+					
 				],
 				tableHeader: [
 					{
-						label: '组织机构代码',
-						prop: 'username'
+						label: '设备编号',
+						prop: 'ASSETNUM'
 					},
 					{
-						label: '单位名称',
-						prop: 'nickname'
+						label: '设备名称',
+						prop: 'DESCRIPTION'
 					},
 					{
-						label: '联系电话',
-						prop: 'telephone'
+						label: '规格型号',
+						prop: 'MODEL'
 					},
 					{
-						label: '联系地址',
-						prop: 'deptName'
+						label: '设备状态',
+						prop: 'STATUS'
 					},
 					{
-						label: '信息状态',
-						prop: 'enabled'
+						label: '保管人',
+						prop: 'KEEPER'
 					}
 				],
-				leftNavs: [//leftNavs左侧菜单数据
-					{
-						navicon: 'icon-user',
-						navtitle: '用户管理',
-						navherf: '/personinfo'
-					}, {
-						navicon: 'icon-edit',
-						navtitle: '机构管理',
-						navherf: '/dept_management'
-					}, {
-						navicon: 'icon-role-site',
-						navtitle: '角色管理',
-						navherf: '/role_management'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '客户管理',
-						navherf: '/customer_management'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '产品类别',
-						navherf: '/products_category'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '产品',
-						navherf: '/products'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测标准',
-						navherf: '/testing_standard'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测项目',
-						navherf: '/testing_projects'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测方法',
-						navherf: '/testing_methods'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '自动编号设置',
-						navherf: '/number_settings'
-					}
-				],
-				companyId: '',
-				deptId: '',
+				
+			
 				selUser: [],
-				'启用': true,
-				'冻结': false,
+				
 				userList: [],
 				search: false,
 				show: false,
@@ -209,9 +165,9 @@
 				ismin:true,
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: {
-					nickname: '',
-					enabled: '',
-					createTime: ''
+//					nickname: '',
+//					enabled: '',
+//					createTime: ''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -344,12 +300,7 @@
 				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
 			},
-			insert() {
-				this.users.push(this.user)
-			},
-			remove(index) {
-				this.users.splice(index, 1)
-			},
+			
 			SelChange(val) {
 				this.selUser = val;
 			},
@@ -357,14 +308,14 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					nickname: this.searchList.nickname,
-					enabled: this.searchList.enabled,
-					searchKey: 'createTime',
-					searchValue: this.searchList.createTime,
-					companyId: this.companyId,
-					deptId: this.deptId
+//					nickname: this.searchList.nickname,
+//					enabled: this.searchList.enabled,
+//					searchKey: 'createTime',
+//					searchValue: this.searchList.createTime,
+//					companyId: this.companyId,
+//					deptId: this.deptId
 				}
-				var url = '/api/api-user/users';
+				var url = '/api/api-apps/app/assetUse';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {

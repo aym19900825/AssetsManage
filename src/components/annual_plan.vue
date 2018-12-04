@@ -375,13 +375,7 @@
                 	});
 				}
 			},
-			judge(data) {
-				//taxStatus 布尔值
-				return data.enabled ? '启用' : '冻结'
-			},
-			sexName(data) {
-				return data.sex ? '男' : '女'
-			},
+			
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -390,12 +384,6 @@
 				}
 				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
-			},
-			insert() {
-				this.users.push(this.user)
-			},
-			remove(index) {
-				this.users.splice(index, 1)
 			},
 			SelChange(val) {
 				this.selUser = val;

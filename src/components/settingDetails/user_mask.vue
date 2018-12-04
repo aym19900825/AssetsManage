@@ -398,7 +398,7 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="修改人" prop="updateby">
-											<el-input v-model="user.updateby" :disabled="edit"></el-input>
+											<el-input v-model="user.updatebyName" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -538,7 +538,7 @@
 				isok2: false,
 				down: true,
 				up: false,
-				activeNames: ['1', '2'], //手风琴数量
+				activeNames: ['1', '2','3','4'], //手风琴数量
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				addtitle: true, //添加弹出框titile
@@ -663,7 +663,8 @@
 				$('.usernames .el-input__inner').attr('disabled',true);
 				var usersUrl = '/api/api-user/users/currentMap';
 				this.$axios.get(usersUrl, {}).then((res) => {
-					this.user.changeby = res.data.nickname;
+					this.user.updatebyName = res.data.nickname;
+					this.user.updateby = res.data.id;
 					var date = new Date();
 					this.user.changedate = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
 				}).catch((err) => {

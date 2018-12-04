@@ -46,36 +46,75 @@
 					</div>
 				</div>
 				<!-- 高级查询划出 Begin-->
-				<div v-show="search" class="pb10">
-					<el-form status-icon :model="searchList" label-width="70px">
-						<el-row :gutter="10">
-							<el-col :span="5">
-								<el-input v-model="searchList.typename">
-									<template slot="prepend">类型名称</template>
-								</el-input>
-							</el-col>
-							<el-col :span="2">
-								<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
-							</el-col>
-						</el-row>
-					</el-form>
-				</div>
+				<div v-show="search">
+						<el-form status-icon :model="searchList" label-width="70px">
+							<el-row :gutter="10">
+								<el-col :span="5">
+									
+								</el-col>
+								<el-col :span="5">
+									<el-input v-model="searchList.A_NAME">
+										<template slot="prepend">设备名称</template>
+									</el-input>
+								</el-col>
+								<el-col :span="5">
+									<el-input v-model="searchList.VENDOR">
+										<template slot="prepend">制造商</template>
+									</el-input>
+								</el-col>
+								<el-col :span="4">
+									<el-input v-model="searchList.KEEPER">
+										<template slot="prepend">保管人</template>
+									</el-input>
+								</el-col>
+								<el-col :span="5">
+									<el-input v-model="searchList.STATE">
+										<template slot="prepend">设备状态</template>
+									</el-input>
+								</el-col>
+								<el-col :span="4">
+									<el-input v-model="searchList.OPTION_STATUS">
+										<template slot="prepend">设备使用状态</template>
+									</el-input>
+								</el-col>
+								<el-col :span="2">
+									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+								</el-col>
+							</el-row>
+						</el-form>
+					</div>
 				<!-- 高级查询划出 End-->
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :data="userList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+						<el-table :data="assetList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'assetList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 							</el-table-column>
-							<el-table-column label="设备编号" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('设备编号')!=-1">
+							<el-table-column label="设备编号" width="200" sortable prop="ASSETNUM" v-if="this.checkedName.indexOf('设备编号')!=-1">
 							</el-table-column>
-							<el-table-column label="设备名称" width="200" sortable prop="NAME" v-if="this.checkedName.indexOf('设备名称')!=-1">
+							<el-table-column label="设备名称" width="200" sortable prop="DESCRIPTION" v-if="this.checkedName.indexOf('设备名称')!=-1">
 							</el-table-column>
-							<el-table-column label="型号" sortable prop="PHONE" v-if="this.checkedName.indexOf('型号')!=-1">
+							<el-table-column label="型号" sortable prop="MODEL" v-if="this.checkedName.indexOf('型号')!=-1">
 							</el-table-column>
-							<el-table-column label="技术指标" sortable prop="CONTACT_ADDRESS" v-if="this.checkedName.indexOf('技术指标')!=-1">
+							<el-table-column label="技术指标" sortable prop="ASSET_KPI" v-if="this.checkedName.indexOf('技术指标')!=-1">
 							</el-table-column>						
-							<el-table-column label="制造厂" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('制造厂')!=-1">
+							<el-table-column label="制造厂" sortable prop="STATUS" v-if="this.checkedName.indexOf('制造厂')!=-1">
+							</el-table-column>
+							<el-table-column label="出厂编号" width="200" sortable prop="FACTOR_NUM" v-if="this.checkedName.indexOf('出厂编号')!=-1">
+							</el-table-column>
+							<el-table-column label="价格(万元)" width="200" sortable prop="A_PRICE" v-if="this.checkedName.indexOf('价格(万元)')!=-1">
+							</el-table-column>
+							<el-table-column label="接受日期" sortable prop="ACCEPT_DATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('接受日期')!=-1">
+							</el-table-column>
+							<el-table-column label="启用日期" sortable prop="S_DATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('启用日期')!=-1">
+							</el-table-column>						
+							<el-table-column label="配置地址" sortable prop="C_ADDRESS" v-if="this.checkedName.indexOf('配置地址')!=-1">
+							</el-table-column>
+							<el-table-column label="接收状态" sortable prop="A_STATUS" v-if="this.checkedName.indexOf('接收状态')!=-1">
+							</el-table-column>
+							<el-table-column label="保管人" sortable prop="KEEPER" v-if="this.checkedName.indexOf('保管人')!=-1">
+							</el-table-column>						
+							<el-table-column label="备注" sortable prop="MEMO" v-if="this.checkedName.indexOf('备注')!=-1">
 							</el-table-column>
 						</el-table>
 						<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
@@ -93,6 +132,7 @@
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
+		<instrumentsmask :user="aaaData[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></instrumentsmask>
 	</div>
 </div>
 </template>
@@ -100,14 +140,16 @@
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left4.vue'
 	import navs_header from '../common/nav_tabs.vue'
-	import tableControle from '../plugin/table-controle/controle.vue'
+//	import tableControle from '../plugin/table-controle/controle.vue'
+	import instrumentsmask from '../equipmentsDetails/instrument_mask.vue'
 	export default {
 		name: 'user_management',
 		components: {
 			vheader,
 			navs_left,
 			navs_header,
-			tableControle,
+			instrumentsmask,
+//			tableControle,
 		},
 		data() {
 			return {
@@ -115,12 +157,11 @@
 				searchData: {
 			        page: 1,
 			        limit: 10,//分页显示数
-			        nickname: '',
-			        enabled: '',
-			        searchKey: '',
-			        searchValue: '',
-			        companyId: '',
-			        deptId: ''
+			        A_NAME: '',
+			        VENDOR: '',
+			        KEEPER: '',
+			        STATE: '',
+			        OPTION_STATUS: ''
 		        },
 				checkedName: [
 					'设备编号',
@@ -128,79 +169,72 @@
 					'性别',
 					'型号',
 					'技术指标',
-					'制造厂'
+					'制造厂',
+					'出厂编号',
+					'价格（万元）',
+					'接受日期',
+					'启用日期',
+					'配置地址',
+					'接收状态',
+					'保管人',
+					'备注',
 				],
 				tableHeader: [
 					{
 						label: '设备编号',
-						prop: 'username'
+						prop: 'ASSETNUM'
 					},
 					{
 						label: '设备名称',
-						prop: 'nickname'
+						prop: 'DESCRIPTION'
 					},
 					{
 						label: '型号',
-						prop: 'telephone'
+						prop: 'MODEL'
 					},
 					{
 						label: '技术指标',
-						prop: 'deptName'
+						prop: 'ASSET_KPI'
 					},
 					{
-						label: '制造厂',
-						prop: 'enabled'
-					}
-				],
-				leftNavs: [//leftNavs左侧菜单数据
+						label: '出厂编号',
+						prop: 'FACTOR_NUM'
+					},
 					{
-						navicon: 'icon-user',
-						navtitle: '用户管理',
-						navherf: '/personinfo'
-					}, {
-						navicon: 'icon-edit',
-						navtitle: '机构管理',
-						navherf: '/dept_management'
-					}, {
-						navicon: 'icon-role-site',
-						navtitle: '角色管理',
-						navherf: '/role_management'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '客户管理',
-						navherf: '/customer_management'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '产品类别',
-						navherf: '/products_category'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '产品',
-						navherf: '/products'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测标准',
-						navherf: '/testing_standard'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测项目',
-						navherf: '/testing_projects'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测方法',
-						navherf: '/testing_methods'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '自动编号设置',
-						navherf: '/number_settings'
+						label: '价格（万元）',
+						prop: 'A_PRICE'
+					},
+					{
+						label: '接受日期',
+						prop: 'ACCEPT_DATE'
+					},
+					{
+						label: '启用日期',
+						prop: 'S_DATE'
+					},
+					{
+						label: '配置地址',
+						prop: 'C_ADDRESS'
+					},
+					{
+						label: '接收状态',
+						prop: 'A_STATUS'
+					},
+					{
+						label: '保管人',
+						prop: 'KEEPER'
+					},
+					{
+						label: '备注',
+						prop: 'MEMO'
 					}
 				],
+				
 				companyId: '',
 				deptId: '',
 				selUser: [],
-				'启用': true,
-				'冻结': false,
-				userList: [],
+				
+				assetList: [],
 				search: false,
 				show: false,
 				down: true,
@@ -209,9 +243,11 @@
 				ismin:true,
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: {
-					nickname: '',
-					enabled: '',
-					createTime: ''
+					A_NAME: '',
+			        VENDOR: '',
+			        KEEPER: '',
+			        STATE: '',
+			        OPTION_STATUS: ''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -301,7 +337,7 @@
 				} else {
 					var changeUser = selData[0];
 					var id = changeUser.id;
-					var url = '/api/api-user/users/' + id;
+					var url = '/api/api-apps/app/asset/' + id;
 					this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -331,10 +367,7 @@
 			Printing() {
 				
 			},
-			judge(data) {
-				//taxStatus 布尔值
-				return data.enabled ? '启用' : '冻结'
-			},
+			
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -344,12 +377,7 @@
 				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
 			},
-			insert() {
-				this.users.push(this.user)
-			},
-			remove(index) {
-				this.users.splice(index, 1)
-			},
+			
 			SelChange(val) {
 				this.selUser = val;
 			},
@@ -357,18 +385,20 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					nickname: this.searchList.nickname,
-					enabled: this.searchList.enabled,
-					searchKey: 'createTime',
-					searchValue: this.searchList.createTime,
-					companyId: this.companyId,
-					deptId: this.deptId
+					A_NAME: this.searchList.A_NAME,
+					VENDOR: this.searchList.VENDOR,
+					KEEPER: this.searchList.KEEPER,
+					STATE: this.searchList.STATE,
+					OPTION_STATUS:  this.searchList.OPTION_STATUS,
+
 				}
-				var url = '/api/api-user/users';
+				var url = '/api/api-apps/app/asset';
+				
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					this.userList = res.data.data;
+					console.log(res.data.data);
+					this.assetList = res.data.data;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
 				

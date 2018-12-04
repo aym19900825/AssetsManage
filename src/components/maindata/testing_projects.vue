@@ -97,6 +97,8 @@
 							</el-table-column>
 							<el-table-column label="项目名称" width="220" sortable prop="P_NAME" v-if="this.checkedName.indexOf('项目名称')!=-1">
 							</el-table-column>
+							<el-table-column label="单价" width="120" sortable prop="QUANTITY" v-if="this.checkedName.indexOf('单价')!=-1">
+							</el-table-column>
 							<el-table-column label="人员资质" width="180" sortable prop="QUALIFICATION" v-if="this.checkedName.indexOf('人员资质')!=-1">
 							</el-table-column>
 							<el-table-column label="信息状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
@@ -169,6 +171,7 @@
 				checkedName: [
 					'检验/检测项编号',
 					'项目名称',
+					'单价',
 					'人员资质',
 					'信息状态',
 					'领域',
@@ -189,7 +192,10 @@
 						label: '项目名称',
 						prop: 'P_NAME'
 					},
-					
+					{
+						label: '单价',
+						prop: 'QUANTITY'
+					},
 					{
 						label: '人员资质',
 						prop: 'QUALIFICATION'
@@ -298,13 +304,14 @@
 				this.page.pageSize = 10;
 				this.requestData();
 			},
-			//添加用戶
+			//添加检验/检测项目
 			openAddMgr() {
-	        	this.aaaData = { //数据库列表
+	        	this.testing_projectForm = { //数据库列表
 					VERSION: 0,
 					STATUS: '活动',
 					P_NUM: '',
 					P_NAME: '',
+					QUANTITY: '',
 					QUALIFICATION: '',
 					FIELD: '',
 					CHILD_FIELD: '',
@@ -315,10 +322,10 @@
 					CHANGEBY: '',
 					CHANGEDATE:'',	
 				},
-				this.$refs.child.visible();
+				this.$refs.child.childMethods();
 			},
-			//修改用戶
-			modify() {
+			
+			modify() {//修改检验/检测项目
 				this.aaaData = this.selMenu;
 				if(this.aaaData.length == 0) {
 					this.$message({
@@ -333,7 +340,10 @@
 					});
 					return;
 				} else {
-					this.$refs.child.detail(this.aaaData[0]);
+
+					this.testing_projectForm = this.selMenu[0]; 
+					this.$refs.child.detail();
+
 				}
 			},
 			//高级查询
@@ -418,7 +428,7 @@
 				this.selMenu = val;
 			},
 			requestData(index) {
-				var data = {
+				var data = {//高级查询数据显示
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 
@@ -458,7 +468,7 @@
 			},
 			handleNodeClick(data) {
 			},
-			
+
 			formatter(row, column) {
 				return row.enabled;
 			},

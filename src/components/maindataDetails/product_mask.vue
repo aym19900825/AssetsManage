@@ -25,7 +25,7 @@
 											<template slot="prepend">版本</template>
 										</el-input>
 									</el-col>
-									<el-col :span="3" class="pull-right">
+									<el-col :span="5" class="pull-right">
 										<el-input v-model="PRODUCT.STATUS" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
@@ -104,8 +104,8 @@
 						ID:'',
 						PRO_NUM:'',
 						PRO_NAME:'',
-						STATUS:'活动',
-						VERSION:'1',
+						STATUS:'',
+						VERSION:'',
 						ENTERBY:'',
 						ENTERDATE:'',
 						CHANGEBY:'',
@@ -225,6 +225,7 @@
 	     			this.PRODUCT.ENTERBY = res.data.nickname;
 	     			var date=new Date();
 					this.PRODUCT.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					this.PRODUCT.VERSION='1';
 	     			this.PRODUCT.STATUS = '活动';
 				 }).catch((err) => {
 				 	this.$message({
@@ -235,12 +236,15 @@
 				this.show = true;
 			},
 			// 这里是修改
-			detail() {
+			detail(data) {
 				this.modify = true;
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.statusshow1 = false;
 				this.statusshow2 = true;
+				
+				console.log(data.STATUS )
+				data.STATUS=data.STATUS=="1"?'活动':'不活动';
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
 	    			this.PRODUCT.CHANGEBY = res.data.nickname;
 	    			var date=new Date();
@@ -258,10 +262,13 @@
 			submitForm(PRODUCT) {
 				 this.$refs[PRODUCT].validate((valid) => {
 		          if (valid) {
-					var url = '/api/api-apps/app/product/saveOrUpdate';		
+					var url = '/api/api-apps/app/product/saveOrUpdate';	
+					console.log(this.PRODUCT);
+					this.PRODUCT.STATUS=this.PRODUCT.STATUS=="活动" ? '1' : '0';
 					this.$axios.post(url,this.PRODUCT).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
-						console.log(this.PRODUCT);
+					
+//						console.log(this.PRODUCT);
 						if(res.data.resp_code == 0) {
 							this.$message({
 								message: '保存成功',

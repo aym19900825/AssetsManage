@@ -189,8 +189,6 @@
 				companyId: '',
 				deptId: '',
 				selUser: [],
-				'启用': true,
-				'冻结': false,
 				customerList: [],
 				search: false,
 				show: false,
@@ -363,7 +361,7 @@
 			},
 			//上传文件 End
 			judge(data) {
-				return data.enabled ? '活动' : '不活动'
+				return data.STATUS=="1" ? '活动' : '不活动'
 			},
 			//时间格式化  
 			dateFormat(row, column) {
@@ -390,6 +388,7 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
+					console.log(res);
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)

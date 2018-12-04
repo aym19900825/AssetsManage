@@ -422,12 +422,9 @@
 		</div>
 
 		<!--弹出-->
-
 		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-
 			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick" @check-change="handleCheckChange">
 			</el-tree>
-
 			<span slot="footer" class="dialog-footer">
 		       <el-button @click="dialogVisible = false">取 消</el-button>
 		       <el-button type="primary" @click="dailogconfirm();" >确 定</el-button>

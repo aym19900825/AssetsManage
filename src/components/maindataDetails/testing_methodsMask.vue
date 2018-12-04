@@ -21,7 +21,7 @@
 							<el-collapse-item title="基础信息" name="1">
 								<el-row :gutter="20" class="pb10">
 									<el-col :span="3" class="pull-right">
-										<el-input v-model="testingForm.VERSION" :disabled="true">
+										<el-input type="number" v-model.number="testingForm.VERSION" :disabled="true">
 											<template slot="prepend">版本</template>
 										</el-input>
 									</el-col>
@@ -31,7 +31,7 @@
 										</el-input>
 									</el-col>
 									<el-col :span="8" class="pull-right">
-										<el-input v-model="testingForm.M_NUM" :disabled="true">
+										<el-input placeholder="自动获取" v-model="testingForm.M_NUM" :disabled="true">
 											<template slot="prepend">检验/检测方法编号</template>
 										</el-input>
 									</el-col>
@@ -182,9 +182,9 @@
 					</div>
 					<div class="content-footer">
 						<el-form-item>
-							<!-- <button @click="cancelForm" class="btn btn-default btn-large">取消</button> -->
-							<button type="primary" class="btn btn-primarys btn-large" @click="submitForm('testingForm')">提交</button>
-							<button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion2">修订</button>
+							<button @click="cancelForm" class="btn btn-default btn-large">取消</button>
+							<button v-if="modify" type="primary" class="btn btn-primarys btn-large" @click="submitForm('testingForm')">修订</button>
+							<button v-else="modify" type="primary" class="btn btn-primarys btn-large" @click="submitForm('testingForm')">提交</button>
 						</el-form-item>
 					</div>
 				</el-form>
@@ -205,8 +205,8 @@
 				type: Object,
 				default: function() {
 					return {
-						VERSION: '1',
-						STATUS: '1',
+						VERSION: '',
+						STATUS: '',
 						M_NUM: '',
 						M_NAME: '',
 						M_ENAME: '',
@@ -268,22 +268,6 @@
 			handleChange(val) { //手风琴开关效果调用
 			},
 			
-			//form表单内容清空
-			resetNew(){
-                this.testingForm = {
-					VERSION: '1',
-					STATUS: '1',
-					M_NUM: '',
-					M_NAME: '',
-					M_ENAME: '',
-					M_TYPE: '',
-					DEPARTMENT: '',
-					ENTERBY: '',
-					ENTERDATE: '',
-					CHANGEBY: '',
-					CHANGEDATE: '',
-				}
-            },
 			childMethods() {//添加内容时从父组件带过来的
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
 					this.testingForm.DEPARTMENT=res.data.deptName;
@@ -377,6 +361,7 @@
 				}
 				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 			},
+
 			//检验/检测方法类别
 			getType() {
 				var url = '/api/api-user/dicts/findChildsByCode?code=type';
@@ -386,6 +371,7 @@
 					console.log('请求失败');
 				})
 			},
+
 			addfield_doclinks() { //插入行到文件文档Table中
 				var isEditingflag=false;
 				for(var i=0;i<this.testing_filesForm.inspectionList.length; i++){
@@ -425,7 +411,6 @@
 			},
 			saveRow (row) {//Table-操作列中的保存行
 				this.$refs['testing_filesForm'].validate((valid) => {
-					//row.VERSION = row.VERSION + 1;//修改保存后版本号+1
 		          if (valid) {
 					var url = '/api/api-apps/app/doclinks/saveOrUpdate';
 					var submitData = {
@@ -457,6 +442,7 @@
 		          }
 		        });
 			},
+
 			deleteRow(row) {//Table-操作列中的删除行
 				this.$confirm('确定删除此文件文档吗？', '提示', {
                     confirmButtonText: '确定',
@@ -483,10 +469,7 @@
             	});
 			},
 
-			//点击修订按钮
-			modifyversion2(){
-				this.testingForm.VERSION = this.testingForm.VERSION + 1;
-			},
+			
 			//点击关闭按钮
 			close() {
 				this.show = false;
@@ -524,28 +507,12 @@
 				$(".mask_div").css("top", "0");
 
 			},
-			//保存
+			//执行保存
 			submitForm(formName) {
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
-						// if(testingForm.M_TYPE.length > 0) {
-						// 	var arr = [];
-						// 	testingForm.M_TYPE.forEach(function(item) {
-						// 		var roles = this.selectData;
-						// 		for(var j = 0; j < roles.length; j++) {
-						// 			if(roles[j].id == item) {
-						// 				arr.push(roles[j]);
-						// 			}
-						// 		}
-						// 		console.log(arr);
-						// 	});
-						// 	testingForm.M_TYPE = testingForm.M_TYPE.join(',');
-						// 	testingForm.roles = arr;
-						// } else {
-						// 	testingForm.M_TYPE = '';
-						// 	testingForm.roles = [];
-						// };
 						var url = '/api/api-apps/app/inspectionMet/saveOrUpdate';
+						this.testingForm.VERSION = this.testingForm.VERSION + 1;//修改时版本+1
 						this.$axios.post(url, this.testingForm).then((res) => {
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {

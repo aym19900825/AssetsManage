@@ -224,7 +224,7 @@
 								      </template>
 								    </el-table-column>
 
-								    <el-table-column prop="STATUS" label="信息信息状态" sortable width="150px">
+								    <el-table-column prop="STATUS" label="信息状态" sortable width="150px">
 								      <template slot-scope="scope">
 								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.STATUS}}</span>
 								      </template>
@@ -361,7 +361,7 @@
 								        <span v-else="v-else">{{scope.row.CHANGEDATE}}</span>
 								      </template>
 								    </el-table-column>
-								    <el-table-column prop="STATUS" label="信息信息状态" sortable width="150px">
+								    <el-table-column prop="STATUS" label="信息状态" sortable width="150px">
 								      <template slot-scope="scope">
 								     <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.STATUS}}</span>
 								     </template>
@@ -492,7 +492,7 @@
 								        <span v-else="v-else">{{scope.row.CHANGEDATE}}</span>
 								      </template>
 								    </el-table-column>
-								    <el-table-column prop="STATUS" label="信息信息状态" sortable width="150px">
+								    <el-table-column prop="STATUS" label="信息状态" sortable width="150px">
 								      <template slot-scope="scope">
 								     <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.STATUS}}</span>
 								     </template>
@@ -630,7 +630,7 @@
 								        <span v-else="v-else">{{scope.row.CHANGEDATE}}</span>
 								      </template>
 								    </el-table-column>
-								    <el-table-column prop="STATUS" label="信息信息状态" sortable width="150px">
+								    <el-table-column prop="STATUS" label="信息状态" sortable width="150px">
 								      <template slot-scope="scope">
 								     <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.STATUS}}</span>
 								     </template>

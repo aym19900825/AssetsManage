@@ -58,7 +58,7 @@
 							<el-row :gutter="10">
 								<el-col :span="5">
 									<el-input v-model="searchDept.simplename">
-										<template slot="prepend">机构编码</template>
+										<template slot="prepend">机构简称</template>
 									</el-input>
 								</el-col>
 								<el-col :span="5">
@@ -76,7 +76,6 @@
 					<el-row :gutter="10">
 						<el-col :span="24">
 							<tree_grid :columns="columns" :tree-structure="true" :data-source="deptList" v-on:childByValue="childByValue"></tree_grid>
-
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
 							   @size-change="sizeChange" 
 							   @current-change="currentChange" 
@@ -92,7 +91,7 @@
 				</div>
 			</div>
 			<!--右侧内容显示 End-->
-			<deptmask :adddeptForm="selMenu[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></deptmask>
+			<deptmask :adddeptForm="adddeptForm" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></deptmask>
 		</div>
 	</div>
 </template>
@@ -117,27 +116,32 @@
 		},
 		data() {
 			return {
-				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				checkedName: [
-					// '序号',
-					'机构名称',
+					'序号',
 					'机构编码',
+					'机构名称',
+					'机构简称',
 					'版本',
 					'电话号',
 				],
 				columns: [
-					// {
-					// 	text: '序号',
-					// 	dataIndex: 'STEP',
-					// 	isShow:true,
-					// },
+					{
+						text: '序号',
+						dataIndex: 'step',
+						isShow:true,
+					},
+					{
+						text: '机构编码',
+						dataIndex: 'code',
+						isShow:true,
+					},
 					{
 						text: '机构名称',
 						dataIndex: 'fullname',
 						isShow:true,
 					},
 					{
-						text: '机构编码',
+						text: '机构简称',
 						dataIndex: 'simplename',
 						isShow:true,
 					},
@@ -173,7 +177,8 @@
 				show: false,
 				down: true,
 				up: false,
-				searchDept: {
+				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
+				searchDept: {//高级查询
 					simplename:'',
 					fullname:''
 				},
@@ -186,6 +191,8 @@
 					label: "simplename"
 				},
 				treeData: [],
+				selData: [],
+				adddeptForm: {}//修改子组件时传递数据
 			}
 		},
 		methods: {
@@ -205,14 +212,14 @@
 		        // childValue就是子组件传过来的
 		        this.selMenu = childValue
 		    },
-			tableControle(data){
+			tableControle(data){//控制表格列显示隐藏
 			  this.checkedName = data;
 			},
-			sizeChange(val) {
+			sizeChange(val) {//分页，总页数
 		      this.page.pageSize = val;
 		      this.requestData();
 		    },
-		    currentChange(val) {
+		    currentChange(val) {//分页，当前页
 		      this.page.currentPage = val;
 		      this.requestData();
 		    },
@@ -223,7 +230,7 @@
 				this.page = val; 
 				this.requestData();
 			}, 
-			searchinfo(index) {
+			searchinfo(index) {//高级查询
 				var data = {
 					params: {
 						page: 1,
@@ -241,8 +248,40 @@
 			},
 			//添加
 			openAddMgr() {
-				// this.$refs.child.resetNew();
-				this.$refs.child.childMethods(); 
+				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+					var date=new Date();
+					var index=this.$moment(date).format("YYYYMMDDHHmmss");
+					this.adddeptForm = {
+						"version":'1',
+						"status":'1',
+						"step":'',
+						"code": 'GP' + index,
+						"fullname":'',
+						"parent":'',
+						"org_range":'',
+						"type":'',
+						"inactive":'否',
+						"address":'',
+						"zipcode":'',
+						"leader":'',
+						"telephone":'',
+						"fax":'',
+						"email":'',
+						"tips":'',
+						"pid":'',
+						"enterby":'',
+						"enterdate":'',
+						"changeby":'',
+						"changedate":''
+					};
+					this.$refs.child.childMethods();
+
+				}).catch((err)=>{
+					this.$message({
+						message:'网络错误，请重试',
+						type:'error'
+					})
+				})
 			},
 			//修改
 			modify() {
@@ -260,6 +299,7 @@
 					});
 					return;
 				} else {
+					this.testingForm = this.selMenu[0]; 
 					this.$refs.child.detail();
 				}
 			},
@@ -286,7 +326,6 @@
 					return;
 				} else {
 					var changeMenu = selData[0];
-					console.log(changeMenu.children);
 					if(changeMenu.children!=null && typeof(changeMenu.children)!='undefined' && changeMenu.children.length>0){
 						this.$message({
 							message: '先删除子机构',
@@ -324,19 +363,16 @@
 					return "";
 				}
 				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
 			},
 			SelChange(val) {
 				this.selDept = val;
 			},
 
-			requestData() {
+			requestData() {//高级查询字段
 				var url = '/api/api-user/depts/treeMap';
 				this.$axios.get(url, {
 //					params: data
 				}).then((res) => {
-					console.log(11111111);
-					console.log(res);
 					let result=res.data
 					for(let i=0;i<result.length;i++){
 						if(typeof(result[i].subDepts)!="undefined"&&result[i].subDepts.length>0){
@@ -357,7 +393,7 @@
 					this.treeData = this.transformTree(this.resourceData);
 				});
 			},
-			transformTree(data){
+			transformTree(data){//给树菜单添加图标
 				for(var i=0; i<data.length; i++){
 					data[i].name = data[i].fullname;
 					if(!data[i].pid || $.isArray(data[i].subDepts)){
@@ -390,12 +426,6 @@
 		mounted() {
 			this.requestData();
 			this.getKey();
-
-			// window.onresize = () => {//获取浏览器可视区域高度
-			//  	return (() => {
-			//  		this.fullHeight.height = document.documentElement.clientHeight - 100+'px';
-			//  	})()
-			// };
 		}
 	}
 </script>

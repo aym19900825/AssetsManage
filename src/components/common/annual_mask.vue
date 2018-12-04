@@ -105,7 +105,7 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="6">
-										<el-form-item label="信息信息状态" prop="MESSSTATUS">
+										<el-form-item label="信息状态" prop="MESSSTATUS">
 											<el-input v-model="WORKPLAN.MESSSTATUS"></el-input>
 										</el-form-item>
 									</el-col>
@@ -834,7 +834,7 @@
 			},
 			//上传文件 End
    			judge(data) {
-				return data.STATUS=="1" ? '活动' : '不活动'
+				return data.enabled ? '活动' : '不活动'
 			},
    			//时间格式化  
 			dateFormat(row, column) {

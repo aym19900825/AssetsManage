@@ -15,18 +15,10 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form status-icon inline-message :model="adddeptForm" :label-position="labelPosition" :rules="rules" ref="adddeptForm" label-width="100px" class="demo-adduserForm">
+				<el-form status-icon :model="adddeptForm" :label-position="labelPosition" :rules="rules" ref="adddeptForm" label-width="100px" class="demo-adduserForm">
 					<div class="accordion">
-						<div class="mask_tab-block">
-							<div class="mask_tab-head clearfix">
-								<div class="accordion_title">
-									<span class="accordion-toggle">机构信息</span>
-								</div>
-								<div class="col_but" @click="col_but('col_but1')">
-									<i class="icon-arrow1-down"></i>
-								</div>
-							</div>
-							<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
+						<el-collapse v-model="activeNames" @change="handleChange">
+							<el-collapse-item title="机构信息" name="1">
 								<el-row :gutter="30">
 									<el-col :span="4" class="pull-right">
 										<el-input v-model="adddeptForm.version" :disabled="edit">
@@ -53,8 +45,8 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="机构名称" prop="name">
-											<el-input v-model="adddeptForm.name">
+										<el-form-item label="机构名称" prop="fullname">
+											<el-input v-model="adddeptForm.fullname">
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -95,12 +87,12 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="联系地址" prop="address">
+										<el-form-item label="联系地址">
 											<el-input v-model="adddeptForm.address"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="邮政编码" prop="zipcode">
+										<el-form-item label="邮政编码">
 											<el-input v-model="adddeptForm.zipcode">
 											</el-input>
 										</el-form-item>
@@ -108,7 +100,7 @@
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="8">
-										<el-form-item label="负责人" prop="leader">
+										<el-form-item label="负责人">
 											<el-input v-model="adddeptForm.leader"></el-input>
 										</el-form-item>
 									</el-col>
@@ -133,7 +125,7 @@
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="24">
-										<el-form-item label="备注" prop="tips">
+										<el-form-item label="备注">
 											<el-input :rows="3" type="textarea" v-model="adddeptForm.tips" placeholder="请输入"></el-input>
 										</el-form-item>
 									</el-col>
@@ -162,8 +154,8 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-							</div>
-						</div>
+							</el-collapse-item>
+						</el-collapse>
 					</div>
 					<div class="el-dialog__footer">
 						<el-form-item>
@@ -199,10 +191,10 @@
 				default: function(){
 					return {
 						version:'1',
-						status:'活动',
+						status:'1',
 						step:'',
 						code:'',
-						name:'',
+						fullname:'',
 						parent:'',
 						org_range:'',
 						type:'',
@@ -224,30 +216,78 @@
 			}
 		},
 		data() {
+			//验证机构序号
+			var validateStep = (rule, value, callback) => {
+				 if (value === '') {
+			          return callback(new Error('机构序号不能为空'));
+			    } else {
+					var targ = /^[A-Za-z0-9]+$/;
+					if( !targ.test(value)){
+	                    callback(new Error('序号只支持英文、数字'));
+	                }
+					callback();
+				}
+			};
+			//验证机构编码
+			var validateCode = (rule, value, callback) => {
+				 if (value === '') {
+			          return callback(new Error('机构编码不能为空'));
+			    } else {
+					var targ = /^[A-Za-z0-9]+$/;
+					if( !targ.test(value)){
+	                    callback(new Error('机构编码只支持英文、数字'));
+	                }
+					callback();
+				}
+			};
+			//验证机构名称
+			var validateFullname = (rule, value, callback) => {
+				if (value === '') {
+		          return callback(new Error('机构名称不能为空'));
+		        }
+		         callback();
+			};
+			//验证机构类型
+			var validateOrgrange = (rule, value, callback) => {
+				if (value === '') {
+		          return callback(new Error('请选择机构类型'));
+		        }
+		         callback();
+			};
+			//验证机构属性
+			var validateType = (rule, value, callback) => {
+				if (value === '') {
+		          return callback(new Error('请选择机构属性'));
+		        }
+		         callback();
+			};
+
+			//验证电话号码
+			var validatePhone = (rule, value, callback) => {
+				if (value && (!(/^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/).test(value))) {
+  				    callback(new Error('请输入有效的电话号码，格式为：0000-0000000'))
+  				} else {
+  				    callback()
+  				}
+			};
+
+			//验证传真
+			var validateFax = (rule, value, callback) => {
+				if (value && (!(/^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/).test(value))) {
+  				    callback(new Error('请输入有效的传真，格式为：0000-0000000'))
+  				} else {
+  				    callback()
+  				}
+			};
+
 			//验证邮箱
 			var validateEmail = (rule, value, callback) => {
-                if(value != ""){
-		             if((/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/).test(value) == false){
-		                 callback(new Error("请填写正确的手机号码"));
-		             }else{
-		                 callback();
-		             }
-		         }else{
-		             callback();
-		         }
-            };
-            //验证手机号
-			var validatePhone = (rule, value, callback) => {
-                if(value != ""){
-		             if((/^1[34578]\d{9}$/).test(value) == false){
-		                 callback(new Error("请填写正确的手机号码"));
-		             }else{
-		                 callback();
-		             }
-		         }else{
-		             callback();
-		         }
-            };
+				if (value && (!(/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/).test(value))) {
+  				    callback(new Error('请输入有效的邮箱'))
+  				} else {
+  				    callback()
+  				}
+			};
 
 			return {
 				value: '',
@@ -284,12 +324,11 @@
 				}],
 				personinfo:false,
 				showcode:true,
+				selMenu:[],
+				activeNames: ['1'], //手风琴数量
 				dialogVisible: false, //对话框
 				edit: true, //禁填
-				value11:true,
 				editSearch: '',
-				col_but1: true,
-				col_but2: true,
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				show: false,
 				isok1: true,
@@ -300,27 +339,8 @@
 				modify:false,
 				stopcontent:false,
 				stopselect:false,
-				rules:{
-					step: [ 
-   						 { required: true, message: '请输入机构序号', trigger: 'blur' } 
-   					],
-		          	code: [ 
-   						 { required: true, message: '请输入机构编码', trigger: 'blur' }],
-   					name: [ { required: true, message: '请输入机构名称', trigger: 'blur' }, { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' } ],
-          			org_range:[ { required: true, message: '请选择机构类型', trigger: 'change' }],
-   					type:[ { required: true, message: '请选择机构属性', trigger: 'change' }],
-   					email: [{
-   						required:false,
-						trigger: 'change',
-						validator: validateEmail,
-					}],
-   					telephone: [{
-   						required:false,
-						trigger: 'change',
-						validator: validatePhone,
-					}],
-	          	},
-	          	//tree
+	          	adddeptForm:{},//机构管理数据组
+	          	//tree树菜单
 				resourceData: [], //数组，我这里是通过接口获取数据
 				resourceDialogisShow: false,
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
@@ -328,6 +348,49 @@
 					children: "subDepts",
 					label: "simplename"
 				},
+				rules:{
+   					step: [{//机构序号
+   						required:true,
+						trigger: 'blur',
+						validator: validateStep,
+					}],
+					code: [{//机构编码
+   						required:true,
+						trigger: 'blur',
+						validator: validateCode,
+					}],
+					fullname: [{//机构名称
+   						required:true,
+						trigger: 'blur',
+						validator: validateFullname,
+					}],
+					org_range: [{//选择机构类型
+   						required:true,
+						trigger: 'change',
+						validator: validateOrgrange,
+					}],
+   					type: [{//选择机构属性
+   						required:true,
+						trigger: 'change',
+						validator: validateType,
+					}],
+   					telephone: [{//电话
+   						required:false,
+						trigger: 'blur',
+						validator: validatePhone,
+					}],
+					fax: [{//传真
+   						required:false,
+						trigger: 'blur',
+						validator: validateFax,
+					}],
+					email: [{//邮箱
+   						required:false,
+						trigger: 'blur',
+						validator: validateEmail,
+					}],
+					
+	          	},
 			};
 		},
 		methods: {
@@ -335,28 +398,7 @@
 			modifyversion(){
 				this.adddeptForm.version = this.adddeptForm.version + 1;
 			},
-			//form表单内容清空
-			// resetNew(){
-   //              this.adddeptForm = {
-			// 		version:'1',
-			// 		status:'活动',
-			// 		step:'',
-			// 		code:'',
-			// 		name:'',
-			// 		parent:'',
-			// 		org_range:'',
-			// 		type:'',
-			// 		inactive:'',
-			// 		address:'',
-			// 		zipcode:'',
-			// 		leader:'',
-			// 		telephone:'',
-			// 		fax:'',
-			// 		email:'',
-			// 		tips:''
-			// 	}
-   //              // this.$refs["adddeptForm"].resetFields();
-   //          },
+
 			//所属上级
 			getDept() {
 				var page = this.page.currentPage;
@@ -378,40 +420,25 @@
 				this.placetext = false;
 				this.dialogVisible = false;				
 				this.adddeptForm.pid = this.checkedNodes[0].id;
-				console.log(this.checkedNodes[0]);
-
+				//console.log(this.checkedNodes[0]);
 				this.adddeptForm.parent = this.checkedNodes[0].fullname;
-
 				
 			},
 			getCheckedNodes() {
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
 			},
-			col_but(col_but) {
-				if(col_but == 'col_but1') {
-					this.col_but1 = !this.col_but1;
-				}
-				if(col_but == 'col_but2') {
-					this.col_but2 = !this.col_but2;
-				}
+			handleChange(val) { //手风琴开关效果调用
 			},
 			//生成随机数函数
 			rand(min,max) {
 		        return Math.floor(Math.random()*(max-min))+min;
 		    },
-			//点击按钮显示弹窗
-			childMethods() {
-				this.addtitle = true;
-				this.modifytitle = false;
-				this.modify = false;
-				this.stopcontent = true;
-				this.stopselect = false;
-				this.showcode = false;
+			
+			childMethods() {//点击父组件按钮显示弹窗
 				var randnum = this.rand(1000,9999);
 				this.adddeptForm.code = randnum;
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
 	     			this.adddeptForm.enterby = res.data.nickname;
-	     			console.log(this.adddeptForm.enterby);
 	     			var date=new Date();
 					this.adddeptForm.enterdate = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				 }).catch((err) => {
@@ -421,17 +448,17 @@
 				 	});
 				});			
 				this.show = !this.show;
+				this.addtitle = true;
+				this.modifytitle = false;
+				this.modify = false;
+				this.stopcontent = true;
+				this.stopselect = false;
+				this.showcode = false;
 			},
 			//修改
 			detail() {
-				this.addtitle = false;
-				this.modifytitle = true;
-				this.modify = true;
-				this.stopcontent = false;
-				this.stopselect = true;
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
 	    			this.adddeptForm.changeby = res.data.nickname;
-	    			console.log(this.adddeptForm.changeby);
 	    			var date=new Date();
 					this.adddeptForm.changedate = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 
@@ -441,6 +468,12 @@
 						type: 'error'
 					});
 				});
+
+				this.addtitle = false;
+				this.modifytitle = true;
+				this.modify = true;
+				this.stopcontent = false;
+				this.stopselect = true;
 				this.show = true;
 			},
 			//点击关闭按钮
@@ -481,7 +514,7 @@
 
 			},
 			judge(data) {
-				return data.STATUS=="1" ? '活动' : '不活动'
+				return data.enabled ? '活动' : '不活动'
 			},
 			//保存
 			submitForm(adddeptForm) {

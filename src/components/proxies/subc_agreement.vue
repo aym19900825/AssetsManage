@@ -121,7 +121,7 @@
 							</el-table-column>
 							<el-table-column label="检验检测费用" width="120" sortable prop="CHECKCOST" v-if="this.checkedName.indexOf('检验检测费用')!=-1">
 							</el-table-column>
-							<el-table-column label="信息信息状态" width="100" sortable prop="STATUS" v-if="this.checkedName.indexOf('信息信息状态')!=-1">
+							<el-table-column label="信息状态" width="100" sortable prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
 							</el-table-column>
 							<el-table-column label="录入人" width="100" sortable prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
 							</el-table-column>
@@ -188,7 +188,7 @@
 					'对环境和操作人员要求',
 					'对分包报告/证书的要求',
 					'检验检测费用',
-					'信息信息状态',
+					'信息状态',
 					'录入人',
 					'录入时间',
 					'修改人',
@@ -228,7 +228,7 @@
 						prop: 'CHECKCOST'
 					},
 					{
-						label: '信息信息状态',
+						label: '信息状态',
 						prop: 'STATUS'
 					},
 					{

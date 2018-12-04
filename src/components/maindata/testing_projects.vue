@@ -134,7 +134,7 @@
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
-		<projectmask :dataInfo="aaaData[0]" @request="requestData" ref="child" v-bind:page=page ></projectmask>
+		<projectmask :testing_projectForm="testing_projectForm" ref="child" @request="requestData" v-bind:page=page ></projectmask>
 	
 	</div>
 </div>
@@ -231,10 +231,13 @@
 						prop: 'CHANGEDATE'
 					}
 				],
-				
 				companyId: '',
 				deptId: '',
-				selUser: [],
+				selMenu: [],
+				'活动': true,
+				'不活动': false,
+				'男': true,
+				'女': false,
 				projectList: [],
 				search: false,
 				show: false,
@@ -258,21 +261,18 @@
 					children: "subDepts",
 					label: "simplename"
 				},
-				userData:[],
 				page: {//分页显示
 					currentPage: 1,
 					pageSize: 10,
 					totalCount: 0
 				},
 				aaaData:[],
+				testing_projectForm: {}//修改子组件时传递数据
 			}
 		},
 
-		mounted(){
-			
-			
-		},
 		methods: {
+			//表格滚动加载
 			loadMore () {
 			   if (this.loadSign) {
 			     this.loadSign = false
@@ -286,29 +286,29 @@
 			     this.requestData()
 			   }
 			 },
-			tableControle(data){
+			tableControle(data){//控制表格列显示隐藏
 				this.checkedName = data;
 			},
-			sizeChange(val) {
+			sizeChange(val) {//分页，总页数
 		      this.page.pageSize = val;
 		      this.requestData();
 		    },
-		    currentChange(val) {
+		    currentChange(val) {//分页，当前页
 		      this.page.currentPage = val;
 		      this.requestData();
 		    },
-			searchinfo(index) {
+			searchinfo(index) {//高级查询
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
 				this.requestData();
 			},
 			//添加用戶
 			openAddMgr() {
-        this.aaaData = { //数据库列表
+	        	this.aaaData = { //数据库列表
+					VERSION: 0,
+					STATUS: 1,
 					P_NUM: '',
 					P_NAME: '',
-					STATUS: '',
-					VERSION: '',
 					QUALIFICATION: '',
 					FIELD: '',
 					CHILD_FIELD: '',
@@ -318,26 +318,26 @@
 					ENTERDATE: '',
 					CHANGEBY: '',
 					CHANGEDATE:'',	
-					},
-
+				},
 				this.$refs.child.visible();
 			},
 			//修改用戶
 			modify() {
-				this.aaaData = this.selUser;
+				this.aaaData = this.selMenu;
 				if(this.aaaData.length == 0) {
 					this.$message({
-						message: '请您选择要修改的用户',
+						message: '请您选择要修改的数据',
 						type: 'warning'
 					});
 					return;
 				} else if(this.aaaData.length > 1) {
 					this.$message({
-						message: '不可同时修改多个用户',
+						message: '不可同时修改多条数据',
 						type: 'warning'
 					});
 					return;
 				} else {
+					this.testingForm = this.selMenu[0]; 
 					this.$refs.child.detail();
 				}
 			},
@@ -349,10 +349,10 @@
 			},
 			// 删除
 			deluserinfo() {
-				var selData = this.selUser;
+				var selData = this.selMenu;
 				if(selData.length == 0) {
 					this.$message({
-						message: '请您选择要删除的用户',
+						message: '请您选择要删除的数据',
 						type: 'warning'
 					});
 					return;
@@ -371,7 +371,7 @@
                     var data = {
 						ids: ids,
 					}
-					this.$confirm('确定删除此产品类别吗？', '提示', {
+					this.$confirm('确定删除此数据吗？', '提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                     }).then(({ value }) => {
@@ -408,7 +408,7 @@
 				
 			},
 			judge(data) {
-				return data.STATUS=="1" ? '活动' : '不活动'
+				return data.enabled ? '活动' : '不活动'
 			},
 			//时间格式化  
 			dateFormat(row, column) {
@@ -420,12 +420,13 @@
 			},
 			
 			SelChange(val) {
-				this.selUser = val;
+				this.selMenu = val;
 			},
 			requestData(index) {
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
+
 					P_NUM: this.searchList.P_NUM,
 					DEPARTMENT: this.searchList.DEPARTMENT,
 					P_NAME: this.searchList.P_NAME,
@@ -462,6 +463,7 @@
 			},
 			handleNodeClick(data) {
 			},
+			
 			formatter(row, column) {
 				return row.enabled;
 			},

@@ -361,7 +361,7 @@
                     var data = {
 						ids: ids,
 					}
-					this.$confirm('确定删除此产品类别吗？', '提示', {
+					this.$confirm('确定删除此数据吗？', '提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                     }).then(({ value }) => {
@@ -398,7 +398,7 @@
 				
 			},
 			judge(data) {
-				return data.STATUS=="1" ? '活动' : '不活动'
+				return data.enabled ? '活动' : '不活动'
 			},
 			
 			insert() {

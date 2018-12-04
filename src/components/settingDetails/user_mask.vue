@@ -183,11 +183,12 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="角色">
-											<el-select v-model="user.roleId" multiple>
-												<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.name"></el-option>
-											</el-select>
-										</el-form-item>
+										<el-form-item label="角色" prop="roleId">
+										<el-select v-model="user.roleId" multiple>
+											<el-option v-for="item in selectData" :key="item.name" :value="item.id" :label="item.name"></el-option>
+											
+										</el-select>
+									</el-form-item>
 									</el-col>
 								</el-row>
 
@@ -673,14 +674,14 @@
 				});
 				var url = '/api/api-user/users/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
-					
+					console.log(res.data);
 					this.user = res.data;
 
 					this.user.sex=this.user.sex?'男':'女';
 					this.user.roleId = [];
 					var roles = this.user.roles;
 					for(var i = 0; i < roles.length; i++) {
-						this.user.roleId.push(roles[i].name);
+						this.user.roleId.push(roles[i].id);
 					}
 					this.show = true;
 				}).catch((err) => {
@@ -729,23 +730,27 @@
 					if(valid) {
 						var user = this.user;
 						user.sex = user.sexName == '男' ? 1 : 0;
-						if(typeof(user.roleId) != 'undefined' && user.roleId.length > 0) {
+						var roleId="";
+						if(typeof(user.roleId)!='undefind' && user.roleId.length > 0) {
 							var arr = [];
 							user.roleId.forEach(function(item) {
 								var roles = _this.selectData;
 								for(var j = 0; j < roles.length; j++) {
 									if(roles[j].id == item) {
+										console.log(roles[j].id);
 										arr.push(roles[j]);
+										roleId = roleId + roles[j].id+",";
 									}
 								}
+								
 							});
-							user.roleId = user.roleId.join(',');
+							user.roleId = roleId;
 							user.roles = arr;
 						} else {
 							user.roleId = '';
 							user.roles = [];
 						}
-					
+					    console.log(this.user);
 						var url = '/api/api-user/users/saveOrUpdate';
 						this.$axios.post(url, this.user).then((res) => {
 							if(res.data.resp_code == 0) {
@@ -819,18 +824,18 @@
 					console.log('请求失败');
 				})
 			},
-			dailogconfirm() { //小弹出框确认按钮事件
-				this.getCheckedNodes();
-				this.placetext = false;
-				this.dialogVisible = false;
-				if(this.editSearch == 'company') {
-					this.user.companyId = this.getCheckboxData.id;
-					this.user.companyName = this.getCheckboxData.simplename;
-				} else {
-					this.user.deptId = this.getCheckboxData.id;
-					this.user.deptName = this.getCheckboxData.simplename;
-				}
-			},
+//			dailogconfirm() { //小弹出框确认按钮事件
+//				this.getCheckedNodes();
+//				this.placetext = false;
+//				this.dialogVisible = false;
+//				if(this.editSearch == 'company') {
+//					this.user.companyId = this.getCheckboxData.id;
+//					this.user.companyName = this.getCheckboxData.simplename;
+//				} else {
+//					this.user.deptId = this.getCheckboxData.id;
+//					this.user.deptName = this.getCheckboxData.simplename;
+//				}
+//			},
 
 			handleClose(done) {
 				this.$confirm('确认关闭？')

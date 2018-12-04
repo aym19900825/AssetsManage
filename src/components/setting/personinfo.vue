@@ -413,7 +413,6 @@
 				var url = '/api/api-user/depts/type';
 				this.$axios.get(url, {
 				}).then((res) => {
-					console.log(res.data.data);
 					this.resourceData = res.data.data;
 					this.dialogVisible = true;
 				});
@@ -433,7 +432,6 @@
 				var url = '/api/api-user/roles';
 				this.$axios.get(url, {
 				}).then((res) => {
-					console.log(res);
 					this.resourceData = res.data.data;
 					this.dialogVisible = true;
 				});

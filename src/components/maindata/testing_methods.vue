@@ -159,10 +159,10 @@
 			return {
 				value: '',
 				options: [{
-					value: '选项1',
+					value: '1',
 					label: '活动'
 				}, {
-					value: '选项2',
+					value: '2',
 					label: '不活动'
 				}],
 				loadSign:true,//加载
@@ -288,30 +288,20 @@
 				this.requestData();
 			},
 			openAddMgr() {//添加检验/检测方法编号数据
-				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
-					var date=new Date();
-					var index=this.$moment(date).format("YYYYMMDDHHmmss");
-					this.testingForm = {
-						"VERSION": '1',
-						"STATUS": '1',
-						"M_NUM": 'TRO' + index,
-						"M_NAME": '',
-						"M_ENAME": '',
-						"M_TYPE": '',
-						"DEPARTMENT": '',
-						"ENTERBY": '',
-						"ENTERDATE": '',
-						"CHANGEBY": '',
-						"CHANGEDATE": '',
-					};
-					this.$refs.child.childMethods();
-
-				}).catch((err)=>{
-					this.$message({
-						message:'网络错误，请重试',
-						type:'error'
-					})
-				})
+				this.testingForm = {
+					"VERSION": 0,
+					"STATUS": 1,
+					"M_NUM": '',
+					"M_NAME": '',
+					"M_ENAME": '',
+					"M_TYPE": '',
+					"DEPARTMENT": '',
+					"ENTERBY": '',
+					"ENTERDATE": '',
+					"CHANGEBY": '',
+					"CHANGEDATE": '',
+				};
+				this.$refs.child.childMethods();
 			},
 			modify() {//修改检验/检测方法编号数据
 				this.aaaData = this.selMenu;
@@ -362,7 +352,7 @@
                     var data = {
 						ids: ids,
 					}
-					this.$confirm('确定删除此产品类别吗？', '提示', {
+					this.$confirm('确定删除此数据吗？', '提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                     }).then(({ value }) => {
@@ -416,6 +406,7 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
+
 					M_NUM: this.searchList.M_NUM,
 					M_NAME: this.searchList.M_NAME,
 					VERSION: this.searchList.VERSION,

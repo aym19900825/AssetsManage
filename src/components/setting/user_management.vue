@@ -550,12 +550,12 @@
 
 					this.userList = newarr;
 				}).catch((wrong) => {})
-				this.userList.forEach((item, index) => {
-					var id = item.id;
-					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
-						this.userList.role = res.data.roles[0].name;
-					}).catch((wrong) => {})
-				})
+//				this.userList.forEach((item, index) => {
+//					var id = item.id;
+//					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
+//						this.userList.role = res.data.roles[0].name;
+//					}).catch((wrong) => {})
+//				})
 			},
 
 			//机构树

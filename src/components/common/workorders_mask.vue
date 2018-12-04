@@ -741,7 +741,7 @@
 			},
 			//上传文件 End
    			judge(data) {
-				return data.STATUS=="1" ? '活动' : '不活动'
+				return data.enabled ? '活动' : '不活动'
 			},
    			
             deleteRow(index, rows) {//Table-操作列中的删除行

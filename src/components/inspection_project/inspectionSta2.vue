@@ -377,7 +377,7 @@
 		        });
 			},
 			deleteRow(row) {//Table-操作列中的删除行
-				this.$confirm('确定删除此产品类别吗？', '提示', {
+				this.$confirm('确定删除此数据吗？', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                 }).then(({ value }) => {

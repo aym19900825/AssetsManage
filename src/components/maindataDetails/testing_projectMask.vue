@@ -15,21 +15,21 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form status-icon :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="100px">
+				<el-form status-icon :model="testing_projectForm" :label-position="labelPosition" :rules="rules" ref="testing_projectForm" label-width="100px">
 					<div class="accordion">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="基本信息" name="1">
 								<el-row :gutter="20" class="pb10">
 									<el-col :span="3" class="pull-right">
-										<el-input v-model="dataInfo.VERSION" :disabled="true">
+										<el-input v-model="testing_projectForm.VERSION" :disabled="true">
 											<template slot="prepend">版本</template>
 										</el-input>
 									</el-col>
 									<el-col :span="3" class="pull-right">
-										<el-input v-model="dataInfo.STATUS" :disabled="true">
+										<el-input v-model="testing_projectForm.STATUS" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
-										<!-- <el-select v-model="dataInfo.STATUS" placeholder="请选择信息状态">
+										<!-- <el-select v-model="testing_projectForm.STATUS" placeholder="请选择信息状态">
 											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
 										</el-select> -->
@@ -39,19 +39,19 @@
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="检验/检测项目编号" prop="P_NUM">
-											<el-input v-model="dataInfo.P_NUM"></el-input>
+											<el-input v-model="testing_projectForm.P_NUM"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="16">
 										<el-form-item label="项目名称" prop="P_NAME">
-											<el-input v-model="dataInfo.P_NAME"></el-input>
+											<el-input v-model="testing_projectForm.P_NAME"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="24">
 										<el-form-item label="文档" prop="DOCLINKS_NUM">
-										<el-input v-model="dataInfo.DOCLINKS_NUM" disabled>
+										<el-input v-model="testing_projectForm.DOCLINKS_NUM" disabled>
 											<el-button slot="append" icon="icon-search" @click="getCompany"></el-button>
 										</el-input>
 									</el-form-item>
@@ -60,46 +60,46 @@
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="人员资质" prop="QUALIFICATION">
-											<el-input v-model="dataInfo.QUALIFICATION"></el-input>
+											<el-input v-model="testing_projectForm.QUALIFICATION"></el-input>
 										</el-form-item> 
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="领域" prop="FIELD">
-											<el-input v-model="dataInfo.FIELD"></el-input>
+											<el-input v-model="testing_projectForm.FIELD"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="子领域" prop="CHILD_FIELD">
-											<el-input v-model="dataInfo.CHILD_FIELD"></el-input>
+											<el-input v-model="testing_projectForm.CHILD_FIELD"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="录入人机构" prop="DEPT">
-											<el-input v-model="dataInfo.DEPT" :disabled="true"></el-input>
+											<el-input v-model="testing_projectForm.DEPT" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="录入人" prop="ENTERBY">
-											<el-input v-model="dataInfo.ENTERBY" :disabled="true"></el-input>
+											<el-input v-model="testing_projectForm.ENTERBY" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="录入时间" prop="ENTERDATE">
-											<el-input v-model="dataInfo.ENTERDATE" :disabled="true"></el-input>
+											<el-input v-model="testing_projectForm.ENTERDATE" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item v-if="modify" label="修改人" prop="CHANGEBY">
-											<el-input v-model="dataInfo.CHANGEBY" :disabled="true"></el-input>
+											<el-input v-model="testing_projectForm.CHANGEBY" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item  v-if="modify" label="修改时间" prop="CHANGEDATE">
-											<el-input v-model="dataInfo.CHANGEDATE" :disabled="true"></el-input>
+											<el-input v-model="testing_projectForm.CHANGEDATE" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -108,7 +108,7 @@
 					</div>
 					<div class="el-dialog__footer">
 						<el-button @click='close' class="btn btn-default btn-large">取消</el-button>
-						<el-button type="primary" class="btn btn-primarys btn-large" @click="submitForm('dataInfo')">提交</el-button>
+						<el-button type="primary" class="btn btn-primarys btn-large" @click="submitForm('testing_projectForm')">提交</el-button>
 					</div>
 				</el-form>
 			</div>
@@ -130,13 +130,13 @@
 	export default {
 		name: 'masks',
 		props: {
-			dataInfo: {
+			testing_projectForm: {
 				type: Object,
 				default: function(){
 					return {
-					P_NUM: 'PR10001',
+					P_NUM: '',
 					P_NAME: '',
-					STATUS: '活动',
+					STATUS: '',
 					VERSION: '1',
 					QUALIFICATION: '',
 					FIELD: '',
@@ -237,8 +237,8 @@
 				this.getCheckedNodes();
 				this.dialogVisible = false;
 				if(this.editSearch == 'DOCLINKS') {
-					this.dataInfo.DOCLINKSId = this.checkedNodes[0].id;
-					this.dataInfo.DOCLINKS_NUM = this.checkedNodes[0].simplename;
+					this.testing_projectForm.DOCLINKSId = this.checkedNodes[0].id;
+					this.testing_projectForm.DOCLINKS_NUM = this.checkedNodes[0].simplename;
 				}
 			},
 			handleClose(done) {//确认框关闭
@@ -256,10 +256,10 @@
 			},
 
 			delfield(item) {
-				var index = this.dataInfo.attributes.indexOf(item);
+				var index = this.testing_projectForm.attributes.indexOf(item);
 				if(index !== -1) {
 					//this.attributes.splice(index, 1)
-					this.dataInfo.attributes.splice(index, 1);
+					this.testing_projectForm.attributes.splice(index, 1);
 				}
 			},
 			importdia() {
@@ -268,10 +268,10 @@
 			//点击按钮显示弹窗
 			visible() {
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
-					this.dataInfo.DEPT=res.data.deptName;
-					this.dataInfo.ENTERBY=res.data.nickname;
+					this.testing_projectForm.DEPT=res.data.deptName;
+					this.testing_projectForm.ENTERBY=res.data.nickname;
 					var date=new Date();
-					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					this.testing_projectForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{
 					this.$message({
 						message:'网络错误，请重试',
@@ -285,18 +285,18 @@
 				this.modify=false;
 				this.show = true;
 			},
-			// 这里是修改
-			detail() {
+			
+			detail() {//修改内容时从父组件带过来的
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
-						this.dataInfo.CHANGEBY=res.data.nickname;
-						var date=new Date();
-						this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-					}).catch((err)=>{
-						this.$message({
-							message:'网络错误，请重试',
-							type:'error'
-						})
+					this.testing_projectForm.CHANGEBY=res.data.nickname;
+					var date=new Date();
+					this.testing_projectForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+				}).catch((err)=>{
+					this.$message({
+						message:'网络错误，请重试',
+						type:'error'
 					})
+				})
 				this.statusshow1 = false;//
 				this.statusshow2 = true;
 				this.addtitle = false;
@@ -335,31 +335,32 @@
 				$(".mask_div").css("top", "0");
 			},
 			// 保存users/saveOrUpdate
-			submitForm(dataInfo) {
-				this.$refs[dataInfo].validate((valid) => {
-					this.dataInfo.CHANGEDATE =  this.$moment(this.dataInfo.CHANGEDATE).format("YYYY-MM-DD HH:mm:ss");
-					this.dataInfo.ENTERDATE = this.$moment(this.dataInfo.ENTERDATE).format("YYYY-MM-DD HH:mm:ss");
-					//		          if (valid) {
-					var url = '/api/api-apps/app/inspectionPro/saveOrUpdate';
-					this.$axios.post(url, this.dataInfo).then((res) => {
-						if(res.data.resp_code == 0) {
+			submitForm(testing_projectForm) {
+				this.$refs[testing_projectForm].validate((valid) => {
+					this.testing_projectForm.VERSION = this.testing_projectForm.VERSION + 1;//修改时版本+1
+					// this.testing_projectForm.CHANGEDATE =  this.$moment(this.testing_projectForm.CHANGEDATE).format("YYYY-MM-DD HH:mm:ss");
+					// this.testing_projectForm.ENTERDATE = this.$moment(this.testing_projectForm.ENTERDATE).format("YYYY-MM-DD HH:mm:ss");
+					if (valid) {
+						var url = '/api/api-apps/app/inspectionPro/saveOrUpdate';
+						this.$axios.post(url, this.testing_projectForm).then((res) => {
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '保存成功',
+									type: 'success'
+								});
+								this.show = false;
+								//重新加载数据
+								this.$emit('request')
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '保存成功',
-								type: 'success'
+								message: '网络错误，请重试',
+								type: 'error'
 							});
-							this.show = false;
-							//重新加载数据
-							this.$emit('request')
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
-					});
-					//			          } else {
-					//			            return false;
-					//			          }
+					} else {
+						return false;
+					}
 				});
 			},
 

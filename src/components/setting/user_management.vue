@@ -139,7 +139,7 @@
 				</div>
 			</div>
 		</div>
-		<usermask :user="aaaData[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></usermask>
+		<usermask :user="user" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></usermask>
 		<!--右侧内容显示 End-->
 	</div>
 	</div>
@@ -228,7 +228,7 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-				aaaData: [],
+				user: {}//修改子组件时传递数据
 			}
 		},
 		methods: {
@@ -299,7 +299,7 @@
 			},
 			//添加用戶
 			openAddMgr() {
-				this.aaaData = [{
+				this.user = {
 					companyName: '',
 					deptName: '',
 					username: '',
@@ -315,20 +315,23 @@
 					phone: '',
 					email: '',
 					address: '',
-					tips: ''
-				}];
+					tips: '',
+					status: '活动',
+					traings: [],
+					qualifications: [],
+				};
 				this.$refs.child.visible();
 			},
 			//修改用戶
 			modify() {
-				this.aaaData = this.selUser;
-				if(this.aaaData.length == 0) {
+//				this.aaaData = this.selUser;
+				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要修改的用户',
 						type: 'warning'
 					});
 					return;
-				} else if(this.aaaData.length > 1) {
+				} else if(this.selUser.length > 1) {
 					this.$message({
 						message: '不可同时修改多个用户',
 						type: 'warning'
@@ -341,7 +344,8 @@
 //						this.aaaData[0].roleId.push(roles[i].id);
 //					}
 //					console.log(this.aaaData[0].roleId);
-					this.$refs.child.detail(this.aaaData[0].id);
+					this.user = this.selUser[0]; 
+					this.$refs.child.detail(this.selUser[0].id);
 				}
 			},
 			//高级查询

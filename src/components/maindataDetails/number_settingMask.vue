@@ -199,6 +199,7 @@
 				}
             },
             childMethods() {//添加内容时从父组件带过来的
+            	console.log(this.numbsetForm);
             	this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
 					this.numbsetForm.DEPARTMENT=res.data.companyName;
 					this.numbsetForm.ENTERBY=res.data.nickname;

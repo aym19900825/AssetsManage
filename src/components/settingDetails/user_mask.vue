@@ -65,30 +65,25 @@
 								<!-- 第一行 -->
 								<el-row :gutter="30">
 									<el-col :span="8">
-										<el-form-item label="姓名" prop="nickname">
-											<el-input v-model="user.nickname"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="职务" prop="post">
-											<el-input v-model="user.post"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
 										<el-form-item label="登录名称" prop="username">
 											<el-input class = "usernames" v-model="user.username" ></el-input>
 										</el-form-item>
 									</el-col>
-								</el-row>
-								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="登录口令" prop="password">
 											<el-input type="password" v-model="user.password"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="身份证号" prop="idnumber">
-											<el-input v-model="user.idnumber"></el-input>
+										<el-form-item label="姓名" prop="nickname">
+											<el-input v-model="user.nickname"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="30">
+									<el-col :span="8">
+										<el-form-item label="职务" prop="post">
+											<el-input v-model="user.post"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -96,37 +91,34 @@
 											<el-input v-model="user.worknumber"></el-input>
 										</el-form-item>
 									</el-col>
-									
-									
+									<el-col :span="8">
+										<el-form-item label="性別" prop="sex">
+											<el-radio-group v-model="user.sex">
+												<el-radio label="男"></el-radio>
+												<el-radio label="女"></el-radio>
+											</el-radio-group>
+										</el-form-item>
+									</el-col>
 								</el-row>
 
 								<el-row :gutter="30">
 									<el-col :span="8">
-										<el-form-item label="IP地址" prop="ip_address">
-											<el-input v-model="user.ip_address"></el-input>
+										<el-form-item label="身份证号" prop="idnumber">
+											<el-input v-model="user.idnumber"></el-input>
 										</el-form-item>
 									</el-col>
-									
 									<el-col :span="8">
 										<el-form-item label="手机号" prop="phone">
 											<el-input v-model="user.phone"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="MAC地址" prop="mac_address">
-											<el-input v-model="user.mac_address"></el-input>
-										</el-form-item>
-									</el-col>
-									
-
-								</el-row>
-								<el-row :gutter="30">
-									<el-col :span="8">
 										<el-form-item label="电子邮箱" prop="email">
 											<el-input v-model="user.email"></el-input>
 										</el-form-item>
 									</el-col>
-									
+								</el-row>
+								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="用户有效期" prop="user_active_date">
 											<el-date-picker v-model="user.user_active_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
@@ -134,23 +126,11 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										
 										<el-form-item label="是否允许授权" prop="ispermit_authorization">
 											 <el-radio-group v-model="user.ispermit_authorization">
     											<el-radio label="是"></el-radio>
     											<el-radio label="否"></el-radio>
   											</el-radio-group>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row :gutter="30">
-									
-									<el-col :span="8">
-										<el-form-item label="性別" prop="sex">
-											<el-radio-group v-model="user.sex">
-												<el-radio label="男"></el-radio>
-												<el-radio label="女"></el-radio>
-											</el-radio-group>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -163,16 +143,14 @@
 									</el-col>
 									
 								</el-row>
-
 								<el-row :gutter="30">
-									
 									<el-col :span="8">
 										<el-form-item label="所属机构" prop="deptName" >
 												<el-select v-model="user.deptName" placeholder="请选择">
 													<el-option v-for="item in option1" :key="item.value" :label="item.label" :value="item.value">
 													</el-option>
 												</el-select>
-											</el-form-item>
+										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="学历" prop="education">
@@ -186,9 +164,20 @@
 										<el-form-item label="角色" prop="roleId">
 										<el-select v-model="user.roleId" multiple>
 											<el-option v-for="item in selectData" :key="item.name" :value="item.id" :label="item.name"></el-option>
-											
 										</el-select>
 									</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="30">
+									<el-col :span="8">
+										<el-form-item label="IP地址" prop="ip_address">
+											<el-input v-model="user.ip_address"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="MAC地址" prop="mac_address">
+											<el-input v-model="user.mac_address"></el-input>
+										</el-form-item>
 									</el-col>
 								</el-row>
 
@@ -398,7 +387,7 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="修改人" prop="updateby">
-											<el-input v-model="user.updatebyName" :disabled="edit"></el-input>
+											<el-input v-model="user.updateby" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -422,9 +411,12 @@
 		</div>
 
 		<!--弹出-->
+
 		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+
 			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick" @check-change="handleCheckChange">
 			</el-tree>
+
 			<span slot="footer" class="dialog-footer">
 		       <el-button @click="dialogVisible = false">取 消</el-button>
 		       <el-button type="primary" @click="dailogconfirm();" >确 定</el-button>
@@ -538,7 +530,7 @@
 				isok2: false,
 				down: true,
 				up: false,
-				activeNames: ['1', '2','3','4'], //手风琴数量
+				activeNames: ['1', '2'], //手风琴数量
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				addtitle: true, //添加弹出框titile
@@ -635,7 +627,29 @@
 
 			//点击按钮显示弹窗
 			visible() {
+				this.user={
+				companyName: '',
+					deptName: '',
+					username: '',
+					password: '',
+					nickname: '',
+					birthday: '',
+					sexName: '',
+					idnumber: '',
+					entrytime: '',
+					roleId: [],
+					roles: [],
+					worknumber: '',
+					phone: '',
+					email: '',
+					address: '',
+					tips: '',
+					status: '活动',
+					traings: [],
+					qualifications: [],
+				}
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+					
 					this.user.createby=res.data.id;
 					this.user.createbyName=res.data.nickname;
 					this.user.enterby=res.data.id
@@ -660,11 +674,10 @@
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.modify = true;
-				$('.usernames .el-input__inner').attr('disabled',true);
+//				$('.usernames .el-input__inner').attr('disabled',true);
 				var usersUrl = '/api/api-user/users/currentMap';
 				this.$axios.get(usersUrl, {}).then((res) => {
-					this.user.updatebyName = res.data.nickname;
-					this.user.updateby = res.data.id;
+					this.user.changeby = res.data.nickname;
 					var date = new Date();
 					this.user.changedate = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
 				}).catch((err) => {
@@ -677,8 +690,8 @@
 				this.$axios.get(url, {}).then((res) => {
 					console.log(res.data);
 					this.user = res.data;
-
 					this.user.sex=this.user.sex?'男':'女';
+
 					this.user.roleId = [];
 					var roles = this.user.roles;
 					for(var i = 0; i < roles.length; i++) {
@@ -729,6 +742,7 @@
 				var _this = this;
 				this.$refs.user.validate((valid) => {
 					if(valid) {
+//						this.user.status=this.user.status=="活动" ? '1' : '0';
 						var user = this.user;
 						user.sex = user.sexName == '男' ? 1 : 0;
 						var roleId="";

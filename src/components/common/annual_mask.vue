@@ -105,7 +105,7 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="6">
-										<el-form-item label="信息信息状态" prop="MESSSTATUS">
+										<el-form-item label="信息状态" prop="MESSSTATUS">
 											<el-input v-model="WORKPLAN.MESSSTATUS"></el-input>
 										</el-form-item>
 									</el-col>

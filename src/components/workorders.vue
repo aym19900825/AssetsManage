@@ -57,60 +57,49 @@
 					</div>
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search" class="pb10">
-						<el-form status-icon inline-message :model="searchList" label-width="70px">
-							<el-row :gutter="10">
-								<el-col :span="5">
+						<el-form status-icon inline-message :model="searchList">
+							<el-row :gutter="30">
+								<el-col :span="6">
 									<el-input v-model="searchList.WONUM">
 										<template slot="prepend">工作任务单编号</template>
 									</el-input>
 								</el-col>
-								<el-col :span="5">
+								<el-col :span="6">
 									<el-input v-model="searchList.ITEM_NAME">
-										<template slot="prepend">描述</template>
+										<template slot="prepend">样品名称</template>
 									</el-input>
 								</el-col>
-								<el-col :span="5">
-									<el-select v-model="searchList.TYPE" placeholder="类型">
-									      <el-option label="监督审查" value="1">	
-									      </el-option>
-									      <el-option label="质量抽查" value="0">
-									      </el-option>
-									    </el-select>
-								</el-col>
-								<el-col :span="5">
-									<el-input v-model="searchList.ITEM_MODEL">
-										<template slot="prepend">样品型号</template>
+								<el-col :span="6">
+									<el-input v-model="searchList.PROXYNUM">
+										<template slot="prepend">委托书编号</template>
 									</el-input>
+								</el-col>
+								<el-col :span="3">
+									<el-select v-model="searchList.STATE" placeholder="请选择信息状态">
+										<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+										</el-option>
+									</el-select>
 								</el-col>
 							</el-row>
-							<el-row :gutter="10" class="pt5">
-								<el-col :span="5">
-									<div class="block">
-									    <el-date-picker
-									      v-model="searchList.ENTERDATE"
-									      type="date"
-									      placeholder="录入时间">
-									    </el-date-picker>
-									  </div>
+
+							<el-row :gutter="30">
+								<el-col :span="6">
+									<el-input v-model="searchList.COMPLETE_DATE">
+										<template slot="prepend">完成日期</template>
+									</el-input>
 								</el-col>
-								<el-col :span="5">
-									<el-select v-model="searchList.ENERBY" placeholder="录入人">
-									    <el-option label="张强" value="1"></el-option>
-									    <el-option label="贾庆林" value="0"></el-option>
-									    <el-option label="李国富" value="0"></el-option>
-									</el-select>
+								<el-col :span="6">
+									<el-input v-model="searchList.ENTERBY">
+										<template slot="prepend">录入人</template>
+									</el-input>
 								</el-col>
-								<el-col :span="5" style="padding-top: 3px">
-									<el-select v-model="searchList.STATUS" placeholder="信息状态">
-									    <el-option label="草稿" value="1"></el-option>
-									    <el-option label="审批中" value="0"></el-option>
-									    <el-option label="驳回" value="0"></el-option>
-									    <el-option label="已发布" value="0"></el-option>
-									    <el-option label="已取消" value="0"></el-option>
-									</el-select>
+								<el-col :span="6">
+									<el-input v-model="searchList.ENTERDATE">
+										<template slot="prepend">录入日期</template>
+									</el-input>
 								</el-col>
-								<el-col :span="5">
-									<el-button class="pull-right" type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+								<el-col :span="3">
+									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -156,7 +145,7 @@
 								<el-table-column label="委托书编号" sortable  width="120px" prop="PROXYNUM" v-if="this.checkedName.indexOf('委托书编号')!=-1">
 								</el-table-column>
 
-								<el-table-column label="信息状态" sortable  width="100px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
+								<el-table-column label="信息状态" sortable width="100px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
 								</el-table-column>
 								</el-table-column>
 								<el-table-column label="录入人" sortable width="210px" prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
@@ -178,7 +167,7 @@
 					</div>
 				</div>
 			</div>
-			<workorders_mask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></workorders_mask>
+			<workorders_mask :workorderForm="workorderForm" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></workorders_mask>
 		</div>
 	</div>
 </template>
@@ -259,7 +248,7 @@
 
 				companyId: '',
 				deptId: '',
-				selUser: [],
+				selMenu: [],
 				'启用': true,
 				'冻结': false,
 				'男': true,
@@ -269,19 +258,21 @@
 				show: false,
 				down: true,
 				up: false,
+				options: [{
+					value: '1',
+					label: '活动'
+				}, {
+					value: '0',
+					label: '不活动'
+				}],
 				searchList: {
-					WONUM: '',
-					ITEM_NAME: '',
-					ITEM_MODEL: '',
-					ITEM_STATUS: '',
-					CHECK_BASIS: '',
-					COMPLETE_DATE: '',
-					COMPLETE_MODE: '',
-					PROXYNUM: '',
-					TYPE: '',
-					STATUS:'',
-					ENTERDATE:'',
-					ENTERBY:'',
+					WONUM: '',//工作任务单编号
+					ITEM_NAME: '',//样品名称
+					PROXYNUM: '',//委托书编号
+					STATE: '',//状态
+					COMPLETE_DATE: '',//完成日期
+					ENTERBY: '',//录入人
+					ENTERDATE: '',//录入日期
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -299,6 +290,7 @@
 					totalCount: 0
 				},
 				aaaData:[],
+				workorderForm: {}//修改子组件时传递数据
 			}
 		},
 		methods: {
@@ -332,14 +324,69 @@
 				this.page.pageSize = 10;
 				this.requestData();
 			},
-			//添加用戶
+			//添加检验工作处理到子组件
 			openAddMgr() {
-				// this.$refs.child.resetNew();
-				this.$refs.child.visible();
+				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+					var date=new Date();
+					var index=this.$moment(date).format("YYYYMMDDHHmmss");
+					this.testingForm = {
+						"STATE": '',//信息状态
+						"STATUS": '1',//状态
+						"WONUM": 'TRO' + index,//工作任务单编号
+						"ITEM_NAME": '',//样品名称
+						"ITEM_MODEL": '',//规格型号
+						"ITEM_TRADEMARK": '',//商标标识
+						"ITEMNUM": '',//样品编号
+						"CHECK_DATE": '',//抽样日期
+						"PRODUCT_DATE": '',//生产日期
+						"ITEMNUM": '',//生产批次
+						"ITEM_STATUS": '',//样品状态
+
+						"PRODUCT_DATE": '',//到站日期
+						"ITEM_QUALITY": '',//样品数量
+						"ITEM_SOURCE": '',//样品来源
+						"CHECK_BASIS": '',//抽样方案/判定依据
+						"TECHNICAL_INFORMATION": '',//委托方提供技术资料
+						"SUB_PROJECT": '',//分包项目
+						"SPECIAL_REQUIREMENTS": '',//特殊要求
+						"ITEM_RECCEPT_USER": '',//样品接收人
+						"ITEM_RECEPT_DATE": '',//样品接收日期
+						"COMPLETE_DATE": '',//完成日期
+						"COMPLETE_MODE": '',//完成方式
+						"ITEM_RECEPT_STATUS": '',//样品接收状态
+						"ITEM_PROFESSIONAL_GROUP": '',//样品承接人(专业组)
+						"UNDERTAKE_DATE": '',//样品承接日期
+						"ITEM_STATUS": '',//样品状态
+						"ITEM_QUALITY": '',//样品返回数量
+						"RETURN_ITEM_USER": '',//样品返回接收人
+						"RETURN_ITEM_DATE": '',//样品返回日期
+						"ITEM_CHECK_STATUS": '',//样品检后状态
+						"ITEM_MANAGEMENT": '',//样品处置
+						"ITEM_UNDERTAKE_USER": '',//样品承接人
+						"PROFESSIONAL": '',//专业技术/质量负责人
+						"CHECK_BASIS": '',//报告模板
+						"SEND": '',//是否寄出
+						"FILE": '',//是否归档
+						"SEND_DATE": '',//寄出时间
+						"FILE_DATE": '',//归档时间
+						"ENTERBY": '',//录入人
+						"ENTERDATE": '',//录入日期
+						"ORG_CODE": '',//录入人机构
+						"CHANGEBY": '',//修改人
+						"CHANGEDATE": '',//修改日期
+					};
+					this.$refs.child.childMethods();
+
+				}).catch((err)=>{
+					this.$message({
+						message:'网络错误，请重试',
+						type:'error'
+					})
+				})
 			},
-			//修改用戶
+			//修改检验工作处理到子组件
 			modify() {
-				this.aaaData = this.selUser;
+				this.aaaData = this.selMenu;
 				if(this.aaaData.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
@@ -353,7 +400,7 @@
 					});
 					return;
 				} else {
-					this.$refs.child.detail(this.selUser[0].ID);
+					this.$refs.child.detail(this.selMenu[0].ID);
 				}
 			},
 			//高级查询
@@ -364,7 +411,7 @@
 			},
 			// 删除
 			deluserinfo() {
-				var selData = this.selUser;
+				var selData = this.selMenu;
 				if(selData.length == 0) {
 					this.$message({
 						message: '请您选择要删除的数据',
@@ -432,7 +479,7 @@
 				this.users.splice(index, 1)
 			},
 			SelChange(val) {
-				this.selUser = val;
+				this.selMenu = val;
 			},
 			requestData(index) {
 				var data = {
@@ -441,25 +488,37 @@
 
 					WONUM: this.searchList.WONUM,
 					ITEM_NAME: this.searchList.ITEM_NAME,
-					TYPE: this.searchList.TYPE,
-					ITEM_MODEL: this.searchList.ITEM_MODEL,
-					ENTERDATE:this.searchList.ENTERDATE,
-					ENTERBY:this.searchList.ENTERBY,
-					STATUS:this.searchList.STATUS
+					PROXYNUM: this.searchList.PROXYNUM,
+					STATE: this.searchList.STATE,
+					COMPLETE_DATE: this.searchList.COMPLETE_DATE,
+					ENTERBY: this.searchList.ENTERBY,
+					ENTERDATE: this.searchList.ENTERDATE,
 				}
 				var url = '/api/api-apps/app/workorder';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					this.userList = res.data.data;
-					this.page.totalCount = res.data.count;
+					this.page.totalCount = res.data.count;	
+					//总的页数
+					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
+					if(this.page.currentPage >= totalPage){
+						 this.loadSign = false
+					}else{
+						this.loadSign=true
+					}
+					this.commentArr[this.page.currentPage]=res.data.data
+					let newarr=[]
+					for(var i = 1; i <= totalPage; i++){
+					
+						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
+							
+							for(var j = 0; j < this.commentArr[i].length; j++){
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					this.methodsList = newarr;
 				}).catch((wrong) => {})
-				this.userList.forEach((item, index) => {
-					var id = item.id;
-					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
-						this.userList.role = res.data.roles[0].name;
-					}).catch((wrong) => {})
-				})
 			},
 			//机构树
 			getKey() {

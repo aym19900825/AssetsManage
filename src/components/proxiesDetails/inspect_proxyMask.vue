@@ -215,7 +215,7 @@
 										</template>
 									</el-table-column>
 
-									<el-table-column prop="STATUS" label="信息信息状态" sortable width="120px">
+									<el-table-column prop="STATUS" label="信息状态" sortable width="120px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.STATUS'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入要求">
@@ -283,7 +283,7 @@
 										</template>
 									</el-table-column>
 									
-									<el-table-column prop="STATUS" label="信息信息状态" sortable width="120px">
+									<el-table-column prop="STATUS" label="信息状态" sortable width="120px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.STATUS'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入要求">
@@ -404,7 +404,7 @@
 											</el-form-item>
 										</template>
 									</el-table-column>
-											<el-table-column prop="STATUS" label="信息信息状态" sortable width="120px">
+											<el-table-column prop="STATUS" label="信息状态" sortable width="120px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.STATUS'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入要求"></el-input>
@@ -508,7 +508,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="信息信息状态" prop="MESSSTATUS">
+											<el-form-item label="信息状态" prop="MESSSTATUS">
 													<el-input v-model="dataInfo.MESSSTATUS"></el-input>
 											</el-form-item>
 										</el-col>

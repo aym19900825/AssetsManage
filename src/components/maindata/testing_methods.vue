@@ -447,7 +447,6 @@
 							}
 						}
 					}
-					
 					this.methodsList = newarr;
 				}).catch((wrong) => {})
 				

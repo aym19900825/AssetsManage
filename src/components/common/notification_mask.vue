@@ -104,7 +104,7 @@
 									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="项目负责人" prop="P_LEADERDesc">
-												<el-input v-model="dataInfo.P_LEADERDesc" :disabled="noedit">
+												<el-input v-model="dataInfo.P_LEADERDesc" :disabled="edit">
 													<el-button slot="append" icon="el-icon-search" @click="getPeople(1)"></el-button>
 												</el-input>
 
@@ -670,7 +670,10 @@
 				this.modifytitle = false;
 			    this.views = false;//
 			    this.noviews=true;
+				this.edit=true;
+				this.noedit=false;
 				this.show = true;
+
 			},
 			// 这里是修改
 			detail(dataid) {
@@ -678,6 +681,8 @@
 				this.modifytitle = true;
  				this.noviews=true;
 				this.views = false;//
+				this.edit=true;
+				this.noedit=false;
 				
 				var url = '/api/api-apps/app/workNot/' + dataid;
 				this.$axios.get(url, {}).then((res) => {

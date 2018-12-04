@@ -18,7 +18,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form status-icon :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
+				<el-form status-icon :model="dataInfo" :label-position="labelPosition"  ref="dataInfo" label-width="100px" class="demo-user">
 					<div class="accordion">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							
@@ -144,7 +144,7 @@
 											</el-radio-group>
 										</el-form-item>
 									</el-col>
-									<el-col :span="8">
+									<el-col :span="10">
 										<el-form-item label="接收状态" prop="A_STATUS">
 											<el-radio-group v-model="dataInfo.A_STATUS">
     											<el-radio label="全新"></el-radio>
@@ -213,7 +213,7 @@
 									</el-button>
 								</div>-->
 
-								<el-table :data="dataInfo.pmRecord" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.pmRecord', order: 'descending'}">
+								<el-table :data="dataInfo.pmRecord" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'dataInfo.pmRecord', order: 'descending'}">
 
 									<el-table-column prop="iconOperation" fixed label="" width="50px">
 										<template slot-scope="scope">
@@ -252,7 +252,7 @@
 										</template>
 									</el-table-column>
 
-									<el-table-column prop="R_DESC" label="溯源确认内容" sortable width="120px">
+									<el-table-column prop="R_DESC" label="溯源确认内容" sortable >
 										<template slot-scope="scope">
 											<el-form-item :prop="'pmRecord.'+scope.$index + '.R_DESC'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 											<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.R_DESC" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
@@ -261,7 +261,7 @@
 											</el-form-item>
 										</template>
 									</el-table-column>
-									<el-table-column prop="R_CONCLUSION" label="溯源确认结论" sortable width="120px">
+									<el-table-column prop="R_CONCLUSION" label="溯源确认结论" sortable width="200px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'pmRecord.'+scope.$index + '.R_CONCLUSION'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.R_CONCLUSION" placeholder="请输入要求">
@@ -301,7 +301,7 @@
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="录入人" prop="ENTERBY">
-											<el-input v-model="dataInfo.ENTERBY" :disabled="edit"></el-input>
+											<el-input v-model="dataInfo.ENTERBYName" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -355,38 +355,7 @@
 		//		props: ['user','page'],
 
 		data() {
-			var validateIdnumber = (rule, value, callback) => { //验证身份证号
-				if(value && (!(/\d{17}[\d|x]|\d{15}/).test(value) || (value.length !== 15 && value.length !== 18))) {
-					callback(new Error('身份证号码不符合规范'))
-				} else {
-					callback()
-				}
-			};
-			var validatePhone = (rule, value, callback) => {
-				if(value === '') {
-					return callback(new Error('手机号不能为空'));
-				} else {
-					if(value !== '') {
-						var reg = /^1[3456789]\d{9}$/;
-						if(!reg.test(value)) {
-							callback(new Error('请输入有效的手机号码'));
-						}
-						callback();
-					}
-				}
-			};
-			var validateEmail = (rule, value, callback) => {//验证电子邮箱
-		        if (value === '') {
-		            callback(new Error('电子邮箱不能为空'));
-		        } else {
-			        var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-			        if(!reg.test(value)){
-			            callback(new Error('请输入有效的邮箱'));
-			        }else{
-			        	callback();
-			        }
-		        }
-		    };
+			
 			return {
 //				user{},
 				dataInfo: {
@@ -405,21 +374,21 @@
 				dialogVisible: false, //对话框
 				addtitle: true, //添加弹出框titile
 				modifytitle: false, //修改弹出框titile
-				rules: {
-					deptName: [{ required: true, message: '必填', trigger: 'blur' }],//名称
-					education:[{required: true, message: '必填', trigger: 'blur'}],
-					roleId: [{required: true,trigger: 'blur',message: '必填',}],
-					username: [{required: true,trigger: 'blur',message: '必填',}],
-					password: [{required: true,trigger: 'blur',message: '必填',}],
-					sex:[{required: true,trigger: 'blur',message: '必填'}],
-					ispermit_authorization:[{required: true,trigger: 'change',message: '必填'}],//授权
-					islogin:[{required: true,trigger: 'change',message: '必填'}],//登陆
-					mac_address:[{required: true,trigger: 'blur',message: '必填',}],
-					ip_address:[{required: true,trigger: 'blur',message: '必填',}],
-					idnumber:[{required: true,trigger: 'blur',validator: validateIdnumber}],
-					phone: [{required: true,trigger: 'blur',validator: validatePhone}],
-					email: [{required: true,trigger: 'blur',validator: validateEmail,}],
-				},
+//				rules: {
+//					deptName: [{ required: true, message: '必填', trigger: 'blur' }],//名称
+//					education:[{required: true, message: '必填', trigger: 'blur'}],
+//					roleId: [{required: true,trigger: 'blur',message: '必填',}],
+//					username: [{required: true,trigger: 'blur',message: '必填',}],
+//					password: [{required: true,trigger: 'blur',message: '必填',}],
+//					sex:[{required: true,trigger: 'blur',message: '必填'}],
+//					ispermit_authorization:[{required: true,trigger: 'change',message: '必填'}],//授权
+//					islogin:[{required: true,trigger: 'change',message: '必填'}],//登陆
+//					mac_address:[{required: true,trigger: 'blur',message: '必填',}],
+//					ip_address:[{required: true,trigger: 'blur',message: '必填',}],
+//					idnumber:[{required: true,trigger: 'blur',validator: validateIdnumber}],
+//					phone: [{required: true,trigger: 'blur',validator: validatePhone}],
+//					email: [{required: true,trigger: 'blur',validator: validateEmail,}],
+//				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
 				resourceDialogisShow: false,
@@ -448,20 +417,16 @@
 			//点击按钮显示弹窗
 			visible() {
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
-					this.user.createby=res.data.id;
-					this.user.createbyName=res.data.nickname;
-					this.user.enterby=res.data.id
-					this.user.enterbyName=res.data.nickname;
-					var date=new Date();
-					this.user.createTime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+//					this.dataInfo.ENTERBY=res.data.id;
+//					this.dataInfo.ENTERBYName=res.data.nickname;
+//					var date=new Date();
+//					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{
 					this.$message({
 						message:'网络错误，请重试',
 						type:'error'
 					})
 				})
-//				this.statusshow1 = true;
-//				this.statusshow2 = false;
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.modify=false;

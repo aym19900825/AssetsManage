@@ -262,9 +262,10 @@
 			submitForm(PRODUCT) {
 				 this.$refs[PRODUCT].validate((valid) => {
 		          if (valid) {
+		          	this.PRODUCT.STATUS=this.PRODUCT.STATUS=="活动" ? '1' : '0';
 					var url = '/api/api-apps/app/product/saveOrUpdate';	
 					console.log(this.PRODUCT);
-					this.PRODUCT.STATUS=this.PRODUCT.STATUS=="活动" ? '1' : '0';
+					
 					this.$axios.post(url,this.PRODUCT).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 					

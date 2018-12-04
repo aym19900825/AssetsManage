@@ -335,7 +335,8 @@
 					PERSON:'',
 					TYPE:'',
 					ZIPCODE:'',
-					STATUS:'活动',
+					STATUS:'',
+//					STATUSDesc:'
 					FAX:'',
 					EMAIL:'',
 					ENTERBY:'',
@@ -510,6 +511,8 @@
 				this.$axios.get('/api/api-apps/app/customer/' + dataid, {}).then((res) => {
 					console.log(this.CUSTOMER);
 					this.CUSTOMER = res.data;
+					console.log(this.CUSTOMER.STATUS==1);
+					this.CUSTOMER.STATUS=this.CUSTOMER.STATUS=="1" ? '活动' : '不活动';
 					this.show = true;
 				}).catch((err) => {
 					this.$message({
@@ -565,9 +568,9 @@
 			},
 			// 保存users/saveOrUpdate
 			submitForm(CUSTOMER) {
-				console.log(this.CUSTOMER);
 				this.$refs[CUSTOMER].validate((valid) => {
 		          if (valid) {
+		          	this.CUSTOMER.STATUS=this.CUSTOMER.STATUS=="活动" ? '1' : '0';
 					var url = '/api/apps-center/app/customer/saveOrUpdate';		
 					this.$axios.post(url, this.CUSTOMER).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息

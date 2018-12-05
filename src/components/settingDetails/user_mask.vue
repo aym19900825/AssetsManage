@@ -688,7 +688,7 @@
 				});
 				var url = '/api/api-user/users/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res.data);
+//					console.log(res.data);
 					this.user = res.data;
 					this.user.sex=this.user.sex?'男':'女';
 
@@ -765,7 +765,7 @@
 							user.roleId = '';
 							user.roles = [];
 						}
-					    console.log(this.user);
+					  
 						var url = '/api/api-user/users/saveOrUpdate';
 						this.$axios.post(url, this.user).then((res) => {
 							if(res.data.resp_code == 0) {

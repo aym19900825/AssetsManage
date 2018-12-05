@@ -57,11 +57,6 @@
 						<el-form status-icon :model="searchDept" label-width="70px">
 							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-input v-model="searchDept.simplename">
-										<template slot="prepend">机构简称</template>
-									</el-input>
-								</el-col>
-								<el-col :span="5">
 									<el-input v-model="searchDept.fullname">
 										<template slot="prepend">机构名称</template>
 									</el-input>
@@ -118,9 +113,8 @@
 			return {
 				checkedName: [
 					'序号',
-					'机构编码',
 					'机构名称',
-					'机构简称',
+					'机构编码',
 					'版本',
 					'电话号',
 				],
@@ -131,18 +125,13 @@
 						isShow:true,
 					},
 					{
-						text: '机构编码',
-						dataIndex: 'code',
-						isShow:true,
-					},
-					{
 						text: '机构名称',
 						dataIndex: 'fullname',
 						isShow:true,
 					},
 					{
-						text: '机构简称',
-						dataIndex: 'simplename',
+						text: '机构编码',
+						dataIndex: 'code',
 						isShow:true,
 					},
 					{

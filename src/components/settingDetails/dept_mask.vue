@@ -319,7 +319,7 @@
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
 				resourceProps: {
 					children: "children",
-					label: "simplename"
+					label: "fullname"
 				},
 				rules:{
    					step: [{//机构序号

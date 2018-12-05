@@ -18,7 +18,7 @@
 				<!-- status-icon 验证后文本框上显示对勾图标 -->
 				<el-form status-icon :model="workorderForm" :label-position="labelPosition" :rules="rules" ref="workorderForm" label-width="100px">
 					<div class="accordion" id="information">
-						<el-collapse v-model="activeNames" @change="handleChange">
+						<el-collapse v-model="activeNames">
 							<!-- 样品信息列表 Begin-->
 							<el-collapse-item title="样品信息" name="1">
 								<el-row :gutter="20">
@@ -423,12 +423,12 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="是否寄出">
-												<el-switch v-model="workorderForm.SEND" active-color="#13ce66"></el-switch>
+												<el-switch v-model="workorderForm.SEND"></el-switch>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="是否归档">
-												<el-switch v-model="workorderForm.FILE" active-color="#13ce66"></el-switch>
+												<el-switch v-model="workorderForm.FILE"></el-switch>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -767,8 +767,7 @@
 				rows.splice(index, 1);
 			},
          
-			handleChange(val) {//手风琴开关效果调用
-			},
+			
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selMenu = val;

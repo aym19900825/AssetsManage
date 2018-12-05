@@ -17,7 +17,7 @@
 			<div class="mask_content">
 				<el-form :model="PRODUCT" inline-message :label-position="labelPosition" :rules="rules" ref="PRODUCT" label-width="100px" class="demo-adduserForm">
 					<div class="accordion" id="information">
-						<el-collapse v-model="activeNames" @change="handleChange">
+						<el-collapse v-model="activeNames">
 							<el-collapse-item title="产品名称" name="1">
 								<el-row :gutter="20" class="pb10">
 									<el-col :span="3" class="pull-right">
@@ -182,8 +182,7 @@
 			// 	    this.$refs["PRODUCT"].resetFields();
 			// 	}
 			// },
-			handleChange(val) {//手风琴开关效果调用
-			},
+			
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selUser = val;

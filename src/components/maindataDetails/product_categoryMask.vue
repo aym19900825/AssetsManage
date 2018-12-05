@@ -17,7 +17,7 @@
 			<div class="mask_content">
 				<el-form :model="CATEGORY" inline-message :label-position="labelPosition" :rules="rules" ref="CATEGORY" label-width="100px" class="demo-adduserForm">
 					<div class="accordion" id="information">
-						<el-collapse v-model="activeNames" @change="handleChange">
+						<el-collapse v-model="activeNames">
 							<el-collapse-item title="产品类别" name="1">
 								<el-row :gutter="20" class="pb10">
 									<el-col :span="3" class="pull-right">
@@ -154,9 +154,23 @@
 			};
 		},
 		methods: {
-		
-			handleChange(val) {//手风琴开关效果调用
-			},
+
+			// resetNew(){
+   //              this.CATEGORY = {
+			// 		NUM:'',
+			// 		TYPE:'',
+			// 		STATUS:'活动',
+			// 		VERSION:'1',
+			// 		DEPARTMENT:'',
+			// 		ENTERBY:'',
+			// 		ENTERDATE:'',
+			// 		CHANGEBY:'',
+			// 		CHANGEDATE:''
+			// 	};
+   //              // this.$refs["CUSTOMER"].resetFields();
+   //          },
+			
+
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selUser = val;

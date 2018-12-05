@@ -18,7 +18,7 @@
 
 				<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" status-icon inline-message label-width="100px" class="demo-ruleForm">
 					<div class="accordion" id="information">
-						<el-collapse v-model="activeNames" @change="handleChange">
+						<el-collapse v-model="activeNames">
 							<el-collapse-item title="委托单位" name="1">
 								<el-row :gutter="20" class="pb10">
 									<el-col :span="5" class="pull-right">
@@ -740,8 +740,7 @@
 					console.log(row.isEditing);
 				}
 			},
-			handleChange(val) { //手风琴开关效果调用
-			},
+			
 			sizeChange(val) {
 				this.page.pageSize = val;
 				this.requestData();

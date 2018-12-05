@@ -14,7 +14,7 @@
 		<div class="wrapper wrapper-content">
 			<div class="ibox-content">
 				<el-form status-icon ref="dictionaries" :model="dictionaries" :rules="rules" label-width="80px" :label-position="labelPosition">
-					<el-collapse v-model="activeNames" @change="handleChange">
+					<el-collapse v-model="activeNames">
 						<el-collapse-item title="字典管理" name="1">
 							<el-row :gutter="30">
 						 		<el-col :span="12">
@@ -74,9 +74,7 @@ export default {
       }
     },
     methods: {  
-		handleChange(val) {//手风琴开关效果调用
-			console.log(val);
-		},
+		
 	},
     mounted(){
 			

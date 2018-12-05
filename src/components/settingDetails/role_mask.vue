@@ -16,7 +16,7 @@
 			<div class="mask_content">
 				<el-form :model="roleList" :label-position="labelPosition" :rules="rules" ref="roleList" label-width="100px" class="demo-user">
 					<div class="accordion">
-						<el-collapse v-model="activeNames" @change="handleChange">
+						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基础信息" name="1">
 								<el-row :gutter="30">
 									<el-col :span="8">
@@ -223,8 +223,7 @@
 				}
 				this.handleNodeClick();
 			},
-			handleChange(val) { //手风琴开关效果调用
-			},
+			
 			handleCheckChange(data, checked, indeterminate) {
 		        this.cccData=data;
 		    },

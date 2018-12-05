@@ -31,7 +31,7 @@
     			<div id="wrapper" :style="{height: fullHeight}">
 					<div id="information" style="height: inherit;">
 						<div class="ibox-content">
-							<el-collapse v-model="activeNames" @change="handleChange">
+							<el-collapse v-model="activeNames">
 								<el-collapse-item title="修改密码" name="1">
 									<el-form :model="passwordedit" status-icon :rules="rules2" ref="passwordedit" label-width="100px" class="demo-ruleForm" :label-position="labelPosition">
 										  <el-form-item label="当前用户" prop="username">
@@ -173,9 +173,7 @@ export default {
 				});
 			});
     	},
-    	handleChange(val) {//手风琴开关效果调用
-			console.log(val);
-		},
+    	
 		submitForm(formName) {
 	        this.$refs[formName].validate((valid) => {
 				if (valid) {

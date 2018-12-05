@@ -18,7 +18,7 @@
 			<div class="mask_content">
 				<div class="accordion">
 					<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
-						<el-collapse v-model="activeNames" @change="handleChange">
+						<el-collapse v-model="activeNames">
 							<el-collapse-item title="类别" name="1">
 								<el-row :gutter="20" class="pb10">
 									<el-col :span="3" class="pull-right">
@@ -579,8 +579,7 @@
 //
 //					this.$refs["dataInfo"].resetFields();
 //			},
-			handleChange(val) { //手风琴开关效果调用
-			},
+			
 			sizeChange(val) {
 				this.page.pageSize = val;
 				//				this.requestData();

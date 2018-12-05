@@ -17,7 +17,7 @@
 			<div class="mask_content">
 				<el-form status-icon :model="testing_projectForm" :label-position="labelPosition" :rules="rules" ref="testing_projectForm" label-width="100px">
 					<div class="accordion">
-						<el-collapse v-model="activeNames" @change="handleChange">
+						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基本信息" name="1">
 								<el-row :gutter="20" class="pb10">
 									<el-col :span="3" class="pull-right">
@@ -256,8 +256,7 @@
 			};
 		},
 		methods: {
-			handleChange(val) { //手风琴开关效果调用
-			},getCompany() {//文档查询接口，暂无通，待修改
+			getCompany() {//文档查询接口，暂无通，待修改
 				this.editSearch = 'DOCLINKS';
 				var url = '/api/api-user/depts/type';//文件接口不对
 				this.$axios.get(url, {

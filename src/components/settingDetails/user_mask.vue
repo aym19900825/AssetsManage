@@ -65,15 +65,19 @@
 								<!-- 第一行 -->
 								<el-row :gutter="30">
 									<el-col :span="8">
-										<el-form-item label="登录名称" prop="username">
-											<el-input v-model="user.username" v-if="modify" :disabled="edit"></el-input>
-											<el-input  v-model="user.username" v-else></el-input>
+										<el-form-item label="登录名称" v-if="modify">
+											<el-input v-model="user.username" :disabled="edit"></el-input>
+										</el-form-item>
+										<el-form-item label="登录名称" prop="username" v-else>
+											<el-input  v-model="user.username"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="登录口令" prop="password">
-											<el-input type="password" v-model="user.password"v-if="modify" :disabled="true"></el-input>
-											<el-input type="password" v-model="user.password" v-else></el-input>
+										<el-form-item label="登录口令" v-if="modify">
+											<el-input type="password" v-model="user.password" :disabled="edit"></el-input>
+										</el-form-item>
+										<el-form-item label="登录口令" prop="password" v-else>
+											<el-input type="password" v-model="user.password"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -620,7 +624,7 @@
 			},
 			//
 			handleNodeClick(data) { //获取勾选树菜单节点
-				console.log(data);
+//				console.log(data);
 			},
 
 

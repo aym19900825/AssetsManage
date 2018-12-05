@@ -167,8 +167,8 @@
 			</div>
 		</div>
 		<!-- 弹出 -->
-		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps">
+		<el-dialog title="机构" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" default-expand-all>
 			</el-tree>
 			<span slot="footer" class="dialog-footer">
 		       <el-button @click="dialogVisible = false">取 消</el-button>
@@ -379,7 +379,6 @@
 					// 	// type: type
 					// },
 				}).then((res) => {
-					console.log(res);
 					this.resourceData = res.data;
 					this.dialogVisible = true;
 				});
@@ -389,7 +388,6 @@
 				this.placetext = false;
 				this.dialogVisible = false;				
 				this.adddeptForm.pid = this.checkedNodes[0].id;
-				//console.log(this.checkedNodes[0]);
 				this.adddeptForm.parent = this.checkedNodes[0].fullname;
 				
 			},
@@ -405,7 +403,6 @@
 			getDEPT_TYPE() {//获取机构属性
 				var url = '/api/api-user/dicts/findChildsByCode?code=DEPT_TYPE';
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					this.SelectDEPT_TYPE = res.data;
 				}).catch(error => {
 					console.log('请求失败');
@@ -414,7 +411,6 @@
 			getsys_depttype() {//获取机构类型
 				var url = '/api/api-user/dicts/findChildsByCode?code=sys_depttype';
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					this.Selectsys_depttype = res.data;
 				}).catch(error => {
 					console.log('请求失败');
@@ -443,7 +439,6 @@
 			},
 			//修改
 			detail() {
-				console.log(this.adddeptForm);
 				this.adddeptForm.status=this.adddeptForm.status=="1"?'活动':'不活动';
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
 	    			this.adddeptForm.changeby = res.data.nickname;

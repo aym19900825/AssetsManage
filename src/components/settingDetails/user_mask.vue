@@ -421,7 +421,7 @@
 
 		<el-dialog title="机构" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
 
-			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick" @check-change="handleCheckChange">
+			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick" @check-change="handleCheckChange">
 			</el-tree>
 
 			<span slot="footer" class="dialog-footer">
@@ -533,6 +533,7 @@
 				addtitle: true, //添加弹出框titile
 				modifytitle: false, //修改弹出框titile
 				modify:false,
+//				default-expand-all:true,
 				rules: {
 					deptName: [{ required: true, message: '必填', trigger: 'blur' }],//名称
 					education:[{required: true, message: '必填', trigger: 'blur'}],
@@ -803,6 +804,8 @@
 					},
 				}).then((res) => {
 					this.resourceData = res.data;
+					
+					console.log(res.data)
 					this.dialogVisible = true;
 				});
 
@@ -813,12 +816,13 @@
 				this.editSearch = 'dept';
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
-				var type = "2";
-				var url = '/api/api-user/depts/treeByType';
+//				var type = "2";
+				var url = '/api/api-user/depts/treeMap';
+//				var url = '/api/api-user/depts/treeByType';
 				this.$axios.get(url, {
-					params: {
-						type: type
-					},
+//					params: {
+//						type: type
+//					},
 				}).then((res) => {
 					this.resourceData = res.data;
 					this.dialogVisible = true;

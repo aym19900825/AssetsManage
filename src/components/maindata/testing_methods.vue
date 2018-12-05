@@ -237,8 +237,8 @@
 				show: false,
 				down: true,
 				up: false,
-				isShow: false,
-				ismin: true,
+				// isShow: false,
+				// ismin: true,
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: { //点击高级搜索后显示的内容
 					nickname: '',

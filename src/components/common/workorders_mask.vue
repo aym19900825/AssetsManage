@@ -277,7 +277,7 @@
 										<el-col :span="8">
 											<el-form-item label="样品承接人(专业组)">
 												<el-select v-model="workorderForm.ITEM_PROFESSIONAL_GROUP" style="width: 100%">
-													<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
+													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.nickname"></el-option>
 												</el-select>
 											</el-form-item>
 										</el-col>
@@ -308,7 +308,7 @@
 										<el-col :span="8">
 											<el-form-item label="样品返回接收人">
 												<el-select v-model="workorderForm.RETURN_ITEM_USER" style="width: 100%">
-													<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
+													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.nickname"></el-option>
 												</el-select>
 											</el-form-item>
 										</el-col>
@@ -338,14 +338,14 @@
 										<el-col :span="8">
 											<el-form-item label="样品承接人">
 												<el-select v-model="workorderForm.ITEM_UNDERTAKE_USER" style="width: 100%">
-													<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
+													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.nickname"></el-option>
 												</el-select>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="专业技术/质量负责人">
 												<el-select v-model="workorderForm.PROFESSIONAL" style="width: 100%">
-													<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
+													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.username"></el-option>
 												</el-select>
 											</el-form-item>
 										</el-col>
@@ -543,6 +543,7 @@
 					description:''
 				}],
 				search:'',
+				selectData:[],//获取接收人、承接人、负责人
 				Select_ITEM_STATUS:[],//获取样品信息-样品状态
 				Select_ITEM_SOURCE:[],//获取样品信息-样品来源
 				Select_COMPLETE_MODE:[],//获取样品信息-完成方式
@@ -675,6 +676,24 @@
 				var url = '/api/api-user/dicts/findChildsByCode?code=ITEM_RECEPT_STATUS';
 				this.$axios.get(url, {}).then((res) => {
 					this.Select_ITEM_RECEPT_STATUS = res.data;
+				}).catch(error => {
+					console.log('请求失败');
+				})
+			},
+
+			//获取样品信息-接收人、
+			getselectData() {
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				}
+				var url = '/api/api-user/users';
+				this.$axios.get(url, {
+					params: data
+				}).then((res) => {
+					
+					this.selectData = res.data;
+					console.log(selectData);
 				}).catch(error => {
 					console.log('请求失败');
 				})
@@ -947,6 +966,7 @@
 			this.getITEM_STATUS();//页面打开加载-样品状态
 			this.getITEM_SOURCE();//页面打开加载-样品来源
 			this.getCOMPLETE_MODE();//页面打开加载-完成方式
+			this.getselectData();//页面打开加载-接收人、负责人、收样人
 			this.getITEM_RECEPT_STATUS();//页面打开加载-样品接收状态
 			this.getITEM_CHECK_STATUS();//页面打开加载-样品检后状态
 			this.getITEM_MANAGEMENT();//页面打开加载-样品处置

@@ -16,9 +16,8 @@
 				</div>
 			</div>
 			<div class="mask_content">
-
-				<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
-					<div class="accordion" id="information">
+				<div class="accordion">
+					<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="类别" name="1">
 								<el-row :gutter="20" class="pb10">
@@ -33,102 +32,93 @@
 										</el-input>
 									</el-col>
 								</el-row>
-								<div class="accordion-body tab-content">
-									<el-radio-group v-model="dataInfo.TYPE" :disabled="noedit">
-										<el-row :gutter="30">
-											<el-col :span="6">
-												<el-radio label="1">监督抽查</el-radio>
-											</el-col>
-											<el-col :span="6">
-												<el-radio label="2">监督抽查复查</el-radio>
-											</el-col>
-											<el-col :span="6">
-												<el-radio label="3">质量抽查</el-radio>
-											</el-col>
-											<el-col :span="6">
-												<el-radio label="4">质量抽查复查</el-radio>
-											</el-col>
-										</el-row>
-										<el-row :gutter="30">
-											<el-col :span="6">
-												<el-radio label="5">生产许可证</el-radio>
-											</el-col>
-											<el-col :span="6">
-												<el-radio label="6">认定检验检测</el-radio>
-											</el-col>
-											<el-col :span="6">
-												<el-radio label="7">鉴定试验</el-radio>
-											</el-col>
-											<el-col :span="6">
-												<el-radio label="8">委托检验检测</el-radio>
-											</el-col>
-										</el-row>
-										<el-row :gutter="30">
-											<el-col :span="6">
-												<el-radio label="9">专项抽查</el-radio>
-											</el-col>
-											<el-col :span="6">
-												<el-radio label="10">专项抽查复查</el-radio>
-											</el-col>
-											<el-col :span="6">
-												<el-radio label="11">其它</el-radio>
-											</el-col>
-										</el-row>
-									</el-radio-group>
-								</div>
+								<el-radio-group v-model="dataInfo.TYPE" :disabled="noedit">
+									<el-row :gutter="20">
+										<el-col :span="4">
+											<el-radio label="1">监督抽查</el-radio>
+										</el-col>
+										<el-col :span="4">
+											<el-radio label="2">监督抽查复查</el-radio>
+										</el-col>
+										<el-col :span="4">
+											<el-radio label="3">质量抽查</el-radio>
+										</el-col>
+										<el-col :span="4">
+											<el-radio label="4">质量抽查复查</el-radio>
+										</el-col>
+										<el-col :span="4">
+											<el-radio label="5">生产许可证</el-radio>
+										</el-col>
+										<el-col :span="4">
+											<el-radio label="6">认定检验检测</el-radio>
+										</el-col>
+										<el-col :span="4">
+											<el-radio label="7">鉴定试验</el-radio>
+										</el-col>
+										<el-col :span="4">
+											<el-radio label="8">委托检验检测</el-radio>
+										</el-col>
+										<el-col :span="4">
+											<el-radio label="9">专项抽查</el-radio>
+										</el-col>
+										<el-col :span="4">
+											<el-radio label="10">专项抽查复查</el-radio>
+										</el-col>
+										<el-col :span="4">
+											<el-radio label="11">其它</el-radio>
+										</el-col>
+									</el-row>		
+								</el-radio-group>
 							</el-collapse-item>
 							<el-collapse-item title="基本信息" name="2">
-								<div class="accordion-body tab-content">
-									<el-row :gutter="30">
-										<el-col :span="8">
-											<el-form-item label="计划编号" prop="WP_NUM">
-												<el-input v-model="dataInfo.WP_NUM" :disabled="noedit">
-												</el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="任务号" prop="TASKNUM">
-												<el-input v-model="dataInfo.TASKNUM" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="承检单位" prop="CJDW">
-												
-										<el-select v-model="dataInfo.CJDW" placeholder="金化站" :disabled="noedit">
-											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-											</el-option>
-										</el-select>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<el-row :gutter="30">
-										<el-col :span="8">
-											<el-form-item label="项目负责人" prop="P_LEADERDesc">
-												<el-input v-model="dataInfo.P_LEADERDesc" :disabled="edit">
-													<el-button slot="append" icon="el-icon-search" @click="getPeople(1)"></el-button>
-												</el-input>
+								<el-row :gutter="30">
+									<el-col :span="8">
+										<el-form-item label="计划编号" prop="WP_NUM">
+											<el-input v-model="dataInfo.WP_NUM" :disabled="noedit">
+											</el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="任务号" prop="TASKNUM">
+											<el-input v-model="dataInfo.TASKNUM" :disabled="noedit"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="承检单位" prop="CJDW">
+											<el-select v-model="dataInfo.CJDW" placeholder="金化站" :disabled="noedit" style="width: 100%">
+												<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+												</el-option>
+											</el-select>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="30">
+									<el-col :span="8">
+										<el-form-item label="项目负责人" prop="P_LEADERDesc">
+											<el-input v-model="dataInfo.P_LEADERDesc" :disabled="edit">
+												<el-button slot="append" icon="el-icon-search" @click="getPeople(1)"></el-button>
+											</el-input>
 
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="受检产品名称" prop="ITEM_NAME">
-												<el-input v-model="dataInfo.ITEM_NAME" :disabled="noedit" ></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="受检产品型号" prop="ITEM_MODEL">
-												<el-input v-model="dataInfo.ITEM_MODEL" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<el-row>
-										<el-col :span="8">
-											<el-form-item label="信息状态" prop="STATUS">
-												<el-input v-model="dataInfo.STATUS" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-								</div>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="受检产品名称" prop="ITEM_NAME">
+											<el-input v-model="dataInfo.ITEM_NAME" :disabled="noedit" ></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="受检产品型号" prop="ITEM_MODEL">
+											<el-input v-model="dataInfo.ITEM_MODEL" :disabled="noedit"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row>
+									<el-col :span="8">
+										<el-form-item label="信息状态" prop="STATUS">
+											<el-input v-model="dataInfo.STATUS" :disabled="noedit"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
 							</el-collapse-item>
 							<el-collapse-item title="依据" name="3">
 								<!-- 字段列表 Begin-->
@@ -197,33 +187,31 @@
 								<!-- 字段列表 End -->
 							</el-collapse-item>
 							<el-collapse-item title="检验检测要求" name="4">
-								<div class="accordion-body tab-content">
-									<el-row :gutter="30">
-										<el-col :span="6">
-											<el-form-item label="受检企业" prop="V_NAME">
-												<el-input v-model="dataInfo.V_NAME" :disabled="noedit" ></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="6">
-											<el-form-item label="抽样方案" prop="SOLUTION">
-												<el-input v-model="dataInfo.SOLUTION" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="6">
-											<el-form-item label="样品数量" prop="QUALITY">
-												<el-input v-model="dataInfo.QUALITY" :disabled="noedit">></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="6">
-											<el-form-item label="接收人" prop="ACCEPT_PERSONDesc">
-												<el-input v-model="dataInfo.ACCEPT_PERSONDesc" :disabled="edit">
-													<el-button slot="append" icon="el-icon-search" @click="getPeople(2)"></el-button>
-												</el-input>
+								<el-row :gutter="30">
+									<el-col :span="6">
+										<el-form-item label="受检企业" prop="V_NAME">
+											<el-input v-model="dataInfo.V_NAME" :disabled="noedit" ></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="6">
+										<el-form-item label="抽样方案" prop="SOLUTION">
+											<el-input v-model="dataInfo.SOLUTION" :disabled="noedit"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="6">
+										<el-form-item label="样品数量" prop="QUALITY">
+											<el-input v-model="dataInfo.QUALITY" :disabled="noedit">></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="6">
+										<el-form-item label="接收人" prop="ACCEPT_PERSONDesc">
+											<el-input v-model="dataInfo.ACCEPT_PERSONDesc" :disabled="edit">
+												<el-button slot="append" icon="el-icon-search" @click="getPeople(2)"></el-button>
+											</el-input>
 
-											</el-form-item>
-										</el-col>
-									</el-row>
-								</div>
+										</el-form-item>
+									</el-col>
+								</el-row>
 							</el-collapse-item>
 							<el-collapse-item title="检验检测项目" name="5">
 								<!-- 字段列表 Begin-->
@@ -293,76 +281,71 @@
 								<!-- 字段列表 End -->
 							</el-collapse-item>
 							<el-collapse-item name="6">
-								<div class="accordion-body tab-content">
-									<el-row :gutter="30">
-										<el-col :span="8">
-											<el-form-item label="完成日期" prop="COMPDATE">
-												<el-date-picker v-model="dataInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" :disabled="noedit">>
-												</el-date-picker>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="检验检测费用" prop="CHECTCOST">
-												<el-input v-model="dataInfo.CHECTCOST" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="下达日期" prop="XD_DATE">
-												<el-date-picker v-model="dataInfo.XD_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" :disabled="noedit">>
-												</el-date-picker>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<el-row :gutter="30">
-										<el-col :span="24">
-											<el-form-item label="备注" prop="MEMO">
-												<el-input v-model="dataInfo.MEMO" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-								</div>
+								<el-row :gutter="30">
+									<el-col :span="8">
+										<el-form-item label="完成日期" prop="COMPDATE">
+											<el-date-picker v-model="dataInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" :disabled="noedit" style="width: 100%">
+											</el-date-picker>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="检验检测费用" prop="CHECTCOST">
+											<el-input v-model="dataInfo.CHECTCOST" :disabled="noedit"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="下达日期" prop="XD_DATE">
+											<el-date-picker v-model="dataInfo.XD_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" :disabled="noedit" style="width: 100%">
+											</el-date-picker>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="30">
+									<el-col :span="24">
+										<el-form-item label="备注" prop="MEMO">
+											<el-input type="textarea" rows="5" v-model="dataInfo.MEMO" :disabled="noedit"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
 							</el-collapse-item>
-							<el-collapse-item title="其他" name="7" v-show="views" >
-								<div class="accordion-body tab-content">
-									<el-row :gutter="30">
-										<el-col :span="8">
-											<el-form-item label="录入人" prop="ENTERBY">
-												<el-input v-model="dataInfo.ENTERBY" :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="录入时间" prop="ENTERDATE">
-												<el-input v-model="dataInfo.ENTERDATE" :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="录入人机构" prop="ORGID">
-												<el-input v-model="dataInfo.ORGID" :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<el-row :gutter="30">
-										<el-col :span="8">
-											<el-form-item label="修改人"  prop="CHANGEBY">
-												<el-input v-model="dataInfo.CHANGEBY" :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="修改时间"  prop="CHANGEDATE">
-												<el-input v-model="dataInfo.CHANGEDATE" :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
-
-									</el-row>
-								</div>
+							<el-collapse-item title="其他" name="7" v-show="views">
+								<el-row :gutter="30">
+									<el-col :span="8">
+										<el-form-item label="录入人" prop="ENTERBY">
+											<el-input v-model="dataInfo.ENTERBY" :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="录入时间" prop="ENTERDATE">
+											<el-input v-model="dataInfo.ENTERDATE" :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="录入人机构" prop="ORGID">
+											<el-input v-model="dataInfo.ORGID" :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="30">
+									<el-col :span="8">
+										<el-form-item label="修改人"  prop="CHANGEBY">
+											<el-input v-model="dataInfo.CHANGEBY" :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="修改时间"  prop="CHANGEDATE">
+											<el-input v-model="dataInfo.CHANGEDATE" :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
 							</el-collapse-item>
 						</el-collapse>
-					</div>
-					<div class="el-dialog__footer" v-show="noviews">
-						<el-button @click='close'>取消</el-button>
-						<el-button type="primary" @click="submitForm('dataInfo')">提交</el-button>
-					</div>
-				</el-form>
+					</el-form>
+				</div>
+				<div class="el-dialog__footer" v-show="noviews">
+					<el-button @click='close'>取消</el-button>
+					<el-button type="primary" @click="submitForm('dataInfo')">提交</el-button>
+				</div>
 			</div>
 		</div>
 		<el-dialog :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
@@ -845,4 +828,5 @@
 
 <style scoped>
 	@import '../../assets/css/mask-modules.css';
+	.el-radio-group .el-col-4 {padding-top: 5px;}
 </style>

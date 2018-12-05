@@ -28,7 +28,13 @@ import passwordedit from '@/components/setting/passwordedit'//修改密码
 import annual_plan from '@/components/annual_plan'//年度计划
 import notifications from '@/components/notifications'//工作任务通知书
 import proxies from '@/components/proxies'//委托书管理
-import samples from '@/components/samples'//样品管理
+
+import samples from '@/components/samples/samples'//样品管理-接样
+import collar_sample from '@/components/samples/collar_sample'//样品管理-领样
+import return_sample from '@/components/samples/return_sample'//样品管理-返样
+import sample_disposal from '@/components/samples/sample_disposal'//样品管理-样品处置
+
+
 import workorders from '@/components/workorders'//工作任务单
 import devices from '@/components/devices'//设备管理
 import inspection_project from '@/components/inspection_project'//检验/检测项目管理
@@ -212,10 +218,24 @@ Vue.use(Router)
       name: 'proxies',
       component: proxies
     },
-    {//样品管理
+    {//样品管理-接样
       path: '/samples',
       name: 'samples',
       component: samples
+    },{//样品管理-领样
+      path: '/collar_sample',
+      name: 'collar_sample',
+      component: collar_sample
+    },
+    {//样品管理-返样
+      path: '/return_sample',
+      name: 'return_sample',
+      component: return_sample
+    },
+    {//样品管理-样品处置
+      path: '/sample_disposal',
+      name: 'sample_disposal',
+      component: sample_disposal
     },
     {//工作任务单
       path: '/workorders',

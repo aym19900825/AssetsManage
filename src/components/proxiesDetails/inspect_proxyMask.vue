@@ -195,7 +195,7 @@
 										</template>
 									</el-table-column>
 
-									<el-table-column prop="P_DESC" label="检验项目描述" sortable width="120px">
+									<el-table-column prop="P_DESC" label="检验项目描述" sortable>
 										<template slot-scope="scope">
 											<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.P_DESC'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入委托方名称">
@@ -205,7 +205,7 @@
 										</template>
 									</el-table-column>
 
-									<el-table-column prop="REMARKS" label="内容" sortable width="120px">
+									<el-table-column prop="REMARKS" label="内容" sortable>
 										<template slot-scope="scope">
 											<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.REMARKS'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" placeholder="请输入要求">		
@@ -273,7 +273,7 @@
 										</template>
 									</el-table-column>
 
-									<el-table-column prop="S_DESC" label="标准内容" sortable width="300px">
+									<el-table-column prop="S_DESC" label="标准内容" sortable>
 										<template slot-scope="scope">
 											<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.S_DESC'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_DESC" placeholder="请输入委托方名称">	
@@ -315,7 +315,7 @@
 							</el-collapse-item>
 
 							<el-collapse-item title="分包要求" name="7">
-								<!-- 资质信息 Begin-->
+								<!-- 分包要求 Begin-->
 								<div class="table-func">
 									<el-button type="success" size="mini" round @click="addcheckProCont">
 										<i class="icon-add"></i>
@@ -360,7 +360,7 @@
 										</template>
 									</el-table-column>
 
-									<el-table-column prop="P_REMARKS" label="检验检测项目内容" sortable width="120px">
+									<el-table-column prop="P_REMARKS" label="检验检测项目内容" sortable width="280px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.P_REMARKS'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入">
@@ -370,7 +370,7 @@
 										</template>
 									</el-table-column>
 
-									<el-table-column prop="BASIS" label="检验检测技术依据" sortable width="120px">
+									<el-table-column prop="BASIS" label="检验检测技术依据" sortable width="220px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.BASIS'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.BASIS" placeholder="请输入">
@@ -379,7 +379,7 @@
 											</el-form-item>
 										</template>
 									</el-table-column>
-									<el-table-column prop="REQUIRES" label="对环境和操作人员要求" sortable width="120px">
+									<el-table-column prop="REQUIRES" label="对环境和操作人员要求" sortable width="220px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.REQUIRES'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REQUIRES" placeholder="请输入内容"></el-input>
@@ -387,7 +387,7 @@
 											</el-form-item>
 										</template>
 									</el-table-column>
-									<el-table-column prop="Q_TYPE" label="对分包报告/证书的要求" sortable width="120px">
+									<el-table-column prop="Q_TYPE" label="对分包报告/证书的要求" sortable width="220px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.Q_TYPE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.Q_TYPE" placeholder="请输入内容"></el-input>
@@ -432,7 +432,7 @@
 									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="完成日期" prop="COMPDATE">
-												<el-date-picker v-model="dataInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+												<el-date-picker v-model="dataInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 100%;">
 												</el-date-picker>
 											</el-form-item>
 										</el-col>
@@ -501,7 +501,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="付款方式" prop="PAYMENT_METHOD">
-												<el-select v-model="dataInfo.PAYMENT_METHOD" placeholder="请选择">
+												<el-select v-model="dataInfo.PAYMENT_METHOD" placeholder="请选择" style="width: 100%;">
 													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 													</el-option>
 												</el-select>
@@ -509,7 +509,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="信息状态" prop="MESSSTATUS">
-													<el-input v-model="dataInfo.MESSSTATUS"></el-input>
+												<el-input v-model="dataInfo.MESSSTATUS"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -523,7 +523,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="主检组" prop="MAINGROUP">
-												<el-select v-model="dataInfo.MAINGROUP" placeholder="请选择">
+												<el-select v-model="dataInfo.MAINGROUP" placeholder="请选择" style="width: 100%;">
 													<el-option v-for="item in option" :key="item.value" :label="item.label" :value="item.value">
 													</el-option>
 												</el-select>
@@ -547,7 +547,7 @@
 									<el-row :gutter="70">
 										<el-col :span="24">
 											<el-form-item label="备注" prop="MEMO">
-												<el-input type="textarea" v-model="dataInfo.MEMO"></el-input>
+												<el-input type="textarea" rows="5" v-model="dataInfo.MEMO"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -558,29 +558,29 @@
 									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="录入人" prop="ENTERBY">
-												<el-input v-model="dataInfo.ENTERBY" :disabled="false"></el-input>
+												<el-input v-model="dataInfo.ENTERBY" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="录入时间" prop="ENTERDATE">
-												<el-input v-model="dataInfo.ENTERDATE" :disabled="false"></el-input>
+												<el-input v-model="dataInfo.ENTERDATE" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="录入人机构" prop="ORGID">
-												<el-input v-model="dataInfo.ORGID" :disabled="false"></el-input>
+												<el-input v-model="dataInfo.ORGID" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="修改人" v-if="modify" prop="CHANGEBY">
-												<el-input v-model="dataInfo.CHANGEBY" :disabled="false"></el-input>
+												<el-input v-model="dataInfo.CHANGEBY" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="修改时间" v-if="modify" prop="CHANGEDATE">
-												<el-input v-model="dataInfo.CHANGEDATE" :disabled="false"></el-input>
+												<el-input v-model="dataInfo.CHANGEDATE" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 

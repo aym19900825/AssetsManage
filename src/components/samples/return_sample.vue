@@ -5,8 +5,11 @@
 			<navs_header></navs_header>
 		</div>
 		<div class="contentbg">
+			<!--左侧菜单内容显示 Begin-->
+			<navs_left></navs_left>
+			<!--左侧菜单内容显示 End-->
 			<!--右侧内容显示 Begin-->
-			<div class="wrapper wrapper-content wrapperall">
+			<div class="wrapper wrapper-content">
 				<div class="ibox-content">
 					<!--<navs_button></navs_button>-->
 					<div class="fixed-table-toolbar clearfix">
@@ -106,7 +109,7 @@
 						<el-col :span="5" class="lefttree">
 							<div class="lefttreebg">
 								<div class="left_tree_title clearfix" @click="min3max()">
-									<div class="pull-left pr20" v-if="ismin">组织生产单位</div>
+									<div class="pull-left pr20" v-if="ismin">检索分类</div>
 									<span class="pull-right navbar-minimalize minimalize-styl-2">
 										<i class="icon-doubleok icon-double-angle-left blue"></i>
 									</span>
@@ -164,16 +167,18 @@
 	</div>
 </template>
 <script>
-	import vheader from './common/vheader.vue'
-	import navs_header from './common/nav_tabs.vue'
+	import vheader from '../common/vheader.vue'
+	import navs_left from '../common/left_navs/nav_left6.vue'
+	import navs_header from '../common/nav_tabs.vue'
 //	import assetsTree from '../plugin/vue-tree/tree2.vue'
-	 import samplesmask from'./common/samples_mask.vue'
+	import samplesmask from'../samplesDetails/samples_mask.vue'
 	export default {
 		name: 'user_management',
 		components: {
 			'vheader': vheader,
 			'navs_header': navs_header,
-			 'samplesmask': samplesmask,
+			'samplesmask': samplesmask,
+			'navs_left': navs_left,
 //			'v-assetsTree': assetsTree
 		},
 		data() {

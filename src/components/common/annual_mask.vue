@@ -24,25 +24,25 @@
 								<el-row :gutter="20">
 									<el-col :span="5" class="pull-right">
 										<el-input placeholder="草稿" v-model="WORKPLAN.STATUS" :disabled="true">
-												<template slot="prepend">信息状态</template>
+											<template slot="prepend">信息状态</template>
 										</el-input>
 									</el-col>
 									<el-col :span="5" class="pull-right">
-										<el-select v-model="WORKPLAN.TYPE" placeholder="类别">
+										<el-select v-model="WORKPLAN.TYPE" placeholder="请选择计划类型">
 									    	<el-option label="监督抽查" value="1"></el-option>
 									    	<el-option label="质量抽查" value="0"></el-option>
 										</el-select>
 									</el-col>
 									<el-col :span="5" class="pull-right">
-										<el-input v-model="WORKPLAN.WP_NUM">
-												<template slot="prepend">计划编号</template>
+										<el-input v-model="WORKPLAN.WP_NUM" placeholder="自动生成" :disabled="true">
+											<template slot="prepend">计划编号</template>
 										</el-input>
 									</el-col>
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="6">
 										<el-form-item label="提出单位" prop="PROP_UNIT">
-											<el-select v-model="WORKPLAN.PROP_UNIT" placeholder="请选择">
+											<el-select v-model="WORKPLAN.PROP_UNIT" placeholder="请选择提出单位">
 										    	<el-option label="金化站" value="1"></el-option>
 										    	<el-option label="运包站" value="0"></el-option>
 											</el-select>

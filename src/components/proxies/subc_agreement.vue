@@ -15,7 +15,7 @@
 				<div class="fixed-table-toolbar clearfix">
 					<div class="bs-bars pull-left">
 						<div class="hidden-xs" id="roleTableToolbar" role="group">
-							<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+							<!-- <button type="button" class="btn btn-green" @click="openAddMgr" id="">
 	                        	<i class="icon-add"></i>添加
 	              			 </button>
 							<button type="button" class="btn btn-bule button-margin" @click="modify">
@@ -26,7 +26,7 @@
 							</button>
 							<button type="button" class="btn btn-primarys button-margin" @click="importData">
 							    <i class="icon-upload-cloud"></i>导入
-							</button>
+							</button> -->
 							<button type="button" class="btn btn-primarys button-margin" @click="exportData">
 							    <i class="icon-download-cloud"></i>导出
 							</button>
@@ -86,10 +86,11 @@
 				</div>
 				<!-- 高级查询划出 End-->
 				<el-row :gutter="10">
+					<!-- 左侧树菜单 Begin-->
 					<el-col :span="5" class="lefttree">
 						<div class="lefttreebg">
 							<div class="left_tree_title clearfix" @click="min3max()">
-								<div class="pull-left pr20" v-if="ismin">组织机构</div>
+								<div class="pull-left pr20" v-if="ismin">检索分类</div>
 								<span class="pull-right navbar-minimalize minimalize-styl-2">
 									<i class="icon-doubleok icon-double-angle-left blue"></i>
 								</span>
@@ -102,6 +103,7 @@
 							</div>
 						</div>
 					</el-col>
+					<!-- 左侧树菜单 End-->
 					<el-col :span="19" class="leftcont v-resize">
 						<!-- 表格 Begin-->
 						<el-table :data="subagree" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'subagree', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">

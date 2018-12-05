@@ -14,19 +14,23 @@
         </el-dropdown-menu>
       </el-dropdown>
     </div>
+
 </template>
 
 <script>
 export default {
-  methods:{
-    checkedChange(){
-      this.$emit('tableControle',this.checkedName);
-    }  
-  },
   props: [
       'tableHeader',
       'checkedName'
   ],
+  methods:{
+    checkedChange(){
+      this.$emit('tableControle',this.checkedName);
+
+      // console.log(this.checkedName.indexOf('账号') != -1);
+    }  
+  },
+ 
 }
 </script>
 <style scope>

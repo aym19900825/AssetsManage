@@ -496,7 +496,7 @@
 			},
 			judge(data) {
 				//taxStatus 布尔值
-				return data.enabled ? '启用' : '冻结'
+				return data.enabled ? '活动' : '不活动'
 			},
 			sexName(data) {
 				return data.sex ? '男' : '女'
@@ -528,7 +528,6 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(res)
 					//					this.userList = res.data.data;
 					this.page.totalCount = res.data.count;
 					//总的页数
@@ -582,13 +581,12 @@
 						data[i].children = this.transformTree(data[i].subDepts);
 					}
 				}
-				//console.log(111222);
-				//console.log(data);
+
 				return data;
 				
 			},
 			handleNodeClick(data) {
-				//console.log(111);
+
 				if(data.type == '1') {
 					this.companyId = data.id;
 					this.deptId = '';

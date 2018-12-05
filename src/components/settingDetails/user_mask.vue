@@ -57,7 +57,7 @@
 							<el-collapse-item title="用户基本资料" name="1">
 								<el-row :gutter="20" class="pb10">
 									<el-col :span="5" class="pull-right">
-										<el-input v-model="user.status" :disabled="edit">
+										<el-input v-model="user.enabled" :disabled="edit">
 											<template slot="prepend">信息状态</template>
 										</el-input>
 									</el-col>
@@ -516,17 +516,7 @@
 					label: 'MBA/EMBA'
 				},
 				],
-//				value: '',
-				option1: [{
-					value: '金化站',
-					label: '金化站'
-				}, {
-					value: '运包站',
-					label: '运包站'
-				}, {
-					value: '接触网站',
-					label: '接触网站'
-				}],
+
 				value: '',
 				editSearch: '',
 				edit: true, //禁填
@@ -563,8 +553,8 @@
 				resourceDialogisShow: false,
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
 				resourceProps: {
-					children: "subDepts",
-					label: "simplename"
+					children: "children",
+					label: "fullname"
 				},
 				selectData: [], //
 				getCheckboxData: {},
@@ -652,7 +642,7 @@
 					email: '',
 					address: '',
 					tips: '',
-					status: '活动',
+					enabled: '活动',
 					traings: [],
 					qualifications: [],
 				}
@@ -700,7 +690,7 @@
 //					console.log(res.data);
 					this.user = res.data;
 					this.user.sex=this.user.sex?'男':'女';
-					this.user.status=this.user.status=='1' ? '活动' : '不活动';
+					this.user.enabled =this.user.enabled? '活动' : '不活动';
 					this.user.ispermit=this.user.ispermit=='1'? '是' : '否';
 					this.user.islogin=this.user.islogin=='1'? '是' : '否';
 					this.user.roleId = [];
@@ -753,7 +743,7 @@
 				var _this = this;
 				this.$refs.user.validate((valid) => {
 					if(valid) {
-						this.user.status=this.user.status=='活动' ? '1' : '0';
+						this.user.enabled=this.user.enabled=='活动' ? 'true' : 'false';
 						this.user.ispermit=this.user.ispermit=='是'? '1' : '2';
 						this.user.islogin=this.user.islogin=='是'? '1' : '2';
 						var user = this.user;
@@ -765,7 +755,6 @@
 								var roles = _this.selectData;
 								for(var j = 0; j < roles.length; j++) {
 									if(roles[j].id == item) {
-										console.log(roles[j].id);
 										arr.push(roles[j]);
 										roleId = roleId + roles[j].id+",";
 									}
@@ -813,7 +802,6 @@
 						type: type
 					},
 				}).then((res) => {
-					console.log(res);
 					this.resourceData = res.data;
 					this.dialogVisible = true;
 				});

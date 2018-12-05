@@ -136,7 +136,7 @@
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
-		<projectmask :testing_projectForm="testing_projectForm" ref="child" @request="requestData" v-bind:page=page ></projectmask>
+		<projectmask :testing_projectForm="aaaData[0]" ref="child" @request="requestData" v-bind:page=page ></projectmask>
 	
 	</div>
 </div>
@@ -237,13 +237,9 @@
 						prop: 'CHANGEDATE'
 					}
 				],
-				companyId: '',
-				deptId: '',
 				selMenu: [],
 				'活动': true,
 				'不活动': false,
-				'男': true,
-				'女': false,
 				projectList: [],
 				search: false,
 				show: false,
@@ -312,7 +308,7 @@
 			openAddMgr() {
 	        	this.testing_projectForm = { //数据库列表
 					VERSION: 0,
-					STATUS: 1,
+					STATUS: '活动',
 					P_NUM: '',
 					P_NAME: '',
 					QUANTITY: '',
@@ -344,8 +340,10 @@
 					});
 					return;
 				} else {
+
 					this.testing_projectForm = this.selMenu[0]; 
 					this.$refs.child.detail();
+
 				}
 			},
 			//高级查询
@@ -415,7 +413,7 @@
 				
 			},
 			judge(data) {
-				return data.enabled ? '活动' : '不活动'
+				return data.STATUS ? '活动' : '不活动'
 			},
 			//时间格式化  
 			dateFormat(row, column) {

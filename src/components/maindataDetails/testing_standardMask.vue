@@ -361,10 +361,12 @@
 				this.show = true;
 			},
 			// 这里是修改
-			detail() {
+			detail(data) {
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.modify=true;
+				console.log(data);
+				data.STATUS=data.STATUS=="1" ? '活动' : '不活动';
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
 					console.log(res);
 					this.dataInfo.CHANGEBY=res.data.nickname;
@@ -411,8 +413,8 @@
 				this.$refs[dataInfo].validate((valid) => {
 						this.dataInfo.RELEASETIME =  this.$moment(this.dataInfo.RELEASETIME).format("YYYY-MM-DD HH:mm:ss");
 						this.dataInfo.STARTETIME = this.$moment(this.dataInfo.STARTETIME).format("YYYY-MM-DD HH:mm:ss");
-							 if (valid) {
-					
+					 if (valid) {
+					this.dataInfo.STATUS=this.dataInfo.STATUS=="活动" ? '1' : '0';
 					var url = '/api/api-apps/app/inspectionSta/saveOrUpdate';
 					this.$axios.post(url, this.dataInfo).then((res) => {
 						if(res.data.resp_code == 0) {

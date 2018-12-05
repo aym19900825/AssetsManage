@@ -199,6 +199,7 @@
 				}
             },
             childMethods() {//添加内容时从父组件带过来的
+            	console.log(this.numbsetForm);
             	this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
 					this.numbsetForm.DEPARTMENT=res.data.companyName;
 					this.numbsetForm.ENTERBY=res.data.nickname;
@@ -229,6 +230,7 @@
             	this.addtitle = false;
             	this.modifytitle = true;
             	this.modify=true;
+          	    this.numbsetForm.STATUS=this.numbsetForm.STATUS=="1"?'活动':'不活动';
             	this.show = true;
             },
 			//点击关闭按钮
@@ -272,6 +274,7 @@
 			submitForm(numbsetForm) {
 				this.$refs[numbsetForm].validate((valid) => {
 		          if (valid) {
+		          	this.numbsetForm.STATUS=this.numbsetForm.STATUS=="活动" ? '1' : '0';
 					var url = '/api/api-apps/app/autokey/saveOrUpdate';
 					this.$axios.post(url, this.numbsetForm).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息

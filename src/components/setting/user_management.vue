@@ -117,9 +117,9 @@
 								</el-table-column>
 								<!--<el-table-column label="性别" sortable width="100px" prop="sex" :formatter="sexName" v-if="this.checkedName.indexOf('性别')!=-1">
 								</el-table-column>-->
-								<el-table-column label="机构" sortable width="150px" prop="deptName" v-if="this.checkedName.indexOf('机构')!=-1">
+								<el-table-column label="机构" sortable prop="deptName" v-if="this.checkedName.indexOf('机构')!=-1">
 								</el-table-column>
-								<el-table-column label="公司" sortable width="200px" prop="companyName" v-if="this.checkedName.indexOf('公司')!=-1">
+								<el-table-column label="公司" sortable prop="companyName" v-if="this.checkedName.indexOf('公司')!=-1">
 								</el-table-column>
 
 								<el-table-column label="信息状态" sortable width="200px" prop="enabled" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
@@ -139,7 +139,7 @@
 				</div>
 			</div>
 		</div>
-		<usermask :user="aaaData[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></usermask>
+		<usermask :userFrom="userFrom" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></usermask>
 		<!--右侧内容显示 End-->
 	</div>
 	</div>
@@ -163,7 +163,6 @@
 			return {
 				isShow: false,
 				ismin: true,
-				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				loadSign: true, //加载
 				commentArr: {},
 				checkedName: [
@@ -198,7 +197,7 @@
 
 				companyId: '',
 				deptId: '',
-				selUser: [],
+				selMenu: [],
 				'启用': true,
 				'冻结': false,
 				'男': true,
@@ -208,6 +207,7 @@
 				show: false,
 				down: true,
 				up: false,
+				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: {
 					nickname: '',
 					enabled: '',
@@ -223,12 +223,13 @@
 				},
 				treeData: [],
 				userData: [],
-				page: {
+				page: {//分页显示
 					currentPage: 1,
 					pageSize: 10,
 					totalCount: 0
 				},
 				aaaData: [],
+				userFrom: {}//修改子组件时传递数据
 			}
 		},
 		methods: {
@@ -284,22 +285,22 @@
 			test() {
 				console.log(this.checkedName.indexOf('账号') != -1);
 			},
-			sizeChange(val) {
+			sizeChange(val) {//分页，总页数
 				this.page.pageSize = val;
 				this.requestData();
 			},
-			currentChange(val) {
+			currentChange(val) {//分页，当前页
 				this.page.currentPage = val;
 				this.requestData();
 			},
-			searchinfo(index) {
+			searchinfo(index) {//高级查询
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
 				this.requestData();
 			},
 			//添加用戶
 			openAddMgr() {
-				this.aaaData = [{
+				this.userFrom = {
 					companyName: '',
 					deptName: '',
 					username: '',
@@ -315,13 +316,20 @@
 					phone: '',
 					email: '',
 					address: '',
-					tips: ''
-				}];
+					tips: '',
+					enterbyName: '',
+					createTime: '',
+					updatebyName: '',
+					updateTime: '',
+					traings: [],
+			     	qualifications: [],
+
+				};
 				this.$refs.child.visible();
 			},
 			//修改用戶
 			modify() {
-				this.aaaData = this.selUser;
+				this.aaaData = this.selMenu;
 				if(this.aaaData.length == 0) {
 					this.$message({
 						message: '请您选择要修改的用户',
@@ -335,13 +343,8 @@
 					});
 					return;
 				} else {
-//					this.aaaData[0].roleId = [];
-//					var roles = this.aaaData[0].roles;
-//					for(var i = 0; i < roles.length; i++) {
-//						this.aaaData[0].roleId.push(roles[i].id);
-//					}
-//					console.log(this.aaaData[0].roleId);
-					this.$refs.child.detail(this.aaaData[0].id);
+					this.userFrom = this.selMenu[0]; 
+					this.$refs.child.detail(this.selMenu[0].id);
 				}
 			},
 			//高级查询
@@ -352,7 +355,7 @@
 			},
 			// 删除
 			deluserinfo() {
-				var selData = this.selUser;
+				var selData = this.selMenu;
 				if(selData.length == 0) {
 					this.$message({
 						message: '请您选择要删除的用户',
@@ -388,7 +391,7 @@
 			},
 			// 重置
 			resetPwd() {
-				var selData = this.selUser;
+				var selData = this.selMenu;
 				if(selData.length == 0) {
 					this.$message({
 						message: '请您选择要重置密码的用户',
@@ -424,7 +427,7 @@
 			},
 			// 启用
 			unfreeze() {
-				var selData = this.selUser;
+				var selData = this.selMenu;
 				if(selData.length == 0) {
 					this.$message({
 						message: '请您选择您要启动的用户',
@@ -459,7 +462,7 @@
 			},
 			// 冻结
 			freezeAccount() {
-				var selData = this.selUser;
+				var selData = this.selMenu;
 				if(selData.length == 0) {
 					this.$message({
 						message: '请您选择您要冻结的用户',
@@ -509,7 +512,7 @@
 			},
 
 			SelChange(val) {
-				this.selUser = val;
+				this.selMenu = val;
 			},
 			requestData(index) {
 				var data = {

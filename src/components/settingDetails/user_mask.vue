@@ -18,14 +18,14 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form status-icon :model="user" :label-position="labelPosition" :rules="rules" ref="user" label-width="100px" class="demo-user">
+				<el-form status-icon :model="userFrom" :label-position="labelPosition" :rules="rules" ref="userFrom" label-width="100px" class="demo-user">
 					<div class="accordion">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<!--<el-collapse-item title="基础信息" name="1">
 								<el-row :gutter="30">
 									<el-col :span="24">
 										<el-form-item label="所属组织" prop="companyName">
-											<el-input v-model="user.companyName" :disabled="edit">
+											<el-input v-model="userFrom.companyName" :disabled="edit">
 												<el-button slot="append" icon="el-icon-search" @click="getCompany"></el-button>
 											</el-input>
 										</el-form-item>
@@ -34,7 +34,7 @@
 								<el-row :gutter="30">
 									<el-col :span="24">
 										<el-form-item label="所属机构" prop="deptName">
-											<el-input v-model="user.deptName" :disabled="edit">
+											<el-input v-model="userFrom.deptName" :disabled="edit">
 												<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
 											</el-input>
 										</el-form-item>
@@ -44,12 +44,12 @@
 								<el-row :gutter="30">
 									<el-col :span="12">
 										<el-form-item label="登录名称" prop="username">
-											<el-input class = "usernames" v-model="user.username" ></el-input>
+											<el-input class = "usernames" v-model="userFrom.username" ></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="12">
 										<el-form-item label="登录口令" prop="password">
-											<el-input type="password" v-model="user.password"></el-input>
+											<el-input type="password" v-model="userFrom.password"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -57,7 +57,7 @@
 							<el-collapse-item title="用户基本资料" name="1">
 								<el-row :gutter="20" class="pb10">
 									<el-col :span="5" class="pull-right">
-										<el-input v-model="user.status" :disabled="true">
+										<el-input v-model="userFrom.status" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
 									</el-col>
@@ -65,144 +65,134 @@
 								<!-- 第一行 -->
 								<el-row :gutter="30">
 									<el-col :span="8">
-										<el-form-item label="姓名" prop="nickname">
-											<el-input v-model="user.nickname"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="职务" prop="post">
-											<el-input v-model="user.post"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
 										<el-form-item label="登录名称" prop="username">
-											<el-input class = "usernames" v-model="user.username" ></el-input>
+											<el-input v-model="userFrom.username" v-if="modify" :disabled="true"></el-input>
+											<el-input v-model="userFrom.username" v-else="modify"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="登录口令" prop="password">
+											<el-input type="password" v-model="userFrom.password" v-if="modify" :disabled="true"></el-input>
+											<el-input type="password" v-model="userFrom.password" v-else="modify"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="姓名" prop="nickname">
+											<el-input v-model="userFrom.nickname"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="8">
-										<el-form-item label="登录口令" prop="password">
-											<el-input type="password" v-model="user.password"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="身份证号" prop="idnumber">
-											<el-input v-model="user.idnumber"></el-input>
+										<el-form-item label="职务" prop="post">
+											<el-input v-model="userFrom.post"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="工号" prop="worknumber">
-											<el-input v-model="user.worknumber"></el-input>
+											<el-input v-model="userFrom.worknumber"></el-input>
 										</el-form-item>
 									</el-col>
-									
-									
-								</el-row>
-
-								<el-row :gutter="30">
-									<el-col :span="8">
-										<el-form-item label="IP地址" prop="ip_address">
-											<el-input v-model="user.ip_address"></el-input>
-										</el-form-item>
-									</el-col>
-									
-									<el-col :span="8">
-										<el-form-item label="手机号" prop="phone">
-											<el-input v-model="user.phone"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="MAC地址" prop="mac_address">
-											<el-input v-model="user.mac_address"></el-input>
-										</el-form-item>
-									</el-col>
-									
-
-								</el-row>
-								<el-row :gutter="30">
-									<el-col :span="8">
-										<el-form-item label="电子邮箱" prop="email">
-											<el-input v-model="user.email"></el-input>
-										</el-form-item>
-									</el-col>
-									
-									<el-col :span="8">
-										<el-form-item label="用户有效期" prop="user_active_date">
-											<el-date-picker v-model="user.user_active_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
-											</el-date-picker>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										
-										<el-form-item label="是否允许授权" prop="ispermit_authorization">
-											 <el-radio-group v-model="user.ispermit_authorization">
-    											<el-radio label="是"></el-radio>
-    											<el-radio label="否"></el-radio>
-  											</el-radio-group>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row :gutter="30">
-									
 									<el-col :span="8">
 										<el-form-item label="性別" prop="sex">
-											<el-radio-group v-model="user.sex">
+											<el-radio-group v-model="userFrom.sex">
 												<el-radio label="男"></el-radio>
 												<el-radio label="女"></el-radio>
 											</el-radio-group>
 										</el-form-item>
 									</el-col>
-									<el-col :span="8">
-										<el-form-item label="是否允许登录" prop="islogin">
-											<el-radio-group v-model="user.islogin">
-    											<el-radio label="是"></el-radio>
-    											<el-radio label="否"></el-radio>
-  											</el-radio-group>
-										</el-form-item>
-									</el-col>
-									
 								</el-row>
 
 								<el-row :gutter="30">
-									
+									<el-col :span="8">
+										<el-form-item label="身份证号" prop="idnumber">
+											<el-input v-model="userFrom.idnumber"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="手机号" prop="phone">
+											<el-input v-model="userFrom.phone"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="电子邮箱" prop="email">
+											<el-input v-model="userFrom.email"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="30">
+									<el-col :span="8">
+										<el-form-item label="用户有效期" prop="user_active_date">
+											<el-date-picker v-model="userFrom.user_active_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 100%;">
+											</el-date-picker>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="是否允许授权" prop="ispermit">
+											<el-radio-group v-model="userFrom.ispermit">
+												<el-radio label="是"></el-radio>
+												<el-radio label="否"></el-radio>
+											</el-radio-group>
+  											<!-- <el-switch v-model="userFrom.ispermit"></el-switch> -->
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="是否允许登录" prop="islogin">
+											<!-- <el-switch v-model="userFrom.islogin"></el-switch> -->
+											<el-radio-group v-model="userFrom.islogin">
+												<el-radio label="是"></el-radio>
+												<el-radio label="否"></el-radio>
+											</el-radio-group>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="所属机构" prop="deptName" >
-												<el-select v-model="user.deptName" placeholder="请选择">
-													<el-option v-for="item in option1" :key="item.value" :label="item.label" :value="item.value">
-													</el-option>
-												</el-select>
-											</el-form-item>
+											<el-select v-model="userFrom.deptName" placeholder="请选择" style="width: 100%;">
+												<el-option v-for="item in option1" :key="item.value" :label="item.label" :value="item.value">
+												</el-option>
+											</el-select>
+										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="学历" prop="education">
-										<el-select v-model="user.education" placeholder="硕士" >
-											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-											</el-option>
-										</el-select>
+											<el-select v-model="userFrom.education" placeholder="硕士" style="width: 100%;">
+												<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+												</el-option>
+											</el-select>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="角色" prop="roleId">
-										<el-select v-model="user.roleId" multiple>
-											<el-option v-for="item in selectData" :key="item.name" :value="item.id" :label="item.name"></el-option>
-											
-										</el-select>
+											<el-select v-model="userFrom.roleId" multiple style="width: 100%;">
+												<el-option v-for="item in selectData" :key="item.name" :value="item.id" :label="item.name"></el-option>
+											</el-select>
 									</el-form-item>
 									</el-col>
 								</el-row>
-
+								<el-row :gutter="30">
+									<el-col :span="8">
+										<el-form-item label="IP地址" prop="ipaddress">
+											<el-input v-model="userFrom.ipaddress"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="MAC地址" prop="macaddress">
+											<el-input v-model="userFrom.macaddress"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="24">
 										<el-form-item label="备注" prop="tips">
-											<el-input type="textarea" v-model="user.tips"></el-input>
-
+											<el-input type="textarea" v-model="userFrom.tips"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 							</el-collapse-item>
 
-						<el-collapse-item title="资质信息" name="2">
+							<el-collapse-item title="资质信息" name="2">
 								<!-- 资质信息 Begin-->
 								<div class="table-func">
 									<el-button type="success" size="mini" round @click="addfield1">
@@ -211,7 +201,7 @@
 									</el-button>
 								</div>
 
-								<el-table :data="user.qualifications" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.qualifications', order: 'descending'}">
+								<el-table :data="userFrom.qualifications" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'userFrom.qualifications', order: 'descending'}">
 
 									<el-table-column prop="iconOperation" fixed label="" width="50px">
 										<template slot-scope="scope">
@@ -230,7 +220,7 @@
 										</template>
 									</el-table-column>
 						            
-									<el-table-column prop="c_num" label="证书编号" sortable width="120px">
+									<el-table-column prop="c_num" label="证书编号" sortable>
 										<template slot-scope="scope">
 											<el-form-item :prop="'qualifications.'+scope.$index + '.c_num'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.c_num" placeholder="请输入委托方名称">
@@ -240,7 +230,7 @@
 										</template>
 									</el-table-column>
 
-									<el-table-column prop="P_DESC" label="证书名称" sortable width="120px">
+									<el-table-column prop="P_DESC" label="证书名称" sortable>
 										<template slot-scope="scope">
 											<el-form-item :prop="'qualifications.'+scope.$index + '.c_name'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.c_name" placeholder="请输入委托方名称">
@@ -261,19 +251,19 @@
 									</el-table-column>
 									<el-table-column prop="enterby" label="录入人" sortable width="120px">
 										<template slot-scope="scope">
-											<el-form-item :prop="'qualifications.'+scope.$index + '.enterbyName'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.enterbyName" placeholder="请输入要求">
-											</el-input>
-											<span v-else="v-else">{{scope.row.enterbyName}}</span>
+											<el-form-item :prop="'qualifications.'+scope.$index + '.enterbyName'">
+												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.enterbyName" placeholder="请输入要求">
+												</el-input>
+												<span v-else="v-else">{{scope.row.enterbyName}}</span>
 											</el-form-item>
 										</template>
 									</el-table-column>
 									<el-table-column prop="enterdate" label="录入时间" sortable width="120px">
 										<template slot-scope="scope">
-											<el-form-item :prop="'qualifications.'+scope.$index + '.enterdate'" >
-											<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.enterdate" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
-											</el-date-picker>
-											<span v-else="v-else">{{scope.row.enterdate}}</span>
+											<el-form-item :prop="'qualifications.'+scope.$index + '.enterdate'">
+												<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.enterdate" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+												</el-date-picker>
+												<span v-else="v-else">{{scope.row.enterdate}}</span>
 											</el-form-item>
 										</template>
 									</el-table-column>
@@ -281,9 +271,9 @@
 									<el-table-column prop="status" label="信息状态" sortable width="120px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'qualifications.'+scope.$index + '.status'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.status" placeholder="请输入要求">
-											</el-input>
-											<span v-else="v-else">{{scope.row.status}}</span>
+												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.status" placeholder="请输入要求">
+												</el-input>
+												<span v-else="v-else">{{scope.row.status}}</span>
 										</el-form-item>
 										</template>
 									</el-table-column>
@@ -299,7 +289,7 @@
 									</el-table-column>-->
 									<el-table-column fixed="right" label="操作" width="120">
 										<template slot-scope="scope">
-											<el-button @click.native.prevent="deleteRow(scope.$index,user.qualifications)" type="text" size="small">
+											<el-button @click.native.prevent="deleteRow(scope.$index,userFrom.qualifications)" type="text" size="small">
 												移除
 											</el-button>
 										</template>
@@ -317,7 +307,7 @@
 									</el-button>
 								</div>
 
-								<el-table :data="user.traings" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.traings', order: 'descending'}">
+								<el-table :data="userFrom.traings" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'userFrom.traings', order: 'descending'}">
 
 									<el-table-column prop="iconOperation" fixed label="" width="50px">
 										<template slot-scope="scope">
@@ -373,7 +363,7 @@
 									
 									<el-table-column fixed="right" label="操作" width="120">
 										<template slot-scope="scope">
-											<el-button @click.native.prevent="deleteRow(scope.$index,user.traings)" type="text" size="small">
+											<el-button @click.native.prevent="deleteRow(scope.$index,userFrom.traings)" type="text" size="small">
 												移除
 											</el-button>
 										</template>
@@ -382,28 +372,27 @@
 							</el-collapse-item>
 							
 							<el-collapse-item title="其他" name="4">
-								
 								<!-- 第一行 -->
 								<el-row :gutter="30">
 									<el-col :span="8">
-										<el-form-item label="录入人" prop="createby">
-											<el-input v-model="user.createbyName" :disabled="edit"></el-input>
+										<el-form-item label="录入人" prop="enterbyName">
+											<el-input v-model="userFrom.enterbyName" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="录入时间" prop="createTime">
-											<el-input v-model="user.createTime" :disabled="edit">
+											<el-input v-model="userFrom.createTime" :disabled="edit">
 											</el-input>
 										</el-form-item>
 									</el-col>
-									<el-col :span="8">
-										<el-form-item label="修改人" prop="updateby">
-											<el-input v-model="user.updatebyName" :disabled="edit"></el-input>
+									<el-col :span="8" v-if="modify">
+										<el-form-item label="修改人" prop="updatebyName">
+											<el-input v-model="userFrom.updatebyName" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
-									<el-col :span="8">
+									<el-col :span="8" v-if="modify">
 										<el-form-item label="修改时间" prop="updateTime">
-											<el-input v-model="user.updateTime" :disabled="edit">
+											<el-input v-model="userFrom.updateTime" :disabled="edit">
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -438,9 +427,40 @@
 	export default {
 		name: 'masks',
 		props: {
-			page: Object,
+			page: {
+				type: Object,
+			},
+			userFrom: { //接收主表单中填写的数据信息
+				type: Object,
+				default: function() {
+					return {
+						companyName: '',
+						deptName: '',
+						username: '',
+						password: '',
+						nickname: '',
+						birthday: '',
+						sexName: '',
+						idnumber: '',
+						entrytime: '',
+						roleId: [],
+						roles: [],
+						worknumber: '',
+						phone: '',
+						email: '',
+						address: '',
+						tips: '',
+						enterbyName: '',
+						createTime: '',
+						updatebyName: '',
+						updateTime: '',
+						traings: [],
+					 	qualifications: [],
+					}
+				}
+			}
 		},
-		//		props: ['user','page'],
+		
 
 		data() {
 			var validateIdnumber = (rule, value, callback) => { //验证身份证号
@@ -476,13 +496,13 @@
 		        }
 		    };
 			return {
-				user: {
-					status: '活动',
-					roleId: [],
-					roles:[],
-					traings: [],
-					qualifications: [],
-				},
+				// userFrom: {
+				// 	status: '活动',
+				// 	roleId: [],
+				// 	roles:[],
+				// 	traings: [],
+				// 	qualifications: [],
+				// },
 				options: [
 				{
 					value: '高中',
@@ -543,17 +563,19 @@
 				dialogVisible: false, //对话框
 				addtitle: true, //添加弹出框titile
 				modifytitle: false, //修改弹出框titile
+				modify:false,//修订、创建人、创建日期
 				rules: {
 					deptName: [{ required: true, message: '必填', trigger: 'blur' }],//名称
 					education:[{required: true, message: '必填', trigger: 'blur'}],
 					roleId: [{required: true,trigger: 'blur',message: '必填',}],
 					username: [{required: true,trigger: 'blur',message: '必填',}],
+					nickname: [{required: true,trigger: 'blur',message: '必填',}],
 					password: [{required: true,trigger: 'blur',message: '必填',}],
 					sex:[{required: true,trigger: 'blur',message: '必填'}],
-					ispermit_authorization:[{required: true,trigger: 'change',message: '必填'}],//授权
+					ispermit:[{required: true,trigger: 'change',message: '必填'}],//授权
 					islogin:[{required: true,trigger: 'change',message: '必填'}],//登陆
-					mac_address:[{required: true,trigger: 'blur',message: '必填',}],
-					ip_address:[{required: true,trigger: 'blur',message: '必填',}],
+					macaddress:[{required: true,trigger: 'blur',message: '必填',}],
+					ipaddress:[{required: true,trigger: 'blur',message: '必填',}],
 					idnumber:[{required: true,trigger: 'blur',validator: validateIdnumber}],
 					phone: [{required: true,trigger: 'blur',validator: validatePhone}],
 					email: [{required: true,trigger: 'blur',validator: validateEmail,}],
@@ -578,13 +600,14 @@
 					
 				}
 			},
-			addfield1() {
+			addfield1() {//资质信息子表数据
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+					var _self = this
 				    var currentUser, currentDate;
-					this.currentUser=res.data.nickname;
-					this.enterby=res.data.id
+					_self.currentUser=res.data.nickname;
+					_self.enterby=res.data.id
 					var date=new Date();
-					this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
+					_self.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 					var obj = {
 					step: '',
 					c_num: '',
@@ -597,7 +620,7 @@
 					//少附件
 					isEditing: true
 				};
-				this.user.qualifications.push(obj);
+				_self.userFrom.qualifications.push(obj);
 				}).catch((err)=>{
 					this.$message({
 						message:'网络错误，请重试',
@@ -606,7 +629,7 @@
 				})
 				
 			},
-			addfield2() {
+			addfield2() {//培训子表数据
 				var obj = {
 					step: '',
 					t_date: '',
@@ -614,7 +637,7 @@
 					status: '',
 					isEditing: true
 				};
-				this.user.traings.push(obj);
+				this.userFrom.traings.push(obj);
 			},
 			//刪除新建行
 			deleteRow(index,rows) {//Table-操作列中的删除行
@@ -632,24 +655,18 @@
 				console.log(data);
 			},
 
-
-			//点击按钮显示弹窗
-			visible() {
+			visible() {//添加内容时从父组件带过来的
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
-					this.user.createby=res.data.id;
-					this.user.createbyName=res.data.nickname;
-					this.user.enterby=res.data.id
-					this.user.enterbyName=res.data.nickname;
+					console.log(res);
+					this.userFrom.enterbyName=res.data.nickname;
 					var date=new Date();
-					this.user.createTime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					this.userFrom.createTime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{
 					this.$message({
 						message:'网络错误，请重试',
 						type:'error'
 					})
 				})
-//				this.statusshow1 = true;
-//				this.statusshow2 = false;
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.modify=false;
@@ -660,13 +677,12 @@
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.modify = true;
-				$('.usernames .el-input__inner').attr('disabled',true);
 				var usersUrl = '/api/api-user/users/currentMap';
 				this.$axios.get(usersUrl, {}).then((res) => {
-					this.user.updatebyName = res.data.nickname;
-					this.user.updateby = res.data.id;
+					this.userFrom.updatebyName = res.data.nickname;
+					this.userFrom.updateTime = res.data.id;
 					var date = new Date();
-					this.user.changedate = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
+					this.userFrom.changedate = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -675,14 +691,12 @@
 				});
 				var url = '/api/api-user/users/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res.data);
-					this.user = res.data;
-
-					this.user.sex=this.user.sex?'男':'女';
-					this.user.roleId = [];
-					var roles = this.user.roles;
+					this.userFrom = res.data;
+					this.userFrom.sex=this.userFrom.sex?'男':'女';
+					this.userFrom.roleId = [];
+					var roles = this.userFrom.roles;
 					for(var i = 0; i < roles.length; i++) {
-						this.user.roleId.push(roles[i].id);
+						this.userFrom.roleId.push(roles[i].id);
 					}
 					this.show = true;
 				}).catch((err) => {
@@ -727,14 +741,14 @@
 //			保存users/saveOrUpdate
 			submitForm() {
 				var _this = this;
-				this.$refs.user.validate((valid) => {
+				this.$refs.userFrom.validate((valid) => {
 					if(valid) {
-						var user = this.user;
-						user.sex = user.sexName == '男' ? 1 : 0;
+						var userFrom = this.userFrom;
+						userFrom.sex = userFrom.sexName == '男' ? 1 : 0;
 						var roleId="";
-						if(typeof(user.roleId)!='undefind' && user.roleId.length > 0) {
+						if(typeof(userFrom.roleId)!='undefind' && userFrom.roleId.length > 0) {
 							var arr = [];
-							user.roleId.forEach(function(item) {
+							userFrom.roleId.forEach(function(item) {
 								var roles = _this.selectData;
 								for(var j = 0; j < roles.length; j++) {
 									if(roles[j].id == item) {
@@ -745,15 +759,15 @@
 								}
 								
 							});
-							user.roleId = roleId;
-							user.roles = arr;
+							userFrom.roleId = roleId;
+							userFrom.roles = arr;
 						} else {
-							user.roleId = '';
-							user.roles = [];
+							userFrom.roleId = '';
+							userFrom.roles = [];
 						}
-					    console.log(this.user);
+					    console.log(this.userFrom);
 						var url = '/api/api-user/users/saveOrUpdate';
-						this.$axios.post(url, this.user).then((res) => {
+						this.$axios.post(url, this.userFrom).then((res) => {
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',
@@ -830,11 +844,11 @@
 //				this.placetext = false;
 //				this.dialogVisible = false;
 //				if(this.editSearch == 'company') {
-//					this.user.companyId = this.getCheckboxData.id;
-//					this.user.companyName = this.getCheckboxData.simplename;
+//					this.userFrom.companyId = this.getCheckboxData.id;
+//					this.userFrom.companyName = this.getCheckboxData.simplename;
 //				} else {
-//					this.user.deptId = this.getCheckboxData.id;
-//					this.user.deptName = this.getCheckboxData.simplename;
+//					this.userFrom.deptId = this.getCheckboxData.id;
+//					this.userFrom.deptName = this.getCheckboxData.simplename;
 //				}
 //			},
 

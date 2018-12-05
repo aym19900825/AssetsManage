@@ -66,12 +66,14 @@
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="登录名称" prop="username">
-											<el-input class = "usernames" v-model="user.username" ></el-input>
+											<el-input v-model="user.username" v-if="modify" disabled="true"></el-input>
+											<el-input  v-model="user.username" v-else></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="登录口令" prop="password">
-											<el-input type="password" v-model="user.password"></el-input>
+											<el-input type="password" v-model="user.password"v-if="modify" disabled="true"></el-input>
+											<el-input type="password" v-model="user.password" v-else></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -535,6 +537,7 @@
 				dialogVisible: false, //对话框
 				addtitle: true, //添加弹出框titile
 				modifytitle: false, //修改弹出框titile
+				modify:false,
 				rules: {
 					deptName: [{ required: true, message: '必填', trigger: 'blur' }],//名称
 					education:[{required: true, message: '必填', trigger: 'blur'}],

@@ -26,7 +26,7 @@
 										</el-input>
 									</el-col>
 									<el-col :span="4" class="pull-right">
-											<el-input v-model="adddeptForm.status" :disabled="edit" :formatter="judge">
+											<el-input v-model="adddeptForm.status" :disabled="edit" >
 												<template slot="prepend">信息状态</template>
 											</el-input>
 									</el-col>
@@ -40,7 +40,7 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="机构编码" prop="code">
-											<el-input v-model="adddeptForm.code" :disabled="edit">
+											<el-input placeholder="自动生成" v-model="adddeptForm.code":disabled="edit" >
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -62,7 +62,7 @@
 									<el-col :span="8">
 										<el-form-item label="机构类型" prop="org_range">
 											<el-select v-model="adddeptForm.org_range" placeholder="请选择" style="width: 100%">
-												<el-option v-for="item in typeoptions" :key="item.value" :label="item.label" :value="item.value">
+												<el-option v-for="(data,index) in Selectsys_depttype" :key="index" :value="data.code" :label="data.name"></el-option>
 												</el-option>
 											</el-select>
 										</el-form-item>
@@ -70,8 +70,7 @@
 									<el-col :span="8">
 										<el-form-item label="机构属性" prop="type">
 											<el-select v-model="adddeptForm.type" placeholder="请选择" style="width: 100%">
-												<el-option v-for="item in attroptions" :key="item.value" :label="item.label" :value="item.value">
-												</el-option>
+												<el-option v-for="(data,index) in SelectDEPT_TYPE" :key="index" :value="data.code" :label="data.name"></el-option>
 											</el-select>
 										</el-form-item>
 									</el-col>
@@ -228,18 +227,7 @@
 					callback();
 				}
 			};
-			//验证机构编码
-			var validateCode = (rule, value, callback) => {
-				 if (value === '') {
-			          return callback(new Error('机构编码不能为空'));
-			    } else {
-					var targ = /^[A-Za-z0-9]+$/;
-					if( !targ.test(value)){
-	                    callback(new Error('机构编码只支持英文、数字'));
-	                }
-					callback();
-				}
-			};
+
 			//验证机构名称
 			var validateFullname = (rule, value, callback) => {
 				if (value === '') {
@@ -298,23 +286,7 @@
 					value: '2',
 					label: '不活动'
 				}],
-				typeoptions: [{
-					value: '1',
-					label: '外部机构'
-				}, {
-					value: '2',
-					label: '内部机构'
-				}],
-				attroptions: [{
-					value: '1',
-					label: '业务部'
-				}, {
-					value: '2',
-					label: '检验部'
-				}, {
-					value: '3',
-					label: '外部机构'
-				}],
+
 				stopoptions: [{
 					value: '1',
 					label: '是'
@@ -325,6 +297,8 @@
 				personinfo:false,
 				showcode:true,
 				selMenu:[],
+				SelectDEPT_TYPE:[],//获取机构属性
+				Selectsys_depttype:[],//获取机构类型
 				activeNames: ['1'], //手风琴数量
 				dialogVisible: false, //对话框
 				edit: true, //禁填
@@ -339,13 +313,12 @@
 				modify:false,
 				stopcontent:false,
 				stopselect:false,
-	          	adddeptForm:{},//机构管理数据组
 	          	//tree树菜单
 				resourceData: [], //数组，我这里是通过接口获取数据
 				resourceDialogisShow: false,
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
 				resourceProps: {
-					children: "subDepts",
+					children: "children",
 					label: "simplename"
 				},
 				rules:{
@@ -353,11 +326,6 @@
    						required:true,
 						trigger: 'blur',
 						validator: validateStep,
-					}],
-					code: [{//机构编码
-   						required:true,
-						trigger: 'blur',
-						validator: validateCode,
 					}],
 					fullname: [{//机构名称
    						required:true,
@@ -403,7 +371,7 @@
 			getDept() {
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
-				var url = '/api/api-user/depts/treeByType';
+				var url = '/api/api-user/depts/treeMap';
 				this.$axios.get(url, {
 					// params: {
 					// 	page: page,
@@ -411,6 +379,7 @@
 					// 	// type: type
 					// },
 				}).then((res) => {
+					console.log(res);
 					this.resourceData = res.data;
 					this.dialogVisible = true;
 				});
@@ -433,10 +402,27 @@
 			rand(min,max) {
 		        return Math.floor(Math.random()*(max-min))+min;
 		    },
+			getDEPT_TYPE() {//获取机构属性
+				var url = '/api/api-user/dicts/findChildsByCode?code=DEPT_TYPE';
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+					this.SelectDEPT_TYPE = res.data;
+				}).catch(error => {
+					console.log('请求失败');
+				})
+			},
+			getsys_depttype() {//获取机构类型
+				var url = '/api/api-user/dicts/findChildsByCode?code=sys_depttype';
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+					this.Selectsys_depttype = res.data;
+				}).catch(error => {
+					console.log('请求失败');
+				})
+			},
 			
 			childMethods() {//点击父组件按钮显示弹窗
-				var randnum = this.rand(1000,9999);
-				this.adddeptForm.code = randnum;
+				
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
 	     			this.adddeptForm.enterby = res.data.nickname;
 	     			var date=new Date();
@@ -457,6 +443,8 @@
 			},
 			//修改
 			detail() {
+				console.log(this.adddeptForm);
+				this.adddeptForm.status=this.adddeptForm.status=="1"?'活动':'不活动';
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
 	    			this.adddeptForm.changeby = res.data.nickname;
 	    			var date=new Date();
@@ -520,18 +508,20 @@
 			submitForm(adddeptForm) {
 				this.$refs[adddeptForm].validate((valid) => {
 		          if (valid) {
+		          	this.adddeptForm.status=this.adddeptForm.status=="活动" ? '1' : '0';
 					var url = '/api/api-user/depts/saveOrUpdate';
-					this.adddeptFormtest = {
-						// "id":this.adddeptForm.id,
-						// "pid":this.adddeptForm.pid,
-						// "fullname":this.adddeptForm.fullname,
-					    // "simplename":this.adddeptForm.simplename,
-					    "type":this.adddeptForm.type,
-					    "code":this.adddeptForm.code,
-					    // "teltphone":this.adddeptForm.teltphone,
-					    // "tips":this.adddeptForm.tips
-					}
-					this.$axios.post(url, this.adddeptFormtest).then((res) => {
+//					this.adddeptForm = {
+//						 "id":this.adddeptForm.id,
+//						 "pid":this.adddeptForm.pid,
+//						 "fullname":this.adddeptForm.fullname,
+//					     "simplename":this.adddeptForm.simplename,
+//					    "type":this.adddeptForm.type,
+//					    "code":this.adddeptForm.code,
+//					     "teltphone":this.adddeptForm.teltphone,
+//					     "tips":this.adddeptForm.tips
+//					}
+					console.log(this.adddeptForm);
+					this.$axios.post(url, this.adddeptForm).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -563,7 +553,8 @@
 			}
 		},
 		mounted() {
-			
+			this.getDEPT_TYPE();//页面打开加载-机构属性
+			this.getsys_depttype();//页面打开加载-机构类型
 		}
 	}
 </script>

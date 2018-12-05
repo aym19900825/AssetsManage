@@ -24,13 +24,13 @@
 								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
 								    <i class="icon-trash"></i>删除
 								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="resetPwd">
+								<button type="button" class="btn btn-primarys button-margin" @click="importData">
 								    <i class="icon-upload-cloud"></i>导入
 								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="unfreeze">
+								<button type="button" class="btn btn-primarys button-margin" @click="exportData">
 								    <i class="icon-download-cloud"></i>导出
 								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="freezeAccount">
+								<button type="button" class="btn btn-primarys button-margin" @click="Printing">
 								    <i class="icon-print"></i>打印
 								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
@@ -42,21 +42,7 @@
 						</div>
 						<div class="columns columns-right btn-group pull-right">
 							<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
-							<div class="keep-open btn-group" title="列">
-								<el-dropdown :hide-on-click="false" class="pl10 btn btn-default btn-outline">
-									<span class="el-dropdown-link">
-										<font class="J_tabClose"><i class="icon-menu3"></i></font>
-										<i class="el-icon-arrow-down icon-arrow2-down"></i>
-									</span>
-									<el-dropdown-menu slot="dropdown">
-										<el-checkbox-group v-model="checkedName" @change="test">
-											<el-dropdown-item v-for="(item,index) in tableHeader" :key="index">
-												<el-checkbox :label="item.label" name="type"></el-checkbox>
-											</el-dropdown-item>
-										</el-checkbox-group>
-									</el-dropdown-menu>
-								</el-dropdown>
-							</div>
+							<tableControle :tableHeader="tableHeader" :checkedName="checkedName" @tableControle="tableControle" ref="tableControle"></tableControle>
 						</div>
 					</div>
 					<!-- 高级查询划出 Begin-->
@@ -64,31 +50,31 @@
 						<el-form status-icon :model="searchList" label-width="70px">
 							<el-row :gutter="30" class="pb5">
 								<el-col :span="7">
-									<el-input v-model="searchList.V_NAME">
-										<template slot="prepend">委托单位名称</template>
+									<el-input v-model="searchList.ITEMNUM">
+										<template slot="prepend">样品编号</template>
 									</el-input>
 								</el-col>
 								
 								<el-col :span="7">
-									<el-input v-model="searchList.DESCRIPTION">
-										<template slot="prepend">样品名称</template>
+									<el-input v-model="searchList.APPR_PERSON">
+										<template slot="prepend">处理批准人</template>
 										</el-input>
 								</el-col>
 								<el-col :span="7">
 									<el-input v-model="searchList.ACCEPT_PERSON" label-width="58px">
-									<template slot="prepend">收样人</template>
+									<template slot="prepend">样品承接人</template>
 										</el-input>
 								</el-col>
 							</el-row>
 							<el-row :gutter="30">
 								<el-col :span="7">				
-									<el-input v-model="searchList.P_NAME">
-										<template slot="prepend">生产单位名称</template>
+									<el-input v-model="searchList.ITEM_STEP">
+										<template slot="prepend">样品序号</template>
 									</el-input>
 								</el-col>
 								<el-col :span="7">
-									<el-input v-model="searchList.TYPE">
-									<template slot="prepend">样品类别</template>
+									<el-input v-model="searchList.APPR_DATE">
+									<template slot="prepend">批准日期</template>
 										</el-input>
 								</el-col>
 								<el-col :span="7">
@@ -104,7 +90,7 @@
 					</div>
 					<!-- 高级查询划出 End-->
 
-					<el-row :gutter="10">
+					<el-row :gutter="0">
 						<!-- 左侧树菜单 Begin-->
 						<el-col :span="5" class="lefttree">
 							<div class="lefttreebg">
@@ -126,33 +112,39 @@
 						
 						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
-							<el-table :data="userList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table :data="samplesList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="样品编号" sortable width="140px" prop="ITEMNUM" v-if="this.checkedName.indexOf('样品编号')!=-1">
+								<el-table-column label="样品子表ID" sortable width="140px" prop="ITEM_LINE_ID" v-if="this.checkedName.indexOf('样品子表ID')!=-1">
 								</el-table-column>
-								<el-table-column label="样品类别" sortable width="200px" prop="TYPE" v-if="this.checkedName.indexOf('样品类别')!=-1">
+								<el-table-column label="样品编号" sortable width="200px" prop="ITEMNUM" v-if="this.checkedName.indexOf('样品编号')!=-1">
 								</el-table-column>
-								<el-table-column label="委托单位" sortable width="100px" prop="sex" :formatter="V_NAME" v-if="this.checkedName.indexOf('委托单位')!=-1">
+								<el-table-column label="样品序号" sortable width="200px" prop="ITEM_STEP" v-if="this.checkedName.indexOf('样品序号')!=-1">
 								</el-table-column>
-								<el-table-column label="生产单位" sortable width="200px" prop="deptName" v-if="this.checkedName.indexOf('生产单位')!=-1">
+								<el-table-column label="数量" width="200px" prop="QUATITY" sortable v-if="this.checkedName.indexOf('数量')!=-1">
 								</el-table-column>
-								<el-table-column label="公司" sortable width="200px" prop="companyName" v-if="this.checkedName.indexOf('公司')!=-1">
+								<el-table-column label="收回入库时间" width="200px" prop="ACCEPT_DATE" sortable v-if="this.checkedName.indexOf('收回入库时间')!=-1">
 								</el-table-column>
-								<el-table-column label="样品名称" sortable width="200px" prop="DESCRIPTION" :formatter="judge" v-if="this.checkedName.indexOf('样品名称')!=-1">
+								<el-table-column label="样品承接人" sortable width="140px" prop="ACCEPT_PERSON" v-if="this.checkedName.indexOf('样品承接人')!=-1">
 								</el-table-column>
-								<el-table-column label="样品型号" width="200px" prop="ITEM_MODEL" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('样品型号')!=-1">
+								<el-table-column label="处理批准人" sortable width="200px" prop="APPR_PERSON" v-if="this.checkedName.indexOf('处理批准人')!=-1">
 								</el-table-column>
-								<el-table-column label="收样人" sortable width="140px" prop="ITEMNUM" v-if="this.checkedName.indexOf('收样人')!=-1">
+								<el-table-column label="批准日期" sortable width="200px" prop="APPR_DATE" v-if="this.checkedName.indexOf('批准日期')!=-1">
 								</el-table-column>
-								<el-table-column label="收样日期" sortable width="140px" prop="ITEMNUM" v-if="this.checkedName.indexOf('收样日期')!=-1">
+								<el-table-column label="处理人" sortable width="140px" prop="DO_PERSON" v-if="this.checkedName.indexOf('处理人')!=-1">
 								</el-table-column>
-								<el-table-column label="信息状态 sortable width="140px" prop="ITEMNUM" v-if="this.checkedName.indexOf('信息状态')!=-1">
+								<el-table-column label="处理日期" sortable width="160px" :formatter="dateFormat" prop="DO_DATE" v-if="this.checkedName.indexOf('处理日期')!=-1">
+								</el-table-column>
+
+								<el-table-column label="备注" sortable width="160px" :formatter="dateFormat" prop="MEMO" v-if="this.checkedName.indexOf('备注')!=-1">
+								</el-table-column>
+
+								<el-table-column label="状态" sortable width="140px" prop="STATE" v-if="this.checkedName.indexOf('状态')!=-1">
+								</el-table-column>
+								<el-table-column label="信息状态" sortable width="140px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
 								</el-table-column>
 							</el-table>
-							<!-- <span class="demonstration">显示总数</span>" -->
-							<!-- <el-pagination background layout="prev, pager, next" :total="2" style="float:right;margin-top:10px;"> -->
-							<!-- </el-pagination style="float:right;margin-top:10px;"> -->
+							
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
 							<!-- 表格 -->
@@ -161,7 +153,7 @@
 				</div>
 			</div>
 		</div>
-		<samplesmask :user="aaaData[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></samplesmask>
+		<samplesmask :samplesForm="samplesForm" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></samplesmask>
 		<!--右侧内容显示 End-->
 	</div>
 	</div>
@@ -170,114 +162,135 @@
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left6.vue'
 	import navs_header from '../common/nav_tabs.vue'
-//	import assetsTree from '../plugin/vue-tree/tree2.vue'
+	import tableControle from '../plugin/table-controle/controle.vue'
 	import samplesmask from'../samplesDetails/samples_mask.vue'
 	export default {
-		name: 'user_management',
+		name: 'sample_disposal',//样品处理
 		components: {
-			'vheader': vheader,
-			'navs_header': navs_header,
-			'samplesmask': samplesmask,
-			'navs_left': navs_left,
-//			'v-assetsTree': assetsTree
+			vheader,
+			navs_header,
+			navs_left,
+			tableControle,
+			samplesmask,
 		},
 		data() {
 			return {
 				isShow: false,
 				ismin: true,
-				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				loadSign: true, //加载
 				commentArr: {},
 				checkedName: [
+					'样品子表ID',
 					'样品编号',
-					'样品类别',
-					'委托单位',
-					'生产单位',
-					'样品名称',
-					'样品型号',
-					'收样人',
-					'收样日期',
+					'样品序号',
+					'数量',
+					'收回入库时间',
+					'样品承接人',
+					'处理批准人',
+					'批准日期',
+					'处理人',
+					'处理日期',
+					'备注',
+					'状态',
 					'信息状态',
 				],
 				tableHeader: [{
+						label: '样品子表ID',
+						prop: 'ITEM_LINE_ID'
+					},
+					{
 						label: '样品编号',
-						prop: 'ITEMNUM'
+						prop: 'ITEM_STEP'
 					},
 					{
-						label: '样品类别',
-						prop: 'TYPE'
+						label: '样品序号',
+						prop: 'ITEM_STEP'
 					},
 					{
-						label: '委托单位',
-						prop: 'V_NAME'
+						label: '数量',
+						prop: 'QUATITY'
 					},
 					{
-						label: '生产单位',
-						prop: 'P_NAME'
-					},
-					{
-						label: '样品名称',
-						prop: 'DESCRIPTION'
-					},
-					{
-						label: '样品型号',
-						prop: 'ITEM_MODEL'
-					},
-					{
-						label: '收样人',
-						prop: 'ACCEPT_PERSON'
-					},
-					{
-						label: '收样日期',
+						label: '收回入库时间',
 						prop: 'ACCEPT_DATE'
 					},
 					{
-						label: '信息状态',
+						label: '样品承接人',
+						prop: 'ACCEPT_PERSON'
+					},
+					{
+						label: '处理批准人',
+						prop: 'APPR_PERSON'
+					},
+					{
+						label: '批准日期',
+						prop: 'APPR_DATE'
+					},
+					{
+						label: '处理人',
+						prop: 'DO_PERSON'
+					},
+					{
+						label: '处理日期',
+						prop: 'DO_DATE'
+					},
+					{
+						label: '备注',
+						prop: 'MEMO'
+					},
+					{
+						label: '状态',
 						prop: 'STATE'
 					},
+					{
+						label: '信息状态',
+						prop: 'STATUS'
+					},
 				],
-
 				companyId: '',
 				deptId: '',
-				selUser: [],
+				selMenu: [],
 				'启用': true,
 				'冻结': false,
-				userList: [],
+				samplesList: [],
+				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				search: false,
 				show: false,
 				down: true,
 				up: false,
 				searchList: {
-					TYPE: '',
-					DESCRIPTION: '',
-					ITEM_MODEL: ''
+					ITEMNUM: '',//样品编号
+					APPR_PERSON: '',//处理批准人
+					ACCEPT_PERSON: '',//样品承接人
+					ITEM_STEP: '',//样品序号
+					APPR_DATE: '',//批准日期
+					ACCEPT_DATE: '',//收样日期
 				},
-				//tree
+				//tree树菜单
 				resourceData: [], //数组，我这里是通过接口获取数据，
 				resourceDialogisShow: false,
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
-				resourceProps: {
+				resourceProps: {//树菜单数据
 					children: "subDepts",
-					label: "simplename"
+					label: "fullname"
 				},
 				treeData: [],
-				userData: [],
 				page: {
 					currentPage: 1,
 					pageSize: 10,
 					totalCount: 0
 				},
 				aaaData: [],
+				samplesForm: {}//修改子组件时传递数据
 			}
 		},
 		methods: {
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
-				console.log();
 				return(
-			<span>
-              <i class={data.iconClass}></i>
-              <span>{node.label}</span>
-            </span>
+					<span>
+		              <i class={data.iconClass}></i>
+		              <span>{node.label}</span>
+		            </span>
 				);
 			},
 			// 点击节点
@@ -302,84 +315,86 @@
 				m.isFolder = !m.isFolder;
 			},
 
-			filterHandler(value, row, column) {
-				const property = column['property'];
-				return row[property] === value;
+			
+			//表格滚动加载
+			loadMore () {
+			   if (this.loadSign) {
+			     this.loadSign = false
+			     this.page.currentPage++
+			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+			       return
+			     }
+			     setTimeout(() => {
+			       this.loadSign = true
+			     }, 1000)
+			     this.requestData()
+//			     console.log('到底了', this.page.currentPage)
+			   }
+			 },
+			tableControle(data) {//控制表格列显示隐藏
+				this.checkedName = data;
 			},
-			loadMore() {
-				if(this.loadSign) {
-					this.loadSign = false
-					this.page.currentPage++
-						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							return
-						}
-					setTimeout(() => {
-						this.loadSign = true
-					}, 1000)
-					this.requestData()
-					//			     console.log('到底了', this.page.currentPage)
-				}
-			},
-			test() {
-				console.log(this.checkedName.indexOf('样品编号') != -1);
-			},
-			sizeChange(val) {
+			sizeChange(val) {//分页，总页数
 				this.page.pageSize = val;
 				this.requestData();
 			},
-			currentChange(val) {
+			currentChange(val) {//分页，当前页
 				this.page.currentPage = val;
 				this.requestData();
 			},
-			searchinfo(index) {
+			searchinfo(index) {//高级查询
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
 				this.requestData();
 			},
-			//添加用戶
+			//添加样品管理
 			openAddMgr() {
-				this.aaaData = [{
-					companyName: '',
-					deptName: '',
-					ITEMNUM: '',
-					password: '',
-					TYPE: '',
-					birthday: '',
-					V_NAME: '',
-					idnumber: '',
-					entrytime: '',
-					roleId: [],
-					roles: [],
-					worknumber: '',
-					phone: '',
-					email: '',
-					address: '',
-					tips: ''
-				}];
-				this.$refs.child.detail();
+				this.samplesForm = {
+					ITEM_LINE_ID: '',//样品子表ID
+					VENDOR: '',//样品编号编号
+					PRODUCT_COMPANY: '',//样品序号编号
+					ITEMNUM: '',//样品编号
+					ITEM_STEP: '',//样品序号
+					APPR_PERSON: '',//处理批准人
+					PRODUCT_CODE: '',//产品标识代码
+					ACCEPT_DATE: '',//收回入库时间
+					QUATITY: '',//数量
+					OTHER: '',//其他资料
+					MEMO: '',//备注
+					ACCEPTDATE: '',//入库时间
+					ACCEPT_PERSON: '',//样品承接人
+					ACCEPT_DATE: '',//收样日期
+					DO_PERSON: '',//处理人
+					DO_DATE: '',//处理日期
+					MEMO: '',//备注
+					STATE: '1',//状态
+					STATUSDATE: '',//状态日期
+					ENTERBY: '',//录入人
+					ENTERDATE: '',//录入时间
+					CHANGEBY: '',//修改人
+					CHANGEDATE: '',//修改时间
+					APPR_DATE: '',//批准日期
+					STATUS: '1',//信息状态
+				};
+				this.$refs.child.childMethods();
 			},
 			//修改用戶
 			modify() {
-				this.aaaData = this.selUser;
+				this.aaaData = this.selMenu;
 				if(this.aaaData.length == 0) {
 					this.$message({
-						message: '请您选择要修改的用户',
+						message: '请您选择要修改的数据',
 						type: 'warning'
 					});
 					return;
 				} else if(this.aaaData.length > 1) {
 					this.$message({
-						message: '不可同时修改多个用户',
+						message: '不可同时修改多条数据',
 						type: 'warning'
 					});
 					return;
 				} else {
-					this.aaaData[0].roleId = [];
-					var roles = this.aaaData[0].roles;
-					for(var i = 0; i < roles.length; i++) {
-						this.aaaData[0].roleId.push(roles[i].id);
-					}
-					//					console.log(this.aaaData[0].roleId);
+					this.samplesForm = this.selMenu[0]; 
 					this.$refs.child.detail();
 				}
 			},
@@ -391,153 +406,69 @@
 			},
 			// 删除
 			deluserinfo() {
-				var selData = this.selUser;
+				var selData = this.selMenu;
 				if(selData.length == 0) {
 					this.$message({
-						message: '请您选择要删除的用户',
-						type: 'warning'
-					});
-					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时删除多个用户',
+						message: '请您选择要删除的数据',
 						type: 'warning'
 					});
 					return;
 				} else {
-					var changeUser = selData[0];
-					var id = changeUser.id;
-					var url = '/api/api-user/users/' + id;
-					this.$axios.delete(url, {}).then((res) => { //.delete 传数据方法
+					var url = '/api/api-apps/app/itemdisposition/deletes';
+					//changeMenu为勾选的数据
+					var changeMenu = selData;
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					for (var i = 0; i < changeMenu.length; i++) {
+						deleteid.push(changeMenu[i].ID);
+					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+                    var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除此数据吗？', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                    }).then(({ value }) => {
+                        this.$axios.delete(url, {params: data}).then((res) => {//.delete 传数据方法
 						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '删除成功',
-								type: 'success'
+								message: '网络错误，请重试',
+								type: 'error'
 							});
-							this.requestData();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
-					});
+                    }).catch(() => {
+
+                	});
 				}
 			},
-			// 重置
-			resetPwd() {
-				var selData = this.selUser;
-				if(selData.length == 0) {
-					this.$message({
-						message: '请您选择要重置密码的用户',
-						type: 'warning'
-					});
-					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时多个用户进行重置',
-						type: 'warning'
-					});
-					return;
-				} else {
-					var changeUser = selData[0];
-					var id = changeUser.id;
-					var url = '/api/api-user/users/' + id + '/resetPassword';
-					this.$axios.post(url, {}).then((res) => {
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '重置成功',
-								type: 'success'
-							});
-							this.requestData();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
-					});
-				}
+			// 导入
+			importData() {
+
 			},
-			// 启用
-			unfreeze() {
-				var selData = this.selUser;
-				if(selData.length == 0) {
-					this.$message({
-						message: '请您选择您要启动的用户',
-						type: 'warning'
-					});
-					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时启动多个用户',
-						type: 'warning'
-					});
-					return;
-				} else {
-					var changeUser = selData[0];
-					var url = '/api/api-user/users/updateDESCRIPTION?id=' + changeUser.id + '&DESCRIPTION=true';
-					this.$axios.get(url, {}).then((res) => {
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '启动成功',
-								type: 'success'
-							});
-							this.requestData();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
-					});
-				}
+			// 导出
+			exportData() {
+
 			},
-			// 冻结
-			freezeAccount() {
-				var selData = this.selUser;
-				if(selData.length == 0) {
-					this.$message({
-						message: '请您选择您要冻结的用户',
-						type: 'warning'
-					});
-					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时冻结多个用户',
-						type: 'warning'
-					});
-					return
-				} else {
-					var changeUser = selData[0];
-					var url = '/api/api-user/users/updateDESCRIPTION?id=' + changeUser.id + '&DESCRIPTION=false';
-					this.$axios.get(url, {}).then((res) => {
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '冻结成功',
-								type: 'success'
-							});
-							this.requestData();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
-					});
-				}
+			// 打印
+			Printing() {
+
 			},
 			judge(data) {
 				//taxStatus 布尔值
-				return data.DESCRIPTION ? '启用' : '冻结'
+				return data.APPR_PERSON ? '启用' : '冻结'
 			},
-			V_NAME(data) {
-				return data.sex ? '男' : '女'
-			},
+			
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -547,26 +478,26 @@
 				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss"); 
 			},
 
-			SelChange(val) {
-				this.selUser = val;
+			SelChange(val) {//选中值后赋值给一个自定义的数组：selMenu
+				this.selMenu = val;
 			},
 			requestData(index) {
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					TYPE: this.searchList.TYPE,
-					DESCRIPTION: this.searchList.DESCRIPTION,
-					searchKey: 'ITEM_MODEL',
-					searchValue: this.searchList.ITEM_MODEL,
-					companyId: this.companyId,
-					deptId: this.deptId
+
+					ITEMNUM: this.searchList.ITEMNUM,//样品编号
+					APPR_PERSON: this.searchList.APPR_PERSON,//处理批准人
+					ACCEPT_PERSON: this.searchList.ACCEPT_PERSON,//样品承接人
+					ITEM_STEP: this.searchList.ITEM_STEP,//样品序号
+					APPR_DATE: this.searchList.APPR_DATE,//批准日期
+					ACCEPT_DATE: this.searchList.ACCEPT_DATE//收样日期
 				}
-				var url = '/api/api-user/users';
+				var url = '/api/api-apps/app/itemdisposition';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					//					console.log(res)
-					//					this.userList = res.data.data;
+					
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -586,37 +517,15 @@
 							}
 						}
 					}
-
-					this.userList = newarr;
+					this.samplesList = newarr;
 				}).catch((wrong) => {})
-				this.userList.forEach((item, index) => {
-					var id = item.id;
-					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
-						this.userList.role = res.data.roles[0].name;
-					}).catch((wrong) => {})
-				})
+				
 			},
-
-			getlist() {
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-					TYPE: this.searchList.TYPE,
-					DESCRIPTION: this.searchList.DESCRIPTION,
-					searchKey: 'ITEM_MODEL',
-					searchValue: this.searchList.ITEM_MODEL,
-					companyId: this.companyId,
-					deptId: this.deptId
-				}
-				var url = '/api/api-user/users';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					userList = res.data.data;
-					isLoading = false
-				})
+			
+			formatter(row, column) {
+				return row.enabled;
 			},
-			//生产单位树
+			//样品序号树
 			getKey() {
 				let that = this;
 				var url = '/api/api-user/depts/tree';
@@ -626,7 +535,6 @@
 				});
 			},
 			transformTree(data) {
-				
 				for(var i = 0; i < data.length; i++) {
 					data[i].name = data[i].fullname;
 					if(!data[i].pid || $.isArray(data[i].subDepts)) {
@@ -638,13 +546,10 @@
 						data[i].children = this.transformTree(data[i].subDepts);
 					}
 				}
-				console.log(111222);
-				console.log(data);
 				return data;
 				
 			},
 			handleNodeClick(data) {
-				console.log(111);
 				if(data.type == '1') {
 					this.companyId = data.id;
 					this.deptId = '';
@@ -674,13 +579,10 @@
 				this.ismin = !this.ismin;
 			}
 		},
-		beforeMount() {
-			// 在页面挂载前就发起请求
+		
+		mounted() {// 在页面挂载前就发起请求
 			this.requestData();
 			this.getKey();
-		},
-		mounted() {
-
 		},
 	}
 </script>

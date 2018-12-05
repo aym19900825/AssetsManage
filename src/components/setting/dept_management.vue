@@ -57,11 +57,6 @@
 						<el-form status-icon :model="searchDept" label-width="70px">
 							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-input v-model="searchDept.simplename">
-										<template slot="prepend">机构简称</template>
-									</el-input>
-								</el-col>
-								<el-col :span="5">
 									<el-input v-model="searchDept.fullname">
 										<template slot="prepend">机构名称</template>
 									</el-input>
@@ -118,9 +113,8 @@
 			return {
 				checkedName: [
 					'序号',
-					'机构编码',
 					'机构名称',
-					'机构简称',
+					'机构编码',
 					'版本',
 					'电话号',
 				],
@@ -131,18 +125,13 @@
 						isShow:true,
 					},
 					{
-						text: '机构编码',
-						dataIndex: 'code',
-						isShow:true,
-					},
-					{
 						text: '机构名称',
 						dataIndex: 'fullname',
 						isShow:true,
 					},
 					{
-						text: '机构简称',
-						dataIndex: 'simplename',
+						text: '机构编码',
+						dataIndex: 'code',
 						isShow:true,
 					},
 					{
@@ -159,15 +148,12 @@
 
 				companyId: '',
 				deptId: '',
-
 				selDept: [],
-
 				page: {
 					currentPage: 1,
 					pageSize: 10,
 					totalCount: 0
 				},
-	
 				total:0,
 				'启用': true,
 				'冻结': false,
@@ -249,16 +235,14 @@
 			//添加
 			openAddMgr() {
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
-					var date=new Date();
-					var index=this.$moment(date).format("YYYYMMDDHHmmss");
 					this.adddeptForm = {
 						"version":'1',
-						"status":'1',
+						"status":'活动',
 						"step":'',
-						"code": 'GP' + index,
+						"code":'',
 						"fullname":'',
 						"parent":'',
-						"org_range":'',
+						"org_range":'2',
 						"type":'',
 						"inactive":'否',
 						"address":'',
@@ -299,7 +283,7 @@
 					});
 					return;
 				} else {
-					this.testingForm = this.selMenu[0]; 
+					this.adddeptForm = this.selMenu[0]; 
 					this.$refs.child.detail();
 				}
 			},
@@ -373,6 +357,7 @@
 				this.$axios.get(url, {
 //					params: data
 				}).then((res) => {
+					console.log(res);
 					let result=res.data
 					for(let i=0;i<result.length;i++){
 						if(typeof(result[i].subDepts)!="undefined"&&result[i].subDepts.length>0){

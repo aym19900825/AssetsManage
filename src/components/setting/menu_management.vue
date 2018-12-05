@@ -56,7 +56,7 @@
 				</div>
 			</div>
 			<!--右侧内容显示 End-->
-			<menumask :menu="selMenu[0]" ref="child" @request="requestData" v-bind:page=page></menumask>
+			<menumask :menu="menu" ref="child" @request="requestData" v-bind:page=page></menumask>
 		</div>
 	</div>
 </template>
@@ -68,7 +68,7 @@
 	import assetsTree from '../plugin/vue-tree/tree.vue'
 	import menumask from '../settingDetails/menu_mask.vue'//弹出框
 	export default {
-		name: 'user_management',
+		name: 'menu_management',
 		components: {
 			'vheader': vheader,
 			'navs_header': navs_header,
@@ -137,7 +137,7 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-				aaaData: [],
+				menu: {}//修改子组件时传递数据
 			}
 		},
 		methods: {
@@ -171,19 +171,17 @@
 			
 			//添加菜单
 			openAddMenu() {
-				this.selData = [
-					{
+				this.menu = {
 					parentId:'',
 					name:'',
 					url:'',
 					sort:'',
 					hidden:1,
 					css:''
-					}
-				];
-				this.$refs.child.detail();
-//				this.$refs.child.resetNew();
-//				this.$refs.child.visible();
+				};
+				
+//				this.$refs.child.detail();
+				this.$refs.child.visible();
 			},
 			//修改
 			modify() {
@@ -202,6 +200,7 @@
 					});
 					return;
 				} else {
+					this.menu = this.selMenu[0]; 
 					this.$refs.child.detail();
 				}
 			},

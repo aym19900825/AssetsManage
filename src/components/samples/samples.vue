@@ -163,7 +163,7 @@
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import samplesmask from'../samplesDetails/samples_mask.vue'
 	export default {
-		name: 'samples',
+		name: 'samples',//接样
 		components: {
 			vheader,
 			navs_header,
@@ -262,7 +262,7 @@
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
 				resourceProps: {//树菜单数据
 					children: "subDepts",
-					label: "simplename"
+					label: "fullname"
 				},
 				treeData: [],
 				page: {

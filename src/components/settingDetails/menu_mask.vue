@@ -4,7 +4,8 @@
 		<div class="mask_div" v-show="show">
 			<!---->
 			<div class="mask_title_div clearfix">
-				<div class="mask_title">添加菜单</div>
+				<div class="mask_title" v-show="addtitle">添加菜单</div>
+				<div class="mask_title" v-show="modifytitle">修改菜单</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>
 						 
@@ -144,20 +145,14 @@
 		},
 
 		data() {
-			var validatePass1 = (rule, value, callback) => {
+			var validatePass = (rule, value, callback) => {
 				if(value === '') {
 					callback(new Error('必填'));
 				} else {
 					callback();
 				}
 			};
-			var validatePass2 = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('必填'));
-				} else {
-					callback();
-				}
-			};
+			
 
 			return {
 				edit: true, //禁填
@@ -169,22 +164,15 @@
 				isok2: false,
 				down: true,
 				up: false,
-				useritem: [],
 				activeNames: ['1'], //手风琴数量
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
+				addtitle:true,
+				modifytitle:false,
 				fullHeight: document.documentElement.clientHeight - 200 +'px',//获取浏览器高度
 				rules: {
-					name: [{
-						required: true,
-						trigger: 'change',
-						validator: validatePass1,
-					}],
-					soft: [{
-						required: true,
-						trigger: 'change',
-						validator: validatePass2,
-					}],
+					name: [{required: true,trigger: 'change',validator: validatePass}],
+					soft: [{required: true,trigger: 'change',validator: validatePass}],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -194,25 +182,11 @@
 					children: "subDepts",
 					label: "name"
 				},
-				selectData: [], //
-				 
 			};
 		},
 		methods: {
 			handleChange(val) { //手风琴开关效果调用
 			},
-			//清空表單
-			resetNew(){
-                this.menu = {
-					parentId:'',
-					name:'',
-					url:'',
-					sort:'',
-					hidden:1,
-					css:''
-				}
-                   this.$refs["menu"].resetFields();
-            },
 			col_but(col_but) {
 				if(col_but == 'col_but1') {
 					this.col_but1 = !this.col_but1;
@@ -227,11 +201,14 @@
 			},
 			//点击按钮显示弹窗
 			visible() {
+				this.modifytitle=false;
 				this.show = true;
 			},
 			
 			// 这里是修改
 			detail() {
+					this.addtitle=false;
+				    this.modifytitle=true;
 					this.show = true;
 			},
 			//点击关闭按钮
@@ -269,7 +246,7 @@
 			//保存users/saveOrUpdate
 			submitForm() {
 				this.$refs.menu.validate((valid) => {
-//					if(valid) {
+					if(valid) {
 						this.menu.hidden=this.menu.hidden?1:0
 						var menu = this.menu;						
 						console.log(menu)
@@ -306,9 +283,12 @@
 								type: 'error'
 							});
 						});
-//					} else {
-//						return false;
-//					}
+					} else {
+						this.$message({
+								message: '有必填项未填写，请填写',
+								type: 'warning'
+							});
+					}
 				})
 			},
 			//所属上级

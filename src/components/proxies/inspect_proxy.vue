@@ -6,8 +6,8 @@
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
-		<navs_left></navs_left>
-		<!--左侧菜单内容显示 End-->
+			<navs_left></navs_left>
+			<!--左侧菜单内容显示 End-->
 			<!--右侧内容显示 Begin-->
 			<div class="wrapper wrapper-content">
 				<div class="ibox-content">

@@ -27,12 +27,20 @@ export default {
 			leftNavs: [//leftNavs左侧菜单数据
 				{
 					navicon: 'icon-file-text',
-					navtitle: '检验/检测委托书',
-					navherf: '/inspect_proxy'
+					navtitle: '接样',
+					navherf: '/samples'
 				}, {
 					navicon: 'icon-wordbook',
-					navtitle: '分包协议',
-					navherf: '/subc_agreement'
+					navtitle: '领样',
+					navherf: '/collar_sample'
+				}, {
+					navicon: 'icon-wordbook',
+					navtitle: '返样',
+					navherf: '/return_sample'
+				}, {
+					navicon: 'icon-wordbook',
+					navtitle: '样品处置',
+					navherf: '/sample_disposal'
 				}
 			],
         selectedNav: {}

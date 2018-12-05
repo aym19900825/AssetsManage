@@ -52,7 +52,7 @@
 										<i class="el-icon-arrow-down icon-arrow2-down"></i>
 									</span>
 									<el-dropdown-menu slot="dropdown">
-										<el-checkbox-group v-model="checkedName" @change="test">
+										<el-checkbox-group v-model="checkedName">
 											<el-dropdown-item v-for="(item,index) in tableHeader" :key="index">
 												<el-checkbox :label="item.label" name="type"></el-checkbox>
 											</el-dropdown-item>
@@ -281,9 +281,7 @@
 					//console.log('到底了', this.page.currentPage)
 				}
 			},
-			test() {
-				console.log(this.checkedName.indexOf('账号') != -1);
-			},
+			
 			sizeChange(val) {
 				this.page.pageSize = val;
 				this.requestData();

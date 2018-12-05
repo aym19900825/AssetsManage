@@ -17,23 +17,23 @@
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
 								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
-	                        	<i class="icon-add"></i>添加
-	              			 </button>
+		                        	<i class="icon-add"></i>添加
+		              			 </button>
 								<button type="button" class="btn btn-bule button-margin" @click="modify">
-							    <i class="icon-edit"></i>修改
-							</button>
+								    <i class="icon-edit"></i>修改
+								</button>
 								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
-							    <i class="icon-trash"></i>删除
-							</button>
+								    <i class="icon-trash"></i>删除
+								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="importData">
-							    <i class="icon-upload-cloud"></i>导入
-							</button>
+								    <i class="icon-upload-cloud"></i>导入
+								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="exportData">
-							    <i class="icon-download-cloud"></i>导出
-							</button>
+								    <i class="icon-download-cloud"></i>导出
+								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="Printing">
-							    <i class="icon-print"></i>打印
-							</button>
+								    <i class="icon-print"></i>打印
+								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 					    		<i class="icon-search"></i>高级查询
 					    		<i class="icon-arrow1-down" v-show="down"></i>
@@ -99,6 +99,7 @@
 						</el-form>
 					</div>
 					<!-- 高级查询划出 End-->
+					
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格 Begin-->

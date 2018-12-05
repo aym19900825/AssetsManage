@@ -188,7 +188,8 @@
 			},
 			// 这里是修改
 			detail() {
-				this.CATEGORY.STATUS="1"?'活动':'不活动';
+				console.log(this.CATEGORY.STATUS);
+				this.CATEGORY.STATUS=="1"?'活动':'不活动';
 				this.modify = true;
 				this.addtitle = false;
 				this.modifytitle = true;

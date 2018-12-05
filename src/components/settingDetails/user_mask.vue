@@ -65,15 +65,19 @@
 								<!-- 第一行 -->
 								<el-row :gutter="30">
 									<el-col :span="8">
-										<el-form-item label="登录名称" prop="username">
-											<el-input v-model="user.username" v-if="modify" :disabled="edit"></el-input>
-											<el-input  v-model="user.username" v-else></el-input>
+										<el-form-item label="登录名称" v-if="modify">
+											<el-input v-model="user.username" :disabled="edit"></el-input>
+										</el-form-item>
+										<el-form-item label="登录名称" prop="username" v-else>
+											<el-input  v-model="user.username"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="登录口令" prop="password">
-											<el-input type="password" v-model="user.password"v-if="modify" :disabled="true"></el-input>
-											<el-input type="password" v-model="user.password" v-else></el-input>
+										<el-form-item label="登录口令" v-if="modify">
+											<el-input type="password" v-model="user.password" :disabled="edit"></el-input>
+										</el-form-item>
+										<el-form-item label="登录口令" prop="password" v-else>
+											<el-input type="password" v-model="user.password"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -419,8 +423,8 @@
 
 		<!--弹出-->
 
-		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick" @check-change="handleCheckChange">
+		<el-dialog title="机构" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick" @check-change="handleCheckChange">
 			</el-tree>
 			<span slot="footer" class="dialog-footer">
 		       <el-button @click="dialogVisible = false">取 消</el-button>
@@ -531,6 +535,7 @@
 				addtitle: true, //添加弹出框titile
 				modifytitle: false, //修改弹出框titile
 				modify:false,
+//				default-expand-all:true,
 				rules: {
 					deptName: [{ required: true, message: '必填', trigger: 'blur' }],//名称
 					education:[{required: true, message: '必填', trigger: 'blur'}],
@@ -616,7 +621,7 @@
 			},
 			//
 			handleNodeClick(data) { //获取勾选树菜单节点
-				console.log(data);
+//				console.log(data);
 			},
 
 
@@ -800,6 +805,8 @@
 					},
 				}).then((res) => {
 					this.resourceData = res.data;
+					
+					console.log(res.data)
 					this.dialogVisible = true;
 				});
 
@@ -810,12 +817,13 @@
 				this.editSearch = 'dept';
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
-				var type = "2";
-				var url = '/api/api-user/depts/treeByType';
+//				var type = "2";
+				var url = '/api/api-user/depts/treeMap';
+//				var url = '/api/api-user/depts/treeByType';
 				this.$axios.get(url, {
-					params: {
-						type: type
-					},
+//					params: {
+//						type: type
+//					},
 				}).then((res) => {
 					this.resourceData = res.data;
 					this.dialogVisible = true;
@@ -845,10 +853,10 @@
 				this.dialogVisible = false;
 				if(this.editSearch == 'company') {
 					this.user.companyId = this.getCheckboxData.id;
-					this.user.companyName = this.getCheckboxData.simplename;
+					this.user.companyName = this.getCheckboxData.fullname;
 				} else {
 					this.user.deptId = this.getCheckboxData.id;
-					this.user.deptName = this.getCheckboxData.simplename;
+					this.user.deptName = this.getCheckboxData.fullname;
 				}
 			},
 

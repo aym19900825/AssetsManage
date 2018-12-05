@@ -28,10 +28,10 @@
 								    <i class="icon-refresh"></i>重置密码
 								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="unfreeze">
-								    <i class="icon-start"></i>启用
+								    <i class="icon-start"></i>活动
 								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="freezeAccount">
-								    <i class="icon-stop"></i>冻结
+								    <i class="icon-stop"></i>不活动
 								</button>
 								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-role-site"></i>角色分配
@@ -67,19 +67,19 @@
 						<el-form status-icon :model="searchList" label-width="70px">
 							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-form-item label="用户名">
-										<el-input v-model="searchList.nickname"></el-input>
-									</el-form-item>
+									<el-input v-model="searchList.username">
+										<template slot="prepend">用户名</template>
+									</el-input>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="信息状态">
-										<el-input v-model="searchList.enabled"></el-input>
-									</el-form-item>
+									<el-input v-model="searchList.nickname">
+										<template slot="prepend">姓名</template>
+									</el-input>
 								</el-col>
 								<el-col :span="4">
-									<el-form-item label="创建时间">
-										<el-input v-model="searchList.createTime"></el-input>
-									</el-form-item>
+									<el-input v-model="searchList.deptName">
+										<template slot="prepend">机构名称</template>
+									</el-input>
 								</el-col>
 								<el-col :span="2">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
@@ -210,8 +210,8 @@
 				up: false,
 				searchList: {
 					nickname: '',
-					enabled: '',
-					createTime: ''
+					username: '',
+					deptName: ''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -517,10 +517,11 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
+					deptName: this.searchList.deptName,
 					nickname: this.searchList.nickname,
-					enabled: this.searchList.enabled,
-					searchKey: 'createTime',
-					searchValue: this.searchList.createTime,
+					username: this.searchList.username,
+//					searchKey: 'createTime',
+//					searchValue: this.searchList.createTime,
 					companyId: this.companyId,
 					deptId: this.deptId
 				}

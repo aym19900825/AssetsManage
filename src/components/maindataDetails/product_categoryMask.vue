@@ -25,7 +25,7 @@
 											<template slot="prepend">版本</template>
 										</el-input>
 									</el-col>
-									<el-col :span="3" class="pull-right">
+									<el-col :span="5" class="pull-right">
 										<el-input v-model="CATEGORY.STATUS" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
@@ -39,7 +39,7 @@
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="产品类别编号" prop="NUM">
-											<el-input v-model="CATEGORY.NUM" :disabled="edit"></el-input>
+											<el-input v-model="CATEGORY.NUM" :disabled="edit" placeholder="自动生成"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -125,14 +125,7 @@
             };
 			return {
 				personinfo:false,
-				value: '',
-				options: [{
-					value: '1',
-					label: '活动'
-				}, {
-					value: '0',
-					label: '不活动'
-				}],
+				
 				modify:false,//修订、修改人、修改时间
 				statusshow1:true,
 				statusshow2:false,
@@ -161,6 +154,7 @@
 			};
 		},
 		methods: {
+
 			// resetNew(){
    //              this.CATEGORY = {
 			// 		NUM:'',
@@ -176,6 +170,7 @@
    //              // this.$refs["CUSTOMER"].resetFields();
    //          },
 			
+
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selUser = val;
@@ -186,7 +181,7 @@
 		    },
 			//点击按钮显示弹窗
 			visible() {
-				this.CATEGORY.NUM =  this.rand(1000,9999);
+//				this.CATEGORY.NUM =  this.rand(1000,9999);
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
 					this.CATEGORY.DEPARTMENT = res.data.companyName;
 	    			this.CATEGORY.ENTERBY = res.data.nickname;
@@ -207,6 +202,7 @@
 			},
 			// 这里是修改
 			detail() {
+				this.CATEGORY.STATUS="1"?'活动':'不活动';
 				this.modify = true;
 				this.addtitle = false;
 				this.modifytitle = true;
@@ -231,7 +227,6 @@
 			//点击关闭按钮
 			close() {
 				this.show = false;
-				this.resetNew();
 			},
 			toggle(e) {
 				if(this.isok1 == true) {
@@ -261,6 +256,7 @@
 			submitForm(CATEGORY) {
 				this.$refs[CATEGORY].validate((valid) => {
 		          if (valid) {
+		          	this.CATEGORY.STATUS=="活动" ? '1' : '0';
 					var url = '/api/api-apps/app/productType/saveOrUpdate';		
 					this.$axios.post(url,this.CATEGORY).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息

@@ -419,7 +419,7 @@
 
 		<!--弹出-->
 
-		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+		<el-dialog title="机构" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
 
 			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick" @check-change="handleCheckChange">
 			</el-tree>
@@ -847,10 +847,10 @@
 				this.dialogVisible = false;
 				if(this.editSearch == 'company') {
 					this.user.companyId = this.getCheckboxData.id;
-					this.user.companyName = this.getCheckboxData.simplename;
+					this.user.companyName = this.getCheckboxData.fullname;
 				} else {
 					this.user.deptId = this.getCheckboxData.id;
-					this.user.deptName = this.getCheckboxData.simplename;
+					this.user.deptName = this.getCheckboxData.fullname;
 				}
 			},
 

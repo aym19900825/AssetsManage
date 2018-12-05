@@ -8,7 +8,6 @@
 				<div class="mask_title" v-show="modifytitle">修改菜单</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>
-						 
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
 					</span>
 					<span class="mask_span" @click='close'>
@@ -19,7 +18,7 @@
 			<div class="mask_content">
 				<el-form :model="menu" :label-position="labelPosition" :rules="rules" ref="menu" label-width="100px" class="demo-user">
 					<div class="accordion">
-						<el-collapse v-model="activeNames" @change="handleChange">
+						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基础信息" name="1">
 								<el-row :gutter="30">
 									<el-col :span="24">
@@ -185,8 +184,7 @@
 			};
 		},
 		methods: {
-			handleChange(val) { //手风琴开关效果调用
-			},
+			
 			col_but(col_but) {
 				if(col_but == 'col_but1') {
 					this.col_but1 = !this.col_but1;

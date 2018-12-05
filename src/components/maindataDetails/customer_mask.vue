@@ -17,7 +17,7 @@
 			<div class="mask_content"><!-- status-icon验证后小对号 -->
 				<el-form status-icon inline-message :model="CUSTOMER" :label-position="labelPosition" :rules="rules" ref="CUSTOMER" label-width="100px" class="demo-adduserForm">
 					<div class="accordion" id="information">
-						<el-collapse v-model="activeNames" @change="handleChange">
+						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基本信息" name="1">
 								<el-row :gutter="20" class="pb10">
 									<el-col :span="3" class="pull-right">
@@ -126,7 +126,7 @@
 							<!-- 资质信息 Begin-->
 							<el-collapse-item title="资质信息" name="2">								
 								<div class="table-func">
-									<el-button type="success" size="mini" round @click="addfield" @change="handleChange">
+									<el-button type="success" size="mini" round @click="addfield">
 										<i class="icon-add"></i>
 										<font>新建行</font>
 									</el-button>
@@ -394,18 +394,13 @@
 			};
 		},
 		methods: {
-			//计数器
-			handleChange(value) {
-		        console.log(value);
-		      },
+			
 			iconOperation(row, column, cell, event){
 		        if(column.property ==="iconOperation"){
 		          row.isEditing = !row.isEditing
 		        }
 		    },
-            //手风琴开关效果调用
-			handleChange(val) {
-			},
+            
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selUser = val;

@@ -20,7 +20,7 @@
 			<div class="mask_content">
 				<el-form status-icon :model="user" :label-position="labelPosition" :rules="rules" ref="user" label-width="100px" class="demo-user">
 					<div class="accordion">
-						<el-collapse v-model="activeNames" @change="handleChange">
+						<el-collapse v-model="activeNames">
 							<!--<el-collapse-item title="基础信息" name="1">
 								<el-row :gutter="30">
 									<el-col :span="24">
@@ -420,10 +420,8 @@
 		<!--弹出-->
 
 		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-
 			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick" @check-change="handleCheckChange">
 			</el-tree>
-
 			<span slot="footer" class="dialog-footer">
 		       <el-button @click="dialogVisible = false">取 消</el-button>
 		       <el-button type="primary" @click="dailogconfirm();" >确 定</el-button>
@@ -548,7 +546,7 @@
 					phone: [{required: true,trigger: 'blur',validator: validatePhone}],
 					email: [{required: true,trigger: 'blur',validator: validateEmail,}],
 				},
-				//tree
+				//tree树菜单
 				resourceData: [], //数组，我这里是通过接口获取数据，
 				resourceDialogisShow: false,
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
@@ -611,8 +609,7 @@
 				rows.splice(index,1);
 
 			},
-			handleChange(val) { //手风琴开关效果调用
-			},
+			
 			//
 			handleCheckChange(data, checked, indeterminate) {
 				this.getCheckboxData = data;
@@ -841,6 +838,7 @@
 					console.log('请求失败');
 				})
 			},
+
 			dailogconfirm() { //小弹出框确认按钮事件
 				this.getCheckedNodes();
 				this.placetext = false;

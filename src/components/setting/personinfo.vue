@@ -28,7 +28,7 @@
 		<div class="wrapper wrapper-content">
 			<div class="ibox-content" :style="{height: fullHeight}">
 				<el-form status-icon ref="personinfo" :model="personinfo" :rules="rules" label-width="80px" :label-position="labelPosition">
-					<el-collapse v-model="activeNames" @change="handleChange">
+					<el-collapse v-model="activeNames">
 						<el-collapse-item title="账号设置" name="1">
 							<el-row :gutter="30">
 								<el-col :span="12">
@@ -405,9 +405,7 @@
 					});
 				});
 	    	},
-			handleChange(val) {//手风琴开关效果调用
-				console.log(val);
-			},
+			
 			getCompany() {//所属组织
 				this.editSearch = 'company';
 				var url = '/api/api-user/depts/type';

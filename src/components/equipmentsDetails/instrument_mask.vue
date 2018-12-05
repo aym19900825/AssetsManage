@@ -20,7 +20,7 @@
 			<div class="mask_content">
 				<el-form status-icon :model="dataInfo" :label-position="labelPosition"  ref="dataInfo" label-width="100px" class="demo-user">
 					<div class="accordion">
-						<el-collapse v-model="activeNames" @change="handleChange">
+						<el-collapse v-model="activeNames">
 							
 							<el-collapse-item title="设备基本信息" name="1">
 								<el-row :gutter="20" class="pb10">
@@ -402,8 +402,7 @@
 			};
 		},
 		methods: {
-			handleChange(val) { //手风琴开关效果调用
-			},
+			
 			//
 			handleCheckChange(data, checked, indeterminate) {
 				this.getCheckboxData = data;

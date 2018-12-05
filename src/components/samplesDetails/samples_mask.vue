@@ -17,7 +17,7 @@
 			<div class="mask_content">
 				<el-form :model="samplesForm" :label-position="labelPosition" :rules="rules" ref="samplesForm" label-width="100px" status-icon>
 					<div class="accordion">
-						<el-collapse v-model="activeNames" @change="handleChange">
+						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基础信息" name="1">
 								<el-row :gutter="20" class="pb10">
 									<el-col :span="4" class="pull-right">
@@ -30,33 +30,133 @@
 											<template slot="prepend">状态</template>
 										</el-input>
 									</el-col>
+									<el-col :span="4" class="pull-right">
+										<el-input type="number" v-model.number="samplesForm.VERSION" :disabled="true">
+											<template slot="prepend">版本</template>
+										</el-input>
+									</el-col>
 									<el-col :span="7" class="pull-right">
-										<el-input placeholder="自动获取" v-model="samplesForm.M_NUM" :disabled="true">
-											<template slot="prepend">检验/检测方法编号</template>
+										<el-input placeholder="自动获取" v-model="samplesForm.ITEMNUM" :disabled="true">
+											<template slot="prepend">样品编号</template>
 										</el-input>
 									</el-col>
 								</el-row>
 
 								<el-row :gutter="30">
 									<el-col :span="8">
-										<el-form-item label="中文名称" prop="M_NAME">
-											<el-input v-model="samplesForm.M_NAME"></el-input>
+										<el-form-item label="委托书编号" prop="PROXYNUM">
+											<el-input v-model="samplesForm.PROXYNUM" :disabled="true">
+												<el-button slot="append" icon="el-icon-search" @click="getProxy"></el-button>
+											</el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="英文名称" prop="M_ENAME">
-											<el-input v-model="samplesForm.M_ENAME"></el-input>
+										<el-form-item label="委托单位编号" prop="VENDOR">
+											<el-input v-model="samplesForm.VENDOR"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="类别" prop="M_TYPE">
-											<el-select v-model="samplesForm.M_TYPE" placeholder="请选择类别" style="width: 100%;">
+										<el-form-item label="委托单位名称" prop="V_NAME">
+											<el-input v-model="samplesForm.V_NAME" :disabled="true"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+
+								<el-row :gutter="30">
+									<el-col :span="8">
+										<el-form-item label="生产单位编号" prop="PRODUCT_COMPANY">
+											<el-input v-model="samplesForm.PRODUCT_COMPANY"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="生产单位名称" prop="P_NAME">
+											<el-input v-model="samplesForm.P_NAME"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="样品名称" prop="DESCRIPTION">
+											<el-input v-model="samplesForm.DESCRIPTION"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+
+								<el-row :gutter="30">
+									<el-col :span="8">
+										<el-form-item label="产品标识代码" prop="PRODUCT_CODE">
+											<el-input v-model="samplesForm.PRODUCT_CODE"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="型号" prop="MODEL">
+											<el-input v-model="samplesForm.MODEL"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="数量" prop="QUATITY">
+											<el-input-number v-model="samplesForm.QUATITY" :min="1" :step="5" :max="100" label="描述文字" style="width: 100%"></el-input-number>
+										</el-form-item>
+									</el-col>
+								</el-row>
+
+								<el-row :gutter="30">
+									<el-col :span="8">
+										<el-form-item label="类别" prop="TYPE">
+											<el-select v-model="samplesForm.TYPE" placeholder="请选择类别" style="width: 100%;">
 												<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
 											</el-select>
 										</el-form-item>
 									</el-col>
+									<el-col :span="16">
+										<el-form-item label="其他资料" prop="OTHER">
+											<el-input v-model="samplesForm.OTHER"></el-input>
+										</el-form-item>
+									</el-col>
 								</el-row>
-								
+
+								<el-row :gutter="30">
+									<el-col :span="24">
+										<el-form-item label="备注" prop="MEMO">
+											<el-input type="textarea" rows="5" v-model="samplesForm.MEMO"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+
+								<el-row :gutter="30">
+									<el-col :span="8">
+										<el-form-item label="入库时间" prop="ACCEPTDATE">
+											<el-input v-model="samplesForm.ACCEPTDATE"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="收样人" prop="ACCEPT_PERSON">
+											<el-input v-model="samplesForm.ACCEPT_PERSON"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="收样日期" prop="ACCEPT_DATE">
+											<el-input v-model="samplesForm.ACCEPT_DATE"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+
+								<el-row :gutter="30">
+									<el-col :span="8">
+										<el-form-item label="接样人" prop="RECIP_PERSON">
+											<el-input v-model="samplesForm.RECIP_PERSON"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="接样日期" prop="RECIP_DATE">
+											<el-input v-model="samplesForm.RECIP_DATE"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="状态日期" prop="STATUSDATE">
+											<el-input v-model="samplesForm.STATUSDATE"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="录入人机构">
@@ -76,12 +176,12 @@
 								</el-row>
 								<el-row :gutter="30" v-if="modify">
 									<el-col :span="8">
-										<el-form-item label="创建人">
+										<el-form-item label="修改人">
 											<el-input v-model="samplesForm.CHANGEBY" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="创建日期">
+										<el-form-item label="修改日期">
 											<el-input v-model="samplesForm.CHANGEDATE" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
@@ -106,7 +206,7 @@
 								<!-- 样品子表Table-List Begin-->
 								<el-form :model="samples_itemlineForm" status-icon inline-message ref="samples_itemlineForm">
 									  <!-- 表格 Begin-->
-									  <el-table :data="samples_itemlineForm.inspectionList" row-key="ID" border stripe height="380" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'samples_itemlineForm.inspectionList', order: 'descending'}" v-loadmore="loadMore">
+									  <el-table :data="samples_itemlineForm.inspectionList" row-key="ID" border stripe height="380" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'samples_itemlineForm.inspectionList', order: 'descending'}" >
 										<el-table-column prop="iconOperation" fixed="left" label="操作" width="80">
 									      <template slot-scope="scope">
 									        <el-button type="text" id="Edit" size="medium" @click="saveRow(scope.row)" v-if="scope.row.isEditing">
@@ -131,11 +231,11 @@
 										
 										<el-table-column label="样品序号" prop="ITEM_STEP" sortable width="120">
 									      <template slot-scope="scope">
-									        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ITEM_STEP" placeholder="自动获取" disabled></el-input><span v-else="v-else">{{scope.ITEM_STEP.DOC_SIZE}}</span>
+									        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ITEM_STEP" placeholder="自动获取" disabled></el-input><span v-else="v-else">{{scope.row.ITEM_STEP}}</span>
 									      </template>
 									    </el-table-column>
 
-									    <el-table-column label="单件码" prop="SN" sortable width="200">
+									    <el-table-column label="单件码" prop="SN" sortable>
 									      <template slot-scope="scope">
 									        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.SN"  placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.SN}}</span>
 									      </template>
@@ -162,15 +262,7 @@
 									  </el-table>
 									</el-form>
 									<!-- 表格 End-->
-									<el-pagination background class="pull-right pt10 pb10"
-							            @size-change="sizeChange"
-							            @current-change="currentChange"
-							            :current-page="page.currentPage"
-							            :page-sizes="[10, 20, 30, 40]"
-							            :page-size="page.pageSize"
-							            layout="total, sizes, prev, pager, next"
-							            :total="page.totalCount">
-							        </el-pagination>
+									
 								<!-- 样品子表Table-List End -->
 							</el-collapse-item>
 						</el-collapse>
@@ -184,7 +276,16 @@
 				</el-form>
 			</div>
 		</div>
-
+		<!--点击委托书编号弹出框 Begin-->
+		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @check-change="handleCheckChange">
+			</el-tree>
+			<span slot="footer" class="dialog-footer">
+		       <el-button @click="dialogVisible = false">取 消</el-button>
+		       <el-button type="primary" @click="dailogconfirm();" >确 定</el-button>
+		    </span>
+		</el-dialog>
+		<!--点击委托书编号弹出框 Begin-->
 	</div>
 </template>
 
@@ -217,6 +318,7 @@
 						RECIP_PERSON: '',//接样人
 						RECIP_DATE: '',//接样日期
 						STATE: '',//状态
+						VERSION: '',//版本
 						STATUSDATE: '',//状态日期
 						ENTERBY: '',//录入人
 						ENTERDATE: '',//录入时间
@@ -239,7 +341,7 @@
 					label: '不活动'
 				}],
 				selectData: [], //获取检验/检测方法类别
-				modify:false,//修订、创建人、创建日期
+				modify:false,//修订、修改人、修改日期
 				selMenu:[],
 				show: false,
 				isok1: true,
@@ -252,30 +354,104 @@
 				labelPosition: 'top', //表单标题在上方
 				addtitle: true,
 				modifytitle: false,
-				samples_itemlineForm:{//文件文档数据组
+				samples_itemlineForm:{//样品子表数据组
 					inspectionList: []
 				},
+				//Tree树菜单数据
+				resourceData: [], //数组，我这里是通过接口获取数据，
+				resourceDialogisShow: false,
+				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
+				resourceProps: {
+					children: "children",
+					label: "fullname"
+				},
+				getCheckboxData: {},
 				isEditing: '',
 				commentArr:{},//下拉加载
 				rules: { //定义需要校验数据的名称
-					M_NAME: [
-						{ required: true, message: '请填写中文名称', trigger: 'blur' },
-						{ min: 5, max: 35, message: '长度在 5 到 35 个字符', trigger: 'blur' }
+					PROXYNUM: [
+						{ required: true, message: '请填写委托书编号', trigger: 'blur' }
 					],
-					M_ENAME: [
-						{ required: true, message: '请填写英文名称', trigger: 'blur' },
-						{ min: 5, max: 50, message: '长度在 5 到 15 个字符', trigger: 'blur' }
+					VENDOR: [
+						{ required: true, message: '请填写委托单位编号', trigger: 'blur' }
 					],
-					M_TYPE: [
+					V_NAME: [
+						{ required: true, message: '请填写委托单位名称', trigger: 'blur' }
+					],
+					PRODUCT_COMPANY: [
+						{ required: true, message: '请填写生产单位编号', trigger: 'blur' }
+					],
+					P_NAME: [
+						{ required: true, message: '请填写生产单位名称', trigger: 'blur' }
+					],
+					DESCRIPTION: [
+						{ required: true, message: '请填写样品名称', trigger: 'blur' }
+					],
+					TYPE: [
 						{ required: true, message: '请选择类别', trigger: 'change' }
-					]
+					],
+					QUATITY: [
+						{ required: true, message: '请填写数量', trigger: 'blur' }
+					],
+					ACCEPTDATE: [
+						{ required: true, message: '入库时间不能为空', trigger: 'blur' }
+					],
+					ACCEPT_DATE: [
+						{ required: true, message: '收样日期不能为空', trigger: 'blur' }
+					],
+					RECIP_DATE: [
+						{ required: true, message: '接样日期不能为空', trigger: 'blur' }
+					],
+					STATUSDATE: [
+						{ required: true, message: '状态日期不能为空', trigger: 'blur' }
+					],
 				},
 			};
 		},
 		methods: {
-			handleChange(val) { //手风琴开关效果调用
+			//获取委托书编号数据
+			getProxy() {
+				this.editSearch = 'dept';
+				var page = this.page.currentPage;
+				var limit = this.page.pageSize;
+				var type = "2";
+				var url = '/api/api-user/depts/treeByType';
+				this.$axios.get(url, {
+					params: {
+						type: type
+					},
+				}).then((res) => {
+					this.resourceData = res.data;
+					this.dialogVisible = true;
+				});
 			},
-			
+			//选择委托书编号节点
+			handleCheckChange(data, checked, indeterminate) {
+				this.getCheckboxData = data;
+			},
+			dailogconfirm() { //委托书编号小弹出框确认按钮事件
+				this.getCheckedNodes();
+				this.placetext = false;
+				this.dialogVisible = false;
+				if(this.editSearch == 'company') {
+					this.samplesForm.PROXYNUM = this.getCheckboxData.id;
+					this.samplesForm.V_NAME = this.getCheckboxData.fullname;
+				} else {
+					this.samplesForm.PROXYNUM = this.getCheckboxData.id;
+					this.samplesForm.V_NAME = this.getCheckboxData.fullname;
+				}
+			},
+			//小弹出框关闭按钮事件
+			handleClose(done) {
+				this.$confirm('确认关闭？')
+					.then(_ => {
+						done();
+					})
+					.catch(_ => {});
+			},
+			getCheckedNodes() { //小弹出框获取树菜单节点
+				this.checkedNodes = this.$refs.tree.getCheckedNodes()
+			},
 			childMethods() {//添加内容时从父组件带过来的
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
 					this.samplesForm.DEPARTMENT=res.data.deptName;
@@ -317,7 +493,7 @@
 				}
 			},
 			
-			modifyversion (row) {//点击修改后给当前创建人和创建日期赋值
+			modifyversion (row) {//点击修改后给当前修改人和修改日期赋值
 				 this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
 					row.CHANGEBY=res.data.nickname;
 					var date=new Date();
@@ -332,32 +508,7 @@
 				})
 			},
 
-			loadMore () {//表格滚动加载
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page.currentPage++
-			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     this.requestData_doclinks()
-			   }
-			 },
-			sizeChange(val) {//页数
-		      this.page.pageSize = val;
-		      this.requestData_doclinks();
-		    },
-		    currentChange(val) {//当前页
-		      this.page.currentPage = val;
-		      this.requestData_doclinks();
-		    },
-			searchinfo(index) {//查询展示出第1页数据
-				this.page.currentPage = 1;
-				this.page.pageSize = 10;
-				this.requestData_doclinks();
-			},
+			
 			judge(data) {//taxStatus 信息状态布尔值
 				return data.enabled ? '活动' : '不活动'
 			},
@@ -399,10 +550,10 @@
 						this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 						var index=this.$moment(date).format("YYYYMMDDHHmmss");
 						var obj = {
-							"DOCLINKS": 'FLS' + index,
-							"DESCRIPTION": '',
-							"DOC_SIZE": '',
-							"ROUTE": '',
+							"ITEMNUM": 'ITE' + index,
+							"ITEM_STEP": '',
+							"SN": '',
+							"STATE": '',
 							"ENTERBY": this.currentUser,
 							"ENTERDATE": this.currentDate,
 							"isEditing": true,
@@ -421,7 +572,7 @@
 			saveRow (row) {//Table-操作列中的保存行
 				this.$refs['samples_itemlineForm'].validate((valid) => {
 		          if (valid) {
-					var url = '/api/api-apps/app/doclinks/saveOrUpdate';
+					var url = '/api/api-apps/app/itemline/saveOrUpdate';
 					var submitData = {
 						"ID":row.ID,
 					    "DOCLINKS": row.DOCLINKS,
@@ -457,7 +608,7 @@
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                 }).then(({ value }) => {
-                	var url = '/api/api-apps/app/doclinks/' + row.ID;
+                	var url = '/api/api-apps/app/itemline/' + row.ID;
                     this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 					//resp_code == 0 是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -516,14 +667,15 @@
 				$(".mask_div").css("top", "0");
 
 			},
-			//执行保存
+			//点击提交按钮执行保存
 			submitForm(formName) {
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
 					    this.samplesForm.STATUS=this.samplesForm.STATUS=="活动" ? '1' : '0';
-						var url = '/api/api-apps/app/inspectionMet/saveOrUpdate';
+						var url = '/api/api-apps/app/item/saveOrUpdate';
 						this.samplesForm.VERSION = this.samplesForm.VERSION + 1;//修改时版本+1
 						this.$axios.post(url, this.samplesForm).then((res) => {
+							console.log(res);
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
 								this.$message({

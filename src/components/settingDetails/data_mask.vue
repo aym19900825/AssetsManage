@@ -15,7 +15,7 @@
 			</div>
 			<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
 				<div class="accordion" id="information">
-						<el-collapse v-model="activeNames" @change="handleChange">
+						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基本信息" name="1">
 								<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
 									<el-row :gutter="30">
@@ -272,8 +272,7 @@
 				}],*/
                 this.$refs["dataInfo"].resetFields();
             },
-			handleChange(val) {//手风琴开关效果调用
-			},
+			
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selUser = val;

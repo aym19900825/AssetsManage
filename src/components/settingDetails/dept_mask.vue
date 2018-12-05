@@ -17,7 +17,7 @@
 			<div class="mask_content">
 				<el-form status-icon :model="adddeptForm" :label-position="labelPosition" :rules="rules" ref="adddeptForm" label-width="100px" class="demo-adduserForm">
 					<div class="accordion">
-						<el-collapse v-model="activeNames" @change="handleChange">
+						<el-collapse v-model="activeNames">
 							<el-collapse-item title="机构信息" name="1">
 								<el-row :gutter="30">
 									<el-col :span="4" class="pull-right">
@@ -396,8 +396,7 @@
 			getCheckedNodes() {
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
 			},
-			handleChange(val) { //手风琴开关效果调用
-			},
+			
 			//生成随机数函数
 			rand(min,max) {
 		        return Math.floor(Math.random()*(max-min))+min;

@@ -358,6 +358,7 @@
 					RECIP_PERSON: '',//接样人
 					RECIP_DATE: '',//接样日期
 					STATE: '1',//状态
+					VERSION: 0,//版本
 					STATUSDATE: '',//状态日期
 					ENTERBY: '',//录入人
 					ENTERDATE: '',//录入时间

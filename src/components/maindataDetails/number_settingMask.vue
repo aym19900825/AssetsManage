@@ -17,7 +17,7 @@
 			<div class="mask_content">
 				<el-form :model="numbsetForm" :label-position="labelPosition" :rules="rules" ref="numbsetForm" label-width="100px" status-icon>
 					<div class="accordion">
-						<el-collapse v-model="activeNames" @change="handleChange">
+						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基础信息" name="1">
 								<el-row :gutter="20">
 									<el-col :span="4" class="pull-right">
@@ -181,8 +181,7 @@
 			};
 		},
 		methods: {
-			handleChange(val) { //手风琴开关效果调用
-			},
+			
 			//form表单内容清空
 			resetNew(){
                 this.numbsetForm = {

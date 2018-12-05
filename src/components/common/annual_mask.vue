@@ -18,7 +18,7 @@
 				<!-- status-icon 验证后文本框上显示对勾图标 -->
 				<el-form status-icon :model="WORKPLAN" :label-position="labelPosition" :rules="rules" ref="WORKPLAN" label-width="100px">
 					<div class="accordion" id="information">
-						<el-collapse v-model="activeNames" @change="handleChange">
+						<el-collapse v-model="activeNames">
 
 							<el-collapse-item title="基本信息" name="1">
 								<el-row :gutter="20">
@@ -914,8 +914,7 @@
 			basisleadbtn2(){
 				this.dialogVisible2 = true;
 			},
-			handleChange(val) {//手风琴开关效果调用
-			},
+			
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selUser = val;

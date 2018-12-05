@@ -14,7 +14,7 @@
 		<div class="wrapper wrapper-content">
 			<div class="ibox-content">
 				<el-form status-icon ref="safemanage" :model="safemanage" label-width="80px" :label-position="labelPosition">
-					<el-collapse v-model="activeNames" @change="handleChange">
+					<el-collapse v-model="activeNames">
 						<el-collapse-item title="安全管理" name="1">
 							<el-row :gutter="30">
 						 		<el-col :span="12">
@@ -237,9 +237,7 @@ export default {
 				}
 	        });
 		},
-		handleChange(val) {//手风琴开关效果调用
-			console.log(val);
-		},
+		
 		resetForm(formName) {//重置按钮调用
 			this.$refs[formName].resetFields();
 		},

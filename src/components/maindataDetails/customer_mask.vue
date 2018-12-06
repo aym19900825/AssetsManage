@@ -138,7 +138,6 @@
 									</el-button>
 								</div>
 								<el-table :data="CUSTOMER.CUSTOMER_QUALIFICATIONList" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER.CUSTOMER_QUALIFICATIONList', order: 'descending'}">
-
 								    <el-table-column prop="iconOperation" fixed width="50px">
 								      <template slot-scope="scope">
 								      	<i class="el-icon-check" v-show="scope.row.isEditing">

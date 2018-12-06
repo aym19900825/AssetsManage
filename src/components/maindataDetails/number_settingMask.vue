@@ -278,7 +278,7 @@
 			submitForm(numbsetForm) {
 				this.$refs[numbsetForm].validate((valid) => {
 		          if (valid) {
-		          	this.numbsetForm.STATUS=this.numbsetForm.STATUS=="活动" ? '1' : '0';
+		          	this.numbsetForm.STATUS=((this.numbsetForm.STATUS=="1"||this.numbsetForm.STATUS=='活动') ? '1' : '0');
 					var url = '/api/api-apps/app/autokey/saveOrUpdate';
 					this.$axios.post(url, this.numbsetForm).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息

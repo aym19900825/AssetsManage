@@ -415,7 +415,8 @@
 						this.dataInfo.RELEASETIME =  this.$moment(this.dataInfo.RELEASETIME).format("YYYY-MM-DD HH:mm:ss");
 						this.dataInfo.STARTETIME = this.$moment(this.dataInfo.STARTETIME).format("YYYY-MM-DD HH:mm:ss");
 					 if (valid) {
-					this.dataInfo.STATUS=this.dataInfo.STATUS=="活动" ? '1' : '0';
+					this.dataInfo.STATUS=((this.dataInfo.STATUS=="1"||this.dataInfo.STATUS=='活动') ? '1' : '0');
+//					this.dataInfo.STATUS=this.dataInfo.STATUS=="活动" ? '1' : '0';
 					var url = '/api/api-apps/app/inspectionSta/saveOrUpdate';
 					this.$axios.post(url, this.dataInfo).then((res) => {
 						if(res.data.resp_code == 0) {

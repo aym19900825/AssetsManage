@@ -218,6 +218,7 @@
 			},
 			// 这里是修改
 			detail() {
+				console.log(this.CATEGORY.STATUS);
 				this.modify = true;
 				this.addtitle = false;
 				this.modifytitle = true;
@@ -272,7 +273,9 @@
 			submitForm(CATEGORY) {
 				this.$refs[CATEGORY].validate((valid) => {
 		          if (valid) {
-		          	this.CATEGORY.STATUS=this.CATEGORY.STATUS=="活动" ? '1' : '0';
+		          	//console.log(this.CATEGORY.STATUS);
+		          	this.CATEGORY.STATUS=((this.CATEGORY.STATUS=="1"||this.CATEGORY.STATUS=='活动') ? '1' : '0');
+		          	//console.log(this.CATEGORY);
 					var url = '/api/api-apps/app/productType/saveOrUpdate';		
 					this.$axios.post(url,this.CATEGORY).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息

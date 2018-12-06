@@ -371,6 +371,7 @@
 			submitForm(formName) {
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
+						this.testing_projectForm.STATUS=((this.testing_projectForm.STATUS=="1"||this.testing_projectForm.STATUS=='活动') ? '1' : '0');
 						var url = '/api/api-apps/app/inspectionPro/saveOrUpdate';
 						this.testing_projectForm.VERSION = this.testing_projectForm.VERSION + 1;//修改时版本+1
 						this.$axios.post(url, this.testing_projectForm).then((res) => {

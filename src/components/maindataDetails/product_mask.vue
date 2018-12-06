@@ -246,7 +246,7 @@
 			submitForm(PRODUCT) {
 				 this.$refs[PRODUCT].validate((valid) => {
 		          if (valid) {
-		          	this.PRODUCT.STATUS=this.PRODUCT.STATUS=="活动" ? '1' : '0';
+		            this.PRODUCT.STATUS=((this.PRODUCT.STATUS=="1"||this.PRODUCT.STATUS=='活动') ? '1' : '0');
 					var url = '/api/api-apps/app/product/saveOrUpdate';	
 					console.log(this.PRODUCT);
 					

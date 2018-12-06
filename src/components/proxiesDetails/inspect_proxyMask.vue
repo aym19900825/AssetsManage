@@ -26,7 +26,7 @@
 											<template slot="prepend">信息状态</template>
 										</el-input>
 									</el-col>
-									<el-col :span="3" class="pull-right">
+									<el-col :span="5" class="pull-right">
 										<el-input v-model="dataInfo.PROXYNUM" :disabled="true">
 											<template slot="prepend">编号</template>
 										</el-input>

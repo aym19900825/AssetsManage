@@ -389,7 +389,7 @@
 					<div class="el-dialog__footer">
 						<el-form-item>
 							<el-button @click='close'>取消</el-button>
-							<el-button type="primary" class="btn-primarys" @click="submitForm">提交</el-button>
+							<el-button type="primary" class="btn-primarys" @click="submitForm('WORKPLAN')">提交</el-button>
 						</el-form-item>
 					</div>
 				</el-form>
@@ -630,6 +630,27 @@
                     callback();
                 }
             };
+            var validateUnit = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请选择提出单位'));
+                }else {
+                    callback();
+                }
+            };
+            var validateItemtype = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请填写产品类别'));
+                }else {
+                    callback();
+                }
+            };
+            var validateType = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请选择计划类型'));
+                }else {
+                    callback();
+                }
+            };
 			return {
 				
 				showEdit: [], //显示编辑框
@@ -751,6 +772,28 @@
 						trigger: 'blur',
 						validator: validateEmail,
 					}],
+					PROP_UNIT:[{//提出单位 
+   						required: true,
+   						validator: validateUnit,
+   						trigger: 'change' 
+       				}],
+       				ITEMTYPE:[{//产品类别 
+   						required: true,
+   						validator: validateItemtype,
+   						trigger: 'change' 
+       				}],
+       				YEAR: [{//年度
+       					type: 'date', 
+       					required: true, 
+       					message: '请选择年度', 
+       					trigger: 'change' 
+       				}],
+       				REPORTDATE: [{//提报日期 
+       					type: 'date', 
+       					required: true, 
+       					message: '请选择提报日期', 
+       					trigger: 'change' 
+       				}],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -1110,38 +1153,43 @@
 				$(".mask_div").css("top", "0");
 			},
 			// 保存users/saveOrUpdate
-			submitForm() {
-				if(!this.isEditList){
-					this.WORKPLAN.WORLPLANLINEList = this.worlplanlist;
-					var url = '/api/apps-center/app/workplan/saveOrUpdate';
-					this.$axios.post(url, this.WORKPLAN).then((res) => {
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '保存成功',
-								type: 'success'
-							});
-							this.show = false;
+			submitForm(WORKPLAN) {
+				this.$refs[WORKPLAN].validate((valid) => {
+					if (valid) {
+						if(!this.isEditList){
+							this.WORKPLAN.WORLPLANLINEList = this.worlplanlist;
+							var url = '/api/apps-center/app/workplan/saveOrUpdate';
+							this.$axios.post(url, this.WORKPLAN).then((res) => {
+								if(res.data.resp_code == 0) {
+									this.$message({
+										message: '保存成功',
+										type: 'success'
+									});
+									this.show = false;
 
-							this.$emit('request');
+									this.$emit('request');
+								}else{
+									this.$message({
+										message: res.data.message,
+										type: 'error'
+									});
+								}
+							}).catch((err) => {
+								this.$message({
+									message: '网络错误，请重试',
+									type: 'error'
+								});
+							});
 						}else{
 							this.$message({
-								message: res.data.message,
-								type: 'error'
+								message: '您还没有在编辑数据，需保存',
+								type: 'warning'
 							});
 						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
-					});
-				}else{
-					this.$message({
-						message: '您还没有在编辑数据，需保存',
-						type: 'warning'
-					});
-				}
-	  			
+					} else {
+			            return false;
+			        }
+	  			});
 			},
 			loadMore () {
 			   if (this.loadSign) {

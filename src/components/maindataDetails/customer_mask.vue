@@ -155,7 +155,7 @@
 
 								    <el-table-column label="证书编号" sortable width="120px" prop="CERTIFICATE_NUM">
 								      <template slot-scope="scope">
-								      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.CERTIFICATE_NUM" disabled></el-input><span v-show="!scope.row.isEditing">{{scope.row.CERTIFICATE_NUM}}</span>
+								      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.CERTIFICATE_NUM" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.CERTIFICATE_NUM}}</span>
 								      </template>
 								    </el-table-column>
 

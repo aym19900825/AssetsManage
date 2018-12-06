@@ -25,7 +25,12 @@
 											<template slot="prepend">版本</template>
 										</el-input>
 									</el-col>
-									<el-col :span="4" class="pull-right">
+									<el-col :span="4" class="pull-right" v-if="modify">
+											<el-input v-model="adddeptForm.status==1?'活动':'不活动'" :disabled="edit" >
+												<template slot="prepend">信息状态</template>
+											</el-input>
+									</el-col>
+									<el-col :span="4" class="pull-right" v-else>
 											<el-input v-model="adddeptForm.status" :disabled="edit" >
 												<template slot="prepend">信息状态</template>
 											</el-input>
@@ -438,7 +443,6 @@
 			},
 			//修改
 			detail() {
-				this.adddeptForm.status=this.adddeptForm.status=="1"?'活动':'不活动';
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
 	    			this.adddeptForm.changeby = res.data.nickname;
 	    			var date=new Date();

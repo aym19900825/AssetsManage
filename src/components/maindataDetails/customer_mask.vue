@@ -20,9 +20,9 @@
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基本信息" name="1">
 								<el-row :gutter="20" class="pb10">
-									<el-col :span="3" class="pull-right">
+									<el-col :span="5" class="pull-right">
 										<el-input v-model="CUSTOMER.STATUS" :disabled="true">
-											<template slot="prepend">状态</template>
+											<template slot="prepend">信息状态</template>
 										</el-input>
 										<!-- <el-select v-model="CUSTOMER.STATUS" placeholder="请选择状态">
 											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
@@ -417,6 +417,7 @@
 					CHANGEBY:'',
 					CHANGEDATE:'',
 					MEMO:'',
+					CUSTOMER_QUALIFICATIONList:[],
 				},
 //				this.CUSTOMER.CODE =  this.rand(1000,9999);
 				this.addtitle = true;
@@ -463,7 +464,7 @@
 				});
 				this.$axios.get('/api/api-apps/app/customer/' + dataid, {}).then((res) => {
 					this.CUSTOMER = res.data;
-					console.log(this.CUSTOMER.STATUS==1);
+//					console.log(this.CUSTOMER.STATUS==1);
 					this.CUSTOMER.STATUS=this.CUSTOMER.STATUS=="1"? '活动' : '不活动';
 					this.show = true;
 				}).catch((err) => {

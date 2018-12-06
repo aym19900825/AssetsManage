@@ -21,8 +21,8 @@
 					</el-col>
 				</el-row>
 				<!--部门名称 End-->
-					<div style="width:4200px">
-						<div class="pull-left" style="width:500px">
+					<div style="width:9100px">
+						<div class="pull-left" style="width:1100px">
 							<el-card class="box-card" :body-style="{ padding: '10px' }">
 								<div slot="header" class="title clearfix">
 									<span>产品类别</span>
@@ -59,7 +59,7 @@
 									      </template>
 									    </el-table-column>
 
-									  	<el-table-column label="产品类别编号" sortable width="140" prop="NUM">
+									  	<el-table-column label="产品类别编号" sortable width="160" prop="NUM">
 									      <template slot-scope="scope">
 									        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 									        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" disabled></el-input><span class="blue" @click="viewchildRow(scope.row.ID)" v-else="v-else">{{scope.row.NUM}}</span>
@@ -77,7 +77,7 @@
 									      </template>
 									    </el-table-column>
 
-									    <el-table-column label="所属部门" sortable width="200" prop="DEPARTMENT">
+									    <el-table-column label="所属部门" sortable width="160" prop="DEPARTMENT">
 									      <template slot-scope="scope">
 									        <el-form-item :prop="'inspectionList.'+scope.$index + '.DEPARTMENT'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 									        	<el-select v-if="scope.row.isEditing" v-model="scope.row.DEPARTMENT" placeholder="请选择">
@@ -87,7 +87,7 @@
 									      </template>
 									    </el-table-column>
 
-										<el-table-column prop="STATUS" label="信息状态" sortable width="100" :formatter="judge">
+										<el-table-column prop="STATUS" label="信息状态" sortable width="120" :formatter="judge">
 									      <template slot-scope="scope">
 									        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" disabled></el-input><span v-else="v-else">{{scope.row.STATUS}}</span>
 									      </template>
@@ -99,7 +99,7 @@
 									      </template>
 									    </el-table-column> -->
 
-									    <el-table-column prop="CHANGEBY" label="修改人" sortable width="120">
+									    <el-table-column prop="CHANGEBY" label="修改人" sortable width="100">
 									      <template slot-scope="scope">
 									        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHANGEBY" placeholder="请输入内容" disabled></el-input><span v-else="v-else">{{scope.row.CHANGEBY}}</span>
 									      </template>
@@ -140,7 +140,7 @@
 							</el-card>
 							<!-- <productType2 ref="child"></productType2> -->
 						</div>
-						<div class="pull-left" style="width:3500px">
+						<div class="pull-left" style="width:8000px">
 							<product2 ref="product2child"></product2>
 						</div>
 					</div>
@@ -333,7 +333,6 @@
 					}
 					
 					this.productType2Form.inspectionList = newarr;
-					this.$refs.product2child.viewfield_product2(this.productType2Form.inspectionList[0].ID);
 				}).catch((wrong) => {})
 			},
 			handleNodeClick(data) {
@@ -474,7 +473,7 @@
     right: 0px;
 }
 .box-card {
-	width: 500px;
+	width: 1100px;
 }
 
 .el-table .cell {

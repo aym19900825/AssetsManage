@@ -332,7 +332,7 @@
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
 				resourceProps: {
 					children: "subDepts",
-					label: "simplename"
+					label: "fullname"
 				},
 				treeData: [],
 				userData: [],
@@ -354,12 +354,11 @@
 		},
 		methods: {
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
-				console.log();
 				return(
-			<span>
-              <i class={data.iconClass}></i>
-              <span>{node.label}</span>
-            </span>
+					<span>
+		              <i class={data.iconClass}></i>
+		              <span>{node.label}</span>
+		            </span>
 				);
 			},
 			// 点击节点
@@ -384,10 +383,7 @@
 				m.isFolder = !m.isFolder;
 			},
 
-			filterHandler(value, row, column) {
-				const property = column['property'];
-				return row[property] === value;
-			},
+			
 			loadMore() {
 				if(this.loadSign) {
 					this.loadSign = false

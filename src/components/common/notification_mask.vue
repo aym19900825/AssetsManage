@@ -479,7 +479,6 @@
 				activeNames: ['1', '2', '3', '4', '5', '6', '7'], //手风琴数量
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
-			
 				leaddata: [ //导入数据的表格
 					{
 						columnname: 'author',
@@ -634,8 +633,7 @@
 			//点击按钮显示弹窗
 			visible() {
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
-					console.log(1111111111);
-					console.log(res);
+					
 					this.dataInfo.DEPT = res.data.deptName;
 					this.dataInfo.ENTERBY = res.data.nickname;
 					this.dataInfo.ORGID = res.data.deptName

@@ -231,7 +231,6 @@
 
 							<!-- 检测项目与要求 begin -->
 							<el-collapse-item title="检测项目与要求" name="4" class="ml60">
-								<!-- 资质信息 Begin-->
 								<div class="table-func">
 									<el-button type="primary" size="mini" round @click="basisleadbtn2" v-show="isEditList">
 										<i class="icon-search"></i>

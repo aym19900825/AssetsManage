@@ -354,6 +354,7 @@
 				labelPosition: 'top', //表单标题在上方
 				addtitle: true,
 				modifytitle: false,
+				
 				samples_itemlineForm:{//样品子表数据组
 					inspectionList: []
 				},
@@ -553,7 +554,8 @@
 							"ITEMNUM": 'ITE' + index,
 							"ITEM_STEP": '',
 							"SN": '',
-							"STATE": '',
+							"STATE": '1',
+							"STATUS": '1',
 							"ENTERBY": this.currentUser,
 							"ENTERDATE": this.currentDate,
 							"isEditing": true,
@@ -575,12 +577,13 @@
 					var url = '/api/api-apps/app/itemline/saveOrUpdate';
 					var submitData = {
 						"ID":row.ID,
-					    "DOCLINKS": row.DOCLINKS,
-						"DESCRIPTION": row.DESCRIPTION,
-					    "DOC_SIZE": row.DOC_SIZE,
-						"ROUTE": row.ROUTE,
+					    "ITEMNUM": row.ITEMNUM,
+						"ITEM_STEP": row.ITEM_STEP,
+						"SN": row.SN,
+						"STATE": row.STATE,
+						"STATUS": row.STATUS,
 						"ENTERBY": row.ENTERBY,
-					    "ENTERDATE": row.ENTERDATE,
+						"ENTERDATE":row.ENTERDATE,
 					}
 					this.$axios.post(url, submitData).then((res) => {
 						if(res.data.resp_code == 0) {

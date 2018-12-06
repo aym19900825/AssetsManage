@@ -38,6 +38,7 @@ import sample_disposal from '@/components/samples/sample_disposal'//样品管理
 import workorders from '@/components/workorders'//工作任务单
 import devices from '@/components/devices'//设备管理
 import inspection_project from '@/components/inspection_project'//检验/检测项目管理
+import inspection_project2 from '@/components/inspection_project2'//检验/检测项目管理
 import files_search from '@/components/files_search'//文件查询
 import interfaces from '@/components/interfaces'//接口
 import reports from '@/components/reports'//报表管理
@@ -251,6 +252,11 @@ Vue.use(Router)
       path: '/inspection_project',
       name: 'inspection_project',
       component: inspection_project
+    },
+    {//检验/检测项目管理
+      path: '/inspection_project2',
+      name: 'inspection_project2',
+      component: inspection_project2
     },
     {//文件查询
       path: '/files_search',

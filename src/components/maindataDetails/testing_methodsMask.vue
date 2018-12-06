@@ -62,7 +62,7 @@
 									</el-col>
 								</el-row>
 								
-								<el-row :gutter="30">
+								<el-row :gutter="30" v-if="modify">
 									<el-col :span="8">
 										<el-form-item label="录入人机构">
 											<el-input v-model="testingForm.DEPARTMENT" :disabled="true"></el-input>
@@ -286,7 +286,7 @@
 				})
 				this.addtitle = true;
             	this.modifytitle = false;
-            	this.modify=false;
+            	this.modify = false;
             	this.show = !this.show;
 			},
 			detail() { //修改内容时从父组件带过来的
@@ -302,7 +302,7 @@
 				})
 				this.addtitle = false;
 				this.modifytitle = true;
-				this.modify = true;
+				this.modify = false;
 //				this.testingForm.STATUS=this.testingForm.STATUS=="1"?'活动':'不活动';
 				this.show = true;
 			},
@@ -354,9 +354,6 @@
 				this.page.pageSize = 10;
 				this.requestData_doclinks();
 			},
-//			judge(data) {//taxStatus 信息状态布尔值
-//				return data.enabled ? '活动' : '不活动'
-//			},
 
 			//时间格式化  
 			dateFormat(row, column) {

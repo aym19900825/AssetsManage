@@ -57,7 +57,7 @@
 								<el-row :gutter="30">
 									<el-col :span="24">
 										<el-form-item label="文档" prop="DOCLINKS_NUM">
-											<el-input v-model="testing_projectForm.DOCLINKS_NUM" disabled>
+											<el-input v-model="testing_projectForm.DOCLINKS_NUM">
 												<el-button slot="append" icon="icon-search" @click="getCompany"></el-button>
 											</el-input>
 										</el-form-item>
@@ -80,7 +80,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30">
+								<el-row :gutter="30" v-if="modify">
 									<el-col :span="8">
 										<el-form-item label="录入人机构" prop="DEPARTMENT">
 											<el-input v-model="testing_projectForm.DEPARTMENT" :disabled="true"></el-input>
@@ -178,9 +178,11 @@
 				}
 			};
 			var validateQUANTITY = (rule, value, callback) => {
-				if(value === 0.00) {
+				if(value === undefined) {
+					callback(new Error('单价不能为空'));
+				}else if (value === 0.00) {
 					callback(new Error('请填写单价'));
-				} else {
+				}else{
 					callback();
 				}
 			};
@@ -305,7 +307,7 @@
 				this.statusshow2 = false;
 				this.addtitle = true;
 				this.modifytitle = false;
-				this.modify=false;
+				this.modify = false;
 				this.show = true;
 			},
 			
@@ -324,7 +326,7 @@
 				this.statusshow2 = true;
 				this.addtitle = false;
 				this.modifytitle = true;
-				this.modify=true;
+				this.modify = false;
 				this.show = true;
 				
 			},

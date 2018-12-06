@@ -78,7 +78,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30">
+								<el-row :gutter="30" v-if="modify">
 									<el-col :span="8">
 										<el-form-item label="录入人机构" prop="DEPARTMENT">
 											<el-input v-model="dataInfo.DEPARTMENT" :disabled="true"></el-input>
@@ -95,14 +95,14 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30">
+								<el-row :gutter="30" v-if="modify">
 									<el-col :span="8">
-										<el-form-item v-if="modify" label="修改人" prop="CHANGEBY">
+										<el-form-item label="修改人" prop="CHANGEBY">
 											<el-input v-model="dataInfo.CHANGEBY" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item v-if="modify" label="修改时间" prop="CHANGEDATE">
+										<el-form-item label="修改时间" prop="CHANGEDATE">
 											<el-input v-model="dataInfo.CHANGEDATE" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
@@ -346,7 +346,7 @@
 			visible() {
 				this.addtitle = true;
 				this.modifytitle = false;
-				this.modify=false;
+				this.modify = false;
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
 					console.log(res);
 					this.dataInfo.DEPARTMENT=res.data.companyName;
@@ -368,7 +368,7 @@
 			detail(data) {
 				this.addtitle = false;
 				this.modifytitle = true;
-				this.modify=true;
+				this.modify = false;
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
 					this.dataInfo.CHANGEBY=res.data.nickname;
 					var date=new Date();

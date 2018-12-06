@@ -400,7 +400,6 @@
 				this.selUser = val;
 			},
 			requestData(index) {
-				console.log(this.searchList.STATUS);
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -414,7 +413,6 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(res);
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)

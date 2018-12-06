@@ -310,8 +310,8 @@
 				statusshow1:true,
 				statusshow2:false,
 				edit: true, //禁填
-				col_but1: true,
-				col_but2: true,
+				// col_but1: true,
+				// col_but2: true,
 				show: false,
 				isok1: true,
 				isok2: false,
@@ -363,7 +363,6 @@
 		    },
 			//新建行
 			addfield(){
-//				var randnum = this.rand(1000,9999);
 				this.index = this.index + 1;
 				var obj = {
                     STEP:this.index,
@@ -372,7 +371,7 @@
 					ACTIVE_DATE:'',
 					STATUS:'',
 					MEMO:'',
-					isEditing: true,
+					isEditing: true
                 };
                 this.CUSTOMER.CUSTOMER_QUALIFICATIONList.push(obj);
 			},
@@ -380,19 +379,19 @@
 			deleteRow(index, rows) {//Table-操作列中的删除行
 				rows.splice(index, 1);
 			},
-			col_but(col_but) {
-				//alert(col_but)
-				if(col_but == 'col_but1') {
-					this.col_but1 = !this.col_but1;
-					this.down = !this.down,
-					this.up = !this.up
-				}
-				if(col_but == 'col_but2') {
-					this.col_but2 = !this.col_but2;
-					this.down = !this.down,
-					this.up = !this.up
-				}
-			},
+			// col_but(col_but) {
+			// 	//alert(col_but)
+			// 	if(col_but == 'col_but1') {
+			// 		this.col_but1 = !this.col_but1;
+			// 		this.down = !this.down,
+			// 		this.up = !this.up
+			// 	}
+			// 	if(col_but == 'col_but2') {
+			// 		this.col_but2 = !this.col_but2;
+			// 		this.down = !this.down,
+			// 		this.up = !this.up
+			// 	}
+			// },
 			
 			//生成随机数函数
 			rand(min,max) {

@@ -58,7 +58,7 @@
 											<el-input v-model="CATEGORY.NUM" :disabled="edit" placeholder="自动生成"></el-input>
 										</el-form-item>
 									</el-col>
-									<el-col :span="8">
+									<el-col :span="16">
 										<el-form-item label="产品类别名称" prop="TYPE">
 											<el-input v-model="CATEGORY.TYPE"></el-input>
 										</el-form-item>

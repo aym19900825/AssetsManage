@@ -1,6 +1,6 @@
 <template>
-<div style="width:3130px">
-	<div class="pull-left ml20" style="width:500px">
+<div style="width:6260px">
+	<div class="pull-left ml20" style="width:1100px">
 		<el-card class="box-card" :body-style="{ padding: '10px' }">
 			<div slot="header" class="title clearfix">
 				<span>检验/检测项目</span>
@@ -39,15 +39,15 @@
 				      </template>
 				    </el-table-column>
 
-				  	<el-table-column label="所属标准编号" width="120" prop="S_NUM">
+				  	<!-- <el-table-column label="所属标准编号" width="120" prop="S_NUM">
 				      <template slot-scope="scope">
 				        <el-form-item :prop="'inspectionList.'+scope.$index + '.S_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 				        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" disabled></el-input><span v-else="v-else">{{scope.row.S_NUM}}</span>
 						</el-form-item>
 				      </template>
-				    </el-table-column>
+				    </el-table-column> -->
 
-				  	<el-table-column label="检验/检测项目编号" width="140" prop="P_NUM">
+				  	<el-table-column label="检验/检测项目编号" width="160" prop="P_NUM">
 				      <template slot-scope="scope">
 				        <el-form-item :prop="'inspectionList.'+scope.$index + '.P_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 				        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" disabled></el-input><span v-else="v-else">{{scope.row.P_NUM}}</span>
@@ -75,7 +75,7 @@
 				      </template>
 				    </el-table-column>
 
-					<el-table-column prop="STATUS" label="信息状态" sortable width="80" :formatter="judge">
+					<el-table-column prop="STATUS" label="信息状态" sortable width="100" :formatter="judge">
 				      <template slot-scope="scope">
 				         <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" disabled></el-input><span v-else="v-else">{{scope.row.STATUS}}</span>
 				      </template>
@@ -127,19 +127,19 @@
 			</div>
 		</el-card>
 	</div>
-	<div class="pull-left ml20" style="width:500px">
+	<div class="pull-left ml20" style="width:850px">
 		<professionGro ref="professionGrochild"></professionGro>
 	</div>
-	<div class="pull-left ml20" style="width:500px">
+	<div class="pull-left ml20" style="width:1450px">
 		<inspectionMet2 ref="inspectionMet2child"></inspectionMet2>
 	</div>
-	<div class="pull-left ml20" style="width:500px">
+	<div class="pull-left ml20" style="width:850px">
 		<rawDataTem2 ref="rawDataTem2child"></rawDataTem2>
 	</div>
-	<div class="pull-left ml20" style="width:500px">
+	<div class="pull-left ml20" style="width:850px">
 		<inspectionRepTem2 ref="inspectionRepTem2child"></inspectionRepTem2>
 	</div>
-	<div class="pull-left ml20" style="width:500px">
+	<div class="pull-left ml20" style="width:850px">
 		<rawDataAsset ref="rawDataAssetchild"></rawDataAsset>
 	</div>
 </div>

@@ -354,12 +354,11 @@
 		},
 		methods: {
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
-				console.log();
 				return(
-			<span>
-              <i class={data.iconClass}></i>
-              <span>{node.label}</span>
-            </span>
+					<span>
+		              <i class={data.iconClass}></i>
+		              <span>{node.label}</span>
+		            </span>
 				);
 			},
 			// 点击节点
@@ -384,10 +383,7 @@
 				m.isFolder = !m.isFolder;
 			},
 
-			filterHandler(value, row, column) {
-				const property = column['property'];
-				return row[property] === value;
-			},
+			
 			loadMore() {
 				if(this.loadSign) {
 					this.loadSign = false

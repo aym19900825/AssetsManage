@@ -1,6 +1,6 @@
 <template>
-<div style="width:3540px">
-	<div class="pull-left ml20" style="width:500px">
+<div style="width:8000px">
+	<div class="pull-left ml20" style="width:860px">
 		<el-card class="box-card" :body-style="{ padding: '10px' }">
 			<div slot="header" class="title clearfix">
 				<span>产品名称</span>
@@ -39,13 +39,13 @@
 				      </template>
 				    </el-table-column>
 
-				  	<el-table-column label="所属类别编号" width="120" prop="NUM">
+				  	<!-- <el-table-column label="所属类别编号" width="120" prop="NUM">
 				      <template slot-scope="scope">
 				        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 				        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" disabled></el-input><span v-else="v-else">{{scope.row.NUM}}</span>
 						</el-form-item>
 				      </template>
-				    </el-table-column>
+				    </el-table-column> -->
 
 				  	<el-table-column label="产品编号" width="120" prop="PRO_NUM">
 				      <template slot-scope="scope">
@@ -55,7 +55,7 @@
 				      </template>
 				    </el-table-column>
 
-				    <el-table-column label="产品名称" sortable width="200" prop="PRO_NAME">
+				    <el-table-column label="产品名称" sortable prop="PRO_NAME">
 				      <template slot-scope="scope">
 				        <el-form-item :prop="'inspectionList.'+scope.$index + '.PRO_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 				        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PRO_NAME" placeholder="请输入内容">
@@ -65,7 +65,7 @@
 				      </template>
 				    </el-table-column>
 
-					<el-table-column prop="STATUS" label="信息状态" sortable width="80" :formatter="judge">
+					<el-table-column prop="STATUS" label="信息状态" sortable width="120" :formatter="judge">
 				      <template slot-scope="scope">
 				        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" disabled></el-input><span v-else="v-else">{{scope.row.STATUS}}</span>
 				      </template>
@@ -117,7 +117,7 @@
 			</div>
 		</el-card>
 	</div>
-	<div class="pull-left" style="width:3000px">
+	<div class="pull-left" style="width:6400px">
 		<inspectionSta2 ref="inspectionSta2child"></inspectionSta2>
 	</div>
 </div>

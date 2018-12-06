@@ -267,7 +267,6 @@
 				up: false,
 				isShow: false,
 				ismin: true,
-				
 				searchList: { //点击高级搜索后显示的内容
 					N_CODE: '',
 					ITEM_NAME: '',
@@ -283,7 +282,7 @@
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
 				resourceProps: {
 					children: "subDepts",
-					label: "simplename"
+					label: "fullname"
 				},
 				page: { //分页显示
 					currentPage: 1,

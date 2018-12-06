@@ -36,7 +36,7 @@
 			      </template>
 			    </el-table-column>
 
-			  	<el-table-column label="产品类别编号" sortable width="140" prop="NUM">
+			  	<el-table-column label="产品类别编号" sortable width="160" prop="NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" disabled></el-input><span v-else="v-else">{{scope.row.NUM}}</span>
@@ -54,7 +54,7 @@
 			      </template>
 			    </el-table-column>
 
-				<el-table-column prop="STATUS" label="信息状态" sortable width="80" :formatter="judge">
+				<el-table-column prop="STATUS" label="信息状态" sortable width="100" :formatter="judge">
 			      <template slot-scope="scope">
 			        <el-select v-if="scope.row.isEditing" v-model="scope.row.STATUS" placeholder="请选择">
 			          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.label"></el-option>

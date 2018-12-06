@@ -1,6 +1,6 @@
 <template>
-<div style="width:3040px">
-	<div class="pull-left ml20" style="width:500px">
+<div style="width:6400px">
+	<div class="pull-left ml20" style="width:1120px">
 		<el-card class="box-card" :body-style="{ padding: '10px' }">
 			<div slot="header" class="title clearfix">
 				<span>检验/检测标准</span>
@@ -37,15 +37,15 @@
 				      </template>
 				    </el-table-column>
 
-					<el-table-column label="所属产品编号" width="120" prop="PRO_NUM">
+					<!-- <el-table-column label="所属产品编号" width="120" prop="PRO_NUM">
 				      <template slot-scope="scope">
 				        <el-form-item :prop="'inspectionList.'+scope.$index + '.PRO_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 				        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PRO_NUM" disabled></el-input><span v-else="v-else">{{scope.row.PRO_NUM}}</span>
 						</el-form-item>
 				      </template>
-				    </el-table-column>
+				    </el-table-column> -->
 
-				  	<el-table-column label="标准编码" sortable width="140" prop="S_NUM">
+				  	<el-table-column label="标准编码" sortable width="160" prop="S_NUM">
 				      <template slot-scope="scope">
 				        <el-form-item :prop="'inspectionList.'+scope.$index + '.S_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 				        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" disabled></el-input><span v-else="v-else">{{scope.row.S_NUM}}</span>
@@ -63,7 +63,7 @@
 				      </template>
 				    </el-table-column>
 
-					<el-table-column prop="STATUS" label="信息状态" sortable width="80" :formatter="judge">
+					<el-table-column prop="STATUS" label="信息状态" sortable width="100" :formatter="judge">
 				      <template slot-scope="scope">
 				        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" disabled></el-input><span v-else="v-else">{{scope.row.STATUS}}</span>
 				      </template>
@@ -81,7 +81,7 @@
 				      </template>
 				    </el-table-column>
 
-				    <el-table-column prop="CHANGEBY" label="修改人" sortable width="120">
+				    <el-table-column prop="CHANGEBY" label="修改人" sortable width="100">
 				      <template slot-scope="scope">
 				        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHANGEBY" placeholder="请输入内容" disabled></el-input><span v-else="v-else">{{scope.row.CHANGEBY}}</span>
 				      </template>
@@ -120,7 +120,7 @@
 			</div>
 		</el-card>
 	</div>
-	<div class="pull-left" style="width:2500px">
+	<div class="pull-left" style="width:5260px">
 		<inspectionPro2 ref="inspectionPro2child"></inspectionPro2>
 	</div>
 </div>

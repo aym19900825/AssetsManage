@@ -21,11 +21,16 @@
 							<el-collapse-item title="基础信息" name="1">
 								<el-row :gutter="20" class="pb10">
 									<el-col :span="3" class="pull-right">
-										<el-input type="number" v-model.number="testingForm.VERSION" :disabled="true">
+										<el-input  v-model="testingForm.VERSION" :disabled="true">
 											<template slot="prepend">版本</template>
 										</el-input>
 									</el-col>
-									<el-col :span="4" class="pull-right">
+									<el-col :span="4" class="pull-right" v-if="modify">
+										<el-input v-model="testingForm.STATUS=='1'?'活动':'不活动'" :disabled="true">
+											<template slot="prepend">信息状态</template>
+										</el-input>
+									</el-col>
+									<el-col :span="4" class="pull-right" v-else>
 										<el-input v-model="testingForm.STATUS" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
@@ -57,7 +62,7 @@
 									</el-col>
 								</el-row>
 								
-								<el-row :gutter="30">
+								<el-row :gutter="30" v-if="modify">
 									<el-col :span="8">
 										<el-form-item label="录入人机构">
 											<el-input v-model="testingForm.DEPARTMENT" :disabled="true"></el-input>
@@ -167,7 +172,7 @@
 									  </el-table>
 									</el-form>
 									<!-- 表格 Begin-->
-									<el-pagination background class="pull-right pt10 pb10"
+									<el-pagination v-if="modify" background class="pull-right pt10 pb10"
 							            @size-change="sizeChange"
 							            @current-change="currentChange"
 							            :current-page="page.currentPage"
@@ -281,10 +286,11 @@
 				})
 				this.addtitle = true;
             	this.modifytitle = false;
-            	this.modify=false;
+            	this.modify = false;
             	this.show = !this.show;
 			},
 			detail() { //修改内容时从父组件带过来的
+				console.log(this.testingForm);
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
 					this.testingForm.CHANGEBY=res.data.nickname;
 					var date=new Date();
@@ -298,7 +304,7 @@
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.modify = true;
-				this.testingForm.STATUS=this.testingForm.STATUS=="1"?'活动':'不活动';
+//				this.testingForm.STATUS=this.testingForm.STATUS=="1"?'活动':'不活动';
 				this.show = true;
 			},
 
@@ -348,9 +354,6 @@
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
 				this.requestData_doclinks();
-			},
-			judge(data) {//taxStatus 信息状态布尔值
-				return data.enabled ? '活动' : '不活动'
 			},
 
 			//时间格式化  

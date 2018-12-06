@@ -25,8 +25,13 @@
 											<template slot="prepend">版本</template>
 										</el-input>
 									</el-col>
-									<el-col :span="5" class="pull-right">
-										<el-input placeholder="自动生成" v-model="testing_projectForm.STATUS" :disabled="true">
+									<el-col :span="5" class="pull-right" v-if="modify">
+										<el-input v-model="testing_projectForm.STATUS=='1'?'活动':'不活动'" :disabled="true">
+											<template slot="prepend">信息状态</template>
+										</el-input>
+									</el-col>
+									<el-col :span="5" class="pull-right" v-else>
+										<el-input v-model="testing_projectForm.STATUS" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
 									</el-col>
@@ -52,7 +57,7 @@
 								<el-row :gutter="30">
 									<el-col :span="24">
 										<el-form-item label="文档" prop="DOCLINKS_NUM">
-											<el-input v-model="testing_projectForm.DOCLINKS_NUM" disabled>
+											<el-input v-model="testing_projectForm.DOCLINKS_NUM">
 												<el-button slot="append" icon="icon-search" @click="getCompany"></el-button>
 											</el-input>
 										</el-form-item>
@@ -75,7 +80,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30">
+								<el-row :gutter="30" v-if="modify">
 									<el-col :span="8">
 										<el-form-item label="录入人机构" prop="DEPARTMENT">
 											<el-input v-model="testing_projectForm.DEPARTMENT" :disabled="true"></el-input>
@@ -173,9 +178,11 @@
 				}
 			};
 			var validateQUANTITY = (rule, value, callback) => {
-				if(value === 0.00) {
+				if(value === undefined) {
+					callback(new Error('单价不能为空'));
+				}else if (value === 0.00) {
 					callback(new Error('请填写单价'));
-				} else {
+				}else{
 					callback();
 				}
 			};
@@ -300,7 +307,7 @@
 				this.statusshow2 = false;
 				this.addtitle = true;
 				this.modifytitle = false;
-				this.modify=false;
+				this.modify = false;
 				this.show = true;
 			},
 			
@@ -319,7 +326,7 @@
 				this.statusshow2 = true;
 				this.addtitle = false;
 				this.modifytitle = true;
-				this.modify=true;
+				this.modify = true;
 				this.show = true;
 				
 			},
@@ -364,6 +371,7 @@
 			submitForm(formName) {
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
+						this.testing_projectForm.STATUS=((this.testing_projectForm.STATUS=="1"||this.testing_projectForm.STATUS=='活动') ? '1' : '0');
 						var url = '/api/api-apps/app/inspectionPro/saveOrUpdate';
 						this.testing_projectForm.VERSION = this.testing_projectForm.VERSION + 1;//修改时版本+1
 						this.$axios.post(url, this.testing_projectForm).then((res) => {

@@ -258,7 +258,7 @@
 			},
 			//添加用戶
 			openAddMgr() {
-				this.$refs.child.resetNew();
+				
 				this.$refs.child.visible();
 			},
 			//修改用戶
@@ -348,7 +348,7 @@
 			},
 			//上传文件 Begin
 			handleRemove(file, fileList) {
-				console.log(file, fileList);
+				// console.log(file, fileList);
 			},
 			handlePreview(file) {
 				console.log(file);

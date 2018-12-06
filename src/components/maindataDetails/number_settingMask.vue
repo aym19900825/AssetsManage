@@ -20,10 +20,16 @@
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基础信息" name="1">
 								<el-row :gutter="20">
-									<el-col :span="4" class="pull-right">
+									<el-col :span="4" class="pull-right" v-if="modify">
+										<el-input v-model="numbsetForm.STATUS==1?'活动':'不活动'" :disabled="true">
+											<template slot="prepend">信息状态</template>
+										</el-input>
+									</el-col>
+									<el-col :span="4" class="pull-right" v-else>
 										<el-input v-model="numbsetForm.STATUS" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
+									</el-col>
 										<!-- <el-select v-model="numbsetForm.STATUS" placeholder="请选择信息状态">
 											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
@@ -54,7 +60,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30">
+								<el-row :gutter="30" v-if="modify">
 										<el-col :span="8">
 											<el-form-item label="录入人机构">
 												<el-input v-model="numbsetForm.DEPARTMENT" :disabled="true"></el-input>
@@ -212,7 +218,7 @@
 				})
             	this.addtitle = true;
             	this.modifytitle = false;
-            	this.modify=false;
+            	this.modify = false;
             	this.show = !this.show;
             },
             detail() {//修改内容时从父组件带过来的
@@ -228,8 +234,7 @@
 				})
             	this.addtitle = false;
             	this.modifytitle = true;
-            	this.modify=true;
-          	    this.numbsetForm.STATUS=this.numbsetForm.STATUS=="1"?'活动':'不活动';
+            	this.modify = true;
             	this.show = true;
             },
 			//点击关闭按钮
@@ -273,7 +278,7 @@
 			submitForm(numbsetForm) {
 				this.$refs[numbsetForm].validate((valid) => {
 		          if (valid) {
-		          	this.numbsetForm.STATUS=this.numbsetForm.STATUS=="活动" ? '1' : '0';
+		          	this.numbsetForm.STATUS=((this.numbsetForm.STATUS=="1"||this.numbsetForm.STATUS=='活动') ? '1' : '0');
 					var url = '/api/api-apps/app/autokey/saveOrUpdate';
 					this.$axios.post(url, this.numbsetForm).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息

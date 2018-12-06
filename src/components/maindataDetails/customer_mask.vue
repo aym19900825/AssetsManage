@@ -20,9 +20,9 @@
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基本信息" name="1">
 								<el-row :gutter="20" class="pb10">
-									<el-col :span="3" class="pull-right">
+									<el-col :span="5" class="pull-right">
 										<el-input v-model="CUSTOMER.STATUS" :disabled="true">
-											<template slot="prepend">状态</template>
+											<template slot="prepend">信息状态</template>
 										</el-input>
 										<!-- <el-select v-model="CUSTOMER.STATUS" placeholder="请选择状态">
 											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
@@ -35,7 +35,7 @@
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="组织机构代码" prop="CODE">
-											<el-input v-model="CUSTOMER.CODE" :disabled="edit"></el-input>
+											<el-input v-model="CUSTOMER.CODE" :disabled="edit" placeholder="自动生成"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -44,7 +44,13 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="类型" prop="TYPE">
+										<el-form-item label="机构类型" prop="TYPE">
+											<el-select v-model="CUSTOMER.TYPE" placeholder="请选择" style="width: 100%">
+												<el-option v-for="(data,index) in SeleCUST_TYPE" :key="index" :value="data.code" :label="data.name"></el-option>
+												</el-option>
+											</el-select>
+										</el-form-item>
+										<!--<el-form-item label="类型" prop="TYPE">
 											<el-select style="width: 100%;" v-model="CUSTOMER.TYPE" placeholder="类型">
 										      	<el-option label="委托" value="委托">	
 										      	</el-option>
@@ -53,7 +59,7 @@
 										      	<el-option label="两者皆是" value="两者皆是">	
 										      	</el-option>
 										    </el-select>
-										</el-form-item>
+										</el-form-item>-->
 									</el-col>
 								</el-row>
 								<el-row :gutter="30">
@@ -132,7 +138,6 @@
 									</el-button>
 								</div>
 								<el-table :data="CUSTOMER.CUSTOMER_QUALIFICATIONList" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER.CUSTOMER_QUALIFICATIONList', order: 'descending'}">
-
 								    <el-table-column prop="iconOperation" fixed width="50px">
 								      <template slot-scope="scope">
 								      	<i class="el-icon-check" v-show="scope.row.isEditing">
@@ -168,7 +173,7 @@
 								    </el-form-item>
 								      </template>
 								    </el-table-column>
-								    <el-table-column prop="STATUS" label="状态" sortable width="120px">
+								    <el-table-column prop="STATUS" label="信息状态" sortable width="120px">
 								      <template slot-scope="scope">
 								        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.STATUS}}</span>
 								      </template>
@@ -222,13 +227,6 @@
 	export default {
 		name: 'customer_masks',
 		data() {
-			var validateCode = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
             var validateName = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error('必填'));
@@ -306,14 +304,14 @@
 					value: '0',
 					label: '不活动'
 				}],
-
+				Selectsys_depttype:[],//获取机构类型
 				selUser:[],
 				modify:false,
 				statusshow1:true,
 				statusshow2:false,
 				edit: true, //禁填
-				col_but1: true,
-				col_but2: true,
+				// col_but1: true,
+				// col_but2: true,
 				show: false,
 				isok1: true,
 				isok2: false,
@@ -327,61 +325,15 @@
 				selectData:[],
 				fileList: [],
 				CUSTOMER:{
-					ID:'',
-					CODE:'',
-					NAME:'',
-					CONTACT_ADDRESS:'',
-					PHONE:'',
-					PERSON:'',
-					TYPE:'',
-					ZIPCODE:'',
-					STATUS:'',
-//					STATUSDesc:'
-					FAX:'',
-					EMAIL:'',
-					ENTERBY:'',
-					ENTERDATE:'',
-					CHANGEBY:'',
-					CHANGEDATE:'',
-					MEMO:'',
 					CUSTOMER_QUALIFICATIONList:[]
 				},
 				rules: {
-					CODE: [{
-						required: true,
-						trigger: 'blur',
-						validator: validateCode,
-					}],
-					NAME:[{
-						required: true,
-						trigger: 'blur',
-						validator: validateName,
-					}],
-					CONTACT_ADDRESS:[{
-						required: true,
-						trigger: 'blur',
-						validator: validateAddress,
-					}],
-					PERSON:[{
-						required: true,
-						trigger: 'blur',
-						validator: validatePerson,
-					}],
-					PHONE:[{
-						required: true,
-						trigger: 'blur',
-						validator: validatePhone,
-					}],
-					EMAIL:[{
-						required: true,
-						trigger: 'blur',
-						validator: validateEmail,
-					}],
-					ZIPCODE:[{
-						required: true,
-						trigger: 'blur',
-						validator: validateZipcode,
-					}],
+					NAME:[{required: true,trigger: 'blur',validator: validateName}],
+					CONTACT_ADDRESS:[{required: true,trigger: 'blur',validator: validateAddress}],
+					PERSON:[{required: true,trigger: 'blur',validator: validatePerson}],
+					PHONE:[{required: true,trigger: 'blur',validator: validatePhone}],
+					EMAIL:[{required: true,trigger: 'blur',validator: validateEmail}],
+					ZIPCODE:[{required: true,trigger: 'blur',validator: validateZipcode}],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -411,16 +363,15 @@
 		    },
 			//新建行
 			addfield(){
-				var randnum = this.rand(1000,9999);
 				this.index = this.index + 1;
 				var obj = {
                     STEP:this.index,
-                    CERTIFICATE_NUM:randnum,
+                    CERTIFICATE_NUM:'',
 					CERTIFICATE_NAME:'',
 					ACTIVE_DATE:'',
 					STATUS:'',
 					MEMO:'',
-					isEditing: true,
+					isEditing: true
                 };
                 this.CUSTOMER.CUSTOMER_QUALIFICATIONList.push(obj);
 			},
@@ -428,21 +379,27 @@
 			deleteRow(index, rows) {//Table-操作列中的删除行
 				rows.splice(index, 1);
 			},
-			col_but(col_but) {
-				//alert(col_but)
-				if(col_but == 'col_but1') {
-					this.col_but1 = !this.col_but1;
-					this.down = !this.down,
-					this.up = !this.up
-				}
-				if(col_but == 'col_but2') {
-					this.col_but2 = !this.col_but2;
-					this.down = !this.down,
-					this.up = !this.up
-				}
-			},
-			resetNew(){
-				this.CUSTOMER = {
+			// col_but(col_but) {
+			// 	//alert(col_but)
+			// 	if(col_but == 'col_but1') {
+			// 		this.col_but1 = !this.col_but1;
+			// 		this.down = !this.down,
+			// 		this.up = !this.up
+			// 	}
+			// 	if(col_but == 'col_but2') {
+			// 		this.col_but2 = !this.col_but2;
+			// 		this.down = !this.down,
+			// 		this.up = !this.up
+			// 	}
+			// },
+			
+			//生成随机数函数
+			rand(min,max) {
+		        return Math.floor(Math.random()*(max-min))+min;
+		    },
+			//点击添加，修改按钮显示弹窗
+			visible() {
+				this.CUSTOMER={
 					ID:'',
 					CODE:'',
 					NAME:'',
@@ -452,6 +409,7 @@
 					TYPE:'',
 					ZIPCODE:'',
 					STATUS:'活动',
+//					STATUSDesc:'
 					FAX:'',
 					EMAIL:'',
 					ENTERBY:'',
@@ -459,16 +417,9 @@
 					CHANGEBY:'',
 					CHANGEDATE:'',
 					MEMO:'',
-					CUSTOMER_QUALIFICATIONList:[]
-				}
-			},
-			//生成随机数函数
-			rand(min,max) {
-		        return Math.floor(Math.random()*(max-min))+min;
-		    },
-			//点击添加，修改按钮显示弹窗
-			visible() {
-				this.CUSTOMER.CODE =  this.rand(1000,9999);
+					CUSTOMER_QUALIFICATIONList:[],
+				},
+//				this.CUSTOMER.CODE =  this.rand(1000,9999);
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.statusshow1 = true;
@@ -485,6 +436,14 @@
 					});
 				});
 				this.show = true;
+			},
+			getsys_depttype() {//获取机构类型
+				var url = '/api/api-user/dicts/findChildsByCode?code=CUST_TYPE';
+				this.$axios.get(url, {}).then((res) => {
+					this.SeleCUST_TYPE = res.data;
+				}).catch(error => {
+					console.log('请求失败');
+				})
 			},
 			// 这里是修改
 			detail(dataid) {
@@ -504,10 +463,9 @@
 					});
 				});
 				this.$axios.get('/api/api-apps/app/customer/' + dataid, {}).then((res) => {
-					console.log(this.CUSTOMER);
 					this.CUSTOMER = res.data;
-					console.log(this.CUSTOMER.STATUS==1);
-					this.CUSTOMER.STATUS=this.CUSTOMER.STATUS=="1" ? '活动' : '不活动';
+//					console.log(this.CUSTOMER.STATUS==1);
+					this.CUSTOMER.STATUS=this.CUSTOMER.STATUS=="1"? '活动' : '不活动';
 					this.show = true;
 				}).catch((err) => {
 					this.$message({
@@ -533,7 +491,6 @@
 			//点击关闭
 			close() {
 				this.show = false;
-				this.resetNew();
 			},
 			//弹出框放大缩小变换
 			toggle(e) {
@@ -596,6 +553,10 @@
 					})
 					.catch(_ => {});
 			}
+		},
+		mounted() {
+			
+			this.getsys_depttype();//页面打开加载-机构类型
 		}
 	}
 </script>

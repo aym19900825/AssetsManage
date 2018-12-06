@@ -25,7 +25,12 @@
 											<template slot="prepend">版本</template>
 										</el-input>
 									</el-col>
-									<el-col :span="4" class="pull-right">
+									<el-col :span="5" class="pull-right" v-if="modify">
+										<el-input v-model="dataInfo.STATUS=='1'?'活动':'不活动'" :disabled="true">
+											<template slot="prepend">信息状态</template>
+										</el-input>
+									</el-col>
+									<el-col :span="5" class="pull-right" v-else>
 										<el-input v-model="dataInfo.STATUS" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
@@ -73,7 +78,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30">
+								<el-row :gutter="30" v-if="modify">
 									<el-col :span="8">
 										<el-form-item label="录入人机构" prop="DEPARTMENT">
 											<el-input v-model="dataInfo.DEPARTMENT" :disabled="true"></el-input>
@@ -90,14 +95,14 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30">
+								<el-row :gutter="30" v-if="modify">
 									<el-col :span="8">
-										<el-form-item v-if="modify" label="修改人" prop="CHANGEBY">
+										<el-form-item label="修改人" prop="CHANGEBY">
 											<el-input v-model="dataInfo.CHANGEBY" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item v-if="modify" label="修改时间" prop="CHANGEDATE">
+										<el-form-item label="修改时间" prop="CHANGEDATE">
 											<el-input v-model="dataInfo.CHANGEDATE" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
@@ -341,7 +346,7 @@
 			visible() {
 				this.addtitle = true;
 				this.modifytitle = false;
-				this.modify=false;
+				this.modify = false;
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
 					console.log(res);
 					this.dataInfo.DEPARTMENT=res.data.companyName;
@@ -363,11 +368,8 @@
 			detail(data) {
 				this.addtitle = false;
 				this.modifytitle = true;
-				this.modify=true;
-				console.log(data);
-				data.STATUS=data.STATUS=="1" ? '活动' : '不活动';
+				this.modify = true;
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
-					console.log(res);
 					this.dataInfo.CHANGEBY=res.data.nickname;
 					var date=new Date();
 					this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
@@ -413,7 +415,8 @@
 						this.dataInfo.RELEASETIME =  this.$moment(this.dataInfo.RELEASETIME).format("YYYY-MM-DD HH:mm:ss");
 						this.dataInfo.STARTETIME = this.$moment(this.dataInfo.STARTETIME).format("YYYY-MM-DD HH:mm:ss");
 					 if (valid) {
-					this.dataInfo.STATUS=this.dataInfo.STATUS=="活动" ? '1' : '0';
+					this.dataInfo.STATUS=((this.dataInfo.STATUS=="1"||this.dataInfo.STATUS=='活动') ? '1' : '0');
+//					this.dataInfo.STATUS=this.dataInfo.STATUS=="活动" ? '1' : '0';
 					var url = '/api/api-apps/app/inspectionSta/saveOrUpdate';
 					this.$axios.post(url, this.dataInfo).then((res) => {
 						if(res.data.resp_code == 0) {

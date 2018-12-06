@@ -97,11 +97,15 @@
 							<el-table-column label="产品类别名称" width="155" sortable prop="TYPE" v-if="this.checkedName.indexOf('产品类别名称')!=-1">
 							</el-table-column>
 							</el-table-column>
-							<el-table-column label="信息状态" width="155" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
+							<el-table-column label="信息状态" width="155" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
+ 								<template slot-scope="scope" >
+ 									<span v-text="scope.row.STATUS=='1'?'活动':'不活动'"></span>
+ 								</template>
 							</el-table-column>
 							<el-table-column label="版本" width="155" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1">
 							</el-table-column>
 							<el-table-column label="录入人机构" width="155" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('录入人机构')!=-1">
+								
 							</el-table-column>
 							<el-table-column label="录入人" width="155" prop="ENTERBY" sortable v-if="this.checkedName.indexOf('录入人')!=-1">
 							</el-table-column>
@@ -127,7 +131,7 @@
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
-		<categorymask :CATEGORY="aaaData[0]" ref="child" @request="requestData" v-bind:page=page></categorymask>
+		<categorymask :CATEGORY="CATEGORY" ref="child" @request="requestData" v-bind:page=page></categorymask>
 	</div>
 </div>
 </template>
@@ -248,6 +252,7 @@
 					totalCount: 0
 				},
 				aaaData:[],
+				CATEGORY: {}//修改子组件时传递数据
 			}
 		},
 
@@ -288,7 +293,7 @@
 			},
 			//添加用戶
 			openAddMgr() {
-				this.aaaData = {
+				this.CATEGORY = {
 					ID:'',
 					NUM:'',
 					TYPE:'',
@@ -304,22 +309,21 @@
 			},
 			//修改用戶
 			modify() {
-				console.log(this.selUser);
-				this.aaaData = this.selUser;
-				if(this.aaaData.length == 0) {
+				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要修改的用户',
 						type: 'warning'
 					});
 					return;
-				} else if(this.aaaData.length > 1) {
+				} else if(this.selUser.length > 1) {
 					this.$message({
 						message: '不可同时修改多个用户',
 						type: 'warning'
 					});
 					return;
 				} else {
-					this.$refs.child.detail();
+					this.CATEGORY = this.selUser[0]; 
+					this.$refs.child.detail(this.CATEGORY);
 				}
 			},
 			//高级查询
@@ -389,8 +393,7 @@
 				
 			},
 			judge(data) {
-				console.log(data)
-				return data.STATUS == "1" ? '活动' : '不活动'
+			data.STATUS=data.STATUS == "1" ? '活动' : '不活动'
 			},
 			//时间格式化  
 			dateFormat(row, column) {

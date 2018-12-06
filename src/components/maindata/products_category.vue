@@ -323,7 +323,6 @@
 					return;
 				} else {
 					this.CATEGORY = this.selUser[0]; 
-				    console.log(this.CATEGORY);
 					this.$refs.child.detail(this.CATEGORY);
 				}
 			},
@@ -441,7 +440,6 @@
 						}
 					}					
 					this.categoryList = newarr;
-					console.log(this.categoryList);
 				}).catch((wrong) => {})
 			},
 			handleNodeClick(data) {

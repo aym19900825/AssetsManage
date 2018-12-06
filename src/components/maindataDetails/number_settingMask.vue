@@ -20,10 +20,16 @@
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基础信息" name="1">
 								<el-row :gutter="20">
-									<el-col :span="4" class="pull-right">
+									<el-col :span="4" class="pull-right" v-if="modify">
+										<el-input v-model="numbsetForm.STATUS==1?'活动':'不活动'" :disabled="true">
+											<template slot="prepend">信息状态</template>
+										</el-input>
+									</el-col>
+									<el-col :span="4" class="pull-right" v-else>
 										<el-input v-model="numbsetForm.STATUS" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
+									</el-col>
 										<!-- <el-select v-model="numbsetForm.STATUS" placeholder="请选择信息状态">
 											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
@@ -229,7 +235,6 @@
             	this.addtitle = false;
             	this.modifytitle = true;
             	this.modify=true;
-          	    this.numbsetForm.STATUS=this.numbsetForm.STATUS=="1"?'活动':'不活动';
             	this.show = true;
             },
 			//点击关闭按钮

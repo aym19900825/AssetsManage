@@ -25,15 +25,21 @@
 											<template slot="prepend">版本</template>
 										</el-input>
 									</el-col>
-									<el-col :span="5" class="pull-right">
+									<el-col :span="5" class="pull-right" v-if="modify">
+										<el-input v-model="PRODUCT.STATUS=='1'?'活动':'不活动'" :disabled="true">
+											<template slot="prepend">信息状态</template>
+										</el-input>
+									</el-col>
+									<el-col :span="5" class="pull-right" v-else>
 										<el-input v-model="PRODUCT.STATUS" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
+									</el-col>
 										<!-- <el-select v-model="PRODUCT.STATUS" placeholder="请选择信息状态">
 											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
 										</el-select> -->
-									</el-col>
+									
 								</el-row>
 
 								<el-row :gutter="30">
@@ -161,28 +167,7 @@
 			};
 		},
 		methods: {
-			// resetNew(){
-   //              this.PRODUCT = {
-			// 		PRO_NUM:'',
-			// 		PRO_NAME:'',
-			// 		STATUS:'活动',
-			// 		VERSION:'1',
-			// 		ENTERBY:'',
-			// 		ENTERDATE:'',
-			// 		CHANGEBY:'',
-			// 		CHANGEDATE:''
-			// 	};
-			// 	if (this.$refs["PRODUCT"]!==undefined) {
-			// 	    this.$refs["PRODUCT"].resetFields();
-			// 	}
-   //               // this.$refs["PRODUCT"].resetFields();
-   // 		    },
-		 //    resetNew(){
-			// 	if (this.$refs["PRODUCT"]!==undefined) {
-			// 	    this.$refs["PRODUCT"].resetFields();
-			// 	}
-			// },
-			
+		
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selUser = val;
@@ -213,7 +198,7 @@
 		    },
 			//点击按钮显示弹窗
 			visible() {
-				this.PRODUCT.PRO_NUM =  this.rand(1000,9999);
+//				this.PRODUCT.PRO_NUM =  this.rand(1000,9999);
 				this.statusshow1 = true;
 				this.statusshow2 = false;
 				this.addtitle = true;
@@ -243,7 +228,7 @@
 				this.statusshow2 = true;
 				
 				console.log(data.STATUS )
-				data.STATUS=data.STATUS=="1"?'活动':'不活动';
+//				data.STATUS=data.STATUS=="1"?'活动':'不活动';
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
 	    			this.PRODUCT.CHANGEBY = res.data.nickname;
 	    			var date=new Date();
@@ -296,7 +281,6 @@
 			//点击关闭按钮
 			close() {
 				this.show = false;
-				this.resetNew();
 			},
 			toggle(e) {
 				if(this.isok1 == true) {

@@ -25,7 +25,12 @@
 											<template slot="prepend">版本</template>
 										</el-input>
 									</el-col>
-									<el-col :span="4" class="pull-right">
+									<el-col :span="5" class="pull-right" v-if="modify">
+										<el-input v-model="dataInfo.STATUS=='1'?'活动':'不活动'" :disabled="true">
+											<template slot="prepend">信息状态</template>
+										</el-input>
+									</el-col>
+									<el-col :span="5" class="pull-right" v-else>
 										<el-input v-model="dataInfo.STATUS" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
@@ -364,10 +369,7 @@
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.modify=true;
-				console.log(data);
-				data.STATUS=data.STATUS=="1" ? '活动' : '不活动';
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
-					console.log(res);
 					this.dataInfo.CHANGEBY=res.data.nickname;
 					var date=new Date();
 					this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");

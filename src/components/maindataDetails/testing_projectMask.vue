@@ -25,8 +25,13 @@
 											<template slot="prepend">版本</template>
 										</el-input>
 									</el-col>
-									<el-col :span="5" class="pull-right">
-										<el-input placeholder="自动生成" v-model="testing_projectForm.STATUS" :disabled="true">
+									<el-col :span="5" class="pull-right" v-if="modify">
+										<el-input v-model="testing_projectForm.STATUS=='1'?'活动':'不活动'" :disabled="true">
+											<template slot="prepend">信息状态</template>
+										</el-input>
+									</el-col>
+									<el-col :span="5" class="pull-right" v-else>
+										<el-input v-model="testing_projectForm.STATUS" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
 									</el-col>

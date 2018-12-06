@@ -27,7 +27,10 @@
 										</el-input>
 									</el-col>
 									<el-col :span="5" class="pull-right">
-										<el-input v-model="dataInfo.STATE" :disabled="edit">
+										<!--<el-input v-model="dataInfo.STATE" :disabled="edit">
+											<template slot="prepend">信息状态</template>
+										</el-input>-->
+										<el-input v-model="dataInfo.STATUS=='1'?'活动':'不活动'" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
 									</el-col>

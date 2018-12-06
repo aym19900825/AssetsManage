@@ -25,10 +25,26 @@
 											<template slot="prepend">版本</template>
 										</el-input>
 									</el-col>
-									<el-col :span="5" class="pull-right">
+									<el-col :span="5" class="pull-right" v-if="modify">
+										<el-input v-model="CATEGORY.STATUS=='1'?'活动':'不活动'" :disabled="true">
+											<template slot="prepend">信息状态</template>
+										</el-input>
+									</el-col>
+									<el-col :span="5" class="pull-right" v-else>
 										<el-input v-model="CATEGORY.STATUS" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
+									</el-col>
+										<!--<template slot-scope="scope">
+											<label>信息状态</label>
+ 									       <!--  <span v-text="scope.STATUS=='1'?'活动':'不活动'"></span>-->
+ 									       <!--<span>{{scope.STATUS}}</span>
+ 									       	
+ 									       </span>
+ 								        </template>-->
+										
+										
+										
 										<!-- <el-select v-model="CATEGORY.STATUS" placeholder="请选择信息状态">
 											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
@@ -103,8 +119,8 @@
 						ID:'',
 						NUM:'',
 						TYPE:'',
-						STATUS:'活动',
-						VERSION:'1',
+						STATUS:'',
+						VERSION:'',
 						DEPARTMENT:'',
 						ENTERBY:'',
 						ENTERDATE:'',
@@ -202,8 +218,6 @@
 			},
 			// 这里是修改
 			detail() {
-				console.log(this.CATEGORY.STATUS);
-				this.CATEGORY.STATUS=="1"?'活动':'不活动';
 				this.modify = true;
 				this.addtitle = false;
 				this.modifytitle = true;
@@ -219,6 +233,7 @@
 						type: 'error'
 					});
 				});
+				
 				this.show = true;
 			},
 			//点击修订按钮
@@ -257,7 +272,7 @@
 			submitForm(CATEGORY) {
 				this.$refs[CATEGORY].validate((valid) => {
 		          if (valid) {
-		          	this.CATEGORY.STATUS=="活动" ? '1' : '0';
+		          	this.CATEGORY.STATUS=this.CATEGORY.STATUS=="活动" ? '1' : '0';
 					var url = '/api/api-apps/app/productType/saveOrUpdate';		
 					this.$axios.post(url,this.CATEGORY).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息

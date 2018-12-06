@@ -25,7 +25,12 @@
 											<template slot="prepend">版本</template>
 										</el-input>
 									</el-col>
-									<el-col :span="4" class="pull-right">
+									<el-col :span="4" class="pull-right" v-if="modify">
+										<el-input v-model="testingForm.STATUS=='1'?'活动':'不活动'" :disabled="true">
+											<template slot="prepend">信息状态</template>
+										</el-input>
+									</el-col>
+									<el-col :span="4" class="pull-right" v-else>
 										<el-input v-model="testingForm.STATUS" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
@@ -298,7 +303,7 @@
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.modify = true;
-				this.testingForm.STATUS=this.testingForm.STATUS=="1"?'活动':'不活动';
+//				this.testingForm.STATUS=this.testingForm.STATUS=="1"?'活动':'不活动';
 				this.show = true;
 			},
 
@@ -349,9 +354,9 @@
 				this.page.pageSize = 10;
 				this.requestData_doclinks();
 			},
-			judge(data) {//taxStatus 信息状态布尔值
-				return data.enabled ? '活动' : '不活动'
-			},
+//			judge(data) {//taxStatus 信息状态布尔值
+//				return data.enabled ? '活动' : '不活动'
+//			},
 
 			//时间格式化  
 			dateFormat(row, column) {

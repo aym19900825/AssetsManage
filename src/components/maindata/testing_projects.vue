@@ -136,7 +136,7 @@
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
-		<projectmask :testing_projectForm="aaaData[0]" ref="child" @request="requestData" v-bind:page=page ></projectmask>
+		<projectmask :testing_projectForm="testing_projectForm" ref="child" @request="requestData" v-bind:page=page ></projectmask>
 	
 	</div>
 </div>

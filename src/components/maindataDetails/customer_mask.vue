@@ -325,23 +325,6 @@
 				selectData:[],
 				fileList: [],
 				CUSTOMER:{
-					ID:'',
-					CODE:'',
-					NAME:'',
-					CONTACT_ADDRESS:'',
-					PHONE:'',
-					PERSON:'',
-					TYPE:'',
-					ZIPCODE:'',
-					STATUS:'',
-//					STATUSDesc:'
-					FAX:'',
-					EMAIL:'',
-					ENTERBY:'',
-					ENTERDATE:'',
-					CHANGEBY:'',
-					CHANGEDATE:'',
-					MEMO:'',
 					CUSTOMER_QUALIFICATIONList:[]
 				},
 				rules: {
@@ -380,11 +363,11 @@
 		    },
 			//新建行
 			addfield(){
-				var randnum = this.rand(1000,9999);
+//				var randnum = this.rand(1000,9999);
 				this.index = this.index + 1;
 				var obj = {
                     STEP:this.index,
-                    CERTIFICATE_NUM:randnum,
+                    CERTIFICATE_NUM:'',
 					CERTIFICATE_NAME:'',
 					ACTIVE_DATE:'',
 					STATUS:'',
@@ -417,6 +400,25 @@
 		    },
 			//点击添加，修改按钮显示弹窗
 			visible() {
+				this.CUSTOMER={
+					ID:'',
+					CODE:'',
+					NAME:'',
+					CONTACT_ADDRESS:'',
+					PHONE:'',
+					PERSON:'',
+					TYPE:'',
+					ZIPCODE:'',
+					STATUS:'活动',
+//					STATUSDesc:'
+					FAX:'',
+					EMAIL:'',
+					ENTERBY:'',
+					ENTERDATE:'',
+					CHANGEBY:'',
+					CHANGEDATE:'',
+					MEMO:'',
+				},
 //				this.CUSTOMER.CODE =  this.rand(1000,9999);
 				this.addtitle = true;
 				this.modifytitle = false;
@@ -462,7 +464,8 @@
 				});
 				this.$axios.get('/api/api-apps/app/customer/' + dataid, {}).then((res) => {
 					this.CUSTOMER = res.data;
-					this.CUSTOMER.STATUS=="1" ? '活动' : '不活动';
+					console.log(this.CUSTOMER.STATUS==1);
+					this.CUSTOMER.STATUS=this.CUSTOMER.STATUS=="1"? '活动' : '不活动';
 					this.show = true;
 				}).catch((err) => {
 					this.$message({
@@ -519,7 +522,7 @@
 			submitForm(CUSTOMER) {
 				this.$refs[CUSTOMER].validate((valid) => {
 		          if (valid) {
-		          	this.CUSTOMER.STATUS=="活动" ? '1' : '0';
+		          	this.CUSTOMER.STATUS=this.CUSTOMER.STATUS=="活动" ? '1' : '0';
 					var url = '/api/apps-center/app/customer/saveOrUpdate';
 					this.$axios.post(url, this.CUSTOMER).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息

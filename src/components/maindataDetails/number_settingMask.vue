@@ -234,7 +234,7 @@
 				})
             	this.addtitle = false;
             	this.modifytitle = true;
-            	this.modify = false;
+            	this.modify = true;
             	this.show = true;
             },
 			//点击关闭按钮

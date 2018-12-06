@@ -218,7 +218,7 @@
 			},
 			// 这里是修改
 			detail() {
-				console.log(this.CATEGORY.STATUS);
+				console.log(this.CATEGORY);
 				this.modify = true;
 				this.addtitle = false;
 				this.modifytitle = true;

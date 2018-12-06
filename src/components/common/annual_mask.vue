@@ -231,6 +231,7 @@
 
 							<!-- 检测项目与要求 begin -->
 							<el-collapse-item title="检测项目与要求" name="4" class="ml60">
+								<!-- 资质信息 Begin-->
 								<div class="table-func">
 									<el-button type="primary" size="mini" round @click="basisleadbtn2" v-show="isEditList">
 										<i class="icon-search"></i>
@@ -639,13 +640,6 @@
             var validateItemtype = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error('请填写产品类别'));
-                }else {
-                    callback();
-                }
-            };
-            var validateType = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请选择计划类型'));
                 }else {
                     callback();
                 }
@@ -1157,8 +1151,7 @@
 			},
 			// 保存users/saveOrUpdate
 			submitForm(WORKPLAN) {
-				this.$refs[WORKPLAN].validate((valid) => {
-					if (valid) {
+				
 						if(!this.isEditList){
 							this.WORKPLAN.WORLPLANLINEList = this.worlplanlist;
 							var url = '/api/apps-center/app/workplan/saveOrUpdate';
@@ -1189,10 +1182,7 @@
 								type: 'warning'
 							});
 						}
-					} else {
-			            return false;
-			        }
-	  			});
+	  			
 			},
 			loadMore () {
 			   if (this.loadSign) {

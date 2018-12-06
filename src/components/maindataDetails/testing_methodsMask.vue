@@ -302,7 +302,7 @@
 				})
 				this.addtitle = false;
 				this.modifytitle = true;
-				this.modify = false;
+				this.modify = true;
 //				this.testingForm.STATUS=this.testingForm.STATUS=="1"?'活动':'不活动';
 				this.show = true;
 			},

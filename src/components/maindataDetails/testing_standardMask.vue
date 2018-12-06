@@ -368,7 +368,7 @@
 			detail(data) {
 				this.addtitle = false;
 				this.modifytitle = true;
-				this.modify = false;
+				this.modify = true;
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
 					this.dataInfo.CHANGEBY=res.data.nickname;
 					var date=new Date();

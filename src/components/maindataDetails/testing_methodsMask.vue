@@ -172,7 +172,7 @@
 									  </el-table>
 									</el-form>
 									<!-- 表格 Begin-->
-									<el-pagination background class="pull-right pt10 pb10"
+									<!-- <el-pagination background class="pull-right pt10 pb10"
 							            @size-change="sizeChange"
 							            @current-change="currentChange"
 							            :current-page="page.currentPage"
@@ -180,7 +180,7 @@
 							            :page-size="page.pageSize"
 							            layout="total, sizes, prev, pager, next"
 							            :total="page.totalCount">
-							        </el-pagination>
+							        </el-pagination> -->
 								<!-- 文档Table-List End -->
 							</el-collapse-item>
 						</el-collapse>

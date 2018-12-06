@@ -258,7 +258,7 @@
 			},
 			//添加用戶
 			openAddMgr() {
-				this.$refs.child.resetNew();
+				
 				this.$refs.child.visible();
 			},
 			//修改用戶
@@ -361,6 +361,7 @@
 			},
 			//上传文件 End
 			judge(data) {
+				console.log(data);
 				return data.STATUS=="1" ? '活动' : '不活动'
 			},
 			//时间格式化  

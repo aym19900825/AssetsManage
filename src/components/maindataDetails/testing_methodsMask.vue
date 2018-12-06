@@ -21,7 +21,7 @@
 							<el-collapse-item title="基础信息" name="1">
 								<el-row :gutter="20" class="pb10">
 									<el-col :span="3" class="pull-right">
-										<el-input type="number" v-model.number="testingForm.VERSION" :disabled="true">
+										<el-input  v-model="testingForm.VERSION" :disabled="true">
 											<template slot="prepend">版本</template>
 										</el-input>
 									</el-col>
@@ -290,6 +290,7 @@
             	this.show = !this.show;
 			},
 			detail() { //修改内容时从父组件带过来的
+				console.log(this.testingForm);
 				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
 					this.testingForm.CHANGEBY=res.data.nickname;
 					var date=new Date();

@@ -45,10 +45,10 @@
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="产品编号" prop="PRO_NUM">
-											<el-input v-model="PRODUCT.PRO_NUM" :disabled="edit"></el-input>
+											<el-input v-model="PRODUCT.PRO_NUM" :disabled="edit" placeholder="自动生成"></el-input>
 										</el-form-item>
 									</el-col>
-									<el-col :span="8">
+									<el-col :span="16">
 										<el-form-item label="产品名称" prop="PRO_NAME">
 											<el-input v-model="PRODUCT.PRO_NAME"></el-input>
 										</el-form-item>

@@ -15,7 +15,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form status-icon :model="adddeptForm" :label-position="labelPosition" :rules="rules" ref="adddeptForm" label-width="100px" class="demo-adduserForm">
+				<el-form status-icon :model="adddeptForm"  :rules="rules" ref="adddeptForm" label-width="100px" class="demo-adduserForm">
 					<div class="accordion">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="机构信息" name="1">
@@ -312,7 +312,7 @@
 				show: false,
 				isok1: true,
 				isok2: false,
-				labelPosition: 'top',
+//				labelPosition: 'top',
 				addtitle:true,
 				modifytitle:false,
 				modify:false,
@@ -499,14 +499,11 @@
 				$(".mask_div").css("top", "0");
 
 			},
-			judge(data) {
-				return data.enabled ? '活动' : '不活动'
-			},
 			//保存
 			submitForm(adddeptForm) {
 				this.$refs[adddeptForm].validate((valid) => {
 		          if (valid) {
-		          	this.adddeptForm.status=this.adddeptForm.status=="活动" ? '1' : '0';
+		          	this.adddeptForm.status=((this.adddeptForm.status=="1"||this.adddeptForm.status=='活动') ? '1' : '0');
 					var url = '/api/api-user/depts/saveOrUpdate';
 //					this.adddeptForm = {
 //						 "id":this.adddeptForm.id,

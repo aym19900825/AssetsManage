@@ -711,6 +711,6 @@ h6 {
 	line-height: 25px;
 }
 
-
+.el-tabs__content {overflow: visible;}
 
 

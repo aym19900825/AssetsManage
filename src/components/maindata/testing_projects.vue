@@ -93,7 +93,7 @@
 						<el-table :data="projectList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'projectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 							</el-table-column>
-							<el-table-column label="检验/检测项编号" width="150" sortable prop="P_NUM" v-if="this.checkedName.indexOf('检验/检测项编号')!=-1">
+							<el-table-column label="检验/检测项目编号" width="150" sortable prop="P_NUM" v-if="this.checkedName.indexOf('检验/检测项目编号')!=-1">
 							</el-table-column>
 							<el-table-column label="项目名称" width="220" sortable prop="P_NAME" v-if="this.checkedName.indexOf('项目名称')!=-1">
 							</el-table-column>
@@ -169,7 +169,7 @@
 				loadSign:true,//加载
 				commentArr:{},
 				checkedName: [
-					'检验/检测项编号',
+					'检验/检测项目编号',
 					'项目名称',
 					'单价',
 					'人员资质',
@@ -185,7 +185,7 @@
 				],
 				tableHeader: [
 					{
-						label: '检验/检测项编号',
+						label: '检验/检测项目编号',
 						prop: 'P_NUM'
 					},
 					{

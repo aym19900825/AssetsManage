@@ -13,7 +13,7 @@
 					</span>
 				</div>
 			</div>
-			<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
+			<el-form :model="dataInfo"  :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
 				<div class="accordion" id="information">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基本信息" name="1">
@@ -176,7 +176,7 @@
 				down: true,
 				up: false,
 				activeNames: ['1','2'],//手风琴数量
-				labelPosition: 'top', //表格
+//				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				dataList:[{
 					name:'',

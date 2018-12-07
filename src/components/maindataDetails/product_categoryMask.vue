@@ -15,7 +15,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="CATEGORY" inline-message :label-position="labelPosition" :rules="rules" ref="CATEGORY" label-width="100px" class="demo-adduserForm">
+				<el-form :model="CATEGORY" inline-message :rules="rules" ref="CATEGORY" label-width="100px" class="demo-adduserForm">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="产品类别" name="1">
@@ -155,7 +155,7 @@
 				addtitle:true,
 				modifytitle:false,
 				activeNames: ['1'],//手风琴数量
-				labelPosition: 'top', //表格
+//				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				selectData:[],
 				rules: {

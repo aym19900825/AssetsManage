@@ -15,7 +15,7 @@
 				</div>
 			</div>
 			<div class="mask_content"><!-- status-icon验证后小对号 -->
-				<el-form status-icon inline-message :model="CUSTOMER" :label-position="labelPosition" :rules="rules" ref="CUSTOMER" label-width="100px" class="demo-adduserForm">
+				<el-form status-icon inline-message :model="CUSTOMER"  :rules="rules" ref="CUSTOMER" label-width="100px" class="demo-adduserForm">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基本信息" name="1">
@@ -320,7 +320,7 @@
 				addtitle:true,//添加弹出框titile
 				modifytitle:false,//修改弹出框titile
 				activeNames: ['1','2'],//手风琴数量
-				labelPosition: 'top', //表格
+//				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				selectData:[],
 				fileList: [],

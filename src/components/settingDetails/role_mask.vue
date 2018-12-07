@@ -14,7 +14,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="roleList" :label-position="labelPosition" :rules="rules" ref="roleList" label-width="100px" class="demo-user">
+				<el-form :model="roleList"  :rules="rules" ref="roleList" label-width="100px" class="demo-user">
 					<div class="accordion">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基础信息" name="1">
@@ -170,7 +170,7 @@
 				up: false,//控制高级查询划出收起
 				activeNames: ['1'], //手风琴数量
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
-				labelPosition: 'top', //表单label位置
+//				labelPosition: 'top', //表单label位置
 				dialogVisible: false, //对话框
 				roleList:{//表格数据
 					name:'',

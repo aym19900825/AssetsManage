@@ -16,7 +16,7 @@
 			</div>
 			<div class="mask_content">
 
-				<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" status-icon inline-message label-width="100px" class="demo-ruleForm">
+				<el-form :model="dataInfo"  :rules="rules" ref="dataInfo" status-icon inline-message label-width="100px" class="demo-ruleForm">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="委托单位" name="1">
@@ -686,7 +686,7 @@
 				modifytitle: false, //修改弹出框titile
 				modify: false,
 				activeNames: ['1', '2', '3', '4', '5', '6', '7', '8', '9'], //手风琴数量
-				labelPosition: 'top', //表格
+//				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 
 				rules: {

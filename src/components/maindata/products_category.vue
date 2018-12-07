@@ -63,7 +63,7 @@
 									<template slot="prepend">单位名称</template>
 								</el-input>
 							</el-col>
-							<el-col :span="5">
+							<!-- <el-col :span="5">
 								<el-input v-model="searchList.PHONE">
 									<template slot="prepend">联系电话</template>
 								</el-input>
@@ -72,7 +72,7 @@
 								<el-input v-model="searchList.CONTACT_ADDRESS">
 									<template slot="prepend">联系地址</template>
 								</el-input>
-							</el-col>
+							</el-col> -->
 							<el-col :span="2" style="padding-top: 3px">
 								<el-select v-model="searchList.STATUS" placeholder="请选择信息状态">
 									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
@@ -412,8 +412,8 @@
 					limit: this.page.pageSize,
 					TYPE: this.searchList.TYPE,
 					NAME: this.searchList.NAME,
-					PHONE: this.searchList.PHONE,
-					CONTACT_ADDRESS: this.searchList.CONTACT_ADDRESS,
+					// PHONE: this.searchList.PHONE,
+					// CONTACT_ADDRESS: this.searchList.CONTACT_ADDRESS,
 					STATUS: this.searchList.STATUS
 				}
 				var url = '/api/api-apps/app/productType';

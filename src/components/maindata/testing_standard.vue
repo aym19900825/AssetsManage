@@ -472,6 +472,7 @@
 					S_NUM: this.searchList.S_NUM,
 					S_NAME: this.searchList.S_NAME,
 					VERSION: this.searchList.VERSION,
+					S_ENGNAME:this.searchList.S_ENGNAME,
 					DEPARTMENT: this.searchList.DEPARTMENT,
 					RELEASETIME: this.searchList.RELEASETIME,
 					STARTETIME: this.searchList.STARTETIME,

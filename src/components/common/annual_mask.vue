@@ -357,7 +357,7 @@
 							<!-- 文档编号列表 End -->
 
 							<!-- 录入人信息 Begin-->
-							<el-collapse-item title="录入人信息" name="6">
+							<el-collapse-item title="录入人信息" name="6" v-if="modify">
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="录入人" prop="ENTERBY">
@@ -1088,7 +1088,7 @@
 			detail(dataid) {
 				this.addtitle = false;
 				this.modifytitle = true;
-				this.modify = true;
+				this.modify = false;
 
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
 	    			this.WORKPLAN.CHANGEBY = res.data.nickname;

@@ -544,7 +544,7 @@
 					password: [{required: true,trigger: 'blur',message: '必填',}],
 					sex:[{required: true,trigger: 'blur',message: '必填'}],
 					ispermit_authorization:[{required: true,trigger: 'change',message: '必填'}],//授权
-					islogin:[{required: true,trigger: 'change',message: '必填'}],//登陆
+					islogin:[{required: true,message: '必填'}],//登陆
 					mac_address:[{required: true,trigger: 'blur',message: '必填',}],
 					ip_address:[{required: true,trigger: 'blur',message: '必填',}],
 					idnumber:[{required: true,trigger: 'blur',validator: validateIdnumber}],

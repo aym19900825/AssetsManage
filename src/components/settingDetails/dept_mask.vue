@@ -499,14 +499,11 @@
 				$(".mask_div").css("top", "0");
 
 			},
-			judge(data) {
-				return data.enabled ? '活动' : '不活动'
-			},
 			//保存
 			submitForm(adddeptForm) {
 				this.$refs[adddeptForm].validate((valid) => {
 		          if (valid) {
-		          	this.adddeptForm.status=this.adddeptForm.status=="活动" ? '1' : '0';
+		          	this.adddeptForm.status=((this.adddeptForm.status=="1"||this.adddeptForm.status=='活动') ? '1' : '0');
 					var url = '/api/api-user/depts/saveOrUpdate';
 //					this.adddeptForm = {
 //						 "id":this.adddeptForm.id,

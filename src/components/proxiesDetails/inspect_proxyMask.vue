@@ -27,7 +27,7 @@
 										</el-input>
 									</el-col>
 									<el-col :span="5" class="pull-right">
-										<el-input v-model="dataInfo.PROXYNUM" :disabled="true">
+										<el-input v-model="dataInfo.PROXYNUM" placeholder='自动获取' :disabled="true">
 											<template slot="prepend">编号</template>
 										</el-input>
 									</el-col>
@@ -185,22 +185,22 @@
 										</template>
 									</el-table-column>
 						
-									<el-table-column prop="P_NUM" label="检验项目编号" sortable width="120px">
+									<el-table-column prop="S_NUM" label="检验项目编号" sortable width="120px">
 										<template slot-scope="scope">
-											<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.P_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="请输入委托方名称">
+											<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.S_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入委托方名称">
 											</el-input>
-											<span v-else="v-else">{{scope.row.P_NUM}}</span>
+											<span v-else="v-else">{{scope.row.S_NUM}}</span>
 											</el-form-item>
 										</template>
 									</el-table-column>
 
-									<el-table-column prop="P_DESC" label="检验项目描述" sortable>
+									<el-table-column prop="S_DESC" label="检验项目描述" sortable>
 										<template slot-scope="scope">
-											<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.P_DESC'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入委托方名称">
+											<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.S_DESC'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_DESC" placeholder="请输入委托方名称">
 											</el-input>
-											<span v-else="v-else">{{scope.row.P_DESC}}</span>
+											<span v-else="v-else">{{scope.row.S_DESC}}</span>
 											</el-form-item>
 										</template>
 									</el-table-column>
@@ -263,22 +263,22 @@
 										</template>
 									</el-table-column>
 
-									<el-table-column prop="S_NUM" label="标准编号" sortable width="150px">
+									<el-table-column prop="PROXYNUM" label="标准编号" sortable width="150px">
 										<template slot-scope="scope">
-											<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.S_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入委托方名称">
+											<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.PROXYNUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROXYNUM" placeholder="请输入委托方名称">
 											</el-input>
-											<span v-else="v-else">{{scope.row.S_NUM}}</span>
+											<span v-else="v-else">{{scope.row.PROXYNUM}}</span>
 											</el-form-item>
 										</template>
 									</el-table-column>
 
-									<el-table-column prop="S_DESC" label="标准内容" sortable>
+									<el-table-column prop="P_DESC" label="标准内容" sortable>
 										<template slot-scope="scope">
-											<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.S_DESC'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_DESC" placeholder="请输入委托方名称">	
+											<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.P_DESC'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入委托方名称">	
 											</el-input>
-											<span v-else="v-else">{{scope.row.S_DESC}}</span>
+											<span v-else="v-else">{{scope.row.P_DESC}}</span>
 											</el-form-item>
 										</template>
 									</el-table-column>
@@ -635,7 +635,6 @@
 
 			return {
 				dataInfo: {
-					PROXYNUM: '1',
 					STATUS: '草稿',
 					INSPECT_PROXY_PROJECList: [],
 					INSPECT_PROXY_BASISList: [],
@@ -881,7 +880,7 @@
 			// 保存users/saveOrUpdate
 			submitForm(dataInfo) {
 				this.$refs[dataInfo].validate((valid) => {
-			        if (valid) {
+//			        if (valid) {
 					var url = '/api/api-apps/app/inspectPro/saveOrUpdate';
 					console.log(this.dataInfo);
 					this.$axios.post(url, this.dataInfo).then((res) => {
@@ -900,12 +899,12 @@
 							type: 'error'
 						});
 					});
-			          } else {
-			           this.$message({
-							message: '未填写完整，请填写',
-							type: 'error'
-						});
-			          }
+//			          } else {
+//			           this.$message({
+//							message: '未填写完整，请填写',
+//							type: 'error'
+//						});
+//			          }
 				});
 			},
 

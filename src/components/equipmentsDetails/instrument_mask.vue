@@ -18,7 +18,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form status-icon :model="dataInfo" :label-position="labelPosition"  ref="dataInfo" label-width="100px" class="demo-user">
+				<el-form status-icon :model="dataInfo"   ref="dataInfo" label-width="100px" class="demo-user">
 					<div class="accordion">
 						<el-collapse v-model="activeNames">
 							
@@ -370,7 +370,7 @@
 				down: true,
 				up: false,
 				activeNames: ['1', '2','3','4'], //手风琴数量
-				labelPosition: 'top', //表格
+//				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				addtitle: true, //添加弹出框titile
 				modifytitle: false, //修改弹出框titile

@@ -15,7 +15,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="user" :label-position="labelPosition" :rules="rules" ref="user" label-width="100px" class="demo-user">
+				<el-form :model="user"  :rules="rules" ref="user" label-width="100px" class="demo-user">
 					<div class="accordion" id="information">
 						<div class="mask_tab-block">
 							<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
@@ -179,7 +179,7 @@
 				down: true,
 				up: false,
 				useritem: [],
-				labelPosition: 'top', //表格
+//				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				rules: {
 					companyName: [{

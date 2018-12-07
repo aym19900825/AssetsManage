@@ -15,7 +15,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="testingForm" :label-position="labelPosition" :rules="rules" ref="testingForm" label-width="100px" status-icon>
+				<el-form :model="testingForm"  :rules="rules" ref="testingForm" label-width="100px" status-icon>
 					<div class="accordion">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基础信息" name="1">
@@ -246,7 +246,7 @@
 				dialogVisible: false, //对话框
 				edit: true, //禁填
 				activeNames: ['1', '2'], //手风琴数量
-				labelPosition: 'top', //表单标题在上方
+//				labelPosition: 'top', //表单标题在上方
 				addtitle: true,
 				modifytitle: false,
 				testing_filesForm:{//文件文档数据组

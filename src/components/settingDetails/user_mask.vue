@@ -18,7 +18,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form status-icon :model="user" :label-position="labelPosition" :rules="rules" ref="user" label-width="100px" class="demo-user">
+				<el-form status-icon :model="user"  :rules="rules" ref="user" label-width="100px" class="demo-user">
 					<div class="accordion">
 						<el-collapse v-model="activeNames">
 							<!--<el-collapse-item title="基础信息" name="1">
@@ -530,7 +530,7 @@
 				down: true,
 				up: false,
 				activeNames: ['1', '2'], //手风琴数量
-				labelPosition: 'top', //表格
+//				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				addtitle: true, //添加弹出框titile
 				modifytitle: false, //修改弹出框titile
@@ -544,7 +544,7 @@
 					password: [{required: true,trigger: 'blur',message: '必填',}],
 					sex:[{required: true,trigger: 'blur',message: '必填'}],
 					ispermit_authorization:[{required: true,trigger: 'change',message: '必填'}],//授权
-					islogin:[{required: true,trigger: 'change',message: '必填'}],//登陆
+					islogin:[{required: true,message: '必填'}],//登陆
 					mac_address:[{required: true,trigger: 'blur',message: '必填',}],
 					ip_address:[{required: true,trigger: 'blur',message: '必填',}],
 					idnumber:[{required: true,trigger: 'blur',validator: validateIdnumber}],

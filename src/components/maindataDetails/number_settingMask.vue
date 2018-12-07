@@ -15,7 +15,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="numbsetForm" :label-position="labelPosition" :rules="rules" ref="numbsetForm" label-width="100px" status-icon>
+				<el-form :model="numbsetForm"  :rules="rules" ref="numbsetForm" label-width="100px" status-icon>
 					<div class="accordion">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基础信息" name="1">
@@ -168,7 +168,7 @@
 				show: false,
 				isok1: true,
 				isok2: false,
-				labelPosition: 'top',//标题在上方显示
+//				labelPosition: 'top',//标题在上方显示
 				addtitle:true,
 				modifytitle:false,
 				rules:{

@@ -33,7 +33,7 @@
 									</el-col>
 
 								</el-row>
-								<div class="accordion-body tab-content">
+								
 									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="名称" prop="V_NAME">
@@ -84,7 +84,6 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
-								</div>
 							</el-collapse-item>
 							<el-collapse-item title="生产单位" name="2">
 								<div class="accordion-body tab-content">

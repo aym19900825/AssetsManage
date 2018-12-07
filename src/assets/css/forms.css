@@ -71,8 +71,11 @@ textarea:focus,button:focus,
     border-color: #A4ACE7;
 }
 
-
-
+/*开关样式*/
+.el-switch.is-checked .el-switch__core {
+    border-color: #13ce66;
+    background-color: #13ce66;
+}
 
 /*操作按钮样式*/
 [class*=" btn-"],[class^="btn-"] {

@@ -125,7 +125,7 @@
 						</el-col>
 						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
-							<el-table :data="userList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
+							<el-table :data="userList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="工作任务单编号" sortable width="280px" prop="WONUM" v-if="this.checkedName.indexOf('工作任务单编号')!=-1">
@@ -144,8 +144,7 @@
 								</el-table-column>
 								<el-table-column label="委托书编号" sortable  width="120px" prop="PROXYNUM" v-if="this.checkedName.indexOf('委托书编号')!=-1">
 								</el-table-column>
-
-								<el-table-column label="信息状态" sortable width="100px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
+								<el-table-column label="信息状态" sortable width="100px" prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
 								</el-table-column>
 								</el-table-column>
 								<el-table-column label="录入人" sortable width="210px" prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
@@ -245,7 +244,6 @@
 						prop: 'ENTERDATE'
 					}
 				],
-
 				companyId: '',
 				deptId: '',
 				selMenu: [],
@@ -311,6 +309,20 @@
 			test(){
 				console.log(this.checkedName.indexOf('账号')!=-1);
 			},
+			loadMore() {
+				if(this.loadSign) {
+					this.loadSign = false
+					this.page.currentPage++
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							return
+						}
+					setTimeout(() => {
+						this.loadSign = true
+					}, 1000)
+					this.requestData()
+					//console.log('到底了', this.page.currentPage)
+				}
+			},
 			sizeChange(val) {
 		      this.page.pageSize = val;
 		      this.requestData();
@@ -326,63 +338,60 @@
 			},
 			//添加检验工作处理到子组件
 			openAddMgr() {
-				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
-					var date=new Date();
-					var index=this.$moment(date).format("YYYYMMDDHHmmss");
-					this.testingForm = {
-						"STATE": '',//信息状态
-						"STATUS": '1',//状态
-						"WONUM": 'TRO' + index,//工作任务单编号
-						"ITEM_NAME": '',//样品名称
-						"ITEM_MODEL": '',//规格型号
-						"ITEM_TRADEMARK": '',//商标标识
-						"ITEMNUM": '',//样品编号
-						"CHECK_DATE": '',//抽样日期
-						"PRODUCT_DATE": '',//生产日期
-						"ITEMNUM": '',//生产批次
-						"ITEM_STATUS": '',//样品状态
-
-						"PRODUCT_DATE": '',//到站日期
-						"ITEM_QUALITY": '',//样品数量
-						"ITEM_SOURCE": '',//样品来源
-						"CHECK_BASIS": '',//抽样方案/判定依据
-						"TECHNICAL_INFORMATION": '',//委托方提供技术资料
-						"SUB_PROJECT": '',//分包项目
-						"SPECIAL_REQUIREMENTS": '',//特殊要求
-						"ITEM_RECCEPT_USER": '',//样品接收人
-						"ITEM_RECEPT_DATE": '',//样品接收日期
-						"COMPLETE_DATE": '',//完成日期
-						"COMPLETE_MODE": '',//完成方式
-						"ITEM_RECEPT_STATUS": '',//样品接收状态
-						"ITEM_PROFESSIONAL_GROUP": '',//样品承接人(专业组)
-						"UNDERTAKE_DATE": '',//样品承接日期
-						"ITEM_STATUS": '',//样品状态
-						"ITEM_QUALITY": '',//样品返回数量
-						"RETURN_ITEM_USER": '',//样品返回接收人
-						"RETURN_ITEM_DATE": '',//样品返回日期
-						"ITEM_CHECK_STATUS": '',//样品检后状态
-						"ITEM_MANAGEMENT": '',//样品处置
-						"ITEM_UNDERTAKE_USER": '',//样品承接人
-						"PROFESSIONAL": '',//专业技术/质量负责人
-						"CHECK_BASIS": '',//报告模板
-						"SEND": '',//是否寄出
-						"FILE": '',//是否归档
-						"SEND_DATE": '',//寄出时间
-						"FILE_DATE": '',//归档时间
-						"ENTERBY": '',//录入人
-						"ENTERDATE": '',//录入日期
-						"ORG_CODE": '',//录入人机构
-						"CHANGEBY": '',//修改人
-						"CHANGEDATE": '',//修改日期
-					};
-					this.$refs.child.childMethods();
-
-				}).catch((err)=>{
-					this.$message({
-						message:'网络错误，请重试',
-						type:'error'
-					})
-				})
+				this.workorderForm = {
+					PROXYNUM: '',//委托书编号
+					PROXY_VERSION: '',//委托书版本
+					PARENT_NUM: '',//父任务单编号
+					IS_MAIN: '',//是否主任务单？
+					MASTER_INSPECTOR: '',//主检员
+					STATE: '',//信息状态
+					STATUS: '',//状态
+					WONUM: '',//工作任务单编号
+					ITEM_NAME: '',//样品名称
+					ITEM_MODEL: '',//规格型号
+					ITEM_TRADEMARK: '',//商标标识
+					ITEMNUM: '',//样品编号
+					CHECK_DATE: '',//抽样日期
+					PRODUCT_DATE: '',//生产日期/批
+					ITEM_STATU: '',//填写的样品状态
+					ITEM_STATUS: '',//选择的样品状态
+					ARRIVAL_DATE: '',//到站日期
+					ITEM_QUALITY: '',//样品数量
+					ITEM_SOURCE: '',//样品来源
+					CHECK_BASIS: '',//抽样方案/判定依据
+					TECHNICAL_INFORMATION: '',//委托方提供技术资料
+					SUB_PROJECT: '',//分包项目
+					SPECIAL_REQUIREMENTS: '',//特殊要求
+					ITEM_RECCEPT_USER: '',//样品接收人
+					ITEM_RECEPT_DATE: '',//样品接收日期
+					COMPLETE_DATE: '',//完成日期
+					COMPLETE_MODE: '',//完成方式
+					ITEM_RECEPT_STATUS: '',//样品接收状态
+					ITEM_PROFESSIONAL_GROUP: '',//样品承接人(专业组)
+					UNDERTAKE_DATE: '',//样品承接日期
+					ITEM_RETURN_QUALITY: '',//样品返回数量
+					RETURN_ITEM_USER: '',//样品返回接收人
+					RETURN_ITEM_DATE: '',//样品返回日期
+					ITEM_CHECK_STATUS: '',//样品检后状态
+					ITEM_MANAGEMENT: '',//样品处置
+					ITEM_UNDERTAKE_USER: '',//样品承接人
+					PROFESSIONAL: '',//专业技术/质量负责人
+					CHECK_BASIS: '',//报告模板
+					SEND: '',//是否寄出
+					FILE: '',//是否归档
+					SEND_DATE: '',//寄出时间
+					FILE_DATE: '',//归档时间
+					ENTERBY: '',//录入人
+					ENTERDATE: '',//录入日期
+					ORG_CODE: '',//录入人机构
+					CHANGEBY: '',//修改人
+					CHANGEDATE: '',//修改日期
+					WorkorderBasisList: [],//检测依据
+					WorkorderProjectList: [],//检测项目与要求
+					WorkorderPersonList: [],//检验员信息
+					SourceDataTemplateList: [],//原始数据模板
+				};
+				this.$refs.child.childMethods();
 			},
 			//修改检验工作处理到子组件
 			modify() {
@@ -395,12 +404,13 @@
 					return;
 				} else if(this.aaaData.length > 1) {
 					this.$message({
-						message: '不可同时修改多个用户',
+						message: '不可同时修改多条数据',
 						type: 'warning'
 					});
 					return;
 				} else {
-					this.$refs.child.detail(this.selMenu[0].ID);
+					this.workorderForm = this.selMenu[0]; 
+					this.$refs.child.detail();
 				}
 			},
 			//高级查询
@@ -458,11 +468,9 @@
 			},
 			judge(data) {
 				//taxStatus 布尔值
-				return data.enabled ? '启用' : '冻结'
+				return data.enabled ? '活动' : '不活动'
 			},
-			sexName(data) {
-				return data.sex ? '男' : '女'
-			},
+			
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -472,12 +480,7 @@
 				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
 			},
-			insert() {
-				this.users.push(this.user)
-			},
-			remove(index) {
-				this.users.splice(index, 1)
-			},
+			
 			SelChange(val) {
 				this.selMenu = val;
 			},
@@ -517,7 +520,7 @@
 							}
 						}
 					}
-					this.methodsList = newarr;
+					this.userList = newarr;
 				}).catch((wrong) => {})
 			},
 			//机构树

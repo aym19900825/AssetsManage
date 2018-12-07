@@ -199,7 +199,7 @@
 			visible() {
 //				this.CATEGORY.NUM =  this.rand(1000,9999);
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
-					this.CATEGORY.DEPARTMENT = res.data.companyName;
+					this.CATEGORY.DEPARTMENT = res.data.deptName;
 	    			this.CATEGORY.ENTERBY = res.data.nickname;
 	    			var date = new Date();
 					this.CATEGORY.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");

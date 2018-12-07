@@ -172,7 +172,7 @@
 									  </el-table>
 									</el-form>
 									<!-- 表格 Begin-->
-									<el-pagination background class="pull-right pt10 pb10"
+									<el-pagination v-if="modify" background class="pull-right pt10 pb10"
 							            @size-change="sizeChange"
 							            @current-change="currentChange"
 							            :current-page="page.currentPage"
@@ -514,7 +514,7 @@
 			submitForm(formName) {
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
-						this.testingForm.STATUS=((this.testingForm.STATUS=="1"||this.testingForm.STATUS=='活动') ? '1' : '0');
+					    this.testingForm.STATUS=this.testingForm.STATUS=="活动" ? '1' : '0';
 						var url = '/api/api-apps/app/inspectionMet/saveOrUpdate';
 						this.testingForm.VERSION = this.testingForm.VERSION + 1;//修改时版本+1
 						this.$axios.post(url, this.testingForm).then((res) => {

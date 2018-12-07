@@ -38,15 +38,15 @@
 			      </template>
 			    </el-table-column>
 
-			  	<el-table-column label="所属项目编号" width="120" prop="P_NUM">
+			  	<!-- <el-table-column label="所属项目编号" width="120" prop="P_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.P_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" disabled></el-input><span v-else="v-else">{{scope.row.P_NUM}}</span>
 					</el-form-item>
 			      </template>
-			    </el-table-column>
+			    </el-table-column> -->
 
-			  	<el-table-column label="专业组编号" width="140" prop="PROF_NUM">
+			  	<el-table-column label="专业组编号" width="160" prop="PROF_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.PROF_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROF_NUM" disabled></el-input><span v-else="v-else">{{scope.row.PROF_NUM}}</span>
@@ -64,7 +64,7 @@
 			      </template>
 			    </el-table-column>
 
-				<el-table-column prop="STATUS" label="信息状态" sortable width="80" :formatter="judge">
+				<el-table-column prop="STATUS" label="信息状态" sortable width="100" :formatter="judge">
 			      <template slot-scope="scope">
 			         <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" disabled></el-input><span v-else="v-else">{{scope.row.STATUS}}</span>
 			      </template>

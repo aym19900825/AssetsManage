@@ -86,7 +86,7 @@
 				</div>
 			</div>
 			<!--右侧内容显示 End-->
-			<deptmask :adddeptForm="adddeptForm" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></deptmask>
+			<deptmask :adddeptForm="adddeptForm" ref="child" @request="requestData" @reset="reset" @requestTree="getKey" v-bind:page=page></deptmask>
 		</div>
 	</div>
 </template>
@@ -157,8 +157,6 @@
 					totalCount: 0
 				},
 				total:0,
-				'启用': true,
-				'冻结': false,
 				deptList: [],
 				selMenu:[],
 				search: false,
@@ -184,6 +182,32 @@
 			}
 		},
 		methods: {
+			//清空
+			reset(){
+				this.adddeptForm = {
+						"version":'1',
+						"status":'活动',
+						"step":'',
+						"code":'',
+						"fullname":'',
+						"parent":'',
+						"org_range":'2',
+						"type":'',
+						"inactive":'否',
+						"address":'',
+						"zipcode":'',
+						"leader":'',
+						"telephone":'',
+						"fax":'',
+						"email":'',
+						"tips":'',
+						"pid":'',
+						"enterby":'',
+						"enterdate":'',
+						"changeby":'',
+						"changedate":''
+					};
+			},
 			changeCheckedName(value){
 				this.checkedName=value
 				let str=value.toString()
@@ -236,38 +260,9 @@
 			},
 			//添加
 			openAddMgr() {
-				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					this.adddeptForm = {
-						"version":'1',
-						"status":'活动',
-						"step":'',
-						"code":'',
-						"fullname":'',
-						"parent":'',
-						"org_range":'2',
-						"type":'',
-						"inactive":'否',
-						"address":'',
-						"zipcode":'',
-						"leader":'',
-						"telephone":'',
-						"fax":'',
-						"email":'',
-						"tips":'',
-						"pid":'',
-						"enterby":'',
-						"enterdate":'',
-						"changeby":'',
-						"changedate":''
-					};
-					this.$refs.child.childMethods();
+				this.reset();
+				this.$refs.child.visible();
 
-				}).catch((err)=>{
-					this.$message({
-						message:'网络错误，请重试',
-						type:'error'
-					})
-				})
 			},
 			//修改
 			modify() {
@@ -338,10 +333,7 @@
 					}
 				}
 			},
-			judge(data) {
-				//taxStatus 布尔值
-				return data.enabled ? '启用' : '冻结'
-			},
+			
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];

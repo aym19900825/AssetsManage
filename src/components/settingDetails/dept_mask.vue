@@ -15,22 +15,22 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form status-icon :model="adddeptForm"  :rules="rules" ref="adddeptForm" label-width="100px" class="demo-adduserForm">
+				<el-form status-icon :model="adddeptForm"  :rules="rules" ref="adddeptForm" label-width="100px" id="demo-adduserForm">
 					<div class="accordion">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="机构信息" name="1">
 								<el-row :gutter="30">
-									<el-col :span="4" class="pull-right">
+									<el-col :span="4" class="pull-right pb10" >
 										<el-input v-model="adddeptForm.version" :disabled="edit">
 											<template slot="prepend">版本</template>
 										</el-input>
 									</el-col>
-									<el-col :span="4" class="pull-right" v-if="modify">
+									<el-col :span="4" class="pull-right" v-if="modify" style="display: none;">
 											<el-input v-model="adddeptForm.status==1?'活动':'不活动'" :disabled="edit" >
 												<template slot="prepend">信息状态</template>
 											</el-input>
 									</el-col>
-									<el-col :span="4" class="pull-right" v-else>
+									<el-col :span="4" class="pull-right" v-else style="display: none;">
 											<el-input v-model="adddeptForm.status" :disabled="edit" >
 												<template slot="prepend">信息状态</template>
 											</el-input>
@@ -39,7 +39,7 @@
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="机构序号" prop="step">
-											<el-input v-model="adddeptForm.step">
+											<el-input  v-model="adddeptForm.step">
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -162,11 +162,11 @@
 						</el-collapse>
 					</div>
 					<div class="el-dialog__footer">
-						<el-form-item>
-							<!-- <el-button @click="cancelForm">取消</el-button> -->
-							<el-button type="primary" class="btn-primarys" @click="submitForm('adddeptForm')">提交</el-button>
+						    <el-button @click="close">取消</el-button> 
+						    <el-button type="primary" @click="saveAndUpdate('adddeptForm')">保存</el-button>
+						    <el-button type="success" @click="saveAndSubmit('adddeptForm')">提交并保存</el-button>
+						<!--	<el-button type="primary" class="btn-primarys" @click="submitForm('adddeptForm')">提交</el-button>-->
 							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion">修订</el-button>
-						</el-form-item>
 					</div>
 				</el-form>
 			</div>
@@ -194,15 +194,15 @@
 				type: Object,
 				default: function(){
 					return {
-						version:'1',
-						status:'1',
+						version:'',
+						status:'',
 						step:'',
 						code:'',
 						fullname:'',
 						parent:'',
 						org_range:'',
 						type:'',
-						inactive:'否',
+						inactive:'',
 						address:'',
 						zipcode:'',
 						leader:'',
@@ -367,6 +367,7 @@
 			};
 		},
 		methods: {
+			
 			//点击修订按钮
 			modifyversion(){
 				this.adddeptForm.version = this.adddeptForm.version + 1;
@@ -421,8 +422,7 @@
 				})
 			},
 			
-			childMethods() {//点击父组件按钮显示弹窗
-				
+			visible() {//点击父组件按钮显示弹窗
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
 	     			this.adddeptForm.enterby = res.data.nickname;
 	     			var date=new Date();
@@ -466,13 +466,6 @@
 			close() {
 				this.show = false;
 			},
-			cancelForm(){
-				this.show = false;
-				this.reset();
-			},
-			reset() {
-				this.show = false;
-			},
 			toggle(e) {
 				if(this.isok1 == true) {
 					this.maxDialog();
@@ -500,7 +493,7 @@
 
 			},
 			//保存
-			submitForm(adddeptForm) {
+			save(adddeptForm) {
 				this.$refs[adddeptForm].validate((valid) => {
 		          if (valid) {
 		          	this.adddeptForm.status=((this.adddeptForm.status=="1"||this.adddeptForm.status=='活动') ? '1' : '0');
@@ -523,9 +516,9 @@
 								message: '保存成功',
 								type: 'success'
 							});
-							this.show = false;
-							//重新加载数据
-							this.$emit('request')
+//							this.show = false;
+//							//重新加载数据
+//							this.$emit('request')
 						}
 					}).catch((err) => {
 						this.$message({
@@ -538,6 +531,16 @@
 		          }
 		        });
 				
+			},
+			saveAndUpdate(adddeptForm){
+				this.save(adddeptForm);
+				this.show = false;
+				this.$emit('request');
+			},
+			saveAndSubmit(adddeptForm){
+				this.save(adddeptForm);
+				this.$emit('reset');
+				this.$emit('request');
 			},
 			handleClose(done) {
 				this.$confirm('确认关闭？')
@@ -556,6 +559,7 @@
 
 <style>
 	@import '../../assets/css/mask-modules.css';
+	
 	/*.el-form-item__error {
 		top: 18%;
 	    left: 5px;

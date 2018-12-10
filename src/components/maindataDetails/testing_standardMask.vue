@@ -35,16 +35,15 @@
 											<template slot="prepend">信息状态</template>
 										</el-input>
 									</el-col>
-									 <el-col :span="6" class="pull-right">
+									 <!-- <el-col :span="6" class="pull-right">
 										<el-input v-model="dataInfo.S_NUM" :disabled="true">
 											<template slot="prepend">产品编号</template>
 										</el-input>
-									</el-col> 
+									</el-col> --> 
 								</el-row>
-
 								<el-row :gutter="30">
 									<el-col :span="8">
-										<el-form-item label="标准编码" prop="S_NUM">
+										<el-form-item label="标准编号" prop="S_NUM">
 											<el-input v-model="dataInfo.S_NUM" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>

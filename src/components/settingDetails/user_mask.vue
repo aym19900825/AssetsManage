@@ -147,7 +147,6 @@
   											</el-radio-group>
 										</el-form-item>
 									</el-col>
-									
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="8">

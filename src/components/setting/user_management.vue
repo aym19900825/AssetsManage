@@ -100,7 +100,7 @@
 								</div>
 								<div class="left_treebg" :style="{height: fullHeight}">
 									<div class="p15" v-if="ismin">
-										<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all check-on-click-node="true" :indent="22" :render-content="renderContent"  :props="resourceProps" @node-click="handleNodeClick">
+										<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all  :indent="22" :render-content="renderContent"  :props="resourceProps" @node-click="handleNodeClick">
 										</el-tree>
 									</div>
 								</div>
@@ -297,27 +297,6 @@
 			},
 			//添加用戶
 			openAddMgr() {
-				this.user = {
-					companyName: '',
-					deptName: '',
-					username: '',
-					password: '',
-					nickname: '',
-					birthday: '',
-					sexName: '',
-					idnumber: '',
-					entrytime: '',
-					roleId: [],
-					roles: [],
-					worknumber: '',
-					phone: '',
-					email: '',
-					address: '',
-					tips: '',
-					status: '活动',
-					traings: [],
-					qualifications: [],
-				};
 				this.$refs.child.visible();
 			},
 			//修改用戶

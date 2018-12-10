@@ -13,24 +13,50 @@
 					</span>
 				</div>
 			</div>
+			<div class="mask_content">
 			<el-form :model="dataInfo"  :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
 				<div class="accordion" id="information">
 					<el-collapse v-model="activeNames">
 						<el-collapse-item title="基本信息" name="1">
-							<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
-								<el-row :gutter="30">
-									<el-col :span="8">
-										<el-form-item label="表名" prop="name">
-											<el-input v-model="dataInfo.name"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="描述" prop="description">
-											<el-input v-model="dataInfo.description"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-							</div>
+							<el-row :gutter="30">
+								<el-col :span="8">
+									<el-form-item label="表名" prop="name">
+										<el-input v-model="dataInfo.name"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="8">
+									<el-form-item label="描述" prop="description">
+										<el-input v-model="dataInfo.description"></el-input>
+									</el-form-item>
+								</el-col>
+							</el-row>
+						</el-collapse-item>
+						<el-collapse-item title="基本信息" name="1">
+							<el-row :gutter="30">
+								<el-col :span="8">
+									<el-form-item label="表名" prop="name">
+										<el-input v-model="dataInfo.name"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="8">
+									<el-form-item label="描述" prop="description">
+										<el-input v-model="dataInfo.description"></el-input>
+									</el-form-item>
+								</el-col>
+							</el-row>
+						</el-collapse-item><el-collapse-item title="基本信息" name="1">
+							<el-row :gutter="30">
+								<el-col :span="8">
+									<el-form-item label="表名" prop="name">
+										<el-input v-model="dataInfo.name"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="8">
+									<el-form-item label="描述" prop="description">
+										<el-input v-model="dataInfo.description"></el-input>
+									</el-form-item>
+								</el-col>
+							</el-row>
 						</el-collapse-item>
 						<el-collapse-item title="字段列表" name="2">
 							<!-- 字段列表 Begin-->
@@ -53,12 +79,12 @@
 								      	</i>
 								    </template>
 							    </el-table-column>
-							    <el-table-column label="字段名" sortable width="100px" prop="columnname">
+							    <el-table-column label="字段名" sortable width="180px" prop="columnname">
 								    <template slot-scope="scope">
 								      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.columnname" disabled></el-input><span v-show="!scope.row.isEditing" >{{scope.row.columnname}}</span>
 								    </template>
 							    </el-table-column>
-							    <el-table-column label="字段描述" sortable width="120px" prop="description">
+							    <el-table-column label="字段描述" sortable width="180px" prop="description">
 								    <template slot-scope="scope">
 								      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.description" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.description}}</span>
 								    </template>
@@ -82,7 +108,7 @@
 								       	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.length" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.length}}</span>
 								    </template>
 							    </el-table-column>
-							    <el-table-column prop="retain" label="小数点位数" sortable width="80px">
+							    <el-table-column prop="retain" label="小数点位数" sortable width="180px">
 								    <template slot-scope="scope">
 								        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.retain" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.retain}}</span>
 								    </template>
@@ -104,6 +130,7 @@
 					<el-button type="primary" @click="submitForm('dataInfo')">提交</el-button>
 				</div>
 			</el-form>
+		</div>
 		</div>
 		<!-- 弹出 -->
 		<el-dialog title="添加数据库表" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">

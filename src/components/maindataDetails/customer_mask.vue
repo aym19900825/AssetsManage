@@ -44,7 +44,7 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="机构类型" prop="TYPE">
+										<el-form-item label="类型" prop="TYPE">
 											<el-select v-model="CUSTOMER.TYPE" placeholder="请选择" style="width: 100%">
 												<el-option v-for="(data,index) in SeleCUST_TYPE" :key="index" :value="data.code" :label="data.name"></el-option>
 												</el-option>

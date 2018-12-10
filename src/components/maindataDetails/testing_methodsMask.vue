@@ -55,9 +55,10 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="类别" prop="M_TYPE">
-											<el-select v-model="testingForm.M_TYPE" placeholder="请选择类别" style="width: 100%;">
+											<!-- <el-select v-model="testingForm.M_TYPE" placeholder="请选择类别" style="width: 100%;">
 												<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
-											</el-select>
+											</el-select> -->
+											<el-input v-model="testingForm.M_TYPE" placeholder="请输入类别"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>

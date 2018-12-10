@@ -200,6 +200,7 @@
 </template>
 
 <script>
+	import Config from '../../config.js'
 	export default {
 		name: 'testing_mask',
 		props: {
@@ -227,6 +228,7 @@
 		},
 		data() {
 			return {
+				basic_url: Config.dev_url,
 				value: '',
 				options: [{
 					value: '1',
@@ -273,7 +275,7 @@
 			
 			
 			childMethods() {//添加内容时从父组件带过来的
-				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.testingForm.DEPARTMENT=res.data.deptName;
 					this.testingForm.ENTERBY=res.data.nickname;
 					var date=new Date();
@@ -290,8 +292,7 @@
             	this.show = !this.show;
 			},
 			detail() { //修改内容时从父组件带过来的
-				console.log(this.testingForm);
-				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.testingForm.CHANGEBY=res.data.nickname;
 					var date=new Date();
 					this.testingForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
@@ -315,7 +316,7 @@
 			},
 			
 			modifyversion (row) {//点击修改后给当前创建人和创建日期赋值
-				 this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+				 this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					row.CHANGEBY=res.data.nickname;
 					var date=new Date();
 					row.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
@@ -367,7 +368,7 @@
 
 			//检验/检测方法类别
 			getType() {
-				var url = '/api/api-user/dicts/findChildsByCode?code=type';
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=type';
 				this.$axios.get(url, {}).then((res) => {
 					this.selectData = res.data;
 				}).catch(error => {
@@ -386,7 +387,7 @@
 					}
 				}
 				if (isEditingflag==false){
-                	this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+                	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
                 		var currentUser, currentDate
 						this.currentUser=res.data.nickname;
 						var date=new Date();
@@ -415,7 +416,7 @@
 			saveRow (row) {//Table-操作列中的保存行
 				this.$refs['testing_filesForm'].validate((valid) => {
 		          if (valid) {
-					var url = '/api/api-apps/app/doclinks/saveOrUpdate';
+					var url = this.basic_url + '/api-apps/app/doclinks/saveOrUpdate';
 					var submitData = {
 						"ID":row.ID,
 					    "DOCLINKS": row.DOCLINKS,
@@ -451,7 +452,7 @@
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                 }).then(({ value }) => {
-                	var url = '/api/api-apps/app/doclinks/' + row.ID;
+                	var url = this.basic_url + '/api-apps/app/doclinks/' + row.ID;
                     this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 					//resp_code == 0 是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -515,7 +516,7 @@
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
 					    this.testingForm.STATUS=this.testingForm.STATUS=="活动" ? '1' : '0';
-						var url = '/api/api-apps/app/inspectionMet/saveOrUpdate';
+						var url = this.basic_url + '/api-apps/app/inspectionMet/saveOrUpdate';
 						this.testingForm.VERSION = this.testingForm.VERSION + 1;//修改时版本+1
 						this.$axios.post(url, this.testingForm).then((res) => {
 							//resp_code == 0是后台返回的请求成功的信息

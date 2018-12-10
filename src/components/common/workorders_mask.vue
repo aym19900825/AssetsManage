@@ -528,6 +528,7 @@
 </template>
 
 <script>
+	import Config from '../../config.js'
 	export default {
 		name: 'masks',
 		props: {
@@ -607,6 +608,7 @@
 				// 	label: '不活动'
 				// }],
 				// loadSign:true,//加载
+				basic_url: Config.dev_url,
 				commentArr:{},
 				selMenu:[],
 				show: false,
@@ -708,7 +710,7 @@
 		methods: {
    			//获取样品信息-样品状态
 			getITEM_STATUS() {
-				var url = '/api/api-user/dicts/findChildsByCode?code=ITEM_STATUS';
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=ITEM_STATUS';
 				this.$axios.get(url, {}).then((res) => {
 					this.Select_ITEM_STATUS = res.data;
 				}).catch(error => {
@@ -718,7 +720,7 @@
 
 			//获取样品信息-样品来源
 			getITEM_SOURCE() {
-				var url = '/api/api-user/dicts/findChildsByCode?code=ITEM_SOURCE';
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=ITEM_SOURCE';
 				this.$axios.get(url, {}).then((res) => {
 					this.Select_ITEM_SOURCE = res.data;
 				}).catch(error => {
@@ -728,7 +730,7 @@
 
 			//获取样品信息-完成方式
 			getCOMPLETE_MODE() {
-				var url = '/api/api-user/dicts/findChildsByCode?code=COMPLETE_MODE';
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=COMPLETE_MODE';
 				this.$axios.get(url, {}).then((res) => {
 					this.Select_COMPLETE_MODE = res.data;
 				}).catch(error => {
@@ -738,7 +740,7 @@
 
 			//获取样品信息-样品接收状态
 			getITEM_RECEPT_STATUS() {
-				var url = '/api/api-user/dicts/findChildsByCode?code=ITEM_RECEPT_STATUS';
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=ITEM_RECEPT_STATUS';
 				this.$axios.get(url, {}).then((res) => {
 					this.Select_ITEM_RECEPT_STATUS = res.data;
 				}).catch(error => {
@@ -750,7 +752,7 @@
 			getselectData() {
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
-				var url = '/api/api-user/dicts/findChildsByCode?code=DEPT_TYPE';
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=DEPT_TYPE';
 				this.$axios.get(url, {}).then((res) => {
 					this.selectData = res.data;
 				}).catch(error => {
@@ -760,7 +762,7 @@
 
 			//获取样品信息-样品检后状态
 			getITEM_CHECK_STATUS() {
-				var url = '/api/api-user/dicts/findChildsByCode?code=ITEM_CHECK_STATUS';
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=ITEM_CHECK_STATUS';
 				this.$axios.get(url, {}).then((res) => {
 					this.Select_ITEM_CHECK_STATUS = res.data;
 				}).catch(error => {
@@ -770,7 +772,7 @@
 
 			//获取样品信息-样品处置
 			getITEM_MANAGEMENT() {
-				var url = '/api/api-user/dicts/findChildsByCode?code=ITEM_MANAGEMENT';
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=ITEM_MANAGEMENT';
 				this.$axios.get(url, {}).then((res) => {
 					this.Select_ITEM_MANAGEMENT = res.data;
 				}).catch(error => {
@@ -872,7 +874,7 @@
 				this.workorderForm.WORKORDER_BASIS[0].SourceDataTemplateList = [];
 				var date = new Date();
 				this.workorderForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
-				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 	    			this.workorderForm.ENTERBY = res.data.nickname;
 	    			this.workorderForm.ORG_CODE = res.data.deptName;
 				}).catch((err) => {
@@ -888,7 +890,7 @@
 			// 这里是修改
 			detail(dataid) {
 				this.modify = true;
-				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 	    			this.workorderForm.CHANGEBY = res.data.nickname;
 	    			var date = new Date();
 					this.workorderForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
@@ -899,7 +901,7 @@
 					});
 				});
 
-				this.$axios.get('/api/api-apps/app/workorder/' + dataid, {}).then((res) => {
+				this.$axios.get(this.basic_url + '/api-apps/app/workorder/' + dataid, {}).then((res) => {
 					this.workorderForm = res.data;
 					this.WorkorderBasisList = res.data.WorkorderBasisList;
 					this.WorkorderBasisList = res.data.WorkorderBasisList;
@@ -922,7 +924,7 @@
 			},
 			
 			childMethods() {//添加内容时从父组件带过来的
-				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.workorderForm.ORG_CODE=res.data.deptName;
 					this.workorderForm.ENTERBY=res.data.nickname;
 					var date=new Date();
@@ -947,7 +949,7 @@
 		  			// this.workorderForm.WorkorderBasisList[0].WorkorderPersonList = this.inspectionList_child.WorkorderPersonList;
 		  			// console.log(this.inspectionList_child);
 		  			// this.workorderForm.WORKORDER_BASIS.push(this.inspectionList_child);
-					var url = '/api/apps-center/app/workorder/saveOrUpdate';
+					var url = this.basic_url + '/apps-center/app/workorder/saveOrUpdate';
 					this.$axios.post(url, this.workorderForm).then((res) => {
 						console.log(res);
 						//resp_code == 0是后台返回的请求成功的信息

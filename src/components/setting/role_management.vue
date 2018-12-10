@@ -101,6 +101,7 @@
 	</div>
 </template>
 <script>
+	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_header from '../common/nav_tabs.vue'
@@ -119,6 +120,7 @@
 		},
 		data() {
 			return {
+				basic_url: Config.dev_url,
 				value:'',
 				stopoptions: [{
 					value: '1',
@@ -243,7 +245,7 @@
 				} else {
 					var changeUser = selData[0];
 					var id = changeUser.id;
-					var url = '/api/api-user/roles/' + id;
+					var url = this.basic_url + '/api-user/roles/' + id;
 					//.delete 传数据方法
 					this.$axios.delete(url, {}).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
@@ -289,7 +291,7 @@
 					name: this.searchList.name,
 					inactive:this.searchList.inactive
 				}
-				var url = '/api/api-user/roles';
+				var url = this.basic_url + '/api-user/roles';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
@@ -301,7 +303,7 @@
 			//机构树
 			getKey() {
 				let that = this;
-				var url = '/api/api-user/depts/tree';
+				var url = this.basic_url + '/api-user/depts/tree';
 				this.$axios.get(url, {}).then((res) => {
 					this.resourceData = res.data;
 					this.treeData = this.transformTree(this.resourceData);

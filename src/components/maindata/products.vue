@@ -136,6 +136,7 @@
 </div>
 </template>
 <script>
+	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left2.vue'
 	import navs_header from '../common/nav_tabs.vue'
@@ -152,6 +153,7 @@
 		},
 		data() {
 			return {
+				basic_url: Config.dev_url,
 				loadSign:true,//加载
 				commentArr:{},
 				value: '',
@@ -343,7 +345,7 @@
 					});
 					return;
 				} else {
-					var url = '/api/api-apps/app/product/deletes';
+					var url = this.basic_url + '/api/api-apps/app/product/deletes';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -409,7 +411,7 @@
 					PRO_NAME: this.searchList.PRO_NAME,
 					VERSION: this.searchList.VERSION,
 				}
-				var url = '/api/api-apps/app/product';
+				var url = this.basic_url + '/api-apps/app/product';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {

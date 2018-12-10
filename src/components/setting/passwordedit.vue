@@ -65,6 +65,7 @@
 </template>
 
 <script>
+import Config from '../../config.js'
 import vheader from '../common/vheader.vue'
 import navs from '../common/left_navs/nav_left.vue'
 import navs_header from '../common/nav_tabs.vue'
@@ -111,6 +112,7 @@ export default {
 			}
 		};
 		return {
+			basic_url: Config.dev_url,
 			activeNames: ['1'],//手风琴数量
 			show:false,			  
 			userList: [],
@@ -162,7 +164,7 @@ export default {
 	},
     methods: {
     	getData(){
-    		var url = '/api/api-user/users/currentMap';
+    		var url = this.basic_url + '/api-user/users/currentMap';
     		this.$axios.get(url, {}).then((res) => {//获取当前用户信息
 				this.passwordedit.username = res.data.username;
 				this.passwordedit.id = res.data.id;
@@ -180,7 +182,7 @@ export default {
 		            var userid = this.passwordedit.id;
 		            var oldpassword = this.passwordedit.oldpassword;
 		            var newpassword= this.passwordedit.newpassword;
-		            var url = '/api/api-user/users/password';
+		            var url = this.basic_url + '/api-user/users/password';
 		            this.$axios.put(url, {
 	            		id: userid,
 	            		oldPassword: oldpassword,

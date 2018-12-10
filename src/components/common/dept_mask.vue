@@ -193,6 +193,7 @@
 </template>
 
 <script>
+	import Config from '../../config.js'
 	export default {
 		name: 'masks',
 		props: {
@@ -238,6 +239,7 @@
             };
 
 			return {
+				basic_url: Config.dev_url,
 				showcode:true,
 				dialogVisible: false, //对话框
 				edit: true, //禁填
@@ -297,7 +299,7 @@
 			getDept() {
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
-				var url = '/api/api-user/depts/treeByType';
+				var url = this.basic_url + '/api-user/depts/treeByType';
 				this.$axios.get(url, {
 					// params: {
 					// 	page: page,
@@ -381,7 +383,7 @@
 			submitForm(adddeptForm) {
 				this.$refs[adddeptForm].validate((valid) => {
 		          if (valid) {
-					var url = '/api/api-user/depts/saveOrUpdate';
+					var url = this.basic_url + '/api-user/depts/saveOrUpdate';
 					this.adddeptFormtest = {
 						"id":this.adddeptForm.id,
 						"pid":this.adddeptForm.pid,

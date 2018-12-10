@@ -145,6 +145,7 @@
 	</div>
 </template>
 <script>
+	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_header from '../common/nav_tabs.vue'
@@ -161,6 +162,7 @@
 		},
 		data() {
 			return {
+				basic_url: Config.dev_url,
 				isShow: false,
 				ismin: true,
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
@@ -370,7 +372,7 @@
 				} else {
 					var changeUser = selData[0];
 					var id = changeUser.id;
-					var url = '/api/api-user/users/' + id;
+					var url = this.basic_url + '/api-user/users/' + id;
 					this.$axios.delete(url, {}).then((res) => { //.delete 传数据方法
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -406,7 +408,7 @@
 				} else {
 					var changeUser = selData[0];
 					var id = changeUser.id;
-					var url = '/api/api-user/users/' + id + '/resetPassword';
+					var url = this.basic_url + '/api-user/users/' + id + '/resetPassword';
 					this.$axios.post(url, {}).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -441,7 +443,7 @@
 					return;
 				} else {
 					var changeUser = selData[0];
-					var url = '/api/api-user/users/updateEnabled?id=' + changeUser.id + '&enabled=true';
+					var url = this.basic_url + '/api-user/users/updateEnabled?id=' + changeUser.id + '&enabled=true';
 					this.$axios.get(url, {}).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -476,7 +478,7 @@
 					return
 				} else {
 					var changeUser = selData[0];
-					var url = '/api/api-user/users/updateEnabled?id=' + changeUser.id + '&enabled=false';
+					var url = this.basic_url + '/api-user/users/updateEnabled?id=' + changeUser.id + '&enabled=false';
 					this.$axios.get(url, {}).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -525,7 +527,7 @@
 					companyId: this.companyId,
 					deptId: this.deptId
 				}
-				var url = '/api/api-user/users';
+				var url = this.basic_url + '/api-user/users';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
@@ -563,7 +565,7 @@
 			//机构树
 			getKey() {
 				let that = this;
-				var url = '/api/api-user/depts/tree';
+				var url = this.basic_url + '/api-user/depts/tree';
 				this.$axios.get(url, {}).then((res) => {
 					this.resourceData = res.data;
 					this.treeData = this.transformTree(this.resourceData);

@@ -376,6 +376,7 @@
 </template>
 
 <script>
+	import Config from '../../config.js'
 	export default {
 		name: 'masks',
 				props: {
@@ -433,6 +434,7 @@
 				}
 			};
 			return {
+				basic_url: Config.dev_url,
 				gridData: [], //彈出框的數據
 				page: {
 					currentPage: 1,
@@ -635,7 +637,7 @@
 			},
 			//点击按钮显示弹窗
 			visible() {
-				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					
 					this.dataInfo.DEPT = res.data.deptName;
 					this.dataInfo.ENTERBY = res.data.nickname;
@@ -667,7 +669,7 @@
 				this.edit=true;
 				this.noedit=false;
 				
-				var url = '/api/api-apps/app/workNot/' + dataid;
+				var url = this.basic_url + '/api-apps/app/workNot/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
 					console.log(res);
 					this.dataInfo = res.data;
@@ -679,7 +681,7 @@
 					});
 				});
 				this.show = true;
-				var usersUrl = '/api/api-user/users/currentMap'
+				var usersUrl = this.basic_url + '/api-user/users/currentMap'
 				this.$axios.get(usersUrl, {}).then((res) => {
 					console.log(res);
 					this.dataInfo.CHANGEBY = res.data.nickname;
@@ -716,7 +718,7 @@
 //						type: 'error'
 //					});
 //				});
-				var url = '/api/api-apps/app/workNot/' + dataid;
+				var url = this.basic_url + '/api-apps/app/workNot/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
 					this.dataInfo = res.data;
 					console.log(this.dataInfo);
@@ -760,7 +762,7 @@
 			submitForm(dataInfo) {
 				this.$refs[dataInfo].validate((valid) => {
 					//		          if (valid) {
-					var url = '/api/apps-center/app/workNot/saveOrUpdate';
+					var url = this.basic_url + '/apps-center/app/workNot/saveOrUpdate';
 					this.$axios.post(url, this.dataInfo).then((res) => {
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -797,7 +799,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				}
-				var url = '/api/api-user/users';
+				var url = this.basic_url + '/api-user/users';
 				this.$axios.get(url, {
 					params: params
 				}).then((res) => {

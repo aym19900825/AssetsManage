@@ -46,16 +46,18 @@
 </template>
 
 <script>
+import Config from '../../config.js'
 export default {
 //  name: 'nav',
     data(){
         return {
+            basic_url: Config.dev_url,
             username: '',
         }
     },
     methods: {
         getData(){
-            var url = '/api/api-user/users/currentMap';
+            var url = this.basic_url + '/api-user/users/currentMap';
             this.$axios.get(url, {}).then((res) => {//获取当前用户信息
                     this.username = res.data.username;
                     this.userid = res.data.id;

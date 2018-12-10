@@ -121,6 +121,7 @@
 </template>
 
 <script>
+import Config from '../config.js'
 import vheader from './common/vheader.vue'
 import navs_header from './common/nav_tabs.vue'
 import  'echarts/theme/macarons.js'
@@ -134,6 +135,7 @@ export default {
 
     data() {
       return {
+      	basic_url: Config.dev_url,
         show: false,
 		fullHeight: document.documentElement.clientHeight - 100+'px',//获取浏览器高度
 		applistdata: [//APP应用数据

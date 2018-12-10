@@ -46,6 +46,7 @@
 </template>
 
 <script>
+import Config from '../../config.js'
 import vheader from '../common/vheader.vue'
 import navs_header from '../common/nav_tabs.vue'
 import navs_left from '../common/left_navs/nav_left5.vue'
@@ -60,6 +61,7 @@ export default {
 
     data() {
       return {
+      	basic_url: Config.dev_url,
         activeNames: ['1'],//手风琴数量
 		fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
         labelPosition: 'top',//表单标题在上方显示

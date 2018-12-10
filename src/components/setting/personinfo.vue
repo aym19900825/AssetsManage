@@ -210,6 +210,7 @@
 </template>
 
 <script>
+	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
 	import navs_header from '../common/nav_tabs.vue'
 
@@ -291,6 +292,7 @@
 		    };
 
 			return {
+				basic_url: Config.dev_url,
 				editSearch: '',
 				'启用': 1,
 				'冻结': 0,
@@ -383,7 +385,7 @@
 		
 		methods: {  
 			getData(){//获取当前用户信息
-	    		var url = '/api/api-user/users/currentMap';
+	    		var url = this.basic_url + '/api-user/users/currentMap';
 	    		this.$axios.get(url, {}).then((res) => {
 	    			//console.log(res.data);
 	    			//res.data.enabled ? '启用' : '冻结';
@@ -399,7 +401,7 @@
 			
 			getCompany() {//所属组织
 				this.editSearch = 'company';
-				var url = '/api/api-user/depts/type';
+				var url = this.basic_url + '/api-user/depts/type';
 				this.$axios.get(url, {
 				}).then((res) => {
 					this.resourceData = res.data.data;
@@ -409,7 +411,7 @@
 			},
 			getDept() {//所属机构
 				this.editSearch = 'dept';
-				var url = '/api/api-user/depts/type';
+				var url = this.basic_url + '/api-user/depts/type';
 				this.$axios.get(url, {
 				}).then((res) => {
 					this.resourceData = res.data.data;
@@ -418,7 +420,7 @@
 			},
 			getRole() {//角色
 				this.editSearch = 'roles';
-				var url = '/api/api-user/roles';
+				var url = this.basic_url + '/api-user/roles';
 				this.$axios.get(url, {
 				}).then((res) => {
 					this.resourceData = res.data.data;
@@ -450,7 +452,7 @@
 	    	submitForm(formName) {//修改当前用户信息
 		        this.$refs[formName].validate((valid) => {
 					if (valid) {
-			            var url = '/api/api-user/users/me';
+			            var url = this.basic_url + '/api-user/users/me';
 			            var personinfo=this.personinfo;
 			            personinfo.sex = personinfo.sex == '男' ? 1 : 0;
 			            personinfo.enabled = personinfo.enabledName == '启用' ? 1 : 0;

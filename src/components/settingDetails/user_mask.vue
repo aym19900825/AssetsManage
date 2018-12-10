@@ -436,6 +436,7 @@
 </template>
 
 <script>
+	import Config from '../../config.js'
 	export default {
 		name: 'masks',
 		props: {
@@ -477,6 +478,7 @@
 		        }
 		    };
 			return {
+				basic_url: Config.dev_url,
 				user: {
 					status: '活动',
 					roleId: [],
@@ -572,7 +574,7 @@
 				}
 			},
 			addfield1() {
-				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 				    var currentUser, currentDate;
 					this.currentUser=res.data.nickname;
 					this.enterby=res.data.id
@@ -648,7 +650,7 @@
 					traings: [],
 					qualifications: [],
 				}
-				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					
 					this.user.createby=res.data.id;
 					this.user.createbyName=res.data.nickname;
@@ -676,7 +678,7 @@
 				this.modify = true;
 				
 //				$('.usernames .el-input__inner').attr('disabled',true);
-				var usersUrl = '/api/api-user/users/currentMap';
+				var usersUrl = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(usersUrl, {}).then((res) => {
 					this.user.changeby = res.data.nickname;
 					var date = new Date();
@@ -687,7 +689,7 @@
 						type: 'error'
 					});
 				});
-				var url = '/api/api-user/users/' + dataid;
+				var url = this.basic_url + '/api-user/users/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
 //					console.log(res.data);
 					this.user = res.data;
@@ -770,7 +772,7 @@
 							user.roles = [];
 						}
 					  
-						var url = '/api/api-user/users/saveOrUpdate';
+						var url = this.basic_url + '/api-user/users/saveOrUpdate';
 						this.$axios.post(url, this.user).then((res) => {
 							if(res.data.resp_code == 0) {
 								this.$message({
@@ -798,7 +800,7 @@
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
 				var type = '1';
-				var url = '/api/api-user/depts/treeByType';
+				var url = this.basic_url + '/api-user/depts/treeByType';
 				this.$axios.get(url, {
 					params: {
 						type: type
@@ -818,7 +820,7 @@
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
 //				var type = "2";
-				var url = '/api/api-user/depts/treeMap';
+				var url = this.basic_url + '/api-user/depts/treeMap';
 //				var url = '/api/api-user/depts/treeByType';
 				this.$axios.get(url, {
 //					params: {
@@ -834,7 +836,7 @@
 				this.editSearch = 'role';
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
-				var url = '/api/api-user/roles';
+				var url = this.basic_url + '/api-user/roles';
 				this.$axios.get(url, {
 					params: {
 						page: page,

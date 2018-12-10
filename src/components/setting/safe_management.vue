@@ -97,6 +97,7 @@
 </template>
 
 <script>
+import Config from '../../config.js'
 import vheader from '../common/vheader.vue'
 import navs_header from '../common/nav_tabs.vue'
 import navs_left from '../common/left_navs/nav_left5.vue'
@@ -111,6 +112,7 @@ export default {
 
     data() {
       return {
+	      	basic_url: Config.dev_url,
 			isShow:false,
 			ismin:true,
 			activeNames: ['1'],//手风琴数量
@@ -210,11 +212,10 @@ export default {
 		submitForm(formName) {//修改当前用户信息
 	        this.$refs[formName].validate((valid) => {
 				if (valid) {
-		            var url = '/api/api-user/users/me';
+		            var url = this.basic_url + '/api-user/users/me';
 		            var personinfo=this.personinfo;
 		            personinfo.sex = personinfo.sexName == '男' ? 1 : 0;
 		            personinfo.enabled = personinfo.enabledName == '启用' ? 1 : 0;
-		            console.log(this.personinfo)
 		            this.$axios.put(url, this.personinfo).then((res) => {
 						console.log(res.data.resp_code);
 						//resp_code == 0是后台返回的请求成功的信息

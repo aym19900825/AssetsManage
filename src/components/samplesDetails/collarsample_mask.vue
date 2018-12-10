@@ -170,6 +170,7 @@
 </template>
 
 <script>
+	import Config from '../../config.js'
 	export default {
 		name: 'collarsample_mask',
 		props: {
@@ -208,6 +209,7 @@
 		},
 		data() {
 			return {
+				basic_url: Config.dev_url,
 				value: '',
 				options: [{
 					value: '1',
@@ -283,7 +285,7 @@
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
 				var type = "2";
-				var url = '/api/api-user/depts/treeByType';
+				var url = this.basic_url + '/api-user/depts/treeByType';
 				this.$axios.get(url, {
 					params: {
 						type: type
@@ -321,7 +323,7 @@
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
 			},
 			childMethods() {//添加内容时从父组件带过来的
-				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					console.log(res);
 					this.samplesForm.ENTERBY=res.data.nickname;
 					var date=new Date();
@@ -339,7 +341,7 @@
             	this.show = !this.show;
 			},
 			detail() { //修改内容时从父组件带过来的
-				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.samplesForm.CHANGEBY=res.data.nickname;
 					var date=new Date();
 					this.samplesForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
@@ -372,7 +374,7 @@
 
 			//检验/检测方法类别
 			getType() {
-				var url = '/api/api-user/dicts/findChildsByCode?code=type';
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=type';
 				this.$axios.get(url, {}).then((res) => {
 					this.selectData = res.data;
 				}).catch(error => {
@@ -423,7 +425,7 @@
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
 					    this.samplesForm.STATUS=this.samplesForm.STATUS=="活动" ? '1' : '0';
-						var url = '/api/api-apps/app/itemgrant/saveOrUpdate';
+						var url = this.basic_url + '/api-apps/app/itemgrant/saveOrUpdate';
 						this.samplesForm.VERSION = this.samplesForm.VERSION + 1;//修改时版本+1
 						this.$axios.post(url, this.samplesForm).then((res) => {
 							//console.log(res);

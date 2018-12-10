@@ -156,6 +156,7 @@
 	</div>
 </template>
 <script>
+	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left6.vue'
 	import navs_header from '../common/nav_tabs.vue'
@@ -172,6 +173,7 @@
 		},
 		data() {
 			return {
+				basic_url: Config.dev_url,
 				isShow: false,
 				ismin: true,
 				loadSign: true, //加载
@@ -399,7 +401,7 @@
 					});
 					return;
 				} else {
-					var url = '/api/api-apps/app/itemdisposition/deletes';
+					var url = this.basic_url + '/api-apps/app/itemdisposition/deletes';
 					//changeMenu为勾选的数据
 					var changeMenu = selData;
 					//deleteid为id的数组
@@ -478,7 +480,7 @@
 					APPR_PERSON: this.searchList.APPR_PERSON,//处理批准人
 					APPR_DATE: this.searchList.APPR_DATE,//批准日期
 				}
-				var url = '/api/api-apps/app/itemdisposition';
+				var url = this.basic_url + '/api-apps/app/itemdisposition';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
@@ -513,7 +515,7 @@
 			//样品序号树
 			getKey() {
 				let that = this;
-				var url = '/api/api-user/depts/tree';
+				var url = this.basic_url + '/api-user/depts/tree';
 				this.$axios.get(url, {}).then((res) => {
 					this.resourceData = res.data;
 					this.treeData = this.transformTree(this.resourceData);

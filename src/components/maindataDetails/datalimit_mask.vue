@@ -74,6 +74,7 @@
 </template>
 
 <script>
+	import Config from '../../config.js'
 	export default {
 		name: 'masks',
 		props: {
@@ -167,6 +168,7 @@
                 }
             };
 			return {
+				basic_url: Config.dev_url,
 				editSearch: '',
 				edit: true, //禁填
 				'男': true,
@@ -272,13 +274,10 @@
 			// 这里是修改
 			detail() {
 				this.show = true;
-				console.log(this.user);
-				var url = '/api/api-user/users/' + userid;
+				var url = this.basic_url + '/api-user/users/' + userid;
 				this.$axios.get(url, {}).then((res) => {
 					this.user = res.data;
 					this.show = true;
-					console.log(this.user);
-					console.log(this.user.roles);
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -324,8 +323,7 @@
 						var user = this.user;
 						user.sex = user.sexName == '男' ? 1 : 0;
 						user.roleId = user.roleId.join(',');	
-						var url = '/api/api-user/users/saveOrUpdate';
-								 console.log(this.user);
+						var url = this.basic_url + '/api-user/users/saveOrUpdate';
 						this.$axios.post(url, this.user).then((res) => {
 
 							if(res.data.resp_code == 0) {
@@ -354,7 +352,7 @@
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
 				var type = 1;
-				var url = '/api/api-user/depts/type';
+				var url = this.basic_url + '/api-user/depts/type';
 				this.$axios.get(url, {
 					params: {
 						page: page,
@@ -373,7 +371,7 @@
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
 				var type = 2;
-				var url = '/api/api-user/depts/type';
+				var url = this.basic_url + '/api-user/depts/type';
 				this.$axios.get(url, {
 					params: {
 						page: page,
@@ -390,7 +388,7 @@
 				this.editSearch = 'role';
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
-				var url = '/api/api-user/roles';
+				var url = this.basic_url + '/api-user/roles';
 				this.$axios.get(url, {
 					params: {
 						page: page,

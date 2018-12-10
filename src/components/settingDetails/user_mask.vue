@@ -835,11 +835,13 @@
 					}
 				})
 			},
+			//保存
 			saveAndUpdate(){
 				this.save();
 				this.show = false;
 				this.$emit('request');
 			},
+			//提交并保存
 			saveAndSubmit(){
 				this.save();
 				this.reset();

@@ -302,6 +302,19 @@
 		          }
 		        });
 			},
+			//保存
+			saveAndUpdate(){
+				this.save();
+				this.show = false;
+				this.$emit('request');
+			},
+			//提交并保存
+			saveAndSubmit(){
+				this.save();
+				this.reset();
+//				this.show = false;
+				this.$emit('request');
+			},
 			//时间格式化
 			dateFormat(row, column) {
 				var date = row[column.property];

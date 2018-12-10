@@ -2,14 +2,11 @@
 	<div>
 		<div class="mask" v-show="show"></div>
 		<div class="mask_div" v-show="show">
-			<!---->
 			<div class="mask_title_div clearfix">
 				<div class="mask_title" v-show="addtitle">添加用户</div>
 				<div class="mask_title" v-show="modifytitle">修改用户</div>
 				<div class="mask_anniu">
-					
 					<span class="mask_span mask_max" @click='toggle'>
-						 
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
 					</span>
 					<span class="mask_span" @click='close'>
@@ -54,9 +51,7 @@
 									</el-col>
 								</el-row>
 							</el-collapse-item>-->
-							
 							<el-collapse-item title="用户基本资料" name="1">
-								
 								<el-row :gutter="20" class="pb10">
 									<el-col :span="5" class="pull-right">
 										<el-input v-model="user.enabled" :disabled="edit">
@@ -108,7 +103,6 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="身份证号" prop="idnumber">
@@ -192,45 +186,40 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-
 								<el-row :gutter="30">
 									<el-col :span="24">
 										<el-form-item label="备注" prop="tips">
 											<el-input type="textarea" v-model="user.tips"></el-input>
-
 										</el-form-item>
 									</el-col>
 								</el-row>
 							</el-collapse-item>
-                           
-						<el-collapse-item title="资质信息" name="2">
-								<!-- 资质信息 Begin-->
-								<div class="table-func">
+							<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
+								<el-tabs v-model="activeName" @tab-click="handleClick">
+								    <el-tab-pane label="资质信息" name="first">
+								    	<div class="table-func table-funcb">
 									<el-button type="success" size="mini" round @click="addfield1">
 										<i class="icon-add"></i>
 										<font>新建行</font>
 									</el-button>
 								</div>
                                 <el-form :label-position="labelPosition" :rules="rules">
-								<el-table :data="user.qualifications" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation"  :default-sort="{prop:'user.qualifications', order: 'descending'}">
-
+								<el-table :data="user.qualifications" row-key="ID" border stripe height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation"  :default-sort="{prop:'user.qualifications', order: 'descending'}">
 									<el-table-column prop="iconOperation" fixed  width="50px">
 										<template slot-scope="scope">
 											<i class="el-icon-check" v-if="scope.row.isEditing"></i>
 											<i class="el-icon-edit" v-else="v-else"></i>
 										</template>
 									</el-table-column>
-						            
 						            <el-table-column  prop="step" label="序号" sortable width="120px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'qualifications.'+scope.$index + '.step'">
-											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.step" placeholder="请输入要求">		
+											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.step" placeholder="请输入要求">	
 											</el-input>
 											<span v-else="v-else">{{scope.row.step}}</span>
 											</el-form-item>
 										</template>
 									</el-table-column>
-						            
 									<el-table-column  prop="c_num" label="证书编号" sortable width="120px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'qualifications.'+scope.$index + '.c_num'">
@@ -240,7 +229,6 @@
 											</el-form-item>
 										</template>
 									</el-table-column>
-
 									<el-table-column  prop="c_name" label="证书名称" sortable width="120px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'qualifications.'+scope.$index + '.c_name'">
@@ -250,7 +238,6 @@
 											</el-form-item>
 										</template>
 									</el-table-column>
-
 									<el-table-column  prop="c_date" label="资质有效期" sortable width="120px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'qualifications.'+scope.$index + '.c_date'" >
@@ -278,7 +265,6 @@
 											</el-form-item>
 										</template>
 									</el-table-column>
-
 									<el-table-column  prop="status" label="信息状态" sortable width="120px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'qualifications.'+scope.$index + '.status'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
@@ -288,7 +274,6 @@
 										</el-form-item>
 										</template>
 									</el-table-column>
-
 									<!--<el-table-column prop="VERSION" label="上传附件" sortable width="120px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'user_qualifications.'+scope.$index + '.VERSION'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
@@ -305,39 +290,33 @@
 											</el-button>
 										</template>
 									</el-table-column>
-
 								</el-table>
 								 </el-form >
-							</el-collapse-item>
-							
-							<el-collapse-item title="培训" name="3">
-								<!-- 资质信息 Begin-->
-								<div class="table-func">
+								    </el-tab-pane>
+								    <el-tab-pane label="培训" name="second">
+								    	<div class="table-func table-funcb">
 									<el-button type="success" size="mini" round @click="addfield2">
 										<i class="icon-add"></i>
 										<font>新建行</font>
 									</el-button>
 								</div>
 								 <el-form :label-position="labelPosition" :rules="rules">
-								<el-table :data="user.traings" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.traings', order: 'descending'}">
-                               
+								<el-table :data="user.traings" row-key="ID" border stripe height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.traings', order: 'descending'}">
 									<el-table-column prop="iconOperation" fixed label="" width="50px">
 										<template slot-scope="scope">
 											<i class="el-icon-check" v-if="scope.row.isEditing"></i>
 											<i class="el-icon-edit" v-else="v-else"></i>
 										</template>
 									</el-table-column>
-						
 									<el-table-column prop="step" label="序号" sortable width="120px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'traings.'+scope.$index + '.step'" >
-											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.step" placeholder="请输入要求">		
+											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.step" placeholder="请输入要求">	
 											</el-input>
 											<span v-else="v-else">{{scope.row.step}}</span>
 											</el-form-item>
 										</template>
 									</el-table-column>
-						
 									<el-table-column prop="t_date" label="培训时间" sortable width="240px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'traings.'+scope.$index + '.t_date'" >
@@ -349,7 +328,6 @@
 											</el-form-item>
 										</template>
 									</el-table-column>
-
 									<el-table-column prop="t_description" label="培训内容" sortable >
 										<template slot-scope="scope">
 											<el-form-item :prop="'traings.'+scope.$index + '.t_description'">
@@ -359,9 +337,6 @@
 											</el-form-item>
 										</template>
 									</el-table-column>
-
-									
-
 									<el-table-column prop="status" label="信息状态" sortable width="120px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'traings.'+scope.$index + '.status'" >
@@ -371,8 +346,6 @@
 										</el-form-item>
 										</template>
 									</el-table-column>
-
-									
 									<el-table-column fixed="right" label="操作" width="120">
 										<template slot-scope="scope">
 											<el-button @click.native.prevent="deleteRow(scope.$index,user.traings)" type="text" size="small">
@@ -380,13 +353,12 @@
 											</el-button>
 										</template>
 									</el-table-column>
-								
 								</el-table>
 								</el-form>
-							</el-collapse-item>
-							
+								    </el-tab-pane>
+								</el-tabs>
+							</div>
 							<el-collapse-item title="其他" name="4">
-								
 								<!-- 第一行 -->
 								<el-row :gutter="30">
 									<el-col :span="8">
@@ -415,7 +387,6 @@
 							</el-collapse-item>
 						</el-collapse>
 					</div>
-
 					<div class="el-dialog__footer">
 						<el-button @click='close'>取消</el-button>
 						<el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
@@ -425,7 +396,6 @@
 			</div>
 			<!--底部-->
 		</div>
-
 		<!--弹出-->
 
 		<el-dialog title="机构" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
@@ -534,6 +504,7 @@
 				isok2: false,
 				down: true,
 				up: false,
+				activeName: 'first',//tabs
 				activeNames: ['1', '2','3','4'], //手风琴数量
 				labelPosition: 'top', //表格
 				labelPositions:'right',
@@ -579,6 +550,9 @@
 			};
 		},
 		methods: {
+			handleClick(tab, event) {
+		        console.log(tab, event);
+		    },
 			iconOperation(row, column, cell, event) {
 				if(column.property === "iconOperation") {
 					
@@ -678,7 +652,6 @@
 				rows.splice(index,1);
 
 			},
-			
 			//
 			handleCheckChange(data, checked, indeterminate) {
 				this.getCheckboxData = data;
@@ -687,10 +660,6 @@
 			handleNodeClick(data) { //获取勾选树菜单节点
 //				console.log(data);
 			},
-
-  
-
-			
 			// 这里是修改
 			detail(dataid) {
 				this.addtitle = false;

@@ -28,12 +28,14 @@
 </template>
 
 <script>
+import Config from '../../config.js'
 export default {
     name: 'nav_tabs',
       data(){
         return {
-           tabs: [],
-           selectedTab: {}
+            basic_url: Config.dev_url,
+            tabs: [],
+            selectedTab: {}
         }
     },
     methods: {

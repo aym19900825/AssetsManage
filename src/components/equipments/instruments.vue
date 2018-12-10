@@ -137,6 +137,7 @@
 </div>
 </template>
 <script>
+	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left4.vue'
 	import navs_header from '../common/nav_tabs.vue'
@@ -153,6 +154,7 @@
 		},
 		data() {
 			return {
+				basic_url: Config.dev_url,
 				dataUrl: '/api/api-user/users',
 				searchData: {
 			        page: 1,
@@ -337,7 +339,7 @@
 				} else {
 					var changeUser = selData[0];
 					var id = changeUser.id;
-					var url = '/api/api-apps/app/asset/' + id;
+					var url = this.basic_url + '/api-apps/app/asset/' + id;
 					this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -392,7 +394,7 @@
 					OPTION_STATUS:  this.searchList.OPTION_STATUS,
 
 				}
-				var url = '/api/api-apps/app/asset';
+				var url = this.basic_url + '/api-apps/app/asset';
 				
 				this.$axios.get(url, {
 					params: data

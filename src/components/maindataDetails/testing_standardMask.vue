@@ -35,16 +35,15 @@
 											<template slot="prepend">信息状态</template>
 										</el-input>
 									</el-col>
-									 <el-col :span="6" class="pull-right">
+									 <!-- <el-col :span="6" class="pull-right">
 										<el-input v-model="dataInfo.S_NUM" :disabled="true">
 											<template slot="prepend">产品编号</template>
 										</el-input>
-									</el-col> 
+									</el-col> --> 
 								</el-row>
-
 								<el-row :gutter="30">
 									<el-col :span="8">
-										<el-form-item label="标准编码" prop="S_NUM">
+										<el-form-item label="标准编号" prop="S_NUM">
 											<el-input v-model="dataInfo.S_NUM" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
@@ -188,6 +187,7 @@
 </template>
 
 <script>
+	import Config from '../../config.js'
 	export default {
 		name: 'masks',
 		props: {
@@ -229,6 +229,7 @@
 				}
 			};
 			return {
+				basic_url: Config.dev_url,
 				options: [{
 					value: '1',
 					label: '活动'
@@ -347,7 +348,7 @@
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.modify = false;
-				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					console.log(res);
 					this.dataInfo.DEPARTMENT=res.data.companyName;
 					console.log(1111);
@@ -369,7 +370,7 @@
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.modify = true;
-				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.dataInfo.CHANGEBY=res.data.nickname;
 					var date=new Date();
 					this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
@@ -417,7 +418,7 @@
 					 if (valid) {
 					this.dataInfo.STATUS=((this.dataInfo.STATUS=="1"||this.dataInfo.STATUS=='活动') ? '1' : '0');
 //					this.dataInfo.STATUS=this.dataInfo.STATUS=="活动" ? '1' : '0';
-					var url = '/api/api-apps/app/inspectionSta/saveOrUpdate';
+					var url = this.basic_url + '/api-apps/app/inspectionSta/saveOrUpdate';
 					this.$axios.post(url, this.dataInfo).then((res) => {
 						if(res.data.resp_code == 0) {
 							this.$message({

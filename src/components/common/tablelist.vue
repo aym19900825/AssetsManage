@@ -6,6 +6,7 @@
 </template>
 
 <script>
+	import Config from '../../config.js'
 	export default {
 		name: 'tablediv',
 		data() {
@@ -14,12 +15,12 @@
 				selUser: [],
 				'启用': true,
 				'冻结': false,
+				basic_url: Config.dev_url,
 			}
 		},
 		methods: {
 			judge(data) {
 				//taxStatus 布尔值
-				console.log(data.enabled);
 				return data.enabled ? '启用' : '冻结'
 			},
 			//时间格式化  
@@ -59,7 +60,7 @@
 				} else {
 					var changeUser = selData[0];
 					var id = changeUser.id;
-					var url = '/api/api-user/users/' + id + '/resetPassword';
+					var url = this.basic_url + '/api-user/users/' + id + '/resetPassword';
 					this.$axios.post(url, {}).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -94,7 +95,7 @@
 				} else {
 					var changeUser = selData[0];
 					var id = changeUser.id;
-					var url = '/api/api-user/users/' + id;
+					var url = this.basic_url + '/api-user/users/' + id;
 					this.$axios.delete(url, {}).then((res) => {
 						console.log(res.data);
 						//resp_code == 0是后台返回的请求成功的信息
@@ -130,7 +131,7 @@
 				} else {
 					var changeUser = selData[0];
 					var id = changeUser.id;
-					var url = '/api/api-user/users/' + id + '/resetPassword';
+					var url = this.basic_url + '/api-user/users/' + id + '/resetPassword';
 					this.$axios.post(url, {}).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -164,9 +165,7 @@
 					return;
 				} else {
 					var changeUser = selData[0];
-					console.log(changeUser);
-					var url = '/api/api-user/users/updateEnabled?id=' + changeUser.id + '&enabled=true';
-					console.log(url);
+					var url = this.basic_url + '/api/api-user/users/updateEnabled?id=' + changeUser.id + '&enabled=true';
 					this.$axios.get(url, {}).then((res) => {
 						console.log(res.data);
 						//resp_code == 0是后台返回的请求成功的信息
@@ -201,7 +200,7 @@
 					return;
 				} else {
 					var changeUser = selData[0];
-					var url = '/api/api-user/users/updateEnabled?id=' + changeUser.id + '&enabled=false';
+					var url = this.basic_url + '/api-user/users/updateEnabled?id=' + changeUser.id + '&enabled=false';
 					this.$axios.get(url, {}).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -227,7 +226,7 @@
 
 					}
 				}
-				var url = '/api/api-user/users';
+				var url = this.basic_url + '/api-user/users';
 				this.$axios.get(url, data).then((res) => {
 					this.userList = res.data.data;
 					console.log(res.data.data);

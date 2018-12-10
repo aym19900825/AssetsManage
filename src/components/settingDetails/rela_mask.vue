@@ -126,10 +126,12 @@
 </template>
 
 <script>
+	import Config from '../../config.js'
 	export default {
 		name: 'masks',
 		data() {
 			return {
+				basic_url: Config.dev_url,
 				selUser:[],
 				edit: true, //禁填
 				'男': true,
@@ -269,7 +271,7 @@
 			},
 			// 这里是修改
 			detail(userid) {
-				var url = '/api/apps-center/objectcfg/' + userid;
+				var url = this.basic_url + '/apps-center/objectcfg/' + userid;
 				this.$axios.get(url, {}).then((res) => {
 					this.user = res.data;
 					this.show = true;
@@ -322,7 +324,7 @@
 				var type = 1;
 				console.log(this.page.currentPage);
 				console.log(this.page.pageSize);
-				var url = '/api/api-user/depts/type';
+				var url = this.basic_url + '/api-user/depts/type';
 				this.$axios.get(url, {
 					params: {
 						page: page,
@@ -342,7 +344,7 @@
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
 				var type = 2;
-				var url = '/api/api-user/depts/type';
+				var url = this.basic_url + '/api-user/depts/type';
 				this.$axios.get(url, {
 					params: {
 						page: page,
@@ -364,7 +366,7 @@
 					}
 				}
 				let that = this;
-				var url = '/api/api-user/roles';
+				var url = this.basic_url + '/api-user/roles';
 
 				this.$axios.get(url, {
 					

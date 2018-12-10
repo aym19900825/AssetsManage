@@ -13,99 +13,124 @@
 					</span>
 				</div>
 			</div>
+			<div class="mask_content">
 			<el-form :model="dataInfo"  :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
 				<div class="accordion" id="information">
-						<el-collapse v-model="activeNames">
-							<el-collapse-item title="基本信息" name="1">
-								<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
-									<el-row :gutter="30">
-										<el-col :span="8">
-											<el-form-item label="表名" prop="name">
-												<el-input v-model="dataInfo.name"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="描述" prop="description">
-												<el-input v-model="dataInfo.description"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-								</div>
-							</el-collapse-item>
-							<el-collapse-item title="字段列表" name="2">
-								<!-- 字段列表 Begin-->
-								<div class="table-func">
-									<el-button type="primary" size="mini" round  @click="importdia">
-										<i class="icon-upload-cloud"></i>
-										<font>导入</font>
-									</el-button>
-									<el-button type="success" size="mini" round @click="addfield">
-										<i class="icon-add"></i>
-										<font>新建</font>
-									</el-button>
-								</div>
-								<!-- :rules="rules" ref="attributes" -->
-								<el-form :model="dataInfo.attributes">
-				                <el-form-item>
-				                	<el-row :gutter="20">
-				                		<el-col :span="4">
-				                            <el-form-item label="字段名" ></el-form-item>
-				                        </el-col>
-				                        <el-col :span="4">
-				                            <el-form-item label="字段描述" ></el-form-item>
-				                        </el-col>
-				                        <el-col :span="4">
-				                            <el-form-item label="字段类型" ></el-form-item>
-				                        </el-col>
-				                        <el-col :span="4">
-				                            <el-form-item label="长度" ></el-form-item>
-				                        </el-col>
-				                        <el-col :span="4">
-				                            <el-form-item label="小数点位数" ></el-form-item>
-				                        </el-col>			                        
-				                        <el-col :span="4">
-				                            <el-form-item label="操作"></el-form-item>
-				                        </el-col>
-				                	</el-row>
-				                    <el-row :gutter="20" v-for="(item,key) in dataInfo.attributes" :key="key">
-				                        <el-col :span="4">
-				                            <el-input type="text"  placeholder="请输入字段名" v-model="item.columnname"></el-input>
-				                        </el-col>
-				                        <el-col :span="4">
-				                            <el-input type="text"  placeholder="请输入字段描述" v-model="item.description"></el-input>
-				                        </el-col>
-				                        <el-col :span="4">
-				                            <el-select v-model="item.type" placeholder="选择字段类型">
-										      <el-option label="字符串(string)" value="string"></el-option>
-										      <el-option label="浮点类型(float)" value="float"></el-option>
-										      <el-option label="整数(int)" value="int"></el-option>
-										      <el-option label="长整型(long)" value="long"></el-option>
-										      <el-option label="双精度(double)" value="double"></el-option>
-										      <el-option label="日期(date)" value="date"></el-option>
-										      <el-option label="时间(time)" value="time"></el-option>
-										    </el-select>
-				                        </el-col>
-				                        <el-col :span="4">
-				                            <el-input type="text"  placeholder="请输入长度" v-model="item.length"></el-input>
-				                        </el-col>
-				                        <el-col :span="4">
-				                            <el-input type="text"  placeholder="请输入小数点位数" v-model="item.retain"></el-input>
-				                        </el-col>			                        
-				                        <el-col :span="4">
-				                            <i class="el-icon-delete" @click="delfield(item)" style="color: red"></i>
-				                        </el-col>
-				                    </el-row>
-				                </el-form-item>
-				            </el-form>
+					<el-collapse v-model="activeNames">
+						<el-collapse-item title="基本信息" name="1">
+							<el-row :gutter="30">
+								<el-col :span="8">
+									<el-form-item label="表名" prop="name">
+										<el-input v-model="dataInfo.name"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="8">
+									<el-form-item label="描述" prop="description">
+										<el-input v-model="dataInfo.description"></el-input>
+									</el-form-item>
+								</el-col>
+							</el-row>
+						</el-collapse-item>
+						<el-collapse-item title="基本信息" name="1">
+							<el-row :gutter="30">
+								<el-col :span="8">
+									<el-form-item label="表名" prop="name">
+										<el-input v-model="dataInfo.name"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="8">
+									<el-form-item label="描述" prop="description">
+										<el-input v-model="dataInfo.description"></el-input>
+									</el-form-item>
+								</el-col>
+							</el-row>
+						</el-collapse-item><el-collapse-item title="基本信息" name="1">
+							<el-row :gutter="30">
+								<el-col :span="8">
+									<el-form-item label="表名" prop="name">
+										<el-input v-model="dataInfo.name"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="8">
+									<el-form-item label="描述" prop="description">
+										<el-input v-model="dataInfo.description"></el-input>
+									</el-form-item>
+								</el-col>
+							</el-row>
+						</el-collapse-item>
+						<el-collapse-item title="字段列表" name="2">
+							<!-- 字段列表 Begin-->
+							<div class="table-func">
+								<el-button type="primary" size="mini" round  @click="importdia">
+									<i class="icon-upload-cloud"></i>
+									<font>导入</font>
+								</el-button>
+								<el-button type="success" size="mini" round @click="addfield">
+									<i class="icon-add"></i>
+									<font>新建</font>
+								</el-button>
+							</div>
+				            <el-table :data="dataInfo.attributes" row-key="ID" border stripe height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.attributes', order: 'descending'}">
+							    <el-table-column prop="iconOperation" fixed width="50px">
+								    <template slot-scope="scope">
+								      	<i class="el-icon-check" v-show="scope.row.isEditing">
+								      	</i>
+								      	<i class="el-icon-edit" v-show="!scope.row.isEditing">
+								      	</i>
+								    </template>
+							    </el-table-column>
+							    <el-table-column label="字段名" sortable width="180px" prop="columnname">
+								    <template slot-scope="scope">
+								      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.columnname" disabled></el-input><span v-show="!scope.row.isEditing" >{{scope.row.columnname}}</span>
+								    </template>
+							    </el-table-column>
+							    <el-table-column label="字段描述" sortable width="180px" prop="description">
+								    <template slot-scope="scope">
+								      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.description" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.description}}</span>
+								    </template>
+							    </el-table-column>
+								<el-table-column prop="type" label="字段类型" sortable width="120px">
+								    <template slot-scope="scope">
+								        <el-select v-show="scope.row.isEditing" size="small" v-model="scope.row.S_DESC" placeholder="选择字段类型">
+										    <el-option label="字符串(string)" value="string"></el-option>
+										    <el-option label="浮点类型(float)" value="float"></el-option>
+										    <el-option label="整数(int)" value="int"></el-option>
+										    <el-option label="长整型(long)" value="long"></el-option>
+										    <el-option label="双精度(double)" value="double"></el-option>
+										    <el-option label="日期(date)" value="date"></el-option>
+										    <el-option label="时间(time)" value="time"></el-option>
+										</el-select>
+								        <span v-show="!scope.row.isEditing">{{scope.row.type}}</span>
+								    </template>
+							    </el-table-column>
+							    <el-table-column prop="length" label="长度" sortable width="150px">
+								    <template slot-scope="scope">
+								       	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.length" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.length}}</span>
+								    </template>
+							    </el-table-column>
+							    <el-table-column prop="retain" label="小数点位数" sortable width="180px">
+								    <template slot-scope="scope">
+								        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.retain" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.retain}}</span>
+								    </template>
+							    </el-table-column>
+							    <el-table-column fixed="right" label="操作" width="120">
+								    <template slot-scope="scope">
+								        <el-button @click = "deleteRow(scope.$index, dataInfo.attributes)" type="text" size="small">
+								          移除
+								        </el-button>
+								    </template>
+							    </el-table-column>
+							</el-table>
 							<!-- 字段列表 End -->
-							</el-collapse-item>
-						</el-collapse>
+						</el-collapse-item>
+					</el-collapse>
 				</div>			
 				<div class="el-dialog__footer">
 					<el-button @click='close'>取消</el-button>
 					<el-button type="primary" @click="submitForm('dataInfo')">提交</el-button>
 				</div>
 			</el-form>
+		</div>
 		</div>
 		<!-- 弹出 -->
 		<el-dialog title="添加数据库表" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
@@ -148,6 +173,7 @@
 </template>
 
 <script>
+	import Config from '../../config.js'
 	export default {
 		name: 'masks',
 		data() {
@@ -166,6 +192,7 @@
                 }
             };
 			return {
+				basic_url: Config.dev_url,
 				selUser:[],
 				edit: true, //禁填
 				col_but1: true,
@@ -214,21 +241,8 @@
 				dataInfo: {//添加数据库列表信息
 					name:'',
 					description:'',
-					attributes:[{//字段列表
-					columnname: '',
-					description: '',
-					type:'',
-					length: '',
-					retain: ''
-				}]
+					attributes:[]
 				},
-				/*attributes:[{//字段列表
-					columnname: '',
-					description: '',
-					type:'',
-					length: '',
-					retain: ''
-				}],*/
 				rules: {
 					name: [{
 						required: true,
@@ -260,16 +274,10 @@
 					description: '',
 					type:'',
 					length: '',
-					retain: ''
+					retain: '',
+					isEditing:true
 				}]
 				},
-                /*this.attributes = [{//字段列表
-					columnname: '',
-					description: '',
-					type:'',
-					length: '',
-					retain: ''
-				}],*/
                 this.$refs["dataInfo"].resetFields();
             },
 			
@@ -304,11 +312,20 @@
 					description: '',
 					type:'',
 					length: '',
-					retain: ''
+					retain: '',
+					isEditing: true
                 };
-                //this.attributes.push(obj);
                 this.dataInfo.attributes.push(obj);
 			},
+			//删除行
+			deleteRow(index, rows) {//Table-操作列中的删除行
+				rows.splice(index, 1);
+			},
+			iconOperation(row, column, cell, event){
+		        if(column.property ==="iconOperation"){
+		          row.isEditing = !row.isEditing
+		        }
+		    },
 			delfield(item){
                 var index = this.dataInfo.attributes.indexOf(item);
                 if (index !== -1) {
@@ -338,7 +355,7 @@
 			},
 			// 这里是修改
 			detail(dataid) {
-				var url = '/api/apps-center/objectcfg/' + dataid;
+				var url = this.basic_url + '/apps-center/objectcfg/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
 					this.dataInfo = res.data;
 					//this.attributes=this.dataInfo.attributes;
@@ -382,7 +399,7 @@
 			submitForm(dataInfo) {
 				this.$refs[dataInfo].validate((valid) => {
 		          if (valid) {
-					var url = '/api/apps-center/objectcfg/saveOrUpdate';
+					var url = this.basic_url + '/apps-center/objectcfg/saveOrUpdate';
 					//this.dataInfo.attributes=this.attributes;
 	               /* $.each(this.attributes,function(i,n){
 	                    this.dataInfo.attributes.push(n.columnname +" ，"+n.description+" ，"+n.type+" ，"+n.length+" ，"+n.retain+");
@@ -417,7 +434,7 @@
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
 				var type = 1;
-				var url = '/api/api-user/depts/type';
+				var url = this.basic_url + '/api-user/depts/type';
 				this.$axios.get(url, {
 					params: {
 						page: page,
@@ -436,7 +453,7 @@
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
 				var type = 2;
-				var url = '/api/api-user/depts/type';
+				var url = this.basic_url + '/api-user/depts/type';
 				this.$axios.get(url, {
 					params: {
 						page: page,
@@ -458,7 +475,7 @@
 					}
 				}
 				let that = this;
-				var url = '/api/api-user/roles';
+				var url = this.basic_url + '/api-user/roles';
 
 				this.$axios.get(url, {
 					

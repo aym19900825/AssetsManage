@@ -56,7 +56,7 @@
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="24">
-										<el-form-item label="文档" prop="DOCLINKS_NUM">
+										<el-form-item label="就业指导书" prop="DOCLINKS_NUM">
 											<el-input v-model="testing_projectForm.DOCLINKS_NUM">
 												<el-button slot="append" icon="icon-search" @click="getCompany"></el-button>
 											</el-input>
@@ -134,6 +134,7 @@
 </template>
 
 <script>
+	import Config from '../../config.js'
 	export default {
 		name: 'masks',
 		props: {
@@ -201,6 +202,7 @@
 				}
 			};
 			return {
+				basic_url: Config.dev_url,
 				editSearch: '',
 				value: '',
 				options: [{
@@ -265,7 +267,7 @@
 		methods: {
 			getCompany() {//文档查询接口，暂无通，待修改
 				this.editSearch = 'DOCLINKS';
-				var url = '/api/api-user/depts/type';//文件接口不对
+				var url = this.basic_url + '/api-user/depts/type';//文件接口不对
 				this.$axios.get(url, {
 				}).then((res) => {
 					this.resourceData = res.data.data;
@@ -292,7 +294,7 @@
 			},
 
 			childMethods() {//添加内容时从父组件带过来的
-				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.testing_projectForm.DEPARTMENT=res.data.companyName;
 					this.testing_projectForm.ENTERBY=res.data.nickname;
 					var date=new Date();
@@ -312,7 +314,7 @@
 			},
 			
 			detail() {//修改内容时从父组件带过来的
-				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.testing_projectForm.CHANGEBY=res.data.nickname;
 					var date=new Date();
 					this.testing_projectForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
@@ -372,7 +374,7 @@
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
 						this.testing_projectForm.STATUS=((this.testing_projectForm.STATUS=="1"||this.testing_projectForm.STATUS=='活动') ? '1' : '0');
-						var url = '/api/api-apps/app/inspectionPro/saveOrUpdate';
+						var url = this.basic_url + '/api-apps/app/inspectionPro/saveOrUpdate';
 						this.testing_projectForm.VERSION = this.testing_projectForm.VERSION + 1;//修改时版本+1
 						this.$axios.post(url, this.testing_projectForm).then((res) => {
 							if(res.data.resp_code == 0) {

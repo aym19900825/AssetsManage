@@ -580,6 +580,7 @@
 </template>
 
 <script>
+	import Config from '../../config.js'
 	export default {
 		name: 'masks',
 		data() {
@@ -645,7 +646,7 @@
                 }
             };
 			return {
-				
+				basic_url: Config.dev_url,
 				showEdit: [], //显示编辑框
 		        showBtn: [],
 		        showBtnOrdinary: true,
@@ -809,7 +810,7 @@
 			//删除计划列表
 			delPlan(index,row,TableName,delList){
 				if(row.ID){
-					var url = '/api/api-apps/app/workplan/' + TableName +'/' + row.ID;
+					var url = this.basic_url + '/api-apps/app/workplan/' + TableName +'/' + row.ID;
 					this.$axios.delete(url, {}).then((res) => {
 						if(res.data.resp_code == 0){
 							this[delList].splice(index,1);
@@ -1070,7 +1071,7 @@
 				this.basisList = []; //检测依据
 				this.proTestList = []; //项目检测和要求
 				this.isEditList = false;
-				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 	    			this.WORKPLAN.ENTERBY = res.data.nickname;
 	    			
 				}).catch((err) => {
@@ -1090,7 +1091,7 @@
 				this.modifytitle = true;
 				this.modify = false;
 
-				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 	    			this.WORKPLAN.CHANGEBY = res.data.nickname;
 	    			var date = new Date();
 					this.WORKPLAN.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
@@ -1101,7 +1102,7 @@
 					});
 				});
 
-				this.$axios.get('/api/api-apps/app/workplan/' + dataid, {}).then((res) => {
+				this.$axios.get(this.basic_url + '/api-apps/app/workplan/' + dataid, {}).then((res) => {
 					this.WORKPLAN = res.data;
 					this.worlplanlist = res.data.WORLPLANLINEList;
 					var worlplanlist = res.data.WORLPLANLINEList;
@@ -1154,7 +1155,7 @@
 				
 						if(!this.isEditList){
 							this.WORKPLAN.WORLPLANLINEList = this.worlplanlist;
-							var url = '/api/apps-center/app/workplan/saveOrUpdate';
+							var url = this.basic_url + '/apps-center/app/workplan/saveOrUpdate';
 							this.$axios.post(url, this.WORKPLAN).then((res) => {
 								if(res.data.resp_code == 0) {
 									this.$message({
@@ -1228,7 +1229,7 @@
 					VERSION: this.searchList.VERSION,
 					STATUS: this.searchList.STATUS,
 				};
-				var url = '/api/api-apps/app/inspectionSta';
+				var url = this.basic_url + '/api-apps/app/inspectionSta';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
@@ -1255,7 +1256,7 @@
 				}).catch((wrong) => {})
 
 
-				this.$axios.get('/api/api-apps/app/inspectionPro', {
+				this.$axios.get(this.basic_url + '/api-apps/app/inspectionPro', {
 					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;	

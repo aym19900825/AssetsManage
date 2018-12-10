@@ -7,7 +7,6 @@
                 <div class="logo"></div>
                 <div class="login_box">
                     <font>用户登录</font>
-
                     <form class="login_form" ref="loginForm" :model="userinfo" method="post" autocomplete="off">
                         
                         <div class="input-group">
@@ -45,18 +44,25 @@
 </template>
 
 <script>
+    import Config from '../../config.js'
     import qs from "qs"
     export default {
-        //记住密码
-        data() {
-          return {
-            checked: true
-          };
-        },
         name: 'login',
+        //记住密码
+        data () {
+            return {
+                msg: 'EAM2.0',
+                ername:"",
+                erpass:"",
+                null1:false,
+                null2:false,
+                userinfo:{},
+                basic_url: Config.dev_url
+            }
+        },
         methods: {
             login() {
-                var url = '/api/api-auth/oauth/token?grant_type=password&scope=app&client_id=webApp&client_secret=webApp&username=' 
+                var url = this.basic_url + '/api-auth/oauth/token?grant_type=password&scope=app&client_id=webApp&client_secret=webApp&username=' 
                         + this.userinfo.username   
                         + '&password=' 
                         + this.userinfo.password;
@@ -113,16 +119,6 @@
                 // }
              }      
         },
-        data () {
-            return {
-                msg: 'EAM2.0',
-                ername:"",
-                erpass:"",
-                null1:false,
-                null2:false,
-                userinfo:{},
-            }
-        }
     }
 </script>
 

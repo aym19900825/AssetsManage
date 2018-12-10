@@ -17,7 +17,7 @@
 
 </template>
 <script>
-
+	import Config from '../../config.js'
 	export default {
 		name: 'all_icons',
 		components: {
@@ -25,6 +25,7 @@
 		},
 		data() {
 			return {
+				basic_url: Config.dev_url,
 				classLists:[
 					'icon-setting3',
 					'icon-data3',

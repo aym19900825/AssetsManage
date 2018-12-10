@@ -118,6 +118,7 @@
 </template>
 
 <script>
+	import Config from '../../config.js'
 	import all_icons from '../common/all_icons.vue'//弹出框
 	export default {
 		name: 'masks',
@@ -154,6 +155,7 @@
 			
 
 			return {
+				basic_url: Config.dev_url,
 				edit: true, //禁填
 				col_but1: true,
 				col_but2: true,
@@ -248,7 +250,7 @@
 						this.menu.hidden=this.menu.hidden?1:0
 						var menu = this.menu;						
 						console.log(menu)
-						var url = '/api/api-user/menus/saveOrUpdate';
+						var url = this.basic_url + '/api-user/menus/saveOrUpdate';
 						this.menutest={
 								"id":this.menu.id,
 								"parentId":this.menu.parentId ,
@@ -291,7 +293,7 @@
 			},
 			//所属上级
 			getParentId() {
-				var url = '/api/api-user/menus/findOnes';
+				var url = this.basic_url + '/api-user/menus/findOnes';
 				this.$axios.get(url, {}).then((res) => {
 					this.resourceData = res.data.data;
 					this.dialogVisible = true;

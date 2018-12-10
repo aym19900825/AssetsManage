@@ -100,6 +100,7 @@
 </template>
 
 <script>
+	import Config from '../../config.js'
 	export default {
 		name: 'masks',
 		props: {
@@ -130,6 +131,7 @@
                 }
             };
 			return {
+				basic_url: Config.dev_url,
 				personinfo:false,
 				value: '',
 				options: [{
@@ -204,7 +206,7 @@
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.modify = false;
-				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 	     			this.PRODUCT.DEPARTMENT=res.data.deptName;
 	     			this.PRODUCT.ENTERBY = res.data.nickname;
 	     			var date=new Date();
@@ -229,7 +231,7 @@
 				
 				console.log(data.STATUS )
 //				data.STATUS=data.STATUS=="1"?'活动':'不活动';
-				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 	    			this.PRODUCT.CHANGEBY = res.data.nickname;
 	    			var date=new Date();
 					this.PRODUCT.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
@@ -247,8 +249,7 @@
 				 this.$refs[PRODUCT].validate((valid) => {
 		          if (valid) {
 		            this.PRODUCT.STATUS=((this.PRODUCT.STATUS=="1"||this.PRODUCT.STATUS=='活动') ? '1' : '0');
-					var url = '/api/api-apps/app/product/saveOrUpdate';	
-					console.log(this.PRODUCT);
+					var url = this.basic_url + '/api-apps/app/product/saveOrUpdate';	
 					
 					this.$axios.post(url,this.PRODUCT).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息

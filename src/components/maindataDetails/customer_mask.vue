@@ -44,7 +44,7 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="机构类型" prop="TYPE">
+										<el-form-item label="类型" prop="TYPE">
 											<el-select v-model="CUSTOMER.TYPE" placeholder="请选择" style="width: 100%">
 												<el-option v-for="(data,index) in SeleCUST_TYPE" :key="index" :value="data.code" :label="data.name"></el-option>
 												</el-option>
@@ -224,6 +224,7 @@
 </template>
 
 <script>
+	import Config from '../../config.js'
 	export default {
 		name: 'customer_masks',
 		data() {
@@ -293,6 +294,7 @@
                 }
             };
 			return {
+				basic_url: Config.dev_url,
 				personinfo:false,
 				loadSign:true,//加载
 				commentArr:{},
@@ -427,7 +429,7 @@
 				this.modify = false;
 				var date = new Date();
 				this.CUSTOMER.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 	    			this.CUSTOMER.ENTERBY = res.data.nickname;
 				}).catch((err) => {
 					this.$message({
@@ -438,7 +440,7 @@
 				this.show = true;
 			},
 			getsys_depttype() {//获取机构类型
-				var url = '/api/api-user/dicts/findChildsByCode?code=CUST_TYPE';
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=CUST_TYPE';
 				this.$axios.get(url, {}).then((res) => {
 					this.SeleCUST_TYPE = res.data;
 				}).catch(error => {
@@ -452,7 +454,7 @@
 				this.statusshow1 = false;
 				this.statusshow2 = true;
 				this.modify = true;
-				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 	    			this.CUSTOMER.CHANGEBY = res.data.nickname;
 	    			var date = new Date();
 					this.CUSTOMER.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
@@ -462,7 +464,7 @@
 						type: 'error'
 					});
 				});
-				this.$axios.get('/api/api-apps/app/customer/' + dataid, {}).then((res) => {
+				this.$axios.get(this.basic_url + '/api-apps/app/customer/' + dataid, {}).then((res) => {
 					this.CUSTOMER = res.data;
 //					console.log(this.CUSTOMER.STATUS==1);
 					this.CUSTOMER.STATUS=this.CUSTOMER.STATUS=="1"? '活动' : '不活动';
@@ -523,7 +525,7 @@
 				this.$refs[CUSTOMER].validate((valid) => {
 		          if (valid) {
 		          	this.CUSTOMER.STATUS=this.CUSTOMER.STATUS=="活动" ? '1' : '0';
-					var url = '/api/apps-center/app/customer/saveOrUpdate';
+					var url = this.basic_url + '/apps-center/app/customer/saveOrUpdate';
 					this.$axios.post(url, this.CUSTOMER).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {

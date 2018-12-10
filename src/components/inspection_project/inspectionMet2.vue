@@ -151,7 +151,7 @@
 </div>
 </template>
 <script>
-
+	import Config from '../../config.js'
 	export default {
 		name: 'inspectionMet2',
 		components: {
@@ -159,6 +159,7 @@
 		},
 		data() {
 			return {
+				basic_url: Config.dev_url,
 				inspectionMet2Form:{
 					inspectionList: []
 				},
@@ -210,7 +211,7 @@
 				}
 			},
 			modifyversion (row) {//点击修改后给当前修改人和修改时间赋值
-				 this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+				 this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					row.CHANGEBY=res.data.nickname;
 					var date=new Date();
 					row.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
@@ -269,7 +270,7 @@
 					return false;
 					//todo  相关数据设置
 				}
-				var url = '/api/api-apps/app/inspectionMet2/INSPECTION_PROJECT2/' + ID;
+				var url = this.basic_url + '/api-apps/app/inspectionMet2/INSPECTION_PROJECT2/' + ID;
 				this.$axios.get(url, {}).then((res) => {
 					console.log(res);
 					this.page.totalCount = res.data.count;	
@@ -292,7 +293,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				}
-				var url = '/api/api-apps/app/inspectionMet2';
+				var url = this.basic_url + '/api-apps/app/inspectionMet2';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
@@ -337,7 +338,7 @@
 					}
 				}
 				if (isEditingflag==false){
-                	this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+                	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
                 		var currentUser, currentDate
 						this.currentUser=res.data.nickname;
 						var date=new Date();
@@ -371,7 +372,7 @@
 				this.$refs['inspectionMet2Form'].validate((valid) => {
 					row.VERSION = row.VERSION + 1;//修改保存后版本号+1
 		          if (valid) {
-					var url = '/api/api-apps/app/inspectionMet2/saveOrUpdate';
+					var url = this.basic_url + '/api-apps/app/inspectionMet2/saveOrUpdate';
 					var submitData = {
 						"ID":row.ID,
 						"P_NUM": row.P_NUM,
@@ -410,7 +411,7 @@
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                 }).then(({ value }) => {
-                	var url = '/api/api-apps/app/inspectionMet2/' + row.ID;
+                	var url = this.basic_url + '/api-apps/app/inspectionMet2/' + row.ID;
                     this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 					//resp_code == 0 是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {

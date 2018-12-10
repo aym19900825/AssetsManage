@@ -166,6 +166,7 @@
 	</div>
 </template>
 <script>
+	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left2.vue'
 	import navs_header from '../common/nav_tabs.vue'
@@ -185,6 +186,7 @@
 		},
 		data() {
 			return {
+				basic_url: Config.dev_url,
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				value: '',
 				options: [{
@@ -400,7 +402,7 @@
 					});
 					return;
 				}else {
-					var url = '/api/api-apps/app/inspectionSta/deletes';
+					var url = this.basic_url + '/api/api-apps/app/inspectionSta/deletes';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -478,7 +480,7 @@
 					STARTETIME: this.searchList.STARTETIME,
 					STATUS: this.searchList.STATUS,
 				}
-				var url = '/api/api-apps/app/inspectionSta';
+				var url = this.basic_url + '/api-apps/app/inspectionSta';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {

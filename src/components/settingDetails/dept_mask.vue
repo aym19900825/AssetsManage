@@ -184,6 +184,7 @@
 </template>
 
 <script>
+	import Config from '../../config.js'
 	export default {
 		name: 'masks',
 		props: {
@@ -283,6 +284,7 @@
 			};
 
 			return {
+				basic_url: Config.dev_url,
 				value: '',
 				options: [{
 					value: '1',
@@ -377,7 +379,7 @@
 			getDept() {
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
-				var url = '/api/api-user/depts/treeMap';
+				var url = this.basic_url + '/api-user/depts/treeMap';
 				this.$axios.get(url, {
 					// params: {
 					// 	page: page,
@@ -406,7 +408,7 @@
 		        return Math.floor(Math.random()*(max-min))+min;
 		    },
 			getDEPT_TYPE() {//获取机构属性
-				var url = '/api/api-user/dicts/findChildsByCode?code=DEPT_TYPE';
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=DEPT_TYPE';
 				this.$axios.get(url, {}).then((res) => {
 					this.SelectDEPT_TYPE = res.data;
 				}).catch(error => {
@@ -414,7 +416,7 @@
 				})
 			},
 			getsys_depttype() {//获取机构类型
-				var url = '/api/api-user/dicts/findChildsByCode?code=sys_depttype';
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=sys_depttype';
 				this.$axios.get(url, {}).then((res) => {
 					this.Selectsys_depttype = res.data;
 				}).catch(error => {
@@ -422,6 +424,7 @@
 				})
 			},
 			
+
 			visible() {//点击父组件按钮显示弹窗
 				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
 	     			this.adddeptForm.enterby = res.data.nickname;
@@ -443,7 +446,7 @@
 			},
 			//修改
 			detail() {
-				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 	    			this.adddeptForm.changeby = res.data.nickname;
 	    			var date=new Date();
 					this.adddeptForm.changedate = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
@@ -497,7 +500,7 @@
 				this.$refs[adddeptForm].validate((valid) => {
 		          if (valid) {
 		          	this.adddeptForm.status=((this.adddeptForm.status=="1"||this.adddeptForm.status=='活动') ? '1' : '0');
-					var url = '/api/api-user/depts/saveOrUpdate';
+					var url = this.basic_url + '/api-user/depts/saveOrUpdate';
 //					this.adddeptForm = {
 //						 "id":this.adddeptForm.id,
 //						 "pid":this.adddeptForm.pid,

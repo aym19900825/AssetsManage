@@ -109,6 +109,7 @@
 </template>
 
 <script>
+	import Config from '../../config.js'
 	export default {
 		name: 'masks',
 		props: {
@@ -140,6 +141,7 @@
                 }
             };
 			return {
+				basic_url: Config.dev_url,
 				personinfo:false,
 				
 				modify:false,//修订、修改人、修改时间
@@ -198,7 +200,7 @@
 			//点击按钮显示弹窗
 			visible() {
 //				this.CATEGORY.NUM =  this.rand(1000,9999);
-				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.CATEGORY.DEPARTMENT = res.data.deptName;
 	    			this.CATEGORY.ENTERBY = res.data.nickname;
 	    			var date = new Date();
@@ -224,7 +226,7 @@
 				this.modifytitle = true;
 				this.statusshow1 = false;
 				this.statusshow2 = true;
-				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 	    			this.CATEGORY.CHANGEBY = res.data.nickname;
 	    			var date=new Date();
 					this.CATEGORY.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
@@ -276,7 +278,7 @@
 		          	//console.log(this.CATEGORY.STATUS);
 		          	this.CATEGORY.STATUS=((this.CATEGORY.STATUS=="1"||this.CATEGORY.STATUS=='活动') ? '1' : '0');
 		          	//console.log(this.CATEGORY);
-					var url = '/api/api-apps/app/productType/saveOrUpdate';		
+					var url = this.basic_url + '/api-apps/app/productType/saveOrUpdate';		
 					this.$axios.post(url,this.CATEGORY).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						console.log(this.CATEGORY);

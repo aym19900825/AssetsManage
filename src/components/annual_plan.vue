@@ -175,6 +175,7 @@
 	</div>
 </template>
 <script>
+	import Config from '../config.js'
 	import vheader from './common/vheader.vue'
 	import navs_left from './common/left_navs/nav_left2.vue'
 	import navs_header from './common/nav_tabs.vue'
@@ -191,6 +192,7 @@
 		},
 		data() {
 			return {
+				basic_url: Config.dev_url,
 				ismin: true,
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				checkedName: [
@@ -338,7 +340,7 @@
 					});
 					return;
 				} else {
-					var url = '/api/api-apps/app/workplan/deletes';
+					var url = this.basic_url + '/api-apps/app/workplan/deletes';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -400,7 +402,7 @@
 					ENTERBY:this.searchList.ENTERBY,
 					STATUS:this.searchList.STATUS
 				}
-				var url = '/api/api-apps/app/workplan';
+				var url = this.basic_url + '/api-apps/app/workplan';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
@@ -417,7 +419,7 @@
 			//机构树
 			getKey() {
 				let that = this;
-				var url = '/api/api-user/depts/tree';
+				var url = this.basic_url + '/api-user/depts/tree';
 				this.$axios.get(url, {}).then((res) => {
 					this.resourceData = res.data;
 					this.treeData = this.transformTree(this.resourceData);

@@ -154,6 +154,7 @@
 </div>
 </template>
 <script>
+	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left3.vue'
 	import navs_header from '../common/nav_tabs.vue' 
@@ -171,6 +172,7 @@
 		data() {
 			return {
 				// dataUrl: '/api/api-user/users',
+				basic_url: Config.dev_url,
 				searchData: {
 			        page: 1,
 			        limit: 10,//分页显示数
@@ -338,7 +340,7 @@
 					});
 					return;
 				} else {
-					var url = '/api/api-apps/app/checkProCont2/deletes';
+					var url = this.basic_url + '/api-apps/app/checkProCont2/deletes';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -412,7 +414,7 @@
 					ENTERBY: this.searchList.ENTERBY,
 					ENTERDATE: this.searchList.ENTERDATE
 				}
-				var url = '/api/api-apps/app/checkProCont2';
+				var url = this.basic_url + '/api-apps/app/checkProCont2';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
@@ -495,7 +497,7 @@
 			//机构树
 			getKey() {
 				let that = this;
-				var url = '/api/api-user/depts/tree';
+				var url = this.basic_url + '/api-user/depts/tree';
 				this.$axios.get(url, {}).then((res) => {
 					this.resourceData = res.data;
 					this.treeData = this.transformTree(this.resourceData);

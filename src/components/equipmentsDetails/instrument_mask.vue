@@ -347,6 +347,7 @@
 </template>
 
 <script>
+	import Config from '../../config.js'
 	export default {
 		name: 'masks',
 		props: {
@@ -357,6 +358,7 @@
 		data() {
 			
 			return {
+				basic_url: Config.dev_url,
 //				user{},
 				dataInfo: {
 					status: '活动',
@@ -415,7 +417,7 @@
 
 			//点击按钮显示弹窗
 			visible() {
-				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 //					this.dataInfo.ENTERBY=res.data.id;
 //					this.dataInfo.ENTERBYName=res.data.nickname;
 //					var date=new Date();
@@ -436,7 +438,7 @@
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.modify = true;
-				var usersUrl = '/api/api-user/users/currentMap';
+				var usersUrl = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(usersUrl, {}).then((res) => {
 					this.user.changeby = res.data.nickname;
 					var date = new Date();
@@ -448,7 +450,7 @@
 					});
 				});
 				
-				var url = '/api/api-user/asset/' + dataid;
+				var url = this.basic_url + '/api-user/asset/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
 					console.log(res.data);
 					this.user = res.data;
@@ -505,7 +507,7 @@
 				this.$refs.user.validate((valid) => {
 					if(valid) {
 						
-						var url = '/api/api-user/asset/saveOrUpdate';
+						var url = this.basic_url + '/api-user/asset/saveOrUpdate';
 						this.$axios.post(url, this.dataInfo).then((res) => {
 							if(res.data.resp_code == 0) {
 								this.$message({

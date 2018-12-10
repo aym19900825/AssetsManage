@@ -106,6 +106,7 @@
 </template>
 
 <script>
+	import Config from '../../config.js'
 	export default {
 		name: 'masks',
 		props: {
@@ -152,6 +153,7 @@
             };
            
 			return {
+				basic_url: Config.dev_url,
 				value: '',
 				options: [{
 					value: '1',
@@ -205,7 +207,7 @@
             },
             childMethods() {//添加内容时从父组件带过来的
             	console.log(this.numbsetForm);
-            	this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+            	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.numbsetForm.DEPARTMENT=res.data.deptName;
 					this.numbsetForm.ENTERBY=res.data.nickname;
 					var date=new Date();
@@ -222,7 +224,7 @@
             	this.show = !this.show;
             },
             detail() {//修改内容时从父组件带过来的
-            	this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+            	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.numbsetForm.CHANGEBY=res.data.nickname;
 					var date=new Date();
 					this.numbsetForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
@@ -279,7 +281,7 @@
 				this.$refs[numbsetForm].validate((valid) => {
 		          if (valid) {
 		          	this.numbsetForm.STATUS=((this.numbsetForm.STATUS=="1"||this.numbsetForm.STATUS=='活动') ? '1' : '0');
-					var url = '/api/api-apps/app/autokey/saveOrUpdate';
+					var url = this.basic_url + '/api-apps/app/autokey/saveOrUpdate';
 					this.$axios.post(url, this.numbsetForm).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {

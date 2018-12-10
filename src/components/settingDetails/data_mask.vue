@@ -173,6 +173,7 @@
 </template>
 
 <script>
+	import Config from '../../config.js'
 	export default {
 		name: 'masks',
 		data() {
@@ -191,6 +192,7 @@
                 }
             };
 			return {
+				basic_url: Config.dev_url,
 				selUser:[],
 				edit: true, //禁填
 				col_but1: true,
@@ -353,7 +355,7 @@
 			},
 			// 这里是修改
 			detail(dataid) {
-				var url = '/api/apps-center/objectcfg/' + dataid;
+				var url = this.basic_url + '/apps-center/objectcfg/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
 					this.dataInfo = res.data;
 					//this.attributes=this.dataInfo.attributes;
@@ -397,7 +399,7 @@
 			submitForm(dataInfo) {
 				this.$refs[dataInfo].validate((valid) => {
 		          if (valid) {
-					var url = '/api/apps-center/objectcfg/saveOrUpdate';
+					var url = this.basic_url + '/apps-center/objectcfg/saveOrUpdate';
 					//this.dataInfo.attributes=this.attributes;
 	               /* $.each(this.attributes,function(i,n){
 	                    this.dataInfo.attributes.push(n.columnname +" ，"+n.description+" ，"+n.type+" ，"+n.length+" ，"+n.retain+");
@@ -432,7 +434,7 @@
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
 				var type = 1;
-				var url = '/api/api-user/depts/type';
+				var url = this.basic_url + '/api-user/depts/type';
 				this.$axios.get(url, {
 					params: {
 						page: page,
@@ -451,7 +453,7 @@
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
 				var type = 2;
-				var url = '/api/api-user/depts/type';
+				var url = this.basic_url + '/api-user/depts/type';
 				this.$axios.get(url, {
 					params: {
 						page: page,
@@ -473,7 +475,7 @@
 					}
 				}
 				let that = this;
-				var url = '/api/api-user/roles';
+				var url = this.basic_url + '/api-user/roles';
 
 				this.$axios.get(url, {
 					

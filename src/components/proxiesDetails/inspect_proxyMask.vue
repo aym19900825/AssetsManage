@@ -633,6 +633,7 @@
 </template>
 
 <script>
+	import Config from '../../config.js'
 	export default {
 		name: 'masks',
 		data() {
@@ -645,6 +646,7 @@
 			};
 
 			return {
+				basic_url: Config.dev_url,
 				dataInfo: {
 					PROXYNUM: '1',
 					STATUS: '草稿',
@@ -815,7 +817,7 @@
 			visible() {
 				//分包人数据置空
 				//				this.datatinfo.checkProCont = [];
-				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.dataInfo.DEPT = res.data.deptName;
 					this.dataInfo.ENTERBY = res.data.nickname;
 					this.dataInfo.ORGID = res.data.deptName
@@ -841,7 +843,7 @@
 				this.statusshow1 = false;
 				this.statusshow2 = true;
 				this.modify = true;
-				var usersUrl = '/api/api-user/users/currentMap'
+				var usersUrl = this.basic_url + '/api-user/users/currentMap'
 				this.$axios.get(usersUrl, {}).then((res) => {
 					this.dataInfo.CHANGEBY = res.data.nickname;
 					var date = new Date();
@@ -853,7 +855,7 @@
 					});
 				});
 				
-				var url = '/api/api-apps/app/inspectPro/' + dataid;
+				var url = this.basic_url + '/api-apps/app/inspectPro/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
 					console.log(res);
 					this.dataInfo = res.data;
@@ -897,8 +899,7 @@
 			submitForm(dataInfo) {
 				this.$refs[dataInfo].validate((valid) => {
 			        if (valid) {
-					var url = '/api/api-apps/app/inspectPro/saveOrUpdate';
-					console.log(this.dataInfo);
+					var url = this.basic_url + '/api-apps/app/inspectPro/saveOrUpdate';
 					this.$axios.post(url, this.dataInfo).then((res) => {
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -938,7 +939,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				}
-				var url = '/api/api-user/users';
+				var url = this.basic_url + '/api-user/users';
 				this.$axios.get(url, {
 					params: params
 				}).then((res) => {

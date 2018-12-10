@@ -177,6 +177,7 @@
 </template>
 
 <script>
+	import Config from '../../config.js'
 	export default {
 		name: 'testing_mask',
 		props: {
@@ -209,6 +210,7 @@
 			};
            
 			return {
+				basic_url: Config.dev_url,
 				options: [{
           			value: '选项1',
           			label: '活动'
@@ -331,7 +333,7 @@
 			getDept() {
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
-				var url = '/api/api-user/depts/treeByType';
+				var url = this.basic_url + '/api-user/depts/treeByType';
 				this.$axios.get(url, {
 					// params: {
 					// 	page: page,
@@ -408,7 +410,7 @@
 			submitForm(testingForm) {
 				this.$refs[testingForm].validate((valid) => {
 		          if (valid) {
-					var url = '/api/api-user/depts/saveOrUpdate';
+					var url = this.basic_url + '/api-user/depts/saveOrUpdate';
 					this.testingFormtest = {
 						"ID":this.testingForm.ID,
 						"pid":this.testingForm.pid,

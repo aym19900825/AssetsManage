@@ -61,6 +61,7 @@
 	</div>
 </template>
 <script>
+	import Config from '../../config.js'
 	import tree_grid from '../common/TreeGrid.vue'//树表格
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
@@ -79,6 +80,7 @@
 		},
 		data() {
 			return {
+			basic_url: Config.dev_url,
 		    checkedName: [
 					'菜单名称',
 					'菜单url',
@@ -231,7 +233,7 @@
 						});
 					}else {
 						var id = changeMenu.id;
-						var url = '/api/api-user/menus/' + id;
+						var url = this.basic_url + '/api/api-user/menus/' + id;
 						this.$axios.delete(url, {}).then((res) => { //.delete 传数据方法
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
@@ -260,7 +262,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				}
-				var url = '/api/api-user/menus/findTreeAlls';
+				var url = this.basic_url + '/api-user/menus/findTreeAlls';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {

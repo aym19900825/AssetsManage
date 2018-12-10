@@ -115,6 +115,7 @@
 </template>
 
 <script>
+	import Config from '../../config.js'
 	export default {
 		name: 'masks',		
 		data() {
@@ -127,6 +128,7 @@
 				}
 			};
 			return {
+				basic_url: Config.dev_url,
 				value:'',
 				stopoptions:[{
 					value: '1',
@@ -240,7 +242,7 @@
 			//机构树
 			getKey() {
 				let that = this;
-				var url = '/api/api-user/depts/tree';
+				var url = this.basic_url + '/api-user/depts/tree';
 				this.$axios.get(url, {}).then((res) => {
 					console.log(res);
 					this.resourceData = res.data;
@@ -287,7 +289,7 @@
 			detail(id) {
 				this.stopshow = false;
 				this.stopselect = true;
-				var url = '/api/api-user/roles/' + id;
+				var url = this.basic_url + '/api-user/roles/' + id;
 				this.$axios.get(url, {}).then((res) => {
 					this.roleList = res.data;
 
@@ -336,7 +338,7 @@
 			submitForm() {
 				this.$refs.roleList.validate((valid) => {
 					// if(valid) {	
-						var url = '/api/api-user/roles/saveOrUpdate';
+						var url = this.basic_url + '/api-user/roles/saveOrUpdate';
 						this.$axios.post(url, this.roleList).then((res) => {
 							if(res.data.resp_code == 0) {
 								this.$message({
@@ -362,7 +364,7 @@
 			getDept() {				
 				// this.editSearch = 'dept';
 				var type = 2;
-				var url = '/api/api-user/depts/treeByType';
+				var url = this.basic_url + '/api-user/depts/treeByType';
 				this.$axios.get(url, {
 					params: {
 						type: type

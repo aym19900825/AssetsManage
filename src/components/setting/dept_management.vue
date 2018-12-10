@@ -92,6 +92,7 @@
 </template>
 
 <script>
+	import Config from '../../config.js'
 	import tree_grid from '../common/TreeGrid.vue'//树表格
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
@@ -111,6 +112,7 @@
 		},
 		data() {
 			return {
+				basic_url: Config.dev_url,
 				checkedName: [
 					'序号',
 					'机构名称',
@@ -225,7 +227,7 @@
 						fullname: this.searchDept.fullname
 					}
 				};
-				var url = '/api/api-user/depts';
+				var url = this.basic_url + '/api-user/depts';
 				this.$axios.get(url, data).then((res) => {
 					this.deptList = res.data.data;
 				}).catch((wrong) => {
@@ -234,7 +236,7 @@
 			},
 			//添加
 			openAddMgr() {
-				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.adddeptForm = {
 						"version":'1',
 						"status":'活动',
@@ -317,7 +319,7 @@
 						});
 					}else {
 						var id = changeMenu.id;
-						var url = '/api/api-user/depts/' + id;
+						var url = this.basic_url + '/api-user/depts/' + id;
 						this.$axios.delete(url, {}).then((res) => {
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
@@ -353,7 +355,7 @@
 			},
 
 			requestData() {//高级查询字段
-				var url = '/api/api-user/depts/treeMap';
+				var url = this.basic_url + '/api-user/depts/treeMap';
 				this.$axios.get(url, {
 //					params: data
 				}).then((res) => {
@@ -371,7 +373,7 @@
 			//机构树
 			getKey() {
 				let that = this;
-				var url = '/api/api-user/depts/tree';
+				var url = this.basic_url + '/api-user/depts/tree';
 				this.$axios.get(url, {}).then((res) => {
 					this.resourceData = res.data;
 					this.treeData = this.transformTree(this.resourceData);

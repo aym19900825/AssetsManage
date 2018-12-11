@@ -114,7 +114,7 @@
 					</div>
 					<div class="el-dialog__footer">
 							<el-button type="primary" @click="saveAndUpdate('testing_projectForm')">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit('testing_projectForm')">提交并保存</el-button>
+							<el-button type="success" @click="saveAndSubmit('testing_projectForm')">保存并添加</el-button>
 							<el-button @click="close">取消</el-button>
 						    <el-button v-if="modify" type="primary"@click="submitForm('testing_projectForm')">修订</el-button>
 					</div>
@@ -406,7 +406,7 @@
 				this.show = false;
 				
 			},
-			//提交并保存
+			//保存并添加
 			saveAndSubmit(testing_projectForm){
 				this.save(testing_projectForm);
 //				this.$emit('request');

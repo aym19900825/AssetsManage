@@ -188,7 +188,7 @@
 					</div>
 					<div class="content-footer">
 							<el-button type="primary" @click="saveAndUpdate('testingForm')">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit('testingForm')">提交并保存</el-button>
+							<el-button type="success" @click="saveAndSubmit('testingForm')">保存并添加</el-button>
 							<el-button @click="close">取消</el-button>
 							<el-button v-if="modify" type="primary" @click="submitForm('testingForm')">修订</el-button>
 							
@@ -545,7 +545,7 @@
 				this.show = false;
 				
 			},
-			//提交并保存
+			//保存并添加
 			saveAndSubmit(testingForm){
 				this.save(testingForm);
 				this.$emit('reset');

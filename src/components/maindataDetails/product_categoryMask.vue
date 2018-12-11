@@ -98,7 +98,7 @@
 					</div>
 					<div class="el-dialog__footer">
 							<el-button type="primary" @click="saveAndUpdate('CATEGORY')">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit('CATEGORY')">提交并保存</el-button>
+							<el-button type="success" @click="saveAndSubmit('CATEGORY')">保存并添加</el-button>
 							<el-button @click="close">取消</el-button>
 							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion">修订</el-button>
 					</div>
@@ -294,7 +294,7 @@
 				this.show = false;
 				
 			},
-			//提交并保存
+			//保存并添加
 			saveAndSubmit(CATEGORY){
 				this.save(CATEGORY);
 				this.$emit('reset');

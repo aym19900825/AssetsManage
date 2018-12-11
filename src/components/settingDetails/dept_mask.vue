@@ -164,7 +164,7 @@
 					<div class="el-dialog__footer">
 						    <el-button @click="close">取消</el-button> 
 						    <el-button type="primary" @click="saveAndUpdate('adddeptForm')">保存</el-button>
-						    <el-button type="success" @click="saveAndSubmit('adddeptForm')">提交并保存</el-button>
+						    <el-button type="success" @click="saveAndSubmit('adddeptForm')">保存并添加</el-button>
 						<!--	<el-button type="primary" class="btn-primarys" @click="submitForm('adddeptForm')">提交</el-button>-->
 							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion">修订</el-button>
 					</div>

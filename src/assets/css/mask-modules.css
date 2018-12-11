@@ -212,5 +212,8 @@ element.style {
 	margin-bottom: 26px;
 	margin-top: 15px;
 }  
+.el-radio{
+	line-height: 40px !important;
+}
 
 

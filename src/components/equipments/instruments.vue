@@ -1,4 +1,5 @@
 <template>
+<!-- 仪器和器量依据页面 -->
 <div>
 	<div class="headerbg">
 		<vheader></vheader>
@@ -293,7 +294,6 @@
 			},
 			//添加用戶
 			openAddMgr() {
-//				this.$refs.child.resetNew();
 				this.$refs.child.visible();
 			},
 			//修改用戶
@@ -425,17 +425,13 @@
 			},
 		},
 		mounted(){
+			this.requestData();
              // 注册scroll事件并监听  
              let self = this;
               $(".div-table").scroll(function(){
                 self.loadMore();
             })
         },
-
-
-		mounted() {
-			this.requestData();
-		},
 	}
 </script>
 

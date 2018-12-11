@@ -274,7 +274,7 @@
 				$(".mask_div").css("top", "0");
 			},
 			// 保存users/saveOrUpdate
-			submitForm(CATEGORY) {
+			save(CATEGORY) {
 				this.$refs[CATEGORY].validate((valid) => {
 		          if (valid) {
 		          	//console.log(this.CATEGORY.STATUS);

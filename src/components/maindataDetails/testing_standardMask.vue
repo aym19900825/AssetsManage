@@ -44,7 +44,7 @@
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="标准编号" prop="S_NUM">
-											<el-input v-model="dataInfo.S_NUM" :disabled="edit" placeholder="自动获取"></el-input>
+											<el-input v-model="dataInfo.S_NUM"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">

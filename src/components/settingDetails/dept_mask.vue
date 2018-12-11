@@ -45,7 +45,7 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="机构编码" prop="code">
-											<el-input placeholder="自动生成" v-model="adddeptForm.code":disabled="edit" >
+											<el-input v-model="adddeptForm.code">
 											</el-input>
 										</el-form-item>
 									</el-col>

@@ -35,7 +35,7 @@
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="组织机构代码" prop="CODE">
-											<el-input v-model="CUSTOMER.CODE" :disabled="edit" placeholder="自动生成"></el-input>
+											<el-input v-model="CUSTOMER.CODE"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">

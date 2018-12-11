@@ -3,7 +3,7 @@
 	<div class="pull-left ml20" style="width:860px">
 		<el-card class="box-card" :body-style="{ padding: '10px' }">
 			<div slot="header" class="title clearfix">
-				<span>产品名称</span>
+				<span>产品</span>
 				<!--按钮操作行 Begin-->
 					<div class="columns pull-right">
 						<el-input placeholder="请输入产品名称" v-model="search" class="input-with-select">

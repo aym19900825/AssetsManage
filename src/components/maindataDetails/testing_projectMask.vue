@@ -25,7 +25,7 @@
 											<template slot="prepend">版本</template>
 										</el-input>
 									</el-col>
-									<el-col :span="5" class="pull-right" v-if="modify">
+									<!--<el-col :span="5" class="pull-right" v-if="modify">
 										<el-input v-model="testing_projectForm.STATUS=='1'?'活动':'不活动'" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
@@ -34,7 +34,7 @@
 										<el-input v-model="testing_projectForm.STATUS" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
-									</el-col>
+									</el-col>-->
 									<el-col :span="7" class="pull-right">
 										<el-input placeholder="自动生成" v-model="testing_projectForm.P_NUM" :disabled="true">
 											<template slot="prepend">检验/检测项目编号</template>
@@ -113,9 +113,10 @@
 						</el-collapse>
 					</div>
 					<div class="el-dialog__footer">
-						<button class="btn btn-default btn-large" @click="cancelForm">取消</button>
-						<button v-if="modify" type="primary" class="btn btn-primarys btn-large" @click="submitForm('testing_projectForm')">修订</button>
-						<button v-else="modify" type="primary" class="btn btn-primarys btn-large" @click="submitForm('testing_projectForm')">提交</button>
+							<el-button type="primary" @click="saveAndUpdate('testing_projectForm')">保存</el-button>
+							<el-button type="success" @click="saveAndSubmit('testing_projectForm')">提交并保存</el-button>
+							<el-button @click="close">取消</el-button>
+						    <el-button v-if="modify" type="primary"@click="submitForm('testing_projectForm')">修订</el-button>
 					</div>
 				</el-form>
 			</div>
@@ -370,8 +371,8 @@
 				$(".mask_div").css("top", "0");
 			},
 			// 保存users/saveOrUpdate
-			submitForm(formName) {
-				this.$refs[formName].validate((valid) => {
+			save(testing_projectForm) {
+				this.$refs[testing_projectForm].validate((valid) => {
 					if (valid) {
 						this.testing_projectForm.STATUS=((this.testing_projectForm.STATUS=="1"||this.testing_projectForm.STATUS=='活动') ? '1' : '0');
 						var url = this.basic_url + '/api-apps/app/inspectionPro/saveOrUpdate';
@@ -382,10 +383,8 @@
 									message: '保存成功',
 									type: 'success'
 								});
-								this.show = false;
-								//重新加载数据
-								this.$emit('request')
 							}
+							this.$emit('request');
 						}).catch((err) => {
 							this.$message({
 								message: '网络错误，请重试',
@@ -396,6 +395,20 @@
 						return false;
 					}
 				});
+			},
+			//保存
+			saveAndUpdate(testing_projectForm){
+				this.save(testing_projectForm);
+				this.show = false;
+				
+			},
+			//提交并保存
+			saveAndSubmit(testing_projectForm){
+				this.save(testing_projectForm);
+//				this.$emit('request');
+				this.show = true;
+				this.$emit('reset');
+				
 			},
 
 			handleClose(done) {

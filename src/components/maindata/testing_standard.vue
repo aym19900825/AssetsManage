@@ -143,7 +143,7 @@
 				</div>
 			</div>
 			<!--右侧内容显示 End-->
-			<standardmask :dataInfo="aaaData[0]" ref="child" @request="requestData" v-bind:page=page></standardmask>
+			<standardmask :dataInfo="dataInfo" ref="child" @request="requestData" v-bind:page=page></standardmask>
 		</div>
 	</div>
 </template>
@@ -294,7 +294,7 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-				aaaData: [],
+				dataInfo: {},//修改子组件时传递数据
 			}
 		},
 
@@ -330,13 +330,13 @@
 				this.page.pageSize = 10;
 				this.requestData();
 			},
-			//添加
-			openAddMgr() {
-				this.aaaData = [{
+			//清空
+			reset(){
+				this.dataInfo = {
 					ID: '',
 					VERSION: '1',
 					STATUS: '活动',
-					S_NUM: 'SRO10001',
+					S_NUM: '',
 					S_NAME: '',
 					S_ENGNAME: '',
 					RELEASETIME: '',
@@ -346,26 +346,30 @@
 					ENTERDATE: '',
 					CHANGEBY: '',
 					CHANGEDATE: ''
-				}];
+				};
+			},
+			//添加
+			openAddMgr() {
+				this.reset();
 				this.$refs.child.visible();
 			},
 			//修改
 			modify() {
-				this.aaaData = this.selUser;
-				if(this.aaaData.length == 0) {
+				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要修改的用户',
 						type: 'warning'
 					});
 					return;
-				} else if(this.aaaData.length > 1) {
+				} else if(this.selUser.length > 1) {
 					this.$message({
 						message: '不可同时修改多个用户',
 						type: 'warning'
 					});
 					return;
 				} else {
-					this.$refs.child.detail(this.aaaData[0]);
+					this.dataInfo = this.selUser[0]; 
+					this.$refs.child.detail();
 				}
 			},
 			//高级查询

@@ -527,9 +527,8 @@
 								message: '保存成功',
 								type: 'success'
 							});
-//							this.show = false;
 //							//重新加载数据
-//							this.$emit('request')
+							this.$emit('request')
 						}
 					}).catch((err) => {
 						this.$message({
@@ -545,13 +544,11 @@
 			saveAndUpdate(CUSTOMER){
 				this.save(CUSTOMER);
 				this.show = false;
-				this.$emit('request');
 			},
 			saveAndSubmit(CUSTOMER){
 				this.save(CUSTOMER);
 				this.reset();
 				this.show = true;
-				this.$emit('request');
 			},
 			handleClose(done) {
 				this.$confirm('确认关闭？')

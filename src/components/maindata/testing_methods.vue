@@ -137,7 +137,7 @@
 				</div>
 			</div>
 			<!--右侧内容显示 End-->
-			<testingmask :testingForm="testingForm" ref="child" @request="requestData" v-bind:page=page></testingmask>
+			<testingmask :testingForm="testingForm" ref="child" @request="requestData" @reset="reset" v-bind:page=page></testingmask>
 		</div>
 	</div>
 </template>
@@ -253,7 +253,6 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-				aaaData: [],
 				testingForm: {}//修改子组件时传递数据
 			}
 		},
@@ -290,9 +289,10 @@
 				this.page.pageSize = 10;
 				this.requestData();
 			},
-			openAddMgr() {//添加检验/检测方法编号数据
+			//重置
+			reset(){
 				this.testingForm = {
-					"VERSION": 0,
+					"VERSION": 1,
 					"STATUS": '活动',
 					"M_NUM": '',
 					"M_NAME": '',
@@ -304,17 +304,19 @@
 					"CHANGEBY": '',
 					"CHANGEDATE": '',
 				};
-				this.$refs.child.childMethods();
+			},
+			openAddMgr() {//添加检验/检测方法编号数据
+				this.reset();
+				this.$refs.child.visible();
 			},
 			modify() {//修改检验/检测方法编号数据
-				this.aaaData = this.selMenu;
-				if(this.aaaData.length == 0) {
+				if(this.selMenu.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
 						type: 'warning'
 					});
 					return;
-				} else if(this.aaaData.length > 1) {
+				} else if(this.selMenu.length > 1) {
 					this.$message({
 						message: '不可同时修改多条数据',
 						type: 'warning'

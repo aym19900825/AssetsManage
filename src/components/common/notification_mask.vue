@@ -593,7 +593,7 @@
 				var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
 				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
 				// this.dataInfo.CHECTCOST="￥" + num.join(".");
-				// this.dataInfo.CHECTCOST=num.join(".");
+				this.dataInfo.CHECTCOST = num.join(".");
 			},
 			
 			//tabs

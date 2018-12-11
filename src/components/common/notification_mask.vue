@@ -628,6 +628,7 @@
 						type: type
 					},
 				}).then((res) => {
+					console.log(res.data);
 					this.resourceData = res.data;
 					this.dialogVisiblecompany = true;
 				});
@@ -911,6 +912,7 @@
 				this.dialogVisiblecompany = false;
 				this.dataInfo.CJDW = this.getCheckboxData.id;
 				this.dataInfo.CJDWDesc = this.getCheckboxData.fullname;
+				this.dataInfo.P_LEADERDesc = this.getCheckboxData.leader;
 			},
 			dailogconfirm(type) { //小弹出框确认按钮事件
 				this.dialogVisible = false;

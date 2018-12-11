@@ -435,7 +435,8 @@
 				 		message: '网络错误，请重试',
 				 		type: 'error'
 				 	});
-				});			
+				});	
+				this.$refs["adddeptForm"].resetFields();//清空表单验证
 				this.show = !this.show;
 				this.addtitle = true;
 				this.modifytitle = false;

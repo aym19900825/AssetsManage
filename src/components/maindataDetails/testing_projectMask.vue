@@ -305,7 +305,11 @@
 						message:'网络错误，请重试',
 						type:'error'
 					})
-				})
+				});
+				//清空表单验证
+				if (this.$refs["testing_projectForm"] !== undefined) {
+                    this.$refs["testing_projectForm"].resetFields();
+               }
 				this.statusshow1 = true;
 				this.statusshow2 = false;
 				this.addtitle = true;

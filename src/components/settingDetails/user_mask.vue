@@ -686,7 +686,8 @@
 					enabled: '活动',
 					traings: [],
 					qualifications: [],
-				}
+				};
+				this.$refs["user"].resetFields();//清空表单验证
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					
 					this.user.createby=res.data.id;
@@ -816,10 +817,9 @@
 								this.$message({
 									message: '保存成功',
 									type: 'success',
-								});
-//								this.show = false;
-//						
-//								this.$emit('request')
+								});						
+								this.$emit('request');
+								
 							}
 						}).catch((err) => {
 							this.$message({
@@ -830,8 +830,11 @@
 					} else {
 						this.$message({
 								message: '有必填项未填写，请重新填写',
-								type: 'warning'
-							});
+								type: 'warning',
+								
+						});
+						return;
+							
 					}
 				})
 			},

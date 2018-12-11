@@ -200,6 +200,10 @@
 		    },
 			//点击按钮显示弹窗
 			visible() {
+				//清空表单验证
+				if (this.$refs["PRODUCT"] !== undefined) {
+                    this.$refs["PRODUCT"].resetFields();
+               }
 				this.statusshow1 = true;
 				this.statusshow2 = false;
 				this.addtitle = true;

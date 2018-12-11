@@ -348,6 +348,7 @@
 			},
 			//添加点击按钮显示弹窗
 			visible() {
+				this.$refs["dataInfo"].resetFields();//清空表单验证
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.modify = false;

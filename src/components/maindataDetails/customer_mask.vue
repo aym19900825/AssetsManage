@@ -416,6 +416,9 @@
 			//点击添加，修改按钮显示弹窗
 			visible() {
 				this.reset();
+				if (this.$refs["CUSTOMER"] !== undefined) {
+                    this.$refs["CUSTOMER"].resetFields();
+               	}
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.statusshow1 = true;

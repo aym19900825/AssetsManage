@@ -16,24 +16,24 @@
 			</div>
 			<div class="mask_content">
 
-				<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" status-icon inline-message label-width="100px" class="demo-ruleForm">
+				<el-form :model="dataInfo" :label-position="labelPositions" :rules="rules" ref="dataInfo" status-icon inline-message label-width="100px" class="demo-ruleForm">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="委托单位" name="1">
 								<el-row :gutter="20" class="pb10">
 									<el-col :span="5" class="pull-right">
 										<el-input v-model="dataInfo.STATUS" :disabled="true">
-											<template slot="prepend">信息状态</template>
+											<template slot="prepend">状态</template>
 										</el-input>
 									</el-col>
 									<el-col :span="5" class="pull-right">
-										<el-input v-model="dataInfo.PROXYNUM" :disabled="true">
+										<el-input v-model="dataInfo.PROXYNUM" :disabled="true" placeholder="自动生成">
 											<template slot="prepend">编号</template>
 										</el-input>
 									</el-col>
 
 								</el-row>
-								<div class="accordion-body tab-content">
+								
 									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="名称" prop="V_NAME">
@@ -54,7 +54,7 @@
 									</el-row>
 									<el-row :gutter="70">
 										<el-col :span="8">
-											<el-form-item label="联系人姓名" prop="V_PERSON">
+											<el-form-item label="姓名" prop="V_PERSON">
 												<el-input v-model="dataInfo.V_PERSON" :disabled="false">
 													<el-button slot="append" icon="el-icon-search" @click="getPeople()"></el-button>
 												</el-input>
@@ -62,7 +62,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="联系人电话" prop="V_PHONE">
+											<el-form-item label="电话" prop="V_PHONE">
 												<el-input v-model="dataInfo.V_PHONE"></el-input>
 											</el-form-item>
 										</el-col>
@@ -78,27 +78,21 @@
 												<el-input v-model="dataInfo.VERSION"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8">
+										<!--<el-col :span="8">
 											<el-form-item label="委托单位编号" prop="VENDOR">
 												<el-input v-model="dataInfo.VENDOR"></el-input>
 											</el-form-item>
-										</el-col>
+										</el-col>-->
 									</el-row>
-								</div>
 							</el-collapse-item>
 							<el-collapse-item title="生产单位" name="2">
-								<div class="accordion-body tab-content">
 									<el-form-item label="生产单位名称" prop="P_NAME">
 										<el-input v-model="dataInfo.P_NAME" :disabled="false">
 											<el-button slot="append" icon="el-icon-search" @click=""></el-button>
 										</el-input>
-
 									</el-form-item>
-								</div>
 							</el-collapse-item>
 							<el-collapse-item title="样品" name="3">
-								<div class="accordion-body tab-content">
-
 									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="名称" prop="ITEM_NAME">
@@ -125,11 +119,11 @@
 
 											</el-form-item>
 										</el-col>
-										<el-col :span="8">
+										<!--<el-col :span="8">
 											<el-form-item label="样品信息状态" prop="ITEM_STATUS">
 												<el-input v-model="dataInfo.ITEM_STATUS"></el-input>
 											</el-form-item>
-										</el-col>
+										</el-col>-->
 										<el-col :span="8">
 											<el-form-item label="保密要求" prop="ITEM_SECRECY">
 												<el-input v-model="dataInfo.ITEM_SECRECY"></el-input>
@@ -137,7 +131,7 @@
 										</el-col>
 									</el-row>
 									<el-row>
-										<el-col :span="8">
+										<el-col :span="10">
 											<el-form-item label="取样方式" prop="ITEM_METHOD">
 												<el-radio-group v-model="dataInfo.ITEM_METHOD">
 													<el-radio label="委托方送样"></el-radio>
@@ -146,7 +140,7 @@
 												</el-radio-group>
 											</el-form-item>
 										</el-col>
-										<el-col :span="10">
+										<el-col :span="14">
 											<el-form-item label="检后处理" prop="ITEM_DISPOSITION">
 												<el-radio-group v-model="dataInfo.ITEM_DISPOSITION">
 													<el-radio label="自提"></el-radio>
@@ -157,16 +151,31 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
-								</div>
 							</el-collapse-item>
 							<el-collapse-item title="检验" name="4">
-								<div class="accordion-body tab-content">
+								<el-row>
+								<el-col :span="8">
+											<el-form-item label="完成日期" prop="COMPDATE">
+												<el-date-picker v-model="dataInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 100%;">
+												</el-date-picker>
+											</el-form-item>
+								</el-col>
+								<el-col :span="8">
+											<el-form-item label="完成方式" prop="COMPMODE">
+												<el-radio-group v-model="dataInfo.COMPMODE">
+													<el-radio label="加急"></el-radio>
+													<el-radio label="正常"></el-radio>
+												</el-radio-group>
+											</el-form-item>
+								</el-col>
+								</el-row>
 									<el-form-item label="抽样方案/判定依据" prop="REMARKS">
 										<el-input v-model="dataInfo.REMARKS"></el-input>
 									</el-form-item>
-								</div>
+									
 							</el-collapse-item>
 							<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
+								 <el-form :label-position="labelPosition">
 								<el-tabs v-model="activeName" @tab-click="handleClick">
 								    <el-tab-pane label="检验依据" name="first">
 								    	<div class="table-func table-funcb">
@@ -175,7 +184,7 @@
 												<font>新建行</font>
 											</el-button>
 										</div>
-
+                                        
 										<el-table :data="dataInfo.INSPECT_PROXY_BASISList" row-key="ID" border stripe height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.INSPECT_PROXY_BASISList', order: 'descending'}">
 
 											<el-table-column prop="iconOperation" fixed label="" width="50px">
@@ -215,7 +224,7 @@
 												</template>
 											</el-table-column>
 
-											<el-table-column prop="STATUS" label="信息状态" sortable width="120px">
+											<!--<el-table-column prop="STATUS" label="信息状态" sortable width="120px">
 												<template slot-scope="scope">
 													<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.STATUS'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入要求">
@@ -223,7 +232,7 @@
 													<span v-else="v-else">{{scope.row.STATUS}}</span>
 												</el-form-item>
 												</template>
-											</el-table-column>
+											</el-table-column>-->
 
 											<el-table-column prop="VERSION" label="项目版本" sortable width="120px">
 												<template slot-scope="scope">
@@ -281,7 +290,7 @@
 												</template>
 											</el-table-column>
 											
-											<el-table-column prop="STATUS" label="信息状态" sortable width="120px">
+											<!--<el-table-column prop="STATUS" label="信息状态" sortable width="120px">
 												<template slot-scope="scope">
 													<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.STATUS'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入要求">
@@ -289,7 +298,7 @@
 													<span v-else="v-else">{{scope.row.STATUS}}</span>
 													</el-form-item>
 												</template>
-											</el-table-column>
+											</el-table-column>-->
 											
 											<el-table-column prop="VERSION" label="版本" sortable width="120px">
 												<template slot-scope="scope">
@@ -400,14 +409,14 @@
 													</el-form-item>
 												</template>
 											</el-table-column>
-													<el-table-column prop="STATUS" label="信息状态" sortable width="120px">
+													<!--<el-table-column prop="STATUS" label="信息状态" sortable width="120px">
 												<template slot-scope="scope">
 													<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.STATUS'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入要求"></el-input>
 													<span v-else="v-else">{{scope.row.STATUS}}</span>
 													</el-form-item>
 												</template>
-											</el-table-column>
+											</el-table-column>-->
 
 											<el-table-column fixed="right" label="操作" width="120">
 												<template slot-scope="scope">
@@ -420,43 +429,13 @@
 										</el-table>
 								    </el-tab-pane>
 								</el-tabs>
+								</el-form>
 							</div>
-							<!-- <el-collapse-item title="检验依据" name="5">
-								 资质信息 Begin
-								
-							</el-collapse-item> -->
-
-							<!-- <el-collapse-item title="检验项目与要求" name="6">
-								 资质信息 Begin
-								
-							</el-collapse-item> -->
-
-							<!-- <el-collapse-item title="分包要求" name="7">
-								 分包要求 Begin
-								
-
-								年度计划列表 End 
-							</el-collapse-item> -->
-
 							<el-collapse-item name="8">
-								<div class="accordion-body tab-content">
+								
 									<el-row :gutter="70">
 										<el-col :span="8">
-											<el-form-item label="完成日期" prop="COMPDATE">
-												<el-date-picker v-model="dataInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 100%;">
-												</el-date-picker>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="完成方式" prop="COMPMODE">
-												<el-radio-group v-model="dataInfo.COMPMODE">
-													<el-radio label="加急"></el-radio>
-													<el-radio label="正常"></el-radio>
-												</el-radio-group>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="编号" prop="REPORT_NUM">
+											<el-form-item label="检验报告编号" prop="REPORT_NUM">
 												<el-input v-model="dataInfo.REPORT_NUM"></el-input>
 											</el-form-item>
 										</el-col>
@@ -518,11 +497,11 @@
 												</el-select>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8">
+										<!--<el-col :span="8">
 											<el-form-item label="信息状态" prop="MESSSTATUS">
 												<el-input v-model="dataInfo.MESSSTATUS"></el-input>
 											</el-form-item>
-										</el-col>
+										</el-col>-->
 									</el-row>
 									<el-row :gutter="70">
 										<el-col :span="8">
@@ -562,7 +541,6 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
-								</div>
 							</el-collapse-item>
 							<el-collapse-item title="其他" name="9">
 								<div class="accordion-body tab-content">
@@ -633,6 +611,7 @@
 </template>
 
 <script>
+	import Config from '../../config.js';
 	export default {
 		name: 'masks',
 		data() {
@@ -645,6 +624,7 @@
 			};
 
 			return {
+				basic_url: Config.dev_url,
 				dataInfo: {
 					PROXYNUM: '1',
 					STATUS: '草稿',
@@ -700,6 +680,7 @@
 				activeName: 'first',//tabs
 				activeNames: ['1', '2', '3', '4', '5', '6', '7', '8', '9'], //手风琴数量
 				labelPosition: 'top', //表格
+				labelPositions: 'right',
 				dialogVisible: false, //对话框
 
 				rules: {
@@ -716,7 +697,7 @@
 					ITEM_ID: [{ required: true, message: '必填', trigger: 'blur' }],//标识
 					ITEM_MODEL: [{ required: true, message: '必填', trigger: 'blur' }],//型号
 					ITEM_QUALITY: [{ required: true, message: '必填', trigger: 'blur' }],//数量
-					ITEM_STATUS: [{ required: true, message: '必填', trigger: 'blur' }],//样品信息状态
+//					ITEM_STATUS: [{ required: true, message: '必填', trigger: 'blur' }],//样品信息状态
 					ITEM_SECRECY: [{ required: true, message: '必填', trigger: 'blur' }],//保密要求
 					ITEM_METHOD: [{ required: true, message: '必填', trigger: 'blur' }],//取样方式
 					ITEM_DISPOSITION: [{ required: true, message: '必填', trigger: 'blur' }],//检后处理
@@ -770,7 +751,7 @@
 					S_NUM: '',
 					S_DESC: '',
 					VERSION: '',
-					STATUS: '',
+					STATUS: '1',
 					isEditing: true
 				};
 				this.dataInfo.INSPECT_PROXY_BASISList.push(obj);
@@ -781,7 +762,7 @@
 					P_DESC: '',
 					REMARKS: '',
 					VERSION: '',
-					STATUS: '',
+					STATUS: '1',
 					isEditing: true
 				};
 				this.dataInfo.INSPECT_PROXY_PROJECList.push(obj);
@@ -796,7 +777,7 @@
 					REQUIRE: '',
 					Q_TYPE: '',
 					CHECKCOST: '',
-					STATUS:'',
+					STATUS:'1',
 					isEditing: true
 				};
 				this.dataInfo.CHECK_PROXY_CONTRACTList.push(obj);
@@ -815,7 +796,7 @@
 			visible() {
 				//分包人数据置空
 				//				this.datatinfo.checkProCont = [];
-				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.dataInfo.DEPT = res.data.deptName;
 					this.dataInfo.ENTERBY = res.data.nickname;
 					this.dataInfo.ORGID = res.data.deptName
@@ -841,7 +822,7 @@
 				this.statusshow1 = false;
 				this.statusshow2 = true;
 				this.modify = true;
-				var usersUrl = '/api/api-user/users/currentMap'
+				var usersUrl = this.basic_url + '/api-user/users/currentMap'
 				this.$axios.get(usersUrl, {}).then((res) => {
 					this.dataInfo.CHANGEBY = res.data.nickname;
 					var date = new Date();
@@ -853,7 +834,7 @@
 					});
 				});
 				
-				var url = '/api/api-apps/app/inspectPro/' + dataid;
+				var url = this.basic_url +'/api-apps/app/inspectPro/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
 					console.log(res);
 					this.dataInfo = res.data;
@@ -897,7 +878,7 @@
 			submitForm(dataInfo) {
 				this.$refs[dataInfo].validate((valid) => {
 			        if (valid) {
-					var url = '/api/api-apps/app/inspectPro/saveOrUpdate';
+					var url = this.basic_url + '/api-apps/app/inspectPro/saveOrUpdate';
 					console.log(this.dataInfo);
 					this.$axios.post(url, this.dataInfo).then((res) => {
 						if(res.data.resp_code == 0) {

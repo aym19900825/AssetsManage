@@ -31,6 +31,11 @@
 											<template slot="prepend">信息状态</template>
 										</el-input>
 									</el-col>
+									<el-col :span="5" class="pull-right">
+											<el-input v-model="dataInfo.STATE" :disabled="edit">
+												<template slot="prepend">状态</template>
+											</el-input>
+									</el-col>
 								</el-row>
 								<el-radio-group v-model="dataInfo.TYPE" :disabled="noedit">
 									<el-row :gutter="20">
@@ -85,7 +90,7 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="承检单位" prop="CJDW" :disabled="noedit">
-											<el-input v-model="dataInfo.CJDW" :disabled="edit">
+											<el-input v-model="dataInfo.CJDW" :disabled="edit" @click="getCompany">
 												<el-button slot="append" icon="el-icon-search" ></el-button>
 											</el-input>
 											
@@ -94,8 +99,13 @@
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="8">
-										<el-form-item label="项目负责人" prop="P_LEADERDesc">
+										<!-- <el-form-item label="项目负责人" prop="P_LEADERDesc">
 											<el-input v-model="dataInfo.P_LEADERDesc" :disabled="noedit">
+											</el-input>
+										</el-form-item> -->
+										<el-form-item label="项目负责人" prop="ACCEPT_PERSONDesc">
+											<el-input v-model="dataInfo.P_LEADERDesc" :disabled="edit">
+												<el-button slot="append" icon="el-icon-search" @click="getPeople(1)"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -111,11 +121,7 @@
 									</el-col>
 								</el-row>
 								<el-row>
-									<el-col :span="8">
-										<el-form-item label="信息状态" prop="STATUS">
-											<el-input v-model="dataInfo.STATUS" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
+									
 								</el-row>
 							</el-collapse-item>
 							<!-- <el-collapse-item title="依据" name="3">
@@ -306,7 +312,7 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="检验检测费用" prop="CHECTCOST">
-											<el-input v-model="dataInfo.CHECTCOST" :disabled="noedit" id="cost"  @blur="toPrice"></el-input>
+											<el-input v-model="dataInfo.CHECTCOST" :disabled="noedit" id="cost" @blur="toPrice"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -477,7 +483,7 @@
 				},
 				],
 				value: '',
-				selUser: {},
+				selUser: [],
 				edit: true, //禁填
 				noedit:false,
 				editSearch: '', //判斷項目負責人和接收人
@@ -489,6 +495,7 @@
 				down: true,
 				up: false,
 				type: '',
+				initcost:'',
 				addtitle: true, //添加弹出框titile
 				modifytitle: false, //修改弹出框titile
 				viewtitle:false,//查看弹出框title
@@ -583,12 +590,31 @@
 //
 //					this.$refs["dataInfo"].resetFields();
 //			},
+			getCompany() {
+				this.editSearch = 'company';
+				var page = this.page.currentPage;
+				var limit = this.page.pageSize;
+				var type = '1';
+				var url = this.basic_url + '/api-user/depts/treeByType';
+				this.$axios.get(url, {
+					params: {
+						type: type
+					},
+				}).then((res) => {
+					this.resourceData = res.data;
+					console.log(res.data);
+					console.log(res.data)
+					this.dialogVisible = true;
+				});
+
+			},
 			toNum(str) {
 				return str.replace(/\,|\￥/g, "");
 			},
 			//金额两位小数点千位分隔符，四舍五入
 			toPrice(){
 				var money = document.getElementById("cost").value;
+				this.initcost = money;
 				var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
 				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
 				// this.dataInfo.CHECTCOST="￥" + num.join(".");
@@ -668,7 +694,6 @@
 						type: 'error'
 					})
 				})
-				
 				this.addtitle = true;
 				this.modifytitle = false;
 			    this.views = false;//
@@ -794,6 +819,8 @@
 			submitForm(dataInfo) {
 				this.$refs[dataInfo].validate((valid) => {
 					//		          if (valid) {
+					this.dataInfo.CHECTCOST = this.initcost;
+					this.dataInfo.STATE = this.dataInfo.STATE=="1"?'草稿':'未知';
 					var url = this.basic_url + '/api-apps/app/workNot/saveOrUpdate';
 					this.$axios.post(url, this.dataInfo).then((res) => {
 						if(res.data.resp_code == 0) {
@@ -844,9 +871,10 @@
 			dailogconfirm(type) { //小弹出框确认按钮事件
 				this.dialogVisible = false;
 				if(this.type == '1') {
+					console.log(12345);
 					this.dataInfo.P_LEADER = this.selUser[0].id;
+					console.log(this.dataInfo.P_LEADER);
 					this.dataInfo.P_LEADERDesc = this.selUser[0].nickname;
-					
 				} else {
 					this.dataInfo.ACCEPT_PERSON = this.selUser[0].id;
 					this.dataInfo.ACCEPT_PERSONDesc = this.selUser[0].nickname;

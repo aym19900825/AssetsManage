@@ -264,7 +264,10 @@
 						});
 					});
 			          } else {
-			            return false;
+			            this.$message({
+							message: '未填写完整，请填写',
+							type: 'warning'
+						});
 			          }
 			    });
 			},

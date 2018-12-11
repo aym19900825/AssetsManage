@@ -25,7 +25,7 @@
 											<template slot="prepend">版本</template>
 										</el-input>
 									</el-col>
-									<el-col :span="4" class="pull-right" v-if="modify">
+									<!--<el-col :span="4" class="pull-right" v-if="modify">
 										<el-input v-model="testingForm.STATUS=='1'?'活动':'不活动'" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
@@ -34,7 +34,7 @@
 										<el-input v-model="testingForm.STATUS" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
-									</el-col>
+									</el-col>-->
 									<el-col :span="8" class="pull-right">
 										<el-input placeholder="自动获取" v-model="testingForm.M_NUM" :disabled="true">
 											<template slot="prepend">检验/检测方法编号</template>
@@ -187,11 +187,11 @@
 						</el-collapse>
 					</div>
 					<div class="content-footer">
-						<el-form-item>
-							<button @click="cancelForm" class="btn btn-default btn-large">取消</button>
-							<button v-if="modify" type="primary" class="btn btn-primarys btn-large" @click="submitForm('testingForm')">修订</button>
-							<button v-else="modify" type="primary" class="btn btn-primarys btn-large" @click="submitForm('testingForm')">提交</button>
-						</el-form-item>
+							<el-button type="primary" @click="saveAndUpdate('testingForm')">保存</el-button>
+							<el-button type="success" @click="saveAndSubmit('testingForm')">提交并保存</el-button>
+							<el-button @click="close">取消</el-button>
+							<el-button v-if="modify" type="primary" @click="submitForm('testingForm')">修订</el-button>
+							
 					</div>
 				</el-form>
 			</div>
@@ -273,9 +273,7 @@
 			};
 		},
 		methods: {
-			
-			
-			childMethods() {//添加内容时从父组件带过来的
+			visible() {//添加内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.testingForm.DEPARTMENT=res.data.deptName;
 					this.testingForm.ENTERBY=res.data.nickname;
@@ -418,16 +416,16 @@
 				this.$refs['testing_filesForm'].validate((valid) => {
 		          if (valid) {
 					var url = this.basic_url + '/api-apps/app/doclinks/saveOrUpdate';
-					var submitData = {
-						"ID":row.ID,
-					    "DOCLINKS": row.DOCLINKS,
-						"DESCRIPTION": row.DESCRIPTION,
-					    "DOC_SIZE": row.DOC_SIZE,
-						"ROUTE": row.ROUTE,
-						"ENTERBY": row.ENTERBY,
-					    "ENTERDATE": row.ENTERDATE,
-					}
-					this.$axios.post(url, submitData).then((res) => {
+//					var submitData = {
+//						"ID":row.ID,
+//					    "DOCLINKS": row.DOCLINKS,
+//						"DESCRIPTION": row.DESCRIPTION,
+//					    "DOC_SIZE": row.DOC_SIZE,
+//						"ROUTE": row.ROUTE,
+//						"ENTERBY": row.ENTERBY,
+//					    "ENTERDATE": row.ENTERDATE,
+//					}
+					this.$axios.post(url, this.submitData).then((res) => {
 						if(res.data.resp_code == 0) {
 							this.$message({
 								message: '保存成功',
@@ -479,13 +477,6 @@
 			close() {
 				this.show = false;
 			},
-			cancelForm() {
-				this.show = false;
-				this.reset();
-			},
-			reset() {
-				this.show = false;
-			},
 			toggle(e) {
 				if(this.isok1 == true) {
 					this.maxDialog();
@@ -513,22 +504,21 @@
 
 			},
 			//执行保存
-			submitForm(formName) {
-				this.$refs[formName].validate((valid) => {
+			save(testingForm) {
+				this.$refs[testingForm].validate((valid) => {
 					if (valid) {
 					    this.testingForm.STATUS=this.testingForm.STATUS=="活动" ? '1' : '0';
 						var url = this.basic_url + '/api-apps/app/inspectionMet/saveOrUpdate';
 						this.testingForm.VERSION = this.testingForm.VERSION + 1;//修改时版本+1
-						this.$axios.post(url, this.testingForm).then((res) => {
+						this.$axios.post(url,this.testingForm).then((res) => {
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',
 									type: 'success'
 								});
-								this.show = false;
 								//重新加载数据
-								this.$emit('request')
+								this.$emit('request');
 							}
 						}).catch((err) => {
 							this.$message({
@@ -537,10 +527,26 @@
 							});
 						});
 					} else {
-						return false;
+						this.$message({
+							message: '未填写完整，请填写',
+							type: 'warning'
+						});
 					}
 				});
 
+			},
+			//保存
+			saveAndUpdate(testingForm){
+				this.save(testingForm);
+				this.show = false;
+				
+			},
+			//提交并保存
+			saveAndSubmit(testingForm){
+				this.save(testingForm);
+				this.$emit('reset');
+				this.show = true;
+				
 			},
 			handleClose(done) { //大弹出框确定关闭按钮
 				this.$confirm('确认关闭？')

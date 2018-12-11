@@ -136,7 +136,7 @@
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
-		<projectmask :testing_projectForm="testing_projectForm" ref="child" @request="requestData" v-bind:page=page ></projectmask>
+		<projectmask :testing_projectForm="testing_projectForm" ref="child" @request="requestData" @reset="reset" v-bind:page=page ></projectmask>
 	
 	</div>
 </div>
@@ -270,7 +270,6 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-				aaaData:[],
 				testing_projectForm: {}//修改子组件时传递数据
 			}
 		},
@@ -306,10 +305,10 @@
 				this.page.pageSize = 10;
 				this.requestData();
 			},
-			//添加检验/检测项目
-			openAddMgr() {
-	        	this.testing_projectForm = { //数据库列表
-					VERSION: 0,
+			//清空
+			reset(){
+			this.testing_projectForm = { //数据库列表
+					VERSION: 1,
 					STATUS: '活动',
 					P_NUM: '',
 					P_NAME: '',
@@ -323,19 +322,24 @@
 					ENTERDATE: '',
 					CHANGEBY: '',
 					CHANGEDATE:'',	
-				},
+				};
+			},
+			//添加检验/检测项目
+			
+			openAddMgr() {
+	        	this.reset();
 				this.$refs.child.childMethods();
 			},
 			
 			modify() {//修改检验/检测项目
-				this.aaaData = this.selMenu;
-				if(this.aaaData.length == 0) {
+				
+				if(this.selMenu.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
 						type: 'warning'
 					});
 					return;
-				} else if(this.aaaData.length > 1) {
+				} else if(this.selMenu.length > 1) {
 					this.$message({
 						message: '不可同时修改多条数据',
 						type: 'warning'
@@ -415,7 +419,7 @@
 				
 			},
 			judge(data) {
-				return data.STATUS ? '活动' : '不活动'
+				return data.STATUS=1? '活动' : '不活动'
 			},
 			//时间格式化  
 			dateFormat(row, column) {
@@ -430,6 +434,7 @@
 				this.selMenu = val;
 			},
 			requestData(index) {
+				console.log(111111);
 				var data = {//高级查询数据显示
 					page: this.page.currentPage,
 					limit: this.page.pageSize,

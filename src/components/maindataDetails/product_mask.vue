@@ -91,7 +91,6 @@
 							<el-button type="primary" @click="saveAndUpdate('PRODUCT')">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit('PRODUCT')">提交并保存</el-button>
 							<el-button @click='close'>取消</el-button>
-						<!--	<el-button type="primary" class="btn-primarys" @click="submitForm('PRODUCT')">保存</el-button>-->
 							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion">修订</el-button>
 					</div>
 				</el-form>
@@ -201,7 +200,6 @@
 		    },
 			//点击按钮显示弹窗
 			visible() {
-//				this.PRODUCT.PRO_NUM =  this.rand(1000,9999);
 				this.statusshow1 = true;
 				this.statusshow2 = false;
 				this.addtitle = true;
@@ -251,16 +249,13 @@
 					
 					this.$axios.post(url,this.PRODUCT).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
-					
-//						console.log(this.PRODUCT);
 						if(res.data.resp_code == 0) {
 							this.$message({
 								message: '保存成功',
 								type: 'success'
 							});
-//							this.show = false;
-//							//重新加载数据
-//							this.$emit('request')
+							//重新加载数据
+							this.$emit('request')
 						}
 					}).catch((err) => {
 						this.$message({
@@ -276,13 +271,11 @@
 			saveAndUpdate(PRODUCT){
 				this.save(PRODUCT);
 				this.show = false;
-				this.$emit('request');
 			},
 			saveAndSubmit(PRODUCT){
 				this.save(PRODUCT);
 				this.$emit('reset');
 				this.show = true;
-				this.$emit('request');
 			},
 			//点击修订按钮
 			modifyversion(){

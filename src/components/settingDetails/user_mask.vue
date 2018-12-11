@@ -829,8 +829,8 @@
 						});
 					} else {
 						this.$message({
-								warning: '有必填项未填写，请重新填写',
-								type: 'error'
+								message: '有必填项未填写，请重新填写',
+								type: 'warning'
 							});
 					}
 				})

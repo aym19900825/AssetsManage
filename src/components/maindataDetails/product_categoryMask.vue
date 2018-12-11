@@ -98,7 +98,9 @@
 					</div>
 					<div class="el-dialog__footer">
 						<el-form-item>
-							<el-button type="primary" class="btn-primarys" @click="submitForm('CATEGORY')">保存</el-button>
+							<el-button @click="close">取消</el-button>
+							<el-button type="primary" @click="saveAndUpdate('CATEGORY')">保存</el-button>
+							<el-button type="success" @click="saveAndSubmit('CATEGORY')">提交并保存</el-button>
 							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion">修订</el-button>
 						</el-form-item>
 					</div>
@@ -287,9 +289,9 @@
 								message: '保存成功',
 								type: 'success'
 							});
-							this.show = false;
+							// this.show = false;
 							//重新加载数据
-							this.$emit('request')
+							// this.$emit('request')
 						}
 					}).catch((err) => {
 						this.$message({
@@ -303,16 +305,15 @@
 		        });
 			},
 			//保存
-			saveAndUpdate(){
-				this.save();
+			saveAndUpdate(CATEGORY){
+				this.save(CATEGORY);
 				this.show = false;
 				this.$emit('request');
 			},
 			//提交并保存
-			saveAndSubmit(){
-				this.save();
-				this.reset();
-//				this.show = false;
+			saveAndSubmit(CATEGORY){
+				this.save(CATEGORY);
+				this.$emit('reset');
 				this.$emit('request');
 			},
 			//时间格式化

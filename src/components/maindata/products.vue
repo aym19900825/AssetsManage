@@ -131,7 +131,8 @@
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
-		<productmask :PRODUCT="aaaData[0]" ref="child" @request="requestData" v-bind:page=page></productmask>
+		<productmask :PRODUCT="PRODUCT" ref="child" @request="requestData" 
+		@reset="reset" v-bind:page=page></productmask>
 	</div>
 </div>
 </template>
@@ -248,12 +249,12 @@
 					label: "simplename"
 				},
 				userData:[],
+				PRODUCT: {},//修改子组件时传递数据
 				page: {//分页显示
 					currentPage: 1,
 					pageSize: 10,
 					totalCount: 0
 				},
-				aaaData:[],
 			}
 		},
 		methods: {
@@ -280,7 +281,7 @@
 				if(date == undefined) {
 					return "";
 				}
-				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss"); 
+				return this.$moment(date).format("YYYY-MM-DD"); 
 			},
 			sizeChange(val) {
 		      this.page.pageSize = val;
@@ -295,10 +296,9 @@
 				this.page.pageSize = 10;
 				this.requestData();
 			},
-			//添加用戶
-			openAddMgr() {
-				// this.$refs.child.resetNew();
-				this.aaaData = {
+			//清空
+			reset(){
+				this.PRODUCT = {
 					PRO_NUM:'',
 					PRO_NAME:'',
 					STATUS:'活动',
@@ -308,25 +308,30 @@
 					CHANGEBY:'',
 					CHANGEDATE:''
 				};
+			},
+			//添加
+			openAddMgr() {
+				this.reset();
 				this.$refs.child.visible();
 			},
 			//修改用戶
 			modify() {
-				this.aaaData = this.selUser;
-				if(this.aaaData.length == 0) {
+				
+				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要修改的用户',
 						type: 'warning'
 					});
 					return;
-				} else if(this.aaaData.length > 1) {
+				} else if(this.selUser.length > 1) {
 					this.$message({
 						message: '不可同时修改多个用户',
 						type: 'warning'
 					});
 					return;
 				} else {
-					this.$refs.child.detail(this.aaaData[0]);
+					this.PRODUCT = this.selUser[0]; 
+					this.$refs.child.detail();
 				}
 			},
 			//高级查询

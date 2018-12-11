@@ -16,15 +16,15 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+								<!-- <button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加
-                      			</button>
+                      			</button> -->
 								<button type="button" class="btn btn-bule button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改
 								</button>
-								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
+								<!-- <button type="button" class="btn btn-red button-margin" @click="deluserinfo">
 								    <i class="icon-trash"></i>删除
-								</button>
+								</button> -->
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 						    		<i class="icon-search"></i>高级查询
 						    		<i class="icon-arrow1-down" v-show="down"></i>
@@ -351,7 +351,7 @@
 				if(date == undefined) {
 					return "";
 				}
-				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+				return this.$moment(date).format("YYYY-MM-DD");
 			},
 			SelChange(val) {//选中值后赋值给一个自定义的数组：selMenu
 				this.selMenu = val;

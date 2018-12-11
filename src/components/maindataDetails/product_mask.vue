@@ -25,16 +25,16 @@
 											<template slot="prepend">版本</template>
 										</el-input>
 									</el-col>
-									<el-col :span="5" class="pull-right" v-if="modify">
+									<!--<el-col :span="5" class="pull-right" v-if="modify" style="display:none;">
 										<el-input v-model="PRODUCT.STATUS=='1'?'活动':'不活动'" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
 									</el-col>
-									<el-col :span="5" class="pull-right" v-else>
+									<el-col :span="5" class="pull-right" v-else style="display:none;">
 										<el-input v-model="PRODUCT.STATUS" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
-									</el-col>
+									</el-col>-->
 										<!-- <el-select v-model="PRODUCT.STATUS" placeholder="请选择信息状态">
 											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
@@ -88,10 +88,10 @@
 						</el-collapse>
 					</div>
 					<div class="el-dialog__footer">
-						<el-form-item>
-							<el-button type="primary" class="btn-primarys" @click="submitForm('PRODUCT')">保存</el-button>
+							<el-button type="primary" @click="saveAndUpdate('PRODUCT')">保存</el-button>
+							<el-button type="success" @click="saveAndSubmit('PRODUCT')">提交并保存</el-button>
+							<el-button @click='close'>取消</el-button>
 							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion">修订</el-button>
-						</el-form-item>
 					</div>
 				</el-form>
 			</div>
@@ -200,7 +200,6 @@
 		    },
 			//点击按钮显示弹窗
 			visible() {
-//				this.PRODUCT.PRO_NUM =  this.rand(1000,9999);
 				this.statusshow1 = true;
 				this.statusshow2 = false;
 				this.addtitle = true;
@@ -222,15 +221,12 @@
 				this.show = true;
 			},
 			// 这里是修改
-			detail(data) {
+			detail() {
 				this.modify = true;
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.statusshow1 = false;
 				this.statusshow2 = true;
-				
-				console.log(data.STATUS )
-//				data.STATUS=data.STATUS=="1"?'活动':'不活动';
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 	    			this.PRODUCT.CHANGEBY = res.data.nickname;
 	    			var date=new Date();
@@ -245,7 +241,7 @@
 				this.show = true;
 			},
 			// 保存users/saveOrUpdate
-			submitForm(PRODUCT) {
+			save(PRODUCT) {
 				 this.$refs[PRODUCT].validate((valid) => {
 		          if (valid) {
 		            this.PRODUCT.STATUS=((this.PRODUCT.STATUS=="1"||this.PRODUCT.STATUS=='活动') ? '1' : '0');
@@ -253,14 +249,11 @@
 					
 					this.$axios.post(url,this.PRODUCT).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
-					
-//						console.log(this.PRODUCT);
 						if(res.data.resp_code == 0) {
 							this.$message({
 								message: '保存成功',
 								type: 'success'
 							});
-							this.show = false;
 							//重新加载数据
 							this.$emit('request')
 						}
@@ -271,9 +264,21 @@
 						});
 					});
 			          } else {
-			            return false;
+			            this.$message({
+							message: '未填写完整，请填写',
+							type: 'warning'
+						});
 			          }
 			    });
+			},
+			saveAndUpdate(PRODUCT){
+				this.save(PRODUCT);
+				this.show = false;
+			},
+			saveAndSubmit(PRODUCT){
+				this.save(PRODUCT);
+				this.$emit('reset');
+				this.show = true;
 			},
 			//点击修订按钮
 			modifyversion(){

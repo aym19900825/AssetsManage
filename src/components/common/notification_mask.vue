@@ -21,15 +21,20 @@
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="类别" name="1">
 								<el-row :gutter="20" class="pb10">
-									<el-col :span="3" class="pull-right">
+									<!-- <el-col :span="3" class="pull-right">
 										<el-input v-model="dataInfo.N_CODE" :disabled="edit">
 											<template slot="prepend">编号</template>
 										</el-input>
-									</el-col>
-									<el-col :span="5" class="pull-right">
+									</el-col> -->
+									<!-- <el-col :span="5" class="pull-right">
 										<el-input v-model="dataInfo.STATUS=='1'?'活动':'不活动'" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
+									</el-col> -->
+									<el-col :span="5" class="pull-right">
+											<el-input v-model="dataInfo.STATE" :disabled="edit">
+												<template slot="prepend">状态</template>
+											</el-input>
 									</el-col>
 								</el-row>
 								<el-radio-group v-model="dataInfo.TYPE" :disabled="noedit">
@@ -74,7 +79,7 @@
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="计划编号" prop="WP_NUM">
-											<el-input v-model="dataInfo.WP_NUM" :disabled="noedit">
+											<el-input v-model="dataInfo.WP_NUM" :disabled="edit">
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -84,17 +89,20 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="承检单位" prop="CJDW">
-											<el-select v-model="dataInfo.CJDW" placeholder="金化站" :disabled="noedit" style="width: 100%">
-												<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-												</el-option>
-											</el-select>
+										<el-form-item label="承检单位" prop="CJDWDesc" :disabled="noedit">
+											<el-input v-model="dataInfo.CJDWDesc" :disabled="edit">
+												<el-button slot="append" icon="el-icon-search" @click="getCompany"></el-button>
+											</el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="8">
-										<el-form-item label="项目负责人" prop="P_LEADERDesc">
+										<!-- <el-form-item label="项目负责人" prop="P_LEADERDesc">
+											<el-input v-model="dataInfo.P_LEADERDesc" :disabled="noedit">
+											</el-input>
+										</el-form-item> -->
+										<el-form-item label="项目负责人" prop="ACCEPT_PERSONDesc">
 											<el-input v-model="dataInfo.P_LEADERDesc" :disabled="edit">
 												<el-button slot="append" icon="el-icon-search" @click="getPeople(1)"></el-button>
 											</el-input>
@@ -112,11 +120,7 @@
 									</el-col>
 								</el-row>
 								<el-row>
-									<el-col :span="8">
-										<el-form-item label="信息状态" prop="STATUS">
-											<el-input v-model="dataInfo.STATUS" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
+									
 								</el-row>
 							</el-collapse-item>
 							<!-- <el-collapse-item title="依据" name="3">
@@ -307,7 +311,7 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="检验检测费用" prop="CHECTCOST">
-											<el-input v-model="dataInfo.CHECTCOST" :disabled="noedit" id="cost"  @blur="toPrice"></el-input>
+											<el-input v-model="dataInfo.CHECTCOST" :disabled="noedit" id="cost" @blur="toPrice"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -360,8 +364,12 @@
 					</el-form>
 				</div>
 				<div class="el-dialog__footer" v-show="noviews">
+					<!-- <el-button @click='close'>取消</el-button>
+					<el-button type="primary" @click="submitForm('dataInfo')">提交</el-button> -->
+
 					<el-button @click='close'>取消</el-button>
-					<el-button type="primary" @click="submitForm('dataInfo')">提交</el-button>
+					<el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
+					<el-button type="success" @click='saveAndSubmit()'>提交并保存</el-button>
 				</div>
 			</div>
 		</div>
@@ -385,7 +393,14 @@
     			<el-button type="primary" @click="dailogconfirm()">确 定</el-button>
   			</span>
 		</el-dialog>
-
+		<el-dialog title="承检部门" :visible.sync="dialogVisiblecompany" width="30%" :before-close="handleClose">
+			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick" @check-change="handleCheckChange">
+			</el-tree>
+			<span slot="footer" class="dialog-footer">
+		       <el-button @click="dialogVisiblecompany = false">取 消</el-button>
+		       <el-button type="primary" @click="diaconfirmcom();" >确 定</el-button>
+		    </span>
+		</el-dialog>
 	</div>
 </template>
 
@@ -451,6 +466,12 @@
 				basic_url: Config.dev_url,
 				gridData: [], //彈出框的數據
 				fileList: [],
+				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 
+				getCheckboxData: {},
+				resourceProps: {
+					children: "children",
+					label: "fullname"
+				},
 				page: {
 					currentPage: 1,
 					pageSize: 10,
@@ -478,7 +499,7 @@
 				},
 				],
 				value: '',
-				selUser: {},
+				selUser: [],
 				edit: true, //禁填
 				noedit:false,
 				editSearch: '', //判斷項目負責人和接收人
@@ -490,6 +511,7 @@
 				down: true,
 				up: false,
 				type: '',
+				initcost:'',
 				addtitle: true, //添加弹出框titile
 				modifytitle: false, //修改弹出框titile
 				viewtitle:false,//查看弹出框title
@@ -500,6 +522,8 @@
 				activeNames: ['1', '2', '3', '4', '5', '6', '7'], //手风琴数量
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
+				dialogVisiblecompany: false, //对话框
+				editSearch: '',
 				leaddata: [ //导入数据的表格
 					{
 						columnname: 'author',
@@ -584,16 +608,43 @@
 //
 //					this.$refs["dataInfo"].resetFields();
 //			},
+			handleNodeClick(data) { //获取勾选树菜单节点
+			//				console.log(data);
+			},
+			handleCheckChange(data, checked, indeterminate) {
+				this.getCheckboxData = data;
+			},
+			getCheckedNodes() { //获取树菜单节点
+				this.checkedNodes = this.$refs.tree.getCheckedNodes()
+			},
+			getCompany() {
+				this.editSearch = 'dept';
+				var page = this.page.currentPage;
+				var limit = this.page.pageSize;
+				var type = '1';
+				var url = this.basic_url + '/api-user/depts/treeMap';
+				this.$axios.get(url, {
+					params: {
+						type: type
+					},
+				}).then((res) => {
+					console.log(res.data);
+					this.resourceData = res.data;
+					this.dialogVisiblecompany = true;
+				});
+
+			},
 			toNum(str) {
 				return str.replace(/\,|\￥/g, "");
 			},
 			//金额两位小数点千位分隔符，四舍五入
 			toPrice(){
 				var money = document.getElementById("cost").value;
+				this.initcost = money;
 				var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
 				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
 				// this.dataInfo.CHECTCOST="￥" + num.join(".");
-				// this.dataInfo.CHECTCOST=num.join(".");
+				this.dataInfo.CHECTCOST = num.join(".");
 			},
 			
 			//tabs
@@ -620,7 +671,7 @@
 			//新建行
 			addfieldBasis() {
 				var obj = {
-					NUMBER: '',
+					NUMBER: '1',
 					S_NUM: '',
 					S_DESC: '',
 					VERSION: '',
@@ -633,7 +684,7 @@
 			},
 			addfieldProject() {
 				var obj = {
-					NUMBER: '',
+					NUMBER: '1',
 					P_NUM: '',
 					P_DESC: '',
 					REMARKS: '',
@@ -662,14 +713,13 @@
 					this.dataInfo.ENTERBY = res.data.nickname;
 					this.dataInfo.ORGID = res.data.deptName
 					var date = new Date();
-					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD ");
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
 						type: 'error'
 					})
 				})
-				
 				this.addtitle = true;
 				this.modifytitle = false;
 			    this.views = false;//
@@ -792,17 +842,19 @@
 				$(".mask_div").css("top", "0");
 			},
 			// 保存users/saveOrUpdate
-			submitForm(dataInfo) {
-				this.$refs[dataInfo].validate((valid) => {
+			save() {
+				this.$refs.dataInfo.validate((valid) => {
 					//		          if (valid) {
-					var url = this.basic_url + '/apps-center/app/workNot/saveOrUpdate';
+					this.dataInfo.CHECTCOST = this.initcost;
+					this.dataInfo.STATE = this.dataInfo.STATE=="1"?'草稿':'未知';
+					var url = this.basic_url + '/api-apps/app/workNot/saveOrUpdate';
 					this.$axios.post(url, this.dataInfo).then((res) => {
 						if(res.data.resp_code == 0) {
 							this.$message({
 								message: '保存成功',
 								type: 'success'
 							});
-							this.show = false;
+							// this.show = false;
 							//重新加载数据
 							this.$emit('request')
 						}
@@ -817,7 +869,19 @@
 					//			          }
 				});
 			},
-
+			//保存
+			saveAndUpdate(){
+				this.save();
+				this.show = false;
+				// this.reset();
+				// this.$emit('request');
+			},
+			//提交并保存
+			saveAndSubmit(){
+				this.save();
+				this.reset();
+				// this.$emit('request');
+			},
 			handleClose(done) {
 				this.$confirm('确认关闭？')
 					.then(_ => {
@@ -842,18 +906,45 @@
 					this.type = type;
 				});
 			},
+			diaconfirmcom(){
+				this.getCheckedNodes();
+				this.placetext = false;
+				this.dialogVisiblecompany = false;
+				this.dataInfo.CJDW = this.getCheckboxData.id;
+				this.dataInfo.CJDWDesc = this.getCheckboxData.fullname;
+				this.dataInfo.P_LEADERDesc = this.getCheckboxData.leader;
+			},
 			dailogconfirm(type) { //小弹出框确认按钮事件
 				this.dialogVisible = false;
 				if(this.type == '1') {
+					console.log(12345);
 					this.dataInfo.P_LEADER = this.selUser[0].id;
+					console.log(this.dataInfo.P_LEADER);
 					this.dataInfo.P_LEADERDesc = this.selUser[0].nickname;
-					
 				} else {
 					this.dataInfo.ACCEPT_PERSON = this.selUser[0].id;
 					this.dataInfo.ACCEPT_PERSONDesc = this.selUser[0].nickname;
 				}
 			},
-
+			reset(){
+				this.dataInfo = {
+					N_CODE: '',
+					TYPE: '',
+					XD_DATE: '',
+					ITEM_NAME: '',
+					ITEM_MODEL: '',
+					VENDOR: '',
+					CJDW: '',
+					TASKNUM: '',
+					SOLUTION: '',
+					COMPDATE: '',
+					STATE: '草稿',
+					ENTERBY: '',
+					STATUS: '',
+					WORK_NOTICE_CHECKBASISList: [],
+					WORK_NOTICE_CHECKPROJECTList: []
+				}
+			},
 			SelChange(val) {
 				this.selUser = val;
 			},

@@ -19,13 +19,13 @@
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基本信息" name="1">
-								<el-row :gutter="20" style="margin-right: 5px;">
+								<el-row :gutter="20" class="pb10"style="margin-right: 5px;">
 									<el-col :span="3" class="pull-right">
 										<el-input v-model="dataInfo.VERSION" :disabled="true">
 											<template slot="prepend">版本</template>
 										</el-input>
 									</el-col>
-									<el-col :span="5" class="pull-right" v-if="modify">
+									<!--<el-col :span="5" class="pull-right" v-if="modify">
 										<el-input v-model="dataInfo.STATUS=='1'?'活动':'不活动'" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
@@ -34,7 +34,7 @@
 										<el-input v-model="dataInfo.STATUS" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
-									</el-col>
+									</el-col>-->
 									 <!-- <el-col :span="6" class="pull-right">
 										<el-input v-model="dataInfo.S_NUM" :disabled="true">
 											<template slot="prepend">产品编号</template>
@@ -44,7 +44,7 @@
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="标准编号" prop="S_NUM">
-											<el-input v-model="dataInfo.S_NUM" :disabled="edit"></el-input>
+											<el-input v-model="dataInfo.S_NUM" :disabled="edit" placeholder="自动获取"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -176,8 +176,11 @@
 						</el-collapse>
 					</div>
 					<div class="el-dialog__footer">
-						<el-button type="primary" class="btn-primarys" v-if="modify" @click='modifyversion'>修订</el-button>
-						<el-button type="primary" class="btn-primarys" @click="submitForm('dataInfo')">提交</el-button>
+						<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
+							<el-button type="success" @click="saveAndSubmit('dataInfo')">提交并保存</el-button>
+							<el-button @click="close">取消</el-button>
+							<el-button v-if="modify" type="primary" @click="modifyversion">修订</el-button>
+							<el-button type="primary" class="btn-primarys" v-if="modify" @click='modifyversion'>修订</el-button>
 					</div>
 				</el-form>
 			</div>
@@ -304,7 +307,7 @@
 				// 	}]
 				// },
 				rules: {
-					S_NUM: [{ required: true, message: '必填', trigger: 'blur' }],//名称
+//					S_NUM: [{ required: true, message: '必填', trigger: 'blur' }],//名称
 					S_NAME: [{ required: true, message: '必填', trigger: 'blur' }],//名称
 //					RELEASETIME:[{required: true, message: '必填', trigger: 'change'}],
 //					STARTETIME: [{required: true,trigger: 'blur',message: '必填',}],
@@ -351,7 +354,6 @@
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					console.log(res);
 					this.dataInfo.DEPARTMENT=res.data.companyName;
-					console.log(1111);
 					console.log(this.dataInfo.DEPARTMENT)
 					this.dataInfo.RELEASE_UNIT=res.data.deptName;
 					this.dataInfo.ENTERBY=res.data.nickname;
@@ -366,7 +368,7 @@
 				this.show = true;
 			},
 			// 这里是修改
-			detail(data) {
+			detail() {
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.modify = true;
@@ -411,11 +413,12 @@
 				$(".mask_div").css("top", "0");
 			},
 			// 保存users/saveOrUpdate
-			submitForm(dataInfo) {
+			save(dataInfo) {
 				this.$refs[dataInfo].validate((valid) => {
 						this.dataInfo.RELEASETIME =  this.$moment(this.dataInfo.RELEASETIME).format("YYYY-MM-DD HH:mm:ss");
 						this.dataInfo.STARTETIME = this.$moment(this.dataInfo.STARTETIME).format("YYYY-MM-DD HH:mm:ss");
 					 if (valid) {
+					 	console.log(111);
 					this.dataInfo.STATUS=((this.dataInfo.STATUS=="1"||this.dataInfo.STATUS=='活动') ? '1' : '0');
 //					this.dataInfo.STATUS=this.dataInfo.STATUS=="活动" ? '1' : '0';
 					var url = this.basic_url + '/api-apps/app/inspectionSta/saveOrUpdate';
@@ -425,7 +428,6 @@
 								message: '保存成功',
 								type: 'success'
 							});
-							this.show = false;
 							//重新加载数据
 							this.$emit('request')
 						}
@@ -436,11 +438,26 @@
 						});
 					});
 			          } else {
-			            return false;
+			          	this.$message({
+							message: '未填写完整，请填写',
+							type: 'warning'
+						});
 			          }
 				});
 			},
-
+			//保存
+			saveAndUpdate(dataInfo){
+				this.save(dataInfo);
+				this.show = false;
+				
+			},
+			//提交并保存
+			saveAndSubmit(dataInfo){
+				this.save(dataInfo);
+				this.$emit('reset');
+				this.show = true;
+				
+			},
 			handleClose(done) {
 				this.$confirm('确认关闭？')
 					.then(_ => {

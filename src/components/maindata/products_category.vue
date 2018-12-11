@@ -131,7 +131,7 @@
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
-		<categorymask :CATEGORY="CATEGORY" ref="child" @request="requestData" v-bind:page=page></categorymask>
+		<categorymask :CATEGORY="CATEGORY" ref="child" @request="requestData" @reset="reset" v-bind:page=page></categorymask>
 	</div>
 </div>
 </template>
@@ -253,7 +253,6 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-				aaaData:[],
 				CATEGORY: {}//修改子组件时传递数据
 			}
 		},
@@ -293,8 +292,8 @@
 				this.page.pageSize = 10;
 				this.requestData();
 			},
-			//添加用戶
-			openAddMgr() {
+			//清空
+			reset(){
 				this.CATEGORY = {
 					ID:'',
 					NUM:'',
@@ -307,6 +306,10 @@
 					CHANGEBY:'',
 					CHANGEDATE:''
 				};
+			},
+			//添加用戶
+			openAddMgr() {
+				this.reset();
 				this.$refs.child.visible();
 			},
 			//修改用戶
@@ -325,7 +328,7 @@
 					return;
 				} else {
 					this.CATEGORY = this.selUser[0]; 
-					this.$refs.child.detail(this.CATEGORY);
+					this.$refs.child.detail();
 				}
 			},
 			//高级查询
@@ -403,7 +406,7 @@
 				if(date == undefined) {
 					return "";
 				}
-				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
+				return this.$moment(date).format("YYYY-MM-DD");  
 			},
 			SelChange(val) {
 				this.selUser = val;

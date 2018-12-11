@@ -220,7 +220,7 @@
 				if(date == undefined) {
 					return "";
 				}
-				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+				return this.$moment(date).format("YYYY-MM-DD");
 			},
 			viewfield_product2(ID){//点击父级筛选出子级数据
 				if(ID=='null'){

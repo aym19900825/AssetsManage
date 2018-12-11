@@ -215,13 +215,11 @@
 					children: "subDepts",
 					label: "simplename"
 				},
-				userData:[],
 				page: {//分页显示
 					currentPage: 1,
 					pageSize: 10,
 					totalCount: 0
 				},
-				aaaData:[],
 			}
 		},
 
@@ -265,14 +263,13 @@
 			},
 			//修改用戶
 			modify() {
-				this.aaaData = this.selUser;
-				if(this.aaaData.length == 0) {
+				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要修改的客户',
 						type: 'warning'
 					});
 					return;
-				} else if(this.aaaData.length > 1) {
+				} else if(this.selUser.length > 1) {
 					this.$message({
 						message: '不可同时修改多个客户',
 						type: 'warning'
@@ -371,7 +368,7 @@
 				if(date == undefined) {
 					return "";
 				}
-				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+				return this.$moment(date).format("YYYY-MM-DD");
 			},
 			SelChange(val) {
 				this.selUser = val;

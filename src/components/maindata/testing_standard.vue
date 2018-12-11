@@ -53,62 +53,44 @@
 						<el-form status-icon :model="searchList" label-width="70px">
 							<el-row :gutter="10" class="pb10">
 								<el-col :span="5">
-
 									<el-input v-model="searchList.S_NUM">
 										<template slot="prepend">标准编号</template>
 									</el-input>
-
 								</el-col>
 								<el-col :span="5">
-
 									<el-input v-model="searchList.S_NAME">
 										<template slot="prepend">标准名称</template>
 									</el-input>
-
 								</el-col>
 								<el-col :span="5">
-
 									<el-input v-model="searchList.S_ENGNAME">
 										<template slot="prepend">英文名称</template>
 									</el-input>
-
 								</el-col>
 								<el-col :span="5">
-
 									<el-input v-model="searchList.VERSION">
 										<template slot="prepend">版本</template>
 									</el-input>
-
 								</el-col>
 								<el-col :span="4">
-
 									<el-input v-model="searchList.DEPARTMENT">
 										<template slot="prepend">录入人机构</template>
 									</el-input>
-
 								</el-col>
 							</el-row>
 							<el-row :gutter="20">
 								<el-col :span="5">
-
 									<el-date-picker v-model="searchList.RELEASETIME" type="date" placeholder="发布时间" value-format="yyyy-MM-dd HH:mm:ss">
-
 									</el-date-picker>
-
 								</el-col>
 								<el-col :span="5">
-
 									<el-date-picker v-model="searchList.STARTETIME" type="date" placeholder="启用时间" value-format="yyyy-MM-dd HH:mm:ss">
 									</el-date-picker>
-
 								</el-col>
 								<el-col :span="3">
-
 									<el-select v-model="searchList.STATUS" placeholder="请选择信息状态">
 										<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-
 										</el-option>
-
 									</el-select>
 								</el-col>
 								<el-col :span="2">
@@ -161,7 +143,7 @@
 				</div>
 			</div>
 			<!--右侧内容显示 End-->
-			<standardmask :dataInfo="aaaData[0]" ref="child" @request="requestData" v-bind:page=page></standardmask>
+			<standardmask :dataInfo="dataInfo" ref="child" @request="requestData" v-bind:page=page></standardmask>
 		</div>
 	</div>
 </template>
@@ -312,7 +294,7 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-				aaaData: [],
+				dataInfo: {},//修改子组件时传递数据
 			}
 		},
 
@@ -348,13 +330,13 @@
 				this.page.pageSize = 10;
 				this.requestData();
 			},
-			//添加
-			openAddMgr() {
-				this.aaaData = [{
+			//清空
+			reset(){
+				this.dataInfo = {
 					ID: '',
 					VERSION: '1',
 					STATUS: '活动',
-					S_NUM: 'SRO10001',
+					S_NUM: '',
 					S_NAME: '',
 					S_ENGNAME: '',
 					RELEASETIME: '',
@@ -364,26 +346,30 @@
 					ENTERDATE: '',
 					CHANGEBY: '',
 					CHANGEDATE: ''
-				}];
+				};
+			},
+			//添加
+			openAddMgr() {
+				this.reset();
 				this.$refs.child.visible();
 			},
 			//修改
 			modify() {
-				this.aaaData = this.selUser;
-				if(this.aaaData.length == 0) {
+				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要修改的用户',
 						type: 'warning'
 					});
 					return;
-				} else if(this.aaaData.length > 1) {
+				} else if(this.selUser.length > 1) {
 					this.$message({
 						message: '不可同时修改多个用户',
 						type: 'warning'
 					});
 					return;
 				} else {
-					this.$refs.child.detail(this.aaaData[0]);
+					this.dataInfo = this.selUser[0]; 
+					this.$refs.child.detail();
 				}
 			},
 			//高级查询
@@ -454,7 +440,6 @@
 			},
 			judge(data) {
 				return data.STATUS == "1" ? '活动' : '不活动'
-
 			},
 			//时间格式化  
 			dateFormat(row, column) {
@@ -462,7 +447,7 @@
 				if(date == undefined) {
 					return "";
 				}
-				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+				return this.$moment(date).format("YYYY-MM-DD");
 			},
 			SelChange(val) {//选中值后赋值给一个自定义的数组：selUser
 				this.selUser = val;

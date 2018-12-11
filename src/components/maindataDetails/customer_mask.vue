@@ -15,11 +15,11 @@
 				</div>
 			</div>
 			<div class="mask_content"><!-- status-icon验证后小对号 -->
-				<el-form status-icon inline-message :model="CUSTOMER"  :rules="rules" ref="CUSTOMER" label-width="100px" class="demo-adduserForm">
+				<el-form status-icon inline-message :model="CUSTOMER"  :rules="rules" ref="CUSTOMER"  class="demo-adduserForm">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基本信息" name="1">
-								<el-row :gutter="20" class="pb10">
+								<el-row :gutter="20" class="pb10" style='display:none;'>
 									<el-col :span="5" class="pull-right">
 										<el-input v-model="CUSTOMER.STATUS" :disabled="true">
 											<template slot="prepend">信息状态</template>
@@ -31,11 +31,11 @@
 									</el-col>
 									
 								</el-row>
-
+                              <el-form label-width="100px">
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="组织机构代码" prop="CODE">
-											<el-input v-model="CUSTOMER.CODE" :disabled="edit" placeholder="自动生成"></el-input>
+											<el-input v-model="CUSTOMER.CODE"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -127,7 +127,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								
+							</el-form>
 							</el-collapse-item>
 							<!-- 资质信息 Begin-->
 							<el-collapse-item title="资质信息" name="2">								
@@ -137,6 +137,7 @@
 										<font>新建行</font>
 									</el-button>
 								</div>
+								<el-form :label-position="labelPosition" :rules="rules">
 								<el-table :data="CUSTOMER.CUSTOMER_QUALIFICATIONList" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER.CUSTOMER_QUALIFICATIONList', order: 'descending'}">
 								    <el-table-column prop="iconOperation" fixed width="50px">
 								      <template slot-scope="scope">
@@ -167,7 +168,7 @@
 
 								    <el-table-column prop="ACTIVE_DATE" label="资质有效期" sortable width="150px">
 								      <template slot-scope="scope">
-								      	<el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.ACTIVE_DATE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+								      	<el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.ACTIVE_DATE'" >
 								         <el-date-picker style="width: 90%" v-show="scope.row.isEditing" v-model="scope.row.ACTIVE_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd"></el-date-picker>
 								        <span v-show="!scope.row.isEditing" >{{scope.row.ACTIVE_DATE}}</span>
 								    </el-form-item>
@@ -207,15 +208,17 @@
 								      </template>
 								    </el-table-column>
 								  </el-table>
+								  </el-form>
 							</el-collapse-item>
 							<!-- 资质信息 End -->
 						</el-collapse>
 					</div>
 					<div class="el-dialog__footer">
-						<el-form-item>
+							<el-button type="primary" @click="saveAndUpdate('CUSTOMER')">保存</el-button>
+							<el-button type="success" @click="saveAndSubmit('CUSTOMER')">提交并保存</el-button>
 							<el-button @click='close'>取消</el-button>
-							<el-button type="primary" class="btn-primarys" @click="submitForm('CUSTOMER')">提交</el-button>
-						</el-form-item>
+							<!--<el-button type="primary" class="btn-primarys" @click="submitForm('CUSTOMER')">提交</el-button>-->
+						
 					</div>
 				</el-form>
 			</div>
@@ -322,7 +325,8 @@
 				addtitle:true,//添加弹出框titile
 				modifytitle:false,//修改弹出框titile
 				activeNames: ['1','2'],//手风琴数量
-//				labelPosition: 'top', //表格
+//				labelPositions: 'ri', //表格
+				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				selectData:[],
 				fileList: [],
@@ -381,27 +385,14 @@
 			deleteRow(index, rows) {//Table-操作列中的删除行
 				rows.splice(index, 1);
 			},
-			// col_but(col_but) {
-			// 	//alert(col_but)
-			// 	if(col_but == 'col_but1') {
-			// 		this.col_but1 = !this.col_but1;
-			// 		this.down = !this.down,
-			// 		this.up = !this.up
-			// 	}
-			// 	if(col_but == 'col_but2') {
-			// 		this.col_but2 = !this.col_but2;
-			// 		this.down = !this.down,
-			// 		this.up = !this.up
-			// 	}
-			// },
-			
+		
 			//生成随机数函数
 			rand(min,max) {
 		        return Math.floor(Math.random()*(max-min))+min;
 		    },
-			//点击添加，修改按钮显示弹窗
-			visible() {
-				this.CUSTOMER={
+		    //清空
+            reset(){
+            	this.CUSTOMER={
 					ID:'',
 					CODE:'',
 					NAME:'',
@@ -420,8 +411,11 @@
 					CHANGEDATE:'',
 					MEMO:'',
 					CUSTOMER_QUALIFICATIONList:[],
-				},
-//				this.CUSTOMER.CODE =  this.rand(1000,9999);
+				};
+            },
+			//点击添加，修改按钮显示弹窗
+			visible() {
+				this.reset();
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.statusshow1 = true;
@@ -521,11 +515,11 @@
 				$(".mask_div").css("top", "0");
 			},
 			// 保存users/saveOrUpdate
-			submitForm(CUSTOMER) {
+			save(CUSTOMER) {
 				this.$refs[CUSTOMER].validate((valid) => {
 		          if (valid) {
 		          	this.CUSTOMER.STATUS=this.CUSTOMER.STATUS=="活动" ? '1' : '0';
-					var url = this.basic_url + '/apps-center/app/customer/saveOrUpdate';
+					var url = this.basic_url + '/api-apps/app/customer/saveOrUpdate';
 					this.$axios.post(url, this.CUSTOMER).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -533,8 +527,7 @@
 								message: '保存成功',
 								type: 'success'
 							});
-							this.show = false;
-							//重新加载数据
+//							//重新加载数据
 							this.$emit('request')
 						}
 					}).catch((err) => {
@@ -547,6 +540,15 @@
 			            return false;
 			          }
 			        });
+			},
+			saveAndUpdate(CUSTOMER){
+				this.save(CUSTOMER);
+				this.show = false;
+			},
+			saveAndSubmit(CUSTOMER){
+				this.save(CUSTOMER);
+				this.reset();
+				this.show = true;
 			},
 			handleClose(done) {
 				this.$confirm('确认关闭？')

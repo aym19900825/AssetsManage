@@ -25,7 +25,7 @@
 											<template slot="prepend">版本</template>
 										</el-input>
 									</el-col>
-									<el-col :span="5" class="pull-right" v-if="modify">
+									<!--<el-col :span="5" class="pull-right" v-if="modify">
 										<el-input v-model="CATEGORY.STATUS=='1'?'活动':'不活动'" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
@@ -34,7 +34,7 @@
 										<el-input v-model="CATEGORY.STATUS" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
-									</el-col>
+									</el-col>-->
 										<!--<template slot-scope="scope">
 											<label>信息状态</label>
  									       <!--  <span v-text="scope.STATUS=='1'?'活动':'不活动'"></span>-->
@@ -54,12 +54,12 @@
 
 								<el-row :gutter="30">
 									<el-col :span="8">
-										<el-form-item label="产品类别编号" prop="NUM">
+										<el-form-item label="类别编号" prop="NUM">
 											<el-input v-model="CATEGORY.NUM" :disabled="edit" placeholder="自动生成"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="16">
-										<el-form-item label="产品类别名称" prop="TYPE">
+										<el-form-item label="类别名称" prop="TYPE">
 											<el-input v-model="CATEGORY.TYPE"></el-input>
 										</el-form-item>
 									</el-col>
@@ -97,12 +97,10 @@
 						</el-collapse>
 					</div>
 					<div class="el-dialog__footer">
-						<el-form-item>
-							<el-button @click="close">取消</el-button>
 							<el-button type="primary" @click="saveAndUpdate('CATEGORY')">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit('CATEGORY')">提交并保存</el-button>
+							<el-button @click="close">取消</el-button>
 							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion">修订</el-button>
-						</el-form-item>
 					</div>
 				</el-form>
 			</div>
@@ -174,23 +172,6 @@
 			};
 		},
 		methods: {
-
-			// resetNew(){
-   //              this.CATEGORY = {
-			// 		NUM:'',
-			// 		TYPE:'',
-			// 		STATUS:'活动',
-			// 		VERSION:'1',
-			// 		DEPARTMENT:'',
-			// 		ENTERBY:'',
-			// 		ENTERDATE:'',
-			// 		CHANGEBY:'',
-			// 		CHANGEDATE:''
-			// 	};
-   //              // this.$refs["CUSTOMER"].resetFields();
-   //          },
-			
-
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selUser = val;
@@ -274,7 +255,7 @@
 				$(".mask_div").css("top", "0");
 			},
 			// 保存users/saveOrUpdate
-			submitForm(CATEGORY) {
+			save(CATEGORY) {
 				this.$refs[CATEGORY].validate((valid) => {
 		          if (valid) {
 		          	//console.log(this.CATEGORY.STATUS);
@@ -289,9 +270,8 @@
 								message: '保存成功',
 								type: 'success'
 							});
-							// this.show = false;
 							//重新加载数据
-							// this.$emit('request')
+							 this.$emit('request');
 						}
 					}).catch((err) => {
 						this.$message({
@@ -308,13 +288,14 @@
 			saveAndUpdate(CATEGORY){
 				this.save(CATEGORY);
 				this.show = false;
-				this.$emit('request');
+				
 			},
 			//提交并保存
 			saveAndSubmit(CATEGORY){
 				this.save(CATEGORY);
 				this.$emit('reset');
-				this.$emit('request');
+				this.show = true;
+				
 			},
 			//时间格式化
 			dateFormat(row, column) {
@@ -322,7 +303,7 @@
 				if(date == undefined) {
 					return "";
 				}
-				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
+				return this.$moment(date).format("YYYY-MM-DD");  
 			},
 			handleClose(done) {
 				this.$confirm('确认关闭？')

@@ -794,7 +794,7 @@
 			submitForm(dataInfo) {
 				this.$refs[dataInfo].validate((valid) => {
 					//		          if (valid) {
-					var url = this.basic_url + '/apps-center/app/workNot/saveOrUpdate';
+					var url = this.basic_url + '/api-apps/app/workNot/saveOrUpdate';
 					this.$axios.post(url, this.dataInfo).then((res) => {
 						if(res.data.resp_code == 0) {
 							this.$message({

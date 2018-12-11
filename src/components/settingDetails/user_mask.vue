@@ -589,7 +589,7 @@
 			//点击按钮显示弹窗
 			visible() {
 				this.reset();
-				this.$axios.get('/api/api-user/users/currentMap',{}).then((res)=>{
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.user.createby=res.data.id;
 					this.user.createbyName=res.data.nickname;
 					console.log(this.user.createbyName);

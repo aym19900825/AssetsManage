@@ -74,7 +74,7 @@
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="计划编号" prop="WP_NUM">
-											<el-input v-model="dataInfo.WP_NUM" :disabled="noedit">
+											<el-input v-model="dataInfo.WP_NUM" :disabled="edit">
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -84,19 +84,18 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="承检单位" prop="CJDW">
-											<el-select v-model="dataInfo.CJDW" placeholder="金化站" :disabled="noedit" style="width: 100%">
-												<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-												</el-option>
-											</el-select>
+										<el-form-item label="承检单位" prop="CJDW" :disabled="noedit">
+											<el-input v-model="dataInfo.CJDW" :disabled="edit">
+												<el-button slot="append" icon="el-icon-search" ></el-button>
+											</el-input>
+											
 										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="项目负责人" prop="P_LEADERDesc">
-											<el-input v-model="dataInfo.P_LEADERDesc" :disabled="edit">
-												<el-button slot="append" icon="el-icon-search" @click="getPeople(1)"></el-button>
+											<el-input v-model="dataInfo.P_LEADERDesc" :disabled="noedit">
 											</el-input>
 										</el-form-item>
 									</el-col>

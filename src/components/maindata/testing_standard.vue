@@ -53,62 +53,44 @@
 						<el-form status-icon :model="searchList" label-width="70px">
 							<el-row :gutter="10" class="pb10">
 								<el-col :span="5">
-
 									<el-input v-model="searchList.S_NUM">
 										<template slot="prepend">标准编号</template>
 									</el-input>
-
 								</el-col>
 								<el-col :span="5">
-
 									<el-input v-model="searchList.S_NAME">
 										<template slot="prepend">标准名称</template>
 									</el-input>
-
 								</el-col>
 								<el-col :span="5">
-
 									<el-input v-model="searchList.S_ENGNAME">
 										<template slot="prepend">英文名称</template>
 									</el-input>
-
 								</el-col>
 								<el-col :span="5">
-
 									<el-input v-model="searchList.VERSION">
 										<template slot="prepend">版本</template>
 									</el-input>
-
 								</el-col>
 								<el-col :span="4">
-
 									<el-input v-model="searchList.DEPARTMENT">
 										<template slot="prepend">录入人机构</template>
 									</el-input>
-
 								</el-col>
 							</el-row>
 							<el-row :gutter="20">
 								<el-col :span="5">
-
 									<el-date-picker v-model="searchList.RELEASETIME" type="date" placeholder="发布时间" value-format="yyyy-MM-dd HH:mm:ss">
-
 									</el-date-picker>
-
 								</el-col>
 								<el-col :span="5">
-
 									<el-date-picker v-model="searchList.STARTETIME" type="date" placeholder="启用时间" value-format="yyyy-MM-dd HH:mm:ss">
 									</el-date-picker>
-
 								</el-col>
 								<el-col :span="3">
-
 									<el-select v-model="searchList.STATUS" placeholder="请选择信息状态">
 										<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-
 										</el-option>
-
 									</el-select>
 								</el-col>
 								<el-col :span="2">
@@ -454,7 +436,6 @@
 			},
 			judge(data) {
 				return data.STATUS == "1" ? '活动' : '不活动'
-
 			},
 			//时间格式化  
 			dateFormat(row, column) {
@@ -462,7 +443,7 @@
 				if(date == undefined) {
 					return "";
 				}
-				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+				return this.$moment(date).format("YYYY-MM-DD");
 			},
 			SelChange(val) {//选中值后赋值给一个自定义的数组：selUser
 				this.selUser = val;

@@ -468,7 +468,7 @@
 				if(date == undefined) {
 					return "";
 				}
-				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss"); 
+				return this.$moment(date).format("YYYY-MM-DD"); 
 			},
 
 			SelChange(val) {//选中值后赋值给一个自定义的数组：selMenu

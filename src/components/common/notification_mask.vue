@@ -307,7 +307,7 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="检验检测费用" prop="CHECTCOST">
-											<el-input v-model="dataInfo.CHECTCOST" :disabled="noedit"></el-input>
+											<el-input v-model="dataInfo.CHECTCOST" :disabled="noedit" id="cost"  @blur="toPrice"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -584,6 +584,18 @@
 //
 //					this.$refs["dataInfo"].resetFields();
 //			},
+			toNum(str) {
+				return str.replace(/\,|\￥/g, "");
+			},
+			//金额两位小数点千位分隔符，四舍五入
+			toPrice(){
+				var money = document.getElementById("cost").value;
+				var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
+				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
+				// this.dataInfo.CHECTCOST="￥" + num.join(".");
+				this.dataInfo.CHECTCOST = num.join(".");
+			},
+			
 			//tabs
 			handleClick(tab, event) {
 		        console.log(tab, event);
@@ -849,7 +861,8 @@
 	}
 </script>
 
-<style scoped>
+<style>
 	@import '../../assets/css/mask-modules.css';
 	.el-radio-group .el-col-4 {padding-top: 5px;}
+	#cost {text-align: right !important;}
 </style>

@@ -21,16 +21,16 @@
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="类别" name="1">
 								<el-row :gutter="20" class="pb10">
-									<el-col :span="3" class="pull-right">
+									<!-- <el-col :span="3" class="pull-right">
 										<el-input v-model="dataInfo.N_CODE" :disabled="edit">
 											<template slot="prepend">编号</template>
 										</el-input>
-									</el-col>
-									<el-col :span="5" class="pull-right">
+									</el-col> -->
+									<!-- <el-col :span="5" class="pull-right">
 										<el-input v-model="dataInfo.STATUS=='1'?'活动':'不活动'" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
-									</el-col>
+									</el-col> -->
 									<el-col :span="5" class="pull-right">
 											<el-input v-model="dataInfo.STATE" :disabled="edit">
 												<template slot="prepend">状态</template>
@@ -89,11 +89,10 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="承检单位" prop="CJDW" :disabled="noedit">
-											<el-input v-model="dataInfo.CJDW" :disabled="edit" @click="getCompany">
-												<el-button slot="append" icon="el-icon-search" ></el-button>
+										<el-form-item label="承检单位" prop="CJDWDesc" :disabled="noedit">
+											<el-input v-model="dataInfo.CJDWDesc" :disabled="edit">
+												<el-button slot="append" icon="el-icon-search" @click="getCompany"></el-button>
 											</el-input>
-											
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -365,8 +364,12 @@
 					</el-form>
 				</div>
 				<div class="el-dialog__footer" v-show="noviews">
+					<!-- <el-button @click='close'>取消</el-button>
+					<el-button type="primary" @click="submitForm('dataInfo')">提交</el-button> -->
+
 					<el-button @click='close'>取消</el-button>
-					<el-button type="primary" @click="submitForm('dataInfo')">提交</el-button>
+					<el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
+					<el-button type="success" @click='saveAndSubmit()'>提交并保存</el-button>
 				</div>
 			</div>
 		</div>
@@ -390,7 +393,14 @@
     			<el-button type="primary" @click="dailogconfirm()">确 定</el-button>
   			</span>
 		</el-dialog>
-
+		<el-dialog title="承检部门" :visible.sync="dialogVisiblecompany" width="30%" :before-close="handleClose">
+			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick" @check-change="handleCheckChange">
+			</el-tree>
+			<span slot="footer" class="dialog-footer">
+		       <el-button @click="dialogVisiblecompany = false">取 消</el-button>
+		       <el-button type="primary" @click="diaconfirmcom();" >确 定</el-button>
+		    </span>
+		</el-dialog>
 	</div>
 </template>
 
@@ -456,6 +466,12 @@
 				basic_url: Config.dev_url,
 				gridData: [], //彈出框的數據
 				fileList: [],
+				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 
+				getCheckboxData: {},
+				resourceProps: {
+					children: "children",
+					label: "fullname"
+				},
 				page: {
 					currentPage: 1,
 					pageSize: 10,
@@ -506,6 +522,8 @@
 				activeNames: ['1', '2', '3', '4', '5', '6', '7'], //手风琴数量
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
+				dialogVisiblecompany: false, //对话框
+				editSearch: '',
 				leaddata: [ //导入数据的表格
 					{
 						columnname: 'author',
@@ -590,21 +608,28 @@
 //
 //					this.$refs["dataInfo"].resetFields();
 //			},
+			handleNodeClick(data) { //获取勾选树菜单节点
+			//				console.log(data);
+			},
+			handleCheckChange(data, checked, indeterminate) {
+				this.getCheckboxData = data;
+			},
+			getCheckedNodes() { //获取树菜单节点
+				this.checkedNodes = this.$refs.tree.getCheckedNodes()
+			},
 			getCompany() {
-				this.editSearch = 'company';
+				this.editSearch = 'dept';
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
 				var type = '1';
-				var url = this.basic_url + '/api-user/depts/treeByType';
+				var url = this.basic_url + '/api-user/depts/treeMap';
 				this.$axios.get(url, {
 					params: {
 						type: type
 					},
 				}).then((res) => {
 					this.resourceData = res.data;
-					console.log(res.data);
-					console.log(res.data)
-					this.dialogVisible = true;
+					this.dialogVisiblecompany = true;
 				});
 
 			},
@@ -645,7 +670,7 @@
 			//新建行
 			addfieldBasis() {
 				var obj = {
-					NUMBER: '',
+					NUMBER: '1',
 					S_NUM: '',
 					S_DESC: '',
 					VERSION: '',
@@ -658,7 +683,7 @@
 			},
 			addfieldProject() {
 				var obj = {
-					NUMBER: '',
+					NUMBER: '1',
 					P_NUM: '',
 					P_DESC: '',
 					REMARKS: '',
@@ -687,7 +712,7 @@
 					this.dataInfo.ENTERBY = res.data.nickname;
 					this.dataInfo.ORGID = res.data.deptName
 					var date = new Date();
-					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD ");
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -816,8 +841,8 @@
 				$(".mask_div").css("top", "0");
 			},
 			// 保存users/saveOrUpdate
-			submitForm(dataInfo) {
-				this.$refs[dataInfo].validate((valid) => {
+			save() {
+				this.$refs.dataInfo.validate((valid) => {
 					//		          if (valid) {
 					this.dataInfo.CHECTCOST = this.initcost;
 					this.dataInfo.STATE = this.dataInfo.STATE=="1"?'草稿':'未知';
@@ -828,7 +853,7 @@
 								message: '保存成功',
 								type: 'success'
 							});
-							this.show = false;
+							// this.show = false;
 							//重新加载数据
 							this.$emit('request')
 						}
@@ -843,7 +868,19 @@
 					//			          }
 				});
 			},
-
+			//保存
+			saveAndUpdate(){
+				this.save();
+				this.show = false;
+				// this.reset();
+				// this.$emit('request');
+			},
+			//提交并保存
+			saveAndSubmit(){
+				this.save();
+				this.reset();
+				// this.$emit('request');
+			},
 			handleClose(done) {
 				this.$confirm('确认关闭？')
 					.then(_ => {
@@ -868,6 +905,13 @@
 					this.type = type;
 				});
 			},
+			diaconfirmcom(){
+				this.getCheckedNodes();
+				this.placetext = false;
+				this.dialogVisiblecompany = false;
+				this.dataInfo.CJDW = this.getCheckboxData.id;
+				this.dataInfo.CJDWDesc = this.getCheckboxData.fullname;
+			},
 			dailogconfirm(type) { //小弹出框确认按钮事件
 				this.dialogVisible = false;
 				if(this.type == '1') {
@@ -880,7 +924,25 @@
 					this.dataInfo.ACCEPT_PERSONDesc = this.selUser[0].nickname;
 				}
 			},
-
+			reset(){
+				this.dataInfo = {
+					N_CODE: '',
+					TYPE: '',
+					XD_DATE: '',
+					ITEM_NAME: '',
+					ITEM_MODEL: '',
+					VENDOR: '',
+					CJDW: '',
+					TASKNUM: '',
+					SOLUTION: '',
+					COMPDATE: '',
+					STATE: '草稿',
+					ENTERBY: '',
+					STATUS: '',
+					WORK_NOTICE_CHECKBASISList: [],
+					WORK_NOTICE_CHECKPROJECTList: []
+				}
+			},
 			SelChange(val) {
 				this.selUser = val;
 			},

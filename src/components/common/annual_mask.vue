@@ -24,7 +24,7 @@
 								<el-row :gutter="20">
 									<el-col :span="5" class="pull-right">
 										<el-input placeholder="草稿" v-model="WORKPLAN.STATUS" :disabled="true">
-											<template slot="prepend">信息状态</template>
+											<template slot="prepend">状态</template>
 										</el-input>
 									</el-col>
 									<el-col :span="5" class="pull-right">

@@ -56,7 +56,6 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="样品承接人" prop="ACCEPT_PERSON">
@@ -75,7 +74,6 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="处理人" prop="DO_PERSON">
@@ -94,7 +92,6 @@
 										</el-form-item>
 									</el-col> -->
 								</el-row>
-
 								<el-row :gutter="30">
 									<el-col :span="24">
 										<el-form-item label="备注" prop="MEMO">
@@ -102,7 +99,6 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="录入人">
@@ -128,13 +124,13 @@
 									</el-col>
 								</el-row>
 							</el-collapse-item>
-							
 						</el-collapse>
 					</div>
 					<div class="content-footer">
 						<el-form-item>
-							<button @click="cancelForm" class="btn btn-default btn-large">取消</button>
-							<button type="primary" class="btn btn-primarys btn-large" @click="submitForm('samplesForm')">提交</button>
+							<el-button @click="close">取消</el-button> 
+						    <el-button type="primary" @click="saveAndUpdate('samplesForm')">保存</el-button>
+						    <el-button type="success" @click="saveAndSubmit('samplesForm')">保存并添加</el-button>
 						</el-form-item>
 					</div>
 				</el-form>
@@ -303,7 +299,6 @@
 			},
 			childMethods() {//添加内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					//console.log(res);
 					// this.samplesForm.DEPARTMENT=res.data.deptName;
 					this.samplesForm.ENTERBY=res.data.nickname;
 					var date=new Date();
@@ -338,7 +333,6 @@
 				this.samplesForm.STATUS=this.samplesForm.STATUS=="1"?'活动':'不活动';
 				this.show = true;
 			},
-
 			
 			judge(data) {//taxStatus 信息状态布尔值
 				return data.enabled ? '活动' : '不活动'
@@ -362,7 +356,6 @@
 					console.log('请求失败');
 				})
 			},
-
 			
 			//点击关闭按钮
 			close() {
@@ -399,11 +392,10 @@
 				$(".mask_div").css("height", "80%");
 				$(".mask_div").css("margin", "7% 10%");
 				$(".mask_div").css("top", "0");
-
 			},
 			//点击提交按钮执行保存
-			submitForm(formName) {
-				this.$refs[formName].validate((valid) => {
+			save(samplesForm) {
+				this.$refs[samplesForm].validate((valid) => {
 					if (valid) {
 					    this.samplesForm.STATUS=this.samplesForm.STATUS=="活动" ? '1' : '0';
 						var url = this.basic_url + '/api-apps/app/itemdisposition/saveOrUpdate';
@@ -416,9 +408,10 @@
 									message: '保存成功',
 									type: 'success'
 								});
-								this.show = false;
+								// this.show = false;
 								//重新加载数据
-								this.$emit('request')
+								this.$emit('request');
+								this.$refs["samplesForm"].resetFields();
 							}
 						}).catch((err) => {
 							this.$message({
@@ -430,7 +423,18 @@
 						return false;
 					}
 				});
-
+			},
+			//保存
+			saveAndUpdate(samplesForm){
+				this.save(samplesForm);
+				this.show = false;
+				// this.$emit('request');
+			},
+			//添加并保存
+			saveAndSubmit(samplesForm){
+				this.save(samplesForm);
+				// this.$emit('reset');
+				// this.$emit('request');
 			},
 			handleClose(done) { //大弹出框确定关闭按钮
 				this.$confirm('确认关闭？')

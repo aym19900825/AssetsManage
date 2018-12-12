@@ -405,7 +405,7 @@
 						displayType: 'inline-block'
 					},
 					{
-						label: '设备动态',
+						label: '备注',
 						prop: 'MEMO',
 						width: '50%',
 						type: 'input',

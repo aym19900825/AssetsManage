@@ -412,6 +412,8 @@
 //				this.$emit('request');
 				this.show = true;
 				this.$emit('reset');
+				this.$refs["testing_projectForm"].resetFields();
+				
 				
 			},
 

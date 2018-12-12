@@ -15,7 +15,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="samplesForm" :label-position="labelPosition" :rules="rules" ref="samplesForm" label-width="110px" status-icon>
+				<el-form :model="samplesForm" :label-position="labelPosition" :rules="rules" ref="samplesForm" label-width="100px" status-icon>
 					<div class="accordion">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基础信息" name="1">
@@ -149,8 +149,9 @@
 					</div>
 					<div class="content-footer">
 						<el-form-item>
-							<button @click="cancelForm" class="btn btn-default btn-large">取消</button>
-							<button type="primary" class="btn btn-primarys btn-large" @click="submitForm('samplesForm')">提交</button>
+							<el-button @click="close">取消</el-button> 
+						    <el-button type="primary" @click="saveAndUpdate('samplesForm')">保存</el-button>
+						    <el-button type="success" @click="saveAndSubmit('samplesForm')">保存并添加</el-button>
 						</el-form-item>
 					</div>
 				</el-form>
@@ -421,8 +422,8 @@
 
 			},
 			//点击提交按钮执行保存
-			submitForm(formName) {
-				this.$refs[formName].validate((valid) => {
+			save(samplesForm) {
+				this.$refs[samplesForm].validate((valid) => {
 					if (valid) {
 					    this.samplesForm.STATUS=this.samplesForm.STATUS=="活动" ? '1' : '0';
 						var url = this.basic_url + '/api-apps/app/itemgrant/saveOrUpdate';
@@ -435,9 +436,10 @@
 									message: '保存成功',
 									type: 'success'
 								});
-								this.show = false;
+								// this.show = false;
 								//重新加载数据
-								this.$emit('request')
+								this.$emit('request');
+								this.$refs["samplesForm"].resetFields();
 							}
 						}).catch((err) => {
 							this.$message({
@@ -449,7 +451,16 @@
 						return false;
 					}
 				});
-
+			},
+			saveAndUpdate(samplesForm){
+				this.save(samplesForm);
+				this.show = false;
+				// this.$emit('request');
+			},
+			saveAndSubmit(samplesForm){
+				this.save(samplesForm);
+				// this.$emit('reset');
+				// this.$emit('request');
 			},
 			handleClose(done) { //大弹出框确定关闭按钮
 				this.$confirm('确认关闭？')

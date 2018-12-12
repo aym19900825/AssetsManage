@@ -343,7 +343,6 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-				aaaData: [],
 			}
 		},
 		mounted(){
@@ -420,21 +419,20 @@
 			},
 			//修改用戶
 			modify() {
-				this.aaaData = this.selUser;
-				if(this.aaaData.length == 0) {
+				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要修改的用户',
 						type: 'warning'
 					});
 					return;
-				} else if(this.aaaData.length > 1) {
+				} else if(this.selUser.length > 1) {
 					this.$message({
 						message: '不可同时修改多个用户',
 						type: 'warning'
 					});
 					return;
 				} else {
-					this.$refs.child.detail(this.aaaData[0].ID);
+					this.$refs.child.detail(this.selUser[0].ID);
 				}
 			},
 			//高级查询
@@ -524,7 +522,6 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(res)
 					//					this.inspectList = res.data.data;
 					this.page.totalCount = res.data.count;
 					//总的页数

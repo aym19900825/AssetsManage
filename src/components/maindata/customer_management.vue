@@ -96,8 +96,8 @@
 							</el-table-column>
 							<el-table-column label="联系电话" sortable width="200" prop="PHONE" v-if="this.checkedName.indexOf('联系电话')!=-1">
 							</el-table-column>	
-							<el-table-column label="信息状态" sortable width="100" prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
-							</el-table-column>
+							<!--<el-table-column label="信息状态" sortable width="100" prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
+							</el-table-column>-->
 						</el-table>
 						<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
 				            @size-change="sizeChange"

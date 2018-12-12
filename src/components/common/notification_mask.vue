@@ -98,15 +98,15 @@
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="8">
-										<!-- <el-form-item label="项目负责人" prop="P_LEADERDesc">
+										<el-form-item label="项目负责人" prop="P_LEADERDesc">
 											<el-input v-model="dataInfo.P_LEADERDesc" :disabled="noedit">
 											</el-input>
-										</el-form-item> -->
-										<el-form-item label="项目负责人" prop="ACCEPT_PERSONDesc">
+										</el-form-item>
+										<!-- <el-form-item label="项目负责人" prop="ACCEPT_PERSONDesc">
 											<el-input v-model="dataInfo.P_LEADERDesc" :disabled="edit">
 												<el-button slot="append" icon="el-icon-search" @click="getPeople(1)"></el-button>
 											</el-input>
-										</el-form-item>
+										</el-form-item> -->
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="受检产品名称" prop="ITEM_NAME">
@@ -266,7 +266,7 @@
 									        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.REMARKS}}</span>
 									    </template>
 								    </el-table-column>
-								    <el-table-column prop="REMARKS" label="要求" sortable width="80px">
+								    <el-table-column prop="REMARKS" label="单价" sortable width="80px">
 									    <template slot-scope="scope">
 									        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.REMARKS}}</span>
 									    </template>
@@ -399,7 +399,7 @@
   			</span>
 		</el-dialog>
 		<el-dialog title="承检部门" :visible.sync="dialogVisiblecompany" width="30%" :before-close="handleClose">
-			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick" @check-change="handleCheckChange">
+			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id"  :default-checked-keys="resourceCheckedKey" :props="resourceProps" @check-change="handleCheckChange">
 			</el-tree>
 			<span slot="footer" class="dialog-footer">
 		       <el-button @click="dialogVisiblecompany = false">取 消</el-button>
@@ -529,36 +529,6 @@
 				dialogVisible: false, //对话框
 				dialogVisiblecompany: false, //对话框
 				editSearch: '',
-				leaddata: [ //导入数据的表格
-					{
-						columnname: 'author',
-						description: '作者姓名',
-						type: '字符串(string)',
-						length: '6',
-						retain: ''
-					},
-					{
-						columnname: 'author',
-						description: '作者姓名',
-						type: '字符串(string)',
-						length: '6',
-						retain: ''
-					},
-					{
-						columnname: 'author',
-						description: '作者姓名',
-						type: '字符串(string)',
-						length: '6',
-						retain: ''
-					},
-					{
-						columnname: 'author',
-						description: '作者姓名',
-						type: '字符串(string)',
-						length: '6',
-						retain: ''
-					}
-				],
 				dataInfo: { //添加数据库列表信息
 					N_CODE: '',
 					TYPE: '',
@@ -567,6 +537,7 @@
 					ITEM_MODEL: '',
 					VENDOR: '',
 					CJDW: '',
+					P_LEADER:'',
 					TASKNUM: '',
 					SOLUTION: '',
 					COMPDATE: '',
@@ -626,18 +597,16 @@
 				this.editSearch = 'dept';
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
-				var type = '1';
-				var url = this.basic_url + '/api-user/depts/treeMap';
+				var type = "2";
+				var url = this.basic_url + '/api-user/depts/treeByType';
 				this.$axios.get(url, {
 					params: {
 						type: type
 					},
 				}).then((res) => {
-					console.log(res.data);
 					this.resourceData = res.data;
 					this.dialogVisiblecompany = true;
 				});
-
 			},
 			toNum(str) {
 				return str.replace(/\,|\￥/g, "");
@@ -917,7 +886,17 @@
 				this.dialogVisiblecompany = false;
 				this.dataInfo.CJDW = this.getCheckboxData.id;
 				this.dataInfo.CJDWDesc = this.getCheckboxData.fullname;
-				this.dataInfo.P_LEADERDesc = this.getCheckboxData.leader;
+				this.dataInfo.P_LEADER = this.getCheckboxData.leader;
+				var dataid = this.getCheckboxData.leader;
+				var url = this.basic_url + '/api-user/users/' + dataid;
+				this.$axios.get(url, {}).then((res) => {
+					this.dataInfo.P_LEADERDesc = res.data.nickname;
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
 			},
 			dailogconfirm(type) { //小弹出框确认按钮事件
 				this.dialogVisible = false;
@@ -940,6 +919,7 @@
 					ITEM_MODEL: '',
 					VENDOR: '',
 					CJDW: '',
+					P_LEADER:'',
 					TASKNUM: '',
 					SOLUTION: '',
 					COMPDATE: '',

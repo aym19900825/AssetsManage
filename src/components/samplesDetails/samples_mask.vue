@@ -45,19 +45,19 @@
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="委托书编号" prop="PROXYNUM">
-											<el-input v-model="samplesForm.PROXYNUM" :disabled="true">
+											<el-input v-model="samplesForm.PROXYNUM" :disabled="edit">
 												<el-button slot="append" icon="el-icon-search" @click="getProxy"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="委托单位编号" prop="VENDOR">
-											<el-input v-model="samplesForm.VENDOR"></el-input>
+											<el-input v-model="samplesForm.VENDOR" ></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="委托单位名称" prop="V_NAME">
-											<el-input v-model="samplesForm.V_NAME" :disabled="true"></el-input>
+											<el-input v-model="samplesForm.V_NAME" ></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -124,7 +124,13 @@
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="入库时间" prop="ACCEPTDATE">
-											<el-input v-model="samplesForm.ACCEPTDATE"></el-input>
+											<div class="block">
+											    <el-date-picker
+											      v-model="samplesForm.ACCEPTDATE"
+											      type="date"
+											      placeholder="选择日期" style="width:100%" value-format="yyyy-MM-dd HH:mm:ss">
+											    </el-date-picker>
+											</div>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -134,7 +140,13 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="收样日期" prop="ACCEPT_DATE">
-											<el-input v-model="samplesForm.ACCEPT_DATE"></el-input>
+											<div class="block">
+											    <el-date-picker
+											      v-model="samplesForm.ACCEPT_DATE"
+											      type="date"
+											      placeholder="选择日期" style="width:100%" value-format="yyyy-MM-dd HH:mm:ss">
+											    </el-date-picker>
+											</div>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -147,12 +159,24 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="接样日期" prop="RECIP_DATE">
-											<el-input v-model="samplesForm.RECIP_DATE"></el-input>
+											<div class="block">
+											    <el-date-picker
+											       v-model="samplesForm.RECIP_DATE"
+											      type="date"
+											      placeholder="选择日期" style="width:100%" value-format="yyyy-MM-dd HH:mm:ss">
+											    </el-date-picker>
+											</div>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="状态日期" prop="STATUSDATE">
-											<el-input v-model="samplesForm.STATUSDATE"></el-input>
+											<div class="block">
+											    <el-date-picker
+											        v-model="samplesForm.STATUSDATE"
+											      type="date"
+											      placeholder="选择日期" style="width:100%" value-format="yyyy-MM-dd HH:mm:ss">
+											    </el-date-picker>
+											</div>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -269,8 +293,12 @@
 					</div>
 					<div class="content-footer">
 						<el-form-item>
-							<button @click="cancelForm" class="btn btn-default btn-large">取消</button>
-							<button type="primary" class="btn btn-primarys btn-large" @click="submitForm('samplesForm')">提交</button>
+							<!-- <button @click="cancelForm" class="btn btn-default btn-large">取消</button>
+							<button type="primary" class="btn btn-primarys btn-large" @click="submitForm('samplesForm')">提交</button> -->
+
+							<el-button @click='close'>取消</el-button>
+							<el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
+							<el-button type="success" @click='saveAndSubmit()'>保存并添加</el-button>
 						</el-form-item>
 					</div>
 				</el-form>
@@ -456,6 +484,7 @@
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
 			},
 			childMethods() {//添加内容时从父组件带过来的
+				this.samplesForm.ACCEPT_DATE =  '2018-10-10';//收样日期
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.samplesForm.DEPARTMENT=res.data.deptName;
 					this.samplesForm.ENTERBY=res.data.nickname;
@@ -639,13 +668,44 @@
 			close() {
 				this.show = false;
 			},
-			cancelForm() {
-				this.show = false;
-				this.reset();
-			},
-			reset() {
-				this.show = false;
-			},
+			// cancelForm() {
+			// 	this.show = false;
+			// 	this.reset();
+			// },
+			// reset() {
+			// 	this.show = false;
+			// },
+			reset(){
+            	this.samplesForm = {
+					PROXYNUM: '',//委托书编号
+					ITEMNUM: '',//样品编号
+					VENDOR: '',//委托单位编号
+					PRODUCT_COMPANY: '',//生产单位编号
+					V_NAME: '',//委托单位名称
+					P_NAME: '',//生产单位名称
+					DESCRIPTION: '',//样品名称
+					PRODUCT_CODE: '',//产品标识代码
+					MODEL: '',//型号
+					QUATITY: '',//数量
+					OTHER: '',//其他资料
+					MEMO: '',//备注
+					ACCEPTDATE: '',//入库时间
+					ACCEPT_PERSON: '',//收样人
+					ACCEPT_DATE: '',//收样日期
+					RECIP_PERSON: '',//接样人
+					RECIP_DATE: '',//接样日期
+					STATE: '',//状态
+					VERSION: '',//版本
+					STATUSDATE: '',//状态日期
+					ENTERBY: '',//录入人
+					ENTERDATE: '',//录入时间
+					CHANGEBY: '',//修改人
+					CHANGEDATE: '',//修改时间
+					TYPE: '',//样品类别
+					STATUS: '',//信息状态
+					// samples_itemlineForm:[]
+				}
+            },
 			toggle(e) {
 				if(this.isok1 == true) {
 					this.maxDialog();
@@ -673,8 +733,8 @@
 
 			},
 			//点击提交按钮执行保存
-			submitForm(formName) {
-				this.$refs[formName].validate((valid) => {
+			save() {
+				this.$refs.samplesForm.validate((valid) => {
 					if (valid) {
 					    this.samplesForm.STATUS=this.samplesForm.STATUS=="活动" ? '1' : '0';
 						var url = this.basic_url + '/api-apps/app/item/saveOrUpdate';
@@ -687,9 +747,9 @@
 									message: '保存成功',
 									type: 'success'
 								});
-								this.show = false;
+								// this.show = false;
 								//重新加载数据
-								this.$emit('request')
+								// this.$emit('request');
 							}
 						}).catch((err) => {
 							this.$message({
@@ -701,7 +761,18 @@
 						return false;
 					}
 				});
-
+			},
+			//保存
+			saveAndUpdate(){
+				this.save();
+				this.show = false;
+				this.$emit('request');
+			},
+			//保存并添加
+			saveAndSubmit(){
+				this.save();
+				this.reset();
+				this.$emit('request');
 			},
 			handleClose(done) { //大弹出框确定关闭按钮
 				this.$confirm('确认关闭？')

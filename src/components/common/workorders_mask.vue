@@ -16,7 +16,7 @@
 			</div>
 			<div class="mask_content">
 				<!-- status-icon 验证后文本框上显示对勾图标 -->
-				<el-form status-icon :model="workorderForm" :label-position="labelPosition" :rules="rules" ref="workorderForm" label-width="100px">
+				<el-form status-icon :model="workorderForm" :label-position="labelPosition" :rules="rules" ref="workorderForm" label-width="110px">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames">
 							<!-- 样品信息列表 Begin-->
@@ -39,7 +39,7 @@
 									</el-col>
 								</el-row>
 
-								<el-row :gutter="30">
+								<el-row :gutter="30" class="pt10">
 									<el-col :span="8">
 										<el-form-item label="委托书编号" prop="PROXYNUM">
 											<el-input v-model="workorderForm.PROXYNUM" >
@@ -152,7 +152,7 @@
 							<el-collapse-item title="检测" name="2">
 								<el-row :gutter="30">
 									<el-col :span="24">
-										<el-form-item label="抽样方案/判定依据">
+										<el-form-item label="抽样方案/判定依据" label-width="130px">
 											<el-input type="textarea" rows="5" v-model="workorderForm.CHECK_BASIS"></el-input>
 										</el-form-item>
 									</el-col>
@@ -173,7 +173,7 @@
 									</el-button>
 								</div>
 
-								<el-table :data="WorkorderBasisList" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation">
+								<el-table :data="WorkorderBasisList" row-key="ID" border stripe height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation">
 								    <el-table-column prop="iconOperation" fixed width="50px">
 								      <template slot-scope="scope">
 								      	<i class="el-icon-check" v-show="scope.row.isEditing">
@@ -255,7 +255,7 @@
 				            	<div class="clearfix pt10">
 					            	<el-row :gutter="30">
 										<el-col :span="8">
-											<el-form-item label="委托方提供技术资料">
+											<el-form-item label="委托方提供技术资料" label-width="140px">
 												<el-input placeholder="请输入内容" v-model="workorderForm.TECHNICAL_INFORMATION"></el-input>
 											</el-form-item>
 										</el-col>
@@ -306,7 +306,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="样品承接人(专业组)">
+											<el-form-item label="样品承接人(专业组)" label-width="150px">
 												<el-select v-model="workorderForm.ITEM_PROFESSIONAL_GROUP" style="width: 100%">
 													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.nickname"></el-option>
 												</el-select>
@@ -374,7 +374,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="专业技术/质量负责人">
+											<el-form-item label="专业技术/质量负责人" label-width="150px">
 												<el-select v-model="workorderForm.PROFESSIONAL" style="width: 100%">
 													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.username"></el-option>
 												</el-select>
@@ -620,7 +620,7 @@
 				addtitle:true,//添加弹出框titile
 				modifytitle:false,//修改弹出框titile
 				activeNames: ['1','2','3','4','5','6','7'],//手风琴数量
-				labelPosition: 'top', //表格
+				labelPosition: 'right', //表格
 				searchList: { //点击高级搜索后显示的内容
 					WONUM: '',//工作任务单编号
 					ITEM_NAME: '',//样品名称

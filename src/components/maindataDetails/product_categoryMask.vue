@@ -194,10 +194,6 @@
 						type: 'error'
 					});
 				});
-//				this.$refs["CATEGORY"].resetFields();//清空表单验证
-				if (this.$refs["CATEGORY"] !== undefined) {
-                    this.$refs["CATEGORY"].resetFields();
-               	}
 				this.statusshow1 = true;
 				this.statusshow2 = false;
 				this.addtitle = true;
@@ -276,6 +272,7 @@
 							});
 							//重新加载数据
 							 this.$emit('request');
+							 this.$refs["CATEGORY"].resetFields();
 						}
 					}).catch((err) => {
 						this.$message({

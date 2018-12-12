@@ -419,7 +419,6 @@
 						this.dataInfo.RELEASETIME =  this.$moment(this.dataInfo.RELEASETIME).format("YYYY-MM-DD HH:mm:ss");
 						this.dataInfo.STARTETIME = this.$moment(this.dataInfo.STARTETIME).format("YYYY-MM-DD HH:mm:ss");
 					 if (valid) {
-					 	console.log(111);
 					this.dataInfo.STATUS=((this.dataInfo.STATUS=="1"||this.dataInfo.STATUS=='活动') ? '1' : '0');
 //					this.dataInfo.STATUS=this.dataInfo.STATUS=="活动" ? '1' : '0';
 					var url = this.basic_url + '/api-apps/app/inspectionSta/saveOrUpdate';
@@ -430,7 +429,9 @@
 								type: 'success'
 							});
 							//重新加载数据
-							this.$emit('request')
+							this.$emit('request');
+							//清空表单验证
+                    		this.$refs["testing_projectForm"].resetFields();
 						}
 					}).catch((err) => {
 						this.$message({

@@ -285,10 +285,6 @@
 						type:'error'
 					})
 				})
-				//清空表单验证
-				if (this.$refs["testingForm"] !== undefined) {
-                    this.$refs["testingForm"].resetFields();
-              }
 				this.addtitle = true;
             	this.modifytitle = false;
             	this.modify = false;
@@ -523,6 +519,7 @@
 								});
 								//重新加载数据
 								this.$emit('request');
+								this.$refs["VERSION"].resetFields();
 							}
 						}).catch((err) => {
 							this.$message({

@@ -200,10 +200,6 @@
 		    },
 			//点击按钮显示弹窗
 			visible() {
-				//清空表单验证
-				if (this.$refs["PRODUCT"] !== undefined) {
-                    this.$refs["PRODUCT"].resetFields();
-               }
 				this.statusshow1 = true;
 				this.statusshow2 = false;
 				this.addtitle = true;
@@ -259,7 +255,8 @@
 								type: 'success'
 							});
 							//重新加载数据
-							this.$emit('request')
+							this.$emit('request');
+							this.$refs["PRODUCT"].resetFields();
 						}
 					}).catch((err) => {
 						this.$message({

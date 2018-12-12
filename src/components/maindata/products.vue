@@ -100,8 +100,8 @@
 							<el-table-column label="产品名称" width="155" sortable prop="PRO_NAME" v-if="this.checkedName.indexOf('产品名称')!=-1">
 							</el-table-column>
 							</el-table-column>
-							<el-table-column label="信息状态" width="155" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
-							</el-table-column>
+							<!--<el-table-column label="信息状态" width="155" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
+							</el-table-column>-->
 							<el-table-column label="版本" width="155" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1">
 							</el-table-column>
 							<el-table-column label="录入人机构" width="155" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('录入人机构')!=-1">

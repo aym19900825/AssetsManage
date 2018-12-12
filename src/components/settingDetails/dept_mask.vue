@@ -105,7 +105,9 @@
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="负责人">
-											<el-input v-model="adddeptForm.leader"></el-input>
+											<el-input v-model="adddeptForm.leaderDesc" :disabled="edit">
+												<el-button slot="append" icon="el-icon-search" @click="getPerson"></el-button>
+											</el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -180,6 +182,44 @@
 		       <el-button type="primary" @click="queding();" >确 定</el-button>
 		    </span>
 		</el-dialog>
+
+		<!--负责人 Begin-->
+		<el-dialog title="选择负责人" :visible.sync="dialogLeader" width="80%" :before-close="handleClose">
+			<div class="accordion" id="information">
+				<div class="mask_tab-block">
+					<!-- <div class="mask_tab-head clearfix">
+						<div class="accordion_title">
+							<span class="accordion-toggle">选择负责人</span>
+						</div>
+					</div> -->
+					<!-- 第二层弹出的表格 -->
+						<el-table :data="userList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+								<el-table-column type="selection" width="55" fixed>
+								</el-table-column>
+								<el-table-column label="账号" sortable width="140px" prop="username">
+								</el-table-column>
+								<el-table-column label="姓名" sortable width="200px" prop="nickname">
+								</el-table-column>
+								<el-table-column label="机构" sortable width="150px" prop="deptName">
+								</el-table-column>
+								<el-table-column label="公司" sortable width="200px" prop="companyName">
+								</el-table-column>
+								<el-table-column label="信息状态" sortable width="200px" prop="enabled" :formatter="judge">
+								</el-table-column>
+								<el-table-column label="创建时间" width="200px" prop="createTime" sortable :formatter="dateFormat">
+								</el-table-column>
+							</el-table>
+							<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							</el-pagination>
+						<!-- 表格 -->
+				</div>
+			</div>
+			<span slot="footer" class="dialog-footer">
+		       <el-button @click="dialogLeader = false">取 消</el-button>
+		       <el-button type="primary" @click="addleader">确 定</el-button>
+		    </span>
+		</el-dialog>
+		<!--负责人 End-->
 	</div>
 </template>
 
@@ -221,6 +261,7 @@
 			}
 		},
 		data() {
+
 			//验证机构序号
 			var validateStep = (rule, value, callback) => {
 				 if (value === '') {
@@ -259,7 +300,7 @@
 			//验证电话号码
 			var validatePhone = (rule, value, callback) => {
 				if (value && (!(/^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/).test(value))) {
-  				    callback(new Error('请输入有效的电话号码，格式为：0000-0000000'))
+  				    callback(new Error('请输入有效的电话号码'))
   				} else {
   				    callback()
   				}
@@ -286,6 +327,8 @@
 			return {
 				basic_url: Config.dev_url,
 				value: '',
+				loadSign: true, //加载
+				commentArr: {},
 				options: [{
 					value: '1',
 					label: '活动'
@@ -304,9 +347,16 @@
 				personinfo:false,
 				showcode:true,
 				selMenu:[],
+				selUser: [],
 				SelectDEPT_TYPE:[],//获取机构属性
 				Selectsys_depttype:[],//获取机构类型
 				activeNames: ['1'], //手风琴数量
+				userList: [],
+				page: {
+					currentPage: 1,
+					pageSize: 10,
+					totalCount: 0
+				},
 				dialogVisible: false, //对话框
 				edit: true, //禁填
 				editSearch: '',
@@ -318,6 +368,7 @@
 				addtitle:true,
 				modifytitle:false,
 				modify:false,
+				dialogLeader:false,
 				stopcontent:false,
 				stopselect:false,
 	          	//tree树菜单
@@ -369,7 +420,68 @@
 			};
 		},
 		methods: {
-			
+			//获取负责人数据
+			getPerson(){
+				this.requestData();
+				this.dialogLeader = true;
+			},
+			SelChange(val) {
+				this.selUser = val;
+			},
+			loadMore() {
+				if(this.loadSign) {
+					this.loadSign = false
+					this.page.currentPage++
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							return
+						}
+					setTimeout(() => {
+						this.loadSign = true
+					}, 1000)
+					this.requestData()
+					//console.log('到底了', this.page.currentPage)
+				}
+			},
+			sizeChange(val) {
+				this.page.pageSize = val;
+				this.requestData();
+			},
+			currentChange(val) {
+				this.page.currentPage = val;
+				this.requestData();
+			},
+			judge(data) {
+				//taxStatus 布尔值
+				return data.enabled ? '活动' : '不活动'
+			},
+			//时间格式化  
+			dateFormat(row, column) {
+				var date = row[column.property];
+				if(date == undefined) {
+					return "";
+				}
+				return this.$moment(date).format("YYYY-MM-DD"); 
+			},
+			addleader(){
+				var selData = this.selUser;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请您选择数据',
+						type: 'warning'
+					});
+					return;
+				} else if(selData.length > 1) {
+					this.$message({
+						message: '不可同时选择多条数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					this.adddeptForm.leader = selData[0].id;
+					this.adddeptForm.leaderDesc = selData[0].nickname;
+					this.dialogLeader = false;
+				}
+			},
 			//点击修订按钮
 			modifyversion(){
 				this.adddeptForm.version = this.adddeptForm.version + 1;
@@ -436,7 +548,7 @@
 				 		type: 'error'
 				 	});
 				});	
-				this.$refs["adddeptForm"].resetFields();//清空表单验证
+				// this.$refs["adddeptForm"].resetFields();//清空表单验证
 				this.show = !this.show;
 				this.addtitle = true;
 				this.modifytitle = false;
@@ -496,8 +608,47 @@
 				$(".mask_div").css("top", "0");
 
 			},
+			//获取负责人数据
+			requestData(index) {
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+					// deptName: this.searchList.deptName,
+					// nickname: this.searchList.nickname,
+					// username: this.searchList.username,
+					companyId: this.companyId,
+					deptId: this.deptId
+				}
+				var url = this.basic_url + '/api-user/users';
+				this.$axios.get(url, {
+					params: data
+				}).then((res) => {
+					this.page.totalCount = res.data.count;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
+					}
+					this.commentArr[this.page.currentPage] = res.data.data
+					let newarr = []
+					for(var i = 1; i <= totalPage; i++) {
+
+						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+
+							for(var j = 0; j < this.commentArr[i].length; j++) {
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+
+					this.userList = newarr;
+				}).catch((wrong) => {})
+			},
 			//保存
 			save(adddeptForm) {
+				console.log(this.adddeptForm);
 				this.$refs[adddeptForm].validate((valid) => {
 		          if (valid) {
 		          	this.adddeptForm.status=((this.adddeptForm.status=="1"||this.adddeptForm.status=='活动') ? '1' : '0');
@@ -557,6 +708,7 @@
 		mounted() {
 			this.getDEPT_TYPE();//页面打开加载-机构属性
 			this.getsys_depttype();//页面打开加载-机构类型
+			this.requestData();
 		}
 	}
 </script>

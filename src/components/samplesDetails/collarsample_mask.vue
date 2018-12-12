@@ -229,7 +229,7 @@
 				dialogVisible: false, //对话框
 				edit: true, //禁填
 				activeNames: ['1'], //手风琴数量
-				labelPosition: 'top', //表单标题在上方
+				labelPosition: 'right', //表单标题在上方
 				addtitle: true,
 				modifytitle: false,
 				

@@ -15,7 +15,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="samplesForm" :label-position="labelPosition" :rules="rules" ref="samplesForm" label-width="100px" status-icon>
+				<el-form :model="samplesForm" :label-position="labelPosition" :rules="rules" ref="samplesForm" label-width="110px" status-icon>
 					<div class="accordion">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基础信息" name="1">
@@ -206,7 +206,7 @@
 								<!-- 样品子表Table-List Begin-->
 								<el-form :model="samples_itemlineForm" status-icon inline-message ref="samples_itemlineForm">
 									  <!-- 表格 Begin-->
-									  <el-table :data="samples_itemlineForm.inspectionList" row-key="ID" border stripe height="380" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'samples_itemlineForm.inspectionList', order: 'descending'}" >
+									  <el-table :data="samples_itemlineForm.inspectionList" row-key="ID" border stripe height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'samples_itemlineForm.inspectionList', order: 'descending'}" >
 										<el-table-column prop="iconOperation" fixed="left" label="操作" width="80">
 									      <template slot-scope="scope">
 									        <el-button type="text" id="Edit" size="medium" @click="saveRow(scope.row)" v-if="scope.row.isEditing">
@@ -353,7 +353,7 @@
 				dialogVisible: false, //对话框
 				edit: true, //禁填
 				activeNames: ['1', '2'], //手风琴数量
-				labelPosition: 'top', //表单标题在上方
+				labelPosition: 'right', //表单标题在上方
 				addtitle: true,
 				modifytitle: false,
 				

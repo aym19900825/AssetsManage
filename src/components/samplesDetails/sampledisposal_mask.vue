@@ -15,7 +15,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="samplesForm" :label-position="labelPosition" :rules="rules" ref="samplesForm" label-width="100px" status-icon>
+				<el-form :model="samplesForm" :label-position="labelPosition" :rules="rules" ref="samplesForm" label-width="110px" status-icon>
 					<div class="accordion">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基础信息" name="1">
@@ -98,7 +98,7 @@
 								<el-row :gutter="30">
 									<el-col :span="24">
 										<el-form-item label="备注" prop="MEMO">
-											<el-input type="textarea" rows="5" v-model="samplesForm.MEMO"></el-input>
+											<el-input type="textarea" rows="3" v-model="samplesForm.MEMO"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -208,7 +208,7 @@
 				dialogVisible: false, //对话框
 				edit: true, //禁填
 				activeNames: ['1'], //手风琴数量
-				labelPosition: 'top', //表单标题在上方
+				labelPosition: 'right', //表单标题在上方
 				addtitle: true,
 				modifytitle: false,
 				

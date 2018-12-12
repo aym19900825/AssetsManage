@@ -551,7 +551,6 @@
 				});
 			},
 			transformTree(data) {
-				
 				for(var i = 0; i < data.length; i++) {
 					data[i].name = data[i].fullname;
 					if(!data[i].pid || $.isArray(data[i].subDepts)) {

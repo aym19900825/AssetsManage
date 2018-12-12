@@ -66,7 +66,9 @@
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="人员资质" prop="QUALIFICATION">
-											<el-input v-model="testing_projectForm.QUALIFICATION"></el-input>
+											<el-input v-model="testing_projectForm.QUALIFICATION">
+												<el-button slot="append" icon="el-icon-search" @click="getpepole"></el-button>
+											</el-input>
 										</el-form-item> 
 									</el-col>
 									<el-col :span="8">
@@ -121,16 +123,27 @@
 				</el-form>
 			</div>
 		</div>
-		<!--弹出框内容显示 Begin-->
-		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps">
-			</el-tree>
+		<el-dialog :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
+			<el-table :data="gridData" @selection-change="SelChange">
+				<el-table-column type="selection" width="55" fixed>
+				</el-table-column>
+				<el-table-column label="用户名" sortable width="100px" prop="user">
+				</el-table-column>
+				<el-table-column label="证书编号" sortable width="200px" prop="c_num">
+				</el-table-column>
+				<el-table-column label="证书名称" sortable width="100px" prop="c_name">
+				</el-table-column>
+				<el-table-column label="资质有效期" sortable width="200px" prop="c_date">
+				</el-table-column>
+				
+			</el-table>
+			<el-pagination background class="pull-right" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+			</el-pagination>
 			<span slot="footer" class="dialog-footer">
-				<el-button @click="dialogVisible = false">取 消</el-button>
-				<el-button type="primary" @click="confirms();" >确 定</el-button>
-		    </span>
+    			<el-button @click="dialogVisible = false">取 消</el-button>
+    			<el-button type="primary" @click="dailogconfirm()">确 定</el-button>
+  			</span>
 		</el-dialog>
-		<!--弹出框内容显示 End-->
 	</div>
 </template>
 
@@ -256,6 +269,8 @@
 				},
 				//testing_projectForm:{},//检验/检测项目数据组
 				//tree
+				gridData:[],
+				selval:[],
 				resourceData: [], //数组，我这里是通过接口获取数据
 				resourceDialogisShow: false,
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
@@ -285,6 +300,17 @@
 					this.testing_projectForm.DOCLINKSId = this.checkedNodes[0].id;
 					this.testing_projectForm.DOCLINKS_NUM = this.checkedNodes[0].simplename;
 				}
+			},
+			SelChange(val) {
+				this.selval = val;
+			},
+			sizeChange(val) {
+				this.page.pageSize = val;
+				this.requestData();
+			},
+			currentChange(val) {
+				this.page.currentPage = val;
+				this.requestData();
 			},
 			handleClose(done) {//确认框关闭
 				this.$confirm('确认关闭？')
@@ -409,12 +435,33 @@
 			//保存并添加
 			saveAndSubmit(testing_projectForm){
 				this.save(testing_projectForm);
-//				this.$emit('request');
 				this.show = true;
 				this.$emit('reset');
 				this.$refs["testing_projectForm"].resetFields();
 				
 				
+			},
+			getpepole() {
+				// type  1 這是負責人  2 這個事接收人
+//				var params = {
+//					page: this.page.currentPage,
+//					limit: this.page.pageSize,
+//				}
+				var url = this.basic_url + '/api-user/users/qualifications';
+				this.$axios.get(url, {
+//					params: params
+				}).then((res) => {
+					console.log(res);
+					this.page.totalCount = res.data.count;
+					
+					this.gridData = res.data.data;
+					this.dialogVisible = true;
+//					this.type = type;
+				});
+			},
+			dailogconfirm() { //小弹出框确认按钮事件
+				this.dialogVisible = false;
+				this.testing_projectForm.QUALIFICATION=this.selval[0].c_name;
 			},
 
 			handleClose(done) {

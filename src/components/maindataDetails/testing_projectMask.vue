@@ -117,8 +117,8 @@
 					<div class="el-dialog__footer">
 							<el-button type="primary" @click="saveAndUpdate('testing_projectForm')">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit('testing_projectForm')">保存并添加</el-button>
+							<el-button v-if="modify" type="primary"@click="modifyversion('testing_projectForm')">修订</el-button>
 							<el-button @click="close">取消</el-button>
-						    <el-button v-if="modify" type="primary"@click="submitForm('testing_projectForm')">修订</el-button>
 					</div>
 				</el-form>
 			</div>
@@ -360,15 +360,39 @@
 				this.show = true;
 				
 			},
-			
+			modifyversion(testing_projectForm){
+				this.$refs[testing_projectForm].validate((valid) => {
+		          if (valid) {
+					var url = this.basic_url + '/api-apps/app/inspectionPro/operate/upgraded';
+					this.$axios.post(url,this.testing_projectForm).then((res) => {
+						//resp_code == 0是后台返回的请求成功的信息
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '保存成功',
+								type: 'success'
+							});
+							//重新加载数据
+							this.show = false;
+							this.$emit('request');
+							this.$refs["testing_projectForm"].resetFields();
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+			          } else {
+			            this.$message({
+							message: '未填写完整，请填写',
+							type: 'warning'
+						});
+			          }
+			   });
+			},
 			//点击关闭按钮
 			close() {
 				this.show = false;
-			},
-			//点击取消按钮
-			cancelForm() {
-				this.show = false;
-				this.reset();
 			},
 			reset() {
 				this.show = false;

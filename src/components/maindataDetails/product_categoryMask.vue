@@ -99,8 +99,8 @@
 					<div class="el-dialog__footer">
 							<el-button type="primary" @click="saveAndUpdate('CATEGORY')">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit('CATEGORY')">保存并添加</el-button>
+							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('CATEGORY')">修订</el-button>
 							<el-button @click="close">取消</el-button>
-							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion">修订</el-button>
 					</div>
 				</el-form>
 			</div>
@@ -223,8 +223,35 @@
 				this.show = true;
 			},
 			//点击修订按钮
-			modifyversion(){
-				this.CATEGORY.VERSION = this.CATEGORY.VERSION + 1;
+			modifyversion(CATEGORY){
+				this.$refs[CATEGORY].validate((valid) => {
+		          if (valid) {
+					var url = this.basic_url + '/api-apps/app/productType/operate/upgraded';
+					this.$axios.post(url,this.CATEGORY).then((res) => {
+						//resp_code == 0是后台返回的请求成功的信息
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '保存成功',
+								type: 'success'
+							});
+							//重新加载数据
+							this.show = false;
+							this.$emit('request');
+							this.$refs["CATEGORY"].resetFields();
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+			          } else {
+			            this.$message({
+							message: '未填写完整，请填写',
+							type: 'warning'
+						});
+			          }
+			   });
 			},
 			//点击关闭按钮
 			close() {

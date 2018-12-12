@@ -261,7 +261,12 @@
 									        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.P_DESC}}</span>
 									    </template>
 								    </el-table-column>
-								    <el-table-column prop="REMARKS" label="要求" sortable width="120px">
+								    <el-table-column prop="REMARKS" label="要求" sortable width="80px">
+									    <template slot-scope="scope">
+									        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.REMARKS}}</span>
+									    </template>
+								    </el-table-column>
+								    <el-table-column prop="REMARKS" label="要求" sortable width="80px">
 									    <template slot-scope="scope">
 									        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.REMARKS}}</span>
 									    </template>
@@ -520,7 +525,7 @@
 				noviews:true,//保存的按钮
 				activeName: 'first',//tabs
 				activeNames: ['1', '2', '3', '4', '5', '6', '7'], //手风琴数量
-				labelPosition: 'top', //表格
+				labelPosition: 'right', //表格
 				dialogVisible: false, //对话框
 				dialogVisiblecompany: false, //对话框
 				editSearch: '',

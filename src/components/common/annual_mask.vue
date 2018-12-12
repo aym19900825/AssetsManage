@@ -39,7 +39,7 @@
 										</el-input>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30">
+								<el-row :gutter="20" class="pt10">
 									<el-col :span="6">
 										<el-form-item label="提出单位" prop="PROP_UNIT">
 											<el-select v-model="WORKPLAN.PROP_UNIT" placeholder="请选择提出单位">
@@ -61,7 +61,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30">
+								<el-row :gutter="20">
 									<el-col :span="6">
 										<el-form-item label="编制人" prop="COMPACTOR">
 											<el-input v-model="WORKPLAN.COMPACTOR"></el-input>
@@ -83,13 +83,13 @@
 										    <el-date-picker
 										      v-model="WORKPLAN.REPORTDATE"
 										      type="date"
-										      placeholder="选择日期" value-format="yyyy-MM-dd">
+										      placeholder="选择日期" value-format="yyyy-MM-dd" style="width:100%">
 										    </el-date-picker>
 										  </div>
 										 </el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30">
+								<el-row :gutter="20">
 									<el-col :span="6">
 										<el-form-item label="年度" prop="YEAR">
 											<div class="block">
@@ -99,7 +99,7 @@
 											      placeholder="选择年度"
 											      value-format="yyyy"
 											      format="yyyy"
-											      :default-value="WORKPLAN.YEAR">
+											      :default-value="WORKPLAN.YEAR" style="width: 100%">
 											    </el-date-picker>
 											</div>
 										</el-form-item>
@@ -125,7 +125,7 @@
 									</el-button>
 								</div>
 
-								<el-table :data="worlplanlist" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;"  :default-sort="{prop:'worlplanlist', order: 'descending'}" v-loadmore="loadMore">
+								<el-table :data="worlplanlist" row-key="ID" border stripe height="260" highlight-current-row="highlight-current-row" style="width: 100%;"  :default-sort="{prop:'worlplanlist', order: 'descending'}" v-loadmore="loadMore">
 
 								    <el-table-column prop="iconOperation" fixed width="50px">
 								      <template slot-scope="scope" >
@@ -674,7 +674,7 @@
 				addtitle:true,//添加弹出框titile
 				modifytitle:false,//修改弹出框titile
 				activeNames: ['1','2','3','4','5','6','7'],//手风琴数量
-				labelPosition: 'top', //表格
+				labelPosition: 'right', //表格
 				dialogVisible: false, //对话框
 				dialogVisible2: false, //对话框
 				searchList: { //点击高级搜索后显示的内容

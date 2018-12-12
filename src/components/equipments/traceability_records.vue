@@ -93,6 +93,7 @@
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
+		<detailPage :detailData="aaaData[0]" ref="child" @request="requestData"></detailPage>
 	</div>
 </div>
 </template>
@@ -102,6 +103,7 @@
 	import navs_left from '../common/left_navs/nav_left4.vue'
 	import navs_header from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
+	import detailPage from '../equipmentsDetails/traceRec_mask.vue'
 	export default {
 		name: 'user_management',
 		components: {
@@ -109,6 +111,7 @@
 			navs_left,
 			navs_header,
 			tableControle,
+			detailPage
 		},
 		data() {
 			return {

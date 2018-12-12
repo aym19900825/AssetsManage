@@ -133,7 +133,7 @@
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
-		<instrumentsmask :user="aaaData[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></instrumentsmask>
+		<instrumentsmask :detailData="aaaData[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></instrumentsmask>
 	</div>
 </div>
 </template>
@@ -269,12 +269,6 @@
 				aaaData:[],
 			}
 		},
-
-		mounted(){
-			
-
-			
-		},
 		methods: {
 			tableControle(data){
 				this.checkedName = data;
@@ -301,13 +295,13 @@
 				this.aaaData = this.selUser;
 				if(this.aaaData.length == 0) {
 					this.$message({
-						message: '请您选择要修改的用户',
+						message: '请您选择要修改的数据',
 						type: 'warning'
 					});
 					return;
 				} else if(this.aaaData.length > 1) {
 					this.$message({
-						message: '不可同时修改多个用户',
+						message: '不可同时修改多条数据',
 						type: 'warning'
 					});
 					return;
@@ -392,7 +386,6 @@
 					KEEPER: this.searchList.KEEPER,
 					STATE: this.searchList.STATE,
 					OPTION_STATUS:  this.searchList.OPTION_STATUS,
-
 				}
 				var url = this.basic_url + '/api-apps/app/asset';
 				

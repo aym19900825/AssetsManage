@@ -7,9 +7,7 @@
 				<div class="mask_title" v-show="addtitle">添加仪器和计量器具</div>
 				<div class="mask_title" v-show="modifytitle">修改仪器和计量器具</div>
 				<div class="mask_anniu">
-					
 					<span class="mask_span mask_max" @click='toggle'>
-						 
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
 					</span>
 					<span class="mask_span" @click='close'>
@@ -61,33 +59,13 @@
 							</el-collapse-item>
 
 						<el-collapse-item title="设备溯源信息状态" name="3">
-								<!-- 资质信息 Begin-->
-								<!--<div class="table-func">
-									<el-button type="success" size="mini" round @click="addfield1">
-										<i class="icon-add"></i>
-										<font>新建行</font>
-									</el-button>
-								</div>-->
-
 								<el-table :data="dataInfo.pmRecord" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'dataInfo.pmRecord', order: 'descending'}">
-
 									<el-table-column prop="iconOperation" fixed label="" width="50px">
 										<template slot-scope="scope">
 											<i class="el-icon-check" v-if="scope.row.isEditing"></i>
 											<i class="el-icon-edit" v-else="v-else"></i>
 										</template>
 									</el-table-column>
-						            
-						            <!--<el-table-column prop="step" label="序号" sortable width="120px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'qualifications.'+scope.$index + '.step'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.step" placeholder="请输入要求">		
-											</el-input>
-											<span v-else="v-else">{{scope.row.step}}</span>
-											</el-form-item>
-										</template>
-									</el-table-column>-->
-						            
 									<el-table-column prop="RECORDNUM" label="溯源记录编号" sortable width="120px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'pmRecord.'+scope.$index + '.RECORDNUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
@@ -97,7 +75,6 @@
 											</el-form-item>
 										</template>
 									</el-table-column>
-
 									<el-table-column prop="PM_DATE" label="溯源日期" sortable width="120px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'pmRecord.'+scope.$index + '.PM_DATE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
@@ -107,7 +84,6 @@
 											</el-form-item>
 										</template>
 									</el-table-column>
-
 									<el-table-column prop="R_DESC" label="溯源确认内容" sortable >
 										<template slot-scope="scope">
 											<el-form-item :prop="'pmRecord.'+scope.$index + '.R_DESC'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
@@ -136,16 +112,6 @@
 										</el-form-item>
 										</template>
 									</el-table-column>
-
-								<!--占时没有-->
-									<!--<el-table-column fixed="right" label="操作" width="120">
-										<template slot-scope="scope">
-											<el-button @click.native.prevent="deleteRow(scope.$index,user.qualifications)" type="text" size="small">
-												移除
-											</el-button>
-										</template>
-									</el-table-column>-->
-
 								</el-table>
 							</el-collapse-item>
 							
@@ -175,11 +141,20 @@
 	import Config from '../../config.js'
 	export default {
 		name: 'masks',
-		props: {
-			page: Object,
-		},
-
+		props: ['detailData'],
 		data() {
+			var checkNum = (rule, value, callback) => {
+				if (!value) {
+					return callback(new Error('请输入设备价值'));
+				}
+				setTimeout(() => {
+					if (!/^[0-9]*$/.test(value)) {
+						callback(new Error('请输入数字值'));
+					} else {
+						callback();
+					}
+				}, 1000);
+			};
 			return {
 				rules: {
 					ASSETNUM: [
@@ -233,7 +208,12 @@
 					STATUS: [
 						{ required: true, message: '请输入信息状态', trigger: 'blur' },
 					],
-
+					A_STATUS: [
+						{ required: true, message: '请输入接收状态', trigger: 'blur' },
+					],
+					A_PRICE: [
+						{ validator: checkNum, trigger: 'blur' },
+					],
 				},
 				basicInfo: [
 					{
@@ -245,7 +225,7 @@
 					},
 					{
 						label: '设备名称',
-						prop: 'A_NAME',
+						prop: 'DESCRIPTION',
 						width: '30%',
 						type: 'input',
 						displayType: 'inline-block'
@@ -478,7 +458,6 @@
 				down: true,
 				up: false,
 				activeNames: ['1', '2','3','4'], //手风琴数量
-//				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				addtitle: true, //添加弹出框titile
 				modifytitle: false, //修改弹出框titile
@@ -493,7 +472,7 @@
 				getCheckboxData: {},
 
 				dataInfo: {
-					'ID': '',
+					'ID': '',  //主键ID，必填但页面没有字段
 					'ASSETNUM': '',
 					'DESCRIPTION': '',
 					'CONFIG_UNIT': '',
@@ -504,17 +483,17 @@
 					'MODEL': '',
 					'FACTOR_NUM': '',
 					'ASSET_KPI': '',
-					'STATE': '',
-					'OPTION_STATUS': '',
-					'TYPE': '',
+					'STATE': '0',    //设备状态，必填但页面没有字段
+					'OPTION_STATUS': '0',   //设备使用状态，必填但页面没有字段
+					'TYPE': '仪器', //设备分类，必填但页面没有字段
 					'ACCEPT_NUM': '',
 					'ISMETER': '',
 					'ISPM': '',
 					'STATUSDATE': '',
 					'KEEPER': '',
 					'ACCEPT_DATE': '',
-					'S_DATE': '',
-					'C_ADDRESS': '',
+					'S_DATE': '2017-01-12',    //启用日期，必填但页面没有字段
+					'C_ADDRESS': 'aaaaaaaaaaa',   //配置地址，必填但页面没有字段
 					'A_STATUS': '',
 					'A_PRICE': '',
 					'MODE': '',
@@ -531,16 +510,6 @@
 			};
 		},
 		methods: {
-			//
-			handleCheckChange(data, checked, indeterminate) {
-				this.getCheckboxData = data;
-			},
-			//
-			handleNodeClick(data) { //获取勾选树菜单节点
-				console.log(data);
-			},
-
-
 			//点击按钮显示弹窗
 			visible() {
 				this.addtitle = true;
@@ -553,43 +522,55 @@
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.modify = true;
-				var usersUrl = this.basic_url + '/api-user/users/currentMap';
-				this.$axios.get(usersUrl, {}).then((res) => {
-					this.user.changeby = res.data.nickname;
-					var date = new Date();
-					this.user.changedate = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
-				
-				var url = this.basic_url + '/api-user/asset/' + dataid;
-				this.$axios.get(url, {}).then((res) => {
-					console.log(res.data);
-					this.user = res.data;
-
-					this.user.sex=this.user.sex?'男':'女';
-					this.user.roleId = [];
-					var roles = this.user.roles;
-					for(var i = 0; i < roles.length; i++) {
-						this.user.roleId.push(roles[i].id);
-					}
-					this.show = true;
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
+				this.show = true;
+				this.dataInfo = this.detailData;
 			},
 			//点击关闭按钮
 			close() {
+				this.resetForm();
+			},
+			resetForm(){
+				this.dataInfo =  {
+					'ID': '',  //主键ID，必填但页面没有字段
+					'ASSETNUM': '1111',
+					'DESCRIPTION': '',
+					'CONFIG_UNIT': '',
+					'INS_SITE': '',
+					'SUPPORT_ASSET': '',
+					'VENDOR': '',
+					'SUPPLIER': '',	
+					'MODEL': '',
+					'FACTOR_NUM': '',
+					'ASSET_KPI': '',
+					'STATE': '0',    //设备状态，必填但页面没有字段
+					'OPTION_STATUS': '0',   //设备使用状态，必填但页面没有字段
+					'TYPE': '仪器', //设备分类，必填但页面没有字段
+					'ACCEPT_NUM': '',
+					'ISMETER': '',
+					'ISPM': '',
+					'STATUSDATE': '',
+					'KEEPER': '',
+					'ACCEPT_DATE': '',
+					'S_DATE': '2017-01-12',    //启用日期，必填但页面没有字段
+					'C_ADDRESS': 'aaaaaaaaaaa',   //配置地址，必填但页面没有字段
+					'A_STATUS': '',
+					'A_PRICE': 0,
+					'MODE': '',
+					'MODE1': '',
+					'CHANGEBY': '',	
+					'CHANGEDATE': '',	
+					'ENTERBY': '',
+					'ENTERDATE': '',	
+					'DEPARTMENT': '',	
+					'MEMO': '',	
+					'STATUS': '',
+					'SYNCHRONIZATION_TIME': '',
+				};
+				this.$refs['dataInfo'].resetFields();
 				this.show = false;
 			},
 			toggle(e) { //大弹出框大小切换
-				if(this.isok1 == true) {
+				if(this.isok1) {
 					this.maxDialog();
 				} else {
 					this.rebackDialog();
@@ -612,11 +593,7 @@
 				$(".mask_div").css("margin", "7% 10%");
 				$(".mask_div").css("top", "0");
 			},
-			getCheckedNodes() { //获取树菜单节点
-				this.checkedNodes = this.$refs.tree.getCheckedNodes()
-			},
 
-//			保存users/saveOrUpdate
 			submitForm() {
 				var _this = this;
 				var url = this.basic_url + '/api-apps/app/asset/saveOrUpdate';
@@ -628,9 +605,8 @@
 									message: '保存成功',
 									type: 'success',
 								});
-								this.show = false;
-						
-								// this.$emit('request')
+								this.resetForm();
+								this.$emit('request');
 							}
 						}).catch((err) => {
 							this.$message({
@@ -644,14 +620,6 @@
 					}
 				});
 			},
-			handleClose(done) {
-				this.$confirm('确认关闭？')
-					.then(_ => {
-						done();
-					})
-					.catch(_ => {});
-			}
-
 		},
 		mounted() {
 			

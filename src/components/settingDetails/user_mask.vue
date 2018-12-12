@@ -802,7 +802,6 @@
 										roleId = roleId + roles[j].id+",";
 									}
 								}
-								
 							});
 							user.roleId = roleId;
 							user.roles = arr;
@@ -810,7 +809,6 @@
 							user.roleId = '';
 							user.roles = [];
 						}
-					  
 						var url = this.basic_url + '/api-user/users/saveOrUpdate';
 						this.$axios.post(url, this.user).then((res) => {
 							if(res.data.resp_code == 0) {
@@ -819,7 +817,6 @@
 									type: 'success',
 								});						
 								this.$emit('request');
-								
 							}
 						}).catch((err) => {
 							this.$message({
@@ -831,10 +828,8 @@
 						this.$message({
 								message: '有必填项未填写，请重新填写',
 								type: 'warning',
-								
 						});
 						return;
-							
 					}
 				})
 			},

@@ -37,7 +37,11 @@ export default {
 					navicon: 'icon-role-site',
 					navtitle: '角色管理',
 					navherf: '/role_management'
-				}, {
+				},{
+		            navicon: 'icon-distribution',
+		            navtitle: '客户管理',
+		            navherf: '/customer_management'
+				},{
 					navicon: 'icon-file-text',
 					navtitle: '菜单管理',
 					navherf: '/menu_management'
@@ -53,6 +57,10 @@ export default {
 					navicon: 'icon-task',
 					navtitle: '安全管理',
 					navherf: '/safe_management'
+				},{
+					navicon: 'icon-file-text',
+					navtitle: '自动编号设置',
+					navherf: '/number_settings'
 				}
 			],
         selectedNav: {}

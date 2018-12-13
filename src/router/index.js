@@ -5,20 +5,22 @@ import index from '@/components/index'//首页
 import all_icons from '@/components/common/all_icons'//所有图标
 import ztree from '@/components/common/ztree' //树菜单
 
-import customer_management from '@/components/maindata/customer_management'//客户管理
+
 import products_category from '@/components/maindata/products_category'//产品类别
 import products from '@/components/maindata/products'//产品
 import testing_standard from '@/components/maindata/testing_standard'//检验/检测标准
 import testing_projects from '@/components/maindata/testing_projects'//检验/检测项目
 import testing_methods from '@/components/maindata/testing_methods'//检验/检测方法
-import number_settings from '@/components/maindata/number_settings'//自动编号设置
 
+
+import customer_management from '@/components/setting/customer_management'//客户管理
 import user_management from '@/components/setting/user_management'//用户管理
 import dept_management from '@/components/setting/dept_management'//机构管理
 import role_management from '@/components/setting/role_management'//角色管理
 import menu_management from '@/components/setting/menu_management'//菜单管理
 import data_management from '@/components/setting/data_management'//数据管理
 import safe_management from '@/components/setting/safe_management'//安全管理
+import number_settings from '@/components/setting/number_settings'//自动编号设置
 import dictionaries_management from '@/components/setting/dictionaries_management'//字典管理
 import personinfo from '@/components/setting/personinfo'//个人资料
 import passwordedit from '@/components/setting/passwordedit'//修改密码

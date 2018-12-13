@@ -34,6 +34,10 @@ export default {
 		            navtitle: '角色管理',
 		            navherf: '/role_management'
 				}, {
+		            navicon: 'icon-distribution',
+		            navtitle: '客户管理',
+		            navherf: '/customer_management'
+				},{
 		            navicon: 'icon-department',
 		            navtitle: '机构管理',
 		            navherf: '/dept_management'

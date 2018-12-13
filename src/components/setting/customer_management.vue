@@ -121,9 +121,9 @@
 <script>
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
-	import navs_left from '../common/left_navs/nav_left2.vue'
+	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_header from '../common/nav_tabs.vue'
-	import customermask from '../maindataDetails/customer_mask.vue'
+	import customermask from '../settingDetails/customer_mask.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	export default {
 		name: 'user_management',

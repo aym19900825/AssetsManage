@@ -142,7 +142,7 @@ export default {
 			{
 				navicon: 'icon-data3',
 				navtitle: '业务基础数据',
-				navherf: '/customer_management'
+				navherf: '/products_category'
 			}, {
 				navicon: 'icon-plan',
 				navtitle: '年度计划',

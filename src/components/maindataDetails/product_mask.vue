@@ -257,8 +257,8 @@
 							});
 							//重新加载数据
 							this.$emit('request');
-							this.$refs["PRODUCT"].resetFields();
 						}
+						this.$refs["PRODUCT"].resetFields();
 					}).catch((err) => {
 						this.$message({
 							message: '网络错误，请重试',

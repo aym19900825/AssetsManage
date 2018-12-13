@@ -236,7 +236,7 @@
 
 								    <el-table-column label="样品序号" sortable width="120px" prop="ITEM_STEP">
 								      <template slot-scope="scope">
-								      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.CERTIFICATE_NUM" placeholder="请输入内容"></el-input>
+								      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.ITEM_STEP" placeholder="请输入内容"></el-input>
 								      	<span v-show="!scope.row.isEditing">{{scope.row.ITEM_STEP}}</span>
 								      </template>
 								    </el-table-column>
@@ -653,7 +653,8 @@
 			save() {
 				this.$refs.samplesForm.validate((valid) => {
 					if (valid) {
-					    this.samplesForm.STATUS=this.samplesForm.STATUS=="活动" ? '1' : '0';
+//					    this.samplesForm.STATUS=this.samplesForm.STATUS=="活动" ? '1' : '0';
+						console.log(this.samplesForm);
 						var url = this.basic_url + '/api-apps/app/item/saveOrUpdate';
 						this.$axios.post(url, this.samplesForm).then((res) => {
 							console.log(res);

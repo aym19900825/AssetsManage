@@ -323,6 +323,9 @@
 					CHANGEBY: '',
 					CHANGEDATE:'',	
 				};
+				 if (this.$refs['testing_projectForm']!==undefined) {
+     				this.$refs['testing_projectForm'].resetFields();	
+ 					}
 			},
 			//添加检验/检测项目
 			

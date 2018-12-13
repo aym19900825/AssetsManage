@@ -306,6 +306,10 @@
 					CHANGEBY:'',
 					CHANGEDATE:''
 				};
+				 if (this.$refs['CATEGORY']!==undefined) {
+     				this.$refs['CATEGORY'].resetFields();	
+ 					}
+						
 			},
 			//添加用戶
 			openAddMgr() {

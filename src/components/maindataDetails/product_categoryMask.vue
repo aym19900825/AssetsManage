@@ -298,8 +298,8 @@
 								type: 'success'
 							});
 							//重新加载数据
+							this.$emit('reset');
 							 this.$emit('request');
-							 this.$refs["CATEGORY"].resetFields();
 						}
 					}).catch((err) => {
 						this.$message({

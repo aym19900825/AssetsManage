@@ -138,8 +138,8 @@
 
 								<el-table-column label="状态" sortable width="140px" prop="STATE" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
-								<el-table-column label="信息状态" sortable width="140px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
-								</el-table-column>
+								<!--<el-table-column label="信息状态" sortable width="140px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
+								</el-table-column>-->
 							</el-table>
 							
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
@@ -355,7 +355,7 @@
 					DO_PERSON: '',//处理人
 					DO_DATE: '',//处理日期
 					MEMO: '',//备注
-					STATE: '1',//状态
+					STATE: '草稿',//状态
 					//STATUSDATE: '',//状态日期
 					STATUS: '1',//信息状态
 					ENTERBY: '',//录入人
@@ -367,14 +367,13 @@
 			},
 			//修改用戶
 			modify() {
-				this.aaaData = this.selMenu;
-				if(this.aaaData.length == 0) {
+				if(this.selMenu.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
 						type: 'warning'
 					});
 					return;
-				} else if(this.aaaData.length > 1) {
+				} else if(this.selMenu.length > 1) {
 					this.$message({
 						message: '不可同时修改多条数据',
 						type: 'warning'

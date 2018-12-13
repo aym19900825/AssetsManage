@@ -151,7 +151,7 @@
 				</div>
 			</div>
 		</div>
-		<samplesmask :samplesForm="samplesForm" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></samplesmask>
+		<samplesmask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></samplesmask>
 		<!--右侧内容显示 End-->
 	</div>
 	</div>
@@ -242,8 +242,6 @@
 				companyId: '',
 				deptId: '',
 				selMenu: [],
-				'启用': true,
-				'冻结': false,
 				samplesList: [],
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				search: false,
@@ -272,7 +270,6 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-				aaaData: [],
 				samplesForm: {}//修改子组件时传递数据
 			}
 		},
@@ -341,54 +338,24 @@
 			},
 			//添加样品管理
 			openAddMgr() {
-				this.samplesForm = {
-					PROXYNUM: '',//委托书编号
-					ITEMNUM: '',//样品编号
-					VENDOR: '',//委托单位编号
-					PRODUCT_COMPANY: '',//生产单位编号
-					V_NAME: '',//委托单位名称
-					P_NAME: '',//生产单位名称
-					DESCRIPTION: '',//样品名称
-					PRODUCT_CODE: '',//产品标识代码
-					MODEL: '',//型号
-					QUATITY: '',//数量
-					OTHER: '',//其他资料
-					MEMO: '',//备注
-					ACCEPTDATE: '',//入库时间
-					ACCEPT_PERSON: '',//收样人
-					ACCEPT_DATE: '',//收样日期
-					RECIP_PERSON: '',//接样人
-					RECIP_DATE: '',//接样日期
-					STATE: '1',//状态
-					VERSION: 0,//版本
-					STATUSDATE: '',//状态日期
-					ENTERBY: '',//录入人
-					ENTERDATE: '',//录入时间
-					CHANGEBY: '',//修改人
-					CHANGEDATE: '',//修改时间
-					TYPE: '',//样品类别
-					STATUS: '1',//信息状态
-				};
-				this.$refs.child.childMethods();
+				this.$refs.child.visible();
 			},
 			//修改用戶
 			modify() {
-				this.aaaData = this.selMenu;
-				if(this.aaaData.length == 0) {
+				if(this.selMenu.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
 						type: 'warning'
 					});
 					return;
-				} else if(this.aaaData.length > 1) {
+				} else if(this.selMenu.length > 1) {
 					this.$message({
 						message: '不可同时修改多条数据',
 						type: 'warning'
 					});
 					return;
 				} else {
-					this.samplesForm = this.selMenu[0]; 
-					this.$refs.child.detail(this.selUser[0].id);
+					this.$refs.child.detail(this.selMenu[0].ID);
 				}
 			},
 			//高级查询

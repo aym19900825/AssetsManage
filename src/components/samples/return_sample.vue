@@ -133,8 +133,8 @@
 
 								<el-table-column label="状态" sortable width="140px" prop="STATE" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
-								<el-table-column label="信息状态" sortable width="140px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
-								</el-table-column>
+								<!--<el-table-column label="信息状态" sortable width="140px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
+								</el-table-column>-->
 							</el-table>
 							
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">

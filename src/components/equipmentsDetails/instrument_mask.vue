@@ -58,59 +58,19 @@
 								</el-form-item>
 							</el-collapse-item>
 
-						<el-collapse-item title="设备溯源信息状态" name="3">
-								<el-table :data="dataInfo.pmRecord" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'dataInfo.pmRecord', order: 'descending'}">
-									<el-table-column prop="iconOperation" fixed label="" width="50px">
-										<template slot-scope="scope">
-											<i class="el-icon-check" v-if="scope.row.isEditing"></i>
-											<i class="el-icon-edit" v-else="v-else"></i>
-										</template>
-									</el-table-column>
+						    <el-collapse-item title="设备溯源信息状态" name="3" v-show="modify">
+								<el-table :data="pmRecordList" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'pmRecordList', order: 'descending'}">
+									<el-table-column type="index" sortable label="序号" width="50">
+                                    </el-table-column>
 									<el-table-column prop="RECORDNUM" label="溯源记录编号" sortable width="120px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'pmRecord.'+scope.$index + '.RECORDNUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.RECORDNUM" placeholder="请输入委托方名称">
-											</el-input>
-											<span v-else="v-else">{{scope.row.RECORDNUM}}</span>
-											</el-form-item>
-										</template>
 									</el-table-column>
 									<el-table-column prop="PM_DATE" label="溯源日期" sortable width="120px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'pmRecord.'+scope.$index + '.PM_DATE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PM_DATE" placeholder="请输入委托方名称">
-											</el-input>
-											<span v-else="v-else">{{scope.row.PM_DATE}}</span>
-											</el-form-item>
-										</template>
 									</el-table-column>
 									<el-table-column prop="R_DESC" label="溯源确认内容" sortable >
-										<template slot-scope="scope">
-											<el-form-item :prop="'pmRecord.'+scope.$index + '.R_DESC'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-											<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.R_DESC" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
-											</el-date-picker>
-											<span v-else="v-else">{{scope.row.R_DESC}}</span>
-											</el-form-item>
-										</template>
 									</el-table-column>
 									<el-table-column prop="R_CONCLUSION" label="溯源确认结论" sortable width="200px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'pmRecord.'+scope.$index + '.R_CONCLUSION'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.R_CONCLUSION" placeholder="请输入要求">
-											</el-input>
-											<span v-else="v-else">{{scope.row.R_CONCLUSION}}</span>
-											</el-form-item>
-										</template>
 									</el-table-column>
-
 									<el-table-column prop="STATUS" label="溯源信息状态" sortable width="120px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'pmRecord.'+scope.$index + '.STATUS'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入要求">
-											</el-input>
-											<span v-else="v-else">{{scope.row.STATUS}}</span>
-										</el-form-item>
-										</template>
 									</el-table-column>
 								</el-table>
 							</el-collapse-item>
@@ -506,10 +466,30 @@
 					'MEMO': '',	
 					'STATUS': '',
 					'SYNCHRONIZATION_TIME': '',
-				}
+				},
+				pmRecordList: []
 			};
 		},
 		methods: {
+			getPmList(){
+				var data = {
+					page: 1,
+					limit: 20,
+					assetnum: this.dataInfo.ASSETNUM
+				};
+				var url = this.basic_url + '/api-apps/app/pmRecord';
+				this.$axios.get(url,{
+					params: data
+				}).then((res) => {
+					this.pmRecordList = res.data.data;
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+					
+			},
 			//点击按钮显示弹窗
 			visible() {
 				this.addtitle = true;
@@ -524,6 +504,7 @@
 				this.modify = true;
 				this.show = true;
 				this.dataInfo = this.detailData;
+				this.getPmList();
 			},
 			//点击关闭按钮
 			close() {

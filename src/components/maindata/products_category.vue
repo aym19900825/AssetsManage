@@ -73,12 +73,12 @@
 									<template slot="prepend">联系地址</template>
 								</el-input>
 							</el-col> -->
-							<el-col :span="2" style="padding-top: 3px">
+							<!-- <el-col :span="2" style="padding-top: 3px">
 								<el-select v-model="searchList.STATUS" placeholder="请选择信息状态">
 									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 									</el-option>
 								</el-select>
-							</el-col>
+							</el-col> -->
 							<el-col :span="2">
 								<el-button class="pull-right" type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
 							</el-col>

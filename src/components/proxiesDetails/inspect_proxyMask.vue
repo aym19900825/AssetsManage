@@ -483,17 +483,17 @@
 									<el-row :gutter="70">
 										<el-col :span="8">
 											<el-form-item label="检验收费" prop="CHECK_COST">
-												<el-input v-model="dataInfo.CHECK_COST"></el-input>
+												<el-input v-model="dataInfo.CHECK_COST" id="cost" @blur="toPrice"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="标准费用" prop="CONTRACTCOST">
-												<el-input v-model="dataInfo.CONTRACTCOST" :disabled="true"></el-input>
+												<el-input v-model="dataInfo.CONTRACTCOST" id="stacost" @blur="staPrice"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="实收费用" prop="ACTUALCOST">
-												<el-input v-model="dataInfo.ACTUALCOST" :disabled="true"></el-input>
+												<el-input v-model="dataInfo.ACTUALCOST" id="actualcost" @blur="actualPrice"></el-input>
 											</el-form-item>
 										</el-col>
 
@@ -718,9 +718,40 @@
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
+				initcost:'',
+				initsta:'',
+				initactual:''
 			};
 		},
 		methods: {
+			toNum(str) {
+				return str.replace(/\,|\￥/g, "");
+			},
+			//金额两位小数点千位分隔符，四舍五入
+			toPrice(){
+				var money = document.getElementById("cost").value;
+				this.initcost = money;
+				var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
+				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
+				// this.dataInfo.CHECTCOST="￥" + num.join(".");
+				this.dataInfo.CHECK_COST = num.join(".");
+			},
+			staPrice(){
+				var money = document.getElementById("stacost").value;
+				this.initsta = money;
+				var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
+				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
+				// this.dataInfo.CHECTCOST="￥" + num.join(".");
+				this.dataInfo.CONTRACTCOST = num.join(".");
+			},
+			actualPrice(){
+				var money = document.getElementById("actualcost").value;
+				this.initactual = money;
+				var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
+				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
+				// this.dataInfo.CHECTCOST="￥" + num.join(".");
+				this.dataInfo.ACTUALCOST = num.join(".");
+			},
 			reset() {					
 				this.dataInfo={
 					VERSION: '1',
@@ -881,6 +912,9 @@
 			// 保存users/saveOrUpdate
 			save(dataInfo) {
 				this.$refs[dataInfo].validate((valid) => {
+					this.dataInfo.CHECK_COST = this.initcost;
+					this.dataInfo.CONTRACTCOST = this.initsta;
+					this.dataInfo.ACTUALCOST = this.initactual;
 			        if (valid) {
 			        this.dataInfo.ITEM_STATUS=this.dataInfo.ITEM_STATUS==1;
 			        this.dataInfo.MESSSTATUS= this.dataInfo.MESSSTATUS==1;//信息状态
@@ -976,6 +1010,9 @@
 .el-collapse-item__content {
     padding-bottom: 0px;
 }
+#cost{text-align: right}
+#stacost{text-align: right}
+#actualcost{text-align: right}
 /*.el-form-item__error {
 	top: 18%;
     left: 5px;

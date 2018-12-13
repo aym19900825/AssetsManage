@@ -308,7 +308,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				}
-				var url = this.basic_url + '/api-apps/app/assetUse';
+				var url = this.basic_url + '/api-apps/app/asset';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {

@@ -35,14 +35,14 @@
 									<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'">
 										<el-radio :label="it.label" v-for="it in item.opts"></el-radio>
 									</el-radio-group>
-									<el-select v-model="item.prop" filterable placeholder="请选择" v-if="item.type == 'select'" @change="selChange">
+									<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'" @change="selChange">
 										<el-option v-for="item in assets"
 										:key="item.ID"
 										:label="item.DESCRIPTION"
 										:value="item.DESCRIPTION">
 										</el-option>
 									</el-select>
-									<el-select v-model="item.prop" filterable placeholder="请选择" v-if="item.type == 'sel'" style="width: 60px;">
+									<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'sel'" style="width: 60px;">
 										<el-option v-for="item in time"
 										:key="item"
 										:label="item"
@@ -221,6 +221,13 @@
                         ],
 					},
 					{
+						label: '溯源机构',
+						prop: 'PM_MECHANISM',
+						width: '50%',
+						type: 'input',
+						displayType: 'inline-block'
+					},
+					{
 						label: '溯源周期',
 						prop: 'FREQUENCY',
 						width: '20%',
@@ -235,26 +242,19 @@
 						displayType: 'inline-block'
 					},
 					{
-						label: '溯源机构',
-						prop: 'PM_MECHANISM',
-						width: '50%',
-						type: 'input',
-						displayType: 'inline-block'
-					},
-					{
 						label: '前次溯源起始时间',
 						prop: 'PM_START_END',
 						width: '50%',
 						type: 'date',
 						displayType: 'inline-block'
 					},
-					{
-						label: '前次溯源完成时间',
-						prop: 'COMP_DATE',
-						width: '50%',
-						type: 'date',
-						displayType: 'inline-block'
-					},
+					// {
+					// 	label: '前次溯源完成时间',
+					// 	prop: 'COMP_DATE',
+					// 	width: '50%',
+					// 	type: 'date',
+					// 	displayType: 'inline-block'
+					// },
 					{
 						label: '本次溯源计划时间',
 						prop: 'PM_PLANDATE',
@@ -301,10 +301,9 @@
 				isok2: false,
 				down: true,
 				up: false,
+				modify: false,
 				activeNames: ['1', '2','3','4'], //手风琴数量
 				dialogVisible: false, //对话框
-				addtitle: true, //添加弹出框titile
-				modifytitle: false, //修改弹出框titile
 				resourceData: [], //数组，我这里是通过接口获取数据，
 				resourceDialogisShow: false,
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
@@ -325,16 +324,40 @@
 					'VENDOR': '',
 					'TRACEABILITY': '',
 					'FREQUENCY': '',
+					'LE_FACTORYNUM': '',
 					'FREQUENCYUNIT': '',
 					'PM_MECHANISM': '',
 					'PM_START_END': '',		
 					'PM_PLANDATE': '',
 					'COMP_DATE': '',	
-					'STATUS': '1'
+					'STATUS': '1',
+					'ENTERBY': '',
+					'ENTERDATE': '',	
+					'DEPARTMENT': '',
 				}
 			};
 		},
 		methods: {
+			getUser(opt){
+				var url = this.basic_url + '/api-user/users/currentMap';
+				this.$axios.get(url,{}).then((res) => {
+					if(opt == 'new'){
+				        this.dataInfo.ENTERBY = res.data.username;
+				        this.dataInfo.ENTERDATE = this.getToday();
+						this.dataInfo.DEPARTMENT = res.data.deptName;
+					}
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+			},
+			getToday(){
+				var date = new Date();
+				var str = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
+				return str;
+			},
 			selChange(val){
 				var data = this.assets;
 				var selData = data.filter(function(item){
@@ -344,6 +367,8 @@
 				});
 				this.dataInfo.MODEL = selData[0].MODEL;
 				this.dataInfo.ASSETNUM = selData[0].ASSETNUM;
+				this.dataInfo.VENDOR = selData[0].VENDOR;
+				this.dataInfo.LE_FACTORYNUM = selData[0].FACTOR_NUM;
 				this.getPmList();
 			},
 			getPmList(){
@@ -357,7 +382,6 @@
 					params: data
 				}).then((res) => {
 					this.pmRecordList = res.data.data;
-					console.log(this.pmRecordList);
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -368,15 +392,12 @@
 			},
 			//点击按钮显示弹窗
 			visible() {
-				this.addtitle = true;
-				this.modifytitle = false;
+				this.getUser('new');
 				this.modify=false;
 				this.show = true;
 			},
 			// 这里是修改
 			detail(dataid) {
-				this.addtitle = false;
-				this.modifytitle = true;
 				this.modify = true;
 				this.show = true;
 				this.dataInfo = this.detailData;
@@ -384,6 +405,7 @@
 			//点击关闭按钮
 			close() {
 				this.resetForm();
+				this.$emit('request');
 			},
 			resetForm(){
 				this.dataInfo =  {

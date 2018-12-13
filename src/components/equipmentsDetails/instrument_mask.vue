@@ -4,8 +4,8 @@
 		<div class="mask_div" v-show="show">
 			<!---->
 			<div class="mask_title_div clearfix">
-				<div class="mask_title" v-show="addtitle">添加仪器和计量器具</div>
-				<div class="mask_title" v-show="modifytitle">修改仪器和计量器具</div>
+				<div class="mask_title" v-show="!modify">添加仪器和计量器具</div>
+				<div class="mask_title" v-show="modify">修改仪器和计量器具</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -29,7 +29,7 @@
 										</el-input>
 									</el-col>
 									<el-col :span="5" class="pull-right">
-										<el-input v-model="dataInfo.STATUS" :disabled="true">
+										<el-input v-model="dataInfo.STATUS==1?'活动':'不活动'" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
 									</el-col>
@@ -53,64 +53,24 @@
 									<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'">
 									</el-date-picker>
 									<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'">
-										<el-radio :label="it.label" v-for="it in item.opts"></el-radio>
+										<el-radio :label="it.val" v-for="it in item.opts">{{it.label}}</el-radio>
 									</el-radio-group>
 								</el-form-item>
 							</el-collapse-item>
 
-						<el-collapse-item title="设备溯源信息状态" name="3">
-								<el-table :data="dataInfo.pmRecord" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'dataInfo.pmRecord', order: 'descending'}">
-									<el-table-column prop="iconOperation" fixed label="" width="50px">
-										<template slot-scope="scope">
-											<i class="el-icon-check" v-if="scope.row.isEditing"></i>
-											<i class="el-icon-edit" v-else="v-else"></i>
-										</template>
-									</el-table-column>
+						    <el-collapse-item title="设备溯源信息状态" name="3" v-show="modify">
+								<el-table :data="pmRecordList" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'pmRecordList', order: 'descending'}">
+									<el-table-column type="index" sortable label="序号" width="50">
+                                    </el-table-column>
 									<el-table-column prop="RECORDNUM" label="溯源记录编号" sortable width="120px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'pmRecord.'+scope.$index + '.RECORDNUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.RECORDNUM" placeholder="请输入委托方名称">
-											</el-input>
-											<span v-else="v-else">{{scope.row.RECORDNUM}}</span>
-											</el-form-item>
-										</template>
 									</el-table-column>
 									<el-table-column prop="PM_DATE" label="溯源日期" sortable width="120px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'pmRecord.'+scope.$index + '.PM_DATE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PM_DATE" placeholder="请输入委托方名称">
-											</el-input>
-											<span v-else="v-else">{{scope.row.PM_DATE}}</span>
-											</el-form-item>
-										</template>
 									</el-table-column>
 									<el-table-column prop="R_DESC" label="溯源确认内容" sortable >
-										<template slot-scope="scope">
-											<el-form-item :prop="'pmRecord.'+scope.$index + '.R_DESC'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-											<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.R_DESC" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
-											</el-date-picker>
-											<span v-else="v-else">{{scope.row.R_DESC}}</span>
-											</el-form-item>
-										</template>
 									</el-table-column>
 									<el-table-column prop="R_CONCLUSION" label="溯源确认结论" sortable width="200px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'pmRecord.'+scope.$index + '.R_CONCLUSION'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.R_CONCLUSION" placeholder="请输入要求">
-											</el-input>
-											<span v-else="v-else">{{scope.row.R_CONCLUSION}}</span>
-											</el-form-item>
-										</template>
 									</el-table-column>
-
 									<el-table-column prop="STATUS" label="溯源信息状态" sortable width="120px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'pmRecord.'+scope.$index + '.STATUS'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入要求">
-											</el-input>
-											<span v-else="v-else">{{scope.row.STATUS}}</span>
-										</el-form-item>
-										</template>
 									</el-table-column>
 								</el-table>
 							</el-collapse-item>
@@ -300,12 +260,12 @@
 						type: 'input',
 						displayType: 'inline-block'
 					},
-                    {
-						label: '安装地点',
-						prop: 'INS_SITE',
+					{
+						label: '使用状态',
+						prop: 'OPTION_STATUS',
 						width: '30%',
 						type: 'input',
-						displayType: 'inline-block'
+						displayType: 'inline-block',
 					},
                     {
 						label: '计量器具',
@@ -315,10 +275,12 @@
 						displayType: 'inline-block',
                         opts: [
                             {
-                                label: '是'
+								label: '是',
+								val: '是'
                             },
                             {
-                                label: '否'
+								label: '否',
+								val: '否'
                             }
                         ]
 					},
@@ -330,10 +292,12 @@
 						displayType: 'inline-block',
                         opts: [
                             {
-                                label: '是'
+								label: '是',
+								val: '是'
                             },
                             {
-                                label: '否'
+								label: '否',
+								val: '否'
                             }
                         ]
 					},
@@ -345,25 +309,29 @@
 						displayType: 'inline-block',
                         opts: [
                             {
-                                label: '外委'
+								label: '外委',
+								val: '外委'
                             },
                             {
-                                label: '自维'
+								label: '自维',
+								val: '自维'
                             }
                         ]
 					},
 					{
-						label: '检定/验证方式',
+						label: '检定/验证',
 						prop: 'MODE1',
 						width: '30%',
 						type: 'radio',
 						displayType: 'inline-block',
                         opts: [
                             {
-                                label: '送检'
+								label: '送检',
+								val: '送检'
                             },
                             {
-                                label: '自检'
+								label: '自检',
+								val: '自检'
                             }
                         ]
 					},
@@ -375,18 +343,81 @@
 						displayType: 'inline-block',
                         opts: [
                             {
-                                label: '全新'
+								label: '全新',
+								val: '全新'
                             },
                             {
-                                label: '已使用过'
+								label: '已使用过',
+								val: '已使用过'
                             },
                             {
-                                label: '改装过'
+								label: '改装过',
+								val: '改装过'
                             },
                             {
-                                label: '大修过'
+								label: '大修过',
+								val: '大修过'
                             }
                         ]
+					},
+					{
+						label: '设备状态',
+						prop: 'STATE',
+						width: '70%',
+						type: 'radio',
+						 opts: [
+                            {
+								label: '启用',
+								val: '1'
+                            },
+                            {
+								label: '封存',
+								val: '2'
+                            },
+                            {
+								label: '报废',
+								val: '3'
+                            }
+                        ],
+						displayType: 'inline-block',
+					},
+					{
+						label: '配置地址',
+						prop: 'C_ADDRESS',
+						width: '100%',
+						type: 'textarea',
+						displayType: 'inline-block'
+					},
+					{
+						label: '设备分类',
+						prop: 'TYPE',
+						width: '30%',
+						type: 'radio',
+						 opts: [
+                            {
+								label: '仪器',
+								val: '仪器'
+                            },
+                            {
+								label: '量具',
+								val: '量具'
+                            }
+                        ],
+						displayType: 'inline-block'
+					},
+					{
+						label: '安装地点',
+						prop: 'INS_SITE',
+						width: '30%',
+						type: 'input',
+						displayType: 'inline-block'
+					},
+					{
+						label: '启用日期',
+						prop: 'S_DATE',
+						width: '30%',
+						type: 'date',
+						displayType: 'inline-block'
 					},
                     {
 						label: '技术资料',
@@ -415,7 +446,7 @@
 				otherInfo: [
 					{
 						label: '录入人',
-						prop: 'ENTERBYName',
+						prop: 'ENTERBY',
 						width: '30%',
 						type: 'input',
 						displayType: 'inline-block'
@@ -459,8 +490,7 @@
 				up: false,
 				activeNames: ['1', '2','3','4'], //手风琴数量
 				dialogVisible: false, //对话框
-				addtitle: true, //添加弹出框titile
-				modifytitle: false, //修改弹出框titile
+				modify: false,
 				resourceData: [], //数组，我这里是通过接口获取数据，
 				resourceDialogisShow: false,
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
@@ -483,17 +513,17 @@
 					'MODEL': '',
 					'FACTOR_NUM': '',
 					'ASSET_KPI': '',
-					'STATE': '0',    //设备状态，必填但页面没有字段
-					'OPTION_STATUS': '0',   //设备使用状态，必填但页面没有字段
-					'TYPE': '仪器', //设备分类，必填但页面没有字段
+					'STATE': '',    //设备状态，必填但页面没有字段
+					'OPTION_STATUS': '',   
+					'TYPE': '', 
 					'ACCEPT_NUM': '',
 					'ISMETER': '',
 					'ISPM': '',
 					'STATUSDATE': '',
 					'KEEPER': '',
 					'ACCEPT_DATE': '',
-					'S_DATE': '2017-01-12',    //启用日期，必填但页面没有字段
-					'C_ADDRESS': 'aaaaaaaaaaa',   //配置地址，必填但页面没有字段
+					'S_DATE': '',   
+					'C_ADDRESS': '',  
 					'A_STATUS': '',
 					'A_PRICE': '',
 					'MODE': '',
@@ -504,35 +534,80 @@
 					'ENTERDATE': '',	
 					'DEPARTMENT': '',	
 					'MEMO': '',	
-					'STATUS': '',
+					'STATUS': '1',
 					'SYNCHRONIZATION_TIME': '',
-				}
+				},
+				pmRecordList: []
 			};
 		},
 		methods: {
+			getUser(opt){
+				var url = this.basic_url + '/api-user/users/currentMap';
+				this.$axios.get(url,{}).then((res) => {
+					if(opt == 'new'){
+                        this.dataInfo.CHANGEBY = res.data.username;
+				        this.dataInfo.CHANGEDATE = this.getToday();
+				        this.dataInfo.ENTERBY = res.data.username;
+				        this.dataInfo.ENTERDATE = this.getToday();
+						this.dataInfo.DEPARTMENT = res.data.deptName;
+					}else{
+						this.dataInfo.CHANGEBY = res.data.username;
+				        this.dataInfo.CHANGEDATE = this.getToday();
+					}
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+			},
+			getToday(){
+				var date = new Date();
+				var str = date.getFullYear() + '-' + date.getMonth() + '-'+ date.getDate();
+				return str;
+			},
+			getPmList(){
+				var data = {
+					page: 1,
+					limit: 20,
+					assetnum: this.dataInfo.ASSETNUM
+				};
+				var url = this.basic_url + '/api-apps/app/pmRecord';
+				this.$axios.get(url,{
+					params: data
+				}).then((res) => {
+					this.pmRecordList = res.data.data;
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+					
+			},
 			//点击按钮显示弹窗
 			visible() {
-				this.addtitle = true;
-				this.modifytitle = false;
 				this.modify=false;
 				this.show = true;
+                this.getUser('new');
 			},
 			// 这里是修改
 			detail(dataid) {
-				this.addtitle = false;
-				this.modifytitle = true;
+				this.dataInfo = this.detailData;
+				this.getUser();
 				this.modify = true;
 				this.show = true;
-				this.dataInfo = this.detailData;
+				this.getPmList();
 			},
 			//点击关闭按钮
 			close() {
 				this.resetForm();
+				this.$emit('request');
 			},
 			resetForm(){
 				this.dataInfo =  {
-					'ID': '',  //主键ID，必填但页面没有字段
-					'ASSETNUM': '1111',
+					'ID': '', 
+					'ASSETNUM': '',
 					'DESCRIPTION': '',
 					'CONFIG_UNIT': '',
 					'INS_SITE': '',
@@ -542,17 +617,17 @@
 					'MODEL': '',
 					'FACTOR_NUM': '',
 					'ASSET_KPI': '',
-					'STATE': '0',    //设备状态，必填但页面没有字段
-					'OPTION_STATUS': '0',   //设备使用状态，必填但页面没有字段
-					'TYPE': '仪器', //设备分类，必填但页面没有字段
+					'STATE': '',   
+					'OPTION_STATUS': '',   
+					'TYPE': '', 
 					'ACCEPT_NUM': '',
 					'ISMETER': '',
 					'ISPM': '',
 					'STATUSDATE': '',
 					'KEEPER': '',
 					'ACCEPT_DATE': '',
-					'S_DATE': '2017-01-12',    //启用日期，必填但页面没有字段
-					'C_ADDRESS': 'aaaaaaaaaaa',   //配置地址，必填但页面没有字段
+					'S_DATE': '',   
+					'C_ADDRESS': '',  
 					'A_STATUS': '',
 					'A_PRICE': 0,
 					'MODE': '',
@@ -563,7 +638,7 @@
 					'ENTERDATE': '',	
 					'DEPARTMENT': '',	
 					'MEMO': '',	
-					'STATUS': '',
+					'STATUS': '1',
 					'SYNCHRONIZATION_TIME': '',
 				};
 				this.$refs['dataInfo'].resetFields();

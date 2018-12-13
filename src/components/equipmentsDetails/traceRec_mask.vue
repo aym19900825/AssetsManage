@@ -36,9 +36,9 @@
 									<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'">
 										<el-radio :label="it.label" v-for="it in item.opts"></el-radio>
 									</el-radio-group>
-									<el-select v-model="item.prop" filterable placeholder="请选择" v-if="item.type == 'select'" @change="selChange">
+									<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'" @change="selChange">
 										<el-option v-for="item in assets"
-										:key="item.DESCRIPTION"
+										:key="item.ID"
 										:label="item.DESCRIPTION"
 										:value="item.DESCRIPTION">
 										</el-option>
@@ -302,8 +302,8 @@
 				getCheckboxData: {},
 
 				dataInfo: {
-					'ID': '',  //页面没有但是必填	  
-					'RECORDNUM': '', //页面没有但是必填
+					'ID': '',    
+					'RECORDNUM': '', 
 					'DESCRIPTION': '',
 					'ASSETNUM': '',
 					'A_NAME': '',
@@ -320,12 +320,35 @@
 					'C_DATE': '',
 					'APPR_PERSON': '',
 					'APPR_DATE': '',
-					'STATUS': '1'	//活动1，不活动0
+					'STATUS': '1',	//活动1，不活动0
+					'ENTERBY': '',
+					'ENTERDATE': '',	
+					'DEPARTMENT': '',
 				},
 				assets: []
 			};
 		},
 		methods: {
+			getUser(opt){
+				var url = this.basic_url + '/api-user/users/currentMap';
+				this.$axios.get(url,{}).then((res) => {
+					if(opt == 'new'){
+				        this.dataInfo.ENTERBY = res.data.username;
+				        this.dataInfo.ENTERDATE = this.getToday();
+						this.dataInfo.DEPARTMENT = res.data.deptName;
+					}
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+			},
+			getToday(){
+				var date = new Date();
+				var str = date.getFullYear() + '-' + date.getMonth() + '-'+ date.getDate();
+				return str;
+			},
 			selChange(val){
 				var data = this.assets;
 				var selData = data.filter(function(item){
@@ -342,6 +365,7 @@
 				this.modifytitle = false;
 				this.modify=false;
 				this.show = true;
+				this.getUser('new');
 			},
 			// 这里是修改
 			detail(dataid) {
@@ -354,6 +378,7 @@
 			//点击关闭按钮
 			close() {
 				this.resetForm();
+				this.$emit('request');
 			},
 			resetForm(){
 				this.dataInfo = {
@@ -375,7 +400,10 @@
 					'C_DATE': '',
 					'APPR_PERSON': '',
 					'APPR_DATE': '',
-					'STATUS': '1'
+					'STATUS': '1',
+					'ENTERBY': '',
+					'ENTERDATE': '',	
+					'DEPARTMENT': '',
 				}
 				this.$refs['dataInfo'].resetFields();
 				this.show = false;
@@ -407,7 +435,6 @@
 
 			submitForm() {
 				var _this = this;
-				
 				var url = this.basic_url + '/api-apps/app/pmRecord/saveOrUpdate';
 				this.$refs['dataInfo'].validate((valid) => {
 					if (valid) {

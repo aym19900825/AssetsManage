@@ -73,7 +73,7 @@
 								</el-input>
 							</el-col>
 							<el-col :span="5">
-								<el-select v-model="searchList.TYPE" placeholder="类型">
+								<el-select v-model="searchList.TYPE" placeholder="类型" style="width: 100%">
 								      <el-option label="监督审查" value="1">	
 								      </el-option>
 								      <el-option label="质量抽查" value="0">
@@ -92,19 +92,19 @@
 								    <el-date-picker
 								      v-model="searchList.ENTERDATE"
 								      type="date"
-								      placeholder="录入时间">
+								      placeholder="录入时间" style="width: 100%">
 								    </el-date-picker>
 								  </div>
 							</el-col>
 							<el-col :span="5">
-								<el-select v-model="searchList.ENERBY" placeholder="录入人">
+								<el-select v-model="searchList.ENERBY" placeholder="录入人" style="width: 100%">
 								    <el-option label="张强" value="1"></el-option>
 								    <el-option label="贾庆林" value="0"></el-option>
 								    <el-option label="李国富" value="0"></el-option>
 								</el-select>
 							</el-col>
-							<el-col :span="5" style="padding-top: 3px">
-								<el-select v-model="searchList.STATUS" placeholder="信息状态">
+							<el-col :span="5">
+								<el-select v-model="searchList.STATUS" placeholder="状态" style="width: 100%">
 								    <el-option label="草稿" value="1"></el-option>
 								    <el-option label="审批中" value="0"></el-option>
 								    <el-option label="驳回" value="0"></el-option>
@@ -113,7 +113,14 @@
 								</el-select>
 							</el-col>
 							<el-col :span="5">
-								<el-button class="pull-right" type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+								<el-select v-model="searchList.LEADER_STATUS" placeholder="执行状态" style="width: 100%">
+								    <el-option label="未开始" value="未开始"></el-option>
+								    <el-option label="进行中" value="进行中"></el-option>
+								    <el-option label="已完成" value="已完成"></el-option>
+								</el-select>
+							</el-col>
+							<el-col :span="4">
+								<el-button type="primary" @click="searchinfo" size="small">搜索</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
@@ -153,8 +160,10 @@
 								</el-table-column>
 								<el-table-column label="录入时间" sortable width="210px" prop="ENTERDATE" v-if="this.checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>
-								<el-table-column label="信息状态" sortable  width="380px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
+								<el-table-column label="执行状态" sortable  width="380px" prop="LEADER_STATUS" v-if="this.checkedName.indexOf('执行状态')!=-1">
 								</el-table-column>
+								<!-- <el-table-column label="信息状态" sortable  width="380px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
+								</el-table-column> -->
 							</el-table>
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
 					            @size-change="sizeChange"
@@ -201,7 +210,8 @@
 					'年度',
 					'录入人',
 					'录入时间',
-					'信息状态'
+					'执行状态'
+					// '信息状态'
 				],
 				tableHeader: [
 					{
@@ -225,9 +235,13 @@
 						prop: 'ENTERDATE'
 					},
 					{
-						label: '信息状态',
-						prop: 'STATUS'
+						label: '执行状态',
+						prop: 'LEADER_STATUS'
 					}
+					// {
+					// 	label: '信息状态',
+					// 	prop: 'STATUS'
+					// }
 				],
 
 				companyId: '',
@@ -249,7 +263,8 @@
 					YEAR: '',
 					ENTERDATE:'',
 					ENTERBY:'',
-					STATUS:''
+					STATUS:'',
+					LEADER_STATUS:''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -400,7 +415,8 @@
 					YEAR: this.searchList.YEAR,
 					ENTERDATE:this.searchList.ENTERDATE,
 					ENTERBY:this.searchList.ENTERBY,
-					STATUS:this.searchList.STATUS
+					STATUS:this.searchList.STATUS,
+					LEADER_STATUS:this.searchList.LEADER_STATUS,
 				}
 				var url = this.basic_url + '/api-apps/app/workplan';
 				this.$axios.get(url, {

@@ -563,7 +563,7 @@
 			},
 			getToday(){
 				var date = new Date();
-				var str = date.getFullYear() + '-' + date.getMonth() + date.getDate();
+				var str = date.getFullYear() + '-' + date.getMonth() + '-'+ date.getDate();
 				return str;
 			},
 			getPmList(){

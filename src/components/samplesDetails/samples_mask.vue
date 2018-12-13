@@ -228,9 +228,9 @@
 								<!-- 字段列表 End -->
 
 								<!-- 样品子表Table-List Begin-->
-								<el-form :model="samples_itemlineForm" status-icon inline-message ref="samples_itemlineForm">
+								<el-form status-icon inline-message>
 									  <!-- 表格 Begin-->
-									  <el-table :data="samples_itemlineForm.inspectionList" row-key="ID" border stripe height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'samples_itemlineForm.inspectionList', order: 'descending'}" >
+									  <el-table :data="samplesForm.ITEM_LINEList" row-key="ID" border stripe height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'samplesForm.ITEM_LINEList', order: 'descending'}" >
 										<el-table-column prop="iconOperation" fixed="left" label="操作" width="80">
 									      <template slot-scope="scope">
 									        <el-button type="text" id="Edit" size="medium" @click="saveRow(scope.row)" v-if="scope.row.isEditing">
@@ -239,7 +239,7 @@
 											<el-button type="text" size="medium" @click="modifyversion(scope.row)" v-else="v-else">
 									        	<i class="icon-edit" title="修改"></i>
 											</el-button>
-									        <el-button @click="deleteRow(scope.row)" type="text" size="medium" title="删除" >
+									        <el-button @click="deleteRow(scope.$index, samplesForm.ITEM_LINEList)" type="text" size="medium" title="删除" >
 									          <i class="icon-trash red"></i>
 									        </el-button>
 									      </template>
@@ -321,44 +321,44 @@
 	import Config from '../../config.js'
 	export default {
 		name: 'samples_mask',
-		props: {
-			page: {
-				type: Object,
-			},
-			samplesForm: { //接收主表单中填写的数据信息
-				type: Object,
-				default: function() {
-					return {
-						PROXYNUM: '',//委托书编号
-						ITEMNUM: '',//样品编号
-						VENDOR: '',//委托单位编号
-						PRODUCT_COMPANY: '',//生产单位编号
-						V_NAME: '',//委托单位名称
-						P_NAME: '',//生产单位名称
-						DESCRIPTION: '',//样品名称
-						PRODUCT_CODE: '',//产品标识代码
-						MODEL: '',//型号
-						QUATITY: '',//数量
-						OTHER: '',//其他资料
-						MEMO: '',//备注
-						ACCEPTDATE: '',//入库时间
-						ACCEPT_PERSON: '',//收样人
-						ACCEPT_DATE: '',//收样日期
-						RECIP_PERSON: '',//接样人
-						RECIP_DATE: '',//接样日期
-						STATE: '',//状态
-						VERSION: '',//版本
-						STATUSDATE: '',//状态日期
-						ENTERBY: '',//录入人
-						ENTERDATE: '',//录入时间
-						CHANGEBY: '',//修改人
-						CHANGEDATE: '',//修改时间
-						TYPE: '',//样品类别
-						STATUS: '',//信息状态
-					}
-				}
-			}
-		},
+		// props: {
+		// 	page: {
+		// 		type: Object,
+		// 	},
+		// 	samplesForm: { //接收主表单中填写的数据信息
+		// 		type: Object,
+		// 		default: function() {
+		// 			return {
+		// 				PROXYNUM: '',//委托书编号
+		// 				ITEMNUM: '',//样品编号
+		// 				VENDOR: '',//委托单位编号
+		// 				PRODUCT_COMPANY: '',//生产单位编号
+		// 				V_NAME: '',//委托单位名称
+		// 				P_NAME: '',//生产单位名称
+		// 				DESCRIPTION: '',//样品名称
+		// 				PRODUCT_CODE: '',//产品标识代码
+		// 				MODEL: '',//型号
+		// 				QUATITY: '',//数量
+		// 				OTHER: '',//其他资料
+		// 				MEMO: '',//备注
+		// 				ACCEPTDATE: '',//入库时间
+		// 				ACCEPT_PERSON: '',//收样人
+		// 				ACCEPT_DATE: '',//收样日期
+		// 				RECIP_PERSON: '',//接样人
+		// 				RECIP_DATE: '',//接样日期
+		// 				STATE: '',//状态
+		// 				VERSION: '',//版本
+		// 				STATUSDATE: '',//状态日期
+		// 				ENTERBY: '',//录入人
+		// 				ENTERDATE: '',//录入时间
+		// 				CHANGEBY: '',//修改人
+		// 				CHANGEDATE: '',//修改时间
+		// 				TYPE: '',//样品类别
+		// 				STATUS: '',//信息状态
+		// 			}
+		// 		}
+		// 	}
+		// },
 		data() {
 			return {
 				basic_url: Config.dev_url,
@@ -385,8 +385,11 @@
 				addtitle: true,
 				modifytitle: false,
 				
-				samples_itemlineForm:{//样品子表数据组
-					inspectionList: []
+				// samples_itemlineForm:{//样品子表数据组
+				// 	inspectionList: []
+				// },
+				samplesForm:{
+					ITEM_LINEList:[]
 				},
 				//Tree树菜单数据
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -512,13 +515,23 @@
 						type:'error'
 					})
 				})
+				this.$axios.get(this.basic_url + '/api-apps/app/item/' + dataid, {}).then((res) => {
+					this.samplesForm = res.data;
+//					console.log(this.CUSTOMER.STATUS==1);
+					// this.CUSTOMER.STATUS=this.CUSTOMER.STATUS=="1"? '活动' : '不活动';
+					this.show = true;
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.modify = true;
 				this.samplesForm.STATUS=this.samplesForm.STATUS=="1"?'活动':'不活动';
 				this.show = true;
 			},
-
 			iconOperation(row, column, cell, event){//切换Table-操作列中的修改、保存
 				if(column.property ==="iconOperation"){
 					row.isEditing = !row.isEditing
@@ -539,12 +552,10 @@
 					})
 				})
 			},
-
 			
 			judge(data) {//taxStatus 信息状态布尔值
 				return data.enabled ? '活动' : '不活动'
 			},
-
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -553,7 +564,6 @@
 				}
 				return this.$moment(date).format("YYYY-MM-DD");
 			},
-
 			//检验/检测方法类别
 			getType() {
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=type';
@@ -563,44 +573,57 @@
 					console.log('请求失败');
 				})
 			},
-
 			addfield_doclinks() { //插入行到文件文档Table中
-				var isEditingflag=false;
-				for(var i=0;i<this.samples_itemlineForm.inspectionList.length; i++){
-					if (this.samples_itemlineForm.inspectionList[i].isEditing==false){
-						isEditingflag=false;
-					}else{
-                        isEditingflag=true;
-                        break;
-					}
-				}
-				if (isEditingflag==false){
-                	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-                		var currentUser, currentDate
-						this.currentUser=res.data.nickname;
-						var date=new Date();
-						this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
-						var index=this.$moment(date).format("YYYYMMDDHHmmss");
-						var obj = {
-							"ITEMNUM": 'ITE' + index,
-							"ITEM_STEP": '',
-							"SN": '',
-							"STATE": '1',
-							"STATUS": '1',
-							"ENTERBY": this.currentUser,
-							"ENTERDATE": this.currentDate,
-							"isEditing": true,
-						};
-						this.samples_itemlineForm.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
-					}).catch((err)=>{
-						this.$message({
-							message:'网络错误，请重试',
-							type:'error'
-						})
-					})
-	            } else {
-	                this.$message.warning("请先保存当前编辑项");
-				}
+				var obj = {
+                    ID:'',
+                    ITEMNUM:'',
+                    ITEM_STEP:'',
+                    SN:'',
+                    STATE:'',
+                    ENTERBY:'',
+                    ENTERDATE:'',
+                    CHANGEBY:'',
+                    CHANGEDATE:'',
+                    STATUS:'',
+					isEditing: true
+                };
+                this.samplesForm.ITEM_LINEList.push(obj);
+				// var isEditingflag=false;
+				// for(var i=0;i<this.samples_itemlineForm.inspectionList.length; i++){
+				// 	if (this.samples_itemlineForm.inspectionList[i].isEditing==false){
+				// 		isEditingflag=false;
+				// 	}else{
+    //                     isEditingflag=true;
+    //                     break;
+				// 	}
+				// }
+				// if (isEditingflag==false){
+    //             	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
+    //             		var currentUser, currentDate
+				// 		this.currentUser=res.data.nickname;
+				// 		var date=new Date();
+				// 		this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
+				// 		var index=this.$moment(date).format("YYYYMMDDHHmmss");
+				// 		var obj = {
+				// 			"ITEMNUM": 'ITE' + index,
+				// 			"ITEM_STEP": '',
+				// 			"SN": '',
+				// 			"STATE": '1',
+				// 			"STATUS": '1',
+				// 			"ENTERBY": this.currentUser,
+				// 			"ENTERDATE": this.currentDate,
+				// 			"isEditing": true,
+				// 		};
+				// 		this.samples_itemlineForm.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
+				// 	}).catch((err)=>{
+				// 		this.$message({
+				// 			message:'网络错误，请重试',
+				// 			type:'error'
+				// 		})
+				// 	})
+	   //          } else {
+	   //              this.$message.warning("请先保存当前编辑项");
+				// }
 			},
 			saveRow (row) {//Table-操作列中的保存行
 				this.$refs['samples_itemlineForm'].validate((valid) => {
@@ -636,33 +659,33 @@
 		          }
 		        });
 			},
-
-			deleteRow(row) {//Table-操作列中的删除行
-				this.$confirm('确定删除此文件文档吗？', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                }).then(({ value }) => {
-                	var url = this.basic_url + '/api-apps/app/itemline/' + row.ID;
-                    this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
-					//resp_code == 0 是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '删除成功',
-								type: 'success'
-							});
-							this.requestData_doclinks();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
-					});
-                }).catch(() => {
-
-            	});
+			// deleteRow(row) {//Table-操作列中的删除行
+			// 	this.$confirm('确定删除此文件文档吗？', '提示', {
+   //                  confirmButtonText: '确定',
+   //                  cancelButtonText: '取消',
+   //              }).then(({ value }) => {
+   //              	var url = this.basic_url + '/api-apps/app/itemline/' + row.ID;
+   //                  this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
+			// 		//resp_code == 0 是后台返回的请求成功的信息
+			// 			if(res.data.resp_code == 0) {
+			// 				this.$message({
+			// 					message: '删除成功',
+			// 					type: 'success'
+			// 				});
+			// 				this.requestData_doclinks();
+			// 			}
+			// 		}).catch((err) => {
+			// 			this.$message({
+			// 				message: '网络错误，请重试',
+			// 				type: 'error'
+			// 			});
+			// 		});
+   //              }).catch(() => {
+   //          	});
+			// },
+			deleteRow(index, rows) {//Table-操作列中的删除行
+				rows.splice(index, 1);
 			},
-
 			
 			//点击关闭按钮
 			close() {
@@ -720,7 +743,6 @@
 				$(".mask_div").height(document.body.clientHeight - 60);
 				$(".mask_div").css("margin", "0%");
 				$(".mask_div").css("top", "60px");
-
 			},
 			//还原按钮
 			rebackDialog() {
@@ -730,7 +752,6 @@
 				$(".mask_div").css("height", "80%");
 				$(".mask_div").css("margin", "7% 10%");
 				$(".mask_div").css("top", "0");
-
 			},
 			//点击提交按钮执行保存
 			save() {

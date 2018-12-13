@@ -518,7 +518,6 @@
 				this.samplesForm.STATUS=this.samplesForm.STATUS=="1"?'活动':'不活动';
 				this.show = true;
 			},
-
 			iconOperation(row, column, cell, event){//切换Table-操作列中的修改、保存
 				if(column.property ==="iconOperation"){
 					row.isEditing = !row.isEditing
@@ -539,12 +538,10 @@
 					})
 				})
 			},
-
 			
 			judge(data) {//taxStatus 信息状态布尔值
 				return data.enabled ? '活动' : '不活动'
 			},
-
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -553,7 +550,6 @@
 				}
 				return this.$moment(date).format("YYYY-MM-DD");
 			},
-
 			//检验/检测方法类别
 			getType() {
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=type';
@@ -563,7 +559,6 @@
 					console.log('请求失败');
 				})
 			},
-
 			addfield_doclinks() { //插入行到文件文档Table中
 				var isEditingflag=false;
 				for(var i=0;i<this.samples_itemlineForm.inspectionList.length; i++){
@@ -636,7 +631,6 @@
 		          }
 		        });
 			},
-
 			deleteRow(row) {//Table-操作列中的删除行
 				this.$confirm('确定删除此文件文档吗？', '提示', {
                     confirmButtonText: '确定',
@@ -659,10 +653,8 @@
 						});
 					});
                 }).catch(() => {
-
             	});
 			},
-
 			
 			//点击关闭按钮
 			close() {
@@ -720,7 +712,6 @@
 				$(".mask_div").height(document.body.clientHeight - 60);
 				$(".mask_div").css("margin", "0%");
 				$(".mask_div").css("top", "60px");
-
 			},
 			//还原按钮
 			rebackDialog() {
@@ -730,7 +721,6 @@
 				$(".mask_div").css("height", "80%");
 				$(".mask_div").css("margin", "7% 10%");
 				$(".mask_div").css("top", "0");
-
 			},
 			//点击提交按钮执行保存
 			save() {

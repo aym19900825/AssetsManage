@@ -388,7 +388,7 @@
 					return;
 				} else {
 					this.samplesForm = this.selMenu[0]; 
-					this.$refs.child.detail();
+					this.$refs.child.detail(this.selUser[0].id);
 				}
 			},
 			//高级查询

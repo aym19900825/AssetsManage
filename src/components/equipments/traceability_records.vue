@@ -75,21 +75,21 @@
 							</el-table-column>
 							<el-table-column label="设备名称" sortable prop="A_NAME" v-if="this.checkedName.indexOf('设备名称')!=-1">
 							</el-table-column>						
-							<el-table-column label="规格型号" sortable prop="MODEL" :formatter="judge" v-if="this.checkedName.indexOf('规格型号')!=-1">
+							<el-table-column label="规格型号" sortable prop="MODEL"  v-if="this.checkedName.indexOf('规格型号')!=-1">
 							</el-table-column>
-							<el-table-column label="溯源方式" sortable prop="PM_MODEL" :formatter="judge" v-if="this.checkedName.indexOf('溯源方式')!=-1">
+							<el-table-column label="溯源方式" sortable prop="PM_MODEL"  v-if="this.checkedName.indexOf('溯源方式')!=-1">
 							</el-table-column>
-							<el-table-column label="溯源日期" sortable prop="PM_DATE" :formatter="judge" v-if="this.checkedName.indexOf('溯源日期')!=-1">
+							<el-table-column label="溯源日期" sortable prop="PM_DATE" v-if="this.checkedName.indexOf('溯源日期')!=-1">
 							</el-table-column>
-							<el-table-column label="确认结论" sortable prop="R_CONCLUSION" :formatter="judge" v-if="this.checkedName.indexOf('确认结论')!=-1">
+							<el-table-column label="确认结论" sortable prop="R_CONCLUSION" v-if="this.checkedName.indexOf('确认结论')!=-1">
 							</el-table-column>
-							<el-table-column label="证书编号" sortable prop="C_NUM" :formatter="judge" v-if="this.checkedName.indexOf('证书编号')!=-1">
+							<el-table-column label="证书编号" sortable prop="C_NUM" v-if="this.checkedName.indexOf('证书编号')!=-1">
 							</el-table-column>
-							<el-table-column label="设备性能指标要求" sortable prop="A_KPI" :formatter="judge" v-if="this.checkedName.indexOf('设备性能指标要求')!=-1">
+							<el-table-column label="设备性能指标要求" sortable prop="A_KPI"  v-if="this.checkedName.indexOf('设备性能指标要求')!=-1">
 							</el-table-column>
-							<el-table-column label="指标确定来源" sortable prop="SORUCE" :formatter="judge" v-if="this.checkedName.indexOf('指标确定来源')!=-1">
+							<el-table-column label="指标确定来源" sortable prop="SORUCE" v-if="this.checkedName.indexOf('指标确定来源')!=-1">
 							</el-table-column>
-							<el-table-column label="确认内容" sortable prop="R_DESC" :formatter="judge" v-if="this.checkedName.indexOf('确认内容')!=-1">
+							<el-table-column label="确认内容" sortable prop="R_DESC" v-if="this.checkedName.indexOf('确认内容')!=-1">
 							</el-table-column>
 						</el-table>
 						<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"

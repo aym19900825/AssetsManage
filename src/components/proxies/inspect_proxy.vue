@@ -141,11 +141,11 @@
 								</el-table-column>
 								<el-table-column label="委托单位名称" sortable width="140px" prop="V_NAME" v-if="this.checkedName.indexOf('委托单位名称')!=-1">
 								</el-table-column>
-								<el-table-column label="生产单位名称" sortable width="100px" prop="P_NAME" v-if="this.checkedName.indexOf('生产单位名称')!=-1">
+								<el-table-column label="生产单位名称" sortable width="140px" prop="P_NAME" v-if="this.checkedName.indexOf('生产单位名称')!=-1">
 								</el-table-column>
 								<el-table-column label="样品名称" sortable width="200px" prop="ITEM_NAME" v-if="this.checkedName.indexOf('样品名称')!=-1">
 								</el-table-column>
-								<el-table-column label="样品型号" sortable width="200px" prop="ITEM_MODEL" v-if="this.checkedName.indexOf('样品型号')!=-1">
+								<el-table-column label="样品型号" sortable width="150px" prop="ITEM_MODEL" v-if="this.checkedName.indexOf('样品型号')!=-1">
 								</el-table-column>
 								<el-table-column label="样品信息状态" sortable width="200px" prop="ITEM_STATUS" v-if="this.checkedName.indexOf('样品信息状态')!=-1">
 								</el-table-column>
@@ -159,8 +159,8 @@
 								</el-table-column>
 								<el-table-column label="主检组" width="200px" prop="MAINGROUP" sortable  v-if="this.checkedName.indexOf('主检组')!=-1">
 								</el-table-column>
-								<el-table-column label="信息状态" width="200px" prop="STATUS" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
-								</el-table-column>
+								<!--<el-table-column label="信息状态" width="200px" prop="STATUS" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
+								</el-table-column>-->
 								<el-table-column label="录入人" width="200px" prop="ENTERBY" sortable  v-if="this.checkedName.indexOf('录入人')!=-1">
 								</el-table-column>
 								<el-table-column label="录入时间" width="200px" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
@@ -168,9 +168,7 @@
 								<el-table-column label="版本" width="50px" prop="VERSION" sortable  v-if="this.checkedName.indexOf('版本')!=-1">
 								</el-table-column>
 							</el-table>
-							<!-- <span class="demonstration">显示总数</span>" -->
-							<!-- <el-pagination background layout="prev, pager, next" :total="2" style="float:right;margin-top:10px;"> -->
-							<!-- </el-pagination style="float:right;margin-top:10px;"> -->
+							
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
 							<!-- 表格 -->

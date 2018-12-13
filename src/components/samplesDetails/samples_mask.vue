@@ -26,17 +26,13 @@
 										</el-input>
 									</el-col>-->
 									<el-col :span="4" class="pull-right">
-										<el-input type="number" v-model.number="samplesForm.STATE" :disabled="true">
+										<el-input  v-model="samplesForm.STATE" :disabled="true">
 											<template slot="prepend">状态</template>
 										</el-input>
 									</el-col>
-									<el-col :span="4" class="pull-right">
-										<el-input type="number" v-model.number="samplesForm.VERSION" :disabled="true">
-											<template slot="prepend">版本</template>
-										</el-input>
-									</el-col>
+									
 									<el-col :span="7" class="pull-right">
-										<el-input placeholder="自动获取" v-model="samplesForm.ITEMNUM" :disabled="true">
+										<el-input placeholder="自动获取" v-model="samplesForm.ITEMNUM" >
 											<template slot="prepend">样品编号</template>
 										</el-input>
 									</el-col>
@@ -299,13 +295,47 @@
 			</div>
 		</div>
 		<!--点击委托书编号弹出框 Begin-->
-		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @check-change="handleCheckChange">
-			</el-tree>
-			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible = false">取 消</el-button>
-		       <el-button type="primary" @click="dailogconfirm();" >确 定</el-button>
-		    </span>
+		<el-dialog :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
+			<el-table :data="gridData" @selection-change="SelChange">
+					<el-table-column type="selection" width="55" fixed >
+					</el-table-column>
+					<el-table-column label="检验委托书编号" sortable width="140px" prop="PROXYNUM" >
+					</el-table-column>
+					<el-table-column label="委托单位名称" sortable width="140px" prop="V_NAME">
+					</el-table-column>
+					<el-table-column label="生产单位名称" sortable width="140px" prop="P_NAME">
+					</el-table-column>
+					<el-table-column label="样品名称" sortable width="200px" prop="ITEM_NAME">
+					</el-table-column>
+					<el-table-column label="样品型号" sortable width="150px" prop="ITEM_MODEL">
+					</el-table-column>
+					<el-table-column label="样品信息状态" sortable width="200px" prop="ITEM_STATUS">
+					</el-table-column>
+					<el-table-column label="检测依据" width="200px" prop="REMARKS" sortable  >
+					</el-table-column>
+					<el-table-column label="完成日期" width="200px" prop="COMPDATE" sortable  :formatter="dateFormat" data-type = ""  >
+					</el-table-column>
+					<el-table-column label="完成方式" width="200px" prop="COMPMODE" sortable >
+					</el-table-column>
+					<el-table-column label="检测报告编号" width="200px" prop="REPORT_NUM" sortable >
+					</el-table-column>
+					<el-table-column label="主检组" width="200px" prop="MAINGROUP" sortable >
+					</el-table-column>
+								<!--<el-table-column label="信息状态" width="200px" prop="STATUS" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
+								</el-table-column>-->
+					<el-table-column label="录入人" width="200px" prop="ENTERBY" sortable  >
+					</el-table-column>
+					<el-table-column label="录入时间" width="200px" prop="ENTERDATE" sortable :formatter="dateFormat" >
+					</el-table-column>
+					<el-table-column label="版本" width="50px" prop="VERSION" sortable>
+					</el-table-column>
+				</el-table>	
+				<el-pagination background class="pull-right pt10"  @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+				</el-pagination>
+				<span slot="footer" class="dialog-footer">
+    			<el-button @click="dialogVisible = false">取 消</el-button>
+    			<el-button type="primary" @click="dailogconfirm()">确 定</el-button>
+  			</span>
 		</el-dialog>
 		<!--点击委托书编号弹出框 Begin-->
 	</div>
@@ -348,54 +378,22 @@
 				samplesForm:{
 					ITEM_LINEList:[]
 				},
-				CUSTOMER:{
-					CUSTOMER_QUALIFICATIONList:[]
-				},
 				//Tree树菜单数据
-				resourceData: [], //数组，我这里是通过接口获取数据，
-				resourceDialogisShow: false,
-				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
-				resourceProps: {
-					children: "children",
-					label: "fullname"
-				},
-				getCheckboxData: {},
+				gridData: [], //彈出框的數據
 				isEditing: '',
 				commentArr:{},//下拉加载
 				rules: { //定义需要校验数据的名称
-					VENDOR: [
-						{ required: true, message: '请填写委托单位编号', trigger: 'blur' }
-					],
-					V_NAME: [
-						{ required: true, message: '请填写委托单位名称', trigger: 'blur' }
-					],
-					PRODUCT_COMPANY: [
-						{ required: true, message: '请填写生产单位编号', trigger: 'blur' }
-					],
-					P_NAME: [
-						{ required: true, message: '请填写生产单位名称', trigger: 'blur' }
-					],
-					DESCRIPTION: [
-						{ required: true, message: '请填写样品名称', trigger: 'blur' }
-					],
-					TYPE: [
-						{ required: true, message: '请选择类别', trigger: 'change' }
-					],
-					QUATITY: [
-						{ required: true, message: '请填写数量', trigger: 'blur' }
-					],
-					ACCEPTDATE: [
-						{ required: true, message: '入库时间不能为空', trigger: 'blur' }
-					],
-					ACCEPT_DATE: [
-						{ required: true, message: '收样日期不能为空', trigger: 'blur' }
-					],
-					RECIP_DATE: [
-						{ required: true, message: '接样日期不能为空', trigger: 'blur' }
-					],
-					STATUSDATE: [
-						{ required: true, message: '状态日期不能为空', trigger: 'blur' }
-					],
+					VENDOR: [{ required: true, message: '请填写委托单位编号', trigger: 'blur' }],
+					V_NAME: [{ required: true, message: '请填写委托单位名称', trigger: 'blur' }],
+					PRODUCT_COMPANY: [{ required: true, message: '请填写生产单位编号', trigger: 'blur' }],
+					P_NAME: [{ required: true, message: '请填写生产单位名称', trigger: 'blur' }],
+					DESCRIPTION: [{ required: true, message: '请填写样品名称', trigger: 'blur' }],
+					TYPE: [{ required: true, message: '请选择类别', trigger: 'change' }],
+					QUATITY: [{ required: true, message: '请填写数量', trigger: 'blur' }],
+					ACCEPTDATE: [{ required: true, message: '入库时间不能为空', trigger: 'blur' }],
+					ACCEPT_DATE: [{ required: true, message: '收样日期不能为空', trigger: 'blur' }],
+					RECIP_DATE: [{ required: true, message: '接样日期不能为空', trigger: 'blur' }],
+					STATUSDATE: [{ required: true, message: '状态日期不能为空', trigger: 'blur' }],
 				},
 			};
 		},
@@ -433,36 +431,32 @@
             },
 			//获取委托书编号数据
 			getProxy() {
-				this.editSearch = 'dept';
-				var page = this.page.currentPage;
-				var limit = this.page.pageSize;
-				var type = "2";
-				var url = this.basic_url + '/api-user/depts/treeByType';
-				this.$axios.get(url, {
-					params: {
-						type: type
-					},
-				}).then((res) => {
-					this.resourceData = res.data;
-					this.dialogVisible = true;
+				var url = this.basic_url + '/api-apps/app/inspectPro';
+				this.$axios.get(url, {}).then((res) => {
+					this.gridData= res.data.data;
+					
 				});
+					this.dialogVisible = true;
 			},
-			//选择委托书编号节点
-			handleCheckChange(data, checked, indeterminate) {
-				this.getCheckboxData = data;
-			},
-			dailogconfirm() { //委托书编号小弹出框确认按钮事件
-				this.getCheckedNodes();
-				this.placetext = false;
+			
+			dailogconfirm(type) { //小弹出框确认按钮事件
 				this.dialogVisible = false;
-				if(this.editSearch == 'company') {
-					this.samplesForm.PROXYNUM = this.getCheckboxData.id;
-					this.samplesForm.V_NAME = this.getCheckboxData.fullname;
-				} else {
-					this.samplesForm.PROXYNUM = this.getCheckboxData.id;
-					this.samplesForm.V_NAME = this.getCheckboxData.fullname;
-				}
+				this.samplesForm.PROXYNUM=this.selval[0].PROXYNUM;
+					this.samplesForm.V_NAME=this.selval[0].V_NAME;
+					this.samplesForm.VENDOR=this.selval[0].VENDOR;
+					this.samplesForm.PROXYNUM=this.selval[0].PROXYNUM;
+					this.samplesForm.P_NAME=this.selval[0].P_NAME;
+					this.samplesForm.PRODUCT_COMPANY=this.selval[0].PRODUCT_UNIT;
+					this.samplesForm.DESCRIPTION=this.selval[0].ITEM_NAME;
+					this.samplesForm.PRODUCT_CODE=this.selval[0].ITEM_ID;//产品标识代码
+					this.samplesForm.MODEL=this.selval[0].ITEM_MODEL;
+					this.samplesForm.QUATITY=this.selval[0].ITEM_QUALITY;
 			},
+
+			SelChange(val) {
+				this.selval = val;
+			},
+		
 			//小弹出框关闭按钮事件
 			handleClose(done) {
 				this.$confirm('确认关闭？')
@@ -471,9 +465,7 @@
 					})
 					.catch(_ => {});
 			},
-			getCheckedNodes() { //小弹出框获取树菜单节点
-				this.checkedNodes = this.$refs.tree.getCheckedNodes()
-			},
+			
 			visible() {//添加内容时从父组件带过来的
 				this.samplesForm.ACCEPT_DATE =  '2018-10-10';//收样日期
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
@@ -540,7 +532,14 @@
 					})
 				})
 			},
-			
+			sizeChange(val) {
+				this.page.pageSize = val;
+				this.requestData();
+			},
+			currentChange(val) {
+				this.page.currentPage = val;
+				this.requestData();
+			},
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -558,22 +557,11 @@
 					console.log('请求失败');
 				})
 			},
-//			addfield(){
-//				this.index = this.index + 1;
-//				var obj = {
-//                  STEP:this.index,
-//                  CERTIFICATE_NUM:'',
-//					CERTIFICATE_NAME:'',
-//					ACTIVE_DATE:'',
-//					STATUS:'',
-//					MEMO:'',
-//					isEditing: true
-//              };
-//              this.samplesForm.ITEM_LINEList.push(obj);
-//			},
+			SelChange(val) {
+				this.selval = val;
+			},
 			addfield() { 
 				//插入行到文件文档Table中
-				console.log(123);
 				var obj = {
                     ITEMNUM:'',
                     ITEM_STEP:'',

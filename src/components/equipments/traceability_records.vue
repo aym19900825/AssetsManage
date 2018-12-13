@@ -67,15 +67,29 @@
 						<el-table :data="userList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 							</el-table-column>
-							<el-table-column label="组织机构代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('组织机构代码')!=-1">
+							<el-table-column label="溯源记录编号" width="200" sortable prop="RECORDNUM" v-if="this.checkedName.indexOf('溯源记录编号')!=-1">
 							</el-table-column>
-							<el-table-column label="单位名称" width="200" sortable prop="NAME" v-if="this.checkedName.indexOf('单位名称')!=-1">
+							<el-table-column label="记录描述" width="200" sortable prop="DESCRIPTION" v-if="this.checkedName.indexOf('记录描述')!=-1">
 							</el-table-column>
-							<el-table-column label="联系电话" sortable prop="PHONE" v-if="this.checkedName.indexOf('联系电话')!=-1">
+							<el-table-column label="设备编号" sortable prop="ASSETNUM" v-if="this.checkedName.indexOf('设备编号')!=-1">
 							</el-table-column>
-							<el-table-column label="联系地址" sortable prop="CONTACT_ADDRESS" v-if="this.checkedName.indexOf('联系地址')!=-1">
+							<el-table-column label="设备名称" sortable prop="A_NAME" v-if="this.checkedName.indexOf('设备名称')!=-1">
 							</el-table-column>						
-							<el-table-column label="信息状态" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
+							<el-table-column label="规格型号" sortable prop="MODEL" :formatter="judge" v-if="this.checkedName.indexOf('规格型号')!=-1">
+							</el-table-column>
+							<el-table-column label="溯源方式" sortable prop="PM_MODEL" :formatter="judge" v-if="this.checkedName.indexOf('溯源方式')!=-1">
+							</el-table-column>
+							<el-table-column label="溯源日期" sortable prop="PM_DATE" :formatter="judge" v-if="this.checkedName.indexOf('溯源日期')!=-1">
+							</el-table-column>
+							<el-table-column label="确认结论" sortable prop="R_CONCLUSION" :formatter="judge" v-if="this.checkedName.indexOf('确认结论')!=-1">
+							</el-table-column>
+							<el-table-column label="证书编号" sortable prop="C_NUM" :formatter="judge" v-if="this.checkedName.indexOf('证书编号')!=-1">
+							</el-table-column>
+							<el-table-column label="设备性能指标要求" sortable prop="A_KPI" :formatter="judge" v-if="this.checkedName.indexOf('设备性能指标要求')!=-1">
+							</el-table-column>
+							<el-table-column label="指标确定来源" sortable prop="SORUCE" :formatter="judge" v-if="this.checkedName.indexOf('指标确定来源')!=-1">
+							</el-table-column>
+							<el-table-column label="确认内容" sortable prop="R_DESC" :formatter="judge" v-if="this.checkedName.indexOf('确认内容')!=-1">
 							</el-table-column>
 						</el-table>
 						<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
@@ -128,33 +142,67 @@
 			        deptId: ''
 		        },
 				checkedName: [
-					'组织机构代码',
-					'单位名称',
-					'性别',
-					'联系电话',
-					'联系地址',
-					'信息状态'
+					'溯源记录编号',
+					'记录描述',
+					'设备编号',
+					'设备名称',
+					'规格型号',
+					'溯源方式',
+					'溯源日期',	
+					'确认结论',
+					'证书编号',
+					'设备性能指标要求',
+					'指标确定来源',
+					'确认内容'
 				],
 				tableHeader: [
 					{
-						label: '组织机构代码',
-						prop: 'username'
+						label: '溯源记录编号',
+						prop: 'RECORDNUM'
 					},
 					{
-						label: '单位名称',
-						prop: 'nickname'
+						label: '记录描述',
+						prop: 'DESCRIPTION'
 					},
 					{
-						label: '联系电话',
-						prop: 'telephone'
+						label: '设备编号',
+						prop: 'ASSETNUM'
 					},
 					{
-						label: '联系地址',
-						prop: 'deptName'
+						label: '设备名称',
+						prop: 'A_NAME'
 					},
 					{
-						label: '信息状态',
-						prop: 'enabled'
+						label: '规格型号',
+						prop: 'MODEL'
+					},
+					{
+						label: '溯源方式',
+						prop: 'PM_MODEL'
+					},
+					{
+						label: '溯源日期',
+						prop: 'PM_DATE'
+					},
+					{
+						label: '确认结论',
+						prop: 'R_CONCLUSION'
+					},
+					{
+						label: '证书编号',
+						prop: 'C_NUM'
+					},
+					{
+						label: '设备性能指标要求',
+						prop: 'A_KPI'
+					},
+					{
+						label: '指标确定来源',
+						prop: 'SORUCE'
+					},
+					{
+						label: '确认内容',
+						prop: 'R_DESC'
 					}
 				],
 				leftNavs: [//leftNavs左侧菜单数据
@@ -260,7 +308,6 @@
 			},
 			//添加用戶
 			openAddMgr() {
-//				this.$refs.child.resetNew();
 				this.$refs.child.visible();
 			},
 			//修改用戶
@@ -362,14 +409,14 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					nickname: this.searchList.nickname,
-					enabled: this.searchList.enabled,
-					searchKey: 'createTime',
-					searchValue: this.searchList.createTime,
-					companyId: this.companyId,
-					deptId: this.deptId
+					// nickname: this.searchList.nickname,
+					// enabled: this.searchList.enabled,
+					// searchKey: 'createTime',
+					// searchValue: this.searchList.createTime,
+					// companyId: this.companyId,
+					// deptId: this.deptId
 				}
-				var url = this.basic_url + '/api-user/users';
+				var url = this.basic_url + '/api-apps/app/pmRecord';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {

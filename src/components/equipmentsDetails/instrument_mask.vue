@@ -534,7 +534,7 @@
 					'ENTERDATE': '',	
 					'DEPARTMENT': '',	
 					'MEMO': '',	
-					'STATUS': '',
+					'STATUS': '1',
 					'SYNCHRONIZATION_TIME': '',
 				},
 				pmRecordList: []
@@ -638,7 +638,7 @@
 					'ENTERDATE': '',	
 					'DEPARTMENT': '',	
 					'MEMO': '',	
-					'STATUS': '',
+					'STATUS': '1',
 					'SYNCHRONIZATION_TIME': '',
 				};
 				this.$refs['dataInfo'].resetFields();

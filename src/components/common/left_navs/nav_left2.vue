@@ -25,11 +25,12 @@ export default {
 			ismin:true,
 			fullHeight: document.documentElement.clientHeight - 100+'px',//获取浏览器高度
 			leftNavs: [//leftNavs左侧菜单数据
+				// {
+				// 	navicon: 'icon-distribution',
+				// 	navtitle: '客户管理',
+				// 	navherf: '/customer_management'
+				// },
 				{
-					navicon: 'icon-distribution',
-					navtitle: '客户管理',
-					navherf: '/customer_management'
-				}, {
 					navicon: 'icon-file-text',
 					navtitle: '产品类别',
 					navherf: '/products_category'
@@ -49,10 +50,6 @@ export default {
 					navicon: 'icon-file-text',
 					navtitle: '检验/检测方法',
 					navherf: '/testing_methods'
-				}, {
-					navicon: 'icon-file-text',
-					navtitle: '自动编号设置',
-					navherf: '/number_settings'
 				}
 			],
         selectedNav: {}

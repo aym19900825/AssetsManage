@@ -534,7 +534,7 @@
 								});
 								//重新加载数据
 								this.$emit('request');
-								this.$refs["VERSION"].resetFields();
+								this.$emit('reset');
 							}
 						}).catch((err) => {
 							this.$message({

@@ -488,12 +488,12 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="标准费用" prop="CONTRACTCOST">
-												<el-input v-model="dataInfo.CONTRACTCOST" id="stacost" @blur="staPrice"></el-input>
+												<el-input v-model="dataInfo.CONTRACTCOST" id="stacost" :disabled="true" @blur="staPrice"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="实收费用" prop="ACTUALCOST">
-												<el-input v-model="dataInfo.ACTUALCOST" id="actualcost" @blur="actualPrice"></el-input>
+												<el-input v-model="dataInfo.ACTUALCOST" id="actualcost" :disabled="true" @blur="actualPrice"></el-input>
 											</el-form-item>
 										</el-col>
 
@@ -930,7 +930,7 @@
 							});
 							//重新加载数据
 							this.$emit('request');
-							this.$refs["dataInfo"].resetFields();
+							this.reset();
 						}
 					}).catch((err) => {
 						this.$message({

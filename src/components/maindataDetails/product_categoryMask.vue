@@ -172,6 +172,25 @@
 			};
 		},
 		methods: {
+			//清空
+			reset(){
+				this.CATEGORY = {
+					ID:'',
+					NUM:'',
+					TYPE:'',
+					STATUS:'活动',
+					VERSION:'1',
+					DEPARTMENT:'',
+					ENTERBY:'',
+					ENTERDATE:'',
+					CHANGEBY:'',
+					CHANGEDATE:''
+				};
+				 if (this.$refs['CATEGORY']!==undefined) {
+     				this.$refs['CATEGORY'].resetFields();	
+ 					}
+						
+			},
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selUser = val;
@@ -194,6 +213,7 @@
 						type: 'error'
 					});
 				});
+				this.reset();
 				this.statusshow1 = true;
 				this.statusshow2 = false;
 				this.addtitle = true;
@@ -203,7 +223,6 @@
 			},
 			// 这里是修改
 			detail() {
-				console.log(this.CATEGORY.STATUS);
 				this.modify = true;
 				this.addtitle = false;
 				this.modifytitle = true;
@@ -236,8 +255,7 @@
 							});
 							//重新加载数据
 							this.show = false;
-							this.$emit('request');
-							this.$refs["CATEGORY"].resetFields();
+							this.reset();
 						}
 					}).catch((err) => {
 						this.$message({
@@ -283,13 +301,14 @@
 			},
 			// 保存users/saveOrUpdate
 			save(CATEGORY) {
+				var _this = this;
 				this.$refs[CATEGORY].validate((valid) => {
 		          if (valid) {
 		          	//console.log(this.CATEGORY.STATUS);
-		          	this.CATEGORY.STATUS=((this.CATEGORY.STATUS=="1"||this.CATEGORY.STATUS=='活动') ? '1' : '0');
+		          	_this.CATEGORY.STATUS=((_this.CATEGORY.STATUS=="1"||_this.CATEGORY.STATUS=='活动') ? '1' : '0');
 		          	//console.log(this.CATEGORY);
 					var url = this.basic_url + '/api-apps/app/productType/saveOrUpdate';		
-					this.$axios.post(url,this.CATEGORY).then((res) => {
+					this.$axios.post(url,_this.CATEGORY).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						console.log(this.CATEGORY);
 						if(res.data.resp_code == 0) {
@@ -299,7 +318,7 @@
 							});
 							//重新加载数据
 							this.$emit('reset');
-							 this.$emit('request');
+							 this.reset();
 						}
 					}).catch((err) => {
 						this.$message({
@@ -321,7 +340,6 @@
 			//保存并添加
 			saveAndSubmit(CATEGORY){
 				this.save(CATEGORY);
-				this.$emit('reset');
 				this.show = true;
 				
 			},

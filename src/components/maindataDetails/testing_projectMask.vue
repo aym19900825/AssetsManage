@@ -283,6 +283,26 @@
 			};
 		},
 		methods: {
+			reset(){
+				this.testing_projectForm = { //数据库列表
+					VERSION: 1,
+					STATUS: '活动',
+					P_NUM: '',
+					P_NAME: '',
+					QUANTITY: '',
+					QUALIFICATION: '',
+					FIELD: '',
+					CHILD_FIELD: '',
+					DOCLINKS_NUM: '',
+					DEPT: '',
+					ENTERBY:'',
+					ENTERDATE: '',
+					CHANGEBY: '',
+					CHANGEDATE:'',	
+				};
+				this.$refs['testing_projectForm'].resetFields();
+				this.show = false;
+			},
 			toNum(str) {
 				return str.replace(/\,|\￥/g, "");
 			},
@@ -386,9 +406,8 @@
 								type: 'success'
 							});
 							//重新加载数据
-							this.show = false;
 							this.$emit('request');
-							this.$refs["testing_projectForm"].resetFields();
+							this.reset();
 						}
 					}).catch((err) => {
 						this.$message({
@@ -408,9 +427,7 @@
 			close() {
 				this.show = false;
 			},
-			reset() {
-				this.show = false;
-			},
+			
 			toggle(e) {
 				if(this.isok1 == true) {
 					this.maxDialog();
@@ -437,13 +454,13 @@
 			},
 			// 保存users/saveOrUpdate
 			save(testing_projectForm) {
+				var _this = this;
 				this.$refs[testing_projectForm].validate((valid) => {
-					this.testing_projectForm.QUANTITY = this.initcost;
+					this.testing_projectForm.QUANTITY = _this.initcost;
 					if (valid) {
-						this.testing_projectForm.STATUS=((this.testing_projectForm.STATUS=="1"||this.testing_projectForm.STATUS=='活动') ? '1' : '0');
+						this.testing_projectForm.STATUS=((_this.testing_projectForm.STATUS=="1"||this.testing_projectForm.STATUS=='活动') ? '1' : '0');
 						var url = this.basic_url + '/api-apps/app/inspectionPro/saveOrUpdate';
-						this.testing_projectForm.VERSION = this.testing_projectForm.VERSION + 1;//修改时版本+1
-						this.$axios.post(url, this.testing_projectForm).then((res) => {
+						this.$axios.post(url, _this.testing_projectForm).then((res) => {
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',
@@ -452,7 +469,7 @@
 							}
 							this.$emit('request');
 							//清空表单验证
-                        this.$refs["testing_projectForm"].resetFields();
+ 							this.reset();
 						}).catch((err) => {
 							this.$message({
 								message: '网络错误，请重试',
@@ -474,8 +491,6 @@
 			saveAndSubmit(testing_projectForm){
 				this.save(testing_projectForm);
 				this.show = true;
-				this.$emit('reset');
-				this.$refs["testing_projectForm"].resetFields();
 				
 				
 			},

@@ -73,12 +73,12 @@
 										<template slot="prepend">版本</template>
 									</el-input>
 								</el-col>
-								<el-col :span="3">
+								<!-- <el-col :span="3">
 									<el-select v-model="searchList.STATUS" placeholder="请选择信息状态">
 										<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 										</el-option>
 									</el-select>
-								</el-col>
+								</el-col> -->
 								<el-col :span="2">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
 								</el-col>

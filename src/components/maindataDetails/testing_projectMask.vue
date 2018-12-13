@@ -50,7 +50,8 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="单价(元)" prop="QUANTITY">
-											<el-input-number type="number" :precision="2" v-model.number="testing_projectForm.QUANTITY" :step="5" :max="100000" style="width: 100%;"></el-input-number>
+											<!-- <el-input-number type="number" :precision="2" v-model.number="testing_projectForm.QUANTITY" :step="5" :max="100000" style="width: 100%;"></el-input-number> -->
+											<el-input v-model="testing_projectForm.QUANTITY" id="cost" @blur="toPrice"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -278,9 +279,22 @@
 					children: "subDepts",
 					label: "simplename"
 				},
+				initcost:''
 			};
 		},
 		methods: {
+			toNum(str) {
+				return str.replace(/\,|\￥/g, "");
+			},
+			//金额两位小数点千位分隔符，四舍五入
+			toPrice(){
+				var money = document.getElementById("cost").value;
+				this.initcost = money;
+				var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
+				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
+				// this.dataInfo.CHECTCOST="￥" + num.join(".");
+				this.testing_projectForm.QUANTITY = num.join(".");
+			},
 			getCompany() {//文档查询接口，暂无通，待修改
 				this.editSearch = 'DOCLINKS';
 				var url = this.basic_url + '/api-user/depts/type';//文件接口不对
@@ -424,6 +438,7 @@
 			// 保存users/saveOrUpdate
 			save(testing_projectForm) {
 				this.$refs[testing_projectForm].validate((valid) => {
+					this.testing_projectForm.QUANTITY = this.initcost;
 					if (valid) {
 						this.testing_projectForm.STATUS=((this.testing_projectForm.STATUS=="1"||this.testing_projectForm.STATUS=='活动') ? '1' : '0');
 						var url = this.basic_url + '/api-apps/app/inspectionPro/saveOrUpdate';

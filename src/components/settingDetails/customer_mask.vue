@@ -352,7 +352,6 @@
 			};
 		},
 		methods: {
-			
 			iconOperation(row, column, cell, event){
 		        if(column.property ==="iconOperation"){
 		          row.isEditing = !row.isEditing
@@ -416,7 +415,6 @@
 			//点击添加，修改按钮显示弹窗
 			visible() {
 				this.reset();
-				
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.statusshow1 = true;
@@ -461,7 +459,7 @@
 				});
 				this.$axios.get(this.basic_url + '/api-apps/app/customer/' + dataid, {}).then((res) => {
 					this.CUSTOMER = res.data;
-//					console.log(this.CUSTOMER.STATUS==1);
+					//console.log(this.CUSTOMER.STATUS==1);
 					this.CUSTOMER.STATUS=this.CUSTOMER.STATUS=="1"? '活动' : '不活动';
 					this.show = true;
 				}).catch((err) => {
@@ -528,7 +526,7 @@
 								message: '保存成功',
 								type: 'success'
 							});
-//							//重新加载数据
+							//重新加载数据
 							this.$emit('request');
 							this.$refs["CUSTOMER"].resetFields();
 						}
@@ -538,10 +536,10 @@
 							type: 'error'
 						});
 					});
-			          } else {
-			            return false;
-			          }
-			        });
+		          } else {
+		            return false;
+		          }
+		        });
 			},
 			saveAndUpdate(CUSTOMER){
 				this.save(CUSTOMER);
@@ -561,7 +559,6 @@
 			}
 		},
 		mounted() {
-			
 			this.getsys_depttype();//页面打开加载-机构类型
 		}
 	}

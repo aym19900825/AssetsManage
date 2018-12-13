@@ -141,7 +141,7 @@ export default {
 		applistdata: [//APP应用数据
 			{
 				navicon: 'icon-data3',
-				navtitle: '主数据',
+				navtitle: '业务基础数据',
 				navherf: '/customer_management'
 			}, {
 				navicon: 'icon-plan',

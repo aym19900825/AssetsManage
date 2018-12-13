@@ -101,8 +101,8 @@
 							</el-table-column>
 							<el-table-column label="人员资质" width="180" sortable prop="QUALIFICATION" v-if="this.checkedName.indexOf('人员资质')!=-1">
 							</el-table-column>
-							<el-table-column label="信息状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
-							</el-table-column>
+							<!--<el-table-column label="信息状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
+							</el-table-column>-->
 							<!--<el-table-column label="文档" width="120" sortable prop="DOCLINKP_NAME" v-if="this.checkedName.indexOf('文档')!=-1">-->
 							<el-table-column label="领域" width="120" sortable prop="FIELD" v-if="this.checkedName.indexOf('领域')!=-1">
 							</el-table-column>
@@ -418,9 +418,7 @@
 			Printing() {
 				
 			},
-			judge(data) {
-				return data.STATUS=1? '活动' : '不活动'
-			},
+			
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];

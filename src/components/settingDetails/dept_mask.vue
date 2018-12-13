@@ -671,9 +671,9 @@
 								message: '保存成功',
 								type: 'success'
 							});
-//							this.show = false;
 //							//重新加载数据
-//							this.$emit('request')
+							this.$emit('request');
+							this.$refs["adddeptForm"].resetFields();//清空验证
 						}
 					}).catch((err) => {
 						this.$message({

@@ -189,9 +189,8 @@
 					<div class="content-footer">
 							<el-button type="primary" @click="saveAndUpdate('testingForm')">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit('testingForm')">保存并添加</el-button>
+							<el-button v-if="modify" type="primary" @click="modifyversion('testingForm')">修订</el-button>
 							<el-button @click="close">取消</el-button>
-							<el-button v-if="modify" type="primary" @click="submitForm('testingForm')">修订</el-button>
-							
 					</div>
 				</el-form>
 			</div>
@@ -285,10 +284,6 @@
 						type:'error'
 					})
 				})
-				//清空表单验证
-				if (this.$refs["testingForm"] !== undefined) {
-                    this.$refs["testingForm"].resetFields();
-              }
 				this.addtitle = true;
             	this.modifytitle = false;
             	this.modify = false;
@@ -318,19 +313,35 @@
 				}
 			},
 			
-			modifyversion (row) {//点击修改后给当前创建人和创建日期赋值
-				 this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					row.CHANGEBY=res.data.nickname;
-					var date=new Date();
-					row.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
-					//console.log(row);
-					
-				}).catch((err)=>{
-					this.$message({
-						message:'网络错误，请重试',
-						type:'error'
-					})
-				})
+			modifyversion (testingForm) {//点击修改后给当前创建人和创建日期赋值
+				this.$refs[testingForm].validate((valid) => {
+		          if (valid) {
+					var url = this.basic_url + '/api-apps/app/inspectionMet/operate/upgraded';
+					this.$axios.post(url,this.testingForm).then((res) => {
+						//resp_code == 0是后台返回的请求成功的信息
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '保存成功',
+								type: 'success'
+							});
+							//重新加载数据
+							this.show = false;
+							this.$emit('request');
+							this.$refs["testingForm"].resetFields();
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+			          } else {
+			            this.$message({
+							message: '未填写完整，请填写',
+							type: 'warning'
+						});
+			          }
+			   });
 			},
 
 			loadMore () {//表格滚动加载
@@ -523,6 +534,7 @@
 								});
 								//重新加载数据
 								this.$emit('request');
+								this.$refs["VERSION"].resetFields();
 							}
 						}).catch((err) => {
 							this.$message({

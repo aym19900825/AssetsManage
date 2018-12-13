@@ -66,7 +66,9 @@
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="人员资质" prop="QUALIFICATION">
-											<el-input v-model="testing_projectForm.QUALIFICATION"></el-input>
+											<el-input v-model="testing_projectForm.QUALIFICATION">
+												<el-button slot="append" icon="el-icon-search" @click="getpepole"></el-button>
+											</el-input>
 										</el-form-item> 
 									</el-col>
 									<el-col :span="8">
@@ -115,22 +117,33 @@
 					<div class="el-dialog__footer">
 							<el-button type="primary" @click="saveAndUpdate('testing_projectForm')">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit('testing_projectForm')">保存并添加</el-button>
+							<el-button v-if="modify" type="primary"@click="modifyversion('testing_projectForm')">修订</el-button>
 							<el-button @click="close">取消</el-button>
-						    <el-button v-if="modify" type="primary"@click="submitForm('testing_projectForm')">修订</el-button>
 					</div>
 				</el-form>
 			</div>
 		</div>
-		<!--弹出框内容显示 Begin-->
-		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps">
-			</el-tree>
+		<el-dialog :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
+			<el-table :data="gridData" @selection-change="SelChange">
+				<el-table-column type="selection" width="55" fixed>
+				</el-table-column>
+				<el-table-column label="用户名" sortable width="100px" prop="user">
+				</el-table-column>
+				<el-table-column label="证书编号" sortable width="200px" prop="c_num">
+				</el-table-column>
+				<el-table-column label="证书名称" sortable width="100px" prop="c_name">
+				</el-table-column>
+				<el-table-column label="资质有效期" sortable width="200px" prop="c_date">
+				</el-table-column>
+				
+			</el-table>
+			<el-pagination background class="pull-right" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+			</el-pagination>
 			<span slot="footer" class="dialog-footer">
-				<el-button @click="dialogVisible = false">取 消</el-button>
-				<el-button type="primary" @click="confirms();" >确 定</el-button>
-		    </span>
+    			<el-button @click="dialogVisible = false">取 消</el-button>
+    			<el-button type="primary" @click="dailogconfirm()">确 定</el-button>
+  			</span>
 		</el-dialog>
-		<!--弹出框内容显示 End-->
 	</div>
 </template>
 
@@ -256,6 +269,8 @@
 				},
 				//testing_projectForm:{},//检验/检测项目数据组
 				//tree
+				gridData:[],
+				selval:[],
 				resourceData: [], //数组，我这里是通过接口获取数据
 				resourceDialogisShow: false,
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
@@ -286,6 +301,17 @@
 					this.testing_projectForm.DOCLINKS_NUM = this.checkedNodes[0].simplename;
 				}
 			},
+			SelChange(val) {
+				this.selval = val;
+			},
+			sizeChange(val) {
+				this.page.pageSize = val;
+				this.requestData();
+			},
+			currentChange(val) {
+				this.page.currentPage = val;
+				this.requestData();
+			},
 			handleClose(done) {//确认框关闭
 				this.$confirm('确认关闭？')
 					.then(_ => {
@@ -306,10 +332,7 @@
 						type:'error'
 					})
 				});
-				//清空表单验证
-				if (this.$refs["testing_projectForm"] !== undefined) {
-                    this.$refs["testing_projectForm"].resetFields();
-               }
+				
 				this.statusshow1 = true;
 				this.statusshow2 = false;
 				this.addtitle = true;
@@ -337,15 +360,39 @@
 				this.show = true;
 				
 			},
-			
+			modifyversion(testing_projectForm){
+				this.$refs[testing_projectForm].validate((valid) => {
+		          if (valid) {
+					var url = this.basic_url + '/api-apps/app/inspectionPro/operate/upgraded';
+					this.$axios.post(url,this.testing_projectForm).then((res) => {
+						//resp_code == 0是后台返回的请求成功的信息
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '保存成功',
+								type: 'success'
+							});
+							//重新加载数据
+							this.show = false;
+							this.$emit('request');
+							this.$refs["testing_projectForm"].resetFields();
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+			          } else {
+			            this.$message({
+							message: '未填写完整，请填写',
+							type: 'warning'
+						});
+			          }
+			   });
+			},
 			//点击关闭按钮
 			close() {
 				this.show = false;
-			},
-			//点击取消按钮
-			cancelForm() {
-				this.show = false;
-				this.reset();
 			},
 			reset() {
 				this.show = false;
@@ -389,6 +436,8 @@
 								});
 							}
 							this.$emit('request');
+							//清空表单验证
+                        this.$refs["testing_projectForm"].resetFields();
 						}).catch((err) => {
 							this.$message({
 								message: '网络错误，请重试',
@@ -409,12 +458,33 @@
 			//保存并添加
 			saveAndSubmit(testing_projectForm){
 				this.save(testing_projectForm);
-//				this.$emit('request');
 				this.show = true;
 				this.$emit('reset');
 				this.$refs["testing_projectForm"].resetFields();
 				
 				
+			},
+			getpepole() {
+				// type  1 這是負責人  2 這個事接收人
+//				var params = {
+//					page: this.page.currentPage,
+//					limit: this.page.pageSize,
+//				}
+				var url = this.basic_url + '/api-user/users/qualifications';
+				this.$axios.get(url, {
+//					params: params
+				}).then((res) => {
+					console.log(res);
+					this.page.totalCount = res.data.count;
+					
+					this.gridData = res.data.data;
+					this.dialogVisible = true;
+//					this.type = type;
+				});
+			},
+			dailogconfirm() { //小弹出框确认按钮事件
+				this.dialogVisible = false;
+				this.testing_projectForm.QUALIFICATION=this.selval[0].c_name;
 			},
 
 			handleClose(done) {

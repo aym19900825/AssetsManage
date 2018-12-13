@@ -116,8 +116,8 @@
 								</el-table-column>
 								<el-table-column label="英文名称" width="220" sortable prop="S_ENGNAME" v-if="this.checkedName.indexOf('英文名称')!=-1">
 								</el-table-column>
-								<el-table-column label="信息状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
-								</el-table-column>
+								<!--<el-table-column label="信息状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
+								</el-table-column>-->
 								<el-table-column label="发布时间" width="160" sortable prop="RELEASETIME" :formatter="dateFormat" v-if="this.checkedName.indexOf('发布时间')!=-1">
 								</el-table-column>
 								<el-table-column label="启用时间" width="160" sortable prop="STARTETIME" :formatter="dateFormat" v-if="this.checkedName.indexOf('启用时间')!=-1">

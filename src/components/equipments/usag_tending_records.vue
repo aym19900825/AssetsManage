@@ -192,12 +192,6 @@
 				aaaData:[],
 			}
 		},
-
-		mounted(){
-			
-
-			
-		},
 		methods: {
 			tableControle(data){
 				this.checkedName = data;

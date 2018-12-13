@@ -176,11 +176,10 @@
 						</el-collapse>
 					</div>
 					<div class="el-dialog__footer">
-						<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
+							<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit('dataInfo')">保存并添加</el-button>
+							<el-button v-if="modify" type="primary" @click="modifyversion('dataInfo')">修订</el-button>
 							<el-button @click="close">取消</el-button>
-							<el-button v-if="modify" type="primary" @click="modifyversion">修订</el-button>
-							<el-button type="primary" class="btn-primarys" v-if="modify" @click='modifyversion'>修订</el-button>
 					</div>
 				</el-form>
 			</div>
@@ -322,8 +321,35 @@
 			SelChange(val) {
 				this.selUser = val;
 			},
-			modifyversion(){
-				this.dataInfo.VERSION = this.dataInfo.VERSION + 1;
+			modifyversion(dataInfo){
+				this.$refs[dataInfo].validate((valid) => {
+		          if (valid) {
+					var url = this.basic_url + '/api-apps/app/inspectionSta/operate/upgraded';
+					this.$axios.post(url,this.dataInfo).then((res) => {
+						//resp_code == 0是后台返回的请求成功的信息
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '保存成功',
+								type: 'success'
+							});
+							//重新加载数据
+							this.show = false;
+							this.$emit('request');
+							this.$refs["dataInfo"].resetFields();
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+			          } else {
+			            this.$message({
+							message: '未填写完整，请填写',
+							type: 'warning'
+						});
+			          }
+			   });
 			},
 			addfield() { //添加行信息
 				var obj = {
@@ -419,7 +445,6 @@
 						this.dataInfo.RELEASETIME =  this.$moment(this.dataInfo.RELEASETIME).format("YYYY-MM-DD HH:mm:ss");
 						this.dataInfo.STARTETIME = this.$moment(this.dataInfo.STARTETIME).format("YYYY-MM-DD HH:mm:ss");
 					 if (valid) {
-					 	console.log(111);
 					this.dataInfo.STATUS=((this.dataInfo.STATUS=="1"||this.dataInfo.STATUS=='活动') ? '1' : '0');
 //					this.dataInfo.STATUS=this.dataInfo.STATUS=="活动" ? '1' : '0';
 					var url = this.basic_url + '/api-apps/app/inspectionSta/saveOrUpdate';
@@ -430,7 +455,9 @@
 								type: 'success'
 							});
 							//重新加载数据
-							this.$emit('request')
+							this.$emit('request');
+							//清空表单验证
+                    		this.$refs["testing_projectForm"].resetFields();
 						}
 					}).catch((err) => {
 						this.$message({

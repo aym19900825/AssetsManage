@@ -687,7 +687,6 @@
 					traings: [],
 					qualifications: [],
 				};
-				this.$refs["user"].resetFields();//清空表单验证
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					
 					this.user.createby=res.data.id;
@@ -817,6 +816,7 @@
 									type: 'success',
 								});						
 								this.$emit('request');
+								this.$refs["user"].resetFields();//清空表单验证
 							}
 						}).catch((err) => {
 							this.$message({

@@ -20,11 +20,11 @@
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基础信息" name="1">
 								<el-row :gutter="20" class="pb10">
-									<el-col :span="4" class="pull-right">
+									<!--<el-col :span="4" class="pull-right">
 										<el-input v-model="samplesForm.STATUS" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
-									</el-col>
+									</el-col>-->
 									<el-col :span="4" class="pull-right">
 										<el-input type="number" v-model.number="samplesForm.STATE" :disabled="true">
 											<template slot="prepend">状态</template>
@@ -213,93 +213,87 @@
 								</el-row>
 
 							</el-collapse-item>
-							<el-collapse-item title="样品子表" name="2">
-								<!-- 字段列表 Begin-->
+							<el-collapse-item title="样品" name="2">								
 								<div class="table-func">
-									<el-button type="primary" size="mini" round>
-										<i class="icon-upload-cloud"></i>
-										<font>上传</font>
-									</el-button>
-									<el-button type="success" size="mini" round @click="addfield_doclinks">
+									<el-button type="success" size="mini" round @click="addfield">
 										<i class="icon-add"></i>
-										<font>新建</font>
+										<font>新建行</font>
 									</el-button>
 								</div>
-								<!-- 字段列表 End -->
+								<el-form :label-position="labelPosition" :rules="rules">
+								<el-table :data="samplesForm.ITEM_LINEList" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'samplesForm.ITEM_LINEList', order: 'descending'}">
+								    <el-table-column prop="iconOperation" fixed width="50px">
+								      <template slot-scope="scope">
+								      	<i class="el-icon-check" v-show="scope.row.isEditing">
+								      	</i>
+								      	<i class="el-icon-edit" v-show="!scope.row.isEditing">
+								      	</i>
+								      </template>
+								    </el-table-column>
 
-								<!-- 样品子表Table-List Begin-->
-								<el-form status-icon inline-message>
-									  <!-- 表格 Begin-->
-									  <el-table :data="samplesForm.ITEM_LINEList" row-key="ID" border stripe height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'samplesForm.ITEM_LINEList', order: 'descending'}" >
-										<el-table-column prop="iconOperation" fixed="left" label="操作" width="80">
-									      <template slot-scope="scope">
-									        <el-button type="text" id="Edit" size="medium" @click="saveRow(scope.row)" v-if="scope.row.isEditing">
-									        	<i class="icon-check" title="保存"></i>
-											</el-button>
-											<el-button type="text" size="medium" @click="modifyversion(scope.row)" v-else="v-else">
-									        	<i class="icon-edit" title="修改"></i>
-											</el-button>
-									        <el-button @click="deleteRow(scope.$index, samplesForm.ITEM_LINEList)" type="text" size="medium" title="删除" >
-									          <i class="icon-trash red"></i>
-									        </el-button>
-									      </template>
-									    </el-table-column>
+								    <el-table-column label="样品编号" sortable width="120px" prop="ITEMNUM">
+								      <template slot-scope="scope">
+								      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.ITEMNUM"></el-input>
+								      	<span v-show="!scope.row.isEditing" >{{scope.row.ITEMNUM}}</span>
+								      </template>
+								    </el-table-column>
 
-									    <el-table-column label="样品编号" sortable width="140" prop="ITEMNUM">
-									      <template slot-scope="scope">
-									        <el-form-item :prop="'inspectionList.'+scope.$index + '.ITEMNUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-									        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ITEMNUM" placeholder="自动获取" disabled></el-input><span v-else="v-else">{{scope.row.ITEMNUM}}</span>
-											</el-form-item>
-									      </template>
-									    </el-table-column>
-										
-										<el-table-column label="样品序号" prop="ITEM_STEP" sortable width="120">
-									      <template slot-scope="scope">
-									        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ITEM_STEP" placeholder="自动获取" disabled></el-input><span v-else="v-else">{{scope.row.ITEM_STEP}}</span>
-									      </template>
-									    </el-table-column>
+								    <el-table-column label="样品序号" sortable width="120px" prop="ITEM_STEP">
+								      <template slot-scope="scope">
+								      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.CERTIFICATE_NUM" placeholder="请输入内容"></el-input>
+								      	<span v-show="!scope.row.isEditing">{{scope.row.ITEM_STEP}}</span>
+								      </template>
+								    </el-table-column>
 
-									    <el-table-column label="单件码" prop="SN" sortable>
-									      <template slot-scope="scope">
-									        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.SN"  placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.SN}}</span>
-									      </template>
-									    </el-table-column>
+									<el-table-column prop="SN" label="单件码" sortable width="120px">
+								      <template slot-scope="scope">
+								         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.SN" placeholder="请输入内容"></el-input>
+								         <span v-show="!scope.row.isEditing">{{scope.row.SN}}</span>
+								      </template>
+								    </el-table-column>
 
-										<el-table-column label="样品状态" prop="STATE" sortable width="140">
-									      <template slot-scope="scope">
-									      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATE" placeholder="自动获取" disabled></el-input><span v-else="v-else">{{scope.row.STATE}}</span>
-									      </template>
-									    </el-table-column>
+									<el-table-column prop="STATE" label="样品状态" sortable width="120px">
+								      <template slot-scope="scope">
+								        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STATE" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.STATUS}}</span>
+								      </template>
+								    </el-table-column>
+								    
+								    <el-table-column prop="ENTERBY" label="录入人" sortable width="120px">
+								      <template slot-scope="scope">
+								        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.ENTERBY" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.ENTERBY}}</span>
+								      </template>
+								    </el-table-column>
+								
 
-									     <el-table-column label="录入人" prop="ENTERBY" sortable width="120">
-									      <template slot-scope="scope">
-									      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ENTERBY" placeholder="自动获取" disabled></el-input><span v-else="v-else">{{scope.row.ENTERBY}}</span>
-									      </template>
-									    </el-table-column>
-
-									    <el-table-column label="录入时间" prop="ENTERDATE" sortable width="160">
-									      <template slot-scope="scope">
-									      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ENTERDATE" placeholder="自动获取" disabled></el-input><span v-else="v-else">{{scope.row.ENTERDATE}}</span>
-									      </template>
-									    </el-table-column>
-
-									  </el-table>
-									</el-form>
-									<!-- 表格 End-->
-									
-								<!-- 样品子表Table-List End -->
+								    <el-table-column prop="ENTERDATE" label="录入时间" sortable width="150px">
+								      <template slot-scope="scope">
+								      	<el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.ENTERDATE'" >
+								         <el-date-picker style="width: 90%" v-show="scope.row.isEditing" v-model="scope.row.ENTERDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd"></el-date-picker>
+								        <span v-show="!scope.row.isEditing" >{{scope.row.ENTERDATE}}</span>
+								    	</el-form-item>
+								      </template>
+								    </el-table-column>
+								   <el-table-column prop="CHANGEBY" label="修改人" sortable width="120px">
+								      <template slot-scope="scope">
+								        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.CHANGEBY" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.CHANGEBY}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column fixed="right" label="操作" width="120">
+								      <template slot-scope="scope">
+								        <el-button @click = "deleteRow(scope.$index, CUSTOMER.CUSTOMER_QUALIFICATIONList)" type="text" size="small">
+								          移除
+								        </el-button>
+								      </template>
+								    </el-table-column>
+								  </el-table>
+								  </el-form>
 							</el-collapse-item>
 						</el-collapse>
 					</div>
 					<div class="content-footer">
-						<el-form-item>
-							<!-- <button @click="cancelForm" class="btn btn-default btn-large">取消</button>
-							<button type="primary" class="btn btn-primarys btn-large" @click="submitForm('samplesForm')">提交</button> -->
-
-							<el-button @click='close'>取消</el-button>
 							<el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
 							<el-button type="success" @click='saveAndSubmit()'>保存并添加</el-button>
-						</el-form-item>
+							<el-button @click='close'>取消</el-button>
 					</div>
 				</el-form>
 			</div>
@@ -321,44 +315,11 @@
 	import Config from '../../config.js'
 	export default {
 		name: 'samples_mask',
-		// props: {
-		// 	page: {
-		// 		type: Object,
-		// 	},
-		// 	samplesForm: { //接收主表单中填写的数据信息
-		// 		type: Object,
-		// 		default: function() {
-		// 			return {
-		// 				PROXYNUM: '',//委托书编号
-		// 				ITEMNUM: '',//样品编号
-		// 				VENDOR: '',//委托单位编号
-		// 				PRODUCT_COMPANY: '',//生产单位编号
-		// 				V_NAME: '',//委托单位名称
-		// 				P_NAME: '',//生产单位名称
-		// 				DESCRIPTION: '',//样品名称
-		// 				PRODUCT_CODE: '',//产品标识代码
-		// 				MODEL: '',//型号
-		// 				QUATITY: '',//数量
-		// 				OTHER: '',//其他资料
-		// 				MEMO: '',//备注
-		// 				ACCEPTDATE: '',//入库时间
-		// 				ACCEPT_PERSON: '',//收样人
-		// 				ACCEPT_DATE: '',//收样日期
-		// 				RECIP_PERSON: '',//接样人
-		// 				RECIP_DATE: '',//接样日期
-		// 				STATE: '',//状态
-		// 				VERSION: '',//版本
-		// 				STATUSDATE: '',//状态日期
-		// 				ENTERBY: '',//录入人
-		// 				ENTERDATE: '',//录入时间
-		// 				CHANGEBY: '',//修改人
-		// 				CHANGEDATE: '',//修改时间
-		// 				TYPE: '',//样品类别
-		// 				STATUS: '',//信息状态
-		// 			}
-		// 		}
-		// 	}
-		// },
+		 props: {
+		 	page: {
+		 		type: Object,
+		 	},
+		 },
 		data() {
 			return {
 				basic_url: Config.dev_url,
@@ -384,12 +345,11 @@
 				labelPosition: 'right', //表单标题在上方
 				addtitle: true,
 				modifytitle: false,
-				
-				// samples_itemlineForm:{//样品子表数据组
-				// 	inspectionList: []
-				// },
 				samplesForm:{
 					ITEM_LINEList:[]
+				},
+				CUSTOMER:{
+					CUSTOMER_QUALIFICATIONList:[]
 				},
 				//Tree树菜单数据
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -403,9 +363,6 @@
 				isEditing: '',
 				commentArr:{},//下拉加载
 				rules: { //定义需要校验数据的名称
-					PROXYNUM: [
-						{ required: true, message: '请填写委托书编号', trigger: 'blur' }
-					],
 					VENDOR: [
 						{ required: true, message: '请填写委托单位编号', trigger: 'blur' }
 					],
@@ -443,6 +400,37 @@
 			};
 		},
 		methods: {
+			reset(){
+            	this.samplesForm = {
+					PROXYNUM: '',//委托书编号
+					ITEMNUM: '',//样品编号
+					VENDOR: '',//委托单位编号
+					PRODUCT_COMPANY: '',//生产单位编号
+					V_NAME: '',//委托单位名称
+					P_NAME: '',//生产单位名称
+					DESCRIPTION: '',//样品名称
+					PRODUCT_CODE: '',//产品标识代码
+					MODEL: '',//型号
+					QUATITY: '',//数量
+					OTHER: '',//其他资料
+					MEMO: '',//备注
+					ACCEPTDATE: '',//入库时间
+					ACCEPT_PERSON: '',//收样人
+					ACCEPT_DATE: '',//收样日期
+					RECIP_PERSON: '',//接样人
+					RECIP_DATE: '',//接样日期
+					STATE: '草稿',//状态
+					VERSION: '1',//版本
+					STATUSDATE: '',//状态日期
+					ENTERBY: '',//录入人
+					ENTERDATE: '',//录入时间
+					CHANGEBY: '',//修改人
+					CHANGEDATE: '',//修改时间
+					TYPE: '',//样品类别
+					STATUS: '1',//信息状态
+					ITEM_LINEList:[]
+				}
+            },
 			//获取委托书编号数据
 			getProxy() {
 				this.editSearch = 'dept';
@@ -486,7 +474,7 @@
 			getCheckedNodes() { //小弹出框获取树菜单节点
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
 			},
-			childMethods() {//添加内容时从父组件带过来的
+			visible() {//添加内容时从父组件带过来的
 				this.samplesForm.ACCEPT_DATE =  '2018-10-10';//收样日期
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.samplesForm.DEPARTMENT=res.data.deptName;
@@ -499,12 +487,13 @@
 						type:'error'
 					})
 				})
+				this.reset();
 				this.addtitle = true;
             	this.modifytitle = false;
             	this.modify=false;
-            	this.show = !this.show;
+            	this.show = true;
 			},
-			detail() { //修改内容时从父组件带过来的
+			detail(dataid) { //修改内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.samplesForm.CHANGEBY=res.data.nickname;
 					var date=new Date();
@@ -516,9 +505,8 @@
 					})
 				})
 				this.$axios.get(this.basic_url + '/api-apps/app/item/' + dataid, {}).then((res) => {
+					console.log(res);
 					this.samplesForm = res.data;
-//					console.log(this.CUSTOMER.STATUS==1);
-					// this.CUSTOMER.STATUS=this.CUSTOMER.STATUS=="1"? '活动' : '不活动';
 					this.show = true;
 				}).catch((err) => {
 					this.$message({
@@ -553,9 +541,6 @@
 				})
 			},
 			
-			judge(data) {//taxStatus 信息状态布尔值
-				return data.enabled ? '活动' : '不活动'
-			},
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -573,9 +558,23 @@
 					console.log('请求失败');
 				})
 			},
-			addfield_doclinks() { //插入行到文件文档Table中
+//			addfield(){
+//				this.index = this.index + 1;
+//				var obj = {
+//                  STEP:this.index,
+//                  CERTIFICATE_NUM:'',
+//					CERTIFICATE_NAME:'',
+//					ACTIVE_DATE:'',
+//					STATUS:'',
+//					MEMO:'',
+//					isEditing: true
+//              };
+//              this.samplesForm.ITEM_LINEList.push(obj);
+//			},
+			addfield() { 
+				//插入行到文件文档Table中
+				console.log(123);
 				var obj = {
-                    ID:'',
                     ITEMNUM:'',
                     ITEM_STEP:'',
                     SN:'',
@@ -583,106 +582,45 @@
                     ENTERBY:'',
                     ENTERDATE:'',
                     CHANGEBY:'',
-                    CHANGEDATE:'',
-                    STATUS:'',
 					isEditing: true
                 };
                 this.samplesForm.ITEM_LINEList.push(obj);
-				// var isEditingflag=false;
-				// for(var i=0;i<this.samples_itemlineForm.inspectionList.length; i++){
-				// 	if (this.samples_itemlineForm.inspectionList[i].isEditing==false){
-				// 		isEditingflag=false;
-				// 	}else{
-    //                     isEditingflag=true;
-    //                     break;
-				// 	}
-				// }
-				// if (isEditingflag==false){
-    //             	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-    //             		var currentUser, currentDate
-				// 		this.currentUser=res.data.nickname;
-				// 		var date=new Date();
-				// 		this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
-				// 		var index=this.$moment(date).format("YYYYMMDDHHmmss");
-				// 		var obj = {
-				// 			"ITEMNUM": 'ITE' + index,
-				// 			"ITEM_STEP": '',
-				// 			"SN": '',
-				// 			"STATE": '1',
-				// 			"STATUS": '1',
-				// 			"ENTERBY": this.currentUser,
-				// 			"ENTERDATE": this.currentDate,
-				// 			"isEditing": true,
-				// 		};
-				// 		this.samples_itemlineForm.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
-				// 	}).catch((err)=>{
-				// 		this.$message({
-				// 			message:'网络错误，请重试',
-				// 			type:'error'
-				// 		})
-				// 	})
-	   //          } else {
-	   //              this.$message.warning("请先保存当前编辑项");
-				// }
 			},
-			saveRow (row) {//Table-操作列中的保存行
-				this.$refs['samples_itemlineForm'].validate((valid) => {
-		          if (valid) {
-					var url = this.basic_url + '/api-apps/app/itemline/saveOrUpdate';
-					var submitData = {
-						"ID":row.ID,
-					    "ITEMNUM": row.ITEMNUM,
-						"ITEM_STEP": row.ITEM_STEP,
-						"SN": row.SN,
-						"STATE": row.STATE,
-						"STATUS": row.STATUS,
-						"ENTERBY": row.ENTERBY,
-						"ENTERDATE":row.ENTERDATE,
-					}
-					this.$axios.post(url, submitData).then((res) => {
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '保存成功',
-								type: 'success'
-							});
-							//重新加载数据
-							this.requestData_doclinks();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
-					});
-		          } else {
-		            return false;
-		          }
-		        });
-			},
-			// deleteRow(row) {//Table-操作列中的删除行
-			// 	this.$confirm('确定删除此文件文档吗？', '提示', {
-   //                  confirmButtonText: '确定',
-   //                  cancelButtonText: '取消',
-   //              }).then(({ value }) => {
-   //              	var url = this.basic_url + '/api-apps/app/itemline/' + row.ID;
-   //                  this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
-			// 		//resp_code == 0 是后台返回的请求成功的信息
-			// 			if(res.data.resp_code == 0) {
-			// 				this.$message({
-			// 					message: '删除成功',
-			// 					type: 'success'
-			// 				});
-			// 				this.requestData_doclinks();
-			// 			}
-			// 		}).catch((err) => {
-			// 			this.$message({
-			// 				message: '网络错误，请重试',
-			// 				type: 'error'
-			// 			});
-			// 		});
-   //              }).catch(() => {
-   //          	});
-			// },
+//			saveRow (row) {//Table-操作列中的保存行
+//				this.$refs['samples_itemlineForm'].validate((valid) => {
+//		          if (valid) {
+//					var url = this.basic_url + '/api-apps/app/itemline/saveOrUpdate';
+//					var submitData = {
+//						"ID":row.ID,
+//					    "ITEMNUM": row.ITEMNUM,
+//						"ITEM_STEP": row.ITEM_STEP,
+//						"SN": row.SN,
+//						"STATE": row.STATE,
+//						"STATUS": row.STATUS,
+//						"ENTERBY": row.ENTERBY,
+//						"ENTERDATE":row.ENTERDATE,
+//					}
+//					this.$axios.post(url, submitData).then((res) => {
+//						if(res.data.resp_code == 0) {
+//							this.$message({
+//								message: '保存成功',
+//								type: 'success'
+//							});
+//							//重新加载数据
+//							this.requestData_doclinks();
+//						}
+//					}).catch((err) => {
+//						this.$message({
+//							message: '网络错误，请重试',
+//							type: 'error'
+//						});
+//					});
+//		          } else {
+//		            return false;
+//		          }
+//		        });
+//			},
+			
 			deleteRow(index, rows) {//Table-操作列中的删除行
 				rows.splice(index, 1);
 			},
@@ -698,37 +636,7 @@
 			// reset() {
 			// 	this.show = false;
 			// },
-			reset(){
-            	this.samplesForm = {
-					PROXYNUM: '',//委托书编号
-					ITEMNUM: '',//样品编号
-					VENDOR: '',//委托单位编号
-					PRODUCT_COMPANY: '',//生产单位编号
-					V_NAME: '',//委托单位名称
-					P_NAME: '',//生产单位名称
-					DESCRIPTION: '',//样品名称
-					PRODUCT_CODE: '',//产品标识代码
-					MODEL: '',//型号
-					QUATITY: '',//数量
-					OTHER: '',//其他资料
-					MEMO: '',//备注
-					ACCEPTDATE: '',//入库时间
-					ACCEPT_PERSON: '',//收样人
-					ACCEPT_DATE: '',//收样日期
-					RECIP_PERSON: '',//接样人
-					RECIP_DATE: '',//接样日期
-					STATE: '',//状态
-					VERSION: '',//版本
-					STATUSDATE: '',//状态日期
-					ENTERBY: '',//录入人
-					ENTERDATE: '',//录入时间
-					CHANGEBY: '',//修改人
-					CHANGEDATE: '',//修改时间
-					TYPE: '',//样品类别
-					STATUS: '',//信息状态
-					// samples_itemlineForm:[]
-				}
-            },
+			
 			toggle(e) {
 				if(this.isok1 == true) {
 					this.maxDialog();
@@ -759,7 +667,6 @@
 					if (valid) {
 					    this.samplesForm.STATUS=this.samplesForm.STATUS=="活动" ? '1' : '0';
 						var url = this.basic_url + '/api-apps/app/item/saveOrUpdate';
-						this.samplesForm.VERSION = this.samplesForm.VERSION + 1;//修改时版本+1
 						this.$axios.post(url, this.samplesForm).then((res) => {
 							console.log(res);
 							//resp_code == 0是后台返回的请求成功的信息
@@ -768,9 +675,8 @@
 									message: '保存成功',
 									type: 'success'
 								});
-								// this.show = false;
 								//重新加载数据
-								// this.$emit('request');
+								 this.$emit('request');
 							}
 						}).catch((err) => {
 							this.$message({

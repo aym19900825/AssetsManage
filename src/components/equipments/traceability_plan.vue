@@ -68,15 +68,29 @@
 						<el-table :data="userList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 							</el-table-column>
-							<el-table-column label="组织机构代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('组织机构代码')!=-1">
+							<el-table-column label="溯源计划编号" width="200" sortable prop="PMNUM" v-if="this.checkedName.indexOf('溯源计划编号')!=-1">
 							</el-table-column>
-							<el-table-column label="单位名称" width="200" sortable prop="NAME" v-if="this.checkedName.indexOf('单位名称')!=-1">
+							<el-table-column label="计划描述" width="200" sortable prop="DESCRIPTION" v-if="this.checkedName.indexOf('计划描述')!=-1">
 							</el-table-column>
-							<el-table-column label="联系电话" sortable prop="PHONE" v-if="this.checkedName.indexOf('联系电话')!=-1">
+							<el-table-column label="设备编号" sortable prop="ASSETNUM" v-if="this.checkedName.indexOf('设备编号')!=-1">
 							</el-table-column>
-							<el-table-column label="联系地址" sortable prop="CONTACT_ADDRESS" v-if="this.checkedName.indexOf('联系地址')!=-1">
+							<el-table-column label="设备名称" sortable prop="A_NAME" v-if="this.checkedName.indexOf('设备名称')!=-1">
 							</el-table-column>						
-							<el-table-column label="信息状态" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
+							<el-table-column label="规格型号" sortable prop="MODEL" v-if="this.checkedName.indexOf('规格型号')!=-1">
+							</el-table-column>
+							<el-table-column label="制造商" sortable prop="VENDOR" v-if="this.checkedName.indexOf('制造商')!=-1">
+							</el-table-column>
+							<el-table-column label="溯源方式" sortable prop="TRACEABILITY" v-if="this.checkedName.indexOf('溯源方式')!=-1">
+							</el-table-column>
+							<el-table-column label="溯源周期" sortable prop="FREQUENCY" v-if="this.checkedName.indexOf('溯源周期')!=-1">
+							</el-table-column>
+							<el-table-column label="溯源机构" sortable prop="PM_MECHANISM" v-if="this.checkedName.indexOf('溯源机构')!=-1">
+							</el-table-column>
+							<el-table-column label="前次溯源起止时间" sortable prop="PM_START_END" v-if="this.checkedName.indexOf('前次溯源起止时间')!=-1">
+							</el-table-column>
+							<el-table-column label="本次溯源计划时间" sortable prop="PM_PLANDATE" v-if="this.checkedName.indexOf('本次溯源计划时间')!=-1">
+							</el-table-column>
+							<el-table-column label="溯源完成日期" sortable prop="COMP_DATE" v-if="this.checkedName.indexOf('溯源完成日期')!=-1">
 							</el-table-column>
 						</el-table>
 						<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
@@ -129,32 +143,66 @@
 			        deptId: ''
 		        },
 				checkedName: [
-					'组织机构代码',
-					'单位名称',
-					'性别',
-					'联系电话',
-					'联系地址',
-					'信息状态'
+					'溯源计划编号',
+					'计划描述',	
+					'设备编号',	
+					'设备名称',	
+					'规格型号',
+					'制造商',
+					'溯源方式',
+					'溯源周期',
+					'溯源机构',	
+					'前次溯源起止时间',
+					'本次溯源计划时间',
+					'溯源完成日期'
 				],
 				tableHeader: [
 					{
-						label: '组织机构代码',
+						label: '溯源计划编号',
 						prop: 'username'
 					},
 					{
-						label: '单位名称',
+						label: '计划描述',
 						prop: 'nickname'
 					},
 					{
-						label: '联系电话',
+						label: '设备编号',
 						prop: 'telephone'
 					},
 					{
-						label: '联系地址',
+						label: '设备名称',
 						prop: 'deptName'
 					},
 					{
-						label: '信息状态',
+						label: '规格型号',
+						prop: 'enabled'
+					},
+					{
+						label: '制造商',
+						prop: 'enabled'
+					},
+					{
+						label: '溯源方式',
+						prop: 'enabled'
+					},
+					{
+						label: '溯源周期',
+						prop: 'enabled'
+					},
+					{
+						label: '溯源机构',
+						prop: 'enabled'
+					},
+					{
+						label: '前次溯源起止时间',
+						prop: 'enabled'
+					},
+					{
+						label: '本次溯源计划时间',
+						prop: 'enabled'
+					},
+					{
+						label: '溯源完成日期',
 						prop: 'enabled'
 					}
 				],
@@ -363,14 +411,14 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					nickname: this.searchList.nickname,
-					enabled: this.searchList.enabled,
-					searchKey: 'createTime',
-					searchValue: this.searchList.createTime,
-					companyId: this.companyId,
-					deptId: this.deptId
+					// nickname: this.searchList.nickname,
+					// enabled: this.searchList.enabled,
+					// searchKey: 'createTime',
+					// searchValue: this.searchList.createTime,
+					// companyId: this.companyId,
+					// deptId: this.deptId
 				}
-				var url = this.basic_url + '/api-user/users';
+				var url = this.basic_url + '/api-apps/app/pmPlan';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {

@@ -27,17 +27,22 @@
 											<template slot="prepend">设备编号</template>
 										</el-input>
 									</el-col>
-									<el-col :span="5" class="pull-right">
-										<el-input v-model="dataInfo.STATUS" :disabled="true">
-											<template slot="prepend">状态</template>
-										</el-input>
-									</el-col>
 								</el-row>
 								<el-form-item v-for="item in basicInfo" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" label-width="160px">
 									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" style="width: 220px;"></el-input>
 									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'"></el-input>
 									<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'">
 									</el-date-picker>
+									<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'">
+										<el-radio :label="it.label" v-for="it in item.opts"></el-radio>
+									</el-radio-group>
+									<el-select v-model="item.prop" filterable placeholder="请选择" v-if="item.type == 'select'" @change="selChange">
+										<el-option v-for="item in assets"
+										:key="item.DESCRIPTION"
+										:label="item.DESCRIPTION"
+										:value="item.DESCRIPTION">
+										</el-option>
+									</el-select>
 								</el-form-item>
 							</el-collapse-item>
 							
@@ -82,24 +87,71 @@
 				}, 1000);
 			};
 			return {
+				rules: {
+
+					ASSETNUM: [
+						{ required: true, message: '请输入设备编号', trigger: 'blur' },
+					],
+					A_NAME: [
+						{ required: true, message: '请输入设备名称', trigger: 'blur' },
+					],
+					MODEL: [
+						{ required: true, message: '请输入规格型号', trigger: 'blur' },
+					],
+					PM_MODEL: [
+						{ required: true, message: '请选择溯源方式', trigger: 'blur' },
+					],
+					PM_DATE: [
+						{ required: true, message: '请输入溯源日期', trigger: 'blur' },
+					],
+					R_CONCLUSION: [
+						{ required: true, message: '请输入确认结论', trigger: 'blur' },
+					],
+					C_NUM: [
+						{ required: true, message: '请输入证书编号', trigger: 'blur' },
+					],
+					A_KPI: [
+						{ required: true, message: '请输入性能指标要求', trigger: 'blur' },
+					],
+					SORUCE: [
+						{ required: true, message: '请输入指标确认来源', trigger: 'blur' },
+					],
+					R_DESC: [
+						{ required: true, message: '请输入确认内容', trigger: 'blur' },
+					],
+					C_PERSON: [
+						{ required: true, message: '请输入确认人', trigger: 'blur' },
+					],
+					C_DATE: [
+						{ required: true, message: '请输入确认日期', trigger: 'blur' },
+					],
+					APPR_PERSON: [
+						{ required: true, message: '请输入审核人', trigger: 'blur' },
+					],
+					APPR_DATE: [
+						{ required: true, message: '请输入审核日期', trigger: 'blur' },
+					],
+					STATUS: [
+						{ required: true, message: '请输入信息状态', trigger: 'blur' },
+					],
+					S_MEMO: [
+						{ required: true, message: '请输入特殊情况说明', trigger: 'blur' },
+					],
+					DESCRIPTION: [
+						{ required: true, message: '请输入记录描述', trigger: 'blur' },
+					],
+				},
 				basicInfo: [
 					{
 						label: '设备名称',
 						prop: 'A_NAME',
 						width: '30%',
-						type: 'input',
+						type: 'select',
 						displayType: 'inline-block'
 					},
 					{
 						label: '规格型号',
 						prop: 'MODEL',
-						width: '30%',
-						type: 'input',
-						displayType: 'inline-block'
-					},
-					{
-						label: '溯源方式',
-						prop: 'PM_MODEL',
 						width: '30%',
 						type: 'input',
 						displayType: 'inline-block'
@@ -116,6 +168,21 @@
 						prop: 'PM_DATE',
 						width: '30%',
 						type: 'date',
+						displayType: 'inline-block'
+					},
+					{
+						label: '溯源方式',
+						prop: 'PM_MODEL',
+						width: '50%',
+						type: 'radio',
+						opts: [
+                            {
+                                label: '检定'
+                            },
+                            {
+                                label: '核查'
+                            }
+                        ],
 						displayType: 'inline-block'
 					},
 					{
@@ -157,7 +224,7 @@
 						label: '确认日期',
 						prop: 'C_DATE',
 						width: '30%',
-						type: 'input',
+						type: 'date',
 						displayType: 'inline-block'
 					},
 					{
@@ -168,8 +235,22 @@
 						displayType: 'inline-block'
 					},
 					{
+						label: '审核时间',
+						prop: 'APPR_DATE',
+						width: '30%',
+						type: 'date',
+						displayType: 'inline-block'
+					},
+					{
 						label: '特殊情况说明',
 						prop: 'S_MEMO',
+						width: '100%',
+						type: 'textarea',
+						displayType: 'inline-block'
+					},
+					{
+						label: '记录描述',
+						prop: 'DESCRIPTION',
 						width: '100%',
 						type: 'textarea',
 						displayType: 'inline-block'
@@ -221,44 +302,40 @@
 				getCheckboxData: {},
 
 				dataInfo: {
-					'ID': '',  //主键ID，必填但页面没有字段
-					'ASSETNUM': '',
+					'ID': '',  //页面没有但是必填	  
+					'RECORDNUM': '', //页面没有但是必填
 					'DESCRIPTION': '',
-					'CONFIG_UNIT': '',
-					'INS_SITE': '',
-					'SUPPORT_ASSET': '',
-					'VENDOR': '',
-					'SUPPLIER': '',	
+					'ASSETNUM': '',
+					'A_NAME': '',
 					'MODEL': '',
-					'FACTOR_NUM': '',
-					'ASSET_KPI': '',
-					'STATE': '0',    //设备状态，必填但页面没有字段
-					'OPTION_STATUS': '0',   //设备使用状态，必填但页面没有字段
-					'TYPE': '仪器', //设备分类，必填但页面没有字段
-					'ACCEPT_NUM': '',
-					'ISMETER': '',
-					'ISPM': '',
-					'STATUSDATE': '',
-					'KEEPER': '',
-					'ACCEPT_DATE': '',
-					'S_DATE': '2017-01-12',    //启用日期，必填但页面没有字段
-					'C_ADDRESS': 'aaaaaaaaaaa',   //配置地址，必填但页面没有字段
-					'A_STATUS': '',
-					'A_PRICE': '',
-					'MODE': '',
-					'MODE1': '',
-					'CHANGEBY': '',	
-					'CHANGEDATE': '',	
-					'ENTERBY': '',
-					'ENTERDATE': '',	
-					'DEPARTMENT': '',	
-					'MEMO': '',	
-					'STATUS': '',
-					'SYNCHRONIZATION_TIME': '',
-				}
+					'PM_MODEL': '', 
+					'PM_DATE': '',
+					'R_CONCLUSION': '',
+					'C_NUM': '',
+					'A_KPI': '',
+					'SORUCE': '',
+					'R_DESC': '',
+					'S_MEMO': '', 
+					'C_PERSON': '',
+					'C_DATE': '',
+					'APPR_PERSON': '',
+					'APPR_DATE': '',
+					'STATUS': '1'	//活动1，不活动0
+				},
+				assets: []
 			};
 		},
 		methods: {
+			selChange(val){
+				var data = this.assets;
+				var selData = data.filter(function(item){
+					if(item.DESCRIPTION == val){
+						return item;
+					}
+				});
+				this.dataInfo.MODEL = selData[0].MODEL;
+				this.dataInfo.ASSETNUM = selData[0].ASSETNUM;
+			},
 			//点击按钮显示弹窗
 			visible() {
 				this.addtitle = true;
@@ -279,42 +356,27 @@
 				this.resetForm();
 			},
 			resetForm(){
-				this.dataInfo =  {
-					'ID': '',  //主键ID，必填但页面没有字段
-					'ASSETNUM': '1111',
-					'DESCRIPTION': '',
-					'CONFIG_UNIT': '',
-					'INS_SITE': '',
-					'SUPPORT_ASSET': '',
-					'VENDOR': '',
-					'SUPPLIER': '',	
+				this.dataInfo = {
+					'ID': '',   
+					'RECORDNUM': '',
+					'DESCRIPTION': '', 
+					'ASSETNUM': '',
+					'A_NAME': '',
 					'MODEL': '',
-					'FACTOR_NUM': '',
-					'ASSET_KPI': '',
-					'STATE': '0',    //设备状态，必填但页面没有字段
-					'OPTION_STATUS': '0',   //设备使用状态，必填但页面没有字段
-					'TYPE': '仪器', //设备分类，必填但页面没有字段
-					'ACCEPT_NUM': '',
-					'ISMETER': '',
-					'ISPM': '',
-					'STATUSDATE': '',
-					'KEEPER': '',
-					'ACCEPT_DATE': '',
-					'S_DATE': '2017-01-12',    //启用日期，必填但页面没有字段
-					'C_ADDRESS': 'aaaaaaaaaaa',   //配置地址，必填但页面没有字段
-					'A_STATUS': '',
-					'A_PRICE': 0,
-					'MODE': '',
-					'MODE1': '',
-					'CHANGEBY': '',	
-					'CHANGEDATE': '',	
-					'ENTERBY': '',
-					'ENTERDATE': '',	
-					'DEPARTMENT': '',	
-					'MEMO': '',	
-					'STATUS': '',
-					'SYNCHRONIZATION_TIME': '',
-				};
+					'PM_MODEL': '',
+					'PM_DATE': '',
+					'R_CONCLUSION': '',
+					'C_NUM': '',
+					'A_KPI': '',
+					'SORUCE': '',
+					'R_DESC': '',
+					'S_MEMO': '', 
+					'C_PERSON': '',
+					'C_DATE': '',
+					'APPR_PERSON': '',
+					'APPR_DATE': '',
+					'STATUS': '1'
+				}
 				this.$refs['dataInfo'].resetFields();
 				this.show = false;
 			},
@@ -345,7 +407,8 @@
 
 			submitForm() {
 				var _this = this;
-				var url = this.basic_url + '/api-apps/app/asset/saveOrUpdate';
+				
+				var url = this.basic_url + '/api-apps/app/pmRecord/saveOrUpdate';
 				this.$refs['dataInfo'].validate((valid) => {
 					if (valid) {
 						this.$axios.post(url, _this.dataInfo).then((res) => {
@@ -356,6 +419,8 @@
 								});
 								this.resetForm();
 								this.$emit('request');
+							}else{
+
 							}
 						}).catch((err) => {
 							this.$message({
@@ -371,7 +436,12 @@
 			},
 		},
 		mounted() {
-			
+			var url = this.basic_url + '/api-apps/app/asset';
+			this.$axios.get(url, {
+				params: {}
+			}).then((res) => {
+				this.assets = res.data.data;
+			}).catch((wrong) => {})
 		},
 
 	}

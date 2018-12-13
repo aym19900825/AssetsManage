@@ -133,7 +133,7 @@
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
-		<instrumentsmask :detailData="aaaData[0]" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></instrumentsmask>
+		<instrumentsmask :detailData="aaaData[0]" ref="child" @request="requestData"></instrumentsmask>
 	</div>
 </div>
 </template>
@@ -286,11 +286,11 @@
 				this.page.pageSize = 10;
 				this.requestData();
 			},
-			//添加用戶
+			//添加
 			openAddMgr() {
 				this.$refs.child.visible();
 			},
-			//修改用戶
+			//修改
 			modify() {
 				this.aaaData = this.selUser;
 				if(this.aaaData.length == 0) {
@@ -332,16 +332,20 @@
 					return;
 				} else {
 					var changeUser = selData[0];
-					var id = changeUser.id;
+					var id = changeUser.ID;
 					var url = this.basic_url + '/api-apps/app/asset/' + id;
 					this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
-						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
 								message: '删除成功',
 								type: 'success'
 							});
 							this.requestData();
+						}else{
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'success'
+							});
 						}
 					}).catch((err) => {
 						this.$message({

@@ -163,7 +163,7 @@
 											</el-form-item>
 										</template>
 									</el-table-column>
-									<el-table-column prop="MEMO" label="备注" sortable>
+									<!-- <el-table-column prop="MEMO" label="备注" sortable>
 										<template slot-scope="scope">
 											<el-form-item :prop="'maintenList.'+scope.$index + '.MEMO'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
                                                 <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MEMO" placeholder="请输入备注">
@@ -171,7 +171,7 @@
                                                 <span v-else="v-else">{{scope.row.MEMO}}</span>
 											</el-form-item>
 										</template>
-									</el-table-column>
+									</el-table-column> -->
 									<el-table-column label="操作" sortable width="120px">
 										<template slot-scope="scope">
 											<el-button type="danger" size="mini" round  @click="delLine(scope.$index,scope.row.ID,'maintenList')">

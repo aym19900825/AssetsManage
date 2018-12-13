@@ -18,7 +18,7 @@
 						<el-collapse-item title="安全管理" name="1">
 							<el-row :gutter="30">
 						 		<el-col :span="12">
-									<el-form-item label="是滞包含大写字母">
+									<el-form-item label="是否包含大写字母">
 										<el-select v-model="safemanage.emptyuppercase" filterable placeholder="请选择">
 											<el-option v-for="item01 in uppercase" :label="item01.label" :value="item01.value" :key="item01.value"></el-option>
 										</el-select>

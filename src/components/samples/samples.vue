@@ -115,7 +115,7 @@
 							<el-table :data="samplesList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="样品编号" sortable width="140px" prop="PROXYNUM" v-if="this.checkedName.indexOf('样品编号')!=-1">
+								<el-table-column label="样品编号" sortable width="140px" prop="ITEMNUM" v-if="this.checkedName.indexOf('样品编号')!=-1">
 								</el-table-column>
 								<el-table-column label="样品类别" sortable width="200px" prop="TYPE" v-if="this.checkedName.indexOf('样品类别')!=-1">
 								</el-table-column>
@@ -196,7 +196,7 @@
 				],
 				tableHeader: [{
 						label: '样品编号',
-						prop: 'PROXYNUM'
+						prop: 'ITEMNUM'
 					},
 					{
 						label: '样品类别',

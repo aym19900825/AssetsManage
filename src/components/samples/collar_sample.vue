@@ -351,7 +351,7 @@
 					ACCEPT_DATE: '',//收样日期
 					GRANT_PERSON: '',//领样人
 					GRANT_DATE: '',//领样日期
-					STATE: '1',//状态
+					STATE: '草稿',//状态
 					STATUSDATE: '',//状态日期
 					ENTERBY: '',//录入人
 					ENTERDATE: '',//录入时间

@@ -26,7 +26,7 @@
 										</el-input>
 									</el-col>-->
 									<el-col :span="4" class="pull-right">
-										<el-input type="number" v-model.number="samplesForm.STATE" :disabled="true">
+										<el-input v-model="samplesForm.STATE" :disabled="true">
 											<template slot="prepend">状态</template>
 										</el-input>
 									</el-col>

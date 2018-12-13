@@ -20,11 +20,11 @@
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基础信息" name="1">
 								<el-row :gutter="20" class="pb10">
-									<el-col :span="4" class="pull-right">
+									<!--<el-col :span="4" class="pull-right">
 										<el-input v-model="samplesForm.STATUS" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
-									</el-col>
+									</el-col>-->
 									<el-col :span="4" class="pull-right">
 										<el-input type="number" v-model.number="samplesForm.STATE" :disabled="true">
 											<template slot="prepend">状态</template>

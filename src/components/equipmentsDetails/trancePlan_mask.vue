@@ -26,11 +26,6 @@
 											<template slot="prepend">设备编号</template>
 										</el-input>
 									</el-col>
-									<el-col :span="5" class="pull-right">
-										<el-input v-model="dataInfo.STATUS" :disabled="true">
-											<template slot="prepend">状态</template>
-										</el-input>
-									</el-col>
 								</el-row>
 								<el-form-item v-for="item in basicInfo" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" label-width="160px">
 									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" style="width: 220px;"></el-input>
@@ -40,6 +35,20 @@
 									<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'">
 										<el-radio :label="it.label" v-for="it in item.opts"></el-radio>
 									</el-radio-group>
+									<el-select v-model="item.prop" filterable placeholder="请选择" v-if="item.type == 'select'" @change="selChange">
+										<el-option v-for="item in assets"
+										:key="item.DESCRIPTION"
+										:label="item.DESCRIPTION"
+										:value="item.DESCRIPTION">
+										</el-option>
+									</el-select>
+									<el-select v-model="item.prop" filterable placeholder="请选择" v-if="item.type == 'sel'" style="width: 60px;">
+										<el-option v-for="item in time"
+										:key="item"
+										:label="item"
+										:value="item">
+										</el-option>
+									</el-select>
 								</el-form-item>
 							</el-collapse-item>
 
@@ -143,6 +152,63 @@
 				}, 1000);
 			};
 			return {
+				time: [
+					'年','月','日','周'
+				],
+				rules: {
+					DESCRIPTION: [
+						{ required: true, message: '请输入计划描述', trigger: 'blur' },
+					],
+					ASSETNUM: [
+						{ required: true, message: '请输入设备编号', trigger: 'blur' },
+					],
+					A_NAME: [
+						{ required: true, message: '请输入设备名称', trigger: 'blur' },
+					],
+					MODEL: [
+						{ required: true, message: '请选择规格型号', trigger: 'blur' },
+					],
+					TRACEABILITY: [
+						{ required: true, message: '请输入溯源方式', trigger: 'blur' },
+					],
+					FREQUENCY: [
+						{ required: true, message: '请输入溯源周期', trigger: 'blur' },
+					],
+					FREQUENCYUNIT: [
+						{ required: true, message: '请输入溯源周期单位', trigger: 'blur' },
+					],
+					PM_MECHANISM: [
+						{ required: true, message: '请输入溯源机构', trigger: 'blur' },
+					],
+					PM_PLANDATE: [
+						{ required: true, message: '请输入本次溯源计划时间', trigger: 'blur' },
+					],
+					R_DESC: [
+						{ required: true, message: '请输入确认内容', trigger: 'blur' },
+					],
+					C_PERSON: [
+						{ required: true, message: '请输入确认人', trigger: 'blur' },
+					],
+					C_DATE: [
+						{ required: true, message: '请输入确认日期', trigger: 'blur' },
+					],
+					APPR_PERSON: [
+						{ required: true, message: '请输入审核人', trigger: 'blur' },
+					],
+					APPR_DATE: [
+						{ required: true, message: '请输入审核日期', trigger: 'blur' },
+					],
+					STATUS: [
+						{ required: true, message: '请输入信息状态', trigger: 'blur' },
+					],
+					S_MEMO: [
+						{ required: true, message: '请输入特殊情况说明', trigger: 'blur' },
+					],
+					DESCRIPTION: [
+						{ required: true, message: '请输入记录描述', trigger: 'blur' },
+					],
+				},
+				assets: [],
 				basicInfo: [
 					{
 						label: '计划描述',
@@ -154,7 +220,7 @@
 					{
 						//无对应数据字段
 						label: '出厂编号',
-						prop: 'DESCRIPTION',
+						prop: 'LE_FACTORYNUM',
 						width: '50%',
 						type: 'input',
 						displayType: 'inline-block'
@@ -163,7 +229,7 @@
 						label: '设备名称',
 						prop: 'A_NAME',
 						width: '50%',
-						type: 'input',
+						type: 'select',
 						displayType: 'inline-block'
 					},
 					{
@@ -184,14 +250,29 @@
 						label: '溯源方式',
 						prop: 'TRACEABILITY',
 						width: '50%',
-						type: 'input',
-						displayType: 'inline-block'
+						type: 'radio',
+						displayType: 'inline-block',
+						opts: [
+                            {
+                                label: '检定'
+                            },
+                            {
+                                label: '核查'
+                            }
+                        ],
 					},
 					{
 						label: '溯源周期',
 						prop: 'FREQUENCY',
-						width: '50%',
+						width: '20%',
 						type: 'input',
+						displayType: 'inline-block'
+					},
+					{
+						label: '',
+						prop: 'FREQUENCYUNIT',
+						width: '100',
+						type: 'sel',
 						displayType: 'inline-block'
 					},
 					{
@@ -276,44 +357,35 @@
 				getCheckboxData: {},
 
 				dataInfo: {
-					'ID': '',  //主键ID，必填但页面没有字段
-					'ASSETNUM': '',
+					'ID': '',	
+					'PMNUM': '', //必填页面没有
 					'DESCRIPTION': '',
-					'CONFIG_UNIT': '',
-					'INS_SITE': '',
-					'SUPPORT_ASSET': '',
-					'VENDOR': '',
-					'SUPPLIER': '',	
+					'ASSETNUM': '',
+					'A_NAME': '',
 					'MODEL': '',
-					'FACTOR_NUM': '',
-					'ASSET_KPI': '',
-					'STATE': '0',    //设备状态，必填但页面没有字段
-					'OPTION_STATUS': '0',   //设备使用状态，必填但页面没有字段
-					'TYPE': '仪器', //设备分类，必填但页面没有字段
-					'ACCEPT_NUM': '',
-					'ISMETER': '',
-					'ISPM': '',
-					'STATUSDATE': '',
-					'KEEPER': '',
-					'ACCEPT_DATE': '',
-					'S_DATE': '2017-01-12',    //启用日期，必填但页面没有字段
-					'C_ADDRESS': 'aaaaaaaaaaa',   //配置地址，必填但页面没有字段
-					'A_STATUS': '',
-					'A_PRICE': '',
-					'MODE': '',
-					'MODE1': '',
-					'CHANGEBY': '',	
-					'CHANGEDATE': '',	
-					'ENTERBY': '',
-					'ENTERDATE': '',	
-					'DEPARTMENT': '',	
-					'MEMO': '',	
-					'STATUS': '',
-					'SYNCHRONIZATION_TIME': '',
+					'VENDOR': '',
+					'TRACEABILITY': '',
+					'FREQUENCY': '',
+					'FREQUENCYUNIT': '',
+					'PM_MECHANISM': '',
+					'PM_START_END': '',		
+					'PM_PLANDATE': '',
+					'COMP_DATE': '',	
+					'STATUS': '1'
 				}
 			};
 		},
 		methods: {
+			selChange(val){
+				var data = this.assets;
+				var selData = data.filter(function(item){
+					if(item.DESCRIPTION == val){
+						return item;
+					}
+				});
+				this.dataInfo.MODEL = selData[0].MODEL;
+				this.dataInfo.ASSETNUM = selData[0].ASSETNUM;
+			},
 			//点击按钮显示弹窗
 			visible() {
 				this.addtitle = true;
@@ -335,40 +407,21 @@
 			},
 			resetForm(){
 				this.dataInfo =  {
-					'ID': '',  //主键ID，必填但页面没有字段
-					'ASSETNUM': '1111',
+					'ID': '',	
+					'PMNUM': '',
 					'DESCRIPTION': '',
-					'CONFIG_UNIT': '',
-					'INS_SITE': '',
-					'SUPPORT_ASSET': '',
-					'VENDOR': '',
-					'SUPPLIER': '',	
+					'ASSETNUM': '',
+					'A_NAME': '',
 					'MODEL': '',
-					'FACTOR_NUM': '',
-					'ASSET_KPI': '',
-					'STATE': '0',    //设备状态，必填但页面没有字段
-					'OPTION_STATUS': '0',   //设备使用状态，必填但页面没有字段
-					'TYPE': '仪器', //设备分类，必填但页面没有字段
-					'ACCEPT_NUM': '',
-					'ISMETER': '',
-					'ISPM': '',
-					'STATUSDATE': '',
-					'KEEPER': '',
-					'ACCEPT_DATE': '',
-					'S_DATE': '2017-01-12',    //启用日期，必填但页面没有字段
-					'C_ADDRESS': 'aaaaaaaaaaa',   //配置地址，必填但页面没有字段
-					'A_STATUS': '',
-					'A_PRICE': 0,
-					'MODE': '',
-					'MODE1': '',
-					'CHANGEBY': '',	
-					'CHANGEDATE': '',	
-					'ENTERBY': '',
-					'ENTERDATE': '',	
-					'DEPARTMENT': '',	
-					'MEMO': '',	
-					'STATUS': '',
-					'SYNCHRONIZATION_TIME': '',
+					'VENDOR': '',
+					'TRACEABILITY': '',
+					'FREQUENCY': '',
+					'FREQUENCYUNIT': '',
+					'PM_MECHANISM': '',
+					'PM_START_END': '',		
+					'PM_PLANDATE': '',
+					'COMP_DATE': '',	
+					'STATUS': '1'
 				};
 				this.$refs['dataInfo'].resetFields();
 				this.show = false;
@@ -400,7 +453,7 @@
 
 			submitForm() {
 				var _this = this;
-				var url = this.basic_url + '/api-apps/app/asset/saveOrUpdate';
+				var url = this.basic_url + '/api-apps/app/pmPlan/saveOrUpdate';
 				this.$refs['dataInfo'].validate((valid) => {
 					if (valid) {
 						this.$axios.post(url, _this.dataInfo).then((res) => {
@@ -426,7 +479,12 @@
 			},
 		},
 		mounted() {
-			
+			var url = this.basic_url + '/api-apps/app/asset';
+			this.$axios.get(url, {
+				params: {}
+			}).then((res) => {
+				this.assets = res.data.data;
+			}).catch((wrong) => {})
 		},
 
 	}

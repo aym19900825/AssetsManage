@@ -54,7 +54,7 @@
 									
 								</el-col>
 								<el-col :span="5">
-									<el-input v-model="searchList.A_NAME">
+									<el-input v-model="searchList.DESCRIPTION">
 										<template slot="prepend">设备名称</template>
 									</el-input>
 								</el-col>
@@ -68,16 +68,25 @@
 										<template slot="prepend">保管人</template>
 									</el-input>
 								</el-col>
-								<el-col :span="5">
+								<!-- <el-col :span="5">
 									<el-input v-model="searchList.STATE">
 										<template slot="prepend">设备状态</template>
 									</el-input>
+									<el-select v-model="searchList.STATE" placeholder="请选择">
+										<el-option
+										v-for="item in status"
+										:key="item.value"
+										:label="item.label"
+										:value="item.value">
+										</el-option>
+										<template slot="prepend">设备状态</template>
+									</el-select>
 								</el-col>
 								<el-col :span="4">
 									<el-input v-model="searchList.OPTION_STATUS">
 										<template slot="prepend">设备使用状态</template>
 									</el-input>
-								</el-col>
+								</el-col> -->
 								<el-col :span="2">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
 								</el-col>
@@ -155,6 +164,20 @@
 		},
 		data() {
 			return {
+				status: [
+					{
+						label: '启用',
+						value: 1
+					},
+					{
+						label: '封存',
+						value: 2
+					},
+					{
+						label: '报废',
+						value: 3
+					}
+				],
 				basic_url: Config.dev_url,
 				dataUrl: '/api/api-user/users',
 				searchData: {
@@ -246,7 +269,7 @@
 				ismin:true,
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: {
-					A_NAME: '',
+					DESCRIPTION: '',
 			        VENDOR: '',
 			        KEEPER: '',
 			        STATE: '',
@@ -385,7 +408,7 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					A_NAME: this.searchList.A_NAME,
+					DESCRIPTION: this.searchList.DESCRIPTION,
 					VENDOR: this.searchList.VENDOR,
 					KEEPER: this.searchList.KEEPER,
 					STATE: this.searchList.STATE,
@@ -396,7 +419,6 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(res.data.data);
 					this.assetList = res.data.data;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})

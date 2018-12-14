@@ -74,7 +74,10 @@
 							</el-table-column>
 							<el-table-column label="规格型号" sortable prop="MODEL" v-if="this.checkedName.indexOf('规格型号')!=-1">
 							</el-table-column>
-							<el-table-column label="设备状态" sortable prop="STATUS" :formatter="judge"  v-if="this.checkedName.indexOf('设备状态')!=-1">
+							<el-table-column label="设备状态" sortable prop="STATUS"  v-if="this.checkedName.indexOf('设备状态')!=-1">
+								<template slot-scope="scope">
+									<span v-text="scope.row.STATUS=='1'?'活动':'不活动'"></span>
+								</template>
 							</el-table-column>						
 							<el-table-column label="保管人" sortable prop="KEEPER" v-if="this.checkedName.indexOf('信息状态')!=-1">
 							</el-table-column>
@@ -255,8 +258,8 @@
 					return;
 				} else {
 					var changeUser = selData[0];
-					var id = changeUser.id;
-					var url = this.basic_url + '/api-user/users/' + id;
+					var id = changeUser.ID;
+					var url = this.basic_url + '/api-apps/app/asset/' + id;
 					this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -265,6 +268,11 @@
 								type: 'success'
 							});
 							this.requestData();
+						}else{
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'error'
+							});
 						}
 					}).catch((err) => {
 						this.$message({

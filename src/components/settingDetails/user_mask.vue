@@ -785,10 +785,10 @@
 				var _this = this;
 				this.$refs.user.validate((valid) => {
 					if(valid) {
-						this.user.enabled=this.user.enabled=='活动' ? 'true' : 'false';
-						this.user.ispermit=this.user.ispermit=='是'? '1' : '2';
-						this.user.islogin=this.user.islogin=='是'? '1' : '2';
-						var user = this.user;
+						_this.user.enabled=_this.user.enabled=='活动' ? 'true' : 'false';
+						_this.user.ispermit=_this.user.ispermit=='是'? '1' : '2';
+						_this.user.islogin=_this.user.islogin=='是'? '1' : '2';
+						var user = _this.user;
 						user.sex = user.sexName == '男' ? 1 : 0;
 						var roleId="";
 						if(typeof(user.roleId)!='undefind' && user.roleId.length > 0) {
@@ -808,8 +808,8 @@
 							user.roleId = '';
 							user.roles = [];
 						}
-						var url = this.basic_url + '/api-user/users/saveOrUpdate';
-						this.$axios.post(url, this.user).then((res) => {
+						var url = _this.basic_url + '/api-user/users/saveOrUpdate';
+						this.$axios.post(url, _this.user).then((res) => {
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',

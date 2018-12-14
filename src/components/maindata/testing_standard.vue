@@ -169,7 +169,7 @@
 		data() {
 			return {
 				basic_url: Config.dev_url,
-				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
+				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
 				value: '',
 				options: [{
 					value: '1',
@@ -178,8 +178,8 @@
 					value: '0',
 					label: '不活动'
 				}],
-				loadSign:true,//加载
-				commentArr:{},
+				loadSign: true, //加载
+				commentArr: {},
 				searchData: {
 					page: 1,
 					limit: 10, //分页显示数
@@ -268,9 +268,9 @@
 				up: false,
 				isShow: false,
 				ismin: true,
-				
-				statusshow1:true,
-				statusshow2:true,
+
+				statusshow1: true,
+				statusshow2: true,
 				searchList: { //点击高级搜索后显示的内容
 					S_NUM: '',
 					S_NAME: '',
@@ -294,26 +294,25 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-				dataInfo: {},//修改子组件时传递数据
+				dataInfo: {}, //修改子组件时传递数据
 			}
 		},
 
-
 		methods: {
-			loadMore () {
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page.currentPage++
-			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     this.requestData()
-//			     console.log('到底了', this.page.currentPage)
-			   }
-			 },
+			loadMore() {
+				if(this.loadSign) {
+					this.loadSign = false
+					this.page.currentPage++
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							return
+						}
+					setTimeout(() => {
+						this.loadSign = true
+					}, 1000)
+					this.requestData()
+					//			     console.log('到底了', this.page.currentPage)
+				}
+			},
 			tableControle(data) {
 				this.checkedName = data;
 			},
@@ -331,7 +330,8 @@
 				this.requestData();
 			},
 			//清空
-			reset(){
+			reset() {
+				console.log(123);
 				this.dataInfo = {
 					ID: '',
 					VERSION: '1',
@@ -347,6 +347,9 @@
 					CHANGEBY: '',
 					CHANGEDATE: ''
 				};
+				if(this.$refs['PRODUCT'] !== undefined) {
+					this.$refs['PRODUCT'].resetFields();
+				}
 			},
 			//添加
 			openAddMgr() {
@@ -368,7 +371,7 @@
 					});
 					return;
 				} else {
-					this.dataInfo = this.selUser[0]; 
+					this.dataInfo = this.selUser[0];
 					this.$refs.child.detail();
 				}
 			},
@@ -387,27 +390,31 @@
 						type: 'warning'
 					});
 					return;
-				}else {
+				} else {
 					var url = this.basic_url + '/api/api-apps/app/inspectionSta/deletes';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
 					var deleteid = [];
 					var ids;
-					for (var i = 0; i < changeUser.length; i++) {
+					for(var i = 0; i < changeUser.length; i++) {
 						deleteid.push(changeUser[i].ID);
 					}
 					//ids为deleteid数组用逗号拼接的字符串
 					ids = deleteid.toString(',');
-                    var data = {
+					var data = {
 						ids: ids,
 					}
 					this.$confirm('确定删除此数据吗？', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                    }).then(({ value }) => {
-                        this.$axios.delete(url, {params: data}).then((res) => {//.delete 传数据方法
-						//resp_code == 0是后台返回的请求成功的信息
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {
+							params: data
+						}).then((res) => { //.delete 传数据方法
+							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '删除成功',
@@ -421,9 +428,9 @@
 								type: 'error'
 							});
 						});
-                    }).catch(() => {
+					}).catch(() => {
 
-                	});
+					});
 				}
 			},
 			// 导入
@@ -449,17 +456,17 @@
 				}
 				return this.$moment(date).format("YYYY-MM-DD");
 			},
-			SelChange(val) {//选中值后赋值给一个自定义的数组：selUser
+			SelChange(val) { //选中值后赋值给一个自定义的数组：selUser
 				this.selUser = val;
 			},
-			requestData(index) {//高级查询字段
+			requestData(index) { //高级查询字段
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 					S_NUM: this.searchList.S_NUM,
 					S_NAME: this.searchList.S_NAME,
 					VERSION: this.searchList.VERSION,
-					S_ENGNAME:this.searchList.S_ENGNAME,
+					S_ENGNAME: this.searchList.S_ENGNAME,
 					DEPARTMENT: this.searchList.DEPARTMENT,
 					RELEASETIME: this.searchList.RELEASETIME,
 					STARTETIME: this.searchList.STARTETIME,
@@ -469,29 +476,29 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					this.page.totalCount = res.data.count;	
+					this.page.totalCount = res.data.count;
 					//总的页数
-					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
-					if(this.page.currentPage >= totalPage){
-						 this.loadSign = false
-					}else{
-						this.loadSign=true
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
 					}
-					this.commentArr[this.page.currentPage]=res.data.data
-					let newarr=[]
-					for(var i = 1; i <= totalPage; i++){
-					
-						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
-							
-							for(var j = 0; j < this.commentArr[i].length; j++){
+					this.commentArr[this.page.currentPage] = res.data.data
+					let newarr = []
+					for(var i = 1; i <= totalPage; i++) {
+
+						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+
+							for(var j = 0; j < this.commentArr[i].length; j++) {
 								newarr.push(this.commentArr[i][j])
 							}
 						}
 					}
-					
+
 					this.standardList = newarr;
-//					this.standardList = res.data.data;
-//					this.page.totalCount = res.data.count;
+					//					this.standardList = res.data.data;
+					//					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
 
 			},
@@ -502,7 +509,7 @@
 		},
 		mounted() {
 			this.requestData();
-			
+
 		},
 	}
 </script>

@@ -15,7 +15,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="PRODUCT" inline-message  :rules="rules" ref="PRODUCT" label-width="100px" class="demo-adduserForm">
+				<el-form :model="PRODUCT" inline-message :rules="rules" ref="PRODUCT" label-width="100px" class="demo-adduserForm">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="产品名称" name="1">
@@ -35,11 +35,11 @@
 											<template slot="prepend">信息状态</template>
 										</el-input>
 									</el-col>-->
-										<!-- <el-select v-model="PRODUCT.STATUS" placeholder="请选择信息状态">
+									<!-- <el-select v-model="PRODUCT.STATUS" placeholder="请选择信息状态">
 											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
 										</el-select> -->
-									
+
 								</el-row>
 
 								<el-row :gutter="30">
@@ -67,15 +67,15 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="录入时间" prop="ENTERDATE">
-											<el-input v-model="PRODUCT.ENTERDATE"  :disabled="edit"></el-input>
+											<el-input v-model="PRODUCT.ENTERDATE" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
-									
+
 								</el-row>
 								<el-row :gutter="30" v-show="personinfo">
 									<el-col :span="8">
 										<el-form-item v-if="modify" label="修改人" prop="CHANGEBY">
-											<el-input v-model="PRODUCT.CHANGEBY" placeholder="当前修改人" :disabled="edit" ></el-input>
+											<el-input v-model="PRODUCT.CHANGEBY" placeholder="当前修改人" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -88,11 +88,11 @@
 						</el-collapse>
 					</div>
 					<div class="el-dialog__footer">
-							<el-button type="primary" @click="saveAndUpdate('PRODUCT')">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit('PRODUCT')">保存并添加</el-button>
-							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('PRODUCT')">修订</el-button>
-							<el-button @click='close'>取消</el-button>
-						
+						<el-button type="primary" @click="saveAndUpdate('PRODUCT')">保存</el-button>
+						<el-button type="success" @click="saveAndSubmit('PRODUCT')">保存并添加</el-button>
+						<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('PRODUCT')">修订</el-button>
+						<el-button @click='close'>取消</el-button>
+
 					</div>
 				</el-form>
 			</div>
@@ -107,33 +107,33 @@
 		props: {
 			PRODUCT: {
 				type: Object,
-				default: function(){
+				default: function() {
 					return {
-						ID:'',
-						PRO_NUM:'',
-						PRO_NAME:'',
-						STATUS:'',
-						VERSION:'',
-						ENTERBY:'',
-						ENTERDATE:'',
-						CHANGEBY:'',
-						CHANGEDATE:''
+						ID: '',
+						PRO_NUM: '',
+						PRO_NAME: '',
+						STATUS: '',
+						VERSION: '',
+						ENTERBY: '',
+						ENTERDATE: '',
+						CHANGEBY: '',
+						CHANGEDATE: ''
 					}
 				}
 			},
-			page: Object ,
+			page: Object,
 		},
 		data() {
 			var validateName = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请填写产品名称'));
-                }else {
-                    callback();
-                }
-            };
+				if(value === '') {
+					callback(new Error('请填写产品名称'));
+				} else {
+					callback();
+				}
+			};
 			return {
 				basic_url: Config.dev_url,
-				personinfo:false,
+				personinfo: false,
 				value: '',
 				options: [{
 					value: '1',
@@ -142,22 +142,22 @@
 					value: '0',
 					label: '不活动'
 				}],
-				selUser:[],
-				modify:false,//修订、修改人、修改时间
+				selUser: [],
+				modify: false, //修订、修改人、修改时间
 				edit: true, //禁填
 				show: false,
 				isok1: true,
 				isok2: false,
-				statusshow1:true,
-				statusshow2:false,
+				statusshow1: true,
+				statusshow2: false,
 				down: true,
 				up: false,
-				addtitle:true,
-				modifytitle:false,
-				activeNames: ['1','2'],//手风琴数量
-//				labelPosition: 'top', //表格
+				addtitle: true,
+				modifytitle: false,
+				activeNames: ['1', '2'], //手风琴数量
+				//				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
-				selectData:[],
+				selectData: [],
 				rules: {
 					PRO_NAME: [{
 						required: true,
@@ -170,13 +170,13 @@
 			};
 		},
 		methods: {
-		
+
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selUser = val;
 			},
 			//导入添加数据按钮
-			leadadddata(){
+			leadadddata() {
 				var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({
@@ -196,9 +196,9 @@
 				}
 			},
 			//生成随机数函数
-			rand(min,max) {
-		        return Math.floor(Math.random()*(max-min))+min;
-		    },
+			rand(min, max) {
+				return Math.floor(Math.random() * (max - min)) + min;
+			},
 			//点击按钮显示弹窗
 			visible() {
 				this.statusshow1 = true;
@@ -207,18 +207,18 @@
 				this.modifytitle = false;
 				this.modify = false;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-	     			this.PRODUCT.DEPARTMENT=res.data.deptName;
-	     			this.PRODUCT.ENTERBY = res.data.nickname;
-	     			var date=new Date();
+					this.PRODUCT.DEPARTMENT = res.data.deptName;
+					this.PRODUCT.ENTERBY = res.data.nickname;
+					var date = new Date();
 					this.PRODUCT.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-					this.PRODUCT.VERSION='1';
-	     			this.PRODUCT.STATUS = '活动';
-				 }).catch((err) => {
-				 	this.$message({
-				 		message: '网络错误，请重试',
-				 		type: 'error'
-				 	});
-				});				
+					this.PRODUCT.VERSION = '1';
+					this.PRODUCT.STATUS = '活动';
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
 				this.show = true;
 			},
 			// 这里是修改
@@ -229,8 +229,8 @@
 				this.statusshow1 = false;
 				this.statusshow2 = true;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-	    			this.PRODUCT.CHANGEBY = res.data.nickname;
-	    			var date=new Date();
+					this.PRODUCT.CHANGEBY = res.data.nickname;
+					var date = new Date();
 					this.PRODUCT.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 
 				}).catch((err) => {
@@ -238,80 +238,80 @@
 						message: '网络错误，请重试',
 						type: 'error'
 					});
-				});		
+				});
 				this.show = true;
 			},
 			// 保存users/saveOrUpdate
 			save(PRODUCT) {
-				 this.$refs[PRODUCT].validate((valid) => {
-		          if (valid) {
-		            this.PRODUCT.STATUS=((this.PRODUCT.STATUS=="1"||this.PRODUCT.STATUS=='活动') ? '1' : '0');
-					var url = this.basic_url + '/api-apps/app/product/saveOrUpdate';	
-					
-					this.$axios.post(url,this.PRODUCT).then((res) => {
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
+				this.$refs[PRODUCT].validate((valid) => {
+					if(valid) {
+						this.PRODUCT.STATUS = ((this.PRODUCT.STATUS == "1" || this.PRODUCT.STATUS == '活动') ? '1' : '0');
+						var url = this.basic_url + '/api-apps/app/product/saveOrUpdate';
+
+						this.$axios.post(url, this.PRODUCT).then((res) => {
+							//resp_code == 0是后台返回的请求成功的信息
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '保存成功',
+									type: 'success'
+								});
+								//重新加载数据
+								this.$emit('request');
+								this.$emit('reset');
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '保存成功',
-								type: 'success'
+								message: '网络错误，请重试',
+								type: 'error'
 							});
-							//重新加载数据
-							this.$emit('request');
-						}
-						this.$refs["PRODUCT"].resetFields();
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
-					});
-			          } else {
-			            this.$message({
+					} else {
+						this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
 						});
-			          }
-			    });
+					}
+				});
 			},
-			saveAndUpdate(PRODUCT){
+			saveAndUpdate(PRODUCT) {
 				this.save(PRODUCT);
 				this.show = false;
 			},
-			saveAndSubmit(PRODUCT){
+			saveAndSubmit(PRODUCT) {
 				this.save(PRODUCT);
-				this.$emit('reset');
+
 				this.show = true;
 			},
 			//点击修订按钮
-			modifyversion(PRODUCT){
+			modifyversion(PRODUCT) {
 				this.$refs[PRODUCT].validate((valid) => {
-		          if (valid) {
-					var url = this.basic_url + '/api-apps/app/product/operate/upgraded';
-					this.$axios.post(url,this.PRODUCT).then((res) => {
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
+					if(valid) {
+						var url = this.basic_url + '/api-apps/app/product/operate/upgraded';
+						this.$axios.post(url, this.PRODUCT).then((res) => {
+							//resp_code == 0是后台返回的请求成功的信息
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '保存成功',
+									type: 'success'
+								});
+								//重新加载数据
+								this.show = false;
+								this.$emit('request');
+								this.$refs["PRODUCT"].resetFields();
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '保存成功',
-								type: 'success'
+								message: '网络错误，请重试',
+								type: 'error'
 							});
-							//重新加载数据
-							this.show = false;
-							this.$emit('request');
-							this.$refs["PRODUCT"].resetFields();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
-					});
-			          } else {
-			            this.$message({
+					} else {
+						this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
 						});
-			          }
-			    });
+					}
+				});
 			},
 			//点击关闭按钮
 			close() {

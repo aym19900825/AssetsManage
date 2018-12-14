@@ -22,9 +22,9 @@
 							<button type="button" class="btn btn-bule button-margin" @click="modify">
 							    <i class="icon-edit"></i>修改
 							</button>
-							<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
+							<!-- <button type="button" class="btn btn-red button-margin" @click="deluserinfo">
 							    <i class="icon-trash"></i>删除
-							</button>
+							</button> -->
 							<button type="button" class="btn btn-primarys button-margin" @click="importData">
 							    <i class="icon-upload-cloud"></i>导入
 							</button>

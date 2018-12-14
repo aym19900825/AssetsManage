@@ -112,7 +112,7 @@
 									</el-table-column>
 									<el-table-column label="操作" sortable width="120px">
 										<template slot-scope="scope">
-											<el-button type="danger" size="mini" round  @click="delLine(scope.$index,scope.row.ID,'tableList')">
+											<el-button type="danger" size="mini" round  @click="delLine(scope.$index,scope.row,'tableList')">
 												<i class="el-icon-delete"></i>
 											</el-button>
 										</template>
@@ -174,7 +174,7 @@
 									</el-table-column> -->
 									<el-table-column label="操作" sortable width="120px">
 										<template slot-scope="scope">
-											<el-button type="danger" size="mini" round  @click="delLine(scope.$index,scope.row.ID,'maintenList')">
+											<el-button type="danger" size="mini" round  @click="delLine(scope.$index,scope.row,'maintenList')">
 												<i class="el-icon-delete"></i>
 											</el-button>
 										</template>
@@ -358,8 +358,14 @@
 				}
 			},
 			delLine(index, row, listName){
+				var TableName = '';
+				if(listName=='tableList'){
+					TableName = 'assetUse';
+				}else{
+					TableName = 'assetMaintenance';
+				}
 				if(row.ID){
-					var url = this.basic_url + '/api-apps/app/assetUse/' + TableName +'/' + row.ID;
+					var url = this.basic_url + '/api-apps/app/' + TableName +'/' + row.ID;
 					this.$axios.delete(url, {}).then((res) => {
 						if(res.data.resp_code == 0){
 							this.dataInfo[listName].splice(index,1);

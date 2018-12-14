@@ -38,7 +38,7 @@
 										</el-input>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30">
+								<el-row :gutter="30" class="pt10">
 									<el-col :span="6">
 										<el-form-item label="提出单位" prop="PROP_UNIT">
 											<el-select v-model="WORKPLAN.PROP_UNIT" placeholder="请选择">
@@ -82,7 +82,7 @@
 										    <el-date-picker
 										      v-model="WORKPLAN.REPORTDATE"
 										      type="date"
-										      placeholder="选择日期" value-format="yyyy-MM-dd">
+										      placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 100%">
 										    </el-date-picker>
 										  </div>
 										 </el-form-item>
@@ -98,7 +98,7 @@
 											      placeholder="选择年度"
 											      value-format="yyyy"
 											      format="yyyy"
-											      :default-value="WORKPLAN.YEAR">
+											      :default-value="WORKPLAN.YEAR" style="width: 100%">
 											    </el-date-picker>
 											</div>
 										</el-form-item>
@@ -205,6 +205,7 @@
 												<font>选择</font>
 											</el-button>
 										</div>
+										<!-- <el-form :model="basisList" :rules="rules" ref="basisList" prop="basisList"> -->
 						            	<el-table :data="basisList" border stripe height="200" style="width: 100%;" :default-sort="{prop:'basisList', order: 'descending'}">
 						            		<el-table-column prop="NUMBER" label="所属计划编号" width="120">
 						            			<template slot-scope="scope">
@@ -228,7 +229,8 @@
 										        </el-button>
 										      </template>
 										    </el-table-column>
-						            	</el-table>								
+						            	</el-table>
+						            	<!-- </el-form> -->								
 								    </el-tab-pane>
 								    <el-tab-pane label="检测项目与要求" name="second">
 								    	<div class="table-func table-funcb">
@@ -630,6 +632,35 @@
                     callback();
                 }
             };
+            var validateUnit = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请选择提出单位'));
+                }else {
+                    callback();
+                }
+            };
+            var validateItemtype = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请填写产品类别'));
+                }else {
+                    callback();
+                }
+            };
+            var validateType = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请选择计划类型'));
+                }else {
+                    callback();
+                }
+            };
+            var validateBasislist = (rule, value, callback) => {
+            	console.log(rule, value, callback);
+                if (value === '') {
+                    callback(new Error('请选择检测依据'));
+                }else {
+                    callback();
+                }
+            };
 			return {
 				basic_url: Config.dev_url,
 				showEdit: [], //显示编辑框
@@ -662,7 +693,7 @@
 				modifytitle:false,//修改弹出框titile
 				activeName: 'first',//tabs
 				activeNames: ['1','2','3','4','5','6','7'],//手风琴数量
-				labelPosition: 'top', //表格
+				labelPosition: 'right', //表格
 				dialogVisible: false, //对话框
 				dialogVisible2: false, //对话框
 				searchList: { //点击高级搜索后显示的内容
@@ -754,6 +785,28 @@
 						trigger: 'blur',
 						validator: validateEmail,
 					}],
+					PROP_UNIT:[{//提出单位 
+   						required: true,
+   						validator: validateUnit,
+   						trigger: 'change' 
+       				}],
+       				ITEMTYPE:[{//产品类别 
+   						required: true,
+   						validator: validateItemtype,
+   						trigger: 'change' 
+       				}],
+       				//年度
+       				YEAR: [{type: 'string',required: true,message: '请选择年度',trigger: 'change' 
+       				}],
+       				//提报日期
+       				REPORTDATE: [{type: 'string',required: true,message: '请选择提报日期',trigger: 'change' 
+       				}],
+       				//检测依据 
+       				basisList:[{//产品类别 
+   						required: true,
+   						validator: validateBasislist,
+   						trigger: 'change' 
+       				}],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -1177,6 +1230,8 @@
 			// },
 			// 保存users/saveOrUpdate
 			submitForm() {
+				this.$refs.WORKPLAN.validate((valid) => {
+					if (valid) {
 				if(!this.isEditList){
 					for(let i=0;i<this.worlplanlist.length;i++){
 						console.log(this.worlplanlist[i].CHECKCOST);
@@ -1211,7 +1266,10 @@
 						type: 'warning'
 					});
 				}
-	  			
+	  			} else {
+			            return false;
+			        }
+	  			});
 			},
 			loadMore () {
 			   if (this.loadSign) {

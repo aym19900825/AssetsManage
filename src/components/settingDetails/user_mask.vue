@@ -203,7 +203,7 @@
 										<font>新建行</font>
 									</el-button>
 								</div>
-                                <el-form :label-position="labelPosition" :rules="rules">
+                                <!-- <el-form :label-position="labelPosition" :rules="rules"> -->
 								<el-table :data="user.qualifications" row-key="ID" border stripe height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation"  :default-sort="{prop:'user.qualifications', order: 'descending'}">
 									<el-table-column prop="iconOperation" fixed  width="50px">
 										<template slot-scope="scope">
@@ -291,7 +291,7 @@
 										</template>
 									</el-table-column>
 								</el-table>
-								 </el-form >
+								 <!-- </el-form > -->
 								    </el-tab-pane>
 								    <el-tab-pane label="培训" name="second">
 								    	<div class="table-func table-funcb">

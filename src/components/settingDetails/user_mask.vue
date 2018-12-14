@@ -62,40 +62,40 @@
 								<!-- 第一行 -->
 								<el-row :gutter="30">
 									<el-col :span="8">
-										<el-form-item  label="登录名称" v-if="modify">
+										<el-form-item label="登录名称" v-if="modify">
 											<el-input v-model="user.username" :disabled="edit"></el-input>
 										</el-form-item>
-										<el-form-item  label="登录名称" prop="username" v-else>
-											<el-input  v-model="user.username"></el-input>
+										<el-form-item label="登录名称" prop="username" v-else>
+											<el-input v-model="user.username"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item  label="登录口令" v-if="modify">
+										<el-form-item label="登录口令" v-if="modify">
 											<el-input type="password" v-model="user.password" :disabled="edit"></el-input>
 										</el-form-item>
-										<el-form-item  label="登录口令" prop="password" v-else>
+										<el-form-item label="登录口令" prop="password" v-else>
 											<el-input type="password" v-model="user.password"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item  label="姓名" prop="nickname">
+										<el-form-item label="姓名" prop="nickname">
 											<el-input v-model="user.nickname"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="8">
-										<el-form-item  label="职务" prop="post">
+										<el-form-item label="职务" prop="post">
 											<el-input v-model="user.post"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item  label="工号" prop="worknumber">
+										<el-form-item label="工号" prop="worknumber">
 											<el-input v-model="user.worknumber"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item  label="性別" prop="sex">
+										<el-form-item label="性別" prop="sex">
 											<el-radio-group v-model="user.sex">
 												<el-radio label="男"></el-radio>
 												<el-radio label="女"></el-radio>
@@ -129,18 +129,18 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="允许授权" prop="ispermit">
-											 <el-radio-group v-model="user.ispermit">
-    											<el-radio label="是"></el-radio>
-    											<el-radio label="否"></el-radio>
-  											</el-radio-group>
+											<el-radio-group v-model="user.ispermit">
+												<el-radio label="是"></el-radio>
+												<el-radio label="否"></el-radio>
+											</el-radio-group>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="允许登录" prop="islogin">
 											<el-radio-group v-model="user.islogin">
-    											<el-radio label="是"></el-radio>
-    											<el-radio label="否"></el-radio>
-  											</el-radio-group>
+												<el-radio label="是"></el-radio>
+												<el-radio label="否"></el-radio>
+											</el-radio-group>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -160,18 +160,18 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="学历" prop="education">
-										<el-select v-model="user.education" placeholder="硕士" >
-											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-											</el-option>
-										</el-select>
+											<el-select v-model="user.education" placeholder="硕士">
+												<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+												</el-option>
+											</el-select>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="角色" prop="roleId">
-										<el-select v-model="user.roleId" multiple>
-											<el-option v-for="item in selectData" :key="item.name" :value="item.id" :label="item.name"></el-option>
-										</el-select>
-									</el-form-item>
+											<el-select v-model="user.roleId" multiple>
+												<el-option v-for="item in selectData" :key="item.name" :value="item.id" :label="item.name"></el-option>
+											</el-select>
+										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row :gutter="30">
@@ -196,85 +196,85 @@
 							</el-collapse-item>
 							<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 								<el-tabs v-model="activeName" @tab-click="handleClick">
-								    <el-tab-pane label="资质信息" name="first">
-								    	<div class="table-func table-funcb">
-									<el-button type="success" size="mini" round @click="addfield1">
-										<i class="icon-add"></i>
-										<font>新建行</font>
-									</el-button>
-								</div>
-                                <el-form :label-position="labelPosition" :rules="rules">
-								<el-table :data="user.qualifications" row-key="ID" border stripe height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation"  :default-sort="{prop:'user.qualifications', order: 'descending'}">
-									<el-table-column prop="iconOperation" fixed  width="50px">
-										<template slot-scope="scope">
-											<i class="el-icon-check" v-if="scope.row.isEditing"></i>
-											<i class="el-icon-edit" v-else="v-else"></i>
-										</template>
-									</el-table-column>
-						            <el-table-column  prop="step" label="序号" sortable width="120px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'qualifications.'+scope.$index + '.step'">
-											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.step" placeholder="请输入要求">	
-											</el-input>
-											<span v-else="v-else">{{scope.row.step}}</span>
-											</el-form-item>
-										</template>
-									</el-table-column>
-									<el-table-column  prop="c_num" label="证书编号" sortable width="120px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'qualifications.'+scope.$index + '.c_num'">
-											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.c_num" placeholder="请输入委托方名称">
-											</el-input>
-											<span v-else="v-else">{{scope.row.c_num}}</span>
-											</el-form-item>
-										</template>
-									</el-table-column>
-									<el-table-column  prop="c_name" label="证书名称" sortable width="120px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'qualifications.'+scope.$index + '.c_name'">
-											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.c_name" placeholder="请输入委托方名称">
-											</el-input>
-											<span v-else="v-else">{{scope.row.c_name}}</span>
-											</el-form-item>
-										</template>
-									</el-table-column>
-									<el-table-column  prop="c_date" label="资质有效期" sortable width="120px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'qualifications.'+scope.$index + '.c_date'" >
-											<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.c_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
-											</el-date-picker>
-											<span v-else="v-else">{{scope.row.c_date}}</span>
-											</el-form-item>
-										</template>
-									</el-table-column>
-									<el-table-column prop="enterby" label="录入人" sortable width="120px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'qualifications.'+scope.$index + '.enterbyName'">
-											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.enterbyName" placeholder="请输入要求">
-											</el-input>
-											<span v-else="v-else">{{scope.row.enterbyName}}</span>
-											</el-form-item>
-										</template>
-									</el-table-column>
-									<el-table-column  prop="enterdate" label="录入时间" sortable width="120px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'qualifications.'+scope.$index + '.enterdate'" >
-											<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.enterdate" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
-											</el-date-picker>
-											<span v-else="v-else">{{scope.row.enterdate}}</span>
-											</el-form-item>
-										</template>
-									</el-table-column>
-									<el-table-column  prop="status" label="信息状态" sortable width="120px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'qualifications.'+scope.$index + '.status'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.status" placeholder="请输入要求">
-											</el-input>
-											<span v-else="v-else">{{scope.row.status}}</span>
-										</el-form-item>
-										</template>
-									</el-table-column>
-									<!--<el-table-column prop="VERSION" label="上传附件" sortable width="120px">
+									<el-tab-pane label="资质信息" name="first">
+										<div class="table-func table-funcb">
+											<el-button type="success" size="mini" round @click="addfield1">
+												<i class="icon-add"></i>
+												<font>新建行</font>
+											</el-button>
+										</div>
+										<el-form :label-position="labelPosition" :rules="rules">
+											<el-table :data="user.qualifications" row-key="ID" border stripe height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.qualifications', order: 'descending'}">
+												<el-table-column prop="iconOperation" fixed width="50px">
+													<template slot-scope="scope">
+														<i class="el-icon-check" v-if="scope.row.isEditing"></i>
+														<i class="el-icon-edit" v-else="v-else"></i>
+													</template>
+												</el-table-column>
+												<el-table-column prop="step" label="序号" sortable width="120px">
+													<template slot-scope="scope">
+														<el-form-item :prop="'qualifications.'+scope.$index + '.step'">
+															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.step" placeholder="请输入要求">
+															</el-input>
+															<span v-else="v-else">{{scope.row.step}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column>
+												<el-table-column prop="c_num" label="证书编号" sortable width="120px">
+													<template slot-scope="scope">
+														<el-form-item :prop="'qualifications.'+scope.$index + '.c_num'">
+															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.c_num" placeholder="请输入委托方名称">
+															</el-input>
+															<span v-else="v-else">{{scope.row.c_num}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column>
+												<el-table-column prop="c_name" label="证书名称" sortable width="120px">
+													<template slot-scope="scope">
+														<el-form-item :prop="'qualifications.'+scope.$index + '.c_name'">
+															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.c_name" placeholder="请输入委托方名称">
+															</el-input>
+															<span v-else="v-else">{{scope.row.c_name}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column>
+												<el-table-column prop="c_date" label="资质有效期" sortable width="120px">
+													<template slot-scope="scope">
+														<el-form-item :prop="'qualifications.'+scope.$index + '.c_date'">
+															<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.c_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+															</el-date-picker>
+															<span v-else="v-else">{{scope.row.c_date}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column>
+												<el-table-column prop="enterby" label="录入人" sortable width="120px">
+													<template slot-scope="scope">
+														<el-form-item :prop="'qualifications.'+scope.$index + '.enterbyName'">
+															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.enterbyName" placeholder="请输入要求">
+															</el-input>
+															<span v-else="v-else">{{scope.row.enterbyName}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column>
+												<el-table-column prop="enterdate" label="录入时间" sortable width="120px">
+													<template slot-scope="scope">
+														<el-form-item :prop="'qualifications.'+scope.$index + '.enterdate'">
+															<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.enterdate" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+															</el-date-picker>
+															<span v-else="v-else">{{scope.row.enterdate}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column>
+												<el-table-column prop="status" label="信息状态" sortable width="120px">
+													<template slot-scope="scope">
+														<el-form-item :prop="'qualifications.'+scope.$index + '.status'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.status" placeholder="请输入要求">
+															</el-input>
+															<span v-else="v-else">{{scope.row.status}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column>
+												<!--<el-table-column prop="VERSION" label="上传附件" sortable width="120px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'user_qualifications.'+scope.$index + '.VERSION'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入分包方名称">
@@ -283,79 +283,77 @@
 											</el-form-item>
 										</template>
 									</el-table-column>-->
-									<el-table-column fixed="right" label="操作" width="120">
-										<template slot-scope="scope">
-											<el-button @click.native.prevent="deleteRow(scope.$index,user.qualifications)" type="text" size="small">
-												移除
+												<el-table-column fixed="right" label="操作" width="120">
+													<template slot-scope="scope">
+														<el-button @click.native.prevent="deleteRow(scope.$index,user.qualifications)" type="text" size="small">
+															移除
+														</el-button>
+													</template>
+												</el-table-column>
+											</el-table>
+										</el-form>
+									</el-tab-pane>
+									<el-tab-pane label="培训" name="second">
+										<div class="table-func table-funcb">
+											<el-button type="success" size="mini" round @click="addfield2">
+												<i class="icon-add"></i>
+												<font>新建行</font>
 											</el-button>
-										</template>
-									</el-table-column>
-								</el-table>
-								 </el-form >
-								    </el-tab-pane>
-								    <el-tab-pane label="培训" name="second">
-								    	<div class="table-func table-funcb">
-									<el-button type="success" size="mini" round @click="addfield2">
-										<i class="icon-add"></i>
-										<font>新建行</font>
-									</el-button>
-								</div>
-								 <el-form :label-position="labelPosition" :rules="rules">
-								<el-table :data="user.traings" row-key="ID" border stripe height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.traings', order: 'descending'}">
-									<el-table-column prop="iconOperation" fixed label="" width="50px">
-										<template slot-scope="scope">
-											<i class="el-icon-check" v-if="scope.row.isEditing"></i>
-											<i class="el-icon-edit" v-else="v-else"></i>
-										</template>
-									</el-table-column>
-									<el-table-column prop="step" label="序号" sortable width="120px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'traings.'+scope.$index + '.step'" >
-											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.step" placeholder="请输入要求">	
-											</el-input>
-											<span v-else="v-else">{{scope.row.step}}</span>
-											</el-form-item>
-										</template>
-									</el-table-column>
-									<el-table-column prop="t_date" label="培训时间" sortable width="240px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'traings.'+scope.$index + '.t_date'" >
-											<!--<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.t_date" placeholder="请输入委托方名称">
+										</div>
+											<el-table :data="user.traings" row-key="ID" border stripe height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.traings', order: 'descending'}">
+												<el-table-column prop="iconOperation" fixed label="" width="50px">
+													<template slot-scope="scope">
+														<i class="el-icon-check" v-if="scope.row.isEditing"></i>
+														<i class="el-icon-edit" v-else="v-else"></i>
+													</template>
+												</el-table-column>
+												<el-table-column prop="step" label="序号" sortable width="120px">
+													<template slot-scope="scope">
+														<el-form-item :prop="'traings.'+scope.$index + '.step'">
+															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.step" placeholder="请输入要求">
+															</el-input>
+															<span v-else="v-else">{{scope.row.step}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column>
+												<el-table-column prop="t_date" label="培训时间" sortable width="240px">
+													<template slot-scope="scope">
+														<el-form-item :prop="'traings.'+scope.$index + '.t_date'">
+															<!--<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.t_date" placeholder="请输入委托方名称">
 											</el-input>-->
-											<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.t_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd hh:mm:ss">
-											</el-date-picker>
-											<span v-else="v-else">{{scope.row.t_date}}</span>
-											</el-form-item>
-										</template>
-									</el-table-column>
-									<el-table-column prop="t_description" label="培训内容" sortable >
-										<template slot-scope="scope">
-											<el-form-item :prop="'traings.'+scope.$index + '.t_description'">
-											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.t_description" placeholder="请输入委托方名称">
-											</el-input>
-											<span v-else="v-else">{{scope.row.t_description}}</span>
-											</el-form-item>
-										</template>
-									</el-table-column>
-									<el-table-column prop="status" label="信息状态" sortable width="120px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'traings.'+scope.$index + '.status'" >
-											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.status" placeholder="请输入要求">
-											</el-input>
-											<span v-else="v-else">{{scope.row.status}}</span>
-										</el-form-item>
-										</template>
-									</el-table-column>
-									<el-table-column fixed="right" label="操作" width="120">
-										<template slot-scope="scope">
-											<el-button @click.native.prevent="deleteRow(scope.$index,user.traings)" type="text" size="small">
-												移除
-											</el-button>
-										</template>
-									</el-table-column>
-								</el-table>
-								</el-form>
-								    </el-tab-pane>
+															<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.t_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd hh:mm:ss">
+															</el-date-picker>
+															<span v-else="v-else">{{scope.row.t_date}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column>
+												<el-table-column prop="t_description" label="培训内容" sortable>
+													<template slot-scope="scope">
+														<el-form-item :prop="'traings.'+scope.$index + '.t_description'">
+															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.t_description" placeholder="请输入委托方名称">
+															</el-input>
+															<span v-else="v-else">{{scope.row.t_description}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column>
+												<el-table-column prop="status" label="信息状态" sortable width="120px">
+													<template slot-scope="scope">
+														<el-form-item :prop="'traings.'+scope.$index + '.status'">
+															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.status" placeholder="请输入要求">
+															</el-input>
+															<span v-else="v-else">{{scope.row.status}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column>
+												<el-table-column fixed="right" label="操作" width="120">
+													<template slot-scope="scope">
+														<el-button @click.native.prevent="deleteRow(scope.$index,user.traings)" type="text" size="small">
+															移除
+														</el-button>
+													</template>
+												</el-table-column>
+											</el-table>
+									</el-tab-pane>
 								</el-tabs>
 							</div>
 							<el-collapse-item title="其他" name="4">
@@ -440,60 +438,59 @@
 					}
 				}
 			};
-			var validateEmail = (rule, value, callback) => {//验证电子邮箱
-		        if (value === '') {
-		            callback(new Error('电子邮箱不能为空'));
-		        } else {
-			        var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-			        if(!reg.test(value)){
-			            callback(new Error('请输入有效的邮箱'));
-			        }else{
-			        	callback();
-			        }
-		        }
-		    };
+			var validateEmail = (rule, value, callback) => { //验证电子邮箱
+				if(value === '') {
+					callback(new Error('电子邮箱不能为空'));
+				} else {
+					var reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+					if(!reg.test(value)) {
+						callback(new Error('请输入有效的邮箱'));
+					} else {
+						callback();
+					}
+				}
+			};
 			return {
 				basic_url: Config.dev_url,
 				user: {
 					status: '活动',
 					roleId: [],
-					roles:[],
+					roles: [],
 					traings: [],
 					qualifications: [],
 				},
-				options: [
-				{
-					value: '高中',
-					label: '高中'
-				},
-				{
-					value: '高中以下',
-					label: '高中以下'
-				},
-				{
-					value:'中专/技校',
-					label:'中专/技校',
-				},
-				{
-					value: '大专',
-					label: '大专'
-				},
-				{
-					value: '本科',
-					label: '本科'
-				},
-				{
-					value: '硕士',
-					label: '硕士'
-				},
-				{
-					value: '博士',
-					label: '博士'
-				},
-				{
-					value: 'MBA/EMBA',
-					label: 'MBA/EMBA'
-				},
+				options: [{
+						value: '高中',
+						label: '高中'
+					},
+					{
+						value: '高中以下',
+						label: '高中以下'
+					},
+					{
+						value: '中专/技校',
+						label: '中专/技校',
+					},
+					{
+						value: '大专',
+						label: '大专'
+					},
+					{
+						value: '本科',
+						label: '本科'
+					},
+					{
+						value: '硕士',
+						label: '硕士'
+					},
+					{
+						value: '博士',
+						label: '博士'
+					},
+					{
+						value: 'MBA/EMBA',
+						label: 'MBA/EMBA'
+					},
 				],
 
 				value: '',
@@ -506,38 +503,122 @@
 				isok2: false,
 				down: true,
 				up: false,
-				activeName: 'first',//tabs
-				activeNames: ['1', '2','3','4'], //手风琴数量
+				activeName: 'first', //tabs
+				activeNames: ['1', '2', '3', '4'], //手风琴数量
 				labelPosition: 'top', //表格
-				labelPositions:'right',
+				labelPositions: 'right',
 				dialogVisible: false, //对话框
 				addtitle: true, //添加弹出框titile
 				modifytitle: false, //修改弹出框titile
-				modify:false,
-//				default-expand-all:true,
+				modify: false,
+				//				default-expand-all:true,
 				rules: {
-					deptName: [{ required: true, message: '必填', trigger: 'blur' }],//名称
-					education:[{required: true, message: '必填', trigger: 'blur'}],
-					roleId: [{required: true,trigger: 'blur',message: '必填',}],
-					username: [{required: true,trigger: 'blur',message: '必填',}],
-					password: [{required: true,trigger: 'blur',message: '必填',}],
-					sex:[{required: true,trigger: 'blur',message: '必填'}],
-					ispermit_authorization:[{required: true,trigger: 'change',message: '必填'}],//授权
-					islogin:[{required: true,trigger: 'change',message: '必填'}],//登陆
-					mac_address:[{required: true,trigger: 'blur',message: '必填',}],
-					ip_address:[{required: true,trigger: 'blur',message: '必填',}],
-					idnumber:[{required: true,trigger: 'blur',validator: validateIdnumber}],
-					phone: [{required: true,trigger: 'blur',validator: validatePhone}],
-					email: [{required: true,trigger: 'blur',validator: validateEmail,}],
-					step:[{required: true,trigger: 'blur',message: '必填',}],
-					t_date:[{required: true,trigger: 'blur',message: '必填',}],
-					t_description:[{required: true,trigger: 'blur',message: '必填',}],
-					status:[{required: true,trigger: 'blur',message: '必填',}],
-					step:[{required: true,trigger: 'blur',message: '必填',}],
-					c_date:[{required: true,trigger: 'blur',message: '必填',}],
-					c_num:[{required: true,trigger: 'blur',message: '必填',}],
-					c_name:[{required: true,trigger: 'blur',message: '必填',}],
-					
+					deptName: [{
+						required: true,
+						message: '必填',
+						trigger: 'blur'
+					}], //名称
+					education: [{
+						required: true,
+						message: '必填',
+						trigger: 'blur'
+					}],
+					roleId: [{
+						required: true,
+						trigger: 'blur',
+						message: '必填',
+					}],
+					username: [{
+						required: true,
+						trigger: 'blur',
+						message: '必填',
+					}],
+					password: [{
+						required: true,
+						trigger: 'blur',
+						message: '必填',
+					}],
+					sex: [{
+						required: true,
+						trigger: 'blur',
+						message: '必填'
+					}],
+					ispermit_authorization: [{
+						required: true,
+						trigger: 'change',
+						message: '必填'
+					}], //授权
+					islogin: [{
+						required: true,
+						trigger: 'change',
+						message: '必填'
+					}], //登陆
+					mac_address: [{
+						required: true,
+						trigger: 'blur',
+						message: '必填',
+					}],
+					ip_address: [{
+						required: true,
+						trigger: 'blur',
+						message: '必填',
+					}],
+					idnumber: [{
+						required: true,
+						trigger: 'blur',
+						validator: validateIdnumber
+					}],
+					phone: [{
+						required: true,
+						trigger: 'blur',
+						validator: validatePhone
+					}],
+					email: [{
+						required: true,
+						trigger: 'blur',
+						validator: validateEmail,
+					}],
+					step: [{
+						required: true,
+						trigger: 'blur',
+						message: '必填',
+					}],
+					t_date: [{
+						required: true,
+						trigger: 'blur',
+						message: '必填',
+					}],
+					t_description: [{
+						required: true,
+						trigger: 'blur',
+						message: '必填',
+					}],
+					status: [{
+						required: true,
+						trigger: 'blur',
+						message: '必填',
+					}],
+					step: [{
+						required: true,
+						trigger: 'blur',
+						message: '必填',
+					}],
+					c_date: [{
+						required: true,
+						trigger: 'blur',
+						message: '必填',
+					}],
+					c_num: [{
+						required: true,
+						trigger: 'blur',
+						message: '必填',
+					}],
+					c_name: [{
+						required: true,
+						trigger: 'blur',
+						message: '必填',
+					}],
+
 				},
 				//tree树菜单
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -553,19 +634,19 @@
 		},
 		methods: {
 			handleClick(tab, event) {
-		        console.log(tab, event);
-		    },
+				console.log(tab, event);
+			},
 			iconOperation(row, column, cell, event) {
 				if(column.property === "iconOperation") {
-					
+
 					row.isEditing = !row.isEditing;
-					
+
 				}
 			},
 			//清空
-            reset(){
-            	this.user={
-				companyName: '',
+			reset() {
+				this.user = {
+					companyName: '',
 					deptName: '',
 					username: '',
 					password: '',
@@ -585,59 +666,59 @@
 					traings: [],
 					qualifications: [],
 				}
-            },
+			},
 			//点击按钮显示弹窗
 			visible() {
 				this.reset();
-				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					this.user.createby=res.data.id;
-					this.user.createbyName=res.data.nickname;
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
+					this.user.createby = res.data.id;
+					this.user.createbyName = res.data.nickname;
 					console.log(this.user.createbyName);
-					this.user.enterby=res.data.id
-					this.user.enterbyName=res.data.nickname;
-					var date=new Date();
+					this.user.enterby = res.data.id
+					this.user.enterbyName = res.data.nickname;
+					var date = new Date();
 					this.user.createTime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-				}).catch((err)=>{
+				}).catch((err) => {
 					this.$message({
-						message:'网络错误，请重试',
-						type:'error'
+						message: '网络错误，请重试',
+						type: 'error'
 					})
 				})
-			
-//				this.statusshow1 = true;
-//				this.statusshow2 = false;
+
+				//				this.statusshow1 = true;
+				//				this.statusshow2 = false;
 				this.addtitle = true;
 				this.modifytitle = false;
-				this.modify=false;
+				this.modify = false;
 				this.show = true;
 			},
 			addfield1() {
-				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-				    var currentUser, currentDate;
-					this.currentUser=res.data.nickname;
-					this.enterby=res.data.id
-					var date=new Date();
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
+					var currentUser, currentDate;
+					this.currentUser = res.data.nickname;
+					this.enterby = res.data.id
+					var date = new Date();
 					this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 					var obj = {
-					step: '',
-					c_num: '',
-					c_name: '',
-					c_date: '',
-					status:'',
-					enterdate:this.currentDate,
-					enterbyName:this.currentUser,
-					enterby:this.enterby,
-					//少附件
-					isEditing: true
-				};
-				this.user.qualifications.push(obj);
-				}).catch((err)=>{
+						step: '',
+						c_num: '',
+						c_name: '',
+						c_date: '',
+						status: '',
+						enterdate: this.currentDate,
+						enterbyName: this.currentUser,
+						enterby: this.enterby,
+						//少附件
+						isEditing: true
+					};
+					this.user.qualifications.push(obj);
+				}).catch((err) => {
 					this.$message({
-						message:'网络错误，请重试',
-						type:'error'
+						message: '网络错误，请重试',
+						type: 'error'
 					})
 				})
-				
+
 			},
 			addfield2() {
 				var obj = {
@@ -650,8 +731,8 @@
 				this.user.traings.push(obj);
 			},
 			//刪除新建行
-			deleteRow(index,rows) {//Table-操作列中的删除行
-				rows.splice(index,1);
+			deleteRow(index, rows) { //Table-操作列中的删除行
+				rows.splice(index, 1);
 
 			},
 			//
@@ -660,14 +741,13 @@
 			},
 			//
 			handleNodeClick(data) { //获取勾选树菜单节点
-//				console.log(data);
+				//				console.log(data);
 			},
-
 
 			//点击按钮显示弹窗
 			visible() {
-				this.user={
-				companyName: '',
+				this.user = {
+					companyName: '',
 					deptName: '',
 					username: '',
 					password: '',
@@ -687,25 +767,25 @@
 					traings: [],
 					qualifications: [],
 				};
-				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					
-					this.user.createby=res.data.id;
-					this.user.createbyName=res.data.nickname;
-					this.user.enterby=res.data.id
-					this.user.enterbyName=res.data.nickname;
-					var date=new Date();
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
+
+					this.user.createby = res.data.id;
+					this.user.createbyName = res.data.nickname;
+					this.user.enterby = res.data.id
+					this.user.enterbyName = res.data.nickname;
+					var date = new Date();
 					this.user.createTime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-				}).catch((err)=>{
+				}).catch((err) => {
 					this.$message({
-						message:'网络错误，请重试',
-						type:'error'
+						message: '网络错误，请重试',
+						type: 'error'
 					})
 				})
-//				this.statusshow1 = true;
-//				this.statusshow2 = false;
+				//				this.statusshow1 = true;
+				//				this.statusshow2 = false;
 				this.addtitle = true;
 				this.modifytitle = false;
-				this.modify=false;
+				this.modify = false;
 				this.show = true;
 			},
 			// 这里是修改
@@ -713,8 +793,8 @@
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.modify = true;
-				
-//				$('.usernames .el-input__inner').attr('disabled',true);
+
+				//				$('.usernames .el-input__inner').attr('disabled',true);
 				var usersUrl = this.basic_url + '/api-user/users/currentMap';
 
 				this.$axios.get(usersUrl, {}).then((res) => {
@@ -729,12 +809,12 @@
 				});
 				var url = this.basic_url + '/api-user/users/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
-//					console.log(res.data);
+					//					console.log(res.data);
 					this.user = res.data;
-					this.user.sex=this.user.sex?'男':'女';
-					this.user.enabled =this.user.enabled? '活动' : '不活动';
-					this.user.ispermit=this.user.ispermit=='1'? '是' : '否';
-					this.user.islogin=this.user.islogin=='1'? '是' : '否';
+					this.user.sex = this.user.sex ? '男' : '女';
+					this.user.enabled = this.user.enabled ? '活动' : '不活动';
+					this.user.ispermit = this.user.ispermit == '1' ? '是' : '否';
+					this.user.islogin = this.user.islogin == '1' ? '是' : '否';
 					this.user.roleId = [];
 					var roles = this.user.roles;
 					for(var i = 0; i < roles.length; i++) {
@@ -780,25 +860,25 @@
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
 			},
 
-//			保存users/saveOrUpdate
+			//			保存users/saveOrUpdate
 			save() {
 				var _this = this;
 				this.$refs.user.validate((valid) => {
 					if(valid) {
-						_this.user.enabled=_this.user.enabled=='活动' ? 'true' : 'false';
-						_this.user.ispermit=_this.user.ispermit=='是'? '1' : '2';
-						_this.user.islogin=_this.user.islogin=='是'? '1' : '2';
+						_this.user.enabled = _this.user.enabled == '活动' ? 'true' : 'false';
+						_this.user.ispermit = _this.user.ispermit == '是' ? '1' : '2';
+						_this.user.islogin = _this.user.islogin == '是' ? '1' : '2';
 						var user = _this.user;
 						user.sex = user.sexName == '男' ? 1 : 0;
-						var roleId="";
-						if(typeof(user.roleId)!='undefind' && user.roleId.length > 0) {
+						var roleId = "";
+						if(typeof(user.roleId) != 'undefind' && user.roleId.length > 0) {
 							var arr = [];
 							user.roleId.forEach(function(item) {
 								var roles = _this.selectData;
 								for(var j = 0; j < roles.length; j++) {
 									if(roles[j].id == item) {
 										arr.push(roles[j]);
-										roleId = roleId + roles[j].id+",";
+										roleId = roleId + roles[j].id + ",";
 									}
 								}
 							});
@@ -814,9 +894,9 @@
 								this.$message({
 									message: '保存成功',
 									type: 'success',
-								});						
+								});
 								this.$emit('request');
-								this.$refs["user"].resetFields();//清空表单验证
+								this.$refs["user"].resetFields(); //清空表单验证
 							}
 						}).catch((err) => {
 							this.$message({
@@ -826,24 +906,24 @@
 						});
 					} else {
 						this.$message({
-								message: '有必填项未填写，请重新填写',
-								type: 'warning',
+							message: '有必填项未填写，请重新填写',
+							type: 'warning',
 						});
 						return;
 					}
 				})
 			},
 			//保存
-			saveAndUpdate(){
+			saveAndUpdate() {
 				this.save();
 				this.show = false;
 				this.$emit('request');
 			},
 			//保存并添加
-			saveAndSubmit(){
+			saveAndSubmit() {
 				this.save();
 				this.reset();
-//				this.show = false;
+				//				this.show = false;
 				this.$emit('request');
 			},
 			//所属组织
@@ -859,7 +939,7 @@
 					},
 				}).then((res) => {
 					this.resourceData = res.data;
-					
+
 					console.log(res.data)
 					this.dialogVisible = true;
 				});
@@ -871,13 +951,13 @@
 				this.editSearch = 'dept';
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
-//				var type = "2";
+				//				var type = "2";
 				var url = this.basic_url + '/api-user/depts/treeMap';
-//				var url = '/api/api-user/depts/treeByType';
+				//				var url = '/api/api-user/depts/treeByType';
 				this.$axios.get(url, {
-//					params: {
-//						type: type
-//					},
+					//					params: {
+					//						type: type
+					//					},
 				}).then((res) => {
 					this.resourceData = res.data;
 					this.dialogVisible = true;

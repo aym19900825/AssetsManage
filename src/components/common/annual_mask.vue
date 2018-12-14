@@ -19,7 +19,6 @@
 				<el-form status-icon :model="WORKPLAN" :label-position="labelPosition" :rules="rules" ref="WORKPLAN" label-width="100px">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames" @change="handleChange">
-
 							<el-collapse-item title="基本信息" name="1">
 								<el-row :gutter="20">
 									<el-col :span="5" class="pull-right">
@@ -196,97 +195,95 @@
 								  </el-table>
 							</el-collapse-item>
 							<!-- 年度计划列表 End -->
+							<!-- 检测依据、检测项目与要求 Begin-->
+							<div class="el-collapse-item pt10 pr20 pb20 ml60" aria-expanded="true" accordion>
+								<el-tabs v-model="activeName" @tab-click="handleClick">
+								    <el-tab-pane label="检测依据" name="first">
+								    	<div class="table-func table-funcb">
+											<el-button type="primary" size="mini" round @click="basisleadbtn" v-show="isEditList">
+												<i class="icon-search"></i>
+												<font>选择</font>
+											</el-button>
+										</div>
+						            	<el-table :data="basisList" border stripe height="200" style="width: 100%;" :default-sort="{prop:'basisList', order: 'descending'}">
+						            		<el-table-column prop="NUMBER" label="所属计划编号" width="120">
+						            			<template slot-scope="scope">
+										        	<span>{{scope.$index + 1}}</span>
+										      	</template>
+						            		</el-table-column>
 
-							<!-- 检测依据 Begin-->
-							<el-collapse-item title="检测依据" name="3" class="ml60">
-								<div class="table-func">
-									<el-button type="primary" size="mini" round @click="basisleadbtn" v-show="isEditList">
-										<i class="icon-search"></i>
-										<font>选择</font>
-									</el-button>
-								</div>
-				            	<el-table :data="basisList" border stripe height="200" style="width: 100%;" :default-sort="{prop:'basisList', order: 'descending'}">
-				            		<el-table-column prop="NUMBER" label="所属计划编号" width="120">
-				            			<template slot-scope="scope">
-								        	<span>{{scope.$index + 1}}</span>
-								      	</template>
-				            		</el-table-column>
+						            		<el-table-column prop="WP_LINENUM" label="所属计划行号" width="120"></el-table-column>
 
-				            		<el-table-column prop="WP_LINENUM" label="所属计划行号" width="120"></el-table-column>
+						            		<el-table-column prop="S_NUM" label="标准编号" width="250"></el-table-column>
 
-				            		<el-table-column prop="S_NUM" label="标准编号" width="250"></el-table-column>
+						            		<el-table-column prop="S_NAME" label="标准内容" width="250"></el-table-column>
+						            		<el-table-column prop="VERSION" label="版本" width="300"></el-table-column>
+						            		<el-table-column fixed="right" label="操作" width="80">
+										      <template slot-scope="scope">
+										        <el-button
+										          @click="delPlan(scope.$index,scope.row,'WORLPLANLINE_BASIS','basisList')"
+										          type="text"
+										          size="small">
+										          	<i class="icon-trash red"></i>
+										        </el-button>
+										      </template>
+										    </el-table-column>
+						            	</el-table>								
+								    </el-tab-pane>
+								    <el-tab-pane label="检测项目与要求" name="second">
+								    	<div class="table-func table-funcb">
+											<el-button type="primary" size="mini" round @click="basisleadbtn2" v-show="isEditList">
+												<i class="icon-search"></i>
+												<font>选择</font>
+											</el-button>
+										</div>
+						            	<el-table :data="proTestList" border stripe height="200" style="width: 100%;" :default-sort="{prop:'proTestList', order: 'descending'}">
+						            	    <el-table-column prop="iconOperation" fixed width="50px">
+										      <template slot-scope="scope" >
+										      	<i class="el-icon-check" v-if="scope.row.isEditing" @click="changeEdit(scope.row)">
+										      	</i>
+										      	<i class="el-icon-edit" v-if="!scope.row.isEditing" @click="changeEdit(scope.row)">
+										      	</i>
+										      </template>
+										    </el-table-column>
 
-				            		<el-table-column prop="S_NAME" label="标准内容" width="250"></el-table-column>
-				            		<el-table-column prop="VERSION" label="版本" width="300"></el-table-column>
-				            		<el-table-column fixed="right" label="操作" width="80">
-								      <template slot-scope="scope">
-								        <el-button
-								          @click="delPlan(scope.$index,scope.row,'WORLPLANLINE_BASIS','basisList')"
-								          type="text"
-								          size="small">
-								          	<i class="icon-trash red"></i>
-								        </el-button>
-								      </template>
-								    </el-table-column>
-				            	</el-table>
-							</el-collapse-item>
-							<!-- 检测依据 End -->
-
-							<!-- 检测项目与要求 begin -->
-							<el-collapse-item title="检测项目与要求" name="4" class="ml60">
-								<!-- 资质信息 Begin-->
-								<div class="table-func">
-									<el-button type="primary" size="mini" round @click="basisleadbtn2" v-show="isEditList">
-										<i class="icon-search"></i>
-										<font>选择</font>
-									</el-button>
-								</div>
-				            	<el-table :data="proTestList" border stripe height="200" style="width: 100%;" :default-sort="{prop:'proTestList', order: 'descending'}">
-				            	    <el-table-column prop="iconOperation" fixed width="50px">
-								      <template slot-scope="scope" >
-								      	<i class="el-icon-check" v-if="scope.row.isEditing" @click="changeEdit(scope.row)">
-								      	</i>
-								      	<i class="el-icon-edit" v-if="!scope.row.isEditing" @click="changeEdit(scope.row)">
-								      	</i>
-								      </template>
-								    </el-table-column>
-
-				            		<el-table-column prop="WP_NUM" label="所属计划编号" width="80">
-				            			<template slot-scope="scope">
-								        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_NUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_NUM}}</span>
-								      	</template>
-				            		</el-table-column>
-				            		<el-table-column label="产品排序号" sortable width="120px" prop="WP_LINENUM">
-								      <template slot-scope="scope">
-								      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_LINENUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_LINENUM}}</span>
-								      </template>
-								    </el-table-column>
-				            		<el-table-column prop="P_NUM" label="检验项目编号" width="170"></el-table-column>
-				            		<el-table-column prop="P_DESC" label="检验项目描述" width="250"></el-table-column>
-				            		<el-table-column prop="REMARKS" label="要求" width="200">
-				            			<template slot-scope="scope">
-								        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" placeholder="请输入内容">
-								        	</el-input>
-								        	<span v-if="!scope.row.isEditing">
-								        		{{scope.row.REMARKS}}
-								        	</span>
-								      </template>
-				            		</el-table-column>
-				            		<el-table-column prop="VERSION" label="版本" width="200"></el-table-column>
-				            		<el-table-column fixed="right" label="操作" width="80">
-								      <template slot-scope="scope">
-								        <el-button
-								          @click="delPlan(scope.$index,scope.row,'WORLPLANLINE_PROJECT','proTestList')" 
-								          type="text"
-								          size="small">
-								          	<i class="icon-trash red"></i>
-								        </el-button>
-								      </template>
-								    </el-table-column>
-				            	</el-table>
-							</el-collapse-item>
-							<!-- 检测项目与要求 End -->
-
+						            		<el-table-column prop="WP_NUM" label="所属计划编号" width="80">
+						            			<template slot-scope="scope">
+										        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_NUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_NUM}}</span>
+										      	</template>
+						            		</el-table-column>
+						            		<el-table-column label="产品排序号" sortable width="120px" prop="WP_LINENUM">
+										      <template slot-scope="scope">
+										      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_LINENUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_LINENUM}}</span>
+										      </template>
+										    </el-table-column>
+						            		<el-table-column prop="P_NUM" label="检验项目编号" width="170"></el-table-column>
+						            		<el-table-column prop="P_DESC" label="检验项目描述" width="250"></el-table-column>
+						            		<el-table-column prop="REMARKS" label="要求" width="200">
+						            			<template slot-scope="scope">
+										        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" placeholder="请输入内容">
+										        	</el-input>
+										        	<span v-if="!scope.row.isEditing">
+										        		{{scope.row.REMARKS}}
+										        	</span>
+										      </template>
+						            		</el-table-column>
+						            		<el-table-column prop="VERSION" label="版本" width="200"></el-table-column>
+						            		<el-table-column fixed="right" label="操作" width="80">
+										      <template slot-scope="scope">
+										        <el-button
+										          @click="delPlan(scope.$index,scope.row,'WORLPLANLINE_PROJECT','proTestList')" 
+										          type="text"
+										          size="small">
+										          	<i class="icon-trash red"></i>
+										        </el-button>
+										      </template>
+										    </el-table-column>
+						            	</el-table>
+								    </el-tab-pane>
+								</el-tabs>
+							</div>
+							<!-- 检测依据、检测项目与要求 End-->
 
 							<!-- todo -->
 							<!-- 文档编号列表 Begin-->
@@ -400,185 +397,184 @@
 		</div>
 		<!-- 检测依据弹出框begin -->
 		<el-dialog title="检测依据" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
-						<!-- 高级查询划出 Begin-->
-								<div class="pb10">
-									<el-form status-icon :model="searchList" label-width="70px">
-										<el-row :gutter="10" class="pb10">
-											<el-col :span="6">
-												<el-input v-model="searchList.S_NUM">
-													<template slot="prepend">标准编号</template>
-												</el-input>
-											</el-col>
-											<el-col :span="6">
-												<el-input v-model="searchList.S_NAME">
-													<template slot="prepend">标准名称</template>
-												</el-input>
-											</el-col>
-											<el-col :span="6">
-												<el-input v-model="searchList.S_ENGNAME">
-													<template slot="prepend">英文名称</template>
-												</el-input>
-											</el-col>
-											<el-col :span="6">
-												<el-input v-model="searchList.VERSION">
-													<template slot="prepend">版本</template>
-												</el-input>
-											</el-col>		
-										</el-row>
-										<el-row :gutter="20">
-											<el-col :span="6">
-												<el-input v-model="searchList.DEPARTMENT">
-													<template slot="prepend">录入人机构</template>
-												</el-input>
-											</el-col>
-											<el-col :span="6">
-												<el-date-picker style="width: 100%" v-model="searchList.RELEASETIME" type="date" placeholder="发布时间" value-format="yyyy-MM-dd HH:mm:ss">
-												</el-date-picker>
-											</el-col>
-											<el-col :span="6">
-												<el-date-picker style="width: 100%" v-model="searchList.STARTETIME" type="date" placeholder="启用时间" value-format="yyyy-MM-dd HH:mm:ss">
-												</el-date-picker>
-											</el-col>
-											<el-col :span="3">
-												<el-select style="width: 120%" v-model="searchList.STATUS" placeholder="请选择信息状态">
-													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-													</el-option>
-												</el-select>
-											</el-col>
-											<el-col :span="2">
-												<el-button type="primary" @click="searchinfo" size="small" style="position:absolute;right:10px;">搜索</el-button>
-											</el-col>
-										</el-row>
-									</el-form>
-								</div>
-								<!-- 高级查询划出 End-->
-					<!-- 第二层弹出的表格 -->
+			<!-- 高级查询划出 Begin-->
+			<div class="pb10">
+				<el-form status-icon :model="searchList" label-width="70px">
+					<el-row :gutter="10" class="pb10">
+						<el-col :span="6">
+							<el-input v-model="searchList.S_NUM">
+								<template slot="prepend">标准编号</template>
+							</el-input>
+						</el-col>
+						<el-col :span="6">
+							<el-input v-model="searchList.S_NAME">
+								<template slot="prepend">标准名称</template>
+							</el-input>
+						</el-col>
+						<el-col :span="6">
+							<el-input v-model="searchList.S_ENGNAME">
+								<template slot="prepend">英文名称</template>
+							</el-input>
+						</el-col>
+						<el-col :span="6">
+							<el-input v-model="searchList.VERSION">
+								<template slot="prepend">版本</template>
+							</el-input>
+						</el-col>		
+					</el-row>
+					<el-row :gutter="20">
+						<el-col :span="6">
+							<el-input v-model="searchList.DEPARTMENT">
+								<template slot="prepend">录入人机构</template>
+							</el-input>
+						</el-col>
+						<el-col :span="6">
+							<el-date-picker style="width: 100%" v-model="searchList.RELEASETIME" type="date" placeholder="发布时间" value-format="yyyy-MM-dd HH:mm:ss">
+							</el-date-picker>
+						</el-col>
+						<el-col :span="6">
+							<el-date-picker style="width: 100%" v-model="searchList.STARTETIME" type="date" placeholder="启用时间" value-format="yyyy-MM-dd HH:mm:ss">
+							</el-date-picker>
+						</el-col>
+						<el-col :span="3">
+							<el-select style="width: 120%" v-model="searchList.STATUS" placeholder="请选择信息状态">
+								<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+								</el-option>
+							</el-select>
+						</el-col>
+						<el-col :span="2">
+							<el-button type="primary" @click="searchinfo" size="small" style="position:absolute;right:10px;">搜索</el-button>
+						</el-col>
+					</el-row>
+				</el-form>
+			</div>
+			<!-- 高级查询划出 End-->
+			<!-- 第二层弹出的表格 Begin -->
 			<el-table :data="standardList" border stripe style="width: 100%;" :default-sort="{prop:'standardList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-					<el-table-column type="selection" width="55" fixed>
-					</el-table-column>
-					<el-table-column label="主键编号" width="120" sortable prop="ID">
-					</el-table-column>
-					<el-table-column label="标准编号" width="120" sortable prop="S_NUM">
-					</el-table-column>
-					<el-table-column label="标准名称" width="220" sortable prop="S_NAME">
-					</el-table-column>
-					</el-table-column>
-					<el-table-column label="英文名称" width="220" sortable prop="S_ENGNAME">
-					</el-table-column>
-					<el-table-column label="状态" width="100" sortable prop="STATUS">
-					</el-table-column>
-					<el-table-column label="发布时间" width="160" sortable prop="RELEASETIME">
-					</el-table-column>
-					<el-table-column label="启用时间" width="160" sortable prop="STARTETIME">
-					</el-table-column>
-					<el-table-column label="版本" width="100" sortable prop="VERSION">
-					</el-table-column>
-					<el-table-column label="录入人机构" width="180" sortable prop="DEPARTMENT">
-					</el-table-column>
-					<el-table-column label="录入人" width="120" prop="ENTERBY" sortable>
-					</el-table-column>
-					<el-table-column label="录入时间" width="160" prop="ENTERDATE" sortable>
-					</el-table-column>
-					<el-table-column label="修改人" width="120" prop="CHANGEBY" sortable>
-					</el-table-column>
-					<el-table-column label="修改时间" width="160" prop="CHANGEDATE" sortable>
-					</el-table-column>
-				</el-table>
-				<el-pagination background class="pull-right pt10 pb10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-				</el-pagination>
-				<!-- 表格 -->
+				<el-table-column type="selection" width="55" fixed>
+				</el-table-column>
+				<el-table-column label="主键编号" width="120" sortable prop="ID">
+				</el-table-column>
+				<el-table-column label="标准编号" width="120" sortable prop="S_NUM">
+				</el-table-column>
+				<el-table-column label="标准名称" width="220" sortable prop="S_NAME">
+				</el-table-column>
+				</el-table-column>
+				<el-table-column label="英文名称" width="220" sortable prop="S_ENGNAME">
+				</el-table-column>
+				<el-table-column label="状态" width="100" sortable prop="STATUS">
+				</el-table-column>
+				<el-table-column label="发布时间" width="160" sortable prop="RELEASETIME">
+				</el-table-column>
+				<el-table-column label="启用时间" width="160" sortable prop="STARTETIME">
+				</el-table-column>
+				<el-table-column label="版本" width="100" sortable prop="VERSION">
+				</el-table-column>
+				<el-table-column label="录入人机构" width="180" sortable prop="DEPARTMENT">
+				</el-table-column>
+				<el-table-column label="录入人" width="120" prop="ENTERBY" sortable>
+				</el-table-column>
+				<el-table-column label="录入时间" width="160" prop="ENTERDATE" sortable>
+				</el-table-column>
+				<el-table-column label="修改人" width="120" prop="CHANGEBY" sortable>
+				</el-table-column>
+				<el-table-column label="修改时间" width="160" prop="CHANGEDATE" sortable>
+				</el-table-column>
+			</el-table>
+			<el-pagination background class="pull-right pt10 pb10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+			</el-pagination>
+			<!-- 第二层弹出的表格 End -->
 			<span slot="footer" class="dialog-footer">
 		       <el-button @click="dialogVisible = false" style="margin-left: 37%;">取 消</el-button>
 		       <el-button type="primary" @click="addbasis">确 定</el-button>
 		    </span>
 		</el-dialog>
-		<!-- 检测依据弹出框end -->
+		<!-- 检测依据弹出框 End -->
 
-		<!-- 检测项目与要求弹出框begin -->
+		<!-- 检测项目与要求弹出框 Begin -->
 		<el-dialog title="检测项目测试与要求" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
-						<!-- 高级查询划出 Begin-->
-							<div class="pb10">
-									<el-form status-icon :model="searchList" label-width="70px">
-										<el-row :gutter="10">
-											<el-col :span="5">
-												<el-input v-model="searchList.P_NUM">
-													<template slot="prepend">项目编号</template>
-												</el-input>
-											</el-col>
-											<el-col :span="5">
-												<el-input v-model="searchList.DEPARTMENT">
-													<template slot="prepend">录入人机构</template>
-												</el-input>
-											</el-col>
-											<el-col :span="5">
-												<el-input v-model="searchList.P_NAME">
-													<template slot="prepend">项目名称</template>
-												</el-input>
-											</el-col>
-											<el-col :span="4">
-												<el-input v-model="searchList.VERSION">
-													<template slot="prepend">版本</template>
-												</el-input>
-											</el-col>
-											<el-col :span="3">
-												<el-select v-model="searchList.STATUS" placeholder="请选择信息状态">
-													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-													</el-option>
-												</el-select>
-											</el-col>
-											<el-col :span="2">
-												<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
-											</el-col>
-										</el-row>
-									</el-form>
-								</div>
-							<!-- 高级查询划出 End-->
-					<!-- 第二层弹出的表格 -->
-						<!-- 表格 Begin-->
-				<el-table :data="projectList" border stripe style="width: 100%;" :default-sort="{prop:'projectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-					<el-table-column type="selection" width="55" fixed>
-					</el-table-column>
-					<el-table-column label="检验/检测项编号" width="150" sortable prop="P_NUM">
-					</el-table-column>
-					<el-table-column label="项目名称" width="220" sortable prop="P_NAME">
-					</el-table-column>
-					<el-table-column label="人员资质" width="180" sortable prop="QUALIFICATION">
-					</el-table-column>
-					<el-table-column label="状态" width="100" sortable prop="STATUS" :formatter="judge">
-					</el-table-column>
-					<el-table-column label="领域" width="120" sortable prop="FIELD" >
-					</el-table-column>
-					<el-table-column label="子领域" width="120" sortable prop="CHILD_FIELD">
-					</el-table-column>
-					<el-table-column label="版本" width="100" sortable prop="VERSION">
-					</el-table-column>
-					<el-table-column label="录入人机构" width="180" sortable prop="DEPARTMENT">
-					</el-table-column>
-					<el-table-column label="录入人" width="120" prop="ENTERBY" sortable>
-					</el-table-column>
-					<el-table-column label="录入时间" width="160" prop="ENTERDATE" sortable :formatter="dateFormat">
-					</el-table-column>
-					<el-table-column label="修改人" width="120" prop="CHANGEBY" sortable>
-					</el-table-column>
-					<el-table-column label="修改时间" width="160" prop="CHANGEDATE" sortable :formatter="dateFormat">
-					</el-table-column>
-				</el-table>
-				<el-pagination background class="pull-right pt10 pb10"
-		            @size-change="sizeChange"
-		            @current-change="currentChange"
-		            :current-page="page.currentPage"
-		            :page-sizes="[10, 20, 30, 40]"
-		            :page-size="page.pageSize"
-		            layout="total, sizes, prev, pager, next"
-		            :total="page.totalCount">
-		        </el-pagination>
-				<!-- 表格 End-->
+			<!-- 高级查询划出 Begin-->
+			<div class="pb10">
+				<el-form status-icon :model="searchList" label-width="70px">
+					<el-row :gutter="10">
+						<el-col :span="5">
+							<el-input v-model="searchList.P_NUM">
+								<template slot="prepend">项目编号</template>
+							</el-input>
+						</el-col>
+						<el-col :span="5">
+							<el-input v-model="searchList.DEPARTMENT">
+								<template slot="prepend">录入人机构</template>
+							</el-input>
+						</el-col>
+						<el-col :span="5">
+							<el-input v-model="searchList.P_NAME">
+								<template slot="prepend">项目名称</template>
+							</el-input>
+						</el-col>
+						<el-col :span="4">
+							<el-input v-model="searchList.VERSION">
+								<template slot="prepend">版本</template>
+							</el-input>
+						</el-col>
+						<el-col :span="3">
+							<el-select v-model="searchList.STATUS" placeholder="请选择信息状态">
+								<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+								</el-option>
+							</el-select>
+						</el-col>
+						<el-col :span="2">
+							<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+						</el-col>
+					</el-row>
+				</el-form>
+			</div>
+			<!-- 高级查询划出 End-->
+			<!-- 第二层弹出的表格 Begin-->
+			<el-table :data="projectList" border stripe style="width: 100%;" :default-sort="{prop:'projectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table-column type="selection" width="55" fixed>
+				</el-table-column>
+				<el-table-column label="检验/检测项编号" width="150" sortable prop="P_NUM">
+				</el-table-column>
+				<el-table-column label="项目名称" width="220" sortable prop="P_NAME">
+				</el-table-column>
+				<el-table-column label="人员资质" width="180" sortable prop="QUALIFICATION">
+				</el-table-column>
+				<el-table-column label="状态" width="100" sortable prop="STATUS" :formatter="judge">
+				</el-table-column>
+				<el-table-column label="领域" width="120" sortable prop="FIELD" >
+				</el-table-column>
+				<el-table-column label="子领域" width="120" sortable prop="CHILD_FIELD">
+				</el-table-column>
+				<el-table-column label="版本" width="100" sortable prop="VERSION">
+				</el-table-column>
+				<el-table-column label="录入人机构" width="180" sortable prop="DEPARTMENT">
+				</el-table-column>
+				<el-table-column label="录入人" width="120" prop="ENTERBY" sortable>
+				</el-table-column>
+				<el-table-column label="录入时间" width="160" prop="ENTERDATE" sortable :formatter="dateFormat">
+				</el-table-column>
+				<el-table-column label="修改人" width="120" prop="CHANGEBY" sortable>
+				</el-table-column>
+				<el-table-column label="修改时间" width="160" prop="CHANGEDATE" sortable :formatter="dateFormat">
+				</el-table-column>
+			</el-table>
+			<el-pagination background class="pull-right pt10 pb10"
+	            @size-change="sizeChange"
+	            @current-change="currentChange"
+	            :current-page="page.currentPage"
+	            :page-sizes="[10, 20, 30, 40]"
+	            :page-size="page.pageSize"
+	            layout="total, sizes, prev, pager, next"
+	            :total="page.totalCount">
+	        </el-pagination>
+			<!-- 表格 End-->
 			<span slot="footer" class="dialog-footer">
 		       <el-button @click="dialogVisible2 = false" style="margin-left: 37%;">取 消</el-button>
 		       <el-button type="primary" @click="addbasis2">确 定</el-button>
 		    </span>
 		</el-dialog>
-		<!-- 检测项目与要求end -->
+		<!-- 检测项目与要求 End -->
 	</div>
 </template>
 
@@ -664,6 +660,7 @@
 				up: false,
 				addtitle:true,//添加弹出框titile
 				modifytitle:false,//修改弹出框titile
+				activeName: 'first',//tabs
 				activeNames: ['1','2','3','4','5','6','7'],//手风琴数量
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
@@ -811,9 +808,8 @@
 					this[delList].splice(index,1);
 				}
 			},
-			// 192.168.1.167:9100/api-apps/app/workplan/operate/createWorkNotice?ID=36
+			//下达任务通知书
 			assign(item){
-				console.log(item);
 				var dataid = item.ID;
 				if(item.ISCREATED == 1){
 					this.$message({
@@ -824,7 +820,6 @@
 				}else{
 					this.$axios.get(this.basic_url + '/api-apps/app/workplan/operate/createWorkNotice?ID=' + dataid, {}).then((res) => {
 						if(res.data.resp_code == 0) {
-
 							this.$message({
 								message: '下达工作任务通知书成功',
 								type: 'success'
@@ -840,14 +835,14 @@
 			},
    			//年度计划表格函数
    			iconOperation(row){
-				row.CHECKCOST = this.initcost;
    				row.isEditing = !row.isEditing;
 	            this.isEditList = row.isEditing;
 	            //如果有编辑状态的数据，保存上一条处于编辑状态的数据
             	var editId = this.editPlan.frontId;
             	if(editId){
-            		var worlplanlist = this.worlplanlist;
-	            	for(var i=0, len=worlplanlist.length; i<len; i++){
+            		let worlplanlist = this.worlplanlist;
+	            	for(let i=0, len=worlplanlist.length; i<len; i++){
+	            		// worlplanlist[i].CHECKCOST = this.initcost;
 	            		if(editId == worlplanlist[i].frontId){
 	            			worlplanlist[i].WORLPLANLINE_PROJECTList = JSON.parse(JSON.stringify(this.proTestList));
 	            			worlplanlist[i].WORLPLANLINE_BASISList = JSON.parse(JSON.stringify(this.basisList));
@@ -857,16 +852,28 @@
             	}
             	
 	            if(row.isEditing){
+	            	console.log('笔');
+	    //         	let money = document.getElementById("costshow").value;
+					// this.initcost = money;
+					// let num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
+					// num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
+					// row.CHECKCOST = num.join(".");
 	            	//编辑
 	        		this.editPlan = row;
 	        		this.proTestList = row.WORLPLANLINE_PROJECTList;
 			   		this.basisList = row.WORLPLANLINE_BASISList;
 	        	}else{
+	        		console.log('对号');
+	    //     		let money = document.getElementById("cost").value;
+					// this.initcost = money;
+					// let num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
+					// num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
+					// row.CHECKCOST = num.join(".");
 	        		this.editPlan = {};
 	        		this.proTestList = [];
 	        		this.basisList = [];
 	        	}
-	        	console.log(row);
+	        	// row.CHECKCOST = this.initcost;
 	        },
    			//上传文件 Begin
 			handleExceed(files, fileList) {
@@ -949,6 +956,10 @@
 					return;
 				}
             },
+            //tabs
+			handleClick(tab, event) {
+		        console.log(tab, event);
+		    },
             //检测依据弹出框
             basisleadbtn(){
 				this.dialogVisible = true;
@@ -1111,6 +1122,14 @@
 					for(var i=0, len=worlplanlist.length; i<len; i++){
 						worlplanlist[i].isEditing = false;
 						worlplanlist[i].frontId = this.frontId++;
+						// var money = document.getElementById("costshow").value;
+						// this.initcost = money;
+						console.log(worlplanlist[i].CHECKCOST);
+						var cost = worlplanlist[i].CHECKCOST.toString();
+						var num = parseFloat(this.toNum(cost)).toFixed(2).toString().split(".");
+						console.log(num);
+						num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
+						worlplanlist[i].CHECKCOST = num.join(".");
 					}
 					this.basisList = res.data.WORLPLANLINEList.length > 0 ? res.data.WORLPLANLINEList[0].WORLPLANLINE_BASISList : [];
 					this.proTestList = res.data.WORLPLANLINEList.length > 0 ? res.data.WORLPLANLINEList[0].WORLPLANLINE_PROJECTList : [];
@@ -1152,9 +1171,18 @@
 				$(".mask_div").css("margin", "7% 10%");
 				$(".mask_div").css("top", "0");
 			},
+			// rmoney(s) 
+			// { 
+			// 	return parseFloat(s.replace(/[^\d\.-]/g, "")); 
+			// },
 			// 保存users/saveOrUpdate
 			submitForm() {
 				if(!this.isEditList){
+					for(let i=0;i<this.worlplanlist.length;i++){
+						console.log(this.worlplanlist[i].CHECKCOST);
+						let b = parseFloat(this.worlplanlist[i].CHECKCOST.replace(/[^\d\.-]/g, ""));
+						this.worlplanlist[i].CHECKCOST = b;
+					}
 					this.WORKPLAN.WORLPLANLINEList = this.worlplanlist;
 					var url = this.basic_url +'/api-apps/app/workplan/saveOrUpdate';
 					this.$axios.post(url, this.WORKPLAN).then((res) => {

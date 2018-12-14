@@ -51,8 +51,33 @@
 					<el-form status-icon :model="searchList" label-width="70px">
 						<el-row :gutter="10">
 							<el-col :span="5">
-								<el-input v-model="searchList.typename">
-									<template slot="prepend">类型名称</template>
+								
+							</el-col>
+							<el-col :span="5">
+								<el-input v-model="searchList.C_PLANNUM">
+									<template slot="prepend">期间核查计划编号</template>
+								</el-input>
+							</el-col>
+							<el-col :span="5">
+								<el-input v-model="searchList.DESCRIPTION">
+									<template slot="prepend">计划描述</template>
+								</el-input>
+							</el-col>
+							<el-col :span="5">
+								<el-input v-model="searchList.ENTERBY">
+									<template slot="prepend">录入人</template>
+								</el-input>
+							</el-col>
+						</el-row>
+						<el-row :gutter="10" style="margin-top: 5px;">
+							<el-col :span="5">
+								<el-input v-model="searchList.ENTERDATE">
+									<template slot="prepend">录入时间</template>
+								</el-input>
+							</el-col>
+							<el-col :span="5">
+								<el-input v-model="searchList.DEPARTMEMT">
+									<template slot="prepend">录入人机构</template>
 								</el-input>
 							</el-col>
 							<el-col :span="2">
@@ -214,9 +239,11 @@
 				ismin:true,
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: {
-					nickname: '',
-					enabled: '',
-					createTime: ''
+					'C_PLANNUM': '',
+					'DESCRIPTION': '',
+					'ENTERBY': '',
+					'ENTERDATE': '',
+					'DEPARTMEMT': '',
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -304,8 +331,8 @@
 					return;
 				} else {
 					var changeUser = selData[0];
-					var id = changeUser.id;
-					var url = this.basic_url + '/api-user/users/' + id;
+					var id = changeUser.ID;
+					var url = this.basic_url + '/api-apps/app/checkPlan/' + id;
 					this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -314,6 +341,11 @@
 								type: 'success'
 							});
 							this.requestData();
+						}else{
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'success'
+							});
 						}
 					}).catch((err) => {
 						this.$message({
@@ -361,12 +393,11 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					// nickname: this.searchList.nickname,
-					// enabled: this.searchList.enabled,
-					// searchKey: 'createTime',
-					// searchValue: this.searchList.createTime,
-					// companyId: this.companyId,
-					// deptId: this.deptId
+					C_PLANNUM: this.searchList.C_PLANNUM,
+					DESCRIPTION: this.searchList.DESCRIPTION,
+					ENTERBY: this.searchList.ENTERBY,
+					ENTERDATE: this.searchList.ENTERDATE,
+					DEPARTMEMT: this.searchList.ENDEPARTMEMTTERBY,
 				}
 				var url = this.basic_url + '/api-apps/app/checkPlan';
 				this.$axios.get(url, {

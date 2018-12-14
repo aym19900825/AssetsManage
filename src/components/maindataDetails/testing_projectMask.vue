@@ -15,7 +15,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form status-icon :model="testing_projectForm"  :rules="rules" ref="testing_projectForm" label-width="100px">
+				<el-form status-icon :model="testing_projectForm" :rules="rules" ref="testing_projectForm" label-width="100px">
 					<div class="accordion">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基本信息" name="1">
@@ -67,10 +67,10 @@
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="人员资质" prop="QUALIFICATION">
-											<el-input v-model="testing_projectForm.QUALIFICATION">
+											<el-input v-model="testing_projectForm.QUALIFICATION" :disabled="true">
 												<el-button slot="append" icon="el-icon-search" @click="getpepole"></el-button>
 											</el-input>
-										</el-form-item> 
+										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="领域" prop="FIELD">
@@ -116,10 +116,10 @@
 						</el-collapse>
 					</div>
 					<div class="el-dialog__footer">
-							<el-button type="primary" @click="saveAndUpdate('testing_projectForm')">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit('testing_projectForm')">保存并添加</el-button>
-							<el-button v-if="modify" type="primary"@click="modifyversion('testing_projectForm')">修订</el-button>
-							<el-button @click="close">取消</el-button>
+						<el-button type="primary" @click="saveAndUpdate('testing_projectForm')">保存</el-button>
+						<el-button type="success" @click="saveAndSubmit('testing_projectForm')">保存并添加</el-button>
+						<el-button v-if="modify" type="primary" @click="modifyversion('testing_projectForm')">修订</el-button>
+						<el-button @click="close">取消</el-button>
 					</div>
 				</el-form>
 			</div>
@@ -136,7 +136,7 @@
 				</el-table-column>
 				<el-table-column label="资质有效期" sortable width="200px" prop="c_date">
 				</el-table-column>
-				
+
 			</el-table>
 			<el-pagination background class="pull-right" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 			</el-pagination>
@@ -158,7 +158,7 @@
 			},
 			testing_projectForm: {
 				type: Object,
-				default: function(){
+				default: function() {
 					return {
 						VERSION: '',
 						STATUS: '',
@@ -170,10 +170,10 @@
 						CHILD_FIELD: '',
 						DOCLINKS_NUM: '',
 						DEPARTMENT: '',
-						ENTERBY:'',
+						ENTERBY: '',
 						ENTERDATE: '',
 						CHANGEBY: '',
-						CHANGEDATE:'',
+						CHANGEDATE: '',
 					}
 				}
 			},
@@ -196,9 +196,9 @@
 			var validateQUANTITY = (rule, value, callback) => {
 				if(value === undefined) {
 					callback(new Error('单价不能为空'));
-				}else if (value === 0.00) {
+				} else if(value === 0.00) {
 					callback(new Error('请填写单价'));
-				}else{
+				} else {
 					callback();
 				}
 			};
@@ -234,14 +234,14 @@
 				down: true,
 				up: false,
 				activeNames: ['1'], //手风琴数量
-//				labelPosition: 'top', //表格
+				//				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				addtitle: true,
 				modifytitle: false,
-				modify:true,
-				statusshow1:true,
-				statusshow2:true,
-				rules: {//需要验证的字段
+				modify: true,
+				statusshow1: true,
+				statusshow2: true,
+				rules: { //需要验证的字段
 					P_NUM: [{
 						required: true,
 						trigger: 'blur',
@@ -270,8 +270,8 @@
 				},
 				//testing_projectForm:{},//检验/检测项目数据组
 				//tree
-				gridData:[],
-				selval:[],
+				gridData: [],
+				selval: [],
 				resourceData: [], //数组，我这里是通过接口获取数据
 				resourceDialogisShow: false,
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
@@ -279,55 +279,34 @@
 					children: "subDepts",
 					label: "simplename"
 				},
-				initcost:''
+				initcost: ''
 			};
 		},
 		methods: {
-			reset(){
-				this.testing_projectForm = { //数据库列表
-					VERSION: 1,
-					STATUS: '活动',
-					P_NUM: '',
-					P_NAME: '',
-					QUANTITY: '',
-					QUALIFICATION: '',
-					FIELD: '',
-					CHILD_FIELD: '',
-					DOCLINKS_NUM: '',
-					DEPT: '',
-					ENTERBY:'',
-					ENTERDATE: '',
-					CHANGEBY: '',
-					CHANGEDATE:'',	
-				};
-				this.$refs['testing_projectForm'].resetFields();
-				this.show = false;
-			},
 			toNum(str) {
 				return str.replace(/\,|\￥/g, "");
 			},
 			//金额两位小数点千位分隔符，四舍五入
-			toPrice(){
+			toPrice() {
 				var money = document.getElementById("cost").value;
 				this.initcost = money;
 				var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
-				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
+				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)', 'ig'), "$1,");
 				// this.dataInfo.CHECTCOST="￥" + num.join(".");
 				this.testing_projectForm.QUANTITY = num.join(".");
 			},
-			getCompany() {//文档查询接口，暂无通，待修改
+			getCompany() { //文档查询接口，暂无通，待修改
 				this.editSearch = 'DOCLINKS';
-				var url = this.basic_url + '/api-user/depts/type';//文件接口不对
-				this.$axios.get(url, {
-				}).then((res) => {
+				var url = this.basic_url + '/api-user/depts/type'; //文件接口不对
+				this.$axios.get(url, {}).then((res) => {
 					this.resourceData = res.data.data;
 					this.dialogVisible = true;
 				});
 			},
-			getCheckedNodes() {//获取树菜单节点
+			getCheckedNodes() { //获取树菜单节点
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
 			},
-			confirms() {//弹出框确定按钮调用数据
+			confirms() { //弹出框确定按钮调用数据
 				this.getCheckedNodes();
 				this.dialogVisible = false;
 				if(this.editSearch == 'DOCLINKS') {
@@ -346,7 +325,7 @@
 				this.page.currentPage = val;
 				this.requestData();
 			},
-			handleClose(done) {//确认框关闭
+			handleClose(done) { //确认框关闭
 				this.$confirm('确认关闭？')
 					.then(_ => {
 						done();
@@ -354,19 +333,22 @@
 					.catch(_ => {});
 			},
 
-			childMethods() {//添加内容时从父组件带过来的
-				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					this.testing_projectForm.DEPARTMENT=res.data.companyName;
-					this.testing_projectForm.ENTERBY=res.data.nickname;
-					var date=new Date();
+			visible() { //添加内容时从父组件带过来的
+			  	if (this.$refs['testing_projectForm']!==undefined) {
+     								this.$refs['testing_projectForm'].resetFields();	
+ 				}
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
+					this.testing_projectForm.DEPARTMENT = res.data.companyName;
+					this.testing_projectForm.ENTERBY = res.data.nickname;
+					var date = new Date();
 					this.testing_projectForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-				}).catch((err)=>{
+				}).catch((err) => {
 					this.$message({
-						message:'网络错误，请重试',
-						type:'error'
+						message: '网络错误，请重试',
+						type: 'error'
 					})
 				});
-				
+
 				this.statusshow1 = true;
 				this.statusshow2 = false;
 				this.addtitle = true;
@@ -374,60 +356,61 @@
 				this.modify = false;
 				this.show = true;
 			},
-			
-			detail() {//修改内容时从父组件带过来的
-				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					this.testing_projectForm.CHANGEBY=res.data.nickname;
-					var date=new Date();
+
+			detail() { //修改内容时从父组件带过来的
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
+					this.testing_projectForm.CHANGEBY = res.data.nickname;
+					var date = new Date();
 					this.testing_projectForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-				}).catch((err)=>{
+				}).catch((err) => {
 					this.$message({
-						message:'网络错误，请重试',
-						type:'error'
+						message: '网络错误，请重试',
+						type: 'error'
 					})
 				})
-				this.statusshow1 = false;//
+				this.statusshow1 = false; //
 				this.statusshow2 = true;
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.modify = true;
 				this.show = true;
-				
+
 			},
-			modifyversion(testing_projectForm){
+			modifyversion(testing_projectForm) {
 				this.$refs[testing_projectForm].validate((valid) => {
-		          if (valid) {
-					var url = this.basic_url + '/api-apps/app/inspectionPro/operate/upgraded';
-					this.$axios.post(url,this.testing_projectForm).then((res) => {
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
+					if(valid) {
+						var url = this.basic_url + '/api-apps/app/inspectionPro/operate/upgraded';
+						this.$axios.post(url, this.testing_projectForm).then((res) => {
+							//resp_code == 0是后台返回的请求成功的信息
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '保存成功',
+									type: 'success'
+								});
+								//重新加载数据
+								this.$emit('request');
+								this.$emit('reset');
+								
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '保存成功',
-								type: 'success'
+								message: '网络错误，请重试',
+								type: 'error'
 							});
-							//重新加载数据
-							this.$emit('request');
-							this.reset();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
-					});
-			          } else {
-			            this.$message({
+					} else {
+						this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
 						});
-			          }
-			   });
+					}
+				});
 			},
 			//点击关闭按钮
 			close() {
 				this.show = false;
 			},
-			
+
 			toggle(e) {
 				if(this.isok1 == true) {
 					this.maxDialog();
@@ -457,8 +440,8 @@
 				var _this = this;
 				this.$refs[testing_projectForm].validate((valid) => {
 					this.testing_projectForm.QUANTITY = _this.initcost;
-					if (valid) {
-						this.testing_projectForm.STATUS=((_this.testing_projectForm.STATUS=="1"||this.testing_projectForm.STATUS=='活动') ? '1' : '0');
+					if(valid) {
+						this.testing_projectForm.STATUS = ((_this.testing_projectForm.STATUS == "1" || this.testing_projectForm.STATUS == '活动') ? '1' : '0');
 						var url = this.basic_url + '/api-apps/app/inspectionPro/saveOrUpdate';
 						this.$axios.post(url, _this.testing_projectForm).then((res) => {
 							if(res.data.resp_code == 0) {
@@ -467,9 +450,12 @@
 									type: 'success'
 								});
 							}
+							this.$emit('reset');
 							this.$emit('request');
+							if (this.$refs['testing_projectForm']!==undefined) {
+     								this.$refs['testing_projectForm'].resetFields();	
+ 								}
 							//清空表单验证
- 							this.reset();
 						}).catch((err) => {
 							this.$message({
 								message: '网络错误，请重试',
@@ -482,39 +468,38 @@
 				});
 			},
 			//保存
-			saveAndUpdate(testing_projectForm){
+			saveAndUpdate(testing_projectForm) {
 				this.save(testing_projectForm);
 				this.show = false;
-				
+
 			},
 			//保存并添加
-			saveAndSubmit(testing_projectForm){
+			saveAndSubmit(testing_projectForm) {
 				this.save(testing_projectForm);
 				this.show = true;
-				
-				
+
 			},
 			getpepole() {
 				// type  1 這是負責人  2 這個事接收人
-//				var params = {
-//					page: this.page.currentPage,
-//					limit: this.page.pageSize,
-//				}
+				//				var params = {
+				//					page: this.page.currentPage,
+				//					limit: this.page.pageSize,
+				//				}
 				var url = this.basic_url + '/api-user/users/qualifications';
 				this.$axios.get(url, {
-//					params: params
+					//					params: params
 				}).then((res) => {
 					console.log(res);
 					this.page.totalCount = res.data.count;
-					
+
 					this.gridData = res.data.data;
 					this.dialogVisible = true;
-//					this.type = type;
+					//					this.type = type;
 				});
 			},
 			dailogconfirm() { //小弹出框确认按钮事件
 				this.dialogVisible = false;
-				this.testing_projectForm.QUALIFICATION=this.selval[0].c_name;
+				this.testing_projectForm.QUALIFICATION = this.selval[0].c_name;
 			},
 
 			handleClose(done) {
@@ -530,5 +515,7 @@
 
 <style>
 	@import '../../assets/css/mask-modules.css';
-	#cost{text-align: right;}
+	#cost {
+		text-align: right;
+	}
 </style>

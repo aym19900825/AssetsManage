@@ -44,7 +44,7 @@
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="标准编号" prop="S_NUM">
-											<el-input v-model="dataInfo.S_NUM"></el-input>
+											<el-input v-model="dataInfo.S_NUM" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -335,7 +335,6 @@
 							//重新加载数据
 							this.show = false;
 							this.$emit('request');
-							this.$refs["dataInfo"].resetFields();
 						}
 					}).catch((err) => {
 						this.$message({
@@ -456,8 +455,7 @@
 							});
 							//重新加载数据
 							this.$emit('request');
-							//清空表单验证
-                    		this.$refs["testing_projectForm"].resetFields();
+							this.$emit('reset');
 						}
 					}).catch((err) => {
 						this.$message({
@@ -482,7 +480,6 @@
 			//保存并添加
 			saveAndSubmit(dataInfo){
 				this.save(dataInfo);
-				this.$emit('reset');
 				this.show = true;
 				
 			},

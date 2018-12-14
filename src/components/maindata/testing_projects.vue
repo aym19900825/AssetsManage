@@ -8,8 +8,6 @@
 		<!--左侧菜单内容显示 Begin-->
 		<navs_left></navs_left>
 		<!--左侧菜单内容显示 End-->
-
-
 		<!--右侧内容显示 Begin-->
 		<div class="wrapper wrapper-content">
 			<div class="ibox-content">
@@ -323,15 +321,12 @@
 					CHANGEBY: '',
 					CHANGEDATE:'',	
 				};
-				 if (this.$refs['testing_projectForm']!==undefined) {
-     				this.$refs['testing_projectForm'].resetFields();	
- 					}
+				 
 			},
 			//添加检验/检测项目
 			
 			openAddMgr() {
-	        	this.reset();
-				this.$refs.child.childMethods();
+				this.$refs.child.visible();
 			},
 			
 			modify() {//修改检验/检测项目

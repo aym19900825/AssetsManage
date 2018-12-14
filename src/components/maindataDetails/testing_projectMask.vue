@@ -67,7 +67,7 @@
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="人员资质" prop="QUALIFICATION">
-											<el-input v-model="testing_projectForm.QUALIFICATION">
+											<el-input v-model="testing_projectForm.QUALIFICATION" :disabled="true">
 												<el-button slot="append" icon="el-icon-search" @click="getpepole"></el-button>
 											</el-input>
 										</el-form-item>
@@ -334,7 +334,9 @@
 			},
 
 			visible() { //添加内容时从父组件带过来的
-			    this.$emit('reset');
+			  	if (this.$refs['testing_projectForm']!==undefined) {
+     								this.$refs['testing_projectForm'].resetFields();	
+ 				}
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.testing_projectForm.DEPARTMENT = res.data.companyName;
 					this.testing_projectForm.ENTERBY = res.data.nickname;

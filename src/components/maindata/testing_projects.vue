@@ -430,7 +430,6 @@
 				this.selMenu = val;
 			},
 			requestData(index) {
-				console.log(111111);
 				var data = {//高级查询数据显示
 					page: this.page.currentPage,
 					limit: this.page.pageSize,

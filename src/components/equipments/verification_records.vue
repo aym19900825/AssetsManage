@@ -47,11 +47,36 @@
 				</div>
 				<!-- 高级查询划出 Begin-->
 				<div v-show="search" class="pb10">
+					 
+					 
+					 
+					 
+					 
 					<el-form status-icon :model="searchList" label-width="70px">
 						<el-row :gutter="10">
 							<el-col :span="5">
-								<el-input v-model="searchList.typename">
-									<template slot="prepend">类型名称</template>
+								
+							</el-col>
+							<el-col :span="5">
+								<el-input v-model="searchList.ASSETNUM">
+									<template slot="prepend">设备编号</template>
+								</el-input>
+							</el-col>
+							<el-col :span="5">
+								<el-input v-model="searchList.C_MEMO">
+									<template slot="prepend">检查日期</template>
+								</el-input>
+							</el-col>
+						</el-row>
+						<el-row :gutter="10" style="margin-top: 5px;">
+							<el-col :span="5">
+								<el-input v-model="searchList.A_NAME">
+									<template slot="prepend">设备名称</template>
+								</el-input>
+							</el-col>
+							<el-col :span="5">
+								<el-input v-model="searchList.C_MEMO">
+									<template slot="prepend">检查结论</template>
 								</el-input>
 							</el-col>
 							<el-col :span="2">
@@ -221,9 +246,10 @@
 				ismin:true,
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: {
-					nickname: '',
-					enabled: '',
-					createTime: ''
+					 'ASSETNUM': '',
+					 'A_NAME': '',
+					 'C_DATE': '',
+					 'C_MEMO': '',
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -311,8 +337,8 @@
 					return;
 				} else {
 					var changeUser = selData[0];
-					var id = changeUser.id;
-					var url = this.basic_url + '/api-user/users/' + id;
+					var id = changeUser.ID;
+					var url = this.basic_url + '/api-apps/app/checkRecord/' + id;
 					this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -321,6 +347,11 @@
 								type: 'success'
 							});
 							this.requestData();
+						}else{
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'success'
+							});
 						}
 					}).catch((err) => {
 						this.$message({
@@ -368,12 +399,11 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					// nickname: this.searchList.nickname,
-					// enabled: this.searchList.enabled,
-					// searchKey: 'createTime',
-					// searchValue: this.searchList.createTime,
-					// companyId: this.companyId,
-					// deptId: this.deptId
+					C_RECORDNUM: this.searchList.C_RECORDNUM,
+					ASSETNUM: this.searchList.ASSETNUM,
+					A_NAME: this.searchList.A_NAME,
+					C_DATE: this.searchList.C_DATE,
+					C_MEMO: this.searchList.C_MEMO,
 				}
 				var url = this.basic_url + '/api-apps/app/checkRecord';
 				this.$axios.get(url, {

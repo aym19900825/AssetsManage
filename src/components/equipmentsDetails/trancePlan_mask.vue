@@ -70,7 +70,7 @@
 							</el-collapse-item>
 							
 							<!-- 其他信息 -->
-							<el-collapse-item title="其他" name="3">
+							<el-collapse-item title="其他" name="3" v-show="modify">
 								<el-form-item v-for="item in otherInfo" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
 									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" disabled></el-input>
 									<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" disabled>

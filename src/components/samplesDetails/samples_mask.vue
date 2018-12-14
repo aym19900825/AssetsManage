@@ -15,7 +15,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="samplesForm" :label-position="labelPosition" :rules="rules" ref="samplesForm" label-width="110px" status-icon>
+				<el-form :model="samplesForm" :label-position="labelPosition" :rules="rules" ref="samplesForm" label-width="110px" status-icon class="demo-form-inline">
 					<div class="accordion">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基础信息" name="1">
@@ -32,7 +32,7 @@
 									</el-col>
 									
 									<el-col :span="7" class="pull-right">
-										<el-input placeholder="自动获取" v-model="samplesForm.ITEMNUM" >
+										<el-input placeholder="自动获取" v-model="samplesForm.ITEMNUM" :disabled="edit">
 											<template slot="prepend">样品编号</template>
 										</el-input>
 									</el-col>
@@ -229,7 +229,7 @@
 
 								    <el-table-column label="样品编号" sortable width="120px" prop="ITEMNUM">
 								      <template slot-scope="scope">
-								      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.ITEMNUM"></el-input>
+								      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.ITEMNUM" :disabled="edit"></el-input>
 								      	<span v-show="!scope.row.isEditing" >{{scope.row.ITEMNUM}}</span>
 								      </template>
 								    </el-table-column>

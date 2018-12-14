@@ -20,9 +20,9 @@
 						<el-collapse v-model="activeNames">
                             <el-collapse-item name="1">
                                 <el-form-item label-width="120px" v-for="item in basicInfo" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
-									<el-select v-model="item.prop" filterable placeholder="请选择" v-if="item.type == 'select'" @change="selChange">
+									<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'" @change="selChange">
 										<el-option v-for="item in item.option"
-										:key="item.ASSETNUM"
+										:key="item.ID"
 										:label="item.ASSETNUM"
 										:value="item.ASSETNUM">
 										</el-option>
@@ -183,7 +183,7 @@
 							</el-collapse-item>
 
 
-                            <el-collapse-item name="4">
+                            <el-collapse-item name="4" v-show="modify">
                                 <el-form-item label-width="120px" v-for="item in otherInfo" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
                                     <el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" disabled></el-input>
                                     <el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" disabled>
@@ -210,6 +210,11 @@
 		props: ['detailData'],
 		data() {
 			return {
+				rules: {
+					ASSETNUM: [
+						{ required: true, message: '请输入设备编号', trigger: 'blur' },
+					]
+				},
 				basicInfo: [
                     {
                         label: '设备编号',
@@ -306,6 +311,24 @@
 			};
 		},
 		methods: {
+			getUser(){
+				var url = this.basic_url + '/api-user/users/currentMap';
+				this.$axios.get(url,{}).then((res) => {
+				        this.dataInfo.ENTERBY = res.data.username;
+				        this.dataInfo.ENTERDATE = this.getToday();
+						this.dataInfo.DEPARTMENT = res.data.deptName;
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+			},
+			getToday(){
+				var date = new Date();
+				var str = date.getFullYear() + '-' + date.getMonth() + '-'+ date.getDate();
+				return str;
+			},
 			changeEdit(row){
 				row.isEditing = !row.isEditing;
 			},
@@ -369,18 +392,21 @@
 			},
 			//点击按钮显示弹窗
 			visible() {
-				this.addtitle = true;
-				this.modifytitle = false;
 				this.modify=false;
 				this.show = true;
+				this.getUser();
 			},
 			// 这里是修改
-			detail(dataid) {
-				this.addtitle = false;
-				this.modifytitle = true;
-				this.modify = true;
-				this.show = true;
-				this.dataInfo = this.detailData;
+			detail() {
+				var ID = this.detailData.ID;
+				var url = this.basic_url + '/api-apps/app/asset/' + ID;
+				this.$axios.get(url, {}).then((res) => {
+					this.modify = true;
+					this.show = true;
+					this.dataInfo = res.data;
+					this.dataInfo.tableList = this.dataInfo.ASSET_USEList;
+					this.dataInfo.maintenList = this.dataInfo.ASSET_MAINTENANCEList;
+				}).catch((wrong) => {});
 			},
 			//点击关闭按钮
 			close() {
@@ -421,12 +447,11 @@
 
 			submitForm() {
 				var _this = this;
-				var url = this.basic_url + '/api-apps/app/assetUse/saveOrUpdate';
+				var url = this.basic_url + '/api-apps/app/asset/saveOrUpdate';
 				this.$refs['dataInfo'].validate((valid) => {
 					if (valid) {
-						this.dataInfo.ID = '';
-						this.dataInfo.assetuseList = this.dataInfo.tableList;
-						this.dataInfo.assetmaintenanceList = this.dataInfo.maintenList;
+						this.dataInfo.ASSET_USEList = this.dataInfo.tableList;
+						this.dataInfo.ASSET_MAINTENANCEList = this.dataInfo.maintenList;
 						this.$axios.post(url, _this.dataInfo).then((res) => {
 							if(res.data.resp_code == 0) {
 								this.$message({

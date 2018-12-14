@@ -1,4 +1,5 @@
 <template>
+<!-- 期间核查计划 -->
 <div>
 	<div class="headerbg">
 		<vheader></vheader>
@@ -50,8 +51,33 @@
 					<el-form status-icon :model="searchList" label-width="70px">
 						<el-row :gutter="10">
 							<el-col :span="5">
-								<el-input v-model="searchList.typename">
-									<template slot="prepend">类型名称</template>
+								
+							</el-col>
+							<el-col :span="5">
+								<el-input v-model="searchList.C_PLANNUM">
+									<template slot="prepend">期间核查计划编号</template>
+								</el-input>
+							</el-col>
+							<el-col :span="5">
+								<el-input v-model="searchList.DESCRIPTION">
+									<template slot="prepend">计划描述</template>
+								</el-input>
+							</el-col>
+							<el-col :span="5">
+								<el-input v-model="searchList.ENTERBY">
+									<template slot="prepend">录入人</template>
+								</el-input>
+							</el-col>
+						</el-row>
+						<el-row :gutter="10" style="margin-top: 5px;">
+							<el-col :span="5">
+								<el-input v-model="searchList.ENTERDATE">
+									<template slot="prepend">录入时间</template>
+								</el-input>
+							</el-col>
+							<el-col :span="5">
+								<el-input v-model="searchList.DEPARTMEMT">
+									<template slot="prepend">录入人机构</template>
 								</el-input>
 							</el-col>
 							<el-col :span="2">
@@ -67,15 +93,15 @@
 						<el-table :data="userList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 							</el-table-column>
-							<el-table-column label="组织机构代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('组织机构代码')!=-1">
+							<el-table-column label="期间核查计划编号" width="200" sortable prop="C_PLANNUM" v-if="this.checkedName.indexOf('期间核查计划编号')!=-1">
 							</el-table-column>
-							<el-table-column label="单位名称" width="200" sortable prop="NAME" v-if="this.checkedName.indexOf('单位名称')!=-1">
+							<el-table-column label="计划描述" width="200" sortable prop="DESCRIPTION" v-if="this.checkedName.indexOf('计划描述')!=-1">
 							</el-table-column>
-							<el-table-column label="联系电话" sortable prop="PHONE" v-if="this.checkedName.indexOf('联系电话')!=-1">
+							<el-table-column label="录入人" sortable prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
 							</el-table-column>
-							<el-table-column label="联系地址" sortable prop="CONTACT_ADDRESS" v-if="this.checkedName.indexOf('联系地址')!=-1">
+							<el-table-column label="录入时间" sortable prop="ENTERDATE" v-if="this.checkedName.indexOf('录入时间')!=-1">
 							</el-table-column>						
-							<el-table-column label="信息状态" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
+							<el-table-column label="录入人机构" sortable prop="DEPARTMEMT" v-if="this.checkedName.indexOf('录入人机构')!=-1">
 							</el-table-column>
 						</el-table>
 						<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
@@ -93,6 +119,7 @@
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
+		<detailPage :detailData="aaaData[0]" ref="child" @request="requestData"></detailPage>
 	</div>
 </div>
 </template>
@@ -102,6 +129,7 @@
 	import navs_left from '../common/left_navs/nav_left4.vue'
 	import navs_header from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
+	import detailPage from '../equipmentsDetails/verifiPlan_mask.vue'
 	export default {
 		name: 'user_management',
 		components: {
@@ -109,6 +137,7 @@
 			navs_left,
 			navs_header,
 			tableControle,
+			detailPage
 		},
 		data() {
 			return {
@@ -125,33 +154,32 @@
 			        deptId: ''
 		        },
 				checkedName: [
-					'组织机构代码',
-					'单位名称',
-					'性别',
-					'联系电话',
-					'联系地址',
-					'信息状态'
+					'期间核查计划编号',
+					'计划描述',
+					'录入人',
+					'录入时间',	
+					'录入人机构',
 				],
 				tableHeader: [
 					{
-						label: '组织机构代码',
-						prop: 'username'
+						label: '期间核查计划编号',
+						prop: 'C_PLANNUM'
 					},
 					{
-						label: '单位名称',
-						prop: 'nickname'
+						label: '计划描述',
+						prop: 'DESCRIPTION'
 					},
 					{
-						label: '联系电话',
-						prop: 'telephone'
+						label: '录入人',
+						prop: 'ENTERBY'
 					},
 					{
-						label: '联系地址',
-						prop: 'deptName'
+						label: '录入时间',
+						prop: 'ENTERDATE'
 					},
 					{
-						label: '信息状态',
-						prop: 'enabled'
+						label: '录入人机构',
+						prop: 'DEPARTMEMT'
 					}
 				],
 				leftNavs: [//leftNavs左侧菜单数据
@@ -211,9 +239,11 @@
 				ismin:true,
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: {
-					nickname: '',
-					enabled: '',
-					createTime: ''
+					'C_PLANNUM': '',
+					'DESCRIPTION': '',
+					'ENTERBY': '',
+					'ENTERDATE': '',
+					'DEPARTMEMT': '',
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -257,7 +287,6 @@
 			},
 			//添加用戶
 			openAddMgr() {
-//				this.$refs.child.resetNew();
 				this.$refs.child.visible();
 			},
 			//修改用戶
@@ -302,8 +331,8 @@
 					return;
 				} else {
 					var changeUser = selData[0];
-					var id = changeUser.id;
-					var url = this.basic_url + '/api-user/users/' + id;
+					var id = changeUser.ID;
+					var url = this.basic_url + '/api-apps/app/checkPlan/' + id;
 					this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -312,6 +341,11 @@
 								type: 'success'
 							});
 							this.requestData();
+						}else{
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'success'
+							});
 						}
 					}).catch((err) => {
 						this.$message({
@@ -359,14 +393,13 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					nickname: this.searchList.nickname,
-					enabled: this.searchList.enabled,
-					searchKey: 'createTime',
-					searchValue: this.searchList.createTime,
-					companyId: this.companyId,
-					deptId: this.deptId
+					C_PLANNUM: this.searchList.C_PLANNUM,
+					DESCRIPTION: this.searchList.DESCRIPTION,
+					ENTERBY: this.searchList.ENTERBY,
+					ENTERDATE: this.searchList.ENTERDATE,
+					DEPARTMEMT: this.searchList.ENDEPARTMEMTTERBY,
 				}
-				var url = this.basic_url + '/api-user/users';
+				var url = this.basic_url + '/api-apps/app/checkPlan';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {

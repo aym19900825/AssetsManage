@@ -50,8 +50,38 @@
 					<el-form status-icon :model="searchList" label-width="70px">
 						<el-row :gutter="10">
 							<el-col :span="5">
-								<el-input v-model="searchList.typename">
-									<template slot="prepend">类型名称</template>
+								
+							</el-col>
+							<el-col :span="5">
+								<el-input v-model="searchList.DESCRIPTION">
+									<template slot="prepend">记录描述</template>
+								</el-input>
+							</el-col>
+							<el-col :span="5">
+								<el-input v-model="searchList.ASSETNUM">
+									<template slot="prepend">设备编号</template>
+								</el-input>
+							</el-col>
+							<el-col :span="5">
+								<el-input v-model="searchList.A_NAME">
+									<template slot="prepend">设备名称</template>
+								</el-input>
+							</el-col>
+						</el-row>
+						<el-row :gutter="10" style="margin-top: 5px;">
+							<el-col :span="5">
+								<el-input v-model="searchList.RECORDNUM">
+									<template slot="prepend">溯源记录编号</template>
+								</el-input>
+							</el-col>
+							<el-col :span="5">
+								<el-input v-model="searchList.PM_MODEL">
+									<template slot="prepend">溯源方式</template>
+								</el-input>
+							</el-col>
+							<el-col :span="5">
+								<el-input v-model="searchList.C_NUM">
+									<template slot="prepend">证书编号</template>
 								</el-input>
 							</el-col>
 							<el-col :span="2">
@@ -262,9 +292,12 @@
 				ismin:true,
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: {
-					nickname: '',
-					enabled: '',
-					createTime: ''
+					DESCRIPTION: '',
+					ASSETNUM: '',
+					A_NAME: '',
+					RECORDNUM: '',
+					PM_MODEL: '',
+					C_NUM: '',
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -352,8 +385,8 @@
 					return;
 				} else {
 					var changeUser = selData[0];
-					var id = changeUser.id;
-					var url = this.basic_url + '/api-user/users/' + id;
+					var id = changeUser.ID;
+					var url = this.basic_url + '/api-apps/app/pmRecord/' + id;
 					this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -362,6 +395,11 @@
 								type: 'success'
 							});
 							this.requestData();
+						}else{
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'success'
+							});
 						}
 					}).catch((err) => {
 						this.$message({
@@ -409,12 +447,12 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					// nickname: this.searchList.nickname,
-					// enabled: this.searchList.enabled,
-					// searchKey: 'createTime',
-					// searchValue: this.searchList.createTime,
-					// companyId: this.companyId,
-					// deptId: this.deptId
+					DESCRIPTION: this.searchList.DESCRIPTION,
+					ASSETNUM: this.searchList.ASSETNUM,
+					A_NAME: this.searchList.A_NAME,
+					RECORDNUM: this.searchList.RECORDNUM,
+					PM_MODEL: this.searchList.PM_MODEL,
+					C_NUM: this.searchList.C_NUM,
 				}
 				var url = this.basic_url + '/api-apps/app/pmRecord';
 				this.$axios.get(url, {

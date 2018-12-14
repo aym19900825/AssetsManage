@@ -67,15 +67,20 @@
 						<el-table :data="userList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 							</el-table-column>
-							<el-table-column label="组织机构代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('组织机构代码')!=-1">
+							<el-table-column label="记录编号" width="200" sortable prop="C_RECORDNUM" v-if="this.checkedName.indexOf('记录编号')!=-1">
 							</el-table-column>
-							<el-table-column label="单位名称" width="200" sortable prop="NAME" v-if="this.checkedName.indexOf('单位名称')!=-1">
+							<el-table-column label="设备编号" width="200" sortable prop="ASSETNUM" v-if="this.checkedName.indexOf('设备编号')!=-1">
 							</el-table-column>
-							<el-table-column label="联系电话" sortable prop="PHONE" v-if="this.checkedName.indexOf('联系电话')!=-1">
+							<el-table-column label="设备名称" sortable prop="A_NAME" v-if="this.checkedName.indexOf('设备名称')!=-1">
 							</el-table-column>
-							<el-table-column label="联系地址" sortable prop="CONTACT_ADDRESS" v-if="this.checkedName.indexOf('联系地址')!=-1">
-							</el-table-column>						
-							<el-table-column label="信息状态" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
+							<el-table-column label="核查日期" sortable prop="C_DATE" v-if="this.checkedName.indexOf('核查日期')!=-1">
+							</el-table-column>		
+							<el-table-column label="检查结论" sortable prop="C_MEMO" v-if="this.checkedName.indexOf('检查结论')!=-1">
+							</el-table-column>					
+							<el-table-column label="信息状态" sortable prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
+								<template slot-scope="scope">
+									<span v-text="scope.row.STATUS=='1'?'活动':'不活动'"></span>
+								</template>
 							</el-table-column>
 						</el-table>
 						<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
@@ -93,6 +98,7 @@
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
+		<detailPage :detailData="aaaData[0]" ref="child" @request="requestData"></detailPage>
 	</div>
 </div>
 </template>
@@ -102,6 +108,7 @@
 	import navs_left from '../common/left_navs/nav_left4.vue'
 	import navs_header from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
+	import detailPage from '../equipmentsDetails/verifiRec_mask.vue'
 	export default {
 		name: 'user_management',
 		components: {
@@ -109,6 +116,7 @@
 			navs_left,
 			navs_header,
 			tableControle,
+			detailPage
 		},
 		data() {
 			return {
@@ -125,33 +133,37 @@
 			        deptId: ''
 		        },
 				checkedName: [
-					'组织机构代码',
-					'单位名称',
-					'性别',
-					'联系电话',
-					'联系地址',
+					'期间核查记录编号',
+					'设备编号',
+					'设备名称',
+					'核查日期',
+					'检查结论',
 					'信息状态'
 				],
 				tableHeader: [
 					{
-						label: '组织机构代码',
-						prop: 'username'
+						label: '期间核查记录编号',
+						prop: 'C_RECORDNUM'
 					},
 					{
-						label: '单位名称',
-						prop: 'nickname'
+						label: '设备编号',
+						prop: 'ASSETNUM'
 					},
 					{
-						label: '联系电话',
-						prop: 'telephone'
+						label: '设备名称',
+						prop: 'A_NAME'
 					},
 					{
-						label: '联系地址',
-						prop: 'deptName'
+						label: '核查日期',
+						prop: 'C_DATE'
+					},
+					{
+						label: '检查结论',
+						prop: 'C_MEMO'
 					},
 					{
 						label: '信息状态',
-						prop: 'enabled'
+						prop: 'STATUS'
 					}
 				],
 				leftNavs: [//leftNavs左侧菜单数据
@@ -200,8 +212,6 @@
 				companyId: '',
 				deptId: '',
 				selUser: [],
-				'启用': true,
-				'冻结': false,
 				userList: [],
 				search: false,
 				show: false,
@@ -257,7 +267,6 @@
 			},
 			//添加用戶
 			openAddMgr() {
-//				this.$refs.child.resetNew();
 				this.$refs.child.visible();
 			},
 			//修改用戶
@@ -359,21 +368,20 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					nickname: this.searchList.nickname,
-					enabled: this.searchList.enabled,
-					searchKey: 'createTime',
-					searchValue: this.searchList.createTime,
-					companyId: this.companyId,
-					deptId: this.deptId
+					// nickname: this.searchList.nickname,
+					// enabled: this.searchList.enabled,
+					// searchKey: 'createTime',
+					// searchValue: this.searchList.createTime,
+					// companyId: this.companyId,
+					// deptId: this.deptId
 				}
-				var url = this.basic_url + '/api-user/users';
+				var url = this.basic_url + '/api-apps/app/checkRecord';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
 					this.userList = res.data.data;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
-				
 			},
 			loadMore () {
 			   if (this.loadSign) {

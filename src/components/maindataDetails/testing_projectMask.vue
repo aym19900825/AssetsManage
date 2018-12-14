@@ -528,6 +528,7 @@
 	}
 </script>
 
-<style scoped>
+<style>
 	@import '../../assets/css/mask-modules.css';
+	#cost{text-align: right;}
 </style>

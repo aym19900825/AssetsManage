@@ -520,21 +520,22 @@
 			},
 			//执行保存
 			save(testingForm) {
+				var _this = this;
 				this.$refs[testingForm].validate((valid) => {
 					if (valid) {
-					    this.testingForm.STATUS=this.testingForm.STATUS=="活动" ? '1' : '0';
+					    _this.testingForm.STATUS=_this.testingForm.STATUS=="活动" ? '1' : '0';
 						var url = this.basic_url + '/api-apps/app/inspectionMet/saveOrUpdate';
-						this.testingForm.VERSION = this.testingForm.VERSION + 1;//修改时版本+1
-						this.$axios.post(url,this.testingForm).then((res) => {
+						this.$axios.post(url,_this.testingForm).then((res) => {
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',
 									type: 'success'
 								});
+								
+								this.$emit('reset');
 								//重新加载数据
 								this.$emit('request');
-								this.$emit('reset');
 							}
 						}).catch((err) => {
 							this.$message({
@@ -543,6 +544,7 @@
 							});
 						});
 					} else {
+						this.show = true;
 						this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
@@ -560,7 +562,6 @@
 			//保存并添加
 			saveAndSubmit(testingForm){
 				this.save(testingForm);
-				this.$emit('reset');
 				this.show = true;
 				
 			},

@@ -304,6 +304,9 @@
 					"CHANGEBY": '',
 					"CHANGEDATE": '',
 				};
+				if(this.$refs['testingForm'] !== undefined) {
+					this.$refs['testingForm'].resetFields();
+				}
 			},
 			openAddMgr() {//添加检验/检测方法编号数据
 				this.reset();

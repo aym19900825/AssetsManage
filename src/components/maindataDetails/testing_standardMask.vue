@@ -287,7 +287,7 @@
 //					S_NUM: [{ required: true, message: '必填', trigger: 'blur' }],//名称
 					S_NAME: [{ required: true, message: '必填', trigger: 'blur' }],//名称
 //					RELEASETIME:[{required: true, message: '必填', trigger: 'change'}],
-//					STARTETIME: [{required: true,trigger: 'blur',message: '必填',}],
+					RELEASE_UNIT: [{required: true,trigger: 'blur',message: '必填',}],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -324,15 +324,13 @@
 			},
 			//添加点击按钮显示弹窗
 			visible() {
-				this.$refs["dataInfo"].resetFields();//清空表单验证
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.modify = false;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					console.log(res);
-					this.dataInfo.DEPARTMENT=res.data.companyName;
-					console.log(this.dataInfo.DEPARTMENT)
-					// this.dataInfo.DEPARTMENT=res.data.deptName;
+//					this.dataInfo.DEPARTMENT=res.data.companyName;
+				     this.dataInfo.DEPARTMENT=res.data.deptName;
 					this.dataInfo.ENTERBY=res.data.nickname;
 					var date=new Date();
 					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
@@ -417,6 +415,7 @@
 							//重新加载数据
 							this.show = false;
 							this.$emit('request');
+							
 						}
 					}).catch((err) => {
 						this.$message({
@@ -449,8 +448,9 @@
 								type: 'success'
 							});
 							//重新加载数据
-							this.$emit('request');
 							this.$emit('reset');
+							this.$emit('request');
+							this.visible();
 						}
 					}).catch((err) => {
 						this.$message({
@@ -459,6 +459,7 @@
 						});
 					});
 			          } else {
+			          	this.show = true;
 			          	this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'

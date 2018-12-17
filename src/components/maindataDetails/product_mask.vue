@@ -266,6 +266,7 @@
 								//重新加载数据
 								this.$emit('request');
 								this.$emit('reset');
+								this.visible();
 							}
 						}).catch((err) => {
 							this.$message({
@@ -274,6 +275,7 @@
 							});
 						});
 					} else {
+						this.show = true;
 						this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
@@ -287,7 +289,6 @@
 			},
 			saveAndSubmit(PRODUCT) {
 				this.save(PRODUCT);
-
 				this.show = true;
 			},
 			//点击修订按钮

@@ -50,15 +50,27 @@
 				<div v-show="search" class="pb10">
 					<el-form status-icon :model="searchList" label-width="70px">
 						<el-row :gutter="10">
-							<el-col :span="5">
-								<el-input v-model="searchList.typename">
-									<template slot="prepend">类型名称</template>
-								</el-input>
-							</el-col>
-							<el-col :span="2">
-								<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
-							</el-col>
-						</el-row>
+								<el-col :span="5">
+								</el-col>
+								<el-col :span="5">
+									<el-input v-model="searchList.ASSETNUM">
+										<template slot="prepend">设备编号</template>
+									</el-input>
+								</el-col>
+								<el-col :span="5">
+									<el-input v-model="searchList.DESCRIPTION">
+										<template slot="prepend">设备名称</template>
+									</el-input>
+								</el-col>
+								<el-col :span="4">
+									<el-input v-model="searchList.MODEL">
+										<template slot="prepend">规格型号</template>
+									</el-input>
+								</el-col>
+								<el-col :span="2">
+									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+								</el-col>
+							</el-row>
 					</el-form>
 				</div>
 				<!-- 高级查询划出 End-->
@@ -124,12 +136,6 @@
 				searchData: {
 			        page: 1,
 			        limit: 10,//分页显示数
-//			        nickname: '',
-//			        enabled: '',
-//			        searchKey: '',
-//			        searchValue: '',
-//			        companyId: '',
-//			        deptId: ''
 		        },
 				checkedName: [
 					'设备编号',
@@ -174,9 +180,9 @@
 				ismin:true,
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: {
-//					nickname: '',
-//					enabled: '',
-//					createTime: ''
+					ASSETNUM: '',
+					DESCRIPTION: '',
+					MODEL: ''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -315,6 +321,9 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
+					ASSETNUM: this.searchList.ASSETNUM,
+					DESCRIPTION: this.searchList.DESCRIPTION,
+					MODEL: this.searchList.MODEL
 				}
 				var url = this.basic_url + '/api-apps/app/asset';
 				this.$axios.get(url, {

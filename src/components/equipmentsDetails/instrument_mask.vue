@@ -35,13 +35,14 @@
 									</el-col>
 								</el-row>
 								<el-form-item v-for="item in basicInfo" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
-									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'"></el-input>
+									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && item.prop !='A_PRICE' "></el-input>
 									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'"></el-input>
 									<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'">
 									</el-date-picker>
 									<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'">
 										<el-radio :label="it.label" v-for="it in item.opts"></el-radio>
 									</el-radio-group>
+									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && item.prop =='A_PRICE' " @blur="handlePrice"></el-input>
 								</el-form-item>
 							</el-collapse-item>
 
@@ -106,14 +107,9 @@
 			var checkNum = (rule, value, callback) => {
 				if (!value) {
 					return callback(new Error('请输入设备价值'));
+				}else{
+					callback();
 				}
-				setTimeout(() => {
-					if (!/^[0-9]*$/.test(value)) {
-						callback(new Error('请输入数字值'));
-					} else {
-						callback();
-					}
-				}, 1000);
 			};
 			return {
 				rules: {
@@ -269,7 +265,7 @@
 					},
                     {
 						label: '计量器具',
-						prop: 'INS_SITE',
+						prop: 'ISMETER',
 						width: '30%',
 						type: 'radio',
 						displayType: 'inline-block',
@@ -421,7 +417,7 @@
 					},
                     {
 						label: '技术资料',
-						prop: 'SUPPORT_ASSET',
+						prop: 'TECHNICAL_DATA',
 						width: '100%',
 						type: 'textarea',
 						displayType: 'inline-block'
@@ -541,6 +537,9 @@
 			};
 		},
 		methods: {
+			handlePrice(){
+				this.dataInfo.A_PRICE = parseFloat(this.dataInfo.A_PRICE).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+			},
 			getUser(opt){
 				var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url,{}).then((res) => {
@@ -594,6 +593,7 @@
 			// 这里是修改
 			detail(dataid) {
 				this.dataInfo = this.detailData;
+				this.handlePrice();
 				this.getUser();
 				this.modify = true;
 				this.show = true;

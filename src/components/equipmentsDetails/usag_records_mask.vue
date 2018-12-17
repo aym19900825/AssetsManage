@@ -286,8 +286,7 @@
 				up: false,
 				activeNames: ['1', '2','3','4'], //手风琴数量
 				dialogVisible: false, //对话框
-				addtitle: true, //添加弹出框titile
-				modifytitle: false, //修改弹出框titile
+				modify: false,
 				resourceData: [], //数组，我这里是通过接口获取数据，
 				resourceDialogisShow: false,
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
@@ -360,12 +359,12 @@
 			delLine(index, row, listName){
 				var TableName = '';
 				if(listName=='tableList'){
-					TableName = 'assetUse';
+					TableName = 'ASSET_USE';
 				}else{
-					TableName = 'assetMaintenance';
+					TableName = 'ASSET_MAINTENANCE';
 				}
 				if(row.ID){
-					var url = this.basic_url + '/api-apps/app/' + TableName +'/' + row.ID;
+					var url = this.basic_url + '/app/asset/' + TableName +'/' + row.ID;
 					this.$axios.delete(url, {}).then((res) => {
 						if(res.data.resp_code == 0){
 							this.dataInfo[listName].splice(index,1);

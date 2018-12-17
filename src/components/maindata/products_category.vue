@@ -239,7 +239,6 @@
 					children: "subDepts",
 					label: "simplename"
 				},
-				userData: [],
 				page: { //分页显示
 					currentPage: 1,
 					pageSize: 10,

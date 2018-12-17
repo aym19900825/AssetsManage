@@ -248,32 +248,38 @@
 											</el-table-column>
 											<el-table-column label="检验检测项目编号" sortable width="145px" prop="P_NUM">
 												<template slot-scope="scope">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.P_NUM}}</span>
+													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="请输入内容"></el-input>
+													<span v-show="!scope.row.isEditing">{{scope.row.P_NUM}}</span>
 												</template>
 											</el-table-column>
 											<el-table-column prop="P_DESC" label="检验检测项目内容" sortable width="145px">
 												<template slot-scope="scope">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.P_DESC}}</span>
+													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入内容"></el-input>
+													<span v-show="!scope.row.isEditing">{{scope.row.P_DESC}}</span>
 												</template>
 											</el-table-column>
 											<el-table-column prop="REMARKS" label="要求" sortable width="80px">
 												<template slot-scope="scope">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.REMARKS}}</span>
+													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" placeholder="请输入内容"></el-input>
+													<span v-show="!scope.row.isEditing">{{scope.row.REMARKS}}</span>
 												</template>
 											</el-table-column>
 											<el-table-column prop="REMARKS" label="单价" sortable width="80px">
 												<template slot-scope="scope">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.REMARKS}}</span>
+													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" placeholder="请输入内容"></el-input>
+													<span v-show="!scope.row.isEditing">{{scope.row.REMARKS}}</span>
 												</template>
 											</el-table-column>
 											<el-table-column prop="VERSION" label="版本" sortable width="80px">
 												<template slot-scope="scope">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.VERSION}}</span>
+													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入内容"></el-input>
+													<span v-show="!scope.row.isEditing">{{scope.row.VERSION}}</span>
 												</template>
 											</el-table-column>
 											<el-table-column prop="STATUS" label="信息状态" sortable width="120px">
 												<template slot-scope="scope">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.STATUS}}</span>
+													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input>
+													<span v-show="!scope.row.isEditing">{{scope.row.STATUS}}</span>
 												</template>
 											</el-table-column>
 											<el-table-column label="附件" sortable width="120px">

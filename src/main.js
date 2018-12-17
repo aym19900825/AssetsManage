@@ -20,6 +20,7 @@ import vueGridLayout from 'vue-grid-layout'
 
 import vueztree from 'vue-ztree-2.0/dist/vue-ztree-2.0.umd.min.js'
 import EasyScroll from 'easyscroll'//自定义滚动条
+import common from './assets/js/common.js'
 //import './jquery/dist/jquery.min.js'
 //import 'bootstrap/dist/css/bootstrap.min.css'
 //import 'bootstrap/dist/js/bootstrap.min.js'
@@ -48,6 +49,7 @@ Vue.directive('loadmore', {
 Vue.config.productionTip = false
 Vue.prototype.$echarts = echarts 
 Vue.prototype.$moment = moment//赋值使用
+Vue.prototype.common = common
 Vue.use(ElementUI)
 Vue.use(vueztree)
 Vue.use(EasyScroll)//自定义滚动条
@@ -59,7 +61,7 @@ new Vue({
   components: { App },
   template: '<App/>'
 })
-
+ 
 /*window.Vue.directive('loadmore', {
   	bind(el, binding) {
     	const selectWrap = el.querySelector('.el-table__body-wrapper')

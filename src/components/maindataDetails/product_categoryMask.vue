@@ -167,9 +167,11 @@
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
+				category:{}
 			};
 		},
 		methods: {
+			
 			//清空
 //			reset() {
 //				this.CATEGORY = {
@@ -229,6 +231,10 @@
 					this.CATEGORY.CHANGEBY = res.data.nickname;
 					var date = new Date();
 					this.CATEGORY.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					console.log(this.CATEGORY);
+					//深拷贝数据
+					let _obj = JSON.stringify(this.CATEGORY);
+        			this.category = JSON.parse(_obj);
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -237,29 +243,43 @@
 				});
 
 				this.show = true;
+				
 			},
 			//点击修订按钮
 			modifyversion(CATEGORY) {
 				this.$refs[CATEGORY].validate((valid) => {
-					if(valid) {
+				if(valid) {
+					var category=JSON.stringify(this.category); 
+ 					var CATEGORY=JSON.stringify(this.CATEGORY);
+				 	if(category==CATEGORY){
+				  	this.$message({
+							message: '没有修改不能修改',
+							type: 'warning'
+						});
+						return false;
+				  }else{
 						var url = this.basic_url + '/api-apps/app/productType/operate/upgraded';
 						this.$axios.post(url, this.CATEGORY).then((res) => {
 							//resp_code == 0是后台返回的请求成功的信息
-							if(res.data.resp_code == 0) {
-								this.$message({
-									message: '保存成功',
-									type: 'success'
-								});
-								//重新加载数据
-								this.show = false;
-								this.reset();
-							}
+								if(res.data.resp_code == 0) {
+									this.$message({
+										message: '修订成功',
+										type: 'success'
+									});
+									//重新加载数据
+									this.$emit('request');
+									this.show = false;
+								}
+								
 						}).catch((err) => {
 							this.$message({
 								message: '网络错误，请重试',
 								type: 'error'
 							});
 						});
+					
+					}
+		
 					} else {
 						this.$message({
 							message: '未填写完整，请填写',
@@ -267,6 +287,7 @@
 						});
 					}
 				});
+				
 			},
 			//点击关闭按钮
 			close() {
@@ -354,8 +375,11 @@
 						done();
 					})
 					.catch(_ => {});
-			}
-		}
+			},
+		},
+		mounted() {
+			
+		},
 	}
 </script>
 

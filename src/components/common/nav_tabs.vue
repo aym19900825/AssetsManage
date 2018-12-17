@@ -44,7 +44,7 @@ export default {
             //tab宽度
             var tabW = $('.page-tabs').width();
             //总宽度
-            var contentW = $('.content-tabs').width();
+            var contentW = $('.content-tabs').width()-240;
             if(tabW-left+80 < contentW){
                 $('.page-tabs').offset({
                     left: left - 110

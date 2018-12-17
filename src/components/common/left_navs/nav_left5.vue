@@ -73,6 +73,9 @@ export default {
 				sessionStorage.setItem('clickedNav',JSON.stringify({arr:[]}));
 			}
 			var clickedNav = JSON.parse(sessionStorage.getItem('clickedNav')).arr;
+			console.log(1234);
+			console.log(clickedNav);
+			
 			var flag = true;
 			for(var i = 0; i < clickedNav.length; i++){
 				if(item.navtitle == clickedNav[i].navtitle){
@@ -80,6 +83,7 @@ export default {
 				}
 			}
 			if(flag){
+//				array.splice(2, 0, "three");
 				clickedNav.push(item);
 			}
 
@@ -87,7 +91,8 @@ export default {
 				sessionStorage.setItem('selectedNav',JSON.stringify({}));
 			}
 			var selectedNav = JSON.parse(sessionStorage.getItem('selectedNav'));
-			
+			console.log(6789)
+			console.log(selectedNav);
 			selectedNav = item;
 			sessionStorage.setItem('selectedNav',JSON.stringify(selectedNav));
 			sessionStorage.setItem('clickedNav',JSON.stringify({arr:clickedNav}));
@@ -116,7 +121,7 @@ export default {
 		}
 	},
 	mounted() {
-		
+		this.common.tabLeft();
 	}
 }
 </script>

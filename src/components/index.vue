@@ -155,18 +155,18 @@ export default {
 				navicon: 'icon-contract',
 				navtitle: '委托书管理',
 				navherf: '/inspect_proxy'
-			}, {
+			},  {
+				navicon: 'icon-worklist',//原工作任务单 workorders.vue
+				navtitle: '检验工作处理',
+				navherf: '/workorders'
+			},{
 				navicon: 'icon-sample3',
 				navtitle: '样品管理',
 				navherf: '/samples'
 			}, {
-				navicon: 'icon-worklist',//原工作任务单 workorders.vue
-				navtitle: '检验工作处理',
-				navherf: '/workorders'
-			}, {
 				navicon: 'icon-device',
 				navtitle: '设备管理',
-				navherf: '/devices'
+				navherf: '/instruments'
 			}, {
 				navicon: 'icon-testing3',
 				navtitle: '检验/检测项目管理',

@@ -64,7 +64,7 @@
 						<el-row :gutter="10">
 							<el-col :span="5">
 								<el-input v-model="searchList.WP_NUM">
-									<template slot="prepend">计划编号</template>
+									<template slot="prepend">编号</template>
 								</el-input>
 							</el-col>
 							<el-col :span="5">
@@ -131,7 +131,7 @@
 						<el-col :span="5" class="lefttree">
 							<div class="lefttreebg">
 								<div class="left_tree_title clearfix" @click="min3max()">
-									<div class="pull-left pr20" v-if="ismin">组织机构</div>
+									<div class="pull-left pr20" v-if="ismin">类型</div>
 									<span class="pull-right navbar-minimalize minimalize-styl-2">
 										<i class="icon-doubleok icon-double-angle-left blue"></i>
 									</span>
@@ -149,18 +149,26 @@
 							<el-table :data="userList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="计划编号" sortable width="100px" prop="WP_NUM" v-if="this.checkedName.indexOf('计划编号')!=-1">
+								<el-table-column label="编号" sortable width="100px" prop="WP_NUM" v-if="this.checkedName.indexOf('编号')!=-1">
 								</el-table-column>
-								<el-table-column label="计划描述" sortable width="200px" prop="DESCRIPTION" v-if="this.checkedName.indexOf('计划描述')!=-1">
+								<el-table-column label="描述" sortable width="200px" prop="DESCRIPTION" v-if="this.checkedName.indexOf('描述')!=-1">
 								</el-table-column>
-								<el-table-column label="年度" sortable width="100px" prop="YEAR" v-if="this.checkedName.indexOf('年度')!=-1">
+								<el-table-column label="年度" sortable width="80px" prop="YEAR" v-if="this.checkedName.indexOf('年度')!=-1">
 								</el-table-column>
 								</el-table-column>
-								<el-table-column label="录入人" sortable width="210px" prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
+								<!-- <el-table-column label="录入人" sortable width="210px" prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
+								</el-table-column> -->
+								<el-table-column label="录入时间" sortable width="100px" prop="ENTERDATE" v-if="this.checkedName.indexOf('录入时间')!=-1" :formatter="dateFormat">
 								</el-table-column>
-								<el-table-column label="录入时间" sortable width="210px" prop="ENTERDATE" v-if="this.checkedName.indexOf('录入时间')!=-1">
+								<el-table-column label="修改时间" sortable width="100px" prop="ENTERDATE" v-if="this.checkedName.indexOf('修改时间')!=-1" :formatter="dateFormat">
 								</el-table-column>
-								<el-table-column label="执行状态" sortable  width="380px" prop="LEADER_STATUS" v-if="this.checkedName.indexOf('执行状态')!=-1">
+								</el-table-column><el-table-column label="编辑状态" sortable width="100px" prop="STATUS" v-if="this.checkedName.indexOf('编辑状态')!=-1">
+								</el-table-column>
+								<el-table-column label="执行状态" sortable  width="120px" prop="LEADER_STATUS" v-if="this.checkedName.indexOf('执行状态')!=-1">
+								</el-table-column>
+								<el-table-column label="类型" sortable  width="100px" prop="TYPE" v-if="this.checkedName.indexOf('类型')!=-1">
+								</el-table-column>
+								<el-table-column label="提报日期" sortable  width="100px" prop="REPORTDATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('提报日期')!=-1">
 								</el-table-column>
 								<!-- <el-table-column label="信息状态" sortable  width="380px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
 								</el-table-column> -->
@@ -169,7 +177,7 @@
 					            @size-change="sizeChange"
 					            @current-change="currentChange"
 					            :current-page="page.currentPage"
-					            :page-sizes="[10, 20, 30, 40]"
+					            :page-sizes="[10, 20, 30, 40,100]"
 					            :page-size="page.pageSize"
 					            layout="total, sizes, prev, pager, next" :total="page.totalCount">
 					        </el-pagination>
@@ -205,38 +213,59 @@
 				ismin: true,
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				checkedName: [
-					'计划编号',
-					'计划描述',
+					'编号',
+					'描述',
 					'年度',
-					'录入人',
+					// '录入人',
 					'录入时间',
-					'执行状态'
 					// '信息状态'
+					'修改时间',
+					'编辑状态',
+					'执行状态',
+					'类型',
+					'提报日期',
+
 				],
 				tableHeader: [
 					{
-						label: '计划编号',
+						label: '编号',
 						prop: 'WP_NUM'
 					},
 					{
-						label: '计划描述',
+						label: '描述',
 						prop: 'DESCRIPTION'
 					},
 					{
 						label: '年度',
 						prop: 'YEAR'
 					},
-					{
-						label: '录入人',
-						prop: 'ENTERBY'
-					},
+					// {
+					// 	label: '录入人',
+					// 	prop: 'ENTERBY'
+					// },
 					{
 						label: '录入时间',
 						prop: 'ENTERDATE'
 					},
 					{
+						label: '修改时间',
+						prop: 'CHANGEDATE'
+					},
+					{
+						label: '编辑状态',
+						prop: 'STATUS'
+					},
+					{
 						label: '执行状态',
 						prop: 'LEADER_STATUS'
+					},
+					{
+						label: '类型',
+						prop: 'TYPE'
+					},
+					{
+						label: '提报日期',
+						prop: 'REPORTDATE'
 					}
 					// {
 					// 	label: '信息状态',
@@ -331,7 +360,7 @@
 					return;
 				} else if(this.aaaData.length > 1) {
 					this.$message({
-						message: '不可同时修改多个用户',
+						message: '不可同时修改多个数据',
 						type: 'warning'
 					});
 					return;

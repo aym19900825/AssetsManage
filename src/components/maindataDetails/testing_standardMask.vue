@@ -44,7 +44,7 @@
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="标准编号" prop="S_NUM">
-											<el-input v-model="dataInfo.S_NUM" :disabled="true"></el-input>
+											<el-input v-model="dataInfo.S_NUM"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -61,19 +61,19 @@
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="发布时间" prop="RELEASETIME">
-											<el-date-picker v-model="dataInfo.RELEASETIME" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+											<el-date-picker v-model="dataInfo.RELEASETIME" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width:100%">
 											</el-date-picker>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="启用时间" prop="STARTETIME">
-											<el-date-picker v-model="dataInfo.STARTETIME" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+											<el-date-picker v-model="dataInfo.STARTETIME" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width:100%">
 											</el-date-picker>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="发布单位" prop="RELEASE_UNIT">
-											<el-input v-model="dataInfo.RELEASE_UNIT" :disabled="true"></el-input>
+											<el-input v-model="dataInfo.RELEASE_UNIT"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -381,7 +381,7 @@
 					console.log(res);
 					this.dataInfo.DEPARTMENT=res.data.companyName;
 					console.log(this.dataInfo.DEPARTMENT)
-					this.dataInfo.RELEASE_UNIT=res.data.deptName;
+					// this.dataInfo.DEPARTMENT=res.data.deptName;
 					this.dataInfo.ENTERBY=res.data.nickname;
 					var date=new Date();
 					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
@@ -399,6 +399,7 @@
 				this.modifytitle = true;
 				this.modify = true;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
+					this.dataInfo.DEPARTMENT=res.data.deptName;
 					this.dataInfo.CHANGEBY=res.data.nickname;
 					var date=new Date();
 					this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");

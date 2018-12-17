@@ -18,7 +18,7 @@
 				<el-form :model="PRODUCT" inline-message :rules="rules" ref="PRODUCT" label-width="100px" class="demo-adduserForm">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames">
-							<el-collapse-item title="产品名称" name="1">
+							<el-collapse-item title="名称" name="1">
 								<el-row :gutter="20" class="pb10">
 									<el-col :span="3" class="pull-right">
 										<el-input v-model="PRODUCT.VERSION" :disabled="true">
@@ -42,14 +42,19 @@
 
 								</el-row>
 
-								<el-row :gutter="30">
-									<el-col :span="8">
+								<el-row :gutter="1">
+									<!-- <el-col :span="8">
 										<el-form-item label="产品编号" prop="PRO_NUM">
+											<el-input v-model="PRODUCT.PRO_NUM" :disabled="edit" placeholder="自动生成"></el-input>
+										</el-form-item>
+									</el-col> -->
+									<el-col :span="8">
+										<el-form-item label="编号" prop="PRO_NUM">
 											<el-input v-model="PRODUCT.PRO_NUM" :disabled="edit" placeholder="自动生成"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="16">
-										<el-form-item label="产品名称" prop="PRO_NAME">
+										<el-form-item label="名称" prop="PRO_NAME">
 											<el-input v-model="PRODUCT.PRO_NAME"></el-input>
 										</el-form-item>
 									</el-col>

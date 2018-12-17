@@ -36,7 +36,7 @@ export default {
 					navherf: '/products_category'
 				}, {
 					navicon: 'icon-file-text',
-					navtitle: '产品名称',
+					navtitle: '产品',
 					navherf: '/products'
 				}, {
 					navicon: 'icon-file-text',

@@ -16,14 +16,14 @@
 			</div>
 			<div class="mask_content">
 				<!-- status-icon 验证后文本框上显示对勾图标 -->
-				<el-form status-icon :model="WORKPLAN" :label-position="labelPosition" :rules="rules" ref="WORKPLAN" label-width="100px">
+				<el-form status-icon :model="WORKPLAN" :label-position="labelPosition" :rules="rules" ref="WORKPLAN" label-width="85px">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="基本信息" name="1">
-								<el-row :gutter="20">
+								<el-row :gutter="5">
 									<el-col :span="5" class="pull-right">
 										<el-input placeholder="草稿" v-model="WORKPLAN.STATUS" :disabled="true">
-												<template slot="prepend">状态</template>
+												<template slot="prepend">编辑状态</template>
 										</el-input>
 									</el-col>
 									<el-col :span="5" class="pull-right">
@@ -38,7 +38,7 @@
 										</el-input>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30">
+								<el-row :gutter="5" class="pt10">
 									<el-col :span="6">
 										<el-form-item label="提出单位" prop="PROP_UNIT">
 											<el-select v-model="WORKPLAN.PROP_UNIT" placeholder="请选择">
@@ -60,7 +60,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30">
+								<el-row :gutter="5">
 									<el-col :span="6">
 										<el-form-item label="编制人" prop="COMPACTOR">
 											<el-input v-model="WORKPLAN.COMPACTOR"></el-input>
@@ -82,13 +82,13 @@
 										    <el-date-picker
 										      v-model="WORKPLAN.REPORTDATE"
 										      type="date"
-										      placeholder="选择日期" value-format="yyyy-MM-dd">
+										      placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 100%">
 										    </el-date-picker>
 										  </div>
 										 </el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30">
+								<el-row :gutter="5">
 									<el-col :span="6">
 										<el-form-item label="年度" prop="YEAR">
 											<div class="block">
@@ -98,7 +98,7 @@
 											      placeholder="选择年度"
 											      value-format="yyyy"
 											      format="yyyy"
-											      :default-value="WORKPLAN.YEAR">
+											      :default-value="WORKPLAN.YEAR" style="width: 100%">
 											    </el-date-picker>
 											</div>
 										</el-form-item>
@@ -124,8 +124,7 @@
 									</el-button>
 								</div>
 
-								<el-table :data="worlplanlist" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;"  :default-sort="{prop:'worlplanlist', order: 'descending'}" v-loadmore="loadMore">
-
+								<el-table :data="worlplanlist" row-key="ID" border stripe height="260" highlight-current-row="highlight-current-row" style="width: 100%;"  :default-sort="{prop:'worlplanlist', order: 'descending'}" v-loadmore="loadMore">
 								    <el-table-column prop="iconOperation" fixed width="50px">
 								      <template slot-scope="scope" >
 								      	<i class="el-icon-check" v-if="scope.row.isEditing" @click="iconOperation(scope.row)">
@@ -146,19 +145,16 @@
 								      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_LINENUM" disabled></el-input><span v-if="!scope.row.isEditing">{{scope.row.WP_LINENUM}}</span>
 								      </template>
 								    </el-table-column>
-
 									<el-table-column prop="ITEM_NAME" label="产品名称" sortable width="120px" :formatter="judge">
 								      <template slot-scope="scope">
 								         <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ITEM_NAME" placeholder="请输入内容"></el-input><span v-if="!scope.row.isEditing">{{scope.row.ITEM_NAME}}</span>
 								      </template>
 								    </el-table-column>
-
 								    <el-table-column prop="MODEL" label="规格型号" sortable width="120px">
 								      <template slot-scope="scope">
 								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入内容"></el-input><span v-if="!scope.row.isEditing">{{scope.row.MODEL}}</span>
 								      </template>
 								    </el-table-column>
-
 								    <el-table-column prop="MEMO" label="近三年监督抽查情况" sortable width="260px">
 								      <template slot-scope="scope">
 								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MEMO" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.MEMO}}</span>
@@ -169,7 +165,6 @@
 								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容" id="cost" @blur="toPrice(scope.row)"></el-input><span v-if="!scope.row.isEditing" id="costshow">{{scope.row.CHECKCOST}}</span>
 								      </template>
 								    </el-table-column>
-
 								    <el-table-column prop="REASION" label="项目提出理由" sortable width="120px">
 								      <template slot-scope="scope">
 								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REASION" placeholder="请输入内容"></el-input><span v-if="!scope.row.isEditing">{{scope.row.REASION}}</span>
@@ -205,19 +200,17 @@
 												<font>选择</font>
 											</el-button>
 										</div>
+										<!-- <el-form :model="basisList" :rules="rules" ref="basisList" prop="basisList"> -->
 						            	<el-table :data="basisList" border stripe height="200" style="width: 100%;" :default-sort="{prop:'basisList', order: 'descending'}">
-						            		<el-table-column prop="NUMBER" label="所属计划编号" width="120">
+						            		<el-table-column prop="NUMBER" label="所属计划编号" width="150">
 						            			<template slot-scope="scope">
 										        	<span>{{scope.$index + 1}}</span>
 										      	</template>
 						            		</el-table-column>
-
-						            		<el-table-column prop="WP_LINENUM" label="所属计划行号" width="120"></el-table-column>
-
-						            		<el-table-column prop="S_NUM" label="标准编号" width="250"></el-table-column>
-
-						            		<el-table-column prop="S_NAME" label="标准内容" width="250"></el-table-column>
-						            		<el-table-column prop="VERSION" label="版本" width="300"></el-table-column>
+						            		<el-table-column prop="WP_LINENUM" label="所属计划行号" width="150"></el-table-column>
+						            		<el-table-column prop="S_NUM" label="标准编号" width="130"></el-table-column>
+						            		<el-table-column prop="S_NAME" label="标准名称" width="350"></el-table-column>
+						            		<el-table-column prop="VERSION" label="版本" width="80"></el-table-column>
 						            		<el-table-column fixed="right" label="操作" width="80">
 										      <template slot-scope="scope">
 										        <el-button
@@ -228,7 +221,8 @@
 										        </el-button>
 										      </template>
 										    </el-table-column>
-						            	</el-table>								
+						            	</el-table>
+						            	<!-- </el-form> -->		
 								    </el-tab-pane>
 								    <el-tab-pane label="检测项目与要求" name="second">
 								    	<div class="table-func table-funcb">
@@ -247,7 +241,7 @@
 										      </template>
 										    </el-table-column>
 
-						            		<el-table-column prop="WP_NUM" label="所属计划编号" width="80">
+						            		<el-table-column prop="WP_NUM" label="所属计划编号" width="130">
 						            			<template slot-scope="scope">
 										        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_NUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_NUM}}</span>
 										      	</template>
@@ -257,7 +251,7 @@
 										      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_LINENUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_LINENUM}}</span>
 										      </template>
 										    </el-table-column>
-						            		<el-table-column prop="P_NUM" label="检验项目编号" width="170"></el-table-column>
+						            		<el-table-column prop="P_NUM" label="检验项目编号" width="100"></el-table-column>
 						            		<el-table-column prop="P_DESC" label="检验项目描述" width="250"></el-table-column>
 						            		<el-table-column prop="REMARKS" label="要求" width="200">
 						            			<template slot-scope="scope">
@@ -268,7 +262,7 @@
 										        	</span>
 										      </template>
 						            		</el-table-column>
-						            		<el-table-column prop="VERSION" label="版本" width="200"></el-table-column>
+						            		<el-table-column prop="VERSION" label="版本" width="80"></el-table-column>
 						            		<el-table-column fixed="right" label="操作" width="80">
 										      <template slot-scope="scope">
 										        <el-button
@@ -630,6 +624,35 @@
                     callback();
                 }
             };
+            var validateUnit = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请选择提出单位'));
+                }else {
+                    callback();
+                }
+            };
+            var validateItemtype = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请填写产品类别'));
+                }else {
+                    callback();
+                }
+            };
+            var validateType = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请选择计划类型'));
+                }else {
+                    callback();
+                }
+            };
+            var validateBasislist = (rule, value, callback) => {
+            	console.log(rule, value, callback);
+                if (value === '') {
+                    callback(new Error('请选择检测依据'));
+                }else {
+                    callback();
+                }
+            };
 			return {
 				basic_url: Config.dev_url,
 				showEdit: [], //显示编辑框
@@ -662,7 +685,7 @@
 				modifytitle:false,//修改弹出框titile
 				activeName: 'first',//tabs
 				activeNames: ['1','2','3','4','5','6','7'],//手风琴数量
-				labelPosition: 'top', //表格
+				labelPosition: 'right', //表格
 				dialogVisible: false, //对话框
 				dialogVisible2: false, //对话框
 				searchList: { //点击高级搜索后显示的内容
@@ -754,6 +777,28 @@
 						trigger: 'blur',
 						validator: validateEmail,
 					}],
+					PROP_UNIT:[{//提出单位 
+   						required: true,
+   						validator: validateUnit,
+   						trigger: 'change' 
+       				}],
+       				ITEMTYPE:[{//产品类别 
+   						required: true,
+   						validator: validateItemtype,
+   						trigger: 'change' 
+       				}],
+       				//年度
+       				YEAR: [{type: 'string',required: true,message: '请选择年度',trigger: 'change' 
+       				}],
+       				//提报日期
+       				REPORTDATE: [{type: 'string',required: true,message: '请选择提报日期',trigger: 'change' 
+       				}],
+       				//检测依据 
+       				basisList:[{//产品类别 
+   						required: true,
+   						validator: validateBasislist,
+   						trigger: 'change' 
+       				}],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -1177,6 +1222,8 @@
 			// },
 			// 保存users/saveOrUpdate
 			submitForm() {
+				this.$refs.WORKPLAN.validate((valid) => {
+					if (valid) {
 				if(!this.isEditList){
 					for(let i=0;i<this.worlplanlist.length;i++){
 						console.log(this.worlplanlist[i].CHECKCOST);
@@ -1211,7 +1258,10 @@
 						type: 'warning'
 					});
 				}
-	  			
+	  			} else {
+			            return false;
+			        }
+	  			});
 			},
 			loadMore () {
 			   if (this.loadSign) {

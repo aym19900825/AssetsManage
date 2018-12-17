@@ -74,7 +74,7 @@
 								</el-col>
 								<el-col :span="4">
 									<el-input v-model="searchList.DEPARTMENT">
-										<template slot="prepend">录入人机构</template>
+										<template slot="prepend">机构</template>
 									</el-input>
 								</el-col>
 							</el-row>
@@ -118,24 +118,24 @@
 								</el-table-column>
 								<!--<el-table-column label="信息状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
 								</el-table-column>-->
-								<el-table-column label="发布时间" width="160" sortable prop="RELEASETIME" :formatter="dateFormat" v-if="this.checkedName.indexOf('发布时间')!=-1">
+								<el-table-column label="发布时间" width="100" sortable prop="RELEASETIME" :formatter="dateFormat" v-if="this.checkedName.indexOf('发布时间')!=-1">
 								</el-table-column>
-								<el-table-column label="启用时间" width="160" sortable prop="STARTETIME" :formatter="dateFormat" v-if="this.checkedName.indexOf('启用时间')!=-1">
+								<el-table-column label="启用时间" width="100" sortable prop="STARTETIME" :formatter="dateFormat" v-if="this.checkedName.indexOf('启用时间')!=-1">
 								</el-table-column>
-								<el-table-column label="版本" width="100" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1">
+								<el-table-column label="版本" width="70" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1">
 								</el-table-column>
-								<el-table-column label="录入人机构" width="180" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('录入人机构')!=-1">
+								<el-table-column label="机构" width="180" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('机构')!=-1">
 								</el-table-column>
-								<el-table-column label="录入人" width="120" prop="ENTERBY" sortable v-if="this.checkedName.indexOf('录入人')!=-1">
+								<!-- <el-table-column label="录入人" width="120" prop="ENTERBY" sortable v-if="this.checkedName.indexOf('录入人')!=-1"> -->
 								</el-table-column>
-								<el-table-column label="录入时间" width="160" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
+								<el-table-column label="录入时间" width="100" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>
-								<el-table-column label="修改人" width="120" prop="CHANGEBY" sortable v-if="this.checkedName.indexOf('修改人')!=-1">
-								</el-table-column>
-								<el-table-column label="修改时间" width="160" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
+								<!-- <el-table-column label="修改人" width="120" prop="CHANGEBY" sortable v-if="this.checkedName.indexOf('修改人')!=-1">
+								</el-table-column> -->
+								<el-table-column label="修改时间" width="100" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
 								</el-table-column>
 							</el-table>
-							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
 							<!-- 表格 End-->
 						</el-col>
@@ -198,10 +198,10 @@
 					'发布时间',
 					'启用时间',
 					'版本',
-					'录入人机构',
-					'录入人',
+					'机构',
+					// '录入人',
 					'录入时间',
-					'修改人',
+					// '修改人',
 					'修改时间'
 				],
 				tableHeader: [{
@@ -237,21 +237,21 @@
 						prop: 'VERSION'
 					},
 					{
-						label: '录入人机构',
+						label: '机构',
 						prop: 'DEPARTMENT'
 					},
-					{
-						label: '录入人',
-						prop: 'ENTERBY'
-					},
+					// {
+					// 	label: '录入人',
+					// 	prop: 'ENTERBY'
+					// },
 					{
 						label: '录入时间',
 						prop: 'ENTERDATE'
 					},
-					{
-						label: '修改人',
-						prop: 'CHANGEBY'
-					},
+					// {
+					// 	label: '修改人',
+					// 	prop: 'CHANGEBY'
+					// },
 					{
 						label: '修改时间',
 						prop: 'CHANGEDATE'
@@ -360,13 +360,13 @@
 			modify() {
 				if(this.selUser.length == 0) {
 					this.$message({
-						message: '请您选择要修改的用户',
+						message: '请您选择要修改的数据',
 						type: 'warning'
 					});
 					return;
 				} else if(this.selUser.length > 1) {
 					this.$message({
-						message: '不可同时修改多个用户',
+						message: '不可同时修改多个数据',
 						type: 'warning'
 					});
 					return;
@@ -386,12 +386,12 @@
 				var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({
-						message: '请您选择要删除的用户',
+						message: '请您选择要删除的数据',
 						type: 'warning'
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api/api-apps/app/inspectionSta/deletes';
+					var url = this.basic_url + '/api-apps/app/inspectionSta/deletes';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组

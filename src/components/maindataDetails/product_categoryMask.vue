@@ -50,19 +50,24 @@
 									</el-col>
 								</el-row>
 
-								<el-row :gutter="30">
-									<el-col :span="8">
+								<el-row :gutter="1">
+									<!-- <el-col :span="8">
 										<el-form-item label="类别编号" prop="NUM">
+											<el-input v-model="CATEGORY.NUM" :disabled="edit" placeholder="自动生成"></el-input>
+										</el-form-item>
+									</el-col> -->
+									<el-col :span="8">
+										<el-form-item label="编号" prop="NUM">
 											<el-input v-model="CATEGORY.NUM" :disabled="edit" placeholder="自动生成"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="16">
-										<el-form-item label="类别名称" prop="TYPE">
+										<el-form-item label="名称" prop="TYPE">
 											<el-input v-model="CATEGORY.TYPE"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30" v-show="personinfo">
+								<el-row :gutter="5" v-show="personinfo">
 									<el-col :span="8">
 										<el-form-item label="录入人机构" prop="DEPARTMENT">
 											<el-input v-model="CATEGORY.DEPARTMENT" :disabled="edit"></el-input>
@@ -322,9 +327,7 @@
 				var _this = this;
 				this.$refs[CATEGORY].validate((valid) => {
 					if(valid) {
-						//console.log(this.CATEGORY.STATUS);
 						_this.CATEGORY.STATUS = ((_this.CATEGORY.STATUS == "1" || _this.CATEGORY.STATUS == '活动') ? '1' : '0');
-						//console.log(this.CATEGORY);
 						var url = this.basic_url + '/api-apps/app/productType/saveOrUpdate';
 						this.$axios.post(url, _this.CATEGORY).then((res) => {
 							//resp_code == 0是后台返回的请求成功的信息
@@ -353,13 +356,11 @@
 			saveAndUpdate(CATEGORY) {
 				this.save(CATEGORY);
 				this.show = false;
-
 			},
 			//保存并添加
 			saveAndSubmit(CATEGORY) {
 				this.save(CATEGORY);
 				this.show = true;
-
 			},
 			//时间格式化
 			dateFormat(row, column) {

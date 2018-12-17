@@ -166,7 +166,7 @@ export default {
 			}, {
 				navicon: 'icon-device',
 				navtitle: '设备管理',
-				navherf: '/devices'
+				navherf: '/instruments'
 			}, {
 				navicon: 'icon-testing3',
 				navtitle: '检验/检测项目管理',

@@ -58,7 +58,7 @@
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search" class="pb10">
 						<el-form status-icon inline-message :model="searchList">
-							<el-row :gutter="30">
+							<el-row :gutter="30" class="pb5">
 								<el-col :span="6">
 									<el-input v-model="searchList.WONUM">
 										<template slot="prepend">工作任务单编号</template>
@@ -74,12 +74,12 @@
 										<template slot="prepend">委托书编号</template>
 									</el-input>
 								</el-col>
-								<el-col :span="3">
+								<!-- <el-col :span="3">
 									<el-select v-model="searchList.STATE" placeholder="请选择信息状态">
 										<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 										</el-option>
 									</el-select>
-								</el-col>
+								</el-col> -->
 							</el-row>
 
 							<el-row :gutter="30">

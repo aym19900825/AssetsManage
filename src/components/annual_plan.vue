@@ -104,7 +104,7 @@
 								</el-select>
 							</el-col>
 							<el-col :span="5">
-								<el-select v-model="searchList.STATUS" placeholder="状态" style="width: 100%">
+								<el-select v-model="searchList.STATUS" placeholder="编辑状态" style="width: 100%">
 								    <el-option label="草稿" value="1"></el-option>
 								    <el-option label="审批中" value="0"></el-option>
 								    <el-option label="驳回" value="0"></el-option>

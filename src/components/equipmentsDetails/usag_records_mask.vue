@@ -59,7 +59,8 @@
 										<template slot-scope="scope">
 											<el-form-item :prop="'tableList.'+scope.$index + '.S_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
                                                 <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入样品编号">
-                                                </el-input>
+													<el-button slot="append" icon="icon-search" @click="changeNum(scope.row)"></el-button>
+												</el-input>
                                                 <span v-else="v-else">{{scope.row.S_NUM}}</span>
 											</el-form-item>
 										</template>
@@ -163,15 +164,6 @@
 											</el-form-item>
 										</template>
 									</el-table-column>
-									<!-- <el-table-column prop="MEMO" label="备注" sortable>
-										<template slot-scope="scope">
-											<el-form-item :prop="'maintenList.'+scope.$index + '.MEMO'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-                                                <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MEMO" placeholder="请输入备注">
-                                                </el-input>
-                                                <span v-else="v-else">{{scope.row.MEMO}}</span>
-											</el-form-item>
-										</template>
-									</el-table-column> -->
 									<el-table-column label="操作" sortable width="120px">
 										<template slot-scope="scope">
 											<el-button type="danger" size="mini" round  @click="delLine(scope.$index,scope.row,'maintenList')">
@@ -200,6 +192,35 @@
 			</div>
 			<!--底部-->
 		</div>
+		<el-dialog title=样品编号 :visible.sync="sampleDialog" width="80%" :before-close="resetSample">
+			<div class="pb10">
+				<el-form status-icon :model="searchList" label-width="70px">
+					<el-row :gutter="10" class="pb10">
+						<el-col :span="6">
+							<el-input v-model="searchList.DESCRIPTION">
+								<template slot="prepend">样品名称</template>
+							</el-input>
+						</el-col>
+						<el-col :span="2">
+							<el-button type="primary" @click="searchSam" size="small" style="margin:4px">搜索</el-button>
+						</el-col>
+					</el-row>
+				</el-form>
+			</div>
+			<el-table :data="sampleList" border stripe style="width: 100%;" @selection-change="selNum" :default-sort="{prop:'sampleList', order: 'descending'}">
+				<el-table-column type="selection" width="55" fixed>
+				</el-table-column>
+				<el-table-column label="样品编号" sortable prop="ITEMNUM">
+				</el-table-column>
+				<el-table-column label="样品名称" sortable prop="DESCRIPTION">
+				</el-table-column>
+			</el-table>
+			<span slot="footer" class="dialog-footer" style="text-align: center;">
+		       <el-button @click="resetSample">取 消</el-button>
+		       <el-button type="primary" @click="addSample">确 定</el-button>
+		    </span>
+		</el-dialog> 
+		<!-- 设备编号弹出框 end-->
 	</div>
 </template>
 
@@ -210,6 +231,7 @@
 		props: ['detailData'],
 		data() {
 			return {
+				sampleDialog: false,
 				rules: {
 					ASSETNUM: [
 						{ required: true, message: '请输入设备编号', trigger: 'blur' },
@@ -306,10 +328,86 @@
 					'KEEPER': '',
 					'tableList': [],
 					'maintenList': []
+				},
+				page: {
+					currentPage: 1,
+					pageSize: 10,
+					totalCount: 0
+				},
+				sampleList: [],
+				selSample: [],
+				selRow: {},
+				searchList: {
+					'DESCRIPTION': ''
 				}
 			};
 		},
 		methods: {
+			searchSam(){
+				this.page.currentPage = 1;
+				this.page.pageSize = 10;
+				this.getSamples();
+			},
+			sizeChange(val) {
+				this.page.pageSize = val;
+				this.getSamples();
+			},
+			currentChange(val) {
+				this.page.currentPage = val;
+				this.getSamples();
+			},
+			selNum(val){
+				this.selSample = val;
+			},
+			addSample(){
+				if(this.selSample.length==0){
+					this.$message({
+						message: '请选择样本编号',
+						type: 'error'
+					});
+				}else if(this.selSample.length>1){
+					this.$message({
+						message: '不可同时选择多条数据',
+						type: 'error'
+					});
+				}else{
+					this.selRow.S_NUM = this.selSample[0].ITEMNUM;
+					this.resetSample();
+				}
+			},
+			resetSample(){
+				this.sampleDialog = false;
+				this.page = {
+					currentPage: 1,
+					pageSize: 10,
+					totalCount: 0
+				};
+				this.searchList.DESCRIPTION = '';
+			},
+			changeNum(row){
+				this.selRow = row;
+				this.getSamples();
+			},
+			getSamples(){
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+					DESCRIPTION: this.searchList.DESCRIPTION,//样品名称
+				}
+				var url = this.basic_url + '/api-apps/app/item';
+				this.$axios.get(url,{
+					params: data
+				}).then((res) => {
+					this.sampleList = res.data.data;
+					this.page.totalCount = res.data.count;
+					this.sampleDialog = true;
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+			},
 			getUser(){
 				var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url,{}).then((res) => {

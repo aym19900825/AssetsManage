@@ -279,7 +279,8 @@
 					children: "subDepts",
 					label: "simplename"
 				},
-				initcost: ''
+				initcost: '',
+				TESTING_PROJECTFORM:{}
 			};
 		},
 		methods: {
@@ -335,9 +336,6 @@
 			},
 
 			visible() { //添加内容时从父组件带过来的
-			  	if (this.$refs['testing_projectForm']!==undefined) {
-     								this.$refs['testing_projectForm'].resetFields();	
- 				}
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.testing_projectForm.DEPARTMENT = res.data.companyName;
 					this.testing_projectForm.ENTERBY = res.data.nickname;
@@ -363,6 +361,9 @@
 					this.testing_projectForm.CHANGEBY = res.data.nickname;
 					var date = new Date();
 					this.testing_projectForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					//深拷贝数据
+					let _obj = JSON.stringify(this.testing_projectForm);
+        			this.TESTING_PROJECTFORM = JSON.parse(_obj);
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -380,6 +381,15 @@
 			modifyversion(testing_projectForm) {
 				this.$refs[testing_projectForm].validate((valid) => {
 					if(valid) {
+					var TESTING_PROJECTFORM=JSON.stringify(this.TESTING_PROJECTFORM); //接过来的数据
+ 					var testing_projectForm=JSON.stringify(this.testing_projectForm); //获取新新的数据
+				 	if(testing_projectForm==TESTING_PROJECTFORM){
+				  	this.$message({
+							message: '没有修改不能修改',
+							type: 'warning'
+						});
+						return false;
+				  }else{
 						var url = this.basic_url + '/api-apps/app/inspectionPro/operate/upgraded';
 						this.$axios.post(url, this.testing_projectForm).then((res) => {
 							//resp_code == 0是后台返回的请求成功的信息
@@ -389,6 +399,7 @@
 									type: 'success'
 								});
 								//重新加载数据
+								this.show = false;
 								this.$emit('request');
 								this.$emit('reset');
 								
@@ -399,6 +410,7 @@
 								type: 'error'
 							});
 						});
+						}
 					} else {
 						this.$message({
 							message: '未填写完整，请填写',
@@ -454,9 +466,6 @@
 							}
 							this.$emit('reset');
 							this.$emit('request');
-							if (this.$refs['testing_projectForm']!==undefined) {
-     								this.$refs['testing_projectForm'].resetFields();	
- 								}
 							//清空表单验证
 						}).catch((err) => {
 							this.$message({

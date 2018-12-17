@@ -44,17 +44,17 @@
 
 								<el-row :gutter="5">
 									<el-col :span="8">
-										<el-form-item label="中文名称" prop="M_NAME" label-width="80px">
+										<el-form-item label="中文名称" prop="M_NAME" >
 											<el-input v-model="testingForm.M_NAME"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="英文名称" prop="M_ENAME" label-width="90px">
+										<el-form-item label="英文名称" prop="M_ENAME" >
 											<el-input v-model="testingForm.M_ENAME"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="类别" prop="M_TYPE" label-width="60px">
+										<el-form-item label="类别" prop="M_TYPE">
 											<!-- <el-select v-model="testingForm.M_TYPE" placeholder="请选择类别" style="width: 100%;">
 												<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
 											</el-select> -->
@@ -63,7 +63,7 @@
 									</el-col>
 								</el-row>
 								
-								<el-row :gutter="30" v-if="modify">
+								<el-row :gutter="5" v-if="modify">
 									<el-col :span="8">
 										<el-form-item label="录入人机构">
 											<el-input v-model="testingForm.DEPARTMENT" :disabled="true"></el-input>
@@ -80,7 +80,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30" v-if="modify">
+								<el-row :gutter="5" v-if="modify">
 									<el-col :span="8">
 										<el-form-item label="创建人">
 											<el-input v-model="testingForm.CHANGEBY" :disabled="true"></el-input>
@@ -254,6 +254,7 @@
 				testing_filesForm:{//文件文档数据组
 					inspectionList: []
 				},
+				TESTINGFORM:{},//
 				isEditing: '',
 				commentArr:{},//下拉加载
 				rules: { //定义需要校验数据的名称
@@ -294,6 +295,9 @@
 					this.testingForm.CHANGEBY=res.data.nickname;
 					var date=new Date();
 					this.testingForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					//深拷贝数据
+					let _obj = JSON.stringify(this.testingForm);
+        			this.TESTINGFORM = JSON.parse(_obj);
 				}).catch((err)=>{
 					this.$message({
 						message:'网络错误，请重试',
@@ -316,6 +320,17 @@
 			modifyversion (testingForm) {//点击修改后给当前创建人和创建日期赋值
 				this.$refs[testingForm].validate((valid) => {
 		          if (valid) {
+		          	var TESTINGFORM=JSON.stringify(this.TESTINGFORM); //接过来的数据
+		          	console.log(TESTINGFORM);
+ 					var testingForm=JSON.stringify(this.testingForm); //获取新新的数据
+ 					console.log(testingForm);
+				 	if(testingForm==TESTINGFORM){
+				  	this.$message({
+							message: '没有修改不能修改',
+							type: 'warning'
+						});
+						return false;
+				  }else{
 					var url = this.basic_url + '/api-apps/app/inspectionMet/operate/upgraded';
 					this.$axios.post(url,this.testingForm).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
@@ -327,7 +342,7 @@
 							//重新加载数据
 							this.show = false;
 							this.$emit('request');
-							this.$refs["testingForm"].resetFields();
+							this.$emit('reset');
 						}
 					}).catch((err) => {
 						this.$message({
@@ -335,6 +350,7 @@
 							type: 'error'
 						});
 					});
+					}
 			          } else {
 			            this.$message({
 							message: '未填写完整，请填写',

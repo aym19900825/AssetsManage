@@ -280,7 +280,7 @@
 					label: "simplename"
 				},
 				initcost: '',
-				TESTING_PROJECTFORM:{}
+				TESTING_PROJECTFORM:{}//
 			};
 		},
 		methods: {

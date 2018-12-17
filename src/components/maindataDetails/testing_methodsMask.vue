@@ -42,19 +42,19 @@
 									</el-col>
 								</el-row>
 
-								<el-row :gutter="30">
+								<el-row :gutter="5">
 									<el-col :span="8">
-										<el-form-item label="中文名称" prop="M_NAME">
+										<el-form-item label="中文名称" prop="M_NAME" label-width="80px">
 											<el-input v-model="testingForm.M_NAME"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="英文名称" prop="M_ENAME">
+										<el-form-item label="英文名称" prop="M_ENAME" label-width="90px">
 											<el-input v-model="testingForm.M_ENAME"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="类别" prop="M_TYPE">
+										<el-form-item label="类别" prop="M_TYPE" label-width="60px">
 											<!-- <el-select v-model="testingForm.M_TYPE" placeholder="请选择类别" style="width: 100%;">
 												<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
 											</el-select> -->
@@ -111,7 +111,7 @@
 
 								<!-- 文档Table-List Begin-->
 								<el-form :model="testing_filesForm" status-icon inline-message ref="testing_filesForm">
-									  <el-table :data="testing_filesForm.inspectionList" row-key="ID" border stripe height="380" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'testing_filesForm.inspectionList', order: 'descending'}" v-loadmore="loadMore">
+									  <el-table :data="testing_filesForm.inspectionList" row-key="ID" border stripe height="200" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'testing_filesForm.inspectionList', order: 'descending'}" v-loadmore="loadMore">
 										<el-table-column prop="iconOperation" fixed="left" label="操作" width="80">
 									      <template slot-scope="scope">
 									        <el-button type="text" id="Edit" size="medium" @click="saveRow(scope.row)" v-if="scope.row.isEditing">

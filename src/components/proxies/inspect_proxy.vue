@@ -419,13 +419,13 @@
 			modify() {
 				if(this.selUser.length == 0) {
 					this.$message({
-						message: '请您选择要修改的用户',
+						message: '请您选择要修改的数据',
 						type: 'warning'
 					});
 					return;
 				} else if(this.selUser.length > 1) {
 					this.$message({
-						message: '不可同时修改多个用户',
+						message: '不可同时修改多个数据',
 						type: 'warning'
 					});
 					return;
@@ -444,7 +444,7 @@
 				var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({
-						message: '请您选择要删除的用户',
+						message: '请您选择要删除的数据',
 						type: 'warning'
 					});
 					return;

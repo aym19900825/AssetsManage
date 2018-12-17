@@ -53,22 +53,22 @@
 							<el-row :gutter="10">
 								<el-col :span="5">
 									<el-input v-model="searchList.P_NUM">
-										<template slot="prepend">项目编号</template>
-									</el-input>
-								</el-col>
-								<el-col :span="5">
-									<el-input v-model="searchList.DEPARTMENT">
-										<template slot="prepend">录入人机构</template>
+										<template slot="prepend">编号</template>
 									</el-input>
 								</el-col>
 								<el-col :span="5">
 									<el-input v-model="searchList.P_NAME">
-										<template slot="prepend">项目名称</template>
+										<template slot="prepend">名称</template>
 									</el-input>
 								</el-col>
 								<el-col :span="4">
 									<el-input v-model="searchList.VERSION">
 										<template slot="prepend">版本</template>
+									</el-input>
+								</el-col>
+								<el-col :span="5">
+									<el-input v-model="searchList.DEPARTMENT">
+										<template slot="prepend">机构</template>
 									</el-input>
 								</el-col>
 								<!-- <el-col :span="3">
@@ -78,7 +78,7 @@
 									</el-select>
 								</el-col> -->
 								<el-col :span="2">
-									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:1px">搜索</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -91,9 +91,9 @@
 						<el-table :data="projectList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'projectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 							</el-table-column>
-							<el-table-column label="检验/检测项目编号" width="150" sortable prop="P_NUM" v-if="this.checkedName.indexOf('检验/检测项目编号')!=-1">
+							<el-table-column label="编号" width="150" sortable prop="P_NUM" v-if="this.checkedName.indexOf('编号')!=-1">
 							</el-table-column>
-							<el-table-column label="项目名称" width="220" sortable prop="P_NAME" v-if="this.checkedName.indexOf('项目名称')!=-1">
+							<el-table-column label="名称" width="220" sortable prop="P_NAME" v-if="this.checkedName.indexOf('名称')!=-1">
 							</el-table-column>
 							<el-table-column label="单价" width="120" sortable prop="QUANTITY" v-if="this.checkedName.indexOf('单价')!=-1">
 							</el-table-column>
@@ -106,24 +106,24 @@
 							</el-table-column>
 							<el-table-column label="子领域" width="120" sortable prop="CHILD_FIELD" v-if="this.checkedName.indexOf('子领域')!=-1">
 							</el-table-column>
-							<el-table-column label="版本" width="100" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1">
+							<el-table-column label="版本" width="70" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1">
 							</el-table-column>
-							<el-table-column label="录入人机构" width="180" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('录入人机构')!=-1">
+							<el-table-column label="机构" width="180" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('机构')!=-1">
 							</el-table-column>
-							<el-table-column label="录入人" width="120" prop="ENTERBY" sortable  v-if="this.checkedName.indexOf('录入人')!=-1">
+							<!-- <el-table-column label="录入人" width="120" prop="ENTERBY" sortable  v-if="this.checkedName.indexOf('录入人')!=-1"> -->
 							</el-table-column>
-							<el-table-column label="录入时间" width="160" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
+							<el-table-column label="录入时间" width="100" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 							</el-table-column>
-							<el-table-column label="修改人" width="120" prop="CHANGEBY" sortable  v-if="this.checkedName.indexOf('修改人')!=-1">
-							</el-table-column>
-							<el-table-column label="修改时间" width="160" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
+							<!-- <el-table-column label="修改人" width="120" prop="CHANGEBY" sortable  v-if="this.checkedName.indexOf('修改人')!=-1">
+							</el-table-column> -->
+							<el-table-column label="修改时间" width="100" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
 							</el-table-column>
 						</el-table>
 						<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
 				            @size-change="sizeChange"
 				            @current-change="currentChange"
 				            :current-page="page.currentPage"
-				            :page-sizes="[10, 20, 30, 40]"
+				            :page-sizes="[10, 20, 30, 40,100]"
 				            :page-size="page.pageSize"
 				            layout="total, sizes, prev, pager, next"
 				            :total="page.totalCount">
@@ -169,27 +169,27 @@
 				loadSign:true,//加载
 				commentArr:{},
 				checkedName: [
-					'检验/检测项目编号',
-					'项目名称',
+					'编号',
+					'名称',
 					'单价',
 					'人员资质',
 					'信息状态',
 					'领域',
 					'子领域',
 					'版本',
-					'录入人机构',
-					'录入人',
+					'机构',
+					// '录入人',
 					'录入时间',
-					'修改人',
+					// '修改人',
 					'修改时间'
 				],
 				tableHeader: [
 					{
-						label: '检验/检测项目编号',
+						label: '编号',
 						prop: 'P_NUM'
 					},
 					{
-						label: '项目名称',
+						label: '名称',
 						prop: 'P_NAME'
 					},
 					{
@@ -217,21 +217,21 @@
 						prop: 'VERSION'
 					},
 					{
-						label: '录入人机构',
+						label: '机构',
 						prop: 'DEPARTMENT'
 					},
-					{
-						label: '录入人',
-						prop: 'ENTERBY'
-					},
+					// {
+					// 	label: '录入人',
+					// 	prop: 'ENTERBY'
+					// },
 					{
 						label: '录入时间',
 						prop: 'ENTERDATE'
 					},
-					{
-						label: '修改人',
-						prop: 'CHANGEBY'
-					},
+					// {
+					// 	label: '修改人',
+					// 	prop: 'CHANGEBY'
+					// },
 					{
 						label: '修改时间',
 						prop: 'CHANGEDATE'

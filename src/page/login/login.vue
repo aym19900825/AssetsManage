@@ -39,7 +39,7 @@
     </div>
     <div class="hiddenDiv"></div>
 
-    <div class="footer-content">Copyright &#169 北京恒信启华信息技术股份有限公司 All Rights Reserved.</div>
+    <div class="footer-content">Copyright &#169 中铁检验认证中心 All Rights Reserved.</div>
 </div>
 </template>
 

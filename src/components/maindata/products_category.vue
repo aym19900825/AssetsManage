@@ -55,12 +55,12 @@
 							<el-row :gutter="10">
 								<el-col :span="5">
 									<el-input v-model="searchList.TYPE">
-										<template slot="prepend">类别名称</template>
+										<template slot="prepend">名称</template>
 									</el-input>
 								</el-col>
 								<el-col :span="5">
 									<el-input v-model="searchList.NAME">
-										<template slot="prepend">单位名称</template>
+										<template slot="prepend">机构</template>
 									</el-input>
 								</el-col>
 								<!-- <el-col :span="5">
@@ -80,7 +80,7 @@
 								</el-select>
 							</el-col> -->
 								<el-col :span="2">
-									<el-button class="pull-right" type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+									<el-button class="pull-right" type="primary" @click="searchinfo" size="small" style="margin-top:1px">搜索</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -92,9 +92,9 @@
 							<el-table :data="categoryList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="产品类别编号" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('产品类别编号')!=-1">
+								<el-table-column label="编号" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('编号')!=-1">
 								</el-table-column>
-								<el-table-column label="产品类别名称" width="155" sortable prop="TYPE" v-if="this.checkedName.indexOf('产品类别名称')!=-1">
+								<el-table-column label="名称" width="255" sortable prop="TYPE" v-if="this.checkedName.indexOf('名称')!=-1">
 								</el-table-column>
 								</el-table-column>
 								<!--<el-table-column label="信息状态" width="155" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
@@ -102,21 +102,20 @@
  									<span v-text="scope.row.STATUS=='1'?'活动':'不活动'"></span>
  								</template>
 							</el-table-column>-->
-								<el-table-column label="版本" width="155" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1">
+								<el-table-column label="版本" width="100" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1">
 								</el-table-column>
-								<el-table-column label="录入人机构" width="155" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('录入人机构')!=-1">
-
+								<el-table-column label="机构" width="185" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('机构')!=-1">
 								</el-table-column>
-								<el-table-column label="录入人" width="155" prop="ENTERBY" sortable v-if="this.checkedName.indexOf('录入人')!=-1">
+								<!-- <el-table-column label="录入人" width="155" prop="ENTERBY" sortable v-if="this.checkedName.indexOf('录入人')!=-1">
+								</el-table-column> -->
+								<el-table-column label="录入时间" width="185" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>
-								<el-table-column label="录入时间" width="155" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
-								</el-table-column>
-								<el-table-column label="修改人" width="155" prop="CHANGEBY" sortable v-if="this.checkedName.indexOf('修改人')!=-1">
-								</el-table-column>
-								<el-table-column label="修改时间" width="155" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
+								<!-- <el-table-column label="修改人" width="155" prop="CHANGEBY" sortable v-if="this.checkedName.indexOf('修改人')!=-1">
+								</el-table-column> -->
+								<el-table-column label="修改时间" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
 								</el-table-column>
 							</el-table>
-							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
 							<!-- 表格 End-->
 						</el-col>
@@ -168,48 +167,48 @@
 					deptId: ''
 				},
 				checkedName: [
-					'产品类别编号',
-					'产品类别名称',
-					'录入人机构',
-					'信息状态',
+					'编号',
+					'名称',
+					'机构',
+					// '信息状态',
 					'版本',
-					'录入人',
+					// '录入人',
 					'录入时间',
-					'修改人',
+					// '修改人',
 					'修改时间'
 				],
 				tableHeader: [{
-						label: '产品类别编号',
+						label: '编号',
 						prop: 'NUM'
 					},
 					{
-						label: '产品类别名称',
+						label: '名称',
 						prop: 'TYPE'
 					},
 					{
-						label: '录入人机构',
+						label: '机构',
 						prop: 'DEPARTMENT'
 					},
-					{
-						label: '信息状态',
-						prop: 'STATUS'
-					},
+					// {
+					// 	label: '信息状态',
+					// 	prop: 'STATUS'
+					// },
 					{
 						label: '版本',
 						prop: 'VERSION'
 					},
-					{
-						label: '录入人',
-						prop: 'ENTERBY'
-					},
+					// {
+					// 	label: '录入人',
+					// 	prop: 'ENTERBY'
+					// },
 					{
 						label: '录入时间',
 						prop: 'ENTERDATE'
 					},
-					{
-						label: '修改人',
-						prop: 'CHANGEBY'
-					},
+					// {
+					// 	label: '修改人',
+					// 	prop: 'CHANGEBY'
+					// },
 					{
 						label: '修改时间',
 						prop: 'CHANGEDATE'
@@ -312,13 +311,13 @@
 			modify() {
 				if(this.selUser.length == 0) {
 					this.$message({
-						message: '请您选择要修改的用户',
+						message: '请您选择要修改的数据',
 						type: 'warning'
 					});
 					return;
 				} else if(this.selUser.length > 1) {
 					this.$message({
-						message: '不可同时修改多个用户',
+						message: '不可同时修改多个数据',
 						type: 'warning'
 					});
 					return;
@@ -338,7 +337,7 @@
 				var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({
-						message: '请您选择要删除的用户',
+						message: '请您选择要删除的数据',
 						type: 'warning'
 					});
 					return;

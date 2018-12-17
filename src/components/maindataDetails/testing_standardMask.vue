@@ -61,13 +61,13 @@
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="发布时间" prop="RELEASETIME">
-											<el-date-picker v-model="dataInfo.RELEASETIME" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+											<el-date-picker v-model="dataInfo.RELEASETIME" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width:100%">
 											</el-date-picker>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="启用时间" prop="STARTETIME">
-											<el-date-picker v-model="dataInfo.STARTETIME" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+											<el-date-picker v-model="dataInfo.STARTETIME" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width:100%">
 											</el-date-picker>
 										</el-form-item>
 									</el-col>

@@ -103,12 +103,12 @@
 							</el-table-column>
 							<el-table-column label="机构" width="155" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('机构')!=-1">
 							</el-table-column>
-							<el-table-column label="录入人" width="155" prop="ENTERBY" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入人')!=-1">
-							</el-table-column>
+							<!-- <el-table-column label="录入人" width="155" prop="ENTERBY" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入人')!=-1">
+							</el-table-column> -->
 							<el-table-column label="录入时间" width="155" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 							</el-table-column>
-							<el-table-column label="修改人" width="155" prop="CHANGEBY" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改人')!=-1">
-							</el-table-column>
+							<!-- <el-table-column label="修改人" width="155" prop="CHANGEBY" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改人')!=-1">
+							</el-table-column> -->
 							<el-table-column label="修改时间" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
 							</el-table-column>
 						</el-table>
@@ -169,9 +169,9 @@
 					'机构',
 					'信息状态',
 					'版本',
-					'录入人',
+					// '录入人',
 					'录入时间',
-					'修改人',
+					// '修改人',
 					'修改时间'
 				],
 				tableHeader: [
@@ -195,18 +195,18 @@
 						label: '版本',
 						prop: 'VERSION'
 					},
-					{
-						label: '录入人',
-						prop: 'ENTERBY'
-					},
+					// {
+					// 	label: '录入人',
+					// 	prop: 'ENTERBY'
+					// },
 					{
 						label: '录入时间',
 						prop: 'ENTERDATE'
 					},
-					{
-						label: '修改人',
-						prop: 'CHANGEBY'
-					},
+					// {
+					// 	label: '修改人',
+					// 	prop: 'CHANGEBY'
+					// },
 					{
 						label: '修改时间',
 						prop: 'CHANGEDATE'

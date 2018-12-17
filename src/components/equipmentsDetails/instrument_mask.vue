@@ -417,7 +417,7 @@
 					},
                     {
 						label: '技术资料',
-						prop: 'SUPPORT_ASSET',
+						prop: 'TECHNICAL_DATA',
 						width: '100%',
 						type: 'textarea',
 						displayType: 'inline-block'

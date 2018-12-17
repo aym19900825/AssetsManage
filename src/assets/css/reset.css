@@ -422,9 +422,9 @@ h6 {
 }
 .el-table .ascending .sort-caret.ascending { border-bottom-color: #6585DF;}
 .el-table .descending .sort-caret.descending { border-top-color: #6585DF;}
-.el-message {
+/*.el-message {
 	top:35%;
-}
+}*/
 
 .el-table--striped .el-table__body tr.el-table__row--striped.current-row td,
 .el-table__body tr.hover-row>td{background-color:#F1F3FD}

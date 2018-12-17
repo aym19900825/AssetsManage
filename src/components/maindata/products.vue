@@ -62,7 +62,7 @@
 								</el-col>
 								<el-col :span="5">
 									<el-input v-model="searchList.PRO_NAME">
-										<template slot="prepend">名称</template>
+										<template slot="prepend">产品</template>
 									</el-input>
 								</el-col>
 								<el-col :span="5">
@@ -96,7 +96,7 @@
 								</el-table-column>
 								<el-table-column label="编号" width="155" sortable prop="PRO_NUM" v-if="this.checkedName.indexOf('编号')!=-1">
 								</el-table-column>
-								<el-table-column label="名称" width="255" sortable prop="PRO_NAME" v-if="this.checkedName.indexOf('名称')!=-1">
+								<el-table-column label="产品" width="255" sortable prop="PRO_NAME" v-if="this.checkedName.indexOf('产品')!=-1">
 								</el-table-column>
 								</el-table-column>
 								<!--<el-table-column label="信息状态" width="155" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
@@ -168,7 +168,7 @@
 				},
 				checkedName: [
 					'编号',
-					'名称',
+					'产品',
 					'机构',
 					'信息状态',
 					'版本',
@@ -182,7 +182,7 @@
 						prop: 'PRO_NUM'
 					},
 					{
-						label: '名称',
+						label: '产品',
 						prop: 'PRO_NAME'
 					},
 					{

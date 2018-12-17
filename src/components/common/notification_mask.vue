@@ -264,12 +264,12 @@
 													<span v-show="!scope.row.isEditing">{{scope.row.REMARKS}}</span>
 												</template>
 											</el-table-column>
-											<el-table-column prop="REMARKS" label="单价" sortable width="80px">
+											<!-- <el-table-column prop="REMARKS" label="单价" sortable width="80px">
 												<template slot-scope="scope">
 													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" placeholder="请输入内容"></el-input>
 													<span v-show="!scope.row.isEditing">{{scope.row.REMARKS}}</span>
 												</template>
-											</el-table-column>
+											</el-table-column> -->
 											<el-table-column prop="VERSION" label="版本" sortable width="80px">
 												<template slot-scope="scope">
 													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入内容"></el-input>
@@ -495,11 +495,11 @@
 						message: '必填',
 						trigger: 'blur'
 					}], //名称
-					WP_NUM: [{
-						required: true,
-						message: '必填',
-						trigger: 'blur'
-					}], //计划编号
+					// WP_NUM: [{
+					// 	required: true,
+					// 	message: '必填',
+					// 	trigger: 'blur'
+					// }], //计划编号
 					CJDWDesc: [{
 						required: true,
 						trigger: 'blur',

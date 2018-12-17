@@ -246,9 +246,7 @@
 						type: 'error'
 					});
 				});
-
 				this.show = true;
-				
 			},
 			//点击修订按钮
 			modifyversion(CATEGORY) {
@@ -340,6 +338,7 @@
 								//重新加载数据
 								this.$emit('request');
 								this.$emit('reset');
+								this.visible();
 							}
 						}).catch((err) => {
 							this.$message({
@@ -360,6 +359,7 @@
 			//保存并添加
 			saveAndSubmit(CATEGORY) {
 				this.save(CATEGORY);
+				// this.visible();
 				this.show = true;
 			},
 			//时间格式化

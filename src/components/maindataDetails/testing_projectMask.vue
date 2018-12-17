@@ -294,6 +294,7 @@
 				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)', 'ig'), "$1,");
 				// this.dataInfo.CHECTCOST="￥" + num.join(".");
 				this.testing_projectForm.QUANTITY = num.join(".");
+				console.log(this.testing_projectForm.QUANTITY);
 			},
 			getCompany() { //文档查询接口，暂无通，待修改
 				this.editSearch = 'DOCLINKS';
@@ -440,6 +441,7 @@
 				var _this = this;
 				this.$refs[testing_projectForm].validate((valid) => {
 					this.testing_projectForm.QUANTITY = _this.initcost;
+					console.log(this.testing_projectForm.QUANTITY);
 					if(valid) {
 						this.testing_projectForm.STATUS = ((_this.testing_projectForm.STATUS == "1" || this.testing_projectForm.STATUS == '活动') ? '1' : '0');
 						var url = this.basic_url + '/api-apps/app/inspectionPro/saveOrUpdate';

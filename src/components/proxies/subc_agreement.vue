@@ -73,13 +73,13 @@
 								<div class="block">
 								    <el-date-picker
 								      v-model="searchList.ENTERDATE"
-								      type="date" style="width: 100%;padding-top:3px"
+								      type="date" style="width: 100%;"
 								      placeholder="录入时间">
 								    </el-date-picker>
 								  </div>
 							</el-col>
 							<el-col :span="2">
-								<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:1px">搜索</el-button>
 							</el-col>
 						</el-row>
 					</el-form>

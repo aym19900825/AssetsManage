@@ -62,7 +62,7 @@
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search" class="pb10">
 						<el-form status-icon :model="searchList" label-width="70px">
-							<el-row :gutter="10" class="pb10">
+							<el-row :gutter="10" class="pb5">
 								<el-col :span="5">
 									<el-input v-model="searchList.V_NAME">
 										<template slot="prepend">委托单位名称</template>
@@ -89,9 +89,9 @@
 									</el-input>
 								</el-col>
 							</el-row>
-							<el-row :gutter="20">
+							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd HH:mm:ss">
+									<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%">
 									</el-date-picker>
 								</el-col>
 								<el-col :span="5">
@@ -100,15 +100,13 @@
 									</el-input>
 								</el-col>
 								<el-col :span="3">
-
 									<el-select v-model="searchList.STATUS" placeholder="选择状态">
 										<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 										</el-option>
-
 									</el-select>
 								</el-col>
 								<el-col :span="2">
-									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:1px">搜索</el-button>
 								</el-col>
 							</el-row>
 						</el-form>

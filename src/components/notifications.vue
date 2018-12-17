@@ -73,23 +73,23 @@
 									</el-input>
 								</el-col>
 							</el-row>
-							<el-row :gutter="20">
+							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-date-picker v-model="searchList.XD_DATE" type="date" placeholder="下达日期" value-format="yyyy-MM-dd">
+									<el-date-picker v-model="searchList.XD_DATE" type="date" placeholder="下达日期" value-format="yyyy-MM-dd" style="width: 100%">
 									</el-date-picker>
 								</el-col>
 								<el-col :span="5">
-									<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd">
+									<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd" style="width: 100%">
 									</el-date-picker>
 								</el-col>
-								<el-col :span="3" class="pt5">
+								<!-- <el-col :span="3" class="pt5">
 									<el-select v-model="searchList.value" placeholder="请选择信息状态">
 										<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 										</el-option>
 									</el-select>
-								</el-col>
+								</el-col> -->
 								<el-col :span="2">
-									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:1px">搜索</el-button>
 								</el-col>
 							</el-row>
 						</el-form>

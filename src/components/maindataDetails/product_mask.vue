@@ -54,7 +54,7 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="16">
-										<el-form-item label="名称" prop="PRO_NAME">
+										<el-form-item label="产品" prop="PRO_NAME">
 											<el-input v-model="PRODUCT.PRO_NAME"></el-input>
 										</el-form-item>
 									</el-col>

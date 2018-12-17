@@ -283,28 +283,6 @@
 						retain: ''
 					}
 				],
-				// dataInfo: { //添加数据库列表信息
-				// 	S_NUM: '',
-				// 	S_NAME: '',
-				// 	S_ENGNAME: '',
-				// 	RELEASETIME: '',
-				// 	STARTETIME: '',
-				// 	VERSION:'1',
-				// 	RELEASE_UNIT: '',
-				// 	DEPARTMENT: '',
-				// 	ENTERBY: '',
-				// 	ENTERDATE: '',
-				// 	CHANGEBY: '',
-				// 	CHANGEDATE: '',
-				// 	attributes: [{ //字段列表
-				// 		columnname: '',
-				// 		description: '',
-				// 		type: '',
-				// 		length: '',
-				// 		retain: '',
-				// 		typename: ''
-				// 	}]
-				// },
 				rules: {
 //					S_NUM: [{ required: true, message: '必填', trigger: 'blur' }],//名称
 					S_NAME: [{ required: true, message: '必填', trigger: 'blur' }],//名称
@@ -313,6 +291,7 @@
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
+				DATAINFO:{}//父组件传过来的值
 			};
 		},
 		methods: {
@@ -321,35 +300,7 @@
 			SelChange(val) {
 				this.selUser = val;
 			},
-			modifyversion(dataInfo){
-				this.$refs[dataInfo].validate((valid) => {
-		          if (valid) {
-					var url = this.basic_url + '/api-apps/app/inspectionSta/operate/upgraded';
-					this.$axios.post(url,this.dataInfo).then((res) => {
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '保存成功',
-								type: 'success'
-							});
-							//重新加载数据
-							this.show = false;
-							this.$emit('request');
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
-					});
-			          } else {
-			            this.$message({
-							message: '未填写完整，请填写',
-							type: 'warning'
-						});
-			          }
-			   });
-			},
+			
 			addfield() { //添加行信息
 				var obj = {
 					columnname: '',
@@ -403,6 +354,9 @@
 					this.dataInfo.CHANGEBY=res.data.nickname;
 					var date=new Date();
 					this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					//深拷贝数据
+					let _obj = JSON.stringify(this.dataInfo);
+        			this.DATAINFO = JSON.parse(_obj);
 				}).catch((err)=>{
 					this.$message({
 						message:'网络错误，请重试',
@@ -438,6 +392,46 @@
 				$(".mask_div").css("height", "80%");
 				$(".mask_div").css("margin", "7% 10%");
 				$(".mask_div").css("top", "0");
+			},
+			//修订
+			modifyversion(dataInfo){
+				this.$refs[dataInfo].validate((valid) => {
+		          if (valid) {
+		          	var DATAINFO=JSON.stringify(this.DATAINFO); //接过来的数据
+ 					var dataInfo=JSON.stringify(this.dataInfo); //获取新新的数据
+				 	if(dataInfo==DATAINFO){
+				  	this.$message({
+							message: '没有修改不能修改',
+							type: 'warning'
+						});
+						return false;
+				  }else{
+					var url = this.basic_url + '/api-apps/app/inspectionSta/operate/upgraded';
+					this.$axios.post(url,this.dataInfo).then((res) => {
+						//resp_code == 0是后台返回的请求成功的信息
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '保存成功',
+								type: 'success'
+							});
+							//重新加载数据
+							this.show = false;
+							this.$emit('request');
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+					}
+			          } else {
+			            this.$message({
+							message: '未填写完整，请填写',
+							type: 'warning'
+						});
+			          }
+			   });
 			},
 			// 保存users/saveOrUpdate
 			save(dataInfo) {

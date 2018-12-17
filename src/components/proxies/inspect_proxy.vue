@@ -145,8 +145,8 @@
 								</el-table-column>
 								<el-table-column label="样品型号" sortable width="150px" prop="ITEM_MODEL" v-if="this.checkedName.indexOf('样品型号')!=-1">
 								</el-table-column>
-								<el-table-column label="样品信息状态" sortable width="200px" prop="ITEM_STATUS" v-if="this.checkedName.indexOf('样品信息状态')!=-1">
-								</el-table-column>
+								<!-- <el-table-column label="样品信息状态" sortable width="200px" prop="ITEM_STATUS" v-if="this.checkedName.indexOf('样品信息状态')!=-1">
+								</el-table-column> -->
 								<el-table-column label="检测依据" width="200px" prop="REMARKS" sortable  v-if="this.checkedName.indexOf('检测依据')!=-1">
 								</el-table-column>
 								<el-table-column label="完成日期" width="200px" prop="COMPDATE" sortable  :formatter="dateFormat" data-type = ""  v-if="this.checkedName.indexOf('完成日期')!=-1">
@@ -229,13 +229,13 @@
 					'生产单位名称',
 					'样品名称',
 					'样品型号',
-					'样品信息状态',
+					// '样品信息状态',
 					'检测依据',
 					'完成日期',
 					'完成方式',
 					'检测报告编号',
 					'主检组',
-					'信息状态',
+					// '信息状态',
 					'录入人',
 					'录入时间',
 					'版本'
@@ -260,10 +260,10 @@
 						label: '样品型号',
 						prop: 'ITEM_MODEL'
 					},
-					{
-						label: '样品信息状态',
-						prop: 'ITEM_STATUS'
-					},
+					// {
+					// 	label: '样品信息状态',
+					// 	prop: 'ITEM_STATUS'
+					// },
 					{
 						label: '检测依据',
 						prop: 'REMARKS'
@@ -284,10 +284,10 @@
 						label: '主检组',
 						prop: 'MAINGROUP'
 					},
-					{
-						label: '信息状态',
-						prop: 'STATUS'
-					},
+					// {
+					// 	label: '信息状态',
+					// 	prop: 'STATUS'
+					// },
 					{
 						label: '录入人',
 						prop: 'ENTERBY'

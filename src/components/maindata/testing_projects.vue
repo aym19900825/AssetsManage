@@ -306,7 +306,7 @@
 			//清空
 			reset(){
 			this.testing_projectForm = { //数据库列表
-					VERSION: 1,
+					VERSION: '1',
 					STATUS: '活动',
 					P_NUM: '',
 					P_NAME: '',
@@ -329,6 +329,7 @@
 			//添加检验/检测项目
 			
 			openAddMgr() {
+				this.reset();
 				this.$refs.child.visible();
 			},
 			

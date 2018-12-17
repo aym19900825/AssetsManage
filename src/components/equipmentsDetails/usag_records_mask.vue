@@ -364,7 +364,7 @@
 					TableName = 'ASSET_MAINTENANCE';
 				}
 				if(row.ID){
-					var url = this.basic_url + '/app/asset/' + TableName +'/' + row.ID;
+					var url = this.basic_url + '/api-apps/app/asset/' + TableName +'/' + row.ID;
 					this.$axios.delete(url, {}).then((res) => {
 						if(res.data.resp_code == 0){
 							this.dataInfo[listName].splice(index,1);

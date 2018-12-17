@@ -172,6 +172,7 @@
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
+				product:{}
 			};
 		},
 		methods: {
@@ -237,7 +238,9 @@
 					this.PRODUCT.CHANGEBY = res.data.nickname;
 					var date = new Date();
 					this.PRODUCT.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-
+					//深拷贝数据
+					let _obj = JSON.stringify(this.PRODUCT);
+        			this.product = JSON.parse(_obj);
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -291,6 +294,16 @@
 			modifyversion(PRODUCT) {
 				this.$refs[PRODUCT].validate((valid) => {
 					if(valid) {
+					var product=JSON.stringify(this.product); 
+ 					var PRODUCT=JSON.stringify(this.PRODUCT);
+ 					console.log(product);console.log(PRODUCT);
+				 	if(product==PRODUCT){
+				  	this.$message({
+							message: '没有修改不能修改',
+							type: 'warning'
+						});
+						return false;
+				  }else{
 						var url = this.basic_url + '/api-apps/app/product/operate/upgraded';
 						this.$axios.post(url, this.PRODUCT).then((res) => {
 							//resp_code == 0是后台返回的请求成功的信息
@@ -302,7 +315,6 @@
 								//重新加载数据
 								this.show = false;
 								this.$emit('request');
-								this.$refs["PRODUCT"].resetFields();
 							}
 						}).catch((err) => {
 							this.$message({
@@ -310,6 +322,7 @@
 								type: 'error'
 							});
 						});
+						}
 					} else {
 						this.$message({
 							message: '未填写完整，请填写',

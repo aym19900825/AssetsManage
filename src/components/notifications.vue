@@ -157,7 +157,7 @@
 				</div>
 			</div>
 			<!--右侧内容显示 End-->
-			<notificationsmask :dataInfo="aaaData[0]" @request="requestData" ref="child" v-bind:page=page></notificationsmask>
+			<notificationsmask  @request="requestData" ref="child" v-bind:page=page></notificationsmask>
 		</div>
 	</div>
 </template>
@@ -344,21 +344,20 @@
 			},
 			//修改用戶
 			modify() {
-				this.aaaData = this.selUser;
-				if(this.aaaData.length == 0) {
+				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
 						type: 'warning'
 					});
 					return;
-				} else if(this.aaaData.length > 1) {
+				} else if(this.selUser.length > 1) {
 					this.$message({
 						message: '不可同时修改多个数据',
 						type: 'warning'
 					});
 					return;
 				} else {
-					this.$refs.child.detail(this.aaaData[0].ID);
+					this.$refs.child.detail(this.selUser[0].ID);
 				}
 			},
 			//查看用戶

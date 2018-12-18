@@ -124,7 +124,7 @@
 									</el-button>
 								</div>
 
-								<el-table :data="worlplanlist" row-key="ID" border stripe height="260" highlight-current-row="highlight-current-row" style="width: 100%;"  :default-sort="{prop:'worlplanlist', order: 'descending'}" v-loadmore="loadMore">
+								<el-table :data="worlplanlist" row-key="ID" border stripe  highlight-current-row="highlight-current-row" style="width: 100% ;"  :default-sort="{prop:'worlplanlist', order: 'descending'}" v-loadmore="loadMore">
 								    <el-table-column prop="iconOperation" fixed width="50px">
 								      <template slot-scope="scope" >
 								      	<i class="el-icon-check" v-if="scope.row.isEditing" @click="iconOperation(scope.row)">

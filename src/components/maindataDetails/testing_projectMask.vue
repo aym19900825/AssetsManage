@@ -337,7 +337,8 @@
 
 			visible() { //添加内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					this.testing_projectForm.DEPARTMENT = res.data.companyName;
+//					this.testing_projectForm.DEPARTMENT = res.data.companyName;
+					this.testing_projectForm.DEPARTMENT = res.data.deptName;
 					this.testing_projectForm.ENTERBY = res.data.nickname;
 					var date = new Date();
 					this.testing_projectForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
@@ -364,6 +365,7 @@
 					//深拷贝数据
 					let _obj = JSON.stringify(this.testing_projectForm);
         			this.TESTING_PROJECTFORM = JSON.parse(_obj);
+        			console.log(_obj);
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -465,16 +467,23 @@
 								});
 							}
 							this.$emit('reset');
+     						this.$refs['testing_projectForm'].resetFields();	
 							this.$emit('request');
+							this.visible();
 							//清空表单验证
 						}).catch((err) => {
+							this.show = true;
 							this.$message({
 								message: '网络错误，请重试',
 								type: 'error'
 							});
 						});
 					} else {
-						return false;
+						this.show = true;
+						this.$message({
+							message: '未填写完整，请填写',
+							type: 'warning'
+						});
 					}
 				});
 			},

@@ -298,6 +298,7 @@
 					//深拷贝数据
 					let _obj = JSON.stringify(this.testingForm);
         			this.TESTINGFORM = JSON.parse(_obj);
+        			
 				}).catch((err)=>{
 					this.$message({
 						message:'网络错误，请重试',
@@ -552,8 +553,10 @@
 								this.$emit('reset');
 								//重新加载数据
 								this.$emit('request');
+								this.visible();	
 							}
 						}).catch((err) => {
+							this.show = true;
 							this.$message({
 								message: '网络错误，请重试',
 								type: 'error'
@@ -579,7 +582,6 @@
 			saveAndSubmit(testingForm){
 				this.save(testingForm);
 				this.show = true;
-				
 			},
 			handleClose(done) { //大弹出框确定关闭按钮
 				this.$confirm('确认关闭？')

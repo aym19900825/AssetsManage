@@ -59,9 +59,17 @@
 									</el-input>
 								</el-col>
 								<el-col :span="5">
-									<el-input v-model="searchList.NAME">
+									<!-- <el-input v-model="searchList.NAME">
 										<template slot="prepend">机构</template>
-									</el-input>
+									</el-input> -->
+									<el-select v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="机构">
+									    <el-option
+									      v-for="item in options5"
+									      :key="item.value"
+									      :label="item.label"
+									      :value="item.value">
+									    </el-option>
+									</el-select>
 								</el-col>
 								<!-- <el-col :span="5">
 								<el-input v-model="searchList.PHONE">
@@ -169,9 +177,10 @@
 				checkedName: [
 					'编号',
 					'名称',
+					'版本',
 					'机构',
 					// '信息状态',
-					'版本',
+					
 					// '录入人',
 					'录入时间',
 					// '修改人',
@@ -186,6 +195,10 @@
 						prop: 'TYPE'
 					},
 					{
+						label: '版本',
+						prop: 'VERSION'
+					},
+					{
 						label: '机构',
 						prop: 'DEPARTMENT'
 					},
@@ -193,10 +206,6 @@
 					// 	label: '信息状态',
 					// 	prop: 'STATUS'
 					// },
-					{
-						label: '版本',
-						prop: 'VERSION'
-					},
 					// {
 					// 	label: '录入人',
 					// 	prop: 'ENTERBY'
@@ -225,10 +234,10 @@
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
 				searchList: { //点击高级搜索后显示的内容
 					TYPE: '',
-					NAME: '',
-					PHONE: '',
-					CONTACT_ADDRESS: '',
-					STATUS: ''
+					DEPARTMENT: '',
+					// PHONE: '',
+					// CONTACT_ADDRESS: '',
+					// STATUS: ''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -243,7 +252,23 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-				CATEGORY: {} //修改子组件时传递数据
+				CATEGORY: {},//修改子组件时传递数据
+				options5: [{
+		            value: '金化站',
+		            label: '金化站'
+		        }, {
+		            value: '通号站',
+		            label: '通号站'
+		        }, {
+		            value: '运包站',
+		            label: '运包站'
+		        }, {
+		            value: '机辆站',
+		            label: '机辆站'
+		        }, {
+		            value: '接触网站',
+		            label: '接触网站'
+		        }],
 			}
 		},
 
@@ -306,14 +331,14 @@
 				}
 
 			},
-			//添加用戶
+			//添加类别
 			openAddMgr() {
 				this.reset();
 				this.$refs.child.open() // 方法1
 				this.$refs.child.visible();
 				
 			},
-			//修改用戶
+			//修改类别
 			modify() {
 				if(this.selUser.length == 0) {
 					this.$message({
@@ -421,10 +446,10 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 					TYPE: this.searchList.TYPE,
-					NAME: this.searchList.NAME,
+					DEPARTMENT: this.searchList.DEPARTMENT,
 					// PHONE: this.searchList.PHONE,
 					// CONTACT_ADDRESS: this.searchList.CONTACT_ADDRESS,
-					STATUS: this.searchList.STATUS
+					// STATUS: this.searchList.STATUS
 				}
 				var url = this.basic_url + '/api-apps/app/productType';
 				this.$axios.get(url, {

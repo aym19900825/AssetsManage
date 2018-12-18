@@ -50,7 +50,7 @@
 									</el-col> -->
 									<el-col :span="8">
 										<el-form-item label="编号" prop="PRO_NUM">
-											<el-input v-model="PRODUCT.PRO_NUM" :disabled="edit" placeholder="自动生成"></el-input>
+											<el-input v-model="PRODUCT.PRO_NUM" placeholder="(自动生成)"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="16">
@@ -94,7 +94,7 @@
 					</div>
 					<div class="el-dialog__footer">
 						<el-button type="primary" @click="saveAndUpdate('PRODUCT')">保存</el-button>
-						<el-button type="success" @click="saveAndSubmit('PRODUCT')">保存并添加</el-button>
+						<el-button type="success" @click="saveAndSubmit('PRODUCT')" v-show="addtitle">保存并添加</el-button>
 						<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('PRODUCT')">修订</el-button>
 						<el-button @click='close'>取消</el-button>
 
@@ -225,7 +225,7 @@
 						type: 'error'
 					});
 				});
-				this.show = true;
+				// this.show = true;
 			},
 			// 这里是修改
 			detail() {
@@ -335,6 +335,9 @@
 			//点击关闭按钮
 			close() {
 				this.show = false;
+			},
+			open(){
+				this.show = true;
 			},
 			toggle(e) {
 				if(this.isok1 == true) {

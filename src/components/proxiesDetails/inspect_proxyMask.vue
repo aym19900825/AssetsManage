@@ -183,7 +183,7 @@
 									
 							</el-collapse-item>
 							<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
-								 <el-form :label-position="labelPosition">
+								 <!-- <el-form :label-position="labelPosition"> -->
 								<el-tabs v-model="activeName" @tab-click="handleClick">
 								    <el-tab-pane label="检验依据" name="first">
 								    	<div class="table-func table-funcb">
@@ -204,31 +204,31 @@
 								
 											<el-table-column prop="P_NUM" label="检验项目编号" sortable width="120px">
 												<template slot-scope="scope">
-													<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.P_NUM'" >
+													
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="请输入委托方名称">
 													</el-input>
 													<span v-else="v-else">{{scope.row.P_NUM}}</span>
-													</el-form-item>
+													
 												</template>
 											</el-table-column>
 
 											<el-table-column prop="P_DESC" label="检验项目描述" sortable>
 												<template slot-scope="scope">
-													<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.P_DESC'" >
+													
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入委托方名称">
 													</el-input>
 													<span v-else="v-else">{{scope.row.P_DESC}}</span>
-													</el-form-item>
+													
 												</template>
 											</el-table-column>
 
 											<el-table-column prop="REMARKS" label="内容" sortable>
 												<template slot-scope="scope">
-													<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.REMARKS'" >
+													
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" placeholder="请输入要求">		
 													</el-input>
 													<span v-else="v-else">{{scope.row.REMARKS}}</span>
-													</el-form-item>
+													
 												</template>
 											</el-table-column>
 
@@ -244,11 +244,11 @@
 
 											<el-table-column prop="VERSION" label="项目版本" sortable width="120px">
 												<template slot-scope="scope">
-													<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.VERSION'">
+													
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入分包方名称">
 													</el-input>
 													<span v-else="v-else">{{scope.row.VERSION}}</span>
-													</el-form-item>
+													
 												</template>
 											</el-table-column>
 											<el-table-column fixed="right" label="操作" width="120">
@@ -280,7 +280,7 @@
 
 											<el-table-column prop="S_NUM" label="标准编号" sortable width="150px">
 												<template slot-scope="scope">
-													<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.S_NUM'">
+													<el-form-item>
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入委托方名称">
 													</el-input>
 													<span v-else="v-else">{{scope.row.S_NUM}}</span>
@@ -290,7 +290,7 @@
 
 											<el-table-column prop="S_DESC" label="标准内容" sortable>
 												<template slot-scope="scope">
-													<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.S_DESC'">
+													<el-form-item>
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_DESC" placeholder="请输入委托方名称">	
 													</el-input>
 													<span v-else="v-else">{{scope.row.S_DESC}}</span>
@@ -310,7 +310,7 @@
 											
 											<el-table-column prop="VERSION" label="版本" sortable width="120px">
 												<template slot-scope="scope">
-													<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.VERSION'">
+													<el-form-item>
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入分包方名称">
 													</el-input>
 													<span v-else="v-else">{{scope.row.VERSION}}</span>
@@ -437,7 +437,7 @@
 										</el-table>
 								    </el-tab-pane>
 								</el-tabs>
-								</el-form>
+								<!-- </el-form> -->
 							</div>
 							<el-collapse-item name="8">
 								
@@ -488,12 +488,12 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="标准费用" prop="CONTRACTCOST">
-												<el-input v-model="dataInfo.CONTRACTCOST" id="stacost" :disabled="true" @blur="staPrice"></el-input>
+												<el-input v-model="dataInfo.CONTRACTCOST" id="stacost"  @blur="staPrice"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="实收费用" prop="ACTUALCOST">
-												<el-input v-model="dataInfo.ACTUALCOST" id="actualcost" :disabled="true" @blur="actualPrice"></el-input>
+												<el-input v-model="dataInfo.ACTUALCOST" id="actualcost"  @blur="actualPrice"></el-input>
 											</el-form-item>
 										</el-col>
 
@@ -911,6 +911,7 @@
 			},
 			// 保存users/saveOrUpdate
 			save(dataInfo) {
+				console.log(this.dataInfo);
 				this.$refs[dataInfo].validate((valid) => {
 					this.dataInfo.CHECK_COST = this.initcost;
 					this.dataInfo.CONTRACTCOST = this.initsta;

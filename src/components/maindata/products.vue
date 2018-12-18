@@ -169,9 +169,10 @@
 				checkedName: [
 					'编号',
 					'名称',
-					'机构',
-					'信息状态',
 					'版本',
+					'机构',
+					// '信息状态',
+					
 					// '录入人',
 					'录入时间',
 					// '修改人',
@@ -186,17 +187,18 @@
 						prop: 'PRO_NAME'
 					},
 					{
-						label: '机构',
-						prop: 'DEPARTMENT'
-					},
-					{
-						label: '信息状态',
-						prop: 'STATUS'
-					},
-					{
 						label: '版本',
 						prop: 'VERSION'
 					},
+					{
+						label: '机构',
+						prop: 'DEPARTMENT'
+					},
+					// {
+					// 	label: '信息状态',
+					// 	prop: 'STATUS'
+					// },
+					
 					// {
 					// 	label: '录入人',
 					// 	prop: 'ENTERBY'
@@ -309,6 +311,7 @@
 			//添加
 			openAddMgr() {
 				this.reset();
+				this.$refs.child.open();
 				this.$refs.child.visible();
 			},
 			//修改用戶

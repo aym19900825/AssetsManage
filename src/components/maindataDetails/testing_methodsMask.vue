@@ -288,7 +288,7 @@
 				this.addtitle = true;
             	this.modifytitle = false;
             	this.modify = false;
-            	this.show = !this.show;
+            	this.show = true;
 			},
 			detail() { //修改内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{

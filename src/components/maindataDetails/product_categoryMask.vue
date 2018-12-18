@@ -223,7 +223,7 @@
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.modify = false;
-				this.show = true;
+//				this.show = true;
 			},
 			// 这里是修改
 			detail() {
@@ -296,6 +296,9 @@
 			close() {
 				this.show = false;
 			},
+			open(){
+				this.show = true;
+			},
 			toggle(e) {
 				if(this.isok1 == true) {
 					this.maxDialog();
@@ -322,14 +325,13 @@
 			},
 			// 保存users/saveOrUpdate
 			save(CATEGORY) {
-				var _this = this;
 				this.$refs[CATEGORY].validate((valid) => {
 					if(valid) {
-						_this.CATEGORY.STATUS = ((_this.CATEGORY.STATUS == "1" || _this.CATEGORY.STATUS == '活动') ? '1' : '0');
+						this.CATEGORY.STATUS = ((this.CATEGORY.STATUS == "1" || this.CATEGORY.STATUS == '活动') ? '1' : '0');
 						var url = this.basic_url + '/api-apps/app/productType/saveOrUpdate';
-						this.$axios.post(url, _this.CATEGORY).then((res) => {
+
+						this.$axios.post(url, this.CATEGORY).then((res) => {
 							//resp_code == 0是后台返回的请求成功的信息
-							console.log(this.CATEGORY);
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',
@@ -347,12 +349,18 @@
 							});
 						});
 					} else {
-						return false;
+						this.show = true;
+						this.$message({
+							message: '未填写完整，请填写',
+							type: 'warning'
+						});
 					}
 				});
 			},
+			
 			//保存
 			saveAndUpdate(CATEGORY) {
+				console.log(111);
 				this.save(CATEGORY);
 				this.show = false;
 			},

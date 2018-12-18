@@ -83,7 +83,7 @@
 										<template slot="prepend">检测报告编号</template>
 									</el-input>
 								</el-col>
-								<el-col :span="4">
+								<el-col :span="5">
 									<el-input v-model="searchList.PROXYNUM">
 										<template slot="prepend">检测委托书编号</template>
 									</el-input>

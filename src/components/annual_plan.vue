@@ -112,13 +112,13 @@
 								    <el-option label="已取消" value="0"></el-option>
 								</el-select>
 							</el-col>
-							<el-col :span="5">
+							<!-- <el-col :span="5">
 								<el-select v-model="searchList.LEADER_STATUS" placeholder="执行状态" style="width: 100%">
 								    <el-option label="未开始" value="未开始"></el-option>
 								    <el-option label="进行中" value="进行中"></el-option>
 								    <el-option label="已完成" value="已完成"></el-option>
 								</el-select>
-							</el-col>
+							</el-col> -->
 							<el-col :span="4">
 								<el-button type="primary" @click="searchinfo" size="small">搜索</el-button>
 							</el-col>
@@ -164,11 +164,11 @@
 								</el-table-column>
 								</el-table-column><el-table-column label="编辑状态" sortable width="100px" prop="STATUS" v-if="this.checkedName.indexOf('编辑状态')!=-1">
 								</el-table-column>
-								<el-table-column label="执行状态" sortable  width="120px" prop="LEADER_STATUS" v-if="this.checkedName.indexOf('执行状态')!=-1">
-								</el-table-column>
+								<!-- <el-table-column label="执行状态" sortable  width="120px" prop="LEADER_STATUS" v-if="this.checkedName.indexOf('执行状态')!=-1">
+								</el-table-column> -->
 								<el-table-column label="类型" sortable  width="100px" prop="TYPE" v-if="this.checkedName.indexOf('类型')!=-1">
 								</el-table-column>
-								<el-table-column label="提报日期" sortable  width="100px" prop="REPORTDATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('提报日期')!=-1">
+								<el-table-column label="提报日期" sortable prop="REPORTDATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('提报日期')!=-1">
 								</el-table-column>
 								<!-- <el-table-column label="信息状态" sortable  width="380px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
 								</el-table-column> -->
@@ -221,7 +221,7 @@
 					// '信息状态'
 					'修改时间',
 					'编辑状态',
-					'执行状态',
+					// '执行状态',
 					'类型',
 					'提报日期',
 
@@ -255,10 +255,10 @@
 						label: '编辑状态',
 						prop: 'STATUS'
 					},
-					{
-						label: '执行状态',
-						prop: 'LEADER_STATUS'
-					},
+					// {
+					// 	label: '执行状态',
+					// 	prop: 'LEADER_STATUS'
+					// },
 					{
 						label: '类型',
 						prop: 'TYPE'

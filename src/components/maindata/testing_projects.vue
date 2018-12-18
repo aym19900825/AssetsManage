@@ -173,7 +173,7 @@
 					'名称',
 					'单价',
 					'人员资质',
-					'信息状态',
+					// '信息状态',
 					'领域',
 					'子领域',
 					'版本',
@@ -200,10 +200,10 @@
 						label: '人员资质',
 						prop: 'QUALIFICATION'
 					},
-					{
-						label: '信息状态',
-						prop: 'STATUS'
-					},
+					// {
+					// 	label: '信息状态',
+					// 	prop: 'STATUS'
+					// },
 					{
 						label: '领域',
 						prop: 'FIELD'
@@ -250,10 +250,10 @@
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: { //点击高级搜索后显示的内容
 					P_NUM: '',
-					DEPARTMENT:'',
 					P_NAME: '',
 					VERSION: '',
-					STATUS:'',
+					DEPARTMENT:'',
+					// STATUS:'',
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -350,6 +350,7 @@
 			
 			openAddMgr() {
 				this.reset();
+				this.$refs.child.open();
 				this.$refs.child.visible();
 			},
 			
@@ -459,10 +460,10 @@
 					limit: this.page.pageSize,
 
 					P_NUM: this.searchList.P_NUM,
-					DEPARTMENT: this.searchList.DEPARTMENT,
 					P_NAME: this.searchList.P_NAME,
 					VERSION: this.searchList.VERSION,
-					STATUS: this.searchList.STATUS,
+					DEPARTMENT: this.searchList.DEPARTMENT,
+					// STATUS: this.searchList.STATUS,
 				}
 				var url = this.basic_url + '/api-apps/app/inspectionPro';
 				this.$axios.get(url, {

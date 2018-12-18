@@ -56,7 +56,7 @@
 							<el-row :gutter="10">
 								<el-col :span="5">
 									<el-input v-model="searchList.PRO_NUM">
-										<template slot="prepend">编号</template>
+										<template slot="prepend">编码</template>
 									</el-input>
 									<el-button slot="append" icon="el-icon-search"></el-button>
 								</el-col>
@@ -71,9 +71,17 @@
 									</el-input>
 								</el-col>
 								<el-col :span="5">
-									<el-input v-model="searchList.DEPARTMENT">
+									<!-- <el-input v-model="searchList.DEPARTMENT">
 										<template slot="prepend">机构</template>
-									</el-input>
+									</el-input> -->
+									<el-select v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="机构">
+									    <el-option
+									      v-for="item in options5"
+									      :key="item.value"
+									      :label="item.label"
+									      :value="item.value">
+									    </el-option>
+									</el-select>
 								</el-col>
 								<!-- <el-col :span="2">
 									<el-select v-model="searchList.STATUS" placeholder="请选择信息状态">
@@ -94,9 +102,9 @@
 							<el-table  :header-cell-style="rowClass" :data="productList" line-center border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="编号" width="155" sortable prop="PRO_NUM" v-if="this.checkedName.indexOf('编号')!=-1">
+								<el-table-column label="编码" width="155" sortable prop="PRO_NUM" v-if="this.checkedName.indexOf('编码')!=-1">
 								</el-table-column>
-								<el-table-column label="名称" width="255" sortable prop="PRO_NAME" v-if="this.checkedName.indexOf('名称')!=-1">
+								<el-table-column label="名称" sortable prop="PRO_NAME" v-if="this.checkedName.indexOf('名称')!=-1">
 								</el-table-column>
 								</el-table-column>
 								<!--<el-table-column label="信息状态" width="155" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
@@ -107,11 +115,11 @@
 								</el-table-column>
 								<!-- <el-table-column label="录入人" width="155" prop="ENTERBY" sortable v-if="this.checkedName.indexOf('录入人')!=-1">
 								</el-table-column> -->
-								<el-table-column label="录入时间" width="185" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
+								<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>
 								<!-- <el-table-column label="修改人" width="155" prop="CHANGEBY" sortablev-if="this.checkedName.indexOf('修改人')!=-1">
 								</el-table-column> -->
-								<el-table-column label="修改时间" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
+								<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
@@ -167,7 +175,7 @@
 					deptId: ''
 				},
 				checkedName: [
-					'编号',
+					'编码',
 					'名称',
 					'版本',
 					'机构',
@@ -179,7 +187,7 @@
 					'修改时间'
 				],
 				tableHeader: [{
-						label: '编号',
+						label: '编码',
 						prop: 'PRO_NUM'
 					},
 					{
@@ -227,10 +235,9 @@
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
 				searchList: { //点击高级搜索后显示的内容
 					PRO_NUM: '',
-					STATUS: '',
-					DEPARTMENT: '',
 					PRO_NAME: '',
-					VERSION: ''
+					VERSION: '',
+					DEPARTMENT: ''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -246,6 +253,22 @@
 					pageSize: 10,
 					totalCount: 0
 				},
+				options5: [{
+		            value: '金化站',
+		            label: '金化站'
+		        }, {
+		            value: '通号站',
+		            label: '通号站'
+		        }, {
+		            value: '运包站',
+		            label: '运包站'
+		        }, {
+		            value: '机辆站',
+		            label: '机辆站'
+		        }, {
+		            value: '接触网站',
+		            label: '接触网站'
+		        }],
 			}
 		},
 		methods: {
@@ -415,10 +438,10 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 					PRO_NUM: this.searchList.PRO_NUM,
-					STATUS: this.searchList.STATUS,
-					DEPARTMENT: this.searchList.DEPARTMENT,
 					PRO_NAME: this.searchList.PRO_NAME,
 					VERSION: this.searchList.VERSION,
+					DEPARTMENT: this.searchList.DEPARTMENT,
+					// STATUS: this.searchList.STATUS,
 				}
 				var url = this.basic_url + '/api-apps/app/product';
 				this.$axios.get(url, {

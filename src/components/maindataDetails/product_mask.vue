@@ -49,8 +49,9 @@
 										</el-form-item>
 									</el-col> -->
 									<el-col :span="8">
-										<el-form-item label="编号" prop="PRO_NUM">
-											<el-input v-model="PRODUCT.PRO_NUM" placeholder="(自动生成)"></el-input>
+										<el-form-item label="编码" prop="PRO_NUM">
+											<el-input v-model="PRODUCT.PRO_NUM" @blur="hint"></el-input>
+											<span v-if="hintshow" style="color:rgb(103,194,58);font-size: 12px">可填写，若不填写系统将自动生成</span>
 										</el-form-item>
 									</el-col>
 									<el-col :span="16">
@@ -172,11 +173,15 @@
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
-				product:{}
+				product:{},
+				hintshow:false
 			};
 		},
 		methods: {
-
+			//编码提示
+			hint(){
+				this.hintshow = true;
+			},
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selUser = val;
@@ -207,6 +212,7 @@
 			},
 			//点击按钮显示弹窗
 			visible() {
+				this.hintshow = false;
 				this.statusshow1 = true;
 				this.statusshow2 = false;
 				this.addtitle = true;
@@ -229,6 +235,7 @@
 			},
 			// 这里是修改
 			detail() {
+				this.hintshow = false;
 				this.modify = true;
 				this.addtitle = false;
 				this.modifytitle = true;
@@ -289,6 +296,7 @@
 			},
 			saveAndSubmit(PRODUCT) {
 				this.save(PRODUCT);
+				this.hintshow = false;
 				this.show = true;
 			},
 			//点击修订按钮

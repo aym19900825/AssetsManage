@@ -107,8 +107,8 @@
 							<el-table :header-cell-style="rowClass" :data="standardList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'standardList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column  type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="主键编号" width="120" sortable prop="ID" v-if="this.checkedName.indexOf('主键编号')!=-1">
-								</el-table-column>
+								<!-- <el-table-column label="主键编号" width="120" sortable prop="ID" v-if="this.checkedName.indexOf('主键编号')!=-1">
+								</el-table-column> -->
 								<el-table-column label="标准编号" width="120" sortable prop="S_NUM" v-if="this.checkedName.indexOf('标准编号')!=-1">
 								</el-table-column>
 								<el-table-column label="标准名称" width="220" sortable prop="S_NAME" v-if="this.checkedName.indexOf('标准名称')!=-1">
@@ -189,11 +189,11 @@
 					deptId: ''
 				},
 				checkedName: [
-					'主键编号',
+					// '主键编号',
 					'标准编号',
 					'标准名称',
 					'英文名称',
-					'信息状态',
+					// '信息状态',
 					'发布时间',
 					'启用时间',
 					'版本',
@@ -203,10 +203,11 @@
 					// '修改人',
 					'修改时间'
 				],
-				tableHeader: [{
-						label: '主键编号',
-						prop: 'ID'
-					},
+				tableHeader: [
+					// {
+					// 	label: '主键编号',
+					// 	prop: 'ID'
+					// },
 					{
 						label: '标准编号',
 						prop: 'S_NUM'
@@ -219,10 +220,10 @@
 						label: '英文名称',
 						prop: 'S_ENGNAME'
 					},
-					{
-						label: '信息状态',
-						prop: 'STATUS'
-					},
+					// {
+					// 	label: '信息状态',
+					// 	prop: 'STATUS'
+					// },
 					{
 						label: '发布时间',
 						prop: 'RELEASETIME'
@@ -358,6 +359,7 @@
 			//添加
 			openAddMgr() {
 				this.reset();
+				this.$refs.child.open();
 				this.$refs.child.visible();
 			},
 			//修改

@@ -200,6 +200,7 @@
 			};
 		},
 		methods: {
+			//编码提示
 			hint(){
 				this.hintshow = true;
 			},
@@ -254,6 +255,7 @@
 			},
 			// 这里是修改
 			detail() {
+				this.hintshow = false;
 				this.modify = true;
 				this.addtitle = false;
 				this.modifytitle = true;
@@ -388,7 +390,6 @@
 			
 			//保存
 			saveAndUpdate(CATEGORY) {
-				console.log(111);
 				this.save(CATEGORY);
 				this.show = false;
 			},

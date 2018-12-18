@@ -207,7 +207,7 @@
 						prop: 'VERSION'
 					},
 					{
-						label: '录入人机构',
+						label: '机构',
 						prop: 'DEPARTMENT'
 					},
 					// {

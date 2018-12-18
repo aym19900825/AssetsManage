@@ -94,7 +94,7 @@
 							</el-table-column>
 							<el-table-column label="联系地址" sortable width="300" prop="CONTACT_ADDRESS" v-if="this.checkedName.indexOf('联系地址')!=-1">
 							</el-table-column>
-							<el-table-column label="联系电话" sortable width="200" prop="PHONE" v-if="this.checkedName.indexOf('联系电话')!=-1">
+							<el-table-column label="联系电话" sortable prop="PHONE" v-if="this.checkedName.indexOf('联系电话')!=-1">
 							</el-table-column>	
 							<!--<el-table-column label="信息状态" sortable width="100" prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
 							</el-table-column>-->

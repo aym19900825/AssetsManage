@@ -62,7 +62,7 @@
 								</el-col>
 								<el-col :span="5">
 									<el-input v-model="searchList.PRO_NAME">
-										<template slot="prepend">产品</template>
+										<template slot="prepend">名称</template>
 									</el-input>
 								</el-col>
 								<el-col :span="5">
@@ -91,27 +91,27 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格 Begin-->
-							<el-table :data="productList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0">
+							<el-table :data="productList" line-center border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+								<el-table-column  align="center" type="selection" fixed width="55" v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="编号" width="155" sortable prop="PRO_NUM" v-if="this.checkedName.indexOf('编号')!=-1">
+								<el-table-column  align="center" label="编号" width="155" sortable prop="PRO_NUM" v-if="this.checkedName.indexOf('编号')!=-1">
 								</el-table-column>
-								<el-table-column label="产品" width="255" sortable prop="PRO_NAME" v-if="this.checkedName.indexOf('产品')!=-1">
+								<el-table-column  align="center" label="名称" width="255" sortable prop="PRO_NAME" v-if="this.checkedName.indexOf('名称')!=-1">
 								</el-table-column>
 								</el-table-column>
 								<!--<el-table-column label="信息状态" width="155" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
 							</el-table-column>-->
-								<el-table-column label="版本" width="100" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1">
+								<el-table-column  align="center" label="版本" width="100" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1">
 								</el-table-column>
-								<el-table-column label="机构" width="185" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('机构')!=-1">
+								<el-table-column  align="center" label="机构" width="185" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('机构')!=-1">
 								</el-table-column>
 								<!-- <el-table-column label="录入人" width="155" prop="ENTERBY" sortable v-if="this.checkedName.indexOf('录入人')!=-1">
 								</el-table-column> -->
-								<el-table-column label="录入时间" width="185" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
+								<el-table-column  align="center" label="录入时间" width="185" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>
 								<!-- <el-table-column label="修改人" width="155" prop="CHANGEBY" sortablev-if="this.checkedName.indexOf('修改人')!=-1">
 								</el-table-column> -->
-								<el-table-column label="修改时间" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
+								<el-table-column  align="center" label="修改时间" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
@@ -168,7 +168,7 @@
 				},
 				checkedName: [
 					'编号',
-					'产品',
+					'名称',
 					'机构',
 					'信息状态',
 					'版本',
@@ -182,7 +182,7 @@
 						prop: 'PRO_NUM'
 					},
 					{
-						label: '产品',
+						label: '名称',
 						prop: 'PRO_NAME'
 					},
 					{

@@ -338,22 +338,23 @@
 			reset() {
 				console.log(123);
 				this.dataInfo = {
-					ID: '',
-					VERSION: '1',
-					STATUS: '活动',
-					S_NUM: '',
-					S_NAME: '',
-					S_ENGNAME: '',
-					RELEASETIME: '',
-					STARTETIME: '',
-					DEPARTMENT: '',
-					ENTERBY: '',
-					ENTERDATE: '',
-					CHANGEBY: '',
-					CHANGEDATE: ''
+						ID:'',
+						S_NUM: '',
+						S_NAME: '',
+						S_ENGNAME: '',
+						RELEASETIME: '',
+						STARTETIME: '',
+						VERSION:'1',
+						STATUS: '活动',
+						RELEASE_UNIT: '',
+						DEPARTMENT: '',
+						ENTERBY: '',
+						ENTERDATE: '',
+						CHANGEBY: '',
+						CHANGEDATE: '',
 				};
-				if(this.$refs['PRODUCT'] !== undefined) {
-					this.$refs['PRODUCT'].resetFields();
+				if(this.$refs['dataInfo'] !== undefined) {
+					this.$refs['dataInfo'].resetFields();
 				}
 			},
 			//添加

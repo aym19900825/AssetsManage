@@ -438,38 +438,77 @@
 			// 保存users/saveOrUpdate
 			save(dataInfo) {
 				this.$refs[dataInfo].validate((valid) => {
-						this.dataInfo.RELEASETIME =  this.$moment(this.dataInfo.RELEASETIME).format("YYYY-MM-DD HH:mm:ss");
+					if(valid) {
+							this.dataInfo.RELEASETIME =  this.$moment(this.dataInfo.RELEASETIME).format("YYYY-MM-DD HH:mm:ss");
 						this.dataInfo.STARTETIME = this.$moment(this.dataInfo.STARTETIME).format("YYYY-MM-DD HH:mm:ss");
-					 if (valid) {
-					this.dataInfo.STATUS=((this.dataInfo.STATUS=="1"||this.dataInfo.STATUS=='活动') ? '1' : '0');
-//					this.dataInfo.STATUS=this.dataInfo.STATUS=="活动" ? '1' : '0';
-					var url = this.basic_url + '/api-apps/app/inspectionSta/saveOrUpdate';
-					this.$axios.post(url, this.dataInfo).then((res) => {
-						if(res.data.resp_code == 0) {
+						this.dataInfo.STATUS = ((this.dataInfo.STATUS == "1" || this.dataInfo.STATUS == '活动') ? '1' : '0');
+						var url = this.basic_url + '/api-apps/app/inspectionSta/saveOrUpdate';
+
+						this.$axios.post(url, this.dataInfo).then((res) => {
+							//resp_code == 0是后台返回的请求成功的信息
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '保存成功',
+									type: 'success'
+								});
+								//重新加载数据
+								this.$emit('request');
+								
+								this.$refs['dataInfo'].resetFields();
+				
+								this.$emit('reset');
+								this.visible();
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '保存成功',
-								type: 'success'
+								message: '网络错误，请重试',
+								type: 'error'
 							});
-							//重新加载数据
-							this.$emit('reset');
-							this.$emit('request');
-							this.visible();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
-					});
-			          } else {
-			          	this.show = true;
-			          	this.$message({
-							message: '未填写完整，请填写',
-							type: 'warning'
-						});
-			          }
+					} else {
+						this.show = true;
+						// this.$message({
+						// 	message: '未填写完整，请填写',
+						// 	type: 'warning'
+						// });
+						return false;
+					}
 				});
 			},
+//			save(dataInfo) {
+//				this.$refs[dataInfo].validate((valid) => {
+//						this.dataInfo.RELEASETIME =  this.$moment(this.dataInfo.RELEASETIME).format("YYYY-MM-DD HH:mm:ss");
+//						this.dataInfo.STARTETIME = this.$moment(this.dataInfo.STARTETIME).format("YYYY-MM-DD HH:mm:ss");
+//					 if (valid) {
+//					this.dataInfo.STATUS=((this.dataInfo.STATUS=="1"||this.dataInfo.STATUS=='活动') ? '1' : '0');
+////					this.dataInfo.STATUS=this.dataInfo.STATUS=="活动" ? '1' : '0';
+//					var url = this.basic_url + '/api-apps/app/inspectionSta/saveOrUpdate';
+//					this.$axios.post(url, this.dataInfo).then((res) => {
+//						if(res.data.resp_code == 0) {
+//							this.$message({
+//								message: '保存成功',
+//								type: 'success'
+//							});
+//							//重新加载数据
+//							this.$emit('reset');
+//							this.$emit('request');
+//							this.visible();
+//						}
+//					}).catch((err) => {
+//						this.$message({
+//							message: '网络错误，请重试',
+//							type: 'error'
+//						});
+//					});
+//			          } else {
+//			          	this.show = true;
+//			          	this.$message({
+//							message: '未填写完整，请填写',
+//							type: 'warning'
+//						});
+//			          }
+//				});
+//			},
 			//保存
 			saveAndUpdate(dataInfo){
 				this.save(dataInfo);

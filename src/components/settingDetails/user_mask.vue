@@ -397,7 +397,7 @@
 		<!--弹出-->
 
 		<el-dialog title="机构" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick" @check-change="handleCheckChange">
+			<el-tree ref="tree" :data="resourceData" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
 			</el-tree>
 			<span slot="footer" class="dialog-footer">
 		       <el-button @click="dialogVisible = false">取 消</el-button>
@@ -512,6 +512,7 @@
 				modifytitle: false, //修改弹出框titile
 				modify: false,
 				//				default-expand-all:true,
+				i:0,
 				rules: {
 					deptName: [{
 						required: true,
@@ -736,9 +737,24 @@
 
 			},
 			//
-			handleCheckChange(data, checked, indeterminate) {
+			handleClicks(data,checked, indeterminate) {
 				this.getCheckboxData = data;
-			},
+           		 this.i++;
+            		if(this.i%2==0){
+                	if(checked){
+                    	this.$refs.tree.setCheckedNodes([]);
+                    	this.$refs.tree.setCheckedNodes([data]);
+                    	//交叉点击节点
+               		 }else{
+                     this.$refs.tree.setCheckedNodes([]);
+                    	//点击已经选中的节点，置空
+                	 }
+            		}
+        	},
+
+//			handleCheckChange(data, checked, indeterminate) {
+//				this.getCheckboxData = data;
+//			},
 			//
 			handleNodeClick(data) { //获取勾选树菜单节点
 				//				console.log(data);

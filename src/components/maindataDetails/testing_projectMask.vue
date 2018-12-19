@@ -83,7 +83,7 @@
 											<el-input v-model="testing_projectForm.CHILD_FIELD"></el-input>
 										</el-form-item>
 									</el-col>
-									<el-col :span="8">
+									<el-col :span="8" v-if="modifytitle">
 										<el-form-item label="机构" prop="DEPARTMENT">
 											<el-input v-model="testing_projectForm.DEPARTMENT" :disabled="true"></el-input>
 										</el-form-item>
@@ -91,7 +91,7 @@
 								</el-row>
 								
 							</el-collapse-item>
-							<el-collapse-item title="其他" name="2"  v-if="modify">
+							<el-collapse-item title="其他" name="2"  v-if="personinfo">
 								<el-row :gutter="5">
 									<el-col :span="8">
 										<el-form-item label="录入人" prop="ENTERBY">
@@ -120,7 +120,7 @@
 					<div class="el-dialog__footer">
 						<el-button type="primary" @click="saveAndUpdate('testing_projectForm')">保存</el-button>
 						<el-button type="success" @click="saveAndSubmit('testing_projectForm')" v-show="addtitle">保存并添加</el-button>
-						<el-button v-if="modify" type="primary" @click="modifyversion('testing_projectForm')">修订</el-button>
+						<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('testing_projectForm')">修订</el-button>
 						<el-button @click="close">取消</el-button>
 					</div>
 				</el-form>
@@ -196,10 +196,8 @@
 				}
 			};
 			var validateQUANTITY = (rule, value, callback) => {
-				if(value === undefined) {
+				if(value === '') {
 					callback(new Error('单价不能为空'));
-				} else if(value === 0.00) {
-					callback(new Error('请填写单价'));
 				} else {
 					callback();
 				}
@@ -256,7 +254,7 @@
 					}],
 					QUANTITY: [{
 						required: true,
-						trigger: 'change',
+						trigger: 'blur',
 						validator: validateQUANTITY,
 					}],
 					QUALIFICATION: [{
@@ -283,7 +281,8 @@
 				},
 				initcost: '',
 				TESTING_PROJECTFORM:{},//
-				hintshow:false
+				hintshow:false,
+				personinfo:false
 			};
 		},
 		methods: {
@@ -380,6 +379,7 @@
 					console.log(23333);
 
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
+					this.testing_projectForm.DEPARTMENT = res.data.deptName;
 					this.testing_projectForm.CHANGEBY = res.data.nickname;
 					var date = new Date();
 					this.testing_projectForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
@@ -397,7 +397,7 @@
 				this.statusshow2 = true;
 				this.addtitle = false;
 				this.modifytitle = true;
-				this.modify = false;
+				this.modify = true;
 				this.show = true;
 
 			},

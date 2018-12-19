@@ -78,7 +78,7 @@
 									</el-col>
 								</el-row>
 								<el-row :gutter="10">
-									<el-col :span="8">
+									<el-col :span="8" v-if="modifytitle">
 										<el-form-item label="机构" prop="DEPARTMENT">
 											<el-input v-model="dataInfo.DEPARTMENT" :disabled="true"></el-input>
 										</el-form-item>
@@ -151,7 +151,7 @@
 								</el-form>
 								<!-- 字段列表 End -->
 							</el-collapse-item>
-							<el-collapse-item title="其它" name="3" v-if="modify">
+							<el-collapse-item title="其它" name="3" v-if="personinfo">
 								<el-row :gutter="5">
 									<el-col :span="8">
 										<el-form-item label="录入人" prop="ENTERBY">
@@ -180,7 +180,7 @@
 					<div class="el-dialog__footer">
 							<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并添加</el-button>
-							<el-button v-if="modify" type="primary" @click="modifyversion('dataInfo')">修订</el-button>
+							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('dataInfo')">修订</el-button>
 							<el-button @click="close">取消</el-button>
 					</div>
 				</el-form>
@@ -293,7 +293,8 @@
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
-				DATAINFO:{}//父组件传过来的值
+				DATAINFO:{},//父组件传过来的值
+				personinfo:false
 			};
 		},
 		methods: {
@@ -348,7 +349,7 @@
 			detail() {
 				this.addtitle = false;
 				this.modifytitle = true;
-				this.modify = false;
+				this.modify = true;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.dataInfo.DEPARTMENT = res.data.deptName;
 					this.dataInfo.CHANGEBY = res.data.nickname;

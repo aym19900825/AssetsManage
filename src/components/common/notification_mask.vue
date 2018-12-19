@@ -99,15 +99,10 @@
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="8">
-										<el-form-item label="项目负责人" prop="P_LEADERDesc">
-											<el-input v-model="dataInfo.P_LEADERDesc" :disabled="noedit">
+										<el-form-item label="项目负责人" prop="P_LEADER">
+											<el-input v-model="dataInfo.P_LEADER" :disabled="noedit">
 											</el-input>
 										</el-form-item>
-										<!-- <el-form-item label="项目负责人" prop="ACCEPT_PERSONDesc">
-											<el-input v-model="dataInfo.P_LEADERDesc" :disabled="edit">
-												<el-button slot="append" icon="el-icon-search" @click="getPeople(1)"></el-button>
-											</el-input>
-										</el-form-item> -->
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="受检产品名称" prop="ITEM_NAME">
@@ -170,12 +165,14 @@
 												<font>新建</font>
 											</el-button>
 										</div>
-										<el-table :data="dataInfo.WORK_NOTICE_CHECKBASISList" row-key="ID" border stripe  highlight-current-row="highlight-current-row" style="width: 100%; max-height: 131px;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.WORK_NOTICE_CHECKBASISList', order: 'descending'}">
+
+										<el-table :data="dataInfo.WORK_NOTICE_CHECKBASISList" row-key="ID" border stripe fit="true" max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.WORK_NOTICE_CHECKBASISList', order: 'descending'}">
+
 											<el-table-column prop="iconOperation" fixed width="50px">
 												<template slot-scope="scope">
-													<i class="el-icon-check" v-show="scope.row.isEditing">
+													<i class="el-icon-check" v-if="scope.row.isEditing">
 								      	</i>
-													<i class="el-icon-edit" v-show="!scope.row.isEditing">
+													<i class="el-icon-edit"  v-else="v-else">
 								      	</i>
 												</template>
 											</el-table-column>
@@ -496,6 +493,7 @@
 					// 	message: '必填',
 					// 	trigger: 'blur'
 					// }], //计划编号
+
 					CJDWDesc: [{required: true,trigger: 'blur',message: '必填',}], //承检单位
 					P_LEADERDesc: [{required: true,trigger: 'blur',message: '必填',}], //项目负责人
 					ITEM_NAME: [{required: true,trigger: 'blur',message: '必填',}], //受检产品名称
@@ -504,6 +502,7 @@
 					QUALITY: [{required: true,trigger: 'change',message: '必填'}], //样品数量
 					CHECTCOST: [{required: true,trigger: 'blur',message: '必填',	}], //检验检测费用
 					REMARKS: [{required: true,trigger: 'blur',message: '必填',}],
+
 					//					idnumber:[{required: true,trigger: 'blur',validator: validateIdnumber}],
 					//					phone: [{required: true,trigger: 'blur',validator: validatePhone}],
 					//					email: [{required: true,trigger: 'blur',validator: validateEmail,}],
@@ -847,19 +846,23 @@
 				this.getCheckedNodes();
 				this.placetext = false;
 				this.dialogVisiblecompany = false;
+				console.log(this.getCheckboxData);
+				//承检单位
 				this.dataInfo.CJDW = this.getCheckboxData.id;
 				this.dataInfo.CJDWDesc = this.getCheckboxData.fullname;
+				//单位负责人
 				this.dataInfo.P_LEADER = this.getCheckboxData.leader;
-				var dataid = this.getCheckboxData.leader;
-				var url = this.basic_url + '/api-user/users/' + dataid;
-				this.$axios.get(url, {}).then((res) => {
-					this.dataInfo.P_LEADERDesc = res.data.nickname;
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
+				console.log(this.dataInfo.P_LEADER);
+				// var dataid = this.getCheckboxData.leader;
+				// var url = this.basic_url + '/api-user/users/' + dataid;
+				// this.$axios.get(url, {}).then((res) => {
+				// 	this.dataInfo.P_LEADERDesc = res.data.nickname;
+				// }).catch((err) => {
+				// 	this.$message({
+				// 		message: '网络错误，请重试',
+				// 		type: 'error'
+				// 	});
+				// });
 			},
 			dailogconfirm(type) { //小弹出框确认按钮事件
 				this.dialogVisible = false;

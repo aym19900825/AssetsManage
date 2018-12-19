@@ -61,6 +61,7 @@ export default {
 			if(!sessionStorage.getItem('clickedNav')){
 				sessionStorage.setItem('clickedNav',JSON.stringify({arr:[]}));
 			}
+			
 			var clickedNav = JSON.parse(sessionStorage.getItem('clickedNav')).arr;
 			var flag = true;
 			for(var i = 0; i < clickedNav.length; i++){
@@ -71,16 +72,16 @@ export default {
 			if(flag){
 				clickedNav.push(item);
 			}
-
 			if(!sessionStorage.getItem('selectedNav')){
 				sessionStorage.setItem('selectedNav',JSON.stringify({}));
 			}
-			var selectedNav = JSON.parse(sessionStorage.getItem('selectedNav'));
-			
+			var selectedNav = JSON.parse(sessionStorage.getItem('selectedNav'));//选中的
 			selectedNav = item;
+			console.log(selectedNav);
 			sessionStorage.setItem('selectedNav',JSON.stringify(selectedNav));
 			sessionStorage.setItem('clickedNav',JSON.stringify({arr:clickedNav}));
 		},
+		
 		min2max(){//左侧菜单正常和变小切换
         	if($(".navbar-static-side").width()=="220"){
 		    	$(".wrapper").css("padding-left", "220px");
@@ -105,6 +106,8 @@ export default {
 		}
 	},
 	mounted() {
+		let item=this.leftNavs[0];
+		this.addClickNav(item);
 		
 	}
 }

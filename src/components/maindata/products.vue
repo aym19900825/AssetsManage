@@ -62,7 +62,7 @@
 								</el-col>
 								<el-col :span="5">
 									<el-input v-model="searchList.PRO_NAME">
-										<template slot="prepend">产品</template>
+										<template slot="prepend">名称</template>
 									</el-input>
 								</el-col>
 								<el-col :span="5">
@@ -91,12 +91,12 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格 Begin-->
-							<el-table :data="productList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table  :header-cell-style="rowClass" :data="productList" line-center border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="编号" width="155" sortable prop="PRO_NUM" v-if="this.checkedName.indexOf('编号')!=-1">
 								</el-table-column>
-								<el-table-column label="产品" width="255" sortable prop="PRO_NAME" v-if="this.checkedName.indexOf('产品')!=-1">
+								<el-table-column label="名称" width="255" sortable prop="PRO_NAME" v-if="this.checkedName.indexOf('名称')!=-1">
 								</el-table-column>
 								</el-table-column>
 								<!--<el-table-column label="信息状态" width="155" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
@@ -168,10 +168,11 @@
 				},
 				checkedName: [
 					'编号',
-					'产品',
-					'机构',
-					'信息状态',
+					'名称',
 					'版本',
+					'机构',
+					// '信息状态',
+					
 					// '录入人',
 					'录入时间',
 					// '修改人',
@@ -182,21 +183,22 @@
 						prop: 'PRO_NUM'
 					},
 					{
-						label: '产品',
+						label: '名称',
 						prop: 'PRO_NAME'
-					},
-					{
-						label: '机构',
-						prop: 'DEPARTMENT'
-					},
-					{
-						label: '信息状态',
-						prop: 'STATUS'
 					},
 					{
 						label: '版本',
 						prop: 'VERSION'
 					},
+					{
+						label: '机构',
+						prop: 'DEPARTMENT'
+					},
+					// {
+					// 	label: '信息状态',
+					// 	prop: 'STATUS'
+					// },
+					
 					// {
 					// 	label: '录入人',
 					// 	prop: 'ENTERBY'
@@ -247,6 +249,11 @@
 			}
 		},
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    console.log(rowIndex) //表头行标号为0
+			    return 'text-align:center'
+			},
 			//表格滚动加载
 			loadMore() {
 				if(this.loadSign) {
@@ -304,6 +311,7 @@
 			//添加
 			openAddMgr() {
 				this.reset();
+				this.$refs.child.open();
 				this.$refs.child.visible();
 			},
 			//修改用戶

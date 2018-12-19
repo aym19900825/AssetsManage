@@ -59,9 +59,17 @@
 									</el-input>
 								</el-col>
 								<el-col :span="5">
-									<el-input v-model="searchList.NAME">
+									<!-- <el-input v-model="searchList.NAME">
 										<template slot="prepend">机构</template>
-									</el-input>
+									</el-input> -->
+									<el-select v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="机构">
+									    <el-option
+									      v-for="item in options5"
+									      :key="item.value"
+									      :label="item.label"
+									      :value="item.value">
+									    </el-option>
+									</el-select>
 								</el-col>
 								<!-- <el-col :span="5">
 								<el-input v-model="searchList.PHONE">
@@ -89,12 +97,12 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格 Begin-->
-							<el-table  :data="categoryList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-								<el-table-column type="selection" fixed width="55" align="center"  v-if="this.checkedName.length>0">
+							<el-table :header-cell-style="rowClass" :data="categoryList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="编号" width="155" align="center" sortable prop="NUM" v-if="this.checkedName.indexOf('编号')!=-1">
+								<el-table-column label="编号" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('编号')!=-1">
 								</el-table-column>
-								<el-table-column label="名称" width="255" align="center" sortable prop="TYPE" v-if="this.checkedName.indexOf('名称')!=-1">
+								<el-table-column label="名称" width="255" sortable prop="TYPE" v-if="this.checkedName.indexOf('名称')!=-1">
 								</el-table-column>
 								</el-table-column>
 								<!--<el-table-column label="信息状态" width="155" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
@@ -102,17 +110,17 @@
  									<span v-text="scope.row.STATUS=='1'?'活动':'不活动'"></span>
  								</template>
 							</el-table-column>-->
-								<el-table-column label="版本" width="100" align="center" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1">
+								<el-table-column label="版本" width="100" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1">
 								</el-table-column>
-								<el-table-column label="机构" width="185" align="center" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('机构')!=-1">
+								<el-table-column label="机构" width="185" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('机构')!=-1">
 								</el-table-column>
 								<!-- <el-table-column label="录入人" width="155" prop="ENTERBY" sortable v-if="this.checkedName.indexOf('录入人')!=-1">
 								</el-table-column> -->
-								<el-table-column label="录入时间" width="185" align="center" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
+								<el-table-column label="录入时间" width="185" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>
 								<!-- <el-table-column label="修改人" width="155" prop="CHANGEBY" sortable v-if="this.checkedName.indexOf('修改人')!=-1">
 								</el-table-column> -->
-								<el-table-column label="修改时间" align="center" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
+								<el-table-column label="修改时间" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
@@ -130,8 +138,8 @@
 <script>
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
-	import navs_left from '../common/left_navs/nav_left2.vue'
 	import navs_header from '../common/nav_tabs.vue'
+	import navs_left from '../common/left_navs/nav_left2.vue'
 	import categorymask from '../maindataDetails/product_categoryMask.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	export default {
@@ -169,9 +177,10 @@
 				checkedName: [
 					'编号',
 					'名称',
+					'版本',
 					'机构',
 					// '信息状态',
-					'版本',
+					
 					// '录入人',
 					'录入时间',
 					// '修改人',
@@ -186,6 +195,10 @@
 						prop: 'TYPE'
 					},
 					{
+						label: '版本',
+						prop: 'VERSION'
+					},
+					{
 						label: '机构',
 						prop: 'DEPARTMENT'
 					},
@@ -193,10 +206,6 @@
 					// 	label: '信息状态',
 					// 	prop: 'STATUS'
 					// },
-					{
-						label: '版本',
-						prop: 'VERSION'
-					},
 					// {
 					// 	label: '录入人',
 					// 	prop: 'ENTERBY'
@@ -225,10 +234,10 @@
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
 				searchList: { //点击高级搜索后显示的内容
 					TYPE: '',
-					NAME: '',
-					PHONE: '',
-					CONTACT_ADDRESS: '',
-					STATUS: ''
+					DEPARTMENT: '',
+					// PHONE: '',
+					// CONTACT_ADDRESS: '',
+					// STATUS: ''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -243,7 +252,23 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-				CATEGORY: {} //修改子组件时传递数据
+				CATEGORY: {},//修改子组件时传递数据
+				options5: [{
+		            value: '金化站',
+		            label: '金化站'
+		        }, {
+		            value: '通号站',
+		            label: '通号站'
+		        }, {
+		            value: '运包站',
+		            label: '运包站'
+		        }, {
+		            value: '机辆站',
+		            label: '机辆站'
+		        }, {
+		            value: '接触网站',
+		            label: '接触网站'
+		        }],
 			}
 		},
 
@@ -252,6 +277,11 @@
 		},
 
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    console.log(rowIndex) //表头行标号为0
+			    return 'text-align:center'
+			},
 			//表格滚动加载
 			loadMore() {
 				if(this.loadSign) {
@@ -301,14 +331,14 @@
 				}
 
 			},
-			//添加用戶
+			//添加类别
 			openAddMgr() {
 				this.reset();
 				this.$refs.child.open() // 方法1
 				this.$refs.child.visible();
 				
 			},
-			//修改用戶
+			//修改类别
 			modify() {
 				if(this.selUser.length == 0) {
 					this.$message({
@@ -416,10 +446,10 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 					TYPE: this.searchList.TYPE,
-					NAME: this.searchList.NAME,
+					DEPARTMENT: this.searchList.DEPARTMENT,
 					// PHONE: this.searchList.PHONE,
 					// CONTACT_ADDRESS: this.searchList.CONTACT_ADDRESS,
-					STATUS: this.searchList.STATUS
+					// STATUS: this.searchList.STATUS
 				}
 				var url = this.basic_url + '/api-apps/app/productType';
 				this.$axios.get(url, {

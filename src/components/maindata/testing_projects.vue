@@ -88,7 +88,7 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :data="projectList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'projectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+						<el-table :header-cell-style="rowClass" :data="projectList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'projectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 							</el-table-column>
 							<el-table-column label="编号" width="150" sortable prop="P_NUM" v-if="this.checkedName.indexOf('编号')!=-1">
@@ -273,24 +273,26 @@
 		},
 
 		methods: {
-		vartoThousands(num){
-			var momeny=num.QUANTITY;
-    		momeny= momeny.toFixed(2);//将数字转成带有2位小数的字符串
-    	
-			momeny = parseFloat(momeny);//将带有2位小数的字符串转成带有小数的数字
-			momeny = momeny.toLocaleString();//将带有2位小数的数字转成金额格式
-			if(momeny.indexOf(".")==-1){
-            	momeny =momeny+".00";
-        	}else{
-            	momeny = momeny.split(".")[1].length<2?momeny+"0":momeny;
-        	}
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    console.log(rowIndex) //表头行标号为0
+			    return 'text-align:center'
+			},
+			vartoThousands(num){
+				var momeny=num.QUANTITY;
+	    		momeny= momeny.toFixed(2);//将数字转成带有2位小数的字符串
+	    	
+				momeny = parseFloat(momeny);//将带有2位小数的字符串转成带有小数的数字
+				momeny = momeny.toLocaleString();//将带有2位小数的数字转成金额格式
+				if(momeny.indexOf(".")==-1){
+	            	momeny =momeny+".00";
+	        	}else{
+	            	momeny = momeny.split(".")[1].length<2?momeny+"0":momeny;
+	        	}
 
-			console.log(momeny);
-			return momeny;
-		},
-
-
-
+				console.log(momeny);
+				return momeny;
+			},
 			//表格滚动加载
 			loadMore () {
 			   if (this.loadSign) {

@@ -2,7 +2,7 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header></navs_header>
+			<navs_header  ref="child"></navs_header>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
@@ -484,6 +484,8 @@
 		},
 		mounted() {
 			this.requestData();
+			this.$refs.child.$emit('aaa') ;
+			
 		},
 	}
 </script>

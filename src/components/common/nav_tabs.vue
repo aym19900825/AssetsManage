@@ -128,17 +128,29 @@ export default {
                     navherf: '/index'
                 }]}));
         },
+        aaa(){
+	        if(sessionStorage.getItem('clickedNav') != null && sessionStorage.getItem('clickedNav').length>0){
+	    		this.tabs = JSON.parse(sessionStorage.getItem('clickedNav')).arr;
+	    		console.log(this.tabs);
+	    	}else{
+	    		this.showindex()
+	    	}
+	    	if(sessionStorage.getItem('selectedNav') != null && sessionStorage.getItem('selectedNav').length>0){
+	    		this.selectedTab = JSON.parse(sessionStorage.getItem('selectedNav'));    		
+	    	}
+    	}
     },
     mounted(){
-    	if(sessionStorage.getItem('clickedNav') != null && sessionStorage.getItem('clickedNav').length>0){
-    		this.tabs = JSON.parse(sessionStorage.getItem('clickedNav')).arr;
-    		console.log(this.tabs);
-    	}else{
-    		this.showindex()
-    	}
-    	if(sessionStorage.getItem('selectedNav') != null && sessionStorage.getItem('selectedNav').length>0){
-    		this.selectedTab = JSON.parse(sessionStorage.getItem('selectedNav'));    		
-    	}
+    	 if(sessionStorage.getItem('clickedNav') != null && sessionStorage.getItem('clickedNav').length>0){
+	    		this.tabs = JSON.parse(sessionStorage.getItem('clickedNav')).arr;
+	    		console.log(this.tabs);
+	    	}else{
+	    		this.showindex()
+	    	}
+	    	if(sessionStorage.getItem('selectedNav') != null && sessionStorage.getItem('selectedNav').length>0){
+	    		this.selectedTab = JSON.parse(sessionStorage.getItem('selectedNav'));    		
+	    	}
+    	
 //  	this.tabs = JSON.parse(sessionStorage.getItem('clickedNav')).arr;
 //  	console.log(this.tabs);
 //      this.selectedTab = JSON.parse(sessionStorage.getItem('selectedNav'));

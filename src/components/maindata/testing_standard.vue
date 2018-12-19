@@ -336,7 +336,7 @@
 			},
 			//清空
 			reset() {
-				console.log(123);
+				
 				this.dataInfo = {
 					// ID: '',
 					VERSION: '1',
@@ -352,7 +352,6 @@
 					ENTERDATE: '',
 					CHANGEBY: '',
 					CHANGEDATE: ''
-
 				};
 				if(this.$refs['dataInfo'] !== undefined) {
 					this.$refs['dataInfo'].resetFields();

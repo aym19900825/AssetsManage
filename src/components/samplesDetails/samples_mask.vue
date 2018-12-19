@@ -38,7 +38,6 @@
 									</el-col>
 								</el-row>
 
-								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="委托书编号" prop="PROXYNUM">
 											<el-input v-model="samplesForm.PROXYNUM" :disabled="edit">
@@ -56,9 +55,7 @@
 											<el-input v-model="samplesForm.V_NAME" ></el-input>
 										</el-form-item>
 									</el-col>
-								</el-row>
 
-								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="生产单位编号" prop="PRODUCT_COMPANY">
 											<el-input v-model="samplesForm.PRODUCT_COMPANY"></el-input>
@@ -74,9 +71,6 @@
 											<el-input v-model="samplesForm.DESCRIPTION"></el-input>
 										</el-form-item>
 									</el-col>
-								</el-row>
-
-								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="产品标识代码" prop="PRODUCT_CODE">
 											<el-input v-model="samplesForm.PRODUCT_CODE"></el-input>
@@ -92,9 +86,7 @@
 											<el-input-number v-model="samplesForm.QUATITY" :min="1" :step="5" :max="100" label="描述文字" style="width: 100%"></el-input-number>
 										</el-form-item>
 									</el-col>
-								</el-row>
 
-								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="类别" prop="TYPE">
 											<el-select v-model="samplesForm.TYPE" placeholder="请选择类别" style="width: 100%;">
@@ -107,7 +99,6 @@
 											<el-input v-model="samplesForm.OTHER"></el-input>
 										</el-form-item>
 									</el-col>
-								</el-row>
 
 								<el-row :gutter="30">
 									<el-col :span="24">
@@ -117,7 +108,6 @@
 									</el-col>
 								</el-row>
 
-								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="入库时间" prop="ACCEPTDATE">
 											<div class="block">
@@ -145,9 +135,7 @@
 											</div>
 										</el-form-item>
 									</el-col>
-								</el-row>
-
-								<el-row :gutter="30">
+								
 									<el-col :span="8">
 										<el-form-item label="接样人" prop="RECIP_PERSON">
 											<el-input v-model="samplesForm.RECIP_PERSON"></el-input>
@@ -175,9 +163,7 @@
 											</div>
 										</el-form-item>
 									</el-col>
-								</el-row>
 
-								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="录入人机构">
 											<el-input v-model="samplesForm.DEPARTMENT" :disabled="true"></el-input>
@@ -193,7 +179,6 @@
 											<el-input v-model="samplesForm.ENTERDATE" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
-								</el-row>
 								<el-row :gutter="30" v-if="modify">
 									<el-col :span="8">
 										<el-form-item label="修改人">

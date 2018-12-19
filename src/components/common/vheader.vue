@@ -115,7 +115,7 @@ export default {
     background: url(../../assets/img/head_rt.png) top right no-repeat;}
 
 .logo{
-    background-image: url(../../assets/img/logo-white.png);
+    background-image: url(/static/img/logo-white.c6547ce.png);
     background-repeat: no-repeat;
     background-position: left center;
     width: 195px;
@@ -123,7 +123,8 @@ export default {
     float: left;
     position: relative;
     z-index: 998;
-    margin-left: 25px;
+    margin-left: 22px;
+    background-size: 75%;
 }
 
 .nav-head li{

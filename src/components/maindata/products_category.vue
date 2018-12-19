@@ -100,9 +100,9 @@
 							<el-table :header-cell-style="rowClass" :data="categoryList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="编号" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('编号')!=-1">
+								<el-table-column label="编码" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('编码')!=-1">
 								</el-table-column>
-								<el-table-column label="名称" width="255" sortable prop="TYPE" v-if="this.checkedName.indexOf('名称')!=-1">
+								<el-table-column label="名称" sortable prop="TYPE" v-if="this.checkedName.indexOf('名称')!=-1">
 								</el-table-column>
 								</el-table-column>
 								<!--<el-table-column label="信息状态" width="155" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
@@ -116,11 +116,11 @@
 								</el-table-column>
 								<!-- <el-table-column label="录入人" width="155" prop="ENTERBY" sortable v-if="this.checkedName.indexOf('录入人')!=-1">
 								</el-table-column> -->
-								<el-table-column label="录入时间" width="185" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
+								<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>
 								<!-- <el-table-column label="修改人" width="155" prop="CHANGEBY" sortable v-if="this.checkedName.indexOf('修改人')!=-1">
 								</el-table-column> -->
-								<el-table-column label="修改时间" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
+								<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
@@ -175,7 +175,7 @@
 					deptId: ''
 				},
 				checkedName: [
-					'编号',
+					'编码',
 					'名称',
 					'版本',
 					'机构',
@@ -187,7 +187,7 @@
 					'修改时间'
 				],
 				tableHeader: [{
-						label: '编号',
+						label: '编码',
 						prop: 'NUM'
 					},
 					{
@@ -334,7 +334,7 @@
 			//添加类别
 			openAddMgr() {
 				this.reset();
-				this.$refs.child.open() // 方法1
+				this.$refs.child.open(); // 方法1
 				this.$refs.child.visible();
 				
 			},

@@ -58,7 +58,8 @@
 									</el-col> -->
 									<el-col :span="8">
 										<el-form-item label="编码" prop="NUM">
-											<el-input v-model="CATEGORY.NUM"placeholder="(自动生成)"></el-input>
+											<el-input v-model="CATEGORY.NUM" @blur="hint"></el-input>
+											<span v-if="hintshow" style="color:rgb(103,194,58);font-size: 12px">可填写，若不填写系统将自动生成</span>
 										</el-form-item>
 									</el-col>
 									<el-col :span="16">
@@ -136,6 +137,24 @@
 			page: Object,
 		},
 		data() {
+			// var validateNum = (rule, value, callback) => {
+			// 	if(value === '') {
+			// 		callback(new Error('可填写，若不填写系统将自动生成'));
+					
+			// 	} else {
+			// 		callback();
+			// 	}
+			// 	callback();
+			// 	// if(value){
+			// 	// 	if (value==='') {
+			// 	// 		callback();
+			// 	// 	}else{
+		 //  //            	callback(new Error('可填写，若不填写系统将自动生成'));
+			// 	// 	}
+		 //  //       }else{
+		 //  //            callback();
+		 //  //       }
+			// };
 			var validateType = (rule, value, callback) => {
 				if(value === '') {
 					callback(new Error('请填写产品类别名称'));
@@ -164,6 +183,10 @@
 				dialogVisible: false, //对话框
 				selectData: [],
 				rules: {
+					// NUM: [{
+					// 	trigger: 'blur',
+					// 	validator: validateNum,
+					// }],
 					TYPE: [{
 						required: true,
 						trigger: 'blur',
@@ -172,11 +195,15 @@
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
-				category:{}
+				category:{},
+				hintshow:false
 			};
 		},
 		methods: {
-			
+			//编码提示
+			hint(){
+				this.hintshow = true;
+			},
 			//清空
 //			reset() {
 //				this.CATEGORY = {
@@ -218,6 +245,7 @@
 						type: 'error'
 					});
 				});
+				this.hintshow = false;
 				this.statusshow1 = true;
 				this.statusshow2 = false;
 				this.addtitle = true;
@@ -227,6 +255,7 @@
 			},
 			// 这里是修改
 			detail() {
+				this.hintshow = false;
 				this.modify = true;
 				this.addtitle = false;
 				this.modifytitle = true;
@@ -350,17 +379,17 @@
 						});
 					} else {
 						this.show = true;
-						this.$message({
-							message: '未填写完整，请填写',
-							type: 'warning'
-						});
+						// this.$message({
+						// 	message: '未填写完整，请填写',
+						// 	type: 'warning'
+						// });
+						return false;
 					}
 				});
 			},
 			
 			//保存
 			saveAndUpdate(CATEGORY) {
-				console.log(111);
 				this.save(CATEGORY);
 				this.show = false;
 			},

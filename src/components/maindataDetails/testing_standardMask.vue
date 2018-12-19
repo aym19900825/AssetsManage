@@ -15,7 +15,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="dataInfo" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
+				<el-form :model="dataInfo" :rules="rules" ref="dataInfo" label-width="80px" class="demo-user">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基本信息" name="1">
@@ -41,7 +41,7 @@
 										</el-input>
 									</el-col> --> 
 								</el-row>
-								<el-row :gutter="30">
+								<el-row :gutter="10">
 									<el-col :span="8">
 										<el-form-item label="标准编号" prop="S_NUM">
 											<el-input v-model="dataInfo.S_NUM"></el-input>
@@ -58,7 +58,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30">
+								<el-row :gutter="10">
 									<el-col :span="8">
 										<el-form-item label="发布时间" prop="RELEASETIME">
 											<el-date-picker v-model="dataInfo.RELEASETIME" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width:100%">
@@ -77,7 +77,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30" v-if="modify">
+								<el-row :gutter="10" v-if="modify">
 									<el-col :span="8">
 										<el-form-item label="机构" prop="DEPARTMENT">
 											<el-input v-model="dataInfo.DEPARTMENT" :disabled="true"></el-input>
@@ -177,7 +177,7 @@
 					</div>
 					<div class="el-dialog__footer">
 							<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit('dataInfo')">保存并添加</el-button>
+							<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并添加</el-button>
 							<el-button v-if="modify" type="primary" @click="modifyversion('dataInfo')">修订</el-button>
 							<el-button @click="close">取消</el-button>
 					</div>
@@ -324,9 +324,6 @@
 			},
 			//添加点击按钮显示弹窗
 			visible() {
-				this.addtitle = true;
-				this.modifytitle = false;
-				this.modify = false;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					console.log(res);
 //					this.dataInfo.DEPARTMENT=res.data.companyName;
@@ -340,13 +337,16 @@
 						type:'error'
 					});
 				});
-				this.show = true;
+				this.addtitle = true;
+				this.modifytitle = false;
+				this.modify = false;
+				// this.show = true;
 			},
 			// 这里是修改
 			detail() {
 				this.addtitle = false;
 				this.modifytitle = true;
-				this.modify = true;
+				this.modify = false;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.dataInfo.DEPARTMENT=res.data.deptName;
 					this.dataInfo.CHANGEBY=res.data.nickname;
@@ -366,6 +366,9 @@
 			//点击关闭按钮
 			close() {
 				this.show = false;
+			},
+			open(){
+				this.show = true;
 			},
 			toggle(e) {
 				if(this.isok1 == true) {

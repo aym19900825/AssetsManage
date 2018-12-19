@@ -117,7 +117,7 @@
 					</div>
 					<div class="el-dialog__footer">
 						<el-button type="primary" @click="saveAndUpdate('testing_projectForm')">保存</el-button>
-						<el-button type="success" @click="saveAndSubmit('testing_projectForm')">保存并添加</el-button>
+						<el-button type="success" @click="saveAndSubmit('testing_projectForm')" v-show="addtitle">保存并添加</el-button>
 						<el-button v-if="modify" type="primary" @click="modifyversion('testing_projectForm')">修订</el-button>
 						<el-button @click="close">取消</el-button>
 					</div>
@@ -354,7 +354,7 @@
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.modify = false;
-				this.show = true;
+				// this.show = true;
 			},
 
 			detail() { //修改内容时从父组件带过来的
@@ -425,7 +425,9 @@
 			close() {
 				this.show = false;
 			},
-
+			open(){
+				this.show = true;
+			},
 			toggle(e) {
 				if(this.isok1 == true) {
 					this.maxDialog();

@@ -132,6 +132,7 @@ export default {
     mounted(){
     	if(sessionStorage.getItem('clickedNav') != null && sessionStorage.getItem('clickedNav').length>0){
     		this.tabs = JSON.parse(sessionStorage.getItem('clickedNav')).arr;
+    		console.log(this.tabs);
     	}else{
     		this.showindex()
     	}
@@ -139,7 +140,8 @@ export default {
     		this.selectedTab = JSON.parse(sessionStorage.getItem('selectedNav'));    		
     	}
 //  	this.tabs = JSON.parse(sessionStorage.getItem('clickedNav')).arr;
-        //this.selectedTab = JSON.parse(sessionStorage.getItem('selectedNav'));
+//  	console.log(this.tabs);
+//      this.selectedTab = JSON.parse(sessionStorage.getItem('selectedNav'));
 
     }
 }

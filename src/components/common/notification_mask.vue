@@ -103,11 +103,6 @@
 											<el-input v-model="dataInfo.P_LEADER" :disabled="noedit">
 											</el-input>
 										</el-form-item>
-										<!-- <el-form-item label="项目负责人" prop="ACCEPT_PERSONDesc">
-											<el-input v-model="dataInfo.P_LEADERDesc" :disabled="edit">
-												<el-button slot="append" icon="el-icon-search" @click="getPeople(1)"></el-button>
-											</el-input>
-										</el-form-item> -->
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="受检产品名称" prop="ITEM_NAME">
@@ -170,7 +165,9 @@
 												<font>新建</font>
 											</el-button>
 										</div>
+
 										<el-table :data="dataInfo.WORK_NOTICE_CHECKBASISList" row-key="ID" border stripe fit="true" max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.WORK_NOTICE_CHECKBASISList', order: 'descending'}">
+
 											<el-table-column prop="iconOperation" fixed width="50px">
 												<template slot-scope="scope">
 													<i class="el-icon-check" v-if="scope.row.isEditing">
@@ -490,56 +487,22 @@
 					WORK_NOTICE_CHECKPROJECTList: []
 				},
 				rules: {
-					TYPE: [{
-						required: true,
-						message: '必填',
-						trigger: 'blur'
-					}], //名称
+					TYPE: [{required: true,message: '必填',trigger: 'blur'}], //名称
 					// WP_NUM: [{
 					// 	required: true,
 					// 	message: '必填',
 					// 	trigger: 'blur'
 					// }], //计划编号
-					CJDW: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填',
-					}], //承检单位
-					P_LEADERDesc: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填',
-					}], //项目负责人
-					ITEM_NAME: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填',
-					}], //受检产品名称
-					ITEM_MODEL: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填'
-					}], //受检产品型号
-					V_NAME: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填'
-					}], //受检企业
-					QUALITY: [{
-						required: true,
-						trigger: 'change',
-						message: '必填'
-					}], //样品数量
-					CHECTCOST: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填',
-					}], //检验检测费用
-					REMARKS: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填',
-					}],
+
+					CJDWDesc: [{required: true,trigger: 'blur',message: '必填',}], //承检单位
+					P_LEADERDesc: [{required: true,trigger: 'blur',message: '必填',}], //项目负责人
+					ITEM_NAME: [{required: true,trigger: 'blur',message: '必填',}], //受检产品名称
+					ITEM_MODEL: [{required: true,trigger: 'blur',message: '必填'}], //受检产品型号
+					V_NAME: [{required: true,trigger: 'blur',message: '必填'}], //受检企业
+					QUALITY: [{required: true,trigger: 'change',message: '必填'}], //样品数量
+					CHECTCOST: [{required: true,trigger: 'blur',message: '必填',	}], //检验检测费用
+					REMARKS: [{required: true,trigger: 'blur',message: '必填',}],
+
 					//					idnumber:[{required: true,trigger: 'blur',validator: validateIdnumber}],
 					//					phone: [{required: true,trigger: 'blur',validator: validatePhone}],
 					//					email: [{required: true,trigger: 'blur',validator: validateEmail,}],
@@ -558,21 +521,28 @@
 			};
 		},
 		methods: {
-			//			resetNew() {
-			//				this.dataInfo = { //数据库列表
-			//						name: '',
-			//						description: '',
-			//						attributes: [{ //字段列表
-			//							columnname: '',
-			//							description: '',
-			//							type: '',
-			//							length: '',
-			//							retain: ''
-			//						}]
-			//					},
-			//
-			//					this.$refs["dataInfo"].resetFields();
-			//			},
+			reset() {
+				this.dataInfo = {
+					N_CODE: '',
+					TYPE: '',
+					XD_DATE: '',
+					ITEM_NAME: '',
+					ITEM_MODEL: '',
+					VENDOR: '',
+					CJDW: '',
+					P_LEADER: '',
+					TASKNUM: '',
+					SOLUTION: '',
+					COMPDATE: '',
+					STATE: '草稿',
+					ENTERBY: '',
+					STATUS: '',
+					WORK_NOTICE_CHECKBASISList: [],
+					WORK_NOTICE_CHECKPROJECTList: []
+				}
+					this.$refs["dataInfo"].resetFields();
+			},
+			
 			handleNodeClick(data) { //获取勾选树菜单节点
 				//				console.log(data);
 			},
@@ -670,6 +640,7 @@
 			},
 			//点击按钮显示弹窗
 			visible() {
+				this.reset();
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 
 					this.dataInfo.DEPT = res.data.deptName;
@@ -683,6 +654,7 @@
 						type: 'error'
 					})
 				})
+				
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.views = false; //
@@ -904,26 +876,7 @@
 					this.dataInfo.ACCEPT_PERSONDesc = this.selUser[0].nickname;
 				}
 			},
-			reset() {
-				this.dataInfo = {
-					N_CODE: '',
-					TYPE: '',
-					XD_DATE: '',
-					ITEM_NAME: '',
-					ITEM_MODEL: '',
-					VENDOR: '',
-					CJDW: '',
-					P_LEADER: '',
-					TASKNUM: '',
-					SOLUTION: '',
-					COMPDATE: '',
-					STATE: '草稿',
-					ENTERBY: '',
-					STATUS: '',
-					WORK_NOTICE_CHECKBASISList: [],
-					WORK_NOTICE_CHECKPROJECTList: []
-				}
-			},
+			
 			SelChange(val) {
 				this.selUser = val;
 			},

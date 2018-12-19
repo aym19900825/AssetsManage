@@ -138,8 +138,8 @@
 <script>
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
-	import navs_left from '../common/left_navs/nav_left2.vue'
 	import navs_header from '../common/nav_tabs.vue'
+	import navs_left from '../common/left_navs/nav_left2.vue'
 	import categorymask from '../maindataDetails/product_categoryMask.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	export default {

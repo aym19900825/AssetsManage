@@ -43,7 +43,7 @@
 									</el-col>
 								</el-row>
 
-								<el-row :gutter="5">
+								<el-row>
 									<el-col :span="8">
 										<el-form-item label="中文名称" prop="M_NAME" >
 											<el-input v-model="testingForm.M_NAME"></el-input>
@@ -63,7 +63,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="5">
+								<el-row>
 									<el-col :span="8" v-if="modifytitle">
 										<el-form-item label="机构">
 											<el-input v-model="testingForm.DEPARTMENT" :disabled="true"></el-input>
@@ -159,7 +159,7 @@
 								<!-- 文档Table-List End -->
 							</el-collapse-item>
 							<el-collapse-item title="其它" name="3"  v-if="personinfo">
-								<el-row :gutter="5">
+								<el-row>
 									<el-col :span="8">
 										<el-form-item label="录入人">
 											<el-input v-model="testingForm.ENTERBY" :disabled="true"></el-input>

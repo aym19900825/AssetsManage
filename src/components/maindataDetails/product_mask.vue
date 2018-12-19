@@ -19,7 +19,7 @@
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="名称" name="1">
-								<el-row :gutter="20" class="pb10">
+								<el-row class="pb10">
 									<el-col :span="3" class="pull-right">
 										<el-input v-model="PRODUCT.VERSION" :disabled="true">
 											<template slot="prepend">版本</template>
@@ -41,7 +41,7 @@
 										</el-select> -->
 								</el-row>
 
-								<el-row :gutter="1">
+								<el-row>
 									<!-- <el-col :span="8">
 										<el-form-item label="产品编号" prop="PRO_NUM">
 											<el-input v-model="PRODUCT.PRO_NUM" :disabled="edit" placeholder="自动生成"></el-input>
@@ -59,7 +59,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="5">
+								<el-row>
 									<el-col :span="8" v-if="modifytitle">
 										<el-form-item label="机构" prop="DEPARTMENT">
 											<el-input v-model="PRODUCT.DEPARTMENT" :disabled="true"></el-input>
@@ -68,7 +68,7 @@
 								</el-row>
 							</el-collapse-item>
 							<el-collapse-item title="其它" name="2"  v-if="personinfo">
-								<el-row :gutter="5">
+								<el-row>
 									<el-col :span="8">
 										<el-form-item label="录入人" prop="ENTERBY">
 											<el-input v-model="PRODUCT.ENTERBY" :disabled="edit"></el-input>

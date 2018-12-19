@@ -43,7 +43,7 @@
 									</el-col>
 								</el-row>
 
-								<el-row :gutter="5">
+								<el-row>
 									<el-col :span="16">
 										<el-form-item label="项目名称" prop="P_NAME">
 											<el-input v-model="testing_projectForm.P_NAME"  onmouseover="this.title=this.value"></el-input>
@@ -56,7 +56,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="5">
+								<el-row>
 									<el-col :span="8">
 										<el-form-item label="就业指导书" prop="DOCLINKS_NUM">
 											<el-input v-model="testing_projectForm.DOCLINKS_NUM">
@@ -77,7 +77,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="5">
+								<el-row>
 									<el-col :span="8">
 										<el-form-item label="子领域" prop="CHILD_FIELD">
 											<el-input v-model="testing_projectForm.CHILD_FIELD"></el-input>
@@ -92,7 +92,7 @@
 								
 							</el-collapse-item>
 							<el-collapse-item title="其他" name="2"  v-if="personinfo">
-								<el-row :gutter="5">
+								<el-row>
 									<el-col :span="8">
 										<el-form-item label="录入人" prop="ENTERBY">
 											<el-input v-model="testing_projectForm.ENTERBY" :disabled="true"></el-input>

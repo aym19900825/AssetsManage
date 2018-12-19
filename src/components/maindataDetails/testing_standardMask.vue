@@ -19,7 +19,7 @@
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基本信息" name="1">
-								<el-row :gutter="20" class="pb10"style="margin-right: 5px;">
+								<el-row class="pb10"style="margin-right: 5px;">
 									<el-col :span="3" class="pull-right">
 										<el-input v-model="dataInfo.VERSION" :disabled="true">
 											<template slot="prepend">版本</template>
@@ -41,7 +41,7 @@
 										</el-input>
 									</el-col> --> 
 								</el-row>
-								<el-row :gutter="10">
+								<el-row>
 									<el-col :span="8">
 										<el-form-item label="标准编号" prop="S_NUM">
 											<el-input v-model="dataInfo.S_NUM"></el-input>
@@ -58,7 +58,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="10">
+								<el-row>
 									<el-col :span="8">
 										<el-form-item label="发布时间" prop="RELEASETIME">
 											<el-date-picker v-model="dataInfo.RELEASETIME" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width:100%">
@@ -77,7 +77,7 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="10">
+								<el-row>
 									<el-col :span="8" v-if="modifytitle">
 										<el-form-item label="机构" prop="DEPARTMENT">
 											<el-input v-model="dataInfo.DEPARTMENT" :disabled="true"></el-input>
@@ -100,7 +100,7 @@
 								<!-- :rules="rules" ref="attributes" -->
 								<el-form :model="dataInfo.attributes">
 									<el-form-item>
-										<el-row :gutter="20">
+										<el-row>
 											<el-col :span="3">
 												<el-form-item label="序号"></el-form-item>
 											</el-col>
@@ -123,7 +123,7 @@
 												<el-form-item label="操作"></el-form-item>
 											</el-col>
 										</el-row>
-										<el-row :gutter="20" v-for="(item,key) in dataInfo.attributes" :key="key">
+										<el-row v-for="(item,key) in dataInfo.attributes" :key="key">
 											<el-col :span="3">
 												<el-input type="text" placeholder="请输入序号" v-model="item.columnname"></el-input>
 											</el-col>
@@ -152,7 +152,7 @@
 								<!-- 字段列表 End -->
 							</el-collapse-item>
 							<el-collapse-item title="其它" name="3" v-if="personinfo">
-								<el-row :gutter="5">
+								<el-row>
 									<el-col :span="8">
 										<el-form-item label="录入人" prop="ENTERBY">
 											<el-input v-model="dataInfo.ENTERBY" :disabled="true"></el-input>

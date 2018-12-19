@@ -53,7 +53,7 @@
 							<el-row :gutter="10">
 								<el-col :span="5">
 									<el-input v-model="searchList.P_NUM">
-										<template slot="prepend">编号</template>
+										<template slot="prepend">编码</template>
 									</el-input>
 								</el-col>
 								<el-col :span="5">
@@ -91,11 +91,11 @@
 						<el-table :header-cell-style="rowClass" :data="projectList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'projectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 							</el-table-column>
-							<el-table-column label="编号" width="150" sortable prop="P_NUM" v-if="this.checkedName.indexOf('编号')!=-1">
+							<el-table-column label="编码" width="150" sortable prop="P_NUM" v-if="this.checkedName.indexOf('编码')!=-1">
 							</el-table-column>
 							<el-table-column label="名称" width="220" sortable prop="P_NAME" v-if="this.checkedName.indexOf('名称')!=-1">
 							</el-table-column>
-							<el-table-column label="单价(元)" width="120" sortable prop="QUANTITY" :formatter="vartoThousands" v-if="this.checkedName.indexOf('单价')!=-1">
+							<el-table-column label="单价(元)" width="120" sortable prop="QUANTITY" v-if="this.checkedName.indexOf('单价')!=-1">
 							</el-table-column>
 							<el-table-column label="人员资质" width="180" sortable prop="QUALIFICATION" v-if="this.checkedName.indexOf('人员资质')!=-1">
 							</el-table-column>
@@ -169,7 +169,7 @@
 				loadSign:true,//加载
 				commentArr:{},
 				checkedName: [
-					'编号',
+					'编码',
 					'名称',
 					'单价',
 					'人员资质',
@@ -185,7 +185,7 @@
 				],
 				tableHeader: [
 					{
-						label: '编号',
+						label: '编码',
 						prop: 'P_NUM'
 					},
 					{
@@ -275,24 +275,31 @@
 		methods: {
 			//表头居中
 			rowClass({ row, rowIndex}) {
-			    console.log(rowIndex) //表头行标号为0
+			    // console.log(rowIndex) //表头行标号为0
 			    return 'text-align:center'
 			},
-			vartoThousands(num){
-				var momeny=num.QUANTITY;
-	    		momeny= momeny.toFixed(2);//将数字转成带有2位小数的字符串
+			// toNum(str) {
+			// 	return str.replace(/\,|\￥/g, "");
+			// },
+			// vartoThousands(){
+			// 	var momeny = this.projectList.QUANTITY;
+			// 	console.log(momeny);
+			// 	var num = parseFloat(this.toNum(momeny)).toFixed(2).toString().split(".");
+			// 	num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
+			// 	// this.dataInfo.CHECTCOST="￥" + num.join(".");
+			// 	this.projectList.QUANTITY = num.join(".");
+			// 	console.log(num);
+	  //   		// momeny = momeny.toFixed(2);//将数字转成带有2位小数的字符串
 	    	
-				momeny = parseFloat(momeny);//将带有2位小数的字符串转成带有小数的数字
-				momeny = momeny.toLocaleString();//将带有2位小数的数字转成金额格式
-				if(momeny.indexOf(".")==-1){
-	            	momeny =momeny+".00";
-	        	}else{
-	            	momeny = momeny.split(".")[1].length<2?momeny+"0":momeny;
-	        	}
-
-				console.log(momeny);
-				return momeny;
-			},
+			// 	// momeny = parseFloat(momeny);//将带有2位小数的字符串转成带有小数的数字
+			// 	// momeny = momeny.toLocaleString();//将带有2位小数的数字转成金额格式
+			// 	// if(momeny.indexOf(".")==-1){
+	  //  //          	momeny = momeny+".00";
+	  //  //      	}else{
+	  //  //          	momeny = momeny.split(".")[1].length<2?momeny+"0":momeny;
+	  //  //      	}
+			// 	return this.projectList.QUANTITY;
+			// },
 			//表格滚动加载
 			loadMore () {
 			   if (this.loadSign) {
@@ -469,7 +476,20 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					this.page.totalCount = res.data.count;	
+					this.page.totalCount = res.data.count;
+					// for(var i = 0;i<res.data.data.length;i++){
+					// 	var money = res.data.data[i].QUANTITY.toString();
+					// 	console.log(2333);
+					// 	console.log(this.toNum(money));
+					// 	var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
+					// 	console.log(num);
+					// 	num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
+					// 	console.log(num.join("."));
+
+					// 	// this.dataInfo.CHECTCOST="￥" + num.join(".");
+					// 	this.projectList[i].QUANTITY = num.join(".");
+					// }
+					
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
 					if(this.page.currentPage >= totalPage){

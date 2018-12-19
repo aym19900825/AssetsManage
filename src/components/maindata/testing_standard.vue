@@ -336,22 +336,22 @@
 			},
 			//清空
 			reset() {
-				console.log(123);
+				
 				this.dataInfo = {
-						ID:'',
-						S_NUM: '',
-						S_NAME: '',
-						S_ENGNAME: '',
-						RELEASETIME: '',
-						STARTETIME: '',
-						VERSION:'1',
-						STATUS: '活动',
-						RELEASE_UNIT: '',
-						DEPARTMENT: '',
-						ENTERBY: '',
-						ENTERDATE: '',
-						CHANGEBY: '',
-						CHANGEDATE: '',
+					// ID: '',
+					VERSION: '1',
+					STATUS: '活动',
+					S_NUM: '',
+					S_NAME: '',
+					S_ENGNAME: '',
+					RELEASETIME: '',
+					STARTETIME: '',
+					RELEASE_UNIT:'',
+					DEPARTMENT: '',
+					ENTERBY: '',
+					ENTERDATE: '',
+					CHANGEBY: '',
+					CHANGEDATE: ''
 				};
 				if(this.$refs['dataInfo'] !== undefined) {
 					this.$refs['dataInfo'].resetFields();
@@ -502,7 +502,6 @@
 							}
 						}
 					}
-
 					this.standardList = newarr;
 					//					this.standardList = res.data.data;
 					//					this.page.totalCount = res.data.count;
@@ -516,7 +515,6 @@
 		},
 		mounted() {
 			this.requestData();
-
 		},
 	}
 </script>

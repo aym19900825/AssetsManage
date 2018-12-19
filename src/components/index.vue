@@ -187,6 +187,10 @@ export default {
 				navicon: 'icon-setting3',
 				navtitle: '系统设置',
 				navherf: '/user_management'
+			}, {
+				navicon: 'icon-setting3',
+				navtitle: '文档管理',
+				navherf: '/doc_category'
 			}
 		]
       }

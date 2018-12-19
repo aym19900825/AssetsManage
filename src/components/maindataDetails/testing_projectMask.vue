@@ -6,7 +6,7 @@
 				<div class="mask_title" v-show="addtitle">添加检验/检测项目</div>
 				<div class="mask_title" v-show="modifytitle">修改检验/检测项目</div>
 				<div class="mask_anniu">
-					<span class="mask_span mask_max" @click='toggle'>						 
+					<span class="mask_span mask_max" @click='toggle'>	
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
 					</span>
 					<span class="mask_span" @click='close'>
@@ -35,17 +35,18 @@
 											<template slot="prepend">信息状态</template>
 										</el-input>
 									</el-col>-->
-									<el-col :span="7" class="pull-right">
-										<el-input placeholder="自动生成" v-model="testing_projectForm.P_NUM" :disabled="true">
-											<template slot="prepend">检验/检测项目编号</template>
+									<el-col :span="5" class="pull-right">
+										<el-input v-model="testing_projectForm.P_NUM" @focus="hint" @input="hinthide">
+											<template slot="prepend">编码</template>
 										</el-input>
+										<span v-if="hintshow" style="color:rgb(103,194,58);font-size: 12px">可填写，若不填写系统将自动生成</span>
 									</el-col>
 								</el-row>
 
-								<el-row :gutter="30">
+								<el-row :gutter="5">
 									<el-col :span="16">
 										<el-form-item label="项目名称" prop="P_NAME">
-											<el-input v-model="testing_projectForm.P_NAME"></el-input>
+											<el-input v-model="testing_projectForm.P_NAME"  onmouseover="this.title=this.value"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -55,16 +56,14 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30">
-									<el-col :span="24">
+								<el-row :gutter="5">
+									<el-col :span="8">
 										<el-form-item label="就业指导书" prop="DOCLINKS_NUM">
 											<el-input v-model="testing_projectForm.DOCLINKS_NUM">
 												<el-button slot="append" icon="icon-search" @click="getCompany"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
-								</el-row>
-								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="人员资质" prop="QUALIFICATION">
 											<el-input v-model="testing_projectForm.QUALIFICATION" :disabled="true">
@@ -77,18 +76,23 @@
 											<el-input v-model="testing_projectForm.FIELD"></el-input>
 										</el-form-item>
 									</el-col>
+								</el-row>
+								<el-row :gutter="5">
 									<el-col :span="8">
 										<el-form-item label="子领域" prop="CHILD_FIELD">
 											<el-input v-model="testing_projectForm.CHILD_FIELD"></el-input>
 										</el-form-item>
 									</el-col>
-								</el-row>
-								<el-row :gutter="30" v-if="modify">
 									<el-col :span="8">
-										<el-form-item label="录入人机构" prop="DEPARTMENT">
+										<el-form-item label="机构" prop="DEPARTMENT">
 											<el-input v-model="testing_projectForm.DEPARTMENT" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
+								</el-row>
+								
+							</el-collapse-item>
+							<el-collapse-item title="其他" name="2"  v-if="modify">
+								<el-row :gutter="5">
 									<el-col :span="8">
 										<el-form-item label="录入人" prop="ENTERBY">
 											<el-input v-model="testing_projectForm.ENTERBY" :disabled="true"></el-input>
@@ -99,8 +103,6 @@
 											<el-input v-model="testing_projectForm.ENTERDATE" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
-								</el-row>
-								<el-row :gutter="30" v-if="modify">
 									<el-col :span="8">
 										<el-form-item label="修改人" prop="CHANGEBY">
 											<el-input v-model="testing_projectForm.CHANGEBY" :disabled="true"></el-input>
@@ -233,7 +235,7 @@
 				isok2: false,
 				down: true,
 				up: false,
-				activeNames: ['1'], //手风琴数量
+				activeNames: ['1','2'], //手风琴数量
 				//				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				addtitle: true,
@@ -280,10 +282,18 @@
 					label: "simplename"
 				},
 				initcost: '',
-				TESTING_PROJECTFORM:{}//
+				TESTING_PROJECTFORM:{},//
+				hintshow:false
 			};
 		},
 		methods: {
+			//编码提示
+			hint(){
+				this.hintshow = true;
+			},
+			hinthide(){
+				this.hintshow = false;
+			},
 			toNum(str) {
 				return str.replace(/\,|\￥/g, "");
 			},
@@ -295,7 +305,6 @@
 				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)', 'ig'), "$1,");
 				// this.dataInfo.CHECTCOST="￥" + num.join(".");
 				this.testing_projectForm.QUANTITY = num.join(".");
-				console.log(this.testing_projectForm.QUANTITY);
 			},
 			getCompany() { //文档查询接口，暂无通，待修改
 				this.editSearch = 'DOCLINKS';
@@ -348,7 +357,7 @@
 						type: 'error'
 					})
 				});
-
+				this.hintshow = false;
 				this.statusshow1 = true;
 				this.statusshow2 = false;
 				this.addtitle = true;
@@ -358,6 +367,18 @@
 			},
 
 			detail() { //修改内容时从父组件带过来的
+				// this.testing_projectForm.QUANTITY
+					this.initcost = this.testing_projectForm.QUANTITY;
+					var money = this.initcost.toString().replace(/\,|\￥/g, "")
+					var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
+					num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)', 'ig'), "$1,");
+					// // this.dataInfo.CHECTCOST="￥" + num.join(".");
+					this.testing_projectForm.QUANTITY = num.join(".");
+					// console.log(23333);
+					console.log('======'+this.initcost+'=======');
+					console.log(this.testing_projectForm.QUANTITY);
+					console.log(23333);
+
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.testing_projectForm.CHANGEBY = res.data.nickname;
 					var date = new Date();
@@ -365,18 +386,18 @@
 					//深拷贝数据
 					let _obj = JSON.stringify(this.testing_projectForm);
         			this.TESTING_PROJECTFORM = JSON.parse(_obj);
-        			console.log(_obj);
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
 						type: 'error'
 					})
 				})
+				this.hintshow = false;
 				this.statusshow1 = false; //
 				this.statusshow2 = true;
 				this.addtitle = false;
 				this.modifytitle = true;
-				this.modify = true;
+				this.modify = false;
 				this.show = true;
 
 			},
@@ -385,33 +406,32 @@
 					if(valid) {
 					var TESTING_PROJECTFORM=JSON.stringify(this.TESTING_PROJECTFORM); //接过来的数据
  					var testing_projectForm=JSON.stringify(this.testing_projectForm); //获取新新的数据
-				 	if(testing_projectForm==TESTING_PROJECTFORM){
-				  	this.$message({
-							message: '没有修改不能修改',
-							type: 'warning'
-						});
-						return false;
-				  }else{
-						var url = this.basic_url + '/api-apps/app/inspectionPro/operate/upgraded';
-						this.$axios.post(url, this.testing_projectForm).then((res) => {
-							//resp_code == 0是后台返回的请求成功的信息
-							if(res.data.resp_code == 0) {
-								this.$message({
-									message: '保存成功',
-									type: 'success'
-								});
-								//重新加载数据
-								this.show = false;
-								this.$emit('request');
-								this.$emit('reset');
-								
-							}
-						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
+					 	if(testing_projectForm==TESTING_PROJECTFORM){
+					  	this.$message({
+								message: '没有修改不能修改',
+								type: 'warning'
 							});
-						});
+							return false;
+					    }else{
+							var url = this.basic_url + '/api-apps/app/inspectionPro/operate/upgraded';
+							this.$axios.post(url, this.testing_projectForm).then((res) => {
+								//resp_code == 0是后台返回的请求成功的信息
+								if(res.data.resp_code == 0) {
+									this.$message({
+										message: '保存成功',
+										type: 'success'
+									});
+									//重新加载数据
+									this.show = false;
+									this.$emit('request');
+									this.$emit('reset');
+								}
+							}).catch((err) => {
+								this.$message({
+									message: '网络错误，请重试',
+									type: 'error'
+								});
+							});
 						}
 					} else {
 						this.$message({
@@ -457,30 +477,44 @@
 				var _this = this;
 				this.$refs[testing_projectForm].validate((valid) => {
 					this.testing_projectForm.QUANTITY = _this.initcost;
-					console.log(this.testing_projectForm.QUANTITY);
 					if(valid) {
 						this.testing_projectForm.STATUS = ((_this.testing_projectForm.STATUS == "1" || this.testing_projectForm.STATUS == '活动') ? '1' : '0');
 						var url = this.basic_url + '/api-apps/app/inspectionPro/saveOrUpdate';
 						this.$axios.post(url, _this.testing_projectForm).then((res) => {
-							if(res.data.resp_code == 0) {
-								this.$message({
-									message: '保存成功',
-									type: 'success'
-								});
-							}
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '保存成功',
+								type: 'success'
+							});
 							this.$emit('reset');
-     						this.$refs['testing_projectForm'].resetFields();	
+     						this.$refs['testing_projectForm'].resetFields();
 							this.$emit('request');
 							this.visible();
-							//清空表单验证
-						}).catch((err) => {
+						}else{
 							this.show = true;
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
+							if(res.data.resp_code == 1) {
+								//res.data.resp_msg!=''后台返回提示信息
+								if( res.data.resp_msg!=''){
+								 	this.$message({
+										message: res.data.resp_msg,
+										type: 'warning'
+								 	});
+								}else{
+									this.$message({
+										message:'相同数据不可重复添加！',
+										type: 'warning'
+									});
+								}
+							}
+						}
+					//清空表单验证
+					}).catch((err) => {
+						this.show = true;
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
 						});
-					} else {
+					});} else {
 						this.show = true;
 						this.$message({
 							message: '未填写完整，请填写',
@@ -493,13 +527,11 @@
 			saveAndUpdate(testing_projectForm) {
 				this.save(testing_projectForm);
 				this.show = false;
-
 			},
 			//保存并添加
 			saveAndSubmit(testing_projectForm) {
 				this.save(testing_projectForm);
 				this.show = true;
-
 			},
 			getpepole() {
 				// type  1 這是負責人  2 這個事接收人
@@ -511,9 +543,7 @@
 				this.$axios.get(url, {
 					//					params: params
 				}).then((res) => {
-					console.log(res);
 					this.page.totalCount = res.data.count;
-
 					this.gridData = res.data.data;
 					this.dialogVisible = true;
 					//					this.type = type;

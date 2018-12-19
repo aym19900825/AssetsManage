@@ -43,7 +43,7 @@
 									</el-col>
 								</el-row>
 
-								<el-row :gutter="5">
+								<el-row>
 									<el-col :span="8">
 										<el-form-item label="中文名称" prop="M_NAME" >
 											<el-input v-model="testingForm.M_NAME"></el-input>
@@ -63,15 +63,13 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								
-								<el-row :gutter="5" v-if="modify">
-									<el-col :span="8">
+								<el-row>
+									<el-col :span="8" v-if="modifytitle">
 										<el-form-item label="机构">
 											<el-input v-model="testingForm.DEPARTMENT" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
-
 							</el-collapse-item>
 							<el-collapse-item title="文档" name="2">
 								<!-- 字段列表 Begin-->
@@ -160,8 +158,8 @@
 							        </el-pagination>
 								<!-- 文档Table-List End -->
 							</el-collapse-item>
-							<el-collapse-item title="其它" name="3"  v-if="modify">
-								<el-row :gutter="5">
+							<el-collapse-item title="其它" name="3"  v-if="personinfo">
+								<el-row>
 									<el-col :span="8">
 										<el-form-item label="录入人">
 											<el-input v-model="testingForm.ENTERBY" :disabled="true"></el-input>
@@ -189,7 +187,7 @@
 					<div class="content-footer">
 							<el-button type="primary" @click="saveAndUpdate('testingForm')">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit('testingForm')" v-show="addtitle">保存并添加</el-button>
-							<el-button v-if="modify" type="primary" @click="modifyversion('testingForm')">修订</el-button>
+							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('testingForm')">修订</el-button>
 							<el-button @click="close">取消</el-button>
 					</div>
 				</el-form>
@@ -270,7 +268,8 @@
 						{ required: true, message: '请选择类别', trigger: 'change' }
 					]
 				},
-				hintshow:false
+				hintshow:false,
+				personinfo:false
 			};
 		},
 		methods: {
@@ -293,6 +292,7 @@
 						type:'error'
 					})
 				})
+				this.hintshow = false;
 				this.addtitle = true;
             	this.modifytitle = false;
             	this.modify = false;
@@ -300,6 +300,7 @@
 			},
 			detail() { //修改内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
+					this.testingForm.DEPARTMENT=res.data.deptName;
 					this.testingForm.CHANGEBY=res.data.nickname;
 					var date=new Date();
 					this.testingForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
@@ -313,9 +314,10 @@
 						type:'error'
 					})
 				})
+				this.hintshow = false;
 				this.addtitle = false;
 				this.modifytitle = true;
-				this.modify = false;
+				this.modify = true;
 //				this.testingForm.STATUS=this.testingForm.STATUS=="1"?'活动':'不活动';
 				this.show = true;
 			},

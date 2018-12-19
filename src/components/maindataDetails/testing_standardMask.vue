@@ -77,32 +77,10 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="10" v-if="modify">
+								<el-row :gutter="10">
 									<el-col :span="8">
 										<el-form-item label="机构" prop="DEPARTMENT">
 											<el-input v-model="dataInfo.DEPARTMENT" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="录入人" prop="ENTERBY">
-											<el-input v-model="dataInfo.ENTERBY" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="录入时间" prop="ENTERDATE">
-											<el-input v-model="dataInfo.ENTERDATE" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row :gutter="30" v-if="modify">
-									<el-col :span="8">
-										<el-form-item label="修改人" prop="CHANGEBY">
-											<el-input v-model="dataInfo.CHANGEBY" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="修改时间" prop="CHANGEDATE">
-											<el-input v-model="dataInfo.CHANGEDATE" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -172,6 +150,30 @@
 									</el-form-item>
 								</el-form>
 								<!-- 字段列表 End -->
+							</el-collapse-item>
+							<el-collapse-item title="其它" name="3" v-if="modify">
+								<el-row :gutter="5">
+									<el-col :span="8">
+										<el-form-item label="录入人" prop="ENTERBY">
+											<el-input v-model="dataInfo.ENTERBY" :disabled="true"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="录入时间" prop="ENTERDATE">
+											<el-input v-model="dataInfo.ENTERDATE" :disabled="true"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="修改人" prop="CHANGEBY">
+											<el-input v-model="dataInfo.CHANGEBY" :disabled="true"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="修改时间" prop="CHANGEDATE">
+											<el-input v-model="dataInfo.CHANGEDATE" :disabled="true"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
 							</el-collapse-item>
 						</el-collapse>
 					</div>
@@ -247,7 +249,7 @@
 				isok2: false,
 				down: true,
 				up: false,
-				activeNames: ['1', '2'], //手风琴数量
+				activeNames: ['1', '2', '3'], //手风琴数量
 //				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				addtitle: true,
@@ -327,7 +329,7 @@
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					console.log(res);
 //					this.dataInfo.DEPARTMENT=res.data.companyName;
-				     this.dataInfo.DEPARTMENT=res.data.deptName;
+				    this.dataInfo.DEPARTMENT=res.data.deptName;
 					this.dataInfo.ENTERBY=res.data.nickname;
 					var date=new Date();
 					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
@@ -348,9 +350,9 @@
 				this.modifytitle = true;
 				this.modify = false;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					this.dataInfo.DEPARTMENT=res.data.deptName;
-					this.dataInfo.CHANGEBY=res.data.nickname;
-					var date=new Date();
+					this.dataInfo.DEPARTMENT = res.data.deptName;
+					this.dataInfo.CHANGEBY = res.data.nickname;
+					var date = new Date();
 					this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 					//深拷贝数据
 					let _obj = JSON.stringify(this.dataInfo);
@@ -397,77 +399,93 @@
 			//修订
 			modifyversion(dataInfo){
 				this.$refs[dataInfo].validate((valid) => {
-		          if (valid) {
-		          	var DATAINFO=JSON.stringify(this.DATAINFO); //接过来的数据
- 					var dataInfo=JSON.stringify(this.dataInfo); //获取新新的数据
-				 	if(dataInfo==DATAINFO){
-				  	this.$message({
+		          	if (valid) {
+		          		var DATAINFO = JSON.stringify(this.DATAINFO); //接过来的数据
+ 						var dataInfo = JSON.stringify(this.dataInfo); //获取新新的数据
+				 		if(dataInfo == DATAINFO){
+				  		this.$message({
 							message: '没有修改不能修改',
 							type: 'warning'
 						});
 						return false;
-				  }else{
-					var url = this.basic_url + '/api-apps/app/inspectionSta/operate/upgraded';
-					this.$axios.post(url,this.dataInfo).then((res) => {
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '保存成功',
-								type: 'success'
+					  	}else{
+							var url = this.basic_url + '/api-apps/app/inspectionSta/operate/upgraded';
+							this.$axios.post(url,this.dataInfo).then((res) => {
+							//resp_code == 0是后台返回的请求成功的信息
+								if(res.data.resp_code == 0) {
+									this.$message({
+										message: '保存成功',
+										type: 'success'
+									});
+									//重新加载数据
+									this.show = false;
+									this.$emit('request');	
+								}
+							}).catch((err) => {
+								this.$message({
+									message: '网络错误，请重试',
+									type: 'error'
+								});
 							});
-							//重新加载数据
-							this.show = false;
-							this.$emit('request');
-							
 						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
-					});
-					}
-			          } else {
+		          	} else {
 			            this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
 						});
-			          }
+		          	}
 			   });
 			},
 			// 保存users/saveOrUpdate
 			save(dataInfo) {
 				this.$refs[dataInfo].validate((valid) => {
-						this.dataInfo.RELEASETIME =  this.$moment(this.dataInfo.RELEASETIME).format("YYYY-MM-DD HH:mm:ss");
-						this.dataInfo.STARTETIME = this.$moment(this.dataInfo.STARTETIME).format("YYYY-MM-DD HH:mm:ss");
-					 if (valid) {
-					this.dataInfo.STATUS=((this.dataInfo.STATUS=="1"||this.dataInfo.STATUS=='活动') ? '1' : '0');
+					this.dataInfo.RELEASETIME =  this.$moment(this.dataInfo.RELEASETIME).format("YYYY-MM-DD HH:mm:ss");
+					this.dataInfo.STARTETIME = this.$moment(this.dataInfo.STARTETIME).format("YYYY-MM-DD HH:mm:ss");
+					if (valid) {
+						this.dataInfo.STATUS = ((this.dataInfo.STATUS == "1"||this.dataInfo.STATUS == '活动') ? '1' : '0');
 //					this.dataInfo.STATUS=this.dataInfo.STATUS=="活动" ? '1' : '0';
-					var url = this.basic_url + '/api-apps/app/inspectionSta/saveOrUpdate';
-					this.$axios.post(url, this.dataInfo).then((res) => {
-						if(res.data.resp_code == 0) {
+						var url = this.basic_url + '/api-apps/app/inspectionSta/saveOrUpdate';
+						this.$axios.post(url, this.dataInfo).then((res) => {
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '保存成功',
+									type: 'success'
+								});
+								//重新加载数据
+								this.$emit('request');
+								this.$emit('reset');
+								this.$refs['dataInfo'].resetFields();
+								this.visible();
+							}else{
+								this.show = true;
+								if(res.data.resp_code == 1) {
+									//res.data.resp_msg!=''后台返回提示信息
+									if( res.data.resp_msg!=''){
+									 	this.$message({
+											message: res.data.resp_msg,
+											type: 'warning'
+									 	});
+									}else{
+										this.$message({
+											message:'相同数据不可重复添加！',
+											type: 'warning'
+										});
+									}
+								}
+							}						
+						}).catch((err) => {
 							this.$message({
-								message: '保存成功',
-								type: 'success'
+								message: '网络错误，请重试',
+								type: 'error'
 							});
-							//重新加载数据
-							this.$emit('reset');
-							this.$emit('request');
-							this.visible();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
-					});
-			          } else {
+			        } else {
 			          	this.show = true;
 			          	this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
 						});
-			          }
+			        }
 				});
 			},
 			//保存
@@ -479,8 +497,8 @@
 			//保存并添加
 			saveAndSubmit(dataInfo){
 				this.save(dataInfo);
+				this.$emit('reset');
 				this.show = true;
-				
 			},
 			handleClose(done) {
 				this.$confirm('确认关闭？')

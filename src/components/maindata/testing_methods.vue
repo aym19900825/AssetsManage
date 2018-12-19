@@ -35,10 +35,10 @@
 								    <i class="icon-print"></i>打印
 								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-					    		<i class="icon-search"></i>高级查询
-					    		<i class="icon-arrow1-down" v-show="down"></i>
-					    		<i class="icon-arrow1-up" v-show="up"></i>
-							</button>
+					    			<i class="icon-search"></i>高级查询
+					    			<i class="icon-arrow1-down" v-show="down"></i>
+					    			<i class="icon-arrow1-up" v-show="up"></i>
+								</button>
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -54,14 +54,13 @@
 							<el-row :gutter="10" class="pb10">
 								<el-col :span="6">
 									<el-input v-model="searchList.M_NUM">
-										<template slot="prepend">编号</template>
+										<template slot="prepend">编码</template>
 									</el-input>
 								</el-col>
 								<el-col :span="6">
 									<el-input v-model="searchList.M_NAME">
 										<template slot="prepend">中文名称</template>
 									</el-input>
-
 								</el-col>
 								<el-col :span="6">
 									<el-input v-model="searchList.M_ENAME">
@@ -105,7 +104,7 @@
 							<el-table :header-cell-style="rowClass" :data="methodsList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'methodsList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="编号" width="170" sortable prop="M_NUM" v-if="this.checkedName.indexOf('编号')!=-1">
+								<el-table-column label="编码" width="170" sortable prop="M_NUM" v-if="this.checkedName.indexOf('编码')!=-1">
 								</el-table-column>
 								<el-table-column label="中文名称" width="220" sortable prop="M_NAME" v-if="this.checkedName.indexOf('中文名称')!=-1">
 								</el-table-column>
@@ -170,7 +169,7 @@
 				loadSign:true,//加载
 				commentArr:{},
 				checkedName: [
-					'编号',
+					'编码',
 					'中文名称',
 					'英文名称',
 					'类别',
@@ -183,7 +182,7 @@
 					'修改时间'
 				],
 				tableHeader: [{
-						label: '编号',
+						label: '编码',
 						prop: 'M_NUM'
 					},
 					{
@@ -418,7 +417,6 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-
 					M_NUM: this.searchList.M_NUM,
 					M_NAME: this.searchList.M_NAME,
 					VERSION: this.searchList.VERSION,
@@ -442,7 +440,6 @@
 					this.commentArr[this.page.currentPage]=res.data.data
 					let newarr=[]
 					for(var i = 1; i <= totalPage; i++){
-					
 						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
 							
 							for(var j = 0; j < this.commentArr[i].length; j++){
@@ -452,7 +449,6 @@
 					}
 					this.methodsList = newarr;
 				}).catch((wrong) => {})
-				
 			},
 
 			formatter(row, column) {
@@ -461,8 +457,6 @@
 		},
 		mounted() {
 			this.requestData();
-			
-			
 		},
 	}
 </script>

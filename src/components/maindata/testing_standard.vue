@@ -338,7 +338,7 @@
 			reset() {
 				console.log(123);
 				this.dataInfo = {
-					ID: '',
+					// ID: '',
 					VERSION: '1',
 					STATUS: '活动',
 					S_NUM: '',
@@ -346,14 +346,16 @@
 					S_ENGNAME: '',
 					RELEASETIME: '',
 					STARTETIME: '',
+					RELEASE_UNIT:'',
 					DEPARTMENT: '',
 					ENTERBY: '',
 					ENTERDATE: '',
 					CHANGEBY: '',
 					CHANGEDATE: ''
+
 				};
-				if(this.$refs['PRODUCT'] !== undefined) {
-					this.$refs['PRODUCT'].resetFields();
+				if(this.$refs['dataInfo'] !== undefined) {
+					this.$refs['dataInfo'].resetFields();
 				}
 			},
 			//添加
@@ -501,7 +503,6 @@
 							}
 						}
 					}
-
 					this.standardList = newarr;
 					//					this.standardList = res.data.data;
 					//					this.page.totalCount = res.data.count;
@@ -515,7 +516,6 @@
 		},
 		mounted() {
 			this.requestData();
-
 		},
 	}
 </script>

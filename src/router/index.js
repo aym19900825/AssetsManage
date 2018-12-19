@@ -57,7 +57,11 @@ import traceability_records from '@/components/equipments/traceability_records'/
 import verification_plan from '@/components/equipments/verification_plan'//期间核查计划
 import verification_records from '@/components/equipments/verification_records'//期间核查记录   
 import testing from '@/components/testing'//期间核查记录
-// 
+
+import doc_category from '@/components/document/category'//关键字类别
+import doc_keyword from '@/components/document/keyword'//关键字
+import doc_authorize from '@/components/document/authorize'//关键字授权
+import doc_root from '@/components/document/doc_root'//文件目录
 Vue.use(Router)
 
   const routes = [
@@ -279,8 +283,28 @@ Vue.use(Router)
       path: '/testing',
       name: 'testing',
       component: testing
+    },
+    {//关键字类别管理
+      path: '/doc_category',
+      name: 'doc_category',
+      component: doc_category
+    },
+    {//关键字管理
+      path: '/doc_keyword',
+      name: 'doc_keyword',
+      component: doc_keyword
+    },
+    {//关键字授权管理
+      path: '/doc_authorize',
+      name: 'doc_authorize',
+      component: doc_authorize
+    },
+    {//文档目录管理
+      path: '/doc_root',
+      name: 'doc_root',
+      component: doc_root
     }
-  ];
+];
 
 const router = new Router({
   routes: routes

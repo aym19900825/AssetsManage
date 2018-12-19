@@ -63,12 +63,12 @@
 									</el-input>
 								</el-col>
 								<el-col :span="5">
-									<el-input v-model="searchList.CJDW">
+									<el-input v-model="searchList.CJDWDesc">
 										<template slot="prepend">承建单位</template>
 									</el-input>
 								</el-col>
 								<el-col :span="4">
-									<el-input v-model="searchList.TYPE">
+									<el-input v-model="searchList.TYPEDesc">
 										<template slot="prepend">类别</template>
 									</el-input>
 								</el-col>
@@ -114,38 +114,38 @@
 						</el-col>
 						<el-col :span="19">
 							<!-- 表格 Begin-->
-							<el-table :data="nitificationsList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'nitificationsList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table :header-cell-style="rowClass" :data="nitificationsList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'nitificationsList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="工作任务通知书编号" width="200" sortable prop="N_CODE" v-if="this.checkedName.indexOf('工作任务通知书编号')!=-1">
+								<el-table-column label="工作任务通知书编号" width="180" sortable prop="N_CODE" v-if="this.checkedName.indexOf('工作任务通知书编号')!=-1">
 
 									<template slot-scope="scope">
 										<p @click=view(scope.row.ID,)>{{scope.row.N_CODE}}
 										</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="类型" width="150" sortable prop="TYPE" v-if="this.checkedName.indexOf('类型')!=-1">
+								<el-table-column label="类型" width="100" sortable prop="TYPEDesc" v-if="this.checkedName.indexOf('类型')!=-1">
 								</el-table-column>
-								<el-table-column label="下达日期" width="180" sortable prop="XD_DATE" v-if="this.checkedName.indexOf('下达日期')!=-1">
+								<el-table-column label="下达日期" width="130" sortable prop="XD_DATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('下达日期')!=-1">
 								</el-table-column>
-								<el-table-column label="受检产品名称" width="200" sortable prop="ITEM_NAME" v-if="this.checkedName.indexOf('受检产品名称')!=-1">
+								<el-table-column label="受检产品名称" width="150" sortable prop="ITEM_NAME" v-if="this.checkedName.indexOf('受检产品名称')!=-1">
 								</el-table-column>
-								<el-table-column label="受检产品型号" width="200" sortable prop="ITEM_MODEL" :formatter="judge" v-if="this.checkedName.indexOf('受检产品型号')!=-1">
+								<el-table-column label="受检产品型号" width="120" sortable prop="ITEM_MODEL" v-if="this.checkedName.indexOf('受检产品型号')!=-1">
 								</el-table-column>
-								<el-table-column label="受检企业" width="100" sortable prop="VENDOR" v-if="this.checkedName.indexOf('受检企业')!=-1">
+								<el-table-column label="受检企业" width="150" sortable prop="V_NAME" v-if="this.checkedName.indexOf('受检企业')!=-1">
 								</el-table-column>
-								<el-table-column label="承检单位" width="180" sortable prop="CJDW" v-if="this.checkedName.indexOf('承检单位')!=-1">
+								<el-table-column label="承检单位" width="150" sortable prop="CJDWDesc" v-if="this.checkedName.indexOf('承检单位')!=-1">
 								</el-table-column>
 								<el-table-column label="任务号" width="120" prop="TASKNUM" sortable v-if="this.checkedName.indexOf('任务号')!=-1">
 								</el-table-column>
 								<el-table-column label="抽样方案" width="120" prop="SOLUTION" sortable v-if="this.checkedName.indexOf('抽样方案')!=-1">
 								</el-table-column>
-								<el-table-column label="完成日期" width="180" prop="COMPDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('完成日期')!=-1">
+								<el-table-column label="完成日期" width="130" prop="COMPDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('完成日期')!=-1">
 								</el-table-column>
 								<!-- <el-table-column label="信息状态" width="120" prop="STATUS" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
 								</el-table-column> -->
-								<el-table-column label="录入人" width="120" prop="ENTERBY" sortable v-if="this.checkedName.indexOf('录入人')!=-1">
-								</el-table-column>
+								<!--<el-table-column label="录入人" width="120" prop="ENTERBY" sortable v-if="this.checkedName.indexOf('录入人')!=-1">
+								</el-table-column>-->
 								<!--<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>-->
 							</el-table>
@@ -204,8 +204,8 @@
 					'抽样方案',
 					'完成日期',
 					'信息状态',
-					'录入人',
-					'录入时间'
+//					'录入人',
+//					'录入时间'
 				],
 				tableHeader: [{
 						label: '工作任务通知书编号',
@@ -229,11 +229,11 @@
 					},
 					{
 						label: '受检企业',
-						prop: 'VENDOR'
+						prop: 'V_NAME'
 					},
 					{
 						label: '承检单位',
-						prop: 'CJDW'
+						prop: 'CJDWDesc'
 					},
 					{
 						label: '任务号',
@@ -251,10 +251,10 @@
 						label: '信息状态',
 						prop: 'STATUS'
 					},
-					{
-						label: '录入人',
-						prop: 'ENTERBY'
-					},
+//					{
+//						label: '录入人',
+//						prop: 'ENTERBY'
+//					},
 					//					{
 					//						label: '录入时间',
 					//						prop: 'ENTERDATE'
@@ -272,7 +272,7 @@
 				searchList: { //点击高级搜索后显示的内容
 					N_CODE: '',
 					ITEM_NAME: '',
-					CJDW: '',
+					CJDWDesc: '',
 					TYPE: '',
 					XD_DATE: '',
 					COMPDATE: '',
@@ -308,6 +308,12 @@
 
 		},
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    console.log(rowIndex) //表头行标号为0
+			    return 'text-align:center'
+			},
+			//滚动加载
 			loadMore() {
 				if(this.loadSign) {
 					this.loadSign = false
@@ -339,8 +345,8 @@
 			},
 			//添加用戶
 			openAddMgr() {
-				//				this.$refs.child.resetNew();
 				this.$refs.child.visible();
+				this.$refs.child.open();
 			},
 			//修改用戶
 			modify() {
@@ -455,8 +461,8 @@
 					limit: this.page.pageSize,
 					N_CODE: this.searchList.N_CODE,
 					ITEM_NAME: this.searchList.ITEM_NAME,
-					CJDW: this.searchList.CJDW,
-					TYPE: this.searchList.TYPE,
+					CJDWDesc: this.searchList.CJDWDesc,
+					TYPEDesc: this.searchList.TYPEDesc,
 					XD_DATE: this.searchList.XD_DATE,
 					COMPDATE: this.searchList.COMPDATE,
 					STATUS: this.searchList.STATUS,
@@ -474,6 +480,7 @@
 						this.loadSign = true
 					}
 					this.commentArr[this.page.currentPage] = res.data.data
+					console.log(res.data.data);
 					let newarr = []
 					for(var i = 1; i <= totalPage; i++) {
 

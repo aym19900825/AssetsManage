@@ -32,7 +32,7 @@
 											<template slot="prepend">状态</template>
 										</el-input>
 									</el-col>
-									<el-col :span="4" class="pull-right">
+									<el-col :span="5" class="pull-right">
 										<el-input v-model="dataInfo.N_CODE" :disabled="edit" placeholder="自动生成">
 											<template slot="prepend">编号</template>
 										</el-input>
@@ -126,18 +126,22 @@
 							</el-collapse-item> -->
 							<el-collapse-item title="检验检测要求" name="4" label-width="100px">
 								<el-row :gutter="30">
-									<el-col :span="8">
+									<el-col :span="6">
 										<el-form-item label="受检企业" prop="V_NAME">
 											<el-input v-model="dataInfo.V_NAME" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
-
-									<el-col :span="8">
+									<el-col :span="6">
+										<el-form-item label="受检企业编号" prop="VENDOR">
+											<el-input v-model="dataInfo.VENDOR" :disabled="noedit"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="6">
 										<el-form-item label="样品数量" prop="QUALITY">
 											<el-input v-model="dataInfo.QUALITY" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
-									<el-col :span="8">
+									<el-col :span="6">
 										<el-form-item label="接收人" prop="ACCEPT_PERSONDesc">
 											<el-input v-model="dataInfo.ACCEPT_PERSONDesc" :disabled="edit">
 												<el-button slot="append" icon="el-icon-search" @click="getPeople(2)"></el-button>
@@ -166,7 +170,7 @@
 											</el-button>
 										</div>
 
-										<el-table :data="dataInfo.WORK_NOTICE_CHECKBASISList" row-key="ID" border stripe fit="true" max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.WORK_NOTICE_CHECKBASISList', order: 'descending'}">
+										<el-table :data="dataInfo.WORK_NOTICE_CHECKBASISList" row-key="ID" border stripe :fit="true" max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.WORK_NOTICE_CHECKBASISList', order: 'descending'}">
 
 											<el-table-column prop="iconOperation" fixed width="50px">
 												<template slot-scope="scope">
@@ -229,7 +233,7 @@
 												<font>新建</font>
 											</el-button>
 										</div>
-										<el-table :data="dataInfo.WORK_NOTICE_CHECKPROJECTList" row-key="ID" border stripe height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.WORK_NOTICE_CHECKPROJECTList', order: 'descending'}">
+										<el-table :data="dataInfo.WORK_NOTICE_CHECKPROJECTList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.WORK_NOTICE_CHECKPROJECTList', order: 'descending'}">
 											<el-table-column prop="iconOperation" fixed width="50px">
 												<template slot-scope="scope">
 													<i class="el-icon-check" v-show="scope.row.isEditing">
@@ -361,7 +365,7 @@
 				</div>
 				<div class="el-dialog__footer" v-show="noviews">
                     <el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
-					<el-button type="success" @click='saveAndSubmit()'>提交并保存</el-button>
+					<el-button type="success" v-show="addtitle" @click='saveAndSubmit()'>提交并保存</el-button>
 					<el-button @click='close'>取消</el-button>
 					
 				</div>
@@ -474,13 +478,14 @@
 					XD_DATE: '',
 					ITEM_NAME: '',
 					ITEM_MODEL: '',
-					VENDOR: '',
+					V_NAME: '',
+					VENDOR:'',
 					CJDW: '',
 					P_LEADER: '',
 					TASKNUM: '',
 					SOLUTION: '',
 					COMPDATE: '',
-					STATE: '草稿',
+					STATE: '1',
 					ENTERBY: '',
 					STATUS: '',
 					WORK_NOTICE_CHECKBASISList: [],
@@ -499,22 +504,10 @@
 					ITEM_NAME: [{required: true,trigger: 'blur',message: '必填',}], //受检产品名称
 					ITEM_MODEL: [{required: true,trigger: 'blur',message: '必填'}], //受检产品型号
 					V_NAME: [{required: true,trigger: 'blur',message: '必填'}], //受检企业
+					VENDOR: [{required: true,trigger: 'blur',message: '必填'}], //受检企业编号
 					QUALITY: [{required: true,trigger: 'change',message: '必填'}], //样品数量
 					CHECTCOST: [{required: true,trigger: 'blur',message: '必填',	}], //检验检测费用
 					REMARKS: [{required: true,trigger: 'blur',message: '必填',}],
-
-					//					idnumber:[{required: true,trigger: 'blur',validator: validateIdnumber}],
-					//					phone: [{required: true,trigger: 'blur',validator: validatePhone}],
-					//					email: [{required: true,trigger: 'blur',validator: validateEmail,}],
-					//					step:[{required: true,trigger: 'blur',message: '必填',}],
-					//					t_date:[{required: true,trigger: 'blur',message: '必填',}],
-					//					t_description:[{required: true,trigger: 'blur',message: '必填',}],
-					//					status:[{required: true,trigger: 'blur',message: '必填',}],
-					//					step:[{required: true,trigger: 'blur',message: '必填',}],
-					//					c_date:[{required: true,trigger: 'blur',message: '必填',}],
-					//					c_num:[{required: true,trigger: 'blur',message: '必填',}],
-					//					c_name:[{required: true,trigger: 'blur',message: '必填',}],
-
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -528,13 +521,14 @@
 					XD_DATE: '',
 					ITEM_NAME: '',
 					ITEM_MODEL: '',
-					VENDOR: '',
+					V_NAME: '',
+					VENDOR:'',
 					CJDW: '',
 					P_LEADER: '',
 					TASKNUM: '',
 					SOLUTION: '',
 					COMPDATE: '',
-					STATE: '草稿',
+					STATE: '1',
 					ENTERBY: '',
 					STATUS: '',
 					WORK_NOTICE_CHECKBASISList: [],
@@ -582,7 +576,7 @@
 
 			//tabs
 			handleClick(tab, event) {
-				console.log(tab, event);
+//				console.log(tab, event);
 			},
 			iconOperation(row, column, cell, event) {
 				if(column.property === "iconOperation") {
@@ -642,7 +636,6 @@
 			visible() {
 				this.reset();
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-
 					this.dataInfo.DEPT = res.data.deptName;
 					this.dataInfo.ENTERBY = res.data.nickname;
 					this.dataInfo.ORGID = res.data.deptName
@@ -661,23 +654,15 @@
 				this.noviews = true;
 				this.edit = true;
 				this.noedit = false;
-				this.show = true;
-
 			},
 			// 这里是修改
 			detail(dataid) {
-				this.addtitle = false;
-				this.modifytitle = true;
-				this.noviews = true;
-				this.views = false; //
-				this.edit = true;
-				this.noedit = false;
-
 				var url = this.basic_url + '/api-apps/app/workNot/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
+					console.log(111);
 					console.log(res);
 					this.dataInfo = res.data;
-
+                    console.log(this.dataInfo);
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -687,7 +672,6 @@
 				this.show = true;
 				var usersUrl = this.basic_url + '/api-user/users/currentMap'
 				this.$axios.get(usersUrl, {}).then((res) => {
-					console.log(res);
 					this.dataInfo.CHANGEBY = res.data.nickname;
 					console.log(this.dataInfo.CHANGEBY);
 					var date = new Date();
@@ -698,6 +682,13 @@
 						type: 'error'
 					});
 				});
+				this.addtitle = false;
+				this.modifytitle = true;
+				this.noviews = true;
+				this.views = false; //
+				this.edit = true;
+				this.noedit = false;
+
 			},
 			//这是查看
 			view(dataid) {
@@ -707,25 +698,9 @@
 				this.noviews = false;
 				this.edit = true;
 				this.noedit = true;
-
-				//				const parent = $("input").attr('disabled',true);
-				//alert(parent)
-				console.log(parent)
-				//				var usersUrl = '/api/api-user/users/currentMap'
-				//				this.$axios.get(usersUrl, {}).then((res) => {
-				//					this.dataInfo.CHANGEBY = res.data.nickname;
-				//					var date = new Date();
-				//					this.dataInfo.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
-				//				}).catch((err) => {
-				//					this.$message({
-				//						message: '网络错误，请重试',
-				//						type: 'error'
-				//					});
-				//				});
 				var url = this.basic_url + '/api-apps/app/workNot/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
 					this.dataInfo = res.data;
-					console.log(this.dataInfo);
 					this.show = true;
 				}).catch((err) => {
 					this.$message({
@@ -736,10 +711,10 @@
 			},
 			//上传文件 Begin
 			handleRemove(file, fileList) {
-				console.log(file, fileList);
+//				console.log(file, fileList);
 			},
 			handlePreview(file) {
-				console.log(file);
+//				console.log(file);
 			},
 			handleExceed(files, fileList) {
 				this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
@@ -751,6 +726,9 @@
 			//点击关闭按钮
 			close() {
 				this.show = false;
+			},
+			open(){
+				this.show = true;
 			},
 			toggle(e) {
 				if(this.isok1 == true) {
@@ -789,9 +767,9 @@
 								message: '保存成功',
 								type: 'success'
 							});
-							// this.show = false;
 							//重新加载数据
-							this.$emit('request')
+							this.$emit('request');
+							this.reset();
 						}
 					}).catch((err) => {
 						this.$message({
@@ -846,13 +824,11 @@
 				this.getCheckedNodes();
 				this.placetext = false;
 				this.dialogVisiblecompany = false;
-				console.log(this.getCheckboxData);
 				//承检单位
 				this.dataInfo.CJDW = this.getCheckboxData.id;
 				this.dataInfo.CJDWDesc = this.getCheckboxData.fullname;
 				//单位负责人
 				this.dataInfo.P_LEADER = this.getCheckboxData.leader;
-				console.log(this.dataInfo.P_LEADER);
 				// var dataid = this.getCheckboxData.leader;
 				// var url = this.basic_url + '/api-user/users/' + dataid;
 				// this.$axios.get(url, {}).then((res) => {

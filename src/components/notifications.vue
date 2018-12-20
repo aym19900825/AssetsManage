@@ -50,37 +50,41 @@
 
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search" class="pb10">
-						<el-form status-icon :model="searchList" label-width="70px">
-							<el-row :gutter="10" class="pb10">
-								<el-col :span="5">
-									<el-input v-model="searchList.N_CODE">
-										<template slot="prepend">工作任务通知书编号</template>
-									</el-input>
+						<el-form status-icon :model="searchList">
+							<el-row :gutter="10">
+								<el-col :span="6">
+									<el-form-item label="工作任务通知书编号" prop="N_CODE" label-width="140px">
+										<el-input v-model="searchList.N_CODE"></el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-input v-model="searchList.ITEM_NAME">
-										<template slot="prepend">受检产品名称</template>
-									</el-input>
+									<el-form-item label="受检产品名称" prop="ITEM_NAME" label-width="110px">
+										<el-input v-model="searchList.ITEM_NAME"></el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-input v-model="searchList.CJDWDesc">
-										<template slot="prepend">承建单位</template>
-									</el-input>
+									<el-form-item label="承建单位" prop="CJDWDesc" label-width="70px">
+										<el-input v-model="searchList.CJDWDesc"></el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="4">
-									<el-input v-model="searchList.TYPEDesc">
-										<template slot="prepend">类别</template>
-									</el-input>
+									<el-form-item label="类别" prop="TYPEDesc" label-width="45px">
+										<el-input v-model="searchList.TYPEDesc"></el-input>
+									</el-form-item>
 								</el-col>
 							</el-row>
 							<el-row :gutter="10">
-								<el-col :span="5">
-									<el-date-picker v-model="searchList.XD_DATE" type="date" placeholder="下达日期" value-format="yyyy-MM-dd" style="width: 100%">
-									</el-date-picker>
+								<el-col :span="6">
+									<el-form-item label="下达日期" prop="XD_DATE" label-width="140px">
+										<el-date-picker v-model="searchList.XD_DATE" type="date" placeholder="下达日期" value-format="yyyy-MM-dd" style="width: 100%">
+										</el-date-picker>
+									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd" style="width: 100%">
-									</el-date-picker>
+									<el-form-item label="完成日期" prop="COMPDATE" label-width="110px">
+										<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd" style="width: 100%">
+										</el-date-picker>
+									</el-form-item>
 								</el-col>
 								<!-- <el-col :span="3" class="pt5">
 									<el-select v-model="searchList.value" placeholder="请选择信息状态">

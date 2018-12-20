@@ -63,7 +63,7 @@
 					<div v-show="search" class="pb5">
 						<el-form status-icon :model="searchList">
 							<el-row :gutter="10">
-								<el-col :span="5">
+								<el-col :span="6">
 									<el-form-item label="委托单位名称" prop="V_NAME"  label-width="100px">
 										<el-input v-model="searchList.V_NAME"></el-input>
 									</el-form-item>
@@ -85,7 +85,7 @@
 								</el-col>
 							</el-row>
 							<el-row :gutter="10">
-								<el-col :span="5">
+								<el-col :span="6">
 									<el-form-item label="完成日期" prop="COMPDATE" label-width="100px">
 										<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%">
 									</el-date-picker>

@@ -517,6 +517,7 @@
 			//点击关闭按钮
 			close() {
 				this.show = false;
+				this.$emit('request');//关闭弹框去掉勾选
 			},
 			open(){
 				this.show = true;

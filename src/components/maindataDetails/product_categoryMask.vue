@@ -59,13 +59,13 @@
 									</el-col> -->
 									<el-col :span="8">
 										<el-form-item label="编码" prop="NUM">
-											<el-input v-model="CATEGORY.NUM" @focus="hint" @input="hinthide"></el-input>
+											<el-input v-model="CATEGORY.NUM" @focus="hint" @input="hinthide" :disabled="noedit"></el-input>
 											<span v-if="hintshow" style="color:rgb(103,194,58);font-size: 12px">可填写，若不填写系统将自动生成</span>
 										</el-form-item>
 									</el-col>
 									<el-col :span="16">
 										<el-form-item label="名称" prop="TYPE">
-											<el-input v-model="CATEGORY.TYPE"></el-input>
+											<el-input v-model="CATEGORY.TYPE" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -103,7 +103,7 @@
 							</el-collapse-item>
 						</el-collapse>
 					</div>
-					<div class="el-dialog__footer">
+					<div class="el-dialog__footer" v-show="noviews">
 						<el-button type="primary" @click="saveAndUpdate('CATEGORY')">保存</el-button>
 						<el-button type="success" @click="saveAndSubmit('CATEGORY')" v-show="addtitle">保存并添加</el-button>
 						<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('CATEGORY')">修订</el-button>
@@ -198,7 +198,7 @@
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
-				category:{},
+				category:{},//从父组件接过来的值
 				hintshow:false,
 				personinfo:false,
 				views:false,
@@ -235,20 +235,30 @@
 						type: 'error'
 					});
 				});
+				this.addtitle = true;
+				this.modifytitle = false;
+				this.viewtitle = false;
+				this.noedit = false;
+				this.views = false;//录入修改人信息
+				this.noviews = true;
 				this.hintshow = false;
 				this.statusshow1 = true;
 				this.statusshow2 = false;
-				this.addtitle = true;
-				this.modifytitle = false;
+				
 				this.modify = false;
 //				this.show = true;
 			},
 			// 这里是修改
 			detail() {
-				this.hintshow = false;
-				this.modify = true;
 				this.addtitle = false;
 				this.modifytitle = true;
+				this.viewtitle = false;
+				this.views = false;//录入修改人信息
+				this.noedit = false;
+				this.noviews = false;
+				this.hintshow = false;
+				this.modify = true;
+				
 				this.statusshow1 = false;
 				this.statusshow2 = true;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
@@ -256,10 +266,10 @@
 					this.CATEGORY.CHANGEBY = res.data.nickname;
 					var date = new Date();
 					this.CATEGORY.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-					console.log(this.CATEGORY);
 					//深拷贝数据
 					let _obj = JSON.stringify(this.CATEGORY);
         			this.category = JSON.parse(_obj);
+        			console.log(this.category);
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -269,23 +279,16 @@
 				this.show = true;
 			},
 			//这是查看
-			view(dataid) {
+			view(item) {
+				console.log(this.category);
 				this.addtitle = false;
+				this.modifytitle = false;
 				this.viewtitle = true;
-				this.views = true; //
+				this.views = true;//录入修改人信息
 				this.noviews = false;
-				this.edit = true;
 				this.noedit = true;
-				var url = this.basic_url + '/api-apps/app/workNot/' + dataid;
-				this.$axios.get(url, {}).then((res) => {
-					this.dataInfo = res.data;
-					this.show = true;
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
+				this.CATEGORY = item;
+				this.show = true;				
 			},
 			//点击修订按钮
 			modifyversion(CATEGORY) {
@@ -330,6 +333,7 @@
 			//点击关闭按钮
 			close() {
 				this.show = false;
+				this.$emit('request');//关闭弹框去掉勾选
 			},
 			open(){
 				this.show = true;

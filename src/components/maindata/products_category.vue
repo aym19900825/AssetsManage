@@ -102,7 +102,7 @@
 								</el-table-column>
 								<el-table-column label="编码" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('编码')!=-1">
 									<template slot-scope="scope">
-										<p @click=view(scope.row.ID,)>{{scope.row.NUM}}
+										<p @click=view(scope.row)>{{scope.row.NUM}}
 										</p>
 									</template>
 								</el-table-column>
@@ -356,8 +356,8 @@
 				}
 			},
 			//查看用戶
-			 view(id) {
-				this.$refs.child.view(id);
+			 view(item) {
+				this.$refs.categorymask.view(item);
 			},
 			//高级查询
 			modestsearch() {

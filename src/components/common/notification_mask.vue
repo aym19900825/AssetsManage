@@ -17,7 +17,7 @@
 			</div>
 			<div class="mask_content">
 				<div class="accordion">
-					<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="110px" class="demo-form-inline" status-icon inline-message>
+					<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo"  class="demo-form-inline" status-icon inline-message>
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="类别" name="1">
 								<el-row :gutter="20" class="pb10">
@@ -78,18 +78,18 @@
 							</el-collapse-item>
 							<el-collapse-item title="基本信息" name="2">
 									<el-col :span="8">
-										<el-form-item label="计划编号" prop="WP_NUM">
+										<el-form-item label="计划编号" prop="WP_NUM" label-width="110px">
 											<el-input v-model="dataInfo.WP_NUM" :disabled="edit">
 											</el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="任务号" prop="TASKNUM">
+										<el-form-item label="任务号" prop="TASKNUM" label-width="110px">
 											<el-input v-model="dataInfo.TASKNUM" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="承检单位" prop="CJDWDesc" :disabled="noedit">
+										<el-form-item label="承检单位" prop="CJDWDesc" :disabled="noedit" label-width="110px">
 											<el-input v-model="dataInfo.CJDWDesc" :disabled="edit">
 												<el-button slot="append" icon="el-icon-search" @click="getCompany"></el-button>
 											</el-input>
@@ -97,18 +97,18 @@
 									</el-col>
 									
 									<el-col :span="8">
-										<el-form-item label="项目负责人" prop="P_LEADER">
+										<el-form-item label="项目负责人" prop="P_LEADER" label-width="110px">
 											<el-input v-model="dataInfo.P_LEADER" :disabled="noedit">
 											</el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="受检产品名称" prop="ITEM_NAME">
+										<el-form-item label="受检产品名称" prop="ITEM_NAME" label-width="110px">
 											<el-input v-model="dataInfo.ITEM_NAME" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="受检产品型号" prop="ITEM_MODEL">
+										<el-form-item label="受检产品型号" prop="ITEM_MODEL" label-width="110px">
 											<el-input v-model="dataInfo.ITEM_MODEL" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
@@ -119,32 +119,32 @@
 								字段列表 End 
 							</el-collapse-item> -->
 							<el-collapse-item title="检验检测要求" name="4" label-width="100px">
-								
+									<el-row>
 									<el-col :span="6">
-										<el-form-item label="受检企业" prop="V_NAME">
+										<el-form-item label="受检企业" prop="V_NAME" label-width="110px">
 											<el-input v-model="dataInfo.V_NAME" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="6">
-										<el-form-item label="受检企业编号" prop="VENDOR">
+										<el-form-item label="受检企业编号" prop="VENDOR" label-width="110px">
 											<el-input v-model="dataInfo.VENDOR" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="6">
-										<el-form-item label="样品数量" prop="QUALITY">
+										<el-form-item label="样品数量" prop="QUALITY" label-width="110px">
 											<el-input v-model="dataInfo.QUALITY" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="6">
-										<el-form-item label="接收人" prop="ACCEPT_PERSONDesc">
+										<el-form-item label="接收人" prop="ACCEPT_PERSONDesc" label-width="110px">
 											<el-input v-model="dataInfo.ACCEPT_PERSONDesc" :disabled="edit">
 												<el-button slot="append" icon="el-icon-search" @click="getPeople(2)"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
-						
+								</el-row>
 								<el-row>
-									<el-form-item label="抽样方案/判定依据" prop="SOLUTION">
+									<el-form-item label="抽样方案/判定依据" prop="SOLUTION" label-width="110px">
 										<el-input v-model="dataInfo.SOLUTION" :disabled="noedit"></el-input>
 									</el-form-item>
 								</el-row>
@@ -181,7 +181,7 @@
 											</el-table-column>
 											<el-table-column label="检验标准编号" sortable width="120px" prop="S_NUM">
 												<template slot-scope="scope">
-													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.items'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
+													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入内容"></el-input>
 													<span v-show="!scope.row.isEditing">{{scope.row.S_NUM}}</span>
 													</el-form-item>
@@ -190,22 +190,32 @@
 											</el-table-column>
 											<el-table-column prop="S_DESC" label="检验标准内容" sortable width="120px">
 												<template slot-scope="scope">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_DESC" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.S_DESC}}</span>
+													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
+													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_DESC" placeholder="请输入内容"></el-input>
+													<span v-show="!scope.row.isEditing">{{scope.row.S_DESC}}</span>
+													</el-form-item>
 												</template>
 											</el-table-column>
 											<el-table-column prop="S_NAME" label="检验标准名称" sortable width="150px">
 												<template slot-scope="scope">
+													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_NAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NAME" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.S_NAME}}</span>
+													</el-form-item>
 												</template>
 											</el-table-column>
 											<el-table-column prop="VERSION" label="版本" sortable width="80px">
 												<template slot-scope="scope">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.VERSION}}</span>
+													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
+													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入内容"></el-input>
+													<span v-show="!scope.row.isEditing">{{scope.row.VERSION}}</span>
+													</el-form-item>
 												</template>
 											</el-table-column>
 											<el-table-column prop="STATUS" label="信息状态" sortable width="120px">
 												<template slot-scope="scope">
+													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.STATUS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.STATUS}}</span>
+													</el-form-item>
 												</template>
 											</el-table-column>
 											<el-table-column label="附件" sortable width="120px">
@@ -242,25 +252,33 @@
 											</el-table-column>
 											<el-table-column label="序号" sortable width="120px" prop="NUMBER">
 												<template slot-scope="scope">
+													<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.NUMBER'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.NUMBER" disabled></el-input><span v-show="!scope.row.isEditing">{{scope.row.NUMBER}}</span>
+													</el-form-item>
 												</template>
 											</el-table-column>
 											<el-table-column label="检验检测项目编号" sortable width="145px" prop="P_NUM">
 												<template slot-scope="scope">
+													<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.P_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="请输入内容"></el-input>
 													<span v-show="!scope.row.isEditing">{{scope.row.P_NUM}}</span>
+													</el-form-item>
 												</template>
 											</el-table-column>
 											<el-table-column prop="P_DESC" label="检验检测项目内容" sortable width="145px">
 												<template slot-scope="scope">
+													<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.P_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入内容"></el-input>
 													<span v-show="!scope.row.isEditing">{{scope.row.P_DESC}}</span>
+													</el-form-item>
 												</template>
 											</el-table-column>
 											<el-table-column prop="REMARKS" label="要求" sortable width="80px">
 												<template slot-scope="scope">
+													<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + 'REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" placeholder="请输入内容"></el-input>
 													<span v-show="!scope.row.isEditing">{{scope.row.REMARKS}}</span>
+													</el-form-item>
 												</template>
 											</el-table-column>
 											<!-- <el-table-column prop="REMARKS" label="单价" sortable width="80px">
@@ -271,14 +289,18 @@
 											</el-table-column> -->
 											<el-table-column prop="VERSION" label="版本" sortable width="80px">
 												<template slot-scope="scope">
+													<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + 'VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入内容"></el-input>
 													<span v-show="!scope.row.isEditing">{{scope.row.VERSION}}</span>
+													</el-form-item>
 												</template>
 											</el-table-column>
 											<el-table-column prop="STATUS" label="信息状态" sortable width="120px">
 												<template slot-scope="scope">
+													<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + 'STATUS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input>
 													<span v-show="!scope.row.isEditing">{{scope.row.STATUS}}</span>
+													</el-form-item>
 												</template>
 											</el-table-column>
 											<el-table-column label="附件" sortable width="120px">
@@ -300,20 +322,20 @@
 								</el-tabs>
 							</div>
 							<el-collapse-item name="6">
-								<el-row :gutter="30">
+								<el-row >
 									<el-col :span="8">
-										<el-form-item label="完成日期" prop="COMPDATE">
+										<el-form-item label="完成日期" prop="COMPDATE" label-width="110px">
 											<el-date-picker v-model="dataInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" :disabled="noedit" style="width: 100%">
 											</el-date-picker>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="检验检测费用" prop="CHECTCOST">
+										<el-form-item label="检验检测费用" prop="CHECTCOST" label-width="110px">
 											<el-input v-model="dataInfo.CHECTCOST" :disabled="noedit" id="cost" @blur="toPrice"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="下达日期" prop="XD_DATE">
+										<el-form-item label="下达日期" prop="XD_DATE" label-width="110px">
 											<el-date-picker v-model="dataInfo.XD_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" :disabled="noedit" style="width: 100%">
 											</el-date-picker>
 										</el-form-item>
@@ -321,38 +343,38 @@
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="24">
-										<el-form-item label="备注" prop="MEMO">
+										<el-form-item label="备注" prop="MEMO" label-width="110px">
 											<el-input type="textarea" rows="5" v-model="dataInfo.MEMO" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 							</el-collapse-item>
 							<el-collapse-item title="其他" name="7" v-show="views">
-								<el-row :gutter="30">
+								<el-row >
 									<el-col :span="8">
-										<el-form-item label="录入人" prop="ENTERBY">
+										<el-form-item label="录入人" prop="ENTERBY" label-width="110px">
 											<el-input v-model="dataInfo.ENTERBY" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="录入时间" prop="ENTERDATE">
+										<el-form-item label="录入时间" prop="ENTERDATE" label-width="110px">
 											<el-input v-model="dataInfo.ENTERDATE" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="录入人机构" prop="ORGID">
+										<el-form-item label="录入人机构" prop="ORGID" label-width="110px">
 											<el-input v-model="dataInfo.ORGID" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30">
+								<el-row>
 									<el-col :span="8">
-										<el-form-item label="修改人" prop="CHANGEBY">
+										<el-form-item label="修改人" prop="CHANGEBY" label-width="110px">
 											<el-input v-model="dataInfo.CHANGEBY" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="修改时间" prop="CHANGEDATE">
+										<el-form-item label="修改时间" prop="CHANGEDATE" label-width="110px">
 											<el-input v-model="dataInfo.CHANGEDATE" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
@@ -757,6 +779,13 @@
 			save() {
 				this.$refs.dataInfo.validate((valid) => {
 		          if (valid) {
+							if(this.dataInfo.WORK_NOTICE_CHECKBASISList.length<=0&&this.dataInfo.WORK_NOTICE_CHECKPROJECTList.length<=0){
+			        		this.$message({
+							message: '依据和检验检测项目是必填项，请填写！',
+							type: 'warning'
+						});
+						return false;
+			        	}else{
 					this.dataInfo.CHECTCOST = this.initcost;
 					this.dataInfo.STATE = this.dataInfo.STATE == "1" ? '草稿' : '未知';
 					var url = this.basic_url + '/api-apps/app/workNot/saveOrUpdate';
@@ -775,7 +804,7 @@
 							message: '网络错误，请重试',
 							type: 'error'
 						});
-					});
+					});}
 					} else {
 					 this.$message({
 							message: '有必填项未填写，请重新填写',

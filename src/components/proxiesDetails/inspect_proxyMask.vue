@@ -62,7 +62,7 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
-									<el-row :gutter="5">
+									<el-row >
 										<el-col :span="8">
 											<el-form-item label="姓名" prop="V_PERSON" label-width="110px">
 												<el-input v-model="dataInfo.V_PERSON" :disabled="true">
@@ -527,7 +527,7 @@
 										</el-col>
 									    <el-col :span="16">
 										<el-form-item label="生产单位名称" prop="P_NAME" label-width="110px">
-											<el-input v-model="dataInfo.P_NAME" :disabled="false" >
+											<el-input v-model="dataInfo.P_NAME" :disabled="true" >
 												<el-button slot="append" icon="el-icon-search" @click="getCustomer(2)"></el-button>
 											</el-input>
 										</el-form-item>
@@ -914,6 +914,13 @@
 					this.dataInfo.CONTRACTCOST = this.initsta;
 					this.dataInfo.ACTUALCOST = this.initactual;
 			        if (valid) {
+							if(this.dataInfo.INSPECT_PROXY_BASISList.length<=0&&this.dataInfo.INSPECT_PROXY_PROJECList.length<=0&&this.dataInfo.CHECK_PROXY_CONTRACTList.length<=0){
+			        		this.$message({
+							message: '检验依据和检验项目与要求和分包要求是必填项，请填写！',
+							type: 'warning'
+						});
+						return false;
+			        	}else{
 			        this.dataInfo.ITEM_STATUS=this.dataInfo.ITEM_STATUS==1;
 			        this.dataInfo.MESSSTATUS= this.dataInfo.MESSSTATUS==1;//信息状态
 			        console.log(this.dataInfo);
@@ -935,11 +942,11 @@
 							message: '网络错误，请重试',
 							type: 'error'
 						});
-					});
+					});}
 			          } else {
 			           this.$message({
 							message: '未填写完整，请填写',
-							type: 'error'
+							type: 'warning'
 						});
 			          }
 				});
@@ -989,6 +996,7 @@
 				this.dataInfo.V_PHONE = this.selval[0].PHONE;
 				} else {
 					this.dataInfo.PRODUCT_UNIT= this.selval[0].CODE;
+					console.log(this.dataInfo.PRODUCT_UNIT);
 					this.dataInfo.P_NAME = this.selval[0].NAME;
 				}
 			},

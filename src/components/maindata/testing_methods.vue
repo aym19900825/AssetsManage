@@ -79,10 +79,18 @@
 										<template slot="prepend">版本</template>
 									</el-input>
 								</el-col>
-								<el-col :span="6">
-									<el-input v-model="searchList.DEPARTMENT">
+								<el-col :span="5">
+									<!-- <el-input v-model="searchList.DEPARTMENT">
 										<template slot="prepend">机构</template>
-									</el-input>
+									</el-input> -->
+									<el-select v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="机构">
+									    <el-option
+									      v-for="item in options5"
+									      :key="item.value"
+									      :label="item.label"
+									      :value="item.value">
+									    </el-option>
+									</el-select>
 								</el-col>
 								<!-- <el-col :span="6">
 									<el-select v-model="searchList.STATUS" placeholder="请选择信息状态">
@@ -98,7 +106,7 @@
 					</div>
 					<!-- 高级查询划出 End-->
 					
-					<el-row :gutter="0">
+					<el-row>
 						<el-col :span="24">
 							<!-- 表格 Begin-->
 							<el-table :header-cell-style="rowClass" :data="methodsList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'methodsList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
@@ -166,6 +174,22 @@
 					value: '2',
 					label: '不活动'
 				}],
+				options5: [{
+		            value: '金化站',
+		            label: '金化站'
+		        }, {
+		            value: '通号站',
+		            label: '通号站'
+		        }, {
+		            value: '运包站',
+		            label: '运包站'
+		        }, {
+		            value: '机辆站',
+		            label: '机辆站'
+		        }, {
+		            value: '接触网站',
+		            label: '接触网站'
+		        }],
 				loadSign:true,//加载
 				commentArr:{},
 				checkedName: [
@@ -313,6 +337,7 @@
 			},
 			openAddMgr() {//添加检验/检测方法编号数据
 				this.reset();
+				this.$refs.child.open();
 				this.$refs.child.visible();
 			},
 			modify() {//修改检验/检测方法编号数据

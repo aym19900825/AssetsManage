@@ -73,9 +73,17 @@
 									</el-input>
 								</el-col>
 								<el-col :span="4">
-									<el-input v-model="searchList.DEPARTMENT">
+									<!-- <el-input v-model="searchList.DEPARTMENT">
 										<template slot="prepend">机构</template>
-									</el-input>
+									</el-input> -->
+									<el-select v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="机构">
+									    <el-option
+									      v-for="item in options5"
+									      :key="item.value"
+									      :label="item.label"
+									      :value="item.value">
+									    </el-option>
+									</el-select>
 								</el-col>
 							</el-row>
 							<el-row :gutter="20">
@@ -295,6 +303,22 @@
 					totalCount: 0
 				},
 				dataInfo: {}, //修改子组件时传递数据
+				options5: [{
+		            value: '金化站',
+		            label: '金化站'
+		        }, {
+		            value: '通号站',
+		            label: '通号站'
+		        }, {
+		            value: '运包站',
+		            label: '运包站'
+		        }, {
+		            value: '机辆站',
+		            label: '机辆站'
+		        }, {
+		            value: '接触网站',
+		            label: '接触网站'
+		        }],
 			}
 		},
 

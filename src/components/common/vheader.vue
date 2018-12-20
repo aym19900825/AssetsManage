@@ -115,7 +115,7 @@ export default {
     background: url(../../assets/img/head_rt.png) top right no-repeat;}
 
 .logo{
-    background-image: url(/static/img/logo-white.c6547ce.png);
+    background-image:url(../../assets/img/logo-white.png);
     background-repeat: no-repeat;
     background-position: left center;
     width: 195px;

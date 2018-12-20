@@ -18,6 +18,9 @@ import './axios'
 import vueGridLayout from 'vue-grid-layout'
 //import infiniteScroll from 'vue-infinite-scroll'//滚动加载更多
 
+import dropzone from 'dropzone/dist/min/dropzone.min.js'
+import 'dropzone/dist/min/dropzone.min.css'
+
 import vueztree from 'vue-ztree-2.0/dist/vue-ztree-2.0.umd.min.js'
 import EasyScroll from 'easyscroll'//自定义滚动条
 import common from './assets/js/common.js'

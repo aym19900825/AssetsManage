@@ -41,6 +41,10 @@ export default {
 					navicon: 'icon-wordbook',
 					navtitle: '文件目录',
 					navherf: '/doc_root'
+				}, {
+					navicon: 'icon-wordbook',
+					navtitle: '文件列表',
+					navherf: '/doc_list'
 				}
 			],
         selectedNav: {}

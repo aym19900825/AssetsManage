@@ -51,25 +51,27 @@
 
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search" class="pb10">
-						<el-form status-icon :model="searchList" label-width="70px">
+						<el-form status-icon :model="searchList" label-width="45px">
 							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-input v-model="searchList.TYPE">
+									<!-- <el-input v-model="searchList.TYPE">
 										<template slot="prepend">名称</template>
-									</el-input>
+									</el-input> -->
+									<el-form-item label="名称" prop="TYPE">
+										<el-input v-model="searchList.TYPE" :disabled="noedit"></el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<!-- <el-input v-model="searchList.NAME">
-										<template slot="prepend">机构</template>
-									</el-input> -->
-									<el-select clearable v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="机构">
-									    <el-option
-									      v-for="item in options5"
-									      :key="item.value"
-									      :label="item.label"
-									      :value="item.value">
-									    </el-option>
-									</el-select>
+									<el-form-item label="机构" prop="DEPARTMENT">
+										<el-select clearable v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="请选择">
+										    <el-option
+										      v-for="item in options5"
+										      :key="item.value"
+										      :label="item.label"
+										      :value="item.value">
+										    </el-option>
+										</el-select>
+									</el-form-item>
 								</el-col>
 								<!-- <el-col :span="5">
 								<el-input v-model="searchList.PHONE">

@@ -72,7 +72,7 @@
 									</el-col>
 								</el-row>
 							</el-collapse-item>
-							<el-collapse-item title="文档" name="2">
+							<el-collapse-item title="文件" name="2">
 								<!-- 字段列表 Begin-->
 								<div class="table-func">
 									<el-button type="primary" size="mini" round>
@@ -86,9 +86,9 @@
 								</div>
 								<!-- 字段列表 End -->
 
-								<!-- 文档Table-List Begin-->
+								<!-- 文件Table-List Begin-->
 								<el-form :model="testing_filesForm" status-icon inline-message ref="testing_filesForm">
-									  <el-table :data="testing_filesForm.inspectionList" row-key="ID" border stripe height="200" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'testing_filesForm.inspectionList', order: 'descending'}" v-loadmore="loadMore">
+									  <el-table :data="testing_filesForm.inspectionList" row-key="ID" border stripe max-height="260" fit="true"highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'testing_filesForm.inspectionList', order: 'descending'}" v-loadmore="loadMore">
 										<el-table-column prop="iconOperation" fixed="left" label="操作" width="80">
 									      <template slot-scope="scope">
 									        <el-button type="text" id="Edit" size="medium" @click="saveRow(scope.row)" v-if="scope.row.isEditing">
@@ -102,14 +102,14 @@
 									        </el-button>
 									      </template>
 									    </el-table-column>
-									  	<el-table-column label="文档编号" sortable width="140" prop="DOCLINKS">
+									  	<el-table-column label="文件编号" sortable width="140" prop="DOCLINKS">
 									      <template slot-scope="scope">
 									        <el-form-item :prop="'inspectionList.'+scope.$index + '.DOCLINKS'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 									        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DOCLINKS" disabled></el-input><span class="blue" @click="viewchildRow(scope.row.ID)" v-else="v-else">{{scope.row.DOCLINKS}}</span>
 											</el-form-item>
 									      </template>
 									    </el-table-column>
-									    <el-table-column label="文档描述" sortable width="300" prop="DESCRIPTION">
+									    <el-table-column label="文件描述" sortable width="300" prop="DESCRIPTION">
 									      <template slot-scope="scope">
 									        <el-form-item :prop="'inspectionList.'+scope.$index + '.DESCRIPTION'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 									        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DESCRIPTION" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.DESCRIPTION}}</span>
@@ -151,7 +151,7 @@
 							            layout="total, sizes, prev, pager, next"
 							            :total="page.totalCount">
 							        </el-pagination>
-								<!-- 文档Table-List End -->
+								<!-- 文件Table-List End -->
 							</el-collapse-item>
 							<el-collapse-item title="其它" name="3" v-show="views">
 								<el-row>

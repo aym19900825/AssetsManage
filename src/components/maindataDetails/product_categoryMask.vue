@@ -298,7 +298,7 @@
 	 					var CATEGORY=JSON.stringify(this.CATEGORY);
 					 	if(category==CATEGORY){
 					  	this.$message({
-								message: '没有修改不能修改',
+								message: '没有修改内容，不允许修订！',
 								type: 'warning'
 							});
 							return false;
@@ -314,7 +314,23 @@
 									//重新加载数据
 									this.$emit('request');
 									this.show = false;
-								}		
+								}else{
+								this.show = true;
+								if(res.data.resp_code == 1) {
+									//res.data.resp_msg!=''后台返回提示信息
+									if( res.data.resp_msg!=''){
+									 	this.$message({
+											message: res.data.resp_msg,
+											type: 'warning'
+									 	});
+									}else{
+										this.$message({
+											message:'相同数据不可重复修订！',
+											type: 'warning'
+										});
+									}
+								}
+							}		
 							}).catch((err) => {
 								this.$message({
 									message: '网络错误，请重试',

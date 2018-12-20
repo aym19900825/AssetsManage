@@ -51,32 +51,34 @@
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search" class="pb10">
 						<el-form status-icon :model="searchList" label-width="70px">
-							<el-row :gutter="10" class="pb10">
+							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-input v-model="searchList.S_NUM">
-										<template slot="prepend">标准编号</template>
-									</el-input>
+									<el-form-item label="标准编号" prop="S_NUM">
+										<el-input v-model="searchList.S_NUM">
+										</el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-input v-model="searchList.S_NAME">
-										<template slot="prepend">标准名称</template>
-									</el-input>
+									<el-form-item label="标准名称" prop="S_NAME">
+										<el-input v-model="searchList.S_NAME">
+										</el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-input v-model="searchList.S_ENGNAME">
-										<template slot="prepend">英文名称</template>
-									</el-input>
+									<el-form-item label="英文名称" prop="S_ENGNAME">
+										<el-input v-model="searchList.S_ENGNAME">
+										</el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-input v-model="searchList.VERSION">
-										<template slot="prepend">版本</template>
-									</el-input>
+									<el-form-item label="版本" prop="VERSION" label-width="45px">
+										<el-input v-model="searchList.VERSION">
+										</el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="4">
-									<!-- <el-input v-model="searchList.DEPARTMENT">
-										<template slot="prepend">机构</template>
-									</el-input> -->
-									<el-select v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="机构">
+									<el-form-item label="机构" prop="DEPARTMENT" label-width="45px">
+										<el-select clearable v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="请选择">
 									    <el-option
 									      v-for="item in options5"
 									      :key="item.value"
@@ -84,16 +86,21 @@
 									      :value="item.value">
 									    </el-option>
 									</el-select>
+									</el-form-item>
 								</el-col>
 							</el-row>
 							<el-row :gutter="20">
 								<el-col :span="5">
-									<el-date-picker v-model="searchList.RELEASETIME" type="date" placeholder="发布时间" value-format="yyyy-MM-dd HH:mm:ss">
-									</el-date-picker>
+									<el-form-item label="发布时间" prop="RELEASETIME">
+										<el-date-picker v-model="searchList.RELEASETIME" type="date" placeholder="发布时间" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%">
+										</el-date-picker>
+									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-date-picker v-model="searchList.STARTETIME" type="date" placeholder="启用时间" value-format="yyyy-MM-dd HH:mm:ss">
-									</el-date-picker>
+									<el-form-item label="启用时间" prop="STARTETIME">
+										<el-date-picker v-model="searchList.STARTETIME" type="date" placeholder="启用时间" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%">>
+										</el-date-picker>
+									</el-form-item>
 								</el-col>
 								<!-- <el-col :span="3">
 									<el-select v-model="searchList.STATUS" placeholder="请选择信息状态">
@@ -118,6 +125,10 @@
 								<!-- <el-table-column label="主键编号" width="120" sortable prop="ID" v-if="this.checkedName.indexOf('主键编号')!=-1">
 								</el-table-column> -->
 								<el-table-column label="标准编号" width="120" sortable prop="S_NUM" v-if="this.checkedName.indexOf('标准编号')!=-1">
+									<template slot-scope="scope">
+										<p @click=view(scope.row)>{{scope.row.S_NUM}}
+										</p>
+									</template>
 								</el-table-column>
 								<el-table-column label="标准名称" width="220" sortable prop="S_NAME" v-if="this.checkedName.indexOf('标准名称')!=-1">
 								</el-table-column>
@@ -406,11 +417,15 @@
 					this.$refs.child.detail();
 				}
 			},
+			//查看
+			 view(item) {
+				this.$refs.child.view(item);
+			},
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
 				this.down = !this.down,
-					this.up = !this.up
+				this.up = !this.up
 			},
 			// 删除
 			deluserinfo() {

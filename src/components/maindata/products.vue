@@ -74,7 +74,7 @@
 									<!-- <el-input v-model="searchList.DEPARTMENT">
 										<template slot="prepend">机构</template>
 									</el-input> -->
-									<el-select v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="机构">
+									<el-select clearable v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="机构">
 									    <el-option
 									      v-for="item in options5"
 									      :key="item.value"
@@ -103,6 +103,10 @@
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="编码" width="155" sortable prop="PRO_NUM" v-if="this.checkedName.indexOf('编码')!=-1">
+									<template slot-scope="scope">
+										<p @click=view(scope.row)>{{scope.row.PRO_NUM}}
+										</p>
+									</template>
 								</el-table-column>
 								<el-table-column label="名称" sortable prop="PRO_NAME" v-if="this.checkedName.indexOf('名称')!=-1">
 								</el-table-column>
@@ -357,11 +361,15 @@
 					this.$refs.child.detail();
 				}
 			},
+			//查看
+			 view(item) {
+				this.$refs.child.view(item);
+			},
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
 				this.down = !this.down,
-					this.up = !this.up
+				this.up = !this.up
 			},
 			// 删除
 			deluserinfo() {

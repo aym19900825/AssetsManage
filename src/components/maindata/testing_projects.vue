@@ -70,7 +70,7 @@
 									<!-- <el-input v-model="searchList.DEPARTMENT">
 										<template slot="prepend">机构</template>
 									</el-input> -->
-									<el-select v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="机构">
+									<el-select clearable v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="机构">
 									    <el-option
 									      v-for="item in options5"
 									      :key="item.value"
@@ -100,6 +100,10 @@
 							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 							</el-table-column>
 							<el-table-column label="编码" width="150" sortable prop="P_NUM" v-if="this.checkedName.indexOf('编码')!=-1">
+								<template slot-scope="scope">
+									<p @click=view(scope.row)>{{scope.row.P_NUM}}
+									</p>
+								</template>
 							</el-table-column>
 							<el-table-column label="名称" width="220" sortable prop="P_NAME" v-if="this.checkedName.indexOf('名称')!=-1">
 							</el-table-column>
@@ -375,18 +379,15 @@
 				if (this.$refs['testing_projectForm']!==undefined) {
      			this.$refs['testing_projectForm'].resetFields();	
  				}
-				 
 			},
 			//添加检验/检测项目
-			
 			openAddMgr() {
 				this.reset();
 				this.$refs.child.open();
 				this.$refs.child.visible();
 			},
-			
-			modify() {//修改检验/检测项目
-				
+			//修改检验/检测项目
+			modify() {
 				if(this.selMenu.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
@@ -400,17 +401,19 @@
 					});
 					return;
 				} else {
-
 					this.testing_projectForm = this.selMenu[0]; 
 					this.$refs.child.detail();
-
 				}
+			},
+			//查看
+			 view(item) {
+				this.$refs.child.view(item);
 			},
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
 				this.down = !this.down,
-					this.up = !this.up
+				this.up = !this.up
 			},
 			// 删除
 			deluserinfo() {

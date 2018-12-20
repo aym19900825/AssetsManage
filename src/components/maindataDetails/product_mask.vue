@@ -5,6 +5,7 @@
 			<div class="mask_title_div clearfix">
 				<div class="mask_title" v-show="addtitle">添加产品</div>
 				<div class="mask_title" v-show="modifytitle">修改产品</div>
+				<div class="mask_title" v-show="viewtitle">查看产品</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -49,25 +50,25 @@
 									</el-col> -->
 									<el-col :span="8">
 										<el-form-item label="编码" prop="PRO_NUM">
-											<el-input v-model="PRODUCT.PRO_NUM" @focus="hint" @input="hinthide"></el-input>
+											<el-input v-model="PRODUCT.PRO_NUM" @focus="hint" @input="hinthide" :disabled="noedit"></el-input>
 											<span v-if="hintshow" style="color:rgb(103,194,58);font-size: 12px">可填写，若不填写系统将自动生成</span>
 										</el-form-item>
 									</el-col>
 									<el-col :span="16">
 										<el-form-item label="产品" prop="PRO_NAME">
-											<el-input v-model="PRODUCT.PRO_NAME"></el-input>
+											<el-input v-model="PRODUCT.PRO_NAME" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row>
-									<el-col :span="8" v-if="modifytitle">
+									<el-col :span="8" v-if="dept">
 										<el-form-item label="机构" prop="DEPARTMENT">
 											<el-input v-model="PRODUCT.DEPARTMENT" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 							</el-collapse-item>
-							<el-collapse-item title="其它" name="2"  v-if="personinfo">
+							<el-collapse-item title="其它" name="2"  v-show="views">
 								<el-row>
 									<el-col :span="8">
 										<el-form-item label="录入人" prop="ENTERBY">
@@ -93,7 +94,7 @@
 							</el-collapse-item>
 						</el-collapse>
 					</div>
-					<div class="el-dialog__footer">
+					<div class="el-dialog__footer" v-show="noviews">
 						<el-button type="primary" @click="saveAndUpdate('PRODUCT')">保存</el-button>
 						<el-button type="success" @click="saveAndSubmit('PRODUCT')" v-show="addtitle">保存并添加</el-button>
 						<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('PRODUCT')">修订</el-button>
@@ -138,7 +139,6 @@
 			};
 			return {
 				basic_url: Config.dev_url,
-				personinfo: false,
 				value: '',
 				options: [{
 					value: '1',
@@ -153,14 +153,10 @@
 				show: false,
 				isok1: true,
 				isok2: false,
-				statusshow1: true,
-				statusshow2: false,
 				down: true,
 				up: false,
-				addtitle: true,
-				modifytitle: false,
 				activeNames: ['1', '2'], //手风琴数量
-				//				labelPosition: 'top', //表格
+				//labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				selectData: [],
 				rules: {
@@ -174,7 +170,17 @@
 				resourceData: [], //数组，我这里是通过接口获取数据
 				product:{},
 				hintshow:false,
-				personinfo:false
+				addtitle:true,
+				modifytitle:false,
+				viewtitle:false,
+				dept:false,
+				noedit:false,//表单内容
+				views:false,//录入修改人信息
+				noviews:true,//按钮
+				modify:false,//修订
+				hintshow:false,
+				statusshow1:true,
+				statusshow2:false,
 			};
 		},
 		methods: {
@@ -215,12 +221,18 @@
 			},
 			//点击按钮显示弹窗
 			visible() {
+				this.addtitle = true;
+				this.modifytitle = false;
+				this.viewtitle = false;
+				this.dept = false;
+				this.noedit = false;//表单内容
+				this.views = false;//录入修改人信息
+				this.noviews = true;//按钮
+				this.modify = false;//修订
 				this.hintshow = false;
 				this.statusshow1 = true;
 				this.statusshow2 = false;
-				this.addtitle = true;
-				this.modifytitle = false;
-				this.modify = false;
+
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.PRODUCT.DEPARTMENT = res.data.deptName;
 					this.PRODUCT.ENTERBY = res.data.nickname;
@@ -238,12 +250,18 @@
 			},
 			// 这里是修改
 			detail() {
-				this.hintshow = false;
-				this.modify = true;
 				this.addtitle = false;
 				this.modifytitle = true;
+				this.viewtitle = false;
+				this.dept = true;
+				this.noedit = false;//表单内容
+				this.views = false;//录入修改人信息
+				this.noviews = true;//按钮
+				this.hintshow = false;
+				this.modify = true;//修订
 				this.statusshow1 = false;
 				this.statusshow2 = true;
+
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.PRODUCT.DEPARTMENT = res.data.deptName;
 					this.PRODUCT.CHANGEBY = res.data.nickname;
@@ -259,6 +277,18 @@
 					});
 				});
 				this.show = true;
+			},
+			//这是查看
+			view(item) {
+				this.addtitle = false;
+				this.modifytitle = false;
+				this.viewtitle = true;
+				this.dept = true;
+				this.noedit = true;//表单内容
+				this.views = true;//录入修改人信息
+				this.noviews = false;//按钮
+				this.PRODUCT = item;
+				this.show = true;				
 			},
 			// 保存users/saveOrUpdate
 			save(PRODUCT) {

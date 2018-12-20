@@ -1,5 +1,5 @@
 <template>
-	<div id="aaa" class="navbar-default navbar-static-side" :style="{height: fullHeight}">
+	<div class="navbar-default navbar-static-side" :style="{height: fullHeight}">
 		<div class="navbarbg" @click="min2max()">
 			<span class="navbar-minimalize minimalize-styl-2">
 				<i class="icon-menu1"></i> 
@@ -104,7 +104,8 @@ export default {
 		}
 	},
 	mounted() {
-		
+		let item=this.leftNavs[0];
+		this.addClickNav(item);
 	}
 }
 </script>

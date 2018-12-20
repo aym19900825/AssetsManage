@@ -58,6 +58,7 @@ export default {
 	
 	methods: {
 		addClickNav(item){
+			console.log(123);
 			if(!sessionStorage.getItem('clickedNav')){
 				sessionStorage.setItem('clickedNav',JSON.stringify({arr:[]}));
 			}

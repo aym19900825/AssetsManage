@@ -114,7 +114,7 @@
 						</el-col>
 						<el-col :span="19">
 							<!-- 表格 Begin-->
-							<el-table :header-cell-style="rowClass" :data="nitificationsList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'nitificationsList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table :data="nitificationsList" :header-cell-style="rowClass" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'nitificationsList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="工作任务通知书编号" width="180" sortable prop="N_CODE" v-if="this.checkedName.indexOf('工作任务通知书编号')!=-1">

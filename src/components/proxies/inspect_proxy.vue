@@ -132,38 +132,38 @@
 						</el-col>
 						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
-							<el-table :data="inspectList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'inspectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table :data="inspectList" :header-cell-style="rowClass" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'inspectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="检验委托书编号" sortable width="140px" prop="PROXYNUM" v-if="this.checkedName.indexOf('检验委托书编号')!=-1">
+								<el-table-column label="检验委托书编号" sortable width="130px" prop="PROXYNUM" v-if="this.checkedName.indexOf('检验委托书编号')!=-1">
 								</el-table-column>
 								<el-table-column label="委托单位名称" sortable width="140px" prop="V_NAME" v-if="this.checkedName.indexOf('委托单位名称')!=-1">
 								</el-table-column>
 								<el-table-column label="生产单位名称" sortable width="140px" prop="P_NAME" v-if="this.checkedName.indexOf('生产单位名称')!=-1">
 								</el-table-column>
-								<el-table-column label="样品名称" sortable width="200px" prop="ITEM_NAME" v-if="this.checkedName.indexOf('样品名称')!=-1">
+								<el-table-column label="样品名称" sortable width="140px" prop="ITEM_NAME" v-if="this.checkedName.indexOf('样品名称')!=-1">
 								</el-table-column>
-								<el-table-column label="样品型号" sortable width="150px" prop="ITEM_MODEL" v-if="this.checkedName.indexOf('样品型号')!=-1">
+								<el-table-column label="样品型号" sortable width="140px" prop="ITEM_MODEL" v-if="this.checkedName.indexOf('样品型号')!=-1">
 								</el-table-column>
 								<!-- <el-table-column label="样品信息状态" sortable width="200px" prop="ITEM_STATUS" v-if="this.checkedName.indexOf('样品信息状态')!=-1">
 								</el-table-column> -->
 								<el-table-column label="检测依据" width="200px" prop="REMARKS" sortable  v-if="this.checkedName.indexOf('检测依据')!=-1">
 								</el-table-column>
-								<el-table-column label="完成日期" width="200px" prop="COMPDATE" sortable  :formatter="dateFormat" data-type = ""  v-if="this.checkedName.indexOf('完成日期')!=-1">
+								<el-table-column label="完成日期" width="140px" prop="COMPDATE" sortable  :formatter="dateFormat" data-type = ""  v-if="this.checkedName.indexOf('完成日期')!=-1">
 								</el-table-column>
-								<el-table-column label="完成方式" width="200px" prop="COMPMODE" sortable v-if="this.checkedName.indexOf('完成方式')!=-1">
+								<el-table-column label="完成方式" width="100px" prop="COMPMODE" sortable v-if="this.checkedName.indexOf('完成方式')!=-1">
 								</el-table-column>
-								<el-table-column label="检测报告编号" width="200px" prop="REPORT_NUM" sortable  v-if="this.checkedName.indexOf('检测报告编号')!=-1">
+								<el-table-column label="检测报告编号" width="140px" prop="REPORT_NUM" sortable  v-if="this.checkedName.indexOf('检测报告编号')!=-1">
 								</el-table-column>
-								<el-table-column label="主检组" width="200px" prop="MAINGROUP" sortable  v-if="this.checkedName.indexOf('主检组')!=-1">
+								<el-table-column label="主检组" width="140px" prop="MAINGROUP" sortable  v-if="this.checkedName.indexOf('主检组')!=-1">
 								</el-table-column>
 								<!--<el-table-column label="信息状态" width="200px" prop="STATUS" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
 								</el-table-column>-->
-								<el-table-column label="录入人" width="200px" prop="ENTERBY" sortable  v-if="this.checkedName.indexOf('录入人')!=-1">
+								<!--<el-table-column label="录入人" width="200px" prop="ENTERBY" sortable  v-if="this.checkedName.indexOf('录入人')!=-1">
+								</el-table-column>-->
+								<el-table-column label="录入时间" width="140px" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>
-								<el-table-column label="录入时间" width="200px" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
-								</el-table-column>
-								<el-table-column label="版本" width="50px" prop="VERSION" sortable  v-if="this.checkedName.indexOf('版本')!=-1">
+								<el-table-column label="版本" width="80" prop="VERSION" sortable  v-if="this.checkedName.indexOf('版本')!=-1">
 								</el-table-column>
 							</el-table>
 							
@@ -350,6 +350,11 @@
 			 };
 		},
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    console.log(rowIndex) //表头行标号为0
+			    return 'text-align:center'
+			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
 				return(
 					<span>
@@ -380,7 +385,7 @@
 				m.isFolder = !m.isFolder;
 			},
 
-			
+			//滚动加载更多
 			loadMore() {
 				if(this.loadSign) {
 					this.loadSign = false

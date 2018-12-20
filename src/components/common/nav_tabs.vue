@@ -131,7 +131,6 @@ export default {
         sessionGet(){
 	        if(sessionStorage.getItem('clickedNav') != null && sessionStorage.getItem('clickedNav').length>0){
 	    		this.tabs = JSON.parse(sessionStorage.getItem('clickedNav')).arr;
-	    		console.log(this.tabs);
 	    	}else{
 	    		this.showindex()
 	    	}

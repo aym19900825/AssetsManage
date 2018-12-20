@@ -17,7 +17,7 @@
 			</div>
 			<div class="mask_content">
 				<div class="accordion">
-					<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="110px" class="demo-form-inline" status-icon>
+					<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" label-width="110px" class="demo-form-inline" status-icon inline-message>
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="类别" name="1">
 								<el-row :gutter="20" class="pb10">
@@ -39,7 +39,7 @@
 									</el-col>
 								</el-row>
 								<el-radio-group v-model="dataInfo.TYPE" :disabled="noedit">
-									<el-row :gutter="20">
+									
 										<el-col :span="4">
 											<el-radio label="1">监督抽查</el-radio>
 										</el-col>
@@ -73,11 +73,10 @@
 										<el-col :span="4">
 											<el-radio label="11">其它</el-radio>
 										</el-col>
-									</el-row>
+									
 								</el-radio-group>
 							</el-collapse-item>
 							<el-collapse-item title="基本信息" name="2">
-								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="计划编号" prop="WP_NUM">
 											<el-input v-model="dataInfo.WP_NUM" :disabled="edit">
@@ -96,8 +95,7 @@
 											</el-input>
 										</el-form-item>
 									</el-col>
-								</el-row>
-								<el-row :gutter="30">
+									
 									<el-col :span="8">
 										<el-form-item label="项目负责人" prop="P_LEADER">
 											<el-input v-model="dataInfo.P_LEADER" :disabled="noedit">
@@ -114,10 +112,6 @@
 											<el-input v-model="dataInfo.ITEM_MODEL" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
-								</el-row>
-								<el-row>
-
-								</el-row>
 							</el-collapse-item>
 							<!-- <el-collapse-item title="依据" name="3">
 								 字段列表 Begin
@@ -125,7 +119,7 @@
 								字段列表 End 
 							</el-collapse-item> -->
 							<el-collapse-item title="检验检测要求" name="4" label-width="100px">
-								<el-row :gutter="30">
+								
 									<el-col :span="6">
 										<el-form-item label="受检企业" prop="V_NAME">
 											<el-input v-model="dataInfo.V_NAME" :disabled="noedit"></el-input>
@@ -148,7 +142,7 @@
 											</el-input>
 										</el-form-item>
 									</el-col>
-								</el-row>
+						
 								<el-row>
 									<el-form-item label="抽样方案/判定依据" prop="SOLUTION">
 										<el-input v-model="dataInfo.SOLUTION" :disabled="noedit"></el-input>
@@ -187,8 +181,12 @@
 											</el-table-column>
 											<el-table-column label="检验标准编号" sortable width="120px" prop="S_NUM">
 												<template slot-scope="scope">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.S_NUM}}</span>
+													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.items'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
+													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入内容"></el-input>
+													<span v-show="!scope.row.isEditing">{{scope.row.S_NUM}}</span>
+													</el-form-item>
 												</template>
+												
 											</el-table-column>
 											<el-table-column prop="S_DESC" label="检验标准内容" sortable width="120px">
 												<template slot-scope="scope">
@@ -795,7 +793,6 @@
 			saveAndSubmit() {
 				this.save();
 				this.show = true;
-				this.reset();
 			},
 			handleClose(done) {
 				this.$confirm('确认关闭？')

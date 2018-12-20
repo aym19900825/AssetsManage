@@ -597,7 +597,7 @@
 				this.getUser();
 				this.modify = true;
 				this.show = true;
-				this.getPmList();
+//				this.getPmList();
 			},
 			//点击关闭按钮
 			close() {

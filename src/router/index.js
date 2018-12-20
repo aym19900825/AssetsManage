@@ -62,6 +62,7 @@ import doc_category from '@/components/document/category'//关键字类别
 import doc_keyword from '@/components/document/keyword'//关键字
 import doc_authorize from '@/components/document/authorize'//关键字授权
 import doc_root from '@/components/document/doc_root'//文件目录
+import doc_list from '@/components/document/doc_list'//文件列表
 Vue.use(Router)
 
   const routes = [
@@ -303,6 +304,12 @@ Vue.use(Router)
       path: '/doc_root',
       name: 'doc_root',
       component: doc_root
+    }
+    ,
+    {//文档列表管理
+      path: '/doc_list',
+      name: 'doc_list',
+      component: doc_list
     }
 ];
 

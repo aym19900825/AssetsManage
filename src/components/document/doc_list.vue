@@ -16,10 +16,7 @@
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
 								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
-                                	<i class="icon-add"></i>新建文件夹
-                      			 </button>
-								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
-                                	<i class="icon-add"></i>上传
+                                	<i class="icon-add"></i>新增
                       			 </button>
 								<button type="button" class="btn btn-bule button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改
@@ -61,41 +58,36 @@
 					</div>
 					<!-- 高级查询划出 End-->
 					<el-row :gutter="0">
-						<!-- 左侧树菜单 Begin-->
-						<el-col :span="5" class="lefttree">
-							<div class="lefttreebg">
-								<div class="left_tree_title clearfix" @click="min3max()">
-									<div class="pull-left pr20" v-if="ismin">关键字分类</div>
-									<span class="pull-right navbar-minimalize minimalize-styl-2">
-										<i class="icon-doubleok icon-double-angle-left blue"></i>
-									</span>
-								</div>
-								<div class="left_treebg" :style="{height: fullHeight}">
-									<div class="p15" v-if="ismin">
-										<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent" :props="resourceProps" @node-click="handleNodeClick">
-										</el-tree>
-									</div>
-								</div>
-							</div>
-						</el-col>
-						<el-col :span="19" class="leftcont v-resize">
+						<el-col class="leftcont v-resize">
 							<!-- 表格 -->
 							<el-table :data="samplesList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="文档目录编号" sortable width="140px" prop="DIRECTORY_NUM" v-if="this.checkedName.indexOf('样品编号')!=-1">
+								<el-table-column label="文档编号" sortable width="140px" prop="DIRECTORY_NUM" v-if="this.checkedName.indexOf('文档编号')!=-1">
 								</el-table-column>
-								<el-table-column label="目录名称" sortable width="200px" prop="DIRECTORY_DESCRIPTION" v-if="this.checkedName.indexOf('样品类别')!=-1">
+								<el-table-column label="文档描述" sortable width="200px" prop="DIRECTORY_DESCRIPTION" v-if="this.checkedName.indexOf('文档描述')!=-1">
 								</el-table-column>
-								<el-table-column label="父级目录" sortable prop="PARENT" v-if="this.checkedName.indexOf('委托单位')!=-1">
+								<el-table-column label="创建人" sortable prop="PARENT" v-if="this.checkedName.indexOf('创建人')!=-1">
 								</el-table-column>
-								<el-table-column label="信息状态" sortable prop="STATUS" v-if="this.checkedName.indexOf('生产单位')!=-1">
+								<el-table-column label="创建时间" sortable prop="STATUS" v-if="this.checkedName.indexOf('创建时间')!=-1">
 								</el-table-column>
-								<el-table-column label="同步时间" sortable prop="SYNCHRONIZATION_TIME" v-if="this.checkedName.indexOf('样品名称')!=-1">
+								<el-table-column label="所属对象名" sortable prop="SYNCHRONIZATION_TIME" v-if="this.checkedName.indexOf('所属对象名')!=-1">
+								</el-table-column>
+								<el-table-column label="所属对象ID" sortable prop="SYNCHRONIZATION_TIME" v-if="this.checkedName.indexOf('所属对象ID')!=-1">
+								</el-table-column>
+								<el-table-column label="版本" sortable prop="SYNCHRONIZATION_TIME" v-if="this.checkedName.indexOf('版本')!=-1">
+								</el-table-column>
+								<el-table-column label="状态" sortable prop="SYNCHRONIZATION_TIME" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
 							</el-table>
 							
-							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" 
+								@size-change="sizeChange" 
+								@current-change="currentChange" 
+								:current-page="page.currentPage" 
+								:page-sizes="[10, 20, 30, 40]" 
+								layout="total, sizes, prev, pager, next" 
+								:total="page.totalCount">
 							</el-pagination>
 							<!-- 表格 -->
 						</el-col>
@@ -132,64 +124,47 @@
 				loadSign: true, //加载
 				commentArr: {},
 				checkedName: [
-					'CLASSFICATION',
-					'样品类别',
-					'委托单位',
-					'生产单位',
-					'样品名称',
-					'型号',
-					'数量',
-					'收样人',
-					'收样日期',
-					'接样人',
-					'接样日期',
-					'状态',
-					'信息状态',
+					'文档编号',
+					'文档描述',
+					'创建人',
+					'创建时间',
+					'所属对象名',
+					'所属对象ID',
+					'版本',
+					'状态'
 				],
 				tableHeader: [{
-						label: '样品编号',
-						prop: 'ITEMNUM'
+						label: '文档编号',
+						prop: 'DOCLINKS'
 					},
 					{
-						label: '样品类别',
-						prop: 'TYPE'
+						label: '文档描述',
+						prop: 'DIRECTORY_DESCRIPTION'
 					},
 					{
-						label: '委托单位',
+						label: '创建人',
 						prop: 'P_NAME'
 					},
 					{
-						label: '生产单位',
+						label: '创建时间',
 						prop: 'P_NAME'
 					},
 					{
-						label: '样品名称',
+						label: '所属对象名',
 						prop: 'DESCRIPTION'
 					},
 					{
-						label: '型号',
+						label: '所属对象ID',
 						prop: 'MODEL'
 					},
 					{
-						label: '数量',
+						label: '版本',
 						prop: 'QUATITY'
 					},
 					{
-						label: '收样人',
-						prop: 'ACCEPT_PERSON'
-					},
-					{
-						label: '收样日期',
-						prop: 'ACCEPT_DATE'
-					},
-					{
 						label: '状态',
-						prop: 'STATE'
-					},
-					{
-						label: '信息状态',
-						prop: 'STATUS'
-					},
+						prop: 'ACCEPT_PERSON'
+					}
 				],
 				companyId: '',
 				deptId: '',

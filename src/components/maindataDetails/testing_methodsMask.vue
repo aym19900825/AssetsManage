@@ -16,11 +16,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-<<<<<<< HEAD
 				<el-form :model="testingForm" inline-message :rules="rules" ref="testingForm" label-width="100px" status-icon>
-=======
-				<el-form :model="testingForm"  :rules="rules" inline-message ref="testingForm" label-width="100px" status-icon>
->>>>>>> 825c723e897617d0841085fbc190061780c333b8
 					<div class="accordion">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基础信息" name="1">

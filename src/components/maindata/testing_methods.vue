@@ -35,10 +35,10 @@
 								    <i class="icon-print"></i>打印
 								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-					    		<i class="icon-search"></i>高级查询
-					    		<i class="icon-arrow1-down" v-show="down"></i>
-					    		<i class="icon-arrow1-up" v-show="up"></i>
-							</button>
+					    			<i class="icon-search"></i>高级查询
+					    			<i class="icon-arrow1-down" v-show="down"></i>
+					    			<i class="icon-arrow1-up" v-show="up"></i>
+								</button>
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -54,14 +54,13 @@
 							<el-row :gutter="10" class="pb10">
 								<el-col :span="6">
 									<el-input v-model="searchList.M_NUM">
-										<template slot="prepend">编号</template>
+										<template slot="prepend">编码</template>
 									</el-input>
 								</el-col>
 								<el-col :span="6">
 									<el-input v-model="searchList.M_NAME">
 										<template slot="prepend">中文名称</template>
 									</el-input>
-
 								</el-col>
 								<el-col :span="6">
 									<el-input v-model="searchList.M_ENAME">
@@ -80,10 +79,18 @@
 										<template slot="prepend">版本</template>
 									</el-input>
 								</el-col>
-								<el-col :span="6">
-									<el-input v-model="searchList.DEPARTMENT">
+								<el-col :span="5">
+									<!-- <el-input v-model="searchList.DEPARTMENT">
 										<template slot="prepend">机构</template>
-									</el-input>
+									</el-input> -->
+									<el-select v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="机构">
+									    <el-option
+									      v-for="item in options5"
+									      :key="item.value"
+									      :label="item.label"
+									      :value="item.value">
+									    </el-option>
+									</el-select>
 								</el-col>
 								<!-- <el-col :span="6">
 									<el-select v-model="searchList.STATUS" placeholder="请选择信息状态">
@@ -99,13 +106,13 @@
 					</div>
 					<!-- 高级查询划出 End-->
 					
-					<el-row :gutter="0">
+					<el-row>
 						<el-col :span="24">
 							<!-- 表格 Begin-->
 							<el-table :header-cell-style="rowClass" :data="methodsList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'methodsList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="编号" width="170" sortable prop="M_NUM" v-if="this.checkedName.indexOf('编号')!=-1">
+								<el-table-column label="编码" width="170" sortable prop="M_NUM" v-if="this.checkedName.indexOf('编码')!=-1">
 								</el-table-column>
 								<el-table-column label="中文名称" width="220" sortable prop="M_NAME" v-if="this.checkedName.indexOf('中文名称')!=-1">
 								</el-table-column>
@@ -167,10 +174,26 @@
 					value: '2',
 					label: '不活动'
 				}],
+				options5: [{
+		            value: '金化站',
+		            label: '金化站'
+		        }, {
+		            value: '通号站',
+		            label: '通号站'
+		        }, {
+		            value: '运包站',
+		            label: '运包站'
+		        }, {
+		            value: '机辆站',
+		            label: '机辆站'
+		        }, {
+		            value: '接触网站',
+		            label: '接触网站'
+		        }],
 				loadSign:true,//加载
 				commentArr:{},
 				checkedName: [
-					'编号',
+					'编码',
 					'中文名称',
 					'英文名称',
 					'类别',
@@ -183,7 +206,7 @@
 					'修改时间'
 				],
 				tableHeader: [{
-						label: '编号',
+						label: '编码',
 						prop: 'M_NUM'
 					},
 					{
@@ -314,6 +337,7 @@
 			},
 			openAddMgr() {//添加检验/检测方法编号数据
 				this.reset();
+				this.$refs.child.open();
 				this.$refs.child.visible();
 			},
 			modify() {//修改检验/检测方法编号数据
@@ -418,7 +442,6 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-
 					M_NUM: this.searchList.M_NUM,
 					M_NAME: this.searchList.M_NAME,
 					VERSION: this.searchList.VERSION,
@@ -442,7 +465,6 @@
 					this.commentArr[this.page.currentPage]=res.data.data
 					let newarr=[]
 					for(var i = 1; i <= totalPage; i++){
-					
 						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
 							
 							for(var j = 0; j < this.commentArr[i].length; j++){
@@ -452,7 +474,6 @@
 					}
 					this.methodsList = newarr;
 				}).catch((wrong) => {})
-				
 			},
 
 			formatter(row, column) {
@@ -461,8 +482,6 @@
 		},
 		mounted() {
 			this.requestData();
-			
-			
 		},
 	}
 </script>

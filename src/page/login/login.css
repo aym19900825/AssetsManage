@@ -55,10 +55,12 @@
     border-radius:6px;}
 
 .logo{
-    width:123px;
-    height:38px;
+    width: 139px;
+    height: 40px;
     background-image:url(../../assets/img/logo.png);
-    margin-bottom: 25px;
+    margin-bottom: 12px;
+    background-repeat: no-repeat;
+    background-size: 100%;
 }
 
 .centerDiv font{/*标题*/

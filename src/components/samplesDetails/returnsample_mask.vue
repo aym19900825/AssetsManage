@@ -330,11 +330,7 @@
 				this.samplesForm.STATUS=this.samplesForm.STATUS=="1"?'活动':'不活动';
 				this.show = true;
 			},
-			
-			judge(data) {//taxStatus 信息状态布尔值
-				return data.enabled ? '活动' : '不活动'
-			},
-
+		
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -357,6 +353,7 @@
 			//点击关闭按钮
 			close() {
 				this.show = false;
+				this.$emit('request');
 			},
 			cancelForm() {
 				this.show = false;

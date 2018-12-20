@@ -2,7 +2,7 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header></navs_header>
+			<navs_header ref="navsheader"></navs_header>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
@@ -112,10 +112,10 @@
 						
 						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
-							<el-table :data="samplesList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table :data="samplesList" :header-cell-style="rowClass" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="样品编号" sortable width="140px" prop="ITEMNUM" v-if="this.checkedName.indexOf('样品编号')!=-1">
+								<el-table-column label="样品编号" sortable width="200px" prop="ITEMNUM" v-if="this.checkedName.indexOf('样品编号')!=-1">
 								</el-table-column>
 								<el-table-column label="样品类别" sortable width="200px" prop="TYPE" v-if="this.checkedName.indexOf('样品类别')!=-1">
 								</el-table-column>
@@ -125,19 +125,19 @@
 								</el-table-column>
 								<el-table-column label="样品名称" sortable width="200px" prop="DESCRIPTION" v-if="this.checkedName.indexOf('样品名称')!=-1">
 								</el-table-column>
-								<el-table-column label="型号" width="200px" prop="MODEL" sortable v-if="this.checkedName.indexOf('型号')!=-1">
+								<el-table-column label="型号" width="100px" prop="MODEL" sortable v-if="this.checkedName.indexOf('型号')!=-1">
 								</el-table-column>
-								<el-table-column label="数量" width="200px" prop="QUATITY" sortable v-if="this.checkedName.indexOf('数量')!=-1">
+								<el-table-column label="数量" width="100px" prop="QUATITY" sortable v-if="this.checkedName.indexOf('数量')!=-1">
 								</el-table-column>
 								<el-table-column label="收样人" sortable width="140px" prop="ACCEPT_PERSON" v-if="this.checkedName.indexOf('收样人')!=-1">
 								</el-table-column>
-								<el-table-column label="收样日期" sortable width="160px" :formatter="dateFormat" prop="ACCEPT_DATE" v-if="this.checkedName.indexOf('收样日期')!=-1">
+								<el-table-column label="收样日期" sortable width="140px" :formatter="dateFormat" prop="ACCEPT_DATE" v-if="this.checkedName.indexOf('收样日期')!=-1">
 								</el-table-column>
 								<el-table-column label="接样人" sortable width="140px" prop="RECIP_PERSON" v-if="this.checkedName.indexOf('接样人')!=-1">
 								</el-table-column>
-								<el-table-column label="接样日期" sortable width="160px" :formatter="dateFormat" prop="RECIP_DATE" v-if="this.checkedName.indexOf('接样日期')!=-1">
+								<el-table-column label="接样日期" sortable width="140px" :formatter="dateFormat" prop="RECIP_DATE" v-if="this.checkedName.indexOf('接样日期')!=-1">
 								</el-table-column>
-								<el-table-column label="状态" sortable width="140px" prop="STATE" v-if="this.checkedName.indexOf('状态')!=-1">
+								<el-table-column label="状态" sortable width="100px" prop="STATE" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
 								<!--<el-table-column label="信息状态" sortable width="140px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
 								</el-table-column>-->
@@ -274,6 +274,11 @@
 			}
 		},
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    console.log(rowIndex) //表头行标号为0
+			    return 'text-align:center'
+			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
 				return(
 					<span>
@@ -543,6 +548,7 @@
 		mounted() {// 在页面挂载前就发起请求
 			this.requestData();
 			this.getKey();
+			this.$refs.navsheader.sessionGet();
 		},
 	}
 </script>

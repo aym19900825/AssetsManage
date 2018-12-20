@@ -2,7 +2,7 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header></navs_header>
+			<navs_header ref="navsheader"></navs_header>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
@@ -101,6 +101,10 @@
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="编码" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('编码')!=-1">
+									<template slot-scope="scope">
+										<p @click=view(scope.row)>{{scope.row.NUM}}
+										</p>
+									</template>
 								</el-table-column>
 								<el-table-column label="名称" sortable prop="TYPE" v-if="this.checkedName.indexOf('名称')!=-1">
 								</el-table-column>
@@ -131,7 +135,7 @@
 				</div>
 			</div>
 			<!--右侧内容显示 End-->
-			<categorymask :CATEGORY="CATEGORY" ref="child" @request="requestData" @reset="reset" v-bind:page=page></categorymask>
+			<categorymask :CATEGORY="CATEGORY" ref="categorymask" @request="requestData" @reset="reset" v-bind:page=page></categorymask>
 		</div>
 	</div>
 </template>
@@ -244,7 +248,7 @@
 				resourceDialogisShow: false,
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
 				resourceProps: {
-					children: "subDepts",
+					categorymaskren: "subDepts",
 					label: "simplename"
 				},
 				page: { //分页显示
@@ -271,15 +275,9 @@
 		        }],
 			}
 		},
-
-		mounted() {
-
-		},
-
 		methods: {
 			//表头居中
 			rowClass({ row, rowIndex}) {
-			    console.log(rowIndex) //表头行标号为0
 			    return 'text-align:center'
 			},
 			//表格滚动加载
@@ -334,8 +332,8 @@
 			//添加类别
 			openAddMgr() {
 				this.reset();
-				this.$refs.child.open(); // 方法1
-				this.$refs.child.visible();
+				this.$refs.categorymask.open(); // 方法1
+				this.$refs.categorymask.visible();
 				
 			},
 			//修改类别
@@ -354,8 +352,12 @@
 					return;
 				} else {
 					this.CATEGORY = this.selUser[0];
-					this.$refs.child.detail();
+					this.$refs.categorymask.detail();
 				}
+			},
+			//查看用戶
+			 view(item) {
+				this.$refs.categorymask.view(item);
 			},
 			//高级查询
 			modestsearch() {
@@ -484,6 +486,7 @@
 		},
 		mounted() {
 			this.requestData();
+			this.$refs.navsheader.sessionGet();
 		},
 	}
 </script>

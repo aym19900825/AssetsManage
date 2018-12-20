@@ -112,30 +112,30 @@
 						
 						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
-							<el-table :data="samplesList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table :data="samplesList" :header-cell-style="rowClass" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="样品子表ID" sortable width="200px" prop="ITEM_LINE_ID" v-if="this.checkedName.indexOf('样品子表ID')!=-1">
-								</el-table-column>
+								<!--<el-table-column label="样品子表ID" sortable width="200px" prop="ITEM_LINE_ID" v-if="this.checkedName.indexOf('样品子表ID')!=-1">
+								</el-table-column>-->
 								<el-table-column label="样品序号" sortable width="200px" prop="ITEMNUM" v-if="this.checkedName.indexOf('样品序号')!=-1">
 								</el-table-column>
-								<el-table-column label="样品类别" sortable width="200px" prop="TYPE" v-if="this.checkedName.indexOf('样品类别')!=-1">
+								<el-table-column label="样品类别" sortable width="140px" prop="TYPE" v-if="this.checkedName.indexOf('样品类别')!=-1">
 								</el-table-column>
-								<el-table-column label="样品名称" sortable width="200px" prop="DESCRIPTION" v-if="this.checkedName.indexOf('样品名称')!=-1">
+								<el-table-column label="样品名称" sortable width="140px" prop="DESCRIPTION" v-if="this.checkedName.indexOf('样品名称')!=-1">
 								</el-table-column>
-								<el-table-column label="型号" width="200px" prop="MODEL" sortable v-if="this.checkedName.indexOf('型号')!=-1">
+								<el-table-column label="型号" width="140px" prop="MODEL" sortable v-if="this.checkedName.indexOf('型号')!=-1">
 								</el-table-column>
-								<el-table-column label="数量" width="200px" prop="QUALITY" sortable v-if="this.checkedName.indexOf('数量')!=-1">
+								<el-table-column label="数量" width="100px" prop="QUALITY" sortable v-if="this.checkedName.indexOf('数量')!=-1">
 								</el-table-column>
 								<el-table-column label="收样人" sortable width="140px" prop="ACCEPT_PERSON" v-if="this.checkedName.indexOf('收样人')!=-1">
 								</el-table-column>
-								<el-table-column label="收样日期" sortable width="160px" :formatter="dateFormat" prop="ACCEPT_DATE" v-if="this.checkedName.indexOf('收样日期')!=-1">
+								<el-table-column label="收样日期" sortable width="140px" :formatter="dateFormat" prop="ACCEPT_DATE" v-if="this.checkedName.indexOf('收样日期')!=-1">
 								</el-table-column>
 								<el-table-column label="领样人" sortable width="140px" prop="GRANT_PERSON" v-if="this.checkedName.indexOf('领样人')!=-1">
 								</el-table-column>
-								<el-table-column label="领样日期" sortable width="160px" :formatter="dateFormat" prop="GRANT_DATE" v-if="this.checkedName.indexOf('领样日期')!=-1">
+								<el-table-column label="领样日期" sortable width="140px" :formatter="dateFormat" prop="GRANT_DATE" v-if="this.checkedName.indexOf('领样日期')!=-1">
 								</el-table-column>
-								<el-table-column label="状态" sortable width="140px" prop="STATE" v-if="this.checkedName.indexOf('状态')!=-1">
+								<el-table-column label="状态" sortable width="100px" prop="STATE" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
 								<!--<el-table-column label="信息状态" sortable width="140px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
 								</el-table-column>-->
@@ -192,10 +192,10 @@
 					'信息状态',
 				],
 				tableHeader: [
-					{
-						label: '样品子表ID',
-						prop: 'ITEM_LINE_ID'
-					},
+//					{
+//						label: '样品子表ID',
+//						prop: 'ITEM_LINE_ID'
+//					},
 					{
 						label: '样品序号',
 						prop: 'ITEMNUM'
@@ -248,7 +248,7 @@
 					ITEMNUM: '',//样品序号
 					DESCRIPTION: '',//样品名称
 					ACCEPT_PERSON: '',//收样人
-					ITEM_LINE_ID: '',//样品子表ID
+//					ITEM_LINE_ID: '',//样品子表ID
 					TYPE: '',//样品类别
 					ACCEPT_DATE: '',//收样日期
 				},
@@ -271,6 +271,11 @@
 			}
 		},
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    console.log(rowIndex) //表头行标号为0
+			    return 'text-align:center'
+			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
 				return(
 					<span>

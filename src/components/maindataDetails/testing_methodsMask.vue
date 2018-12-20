@@ -35,14 +35,15 @@
 											<template slot="prepend">信息状态</template>
 										</el-input>
 									</el-col>-->
-									<el-col :span="8" class="pull-right">
-										<el-input placeholder="自动获取" v-model="testingForm.M_NUM" :disabled="true">
-											<template slot="prepend">检验/检测方法编号</template>
+									<el-col :span="5" class="pull-right">
+										<el-input v-model="testingForm.M_NUM" @focus="hint" @input="hinthide">
+											<template slot="prepend">编码</template>
 										</el-input>
+										<span v-if="hintshow" style="color:rgb(103,194,58);font-size: 12px">可填写，若不填写系统将自动生成</span>
 									</el-col>
 								</el-row>
 
-								<el-row :gutter="5">
+								<el-row>
 									<el-col :span="8">
 										<el-form-item label="中文名称" prop="M_NAME" >
 											<el-input v-model="testingForm.M_NAME"></el-input>
@@ -62,38 +63,13 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								
-								<el-row :gutter="5" v-if="modify">
-									<el-col :span="8">
-										<el-form-item label="录入人机构">
+								<el-row>
+									<el-col :span="8" v-if="modifytitle">
+										<el-form-item label="机构">
 											<el-input v-model="testingForm.DEPARTMENT" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
-									<el-col :span="8">
-										<el-form-item label="录入人">
-											<el-input v-model="testingForm.ENTERBY" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="录入时间">
-											<el-input v-model="testingForm.ENTERDATE" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
 								</el-row>
-								<el-row :gutter="5" v-if="modify">
-									<el-col :span="8">
-										<el-form-item label="创建人">
-											<el-input v-model="testingForm.CHANGEBY" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="创建日期">
-											<el-input v-model="testingForm.CHANGEDATE" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
-
-								</el-row>
-
 							</el-collapse-item>
 							<el-collapse-item title="文档" name="2">
 								<!-- 字段列表 Begin-->
@@ -166,10 +142,8 @@
 									        <router-link :to="scope.row.ROUTE" target="_blank" class="blue font20" v-else="v-else">
 												<i class="icon-word"></i>
 											</router-link>
-
 									      </template>
 									    </el-table-column>
-
 									  </el-table>
 									</el-form>
 									<!-- 表格 Begin-->
@@ -184,12 +158,36 @@
 							        </el-pagination>
 								<!-- 文档Table-List End -->
 							</el-collapse-item>
+							<el-collapse-item title="其它" name="3"  v-if="personinfo">
+								<el-row>
+									<el-col :span="8">
+										<el-form-item label="录入人">
+											<el-input v-model="testingForm.ENTERBY" :disabled="true"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="录入时间">
+											<el-input v-model="testingForm.ENTERDATE" :disabled="true"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="修改人">
+											<el-input v-model="testingForm.CHANGEBY" :disabled="true"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="修改日期">
+											<el-input v-model="testingForm.CHANGEDATE" :disabled="true"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+							</el-collapse-item>
 						</el-collapse>
 					</div>
 					<div class="content-footer">
 							<el-button type="primary" @click="saveAndUpdate('testingForm')">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit('testingForm')">保存并添加</el-button>
-							<el-button v-if="modify" type="primary" @click="modifyversion('testingForm')">修订</el-button>
+							<el-button type="success" @click="saveAndSubmit('testingForm')" v-show="addtitle">保存并添加</el-button>
+							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('testingForm')">修订</el-button>
 							<el-button @click="close">取消</el-button>
 					</div>
 				</el-form>
@@ -247,7 +245,7 @@
 				up: false,
 				dialogVisible: false, //对话框
 				edit: true, //禁填
-				activeNames: ['1', '2'], //手风琴数量
+				activeNames: ['1', '2', '3'], //手风琴数量
 //				labelPosition: 'top', //表单标题在上方
 				addtitle: true,
 				modifytitle: false,
@@ -270,9 +268,18 @@
 						{ required: true, message: '请选择类别', trigger: 'change' }
 					]
 				},
+				hintshow:false,
+				personinfo:false
 			};
 		},
 		methods: {
+			//编码提示
+			hint(){
+				this.hintshow = true;
+			},
+			hinthide(){
+				this.hintshow = false;
+			},
 			visible() {//添加内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.testingForm.DEPARTMENT=res.data.deptName;
@@ -285,13 +292,15 @@
 						type:'error'
 					})
 				})
+				this.hintshow = false;
 				this.addtitle = true;
             	this.modifytitle = false;
             	this.modify = false;
-            	this.show = true;
+            	// this.show = true;
 			},
 			detail() { //修改内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
+					this.testingForm.DEPARTMENT=res.data.deptName;
 					this.testingForm.CHANGEBY=res.data.nickname;
 					var date=new Date();
 					this.testingForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
@@ -305,6 +314,7 @@
 						type:'error'
 					})
 				})
+				this.hintshow = false;
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.modify = true;
@@ -320,67 +330,67 @@
 			
 			modifyversion (testingForm) {//点击修改后给当前创建人和创建日期赋值
 				this.$refs[testingForm].validate((valid) => {
-		          if (valid) {
-		          	var TESTINGFORM=JSON.stringify(this.TESTINGFORM); //接过来的数据
-		          	console.log(TESTINGFORM);
- 					var testingForm=JSON.stringify(this.testingForm); //获取新新的数据
- 					console.log(testingForm);
-				 	if(testingForm==TESTINGFORM){
-				  	this.$message({
-							message: '没有修改不能修改',
-							type: 'warning'
-						});
-						return false;
-				  }else{
-					var url = this.basic_url + '/api-apps/app/inspectionMet/operate/upgraded';
-					this.$axios.post(url,this.testingForm).then((res) => {
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '保存成功',
-								type: 'success'
+			        if (valid) {
+			          	var TESTINGFORM=JSON.stringify(this.TESTINGFORM); //接过来的数据
+			          	console.log(TESTINGFORM);
+	 					var testingForm=JSON.stringify(this.testingForm); //获取新新的数据
+	 					console.log(testingForm);
+					 	if(testingForm==TESTINGFORM){
+					  		this.$message({
+								message: '没有修改不能修改',
+								type: 'warning'
 							});
-							//重新加载数据
-							this.show = false;
-							this.$emit('request');
-							this.$emit('reset');
+							return false;
+						}else{
+							var url = this.basic_url + '/api-apps/app/inspectionMet/operate/upgraded';
+							this.$axios.post(url,this.testingForm).then((res) => {
+								//resp_code == 0是后台返回的请求成功的信息
+								if(res.data.resp_code == 0) {
+									this.$message({
+										message: '保存成功',
+										type: 'success'
+									});
+									//重新加载数据
+									this.show = false;
+									this.$emit('request');
+									this.$emit('reset');
+								}
+							}).catch((err) => {
+								this.$message({
+									message: '网络错误，请重试',
+									type: 'error'
+								});
+							});
 						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
-					});
-					}
-			          } else {
+		          	} else {
 			            this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
 						});
-			          }
-			   });
+		          	}
+			   	});
 			},
 
 			loadMore () {//表格滚动加载
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page.currentPage++
-			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     this.requestData_doclinks()
-			   }
-			 },
+			    if (this.loadSign) {
+			        this.loadSign = false
+			     	this.page.currentPage++
+			     	if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+			       		return
+			     	}
+				    setTimeout(() => {
+				        this.loadSign = true
+				    }, 1000)
+			     	this.requestData_doclinks()
+			    }
+			},
 			sizeChange(val) {//页数
-		      this.page.pageSize = val;
-		      this.requestData_doclinks();
+		        this.page.pageSize = val;
+		      	this.requestData_doclinks();
 		    },
 		    currentChange(val) {//当前页
-		      this.page.currentPage = val;
-		      this.requestData_doclinks();
+		      	this.page.currentPage = val;
+		      	this.requestData_doclinks();
 		    },
 			searchinfo(index) {//查询展示出第1页数据
 				this.page.currentPage = 1;
@@ -446,9 +456,9 @@
 			},
 			saveRow (row) {//Table-操作列中的保存行
 				this.$refs['testing_filesForm'].validate((valid) => {
-		          if (valid) {
-					var url = this.basic_url + '/api-apps/app/doclinks/saveOrUpdate';
-//					var submitData = {
+		          	if (valid) {
+						var url = this.basic_url + '/api-apps/app/doclinks/saveOrUpdate';
+	//					var submitData = {
 //						"ID":row.ID,
 //					    "DOCLINKS": row.DOCLINKS,
 //						"DESCRIPTION": row.DESCRIPTION,
@@ -457,24 +467,24 @@
 //						"ENTERBY": row.ENTERBY,
 //					    "ENTERDATE": row.ENTERDATE,
 //					}
-					this.$axios.post(url, this.submitData).then((res) => {
-						if(res.data.resp_code == 0) {
+						this.$axios.post(url, this.submitData).then((res) => {
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '保存成功',
+									type: 'success'
+								});
+								//重新加载数据
+								this.requestData_doclinks();
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '保存成功',
-								type: 'success'
+								message: '网络错误，请重试',
+								type: 'error'
 							});
-							//重新加载数据
-							this.requestData_doclinks();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
-					});
-		          } else {
-		            return false;
-		          }
+			        } else {
+			            return false;
+			        }
 		        });
 			},
 
@@ -503,11 +513,14 @@
 
             	});
 			},
-
 			
 			//点击关闭按钮
 			close() {
 				this.show = false;
+				this.$emit('request');//关闭弹框去掉勾选
+			},
+			open(){
+				this.show = true;
 			},
 			toggle(e) {
 				if(this.isok1 == true) {
@@ -523,7 +536,6 @@
 				$(".mask_div").height(document.body.clientHeight - 60);
 				$(".mask_div").css("margin", "0%");
 				$(".mask_div").css("top", "60px");
-
 			},
 			//还原按钮
 			rebackDialog() {
@@ -533,7 +545,6 @@
 				$(".mask_div").css("height", "80%");
 				$(".mask_div").css("margin", "7% 10%");
 				$(".mask_div").css("top", "0");
-
 			},
 			//执行保存
 			save(testingForm) {
@@ -554,6 +565,22 @@
 								//重新加载数据
 								this.$emit('request');
 								this.visible();	
+							}else{
+								this.show = true;
+								if(res.data.resp_code == 1) {
+									//res.data.resp_msg!=''后台返回提示信息
+									if( res.data.resp_msg!=''){
+									 	this.$message({
+											message: res.data.resp_msg,
+											type: 'warning'
+									 	});
+									}else{
+										this.$message({
+											message:'相同数据不可重复添加！',
+											type: 'warning'
+										});
+									}
+								}
 							}
 						}).catch((err) => {
 							this.show = true;
@@ -570,13 +597,11 @@
 						});
 					}
 				});
-
 			},
 			//保存
 			saveAndUpdate(testingForm){
 				this.save(testingForm);
 				this.show = false;
-				
 			},
 			//保存并添加
 			saveAndSubmit(testingForm){

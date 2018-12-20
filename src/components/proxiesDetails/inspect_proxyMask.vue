@@ -20,8 +20,8 @@
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="委托单位" name="1">
-								<el-row :gutter="20" class="pb10">
-									<el-col :span="5" class="pull-right">
+								<el-row :gutter="5" class="pb10">
+									<el-col :span="3" class="pull-right">
 										<el-input v-model="dataInfo.VERSION" :disabled="true">
 											<template slot="prepend">版本</template>
 										</el-input>
@@ -39,14 +39,14 @@
 
 								</el-row>
 								
-									<el-row :gutter="70">
+									<el-row>
 										<el-col :span="8">
 											<!--<el-form-item label="名称" prop="V_NAME">
 												<el-input v-model="dataInfo.V_NAME">
 												</el-input>
 											</el-form-item>-->
 											<el-form-item label="名称" prop="V_NAME">
-												<el-input v-model="dataInfo.V_NAME" :disabled="true">
+												<el-input v-model="dataInfo.V_NAME" :disabled="true"width="100%">
 													<el-button slot="append" icon="el-icon-search" @click="getCustomer(1)"></el-button>
 												</el-input>
 											</el-form-item>
@@ -62,7 +62,7 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
-									<el-row :gutter="70">
+									<el-row :gutter="5">
 										<el-col :span="8">
 											<el-form-item label="姓名" prop="V_PERSON">
 												<el-input v-model="dataInfo.V_PERSON" :disabled="true">
@@ -80,7 +80,7 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
-									<el-row :gutter="70">
+									<el-row >
 										<el-col :span="8" style="display: none;">
 											<el-form-item label="委托单位编号" prop="VENDOR">
 												<el-input v-model="dataInfo.VENDOR"></el-input>
@@ -89,7 +89,7 @@
 									</el-row>
 							</el-collapse-item>
 							<el-collapse-item title="生产单位" name="2">
-								<el-row :gutter="70">
+								<el-row >
 									<el-col :span="8" style="display:none;">
 											<el-form-item label="生产单位编号" prop="PRODUCT_UNIT">
 												<el-input v-model="dataInfo.PRODUCT_UNIT"></el-input>
@@ -105,7 +105,7 @@
 								</el-row>
 							</el-collapse-item>
 							<el-collapse-item title="样品" name="3">
-									<el-row :gutter="70">
+									<el-row >
 										<el-col :span="8">
 											<el-form-item label="名称" prop="ITEM_NAME">
 												<el-input v-model="dataInfo.ITEM_NAME" :disabled="false">
@@ -119,7 +119,7 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
-									<el-row :gutter="70">
+									<el-row >
 										<el-col :span="8">
 											<el-form-item label="数量" prop="ITEM_QUALITY">
 												<el-input v-model="dataInfo.ITEM_QUALITY">
@@ -193,7 +193,7 @@
 											</el-button>
 										</div>
                                         
-										<el-table :data="dataInfo.INSPECT_PROXY_BASISList" row-key="ID" border stripe height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.INSPECT_PROXY_BASISList', order: 'descending'}">
+										<el-table :data="dataInfo.INSPECT_PROXY_BASISList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.INSPECT_PROXY_BASISList', order: 'descending'}">
 
 											<el-table-column prop="iconOperation" fixed label="" width="50px">
 												<template slot-scope="scope">
@@ -269,7 +269,7 @@
 											</el-button>
 										</div>
 
-										<el-table :data="dataInfo.INSPECT_PROXY_PROJECList" row-key="ID" border stripe height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.INSPECT_PROXY_PROJECList', order: 'descending'}">
+										<el-table :data="dataInfo.INSPECT_PROXY_PROJECList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.INSPECT_PROXY_PROJECList', order: 'descending'}">
 
 											<el-table-column prop="iconOperation" fixed label="" width="50px">
 												<template slot-scope="scope">
@@ -280,21 +280,17 @@
 
 											<el-table-column prop="S_NUM" label="标准编号" sortable width="150px">
 												<template slot-scope="scope">
-													<el-form-item>
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入委托方名称">
 													</el-input>
 													<span v-else="v-else">{{scope.row.S_NUM}}</span>
-													</el-form-item>
 												</template>
 											</el-table-column>
 
 											<el-table-column prop="S_DESC" label="标准内容" sortable>
 												<template slot-scope="scope">
-													<el-form-item>
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_DESC" placeholder="请输入委托方名称">	
 													</el-input>
 													<span v-else="v-else">{{scope.row.S_DESC}}</span>
-													</el-form-item>
 												</template>
 											</el-table-column>
 											
@@ -310,11 +306,9 @@
 											
 											<el-table-column prop="VERSION" label="版本" sortable width="120px">
 												<template slot-scope="scope">
-													<el-form-item>
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入分包方名称">
 													</el-input>
 													<span v-else="v-else">{{scope.row.VERSION}}</span>
-													</el-form-item>
 												</template>
 											</el-table-column>
 											
@@ -336,7 +330,7 @@
 											</el-button>
 										</div>
 
-										<el-table :data="dataInfo.CHECK_PROXY_CONTRACTList" row-key="ID" border stripe height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.CHECK_PROXY_CONTRACTList', order: 'descending'}">
+										<el-table :data="dataInfo.CHECK_PROXY_CONTRACTList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.CHECK_PROXY_CONTRACTList', order: 'descending'}">
 
 											<el-table-column prop="iconOperation" fixed label="" width="50px">
 												<template slot-scope="scope"><i class="el-icon-check" v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else="v-else"></i></template>
@@ -355,66 +349,52 @@
 
 											<el-table-column prop="PROXYNUM" label="委托书编号" sortable width="120px">
 												<template slot-scope="scope">
-													<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.PROXYNUM'">
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROXYNUM" placeholder="请输入委托方名称">
 													</el-input>
 													<span v-else="v-else">{{scope.row.PROXYNUM}}</span>
-													</el-form-item>
 												</template>
 											</el-table-column>
 
 											<el-table-column prop="VENDOR" label="分包方名称" sortable width="120px">
 												<template slot-scope="scope">
-													<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.VENDOR'">
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDOR" placeholder="请输入分包方名称">
 													</el-input>
 													<span v-else="v-else">{{scope.row.VENDOR}}</span>
-													</el-form-item>
 												</template>
 											</el-table-column>
 
 											<el-table-column prop="P_REMARKS" label="检验检测项目内容" sortable width="280px">
 												<template slot-scope="scope">
-													<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.P_REMARKS'" >
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入">
 													</el-input
 													<span v-else="v-else">{{scope.row.P_REMARKS}}</span>
-													</el-form-item>
 												</template>
 											</el-table-column>
 
 											<el-table-column prop="BASIS" label="检验检测技术依据" sortable width="220px">
 												<template slot-scope="scope">
-													<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.BASIS'">
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.BASIS" placeholder="请输入">
 													</el-input>
 													<span v-else="v-else">{{scope.row.BASIS}}</span>
-													</el-form-item>
 												</template>
 											</el-table-column>
 											<el-table-column prop="REQUIRES" label="对环境和操作人员要求" sortable width="220px">
 												<template slot-scope="scope">
-													<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.REQUIRES'">
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REQUIRES" placeholder="请输入内容"></el-input>
 													<span v-else="v-else">{{scope.row.REQUIRES}}</span>
-													</el-form-item>
 												</template>
 											</el-table-column>
 											<el-table-column prop="Q_TYPE" label="对分包报告/证书的要求" sortable width="220px">
 												<template slot-scope="scope">
-													<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.Q_TYPE'" >
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.Q_TYPE" placeholder="请输入内容"></el-input>
 													<span v-else="v-else">{{scope.row.Q_TYPE}}</span>
-													</el-form-item>
 												</template>
 											</el-table-column>
 							
 											<el-table-column prop="CHECKCOST" label="检验检测费用" sortable width="120px">
 												<template slot-scope="scope">
-													<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.CHECKCOST'" >
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input>
 													<span v-else="v-else">{{scope.row.CHECKCOST}}</span>
-													</el-form-item>
 												</template>
 											</el-table-column>
 													<!--<el-table-column prop="STATUS" label="信息状态" sortable width="120px">
@@ -441,7 +421,7 @@
 							</div>
 							<el-collapse-item name="8">
 								
-									<el-row :gutter="70">
+									<el-row >
 										<el-col :span="8">
 											<el-form-item label="检验报告编号" prop="REPORT_NUM">
 												<el-input v-model="dataInfo.REPORT_NUM"></el-input>
@@ -463,7 +443,7 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
-									<el-row :gutter="70">
+									<el-row >
 										<el-col :span="8">
 											<el-form-item label="交委托方分数" prop="REPORT_QUALITY">
 												<el-input v-model="dataInfo.REPORT_QUALITY"></el-input>
@@ -480,7 +460,7 @@
 										</el-col>
 										
 									</el-row>
-									<el-row :gutter="70">
+									<el-row >
 										<el-col :span="8">
 											<el-form-item label="检验收费" prop="CHECK_COST">
 												<el-input v-model="dataInfo.CHECK_COST" id="cost" @blur="toPrice"></el-input>
@@ -498,7 +478,7 @@
 										</el-col>
 
 									</el-row>
-									<el-row :gutter="70">
+									<el-row>
 										<el-col :span="8">
 											<el-form-item label="实收比例" prop="ACTUAL_PERCENT">
 												<el-input v-model="dataInfo.ACTUAL_PERCENT"></el-input>
@@ -518,7 +498,7 @@
 											</el-form-item>
 										</el-col>-->
 									</el-row>
-									<el-row :gutter="70">
+									<el-row>
 										<el-col :span="8">
 											<el-form-item label="主检组" prop="MAINGROUP">
 												<el-select v-model="dataInfo.MAINGROUP" placeholder="请选择" style="width: 100%;">
@@ -532,10 +512,15 @@
 													<el-input v-model="dataInfo.LEADER"></el-input>
 											</el-form-item>
 										</el-col>
+										<el-col :span="8" style="display:none;">
+											<el-form-item label="生产单位编号" prop="PRODUCT_UNIT">
+												<el-input v-model="dataInfo.PRODUCT_UNIT"></el-input>
+											</el-form-item>
+										</el-col>
 										
 									</el-row>
 									
-									<el-row :gutter="70">
+									<el-row >
 										<el-col :span="24">
 											<el-form-item label="备注" prop="MEMO">
 												<el-input type="textarea" rows="5" v-model="dataInfo.MEMO"></el-input>
@@ -545,7 +530,7 @@
 							</el-collapse-item>
 							<el-collapse-item title="其他" name="9">
 								<div class="accordion-body tab-content">
-									<el-row :gutter="70">
+									<el-row >
 										<el-col :span="8">
 											<el-form-item label="录入人" prop="ENTERBY">
 												<el-input v-model="dataInfo.ENTERBY" :disabled="true"></el-input>
@@ -562,7 +547,7 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
-									<el-row :gutter="70">
+									<el-row >
 										<el-col :span="8">
 											<el-form-item label="修改人" v-if="modify" prop="CHANGEBY">
 												<el-input v-model="dataInfo.CHANGEBY" :disabled="true"></el-input>
@@ -884,6 +869,7 @@
 			//点击关闭按钮
 			close() {
 				this.show = false;
+				this.$emit('request');
 			},
 			toggle(e) {
 				if(this.isok1 == true) {

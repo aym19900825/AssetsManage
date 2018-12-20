@@ -213,7 +213,7 @@
 												</el-table-column>
 												<el-table-column prop="step" label="序号" sortable width="120px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'qualifications.'+scope.$index + '.step'">
+														<el-form-item :prop="'qualifications.'+scope.$index + '.step'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.step" placeholder="请输入要求">
 															</el-input>
 															<span v-else="v-else">{{scope.row.step}}</span>
@@ -222,7 +222,7 @@
 												</el-table-column>
 												<el-table-column prop="c_num" label="证书编号" sortable width="120px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'qualifications.'+scope.$index + '.c_num'">
+														<el-form-item :prop="'qualifications.'+scope.$index + '.c_num'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.c_num" placeholder="请输入委托方名称">
 															</el-input>
 															<span v-else="v-else">{{scope.row.c_num}}</span>

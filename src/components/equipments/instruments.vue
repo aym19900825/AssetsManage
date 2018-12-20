@@ -3,7 +3,7 @@
 <div>
 	<div class="headerbg">
 		<vheader></vheader>
-		<navs_header></navs_header>
+		<navs_header ref='navsheader'></navs_header>
 	</div>
 	<div class="contentbg">
 		<!--左侧菜单内容显示 Begin-->
@@ -456,6 +456,7 @@
               $(".div-table").scroll(function(){
                 self.loadMore();
             })
+              this.$refs.navsheader.sessionGet();
         },
 	}
 </script>

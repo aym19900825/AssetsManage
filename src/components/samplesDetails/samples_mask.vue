@@ -601,6 +601,7 @@
 			//点击关闭按钮
 			close() {
 				this.show = false;
+				this.$emit('request');
 			},
 			// cancelForm() {
 			// 	this.show = false;

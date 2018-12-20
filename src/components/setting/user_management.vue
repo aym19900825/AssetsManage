@@ -2,7 +2,7 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header></navs_header>
+			<navs_header  ref="navsheader"></navs_header>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单调用 Begin-->
@@ -603,7 +603,7 @@
 			this.getKey();
 		},
 		mounted() {
-
+			this.$refs.navsheader.sessionGet();
 		}
 	}
 </script>

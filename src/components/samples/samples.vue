@@ -2,7 +2,7 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header></navs_header>
+			<navs_header ref="navsheader"></navs_header>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
@@ -548,6 +548,7 @@
 		mounted() {// 在页面挂载前就发起请求
 			this.requestData();
 			this.getKey();
+			this.$refs.navsheader.sessionGet();
 		},
 	}
 </script>

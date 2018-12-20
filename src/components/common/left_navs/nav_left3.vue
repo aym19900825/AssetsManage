@@ -88,7 +88,8 @@ export default {
 		}
 	},
 	mounted() {
-		
+		let item=this.leftNavs[0];
+		this.addClickNav(item);
 	}
 }
 </script>

@@ -60,50 +60,50 @@
 						</div>
 					</div>
 					<!-- 高级查询划出 Begin-->
-					<div v-show="search" class="pb10">
-						<el-form status-icon :model="searchList" label-width="70px">
-							<el-row :gutter="10" class="pb5">
+					<div v-show="search" class="pb5">
+						<el-form status-icon :model="searchList">
+							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-input v-model="searchList.V_NAME">
-										<template slot="prepend">委托单位名称</template>
-									</el-input>
+									<el-form-item label="委托单位名称" prop="V_NAME"  label-width="100px">
+										<el-input v-model="searchList.V_NAME"></el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-input v-model="searchList.ITEM_NAME">
-										<template slot="prepend">样品名称</template>
-									</el-input>
-								</el-col>
-								<!--<el-col :span="5">
-									<el-input v-model="searchList.S_ENGNAME">
-										<template slot="prepend">英文名称</template>
-									</el-input>
-								</el-col>-->
-								<el-col :span="5">
-									<el-input v-model="searchList.REPORT_NUM">
-										<template slot="prepend">检测报告编号</template>
-									</el-input>
+									<el-form-item label="样品名称" prop="ITEM_NAME" label-width="70px">
+										<el-input v-model="searchList.ITEM_NAME"></el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-input v-model="searchList.PROXYNUM">
-										<template slot="prepend">检测委托书编号</template>
-									</el-input>
+									<el-form-item label="检测报告编号" prop="REPORT_NUM" label-width="100px">
+										<el-input v-model="searchList.REPORT_NUM"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="5">
+									<el-form-item label="检测委托书编号" prop="PROXYNUM" label-width="110px">
+										<el-input v-model="searchList.PROXYNUM"></el-input>
+									</el-form-item>
 								</el-col>
 							</el-row>
 							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%">
+									<el-form-item label="完成日期" prop="COMPDATE" label-width="100px">
+										<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%">
 									</el-date-picker>
+									</el-form-item>
+									
 								</el-col>
 								<el-col :span="5">
-									<el-input v-model="searchList.ENTERBY">
-										<template slot="prepend">录入人</template>
-									</el-input>
+									<el-form-item label="录入人" prop="ENTERBY" label-width="70px">
+										<el-input v-model="searchList.ENTERBY"></el-input>
+									</el-form-item>
 								</el-col>
-								<el-col :span="3">
-									<el-select v-model="searchList.STATUS" placeholder="选择状态">
-										<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-										</el-option>
-									</el-select>
+								<el-col :span="5">
+									<el-form-item label="状态" prop="STATUS" label-width="100px">
+										<el-select v-model="searchList.STATUS" placeholder="选择状态" style="width: 100%">
+											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+											</el-option>
+										</el-select>
+									</el-form-item>
 								</el-col>
 								<el-col :span="2">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:1px">搜索</el-button>

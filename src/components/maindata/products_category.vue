@@ -101,6 +101,10 @@
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="编码" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('编码')!=-1">
+									<template slot-scope="scope">
+										<p @click=view(scope.row.ID,)>{{scope.row.NUM}}
+										</p>
+									</template>
 								</el-table-column>
 								<el-table-column label="名称" sortable prop="TYPE" v-if="this.checkedName.indexOf('名称')!=-1">
 								</el-table-column>
@@ -356,6 +360,10 @@
 					this.CATEGORY = this.selUser[0];
 					this.$refs.child.detail();
 				}
+			},
+			//查看用戶
+			 view(id) {
+				this.$refs.child.view(id);
 			},
 			//高级查询
 			modestsearch() {

@@ -58,7 +58,7 @@
 								</el-row>
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="就业指导书" prop="DOCLINKS_NUM">
+										<el-form-item label="作业指导书" prop="DOCLINKS_NUM">
 											<el-input v-model="testing_projectForm.DOCLINKS_NUM">
 												<el-button slot="append" icon="icon-search" @click="getCompany"></el-button>
 											</el-input>

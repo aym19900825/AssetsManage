@@ -5,6 +5,7 @@
 			<div class="mask_title_div clearfix">
 				<div class="mask_title" v-show="addtitle">添加产品类别</div>
 				<div class="mask_title" v-show="modifytitle">修改产品类别</div>
+				<div class="mask_title" v-show="viewtitle">查看产品类别</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -76,7 +77,7 @@
 									</el-col>
 								</el-row>
 							</el-collapse-item>
-							<el-collapse-item title="其它" name="2" v-if="personinfo">
+							<el-collapse-item title="其它" name="2" v-show="views">
 								<el-row>
 									<el-col :span="8">
 										<el-form-item label="录入人" prop="FAX">
@@ -199,7 +200,9 @@
 				resourceData: [], //数组，我这里是通过接口获取数据
 				category:{},
 				hintshow:false,
-				personinfo:false
+				personinfo:false,
+				views:false,
+				noviews: true,
 			};
 		},
 		methods: {
@@ -264,6 +267,25 @@
 					});
 				});
 				this.show = true;
+			},
+			//这是查看
+			view(dataid) {
+				this.addtitle = false;
+				this.viewtitle = true;
+				this.views = true; //
+				this.noviews = false;
+				this.edit = true;
+				this.noedit = true;
+				var url = this.basic_url + '/api-apps/app/workNot/' + dataid;
+				this.$axios.get(url, {}).then((res) => {
+					this.dataInfo = res.data;
+					this.show = true;
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
 			},
 			//点击修订按钮
 			modifyversion(CATEGORY) {

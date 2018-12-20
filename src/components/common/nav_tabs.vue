@@ -22,7 +22,7 @@
                   </el-dropdown-menu>
                 </el-dropdown>
             </button>
-            <a href="/" class="roll-nav roll-right J_tabExit"><i class="icon-back"></i>返回</a>
+            <a  onclick="history.back(-1);return false;"class="roll-nav roll-right J_tabExit"><i class="icon-back"></i>返回</a>
         </div>
     </div>
 </template>

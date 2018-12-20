@@ -296,7 +296,7 @@
 				this.addtitle = true;
             	this.modifytitle = false;
             	this.modify = false;
-            	this.show = true;
+            	// this.show = true;
 			},
 			detail() { //修改内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
@@ -518,6 +518,9 @@
 			close() {
 				this.show = false;
 			},
+			open(){
+				this.show = true;
+			},
 			toggle(e) {
 				if(this.isok1 == true) {
 					this.maxDialog();
@@ -561,6 +564,22 @@
 								//重新加载数据
 								this.$emit('request');
 								this.visible();	
+							}else{
+								this.show = true;
+								if(res.data.resp_code == 1) {
+									//res.data.resp_msg!=''后台返回提示信息
+									if( res.data.resp_msg!=''){
+									 	this.$message({
+											message: res.data.resp_msg,
+											type: 'warning'
+									 	});
+									}else{
+										this.$message({
+											message:'相同数据不可重复添加！',
+											type: 'warning'
+										});
+									}
+								}
 							}
 						}).catch((err) => {
 							this.show = true;

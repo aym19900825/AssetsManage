@@ -51,41 +51,41 @@
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
 						<el-form status-icon :model="searchList" label-width="45px">
-							<el-row :gutter="10">
-								<el-col :span="6">
+							<el-row>
+								<el-col :span="5">
 									<el-form-item label="编码" prop="M_NUM">
 										<el-input v-model="searchList.M_NUM">
 										</el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="6">
-									<el-form-item label="中文名称" prop="M_NAME" label-width="70px">
+									<el-form-item label="中文名称" prop="M_NAME" label-width="90px">
 										<el-input v-model="searchList.M_NAME">
 										</el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="6">
-									<el-form-item label="英文名称" prop="M_ENAME" label-width="70px">
+									<el-form-item label="英文名称" prop="M_ENAME" label-width="90px">
 										<el-input v-model="searchList.M_ENAME">
 										</el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="6">
-									<el-form-item label="类别" prop="M_TYPE">
+									<el-form-item label="类别" prop="M_TYPE" label-width="60px">
 										<el-input v-model="searchList.M_TYPE">
 										</el-input>
 									</el-form-item>
 								</el-col>
 							</el-row>
 							<el-row>
-								<el-col :span="6">
-									<el-form-item label="版本" prop="VERSION">
-										<el-input v-model="searchList.VERSION">
+								<el-col :span="5">
+									<el-form-item label="版本" prop="VERSION" >
+										<el-input v-model="searchList.VERSION" >
 										</el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="6">
-									<el-form-item label="机构" prop="DEPARTMENT" label-width="70px">
+									<el-form-item label="机构" prop="DEPARTMENT" label-width="90px">
 										<el-select clearable v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="请选择">
 										    <el-option
 										      v-for="item in options5"
@@ -103,7 +103,7 @@
 									</el-select>
 								</el-col> -->
 								<el-col :span="3">
-									<el-button type="primary" @click="searchinfo" size="small" style="margin-top: 2px" class="pull-right">搜索</el-button>
+									<el-button type="primary" @click="searchinfo" size="small" style="margin: 0 20px">搜索</el-button>
 								</el-col>
 							</el-row>
 						</el-form>

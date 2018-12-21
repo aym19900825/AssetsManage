@@ -85,7 +85,7 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格 Begin-->
-							<el-table :header-cell-style="rowClass" :data="WORK_INSTRUCTION" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'WORK_INSTRUCTION', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table :header-cell-style="rowClass" :data="WORK_INSTRUCTIONList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'WORK_INSTRUCTIONList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="分发号" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('分发号')!=-1">
@@ -97,13 +97,13 @@
 								<el-table-column label="文件名称" sortable prop="DESCRIPTION" v-if="this.checkedName.indexOf('文件名称')!=-1">
 								</el-table-column>
 								</el-table-column>
-								<el-table-column label="版本" width="100" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本号')!=-1">
+								<el-table-column label="版本" width="100" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1">
 								</el-table-column>
-								<el-table-column label="状态" width="185" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('状态')!=-1">
-								</el-table-column>
+								<!-- <el-table-column label="状态" width="185" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('状态')!=-1">
+								</el-table-column> -->
 								<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>
-								<el-table-column label="机构" width="120" prop="DEPARTMENT" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('机构')!=-1">
+								<el-table-column label="机构" width="120" prop="DEPARTMENT" sortable v-if="this.checkedName.indexOf('机构')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
@@ -114,7 +114,7 @@
 				</div>
 			</div>
 			<!--右侧内容显示 End-->
-			<categorymask :CATEGORY="CATEGORY" ref="categorymask" @request="requestData" @reset="reset" v-bind:page=page></categorymask>
+			<instructionmask :WORK_INSTRUCTION="WORK_INSTRUCTION" ref="instructionmask" @request="requestData" @reset="reset" v-bind:page=page></instructionmask>
 		</div>
 	</div>
 </template>
@@ -123,7 +123,7 @@
 	import vheader from '../common/vheader.vue'
 	import navs_header from '../common/nav_tabs.vue'
 	import navs_left from '../common/left_navs/nav_left2.vue'
-	import categorymask from '../maindataDetails/product_categoryMask.vue'
+	import instructionmask from '../maindataDetails/work_instructionMask.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	export default {
 		name: 'customer_management',
@@ -131,7 +131,7 @@
 			vheader,
 			navs_left,
 			navs_header,
-			categorymask,
+			instructionmask,
 			tableControle,
 		},
 		data() {
@@ -154,7 +154,7 @@
 					'分发号',
 					'文件名称',
 					'版本',
-					'状态',
+					// '状态',
 					'录入时间',
 					'机构'
 				],
@@ -170,10 +170,10 @@
 						label: '版本',
 						prop: 'VERSION'
 					},
-					{
-						label: '状态',
-						prop: 'DEPARTMENT'
-					},
+					// {
+					// 	label: '状态',
+					// 	prop: 'DEPARTMENT'
+					// },
 					{
 						label: '录入时间',
 						prop: 'ENTERDATE'
@@ -184,11 +184,13 @@
 					}
 				],
 				selUser: [],
-				WORK_INSTRUCTION: [],
+				WORK_INSTRUCTIONList: [],
 				search: false,
 				show: false,
 				down: true,
 				up: false,
+				isShow: false,
+				ismin: true,
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
 				searchList: { //点击高级搜索后显示的内容
 					DESCRIPTION:'',
@@ -200,7 +202,7 @@
 				resourceDialogisShow: false,
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
 				resourceProps: {
-					categorymaskren: "subDepts",
+					instructionmaskren: "subDepts",
 					label: "simplename"
 				},
 				page: { //分页显示
@@ -208,7 +210,7 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-				CATEGORY: {},//修改子组件时传递数据
+				WORK_INSTRUCTION: {},//修改子组件时传递数据
 				options5: [{
 		            value: '金化站',
 		            label: '金化站'
@@ -264,10 +266,10 @@
 			},
 			//清空
 			reset() {
-				this.CATEGORY = {
+				this.WORK_INSTRUCTION = {
 					ID: '',
 					NUM: '',
-					TYPE: '',
+					DESCRIPTION: '',
 					STATUS: '活动',
 					VERSION: '1',
 					DEPARTMENT: '',
@@ -276,17 +278,16 @@
 					CHANGEBY: '',
 					CHANGEDATE: ''
 				};
-				if(this.$refs['CATEGORY'] !== undefined) {
-					this.$refs['CATEGORY'].resetFields();
+				if(this.$refs['WORK_INSTRUCTION'] !== undefined) {
+					this.$refs['WORK_INSTRUCTION'].resetFields();
 				}
 
 			},
 			//添加类别
 			openAddMgr() {
 				this.reset();
-				this.$refs.categorymask.open(); // 方法1
-				this.$refs.categorymask.visible();
-				
+				this.$refs.instructionmask.open(); // 方法1
+				this.$refs.instructionmask.visible();
 			},
 			//修改类别
 			modify() {
@@ -303,13 +304,13 @@
 					});
 					return;
 				} else {
-					this.CATEGORY = this.selUser[0];
-					this.$refs.categorymask.detail();
+					this.WORK_INSTRUCTION = this.selUser[0];
+					this.$refs.instructionmask.detail();
 				}
 			},
 			//查看
 			 view(item) {
-				this.$refs.categorymask.view(item);
+				this.$refs.instructionmask.view(item);
 			},
 			//高级查询
 			modestsearch() {
@@ -327,7 +328,7 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/productType/deletes';
+					var url = this.basic_url + '/api-apps/app/workIns/deletes';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -351,6 +352,7 @@
 							params: data
 						}).then((res) => { //.delete 传数据方法
 							//resp_code == 0是后台返回的请求成功的信息
+							console.log(res.data.resp_code);
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '删除成功',
@@ -399,13 +401,11 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					TYPE: this.searchList.TYPE,
+					DESCRIPTION: this.searchList.DESCRIPTION,
+					VERSION:this.searchList.VERSION,
 					DEPARTMENT: this.searchList.DEPARTMENT,
-					// PHONE: this.searchList.PHONE,
-					// CONTACT_ADDRESS: this.searchList.CONTACT_ADDRESS,
-					// STATUS: this.searchList.STATUS
 				}
-				var url = this.basic_url + '/api-apps/app/productType';
+				var url = this.basic_url + '/api-apps/app/workIns';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
@@ -428,7 +428,7 @@
 							}
 						}
 					}
-					this.categoryList = newarr;
+					this.WORK_INSTRUCTIONList = newarr;
 				}).catch((wrong) => {})
 			},
 			handleNodeClick(data) {},

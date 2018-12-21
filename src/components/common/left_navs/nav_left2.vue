@@ -50,6 +50,10 @@ export default {
 					navicon: 'icon-file-text',
 					navtitle: '检验/检测方法',
 					navherf: '/testing_methods'
+				}, {
+					navicon: 'icon-file-text',
+					navtitle: '作业指导书',
+					navherf: '/work_instruction'
 				}
 			],
         selectedNav: {}

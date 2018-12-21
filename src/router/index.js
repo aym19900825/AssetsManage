@@ -11,6 +11,7 @@ import products from '@/components/maindata/products'//产品
 import testing_standard from '@/components/maindata/testing_standard'//检验/检测标准
 import testing_projects from '@/components/maindata/testing_projects'//检验/检测项目
 import testing_methods from '@/components/maindata/testing_methods'//检验/检测方法
+import work_instruction from '@/components/maindata/work_instruction'//检验/检测方法
 
 
 import customer_management from '@/components/setting/customer_management'//客户管理
@@ -120,6 +121,11 @@ Vue.use(Router)
       path: '/testing_methods',
       name: 'testing_methods',
       component: testing_methods
+    },
+    {//作业指导书
+      path: '/work_instruction',
+      name: 'work_instruction',
+      component: work_instruction
     },
     {//自动编号设置
       path: '/number_settings',

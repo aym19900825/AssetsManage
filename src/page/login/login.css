@@ -30,9 +30,12 @@
 .left-img{
     background-image:url(../../assets/img/login-left.png);
     background-repeat: no-repeat;
-    width:563px;
-    height:473px;
+    width: 591px;
+    height: 473px;
     float: left;
+    margin-top: 52px;
+    margin-left: 77px;
+    background-size: 99%;
 }
 
 .loginscreen.middle-box {

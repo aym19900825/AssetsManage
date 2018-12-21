@@ -505,7 +505,7 @@
 					TASKNUM: '',
 					SOLUTION: '',
 					COMPDATE: '',
-					STATE: '1',
+					STATE: '草稿',
 					ENTERBY: '',
 					STATUS: '',
 					WORK_NOTICE_CHECKBASISList: [],
@@ -548,7 +548,7 @@
 					TASKNUM: '',
 					SOLUTION: '',
 					COMPDATE: '',
-					STATE: '1',
+					STATE: '草稿',
 					ENTERBY: '',
 					STATUS: '',
 					WORK_NOTICE_CHECKBASISList: [],
@@ -787,7 +787,9 @@
 						return false;
 			        	}else{
 					this.dataInfo.CHECTCOST = this.initcost;
-					this.dataInfo.STATE = this.dataInfo.STATE == "1" ? '草稿' : '未知';
+					if( this.dataInfo.STATE == "草稿" ){
+						this.dataInfo.STATE = this.dataInfo.STATE == "1"
+					}
 					var url = this.basic_url + '/api-apps/app/workNot/saveOrUpdate';
 					this.$axios.post(url, this.dataInfo).then((res) => {
 						if(res.data.resp_code == 0) {

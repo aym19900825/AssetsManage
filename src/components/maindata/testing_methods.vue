@@ -290,7 +290,7 @@
 		methods: {
 			//表头居中
 			rowClass({ row, rowIndex}) {
-			    console.log(rowIndex) //表头行标号为0
+			    // console.log(rowIndex) //表头行标号为0
 			    return 'text-align:center'
 			},
 			//表格滚动加载

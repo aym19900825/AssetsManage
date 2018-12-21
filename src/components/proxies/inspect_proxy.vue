@@ -90,7 +90,6 @@
 										<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%">
 									</el-date-picker>
 									</el-form-item>
-									
 								</el-col>
 								<el-col :span="5">
 									<el-form-item label="录入人" prop="ENTERBY" label-width="70px">

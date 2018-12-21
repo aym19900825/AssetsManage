@@ -5,6 +5,7 @@
 			<div class="mask_title_div clearfix">
 				<div class="mask_title" v-show="addtitle">添加返样</div>
 				<div class="mask_title" v-show="modifytitle">修改返样</div>
+				<div class="mask_title" v-show="viewtitle">查看返样</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -207,7 +208,7 @@
 				labelPosition: 'right', //表单标题在上方
 				addtitle: true,
 				modifytitle: false,
-				
+				viewtitle: false, //查看弹出框title
 				samples_itemlineForm:{//样品子表数据组
 					inspectionList: []
 				},
@@ -308,10 +309,13 @@
 						type:'error'
 					})
 				})
+				this.reset();
 				this.addtitle = true;
             	this.modifytitle = false;
             	this.modify=false;
-            	this.show = !this.show;
+            	this.show = true;
+            	this.edit = true;
+				this.noedit = false;
 			},
 			detail() { //修改内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
@@ -324,13 +328,26 @@
 						type:'error'
 					})
 				})
+				this.viewtitle = false;
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.modify = true;
-				this.samplesForm.STATUS=this.samplesForm.STATUS=="1"?'活动':'不活动';
+				this.show = true;
+				this.edit = true;
+				this.noedit = false;
+			},
+			//这是查看
+			view(data) {
+				this.addtitle = false;
+				this.viewtitle = true;
+				this.views = true; //
+				this.noviews = false;
+				this.edit = true;
+				this.noedit = true;
+				console.log(data);
+//				this.samplesForm = data;
 				this.show = true;
 			},
-		
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -355,13 +372,7 @@
 				this.show = false;
 				this.$emit('request');
 			},
-			cancelForm() {
-				this.show = false;
-				this.reset();
-			},
-			reset() {
-				this.show = false;
-			},
+			
 			toggle(e) {
 				if(this.isok1 == true) {
 					this.maxDialog();

@@ -58,7 +58,7 @@
 										<template slot="prepend">名称</template>
 									</el-input> -->
 									<el-form-item label="名称" prop="TYPE">
-										<el-input v-model="searchList.TYPE" :disabled="noedit"></el-input>
+										<el-input v-model="searchList.TYPE"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">

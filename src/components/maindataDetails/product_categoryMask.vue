@@ -269,7 +269,6 @@
 					//深拷贝数据
 					let _obj = JSON.stringify(this.CATEGORY);
         			this.category = JSON.parse(_obj);
-        			console.log(this.category);
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',

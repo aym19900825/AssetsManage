@@ -115,6 +115,10 @@
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="样品子表ID" sortable width="140px" prop="ITEM_LINE_ID" v-if="this.checkedName.indexOf('样品子表ID')!=-1">
+									<template slot-scope="scope">
+										<p @click=view(scope.row)>{{scope.row.ITEM_LINE_ID}}
+										</p>
+									</template>
 								</el-table-column>
 								<el-table-column label="样品序号" sortable width="200px" prop="ITEMNUM" v-if="this.checkedName.indexOf('样品序号')!=-1">
 								</el-table-column>
@@ -281,7 +285,6 @@
 		methods: {
 			//表头居中
 			rowClass({ row, rowIndex}) {
-			    console.log(rowIndex) //表头行标号为0
 			    return 'text-align:center'
 			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
@@ -340,6 +343,10 @@
 			currentChange(val) {//分页，当前页
 				this.page.currentPage = val;
 				this.requestData();
+			},
+			//查看页面
+			view(data){
+				this.$refs.child.view(data);
 			},
 			searchinfo(index) {//高级查询
 				this.page.currentPage = 1;

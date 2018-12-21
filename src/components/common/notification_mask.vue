@@ -19,7 +19,7 @@
 				<div class="accordion">
 					<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo"  class="demo-form-inline" status-icon inline-message>
 						<el-collapse v-model="activeNames">
-							<el-collapse-item title="类别" name="1">
+							<el-collapse-item title="类型" name="1">
 								<el-row :gutter="20" class="pb10">
 
 									<!-- <el-col :span="5" class="pull-right">
@@ -624,7 +624,7 @@
 					VERSION: '',
 					S_NAME: '',
 					S_ENGNAME: 'sss',
-					STATUS: '',
+					STATUS: '1',
 					isEditing: true
 				};
 				this.dataInfo.WORK_NOTICE_CHECKBASISList.push(obj);
@@ -636,7 +636,7 @@
 					P_DESC: '',
 					REMARKS: '',
 					VERSION: '',
-					STATUS: '',
+					STATUS: '1',
 					isEditing: true
 				};
 				this.dataInfo.WORK_NOTICE_CHECKPROJECTList.push(obj);

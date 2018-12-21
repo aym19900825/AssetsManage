@@ -355,7 +355,7 @@
 					if(valid) {
 					var product = JSON.stringify(this.product); 
  					var PRODUCT = JSON.stringify(this.PRODUCT);
- 					console.log(product);console.log(PRODUCT);
+ 					// console.log(product);console.log(PRODUCT);
 					 	if(product == PRODUCT){
 						  	this.$message({
 								message: '没有修改不能修改',

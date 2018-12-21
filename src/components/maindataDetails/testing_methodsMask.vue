@@ -361,9 +361,9 @@
 				this.$refs[testingForm].validate((valid) => {
 			        if (valid) {
 			          	var TESTINGFORM=JSON.stringify(this.TESTINGFORM); //接过来的数据
-			          	console.log(TESTINGFORM);
+			          	// console.log(TESTINGFORM);
 	 					var testingForm=JSON.stringify(this.testingForm); //获取新新的数据
-	 					console.log(testingForm);
+	 					// console.log(testingForm);
 					 	if(testingForm==TESTINGFORM){
 					  		this.$message({
 								message: '没有修改不能修改',
@@ -442,7 +442,7 @@
 				this.$axios.get(url, {}).then((res) => {
 					this.selectData = res.data;
 				}).catch(error => {
-					console.log('请求失败');
+					// console.log('请求失败');
 				})
 			},
 

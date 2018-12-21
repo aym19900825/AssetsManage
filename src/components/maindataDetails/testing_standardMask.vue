@@ -336,7 +336,6 @@
 			//添加点击按钮显示弹窗
 			visible() {
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					console.log(res);
 //					this.dataInfo.DEPARTMENT=res.data.companyName;
 				    this.dataInfo.DEPARTMENT=res.data.deptName;
 					this.dataInfo.ENTERBY=res.data.nickname;

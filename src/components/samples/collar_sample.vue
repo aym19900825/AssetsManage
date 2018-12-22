@@ -276,7 +276,6 @@
 		methods: {
 			//表头居中
 			rowClass({ row, rowIndex}) {
-			    console.log(rowIndex) //表头行标号为0
 			    return 'text-align:center'
 			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
@@ -390,7 +389,8 @@
 			},
 			//查看
 			view(data) {
-				this.$refs.child.view(data);
+				this.samplesForm = data; 
+				this.$refs.child.view();
 			},
 
 			//高级查询

@@ -332,15 +332,14 @@
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
 			},
 			//这是查看
-			view(dataid) {
+			view() {
 				this.addtitle = false;
 				this.viewtitle = true;
 				this.views = true; //
 				this.noviews = false;
 				this.edit = true;
 				this.noedit = true;
-				this.samplesForm = data;
-				var url = this.basic_url + '/api-apps/app/item/' + dataid;
+				this.show=true;
 			},
 			childMethods() {//添加内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{

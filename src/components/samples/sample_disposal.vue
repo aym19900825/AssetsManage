@@ -344,10 +344,7 @@
 				this.page.currentPage = val;
 				this.requestData();
 			},
-			//查看页面
-			view(data){
-				this.$refs.child.view(data);
-			},
+			
 			searchinfo(index) {//高级查询
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
@@ -394,6 +391,11 @@
 					this.samplesForm = this.selMenu[0]; 
 					this.$refs.child.detail();
 				}
+			},
+			//查看页面
+			view(data){
+				this.samplesForm = data; 
+				this.$refs.child.view();
 			},
 			//高级查询
 			modestsearch() {

@@ -386,7 +386,8 @@
 			},
 			//查看
 			view(data) {
-				this.$refs.child.view(data);
+				this.samplesForm = data; 
+				this.$refs.child.view();
 			},
 			//高级查询
 			modestsearch() {

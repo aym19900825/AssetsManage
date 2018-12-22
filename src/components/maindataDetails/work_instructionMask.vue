@@ -365,7 +365,7 @@
 				this.show = true;
 			},
 			//这是查看
-			view(item) {
+			view() {
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;
@@ -373,7 +373,6 @@
 				this.noedit = true;//表单内容
 				this.views = true;//录入修改人信息
 				this.noviews = false;//按钮
-				this.WORK_INSTRUCTION = item;
 				this.show = true;				
 			},
 			//点击修订按钮

@@ -346,7 +346,7 @@
 				}
 			},
 			//这是查看
-			view(item) {
+			view() {
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;
@@ -354,7 +354,6 @@
 				this.noedit = true;//表单内容
 				this.views = true;//录入修改人信息
 				this.noviews = false;//按钮
-				this.testingForm = item;
 				this.show = true;				
 			},
 			modifyversion (testingForm) {//点击修改后给当前创建人和创建日期赋值

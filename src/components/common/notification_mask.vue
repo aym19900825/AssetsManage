@@ -19,7 +19,7 @@
 				<div class="accordion">
 					<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo"  class="demo-form-inline" status-icon inline-message>
 						<el-collapse v-model="activeNames">
-							<el-collapse-item title="类别" name="1">
+							<el-collapse-item title="类型" name="1">
 								<el-row :gutter="20" class="pb10">
 
 									<!-- <el-col :span="5" class="pull-right">
@@ -505,7 +505,7 @@
 					TASKNUM: '',
 					SOLUTION: '',
 					COMPDATE: '',
-					STATE: '1',
+					STATE: '草稿',
 					ENTERBY: '',
 					STATUS: '',
 					WORK_NOTICE_CHECKBASISList: [],
@@ -548,7 +548,7 @@
 					TASKNUM: '',
 					SOLUTION: '',
 					COMPDATE: '',
-					STATE: '1',
+					STATE: '草稿',
 					ENTERBY: '',
 					STATUS: '',
 					WORK_NOTICE_CHECKBASISList: [],
@@ -624,7 +624,7 @@
 					VERSION: '',
 					S_NAME: '',
 					S_ENGNAME: 'sss',
-					STATUS: '',
+					STATUS: '1',
 					isEditing: true
 				};
 				this.dataInfo.WORK_NOTICE_CHECKBASISList.push(obj);
@@ -636,7 +636,7 @@
 					P_DESC: '',
 					REMARKS: '',
 					VERSION: '',
-					STATUS: '',
+					STATUS: '1',
 					isEditing: true
 				};
 				this.dataInfo.WORK_NOTICE_CHECKPROJECTList.push(obj);
@@ -787,7 +787,9 @@
 						return false;
 			        	}else{
 					this.dataInfo.CHECTCOST = this.initcost;
-					this.dataInfo.STATE = this.dataInfo.STATE == "1" ? '草稿' : '未知';
+					if( this.dataInfo.STATE == "草稿" ){
+						this.dataInfo.STATE = this.dataInfo.STATE == "1"
+					}
 					var url = this.basic_url + '/api-apps/app/workNot/saveOrUpdate';
 					this.$axios.post(url, this.dataInfo).then((res) => {
 						if(res.data.resp_code == 0) {

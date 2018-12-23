@@ -371,8 +371,9 @@
 				}
 			},
 			//查看
-			 view(item) {
-				this.$refs.child.view(item);
+			 view(data) {
+			 	this.PRODUCT = data;
+				this.$refs.child.view();
 			},
 			//高级查询
 			modestsearch() {

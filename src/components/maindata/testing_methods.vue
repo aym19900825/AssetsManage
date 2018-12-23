@@ -367,7 +367,8 @@
 				}
 			},
 			//查看
-			 view(item) {
+			 view(data) {
+			 	this.testingForm = data;
 				this.$refs.child.view(item);
 			},
 			//高级查询

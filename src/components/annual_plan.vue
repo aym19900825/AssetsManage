@@ -150,6 +150,10 @@
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="编号" sortable width="100px" prop="WP_NUM" v-if="this.checkedName.indexOf('编号')!=-1">
+									<template slot-scope="scope">
+										<p @click=view(scope.row.ID)>{{scope.row.WP_NUM}}
+										</p>
+									</template>
 								</el-table-column>
 								<el-table-column label="描述" sortable width="200px" prop="DESCRIPTION" v-if="this.checkedName.indexOf('描述')!=-1">
 								</el-table-column>
@@ -310,7 +314,6 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-				aaaData:[],
 			}
 		},
 	methods: {
@@ -351,14 +354,13 @@
 			},
 			//修改用戶
 			modify() {
-				this.aaaData = this.selUser;
-				if(this.aaaData.length == 0) {
+				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
 						type: 'warning'
 					});
 					return;
-				} else if(this.aaaData.length > 1) {
+				} else if(this.selUser.length > 1) {
 					this.$message({
 						message: '不可同时修改多个数据',
 						type: 'warning'
@@ -367,6 +369,10 @@
 				} else {
 					this.$refs.child.detail(this.selUser[0].ID);
 				}
+			},
+			//查看
+			view(id) {
+				this.$refs.child.view(id);
 			},
 			//高级查询
 			modestsearch() {

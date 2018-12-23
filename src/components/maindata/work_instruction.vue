@@ -309,8 +309,9 @@
 				}
 			},
 			//查看
-			 view(item) {
-				this.$refs.instructionmask.view(item);
+			 view(data) {
+			 	this.WORK_INSTRUCTION =data;
+				this.$refs.instructionmask.view();
 			},
 			//高级查询
 			modestsearch() {

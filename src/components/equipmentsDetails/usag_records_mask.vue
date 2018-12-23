@@ -19,7 +19,7 @@
 						<!-- 设备header信息 -->
 						<el-collapse v-model="activeNames">
                             <el-collapse-item name="1">
-                                <el-form-item label-width="120px" v-for="item in basicInfo" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
+                                <el-form-item label-width="120px" v-for="item in basicInfo" :key="item.id" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
 									<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'" @change="selChange">
 										<el-option v-for="item in item.option"
 										:key="item.ID"
@@ -176,7 +176,7 @@
 
 
                             <el-collapse-item name="4" v-show="modify">
-                                <el-form-item label-width="120px" v-for="item in otherInfo" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
+                                <el-form-item label-width="120px" v-for="item in otherInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
                                     <el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" disabled></el-input>
                                     <el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" disabled>
                                     </el-date-picker>

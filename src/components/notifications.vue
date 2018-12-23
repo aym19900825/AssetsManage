@@ -133,7 +133,7 @@
 								<el-table-column label="工作任务通知书编号" width="180" sortable prop="N_CODE" v-if="this.checkedName.indexOf('工作任务通知书编号')!=-1">
 
 									<template slot-scope="scope">
-										<p @click=view(scope.row.ID,)>{{scope.row.N_CODE}}
+										<p @click=view(scope.row.ID)>{{scope.row.N_CODE}}
 										</p>
 									</template>
 								</el-table-column>
@@ -304,7 +304,6 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-				aaaData: [],
 				treeData: [],
 				options5: [{
 		            value: '金化站',
@@ -405,7 +404,7 @@
 					this.$refs.child.detail(this.selUser[0].ID);
 				}
 			},
-			//查看用戶
+			//查看
 			 view(id) {
 				this.$refs.child.view(id);
 			},

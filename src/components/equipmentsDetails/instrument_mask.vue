@@ -34,13 +34,13 @@
 										</el-input>
 									</el-col>
 								</el-row>
-								<el-form-item v-for="item in basicInfo" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
+								<el-form-item v-for="item in basicInfo" :key="item.id" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
 									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && item.prop !='A_PRICE' "></el-input>
 									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'"></el-input>
 									<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'">
 									</el-date-picker>
 									<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'">
-										<el-radio :label="it.label" v-for="it in item.opts"></el-radio>
+										<el-radio :label="it.label" v-for="it in item.opts" :key="it.id"></el-radio>
 									</el-radio-group>
 									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && item.prop =='A_PRICE' " @blur="handlePrice"></el-input>
 								</el-form-item>
@@ -48,13 +48,13 @@
 
 							<!-- 设备保管人员情况 -->
 							<el-collapse-item title="设备保管人员情况" name="2">
-								<el-form-item v-for="item in keeperInfo" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
+								<el-form-item v-for="item in keeperInfo" :label="item.label":key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
 									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'"></el-input>
 									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'"></el-input>
 									<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'">
 									</el-date-picker>
 									<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'">
-										<el-radio :label="it.val" v-for="it in item.opts">{{it.label}}</el-radio>
+										<el-radio :label="it.val" v-for="it in item.opts" :key="it.id">{{it.label}}</el-radio>
 									</el-radio-group>
 								</el-form-item>
 							</el-collapse-item>
@@ -78,7 +78,7 @@
 							
 							<!-- 其他信息 -->
 							<el-collapse-item title="其他" name="4">
-								<el-form-item v-for="item in otherInfo" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
+								<el-form-item v-for="item in otherInfo" :key="item.id" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
 									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" disabled></el-input>
 									<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" disabled>
 									</el-date-picker>

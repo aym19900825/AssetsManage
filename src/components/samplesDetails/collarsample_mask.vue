@@ -5,6 +5,7 @@
 			<div class="mask_title_div clearfix">
 				<div class="mask_title" v-show="addtitle">添加领样</div>
 				<div class="mask_title" v-show="modifytitle">修改领样</div>
+				<div class="mask_title" v-show="viewtitle">查看领样</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -37,7 +38,7 @@
 									</el-col>
 								</el-row>
 
-								<el-row :gutter="30">
+								<el-row >
 									<el-col :span="8">
 										<el-form-item label="样品子表ID" prop="ITEM_LINE_ID">
 											<el-input v-model="samplesForm.ITEM_LINE_ID" :disabled="true">
@@ -52,22 +53,22 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="类别" prop="TYPE">
-											<el-select v-model="samplesForm.TYPE" placeholder="请选择类别" style="width: 100%;">
+											<el-select v-model="samplesForm.TYPE" placeholder="请选择类别" style="width: 100%;" :disabled="noedit">
 												<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
 											</el-select>
 										</el-form-item>
 									</el-col>
 								</el-row>
 
-								<el-row :gutter="30">
+								<el-row>
 									<el-col :span="8">
 										<el-form-item label="型号" prop="MODEL">
-											<el-input v-model="samplesForm.MODEL"></el-input>
+											<el-input v-model="samplesForm.MODEL" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="数量" prop="QUALITY">
-											<el-input-number v-model="samplesForm.QUALITY" :min="1" :step="5" :max="100" label="描述文字" style="width: 100%"></el-input-number>
+											<el-input-number v-model="samplesForm.QUALITY" :min="1" :step="5" :max="100" label="描述文字" style="width: 100%" :disabled="noedit"></el-input-number >
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -77,74 +78,81 @@
 									</el-col>
 								</el-row>
 
-								<el-row :gutter="30">
+								<el-row>
 									<el-col :span="8">
 										<el-form-item label="收样人" prop="ACCEPT_PERSON">
-											<el-input v-model="samplesForm.ACCEPT_PERSON"></el-input>
+											<el-input v-model="samplesForm.ACCEPT_PERSON" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="收样日期" prop="ACCEPT_DATE">
-											<el-date-picker v-model="samplesForm.ACCEPT_DATE" type="date" placeholder="请选择收样日期" value-format="yyyy-MM-dd" style="width: 100%;">
+											<el-date-picker v-model="samplesForm.ACCEPT_DATE" type="date" :disabled="noedit"placeholder="请选择收样日期" value-format="yyyy-MM-dd" style="width: 100%;">
 											</el-date-picker>
 										</el-form-item>
 									</el-col>
 								</el-row>
 
-								<el-row :gutter="30">
+								<el-row>
 									<el-col :span="8">
 										<el-form-item label="领样人" prop="GRANT_PERSON">
-											<el-input v-model="samplesForm.GRANT_PERSON"></el-input>
+											<el-input v-model="samplesForm.GRANT_PERSON" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="领样日期" prop="GRANT_DATE">
-											<el-date-picker v-model="samplesForm.GRANT_DATE" type="date" placeholder="请选择领样日期" value-format="yyyy-MM-dd" style="width: 100%;">
+											<el-date-picker v-model="samplesForm.GRANT_DATE" type="date" placeholder="请选择领样日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
 											</el-date-picker>
 										</el-form-item>
 									</el-col>
 									
 								</el-row>
 
-								<el-row :gutter="30">
+								<el-row>
 									<el-col :span="24">
 										<el-form-item label="其他资料" prop="OTHER">
-											<el-input v-model="samplesForm.OTHER"></el-input>
+											<el-input v-model="samplesForm.OTHER" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="24">
 										<el-form-item label="备注" prop="MEMO">
-											<el-input type="textarea" rows="5" v-model="samplesForm.MEMO"></el-input>
+											<el-input type="textarea" rows="5" v-model="samplesForm.MEMO":disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 
-								<el-row :gutter="30">
+							</el-collapse-item>
+							<el-collapse-item title="其他" name="3" v-show="views">
+								<el-row >
 									<el-col :span="8">
-										<el-form-item label="录入人">
-											<el-input v-model="samplesForm.ENTERBY" :disabled="true"></el-input>
+										<el-form-item label="录入人" prop="ENTERBY" label-width="110px">
+											<el-input v-model="samplesForm.ENTERBY" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="录入时间">
-											<el-input v-model="samplesForm.ENTERDATE" :disabled="true"></el-input>
+										<el-form-item label="录入时间" prop="ENTERDATE" label-width="110px">
+											<el-input v-model="samplesForm.ENTERDATE" :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="录入人机构" prop="DEPARTMENT" label-width="110px">
+											<el-input v-model="samplesForm.DEPARTMENT" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30" v-if="modify">
+								<el-row>
 									<el-col :span="8">
 										<el-form-item label="修改人">
-											<el-input v-model="samplesForm.CHANGEBY" :disabled="true"></el-input>
+											<el-input v-model="samplesForm.CHANGEBY" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="修改日期">
-											<el-input v-model="samplesForm.CHANGEDATE" :disabled="true"></el-input>
+											<el-input v-model="samplesForm.CHANGEDATE" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
+
 								</el-row>
 							</el-collapse-item>
-							
 						</el-collapse>
 					</div>
 					<div class="content-footer">
@@ -229,11 +237,11 @@
 				up: false,
 				dialogVisible: false, //对话框
 				edit: true, //禁填
-				activeNames: ['1'], //手风琴数量
+				activeNames: ['1','2'], //手风琴数量
 				labelPosition: 'right', //表单标题在上方
 				addtitle: true,
 				modifytitle: false,
-				
+				viewtitle: false, //查看弹出框title
 				samples_itemlineForm:{//样品子表数据组
 					inspectionList: []
 				},
@@ -323,6 +331,16 @@
 			getCheckedNodes() { //小弹出框获取树菜单节点
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
 			},
+			//这是查看
+			view() {
+				this.addtitle = false;
+				this.viewtitle = true;
+				this.views = true; //
+				this.noviews = false;
+				this.edit = true;
+				this.noedit = true;
+				this.show=true;
+			},
 			childMethods() {//添加内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					console.log(res);
@@ -339,7 +357,9 @@
 				this.addtitle = true;
             	this.modifytitle = false;
             	this.modify=false;
-            	this.show = !this.show;
+            	this.show = true;
+            	this.edit = true;
+				this.noedit = false;
 			},
 			detail() { //修改内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
@@ -352,17 +372,15 @@
 						type:'error'
 					})
 				})
+				this.viewtitle = false;
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.modify = true;
-				this.samplesForm.STATUS=this.samplesForm.STATUS=="1"?'活动':'不活动';
 				this.show = true;
+				this.edit = true;
+				this.noedit = false;
 			},
 
-			
-			judge(data) {//taxStatus 信息状态布尔值
-				return data.enabled ? '活动' : '不活动'
-			},
 
 			//时间格式化  
 			dateFormat(row, column) {
@@ -388,15 +406,8 @@
 			close() {
 				this.show = false;
 				this.$emit('request');
-				
 			},
-			cancelForm() {
-				this.show = false;
-				this.reset();
-			},
-			reset() {
-				this.show = false;
-			},
+			
 			toggle(e) {
 				if(this.isok1 == true) {
 					this.maxDialog();
@@ -427,9 +438,8 @@
 			save(samplesForm) {
 				this.$refs[samplesForm].validate((valid) => {
 					if (valid) {
-					    this.samplesForm.STATUS=this.samplesForm.STATUS=="活动" ? '1' : '0';
+//					    this.samplesForm.STATUS=this.samplesForm.STATUS=="活动" ? '1' : '0';
 						var url = this.basic_url + '/api-apps/app/itemgrant/saveOrUpdate';
-						this.samplesForm.VERSION = this.samplesForm.VERSION + 1;//修改时版本+1
 						this.$axios.post(url, this.samplesForm).then((res) => {
 							//console.log(res);
 							//resp_code == 0是后台返回的请求成功的信息

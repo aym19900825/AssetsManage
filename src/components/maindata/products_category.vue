@@ -358,8 +358,9 @@
 				}
 			},
 			//查看
-			 view(item) {
-				this.$refs.categorymask.view(item);
+			 view(data) {
+			 	this.CATEGORY =data;
+				this.$refs.categorymask.view();
 			},
 			//高级查询
 			modestsearch() {

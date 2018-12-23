@@ -118,6 +118,10 @@
 								<!--<el-table-column label="样品子表ID" sortable width="200px" prop="ITEM_LINE_ID" v-if="this.checkedName.indexOf('样品子表ID')!=-1">
 								</el-table-column>-->
 								<el-table-column label="样品序号" sortable width="200px" prop="ITEMNUM" v-if="this.checkedName.indexOf('样品序号')!=-1">
+									<template slot-scope="scope">
+										<p @click=view(scope.row)>{{scope.row.ITEMNUM}}
+										</p>
+									</template>
 								</el-table-column>
 								<el-table-column label="样品类别" sortable width="140px" prop="TYPE" v-if="this.checkedName.indexOf('样品类别')!=-1">
 								</el-table-column>
@@ -135,7 +139,7 @@
 								</el-table-column>
 								<el-table-column label="领样日期" sortable width="140px" :formatter="dateFormat" prop="GRANT_DATE" v-if="this.checkedName.indexOf('领样日期')!=-1">
 								</el-table-column>
-								<el-table-column label="状态" sortable width="100px" prop="STATE" v-if="this.checkedName.indexOf('状态')!=-1">
+								<el-table-column label="状态" sortable width="100px" prop="STATE" v-if="this.checkedName.indexOf('状态')!=-1" >
 								</el-table-column>
 								<!--<el-table-column label="信息状态" sortable width="140px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
 								</el-table-column>-->
@@ -266,14 +270,12 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-				aaaData: [],
 				samplesForm: {}//修改子组件时传递数据
 			}
 		},
 		methods: {
 			//表头居中
 			rowClass({ row, rowIndex}) {
-			    console.log(rowIndex) //表头行标号为0
 			    return 'text-align:center'
 			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
@@ -368,14 +370,13 @@
 			},
 			//修改用戶
 			modify() {
-				this.aaaData = this.selMenu;
-				if(this.aaaData.length == 0) {
+				if(this.selMenu.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
 						type: 'warning'
 					});
 					return;
-				} else if(this.aaaData.length > 1) {
+				} else if(this.selMenu.length > 1) {
 					this.$message({
 						message: '不可同时修改多条数据',
 						type: 'warning'
@@ -386,6 +387,12 @@
 					this.$refs.child.detail();
 				}
 			},
+			//查看
+			view(data) {
+				this.samplesForm = data; 
+				this.$refs.child.view();
+			},
+
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
@@ -452,10 +459,20 @@
 			Printing() {
 
 			},
-			judge(data) {
-				//taxStatus 布尔值
-				return data.DESCRIPTION ? '启用' : '冻结'
-			},
+//			judge(data) {
+//				console.log(data.STATE);
+//				if(data.STATE==1){
+//					return data.STATE='草稿'
+//				}else if(data.STATE=='2'){
+//					return data.STATE='审批中'
+//				}else if(data.STATE=='3'){
+//					return data.STATE='已发布'
+//				}else if(data.STATE=='4'){
+//					return data.STATE='已取消'
+//				}else{
+//					return data.STATE='驳回'
+//				}
+//			},
 			
 			//时间格式化  
 			dateFormat(row, column) {
@@ -510,9 +527,6 @@
 				
 			},
 			
-			formatter(row, column) {
-				return row.enabled;
-			},
 			//样品序号树
 			getKey() {
 				let that = this;

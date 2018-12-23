@@ -135,6 +135,10 @@
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="检验委托书编号" sortable width="130px" prop="PROXYNUM" v-if="this.checkedName.indexOf('检验委托书编号')!=-1">
+									<template slot-scope="scope">
+										<p @click=view(scope.row.ID)>{{scope.row.PROXYNUM}}
+										</p>
+									</template>
 								</el-table-column>
 								<el-table-column label="委托单位名称" sortable width="140px" prop="V_NAME" v-if="this.checkedName.indexOf('委托单位名称')!=-1">
 								</el-table-column>
@@ -351,7 +355,6 @@
 		methods: {
 			//表头居中
 			rowClass({ row, rowIndex}) {
-			    console.log(rowIndex) //表头行标号为0
 			    return 'text-align:center'
 			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
@@ -411,13 +414,14 @@
 				this.page.pageSize = 10;
 				this.requestData();
 			},
-			//添加用戶
+			//添加
 			openAddMgr() {
 //				this.$refs.child.resetNew();
 				this.$refs.child.visible();
+				this.$refs.child.open();
 				
 			},
-			//修改用戶
+			//修改
 			modify() {
 				if(this.selUser.length == 0) {
 					this.$message({
@@ -434,6 +438,10 @@
 				} else {
 					this.$refs.child.detail(this.selUser[0].ID);
 				}
+			},
+			//查看
+			 view(id) {
+				this.$refs.child.view(id);
 			},
 			//高级查询
 			modestsearch() {
@@ -460,7 +468,6 @@
 					for(var i = 0; i < changeUser.length; i++) {
 						deleteid.push(changeUser[i].ID);
 					}
-					console.log(deleteid);
 					//ids为deleteid数组用逗号拼接的字符串
 					ids = deleteid.toString(',');
 					var data = {
@@ -475,7 +482,6 @@
 						this.$axios.delete(url, {
 							params: data
 						}).then((res) => { //.delete 传数据方法
-							console.log(res);
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '删除成功',
@@ -573,7 +579,6 @@
 				
 			},
 			handleNodeClick(data) {
-				console.log(111);
 				if(data.type == '1') {
 					this.companyId = data.id;
 					this.deptId = '';

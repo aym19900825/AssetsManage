@@ -5,6 +5,7 @@
 			<div class="mask_title_div clearfix">
 				<div class="mask_title" v-show="addtitle">添加用户</div>
 				<div class="mask_title" v-show="modifytitle">修改用户</div>
+				<div class="mask_title" v-show="viewtitle">查看用户</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -15,7 +16,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form status-icon :model="user" label-width="100px" :rules="rules" ref="user" :label-position="labelPositions" class="demo-user">
+				<el-form status-icon :model="user"  :rules="rules" ref="user" :label-position="labelPositions" class="demo-user">
 					<div class="accordion">
 						<el-collapse v-model="activeNames">
 							<!--<el-collapse-item title="基础信息" name="1">
@@ -52,103 +53,103 @@
 								</el-row>
 							</el-collapse-item>-->
 							<el-collapse-item title="用户基本资料" name="1">
-								<el-row :gutter="20" class="pb10">
+								<!-- <el-row :gutter="20" class="pb10">
 									<el-col :span="5" class="pull-right">
 										<el-input v-model="user.enabled" :disabled="edit">
 											<template slot="prepend">信息状态</template>
 										</el-input>
 									</el-col>
-								</el-row>
+								</el-row> -->
 								<!-- 第一行 -->
-								<el-row :gutter="30">
+								<el-row>
 									<el-col :span="8">
-										<el-form-item label="登录名称" v-if="modify">
-											<el-input v-model="user.username" :disabled="edit"></el-input>
+										<el-form-item label="登录名称" v-if="modify"label-width="100px">
+											<el-input v-model="user.username" :disabled="noedit"></el-input>
 										</el-form-item>
-										<el-form-item label="登录名称" prop="username" v-else>
-											<el-input v-model="user.username"></el-input>
+										<el-form-item label="登录名称" prop="username" v-else label-width="100px">
+											<el-input v-model="user.username" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="登录口令" v-if="modify">
-											<el-input type="password" v-model="user.password" :disabled="edit"></el-input>
+										<el-form-item label="登录口令" v-if="modify" label-width="100px">
+											<el-input type="password" v-model="user.password" :disabled="noedit"></el-input>
 										</el-form-item>
-										<el-form-item label="登录口令" prop="password" v-else>
-											<el-input type="password" v-model="user.password"></el-input>
+										<el-form-item label="登录口令" prop="password" v-else label-width="100px">
+											<el-input type="password" v-model="user.password" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="姓名" prop="nickname">
-											<el-input v-model="user.nickname"></el-input>
+										<el-form-item label="姓名" prop="nickname" label-width="100px">
+											<el-input v-model="user.nickname" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30">
+								<el-row>
 									<el-col :span="8">
-										<el-form-item label="职务" prop="post">
-											<el-input v-model="user.post"></el-input>
+										<el-form-item label="职务" prop="post" label-width="100px">
+											<el-input v-model="user.post" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="工号" prop="worknumber">
-											<el-input v-model="user.worknumber"></el-input>
+										<el-form-item label="工号" prop="worknumber" label-width="100px">
+											<el-input v-model="user.worknumber" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="性別" prop="sex">
-											<el-radio-group v-model="user.sex">
+										<el-form-item label="性別" prop="sex" label-width="100px">
+											<el-radio-group v-model="user.sex" :disabled="noedit">
 												<el-radio label="男"></el-radio>
 												<el-radio label="女"></el-radio>
 											</el-radio-group>
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30">
+								<el-row>
 									<el-col :span="8">
-										<el-form-item label="身份证号" prop="idnumber">
-											<el-input v-model="user.idnumber"></el-input>
+										<el-form-item label="身份证号" prop="idnumber" label-width="100px">
+											<el-input v-model="user.idnumber" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="手机号" prop="phone">
-											<el-input v-model="user.phone"></el-input>
+										<el-form-item label="手机号" prop="phone" label-width="100px">
+											<el-input v-model="user.phone" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="电子邮箱" prop="email">
-											<el-input v-model="user.email"></el-input>
+										<el-form-item label="电子邮箱" prop="email" label-width="100px">
+											<el-input v-model="user.email" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30">
+								<el-row>
 									<el-col :span="8">
-										<el-form-item label="用户有效期" prop="user_active_date">
-											<el-date-picker v-model="user.user_active_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd HH:mm:ss">
+										<el-form-item label="用户有效期" prop="user_active_date" label-width="100px">
+											<el-date-picker v-model="user.user_active_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd HH:mm:ss" :disabled="noedit">
 											</el-date-picker>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="允许授权" prop="ispermit">
-											<el-radio-group v-model="user.ispermit">
+										<el-form-item label="允许授权" prop="ispermit" label-width="100px">
+											<el-radio-group v-model="user.ispermit" :disabled="noedit">
 												<el-radio label="是"></el-radio>
 												<el-radio label="否"></el-radio>
 											</el-radio-group>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="允许登录" prop="islogin">
-											<el-radio-group v-model="user.islogin">
+										<el-form-item label="允许登录" prop="islogin" label-width="100px">
+											<el-radio-group v-model="user.islogin" :disabled="noedit">
 												<el-radio label="是"></el-radio>
 												<el-radio label="否"></el-radio>
 											</el-radio-group>
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30">
+								<el-row>
 									<el-col :span="8">
-										<el-form-item label="所属机构" prop="deptName">
-											<el-input v-model="user.deptName" :disabled="edit">
-												<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
+										<el-form-item label="所属机构" prop="deptName" label-width="100px">
+											<el-input v-model="user.deptName" :disabled="edit" >
+												<el-button slot="append" icon="el-icon-search" @click="getDept" :disabled="noedit"></el-button>
 											</el-input>
 										</el-form-item>
 										<!--<el-form-item label="所属机构" prop="deptName" >
@@ -159,37 +160,37 @@
 										</el-form-item>-->
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="学历" prop="education">
-											<el-select v-model="user.education" placeholder="硕士">
+										<el-form-item label="学历" prop="education" label-width="100px">
+											<el-select v-model="user.education" placeholder="硕士" style="width: 100%" :disabled="noedit">
 												<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 												</el-option>
 											</el-select>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="角色" prop="roleId">
-											<el-select v-model="user.roleId" multiple>
+										<el-form-item label="角色" prop="roleId" label-width="100px">
+											<el-select v-model="user.roleId" multiple :disabled="noedit">
 												<el-option v-for="item in selectData" :key="item.name" :value="item.id" :label="item.name"></el-option>
 											</el-select>
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30">
+								<el-row>
 									<el-col :span="8">
-										<el-form-item label="IP地址" prop="ipaddress">
-											<el-input v-model="user.ipaddress"></el-input>
+										<el-form-item label="IP地址" prop="ipaddress" label-width="100px">
+											<el-input v-model="user.ipaddress" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="MAC地址" prop="macaddress">
-											<el-input v-model="user.macaddress"></el-input>
+										<el-form-item label="MAC地址" prop="macaddress" label-width="100px">
+											<el-input v-model="user.macaddress" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30">
+								<el-row>
 									<el-col :span="24">
-										<el-form-item label="备注" prop="tips">
-											<el-input type="textarea" v-model="user.tips"></el-input>
+										<el-form-item label="备注" prop="tips" label-width="100px">
+											<el-input type="textarea" v-model="user.tips" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -204,7 +205,7 @@
 											</el-button>
 										</div>
 										<el-form :label-position="labelPosition" :rules="rules">
-											<el-table :data="user.qualifications" row-key="ID" border stripe height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.qualifications', order: 'descending'}">
+											<el-table :header-cell-style="rowClass" :fig="true" :data="user.qualifications" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.qualifications', order: 'descending'}">
 												<el-table-column prop="iconOperation" fixed width="50px">
 													<template slot-scope="scope">
 														<i class="el-icon-check" v-if="scope.row.isEditing"></i>
@@ -300,7 +301,7 @@
 												<font>新建行</font>
 											</el-button>
 										</div>
-											<el-table :data="user.traings" row-key="ID" border stripe height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.traings', order: 'descending'}">
+											<el-table :header-cell-style="rowClass" :fit="true" :data="user.traings" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.traings', order: 'descending'}">
 												<el-table-column prop="iconOperation" fixed label="" width="50px">
 													<template slot-scope="scope">
 														<i class="el-icon-check" v-if="scope.row.isEditing"></i>
@@ -356,27 +357,27 @@
 									</el-tab-pane>
 								</el-tabs>
 							</div>
-							<el-collapse-item title="其他" name="4">
+							<el-collapse-item title="其他" name="4" v-show="views">
 								<!-- 第一行 -->
 								<el-row :gutter="30">
 									<el-col :span="8">
-										<el-form-item label="录入人" prop="createby">
+										<el-form-item label="录入人" prop="createby" label-width="100px">
 											<el-input v-model="user.createbyName" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="录入时间" prop="createTime">
+										<el-form-item label="录入时间" prop="createTime" label-width="100px">
 											<el-input v-model="user.createTime" :disabled="edit">
 											</el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="修改人" prop="updateby">
+										<el-form-item label="修改人" prop="updateby" label-width="100px">
 											<el-input v-model="user.updateby" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="修改时间" prop="updateTime">
+										<el-form-item label="修改时间" prop="updateTime" label-width="100px">
 											<el-input v-model="user.updateTime" :disabled="edit">
 											</el-input>
 										</el-form-item>
@@ -388,7 +389,7 @@
 					<div class="el-dialog__footer">
 						<el-button @click='close'>取消</el-button>
 						<el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
-						<el-button type="success" @click='saveAndSubmit()'>保存并添加</el-button>
+						<el-button type="success" @click='saveAndSubmit()' v-show="addtitle">保存并添加</el-button>
 					</div>
 				</el-form>
 			</div>
@@ -631,9 +632,25 @@
 				},
 				selectData: [], //
 				getCheckboxData: {},
+				addtitle:true,
+				modifytitle:false,
+				viewtitle:false,
+				dept:false,
+				noedit:false,//表单内容
+				views:false,//录入修改人信息
+				noviews:true,//按钮
+				modify:false,//修订
+				hintshow:false,
+				statusshow1:true,
+				statusshow2:false,
 			};
 		},
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    // console.log(rowIndex) //表头行标号为0
+			    return 'text-align:center'
+			},
 			handleClick(tab, event) {
 				console.log(tab, event);
 			},
@@ -688,10 +705,19 @@
 
 				//				this.statusshow1 = true;
 				//				this.statusshow2 = false;
+
 				this.addtitle = true;
 				this.modifytitle = false;
-				this.modify = false;
-				this.show = true;
+				this.viewtitle = false;
+				this.dept = false;
+				this.noedit = false;//表单内容
+				this.views = false;//录入修改人信息
+				this.noviews = true;//按钮
+				this.modify = false;//修订
+				this.hintshow = false;
+				this.statusshow1 = true;
+				this.statusshow2 = false;
+				// this.show = true;
 			},
 			addfield1() {
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
@@ -801,14 +827,30 @@
 				//				this.statusshow2 = false;
 				this.addtitle = true;
 				this.modifytitle = false;
-				this.modify = false;
-				this.show = true;
+				this.viewtitle = false;
+				this.dept = false;
+				this.noedit = false;//表单内容
+				this.views = false;//录入修改人信息
+				this.noviews = true;//按钮
+				this.modify = false;//修订
+				this.hintshow = false;
+				this.statusshow1 = true;
+				this.statusshow2 = false;
+				// this.show = true;
 			},
 			// 这里是修改
 			detail(dataid) {
 				this.addtitle = false;
 				this.modifytitle = true;
-				this.modify = true;
+				this.viewtitle = false;
+				this.dept = true;
+				this.noedit = false;//表单内容
+				this.views = false;//录入修改人信息
+				this.noviews = true;//按钮
+				this.hintshow = false;
+				this.modify = true;//修订
+				this.statusshow1 = false;
+				this.statusshow2 = true;
 
 				//				$('.usernames .el-input__inner').attr('disabled',true);
 				var usersUrl = this.basic_url + '/api-user/users/currentMap';
@@ -844,9 +886,44 @@
 					});
 				});
 			},
+			//这是查看
+			view(dataid) {
+				this.addtitle = false;
+				this.modifytitle = false;
+				this.viewtitle = true;
+				this.dept = true;
+				this.noedit = true;//表单内容
+				this.views = true;//录入修改人信息
+				this.noviews = false;//按钮
+				// this.CATEGORY = item;
+				this.show = true;
+
+				var url = this.basic_url + '/api-user/users/' + dataid;
+				this.$axios.get(url, {}).then((res) => {
+					this.user = res.data;
+					this.user.sex = this.user.sex ? '男' : '女';
+					this.user.enabled = this.user.enabled ? '活动' : '不活动';
+					this.user.ispermit = this.user.ispermit == '1' ? '是' : '否';
+					this.user.islogin = this.user.islogin == '1' ? '是' : '否';
+					this.user.roleId = [];
+					var roles = this.user.roles;
+					for(var i = 0; i < roles.length; i++) {
+						this.user.roleId.push(roles[i].id);
+					}
+					this.show = true;
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+			},
 			//点击关闭按钮
 			close() {
 				this.show = false;
+			},
+			open(){
+				this.show = true;
 			},
 			toggle(e) { //大弹出框大小切换
 				if(this.isok1 == true) {

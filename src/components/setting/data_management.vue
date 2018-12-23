@@ -40,8 +40,8 @@
 					</div>
 					<!-- 高级查询划出begin -->
 					<div v-show="search">
-						<el-form status-icon :model="searchList" label-width="70px">
-							<el-row :gutter="10" style="margin-left:-34px">
+						<el-form status-icon :model="searchList" label-width="45px">
+							<el-row :gutter="10">
 								<el-col :span="5">
 									<el-form-item label="表名">
 										<el-input v-model="searchList.name"></el-input>
@@ -53,7 +53,7 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="2">
-									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -62,7 +62,7 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格begin-->
-							<el-table :data="dataList" border stripe :height="fullHeight" style="width: 100%; margin: 0 auto;" :default-sort="{prop:'dataList', order: 'descending'}" @selection-change="SelChange">
+							<el-table :data="dataList" border stripe  :header-cell-style="rowClass" :height="fullHeight" style="width: 100%; margin: 0 auto;" :default-sort="{prop:'dataList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column fixed type="selection" width="55">
 								</el-table-column>
 								<el-table-column label="表名" sortable width="320" prop="name"  v-if="this.checkedName.indexOf('表名')!=-1">
@@ -156,6 +156,11 @@
 			}
 		},
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    // console.log(rowIndex) //表头行标号为0
+			    return 'text-align:center'
+			},
 			tableControle(data){
 				this.checkedName = data;
 			},

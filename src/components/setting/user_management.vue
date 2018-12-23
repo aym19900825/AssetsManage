@@ -64,25 +64,28 @@
 					</div>
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
-						<el-form status-icon :model="searchList" label-width="70px">
+						<el-form status-icon :model="searchList">
 							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-input v-model="searchList.username">
-										<template slot="prepend">用户名</template>
-									</el-input>
+									<el-form-item label="用户名" prop="username" label-width="55px">
+										<el-input v-model="searchList.username">
+										</el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-input v-model="searchList.nickname">
-										<template slot="prepend">姓名</template>
-									</el-input>
+									<el-form-item label="姓名" prop="nickname" label-width="45px">
+										<el-input v-model="searchList.nickname">
+										</el-input>
+									</el-form-item>
 								</el-col>
-								<el-col :span="4">
-									<el-input v-model="searchList.deptName">
-										<template slot="prepend">机构名称</template>
-									</el-input>
+								<el-col :span="5">
+									<el-form-item label="机构名称" prop="deptName" label-width="70px">
+										<el-input v-model="searchList.deptName">
+										</el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="2">
-									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -108,10 +111,14 @@
 						</el-col>
 						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
-							<el-table :data="userList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table :data="userList" border stripe :header-cell-style="rowClass" :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="账号" sortable width="140px" prop="username" v-if="this.checkedName.indexOf('账号')!=-1">
+									<template slot-scope="scope">
+										<p @click=view(scope.row.id)>{{scope.row.username}}
+										</p>
+									</template>
 								</el-table-column>
 								<el-table-column label="姓名" sortable width="200px" prop="nickname" v-if="this.checkedName.indexOf('姓名')!=-1">
 								</el-table-column>
@@ -119,13 +126,13 @@
 								</el-table-column>-->
 								<el-table-column label="机构" sortable width="150px" prop="deptName" v-if="this.checkedName.indexOf('机构')!=-1">
 								</el-table-column>
-								<el-table-column label="公司" sortable width="200px" prop="companyName" v-if="this.checkedName.indexOf('公司')!=-1">
+								<el-table-column label="公司" sortable prop="companyName" v-if="this.checkedName.indexOf('公司')!=-1">
 								</el-table-column>
 
 								<!--<el-table-column label="信息状态" sortable width="200px" prop="enabled" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
 
 								</el-table-column>-->
-								<el-table-column label="创建时间" prop="createTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('创建时间')!=-1">
+								<el-table-column label="创建时间" prop="createTime" width="100px" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('创建时间')!=-1">
 								</el-table-column>
 							</el-table>
 							<!-- <span class="demonstration">显示总数</span>" -->
@@ -172,7 +179,8 @@
 					'账号',
 					'姓名',
 					'机构',
-					'信息状态',
+					'公司',
+					// '信息状态',
 					'创建时间'
 				],
 				tableHeader: [{
@@ -183,15 +191,18 @@
 						label: '姓名',
 						prop: 'nickname'
 					},
-					
 					{
 						label: '机构',
 						prop: 'deptName'
 					},
 					{
-						label: '信息状态',
-						prop: 'enabled'
+						label: '公司',
+						prop: 'companyName'
 					},
+					// {
+					// 	label: '信息状态',
+					// 	prop: 'enabled'
+					// },
 					{
 						label: '创建时间',
 						prop: 'createTime'
@@ -234,6 +245,11 @@
 			}
 		},
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    // console.log(rowIndex) //表头行标号为0
+			    return 'text-align:center'
+			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
 				//console.log();
 				return(
@@ -300,6 +316,7 @@
 			//添加用戶
 			openAddMgr() {
 				this.$refs.child.visible();
+				this.$refs.child.open();
 			},
 			//修改用戶
 			modify() {
@@ -327,11 +344,15 @@
 					this.$refs.child.detail(this.selUser[0].id);
 				}
 			},
+			//查看用戶
+			 view(id) {
+				this.$refs.child.view(id);
+			},
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
-				this.down = !this.down,
-					this.up = !this.up
+				this.down = !this.down;
+				this.up = !this.up;
 			},
 			// 删除
 			deluserinfo() {

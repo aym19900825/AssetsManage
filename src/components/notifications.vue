@@ -63,13 +63,22 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="承建单位" prop="CJDWDesc" label-width="70px">
-										<el-input v-model="searchList.CJDWDesc"></el-input>
+									<el-form-item label="承检单位" prop="CJDWDesc" label-width="70px">
+										<el-select clearable v-model="searchList.CJDWDesc" filterable allow-create default-first-option placeholder="请选择" style="width: 90%;border-radius:none">
+										    <el-option style="width: 100%;border-radius:none"
+										      v-for="item in options5"
+										      :key="item.value"
+										      :label="item.label"
+										      :value="item.value">
+										    </el-option>
+										</el-select>
 									</el-form-item>
 								</el-col>
 								<el-col :span="4">
-									<el-form-item label="类别" prop="TYPEDesc" label-width="45px">
-										<el-input v-model="searchList.TYPEDesc"></el-input>
+									<el-form-item label="类别" prop="TYPE" label-width="45px">
+										<el-select v-model="searchList.TYPE" placeholder="请选择类别" style="width: 100%;">
+												<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
+											</el-select>
 									</el-form-item>
 								</el-col>
 							</el-row>
@@ -195,7 +204,7 @@
 				}],
 				loadSign: true, //加载
 				commentArr: {},
-
+				selectData: [], //获取检验/检测方法类别
 				checkedName: [
 					'工作任务通知书编号',
 					'类型',
@@ -297,6 +306,22 @@
 				},
 				aaaData: [],
 				treeData: [],
+				options5: [{
+		            value: '金化站',
+		            label: '金化站'
+		        }, {
+		            value: '通号站',
+		            label: '通号站'
+		        }, {
+		            value: '运包站',
+		            label: '运包站'
+		        }, {
+		            value: '机辆站',
+		            label: '机辆站'
+		        }, {
+		            value: '接触网站',
+		            label: '接触网站'
+		        }],
 			}
 		},
 
@@ -312,9 +337,19 @@
 
 		},
 		methods: {
+			//检验/检测方法类别
+			getType() {
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=type';
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res.data);
+					this.selectData = res.data; 
+				}).catch(error => {
+					console.log('请求失败');
+				})
+			},
 			//表头居中
 			rowClass({ row, rowIndex}) {
-			    console.log(rowIndex) //表头行标号为0
+			    // console.log(rowIndex) //表头行标号为0
 			    return 'text-align:center'
 			},
 			//滚动加载
@@ -460,13 +495,14 @@
 				this.selUser = val;
 			},
 			requestData(index) {
+				console.log('==='+this.searchList.TYPE);
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 					N_CODE: this.searchList.N_CODE,
 					ITEM_NAME: this.searchList.ITEM_NAME,
 					CJDWDesc: this.searchList.CJDWDesc,
-					TYPEDesc: this.searchList.TYPEDesc,
+					TYPE: this.searchList.TYPE,
 					XD_DATE: this.searchList.XD_DATE,
 					COMPDATE: this.searchList.COMPDATE,
 					STATUS: this.searchList.STATUS,
@@ -484,7 +520,6 @@
 						this.loadSign = true
 					}
 					this.commentArr[this.page.currentPage] = res.data.data
-					console.log(res.data.data);
 					let newarr = []
 					for(var i = 1; i <= totalPage; i++) {
 
@@ -586,6 +621,7 @@
 		mounted() {
 			this.requestData();
 			this.getKey();
+			this.getType();
 		},
 	}
 </script>

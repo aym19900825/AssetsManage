@@ -5,6 +5,7 @@
 			<div class="mask_title_div clearfix">
 				<div class="mask_title" v-show="addtitle">添加自动编号设置</div>
 				<div class="mask_title" v-show="modifytitle">修改自动编号设置</div>
+				<div class="mask_title" v-show="viewtitle">查看自动编号设置</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -20,71 +21,73 @@
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基础信息" name="1">
 								<el-row :gutter="20">
-									<el-col :span="4" class="pull-right" v-if="modify">
+									<!-- <el-col :span="4" class="pull-right" v-if="modify">
 										<el-input v-model="numbsetForm.STATUS==1?'活动':'不活动'" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
-									</el-col>
-									<el-col :span="4" class="pull-right" v-else>
+									</el-col> -->
+									<!-- <el-col :span="4" class="pull-right" v-else>
 										<el-input v-model="numbsetForm.STATUS" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
-									</el-col>
+									</el-col> -->
 										<!-- <el-select v-model="numbsetForm.STATUS" placeholder="请选择信息状态">
 											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
 										</el-select> -->
 									</el-col>
 								</el-row>
-								<el-row :gutter="30">
+								<el-row>
 									<el-col :span="8">
-										<el-form-item label="自动编号名称" prop="AUTOKEY">
-											<el-input v-model="numbsetForm.AUTOKEY"></el-input>
+										<el-form-item label="自动编号名称" prop="AUTOKEY" label-width="110px">
+											<el-input v-model="numbsetForm.AUTOKEY" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="前缀">
-											<el-input v-model="numbsetForm.PREFIX"></el-input>
+											<el-input v-model="numbsetForm.PREFIX" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="起始数" prop="S_NUM">
-											<el-input v-model="numbsetForm.S_NUM"></el-input>
+											<el-input v-model="numbsetForm.S_NUM" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
-								</el-row>
-								<el-row :gutter="30">
-									<el-col :span="24">
-										<el-form-item label="备注">
-											<el-input type="textarea" v-model="numbsetForm.MEMO"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row :gutter="30" v-if="modify">
-										<el-col :span="8">
-											<el-form-item label="录入人机构">
+									<el-col :span="8" v-if="dept">
+											<el-form-item label="机构" label-width="110px">
 												<el-input v-model="numbsetForm.DEPARTMENT" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8">
-											<el-form-item label="录入人">
-												<el-input v-model="numbsetForm.ENTERBY" :disabled="true"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="录入时间">
-												<el-input v-model="numbsetForm.ENTERDATE" :disabled="true"></el-input>
-											</el-form-item>
-										</el-col>
 								</el-row>
-								<el-row :gutter="30" v-if="modify">
+								<el-row :gutter="30">
+									<el-col :span="24">
+										<el-form-item label="备注" label-width="110px">
+											<el-input type="textarea" v-model="numbsetForm.MEMO" :disabled="noedit"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+							</el-collapse-item>
+							<el-collapse-item title="其它" name="2"  v-show="views">
+								<el-row>
 									<el-col :span="8">
-										<el-form-item label="修改人">
-											<el-input v-model="numbsetForm.CHANGEBY" :disabled="true"></el-input>
+										<el-form-item label="录入人"  label-width="110px">
+											<el-input v-model="numbsetForm.ENTERBY" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="修改时间">
+										<el-form-item label="录入时间" label-width="80px">
+											<el-input v-model="numbsetForm.ENTERDATE" :disabled="true"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+									<el-form-item label="修改人" label-width="80px">
+											<el-input v-model="numbsetForm.CHANGEBY" :disabled="true"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row>
+									<el-col :span="8">
+										<el-form-item label="修改时间"  label-width="110px">
 											<el-input v-model="numbsetForm.CHANGEDATE" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
@@ -92,7 +95,7 @@
 							</el-collapse-item>
 						</el-collapse>
 					</div>
-					<div class="content-footer">
+					<div class="content-footer"v-show="noviews">
 						<el-form-item>
 							<button @click="cancelForm" class="btn btn-default btn-large">取消</button>
 							<button type="primary" class="btn btn-primarys btn-large" @click="submitForm('numbsetForm')">提交</button>
@@ -166,7 +169,7 @@
 				selMenu:[],
 				dialogVisible: false, //对话框
 				edit: true, //禁填
-				activeNames: ['1'], //手风琴数量
+				activeNames: ['1','1'], //手风琴数量
 				show: false,
 				isok1: true,
 				isok2: false,
@@ -186,6 +189,17 @@
    					}]
           		
 	          	},
+	          	addtitle:true,
+				modifytitle:false,
+				viewtitle:false,
+				dept:false,
+				noedit:false,//表单内容
+				views:false,//录入修改人信息
+				noviews:true,//按钮
+				modify:false,//修订
+				hintshow:false,
+				statusshow1:true,
+				statusshow2:false,
 			};
 		},
 		methods: {
@@ -219,9 +233,17 @@
 					})
 				})
             	this.addtitle = true;
-            	this.modifytitle = false;
-            	this.modify = false;
-            	this.show = !this.show;
+				this.modifytitle = false;
+				this.viewtitle = false;
+				this.dept = false;
+				this.noedit = false;//表单内容
+				this.views = false;//录入修改人信息
+				this.noviews = true;//按钮
+				this.modify = false;//修订
+				this.hintshow = false;
+				this.statusshow1 = true;
+				this.statusshow2 = false;
+            	// this.show = !this.show;
             },
             detail() {//修改内容时从父组件带过来的
             	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
@@ -235,13 +257,37 @@
 					})
 				})
             	this.addtitle = false;
-            	this.modifytitle = true;
-            	this.modify = true;
+				this.modifytitle = true;
+				this.viewtitle = false;
+				this.dept = true;
+				this.noedit = false;//表单内容
+				this.views = false;//录入修改人信息
+				this.noviews = true;//按钮
+				this.hintshow = false;
+				this.modify = true;//修订
+				this.statusshow1 = false;
+				this.statusshow2 = true;
             	this.show = true;
             },
+            //这是查看
+			view(item) {
+				this.addtitle = false;
+				this.modifytitle = false;
+				this.viewtitle = true;
+				this.dept = true;
+				this.noedit = true;//表单内容
+				this.views = true;//录入修改人信息
+				this.noviews = false;//按钮
+				this.numbsetForm = item;
+				console.log(this.numbsetForm);
+				this.show = true;				
+			},
 			//点击关闭按钮
 			close() {
 				this.show = false;
+			},
+			open(){
+				this.show = true;
 			},
 			cancelForm(){
 				this.show = false;

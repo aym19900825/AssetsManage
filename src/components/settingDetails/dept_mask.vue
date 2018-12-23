@@ -538,7 +538,7 @@
 			
 
 			visible() {//点击父组件按钮显示弹窗
-				this.$axios.get('/api/api-user/users/currentMap', {}).then((res) => {
+				this.$axios.get(this.basic_url +'/api-user/users/currentMap', {}).then((res) => {
 	     			this.adddeptForm.enterby = res.data.nickname;
 	     			var date=new Date();
 					this.adddeptForm.enterdate = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");

@@ -33,9 +33,9 @@
                 </el-dropdown-item>
 
                 <el-dropdown-item>
-                    <router-link to="/">
+                    <span v-on:click="cleanAll()">
                         <i class="icon-log-out mr10"></i>退出
-                    </router-link>
+                    </span>
                 </el-dropdown-item>
 
               </el-dropdown-menu>
@@ -56,6 +56,10 @@ export default {
         }
     },
     methods: {
+    	cleanAll(){
+    		this.$router.push({ path: '/',name: 'Login',});
+    		sessionStorage.clear();
+    	},
         getData(){
             var url = this.basic_url + '/api-user/users/currentMap';
             this.$axios.get(url, {}).then((res) => {//获取当前用户信息

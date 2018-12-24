@@ -5,6 +5,7 @@
 			<div class="mask_title_div clearfix">
 				<div class="mask_title" v-show="addtitle">添加客户</div>
 				<div class="mask_title" v-show="modifytitle">修改客户</div>
+				<div class="mask_title" v-show="viewtitle">查看客户</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -21,9 +22,9 @@
 							<el-collapse-item title="基本信息" name="1">
 								<el-row :gutter="20" class="pb10" style='display:none;'>
 									<el-col :span="5" class="pull-right">
-										<el-input v-model="CUSTOMER.STATUS" :disabled="true">
+										<!-- <el-input v-model="CUSTOMER.STATUS" :disabled="true">
 											<template slot="prepend">信息状态</template>
-										</el-input>
+										</el-input> -->
 										<!-- <el-select v-model="CUSTOMER.STATUS" placeholder="请选择状态">
 											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
@@ -35,17 +36,17 @@
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="组织机构代码" prop="CODE">
-											<el-input v-model="CUSTOMER.CODE"></el-input>
+											<el-input v-model="CUSTOMER.CODE" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="单位名称" prop="NAME">
-											<el-input v-model="CUSTOMER.NAME"></el-input>
+										<el-form-item label="单位名称" prop="NAME" >
+											<el-input v-model="CUSTOMER.NAME" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="类型" prop="TYPE">
-											<el-select v-model="CUSTOMER.TYPE" placeholder="请选择" style="width: 100%">
+											<el-select v-model="CUSTOMER.TYPE" placeholder="请选择" style="width: 100%" :disabled="noedit">
 												<el-option v-for="(data,index) in SeleCUST_TYPE" :key="index" :value="data.code" :label="data.name"></el-option>
 												</el-option>
 											</el-select>
@@ -65,35 +66,35 @@
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="联系人" prop="PERSON">
-											<el-input v-model="CUSTOMER.PERSON"></el-input>
+											<el-input v-model="CUSTOMER.PERSON" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="联系电话" prop="PHONE">
-											<el-input v-model="CUSTOMER.PHONE"></el-input>
+											<el-input v-model="CUSTOMER.PHONE" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="邮箱" prop="EMAIL">
-											<el-input v-model="CUSTOMER.EMAIL"></el-input>
+											<el-input v-model="CUSTOMER.EMAIL" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="联系地址" prop="CONTACT_ADDRESS">
-											<el-input v-model="CUSTOMER.CONTACT_ADDRESS"></el-input>
+											<el-input v-model="CUSTOMER.CONTACT_ADDRESS" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="邮政编码" prop="ZIPCODE">
-											<el-input v-model="CUSTOMER.ZIPCODE"></el-input>
+											<el-input v-model="CUSTOMER.ZIPCODE" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 
 									<el-col :span="8">
 										<el-form-item label="传真" prop="FAX">
-											<el-input v-model="CUSTOMER.FAX"></el-input>
+											<el-input v-model="CUSTOMER.FAX" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 
@@ -101,34 +102,12 @@
 								<el-row :gutter="30">
 									<el-col :span="24">
 										<el-form-item label="备注" prop="MEMO">
-											<el-input v-model="CUSTOMER.MEMO" type="textarea"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row :gutter="30" v-show="personinfo">
-									<el-col :span="8">
-										<el-form-item label="录入人" prop="ENTERBY">
-											<el-input v-model="CUSTOMER.ENTERBY" placeholder="当前录入人" :disabled="edit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="录入时间" prop="ENTERDATE">
-											<el-input v-model="CUSTOMER.ENTERDATE" placeholder="当前录入时间" :disabled="edit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="修改人" prop="CHANGEBY" v-if="modify">
-											<el-input v-model="CUSTOMER.CHANGEBY" placeholder="记录当前修改人" :disabled="edit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="修改时间" prop="CHANGEDATE" v-if="modify">
-											<el-input v-model="CUSTOMER.CHANGEDATE" placeholder="自动记录当前修改时间" :disabled="edit"></el-input>
+											<el-input v-model="CUSTOMER.MEMO" type="textarea" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 							</el-form>
-							</el-collapse-item>
+						
 							<!-- 资质信息 Begin-->
 							<el-collapse-item title="资质信息" name="2">								
 								<div class="table-func">
@@ -138,7 +117,7 @@
 									</el-button>
 								</div>
 								<el-form :label-position="labelPosition" :rules="rules">
-								<el-table :data="CUSTOMER.CUSTOMER_QUALIFICATIONList" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER.CUSTOMER_QUALIFICATIONList', order: 'descending'}">
+								<el-table :header-cell-style="rowClass" :fit="true" :data="CUSTOMER.CUSTOMER_QUALIFICATIONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER.CUSTOMER_QUALIFICATIONList', order: 'descending'}">
 								    <el-table-column prop="iconOperation" fixed width="50px">
 								      <template slot-scope="scope">
 								      	<i class="el-icon-check" v-show="scope.row.isEditing">
@@ -211,11 +190,38 @@
 								  </el-form>
 							</el-collapse-item>
 							<!-- 资质信息 End -->
+							</el-collapse-item>
+							<el-collapse-item title="其它" name="3"  v-show="views">
+								<el-form label-width="100px">
+								<el-row :gutter="30">
+									<el-col :span="8">
+										<el-form-item label="录入人" prop="ENTERBY">
+											<el-input v-model="CUSTOMER.ENTERBY" placeholder="当前录入人" :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="录入时间" prop="ENTERDATE">
+											<el-input v-model="CUSTOMER.ENTERDATE" placeholder="当前录入时间" :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="修改人" prop="CHANGEBY">
+											<el-input v-model="CUSTOMER.CHANGEBY" placeholder="记录当前修改人" :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="修改时间" prop="CHANGEDATE">
+											<el-input v-model="CUSTOMER.CHANGEDATE" placeholder="自动记录当前修改时间" :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+							</el-form>
+							</el-collapse-item>
 						</el-collapse>
 					</div>
-					<div class="el-dialog__footer">
+					<div class="el-dialog__footer" v-show="noviews">
 							<el-button type="primary" @click="saveAndUpdate('CUSTOMER')">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit('CUSTOMER')">保存并添加</el-button>
+							<el-button type="success" @click="saveAndSubmit('CUSTOMER')" v-show="addtitle">保存并添加</el-button>
 							<el-button @click='close'>取消</el-button>
 							<!--<el-button type="primary" class="btn-primarys" @click="submitForm('CUSTOMER')">提交</el-button>-->
 						
@@ -324,7 +330,7 @@
 				up: false,
 				addtitle:true,//添加弹出框titile
 				modifytitle:false,//修改弹出框titile
-				activeNames: ['1','2'],//手风琴数量
+				activeNames: ['1','2','3'],//手风琴数量
 //				labelPositions: 'ri', //表格
 				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
@@ -348,10 +354,26 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-				index:0
+				index:0,
+				addtitle:true,
+				modifytitle:false,
+				viewtitle:false,
+				dept:false,
+				noedit:false,//表单内容
+				views:false,//录入修改人信息
+				noviews:true,//按钮
+				modify:false,//修订
+				hintshow:false,
+				statusshow1:true,
+				statusshow2:false,
 			};
 		},
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    // console.log(rowIndex) //表头行标号为0
+			    return 'text-align:center'
+			},
 			iconOperation(row, column, cell, event){
 		        if(column.property ==="iconOperation"){
 		          row.isEditing = !row.isEditing
@@ -417,9 +439,15 @@
 				this.reset();
 				this.addtitle = true;
 				this.modifytitle = false;
+				this.viewtitle = false;
+				this.dept = false;
+				this.noedit = false;//表单内容
+				this.views = false;//录入修改人信息
+				this.noviews = true;//按钮
+				this.modify = false;//修订
+				this.hintshow = false;
 				this.statusshow1 = true;
 				this.statusshow2 = false;
-				this.modify = false;
 				var date = new Date();
 				this.CUSTOMER.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
@@ -430,7 +458,7 @@
 						type: 'error'
 					});
 				});
-				this.show = true;
+				// this.show = true;
 			},
 			getsys_depttype() {//获取机构类型
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=CUST_TYPE';
@@ -444,9 +472,15 @@
 			detail(dataid) {
 				this.addtitle = false;
 				this.modifytitle = true;
+				this.viewtitle = false;
+				this.dept = true;
+				this.noedit = false;//表单内容
+				this.views = false;//录入修改人信息
+				this.noviews = true;//按钮
+				this.hintshow = false;
+				this.modify = true;//修订
 				this.statusshow1 = false;
 				this.statusshow2 = true;
-				this.modify = true;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 	    			this.CUSTOMER.CHANGEBY = res.data.nickname;
 	    			var date = new Date();
@@ -469,6 +503,28 @@
 					});
 				});
 			},
+			//这是查看
+			view(dataid) {
+				this.addtitle = false;
+				this.modifytitle = false;
+				this.viewtitle = true;
+				this.dept = true;
+				this.noedit = true;//表单内容
+				this.views = true;//录入修改人信息
+				this.noviews = false;//按钮
+				this.$axios.get(this.basic_url + '/api-apps/app/customer/' + dataid, {}).then((res) => {
+					this.CUSTOMER = res.data;
+					//console.log(this.CUSTOMER.STATUS==1);
+					this.CUSTOMER.STATUS=this.CUSTOMER.STATUS=="1"? '活动' : '不活动';
+					this.show = true;
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+				this.show = true;				
+			},
 			//上传文件 Begin
 			handleRemove(file, fileList) {
 				console.log(file, fileList);
@@ -486,6 +542,9 @@
 			//点击关闭
 			close() {
 				this.show = false;
+			},
+			open(){
+				this.show = true;
 			},
 			//弹出框放大缩小变换
 			toggle(e) {

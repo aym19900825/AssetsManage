@@ -5,6 +5,7 @@
 			<div class="mask_title_div clearfix">
 				<div class="mask_title" v-show="addtitle">添加检验/检测标准</div>
 				<div class="mask_title" v-show="modifytitle">修改检验/检测标准</div>
+				<div class="mask_title" v-show="viewtitle">查看检验/检测标准</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>						 
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -15,7 +16,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="dataInfo" :rules="rules" ref="dataInfo" label-width="80px" class="demo-user">
+				<el-form :model="dataInfo" inline-message :rules="rules" ref="dataInfo" label-width="80px" class="demo-user">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基本信息" name="1">
@@ -44,41 +45,41 @@
 								<el-row>
 									<el-col :span="8">
 										<el-form-item label="标准编号" prop="S_NUM">
-											<el-input v-model="dataInfo.S_NUM"></el-input>
+											<el-input v-model="dataInfo.S_NUM" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="标准名称" prop="S_NAME">
-											<el-input v-model="dataInfo.S_NAME"></el-input>
+											<el-input v-model="dataInfo.S_NAME" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="英文名称" prop="S_ENGNAME">
-											<el-input v-model="dataInfo.S_ENGNAME"></el-input>
+											<el-input v-model="dataInfo.S_ENGNAME" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row>
 									<el-col :span="8">
 										<el-form-item label="发布时间" prop="RELEASETIME">
-											<el-date-picker v-model="dataInfo.RELEASETIME" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width:100%">
+											<el-date-picker v-model="dataInfo.RELEASETIME" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width:100%"  :disabled="noedit">
 											</el-date-picker>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="启用时间" prop="STARTETIME">
-											<el-date-picker v-model="dataInfo.STARTETIME" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width:100%">
+											<el-date-picker v-model="dataInfo.STARTETIME" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width:100%"  :disabled="noedit">
 											</el-date-picker>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="发布单位" prop="RELEASE_UNIT">
-											<el-input v-model="dataInfo.RELEASE_UNIT"></el-input>
+											<el-input v-model="dataInfo.RELEASE_UNIT" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row>
-									<el-col :span="8" v-if="modifytitle">
+									<el-col :span="8" v-if="dept">
 										<el-form-item label="机构" prop="DEPARTMENT">
 											<el-input v-model="dataInfo.DEPARTMENT" :disabled="true"></el-input>
 										</el-form-item>
@@ -151,7 +152,7 @@
 								</el-form>
 								<!-- 字段列表 End -->
 							</el-collapse-item>
-							<el-collapse-item title="其它" name="3" v-if="personinfo">
+							<el-collapse-item title="其它" name="3" v-show="views">
 								<el-row>
 									<el-col :span="8">
 										<el-form-item label="录入人" prop="ENTERBY">
@@ -177,7 +178,7 @@
 							</el-collapse-item>
 						</el-collapse>
 					</div>
-					<div class="el-dialog__footer">
+					<div class="el-dialog__footer" v-show="noviews">
 							<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并添加</el-button>
 							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('dataInfo')">修订</el-button>
@@ -252,9 +253,6 @@
 				activeNames: ['1', '2', '3'], //手风琴数量
 //				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
-				addtitle: true,
-				modifytitle: false,
-				modify:false,//修订、修改人、修改时间
 				leaddata: [ //导入数据的表格
 					{
 						columnname: 'author',
@@ -294,7 +292,17 @@
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
 				DATAINFO:{},//父组件传过来的值
-				personinfo:false
+				addtitle:true,
+				modifytitle:false,
+				viewtitle:false,
+				dept:false,
+				noedit:false,//表单内容
+				views:false,//录入修改人信息
+				noviews:true,//按钮
+				modify:false,//修订
+				hintshow:false,
+				statusshow1:true,
+				statusshow2:false,
 			};
 		},
 		methods: {
@@ -328,7 +336,6 @@
 			//添加点击按钮显示弹窗
 			visible() {
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					console.log(res);
 //					this.dataInfo.DEPARTMENT=res.data.companyName;
 				    this.dataInfo.DEPARTMENT=res.data.deptName;
 					this.dataInfo.ENTERBY=res.data.nickname;
@@ -342,14 +349,30 @@
 				});
 				this.addtitle = true;
 				this.modifytitle = false;
-				this.modify = false;
+				this.viewtitle = false;
+				this.dept = false;
+				this.noedit = false;//表单内容
+				this.views = false;//录入修改人信息
+				this.noviews = true;//按钮
+				this.modify = false;//修订
+				this.hintshow = false;
+				this.statusshow1 = true;
+				this.statusshow2 = false;
 				// this.show = true;
 			},
 			// 这里是修改
 			detail() {
 				this.addtitle = false;
 				this.modifytitle = true;
-				this.modify = true;
+				this.viewtitle = false;
+				this.dept = true;
+				this.noedit = false;//表单内容
+				this.views = false;//录入修改人信息
+				this.noviews = true;//按钮
+				this.hintshow = false;
+				this.modify = true;//修订
+				this.statusshow1 = false;
+				this.statusshow2 = true;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.dataInfo.DEPARTMENT = res.data.deptName;
 					this.dataInfo.CHANGEBY = res.data.nickname;
@@ -365,6 +388,17 @@
 					});
 				});
 				this.show = true;
+			},
+			//这是查看
+			view() {
+				this.addtitle = false;
+				this.modifytitle = false;
+				this.viewtitle = true;
+				this.dept = true;
+				this.noedit = true;//表单内容
+				this.views = true;//录入修改人信息
+				this.noviews = false;//按钮
+				this.show = true;				
 			},
 			//点击关闭按钮
 			close() {
@@ -494,7 +528,6 @@
 			saveAndUpdate(dataInfo){
 				this.save(dataInfo);
 				this.show = false;
-				
 			},
 			//保存并添加
 			saveAndSubmit(dataInfo){

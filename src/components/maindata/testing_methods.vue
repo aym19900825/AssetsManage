@@ -49,48 +49,52 @@
 					<!--按钮操作行 End-->
 
 					<!-- 高级查询划出 Begin-->
-					<div v-show="search" class="pb10">
-						<el-form status-icon :model="searchList" label-width="70px">
-							<el-row :gutter="10" class="pb10">
-								<el-col :span="6">
-									<el-input v-model="searchList.M_NUM">
-										<template slot="prepend">编码</template>
-									</el-input>
+					<div v-show="search">
+						<el-form status-icon :model="searchList" label-width="45px">
+							<el-row>
+								<el-col :span="5">
+									<el-form-item label="编码" prop="M_NUM">
+										<el-input v-model="searchList.M_NUM">
+										</el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="6">
-									<el-input v-model="searchList.M_NAME">
-										<template slot="prepend">中文名称</template>
-									</el-input>
+									<el-form-item label="中文名称" prop="M_NAME" label-width="90px">
+										<el-input v-model="searchList.M_NAME">
+										</el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="6">
-									<el-input v-model="searchList.M_ENAME">
-										<template slot="prepend">英文名称</template>
-									</el-input>
+									<el-form-item label="英文名称" prop="M_ENAME" label-width="90px">
+										<el-input v-model="searchList.M_ENAME">
+										</el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="6">
-									<el-input v-model="searchList.M_TYPE">
-										<template slot="prepend">类别</template>
-									</el-input>
+									<el-form-item label="类别" prop="M_TYPE" label-width="60px">
+										<el-input v-model="searchList.M_TYPE">
+										</el-input>
+									</el-form-item>
 								</el-col>
 							</el-row>
-							<el-row :gutter="10">
-								<el-col :span="6">
-									<el-input v-model="searchList.VERSION">
-										<template slot="prepend">版本</template>
-									</el-input>
-								</el-col>
+							<el-row>
 								<el-col :span="5">
-									<!-- <el-input v-model="searchList.DEPARTMENT">
-										<template slot="prepend">机构</template>
-									</el-input> -->
-									<el-select v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="机构">
-									    <el-option
-									      v-for="item in options5"
-									      :key="item.value"
-									      :label="item.label"
-									      :value="item.value">
-									    </el-option>
-									</el-select>
+									<el-form-item label="版本" prop="VERSION" >
+										<el-input v-model="searchList.VERSION" >
+										</el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="6">
+									<el-form-item label="机构" prop="DEPARTMENT" label-width="90px">
+										<el-select clearable v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="请选择">
+										    <el-option
+										      v-for="item in options5"
+										      :key="item.value"
+										      :label="item.label"
+										      :value="item.value">
+										    </el-option>
+										</el-select>
+									</el-form-item>
 								</el-col>
 								<!-- <el-col :span="6">
 									<el-select v-model="searchList.STATUS" placeholder="请选择信息状态">
@@ -98,8 +102,8 @@
 										</el-option>
 									</el-select>
 								</el-col> -->
-								<el-col :span="2">
-									<el-button type="primary" @click="searchinfo" size="small" style="margin-top: 2px">搜索</el-button>
+								<el-col :span="3">
+									<el-button type="primary" @click="searchinfo" size="small" style="margin: 0 20px">搜索</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -113,6 +117,10 @@
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="编码" width="170" sortable prop="M_NUM" v-if="this.checkedName.indexOf('编码')!=-1">
+									<template slot-scope="scope">
+										<p @click=view(scope.row)>{{scope.row.M_NUM}}
+										</p>
+									</template>
 								</el-table-column>
 								<el-table-column label="中文名称" width="220" sortable prop="M_NAME" v-if="this.checkedName.indexOf('中文名称')!=-1">
 								</el-table-column>
@@ -282,7 +290,7 @@
 		methods: {
 			//表头居中
 			rowClass({ row, rowIndex}) {
-			    console.log(rowIndex) //表头行标号为0
+			    // console.log(rowIndex) //表头行标号为0
 			    return 'text-align:center'
 			},
 			//表格滚动加载
@@ -358,11 +366,16 @@
 					this.$refs.child.detail();
 				}
 			},
+			//查看
+			 view(data) {
+			 	this.testingForm = data;
+				this.$refs.child.view(item);
+			},
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
 				this.down = !this.down,
-					this.up = !this.up
+				this.up = !this.up
 			},
 			// 删除
 			deluserinfo() {

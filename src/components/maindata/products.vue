@@ -52,36 +52,45 @@
 
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search" class="pb10">
-						<el-form status-icon :model="searchList" label-width="70px">
+						<el-form status-icon :model="searchList" label-width="45px">
 							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-input v-model="searchList.PRO_NUM">
-										<template slot="prepend">编码</template>
-									</el-input>
-									<el-button slot="append" icon="el-icon-search"></el-button>
+									<el-form-item label="编码" prop="PRO_NUM">
+										<el-input v-model="searchList.PRO_NUM">
+										</el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-input v-model="searchList.PRO_NAME">
-										<template slot="prepend">名称</template>
-									</el-input>
+									<el-form-item label="名称" prop="PRO_NAME">
+										<el-input v-model="searchList.PRO_NAME">
+										</el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-input v-model="searchList.VERSION">
-										<template slot="prepend">版本</template>
-									</el-input>
+									<el-form-item label="版本" prop="VERSION">
+										<el-input v-model="searchList.VERSION">
+										</el-input>
+									</el-form-item>
 								</el-col>
-								<el-col :span="5">
-									<!-- <el-input v-model="searchList.DEPARTMENT">
-										<template slot="prepend">机构</template>
-									</el-input> -->
-									<el-select v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="机构">
-									    <el-option
-									      v-for="item in options5"
-									      :key="item.value"
-									      :label="item.label"
-									      :value="item.value">
-									    </el-option>
-									</el-select>
+								<el-col :span="6">
+								<!-- <div >
+									<span class="pull-left" style="border:1px solid #D8DEE6;border-right:none;background-color: #F3F6FA;width: 24%;height:35px;text-align: center; border-radius:3px 0 0 3px; padding-top:6px;color: #5B6371;" >
+										机构
+									</span>
+									<div class="pull-right"> -->
+									<el-form-item label="机构" prop="DEPARTMENT">
+										<el-select clearable v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="请选择" style="width: 90%;border-radius:none">
+										    <el-option style="width: 100%;border-radius:none"
+										      v-for="item in options5"
+										      :key="item.value"
+										      :label="item.label"
+										      :value="item.value">
+										    </el-option>
+										</el-select>
+									</el-form-item>
+									<!-- </div>
+								</div> -->
+									
 								</el-col>
 								<!-- <el-col :span="2">
 									<el-select v-model="searchList.STATUS" placeholder="请选择信息状态">
@@ -103,6 +112,10 @@
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="编码" width="155" sortable prop="PRO_NUM" v-if="this.checkedName.indexOf('编码')!=-1">
+									<template slot-scope="scope">
+										<p @click=view(scope.row)>{{scope.row.PRO_NUM}}
+										</p>
+									</template>
 								</el-table-column>
 								<el-table-column label="名称" sortable prop="PRO_NAME" v-if="this.checkedName.indexOf('名称')!=-1">
 								</el-table-column>
@@ -274,7 +287,7 @@
 		methods: {
 			//表头居中
 			rowClass({ row, rowIndex}) {
-			    console.log(rowIndex) //表头行标号为0
+			    // console.log(rowIndex) //表头行标号为0
 			    return 'text-align:center'
 			},
 			//表格滚动加载
@@ -357,11 +370,16 @@
 					this.$refs.child.detail();
 				}
 			},
+			//查看
+			 view(data) {
+			 	this.PRODUCT = data;
+				this.$refs.child.view();
+			},
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
 				this.down = !this.down,
-					this.up = !this.up
+				this.up = !this.up
 			},
 			// 删除
 			deluserinfo() {
@@ -478,6 +496,13 @@
 	}
 </script>
 
-<style scoped>
-
+<style>
+input[type="text"], input[type="password"], textarea {
+    height: 35px;
+    padding: 0px 5px;
+    background-color: #FFFFFF;
+    border-radius: 0px;
+    border-left:none;
+    border: 1px solid #DFE5EA;
+}
 </style>

@@ -57,12 +57,13 @@
 						<el-form status-icon :model="searchDept" label-width="70px">
 							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-input v-model="searchDept.fullname">
-										<template slot="prepend">机构名称</template>
-									</el-input>
+									<el-form-item label="机构名称" prop="fullname" label-width="70px">
+										<el-input v-model="searchDept.fullname">
+										</el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="2">
-									<el-button type="primary" @click="searchinfo" size="small"  style="margin:4px">搜索</el-button>
+									<el-button type="primary" @click="searchinfo" size="small"  style="margin-top:2px">搜索</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -182,6 +183,11 @@
 			}
 		},
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    // console.log(rowIndex) //表头行标号为0
+			    return 'text-align:center'
+			},
 			//清空
 			reset(){
 				this.adddeptForm = {

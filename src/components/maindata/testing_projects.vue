@@ -48,36 +48,36 @@
 				<!--按钮操作行 End-->
 
 				<!-- 高级查询划出 Begin-->
-				<div v-show="search" class="pb10">
-						<el-form status-icon :model="searchList" label-width="70px">
+				<div v-show="search" class="pb5">
+						<el-form status-icon :model="searchList" label-width="45px">
 							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-input v-model="searchList.P_NUM">
-										<template slot="prepend">编码</template>
-									</el-input>
+									<el-form-item label="编码" prop="P_NUM">
+										<el-input v-model="searchList.P_NUM">
+										</el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-input v-model="searchList.P_NAME">
-										<template slot="prepend">名称</template>
-									</el-input>
+									<el-form-item label="名称" prop="P_NAME">
+										<el-input v-model="searchList.P_NAME">
+										</el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="4">
-									<el-input v-model="searchList.VERSION">
-										<template slot="prepend">版本</template>
-									</el-input>
+									<el-form-item label="版本" prop="VERSION">
+										<el-input v-model="searchList.VERSION">
+										</el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<!-- <el-input v-model="searchList.DEPARTMENT">
-										<template slot="prepend">机构</template>
-									</el-input> -->
-									<el-select v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="机构">
-									    <el-option
-									      v-for="item in options5"
-									      :key="item.value"
+									<el-form-item label="机构" prop="DEPARTMENT">
+										<el-select clearable v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="请选择">
+									    	<el-option v-for="item in options5" :key="item.value"
 									      :label="item.label"
 									      :value="item.value">
-									    </el-option>
-									</el-select>
+									    	</el-option>
+										</el-select>
+									</el-form-item>
 								</el-col>
 								<!-- <el-col :span="3">
 									<el-select v-model="searchList.STATUS" placeholder="请选择信息状态">
@@ -100,6 +100,10 @@
 							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 							</el-table-column>
 							<el-table-column label="编码" width="150" sortable prop="P_NUM" v-if="this.checkedName.indexOf('编码')!=-1">
+								<template slot-scope="scope">
+									<p @click=view(scope.row)>{{scope.row.P_NUM}}
+									</p>
+								</template>
 							</el-table-column>
 							<el-table-column label="名称" width="220" sortable prop="P_NAME" v-if="this.checkedName.indexOf('名称')!=-1">
 							</el-table-column>
@@ -375,18 +379,15 @@
 				if (this.$refs['testing_projectForm']!==undefined) {
      			this.$refs['testing_projectForm'].resetFields();	
  				}
-				 
 			},
 			//添加检验/检测项目
-			
 			openAddMgr() {
 				this.reset();
 				this.$refs.child.open();
 				this.$refs.child.visible();
 			},
-			
-			modify() {//修改检验/检测项目
-				
+			//修改检验/检测项目
+			modify() {
 				if(this.selMenu.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
@@ -400,17 +401,20 @@
 					});
 					return;
 				} else {
-
 					this.testing_projectForm = this.selMenu[0]; 
 					this.$refs.child.detail();
-
 				}
+			},
+			//查看
+			 view(data) {
+			 	this.testing_projectForm = data; 
+				this.$refs.child.view();
 			},
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
 				this.down = !this.down,
-					this.up = !this.up
+				this.up = !this.up
 			},
 			// 删除
 			deluserinfo() {

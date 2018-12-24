@@ -3,8 +3,9 @@
 		<div class="mask" v-if="show"></div>
 		<div class="mask_div" v-if="show">
 			<div class="mask_title_div clearfix">
-				<div class="mask_title" v-show="addtitle">年度计划</div>
-				<div class="mask_title" v-show="modifytitle">年度计划</div>
+				<div class="mask_title" v-show="addtitle">添加年度计划</div>
+				<div class="mask_title" v-show="modifytitle">修改年度计划</div>
+				<div class="mask_title" v-show="viewtitle">查看年度计划</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>
 						<i v-bind:class="{'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -124,7 +125,7 @@
 									</el-button>
 								</div>
 
-								<el-table :data="worlplanlist" row-key="ID" border stripe  highlight-current-row="highlight-current-row" style="width: 100% ;"  :default-sort="{prop:'worlplanlist', order: 'descending'}" v-loadmore="loadMore">
+								<el-table :data="worlplanlist" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100% ;"  :default-sort="{prop:'worlplanlist', order: 'descending'}" v-loadmore="loadMore">
 								    <el-table-column prop="iconOperation" fixed width="50px">
 								      <template slot-scope="scope" >
 								      	<i class="el-icon-check" v-if="scope.row.isEditing" @click="iconOperation(scope.row)">
@@ -201,7 +202,7 @@
 											</el-button>
 										</div>
 										<!-- <el-form :model="basisList" :rules="rules" ref="basisList" prop="basisList"> -->
-						            	<el-table :data="basisList" border stripe height="200" style="width: 100%;" :default-sort="{prop:'basisList', order: 'descending'}">
+						            	<el-table :data="basisList" border stripe :fit="true" style="width: 100%;" :default-sort="{prop:'basisList', order: 'descending'}">
 						            		<el-table-column prop="NUMBER" label="所属计划编号" width="150">
 						            			<template slot-scope="scope">
 										        	<span>{{scope.$index + 1}}</span>
@@ -683,6 +684,9 @@
 				up: false,
 				addtitle:true,//添加弹出框titile
 				modifytitle:false,//修改弹出框titile
+				viewtitle: false, //查看弹出框title
+				noviews: true, //保存的按钮
+				views: false,
 				activeName: 'first',//tabs
 				activeNames: ['1','2','3','4','5','6','7'],//手风琴数量
 				labelPosition: 'right', //表格
@@ -712,93 +716,24 @@
 					totalCount: 0
 				},
 				WORKPLAN:{
-					// ID:'',
-					// WP_NUM:'10001',
-					// DESCRIPTION:'',
-					// STATUS:'1',
-					// YEAR:'',
-					// TYPE:'',
-					// LEADER_STATUS:'',
-					// STATUSDATE:'',
-					// ITEMTYPE:'',
-					// PROP_UNIT:'',
-					// ENTERBY:'',
-					// ENTERDATE:'',
-					// CHANGEBY:'',
-					// CHANGEDATE:'',
-					// COMPACTOR:'',
-					// C_PERSON:'1',
-					// APPRPERSON:'',
-					// REPORTDATE:'',
-					// MEMO:'',
-					// MESSSTATUS:'1',
-					// WORLPLANLINEList: []
 				},
 				inspectionList_child: {
-					// ID:'',
-					// WP_NUM:'',
-					// WP_LINENUM:'',
-					// ITEM_NAME:'',
-					// MODEL:'',
-					// VENDOR:'',
-					// V_NAME:'',
-					// SJ_NAME:'',
-					// CHECKCOST:'',
-					// REASION:'',
-					// MEMO:'',
-					// STATUS:'',
 					 WORLPLANLINE_BASISList:[],
 					 WORLPLANLINE_PROJECTList:[]
 				},
 				
 				rules: {
-					CODE: [{
-						required: true,
-						trigger: 'blur',
-						validator: validateCode,
-					}],
-					NAME:[{
-						required: true,
-						trigger: 'blur',
-						validator: validateName,
-					}],
-					CONTACT_ADDRESS:[{
-						required: true,
-						trigger: 'blur',
-						validator: validateAddress,
-					}],
-					PHONE:[{
-						required: true,
-						trigger: 'blur',
-						validator: validatePhone,
-					}],
-					EMAIL:[{
-						required: true,
-						trigger: 'blur',
-						validator: validateEmail,
-					}],
-					PROP_UNIT:[{//提出单位 
-   						required: true,
-   						validator: validateUnit,
-   						trigger: 'change' 
-       				}],
-       				ITEMTYPE:[{//产品类别 
-   						required: true,
-   						validator: validateItemtype,
-   						trigger: 'change' 
-       				}],
-       				//年度
-       				YEAR: [{type: 'string',required: true,message: '请选择年度',trigger: 'change' 
-       				}],
-       				//提报日期
-       				REPORTDATE: [{type: 'string',required: true,message: '请选择提报日期',trigger: 'change' 
-       				}],
+					CODE: [{required: true,trigger: 'blur',validator: validateCode,}],
+					NAME:[{required: true,trigger: 'blur',validator: validateName,}],
+					CONTACT_ADDRESS:[{required: true,trigger: 'blur',validator: validateAddress,}],
+					PHONE:[{required: true,trigger: 'blur',validator: validatePhone,}],
+					EMAIL:[{required: true,trigger: 'blur',validator: validateEmail,}],
+					PROP_UNIT:[{required: true,validator: validateUnit,trigger: 'change'}],//提出单位 
+       				ITEMTYPE:[{required: true,validator: validateItemtype,trigger: 'change' }],//产品类别 
+       				YEAR: [{type: 'string',required: true,message: '请选择年度',trigger: 'change' }],//年度
+       				REPORTDATE: [{type: 'string',required: true,message: '请选择提报日期',trigger: 'change'}],//提报日期
        				//检测依据 
-       				basisList:[{//产品类别 
-   						required: true,
-   						validator: validateBasislist,
-   						trigger: 'change' 
-       				}],
+       				basisList:[{required: true,validator: validateBasislist,trigger: 'change'}],//产品类别 
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -897,28 +832,15 @@
             	}
             	
 	            if(row.isEditing){
-	            	console.log('笔');
-	    //         	let money = document.getElementById("costshow").value;
-					// this.initcost = money;
-					// let num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
-					// num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
-					// row.CHECKCOST = num.join(".");
 	            	//编辑
 	        		this.editPlan = row;
 	        		this.proTestList = row.WORLPLANLINE_PROJECTList;
 			   		this.basisList = row.WORLPLANLINE_BASISList;
 	        	}else{
-	        		console.log('对号');
-	    //     		let money = document.getElementById("cost").value;
-					// this.initcost = money;
-					// let num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
-					// num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
-					// row.CHECKCOST = num.join(".");
 	        		this.editPlan = {};
 	        		this.proTestList = [];
 	        		this.basisList = [];
 	        	}
-	        	// row.CHECKCOST = this.initcost;
 	        },
    			//上传文件 Begin
 			handleExceed(files, fileList) {
@@ -1003,7 +925,7 @@
             },
             //tabs
 			handleClick(tab, event) {
-		        console.log(tab, event);
+//		        console.log(tab, event);
 		    },
             //检测依据弹出框
             basisleadbtn(){
@@ -1042,7 +964,7 @@
 						'STATUS': '1',
 						'VENDOR':  ''
 					};
-					this.worlplanlist.unshift(obj);
+					this.worlplanlist.push(obj);
 					this.editPlan = this.worlplanlist[0];
 					this.basisList = [];
 					this.proTestList = [];
@@ -1103,7 +1025,7 @@
 			},
 			//点击添加，修改按钮显示弹窗
 			visible() {
-				this.assignshow = false;
+				this.assignshow = false;//下达 按钮
 				var myDate = new Date();
 				var date = this.$moment(date).format("YYYY-MM-DD");
 				var year = myDate.getFullYear().toString();
@@ -1127,7 +1049,7 @@
 					'APPRPERSON': '',
 					'REPORTDATE': date,
 					'MEMO': '',
-					'MESSSTATUS': '活动',
+					'MESSSTATUS': '1',
 					'SYNCHRONIZATION_TIME': ''
 				};
 				this.worlplanlist = []; //年度计划列表
@@ -1143,13 +1065,16 @@
 						type: 'error'
 					});
 				});
-				this.modify = false;
-				this.show = true;
+				this.addtitle = true;
+            	this.modifytitle = false;
+            	this.modify=false;
+            	this.show = true;
+            	this.edit = true;
+				this.noedit = false;
 			},
 			// 这里是修改
 			detail(dataid) {
 				this.assignshow = true;
-				this.modify = true;
 				this.$axios.get(this.basic_url +'/api-user/users/currentMap', {}).then((res) => {
 	    			this.WORKPLAN.CHANGEBY = res.data.nickname;
 	    			var date = new Date();
@@ -1161,6 +1086,7 @@
 					});
 				});
 				this.$axios.get(this.basic_url +'/api-apps/app/workplan/' + dataid, {}).then((res) => {
+					console.log(res.data);
 					this.WORKPLAN = res.data;
 					this.worlplanlist = res.data.WORLPLANLINEList;
 					var worlplanlist = res.data.WORLPLANLINEList;
@@ -1169,7 +1095,6 @@
 						worlplanlist[i].frontId = this.frontId++;
 						// var money = document.getElementById("costshow").value;
 						// this.initcost = money;
-						console.log(worlplanlist[i].CHECKCOST);
 						var cost = worlplanlist[i].CHECKCOST.toString();
 						var num = parseFloat(this.toNum(cost)).toFixed(2).toString().split(".");
 						console.log(num);
@@ -1179,6 +1104,31 @@
 					this.basisList = res.data.WORLPLANLINEList.length > 0 ? res.data.WORLPLANLINEList[0].WORLPLANLINE_BASISList : [];
 					this.proTestList = res.data.WORLPLANLINEList.length > 0 ? res.data.WORLPLANLINEList[0].WORLPLANLINE_PROJECTList : [];
 					
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+				this.viewtitle = false;
+				this.addtitle = false;
+				this.modifytitle = true;
+				this.modify = true;
+				this.show = true;
+				this.edit = true;
+				this.noedit = false;
+			},
+			//查看
+			view(dataid) {
+				this.addtitle = false;
+				this.viewtitle = true;
+				this.views = true; //
+				this.noviews = false;
+				this.edit = true;
+				this.noedit = true;
+				var url = this.basic_url + '/api-apps/app/workplan/' + dataid;
+				this.$axios.get(url, {}).then((res) => {
+					this.WORKPLAN = res.data;
 					this.show = true;
 				}).catch((err) => {
 					this.$message({

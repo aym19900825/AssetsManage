@@ -45,12 +45,13 @@
 					<el-form status-icon :model="searchList" label-width="70px">
 						<el-row :gutter="10">
 							<el-col :span="5">
-								<el-input v-model="searchList.AUTOKEY">
-									<template slot="prepend">自动编号名称</template>
-								</el-input>
+								<el-form-item label="自动编号名称" prop="AUTOKEY" label-width="100px">
+									<el-input v-model="searchList.AUTOKEY">
+									</el-input>
+								</el-form-item>
 							</el-col>
 							<el-col :span="2">
-								<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
@@ -60,10 +61,14 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :data="numberList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'numberList', order: 'descending'}" @selection-change="SelChange"  v-loadmore="loadMore">
+						<el-table :data="numberList" border stripe :header-cell-style="rowClass" :height="fullHeight" style="width: 100%;" :default-sort="{prop:'numberList', order: 'descending'}" @selection-change="SelChange"  v-loadmore="loadMore">
 							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 							</el-table-column>
 							<el-table-column label="自动编号名称" width="140" sortable prop="AUTOKEY" v-if="this.checkedName.indexOf('自动编号名称')!=-1">
+								<template slot-scope="scope">
+									<p @click=view(scope.row)>{{scope.row.AUTOKEY}}
+									</p>
+								</template>
 							</el-table-column>
 							<el-table-column label="起始数" width="140" sortable prop="S_NUM" v-if="this.checkedName.indexOf('起始数')!=-1">
 							</el-table-column>
@@ -73,15 +78,15 @@
 							</el-table-column>
 							<!--<el-table-column label="信息状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
 							</el-table-column>-->
-							<el-table-column label="录入人机构" width="180" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('录入人机构')!=-1">
+							<el-table-column label="机构" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('机构')!=-1">
 							</el-table-column>
-							<el-table-column label="录入人" width="140" sortable prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
+							<!-- <el-table-column label="录入人" width="140" sortable prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
+							</el-table-column> -->
+							<el-table-column label="录入时间" width="100" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 							</el-table-column>
-							<el-table-column label="录入时间" width="160" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
-							</el-table-column>
-							<el-table-column label="修改人" width="140" prop="CHANGEBY" sortable v-if="this.checkedName.indexOf('修改人')!=-1">
-							</el-table-column>
-							<el-table-column label="修改时间" width="160" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
+							<!-- <el-table-column label="修改人" width="140" prop="CHANGEBY" sortable v-if="this.checkedName.indexOf('修改人')!=-1">
+							</el-table-column> -->
+							<el-table-column label="修改时间" width="100" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
 							</el-table-column>
 						</el-table>
 						<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
@@ -134,12 +139,12 @@
 					'自动编号名称',
 					'起始数',
 					'前缀',
-					'信息状态',
+					// '信息状态',
 					'备注',
-					'录入人机构',
-					'录入人',
+					'机构',
+					// '录入人',
 					'录入时间',
-					'修改人',
+					// '修改人',
 					'修改时间',
 				],
 				tableHeader: [//控制Table-列头标题名称
@@ -155,30 +160,30 @@
 						label: '前缀',
 						prop: 'PREFIX'
 					},
-					{
-						label: '信息状态',
-						prop: 'STATUS'
-					},
+					// {
+					// 	label: '信息状态',
+					// 	prop: 'STATUS'
+					// },
 					{
 						label: '备注',
 						prop: 'MEMO'
 					},
 					{
-						label: '录入人机构',
+						label: '机构',
 						prop: 'DEPARTMENT'
 					},
-					{
-						label: '录入人',
-						prop: 'ENTERBY'
-					},
+					// {
+					// 	label: '录入人',
+					// 	prop: 'ENTERBY'
+					// },
 					{
 						label: '录入时间',
 						prop: 'ENTERDATE'
 					},
-					{
-						label: '修改人',
-						prop: 'CHANGEBY'
-					},
+					// {
+					// 	label: '修改人',
+					// 	prop: 'CHANGEBY'
+					// },
 					{
 						label: '修改时间',
 						prop: 'CHANGEDATE'
@@ -211,6 +216,11 @@
 		},
 
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    // console.log(rowIndex) //表头行标号为0
+			    return 'text-align:center'
+			},
 			//表格滚动加载
 			loadMore () {
 			   if (this.loadSign) {
@@ -254,6 +264,7 @@
 					CHANGEBY:'',
 					CHANGEDATE:''
 				};
+				this.$refs.child.open();
 				this.$refs.child.childMethods();
 			},
 			modify() {//修改自动编号设置数据
@@ -274,6 +285,10 @@
 					this.numbsetForm = this.selMenu[0]; 
 					this.$refs.child.detail();
 				}
+			},
+			//查看
+			 view(item) {
+				this.$refs.child.view(item);
 			},
 			//高级查询
 			modestsearch() {

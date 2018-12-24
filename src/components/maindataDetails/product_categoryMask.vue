@@ -70,7 +70,7 @@
 									</el-col>
 								</el-row>
 								<el-row>
-									<el-col :span="8" v-if="modifytitle">
+									<el-col :span="8" v-if="dept">
 										<el-form-item label="机构" prop="DEPARTMENT">
 											<el-input v-model="CATEGORY.DEPARTMENT" :disabled="edit"></el-input>
 										</el-form-item>
@@ -167,11 +167,6 @@
 			};
 			return {
 				basic_url: Config.dev_url,
-				// personinfo: false,
-
-				modify: false, //修订、修改人、修改时间
-				statusshow1: true,
-				statusshow2: false,
 				selUser: [],
 				edit: true, //禁填
 				show: false,
@@ -179,8 +174,6 @@
 				isok2: false,
 				down: true,
 				up: false,
-				addtitle: true,
-				modifytitle: false,
 				activeNames: ['1','2'], //手风琴数量
 				//				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
@@ -199,10 +192,17 @@
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
 				category:{},//从父组件接过来的值
+				addtitle:true,
+				modifytitle:false,
+				viewtitle:false,
+				dept:false,
+				noedit:false,//表单内容
+				views:false,//录入修改人信息
+				noviews:true,//按钮
+				modify:false,//修订
 				hintshow:false,
-				personinfo:false,
-				views:false,
-				noviews: true,
+				statusshow1:true,
+				statusshow2:false,
 			};
 		},
 		methods: {
@@ -238,14 +238,14 @@
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.viewtitle = false;
-				this.noedit = false;
+				this.dept = false;
+				this.noedit = false;//表单内容
 				this.views = false;//录入修改人信息
-				this.noviews = true;
+				this.noviews = true;//按钮
+				this.modify = false;//修订
 				this.hintshow = false;
 				this.statusshow1 = true;
 				this.statusshow2 = false;
-				
-				this.modify = false;
 //				this.show = true;
 			},
 			// 这里是修改
@@ -253,12 +253,12 @@
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.viewtitle = false;
+				this.dept = true;
+				this.noedit = false;//表单内容
 				this.views = false;//录入修改人信息
-				this.noedit = false;
-				this.noviews = false;
+				this.noviews = true;//按钮
 				this.hintshow = false;
-				this.modify = true;
-				
+				this.modify = true;//修订
 				this.statusshow1 = false;
 				this.statusshow2 = true;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
@@ -269,7 +269,6 @@
 					//深拷贝数据
 					let _obj = JSON.stringify(this.CATEGORY);
         			this.category = JSON.parse(_obj);
-        			console.log(this.category);
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -279,15 +278,14 @@
 				this.show = true;
 			},
 			//这是查看
-			view(item) {
-				console.log(this.category);
+			view() {
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;
+				this.dept = true;
+				this.noedit = true;//表单内容
 				this.views = true;//录入修改人信息
-				this.noviews = false;
-				this.noedit = true;
-				this.CATEGORY = item;
+				this.noviews = false;//按钮
 				this.show = true;				
 			},
 			//点击修订按钮
@@ -298,7 +296,7 @@
 	 					var CATEGORY=JSON.stringify(this.CATEGORY);
 					 	if(category==CATEGORY){
 					  	this.$message({
-								message: '没有修改不能修改',
+								message: '没有修改内容，不允许修订！',
 								type: 'warning'
 							});
 							return false;
@@ -314,7 +312,23 @@
 									//重新加载数据
 									this.$emit('request');
 									this.show = false;
-								}		
+								}else{
+								this.show = true;
+								if(res.data.resp_code == 1) {
+									//res.data.resp_msg!=''后台返回提示信息
+									if( res.data.resp_msg!=''){
+									 	this.$message({
+											message: res.data.resp_msg,
+											type: 'warning'
+									 	});
+									}else{
+										this.$message({
+											message:'相同数据不可重复修订！',
+											type: 'warning'
+										});
+									}
+								}
+							}		
 							}).catch((err) => {
 								this.$message({
 									message: '网络错误，请重试',

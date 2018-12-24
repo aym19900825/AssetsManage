@@ -5,6 +5,7 @@
 			<div class="mask_title_div clearfix">
 				<div class="mask_title" v-show="addtitle">添加检验/检测项目</div>
 				<div class="mask_title" v-show="modifytitle">修改检验/检测项目</div>
+				<div class="mask_title" v-show="viewtitle">查看检验/检测项目</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>	
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -15,7 +16,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form status-icon :model="testing_projectForm" :rules="rules" ref="testing_projectForm" label-width="100px">
+				<el-form status-icon inline-message :model="testing_projectForm" :rules="rules" ref="testing_projectForm" label-width="100px">
 					<div class="accordion">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基本信息" name="1">
@@ -36,23 +37,22 @@
 										</el-input>
 									</el-col>-->
 									<el-col :span="5" class="pull-right">
-										<el-input v-model="testing_projectForm.P_NUM" @focus="hint" @input="hinthide">
+										<el-input v-model="testing_projectForm.P_NUM" @focus="hint" @input="hinthide" :disabled="noedit">
 											<template slot="prepend">编码</template>
 										</el-input>
 										<span v-if="hintshow" style="color:rgb(103,194,58);font-size: 12px">可填写，若不填写系统将自动生成</span>
 									</el-col>
 								</el-row>
-
 								<el-row>
 									<el-col :span="16">
 										<el-form-item label="项目名称" prop="P_NAME">
-											<el-input v-model="testing_projectForm.P_NAME"  onmouseover="this.title=this.value"></el-input>
+											<el-input v-model="testing_projectForm.P_NAME"  onmouseover="this.title=this.value" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="单价(元)" prop="QUANTITY">
 											<!-- <el-input-number type="number" :precision="2" v-model.number="testing_projectForm.QUANTITY" :step="5" :max="100000" style="width: 100%;"></el-input-number> -->
-											<el-input v-model="testing_projectForm.QUANTITY" id="cost" @blur="toPrice"></el-input>
+											<el-input v-model="testing_projectForm.QUANTITY" id="cost" @blur="toPrice" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -60,7 +60,7 @@
 									<el-col :span="8">
 										<el-form-item label="作业指导书" prop="DOCLINKS_NUM">
 											<el-input v-model="testing_projectForm.DOCLINKS_NUM">
-												<el-button slot="append" icon="icon-search" @click="getCompany"></el-button>
+												<el-button slot="append" icon="icon-search" @click="getCompany" :disabled="noedit"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -73,25 +73,24 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="领域" prop="FIELD">
-											<el-input v-model="testing_projectForm.FIELD"></el-input>
+											<el-input v-model="testing_projectForm.FIELD" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row>
 									<el-col :span="8">
 										<el-form-item label="子领域" prop="CHILD_FIELD">
-											<el-input v-model="testing_projectForm.CHILD_FIELD"></el-input>
+											<el-input v-model="testing_projectForm.CHILD_FIELD" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
-									<el-col :span="8" v-if="modifytitle">
+									<el-col :span="8" v-if="dept">
 										<el-form-item label="机构" prop="DEPARTMENT">
 											<el-input v-model="testing_projectForm.DEPARTMENT" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
-								</el-row>
-								
+								</el-row>	
 							</el-collapse-item>
-							<el-collapse-item title="其他" name="2"  v-if="personinfo">
+							<el-collapse-item title="其他" name="2" v-show="views">
 								<el-row>
 									<el-col :span="8">
 										<el-form-item label="录入人" prop="ENTERBY">
@@ -117,7 +116,7 @@
 							</el-collapse-item>
 						</el-collapse>
 					</div>
-					<div class="el-dialog__footer">
+					<div class="el-dialog__footer" v-show="noviews">
 						<el-button type="primary" @click="saveAndUpdate('testing_projectForm')">保存</el-button>
 						<el-button type="success" @click="saveAndSubmit('testing_projectForm')" v-show="addtitle">保存并添加</el-button>
 						<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('testing_projectForm')">修订</el-button>
@@ -138,7 +137,6 @@
 				</el-table-column>
 				<el-table-column label="资质有效期" sortable width="200px" prop="c_date">
 				</el-table-column>
-
 			</el-table>
 			<el-pagination background class="pull-right" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 			</el-pagination>
@@ -236,11 +234,6 @@
 				activeNames: ['1','2'], //手风琴数量
 				//				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
-				addtitle: true,
-				modifytitle: false,
-				modify: true,
-				statusshow1: true,
-				statusshow2: true,
 				rules: { //需要验证的字段
 					P_NUM: [{
 						required: true,
@@ -281,8 +274,17 @@
 				},
 				initcost: '',
 				TESTING_PROJECTFORM:{},//
+				addtitle:true,
+				modifytitle:false,
+				viewtitle:false,
+				dept:false,
+				noedit:false,//表单内容
+				views:false,//录入修改人信息
+				noviews:true,//按钮
+				modify:false,//修订
 				hintshow:false,
-				personinfo:false
+				statusshow1:true,
+				statusshow2:false,
 			};
 		},
 		methods: {
@@ -356,28 +358,28 @@
 						type: 'error'
 					})
 				});
+				this.addtitle = true;
+				this.modifytitle = false;
+				this.viewtitle = false;
+				this.dept = false;
+				this.noedit = false;//表单内容
+				this.views = false;//录入修改人信息
+				this.noviews = true;//按钮
+				this.modify = false;//修订
 				this.hintshow = false;
 				this.statusshow1 = true;
 				this.statusshow2 = false;
-				this.addtitle = true;
-				this.modifytitle = false;
-				this.modify = false;
 				// this.show = true;
 			},
 
 			detail() { //修改内容时从父组件带过来的
 				// this.testing_projectForm.QUANTITY
-					this.initcost = this.testing_projectForm.QUANTITY;
-					var money = this.initcost.toString().replace(/\,|\￥/g, "")
-					var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
-					num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)', 'ig'), "$1,");
-					// // this.dataInfo.CHECTCOST="￥" + num.join(".");
-					this.testing_projectForm.QUANTITY = num.join(".");
-					// console.log(23333);
-					console.log('======'+this.initcost+'=======');
-					console.log(this.testing_projectForm.QUANTITY);
-					console.log(23333);
-
+				this.initcost = this.testing_projectForm.QUANTITY;
+				var money = this.initcost.toString().replace(/\,|\￥/g, "")
+				var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
+				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)', 'ig'), "$1,");
+				// // this.dataInfo.CHECTCOST="￥" + num.join(".");
+				this.testing_projectForm.QUANTITY = num.join(".");
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.testing_projectForm.DEPARTMENT = res.data.deptName;
 					this.testing_projectForm.CHANGEBY = res.data.nickname;
@@ -392,14 +394,29 @@
 						type: 'error'
 					})
 				})
-				this.hintshow = false;
-				this.statusshow1 = false; //
-				this.statusshow2 = true;
 				this.addtitle = false;
 				this.modifytitle = true;
-				this.modify = true;
+				this.viewtitle = false;
+				this.dept = true;
+				this.noedit = false;//表单内容
+				this.views = false;//录入修改人信息
+				this.noviews = true;//按钮
+				this.hintshow = false;
+				this.modify = true;//修订
+				this.statusshow1 = false;
+				this.statusshow2 = true;
 				this.show = true;
-
+			},
+			//这是查看
+			view() {
+				this.addtitle = false;
+				this.modifytitle = false;
+				this.viewtitle = true;
+				this.dept = true;
+				this.noedit = true;//表单内容
+				this.views = true;//录入修改人信息
+				this.noviews = false;//按钮
+				this.show = true;				
 			},
 			modifyversion(testing_projectForm) {
 				this.$refs[testing_projectForm].validate((valid) => {

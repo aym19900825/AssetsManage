@@ -116,6 +116,10 @@
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="样品编号" sortable width="200px" prop="ITEMNUM" v-if="this.checkedName.indexOf('样品编号')!=-1">
+									<template slot-scope="scope">
+										<p @click=view(scope.row.ID)>{{scope.row.ITEMNUM}}
+										</p>
+									</template>
 								</el-table-column>
 								<el-table-column label="样品类别" sortable width="200px" prop="TYPE" v-if="this.checkedName.indexOf('样品类别')!=-1">
 								</el-table-column>
@@ -276,7 +280,6 @@
 		methods: {
 			//表头居中
 			rowClass({ row, rowIndex}) {
-			    console.log(rowIndex) //表头行标号为0
 			    return 'text-align:center'
 			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
@@ -363,6 +366,10 @@
 					this.$refs.child.detail(this.selMenu[0].ID);
 				}
 			},
+			//查看
+			view(id) {
+				this.$refs.child.view(id);
+			},
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
@@ -429,11 +436,6 @@
 			Printing() {
 
 			},
-			judge(data) {
-				//taxStatus 布尔值
-				return data.DESCRIPTION ? '启用' : '冻结'
-			},
-			
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];

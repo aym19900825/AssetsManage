@@ -50,24 +50,28 @@
 					<el-form status-icon :model="searchList" label-width="70px">
 						<el-row :gutter="10">
 							<el-col :span="5">
-								<el-input v-model="searchList.NAME">
-									<template slot="prepend">单位名称</template>
-								</el-input>
+								<el-form-item label="单位名称" prop="NAME">
+									<el-input v-model="searchList.NAME">
+									</el-input>
+								</el-form-item>
 							</el-col>
 							<el-col :span="5">
-								<el-input v-model="searchList.CODE">
-									<template slot="prepend">组织机构代码</template>
-								</el-input>
+								<el-form-item label="组织机构代码" prop="CODE" label-width="100px">
+									<el-input v-model="searchList.CODE">
+									</el-input>
+								</el-form-item>
 							</el-col>
 							<el-col :span="5">
-								<el-input v-model="searchList.PHONE">
-									<template slot="prepend">联系电话</template>
-								</el-input>
+								<el-form-item label="联系电话" prop="PHONE">
+									<el-input v-model="searchList.PHONE">
+									</el-input>
+								</el-form-item>
 							</el-col>
 							<el-col :span="5">
-								<el-input v-model="searchList.CONTACT_ADDRESS">
-									<template slot="prepend">联系地址</template>
-								</el-input>
+								<el-form-item label="联系地址" prop="CONTACT_ADDRESS">
+									<el-input v-model="searchList.CONTACT_ADDRESS">
+									</el-input>
+								</el-form-item>
 							</el-col>
 							<!-- <el-col :span="2" style="padding-top: 3px">
 								<el-select v-model="searchList.STATUS" placeholder="请选择信息状态">
@@ -76,7 +80,7 @@
 								</el-select>
 							</el-col> -->
 							<el-col :span="2">
-								<el-button class="pull-right" type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
@@ -85,10 +89,14 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :data="customerList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'customerList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+						<el-table :data="customerList" border stripe :header-cell-style="rowClass" :height="fullHeight" style="width: 100%;" :default-sort="{prop:'customerList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 							</el-table-column>
 							<el-table-column label="组织机构代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('组织机构代码')!=-1">
+								<template slot-scope="scope">
+									<p @click=view(scope.row.ID)>{{scope.row.CODE}}
+									</p>
+								</template>
 							</el-table-column>
 							<el-table-column label="单位名称" width="300" sortable prop="NAME" v-if="this.checkedName.indexOf('单位名称')!=-1">
 							</el-table-column>
@@ -224,6 +232,11 @@
 		},
 
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    // console.log(rowIndex) //表头行标号为0
+			    return 'text-align:center'
+			},
 			//表格滚动加载数据
 			loadMore () {
 			   if (this.loadSign) {
@@ -258,7 +271,7 @@
 			},
 			//添加用戶
 			openAddMgr() {
-				
+				this.$refs.child.open();
 				this.$refs.child.visible();
 			},
 			//修改用戶
@@ -278,6 +291,10 @@
 				} else {
 					this.$refs.child.detail(this.selUser[0].ID);
 				}
+			},
+			//查看
+			 view(id) {
+				this.$refs.child.view(id);
 			},
 			//高级查询
 			modestsearch() {

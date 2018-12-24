@@ -2,7 +2,7 @@
 <div>
 	<div class="headerbg">
 		<vheader></vheader>
-		<navs_header></navs_header>
+		<navs_header ref='navsheader'></navs_header>
 	</div>
 
     <div class="contentbg">
@@ -195,10 +195,9 @@ export default {
 		]
       }
     },
-    mounted(){
-		this.initEchart();//调用饼状图图表函数名称
-	},
+  
 	methods: {
+		
 		initEchart(){//引入饼状图图表
 			var myChart = this.$echarts.init(document.getElementById('main'),'macarons');
 	        // 指定图表的配置项和数据
@@ -220,7 +219,11 @@ export default {
 	        // 使用刚指定的配置项和数据显示图表。
 	        myChart.setOption(option);
 			}
-	}
+	},
+	  mounted(){
+		this.initEchart();//调用饼状图图表函数名称
+		this.$refs.navsheader.sessionGet();
+	},
 }
 
 </script>

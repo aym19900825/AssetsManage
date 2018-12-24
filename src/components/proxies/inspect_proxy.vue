@@ -60,53 +60,52 @@
 						</div>
 					</div>
 					<!-- 高级查询划出 Begin-->
-					<div v-show="search" class="pb10">
-						<el-form status-icon :model="searchList" label-width="70px">
-							<el-row :gutter="10" class="pb5">
-								<el-col :span="5">
-									<el-input v-model="searchList.V_NAME">
-										<template slot="prepend">委托单位名称</template>
-									</el-input>
+					<div v-show="search" class="pb5">
+						<el-form status-icon :model="searchList">
+							<el-row :gutter="10">
+								<el-col :span="6">
+									<el-form-item label="委托单位名称" prop="V_NAME"  label-width="100px">
+										<el-input v-model="searchList.V_NAME"></el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-input v-model="searchList.ITEM_NAME">
-										<template slot="prepend">样品名称</template>
-									</el-input>
-								</el-col>
-								<!--<el-col :span="5">
-									<el-input v-model="searchList.S_ENGNAME">
-										<template slot="prepend">英文名称</template>
-									</el-input>
-								</el-col>-->
-								<el-col :span="5">
-									<el-input v-model="searchList.REPORT_NUM">
-										<template slot="prepend">检测报告编号</template>
-									</el-input>
+									<el-form-item label="样品名称" prop="ITEM_NAME" label-width="70px">
+										<el-input v-model="searchList.ITEM_NAME"></el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-input v-model="searchList.PROXYNUM">
-										<template slot="prepend">检测委托书编号</template>
-									</el-input>
+									<el-form-item label="检测报告编号" prop="REPORT_NUM" label-width="100px">
+										<el-input v-model="searchList.REPORT_NUM"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="5">
+									<el-form-item label="检测委托书编号" prop="PROXYNUM" label-width="110px">
+										<el-input v-model="searchList.PROXYNUM"></el-input>
+									</el-form-item>
 								</el-col>
 							</el-row>
 							<el-row :gutter="10">
-								<el-col :span="5">
-									<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%">
+								<el-col :span="6">
+									<el-form-item label="完成日期" prop="COMPDATE" label-width="100px">
+										<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%">
 									</el-date-picker>
+									</el-form-item>
 								</el-col>
+								<!-- <el-col :span="5">
+									<el-form-item label="录入人" prop="ENTERBY" label-width="70px">
+										<el-input v-model="searchList.ENTERBY"></el-input>
+									</el-form-item>
+								</el-col -->
 								<el-col :span="5">
-									<el-input v-model="searchList.ENTERBY">
-										<template slot="prepend">录入人</template>
-									</el-input>
-								</el-col>
-								<el-col :span="3">
-									<el-select v-model="searchList.STATUS" placeholder="选择状态">
-										<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-										</el-option>
-									</el-select>
+									<el-form-item label="状态" prop="STATUS" label-width="70px">
+										<el-select clearable v-model="searchList.STATUS" placeholder="选择状态" style="width: 100%">
+											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+											</el-option>
+										</el-select>
+									</el-form-item>
 								</el-col>
 								<el-col :span="2">
-									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:1px">搜索</el-button>
+									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -136,6 +135,10 @@
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="检验委托书编号" sortable width="130px" prop="PROXYNUM" v-if="this.checkedName.indexOf('检验委托书编号')!=-1">
+									<template slot-scope="scope">
+										<p @click=view(scope.row.ID)>{{scope.row.PROXYNUM}}
+										</p>
+									</template>
 								</el-table-column>
 								<el-table-column label="委托单位名称" sortable width="140px" prop="V_NAME" v-if="this.checkedName.indexOf('委托单位名称')!=-1">
 								</el-table-column>
@@ -352,7 +355,6 @@
 		methods: {
 			//表头居中
 			rowClass({ row, rowIndex}) {
-			    console.log(rowIndex) //表头行标号为0
 			    return 'text-align:center'
 			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
@@ -412,13 +414,14 @@
 				this.page.pageSize = 10;
 				this.requestData();
 			},
-			//添加用戶
+			//添加
 			openAddMgr() {
 //				this.$refs.child.resetNew();
 				this.$refs.child.visible();
+				this.$refs.child.open();
 				
 			},
-			//修改用戶
+			//修改
 			modify() {
 				if(this.selUser.length == 0) {
 					this.$message({
@@ -435,6 +438,10 @@
 				} else {
 					this.$refs.child.detail(this.selUser[0].ID);
 				}
+			},
+			//查看
+			 view(id) {
+				this.$refs.child.view(id);
 			},
 			//高级查询
 			modestsearch() {
@@ -461,7 +468,6 @@
 					for(var i = 0; i < changeUser.length; i++) {
 						deleteid.push(changeUser[i].ID);
 					}
-					console.log(deleteid);
 					//ids为deleteid数组用逗号拼接的字符串
 					ids = deleteid.toString(',');
 					var data = {
@@ -476,7 +482,6 @@
 						this.$axios.delete(url, {
 							params: data
 						}).then((res) => { //.delete 传数据方法
-							console.log(res);
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '删除成功',
@@ -574,7 +579,6 @@
 				
 			},
 			handleNodeClick(data) {
-				console.log(111);
 				if(data.type == '1') {
 					this.companyId = data.id;
 					this.deptId = '';

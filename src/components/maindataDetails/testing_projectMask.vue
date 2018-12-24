@@ -215,6 +215,7 @@
 				}
 			};
 			return {
+				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				editSearch: '',
 				value: '',
@@ -532,19 +533,24 @@
 							message: '网络错误，请重试',
 							type: 'error'
 						});
-					});} else {
+					});
+				this.falg = true;
+			} else {
 						this.show = true;
 						this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
 						});
+						this.falg = false;
 					}
 				});
 			},
 			//保存
 			saveAndUpdate(testing_projectForm) {
 				this.save(testing_projectForm);
-				this.show = false;
+				if(this.falg){
+					this.show = false;
+				}
 			},
 			//保存并添加
 			saveAndSubmit(testing_projectForm) {

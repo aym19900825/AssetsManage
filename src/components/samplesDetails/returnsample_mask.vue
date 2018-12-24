@@ -191,6 +191,7 @@
 //		},
 		data() {
 			return {
+				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				value: '',
 				options: [{
@@ -424,7 +425,7 @@
 								// this.show = false;
 								//重新加载数据
 								this.$emit('request');
-								this.$refs["samplesForm"].resetFields();
+								// this.$refs["samplesForm"].resetFields();
 							}
 						}).catch((err) => {
 							this.$message({
@@ -432,15 +433,23 @@
 								type: 'error'
 							});
 						});
+						this.falg = true;
 					} else {
-						return false;
+						this.show = true;
+						this.$message({
+							message: '未填写完整，请填写',
+							type: 'warning'
+						});
+						this.falg = false;
 					}
 				});
 			},
 			//保存
 			saveAndUpdate(samplesForm){
 				this.save(samplesForm);
-				this.show = false;
+				if(this.falg){
+					this.show = false;
+				}
 				// this.$emit('request');
 			},
 			//添加并保存

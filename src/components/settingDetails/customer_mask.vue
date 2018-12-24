@@ -587,7 +587,7 @@
 							});
 							//重新加载数据
 							this.$emit('request');
-							this.$refs["CUSTOMER"].resetFields();
+							// this.$refs["CUSTOMER"].resetFields();
 						}
 					}).catch((err) => {
 						this.$message({

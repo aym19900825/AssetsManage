@@ -47,7 +47,7 @@
 					</div>
 					<el-row :gutter="10">
 						<el-col :span="24">
-							 <tree_grid :columns="columns" :tree-structure="true" :data-source="menuList" v-on:childByValue="childByValue"></tree_grid>
+							 <tree_grid :columns="columns" :tree-structure="true" :data-source="menuList" v-on:childByValue="childByValue" ></tree_grid>
 
 							<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
@@ -158,7 +158,7 @@
 			childByValue: function (childValue) {
 		        // childValue就是子组件传过来的
 		        this.selMenu = childValue
-		       
+		       console.log(childValue);
 //		        this.selMenu[0].hidden ? '1' : '0'
 		        
 		    },
@@ -206,7 +206,11 @@
 					this.$refs.child.detail();
 				}
 			},
-
+			// 查看
+			 view() {
+			 	this.menu=this.selMenu;
+				this.$refs.child.view();
+			},
 			// 删除
 			delmenu() {
 				var selData = this.selMenu;

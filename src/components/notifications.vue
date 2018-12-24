@@ -359,10 +359,6 @@
 			},
 			//表头居中
 			rowClass({ row, rowIndex}) {
-<<<<<<< HEAD
-=======
-			    // console.log(rowIndex) //表头行标号为0
->>>>>>> 1a66a1548edc9e36572e6af3f7155caf7ef1729d
 			    return 'text-align:center'
 			},
 			//滚动加载
@@ -507,12 +503,8 @@
 			SelChange(val) {
 				this.selUser = val;
 			},
-<<<<<<< HEAD
-			requestData() {
-=======
 			requestData(index) {
-				console.log('==='+this.searchList.TYPE);
->>>>>>> 1a66a1548edc9e36572e6af3f7155caf7ef1729d
+
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -635,12 +627,9 @@
 		},
 		mounted() {
 			this.requestData();
-<<<<<<< HEAD
-//			this.getKey();
-=======
 			this.getKey();
 			this.getType();
->>>>>>> 1a66a1548edc9e36572e6af3f7155caf7ef1729d
+
 		},
 	}
 </script>

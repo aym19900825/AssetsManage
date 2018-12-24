@@ -292,12 +292,23 @@
 					STATUS: ''
 				},
 				//tree
-				resourceData: [], //数组，我这里是通过接口获取数据，
+				resourceData: [{ 
+					label: '监督抽查'},
+					{label: '监督抽查复查'},
+					{label: '质量抽查'},
+					{label: '质量抽查复查'},
+					{label: '生产许可证'},
+					{label: '认定检验检测'},
+					{label: '鉴定试验'},
+					{label: '委托检验检测'},
+					{label: '专项抽查'},
+					{label: '专项抽查复查'},
+					{label: '其它'},
+				], //数组，我这里是通过接口获取数据，
 				resourceDialogisShow: false,
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
 				resourceProps: {
-					children: "subDepts",
-					label: "fullname"
+					label: "label"
 				},
 				page: { //分页显示
 					currentPage: 1,
@@ -535,14 +546,14 @@
 			},
 
 			//机构树
-			getKey() {
-				let that = this;
-				var url = this.basic_url + '/api-user/depts/tree';
-				this.$axios.get(url, {}).then((res) => {
-					this.resourceData = res.data;
-					this.treeData = this.transformTree(this.resourceData);
-				});
-			},
+//			getKey() {
+//				let that = this;
+//				var url = this.basic_url + '/api-user/depts/tree';
+//				this.$axios.get(url, {}).then((res) => {
+//					this.resourceData = res.data;
+//					this.treeData = this.transformTree(this.resourceData);
+//				});
+//			},
 
 			transformTree(data) {
 				for(var i = 0; i < data.length; i++) {
@@ -559,6 +570,7 @@
 				return data;
 			},
 			handleNodeClick(data) {
+				console.log(data);
 				if(data.type == '1') {
 					this.companyId = data.id;
 					this.deptId = '';
@@ -568,16 +580,14 @@
 				}
 				this.requestData();
 			},
-			renderContent(h, {
-				node,
-				data,
-				store
-			}) { //自定义Element树菜单显示图标
+//			树节点的内容区的渲染 Function
+			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
+				console.log(node);console.log(data);console.log(store);
 				return(
 					<span>
-              <i class={data.iconClass}></i>
-              <span>{node.label}</span>
-            </span>
+              			<i class={data.iconClass}></i>
+              			<span>{node.label}</span>
+           			</span>
 				);
 			},
 			// 点击节点
@@ -612,14 +622,13 @@
 				}
 				this.requestData();
 			},
-			handleNodeClick(data) {},
 			formatter(row, column) {
 				return row.enabled;
 			},
 		},
 		mounted() {
 			this.requestData();
-			this.getKey();
+//			this.getKey();
 			this.getType();
 		},
 	}

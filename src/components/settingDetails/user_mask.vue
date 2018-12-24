@@ -955,10 +955,11 @@
 
 			//			保存users/saveOrUpdate
 			save() {
+				console.log(123453);
 				var _this = this;
 				this.$refs.user.validate((valid) => {
 					if(valid) {
-						_this.user.enabled = _this.user.enabled == '活动' ? 'true' : 'false';
+//						_this.user.enabled = _this.user.enabled == '活动' ? 'true' : 'false';
 						_this.user.ispermit = _this.user.ispermit == '是' ? '1' : '2';
 						_this.user.islogin = _this.user.islogin == '是' ? '1' : '2';
 						var user = _this.user;
@@ -981,6 +982,7 @@
 							user.roleId = '';
 							user.roles = [];
 						}
+						console.log(_this.user);
 						var url = _this.basic_url + '/api-user/users/saveOrUpdate';
 						this.$axios.post(url, _this.user).then((res) => {
 							if(res.data.resp_code == 0) {
@@ -988,9 +990,11 @@
 									message: '保存成功',
 									type: 'success',
 								});
+								console.log(_this.user);
 								this.$emit('request');
-								this.$refs["user"].resetFields(); //清空表单验证
+								// this.$refs["user"].resetFields(); //清空表单验证
 							}
+
 						}).catch((err) => {
 							this.$message({
 								message: '网络错误，请重试',

@@ -338,6 +338,7 @@
 							//重新加载数据
 							this.$emit('request');
 							this.$refs["numbsetForm"].resetFields();
+							this.show = false;
 						}
 					}).catch((err) => {
 						this.$message({
@@ -345,9 +346,13 @@
 							type: 'error'
 						});
 					});
-		          } else {
-		            return false;
-		          }
+		          }else {
+						this.show = true;
+						this.$message({
+							message: '未填写完整，请填写',
+							type: 'warning'
+						});
+					}
 		        });
 				
 			},

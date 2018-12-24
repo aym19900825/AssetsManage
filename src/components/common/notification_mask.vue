@@ -431,6 +431,7 @@
 		//				},
 		data() {
 			return {
+				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				gridData: [], //彈出框的數據
 				fileList: [],
@@ -801,24 +802,31 @@
 							this.$emit('request');
 							this.reset();
 						}
+						this.falg=true
 					}).catch((err) => {
 						this.$message({
 							message: '网络错误，请重试',
 							type: 'error'
 						});
+						this.falg=false
 					});}
 					} else {
-					 this.$message({
+						this.show=true;
+					 	this.$message({
 							message: '有必填项未填写，请重新填写',
 							type: 'warning',
 						});
+						this.falg=false
 					}
 				});
 			},
 			//保存
 			saveAndUpdate() {
 				this.save();
-				this.show = false;
+				if(this.falg){
+					this.show = false;
+				}
+				
 			},
 			//提交并保存
 			saveAndSubmit() {

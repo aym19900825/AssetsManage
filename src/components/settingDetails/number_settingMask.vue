@@ -278,7 +278,7 @@
 				this.noedit = true;//表单内容
 				this.views = true;//录入修改人信息
 				this.noviews = false;//按钮
-				this.numbsetForm = item;
+				// this.numbsetForm = item;
 				console.log(this.numbsetForm);
 				this.show = true;				
 			},

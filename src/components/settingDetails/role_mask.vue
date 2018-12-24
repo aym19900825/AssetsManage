@@ -3,7 +3,9 @@
 		<div class="mask" v-show="show"></div>
 		<div class="mask_div"  v-show="show">
 			<div class="mask_title_div clearfix">
-				<div class="mask_title">添加角色</div>
+				<div class="mask_title" v-show="addtitle">添加角色</div>
+				<div class="mask_title" v-show="modifytitle">修改角色</div>
+				<div class="mask_title" v-show="viewtitle">查看角色</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'> 
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -21,18 +23,18 @@
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="角色编码" prop="code">
-											<el-input v-model="roleList.code" :disabled="edit"></el-input>
+											<el-input v-model="roleList.code" :disabled="edit" ></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="角色名称" prop="name">
-											<el-input v-model="roleList.name"></el-input>
+											<el-input v-model="roleList.name" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="是否停用" prop="INACTIVE">
 											<el-input v-if="stopshow" v-model="roleList.INACTIVE" :disabled="edit"></el-input>
-											<el-select v-if="stopselect" v-model="roleList.INACTIVE" placeholder="请选择" style="width: 100%">
+											<el-select v-if="stopselect" v-model="roleList.INACTIVE" placeholder="请选择" style="width: 100%" :disabled="noedit">
 												<el-option v-for="item in stopoptions" :key="item.value" :label="item.label" :value="item.value">
 												</el-option>
 											</el-select>
@@ -42,7 +44,7 @@
 								<el-row :gutter="30">
 									<el-col :span="24">
 										<el-form-item label="备注" prop="MEMO">
-											<el-input type="textarea" v-model="roleList.MEMO" placeholder="请填写"></el-input>
+											<el-input type="textarea" v-model="roleList.MEMO" placeholder="请填写" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -95,7 +97,7 @@
 							</el-collapse-item>
 						</el-collapse>
 					</div>
-					<div class="el-dialog__footer">
+					<div class="el-dialog__footer" v-show="noviews">
 						<el-button @click='close'>取消</el-button>
 						<el-button type="primary" @click='submitForm()'>保存</el-button>
 					</div>
@@ -204,7 +206,18 @@
 				companyId: '',
 				deptId: '',
 				treeData: [],
-				cccData:{}
+				cccData:{},
+				addtitle:true,
+				modifytitle:false,
+				viewtitle:false,
+				dept:false,
+				noedit:false,//表单内容
+				views:false,//录入修改人信息
+				noviews:true,//按钮
+				modify:false,//修订
+				hintshow:false,
+				statusshow1:true,
+				statusshow2:false,
 			};
 		},
 		mounted() {
@@ -283,10 +296,32 @@
 				this.stopshow = true;
 				this.stopselect = false;
 				this.roleList.INACTIVE = '否';
-				this.show = true;
+				this.addtitle = true;
+				this.modifytitle = false;
+				this.viewtitle = false;
+				this.dept = false;
+				this.noedit = false;//表单内容
+				this.views = false;//录入修改人信息
+				this.noviews = true;//按钮
+				this.modify = false;//修订
+				this.hintshow = false;
+				this.statusshow1 = true;
+				this.statusshow2 = false;
+				// this.show = true;
 			},
 			// 这里是修改
 			detail(id) {
+				this.addtitle = false;
+				this.modifytitle = true;
+				this.viewtitle = false;
+				this.dept = true;
+				this.noedit = false;//表单内容
+				this.views = false;//录入修改人信息
+				this.noviews = true;//按钮
+				this.hintshow = false;
+				this.modify = true;//修订
+				this.statusshow1 = false;
+				this.statusshow2 = true;
 				this.stopshow = false;
 				this.stopselect = true;
 				var url = this.basic_url + '/api-user/roles/' + id;
@@ -302,9 +337,24 @@
 				});
 				this.show = true;
 			},
+			//这是查看
+			view(item) {
+				this.addtitle = false;
+				this.modifytitle = false;
+				this.viewtitle = true;
+				this.dept = true;
+				this.noedit = true;//表单内容
+				this.views = true;//录入修改人信息
+				this.noviews = false;//按钮
+				this.roleList = item;
+				this.show = true;				
+			},
 			//点击关闭按钮
 			close() {
 				this.show = false;
+			},
+			open(){
+				this.show = true;
 			},
 			toggle(e) {
 				if(this.isok1 == true) {

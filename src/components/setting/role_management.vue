@@ -47,21 +47,24 @@
 					</div>
 					<!-- 高级查询划出 -->
 					<div v-show="search" class="pb10">
-						<el-form status-icon :model="searchList" label-width="70px">
+						<el-form status-icon :model="searchList">
 							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-input v-model="searchList.name">
-										<template slot="prepend">角色名称</template>
-									</el-input>
+									<el-form-item label="角色名称" prop="name" label-width="70px">
+										<el-input v-model="searchList.name">
+										</el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="3">
-										<el-select v-model="searchList.INACTIVE" placeholder="是否停用" style="width: 100%;padding-top: 3px">
+									<el-form-item label="是否停用" prop="INACTIVE" label-width="70px">
+										<el-select clearable v-model="searchList.INACTIVE" placeholder="" style="width: 100%;">
 											<el-option v-for="item in stopoptions" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
 										</el-select>
+									</el-form-item>
 								</el-col>
 								<el-col :span="2">
-									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -70,10 +73,14 @@
 					<div class="row">
 						<div class="col-sm-12">
 							<!-- 表格begin -->
-							<el-table :data="roleList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'roleList', order: 'descending'}" @selection-change="SelChange">
+							<el-table :data="roleList" border stripe :header-cell-style="rowClass" :height="fullHeight" style="width: 100%;" :default-sort="{prop:'roleList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="角色编码" sortable prop="code" v-if="this.checkedName.indexOf('角色编码')!=-1">
+									<template slot-scope="scope">
+										<p @click=view(scope.row)>{{scope.row.code}}
+										</p>
+									</template>
 								</el-table-column>
 								<el-table-column label="角色名称" sortable prop="name" v-if="this.checkedName.indexOf('角色名称')!=-1">
 								</el-table-column>
@@ -174,6 +181,11 @@
 			}
 		},
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    // console.log(rowIndex) //表头行标号为0
+			    return 'text-align:center'
+			},
 			//控制列的显示隐藏调用函数
 			tableControle(data){
 				this.checkedName = data;
@@ -197,6 +209,7 @@
 			openAddMgr() {
 				this.$refs.child.resetNew();
 				this.$refs.child.visible();
+				this.$refs.child.open();
 			},
 			//数据限制
 			datalimit() {
@@ -220,6 +233,10 @@
 				} else {
 					this.$refs.child.detail(this.selData[0].id);
 				}
+			},
+			//查看用戶
+			 view(item) {
+				this.$refs.child.view(item);
 			},
 			//高级查询
 			modestsearch() {

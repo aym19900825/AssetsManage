@@ -91,21 +91,21 @@
 									</el-date-picker>
 									</el-form-item>
 								</el-col>
-								<el-col :span="5">
+								<!-- <el-col :span="5">
 									<el-form-item label="录入人" prop="ENTERBY" label-width="70px">
 										<el-input v-model="searchList.ENTERBY"></el-input>
 									</el-form-item>
-								</el-col>
+								</el-col -->
 								<el-col :span="5">
-									<el-form-item label="状态" prop="STATUS" label-width="100px">
-										<el-select v-model="searchList.STATUS" placeholder="选择状态" style="width: 100%">
+									<el-form-item label="状态" prop="STATUS" label-width="70px">
+										<el-select clearable v-model="searchList.STATUS" placeholder="选择状态" style="width: 100%">
 											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
 										</el-select>
 									</el-form-item>
 								</el-col>
 								<el-col :span="2">
-									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:1px">搜索</el-button>
+									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 								</el-col>
 							</el-row>
 						</el-form>

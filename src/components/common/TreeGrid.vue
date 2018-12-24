@@ -2,7 +2,7 @@
   <el-table
     :data="data"
     style="width: 100%;"
-    :row-style="showTr" border stripe :height="fullHeight" @selection-change="SelChange">
+    :row-style="showTr" border stripe :header-cell-style="rowClass" :height="fullHeight" @selection-change="SelChange">
     <el-table-column type="selection" width="55" fixed>
 		</el-table-column>
     <el-table-column v-for="(column, index) in columns" :key="column.dataIndex"
@@ -98,6 +98,11 @@
       }
     },
     methods: {
+      //表头居中
+      rowClass({ row, rowIndex}) {
+          // console.log(rowIndex) //表头行标号为0
+          return 'text-align:center'
+      },
     	//改变的值
     	SelChange(val) {
 				this.selUser = val;

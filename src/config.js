@@ -3,6 +3,5 @@ const config = {
 	dev_url: 'http://192.168.1.169:9100'
 //	dev_url: 'http://203.93.173.179:9500'   //部署版远端访问地址
 
-}
 
 export default  config

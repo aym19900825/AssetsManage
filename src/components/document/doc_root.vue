@@ -18,7 +18,7 @@
 								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>新建文件夹
                       			 </button>
-								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+								<button type="button" class="btn btn-green" id="">
                                 	<i class="icon-add"></i>上传
                       			 </button>
 								<button type="button" class="btn btn-bule button-margin" @click="modify">
@@ -39,6 +39,7 @@
 							<tableControle :tableHeader="tableHeader" :checkedName="checkedName" @tableControle="tableControle" ref="tableControle"></tableControle>
 						</div>
 					</div>
+					<vue-dropzone ref="myVueDropzone" id="dropzone" :options="dropzoneOptions"></vue-dropzone>
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search" class="pb10">
 						<el-form status-icon :model="searchList" label-width="70px">
@@ -115,6 +116,8 @@
 	import navs_header from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import samplesmask from'../samplesDetails/samples_mask.vue'
+	import vueDropzone from 'vue2-dropzone'
+	import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 	export default {
 		name: 'samples',//接样
 		components: {
@@ -123,9 +126,20 @@
 			navs_left,
 			tableControle,
 			samplesmask,
+			vueDropzone
 		},
 		data() {
 			return {
+				//上传初始化参数
+				dropzoneOptions: {
+					url: 'https://httpbin.org/post',
+					thumbnailWidth: 150,
+					maxFilesize: 0.5,
+					addRemoveLinks: true,
+					headers: { "My-Awesome-Header": "header value" },
+					dictDefaultMessage: "<i class='el-icon-upload'></i>点击上传"
+				},
+
 				basic_url: Config.dev_url,
 				isShow: false,
 				ismin: true,
@@ -251,8 +265,6 @@
 				}
 				m.isFolder = !m.isFolder;
 			},
-
-			
 			//表格滚动加载
 			loadMore () {
 			   if (this.loadSign) {
@@ -265,7 +277,6 @@
 			       this.loadSign = true
 			     }, 1000)
 			     this.requestData()
-//			     console.log('到底了', this.page.currentPage)
 			   }
 			 },
 			tableControle(data) {//控制表格列显示隐藏
@@ -360,32 +371,6 @@
                 	});
 				}
 			},
-			// 导入
-			importData() {
-
-			},
-			// 导出
-			exportData() {
-
-			},
-			// 打印
-			Printing() {
-
-			},
-			judge(data) {
-				//taxStatus 布尔值
-				return data.DESCRIPTION ? '启用' : '冻结'
-			},
-			
-			//时间格式化  
-			dateFormat(row, column) {
-				var date = row[column.property];
-				if(date == undefined) {
-					return "";
-				}
-				return this.$moment(date).format("YYYY-MM-DD"); 
-			},
-
 			SelChange(val) {//选中值后赋值给一个自定义的数组：selMenu
 				this.selMenu = val;
 			},
@@ -423,10 +408,6 @@
 					this.samplesList = newarr;
 				}).catch((wrong) => {})
 				
-			},
-			
-			formatter(row, column) {
-				return row.enabled;
 			},
 			//生产单位树
 			getKey() {
@@ -486,6 +467,7 @@
 		mounted() {// 在页面挂载前就发起请求
 			this.requestData();
 			this.getKey();
+			this.upload();
 		},
 	}
 </script>

@@ -169,7 +169,7 @@
 				selMenu:[],
 				dialogVisible: false, //对话框
 				edit: true, //禁填
-				activeNames: ['1','1'], //手风琴数量
+				activeNames: ['1','2'], //手风琴数量
 				show: false,
 				isok1: true,
 				isok2: false,

@@ -42,25 +42,26 @@ export default {
         tabLeft(){
             var left = $('.page-tabs').offset().left; 
             //tab宽度
-            var tabW = $('.page-tabs').width();
+            var tabW = $('.page-tabs-content').width();
             //总宽度
             var contentW = $('.content-tabs').width()-240;
-            if(tabW-left+80 < contentW){
+           if (left !== 0&&tabW>contentW) {
                 $('.page-tabs').offset({
-                    left: left - 110
+                    left:40
                 });
             }
             
         },
         tabRight(){
             var left = $('.page-tabs').offset().left; 
-            //tab宽度
-            var tabW = $('.page-tabs').width();
-            //总宽度
+            //tabs总宽度
+            var tabW = $('.page-tabs-content').width();
+            //总区域内容宽度
             var contentW = $('.content-tabs').width()-240;
-            if(left < 0){
-                $('.page-tabs').offset({
-                    left: left + 110
+            if(tabW>contentW){
+            	var aa=tabW-contentW;
+            	$('.page-tabs').offset({
+                    left: -aa
                 });
             }
         },
@@ -193,10 +194,12 @@ export default {
     background:linear-gradient(360deg,rgba(232,236,240,1) 0%,rgba(255,255,255,1) 100%);
 }
 .page-tabs {
+	float: left;
     position: absolute;
     margin-left: 40px;
     height: 39px;
     overflow: hidden;
+    width:10000px;
 }
 .roll-right.J_tabRight {
     right: 140px;
@@ -234,7 +237,9 @@ export default {
 .roll-right.J_tabRight {
     right: 160px;
 }
-
+.page-tabs-content{
+	 float: left;
+}
 .page-tabs-content span{
     display: block;
     float: left;
@@ -248,6 +253,7 @@ export default {
     line-height: 35px;
     position: relative;
     cursor: pointer;
+    /*width:30000px;*/
 }
 .page-tabs span.active {
     color: #6585DF;

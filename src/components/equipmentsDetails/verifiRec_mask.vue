@@ -17,7 +17,6 @@
 			<div class="mask_content">
 				<el-form status-icon :model="dataInfo" :rules="rules"   ref="dataInfo" label-width="100px" class="demo-user">
 					<div class="accordion">
-
 						<!-- 设备基本信息 -->
 						<el-collapse v-model="activeNames">
 							<el-collapse-item name="1">
@@ -45,7 +44,10 @@
 									</el-select>
 								</el-form-item>
 							</el-collapse-item>
-							
+							<!-- 文档管理 -->
+							<el-collapse-item title="文档" name="2">
+								<doc-table></doc-table>
+							</el-collapse-item>
 							<!-- 其他信息 -->
 							<el-collapse-item title="其他" name="3">
 								<el-form-item v-for="item in otherInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
@@ -70,9 +72,11 @@
 
 <script>
 	import Config from '../../config.js'
+	import docTable from '../common/doc.vue'
 	export default {
 		name: 'masks',
 		props: ['detailData'],
+		components: {docTable},
 		data() {
 			var checkNum = (rule, value, callback) => {
 				if (!value) {

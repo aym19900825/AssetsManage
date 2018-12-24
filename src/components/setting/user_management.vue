@@ -567,7 +567,7 @@
 				
 			},
 			handleNodeClick(data) {
-
+				console.log(data);
 				if(data.type == '1') {
 					this.companyId = data.id;
 					this.deptId = '';

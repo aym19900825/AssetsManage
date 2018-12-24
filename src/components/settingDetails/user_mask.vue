@@ -881,7 +881,7 @@
 				var _this = this;
 				this.$refs.user.validate((valid) => {
 					if(valid) {
-						_this.user.enabled = _this.user.enabled == '活动' ? 'true' : 'false';
+//						_this.user.enabled = _this.user.enabled == '活动' ? 'true' : 'false';
 						_this.user.ispermit = _this.user.ispermit == '是' ? '1' : '2';
 						_this.user.islogin = _this.user.islogin == '是' ? '1' : '2';
 						var user = _this.user;

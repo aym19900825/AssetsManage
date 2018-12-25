@@ -349,6 +349,7 @@
 				this.roleList = item;
 				this.show = true;				
 			},
+			
 			//点击关闭按钮
 			close() {
 				this.show = false;

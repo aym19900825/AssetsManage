@@ -288,6 +288,7 @@
 			},
 			//查看
 			 view(item) {
+			 	this.numbsetForm = item;
 				this.$refs.child.view(item);
 			},
 			//高级查询

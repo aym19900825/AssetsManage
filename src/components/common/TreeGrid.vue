@@ -14,7 +14,8 @@
           <i v-if="scope.row._expanded" class="el-icon-caret-bottom" aria-hidden="true"></i>
         </span>
         <span v-else-if="index===0" class="ms-tree-space"></span>
-        {{scope.row[column.dataIndex]}}
+        <span v-if="index===0"@click=view(scope.row)>{{scope.row[column.dataIndex]}}</span>
+        <span v-else>{{scope.row[column.dataIndex]}}</span>          
       </template>
     </el-table-column>
     
@@ -22,6 +23,7 @@
 </template>
 <script>
   import Utils from '../../assets/js/index.js'
+  import deliver from '../../assets/js/deliver.js'
   export default {
     name: 'tree-grid',
     props: {
@@ -124,6 +126,12 @@
         let record = me.data[trIndex]
         record._expanded = !record._expanded
       },
+      view: function (data) {
+        console.log(data);
+         this.$emit('childByValue', data)
+        // deliver.$emit('data', this.view)
+      },
+    
     // 显示层级关系的空格和图标
       spaceIconShow (index) {
         let me = this

@@ -359,6 +359,7 @@
 			},
 			//表头居中
 			rowClass({ row, rowIndex}) {
+			    // console.log(rowIndex) //表头行标号为0
 			    return 'text-align:center'
 			},
 			//滚动加载
@@ -504,7 +505,7 @@
 				this.selUser = val;
 			},
 			requestData(index) {
-
+				console.log('==='+this.searchList.TYPE);
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -627,9 +628,8 @@
 		},
 		mounted() {
 			this.requestData();
-			this.getKey();
+//			this.getKey();
 			this.getType();
-
 		},
 	}
 </script>

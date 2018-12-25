@@ -119,6 +119,7 @@
 
 <script>
 	import Config from '../../config.js'
+	import deliver from '../../assets/js/deliver.js'
 	import all_icons from '../common/all_icons.vue'//弹出框
 	export default {
 		name: 'masks',
@@ -155,6 +156,7 @@
 			
 
 			return {
+				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				edit: true, //禁填
 				col_but1: true,
@@ -210,6 +212,17 @@
 					this.addtitle=false;
 				    this.modifytitle=true;
 					this.show = true;
+			},
+			//这是查看
+			view() {
+				this.addtitle = false;
+				this.modifytitle = false;
+				this.viewtitle = true;
+				this.dept = true;
+				this.noedit = true;//表单内容
+				this.views = true;//录入修改人信息
+				this.noviews = false;//按钮
+				this.show = true;
 			},
 			//点击关闭按钮
 			close() {
@@ -275,19 +288,20 @@
 								this.show = false;
 								//重新加载数据
 								this.$emit('request')
+								this.$refs["menu"].resetFields();
 							}
 						}).catch((err) => {
 							this.$message({
-
 								message: '网络错误，请重试',
 								type: 'error'
 							});
 						});
 					} else {
 						this.$message({
-								message: '有必填项未填写，请填写',
-								type: 'warning'
-							});
+							message: '有必填项未填写，请填写',
+							type: 'warning'
+						});
+						this.show = true;
 					}
 				})
 			},

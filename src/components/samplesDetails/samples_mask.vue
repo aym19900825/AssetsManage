@@ -351,6 +351,7 @@
 		 },
 		data() {
 			return {
+				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				value: '',
 				options: [{
@@ -705,15 +706,23 @@
 								type: 'error'
 							});
 						});
+						this.falg = true;
 					} else {
-						return false;
+						this.show = true;
+						this.$message({
+							message: '未填写完整，请填写',
+							type: 'warning'
+						});
+						this.falg = false;
 					}
 				});
 			},
 			//保存
 			saveAndUpdate(){
 				this.save();
-				this.show = false;
+				if(this.falg){
+					this.show = false;
+				}
 				this.$emit('request');
 			},
 			//保存并添加

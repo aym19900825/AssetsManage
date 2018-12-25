@@ -224,6 +224,7 @@
 				}
 			};
 			return {
+				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				selUser: [],
 				edit: true, //禁填
@@ -241,7 +242,7 @@
 					// 	trigger: 'blur',
 					// 	validator: validateNum,
 					// }],
-					TYPE: [{
+					DESCRIPTION: [{
 						required: true,
 						trigger: 'blur',
 						validator: validateType,
@@ -541,13 +542,14 @@
 								type: 'error'
 							});
 						});
+						this.falg = true;
 					} else {
 						this.show = true;
-						// this.$message({
-						// 	message: '未填写完整，请填写',
-						// 	type: 'warning'
-						// });
-						return false;
+						this.$message({
+							message: '未填写完整，请填写',
+							type: 'warning'
+						});
+						this.falg = false;
 					}
 				});
 			},
@@ -555,7 +557,9 @@
 			//保存
 			saveAndUpdate(WORK_INSTRUCTION) {
 				this.save(WORK_INSTRUCTION);
-				this.show = false;
+				if(this.falg){
+					this.show = false;
+				}
 			},
 			//保存并添加
 			saveAndSubmit(WORK_INSTRUCTION) {

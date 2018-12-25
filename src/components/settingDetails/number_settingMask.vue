@@ -169,7 +169,7 @@
 				selMenu:[],
 				dialogVisible: false, //对话框
 				edit: true, //禁填
-				activeNames: ['1','1'], //手风琴数量
+				activeNames: ['1','2'], //手风琴数量
 				show: false,
 				isok1: true,
 				isok2: false,
@@ -278,7 +278,7 @@
 				this.noedit = true;//表单内容
 				this.views = true;//录入修改人信息
 				this.noviews = false;//按钮
-				this.numbsetForm = item;
+				// this.numbsetForm = item;
 				console.log(this.numbsetForm);
 				this.show = true;				
 			},
@@ -338,6 +338,7 @@
 							//重新加载数据
 							this.$emit('request');
 							this.$refs["numbsetForm"].resetFields();
+							this.show = false;
 						}
 					}).catch((err) => {
 						this.$message({
@@ -345,9 +346,13 @@
 							type: 'error'
 						});
 					});
-		          } else {
-		            return false;
-		          }
+		          }else {
+						this.show = true;
+						this.$message({
+							message: '未填写完整，请填写',
+							type: 'warning'
+						});
+					}
 		        });
 				
 			},

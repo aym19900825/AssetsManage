@@ -645,6 +645,7 @@
 				this.modify = true;
 				this.noedit = true;//表单内容
 				this.views = true;//录入修改人信息
+				this.mview = true;
 				this.noviews = false;//按钮
 				this.dataInfo = data;
 				this.show = true;				

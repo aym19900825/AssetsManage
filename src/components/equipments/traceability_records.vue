@@ -46,46 +46,43 @@
 					</div>
 				</div>
 				<!-- 高级查询划出 Begin-->
-				<div v-show="search" class="pb10">
+				<div v-show="search">
 					<el-form status-icon :model="searchList" label-width="70px">
 						<el-row :gutter="10">
 							<el-col :span="5">
-								
+								<el-form-item label="溯源记录编号" prop="RECORDNUM" label-width="100px">
+									<el-input v-model="searchList.RECORDNUM"></el-input>
+								</el-form-item>
 							</el-col>
 							<el-col :span="5">
-								<el-input v-model="searchList.DESCRIPTION">
-									<template slot="prepend">记录描述</template>
-								</el-input>
+								<el-form-item label="记录描述" prop="DESCRIPTION">
+									<el-input v-model="searchList.DESCRIPTION"></el-input>
+								</el-form-item>
 							</el-col>
 							<el-col :span="5">
-								<el-input v-model="searchList.ASSETNUM">
-									<template slot="prepend">设备编号</template>
-								</el-input>
+								<el-form-item label="设备编号" prop="ASSETNUM">
+									<el-input v-model="searchList.ASSETNUM"></el-input>
+								</el-form-item>
 							</el-col>
 							<el-col :span="5">
-								<el-input v-model="searchList.A_NAME">
-									<template slot="prepend">设备名称</template>
-								</el-input>
+								<el-form-item label="设备名称" prop="A_NAME">
+									<el-input v-model="searchList.A_NAME"></el-input>
+								</el-form-item>
 							</el-col>
 						</el-row>
-						<el-row :gutter="10" style="margin-top: 5px;">
+						<el-row :gutter="10">
 							<el-col :span="5">
-								<el-input v-model="searchList.RECORDNUM">
-									<template slot="prepend">溯源记录编号</template>
-								</el-input>
+								<el-form-item label="溯源方式" prop="PM_MODEL" label-width="100px">
+									<el-input v-model="searchList.PM_MODEL"></el-input>
+								</el-form-item>
 							</el-col>
 							<el-col :span="5">
-								<el-input v-model="searchList.PM_MODEL">
-									<template slot="prepend">溯源方式</template>
-								</el-input>
-							</el-col>
-							<el-col :span="5">
-								<el-input v-model="searchList.C_NUM">
-									<template slot="prepend">证书编号</template>
-								</el-input>
+								<el-form-item label="证书编号" prop="C_NUM">
+									<el-input v-model="searchList.C_NUM"></el-input>
+								</el-form-item>
 							</el-col>
 							<el-col :span="2">
-								<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
@@ -94,10 +91,14 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :data="userList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+						<el-table :header-cell-style="rowClass" :data="userList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 							</el-table-column>
 							<el-table-column label="溯源记录编号" width="200" sortable prop="RECORDNUM" v-if="this.checkedName.indexOf('溯源记录编号')!=-1">
+								<template slot-scope="scope">
+									<p @click=view(scope.row)>{{scope.row.RECORDNUM}}
+									</p>
+								</template>
 							</el-table-column>
 							<el-table-column label="记录描述" width="200" sortable prop="DESCRIPTION" v-if="this.checkedName.indexOf('记录描述')!=-1">
 							</el-table-column>
@@ -316,13 +317,11 @@
 				aaaData:[],
 			}
 		},
-
-		mounted(){
-			
-
-			
-		},
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+				return 'text-align:center'
+			},
 			tableControle(data){
 				this.checkedName = data;
 			},
@@ -361,6 +360,12 @@
 				} else {
 					this.$refs.child.detail();
 				}
+			},
+			//查看
+			 view(data) {
+			 	// console.log(data);
+			 	// this.dataInfo = data;
+				this.$refs.child.view(data);
 			},
 			//高级查询
 			modestsearch() {

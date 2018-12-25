@@ -82,6 +82,19 @@ export default {
 			if(flag){
 //				array.splice(2, 0, "three");
 				clickedNav.push(item);
+				setTimeout(function(){
+		 			var left = $('.page-tabs').offset().left; 
+		            //tabs总宽度
+		            var tabW = $('.page-tabs-content').width();
+		            //总区域内容宽度
+		            var contentW = $('.content-tabs').width()-240;
+		            if(tabW>contentW){
+		            	var poor=tabW-contentW;
+		            	$('.page-tabs').offset({
+		                    left: -poor
+		                });
+		            }
+				},0);				
 			}
 
 			if(!sessionStorage.getItem('selectedNav')){
@@ -116,7 +129,7 @@ export default {
 		}
 	},
 	mounted() {
-		this.common.tabLeft();
+//		this.common.tabLeft();
 		let item=this.leftNavs[0];
 		this.addClickNav(item);
 	}

@@ -3,17 +3,20 @@
 	<div>
 		<div class="mask" v-show="show"></div>
 		<div class="mask_div" v-show="show">
-			<div class="mask_content">
-                <div class="mask_title_div clearfix">
-                    <div class="mask_anniu">
-                        <span class="mask_span mask_max" @click='toggle'>
-                            <i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
-                        </span>
-                        <span class="mask_span" @click='close'>
-                            <i class="icon-close1"></i>
-                        </span>
-                    </div>
+            <div class="mask_title_div clearfix">
+            	<div class="mask_title" v-show="addtitle">添加期间和核查计划</div>
+					<div class="mask_title" v-show="modifytitle">修改期间和核查计划</div>
+					<div class="mask_title" v-show="viewtitle">查看期间和核查计划</div>
+                <div class="mask_anniu">
+                    <span class="mask_span mask_max" @click='toggle'>
+                        <i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
+                    </span>
+                    <span class="mask_span" @click='close'>
+                        <i class="icon-close1"></i>
+                    </span>
                 </div>
+            </div>
+            <div class="mask_content">
 				<el-form status-icon :model="dataInfo" :rules="rules"   ref="dataInfo" class="demo-user">
 					<div class="accordion">
 						<!-- 设备header信息 -->
@@ -35,7 +38,7 @@
 										<font>新建行</font>
 									</el-button>
 								</div>
-								<el-table :data="dataInfo.tableList" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'dataInfo.pmRecord', order: 'descending'}">
+								<el-table :header-cell-style="rowClass" :data="dataInfo.tableList" row-key="ID" border stripe :fit="true" max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'dataInfo.pmRecord', order: 'descending'}">
 									<el-table-column prop="iconOperation" fixed label="" width="50px">
 										<template slot-scope="scope">
 											<i class="el-icon-check" v-if="scope.row.isEditing"  @click="changeEdit(scope.row)"></i>
@@ -85,7 +88,7 @@
 											</el-form-item>
 										</template>
 									</el-table-column>
-									<el-table-column prop="PM_YXQ" label="溯源有效期" sortable >
+									<el-table-column prop="PM_YXQ" label="溯源有效期" sortable width="120px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'tableList.'+scope.$index + '.PM_YXQ'">
 												<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.PM_YXQ" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
@@ -94,7 +97,7 @@
 											</el-form-item>
 										</template>
 									</el-table-column>
-									<el-table-column prop="C_PLAN_DATE" label="计划期间核查时间" sortable >
+									<el-table-column prop="C_PLAN_DATE" label="计划期间核查时间" sortable width="150px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'tableList.'+scope.$index + '.C_PLAN_DATE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
                                                 <el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.C_PLAN_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
@@ -103,7 +106,7 @@
 											</el-form-item>
 										</template>
 									</el-table-column>
-                                    <el-table-column prop="COMPDATE" label="执行时间" sortable >
+                                    <el-table-column prop="COMPDATE" label="执行时间" sortable width="100px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'tableList.'+scope.$index + '.COMPDATE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
                                                 <el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
@@ -121,7 +124,7 @@
 											</el-form-item>
 										</template>
 									</el-table-column>
-									<el-table-column label="操作" sortable width="120px">
+									<el-table-column label="操作" sortable width="80px">
 										<template slot-scope="scope">
 											<el-button type="danger" size="mini" round  @click="delLine(scope.$index,scope.row)">
 												<i class="el-icon-delete"></i>
@@ -240,6 +243,10 @@
 			};
 		},
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+				return 'text-align:center'
+			},
 			getUser(){
 				var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url,{}).then((res) => {

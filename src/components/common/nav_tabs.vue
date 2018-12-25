@@ -59,9 +59,9 @@ export default {
             //总区域内容宽度
             var contentW = $('.content-tabs').width()-240;
             if(tabW>contentW){
-            	var aa=tabW-contentW;
+            	var poor=tabW-contentW;
             	$('.page-tabs').offset({
-                    left: -aa
+                    left: -poor
                 });
             }
         },
@@ -125,6 +125,11 @@ export default {
             this.selectedTab = item;
             sessionStorage.setItem('selectedNav',JSON.stringify(this.selectedTab));
             this.$router.push({path: item.navherf});
+            console.log(item);
+            
+//          $('.page-tabs').offset({
+//                  left: 
+//              });
         },
         showindex(){
         	

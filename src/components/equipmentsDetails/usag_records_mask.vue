@@ -3,8 +3,11 @@
 	<div>
 		<div class="mask" v-show="show"></div>
 		<div class="mask_div" v-show="show">
-			<div class="mask_content">
+			<!-- <div class="mask_content"> -->
                 <div class="mask_title_div clearfix">
+                	<div class="mask_title" v-show="addtitle">添加使用/维护保养记录</div>
+					<div class="mask_title" v-show="modifytitle">修改使用/维护保养记录</div>
+					<div class="mask_title" v-show="viewtitle">查看使用/维护保养记录</div>
                     <div class="mask_anniu">
                         <span class="mask_span mask_max" @click='toggle'>
                             <i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -14,13 +17,14 @@
                         </span>
                     </div>
                 </div>
+                <div class="mask_content">
 				<el-form status-icon :model="dataInfo" :rules="rules"   ref="dataInfo" class="demo-user">
 					<div class="accordion">
 						<!-- 设备header信息 -->
-						<el-collapse v-model="activeNames">
+						<el-collapse v-model="activeNames">							
                             <el-collapse-item name="1">
                                 <el-form-item label-width="120px" v-for="item in basicInfo" :key="item.id" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
-									<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'" @change="selChange">
+									<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'" @change="selChange" :disabled="noedit">
 										<el-option v-for="item in item.option"
 										:key="item.ID"
 										:label="item.ASSETNUM"
@@ -30,14 +34,17 @@
                                     <el-input v-model="dataInfo[item.prop]" :type="item.type" disabled v-if="item.type == 'input'"></el-input>
                                 </el-form-item>
                             </el-collapse-item>
-						    <el-collapse-item title="设备使用记录信息" name="2">
-                                <div class="table-func">
-									<el-button type="success" size="mini" round @click="addLine('tableList')">
+                            <!-- 使用记录、维护保养 Begin-->
+							<div class="el-collapse-item pt10 pr20 pb20 ml60" aria-expanded="true" accordion>
+								<el-tabs v-model="activeName" @tab-click="handleClick">
+								    <el-tab-pane label="设备使用记录信息" name="first">
+								    	<div class="table-func table-funcb">
+									<el-button type="success" size="mini" round @click="addLine('tableList')" :disabled="noedit">
 										<i class="icon-add"></i>
 										<font>新建行</font>
 									</el-button>
 								</div>
-								<el-table :data="dataInfo.tableList" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'dataInfo.pmRecord', order: 'descending'}">
+								<el-table :header-cell-style="rowClass" :data="dataInfo.tableList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'dataInfo.pmRecord', order: 'descending'}">
 									<el-table-column prop="iconOperation" fixed label="" width="50px">
 										<template slot-scope="scope">
 											<i class="el-icon-check" v-if="scope.row.isEditing"  @click="changeEdit(scope.row)"></i>
@@ -66,7 +73,7 @@
 										</template>
 									</el-table-column>
                                     <!-- 项目名称无 -->
-									<el-table-column prop="USE_START" label="使用起始时间" sortable >
+									<el-table-column prop="USE_START" label="使用起始时间" sortable width="120px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'tableList.'+scope.$index + '.USE_START'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
                                                 <el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.USE_START" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
@@ -75,7 +82,7 @@
 											</el-form-item>
 										</template>
 									</el-table-column>
-                                    <el-table-column prop="USE_END" label="使用终止时间" sortable >
+                                    <el-table-column prop="USE_END" label="使用终止时间" sortable width="120px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'tableList.'+scope.$index + '.USE_END'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
                                                 <el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.USE_END" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
@@ -93,7 +100,7 @@
 											</el-form-item>
 										</template>
 									</el-table-column>
-                                    <el-table-column prop="USE_PERSON" label="使用人" sortable width="120px">
+                                    <el-table-column prop="USE_PERSON" label="使用人" sortable width="100px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'tableList.'+scope.$index + '.USE_PERSON'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
                                                 <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.USE_PERSON" placeholder="请输入使用人">
@@ -102,7 +109,7 @@
 											</el-form-item>
 										</template>
 									</el-table-column>
-                                    <el-table-column prop="MEMO" label="备注" sortable width="120px">
+                                    <el-table-column prop="MEMO" label="备注" sortable>
 										<template slot-scope="scope">
 											<el-form-item :prop="'tableList.'+scope.$index + '.MEMO'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
                                                 <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MEMO" placeholder="请输入备注">
@@ -111,24 +118,23 @@
 											</el-form-item>
 										</template>
 									</el-table-column>
-									<el-table-column label="操作" sortable width="120px">
+									<el-table-column label="操作" sortable width="70px">
 										<template slot-scope="scope">
-											<el-button type="danger" size="mini" round  @click="delLine(scope.$index,scope.row,'tableList')">
+											<el-button type="danger" size="mini" round  @click="delLine(scope.$index,scope.row,'tableList')" :disabled="noedit">
 												<i class="el-icon-delete"></i>
 											</el-button>
 										</template>
 									</el-table-column>
 								</el-table>
-							</el-collapse-item>
-
-							<el-collapse-item title="设备维护保养记录信息" name="3">
-                                <div class="table-func">
-									<el-button type="success" size="mini" round @click="addLine('maintenList')">
+								    </el-tab-pane>
+								    <el-tab-pane label="设备维护保养记录信息" name="second">
+								    	<div class="table-func table-funcb">
+									<el-button type="success" size="mini" round @click="addLine('maintenList')" :disabled="noedit">
 										<i class="icon-add"></i>
 										<font>新建行</font>
 									</el-button>
 								</div>
-								<el-table :data="dataInfo.maintenList" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'dataInfo.pmRecord', order: 'descending'}">
+								<el-table :header-cell-style="rowClass" :data="dataInfo.maintenList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'dataInfo.pmRecord', order: 'descending'}">
 									<el-table-column prop="iconOperation" fixed width="50px">
 										<template slot-scope="scope">
 											<i class="el-icon-check" v-if="scope.row.isEditing"  @click="changeEdit(scope.row)"></i>
@@ -164,32 +170,35 @@
 											</el-form-item>
 										</template>
 									</el-table-column>
-									<el-table-column label="操作" sortable width="120px">
+									<el-table-column label="操作" sortable width="70px">
 										<template slot-scope="scope">
-											<el-button type="danger" size="mini" round  @click="delLine(scope.$index,scope.row,'maintenList')">
+											<el-button type="danger" size="mini" round  @click="delLine(scope.$index,scope.row,'maintenList')" :disabled="noedit">
 												<i class="el-icon-delete"></i>
 											</el-button>
 										</template>
 									</el-table-column>
 								</el-table>
-							</el-collapse-item>
-
-
-                            <el-collapse-item name="4" v-show="modify">
-                                <el-form-item label-width="120px" v-for="item in otherInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
-                                    <el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" disabled></el-input>
-                                    <el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" disabled>
-                                    </el-date-picker>
+								    </el-tab-pane>
+								</el-tabs>
+							</div>
+							<!-- 使用记录、维护保养 End-->
+                            <el-collapse-item title="其他" name="4" v-show="!addtitle">
+                            	<el-form-item label-width="120px" v-for="item in otherInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-if="item.prop=='DEPARTMENT'" v-show="dept">
+                                    <el-input v-model="dataInfo[item.prop]" :type="item.type" disabled v-if="item.prop=='DEPARTMENT'"></el-input>
+                                </el-form-item>	
+                                <el-form-item label-width="120px" v-for="item in otherInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-show="views">
+                                    <el-input v-if="item.type=='input'" v-model="dataInfo[item.prop]" :type="item.type" disabled></el-input>
+                                    <el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" disabled style="width:100%"></el-date-picker>
                                 </el-form-item>	
                             </el-collapse-item>
 						</el-collapse>
 					</div>
-					<div class="el-dialog__footer">
+					<div class="el-dialog__footer" v-show="noviews">
 						<el-button @click='close'>取消</el-button>
 						<el-button type="primary" @click='submitForm'>提交</el-button>
 					</div>
 				</el-form>
-			</div>
+				</div>
 			<!--底部-->
 		</div>
 		<el-dialog title=样品编号 :visible.sync="sampleDialog" width="80%" :before-close="resetSample">
@@ -260,13 +269,13 @@
                         type: 'input',
                         displayType: 'inline-block'
                     },
-                    {
-                        label: '设备状态',
-                        prop: 'STATE',
-                        width: '30%',
-                        type: 'input',
-                        displayType: 'inline-block'
-                    },
+                    // {
+                    //     label: '设备状态',
+                    //     prop: 'STATE',
+                    //     width: '30%',
+                    //     type: 'input',
+                    //     displayType: 'inline-block'
+                    // },
                     {
                         label: '保管人',
                         prop: 'KEEPER',
@@ -284,7 +293,7 @@
                         displayType: 'inline-block'
                     },
                     {
-                        label: '录入人部门',
+                        label: '机构',
                         prop: 'DEPARTMENT',
                         width: '30%',
                         type: 'input',
@@ -296,7 +305,21 @@
                         width: '30%',
                         type: 'date',
                         displayType: 'inline-block'
-                    }
+                    },
+                    {
+						label: '修改人',
+						prop: 'CHANGEBY',
+						width: '30%',
+						type: 'input',
+						displayType: 'inline-block'
+					},
+					{
+						label: '修改时间',
+						prop: 'CHANGEDATE',
+						width: '30%',
+						type: 'date',
+						displayType: 'inline-block'
+					}
                 ],
 				
 				basic_url: Config.dev_url,
@@ -339,10 +362,30 @@
 				selRow: {},
 				searchList: {
 					'DESCRIPTION': ''
-				}
+				},
+				activeName: 'first',//tabs
+				addtitle:true,
+				modifytitle:false,
+				viewtitle:false,
+				dept:false,
+				noedit:false,//表单内容
+				views:false,//录入修改人信息
+				noviews:true,//按钮
+				modify:false,//修订
+				hintshow:false,
+				statusshow1:true,
+				statusshow2:false,
 			};
 		},
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+				return 'text-align:center'
+			},
+			//tabs
+			handleClick(tab, event) {
+//		        console.log(tab, event);
+		    },
 			searchSam(){
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
@@ -413,6 +456,18 @@
 				this.$axios.get(url,{}).then((res) => {
 				        this.dataInfo.ENTERBY = res.data.username;
 				        this.dataInfo.ENTERDATE = this.getToday();
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+			},
+			getModiuser(){
+				var url = this.basic_url + '/api-user/users/currentMap';
+				this.$axios.get(url,{}).then((res) => {
+				        this.dataInfo.CHANGEBY = res.data.username;
+				        this.dataInfo.CHANGEDATE = this.getToday();
 						this.dataInfo.DEPARTMENT = res.data.deptName;
 				}).catch((err) => {
 					this.$message({
@@ -424,7 +479,8 @@
 			getToday(){
 				var date = new Date();
 				var str = date.getFullYear() + '-' + date.getMonth() + '-'+ date.getDate();
-				return str;
+				var rate = this.$moment(str).format("yyyy-MM-dd")
+				return rate;
 			},
 			changeEdit(row){
 				row.isEditing = !row.isEditing;
@@ -495,7 +551,17 @@
 			},
 			//点击按钮显示弹窗
 			visible() {
-				this.modify=false;
+				this.addtitle = true;
+				this.modifytitle = false;
+				this.viewtitle = false;
+				this.dept = false;
+				this.noedit = false;//表单内容
+				this.views = false;//录入修改人信息
+				this.noviews = true;//按钮
+				this.modify = false;//修订
+				this.hintshow = false;
+				this.statusshow1 = true;
+				this.statusshow2 = false;
 				this.show = true;
 				this.getUser();
 			},
@@ -510,6 +576,40 @@
 					this.dataInfo.tableList = this.dataInfo.ASSET_USEList;
 					this.dataInfo.maintenList = this.dataInfo.ASSET_MAINTENANCEList;
 				}).catch((wrong) => {});
+				this.getModiuser();
+				this.addtitle = false;
+				this.modifytitle = true;
+				this.viewtitle = false;
+				this.dept = true;
+				this.noedit = false;//表单内容
+				this.views = false;//录入修改人信息
+				this.noviews = true;//按钮
+				this.modify = true;
+				this.hintshow = false;
+				this.statusshow1 = true;
+				this.statusshow2 = false;
+				this.show = true;
+			},
+			//这是查看
+			view(dataid) {
+				var url = this.basic_url + '/api-apps/app/asset/' + dataid;
+				this.$axios.get(url, {}).then((res) => {
+					// this.modify = true;
+					// this.show = true;
+					this.dataInfo = res.data;
+					this.dataInfo.tableList = this.dataInfo.ASSET_USEList;
+					this.dataInfo.maintenList = this.dataInfo.ASSET_MAINTENANCEList;
+				}).catch((wrong) => {});
+				this.addtitle = false;
+				this.modifytitle = false;
+				this.viewtitle = true;
+				this.dept = false;
+				this.modify = true;
+				this.noedit = true;//表单内容
+				this.views = true;//录入修改人信息
+				this.noviews = false;//按钮
+				// this.dataInfo = data;
+				this.show = true;				
 			},
 			//点击关闭按钮
 			close() {

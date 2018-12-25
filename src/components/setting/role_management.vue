@@ -33,6 +33,9 @@
 								<button type="button" class="btn btn-primarys button-margin" @click="datalimit">
 								    <i class="icon-date-limit"></i>数据限制
 								</button>
+								<button type="button" class="btn btn-primarys button-margin" @click="menu">
+								    <i class="icon-key"></i>菜单管理
+								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 						    		<i class="icon-search"></i>高级查询
 						    		<i class="icon-arrow1-down" v-show="down"></i>
@@ -103,6 +106,7 @@
 			</div>
 			<rolemask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></rolemask>
 			<datalimitmask ref="aaa" v-bind:page=page></datalimitmask>
+			<rolemeunmask ref="childs" v-bind:page=page></rolemeunmask>
 			<!--右侧内容显示 End-->
 		</div>
 	</div>
@@ -113,6 +117,7 @@
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_header from '../common/nav_tabs.vue'
 	import rolemask from '../settingDetails/role_mask.vue'
+	import rolemeunmask from '../settingDetails/rolemenu_mask.vue'
 	import datalimitmask from '../maindataDetails/datalimit_mask.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	export default {
@@ -122,6 +127,7 @@
 			'navs_header': navs_header,
 			'navs_left': navs_left,
 			'rolemask': rolemask,
+			'rolemeunmask': rolemeunmask,
 			'datalimitmask': datalimitmask,
 			'tableControle': tableControle,
 		},
@@ -215,7 +221,7 @@
 			datalimit() {
 				this.$refs.aaa.showdatalimit();
 			},
-			//修改用戶
+			//修改
 			modify() {
 				this.selData = this.selUser;
 				if(this.selData.length == 0) {
@@ -232,6 +238,25 @@
 					return;
 				} else {
 					this.$refs.child.detail(this.selData[0].id);
+				}
+			},
+			//数据库配置
+			menu(){
+				this.selData = this.selUser;
+				if(this.selData.length == 0) {
+					this.$message({
+						message: '请您选择要修改的数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selData.length > 1) {
+					this.$message({
+						message: '不可同时修改多个数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					this.$refs.childs.menu(this.selData[0].id);
 				}
 			},
 			//查看用戶

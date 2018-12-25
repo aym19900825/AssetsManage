@@ -53,6 +53,19 @@ export default {
 			}
 			if(flag){
 				clickedNav.push(item);
+				setTimeout(function(){
+		 			var left = $('.page-tabs').offset().left; 
+		            //tabs总宽度
+		            var tabW = $('.page-tabs-content').width();
+		            //总区域内容宽度
+		            var contentW = $('.content-tabs').width()-240;
+		            if(tabW>contentW){
+		            	var poor=tabW-contentW;
+		            	$('.page-tabs').offset({
+		                    left: -poor
+		                });
+		            }
+				},0);
 			}
 
 			if(!sessionStorage.getItem('selectedNav')){

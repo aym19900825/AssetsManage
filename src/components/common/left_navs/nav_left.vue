@@ -100,6 +100,7 @@ export default {
 				}
 			}
 			if(flag){
+				
 				clickedNav.push(item);
 			}
 

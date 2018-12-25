@@ -54,19 +54,19 @@
 									
 								</el-col>
 								<el-col :span="5">
-									<el-input v-model="searchList.DESCRIPTION">
-										<template slot="prepend">设备名称</template>
-									</el-input>
+									<el-form-item label="设备名称" prop="DESCRIPTION">
+										<el-input v-model="searchList.DESCRIPTION"></el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-input v-model="searchList.VENDOR">
-										<template slot="prepend">制造商</template>
-									</el-input>
+									<el-form-item label="制造商" prop="VENDOR">
+										<el-input v-model="searchList.VENDOR"></el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="4">
-									<el-input v-model="searchList.KEEPER">
-										<template slot="prepend">保管人</template>
-									</el-input>
+									<el-form-item label="保管人" prop="KEEPER">
+										<el-input v-model="searchList.KEEPER"></el-input>
+									</el-form-item>
 								</el-col>
 								<!-- <el-col :span="5">
 									<el-input v-model="searchList.STATE">
@@ -97,10 +97,14 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :data="assetList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'assetList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+						<el-table :header-cell-style="rowClass" :data="assetList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'assetList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 							</el-table-column>
-							<el-table-column label="设备编号" width="200" sortable prop="ASSETNUM" v-if="this.checkedName.indexOf('设备编号')!=-1">
+							<el-table-column label="设备编号" width="130" sortable prop="ASSETNUM" v-if="this.checkedName.indexOf('设备编号')!=-1">
+								<template slot-scope="scope">
+									<p @click=view(scope.row)>{{scope.row.ASSETNUM}}
+									</p>
+								</template>
 							</el-table-column>
 							<el-table-column label="设备名称" width="200" sortable prop="DESCRIPTION" v-if="this.checkedName.indexOf('设备名称')!=-1">
 							</el-table-column>
@@ -108,15 +112,15 @@
 							</el-table-column>
 							<el-table-column label="技术指标" sortable prop="ASSET_KPI" v-if="this.checkedName.indexOf('技术指标')!=-1">
 							</el-table-column>						
-							<el-table-column label="制造厂" sortable prop="STATUS" v-if="this.checkedName.indexOf('制造厂')!=-1">
+							<el-table-column label="制造商" sortable prop="VENDOR" v-if="this.checkedName.indexOf('制造商')!=-1">
 							</el-table-column>
 							<el-table-column label="出厂编号" width="200" sortable prop="FACTOR_NUM" v-if="this.checkedName.indexOf('出厂编号')!=-1">
 							</el-table-column>
 							<el-table-column label="价格(万元)" width="200" sortable prop="A_PRICE" v-if="this.checkedName.indexOf('价格(万元)')!=-1">
 							</el-table-column>
-							<el-table-column label="接受日期" sortable prop="ACCEPT_DATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('接受日期')!=-1">
+							<el-table-column label="接受日期" width="100" sortable prop="ACCEPT_DATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('接受日期')!=-1">
 							</el-table-column>
-							<el-table-column label="启用日期" sortable prop="S_DATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('启用日期')!=-1">
+							<el-table-column label="启用日期" width="100" sortable prop="S_DATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('启用日期')!=-1">
 							</el-table-column>						
 							<el-table-column label="配置地址" sortable prop="C_ADDRESS" v-if="this.checkedName.indexOf('配置地址')!=-1">
 							</el-table-column>
@@ -151,16 +155,16 @@
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left4.vue'
 	import navs_header from '../common/nav_tabs.vue'
-//	import tableControle from '../plugin/table-controle/controle.vue'
+	import tableControle from '../plugin/table-controle/controle.vue'
 	import instrumentsmask from '../equipmentsDetails/instrument_mask.vue'
 	export default {
-		name: 'user_management',
+		name: 'instruments',
 		components: {
 			vheader,
 			navs_left,
 			navs_header,
 			instrumentsmask,
-//			tableControle,
+			tableControle,
 		},
 		data() {
 			return {
@@ -192,10 +196,9 @@
 				checkedName: [
 					'设备编号',
 					'设备名称',
-					'性别',
 					'型号',
 					'技术指标',
-					'制造厂',
+					'制造商',
 					'出厂编号',
 					'价格（万元）',
 					'接受日期',
@@ -221,6 +224,10 @@
 					{
 						label: '技术指标',
 						prop: 'ASSET_KPI'
+					},
+					{
+						label: '制造商',
+						prop: 'VENDOR'
 					},
 					{
 						label: '出厂编号',
@@ -293,6 +300,10 @@
 			}
 		},
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+				return 'text-align:center'
+			},
 			tableControle(data){
 				this.checkedName = data;
 			},
@@ -331,6 +342,12 @@
 				} else {
 					this.$refs.child.detail();
 				}
+			},
+			//查看
+			 view(data) {
+			 	console.log(data);
+			 	// this.dataInfo = data;
+				this.$refs.child.view(data);
 			},
 			//高级查询
 			modestsearch() {

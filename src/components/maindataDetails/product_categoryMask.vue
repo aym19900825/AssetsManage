@@ -107,6 +107,7 @@
 						<el-button type="primary" @click="saveAndUpdate('CATEGORY')">保存</el-button>
 						<el-button type="success" @click="saveAndSubmit('CATEGORY')" v-show="addtitle">保存并添加</el-button>
 						<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('CATEGORY')">修订</el-button>
+						<el-button v-if="modify" type="primary" class="btn-primarys" @click="update('CATEGORY')">修订</el-button>
 						<el-button @click="close">取消</el-button>
 					</div>
 				</el-form>
@@ -344,6 +345,9 @@
 						});
 					}
 				});
+			},
+			update(){
+
 			},
 			//点击关闭按钮
 			close() {

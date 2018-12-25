@@ -4,6 +4,9 @@
 		<div class="mask_div" v-show="show">
 			<!---->
 			<div class="mask_title_div clearfix">
+				<div class="mask_title" v-show="addtitle">添加溯源计划</div>
+					<div class="mask_title" v-show="modifytitle">修改溯源计划</div>
+					<div class="mask_title" v-show="viewtitle">查看溯源计划</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -53,7 +56,7 @@
 							</el-collapse-item>
 
 							<el-collapse-item title="溯源后确认记录信息" name="2">
-								<el-table :data="pmRecordList" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'pmRecordList', order: 'descending'}">
+								<el-table :header-cell-style="rowClass" :data="pmRecordList" row-key="ID" border stripe ma-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'pmRecordList', order: 'descending'}">
 									 <el-table-column type="index" sortable label="序号" width="50">
                                     </el-table-column>
 									<el-table-column prop="RECORDNUM" label="溯源确认记录编号" sortable width="120px">
@@ -334,10 +337,25 @@
 					'ENTERBY': '',
 					'ENTERDATE': '',	
 					'DEPARTMENT': '',
-				}
+				},
+				addtitle:true,
+				modifytitle:false,
+				viewtitle:false,
+				dept:false,
+				noedit:false,//表单内容
+				views:false,//录入修改人信息
+				noviews:true,//按钮
+				modify:false,//修订
+				hintshow:false,
+				statusshow1:true,
+				statusshow2:false,
 			};
 		},
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+				return 'text-align:center'
+			},
 			getUser(opt){
 				var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url,{}).then((res) => {
@@ -402,6 +420,25 @@
 				this.show = true;
 				this.dataInfo = this.detailData;
 			},
+			//这是查看
+			view(data) {
+				// var url = this.basic_url + '/api-apps/app/pmPlan/' + dataid;
+				// this.$axios.get(url, {}).then((res) => {
+				// 	// this.modify = true;
+				// 	// this.show = true;
+				// 	this.dataInfo = res.data;
+				// }).catch((wrong) => {});
+				this.addtitle = false;
+				this.modifytitle = false;
+				this.viewtitle = true;
+				this.dept = false;
+				this.modify = true;
+				this.noedit = true;//表单内容
+				this.views = true;//录入修改人信息
+				this.noviews = false;//按钮
+				this.dataInfo = data;
+				this.show = true;				
+			},
 			//点击关闭按钮
 			close() {
 				this.resetForm();
@@ -454,6 +491,7 @@
 			},
 
 			submitForm() {
+				console.log(this.dataInfo);
 				var _this = this;
 				var url = this.basic_url + '/api-apps/app/pmPlan/saveOrUpdate';
 				this.$refs['dataInfo'].validate((valid) => {

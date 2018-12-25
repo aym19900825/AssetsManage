@@ -193,7 +193,7 @@
                             </el-collapse-item>
 						</el-collapse>
 					</div>
-					<div class="el-dialog__footer">
+					<div class="el-dialog__footer" v-show="noviews">
 						<el-button @click='close'>取消</el-button>
 						<el-button type="primary" @click='submitForm'>提交</el-button>
 					</div>

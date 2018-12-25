@@ -112,7 +112,7 @@
 							</el-table-column>
 							<el-table-column label="技术指标" sortable prop="ASSET_KPI" v-if="this.checkedName.indexOf('技术指标')!=-1">
 							</el-table-column>						
-							<el-table-column label="制造厂" sortable prop="VENDOR" v-if="this.checkedName.indexOf('制造厂')!=-1">
+							<el-table-column label="制造商" sortable prop="VENDOR" v-if="this.checkedName.indexOf('制造商')!=-1">
 							</el-table-column>
 							<el-table-column label="出厂编号" width="200" sortable prop="FACTOR_NUM" v-if="this.checkedName.indexOf('出厂编号')!=-1">
 							</el-table-column>
@@ -198,7 +198,7 @@
 					'设备名称',
 					'型号',
 					'技术指标',
-					'制造厂',
+					'制造商',
 					'出厂编号',
 					'价格（万元）',
 					'接受日期',
@@ -226,7 +226,7 @@
 						prop: 'ASSET_KPI'
 					},
 					{
-						label: '制造厂',
+						label: '制造商',
 						prop: 'VENDOR'
 					},
 					{

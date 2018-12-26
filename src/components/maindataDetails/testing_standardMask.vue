@@ -479,7 +479,7 @@
 				var data = {
 					id: this.dataInfo.ID,
 				}
-				this.$axios.get(this.basic_url+ '/api-apps/app/rawDataTem/operate/upgraded', {
+				this.$axios.get(this.basic_url+ '/api-apps/app/inspectionSta/operate/updateRelate', {
 					params: data
 				}).then((res) => {
 					console.log(res.data.resp_code);

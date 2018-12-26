@@ -348,14 +348,12 @@
 			},
 			//点击更新按钮
 			update(CATEGORY) {
-				console.log(this.CATEGORY);
 				var data = {
-					ID: this.CATEGORY.ID,
+					id: this.CATEGORY.ID,
 				}
 				this.$axios.get(this.basic_url+ '/api-apps/app/productType/operate/updateRelate', {
 					params: data
 				}).then((res) => {
-					console.log(res);
 					console.log(res.data.resp_code);
 					if(res.data.resp_code == 0) {
 						this.$message({

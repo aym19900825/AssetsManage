@@ -183,6 +183,7 @@
 						<el-button type="primary" @click="saveAndUpdate('testingForm')">保存</el-button>
 						<el-button type="success" @click="saveAndSubmit('testingForm')" v-show="addtitle">保存并添加</el-button>
 						<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('testingForm')">修订</el-button>
+						<el-button v-if="modify" type="success" @click="update('testingForm')">更新</el-button>
 						<el-button @click="close">取消</el-button>
 					</div>
 				</el-form>
@@ -578,6 +579,31 @@
 				$(".mask_div").css("height", "80%");
 				$(".mask_div").css("margin", "7% 10%");
 				$(".mask_div").css("top", "0");
+			},
+			//点击更新按钮
+			update(testingForm) {
+				var data = {
+					ID: this.testingForm.ID,
+				}
+				this.$axios.get(this.basic_url+ '/api-apps/app/inspectionMet/operate/updateRelate', {
+					params: data
+				}).then((res) => {
+					console.log(res);
+					console.log(res.data.resp_code);
+					if(res.data.resp_code == 0) {
+						this.$message({
+							message: '更新成功',
+							type: 'success'
+						});
+					}else{
+						return;
+					}
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
 			},
 			//执行保存
 			save(testingForm) {

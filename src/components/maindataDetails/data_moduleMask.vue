@@ -151,7 +151,7 @@
 					<div class="el-dialog__footer" v-show="noviews">
 						<el-button type="primary" @click="saveAndUpdate('CATEGORY')">保存</el-button>
 						<el-button type="success" @click="saveAndSubmit('CATEGORY')" v-show="addtitle">保存并添加</el-button>
-						<el-button v-if="modify" type="primary" class="btn-primarys" @click="update('CATEGORY')">更新</el-button>
+						<el-button v-if="modify" type="success" @click="update('CATEGORY')">更新</el-button>
 						<el-button @click="close">取消</el-button>
 					</div>
 				</el-form>
@@ -356,11 +356,12 @@
 			//点击更新按钮
 			update(CATEGORY) {
 				var data = {
-					id: this.CATEGORY.ID,
+					ID: this.CATEGORY.ID,
 				}
-				this.$axios.get(this.basic_url+ '/api-apps/app/rawDataTem/operate/upgraded', {
+				this.$axios.get(this.basic_url+ '/api-apps/app/rawDataTem/operate/updateRelate', {
 					params: data
 				}).then((res) => {
+					console.log(res);
 					console.log(res.data.resp_code);
 					if(res.data.resp_code == 0) {
 						this.$message({

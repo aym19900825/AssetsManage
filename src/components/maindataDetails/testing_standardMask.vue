@@ -182,6 +182,7 @@
 							<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并添加</el-button>
 							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('dataInfo')">修订</el-button>
+							<el-button v-if="modify" type="success" @click="update('dataInfo')">更新</el-button>
 							<el-button @click="close">取消</el-button>
 					</div>
 				</el-form>
@@ -472,6 +473,30 @@
 						});
 		          	}
 			   });
+			},
+			//点击更新按钮
+			update(dataInfo) {
+				var data = {
+					id: this.dataInfo.ID,
+				}
+				this.$axios.get(this.basic_url+ '/api-apps/app/rawDataTem/operate/upgraded', {
+					params: data
+				}).then((res) => {
+					console.log(res.data.resp_code);
+					if(res.data.resp_code == 0) {
+						this.$message({
+							message: '更新成功',
+							type: 'success'
+						});
+					}else{
+						return;
+					}
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
 			},
 			// 保存users/saveOrUpdate
 			save(dataInfo) {

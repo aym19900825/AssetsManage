@@ -50,7 +50,15 @@ export default {
 					navicon: 'icon-file-text',
 					navtitle: '检验/检测方法',
 					navherf: '/testing_methods'
+				},{
+					navicon: 'icon-file-text',
+					navtitle: '原始数据模板',
+					navherf: '/data_module'
 				}, {
+					navicon: 'icon-file-text',
+					navtitle: '检验/检测报告模板',
+					navherf: '/report_module'
+				},{
 					navicon: 'icon-file-text',
 					navtitle: '作业指导书',
 					navherf: '/work_instruction'

@@ -89,6 +89,10 @@
 							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 							</el-table-column>
 							<el-table-column label="期间核查计划编号" width="200" sortable prop="C_PLANNUM" v-if="this.checkedName.indexOf('期间核查计划编号')!=-1">
+								<template slot-scope="scope">
+									<p @click=view(scope.row.ID)>{{scope.row.C_PLANNUM}}
+									</p>
+								</template>
 							</el-table-column>
 							<el-table-column label="计划描述" width="200" sortable prop="DESCRIPTION" v-if="this.checkedName.indexOf('计划描述')!=-1">
 							</el-table-column>
@@ -300,6 +304,11 @@
 				} else {
 					this.$refs.child.detail();
 				}
+			},
+			//查看
+			 view(dataid) {
+			 	console.log(dataid);
+				this.$refs.child.view(dataid);
 			},
 			//高级查询
 			modestsearch() {

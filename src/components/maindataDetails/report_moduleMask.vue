@@ -3,9 +3,9 @@
 		<div class="mask" v-if="show"></div>
 		<div class="mask_div" v-if="show">
 			<div class="mask_title_div clearfix">
-				<div class="mask_title" v-show="addtitle">添加检验/检测方法</div>
-				<div class="mask_title" v-show="modifytitle">修改检验/检测方法</div>
-				<div class="mask_title" v-show="viewtitle">查看检验/检测方法</div>
+				<div class="mask_title" v-show="addtitle">添加检验/检测报告模板</div>
+				<div class="mask_title" v-show="modifytitle">修改检验/检测报告模板</div>
+				<div class="mask_title" v-show="viewtitle">查看检验/检测报告模板</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -16,58 +16,27 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="testingForm" inline-message :rules="rules" ref="testingForm" label-width="100px" status-icon>
-					<div class="accordion">
+				<el-form :model="CATEGORY" inline-message :rules="rules" ref="CATEGORY" label-width="100px" class="demo-adduserForm">
+					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames">
-							<el-collapse-item title="基础信息" name="1">
-								<el-row :gutter="20" class="pb10">
-									<el-col :span="3" class="pull-right">
-										<el-input  v-model="testingForm.VERSION" :disabled="true">
-											<template slot="prepend">版本</template>
-										</el-input>
-									</el-col>
-									<!--<el-col :span="4" class="pull-right" v-if="modify">
-										<el-input v-model="testingForm.STATUS=='1'?'活动':'不活动'" :disabled="true">
-											<template slot="prepend">信息状态</template>
-										</el-input>
-									</el-col>
-									<el-col :span="4" class="pull-right" v-else>
-										<el-input v-model="testingForm.STATUS" :disabled="true">
-											<template slot="prepend">信息状态</template>
-										</el-input>
-									</el-col>-->
-									<el-col :span="5" class="pull-right">
-										<el-input v-model="testingForm.M_NUM" @focus="hint" @input="hinthide" :disabled="noedit">
-											<template slot="prepend">编码</template>
-										</el-input>
-										<span v-if="hintshow" style="color:rgb(103,194,58);font-size: 12px">可填写，若不填写系统将自动生成</span>
-									</el-col>
-								</el-row>
-
+							<el-collapse-item title="检验/检测报告模板" name="1">
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="中文名称" prop="M_NAME" >
-											<el-input v-model="testingForm.M_NAME" :disabled="noedit"></el-input>
+										<el-form-item label="编码" prop="NUM">
+											<el-input v-model="CATEGORY.NUM" @focus="hint" @input="hinthide" :disabled="noedit"></el-input>
+											<span v-if="hintshow" style="color:rgb(103,194,58);font-size: 12px">可填写，若不填写系统将自动生成</span>
 										</el-form-item>
 									</el-col>
-									<el-col :span="8">
-										<el-form-item label="英文名称" prop="M_ENAME" >
-											<el-input v-model="testingForm.M_ENAME" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="类别" prop="M_TYPE">
-											<!-- <el-select v-model="testingForm.M_TYPE" placeholder="请选择类别" style="width: 100%;">
-												<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
-											</el-select> -->
-											<el-input v-model="testingForm.M_TYPE" placeholder="请输入类别" :disabled="noedit"></el-input>
+									<el-col :span="16">
+										<el-form-item label="模板描述" prop="DECRIPTION">
+											<el-input v-model="CATEGORY.DECRIPTION" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row>
 									<el-col :span="8" v-if="dept">
-										<el-form-item label="机构">
-											<el-input v-model="testingForm.DEPARTMENT" :disabled="true"></el-input>
+										<el-form-item label="机构" prop="DEPARTMENT">
+											<el-input v-model="CATEGORY.DEPARTMENT" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -88,7 +57,7 @@
 
 								<!-- 文件Table-List Begin-->
 								<el-form :model="testing_filesForm" status-icon inline-message ref="testing_filesForm">
-									  <el-table :header-cell-style="rowClass" :data="testing_filesForm.inspectionList" row-key="ID" border stripe max-height="260" fit="true"highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'testing_filesForm.inspectionList', order: 'descending'}" v-loadmore="loadMore">
+									  <el-table :header-cell-style="rowClass" :data="testing_filesForm.inspectionList" row-key="ID" border stripe max-height="260" :fit="true"highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'testing_filesForm.inspectionList', order: 'descending'}" v-loadmore="loadMore">
 										<el-table-column prop="iconOperation" fixed="left" label="操作" width="80">
 									      <template slot-scope="scope">
 									        <el-button type="text" id="Edit" size="medium" @click="saveRow(scope.row)" v-if="scope.row.isEditing">
@@ -156,33 +125,33 @@
 							<el-collapse-item title="其它" name="3" v-show="views">
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="录入人">
-											<el-input v-model="testingForm.ENTERBY" :disabled="true"></el-input>
+										<el-form-item label="录入人" prop="ENTERBY">
+											<el-input v-model="CATEGORY.ENTERBY" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="录入时间">
-											<el-input v-model="testingForm.ENTERDATE" :disabled="true"></el-input>
+										<el-form-item label="录入时间" prop="ENTERDATE">
+											<el-input v-model="CATEGORY.ENTERDATE" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="修改人">
-											<el-input v-model="testingForm.CHANGEBY" :disabled="true"></el-input>
+										<el-form-item label="修改人" prop="CHANGEBY">
+											<el-input v-model="CATEGORY.CHANGEBY" placeholder="当前修改人" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="修改日期">
-											<el-input v-model="testingForm.CHANGEDATE" :disabled="true"></el-input>
+										<el-form-item label="修改时间" prop="CHANGEDATE">
+											<el-input v-model="CATEGORY.CHANGEDATE" placeholder="当前修改时间" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 							</el-collapse-item>
 						</el-collapse>
 					</div>
-					<div class="content-footer" v-show="noviews">
-						<el-button type="primary" @click="saveAndUpdate('testingForm')">保存</el-button>
-						<el-button type="success" @click="saveAndSubmit('testingForm')" v-show="addtitle">保存并添加</el-button>
-						<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('testingForm')">修订</el-button>
+					<div class="el-dialog__footer" v-show="noviews">
+						<el-button type="primary" @click="saveAndUpdate('CATEGORY')">保存</el-button>
+						<el-button type="success" @click="saveAndSubmit('CATEGORY')" v-show="addtitle">保存并添加</el-button>
+						<el-button v-if="modify" type="primary" class="btn-primarys" @click="update('CATEGORY')">更新</el-button>
 						<el-button @click="close">取消</el-button>
 					</div>
 				</el-form>
@@ -194,76 +163,80 @@
 <script>
 	import Config from '../../config.js'
 	export default {
-		name: 'testing_mask',
+		name: 'masks',
 		props: {
-			page: {
-				type: Object,
-			},
-			testingForm: { //接收主表单中填写的数据信息
+			CATEGORY: {
 				type: Object,
 				default: function() {
 					return {
-						VERSION: '',
+						ID: '',
+						NUM: '',
+						DECRIPTION: '',
 						STATUS: '',
-						M_NUM: '',
-						M_NAME: '',
-						M_ENAME: '',
-						M_TYPE: '',
 						DEPARTMENT: '',
 						ENTERBY: '',
 						ENTERDATE: '',
 						CHANGEBY: '',
-						CHANGEDATE: '',
+						CHANGEDATE: ''
 					}
 				}
-			}
+			},
+			page: Object,
 		},
 		data() {
+			// var validateNum = (rule, value, callback) => {
+			// 	if(value === '') {
+			// 		callback(new Error('可填写，若不填写系统将自动生成'));
+					
+			// 	} else {
+			// 		callback();
+			// 	}
+			// 	callback();
+			// 	// if(value){
+			// 	// 	if (value==='') {
+			// 	// 		callback();
+			// 	// 	}else{
+		 //  //            	callback(new Error('可填写，若不填写系统将自动生成'));
+			// 	// 	}
+		 //  //       }else{
+		 //  //            callback();
+		 //  //       }
+			// };
+			var validateDeci = (rule, value, callback) => {
+				if(value === '') {
+					callback(new Error('请填写产品类别名称'));
+				} else {
+					callback();
+				}
+			};
 			return {
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
-				value: '',
-				options: [{
-					value: '1',
-					label: '活动'
-				}, {
-					value: '0',
-					label: '不活动'
-				}],
-				selectData: [], //获取检验/检测方法类别
-				selMenu:[],
+				selUser: [],
+				edit: true, //禁填
 				show: false,
 				isok1: true,
 				isok2: false,
 				down: true,
 				up: false,
+				activeNames: ['1','2','3'], //手风琴数量
+				//				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
-				edit: true, //禁填
-				activeNames: ['1', '2', '3'], //手风琴数量
-//				labelPosition: 'top', //表单标题在上方
-				addtitle: true,
-				modifytitle: false,
-				testing_filesForm:{//文件文档数据组
-					inspectionList: []
+				selectData: [],
+				rules: {
+					// NUM: [{
+					// 	trigger: 'blur',
+					// 	validator: validateNum,
+					// }],
+					DECRIPTION: [{
+						required: true,
+						trigger: 'blur',
+						validator: validateDeci,
+					}],
 				},
-				TESTINGFORM:{},//
-				isEditing: '',
-				commentArr:{},//下拉加载
-				rules: { //定义需要校验数据的名称
-					M_NAME: [
-						{ required: true, message: '请填写中文名称', trigger: 'blur' },
-						{ min: 5, max: 35, message: '长度在 5 到 35 个字符', trigger: 'blur' }
-					],
-					M_ENAME: [
-						{ required: true, message: '请填写英文名称', trigger: 'blur' },
-						{ min: 5, max: 50, message: '长度在 5 到 15 个字符', trigger: 'blur' }
-					],
-					M_TYPE: [
-						{ required: true, message: '请选择类别', trigger: 'change' }
-					]
-				},
-				hintshow:false,
-				personinfo:false,
+				//tree
+				resourceData: [], //数组，我这里是通过接口获取数据
+				category:{},//从父组件接过来的值
 				addtitle:true,
 				modifytitle:false,
 				viewtitle:false,
@@ -275,6 +248,9 @@
 				hintshow:false,
 				statusshow1:true,
 				statusshow2:false,
+				testing_filesForm:{//文件文档数据组
+					inspectionList: []
+				},
 			};
 		},
 		methods: {
@@ -289,19 +265,29 @@
 			hinthide(){
 				this.hintshow = false;
 			},
-			visible() {//添加内容时从父组件带过来的
-				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					this.testingForm.DEPARTMENT=res.data.deptName;
-					this.testingForm.ENTERBY=res.data.nickname;
-					var date=new Date();
-					this.testingForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
-				}).catch((err)=>{
+			//获取导入表格勾选信息
+			SelChange(val) {
+				this.selUser = val;
+			},
+			//生成随机数函数
+			rand(min, max) {
+				return Math.floor(Math.random() * (max - min)) + min;
+			},
+			//点击按钮显示弹窗
+			visible() {
+				//				this.CATEGORY.NUM =  this.rand(1000,9999);
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
+					this.CATEGORY.DEPARTMENT = res.data.deptName;
+					this.CATEGORY.ENTERBY = res.data.nickname;
+					var date = new Date();
+					this.CATEGORY.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+				}).catch((err) => {
 					this.$message({
-						message:'网络错误，请重试',
-						type:'error'
-					})
-				})
-            	this.addtitle = true;
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+				this.addtitle = true;
 				this.modifytitle = false;
 				this.viewtitle = false;
 				this.dept = false;
@@ -312,24 +298,10 @@
 				this.hintshow = false;
 				this.statusshow1 = true;
 				this.statusshow2 = false;
-            	// this.show = true;
+//				this.show = true;
 			},
-			detail() { //修改内容时从父组件带过来的
-				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					this.testingForm.DEPARTMENT=res.data.deptName;
-					this.testingForm.CHANGEBY=res.data.nickname;
-					var date=new Date();
-					this.testingForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-					//深拷贝数据
-					let _obj = JSON.stringify(this.testingForm);
-        			this.TESTINGFORM = JSON.parse(_obj);
-        			
-				}).catch((err)=>{
-					this.$message({
-						message:'网络错误，请重试',
-						type:'error'
-					})
-				})
+			// 这里是修改
+			detail() {
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.viewtitle = false;
@@ -341,14 +313,21 @@
 				this.modify = true;//修订
 				this.statusshow1 = false;
 				this.statusshow2 = true;
-//				this.testingForm.STATUS=this.testingForm.STATUS=="1"?'活动':'不活动';
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
+					this.CATEGORY.DEPARTMENT = res.data.deptName;
+					this.CATEGORY.CHANGEBY = res.data.nickname;
+					var date = new Date();
+					this.CATEGORY.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					//深拷贝数据
+					let _obj = JSON.stringify(this.CATEGORY);
+        			this.category = JSON.parse(_obj);
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
 				this.show = true;
-			},
-
-			iconOperation(row, column, cell, event){//切换Table-操作列中的修改、保存
-				if(column.property ==="iconOperation"){
-					row.isEditing = !row.isEditing
-				}
 			},
 			//这是查看
 			view() {
@@ -361,49 +340,11 @@
 				this.noviews = false;//按钮
 				this.show = true;				
 			},
-			modifyversion (testingForm) {//点击修改后给当前创建人和创建日期赋值
-				this.$refs[testingForm].validate((valid) => {
-			        if (valid) {
-			          	var TESTINGFORM=JSON.stringify(this.TESTINGFORM); //接过来的数据
-			          	// console.log(TESTINGFORM);
-	 					var testingForm=JSON.stringify(this.testingForm); //获取新新的数据
-	 					// console.log(testingForm);
-					 	if(testingForm==TESTINGFORM){
-					  		this.$message({
-								message: '没有修改不能修改',
-								type: 'warning'
-							});
-							return false;
-						}else{
-							var url = this.basic_url + '/api-apps/app/inspectionMet/operate/upgraded';
-							this.$axios.post(url,this.testingForm).then((res) => {
-								//resp_code == 0是后台返回的请求成功的信息
-								if(res.data.resp_code == 0) {
-									this.$message({
-										message: '保存成功',
-										type: 'success'
-									});
-									//重新加载数据
-									this.show = false;
-									this.$emit('request');
-									this.$emit('reset');
-								}
-							}).catch((err) => {
-								this.$message({
-									message: '网络错误，请重试',
-									type: 'error'
-								});
-							});
-						}
-		          	} else {
-			            this.$message({
-							message: '未填写完整，请填写',
-							type: 'warning'
-						});
-		          	}
-			   	});
+			iconOperation(row, column, cell, event){//切换Table-操作列中的修改、保存
+				if(column.property ==="iconOperation"){
+					row.isEditing = !row.isEditing
+				}
 			},
-
 			loadMore () {//表格滚动加载
 			    if (this.loadSign) {
 			        this.loadSign = false
@@ -417,39 +358,6 @@
 			     	this.requestData_doclinks()
 			    }
 			},
-			sizeChange(val) {//页数
-		        this.page.pageSize = val;
-		      	this.requestData_doclinks();
-		    },
-		    currentChange(val) {//当前页
-		      	this.page.currentPage = val;
-		      	this.requestData_doclinks();
-		    },
-			searchinfo(index) {//查询展示出第1页数据
-				this.page.currentPage = 1;
-				this.page.pageSize = 10;
-				this.requestData_doclinks();
-			},
-
-			//时间格式化  
-			dateFormat(row, column) {
-				var date = row[column.property];
-				if(date == undefined) {
-					return "";
-				}
-				return this.$moment(date).format("YYYY-MM-DD");
-			},
-
-			//检验/检测方法类别
-			getType() {
-				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=type';
-				this.$axios.get(url, {}).then((res) => {
-					this.selectData = res.data;
-				}).catch(error => {
-					// console.log('请求失败');
-				})
-			},
-
 			addfield_doclinks() { //插入行到文件文档Table中
 				var isEditingflag=false;
 				for(var i=0;i<this.testing_filesForm.inspectionList.length; i++){
@@ -546,7 +454,9 @@
 
             	});
 			},
-			
+			update(){
+
+			},
 			//点击关闭按钮
 			close() {
 				this.show = false;
@@ -562,7 +472,7 @@
 					this.rebackDialog();
 				}
 			},
-			maxDialog(e) { //大弹出框距离头部少60px
+			maxDialog(e) {
 				this.isok1 = false;
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
@@ -579,25 +489,23 @@
 				$(".mask_div").css("margin", "7% 10%");
 				$(".mask_div").css("top", "0");
 			},
-			//执行保存
-			save(testingForm) {
-				var _this = this;
-				this.$refs[testingForm].validate((valid) => {
-					if (valid) {
-					    _this.testingForm.STATUS=_this.testingForm.STATUS=="活动" ? '1' : '0';
-						var url = this.basic_url + '/api-apps/app/inspectionMet/saveOrUpdate';
-						this.$axios.post(url,_this.testingForm).then((res) => {
+			// 保存users/saveOrUpdate
+			save(CATEGORY) {
+				this.$refs[CATEGORY].validate((valid) => {
+					if(valid) {
+						this.CATEGORY.STATUS = ((this.CATEGORY.STATUS == "1" || this.CATEGORY.STATUS == '活动') ? '1' : '0');
+						var url = this.basic_url + '/api-apps/app/inspectionRepTem/saveOrUpdate';
+						this.$axios.post(url, this.CATEGORY).then((res) => {
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',
 									type: 'success'
 								});
-								
-								this.$emit('reset');
 								//重新加载数据
 								this.$emit('request');
-								this.visible();	
+								this.$emit('reset');
+								this.visible();
 							}else{
 								this.show = true;
 								if(res.data.resp_code == 1) {
@@ -616,7 +524,6 @@
 								}
 							}
 						}).catch((err) => {
-							this.show = true;
 							this.$message({
 								message: '网络错误，请重试',
 								type: 'error'
@@ -633,29 +540,40 @@
 					}
 				});
 			},
+			
 			//保存
-			saveAndUpdate(testingForm){
-				this.save(testingForm);
+			saveAndUpdate(CATEGORY) {
+				this.save(CATEGORY);
 				if(this.falg){
 					this.show = false;
 				}
 			},
 			//保存并添加
-			saveAndSubmit(testingForm){
-				this.save(testingForm);
+			saveAndSubmit(CATEGORY) {
+				this.save(CATEGORY);
+				// this.visible();
 				this.show = true;
 			},
-			handleClose(done) { //大弹出框确定关闭按钮
+			//时间格式化
+			dateFormat(row, column) {
+				var date = row[column.property];
+				if(date == undefined) {
+					return "";
+				}
+				return this.$moment(date).format("YYYY-MM-DD");
+			},
+			handleClose(done) {
 				this.$confirm('确认关闭？')
 					.then(_ => {
 						done();
 					})
 					.catch(_ => {});
-			}
+			},
 		},
 		mounted() {
-			this.getType();
+			
 		},
+		
 	}
 </script>
 

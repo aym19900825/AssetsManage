@@ -696,7 +696,7 @@
 					'SYNCHRONIZATION_TIME': '',
 				};
 				this.$refs['dataInfo'].resetFields();
-				this.show = false;
+				// this.show = false;
 			},
 			toggle(e) { //大弹出框大小切换
 				if(this.isok1) {

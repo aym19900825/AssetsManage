@@ -657,6 +657,7 @@
 			close() {
 				this.reset();
 				this.$emit('request');
+				this.show = false;
 			},
 			reset(){
 				this.dataInfo =  {
@@ -767,7 +768,6 @@
 			saveAndSubmit(dataInfo) {
 				this.save(dataInfo);
 				this.show = true;
-				console.log(111);
 			},
 		},
 		mounted() {

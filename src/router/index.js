@@ -11,7 +11,9 @@ import products from '@/components/maindata/products'//产品
 import testing_standard from '@/components/maindata/testing_standard'//检验/检测标准
 import testing_projects from '@/components/maindata/testing_projects'//检验/检测项目
 import testing_methods from '@/components/maindata/testing_methods'//检验/检测方法
-import work_instruction from '@/components/maindata/work_instruction'//检验/检测方法
+import data_module from '@/components/maindata/data_module'//原始数据模板
+import report_module from '@/components/maindata/report_module'//检验/检测报告模板
+import work_instruction from '@/components/maindata/work_instruction'//作业指导书
 
 
 import customer_management from '@/components/setting/customer_management'//客户管理
@@ -121,6 +123,16 @@ Vue.use(Router)
       path: '/testing_methods',
       name: 'testing_methods',
       component: testing_methods
+    },
+    {//原始数据模板
+      path: '/data_module',
+      name: 'data_module',
+      component: data_module
+    },
+    {//检验检测报告模板
+      path: '/report_module',
+      name: 'report_module',
+      component: report_module
     },
     {//作业指导书
       path: '/work_instruction',

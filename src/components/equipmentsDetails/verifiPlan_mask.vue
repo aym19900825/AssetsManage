@@ -3,17 +3,20 @@
 	<div>
 		<div class="mask" v-show="show"></div>
 		<div class="mask_div" v-show="show">
-			<div class="mask_content">
-                <div class="mask_title_div clearfix">
-                    <div class="mask_anniu">
-                        <span class="mask_span mask_max" @click='toggle'>
-                            <i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
-                        </span>
-                        <span class="mask_span" @click='close'>
-                            <i class="icon-close1"></i>
-                        </span>
-                    </div>
+            <div class="mask_title_div clearfix">
+            	<div class="mask_title" v-show="addtitle">添加期间和核查计划</div>
+					<div class="mask_title" v-show="modifytitle">修改期间和核查计划</div>
+					<div class="mask_title" v-show="viewtitle">查看期间和核查计划</div>
+                <div class="mask_anniu">
+                    <span class="mask_span mask_max" @click='toggle'>
+                        <i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
+                    </span>
+                    <span class="mask_span" @click='close'>
+                        <i class="icon-close1"></i>
+                    </span>
                 </div>
+            </div>
+            <div class="mask_content">
 				<el-form status-icon :model="dataInfo" :rules="rules"   ref="dataInfo" class="demo-user">
 					<div class="accordion">
 						<!-- 设备header信息 -->
@@ -21,21 +24,21 @@
                             <el-collapse-item name="1">
                                 <el-form-item label-width="120px" v-for="item in basicInfo" :label="item.label" :key="item.id":prop="item.prop" :style="{ width: item.width, display: item.displayType}">
 									<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" :disabled="item.disabled"></el-date-picker>
-                                    <el-input v-model="dataInfo[item.prop]" :type="item.type" disabled v-if="item.type == 'input'" :disabled="item.disabled"></el-input>
+                                    <el-input v-model="dataInfo[item.prop]" :type="item.type" disabled v-if="item.type == 'input'" :disabled="noedit"></el-input>
                                 </el-form-item>
                             </el-collapse-item>
 						    <el-collapse-item title="设备期间检查计划信息" name="2">
                                 <div class="table-func">
-									<el-button type="warning" size="mini" round @click="addLine('tableList')">
+									<el-button type="warning" size="mini" round @click="addLine('tableList')" :disabled="noedit">
 										<i class="el-icon-upload"></i>
 										<font>导入</font>
 									</el-button>
-									<el-button type="success" size="mini" round @click="addLine">
+									<el-button type="success" size="mini" round @click="addLine" :disabled="noedit">
 										<i class="icon-add"></i>
 										<font>新建行</font>
 									</el-button>
 								</div>
-								<el-table :data="dataInfo.tableList" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'dataInfo.pmRecord', order: 'descending'}">
+								<el-table :header-cell-style="rowClass" :data="dataInfo.tableList" row-key="ID" border stripe :fit="true" max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'dataInfo.pmRecord', order: 'descending'}">
 									<el-table-column prop="iconOperation" fixed label="" width="50px">
 										<template slot-scope="scope">
 											<i class="el-icon-check" v-if="scope.row.isEditing"  @click="changeEdit(scope.row)"></i>
@@ -85,7 +88,7 @@
 											</el-form-item>
 										</template>
 									</el-table-column>
-									<el-table-column prop="PM_YXQ" label="溯源有效期" sortable >
+									<el-table-column prop="PM_YXQ" label="溯源有效期" sortable width="120px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'tableList.'+scope.$index + '.PM_YXQ'">
 												<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.PM_YXQ" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
@@ -94,7 +97,7 @@
 											</el-form-item>
 										</template>
 									</el-table-column>
-									<el-table-column prop="C_PLAN_DATE" label="计划期间核查时间" sortable >
+									<el-table-column prop="C_PLAN_DATE" label="计划期间核查时间" sortable width="150px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'tableList.'+scope.$index + '.C_PLAN_DATE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
                                                 <el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.C_PLAN_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
@@ -103,7 +106,7 @@
 											</el-form-item>
 										</template>
 									</el-table-column>
-                                    <el-table-column prop="COMPDATE" label="执行时间" sortable >
+                                    <el-table-column prop="COMPDATE" label="执行时间" sortable width="100px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'tableList.'+scope.$index + '.COMPDATE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
                                                 <el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
@@ -121,7 +124,7 @@
 											</el-form-item>
 										</template>
 									</el-table-column>
-									<el-table-column label="操作" sortable width="120px">
+									<el-table-column label="操作" sortable width="80px">
 										<template slot-scope="scope">
 											<el-button type="danger" size="mini" round  @click="delLine(scope.$index,scope.row)">
 												<i class="el-icon-delete"></i>
@@ -130,9 +133,18 @@
 									</el-table-column>
 								</el-table>
 							</el-collapse-item>
+							<el-collapse-item title="其他" name="3" v-show="!addtitle">
+                            	<el-form-item label-width="120px" v-for="item in otherInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-if="item.prop=='DEPARTMENT'" v-show="dept">
+                                    <el-input v-model="dataInfo[item.prop]" :type="item.type" disabled v-if="item.prop=='DEPARTMENT'"></el-input>
+                                </el-form-item>	
+                                <el-form-item label-width="120px" v-for="item in otherInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-show="views">
+                                    <el-input v-if="item.type=='input'" v-model="dataInfo[item.prop]" :type="item.type" disabled></el-input>
+                                    <el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" disabled style="width:100%"></el-date-picker>
+                                </el-form-item>	
+                            </el-collapse-item>
 						</el-collapse>
 					</div>
-					<div class="el-dialog__footer">
+					<div class="el-dialog__footer" v-show="noviews">
 						<el-button @click='close'>取消</el-button>
 						<el-button type="primary" @click='submitForm'>提交</el-button>
 					</div>
@@ -180,31 +192,44 @@
 						displayType: 'inline-block',
 						disabled: false
 					},
-					{
-						label: '录入人',
-						prop: 'ENTERBY',
+				],
+				otherInfo: [
+                    {
+                        label: '录入人',
+                        prop: 'ENTERBY',
+                        width: '30%',
+                        type: 'input',
+                        displayType: 'inline-block'
+                    },
+                    {
+                        label: '机构',
+                        prop: 'DEPARTMENT',
+                        width: '30%',
+                        type: 'input',
+                        displayType: 'inline-block'
+                    },
+                    {
+                        label: '录入日期',
+                        prop: 'ENTERDATE',
+                        width: '30%',
+                        type: 'date',
+                        displayType: 'inline-block'
+                    },
+                    {
+						label: '修改人',
+						prop: 'CHANGEBY',
 						width: '30%',
 						type: 'input',
-						displayType: 'inline-block',
-						disabled: true
+						displayType: 'inline-block'
 					},
 					{
-						label: '录入时间',
-						prop: 'ENTERDATE',
+						label: '修改时间',
+						prop: 'CHANGEDATE',
 						width: '30%',
 						type: 'date',
-						displayType: 'inline-block',
-						disabled: true
-					},
-					{
-						label: '录入人机构',
-						prop: 'DEPARTMEMT',
-						width: '30%',
-						type: 'input',
-						displayType: 'inline-block',
-						disabled: true
+						displayType: 'inline-block'
 					}
-				],
+                ],
 				basic_url: Config.dev_url,
 
 				show: false,
@@ -212,9 +237,8 @@
 				isok2: false,
 				down: true,
 				up: false,
-				activeNames: ['1', '2','3','4'], //手风琴数量
+				activeNames:['1', '2','3'], //手风琴数量
 				dialogVisible: false, //对话框
-				modify: false,
 				resourceData: [], //数组，我这里是通过接口获取数据，
 				resourceDialogisShow: false,
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
@@ -236,16 +260,43 @@
 					'STATUS': '1',
 					'tableList': []
 				},
-				assets: []
+				assets: [],
+				addtitle:true,
+				modifytitle:false,
+				viewtitle:false,
+				dept:false,
+				noedit:false,//表单内容
+				views:false,//录入修改人信息
+				noviews:true,//按钮
+				modify:false,//修订
+				hintshow:false,
+				statusshow1:true,
+				statusshow2:false,
 			};
 		},
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+				return 'text-align:center'
+			},
 			getUser(){
 				var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url,{}).then((res) => {
-					this.dataInfo.ENTERBY = res.data.username;
-					this.dataInfo.ENTERDATE = this.getToday();
-					this.dataInfo.DEPARTMEMT = res.data.deptName;
+				        this.dataInfo.ENTERBY = res.data.username;
+				        this.dataInfo.ENTERDATE = this.getToday();
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+			},
+			getModiuser(){
+				var url = this.basic_url + '/api-user/users/currentMap';
+				this.$axios.get(url,{}).then((res) => {
+				        this.dataInfo.CHANGEBY = res.data.username;
+				        this.dataInfo.CHANGEDATE = this.getToday();
+						this.dataInfo.DEPARTMENT = res.data.deptName;
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -256,7 +307,8 @@
 			getToday(){
 				var date = new Date();
 				var str = date.getFullYear() + '-' + date.getMonth() + '-'+ date.getDate();
-				return str;
+				var rate = this.$moment(str).format("yyyy-MM-dd")
+				return rate;
 			},
 			selChange(val,row){
 				var data = this.assets;
@@ -313,7 +365,17 @@
 			},
 			//点击按钮显示弹窗
 			visible() {
-				this.modify=false;
+				this.addtitle = true;
+				this.modifytitle = false;
+				this.viewtitle = false;
+				this.dept = false;
+				this.noedit = false;//表单内容
+				this.views = false;//录入修改人信息
+				this.noviews = true;//按钮
+				this.modify = false;//修订
+				this.hintshow = false;
+				this.statusshow1 = true;
+				this.statusshow2 = false;
 				this.show = true;
 				this.getUser();
 			},
@@ -328,6 +390,37 @@
 					console.log(this.dataInfo);
 					this.dataInfo.tableList = this.dataInfo.CHECK_PLAN_LINEList;
 				}).catch((wrong) => {});
+				this.getModiuser();
+				this.addtitle = false;
+				this.modifytitle = true;
+				this.viewtitle = false;
+				this.dept = true;
+				this.noedit = false;//表单内容
+				this.views = false;//录入修改人信息
+				this.noviews = true;//按钮
+				this.modify = true;
+				this.hintshow = false;
+				this.statusshow1 = true;
+				this.statusshow2 = false;
+				this.show = true;
+			},
+			//这是查看
+			view(dataid) {
+				var url = this.basic_url + '/api-apps/app/checkPlan/' + dataid;
+				this.$axios.get(url, {}).then((res) => {
+					this.dataInfo = res.data;
+					this.dataInfo.tableList = this.dataInfo.CHECK_PLAN_LINEList;
+				}).catch((wrong) => {});
+				this.addtitle = false;
+				this.modifytitle = false;
+				this.viewtitle = true;
+				this.dept = false;
+				this.modify = true;
+				this.noedit = true;//表单内容
+				this.views = true;//录入修改人信息
+				this.noviews = false;//按钮
+				// this.dataInfo = data;
+				this.show = true;				
 			},
 			//点击关闭按钮
 			close() {

@@ -432,7 +432,6 @@
 					}
 				});
 			},
-			
 			addfield_doclinks() { //插入行到文件文档Table中
 				var isEditingflag=false;
 				for(var i=0;i<this.testing_filesForm.inspectionList.length; i++){

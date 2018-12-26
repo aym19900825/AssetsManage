@@ -5,6 +5,9 @@
 		<div class="mask_div" v-show="show">
 			<!---->
 			<div class="mask_title_div clearfix">
+				<div class="mask_title" v-show="addtitle">添加期间核查记录</div>
+					<div class="mask_title" v-show="modifytitle">修改期间核查记录</div>
+					<div class="mask_title" v-show="viewtitle">查看期间核查记录</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -28,14 +31,14 @@
 									</el-col>
 								</el-row>
 								<el-form-item v-for="item in basicInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" label-width="160px">
-									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" style="width: 220px;"></el-input>
-									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'"></el-input>
-									<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'">
+									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" style="width: 220px;" :disabled="noedit"></el-input>
+									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'" :disabled="noedit"></el-input>
+									<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" :disabled="noedit">
 									</el-date-picker>
-									<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'">
+									<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'" :disabled="noedit">
 										<el-radio :label="it.label" v-for="it in item.opts" :key="it.id"></el-radio>
 									</el-radio-group>
-									<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'" @change="selChange">
+									<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'" @change="selChange" :disabled="noedit">
 										<el-option v-for="item in assets"
 										:key="item.ID"
 										:label="item.DESCRIPTION"
@@ -49,19 +52,23 @@
 								<doc-table></doc-table>
 							</el-collapse-item>
 							<!-- 其他信息 -->
-							<el-collapse-item title="其他" name="3">
-								<el-form-item v-for="item in otherInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
-									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" disabled></el-input>
-									<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" disabled>
-									</el-date-picker>
-								</el-form-item>		
+							<el-collapse-item title="其他" name="3" v-show="!addtitle">
+								<el-form-item label-width="120px" v-for="item in otherInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-if="item.prop=='DEPARTMENT'" v-show="dept">
+                                    <el-input v-model="dataInfo[item.prop]" :type="item.type" disabled v-if="item.prop=='DEPARTMENT'"></el-input>
+                                </el-form-item>	
+                                <el-form-item label-width="120px" v-for="item in otherInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-show="views">
+                                    <el-input v-if="item.type=='input'" v-model="dataInfo[item.prop]" :type="item.type" disabled></el-input>
+                                    <el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" disabled style="width:100%"></el-date-picker>
+                                </el-form-item>		
 							</el-collapse-item>
 						</el-collapse>
 					</div>
 
-					<div class="el-dialog__footer">
+					<div class="el-dialog__footer" v-show="noviews">
+						<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
+						<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并添加</el-button>
 						<el-button @click='close'>取消</el-button>
-						<el-button type="primary" @click='submitForm'>提交</el-button>
+						<!-- <el-button type="primary" @click='submitForm'>提交</el-button> -->
 					</div>
 				</el-form>
 			</div>
@@ -281,10 +288,24 @@
 						displayType: 'inline-block'
 					},
 					{
-						label: '录入机构',
+						label: '机构',
 						prop: 'DEPARTMENT',
 						width: '30%',
 						type: 'input',
+						displayType: 'inline-block'
+					},
+                    {
+						label: '修改人',
+						prop: 'CHANGEBY',
+						width: '30%',
+						type: 'input',
+						displayType: 'inline-block'
+					},
+					{
+						label: '修改时间',
+						prop: 'CHANGEDATE',
+						width: '30%',
+						type: 'date',
 						displayType: 'inline-block'
 					}
 				],
@@ -333,18 +354,39 @@
 					'DEPARTMENT': '',
 					'STATUS': '1'
 				},
-				assets: []
+				assets: [],
+				addtitle:true,
+				modifytitle:false,
+				viewtitle:false,
+				dept:false,
+				noedit:false,//表单内容
+				views:false,//录入修改人信息
+				noviews:true,//按钮
+				modify:false,//修订
+				hintshow:false,
+				statusshow1:true,
+				statusshow2:false,
 			};
 		},
 		methods: {
-			getUser(opt){
+			getUser(){
 				var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url,{}).then((res) => {
-					if(opt == 'new'){
 				        this.dataInfo.ENTERBY = res.data.username;
 				        this.dataInfo.ENTERDATE = this.getToday();
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+			},
+			getModiuser(){
+				var url = this.basic_url + '/api-user/users/currentMap';
+				this.$axios.get(url,{}).then((res) => {
+				        this.dataInfo.CHANGEBY = res.data.username;
+				        this.dataInfo.CHANGEDATE = this.getToday();
 						this.dataInfo.DEPARTMENT = res.data.deptName;
-					}
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -355,7 +397,8 @@
 			getToday(){
 				var date = new Date();
 				var str = date.getFullYear() + '-' + date.getMonth() + '-'+ date.getDate();
-				return str;
+				var rate = this.$moment(str).format("yyyy-MM-dd")
+				return rate;
 			},
 			selChange(val){
 				var data = this.assets;
@@ -369,20 +412,55 @@
 			},
 			//点击按钮显示弹窗
 			visible() {
-				this.modify=false;
+				this.addtitle = true;
+				this.modifytitle = false;
+				this.viewtitle = false;
+				this.dept = false;
+				this.noedit = false;//表单内容
+				this.views = false;//录入修改人信息
+				this.noviews = true;//按钮
+				this.modify = false;//修订
+				this.hintshow = false;
+				this.statusshow1 = true;
+				this.statusshow2 = false;
 				this.show = true;
 				this.getUser('new');
 			},
 			// 这里是修改
 			detail() {
 				this.dataInfo = this.detailData;
+				this.getModiuser();
+				this.addtitle = false;
+				this.modifytitle = true;
+				this.viewtitle = false;
+				this.dept = true;
+				this.noedit = false;//表单内容
+				this.views = false;//录入修改人信息
+				this.noviews = true;//按钮
 				this.modify = true;
+				this.hintshow = false;
+				this.statusshow1 = true;
+				this.statusshow2 = false;
 				this.show = true;
+			},
+			//这是查看
+			view(data) {
+				this.addtitle = false;
+				this.modifytitle = false;
+				this.viewtitle = true;
+				this.dept = false;
+				this.modify = true;
+				this.noedit = true;//表单内容
+				this.views = true;//录入修改人信息
+				this.noviews = false;//按钮
+				this.dataInfo = data;
+				this.show = true;				
 			},
 			//点击关闭按钮
 			close() {
 				this.resetForm();
 				this.$emit('request');
+				this.show = false;
 			},
 			resetForm(){
 				this.dataInfo = {
@@ -410,7 +488,7 @@
 					'STATUS': '1'
 				}
 				this.$refs['dataInfo'].resetFields();
-				this.show = false;
+				// this.show = false;
 			},
 			toggle(e) { //大弹出框大小切换
 				if(this.isok1) {
@@ -437,7 +515,7 @@
 				$(".mask_div").css("top", "0");
 			},
 
-			submitForm() {
+			save(dataInfo) {
 				var _this = this;
 				var url = this.basic_url + '/api-apps/app/checkRecord/saveOrUpdate';
 				this.$refs['dataInfo'].validate((valid) => {
@@ -459,11 +537,26 @@
 								type: 'error'
 							});
 						});
+						this.falg=true;
 					} else {
-						console.log('error submit!!');
-						return false;
+						this.show = true;
+						this.$message({
+							message: '未填写完整，请填写',
+							type: 'warning'
+						});
+						this.falg=false;
 					}
 				});
+			},
+			saveAndUpdate(dataInfo) {
+				this.save(dataInfo);
+				if(this.falg){
+					this.show = false;
+				}
+			},
+			saveAndSubmit(dataInfo) {
+				this.save(dataInfo);
+				this.show = true;
 			},
 		},
 		mounted() {

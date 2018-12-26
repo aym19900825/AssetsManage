@@ -950,7 +950,8 @@
 				$(".mask_div").css("top", "0");
 			},
 			getCheckedNodes() { //获取树菜单节点
-				this.checkedNodes = this.$refs.tree.getCheckedNodes()
+				this.checkedNodes = this.$refs.tree.getCheckedNodes();
+				console.log(this.checkedNodes);
 			},
 
 			//			保存users/saveOrUpdate
@@ -1080,6 +1081,7 @@
 
 			dailogconfirm() { //小弹出框确认按钮事件
 				this.getCheckedNodes();
+				
 				this.placetext = false;
 				this.dialogVisible = false;
 				if(this.editSearch == 'company') {

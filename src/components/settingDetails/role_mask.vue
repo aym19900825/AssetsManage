@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="mask" v-show="show"></div>
-		<div class="mask_div"  v-show="show">
+		<div class="mask_div" v-show="show">
 			<div class="mask_title_div clearfix">
 				<div class="mask_title" v-show="addtitle">添加角色</div>
 				<div class="mask_title" v-show="modifytitle">修改角色</div>
@@ -16,14 +16,14 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="roleList"  :rules="rules" ref="roleList" label-width="100px" class="demo-user">
+				<el-form :model="roleList" :rules="rules" ref="roleList" label-width="100px" class="demo-user">
 					<div class="accordion">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基础信息" name="1">
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="角色编码" prop="code">
-											<el-input v-model="roleList.code" :disabled="edit" ></el-input>
+											<el-input v-model="roleList.code" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -65,7 +65,7 @@
 												</div> -->
 												<div class="left_treebg" style="height: 400px">
 													<div class="p15">
-														<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent"  :props="resourceProps" @node-click="handleNodeClick">
+														<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent" :props="resourceProps" @node-click="handleNodeClick">
 														</el-tree>
 													</div>
 												</div>
@@ -85,7 +85,7 @@
 												</div> -->
 												<div class="left_treebg" style="height: 400px">
 													<div class="p15">
-														<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent"  :props="resourceProps" @node-click="handleNodeClick">
+														<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent" :props="resourceProps" @node-click="handleNodeClick">
 														</el-tree>
 													</div>
 												</div>
@@ -104,9 +104,9 @@
 				</el-form>
 			</div>
 		</div>
-	    <!-- 弹出 -->
+		<!-- 弹出 -->
 		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick"  @check-change="handleCheckChange">
+			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick" @check-change="handleCheckChange">
 			</el-tree>
 			<span slot="footer" class="dialog-footer">
 		       <el-button @click="dialogVisible = false">取 消</el-button>
@@ -119,7 +119,7 @@
 <script>
 	import Config from '../../config.js'
 	export default {
-		name: 'masks',		
+		name: 'masks',
 		data() {
 			//验证name
 			var validatePass1 = (rule, value, callback) => {
@@ -131,11 +131,11 @@
 			};
 			return {
 				basic_url: Config.dev_url,
-				value:'',
-				stopoptions:[{
+				value: '',
+				stopoptions: [{
 					value: '1',
 					label: '是'
-				},{
+				}, {
 					value: '2',
 					label: '否'
 				}],
@@ -146,49 +146,53 @@
 				}, {
 					value: '2',
 					label: '所在公司及以下数据'
-				},{
+				}, {
 					value: '3',
 					label: '所在公司数据'
-				},{
+				}, {
 					value: '4',
 					label: '所在部门及以下数据'
-				},{
+				}, {
 					value: '5',
 					label: '所在部门数据'
-				},{
+				}, {
 					value: '6',
 					label: '仅本人数据'
-				},{
+				}, {
 					value: '7',
 					label: '按明细设置'
-				},],
+				}, ],
 				edit: true, //禁填
 				'男': true,
 				'女': false,
-				stopshow:false,
-				stopselect:false,
-				show: false,//控制弹出框显示隐藏
-				isok1: true,//控制弹出框放大还原
-				isok2: false,//控制弹出框放大还原
-				down: true,//控制高级查询划出收起
-				up: false,//控制高级查询划出收起
+				stopshow: false,
+				stopselect: false,
+				show: false, //控制弹出框显示隐藏
+				isok1: true, //控制弹出框放大还原
+				isok2: false, //控制弹出框放大还原
+				down: true, //控制高级查询划出收起
+				up: false, //控制高级查询划出收起
 				activeNames: ['1'], //手风琴数量
-				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
-//				labelPosition: 'top', //表单label位置
+				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
+				//				labelPosition: 'top', //表单label位置
 				dialogVisible: false, //对话框
-				roleList:{//表格数据
-					name:'',
-					code:'',
-					deptId:'',
-					tips:''
+				roleList: { //表格数据
+					name: '',
+					code: '',
+					deptId: '',
+					tips: ''
 				},
-				rules: {//验证表单
+				rules: { //验证表单
 					name: [{
 						required: true,
 						trigger: 'blur',
 						validator: validatePass1,
 					}],
-					range:[ { required: true, message: '请选择机构属性', trigger: 'change' }]
+					range: [{
+						required: true,
+						message: '请选择机构属性',
+						trigger: 'change'
+					}]
 					// range: [{
 					// 	required: true,
 					// 	trigger: 'change',
@@ -206,27 +210,31 @@
 				companyId: '',
 				deptId: '',
 				treeData: [],
-				cccData:{},
-				addtitle:true,
-				modifytitle:false,
-				viewtitle:false,
-				dept:false,
-				noedit:false,//表单内容
-				views:false,//录入修改人信息
-				noviews:true,//按钮
-				modify:false,//修订
-				hintshow:false,
-				statusshow1:true,
-				statusshow2:false,
+				cccData: {},
+				addtitle: true,
+				modifytitle: false,
+				viewtitle: false,
+				dept: false,
+				noedit: false, //表单内容
+				views: false, //录入修改人信息
+				noviews: true, //按钮
+				modify: false, //修订
+				hintshow: false,
+				statusshow1: true,
+				statusshow2: false,
 			};
 		},
 		mounted() {
 			this.getKey();
 		},
 		methods: {
-			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
-			return(<span><i class={data.iconClass}></i><span>{node.label}</span></span>);
-		},
+			renderContent(h, {
+				node,
+				data,
+				store
+			}) { //自定义Element树菜单显示图标
+				return(<span><i class={data.iconClass}></i><span>{node.label}</span></span>);
+			},
 			// 点击节点
 			nodeClick: function(m) {
 				if(m.iconClass != 'icon-file-text') {
@@ -238,11 +246,11 @@
 				}
 				this.handleNodeClick();
 			},
-			
+
 			handleCheckChange(data, checked, indeterminate) {
-		        this.cccData=data;
-		    },
-		    handleNodeClick(data) {
+				this.cccData = data;
+			},
+			handleNodeClick(data) {
 				if(data.type == '1') {
 					this.companyId = data.id;
 					this.deptId = '';
@@ -262,36 +270,36 @@
 					this.treeData = this.transformTree(this.resourceData);
 				});
 			},
-			transformTree(data){
-				for(var i=0; i<data.length; i++){
+			transformTree(data) {
+				for(var i = 0; i < data.length; i++) {
 					data[i].name = data[i].fullname;
-					if(!data[i].pid || $.isArray(data[i].subDepts)){
+					if(!data[i].pid || $.isArray(data[i].subDepts)) {
 						data[i].iconClass = 'icon-file-normal';
-					}else{
+					} else {
 						data[i].iconClass = 'icon-file-text';
 					}
-					if($.isArray(data[i].subDepts)){
+					if($.isArray(data[i].subDepts)) {
 						data[i].children = this.transformTree(data[i].subDepts);
 					}
 				}
 				return data;
 			},
 			//form表单内容清空
-			resetNew(){
-                this.roleList = {
-					name:'',
-					code:'',
-					deptName:'',
-					tips:''
+			resetNew() {
+				this.roleList = {
+					name: '',
+					code: '',
+					deptName: '',
+					tips: ''
 				}
-                this.$refs["roleList"].resetFields();
-            },
-            rand(min,max) {
-		        return Math.floor(Math.random()*(max-min))+min;
-		    },
+				this.$refs["roleList"].resetFields();
+			},
+			rand(min, max) {
+				return Math.floor(Math.random() * (max - min)) + min;
+			},
 			//点击按钮显示弹窗
 			visible() {
-				var randnum = this.rand(1000,9999);
+				var randnum = this.rand(1000, 9999);
 				this.roleList.code = randnum;
 				this.stopshow = true;
 				this.stopselect = false;
@@ -300,10 +308,10 @@
 				this.modifytitle = false;
 				this.viewtitle = false;
 				this.dept = false;
-				this.noedit = false;//表单内容
-				this.views = false;//录入修改人信息
-				this.noviews = true;//按钮
-				this.modify = false;//修订
+				this.noedit = false; //表单内容
+				this.views = false; //录入修改人信息
+				this.noviews = true; //按钮
+				this.modify = false; //修订
 				this.hintshow = false;
 				this.statusshow1 = true;
 				this.statusshow2 = false;
@@ -315,11 +323,11 @@
 				this.modifytitle = true;
 				this.viewtitle = false;
 				this.dept = true;
-				this.noedit = false;//表单内容
-				this.views = false;//录入修改人信息
-				this.noviews = true;//按钮
+				this.noedit = false; //表单内容
+				this.views = false; //录入修改人信息
+				this.noviews = true; //按钮
 				this.hintshow = false;
-				this.modify = true;//修订
+				this.modify = true; //修订
 				this.statusshow1 = false;
 				this.statusshow2 = true;
 				this.stopshow = false;
@@ -343,18 +351,18 @@
 				this.modifytitle = false;
 				this.viewtitle = true;
 				this.dept = true;
-				this.noedit = true;//表单内容
-				this.views = true;//录入修改人信息
-				this.noviews = false;//按钮
+				this.noedit = true; //表单内容
+				this.views = true; //录入修改人信息
+				this.noviews = false; //按钮
 				this.roleList = item;
-				this.show = true;				
+				this.show = true;
 			},
-			
+
 			//点击关闭按钮
 			close() {
 				this.show = false;
 			},
-			open(){
+			open() {
 				this.show = true;
 			},
 			toggle(e) {
@@ -389,37 +397,37 @@
 			submitForm() {
 				this.$refs.roleList.validate((valid) => {
 					// if(valid) {	
-						var url = this.basic_url + '/api-user/roles/saveOrUpdate';
-						this.$axios.post(url, this.roleList).then((res) => {
-							if(res.data.resp_code == 0) {
-								this.$message({
-									message: '保存成功',
-									type: 'success',
-								});
-								this.show = false;
-								//重新加载数据
-								this.$emit('request')
-							}
-						}).catch((err) => {
+					var url = this.basic_url + '/api-user/roles/saveOrUpdate';
+					this.$axios.post(url, this.roleList).then((res) => {
+						if(res.data.resp_code == 0) {
 							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
+								message: '保存成功',
+								type: 'success',
 							});
+							this.show = false;
+							//重新加载数据
+							this.$emit('request')
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
 						});
+					});
 					// } else {
 					// 	return false;
 					// }
 				})
 			},
 			//所在机构
-			getDept() {				
+			getDept() {
 				// this.editSearch = 'dept';
 				var type = 2;
 				var url = this.basic_url + '/api-user/depts/treeByType';
 				this.$axios.get(url, {
 					params: {
 						type: type
-					},					
+					},
 				}).then((res) => {
 					this.resourceData = res.data;
 					this.dialogVisible = true;

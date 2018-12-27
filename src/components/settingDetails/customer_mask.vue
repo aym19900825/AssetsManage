@@ -201,13 +201,13 @@
 										      </template>
 										    </el-table-column>
 
-										    <el-table-column label="联系人" sortable width="120px" prop="PERSON">
+										    <el-table-column label="联系人" sortable width="150px" prop="PERSON">
 										      <template slot-scope="scope">
 										      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.PERSON" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.PERSON}}</span>
 										      </template>
 										    </el-table-column>
 
-											<el-table-column prop="PHONE" label="联系电话" sortable width="120px">
+											<el-table-column prop="PHONE" label="联系电话" sortable width="150px">
 										      <template slot-scope="scope">
 										         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.PHONE" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.PHONE}}</span>
 										      </template>
@@ -218,7 +218,7 @@
 										         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.FAX" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.FAX}}</span>
 										      </template>
 										    </el-table-column>
-										    <el-table-column prop="EMAIL" label="邮箱" sortable width="120px">
+										    <el-table-column prop="EMAIL" label="邮箱" sortable>
 										      <template slot-scope="scope">
 										        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.EMAIL" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.EMAIL}}</span>
 										      </template>
@@ -457,8 +457,7 @@
 				this.index = this.index + 1;
 				var obj = {
 					STEP:this.index,
-                    ID:'',
-                    CUSTOMER_ID:'',
+					ID:'',
                     CODE:'',
                     PERSON:'',
                     PHONE:'',

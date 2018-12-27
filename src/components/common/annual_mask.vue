@@ -125,7 +125,7 @@
 									</el-button>
 								</div>
 
-								<el-table :data="worlplanlist" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100% ;"  :default-sort="{prop:'worlplanlist', order: 'descending'}" v-loadmore="loadMore">
+								<el-table :header-cell-style="rowClass" :data="worlplanlist" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100% ;"  :default-sort="{prop:'worlplanlist', order: 'descending'}" v-loadmore="loadMore">
 								    <el-table-column prop="iconOperation" fixed width="50px">
 								      <template slot-scope="scope" >
 								      	<i class="el-icon-check" v-if="scope.row.isEditing" @click="iconOperation(scope.row)">
@@ -202,7 +202,7 @@
 											</el-button>
 										</div>
 										<!-- <el-form :model="basisList" :rules="rules" ref="basisList" prop="basisList"> -->
-						            	<el-table :data="basisList" border stripe :fit="true" style="width: 100%;" :default-sort="{prop:'basisList', order: 'descending'}">
+						            	<el-table :header-cell-style="rowClass" :data="basisList" border stripe :fit="true" max-length="260px" style="width: 100%;" :default-sort="{prop:'basisList', order: 'descending'}">
 						            		<el-table-column prop="NUMBER" label="所属计划编号" width="150">
 						            			<template slot-scope="scope">
 										        	<span>{{scope.$index + 1}}</span>
@@ -232,7 +232,7 @@
 												<font>选择</font>
 											</el-button>
 										</div>
-						            	<el-table :data="proTestList" border stripe height="200" style="width: 100%;" :default-sort="{prop:'proTestList', order: 'descending'}">
+						            	<el-table :header-cell-style="rowClass" :data="proTestList" border stripe :fit="true" max-height="260" style="width: 100%;" :default-sort="{prop:'proTestList', order: 'descending'}">
 						            	    <el-table-column prop="iconOperation" fixed width="50px">
 										      <template slot-scope="scope" >
 										      	<i class="el-icon-check" v-if="scope.row.isEditing" @click="changeEdit(scope.row)">
@@ -747,6 +747,10 @@
 			};
 		},
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    return 'text-align:center'
+			},
 			toNum(str) {
 				return str.replace(/\,|\￥/g, "");
 			},

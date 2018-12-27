@@ -169,7 +169,7 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="角色" prop="roleId" label-width="100px">
-											<el-select v-model="user.roleId" multiple :disabled="noedit">
+											<el-select v-model="user.roleId" multiple :disabled="noedit" @change="currentSel">
 												<el-option v-for="item in selectData" :key="item.name" :value="item.id" :label="item.name"></el-option>
 											</el-select>
 										</el-form-item>
@@ -515,111 +515,27 @@
 				//				default-expand-all:true,
 				i:0,
 				rules: {
-					deptName: [{
-						required: true,
-						message: '必填',
-						trigger: 'blur'
-					}], //名称
-					education: [{
-						required: true,
-						message: '必填',
-						trigger: 'blur'
-					}],
-					roleId: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填',
-					}],
-					username: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填',
-					}],
-					password: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填',
-					}],
-					sex: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填'
-					}],
-					ispermit_authorization: [{
-						required: true,
-						trigger: 'change',
-						message: '必填'
-					}], //授权
-					islogin: [{
-						required: true,
-						trigger: 'change',
-						message: '必填'
-					}], //登陆
-					mac_address: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填',
-					}],
-					ip_address: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填',
-					}],
-					idnumber: [{
-						required: true,
-						trigger: 'blur',
-						validator: validateIdnumber
-					}],
-					phone: [{
-						required: true,
-						trigger: 'blur',
-						validator: validatePhone
-					}],
-					email: [{
-						required: true,
-						trigger: 'blur',
-						validator: validateEmail,
-					}],
-					step: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填',
-					}],
-					t_date: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填',
-					}],
-					t_description: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填',
-					}],
-					status: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填',
-					}],
-					step: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填',
-					}],
-					c_date: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填',
-					}],
-					c_num: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填',
-					}],
-					c_name: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填',
-					}],
+					deptName: [{required: true,message: '必填',trigger: 'blur'}], //名称
+					education: [{required: true,message: '必填',trigger: 'blur'}],
+					roleId: [{required: true,trigger: 'blur',message: '必填',}],
+					username: [{required: true,trigger: 'blur',message: '必填',}],
+					password: [{required: true,trigger: 'blur',message: '必填',}],
+					sex: [{required: true,trigger: 'blur',message: '必填'}],
+					ispermit_authorization: [{required: true,trigger: 'change',message: '必填'}], //授权
+					islogin: [{required: true,trigger: 'change',message: '必填'}], //登陆
+					mac_address: [{required: true,trigger: 'blur',message: '必填',}],
+					ip_address: [{required: true,trigger: 'blur',message: '必填',}],
+					idnumber: [{required: true,trigger: 'blur',validator: validateIdnumber}],
+					phone: [{required: true,trigger: 'blur',validator: validatePhone}],
+					email: [{required: true,trigger: 'blur',validator: validateEmail,}],
+					step: [{required: true,trigger: 'blur',message: '必填',}],
+					t_date: [{required: true,trigger: 'blur',message: '必填',}],
+					t_description: [{required: true,trigger: 'blur',message: '必填',}],
+					status: [{required: true,trigger: 'blur',message: '必填',}],
+					step: [{required: true,trigger: 'blur',message: '必填',}],
+					c_date: [{required: true,trigger: 'blur',message: '必填',}],
+					c_num: [{required: true,trigger: 'blur',message: '必填',}],
+					c_name: [{required: true,trigger: 'blur',message: '必填',}],
 
 				},
 				//tree树菜单
@@ -646,6 +562,9 @@
 			};
 		},
 		methods: {
+			 currentSel(selVal){
+        		this.selVal = selVal;
+      		},
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    // console.log(rowIndex) //表头行标号为0

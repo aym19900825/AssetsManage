@@ -19,7 +19,7 @@
 			return {
 				roId: 1,
 				basic_url: Config.dev_url,
-				menuData: [], //数组，我这里是通过接口获取数据，
+				depetData: [], //数组，我这里是通过接口获取数据，
 				resourceDialogisShow: false,
 				dialogVisible: false, //对话框
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
@@ -31,33 +31,42 @@
 
 		},
 		methods: {
-			//			handleCheckChange(data, checked, indeterminate) {
-			//				this.cccData = data;
-			//			},
+			handleCheckChange(data, checked, indeterminate) {
+				this.cccData = data;
+			},
 			getCheckedKeys() {
 				console.log(this.$refs.tree.getCheckedKeys());
 			},
 			depet(id) {
+				console.log(id);
 				this.roId = id;
 				var arr = [];
-				var url = this.basic_url + '/api-user/depts/treeMap';
+				var url = this.basic_url + '/api-user/depts/getTreeMapByRoleId/'+id;
 				this.$axios.get(url, {}).then((res) => {
 					console.log(res.data);
 					this.depetData = res.data;
 					var depetData = res.data
 					for(var a = 0; a < depetData.length; a++) {
 						if(depetData[a].checked) {
-							//							arr.push(menuData[a].id);
+							//arr.push(menuData[a].id);
 							if(depetData[a].children.length > 0) {
-								var depetDataChild = depetData[a].children //2
+//								arr.pop(depetData[a].children[b].id)
 								for(var b = 0; b < depetData[a].children.length; b++) {
-									console.log(depetData[a].children.length);
 									if(depetData[a].children[b].checked) {
 										arr.push(depetData[a].children[b].id);
-										if(depetData[a].children[b].children.length > 0) {
+										if(depetData[a].children[b].children!=null&&depetData[a].children[b].children.length > 0) {
+											arr.pop(depetData[a].children[b].id)
+											console.log(depetData[a].children[b].children.length);
 											for(var c = 0; c < depetData[a].children[b].children.length; c++) {
 												if(depetData[a].children[b].children[c].checked) {
 													arr.push(depetData[a].children[b].children[c].id);
+													if(depetData[a].children[b].children[c].children!=null&&depetData[a].children[b].children[c].children.length > 0) {
+														arr.pop(depetData[a].children[b].children[c].id)
+														for(var d = 0; d < depetData[a].children[b].children[c].children.length; d++) {
+													        if(depetData[a].children[b].children[c].children[d].id) {
+															arr.push(depetData[a].children[b].children[c].children[d].id);
+													        }
+														}
 												}
 											}
 										}
@@ -66,6 +75,7 @@
 							}
 						}
 					}
+					}	
 					this.$nextTick(() => {
 						this.setChecked(arr);
 					});

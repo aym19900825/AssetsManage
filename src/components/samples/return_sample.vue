@@ -49,42 +49,43 @@
 					<div v-show="search">
 						<el-form status-icon :model="searchList">
 							<el-row :gutter="5">
-								<el-col :span="3">
-									<el-form-item label="样品序号" prop="ITEMNUM" label-width="70px">
+								<el-col :span="6">
+									<el-form-item label="样品序号" prop="ITEMNUM" label-width="85px">
 										<el-input v-model="searchList.ITEMNUM"></el-input>
 									</el-form-item>
 								</el-col>
-								<el-col :span="4">
+								<el-col :span="6">
+									<el-form-item label="收回入库时间" prop="ACCEPT_DATE" label-width="100px">
+										<div class="block">
+										    <el-date-picker
+										      v-model="searchList.ACCEPT_DATE"
+										      type="date"
+										      placeholder="请选择" style="width: 100%">
+										    </el-date-picker>
+									  	</div>
+									</el-form-item>
+								</el-col>
+								<el-col :span="6">
 									<el-form-item label="样品承接人" prop="ACCEPT_PERSON" label-width="85px">
 										<el-input v-model="searchList.ACCEPT_PERSON"></el-input>
 									</el-form-item>
 								</el-col>
-								<el-col :span="4">
+							</el-row>
+							<el-row :gutter="5">
+								<el-col :span="6">
 									<el-form-item label="处理批准人" prop="APPR_PERSON" label-width="85px">
 										<el-input v-model="searchList.APPR_PERSON"></el-input>
 									</el-form-item>
 								</el-col>
-								<el-col :span="5">
-									<el-form-item label="批准日期" prop="APPR_DATE" label-width="70px">
+								<el-col :span="6">
+									<el-form-item label="批准日期" prop="APPR_DATE" label-width="100px">
 										<div class="block">
-									    <el-date-picker
-									      v-model="searchList.APPR_DATE"
-									      type="date"
-									      placeholder="请选择" style="width: 100%">
-									    </el-date-picker>
-								  	</div>
-								</el-form-item>
-									</el-form-item>
-								</el-col>
-								<el-col :span="5">
-									<el-form-item label="收样日期" prop="ACCEPT_DATE" label-width="70px">
-										<div class="block">
-									    <el-date-picker
-									      v-model="searchList.ACCEPT_DATE"
-									      type="date"
-									      placeholder="请选择" style="width: 100%">
-									    </el-date-picker>
-								  	</div>
+										    <el-date-picker
+										      v-model="searchList.APPR_DATE"
+										      type="date"
+										      placeholder="请选择" style="width: 100%">
+										    </el-date-picker>
+									  	</div>
 									</el-form-item>
 								</el-col>
 								<el-col :span="3">
@@ -128,24 +129,22 @@
 								</el-table-column>
 								<el-table-column label="样品序号" sortable width="100px" prop="ITEMNUM" v-if="this.checkedName.indexOf('样品序号')!=-1">
 								</el-table-column>
-								<el-table-column label="数量" width="200px" prop="QUALITY" sortable v-if="this.checkedName.indexOf('数量')!=-1">
+								<el-table-column label="数量" width="100px" prop="QUALITY" sortable v-if="this.checkedName.indexOf('数量')!=-1">
 								</el-table-column>
-								<el-table-column label="收回入库时间" width="200px" prop="ACCEPT_DATE" sortable v-if="this.checkedName.indexOf('收回入库时间')!=-1">
+								<el-table-column label="收回入库时间" width="150px" prop="ACCEPT_DATE" sortable v-if="this.checkedName.indexOf('收回入库时间')!=-1" :formatter="dateFormat">
 								</el-table-column>
-								<el-table-column label="样品承接人" sortable width="140px" prop="ACCEPT_PERSON" v-if="this.checkedName.indexOf('样品承接人')!=-1">
+								<el-table-column label="样品承接人" sortable width="120px" prop="ACCEPT_PERSON" v-if="this.checkedName.indexOf('样品承接人')!=-1">
 								</el-table-column>
-								<el-table-column label="处理批准人" sortable width="200px" prop="APPR_PERSON" v-if="this.checkedName.indexOf('处理批准人')!=-1">
+								<el-table-column label="处理批准人" sortable width="120px" prop="APPR_PERSON" v-if="this.checkedName.indexOf('处理批准人')!=-1">
 								</el-table-column>
-								<el-table-column label="批准日期" sortable width="200px" prop="APPR_DATE" v-if="this.checkedName.indexOf('批准日期')!=-1">
+								<el-table-column label="批准日期" sortable width="100px" prop="APPR_DATE" v-if="this.checkedName.indexOf('批准日期')!=-1" :formatter="dateFormat">
 								</el-table-column>
-								<el-table-column label="处理人" sortable width="140px" prop="DO_PERSON" v-if="this.checkedName.indexOf('处理人')!=-1">
+								<el-table-column label="处理人" sortable width="120px" prop="DO_PERSON" v-if="this.checkedName.indexOf('处理人')!=-1">
 								</el-table-column>
-								<el-table-column label="处理日期" sortable width="160px" :formatter="dateFormat" prop="DO_DATE" v-if="this.checkedName.indexOf('处理日期')!=-1">
+								<el-table-column label="处理日期" sortable width="100px" :formatter="dateFormat" prop="DO_DATE" v-if="this.checkedName.indexOf('处理日期')!=-1">
 								</el-table-column>
-
 								<el-table-column label="备注" sortable width="160px" prop="MEMO" v-if="this.checkedName.indexOf('备注')!=-1">
 								</el-table-column>
-
 								<el-table-column label="状态" sortable width="140px" prop="STATE" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
 								<!--<el-table-column label="信息状态" sortable width="140px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">

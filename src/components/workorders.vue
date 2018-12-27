@@ -56,24 +56,30 @@
 						</div>
 					</div>
 					<!-- 高级查询划出 Begin-->
-					<div v-show="search" class="pb10">
-						<el-form status-icon inline-message :model="searchList">
-							<el-row :gutter="30" class="pb5">
+					<div v-show="search">
+						<el-form status-icon inline-message :model="searchList" label-width="110px">
+							<el-row :gutter="5">
 								<el-col :span="6">
-									<el-input v-model="searchList.WONUM">
-										<template slot="prepend">工作任务单编号</template>
-									</el-input>
+									<el-form-item label="工作任务单编号" prop="WONUM">
+										<el-input v-model="searchList.WONUM">
+										</el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="6">
-									<el-input v-model="searchList.ITEM_NAME">
-										<template slot="prepend">样品名称</template>
-									</el-input>
+									<el-form-item label="样品名称" prop="ITEM_NAME" label-width="80px">
+										<el-input v-model="searchList.ITEM_NAME">
+										</el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="6">
-									<el-input v-model="searchList.PROXYNUM">
-										<template slot="prepend">委托书编号</template>
-									</el-input>
+									<el-form-item label="完成日期" prop="COMPLETE_DATE" label-width="80px">
+										<div class="block">
+									    	<el-date-picker v-model="searchList.COMPLETE_DATE" type="date" placeholder="请选择" style="width: 100%">
+									    	</el-date-picker>
+								  		</div>
+									</el-form-item>
 								</el-col>
+								
 								<!-- <el-col :span="3">
 									<el-select v-model="searchList.STATE" placeholder="请选择信息状态">
 										<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
@@ -81,25 +87,23 @@
 									</el-select>
 								</el-col> -->
 							</el-row>
-
-							<el-row :gutter="30">
+							<el-row :gutter="5">
 								<el-col :span="6">
-									<el-input v-model="searchList.COMPLETE_DATE">
-										<template slot="prepend">完成日期</template>
-									</el-input>
+									<el-form-item label="委托书编号" prop="PROXYNUM" label-width="110px">
+										<el-input v-model="searchList.PROXYNUM">
+										</el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="6">
-									<el-input v-model="searchList.ENTERBY">
-										<template slot="prepend">录入人</template>
-									</el-input>
-								</el-col>
-								<el-col :span="6">
-									<el-input v-model="searchList.ENTERDATE">
-										<template slot="prepend">录入日期</template>
-									</el-input>
+									<el-form-item label="录入日期" prop="ENTERDATE" label-width="80px">
+										<div class="block">
+									    	<el-date-picker v-model="searchList.ENTERDATE" type="date" placeholder="请选择" style="width: 100%">
+									    	</el-date-picker>
+								  		</div>
+									</el-form-item>
 								</el-col>
 								<el-col :span="3">
-									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -138,18 +142,17 @@
 								</el-table-column>
 								<el-table-column label="抽样方案/判定依据" sortable width="200px" prop="CHECK_BASIS" v-if="this.checkedName.indexOf('抽样方案/判定依据')!=-1">
 								</el-table-column>
-								<el-table-column label="完成日期" sortable  width="100px" prop="COMPLETE_DATE" v-if="this.checkedName.indexOf('完成日期')!=-1">
+								<el-table-column label="完成日期" sortable  width="100px" :formatter="dateFormat" prop="COMPLETE_DATE" v-if="this.checkedName.indexOf('完成日期')!=-1">
 								</el-table-column>
 								<el-table-column label="完成方式" sortable  width="100px" prop="COMPLETE_MODE" v-if="this.checkedName.indexOf('完成方式')!=-1">
 								</el-table-column>
 								<el-table-column label="委托书编号" sortable  width="120px" prop="PROXYNUM" v-if="this.checkedName.indexOf('委托书编号')!=-1">
 								</el-table-column>
-								<el-table-column label="信息状态" sortable width="100px" prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
-								</el-table-column>
-								</el-table-column>
-								<el-table-column label="录入人" sortable width="210px" prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
-								</el-table-column>
-								<el-table-column label="录入时间" sortable width="210px" prop="ENTERDATE" v-if="this.checkedName.indexOf('录入时间')!=-1">
+								<!-- <el-table-column label="信息状态" sortable width="100px" prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
+								</el-table-column> -->
+								<!-- <el-table-column label="录入人" sortable width="210px" prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
+								</el-table-column> -->
+								<el-table-column label="录入时间" sortable width="210px" :formatter="dateFormat" prop="ENTERDATE" v-if="this.checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
@@ -198,9 +201,9 @@
 					'完成日期',
 					'完成方式',
 					'委托书编号',
-					'录入人',
+					// '录入人',
 					'录入时间',
-					'信息状态'
+					// '信息状态'
 				],
 				tableHeader: [
 					{
@@ -235,14 +238,14 @@
 						label: '委托书编号',
 						prop: 'PROXYNUM'
 					},
-					{
-						label: '信息状态',
-						prop: 'STATUS'
-					},
-					{
-						label: '录入人',
-						prop: 'ENTERBY'
-					},
+					// {
+					// 	label: '信息状态',
+					// 	prop: 'STATUS'
+					// },
+					// {
+					// 	label: '录入人',
+					// 	prop: 'ENTERBY'
+					// },
 					{
 						label: '录入时间',
 						prop: 'ENTERDATE'
@@ -269,7 +272,7 @@
 					PROXYNUM: '',//委托书编号
 					STATE: '',//状态
 					COMPLETE_DATE: '',//完成日期
-					ENTERBY: '',//录入人
+					// ENTERBY: '',//录入人
 					ENTERDATE: '',//录入日期
 				},
 				//tree

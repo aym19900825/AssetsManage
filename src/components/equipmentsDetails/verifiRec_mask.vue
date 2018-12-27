@@ -366,6 +366,7 @@
 				hintshow:false,
 				statusshow1:true,
 				statusshow2:false,
+				falg:false
 			};
 		},
 		methods: {
@@ -526,8 +527,8 @@
 									message: '保存成功',
 									type: 'success',
 								});
-								this.resetForm();
 								this.$emit('request');
+								this.resetForm();
 							}else{
 
 							}

@@ -384,6 +384,7 @@
 			},
 			// 这里是修改
 			detail() {
+				this.getModiuser();
 				var ID = this.detailData.ID;
 				var url = this.basic_url + '/api-apps/app/checkPlan/' + ID;
 				this.$axios.get(url, {}).then((res) => {

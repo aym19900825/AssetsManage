@@ -616,6 +616,7 @@
 			//点击关闭按钮
 			close() {
 				this.resetForm();
+				this.$emit('request');
 				this.show = false;
 			},
 			resetForm(){
@@ -663,8 +664,9 @@
 									message: '保存成功',
 									type: 'success',
 								});
-								this.resetForm();
+								
 								this.$emit('request');
+								this.resetForm();
 							}
 						}).catch((err) => {
 							this.$message({

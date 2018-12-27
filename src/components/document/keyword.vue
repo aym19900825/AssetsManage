@@ -41,18 +41,13 @@
 						<el-form status-icon :model="searchList" label-width="70px">
 							<el-row :gutter="30" class="pb5">
 								<el-col :span="7">
-									<el-input v-model="searchList.KEYNUM">
-										<template slot="prepend">编号</template>
+									<el-input v-model="searchList.keywordname">
+										<template slot="prepend">关键字名称</template>
 									</el-input>
 								</el-col>
 								<el-col :span="7">
-									<el-input v-model="searchList.KEY">
-										<template slot="prepend">关键字</template>
-									</el-input>
-								</el-col>
-								<el-col :span="7">
-									<el-input v-model="searchList.CLASSFICATIONID" label-width="58px">
-										<template slot="prepend">分类</template>
+									<el-input v-model="searchList.categoryid">
+										<template slot="prepend">关键字分类ID</template>
 									</el-input>
 								</el-col>
 								<el-col :span="3">
@@ -65,7 +60,7 @@
 
 					<el-row :gutter="0">
 						<!-- 左侧树菜单 Begin-->
-						<el-col :span="5" class="lefttree">
+						<!-- <el-col :span="5" class="lefttree">
 							<div class="lefttreebg">
 								<div class="left_tree_title clearfix" @click="min3max()">
 									<div class="pull-left pr20" v-if="ismin">关键字分类</div>
@@ -80,27 +75,33 @@
 									</div>
 								</div>
 							</div>
-						</el-col>
+						</el-col> -->
 						<!-- 左侧树菜单 End-->
 						
-						<el-col :span="19" class="leftcont v-resize">
+						<el-col class="leftcont v-resize">
 							<!-- 表格 -->
-							<el-table :data="samplesList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table :data="samplesList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="编号" sortable width="140px" prop="KEYNUM" v-if="this.checkedName.indexOf('编号')!=-1">
+								<el-table-column label="关键字" sortable prop="keywordname" v-if="this.checkedName.indexOf('关键字')!=-1">
 								</el-table-column>
-								<el-table-column label="关键字" sortable width="" prop="KEY" v-if="this.checkedName.indexOf('关键字')!=-1">
+								<el-table-column label="分类" sortable prop="categoryid" v-if="this.checkedName.indexOf('分类')!=-1">
 								</el-table-column>
-								<el-table-column label="分类" sortable width="200px" prop="CLASSFICATIONID" v-if="this.checkedName.indexOf('分类')!=-1">
+								<el-table-column label="用户名称" sortable prop="username" v-if="this.checkedName.indexOf('用户名称')!=-1">
 								</el-table-column>
-								<el-table-column label="信息状态" sortable width="140px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
+								<el-table-column label="用户部门" sortable prop="deptfullname" v-if="this.checkedName.indexOf('用户部门')!=-1">
 								</el-table-column>
-								<el-table-column label="同步时间" sortable width="140px" prop="SYNCHRONIZATION_TIME" v-if="this.checkedName.indexOf('同步时间')!=-1">
+								<el-table-column label="创建时间" sortable prop="createtime" v-if="this.checkedName.indexOf('创建时间')!=-1">
 								</el-table-column>
 							</el-table>
 							
-							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" 
+								@size-change="sizeChange" 
+								@current-change="currentChange" 
+								:current-page="page.currentPage" 
+								:page-sizes="[10, 20, 30, 40]" 
+								layout="total, sizes, prev, pager, next" 
+								:total="page.totalCount">
 							</el-pagination>
 							<!-- 表格 -->
 						</el-col>
@@ -108,7 +109,7 @@
 				</div>
 			</div>
 		</div>
-		<keywordmask  ref="child" @request="requestData"></keywordmask>
+		<keywordmask  ref="child" @request="requestData" :detailData="selMenu[0]"></keywordmask>
 		<!--右侧内容显示 End-->
 	</div>
 	</div>
@@ -137,62 +138,45 @@
 				loadSign: true, //加载
 				commentArr: {},
 				checkedName: [
-					'编号',
 					'关键字',
 					'分类',
-					'信息状态',
-					'同步时间',
+					'用户名称',
+					'用户部门',
+					'创建时间',
 				],
-				tableHeader: [{
-						label: '编号',
-						prop: 'KEYNUM'
-					},
+				tableHeader: [
 					{
 						label: '关键字',
-						prop: 'KEY'
+						prop: 'keywordname'
 					},
 					{
 						label: '分类',
-						prop: 'CLASSFICATIONID'
+						prop: 'categoryid'
 					},
 					{
-						label: '信息状态',
-						prop: 'STATUS'
+						label: '用户名称',
+						prop: 'username'
 					},
 					{
-						label: '同步时间',
-						prop: 'SYNCHRONIZATION_TIME'
+						label: '用户部门',
+						prop: 'deptfullname'
+					},
+					{
+						label: '创建时间',
+						prop: 'createtime'
 					}
 				],
 				selMenu: [],
-				samplesList: [
-					{
-						'KEYNUM': '1111',
-						'KEY': '关键字',
-						'CLASSFICATIONID': '业务',
-						'STATUS': '活动',
-						'SYNCHRONIZATION_TIME': '2017-02-23',
-					}
-				],
+				samplesList: [],
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				search: false,
 				show: false,
 				down: true,
 				up: false,
 				searchList: {
-					KEYNUM: '',
-					KEY: '',
-					CLASSFICATIONID: '',
+					keywordname: '',
+					categoryid: ''
 				},
-				//tree树菜单
-				resourceData: [], //数组，我这里是通过接口获取数据，
-				resourceDialogisShow: false,
-				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
-				resourceProps: {//树菜单数据
-					children: "subDepts",
-					label: "fullname"
-				},
-				treeData: [],
 				page: {
 					currentPage: 1,
 					pageSize: 10,
@@ -204,27 +188,6 @@
 			}
 		},
 		methods: {
-			// 点击节点
-			nodeClick: function(m) {
-				if(m.iconClass != 'icon-file-text') {
-					if(m.iconClass == 'icon-file-normal') {
-						m.iconClass = 'icon-file-open';
-					} else {
-						m.iconClass = 'icon-file-normal';
-					}
-				}
-				this.handleNodeClick();
-			},
-			expandClick: function(m) {
-				if(m.iconClass != 'icon-file-text') {
-					if(m.iconClass == 'icon-file-normal') {
-						m.iconClass = 'icon-file-open';
-					} else {
-						m.iconClass = 'icon-file-normal';
-					}
-				}
-				m.isFolder = !m.isFolder;
-			},
 			tableControle(data) {//控制表格列显示隐藏
 				this.checkedName = data;
 			},
@@ -260,7 +223,7 @@
 					});
 					return;
 				} else {
-					this.$refs.child.detail(this.selMenu[0].ID);
+					this.$refs.child.detail();
 				}
 			},
 			//高级查询
@@ -324,55 +287,21 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					KEYNUM: this.searchList.KEYNUM,
-					KEY: this.searchList.KEY,
-					CLASSFICATIONID: this.searchList.CLASSFICATIONID,
+					keywordname: this.searchList.keywordname,
 				}
-				var url = this.basic_url + '/api-apps/app/item';
+				if(this.searchList.categoryid != ''){
+					this.searchList.categoryid = parseInt(this.searchList.categoryid);
+				};
+				var url = this.basic_url + '/api-apps/app/tbKeyword2';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;
-					// this.samplesList = newarr;
+					this.samplesList = res.data.data;
 				}).catch((wrong) => {})
 				
 			},
 			
-			//生产单位树
-			getKey() {
-				let that = this;
-				var url = this.basic_url + '/api-user/depts/tree';
-				this.$axios.get(url, {}).then((res) => {
-					this.resourceData = res.data;
-					this.treeData = this.transformTree(this.resourceData);
-				});
-			},
-			transformTree(data) {
-				for(var i = 0; i < data.length; i++) {
-					data[i].name = data[i].fullname;
-					if(!data[i].pid || $.isArray(data[i].subDepts)) {
-						data[i].iconClass = 'icon-file-normal';
-					} else {
-						data[i].iconClass = 'icon-file-text';
-					}
-					if($.isArray(data[i].subDepts)) {
-						data[i].children = this.transformTree(data[i].subDepts);
-					}
-				}
-				return data;
-				
-			},
-			handleNodeClick(data) {
-				if(data.type == '1') {
-					this.companyId = data.id;
-					this.deptId = '';
-				} else {
-					this.deptId = data.id;
-					this.companyId = '';
-				}
-				this.requestData();
-			},
-
 			min3max() { //左侧菜单正常和变小切换
 				if($(".lefttree").hasClass("el-col-5")) {
 					$(".lefttree").removeClass("el-col-5");
@@ -395,7 +324,6 @@
 		
 		mounted() {// 在页面挂载前就发起请求
 			this.requestData();
-			this.getKey();
 		},
 	}
 </script>

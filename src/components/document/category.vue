@@ -50,13 +50,13 @@
 						<el-form status-icon :model="searchList" label-width="70px">
 							<el-row :gutter="30" class="pb5">
 								<el-col :span="7">
-									<el-input v-model="searchList.CLASSFICATION">
+									<el-input v-model="searchList.categoryname">
 										<template slot="prepend">分类名称</template>
 									</el-input>
 								</el-col>
 								<el-col :span="7">
-									<el-input v-model="searchList.STATUS">
-										<template slot="prepend">信息状态</template>
+									<el-input v-model="searchList.username">
+										<template slot="prepend">用户名称</template>
 										</el-input>
 								</el-col>
 								<el-col :span="3">
@@ -70,14 +70,16 @@
 					<el-row :gutter="0">
 						<el-col class="leftcont v-resize">
 							<!-- 表格 -->
-							<el-table :data="samplesList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="selChange" v-loadmore="loadMore">
+							<el-table :data="samplesList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="selChange">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="分类名称" sortable  prop="CLASSFICATION" v-if="this.checkedName.indexOf('分类名称')!=-1">
+								<el-table-column label="分类名称" sortable  prop="categoryname" v-if="this.checkedName.indexOf('分类名称')!=-1">
 								</el-table-column>
-								<el-table-column label="信息状态" sortable  prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
+								<el-table-column label="用户名称" sortable  prop="username" v-if="this.checkedName.indexOf('用户名称')!=-1">
 								</el-table-column>
-								<el-table-column label="同步时间" sortable  prop="SYNCHRONIZATION_TIME" v-if="this.checkedName.indexOf('同步时间')!=-1">
+								<el-table-column label="部门名称" sortable  prop="deptfullname" v-if="this.checkedName.indexOf('部门名称')!=-1">
+								</el-table-column>
+								<el-table-column label="创建时间" sortable  prop="createtime" v-if="this.checkedName.indexOf('创建时间')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
@@ -95,7 +97,7 @@
 				</div>
 			</div>
 		</div>
-		<catmask  ref="child" @request="requestData"></catmask>
+		<catmask  ref="child" @request="requestData" :detailData="selMenu[0]"></catmask>
 		<!--右侧内容显示 End-->
 	</div>
 	</div>
@@ -124,42 +126,36 @@
 				//选择显示数据
 				checkedName: [
 					'分类名称',
-					'信息状态',
-					'同步时间'
+					'用户名称',
+					'部门名称',
+					'创建时间'
 				],
 				tableHeader: [{
 						label: '分类名称',
-						prop: 'CLASSFICATION'
+						prop: 'categoryname'
 					},
 					{
-						label: '信息状态',
-						prop: 'STATUS'
+						label: '用户名称',
+						prop: 'username'
 					},
 					{
-						label: '同步时间',
-						prop: 'SYNCHRONIZATION_TIME'
+						label: '部门名称',
+						prop: 'deptfullname'
+					},
+					{
+						label: '创建时间',
+						prop: 'createtime'
 					}
 				],
-				samplesList: [
-					{
-						'CLASSFICATION': '业务',
-						'STATUS': '活动',
-						'SYNCHRONIZATION_TIME': '2018-01-02'
-					},
-					{
-						'CLASSFICATION': '站室',
-						'STATUS': '活动',
-						'SYNCHRONIZATION_TIME': '2018-01-02'
-					},
-				],
+				samplesList: [],
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				search: false,
 				show: false,
 				down: true,
 				up: false,
 				searchList: {
-					'CLASSFICATION': '',
-					'STATUS': ''
+					'categoryname': '',
+					'username': ''
 				},
 				
 				page: {
@@ -210,7 +206,7 @@
 					});
 					return;
 				} else {
-					this.$refs.child.detail(this.selMenu[0].ID);
+					this.$refs.child.detail(this.selMenu[0]);
 				}
 			},
 			//高级查询
@@ -229,18 +225,16 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/item/deletes';
+					var url = this.basic_url + '/api-apps/app/tbCategory2/deletes';
 					var changeMenu = selData;
 					var deleteid = [];
-					var ids;
 					for (var i = 0; i < changeMenu.length; i++) {
-						deleteid.push(changeMenu[i].ID);
+						deleteid.push(changeMenu[i].id);
 					}
-					ids = deleteid.toString(',');
                     var data = {
-						ids: ids,
+						ids: deleteid.toString(',')
 					}
-					this.$confirm('确定删除此数据吗？', '提示', {
+					this.$confirm('确定删除数据吗？', '提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                     }).then(({ value }) => {
@@ -270,15 +264,15 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					CLASSFICATION: this.searchList.CLASSFICATION,
-					STATUS: this.searchList.STATUS
-				}
-				var url = this.basic_url + '/api-apps/app/item';
+					categoryname: this.searchList.categoryname,
+					username: this.searchList.username,
+				};
+				var url = this.basic_url + '/api-apps/app/tbCategory2';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;
-					// this.samplesList = newarr;
+					this.samplesList = res.data.data;
 				}).catch((wrong) => {});
 			},
 			min3max() { //左侧菜单正常和变小切换

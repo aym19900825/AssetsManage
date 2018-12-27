@@ -24,18 +24,18 @@
 							<el-collapse-item title="关键字信息" name="1">
 								<el-row :gutter="20" class="pb10">
 									<el-col :span="5" class="pull-right">
-										<el-input v-model="dataInfo.STATUS==1?'活动':'不活动'" :disabled="true">
+										<!-- <el-input v-model="dataInfo.STATUS==1?'活动':'不活动'" :disabled="true">
 											<template slot="prepend">信息状态</template>
-										</el-input>
+										</el-input> -->
 									</el-col>
 								</el-row>
 								<el-form-item v-for="item in basicInfo" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
 									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'"></el-input>
-									<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'" @change="selChange">
-										<el-option v-for="item in assets"
-										:key="item.ID"
-										:label="item.DESCRIPTION"
-										:value="item.DESCRIPTION">
+									<el-select v-model="dataInfo[item.prop]" placeholder="请选择" v-if="item.type == 'select'">
+										<el-option v-for="item in cats"
+										:key="item.id"
+										:label="item.categoryname"
+										:value="item.id">
 										</el-option>
 									</el-select>
 								</el-form-item>
@@ -62,24 +62,24 @@
 		data() {
 			return {
 				rules: {
-					KEY: [
+					keywordname: [
 						{ required: true, message: '请输入关键字', trigger: 'blur' },
 					],
-					CLASSFICATIONID: [
+					categoryid: [
 						{ required: true, message: '请选择关键字分类', trigger: 'blur' },
 					]
 				},
 				basicInfo: [
 					{
 						label: '关键字',
-						prop: 'KEY',
+						prop: 'keywordname',
 						width: '30%',
 						type: 'input',
 						displayType: 'inline-block'
 					},
 					{
 						label: '分类',
-						prop: 'CLASSFICATIONID',
+						prop: 'categoryid',
 						width: '50%',
 						type: 'select',
 						displayType: 'inline-block'
@@ -107,30 +107,33 @@
 				getCheckboxData: {},
 
 				dataInfo: {
-					'ID': '',  //主键ID，必填但页面没有字段
-					'CLASSFICATION': '',
-					'STATUS': '1',
-					'SYNCHRONIZATION_TIME': '',
+					'keywordid': 1,
+					'categoryid': 1,	
+					'keywordname': '',
+					'userid': 1,
+					'username': '',
+					'createtime': '',
+					'deptid': 1,
+					'deptfullname': ''
 				},
-				pmRecordList: []
+				cats: []
 			};
 		},
 		methods: {
-			handlePrice(){
-				this.dataInfo.A_PRICE = parseFloat(this.dataInfo.A_PRICE).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-			},
 			getUser(opt){
 				var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url,{}).then((res) => {
 					if(opt == 'new'){
-                        this.dataInfo.CHANGEBY = res.data.username;
-				        this.dataInfo.CHANGEDATE = this.getToday();
-				        this.dataInfo.ENTERBY = res.data.username;
-				        this.dataInfo.ENTERDATE = this.getToday();
-						this.dataInfo.DEPARTMENT = res.data.deptName;
+						this.dataInfo.userid = res.data.id;
+						this.dataInfo.username = res.data.username;
+						this.dataInfo.createtime = '10:06:48';
+						this.dataInfo.deptid = res.data.deptId;
+						this.dataInfo.deptfullname = res.data.deptName;
 					}else{
-						this.dataInfo.CHANGEBY = res.data.username;
-				        this.dataInfo.CHANGEDATE = this.getToday();
+						this.dataInfo.userid = res.data.id;
+						this.dataInfo.username = res.data.username;
+						this.dataInfo.deptid = res.data.deptId;
+						this.dataInfo.deptfullname = res.data.deptName;
 					}
 				}).catch((err) => {
 					this.$message({
@@ -141,38 +144,24 @@
 			},
 			getToday(){
 				var date = new Date();
-				var str = date.getFullYear() + '-' + date.getMonth() + '-'+ date.getDate();
+				var month = date.getMonth()+1;
+				var str = date.getFullYear() + '-' + month + '-'+ date.getDate();
 				return str;
-			},
-			getPmList(){
-				var data = {
-					page: 1,
-					limit: 20,
-					assetnum: this.dataInfo.ASSETNUM
-				};
-				var url = this.basic_url + '/api-apps/app/pmRecord';
-				this.$axios.get(url,{
-					params: data
-				}).then((res) => {
-					this.pmRecordList = res.data.data;
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
-					
 			},
 			//点击按钮显示弹窗
 			visible() {
+				this.getUser('new');
 				this.modify=false;
 				this.show = true;
+				this.getCat();
 			},
 			// 这里是修改
 			detail(dataid) {
-				// this.dataInfo = this.detailData;
+				this.getUser();
+				this.dataInfo = this.detailData;
 				this.modify = true;
 				this.show = true;
+				this.getCat();
 			},
 			//点击关闭按钮
 			close() {
@@ -181,40 +170,14 @@
 			},
 			resetForm(){
 				this.dataInfo =  {
-					'ID': '', 
-					'ASSETNUM': '',
-					'DESCRIPTION': '',
-					'CONFIG_UNIT': '',
-					'INS_SITE': '',
-					'SUPPORT_ASSET': '',
-					'VENDOR': '',
-					'SUPPLIER': '',	
-					'MODEL': '',
-					'FACTOR_NUM': '',
-					'ASSET_KPI': '',
-					'STATE': '',   
-					'OPTION_STATUS': '',   
-					'TYPE': '', 
-					'ACCEPT_NUM': '',
-					'ISMETER': '',
-					'ISPM': '',
-					'STATUSDATE': '',
-					'KEEPER': '',
-					'ACCEPT_DATE': '',
-					'S_DATE': '',   
-					'C_ADDRESS': '',  
-					'A_STATUS': '',
-					'A_PRICE': 0,
-					'MODE': '',
-					'MODE1': '',
-					'CHANGEBY': '',	
-					'CHANGEDATE': '',	
-					'ENTERBY': '',
-					'ENTERDATE': '',	
-					'DEPARTMENT': '',	
-					'MEMO': '',	
-					'STATUS': '1',
-					'SYNCHRONIZATION_TIME': '',
+					'keywordid': 1,
+					'categoryid': 1,	
+					'keywordname': '',
+					'userid': 1,
+					'username': '',
+					'createtime': '',
+					'deptid': 1,
+					'deptfullname': ''
 				};
 				this.$refs['dataInfo'].resetFields();
 				this.show = false;
@@ -246,7 +209,7 @@
 
 			submitForm() {
 				var _this = this;
-				var url = this.basic_url + '/api-apps/app/asset/saveOrUpdate';
+				var url = this.basic_url + '/api-apps/app/tbKeyword2/saveOrUpdate';
 				this.$refs['dataInfo'].validate((valid) => {
 					if (valid) {
 						this.$axios.post(url, _this.dataInfo).then((res) => {
@@ -270,11 +233,21 @@
 					}
 				});
 			},
+			getCat(){
+				var data = {
+					page: 1,
+					limit: 1000,
+					categoryname: '',
+					username: this.dataInfo.username,
+				};
+				var url = this.basic_url + '/api-apps/app/tbCategory2';
+				this.$axios.get(url, {
+					params: data
+				}).then((res) => {
+					this.cats = res.data.data;
+				}).catch((wrong) => {});
+			}
 		},
-		mounted() {
-			
-		},
-
 	}
 </script>
 

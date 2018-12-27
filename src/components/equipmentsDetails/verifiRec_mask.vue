@@ -3,7 +3,6 @@
 	<div>
 		<div class="mask" v-show="show"></div>
 		<div class="mask_div" v-show="show">
-			<!---->
 			<div class="mask_title_div clearfix">
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>
@@ -46,7 +45,7 @@
 							</el-collapse-item>
 							<!-- 文档管理 -->
 							<el-collapse-item title="文档" name="2">
-								<doc-table></doc-table>
+								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
 							</el-collapse-item>
 							<!-- 其他信息 -->
 							<el-collapse-item title="其他" name="3">
@@ -333,18 +332,35 @@
 					'DEPARTMENT': '',
 					'STATUS': '1'
 				},
-				assets: []
+				assets: [],
+				docParm: {
+					'model': 'new',
+					'appname': '',
+					'recordid': 1,
+					'userid': 1,
+					'username': '',
+					'deptid': 1,
+					'deptfullname': '',
+					'appname': '',
+					'appid': 1
+				}
 			};
 		},
 		methods: {
 			getUser(opt){
 				var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url,{}).then((res) => {
+					console.log('======getUser======');
 					if(opt == 'new'){
 				        this.dataInfo.ENTERBY = res.data.username;
 				        this.dataInfo.ENTERDATE = this.getToday();
 						this.dataInfo.DEPARTMENT = res.data.deptName;
 					}
+					this.docParm.userid = res.data.id;
+					this.docParm.username = res.data.username;
+					this.docParm.deptid = res.data.deptId;
+					this.docParm.deptfullname = res.data.deptName;
+					console.log(this.docParm);
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -372,12 +388,24 @@
 				this.modify=false;
 				this.show = true;
 				this.getUser('new');
+				this.docParm = {
+					'model': 'new',
+					'appname': '',
+					'recordid': 1
+				};
 			},
 			// 这里是修改
 			detail() {
 				this.dataInfo = this.detailData;
 				this.modify = true;
 				this.show = true;
+				this.getUser();
+				this.docParm = {
+					'model': 'edit',
+					'appname': 'CHECK_RECORD',
+					'recordid': this.detailData.ID
+				};
+				this.$refs.docTable.getData();
 			},
 			//点击关闭按钮
 			close() {

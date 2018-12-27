@@ -1,135 +1,127 @@
 <template>
-<div style="width:8000px">
-	<div class="pull-left ml20" style="width:860px">
-		<el-card class="box-card" :body-style="{ padding: '10px' }">
-			<div slot="header" class="title clearfix">
-				<span>产品</span>
-				<!--按钮操作行 Begin-->
-					<div class="columns pull-right">
-						<el-input placeholder="请输入产品名称" v-model="search" class="input-with-select">
-							<el-button slot="append" icon="el-icon-search"></el-button>
-						</el-input>
-					</div>
-				<!--按钮操作行 End-->
-			</div>
-			<div class="text item">
-				<div class="pb10 clearfix">
-					<!-- <div class="columns pull-left"><el-button type="primary" size="small">关联父级</el-button></div> -->
-						<!-- <div class="table-func pull-right">
-						<el-button type="success" size="mini" round @click="addfield_product2" class="pull-right">
-							<i class="icon-add"></i>
-							<font>新建</font>
-						</el-button>
-					</div> -->
+<div>
+	<el-card class="box-card" :body-style="{ padding: '10px' }">
+		<div slot="header" class="title clearfix">
+			<span>产品</span>
+			<!--搜索框 Begin-->
+				<div class="columns pull-right" style="width: 180px;">
+					<el-input placeholder="请输入产品名称" v-model="search" class="input-with-select">
+						<el-button slot="append" icon="el-icon-search"></el-button>
+					</el-input>
 				</div>
-				<el-form :model="product2Form" ref="product2Form">
-				  <el-table :data="product2Form.inspectionList.filter(data => !search || data.PRO_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="410" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'product2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
-					<el-table-column prop="iconOperation" fixed="left" label="操作" width="50">
-				      <template slot-scope="scope">
-				        <!-- <el-button type="text" id="Edit" size="medium" @click.native.prevent="saveRow(scope.row)" v-if="scope.row.isEditing">
-				        	<i class="icon-check" title="保存"></i>
-						</el-button> -->
-						<!-- <el-button type="text" size="medium" @click.native.prevent="modifyversion(scope.row)" v-else="v-else">
-				        	<i class="icon-edit" title="修改"></i>
-						</el-button> -->
-
-				        <el-button @click="deleteRow(scope.row)" type="text" size="medium" title="删除" >
-				          <i class="icon-trash red"></i>
-				        </el-button>
-				      </template>
-				    </el-table-column>
-
-				  	<!-- <el-table-column label="所属类别编号" width="120" prop="NUM">
-				      <template slot-scope="scope">
-				        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-				        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" disabled></el-input><span v-else="v-else">{{scope.row.NUM}}</span>
-						</el-form-item>
-				      </template>
-				    </el-table-column> -->
-
-				  	<el-table-column label="产品编号" width="120" prop="PRO_NUM">
-				      <template slot-scope="scope">
-				        <el-form-item :prop="'inspectionList.'+scope.$index + '.PRO_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-				        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PRO_NUM" disabled></el-input><span v-else="v-else">{{scope.row.PRO_NUM}}</span>
-						</el-form-item>
-				      </template>
-				    </el-table-column>
-
-				    <el-table-column label="产品名称" sortable prop="PRO_NAME">
-				      <template slot-scope="scope">
-				        <el-form-item :prop="'inspectionList.'+scope.$index + '.PRO_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-				        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PRO_NAME" placeholder="请输入内容">
-				        		<el-button slot="append" icon="icon-search"></el-button>
-				        	</el-input><span class="blue" @click="viewchildRow(scope.row.ID)" v-else="v-else">{{scope.row.PRO_NAME}}</span>
-						</el-form-item>
-				      </template>
-				    </el-table-column>
-
-					<el-table-column prop="STATUS" label="信息状态" sortable width="120" :formatter="judge">
-				      <template slot-scope="scope">
-				        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" disabled></el-input><span v-else="v-else">{{scope.row.STATUS}}</span>
-				      </template>
-				    </el-table-column>
-					
-					<!-- <el-table-column prop="VERSION" label="版本" sortable width="120">
-				      <template slot-scope="scope">
-				       	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" disabled></el-input><span v-else="v-else">{{scope.row.VERSION}}</span>
-				      </template>
-				    </el-table-column> -->
-
-				    <el-table-column prop="CHANGEBY" label="修改人" sortable width="120">
-				      <template slot-scope="scope">
-				        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHANGEBY" placeholder="请输入内容" disabled></el-input><span v-else="v-else">{{scope.row.CHANGEBY}}</span>
-				      </template>
-				    </el-table-column>
-
-				     <el-table-column prop="CHANGEDATE" label="修改时间" sortable width="160" :formatter="dateFormat">
-				      <template slot-scope="scope">
-				      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHANGEDATE" disabled></el-input><span v-else="v-else">{{scope.row.CHANGEDATE}}</span>
-				      </template>
-				    </el-table-column>
-				    <el-table-column prop="operationChild" fixed="right" align="center" label="增加子项" width="80">
-					 	<template slot-scope="scope">
-						 	<el-button type="text" id="Edit" size="medium" @click.native.prevent="saveRow(scope.row)" v-if="scope.row.isEditing">
-					        	<i class="icon-check" title="保存"></i>
-							</el-button>
-
-						 	<el-button type="primary" round size="mini" @click="addchildRow(scope.row)" v-else="v-else">
-					          添加
-					        </el-button>
-					    </template>
-					 </el-table-column>
-					 
-				  </el-table>
-				</el-form>
-				<!-- 表格分页 Begin-->
-				<el-pagination background class="pull-right pt10 pb10"
-		            @size-change="sizeChange"
-		            @current-change="currentChange"
-		            :current-page="page.currentPage"
-		            :page-sizes="[10, 20, 30, 40]"
-		            :page-size="page.pageSize"
-		            layout="total, sizes, prev, pager, next"
-		            :total="page.totalCount">
-		        </el-pagination>
-				<!-- 表格 End-->
-				
+			<!--搜索框 End-->
+		</div>
+		<div class="text item">
+			<div class="pb10 clearfix">
+				<!-- <div class="columns pull-left"><el-button type="primary" size="small">关联父级</el-button></div> -->
+				<div class="table-func pull-right">
+					<el-button type="success" size="mini" round @click="addfield_product2" class="pull-right">
+						<i class="icon-add"></i>
+						<font>新建</font>
+					</el-button>
+				</div>
 			</div>
-		</el-card>
-	</div>
-	<div class="pull-left" style="width:6400px">
-		<inspectionSta2 ref="inspectionSta2child"></inspectionSta2>
-	</div>
+			<el-form :model="product2Form" ref="product2Form" class="el-radio__table">
+			  <el-table :data="product2Form.inspectionList.filter(data => !search || data.PRO_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="350" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'product2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
+			    <el-table-column label="单选" width="50"></el-table-column>
+			  	<el-table-column label="所属类别编号" width="120" prop="NUM">
+			      <template slot-scope="scope">
+			        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" disabled></el-input><span v-else="v-else">{{scope.row.NUM}}</span>
+					</el-form-item>
+			      </template>
+			    </el-table-column>
+
+			  	<el-table-column label="产品编号" sortable width="100" prop="PRO_NUM">
+			      <template slot-scope="scope">
+			        <el-form-item :prop="'inspectionList.'+scope.$index + '.PRO_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PRO_NUM" placeholder="自动生成" disabled></el-input><span v-else="v-else">{{scope.row.PRO_NUM}}</span>
+					</el-form-item>
+			      </template>
+			    </el-table-column>
+
+			    <el-table-column label="产品名称" sortable prop="PRO_NAME">
+			      <template slot-scope="scope">
+			        <el-form-item :prop="'inspectionList.'+scope.$index + '.PRO_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PRO_NAME" placeholder="请输入内容">
+			        		<el-button slot="append" icon="icon-search"></el-button>
+			        	</el-input><span class="blue" @click="viewchildRow(scope.row.ID)" v-else="v-else">{{scope.row.PRO_NAME}}</span>
+					</el-form-item>
+			      </template>
+			    </el-table-column>
+
+				<!-- <el-table-column prop="STATUS" label="信息状态" sortable width="120" :formatter="judge">
+			      <template slot-scope="scope">
+			        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" disabled></el-input><span v-else="v-else">{{scope.row.STATUS}}</span>
+			      </template>
+			    </el-table-column> -->
+				
+				<!-- <el-table-column prop="VERSION" label="版本" sortable width="120">
+			      <template slot-scope="scope">
+			       	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" disabled></el-input><span v-else="v-else">{{scope.row.VERSION}}</span>
+			      </template>
+			    </el-table-column> -->
+
+			    <!-- <el-table-column prop="CHANGEBY" label="修改人" sortable width="120">
+			      <template slot-scope="scope">
+			        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHANGEBY" placeholder="请输入内容" disabled></el-input><span v-else="v-else">{{scope.row.CHANGEBY}}</span>
+			      </template>
+			    </el-table-column> -->
+
+			     <!-- <el-table-column prop="CHANGEDATE" label="修改时间" sortable width="160" :formatter="dateFormat">
+			      <template slot-scope="scope">
+			      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHANGEDATE" disabled></el-input><span v-else="v-else">{{scope.row.CHANGEDATE}}</span>
+			      </template>
+			    </el-table-column> -->
+
+			    <el-table-column prop="iconOperation" fixed="right" label="操作" width="50">
+			      <template slot-scope="scope">
+			        <!-- <el-button type="text" id="Edit" size="medium" @click.native.prevent="saveRow(scope.row)" v-if="scope.row.isEditing">
+			        	<i class="icon-check" title="保存"></i>
+					</el-button> -->
+					<!-- <el-button type="text" size="medium" @click.native.prevent="modifyversion(scope.row)" v-else="v-else">
+			        	<i class="icon-edit" title="修改"></i>
+					</el-button> -->
+			        <el-button @click="deleteRow(scope.row)" type="text" size="medium" title="删除" >
+			          <i class="icon-trash red"></i>
+			        </el-button>
+			       <!--  <el-button type="text" id="Edit" size="medium" @click.native.prevent="saveRow(scope.row)" v-if="scope.row.isEditing">
+			        	<i class="icon-check" title="保存"></i>
+					</el-button>
+
+				 	<el-button type="primary" round size="mini" @click="addchildRow(scope.row)" v-else="v-else">
+			          添加
+			        </el-button> -->
+			      </template>
+			    </el-table-column>
+
+			   
+			  </el-table>
+			</el-form>
+			<!-- 表格分页 Begin-->
+			<!-- <el-pagination background class="pull-right pt10 pb10"
+	            @size-change="sizeChange"
+	            @current-change="currentChange"
+	            :current-page="page.currentPage"
+	            :page-sizes="[10, 20, 30, 40]"
+	            :page-size="page.pageSize"
+	            layout="total, sizes, prev, pager, next"
+	            :total="page.totalCount">
+	        </el-pagination> -->
+			<!-- 表格 End-->
+			
+		</div>
+	</el-card>
 </div>
 
 </template>
 <script>
 	import Config from '../../config.js'
-	import inspectionSta2 from '../inspection_project/inspectionSta2.vue'
+	
 	export default {
 		name: 'product2',
 		components: {
-			inspectionSta2,//检验/检测标准
+			
 		},
 
 		data() {
@@ -161,6 +153,8 @@
 					pageSize: 10,
 					totalCount: 0
 				},
+
+				parentId: 1
 
 				// childData: {}
 			}
@@ -222,13 +216,15 @@
 				}
 				return this.$moment(date).format("YYYY-MM-DD");
 			},
-			viewfield_product2(ID){//点击父级筛选出子级数据
+			viewfield_product2(ID,num){//点击父级筛选出子级数据
+
 				if(ID=='null'){
 					this.product2Form.inspectionList = []; 
 					this.$refs.inspectionSta2child.viewfield_inspectionSta2('null');
 					return false;
 					//todo  相关数据设置
 				}
+				this.parentId = num;
 				var url = this.basic_url + '/api-apps/app/productType2/' + ID;
 				this.$axios.get(url, {}).then((res) => {
 					//console.log(res);
@@ -243,18 +239,23 @@
 					this.product2Form.inspectionList=res.data.PRODUCT2List;
 
 					//默认主表第一条数据
+					// this.childMsd();
 					if(this.product2Form.inspectionList.length > 0){
-						this.$refs.inspectionSta2child.viewfield_inspectionSta2(this.product2Form.inspectionList[0].ID);
+					// this.$refs.inspectionSta2child.viewfield_inspectionSta2(this.product2Form.inspectionList[0].ID);
+						this.$emit('parentMsd_product2', this.product2Form.inspectionList[0].ID);
 					}else{
-						this.$refs.inspectionSta2child.viewfield_inspectionSta2('null');
+						// this.$refs.inspectionSta2child.viewfield_inspectionSta2('null');
+						this.$emit('parentMsd_product2', 'null');
 					}
-					
 					
 					for(var j = 0; j < this.product2Form.inspectionList.length; j++){
 						this.product2Form.inspectionList[j].isEditing = false;
 					}
+
+
 				}).catch((wrong) => {})
 			},
+			
 			requestData_product2(index) {//默认加载所有数据
 				var data = {
 					page: this.page.currentPage,
@@ -292,7 +293,8 @@
 			},
 
 			addfield_product2(NUM) { //插入行到产品类型Table中
-				 var isEditingflag=false;
+				
+				var isEditingflag=false;
 				//console.log(this.product2Form.inspectionList);
 				for(var i=0;i<this.product2Form.inspectionList.length; i++){
 					if (this.product2Form.inspectionList[i].isEditing==false){
@@ -308,12 +310,12 @@
 						this.currentUser=res.data.nickname;
 						var date=new Date();
 						this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
-						var index=this.$moment(date).format("YYYYMMDDHHmmss");
+						
 						var obj = {
 							"PRO_NAME": '',
 							"STATUS": '活动',
-							"NUM": NUM,
-							"PRO_NUM": 'PR' + index,
+							"NUM": this.parentId,//所属类别编号
+							"PRO_NUM": '',
 							"VERSION": 1,
 							"CHANGEBY": this.currentUser,
 							"CHANGEDATE": this.currentDate,
@@ -414,5 +416,13 @@
     left: 5px;
     background: #FFF;
     padding: 5px 10px;
+}
+.el-card__header {
+	padding: 10px;
+}
+.table-func {
+	position:relative;
+	top: 0px;
+    right: 0px;
 }
 </style>

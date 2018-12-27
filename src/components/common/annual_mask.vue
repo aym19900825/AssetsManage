@@ -43,8 +43,11 @@
 									<el-col :span="6">
 										<el-form-item label="提出单位" prop="PROP_UNIT">
 											<el-select v-model="WORKPLAN.PROP_UNIT" placeholder="请选择">
-										    	<el-option label="金化站" value="1"></el-option>
-										    	<el-option label="运包站" value="0"></el-option>
+										    	<el-option label="金化站" value="金化站"></el-option>
+										    	<el-option label="通号站" value="通号站"></el-option>
+										    	<el-option label="运包站" value="运包站"></el-option>
+										    	<el-option label="机辆站" value="机辆站"></el-option>
+										    	<el-option label="接触网站" value="接触网站"></el-option>
 											</el-select>
 										</el-form-item>
 									</el-col>

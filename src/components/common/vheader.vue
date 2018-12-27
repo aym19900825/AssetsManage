@@ -10,23 +10,43 @@
             </li> -->
         </ul>
         <div class="nav-head pull-right nav-right">
-            <el-badge :value="200" :max="99" class="item mr30">
+            <el-badge :value="200" :max="99" class="item pt5 mr30">
                 <a href="#"><i class="icon-notice"></i></a>
             </el-badge>
+           
+
             <el-dropdown placement="top" trigger="click">
               <span class="el-dropdown-link white">
-                <font class="pr10">{{username}}，您好</font>
+                <font class="roles pr10">{{username}}<br>{{nickname}}</font>
+                <font class="pr10">您好</font>
                 <font><img class="userimg" /></font>
                 <i class="el-icon-arrow-down icon-arrow2-down"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item v-for="(data,index) in GetRoles" :key="index">
+                    <router-link :to="data.id">
+                        {{data.name}}
+                    </router-link>
+                </el-dropdown-item>
+                
+                <!-- <el-dropdown-item>
+                    <router-link to="/personinfo">
+                        <img class="userimgs" src="../../assets/img/male.png" />管理员
+                    </router-link>
+                </el-dropdown-item>
                 <el-dropdown-item>
+                    <router-link to="/personinfo">
+                        <img class="userimgs" src="../../assets/img/male.png" />站长
+                    </router-link>
+                </el-dropdown-item> -->
+
+                <el-dropdown-item class="border-linet pt10 mt10">
                     <router-link to="/personinfo">
                         <i class="icon-user mr10"></i>个人资料
                     </router-link>
                 </el-dropdown-item>
 
-                <el-dropdown-item class="border-lineb">
+                <el-dropdown-item class="border-lineb pb10">
                     <router-link to="/passwordedit">
                         <i class="icon-key mr10"></i>修改密码
                     </router-link>
@@ -53,6 +73,8 @@ export default {
         return {
             basic_url: Config.dev_url,
             username: '',
+            nickname: '',
+            GetRoles:[],//获取当前角色
         }
     },
     methods: {
@@ -60,10 +82,11 @@ export default {
     		this.$router.push({ path: '/',name: 'Login',});
     		sessionStorage.clear();
     	},
-        getData(){
+        getData(){//获取当前用户信息
             var url = this.basic_url + '/api-user/users/currentMap';
             this.$axios.get(url, {}).then((res) => {//获取当前用户信息
                     this.username = res.data.username;
+                    this.nickname = res.data.nickname;
                     this.userid = res.data.id;
             }).catch((err) => {
                 this.$message({
@@ -72,6 +95,16 @@ export default {
                 });
             });
         },
+        //当前角色
+        getITEM_Roles() {
+            var url = this.basic_url + '/api-user/roles/current';
+            this.$axios.get(url, {}).then((res) => {
+                this.GetRoles = res.data;
+            }).catch(error => {
+                console.log('请求失败');
+            })
+        },
+
         setTabs(){
             if(!sessionStorage.getItem('clickedNav')){
                 sessionStorage.setItem('clickedNav',JSON.stringify({arr:[]}));
@@ -101,6 +134,7 @@ export default {
     },
     mounted(){
         this.getData();//调用getData
+        this.getITEM_Roles();
     }
 }
 </script>
@@ -151,9 +185,20 @@ export default {
 
 .nav-right{
     height:36px;
-    line-height:36px;
-    margin: 12px 20px;
+    margin: 10px 20px;
 }
+.nav-right font { line-height:36px; display: inline-block; vertical-align: middle;}
+font.roles { line-height:18px;}
+
+.roles i{
+    font-style: normal;;
+    display: inline-block;
+    padding-right: 5px;
+    font-size: 12px;
+}
+a .userimgs {border:2px solid #DFE5EA;}
+a:hover .userimgs {border:2px solid #9153f1;}
+.userimgs {width:16px; height:16px; margin-right:9px; border-radius:3px;}
 
 .lingdang{
 	position: relative;
@@ -179,7 +224,7 @@ export default {
 .userimg{
 	position: relative;
 }
-
+.border-linet {border-top:1px solid #DFE5EA;}
   
 .userInfo{
     width:84px;
@@ -198,6 +243,9 @@ export default {
     background-repeat: no-repeat;
     border-radius:6px;
 }
+
+
+
 .icon-order-down{
 	position: absolute;
     color: #fff;
@@ -207,4 +255,5 @@ export default {
     left: 50px;
     top: 8px;
 }
+
 </style>

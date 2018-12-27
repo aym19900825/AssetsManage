@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<el-dialog title="权限配置" :visible.sync="dialogVisible" width="30%" :before-close="handleClose" >
+		<el-dialog title="权限配置" :visible.sync="dialogVisible" width="30%"  >
 			<el-tree ref="tree" :data="menuData" show-checkbox node-key="id"  :props="resourceProps" @check-change="handleCheckChange" @click="getCheckedKeys">
 			</el-tree>
 			<span slot="footer" class="dialog-footer">
@@ -42,7 +42,6 @@
 				var _this = this;
 				this.roId=id;
 				var arr = [];
-				
 				var url = this.basic_url + '/api-user/menus/' + id + '/menus';
 				this.$axios.get(url, {}).then((res) => {
 					console.log(res.data);
@@ -71,7 +70,7 @@
 					}
 					
 					this.$nextTick(() => {
-	 					this.$refs.tree.setCheckedKeys(arr);
+	 					this.setChecked(arr);
 					});
 					this.dialogVisible = true;
 				}).catch((err) => {
@@ -81,12 +80,8 @@
 					});
 				});
 			},
-			handleClose(done) {
-				this.$confirm('确认关闭？')
-					.then(_ => {
-						done();
-					})
-					.catch(_ => {});
+			setChecked(arr){
+				this.$refs.tree.setCheckedKeys(arr);
 			},
 			getCheckedAll() {
 

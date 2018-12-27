@@ -270,31 +270,33 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
+					console.log(res.data);
 					let result=res.data
 					
-					for(let i=0;i<result.length;i++){
-						if(result[i].parentId == "-1" || result[i].parentId == "null") {
-							result[i].isMenu = "目录"
-						} else {
-							result[i].isMenu = "菜单"
-						}	
-						result[i].hidden=result[i].hidden?true:false
-						if(result[i].children.length>0){
-							let children=result[i].children
-							for(let j=0;j<children.length;j++){
-								if(children[j].parentId == "-1" || children[j].parentId == "null") {
-									children[j].isMenu = "目录"
-								} else {
-									children[j].isMenu = "菜单"
-								}
-								children[j].hidden=children[j].hidden?true:false
-							}
+					// for(let i=0;i<result.length;i++){
+					// 	if(result[i].parentId == "-1" || result[i].parentId == "null") {
+					// 		result[i].isMenu = "目录"
+					// 	} else {
+					// 		result[i].isMenu = "菜单"
+					// 	}	
+					// 	result[i].hidden=result[i].hidden?true:false
+						// if(result[i].children.length>0){
+						// 	let children=result[i].children
+						// 	for(let j=0;j<children.length;j++){
+						// 		if(children[j].parentId == "-1" || children[j].parentId == "null") {
+						// 			children[j].isMenu = "目录"
+						// 		} else {
+						// 			children[j].isMenu = "菜单"
+						// 		}
+						// 		children[j].hidden=children[j].hidden?true:false
+						// 	}
 							
-							result[i].children=children
-						}
-					}
+						// 	result[i].children=children
+						// }
+					// }
 					
 					this.menuList = result;
+					console.log('==='+result+'===');
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
 			},

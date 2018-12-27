@@ -110,7 +110,7 @@
 							</el-table-column>
 							<el-table-column label="溯源方式" sortable prop="PM_MODEL"  v-if="this.checkedName.indexOf('溯源方式')!=-1">
 							</el-table-column>
-							<el-table-column label="溯源日期" sortable prop="PM_DATE" v-if="this.checkedName.indexOf('溯源日期')!=-1">
+							<el-table-column label="溯源日期" sortable prop="PM_DATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('溯源日期')!=-1">
 							</el-table-column>
 							<el-table-column label="确认结论" sortable prop="R_CONCLUSION" v-if="this.checkedName.indexOf('确认结论')!=-1">
 							</el-table-column>
@@ -337,6 +337,14 @@
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
 				this.requestData();
+			},
+			//时间格式化  
+			dateFormat(row, column) {
+				var date = row[column.property];
+				if(date == undefined) {
+					return "";
+				}
+				return this.$moment(date).format("YYYY-MM-DD");
 			},
 			//添加用戶
 			openAddMgr() {

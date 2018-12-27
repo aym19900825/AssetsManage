@@ -92,7 +92,7 @@
 							</el-table-column>
 							<el-table-column label="设备名称" sortable prop="A_NAME" v-if="this.checkedName.indexOf('设备名称')!=-1">
 							</el-table-column>
-							<el-table-column label="核查日期" sortable prop="C_DATE" v-if="this.checkedName.indexOf('核查日期')!=-1" value-format="yyyy-MM-dd">
+							<el-table-column label="核查日期" sortable prop="C_DATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('核查日期')!=-1" value-format="yyyy-MM-dd">
 							</el-table-column>		
 							<el-table-column label="核查结论" sortable prop="C_MEMO" v-if="this.checkedName.indexOf('核查结论')!=-1">
 							</el-table-column>					
@@ -278,6 +278,14 @@
 		      this.page.currentPage = val;
 		      this.requestData();
 		    },
+		    //时间格式化  
+			dateFormat(row, column) {
+				var date = row[column.property];
+				if(date == undefined) {
+					return "";
+				}
+				return this.$moment(date).format("YYYY-MM-DD");
+			},
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;

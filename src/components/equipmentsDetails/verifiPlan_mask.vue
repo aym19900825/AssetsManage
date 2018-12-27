@@ -145,8 +145,10 @@
 						</el-collapse>
 					</div>
 					<div class="el-dialog__footer" v-show="noviews">
+						<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
+						<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并添加</el-button>
 						<el-button @click='close'>取消</el-button>
-						<el-button type="primary" @click='submitForm'>提交</el-button>
+						<!-- <el-button type="primary" @click='submitForm'>提交</el-button> -->
 					</div>
 				</el-form>
 			</div>
@@ -297,6 +299,7 @@
 				        this.dataInfo.CHANGEBY = res.data.username;
 				        this.dataInfo.CHANGEDATE = this.getToday();
 						this.dataInfo.DEPARTMENT = res.data.deptName;
+						console.log(this.dataInfo.DEPARTMENT);
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -381,6 +384,7 @@
 			},
 			// 这里是修改
 			detail() {
+				this.getModiuser();
 				var ID = this.detailData.ID;
 				var url = this.basic_url + '/api-apps/app/checkPlan/' + ID;
 				this.$axios.get(url, {}).then((res) => {
@@ -408,6 +412,7 @@
 			view(dataid) {
 				var url = this.basic_url + '/api-apps/app/checkPlan/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
+					console.log(res.data);
 					this.dataInfo = res.data;
 					this.dataInfo.tableList = this.dataInfo.CHECK_PLAN_LINEList;
 				}).catch((wrong) => {});
@@ -426,6 +431,7 @@
 			close() {
 				this.resetForm();
 				this.$emit('request');
+				this.show = false;
 			},
 			resetForm(){
 				this.dataInfo = {
@@ -440,7 +446,7 @@
 					'tableList': []
 				};
 				this.$refs['dataInfo'].resetFields();
-				this.show = false;
+				// this.show = false;
 			},
 			toggle(e) { //大弹出框大小切换
 				if(this.isok1) {
@@ -467,20 +473,22 @@
 				$(".mask_div").css("top", "0");
 			},
 
-			submitForm() {
+			save(dataInfo) {
 				var _this = this;
 				var url = this.basic_url + '/api-apps/app/checkPlan/saveOrUpdate';
 				this.$refs['dataInfo'].validate((valid) => {
 					if (valid) {
 						this.dataInfo.CHECK_PLAN_LINEList = this.dataInfo.tableList;
+						console.log(_this.dataInfo);
 						this.$axios.post(url, _this.dataInfo).then((res) => {
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',
 									type: 'success',
 								});
-								this.resetForm();
+								
 								this.$emit('request');
+								this.resetForm();
 							}
 						}).catch((err) => {
 							this.$message({
@@ -488,11 +496,26 @@
 								type: 'error'
 							});
 						});
+						this.falg=true;
 					} else {
-						console.log('error submit!!');
-						return false;
+						this.show = true;
+						this.$message({
+							message: '未填写完整，请填写',
+							type: 'warning'
+						});
+						this.falg=false;
 					}
 				});
+			},
+			saveAndUpdate(dataInfo) {
+				this.save(dataInfo);
+				if(this.falg){
+					this.show = false;
+				}
+			},
+			saveAndSubmit(dataInfo) {
+				this.save(dataInfo);
+				this.show = true;
 			},
 		},
 		mounted() {

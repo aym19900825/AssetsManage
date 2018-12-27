@@ -46,15 +46,9 @@
 					</div>
 				</div>
 				<!-- 高级查询划出 Begin-->
-				<div v-show="search" class="pb10">
+				<div v-show="search">
 					<el-form status-icon :model="searchList" label-width="70px">
 						<el-row :gutter="10">
-							<el-col :span="5">
-								<el-form-item label="单位名称" prop="NAME">
-									<el-input v-model="searchList.NAME">
-									</el-input>
-								</el-form-item>
-							</el-col>
 							<el-col :span="5">
 								<el-form-item label="组织机构代码" prop="CODE" label-width="100px">
 									<el-input v-model="searchList.CODE">
@@ -62,11 +56,18 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
+								<el-form-item label="单位名称" prop="NAME">
+									<el-input v-model="searchList.NAME">
+									</el-input>
+								</el-form-item>
+							</el-col>
+							
+							<!-- <el-col :span="5">
 								<el-form-item label="联系电话" prop="PHONE">
 									<el-input v-model="searchList.PHONE">
 									</el-input>
 								</el-form-item>
-							</el-col>
+							</el-col> -->
 							<el-col :span="5">
 								<el-form-item label="联系地址" prop="CONTACT_ADDRESS">
 									<el-input v-model="searchList.CONTACT_ADDRESS">
@@ -100,10 +101,10 @@
 							</el-table-column>
 							<el-table-column label="单位名称" width="300" sortable prop="NAME" v-if="this.checkedName.indexOf('单位名称')!=-1">
 							</el-table-column>
-							<el-table-column label="联系地址" sortable width="300" prop="CONTACT_ADDRESS" v-if="this.checkedName.indexOf('联系地址')!=-1">
+							<el-table-column label="联系地址" sortable prop="CONTACT_ADDRESS" v-if="this.checkedName.indexOf('联系地址')!=-1">
 							</el-table-column>
-							<el-table-column label="联系电话" sortable prop="PHONE" v-if="this.checkedName.indexOf('联系电话')!=-1">
-							</el-table-column>	
+							<!-- <el-table-column label="联系电话" sortable prop="PHONE" v-if="this.checkedName.indexOf('联系电话')!=-1">
+							</el-table-column> -->	
 							<!--<el-table-column label="信息状态" sortable width="100" prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
 							</el-table-column>-->
 						</el-table>
@@ -168,10 +169,9 @@
 				checkedName: [
 					'组织机构代码',
 					'单位名称',
-					'性别',
 					'联系地址',
-					'联系电话',
-					'信息状态',
+					// '联系电话',
+					// '信息状态',
 				],
 				tableHeader: [
 					{
@@ -186,14 +186,14 @@
 						label: '联系地址',
 						prop: 'CONTACT_ADDRESS'
 					},
-					{
-						label: '联系电话',
-						prop: 'PHONE'
-					},
-					{
-						label: '信息状态',
-						prop: 'STATUS'
-					}
+					// {
+					// 	label: '联系电话',
+					// 	prop: 'PHONE'
+					// },
+					// {
+					// 	label: '信息状态',
+					// 	prop: 'STATUS'
+					// }
 				],
 				
 				companyId: '',

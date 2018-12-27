@@ -1,7 +1,7 @@
 <template>
 	<div>
-		<el-dialog title="权限配置" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-			<el-tree ref="tree" :data="menuData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @check-change="handleCheckChange" @click="getCheckedKeys">
+		<el-dialog title="权限配置" :visible.sync="dialogVisible" width="30%" :before-close="handleClose" >
+			<el-tree ref="tree" :data="menuData" show-checkbox node-key="id"  :props="resourceProps" @check-change="handleCheckChange" @click="getCheckedKeys">
 			</el-tree>
 			<span slot="footer" class="dialog-footer">
 		       <el-button @click="dialogVisible = false">取 消</el-button>
@@ -38,39 +38,41 @@
 				console.log(this.$refs.tree.getCheckedKeys());
 			},
 			menu(id) {
+				console.log(id);
 				var _this = this;
 				this.roId=id;
 				var arr = [];
+				
 				var url = this.basic_url + '/api-user/menus/' + id + '/menus';
 				this.$axios.get(url, {}).then((res) => {
+					console.log(res.data);
 					this.menuData = res.data;
-					var menuData = res.data;
-					for(var a = 0; a < menuData.length; a++) {
-						if(menuData[a].checked == true) {
-							arr.push(menuData[a].id);
-						}
-						if(menuData[a].children.length > 0) {
-							for(var b = 0; b < menuData[a].children.length; b++) {
-								if(menuData[a].children[b].checked == true) {
-									arr.push(menuData[a].children[b].id);
-									if(menuData[a].children[b].children.length > 0) {
-										for(var c = 0; c < menuData[a].children[b].length; c++) {
-											if(menuData[a].children[b].children[c].checked == true) {
-												arr.push(menuData[a].children[b].children[c].id);
+					var menuData = res.data;//第一级
+					for(var a = 0; a < menuData.length; a++){
+						if(menuData[a].checked) {
+//							arr.push(menuData[a].id);
+							if(menuData[a].children.length>0){
+								var menuDataChild=menuData[a].children//2
+								for(var b=0;b<menuData[a].children.length;b++){
+									console.log(menuData[a].children.length);
+									if(menuData[a].children[b].checked) {
+										arr.push(menuData[a].children[b].id);
+										if(menuData[a].children[b].children.length > 0) {
+											for(var c=0;c<menuData[a].children[b].children.length;c++){
+												if(menuData[a].children[b].children[c].checked) {
+													arr.push(menuData[a].children[b].children[c].id);
+												}
 											}
 										}
 									}
-
 								}
 							}
 						}
-
 					}
-					setTimeout(function(){
-						if(arr.length>0){
-							_this.$refs.tree.setCheckedKeys(arr); //获取已经设置的资源后渲染	
-						}
-					},0);
+					
+					this.$nextTick(() => {
+	 					this.$refs.tree.setCheckedKeys(arr);
+					});
 					this.dialogVisible = true;
 				}).catch((err) => {
 					this.$message({
@@ -134,7 +136,7 @@
 						type: 'success'
 					});
 				}
-					this.dialogVisible = true;
+					this.dialogVisible = false;
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',

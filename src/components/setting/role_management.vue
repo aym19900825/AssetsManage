@@ -315,13 +315,7 @@
 					});
 				}
 			},
-			judge(data) {
-				//布尔值判断
-				return data.enabled ? '启用' : '冻结'
-			},
-			sexName(data) {
-				return data.sex ? '男' : '女'
-			},
+			
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];

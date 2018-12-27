@@ -1,11 +1,11 @@
 <template>
 	<div>
-		<el-dialog title="权限配置" :visible.sync="dialogVisible" width="30%"  >
-			<el-tree ref="tree" :data="menuData" show-checkbox node-key="id"  :props="resourceProps" @check-change="handleCheckChange" @click="getCheckedKeys" default-expand-all>
+		<el-dialog title="数据范围" :visible.sync="dialogVisible" width="30%">
+			<el-tree ref="tree" :data="depetData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @check-change="handleCheckChange" @click="getCheckedKeys"  default-expand-all>
 			</el-tree>
 			<span slot="footer" class="dialog-footer">
 		       <el-button @click="dialogVisible = false">取 消</el-button>
-		       <el-button type="primary" @click="queding();" >确 定</el-button>
+		       <el-button type="primary" @click="determine();" >确 定</el-button>
 		    </span>
 		</el-dialog>
 	</div>
@@ -25,41 +25,39 @@
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
 				resourceProps: {
 					children: "children",
-					label: "name"
+					label: "fullname"
 				},
 			}
 
 		},
 		methods: {
-			handleCheckChange(data, checked, indeterminate) {
-				this.cccData = data;
-			},
+			//			handleCheckChange(data, checked, indeterminate) {
+			//				this.cccData = data;
+			//			},
 			getCheckedKeys() {
 				console.log(this.$refs.tree.getCheckedKeys());
 			},
-			menu(id) {
-				console.log(id);
-				var _this = this;
-				this.roId=id;
+			depet(id) {
+				this.roId = id;
 				var arr = [];
-				var url = this.basic_url + '/api-user/menus/' + id + '/menus';
+				var url = this.basic_url + '/api-user/depts/treeMap';
 				this.$axios.get(url, {}).then((res) => {
 					console.log(res.data);
-					this.menuData = res.data;
-					var menuData = res.data;//第一级
-					for(var a = 0; a < menuData.length; a++){
-						if(menuData[a].checked) {
-//							arr.push(menuData[a].id);
-							if(menuData[a].children.length>0){
-								var menuDataChild=menuData[a].children//2
-								for(var b=0;b<menuData[a].children.length;b++){
-									console.log(menuData[a].children.length);
-									if(menuData[a].children[b].checked) {
-										arr.push(menuData[a].children[b].id);
-										if(menuData[a].children[b].children.length > 0) {
-											for(var c=0;c<menuData[a].children[b].children.length;c++){
-												if(menuData[a].children[b].children[c].checked) {
-													arr.push(menuData[a].children[b].children[c].id);
+					this.depetData = res.data;
+					var depetData = res.data
+					for(var a = 0; a < depetData.length; a++) {
+						if(depetData[a].checked) {
+							//							arr.push(menuData[a].id);
+							if(depetData[a].children.length > 0) {
+								var depetDataChild = depetData[a].children //2
+								for(var b = 0; b < depetData[a].children.length; b++) {
+									console.log(depetData[a].children.length);
+									if(depetData[a].children[b].checked) {
+										arr.push(depetData[a].children[b].id);
+										if(depetData[a].children[b].children.length > 0) {
+											for(var c = 0; c < depetData[a].children[b].children.length; c++) {
+												if(depetData[a].children[b].children[c].checked) {
+													arr.push(depetData[a].children[b].children[c].id);
 												}
 											}
 										}
@@ -68,9 +66,8 @@
 							}
 						}
 					}
-					
 					this.$nextTick(() => {
-	 					this.setChecked(arr);
+						this.setChecked(arr);
 					});
 					this.dialogVisible = true;
 				}).catch((err) => {
@@ -80,7 +77,7 @@
 					});
 				});
 			},
-			setChecked(arr){
+			setChecked(arr) {
 				this.$refs.tree.setCheckedKeys(arr);
 			},
 			getCheckedAll() {
@@ -94,43 +91,32 @@
 					return e.node
 				})
 			},
-			queding() {
-				console.log(this.roId);
+			determine() { //确定
 				var permissionIds = [];
-				var menuIds = [];
+				var deptIds = [];
 				var permission = this.$refs.tree.getCheckedNodes(); // 获取当前的选中的数据{对象}
 				var menu = this.$refs.tree.getHalfCheckedNodes();
-				console.log(this.$refs.tree.getCheckedKeys().concat(menuIds));
-				console.log(this.$refs.tree.getCheckedKeys());
 				console.log(menu); //父的
 				console.log(permission); //勾選的子
 				for(var j = 0; j < menu.length; j++) {
-					if(menu[j].type == "menu") {
-						menuIds.push(menu[j].id);
-					}
+					deptIds.push(menu[j].id);
 				}
 				for(var i = 0; i < permission.length; i++) {
-					if(permission[i].type == "permission") {
-						permissionIds.push(permission[i].id);
-					}
-					if(permission[i].type == "menu") {
-						menuIds.push(permission[i].id);
-					}
-
+					deptIds.push(permission[i].id);
 				}
 				var data = {
-					menuIds: menuIds,
-					permissionIds: permissionIds,
-					roleId: this.roId,
+					deptIds: deptIds,
+					roleid: this.roId,
 				}
-				var url = this.basic_url + '/api-user/menus/granted'
+				var url = this.basic_url + '/api-user/depts/dataScopeSave'
 				this.$axios.post(url, data).then((res) => {
+					console.log(res);
 					if(res.data.resp_code == 0) {
-					this.$message({
-						message: '操作成功',
-						type: 'success'
-					});
-				}
+						this.$message({
+							message: '操作成功',
+							type: 'success'
+						});
+					}
 					this.dialogVisible = false;
 				}).catch((err) => {
 					this.$message({

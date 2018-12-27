@@ -71,10 +71,10 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="登录口令" v-if="modify" label-width="100px">
+										<el-form-item label="密码" v-if="modify" label-width="100px">
 											<el-input type="password" v-model="user.password" :disabled="noedit"></el-input>
 										</el-form-item>
-										<el-form-item label="登录口令" prop="password" v-else label-width="100px">
+										<el-form-item label="密码" prop="password" v-else label-width="100px">
 											<el-input type="password" v-model="user.password" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
@@ -386,7 +386,7 @@
 							</el-collapse-item>
 						</el-collapse>
 					</div>
-					<div class="el-dialog__footer" v-show="noviews">
+					<div class="el-dialog__footer">
 						<el-button @click='close'>取消</el-button>
 						<el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
 						<el-button type="success" @click='saveAndSubmit()' v-show="addtitle">保存并添加</el-button>
@@ -955,7 +955,6 @@
 
 			//			保存users/saveOrUpdate
 			save() {
-				console.log(123453);
 				var _this = this;
 				this.$refs.user.validate((valid) => {
 					if(valid) {
@@ -982,7 +981,6 @@
 							user.roleId = '';
 							user.roles = [];
 						}
-						console.log(_this.user);
 						var url = _this.basic_url + '/api-user/users/saveOrUpdate';
 						this.$axios.post(url, _this.user).then((res) => {
 							if(res.data.resp_code == 0) {
@@ -990,11 +988,9 @@
 									message: '保存成功',
 									type: 'success',
 								});
-								console.log(_this.user);
 								this.$emit('request');
-								// this.$refs["user"].resetFields(); //清空表单验证
+								this.$refs["user"].resetFields(); //清空表单验证
 							}
-
 						}).catch((err) => {
 							this.$message({
 								message: '网络错误，请重试',

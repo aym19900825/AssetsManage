@@ -120,6 +120,7 @@
 						<el-button type="primary" @click="saveAndUpdate('testing_projectForm')">保存</el-button>
 						<el-button type="success" @click="saveAndSubmit('testing_projectForm')" v-show="addtitle">保存并添加</el-button>
 						<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('testing_projectForm')">修订</el-button>
+						<el-button v-if="modify" type="success" @click="update('testing_projectForm')">更新</el-button>
 						<el-button @click="close">取消</el-button>
 					</div>
 				</el-form>
@@ -418,6 +419,32 @@
 				this.views = true;//录入修改人信息
 				this.noviews = false;//按钮
 				this.show = true;				
+			},
+			//点击更新按钮
+			update(testing_projectForm) {
+				console.log(this.testing_projectForm);
+				var data = {
+					ID: this.testing_projectForm.ID,
+				}
+				this.$axios.get(this.basic_url+ '/api-apps/app/inspectionPro/operate/updateRelate', {
+					params: data
+				}).then((res) => {
+					console.log(res);
+					console.log(res.data.resp_code);
+					if(res.data.resp_code == 0) {
+						this.$message({
+							message: '更新成功',
+							type: 'success'
+						});
+					}else{
+						return;
+					}
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
 			},
 			modifyversion(testing_projectForm) {
 				this.$refs[testing_projectForm].validate((valid) => {

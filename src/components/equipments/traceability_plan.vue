@@ -122,11 +122,11 @@
 							</el-table-column>
 							<el-table-column label="溯源机构" width="100" sortable prop="PM_MECHANISM" v-if="this.checkedName.indexOf('溯源机构')!=-1">
 							</el-table-column>
-							<el-table-column label="前次溯源起止时间" width="180" sortable prop="PM_START_END" v-if="this.checkedName.indexOf('前次溯源起止时间')!=-1">
+							<el-table-column label="前次溯源起止时间" width="180" sortable prop="PM_START_END" :formatter="dateFormat" v-if="this.checkedName.indexOf('前次溯源起止时间')!=-1">
 							</el-table-column>
-							<el-table-column label="本次溯源计划时间" width="180" sortable prop="PM_PLANDATE" v-if="this.checkedName.indexOf('本次溯源计划时间')!=-1">
+							<el-table-column label="本次溯源计划时间" width="180" sortable prop="PM_PLANDATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('本次溯源计划时间')!=-1">
 							</el-table-column>
-							<el-table-column label="溯源完成日期" width="130" sortable prop="COMP_DATE" v-if="this.checkedName.indexOf('溯源完成日期')!=-1">
+							<el-table-column label="溯源完成日期" width="130" sortable prop="COMP_DATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('溯源完成日期')!=-1">
 							</el-table-column>
 						</el-table>
 						<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
@@ -350,6 +350,14 @@
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
 				this.requestData();
+			},
+			//时间格式化  
+			dateFormat(row, column) {
+				var date = row[column.property];
+				if(date == undefined) {
+					return "";
+				}
+				return this.$moment(date).format("YYYY-MM-DD");
 			},
 			//添加用戶
 			openAddMgr() {

@@ -27,6 +27,9 @@
 								    <i class="icon-inventory-line-callout"></i>导出
 								</button>
 								<button type="button" class="btn btn-primarys button-margin">
+								    <i class="icon-edit"></i>编辑
+								</button>
+								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-send"></i>发布
 								</button>
 								<button type="button" class="btn btn-primarys button-margin">
@@ -59,58 +62,56 @@
 						</div>
 					</div>
 					<!-- 高级查询划出 Begin-->
-				<div v-show="search" class="pb10">
+				<div v-show="search">
 					<el-form status-icon :model="searchList" label-width="70px">
 						<el-row :gutter="10">
 							<el-col :span="5">
-								<el-input v-model="searchList.WP_NUM">
-									<template slot="prepend">编号</template>
-								</el-input>
+								<el-form-item label="编号" prop="WP_NUM">
+									<el-input v-model="searchList.WP_NUM"></el-input>
+								</el-form-item>
 							</el-col>
 							<el-col :span="5">
-								<el-input v-model="searchList.DESCRIPTION">
-									<template slot="prepend">描述</template>
-								</el-input>
+								<el-form-item label="描述" prop="DESCRIPTION">
+									<el-input v-model="searchList.DESCRIPTION"></el-input>
+								</el-form-item>
 							</el-col>
+							
 							<el-col :span="5">
-								<el-select v-model="searchList.TYPE" placeholder="类型" style="width: 100%">
-								      <el-option label="监督审查" value="1">	
-								      </el-option>
-								      <el-option label="质量抽查" value="0">
-								      </el-option>
-								    </el-select>
-							</el-col>
-							<el-col :span="5">
-								<el-input v-model="searchList.YEAR">
-									<template slot="prepend">年度</template>
-								</el-input>
+								<el-form-item label="年度" prop="YEAR" label-width="45px">
+									<el-input v-model="searchList.YEAR"></el-input>
+								</el-form-item>
 							</el-col>
 						</el-row>
-						<el-row :gutter="10" class="pt5">
+						<el-row :gutter="10">
 							<el-col :span="5">
-								<div class="block">
-								    <el-date-picker
-								      v-model="searchList.ENTERDATE"
-								      type="date"
-								      placeholder="录入时间" style="width: 100%">
-								    </el-date-picker>
-								  </div>
+								 <el-form-item label="录入时间" prop="ENTERDATE">
+									<div class="block">
+									    <el-date-picker
+									      v-model="searchList.ENTERDATE"
+									      type="date"
+									      placeholder="录入时间" style="width: 100%">
+									    </el-date-picker>
+								  	</div>
+								</el-form-item>
 							</el-col>
 							<el-col :span="5">
-								<el-select v-model="searchList.ENERBY" placeholder="录入人" style="width: 100%">
-								    <el-option label="张强" value="1"></el-option>
-								    <el-option label="贾庆林" value="0"></el-option>
-								    <el-option label="李国富" value="0"></el-option>
-								</el-select>
+								<el-form-item label="编辑状态" prop="STATUS">
+									<el-select v-model="searchList.STATUS" placeholder="请选择" style="width: 100%" clearable>
+									    <el-option label="草稿" value="1"></el-option>
+									    <el-option label="审批中" value="2"></el-option>
+									    <el-option label="驳回" value="0"></el-option>
+									    <el-option label="已发布" value="3"></el-option>
+									    <el-option label="已取消" value="4"></el-option>
+									</el-select>
+								</el-form-item>
 							</el-col>
 							<el-col :span="5">
-								<el-select v-model="searchList.STATUS" placeholder="编辑状态" style="width: 100%">
-								    <el-option label="草稿" value="1"></el-option>
-								    <el-option label="审批中" value="0"></el-option>
-								    <el-option label="驳回" value="0"></el-option>
-								    <el-option label="已发布" value="0"></el-option>
-								    <el-option label="已取消" value="0"></el-option>
-								</el-select>
+								<el-form-item label="类型" prop="TYPE" label-width="45px">
+									<el-select clearable v-model="searchList.TYPE" filterable allow-create default-first-option placeholder="请选择" style="width:100%">
+									    <el-option label="监督审查" value="1"></el-option>
+							      		<el-option label="质量抽查" value="0"></el-option>
+									</el-select>
+								</el-form-item>
 							</el-col>
 							<!-- <el-col :span="5">
 								<el-select v-model="searchList.LEADER_STATUS" placeholder="执行状态" style="width: 100%">
@@ -126,7 +127,6 @@
 					</el-form>
 				</div>
 				<!-- 高级查询划出 End-->
-					
 					<el-row :gutter="10">
 						<el-col :span="5" class="lefttree">
 							<div class="lefttreebg">
@@ -146,7 +146,7 @@
 						</el-col>
 						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
-							<el-table :data="userList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
+							<el-table :header-cell-style="rowClass" :data="userList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="编号" sortable width="100px" prop="WP_NUM" v-if="this.checkedName.indexOf('编号')!=-1">
@@ -317,6 +317,10 @@
 			}
 		},
 	methods: {
+		//表头居中
+			rowClass({ row, rowIndex}) {
+			    return 'text-align:center'
+			},
 		renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
 			return(<span><i class={data.iconClass}></i><span>{node.label}</span></span>);
 		},
@@ -409,6 +413,7 @@
                         cancelButtonText: '取消',
                     }).then(({ value }) => {
                         this.$axios.delete(url, {params: data}).then((res) => {
+                        	console.log(res.data);
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '删除成功',

@@ -50,15 +50,22 @@
 					<!--按钮操作行 End-->
 
 					<!-- 高级查询划出 Begin-->
-					<div v-show="search" class="pb10">
+					<div v-show="search">
 						<el-form status-icon :model="searchList" label-width="45px">
 							<el-row :gutter="10">
 								<el-col :span="5">
-									<!-- <el-input v-model="searchList.TYPE">
-										<template slot="prepend">名称</template>
-									</el-input> -->
+									<el-form-item label="编码" prop="NUM">
+										<el-input v-model="searchList.NUM"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="5">
 									<el-form-item label="名称" prop="TYPE">
 										<el-input v-model="searchList.TYPE"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="5">
+									<el-form-item label="版本" prop="VERSION">
+										<el-input v-model="searchList.VERSION"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
@@ -239,11 +246,10 @@
 				ismin: true,
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
 				searchList: { //点击高级搜索后显示的内容
+					NUM:'',
 					TYPE: '',
+					VERSION:'',
 					DEPARTMENT: '',
-					// PHONE: '',
-					// CONTACT_ADDRESS: '',
-					// STATUS: ''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -450,7 +456,9 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
+					NUM:this.searchList.NUM,
 					TYPE: this.searchList.TYPE,
+					VERSION:this.searchList.VERSION,
 					DEPARTMENT: this.searchList.DEPARTMENT,
 					// PHONE: this.searchList.PHONE,
 					// CONTACT_ADDRESS: this.searchList.CONTACT_ADDRESS,

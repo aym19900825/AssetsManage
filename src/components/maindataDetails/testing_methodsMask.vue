@@ -88,7 +88,7 @@
 
 								<!-- 文件Table-List Begin-->
 								<el-form :model="testing_filesForm" status-icon inline-message ref="testing_filesForm">
-									  <el-table :data="testing_filesForm.inspectionList" row-key="ID" border stripe max-height="260" fit="true"highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'testing_filesForm.inspectionList', order: 'descending'}" v-loadmore="loadMore">
+									  <el-table :header-cell-style="rowClass" :data="testing_filesForm.inspectionList" row-key="ID" border stripe max-height="260" fit="true"highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'testing_filesForm.inspectionList', order: 'descending'}" v-loadmore="loadMore">
 										<el-table-column prop="iconOperation" fixed="left" label="操作" width="80">
 									      <template slot-scope="scope">
 									        <el-button type="text" id="Edit" size="medium" @click="saveRow(scope.row)" v-if="scope.row.isEditing">
@@ -183,6 +183,7 @@
 						<el-button type="primary" @click="saveAndUpdate('testingForm')">保存</el-button>
 						<el-button type="success" @click="saveAndSubmit('testingForm')" v-show="addtitle">保存并添加</el-button>
 						<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('testingForm')">修订</el-button>
+						<el-button v-if="modify" type="success" @click="update('testingForm')">更新</el-button>
 						<el-button @click="close">取消</el-button>
 					</div>
 				</el-form>
@@ -278,6 +279,10 @@
 			};
 		},
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    return 'text-align:center'
+			},
 			//编码提示
 			hint(){
 				this.hintshow = true;
@@ -574,6 +579,31 @@
 				$(".mask_div").css("height", "80%");
 				$(".mask_div").css("margin", "7% 10%");
 				$(".mask_div").css("top", "0");
+			},
+			//点击更新按钮
+			update(testingForm) {
+				var data = {
+					ID: this.testingForm.ID,
+				}
+				this.$axios.get(this.basic_url+ '/api-apps/app/inspectionMet/operate/updateRelate', {
+					params: data
+				}).then((res) => {
+					console.log(res);
+					console.log(res.data.resp_code);
+					if(res.data.resp_code == 0) {
+						this.$message({
+							message: '更新成功',
+							type: 'success'
+						});
+					}else{
+						return;
+					}
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
 			},
 			//执行保存
 			save(testingForm) {

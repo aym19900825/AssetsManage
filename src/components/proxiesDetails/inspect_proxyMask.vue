@@ -579,7 +579,7 @@
 					<div class="el-dialog__footer" v-show="noviews">
 						<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
 						<el-button type="success"  v-show="addtitle" @click="saveAndSubmit('dataInfo')">保存并添加</el-button>
-						<el-button v-show="modifytitle" type="primary"@click="saveAndUpdate('dataInfo')">修订</el-button>
+						<el-button v-show="modifytitle" type="primary"@click="modifyversion('dataInfo')">修订</el-button>
 						<el-button @click='close'>取消</el-button>
 					</div>
 				</el-form>
@@ -626,6 +626,7 @@
 			};
 
 			return {
+				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				dataInfo: {
 					STATUS: '草稿',
@@ -677,6 +678,7 @@
 				down: true,
 				up: false,
 				type: '',
+				datainfo:{},
 				addtitle: true, //添加弹出框titile
 				modifytitle: false, //修改弹出框titile
 				viewtitle: false, //查看弹出框title
@@ -869,6 +871,9 @@
 					console.log(res);
 					this.dataInfo = res.data;
 					this.show = true;
+					//深拷贝数据
+					let _obj = JSON.stringify(this.dataInfo);
+        			this.datainfo = JSON.parse(_obj);
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -883,6 +888,62 @@
 				this.views = false; //
 				this.edit = true;
 				this.noedit = false;
+			},
+			//点击修订按钮
+			modifyversion(dataInfo) {
+				this.$refs[dataInfo].validate((valid) => {
+					if(valid) {
+						var datainfo=JSON.stringify(this.datainfo); 
+	 					var dataInfo=JSON.stringify(this.dataInfo);
+					 	if(datainfo==dataInfo){
+					  	this.$message({
+								message: '没有修改内容，不允许修订！',
+								type: 'warning'
+							});
+							return false;
+					    }else{
+							var url = this.basic_url+ '/api-apps/app/inspectPro/operate/upgraded'
+							this.$axios.post(url, this.dataInfo).then((res) => {
+								//resp_code == 0是后台返回的请求成功的信息
+								if(res.data.resp_code == 0) {
+									this.$message({
+										message: '修订成功',
+										type: 'success'
+									});
+									//重新加载数据
+									this.$emit('request');
+									this.show = false;
+								}else{
+								this.show = true;
+								if(res.data.resp_code == 1) {
+									//res.data.resp_msg!=''后台返回提示信息
+									if( res.data.resp_msg!=''){
+									 	this.$message({
+											message: res.data.resp_msg,
+											type: 'warning'
+									 	});
+									}else{
+										this.$message({
+											message:'相同数据不可重复修订！',
+											type: 'warning'
+										});
+									}
+								}
+							}		
+							}).catch((err) => {
+								this.$message({
+									message: '网络错误，请重试',
+									type: 'error'
+								});
+							});
+						}
+					} else {
+						this.$message({
+							message: '未填写完整，请填写',
+							type: 'warning'
+						});
+					}
+				});
 			},
 			//这是查看
 			view(dataid) {
@@ -972,17 +1033,22 @@
 							type: 'error'
 						});
 					});}
+					this.falg = true;
 			          } else {
+			          	this.show = true;
 			           this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
 						});
+			           this.falg = false;
 			          }
 				});
 			},
 			saveAndUpdate(dataInfo){
 				this.save(dataInfo);
-				this.show = false;
+				if(this.falg){
+					this.show = false;
+				}
 			},
 			saveAndSubmit(dataInfo){
 				this.save(dataInfo);

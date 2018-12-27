@@ -30,7 +30,6 @@
 											</el-option>
 										</el-select> -->
 									</el-col>
-									
 								</el-row>
                               <el-form label-width="100px">
 								<el-row :gutter="30">
@@ -65,22 +64,10 @@
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="8">
-										<el-form-item label="联系人" prop="PERSON">
-											<el-input v-model="CUSTOMER.PERSON" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="联系电话" prop="PHONE">
-											<el-input v-model="CUSTOMER.PHONE" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
 										<el-form-item label="邮箱" prop="EMAIL">
 											<el-input v-model="CUSTOMER.EMAIL" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
-								</el-row>
-								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="联系地址" prop="CONTACT_ADDRESS">
 											<el-input v-model="CUSTOMER.CONTACT_ADDRESS" :disabled="noedit"></el-input>
@@ -91,13 +78,13 @@
 											<el-input v-model="CUSTOMER.ZIPCODE" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
-
+								</el-row>
+								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="传真" prop="FAX">
 											<el-input v-model="CUSTOMER.FAX" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
-
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="24">
@@ -107,10 +94,10 @@
 									</el-col>
 								</el-row>
 							</el-form>
-						
-							<!-- 资质信息 Begin-->
-							<el-collapse-item title="资质信息" name="2">								
-								<div class="table-func">
+							<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
+								<el-tabs v-model="activeName" @tab-click="handleClick">
+									<el-tab-pane label="资质信息" name="first">
+										<div class="table-func table-funcb">
 									<el-button type="success" size="mini" round @click="addfield">
 										<i class="icon-add"></i>
 										<font>新建行</font>
@@ -188,8 +175,66 @@
 								    </el-table-column>
 								  </el-table>
 								  </el-form>
-							</el-collapse-item>
-							<!-- 资质信息 End -->
+									</el-tab-pane>
+									<el-tab-pane label="客户联系人" name="second">
+										<div class="table-func table-funcb">
+											<el-button type="success" size="mini" round @click="addrela">
+												<i class="icon-add"></i>
+												<font>新建行</font>
+											</el-button>
+										</div>
+										<el-form :label-position="labelPosition" :rules="rules">
+										<el-table :header-cell-style="rowClass" :fit="true" :data="CUSTOMER.CUSTOMER_PERSONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER.CUSTOMER_PERSONList', order: 'descending'}">
+										    <el-table-column prop="iconOperation" fixed width="50px">
+										      <template slot-scope="scope">
+										      	<i class="el-icon-check" v-show="scope.row.isEditing">
+										      	</i>
+										      	<i class="el-icon-edit" v-show="!scope.row.isEditing">
+										      	</i>
+										      </template>
+										    </el-table-column>
+
+										    <el-table-column label="序号" sortable width="120px" prop="STEP">
+										      <template slot-scope="scope">
+										      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STEP" disabled></el-input>
+										      	<span v-show="!scope.row.isEditing" >{{scope.row.STEP}}</span>
+										      </template>
+										    </el-table-column>
+
+										    <el-table-column label="联系人" sortable width="150px" prop="PERSON">
+										      <template slot-scope="scope">
+										      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.PERSON" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.PERSON}}</span>
+										      </template>
+										    </el-table-column>
+
+											<el-table-column prop="PHONE" label="联系电话" sortable width="150px">
+										      <template slot-scope="scope">
+										         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.PHONE" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.PHONE}}</span>
+										      </template>
+										    </el-table-column>
+
+										    <el-table-column prop="FAX" label="传真" sortable width="150px">
+										       <template slot-scope="scope">
+										         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.FAX" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.FAX}}</span>
+										      </template>
+										    </el-table-column>
+										    <el-table-column prop="EMAIL" label="邮箱" sortable>
+										      <template slot-scope="scope">
+										        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.EMAIL" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.EMAIL}}</span>
+										      </template>
+										    </el-table-column>
+										    <el-table-column fixed="right" label="操作" width="120">
+										      <template slot-scope="scope">
+										        <el-button @click = "deleteRow(scope.$index, CUSTOMER.CUSTOMER_PERSONList)" type="text" size="small">
+										          移除
+										        </el-button>
+										      </template>
+										    </el-table-column>
+										  </el-table>
+								  		</el-form>
+									</el-tab-pane>
+								</el-tabs>
+							</div>
 							</el-collapse-item>
 							<el-collapse-item title="其它" name="3"  v-show="views">
 								<el-form label-width="100px">
@@ -330,6 +375,7 @@
 				up: false,
 				addtitle:true,//添加弹出框titile
 				modifytitle:false,//修改弹出框titile
+				activeName: 'first', //tabs
 				activeNames: ['1','2','3'],//手风琴数量
 //				labelPositions: 'ri', //表格
 				labelPosition: 'top', //表格
@@ -337,7 +383,8 @@
 				selectData:[],
 				fileList: [],
 				CUSTOMER:{
-					CUSTOMER_QUALIFICATIONList:[]
+					CUSTOMER_QUALIFICATIONList:[],
+					CUSTOMER_PERSONList:[]
 				},
 				rules: {
 					NAME:[{required: true,trigger: 'blur',validator: validateName}],
@@ -374,6 +421,9 @@
 			    // console.log(rowIndex) //表头行标号为0
 			    return 'text-align:center'
 			},
+			handleClick(tab, event) {
+				console.log(tab, event);
+			},
 			iconOperation(row, column, cell, event){
 		        if(column.property ==="iconOperation"){
 		          row.isEditing = !row.isEditing
@@ -401,6 +451,27 @@
 					isEditing: true
                 };
                 this.CUSTOMER.CUSTOMER_QUALIFICATIONList.push(obj);
+			},
+			//新建行
+			addrela(){
+				this.index = this.index + 1;
+				var obj = {
+					STEP:this.index,
+					ID:'',
+                    CODE:'',
+                    PERSON:'',
+                    PHONE:'',
+                    FAX:'',
+                    EMAIL:'',
+                    STATUS:'',
+                    MEMO:'',
+                    ENTERBY:'',
+                    ENTERDATE:'',
+                    CHANGEBY:'',
+                    CHANGEDATE:'',
+					isEditing: true
+                };
+                this.CUSTOMER.CUSTOMER_PERSONList.push(obj);
 			},
 			//删除行
 			deleteRow(index, rows) {//Table-操作列中的删除行
@@ -432,6 +503,7 @@
 					CHANGEDATE:'',
 					MEMO:'',
 					CUSTOMER_QUALIFICATIONList:[],
+					CUSTOMER_PERSONList:[]
 				};
             },
 			//点击添加，修改按钮显示弹窗
@@ -492,6 +564,7 @@
 					});
 				});
 				this.$axios.get(this.basic_url + '/api-apps/app/customer/' + dataid, {}).then((res) => {
+					console.log(res.data);
 					this.CUSTOMER = res.data;
 					//console.log(this.CUSTOMER.STATUS==1);
 					this.CUSTOMER.STATUS=this.CUSTOMER.STATUS=="1"? '活动' : '不活动';
@@ -587,7 +660,7 @@
 							});
 							//重新加载数据
 							this.$emit('request');
-							this.$refs["CUSTOMER"].resetFields();
+							// this.$refs["CUSTOMER"].resetFields();
 						}
 					}).catch((err) => {
 						this.$message({

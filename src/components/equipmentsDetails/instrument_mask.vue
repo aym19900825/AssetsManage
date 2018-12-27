@@ -4,8 +4,9 @@
 		<div class="mask_div" v-show="show">
 			<!---->
 			<div class="mask_title_div clearfix">
-				<div class="mask_title" v-show="!modify">添加仪器和计量器具</div>
-				<div class="mask_title" v-show="modify">修改仪器和计量器具</div>
+				<div class="mask_title" v-show="addtitle">添加仪器和计量器具</div>
+				<div class="mask_title" v-show="modifytitle">修改仪器和计量器具</div>
+				<div class="mask_title" v-show="viewtitle">查看仪器和计量器具</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -28,39 +29,39 @@
 											<template slot="prepend">设备编号</template>
 										</el-input>
 									</el-col>
-									<el-col :span="5" class="pull-right">
+									<!-- <el-col :span="5" class="pull-right">
 										<el-input v-model="dataInfo.STATUS==1?'活动':'不活动'" :disabled="true">
 											<template slot="prepend">信息状态</template>
 										</el-input>
-									</el-col>
+									</el-col> -->
 								</el-row>
 								<el-form-item v-for="item in basicInfo" :key="item.id" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
-									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && item.prop !='A_PRICE' "></el-input>
-									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'"></el-input>
-									<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'">
+									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && item.prop !='A_PRICE' " :disabled="noedit"></el-input>
+									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'" :disabled="noedit"></el-input>
+									<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" :disabled="noedit">
 									</el-date-picker>
-									<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'">
+									<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'" :disabled="noedit">
 										<el-radio :label="it.label" v-for="it in item.opts" :key="it.id"></el-radio>
 									</el-radio-group>
-									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && item.prop =='A_PRICE' " @blur="handlePrice"></el-input>
+									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && item.prop =='A_PRICE' " @blur="handlePrice" :disabled="noedit"></el-input>
 								</el-form-item>
 							</el-collapse-item>
 
 							<!-- 设备保管人员情况 -->
 							<el-collapse-item title="设备保管人员情况" name="2">
 								<el-form-item v-for="item in keeperInfo" :label="item.label":key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
-									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'"></el-input>
-									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'"></el-input>
-									<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'">
+									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" :disabled="noedit"></el-input>
+									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'" :disabled="noedit"></el-input>
+									<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" :disabled="noedit">
 									</el-date-picker>
 									<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'">
-										<el-radio :label="it.val" v-for="it in item.opts" :key="it.id">{{it.label}}</el-radio>
+										<el-radio :label="it.val" v-for="it in item.opts" :key="it.id" :disabled="noedit">{{it.label}}</el-radio>
 									</el-radio-group>
 								</el-form-item>
 							</el-collapse-item>
 
 						    <el-collapse-item title="设备溯源信息状态" name="3" v-show="modify">
-								<el-table :data="pmRecordList" row-key="ID" border stripe height="400" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'pmRecordList', order: 'descending'}">
+								<el-table :header-cell-style="rowClass" :fit="true" :data="pmRecordList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'pmRecordList', order: 'descending'}">
 									<el-table-column type="index" sortable label="序号" width="50">
                                     </el-table-column>
 									<el-table-column prop="RECORDNUM" label="溯源记录编号" sortable width="120px">
@@ -77,19 +78,22 @@
 							</el-collapse-item>
 							
 							<!-- 其他信息 -->
-							<el-collapse-item title="其他" name="4">
-								<el-form-item v-for="item in otherInfo" :key="item.id" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
-									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" disabled></el-input>
-									<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" disabled>
-									</el-date-picker>
-								</el-form-item>		
+							<el-collapse-item title="其他" name="4" v-show="!addtitle">
+								<el-form-item v-for="item in otherInfo" :key="item.id" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-if="item.prop=='DEPARTMENT'" v-show="dept">
+									<el-input v-model="dataInfo[item.prop]" :type="item.type" disabled v-if="item.prop=='DEPARTMENT'"></el-input>
+								</el-form-item>
+								<el-form-item   v-for="item in otherInfo" :key="item.id" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-show="views">
+									<el-input v-model="dataInfo[item.prop]" :type="item.type" disabled ></el-input>
+								</el-form-item>	
 							</el-collapse-item>
 						</el-collapse>
 					</div>
 
-					<div class="el-dialog__footer">
+					<div class="el-dialog__footer" v-show="noviews">
+						<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
+						<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并添加</el-button>
 						<el-button @click='close'>取消</el-button>
-						<el-button type="primary" @click='submitForm'>提交</el-button>
+						<!-- <el-button type="primary" @click='submitForm'>提交</el-button> -->
 					</div>
 				</el-form>
 			</div>
@@ -455,7 +459,7 @@
 						displayType: 'inline-block'
 					},
 					{
-						label: '录入机构',
+						label: '机构',
 						prop: 'DEPARTMENT',
 						width: '30%',
 						type: 'input',
@@ -533,10 +537,26 @@
 					'STATUS': '1',
 					'SYNCHRONIZATION_TIME': '',
 				},
-				pmRecordList: []
+				pmRecordList: [],
+				addtitle:true,
+				modifytitle:false,
+				viewtitle:false,
+				dept:false,
+				noedit:false,//表单内容
+				views:false,//录入修改人信息
+				noviews:true,//按钮
+				modify:false,//修订
+				hintshow:false,
+				statusshow1:true,
+				statusshow2:false,
+				falg:false,
 			};
 		},
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    return 'text-align:center'
+			},
 			handlePrice(){
 				this.dataInfo.A_PRICE = parseFloat(this.dataInfo.A_PRICE).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 			},
@@ -586,7 +606,17 @@
 			},
 			//点击按钮显示弹窗
 			visible() {
-				this.modify=false;
+				this.addtitle = true;
+				this.modifytitle = false;
+				this.viewtitle = false;
+				this.dept = false;
+				this.noedit = false;//表单内容
+				this.views = false;//录入修改人信息
+				this.noviews = true;//按钮
+				this.modify = false;//修订
+				this.hintshow = false;
+				this.statusshow1 = true;
+				this.statusshow2 = false;
 				this.show = true;
                 this.getUser('new');
 			},
@@ -595,16 +625,41 @@
 				this.dataInfo = this.detailData;
 				this.handlePrice();
 				this.getUser();
+				this.addtitle = false;
+				this.modifytitle = true;
+				this.viewtitle = false;
+				this.dept = true;
+				this.noedit = false;//表单内容
+				this.views = false;//录入修改人信息
+				this.noviews = true;//按钮
 				this.modify = true;
+				this.hintshow = false;
+				this.statusshow1 = true;
+				this.statusshow2 = false;
 				this.show = true;
 //				this.getPmList();
 			},
+			//这是查看
+			view(data) {
+				this.addtitle = false;
+				this.modifytitle = false;
+				this.viewtitle = true;
+				this.dept = false;
+				this.modify = true;
+				this.noedit = true;//表单内容
+				this.views = true;//录入修改人信息
+				this.mview = true;
+				this.noviews = false;//按钮
+				this.dataInfo = data;
+				this.show = true;				
+			},
 			//点击关闭按钮
 			close() {
-				this.resetForm();
+				this.reset();
 				this.$emit('request');
+				this.show = false;
 			},
-			resetForm(){
+			reset(){
 				this.dataInfo =  {
 					'ID': '', 
 					'ASSETNUM': '',
@@ -642,7 +697,7 @@
 					'SYNCHRONIZATION_TIME': '',
 				};
 				this.$refs['dataInfo'].resetFields();
-				this.show = false;
+				// this.show = false;
 			},
 			toggle(e) { //大弹出框大小切换
 				if(this.isok1) {
@@ -669,8 +724,9 @@
 				$(".mask_div").css("top", "0");
 			},
 
-			submitForm() {
+			save(dataInfo) {
 				var _this = this;
+				console.log(_this.dataInfo);
 				var url = this.basic_url + '/api-apps/app/asset/saveOrUpdate';
 				this.$refs['dataInfo'].validate((valid) => {
 					if (valid) {
@@ -680,8 +736,11 @@
 									message: '保存成功',
 									type: 'success',
 								});
-								this.resetForm();
+								
 								this.$emit('request');
+								this.reset();
+								// this.$emit('reset');
+								// this.visible();
 							}
 						}).catch((err) => {
 							this.$message({
@@ -689,11 +748,26 @@
 								type: 'error'
 							});
 						});
+						this.falg=true;
 					} else {
-						console.log('error submit!!');
-						return false;
+						this.show = true;
+						this.$message({
+							message: '未填写完整，请填写',
+							type: 'warning'
+						});
+						this.falg=false;
 					}
 				});
+			},
+			saveAndUpdate(dataInfo) {
+				this.save(dataInfo);
+				if(this.falg){
+					this.show = false;
+				}
+			},
+			saveAndSubmit(dataInfo) {
+				this.save(dataInfo);
+				this.show = true;
 			},
 		},
 		mounted() {

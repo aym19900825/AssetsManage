@@ -50,7 +50,15 @@ export default {
 					navicon: 'icon-file-text',
 					navtitle: '检验/检测方法',
 					navherf: '/testing_methods'
+				},{
+					navicon: 'icon-file-text',
+					navtitle: '原始数据模板',
+					navherf: '/data_module'
 				}, {
+					navicon: 'icon-file-text',
+					navtitle: '检验/检测报告模板',
+					navherf: '/report_module'
+				},{
 					navicon: 'icon-file-text',
 					navtitle: '作业指导书',
 					navherf: '/work_instruction'
@@ -76,6 +84,19 @@ export default {
 			}
 			if(flag){
 				clickedNav.push(item);
+				setTimeout(function(){
+		 			var left = $('.page-tabs').offset().left; 
+		            //tabs总宽度
+		            var tabW = $('.page-tabs-content').width();
+		            //总区域内容宽度
+		            var contentW = $('.content-tabs').width()-240;
+		            if(tabW>contentW){
+		            	var poor=tabW-contentW;
+		            	$('.page-tabs').offset({
+		                    left: -poor
+		                });
+		            }
+				},0);
 			}
 			if(!sessionStorage.getItem('selectedNav')){
 				sessionStorage.setItem('selectedNav',JSON.stringify({}));

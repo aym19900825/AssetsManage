@@ -45,11 +45,7 @@
 								</div>
 								<el-form :model="productType2Form" status-icon inline-message ref="productType2Form" class="el-radio__table">
 								  <el-table :data="productType2Form.inspectionList.filter(data => !search || data.TYPE.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="350" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'productType2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore" @selection-change="SelChange">
-									<el-table-column label="单选" width="50">
-										<el-radio-group v-model="productType2Form.NUM">
-											<el-radio label="0"></el-radio>
-										</el-radio-group>
-									</el-table-column>
+									<el-table-column label="单选" width="50"></el-table-column>
 
 								  	<el-table-column label="类别编号" sortable width="100" prop="NUM">
 								      <template slot-scope="scope">

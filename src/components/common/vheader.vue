@@ -23,14 +23,13 @@
                 <i class="el-icon-arrow-down icon-arrow2-down"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
-                
-                <el-dropdown-item v-for="item in selectData" :key="item.nickname">
-                    <router-link :to="item.id">
-                        <img class="userimgs" src="../../assets/img/female.png" />{{item.nickname}}
+                <el-dropdown-item v-for="(data,index) in GetRoles" :key="index">
+                    <router-link :to="data.id">
+                        {{data.name}}
                     </router-link>
                 </el-dropdown-item>
                 
-                <el-dropdown-item>
+                <!-- <el-dropdown-item>
                     <router-link to="/personinfo">
                         <img class="userimgs" src="../../assets/img/male.png" />管理员
                     </router-link>
@@ -39,7 +38,7 @@
                     <router-link to="/personinfo">
                         <img class="userimgs" src="../../assets/img/male.png" />站长
                     </router-link>
-                </el-dropdown-item>
+                </el-dropdown-item> -->
 
                 <el-dropdown-item class="border-linet pt10 mt10">
                     <router-link to="/personinfo">
@@ -75,7 +74,7 @@ export default {
             basic_url: Config.dev_url,
             username: '',
             nickname: '',
-            selectData: [], //
+            GetRoles:[],//获取当前角色
         }
     },
     methods: {
@@ -87,7 +86,7 @@ export default {
             var url = this.basic_url + '/api-user/users/currentMap';
             this.$axios.get(url, {}).then((res) => {//获取当前用户信息
                     this.username = res.data.username;
-                     this.nickname = res.data.nickname;
+                    this.nickname = res.data.nickname;
                     this.userid = res.data.id;
             }).catch((err) => {
                 this.$message({
@@ -96,19 +95,11 @@ export default {
                 });
             });
         },
-        //角色
-        getRole() {
-            this.editSearch = 'role';
-            var page = this.page.currentPage;
-            var limit = this.page.pageSize;
-            var url = this.basic_url + '/api-user/roles';
-            this.$axios.get(url, {
-                params: {
-                    page: page,
-                    limit: limit,
-                },
-            }).then((res) => {
-                this.selectData = res.data.data;
+        //当前角色
+        getITEM_Roles() {
+            var url = this.basic_url + '/api-user/roles/current';
+            this.$axios.get(url, {}).then((res) => {
+                this.GetRoles = res.data;
             }).catch(error => {
                 console.log('请求失败');
             })
@@ -143,6 +134,7 @@ export default {
     },
     mounted(){
         this.getData();//调用getData
+        this.getITEM_Roles();
     }
 }
 </script>

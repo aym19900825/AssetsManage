@@ -81,7 +81,7 @@
 								<el-row>
 									<el-col :span="8">
 										<el-form-item label="收样人" prop="ACCEPT_PERSON">
-											<el-input v-model="samplesForm.ACCEPT_PERSON" :disabled="true"></el-input>
+											<el-input v-model="samplesForm.ACCEPT_PERSON" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -218,6 +218,7 @@
 		},
 		data() {
 			return {
+				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				value: '',
 				options: [{
@@ -242,6 +243,7 @@
 				addtitle: true,
 				modifytitle: false,
 				viewtitle: false, //查看弹出框title
+				views:false,
 				samples_itemlineForm:{//样品子表数据组
 					inspectionList: []
 				},
@@ -436,12 +438,14 @@
 			},
 			//点击提交按钮执行保存
 			save(samplesForm) {
+				
 				this.$refs[samplesForm].validate((valid) => {
 					if (valid) {
-//					    this.samplesForm.STATUS=this.samplesForm.STATUS=="活动" ? '1' : '0';
+//					    this.samplesForm.STATUS=this.samplesForm.STATUS=="活动" ? '1' : '0';					
+						console.log(this.samplesForm);
 						var url = this.basic_url + '/api-apps/app/itemgrant/saveOrUpdate';
 						this.$axios.post(url, this.samplesForm).then((res) => {
-							//console.log(res);
+							console.log(res);
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
 								this.$message({
@@ -451,7 +455,7 @@
 								// this.show = false;
 								//重新加载数据
 								this.$emit('request');
-								this.$refs["samplesForm"].resetFields();
+								// this.$refs["samplesForm"].resetFields();
 							}
 						}).catch((err) => {
 							this.$message({
@@ -459,14 +463,22 @@
 								type: 'error'
 							});
 						});
+						this.falg = true;
 					} else {
-						return false;
+						this.show = true;
+						this.$message({
+							message: '未填写完整，请填写',
+							type: 'warning'
+						});
+						this.falg = false;
 					}
 				});
 			},
 			saveAndUpdate(samplesForm){
 				this.save(samplesForm);
-				this.show = false;
+				if(this.falg){
+					this.show = false;
+				}
 				// this.$emit('request');
 			},
 			saveAndSubmit(samplesForm){

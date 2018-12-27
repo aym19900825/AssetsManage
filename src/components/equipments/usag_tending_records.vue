@@ -47,25 +47,23 @@
 					</div>
 				</div>
 				<!-- 高级查询划出 Begin-->
-				<div v-show="search" class="pb10">
+				<div v-show="search">
 					<el-form status-icon :model="searchList" label-width="70px">
 						<el-row :gutter="10">
 								<el-col :span="5">
+									<el-form-item label="设备编号" prop="ASSETNUM">
+										<el-input v-model="searchList.ASSETNUM"></el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-input v-model="searchList.ASSETNUM">
-										<template slot="prepend">设备编号</template>
-									</el-input>
-								</el-col>
-								<el-col :span="5">
-									<el-input v-model="searchList.DESCRIPTION">
-										<template slot="prepend">设备名称</template>
-									</el-input>
+									<el-form-item label="设备名称" prop="DESCRIPTION">
+										<el-input v-model="searchList.DESCRIPTION"></el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="4">
-									<el-input v-model="searchList.MODEL">
-										<template slot="prepend">规格型号</template>
-									</el-input>
+									<el-form-item label="规格型号" prop="MODEL">
+										<el-input v-model="searchList.MODEL"></el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="2">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
@@ -77,21 +75,25 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :data="userList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+						<el-table :header-cell-style="rowClass" :data="userList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 							</el-table-column>
 							<el-table-column label="设备编号" width="200" sortable prop="ASSETNUM" v-if="this.checkedName.indexOf('设备编号')!=-1">
+								<template slot-scope="scope">
+									<p @click=view(scope.row.ID)>{{scope.row.ASSETNUM}}
+									</p>
+								</template>
 							</el-table-column>
 							<el-table-column label="设备名称" width="200" sortable prop="DESCRIPTION" v-if="this.checkedName.indexOf('设备名称')!=-1">
 							</el-table-column>
-							<el-table-column label="规格型号" sortable prop="MODEL" v-if="this.checkedName.indexOf('规格型号')!=-1">
+							<el-table-column label="规格型号" width="300" sortable prop="MODEL" v-if="this.checkedName.indexOf('规格型号')!=-1">
 							</el-table-column>
-							<el-table-column label="设备状态" sortable prop="STATUS"  v-if="this.checkedName.indexOf('设备状态')!=-1">
+							<!-- <el-table-column label="设备状态" sortable prop="STATUS"  v-if="this.checkedName.indexOf('设备状态')!=-1">
 								<template slot-scope="scope">
 									<span v-text="scope.row.STATUS=='1'?'活动':'不活动'"></span>
 								</template>
-							</el-table-column>						
-							<el-table-column label="保管人" sortable prop="KEEPER" v-if="this.checkedName.indexOf('信息状态')!=-1">
+							</el-table-column> -->						
+							<el-table-column label="保管人" sortable prop="KEEPER" v-if="this.checkedName.indexOf('保管人')!=-1">
 							</el-table-column>
 						</el-table>
 						<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
@@ -141,8 +143,7 @@
 					'设备编号',
 					'设备名称',
 					'规格型号',
-					'联系电话',
-					'设备状态',
+					'保管人',
 					
 				],
 				tableHeader: [
@@ -158,10 +159,10 @@
 						label: '规格型号',
 						prop: 'MODEL'
 					},
-					{
-						label: '设备状态',
-						prop: 'STATUS'
-					},
+					// {
+					// 	label: '设备状态',
+					// 	prop: 'STATUS'
+					// },
 					{
 						label: '保管人',
 						prop: 'KEEPER'
@@ -198,10 +199,14 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-				aaaData:[],
+				aaaData:[]
 			}
 		},
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+				return 'text-align:center'
+			},
 			tableControle(data){
 				this.checkedName = data;
 			},
@@ -240,6 +245,12 @@
 				} else {
 					this.$refs.child.detail();
 				}
+			},
+			//查看
+			 view(dataid) {
+			 	// console.log(data);
+			 	// this.dataInfo = data;
+				this.$refs.child.view(dataid);
 			},
 			//高级查询
 			modestsearch() {

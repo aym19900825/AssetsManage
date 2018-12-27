@@ -186,6 +186,8 @@
 			return {
 				basic_url: Config.dev_url,
 				ismin: true,
+				loadSign:true,//加载
+				commentArr:{},
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				checkedName: [
 					'工作任务单编号',
@@ -249,10 +251,6 @@
 				companyId: '',
 				deptId: '',
 				selMenu: [],
-				'启用': true,
-				'冻结': false,
-				'男': true,
-				'女': false,
 				userList: [],
 				search: false,
 				show: false,
@@ -283,13 +281,11 @@
 					label: "fullname"
 				},
 				treeData: [],
-				userData:[],
 				page: {
 					currentPage: 1,
 					pageSize: 10,
 					totalCount: 0
 				},
-				aaaData:[],
 				workorderForm: {}//修改子组件时传递数据
 			}
 		},
@@ -397,22 +393,20 @@
 			},
 			//修改检验工作处理到子组件
 			modify() {
-				this.aaaData = this.selMenu;
-				if(this.aaaData.length == 0) {
+				if(this.selMenu.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
 						type: 'warning'
 					});
 					return;
-				} else if(this.aaaData.length > 1) {
+				} else if(this.selMenu.length > 1) {
 					this.$message({
 						message: '不可同时修改多条数据',
 						type: 'warning'
 					});
 					return;
 				} else {
-					this.workorderForm = this.selMenu[0]; 
-					this.$refs.child.detail();
+					this.$refs.child.detail(this.selMenu[0].ID);
 				}
 			},
 			//高级查询
@@ -486,7 +480,7 @@
 			SelChange(val) {
 				this.selMenu = val;
 			},
-			requestData(index) {
+			requestData() {
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -503,8 +497,10 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
+					console.log(res)
 					this.page.totalCount = res.data.count;	
 					//总的页数
+					this.userList=res.data.data;
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
 					if(this.page.currentPage >= totalPage){
 						 this.loadSign = false
@@ -522,7 +518,10 @@
 							}
 						}
 					}
+					console.log(newarr);
 					this.userList = newarr;
+					console.log(this.userList);
+					
 				}).catch((wrong) => {})
 			},
 			//机构树

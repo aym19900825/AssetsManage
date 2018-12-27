@@ -182,6 +182,7 @@
 							<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并添加</el-button>
 							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('dataInfo')">修订</el-button>
+							<el-button v-if="modify" type="success" @click="update('dataInfo')">更新</el-button>
 							<el-button @click="close">取消</el-button>
 					</div>
 				</el-form>
@@ -234,6 +235,7 @@
 				}
 			};
 			return {
+				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				options: [{
 					value: '1',
@@ -472,6 +474,30 @@
 		          	}
 			   });
 			},
+			//点击更新按钮
+			update(dataInfo) {
+				var data = {
+					id: this.dataInfo.ID,
+				}
+				this.$axios.get(this.basic_url+ '/api-apps/app/inspectionSta/operate/updateRelate', {
+					params: data
+				}).then((res) => {
+					console.log(res.data.resp_code);
+					if(res.data.resp_code == 0) {
+						this.$message({
+							message: '更新成功',
+							type: 'success'
+						});
+					}else{
+						return;
+					}
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+			},
 			// 保存users/saveOrUpdate
 			save(dataInfo) {
 				this.$refs[dataInfo].validate((valid) => {
@@ -515,27 +541,30 @@
 								type: 'error'
 							});
 						});
+						this.falg = true;
 			        } else {
 			          	this.show = true;
 			          	this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
 						});
+						this.falg = false;
 			        }
 				});
 			},
 			//保存
 			saveAndUpdate(dataInfo){
 				this.save(dataInfo);
-				this.show = false;
+				if(this.falg){
+					this.show = false;
+				}
 			},
 			//保存并添加
 			saveAndSubmit(dataInfo){
 				this.save(dataInfo);
 				this.$emit('reset');
 				this.show = true;
-			},
-			handleClose(done) {
+			},			handleClose(done) {
 				this.$confirm('确认关闭？')
 					.then(_ => {
 						done();

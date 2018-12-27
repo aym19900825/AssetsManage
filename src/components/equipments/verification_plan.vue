@@ -47,41 +47,36 @@
 					</div>
 				</div>
 				<!-- 高级查询划出 Begin-->
-				<div v-show="search" class="pb10">
+				<div v-show="search">
 					<el-form status-icon :model="searchList" label-width="70px">
 						<el-row :gutter="10">
-							<el-col :span="5">
-								
+							<el-col :span="6">
+								<el-form-item label="期间核查计划编号" prop="C_PLANNUM" label-width="130px">
+									<el-input v-model="searchList.C_PLANNUM"></el-input>
+								</el-form-item>
 							</el-col>
 							<el-col :span="5">
-								<el-input v-model="searchList.C_PLANNUM">
-									<template slot="prepend">期间核查计划编号</template>
-								</el-input>
+								<el-form-item label="计划描述" prop="DESCRIPTION">
+									<el-input v-model="searchList.DESCRIPTION"></el-input>
+								</el-form-item>
 							</el-col>
-							<el-col :span="5">
-								<el-input v-model="searchList.DESCRIPTION">
-									<template slot="prepend">计划描述</template>
-								</el-input>
-							</el-col>
-							<el-col :span="5">
+							<!-- <el-col :span="5">
 								<el-input v-model="searchList.ENTERBY">
 									<template slot="prepend">录入人</template>
 								</el-input>
-							</el-col>
-						</el-row>
-						<el-row :gutter="10" style="margin-top: 5px;">
+							</el-col> -->
 							<el-col :span="5">
-								<el-input v-model="searchList.ENTERDATE">
-									<template slot="prepend">录入时间</template>
-								</el-input>
+								<el-form-item label="录入时间" prop="ENTERDATE">
+									<el-input v-model="searchList.ENTERDATE"></el-input>
+								</el-form-item>
 							</el-col>
 							<el-col :span="5">
-								<el-input v-model="searchList.DEPARTMEMT">
-									<template slot="prepend">录入人机构</template>
-								</el-input>
+								<el-form-item label="机构" prop="DEPARTMEMT" label-width="45px">
+									<el-input v-model="searchList.DEPARTMEMT"></el-input>
+								</el-form-item>
 							</el-col>
 							<el-col :span="2">
-								<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
@@ -90,18 +85,22 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :data="userList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+						<el-table :header-cell-style="rowClass" :data="userList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 							</el-table-column>
 							<el-table-column label="期间核查计划编号" width="200" sortable prop="C_PLANNUM" v-if="this.checkedName.indexOf('期间核查计划编号')!=-1">
+								<template slot-scope="scope">
+									<p @click=view(scope.row.ID)>{{scope.row.C_PLANNUM}}
+									</p>
+								</template>
 							</el-table-column>
 							<el-table-column label="计划描述" width="200" sortable prop="DESCRIPTION" v-if="this.checkedName.indexOf('计划描述')!=-1">
 							</el-table-column>
-							<el-table-column label="录入人" sortable prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
-							</el-table-column>
-							<el-table-column label="录入时间" sortable prop="ENTERDATE" v-if="this.checkedName.indexOf('录入时间')!=-1">
+							<!-- <el-table-column label="录入人" sortable prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
+							</el-table-column> -->
+							<el-table-column label="录入时间" sortable prop="ENTERDATE" :formatter="dateFormat"v-if="this.checkedName.indexOf('录入时间')!=-1">
 							</el-table-column>						
-							<el-table-column label="录入人机构" sortable prop="DEPARTMEMT" v-if="this.checkedName.indexOf('录入人机构')!=-1">
+							<el-table-column label="机构" sortable prop="DEPARTMEMT" v-if="this.checkedName.indexOf('机构')!=-1">
 							</el-table-column>
 						</el-table>
 						<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
@@ -156,9 +155,9 @@
 				checkedName: [
 					'期间核查计划编号',
 					'计划描述',
-					'录入人',
+					// '录入人',
 					'录入时间',	
-					'录入人机构',
+					'机构',
 				],
 				tableHeader: [
 					{
@@ -169,16 +168,16 @@
 						label: '计划描述',
 						prop: 'DESCRIPTION'
 					},
-					{
-						label: '录入人',
-						prop: 'ENTERBY'
-					},
+					// {
+					// 	label: '录入人',
+					// 	prop: 'ENTERBY'
+					// },
 					{
 						label: '录入时间',
 						prop: 'ENTERDATE'
 					},
 					{
-						label: '录入人机构',
+						label: '机构',
 						prop: 'DEPARTMEMT'
 					}
 				],
@@ -262,13 +261,11 @@
 				aaaData:[],
 			}
 		},
-
-		mounted(){
-			
-
-			
-		},
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+				return 'text-align:center'
+			},
 			tableControle(data){
 				this.checkedName = data;
 			},
@@ -280,6 +277,14 @@
 		      this.page.currentPage = val;
 		      this.requestData();
 		    },
+		    //时间格式化  
+			dateFormat(row, column) {
+				var date = row[column.property];
+				if(date == undefined) {
+					return "";
+				}
+				return this.$moment(date).format("YYYY-MM-DD");
+			},
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
@@ -307,6 +312,11 @@
 				} else {
 					this.$refs.child.detail();
 				}
+			},
+			//查看
+			 view(dataid) {
+			 	console.log(dataid);
+				this.$refs.child.view(dataid);
 			},
 			//高级查询
 			modestsearch() {

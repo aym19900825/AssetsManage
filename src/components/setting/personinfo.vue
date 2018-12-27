@@ -36,7 +36,7 @@
 						 				<el-input v-model="personinfo.username" disabled></el-input>
 						 			</el-form-item>
 
-						 			<el-form-item label="人员姓名" prop="nickname">
+						 			<el-form-item label="姓名" prop="nickname">
 										<el-input v-model="personinfo.nickname"></el-input>
 									</el-form-item>
 
@@ -87,15 +87,15 @@
 
 								<el-col :span="8">
 						 			 <el-form-item label="角色">
-						 				<el-input v-model="personinfo.roles" disabled></el-input>
-										</el-switch>
+						 				<el-select v-model="personinfo.roles" multiple :disabled="noedit">
+											<el-option v-for="item in selectData" :key="item.name" :value="item.id" :label="item.name"></el-option>
+										</el-select>
 						 			</el-form-item>	
 						 		</el-col>
 
 						 		<el-col :span="8">
 						 			 <el-form-item label="最高学历">
 						 				<el-input v-model="personinfo.education" disabled></el-input>
-										</el-switch>
 						 			</el-form-item>	
 						 		</el-col>
 						 		

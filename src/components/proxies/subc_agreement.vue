@@ -50,33 +50,30 @@
 					<el-form status-icon :model="searchList" label-width="70px">
 						<el-row :gutter="10">
 							<el-col :span="5">
-								<el-input v-model="searchList.PROXY_CONTRACT_NUM">
-									<template slot="prepend">分包协议编号</template>
-								</el-input>
+								<el-form-item label="分包协议编号" prop="PROXY_CONTRACT_NUM" label-width="100px">
+									<el-input v-model="searchList.PROXY_CONTRACT_NUM"></el-input>
+								</el-form-item>
 							</el-col>
 							<el-col :span="5">
-								<el-input v-model="searchList.PROXYNUM">
-									<template slot="prepend">委托书编号</template>
-								</el-input>
+								<el-form-item label="委托书编号" prop="PROXYNUM" label-width="85px">
+									<el-input v-model="searchList.PROXYNUM"></el-input>
+								</el-form-item>
 							</el-col>
 							<el-col :span="5">
-								<el-input v-model="searchList.VENDOR">
-									<template slot="prepend">分包单位</template>
-								</el-input>
+								<el-form-item label="分包单位" prop="VENDOR" label-width="70px">
+									<el-input v-model="searchList.VENDOR"></el-input>
+								</el-form-item>
 							</el-col>
-							<el-col :span="4">
-								<el-input v-model="searchList.ENTERBY">
-									<template slot="prepend">录入人</template>
-								</el-input>
-							</el-col>
-							<el-col :span="3">
-								<div class="block">
-								    <el-date-picker
-								      v-model="searchList.ENTERDATE"
-								      type="date" style="width: 100%;"
-								      placeholder="录入时间">
-								    </el-date-picker>
+							<el-col :span="5">
+								  <el-form-item label="录入时间" prop="ENTERDATE" label-width="70px">
+									<div class="block">
+									    <el-date-picker
+									      v-model="searchList.ENTERDATE"
+									      type="date" style="width: 100%;"
+									      placeholder="录入时间">
+									    </el-date-picker>
 								  </div>
+								</el-form-item>
 							</el-col>
 							<el-col :span="2">
 								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:1px">搜索</el-button>

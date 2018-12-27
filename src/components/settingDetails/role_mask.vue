@@ -16,7 +16,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="roleList" :rules="rules" ref="roleList" label-width="100px" class="demo-user">
+				<el-form :model="roleList" :rules="rules" ref="roleList" label-width="110px" class="demo-user">
 					<div class="accordion">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基础信息" name="1">
@@ -51,7 +51,7 @@
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="数据授权范围" prop="range">
-											<el-select placeholder="请选择" v-model="roleList.range" style="width: 100%">
+											<el-select placeholder="请选择" v-model="roleList.range" style="width: 100%" @change="selectValue">
 												<el-option v-for="item in dataoptions" :key="item.value" :label="item.label" :value="item.value">
 												</el-option>
 											</el-select>
@@ -63,9 +63,9 @@
 														<i class="icon-doubleok icon-double-angle-left blue"></i>
 													</span>
 												</div> -->
-												<div class="left_treebg" style="height: 400px">
+												<div class="left_treebg" style="height: 400px;display:none;">
 													<div class="p15">
-														<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent" :props="resourceProps" @node-click="handleNodeClick">
+														<el-tree ref="tree" class="filter-tree" :data="deptData" node-key="id" default-expand-all :indent="22" :render-content="renderContent" :props="resourceProps" @node-click="handleNodeClick">
 														</el-tree>
 													</div>
 												</div>
@@ -200,16 +200,16 @@
 					// }]
 				},
 				//tree
-				resourceData: [], //数组，我这里是通过接口获取数据，
+				resourceData:[],
+				deptData: [], //数组，我这里是通过接口获取数据，
 				resourceDialogisShow: false,
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
 				resourceProps: {
-					children: "subDepts",
-					label: "simplename"
+					children: "children",
+					label: "fullname"
 				},
 				companyId: '',
 				deptId: '',
-				treeData: [],
 				cccData: {},
 				addtitle: true,
 				modifytitle: false,
@@ -224,9 +224,7 @@
 				statusshow2: false,
 			};
 		},
-		mounted() {
-			this.getKey();
-		},
+		
 		methods: {
 			renderContent(h, {
 				node,
@@ -266,8 +264,8 @@
 				var url = this.basic_url + '/api-user/depts/tree';
 				this.$axios.get(url, {}).then((res) => {
 					console.log(res);
-					this.resourceData = res.data;
-					this.treeData = this.transformTree(this.resourceData);
+					this.deptData = res.data;
+					this.treeData = this.transformTree(this.deptData);
 				});
 			},
 			transformTree(data) {
@@ -448,7 +446,15 @@
 					})
 					.catch(_ => {});
 			}
-		}
+		},
+		mounted() {
+			this.getKey();
+		},
+		watch:{
+			val(){
+				
+			}
+		},
 	}
 </script>
 

@@ -412,6 +412,7 @@
 			view(dataid) {
 				var url = this.basic_url + '/api-apps/app/checkPlan/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
+					console.log(res.data);
 					this.dataInfo = res.data;
 					this.dataInfo.tableList = this.dataInfo.CHECK_PLAN_LINEList;
 				}).catch((wrong) => {});
@@ -478,14 +479,16 @@
 				this.$refs['dataInfo'].validate((valid) => {
 					if (valid) {
 						this.dataInfo.CHECK_PLAN_LINEList = this.dataInfo.tableList;
+						console.log(_this.dataInfo);
 						this.$axios.post(url, _this.dataInfo).then((res) => {
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',
 									type: 'success',
 								});
-								this.resetForm();
+								
 								this.$emit('request');
+								this.resetForm();
 							}
 						}).catch((err) => {
 							this.$message({

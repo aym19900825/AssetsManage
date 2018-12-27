@@ -1,11 +1,11 @@
 <template>
 	<div>
-		<el-dialog title="数据范围" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-			<el-tree ref="tree" :data="menuData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @check-change="handleCheckChange" @click="getCheckedKeys">
+		<el-dialog title="数据范围" :visible.sync="dialogVisible" width="30%">
+			<el-tree ref="tree" :data="depetData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @check-change="handleCheckChange" @click="getCheckedKeys">
 			</el-tree>
 			<span slot="footer" class="dialog-footer">
 		       <el-button @click="dialogVisible = false">取 消</el-button>
-		       <el-button type="primary" @click="queding();" >确 定</el-button>
+		       <el-button type="primary" @click="determine();" >确 定</el-button>
 		    </span>
 		</el-dialog>
 	</div>
@@ -31,18 +31,44 @@
 
 		},
 		methods: {
-//			handleCheckChange(data, checked, indeterminate) {
-//				this.cccData = data;
-//			},
+			//			handleCheckChange(data, checked, indeterminate) {
+			//				this.cccData = data;
+			//			},
 			getCheckedKeys() {
 				console.log(this.$refs.tree.getCheckedKeys());
 			},
 			depet(id) {
 				this.roId = id;
+				var arr = [];
 				var url = this.basic_url + '/api-user/depts/treeMap';
 				this.$axios.get(url, {}).then((res) => {
 					console.log(res.data);
-					this.menuData = res.data;
+					this.depetData = res.data;
+					var depetData = res.data
+					for(var a = 0; a < depetData.length; a++) {
+						if(depetData[a].checked) {
+							//							arr.push(menuData[a].id);
+							if(depetData[a].children.length > 0) {
+								var depetDataChild = depetData[a].children //2
+								for(var b = 0; b < depetData[a].children.length; b++) {
+									console.log(depetData[a].children.length);
+									if(depetData[a].children[b].checked) {
+										arr.push(depetData[a].children[b].id);
+										if(depetData[a].children[b].children.length > 0) {
+											for(var c = 0; c < depetData[a].children[b].children.length; c++) {
+												if(depetData[a].children[b].children[c].checked) {
+													arr.push(depetData[a].children[b].children[c].id);
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					this.$nextTick(() => {
+						this.setChecked(arr);
+					});
 					this.dialogVisible = true;
 				}).catch((err) => {
 					this.$message({
@@ -51,12 +77,8 @@
 					});
 				});
 			},
-			handleClose(done) {
-				this.$confirm('确认关闭？')
-					.then(_ => {
-						done();
-					})
-					.catch(_ => {});
+			setChecked(arr) {
+				this.$refs.tree.setCheckedKeys(arr);
 			},
 			getCheckedAll() {
 
@@ -69,8 +91,7 @@
 					return e.node
 				})
 			},
-			queding() {
-				console.log(this.roId);
+			determine() { //确定
 				var permissionIds = [];
 				var deptIds = [];
 				var permission = this.$refs.tree.getCheckedNodes(); // 获取当前的选中的数据{对象}
@@ -96,7 +117,7 @@
 							type: 'success'
 						});
 					}
-					this.dialogVisible = true;
+					this.dialogVisible = false;
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',

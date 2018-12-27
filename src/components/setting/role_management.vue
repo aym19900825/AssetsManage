@@ -47,7 +47,7 @@
 						</div>
 					</div>
 					<!-- 高级查询划出 -->
-					<div v-show="search" class="pb10">
+					<div v-show="search">
 						<el-form status-icon :model="searchList">
 							<el-row :gutter="10">
 								<el-col :span="5">
@@ -315,13 +315,7 @@
 					});
 				}
 			},
-			judge(data) {
-				//布尔值判断
-				return data.enabled ? '启用' : '冻结'
-			},
-			sexName(data) {
-				return data.sex ? '男' : '女'
-			},
+			
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];

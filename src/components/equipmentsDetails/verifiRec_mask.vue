@@ -489,7 +489,7 @@
 					'STATUS': '1'
 				}
 				this.$refs['dataInfo'].resetFields();
-				// this.show = false;
+				this.show = false;
 			},
 			toggle(e) { //大弹出框大小切换
 				if(this.isok1) {
@@ -521,6 +521,7 @@
 				var url = this.basic_url + '/api-apps/app/checkRecord/saveOrUpdate';
 				this.$refs['dataInfo'].validate((valid) => {
 					if (valid) {
+						console.log(_this.dataInfo);
 						this.$axios.post(url, _this.dataInfo).then((res) => {
 							if(res.data.resp_code == 0) {
 								this.$message({
@@ -529,8 +530,6 @@
 								});
 								this.$emit('request');
 								this.resetForm();
-							}else{
-
 							}
 						}).catch((err) => {
 							this.$message({
@@ -538,19 +537,20 @@
 								type: 'error'
 							});
 						});
-						this.falg=true;
+						this.falg = true;
 					} else {
 						this.show = true;
 						this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
 						});
-						this.falg=false;
+						this.falg = false;
 					}
 				});
 			},
 			saveAndUpdate(dataInfo) {
 				this.save(dataInfo);
+				console.log(this.falg);
 				if(this.falg){
 					this.show = false;
 				}

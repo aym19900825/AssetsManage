@@ -151,7 +151,9 @@
 								    </el-table-column>
 									<el-table-column prop="ITEM_NAME" label="产品名称" sortable width="120px" :formatter="judge">
 								      <template slot-scope="scope">
-								         <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ITEM_NAME" placeholder="请输入内容"></el-input><span v-if="!scope.row.isEditing">{{scope.row.ITEM_NAME}}</span>
+								         <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ITEM_NAME" placeholder="请输入内容">
+								         	<el-button slot="append" icon="el-icon-search"></el-button>
+								         </el-input><span v-if="!scope.row.isEditing">{{scope.row.ITEM_NAME}}</span>
 								      </template>
 								    </el-table-column>
 								    <el-table-column prop="MODEL" label="规格型号" sortable width="120px">
@@ -250,7 +252,7 @@
 										        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_NUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_NUM}}</span>
 										      	</template>
 						            		</el-table-column>
-						            		<el-table-column label="产品排序号" sortable width="120px" prop="WP_LINENUM">
+						            		<el-table-column label="所属计划行号" sortable width="120px" prop="WP_LINENUM">
 										      <template slot-scope="scope">
 										      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_LINENUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_LINENUM}}</span>
 										      </template>
@@ -355,8 +357,8 @@
 							<!-- 文档编号列表 End -->
 
 							<!-- 录入人信息 Begin-->
-							<el-collapse-item title="录入人信息" name="6">
-								<el-row :gutter="30">
+							<el-collapse-item title="其他" name="6" v-if="dept">
+								<el-row :gutter="30"  v-show="views">
 									<el-col :span="8">
 										<el-form-item label="录入人" prop="ENTERBY">
 											<el-input v-model="WORKPLAN.ENTERBY" :disabled="edit"></el-input>
@@ -367,8 +369,6 @@
 											<el-input v-model="WORKPLAN.ENTERDATE" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
-								</el-row>
-								<el-row :gutter="30" v-if="modify">
 									<el-col :span="8">
 										<el-form-item label="修改人" prop="CHANGEBY">
 											<el-input v-model="WORKPLAN.CHANGEBY" :disabled="edit"></el-input>
@@ -380,6 +380,13 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
+								<el-row :gutter="30"  v-if="dept">
+									<el-col :span="8">
+										<el-form-item label="机构" prop="DEPARTMENT">
+											<el-input v-model="WORKPLAN.DEPARTMENT" :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
 							</el-collapse-item>
 							<!-- 录入人信息 End -->
 						</el-collapse>
@@ -387,7 +394,7 @@
 					<div class="el-dialog__footer">
 						<el-form-item>
 							<el-button @click='close'>取消</el-button>
-							<el-button type="primary" class="btn-primarys" @click="submitForm">提交</el-button>
+							<el-button type="primary" class="btn-primarys" @click="submitForm">保存</el-button>
 						</el-form-item>
 					</div>
 				</el-form>
@@ -746,7 +753,9 @@
 				isEditList: false,  //年度计划列表编辑装填
 				editPlan: {},  //编辑中的内容
 				frontId: 1, //前端年度计划列表的唯一主键
-				index:0
+				index:0,
+				views:true,
+				dept:true
 			};
 		},
 		methods: {
@@ -1065,7 +1074,7 @@
 				this.isEditList = false;
 				this.$axios.get(this.basic_url +'/api-user/users/currentMap', {}).then((res) => {
 	    			this.WORKPLAN.ENTERBY = res.data.nickname;
-	    			
+	    			this.WORKPLAN.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -1075,6 +1084,8 @@
 				this.addtitle = true;
             	this.modifytitle = false;
             	this.modify=false;
+            	this.views = false;
+            	this.dept = false;
             	this.show = true;
             	this.edit = true;
 				this.noedit = false;
@@ -1083,6 +1094,8 @@
 			detail(dataid) {
 				this.assignshow = true;
 				this.$axios.get(this.basic_url +'/api-user/users/currentMap', {}).then((res) => {
+					console.log(res.data.deptName);
+					this.WORKPLAN.DEPARTMENT = res.data.deptName;
 	    			this.WORKPLAN.CHANGEBY = res.data.nickname;
 	    			var date = new Date();
 					this.WORKPLAN.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
@@ -1121,6 +1134,8 @@
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.modify = true;
+				this.views = false;
+				this.dept = true;
 				this.show = true;
 				this.edit = true;
 				this.noedit = false;

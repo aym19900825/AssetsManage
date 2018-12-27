@@ -168,8 +168,6 @@
 
 							<!-- 检测项目与要求 Begin-->
 							<el-collapse-item title="检测项目与要求" name="4">
-								
-
 				            	<div class="clearfix pt10">
 					            	<el-row>
 										<el-col :span="8">
@@ -302,21 +300,15 @@
 								</div>
 							</el-collapse-item>
 							<!-- 检测项目与要求 End -->
-
-							<!-- 检验员信息 begin -->
-							<!-- <el-collapse-item title="检验员信息" name="5">
-								
-							</el-collapse-item> -->
-							<!-- 检验员信息 End -->
-
 							<!-- 原始数据模板 Begin-->
-							<el-collapse-item title="原始数据模板" name="6">
-								
+							<el-collapse-item title="原始数据模板" name="6">	
 				            	<div class="clearfix pt10">
 					            	<el-row >
 										<el-col :span="8">
 											<el-form-item label="报告模板">
-												<el-input placeholder="请输入内容" v-model="workorderForm.CHECK_BASIS"></el-input>
+												<el-input placeholder="请输入内容" v-model="workorderForm.CHECK_BASIS">
+													 <el-button slot="append" icon="el-icon-search"></el-button>
+												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -439,7 +431,7 @@
 						          			<el-table-column prop="HOSTPERSON" label="主检员" sortable>
 														<template slot-scope="scope">
 															<el-form-item :prop="'workorderbasisList.'+scope.$index + '.HOSTPERSON'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入">	
+															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.HOSTPERSON" placeholder="请输入">
 															</el-input>
 															<span v-else="v-else">{{scope.row.HOSTPERSON}}</span>
 															</el-form-item>
@@ -607,11 +599,16 @@
 		data() {
 			return {
 			workorderForm: {
-					WorkorderBasisList: [],//检测依据
-					WorkorderProjectList: [],//检测项目与要求
-					WorkorderPersonList: [],//检验员信息
-					SourceDataTemplateList: [],//原始数据模板
-					WORKORDER_REPORT_TEMPLATE:[],//报告模版
+					// WorkorderBasisList: [],//检测依据
+					// WorkorderProjectList: [],//检测项目与要求
+					// WorkorderPersonList: [],//检验员信息
+					// SourceDataTemplateList: [],//原始数据模板
+					// WORKORDER_REPORT_TEMPLATE:[],//报告模版
+					WORKORDER_BASISList:[],//检测依据
+					WORKORDER_PROJECTList:[],//检测项目
+					WORKORDER_CHECKPERSONList:[],//检验员信息
+					WORKORDER_DATA_TEMPLATEList:[],//原始数据模板
+					WORKORDER_REPORT_TEMPLATEList:[],//报告模板
 				},
 				basic_url: Config.dev_url,
 				commentArr:{},

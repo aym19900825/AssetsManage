@@ -386,7 +386,7 @@
 							</el-collapse-item>
 						</el-collapse>
 					</div>
-					<div class="el-dialog__footer" v-show="noviews">
+					<div class="el-dialog__footer">
 						<el-button @click='close'>取消</el-button>
 						<el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
 						<el-button type="success" @click='saveAndSubmit()' v-show="addtitle">保存并添加</el-button>
@@ -950,13 +950,11 @@
 				$(".mask_div").css("top", "0");
 			},
 			getCheckedNodes() { //获取树菜单节点
-				this.checkedNodes = this.$refs.tree.getCheckedNodes();
-				console.log(this.checkedNodes);
+				this.checkedNodes = this.$refs.tree.getCheckedNodes()
 			},
 
 			//			保存users/saveOrUpdate
 			save() {
-				console.log(123453);
 				var _this = this;
 				this.$refs.user.validate((valid) => {
 					if(valid) {
@@ -983,7 +981,6 @@
 							user.roleId = '';
 							user.roles = [];
 						}
-						console.log(_this.user);
 						var url = _this.basic_url + '/api-user/users/saveOrUpdate';
 						this.$axios.post(url, _this.user).then((res) => {
 							if(res.data.resp_code == 0) {
@@ -991,11 +988,9 @@
 									message: '保存成功',
 									type: 'success',
 								});
-								console.log(_this.user);
 								this.$emit('request');
-								// this.$refs["user"].resetFields(); //清空表单验证
+								this.$refs["user"].resetFields(); //清空表单验证
 							}
-
 						}).catch((err) => {
 							this.$message({
 								message: '网络错误，请重试',
@@ -1081,7 +1076,6 @@
 
 			dailogconfirm() { //小弹出框确认按钮事件
 				this.getCheckedNodes();
-				
 				this.placetext = false;
 				this.dialogVisible = false;
 				if(this.editSearch == 'company') {

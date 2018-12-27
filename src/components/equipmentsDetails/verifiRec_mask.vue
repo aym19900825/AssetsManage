@@ -3,7 +3,6 @@
 	<div>
 		<div class="mask" v-show="show"></div>
 		<div class="mask_div" v-show="show">
-			<!---->
 			<div class="mask_title_div clearfix">
 				<div class="mask_title" v-show="addtitle">添加期间核查记录</div>
 					<div class="mask_title" v-show="modifytitle">修改期间核查记录</div>
@@ -49,7 +48,7 @@
 							</el-collapse-item>
 							<!-- 文档管理 -->
 							<el-collapse-item title="文档" name="2">
-								<doc-table></doc-table>
+								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
 							</el-collapse-item>
 							<!-- 其他信息 -->
 							<el-collapse-item title="其他" name="3" v-show="!addtitle">
@@ -355,6 +354,17 @@
 					'STATUS': '1'
 				},
 				assets: [],
+				docParm: {
+					'model': 'new',
+					'appname': '',
+					'recordid': 1,
+					'userid': 1,
+					'username': '',
+					'deptid': 1,
+					'deptfullname': '',
+					'appname': '',
+					'appid': 1
+				},
 				addtitle:true,
 				modifytitle:false,
 				viewtitle:false,
@@ -373,8 +383,14 @@
 			getUser(){
 				var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url,{}).then((res) => {
+					if(opt == 'new'){
 				        this.dataInfo.ENTERBY = res.data.username;
-				        this.dataInfo.ENTERDATE = this.getToday();
+						this.dataInfo.ENTERDATE = this.getToday();
+					}
+					this.docParm.userid = res.data.id;
+					this.docParm.username = res.data.username;
+					this.docParm.deptid = res.data.deptId;
+					this.docParm.deptfullname = res.data.deptName;
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -387,7 +403,7 @@
 				this.$axios.get(url,{}).then((res) => {
 				        this.dataInfo.CHANGEBY = res.data.username;
 				        this.dataInfo.CHANGEDATE = this.getToday();
-						this.dataInfo.DEPARTMENT = res.data.deptName;
+						this.dataInfo.DEPARTMENT = res.data.deptName;	
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -426,6 +442,11 @@
 				this.statusshow2 = false;
 				this.show = true;
 				this.getUser('new');
+				this.docParm = {
+					'model': 'new',
+					'appname': '',
+					'recordid': 1
+				};
 			},
 			// 这里是修改
 			detail() {
@@ -443,6 +464,13 @@
 				this.statusshow1 = true;
 				this.statusshow2 = false;
 				this.show = true;
+				this.getUser();
+				this.docParm = {
+					'model': 'edit',
+					'appname': 'CHECK_RECORD',
+					'recordid': this.detailData.ID
+				};
+				this.$refs.docTable.getData();
 			},
 			//这是查看
 			view(data) {

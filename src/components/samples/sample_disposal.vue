@@ -46,43 +46,55 @@
 						</div>
 					</div>
 					<!-- 高级查询划出 Begin-->
-					<div v-show="search" class="pb10">
+					<div v-show="search">
 						<el-form status-icon :model="searchList" label-width="70px">
-							<el-row :gutter="30" class="pb5">
-								<el-col :span="7">				
-									<el-input v-model="searchList.ITEM_LINE_ID">
-										<template slot="prepend">样品子表ID</template>
-									</el-input>
+							<el-row :gutter="5">
+								<el-col :span="7">	
+									<el-form-item label="样品子表ID" prop="ITEM_LINE_ID" label-width="85px">
+										<el-input v-model="searchList.ITEM_LINE_ID"></el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="7">
-									<el-input v-model="searchList.APPR_PERSON">
-										<template slot="prepend">处理批准人</template>
-										</el-input>
+									<el-form-item label="处理批准人" prop="APPR_PERSON" label-width="85px">
+										<el-input v-model="searchList.APPR_PERSON"></el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="7">
-									<el-input v-model="searchList.ACCEPT_PERSON" label-width="58px">
-									<template slot="prepend">样品承接人</template>
-										</el-input>
+									<el-form-item label="样品承接人" prop="ACCEPT_PERSON" label-width="100px">
+										<el-input v-model="searchList.ACCEPT_PERSON"></el-input>
+									</el-form-item>
 								</el-col>
 							</el-row>
-							<el-row :gutter="30">
+							<el-row :gutter="5">
 								<el-col :span="7">
-									<el-input v-model="searchList.ITEMNUM">
-										<template slot="prepend">样品序号</template>
-									</el-input>
+									<el-form-item label="样品序号" prop="ITEMNUM" label-width="85px">
+										<el-input v-model="searchList.ITEMNUM"></el-input>
+									</el-form-item>
 								</el-col>
 								<el-col :span="7">
-									<el-input v-model="searchList.APPR_DATE">
-									<template slot="prepend">批准日期</template>
-										</el-input>
+									<el-form-item label="批准日期" prop="APPR_DATE" label-width="85px">
+										<div class="block">
+										    <el-date-picker
+										      v-model="searchList.APPR_DATE"
+										      type="date"
+										      placeholder="请选择" style="width: 100%">
+										    </el-date-picker>
+									  	</div>
+									</el-form-item>
 								</el-col>
 								<el-col :span="7">
-									<el-input v-model="searchList.ACCEPT_DATE" label-width="70px">
-									<template slot="prepend">收回入库时间</template>
-										</el-input>
+									<el-form-item label="收回入库时间" prop="ACCEPT_DATE" label-width="100px">
+										<div class="block">
+										    <el-date-picker
+										      v-model="searchList.ACCEPT_DATE"
+										      type="date"
+										      placeholder="请选择" style="width: 100%">
+										    </el-date-picker>
+									  	</div>
+									</el-form-item>
 								</el-col>
 								<el-col :span="3">
-									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 								</el-col>
 							</el-row>
 						</el-form>

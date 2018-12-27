@@ -98,7 +98,7 @@
 							</el-table-column>
 							<!-- <el-table-column label="录入人" sortable prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
 							</el-table-column> -->
-							<el-table-column label="录入时间" sortable prop="ENTERDATE" v-if="this.checkedName.indexOf('录入时间')!=-1">
+							<el-table-column label="录入时间" sortable prop="ENTERDATE" :formatter="dateFormat"v-if="this.checkedName.indexOf('录入时间')!=-1">
 							</el-table-column>						
 							<el-table-column label="机构" sortable prop="DEPARTMEMT" v-if="this.checkedName.indexOf('机构')!=-1">
 							</el-table-column>
@@ -277,6 +277,14 @@
 		      this.page.currentPage = val;
 		      this.requestData();
 		    },
+		    //时间格式化  
+			dateFormat(row, column) {
+				var date = row[column.property];
+				if(date == undefined) {
+					return "";
+				}
+				return this.$moment(date).format("YYYY-MM-DD");
+			},
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;

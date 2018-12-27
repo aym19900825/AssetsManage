@@ -145,8 +145,10 @@
 						</el-collapse>
 					</div>
 					<div class="el-dialog__footer" v-show="noviews">
+						<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
+						<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并添加</el-button>
 						<el-button @click='close'>取消</el-button>
-						<el-button type="primary" @click='submitForm'>提交</el-button>
+						<!-- <el-button type="primary" @click='submitForm'>提交</el-button> -->
 					</div>
 				</el-form>
 			</div>
@@ -297,6 +299,7 @@
 				        this.dataInfo.CHANGEBY = res.data.username;
 				        this.dataInfo.CHANGEDATE = this.getToday();
 						this.dataInfo.DEPARTMENT = res.data.deptName;
+						console.log(this.dataInfo.DEPARTMENT);
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -426,6 +429,7 @@
 			close() {
 				this.resetForm();
 				this.$emit('request');
+				this.show = false;
 			},
 			resetForm(){
 				this.dataInfo = {
@@ -440,7 +444,7 @@
 					'tableList': []
 				};
 				this.$refs['dataInfo'].resetFields();
-				this.show = false;
+				// this.show = false;
 			},
 			toggle(e) { //大弹出框大小切换
 				if(this.isok1) {
@@ -467,7 +471,7 @@
 				$(".mask_div").css("top", "0");
 			},
 
-			submitForm() {
+			save(dataInfo) {
 				var _this = this;
 				var url = this.basic_url + '/api-apps/app/checkPlan/saveOrUpdate';
 				this.$refs['dataInfo'].validate((valid) => {
@@ -488,11 +492,26 @@
 								type: 'error'
 							});
 						});
+						this.falg=true;
 					} else {
-						console.log('error submit!!');
-						return false;
+						this.show = true;
+						this.$message({
+							message: '未填写完整，请填写',
+							type: 'warning'
+						});
+						this.falg=false;
 					}
 				});
+			},
+			saveAndUpdate(dataInfo) {
+				this.save(dataInfo);
+				if(this.falg){
+					this.show = false;
+				}
+			},
+			saveAndSubmit(dataInfo) {
+				this.save(dataInfo);
+				this.show = true;
 			},
 		},
 		mounted() {

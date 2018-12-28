@@ -169,7 +169,7 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="角色" prop="roleId" label-width="100px">
-											<el-select v-model="user.roleId" multiple :disabled="noedit">
+											<el-select v-model="user.roleId" multiple :disabled="noedit" @change="currentSel">
 												<el-option v-for="item in selectData" :key="item.name" :value="item.id" :label="item.name"></el-option>
 											</el-select>
 										</el-form-item>
@@ -266,7 +266,7 @@
 														</el-form-item>
 													</template>
 												</el-table-column>
-												<el-table-column prop="status" label="信息状态" sortable width="120px">
+												<!-- <el-table-column prop="status" label="信息状态" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'qualifications.'+scope.$index + '.status'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.status" placeholder="请输入要求">
@@ -274,7 +274,7 @@
 															<span v-else="v-else">{{scope.row.status}}</span>
 														</el-form-item>
 													</template>
-												</el-table-column>
+												</el-table-column> -->
 												<!--<el-table-column prop="VERSION" label="上传附件" sortable width="120px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'user_qualifications.'+scope.$index + '.VERSION'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
@@ -337,7 +337,7 @@
 														</el-form-item>
 													</template>
 												</el-table-column>
-												<el-table-column prop="status" label="信息状态" sortable width="120px">
+												<!-- <el-table-column prop="status" label="信息状态" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'traings.'+scope.$index + '.status'">
 															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.status" placeholder="请输入要求">
@@ -345,7 +345,7 @@
 															<span v-else="v-else">{{scope.row.status}}</span>
 														</el-form-item>
 													</template>
-												</el-table-column>
+												</el-table-column> -->
 												<el-table-column fixed="right" label="操作" width="120">
 													<template slot-scope="scope">
 														<el-button @click.native.prevent="deleteRow(scope.$index,user.traings)" type="text" size="small">
@@ -454,7 +454,7 @@
 			return {
 				basic_url: Config.dev_url,
 				user: {
-					status: '活动',
+					status: '1',
 					roleId: [],
 					roles: [],
 					traings: [],
@@ -515,111 +515,27 @@
 				//				default-expand-all:true,
 				i:0,
 				rules: {
-					deptName: [{
-						required: true,
-						message: '必填',
-						trigger: 'blur'
-					}], //名称
-					education: [{
-						required: true,
-						message: '必填',
-						trigger: 'blur'
-					}],
-					roleId: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填',
-					}],
-					username: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填',
-					}],
-					password: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填',
-					}],
-					sex: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填'
-					}],
-					ispermit_authorization: [{
-						required: true,
-						trigger: 'change',
-						message: '必填'
-					}], //授权
-					islogin: [{
-						required: true,
-						trigger: 'change',
-						message: '必填'
-					}], //登陆
-					mac_address: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填',
-					}],
-					ip_address: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填',
-					}],
-					idnumber: [{
-						required: true,
-						trigger: 'blur',
-						validator: validateIdnumber
-					}],
-					phone: [{
-						required: true,
-						trigger: 'blur',
-						validator: validatePhone
-					}],
-					email: [{
-						required: true,
-						trigger: 'blur',
-						validator: validateEmail,
-					}],
-					step: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填',
-					}],
-					t_date: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填',
-					}],
-					t_description: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填',
-					}],
-					status: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填',
-					}],
-					step: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填',
-					}],
-					c_date: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填',
-					}],
-					c_num: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填',
-					}],
-					c_name: [{
-						required: true,
-						trigger: 'blur',
-						message: '必填',
-					}],
+					deptName: [{required: true,message: '必填',trigger: 'blur'}], //名称
+					education: [{required: true,message: '必填',trigger: 'blur'}],
+					roleId: [{required: true,trigger: 'blur',message: '必填',}],
+					username: [{required: true,trigger: 'blur',message: '必填',}],
+					password: [{required: true,trigger: 'blur',message: '必填',}],
+					sex: [{required: true,trigger: 'blur',message: '必填'}],
+					ispermit_authorization: [{required: true,trigger: 'change',message: '必填'}], //授权
+					islogin: [{required: true,trigger: 'change',message: '必填'}], //登陆
+					mac_address: [{required: true,trigger: 'blur',message: '必填',}],
+					ip_address: [{required: true,trigger: 'blur',message: '必填',}],
+					idnumber: [{required: true,trigger: 'blur',validator: validateIdnumber}],
+					phone: [{required: true,trigger: 'blur',validator: validatePhone}],
+					email: [{required: true,trigger: 'blur',validator: validateEmail,}],
+					step: [{required: true,trigger: 'blur',message: '必填',}],
+					t_date: [{required: true,trigger: 'blur',message: '必填',}],
+					t_description: [{required: true,trigger: 'blur',message: '必填',}],
+					status: [{required: true,trigger: 'blur',message: '必填',}],
+					step: [{required: true,trigger: 'blur',message: '必填',}],
+					c_date: [{required: true,trigger: 'blur',message: '必填',}],
+					c_num: [{required: true,trigger: 'blur',message: '必填',}],
+					c_name: [{required: true,trigger: 'blur',message: '必填',}],
 
 				},
 				//tree树菜单
@@ -646,6 +562,9 @@
 			};
 		},
 		methods: {
+			 currentSel(selVal){
+        		this.selVal = selVal;
+      		},
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    // console.log(rowIndex) //表头行标号为0
@@ -680,7 +599,7 @@
 					email: '',
 					address: '',
 					tips: '',
-					enabled: '活动',
+					enabled: true,
 					traings: [],
 					qualifications: [],
 				}
@@ -805,7 +724,7 @@
 					email: '',
 					address: '',
 					tips: '',
-					enabled: '活动',
+					enabled: true,
 					traings: [],
 					qualifications: [],
 				};
@@ -856,6 +775,7 @@
 				var usersUrl = this.basic_url + '/api-user/users/currentMap';
 
 				this.$axios.get(usersUrl, {}).then((res) => {
+					console.log(res.data);
 					this.user.changeby = res.data.nickname;
 					var date = new Date();
 					this.user.changedate = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
@@ -921,6 +841,7 @@
 			//点击关闭按钮
 			close() {
 				this.show = false;
+				this.$emit('request');
 			},
 			open(){
 				this.show = true;

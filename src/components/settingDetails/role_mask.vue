@@ -48,52 +48,52 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
-								<el-row :gutter="30">
+								<!--<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="数据授权范围" prop="range">
 											<el-select placeholder="请选择" v-model="roleList.range" style="width: 100%" @change="selectValue">
 												<el-option v-for="item in dataoptions" :key="item.value" :label="item.label" :value="item.value">
 												</el-option>
-											</el-select>
+											</el-select>-->
 											<!-- 树 Begen-->
-											<div class="lefttreebg">
+											<!--<div class="lefttreebg">-->
 												<!-- <div class="left_tree_title clearfix">
 													<div class="pull-left pr20">数据授权范围</div>
 													<span class="pull-right navbar-minimalize minimalize-styl-2">
 														<i class="icon-doubleok icon-double-angle-left blue"></i>
 													</span>
 												</div> -->
-												<div class="left_treebg" style="height: 400px;display:none;">
+												<!--<div class="left_treebg" style="height: 400px;display:none;">
 													<div class="p15">
 														<el-tree ref="tree" class="filter-tree" :data="deptData" node-key="id" default-expand-all :indent="22" :render-content="renderContent" :props="resourceProps" @node-click="handleNodeClick">
 														</el-tree>
 													</div>
 												</div>
-											</div>
+											</div>-->
 											<!-- 树 End-->
-										</el-form-item>
+										<!--</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="角色授权" prop="roleright">
+										<el-form-item label="角色授权" prop="roleright">-->
 											<!-- 树 Begen-->
-											<div class="lefttreebg">
+											<!--<div class="lefttreebg">-->
 												<!-- <div class="left_tree_title clearfix">
 													<div class="pull-left pr20">角色授权</div>
 													<span class="pull-right navbar-minimalize minimalize-styl-2">
 														<i class="icon-doubleok icon-double-angle-left blue"></i>
 													</span>
 												</div> -->
-												<div class="left_treebg" style="height: 400px">
+												<!--<div class="left_treebg" style="height: 400px">
 													<div class="p15">
 														<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent" :props="resourceProps" @node-click="handleNodeClick">
 														</el-tree>
 													</div>
 												</div>
-											</div>
+											</div>-->
 											<!-- 树 End-->
-										</el-form-item>
+										<!--</el-form-item>
 									</el-col>
-								</el-row>
+								</el-row>-->
 							</el-collapse-item>
 						</el-collapse>
 					</div>

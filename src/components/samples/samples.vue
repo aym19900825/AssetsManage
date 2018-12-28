@@ -50,31 +50,32 @@
 						<el-form status-icon :model="searchList" label-width="70px">
 							<el-row :gutter="5">
 								<el-col :span="7">
-									<el-form-item label="委托单位名称" prop="V_NAME" label-width="100px">
+									<el-form-item label="样品类别" prop="TYPE">
+										<el-input v-model="searchList.TYPE"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="7">
+									<el-form-item label="委托单位" prop="V_NAME">
 										<el-input v-model="searchList.V_NAME"></el-input>
 									</el-form-item>
 								</el-col>
+								<el-col :span="7">
+									<el-form-item label="生产单位" prop="P_NAME">
+										<el-input v-model="searchList.P_NAME"></el-input>
+									</el-form-item>
+								</el-col>
 								
+								
+							</el-row>
+							<el-row :gutter="5">
 								<el-col :span="7">
 									<el-form-item label="样品名称" prop="DESCRIPTION">
 										<el-input v-model="searchList.DESCRIPTION"></el-input>
 									</el-form-item>
 								</el-col>
-								<el-col :span="5">
+								<el-col :span="7">
 									<el-form-item label="收样人" prop="ACCEPT_PERSON">
 										<el-input v-model="searchList.ACCEPT_PERSON"></el-input>
-									</el-form-item>
-								</el-col>
-							</el-row>
-							<el-row :gutter="5">
-								<el-col :span="7">
-									<el-form-item label="生产单位名称" prop="P_NAME" label-width="100px">
-										<el-input v-model="searchList.P_NAME"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="7">
-									<el-form-item label="样品类别" prop="TYPE">
-										<el-input v-model="searchList.TYPE"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">

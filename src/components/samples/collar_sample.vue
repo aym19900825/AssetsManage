@@ -54,27 +54,21 @@
 										<el-input v-model="searchList.ITEMNUM"></el-input>
 									</el-form-item>
 								</el-col>
-								
+								<el-col :span="7">
+									<el-form-item label="样品类别" prop="TYPE" label-width="70px">
+										<el-input v-model="searchList.TYPE"></el-input>
+									</el-form-item>
+								</el-col>
 								<el-col :span="7">
 									<el-form-item label="样品名称" prop="DESCRIPTION" label-width="70px">
 										<el-input v-model="searchList.DESCRIPTION"></el-input>
 									</el-form-item>
 								</el-col>
-								<el-col :span="7">
-									<el-form-item label="收样人" prop="ACCEPT_PERSON" label-width="70px">
-										<el-input v-model="searchList.ACCEPT_PERSON"></el-input>
-									</el-form-item>
-								</el-col>
 							</el-row>
 							<el-row :gutter="5">
 								<el-col :span="5">
-									<el-form-item label="样品子表ID" prop="ITEM_LINE_ID" label-width="85px">
-										<el-input v-model="searchList.ITEM_LINE_ID"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="7">
-									<el-form-item label="样品类别" prop="TYPE" label-width="70px">
-										<el-input v-model="searchList.TYPE"></el-input>
+									<el-form-item label="收样人" prop="ACCEPT_PERSON" label-width="70px">
+										<el-input v-model="searchList.ACCEPT_PERSON"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
@@ -126,21 +120,21 @@
 										</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="样品类别" sortable width="140px" prop="TYPE" v-if="this.checkedName.indexOf('样品类别')!=-1">
+								<el-table-column label="样品类别" sortable width="100px" prop="TYPE" v-if="this.checkedName.indexOf('样品类别')!=-1">
 								</el-table-column>
-								<el-table-column label="样品名称" sortable width="140px" prop="DESCRIPTION" v-if="this.checkedName.indexOf('样品名称')!=-1">
+								<el-table-column label="样品名称" sortable width="120px" prop="DESCRIPTION" v-if="this.checkedName.indexOf('样品名称')!=-1">
 								</el-table-column>
-								<el-table-column label="型号" width="140px" prop="MODEL" sortable v-if="this.checkedName.indexOf('型号')!=-1">
+								<el-table-column label="型号" width="100px" prop="MODEL" sortable v-if="this.checkedName.indexOf('型号')!=-1">
 								</el-table-column>
-								<el-table-column label="数量" width="100px" prop="QUALITY" sortable v-if="this.checkedName.indexOf('数量')!=-1">
+								<el-table-column label="数量" width="70px" prop="QUALITY" sortable v-if="this.checkedName.indexOf('数量')!=-1">
 								</el-table-column>
-								<el-table-column label="收样人" sortable width="140px" prop="ACCEPT_PERSON" v-if="this.checkedName.indexOf('收样人')!=-1">
+								<el-table-column label="收样人" sortable width="100px" prop="ACCEPT_PERSON" v-if="this.checkedName.indexOf('收样人')!=-1">
 								</el-table-column>
-								<el-table-column label="收样日期" sortable width="140px" :formatter="dateFormat" prop="ACCEPT_DATE" v-if="this.checkedName.indexOf('收样日期')!=-1">
+								<el-table-column label="收样日期" sortable width="100px" :formatter="dateFormat" prop="ACCEPT_DATE" v-if="this.checkedName.indexOf('收样日期')!=-1">
 								</el-table-column>
-								<el-table-column label="领样人" sortable width="140px" prop="GRANT_PERSON" v-if="this.checkedName.indexOf('领样人')!=-1">
+								<el-table-column label="领样人" sortable width="100px" prop="GRANT_PERSON" v-if="this.checkedName.indexOf('领样人')!=-1">
 								</el-table-column>
-								<el-table-column label="领样日期" sortable width="140px" :formatter="dateFormat" prop="GRANT_DATE" v-if="this.checkedName.indexOf('领样日期')!=-1">
+								<el-table-column label="领样日期" sortable width="100px" :formatter="dateFormat" prop="GRANT_DATE" v-if="this.checkedName.indexOf('领样日期')!=-1">
 								</el-table-column>
 								<el-table-column label="状态" sortable width="100px" prop="STATE" v-if="this.checkedName.indexOf('状态')!=-1" >
 								</el-table-column>

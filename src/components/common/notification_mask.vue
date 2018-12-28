@@ -104,7 +104,9 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="受检产品名称" prop="ITEM_NAME" label-width="110px">
-											<el-input v-model="dataInfo.ITEM_NAME" :disabled="noedit"></el-input>
+											<el-input v-model="dataInfo.ITEM_NAME" :disabled="noedit">
+												   <el-button slot="append" icon="el-icon-search"></el-button>
+											</el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -122,7 +124,9 @@
 									<el-row>
 									<el-col :span="6">
 										<el-form-item label="受检企业" prop="V_NAME" label-width="110px">
-											<el-input v-model="dataInfo.V_NAME" :disabled="noedit"></el-input>
+											<el-input v-model="dataInfo.V_NAME" :disabled="noedit">
+												   <el-button slot="append" icon="el-icon-search"></el-button>
+											</el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="6">
@@ -182,7 +186,9 @@
 											<el-table-column label="检验标准编号" sortable width="120px" prop="S_NUM">
 												<template slot-scope="scope">
 													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入内容"></el-input>
+													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入内容">
+														   <el-button slot="append" icon="el-icon-search"></el-button>
+													</el-input>
 													<span v-show="!scope.row.isEditing">{{scope.row.S_NUM}}</span>
 													</el-form-item>
 												</template>
@@ -260,7 +266,9 @@
 											<el-table-column label="检验检测项目编号" sortable width="145px" prop="P_NUM">
 												<template slot-scope="scope">
 													<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.P_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="请输入内容"></el-input>
+													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="请输入内容">
+														   <el-button slot="append" icon="el-icon-search"></el-button>
+													</el-input>
 													<span v-show="!scope.row.isEditing">{{scope.row.P_NUM}}</span>
 													</el-form-item>
 												</template>
@@ -385,7 +393,8 @@
 				</div>
 				<div class="el-dialog__footer" v-show="noviews">
                     <el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
-					<el-button type="success" v-show="addtitle" @click='saveAndSubmit()'>提交并保存</el-button>
+					<el-button type="success" v-show="addtitle" @click='saveAndSubmit()'>保存并添加</el-button>
+					<el-button type="success" v-show="!addtitle">生成委托书</el-button>
 					<el-button @click='close'>取消</el-button>
 					
 				</div>
@@ -905,5 +914,6 @@
 	
 	#cost {
 		text-align: right !important;
+		padding-right: 30px;
 	}
 </style>

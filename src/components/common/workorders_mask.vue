@@ -161,141 +161,13 @@
 							<!-- 检测 End-->
 
 							<!-- 检测依据 Begin-->
-							<el-collapse-item title="检测依据" name="3">
-								<div class="table-func">
-									<el-button type="primary" size="mini" round>
-										<i class="icon-upload-cloud"></i>
-										<font>导入</font>
-									</el-button>
-									<el-button type="success" size="mini" round @click="addfield1">
-										<i class="icon-add"></i>
-										<font>新建行</font>
-									</el-button>
-								</div>
-
-								<el-table :data="WorkorderBasisList" row-key="ID" border stripe height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation">
-								    <el-table-column prop="iconOperation" fixed width="50px">
-								      <template slot-scope="scope">
-								      	<i class="el-icon-check" v-show="scope.row.isEditing">
-								      	</i>
-								      	<i class="el-icon-edit" v-show="!scope.row.isEditing">
-								      	</i>
-								      </template>
-								    </el-table-column>
-
-								    <el-table-column label="标准编号" sortable width="160px" prop="S_NUM">
-								      <template slot-scope="scope">
-								      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" disabled></el-input><span v-show="!scope.row.isEditing">{{scope.row.S_NUM}}</span>
-								      </template>
-								    </el-table-column>
-
-								    <el-table-column label="标准名称" sortable prop="S_NAME">
-								      <template slot-scope="scope">
-								      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NAME"></el-input><span v-show="!scope.row.isEditing">{{scope.row.S_NAME}}</span>
-								      </template>
-								    </el-table-column>
-
-									<el-table-column prop="S_ENGNAME" label="英文名称" sortable>
-								      <template slot-scope="scope">
-								         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_ENGNAME" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.S_ENGNAME}}</span>
-								      </template>
-								    </el-table-column>
-
-								    <el-table-column prop="VERSION" label="标准版本" sortable width="120px">
-								      <template slot-scope="scope">
-								         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" :disabled="true"></el-input><span v-show="!scope.row.isEditing">{{scope.row.VERSION}}</span>
-								      </template>
-								    </el-table-column>
-
-								     <el-table-column prop="STATUS" label="信息状态" sortable width="120px" :formatter="judge">
-								      <template slot-scope="scope">
-								         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STATUS" :disabled="true"></el-input><span v-show="!scope.row.isEditing">{{scope.row.STATUS}}</span>
-								      </template>
-								    </el-table-column>
-
-								    <el-table-column fixed="right" label="操作" width="120">
-								      <template slot-scope="scope">
-								        <el-button @click.native.prevent="deleteRow(index, row)" type="text" size="small">
-								          移除
-								        </el-button>
-								      </template>
-								    </el-table-column>
-								  </el-table>
-							</el-collapse-item>
+							<!-- <el-collapse-item title="检测依据" name="3">
+								
+							</el-collapse-item> -->
 							<!-- 检测依据 End -->
 
 							<!-- 检测项目与要求 Begin-->
 							<el-collapse-item title="检测项目与要求" name="4">
-								<div class="table-func">
-									<el-button type="success" size="mini" round @click="addfield2">
-										<i class="icon-add"></i>
-										<font>新建行</font>
-									</el-button>
-								</div>
-				            	<el-table :data="WorkorderProjectList" border stripe height="200" style="width: 100%;" :default-sort="{prop:'workorderbasisList', order: 'descending'}">
-				            		<el-table-column prop="P_NUM" label="检测项目编号" sortable>
-												<template slot-scope="scope">
-													<el-form-item :prop="'workorderbasisList.'+scope.$index + '.P_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_DESC" placeholder="请输入">	
-													</el-input>
-													<span v-else="v-else">{{scope.row.P_NUM}}</span>
-													</el-form-item>
-												</template>
-									</el-table-column>
-									<el-table-column prop="P_DESC" label="检测项目名称" sortable>
-												<template slot-scope="scope">
-													<el-form-item :prop="'workorderbasisList.'+scope.$index + '.P_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入">	
-													</el-input>
-													<span v-else="v-else">{{scope.row.P_DESC}}</span>
-													</el-form-item>
-												</template>
-									</el-table-column>
-				          			<el-table-column prop="HOSTPERSON" label="主检员" sortable>
-												<template slot-scope="scope">
-													<el-form-item :prop="'workorderbasisList.'+scope.$index + '.HOSTPERSON'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入">	
-													</el-input>
-													<span v-else="v-else">{{scope.row.HOSTPERSON}}</span>
-													</el-form-item>
-												</template>
-									</el-table-column>
-									<el-table-column prop="FOLLOWPERSON" label="从检员" sortable>
-												<template slot-scope="scope">
-													<el-form-item :prop="'workorderbasisList.'+scope.$index + '.FOLLOWPERSON'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.FOLLOWPERSON" placeholder="请输入">	
-													</el-input>
-													<span v-else="v-else">{{scope.row.FOLLOWPERSON}}</span>
-													</el-form-item>
-												</template>
-									</el-table-column>
-				            		<el-table-column prop="REMARKS" label="要求" sortable>
-												<template slot-scope="scope">
-													<el-form-item :prop="'workorderbasisList.'+scope.$index + '.REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" placeholder="请输入">	
-													</el-input>
-													<span v-else="v-else">{{scope.row.REMARKS}}</span>
-													</el-form-item>
-												</template>
-									</el-table-column>
-				            		<el-table-column prop="VERSION" label="版本" sortable>
-												<template slot-scope="scope">
-													<el-form-item :prop="'workorderbasisList.'+scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入">	
-													</el-input>
-													<span v-else="v-else">{{scope.row.VERSION}}</span>
-													</el-form-item>
-												</template>
-									</el-table-column>
-								      <el-table-column fixed="right" label="操作" width="120">
-								      <template slot-scope="scope">
-								        <el-button @click.native.prevent="deleteRow(index, row)" type="text" size="small">
-								          移除
-								        </el-button>
-								      </template>
-								    </el-table-column>
-				            	</el-table>
-
 				            	<div class="clearfix pt10">
 					            	<el-row>
 										<el-col :span="8">
@@ -428,89 +300,15 @@
 								</div>
 							</el-collapse-item>
 							<!-- 检测项目与要求 End -->
-
-							<!-- 检验员信息 begin -->
-							<el-collapse-item title="检验员信息" name="5">
-								<div class="table-func">
-									<el-button type="success" size="mini" round><i class="icon-add"></i><font>新建行</font>
-									</el-button>
-								</div>
-				            	<el-table :data="WorkorderPersonList" border stripe height="200" style="width: 100%;" :default-sort="{prop:'WorkorderPersonList', order: 'descending'}">
-
-				            		<el-table-column label="人员姓名" sortable prop="NAME">
-								      <template slot-scope="scope">
-								      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NAME" disabled></el-input><span v-else="v-else">{{scope.row.NAME}}</span>
-								      </template>
-								    </el-table-column>
-								    <el-table-column label="机构" sortable prop="DEPARTMENT">
-								      <template slot-scope="scope">
-								      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DEPARTMENT" disabled></el-input><span v-else="v-else">{{scope.row.DEPARTMENT}}</span>
-								      </template>
-								    </el-table-column>
-								    <el-table-column label="电话" sortable prop="TELPHONE">
-								      <template slot-scope="scope">
-								      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.TELPHONE" disabled></el-input><span v-else="v-else">{{scope.row.TELPHONE}}</span>
-								      </template>
-								    </el-table-column>
-				            		<el-table-column fixed="right" label="操作" width="120">
-								      <template slot-scope="scope">
-								        <el-button @click.native.prevent="deleteRow(index, row)" type="text" size="small">
-								          移除
-								        </el-button>
-								      </template>
-								    </el-table-column>
-				            	</el-table>
-							</el-collapse-item>
-							<!-- 检验员信息 End -->
-
 							<!-- 原始数据模板 Begin-->
-							<el-collapse-item title="原始数据模板" name="6">
-								<div class="table-func">
-									<el-button type="success" size="mini" round><i class="icon-add"></i><font>新建行</font>
-									</el-button>
-								</div>
-								<el-table :data="SourceDataTemplateList" border stripe height="200" style="width: 100%;" :default-sort="{prop:'SourceDataTemplateList', order: 'descending'}">
-									<el-table-column label="模板编号" sortable prop="P_NUM">
-								      <template slot-scope="scope">
-								      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NAME" disabled></el-input><span v-else="v-else">{{scope.row.P_NUM}}</span>
-								      </template>
-								    </el-table-column>
-				                    <el-table-column label="检测项目名称" sortable prop="WP_LINENUM">
-								      <template slot-scope="scope">
-								      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_LINENUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_LINENUM}}</span>
-								      </template>
-								    </el-table-column>
-								    <el-table-column label="模板描述" sortable prop="P_DESC">
-								      <template slot-scope="scope">
-								      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" disabled></el-input><span v-else="v-else">{{scope.row.P_DESC}}</span>
-								      </template>
-								    </el-table-column>
-								    <el-table-column label="模板状态" sortable prop="S_NAME">
-								      <template slot-scope="scope">
-								      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NAME" disabled></el-input><span v-else="v-else">{{scope.row.S_NAME}}</span>
-								      </template>
-								    </el-table-column>
-				            		<el-table-column prop="WP_LINENUM" label="检测项目名称"></el-table-column>
-				            		<el-table-column prop="S_NAME" label="模板描述"></el-table-column>
-				            		<el-table-column prop="VERSION" label="模板状态"></el-table-column>
-				            		<el-table-column prop="VERSION" label="预览"></el-table-column>
-				            		<el-table-column fixed="right" label="操作" width="80">
-								      <template slot-scope="scope">
-								        <el-button
-								          @click.native.prevent="deleteRow(index, row)"
-								          type="text"
-								          size="small">
-								          	<i class="icon-trash red"></i>
-								        </el-button>
-								      </template>
-								    </el-table-column>
-				            	</el-table>
-
+							<el-collapse-item title="原始数据模板" name="6">	
 				            	<div class="clearfix pt10">
 					            	<el-row >
 										<el-col :span="8">
 											<el-form-item label="报告模板">
-												<el-input placeholder="请输入内容" v-model="workorderForm.CHECK_BASIS"></el-input>
+												<el-input placeholder="请输入内容" v-model="workorderForm.CHECK_BASIS">
+													 <el-button slot="append" icon="el-icon-search"></el-button>
+												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -541,7 +339,206 @@
 								</div>
 							</el-collapse-item>
 							<!-- 原始数据模板 End -->
+							<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
+								<el-tabs v-model="activeName" @tab-click="handleClick">
+									<el-tab-pane label="检测依据" name="first">
+										<div class="table-func table-funcb">
+											<el-button type="primary" size="mini" round>
+												<i class="icon-upload-cloud"></i>
+												<font>导入</font>
+											</el-button>
+											<el-button type="success" size="mini" round @click="addfield1">
+												<i class="icon-add"></i>
+												<font>新建行</font>
+											</el-button>
+										</div>
 
+										<el-table :data="WorkorderBasisList" row-key="ID" border stripe :fit="true" max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation">
+										    <el-table-column prop="iconOperation" fixed width="50px">
+										      <template slot-scope="scope">
+										      	<i class="el-icon-check" v-show="scope.row.isEditing">
+										      	</i>
+										      	<i class="el-icon-edit" v-show="!scope.row.isEditing">
+										      	</i>
+										      </template>
+										    </el-table-column>
+
+										    <el-table-column label="标准编号" sortable width="160px" prop="S_NUM">
+										      <template slot-scope="scope">
+										      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" disabled></el-input><span v-show="!scope.row.isEditing">{{scope.row.S_NUM}}</span>
+										      </template>
+										    </el-table-column>
+
+										    <el-table-column label="标准名称" sortable prop="S_NAME">
+										      <template slot-scope="scope">
+										      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NAME"></el-input><span v-show="!scope.row.isEditing">{{scope.row.S_NAME}}</span>
+										      </template>
+										    </el-table-column>
+
+											<el-table-column prop="S_ENGNAME" label="英文名称" sortable>
+										      <template slot-scope="scope">
+										         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_ENGNAME" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.S_ENGNAME}}</span>
+										      </template>
+										    </el-table-column>
+
+										    <el-table-column prop="VERSION" label="标准版本" sortable width="120px">
+										      <template slot-scope="scope">
+										         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" :disabled="true"></el-input><span v-show="!scope.row.isEditing">{{scope.row.VERSION}}</span>
+										      </template>
+										    </el-table-column>
+
+										     <el-table-column prop="STATUS" label="信息状态" sortable width="120px" :formatter="judge">
+										      <template slot-scope="scope">
+										         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STATUS" :disabled="true"></el-input><span v-show="!scope.row.isEditing">{{scope.row.STATUS}}</span>
+										      </template>
+										    </el-table-column>
+
+										    <el-table-column fixed="right" label="操作" width="120">
+										      <template slot-scope="scope">
+										        <el-button @click.native.prevent="deleteRow(index, row)" type="text" size="small">
+										          移除
+										        </el-button>
+										      </template>
+										    </el-table-column>
+										  </el-table>
+									</el-tab-pane>
+									<el-tab-pane label="检测项目与要求" name="second">
+										<div class="table-func table-funcb">
+											<el-button type="success" size="mini" round @click="addfield2">
+												<i class="icon-add"></i>
+												<font>新建行</font>
+											</el-button>
+										</div>
+						            	<el-table :data="WorkorderProjectList" border stripe :fit="true" max-height="260" style="width: 100%;" :default-sort="{prop:'workorderbasisList', order: 'descending'}">
+						            		<el-table-column prop="P_NUM" label="检测项目编号" sortable>
+														<template slot-scope="scope">
+															<el-form-item :prop="'workorderbasisList.'+scope.$index + '.P_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="请输入">	
+															</el-input>
+															<span v-else="v-else">{{scope.row.P_NUM}}</span>
+															</el-form-item>
+														</template>
+											</el-table-column>
+											<el-table-column prop="P_DESC" label="检测项目名称" sortable>
+														<template slot-scope="scope">
+															<el-form-item :prop="'workorderbasisList.'+scope.$index + '.P_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入">	
+															</el-input>
+															<span v-else="v-else">{{scope.row.P_DESC}}</span>
+															</el-form-item>
+														</template>
+											</el-table-column>
+						          			<el-table-column prop="HOSTPERSON" label="主检员" sortable>
+														<template slot-scope="scope">
+															<el-form-item :prop="'workorderbasisList.'+scope.$index + '.HOSTPERSON'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.HOSTPERSON" placeholder="请输入">
+															</el-input>
+															<span v-else="v-else">{{scope.row.HOSTPERSON}}</span>
+															</el-form-item>
+														</template>
+											</el-table-column>
+											<el-table-column prop="FOLLOWPERSON" label="从检员" sortable>
+														<template slot-scope="scope">
+															<el-form-item :prop="'workorderbasisList.'+scope.$index + '.FOLLOWPERSON'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.FOLLOWPERSON" placeholder="请输入">	
+															</el-input>
+															<span v-else="v-else">{{scope.row.FOLLOWPERSON}}</span>
+															</el-form-item>
+														</template>
+											</el-table-column>
+						            		<el-table-column prop="REMARKS" label="要求" sortable>
+														<template slot-scope="scope">
+															<el-form-item :prop="'workorderbasisList.'+scope.$index + '.REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" placeholder="请输入">	
+															</el-input>
+															<span v-else="v-else">{{scope.row.REMARKS}}</span>
+															</el-form-item>
+														</template>
+											</el-table-column>
+						            		<el-table-column prop="VERSION" label="版本" sortable>
+														<template slot-scope="scope">
+															<el-form-item :prop="'workorderbasisList.'+scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入">	
+															</el-input>
+															<span v-else="v-else">{{scope.row.VERSION}}</span>
+															</el-form-item>
+														</template>
+											</el-table-column>
+										      <el-table-column fixed="right" label="操作" width="120">
+										      <template slot-scope="scope">
+										        <el-button @click.native.prevent="deleteRow(index, row)" type="text" size="small">
+										          移除
+										        </el-button>
+										      </template>
+										    </el-table-column>
+						            	</el-table>
+									</el-tab-pane>
+									<el-tab-pane label="检验员信息" name="third">
+										<div class="table-func table-funcb">
+											<el-button type="success" size="mini" round><i class="icon-add"></i><font>新建行</font>
+											</el-button>
+										</div>
+						            	<el-table :data="WorkorderPersonList" border stripe :fit="true" max-height="260" style="width: 100%;" :default-sort="{prop:'WorkorderPersonList', order: 'descending'}">
+						            		<el-table-column label="人员姓名" sortable prop="NAME">
+										      <template slot-scope="scope">
+										      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NAME" disabled></el-input><span v-else="v-else">{{scope.row.NAME}}</span>
+										      </template>
+										    </el-table-column>
+										    <el-table-column label="机构" sortable prop="DEPARTMENT">
+										      <template slot-scope="scope">
+										      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DEPARTMENT" disabled></el-input><span v-else="v-else">{{scope.row.DEPARTMENT}}</span>
+										      </template>
+										    </el-table-column>
+										    <el-table-column label="电话" sortable prop="TELPHONE">
+										      <template slot-scope="scope">
+										      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.TELPHONE" disabled></el-input><span v-else="v-else">{{scope.row.TELPHONE}}</span>
+										      </template>
+										    </el-table-column>
+						            		<el-table-column fixed="right" label="操作" width="120">
+										      <template slot-scope="scope">
+										        <el-button @click.native.prevent="deleteRow(index, row)" type="text" size="small">
+										          移除
+										        </el-button>
+										      </template>
+										    </el-table-column>
+						            	</el-table>
+									</el-tab-pane>
+									<el-tab-pane label="原始数据模板" name="fourth">
+										<div class="table-func table-funcb">
+											<el-button type="success" size="mini" round><i class="icon-add"></i><font>新建行</font>
+											</el-button>
+										</div>
+										<el-table :data="SourceDataTemplateList" border stripe :fit="true" max-height="260" style="width: 100%;" :default-sort="{prop:'SourceDataTemplateList', order: 'descending'}">
+											<el-table-column label="模板编号" sortable prop="D_NUM">
+										      <template slot-scope="scope">
+										      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.D_NUM" disabled></el-input><span v-else="v-else">{{scope.row.D_NUM}}</span>
+										      </template>
+										    </el-table-column>
+										    <el-table-column label="模板描述" sortable prop="DESC">
+										      <template slot-scope="scope">
+										      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DESC" disabled></el-input><span v-else="v-else">{{scope.row.DESC}}</span>
+										      </template>
+										    </el-table-column>
+										    <el-table-column label="模板状态" sortable prop="STATUS">
+										      <template slot-scope="scope">
+										      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" disabled></el-input><span v-else="v-else">{{scope.row.STATUS}}</span>
+										      </template>
+										    </el-table-column>
+						            		<el-table-column prop="VERSION" label="预览"></el-table-column>
+						            		<el-table-column fixed="right" label="操作" width="80">
+										      <template slot-scope="scope">
+										        <el-button
+										          @click.native.prevent="deleteRow(index, row)"
+										          type="text"
+										          size="small">
+										          	<i class="icon-trash red"></i>
+										        </el-button>
+										      </template>
+										    </el-table-column>
+						            	</el-table>
+									</el-tab-pane>
+								</el-tabs>
+							</div>
 							<!-- 录入人信息 Begin-->
 							<el-collapse-item title="其他" name="7">
 								<el-row >
@@ -556,7 +553,7 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="录入人机构" prop="ORG_CODE">
+										<el-form-item label="机构" prop="ORG_CODE">
 											<el-input v-model="workorderForm.ORG_CODE" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
@@ -602,11 +599,16 @@
 		data() {
 			return {
 			workorderForm: {
-					WorkorderBasisList: [],//检测依据
-					WorkorderProjectList: [],//检测项目与要求
-					WorkorderPersonList: [],//检验员信息
-					SourceDataTemplateList: [],//原始数据模板
-					WORKORDER_REPORT_TEMPLATE:[],//报告模版
+					// WorkorderBasisList: [],//检测依据
+					// WorkorderProjectList: [],//检测项目与要求
+					// WorkorderPersonList: [],//检验员信息
+					// SourceDataTemplateList: [],//原始数据模板
+					// WORKORDER_REPORT_TEMPLATE:[],//报告模版
+					WORKORDER_BASISList:[],//检测依据
+					WORKORDER_PROJECTList:[],//检测项目
+					WORKORDER_CHECKPERSONList:[],//检验员信息
+					WORKORDER_DATA_TEMPLATEList:[],//原始数据模板
+					WORKORDER_REPORT_TEMPLATEList:[],//报告模板
 				},
 				basic_url: Config.dev_url,
 				commentArr:{},
@@ -619,6 +621,7 @@
 				up: false,
 				addtitle:true,//添加弹出框titile
 				modifytitle:false,//修改弹出框titile
+				activeName: 'first', //tabs
 				activeNames: ['1','2','3','4','5','6','7'],//手风琴数量
 				labelPosition: 'right', //表格
 				searchList: { //点击高级搜索后显示的内容

@@ -454,7 +454,7 @@
 			return {
 				basic_url: Config.dev_url,
 				user: {
-					status: '活动',
+					status: '1',
 					roleId: [],
 					roles: [],
 					traings: [],
@@ -599,7 +599,7 @@
 					email: '',
 					address: '',
 					tips: '',
-					enabled: '活动',
+					enabled: true,
 					traings: [],
 					qualifications: [],
 				}
@@ -724,7 +724,7 @@
 					email: '',
 					address: '',
 					tips: '',
-					enabled: '活动',
+					enabled: true,
 					traings: [],
 					qualifications: [],
 				};
@@ -775,6 +775,7 @@
 				var usersUrl = this.basic_url + '/api-user/users/currentMap';
 
 				this.$axios.get(usersUrl, {}).then((res) => {
+					console.log(res.data);
 					this.user.changeby = res.data.nickname;
 					var date = new Date();
 					this.user.changedate = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
@@ -840,6 +841,7 @@
 			//点击关闭按钮
 			close() {
 				this.show = false;
+				this.$emit('request');
 			},
 			open(){
 				this.show = true;

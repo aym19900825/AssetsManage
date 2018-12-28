@@ -126,7 +126,7 @@
 								      </template>
 								    </el-table-column>
 
-									<el-table-column prop="CERTIFICATE_NAME" label="证书名称" sortable width="120px">
+									<el-table-column prop="CERTIFICATE_NAME" label="证书名称" sortable>
 								      <template slot-scope="scope">
 								         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.CERTIFICATE_NAME" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.CERTIFICATE_NAME}}</span>
 								      </template>
@@ -140,11 +140,11 @@
 								    </el-form-item>
 								      </template>
 								    </el-table-column>
-								    <el-table-column prop="STATUS" label="信息状态" sortable width="120px">
+								    <!-- <el-table-column prop="STATUS" label="信息状态" sortable width="120px">
 								      <template slot-scope="scope">
 								        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.STATUS}}</span>
 								      </template>
-								    </el-table-column>
+								    </el-table-column> -->
 								    <el-table-column prop="MEMO" label="备注" sortable width="120px">
 								      <template slot-scope="scope">
 								        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.MEMO" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.MEMO}}</span>

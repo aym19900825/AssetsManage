@@ -551,6 +551,7 @@
 									type: 'success',
 								});
 								this.resetForm();
+								this.pmRecordList = [];
 								this.$emit('request');
 							}
 						}).catch((err) => {

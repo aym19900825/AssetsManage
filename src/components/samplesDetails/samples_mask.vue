@@ -189,7 +189,7 @@
 									</el-button>
 								</div>
 								<el-form :label-position="labelPosition" :rules="rules">
-								<el-table :data="samplesForm.ITEM_LINEList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'samplesForm.ITEM_LINEList', order: 'descending'}">
+								<el-table :header-cell-style="rowClass" :data="samplesForm.ITEM_LINEList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'samplesForm.ITEM_LINEList', order: 'descending'}">
 								    <el-table-column prop="iconOperation" fixed width="50px">
 								      <template slot-scope="scope">
 								      	<i class="el-icon-check" v-show="scope.row.isEditing">
@@ -199,41 +199,41 @@
 								      </template>
 								    </el-table-column>
 
-								    <el-table-column label="样品编号" sortable width="120px" prop="ITEMNUM">
+								    <el-table-column label="样品编号" sortable width="170px" prop="ITEMNUM">
 								      <template slot-scope="scope">
 								      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.ITEMNUM" :disabled="edit"></el-input>
 								      	<span v-show="!scope.row.isEditing" >{{scope.row.ITEMNUM}}</span>
 								      </template>
 								    </el-table-column>
 
-								    <el-table-column label="样品序号" sortable width="120px" prop="ITEM_STEP">
+								    <el-table-column label="样品序号" sortable width="170px" prop="ITEM_STEP">
 								      <template slot-scope="scope">
 								      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.ITEM_STEP" placeholder="请输入内容"></el-input>
 								      	<span v-show="!scope.row.isEditing">{{scope.row.ITEM_STEP}}</span>
 								      </template>
 								    </el-table-column>
 
-									<el-table-column prop="SN" label="单件码" sortable width="120px">
+									<el-table-column prop="SN" label="单件码" sortable width="170px">
 								      <template slot-scope="scope">
 								         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.SN" placeholder="请输入内容"></el-input>
 								         <span v-show="!scope.row.isEditing">{{scope.row.SN}}</span>
 								      </template>
 								    </el-table-column>
 
-									<el-table-column prop="STATE" label="样品状态" sortable width="120px">
+									<el-table-column prop="STATE" label="样品状态" sortable width="170px">
 								      <template slot-scope="scope">
 								        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STATE" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.STATUS}}</span>
 								      </template>
 								    </el-table-column>
 								    
-								    <el-table-column prop="ENTERBY" label="录入人" sortable width="120px">
+								   <!--  <el-table-column prop="ENTERBY" label="录入人" sortable width="120px">
 								      <template slot-scope="scope">
 								        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.ENTERBY" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.ENTERBY}}</span>
 								      </template>
-								    </el-table-column>
+								    </el-table-column> -->
 								
 
-								    <el-table-column prop="ENTERDATE" label="录入时间" sortable width="150px">
+								    <el-table-column prop="ENTERDATE" label="录入时间" sortable>
 								      <template slot-scope="scope">
 								      	<el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.ENTERDATE'" >
 								         <el-date-picker style="width: 90%" v-show="scope.row.isEditing" v-model="scope.row.ENTERDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd"></el-date-picker>
@@ -241,12 +241,12 @@
 								    	</el-form-item>
 								      </template>
 								    </el-table-column>
-								   <el-table-column prop="CHANGEBY" label="修改人" sortable width="120px">
+								  <!--  <el-table-column prop="CHANGEBY" label="修改人" sortable width="120px">
 								      <template slot-scope="scope">
 								        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.CHANGEBY" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.CHANGEBY}}</span>
 								      </template>
-								    </el-table-column>
-								    <el-table-column fixed="right" label="操作" width="120">
+								    </el-table-column> -->
+								    <el-table-column fixed="right" label="操作" width="100px">
 								      <template slot-scope="scope">
 								        <el-button @click = "deleteRow(scope.$index, CUSTOMER.CUSTOMER_QUALIFICATIONList)" type="text" size="small">
 								          移除
@@ -402,6 +402,10 @@
 			};
 		},
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    return 'text-align:center'
+			},
 			reset(){
             	this.samplesForm = {
 					PROXYNUM: '',//委托书编号

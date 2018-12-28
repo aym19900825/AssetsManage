@@ -43,7 +43,7 @@
 									<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'" :disabled="noedit">
 										<el-radio :label="it.label" v-for="it in item.opts" :key="it.id"></el-radio>
 									</el-radio-group>
-									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && item.prop =='A_PRICE' " @blur="handlePrice" :disabled="noedit"></el-input>
+									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && item.prop =='A_PRICE' " @blur="handlePrice" :disabled="noedit" id="cost"></el-input>
 								</el-form-item>
 							</el-collapse-item>
 
@@ -559,6 +559,7 @@
 			},
 			handlePrice(){
 				this.dataInfo.A_PRICE = parseFloat(this.dataInfo.A_PRICE).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+				console.log(this.dataInfo.A_PRICE);
 			},
 			getUser(opt){
 				var url = this.basic_url + '/api-user/users/currentMap';
@@ -684,7 +685,7 @@
 					'S_DATE': '',   
 					'C_ADDRESS': '',  
 					'A_STATUS': '',
-					'A_PRICE': 0,
+					'A_PRICE': '',
 					'MODE': '',
 					'MODE1': '',
 					'CHANGEBY': '',	
@@ -777,6 +778,10 @@
 	}
 </script>
 
-<style scoped>
+<style>
 	@import '../../assets/css/mask-modules.css';
+	#cost{
+		text-align: right !important;
+		padding-right: 30px;
+	}
 </style>

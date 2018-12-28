@@ -86,7 +86,7 @@
 						<el-col :span="24">
 							<!-- 表格 Begin-->
 							<el-table :header-cell-style="rowClass" :data="WORK_INSTRUCTIONList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'WORK_INSTRUCTIONList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0">
+								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="分发号" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('分发号')!=-1">
 									<template slot-scope="scope">

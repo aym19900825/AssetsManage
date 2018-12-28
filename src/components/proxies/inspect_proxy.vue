@@ -60,9 +60,9 @@
 						</div>
 					</div>
 					<!-- 高级查询划出 Begin-->
-					<div v-show="search" class="pb5">
+					<div v-show="search">
 						<el-form status-icon :model="searchList">
-							<el-row :gutter="10">
+							<el-row :gutter="5">
 								<el-col :span="6">
 									<el-form-item label="委托单位名称" prop="V_NAME"  label-width="100px">
 										<el-input v-model="searchList.V_NAME"></el-input>
@@ -84,7 +84,7 @@
 									</el-form-item>
 								</el-col>
 							</el-row>
-							<el-row :gutter="10">
+							<el-row :gutter="5">
 								<el-col :span="6">
 									<el-form-item label="完成日期" prop="COMPDATE" label-width="100px">
 										<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%">
@@ -132,7 +132,7 @@
 						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
 							<el-table :data="inspectList" :header-cell-style="rowClass" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'inspectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
+								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="检验委托书编号" sortable width="130px" prop="PROXYNUM" v-if="this.checkedName.indexOf('检验委托书编号')!=-1">
 									<template slot-scope="scope">

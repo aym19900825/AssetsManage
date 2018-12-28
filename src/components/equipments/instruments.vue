@@ -97,8 +97,8 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :header-cell-style="rowClass" :data="assetList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'assetList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
+						<el-table :header-cell-style="rowClass" :data="assetList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'assetList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 							</el-table-column>
 							<el-table-column label="设备编号" width="130" sortable prop="ASSETNUM" v-if="this.checkedName.indexOf('设备编号')!=-1">
 								<template slot-scope="scope">
@@ -168,6 +168,8 @@
 		},
 		data() {
 			return {
+				loadSign: true, //加载
+				commentArr: {},
 				status: [
 					{
 						label: '启用',
@@ -442,24 +444,58 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					this.assetList = res.data.data;
+					// this.assetList = res.data.data;
+					// this.page.totalCount = res.data.count;
 					this.page.totalCount = res.data.count;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
+					}
+					this.commentArr[this.page.currentPage] = res.data.data
+					let newarr = []
+					for(var i = 1; i <= totalPage; i++) {
+
+						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+
+							for(var j = 0; j < this.commentArr[i].length; j++) {
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					this.assetList = newarr;
 				}).catch((wrong) => {})
 				
 			},
-			loadMore () {
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page++
-			     if (this.page > 10) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     console.log('到底了', this.page)
-			   }
-			 },
+			// loadMore () {
+			//    if (this.loadSign) {
+			//      this.loadSign = false
+			//      this.page++
+			//      if (this.page > 10) {
+			//        return
+			//      }
+			//      setTimeout(() => {
+			//        this.loadSign = true
+			//      }, 1000)
+			//      console.log('到底了', this.page)
+			//    }
+			//  },
+			// loadMore() {
+			// 	if(this.loadSign) {
+			// 		this.loadSign = false
+			// 		this.page.currentPage++
+			// 			if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+			// 				return
+			// 			}
+			// 		setTimeout(() => {
+			// 			this.loadSign = true
+			// 		}, 1000)
+			// 		this.requestData()
+			// 		//console.log('到底了', this.page.currentPage)
+			// 	}
+			// },
 			handleNodeClick(data) {
 			},
 			formatter(row, column) {

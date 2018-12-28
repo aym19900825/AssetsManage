@@ -399,18 +399,11 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 
-					V_NAME: this.searchList.V_NAME,//委托单位名称
-					DESCRIPTION: this.searchList.DESCRIPTION,//样品名称
-					ACCEPT_PERSON: this.searchList.ACCEPT_PERSON,//收样人
-					P_NAME: this.searchList.P_NAME,//生产单位名称
-					TYPE: this.searchList.TYPE,//样品类别
-					ACCEPT_DATE: this.searchList.ACCEPT_DATE//收样日期
 				}
-				var url = this.basic_url + '/api-apps/app/item';
+				var url = this.basic_url + '/api-apps/app/tbKeywordPrivilege2';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -430,7 +423,7 @@
 							}
 						}
 					}
-					this.samplesList = newarr;
+					// this.samplesList = newarr;
 				}).catch((wrong) => {})
 				
 			},

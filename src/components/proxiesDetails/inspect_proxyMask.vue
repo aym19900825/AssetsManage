@@ -1077,7 +1077,8 @@
 				this.$axios.get(url, {
 					params: params
 				}).then((res) => {
-					console.log(res);
+					console.log(23333);
+					console.log(res.data);
 					this.page.totalCount = res.data.count;
 					
 					this.gridData = res.data.data;

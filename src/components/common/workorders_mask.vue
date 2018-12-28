@@ -387,11 +387,11 @@
 										      </template>
 										    </el-table-column>
 
-										     <el-table-column prop="STATUS" label="信息状态" sortable width="120px" :formatter="judge">
+										     <!-- <el-table-column prop="STATUS" label="信息状态" sortable width="120px" :formatter="judge">
 										      <template slot-scope="scope">
 										         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STATUS" :disabled="true"></el-input><span v-show="!scope.row.isEditing">{{scope.row.STATUS}}</span>
 										      </template>
-										    </el-table-column>
+										    </el-table-column> -->
 
 										    <el-table-column fixed="right" label="操作" width="120">
 										      <template slot-scope="scope">

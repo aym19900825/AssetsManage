@@ -243,7 +243,7 @@
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
-				DATAINFO:{},//父组件传过来的值
+				// DATAINFO:{},//父组件传过来的值
 				addtitle:true,
 				modifytitle:false,
 				viewtitle:false,
@@ -309,18 +309,6 @@
 			},
 			//添加点击按钮显示弹窗
 			visible() {
-				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-//					this.dataInfo.DEPARTMENT=res.data.companyName;
-				    this.dataInfo.DEPARTMENT=res.data.deptName;
-					this.dataInfo.ENTERBY=res.data.nickname;
-					var date=new Date();
-					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-				}).catch((err)=>{
-					this.$message({
-						message:'网络错误，请重试',
-						type:'error'
-					});
-				});
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.viewtitle = false;

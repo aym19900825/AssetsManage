@@ -116,84 +116,8 @@
 							</el-collapse-item>
 
 							<!-- 年度计划列表 Begin-->
-							<el-collapse-item title="年度计划列表" name="2" class="ml30">
-								<div class="table-func">
-									<el-button type="primary" size="mini" round>
-										<i class="icon-upload-cloud"></i>
-										<font>导入</font>
-									</el-button>
-									<el-button type="success" size="mini" round @click="addfield1">
-										<i class="icon-add"></i>
-										<font>新建行</font>
-									</el-button>
-								</div>
-
-								<el-table :header-cell-style="rowClass" :data="worlplanlist" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100% ;"  :default-sort="{prop:'worlplanlist', order: 'descending'}" v-loadmore="loadMore">
-								    <el-table-column prop="iconOperation" fixed width="50px">
-								      <template slot-scope="scope" >
-								      	<i class="el-icon-check" v-if="scope.row.isEditing" @click="iconOperation(scope.row)">
-								      	</i>
-								      	<i class="el-icon-edit" v-if="!scope.row.isEditing" @click="iconOperation(scope.row)">
-								      	</i>
-								      </template>
-								    </el-table-column>
-
-								    <!-- <el-table-column label="所属计划编号" sortable width="120px" prop="WP_NUM">
-								      <template slot-scope="scope">
-								      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_NUM" disabled></el-input><span v-if="!scope.row.isEditing">{{scope.row.WP_NUM}}</span>
-								      </template>
-								    </el-table-column> -->
-
-								    <el-table-column label="序号" sortable width="120px" prop="WP_LINENUM">
-								      <template slot-scope="scope">
-								      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_LINENUM" disabled></el-input><span v-if="!scope.row.isEditing">{{scope.row.WP_LINENUM}}</span>
-								      </template>
-								    </el-table-column>
-									<el-table-column prop="ITEM_NAME" label="产品名称" sortable width="120px" :formatter="judge">
-								      <template slot-scope="scope">
-								         <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ITEM_NAME" placeholder="请输入内容">
-								         	<el-button slot="append" icon="el-icon-search"></el-button>
-								         </el-input><span v-if="!scope.row.isEditing">{{scope.row.ITEM_NAME}}</span>
-								      </template>
-								    </el-table-column>
-								    <el-table-column prop="MODEL" label="规格型号" sortable width="120px">
-								      <template slot-scope="scope">
-								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入内容"></el-input><span v-if="!scope.row.isEditing">{{scope.row.MODEL}}</span>
-								      </template>
-								    </el-table-column>
-								    <el-table-column prop="MEMO" label="近三年监督抽查情况" sortable width="260px">
-								      <template slot-scope="scope">
-								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MEMO" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.MEMO}}</span>
-								      </template>
-								    </el-table-column>
-								    <el-table-column prop="CHECKCOST" label="检测费用" sortable width="120px">
-								      <template slot-scope="scope">
-								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容" id="cost" @blur="toPrice(scope.row)"></el-input><span v-if="!scope.row.isEditing" id="costshow">{{scope.row.CHECKCOST}}</span>
-								      </template>
-								    </el-table-column>
-								    <el-table-column prop="REASION" label="项目提出理由" sortable width="120px">
-								      <template slot-scope="scope">
-								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REASION" placeholder="请输入内容"></el-input><span v-if="!scope.row.isEditing">{{scope.row.REASION}}</span>
-								      </template>
-								    </el-table-column>
-
-								    <!-- <el-table-column prop="MEMO" label="近三年监督抽查情况" sortable width="160px">
-								      <template slot-scope="scope">
-								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入内容"></el-input><span v-if="!scope.row.isEditing">{{scope.row.MODEL}}</span>
-								      </template>
-								    </el-table-column> -->
-
-								    <el-table-column fixed="right" label="操作" width="120">
-								      <template slot-scope="scope">
-								        <el-button @click="delPlan(scope.$index,scope.row, 'WORLPLANLINE','worlplanlist')" type="text" size="small">
-								          移除
-								        </el-button>
-								        <el-button @click="assign(scope.row)" type="text" size="small" v-if="assignshow">
-								          下达
-								        </el-button>
-								      </template>
-								    </el-table-column>
-								  </el-table>
+							<el-collapse-item title="文档" name="2">
+								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
 							</el-collapse-item>
 							<!-- 年度计划列表 End -->
 							<!-- 检测依据、检测项目与要求 Begin-->
@@ -585,8 +509,10 @@
 
 <script>
 	import Config from '../../config.js'
+	import docTable from '../common/doc.vue'
 	export default {
 		name: 'masks',
+		components: {docTable},
 		data() {
 			var validateCode = (rule, value, callback) => {
                 if (value === '') {
@@ -665,6 +591,17 @@
                 }
             };
 			return {
+				docParm: {
+					'model': 'new',
+					'appname': '',
+					'recordid': 1,
+					'userid': 1,
+					'username': '',
+					'deptid': 1,
+					'deptfullname': '',
+					'appname': '',
+					'appid': 1
+				},
 				basic_url: Config.dev_url,
 				showEdit: [], //显示编辑框
 		        showBtn: [],
@@ -1039,6 +976,29 @@
 					this.up = !this.up
 				}
 			},
+			getUser(opt){
+				this.$axios.get(this.basic_url +'/api-user/users/currentMap', {}).then((res) => {
+					if(opt=='new'){
+						this.WORKPLAN.ENTERBY = res.data.nickname;
+	    				this.WORKPLAN.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
+					}else{
+						this.WORKPLAN.DEPARTMENT = res.data.deptName;
+	    				this.WORKPLAN.CHANGEBY = res.data.nickname;
+	    				var date = new Date();
+						this.WORKPLAN.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
+
+						this.docParm.userid = res.data.id;
+						this.docParm.username = res.data.username;
+						this.docParm.deptid = res.data.deptId;
+						this.docParm.deptfullname = res.data.deptName;
+					}
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+			},
 			//点击添加，修改按钮显示弹窗
 			visible() {
 				this.assignshow = false;//下达 按钮
@@ -1072,15 +1032,15 @@
 				this.basisList = []; //检测依据
 				this.proTestList = []; //项目检测和要求
 				this.isEditList = false;
-				this.$axios.get(this.basic_url +'/api-user/users/currentMap', {}).then((res) => {
-	    			this.WORKPLAN.ENTERBY = res.data.nickname;
-	    			this.WORKPLAN.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
+
+				this.docParm = {
+					'model': 'new',
+					'appname': 'WORKPLAN',
+					'recordid': 1,
+					'appid': 39 
+				};
+				this.getUser('new');
+
 				this.addtitle = true;
             	this.modifytitle = false;
             	this.modify=false;
@@ -1093,20 +1053,7 @@
 			// 这里是修改
 			detail(dataid) {
 				this.assignshow = true;
-				this.$axios.get(this.basic_url +'/api-user/users/currentMap', {}).then((res) => {
-					console.log(res.data.deptName);
-					this.WORKPLAN.DEPARTMENT = res.data.deptName;
-	    			this.WORKPLAN.CHANGEBY = res.data.nickname;
-	    			var date = new Date();
-					this.WORKPLAN.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
 				this.$axios.get(this.basic_url +'/api-apps/app/workplan/' + dataid, {}).then((res) => {
-					console.log(res.data);
 					this.WORKPLAN = res.data;
 					this.worlplanlist = res.data.WORLPLANLINEList;
 					var worlplanlist = res.data.WORLPLANLINEList;
@@ -1117,13 +1064,21 @@
 						// this.initcost = money;
 						var cost = worlplanlist[i].CHECKCOST.toString();
 						var num = parseFloat(this.toNum(cost)).toFixed(2).toString().split(".");
-						console.log(num);
 						num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
 						worlplanlist[i].CHECKCOST = num.join(".");
 					}
 					this.basisList = res.data.WORLPLANLINEList.length > 0 ? res.data.WORLPLANLINEList[0].WORLPLANLINE_BASISList : [];
 					this.proTestList = res.data.WORLPLANLINEList.length > 0 ? res.data.WORLPLANLINEList[0].WORLPLANLINE_PROJECTList : [];
-					
+
+					this.getUser('edit');
+					var _this = this;
+					setTimeout(function(){
+						_this.docParm.model = 'edit';
+						_this.docParm.appname = 'WORKPLAN';
+						_this.docParm.recordid = _this.WORKPLAN.ID;
+						_this.docParm.appid = 39;
+						_this.$refs.docTable.getData();
+					},100);
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',

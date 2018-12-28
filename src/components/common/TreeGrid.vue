@@ -3,7 +3,7 @@
     :data="data"
     style="width: 100%;"
     :row-style="showTr" border stripe :header-cell-style="rowClass" :height="fullHeight" @selection-change="SelChange">
-    <el-table-column type="selection" width="55" fixed>
+    <el-table-column type="selection" width="55" fixed align="center">
 		</el-table-column>
     <el-table-column v-for="(column, index) in columns" :key="column.dataIndex"
       :label="column.text" v-if="column.isShow">

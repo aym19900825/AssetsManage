@@ -1,10 +1,10 @@
 <template>
 <div>
 	<div class="text item">
-		<div class="pb10 clearfix">
+		<div class="clearfix relative">
 			<!-- <div class="columns pull-left"><el-button type="primary" size="small">关联父级</el-button></div> -->
 			<div class="columns pull-left">
-				<el-input placeholder="请输入检测仪器" v-model="search" class="input-with-select">
+				<el-input placeholder="请输入设备名称" v-model="search" class="input-with-select">
 					<el-button slot="append" icon="el-icon-search"></el-button>
 				</el-input>
 			</div>
@@ -16,7 +16,7 @@
 			</div>
 		</div>
 		<el-form :model="rawDataAssetForm" ref="rawDataAssetForm">
-		  <el-table :data="rawDataAssetForm.inspectionList.filter(data => !search || data.DECRIPTION.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="380" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'rawDataAssetForm.inspectionList', order: 'descending'}" v-loadmore="loadMore">
+		  <el-table :data="rawDataAssetForm.inspectionList.filter(data => !search || data.DECRIPTION.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'rawDataAssetForm.inspectionList', order: 'descending'}" v-loadmore="loadMore">
 			
 
 		  	<!-- <el-table-column label="所属项目编号" width="120" prop="P_NUM">
@@ -388,9 +388,18 @@
     background: #FFF;
     padding: 5px 10px;
 }
+
 .table-func {
-	position:relative;
-	top: 0px;
+	position: absolute;
+	top: -50px;
     right: 0px;
+    z-index: 888;
+}
+.columns{
+	width:220px;
+	position: absolute;
+    right: 100px;
+    bottom: -40px;
+    z-index: 9999;
 }
 </style>

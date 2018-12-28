@@ -129,8 +129,8 @@
 						</el-col>
 						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
-							<el-table :data="userList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
+							<el-table :header-cell-style="rowClass" :data="userList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="工作任务单编号" sortable width="280px" prop="WONUM" v-if="this.checkedName.indexOf('工作任务单编号')!=-1">
 								</el-table-column>
@@ -293,6 +293,10 @@
 			}
 		},
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    return 'text-align:center'
+			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
 				return(<span><i class={data.iconClass}></i><span>{node.label}</span></span>);
 			},

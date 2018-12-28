@@ -33,6 +33,9 @@
 								<button type="button" class="btn btn-primarys button-margin" @click="Printing">
 							    <i class="icon-print"></i>打印
 							</button>
+							<button type="button" class="btn btn-primarys button-margin" @click="Configuration">
+							    <i class="icon-cpu"></i>配置关系
+							</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 					    		<i class="icon-search"></i>高级查询
 					    		<i class="icon-arrow1-down" v-show="down"></i>
@@ -107,7 +110,7 @@
 						<el-col :span="24">
 							<!-- 表格 Begin-->
 							<el-table :header-cell-style="rowClass" :data="categoryList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0">
+								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="编码" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('编码')!=-1">
 									<template slot-scope="scope">
@@ -437,6 +440,12 @@
 			// 打印
 			Printing() {
 
+			},
+			// 配置关系
+			Configuration() {
+				this.$router.push({
+					path: '/inspection_project'
+				});
 			},
 			judge(data) {
 				data.STATUS = data.STATUS == "1" ? '活动' : '不活动'

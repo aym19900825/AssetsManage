@@ -1,10 +1,10 @@
 <template>
 <div>
 	<div class="text item">
-		<div class="pb10 clearfix">
+		<div class="clearfix relative">
 			<!-- <div class="columns pull-left"><el-button type="primary" size="small">关联父级</el-button></div> -->
 			<div class="columns pull-left">
-				<el-input placeholder="请输入原始数据模板" v-model="search" class="input-with-select">
+				<el-input placeholder="请输入原始数据模板描述" v-model="search" class="input-with-select">
 					<el-button slot="append" icon="el-icon-search"></el-button>
 				</el-input>
 			</div>
@@ -16,7 +16,7 @@
 			</div>
 		</div>
 		<el-form :model="rawDataTem2Form" ref="rawDataTem2Form">
-		  <el-table :data="rawDataTem2Form.inspectionList.filter(data => !search || data.DECRIPTION.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="380" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'rawDataTem2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
+		  <el-table :data="rawDataTem2Form.inspectionList.filter(data => !search || data.DECRIPTION.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'rawDataTem2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
 			
 
 		  	<!-- <el-table-column label="所属项目编号" width="120" prop="P_NUM">
@@ -35,7 +35,7 @@
 		      </template>
 		    </el-table-column>
 
-		    <el-table-column label="原始数据模板" sortable prop="DECRIPTION">
+		    <el-table-column label="原始数据模板描述" sortable prop="DECRIPTION">
 		      <template slot-scope="scope">
 		        <el-form-item :prop="'inspectionList.'+scope.$index + '.DECRIPTION'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DECRIPTION" placeholder="请输入内容">
@@ -391,9 +391,18 @@
     background: #FFF;
     padding: 5px 10px;
 }
+
 .table-func {
-	position:relative;
-	top: 0px;
+	position: absolute;
+	top: -50px;
     right: 0px;
+    z-index: 888;
+}
+.columns{
+	width:220px;
+	position: absolute;
+    right: 100px;
+    bottom: -40px;
+    z-index: 9999;
 }
 </style>

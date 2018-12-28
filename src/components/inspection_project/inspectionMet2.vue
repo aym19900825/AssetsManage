@@ -1,7 +1,7 @@
 <template>
 <div>
 	<div class="text item">
-		<div class="pb10 clearfix">
+		<div class="clearfix relative">
 			<!-- <div class="columns pull-left"><el-button type="primary" size="small">关联父级</el-button></div> -->
 			<div class="columns pull-left">
 				<el-input placeholder="请输入方法中文名称" v-model="search" class="input-with-select">
@@ -16,7 +16,7 @@
 			</div>
 		</div>
 		<el-form :model="inspectionMet2Form" ref="inspectionMet2Form">
-		  <el-table :data="inspectionMet2Form.inspectionList.filter(data => !search || data.M_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="380" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'inspectionMet2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
+		  <el-table :data="inspectionMet2Form.inspectionList.filter(data => !search || data.M_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'inspectionMet2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
 			
 		  	<!-- <el-table-column label="所属项目编号" width="120" prop="P_NUM">
 		      <template slot-scope="scope">
@@ -44,7 +44,7 @@
 		      </template>
 		    </el-table-column>
 
-		    <el-table-column label="方法英文名称" sortable prop="M_ENAME">
+		    <el-table-column label="方法英文名称" width="160" sortable prop="M_ENAME">
 		      <template slot-scope="scope">
 		        <el-form-item :prop="'inspectionList.'+scope.$index + '.M_ENAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.M_ENAME" placeholder="请输入内容">
@@ -54,7 +54,7 @@
 		      </template>
 		    </el-table-column>
 
-		    <el-table-column label="类别" sortable width="200" prop="M_TYPE">
+		    <el-table-column label="类别" sortable width="160" prop="M_TYPE">
 		      <template slot-scope="scope">
 		        <el-form-item :prop="'inspectionList.'+scope.$index + '.M_TYPE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 		        	<!-- <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.M_TYPE" placeholder="请输入内容">
@@ -67,7 +67,7 @@
 		      </template>
 		    </el-table-column>
 
-		    <el-table-column label="内容描述" sortable prop="DESCRIPTION">
+		    <el-table-column label="内容描述" sortable width="160" prop="DESCRIPTION">
 		      <template slot-scope="scope">
 		        <el-form-item :prop="'inspectionList.'+scope.$index + '.DESCRIPTION'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DESCRIPTION" placeholder="请输入内容">
@@ -443,9 +443,18 @@
     background: #FFF;
     padding: 5px 10px;
 }
+
 .table-func {
-	position:relative;
-	top: 0px;
+	position: absolute;
+	top: -50px;
     right: 0px;
+    z-index: 888;
+}
+.columns{
+	width:220px;
+	position: absolute;
+    right: 570px;
+    bottom: -40px;
+    z-index: 9999;
 }
 </style>

@@ -33,6 +33,9 @@
 								<button type="button" class="btn btn-primarys button-margin" @click="Printing">
 							    <i class="icon-print"></i>打印
 							</button>
+							<button type="button" class="btn btn-primarys button-margin" @click="Configuration">
+							    <i class="icon-cpu"></i>配置关系
+							</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 					    		<i class="icon-search"></i>高级查询
 					    		<i class="icon-arrow1-down" v-show="down"></i>
@@ -437,6 +440,12 @@
 			// 打印
 			Printing() {
 
+			},
+			// 配置关系
+			Configuration() {
+				this.$router.push({
+					path: '/inspection_project'
+				});
 			},
 			judge(data) {
 				data.STATUS = data.STATUS == "1" ? '活动' : '不活动'

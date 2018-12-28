@@ -4,35 +4,30 @@
 		<div slot="header" class="title clearfix">
 			<span>检验/检测项目</span>
 			<!--搜索框 Begin-->
-				<div class="columns pull-right" style="width: 180px;">
-					<el-input placeholder="请输入项目名称" v-model="search" class="input-with-select">
-						<el-button slot="append" icon="el-icon-search"></el-button>
+				<div class="columns pull-right" style="width: 160px;">
+					<el-input placeholder="请输入项目名称" v-model="search">
 					</el-input>
 				</div>
 			<!--搜索框 End-->
 		</div>
 		<div class="text item">
-			<div class="pb10 clearfix">
-				<!-- <div class="columns pull-left"><el-button type="primary" size="small">关联父级</el-button></div> -->
-				<div class="table-func pull-right">
-					<el-button type="success" size="mini" round @click="addfield_inspectionPro2" class="pull-right">
-						<i class="icon-add"></i>
-						<font>新建</font>
-					</el-button>
-				</div>
+			<div class="table-func pb10 clearfix">
+				<el-button type="success" size="mini" round @click="addfield_inspectionPro2">
+					<i class="icon-add"></i>
+					<font>新建</font>
+				</el-button>
 			</div>
 			<el-form :model="inspectionPro2Form" ref="inspectionPro2Form" class="el-radio__table">
-			  <el-table :data="(Array.isArray(inspectionPro2Form.inspectionList)?inspectionPro2Form.inspectionList:[]).filter(data => !search || data.P_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="350" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'inspectionPro2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
-				<el-table-column label="单选" width="50"></el-table-column>
-			  	<!-- <el-table-column label="所属标准编号" width="120" prop="S_NUM">
+			  <el-table :data="(Array.isArray(inspectionPro2Form.inspectionList)?inspectionPro2Form.inspectionList:[]).filter(data => !search || data.P_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'inspectionPro2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
+			  	<el-table-column label="所属标准" width="80" prop="S_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.S_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" disabled></el-input><span v-else="v-else">{{scope.row.S_NUM}}</span>
 					</el-form-item>
 			      </template>
-			    </el-table-column> -->
+			    </el-table-column>
 
-			  	<el-table-column label="项目编号" width="100" prop="P_NUM">
+			  	<el-table-column label="项目编号" sortable width="100" prop="P_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.P_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" disabled></el-input><span v-else="v-else">{{scope.row.P_NUM}}</span>
@@ -447,9 +442,13 @@
 .el-card__header {
 	padding: 10px;
 }
-.table-func {
-	position:relative;
-	top: 0px;
-    right: 0px;
+.el-card { position: relative; overflow:visible;}
+.el-card .table-func {
+	display: none;
+	z-index: 998;
+	position:absolute;
+	top: -35px;
+	left: 0px;
 }
+.el-card:hover .table-func  {display: block;}
 </style>

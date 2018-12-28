@@ -3,7 +3,7 @@
     <div class="table-func">
         <form method="post" id="file" action="" enctype="multipart/form-data" style="float: left;">
             <el-button type="warn" size="mini" round class="a-upload" :disabled="docParm.model=='new'?true:false">
-                <i class="el-icon-upload"></i>
+                <i class="el-icon-upload2"></i>
                 <font>上传</font>
                 <input id="excelFile" type="file" name="uploadFile" @change="upload" v-if="docParm.model=='edit'"/>
             </el-button>

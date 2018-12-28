@@ -114,10 +114,86 @@
 									</el-col> -->
 								</el-row>
 							</el-collapse-item>
-
+							
 							<!-- 年度计划列表 Begin-->
-							<el-collapse-item title="文档" name="2">
-								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
+							<el-collapse-item title="年度计划列表" name="2" class="ml30">
+								<div class="table-func">
+									<el-button type="primary" size="mini" round>
+										<i class="icon-upload-cloud"></i>
+										<font>导入</font>
+									</el-button>
+									<el-button type="success" size="mini" round @click="addfield1">
+										<i class="icon-add"></i>
+										<font>新建行</font>
+									</el-button>
+								</div>
+
+								<el-table :header-cell-style="rowClass" :data="worlplanlist" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100% ;"  :default-sort="{prop:'worlplanlist', order: 'descending'}" v-loadmore="loadMore">
+								    <el-table-column prop="iconOperation" fixed width="50px">
+								      <template slot-scope="scope" >
+								      	<i class="el-icon-check" v-if="scope.row.isEditing" @click="iconOperation(scope.row)">
+								      	</i>
+								      	<i class="el-icon-edit" v-if="!scope.row.isEditing" @click="iconOperation(scope.row)">
+								      	</i>
+								      </template>
+								    </el-table-column>
+
+								    <!-- <el-table-column label="所属计划编号" sortable width="120px" prop="WP_NUM">
+								      <template slot-scope="scope">
+								      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_NUM" disabled></el-input><span v-if="!scope.row.isEditing">{{scope.row.WP_NUM}}</span>
+								      </template>
+								    </el-table-column> -->
+
+								    <el-table-column label="序号" sortable width="120px" prop="WP_LINENUM">
+								      <template slot-scope="scope">
+								      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_LINENUM" disabled></el-input><span v-if="!scope.row.isEditing">{{scope.row.WP_LINENUM}}</span>
+								      </template>
+								    </el-table-column>
+									<el-table-column prop="ITEM_NAME" label="产品名称" sortable width="120px" :formatter="judge">
+								      <template slot-scope="scope">
+								         <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ITEM_NAME" placeholder="请输入内容">
+								         	<el-button slot="append" icon="el-icon-search"></el-button>
+								         </el-input><span v-if="!scope.row.isEditing">{{scope.row.ITEM_NAME}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="MODEL" label="规格型号" sortable width="120px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入内容"></el-input><span v-if="!scope.row.isEditing">{{scope.row.MODEL}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="MEMO" label="近三年监督抽查情况" sortable width="260px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MEMO" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.MEMO}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="CHECKCOST" label="检测费用" sortable width="120px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容" id="cost" @blur="toPrice(scope.row)"></el-input><span v-if="!scope.row.isEditing" id="costshow">{{scope.row.CHECKCOST}}</span>
+								      </template>
+								    </el-table-column>
+								    <el-table-column prop="REASION" label="项目提出理由" sortable width="120px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REASION" placeholder="请输入内容"></el-input><span v-if="!scope.row.isEditing">{{scope.row.REASION}}</span>
+								      </template>
+								    </el-table-column>
+
+								    <!-- <el-table-column prop="MEMO" label="近三年监督抽查情况" sortable width="160px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入内容"></el-input><span v-if="!scope.row.isEditing">{{scope.row.MODEL}}</span>
+								      </template>
+								    </el-table-column> -->
+
+								    <el-table-column fixed="right" label="操作" width="120">
+								      <template slot-scope="scope">
+								        <el-button @click="delPlan(scope.$index,scope.row, 'WORLPLANLINE','worlplanlist')" type="text" size="small">
+								          移除
+								        </el-button>
+								        <el-button @click="assign(scope.row)" type="text" size="small" v-if="assignshow">
+								          下达
+								        </el-button>
+								      </template>
+								    </el-table-column>
+								</el-table>
 							</el-collapse-item>
 							<!-- 年度计划列表 End -->
 							<!-- 检测依据、检测项目与要求 Begin-->
@@ -279,9 +355,11 @@
 				            	</el-form>
 							</el-collapse-item> -->
 							<!-- 文档编号列表 End -->
-
+							<el-collapse-item title="文档" name="6">
+								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
+							</el-collapse-item>
 							<!-- 录入人信息 Begin-->
-							<el-collapse-item title="其他" name="6" v-if="dept">
+							<el-collapse-item title="其他" name="7" v-if="dept">
 								<el-row :gutter="30"  v-show="views">
 									<el-col :span="8">
 										<el-form-item label="录入人" prop="ENTERBY">

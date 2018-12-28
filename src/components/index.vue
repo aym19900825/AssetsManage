@@ -173,8 +173,8 @@ export default {
 				navherf: '/inspection_project'
 			}, {
 				navicon: 'icon-search3',
-				navtitle: '文件查询',
-				navherf: '/files_search'
+				navtitle: '文档管理',
+				navherf: '/doc_category'
 			}, {
 				navicon: 'icon-ports3',
 				navtitle: '接口',
@@ -187,11 +187,12 @@ export default {
 				navicon: 'icon-setting3',
 				navtitle: '系统设置',
 				navherf: '/user_management'
-			}, {
-				navicon: 'icon-setting3',
-				navtitle: '文档管理',
-				navherf: '/doc_category'
-			}
+			},
+			//  {
+			// 	navicon: 'icon-search3',
+			// 	navtitle: '文件查询',
+			// 	navherf: '/files_search'
+			// }
 		]
       }
     },

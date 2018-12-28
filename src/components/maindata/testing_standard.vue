@@ -543,8 +543,8 @@
 						}
 					}
 					this.standardList = newarr;
-					//					this.standardList = res.data.data;
-					//					this.page.totalCount = res.data.count;
+					//	this.standardList = res.data.data;
+					//	this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
 
 			},

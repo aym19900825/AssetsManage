@@ -21,8 +21,10 @@
                     <el-dropdown-item class="J_tabCloseOther"><span @click="closeOther">关闭其他选项卡</span></el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
-            </button>
-            <a  onclick="history.back(-1);return false;"class="roll-nav roll-right J_tabExit"><i class="icon-back"></i>返回</a>
+            </button>in
+            <router-link class="roll-nav roll-right J_tabExit" v-if="currentPage === 'index'"></router-link>
+            <router-link :to="{path:'/index'}" class="roll-nav roll-right J_tabExit" v-else><i class="icon-back"></i>返回</router-link>
+           <!--  <a onclick="history.back(-1);return false;" class="roll-nav roll-right J_tabExit"><i class="icon-back"></i>返回</a> -->
         </div>
     </div>
 </template>
@@ -35,7 +37,8 @@ export default {
         return {
             basic_url: Config.dev_url,
             tabs: [],
-            selectedTab: {}
+            selectedTab: {},
+            currentPage: '',
         }
     },
     methods: {

@@ -11,6 +11,13 @@
 				<!--部门名称 Begin-->
 				<el-row :gutter="0">
 					<el-col :span="24" class="text-center">
+						<div class="clearfix">
+							<div class="table-func pull-left">
+								<el-button type="success" size="mini" round @click="addfield_productType2" class="pull-right mt5">
+									<i class="icon-add"></i>
+									<font>新建</font>
+								</el-button>
+							</div>
 						<el-form :inline="true" :model="formInline">
 							<el-form-item label="部门名称">
 								<el-select v-model="formInline.DEPARTMENT" placeholder="请选择部门" @change="requestData_productType2">
@@ -18,6 +25,7 @@
 								</el-select>
 							</el-form-item>
 						</el-form>
+						</div>
 					</el-col>
 				</el-row>
 				<!--部门名称 End-->
@@ -27,35 +35,25 @@
 							<div slot="header" class="title clearfix">
 								<span>产品类别</span>
 								<!--搜索框 Begin-->
-								<div class="columns pull-right" style="width: 180px;">
-									<el-input placeholder="请输入产品类别名称" v-model="search" class="input-with-select">
-										<el-button slot="append" icon="el-icon-search"></el-button>
+								<div class="columns pull-right" style="width: 160px;">
+									<el-input placeholder="请输入产品类别名称" v-model="search">
 									</el-input>
 								</div>
 								<!--搜索框 End-->
 							</div>
 							<div class="text item">
-								<div class="pb10 clearfix">
-									<div class="table-func pull-right">
-										<el-button type="success" size="mini" round @click="addfield_productType2" class="pull-right">
-											<i class="icon-add"></i>
-											<font>新建</font>
-										</el-button>
-									</div>
-								</div>
 								<el-form :model="productType2Form" status-icon inline-message ref="productType2Form" class="el-radio__table">
-								  <el-table :data="productType2Form.inspectionList.filter(data => !search || data.TYPE.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="350" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'productType2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore" @selection-change="SelChange">
-									<el-table-column label="单选" width="50"></el-table-column>
+								  <el-table :data="productType2Form.inspectionList.filter(data => !search || data.TYPE.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'productType2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
 
-								  	<el-table-column label="类别编号" sortable width="100" prop="NUM">
+								  	<el-table-column label="类别编号" sortable width="100" prop="NUM" class="pl30">
 								      <template slot-scope="scope">
 								        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-								        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" disabled></el-input><span class="blue" @click="viewchildRow(scope.row.ID,scope.row.NUM)" v-else="v-else">{{scope.row.NUM}}</span>
+								        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM"></el-input><span class="blue" @click="viewchildRow(scope.row.ID,scope.row.NUM)" v-else="v-else">{{scope.row.NUM}}</span>
 										</el-form-item>
 								      </template>
 								    </el-table-column>
 
-								    <el-table-column label="类别名称" sortable width="160" prop="TYPE">
+								    <el-table-column label="类别名称" sortable prop="TYPE">
 								      <template slot-scope="scope">
 								        <el-form-item :prop="'inspectionList.'+scope.$index + '.TYPE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 								        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.TYPE" placeholder="请输入内容">
@@ -65,7 +63,7 @@
 								      </template>
 								    </el-table-column>
 
-								    <el-table-column label="所属部门" sortable width="160" prop="DEPARTMENT">
+								    <!-- <el-table-column label="所属部门" sortable width="160" prop="DEPARTMENT">
 								      <template slot-scope="scope">
 								        <el-form-item :prop="'inspectionList.'+scope.$index + '.DEPARTMENT'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 								        	<el-select v-if="scope.row.isEditing" v-model="scope.row.DEPARTMENT" placeholder="请选择">
@@ -73,25 +71,22 @@
 											</el-select><span v-else="v-else">{{scope.row.DEPARTMENT}}</span>
 										</el-form-item>
 								      </template>
-								    </el-table-column>
+								    </el-table-column> -->
+								    <!-- @cell-click="iconOperation" -->
 
 								    <el-table-column prop="iconOperation" fixed="right" label="操作" width="50">
 								      <template slot-scope="scope">
-								        <!-- <el-button type="text" id="Edit" size="medium" @click.native.prevent="saveRow(scope.row)" v-if="scope.row.isEditing">
+								        <el-button type="text" id="Edit" size="medium" @click="saveRow(scope.row)" v-if="scope.row.isEditing">
 								        	<i class="icon-check" title="保存"></i>
-										</el-button> -->
-										<!-- <el-button type="text" size="medium" @click.native.prevent="modifyversion(scope.row)" v-else="v-else">
+										</el-button>
+										<!-- <el-button type="text" size="medium" @click="modifyversion(scope.row)">
 								        	<i class="icon-edit" title="修改"></i>
 										</el-button> -->
-								        <el-button @click="deleteRow(scope.row)" type="text" size="medium" title="删除" >
+								        <el-button @click="deleteRow(scope.row)" type="text" size="medium" title="删除" v-else="v-else">
 								          <i class="icon-trash red"></i>
 								        </el-button>
 
-								        <!-- <el-button type="text" id="Edit" size="medium" @click.native.prevent="saveRow(scope.row)" v-if="scope.row.isEditing">
-								        	<i class="icon-check" title="保存"></i>
-										</el-button> -->
-
-									 	<!-- <el-button type="text" id="AddChild" size="medium" @click="addchildRow(scope.row)" v-else="v-else">
+									 	<!-- <el-button type="text" size="medium" @click="addchildRow(scope.row)">
 								          <i class="icon-add" title="添加子项"></i>
 								        </el-button> -->
 								      </template>
@@ -113,11 +108,11 @@
 							</div>
 						</el-card>
 					</el-col>
-					<el-col :span="6"><product2child @parentMsd_product2="childMsd_product2" ref="product2child"></product2child></el-col>
-					<el-col :span="6"><inspectionSta2child @parentMsd_inspectionSta2="childMsd_inspectionSta2" ref="inspectionSta2child"></inspectionSta2child></el-col>
-					<el-col :span="6"><inspectionPro2child @parentMsd_inspectionPro2="childMsd_inspectionPro2" ref="inspectionPro2child"></inspectionPro2child></el-col>
+					<el-col :span="6" class="v-resize"><product2child @parentMsd_product2="childMsd_product2" ref="product2child"></product2child></el-col>
+					<el-col :span="6" class="v-resize"><inspectionSta2child @parentMsd_inspectionSta2="childMsd_inspectionSta2" ref="inspectionSta2child"></inspectionSta2child></el-col>
+					<el-col :span="6" class="v-resize"><inspectionPro2child @parentMsd_inspectionPro2="childMsd_inspectionPro2" ref="inspectionPro2child"></inspectionPro2child></el-col>
 				</el-row>
-				<div class="el-collapse-item mt20 pt10 pb10" aria-expanded="true" accordion>
+				<div class="el-collapse-item mt10 pt10 pb10" aria-expanded="true" accordion>
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<el-tabs>
@@ -221,10 +216,10 @@
 		},
 		methods: {
 			childMsd_product2(data){//赋值给子表产品ID
-				console.log(data);
 				this.product2Id = data;
 			},
 			childMsd_inspectionSta2(data){//赋值给子表检验/检测标准ID
+				console.log(data);
 				this.inspectionSta2Id = data;
 			},
 			childMsd_inspectionPro2(data){//赋值给子表检验/检测标准ID
@@ -237,7 +232,8 @@
 				}
 			},
 			
-			modifyversion (row) {//点击修改后给当前修改人和修改时间赋值
+			modifyversion (row) {//点击修改后给当前修改人和修改时间赋值				
+				row.isEditing = !row.isEditing				
 				 this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					row.CHANGEBY=res.data.nickname;
 					var date=new Date();
@@ -383,11 +379,10 @@
 						this.currentUser=res.data.nickname;
 						var date=new Date();
 						this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
-						var index=this.$moment(date).format("YYYYMMDDHHmmss");
 						var obj = {
 							"TYPE": '',
 							"STATUS": '活动',
-							"NUM": 'PT' + index,
+							"NUM": '',
 							"VERSION": 1,
 							"DEPARTMENT": '',
 							"CHANGEBY": this.currentUser,
@@ -483,14 +478,18 @@
 </script>
 
 <style scoped>
+.input { position: relative; z-index: 25; }
+.el-input__suffix-inner {display: none;}
+.el-form-item { margin-bottom: 0px;}
 .el-collapse-item {
 	padding-left: 15px;
 	padding-right: 15px;
 }
-.el-card__header {
-	padding: 10px;
-}
 
+.el-table td {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
 .table-func {
 	position:relative;
 	top: 0px;

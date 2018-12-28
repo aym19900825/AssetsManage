@@ -15,8 +15,8 @@
 					</span>
 				</div>
 			</div>
-			<div class="mask_content">
-				<el-form :model="dataInfo" inline-message :rules="rules" ref="dataInfo" label-width="80px" class="demo-user">
+			<el-form :model="dataInfo" inline-message :rules="rules" ref="dataInfo" label-width="80px" class="demo-user">
+				<div class="mask_content">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基本信息" name="1">
@@ -49,13 +49,18 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="标准名称" prop="S_NAME">
-											<el-input v-model="dataInfo.S_NAME" :disabled="noedit"></el-input>
-										</el-form-item>
+										<el-tooltip class="item" effect="dark" :content="dataInfo.S_NAME" placement="top">
+											<el-form-item label="标准名称" prop="S_NAME">
+												<el-input v-model="dataInfo.S_NAME" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-tooltip>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="英文名称" prop="S_ENGNAME">
-											<el-input v-model="dataInfo.S_ENGNAME" :disabled="noedit"></el-input>
+											<el-input v-model="dataInfo.S_ENGNAME" :disabled="noedit" @focus="editBox('S_ENGNAME')">
+												<!-- <el-button slot="append" @click="dialogFormVisible = true" icon="icon-maximization"></el-button> -->
+											</el-input>
+											
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -115,6 +120,7 @@
 							</el-collapse-item>
 						</el-collapse>
 					</div>
+
 					<div class="el-dialog__footer" v-show="noviews">
 							<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并添加</el-button>
@@ -122,9 +128,21 @@
 							<el-button v-if="modify" type="success" @click="update('dataInfo')">启用</el-button>
 							<el-button @click="close">取消</el-button>
 					</div>
-				</el-form>
-			</div>
+				</div>
+			</el-form>
 		</div>
+
+		<el-dialog title="信息" :visible.sync="dialogFormVisible"  :before-close="resetEditBox">
+			<el-form>
+				<el-form-item label="英文名称" :label-width="formLabelWidth">
+					<el-input type="textarea" :rows="4" v-model="editDataInfo" autocomplete="off"></el-input>
+				</el-form-item>
+				<el-form-item class="text-center pt20">
+					<el-button @click="resetEditBox">取 消</el-button>
+					<el-button type="primary" @click="saveEditBox">确 定</el-button>
+				</el-form-item>
+			</el-form>
+		</el-dialog>
 
 	</div>
 </template>
@@ -174,6 +192,9 @@
 				}
 			};
 			return {
+				editDataInfo: '',
+				editDataInfoProp: '',
+
 				docParm: {
 					'model': 'new',
 					'appname': '',
@@ -185,6 +206,19 @@
 					'appname': '',
 					'appid': 1
 				},
+				dialogTableVisible: false,
+        		dialogFormVisible: false,
+        		form: {
+					name: '',
+					region: '',
+					date1: '',
+					date2: '',
+					delivery: false,
+					type: [],
+					resource: '',
+					desc: ''
+				},
+				formLabelWidth: '120px',
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				options: [{
@@ -243,7 +277,7 @@
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
-				DATAINFO:{},//父组件传过来的值
+				// DATAINFO:{},//父组件传过来的值
 				addtitle:true,
 				modifytitle:false,
 				viewtitle:false,
@@ -258,7 +292,22 @@
 			};
 		},
 		methods: {
-			
+			editBox(val){
+				console.log('edit=========');
+				this.dialogFormVisible = true;
+				this.editDataInfoProp = val;
+				this.editDataInfo = this.dataInfo[val];
+			},
+			saveEditBox(){
+				var  editProp = this.editDataInfoProp;
+				this.dataInfo[editProp] = this.editDataInfo;
+				this.resetEditBox();
+			},
+			resetEditBox(){
+				this.dialogFormVisible = false;
+				this.editDataInfo = '';
+				this.editDataInfoProp = '';
+			},
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selUser = val;
@@ -309,18 +358,6 @@
 			},
 			//添加点击按钮显示弹窗
 			visible() {
-				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-//					this.dataInfo.DEPARTMENT=res.data.companyName;
-				    this.dataInfo.DEPARTMENT=res.data.deptName;
-					this.dataInfo.ENTERBY=res.data.nickname;
-					var date=new Date();
-					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-				}).catch((err)=>{
-					this.$message({
-						message:'网络错误，请重试',
-						type:'error'
-					});
-				});
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.viewtitle = false;

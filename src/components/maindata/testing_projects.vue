@@ -107,7 +107,7 @@
 							</el-table-column>
 							<el-table-column label="名称" width="220" sortable prop="P_NAME" v-if="this.checkedName.indexOf('名称')!=-1">
 							</el-table-column>
-							<el-table-column label="单价(元)" width="120" sortable prop="QUANTITY" v-if="this.checkedName.indexOf('单价')!=-1">
+							<el-table-column label="单价(元)" width="120" align="right" sortable prop="QUANTITY" v-if="this.checkedName.indexOf('单价')!=-1">
 							</el-table-column>
 							<el-table-column label="人员资质" width="180" sortable prop="QUALIFICATION" v-if="this.checkedName.indexOf('人员资质')!=-1">
 							</el-table-column>

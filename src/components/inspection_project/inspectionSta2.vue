@@ -4,32 +4,28 @@
 		<div slot="header" class="title clearfix">
 			<span>检验/检测标准</span>
 			<!--搜索框 Begin-->
-			<div class="columns pull-right" style="width: 180px;">
-				<el-input placeholder="请输入标准名称" v-model="search" class="input-with-select">
-					<el-button slot="append" icon="el-icon-search"></el-button>
+			<div class="columns pull-right" style="width: 160px;">
+				<el-input placeholder="请输入标准名称" v-model="search">
 				</el-input>
 			</div>
 			<!--搜索框 End-->
 		</div>
 		<div class="text item">
-			<div class="pb10 clearfix">
-				<div class="table-func pull-right">
-						<el-button type="success" size="mini" round @click="addfield_inspectionSta2(scope.row)" class="pull-right">
-						<i class="icon-add"></i>
-						<font>新建</font>
-					</el-button>
-				</div>
+			<div class="table-func pb10 clearfix">
+				<el-button type="success" size="mini" round @click="addfield_inspectionSta2">
+					<i class="icon-add"></i>
+					<font>新建</font>
+				</el-button>
 			</div>
 			<el-form :model="inspectionSta2Form" ref="inspectionSta2Form" class="el-radio__table">
-			  <el-table :data="(Array.isArray(inspectionSta2Form.inspectionList)?inspectionSta2Form.inspectionList:[]).filter(data => !search || data.S_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="350" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'inspectionSta2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
-			  	<el-table-column label="单选" width="50"></el-table-column>
-				<!-- <el-table-column label="所属产品编号" width="120" prop="PRO_NUM">
+			  <el-table :data="(Array.isArray(inspectionSta2Form.inspectionList)?inspectionSta2Form.inspectionList:[]).filter(data => !search || data.S_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'inspectionSta2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
+				<el-table-column label="所属产品" width="80" prop="PRO_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.PRO_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PRO_NUM" disabled></el-input><span v-else="v-else">{{scope.row.PRO_NUM}}</span>
 					</el-form-item>
 			      </template>
-			    </el-table-column> -->
+			    </el-table-column>
 
 			  	<el-table-column label="标准编码" sortable width="100" prop="S_NUM">
 			      <template slot-scope="scope">
@@ -39,7 +35,7 @@
 			      </template>
 			    </el-table-column>
 
-			    <el-table-column label="标准名称" sortable width="160" prop="S_NAME">
+			    <el-table-column label="标准名称" sortable prop="S_NAME">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.S_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NAME" placeholder="请输入内容">
@@ -224,7 +220,7 @@
 				return index + 1;
 			},
 			viewfield_inspectionSta2(ID){//点击父级筛选出子级数据
-				console.log('viewfield_inspectionSta2');
+				console.log(ID);
 				if(ID=='null'){
 					this.inspectionSta2Form.inspectionList = []; 
 					// this.$refs.inspectionPro2child.viewfield_inspectionPro2('null');
@@ -246,10 +242,10 @@
 					//默认主表第一条数据
 					if(this.inspectionSta2Form.inspectionList.length > 0){
 						//this.$refs.inspectionPro2child.viewfield_inspectionPro2(this.inspectionSta2Form.inspectionList[0].ID);
-						this.$emit('parentMsd_inspectionSta2', this.inspectionSta2Form.inspectionList[0].ID);
+						this.$on('parentMsd_inspectionSta2', this.inspectionSta2Form.inspectionList[0].ID);
 					}else{
 						//this.$refs.inspectionPro2child.viewfield_inspectionPro2('null');
-						this.$emit('parentMsd_inspectionSta2', 'null');
+						this.$on('parentMsd_inspectionSta2', 'null');
 					}
 
 					for(var j = 0; j < this.inspectionSta2Form.inspectionList.length; j++){
@@ -427,9 +423,13 @@
 .el-card__header {
 	padding: 10px;
 }
-.table-func {
-	position:relative;
-	top: 0px;
-    right: 0px;
+.el-card { position: relative; overflow:visible;}
+.el-card .table-func {
+	display: none;
+	z-index: 998;
+	position:absolute;
+	top: -35px;
+	left: 0px;
 }
+.el-card:hover .table-func  {display: block;}
 </style>

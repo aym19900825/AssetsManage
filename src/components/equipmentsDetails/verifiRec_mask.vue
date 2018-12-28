@@ -433,7 +433,9 @@
 				this.docParm = {
 					'model': 'new',
 					'appname': 'CHECK_RECORD',
-					'recordid': 1
+					'recordid': 1,
+					'appid': 73
+
 				};
 			},
 			// 这里是修改
@@ -456,7 +458,8 @@
 				this.docParm = {
 					'model': 'edit',
 					'appname': 'CHECK_RECORD',
-					'recordid': this.detailData.ID
+					'recordid': this.detailData.ID,
+					'appid': 73
 				};
 				this.$refs.docTable.getData();
 			},

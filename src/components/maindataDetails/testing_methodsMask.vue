@@ -252,9 +252,10 @@
 			visible() {//添加内容时从父组件带过来的
 				this.getUser('new');
 				this.docParm = {
-					'model': 'new',
-					'appname': 'CHECK_RECORD',
-					'recordid': 1
+					'model': 'edit',
+					'appname': 'INSPECTION_METHOD2',
+					'recordid': this.testingForm.ID,
+					'appid':32
 				};
 				
             	this.addtitle = true;
@@ -288,8 +289,9 @@
 
 				this.docParm = {
 					'model': 'edit',
-					'appname': 'CHECK_RECORD',
-					'recordid': this.detailData.ID
+					'appname': 'INSPECTION_METHOD2',
+					'recordid': this.testingForm.ID,
+					'appid':32
 				};
 				this.$refs.docTable.getData();
 			},

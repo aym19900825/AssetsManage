@@ -80,8 +80,8 @@
 							<el-collapse-item title="其它" name="2" v-show="views">
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="录入人" prop="FAX">
-											<el-input v-model="CATEGORY.ENTERBY" :disabled="edit"></el-input>
+										<el-form-item label="录入人" prop="ENTERBYDesc">
+											<el-input v-model="CATEGORY.ENTERBYDesc" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -90,8 +90,8 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="修改人" prop="CHANGEBY">
-											<el-input v-model="CATEGORY.CHANGEBY" placeholder="当前修改人" :disabled="edit"></el-input>
+										<el-form-item label="修改人" prop="CHANGEBYDesc">
+											<el-input v-model="CATEGORY.CHANGEBYDesc" placeholder="当前修改人" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -227,10 +227,11 @@
 			visible() {
 				//				this.CATEGORY.NUM =  this.rand(1000,9999);
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					this.CATEGORY.DEPARTMENT = res.data.deptName;
-					this.CATEGORY.ENTERBY = res.data.nickname;
+					console.log(res.data);
+					this.CATEGORY.ENTERBY = res.data.id;
+					this.CATEGORY.ENTERBYDesc = res.data.nickname;
 					var date = new Date();
-					this.CATEGORY.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					this.CATEGORY.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -265,9 +266,10 @@
 				this.statusshow2 = true;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.CATEGORY.DEPARTMENT = res.data.deptName;
-					this.CATEGORY.CHANGEBY = res.data.nickname;
+					this.CATEGORY.CHANGEBY = res.data.id;
+					this.CATEGORY.CHANGEBYDesc = res.data.nickname;
 					var date = new Date();
-					this.CATEGORY.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					this.CATEGORY.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
 					//深拷贝数据
 					let _obj = JSON.stringify(this.CATEGORY);
         			this.category = JSON.parse(_obj);
@@ -281,6 +283,7 @@
 			},
 			//这是查看
 			view() {
+				console.log(this.CATEGORY);
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;

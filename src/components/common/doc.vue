@@ -91,7 +91,7 @@ export default {
                     + '&deptfullname=' + this.docParm.deptfullname
                     + '&recordid=' + this.docParm.recordid
                     + '&appname=' + this.docParm.appname
-                    + '&appid=99';
+                    + '&appid=' + this.docParm.appid;
             this.$axios.post(url, formData, config
             ).then((res)=>{
                 if(res.data.code == 0){

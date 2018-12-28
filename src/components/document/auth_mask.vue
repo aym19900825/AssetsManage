@@ -36,7 +36,7 @@
 										v-if="item.type=='checkbox'" >
 										<el-checkbox style="line-height: 40px;" v-for="item in authorities" :label="item.label" :key="item.val">{{item.label}}</el-checkbox>
 									</el-checkbox-group>
-									<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'" @change="selChange">
+									<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'&&item.prop==''" @change="selChange">
 										<el-option v-for="item in assets"
 										:key="item.ID"
 										:label="item.DESCRIPTION"

@@ -110,25 +110,25 @@
 							</el-table-column>
 							<el-table-column label="型号" sortable prop="MODEL" v-if="this.checkedName.indexOf('型号')!=-1">
 							</el-table-column>
-							<el-table-column label="技术指标" sortable prop="ASSET_KPI" v-if="this.checkedName.indexOf('技术指标')!=-1">
+							<el-table-column label="技术指标" width="120" sortable prop="ASSET_KPI" v-if="this.checkedName.indexOf('技术指标')!=-1">
 							</el-table-column>						
-							<el-table-column label="制造商" sortable prop="VENDOR" v-if="this.checkedName.indexOf('制造商')!=-1">
+							<el-table-column label="制造商" width="140" sortable prop="VENDOR" v-if="this.checkedName.indexOf('制造商')!=-1">
 							</el-table-column>
-							<el-table-column label="出厂编号" width="200" sortable prop="FACTOR_NUM" v-if="this.checkedName.indexOf('出厂编号')!=-1">
+							<el-table-column label="出厂编号" width="160" sortable prop="FACTOR_NUM" v-if="this.checkedName.indexOf('出厂编号')!=-1">
 							</el-table-column>
-							<el-table-column label="价格(万元)" width="200" sortable prop="A_PRICE" v-if="this.checkedName.indexOf('价格(万元)')!=-1">
+							<el-table-column label="价格(万元)" width="140" sortable prop="A_PRICE" v-if="this.checkedName.indexOf('价格(万元)')!=-1">
 							</el-table-column>
-							<el-table-column label="接受日期" width="100" sortable prop="ACCEPT_DATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('接受日期')!=-1">
+							<el-table-column label="接受日期" width="140" sortable prop="ACCEPT_DATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('接受日期')!=-1">
 							</el-table-column>
-							<el-table-column label="启用日期" width="100" sortable prop="S_DATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('启用日期')!=-1">
+							<el-table-column label="启用日期" width="140" sortable prop="S_DATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('启用日期')!=-1">
 							</el-table-column>						
-							<el-table-column label="配置地址" sortable prop="C_ADDRESS" v-if="this.checkedName.indexOf('配置地址')!=-1">
+							<el-table-column label="配置地址" width="140" sortable prop="C_ADDRESS" v-if="this.checkedName.indexOf('配置地址')!=-1">
 							</el-table-column>
-							<el-table-column label="接收状态" sortable prop="A_STATUS" v-if="this.checkedName.indexOf('接收状态')!=-1">
+							<el-table-column label="接收状态" width="120" sortable prop="A_STATUS" v-if="this.checkedName.indexOf('接收状态')!=-1">
 							</el-table-column>
-							<el-table-column label="保管人" sortable prop="KEEPER" v-if="this.checkedName.indexOf('保管人')!=-1">
+							<el-table-column label="保管人" width="200" sortable prop="KEEPER" v-if="this.checkedName.indexOf('保管人')!=-1">
 							</el-table-column>						
-							<el-table-column label="备注" sortable prop="MEMO" v-if="this.checkedName.indexOf('备注')!=-1">
+							<el-table-column label="备注" width="200" sortable prop="MEMO" v-if="this.checkedName.indexOf('备注')!=-1">
 							</el-table-column>
 						</el-table>
 						<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
@@ -469,33 +469,20 @@
 				}).catch((wrong) => {})
 				
 			},
-			// loadMore () {
-			//    if (this.loadSign) {
-			//      this.loadSign = false
-			//      this.page++
-			//      if (this.page > 10) {
-			//        return
-			//      }
-			//      setTimeout(() => {
-			//        this.loadSign = true
-			//      }, 1000)
-			//      console.log('到底了', this.page)
-			//    }
-			//  },
-			// loadMore() {
-			// 	if(this.loadSign) {
-			// 		this.loadSign = false
-			// 		this.page.currentPage++
-			// 			if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-			// 				return
-			// 			}
-			// 		setTimeout(() => {
-			// 			this.loadSign = true
-			// 		}, 1000)
-			// 		this.requestData()
-			// 		//console.log('到底了', this.page.currentPage)
-			// 	}
-			// },
+			loadMore() {
+				if(this.loadSign) {
+					this.loadSign = false
+					this.page.currentPage++
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							return
+						}
+					setTimeout(() => {
+						this.loadSign = true
+					}, 1000)
+					this.requestData()
+					//console.log('到底了', this.page.currentPage)
+				}
+			},
 			handleNodeClick(data) {
 			},
 			formatter(row, column) {

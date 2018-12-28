@@ -133,7 +133,10 @@
 									</el-table-column>
 								</el-table>
 							</el-collapse-item>
-							<el-collapse-item title="其他" name="3" v-show="!addtitle">
+							<el-collapse-item title="文档" name="3">
+								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
+							</el-collapse-item>
+							<el-collapse-item title="其他" name="4" v-show="!addtitle">
                             	<el-form-item label-width="120px" v-for="item in otherInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-if="item.prop=='DEPARTMENT'" v-show="dept">
                                     <el-input v-model="dataInfo[item.prop]" :type="item.type" disabled v-if="item.prop=='DEPARTMENT'"></el-input>
                                 </el-form-item>	
@@ -159,11 +162,24 @@
 
 <script>
 	import Config from '../../config.js'
+	import docTable from '../common/doc.vue'
 	export default {
 		name: 'masks',
 		props: ['detailData'],
+		components: {docTable},
 		data() {
 			return {
+				docParm: {
+					'model': 'new',
+					'appname': '',
+					'recordid': 1,
+					'userid': 1,
+					'username': '',
+					'deptid': 1,
+					'deptfullname': '',
+					'appname': '',
+					'appid': 1
+				},
 				rules: {
 					DESCRIPTION: [
 						{ required: true, message: '请输入计划描述', trigger: 'blur' },
@@ -281,25 +297,22 @@
 			rowClass({ row, rowIndex}) {
 				return 'text-align:center'
 			},
-			getUser(){
+			getUser(opt){
 				var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url,{}).then((res) => {
-				        this.dataInfo.ENTERBY = res.data.username;
-				        this.dataInfo.ENTERDATE = this.getToday();
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
-			},
-			getModiuser(){
-				var url = this.basic_url + '/api-user/users/currentMap';
-				this.$axios.get(url,{}).then((res) => {
-				        this.dataInfo.CHANGEBY = res.data.username;
+					if(opt=='new'){
+						this.dataInfo.ENTERBY = res.data.username;
+						this.dataInfo.ENTERDATE = this.getToday();
+					}else{
+						this.dataInfo.CHANGEBY = res.data.username;
 				        this.dataInfo.CHANGEDATE = this.getToday();
 						this.dataInfo.DEPARTMENT = res.data.deptName;
-						console.log(this.dataInfo.DEPARTMENT);
+
+						this.docParm.userid = res.data.id;
+						this.docParm.username = res.data.username;
+						this.docParm.deptid = res.data.deptId;
+						this.docParm.deptfullname = res.data.deptName;
+					}
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -380,33 +393,48 @@
 				this.statusshow1 = true;
 				this.statusshow2 = false;
 				this.show = true;
-				this.getUser();
+				
+				this.docParm = {
+					'model': 'new',
+					'appname': 'checkPlan',
+					'recordid': 1,
+					'appid': 71
+				};
+				this.getUser('new');
 			},
 			// 这里是修改
 			detail() {
-				this.getModiuser();
 				var ID = this.detailData.ID;
 				var url = this.basic_url + '/api-apps/app/checkPlan/' + ID;
 				this.$axios.get(url, {}).then((res) => {
 					this.modify = true;
 					this.show = true;
 					this.dataInfo = res.data;
-					console.log(this.dataInfo);
 					this.dataInfo.tableList = this.dataInfo.CHECK_PLAN_LINEList;
+
+					this.getUser('edit');
+					var _this = this;
+					setTimeout(function(){
+						_this.docParm.model = 'edit';
+						_this.docParm.appname = 'checkPlan';
+						_this.docParm.recordid = _this.dataInfo.ID;
+						_this.docParm.appid = 71;
+						_this.$refs.docTable.getData();
+					},100);
+
+					this.addtitle = false;
+					this.modifytitle = true;
+					this.viewtitle = false;
+					this.dept = true;
+					this.noedit = false;//表单内容
+					this.views = false;//录入修改人信息
+					this.noviews = true;//按钮
+					this.modify = true;
+					this.hintshow = false;
+					this.statusshow1 = true;
+					this.statusshow2 = false;
+					this.show = true;
 				}).catch((wrong) => {});
-				this.getModiuser();
-				this.addtitle = false;
-				this.modifytitle = true;
-				this.viewtitle = false;
-				this.dept = true;
-				this.noedit = false;//表单内容
-				this.views = false;//录入修改人信息
-				this.noviews = true;//按钮
-				this.modify = true;
-				this.hintshow = false;
-				this.statusshow1 = true;
-				this.statusshow2 = false;
-				this.show = true;
 			},
 			//这是查看
 			view(dataid) {

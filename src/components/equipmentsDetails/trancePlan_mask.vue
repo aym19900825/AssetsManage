@@ -71,9 +71,11 @@
 									</el-table-column>
 								</el-table>
 							</el-collapse-item>
-							
+							<el-collapse-item title="文档" name="3">
+								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
+							</el-collapse-item>
 							<!-- 其他信息 -->
-							<el-collapse-item title="其他" name="3" v-show="!addtitle">
+							<el-collapse-item title="其他" name="4" v-show="!addtitle">
 								<el-form-item v-for="item in otherInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-if="item.prop=='DEPARTMENT'" v-show="dept">
 									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.prop=='DEPARTMENT'" disabled></el-input>
 								</el-form-item>	
@@ -101,9 +103,11 @@
 
 <script>
 	import Config from '../../config.js'
+	import docTable from '../common/doc.vue'
 	export default {
 		name: 'masks',
 		props: ['detailData'],
+		components: {docTable},
 		data() {
 			var checkNum = (rule, value, callback) => {
 				if (!value) {
@@ -118,6 +122,17 @@
 				}, 1000);
 			};
 			return {
+				docParm: {
+					'model': 'new',
+					'appname': '',
+					'recordid': 1,
+					'userid': 1,
+					'username': '',
+					'deptid': 1,
+					'deptfullname': '',
+					'appname': '',
+					'appid': 1
+				},
 				pmRecordList: [],
 				time: [
 					'年','月','日','周'
@@ -375,24 +390,22 @@
 			rowClass({ row, rowIndex}) {
 				return 'text-align:center'
 			},
-			getUser(){
+			getUser(opt){
 				var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url,{}).then((res) => {
-				        this.dataInfo.ENTERBY = res.data.username;
-				        this.dataInfo.ENTERDATE = this.getToday();
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
-			},
-			getModiuser(){
-				var url = this.basic_url + '/api-user/users/currentMap';
-				this.$axios.get(url,{}).then((res) => {
-				        this.dataInfo.CHANGEBY = res.data.username;
-				        this.dataInfo.CHANGEDATE = this.getToday();
-						this.dataInfo.DEPARTMENT = res.data.deptName;
+						if(opt == 'new'){
+							this.dataInfo.ENTERBY = res.data.username;
+							this.dataInfo.ENTERDATE = this.getToday();
+						}else{
+							this.dataInfo.CHANGEBY = res.data.username;
+							this.dataInfo.CHANGEDATE = this.getToday();
+							this.dataInfo.DEPARTMENT = res.data.deptName;
+
+							this.docParm.userid = res.data.id;
+							this.docParm.username = res.data.username;
+							this.docParm.deptid = res.data.deptId;
+							this.docParm.deptfullname = res.data.deptName;
+						}
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -451,11 +464,18 @@
 				this.hintshow = false;
 				this.statusshow1 = true;
 				this.statusshow2 = false;
+				this.docParm = {
+					'model': 'new',
+					'appname': 'PM_PLAN',
+					'recordid': 1,
+					'appid': 69
+				};
 				this.getUser('new');
 				this.show = true;
 			},
 			// 这里是修改
 			detail(dataid) {
+				this.dataInfo = this.detailData;
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.viewtitle = false;
@@ -468,8 +488,16 @@
 				this.statusshow1 = true;
 				this.statusshow2 = false;
 				this.show = true;
-				this.getModiuser();
-				this.dataInfo = this.detailData;
+
+				this.getUser('edit');
+				var _this = this;
+				setTimeout(function(){
+					_this.docParm.model = 'edit';
+					_this.docParm.appname = 'PM_PLAN';
+					_this.docParm.recordid = _this.dataInfo.ID;
+					_this.docParm.appid = 69;
+					_this.$refs.docTable.getData();
+				},100);
 				this.getPmList();
 			},
 			//这是查看

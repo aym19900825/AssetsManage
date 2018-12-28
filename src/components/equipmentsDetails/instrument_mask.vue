@@ -76,9 +76,12 @@
 									</el-table-column>
 								</el-table>
 							</el-collapse-item>
+							<el-collapse-item title="文档" name="4">
+								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
+							</el-collapse-item>
 							
 							<!-- 其他信息 -->
-							<el-collapse-item title="其他" name="4" v-show="!addtitle">
+							<el-collapse-item title="其他" name="5" v-show="!addtitle">
 								<el-form-item v-for="item in otherInfo" :key="item.id" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-if="item.prop=='DEPARTMENT'" v-show="dept">
 									<el-input v-model="dataInfo[item.prop]" :type="item.type" disabled v-if="item.prop=='DEPARTMENT'"></el-input>
 								</el-form-item>
@@ -104,9 +107,11 @@
 
 <script>
 	import Config from '../../config.js'
+	import docTable from '../common/doc.vue'
 	export default {
 		name: 'masks',
 		props: ['detailData'],
+		components: {docTable},
 		data() {
 			var checkNum = (rule, value, callback) => {
 				if (!value) {
@@ -116,6 +121,17 @@
 				}
 			};
 			return {
+				docParm: {
+					'model': 'new',
+					'appname': '',
+					'recordid': 1,
+					'userid': 1,
+					'username': '',
+					'deptid': 1,
+					'deptfullname': '',
+					'appname': '',
+					'appid': 1
+				},
 				rules: {
 					ASSETNUM: [
 						{ required: true, message: '请输入设备编号', trigger: 'blur' },
@@ -572,7 +588,11 @@
 						this.dataInfo.DEPARTMENT = res.data.deptName;
 					}else{
 						this.dataInfo.CHANGEBY = res.data.username;
-				        this.dataInfo.CHANGEDATE = this.getToday();
+						this.dataInfo.CHANGEDATE = this.getToday();
+						this.docParm.userid = res.data.id;
+						this.docParm.username = res.data.username;
+						this.docParm.deptid = res.data.deptId;
+						this.docParm.deptfullname = res.data.deptName;
 					}
 				}).catch((err) => {
 					this.$message({
@@ -619,13 +639,19 @@
 				this.statusshow1 = true;
 				this.statusshow2 = false;
 				this.show = true;
-                this.getUser('new');
+
+				this.docParm = {
+					'model': 'new',
+					'appname': 'ASSET',
+					'recordid': 1,
+					'appid': 66
+				};
+				this.getUser('new');
 			},
 			// 这里是修改
 			detail(dataid) {
 				this.dataInfo = this.detailData;
 				this.handlePrice();
-				this.getUser();
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.viewtitle = false;
@@ -637,6 +663,17 @@
 				this.hintshow = false;
 				this.statusshow1 = true;
 				this.statusshow2 = false;
+				
+				this.getUser();
+				var _this = this;
+				setTimeout(function(){
+					_this.docParm.model = 'edit';
+					_this.docParm.appname = 'ASSET';
+					_this.docParm.recordid = _this.dataInfo.ID;
+					_this.docParm.appid = 66;
+					_this.$refs.docTable.getData();
+				},100);
+
 				this.show = true;
 //				this.getPmList();
 			},

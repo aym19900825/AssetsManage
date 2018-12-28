@@ -469,33 +469,20 @@
 				}).catch((wrong) => {})
 				
 			},
-			// loadMore () {
-			//    if (this.loadSign) {
-			//      this.loadSign = false
-			//      this.page++
-			//      if (this.page > 10) {
-			//        return
-			//      }
-			//      setTimeout(() => {
-			//        this.loadSign = true
-			//      }, 1000)
-			//      console.log('到底了', this.page)
-			//    }
-			//  },
-			// loadMore() {
-			// 	if(this.loadSign) {
-			// 		this.loadSign = false
-			// 		this.page.currentPage++
-			// 			if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-			// 				return
-			// 			}
-			// 		setTimeout(() => {
-			// 			this.loadSign = true
-			// 		}, 1000)
-			// 		this.requestData()
-			// 		//console.log('到底了', this.page.currentPage)
-			// 	}
-			// },
+			loadMore() {
+				if(this.loadSign) {
+					this.loadSign = false
+					this.page.currentPage++
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							return
+						}
+					setTimeout(() => {
+						this.loadSign = true
+					}, 1000)
+					this.requestData()
+					//console.log('到底了', this.page.currentPage)
+				}
+			},
 			handleNodeClick(data) {
 			},
 			formatter(row, column) {

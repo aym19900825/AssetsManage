@@ -340,7 +340,7 @@
 						this.dataInfo.DEPARTMENT = res.data.deptName;
 						this.dataInfo.CHANGEBY = res.data.nickname;
 						var date = new Date();
-						this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+						this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
 						//深拷贝数据
 						let _obj = JSON.stringify(this.dataInfo);
 						this.DATAINFO = JSON.parse(_obj);

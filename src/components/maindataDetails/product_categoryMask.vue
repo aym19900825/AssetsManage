@@ -142,23 +142,30 @@
 		},
 		data() {
 			// var validateNum = (rule, value, callback) => {
-			// 	if(value === '') {
-			// 		callback(new Error('可填写，若不填写系统将自动生成'));
-					
-			// 	} else {
-			// 		callback();
-			// 	}
-			// 	callback();
-			// 	// if(value){
-			// 	// 	if (value==='') {
-			// 	// 		callback();
-			// 	// 	}else{
-		 //  //            	callback(new Error('可填写，若不填写系统将自动生成'));
-			// 	// 	}
-		 //  //       }else{
-		 //  //            callback();
-		 //  //       }
+			// 	if(value != ""){
+			//              if((/^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/).test(value) == false){
+			//                  callback(new Error("请填写大于0的数字"));
+			//              }else{
+			//                  callback();
+			//              }
+			//          }else{
+			//              callback();
+			//          }
 			// };
+			// consumptionMinimum:[{
+			//      validator:(rule,value,callback)=>{
+			//          if(value != ""){
+			//              if((/^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/).test(value) == false){
+			//                  callback(new Error("请填写大于0的数字"));
+			//              }else{
+			//                  callback();
+			//              }
+			//          }else{
+			//              callback();
+			//          }
+			//      },
+			//      trigger:'change'
+			//  }],
 			var validateType = (rule, value, callback) => {
 				if(value === '') {
 					callback(new Error('请填写产品类别名称'));
@@ -182,7 +189,8 @@
 				selectData: [],
 				rules: {
 					// NUM: [{
-					// 	trigger: 'blur',
+					// 	required: false,
+					// 	trigger: 'change',
 					// 	validator: validateNum,
 					// }],
 					TYPE: [{
@@ -228,6 +236,7 @@
 				//				this.CATEGORY.NUM =  this.rand(1000,9999);
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					console.log(res.data);
+					this.CATEGORY.DEPARTMENT = res.data.deptName;
 					this.CATEGORY.ENTERBY = res.data.id;
 					this.CATEGORY.ENTERBYDesc = res.data.nickname;
 					var date = new Date();

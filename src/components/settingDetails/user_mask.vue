@@ -63,16 +63,18 @@
 								<!-- 第一行 -->
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="登录名称" v-if="modify"label-width="100px">
+										<el-form-item label="用户名" v-if="modify"label-width="100px">
 											<el-input v-model="user.username" :disabled="noedit"></el-input>
 										</el-form-item>
-										<el-form-item label="登录名称" prop="username" v-else label-width="100px">
+										<el-form-item label="用户名" prop="username" v-else label-width="100px">
 											<el-input v-model="user.username" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="密码" v-if="modify" label-width="100px">
-											<el-input type="password" v-model="user.password" :disabled="noedit"></el-input>
+											<el-input type="password" v-model="user.password" :disabled="true">
+												<el-button slot="append" icon="icon-edit" @click="editpassword"></el-button>
+											</el-input>
 										</el-form-item>
 										<el-form-item label="密码" prop="password" v-else label-width="100px">
 											<el-input type="password" v-model="user.password" :disabled="noedit"></el-input>
@@ -204,7 +206,7 @@
 												<font>新建行</font>
 											</el-button>
 										</div>
-										<el-form :label-position="labelPosition" :rules="rules">
+										<!-- <el-form :label-position="labelPosition" :rules="rules"> -->
 											<el-table :header-cell-style="rowClass" :fig="true" :data="user.qualifications" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.qualifications', order: 'descending'}">
 												<el-table-column prop="iconOperation" fixed width="50px">
 													<template slot-scope="scope">
@@ -215,13 +217,13 @@
 												<el-table-column prop="step" label="序号" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'qualifications.'+scope.$index + '.step'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.step" placeholder="请输入要求">
+															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.step" placeholder="请输入要求" :disabled="true">
 															</el-input>
 															<span v-else="v-else">{{scope.row.step}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
-												<el-table-column prop="c_num" label="证书编号" sortable width="120px">
+												<el-table-column prop="c_num" label="证书编号" sortable width="180px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'qualifications.'+scope.$index + '.c_num'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.c_num" placeholder="请输入委托方名称">
@@ -230,7 +232,7 @@
 														</el-form-item>
 													</template>
 												</el-table-column>
-												<el-table-column prop="c_name" label="证书名称" sortable width="120px">
+												<el-table-column prop="c_name" label="证书名称" sortable width="200px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'qualifications.'+scope.$index + '.c_name'">
 															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.c_name" placeholder="请输入委托方名称">
@@ -239,7 +241,7 @@
 														</el-form-item>
 													</template>
 												</el-table-column>
-												<el-table-column prop="c_date" label="资质有效期" sortable width="120px">
+												<el-table-column prop="c_date" label="资质有效期" sortable width="200px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'qualifications.'+scope.$index + '.c_date'">
 															<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.c_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
@@ -248,7 +250,7 @@
 														</el-form-item>
 													</template>
 												</el-table-column>
-												<el-table-column prop="enterby" label="录入人" sortable width="120px">
+												<!-- <el-table-column prop="enterby" label="录入人" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'qualifications.'+scope.$index + '.enterbyName'">
 															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.enterbyName" placeholder="请输入要求">
@@ -256,7 +258,7 @@
 															<span v-else="v-else">{{scope.row.enterbyName}}</span>
 														</el-form-item>
 													</template>
-												</el-table-column>
+												</el-table-column> -->
 												<el-table-column prop="enterdate" label="录入时间" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'qualifications.'+scope.$index + '.enterdate'">
@@ -292,7 +294,7 @@
 													</template>
 												</el-table-column>
 											</el-table>
-										</el-form>
+										<!-- </el-form> -->
 									</el-tab-pane>
 									<el-tab-pane label="培训" name="second">
 										<div class="table-func table-funcb">
@@ -387,9 +389,9 @@
 						</el-collapse>
 					</div>
 					<div class="el-dialog__footer">
-						<el-button @click='close'>取消</el-button>
 						<el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
 						<el-button type="success" @click='saveAndSubmit()' v-show="addtitle">保存并添加</el-button>
+						<el-button @click='close'>取消</el-button>
 					</div>
 				</el-form>
 			</div>
@@ -559,10 +561,15 @@
 				hintshow:false,
 				statusshow1:true,
 				statusshow2:false,
+				falg:true,
+				index:0
 			};
 		},
 		methods: {
-			 currentSel(selVal){
+			editpassword(){//点击修改密码按钮跳转到修改密码页面
+		      	this.$router.push({path: '/passwordedit'})
+		    },
+			currentSel(selVal){
         		this.selVal = selVal;
       		},
 			//表头居中
@@ -645,8 +652,9 @@
 					this.enterby = res.data.id
 					var date = new Date();
 					this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
+					this.index = this.index + 1;
 					var obj = {
-						step: '',
+						step: this.index,
 						c_num: '',
 						c_name: '',
 						c_date: '',
@@ -918,19 +926,23 @@
 								type: 'error'
 							});
 						});
+						this.falg = true;
 					} else {
+						this.show = true;
 						this.$message({
 							message: '有必填项未填写，请重新填写',
 							type: 'warning',
 						});
-						return;
+						this.falg = false;
 					}
 				})
 			},
 			//保存
 			saveAndUpdate() {
 				this.save();
-				this.show = false;
+				if(this.falg){
+					this.show = false;
+				}
 				this.$emit('request');
 			},
 			//保存并添加

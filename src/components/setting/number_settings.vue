@@ -62,7 +62,7 @@
 					<el-col :span="24">
 						<!-- 表格 Begin-->
 						<el-table :data="numberList" border stripe :header-cell-style="rowClass" :height="fullHeight" style="width: 100%;" :default-sort="{prop:'numberList', order: 'descending'}" @selection-change="SelChange"  v-loadmore="loadMore">
-							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
+							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 							</el-table-column>
 							<el-table-column label="自动编号名称" width="140" sortable prop="AUTOKEY" v-if="this.checkedName.indexOf('自动编号名称')!=-1">
 								<template slot-scope="scope">

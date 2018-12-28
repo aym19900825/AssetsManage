@@ -109,7 +109,7 @@
 						<el-col :span="24">
 							<!-- 表格 Begin-->
 							<el-table  :header-cell-style="rowClass" :data="productList" line-center border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0">
+								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="编码" width="155" sortable prop="PRO_NUM" v-if="this.checkedName.indexOf('编码')!=-1">
 									<template slot-scope="scope">

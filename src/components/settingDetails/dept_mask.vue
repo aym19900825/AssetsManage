@@ -164,11 +164,12 @@
 						</el-collapse>
 					</div>
 					<div class="el-dialog__footer">
-						    <el-button @click="close">取消</el-button> 
+						    
 						    <el-button type="primary" @click="saveAndUpdate('adddeptForm')">保存</el-button>
-						    <el-button type="success" @click="saveAndSubmit('adddeptForm')">保存并添加</el-button>
+						    <el-button type="success" @click="saveAndSubmit('adddeptForm')" v-show="addtitle">保存并添加</el-button>
 						<!--	<el-button type="primary" class="btn-primarys" @click="submitForm('adddeptForm')">提交</el-button>-->
 							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion">修订</el-button>
+							<el-button @click="close">取消</el-button> 
 					</div>
 				</el-form>
 			</div>
@@ -663,7 +664,7 @@
 //					     "teltphone":this.adddeptForm.teltphone,
 //					     "tips":this.adddeptForm.tips
 //					}
-					console.log(this.adddeptForm);
+					// console.log(this.adddeptForm);
 					this.$axios.post(url, this.adddeptForm).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -673,7 +674,7 @@
 							});
 //							//重新加载数据
 							this.$emit('request');
-							this.$refs["adddeptForm"].resetFields();//清空验证
+							// this.$refs["adddeptForm"].resetFields();//清空验证
 						}
 					}).catch((err) => {
 						this.$message({
@@ -681,15 +682,23 @@
 							type: 'error'
 						});
 					});
+					this.falg=true;
 		          } else {
-		            return false;
-		          }
+						this.show = true;
+						this.$message({
+							message: '未填写完整，请填写',
+							type: 'warning'
+						});
+						this.falg = false;
+					}
 		        });
 				
 			},
 			saveAndUpdate(adddeptForm){
 				this.save(adddeptForm);
-				this.show = false;
+				if(this.falg){
+					this.show = false;
+				}
 				this.$emit('request');
 			},
 			saveAndSubmit(adddeptForm){

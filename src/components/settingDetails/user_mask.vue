@@ -266,7 +266,7 @@
 														</el-form-item>
 													</template>
 												</el-table-column>
-												<el-table-column prop="status" label="信息状态" sortable width="120px">
+												<!-- <el-table-column prop="status" label="信息状态" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'qualifications.'+scope.$index + '.status'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.status" placeholder="请输入要求">
@@ -274,7 +274,7 @@
 															<span v-else="v-else">{{scope.row.status}}</span>
 														</el-form-item>
 													</template>
-												</el-table-column>
+												</el-table-column> -->
 												<!--<el-table-column prop="VERSION" label="上传附件" sortable width="120px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'user_qualifications.'+scope.$index + '.VERSION'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
@@ -337,7 +337,7 @@
 														</el-form-item>
 													</template>
 												</el-table-column>
-												<el-table-column prop="status" label="信息状态" sortable width="120px">
+												<!-- <el-table-column prop="status" label="信息状态" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'traings.'+scope.$index + '.status'">
 															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.status" placeholder="请输入要求">
@@ -345,7 +345,7 @@
 															<span v-else="v-else">{{scope.row.status}}</span>
 														</el-form-item>
 													</template>
-												</el-table-column>
+												</el-table-column> -->
 												<el-table-column fixed="right" label="操作" width="120">
 													<template slot-scope="scope">
 														<el-button @click.native.prevent="deleteRow(scope.$index,user.traings)" type="text" size="small">
@@ -454,7 +454,7 @@
 			return {
 				basic_url: Config.dev_url,
 				user: {
-					status: '活动',
+					status: '1',
 					roleId: [],
 					roles: [],
 					traings: [],
@@ -599,7 +599,7 @@
 					email: '',
 					address: '',
 					tips: '',
-					enabled: '活动',
+					enabled: true,
 					traings: [],
 					qualifications: [],
 				}
@@ -724,7 +724,7 @@
 					email: '',
 					address: '',
 					tips: '',
-					enabled: '活动',
+					enabled: true,
 					traings: [],
 					qualifications: [],
 				};
@@ -775,6 +775,7 @@
 				var usersUrl = this.basic_url + '/api-user/users/currentMap';
 
 				this.$axios.get(usersUrl, {}).then((res) => {
+					console.log(res.data);
 					this.user.changeby = res.data.nickname;
 					var date = new Date();
 					this.user.changedate = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
@@ -840,6 +841,7 @@
 			//点击关闭按钮
 			close() {
 				this.show = false;
+				this.$emit('request');
 			},
 			open(){
 				this.show = true;

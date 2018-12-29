@@ -91,7 +91,7 @@
 									</el-col>
 								</el-row>
 							</el-collapse-item>
-							<el-collapse-item title="文档" name="2">
+							<el-collapse-item title="文件" name="2">
 								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
 							</el-collapse-item>
 							<el-collapse-item title="其它" name="3" v-show="views">

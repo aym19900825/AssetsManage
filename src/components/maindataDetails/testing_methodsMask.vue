@@ -72,7 +72,7 @@
 									</el-col>
 								</el-row>
 							</el-collapse-item>
-							<el-collapse-item title="文档" name="2">
+							<el-collapse-item title="文件" name="2">
 								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
 							</el-collapse-item>
 							<el-collapse-item title="其它" name="3" v-show="views">
@@ -251,6 +251,7 @@
 			},
 			visible() {//添加内容时从父组件带过来的
 				this.getUser('new');
+
 				this.docParm = {
 					'model': 'edit',
 					'appname': 'INSPECTION_METHOD2',
@@ -287,13 +288,15 @@
 //				this.testingForm.STATUS=this.testingForm.STATUS=="1"?'活动':'不活动';
 				this.show = true;
 
-				this.docParm = {
-					'model': 'edit',
-					'appname': 'INSPECTION_METHOD2',
-					'recordid': this.testingForm.ID,
-					'appid':32
-				};
-				this.$refs.docTable.getData();
+				this.getUser('edit');
+				var _this = this;
+				setTimeout(function(){
+					_this.docParm.model = 'edit';
+					_this.docParm.appname = 'INSPECTION_METHOD2';
+					_this.docParm.recordid = _this.testingForm.ID;
+					_this.docParm.appid = 32;
+					_this.$refs.docTable.getData();
+				},100);
 			},
 
 			iconOperation(row, column, cell, event){//切换Table-操作列中的修改、保存

@@ -91,7 +91,7 @@
 									</el-col>
 								</el-row>
 							</el-collapse-item>
-							<el-collapse-item title="文档" name="2">
+							<el-collapse-item title="文件" name="2">
 								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
 							</el-collapse-item>
 							<el-collapse-item title="其它" name="3" v-show="views">
@@ -340,7 +340,7 @@
 						this.dataInfo.DEPARTMENT = res.data.deptName;
 						this.dataInfo.CHANGEBY = res.data.nickname;
 						var date = new Date();
-						this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+						this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
 						//深拷贝数据
 						let _obj = JSON.stringify(this.dataInfo);
 						this.DATAINFO = JSON.parse(_obj);
@@ -374,7 +374,7 @@
 				this.docParm = {
 					'model': 'new',
 					'appname': 'INSPECTION_STANDARDS2',
-					'recordid': this.dataInfo.ID,
+					'recordid': 1,
 					'appid': 29
 				};
 				// this.show = true;
@@ -392,14 +392,16 @@
 				this.modify = true;//修订
 				this.statusshow1 = false;
 				this.statusshow2 = true;
-				this.getUser();
-				this.docParm = {
-					'model': 'edit',
-					'appname': 'INSPECTION_STANDARDS2',
-					'recordid': this.dataInfo.ID,
-					'appid': 29
-				};
-				this.$refs.docTable.getData();
+
+				this.getUser('edit');
+				var _this = this;
+				setTimeout(function(){
+					_this.docParm.model = 'edit';
+					_this.docParm.appname = 'INSPECTION_STANDARDS2';
+					_this.docParm.recordid = _this.dataInfo.ID;
+					_this.docParm.appid = 29;
+					_this.$refs.docTable.getData();
+				},100);
 				this.show = true;
 			},
 			//这是查看

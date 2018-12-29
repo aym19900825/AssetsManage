@@ -80,19 +80,14 @@
 							<el-row>
 								<el-col :span="5">
 									<el-form-item label="版本" prop="VERSION" >
-										<el-input v-model="searchList.VERSION" >
+										<el-input v-model="searchList.VERSION">
 										</el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="6">
 									<el-form-item label="机构" prop="DEPARTMENT" label-width="90px">
 										<el-select clearable v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="请选择">
-										    <el-option
-										      v-for="item in options5"
-										      :key="item.value"
-										      :label="item.label"
-										      :value="item.value">
-										    </el-option>
+										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 										</el-select>
 									</el-form-item>
 								</el-col>
@@ -130,9 +125,9 @@
 								</el-table-column>
 								<!--<el-table-column label="信息状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
 								</el-table-column>-->
-								<el-table-column label="版本" width="70" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1">
+								<el-table-column label="版本" width="70" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1" align="right">
 								</el-table-column>
-								<el-table-column label="机构" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('机构')!=-1">
+								<el-table-column label="机构" sortable prop="DEPARTMENTDesc" v-if="this.checkedName.indexOf('机构')!=-1">
 								</el-table-column>
 								<!-- <el-table-column label="录入人" width="120" prop="ENTERBY" sortable v-if="this.checkedName.indexOf('录入人')!=-1">
 								</el-table-column> -->
@@ -182,22 +177,6 @@
 					value: '2',
 					label: '不活动'
 				}],
-				options5: [{
-		            value: '金化站',
-		            label: '金化站'
-		        }, {
-		            value: '通号站',
-		            label: '通号站'
-		        }, {
-		            value: '运包站',
-		            label: '运包站'
-		        }, {
-		            value: '机辆站',
-		            label: '机辆站'
-		        }, {
-		            value: '接触网站',
-		            label: '接触网站'
-		        }],
 				loadSign:true,//加载
 				commentArr:{},
 				checkedName: [
@@ -283,7 +262,8 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-				testingForm: {}//修改子组件时传递数据
+				testingForm: {},//修改子组件时传递数据
+				selectData: [],
 			}
 		},
 
@@ -292,6 +272,19 @@
 			rowClass({ row, rowIndex}) {
 			    // console.log(rowIndex) //表头行标号为0
 			    return 'text-align:center'
+			},
+			//机构值
+			getCompany() {
+				var type = "2";
+				var url = this.basic_url + '/api-user/depts/treeByType';
+				this.$axios.get(url, {
+					params: {
+						type: type
+					},
+				}).then((res) => {
+					console.log(res.data);
+					this.selectData = res.data;
+				});
 			},
 			//表格滚动加载
 			loadMore () {
@@ -495,6 +488,7 @@
 		},
 		mounted() {
 			this.requestData();
+			this.getCompany();
 		},
 	}
 </script>

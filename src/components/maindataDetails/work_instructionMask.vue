@@ -36,8 +36,7 @@
 									</el-col> -->
 									<el-col :span="8">
 										<el-form-item label="分发号" prop="NUM">
-											<el-input v-model="WORK_INSTRUCTION.NUM" @focus="hint" @input="hinthide" :disabled="noedit"></el-input>
-											<span v-if="hintshow" style="color:rgb(103,194,58);font-size: 12px">可填写，若不填写系统将自动生成</span>
+											<el-input v-model="WORK_INSTRUCTION.NUM" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="16">
@@ -54,7 +53,7 @@
 									</el-col>
 								</el-row>
 							</el-collapse-item>
-							<el-collapse-item title="文档" name="2">
+							<el-collapse-item title="文件" name="2">
 								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
 							</el-collapse-item>
 							<el-collapse-item title="其它" name="3" v-show="views">
@@ -122,24 +121,17 @@
 			page: Object,
 		},
 		data() {
-			// var validateNum = (rule, value, callback) => {
-			// 	if(value === '') {
-			// 		callback(new Error('可填写，若不填写系统将自动生成'));
-					
-			// 	} else {
-			// 		callback();
-			// 	}
-			// 	callback();
-			// 	// if(value){
-			// 	// 	if (value==='') {
-			// 	// 		callback();
-			// 	// 	}else{
-		 //  //            	callback(new Error('可填写，若不填写系统将自动生成'));
-			// 	// 	}
-		 //  //       }else{
-		 //  //            callback();
-		 //  //       }
-			// };
+			var validateNum = (rule, value, callback) => {
+				if(value != ""){
+		             if((/^[0-9a-zA-Z()]+$/).test(value) == false){
+		                 callback(new Error("请填写数字或字母（编码不填写可自动生成）"));
+		             }else{
+		                 callback();
+		             }
+		         }else{
+		             callback();
+		         }
+			};
 			var validateType = (rule, value, callback) => {
 				if(value === '') {
 					callback(new Error('请填写产品类别名称'));
@@ -173,10 +165,11 @@
 				dialogVisible: false, //对话框
 				selectData: [],
 				rules: {
-					// NUM: [{
-					// 	trigger: 'blur',
-					// 	validator: validateNum,
-					// }],
+					NUM: [{
+						required: false,
+						trigger: 'change',
+						validator: validateNum,
+					}],
 					DESCRIPTION: [{
 						required: true,
 						trigger: 'blur',
@@ -203,13 +196,6 @@
 			};
 		},
 		methods: {
-			//编码提示
-			hint(){
-				this.hintshow = true;
-			},
-			hinthide(){
-				this.hintshow = false;
-			},
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selUser = val;

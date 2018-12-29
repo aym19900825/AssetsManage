@@ -43,7 +43,7 @@
 							</div>
 							<div class="text item">
 								<el-form :model="productType2Form" status-icon inline-message ref="productType2Form" class="el-radio__table">
-								  <el-table :data="productType2Form.inspectionList.filter(data => !search || data.TYPE.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'productType2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
+								  <el-table ref="singleTable" :data="productType2Form.inspectionList.filter(data => !search || data.TYPE.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'productType2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
 
 								  	<el-table-column label="类别编号" sortable width="100" prop="NUM" class="pl30">
 								      <template slot-scope="scope">
@@ -351,6 +351,8 @@
 					setTimeout(function(){
 						_this.viewchildRow(_this.productType2Form.inspectionList[0].ID,_this.productType2Form.inspectionList[0].NUM);
 					},0);
+
+					this.$refs.singleTable.setCurrentRow(this.productType2Form.inspectionList[0]);
 					
 					// this.$refs.product2child.viewfield_product2(this.productType2Form.inspectionList[0].ID);
 					// this.$refs.inspectionSta2child.viewfield_inspectionSta2(this.product2Form.inspectionList[0].ID);

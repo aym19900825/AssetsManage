@@ -374,7 +374,7 @@
 				this.docParm = {
 					'model': 'new',
 					'appname': 'INSPECTION_STANDARDS2',
-					'recordid': this.dataInfo.ID,
+					'recordid': 1,
 					'appid': 29
 				};
 				// this.show = true;
@@ -392,14 +392,16 @@
 				this.modify = true;//修订
 				this.statusshow1 = false;
 				this.statusshow2 = true;
-				this.getUser();
-				this.docParm = {
-					'model': 'edit',
-					'appname': 'INSPECTION_STANDARDS2',
-					'recordid': this.dataInfo.ID,
-					'appid': 29
-				};
-				this.$refs.docTable.getData();
+
+				this.getUser('edit');
+				var _this = this;
+				setTimeout(function(){
+					_this.docParm.model = 'edit';
+					_this.docParm.appname = 'INSPECTION_STANDARDS2';
+					_this.docParm.recordid = _this.dataInfo.ID;
+					_this.docParm.appid = 29;
+					_this.$refs.docTable.getData();
+				},100);
 				this.show = true;
 			},
 			//这是查看

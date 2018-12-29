@@ -22,11 +22,14 @@
         </el-table-column>
         <el-table-column type="index" sortable label="序号" width="50">
         </el-table-column>
-        <el-table-column prop="filerealname" label="文档名称" sortable>
+        <el-table-column prop="filerealname" label="名称" sortable>
         </el-table-column>
-        <el-table-column prop="filestatus" label="文档状态" sortable>
+        <el-table-column prop="filestatus" label="状态" sortable>
         </el-table-column>
-        <el-table-column prop="filesize" label="文档大小" sortable >
+        <el-table-column prop="filesize" label="大小" sortable >
+            <template slot-scope="scope">
+                <span v-text="scope.row.filesize+'M'"></span>
+            </template>
         </el-table-column>
     </el-table>
     <el-pagination class="pageLeft"
@@ -98,6 +101,11 @@ export default {
                     this.$message({
                         message: res.data.message,
                         type: 'error'
+                    });
+                }else{
+                    this.$message({
+                        message: '文档已成功上传至服务器',
+                        type: 'success'
                     });
                 }
                 this.getData();

@@ -239,7 +239,7 @@
 					this.PRODUCT.DEPARTMENT = res.data.deptName;
 					this.PRODUCT.ENTERBY = res.data.nickname;
 					var date = new Date();
-					this.PRODUCT.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					this.PRODUCT.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 					this.PRODUCT.VERSION = '1';
 					this.PRODUCT.STATUS = '活动';
 				}).catch((err) => {
@@ -268,7 +268,7 @@
 					this.PRODUCT.DEPARTMENT = res.data.deptName;
 					this.PRODUCT.CHANGEBY = res.data.nickname;
 					var date = new Date();
-					this.PRODUCT.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					this.PRODUCT.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
 					//深拷贝数据
 					let _obj = JSON.stringify(this.PRODUCT);
         			this.product = JSON.parse(_obj);

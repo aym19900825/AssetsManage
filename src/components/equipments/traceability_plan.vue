@@ -98,7 +98,7 @@
 					<el-col :span="24">
 						<!-- 表格 Begin-->
 						<el-table :header-cell-style="rowClass" :data="userList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
+							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 							</el-table-column>
 							<el-table-column label="溯源计划编号" width="200" sortable prop="PMNUM" v-if="this.checkedName.indexOf('溯源计划编号')!=-1">
 								<template slot-scope="scope">

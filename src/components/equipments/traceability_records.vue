@@ -92,9 +92,9 @@
 					<el-col :span="24">
 						<!-- 表格 Begin-->
 						<el-table :header-cell-style="rowClass" :data="userList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
+							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 							</el-table-column>
-							<el-table-column label="溯源记录编号" width="200" sortable prop="RECORDNUM" v-if="this.checkedName.indexOf('溯源记录编号')!=-1">
+							<el-table-column label="溯源记录编号" width="120" sortable prop="RECORDNUM" v-if="this.checkedName.indexOf('溯源记录编号')!=-1">
 								<template slot-scope="scope">
 									<p @click=view(scope.row)>{{scope.row.RECORDNUM}}
 									</p>
@@ -102,25 +102,25 @@
 							</el-table-column>
 							<el-table-column label="记录描述" width="200" sortable prop="DESCRIPTION" v-if="this.checkedName.indexOf('记录描述')!=-1">
 							</el-table-column>
-							<el-table-column label="设备编号" sortable prop="ASSETNUM" v-if="this.checkedName.indexOf('设备编号')!=-1">
+							<el-table-column label="设备编号" width="140" sortable prop="ASSETNUM" v-if="this.checkedName.indexOf('设备编号')!=-1">
 							</el-table-column>
-							<el-table-column label="设备名称" sortable prop="A_NAME" v-if="this.checkedName.indexOf('设备名称')!=-1">
+							<el-table-column label="设备名称" width="200" sortable prop="A_NAME" v-if="this.checkedName.indexOf('设备名称')!=-1">
 							</el-table-column>						
-							<el-table-column label="规格型号" sortable prop="MODEL"  v-if="this.checkedName.indexOf('规格型号')!=-1">
+							<el-table-column label="规格型号" width="120" sortable prop="MODEL"  v-if="this.checkedName.indexOf('规格型号')!=-1">
 							</el-table-column>
-							<el-table-column label="溯源方式" sortable prop="PM_MODEL"  v-if="this.checkedName.indexOf('溯源方式')!=-1">
+							<el-table-column label="溯源方式" width="120" sortable prop="PM_MODEL"  v-if="this.checkedName.indexOf('溯源方式')!=-1">
 							</el-table-column>
-							<el-table-column label="溯源日期" sortable prop="PM_DATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('溯源日期')!=-1">
+							<el-table-column label="溯源日期" width="140" sortable prop="PM_DATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('溯源日期')!=-1">
 							</el-table-column>
-							<el-table-column label="确认结论" sortable prop="R_CONCLUSION" v-if="this.checkedName.indexOf('确认结论')!=-1">
+							<el-table-column label="确认结论" width="160" sortable prop="R_CONCLUSION" v-if="this.checkedName.indexOf('确认结论')!=-1">
 							</el-table-column>
-							<el-table-column label="证书编号" sortable prop="C_NUM" v-if="this.checkedName.indexOf('证书编号')!=-1">
+							<el-table-column label="证书编号" width="140" sortable prop="C_NUM" v-if="this.checkedName.indexOf('证书编号')!=-1">
 							</el-table-column>
-							<el-table-column label="设备性能指标要求" sortable prop="A_KPI"  v-if="this.checkedName.indexOf('设备性能指标要求')!=-1">
+							<el-table-column label="设备性能指标要求" width="200" sortable prop="A_KPI"  v-if="this.checkedName.indexOf('设备性能指标要求')!=-1">
 							</el-table-column>
-							<el-table-column label="指标确定来源" sortable prop="SORUCE" v-if="this.checkedName.indexOf('指标确定来源')!=-1">
+							<el-table-column label="指标确定来源" width="160" sortable prop="SORUCE" v-if="this.checkedName.indexOf('指标确定来源')!=-1">
 							</el-table-column>
-							<el-table-column label="确认内容" sortable prop="R_DESC" v-if="this.checkedName.indexOf('确认内容')!=-1">
+							<el-table-column label="确认内容" width="200" sortable prop="R_DESC" v-if="this.checkedName.indexOf('确认内容')!=-1">
 							</el-table-column>
 						</el-table>
 						<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"

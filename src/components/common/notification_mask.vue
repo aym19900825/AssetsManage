@@ -104,7 +104,9 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="受检产品名称" prop="ITEM_NAME" label-width="110px">
-											<el-input v-model="dataInfo.ITEM_NAME" :disabled="noedit"></el-input>
+											<el-input v-model="dataInfo.ITEM_NAME" :disabled="noedit">
+												   <el-button slot="append" icon="el-icon-search"></el-button>
+											</el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -122,7 +124,9 @@
 									<el-row>
 									<el-col :span="6">
 										<el-form-item label="受检企业" prop="V_NAME" label-width="110px">
-											<el-input v-model="dataInfo.V_NAME" :disabled="noedit"></el-input>
+											<el-input v-model="dataInfo.V_NAME" :disabled="noedit">
+												   <el-button slot="append" icon="el-icon-search"></el-button>
+											</el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="6">
@@ -182,13 +186,15 @@
 											<el-table-column label="检验标准编号" sortable width="120px" prop="S_NUM">
 												<template slot-scope="scope">
 													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入内容"></el-input>
+													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入内容">
+														   <el-button slot="append" icon="el-icon-search"></el-button>
+													</el-input>
 													<span v-show="!scope.row.isEditing">{{scope.row.S_NUM}}</span>
 													</el-form-item>
 												</template>
 												
 											</el-table-column>
-											<el-table-column prop="S_DESC" label="检验标准内容" sortable width="120px">
+											<el-table-column prop="S_DESC" label="检验标准内容" sortable width="200px">
 												<template slot-scope="scope">
 													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_DESC" placeholder="请输入内容"></el-input>
@@ -196,14 +202,14 @@
 													</el-form-item>
 												</template>
 											</el-table-column>
-											<el-table-column prop="S_NAME" label="检验标准名称" sortable width="150px">
+											<el-table-column prop="S_NAME" label="检验标准名称" sortable width="200px">
 												<template slot-scope="scope">
 													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_NAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NAME" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.S_NAME}}</span>
 													</el-form-item>
 												</template>
 											</el-table-column>
-											<el-table-column prop="VERSION" label="版本" sortable width="80px">
+											<el-table-column prop="VERSION" label="版本" sortable width="120px">
 												<template slot-scope="scope">
 													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入内容"></el-input>
@@ -211,13 +217,13 @@
 													</el-form-item>
 												</template>
 											</el-table-column>
-											<el-table-column prop="STATUS" label="信息状态" sortable width="120px">
+											<!-- <el-table-column prop="STATUS" label="信息状态" sortable width="120px">
 												<template slot-scope="scope">
 													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.STATUS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.STATUS}}</span>
 													</el-form-item>
 												</template>
-											</el-table-column>
+											</el-table-column> -->
 											<el-table-column label="附件" sortable width="120px">
 												<template slot-scope="scope">
 													<el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="3" :on-exceed="handleExceed" :file-list="fileList">
@@ -225,7 +231,7 @@
 													</el-upload>
 												</template>
 											</el-table-column>
-											<el-table-column fixed="right" label="操作" width="120">
+											<el-table-column fixed="right" label="操作" width="100">
 												<template slot-scope="scope">
 													<el-button @click="deleteRow(scope.$index, dataInfo.WORK_NOTICE_CHECKBASISList)" type="text" size="small">
 														移除
@@ -260,12 +266,14 @@
 											<el-table-column label="检验检测项目编号" sortable width="145px" prop="P_NUM">
 												<template slot-scope="scope">
 													<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.P_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="请输入内容"></el-input>
+													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="请输入内容">
+														   <el-button slot="append" icon="el-icon-search"></el-button>
+													</el-input>
 													<span v-show="!scope.row.isEditing">{{scope.row.P_NUM}}</span>
 													</el-form-item>
 												</template>
 											</el-table-column>
-											<el-table-column prop="P_DESC" label="检验检测项目内容" sortable width="145px">
+											<el-table-column prop="P_DESC" label="检验检测项目内容" sortable width="200px">
 												<template slot-scope="scope">
 													<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.P_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入内容"></el-input>
@@ -273,7 +281,7 @@
 													</el-form-item>
 												</template>
 											</el-table-column>
-											<el-table-column prop="REMARKS" label="要求" sortable width="80px">
+											<el-table-column prop="REMARKS" label="要求" sortable width="150px">
 												<template slot-scope="scope">
 													<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + 'REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" placeholder="请输入内容"></el-input>
@@ -295,14 +303,14 @@
 													</el-form-item>
 												</template>
 											</el-table-column>
-											<el-table-column prop="STATUS" label="信息状态" sortable width="120px">
+											<!-- <el-table-column prop="STATUS" label="信息状态" sortable width="120px">
 												<template slot-scope="scope">
 													<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + 'STATUS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input>
 													<span v-show="!scope.row.isEditing">{{scope.row.STATUS}}</span>
 													</el-form-item>
 												</template>
-											</el-table-column>
+											</el-table-column> -->
 											<el-table-column label="附件" sortable width="120px">
 												<template slot-scope="scope">
 													<el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="3" :on-exceed="handleExceed" :file-list="fileList">
@@ -310,7 +318,7 @@
 													</el-upload>
 												</template>
 											</el-table-column>
-											<el-table-column fixed="right" label="操作" width="120">
+											<el-table-column fixed="right" label="操作" width="100">
 												<template slot-scope="scope">
 													<el-button @click="deleteRow(scope.$index, dataInfo.WORK_NOTICE_CHECKPROJECTList)" type="text" size="small">
 														移除
@@ -385,7 +393,8 @@
 				</div>
 				<div class="el-dialog__footer" v-show="noviews">
                     <el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
-					<el-button type="success" v-show="addtitle" @click='saveAndSubmit()'>提交并保存</el-button>
+					<el-button type="success" v-show="addtitle" @click='saveAndSubmit()'>保存并添加</el-button>
+					<el-button type="success" v-show="!addtitle">生成委托书</el-button>
 					<el-button @click='close'>取消</el-button>
 					
 				</div>
@@ -905,5 +914,6 @@
 	
 	#cost {
 		text-align: right !important;
+		padding-right: 30px;
 	}
 </style>

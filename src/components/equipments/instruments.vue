@@ -97,8 +97,8 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :header-cell-style="rowClass" :data="assetList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'assetList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
+						<el-table :header-cell-style="rowClass" :data="assetList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'assetList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 							</el-table-column>
 							<el-table-column label="设备编号" width="130" sortable prop="ASSETNUM" v-if="this.checkedName.indexOf('设备编号')!=-1">
 								<template slot-scope="scope">
@@ -110,25 +110,25 @@
 							</el-table-column>
 							<el-table-column label="型号" sortable prop="MODEL" v-if="this.checkedName.indexOf('型号')!=-1">
 							</el-table-column>
-							<el-table-column label="技术指标" sortable prop="ASSET_KPI" v-if="this.checkedName.indexOf('技术指标')!=-1">
+							<el-table-column label="技术指标" width="120" sortable prop="ASSET_KPI" v-if="this.checkedName.indexOf('技术指标')!=-1">
 							</el-table-column>						
-							<el-table-column label="制造商" sortable prop="VENDOR" v-if="this.checkedName.indexOf('制造商')!=-1">
+							<el-table-column label="制造商" width="140" sortable prop="VENDOR" v-if="this.checkedName.indexOf('制造商')!=-1">
 							</el-table-column>
-							<el-table-column label="出厂编号" width="200" sortable prop="FACTOR_NUM" v-if="this.checkedName.indexOf('出厂编号')!=-1">
+							<el-table-column label="出厂编号" width="160" sortable prop="FACTOR_NUM" v-if="this.checkedName.indexOf('出厂编号')!=-1">
 							</el-table-column>
-							<el-table-column label="价格(万元)" width="200" sortable prop="A_PRICE" v-if="this.checkedName.indexOf('价格(万元)')!=-1">
+							<el-table-column label="价格(万元)" width="140" sortable prop="A_PRICE" v-if="this.checkedName.indexOf('价格(万元)')!=-1">
 							</el-table-column>
-							<el-table-column label="接受日期" width="100" sortable prop="ACCEPT_DATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('接受日期')!=-1">
+							<el-table-column label="接受日期" width="140" sortable prop="ACCEPT_DATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('接受日期')!=-1">
 							</el-table-column>
-							<el-table-column label="启用日期" width="100" sortable prop="S_DATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('启用日期')!=-1">
+							<el-table-column label="启用日期" width="140" sortable prop="S_DATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('启用日期')!=-1">
 							</el-table-column>						
-							<el-table-column label="配置地址" sortable prop="C_ADDRESS" v-if="this.checkedName.indexOf('配置地址')!=-1">
+							<el-table-column label="配置地址" width="140" sortable prop="C_ADDRESS" v-if="this.checkedName.indexOf('配置地址')!=-1">
 							</el-table-column>
-							<el-table-column label="接收状态" sortable prop="A_STATUS" v-if="this.checkedName.indexOf('接收状态')!=-1">
+							<el-table-column label="接收状态" width="120" sortable prop="A_STATUS" v-if="this.checkedName.indexOf('接收状态')!=-1">
 							</el-table-column>
-							<el-table-column label="保管人" sortable prop="KEEPER" v-if="this.checkedName.indexOf('保管人')!=-1">
+							<el-table-column label="保管人" width="200" sortable prop="KEEPER" v-if="this.checkedName.indexOf('保管人')!=-1">
 							</el-table-column>						
-							<el-table-column label="备注" sortable prop="MEMO" v-if="this.checkedName.indexOf('备注')!=-1">
+							<el-table-column label="备注" width="200" sortable prop="MEMO" v-if="this.checkedName.indexOf('备注')!=-1">
 							</el-table-column>
 						</el-table>
 						<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
@@ -168,6 +168,8 @@
 		},
 		data() {
 			return {
+				loadSign: true, //加载
+				commentArr: {},
 				status: [
 					{
 						label: '启用',
@@ -442,24 +444,45 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					this.assetList = res.data.data;
+					// this.assetList = res.data.data;
+					// this.page.totalCount = res.data.count;
 					this.page.totalCount = res.data.count;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
+					}
+					this.commentArr[this.page.currentPage] = res.data.data
+					let newarr = []
+					for(var i = 1; i <= totalPage; i++) {
+
+						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+
+							for(var j = 0; j < this.commentArr[i].length; j++) {
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					this.assetList = newarr;
 				}).catch((wrong) => {})
 				
 			},
-			loadMore () {
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page++
-			     if (this.page > 10) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     console.log('到底了', this.page)
-			   }
-			 },
+			loadMore() {
+				if(this.loadSign) {
+					this.loadSign = false
+					this.page.currentPage++
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							return
+						}
+					setTimeout(() => {
+						this.loadSign = true
+					}, 1000)
+					this.requestData()
+					//console.log('到底了', this.page.currentPage)
+				}
+			},
 			handleNodeClick(data) {
 			},
 			formatter(row, column) {

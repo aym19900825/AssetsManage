@@ -380,30 +380,18 @@
 			};
 		},
 		methods: {
-			getUser(){
+			getUser(opt){
 				var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url,{}).then((res) => {
 					if(opt == 'new'){
-				        this.dataInfo.ENTERBY = res.data.username;
-						this.dataInfo.ENTERDATE = this.getToday();
+				       this.dataInfo.CHANGEBY = res.data.username;
+						this.dataInfo.CHANGEDATE = this.getToday();
+						this.dataInfo.DEPARTMENT = res.data.deptName;	
 					}
 					this.docParm.userid = res.data.id;
 					this.docParm.username = res.data.username;
 					this.docParm.deptid = res.data.deptId;
 					this.docParm.deptfullname = res.data.deptName;
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
-			},
-			getModiuser(){
-				var url = this.basic_url + '/api-user/users/currentMap';
-				this.$axios.get(url,{}).then((res) => {
-				        this.dataInfo.CHANGEBY = res.data.username;
-				        this.dataInfo.CHANGEDATE = this.getToday();
-						this.dataInfo.DEPARTMENT = res.data.deptName;	
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -444,14 +432,16 @@
 				this.getUser('new');
 				this.docParm = {
 					'model': 'new',
-					'appname': '',
-					'recordid': 1
+					'appname': 'CHECK_RECORD',
+					'recordid': 1,
+					'appid': 73
+
 				};
 			},
 			// 这里是修改
 			detail() {
 				this.dataInfo = this.detailData;
-				this.getModiuser();
+				// this.getModiuser();
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.viewtitle = false;
@@ -468,7 +458,8 @@
 				this.docParm = {
 					'model': 'edit',
 					'appname': 'CHECK_RECORD',
-					'recordid': this.detailData.ID
+					'recordid': this.detailData.ID,
+					'appid': 73
 				};
 				this.$refs.docTable.getData();
 			},

@@ -63,7 +63,7 @@
 						<el-col :span="24">
 							<!-- 表格begin-->
 							<el-table :data="dataList" border stripe  :header-cell-style="rowClass" :height="fullHeight" style="width: 100%; margin: 0 auto;" :default-sort="{prop:'dataList', order: 'descending'}" @selection-change="SelChange">
-								<el-table-column fixed type="selection" width="55">
+								<el-table-column fixed type="selection" width="55" align="center">
 								</el-table-column>
 								<el-table-column label="表名" sortable width="320" prop="name"  v-if="this.checkedName.indexOf('表名')!=-1">
 								</el-table-column>

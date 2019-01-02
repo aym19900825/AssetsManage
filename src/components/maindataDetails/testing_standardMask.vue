@@ -15,8 +15,8 @@
 					</span>
 				</div>
 			</div>
-			<div class="mask_content">
-				<el-form :model="dataInfo" inline-message :rules="rules" ref="dataInfo" label-width="80px" class="demo-user">
+			<el-form :model="dataInfo" inline-message :rules="rules" ref="dataInfo" label-width="80px" class="demo-user">
+				<div class="mask_content">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基本信息" name="1">
@@ -49,13 +49,18 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="标准名称" prop="S_NAME">
-											<el-input v-model="dataInfo.S_NAME" :disabled="noedit"></el-input>
-										</el-form-item>
+										<el-tooltip class="item" effect="dark" :content="dataInfo.S_NAME" placement="top">
+											<el-form-item label="标准名称" prop="S_NAME">
+												<el-input v-model="dataInfo.S_NAME" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-tooltip>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="英文名称" prop="S_ENGNAME">
-											<el-input v-model="dataInfo.S_ENGNAME" :disabled="noedit"></el-input>
+											<el-input v-model="dataInfo.S_ENGNAME" :disabled="noedit" @focus="editBox('S_ENGNAME')">
+												<!-- <el-button slot="append" @click="dialogFormVisible = true" icon="icon-maximization"></el-button> -->
+											</el-input>
+											
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -86,71 +91,8 @@
 									</el-col>
 								</el-row>
 							</el-collapse-item>
-							<el-collapse-item title="文档" name="2">
-								<!-- 字段列表 Begin-->
-								<div class="table-func">
-									<el-button type="primary" size="mini" round @click="importdia">
-										<i class="icon-upload-cloud"></i>
-										<font>导入</font>
-									</el-button>
-									<el-button type="success" size="mini" round @click="addfield">
-										<i class="icon-add"></i>
-										<font>新建</font>
-									</el-button>
-								</div>
-								<!-- :rules="rules" ref="attributes" -->
-								<el-form :model="dataInfo.attributes">
-									<el-form-item>
-										<el-row>
-											<el-col :span="3">
-												<el-form-item label="序号"></el-form-item>
-											</el-col>
-											<el-col :span="3">
-												<el-form-item label="文档编号"></el-form-item>
-											</el-col>
-											<el-col :span="6">
-												<el-form-item label="文档描述"></el-form-item>
-											</el-col>
-											<el-col :span="3">
-												<el-form-item label="创建人"></el-form-item>
-											</el-col>
-											<el-col :span="3">
-												<el-form-item label="创建日期"></el-form-item>
-											</el-col>
-											<el-col :span="3">
-												<el-form-item label="附件"></el-form-item>
-											</el-col>
-											<el-col :span="3">
-												<el-form-item label="操作"></el-form-item>
-											</el-col>
-										</el-row>
-										<el-row v-for="(item,key) in dataInfo.attributes" :key="key">
-											<el-col :span="3">
-												<el-input type="text" placeholder="请输入序号" v-model="item.columnname"></el-input>
-											</el-col>
-											<el-col :span="3">
-												<el-input type="text" placeholder="请输入文档编号" v-model="item.description"></el-input>
-											</el-col>
-											<el-col :span="6">
-												<el-input type="text" placeholder="文档描述" v-model="item.description"></el-input>
-											</el-col>
-
-											<el-col :span="3">
-												<el-input type="text" placeholder="创建人" v-model="item.length"></el-input>
-											</el-col>
-											<el-col :span="3">
-												<el-input type="text" placeholder="创建日期" v-model="item.retain"></el-input>
-											</el-col>
-											<el-col :span="3">
-												<el-input type="text" placeholder="附件" v-model="item.files"></el-input>
-											</el-col>
-											<el-col :span="2">
-												<i class="el-icon-delete" @click="delfield(item)" style="color: red"></i>
-											</el-col>
-										</el-row>
-									</el-form-item>
-								</el-form>
-								<!-- 字段列表 End -->
+							<el-collapse-item title="文件" name="2">
+								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
 							</el-collapse-item>
 							<el-collapse-item title="其它" name="3" v-show="views">
 								<el-row>
@@ -178,22 +120,36 @@
 							</el-collapse-item>
 						</el-collapse>
 					</div>
+
 					<div class="el-dialog__footer" v-show="noviews">
 							<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并添加</el-button>
 							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('dataInfo')">修订</el-button>
-							<el-button v-if="modify" type="success" @click="update('dataInfo')">更新</el-button>
+							<el-button v-if="modify" type="success" @click="update('dataInfo')">启用</el-button>
 							<el-button @click="close">取消</el-button>
 					</div>
-				</el-form>
-			</div>
+				</div>
+			</el-form>
 		</div>
+
+		<el-dialog title="信息" :visible.sync="dialogFormVisible"  :before-close="resetEditBox">
+			<el-form>
+				<el-form-item label="英文名称" :label-width="formLabelWidth">
+					<el-input type="textarea" :rows="4" v-model="editDataInfo" autocomplete="off"></el-input>
+				</el-form-item>
+				<el-form-item class="text-center pt20">
+					<el-button @click="resetEditBox">取 消</el-button>
+					<el-button type="primary" @click="saveEditBox">确 定</el-button>
+				</el-form-item>
+			</el-form>
+		</el-dialog>
 
 	</div>
 </template>
 
 <script>
 	import Config from '../../config.js'
+	import docTable from '../common/doc.vue'
 	export default {
 		name: 'masks',
 		props: {
@@ -219,6 +175,7 @@
 			},
 			page: Object ,
 		},
+		components: {docTable},
 		data() {
 			var validateName = (rule, value, callback) => {
 				if(value === '') {
@@ -235,6 +192,33 @@
 				}
 			};
 			return {
+				editDataInfo: '',
+				editDataInfoProp: '',
+
+				docParm: {
+					'model': 'new',
+					'appname': '',
+					'recordid': 1,
+					'userid': 1,
+					'username': '',
+					'deptid': 1,
+					'deptfullname': '',
+					'appname': '',
+					'appid': 1
+				},
+				dialogTableVisible: false,
+        		dialogFormVisible: false,
+        		form: {
+					name: '',
+					region: '',
+					date1: '',
+					date2: '',
+					delivery: false,
+					type: [],
+					resource: '',
+					desc: ''
+				},
+				formLabelWidth: '120px',
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				options: [{
@@ -293,7 +277,7 @@
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
-				DATAINFO:{},//父组件传过来的值
+				// DATAINFO:{},//父组件传过来的值
 				addtitle:true,
 				modifytitle:false,
 				viewtitle:false,
@@ -308,7 +292,22 @@
 			};
 		},
 		methods: {
-			
+			editBox(val){
+				console.log('edit=========');
+				this.dialogFormVisible = true;
+				this.editDataInfoProp = val;
+				this.editDataInfo = this.dataInfo[val];
+			},
+			saveEditBox(){
+				var  editProp = this.editDataInfoProp;
+				this.dataInfo[editProp] = this.editDataInfo;
+				this.resetEditBox();
+			},
+			resetEditBox(){
+				this.dialogFormVisible = false;
+				this.editDataInfo = '';
+				this.editDataInfoProp = '';
+			},
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selUser = val;
@@ -335,20 +334,30 @@
 			importdia() {
 				this.dialogVisible = true;
 			},
-			//添加点击按钮显示弹窗
-			visible() {
+			getUser(opt){
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-//					this.dataInfo.DEPARTMENT=res.data.companyName;
-				    this.dataInfo.DEPARTMENT=res.data.deptName;
-					this.dataInfo.ENTERBY=res.data.nickname;
-					var date=new Date();
-					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					if(opt!='new'){
+						this.dataInfo.DEPARTMENT = res.data.deptName;
+						this.dataInfo.CHANGEBY = res.data.nickname;
+						var date = new Date();
+						this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
+						//深拷贝数据
+						let _obj = JSON.stringify(this.dataInfo);
+						this.DATAINFO = JSON.parse(_obj);
+					}
+					this.docParm.userid = res.data.id;
+					this.docParm.username = res.data.username;
+					this.docParm.deptid = res.data.deptId;
+					this.docParm.deptfullname = res.data.deptName;
 				}).catch((err)=>{
 					this.$message({
 						message:'网络错误，请重试',
 						type:'error'
 					});
 				});
+			},
+			//添加点击按钮显示弹窗
+			visible() {
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.viewtitle = false;
@@ -360,6 +369,14 @@
 				this.hintshow = false;
 				this.statusshow1 = true;
 				this.statusshow2 = false;
+
+				this.getUser('new');
+				this.docParm = {
+					'model': 'new',
+					'appname': 'INSPECTION_STANDARDS2',
+					'recordid': 1,
+					'appid': 29
+				};
 				// this.show = true;
 			},
 			// 这里是修改
@@ -375,20 +392,16 @@
 				this.modify = true;//修订
 				this.statusshow1 = false;
 				this.statusshow2 = true;
-				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					this.dataInfo.DEPARTMENT = res.data.deptName;
-					this.dataInfo.CHANGEBY = res.data.nickname;
-					var date = new Date();
-					this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-					//深拷贝数据
-					let _obj = JSON.stringify(this.dataInfo);
-        			this.DATAINFO = JSON.parse(_obj);
-				}).catch((err)=>{
-					this.$message({
-						message:'网络错误，请重试',
-						type:'error'
-					});
-				});
+
+				this.getUser('edit');
+				var _this = this;
+				setTimeout(function(){
+					_this.docParm.model = 'edit';
+					_this.docParm.appname = 'INSPECTION_STANDARDS2';
+					_this.docParm.recordid = _this.dataInfo.ID;
+					_this.docParm.appid = 29;
+					_this.$refs.docTable.getData();
+				},100);
 				this.show = true;
 			},
 			//这是查看
@@ -435,7 +448,7 @@
 				$(".mask_div").css("top", "0");
 			},
 			//修订
-			modifyversion(dataInfo){
+			modifyversion(){
 				this.$refs[dataInfo].validate((valid) => {
 		          	if (valid) {
 		          		var DATAINFO = JSON.stringify(this.DATAINFO); //接过来的数据

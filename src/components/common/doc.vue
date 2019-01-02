@@ -3,11 +3,15 @@
     <div class="table-func">
         <form method="post" id="file" action="" enctype="multipart/form-data" style="float: left;">
             <el-button type="warn" size="mini" round class="a-upload" :disabled="docParm.model=='new'?true:false">
-                <i class="el-icon-upload"></i>
+                <i class="el-icon-upload2"></i>
                 <font>上传</font>
                 <input id="excelFile" type="file" name="uploadFile" @change="upload" v-if="docParm.model=='edit'"/>
             </el-button>
         </form>
+        <el-button type="error" size="mini" @click="download" round :disabled="docParm.model=='new'?true:false" style="margin-left: 10px;">
+            <i class="el-icon-download"></i>
+            <font>下载</font>
+        </el-button>
         <el-button type="error" size="mini" @click="delFile" round :disabled="docParm.model=='new'?true:false">
             <i class="el-icon-delete"></i>
             <font>删除行</font>
@@ -18,11 +22,14 @@
         </el-table-column>
         <el-table-column type="index" sortable label="序号" width="50">
         </el-table-column>
-        <el-table-column prop="filerealname" label="文档名称" sortable>
+        <el-table-column prop="filerealname" label="名称" sortable>
         </el-table-column>
-        <el-table-column prop="filestatus" label="文档状态" sortable>
+        <el-table-column prop="filestatus" label="状态" sortable>
         </el-table-column>
-        <el-table-column prop="filesize" label="文档大小" sortable >
+        <el-table-column prop="filesize" label="大小" sortable >
+            <template slot-scope="scope">
+                <span v-text="scope.row.filesize+'M'"></span>
+            </template>
         </el-table-column>
     </el-table>
     <el-pagination class="pageLeft"
@@ -87,9 +94,20 @@ export default {
                     + '&deptfullname=' + this.docParm.deptfullname
                     + '&recordid=' + this.docParm.recordid
                     + '&appname=' + this.docParm.appname
-                    + '&appid=99';
+                    + '&appid=' + this.docParm.appid;
             this.$axios.post(url, formData, config
             ).then((res)=>{
+                if(res.data.code == 0){
+                    this.$message({
+                        message: res.data.message,
+                        type: 'error'
+                    });
+                }else{
+                    this.$message({
+                        message: '文档已成功上传至服务器',
+                        type: 'success'
+                    });
+                }
                 this.getData();
             })
         },
@@ -97,7 +115,8 @@ export default {
             if(this.docParm.model == 'new'){
                 return false;
             }
-            var url = this.file_url + '/file/fileList?page=' + this.page.currentPage + '&size=' + this.page.pageSize;
+            var pageNum = this.page.currentPage - 1;
+            var url = this.file_url + '/file/fileList?page=' + pageNum + '&size=' + this.page.pageSize;
             this.$axios.post(url,{
                 'appname': this.docParm.appname,
                 'recordid': this.docParm.recordid,
@@ -110,6 +129,23 @@ export default {
                 });
             });
         },
+        download(){
+            var selFilesLen = this.selFiles.length;
+            if(selFilesLen == 0){
+                this.$message({
+                    message: '请选择文件',
+                    type: 'warning'
+                });
+            }else if(selFilesLen > 1){
+                this.$message({
+                    message: '不可同时下载多个文件',
+                    type: 'warning'
+                });
+            }else{
+                var url = this.selFiles[0].filepath;
+                window.open(url); 
+            }
+        },
         delFile(){
             var selFilesLen = this.selFiles.length;
             if(selFilesLen == 0){
@@ -117,16 +153,14 @@ export default {
                     message: '请选择数据项',
                     type: 'warning'
                 });
-            }else if(selFilesLen > 0){
+            }else if(selFilesLen > 1){
                 this.$message({
                     message: '不可同时删除多条数据',
                     type: 'warning'
                 });
             }else{
-                var url = this.file_url + '/file/deleteFile';
-                this.$axios.post(url,{
-                    'fileid': this.selFiles[0].fileid,
-                }).then((res) => {
+                var url = this.file_url + '/file/deleteFile/' + this.selFiles[0].fileid;
+                this.$axios.delete(url,{}).then((res) => {
                     if(res.data.code == 1){
                         this.$message({
                             message: '删除成功',
@@ -138,6 +172,7 @@ export default {
                             type: 'error'
                         });
                     }
+                    this.getData();
                 }).catch((err) => {
                     this.$message({
                         message: '网络错误，请重试',
@@ -147,9 +182,6 @@ export default {
             }
         }
     },
-    mounted(){
-        this.getData();
-    }
 }
 </script>
 
@@ -157,7 +189,7 @@ export default {
 .a-upload input{
     position: absolute;
     font-size: 100px;
-    right: 30px;
+    right: 100px;
     top: 0;
     opacity: 0;
     filter: alpha(opacity=0);

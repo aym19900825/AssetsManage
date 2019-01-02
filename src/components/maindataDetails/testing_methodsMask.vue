@@ -73,85 +73,7 @@
 								</el-row>
 							</el-collapse-item>
 							<el-collapse-item title="文件" name="2">
-								<!-- 字段列表 Begin-->
-								<div class="table-func">
-									<el-button type="primary" size="mini" round>
-										<i class="icon-upload-cloud"></i>
-										<font>上传</font>
-									</el-button>
-									<el-button type="success" size="mini" round @click="addfield_doclinks">
-										<i class="icon-add"></i>
-										<font>新建</font>
-									</el-button>
-								</div>
-								<!-- 字段列表 End -->
-
-								<!-- 文件Table-List Begin-->
-								<el-form :model="testing_filesForm" status-icon inline-message ref="testing_filesForm">
-									  <el-table :header-cell-style="rowClass" :data="testing_filesForm.inspectionList" row-key="ID" border stripe max-height="260" fit="true"highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'testing_filesForm.inspectionList', order: 'descending'}" v-loadmore="loadMore">
-										<el-table-column prop="iconOperation" fixed="left" label="操作" width="80">
-									      <template slot-scope="scope">
-									        <el-button type="text" id="Edit" size="medium" @click="saveRow(scope.row)" v-if="scope.row.isEditing">
-									        	<i class="icon-check" title="保存"></i>
-											</el-button>
-											<el-button type="text" size="medium" @click="modifyversion(scope.row)" v-else="v-else">
-									        	<i class="icon-edit" title="修改"></i>
-											</el-button>
-									        <el-button @click="deleteRow(scope.row)" type="text" size="medium" title="删除" >
-									          <i class="icon-trash red"></i>
-									        </el-button>
-									      </template>
-									    </el-table-column>
-									  	<el-table-column label="文件编号" sortable width="140" prop="DOCLINKS">
-									      <template slot-scope="scope">
-									        <el-form-item :prop="'inspectionList.'+scope.$index + '.DOCLINKS'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-									        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DOCLINKS" disabled></el-input><span class="blue" @click="viewchildRow(scope.row.ID)" v-else="v-else">{{scope.row.DOCLINKS}}</span>
-											</el-form-item>
-									      </template>
-									    </el-table-column>
-									    <el-table-column label="文件描述" sortable width="300" prop="DESCRIPTION">
-									      <template slot-scope="scope">
-									        <el-form-item :prop="'inspectionList.'+scope.$index + '.DESCRIPTION'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-									        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DESCRIPTION" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.DESCRIPTION}}</span>
-											</el-form-item>
-									      </template>
-									    </el-table-column>		
-										<el-table-column prop="DOC_SIZE" label="文件大小" sortable width="120">
-									      <template slot-scope="scope">
-									        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DOC_SIZE" placeholder="自动获取" disabled></el-input><span v-else="v-else">{{scope.row.DOC_SIZE}}</span>
-									      </template>
-									    </el-table-column>
-									    <el-table-column prop="ENTERBY" label="上传人" sortable width="120">
-									      <template slot-scope="scope">
-									        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ENTERBY" placeholder="自动获取" disabled></el-input><span v-else="v-else">{{scope.row.ENTERBY}}</span>
-									      </template>
-									    </el-table-column>
-									     <el-table-column prop="ENTERDATE" label="上传时间" sortable width="160" :formatter="dateFormat">
-									      <template slot-scope="scope">
-									      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ENTERDATE" placeholder="自动获取" disabled></el-input><span v-else="v-else">{{scope.row.ENTERDATE}}</span>
-									      </template>
-									    </el-table-column>
-										<el-table-column prop="ROUTE" label="预览" sortable>
-									      <template slot-scope="scope">
-									        <el-button size="small" type="primary" v-if="scope.row.isEditing">点击上传</el-button>
-									        <router-link :to="scope.row.ROUTE" target="_blank" class="blue font20" v-else="v-else">
-												<i class="icon-word"></i>
-											</router-link>
-									      </template>
-									    </el-table-column>
-									  </el-table>
-									</el-form>
-									<!-- 表格 Begin-->
-									<el-pagination v-if="modify" background class="pull-right pt10 pb10"
-							            @size-change="sizeChange"
-							            @current-change="currentChange"
-							            :current-page="page.currentPage"
-							            :page-sizes="[10, 20, 30, 40]"
-							            :page-size="page.pageSize"
-							            layout="total, sizes, prev, pager, next"
-							            :total="page.totalCount">
-							        </el-pagination>
-								<!-- 文件Table-List End -->
+								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
 							</el-collapse-item>
 							<el-collapse-item title="其它" name="3" v-show="views">
 								<el-row>
@@ -183,7 +105,7 @@
 						<el-button type="primary" @click="saveAndUpdate('testingForm')">保存</el-button>
 						<el-button type="success" @click="saveAndSubmit('testingForm')" v-show="addtitle">保存并添加</el-button>
 						<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('testingForm')">修订</el-button>
-						<el-button v-if="modify" type="success" @click="update('testingForm')">更新</el-button>
+						<el-button v-if="modify" type="success" @click="update('testingForm')">启用</el-button>
 						<el-button @click="close">取消</el-button>
 					</div>
 				</el-form>
@@ -194,8 +116,10 @@
 
 <script>
 	import Config from '../../config.js'
+	import docTable from '../common/doc.vue'
 	export default {
 		name: 'testing_mask',
+		components: {docTable},
 		props: {
 			page: {
 				type: Object,
@@ -221,6 +145,17 @@
 		},
 		data() {
 			return {
+				docParm: {
+					'model': 'new',
+					'appname': '',
+					'recordid': 1,
+					'userid': 1,
+					'username': '',
+					'deptid': 1,
+					'deptfullname': '',
+					'appname': '',
+					'appid': 1
+				},
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				value: '',
@@ -260,7 +195,7 @@
 						{ min: 5, max: 50, message: '长度在 5 到 15 个字符', trigger: 'blur' }
 					],
 					M_TYPE: [
-						{ required: true, message: '请选择类别', trigger: 'change' }
+						{ required: true, message: '请填写', trigger: 'change' }
 					]
 				},
 				hintshow:false,
@@ -290,18 +225,40 @@
 			hinthide(){
 				this.hintshow = false;
 			},
-			visible() {//添加内容时从父组件带过来的
+			getUser(opt){
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.testingForm.DEPARTMENT=res.data.deptName;
 					this.testingForm.ENTERBY=res.data.nickname;
 					var date=new Date();
 					this.testingForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
+					if(opt != 'new'){
+						//深拷贝数据
+						let _obj = JSON.stringify(this.testingForm);
+						this.TESTINGFORM = JSON.parse(_obj);
+
+						this.docParm.userid = res.data.id;
+						this.docParm.username = res.data.username;
+						this.docParm.deptid = res.data.deptId;
+						this.docParm.deptfullname = res.data.deptName;
+					}
 				}).catch((err)=>{
 					this.$message({
 						message:'网络错误，请重试',
 						type:'error'
 					})
 				})
+				
+			},
+			visible() {//添加内容时从父组件带过来的
+				this.getUser('new');
+
+				this.docParm = {
+					'model': 'edit',
+					'appname': 'INSPECTION_METHOD2',
+					'recordid': this.testingForm.ID,
+					'appid':32
+				};
+				
             	this.addtitle = true;
 				this.modifytitle = false;
 				this.viewtitle = false;
@@ -316,21 +273,7 @@
             	// this.show = true;
 			},
 			detail() { //修改内容时从父组件带过来的
-				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					this.testingForm.DEPARTMENT=res.data.deptName;
-					this.testingForm.CHANGEBY=res.data.nickname;
-					var date=new Date();
-					this.testingForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-					//深拷贝数据
-					let _obj = JSON.stringify(this.testingForm);
-        			this.TESTINGFORM = JSON.parse(_obj);
-        			
-				}).catch((err)=>{
-					this.$message({
-						message:'网络错误，请重试',
-						type:'error'
-					})
-				})
+				this.getUser('edit');
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.viewtitle = false;
@@ -344,6 +287,16 @@
 				this.statusshow2 = true;
 //				this.testingForm.STATUS=this.testingForm.STATUS=="1"?'活动':'不活动';
 				this.show = true;
+
+				this.getUser('edit');
+				var _this = this;
+				setTimeout(function(){
+					_this.docParm.model = 'edit';
+					_this.docParm.appname = 'INSPECTION_METHOD2';
+					_this.docParm.recordid = _this.testingForm.ID;
+					_this.docParm.appid = 32;
+					_this.$refs.docTable.getData();
+				},100);
 			},
 
 			iconOperation(row, column, cell, event){//切换Table-操作列中的修改、保存
@@ -620,9 +573,10 @@
 									type: 'success'
 								});
 								
-								this.$emit('reset');
+								
 								//重新加载数据
 								this.$emit('request');
+								this.$emit('reset');
 								this.visible();	
 							}else{
 								this.show = true;

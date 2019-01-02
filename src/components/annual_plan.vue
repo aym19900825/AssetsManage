@@ -121,7 +121,7 @@
 								</el-select>
 							</el-col> -->
 							<el-col :span="4">
-								<el-button type="primary" @click="searchinfo" size="small">搜索</el-button>
+								<el-button type="primary" @click="searchinfo" size="small" style="margin-top: 2px">搜索</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
@@ -147,7 +147,7 @@
 						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
 							<el-table :header-cell-style="rowClass" :data="userList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
-								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
+								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="编号" sortable width="100px" prop="WP_NUM" v-if="this.checkedName.indexOf('编号')!=-1">
 									<template slot-scope="scope">

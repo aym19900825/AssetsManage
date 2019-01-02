@@ -6,7 +6,7 @@
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
-			<navs_left></navs_left>
+			<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left>
 			<!--左侧菜单内容显示 End-->
 			<!--右侧内容显示 Begin-->
 			<div class="wrapper wrapper-content">
@@ -32,6 +32,9 @@
 							</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="Printing">
 							    <i class="icon-print"></i>打印
+							</button>
+							<button type="button" class="btn btn-primarys button-margin" @click="Configuration">
+							    <i class="icon-cpu"></i>配置关系
 							</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 					    		<i class="icon-search"></i>高级查询
@@ -71,12 +74,7 @@
 								<el-col :span="5">
 									<el-form-item label="机构" prop="DEPARTMENT">
 										<el-select clearable v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="请选择">
-										    <el-option
-										      v-for="item in options5"
-										      :key="item.value"
-										      :label="item.label"
-										      :value="item.value">
-										    </el-option>
+										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 										</el-select>
 									</el-form-item>
 								</el-col>
@@ -97,7 +95,7 @@
 								</el-select>
 							</el-col> -->
 								<el-col :span="2">
-									<el-button class="pull-right" type="primary" @click="searchinfo" size="small" style="margin-top:1px">搜索</el-button>
+									<el-button class="pull-right" type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -107,7 +105,7 @@
 						<el-col :span="24">
 							<!-- 表格 Begin-->
 							<el-table :header-cell-style="rowClass" :data="categoryList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0">
+								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="编码" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('编码')!=-1">
 									<template slot-scope="scope">
@@ -123,9 +121,9 @@
  									<span v-text="scope.row.STATUS=='1'?'活动':'不活动'"></span>
  								</template>
 							</el-table-column>-->
-								<el-table-column label="版本" width="100" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1">
+								<el-table-column label="版本" width="100" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1" align="right">
 								</el-table-column>
-								<el-table-column label="机构" width="185" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('机构')!=-1">
+								<el-table-column label="机构" width="185" sortable prop="DEPARTMENTDesc" v-if="this.checkedName.indexOf('机构')!=-1">
 								</el-table-column>
 								<!-- <el-table-column label="录入人" width="155" prop="ENTERBY" sortable v-if="this.checkedName.indexOf('录入人')!=-1">
 								</el-table-column> -->
@@ -152,7 +150,7 @@
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
 	import navs_header from '../common/nav_tabs.vue'
-	import navs_left from '../common/left_navs/nav_left2.vue'
+	import navs_left from '../common/left_navs/nav_left5.vue'
 	import categorymask from '../maindataDetails/product_categoryMask.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	export default {
@@ -213,7 +211,7 @@
 					},
 					{
 						label: '机构',
-						prop: 'DEPARTMENT'
+						prop: 'DEPARTMENTDesc'
 					},
 					// {
 					// 	label: '信息状态',
@@ -265,28 +263,26 @@
 					totalCount: 0
 				},
 				CATEGORY: {},//修改子组件时传递数据
-				options5: [{
-		            value: '金化站',
-		            label: '金化站'
-		        }, {
-		            value: '通号站',
-		            label: '通号站'
-		        }, {
-		            value: '运包站',
-		            label: '运包站'
-		        }, {
-		            value: '机辆站',
-		            label: '机辆站'
-		        }, {
-		            value: '接触网站',
-		            label: '接触网站'
-		        }],
+				selectData: [],
 			}
 		},
 		methods: {
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
+			},
+			//机构值
+			getCompany() {
+				var type = "2";
+				var url = this.basic_url + '/api-user/depts/treeByType';
+				this.$axios.get(url, {
+					params: {
+						type: type
+					},
+				}).then((res) => {
+					console.log(res.data);
+					this.selectData = res.data;
+				});
 			},
 			//表格滚动加载
 			loadMore() {
@@ -438,6 +434,12 @@
 			Printing() {
 
 			},
+			// 配置关系
+			Configuration() {
+				this.$router.push({
+					path: '/inspection_project'
+				});
+			},
 			judge(data) {
 				data.STATUS = data.STATUS == "1" ? '活动' : '不活动'
 			},
@@ -464,6 +466,7 @@
 					// CONTACT_ADDRESS: this.searchList.CONTACT_ADDRESS,
 					// STATUS: this.searchList.STATUS
 				}
+				console.log(this.searchList.DEPARTMENT);
 				var url = this.basic_url + '/api-apps/app/productType';
 				this.$axios.get(url, {
 					params: data
@@ -493,11 +496,16 @@
 			handleNodeClick(data) {},
 			formatter(row, column) {
 				return row.enabled;
-			}
+			},
+			childByValue:function(childValue) {
+        		// childValue就是子组件传过来的值
+        		this.$refs.navsheader.showClick(childValue);
+      		},
+
 		},
 		mounted() {
 			this.requestData();
-			this.$refs.navsheader.sessionGet();
+			this.getCompany();
 		},
 	}
 </script>

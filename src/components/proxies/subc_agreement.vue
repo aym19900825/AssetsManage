@@ -6,7 +6,7 @@
 	</div>
 	<div class="contentbg">
 		<!--左侧菜单内容显示 Begin-->
-		<navs_left></navs_left>
+		<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left>
 		<!--左侧菜单内容显示 End-->
 
 		<!--右侧内容显示 Begin-->
@@ -46,9 +46,9 @@
 					</div>
 				</div>
 				<!-- 高级查询划出 Begin-->
-				<div v-show="search" class="pb10">
+				<div v-show="search">
 					<el-form status-icon :model="searchList" label-width="70px">
-						<el-row :gutter="10">
+						<el-row :gutter="5">
 							<el-col :span="5">
 								<el-form-item label="分包协议编号" prop="PROXY_CONTRACT_NUM" label-width="100px">
 									<el-input v-model="searchList.PROXY_CONTRACT_NUM"></el-input>
@@ -76,13 +76,13 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="2">
-								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:1px">搜索</el-button>
+								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
 				</div>
 				<!-- 高级查询划出 End-->
-				<el-row :gutter="10">
+				<el-row :gutter="5">
 					<!-- 左侧树菜单 Begin-->
 					<el-col :span="5" class="lefttree">
 						<div class="lefttreebg">
@@ -103,8 +103,8 @@
 					<!-- 左侧树菜单 End-->
 					<el-col :span="19" class="leftcont v-resize">
 						<!-- 表格 Begin-->
-						<el-table :data="subagree" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'subagree', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
+						<el-table :header-cell-style="rowClass" :data="subagree" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'subagree', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0" align="center">
 							</el-table-column>
 							<el-table-column label="分包协议编号" width="150" sortable prop="PROXY_CONTRACT_NUM" v-if="this.checkedName.indexOf('分包协议编号')!=-1">
 							</el-table-column>
@@ -153,7 +153,7 @@
 <script>
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
-	import navs_left from '../common/left_navs/nav_left3.vue'
+	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_header from '../common/nav_tabs.vue' 
 	import table from '../plugin/table/table-normal.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
@@ -298,7 +298,10 @@
 		},
 		methods: {
 			
-
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    return 'text-align:center'
+			},
 			tableControle(data){
 				this.checkedName = data;
 			},
@@ -499,7 +502,11 @@
 					this.resourceData = res.data;
 					this.treeData = this.transformTree(this.resourceData);
 				});
-			}
+			},
+			childByValue:function(childValue) {
+        		// childValue就是子组件传过来的值
+        		this.$refs.navsheader.showClick(childValue);
+      		},
 		},
 		mounted(){
              // 注册scroll事件并监听  

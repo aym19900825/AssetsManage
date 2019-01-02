@@ -49,9 +49,9 @@
 					<!--按钮操作行 End-->
 
 					<!-- 高级查询划出 Begin-->
-					<div v-show="search" class="pb10">
+					<div v-show="search">
 						<el-form status-icon :model="searchList">
-							<el-row :gutter="10">
+							<el-row :gutter="5">
 								<el-col :span="6">
 									<el-form-item label="工作任务通知书编号" prop="N_CODE" label-width="140px">
 										<el-input v-model="searchList.N_CODE"></el-input>
@@ -63,7 +63,7 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="承检单位" prop="CJDWDesc" label-width="70px">
+									<el-form-item label="承检单位" prop="CJDWDesc" label-width="75px">
 										<el-select clearable v-model="searchList.CJDWDesc" filterable allow-create default-first-option placeholder="请选择" style="width: 90%;border-radius:none">
 										    <el-option style="width: 100%;border-radius:none"
 										      v-for="item in options5"
@@ -82,7 +82,7 @@
 									</el-form-item>
 								</el-col>
 							</el-row>
-							<el-row :gutter="10">
+							<el-row :gutter="5">
 								<el-col :span="6">
 									<el-form-item label="下达日期" prop="XD_DATE" label-width="140px">
 										<el-date-picker v-model="searchList.XD_DATE" type="date" placeholder="下达日期" value-format="yyyy-MM-dd" style="width: 100%">
@@ -112,7 +112,7 @@
 						<el-col :span="5" class="lefttree">
 							<div class="lefttreebg">
 								<div class="left_tree_title clearfix" @click="min3max()">
-									<div class="pull-left pr20" v-if="ismin">组织机构</div>
+									<div class="pull-left pr20" v-if="ismin">类型</div>
 									<span class="pull-right navbar-minimalize minimalize-styl-2">
 										<i class="icon-doubleok icon-double-angle-left blue"></i>
 									</span>
@@ -128,7 +128,7 @@
 						<el-col :span="19">
 							<!-- 表格 Begin-->
 							<el-table :data="nitificationsList" :header-cell-style="rowClass" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'nitificationsList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
+								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="工作任务通知书编号" width="180" sortable prop="N_CODE" v-if="this.checkedName.indexOf('工作任务通知书编号')!=-1">
 

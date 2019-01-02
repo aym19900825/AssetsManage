@@ -61,12 +61,7 @@
 								<el-col :span="5">
 									<el-form-item label="机构" prop="DEPARTMENT">
 										<el-select clearable v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="请选择">
-										    <el-option
-										      v-for="item in options5"
-										      :key="item.value"
-										      :label="item.label"
-										      :value="item.value">
-										    </el-option>
+										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 										</el-select>
 									</el-form-item>
 								</el-col>
@@ -81,7 +76,7 @@
 						<el-col :span="24">
 							<!-- 表格 Begin-->
 							<el-table :header-cell-style="rowClass" :data="categoryList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0">
+								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="编码" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('编码')!=-1">
 									<template slot-scope="scope">
@@ -92,7 +87,7 @@
 								<el-table-column label="模板描述" sortable prop="DECRIPTION" v-if="this.checkedName.indexOf('模板描述')!=-1">
 								</el-table-column>							             <el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>
-								<el-table-column label="机构" width="185" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('机构')!=-1">
+								<el-table-column label="机构" width="185" sortable prop="DEPARTMENTDesc" v-if="this.checkedName.indexOf('机构')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
@@ -111,7 +106,7 @@
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
 	import navs_header from '../common/nav_tabs.vue'
-	import navs_left from '../common/left_navs/nav_left2.vue'
+	import navs_left from '../common/left_navs/nav_left5.vue'
 	import categorymask from '../maindataDetails/data_moduleMask.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	export default {
@@ -199,28 +194,26 @@
 					totalCount: 0
 				},
 				CATEGORY: {},//修改子组件时传递数据
-				options5: [{
-		            value: '金化站',
-		            label: '金化站'
-		        }, {
-		            value: '通号站',
-		            label: '通号站'
-		        }, {
-		            value: '运包站',
-		            label: '运包站'
-		        }, {
-		            value: '机辆站',
-		            label: '机辆站'
-		        }, {
-		            value: '接触网站',
-		            label: '接触网站'
-		        }],
+				selectData: [],
 			}
 		},
 		methods: {
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
+			},
+			//机构值
+			getCompany() {
+				var type = "2";
+				var url = this.basic_url + '/api-user/depts/treeByType';
+				this.$axios.get(url, {
+					params: {
+						type: type
+					},
+				}).then((res) => {
+					console.log(res.data);
+					this.selectData = res.data;
+				});
 			},
 			//表格滚动加载
 			loadMore() {
@@ -427,6 +420,7 @@
 		mounted() {
 			this.requestData();
 			this.$refs.navsheader.sessionGet();
+			this.getCompany();
 		},
 	}
 </script>

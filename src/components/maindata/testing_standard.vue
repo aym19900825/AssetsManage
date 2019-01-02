@@ -6,7 +6,7 @@
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
-			<navs_left></navs_left>
+			<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left>
 			<!--左侧菜单内容显示 End-->
 
 			<!--右侧内容显示 Begin-->
@@ -79,12 +79,7 @@
 								<el-col :span="4">
 									<el-form-item label="机构" prop="DEPARTMENT" label-width="45px">
 										<el-select clearable v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="请选择">
-									    <el-option
-									      v-for="item in options5"
-									      :key="item.value"
-									      :label="item.label"
-									      :value="item.value">
-									    </el-option>
+									    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 									</el-select>
 									</el-form-item>
 								</el-col>
@@ -120,7 +115,7 @@
 						<el-col :span="24">
 							<!-- 表格 Begin-->
 							<el-table :header-cell-style="rowClass" :data="standardList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'standardList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-								<el-table-column  type="selection" width="55" fixed v-if="this.checkedName.length>0">
+								<el-table-column  type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<!-- <el-table-column label="主键编号" width="120" sortable prop="ID" v-if="this.checkedName.indexOf('主键编号')!=-1">
 								</el-table-column> -->
@@ -140,9 +135,9 @@
 								</el-table-column>
 								<el-table-column label="启用时间" width="100" sortable prop="STARTETIME" :formatter="dateFormat" v-if="this.checkedName.indexOf('启用时间')!=-1">
 								</el-table-column>
-								<el-table-column label="版本" width="70" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1">
+								<el-table-column label="版本" width="70" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1" align="right">
 								</el-table-column>
-								<el-table-column label="机构" width="180" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('机构')!=-1">
+								<el-table-column label="机构" width="180" sortable prop="DEPARTMENTDesc" v-if="this.checkedName.indexOf('机构')!=-1">
 								</el-table-column>
 								<!-- <el-table-column label="录入人" width="120" prop="ENTERBY" sortable v-if="this.checkedName.indexOf('录入人')!=-1"> -->
 								<!-- </el-table-column> -->
@@ -168,7 +163,7 @@
 <script>
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
-	import navs_left from '../common/left_navs/nav_left2.vue'
+	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_header from '../common/nav_tabs.vue'
 	//	import table from '../plugin/table/table-normal.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
@@ -257,7 +252,7 @@
 					},
 					{
 						label: '机构',
-						prop: 'DEPARTMENT'
+						prop: 'DEPARTMENTDesc'
 					},
 					// {
 					// 	label: '录入人',
@@ -314,22 +309,7 @@
 					totalCount: 0
 				},
 				dataInfo: {}, //修改子组件时传递数据
-				options5: [{
-		            value: '金化站',
-		            label: '金化站'
-		        }, {
-		            value: '通号站',
-		            label: '通号站'
-		        }, {
-		            value: '运包站',
-		            label: '运包站'
-		        }, {
-		            value: '机辆站',
-		            label: '机辆站'
-		        }, {
-		            value: '接触网站',
-		            label: '接触网站'
-		        }],
+		        selectData: [],
 			}
 		},
 
@@ -338,6 +318,19 @@
 			rowClass({ row, rowIndex}) {
 			    // console.log(rowIndex) //表头行标号为0
 			    return 'text-align:center'
+			},
+			//机构值
+			getCompany() {
+				var type = "2";
+				var url = this.basic_url + '/api-user/depts/treeByType';
+				this.$axios.get(url, {
+					params: {
+						type: type
+					},
+				}).then((res) => {
+					console.log(res.data);
+					this.selectData = res.data;
+				});
 			},
 			loadMore() {
 				if(this.loadSign) {
@@ -543,8 +536,8 @@
 						}
 					}
 					this.standardList = newarr;
-					//					this.standardList = res.data.data;
-					//					this.page.totalCount = res.data.count;
+					//	this.standardList = res.data.data;
+					//	this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
 
 			},
@@ -552,9 +545,14 @@
 			formatter(row, column) {
 				return row.enabled;
 			},
+			childByValue:function(childValue) {
+        		// childValue就是子组件传过来的值
+        		this.$refs.navsheader.showClick(childValue);
+      		},
 		},
 		mounted() {
 			this.requestData();
+			this.getCompany();
 		},
 	}
 </script>

@@ -10,7 +10,9 @@ body,html{
 	width:100%;
 	/*overflow: hidden;*/
 }
-
+.el-card__header {
+	padding: 10px !important;
+}
 body{
 	background-color: #F5F8FB;
 	-webkit-text-size-adjust:100%;
@@ -145,14 +147,14 @@ i, cite, em, var, address, dfn {
 }
 
 
-
+.relative {position: relative;}
 
 /*字体颜色 By Heliping*/
 .white,.white a {color:#dae2ea;}
 .white a:hover {color:#ffffff;}
 .blue,.blue a {color:#2196F3;}
 .blue a:hover {color:#6585DF;}
-
+.blue { cursor:pointer; }
 .red,.red a {color:#ea4074;}
 .red a:hover {color:#E97A9B;}
 
@@ -265,7 +267,7 @@ h6 {
 
 /*上下布局*/
 .headerbg { width:100%; height:100px; position: fixed; z-index: 999; top: 0px;}
-.contentbg { padding-top: 100px; height: 100%; }
+.contentbg { padding-top: 100px; height: 100%; min-width: 1000px;}
 
 	.wrapper {
 		width: 100%;
@@ -432,28 +434,30 @@ h6 {
 .el-tabs__nav-wrap::after {height: 1px;}
 /*Table当前行标识*/
 /*默认*/
-.el-radio__table .el-table__body tr.el-table__row>td:first-child:before {
+.el-radio__table .el-table__body tr.el-table__row>td:first-child .el-form-item__content span.blue:before {
 	content: "\EA33";
 	font-family: 'hxqheam';
 	color: #C7CED6;
-	width: 14px;
+	width: 24px;
 	height: 14px;
-	position: absolute;
-	left:15px;
-	top:50%;
-	margin-top:-10px;
+	position: relative;
+	float: left;
+	top: 0px;
+	left: 0px;
+	z-index: 1;
 }
 /*选中*/
-.el-radio__table .el-table__body tr.current-row>td:first-child:before {
+.el-radio__table .el-table__body tr.current-row>td:first-child .el-form-item__content span.blue:before {
 	content: "\EA32";
 	font-family: 'hxqheam';
 	color: #6585df;
-	width: 14px;
+	width: 24px;
 	height: 14px;
-	position: absolute;
-	left:15px;
-	top:50%;
-	margin-top:-10px;
+	position: relative;
+	float: left;
+	top: 0px;
+	left: 0px;
+	z-index: 1;
 }
 /*.el-table__body tr.current-row>td,
 .el-table__body tr.hover-row.current-row>td,

@@ -140,6 +140,7 @@ export default {
         show: false,
 		fullHeight: document.documentElement.clientHeight - 100+'px',//获取浏览器高度
 		applistdata: []
+
       }
     },
   
@@ -254,6 +255,7 @@ export default {
 .big_numb { color: #333333; font-size: 28px; line-height:32px; }
 .small_font { color: #BDBDBD; font-size:10px; line-height:15px;}
 .middle_font { color: #121958; font-size: 12px;  line-height:20px;}
+
 
 
 

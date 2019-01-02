@@ -114,7 +114,7 @@
 									</el-col> -->
 								</el-row>
 							</el-collapse-item>
-
+							
 							<!-- 年度计划列表 Begin-->
 							<el-collapse-item title="年度计划列表" name="2" class="ml30">
 								<div class="table-func">
@@ -151,7 +151,9 @@
 								    </el-table-column>
 									<el-table-column prop="ITEM_NAME" label="产品名称" sortable width="120px" :formatter="judge">
 								      <template slot-scope="scope">
-								         <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ITEM_NAME" placeholder="请输入内容"></el-input><span v-if="!scope.row.isEditing">{{scope.row.ITEM_NAME}}</span>
+								         <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ITEM_NAME" placeholder="请输入内容">
+								         	<el-button slot="append" icon="el-icon-search"></el-button>
+								         </el-input><span v-if="!scope.row.isEditing">{{scope.row.ITEM_NAME}}</span>
 								      </template>
 								    </el-table-column>
 								    <el-table-column prop="MODEL" label="规格型号" sortable width="120px">
@@ -191,7 +193,7 @@
 								        </el-button>
 								      </template>
 								    </el-table-column>
-								  </el-table>
+								</el-table>
 							</el-collapse-item>
 							<!-- 年度计划列表 End -->
 							<!-- 检测依据、检测项目与要求 Begin-->
@@ -250,7 +252,7 @@
 										        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_NUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_NUM}}</span>
 										      	</template>
 						            		</el-table-column>
-						            		<el-table-column label="产品排序号" sortable width="120px" prop="WP_LINENUM">
+						            		<el-table-column label="所属计划行号" sortable width="120px" prop="WP_LINENUM">
 										      <template slot-scope="scope">
 										      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_LINENUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_LINENUM}}</span>
 										      </template>
@@ -353,10 +355,12 @@
 				            	</el-form>
 							</el-collapse-item> -->
 							<!-- 文档编号列表 End -->
-
+							<el-collapse-item title="文档" name="6">
+								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
+							</el-collapse-item>
 							<!-- 录入人信息 Begin-->
-							<el-collapse-item title="录入人信息" name="6">
-								<el-row :gutter="30">
+							<el-collapse-item title="其他" name="7" v-if="dept">
+								<el-row :gutter="30"  v-show="views">
 									<el-col :span="8">
 										<el-form-item label="录入人" prop="ENTERBY">
 											<el-input v-model="WORKPLAN.ENTERBY" :disabled="edit"></el-input>
@@ -367,8 +371,6 @@
 											<el-input v-model="WORKPLAN.ENTERDATE" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
-								</el-row>
-								<el-row :gutter="30" v-if="modify">
 									<el-col :span="8">
 										<el-form-item label="修改人" prop="CHANGEBY">
 											<el-input v-model="WORKPLAN.CHANGEBY" :disabled="edit"></el-input>
@@ -380,6 +382,13 @@
 										</el-form-item>
 									</el-col>
 								</el-row>
+								<el-row :gutter="30"  v-if="dept">
+									<el-col :span="8">
+										<el-form-item label="机构" prop="DEPARTMENT">
+											<el-input v-model="WORKPLAN.DEPARTMENT" :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
 							</el-collapse-item>
 							<!-- 录入人信息 End -->
 						</el-collapse>
@@ -387,7 +396,7 @@
 					<div class="el-dialog__footer">
 						<el-form-item>
 							<el-button @click='close'>取消</el-button>
-							<el-button type="primary" class="btn-primarys" @click="submitForm">提交</el-button>
+							<el-button type="primary" class="btn-primarys" @click="submitForm">保存</el-button>
 						</el-form-item>
 					</div>
 				</el-form>
@@ -578,8 +587,10 @@
 
 <script>
 	import Config from '../../config.js'
+	import docTable from '../common/doc.vue'
 	export default {
 		name: 'masks',
+		components: {docTable},
 		data() {
 			var validateCode = (rule, value, callback) => {
                 if (value === '') {
@@ -658,6 +669,17 @@
                 }
             };
 			return {
+				docParm: {
+					'model': 'new',
+					'appname': '',
+					'recordid': 1,
+					'userid': 1,
+					'username': '',
+					'deptid': 1,
+					'deptfullname': '',
+					'appname': '',
+					'appid': 1
+				},
 				basic_url: Config.dev_url,
 				showEdit: [], //显示编辑框
 		        showBtn: [],
@@ -746,7 +768,9 @@
 				isEditList: false,  //年度计划列表编辑装填
 				editPlan: {},  //编辑中的内容
 				frontId: 1, //前端年度计划列表的唯一主键
-				index:0
+				index:0,
+				views:true,
+				dept:true
 			};
 		},
 		methods: {
@@ -1030,6 +1054,29 @@
 					this.up = !this.up
 				}
 			},
+			getUser(opt){
+				this.$axios.get(this.basic_url +'/api-user/users/currentMap', {}).then((res) => {
+					if(opt=='new'){
+						this.WORKPLAN.ENTERBY = res.data.nickname;
+	    				this.WORKPLAN.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
+					}else{
+						this.WORKPLAN.DEPARTMENT = res.data.deptName;
+	    				this.WORKPLAN.CHANGEBY = res.data.nickname;
+	    				var date = new Date();
+						this.WORKPLAN.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
+
+						this.docParm.userid = res.data.id;
+						this.docParm.username = res.data.username;
+						this.docParm.deptid = res.data.deptId;
+						this.docParm.deptfullname = res.data.deptName;
+					}
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+			},
 			//点击添加，修改按钮显示弹窗
 			visible() {
 				this.assignshow = false;//下达 按钮
@@ -1063,18 +1110,20 @@
 				this.basisList = []; //检测依据
 				this.proTestList = []; //项目检测和要求
 				this.isEditList = false;
-				this.$axios.get(this.basic_url +'/api-user/users/currentMap', {}).then((res) => {
-	    			this.WORKPLAN.ENTERBY = res.data.nickname;
-	    			
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
+
+				this.docParm = {
+					'model': 'new',
+					'appname': 'WORKPLAN',
+					'recordid': 1,
+					'appid': 39 
+				};
+				this.getUser('new');
+
 				this.addtitle = true;
             	this.modifytitle = false;
             	this.modify=false;
+            	this.views = false;
+            	this.dept = false;
             	this.show = true;
             	this.edit = true;
 				this.noedit = false;
@@ -1082,18 +1131,7 @@
 			// 这里是修改
 			detail(dataid) {
 				this.assignshow = true;
-				this.$axios.get(this.basic_url +'/api-user/users/currentMap', {}).then((res) => {
-	    			this.WORKPLAN.CHANGEBY = res.data.nickname;
-	    			var date = new Date();
-					this.WORKPLAN.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
 				this.$axios.get(this.basic_url +'/api-apps/app/workplan/' + dataid, {}).then((res) => {
-					console.log(res.data);
 					this.WORKPLAN = res.data;
 					this.worlplanlist = res.data.WORLPLANLINEList;
 					var worlplanlist = res.data.WORLPLANLINEList;
@@ -1104,13 +1142,21 @@
 						// this.initcost = money;
 						var cost = worlplanlist[i].CHECKCOST.toString();
 						var num = parseFloat(this.toNum(cost)).toFixed(2).toString().split(".");
-						console.log(num);
 						num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
 						worlplanlist[i].CHECKCOST = num.join(".");
 					}
 					this.basisList = res.data.WORLPLANLINEList.length > 0 ? res.data.WORLPLANLINEList[0].WORLPLANLINE_BASISList : [];
 					this.proTestList = res.data.WORLPLANLINEList.length > 0 ? res.data.WORLPLANLINEList[0].WORLPLANLINE_PROJECTList : [];
-					
+
+					this.getUser('edit');
+					var _this = this;
+					setTimeout(function(){
+						_this.docParm.model = 'edit';
+						_this.docParm.appname = 'WORKPLAN';
+						_this.docParm.recordid = _this.WORKPLAN.ID;
+						_this.docParm.appid = 39;
+						_this.$refs.docTable.getData();
+					},100);
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -1121,6 +1167,8 @@
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.modify = true;
+				this.views = false;
+				this.dept = true;
 				this.show = true;
 				this.edit = true;
 				this.noedit = false;

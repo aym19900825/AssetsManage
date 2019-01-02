@@ -33,6 +33,7 @@
 								</el-row>
 								<el-form-item v-for="item in basicInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" label-width="160px">
 									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" style="width: 220px;" :disabled="noedit"></el-input>
+									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'&&item.prop=='model'" style="width: 220px;" :disabled="true"></el-input>
 									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'" :disabled="noedit"></el-input>
 									<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" :disabled="noedit">
 									</el-date-picker>
@@ -48,7 +49,9 @@
 									</el-select>
 								</el-form-item>
 							</el-collapse-item>
-							
+							<el-collapse-item title="文档" name="2">
+								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
+							</el-collapse-item>
 							<!-- 其他信息 -->
 							<el-collapse-item title="其他" name="3" v-show="!addtitle">
 								<el-form-item v-for="item in otherInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-if="item.prop=='DEPARTMENT'" v-show="dept">
@@ -78,9 +81,11 @@
 
 <script>
 	import Config from '../../config.js'
+	import docTable from '../common/doc.vue'
 	export default {
 		name: 'masks',
 		props: ['detailData'],
+		components: {docTable},
 		data() {
 			var checkNum = (rule, value, callback) => {
 				if (!value) {
@@ -95,6 +100,17 @@
 				}, 1000);
 			};
 			return {
+				docParm: {
+					'model': 'new',
+					'appname': '',
+					'recordid': 1,
+					'userid': 1,
+					'username': '',
+					'deptid': 1,
+					'deptfullname': '',
+					'appname': '',
+					'appid': 1
+				},
 				rules: {
 
 					ASSETNUM: [
@@ -365,21 +381,19 @@
 			getUser(){
 				var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url,{}).then((res) => {
-				        this.dataInfo.ENTERBY = res.data.username;
-				        this.dataInfo.ENTERDATE = this.getToday();
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
-			},
-			getModiuser(){
-				var url = this.basic_url + '/api-user/users/currentMap';
-				this.$axios.get(url,{}).then((res) => {
-				        this.dataInfo.CHANGEBY = res.data.username;
+					if(opt=='new'){
+						this.dataInfo.ENTERBY = res.data.username;
+						this.dataInfo.ENTERDATE = this.getToday();
+					}else{
+						this.dataInfo.CHANGEBY = res.data.username;
 				        this.dataInfo.CHANGEDATE = this.getToday();
 						this.dataInfo.DEPARTMENT = res.data.deptName;
+
+						this.docParm.userid = res.data.id;
+						this.docParm.username = res.data.username;
+						this.docParm.deptid = res.data.deptId;
+						this.docParm.deptfullname = res.data.deptName;
+					}
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -422,8 +436,14 @@
 				this.statusshow1 = true;
 				this.statusshow2 = false;
 				this.show = true;
-				this.show = true;
-				this.getUser();
+
+				this.docParm = {
+					'model': 'new',
+					'appname': 'pmRecord',
+					'recordid': 1,
+					'appid': 70
+				};
+				this.getUser('new');
 			},
 			// 这里是修改
 			detail(dataid) {
@@ -439,7 +459,16 @@
 				this.statusshow1 = true;
 				this.statusshow2 = false;
 				this.show = true;
-				this.getModiuser();
+
+				this.getUser('edit');
+				var _this = this;
+				setTimeout(function(){
+					_this.docParm.model = 'edit';
+					_this.docParm.appname = 'pmRecord';
+					_this.docParm.recordid = _this.detailData.ID;
+					_this.docParm.appid = 70;
+					_this.$refs.docTable.getData();
+				},100);
 				this.dataInfo = this.detailData;
 			},
 			//这是查看

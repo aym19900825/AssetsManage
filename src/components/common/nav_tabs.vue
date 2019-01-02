@@ -8,8 +8,9 @@
                     <!-- <router-link to="/user_management" class="J_menuTab active" >用户管理 <i class="icon-close2"></i></router-link> -->
                 </div>
             </div>
-            <button class="roll-nav roll-right J_tabRight"  @click="tabRight"><i class="icon-next"></i></button>
-            <button class="btn-group roll-nav roll-right">
+            <div v-if="currentPage === '/index'">
+            <button class="roll-nav roll-right J_tabRight" @click="tabRight" style="right:100px;"><i class="icon-next"></i></button>
+            <button class="btn-group roll-nav roll-right" style="right:0px;">
                 <el-dropdown placement="top" trigger="click">
                   <span class="el-dropdown-link">
                     <font class="pr10 J_tabClose">关闭操作</font>
@@ -22,7 +23,25 @@
                   </el-dropdown-menu>
                 </el-dropdown>
             </button>
-            <a  onclick="history.back(-1);return false;"class="roll-nav roll-right J_tabExit"><i class="icon-back"></i>返回</a>
+            </div>
+            <div v-else>
+                <button class="roll-nav roll-right J_tabRight"  @click="tabRight"><i class="icon-next"></i></button>
+                <button class="btn-group roll-nav roll-right">
+                    <el-dropdown placement="top" trigger="click">
+                      <span class="el-dropdown-link">
+                        <font class="pr10 J_tabClose">关闭操作</font>
+                        <i class="el-icon-arrow-down icon-arrow2-down"></i>
+                      </span>
+                      <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item class="divider"><span @click="closeSel">定位当前选项卡</span></el-dropdown-item>
+                        <el-dropdown-item class="J_tabCloseAll border-lineb"><span @click="closeAll">关闭全部选项卡</span></el-dropdown-item>
+                        <el-dropdown-item class="J_tabCloseOther"><span @click="closeOther">关闭其他选项卡</span></el-dropdown-item>
+                      </el-dropdown-menu>
+                    </el-dropdown>
+                </button>
+                <router-link :to="{path:'/index'}" class="roll-nav roll-right J_tabExit"><i class="icon-back"></i>返回</router-link>
+            </div>
+           <!--  <a onclick="history.back(-1);return false;" class="roll-nav roll-right J_tabExit"><i class="icon-back"></i>返回</a> -->
         </div>
     </div>
 </template>
@@ -35,7 +54,9 @@ export default {
         return {
             basic_url: Config.dev_url,
             tabs: [],
-            selectedTab: {}
+            selectedTab: {},
+            currentPage: this.$route.path,//获取URL地址
+
         }
     },
     methods: {
@@ -51,6 +72,7 @@ export default {
                 });
             }
         },
+
         tabRight(){
             var left = $('.page-tabs').offset().left; 
             //tabs总宽度
@@ -143,7 +165,7 @@ export default {
     },
     mounted(){
       	this.showClick(this.$selectedNav);
-    }
+    },
 }
 </script>
 

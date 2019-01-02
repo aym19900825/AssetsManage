@@ -24,9 +24,9 @@
 							<el-collapse-item title="关键字授权信息" name="1">
 								<el-row :gutter="20" class="pb10">
 									<el-col :span="5" class="pull-right">
-										<el-input v-model="dataInfo.STATUS==1?'活动':'不活动'" :disabled="true">
+										<!-- <el-input v-model="dataInfo.STATUS==1?'活动':'不活动'" :disabled="true">
 											<template slot="prepend">信息状态</template>
-										</el-input>
+										</el-input> -->
 									</el-col>
 								</el-row>
 								<el-form-item v-for="item in basicInfo" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
@@ -36,7 +36,7 @@
 										v-if="item.type=='checkbox'" >
 										<el-checkbox style="line-height: 40px;" v-for="item in authorities" :label="item.label" :key="item.val">{{item.label}}</el-checkbox>
 									</el-checkbox-group>
-									<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'" @change="selChange">
+									<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'&&item.prop==''" @change="selChange">
 										<el-option v-for="item in assets"
 										:key="item.ID"
 										:label="item.DESCRIPTION"

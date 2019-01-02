@@ -36,8 +36,7 @@
 									</el-col> -->
 									<el-col :span="8">
 										<el-form-item label="分发号" prop="NUM">
-											<el-input v-model="WORK_INSTRUCTION.NUM" @focus="hint" @input="hinthide" :disabled="noedit"></el-input>
-											<span v-if="hintshow" style="color:rgb(103,194,58);font-size: 12px">可填写，若不填写系统将自动生成</span>
+											<el-input v-model="WORK_INSTRUCTION.NUM" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="16">
@@ -55,85 +54,7 @@
 								</el-row>
 							</el-collapse-item>
 							<el-collapse-item title="文件" name="2">
-								<!-- 字段列表 Begin-->
-								<div class="table-func">
-									<el-button type="primary" size="mini" round>
-										<i class="icon-upload-cloud"></i>
-										<font>上传</font>
-									</el-button>
-									<el-button type="success" size="mini" round @click="addfield_doclinks">
-										<i class="icon-add"></i>
-										<font>新建</font>
-									</el-button>
-								</div>
-								<!-- 字段列表 End -->
-
-								<!-- 文件Table-List Begin-->
-								<el-form :model="testing_filesForm" status-icon inline-message ref="testing_filesForm">
-									  <el-table :data="testing_filesForm.inspectionList" row-key="ID" border stripe max-height="260" :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'testing_filesForm.inspectionList', order: 'descending'}" v-loadmore="loadMore">
-										<el-table-column prop="iconOperation" fixed="left" label="操作" width="80">
-									      <template slot-scope="scope">
-									        <el-button type="text" id="Edit" size="medium" @click="saveRow(scope.row)" v-if="scope.row.isEditing">
-									        	<i class="icon-check" title="保存"></i>
-											</el-button>
-											<el-button type="text" size="medium" @click="modifyversion(scope.row)" v-else="v-else">
-									        	<i class="icon-edit" title="修改"></i>
-											</el-button>
-									        <el-button @click="deleteRow(scope.row)" type="text" size="medium" title="删除" >
-									          <i class="icon-trash red"></i>
-									        </el-button>
-									      </template>
-									    </el-table-column>
-									  	<el-table-column label="文件编号" sortable width="140" prop="DOCLINKS">
-									      <template slot-scope="scope">
-									        <el-form-item :prop="'inspectionList.'+scope.$index + '.DOCLINKS'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-									        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DOCLINKS" disabled></el-input><span class="blue" @click="viewchildRow(scope.row.ID)" v-else="v-else">{{scope.row.DOCLINKS}}</span>
-											</el-form-item>
-									      </template>
-									    </el-table-column>
-									    <el-table-column label="文件描述" sortable width="300" prop="DESCRIPTION">
-									      <template slot-scope="scope">
-									        <el-form-item :prop="'inspectionList.'+scope.$index + '.DESCRIPTION'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-									        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DESCRIPTION" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.DESCRIPTION}}</span>
-											</el-form-item>
-									      </template>
-									    </el-table-column>		
-										<el-table-column prop="DOC_SIZE" label="文件大小" sortable width="120">
-									      <template slot-scope="scope">
-									        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DOC_SIZE" placeholder="自动获取" disabled></el-input><span v-else="v-else">{{scope.row.DOC_SIZE}}</span>
-									      </template>
-									    </el-table-column>
-									    <el-table-column prop="ENTERBY" label="上传人" sortable width="120">
-									      <template slot-scope="scope">
-									        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ENTERBY" placeholder="自动获取" disabled></el-input><span v-else="v-else">{{scope.row.ENTERBY}}</span>
-									      </template>
-									    </el-table-column>
-									     <el-table-column prop="ENTERDATE" label="上传时间" sortable width="160" :formatter="dateFormat">
-									      <template slot-scope="scope">
-									      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ENTERDATE" placeholder="自动获取" disabled></el-input><span v-else="v-else">{{scope.row.ENTERDATE}}</span>
-									      </template>
-									    </el-table-column>
-										<el-table-column prop="ROUTE" label="预览" sortable>
-									      <template slot-scope="scope">
-									        <el-button size="small" type="primary" v-if="scope.row.isEditing">点击上传</el-button>
-									        <router-link :to="scope.row.ROUTE" target="_blank" class="blue font20" v-else="v-else">
-												<i class="icon-word"></i>
-											</router-link>
-									      </template>
-									    </el-table-column>
-									  </el-table>
-									</el-form>
-									<!-- 表格 Begin-->
-									<el-pagination v-if="modify" background class="pull-right pt10 pb10"
-							            @size-change="sizeChange"
-							            @current-change="currentChange"
-							            :current-page="page.currentPage"
-							            :page-sizes="[10, 20, 30, 40]"
-							            :page-size="page.pageSize"
-							            layout="total, sizes, prev, pager, next"
-							            :total="page.totalCount">
-							        </el-pagination>
-								<!-- 文件Table-List End -->
+								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
 							</el-collapse-item>
 							<el-collapse-item title="其它" name="3" v-show="views">
 								<el-row>
@@ -175,8 +96,10 @@
 
 <script>
 	import Config from '../../config.js'
+	import docTable from '../common/doc.vue'
 	export default {
 		name: 'masks',
+		components: {docTable},
 		props: {
 			WORK_INSTRUCTION: {
 				type: Object,
@@ -198,24 +121,17 @@
 			page: Object,
 		},
 		data() {
-			// var validateNum = (rule, value, callback) => {
-			// 	if(value === '') {
-			// 		callback(new Error('可填写，若不填写系统将自动生成'));
-					
-			// 	} else {
-			// 		callback();
-			// 	}
-			// 	callback();
-			// 	// if(value){
-			// 	// 	if (value==='') {
-			// 	// 		callback();
-			// 	// 	}else{
-		 //  //            	callback(new Error('可填写，若不填写系统将自动生成'));
-			// 	// 	}
-		 //  //       }else{
-		 //  //            callback();
-		 //  //       }
-			// };
+			var validateNum = (rule, value, callback) => {
+				if(value != ""){
+		             if((/^[0-9a-zA-Z()]+$/).test(value) == false){
+		                 callback(new Error("请填写数字或字母（编码不填写可自动生成）"));
+		             }else{
+		                 callback();
+		             }
+		         }else{
+		             callback();
+		         }
+			};
 			var validateType = (rule, value, callback) => {
 				if(value === '') {
 					callback(new Error('请填写产品类别名称'));
@@ -224,6 +140,17 @@
 				}
 			};
 			return {
+				docParm: {
+					'model': 'new',
+					'appname': '',
+					'recordid': 1,
+					'userid': 1,
+					'username': '',
+					'deptid': 1,
+					'deptfullname': '',
+					'appname': '',
+					'appid': 1
+				},
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				selUser: [],
@@ -238,10 +165,11 @@
 				dialogVisible: false, //对话框
 				selectData: [],
 				rules: {
-					// NUM: [{
-					// 	trigger: 'blur',
-					// 	validator: validateNum,
-					// }],
+					NUM: [{
+						required: false,
+						trigger: 'change',
+						validator: validateNum,
+					}],
 					DESCRIPTION: [{
 						required: true,
 						trigger: 'blur',
@@ -268,13 +196,6 @@
 			};
 		},
 		methods: {
-			//编码提示
-			hint(){
-				this.hintshow = true;
-			},
-			hinthide(){
-				this.hintshow = false;
-			},
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selUser = val;
@@ -309,20 +230,31 @@
 			     	this.requestData_doclinks()
 			    }
 			},
-			//点击按钮显示弹窗
-			visible() {
-				//				this.WORK_INSTRUCTION.NUM =  this.rand(1000,9999);
+			getUser(opt){
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.WORK_INSTRUCTION.DEPARTMENT = res.data.deptName;
 					this.WORK_INSTRUCTION.ENTERBY = res.data.nickname;
 					var date = new Date();
 					this.WORK_INSTRUCTION.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					if( opt!='new' ){
+						//深拷贝数据
+						let _obj = JSON.stringify(this.WORK_INSTRUCTION);
+						this.work_instruction = JSON.parse(_obj);
+						this.docParm.userid = res.data.id;
+						this.docParm.username = res.data.username;
+						this.docParm.deptid = res.data.deptId;
+						this.docParm.deptfullname = res.data.deptName;
+					}
+					
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
 						type: 'error'
 					});
 				});
+			},
+			//点击按钮显示弹窗
+			visible() {
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.viewtitle = false;
@@ -334,6 +266,13 @@
 				this.hintshow = false;
 				this.statusshow1 = true;
 				this.statusshow2 = false;
+				this.docParm = {
+					'model': 'new',
+					'appname': 'WORK_INSTRUCTION',
+					'recordid': 1,
+					'appid': 26
+				};
+				this.getUser('new');
 //				this.show = true;
 			},
 			// 这里是修改
@@ -349,20 +288,15 @@
 				this.modify = true;//修订
 				this.statusshow1 = false;
 				this.statusshow2 = true;
-				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					this.WORK_INSTRUCTION.DEPARTMENT = res.data.deptName;
-					this.WORK_INSTRUCTION.CHANGEBY = res.data.nickname;
-					var date = new Date();
-					this.WORK_INSTRUCTION.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-					//深拷贝数据
-					let _obj = JSON.stringify(this.WORK_INSTRUCTION);
-        			this.work_instruction = JSON.parse(_obj);
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
+				this.getUser();
+				var _this = this;
+				setTimeout(function(){
+					_this.docParm.model = 'edit';
+					_this.docParm.appname = 'WORK_INSTRUCTION';
+					_this.docParm.recordid = _this.WORK_INSTRUCTION.ID;
+					_this.docParm.appid = 26;
+					_this.$refs.docTable.getData();
+				},100);
 				this.show = true;
 			},
 			//这是查看
@@ -581,10 +515,6 @@
 					.catch(_ => {});
 			},
 		},
-		mounted() {
-			
-		},
-		
 	}
 </script>
 

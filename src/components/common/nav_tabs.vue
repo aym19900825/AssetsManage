@@ -143,7 +143,6 @@ export default {
             sessionStorage.setItem('clickedNav',JSON.stringify({arr:this.tabs}));
         },
         showSelected(item){
-        	console.log(item);
         	this.selectedTab = item;
 //        	this.$store.dispatch('setSelectedNavAct',item);
           	this.$store.dispatch('setNavIdAct',item.parentId);//点击时重新给meunid赋值
@@ -160,7 +159,6 @@ export default {
 			}else{
 				this.selectedTab = items;
 			}
-	        console.log(this.selectedTab);
         }
     },
     mounted(){

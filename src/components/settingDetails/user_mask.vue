@@ -169,7 +169,7 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="角色" prop="roleId" label-width="100px">
-											<el-select v-model="user.roleId" multiple :disabled="noedit" @change="currentSel">
+											<el-select v-model="user.roleId" multiple :disabled="noedit" value-key="item.id" >
 												<el-option v-for="item in selectData" :key="item.name" :value="item.id" :label="item.name"></el-option>
 											</el-select>
 										</el-form-item>

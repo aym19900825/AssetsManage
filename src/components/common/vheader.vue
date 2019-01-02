@@ -24,9 +24,9 @@
               </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item v-for="(data,index) in GetRoles" :key="index">
-                    <router-link :to="data.id">
+                    <div @click = "clickfun($event)">
                         {{data.name}}
-                    </router-link>
+                    </div>
                 </el-dropdown-item>
                 
                 <!-- <el-dropdown-item>
@@ -95,16 +95,34 @@ export default {
                 });
             });
         },
-        //当前角色
-        getITEM_Roles() {
+       getITEM_Roles() {
             var url = this.basic_url + '/api-user/roles/current';
             this.$axios.get(url, {}).then((res) => {
                 this.GetRoles = res.data;
+                if(res.data!=null&&res.data.length>0)
+                {
+                    let item = res.data[0];
+                    this.$store.dispatch('setRoleIdAct',item.id);
+                }
             }).catch(error => {
                 console.log('请求失败');
             })
         },
+		 clickfun(e) {
+      		// e.target 是你当前点击的元素
+      		// e.currentTarget 是你绑定事件的元素
+      	    var content=$.trim(e.target.innerHTML)
+      	    var GetRoles=this.GetRoles
+      	    for(let i=0;i<GetRoles.length;i++){
+      	    	if(GetRoles[i].name==content){
+      	    		var roId=this.GetRoles[i].id
+                     this.$store.dispatch('setRoleIdAct',roId);
+                     console.log("roleid"+this.$store.state.roleid);
+      	    	}
+      	    }
 
+      	   this.$emit('clickfun',roId)
+    	},
         setTabs(){
             if(!sessionStorage.getItem('clickedNav')){
                 sessionStorage.setItem('clickedNav',JSON.stringify({arr:[]}));

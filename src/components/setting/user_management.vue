@@ -6,7 +6,7 @@
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单调用 Begin-->
-			<navs_left></navs_left>
+			<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left>
 			<!--左侧菜单调用 End-->
 			<!--右侧内容显示 Begin-->
 			<div class="wrapper wrapper-content">
@@ -588,7 +588,6 @@
 				
 			},
 			handleNodeClick(data) {
-				console.log(data);
 				if(data.type == '1') {
 					this.companyId = data.id;
 					this.deptId = '';
@@ -616,15 +615,20 @@
 					$(".icon-doubleok").addClass("icon-double-angle-left");
 				}
 				this.ismin = !this.ismin;
-			}
+			},
+			childByValue:function(childValue) {
+        		// childValue就是子组件传过来的值
+        		this.$refs.navsheader.showClick(childValue);
+      		},
 		},
 		beforeMount() {
+			
+		},
+		mounted() {	
 			// 在页面挂载前就发起请求
 			this.requestData();
 			this.getKey();
-		},
-		mounted() {
-			this.$refs.navsheader.sessionGet();
+//			this.$refs.navleft.getleft();
 		}
 	}
 </script>

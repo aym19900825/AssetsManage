@@ -241,6 +241,7 @@
 					}else{
 						// this.$refs.inspectionSta2child.viewfield_inspectionSta2('null');
 						this.$emit('parentMsd_product2', 'null');
+
 					}
 					
 					for(var j = 0; j < this.product2Form.inspectionList.length; j++){
@@ -294,6 +295,7 @@
 			},
 
 			addfield_product2(NUM) { //插入行到产品类型Table中
+				
 				var isEditingflag=false;
 				//console.log(this.product2Form.inspectionList);
 				for(var i=0;i<this.product2Form.inspectionList.length; i++){

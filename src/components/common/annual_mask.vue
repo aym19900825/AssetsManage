@@ -17,7 +17,7 @@
 			</div>
 			<div class="mask_content">
 				<!-- status-icon 验证后文本框上显示对勾图标 -->
-				<el-form status-icon :model="WORKPLAN" :label-position="labelPosition" :rules="rules" ref="WORKPLAN" label-width="85px">
+				<el-form status-icon inline-message :model="WORKPLAN" :label-position="labelPosition" :rules="rules" ref="WORKPLAN" label-width="85px">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="基本信息" name="1">
@@ -42,12 +42,8 @@
 								<el-row :gutter="5" class="pt10">
 									<el-col :span="6">
 										<el-form-item label="提出单位" prop="PROP_UNIT">
-											<el-select v-model="WORKPLAN.PROP_UNIT" placeholder="请选择">
-										    	<el-option label="金化站" value="金化站"></el-option>
-										    	<el-option label="通号站" value="通号站"></el-option>
-										    	<el-option label="运包站" value="运包站"></el-option>
-										    	<el-option label="机辆站" value="机辆站"></el-option>
-										    	<el-option label="接触网站" value="接触网站"></el-option>
+											<el-select clearable v-model="WORKPLAN.PROP_UNIT" filterable allow-create default-first-option placeholder="请选择">
+												<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 											</el-select>
 										</el-form-item>
 									</el-col>
@@ -774,6 +770,19 @@
 			};
 		},
 		methods: {
+			//提出单位
+			getCompany() {
+				var type = "2";
+				var url = this.basic_url + '/api-user/depts/treeByType';
+				this.$axios.get(url, {
+					params: {
+						type: type
+					},
+				}).then((res) => {
+					console.log(res.data);
+					this.selectData = res.data;
+				});
+			},
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
@@ -1372,6 +1381,7 @@
 		},
 		mounted() {
 			this.requestData();
+			this.getCompany();
 		},
 	}
 </script>

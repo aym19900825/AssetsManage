@@ -38,7 +38,7 @@
 									</el-col>-->
 									<!--<template slot-scope="scope">
 											<label>信息状态</label>
- 									       <!--  <span v-text="scope.STATUS=='1'?'活动':'不活动'"></span>-->
+ 									       <span v-text="scope.STATUS=='1'?'活动':'不活动'"></span>-->
 									<!--<span>{{scope.STATUS}}</span>
  									       	
  									       </span>

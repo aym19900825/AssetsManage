@@ -167,7 +167,7 @@
 <script>
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
-	import navs_left from '../common/left_navs/nav_left6.vue'
+	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_header from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import samplesmask from'../samplesDetails/returnsample_mask.vue'
@@ -175,8 +175,8 @@
 		name: 'return_samples',//返样
 		components: {
 			vheader,
-			navs_header,
 			navs_left,
+			navs_header,
 			tableControle,
 			samplesmask,
 		},

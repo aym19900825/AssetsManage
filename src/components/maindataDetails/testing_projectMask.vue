@@ -60,7 +60,7 @@
 									<el-col :span="8">
 										<el-form-item label="作业指导书" prop="DOCLINKS_NUM">
 											<el-input v-model="testing_projectForm.DOCLINKS_NUM">
-												<el-button slot="append" icon="icon-search" @click="getCompany" :disabled="noedit"></el-button>
+												<el-button slot="append" icon="icon-search" @click="getwork" :disabled="noedit"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -146,6 +146,36 @@
     			<el-button type="primary" @click="dailogconfirm()">确 定</el-button>
   			</span>
 		</el-dialog>
+		<!-- 作业指导书 Begin -->
+		<el-dialog title="检测项目测试与要求" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
+			<!-- 第二层弹出的表格 Begin-->
+			<el-table :header-cell-style="rowClass" :data="WORK_INSTRUCTIONList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'WORK_INSTRUCTIONList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
+								</el-table-column>
+								<el-table-column label="分发号" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('分发号')!=-1">
+									<template slot-scope="scope">
+										<p @click=view(scope.row)>{{scope.row.NUM}}
+										</p>
+									</template>
+								</el-table-column>
+								<el-table-column label="文件名称" sortable prop="DESCRIPTION" v-if="this.checkedName.indexOf('文件名称')!=-1">
+								</el-table-column>
+								<el-table-column label="版本" width="100" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1" align="right">
+								</el-table-column>
+								<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
+								</el-table-column>
+								<el-table-column label="机构" width="120" prop="DEPARTMENTDesc" sortable v-if="this.checkedName.indexOf('机构')!=-1">
+								</el-table-column>
+							</el-table>
+							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							</el-pagination>
+							<!-- 表格 End-->
+			<span slot="footer" class="dialog-footer">
+		       <el-button @click="dialogVisible2 = false" style="margin-left: 37%;">取 消</el-button>
+		       <el-button type="primary" @click="addwork">确 定</el-button>
+		    </span>
+		</el-dialog>
+		<!-- 作业指导书 End -->
 	</div>
 </template>
 
@@ -287,6 +317,7 @@
 				hintshow:false,
 				statusshow1:true,
 				statusshow2:false,
+				dialogVisible2:false,//作业指导书弹出框
 			};
 		},
 		methods: {
@@ -316,6 +347,9 @@
 					this.resourceData = res.data.data;
 					this.dialogVisible = true;
 				});
+			},
+			getwork(){
+				this.dialogVisible2 = true;
 			},
 			getCheckedNodes() { //获取树菜单节点
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()

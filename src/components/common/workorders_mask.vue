@@ -3,8 +3,8 @@
 		<div class="mask" v-if="show"></div>
 		<div class="mask_div" v-if="show">
 			<div class="mask_title_div clearfix">
-				<div class="mask_title" v-show="addtitle">添加检验工作处理</div>
-				<div class="mask_title" v-show="modifytitle">修改检验工作处理</div>
+				<div class="mask_title" v-show="addtitle">添加工作任务单</div>
+				<div class="mask_title" v-show="modifytitle">修改工作任务单</div>
 				<div class="mask_anniu">
 					<span class="mask_span mask_max" @click='toggle'>
 						<i v-bind:class="{'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -49,7 +49,7 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="委托书版本" prop="PROXY_VERSION">
-											<el-input v-model="workorderForm.PROXY_VERSION"></el-input>
+											<el-input v-model="workorderForm.PROXY_VERSION" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -62,7 +62,9 @@
 								<el-row >
 									<el-col :span="8">
 										<el-form-item label="主检员" prop="MASTER_INSPECTOR">
-											<el-input v-model="workorderForm.MASTER_INSPECTOR"></el-input>
+											<el-input v-model="workorderForm.MASTER_INSPECTOR">
+												<el-button slot="append" icon="el-icon-search"></el-button>
+											</el-input>
 										</el-form-item>
 									</el-col>
 									<!--<el-col :span="8">
@@ -365,7 +367,10 @@
 
 										    <el-table-column label="标准编号" sortable width="160px" prop="S_NUM">
 										      <template slot-scope="scope">
-										      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" disabled></el-input><span v-show="!scope.row.isEditing">{{scope.row.S_NUM}}</span>
+										      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" disabled>
+													  <el-button slot="append" icon="el-icon-search"></el-button>
+												</el-input>
+												<span v-show="!scope.row.isEditing">{{scope.row.S_NUM}}</span>
 										      </template>
 										    </el-table-column>
 
@@ -576,8 +581,9 @@
 					</div>
 					<div class="el-dialog__footer">
 						<el-form-item>
+							<el-button type="primary" @click="submitForm('workorderForm')">保存</el-button>
+							<el-button type="success" v-show="addtitle">保存并添加</el-button>
 							<el-button @click='close'>取消</el-button>
-							<el-button type="primary" class="btn-primarys" @click="submitForm('workorderForm')">提交</el-button>
 						</el-form-item>
 					</div>
 				</el-form>

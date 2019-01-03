@@ -43,6 +43,8 @@ export default {
 				}
 			}
 			if(!flag){
+				console.log(this.$store.state.clickedNavs);
+//				this.$store.state.clickedNavs = this.$store.state.clickedNavs.slice();
 				this.$store.state.clickedNavs.push(item);
 				setTimeout(function(){
 		 			var left = $('.page-tabs').offset().left; 
@@ -59,7 +61,7 @@ export default {
 				},0);				
 			}
 //			this.$selectedNav=item;
-			_this.$store.dispatch('setSelectedNavAct',item);
+			this.$store.dispatch('setSelectedNavAct',item);
 			//点击的值传给user
 			this.$emit('childByValue',item);
 		},
@@ -87,6 +89,7 @@ export default {
 		},	
 	},
 	mounted() {
+		console.log(111111);
 		var _this = this;
 		var data = {
 			menuId: this.$store.state.navid,

@@ -163,6 +163,7 @@ export default {
     },
     mounted(){
       	this.showClick(this.$store.state.setSelectedNav);
+      	console.log(this.$store.state.setSelectedNav);
     },
 }
 </script>

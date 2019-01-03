@@ -53,9 +53,9 @@
                 </el-dropdown-item>
 
                 <el-dropdown-item>
-                    <span v-on:click="cleanAll()">
+                    <div v-on:click="cleanAll()">
                         <i class="icon-log-out mr10"></i>退出
-                    </span>
+                    </div>
                 </el-dropdown-item>
 
               </el-dropdown-menu>
@@ -80,7 +80,14 @@ export default {
     methods: {
     	cleanAll(){
     		this.$router.push({ path: '/',name: 'Login',});
-    		sessionStorage.clear();
+    		var selectedNav={
+      			css: 'icon-user',
+      			name: '首页',
+      			url: '/index'};
+    			console.log(1234567);
+//    		sessionStorage.setItem("",JSON.stringify(this.$store.state))
+			this.$store.dispatch('setClickedNavAct',this.$store.state.selectedNav);
+      	    console.log(this.$store.state);
     	},
         getData(){//获取当前用户信息
             var url = this.basic_url + '/api-user/users/currentMap';

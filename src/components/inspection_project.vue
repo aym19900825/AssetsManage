@@ -43,7 +43,7 @@
 							</div>
 							<div class="text item">
 								<el-form :model="productType2Form" status-icon inline-message ref="productType2Form" class="el-radio__table">
-								  <el-table ref="singleTable" :data="productType2Form.inspectionList.filter(data => !search || data.TYPE.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'productType2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
+								  <el-table ref="singleTable" :data="productType2Form.inspectionList.filter(data => !search || data.TYPE.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250" highlight-current-row style="width: 100%;" :default-sort="{prop:'productType2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
 
 								  	<el-table-column label="类别编号" sortable width="100" prop="NUM" class="pl30">
 								      <template slot-scope="scope">
@@ -215,8 +215,12 @@
 			}
 		},
 		methods: {
-			childMsd_product2(data){//赋值给子表产品ID
-				this.product2Id = data;
+			childMsd_product2(id,num,eventType){//赋值给子表产品ID
+				this.product2Id = id;
+				console.log(eventType);
+				if(eventType=='read'){
+					this.$refs.inspectionSta2child.viewfield_inspectionSta2(this.product2Id);
+				}
 			},
 			childMsd_inspectionSta2(data){//赋值给子表检验/检测标准ID
 				console.log(data);

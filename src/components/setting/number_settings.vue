@@ -291,6 +291,9 @@
 			 	this.numbsetForm = item;
 				this.$refs.child.view(item);
 			},
+			open(){
+				this.show = true;
+			},
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;

@@ -151,7 +151,7 @@
 								</el-table-column>
 								<el-table-column label="编号" sortable width="100px" prop="WP_NUM" v-if="this.checkedName.indexOf('编号')!=-1">
 									<template slot-scope="scope">
-										<p @click=view(scope.row.ID)>{{scope.row.WP_NUM}}
+										<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.WP_NUM}}
 										</p>
 									</template>
 								</el-table-column>
@@ -191,7 +191,7 @@
 					</div>
 				</div>
 			</div>
-			<annualmask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></annualmask>
+			<annualmask ref="child" @request="requestData" v-bind:page=page></annualmask>
 		</div>
 	</div>
 </template>
@@ -300,12 +300,14 @@
 					LEADER_STATUS:''
 				},
 				//tree
-				resourceData: [], //数组，我这里是通过接口获取数据，
+				resourceData: [
+					{label: '监督抽查'},
+					{label: '质量抽查'}
+				], //数组，我这里是通过接口获取数据，
 				resourceDialogisShow: false,
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
 				resourceProps: {
-					children: "subDepts",
-					label: "fullname"
+					label: "label"
 				},
 				treeData: [],
 				userData:[],
@@ -318,9 +320,9 @@
 		},
 	methods: {
 		//表头居中
-			rowClass({ row, rowIndex}) {
-			    return 'text-align:center'
-			},
+		rowClass({ row, rowIndex}) {
+		    return 'text-align:center'
+		},
 		renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
 			return(<span><i class={data.iconClass}></i><span>{node.label}</span></span>);
 		},
@@ -473,14 +475,14 @@
 				})
 			},
 			//机构树
-			getKey() {
-				let that = this;
-				var url = this.basic_url + '/api-user/depts/tree';
-				this.$axios.get(url, {}).then((res) => {
-					this.resourceData = res.data;
-					this.treeData = this.transformTree(this.resourceData);
-				});
-			},
+			// getKey() {
+			// 	let that = this;
+			// 	var url = this.basic_url + '/api-user/depts/tree';
+			// 	this.$axios.get(url, {}).then((res) => {
+			// 		this.resourceData = res.data;
+			// 		this.treeData = this.transformTree(this.resourceData);
+			// 	});
+			// },
 			transformTree(data){
 				for(var i=0; i<data.length; i++){
 					data[i].name = data[i].fullname;
@@ -539,7 +541,7 @@
 		},
 		mounted() {
 			this.requestData();
-			this.getKey();
+			// this.getKey();
 
 			
 		},

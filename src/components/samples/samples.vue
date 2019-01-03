@@ -131,17 +131,17 @@
 								</el-table-column>
 								<el-table-column label="样品编号" sortable width="200px" prop="ITEMNUM" v-if="this.checkedName.indexOf('样品编号')!=-1">
 									<template slot-scope="scope">
-										<p @click=view(scope.row.ID)>{{scope.row.ITEMNUM}}
+										<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.ITEMNUM}}
 										</p>
 									</template>
+								</el-table-column>
+								<el-table-column label="样品名称" sortable width="200px" prop="DESCRIPTION" v-if="this.checkedName.indexOf('样品名称')!=-1">
 								</el-table-column>
 								<el-table-column label="样品类别" sortable width="200px" prop="TYPE" v-if="this.checkedName.indexOf('样品类别')!=-1">
 								</el-table-column>
 								<el-table-column label="委托单位" sortable width="200px" prop="V_NAME" v-if="this.checkedName.indexOf('委托单位')!=-1">
 								</el-table-column>
 								<el-table-column label="生产单位" sortable width="200px" prop="P_NAME" v-if="this.checkedName.indexOf('生产单位')!=-1">
-								</el-table-column>
-								<el-table-column label="样品名称" sortable width="200px" prop="DESCRIPTION" v-if="this.checkedName.indexOf('样品名称')!=-1">
 								</el-table-column>
 								<el-table-column label="型号" width="100px" prop="MODEL" sortable v-if="this.checkedName.indexOf('型号')!=-1">
 								</el-table-column>
@@ -199,10 +199,10 @@
 				commentArr: {},
 				checkedName: [
 					'样品编号',
+					'样品名称',
 					'样品类别',
 					'委托单位',
 					'生产单位',
-					'样品名称',
 					'型号',
 					'数量',
 					'收样人',
@@ -217,6 +217,10 @@
 						prop: 'ITEMNUM'
 					},
 					{
+						label: '样品名称',
+						prop: 'DESCRIPTION'
+					},
+					{
 						label: '样品类别',
 						prop: 'TYPE'
 					},
@@ -228,10 +232,7 @@
 						label: '生产单位',
 						prop: 'P_NAME'
 					},
-					{
-						label: '样品名称',
-						prop: 'DESCRIPTION'
-					},
+					
 					{
 						label: '型号',
 						prop: 'MODEL'

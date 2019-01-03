@@ -273,8 +273,6 @@
 				}
 				m.isFolder = !m.isFolder;
 			},
-
-			
 			//表格滚动加载
 			loadMore () {
 			   if (this.loadSign) {

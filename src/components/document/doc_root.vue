@@ -226,7 +226,6 @@
 					children: "subDepts",
 					label: "fullname"
 				},
-				treeData: [],
 				page: {
 					currentPage: 1,
 					pageSize: 10,
@@ -416,24 +415,8 @@
 				this.$axios.post(url, {
 					'pathid': 0
 				}).then((res) => {
-					// this.resourceData = res.data;
-					// this.treeData = this.transformTree(this.resourceData);
+					this.resourceData = res.data;
 				});
-			},
-			transformTree(data) {
-				for(var i = 0; i < data.length; i++) {
-					data[i].name = data[i].foldername;
-					if(!data[i].pid || $.isArray(data[i].subDepts)) {
-						data[i].iconClass = 'icon-file-normal';
-					} else {
-						data[i].iconClass = 'icon-file-text';
-					}
-					if($.isArray(data[i].subDepts)) {
-						data[i].children = this.transformTree(data[i].subDepts);
-					}
-				}
-				return data;
-				
 			},
 			handleNodeClick(data) {
 				if(data.type == '1') {
@@ -445,7 +428,6 @@
 				}
 				this.requestData();
 			},
-
 			min3max() { //左侧菜单正常和变小切换
 				if($(".lefttree").hasClass("el-col-5")) {
 					$(".lefttree").removeClass("el-col-5");

@@ -38,7 +38,7 @@
 									</el-col>-->
 									<!--<template slot-scope="scope">
 											<label>信息状态</label>
- 									       <!--  <span v-text="scope.STATUS=='1'?'活动':'不活动'"></span>-->
+ 									       <span v-text="scope.STATUS=='1'?'活动':'不活动'"></span>-->
 									<!--<span>{{scope.STATUS}}</span>
  									       	
  									       </span>
@@ -142,8 +142,8 @@
 		data() {
 			var validateNum = (rule, value, callback) => {
 				if(value != ""){
-		             if((/^[0-9a-zA-Z()]+$/).test(value) == false){
-		                 callback(new Error("请填写数字或字母（编码不填写可自动生成）"));
+		             if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
+		                 callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
 		             }else{
 		                 callback();
 		             }

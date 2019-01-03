@@ -51,6 +51,11 @@
 						<el-form status-icon :model="searchList" label-width="70px">
 							<el-row :gutter="5">
 								<el-col :span="7">
+									<el-form-item label="样品编号" prop="ITEMNUM">
+										<el-input v-model="searchList.ITEMNUM"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="7">
 									<el-form-item label="样品类别" prop="TYPE">
 										<el-input v-model="searchList.TYPE"></el-input>
 									</el-form-item>
@@ -60,11 +65,11 @@
 										<el-input v-model="searchList.V_NAME"></el-input>
 									</el-form-item>
 								</el-col>
-								<el-col :span="7">
+								<!-- <el-col :span="7">
 									<el-form-item label="生产单位" prop="P_NAME">
 										<el-input v-model="searchList.P_NAME"></el-input>
 									</el-form-item>
-								</el-col>
+								</el-col> -->
 								
 								
 							</el-row>
@@ -262,10 +267,11 @@
 				down: true,
 				up: false,
 				searchList: {
+					ITEMNUM:'',//样品编号
 					V_NAME: '',//委托单位名称
 					DESCRIPTION: '',//样品名称
 					ACCEPT_PERSON: '',//收样人
-					P_NAME: '',//生产单位名称
+					// P_NAME: '',//生产单位名称
 					TYPE: '',//样品类别
 					ACCEPT_DATE: '',//收样日期
 				},
@@ -461,11 +467,11 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-
+					ITEMNUM: this.searchList.ITEMNUM,//样品编号
 					V_NAME: this.searchList.V_NAME,//委托单位名称
 					DESCRIPTION: this.searchList.DESCRIPTION,//样品名称
 					ACCEPT_PERSON: this.searchList.ACCEPT_PERSON,//收样人
-					P_NAME: this.searchList.P_NAME,//生产单位名称
+					// P_NAME: this.searchList.P_NAME,//生产单位名称
 					TYPE: this.searchList.TYPE,//样品类别
 					ACCEPT_DATE: this.searchList.ACCEPT_DATE//收样日期
 				}

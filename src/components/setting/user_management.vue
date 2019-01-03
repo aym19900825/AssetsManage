@@ -6,7 +6,7 @@
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单调用 Begin-->
-			<navs_left></navs_left>
+			<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left>
 			<!--左侧菜单调用 End-->
 			<!--右侧内容显示 Begin-->
 			<div class="wrapper wrapper-content">
@@ -15,9 +15,12 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+									<i :class="item.icon"></i>{{item.name}}
+								</button>
+								<!--<button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加
-                      			 </button>
+                      			</button>
 								<button type="button" class="btn btn-bule button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改
 								</button>
@@ -40,7 +43,7 @@
 						    		<i class="icon-search"></i>高级查询
 						    		<i class="icon-arrow1-down" v-show="down"></i>
 						    		<i class="icon-arrow1-up" v-show="up"></i>
-								</button>
+								</button>-->
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -183,6 +186,7 @@
 					// '信息状态',
 					'创建时间'
 				],
+				buttons: [],//请求回的按钮
 				tableHeader: [{
 						label: '用户名',
 						prop: 'username'
@@ -208,7 +212,7 @@
 						prop: 'createTime'
 					}
 				],
-
+				leftitem:'',//点击左侧传过来的
 				companyId: '',
 				deptId: '',
 				selUser: [],
@@ -313,6 +317,38 @@
 				this.page.pageSize = 10;
 				this.requestData();
 			},
+			//请求页面的菜单接口
+		    getbutton(childByValue){
+		    	console.log(childByValue);
+		    	var data = {
+					menuId: childByValue.id,
+					roleId: this.$store.state.roleid,
+				};
+				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
+				this.$axios.get(url, {params: data}).then((res) => {
+					console.log(111)
+					console.log(res);
+					this.buttons = res.data;
+					
+				}).catch((wrong) => {})
+
+		    },
+		    //请求点击
+		    getbtn(item){
+		    	if(item.name=="添加"){
+		         this.openAddMgr();
+		    	}else if(item.name=="修改"){
+		    	 this.modify();
+		    	}else if(item.name=="高级查询"){
+		    	 this.modestsearch();
+		    	}else if(item.name=="活动"){
+		    		this.unfreeze();
+		    	}else if(item.name=="不活动"){
+		    		this.freezeAccount();
+		    	}else if(item.name=="删除"){
+		    		this.deluserinfo();
+		    	}
+		    },
 			//添加用戶
 			openAddMgr() {
 				this.$refs.child.visible();
@@ -588,7 +624,6 @@
 				
 			},
 			handleNodeClick(data) {
-				console.log(data);
 				if(data.type == '1') {
 					this.companyId = data.id;
 					this.deptId = '';
@@ -616,15 +651,23 @@
 					$(".icon-doubleok").addClass("icon-double-angle-left");
 				}
 				this.ismin = !this.ismin;
-			}
+			},
+			childByValue:function(childValue) {
+        		// childValue就是子组件传过来的值
+        		console.log(childValue);
+        		this.$refs.navsheader.showClick(childValue);
+        		this.getbutton(childValue);
+      		},
 		},
 		beforeMount() {
+			
+		},
+		mounted() {	
 			// 在页面挂载前就发起请求
 			this.requestData();
 			this.getKey();
-		},
-		mounted() {
-			this.$refs.navsheader.sessionGet();
+//			this.getbutton();
+//			this.$refs.navleft.getleft();
 		}
 	}
 </script>

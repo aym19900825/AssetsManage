@@ -6,7 +6,7 @@
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
-			<navs_left></navs_left>
+			<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left>
 			<!--左侧菜单内容显示 End-->
 			<!--右侧内容显示 Begin-->
 			<div class="wrapper wrapper-content">
@@ -186,7 +186,7 @@
 <script>
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
-	import navs_left from '../common/left_navs/nav_left3.vue'
+	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_header from '../common/nav_tabs.vue'
 	import inspectmask from '../proxiesDetails/inspect_proxyMask.vue'
 
@@ -343,14 +343,6 @@
 					totalCount: 0
 				},
 			}
-		},
-		mounted(){
-			// 获取浏览器可视区域高度
-			window.onresize = () => {//获取浏览器可视区域高度
-			 	return (() => {
-			 		this.fullHeight.height = document.documentElement.clientHeight - 100+'px';
-			 	})()
-			 };
 		},
 		methods: {
 			//表头居中
@@ -606,7 +598,11 @@
 					$(".icon-doubleok").addClass("icon-double-angle-left");
 				}
 				this.ismin = !this.ismin;
-			}
+			},
+			childByValue:function(childValue) {
+        		// childValue就是子组件传过来的值
+        		this.$refs.navsheader.showClick(childValue);
+      		},
 		},
 		beforeMount() {
 			// 在页面挂载前就发起请求
@@ -614,7 +610,7 @@
 			this.getKey();
 		},
 		mounted() {
-			this.$refs.navsheader.sessionGet();
+		
 		},
 	}
 </script>

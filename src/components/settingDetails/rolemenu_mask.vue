@@ -44,19 +44,21 @@
 				var arr = [];
 				var url = this.basic_url + '/api-user/menus/' + id + '/menus';
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res.data);
+					console.log(res);
 					this.menuData = res.data;
 					var menuData = res.data;//第一级
 					for(var a = 0; a < menuData.length; a++){
 						if(menuData[a].checked) {
-//							arr.push(menuData[a].id);
+							arr.push(menuData[a].id);
 							if(menuData[a].children.length>0){
+								arr.pop(menuData[a].id)
 								var menuDataChild=menuData[a].children//2
 								for(var b=0;b<menuData[a].children.length;b++){
 									console.log(menuData[a].children.length);
 									if(menuData[a].children[b].checked) {
 										arr.push(menuData[a].children[b].id);
 										if(menuData[a].children[b].children.length > 0) {
+											arr.pop(menuData[a].children[b].id)
 											for(var c=0;c<menuData[a].children[b].children.length;c++){
 												if(menuData[a].children[b].children[c].checked) {
 													arr.push(menuData[a].children[b].children[c].id);

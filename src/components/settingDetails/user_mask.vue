@@ -171,7 +171,7 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="角色" prop="roleId" label-width="100px">
-											<el-select v-model="user.roleId" multiple :disabled="noedit" @change="currentSel">
+											<el-select v-model="user.roleId" multiple :disabled="noedit" value-key="item.id" >
 												<el-option v-for="item in selectData" :key="item.name" :value="item.id" :label="item.name"></el-option>
 											</el-select>
 										</el-form-item>
@@ -783,7 +783,7 @@
 				var usersUrl = this.basic_url + '/api-user/users/currentMap';
 
 				this.$axios.get(usersUrl, {}).then((res) => {
-					console.log(res.data);
+					
 					this.user.changeby = res.data.nickname;
 					var date = new Date();
 					this.user.changedate = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
@@ -795,7 +795,7 @@
 				});
 				var url = this.basic_url + '/api-user/users/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
-					//					console.log(res.data);
+					console.log(res.data);
 					this.user = res.data;
 					this.user.sex = this.user.sex ? '男' : '女';
 					this.user.enabled = this.user.enabled ? '活动' : '不活动';

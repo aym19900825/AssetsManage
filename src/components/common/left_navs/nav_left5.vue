@@ -99,13 +99,16 @@ export default {
 		_this.$axios.get(url, {params: data}).then((res) => {
 			if(_this.$route.path!=_this.$store.state.selectedNav.url){
 				//赋值
+				console.log(res);
 //				_this.$selectedNav=res.data[0]
 				_this.$store.dispatch('setSelectedNavAct',res.data[0]);
+				console.log(res.data[0]);
+				console.log(_this.$store.state.selectedNav);
 			}
 			_this.leftNavs = res.data;
 			//子传父
-			
-			_this.$emit('childByValue',_this.$store.state.setSelectedNav);
+			console.log(_this.$store.state.selectedNav)
+			 _this.$emit('childByValue',_this.$store.state.selectedNav);
 		}).catch((wrong) => {
 			_this.$message({
 				message: '网络错误，请重试左侧1',

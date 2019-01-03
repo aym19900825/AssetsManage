@@ -2,7 +2,6 @@
 	<div>
 		<div class="mask" v-show="show"></div>
 		<div class="mask_div" v-show="show">
-			<!---->
 			<div class="mask_title_div clearfix">
 				<div class="mask_title" v-show="!modify">添加关键字授权</div>
 				<div class="mask_title" v-show="modify">修改关键字授权</div>
@@ -36,11 +35,18 @@
 										v-if="item.type=='checkbox'" >
 										<el-checkbox style="line-height: 40px;" v-for="item in authorities" :label="item.label" :key="item.val">{{item.label}}</el-checkbox>
 									</el-checkbox-group>
-									<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'&&item.prop==''" @change="selChange">
-										<el-option v-for="item in assets"
-										:key="item.ID"
-										:label="item.DESCRIPTION"
-										:value="item.DESCRIPTION">
+									<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'&&item.label=='姓名'">
+										<el-option v-for="item in usernames"
+										:key="item.id"
+										:label="item.nickname"
+										:value="item.id">
+										</el-option>
+									</el-select>
+									<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'&&item.label=='关键字'">
+										<el-option v-for="item in keywords"
+										:key="item.id"
+										:label="item.keywordname"
+										:value="item.id">
 										</el-option>
 									</el-select>
 								</el-form-item>
@@ -67,28 +73,34 @@
 		data() {
 			return {
 				rules: {
-					CLASSFICATION: [
-						{ required: true, message: '请输入分类名称', trigger: 'blur' },
+					userid: [
+						{ required: true, message: '请选择用户', trigger: 'blur' },
+					],
+					keywordid: [
+						{ required: true, message: '请选择关键字', trigger: 'blur' },
+					],
+					authority: [
+						{ required: true, message: '请选择授权类型', trigger: 'blur' },
 					]
 				},
 				basicInfo: [
 					{
 						label: '姓名',
-						prop: 'USERNAME',
+						prop: 'userid',
 						width: '50%',
 						type: 'select',
 						displayType: 'inline-block'
 					},
 					{
 						label: '关键字',
-						prop: 'KEYNUM',
+						prop: 'keywordid',
 						width: '50%',
 						type: 'select',
 						displayType: 'inline-block'
 					},
 					{
 						label: '显示',
-						prop: 'AUTHORITY',
+						prop: 'authority',
 						width: '100%',
 						type: 'checkbox',
 						displayType: 'inline-block'
@@ -97,22 +109,25 @@
 				authorities: [
 					{
 						label: '显示',
-						val: 'DOC_DISPLAY'
+						val: 'fileread'
 					},{
 						label: '编辑',
-						val: 'DOC_EDIT'
+						val: 'fileedit'
 					},{
-						label: '保存',
-						val: 'DOC_SAVE'
+						label: '删除',
+						val: 'filedelete'
 					},{
 						label: '打印',
-						val: 'DOC_PRINT'
+						val: 'fileprint'
 					},{
 						label: '下载',
-						val: 'DOC_DOWN'
+						val: 'filedownload'
 					},{
 						label: '复制',
-						val: 'DOC_DUP'
+						val: 'fileduplicate'
+					},{
+						label: '上传',
+						val: 'fileupload'
 					}
 				],
 
@@ -137,12 +152,15 @@
 				getCheckboxData: {},
 
 				dataInfo: {
-					'ID': '',  //主键ID，必填但页面没有字段
-					'AUTHORITY': [],
-					'KEYNUM': '',
-					'USERNAME': ''
+					'keywordprivilegeid': '',  //主键ID，必填但页面没有字段
+					'authority': [],
+					'keywordid': 1,
+					'userid': 1
 				},
-				pmRecordList: []
+				pmRecordList: [],
+
+				usernames: [],
+				keywords: []
 			};
 		},
 		methods: {
@@ -156,6 +174,11 @@
 				// this.dataInfo = this.detailData;
 				this.modify = true;
 				this.show = true;
+				
+				this.dataInfo.keywordprivilegeid = this.detailData.keywordprivilegeid;
+				this.dataInfo.keywordid = this.detailData.keywordid;
+				this.dataInfo.userid = this.detailData.userid;
+				this.dataInfo.authority = [];
 			},
 			//点击关闭按钮
 			close() {
@@ -164,40 +187,10 @@
 			},
 			resetForm(){
 				this.dataInfo =  {
-					'ID': '', 
-					'ASSETNUM': '',
-					'DESCRIPTION': '',
-					'CONFIG_UNIT': '',
-					'INS_SITE': '',
-					'SUPPORT_ASSET': '',
-					'VENDOR': '',
-					'SUPPLIER': '',	
-					'MODEL': '',
-					'FACTOR_NUM': '',
-					'ASSET_KPI': '',
-					'STATE': '',   
-					'OPTION_STATUS': '',   
-					'TYPE': '', 
-					'ACCEPT_NUM': '',
-					'ISMETER': '',
-					'ISPM': '',
-					'STATUSDATE': '',
-					'KEEPER': '',
-					'ACCEPT_DATE': '',
-					'S_DATE': '',   
-					'C_ADDRESS': '',  
-					'A_STATUS': '',
-					'A_PRICE': 0,
-					'MODE': '',
-					'MODE1': '',
-					'CHANGEBY': '',	
-					'CHANGEDATE': '',	
-					'ENTERBY': '',
-					'ENTERDATE': '',	
-					'DEPARTMENT': '',	
-					'MEMO': '',	
-					'STATUS': '1',
-					'SYNCHRONIZATION_TIME': '',
+					'keywordprivilegeid': 0,  //主键ID，必填但页面没有字段
+					'authority': [],
+					'keywordid': 1,
+					'userid': 1
 				};
 				this.$refs['dataInfo'].resetFields();
 				this.show = false;
@@ -229,10 +222,48 @@
 
 			submitForm() {
 				var _this = this;
-				var url = this.basic_url + '/api-apps/app/asset/saveOrUpdate';
+				var url = this.basic_url + '/api-apps/app/tbKeywordPrivilege2/saveOrUpdate';
 				this.$refs['dataInfo'].validate((valid) => {
+					var submitData = {
+						'keywordprivilegeid': '',  //主键ID，必填但页面没有字段
+						'keywordid': this.dataInfo.keywordid,
+						'userid': this.dataInfo.userid,
+						'fileread': 0,
+						'fileedit': 0,
+						'fileprint': 0,
+						'fileupload': 0,
+						'filedownload': 0,
+						'fileduplicate': 0,
+						'filedelete': 0,
+					};
+					var authorities = this.dataInfo.authority;
+					var labelAuth = this.authorities;
+					
+					for(var i in authorities){
+						for(var n=0; n<labelAuth.length; n++){
+							if(labelAuth[n].label == authorities[i]){
+								var item =  labelAuth[n].val;
+								submitData[item] = 1;
+							}
+						}
+					}
+
+					var users = this.usernames;
+					for(var j=0; j<users.length; j++){
+						if(users[j].id == _this.dataInfo.userid){
+							submitData.username = users[j].username;
+						}
+					}
+
+					var keywords = this.keywords;
+					for(var m=0; m<keywords.length; m++){
+						if(keywords[m].id == _this.dataInfo.keywordid){
+							submitData.categoryid = keywords[m].categoryid;
+						}
+					}
+
 					if (valid) {
-						this.$axios.post(url, _this.dataInfo).then((res) => {
+						this.$axios.post(url, submitData).then((res) => {
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',
@@ -253,9 +284,39 @@
 					}
 				});
 			},
+			getUsers(){
+				var url = this.basic_url + '/api-user/users';
+				var data = {
+					page: 1,
+					limit: 1000
+				}
+				this.$axios.get(url, {
+					params: data
+				}).then((res) => {
+					this.usernames = res.data.data;
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+			},
+			getKeyWords(){
+				var data = {
+					page: 1,
+					limit: 1000
+				}
+				var url = this.basic_url + '/api-apps/app/tbKeyword2';
+				this.$axios.get(url, {
+					params: data
+				}).then((res) => {
+					this.keywords = res.data.data;
+				}).catch((wrong) => {})
+			}
 		},
 		mounted() {
-			
+			this.getUsers();
+			this.getKeyWords();
 		},
 
 	}

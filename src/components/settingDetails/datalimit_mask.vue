@@ -48,9 +48,9 @@
 					var depetData = res.data
 					for(var a = 0; a < depetData.length; a++) {
 						if(depetData[a].checked) {
-							//arr.push(menuData[a].id);
+							arr.push(menuData[a].id);
 							if(depetData[a].children.length > 0) {
-//								arr.pop(depetData[a].children[b].id)
+								arr.pop(depetData[a].children[b].id)
 								for(var b = 0; b < depetData[a].children.length; b++) {
 									if(depetData[a].children[b].checked) {
 										arr.push(depetData[a].children[b].id);
@@ -75,7 +75,7 @@
 							}
 						}
 					}
-					}	
+					}
 					this.$nextTick(() => {
 						this.setChecked(arr);
 					});

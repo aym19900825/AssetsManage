@@ -152,7 +152,7 @@ export default {
 				menuId: item.id,
 				roleId: this.$store.state.roleid,
 			};
-
+            this.$store.dispatch('setMenuIdAct',item.id);
 			console.log("roleId:"+data.roleId);
 
 			var url = _this.basic_url + '/api-user/menus/findSecondByRoleIdAndFisrtMenu';

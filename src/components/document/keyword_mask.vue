@@ -220,6 +220,11 @@
 								});
 								this.resetForm();
 								this.$emit('request');
+							}else{
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'error',
+								});
 							}
 						}).catch((err) => {
 							this.$message({

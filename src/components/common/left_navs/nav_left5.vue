@@ -1,5 +1,4 @@
 <template>
-	
 	<div  class="navbar-default navbar-static-side" :style="{height: fullHeight}">
 		<div class="navbarbg" @click="min2max()">
 			<span class="navbar-minimalize minimalize-styl-2">

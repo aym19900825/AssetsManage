@@ -39,7 +39,7 @@
 							<tableControle :tableHeader="tableHeader" :checkedName="checkedName" @tableControle="tableControle" ref="tableControle"></tableControle>
 						</div>
 					</div>
-					<vue-dropzone ref="myVueDropzone" id="dropzone" :options="dropzoneOptions"></vue-dropzone>
+					<!-- <vue-dropzone ref="myVueDropzone" id="dropzone" :options="dropzoneOptions"></vue-dropzone> -->
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search" class="pb10">
 						<el-form status-icon :model="searchList" label-width="70px">
@@ -66,7 +66,7 @@
 						<el-col :span="5" class="lefttree">
 							<div class="lefttreebg">
 								<div class="left_tree_title clearfix" @click="min3max()">
-									<div class="pull-left pr20" v-if="ismin">关键字分类</div>
+									<div class="pull-left pr20" v-if="ismin">文档树</div>
 									<span class="pull-right navbar-minimalize minimalize-styl-2">
 										<i class="icon-doubleok icon-double-angle-left blue"></i>
 									</span>
@@ -139,7 +139,7 @@
 					headers: { "My-Awesome-Header": "header value" },
 					dictDefaultMessage: "<i class='el-icon-upload'></i>点击上传"
 				},
-
+				file_url: Config.file_url,
 				basic_url: Config.dev_url,
 				isShow: false,
 				ismin: true,
@@ -412,15 +412,17 @@
 			//生产单位树
 			getKey() {
 				let that = this;
-				var url = this.basic_url + '/api-user/depts/tree';
-				this.$axios.get(url, {}).then((res) => {
-					this.resourceData = res.data;
-					this.treeData = this.transformTree(this.resourceData);
+				var url = this.file_url + '/file/pathList';
+				this.$axios.post(url, {
+					'pathid': 0
+				}).then((res) => {
+					// this.resourceData = res.data;
+					// this.treeData = this.transformTree(this.resourceData);
 				});
 			},
 			transformTree(data) {
 				for(var i = 0; i < data.length; i++) {
-					data[i].name = data[i].fullname;
+					data[i].name = data[i].foldername;
 					if(!data[i].pid || $.isArray(data[i].subDepts)) {
 						data[i].iconClass = 'icon-file-normal';
 					} else {

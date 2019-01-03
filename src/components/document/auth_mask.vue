@@ -99,7 +99,7 @@
 						displayType: 'inline-block'
 					},
 					{
-						label: '显示',
+						label: '授权',
 						prop: 'authority',
 						width: '100%',
 						type: 'checkbox',
@@ -152,10 +152,10 @@
 				getCheckboxData: {},
 
 				dataInfo: {
-					'keywordprivilegeid': '',  //主键ID，必填但页面没有字段
+					'id': '',  //主键ID，必填但页面没有字段
 					'authority': [],
-					'keywordid': 1,
-					'userid': 1
+					'keywordid': '',
+					'userid': ''
 				},
 				pmRecordList: [],
 
@@ -170,15 +170,23 @@
 				this.show = true;
 			},
 			// 这里是修改
-			detail(dataid) {
-				// this.dataInfo = this.detailData;
+			detail() {
+				var detailData = this.detailData;
+				var labelAuth = this.authorities;
+				for(var i in labelAuth){
+					for(var n=0; n<labelAuth.length; n++){
+						var item = labelAuth[n].val;
+						if(detailData[item] == 1){
+							this.dataInfo.authority.push(labelAuth[n].label);
+						}
+					}
+				}
+				this.dataInfo.keywordprivilegeid = detailData.id;
+				this.dataInfo.keywordid = detailData.keywordid;
+				this.dataInfo.userid = detailData.userid;
+
 				this.modify = true;
 				this.show = true;
-				
-				this.dataInfo.keywordprivilegeid = this.detailData.keywordprivilegeid;
-				this.dataInfo.keywordid = this.detailData.keywordid;
-				this.dataInfo.userid = this.detailData.userid;
-				this.dataInfo.authority = [];
 			},
 			//点击关闭按钮
 			close() {
@@ -187,10 +195,10 @@
 			},
 			resetForm(){
 				this.dataInfo =  {
-					'keywordprivilegeid': 0,  //主键ID，必填但页面没有字段
+					'id': '',  //主键ID，必填但页面没有字段
 					'authority': [],
-					'keywordid': 1,
-					'userid': 1
+					'keywordid': '',
+					'userid': ''
 				};
 				this.$refs['dataInfo'].resetFields();
 				this.show = false;
@@ -225,7 +233,7 @@
 				var url = this.basic_url + '/api-apps/app/tbKeywordPrivilege2/saveOrUpdate';
 				this.$refs['dataInfo'].validate((valid) => {
 					var submitData = {
-						'keywordprivilegeid': '',  //主键ID，必填但页面没有字段
+						'id': '',  //主键ID，必填但页面没有字段
 						'keywordid': this.dataInfo.keywordid,
 						'userid': this.dataInfo.userid,
 						'fileread': 0,
@@ -239,6 +247,9 @@
 					var authorities = this.dataInfo.authority;
 					var labelAuth = this.authorities;
 					
+					if(_this.modify){
+						submitData.id = _this.detailData.id;
+					}
 					for(var i in authorities){
 						for(var n=0; n<labelAuth.length; n++){
 							if(labelAuth[n].label == authorities[i]){

@@ -107,13 +107,13 @@
 				getCheckboxData: {},
 
 				dataInfo: {
-					'keywordid': 1,
-					'categoryid': 1,	
+					'keywordid': '',
+					'categoryid': '',	
 					'keywordname': '',
-					'userid': 1,
+					'userid': '',
 					'username': '',
 					'createtime': '',
-					'deptid': 1,
+					'deptid': '',
 					'deptfullname': ''
 				},
 				cats: []
@@ -170,13 +170,13 @@
 			},
 			resetForm(){
 				this.dataInfo =  {
-					'keywordid': 1,
-					'categoryid': 1,	
+					'keywordid': '',
+					'categoryid': '',	
 					'keywordname': '',
-					'userid': 1,
+					'userid': '',
 					'username': '',
 					'createtime': '',
-					'deptid': 1,
+					'deptid': '',
 					'deptfullname': ''
 				};
 				this.$refs['dataInfo'].resetFields();

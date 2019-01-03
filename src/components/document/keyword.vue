@@ -242,14 +242,14 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/item/deletes';
+					var url = this.basic_url + '/api-apps/app/tbKeyword2/deletes';
 					//changeMenu为勾选的数据
 					var changeMenu = selData;
 					//deleteid为id的数组
 					var deleteid = [];
 					var ids;
 					for (var i = 0; i < changeMenu.length; i++) {
-						deleteid.push(changeMenu[i].ID);
+						deleteid.push(changeMenu[i].id);
 					}
 					//ids为deleteid数组用逗号拼接的字符串
 					ids = deleteid.toString(',');
@@ -268,6 +268,11 @@
 									type: 'success'
 								});
 								this.requestData();
+							}else{
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'success'
+								});
 							}
 						}).catch((err) => {
 							this.$message({

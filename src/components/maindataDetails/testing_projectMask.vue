@@ -673,9 +673,6 @@
 			},
 			addwork() { //小弹出框确认按钮事件
 				this.dialogVisible2 = false;
-				console.log(this.selval[0]);
-				console.log(this.selval[0].DESCRIPTION);
-				console.log(this.WORK_INSTRUCTIONList);
 				this.testing_projectForm.DOCLINKS_NUM = this.selval[0].DESCRIPTION;
 			},
 			handleClose(done) {

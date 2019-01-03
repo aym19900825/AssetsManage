@@ -115,7 +115,6 @@
 								</el-table-column>
 								<el-table-column label="名称" sortable prop="TYPE" v-if="this.checkedName.indexOf('名称')!=-1">
 								</el-table-column>
-								</el-table-column>
 								<!--<el-table-column label="信息状态" width="155" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
  								<template slot-scope="scope" >
  									<span v-text="scope.row.STATUS=='1'?'活动':'不活动'"></span>

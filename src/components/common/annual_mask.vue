@@ -49,8 +49,8 @@
 									</el-col>
 									<el-col :span="6">
 										<el-form-item label="产品类别" prop="ITEMTYPE">
-											<el-input v-model="WORKPLAN.ITEMTYPE" >
-												<el-button slot="append" icon="el-icon-search"></el-button>
+											<el-input v-model="WORKPLAN.ITEMTYPE" :disabled="true">
+												<el-button slot="append" icon="el-icon-search" @click="addprobtn"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -578,6 +578,34 @@
 		    </span>
 		</el-dialog>
 		<!-- 检测项目与要求 End -->
+		<!-- 产品类别 Begin -->
+		<el-dialog title="产品类别" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
+			<!-- 第二层弹出的表格 Begin-->
+			<el-table :header-cell-style="rowClass" :data="categoryList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table-column type="selection" fixed width="55" align="center">
+				</el-table-column>
+				<el-table-column label="编码" width="155" sortable prop="NUM">
+				</el-table-column>
+				<el-table-column label="名称" sortable prop="TYPE">
+				</el-table-column>
+				<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
+				</el-table-column>
+				<el-table-column label="机构" width="185" sortable prop="DEPARTMENTDesc">
+				</el-table-column>
+				<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
+				</el-table-column>
+				<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat">
+				</el-table-column>
+			</el-table>
+			<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+			</el-pagination>
+			<!-- 表格 End-->
+			<span slot="footer" class="dialog-footer">
+		       <el-button @click="dialogVisible3 = false" style="margin-left: 37%;">取 消</el-button>
+		       <el-button type="primary" @click="addproclass">确 定</el-button>
+		    </span>
+		</el-dialog>
+		<!-- 产品类别 End -->
 	</div>
 </template>
 
@@ -713,6 +741,7 @@
 				labelPosition: 'right', //表格
 				dialogVisible: false, //对话框
 				dialogVisible2: false, //对话框
+				dialogVisible3: false, //对话框
 				searchList: { //点击高级搜索后显示的内容
 					S_NUM: '',
 					S_NAME: '',
@@ -766,7 +795,8 @@
 				frontId: 1, //前端年度计划列表的唯一主键
 				index:0,
 				views:true,
-				dept:true
+				dept:true,
+				categoryList:[]
 			};
 		},
 		methods: {
@@ -779,7 +809,6 @@
 						type: type
 					},
 				}).then((res) => {
-					console.log(res.data);
 					this.selectData = res.data;
 				});
 			},
@@ -962,7 +991,11 @@
 					});
 					return;
 				}
-            },
+			},
+			addproclass() { //小弹出框确认按钮事件
+				this.dialogVisible3 = false;
+				this.WORKPLAN.ITEMTYPE = this.selUser[0].TYPE;
+			},
             //tabs
 			handleClick(tab, event) {
 //		        console.log(tab, event);
@@ -973,6 +1006,40 @@
 			},
 			basisleadbtn2(){
 				this.dialogVisible2 = true;
+			},
+			addprobtn(){
+				this.dialogVisible3 = true;
+				console.log(23333);
+				console.log(this.WORKPLAN.PROP_UNIT);
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				};
+				this.$axios.get(this.basic_url + '/api-apps/app/productType?DEPARTMENT='+this.WORKPLAN.PROP_UNIT, {
+					params: data
+				}).then((res) => {
+					console.log(res.data);
+					this.page.totalCount = res.data.count;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
+					}
+					this.commentArr[this.page.currentPage] = res.data.data
+					let newarr = []
+					for(var i = 1; i <= totalPage; i++) {
+
+						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+
+							for(var j = 0; j < this.commentArr[i].length; j++) {
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					this.categoryList = newarr;
+				}).catch((wrong) => {})
 			},
 			handleChange(val) {//手风琴开关效果调用
 			},
@@ -1166,11 +1233,30 @@
 						_this.docParm.appid = 39;
 						_this.$refs.docTable.getData();
 					},100);
+					var type = "2";
+					var url = this.basic_url + '/api-user/depts/treeByType';
+					this.$axios.get(url, {
+						params: {
+							type: type
+						},
+					}).then((res) => {
+						this.selectData = res.data;
+					});
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
 						type: 'error'
 					});
+				});
+				var type = "2";
+				var url = this.basic_url + '/api-user/depts/treeByType?id='+this.WORKPLAN.PROP_UNIT;
+				this.$axios.get(url, {
+					// params: {
+					// 	type: type
+					// },
+				}).then((res) => {
+					console.log(res.data);
+					this.selectData = res.data;
 				});
 				this.viewtitle = false;
 				this.addtitle = false;

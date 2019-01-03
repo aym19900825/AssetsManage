@@ -200,7 +200,7 @@
 							<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 								<el-tabs v-model="activeName" @tab-click="handleClick">
 									<el-tab-pane label="资质信息" name="first">
-										<div class="table-func table-funcb">
+										<div class="table-func table-funcb" v-show="noviews">
 											<el-button type="success" size="mini" round @click="addfield1">
 												<i class="icon-add"></i>
 												<font>新建行</font>
@@ -297,7 +297,7 @@
 										<!-- </el-form> -->
 									</el-tab-pane>
 									<el-tab-pane label="培训" name="second">
-										<div class="table-func table-funcb">
+										<div class="table-func table-funcb" v-show="noviews">
 											<el-button type="success" size="mini" round @click="addfield2">
 												<i class="icon-add"></i>
 												<font>新建行</font>
@@ -388,7 +388,7 @@
 							</el-collapse-item>
 						</el-collapse>
 					</div>
-					<div class="el-dialog__footer">
+					<div class="el-dialog__footer" v-show="noviews">
 						<el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
 						<el-button type="success" @click='saveAndSubmit()' v-show="addtitle">保存并添加</el-button>
 						<el-button @click='close'>取消</el-button>
@@ -783,7 +783,7 @@
 				var usersUrl = this.basic_url + '/api-user/users/currentMap';
 
 				this.$axios.get(usersUrl, {}).then((res) => {
-					
+					//console.log(res.data);
 					this.user.changeby = res.data.nickname;
 					var date = new Date();
 					this.user.changedate = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");

@@ -16,7 +16,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="menu"  :rules="rules" ref="menu" label-width="100px" class="demo-user">
+				<el-form :model="menu" :rules="rules" ref="menu" label-width="100px" class="demo-user">
 					<div class="accordion">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基础信息" name="1">
@@ -174,8 +174,8 @@
 				modifytitle:false,
 				fullHeight: document.documentElement.clientHeight - 200 +'px',//获取浏览器高度
 				rules: {
-					name: [{required: true,trigger: 'change',validator: validatePass}],
-					soft: [{required: true,trigger: 'change',validator: validatePass}],
+					name: [{required: true,trigger: 'blur',validator: validatePass}],
+					url: [{required: true,trigger: 'blur',validator: validatePass}],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，

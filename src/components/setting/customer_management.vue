@@ -95,7 +95,7 @@
 							</el-table-column>
 							<el-table-column label="组织机构代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('组织机构代码')!=-1">
 								<template slot-scope="scope">
-									<p @click=view(scope.row.ID)>{{scope.row.CODE}}
+									<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.CODE}}
 									</p>
 								</template>
 							</el-table-column>

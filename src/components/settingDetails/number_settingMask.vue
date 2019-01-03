@@ -174,8 +174,6 @@
 				isok1: true,
 				isok2: false,
 //				labelPosition: 'top',//标题在上方显示
-				addtitle:true,
-				modifytitle:false,
 				rules:{
           			AUTOKEY: [{ 
    						required: true,
@@ -220,7 +218,7 @@
 				}
             },
             childMethods() {//添加内容时从父组件带过来的
-            	console.log(this.numbsetForm);
+            	//console.log(this.numbsetForm);
             	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.numbsetForm.DEPARTMENT=res.data.deptName;
 					this.numbsetForm.ENTERBY=res.data.nickname;
@@ -279,7 +277,7 @@
 				this.views = true;//录入修改人信息
 				this.noviews = false;//按钮
 				// this.numbsetForm = item;
-				console.log(this.numbsetForm);
+				//console.log(this.numbsetForm);
 				this.show = true;				
 			},
 			//点击关闭按钮

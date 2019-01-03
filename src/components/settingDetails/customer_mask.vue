@@ -94,6 +94,7 @@
 									</el-col>
 								</el-row>
 							</el-form>
+							</el-collapse-item>
 							<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 								<el-tabs v-model="activeName" @tab-click="handleClick">
 									<el-tab-pane label="资质信息" name="first">
@@ -104,7 +105,7 @@
 									</el-button>
 								</div>
 								<el-form :label-position="labelPosition" :rules="rules">
-								<el-table :header-cell-style="rowClass" :fit="true" :data="CUSTOMER.CUSTOMER_QUALIFICATIONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER.CUSTOMER_QUALIFICATIONList', order: 'descending'}">
+								<el-table :header-cell-style="rowClass" :fit="true" :data="CUSTOMER.CUSTOMER_QUALIFICATIONList" row-key="ID" border stripe max-height="260" highlight-current-row style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER.CUSTOMER_QUALIFICATIONList', order: 'descending'}">
 								    <el-table-column prop="iconOperation" fixed width="50px">
 								      <template slot-scope="scope">
 								      	<i class="el-icon-check" v-show="scope.row.isEditing">
@@ -132,7 +133,7 @@
 								      </template>
 								    </el-table-column>
 
-								    <el-table-column prop="ACTIVE_DATE" label="资质有效期" sortable width="150px">
+								    <el-table-column prop="ACTIVE_DATE" label="资质有效期" sortable width="160">
 								      <template slot-scope="scope">
 								      	<el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.ACTIVE_DATE'" >
 								         <el-date-picker style="width: 90%" v-show="scope.row.isEditing" v-model="scope.row.ACTIVE_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd"></el-date-picker>
@@ -184,58 +185,57 @@
 											</el-button>
 										</div>
 										<el-form :label-position="labelPosition" :rules="rules">
-										<el-table :header-cell-style="rowClass" :fit="true" :data="CUSTOMER.CUSTOMER_PERSONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER.CUSTOMER_PERSONList', order: 'descending'}">
-										    <el-table-column prop="iconOperation" fixed width="50px">
-										      <template slot-scope="scope">
-										      	<i class="el-icon-check" v-show="scope.row.isEditing">
-										      	</i>
-										      	<i class="el-icon-edit" v-show="!scope.row.isEditing">
-										      	</i>
-										      </template>
-										    </el-table-column>
+											<el-table :header-cell-style="rowClass" :fit="true" :data="CUSTOMER.CUSTOMER_PERSONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER.CUSTOMER_PERSONList', order: 'descending'}">
+											    <el-table-column prop="iconOperation" fixed width="50px">
+											      <template slot-scope="scope">
+											      	<i class="el-icon-check" v-show="scope.row.isEditing">
+											      	</i>
+											      	<i class="el-icon-edit" v-show="!scope.row.isEditing">
+											      	</i>
+											      </template>
+											    </el-table-column>
 
-										    <el-table-column label="序号" sortable width="120px" prop="STEP">
-										      <template slot-scope="scope">
-										      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STEP" disabled></el-input>
-										      	<span v-show="!scope.row.isEditing" >{{scope.row.STEP}}</span>
-										      </template>
-										    </el-table-column>
+											    <el-table-column label="序号" sortable width="120px" prop="STEP">
+											      <template slot-scope="scope">
+											      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STEP" disabled></el-input>
+											      	<span v-show="!scope.row.isEditing" >{{scope.row.STEP}}</span>
+											      </template>
+											    </el-table-column>
 
-										    <el-table-column label="联系人" sortable width="150px" prop="PERSON">
-										      <template slot-scope="scope">
-										      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.PERSON" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.PERSON}}</span>
-										      </template>
-										    </el-table-column>
+											    <el-table-column label="联系人" sortable width="150px" prop="PERSON">
+											      <template slot-scope="scope">
+											      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.PERSON" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.PERSON}}</span>
+											      </template>
+											    </el-table-column>
 
-											<el-table-column prop="PHONE" label="联系电话" sortable width="150px">
-										      <template slot-scope="scope">
-										         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.PHONE" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.PHONE}}</span>
-										      </template>
-										    </el-table-column>
+												<el-table-column prop="PHONE" label="联系电话" sortable width="150px">
+											      <template slot-scope="scope">
+											         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.PHONE" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.PHONE}}</span>
+											      </template>
+											    </el-table-column>
 
-										    <el-table-column prop="FAX" label="传真" sortable width="150px">
-										       <template slot-scope="scope">
-										         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.FAX" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.FAX}}</span>
-										      </template>
-										    </el-table-column>
-										    <el-table-column prop="EMAIL" label="邮箱" sortable>
-										      <template slot-scope="scope">
-										        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.EMAIL" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.EMAIL}}</span>
-										      </template>
-										    </el-table-column>
-										    <el-table-column fixed="right" label="操作" width="120">
-										      <template slot-scope="scope">
-										        <el-button @click = "deleteRow(scope.$index, CUSTOMER.CUSTOMER_PERSONList)" type="text" size="small">
-										          移除
-										        </el-button>
-										      </template>
-										    </el-table-column>
-										  </el-table>
+											    <el-table-column prop="FAX" label="传真" sortable width="150px">
+											       <template slot-scope="scope">
+											         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.FAX" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.FAX}}</span>
+											      </template>
+											    </el-table-column>
+											    <el-table-column prop="EMAIL" label="邮箱" sortable>
+											      <template slot-scope="scope">
+											        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.EMAIL" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.EMAIL}}</span>
+											      </template>
+											    </el-table-column>
+											    <el-table-column fixed="right" label="操作" width="120">
+											      <template slot-scope="scope">
+											        <el-button @click = "deleteRow(scope.$index, CUSTOMER.CUSTOMER_PERSONList)" type="text" size="small">
+											          移除
+											        </el-button>
+											      </template>
+											    </el-table-column>
+											  </el-table>
 								  		</el-form>
 									</el-tab-pane>
 								</el-tabs>
 							</div>
-							</el-collapse-item>
 							<el-collapse-item title="其它" name="3"  v-show="views">
 								<el-form label-width="100px">
 								<el-row :gutter="30">

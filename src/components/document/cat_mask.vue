@@ -97,7 +97,7 @@
 				getCheckboxData: {},
 
 				dataInfo: {
-					'id': 0,	
+					'id': '',	
                     'categoryname': '',
                     'userid': 0,	
                     'username': '',
@@ -132,8 +132,9 @@
 			},
 			getToday(){
 				var date = new Date();
-				var str = date.getFullYear() + '-' + date.getMonth() + '-'+ date.getDate();
-				console.log(str);
+				var month = date.getMonth();
+				month++;
+				var str = date.getFullYear() + '-' + month + '-'+ date.getDate() + ' ' +  date.getHours() + ':' + date.getMinutes()+ ':' + date.getSeconds() ;
 				return str;
 			},
 			//点击按钮显示弹窗
@@ -145,8 +146,6 @@
 			// 这里是修改
 			detail(dataid) {
 				this.dataInfo = this.detailData;
-				console.log('========detail=============');
-				console.log(this.detailData);
 				this.modify = true;
 				this.show = true;
 				this.getUser();
@@ -158,12 +157,12 @@
 			},
 			resetForm(){
 				this.dataInfo =  {
-					'id': 0,	
+					'id': '',	
                     'categoryname': '',
-                    'userid': 0,	
+                    'userid': '',	
                     'username': '',
                     'createtime': '',	
-                    'deptid': 0,
+                    'deptid': '',
                     'deptfullname': ''
 				};
 				this.$refs['dataInfo'].resetFields();
@@ -199,6 +198,9 @@
 				var url = this.basic_url + '/api-apps/app/tbCategory2/saveOrUpdate';
 				this.$refs['dataInfo'].validate((valid) => {
 					if (valid) {
+						if(!this.modify){
+							this.dataInfo.createtime = this.getToday();
+						}
 						this.$axios.post(url, _this.dataInfo).then((res) => {
 							if(res.data.resp_code == 0) {
 								this.$message({

@@ -119,7 +119,7 @@
 								</el-table-column>
 								<el-table-column label="用户名" sortable width="140px" prop="username" v-if="this.checkedName.indexOf('用户名')!=-1">
 									<template slot-scope="scope">
-										<p @click=view(scope.row.id)>{{scope.row.username}}
+										<p class="blue" title="点击查看详情" @click=view(scope.row.id)>{{scope.row.username}}
 										</p>
 									</template>
 								</el-table-column>
@@ -567,7 +567,8 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					//					this.userList = res.data.data;
+					console.log(res);
+					//this.userList = res.data.data;
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)

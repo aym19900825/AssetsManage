@@ -240,7 +240,7 @@
 						this.$emit('parentMsd_product2', this.product2Form.inspectionList[0].ID, this.product2Form.inspectionList[0].PRO_NUM);
 					}else{
 						// this.$refs.inspectionSta2child.viewfield_inspectionSta2('null');
-						this.$emit('parentMsd_product2', 'null');
+						this.$emit('parentMsd_product2', 'null', 'click');
 
 					}
 					
@@ -400,7 +400,9 @@
 			},
 			viewchildRow(ID,PRO_NUM) {//查看子项数据
 				//this.$refs.inspectionSta2child.viewfield_inspectionSta2(ID,PRO_NUM);
-				this.$emit('parentMsd_inspectionSta2', this.product2Form.inspectionList[0].PRO_NUM);
+				// this.$emit('parentMsd_inspectionSta2', this.product2Form.inspectionList[0].PRO_NUM);
+				this.$emit('parentMsd_product2', ID, PRO_NUM, 'read');
+
 			},
 		},
 		

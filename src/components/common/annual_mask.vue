@@ -148,7 +148,7 @@
 									<el-table-column prop="ITEM_NAME" label="产品名称" sortable width="120px" :formatter="judge">
 								      <template slot-scope="scope">
 								         <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ITEM_NAME" placeholder="请输入内容">
-								         	<el-button slot="append" icon="el-icon-search"></el-button>
+								         	<el-button slot="append" icon="el-icon-search" @click="addproduct(scope.row)"></el-button>
 								         </el-input><span v-if="!scope.row.isEditing">{{scope.row.ITEM_NAME}}</span>
 								      </template>
 								    </el-table-column>
@@ -204,9 +204,12 @@
 										</div>
 										<!-- <el-form :model="basisList" :rules="rules" ref="basisList" prop="basisList"> -->
 						            	<el-table :header-cell-style="rowClass" :data="basisList" border stripe :fit="true" max-length="260px" style="width: 100%;" :default-sort="{prop:'basisList', order: 'descending'}">
-						            		<el-table-column prop="NUMBER" label="所属计划编号" width="150">
-						            			<template slot-scope="scope">
+						            		<el-table-column prop="WP_NUM" label="所属计划编号" width="150">
+						            			<!-- <template slot-scope="scope">
 										        	<span>{{scope.$index + 1}}</span>
+										      	</template> -->
+										      	<template slot-scope="scope">
+										        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_NUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_NUM}}</span>
 										      	</template>
 						            		</el-table-column>
 						            		<el-table-column prop="WP_LINENUM" label="所属计划行号" width="150"></el-table-column>
@@ -453,7 +456,7 @@
 			</div>
 			<!-- 高级查询划出 End-->
 			<!-- 第二层弹出的表格 Begin -->
-			<el-table :data="standardList" border stripe style="width: 100%;" :default-sort="{prop:'standardList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+			<el-table :data="standardList" height="400px" border stripe style="width: 100%;" :default-sort="{prop:'standardList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 				<el-table-column type="selection" width="55" fixed>
 				</el-table-column>
 				<el-table-column label="主键编号" width="120" sortable prop="ID">
@@ -534,7 +537,7 @@
 			</div>
 			<!-- 高级查询划出 End-->
 			<!-- 第二层弹出的表格 Begin-->
-			<el-table :data="projectList" border stripe style="width: 100%;" :default-sort="{prop:'projectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+			<el-table :data="projectList" height="400px" border stripe style="width: 100%;" :default-sort="{prop:'projectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 				<el-table-column type="selection" width="55" fixed>
 				</el-table-column>
 				<el-table-column label="检验/检测项编号" width="150" sortable prop="P_NUM">
@@ -579,7 +582,7 @@
 		</el-dialog>
 		<!-- 检测项目与要求 End -->
 		<!-- 产品类别 Begin -->
-		<el-dialog title="产品类别" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
+		<el-dialog title="产品类别" height="400px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
 			<!-- 第二层弹出的表格 Begin-->
 			<el-table :header-cell-style="rowClass" :data="categoryList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 				<el-table-column type="selection" fixed width="55" align="center">
@@ -606,6 +609,33 @@
 		    </span>
 		</el-dialog>
 		<!-- 产品类别 End -->
+		<!-- 产品名称 Begin -->
+		<el-dialog title="产品类别" :visible.sync="dialogVisible4" width="80%" :before-close="handleClose">
+			<el-table  :header-cell-style="rowClass" :data="productList" line-center border stripe height="400px" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+								<el-table-column type="selection" fixed width="55" align="center">
+								</el-table-column>
+								<el-table-column label="编码" width="155" sortable prop="PRO_NUM">
+								</el-table-column>
+								<el-table-column label="名称" sortable prop="PRO_NAME">
+								</el-table-column>
+								</el-table-column>
+								<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
+								</el-table-column>
+								<el-table-column label="机构" width="185" sortable prop="DEPARTMENTDesc">
+								</el-table-column>
+								<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
+								</el-table-column>
+								<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat">
+								</el-table-column>
+							</el-table>
+							<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							</el-pagination>
+			<span slot="footer" class="dialog-footer">
+		       <el-button @click="dialogVisible4 = false" style="margin-left: 37%;">取 消</el-button>
+		       <el-button type="primary" @click="addproname">确 定</el-button>
+		    </span>
+		</el-dialog>
+		<!-- 产品名称 End -->
 	</div>
 </template>
 
@@ -722,6 +752,7 @@
 				loadSign:true,//加载
 				commentArr:{},
 				selUser:[],
+				productList:[],
 				edit: true, //禁填
 				col_but1: true,
 				col_but2: true,
@@ -742,6 +773,7 @@
 				dialogVisible: false, //对话框
 				dialogVisible2: false, //对话框
 				dialogVisible3: false, //对话框
+				dialogVisible4: false, //对话框
 				searchList: { //点击高级搜索后显示的内容
 					S_NUM: '',
 					S_NAME: '',
@@ -796,7 +828,8 @@
 				index:0,
 				views:true,
 				dept:true,
-				categoryList:[]
+				categoryList:[],
+				proindex:0
 			};
 		},
 		methods: {
@@ -944,7 +977,7 @@
 						//新选来的数据ID为空
 						selData[i].ID = '';
 						//产品编号  与主表关联
-						selData[i].WP_NUM = this.editPlan.WP_NUM;
+						selData[i].WP_NUM = this.WORKPLAN.WP_NUM;
 						selData[i].WP_LINENUM = this.editPlan.WP_LINENUM;
 						//产品序号
 						selData[i].NUMBER = this.proTestList.length>0?this.proTestList[this.proTestList.length-1].NUMBER+i+1 :
@@ -977,7 +1010,7 @@
 						//产品要求
 						selData[i].REMARKS = '';
 						//产品编号
-						selData[i].WP_NUM = this.editPlan.WP_NUM;
+						selData[i].WP_NUM = this.WORKPLAN.WP_NUM;
 						selData[i].WP_LINENUM = this.editPlan.WP_LINENUM;
 						//产品序号
 						selData[i].NUMBER = this.proTestList.length>0?this.proTestList[this.proTestList.length-1].NUMBER+i+1 :
@@ -995,6 +1028,17 @@
 			addproclass() { //小弹出框确认按钮事件
 				this.dialogVisible3 = false;
 				this.WORKPLAN.ITEMTYPE = this.selUser[0].TYPE;
+				this.$emit('request');
+			},
+			addproduct(item){//产品名称按钮
+				this.$emit('request');
+				this.dialogVisible4 = true;
+				this.proindex = item;
+			},
+			addproname(){//产品名称弹框确定选中数据
+				this.dialogVisible4 = false;
+				this.proindex.ITEM_NAME = this.selUser[0].PRO_NAME;
+				this.$emit('request');
 			},
             //tabs
 			handleClick(tab, event) {
@@ -1002,9 +1046,13 @@
 		    },
             //检测依据弹出框
             basisleadbtn(){
+            	this.$emit('request');
+            	this.requestData();
 				this.dialogVisible = true;
 			},
 			basisleadbtn2(){
+				this.$emit('request');
+				this.requestData();
 				this.dialogVisible2 = true;
 			},
 			addprobtn(){
@@ -1290,7 +1338,7 @@
 			//点击关闭按钮
 			close() {
 				this.show = false;
-				//this.resetNew();
+				this.$emit('request');
 			},
 			toggle(e) {
 				if(this.isok1 == true) {
@@ -1455,6 +1503,38 @@
 					}
 					
 					this.projectList = newarr;
+				}).catch((wrong) => {})
+				// var data = {
+				// 	page: this.page.currentPage,
+				// 	limit: this.page.pageSize,
+				// 	PRO_NUM: this.searchList.PRO_NUM,
+				// 	PRO_NAME: this.searchList.PRO_NAME,
+				// 	VERSION: this.searchList.VERSION,
+				// 	DEPARTMENT: this.searchList.DEPARTMENT,
+				// 	// STATUS: this.searchList.STATUS,
+				// }
+				var url = this.basic_url + '/api-apps/app/product';
+				this.$axios.get(url, {
+					params: data
+				}).then((res) => {
+					this.page.totalCount = res.data.count;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
+					}
+					this.commentArr[this.page.currentPage] = res.data.data
+					let newarr = []
+					for(var i = 1; i <= totalPage; i++) {
+						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+							for(var j = 0; j < this.commentArr[i].length; j++) {
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					this.productList = newarr;
 				}).catch((wrong) => {})
 			},
 			handleClose(done) {

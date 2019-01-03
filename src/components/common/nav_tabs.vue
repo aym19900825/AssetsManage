@@ -143,15 +143,14 @@ export default {
             sessionStorage.setItem('clickedNav',JSON.stringify({arr:this.tabs}));
         },
         showSelected(item){
-        	console.log(item);
         	this.selectedTab = item;
 //        	this.$store.dispatch('setSelectedNavAct',item);
           	this.$store.dispatch('setNavIdAct',item.parentId);//点击时重新给meunid赋值
             this.$router.push({path: item.url});
         },
         showClick(items){
-	        this.tabs = this.$clickedNav;
-	        if(this.$route.path!=this.$selectedNav.url){
+	        this.tabs = this.$store.state.clickedNavs;
+	        if(this.$route.path!=this.$store.state.clickedNavs.url){
 				for(var i = 0; i < this.tabs.length; i++){
 					if(this.$route.path == this.tabs[i].url){
 						this.selectedTab = this.tabs[i];
@@ -160,11 +159,10 @@ export default {
 			}else{
 				this.selectedTab = items;
 			}
-	        console.log(this.selectedTab);
         }
     },
     mounted(){
-      	this.showClick(this.$selectedNav);
+      	this.showClick(this.$store.state.setSelectedNav);
     },
 }
 </script>

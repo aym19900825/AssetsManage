@@ -1,7 +1,7 @@
 <template>
 <div>
 	<div class="headerbg">
-		<vheader></vheader>
+		<vheader @clickfun='getroId'></vheader>
 		<navs_header ref='navsheader'></navs_header>
 	</div>
 
@@ -17,10 +17,10 @@
 					<el-row :gutter="20" class="applist">
 						<!--APPList Begin-->
 						<el-col :span="4" v-for="(item,index) in applistdata" :key="index">
-							<div class="applistbg">
-								<router-link :to="item.navherf">
-									<span><i :class="item.navicon"></i></span>
-									<font>{{item.navtitle}}</font></a>
+							<div class="applistbg" @click="goto(item)" :data-id='applistdata.id'>
+								<router-link :to="item.url">
+									<span><i :class="item.css"></i></span>
+									<font>{{item.name}}</font>
 								</router-link>
 							</div>
 						</el-col>
@@ -135,70 +135,57 @@ export default {
 
     data() {
       return {
+      	roleid:1,
       	basic_url: Config.dev_url,
         show: false,
 		fullHeight: document.documentElement.clientHeight - 100+'px',//获取浏览器高度
-		applistdata: [//APP应用数据
-			{
-				navicon: 'icon-data3',
-				navtitle: '业务基础数据',
-				navherf: '/products_category'
-			}, {
-				navicon: 'icon-plan',
-				navtitle: '年度计划',
-				navherf: '/annual_plan'
-			}, {
-				navicon: 'icon-reminding3',
-				navtitle: '工作任务通知书',
-				navherf: '/notifications'
-			}, {
-				navicon: 'icon-contract',
-				navtitle: '委托书管理',
-				navherf: '/inspect_proxy'
-			},  {
-				navicon: 'icon-worklist',//原工作任务单 workorders.vue
-				navtitle: '检验工作处理',
-				navherf: '/workorders'
-			},{
-				navicon: 'icon-sample3',
-				navtitle: '样品管理',
-				navherf: '/samples'
-			}, {
-				navicon: 'icon-device',
-				navtitle: '设备管理',
-				navherf: '/instruments'
-			}, {
-				navicon: 'icon-testing3',
-				navtitle: '检验/检测项目管理',
-				navherf: '/inspection_project'
-			}, {
-				navicon: 'icon-search3',
-				navtitle: '文档管理',
-				navherf: '/doc_category'
-			}, {
-				navicon: 'icon-ports3',
-				navtitle: '接口',
-				navherf: '/interfaces'
-			}, {
-				navicon: 'icon-report2',
-				navtitle: '报表管理',
-				navherf: '/reports'
-			}, {
-				navicon: 'icon-setting3',
-				navtitle: '系统设置',
-				navherf: '/user_management'
-			},
-			//  {
-			// 	navicon: 'icon-search3',
-			// 	navtitle: '文件查询',
-			// 	navherf: '/files_search'
-			// }
-		]
+		applistdata: []
+
       }
     },
   
 	methods: {
-		
+		goto(item){
+
+	        var _this = this;
+	        var data = {
+				menuId: item.id,
+				roleId: this.$store.state.roleid,
+			};
+            this.$store.dispatch('setMenuIdAct',item.id);
+			console.log("roleId:"+data.roleId);
+
+			var url = _this.basic_url + '/api-user/menus/findSecondByRoleIdAndFisrtMenu';
+			_this.$axios.get(url, {params: data}).then((res) => {
+				
+				if(res.data!=null&&res.data.length>0){
+					var item = res.data[0];
+					_this.$selectedNav=item;
+					var flag="1";
+					for(var i=0;i<_this.$clickedNav.length;i++){
+						if(_this.$clickedNav.length==1){
+							flag="0";
+						}else{
+							if(typeof(_this.$clickedNav[i].id)!=undefined&&i!=0){
+							if(_this.$clickedNav[i].id != item.id){
+								flag="0";
+							}else{
+								flag="1";
+								break;
+							}
+						}
+						}
+						
+					}
+					if(flag=="0"){
+						_this.$clickedNav.push(item);
+					}
+				}
+			}).catch((wrong) => {
+			});
+		    _this.$store.dispatch('setRoleIdAct',this.$store.state.roleid);
+		    _this.$store.dispatch('setNavIdAct',item.id);
+		},
 		initEchart(){//引入饼状图图表
 			var myChart = this.$echarts.init(document.getElementById('main'),'macarons');
 	        // 指定图表的配置项和数据
@@ -219,11 +206,33 @@ export default {
 	        };
 	        // 使用刚指定的配置项和数据显示图表。
 	        myChart.setOption(option);
-			}
+		},
+		 getroId(roleid){
+		 	this.getFirstMenus(roleid);
+		},
+        //当前角色
+        getFirstMenus(roleid) {
+        	sessionStorage.setItem('roleid',roleid);
+	        var url = this.basic_url + '/api-user/menus/findFirstByRoleId/' + roleid;
+	        
+	        this.$axios.get(url, {}).then((res) => {
+	            this.applistdata = res.data;
+	        }).catch(error => {
+	            console.log('请求失败');
+	        })
+        },
 	},
-	  mounted(){
+	mounted(){
 		this.initEchart();//调用饼状图图表函数名称
-		this.$refs.navsheader.sessionGet();
+		//this.$refs.navsheader.sessionGet();
+      	var url = this.basic_url + '/api-user/roles/default';
+        this.$axios.get(url, {}).then((res) => {
+        	this.roleid= res.data.id;
+        	this.getFirstMenus(this.roleid);
+      	}).catch(error => {
+            console.log('请求失败111');
+        })
+		
 	},
 }
 

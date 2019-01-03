@@ -560,14 +560,14 @@ h6 {
 
 .el-collapse-item__header {border-bottom: none; font-size: 14px; font-weight: bold; color: rgba(59,66,78,1);}
 .el-collapse-item__header:before {
-    width: 20px;
-    height: 3px;
-    display: table;
-    line-height: 0;
-    content: '';
-    background-color: #6585DF;
-    top: 0px;
-	position: absolute;
+    width:20px;
+    height:3px;
+    display:table;
+    line-height:0;
+    content:'';
+    background-color:#6585DF;
+    top:0px;
+	position:absolute;
 }
 .el-collapse-item {
 	padding-left: 25px;
@@ -577,9 +577,9 @@ h6 {
 	border-radius:4px;
 	margin-bottom: 8px;
 }
-.el-collapse-item__arrow {font-weight: bold;}
+.el-collapse-item__arrow {font-weight:bold;}
 
-.el-dropdown {cursor: pointer;}
+.el-dropdown {cursor:pointer;}
 
 
 

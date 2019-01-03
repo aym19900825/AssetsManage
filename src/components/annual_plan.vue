@@ -16,7 +16,7 @@
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
 								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加
-                      			 </button>
+                      			</button>
 								<button type="button" class="btn btn-bule button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改
 								</button>
@@ -151,7 +151,7 @@
 								</el-table-column>
 								<el-table-column label="编号" sortable width="100px" prop="WP_NUM" v-if="this.checkedName.indexOf('编号')!=-1">
 									<template slot-scope="scope">
-										<p @click=view(scope.row.ID)>{{scope.row.WP_NUM}}
+										<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.WP_NUM}}
 										</p>
 									</template>
 								</el-table-column>

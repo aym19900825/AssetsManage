@@ -7,9 +7,9 @@
 		</div>
 		<ul class="navs" id="side-menu" v-show="!isShow" >
 			<li v-for="item in leftNavs" @click="addClickNav(item)">
-				<router-link :to="item.navherf">
-					<i :class="item.navicon"></i>
-					<span class="nav-label" v-show="ismin">{{item.navtitle}}</span>
+				<router-link :to="item.url">
+					<i :class="item.css"></i>
+					<span class="nav-label" v-show="ismin">{{item.name}}</span>
 				</router-link>
 			</li>
 		</ul>
@@ -17,37 +17,64 @@
 </template>
 
 <script>
+	import Config from '../../../config.js'
 export default {
 	name: 'navs',
 	data(){
 		return{
+			basic_url: Config.dev_url,
 			isShow:false,
 			ismin:true,
 			fullHeight: document.documentElement.clientHeight - 100+'px',//获取浏览器高度
-			leftNavs: [//leftNavs左侧菜单数据
-				{
-					navicon: 'icon-file-text',
-					navtitle: '接样',
-					navherf: '/samples'
-				}, {
-					navicon: 'icon-wordbook',
-					navtitle: '领样',
-					navherf: '/collar_sample'
-				}, {
-					navicon: 'icon-wordbook',
-					navtitle: '返样',
-					navherf: '/return_sample'
-				}, {
-					navicon: 'icon-wordbook',
-					navtitle: '样品处置',
-					navherf: '/sample_disposal'
-				}
-			],
+			leftNavs:[],
+//			leftNavs: [//leftNavs左侧菜单数据
+//				{
+//					navicon: 'icon-file-text',
+//					navtitle: '接样',
+//					navherf: '/samples'
+//				}, {
+//					navicon: 'icon-wordbook',
+//					navtitle: '领样',
+//					navherf: '/collar_sample'
+//				}, {
+//					navicon: 'icon-wordbook',
+//					navtitle: '返样',
+//					navherf: '/return_sample'
+//				}, {
+//					navicon: 'icon-wordbook',
+//					navtitle: '样品处置',
+//					navherf: '/sample_disposal'
+//				}
+//			],
         selectedNav: {}
 		}
 	},
 	
 	methods: {
+		getNaveLeft() {
+				var _this = this;
+				var data = {
+					menuId: sessionStorage.getItem('menuId'),
+					roleId: sessionStorage.getItem('roleid'),
+				}
+				console.log(menuId);
+				console.log(roleId);
+				var promise = new Promise(function(resolve, reject) {
+					var url = _this.basic_url + '/api-user/menus/findSecondByRoleIdAndFisrtMenu';
+					_this.$axios.get(url, {params: data}).then((res) => {
+						_this.leftNavs = res.data;
+						console.log(1234);
+						console.log(res.data);
+						resolve(res);
+					}).catch((wrong) => {
+						_this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+				});
+				return promise;
+			},
 		addClickNav(item){
 			if(!sessionStorage.getItem('clickedNav')){
 				sessionStorage.setItem('clickedNav',JSON.stringify({arr:[]}));
@@ -55,7 +82,7 @@ export default {
 			var clickedNav = JSON.parse(sessionStorage.getItem('clickedNav')).arr;
 			var flag = true;
 			for(var i = 0; i < clickedNav.length; i++){
-				if(item.navtitle == clickedNav[i].navtitle){
+				if(item.name == clickedNav[i].name){
 					flag = false;
 				}
 			}
@@ -109,12 +136,19 @@ export default {
 		}
 	},
 	mounted() {
-		let item=this.leftNavs[0];
-		this.addClickNav(item);
+//		this.getNaveLeft();
+		var that=this;
+		that.getNaveLeft().then(function (result){
+			console.log(result);
+			var data=result.data;
+			let item = data[0];
+			that.addClickNav(item);
+		});
+//		let item=this.leftNavs[0];
+//		this.addClickNav(item);
 	}
 }
 </script>
 
 <style scoped>
-
-</style>
+</style>	

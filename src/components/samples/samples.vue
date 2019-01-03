@@ -6,7 +6,8 @@
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
-			<navs_left></navs_left>
+			<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left>
+			
 			<!--左侧菜单内容显示 End-->
 			<!--右侧内容显示 Begin-->
 			<div class="wrapper wrapper-content">
@@ -50,6 +51,11 @@
 						<el-form status-icon :model="searchList" label-width="70px">
 							<el-row :gutter="5">
 								<el-col :span="7">
+									<el-form-item label="样品编号" prop="ITEMNUM">
+										<el-input v-model="searchList.ITEMNUM"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="7">
 									<el-form-item label="样品类别" prop="TYPE">
 										<el-input v-model="searchList.TYPE"></el-input>
 									</el-form-item>
@@ -59,11 +65,11 @@
 										<el-input v-model="searchList.V_NAME"></el-input>
 									</el-form-item>
 								</el-col>
-								<el-col :span="7">
+								<!-- <el-col :span="7">
 									<el-form-item label="生产单位" prop="P_NAME">
 										<el-input v-model="searchList.P_NAME"></el-input>
 									</el-form-item>
-								</el-col>
+								</el-col> -->
 								
 								
 							</el-row>
@@ -125,7 +131,7 @@
 								</el-table-column>
 								<el-table-column label="样品编号" sortable width="200px" prop="ITEMNUM" v-if="this.checkedName.indexOf('样品编号')!=-1">
 									<template slot-scope="scope">
-										<p @click=view(scope.row.ID)>{{scope.row.ITEMNUM}}
+										<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.ITEMNUM}}
 										</p>
 									</template>
 								</el-table-column>
@@ -171,7 +177,7 @@
 <script>
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
-	import navs_left from '../common/left_navs/nav_left6.vue'
+	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_header from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import samplesmask from'../samplesDetails/samples_mask.vue'
@@ -179,8 +185,8 @@
 		name: 'samples',//接样
 		components: {
 			vheader,
-			navs_header,
 			navs_left,
+			navs_header,
 			tableControle,
 			samplesmask,
 		},
@@ -261,10 +267,11 @@
 				down: true,
 				up: false,
 				searchList: {
+					ITEMNUM:'',//样品编号
 					V_NAME: '',//委托单位名称
 					DESCRIPTION: '',//样品名称
 					ACCEPT_PERSON: '',//收样人
-					P_NAME: '',//生产单位名称
+					// P_NAME: '',//生产单位名称
 					TYPE: '',//样品类别
 					ACCEPT_DATE: '',//收样日期
 				},
@@ -460,11 +467,11 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-
+					ITEMNUM: this.searchList.ITEMNUM,//样品编号
 					V_NAME: this.searchList.V_NAME,//委托单位名称
 					DESCRIPTION: this.searchList.DESCRIPTION,//样品名称
 					ACCEPT_PERSON: this.searchList.ACCEPT_PERSON,//收样人
-					P_NAME: this.searchList.P_NAME,//生产单位名称
+					// P_NAME: this.searchList.P_NAME,//生产单位名称
 					TYPE: this.searchList.TYPE,//样品类别
 					ACCEPT_DATE: this.searchList.ACCEPT_DATE//收样日期
 				}
@@ -552,13 +559,17 @@
 					$(".icon-doubleok").addClass("icon-double-angle-left");
 				}
 				this.ismin = !this.ismin;
-			}
+			},
+			childByValue:function(childValue) {
+        		// childValue就是子组件传过来的值
+        		this.$refs.navsheader.showClick(childValue);
+      		},
 		},
 		
 		mounted() {// 在页面挂载前就发起请求
 			this.requestData();
 			this.getKey();
-			this.$refs.navsheader.sessionGet();
+//			this.$refs.navleft.getleft();
 		},
 	}
 </script>

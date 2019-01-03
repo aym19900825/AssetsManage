@@ -1,6 +1,7 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
+import Vuex from 'vuex'
 import App from './App'
 import router from './router'
 import echarts from 'echarts'
@@ -24,6 +25,8 @@ import vueGridLayout from 'vue-grid-layout'
 import vueztree from 'vue-ztree-2.0/dist/vue-ztree-2.0.umd.min.js'
 import EasyScroll from 'easyscroll'//自定义滚动条
 import common from './assets/js/common.js'
+import store from './store.js'
+
 //import './jquery/dist/jquery.min.js'
 //import 'bootstrap/dist/css/bootstrap.min.css'
 //import 'bootstrap/dist/js/bootstrap.min.js'
@@ -50,7 +53,22 @@ Vue.directive('loadmore', {
 })
 
 Vue.config.productionTip = false
-Vue.prototype.$echarts = echarts 
+let selectedNav={
+	css: 'icon-user',
+	name: '首页',
+	url: '/index'}
+
+
+var clickedNav=new Array();
+clickedNav[0]=selectedNav
+//tab 上选中的页面  只能有一个
+Vue.prototype.$selectedNav = selectedNav //选中的tab
+//所有tab的页面
+Vue.prototype.$clickedNav = clickedNav   //点选的tab
+
+
+
+Vue.prototype.$echarts = echarts
 Vue.prototype.$moment = moment//赋值使用
 Vue.prototype.common = common
 Vue.use(ElementUI)
@@ -61,6 +79,7 @@ Vue.use(EasyScroll)//自定义滚动条
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })
@@ -77,3 +96,5 @@ new Vue({
     	})
   	}
 })*/
+
+   

@@ -59,8 +59,8 @@
 								<el-row>
 									<el-col :span="8">
 										<el-form-item label="作业指导书" prop="DOCLINKS_NUM">
-											<el-input v-model="testing_projectForm.DOCLINKS_NUM">
-												<el-button slot="append" icon="icon-search" @click="getCompany" :disabled="noedit"></el-button>
+											<el-input v-model="testing_projectForm.DOCLINKS_NUM" :disabled="true">
+												<el-button slot="append" icon="icon-search" @click="getwork" :disabled="noedit"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -130,13 +130,13 @@
 			<el-table :data="gridData" @selection-change="SelChange">
 				<el-table-column type="selection" width="55" fixed>
 				</el-table-column>
-				<el-table-column label="用户名" sortable width="100px" prop="user">
-				</el-table-column>
+				<!-- <el-table-column label="用户名" sortable width="100px" prop="user">
+				</el-table-column> -->
 				<el-table-column label="证书编号" sortable width="200px" prop="c_num">
 				</el-table-column>
-				<el-table-column label="证书名称" sortable width="100px" prop="c_name">
+				<el-table-column label="证书名称" sortable width="200px" prop="c_name">
 				</el-table-column>
-				<el-table-column label="资质有效期" sortable width="200px" prop="c_date">
+				<el-table-column label="资质有效期" sortable prop="c_date">
 				</el-table-column>
 			</el-table>
 			<el-pagination background class="pull-right" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
@@ -146,6 +146,36 @@
     			<el-button type="primary" @click="dailogconfirm()">确 定</el-button>
   			</span>
 		</el-dialog>
+		<!-- 作业指导书 Begin -->
+		<el-dialog title="作业指导书" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
+			<!-- 第二层弹出的表格 Begin-->
+			<el-table :header-cell-style="rowClass" :data="WORK_INSTRUCTIONList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'WORK_INSTRUCTIONList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+								<el-table-column type="selection" fixed width="55" align="center">
+								</el-table-column>
+								<el-table-column label="分发号" width="155" sortable prop="NUM">
+									<template slot-scope="scope">
+										<p @click=view(scope.row)>{{scope.row.NUM}}
+										</p>
+									</template>
+								</el-table-column>
+								<el-table-column label="文件名称" sortable prop="DESCRIPTION">
+								</el-table-column>
+								<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
+								</el-table-column>
+								<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
+								</el-table-column>
+								<el-table-column label="机构" width="120" prop="DEPARTMENTDesc" sortable>
+								</el-table-column>
+							</el-table>
+							<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							</el-pagination>
+							<!-- 表格 End-->
+			<span slot="footer" class="dialog-footer">
+		       <el-button @click="dialogVisible2 = false" style="margin-left: 37%;">取 消</el-button>
+		       <el-button type="primary" @click="addwork">确 定</el-button>
+		    </span>
+		</el-dialog>
+		<!-- 作业指导书 End -->
 	</div>
 </template>
 
@@ -210,7 +240,7 @@
 			};
 			var validateDOCLINKS_NUM = (rule, value, callback) => {
 				if(value === '') {
-					callback(new Error('请选择文档'));
+					callback(new Error('请选择作业指导书'));
 				} else {
 					callback();
 				}
@@ -267,12 +297,19 @@
 				//tree
 				gridData: [],
 				selval: [],
+				loadSign:true,//加载
+				commentArr:{},
 				resourceData: [], //数组，我这里是通过接口获取数据
 				resourceDialogisShow: false,
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
 				resourceProps: {
 					children: "subDepts",
 					label: "simplename"
+				},
+				page: { //分页显示
+					currentPage: 1,
+					pageSize: 10,
+					totalCount: 0
 				},
 				initcost: '',
 				TESTING_PROJECTFORM:{},//
@@ -287,9 +324,24 @@
 				hintshow:false,
 				statusshow1:true,
 				statusshow2:false,
+				dialogVisible2:false,//作业指导书弹出框
+				WORK_INSTRUCTIONList:[],
+				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 			};
 		},
 		methods: {
+			//时间格式化  
+			dateFormat(row, column) {
+				var date = row[column.property];
+				if(date == undefined) {
+					return "";
+				}
+				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+			},
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    return 'text-align:center'
+			},
 			//编码提示
 			hint(){
 				this.hintshow = true;
@@ -314,8 +366,23 @@
 				var url = this.basic_url + '/api-user/depts/type'; //文件接口不对
 				this.$axios.get(url, {}).then((res) => {
 					this.resourceData = res.data.data;
-					this.dialogVisible = true;
 				});
+			},
+			loadMore () {
+			   if (this.loadSign) {
+			     this.loadSign = false
+			     this.page.currentPage++
+			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+			       return
+			     }
+			     setTimeout(() => {
+			       this.loadSign = true
+			     }, 1000)
+			     this.requestData()
+			   }
+			 },
+			getwork(){
+				this.dialogVisible2 = true;
 			},
 			getCheckedNodes() { //获取树菜单节点
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
@@ -604,15 +671,53 @@
 				this.dialogVisible = false;
 				this.testing_projectForm.QUALIFICATION = this.selval[0].c_name;
 			},
-
+			addwork() { //小弹出框确认按钮事件
+				this.dialogVisible2 = false;
+				this.testing_projectForm.DOCLINKS_NUM = this.selval[0].DESCRIPTION;
+			},
 			handleClose(done) {
 				this.$confirm('确认关闭？')
 					.then(_ => {
 						done();
 					})
 					.catch(_ => {});
-			}
-		}
+			},
+			requestData(index) {
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				}
+				var url = this.basic_url + '/api-apps/app/workIns';
+				this.$axios.get(url, {
+					params: data
+				}).then((res) => {
+					this.page.totalCount = res.data.count;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
+					}
+					this.commentArr[this.page.currentPage] = res.data.data
+					let newarr = []
+					for(var i = 1; i <= totalPage; i++) {
+
+						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+
+							for(var j = 0; j < this.commentArr[i].length; j++) {
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					this.WORK_INSTRUCTIONList = newarr;
+				}).catch((wrong) => {})
+			},
+		},
+		mounted() {
+			this.requestData();
+			this.getCompany();
+		},
 	}
 </script>
 

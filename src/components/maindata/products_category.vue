@@ -6,7 +6,7 @@
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
-			<navs_left></navs_left>
+			<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left>
 			<!--左侧菜单内容显示 End-->
 			<!--右侧内容显示 Begin-->
 			<div class="wrapper wrapper-content">
@@ -115,7 +115,6 @@
 								</el-table-column>
 								<el-table-column label="名称" sortable prop="TYPE" v-if="this.checkedName.indexOf('名称')!=-1">
 								</el-table-column>
-								</el-table-column>
 								<!--<el-table-column label="信息状态" width="155" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
  								<template slot-scope="scope" >
  									<span v-text="scope.row.STATUS=='1'?'活动':'不活动'"></span>
@@ -150,7 +149,7 @@
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
 	import navs_header from '../common/nav_tabs.vue'
-	import navs_left from '../common/left_navs/nav_left2.vue'
+	import navs_left from '../common/left_navs/nav_left5.vue'
 	import categorymask from '../maindataDetails/product_categoryMask.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	export default {
@@ -496,11 +495,15 @@
 			handleNodeClick(data) {},
 			formatter(row, column) {
 				return row.enabled;
-			}
+			},
+			childByValue:function(childValue) {
+        		// childValue就是子组件传过来的值
+        		this.$refs.navsheader.showClick(childValue);
+      		},
+
 		},
 		mounted() {
 			this.requestData();
-			this.$refs.navsheader.sessionGet();
 			this.getCompany();
 		},
 	}

@@ -30,9 +30,6 @@
 								<button type="button" class="btn btn-primarys button-margin" @click="datalimit">
 								    <i class="icon-data"></i>数据范围
 								</button>
-								<button type="button" class="btn btn-primarys button-margin" >
-								    <i class="icon-date-limit"></i>数据限制
-								</button>
 								
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 						    		<i class="icon-search"></i>高级查询
@@ -102,8 +99,8 @@
 				</div>
 			</div>
 			<rolemask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></rolemask>
-			<datalimitmask ref="aaa" v-bind:page=page></datalimitmask>
-			<rolemeunmask ref="childs" v-bind:page=page></rolemeunmask>
+			<datalimitmask ref="limit" v-bind:page=page></datalimitmask>
+			<rolemeunmask ref="role" v-bind:page=page></rolemeunmask>
 			<!--右侧内容显示 End-->
 		</div>
 	</div>
@@ -226,7 +223,7 @@
 					});
 					return;
 				} else {
-					this.$refs.aaa.depet(this.selData[0].id);
+					this.$refs.limit.depet(this.selData[0].id);
 				}
 			},
 			//修改
@@ -264,7 +261,7 @@
 					});
 					return;
 				} else {
-					this.$refs.childs.menu(this.selData[0].id);
+					this.$refs.role.menu(this.selData[0].id);
 				}
 			},
 			//查看用戶

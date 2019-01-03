@@ -55,19 +55,22 @@
 							<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 								<el-tabs v-model="activeName" @tab-click="handleClick">
 									<el-tab-pane label="字典值列表" name="first">
-										<div class="table-func table-funcb">
+										<div class="table-func table-funcb" v-show="noviews">
 											<el-button type="success" size="mini" round @click="addfield1">
 												<i class="icon-add"></i><font>新建行</font>
 											</el-button>
 										</div>
 										<el-table :header-cell-style="rowClass" :fig="true" :data="dictionarieForm.subDicts" row-key="ID" border stripe max-height="260" highlight-current-row style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dictionarieForm.subDicts', order: 'descending'}">
-											<el-table-column prop="iconOperation" fixed width="50px">
+											<el-table-column prop="iconOperation" fixed width="50">
 												<template slot-scope="scope">
-													<i class="el-icon-check" v-if="scope.row.isEditing"></i>
-													<i class="el-icon-edit" v-else="v-else"></i>
+													<div v-show="noviews" style="width: 50px;">
+														<i class="el-icon-check" v-if="scope.row.isEditing"></i>
+														<i class="el-icon-edit" v-else="v-else"></i>
+													</div>
 												</template>
 											</el-table-column>
-											<el-table-column prop="sort" label="排序" sortable width="120px">
+
+											<el-table-column prop="sort" label="排序" sortable width="120">
 												<template slot-scope="scope">
 													<el-form-item :prop="'subDicts.'+scope.$index + '.sort'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.sort" placeholder="请输入">
@@ -264,13 +267,8 @@
 				});
 				var url = this.basic_url + '/api-user/dicts/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res.data);
 					this.dictionarieForm = res.data;
-					this.dictionarieForm.subDicts = [];
-					// var subDicts = this.dictionarieForm.subDicts;
-					// for(var i = 0; i < subDicts.length; i++) {
-					// 	this.dictionarieForm.id.push(subDicts[i].id);
-					// }
+					// console.log(this.dictionarieForm.subDicts);
 					this.show = true;
 				}).catch((err) => {
 					this.$message({
@@ -290,11 +288,9 @@
 				this.views = true;//录入修改人信息
 				this.noviews = false;//按钮
 				this.show = true;
-
 				var url = this.basic_url + '/api-user/dicts/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
 					this.dictionarieForm = res.data;
-					this.dictionarieForm.subDicts = [];
 					this.show = true;
 				}).catch((err) => {
 					this.$message({
@@ -334,7 +330,6 @@
 				$(".mask_div").css("margin", "7% 10%");
 				$(".mask_div").css("top", "0");
 			},
-
 			//保存users/saveOrUpdate
 			submitForm() {
 				this.$refs.dictionarieForm.validate((valid) => {
@@ -378,7 +373,6 @@
 					var date = new Date();
 					this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 					this.index = this.index + 1;
-					console.log(this.index);
 					var obj = {
 						sort: this.index,
 						code: '' ,

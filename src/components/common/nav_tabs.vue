@@ -4,7 +4,7 @@
             <button class="roll-nav roll-left J_tabLeft"  @click="tabLeft"><i class="icon-previous"></i></button>
             <div class="page-tabs J_menuTabs">
                 <div class="page-tabs-content">
-                    <span v-for="item in tabs" :class="item.navtitle==selectedTab.navtitle?'active':'J_menuTab'" @click="showSelected(item)">{{item.navtitle}} <i class="icon-close2" @click.stop="closeTab(item, $event)"></i></span>
+                    <span v-for="item in tabs" :class="item.name==selectedTab.name?'active':'J_menuTab'" @click="showSelected(item)">{{item.name}}<i class="icon-close2" @click.stop="closeTab(item, $event)"></i></span>
                     <!-- <router-link to="/user_management" class="J_menuTab active" >用户管理 <i class="icon-close2"></i></router-link> -->
                 </div>
             </div>
@@ -71,7 +71,6 @@ export default {
                     left:40
                 });
             }
-            
         },
 
         tabRight(){
@@ -95,32 +94,32 @@ export default {
                 //只有一个选项卡
                 this.$router.push({path: '/index'});
                 sessionStorage.setItem('clickedNav',JSON.stringify({arr:[{
-                    navtitle: '首页',
-                    navherf: '/index'
+                    name: '首页',
+                    url: '/index'
                 }]}));
                 sessionStorage.setItem('selectedNav',JSON.stringify({
-                    navicon: 'icon-user',
-                    navtitle: '首页',
-                    navherf: '/index'}));
+                    css: 'icon-user',
+                    name: '首页',
+                    url: '/index'}));
             }else{
                 var selectedIndex = 0;
                 _this.tabs = _this.tabs.filter(function(item,index){
-                    if(item.navtitle != tab.navtitle){
+                    if(item.name != tab.name){
                         selectedIndex = index;
                     }
-                    return item.navtitle != tab.navtitle;
+                    return item.name != tab.name;
                 });
             
                 //关闭当前显示的选项卡
-                if(tab.navtitle == _this.selectedTab.navtitle){
+                if(tab.name == _this.selectedTab.name){
                     if(selectedIndex==_this.tabs.length){
                         selectedIndex = 0;
                     }
                     var selTab = _this.tabs[selectedIndex];
                     _this.selectedTab = JSON.parse(JSON.stringify(selTab));
                 }
-                sessionStorage.setItem('clickedNav',JSON.stringify({arr:_this.tabs}));
-                sessionStorage.setItem('selectedNav',JSON.stringify(_this.selectedTab));
+//              sessionStorage.setItem('clickedNav',JSON.stringify({arr:_this.tabs}));
+//              sessionStorage.setItem('selectedNav',JSON.stringify(_this.selectedTab));
                 this.$router.push({path: _this.selectedTab.navherf});
                 return false;
             }
@@ -130,13 +129,13 @@ export default {
         },
         closeAll(){
             sessionStorage.setItem('clickedNav',JSON.stringify({arr:[{
-                navtitle: '首页',
-                navherf: '/index'
+                name: '首页',
+                url: '/index'
             }]}));
             sessionStorage.setItem('selectedNav',JSON.stringify({
-                navicon: 'icon-user',
-                navtitle: '首页',
-                navherf: '/index'}));
+                css: 'icon-user',
+                name: '首页',
+                url: '/index'}));
             this.$router.push({path: '/index'});
         },
         closeOther(){
@@ -144,57 +143,29 @@ export default {
             sessionStorage.setItem('clickedNav',JSON.stringify({arr:this.tabs}));
         },
         showSelected(item){
-            this.selectedTab = item;
-            sessionStorage.setItem('selectedNav',JSON.stringify(this.selectedTab));
-            this.$router.push({path: item.navherf});
-            console.log(item);
-            
-//          $('.page-tabs').offset({
-//                  left: 
-//              });
+        	console.log(item);
+        	this.selectedTab = item;
+//        	this.$store.dispatch('setSelectedNavAct',item);
+          	this.$store.dispatch('setNavIdAct',item.parentId);//点击时重新给meunid赋值
+            this.$router.push({path: item.url});
         },
-        showindex(){
-        	
-        	sessionStorage.setItem('clickedNav',JSON.stringify({arr:[{
-                    navtitle: '首页',
-                    navherf: '/index'
-                }]}));
-        },
-        sessionGet(){
-            //console.log();
-	        if(sessionStorage.getItem('clickedNav') != null && sessionStorage.getItem('clickedNav').length>0){
-	    		this.tabs = JSON.parse(sessionStorage.getItem('clickedNav')).arr;
-	    	}else{
-	    		this.showindex()
-	    	}
-	    	if(sessionStorage.getItem('selectedNav') != null && sessionStorage.getItem('selectedNav').length>0){
-	    		this.selectedTab = JSON.parse(sessionStorage.getItem('selectedNav'));    		
-	    	}
-    	}
+        showClick(items){
+	        this.tabs = this.$clickedNav;
+	        if(this.$route.path!=this.$selectedNav.url){
+				for(var i = 0; i < this.tabs.length; i++){
+					if(this.$route.path == this.tabs[i].url){
+						this.selectedTab = this.tabs[i];
+					}
+				}
+			}else{
+				this.selectedTab = items;
+			}
+	        console.log(this.selectedTab);
+        }
     },
     mounted(){
-    	this.sessionGet();
-        // var index=this.$route.path.toString();
-        //     console.log(this.$route.path);
-       // if (index.IndexOf("index") == -1){
-       //      console.log(this.$route.path);
-       //  }
-        
-//  	 if(sessionStorage.getItem('clickedNav') != null && sessionStorage.getItem('clickedNav').length>0){
-//	    		this.tabs = JSON.parse(sessionStorage.getItem('clickedNav')).arr;
-//	    		console.log(this.tabs);
-//	    	}else{
-//	    		this.showindex()
-//	    	}
-//	    	if(sessionStorage.getItem('selectedNav') != null && sessionStorage.getItem('selectedNav').length>0){
-//	    		this.selectedTab = JSON.parse(sessionStorage.getItem('selectedNav'));    		
-//	    	}
-    	
-//  	this.tabs = JSON.parse(sessionStorage.getItem('clickedNav')).arr;
-//  	console.log(this.tabs);
-//      this.selectedTab = JSON.parse(sessionStorage.getItem('selectedNav'));
-
-    }
+      	this.showClick(this.$selectedNav);
+    },
 }
 </script>
 

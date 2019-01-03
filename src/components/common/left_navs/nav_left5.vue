@@ -37,7 +37,6 @@ export default {
 	
 	methods: {
 		addClickNav(item){
-
 			var flag = false;
 			for(var i = 0; i < this.$clickedNav.length; i++){
 				if(item.name == this.$clickedNav[i].name){

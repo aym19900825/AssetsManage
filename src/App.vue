@@ -7,7 +7,7 @@
 <script>
 export default {
   name: 'App',
-  created () {
+created () {
     //在页面加载时读取sessionStorage里的状态信息
     if (sessionStorage.getItem("store") ) {
         this.$store.replaceState(Object.assign({}, 				this.$store.state,JSON.parse(sessionStorage.getItem("store"))))
@@ -17,7 +17,7 @@ export default {
     window.addEventListener("beforeunload",()=>{
         sessionStorage.setItem("store",JSON.stringify(this.$store.state))
     })
-  }
+}
 
 }
 </script>

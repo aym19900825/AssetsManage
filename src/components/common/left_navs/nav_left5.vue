@@ -37,13 +37,13 @@ export default {
 	methods: {
 		addClickNav(item){
 			var flag = false;
-			for(var i = 0; i < this.$clickedNav.length; i++){
-				if(item.name == this.$clickedNav[i].name){
+			for(var i = 0; i < this.$store.state.clickedNavs.length; i++){
+				if(item.name == this.$store.state.clickedNavs[i].name){
 					flag = true;
 				}
 			}
 			if(!flag){
-				this.$clickedNav.push(item);
+				this.$store.state.clickedNavs.push(item);
 				setTimeout(function(){
 		 			var left = $('.page-tabs').offset().left; 
 		            //tabs总宽度
@@ -58,7 +58,8 @@ export default {
 		            }
 				},0);				
 			}
-			this.$selectedNav=item;
+//			this.$selectedNav=item;
+			_this.$store.dispatch('setSelectedNavAct',item);
 			//点击的值传给user
 			this.$emit('childByValue',item);
 		},
@@ -92,12 +93,16 @@ export default {
 			roleId: this.$store.state.roleid,
 		};
 		var url = _this.basic_url + '/api-user/menus/findSecondByRoleIdAndFisrtMenu';
-		_this.$axios.get(url, {params: data}).then((res) => {			
-			if(_this.$route.path!=_this.$selectedNav.url){
-				_this.$selectedNav=res.data[0]
+		_this.$axios.get(url, {params: data}).then((res) => {
+			if(_this.$route.path!=_this.$store.state.selectedNav.url){
+				//赋值
+//				_this.$selectedNav=res.data[0]
+				_this.$store.dispatch('setSelectedNavAct',res.data[0]);
 			}
 			_this.leftNavs = res.data;
-			_this.$emit('childByValue',_this.$selectedNav);
+			//子传父
+			
+			_this.$emit('childByValue',_this.$store.state.setSelectedNav);
 		}).catch((wrong) => {
 			_this.$message({
 				message: '网络错误，请重试左侧1',

@@ -36,27 +36,31 @@
 											<template slot="prepend">信息状态</template>
 										</el-input>
 									</el-col>-->
-									<el-col :span="5" class="pull-right">
-										<el-input v-model="testing_projectForm.P_NUM" @focus="hint" @input="hinthide" :disabled="noedit">
+									<!-- <el-col :span="5" class="pull-right">
+										<el-input v-model="testing_projectForm.P_NUM" :disabled="noedit" prop="P_NUM">
 											<template slot="prepend">编码</template>
 										</el-input>
-										<span v-if="hintshow" style="color:rgb(103,194,58);font-size: 12px">可填写，若不填写系统将自动生成</span>
-									</el-col>
+									</el-col> -->
 								</el-row>
 								<el-row>
+									<el-col :span="8">
+										<el-form-item label="编码" prop="P_NUM">
+											<el-input v-model="testing_projectForm.P_NUM" :disabled="noedit"></el-input>
+										</el-form-item>
+									</el-col>
 									<el-col :span="16">
 										<el-form-item label="项目名称" prop="P_NAME">
 											<el-input v-model="testing_projectForm.P_NAME"  onmouseover="this.title=this.value" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
+								</el-row>
+								<el-row>
 									<el-col :span="8">
 										<el-form-item label="单价(元)" prop="QUANTITY">
 											<!-- <el-input-number type="number" :precision="2" v-model.number="testing_projectForm.QUANTITY" :step="5" :max="100000" style="width: 100%;"></el-input-number> -->
 											<el-input v-model="testing_projectForm.QUANTITY" id="cost" @blur="toPrice" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
-								</el-row>
-								<el-row>
 									<el-col :span="8">
 										<el-form-item label="作业指导书" prop="DOCLINKS_NUM">
 											<el-input v-model="testing_projectForm.DOCLINKS_NUM" :disabled="true">
@@ -71,13 +75,13 @@
 											</el-input>
 										</el-form-item>
 									</el-col>
+								</el-row>
+								<el-row>
 									<el-col :span="8">
 										<el-form-item label="领域" prop="FIELD">
 											<el-input v-model="testing_projectForm.FIELD" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
-								</el-row>
-								<el-row>
 									<el-col :span="8">
 										<el-form-item label="子领域" prop="CHILD_FIELD">
 											<el-input v-model="testing_projectForm.CHILD_FIELD" :disabled="noedit"></el-input>
@@ -210,12 +214,16 @@
 			},
 		},
 		data() {
-			var validateP_NUM = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('请填写检测项目编号'));
-				} else {
-					callback();
-				}
+			var validateNum = (rule, value, callback) => {
+				if(value != ""){
+		             if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
+		                 callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
+		             }else{
+		                 callback();
+		             }
+		         }else{
+		             callback();
+		         }
 			};
 			var validateP_NAME = (rule, value, callback) => {
 				if(value === '') {
@@ -268,9 +276,9 @@
 				dialogVisible: false, //对话框
 				rules: { //需要验证的字段
 					P_NUM: [{
-						required: true,
-						trigger: 'blur',
-						validator: validateP_NUM,
+						required: false,
+						trigger: 'change',
+						validator: validateNum,
 					}],
 					P_NAME: [{
 						required: true,

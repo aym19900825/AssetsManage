@@ -134,7 +134,7 @@
 				var date = new Date();
 				var month = date.getMonth();
 				month++;
-				var str = date.getFullYear() + '-' + month + '-'+ date.getDate();
+				var str = date.getFullYear() + '-' + month + '-'+ date.getDate() + ' ' +  date.getHours() + ':' + date.getMinutes()+ ':' + date.getSeconds() ;
 				return str;
 			},
 			//点击按钮显示弹窗
@@ -198,6 +198,9 @@
 				var url = this.basic_url + '/api-apps/app/tbCategory2/saveOrUpdate';
 				this.$refs['dataInfo'].validate((valid) => {
 					if (valid) {
+						if(!this.modify){
+							this.dataInfo.createtime = this.getToday();
+						}
 						this.$axios.post(url, _this.dataInfo).then((res) => {
 							if(res.data.resp_code == 0) {
 								this.$message({

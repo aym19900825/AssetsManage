@@ -208,26 +208,22 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-
 				product2Id: 0,//获取子表产品ID
 				inspectionSta2Id: 0,//获取子表检验/检测标准ID
 				inspectionPro2Id: 0,//获取子表检验/检测项目ID
 			}
 		},
 		methods: {
-			childMsd_product2(id,num,eventType){//赋值给子表产品ID
-				this.product2Id = id;
-				console.log(eventType);
-				if(eventType=='read'){
-					this.$refs.inspectionSta2child.viewfield_inspectionSta2(this.product2Id);
-				}
+			childMsd_product2(data){//赋值给子表产品ID
+				this.$refs.inspectionSta2child.viewfield_inspectionSta2(data.id,data.num);
 			},
 			childMsd_inspectionSta2(data){//赋值给子表检验/检测标准ID
-				console.log(data);
 				this.inspectionSta2Id = data;
+				this.$refs.inspectionPro2child.viewfield_inspectionPro2(data.id,data.num);
 			},
 			childMsd_inspectionPro2(data){//赋值给子表检验/检测标准ID
 				this.inspectionPro2Id = data;
+				// this.$refs.inspectionSta2child.viewfield_inspectionSta2(data.id,data.num);
 			},
 			
 			iconOperation(row, column, cell, event){//切换Table-操作列中的修改、保存
@@ -356,7 +352,7 @@
 						_this.viewchildRow(_this.productType2Form.inspectionList[0].ID,_this.productType2Form.inspectionList[0].NUM);
 					},0);
 
-					this.$refs.singleTable.setCurrentRow(this.productType2Form.inspectionList[0]);
+					this.$refs.singleTable.setCurrentRow(this.productType2Form.inspectionList[0]);//默认选中第一条数据
 					
 					// this.$refs.product2child.viewfield_product2(this.productType2Form.inspectionList[0].ID);
 					// this.$refs.inspectionSta2child.viewfield_inspectionSta2(this.product2Form.inspectionList[0].ID);
@@ -364,8 +360,8 @@
 
 				}).catch((wrong) => {})
 			},
-			handleNodeClick(data) {
-			},
+			// handleNodeClick(data) {
+			// },
 			formatter(row, column) {
 				return row.enabled;
 			},
@@ -467,13 +463,13 @@
             	});
 			},
 			addchildRow(row) {//添加子项数据
-				this.$refs.product2child.addfield_product2(row.NUM);
+				// this.$refs.product2child.addfield_product2(row.NUM);
 				//console.log();
 			},
 			viewchildRow(id,num) {//查看子项数据
 				this.$refs.product2child.viewfield_product2(id,num);
-				this.$refs.inspectionSta2child.viewfield_inspectionSta2(this.product2Id);
-				this.$refs.inspectionPro2child.viewfield_inspectionPro2(this.inspectionSta2Id);
+				// this.$refs.inspectionSta2child.viewfield_inspectionSta2(this.product2Id);
+				// this.$refs.inspectionPro2child.viewfield_inspectionPro2(this.inspectionSta2Id);
 			},
 		},
 		

@@ -215,6 +215,19 @@
 				this.down = !this.down,
 					this.up = !this.up
 			},
+			getKeyWords(catId){
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+					categoryid: catId ,
+				}
+				var url = this.basic_url + '/api-apps/app/tbKeyword2';
+				this.$axios.get(url, {
+					params: data
+				}).then((res) => {
+					return res.data.count;
+				}).catch((wrong) => {})
+			},
 			// 删除
 			del() {
 				var selData = this.selMenu;
@@ -224,7 +237,21 @@
 						type: 'warning'
 					});
 					return;
-				} else {
+				}else if(selData.length > 1){
+					this.$message({
+						message: '不可同时删除多条数据',
+						type: 'error'
+					});
+					return;
+				}else {
+					var sonLength = this.getKeyWords(selData[0].id);
+					if(sonLength>0){
+						this.$message({
+							message: '请先删除此类别下的关键字后再删除此数据',
+							type: 'error'
+						});
+						return;
+					}
 					var url = this.basic_url + '/api-apps/app/tbCategory2/deletes';
 					var changeMenu = selData;
 					var deleteid = [];
@@ -252,9 +279,7 @@
 								type: 'error'
 							});
 						});
-                    }).catch(() => {
-
-                	});
+                    }).catch(() => {});
 				}
 			},
 			selChange(val) {

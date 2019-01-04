@@ -47,7 +47,7 @@
 								</el-col>
 								
 								<el-col :span="7">
-									<el-input v-model="searchList.keywordid">
+									<el-input v-model="searchList.keywordidDesc">
 										<template slot="prepend">关键字</template>
 										</el-input>
 								</el-col>
@@ -65,39 +65,39 @@
 								</el-table-column>
 								<el-table-column label="姓名" sortable width="140px" prop="username" v-if="this.checkedName.indexOf('姓名')!=-1">
 								</el-table-column>
-								<el-table-column label="关键字" sortable prop="keywordid" v-if="this.checkedName.indexOf('关键字')!=-1">
+								<el-table-column label="关键字" sortable prop="keywordidDesc" v-if="this.checkedName.indexOf('关键字')!=-1">
 								</el-table-column>
-								<el-table-column label="查看授权" sortable prop="fileread" v-if="this.checkedName.indexOf('查看授权')!=-1">
+								<el-table-column label="查看" sortable prop="fileread" v-if="this.checkedName.indexOf('查看')!=-1">
 									<template slot-scope="scope">
 										<i :class="scope.row.fileread==1?'el-icon-check':''"></i>
 									</template>
 								</el-table-column>
-								<el-table-column label="编辑授权" sortable prop="fileedit" v-if="this.checkedName.indexOf('编辑授权')!=-1">
+								<el-table-column label="编辑" sortable prop="fileedit" v-if="this.checkedName.indexOf('编辑')!=-1">
 									<template slot-scope="scope">
 										<i :class="scope.row.fileedit==1?'el-icon-check':''"></i>
 									</template>
 								</el-table-column>
-								<el-table-column label="删除授权" sortable prop="filedelete" v-if="this.checkedName.indexOf('删除授权')!=-1">
+								<el-table-column label="删除" sortable prop="filedelete" v-if="this.checkedName.indexOf('删除')!=-1">
 									<template slot-scope="scope">
 										<i :class="scope.row.filedelete==1?'el-icon-check':''"></i>
 									</template>
 								</el-table-column>
-								<el-table-column label="上传授权" sortable prop="fileupload" v-if="this.checkedName.indexOf('上传授权')!=-1">
+								<el-table-column label="上传" sortable prop="fileupload" v-if="this.checkedName.indexOf('上传')!=-1">
 									<template slot-scope="scope">
 										<i :class="scope.row.fileupload==1?'el-icon-check':''"></i>
 									</template>
 								</el-table-column>
-								<el-table-column label="下载授权" sortable prop="filedownload" v-if="this.checkedName.indexOf('下载授权')!=-1">
+								<el-table-column label="下载" sortable prop="filedownload" v-if="this.checkedName.indexOf('下载')!=-1">
 									<template slot-scope="scope">
 										<i :class="scope.row.filedownload==1?'el-icon-check':''"></i>
 									</template>
 								</el-table-column>
-								<el-table-column label="打印授权" sortable prop="fileprint" v-if="this.checkedName.indexOf('打印授权')!=-1">
+								<el-table-column label="打印" sortable prop="fileprint" v-if="this.checkedName.indexOf('打印')!=-1">
 									<template slot-scope="scope">
 										<i :class="scope.row.fileprint==1?'el-icon-check':''"></i>
 									</template>
 								</el-table-column>
-								<el-table-column label="复制授权" sortable prop="fileduplicate" v-if="this.checkedName.indexOf('复制授权')!=-1">
+								<el-table-column label="复制" sortable prop="fileduplicate" v-if="this.checkedName.indexOf('复制')!=-1">
 									<template slot-scope="scope">
 										<i :class="scope.row.fileduplicate==1?'el-icon-check':''"></i>
 									</template>
@@ -142,13 +142,13 @@
 				checkedName: [
 					'姓名',
 					'关键字',
-					'查看授权',
-					'删除授权',
-					'上传授权',
-					'下载授权',
-					'复制授权',
-					'编辑授权',
-					'打印授权',
+					'查看',
+					'删除',
+					'上传',
+					'下载',
+					'复制',
+					'编辑',
+					'打印',
 				],
 				tableHeader: [{
 						label: '姓名',
@@ -156,34 +156,34 @@
 					},
 					{
 						label: '关键字',
-						prop: 'keywordid'
+						prop: 'keywordidDesc'
 					},
 					{
-						label: '查看授权',
+						label: '查看',
 						prop: 'fileread'
 					},
 					{
-						label: '删除授权',
+						label: '删除',
 						prop: 'filedelete'
 					},
 					{
-						label: '上传授权',
+						label: '上传',
 						prop: 'fileupload'
 					},
 					{
-						label: '下载授权',
+						label: '下载',
 						prop: 'filedownload'
 					},
 					{
-						label: '复制授权',
+						label: '复制',
 						prop: 'fileduplicate'
 					},
 					{
-						label: '编辑授权',
+						label: '编辑',
 						prop: 'fileedit'
 					},
 					{
-						label: '打印授权',
+						label: '打印',
 						prop: 'fileprint'
 					}
 				],
@@ -197,12 +197,8 @@
 				down: true,
 				up: false,
 				searchList: {
-					V_NAME: '',//委托单位名称
-					DESCRIPTION: '',//样品名称
-					ACCEPT_PERSON: '',//收样人
-					P_NAME: '',//生产单位名称
-					TYPE: '',//样品类别
-					ACCEPT_DATE: '',//收样日期
+					keywordidDesc: '',
+					username: ''
 				},
 				//tree树菜单
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -369,7 +365,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 					username: this.searchList.username,
-					keywordid: this.searchList.keywordid
+					keywordidDesc: this.searchList.keywordidDesc
 				}
 				var url = this.basic_url + '/api-apps/app/tbKeywordPrivilege2';
 				this.$axios.get(url, {

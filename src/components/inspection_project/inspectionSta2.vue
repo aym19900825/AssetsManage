@@ -295,7 +295,9 @@
 					setTimeout(function(){
 						_this.viewchildRow(_this.inspectionSta2Form.inspectionList[0].ID,_this.inspectionSta2Form.inspectionList[0].S_NUM);
 					},0);
+
 					this.$refs.singleTable.setCurrentRow(this.inspectionSta2Form.inspectionList[0]);//默认选中第一条数据
+					
 				}).catch((wrong) => {})
 			},
 			// handleNodeClick(data) {

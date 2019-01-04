@@ -16,10 +16,10 @@
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
 				
-								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+								<!--<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
-								</button>
-								<!-- <button type="button" class="btn btn-green" @click="openAddMgr" id="">
+								</button>-->
+								 <button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加
                       			</button>
 								<button type="button" class="btn btn-blue button-margin" @click="modify">
@@ -39,7 +39,7 @@
 						    		<i class="icon-search"></i>高级查询
 						    		<i class="icon-arrow1-down" v-show="down"></i>
 						    		<i class="icon-arrow1-up" v-show="up"></i>
-								</button> -->
+								</button> 
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">

@@ -222,6 +222,7 @@ export default {
         },
 	},
 	mounted(){
+		console.log(this.$store.state.setSelectedNav);
 		this.initEchart();//调用饼状图图表函数名称
 		//this.$refs.navsheader.sessionGet();
       	var url = this.basic_url + '/api-user/roles/default';

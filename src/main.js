@@ -53,18 +53,18 @@ Vue.directive('loadmore', {
 })
 
 Vue.config.productionTip = false
-let selectedNav={
-	css: 'icon-user',
-	name: '首页',
-	url: '/index'}
-
-
-var clickedNav=new Array();
-clickedNav[0]=selectedNav
-//tab 上选中的页面  只能有一个
-Vue.prototype.$selectedNav = selectedNav //选中的tab
-//所有tab的页面
-Vue.prototype.$clickedNav = clickedNav   //点选的tab
+//let selectedNav={
+//	css: 'icon-user',
+//	name: '首页',
+//	url: '/index'}
+//
+//
+//var clickedNav=new Array();
+//clickedNav[0]=selectedNav
+////tab 上选中的页面  只能有一个
+//Vue.prototype.$selectedNav = selectedNav //选中的tab
+////所有tab的页面
+//Vue.prototype.$clickedNav = clickedNav   //点选的tab
 
 
 

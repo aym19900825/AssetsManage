@@ -14,7 +14,7 @@
 								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加
                        			</button>
-								<button type="button" class="btn btn-bule button-margin" @click="modify" id="">
+								<button type="button" class="btn btn-blue button-margin" @click="modify" id="">
 						    		<i class="icon-edit"></i>修改
 								</button>
 								<button type="button" class="btn btn-red button-margin" id="" @click="deluserinfo">

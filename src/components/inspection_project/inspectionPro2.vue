@@ -17,20 +17,20 @@
 					<font>新建</font>
 				</el-button>
 			</div>
-			<el-form :model="inspectionPro2Form" ref="inspectionPro2Form" class="el-radio__table">
-			  <el-table :data="(Array.isArray(inspectionPro2Form.inspectionList)?inspectionPro2Form.inspectionList:[]).filter(data => !search || data.P_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'inspectionPro2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
-			  	<el-table-column label="所属标准" width="80" prop="S_NUM">
+			<el-form :model="inspectionPro2Form" status-icon inline-message ref="inspectionPro2Form" class="el-radio__table">
+			  <el-table ref="singleTable" :data="(Array.isArray(inspectionPro2Form.inspectionList)?inspectionPro2Form.inspectionList:[]).filter(data => !search || data.P_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250" highlight-current-row style="width: 100%;" :default-sort="{prop:'inspectionPro2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
+			  	<!-- <el-table-column label="所属标准" width="80" prop="S_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.S_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" disabled></el-input><span v-else="v-else">{{scope.row.S_NUM}}</span>
 					</el-form-item>
 			      </template>
-			    </el-table-column>
+			    </el-table-column> -->
 
 			  	<el-table-column label="项目编号" sortable width="100" prop="P_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.P_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" disabled></el-input><span v-else="v-else">{{scope.row.P_NUM}}</span>
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" disabled></el-input><span class="blue" @click="viewchildRow(scope.row.ID,scope.row.P_NUM)" v-else="v-else">{{scope.row.P_NUM}}</span>
 					</el-form-item>
 			      </template>
 			    </el-table-column>
@@ -40,7 +40,7 @@
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.P_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NAME" placeholder="请输入内容">
 			        		<el-button slot="append" icon="icon-search"></el-button>
-			        	</el-input><span class="blue" @click="viewchildRow(scope.row.ID)" v-else="v-else">{{scope.row.P_NAME}}</span>
+			        	</el-input><span v-else="v-else">{{scope.row.P_NAME}}</span>
 					</el-form-item>
 			      </template>
 			    </el-table-column>
@@ -81,14 +81,14 @@
 
 			    <el-table-column prop="iconOperation" fixed="right" label="操作" width="50">
 			      <template slot-scope="scope">
-			        <!-- <el-button type="text" id="Edit" size="medium" @click.native.prevent="saveRow(scope.row)" v-if="scope.row.isEditing">
-			        	<i class="icon-check" title="保存"></i>
-					</el-button> -->
 					<!-- <el-button type="text" size="medium" @click.native.prevent="modifyversion(scope.row)" v-else="v-else">
 			        	<i class="icon-edit" title="修改"></i>
 					</el-button> -->
+					<el-button type="text" id="Edit" size="medium" @click.native.prevent="saveRow(scope.row)" v-if="scope.row.isEditing">
+			        	<i class="icon-check" title="保存"></i>
+					</el-button>
 
-			        <el-button @click="deleteRow(scope.row)" type="text" size="medium" title="删除" >
+			        <el-button @click="deleteRow(scope.row)" type="text" size="medium" title="删除" v-else="v-else">
 			          <i class="icon-trash red"></i>
 			        </el-button>
 
@@ -155,6 +155,7 @@
 					pageSize: 10,
 					totalCount: 0
 				},
+				parentId: 1
 			}
 		},
 		methods: {
@@ -217,9 +218,10 @@
 			indexMethod(index) {
 				return index + 1;
 			},
-			viewfield_inspectionPro2(ID){//点击父级筛选出子级数据
+			viewfield_inspectionPro2(ID,num){//点击父级筛选出子级数据
+				// console.log(ID);
 				if(ID=='null'){
-					this.inspectionPro2Form.inspectionList = []; 
+					this.inspectionPro2Form.inspectionList = [];
 					// this.$refs.professionGrochild.viewfield_professionGro('null');
 					// this.$refs.inspectionMet2child.viewfield_inspectionMet2('null');
 					// this.$refs.rawDataTem2child.viewfield_rawDataTem2('null');
@@ -228,6 +230,7 @@
 					return false;
 					//todo  相关数据设置
 				}
+				this.parentId = num;
 				var url = this.basic_url + '/api-apps/app/inspectionPro2/INSPECTION_STANDARDS2/' + ID;
 				this.$axios.get(url, {}).then((res) => {
 					//console.log(res);
@@ -243,8 +246,8 @@
 					
 					//默认主表第一条数据
 					if(this.inspectionPro2Form.inspectionList.length > 0){
-						this.$emit('parentMsd_inspectionPro2', this.inspectionPro2Form.inspectionList[0].ID);
-
+						this.viewchildRow(this.inspectionPro2Form.inspectionList[0].ID,this.inspectionPro2Form.inspectionList[0].P_NUM);
+						// this.$emit('parentMsd_inspectionPro2', this.inspectionPro2Form.inspectionList[0].ID);
 						// this.$refs.professionGrochild.viewfield_professionGro(this.inspectionPro2Form.inspectionList[0].ID);
 						// this.$refs.inspectionMet2child.viewfield_inspectionMet2(this.inspectionPro2Form.inspectionList[0].ID);
 
@@ -252,8 +255,8 @@
 						// this.$refs.inspectionRepTem2child.viewfield_inspectionRepTem2(this.inspectionPro2Form.inspectionList[0].ID);
 						// this.$refs.rawDataAssetchild.viewfield_rawDataAsset(this.inspectionPro2Form.inspectionList[0].ID);
 					}else{
-						this.$emit('parentMsd_inspectionPro2', 'null');
-
+						this.viewchildRow('null');
+						// this.$emit('parentMsd_inspectionPro2', 'null');
 						// this.$refs.professionGrochild.viewfield_professionGro('null');
 						// this.$refs.inspectionMet2child.viewfield_inspectionMet2('null');
 
@@ -269,6 +272,7 @@
 			},
 			
 			requestData_inspectionPro2(index) {//加载数据
+				var _this = this;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -299,10 +303,16 @@
 					}
 					
 					this.inspectionPro2Form.inspectionList = newarr;
+
+					setTimeout(function(){
+						_this.viewchildRow(_this.inspectionPro2Form.inspectionList[0].ID,_this.inspectionPro2Form.inspectionList[0].P_NUM);
+					},0);
+					
+					this.$refs.singleTable.setCurrentRow(this.inspectionPro2Form.inspectionList[0]);//默认选中第一条数据
 				}).catch((wrong) => {})
 			},
-			handleNodeClick(data) {
-			},
+			// handleNodeClick(data) {
+			// },
 			formatter(row, column) {
 				return row.enabled;
 			},
@@ -327,8 +337,8 @@
 							"P_NAME": '',
 							"UNITCOST": '',
 							"STATUS": '活动',
-							"S_NUM": S_NUM,
-							"P_NUM": 'PRO' + index,
+							"S_NUM": this.parentId,//所属类别编号
+							"P_NUM": '',
 							"VERSION": 1,
 							"CHANGEBY": this.currentUser,
 							"CHANGEDATE": this.currentDate,
@@ -407,19 +417,24 @@
             	});
 			},
 			addchildRow(row) {//添加子项数据
-				this.$refs.professionGrochild.addfield_professionGro(row.P_NUM);//专业组
-				this.$refs.inspectionMet2child.addfield_inspectionMet2(row.P_NUM);//检验/检测方法
-				this.$refs.rawDataTem2child.addfield_rawDataTem2(row.P_NUM);//原始数据模板
-				this.$refs.inspectionRepTem2child.addfield_inspectionRepTem2(row.P_NUM);//检验/检测报告模板
-				this.$refs.rawDataAssetchild.addfield_rawDataAsset(row.P_NUM);//仪器和计量器具
+				// this.$refs.professionGrochild.addfield_professionGro(row.P_NUM);//专业组
+				// this.$refs.inspectionMet2child.addfield_inspectionMet2(row.P_NUM);//检验/检测方法
+				// this.$refs.rawDataTem2child.addfield_rawDataTem2(row.P_NUM);//原始数据模板
+				// this.$refs.inspectionRepTem2child.addfield_inspectionRepTem2(row.P_NUM);//检验/检测报告模板
+				// this.$refs.rawDataAssetchild.addfield_rawDataAsset(row.P_NUM);//仪器和计量器具
 				//console.log();
 			},
-			viewchildRow(ID) {//查看子项数据
-				this.$refs.professionGrochild.viewfield_professionGro(ID);//专业组
-				this.$refs.inspectionMet2child.viewfield_inspectionMet2(ID);//检验/检测方法
-				this.$refs.rawDataTem2child.viewfield_rawDataTem2(ID);//原始数据模板
-				this.$refs.inspectionRepTem2child.viewfield_inspectionRepTem2(ID);//检验/检测报告模板
-				this.$refs.rawDataAssetchild.viewfield_rawDataAsset(ID);//仪器和计量器具
+			viewchildRow(ID,P_NUM) {//查看子项数据
+				// this.$refs.professionGrochild.viewfield_professionGro(ID);//专业组
+				// this.$refs.inspectionMet2child.viewfield_inspectionMet2(ID);//检验/检测方法
+				// this.$refs.rawDataTem2child.viewfield_rawDataTem2(ID);//原始数据模板
+				// this.$refs.inspectionRepTem2child.viewfield_inspectionRepTem2(ID);//检验/检测报告模板
+				// this.$refs.rawDataAssetchild.viewfield_rawDataAsset(ID);//仪器和计量器具
+				var data = {
+					id: ID,
+					num: P_NUM
+				};
+				this.$emit('parentMsd_inspectionPro2', data);
 			},
 		},
 		

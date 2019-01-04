@@ -17,20 +17,20 @@
 					<font>新建</font>
 				</el-button>
 			</div>
-			<el-form :model="inspectionSta2Form" ref="inspectionSta2Form" class="el-radio__table">
-			  <el-table :data="(Array.isArray(inspectionSta2Form.inspectionList)?inspectionSta2Form.inspectionList:[]).filter(data => !search || data.S_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'inspectionSta2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
-				<el-table-column label="所属产品" width="80" prop="PRO_NUM">
+			<el-form :model="inspectionSta2Form" status-icon inline-message ref="inspectionSta2Form" class="el-radio__table">
+			  <el-table ref="singleTable" :data="inspectionSta2Form.inspectionList.filter(data => !search || data.S_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250" highlight-current-row style="width: 100%;" :default-sort="{prop:'inspectionSta2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
+				<!-- <el-table-column label="所属产品" width="80" prop="PRO_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.PRO_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PRO_NUM" disabled></el-input><span v-else="v-else">{{scope.row.PRO_NUM}}</span>
 					</el-form-item>
 			      </template>
-			    </el-table-column>
+			    </el-table-column> -->
 
 			  	<el-table-column label="标准编码" sortable width="100" prop="S_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.S_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" disabled></el-input><span v-else="v-else">{{scope.row.S_NUM}}</span>
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" disabled></el-input><span class="blue" @click="viewchildRow(scope.row.ID,scope.row.S_NUM)" v-else="v-else">{{scope.row.S_NUM}}</span>
 					</el-form-item>
 			      </template>
 			    </el-table-column>
@@ -40,7 +40,7 @@
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.S_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NAME" placeholder="请输入内容">
 			        		<el-button slot="append" icon="icon-search"></el-button>
-			        	</el-input><span class="blue" @click="viewchildRow(scope.row.ID)" v-else="v-else">{{scope.row.S_NAME}}</span>
+			        	</el-input><span v-else="v-else">{{scope.row.S_NAME}}</span>
 					</el-form-item>
 			      </template>
 			    </el-table-column>
@@ -77,13 +77,15 @@
 
 			    <el-table-column prop="iconOperation" fixed="right" label="操作" width="50">
 			      <template slot-scope="scope">
-			        <!-- <el-button type="text" id="Edit" size="medium" @click.native.prevent="saveRow(scope.row)" v-if="scope.row.isEditing">
-			        	<i class="icon-check" title="保存"></i>
-					</el-button> -->
 					<!-- <el-button type="text" size="medium" @click.native.prevent="modifyversion(scope.row)" v-else="v-else">
 			        	<i class="icon-edit" title="修改"></i>
 					</el-button> -->
-			        <el-button @click="deleteRow(scope.row)" type="text" size="medium" title="删除" >
+
+					<el-button type="text" id="Edit" size="medium" @click.native.prevent="saveRow(scope.row)" v-if="scope.row.isEditing">
+			        	<i class="icon-check" title="保存"></i>
+					</el-button>
+
+			        <el-button @click="deleteRow(scope.row)" type="text" size="medium" title="删除" v-else="v-else">
 			          <i class="icon-trash red"></i>
 			        </el-button>
 
@@ -152,6 +154,7 @@
 					pageSize: 10,
 					totalCount: 0
 				},
+				parentId: 1
 			}
 		},
 		methods: {
@@ -219,14 +222,15 @@
 			indexMethod(index) {
 				return index + 1;
 			},
-			viewfield_inspectionSta2(ID){//点击父级筛选出子级数据
-				console.log(ID);
+			viewfield_inspectionSta2(ID,num){//点击父级筛选出子级数据
+				// console.log(ID);
 				if(ID=='null'){
 					this.inspectionSta2Form.inspectionList = []; 
 					// this.$refs.inspectionPro2child.viewfield_inspectionPro2('null');
 					return false;
 					//todo  相关数据设置
 				}
+				this.parentId = num;
 				var url = this.basic_url + '/api-apps/app/inspectionSta2/PRODUCT2/' + ID;
 				this.$axios.get(url, {}).then((res) => {
 					this.page.totalCount = res.data.count;	
@@ -242,10 +246,11 @@
 					//默认主表第一条数据
 					if(this.inspectionSta2Form.inspectionList.length > 0){
 						//this.$refs.inspectionPro2child.viewfield_inspectionPro2(this.inspectionSta2Form.inspectionList[0].ID);
-						this.$on('parentMsd_inspectionSta2', this.inspectionSta2Form.inspectionList[0].ID);
+						// this.$on('parentMsd_inspectionSta2', this.inspectionSta2Form.inspectionList[0].ID);
+						this.viewchildRow(this.inspectionSta2Form.inspectionList[0].ID,this.inspectionSta2Form.inspectionList[0].S_NUM);
 					}else{
 						//this.$refs.inspectionPro2child.viewfield_inspectionPro2('null');
-						this.$on('parentMsd_inspectionSta2', 'null');
+						this.viewchildRow('null');
 					}
 
 					for(var j = 0; j < this.inspectionSta2Form.inspectionList.length; j++){
@@ -255,6 +260,7 @@
 			},
 
 			requestData_inspectionSta2(index) {//加载数据
+				var _this = this;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -285,10 +291,17 @@
 					}
 					
 					this.inspectionSta2Form.inspectionList = newarr;
+
+					setTimeout(function(){
+						_this.viewchildRow(_this.inspectionSta2Form.inspectionList[0].ID,_this.inspectionSta2Form.inspectionList[0].S_NUM);
+					},0);
+
+					this.$refs.singleTable.setCurrentRow(this.inspectionSta2Form.inspectionList[0]);//默认选中第一条数据
+					
 				}).catch((wrong) => {})
 			},
-			handleNodeClick(data) {
-			},
+			// handleNodeClick(data) {
+			// },
 			formatter(row, column) {
 				return row.enabled;
 			},
@@ -311,10 +324,10 @@
 						this.currentDateTime = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 						var index=this.$moment(date).format("YYYYMMDDHHmmss");
 						var obj = {
-							"PRO_NUM": PRO_NUM,
+							"PRO_NUM": this.parentId,//所属类别编号
 							"S_NAME": '',
-							"STATUS": '活动',
-							"S_NUM": 'INP' + index,
+							"STATUS": '1',
+							"S_NUM": '',
 							"VERSION": 1,
 							"RELEASETIME": this.currentDate,
 							"STARTETIME": this.currentDate,
@@ -396,11 +409,16 @@
             	});
 			},
 			addchildRow(row) {//添加子项数据
-				this.$refs.inspectionPro2child.addfield_inspectionPro2(row.S_NUM);
+				// this.$refs.inspectionPro2child.addfield_inspectionPro2(row.S_NUM);
 				//console.log();
 			},
-			viewchildRow(ID) {//查看子项数据
-				this.$refs.inspectionPro2child.viewfield_inspectionPro2(ID);
+			viewchildRow(ID,S_NUM) {//查看子项数据
+				// this.$refs.inspectionPro2child.viewfield_inspectionPro2(ID);
+				var data = {
+					id: ID,
+					num: S_NUM
+				};
+				this.$emit('parentMsd_inspectionSta2', data);
 			},
 		},
 		

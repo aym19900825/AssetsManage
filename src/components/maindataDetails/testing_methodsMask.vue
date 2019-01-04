@@ -36,15 +36,18 @@
 											<template slot="prepend">信息状态</template>
 										</el-input>
 									</el-col>-->
-									<el-col :span="5" class="pull-right">
-										<el-input v-model="testingForm.M_NUM" @focus="hint" @input="hinthide" :disabled="noedit">
+									<!-- <el-col :span="5" class="pull-right">
+										<el-input v-model="testingForm.M_NUM" :disabled="noedit">
 											<template slot="prepend">编码</template>
 										</el-input>
-										<span v-if="hintshow" style="color:rgb(103,194,58);font-size: 12px">可填写，若不填写系统将自动生成</span>
-									</el-col>
+									</el-col> -->
 								</el-row>
-
 								<el-row>
+									<el-col :span="8">
+										<el-form-item label="编码" prop="M_NUM" >
+											<el-input v-model="testingForm.M_NUM" :disabled="noedit"></el-input>
+										</el-form-item>
+									</el-col>
 									<el-col :span="8">
 										<el-form-item label="中文名称" prop="M_NAME" >
 											<el-input v-model="testingForm.M_NAME" :disabled="noedit"></el-input>
@@ -55,6 +58,8 @@
 											<el-input v-model="testingForm.M_ENAME" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
+								</el-row>
+								<el-row>
 									<el-col :span="8">
 										<el-form-item label="类别" prop="M_TYPE">
 											<!-- <el-select v-model="testingForm.M_TYPE" placeholder="请选择类别" style="width: 100%;">
@@ -63,8 +68,6 @@
 											<el-input v-model="testingForm.M_TYPE" placeholder="请输入类别" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
-								</el-row>
-								<el-row>
 									<el-col :span="8" v-if="dept">
 										<el-form-item label="机构">
 											<el-input v-model="testingForm.DEPARTMENT" :disabled="true"></el-input>
@@ -105,7 +108,7 @@
 						<el-button type="primary" @click="saveAndUpdate('testingForm')">保存</el-button>
 						<el-button type="success" @click="saveAndSubmit('testingForm')" v-show="addtitle">保存并添加</el-button>
 						<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('testingForm')">修订</el-button>
-						<el-button v-if="modify" type="success" @click="update('testingForm')">启用</el-button>
+						<!-- <el-button v-if="modify" type="success" @click="update('testingForm')">启用</el-button> -->
 						<el-button @click="close">取消</el-button>
 					</div>
 				</el-form>
@@ -144,6 +147,17 @@
 			}
 		},
 		data() {
+			var validateNum = (rule, value, callback) => {
+				if(value != ""){
+		             if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
+		                 callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
+		             }else{
+		                 callback();
+		             }
+		         }else{
+		             callback();
+		         }
+			};
 			return {
 				docParm: {
 					'model': 'new',
@@ -186,6 +200,11 @@
 				isEditing: '',
 				commentArr:{},//下拉加载
 				rules: { //定义需要校验数据的名称
+					M_NUM: [{
+						required: false,
+						trigger: 'change',
+						validator: validateNum,
+					}],
 					M_NAME: [
 						{ required: true, message: '请填写中文名称', trigger: 'blur' },
 						{ min: 5, max: 35, message: '长度在 5 到 35 个字符', trigger: 'blur' }

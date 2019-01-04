@@ -21,7 +21,7 @@
 								<!--<button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加
                       			</button>
-								<button type="button" class="btn btn-bule button-margin" @click="modify">
+								<button type="button" class="btn btn-blue button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改
 								</button>
 								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
@@ -317,7 +317,7 @@
 				this.page.pageSize = 10;
 				this.requestData();
 			},
-			//请求页面的菜单接口
+			//请求页面的button接口
 		    getbutton(childByValue){
 		    	console.log(childByValue);
 		    	var data = {

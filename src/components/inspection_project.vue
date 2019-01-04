@@ -116,7 +116,7 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<el-tabs>
-						    	<el-tab-pane label="专业组"><professionGrochild ref="professionGrochild"></professionGrochild></el-tab-pane>
+						    	<el-tab-pane label="专业组"><professionGrochild @parentMsd_inspectionPro2="childMsd_professionGro" ref="professionGrochild"></professionGrochild></el-tab-pane>
 						    	<el-tab-pane label="检验/检测方法"><inspectionMet2child ref="inspectionMet2child"></inspectionMet2child></el-tab-pane>
 						    	<el-tab-pane label="原始数据模板"><rawDataTem2child ref="rawDataTem2child"></rawDataTem2child></el-tab-pane>
 						    	<el-tab-pane label="检验/检测报告模板"><inspectionRepTem2child ref="inspectionRepTem2child"></inspectionRepTem2child></el-tab-pane>
@@ -208,28 +208,26 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-
 				product2Id: 0,//获取子表产品ID
 				inspectionSta2Id: 0,//获取子表检验/检测标准ID
 				inspectionPro2Id: 0,//获取子表检验/检测项目ID
 			}
 		},
 		methods: {
-			childMsd_product2(id,num,eventType){//赋值给子表产品ID
-				this.product2Id = id;
-				console.log(eventType);
-				if(eventType=='read'){
-					this.$refs.inspectionSta2child.viewfield_inspectionSta2(this.product2Id);
-				}
+			childMsd_product2(data){//赋值给子表产品ID
+				this.$refs.inspectionSta2child.viewfield_inspectionSta2(data.id,data.num);
 			},
 			childMsd_inspectionSta2(data){//赋值给子表检验/检测标准ID
-				console.log(data);
 				this.inspectionSta2Id = data;
+				this.$refs.inspectionPro2child.viewfield_inspectionPro2(data.id,data.num);
 			},
 			childMsd_inspectionPro2(data){//赋值给子表检验/检测标准ID
 				this.inspectionPro2Id = data;
+				this.$refs.professionGrochild.viewfield_professionGro(data.id,data.num);
 			},
-			
+			childMsd_professionGro(data){//赋值给子表专业组ID
+				this.professionGroId = data;
+			},
 			iconOperation(row, column, cell, event){//切换Table-操作列中的修改、保存
 				if(column.property ==="iconOperation"){
 					row.isEditing = !row.isEditing
@@ -356,7 +354,7 @@
 						_this.viewchildRow(_this.productType2Form.inspectionList[0].ID,_this.productType2Form.inspectionList[0].NUM);
 					},0);
 
-					this.$refs.singleTable.setCurrentRow(this.productType2Form.inspectionList[0]);
+					this.$refs.singleTable.setCurrentRow(this.productType2Form.inspectionList[0]);//默认选中第一条数据
 					
 					// this.$refs.product2child.viewfield_product2(this.productType2Form.inspectionList[0].ID);
 					// this.$refs.inspectionSta2child.viewfield_inspectionSta2(this.product2Form.inspectionList[0].ID);
@@ -364,8 +362,8 @@
 
 				}).catch((wrong) => {})
 			},
-			handleNodeClick(data) {
-			},
+			// handleNodeClick(data) {
+			// },
 			formatter(row, column) {
 				return row.enabled;
 			},
@@ -467,13 +465,13 @@
             	});
 			},
 			addchildRow(row) {//添加子项数据
-				this.$refs.product2child.addfield_product2(row.NUM);
+				// this.$refs.product2child.addfield_product2(row.NUM);
 				//console.log();
 			},
 			viewchildRow(id,num) {//查看子项数据
 				this.$refs.product2child.viewfield_product2(id,num);
-				this.$refs.inspectionSta2child.viewfield_inspectionSta2(this.product2Id);
-				this.$refs.inspectionPro2child.viewfield_inspectionPro2(this.inspectionSta2Id);
+				// this.$refs.inspectionSta2child.viewfield_inspectionSta2(this.product2Id);
+				// this.$refs.inspectionPro2child.viewfield_inspectionPro2(this.inspectionSta2Id);
 			},
 		},
 		

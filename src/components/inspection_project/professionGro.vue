@@ -209,13 +209,14 @@
 			indexMethod(index) {
 				return index + 1;
 			},
-			viewfield_professionGro(ID){//点击父级筛选出子级数据
+			viewfield_professionGro(ID,num){//点击父级筛选出子级数据
 				if(ID=='null'){
 					this.professionGroForm.inspectionList = []; 
 					// this.$refs.rawDataAssetchild.viewfield_rawDataAsset('null');
 					return false;
 					//todo  相关数据设置
 				}
+				this.parentId = num;
 				var url = this.basic_url + '/api-apps/app/professionGro/INSPECTION_PROJECT2/' + ID;
 				this.$axios.get(url, {}).then((res) => {
 					//console.log(res);

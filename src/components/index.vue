@@ -153,21 +153,20 @@ export default {
 				roleId: this.$store.state.roleid,
 			};
             this.$store.dispatch('setMenuIdAct',item.id);
-			console.log("roleId:"+data.roleId);
-
 			var url = _this.basic_url + '/api-user/menus/findSecondByRoleIdAndFisrtMenu';
 			_this.$axios.get(url, {params: data}).then((res) => {
 				
 				if(res.data!=null&&res.data.length>0){
 					var item = res.data[0];
-					_this.$selectedNav=item;
+					_this.$store.dispatch('setSelectedNavAct',item);
+//					_this.$selectedNav=item;
 					var flag="1";
-					for(var i=0;i<_this.$clickedNav.length;i++){
-						if(_this.$clickedNav.length==1){
+					for(var i=0;i<_this.$store.state.clickedNavs.length;i++){
+						if(_this.$store.state.clickedNavs.length==1){
 							flag="0";
 						}else{
-							if(typeof(_this.$clickedNav[i].id)!=undefined&&i!=0){
-							if(_this.$clickedNav[i].id != item.id){
+							if(typeof(_this.$store.state.clickedNavs[i].id)!=undefined&&i!=0){
+							if(_this.$store.state.clickedNavs[i].id != item.id){
 								flag="0";
 							}else{
 								flag="1";
@@ -178,7 +177,7 @@ export default {
 						
 					}
 					if(flag=="0"){
-						_this.$clickedNav.push(item);
+						_this.$store.state.clickedNavs.push(item);
 					}
 				}
 			}).catch((wrong) => {
@@ -223,6 +222,7 @@ export default {
         },
 	},
 	mounted(){
+		console.log(this.$store.state.setSelectedNav);
 		this.initEchart();//调用饼状图图表函数名称
 		//this.$refs.navsheader.sessionGet();
       	var url = this.basic_url + '/api-user/roles/default';

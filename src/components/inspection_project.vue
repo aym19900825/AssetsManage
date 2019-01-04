@@ -116,7 +116,7 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<el-tabs>
-						    	<el-tab-pane label="专业组"><professionGrochild ref="professionGrochild"></professionGrochild></el-tab-pane>
+						    	<el-tab-pane label="专业组"><professionGrochild @parentMsd_inspectionPro2="childMsd_professionGro" ref="professionGrochild"></professionGrochild></el-tab-pane>
 						    	<el-tab-pane label="检验/检测方法"><inspectionMet2child ref="inspectionMet2child"></inspectionMet2child></el-tab-pane>
 						    	<el-tab-pane label="原始数据模板"><rawDataTem2child ref="rawDataTem2child"></rawDataTem2child></el-tab-pane>
 						    	<el-tab-pane label="检验/检测报告模板"><inspectionRepTem2child ref="inspectionRepTem2child"></inspectionRepTem2child></el-tab-pane>
@@ -223,9 +223,11 @@
 			},
 			childMsd_inspectionPro2(data){//赋值给子表检验/检测标准ID
 				this.inspectionPro2Id = data;
-				// this.$refs.inspectionSta2child.viewfield_inspectionSta2(data.id,data.num);
+				this.$refs.professionGrochild.viewfield_professionGro(data.id,data.num);
 			},
-			
+			childMsd_professionGro(data){//赋值给子表专业组ID
+				this.professionGroId = data;
+			},
 			iconOperation(row, column, cell, event){//切换Table-操作列中的修改、保存
 				if(column.property ==="iconOperation"){
 					row.isEditing = !row.isEditing

@@ -267,6 +267,7 @@ export default {
 
 .page-tabs span .icon-close2 {
     color: #97A3B4;
+    margin-left: 2px;
 }
 .page-tabs span.active .icon-close2 {
     color: #E97A9B;

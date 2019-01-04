@@ -317,7 +317,7 @@
 				this.page.pageSize = 10;
 				this.requestData();
 			},
-			//请求页面的菜单接口
+			//请求页面的button接口
 		    getbutton(childByValue){
 		    	console.log(childByValue);
 		    	var data = {

@@ -108,7 +108,7 @@
 						<el-button type="primary" @click="saveAndUpdate('testingForm')">保存</el-button>
 						<el-button type="success" @click="saveAndSubmit('testingForm')" v-show="addtitle">保存并添加</el-button>
 						<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('testingForm')">修订</el-button>
-						<el-button v-if="modify" type="success" @click="update('testingForm')">启用</el-button>
+						<!-- <el-button v-if="modify" type="success" @click="update('testingForm')">启用</el-button> -->
 						<el-button @click="close">取消</el-button>
 					</div>
 				</el-form>

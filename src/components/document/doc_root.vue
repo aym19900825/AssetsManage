@@ -77,9 +77,6 @@
 										 :load="loadNode"
 										 lazy
 										 :props="props"
-										 class="filter-tree"  
-										 node-key="id" 
-										 default-expand-all 
 										 @node-click="handleNodeClick">
 										</el-tree>
 									</div>
@@ -256,44 +253,36 @@
 			},
 			//生产单位树
 			loadNode(node, resolve) {
-				// let that = this;
-				// var url = this.file_url + '/file/pathList';
-				// this.$axios.post(url, {
-				// 	'pathid': 0
-				// }).then((res) => {
-				// 	var pathList = res.data.pathList;
-				// 	for(var i=0; i<pathList.length; i++){
-				// 		pathList[i].label = pathList[i].foldername;
-				// 	}
-				// 	return resolve(pathList);
-				// });
-				if (node.level === 0) {
+				let that = this;
+				var url = this.file_url + '/file/pathList';
+				var pathid = 2;
+				if(node.level === 0){
+					pathid = 0;
 					return resolve([{ name: 'region1' }, { name: 'region2' }]);
-				}
-				if (node.level > 3) return resolve([]);
-				var hasChild;
-				if (node.data.name === 'region1') {
-					hasChild = true;
-				} else if (node.data.name === 'region2') {
-					hasChild = false;
-				} else {
-					hasChild = Math.random() > 0.5;
-				}
-
-				setTimeout(() => {
-					var data;
-					if (hasChild) {
-						data = [{
-							name: 'zone' + this.count++
-						}, {
-							name: 'zone' + this.count++
-						}];
-					} else {
-						data = [];
+				};
+				this.$axios.post(url, {
+					'pathid': pathid
+				}).then((res) => {
+					var pathList = res.data.pathList;
+					for(var i=0; i<pathList.length; i++){
+						pathList[i].label = pathList[i].foldername;
 					}
-
-					resolve(data);
-				}, 500);
+					return resolve(pathList);
+				});
+				
+				// setTimeout(() => {
+				// 	var data;
+				// 	if (hasChild) {
+				// 		data = [{
+				// 			name: 'zone'
+				// 		}, {
+				// 			name: 'zone'
+				// 		}];
+				// 	} else {
+				// 		data = [];
+				// 	}
+				// 	resolve(data);
+				// }, 500);
 			},
 			// 点击节点
 			nodeClick: function(m) {

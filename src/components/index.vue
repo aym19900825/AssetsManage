@@ -1,7 +1,7 @@
 <template>
 <div>
 	<div class="headerbg">
-		<vheader @clickfun='getroId'></vheader>
+		<vheader @clickfun='getroId' ></vheader>
 		<navs_header ref='navsheader'></navs_header>
 	</div>
 
@@ -150,12 +150,11 @@ export default {
 	        var _this = this;
 	        var data = {
 				menuId: item.id,
-				roleId: this.$store.state.roleid,
+				roleId: _this.$store.state.roleid,
 			};
             this.$store.dispatch('setMenuIdAct',item.id);
 			var url = _this.basic_url + '/api-user/menus/findSecondByRoleIdAndFisrtMenu';
 			_this.$axios.get(url, {params: data}).then((res) => {
-				
 				if(res.data!=null&&res.data.length>0){
 					var item = res.data[0];
 					_this.$store.dispatch('setSelectedNavAct',item);
@@ -182,7 +181,7 @@ export default {
 				}
 			}).catch((wrong) => {
 			});
-		    _this.$store.dispatch('setRoleIdAct',this.$store.state.roleid);
+//		    _this.$store.dispatch('setRoleIdAct',this.$store.state.roleid);
 		    _this.$store.dispatch('setNavIdAct',item.id);
 		},
 		initEchart(){//引入饼状图图表
@@ -209,9 +208,10 @@ export default {
 		 getroId(roleid){
 		 	this.getFirstMenus(roleid);
 		},
-        //当前角色
+        //一级菜单
         getFirstMenus(roleid) {
-        	sessionStorage.setItem('roleid',roleid);
+//      	sessionStorage.setItem('roleid',roleid);
+ 			var roleid=this.$store.state.roleid;
 	        var url = this.basic_url + '/api-user/menus/findFirstByRoleId/' + roleid;
 	        
 	        this.$axios.get(url, {}).then((res) => {
@@ -222,17 +222,30 @@ export default {
         },
 	},
 	mounted(){
-		console.log(this.$store.state.setSelectedNav);
+		//一级菜单
 		this.initEchart();//调用饼状图图表函数名称
-		//this.$refs.navsheader.sessionGet();
-      	var url = this.basic_url + '/api-user/roles/default';
-        this.$axios.get(url, {}).then((res) => {
-        	this.roleid= res.data.id;
-        	this.getFirstMenus(this.roleid);
-      	}).catch(error => {
+		//this.$refs.navsheader.sessionGet()
+		//默认请求roid
+		if(this.$store.state.roleid==null||typeof(this.$store.state.roleid)==undefined){
+			var url = this.basic_url + '/api-user/roles/default';
+        	this.$axios.get(url, {}).then((res) => {
+        	var roleid= res.data.id;
+        	this.$store.dispatch('setRoleIdAct',res.data.id);
+      		this.getFirstMenus(roleid);
+      		}).catch(error => {
             console.log('请求失败111');
-        })
-		
+       		})
+		}else{
+			var roleid=this.$store.state.roleid;
+	        var url = this.basic_url + '/api-user/menus/findFirstByRoleId/' + roleid;
+	        
+	        this.$axios.get(url, {}).then((res) => {
+	            this.applistdata = res.data;
+	        }).catch(error => {
+	            console.log('请求失败');
+	        })
+		}
+      	
 	},
 }
 

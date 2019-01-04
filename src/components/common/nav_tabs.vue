@@ -144,8 +144,11 @@ export default {
         },
         showSelected(item){
         	this.selectedTab = item;
-//        	this.$store.dispatch('setSelectedNavAct',item);
-          	this.$store.dispatch('setNavIdAct',item.parentId);//点击时重新给meunid赋值
+        	this.$store.dispatch('setSelectedNavAct',item);
+			console.log(item);
+          	this.$store.dispatch('setMenuIdAct',item.parentId);//点击时重新给meunid赋值
+          	console.log(this.$store.state.menuid);
+          	console.log(this.$store.state.roleid);
             this.$router.push({path: item.url});
         },
         showClick(items){
@@ -163,7 +166,6 @@ export default {
     },
     mounted(){
       	this.showClick(this.$store.state.setSelectedNav);
-      	console.log(this.$store.state.setSelectedNav);
     },
 }
 </script>

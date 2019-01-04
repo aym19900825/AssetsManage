@@ -41,36 +41,14 @@
 						<el-form status-icon :model="searchList" label-width="70px">
 							<el-row :gutter="30" class="pb5">
 								<el-col :span="7">
-									<el-input v-model="searchList.V_NAME">
-										<template slot="prepend">委托单位名称</template>
+									<el-input v-model="searchList.username">
+										<template slot="prepend">姓名</template>
 									</el-input>
 								</el-col>
 								
 								<el-col :span="7">
-									<el-input v-model="searchList.DESCRIPTION">
-										<template slot="prepend">样品名称</template>
-										</el-input>
-								</el-col>
-								<el-col :span="7">
-									<el-input v-model="searchList.ACCEPT_PERSON" label-width="58px">
-									<template slot="prepend">收样人</template>
-										</el-input>
-								</el-col>
-							</el-row>
-							<el-row :gutter="30">
-								<el-col :span="7">				
-									<el-input v-model="searchList.P_NAME">
-										<template slot="prepend">生产单位名称</template>
-									</el-input>
-								</el-col>
-								<el-col :span="7">
-									<el-input v-model="searchList.TYPE">
-									<template slot="prepend">样品类别</template>
-										</el-input>
-								</el-col>
-								<el-col :span="7">
-									<el-input v-model="searchList.ACCEPT_DATE" label-width="70px">
-									<template slot="prepend">收样日期</template>
+									<el-input v-model="searchList.keywordid">
+										<template slot="prepend">关键字</template>
 										</el-input>
 								</el-col>
 								<el-col :span="3">
@@ -390,7 +368,8 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-
+					username: this.searchList.username,
+					keywordid: this.searchList.keywordid
 				}
 				var url = this.basic_url + '/api-apps/app/tbKeywordPrivilege2';
 				this.$axios.get(url, {

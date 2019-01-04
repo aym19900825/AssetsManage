@@ -63,7 +63,7 @@
 								<!-- 第一行 -->
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="用户名" v-if="modify"label-width="100px">
+										<el-form-item label="用户名" v-if="modify" label-width="100px">
 											<el-input v-model="user.username" :disabled="noedit"></el-input>
 										</el-form-item>
 										<el-form-item label="用户名" prop="username" v-else label-width="100px">

@@ -222,16 +222,16 @@
 			indexMethod(index) {
 				return index + 1;
 			},
-			viewfield_inspectionSta2(ID,num){//点击父级筛选出子级数据
+			viewfield_inspectionSta2(id,num){//点击父级筛选出子级数据
 				// console.log(ID);
-				if(ID=='null'){
+				if(id=='null'){
 					this.inspectionSta2Form.inspectionList = []; 
-					// this.$refs.inspectionPro2child.viewfield_inspectionPro2('null');
+					this.viewchildRow('null');
 					return false;
 					//todo  相关数据设置
 				}
 				this.parentId = num;
-				var url = this.basic_url + '/api-apps/app/inspectionSta2/PRODUCT2/' + ID;
+				var url = this.basic_url + '/api-apps/app/inspectionSta2/PRODUCT2/' + id;
 				this.$axios.get(url, {}).then((res) => {
 					this.page.totalCount = res.data.count;	
 					//总的页数
@@ -245,17 +245,16 @@
 					
 					//默认主表第一条数据
 					if(this.inspectionSta2Form.inspectionList.length > 0){
-						//this.$refs.inspectionPro2child.viewfield_inspectionPro2(this.inspectionSta2Form.inspectionList[0].ID);
-						// this.$on('parentMsd_inspectionSta2', this.inspectionSta2Form.inspectionList[0].ID);
 						this.viewchildRow(this.inspectionSta2Form.inspectionList[0].ID,this.inspectionSta2Form.inspectionList[0].S_NUM);
 					}else{
-						//this.$refs.inspectionPro2child.viewfield_inspectionPro2('null');
 						this.viewchildRow('null');
 					}
 
 					for(var j = 0; j < this.inspectionSta2Form.inspectionList.length; j++){
 						this.inspectionSta2Form.inspectionList[j].isEditing = false;
 					}
+
+					this.$refs.singleTable.setCurrentRow(this.inspectionSta2Form.inspectionList[0]);//默认选中第一条数据
 				}).catch((wrong) => {})
 			},
 
@@ -295,7 +294,7 @@
 					setTimeout(function(){
 						_this.viewchildRow(_this.inspectionSta2Form.inspectionList[0].ID,_this.inspectionSta2Form.inspectionList[0].S_NUM);
 					},0);
-					this.$refs.singleTable.setCurrentRow(this.inspectionSta2Form.inspectionList[0]);//默认选中第一条数据
+					
 				}).catch((wrong) => {})
 			},
 			// handleNodeClick(data) {
@@ -407,11 +406,8 @@
             	});
 			},
 			addchildRow(row) {//添加子项数据
-				// this.$refs.inspectionPro2child.addfield_inspectionPro2(row.S_NUM);
-				//console.log();
 			},
 			viewchildRow(ID,S_NUM) {//查看子项数据
-				// this.$refs.inspectionPro2child.viewfield_inspectionPro2(ID);
 				var data = {
 					id: ID,
 					num: S_NUM
@@ -420,10 +416,10 @@
 			},
 		},
 		
-		mounted() {
-			this.requestData_inspectionSta2();
+		// mounted() {
+		// 	this.requestData_inspectionSta2();
 			
-		},
+		// },
 		
 
 	}

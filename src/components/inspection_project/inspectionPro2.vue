@@ -179,17 +179,17 @@
 				})
 			},
 			loadMore () {//表格滚动加载
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page.currentPage++
-			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     this.requestData_inspectionPro2()
-			   }
+			   // if (this.loadSign) {
+			   //   this.loadSign = false
+			   //   this.page.currentPage++
+			   //   if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+			   //     return
+			   //   }
+			   //   setTimeout(() => {
+			   //     this.loadSign = true
+			   //   }, 1000)
+			   //   this.requestData_inspectionPro2()
+			   // }
 			 },
 			sizeChange(val) {//页数
 		      this.page.pageSize = val;
@@ -218,20 +218,16 @@
 			indexMethod(index) {
 				return index + 1;
 			},
-			viewfield_inspectionPro2(ID,num){//点击父级筛选出子级数据
+			viewfield_inspectionPro2(id,num){//点击父级筛选出子级数据
 				// console.log(ID);
-				if(ID=='null'){
+				if(id=='null'){
 					this.inspectionPro2Form.inspectionList = [];
-					// this.$refs.professionGrochild.viewfield_professionGro('null');
-					// this.$refs.inspectionMet2child.viewfield_inspectionMet2('null');
-					// this.$refs.rawDataTem2child.viewfield_rawDataTem2('null');
-					// this.$refs.inspectionRepTem2child.viewfield_inspectionRepTem2('null');
-					// this.$refs.rawDataAssetchild.viewfield_rawDataAsset('null');
+					this.viewchildRow('null');
 					return false;
 					//todo  相关数据设置
 				}
 				this.parentId = num;
-				var url = this.basic_url + '/api-apps/app/inspectionPro2/INSPECTION_STANDARDS2/' + ID;
+				var url = this.basic_url + '/api-apps/app/inspectionPro2/INSPECTION_STANDARDS2/' + id;
 				this.$axios.get(url, {}).then((res) => {
 					//console.log(res);
 					this.page.totalCount = res.data.count;	
@@ -247,27 +243,15 @@
 					//默认主表第一条数据
 					if(this.inspectionPro2Form.inspectionList.length > 0){
 						this.viewchildRow(this.inspectionPro2Form.inspectionList[0].ID,this.inspectionPro2Form.inspectionList[0].P_NUM);
-						// this.$emit('parentMsd_inspectionPro2', this.inspectionPro2Form.inspectionList[0].ID);
-						// this.$refs.professionGrochild.viewfield_professionGro(this.inspectionPro2Form.inspectionList[0].ID);
-						// this.$refs.inspectionMet2child.viewfield_inspectionMet2(this.inspectionPro2Form.inspectionList[0].ID);
-
-						// this.$refs.rawDataTem2child.viewfield_rawDataTem2(this.inspectionPro2Form.inspectionList[0].ID);
-						// this.$refs.inspectionRepTem2child.viewfield_inspectionRepTem2(this.inspectionPro2Form.inspectionList[0].ID);
-						// this.$refs.rawDataAssetchild.viewfield_rawDataAsset(this.inspectionPro2Form.inspectionList[0].ID);
 					}else{
 						this.viewchildRow('null');
-						// this.$emit('parentMsd_inspectionPro2', 'null');
-						// this.$refs.professionGrochild.viewfield_professionGro('null');
-						// this.$refs.inspectionMet2child.viewfield_inspectionMet2('null');
-
-						// this.$refs.rawDataTem2child.viewfield_rawDataTem2('null');
-						// this.$refs.inspectionRepTem2child.viewfield_inspectionRepTem2('null');
-						// this.$refs.rawDataAssetchild.viewfield_rawDataAsset('null');
 					}
 
 					for(var j = 0; j < this.inspectionPro2Form.inspectionList.length; j++){
 						this.inspectionPro2Form.inspectionList[j].isEditing = false;
 					}
+
+					this.$refs.singleTable.setCurrentRow(this.inspectionPro2Form.inspectionList[0]);//默认选中第一条数据
 				}).catch((wrong) => {})
 			},
 			
@@ -308,7 +292,6 @@
 						_this.viewchildRow(_this.inspectionPro2Form.inspectionList[0].ID,_this.inspectionPro2Form.inspectionList[0].P_NUM);
 					},0);
 					
-					this.$refs.singleTable.setCurrentRow(this.inspectionPro2Form.inspectionList[0]);//默认选中第一条数据
 				}).catch((wrong) => {})
 			},
 			// handleNodeClick(data) {
@@ -336,7 +319,7 @@
 						var obj = {
 							"P_NAME": '',
 							"UNITCOST": '',
-							"STATUS": '活动',
+							"STATUS": '1',
 							"S_NUM": this.parentId,//所属类别编号
 							"P_NUM": '',
 							"VERSION": 1,
@@ -417,19 +400,8 @@
             	});
 			},
 			addchildRow(row) {//添加子项数据
-				// this.$refs.professionGrochild.addfield_professionGro(row.P_NUM);//专业组
-				// this.$refs.inspectionMet2child.addfield_inspectionMet2(row.P_NUM);//检验/检测方法
-				// this.$refs.rawDataTem2child.addfield_rawDataTem2(row.P_NUM);//原始数据模板
-				// this.$refs.inspectionRepTem2child.addfield_inspectionRepTem2(row.P_NUM);//检验/检测报告模板
-				// this.$refs.rawDataAssetchild.addfield_rawDataAsset(row.P_NUM);//仪器和计量器具
-				//console.log();
 			},
 			viewchildRow(ID,P_NUM) {//查看子项数据
-				// this.$refs.professionGrochild.viewfield_professionGro(ID);//专业组
-				// this.$refs.inspectionMet2child.viewfield_inspectionMet2(ID);//检验/检测方法
-				// this.$refs.rawDataTem2child.viewfield_rawDataTem2(ID);//原始数据模板
-				// this.$refs.inspectionRepTem2child.viewfield_inspectionRepTem2(ID);//检验/检测报告模板
-				// this.$refs.rawDataAssetchild.viewfield_rawDataAsset(ID);//仪器和计量器具
 				var data = {
 					id: ID,
 					num: P_NUM
@@ -438,10 +410,10 @@
 			},
 		},
 		
-		mounted() {
-			this.requestData_inspectionPro2();
+		// mounted() {
+		// 	this.requestData_inspectionPro2();
 			
-		},
+		// },
 		
 
 	}

@@ -28,7 +28,7 @@
 
 			  	<el-table-column label="产品编号" sortable width="100" prop="PRO_NUM" class="pl30">
 			      <template slot-scope="scope">
-			        <el-form-item :prop="'inspectionList.'+scope.$index + '.PRO_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+			        <el-form-item :prop="'inspectionList.'+scope.$index + '.PRO_NUM'">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PRO_NUM" placeholder="自动生成" disabled></el-input><span class="blue" @click="viewchildRow(scope.row.ID,scope.row.PRO_NUM)" v-else="v-else">{{scope.row.PRO_NUM}}</span>
 					</el-form-item>
 			      </template>
@@ -212,15 +212,16 @@
 				}
 				return this.$moment(date).format("YYYY-MM-DD");
 			},
-			viewfield_product2(ID,num){//点击父级筛选出子级数据
-				if(ID=='null'){
-					this.product2Form.inspectionList = []; 
-					this.$refs.inspectionSta2child.viewfield_inspectionSta2('null');
+			viewfield_product2(id,num){//点击父级筛选出子级数据
+				if(id=='null'){
+					this.product2Form.inspectionList = [];
+					this.viewchildRow('null');
+					// this.$refs.inspectionSta2child.viewfield_inspectionSta2('null');
 					return false;
 					//todo  相关数据设置
 				}
 				this.parentId = num;
-				var url = this.basic_url + '/api-apps/app/productType2/' + ID;
+				var url = this.basic_url + '/api-apps/app/productType2/' + id;
 				this.$axios.get(url, {}).then((res) => {
 					this.page.totalCount = res.data.count;	
 					//总的页数
@@ -233,7 +234,6 @@
 					this.product2Form.inspectionList=res.data.PRODUCT2List;
 
 					//默认主表第一条数据
-					// this.childMsd();
 					if(this.product2Form.inspectionList.length > 0){
 						this.viewchildRow(this.product2Form.inspectionList[0].ID,this.product2Form.inspectionList[0].PRO_NUM);
 					}else{
@@ -243,7 +243,7 @@
 					for(var j = 0; j < this.product2Form.inspectionList.length; j++){
 						this.product2Form.inspectionList[j].isEditing = false;
 					}
-
+					this.$refs.singleTable.setCurrentRow(this.product2Form.inspectionList[0]);//默认选中第一条数据
 
 				}).catch((wrong) => {})
 			},
@@ -283,7 +283,6 @@
 						_this.viewchildRow(_this.product2Form.inspectionList[0].ID,_this.product2Form.inspectionList[0].PRO_NUM);
 					},0);
 
-					this.$refs.singleTable.setCurrentRow(this.product2Form.inspectionList[0]);//默认选中第一条数据
 				}).catch((wrong) => {})
 			},
 			
@@ -390,12 +389,8 @@
             	});
 			},
 			addchildRow(row) {//添加子项数据
-				// this.$refs.inspectionSta2child.addfield_inspectionSta2(row.PRO_NUM);
-				//console.log();
 			},
 			viewchildRow(ID,PRO_NUM) {//查看子项数据
-				//this.$refs.inspectionSta2child.viewfield_inspectionSta2(ID,PRO_NUM);
-				// this.$emit('parentMsd_inspectionSta2', this.product2Form.inspectionList[0].PRO_NUM);
 				var data = {
 					id: ID,
 					num: PRO_NUM
@@ -405,10 +400,10 @@
 			},
 		},
 		
-		mounted() {
-			this.requestData_product2();
+		// mounted() {
+		// 	this.requestData_product2();
 			
-		},
+		// },
 		
 
 	}

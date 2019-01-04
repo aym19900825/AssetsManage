@@ -223,7 +223,11 @@
 			},
 			childMsd_inspectionPro2(data){//赋值给子表检验/检测标准ID
 				this.inspectionPro2Id = data;
-				// this.$refs.inspectionSta2child.viewfield_inspectionSta2(data.id,data.num);
+				this.$refs.professionGrochild.viewfield_professionGro(data.id,data.num);
+				this.$refs.inspectionMet2child.viewfield_inspectionMet2(data.id,data.num);
+				this.$refs.rawDataTem2child.viewfield_rawDataTem2(data.id,data.num);
+				this.$refs.inspectionRepTem2child.viewfield_inspectionRepTem2(data.id,data.num);
+				this.$refs.rawDataAssetchild.viewfield_rawDataAsset(data.id,data.num);
 			},
 			
 			iconOperation(row, column, cell, event){//切换Table-操作列中的修改、保存

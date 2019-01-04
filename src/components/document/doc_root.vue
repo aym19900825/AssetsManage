@@ -11,7 +11,6 @@
 			<!--右侧内容显示 Begin-->
 			<div class="wrapper wrapper-content">
 				<div class="ibox-content">
-					<!--<navs_button></navs_button>-->
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
@@ -21,7 +20,7 @@
 								<button type="button" class="btn btn-green" id="">
                                 	<i class="icon-add"></i>上传
                       			 </button>
-								<button type="button" class="btn btn-bule button-margin" @click="modify">
+								<button type="button" class="btn btn-blue button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改
 								</button>
 								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
@@ -73,7 +72,12 @@
 								</div>
 								<div class="left_treebg" :style="{height: fullHeight}">
 									<div class="p15" v-if="ismin">
-										<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent" :props="resourceProps" @node-click="handleNodeClick">
+										<el-tree ref="tree" 
+										 :render-content="renderContent" 
+										 :load="loadNode"
+										 lazy
+										 :props="props"
+										 @node-click="handleNodeClick">
 										</el-tree>
 									</div>
 								</div>
@@ -130,6 +134,10 @@
 		},
 		data() {
 			return {
+				props: {
+					label: 'name',
+					children: 'zones'
+				},
 				//上传初始化参数
 				dropzoneOptions: {
 					url: 'https://httpbin.org/post',
@@ -243,6 +251,39 @@
 		            </span>
 				);
 			},
+			//生产单位树
+			loadNode(node, resolve) {
+				let that = this;
+				var url = this.file_url + '/file/pathList';
+				var pathid = 2;
+				if(node.level === 0){
+					pathid = 0;
+					return resolve([{ name: 'region1' }, { name: 'region2' }]);
+				};
+				this.$axios.post(url, {
+					'pathid': pathid
+				}).then((res) => {
+					var pathList = res.data.pathList;
+					for(var i=0; i<pathList.length; i++){
+						pathList[i].label = pathList[i].foldername;
+					}
+					return resolve(pathList);
+				});
+				
+				// setTimeout(() => {
+				// 	var data;
+				// 	if (hasChild) {
+				// 		data = [{
+				// 			name: 'zone'
+				// 		}, {
+				// 			name: 'zone'
+				// 		}];
+				// 	} else {
+				// 		data = [];
+				// 	}
+				// 	resolve(data);
+				// }, 500);
+			},
 			// 点击节点
 			nodeClick: function(m) {
 				if(m.iconClass != 'icon-file-text') {
@@ -277,7 +318,7 @@
 			     }, 1000)
 			     this.requestData()
 			   }
-			 },
+			},
 			tableControle(data) {//控制表格列显示隐藏
 				this.checkedName = data;
 			},
@@ -455,7 +496,7 @@
 		mounted() {// 在页面挂载前就发起请求
 			this.requestData();
 			this.getKey();
-			this.upload();
+			// this.upload();
 		},
 	}
 </script>

@@ -17,7 +17,7 @@
 								<button type="button" class="btn btn-green" @click="openAddMenu" id="">
 	                            	<i class="icon-add"></i>添加
 	                  			 </button>
-								<button type="button" class="btn btn-bule button-margin" @click="modify">
+								<button type="button" class="btn btn-blue button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改
 								</button>
 								<button type="button" class="btn btn-red button-margin" @click="delmenu">

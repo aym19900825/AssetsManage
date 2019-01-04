@@ -19,13 +19,13 @@
 		  <el-table :data="rawDataAssetForm.inspectionList.filter(data => !search || data.DECRIPTION.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'rawDataAssetForm.inspectionList', order: 'descending'}" v-loadmore="loadMore">
 			
 
-		  	<!-- <el-table-column label="所属项目编号" width="120" prop="P_NUM">
+		  	<el-table-column label="所属项目编号" width="120" prop="P_NUM">
 		      <template slot-scope="scope">
 		        <el-form-item :prop="'inspectionList.'+scope.$index + '.P_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" disabled></el-input><span v-else="v-else">{{scope.row.P_NUM}}</span>
 				</el-form-item>
 		      </template>
-		    </el-table-column> -->
+		    </el-table-column>
 
 		  	<el-table-column label="设备编号" width="160" prop="NUM">
 		      <template slot-scope="scope">
@@ -208,16 +208,16 @@
 			indexMethod(index) {
 				return index + 1;
 			},
-			viewfield_rawDataAsset(ID){//点击父级筛选出子级数据
-				console.log('==============viewfield_rawDataAsset');
-				if(ID=='null'){
+			viewfield_rawDataAsset(id,num){//点击父级筛选出子级数据
+				if(id=='null'){
 					this.rawDataAssetForm.inspectionList = []; 
 					return false;
 					//todo  相关数据设置
 				}
-				var url = this.basic_url + '/api-apps/app/rawDataAsset/INSPECTION_PROJECT2/' + ID;
-
+				this.parentId = num;
+				var url = this.basic_url + '/api-apps/app/rawDataAsset/INSPECTION_PROJECT2/' + id;
 				this.$axios.get(url, {}).then((res) => {
+					// console.log(res);
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -231,6 +231,9 @@
 					for(var j = 0; j < this.rawDataAssetForm.inspectionList.length; j++){
 						this.rawDataAssetForm.inspectionList[j].isEditing = false;
 					}
+
+					this.$refs.singleTable.setCurrentRow(this.rawDataAssetForm.inspectionList[0]);//默认选中第一条数据
+
 				}).catch((wrong) => {})
 			},
 			requestData_rawDataAsset(index) {//加载数据
@@ -266,8 +269,7 @@
 					this.rawDataAssetForm.inspectionList = newarr;
 				}).catch((wrong) => {})
 			},
-			handleNodeClick(data) {
-			},
+			
 			formatter(row, column) {
 				return row.enabled;
 			},
@@ -287,12 +289,11 @@
 						this.currentUser=res.data.nickname;
 						var date=new Date();
 						this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
-						var index=this.$moment(date).format("YYYYMMDDHHmmss");
 						var obj = {
 							"DECRIPTION": '',
-							"STATUS": '活动',
-							"P_NUM": P_NUM,
-							"NUM": 'AS' + index,
+							"STATUS": '1',
+							"P_NUM": this.parentId,
+							"NUM": '',
 							"VERSION": 1,
 							"CHANGEBY": this.currentUser,
 							"CHANGEDATE": this.currentDate,
@@ -374,7 +375,6 @@
 		
 		mounted() {
 			this.requestData_rawDataAsset();
-			
 		},
 		
 

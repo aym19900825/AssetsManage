@@ -14,7 +14,6 @@ axios.interceptors.request.use(
     return request;
   },
   err => {
-    console.log('=======request error==========');
     return Promise.reject(err)
   },
 )
@@ -22,14 +21,10 @@ axios.interceptors.request.use(
 // http response 拦截器
 axios.interceptors.response.use(
   response => {
-      console.log('===========response=========');
-      console.log(response);
       return response;
   },
   error => {
     if (error.response) {
-      console.log('========  error.response =======');
-      console.log(error.response.status);
       switch (error.response.status) {
         case 401:
           router.push({ path: '/' });

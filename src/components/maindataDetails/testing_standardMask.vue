@@ -293,7 +293,6 @@
 		},
 		methods: {
 			editBox(val){
-				console.log('edit=========');
 				this.dialogFormVisible = true;
 				this.editDataInfoProp = val;
 				this.editDataInfo = this.dataInfo[val];

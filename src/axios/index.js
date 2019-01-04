@@ -7,7 +7,6 @@ import axios  from 'axios'
 axios.interceptors.request.use(
   request => {
     var token = sessionStorage.getItem('access_token');
-    //console.log("token："+token);
     if (token) {
         request.headers.Authorization = 'Bearer ' + token;
     }

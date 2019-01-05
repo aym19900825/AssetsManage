@@ -94,18 +94,18 @@
 							<!--<el-collapse-item title="生产单位" name="2">
 								<el-row >
 									<el-col :span="8" style="display:none;">
-											<el-form-item label="生产单位编号" prop="PRODUCT_UNIT">
-												<el-input v-model="dataInfo.PRODUCT_UNIT"></el-input>
-											</el-form-item>
+										<el-form-item label="生产单位编号" prop="PRODUCT_UNIT">
+											<el-input v-model="dataInfo.PRODUCT_UNIT"></el-input>
+										</el-form-item>
 									</el-col>
-									
 								</el-row>
 							</el-collapse-item>-->
 							<el-collapse-item title="样品" name="2" >
 									<el-row >
 										<el-col :span="8">
 											<el-form-item label="名称" prop="ITEM_NAME" label-width="110px">
-												<el-input v-model="dataInfo.ITEM_NAME" :disabled="noedit">
+												<el-input v-model="dataInfo.ITEM_NAME" :disabled="true">
+													<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="addsample"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -247,9 +247,7 @@
 													</el-button>
 												</template>
 											</el-table-column>
-
 										</el-table>
-								    	
 								    </el-tab-pane>
 								    <el-tab-pane label="检验项目与要求" name="second">
 								    	<div class="table-func table-funcb">
@@ -439,8 +437,6 @@
 								</el-tabs>
 							</div>
 							<el-collapse-item name="7">
-								
-									
 										<el-col :span="8">
 											<el-form-item label="检验报告编号" prop="REPORT_NUM" label-width="110px">
 												<el-input v-model="dataInfo.REPORT_NUM" :disabled="noedit" ></el-input>
@@ -613,7 +609,47 @@
     			<el-button type="primary" @click="dailogconfirm()">确 定</el-button>
   			</span>
 		</el-dialog>
-
+		<!-- 样品名称 Begin -->
+		<el-dialog title="样品名称" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
+			<el-table :data="samplesList" :header-cell-style="rowClass" border stripe height="400px" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table-column type="selection" width="55" fixed align="center">
+				</el-table-column>
+				<el-table-column label="样品编号" sortable width="200px" prop="ITEMNUM">
+				</el-table-column>
+				<el-table-column label="样品名称" sortable width="200px" prop="DESCRIPTION">
+				</el-table-column>
+				<el-table-column label="样品类别" sortable width="200px" prop="TYPE">
+				</el-table-column>
+				<el-table-column label="委托单位" sortable width="200px" prop="V_NAME">
+				</el-table-column>
+				<el-table-column label="生产单位" sortable width="200px" prop="P_NAME">
+				</el-table-column>
+				<el-table-column label="型号" width="100px" prop="MODEL" sortable>
+				</el-table-column>
+				<el-table-column label="数量" width="100px" prop="QUATITY" sortable>
+				</el-table-column>
+				<el-table-column label="收样人" sortable width="140px" prop="ACCEPT_PERSON">
+				</el-table-column>
+				<el-table-column label="收样日期" sortable width="140px" :formatter="dateFormat" prop="ACCEPT_DATE">
+				</el-table-column>
+				<el-table-column label="接样人" sortable width="140px" prop="RECIP_PERSON">
+				</el-table-column>
+				<el-table-column label="接样日期" sortable width="140px" :formatter="dateFormat" prop="RECIP_DATE">
+				</el-table-column>
+				<el-table-column label="状态" sortable width="100px" prop="STATE">
+				</el-table-column>
+				<!--<el-table-column label="信息状态" sortable width="140px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
+				</el-table-column>-->
+			</el-table>
+			
+			<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+			</el-pagination>
+			<span slot="footer" class="dialog-footer">
+		       <el-button @click="dialogVisible2 = false" style="margin-left: 37%;">取 消</el-button>
+		       <el-button type="primary" @click="addsamplename">确 定</el-button>
+		    </span>
+		</el-dialog>
+		<!-- 样品名称 End -->
 	</div>
 </template>
 
@@ -631,6 +667,8 @@
 			};
 
 			return {
+				loadSign:true,//加载
+				commentArr:{},
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				dataInfo: {
@@ -726,19 +764,45 @@
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
-				initcost:'',
-				initsta:'',
-				initactual:''
+				// initcost:'',
+				// initsta:'',
+				// initactual:'',
+				dialogVisible2:false,
+				samplesList:[]
 			};
 		},
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    return 'text-align:center'
+			},		
+			dateFormat(row, column) {
+				var date = row[column.property];
+				if(date == undefined) {
+					return "";
+				}
+				return this.$moment(date).format("YYYY-MM-DD");
+			},
+			loadMore () {
+			   if (this.loadSign) {
+			     this.loadSign = false
+			     this.page.currentPage++
+			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+			       return
+			     }
+			     setTimeout(() => {
+			       this.loadSign = true
+			     }, 1000)
+			     this.requestData()
+			   }
+			 },	
 			toNum(str) {
 				return str.replace(/\,|\￥/g, "");
 			},
 			//金额两位小数点千位分隔符，四舍五入
 			toPrice(){
 				var money = document.getElementById("cost").value;
-				this.initcost = money;
+				// this.initcost = money;
 				var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
 				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
 				// this.dataInfo.CHECTCOST="￥" + num.join(".");
@@ -746,7 +810,7 @@
 			},
 			staPrice(){
 				var money = document.getElementById("stacost").value;
-				this.initsta = money;
+				// this.initsta = money;
 				var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
 				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
 				// this.dataInfo.CHECTCOST="￥" + num.join(".");
@@ -754,7 +818,7 @@
 			},
 			actualPrice(){
 				var money = document.getElementById("actualcost").value;
-				this.initactual = money;
+				// this.initactual = money;
 				var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
 				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
 				// this.dataInfo.CHECTCOST="￥" + num.join(".");
@@ -829,7 +893,15 @@
 				};
 				this.dataInfo.CHECK_PROXY_CONTRACTList.push(obj);
 			},
-
+			addsample(){
+				this.$emit('request');
+				this.dialogVisible2 = true;
+			},
+			addsamplename(){
+				this.dialogVisible2 = false;
+				this.dataInfo.ITEM_NAME = this.selval[0].DESCRIPTION;
+				this.$emit('request');
+			},
 			//刪除新建行
 			deleteRow(index,rows) {//Table-操作列中的删除行
 				rows.splice(index,1);
@@ -1005,9 +1077,9 @@
 			save(dataInfo) {
 				console.log(this.dataInfo);
 				this.$refs['dataInfo'].validate((valid) => {
-					this.dataInfo.CHECK_COST = this.initcost;
-					this.dataInfo.CONTRACTCOST = this.initsta;
-					this.dataInfo.ACTUALCOST = this.initactual;
+					// this.dataInfo.CHECK_COST = this.initcost;
+					// this.dataInfo.CONTRACTCOST = this.initsta;
+					// this.dataInfo.ACTUALCOST = this.initactual;
 			        if (valid) {
 							if(this.dataInfo.INSPECT_PROXY_BASISList.length<=0&&this.dataInfo.INSPECT_PROXY_PROJECList.length<=0&&this.dataInfo.CHECK_PROXY_CONTRACTList.length<=0){
 			        		this.$message({
@@ -1105,7 +1177,43 @@
 			SelChange(val) {
 				this.selval = val;
 			},
-		}
+			requestData(index) {
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				}
+				var url = this.basic_url + '/api-apps/app/item';
+				this.$axios.get(url, {
+					params: data
+				}).then((res) => {
+					
+					this.page.totalCount = res.data.count;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
+					}
+					this.commentArr[this.page.currentPage] = res.data.data
+					let newarr = []
+					for(var i = 1; i <= totalPage; i++) {
+
+						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+
+							for(var j = 0; j < this.commentArr[i].length; j++) {
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					this.samplesList = newarr;
+				}).catch((wrong) => {})
+				
+			},
+		},
+		mounted() {
+			this.requestData();
+		},
 	}
 </script>
 

@@ -27,12 +27,12 @@
 												<template slot="prepend">编辑状态</template>
 										</el-input>
 									</el-col>
-									<el-col :span="5" class="pull-right">
+									<!-- <el-col :span="5" class="pull-right">
 										<el-select v-model="WORKPLAN.TYPE" placeholder="类别">
 									    	<el-option label="监督抽查" value="1"></el-option>
 									    	<el-option label="质量抽查" value="0"></el-option>
 										</el-select>
-									</el-col>
+									</el-col> -->
 									<el-col :span="5" class="pull-right">
 										<el-input v-model="WORKPLAN.WP_NUM" placeholder="自动生成" :disabled="edit">
 												<template slot="prepend">计划编号</template>
@@ -62,6 +62,14 @@
 								</el-row>
 								<el-row :gutter="5">
 									<el-col :span="6">
+										<el-form-item label="类别" prop="TYPE">
+											<el-select v-model="WORKPLAN.TYPE" placeholder="请选择">
+												<el-option label="监督抽查" value="1"></el-option>
+												<el-option label="质量抽查" value="0"></el-option>
+											</el-select>
+										</el-form-item>
+									</el-col>
+									<el-col :span="6">
 										<el-form-item label="编制人" prop="COMPACTOR">
 											<el-input v-model="WORKPLAN.COMPACTOR"></el-input>
 										</el-form-item>
@@ -76,6 +84,8 @@
 											<el-input v-model="WORKPLAN.APPRPERSON"></el-input>
 										</el-form-item>
 									</el-col>
+								</el-row>
+								<el-row :gutter="5">
 									<el-col :span="6">
 										<el-form-item label="提报日期" prop="REPORTDATE">
 										<div class="block">
@@ -87,8 +97,6 @@
 										  </div>
 										 </el-form-item>
 									</el-col>
-								</el-row>
-								<el-row :gutter="5">
 									<el-col :span="6">
 										<el-form-item label="年度" prop="YEAR">
 											<div class="block">
@@ -354,7 +362,7 @@
 				            	</el-form>
 							</el-collapse-item> -->
 							<!-- 文档编号列表 End -->
-							<el-collapse-item title="文档" name="6">
+							<el-collapse-item title="文件" name="6">
 								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
 							</el-collapse-item>
 							<!-- 录入人信息 Begin-->
@@ -610,14 +618,13 @@
 		</el-dialog>
 		<!-- 产品类别 End -->
 		<!-- 产品名称 Begin -->
-		<el-dialog title="产品类别" :visible.sync="dialogVisible4" width="80%" :before-close="handleClose">
+		<el-dialog title="产品名称" :visible.sync="dialogVisible4" width="80%" :before-close="handleClose">
 			<el-table  :header-cell-style="rowClass" :data="productList" line-center border stripe height="400px" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" fixed width="55" align="center">
 								</el-table-column>
 								<el-table-column label="编码" width="155" sortable prop="PRO_NUM">
 								</el-table-column>
 								<el-table-column label="名称" sortable prop="PRO_NAME">
-								</el-table-column>
 								</el-table-column>
 								<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
 								</el-table-column>
@@ -893,6 +900,9 @@
 			//下达任务通知书
 			assign(item){
 				var dataid = item.ID;
+				console.log(dataid);
+				console.log(item);
+				console.log(item.ISCREATED);
 				if(item.ISCREATED == 1){
 					this.$message({
 						message: '已经下达工作任务通知书，请勿重复下达',

@@ -63,20 +63,15 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="承检单位" prop="CJDWDesc" label-width="75px">
-										<el-select clearable v-model="searchList.CJDWDesc" filterable allow-create default-first-option placeholder="请选择" style="width: 90%;border-radius:none">
-										    <el-option style="width: 100%;border-radius:none"
-										      v-for="item in options5"
-										      :key="item.value"
-										      :label="item.label"
-										      :value="item.value">
-										    </el-option>
+									<el-form-item label="承检单位" prop="CJDW" label-width="75px">
+										<el-select clearable v-model="searchList.CJDW" filterable allow-create default-first-option placeholder="请选择">
+										    <el-option v-for="(data,index) in selectDept" :key="index" :value="data.id" :label="data.fullname"></el-option>
 										</el-select>
 									</el-form-item>
 								</el-col>
 								<el-col :span="4">
 									<el-form-item label="类别" prop="TYPE" label-width="45px">
-										<el-select v-model="searchList.TYPE" placeholder="请选择类别" style="width: 100%;">
+										<el-select clearable v-model="searchList.TYPE" placeholder="请选择类别" style="width: 100%;">
 												<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
 											</el-select>
 									</el-form-item>
@@ -285,7 +280,7 @@
 				searchList: { //点击高级搜索后显示的内容
 					N_CODE: '',
 					ITEM_NAME: '',
-					CJDWDesc: '',
+					CJDW: '',
 					TYPE: '',
 					XD_DATE: '',
 					COMPDATE: '',
@@ -316,22 +311,7 @@
 					totalCount: 0
 				},
 				treeData: [],
-				options5: [{
-		            value: '金化站',
-		            label: '金化站'
-		        }, {
-		            value: '通号站',
-		            label: '通号站'
-		        }, {
-		            value: '运包站',
-		            label: '运包站'
-		        }, {
-		            value: '机辆站',
-		            label: '机辆站'
-		        }, {
-		            value: '接触网站',
-		            label: '接触网站'
-		        }],
+				selectDept: [],
 			}
 		},
 
@@ -361,6 +341,19 @@
 			rowClass({ row, rowIndex}) {
 			    // console.log(rowIndex) //表头行标号为0
 			    return 'text-align:center'
+			},
+			//机构值
+			getCompany() {
+				var type = "2";
+				var url = this.basic_url + '/api-user/depts/treeByType';
+				this.$axios.get(url, {
+					params: {
+						type: type
+					},
+				}).then((res) => {
+					console.log(res.data);
+					this.selectDept = res.data;
+				});
 			},
 			//滚动加载
 			loadMore() {
@@ -511,7 +504,7 @@
 					limit: this.page.pageSize,
 					N_CODE: this.searchList.N_CODE,
 					ITEM_NAME: this.searchList.ITEM_NAME,
-					CJDWDesc: this.searchList.CJDWDesc,
+					CJDW: this.searchList.CJDW,
 					TYPE: this.searchList.TYPE,
 					XD_DATE: this.searchList.XD_DATE,
 					COMPDATE: this.searchList.COMPDATE,
@@ -630,6 +623,7 @@
 			this.requestData();
 //			this.getKey();
 			this.getType();
+			this.getCompany();
 		},
 	}
 </script>

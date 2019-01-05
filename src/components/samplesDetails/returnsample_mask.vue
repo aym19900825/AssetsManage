@@ -39,8 +39,15 @@
 								</el-row>
 
 								<el-row>
-									<el-col :span="8">
+									<!-- <el-col :span="8">
 										<el-form-item label="样品子表ID" prop="ITEM_LINE_ID">
+											<el-input v-model="samplesForm.ITEM_LINE_ID" :disabled="edit">
+												<el-button slot="append" icon="el-icon-search" @click="getProxy"></el-button>
+											</el-input>
+										</el-form-item>
+									</el-col> -->
+									<el-col :span="8">
+										<el-form-item label="样品编号" prop="ITEM_LINE_ID">
 											<el-input v-model="samplesForm.ITEM_LINE_ID" :disabled="edit">
 												<el-button slot="append" icon="el-icon-search" @click="getProxy"></el-button>
 											</el-input>

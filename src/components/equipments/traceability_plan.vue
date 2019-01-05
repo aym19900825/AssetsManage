@@ -79,12 +79,20 @@
 							</el-col>
 							<el-col :span="5">
 								<el-form-item label="溯源机构" prop="PM_MECHANISM">
-									<el-input v-model="searchList.PM_MECHANISM"></el-input>
+									<el-select clearable v-model="searchList.PM_MECHANISM" filterable allow-create default-first-option placeholder="请选择">
+										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+										</el-select>
 								</el-form-item>
 							</el-col>
 							<el-col :span="6">
 								<el-form-item label="溯源完成日期" prop="COMP_DATE" label-width="100px">
-									<el-input v-model="searchList.COMP_DATE"></el-input>
+									<div class="block">
+									    <el-date-picker
+									      v-model="searchList.COMP_DATE"
+									      type="date"
+									      placeholder="请选择" style="width: 100%">
+									    </el-date-picker>
+								  	</div>
 								</el-form-item>
 							</el-col>
 							<el-col :span="2">
@@ -322,13 +330,8 @@
 					totalCount: 0
 				},
 				aaaData:[],
+				selectData:[]
 			}
-		},
-
-		mounted(){
-			
-
-			
 		},
 		methods: {
 			//表头居中
@@ -490,6 +493,7 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
+					console.log(res.data);
 					this.userList = res.data.data;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
@@ -513,19 +517,29 @@
 			formatter(row, column) {
 				return row.enabled;
 			},
+			//机构值
+			getCompany() {
+				var type = "2";
+				var url = this.basic_url + '/api-user/depts/treeByType';
+				this.$axios.get(url, {
+					params: {
+						type: type
+					},
+				}).then((res) => {
+					console.log(res.data);
+					this.selectData = res.data;
+				});
+			},
 		},
 		mounted(){
+			this.requestData();
+			this.getCompany();
              // 注册scroll事件并监听  
              let self = this;
               $(".div-table").scroll(function(){
                 self.loadMore();
             })
         },
-
-
-		mounted() {
-			this.requestData();
-		},
 	}
 </script>
 

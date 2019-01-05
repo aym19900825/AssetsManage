@@ -39,8 +39,15 @@
 								</el-row>
 
 								<el-row >
-									<el-col :span="8">
+									<!-- <el-col :span="8">
 										<el-form-item label="样品子表ID" prop="ITEM_LINE_ID">
+											<el-input v-model="samplesForm.ITEM_LINE_ID" :disabled="true">
+												<el-button slot="append" icon="el-icon-search" @click="getProxy"></el-button>
+											</el-input>
+										</el-form-item>
+									</el-col> -->
+									<el-col :span="8">
+										<el-form-item label="样品编号" prop="ITEM_LINE_ID">
 											<el-input v-model="samplesForm.ITEM_LINE_ID" :disabled="true">
 												<el-button slot="append" icon="el-icon-search" @click="getProxy"></el-button>
 											</el-input>
@@ -53,9 +60,12 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="类别" prop="TYPE">
-											<el-select v-model="samplesForm.TYPE" placeholder="请选择类别" style="width: 100%;" :disabled="noedit">
+											<!-- <el-select v-model="samplesForm.TYPE" placeholder="请选择类别" style="width: 100%;" :disabled="noedit">
 												<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
-											</el-select>
+											</el-select> -->
+											<el-input v-model="samplesForm.TYPE" :disabled="true">
+												<el-button slot="append" icon="el-icon-search" @click="addprobtn"></el-button>
+											</el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -175,6 +185,34 @@
 		    </span>
 		</el-dialog>
 		<!--点击委托书编号弹出框 Begin-->
+		<!-- 产品类别 Begin -->
+		<el-dialog title="产品类别" height="400px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
+			<!-- 第二层弹出的表格 Begin-->
+			<el-table :header-cell-style="rowClass" :data="categoryList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table-column type="selection" fixed width="55" align="center">
+				</el-table-column>
+				<el-table-column label="编码" width="155" sortable prop="NUM">
+				</el-table-column>
+				<el-table-column label="名称" sortable prop="TYPE">
+				</el-table-column>
+				<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
+				</el-table-column>
+				<el-table-column label="机构" width="185" sortable prop="DEPARTMENTDesc">
+				</el-table-column>
+				<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
+				</el-table-column>
+				<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat">
+				</el-table-column>
+			</el-table>
+			<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+			</el-pagination>
+			<!-- 表格 End-->
+			<span slot="footer" class="dialog-footer">
+		       <el-button @click="dialogVisible3 = false" style="margin-left: 37%;">取 消</el-button>
+		       <el-button type="primary" @click="addproclass">确 定</el-button>
+		    </span>
+		</el-dialog>
+		<!-- 产品类别 End -->
 	</div>
 </template>
 
@@ -230,6 +268,7 @@
 				}],
 				selectData: [], //获取检验/检测方法类别
 				modify:false,//修订、修改人、修改日期
+				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
 				selMenu:[],
 				show: false,
 				isok1: true,
@@ -287,9 +326,24 @@
 						{ required: true, message: '领样日期不能为空', trigger: 'blur' }
 					],
 				},
+				dialogVisible3: false, //对话框
+				categoryList:[],
+				selUser:[],
 			};
 		},
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    return 'text-align:center'
+			},
+			sizeChange(val) {
+				this.page.pageSize = val;
+				this.requestData();
+			},
+			currentChange(val) {
+				this.page.currentPage = val;
+				this.requestData();
+			},
 			//获取委托书编号数据
 			getProxy() {
 				this.editSearch = 'dept';
@@ -321,6 +375,19 @@
 					this.samplesForm.ITEM_LINE_ID = this.getCheckboxData.id;
 					this.samplesForm.DESCRIPTION = this.getCheckboxData.fullname;
 				}
+			},
+			SelChange(val) {
+				this.selUser = val;
+			},
+			addprobtn(){
+				this.$emit('request');
+				this.dialogVisible3 = true;				
+			},
+			addproclass() { //小弹出框确认按钮事件
+				this.dialogVisible3 = false;
+				console.log(this.selUser[0].TYPE);
+				this.samplesForm.TYPE = this.selUser[0].TYPE;
+				this.$emit('request');
 			},
 			//小弹出框关闭按钮事件
 			handleClose(done) {
@@ -492,10 +559,63 @@
 						done();
 					})
 					.catch(_ => {});
+			},
+			//表格滚动加载
+			loadMore() {
+				if(this.loadSign) {
+					this.loadSign = false
+					this.page.currentPage++
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							return
+						}
+					setTimeout(() => {
+						this.loadSign = true
+					}, 1000)
+					this.requestData()
+				}
+			},
+			requestData(index) {//高级查询字段
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				};
+				var url = this.basic_url + '/api-apps/app/productType';
+				this.$axios.get(url, {
+					params: data
+				}).then((res) => {
+					this.page.totalCount = res.data.count;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
+					}
+					this.commentArr[this.page.currentPage] = res.data.data
+					let newarr = []
+					for(var i = 1; i <= totalPage; i++) {
+
+						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+
+							for(var j = 0; j < this.commentArr[i].length; j++) {
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					this.categoryList = newarr;
+				}).catch((wrong) => {})
+			},
+			handleClose(done) {
+				this.$confirm('确认关闭？')
+					.then(_ => {
+						done();
+					})
+					.catch(_ => {});
 			}
 		},
 		mounted() {
 			this.getType();
+			this.requestData();
 		},
 	}
 </script>

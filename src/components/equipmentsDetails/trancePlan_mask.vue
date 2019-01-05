@@ -38,14 +38,17 @@
 									<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'" :disabled="noedit">
 										<el-radio :label="it.label" v-for="it in item.opts" :key="it.id"></el-radio>
 									</el-radio-group>
-									<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'" @change="selChange" :disabled="noedit">
+									<el-select clearable v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'" @change="selChange" :disabled="noedit">
 										<el-option v-for="item in assets"
 										:key="item.ID"
 										:label="item.DESCRIPTION"
 										:value="item.DESCRIPTION">
 										</el-option>
 									</el-select>
-									<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'sel'" style="width: 60px;" :disabled="noedit">
+									<el-select clearable v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'seldept'" :disabled="noedit">
+										<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+									</el-select>
+									<el-select clearable v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'sel'" style="width: 60px;" :disabled="noedit">
 										<el-option v-for="item in time"
 										:key="item"
 										:label="item"
@@ -71,7 +74,7 @@
 									</el-table-column>
 								</el-table>
 							</el-collapse-item>
-							<el-collapse-item title="文档" name="3">
+							<el-collapse-item title="文件" name="3">
 								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
 							</el-collapse-item>
 							<!-- 其他信息 -->
@@ -247,7 +250,7 @@
 						label: '溯源机构',
 						prop: 'PM_MECHANISM',
 						width: '50%',
-						type: 'input',
+						type: 'seldept',
 						displayType: 'inline-block'
 					},
 					{
@@ -411,6 +414,19 @@
 						message: '网络错误，请重试',
 						type: 'error'
 					});
+				});
+			},
+			//机构值
+			getCompany() {
+				var type = "2";
+				var url = this.basic_url + '/api-user/depts/treeByType';
+				this.$axios.get(url, {
+					params: {
+						type: type
+					},
+				}).then((res) => {
+					console.log(res.data);
+					this.selectData = res.data;
 				});
 			},
 			getToday(){
@@ -611,6 +627,7 @@
 			},
 		},
 		mounted() {
+			this.getCompany();
 			var url = this.basic_url + '/api-apps/app/asset';
 			this.$axios.get(url, {
 				params: {}

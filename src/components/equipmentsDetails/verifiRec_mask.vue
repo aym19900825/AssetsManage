@@ -47,7 +47,7 @@
 								</el-form-item>
 							</el-collapse-item>
 							<!-- 文档管理 -->
-							<el-collapse-item title="文档" name="2">
+							<el-collapse-item title="文件" name="2">
 								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
 							</el-collapse-item>
 							<!-- 其他信息 -->

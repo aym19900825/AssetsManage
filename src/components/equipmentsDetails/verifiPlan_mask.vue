@@ -133,7 +133,7 @@
 									</el-table-column>
 								</el-table>
 							</el-collapse-item>
-							<el-collapse-item title="文档" name="3">
+							<el-collapse-item title="文件" name="3">
 								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
 							</el-collapse-item>
 							<el-collapse-item title="其他" name="4" v-show="!addtitle">

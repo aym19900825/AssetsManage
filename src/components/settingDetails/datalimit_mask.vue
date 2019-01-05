@@ -1,6 +1,10 @@
 <template>
 	<div>
+		
 		<el-dialog title="数据范围" :visible.sync="dialogVisible" width="30%">
+			<el-select v-model="value" placeholder="请选择">
+    		<el-option v-for="item in options":key="item.value":label="item.label" :value="item.value"></el-option>
+  			</el-select>
 			<el-tree ref="tree" :data="depetData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @check-change="handleCheckChange" @click="getCheckedKeys"  default-expand-all>
 			</el-tree>
 			<span slot="footer" class="dialog-footer">
@@ -17,6 +21,14 @@
 		name: 'masks',
 		data() {
 			return {
+				options: [{
+          			value: '1',
+         		    label: '仅本人'
+        			}, {
+          			value: '2',
+          			label: '按明细设置'
+        			}],
+        		value: '',
 				roId: 1,
 				basic_url: Config.dev_url,
 				depetData: [], //数组，我这里是通过接口获取数据，
@@ -48,9 +60,9 @@
 					var depetData = res.data
 					for(var a = 0; a < depetData.length; a++) {
 						if(depetData[a].checked) {
-							arr.push(menuData[a].id);
+							arr.push(depetData[a].id);
 							if(depetData[a].children.length > 0) {
-								arr.pop(depetData[a].children[b].id)
+								arr.pop(depetData[a].id)
 								for(var b = 0; b < depetData[a].children.length; b++) {
 									if(depetData[a].children[b].checked) {
 										arr.push(depetData[a].children[b].id);
@@ -137,6 +149,7 @@
 			},
 
 		}
+	
 	}
 </script>
 

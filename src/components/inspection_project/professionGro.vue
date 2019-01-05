@@ -19,13 +19,13 @@
 			<el-form :model="professionGroForm" ref="professionGroForm">
 			  <el-table :data="professionGroForm.inspectionList.filter(data => !search || data.PROF_GROUP.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'professionGroForm.inspectionList', order: 'descending'}" v-loadmore="loadMore">
 
-			  	<!-- <el-table-column label="所属项目编号" width="120" prop="P_NUM">
+			  	<el-table-column label="所属项目编号" width="120" prop="P_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.P_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" disabled></el-input><span v-else="v-else">{{scope.row.P_NUM}}</span>
 					</el-form-item>
 			      </template>
-			    </el-table-column> -->
+			    </el-table-column>
 
 			  	<el-table-column label="专业组编号" width="160" prop="PROF_NUM">
 			      <template slot-scope="scope">
@@ -85,11 +85,11 @@
 			        <el-button type="text" id="Edit" size="medium" @click.native.prevent="saveRow(scope.row)" v-if="scope.row.isEditing">
 			        	<i class="icon-check" title="保存"></i>
 					</el-button>
-					<el-button type="text" size="medium" @click.native.prevent="modifyversion(scope.row)" v-else="v-else">
+					<!-- <el-button type="text" size="medium" @click.native.prevent="modifyversion(scope.row)">
 			        	<i class="icon-edit" title="修改"></i>
-					</el-button>
+					</el-button> -->
 
-			        <el-button @click="deleteRow(scope.row)" type="text" size="medium" title="删除" >
+			        <el-button @click="deleteRow(scope.row)" type="text" size="medium" title="删除" v-else="v-else">
 			          <i class="icon-trash red"></i>
 			        </el-button>
 			      </template>
@@ -170,17 +170,17 @@
 				})
 			},
 			loadMore () {//表格滚动加载
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page.currentPage++
-			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     this.requestData_professionGro()
-			   }
+			   // if (this.loadSign) {
+			   //   this.loadSign = false
+			   //   this.page.currentPage++
+			   //   if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+			   //     return
+			   //   }
+			   //   setTimeout(() => {
+			   //     this.loadSign = true
+			   //   }, 1000)
+			   //   this.requestData_professionGro()
+			   // }
 			 },
 			sizeChange(val) {//页数
 		      this.page.pageSize = val;
@@ -209,15 +209,14 @@
 			indexMethod(index) {
 				return index + 1;
 			},
-			viewfield_professionGro(ID,num){//点击父级筛选出子级数据
-				if(ID=='null'){
-					this.professionGroForm.inspectionList = []; 
-					// this.$refs.rawDataAssetchild.viewfield_rawDataAsset('null');
+			viewfield_professionGro(id,num){//点击父级筛选出子级数据
+				if(id=='null'){
+					this.professionGroForm.inspectionList = [];
 					return false;
 					//todo  相关数据设置
 				}
 				this.parentId = num;
-				var url = this.basic_url + '/api-apps/app/professionGro/INSPECTION_PROJECT2/' + ID;
+				var url = this.basic_url + '/api-apps/app/professionGro/INSPECTION_PROJECT2/' + id;
 				this.$axios.get(url, {}).then((res) => {
 					//console.log(res);
 					this.page.totalCount = res.data.count;	
@@ -229,20 +228,17 @@
 						this.loadSign=true
 					}
 					this.professionGroForm.inspectionList=res.data.PROFESSION_GROUPList;
-					//console.log(this.professionGroForm.inspectionList[0].ID);
-					//默认主表第一条数据
-					// if(this.professionGroForm.inspectionList.length > 0){
-					// 	this.$refs.rawDataAssetchild.viewfield_rawDataAsset(this.professionGroForm.inspectionList[0].ID);
-					// }else{
-					// 	this.$refs.rawDataAssetchild.viewfield_rawDataAsset('null');
-					// }
 
 					for(var j = 0; j < this.professionGroForm.inspectionList.length; j++){
 						this.professionGroForm.inspectionList[j].isEditing = false;
 					}
+
+					this.$refs.singleTable.setCurrentRow(this.professionGroForm.inspectionList[0]);//默认选中第一条数据
+
 				}).catch((wrong) => {})
 			},
 			requestData_professionGro(index) {//加载数据
+				var _this = this;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -251,6 +247,7 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
+					console.log(res);
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -272,11 +269,11 @@
 						}
 					}
 					
-					this.professionGroForm.inspectionList = newarr;
+					this.professionGroForm.inspectionList = newarr;//滚动加载更多
+
 				}).catch((wrong) => {})
 			},
-			handleNodeClick(data) {
-			},
+			
 			formatter(row, column) {
 				return row.enabled;
 			},
@@ -296,12 +293,11 @@
 						this.currentUser=res.data.nickname;
 						var date=new Date();
 						this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
-						var index=this.$moment(date).format("YYYYMMDDHHmmss");
 						var obj = {
 							"PROF_GROUP": '',
-							"STATUS": '活动',
-							"P_NUM": P_NUM,
-							"PROF_NUM": 'PG' + index,
+							"STATUS": '1',
+							"P_NUM": this.parentId,
+							"PROF_NUM": '',
 							"VERSION": 1,
 							"CHANGEBY": this.currentUser,
 							"CHANGEDATE": this.currentDate,
@@ -380,10 +376,10 @@
 			},
 		},
 		
-		mounted() {
-			this.requestData_professionGro();
+		// mounted() {
+		// 	this.requestData_professionGro();
 			
-		},
+		// },
 		
 
 	}

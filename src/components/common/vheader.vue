@@ -23,9 +23,9 @@
                 <i class="el-icon-arrow-down icon-arrow2-down"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item v-for="(data,index) in GetRoles" :key="index">
+                <el-dropdown-item v-for="item in GetRoles" >
                     <div @click = "clickfun($event)">
-                        {{data.name}}
+                        {{item.name}}
                     </div>
                 </el-dropdown-item>
                 
@@ -91,6 +91,9 @@ export default {
                 css: 'icon-user',
                 name: '首页',
                 url: '/index'});
+            this.$store.dispatch('setRoleIdAct',null);
+            this.$store.dispatch('setNavIdAct',null);
+            console.log(this.$store.state);
     	},
         getData(){//获取当前用户信息
             var url = this.basic_url + '/api-user/users/currentMap';
@@ -112,11 +115,15 @@ export default {
                 if(res.data!=null&&res.data.length>0)
                 {
                     let item = res.data[0];
-                    this.$store.dispatch('setRoleIdAct',item.id);
+                    if(this.$store.state.roleid==null||typeof(this.$store.state.roleid)==undefined){
+//                  	this.$store.dispatch('setRoleIdAct',item.id);
+                   		console.log(item.id);
+                   	}
                 }
             }).catch(error => {
                 console.log('请求失败');
             })
+  
         },
 		 clickfun(e) {
       		// e.target 是你当前点击的元素
@@ -131,7 +138,15 @@ export default {
       	    	}
       	    }
 
-      	   this.$emit('clickfun',roId)
+    	   this.$emit('clickfun',roId);
+      	   this.$store.dispatch('setClickedNavAct',[{
+                css: 'icon-user',
+                name: '首页',
+                url: '/index'}]);
+            this.$store.dispatch('setSelectedNavAct',{
+                css: 'icon-user',
+                name: '首页',
+                url: '/index'});
     	},
         setTabs(){
             if(!sessionStorage.getItem('clickedNav')){

@@ -30,6 +30,7 @@
 										<el-input  v-model="samplesForm.STATE" :disabled="true">
 											<template slot="prepend">状态</template>
 										</el-input>
+										<!-- <el-input v-for="(data,index) in Select_STATUS" :key="index" :value="data.code" :label="data.name"></el-input> -->
 									</el-col>
 									
 									<el-col :span="7" class="pull-right">
@@ -299,7 +300,7 @@
 					</div>
 					<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
-							<el-button type="success" v-show="addtitle" @click='saveAndSubmit()'>保存并添加</el-button>
+							<el-button type="success" v-show="addtitle" @click='saveAndSubmit()'>保存并继续</el-button>
 							<el-button @click='close'>取消</el-button>
 					</div>
 				</el-form>
@@ -428,6 +429,7 @@
 					totalCount: 0
 				},
 				selectData: [], //获取检验/检测方法类别
+				Select_STATUS:[],//获取样品信息-样品状态-new
 				modify:false,//修订、修改人、修改日期
 				edit: true, //禁填
 				noedit:false,
@@ -804,25 +806,33 @@
 			save() {
 				this.$refs.samplesForm.validate((valid) => {
 					if (valid) {
-						var url = this.basic_url + '/api-apps/app/item/saveOrUpdate';
-						this.$axios.post(url, this.samplesForm).then((res) => {
-							console.log(res);
-							//resp_code == 0是后台返回的请求成功的信息
-							if(res.data.resp_code == 0) {
-								this.$message({
-									message: '保存成功',
-									type: 'success'
-								});
-								//重新加载数据
-								 this.$emit('request');
-							}
-						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
+						if(this.samplesForm.ITEM_LINEList.length<=0){
+			        		this.$message({
+								message: '样品表格是必填项，请填写！',
+								type: 'warning'
 							});
-						});
-						this.falg = true;
+							return false;
+			        	}else{
+							var url = this.basic_url + '/api-apps/app/item/saveOrUpdate';
+							this.$axios.post(url, this.samplesForm).then((res) => {
+								console.log(res);
+								//resp_code == 0是后台返回的请求成功的信息
+								if(res.data.resp_code == 0) {
+									this.$message({
+										message: '保存成功',
+										type: 'success'
+									});
+									//重新加载数据
+									this.$emit('request');
+								}
+							}).catch((err) => {
+								this.$message({
+									message: '网络错误，请重试',
+									type: 'error'
+								});
+							});
+							this.falg = true;
+						}
 					} else {
 						this.show = true;
 						this.$message({
@@ -841,7 +851,7 @@
 				}
 				this.$emit('request');
 			},
-			//保存并添加
+			//保存并继续
 			saveAndSubmit(){
 				this.save();
 				this.reset();
@@ -868,7 +878,7 @@
 				this.$axios.get(this.basic_url + '/api-apps/app/productType', {
 					params: data
 				}).then((res) => {
-					console.log(res.data);
+					// console.log(res.data);
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -918,6 +928,15 @@
 					this.userList = newarr;
 				}).catch((wrong) => {})
 			},
+			getITEM_STATUS() {//获取样品状态
+				var url =  this.basic_url + '/api-user/dicts/findChildsByCode?code=ITEM_STATUS';
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res)
+					// this.Select_STATUS = res.data;
+				}).catch(error => {
+					console.log('请求失败');
+				})
+			},
 			handleClose(done) { //大弹出框确定关闭按钮
 				this.$confirm('确认关闭？')
 					.then(_ => {
@@ -929,6 +948,7 @@
 		mounted() {
 			this.getType();
 			this.requestData();
+			this.getITEM_STATUS();
 		},
 	}
 </script>

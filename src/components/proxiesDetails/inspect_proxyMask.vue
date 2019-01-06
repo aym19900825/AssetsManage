@@ -585,7 +585,7 @@
 					</div>
 					<div class="el-dialog__footer" v-show="noviews">
 						<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
-						<el-button type="success"  v-show="addtitle" @click="saveAndSubmit('dataInfo')">保存并添加</el-button>
+						<el-button type="success"  v-show="addtitle" @click="saveAndSubmit('dataInfo')">保存并继续</el-button>
 						<el-button v-show="modifytitle" type="btn btn-primarys" @click="modifyversion('dataInfo')">修订</el-button>
 						<el-button @click='close'>取消</el-button>
 					</div>

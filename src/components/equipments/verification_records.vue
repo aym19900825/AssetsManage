@@ -84,7 +84,7 @@
 							</el-table-column>
 							<el-table-column label="记录编号" width="200" sortable prop="C_RECORDNUM" v-if="this.checkedName.indexOf('记录编号')!=-1">
 								<template slot-scope="scope">
-									<p @click=view(scope.row)>{{scope.row.C_RECORDNUM}}
+									<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.C_RECORDNUM}}
 									</p>
 								</template>
 							</el-table-column>

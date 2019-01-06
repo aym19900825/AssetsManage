@@ -98,7 +98,6 @@ export default {
 			if(_this.$route.path!=_this.$store.state.selectedNav.url){
 				//赋值
 //				_this.$selectedNav=res.data[0]
-               console.log(res);
 				_this.$store.dispatch('setSelectedNavAct',res.data[0]);
 			}
 			_this.leftNavs = res.data;

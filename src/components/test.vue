@@ -24,8 +24,8 @@
       <el-row :gutter="10" v-for="(item,index) in form.productGroup" :key="index">
        <el-col :span="6">
         <el-form-item label="商品数量:" :prop="'productGroup.'+index+'.num'" :rules="productGroupRules.productGroupNum">
- <el-input v-model="item.num" type="number" size="small" style="width:80px;"></el-input>
-</el-form-item>
+         <el-input v-model="item.num" type="number" size="small" style="width:80px;"></el-input>
+        </el-form-item>
        </el-col>
        <el-col :span="6">
         <el-form-item label="优惠价格:">
@@ -61,13 +61,12 @@ export default {
      productGroupNum: [{required: true, message: '请填写商品数量', trigger: 'blur'}],
      productGroupPrice: [{required: true, message: '请填写优惠价格', trigger: 'blur'}]
     }
-   rules: {
-    activityName: [
-     { required: true, message: '请输入套餐名称', trigger: 'blur' }
-    ]
-   }
+   // rules: {
+    // activityName: [{ required: true, message: '请输入套餐名称', trigger: 'blur' }]
+   // }
   }
  },
+ 
  methods: {
   deleteLadder(index)
   {

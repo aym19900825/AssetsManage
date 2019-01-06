@@ -155,8 +155,9 @@ export default {
             this.$store.dispatch('setMenuIdAct',item.id);
 			var url = _this.basic_url + '/api-user/menus/findSecondByRoleIdAndFisrtMenu';
 			_this.$axios.get(url, {params: data}).then((res) => {
-				if(res.data!=null&&res.data.length>0){
-					var item = res.data[0];
+				console.log(res);
+				if(res.data!="undefined"&&res.data.length>0){
+					let item = res.data[0];
 					_this.$store.dispatch('setSelectedNavAct',item);
 //					_this.$selectedNav=item;
 					var flag="1";
@@ -178,6 +179,9 @@ export default {
 					if(flag=="0"){
 						_this.$store.state.clickedNavs.push(item);
 					}
+				}else{
+					_this.$store.dispatch('setSelectedNavAct',item);
+					_this.$store.state.clickedNavs.push(item);
 				}
 			}).catch((wrong) => {
 			});
@@ -224,7 +228,10 @@ export default {
 	mounted(){
 		//一级菜单
 		this.initEchart();//调用饼状图图表函数名称
-		//this.$refs.navsheader.sessionGet()
+		this.$refs.navsheader.showClick({
+                css: 'icon-user',
+                name: '首页',
+                url: '/index'})
 		//默认请求roid
 		if(this.$store.state.roleid==null||typeof(this.$store.state.roleid)==undefined){
 			var url = this.basic_url + '/api-user/roles/default';

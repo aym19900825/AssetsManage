@@ -85,7 +85,7 @@
 								</el-table-column>
 								<el-table-column label="分发号" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('分发号')!=-1">
 									<template slot-scope="scope">
-										<p @click=view(scope.row)>{{scope.row.NUM}}
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.NUM}}
 										</p>
 									</template>
 								</el-table-column>

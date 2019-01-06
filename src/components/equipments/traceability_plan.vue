@@ -110,7 +110,7 @@
 							</el-table-column>
 							<el-table-column label="溯源计划编号" width="200" sortable prop="PMNUM" v-if="this.checkedName.indexOf('溯源计划编号')!=-1">
 								<template slot-scope="scope">
-									<p @click=view(scope.row)>{{scope.row.PMNUM}}
+									<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.PMNUM}}
 									</p>
 								</template>
 							</el-table-column>

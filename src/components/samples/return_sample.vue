@@ -123,7 +123,7 @@
 								</el-table-column>
 								<el-table-column label="样品子表ID" sortable width="120px" prop="ITEM_LINE_ID" v-if="this.checkedName.indexOf('样品子表ID')!=-1">
 									<template slot-scope="scope">
-										<p @click=view(scope.row)>{{scope.row.ITEM_LINE_ID}}
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.ITEM_LINE_ID}}
 										</p>
 									</template>
 								</el-table-column>

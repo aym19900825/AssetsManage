@@ -18,6 +18,12 @@
 			<div class="mask_content">
 
 				<el-form :model="dataInfo" :label-position="labelPositions" :rules="rules" ref="dataInfo" status-icon inline-message  class="demo-ruleForm">
+					<div class="text-center" v-show="viewtitle">
+						<el-button class="start" type="success" round plain size="mini" @click="startup"><i class="icon-start"></i> 启动流程</el-button>
+						<el-button class="" type="warning" round plain size="mini" @click="approvals"><i class="icon-edit-3"></i> 审批</el-button>
+						<el-button type="primary" round plain size="mini"><i class="icon-git-pull-request"></i> 流程地图</el-button>
+						<el-button type="primary" round plain size="mini"><i class="icon-plan"></i> 流程历史</el-button>
+					</div>
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="委托单位" name="1">
@@ -675,13 +681,19 @@
 		    </span>
 		</el-dialog>
 		<!-- 客户联系人 End -->
+		<!--审批页面-->
+		<approvalmask ref="approval" ></approvalmask>
 	</div>
 </template>
 
 <script>
 	import Config from '../../config.js';
+	import approvalmask from '../workflow/approving.vue'
 	export default {
 		name: 'masks',
+		components: {
+			'approvalmask': approvalmask
+		},
 		data() {
 			var validate = (rule, value, callback) => {
 				if(value === '') {
@@ -796,6 +808,7 @@
 				dialogVisible3:false,
 				samplesList:[],
 				customid:1,
+				dataid:2,//修改和查看带过的id
 				CUSTOMER_PERSONList:[]
 			};
 		},
@@ -973,6 +986,7 @@
 			},
 			// 这里是修改
 			detail(dataid) {
+				
 				var usersUrl = this.basic_url + '/api-user/users/currentMap'
 				this.$axios.get(usersUrl, {}).then((res) => {
 					this.dataInfo.CHANGEBY = res.data.nickname;
@@ -1066,6 +1080,8 @@
 			},
 			//这是查看
 			view(dataid) {
+				this.dataid=dataid;				
+				this.modifytitle = false;
 				this.addtitle = false;
 				this.viewtitle = true;
 				this.views = true; //
@@ -1081,6 +1097,16 @@
 						message: '网络错误，请重试',
 						type: 'error'
 					});
+				});
+				//判断启动流程和审批的按钮是否显示
+				var url = this.basic_url + '/api-apps/app/inspectPro/flow/isStart/'+dataid;
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+					if(res.data.resp_code==1){
+						$(".approval").hide();
+					}else{
+						$(".start").hide();
+					}
 				});
 			},
 			//点击关闭按钮
@@ -1240,6 +1266,44 @@
 			SelChange(val) {
 				this.selval = val;
 			},
+			//启动流程
+			startup(){
+				console.log(12345);
+				console.log(this.dataid);
+				var url = this.basic_url + '/api-apps/app/inspectPro/flow/'+this.dataid;
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+					if(res.data.resp_code == 1) {
+							this.$message({
+								message:res.data.resp_msg,
+								type: 'warning'
+							});
+				    }else{
+				    	this.$message({
+								message:res.data.resp_msg,
+								type: 'success'
+							});
+				    }
+				});
+			},
+			//审批流程
+			approvals(){
+//				var url = this.basic_url + '/api-apps/app/inspectPro/flow/'+this.dataid;
+//				this.$axios.post(url, {}).then((res) => {
+//					console.log(res);
+//					if(res.data.resp_code == 1) {
+//							this.$message({
+//								message:res.data.resp_msg,
+//								type: 'warning'
+//							});
+//				    }else{
+//				    	this.$message({
+//								message:res.data.resp_msg,
+//								type: 'success'
+//							});
+//				    }
+//				});
+			},
 			requestData(index) {
 				var data = {
 					page: this.page.currentPage,
@@ -1276,6 +1340,7 @@
 		},
 		mounted() {
 			this.requestData();
+			
 		},
 	}
 </script>

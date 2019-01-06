@@ -1,5 +1,6 @@
 <template>
 <div>
+	<div class="mask_div">
   <el-form ref="approveForm" :model="approveForm" :rules="rules" label-width="120px" class="demo-ruleForm">
     <el-row :gutter="30">
       <el-col :span="23" :offset="0">
@@ -15,6 +16,7 @@
       <el-button @click="resetForm('approveForm')">取消</el-button>
     </el-form-item>
   </el-form>
+  </div>
 </div>
 </template>
 

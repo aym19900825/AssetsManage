@@ -146,7 +146,6 @@ export default {
   
 	methods: {
 		goto(item){
-
 	        var _this = this;
 	        var data = {
 				menuId: item.id,
@@ -157,7 +156,8 @@ export default {
 			_this.$axios.get(url, {params: data}).then((res) => {
 				console.log(res);
 				if(res.data!="undefined"&&res.data.length>0){
-					let item = res.data[0];
+					item = res.data[0];
+				}
 					_this.$store.dispatch('setSelectedNavAct',item);
 //					_this.$selectedNav=item;
 					var flag="1";
@@ -179,10 +179,6 @@ export default {
 					if(flag=="0"){
 						_this.$store.state.clickedNavs.push(item);
 					}
-				}else{
-					_this.$store.dispatch('setSelectedNavAct',item);
-					_this.$store.state.clickedNavs.push(item);
-				}
 			}).catch((wrong) => {
 			});
 //		    _this.$store.dispatch('setRoleIdAct',this.$store.state.roleid);
@@ -247,6 +243,7 @@ export default {
 	        var url = this.basic_url + '/api-user/menus/findFirstByRoleId/' + roleid;
 	        
 	        this.$axios.get(url, {}).then((res) => {
+	        	console.log(res);
 	            this.applistdata = res.data;
 	        }).catch(error => {
 	            console.log('请求失败');

@@ -6,7 +6,7 @@
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单调用 Begin-->
-			<!-- <navs_left></navs_left> -->
+			<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left> 
 			<!--左侧菜单调用 End-->
 			<div class="wrapper wrapper-content wrapperall">
 				<div class="ibox-content">
@@ -198,7 +198,7 @@
 <script>
 	import Config from '../config.js'
 	import vheader from './common/vheader.vue'
-	import navs_left from './common/left_navs/nav_left2.vue'
+	import navs_left from './common/left_navs/nav_left5.vue'
 	import navs_header from './common/nav_tabs.vue'
 	import annualmask from './common/annual_mask.vue'
 	import assetsTree from './plugin/vue-tree/tree.vue'
@@ -537,16 +537,14 @@
 					$(".icon-doubleok").addClass("icon-double-angle-left");
 				}
 				this.ismin = !this.ismin;
-			}
+			},
+			childByValue:function(childValue) {
+        		// childValue就是子组件传过来的值
+        		this.$refs.navsheader.showClick(childValue);
+      		},
 		},
 		mounted() {
-			this.requestData();
-			console.log(this.$store.state.selectedNav);
-			this.$refs.navsheader.showClick(this.$store.state.selectedNav);
-			this.$refs.navsheader.showSelected(this.$store.state.selectedNav);
-			// this.getKey();
-
-			
+			this.requestData();	
 		},
 	}
 </script>

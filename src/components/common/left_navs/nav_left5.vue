@@ -89,26 +89,43 @@ export default {
 	},
 	mounted() {
 		var _this = this;
-		var data = {
+		console.log(_this.$store.state.menuid);
+		if(typeof(_this.$store.state.menuid)=="undefined"){
+			console.log(111111);
+			$('.navbar-default').hide();
+		     _this.$emit('childByValue',_this.$store.state.selectedNav);
+		}else{
+		    var data = {
 			menuId: _this.$store.state.menuid,
 			roleId: _this.$store.state.roleid,
-		};
+			};
 		var url = _this.basic_url + '/api-user/menus/findSecondByRoleIdAndFisrtMenu';
 		_this.$axios.get(url, {params: data}).then((res) => {
-			if(_this.$route.path!=_this.$store.state.selectedNav.url){
-				//赋值
-//				_this.$selectedNav=res.data[0]
-				_this.$store.dispatch('setSelectedNavAct',res.data[0]);
+			if(res.data.length>0&&res.data!='undefined'){
+			
+				if(_this.$route.path!=_this.$store.state.selectedNav.url){
+					//赋值
+	//				_this.$selectedNav=res.data[0]
+					_this.$store.dispatch('setSelectedNavAct',res.data[0]);
+				}
+				$('.navbar-default').show();
+				_this.leftNavs = res.data;
+				//子传父
+				 _this.$emit('childByValue',_this.$store.state.selectedNav);
+			}else{
+				$('.navbar-default').hide();
+				 _this.$emit('childByValue',_this.$store.state.selectedNav);
+				 
 			}
-			_this.leftNavs = res.data;
-			//子传父
-			 _this.$emit('childByValue',_this.$store.state.selectedNav);
+				
 		}).catch((wrong) => {
 			_this.$message({
 				message: '网络错误，请重试左侧1',
 				type: 'error'
 			});
 		});
+		}
+		
 		
 		
 	}

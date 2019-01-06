@@ -96,7 +96,7 @@
 							</el-table-column>
 							<el-table-column label="溯源记录编号" width="120" sortable prop="RECORDNUM" v-if="this.checkedName.indexOf('溯源记录编号')!=-1">
 								<template slot-scope="scope">
-									<p @click=view(scope.row)>{{scope.row.RECORDNUM}}
+									<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.RECORDNUM}}
 									</p>
 								</template>
 							</el-table-column>

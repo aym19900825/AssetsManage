@@ -43,7 +43,7 @@ import sample_disposal from '@/components/samples/sample_disposal'//样品管理
 import workorders from '@/components/workorders'//工作任务单
 import devices from '@/components/devices'//设备管理
 import inspection_project from '@/components/inspection_project'//检验/检测项目管理
-import inspection_project2 from '@/components/inspection_project2'//检验/检测项目管理
+import test from '@/components/test'//检验/检测项目管理
 import files_search from '@/components/files_search'//文件查询
 import interfaces from '@/components/interfaces'//接口
 import reports from '@/components/reports'//报表管理
@@ -65,8 +65,12 @@ import doc_keyword from '@/components/document/keyword'//关键字
 import doc_authorize from '@/components/document/authorize'//关键字授权
 import doc_root from '@/components/document/doc_root'//文件目录
 import doc_list from '@/components/document/doc_list'//文件列表
-Vue.use(Router)
 
+import approving from '@/components/workflow/approving'//审批意见
+import flowhistory from '@/components/workflow/flowhistory'//流程历史
+import flowmap from '@/components/workflow/flowmap'//流程地图
+
+Vue.use(Router)
   const routes = [
     {//登录页
       path: '/',
@@ -162,8 +166,20 @@ Vue.use(Router)
       path: '/inspect_proxy',
       name: 'inspect_proxy',
       component: inspect_proxy
+    },{//审批意见
+      path: '/approving',
+      name: 'approving',
+      component: approving
     },
-   
+     {//流程历史
+      path: '/flowhistory',
+      name: 'flowhistory',
+      component: flowhistory
+    },{//流程地图
+      path: '/flowmap',
+      name: 'flowmap',
+      component: flowmap
+    },
     {//分包协议
       path: '/subc_agreement',
       name: 'subc_agreement',
@@ -274,9 +290,9 @@ Vue.use(Router)
       component: inspection_project
     },
     {//检验/检测项目管理
-      path: '/inspection_project2',
-      name: 'inspection_project2',
-      component: inspection_project2
+      path: '/test',
+      name: 'test',
+      component: test
     },
     {//文件查询
       path: '/files_search',

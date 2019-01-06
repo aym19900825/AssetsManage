@@ -66,7 +66,7 @@
 							</el-table-column>
 							<el-table-column label="自动编号名称" width="140" sortable prop="AUTOKEY" v-if="this.checkedName.indexOf('自动编号名称')!=-1">
 								<template slot-scope="scope">
-									<p @click=view(scope.row)>{{scope.row.AUTOKEY}}
+									<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.AUTOKEY}}
 									</p>
 								</template>
 							</el-table-column>

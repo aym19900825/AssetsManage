@@ -113,7 +113,7 @@
 								</el-table-column>
 								<el-table-column label="编码" width="170" sortable prop="M_NUM" v-if="this.checkedName.indexOf('编码')!=-1">
 									<template slot-scope="scope">
-										<p @click=view(scope.row)>{{scope.row.M_NUM}}
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.M_NUM}}
 										</p>
 									</template>
 								</el-table-column>

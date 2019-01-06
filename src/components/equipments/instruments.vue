@@ -102,7 +102,7 @@
 							</el-table-column>
 							<el-table-column label="设备编号" width="130" sortable prop="ASSETNUM" v-if="this.checkedName.indexOf('设备编号')!=-1">
 								<template slot-scope="scope">
-									<p @click=view(scope.row)>{{scope.row.ASSETNUM}}
+									<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.ASSETNUM}}
 									</p>
 								</template>
 							</el-table-column>

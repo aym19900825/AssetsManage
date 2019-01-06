@@ -158,7 +158,8 @@ i, cite, em, var, address, dfn {
 .red,.red a {color:#ea4074;}
 .red a:hover {color:#E97A9B;}
 
-
+.gray,.gray a {color:#97A3B4;}
+.gray a:hover {color:#5B6371;}
 
 
 .font13 {font-size: 13px;}
@@ -180,10 +181,10 @@ h6 {
 
 
 
-
-
-
-
+/*Step*/
+.el-step__description { padding-right: 0 !important;}
+.el-step.is-vertical .el-step__title {margin-left: -5px;}
+.el-step.is-vertical .el-step__main {padding-left: 15px;}
 /*必填信息为错时 By Heliping*/
 .wrong,.correct{
     color: #FF6663;

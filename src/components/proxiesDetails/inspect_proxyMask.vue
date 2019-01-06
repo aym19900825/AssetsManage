@@ -49,7 +49,6 @@
 											<el-form-item label="名称" prop="V_NAME" label-width="110px">
 												<el-input v-model="dataInfo.V_NAME" :disabled="edit" width="100%">
 													<el-button slot="append" icon="el-icon-search" @click="getCustomer(1)">
-														   <el-button slot="append" icon="el-icon-search"></el-button>
 													</el-button>
 												</el-input>
 											</el-form-item>
@@ -69,6 +68,7 @@
 										<el-col :span="8">
 											<el-form-item label="姓名" prop="V_PERSON" label-width="110px">
 												<el-input v-model="dataInfo.V_PERSON" :disabled="edit">
+													 <el-button slot="append" icon="el-icon-search" @click="addname"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -373,9 +373,9 @@
 
 											<el-table-column prop="P_REMARKS" label="检验检测项目内容" sortable width="280px">
 												<template slot-scope="scope">
-														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.P_REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入">
-													</el-input
+													<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.P_REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入">
+														</el-input>
 													<span v-else="v-else">{{scope.row.P_REMARKS}}</span>
 													</el-form-item>
 												</template>
@@ -409,8 +409,8 @@
 							
 											<el-table-column prop="CHECKCOST" label="检验检测费用" sortable width="120px">
 												<template slot-scope="scope">
-													<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.Q_TYPE'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input>
+													<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.CHECKCOST'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+													<el-input v-if="scope.row.isEditing" id="testprice" @blur="testPrice(scope.row)" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input>
 													<span v-else="v-else">{{scope.row.CHECKCOST}}</span>
 													</el-form-item>
 												</template>
@@ -580,7 +580,7 @@
 					<div class="el-dialog__footer" v-show="noviews">
 						<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
 						<el-button type="success"  v-show="addtitle" @click="saveAndSubmit('dataInfo')">保存并添加</el-button>
-						<el-button v-show="modifytitle" type="primary"@click="modifyversion('dataInfo')">修订</el-button>
+						<el-button v-show="modifytitle" type="btn btn-primarys" @click="modifyversion('dataInfo')">修订</el-button>
 						<el-button @click='close'>取消</el-button>
 					</div>
 				</el-form>
@@ -650,6 +650,31 @@
 		    </span>
 		</el-dialog>
 		<!-- 样品名称 End -->
+		<!-- 客户联系人 Begin -->
+		<el-dialog title="客户联系人" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
+			<el-table :header-cell-style="rowClass" :data="CUSTOMER_PERSONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @selection-change="SelChange" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER.CUSTOMER_PERSONList', order: 'descending'}">
+				<el-table-column type="selection" width="55" fixed align="center">
+				</el-table-column>
+				<!-- <el-table-column label="序号" sortable width="120px" prop="STEP">
+				</el-table-column> -->
+				<el-table-column label="联系人" sortable width="150px" prop="PERSON">
+				</el-table-column>
+				<el-table-column prop="PHONE" label="联系电话" sortable width="150px">
+				</el-table-column>
+				<el-table-column prop="FAX" label="传真" sortable width="150px">
+				</el-table-column>
+				<el-table-column prop="EMAIL" label="邮箱" sortable>
+				</el-table-column>
+			</el-table>
+			
+			<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+			</el-pagination>
+			<span slot="footer" class="dialog-footer">
+		       <el-button @click="dialogVisible3 = false" style="margin-left: 37%;">取 消</el-button>
+		       <el-button type="primary" @click="addcusname">确 定</el-button>
+		    </span>
+		</el-dialog>
+		<!-- 客户联系人 End -->
 	</div>
 </template>
 
@@ -768,14 +793,31 @@
 				// initsta:'',
 				// initactual:'',
 				dialogVisible2:false,
-				samplesList:[]
+				dialogVisible3:false,
+				samplesList:[],
+				customid:1,
+				CUSTOMER_PERSONList:[]
 			};
 		},
 		methods: {
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
-			},		
+			},	
+			toNum(str) {
+				return str.replace(/\,|\￥/g, "");
+			},
+			//金额两位小数点千位分隔符，四舍五入
+			testPrice(item){
+				var money = document.getElementById("testprice").value;
+				if(money == ''){
+					return;
+				}else{
+					var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
+					num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
+					item.CHECKCOST = num.join(".");
+				}
+			},	
 			dateFormat(row, column) {
 				var date = row[column.property];
 				if(date == undefined) {
@@ -1161,6 +1203,10 @@
 			dailogconfirm(type) { //小弹出框确认按钮事件
 				this.dialogVisible = false;
 				if(this.type == '1') {
+					console.log(this.selval[0].ID);
+					
+				this.customid = this.selval[0].ID;
+				console.log(this.customid);
 				this.dataInfo.VENDOR=this.selval[0].CODE;
 				this.dataInfo.V_NAME = this.selval[0].NAME;
 				this.dataInfo.V_ADDRESS = this.selval[0].CONTACT_ADDRESS;
@@ -1173,7 +1219,24 @@
 					this.dataInfo.P_NAME = this.selval[0].NAME;
 				}
 			},
-
+			addname(){
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				}
+				var url = this.basic_url + '/api-apps/app/customer/CUSTOMER/'+ this.customid;
+				this.$axios.get(url, {
+					params: data
+				}).then((res) => {
+					this.CUSTOMER_PERSONList = res.data.CUSTOMER_PERSONList;
+				});
+				this.dialogVisible3 = true;
+			},
+			addcusname(){
+				this.dataInfo.V_PERSON = this.selval[0].PERSON;
+				this.dataInfo.V_PHONE = this.selval[0].PHONE;
+				this.dialogVisible3 = false;
+			},
 			SelChange(val) {
 				this.selval = val;
 			},

@@ -191,7 +191,7 @@
 									</el-button>
 								</div>
 								<!-- <el-form :label-position="labelPosition" :rules="rules" > -->
-								<el-table :fit="true" height="260px" :header-cell-style="rowClass" :data="samplesForm.ITEM_LINEList" row-key="ID" border stripe highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'samplesForm.ITEM_LINEList', order: 'descending'}">
+								<el-table :fit="true" max-height="260px" :header-cell-style="rowClass" :data="samplesForm.ITEM_LINEList" row-key="ID" border stripe highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'samplesForm.ITEM_LINEList', order: 'descending'}">
 								    <el-table-column prop="iconOperation" fixed width="50px">
 								      <template slot-scope="scope">
 								      	<i class="el-icon-check" v-show="scope.row.isEditing">
@@ -200,7 +200,7 @@
 								      	</i>
 								      </template>
 								    </el-table-column>
-
+	
 								    <el-table-column label="样品编号" sortable width="170px" prop="ITEMNUM" >
 								      <template slot-scope="scope">
 								      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.ITEMNUM" :disabled="edit" placeholder="自动获取">
@@ -228,8 +228,9 @@
 
 									<el-table-column prop="STATE" label="样品状态" sortable width="170px">
 								      <template slot-scope="scope">
-								        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STATE" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.STATUS}}</span>
-								      </template>
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATE" placeholder="请输入内容"></el-input>
+								      	<span v-else="v-else">{{scope.row.STATE}}</span>
+									  </template>
 								    </el-table-column>
 								    
 								   <!--  <el-table-column prop="ENTERBY" label="录入人" sortable width="120px">

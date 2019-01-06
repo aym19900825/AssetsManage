@@ -35,7 +35,7 @@
 									</el-col> -->
 									<el-col :span="5" class="pull-right">
 										<el-input v-model="WORKPLAN.WP_NUM" placeholder="自动生成" :disabled="edit">
-												<template slot="prepend">计划编号</template>
+												<template slot="prepend">编号</template>
 										</el-input>
 									</el-col>
 								</el-row>
@@ -112,7 +112,7 @@
 										</el-form-item>
 									</el-col>
 									<!-- <el-col :span="6">
-										<el-form-item label="信息信息状态" prop="MESSSTATUS">
+										<el-form-item label="信息状态" prop="MESSSTATUS">
 											<el-input v-model="WORKPLAN.MESSSTATUS"></el-input>
 										</el-form-item>
 									</el-col> -->
@@ -748,7 +748,6 @@
 		        fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				value: '',
 				assignshow:false,//下达任务通知书按钮
-				initcost:'',
 				options: [{
 					value: '1',
 					label: '活动'
@@ -862,7 +861,6 @@
 			//金额两位小数点千位分隔符，四舍五入
 			toPrice(item){
 				var money = document.getElementById("cost").value;
-				this.initcost = money;
 				var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
 				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
 				// this.dataInfo.CHECTCOST="￥" + num.join(".");
@@ -934,7 +932,6 @@
             	if(editId){
             		let worlplanlist = this.worlplanlist;
 	            	for(let i=0, len=worlplanlist.length; i<len; i++){
-	            		// worlplanlist[i].CHECKCOST = this.initcost;
 	            		if(editId == worlplanlist[i].frontId){
 	            			worlplanlist[i].WORLPLANLINE_PROJECTList = JSON.parse(JSON.stringify(this.proTestList));
 	            			worlplanlist[i].WORLPLANLINE_BASISList = JSON.parse(JSON.stringify(this.basisList));
@@ -1272,8 +1269,6 @@
 					for(var i=0, len=worlplanlist.length; i<len; i++){
 						worlplanlist[i].isEditing = false;
 						worlplanlist[i].frontId = this.frontId++;
-						// var money = document.getElementById("costshow").value;
-						// this.initcost = money;
 						var cost = worlplanlist[i].CHECKCOST.toString();
 						var num = parseFloat(this.toNum(cost)).toFixed(2).toString().split(".");
 						num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");

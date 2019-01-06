@@ -391,7 +391,7 @@
 				<div class="el-dialog__footer" v-show="noviews">
                     <el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
 					<el-button type="success" v-show="addtitle" @click='saveAndSubmit()'>保存并添加</el-button>
-					<el-button type="success" v-show="!addtitle">生成委托书</el-button>
+					<el-button type="success" v-show="!addtitle" @click="build">生成委托书</el-button>
 					<el-button @click='close'>取消</el-button>
 					
 				</div>
@@ -994,7 +994,32 @@
 					this.dataInfo.ACCEPT_PERSONDesc = this.selUser[0].nickname;
 				}
 			},
-			
+			//生成委托书
+			build(){
+				console.log(this.dataInfo.ISCREATED);
+				var dataid = this.dataInfo.ID;
+				if(this.dataInfo.ISCREATED == 1){
+					this.$message({
+						message: '已经生成委托书，请勿重复生成',
+						type: 'warning'
+					});
+					return;
+				}else{
+					this.$axios.get(this.basic_url + '/api-apps/app/workNot/operate/createInspectProxy?ID=' + dataid, {}).then((res) => {
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '生成委托书成功',
+								type: 'success'
+							});
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+				}
+			},
 			SelChange(val) {
 				this.selUser = val;
 			},

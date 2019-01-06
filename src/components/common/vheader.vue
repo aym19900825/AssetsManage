@@ -2,7 +2,7 @@
 	<div class="heder clearfix white">
         <div class="logo"></div>
         <ul class="nav-head pull-left">
-            <li class="current"><router-link :to="{path:'/index'}">应用中心</router-link></li>
+            <li class="current" @click="appCenter"><router-link :to="{path:'/index'}">应用中心</router-link></li>
             <!-- <li><router-link :to="{path:'/dashboardList'}" >程序设计器</router-link></li>
             <li><router-link :to="{path:'/dashboardList'}" >权限管理</router-link></li>
             <li>
@@ -148,32 +148,23 @@ export default {
                 name: '首页',
                 url: '/index'});
     	},
-        setTabs(){
-            if(!sessionStorage.getItem('clickedNav')){
-                sessionStorage.setItem('clickedNav',JSON.stringify({arr:[]}));
-            }
-            var clickedNav = JSON.parse(sessionStorage.getItem('clickedNav')).arr;
-            var flag = true;
-            for(var i = 0; i < clickedNav.length; i++){
-                if(clickedNav[i].navtitle == "用户管理"){
-                    flag = false;
-                }
-            }
-            if(flag){
-                clickedNav.push({
-                    navicon: 'icon-user',
-                    navtitle: '用户管理',
-                    navherf: '/user_management'
-                });
-            }
-            sessionStorage.setItem('clickedNav',JSON.stringify({arr:clickedNav}));
-
-            sessionStorage.setItem('selectedNav',JSON.stringify({
-                navicon: 'icon-user',
-                navtitle: '用户管理',
-                navherf: '/user_management'
-            }));
+        appCenter(){
+//      	var item={
+//      		css: 'icon-user',
+//              name: '首页',
+//              url: '/index'};
+//      	if(this.$route.path!=this.$store.state.clickedNavs.url){
+//				for(var i = 0; i < this.tabs.length; i++){
+//					if(this.$route.path == this.tabs[i].url){
+//						this.selectedTab = this.tabs[i];
+//					}
+//				}
+//			}else{
+//				this.$store.state.clickedNavs.push(item);
+//				this.$store.dispatch('setSelectedNavAct',item);
+//			}
         }
+        
     },
     mounted(){
         this.getData();//调用getData

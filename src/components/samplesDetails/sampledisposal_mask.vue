@@ -145,7 +145,7 @@
 					<div class="content-footer" v-show="noviews">
 						<el-form-item> 
 						    <el-button type="primary" @click="saveAndUpdate('samplesForm')">保存</el-button>
-						    <el-button type="success" @click="saveAndSubmit('samplesForm')" v-show="addtitle">保存并添加</el-button>
+						    <el-button type="success" @click="saveAndSubmit('samplesForm')" v-show="addtitle">保存并继续</el-button>
 						    
 							<el-button @click="close">取消</el-button>
 						</el-form-item>

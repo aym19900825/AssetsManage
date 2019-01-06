@@ -63,7 +63,7 @@
 									<el-col :span="8">
 										<el-form-item label="主检员" prop="MASTER_INSPECTOR">
 											<el-input v-model="workorderForm.MASTER_INSPECTOR" :disabled="true">
-												<el-button slot="append" icon="el-icon-search" @click="addperson"></el-button>
+												<el-button slot="append" icon="el-icon-search" @click="addperson('1')"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -225,9 +225,12 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="样品承接人(专业组)" label-width="150px">
-												<el-select v-model="workorderForm.ITEM_PROFESSIONAL_GROUP" style="width: 100%">
+												<!-- <el-select v-model="workorderForm.ITEM_PROFESSIONAL_GROUP" style="width: 100%">
 													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.nickname"></el-option>
-												</el-select>
+												</el-select> -->
+												<el-input v-model="workorderForm.ITEM_PROFESSIONAL_GROUP" :disabled="true">
+													<el-button slot="append" icon="el-icon-search" @click="addperson('2')"></el-button>
+												</el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -256,9 +259,12 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="样品返回接收人">
-												<el-select v-model="workorderForm.RETURN_ITEM_USER" style="width: 100%">
+												<!-- <el-select v-model="workorderForm.RETURN_ITEM_USER" style="width: 100%">
 													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.nickname"></el-option>
-												</el-select>
+												</el-select> -->
+												<el-input v-model="workorderForm.RETURN_ITEM_USER" :disabled="true">
+													<el-button slot="append" icon="el-icon-search" @click="addperson('3')"></el-button>
+												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -545,7 +551,7 @@
 								</el-tabs>
 							</div>
 							<!-- 录入人信息 Begin-->
-							<el-collapse-item title="其他" name="7">
+							<el-collapse-item title="其他" name="7" v-show="views">
 								<el-row >
 									<el-col :span="8">
 										<el-form-item label="录入人" prop="ENTERBY">
@@ -582,7 +588,7 @@
 					<div class="el-dialog__footer">
 						<el-form-item>
 							<el-button type="primary" @click="submitForm('workorderForm')">保存</el-button>
-							<el-button type="success" v-show="addtitle">保存并添加</el-button>
+							<el-button type="success" v-show="addtitle">保存并继续</el-button>
 							<el-button @click='close'>取消</el-button>
 						</el-form-item>
 					</div>
@@ -831,6 +837,7 @@
 				selval:[],
 				userList:[],
 				samplesList:[],
+				numtips:''
 			};
 		},
 		methods: {
@@ -872,12 +879,19 @@
 				this.dialogVisible3 = false;
 				this.$emit('request');
 			},
-			addperson(){
+			addperson(num){
+				this.numtips = num;
 				this.$emit('request');
 				this.dialogVisible2 = true;
 			},
 			addpersonname(){
-				this.workorderForm.MASTER_INSPECTOR = this.selMenu[0].username;
+				if(this.numtips == '1'){
+					this.workorderForm.MASTER_INSPECTOR = this.selMenu[0].username;
+				}else if(this.numtips == '2'){
+					this.workorderForm.ITEM_PROFESSIONAL_GROUP = this.selMenu[0].username;
+				}else if(this.numtips == '3'){
+					this.workorderForm.RETURN_ITEM_USER = this.selMenu[0].username;
+				}
 				this.dialogVisible2 = false;
 				this.$emit('request');
 			},
@@ -1078,12 +1092,14 @@
 						type: 'error'
 					});
 				});
+				this.vuews = false
 				this.modify = false;
 				this.show = true;
 			},
 
 			// 这里是修改
 			detail(dataid) {
+				this.views = false;
 				this.modify = true;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 	    			this.workorderForm.CHANGEBY = res.data.nickname;

@@ -496,11 +496,11 @@
 		          		var DATAINFO = JSON.stringify(this.DATAINFO); //接过来的数据
  						var dataInfo = JSON.stringify(this.dataInfo); //获取新新的数据
 				 		if(dataInfo == DATAINFO){
-				  		this.$message({
-							message: '没有修改不能修改',
-							type: 'warning'
-						});
-						return false;
+							this.$message({
+								message: '没有修改内容，不允许修订',
+								type: 'warning'
+							});
+							return false;
 					  	}else{
 							var url = this.basic_url + '/api-apps/app/inspectionSta/operate/upgraded';
 							this.$axios.post(url,this.dataInfo).then((res) => {

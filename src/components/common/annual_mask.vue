@@ -401,11 +401,9 @@
 						</el-collapse>
 					</div>
 					<div class="el-dialog__footer">
-						<el-form-item>
-							<el-button type="primary" class="btn-primarys" @click="saveAndUpdate('WORKPLAN')">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit('WORKPLAN')" v-show="addtitle">保存并继续</el-button>
-							<el-button @click='close'>取消</el-button>
-						</el-form-item>
+						<el-button type="primary" @click="saveAndUpdate('WORKPLAN')">保存</el-button>
+						<el-button type="success" @click="saveAndSubmit('WORKPLAN')" v-show="addtitle">保存并继续</el-button>
+						<el-button @click='close'>取消</el-button>
 					</div>
 				</el-form>
 			</div>
@@ -1375,16 +1373,22 @@
 			save(WORKPLAN) {
 				this.$refs.WORKPLAN.validate((valid) => {
 					if (valid) {
-						if(this.worlplanlist.length<=0&&this.basisList.length<=0&&this.proTestList.length<=0){
+						if(this.worlplanlist.length<=0){
 			        		this.$message({
-								message: '年度计划列表、检测依据、检测项目与要求是必填项，请填写！',
+								message: '年度计划列表是必填项，请填写！',
 								type: 'warning'
 							});
 							return false;
 			        	}else{
 							if(!this.isEditList){
 								for(let i=0;i<this.worlplanlist.length;i++){
-									console.log(this.worlplanlist[i].CHECKCOST);
+									if(this.worlplanlist[i].WORLPLANLINE_BASISList.length<=0||this.worlplanlist[i].WORLPLANLINE_PROJECTList.length<=0){
+										this.$message({
+											message: '检测依据、检测项目与要求是必填项，请填写！',
+											type: 'warning'
+										});
+										return false;
+									}
 									let b = parseFloat(this.worlplanlist[i].CHECKCOST.replace(/[^\d\.-]/g, ""));
 									this.worlplanlist[i].CHECKCOST = b;
 								}
@@ -1397,10 +1401,38 @@
 											type: 'success'
 										});
 										//重新加载数据
-											this.$emit('request');
-											this.$emit('reset');
-											// this.visible();
+											this.falg = true;
+											// this.reset();
+											// this.WORKPLAN = {
+											// 	'ID': '',
+											// 	'WP_NUM': '',
+											// 	'DESCRIPTION': '',
+											// 	'YEAR': year,	
+											// 	'TYPE': '',
+											// 	'STATUS': '草稿',
+											// 	'LEADER_STATUS': '未开始',
+											// 	'STATUSDATE': date,
+											// 	'ITEMTYPE': '',
+											// 	'PROP_UNIT': '',
+											// 	'ENTERBY': '当前人',
+											// 	'ENTERDATE': date,
+											// 	'CHANGEBY': '',
+											// 	'CHANGEDATE': '',
+											// 	'COMPACTOR': '',
+											// 	'C_PERSON': '',
+											// 	'APPRPERSON': '',
+											// 	'REPORTDATE': date,
+											// 	'MEMO': '',
+											// 	'MESSSTATUS': '1',
+											// 	'SYNCHRONIZATION_TIME': ''
+											// };
+											// this.worlplanlist = []; //年度计划列表
+											// this.basisList = []; //检测依据
+											// this.proTestList = []; //项目检测和要求
+											// this.isEditList = false;
+											// this.$emit('request');
 									}else{
+										this.falg = false;
 										this.$message({
 											message: res.data.message,
 											type: 'error'
@@ -1420,9 +1452,7 @@
 								});
 								this.falg = false;
 							}
-							
 						}
-						// this.falg = true;
 					} else {
 						this.show = true;
 						this.$message({
@@ -1433,18 +1463,47 @@
 					}
 	  			});
 			},
+			reset(){
+				this.WORKPLAN = {
+					'ID': '',
+					'WP_NUM': '',
+					'DESCRIPTION': '',
+					'YEAR': year,	
+					'TYPE': '',
+					'STATUS': '草稿',
+					'LEADER_STATUS': '未开始',
+					'STATUSDATE': date,
+					'ITEMTYPE': '',
+					'PROP_UNIT': '',
+					'ENTERBY': '当前人',
+					'ENTERDATE': date,
+					'CHANGEBY': '',
+					'CHANGEDATE': '',
+					'COMPACTOR': '',
+					'C_PERSON': '',
+					'APPRPERSON': '',
+					'REPORTDATE': date,
+					'MEMO': '',
+					'MESSSTATUS': '1',
+					'SYNCHRONIZATION_TIME': ''
+				};
+				this.worlplanlist = []; //年度计划列表
+				// this.basisList = []; //检测依据
+				// this.proTestList = []; //项目检测和要求
+				// this.isEditList = false;
+			},
 			//保存
 			saveAndUpdate(WORKPLAN) {
 				this.save(WORKPLAN);
-				if(this.falg){
+				// if(this.falg){
 					this.show = false;
-				}
+				// }
 			},
 			//保存并继续
 			saveAndSubmit(WORKPLAN) {
 				this.save(WORKPLAN);
-				// this.visible();
-				this.visible();
+				this.$emit('reset');
+				// this.show = true;
 			},
 			loadMore () {
 			   if (this.loadSign) {

@@ -343,7 +343,7 @@
 	 					// console.log(testingForm);
 					 	if(testingForm==TESTINGFORM){
 					  		this.$message({
-								message: '没有修改不能修改',
+								message: '没有修改内容，不允许修订',
 								type: 'warning'
 							});
 							return false;

@@ -586,11 +586,9 @@
 						</el-collapse>
 					</div>
 					<div class="el-dialog__footer">
-						<el-form-item>
 							<el-button type="primary" @click="submitForm('workorderForm')">保存</el-button>
 							<el-button type="success" v-show="addtitle">保存并继续</el-button>
 							<el-button @click='close'>取消</el-button>
-						</el-form-item>
 					</div>
 				</el-form>
 			</div>

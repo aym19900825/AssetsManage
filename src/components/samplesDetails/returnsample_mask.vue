@@ -139,11 +139,9 @@
 						</el-collapse>
 					</div>
 					<div class="content-footer"  v-show="noviews">
-						<el-form-item>
-							<el-button type="primary" @click="saveAndUpdate('samplesForm')">保存</el-button>
-						    <el-button type="success" @click="saveAndSubmit('samplesForm')">保存并继续</el-button>
-							<el-button @click="close">取消</el-button>     
-						</el-form-item>
+						<el-button type="primary" @click="saveAndUpdate('samplesForm')">保存</el-button>
+						<el-button type="success" @click="saveAndSubmit('samplesForm')">保存并继续</el-button>
+						<el-button @click="close">取消</el-button>     
 					</div>
 				</el-form>
 			</div>

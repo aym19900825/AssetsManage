@@ -1,6 +1,6 @@
 <template>
 <div>
-	<div class="mask_div">
+	<div class="masks_div">
   <el-form ref="approveForm" :model="approveForm" :rules="rules" label-width="120px" class="demo-ruleForm">
     <el-row :gutter="30">
       <el-col :span="23" :offset="0">
@@ -11,9 +11,9 @@
     </el-row>
 
     <el-form-item size="medium" class="div-submit">
-      <el-button type="primary" @click="submitForm('approveForm')">同意</el-button>
-      <el-button type="danger" @click="rejectForm('approveForm')">驳回</el-button>
-      <el-button @click="resetForm('approveForm')">取消</el-button>
+      <el-button type="primary" @click="submitForm">同意</el-button>
+      <el-button type="danger" @click="rejectForm">驳回</el-button>
+      <el-button @click="resetForm">取消</el-button>
     </el-form-item>
   </el-form>
   </div>
@@ -41,31 +41,18 @@ export default {
   },
 
   methods: {
+  	visible() {
+			this.show=true;
+  	},
     //同意
-    submitForm(formName){
-     this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert('submit!');
-        } else {
-          console.log('error submit!!');
-          return false;
-        }
-      });
+    submitForm(){
+     
     },
     //驳回
-    rejectForm(formName){
-     this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert('submit!');
-        } else {
-          console.log('error submit!!');
-          return false;
-        }
-      });
-    },
+    rejectForm(){
+   },
     //取消
-    resetForm(formName){
-     this.$refs[formName].resetFields();
+    resetForm(){
     }
   }
 }
@@ -75,5 +62,17 @@ export default {
 <style>
 .el-form-item {
 margin-bottom: 20px;
+}
+.masks_div{
+    position: absolute;
+    z-index: 1002;
+    width: 50%;
+    margin: 20% 20%;
+    background:#F3F6FA;	
+    border-radius: 0px;
+    height: 50%;
+    top: 0px;
+    bottom: 0px;
+    overflow: hidden;
 }
 </style>

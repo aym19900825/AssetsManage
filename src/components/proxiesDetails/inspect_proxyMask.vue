@@ -682,17 +682,17 @@
 		</el-dialog>
 		<!-- 客户联系人 End -->
 		<!--审批页面-->
-		<!--<approvalmask ref="approval" ></approvalmask>-->
+		<approvalmask ref="approvalChild" ></approvalmask>
 	</div>
 </template>
 
 <script>
 	import Config from '../../config.js';
-//	import approvalmask from '../workflow/approving.vue'
+	import approvalmask from '../workflow/approving.vue'
 	export default {
 		name: 'masks',
 		components: {
-//			'approvalmask': approvalmask
+		 approvalmask
 		},
 		data() {
 			var validate = (rule, value, callback) => {
@@ -1288,6 +1288,7 @@
 			},
 			//审批流程
 			approvals(){
+				this.$refs.approvalChild.visible();
 //				var url = this.basic_url + '/api-apps/app/inspectPro/flow/'+this.dataid;
 //				this.$axios.post(url, {}).then((res) => {
 //					console.log(res);

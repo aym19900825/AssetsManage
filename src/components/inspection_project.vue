@@ -2,9 +2,12 @@
 <div>
 	<div class="headerbg">
 		<vheader></vheader>
-		<navs_header></navs_header>
+		<navs_header ref="navsheader"></navs_header>
 	</div>
 	<div class="contentbg">
+		<!--左侧菜单调用 Begin-->
+			<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left> 
+		<!--左侧菜单调用 End-->
 		<!--右侧内容显示 Begin-->
 		<div class="wrapper wrapper-content wrapperall">
 			<div class="ibox-content">
@@ -446,6 +449,10 @@
 			viewchildRow(id,num) {//查看子项数据
 				this.$refs.product2child.viewfield_product2(id,num);
 			},
+			childByValue:function(childValue) {
+        		// childValue就是子组件传过来的值
+        		this.$refs.navsheader.showClick(childValue);
+      		},
 		},
 		
 		mounted() {

@@ -606,7 +606,7 @@
 					email: '',
 					address: '',
 					tips: '',
-					enabled: '1',
+					enabled: true,
 					traings: [],
 					qualifications: [],
 				}
@@ -732,7 +732,7 @@
 					email: '',
 					address: '',
 					tips: '',
-					enabled: '1',
+					enabled: true,
 					traings: [],
 					qualifications: [],
 				};
@@ -798,7 +798,7 @@
 					console.log(res.data);
 					this.user = res.data;
 					this.user.sex = this.user.sex ? '男' : '女';
-					this.user.enabled ='1';
+					this.user.enabled = this.user.enabled ? '活动' : '不活动';
 					this.user.ispermit = this.user.ispermit == '1' ? '是' : '否';
 					this.user.islogin = this.user.islogin == '1' ? '是' : '否';
 					this.user.roleId = [];
@@ -830,7 +830,7 @@
 				this.$axios.get(url, {}).then((res) => {
 					this.user = res.data;
 					this.user.sex = this.user.sex ? '男' : '女';
-					this.user.enabled =1;
+					this.user.enabled = this.user.enabled ? '活动' : '不活动';
 					this.user.ispermit = this.user.ispermit == '1' ? '是' : '否';
 					this.user.islogin = this.user.islogin == '1' ? '是' : '否';
 					this.user.roleId = [];
@@ -887,7 +887,7 @@
 				var _this = this;
 				this.$refs.user.validate((valid) => {
 					if(valid) {
-					    _this.user.enabled = 1;
+						_this.user.enabled = true;
 						_this.user.ispermit = _this.user.ispermit == '是' ? '1' : '2';
 						_this.user.islogin = _this.user.islogin == '是' ? '1' : '2';
 						var user = _this.user;
@@ -918,7 +918,7 @@
 									type: 'success',
 								});
 								this.$emit('request');
-								this.$refs["user"].resetFields(); //清空表单验证
+//								this.$refs["user"].resetFields(); //清空表单验证
 							}
 						}).catch((err) => {
 							this.$message({

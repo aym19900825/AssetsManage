@@ -401,10 +401,9 @@
 						</el-collapse>
 					</div>
 					<div class="el-dialog__footer">
-						<el-form-item>
-							<el-button @click='close'>取消</el-button>
-							<el-button type="primary" class="btn-primarys" @click="submitForm">保存</el-button>
-						</el-form-item>
+						<el-button type="primary" @click="saveAndUpdate('WORKPLAN')">保存</el-button>
+						<el-button type="success" @click="saveAndSubmit('WORKPLAN')" v-show="addtitle">保存并继续</el-button>
+						<el-button @click='close'>取消</el-button>
 					</div>
 				</el-form>
 			</div>
@@ -835,7 +834,8 @@
 				views:true,
 				dept:true,
 				categoryList:[],
-				proindex:0
+				proindex:0,
+				falg:false
 			};
 		},
 		methods: {
@@ -1369,52 +1369,141 @@
 				$(".mask_div").css("margin", "7% 10%");
 				$(".mask_div").css("top", "0");
 			},
-			// rmoney(s) 
-			// { 
-			// 	return parseFloat(s.replace(/[^\d\.-]/g, "")); 
-			// },
 			// 保存users/saveOrUpdate
-			submitForm() {
+			save(WORKPLAN) {
 				this.$refs.WORKPLAN.validate((valid) => {
 					if (valid) {
-				if(!this.isEditList){
-					for(let i=0;i<this.worlplanlist.length;i++){
-						console.log(this.worlplanlist[i].CHECKCOST);
-						let b = parseFloat(this.worlplanlist[i].CHECKCOST.replace(/[^\d\.-]/g, ""));
-						this.worlplanlist[i].CHECKCOST = b;
-					}
-					this.WORKPLAN.WORLPLANLINEList = this.worlplanlist;
-					var url = this.basic_url +'/api-apps/app/workplan/saveOrUpdate';
-					this.$axios.post(url, this.WORKPLAN).then((res) => {
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '保存成功',
-								type: 'success'
+						if(this.worlplanlist.length<=0){
+			        		this.$message({
+								message: '年度计划列表是必填项，请填写！',
+								type: 'warning'
 							});
-							this.show = false;
-							this.$emit('request');
-						}else{
-							this.$message({
-								message: res.data.message,
-								type: 'error'
-							});
+							return false;
+			        	}else{
+							if(!this.isEditList){
+								for(let i=0;i<this.worlplanlist.length;i++){
+									if(this.worlplanlist[i].WORLPLANLINE_BASISList.length<=0||this.worlplanlist[i].WORLPLANLINE_PROJECTList.length<=0){
+										this.$message({
+											message: '检测依据、检测项目与要求是必填项，请填写！',
+											type: 'warning'
+										});
+										return false;
+									}
+									let b = parseFloat(this.worlplanlist[i].CHECKCOST.replace(/[^\d\.-]/g, ""));
+									this.worlplanlist[i].CHECKCOST = b;
+								}
+								this.WORKPLAN.WORLPLANLINEList = this.worlplanlist;
+								var url = this.basic_url +'/api-apps/app/workplan/saveOrUpdate';
+								this.$axios.post(url, this.WORKPLAN).then((res) => {
+									if(res.data.resp_code == 0) {
+										this.$message({
+											message: '保存成功',
+											type: 'success'
+										});
+										//重新加载数据
+											this.falg = true;
+											// this.reset();
+											// this.WORKPLAN = {
+											// 	'ID': '',
+											// 	'WP_NUM': '',
+											// 	'DESCRIPTION': '',
+											// 	'YEAR': year,	
+											// 	'TYPE': '',
+											// 	'STATUS': '草稿',
+											// 	'LEADER_STATUS': '未开始',
+											// 	'STATUSDATE': date,
+											// 	'ITEMTYPE': '',
+											// 	'PROP_UNIT': '',
+											// 	'ENTERBY': '当前人',
+											// 	'ENTERDATE': date,
+											// 	'CHANGEBY': '',
+											// 	'CHANGEDATE': '',
+											// 	'COMPACTOR': '',
+											// 	'C_PERSON': '',
+											// 	'APPRPERSON': '',
+											// 	'REPORTDATE': date,
+											// 	'MEMO': '',
+											// 	'MESSSTATUS': '1',
+											// 	'SYNCHRONIZATION_TIME': ''
+											// };
+											// this.worlplanlist = []; //年度计划列表
+											// this.basisList = []; //检测依据
+											// this.proTestList = []; //项目检测和要求
+											// this.isEditList = false;
+											// this.$emit('request');
+									}else{
+										this.falg = false;
+										this.$message({
+											message: res.data.message,
+											type: 'error'
+										});
+									}
+								}).catch((err) => {
+									this.$message({
+										message: '网络错误，请重试',
+										type: 'error'
+									});
+								});
+							}
+							else{
+								this.$message({
+									message: '您还没有在编辑数据，需保存',
+									type: 'warning'
+								});
+								this.falg = false;
+							}
 						}
-					}).catch((err) => {
+					} else {
+						this.show = true;
 						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
+							message: '未填写完整，请填写',
+							type: 'warning'
 						});
-					});
-				}else{
-					this.$message({
-						message: '您还没有在编辑数据，需保存',
-						type: 'warning'
-					});
-				}
-	  			} else {
-			            return false;
-			        }
+						this.falg = false;
+					}
 	  			});
+			},
+			reset(){
+				this.WORKPLAN = {
+					'ID': '',
+					'WP_NUM': '',
+					'DESCRIPTION': '',
+					'YEAR': year,	
+					'TYPE': '',
+					'STATUS': '草稿',
+					'LEADER_STATUS': '未开始',
+					'STATUSDATE': date,
+					'ITEMTYPE': '',
+					'PROP_UNIT': '',
+					'ENTERBY': '当前人',
+					'ENTERDATE': date,
+					'CHANGEBY': '',
+					'CHANGEDATE': '',
+					'COMPACTOR': '',
+					'C_PERSON': '',
+					'APPRPERSON': '',
+					'REPORTDATE': date,
+					'MEMO': '',
+					'MESSSTATUS': '1',
+					'SYNCHRONIZATION_TIME': ''
+				};
+				this.worlplanlist = []; //年度计划列表
+				// this.basisList = []; //检测依据
+				// this.proTestList = []; //项目检测和要求
+				// this.isEditList = false;
+			},
+			//保存
+			saveAndUpdate(WORKPLAN) {
+				this.save(WORKPLAN);
+				// if(this.falg){
+					this.show = false;
+				// }
+			},
+			//保存并继续
+			saveAndSubmit(WORKPLAN) {
+				this.save(WORKPLAN);
+				this.$emit('reset');
+				// this.show = true;
 			},
 			loadMore () {
 			   if (this.loadSign) {
@@ -1423,7 +1512,7 @@
 			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
 			       return
 			     }
-			     setTimeout(() => {
+			    setTimeout(() => {
 			       this.loadSign = true
 			     }, 1000)
 			     this.requestData()

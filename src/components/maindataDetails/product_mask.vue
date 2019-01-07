@@ -145,7 +145,11 @@
 				if(value === '') {
 					callback(new Error('请填写产品名称'));
 				} else {
-					callback();
+					if((/^[!@#$%^&*";',.~！@#￥%……&*《》？，。?、|]+$/).test(value) == true){
+		                 callback(new Error("请规范填写名称"));
+		            }else{
+		                callback();
+		            }
 				}
 			};
 			return {
@@ -378,7 +382,7 @@
  					// console.log(product);console.log(PRODUCT);
 					 	if(product == PRODUCT){
 						  	this.$message({
-								message: '没有修改不能修改',
+								message: '没有修改内容，不允许修订',
 								type: 'warning'
 							});
 							return false;

@@ -7,7 +7,7 @@
 	</div>
 	<div class="contentbg">
 		<!--左侧菜单内容显示 Begin-->
-		<navs_left></navs_left>
+		<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left>
 		<!--左侧菜单内容显示 End-->
 
 		<!--右侧内容显示 Begin-->
@@ -153,7 +153,7 @@
 <script>
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
-	import navs_left from '../common/left_navs/nav_left4.vue'
+	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_header from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import instrumentsmask from '../equipmentsDetails/instrument_mask.vue'
@@ -488,6 +488,11 @@
 			formatter(row, column) {
 				return row.enabled;
 			},
+			childByValue:function(childValue) {
+        		// childValue就是子组件传过来的值
+        		console.log(childValue);
+        		this.$refs.navsheader.showClick(childValue);
+      		},
 		},
 		mounted(){
 			this.requestData();
@@ -496,7 +501,6 @@
               $(".div-table").scroll(function(){
                 self.loadMore();
             })
-              this.$refs.navsheader.sessionGet();
         },
 	}
 </script>

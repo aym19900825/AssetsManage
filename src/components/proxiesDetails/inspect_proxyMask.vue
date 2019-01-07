@@ -21,8 +21,8 @@
 					<div class="text-center" v-show="viewtitle">
 						<el-button class="start" type="success" round plain size="mini" @click="startup"><i class="icon-start"></i> 启动流程</el-button>
 						<el-button class="" type="warning" round plain size="mini" @click="approvals"><i class="icon-edit-3"></i> 审批</el-button>
-						<el-button type="primary" round plain size="mini"><i class="icon-git-pull-request"></i> 流程地图</el-button>
-						<el-button type="primary" round plain size="mini"><i class="icon-plan"></i> 流程历史</el-button>
+						<el-button type="primary" round plain size="mini" @click="flowmap"><i class="icon-git-pull-request"></i> 流程地图</el-button>
+						<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
 					</div>
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames">
@@ -682,17 +682,24 @@
 		</el-dialog>
 		<!-- 客户联系人 End -->
 		<!--审批页面-->
-		<!--<approvalmask ref="approval" ></approvalmask>-->
+		<approvalmask :approvingData="approvingData" ref="approvalChild" ></approvalmask>
+		<!--流程历史-->
+		<flowhistorymask ref="flowhistoryChild" ></flowhistorymask>
+		<flowmapmask  ref="flowmapChild" ></flowmapmask>
 	</div>
 </template>
 
 <script>
 	import Config from '../../config.js';
-//	import approvalmask from '../workflow/approving.vue'
+	import approvalmask from '../workflow/approving.vue'
+	import flowhistorymask from '../workflow/flowhistory.vue'
+		import flowmapmask from '../workflow/flowmap.vue'
 	export default {
 		name: 'masks',
 		components: {
-//			'approvalmask': approvalmask
+		 approvalmask,
+		 flowhistorymask,
+		 flowmapmask,
 		},
 		data() {
 			var validate = (rule, value, callback) => {
@@ -704,6 +711,7 @@
 			};
 
 			return {
+				approvingData:{},
 				loadSign:true,//加载
 				commentArr:{},
 				falg:false,//保存验证需要的
@@ -986,7 +994,6 @@
 			},
 			// 这里是修改
 			detail(dataid) {
-				
 				var usersUrl = this.basic_url + '/api-user/users/currentMap'
 				this.$axios.get(usersUrl, {}).then((res) => {
 					this.dataInfo.CHANGEBY = res.data.nickname;
@@ -1288,21 +1295,31 @@
 			},
 			//审批流程
 			approvals(){
-//				var url = this.basic_url + '/api-apps/app/inspectPro/flow/'+this.dataid;
-//				this.$axios.post(url, {}).then((res) => {
-//					console.log(res);
-//					if(res.data.resp_code == 1) {
-//							this.$message({
-//								message:res.data.resp_msg,
-//								type: 'warning'
-//							});
-//				    }else{
-//				    	this.$message({
-//								message:res.data.resp_msg,
-//								type: 'success'
-//							});
-//				    }
-//				});
+				this.approvingData =this.dataid;
+				this.$refs.approvalChild.visible();
+			},
+			//流程历史
+			flowhistory(){
+				this.$refs.flowhistoryChild.visible();
+			},
+			//流程地图
+			flowmap(){
+				this.$refs.flowmapChild.visible();
+				var url = this.basic_url + '/api-apps/app/inspectPro/flow/image/'+this.dataid;
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+					if(res.data.resp_code == 1) {
+							this.$message({
+								message:res.data.resp_msg,
+								type: 'warning'
+							});
+				    }else{
+				    	this.$message({
+								message:res.data.resp_msg,
+								type: 'success'
+							});
+				    }
+				});
 			},
 			requestData(index) {
 				var data = {

@@ -212,7 +212,7 @@
 					this.CATEGORY.DEPARTMENT = res.data.deptName;
 					this.CATEGORY.ENTERBY = res.data.nickname;
 					var date = new Date();
-					this.CATEGORY.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					this.CATEGORY.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 					if(opt != 'new'){
 						let _obj = JSON.stringify(this.CATEGORY);
 						this.category = JSON.parse(_obj);

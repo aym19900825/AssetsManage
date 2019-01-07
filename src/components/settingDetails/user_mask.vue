@@ -606,7 +606,7 @@
 					email: '',
 					address: '',
 					tips: '',
-					enabled: 1,
+					enabled: '1',
 					traings: [],
 					qualifications: [],
 				}
@@ -732,7 +732,7 @@
 					email: '',
 					address: '',
 					tips: '',
-					enabled: 1,
+					enabled: '1',
 					traings: [],
 					qualifications: [],
 				};

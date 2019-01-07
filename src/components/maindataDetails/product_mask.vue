@@ -145,7 +145,11 @@
 				if(value === '') {
 					callback(new Error('请填写产品名称'));
 				} else {
-					callback();
+					if((/^[!@#$%^&*";',.~！@#￥%……&*《》？，。?、|]+$/).test(value) == true){
+		                 callback(new Error("请规范填写名称"));
+		            }else{
+		                callback();
+		            }
 				}
 			};
 			return {

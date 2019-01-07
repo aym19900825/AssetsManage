@@ -390,7 +390,7 @@
 					</div>
 					<div class="el-dialog__footer" v-show="noviews">
 						<el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
-						<el-button type="success" @click='saveAndSubmit()' v-show="addtitle">保存并添加</el-button>
+						<el-button type="success" @click='saveAndSubmit()' v-show="addtitle">保存并继续</el-button>
 						<el-button @click='close'>取消</el-button>
 					</div>
 				</el-form>
@@ -945,7 +945,7 @@
 				}
 				this.$emit('request');
 			},
-			//保存并添加
+			//保存并继续
 			saveAndSubmit() {
 				this.save();
 				this.reset();

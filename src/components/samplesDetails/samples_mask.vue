@@ -30,6 +30,7 @@
 										<el-input  v-model="samplesForm.STATE" :disabled="true">
 											<template slot="prepend">状态</template>
 										</el-input>
+										<!-- <el-input v-for="(data,index) in Select_STATUS" :key="index" :value="data.code" :label="data.name"></el-input> -->
 									</el-col>
 									
 									<el-col :span="7" class="pull-right">
@@ -191,7 +192,7 @@
 									</el-button>
 								</div>
 								<!-- <el-form :label-position="labelPosition" :rules="rules" > -->
-								<el-table :fit="true" height="260px" :header-cell-style="rowClass" :data="samplesForm.ITEM_LINEList" row-key="ID" border stripe highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'samplesForm.ITEM_LINEList', order: 'descending'}">
+								<el-table :fit="true" max-height="260px" :header-cell-style="rowClass" :data="samplesForm.ITEM_LINEList" row-key="ID" border stripe highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'samplesForm.ITEM_LINEList', order: 'descending'}">
 								    <el-table-column prop="iconOperation" fixed width="50px">
 								      <template slot-scope="scope">
 								      	<i class="el-icon-check" v-show="scope.row.isEditing">
@@ -200,7 +201,7 @@
 								      	</i>
 								      </template>
 								    </el-table-column>
-
+	
 								    <el-table-column label="样品编号" sortable width="170px" prop="ITEMNUM" >
 								      <template slot-scope="scope">
 								      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.ITEMNUM" :disabled="edit" placeholder="自动获取">
@@ -228,8 +229,9 @@
 
 									<el-table-column prop="STATE" label="样品状态" sortable width="170px">
 								      <template slot-scope="scope">
-								        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STATE" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.STATUS}}</span>
-								      </template>
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATE" placeholder="请输入内容"></el-input>
+								      	<span v-else="v-else">{{scope.row.STATE}}</span>
+									  </template>
 								    </el-table-column>
 								    
 								   <!--  <el-table-column prop="ENTERBY" label="录入人" sortable width="120px">
@@ -298,7 +300,7 @@
 					</div>
 					<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
-							<el-button type="success" v-show="addtitle" @click='saveAndSubmit()'>保存并添加</el-button>
+							<el-button type="success" v-show="addtitle" @click='saveAndSubmit()'>保存并继续</el-button>
 							<el-button @click='close'>取消</el-button>
 					</div>
 				</el-form>
@@ -427,6 +429,7 @@
 					totalCount: 0
 				},
 				selectData: [], //获取检验/检测方法类别
+				Select_STATUS:[],//获取样品信息-样品状态-new
 				modify:false,//修订、修改人、修改日期
 				edit: true, //禁填
 				noedit:false,
@@ -803,25 +806,33 @@
 			save() {
 				this.$refs.samplesForm.validate((valid) => {
 					if (valid) {
-						var url = this.basic_url + '/api-apps/app/item/saveOrUpdate';
-						this.$axios.post(url, this.samplesForm).then((res) => {
-							console.log(res);
-							//resp_code == 0是后台返回的请求成功的信息
-							if(res.data.resp_code == 0) {
-								this.$message({
-									message: '保存成功',
-									type: 'success'
-								});
-								//重新加载数据
-								 this.$emit('request');
-							}
-						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
+						if(this.samplesForm.ITEM_LINEList.length<=0){
+			        		this.$message({
+								message: '样品表格是必填项，请填写！',
+								type: 'warning'
 							});
-						});
-						this.falg = true;
+							return false;
+			        	}else{
+							var url = this.basic_url + '/api-apps/app/item/saveOrUpdate';
+							this.$axios.post(url, this.samplesForm).then((res) => {
+								console.log(res);
+								//resp_code == 0是后台返回的请求成功的信息
+								if(res.data.resp_code == 0) {
+									this.$message({
+										message: '保存成功',
+										type: 'success'
+									});
+									//重新加载数据
+									this.$emit('request');
+								}
+							}).catch((err) => {
+								this.$message({
+									message: '网络错误，请重试',
+									type: 'error'
+								});
+							});
+							this.falg = true;
+						}
 					} else {
 						this.show = true;
 						this.$message({
@@ -840,7 +851,7 @@
 				}
 				this.$emit('request');
 			},
-			//保存并添加
+			//保存并继续
 			saveAndSubmit(){
 				this.save();
 				this.reset();
@@ -867,7 +878,7 @@
 				this.$axios.get(this.basic_url + '/api-apps/app/productType', {
 					params: data
 				}).then((res) => {
-					console.log(res.data);
+					// console.log(res.data);
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -917,6 +928,15 @@
 					this.userList = newarr;
 				}).catch((wrong) => {})
 			},
+			getITEM_STATUS() {//获取样品状态
+				var url =  this.basic_url + '/api-user/dicts/findChildsByCode?code=ITEM_STATUS';
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res)
+					// this.Select_STATUS = res.data;
+				}).catch(error => {
+					console.log('请求失败');
+				})
+			},
 			handleClose(done) { //大弹出框确定关闭按钮
 				this.$confirm('确认关闭？')
 					.then(_ => {
@@ -928,6 +948,7 @@
 		mounted() {
 			this.getType();
 			this.requestData();
+			this.getITEM_STATUS();
 		},
 	}
 </script>

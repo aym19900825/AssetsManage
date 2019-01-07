@@ -347,6 +347,8 @@
 		    		this.freezeAccount();
 		    	}else if(item.name=="删除"){
 		    		this.deluserinfo();
+		    	}else if(item.name=="重置密码"){
+		    		this.resetPwd();
 		    	}
 		    },
 			//添加用戶

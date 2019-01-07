@@ -121,7 +121,7 @@
 								</el-table-column> -->
 								<el-table-column label="标准编号" width="120" sortable prop="S_NUM" v-if="this.checkedName.indexOf('标准编号')!=-1">
 									<template slot-scope="scope">
-										<p @click=view(scope.row)>{{scope.row.S_NUM}}
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.S_NUM}}
 										</p>
 									</template>
 								</el-table-column>

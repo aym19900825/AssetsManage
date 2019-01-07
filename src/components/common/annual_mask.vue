@@ -27,15 +27,15 @@
 												<template slot="prepend">编辑状态</template>
 										</el-input>
 									</el-col>
-									<el-col :span="5" class="pull-right">
+									<!-- <el-col :span="5" class="pull-right">
 										<el-select v-model="WORKPLAN.TYPE" placeholder="类别">
 									    	<el-option label="监督抽查" value="1"></el-option>
 									    	<el-option label="质量抽查" value="0"></el-option>
 										</el-select>
-									</el-col>
+									</el-col> -->
 									<el-col :span="5" class="pull-right">
 										<el-input v-model="WORKPLAN.WP_NUM" placeholder="自动生成" :disabled="edit">
-												<template slot="prepend">计划编号</template>
+												<template slot="prepend">编号</template>
 										</el-input>
 									</el-col>
 								</el-row>
@@ -62,6 +62,14 @@
 								</el-row>
 								<el-row :gutter="5">
 									<el-col :span="6">
+										<el-form-item label="类别" prop="TYPE">
+											<el-select v-model="WORKPLAN.TYPE" placeholder="请选择">
+												<el-option label="监督抽查" value="1"></el-option>
+												<el-option label="质量抽查" value="0"></el-option>
+											</el-select>
+										</el-form-item>
+									</el-col>
+									<el-col :span="6">
 										<el-form-item label="编制人" prop="COMPACTOR">
 											<el-input v-model="WORKPLAN.COMPACTOR"></el-input>
 										</el-form-item>
@@ -76,6 +84,8 @@
 											<el-input v-model="WORKPLAN.APPRPERSON"></el-input>
 										</el-form-item>
 									</el-col>
+								</el-row>
+								<el-row :gutter="5">
 									<el-col :span="6">
 										<el-form-item label="提报日期" prop="REPORTDATE">
 										<div class="block">
@@ -87,8 +97,6 @@
 										  </div>
 										 </el-form-item>
 									</el-col>
-								</el-row>
-								<el-row :gutter="5">
 									<el-col :span="6">
 										<el-form-item label="年度" prop="YEAR">
 											<div class="block">
@@ -104,7 +112,7 @@
 										</el-form-item>
 									</el-col>
 									<!-- <el-col :span="6">
-										<el-form-item label="信息信息状态" prop="MESSSTATUS">
+										<el-form-item label="信息状态" prop="MESSSTATUS">
 											<el-input v-model="WORKPLAN.MESSSTATUS"></el-input>
 										</el-form-item>
 									</el-col> -->
@@ -285,8 +293,8 @@
 							<!-- 检测依据、检测项目与要求 End-->
 
 							<!-- todo -->
-							<!-- 文档编号列表 Begin-->
-							<!-- <el-collapse-item title="文档编号列表" name="5">
+							<!-- 文件编号列表 Begin-->
+							<!-- <el-collapse-item title="文件编号列表" name="5">
 								<div class="table-func">
 									<el-button type="success" size="mini" round @click="addfield2"><i class="icon-add"></i><font>新建行</font>
 									</el-button>
@@ -298,10 +306,10 @@
 					                            <el-form-item label="计划编号" ></el-form-item>
 					                        </el-col>
 					                        <el-col :span="4">
-					                            <el-form-item label="文档编号"></el-form-item>
+					                            <el-form-item label="文件编号"></el-form-item>
 					                        </el-col>
 					                        <el-col :span="6">
-					                            <el-form-item label="文档描述"></el-form-item>
+					                            <el-form-item label="文件描述"></el-form-item>
 					                        </el-col>
 					                        <el-col :span="4">
 					                            <el-form-item label="创建人" ></el-form-item>
@@ -321,10 +329,10 @@
 					                            <el-input type="text"  placeholder="计划编号"></el-input>
 					                        </el-col>
 					                        <el-col :span="4">
-					                            <el-input type="text"  placeholder="文档编号"></el-input>
+					                            <el-input type="text"  placeholder="文件编号"></el-input>
 					                        </el-col>
 					                        <el-col :span="6">
-					                        	<el-input type="text"  placeholder="文档描述"></el-input>
+					                        	<el-input type="text"  placeholder="文件描述"></el-input>
 					                        </el-col>
 					                        <el-col :span="4">
 					                            <el-input type="text"  placeholder="创建人"></el-input>
@@ -353,8 +361,8 @@
 					                </el-form-item>
 				            	</el-form>
 							</el-collapse-item> -->
-							<!-- 文档编号列表 End -->
-							<el-collapse-item title="文档" name="6">
+							<!-- 文件编号列表 End -->
+							<el-collapse-item title="文件" name="6">
 								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
 							</el-collapse-item>
 							<!-- 录入人信息 Begin-->
@@ -393,10 +401,9 @@
 						</el-collapse>
 					</div>
 					<div class="el-dialog__footer">
-						<el-form-item>
-							<el-button @click='close'>取消</el-button>
-							<el-button type="primary" class="btn-primarys" @click="submitForm">保存</el-button>
-						</el-form-item>
+						<el-button type="primary" @click="saveAndUpdate('WORKPLAN')">保存</el-button>
+						<el-button type="success" @click="saveAndSubmit('WORKPLAN')" v-show="addtitle">保存并继续</el-button>
+						<el-button @click='close'>取消</el-button>
 					</div>
 				</el-form>
 			</div>
@@ -610,14 +617,13 @@
 		</el-dialog>
 		<!-- 产品类别 End -->
 		<!-- 产品名称 Begin -->
-		<el-dialog title="产品类别" :visible.sync="dialogVisible4" width="80%" :before-close="handleClose">
+		<el-dialog title="产品名称" :visible.sync="dialogVisible4" width="80%" :before-close="handleClose">
 			<el-table  :header-cell-style="rowClass" :data="productList" line-center border stripe height="400px" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" fixed width="55" align="center">
 								</el-table-column>
 								<el-table-column label="编码" width="155" sortable prop="PRO_NUM">
 								</el-table-column>
 								<el-table-column label="名称" sortable prop="PRO_NAME">
-								</el-table-column>
 								</el-table-column>
 								<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
 								</el-table-column>
@@ -741,7 +747,6 @@
 		        fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				value: '',
 				assignshow:false,//下达任务通知书按钮
-				initcost:'',
 				options: [{
 					value: '1',
 					label: '活动'
@@ -829,7 +834,8 @@
 				views:true,
 				dept:true,
 				categoryList:[],
-				proindex:0
+				proindex:0,
+				falg:false
 			};
 		},
 		methods: {
@@ -855,7 +861,6 @@
 			//金额两位小数点千位分隔符，四舍五入
 			toPrice(item){
 				var money = document.getElementById("cost").value;
-				this.initcost = money;
 				var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
 				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
 				// this.dataInfo.CHECTCOST="￥" + num.join(".");
@@ -893,6 +898,9 @@
 			//下达任务通知书
 			assign(item){
 				var dataid = item.ID;
+				console.log(dataid);
+				console.log(item);
+				console.log(item.ISCREATED);
 				if(item.ISCREATED == 1){
 					this.$message({
 						message: '已经下达工作任务通知书，请勿重复下达',
@@ -924,7 +932,6 @@
             	if(editId){
             		let worlplanlist = this.worlplanlist;
 	            	for(let i=0, len=worlplanlist.length; i<len; i++){
-	            		// worlplanlist[i].CHECKCOST = this.initcost;
 	            		if(editId == worlplanlist[i].frontId){
 	            			worlplanlist[i].WORLPLANLINE_PROJECTList = JSON.parse(JSON.stringify(this.proTestList));
 	            			worlplanlist[i].WORLPLANLINE_BASISList = JSON.parse(JSON.stringify(this.basisList));
@@ -1128,7 +1135,7 @@
 	                this.$message.warning("请先保存当前编辑项");
 				}
 			},
-			addfield2(){//文档编号列表新建行
+			addfield2(){//文件编号列表新建行
 				var obj2 = {
                     STEP:'',
 					CERTIFICATE_NUM:'',
@@ -1262,8 +1269,6 @@
 					for(var i=0, len=worlplanlist.length; i<len; i++){
 						worlplanlist[i].isEditing = false;
 						worlplanlist[i].frontId = this.frontId++;
-						// var money = document.getElementById("costshow").value;
-						// this.initcost = money;
 						var cost = worlplanlist[i].CHECKCOST.toString();
 						var num = parseFloat(this.toNum(cost)).toFixed(2).toString().split(".");
 						num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
@@ -1364,52 +1369,141 @@
 				$(".mask_div").css("margin", "7% 10%");
 				$(".mask_div").css("top", "0");
 			},
-			// rmoney(s) 
-			// { 
-			// 	return parseFloat(s.replace(/[^\d\.-]/g, "")); 
-			// },
 			// 保存users/saveOrUpdate
-			submitForm() {
+			save(WORKPLAN) {
 				this.$refs.WORKPLAN.validate((valid) => {
 					if (valid) {
-				if(!this.isEditList){
-					for(let i=0;i<this.worlplanlist.length;i++){
-						console.log(this.worlplanlist[i].CHECKCOST);
-						let b = parseFloat(this.worlplanlist[i].CHECKCOST.replace(/[^\d\.-]/g, ""));
-						this.worlplanlist[i].CHECKCOST = b;
-					}
-					this.WORKPLAN.WORLPLANLINEList = this.worlplanlist;
-					var url = this.basic_url +'/api-apps/app/workplan/saveOrUpdate';
-					this.$axios.post(url, this.WORKPLAN).then((res) => {
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '保存成功',
-								type: 'success'
+						if(this.worlplanlist.length<=0){
+			        		this.$message({
+								message: '年度计划列表是必填项，请填写！',
+								type: 'warning'
 							});
-							this.show = false;
-							this.$emit('request');
-						}else{
-							this.$message({
-								message: res.data.message,
-								type: 'error'
-							});
+							return false;
+			        	}else{
+							if(!this.isEditList){
+								for(let i=0;i<this.worlplanlist.length;i++){
+									if(this.worlplanlist[i].WORLPLANLINE_BASISList.length<=0||this.worlplanlist[i].WORLPLANLINE_PROJECTList.length<=0){
+										this.$message({
+											message: '检测依据、检测项目与要求是必填项，请填写！',
+											type: 'warning'
+										});
+										return false;
+									}
+									let b = parseFloat(this.worlplanlist[i].CHECKCOST.replace(/[^\d\.-]/g, ""));
+									this.worlplanlist[i].CHECKCOST = b;
+								}
+								this.WORKPLAN.WORLPLANLINEList = this.worlplanlist;
+								var url = this.basic_url +'/api-apps/app/workplan/saveOrUpdate';
+								this.$axios.post(url, this.WORKPLAN).then((res) => {
+									if(res.data.resp_code == 0) {
+										this.$message({
+											message: '保存成功',
+											type: 'success'
+										});
+										//重新加载数据
+											this.falg = true;
+											// this.reset();
+											// this.WORKPLAN = {
+											// 	'ID': '',
+											// 	'WP_NUM': '',
+											// 	'DESCRIPTION': '',
+											// 	'YEAR': year,	
+											// 	'TYPE': '',
+											// 	'STATUS': '草稿',
+											// 	'LEADER_STATUS': '未开始',
+											// 	'STATUSDATE': date,
+											// 	'ITEMTYPE': '',
+											// 	'PROP_UNIT': '',
+											// 	'ENTERBY': '当前人',
+											// 	'ENTERDATE': date,
+											// 	'CHANGEBY': '',
+											// 	'CHANGEDATE': '',
+											// 	'COMPACTOR': '',
+											// 	'C_PERSON': '',
+											// 	'APPRPERSON': '',
+											// 	'REPORTDATE': date,
+											// 	'MEMO': '',
+											// 	'MESSSTATUS': '1',
+											// 	'SYNCHRONIZATION_TIME': ''
+											// };
+											// this.worlplanlist = []; //年度计划列表
+											// this.basisList = []; //检测依据
+											// this.proTestList = []; //项目检测和要求
+											// this.isEditList = false;
+											// this.$emit('request');
+									}else{
+										this.falg = false;
+										this.$message({
+											message: res.data.message,
+											type: 'error'
+										});
+									}
+								}).catch((err) => {
+									this.$message({
+										message: '网络错误，请重试',
+										type: 'error'
+									});
+								});
+							}
+							else{
+								this.$message({
+									message: '您还没有在编辑数据，需保存',
+									type: 'warning'
+								});
+								this.falg = false;
+							}
 						}
-					}).catch((err) => {
+					} else {
+						this.show = true;
 						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
+							message: '未填写完整，请填写',
+							type: 'warning'
 						});
-					});
-				}else{
-					this.$message({
-						message: '您还没有在编辑数据，需保存',
-						type: 'warning'
-					});
-				}
-	  			} else {
-			            return false;
-			        }
+						this.falg = false;
+					}
 	  			});
+			},
+			reset(){
+				this.WORKPLAN = {
+					'ID': '',
+					'WP_NUM': '',
+					'DESCRIPTION': '',
+					'YEAR': year,	
+					'TYPE': '',
+					'STATUS': '草稿',
+					'LEADER_STATUS': '未开始',
+					'STATUSDATE': date,
+					'ITEMTYPE': '',
+					'PROP_UNIT': '',
+					'ENTERBY': '当前人',
+					'ENTERDATE': date,
+					'CHANGEBY': '',
+					'CHANGEDATE': '',
+					'COMPACTOR': '',
+					'C_PERSON': '',
+					'APPRPERSON': '',
+					'REPORTDATE': date,
+					'MEMO': '',
+					'MESSSTATUS': '1',
+					'SYNCHRONIZATION_TIME': ''
+				};
+				this.worlplanlist = []; //年度计划列表
+				// this.basisList = []; //检测依据
+				// this.proTestList = []; //项目检测和要求
+				// this.isEditList = false;
+			},
+			//保存
+			saveAndUpdate(WORKPLAN) {
+				this.save(WORKPLAN);
+				// if(this.falg){
+					this.show = false;
+				// }
+			},
+			//保存并继续
+			saveAndSubmit(WORKPLAN) {
+				this.save(WORKPLAN);
+				this.$emit('reset');
+				// this.show = true;
 			},
 			loadMore () {
 			   if (this.loadSign) {
@@ -1418,7 +1512,7 @@
 			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
 			       return
 			     }
-			     setTimeout(() => {
+			    setTimeout(() => {
 			       this.loadSign = true
 			     }, 1000)
 			     this.requestData()

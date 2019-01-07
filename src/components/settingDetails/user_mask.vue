@@ -390,7 +390,7 @@
 					</div>
 					<div class="el-dialog__footer" v-show="noviews">
 						<el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
-						<el-button type="success" @click='saveAndSubmit()' v-show="addtitle">保存并添加</el-button>
+						<el-button type="success" @click='saveAndSubmit()' v-show="addtitle">保存并继续</el-button>
 						<el-button @click='close'>取消</el-button>
 					</div>
 				</el-form>
@@ -887,7 +887,7 @@
 				var _this = this;
 				this.$refs.user.validate((valid) => {
 					if(valid) {
-//						_this.user.enabled = _this.user.enabled == '活动' ? 'true' : 'false';
+						_this.user.enabled = true;
 						_this.user.ispermit = _this.user.ispermit == '是' ? '1' : '2';
 						_this.user.islogin = _this.user.islogin == '是' ? '1' : '2';
 						var user = _this.user;
@@ -918,7 +918,7 @@
 									type: 'success',
 								});
 								this.$emit('request');
-								this.$refs["user"].resetFields(); //清空表单验证
+//								this.$refs["user"].resetFields(); //清空表单验证
 							}
 						}).catch((err) => {
 							this.$message({
@@ -945,7 +945,7 @@
 				}
 				this.$emit('request');
 			},
-			//保存并添加
+			//保存并继续
 			saveAndSubmit() {
 				this.save();
 				this.reset();

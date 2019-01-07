@@ -43,20 +43,20 @@
 									<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'" :disabled="noedit">
 										<el-radio :label="it.label" v-for="it in item.opts" :key="it.id"></el-radio>
 									</el-radio-group>
+									<el-select clearable v-model="dataInfo[item.prop]"  v-if="item.type=='select'" filterable allow-create default-first-option placeholder="请选择">
+										<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+									</el-select>
 									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && item.prop =='A_PRICE' " @blur="handlePrice" :disabled="noedit" id="cost"></el-input>
 								</el-form-item>
 							</el-collapse-item>
 
 							<!-- 设备保管人员情况 -->
 							<el-collapse-item title="设备保管人员情况" name="2">
-								<el-form-item v-for="item in keeperInfo" :label="item.label":key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
-									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" :disabled="noedit"></el-input>
-									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'" :disabled="noedit"></el-input>
-									<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" :disabled="noedit">
-									</el-date-picker>
-									<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'">
-										<el-radio :label="it.val" v-for="it in item.opts" :key="it.id" :disabled="noedit">{{it.label}}</el-radio>
-									</el-radio-group>
+								<el-form-item v-for="item in keeperInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
+									<el-input v-model="dataInfo[item.prop]" v-if="item.type=='input'&&item.prop =='KEEPER'" :type="item.type"  :disabled="true">
+										<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="addPeople"></el-button>
+									</el-input>
+									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'&&item.prop!='KEEPER'" :disabled="noedit"></el-input>
 								</el-form-item>
 							</el-collapse-item>
 
@@ -76,7 +76,7 @@
 									</el-table-column>
 								</el-table>
 							</el-collapse-item>
-							<el-collapse-item title="文档" name="4">
+							<el-collapse-item title="文件" name="4">
 								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
 							</el-collapse-item>
 							
@@ -94,7 +94,7 @@
 
 					<div class="el-dialog__footer" v-show="noviews">
 						<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
-						<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并添加</el-button>
+						<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并继续</el-button>
 						<el-button @click='close'>取消</el-button>
 						<!-- <el-button type="primary" @click='submitForm'>提交</el-button> -->
 					</div>
@@ -102,6 +102,30 @@
 			</div>
 			<!--底部-->
 		</div>
+		<!--设备保管人 Begin-->
+		<el-dialog :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
+			<el-table :data="userList" border stripe :header-cell-style="rowClass" height="400px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table-column type="selection" width="55" fixed align="center">
+				</el-table-column>
+				<el-table-column label="用户名" sortable width="140px" prop="username">
+				</el-table-column>
+				<el-table-column label="姓名" sortable width="200px" prop="nickname">
+				</el-table-column>
+				<el-table-column label="机构" sortable width="150px" prop="deptName">
+				</el-table-column>
+				<el-table-column label="公司" sortable prop="companyName">
+				</el-table-column>
+				<el-table-column label="创建时间" prop="createTime" width="100px" sortable :formatter="dateFormat">
+				</el-table-column>
+			</el-table>
+			<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+			</el-pagination>
+			<span slot="footer" class="dialog-footer" v-if="noviews">
+    			<el-button @click="dialogVisible = false">取 消</el-button>
+    			<el-button type="primary" @click="addpeoname()">确 定</el-button>
+  			</span>
+		</el-dialog>
+		<!--设备保管人 End-->
 	</div>
 </template>
 
@@ -121,6 +145,8 @@
 				}
 			};
 			return {
+				loadSign:true,//加载
+				commentArr:{},
 				docParm: {
 					'model': 'new',
 					'appname': '',
@@ -224,7 +250,7 @@
 						label: '配置单位',
 						prop: 'CONFIG_UNIT',
 						width: '30%',
-						type: 'input',
+						type: 'select',
 						displayType: 'inline-block'
 					},
                     {
@@ -505,7 +531,7 @@
 				down: true,
 				up: false,
 				activeNames: ['1', '2','3','4'], //手风琴数量
-				dialogVisible: false, //对话框
+				// dialogVisible: false, //对话框
 				modify: false,
 				resourceData: [], //数组，我这里是通过接口获取数据，
 				resourceDialogisShow: false,
@@ -566,6 +592,14 @@
 				statusshow1:true,
 				statusshow2:false,
 				falg:false,
+				dialogVisible:false,//设备管理人
+				userList:[],
+				page: {
+					currentPage: 1,
+					pageSize: 10,
+					totalCount: 0
+				},
+				selectData:[]
 			};
 		},
 		methods: {
@@ -576,6 +610,60 @@
 			handlePrice(){
 				this.dataInfo.A_PRICE = parseFloat(this.dataInfo.A_PRICE).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 				console.log(this.dataInfo.A_PRICE);
+			},
+			//机构值
+			getCompany() {
+				var type = "2";
+				var url = this.basic_url + '/api-user/depts/treeByType';
+				this.$axios.get(url, {
+					params: {
+						type: type
+					},
+				}).then((res) => {
+					console.log(res.data);
+					this.selectData = res.data;
+				});
+			},
+			addPeople(){
+				console.log(123);
+				this.$emit('request');
+				this.dialogVisible = true;
+			},
+			addpeoname(){
+				this.dialogVisible = false;
+				this.dataInfo.KEEPER = this.selUser[0].nickname;
+				this.$emit('request');
+			},
+			SelChange(val) {
+				this.selUser = val;
+			},
+			loadMore () {
+			   if (this.loadSign) {
+			     this.loadSign = false
+			     this.page.currentPage++
+			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+			       return
+			     }
+			     setTimeout(() => {
+			       this.loadSign = true
+			     }, 1000)
+			     this.requestData()
+			   }
+			 },
+			 sizeChange(val) {
+				this.page.pageSize = val;
+				//				this.requestData();
+			},
+			currentChange(val) {
+				this.page.currentPage = val;
+				//				this.requestData();
+			},
+			dateFormat(row, column) {
+				var date = row[column.property];
+				if(date == undefined) {
+					return "";
+				}
+				return this.$moment(date).format("YYYY-MM-DD");
 			},
 			getUser(opt){
 				var url = this.basic_url + '/api-user/users/currentMap';
@@ -744,6 +832,13 @@
 					this.rebackDialog();
 				}
 			},
+			handleClose(done) {
+				this.$confirm('确认关闭？')
+					.then(_ => {
+						done();
+					})
+					.catch(_ => {});
+			},
 			maxDialog(e) { //定义大弹出框一个默认大小
 				this.isok1 = false;
 				this.isok2 = true;
@@ -807,9 +902,42 @@
 				this.save(dataInfo);
 				this.show = true;
 			},
+			requestData(index) {//高级查询字段
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				};
+				this.$axios.get(this.basic_url + '/api-user/users', {
+					params: data
+				}).then((res) => {
+					this.page.totalCount = res.data.count;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
+					}
+					this.commentArr[this.page.currentPage] = res.data.data
+					let newarr = []
+					for(var i = 1; i <= totalPage; i++) {
+
+						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+
+							for(var j = 0; j < this.commentArr[i].length; j++) {
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+
+					this.userList = newarr;
+				}).catch((wrong) => {})
+				
+			},
 		},
 		mounted() {
-			
+			this.requestData();
+			this.getCompany();
 		},
 
 	}

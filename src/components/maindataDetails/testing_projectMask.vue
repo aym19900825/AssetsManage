@@ -122,7 +122,7 @@
 					</div>
 					<div class="el-dialog__footer" v-show="noviews">
 						<el-button type="primary" @click="saveAndUpdate('testing_projectForm')">保存</el-button>
-						<el-button type="success" @click="saveAndSubmit('testing_projectForm')" v-show="addtitle">保存并添加</el-button>
+						<el-button type="success" @click="saveAndSubmit('testing_projectForm')" v-show="addtitle">保存并继续</el-button>
 						<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('testing_projectForm')">修订</el-button>
 						<!-- <el-button v-if="modify" type="success" @click="update('testing_projectForm')">启用</el-button> -->
 						<el-button @click="close">取消</el-button>
@@ -158,7 +158,7 @@
 								</el-table-column>
 								<el-table-column label="分发号" width="155" sortable prop="NUM">
 									<template slot-scope="scope">
-										<p @click=view(scope.row)>{{scope.row.NUM}}
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.NUM}}
 										</p>
 									</template>
 								</el-table-column>
@@ -369,7 +369,7 @@
 				// this.dataInfo.CHECTCOST="￥" + num.join(".");
 				this.testing_projectForm.QUANTITY = num.join(".");
 			},
-			getCompany() { //文档查询接口，暂无通，待修改
+			getCompany() { //文件查询接口，暂无通，待修改
 				this.editSearch = 'DOCLINKS';
 				var url = this.basic_url + '/api-user/depts/type'; //文件接口不对
 				this.$axios.get(url, {}).then((res) => {
@@ -528,7 +528,7 @@
  					var testing_projectForm=JSON.stringify(this.testing_projectForm); //获取新新的数据
 					 	if(testing_projectForm==TESTING_PROJECTFORM){
 					  	this.$message({
-								message: '没有修改不能修改',
+								message: '没有修改内容，不允许修订',
 								type: 'warning'
 							});
 							return false;
@@ -654,7 +654,7 @@
 					this.show = false;
 				}
 			},
-			//保存并添加
+			//保存并继续
 			saveAndSubmit(testing_projectForm) {
 				this.save(testing_projectForm);
 				this.show = true;

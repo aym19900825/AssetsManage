@@ -3,11 +3,11 @@
 <div>
 	<div class="headerbg">
 		<vheader></vheader>
-		<navs_header></navs_header>
+		<navs_header ref='navsheader'></navs_header>
 	</div>
 	<div class="contentbg">
 		<!--左侧菜单内容显示 Begin-->
-		<navs_left></navs_left>
+			<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left>
 		<!--左侧菜单内容显示 End-->
 
 		<!--右侧内容显示 Begin-->
@@ -79,12 +79,20 @@
 							</el-col>
 							<el-col :span="5">
 								<el-form-item label="溯源机构" prop="PM_MECHANISM">
-									<el-input v-model="searchList.PM_MECHANISM"></el-input>
+									<el-select clearable v-model="searchList.PM_MECHANISM" filterable allow-create default-first-option placeholder="请选择">
+										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+										</el-select>
 								</el-form-item>
 							</el-col>
 							<el-col :span="6">
 								<el-form-item label="溯源完成日期" prop="COMP_DATE" label-width="100px">
-									<el-input v-model="searchList.COMP_DATE"></el-input>
+									<div class="block">
+									    <el-date-picker
+									      v-model="searchList.COMP_DATE"
+									      type="date"
+									      placeholder="请选择" style="width: 100%">
+									    </el-date-picker>
+								  	</div>
 								</el-form-item>
 							</el-col>
 							<el-col :span="2">
@@ -102,7 +110,7 @@
 							</el-table-column>
 							<el-table-column label="溯源计划编号" width="200" sortable prop="PMNUM" v-if="this.checkedName.indexOf('溯源计划编号')!=-1">
 								<template slot-scope="scope">
-									<p @click=view(scope.row)>{{scope.row.PMNUM}}
+									<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.PMNUM}}
 									</p>
 								</template>
 							</el-table-column>
@@ -151,7 +159,7 @@
 <script>
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
-	import navs_left from '../common/left_navs/nav_left4.vue'
+	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_header from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import detailPage from '../equipmentsDetails/trancePlan_mask.vue'
@@ -322,13 +330,8 @@
 					totalCount: 0
 				},
 				aaaData:[],
+				selectData:[]
 			}
-		},
-
-		mounted(){
-			
-
-			
 		},
 		methods: {
 			//表头居中
@@ -490,6 +493,7 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
+					console.log(res.data);
 					this.userList = res.data.data;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
@@ -513,19 +517,34 @@
 			formatter(row, column) {
 				return row.enabled;
 			},
+			//机构值
+			getCompany() {
+				var type = "2";
+				var url = this.basic_url + '/api-user/depts/treeByType';
+				this.$axios.get(url, {
+					params: {
+						type: type
+					},
+				}).then((res) => {
+					console.log(res.data);
+					this.selectData = res.data;
+				});
+			},
+			childByValue:function(childValue) {
+        		// childValue就是子组件传过来的值
+        		console.log(childValue);
+        		this.$refs.navsheader.showClick(childValue);
+      		},
 		},
 		mounted(){
+			this.requestData();
+			this.getCompany();
              // 注册scroll事件并监听  
              let self = this;
               $(".div-table").scroll(function(){
                 self.loadMore();
             })
         },
-
-
-		mounted() {
-			this.requestData();
-		},
 	}
 </script>
 

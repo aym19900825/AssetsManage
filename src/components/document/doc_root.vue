@@ -68,7 +68,7 @@
 						<el-col :span="5" class="lefttree">
 							<div class="lefttreebg">
 								<div class="left_tree_title clearfix" @click="min3max()">
-									<div class="pull-left pr20" v-if="ismin">文档树</div>
+									<div class="pull-left pr20" v-if="ismin">文件树</div>
 									<span class="pull-right navbar-minimalize minimalize-styl-2">
 										<i class="icon-doubleok icon-double-angle-left blue"></i>
 									</span>
@@ -91,8 +91,6 @@
 							<!-- 表格 -->
 							<el-table :data="fileList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'fileList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
-								</el-table-column>
-								<el-table-column label="名称" sortable prop="filename" v-if="this.checkedName.indexOf('名称')!=-1">
 								</el-table-column>
 								<el-table-column label="状态" sortable width="200px" prop="filestatus" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>

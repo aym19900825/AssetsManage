@@ -43,7 +43,6 @@ export default {
 				}
 			}
 			if(!flag){
-				console.log(this.$store.state.clickedNavs);
 //				this.$store.state.clickedNavs = this.$store.state.clickedNavs.slice();
 				this.$store.state.clickedNavs.push(item);
 				setTimeout(function(){
@@ -89,32 +88,44 @@ export default {
 		},	
 	},
 	mounted() {
-		console.log(111111);
 		var _this = this;
-		var data = {
-			menuId: this.$store.state.navid,
-			roleId: this.$store.state.roleid,
-		};
+		console.log(_this.$store.state.menuid);
+		if(typeof(_this.$store.state.menuid)=="undefined"){
+			console.log(111111);
+			$('.navbar-default').hide();
+		     _this.$emit('childByValue',_this.$store.state.selectedNav);
+		}else{
+		    var data = {
+			menuId: _this.$store.state.menuid,
+			roleId: _this.$store.state.roleid,
+			};
 		var url = _this.basic_url + '/api-user/menus/findSecondByRoleIdAndFisrtMenu';
 		_this.$axios.get(url, {params: data}).then((res) => {
-			if(_this.$route.path!=_this.$store.state.selectedNav.url){
-				//赋值
-				console.log(res);
-//				_this.$selectedNav=res.data[0]
-				_this.$store.dispatch('setSelectedNavAct',res.data[0]);
-				console.log(res.data[0]);
-				console.log(_this.$store.state.selectedNav);
+			if(res.data.length>0&&res.data!='undefined'){
+			
+				if(_this.$route.path!=_this.$store.state.selectedNav.url){
+					//赋值
+	//				_this.$selectedNav=res.data[0]
+					_this.$store.dispatch('setSelectedNavAct',res.data[0]);
+				}
+				$('.navbar-default').show();
+				_this.leftNavs = res.data;
+				//子传父
+				 _this.$emit('childByValue',_this.$store.state.selectedNav);
+			}else{
+				$('.navbar-default').hide();
+				 _this.$emit('childByValue',_this.$store.state.selectedNav);
+				 
 			}
-			_this.leftNavs = res.data;
-			//子传父
-			console.log(_this.$store.state.selectedNav)
-			 _this.$emit('childByValue',_this.$store.state.selectedNav);
+				
 		}).catch((wrong) => {
 			_this.$message({
 				message: '网络错误，请重试左侧1',
 				type: 'error'
 			});
 		});
+		}
+		
 		
 		
 	}

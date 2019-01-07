@@ -42,8 +42,8 @@
 								<el-row class="pt10">
 									<el-col :span="8">
 										<el-form-item label="委托书编号" prop="PROXYNUM">
-											<el-input v-model="workorderForm.PROXYNUM" >
-												<el-button slot="append" icon="el-icon-search"></el-button>
+											<el-input v-model="workorderForm.PROXYNUM" :disabled="true">
+												<el-button slot="append" icon="el-icon-search" @click="addworkorder"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -62,8 +62,8 @@
 								<el-row >
 									<el-col :span="8">
 										<el-form-item label="主检员" prop="MASTER_INSPECTOR">
-											<el-input v-model="workorderForm.MASTER_INSPECTOR">
-												<el-button slot="append" icon="el-icon-search"></el-button>
+											<el-input v-model="workorderForm.MASTER_INSPECTOR" :disabled="true">
+												<el-button slot="append" icon="el-icon-search" @click="addperson('1')"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -78,8 +78,8 @@
 								<el-row >
 									<el-col :span="8">
 										<el-form-item label="样品名称" prop="ITEM_NAME">
-											<el-input v-model="workorderForm.ITEM_NAME" >
-												<el-button slot="append" icon="el-icon-search"></el-button>
+											<el-input v-model="workorderForm.ITEM_NAME" :disabled="true">
+												<el-button slot="append" icon="el-icon-search" @click="addsample"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -225,9 +225,12 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="样品承接人(专业组)" label-width="150px">
-												<el-select v-model="workorderForm.ITEM_PROFESSIONAL_GROUP" style="width: 100%">
+												<!-- <el-select v-model="workorderForm.ITEM_PROFESSIONAL_GROUP" style="width: 100%">
 													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.nickname"></el-option>
-												</el-select>
+												</el-select> -->
+												<el-input v-model="workorderForm.ITEM_PROFESSIONAL_GROUP" :disabled="true">
+													<el-button slot="append" icon="el-icon-search" @click="addperson('2')"></el-button>
+												</el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -256,9 +259,12 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="样品返回接收人">
-												<el-select v-model="workorderForm.RETURN_ITEM_USER" style="width: 100%">
+												<!-- <el-select v-model="workorderForm.RETURN_ITEM_USER" style="width: 100%">
 													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.nickname"></el-option>
-												</el-select>
+												</el-select> -->
+												<el-input v-model="workorderForm.RETURN_ITEM_USER" :disabled="true">
+													<el-button slot="append" icon="el-icon-search" @click="addperson('3')"></el-button>
+												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -545,7 +551,7 @@
 								</el-tabs>
 							</div>
 							<!-- 录入人信息 Begin-->
-							<el-collapse-item title="其他" name="7">
+							<el-collapse-item title="其他" name="7" v-show="views">
 								<el-row >
 									<el-col :span="8">
 										<el-form-item label="录入人" prop="ENTERBY">
@@ -580,16 +586,123 @@
 						</el-collapse>
 					</div>
 					<div class="el-dialog__footer">
-						<el-form-item>
 							<el-button type="primary" @click="submitForm('workorderForm')">保存</el-button>
-							<el-button type="success" v-show="addtitle">保存并添加</el-button>
+							<el-button type="success" v-show="addtitle">保存并继续</el-button>
 							<el-button @click='close'>取消</el-button>
-						</el-form-item>
 					</div>
 				</el-form>
 			</div>
 		</div>
-
+	<!--委托书编号 Begin-->
+	<el-dialog title="委托书编号" :visible.sync="dialogVisible1" width="80%" :before-close="handleClose">
+			<el-table :data="inspectList" :header-cell-style="rowClass" border stripe height="400px" style="width: 100%;" :default-sort="{prop:'inspectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table-column type="selection" width="55" fixed align="center">
+				</el-table-column>
+				<el-table-column label="检验委托书编号" sortable width="130px" prop="PROXYNUM">
+				</el-table-column>
+				<el-table-column label="委托单位名称" sortable width="140px" prop="V_NAME">
+				</el-table-column>
+				<el-table-column label="生产单位名称" sortable width="140px" prop="P_NAME">
+				</el-table-column>
+				<el-table-column label="样品名称" sortable width="140px" prop="ITEM_NAME">
+				</el-table-column>
+				<el-table-column label="样品型号" sortable width="140px" prop="ITEM_MODEL">
+				</el-table-column>
+				<!-- <el-table-column label="样品信息状态" sortable width="200px" prop="ITEM_STATUS" v-if="this.checkedName.indexOf('样品信息状态')!=-1">
+				</el-table-column> -->
+				<el-table-column label="检测依据" width="200px" prop="REMARKS" sortable>
+				</el-table-column>
+				<el-table-column label="完成日期" width="140px" prop="COMPDATE" sortable  :formatter="dateFormat" data-type = "">
+				</el-table-column>
+				<el-table-column label="完成方式" width="100px" prop="COMPMODE" sortable>
+				</el-table-column>
+				<el-table-column label="检测报告编号" width="140px" prop="REPORT_NUM" sortable>
+				</el-table-column>
+				<el-table-column label="主检组" width="140px" prop="MAINGROUP" sortable>
+				</el-table-column>
+				<!--<el-table-column label="信息状态" width="200px" prop="STATUS" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
+				</el-table-column>-->
+				<!--<el-table-column label="录入人" width="200px" prop="ENTERBY" sortable  v-if="this.checkedName.indexOf('录入人')!=-1">
+				</el-table-column>-->
+				<el-table-column label="录入时间" width="140px" prop="ENTERDATE" sortable :formatter="dateFormat">
+				</el-table-column>
+				<el-table-column label="版本" width="80" prop="VERSION" sortable>
+				</el-table-column>
+			</el-table>
+			
+			<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+			</el-pagination>
+			<span slot="footer" class="dialog-footer">
+		       <el-button @click="dialogVisible1 = false" style="margin-left: 37%;">取 消</el-button>
+		       <el-button type="primary" @click="addworkordernum">确 定</el-button>
+		    </span>
+		</el-dialog>
+	<!--委托书编号 End-->
+	<!--主检员 Begin-->
+	<el-dialog title="委托书编号" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
+			<el-table :data="userList" border stripe :header-cell-style="rowClass" :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table-column type="selection" width="55" fixed align="center">
+				</el-table-column>
+				<el-table-column label="用户名" sortable width="140px" prop="username">
+				</el-table-column>
+				<el-table-column label="姓名" sortable width="200px" prop="nickname">
+				</el-table-column>
+				<el-table-column label="机构" sortable width="150px" prop="deptName">
+				</el-table-column>
+				<el-table-column label="公司" sortable prop="companyName">
+				</el-table-column>
+				<el-table-column label="创建时间" prop="createTime" width="100px" sortable :formatter="dateFormat">
+				</el-table-column>
+			</el-table>
+			<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+			</el-pagination>
+			<span slot="footer" class="dialog-footer">
+		       <el-button @click="dialogVisible2 = false" style="margin-left: 37%;">取 消</el-button>
+		       <el-button type="primary" @click="addpersonname">确 定</el-button>
+		    </span>
+		</el-dialog>
+	<!--主检员 End-->
+	<!-- 样品名称 Begin -->
+		<el-dialog title="样品名称" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
+			<el-table :data="samplesList" :header-cell-style="rowClass" border stripe height="400px" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table-column type="selection" width="55" fixed align="center">
+				</el-table-column>
+				<el-table-column label="样品编号" sortable width="200px" prop="ITEMNUM">
+				</el-table-column>
+				<el-table-column label="样品名称" sortable width="200px" prop="DESCRIPTION">
+				</el-table-column>
+				<el-table-column label="样品类别" sortable width="200px" prop="TYPE">
+				</el-table-column>
+				<el-table-column label="委托单位" sortable width="200px" prop="V_NAME">
+				</el-table-column>
+				<el-table-column label="生产单位" sortable width="200px" prop="P_NAME">
+				</el-table-column>
+				<el-table-column label="型号" width="100px" prop="MODEL" sortable>
+				</el-table-column>
+				<el-table-column label="数量" width="100px" prop="QUATITY" sortable>
+				</el-table-column>
+				<el-table-column label="收样人" sortable width="140px" prop="ACCEPT_PERSON">
+				</el-table-column>
+				<el-table-column label="收样日期" sortable width="140px" :formatter="dateFormat" prop="ACCEPT_DATE">
+				</el-table-column>
+				<el-table-column label="接样人" sortable width="140px" prop="RECIP_PERSON">
+				</el-table-column>
+				<el-table-column label="接样日期" sortable width="140px" :formatter="dateFormat" prop="RECIP_DATE">
+				</el-table-column>
+				<el-table-column label="状态" sortable width="100px" prop="STATE">
+				</el-table-column>
+				<!--<el-table-column label="信息状态" sortable width="140px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
+				</el-table-column>-->
+			</el-table>
+			
+			<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+			</el-pagination>
+			<span slot="footer" class="dialog-footer">
+		       <el-button @click="dialogVisible3 = false" style="margin-left: 37%;">取 消</el-button>
+		       <el-button type="primary" @click="addsamplename">确 定</el-button>
+		    </span>
+		</el-dialog>
+		<!-- 样品名称 End -->
 	</div>
 </template>
 
@@ -604,6 +717,10 @@
 		},
 		data() {
 			return {
+			dialogVisible1:false,
+			dialogVisible2:false,
+			dialogVisible3:false,
+			inspectList:[],
 			workorderForm: {
 					// WorkorderBasisList: [],//检测依据
 					// WorkorderProjectList: [],//检测项目与要求
@@ -617,6 +734,7 @@
 					WORKORDER_REPORT_TEMPLATEList:[],//报告模板
 				},
 				basic_url: Config.dev_url,
+				loadSign:true,//加载
 				commentArr:{},
 				selMenu:[],
 				show: false,
@@ -713,10 +831,68 @@
 				WorkorderPersonList: [], //检验员信息列表
 				SourceDataTemplateList: [], //原始数据模板列表
 				isEditList: false,  //年度计划列表编辑装填
-				editPlan: {}  //编辑中的内容
+				editPlan: {},  //编辑中的内容
+				selval:[],
+				userList:[],
+				samplesList:[],
+				numtips:''
 			};
 		},
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    return 'text-align:center'
+			},
+			handleClick(tab, event) {
+//		        console.log(tab, event);
+		    },
+			// SelChange(val) {
+			// 	this.selval = val;
+			// },
+			sizeChange(val) {
+				this.page.pageSize = val;
+				this.requestData();
+			},
+			currentChange(val) {
+				this.page.currentPage = val;
+				this.requestData();
+			},
+			addworkorder(){
+				this.$emit('request');
+				this.dialogVisible1 = true;
+			},
+			addworkordernum(){
+				console.log(this.selMenu[0]);
+				this.workorderForm.PROXYNUM = this.selMenu[0].PROXYNUM;
+				this.dialogVisible1 = false;
+				this.$emit('request');
+			},
+			addsample(){
+				this.$emit('request');
+				this.dialogVisible3 = true;
+			},
+			addsamplename(){
+				console.log(this.selMenu[0]);
+				this.workorderForm.ITEM_NAME = this.selMenu[0].DESCRIPTION;
+				this.dialogVisible3 = false;
+				this.$emit('request');
+			},
+			addperson(num){
+				this.numtips = num;
+				this.$emit('request');
+				this.dialogVisible2 = true;
+			},
+			addpersonname(){
+				if(this.numtips == '1'){
+					this.workorderForm.MASTER_INSPECTOR = this.selMenu[0].username;
+				}else if(this.numtips == '2'){
+					this.workorderForm.ITEM_PROFESSIONAL_GROUP = this.selMenu[0].username;
+				}else if(this.numtips == '3'){
+					this.workorderForm.RETURN_ITEM_USER = this.selMenu[0].username;
+				}
+				this.dialogVisible2 = false;
+				this.$emit('request');
+			},
    			//获取样品信息-样品状态
 			getITEM_STATUS() {
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=ITEM_STATUS';
@@ -914,12 +1090,14 @@
 						type: 'error'
 					});
 				});
+				this.vuews = false
 				this.modify = false;
 				this.show = true;
 			},
 
 			// 这里是修改
 			detail(dataid) {
+				this.views = false;
 				this.modify = true;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 	    			this.workorderForm.CHANGEBY = res.data.nickname;
@@ -1051,7 +1229,104 @@
 						done();
 					})
 					.catch(_ => {});
-			}
+			},
+			loadMore () {
+			    if (this.loadSign) {
+			      this.loadSign = false
+			      this.page.currentPage++
+			      if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+			        return
+			    	}
+					setTimeout(() => {
+					this.loadSign = true
+					}, 1000)
+					this.requestData()
+			    }
+			},	
+			requestData(index) {
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				}
+				this.$axios.get(this.basic_url + '/api-apps/app/inspectPro', {
+					params: data
+				}).then((res) => {
+					this.page.totalCount = res.data.count;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
+					}
+					this.commentArr[this.page.currentPage] = res.data.data
+					let newarr = []
+					for(var i = 1; i <= totalPage; i++) {
+						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+
+							for(var j = 0; j < this.commentArr[i].length; j++) {
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					this.inspectList = newarr;
+				}).catch((wrong) => {})
+
+				this.$axios.get(this.basic_url + '/api-user/users', {
+					params: data
+				}).then((res) => {
+					console.log(res);
+					//this.userList = res.data.data;
+					this.page.totalCount = res.data.count;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
+					}
+					this.commentArr[this.page.currentPage] = res.data.data
+					let newarr = []
+					for(var i = 1; i <= totalPage; i++) {
+
+						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+
+							for(var j = 0; j < this.commentArr[i].length; j++) {
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+
+					this.userList = newarr;
+				}).catch((wrong) => {})
+
+				this.$axios.get(this.basic_url + '/api-apps/app/item', {
+					params: data
+				}).then((res) => {
+					
+					this.page.totalCount = res.data.count;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
+					}
+					this.commentArr[this.page.currentPage] = res.data.data
+					let newarr = []
+					for(var i = 1; i <= totalPage; i++) {
+
+						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+
+							for(var j = 0; j < this.commentArr[i].length; j++) {
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					this.samplesList = newarr;
+				}).catch((wrong) => {})
+			},
+
 		},
 		mounted() {
 			this.getITEM_STATUS();//页面打开加载-样品状态
@@ -1061,6 +1336,7 @@
 			this.getITEM_RECEPT_STATUS();//页面打开加载-样品接收状态
 			this.getITEM_CHECK_STATUS();//页面打开加载-样品检后状态
 			this.getITEM_MANAGEMENT();//页面打开加载-样品处置
+			this.requestData();
 		},
 	}
 </script>

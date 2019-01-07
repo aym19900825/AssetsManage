@@ -123,7 +123,7 @@
 
 					<div class="el-dialog__footer" v-show="noviews">
 							<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并添加</el-button>
+							<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并继续</el-button>
 							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('dataInfo')">修订</el-button>
 							<!-- <el-button v-if="modify" type="success" @click="update('dataInfo')">启用</el-button> -->
 							<el-button @click="close">取消</el-button>
@@ -188,7 +188,33 @@
 				if(value === '') {
 					callback(new Error('请填写描述'));
 				} else {
-					callback();
+					if((/^[!@#$%^&*:";',.~！@#￥%……&*《》？，。?、|]+$/).test(value) == true){
+		                 callback(new Error("请规范填写名称"));
+		            }else{
+		                callback();
+		            }
+				}
+			};
+			var validateSname = (rule, value, callback) => {
+				if(value === '') {
+					callback(new Error('请填写标准名称'));
+				} else {
+					if((/^[!@#$%^&*:";',.~！@#￥%……&*《》？，。?、|]+$/).test(value) == true){
+		                 callback(new Error("请规范填写标准名称"));
+		            }else{
+		                callback();
+		            }
+				}
+			};
+			var validateEname = (rule, value, callback) => {
+				if(value === '') {
+					callback(new Error('请填写标准名称'));
+				} else {
+					if((/^[!@#$%^&*";',.~！@#￥%……&*《》？，。?、|]+$/).test(value) == true){
+		                 callback(new Error("请规范填写标准名称"));
+		            }else{
+		                callback();
+		            }
 				}
 			};
 			return {
@@ -271,7 +297,16 @@
 				],
 				rules: {
 //					S_NUM: [{ required: true, message: '必填', trigger: 'blur' }],//名称
-					S_NAME: [{ required: true, message: '必填', trigger: 'blur' }],//名称
+					S_NAME: [{//名称
+						required: true,
+						trigger: 'blur',
+						validator: validateSname,
+					}],
+					S_ENGNAME: [{//英文名称
+						required: true,
+						trigger: 'blur',
+						validator: validateEname,
+					}],
 //					RELEASETIME:[{required: true, message: '必填', trigger: 'change'}],
 					RELEASE_UNIT: [{required: true,trigger: 'blur',message: '必填',}],
 				},
@@ -340,6 +375,14 @@
 						this.dataInfo.CHANGEBY = res.data.nickname;
 						var date = new Date();
 						this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
+						//深拷贝数据
+						let _obj = JSON.stringify(this.dataInfo);
+						this.DATAINFO = JSON.parse(_obj);
+					}else if(opt =='new'){
+						this.dataInfo.DEPARTMENT = res.data.deptName;
+						this.dataInfo.ENTERBY = res.data.nickname;
+						var date = new Date();
+						this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 						//深拷贝数据
 						let _obj = JSON.stringify(this.dataInfo);
 						this.DATAINFO = JSON.parse(_obj);
@@ -453,11 +496,11 @@
 		          		var DATAINFO = JSON.stringify(this.DATAINFO); //接过来的数据
  						var dataInfo = JSON.stringify(this.dataInfo); //获取新新的数据
 				 		if(dataInfo == DATAINFO){
-				  		this.$message({
-							message: '没有修改不能修改',
-							type: 'warning'
-						});
-						return false;
+							this.$message({
+								message: '没有修改内容，不允许修订',
+								type: 'warning'
+							});
+							return false;
 					  	}else{
 							var url = this.basic_url + '/api-apps/app/inspectionSta/operate/upgraded';
 							this.$axios.post(url,this.dataInfo).then((res) => {
@@ -571,7 +614,7 @@
 					this.show = false;
 				}
 			},
-			//保存并添加
+			//保存并继续
 			saveAndSubmit(dataInfo){
 				this.save(dataInfo);
 				this.$emit('reset');

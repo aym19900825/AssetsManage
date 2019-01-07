@@ -95,7 +95,7 @@
 					</div>
 					<div class="el-dialog__footer" v-show="noviews">
 						<el-button type="primary" @click="saveAndUpdate('PRODUCT')">保存</el-button>
-						<el-button type="success" @click="saveAndSubmit('PRODUCT')" v-show="addtitle">保存并添加</el-button>
+						<el-button type="success" @click="saveAndSubmit('PRODUCT')" v-show="addtitle">保存并继续</el-button>
 						<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('PRODUCT')">修订</el-button>
 						<!-- <el-button v-if="modify" type="success" @click="update('PRODUCT')">启用</el-button> -->
 						<el-button @click='close'>取消</el-button>
@@ -145,7 +145,11 @@
 				if(value === '') {
 					callback(new Error('请填写产品名称'));
 				} else {
-					callback();
+					if((/^[!@#$%^&*";',.~！@#￥%……&*《》？，。?、|]+$/).test(value) == true){
+		                 callback(new Error("请规范填写名称"));
+		            }else{
+		                callback();
+		            }
 				}
 			};
 			return {
@@ -378,7 +382,7 @@
  					// console.log(product);console.log(PRODUCT);
 					 	if(product == PRODUCT){
 						  	this.$message({
-								message: '没有修改不能修改',
+								message: '没有修改内容，不允许修订',
 								type: 'warning'
 							});
 							return false;

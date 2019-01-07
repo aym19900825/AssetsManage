@@ -189,7 +189,7 @@ export default {
 				navherf: '/user_management'
 			}, {
 				navicon: 'icon-setting3',
-				navtitle: '文档管理',
+				navtitle: '文件管理',
 				navherf: '/doc_category'
 			}
 		]

@@ -84,7 +84,7 @@
 					</div>
 					<div class="el-dialog__footer" v-show="noviews">
 						<el-button type="primary" @click="saveAndUpdate('WORK_INSTRUCTION')">保存</el-button>
-						<el-button type="success" @click="saveAndSubmit('WORK_INSTRUCTION')" v-show="addtitle">保存并添加</el-button>
+						<el-button type="success" @click="saveAndSubmit('WORK_INSTRUCTION')" v-show="addtitle">保存并继续</el-button>
 						<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('WORK_INSTRUCTION')">修订</el-button>
 						<el-button @click="close">取消</el-button>
 					</div>
@@ -176,7 +176,7 @@
 						validator: validateType,
 					}],
 				},
-				testing_filesForm:{//文件文档数据组
+				testing_filesForm:{//文件文件数据组
 					inspectionList: []
 				},
 				//tree
@@ -366,7 +366,7 @@
 					}
 				});
 			},
-			addfield_doclinks() { //插入行到文件文档Table中
+			addfield_doclinks() { //插入行到文件文件Table中
 				var isEditingflag=false;
 				for(var i=0;i<this.testing_filesForm.inspectionList.length; i++){
 					if (this.testing_filesForm.inspectionList[i].isEditing==false){
@@ -494,7 +494,7 @@
 					this.show = false;
 				}
 			},
-			//保存并添加
+			//保存并继续
 			saveAndSubmit(WORK_INSTRUCTION) {
 				this.save(WORK_INSTRUCTION);
 				this.show = true;

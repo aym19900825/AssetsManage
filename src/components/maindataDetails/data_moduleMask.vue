@@ -71,7 +71,7 @@
 					</div>
 					<div class="el-dialog__footer" v-show="noviews">
 						<el-button type="primary" @click="saveAndUpdate('CATEGORY')">保存</el-button>
-						<el-button type="success" @click="saveAndSubmit('CATEGORY')" v-show="addtitle">保存并添加</el-button>
+						<el-button type="success" @click="saveAndSubmit('CATEGORY')" v-show="addtitle">保存并继续</el-button>
 						<!-- <el-button v-if="modify" type="success" @click="update('CATEGORY')">启用</el-button> -->
 						<el-button @click="close">取消</el-button>
 					</div>
@@ -176,7 +176,7 @@
 				hintshow:false,
 				statusshow1:true,
 				statusshow2:false,
-				testing_filesForm:{//文件文档数据组
+				testing_filesForm:{//文件文件数据组
 					inspectionList: []
 				},
 			};
@@ -212,7 +212,7 @@
 					this.CATEGORY.DEPARTMENT = res.data.deptName;
 					this.CATEGORY.ENTERBY = res.data.nickname;
 					var date = new Date();
-					this.CATEGORY.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					this.CATEGORY.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 					if(opt != 'new'){
 						let _obj = JSON.stringify(this.CATEGORY);
 						this.category = JSON.parse(_obj);
@@ -401,7 +401,7 @@
 					this.show = false;
 				}
 			},
-			//保存并添加
+			//保存并继续
 			saveAndSubmit(CATEGORY) {
 				this.save(CATEGORY);
 				// this.visible();
@@ -412,7 +412,7 @@
 					row.isEditing = !row.isEditing
 				}
 			},
-			addfield_doclinks() { //插入行到文件文档Table中
+			addfield_doclinks() { //插入行到文件文件Table中
 				var isEditingflag=false;
 				for(var i=0;i<this.testing_filesForm.inspectionList.length; i++){
 					if (this.testing_filesForm.inspectionList[i].isEditing==false){
@@ -484,7 +484,7 @@
 			},
 
 			deleteRow(row) {//Table-操作列中的删除行
-				this.$confirm('确定删除此文件文档吗？', '提示', {
+				this.$confirm('确定删除此文件文件吗？', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                 }).then(({ value }) => {

@@ -3,11 +3,11 @@
 <div>
 	<div class="headerbg">
 		<vheader></vheader>
-		<navs_header></navs_header>
+		<navs_header ref='navsheader'></navs_header>
 	</div>
 	<div class="contentbg">
 		<!--左侧菜单内容显示 Begin-->
-		<navs_left></navs_left>
+		<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left>
 		<!--左侧菜单内容显示 End-->
 
 		<!--右侧内容显示 Begin-->
@@ -458,6 +458,11 @@
 			formatter(row, column) {
 				return row.enabled;
 			},
+			childByValue:function(childValue) {
+        		// childValue就是子组件传过来的值
+        		console.log(childValue);
+        		this.$refs.navsheader.showClick(childValue);
+      		},
 		},
 		mounted(){
              // 注册scroll事件并监听  

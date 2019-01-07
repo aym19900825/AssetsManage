@@ -329,13 +329,13 @@ Vue.use(Router)
       name: 'doc_authorize',
       component: doc_authorize
     },
-    {//文档目录管理
+    {//文件目录管理
       path: '/doc_root',
       name: 'doc_root',
       component: doc_root
     }
     ,
-    {//文档列表管理
+    {//文件列表管理
       path: '/doc_list',
       name: 'doc_list',
       component: doc_list

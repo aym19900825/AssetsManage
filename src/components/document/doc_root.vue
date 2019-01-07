@@ -14,17 +14,20 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+								<form method="post" id="file" action="" enctype="multipart/form-data" style="float: left;">
+									<button style="margin-right: 4px;" type="button" class="btn btn-green a-upload">
+										<i class="icon-add"></i>上传
+										<input id="excelFile" type="file" name="uploadFile" @change="upload"/>
+									</button>
+								</form>
+								<button type="button" class="btn btn-green" @click="showDir" id="">
                                 	<i class="icon-add"></i>新建文件夹
                       			 </button>
-								<button type="button" class="btn btn-green" id="">
-                                	<i class="icon-add"></i>上传
-                      			 </button>
 								<button type="button" class="btn btn-blue button-margin" @click="modify">
-								    <i class="icon-edit"></i>修改
+								    <i class="icon-edit"></i>修改文件夹
 								</button>
-								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
-								    <i class="icon-trash"></i>删除
+								<button type="button" class="btn btn-red button-margin" @click="delDir">
+								    <i class="icon-trash"></i>删除文件夹
 								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 						    		<i class="icon-search"></i>高级查询
@@ -75,6 +78,7 @@
 										<el-tree ref="tree" 
 										 :render-content="renderContent" 
 										 :load="loadNode"
+										 node-key="id"
 										 lazy
 										 :props="props"
 										 @node-click="handleNodeClick">
@@ -85,21 +89,27 @@
 						</el-col>
 						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
-							<el-table :data="samplesList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table :data="fileList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'fileList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="文档目录编号" sortable width="140px" prop="DIRECTORY_NUM" v-if="this.checkedName.indexOf('样品编号')!=-1">
+								<el-table-column label="名称" sortable prop="filename" v-if="this.checkedName.indexOf('名称')!=-1">
 								</el-table-column>
-								<el-table-column label="目录名称" sortable width="200px" prop="DIRECTORY_DESCRIPTION" v-if="this.checkedName.indexOf('样品类别')!=-1">
+								<el-table-column label="状态" sortable width="200px" prop="filestatus" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
-								<el-table-column label="父级目录" sortable prop="PARENT" v-if="this.checkedName.indexOf('委托单位')!=-1">
+								<el-table-column label="大小" sortable  width="140px" prop="filesize" v-if="this.checkedName.indexOf('大小')!=-1">
+									<template slot-scope="scope">
+										<span v-text="scope.row.filesize+'M'"></span>
+									</template>
 								</el-table-column>
-								<el-table-column label="信息状态" sortable prop="STATUS" v-if="this.checkedName.indexOf('生产单位')!=-1">
-								</el-table-column>
-								<el-table-column label="同步时间" sortable prop="SYNCHRONIZATION_TIME" v-if="this.checkedName.indexOf('样品名称')!=-1">
+								 <el-table-column
+									fixed="right"
+									label="操作"
+									width="100">
+									<template slot-scope="scope">
+										<el-button @click="showAuth(scope.row)" type="text" size="small">关键字</el-button>
+									</template>
 								</el-table-column>
 							</el-table>
-							
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
 							<!-- 表格 -->
@@ -110,7 +120,18 @@
 		</div>
 		<!-- <samplesmask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></samplesmask> -->
 		<!--右侧内容显示 End-->
-	</div>
+		<el-dialog title="文件夹" :visible.sync="dirDialog">
+			<el-form :model="dir" label-width="80px">
+				<el-form-item label="名称">
+					<el-input v-model="dir.dirName"></el-input>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click="resetDir">取 消</el-button>
+				<el-button type="primary" @click="addDir">确 定</el-button>
+			</div>
+		</el-dialog>
+		<vkeyword ref="keyword" :param="param"></vkeyword>
 	</div>
 </template>
 <script>
@@ -122,6 +143,7 @@
 	import samplesmask from'../samplesDetails/samples_mask.vue'
 	import vueDropzone from 'vue2-dropzone'
 	import 'vue2-dropzone/dist/vue2Dropzone.min.css'
+	import vkeyword from '../common/keyword.vue'
 	export default {
 		name: 'samples',//接样
 		components: {
@@ -130,13 +152,24 @@
 			navs_left,
 			tableControle,
 			samplesmask,
-			vueDropzone
+			vueDropzone,
+			vkeyword
 		},
 		data() {
 			return {
+				param: {
+					visible: false,
+				},
+				resolve: function(){},
+				node: {},
+				dirDialog: false,
+				dir: {
+					'dirName': ''
+				},
+				defaultKey: [],
 				props: {
 					label: 'name',
-					children: 'zones'
+					children: 'zones',
 				},
 				//上传初始化参数
 				dropzoneOptions: {
@@ -154,69 +187,26 @@
 				loadSign: true, //加载
 				commentArr: {},
 				checkedName: [
-					'CLASSFICATION',
-					'样品类别',
-					'委托单位',
-					'生产单位',
-					'样品名称',
-					'型号',
-					'数量',
-					'收样人',
-					'收样日期',
-					'接样人',
-					'接样日期',
+					'名称', 
 					'状态',
-					'信息状态',
+					'大小'
 				],
 				tableHeader: [{
-						label: '样品编号',
-						prop: 'ITEMNUM'
-					},
-					{
-						label: '样品类别',
-						prop: 'TYPE'
-					},
-					{
-						label: '委托单位',
-						prop: 'P_NAME'
-					},
-					{
-						label: '生产单位',
-						prop: 'P_NAME'
-					},
-					{
-						label: '样品名称',
-						prop: 'DESCRIPTION'
-					},
-					{
-						label: '型号',
-						prop: 'MODEL'
-					},
-					{
-						label: '数量',
-						prop: 'QUATITY'
-					},
-					{
-						label: '收样人',
-						prop: 'ACCEPT_PERSON'
-					},
-					{
-						label: '收样日期',
-						prop: 'ACCEPT_DATE'
+						label: '名称',
+						prop: 'filename'
 					},
 					{
 						label: '状态',
-						prop: 'STATE'
+						prop: 'filestatus'
 					},
 					{
-						label: '信息状态',
-						prop: 'STATUS'
-					},
+						label: '大小',
+						prop: 'filesize'
+					}
 				],
 				companyId: '',
-				deptId: '',
 				selMenu: [],
-				samplesList: [],
+				fileList: [],
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				search: false,
 				show: false,
@@ -239,10 +229,98 @@
 					pageSize: 10,
 					totalCount: 0
 				},
+				deptId: 0,
+				docId: 0,
+				docParm: {
+					'userid': '',
+					'username': '',
+					'deptid': '',
+					'deptfullname': '',
+				},
 				samplesForm: {}//修改子组件时传递数据
 			}
 		},
 		methods: {
+			showAuth(){
+				this.param.visible = true;
+			},
+			resetDir(){
+				this.dir.dirName = '';
+				this.dirDialog = false;
+			},
+			showDir(){
+				this.dirDialog = true;
+			},
+			addDir(){
+				var url = this.file_url + '/file/createPath';
+				this.$axios.post(url, {
+					"parentid": this.docId,
+					"foldername": this.dir.dirName,
+					"deptid": this.docParm.deptid
+				}).then((res)=>{
+					this.resetDir();
+					if(res.data.code == 0){
+						this.$message({
+							message: res.data.message,
+							type: 'error'
+						});
+					}else{
+						this.$message({
+							message: '新建成功',
+							type: 'success'
+						});
+						this.loadThisNode();
+					}
+				})
+			},
+			loadThisNode(){
+				var url = this.file_url + '/file/pathList';
+				this.$axios.post(url, {
+					'pathid': this.docId,
+					'deptid': this.docParm.deptid
+				}).then((res) => {
+					this.fileList = res.data.fileList.fileList;
+					var pathList = res.data.pathList;
+					for(var i=0; i<pathList.length; i++){
+						pathList[i].name = pathList[i].foldername;
+					}
+					return resolve(pathList);
+				});
+			},
+			upload(e){
+				var formData = new FormData();
+				formData.append('files', document.getElementById('excelFile').files[0]);
+				var config = {
+					//添加请求头
+					headers: { "Content-Type": "multipart/form-data" },
+					//添加上传进度监听事件
+					onUploadProgress: e => {
+						var completeProgress = ((e.loaded / e.total * 100) | 0) + "%";
+						this.progress = completeProgress;
+					}
+				};
+				var url = this.file_url + '/file/uploadfile?userid=' 
+						+ this.docParm.userid 
+						+ '&username=' + this.docParm.username
+						+ '&deptid=' + this.docParm.deptid
+						+ '&deptfullname=' + this.docParm.deptfullname
+						+ '&pathid=' + this.docId
+				this.$axios.post(url, formData, config
+				).then((res)=>{
+					if(res.data.code == 0){
+						this.$message({
+							message: res.data.message,
+							type: 'error'
+						});
+					}else{
+						this.$message({
+							message: '文档已成功上传至服务器',
+							type: 'success'
+						});
+						this.getFileList();
+					}
+				})
+			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
 				return(
 					<span>
@@ -251,41 +329,82 @@
 		            </span>
 				);
 			},
-			//生产单位树
-			loadNode(node, resolve) {
-				let that = this;
+			handleNodeClick(data){
+				this.page.currentPage = 1;
+				this.docId = data.id;
+				this.node = data;
+				this.getFileList();
+			},
+			getFileList(){
 				var url = this.file_url + '/file/pathList';
+				this.$axios.post(url, {
+					'pathid': this.docId,
+					'deptid': this.docParm.deptid,
+					'page': this.page.currentPage - 1,
+					'size': this.page.pageSize
+				}).then((res) => {
+					this.fileList = res.data.fileList.fileList;
+					this.page.totalCount = res.data.fileList.total;
+				});
+			},
+			getUser(){//获取当前用户信息
+				var url = this.basic_url + '/api-user/users/currentMap';
+				this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+					this.docParm.userid = res.data.id;
+					this.docParm.username = res.data.username;
+					this.docParm.deptid = res.data.deptId;
+					this.docParm.deptfullname = res.data.deptName;
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+			},
+			loadNode(node, resolve) {
+				this.resolve = resolve;
+				this.node = node;
+				let that = this;
+				var url = that.file_url + '/file/pathList';
 				var pathid = 2;
 				if(node.level === 0){
 					pathid = 0;
-					return resolve([{ name: 'region1' }, { name: 'region2' }]);
-				};
-				this.$axios.post(url, {
-					'pathid': pathid
-				}).then((res) => {
-					var pathList = res.data.pathList;
-					for(var i=0; i<pathList.length; i++){
-						pathList[i].label = pathList[i].foldername;
-					}
-					return resolve(pathList);
-				});
+				}else{
+					pathid = node.data.id;
+				}
+				if(that.deptId == 0){
+					setTimeout(function(){
+						that.$axios.post(url, {
+							'pathid': pathid,
+							'deptid': that.docParm.deptid
+						}).then((res) => {
+							that.fileList = res.data.fileList.fileList;
+							that.page.totalCount = res.data.fileList.total;
+							var pathList = res.data.pathList;
+							for(let i=0; i<pathList.length; i++){
+								pathList[i].id =  pathList[i].pathid;
+								pathList[i].name = pathList[i].foldername;
+							}
+							return resolve(pathList);
+						});
+					}, 1000);
+				}else{
+					that.$axios.post(url, {
+						'pathid': pathid,
+						'deptid': that.deptId.deptid
+					}).then((res) => {
+						that.fileList = res.data.fileList.fileList;
+						var pathList = res.data.pathList;
+						for(var i=0; i<pathList.length; i++){
+							pathList[i].name = pathList[i].foldername;
+							pathList[i].id =  pathList[i].pathid;
+						}
+						return resolve(pathList);
+					});
+				}
 				
-				// setTimeout(() => {
-				// 	var data;
-				// 	if (hasChild) {
-				// 		data = [{
-				// 			name: 'zone'
-				// 		}, {
-				// 			name: 'zone'
-				// 		}];
-				// 	} else {
-				// 		data = [];
-				// 	}
-				// 	resolve(data);
-				// }, 500);
 			},
-			// 点击节点
-			nodeClick: function(m) {
+			nodeClick(m) {
 				if(m.iconClass != 'icon-file-text') {
 					if(m.iconClass == 'icon-file-normal') {
 						m.iconClass = 'icon-file-open';
@@ -293,7 +412,7 @@
 						m.iconClass = 'icon-file-normal';
 					}
 				}
-				this.handleNodeClick();
+				// this.handleNodeClick();
 			},
 			expandClick: function(m) {
 				if(m.iconClass != 'icon-file-text') {
@@ -305,39 +424,18 @@
 				}
 				m.isFolder = !m.isFolder;
 			},
-			//表格滚动加载
-			loadMore () {
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page.currentPage++
-			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     this.requestData()
-			   }
-			},
 			tableControle(data) {//控制表格列显示隐藏
 				this.checkedName = data;
 			},
 			sizeChange(val) {//分页，总页数
 				this.page.pageSize = val;
-				this.requestData();
 			},
 			currentChange(val) {//分页，当前页
 				this.page.currentPage = val;
-				this.requestData();
 			},
 			searchinfo(index) {//高级查询
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
-				this.requestData();
-			},
-			//添加样品管理
-			openAddMgr() {
-				this.$refs.child.visible();
 			},
 			//修改用戶
 			modify() {
@@ -364,110 +462,34 @@
 					this.up = !this.up
 			},
 			// 删除
-			deluserinfo() {
-				var selData = this.selMenu;
-				if(selData.length == 0) {
-					this.$message({
-						message: '请您选择要删除的数据',
-						type: 'warning'
-					});
-					return;
-				} else {
-					var url = this.basic_url + '/api-apps/app/item/deletes';
-					//changeMenu为勾选的数据
-					var changeMenu = selData;
-					//deleteid为id的数组
-					var deleteid = [];
-					var ids;
-					for (var i = 0; i < changeMenu.length; i++) {
-						deleteid.push(changeMenu[i].ID);
-					}
-					//ids为deleteid数组用逗号拼接的字符串
-					ids = deleteid.toString(',');
-                    var data = {
-						ids: ids,
-					}
-					this.$confirm('确定删除此数据吗？', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                    }).then(({ value }) => {
-                        this.$axios.delete(url, {params: data}).then((res) => {//.delete 传数据方法
-						//resp_code == 0是后台返回的请求成功的信息
-							if(res.data.resp_code == 0) {
-								this.$message({
-									message: '删除成功',
-									type: 'success'
-								});
-								this.requestData();
-							}
-						}).catch((err) => {
+			delDir() {
+				var url = this.file_url + '/file/deletePath/' + this.docId;
+				this.$confirm('确定删除此文件夹吗？', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+				}).then(({ value }) => {
+					this.$axios.delete(url, {}).then((res) => {
+						if(res.data.code == 1) {
 							this.$message({
-								message: '网络错误，请重试',
+								message: '删除成功',
+								type: 'success'
+							});
+						}else{
+							this.$message({
+								message: res.data.message,
 								type: 'error'
 							});
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
 						});
-                    }).catch(() => {
-
-                	});
-				}
+					});
+				}).catch(() => {});
 			},
 			SelChange(val) {//选中值后赋值给一个自定义的数组：selMenu
 				this.selMenu = val;
-			},
-			requestData(index) {
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-					CLASSFICATION: this.searchList.CLASSFICATION,//委托单位名称
-					STATUS: this.searchList.STATUS,//样品名称
-				}
-				var url = this.basic_url + '/api-apps/app/item';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					
-					this.page.totalCount = res.data.count;
-					//总的页数
-					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false
-					} else {
-						this.loadSign = true
-					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
-
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.samplesList = newarr;
-				}).catch((wrong) => {})
-				
-			},
-			//生产单位树
-			getKey() {
-				let that = this;
-				var url = this.file_url + '/file/pathList';
-				this.$axios.post(url, {
-					'pathid': 0
-				}).then((res) => {
-					this.resourceData = res.data;
-				});
-			},
-			handleNodeClick(data) {
-				if(data.type == '1') {
-					this.companyId = data.id;
-					this.deptId = '';
-				} else {
-					this.deptId = data.id;
-					this.companyId = '';
-				}
-				this.requestData();
 			},
 			min3max() { //左侧菜单正常和变小切换
 				if($(".lefttree").hasClass("el-col-5")) {
@@ -488,19 +510,35 @@
 				this.ismin = !this.ismin;
 			},
 			childByValue:function(childValue) {
-        		// childValue就是子组件传过来的值
         		this.$refs.navsheader.showClick(childValue);
       		},
 		},
-		
-		mounted() {// 在页面挂载前就发起请求
-			this.requestData();
-			this.getKey();
-			// this.upload();
+		created() {// 在页面挂载前就发起请求
+			this.getUser();
 		},
 	}
 </script>
 
 <style scope>
 .p15 {padding:10px 15px;}
+.a-upload input{
+	position: absolute;
+    top: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    cursor: pointer;
+    width: 65px;
+    left: 0px;
+    height: 40px;
+}
+.upload-btn{
+    color: #fff;
+    background-color: #286090;
+    border-radius: 4px;
+    padding: 4px 10px;
+    width: 85px;
+    height: 34px;
+    line-height: 28px;
+    border: none;
+}
 </style>

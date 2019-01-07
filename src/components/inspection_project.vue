@@ -48,7 +48,7 @@
 								  	<el-table-column label="类别编号" sortable width="100" prop="NUM" class="pl30">
 								      <template slot-scope="scope">
 								        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-								        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM"></el-input><span class="blue" @click="viewchildRow(scope.row.ID,scope.row.NUM)" v-else="v-else">{{scope.row.NUM}}</span>
+								        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" placeholder="自动生成" :disabled="true"></el-input><span class="blue" @click="viewchildRow(scope.row.ID,scope.row.NUM)" v-else="v-else">{{scope.row.NUM}}</span>
 										</el-form-item>
 								      </template>
 								    </el-table-column>
@@ -163,6 +163,9 @@
 			return {
 				basic_url: Config.dev_url,
 				DEPARTMENTS: [{
+					value: '总公司',
+					label: '总公司'
+					}, {
 					value: '金化站',
 					label: '金化站'
 					}, {
@@ -180,7 +183,7 @@
 				}],
       			fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				formInline: {//选择站点显示数据
-					DEPARTMENT: '金化站',
+					DEPARTMENT: '金化站',//this.currentDept,
 				},
 				productType2Form:{//产品类别数据组
 					inspectionList: []
@@ -236,21 +239,22 @@
 				}
 			},
 			
-			modifyversion (row) {//点击修改后给当前修改人和修改时间赋值				
-				row.isEditing = !row.isEditing				
-				 this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					row.CHANGEBY=res.data.nickname;
-					var date=new Date();
-					row.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
-					//console.log(row);
+			// modifyversion (row) {//点击修改后给当前修改人和修改时间赋值				
+			// 	row.isEditing = !row.isEditing				
+			// 	 this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
+			// 		row.CHANGEBY=res.data.nickname;
+			// 		var date=new Date();
+			// 		row.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
+			// 		//console.log(row);
 					
-				}).catch((err)=>{
-					this.$message({
-						message:'网络错误，请重试',
-						type:'error'
-					})
-				})
-			},
+			// 	}).catch((err)=>{
+			// 		this.$message({
+			// 			message:'网络错误，请重试',
+			// 			type:'error'
+			// 		})
+			// 	})
+			// },
+
 			loadMore () {//表格滚动加载
 			   if (this.loadSign) {
 			     this.loadSign = false
@@ -291,31 +295,6 @@
 			indexMethod(index) {
 				return index + 1;
 			},
-			// selectVal(ID){//点击父级筛选出子级数据
-			// 	var url = '/api/api-apps/app/productType2/' + ID;
-			// 	this.$axios.get(url, {}).then((res) => {
-			// 		console.log(res);
-			// 		this.page.totalCount = res.data.count;	
-			// 		//总的页数
-			// 		let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
-			// 		if(this.page.currentPage >= totalPage){
-			// 			 this.loadSign = false
-			// 		}else{
-			// 			this.loadSign=true
-			// 		}
-			// 		this.productType2Form.inspectionList=res.data.PRODUCT_TYPE2List;
-
-			// 		//默认主表第一条数据
-			// 		if(this.productType2Form.inspectionList.length > 0){
-			// 			this.productType2Form.inspectionList[0].ID;
-			// 		}else{
-			// 			this.productType2Form.inspectionList('null');
-			// 		}
-			// 		for(var j = 0; j < this.productType2Form.inspectionList.length; j++){
-			// 			this.productType2Form.inspectionList[j].isEditing = false;
-			// 		}
-			// 	}).catch((wrong) => {})
-			// },
 			
 			requestData_productType2(index) {//加载数据
 				var _this = this;
@@ -357,15 +336,10 @@
 					},0);
 
 					this.$refs.singleTable.setCurrentRow(this.productType2Form.inspectionList[0]);//默认选中第一条数据
-					
-					// this.$refs.product2child.viewfield_product2(this.productType2Form.inspectionList[0].ID);
-					// this.$refs.inspectionSta2child.viewfield_inspectionSta2(this.product2Form.inspectionList[0].ID);
-					// this.$refs.inspectionPro2child.viewfield_inspectionPro2(this.inspectionSta2Form.inspectionList[0].ID);
 
 				}).catch((wrong) => {})
 			},
-			// handleNodeClick(data) {
-			// },
+			
 			formatter(row, column) {
 				return row.enabled;
 			},
@@ -381,8 +355,10 @@
 				}
 				if (isEditingflag==false){
                 	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-                		var currentUser, currentDate
+                		console.log(res);
+                		var currentUser, currentDate, currentDept
 						this.currentUser=res.data.nickname;
+						this.currentDept=res.data.deptName;
 						var date=new Date();
 						this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 						var obj = {
@@ -390,7 +366,7 @@
 							"STATUS": '活动',
 							"NUM": '',
 							"VERSION": 1,
-							"DEPARTMENT": '',
+							"DEPARTMENT": this.currentDept,
 							"CHANGEBY": this.currentUser,
 							"CHANGEDATE": this.currentDate,
 							"isEditing": true,
@@ -466,14 +442,9 @@
 
             	});
 			},
-			addchildRow(row) {//添加子项数据
-				// this.$refs.product2child.addfield_product2(row.NUM);
-				//console.log();
-			},
+			
 			viewchildRow(id,num) {//查看子项数据
 				this.$refs.product2child.viewfield_product2(id,num);
-				// this.$refs.inspectionSta2child.viewfield_inspectionSta2(this.product2Id);
-				// this.$refs.inspectionPro2child.viewfield_inspectionPro2(this.inspectionSta2Id);
 			},
 		},
 		

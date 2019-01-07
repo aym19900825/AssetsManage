@@ -369,7 +369,7 @@
 				// this.dataInfo.CHECTCOST="￥" + num.join(".");
 				this.testing_projectForm.QUANTITY = num.join(".");
 			},
-			getCompany() { //文档查询接口，暂无通，待修改
+			getCompany() { //文件查询接口，暂无通，待修改
 				this.editSearch = 'DOCLINKS';
 				var url = this.basic_url + '/api-user/depts/type'; //文件接口不对
 				this.$axios.get(url, {}).then((res) => {

@@ -63,9 +63,9 @@
 							<el-table :data="samplesList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="文档编号" sortable width="140px" prop="DIRECTORY_NUM" v-if="this.checkedName.indexOf('文档编号')!=-1">
+								<el-table-column label="文件编号" sortable width="140px" prop="DIRECTORY_NUM" v-if="this.checkedName.indexOf('文件编号')!=-1">
 								</el-table-column>
-								<el-table-column label="文档描述" sortable width="200px" prop="DIRECTORY_DESCRIPTION" v-if="this.checkedName.indexOf('文档描述')!=-1">
+								<el-table-column label="文件描述" sortable width="200px" prop="DIRECTORY_DESCRIPTION" v-if="this.checkedName.indexOf('文件描述')!=-1">
 								</el-table-column>
 								<el-table-column label="创建人" sortable prop="PARENT" v-if="this.checkedName.indexOf('创建人')!=-1">
 								</el-table-column>
@@ -124,8 +124,8 @@
 				loadSign: true, //加载
 				commentArr: {},
 				checkedName: [
-					'文档编号',
-					'文档描述',
+					'文件编号',
+					'文件描述',
 					'创建人',
 					'创建时间',
 					'所属对象名',
@@ -134,11 +134,11 @@
 					'状态'
 				],
 				tableHeader: [{
-						label: '文档编号',
+						label: '文件编号',
 						prop: 'DOCLINKS'
 					},
 					{
-						label: '文档描述',
+						label: '文件描述',
 						prop: 'DIRECTORY_DESCRIPTION'
 					},
 					{

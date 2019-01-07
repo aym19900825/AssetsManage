@@ -649,7 +649,7 @@
 			},
 			//保存
 			save(adddeptForm) {
-				console.log(this.adddeptForm);
+				// console.log(this.adddeptForm);
 				this.$refs[adddeptForm].validate((valid) => {
 		          if (valid) {
 		          	this.adddeptForm.status=((this.adddeptForm.status=="1"||this.adddeptForm.status=='活动') ? '1' : '0');

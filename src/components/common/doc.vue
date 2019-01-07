@@ -104,7 +104,7 @@ export default {
                     });
                 }else{
                     this.$message({
-                        message: '文档已成功上传至服务器',
+                        message: '文件已成功上传至服务器',
                         type: 'success'
                     });
                 }

@@ -293,8 +293,8 @@
 							<!-- 检测依据、检测项目与要求 End-->
 
 							<!-- todo -->
-							<!-- 文档编号列表 Begin-->
-							<!-- <el-collapse-item title="文档编号列表" name="5">
+							<!-- 文件编号列表 Begin-->
+							<!-- <el-collapse-item title="文件编号列表" name="5">
 								<div class="table-func">
 									<el-button type="success" size="mini" round @click="addfield2"><i class="icon-add"></i><font>新建行</font>
 									</el-button>
@@ -306,10 +306,10 @@
 					                            <el-form-item label="计划编号" ></el-form-item>
 					                        </el-col>
 					                        <el-col :span="4">
-					                            <el-form-item label="文档编号"></el-form-item>
+					                            <el-form-item label="文件编号"></el-form-item>
 					                        </el-col>
 					                        <el-col :span="6">
-					                            <el-form-item label="文档描述"></el-form-item>
+					                            <el-form-item label="文件描述"></el-form-item>
 					                        </el-col>
 					                        <el-col :span="4">
 					                            <el-form-item label="创建人" ></el-form-item>
@@ -329,10 +329,10 @@
 					                            <el-input type="text"  placeholder="计划编号"></el-input>
 					                        </el-col>
 					                        <el-col :span="4">
-					                            <el-input type="text"  placeholder="文档编号"></el-input>
+					                            <el-input type="text"  placeholder="文件编号"></el-input>
 					                        </el-col>
 					                        <el-col :span="6">
-					                        	<el-input type="text"  placeholder="文档描述"></el-input>
+					                        	<el-input type="text"  placeholder="文件描述"></el-input>
 					                        </el-col>
 					                        <el-col :span="4">
 					                            <el-input type="text"  placeholder="创建人"></el-input>
@@ -361,7 +361,7 @@
 					                </el-form-item>
 				            	</el-form>
 							</el-collapse-item> -->
-							<!-- 文档编号列表 End -->
+							<!-- 文件编号列表 End -->
 							<el-collapse-item title="文件" name="6">
 								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
 							</el-collapse-item>
@@ -1138,7 +1138,7 @@
 	                this.$message.warning("请先保存当前编辑项");
 				}
 			},
-			addfield2(){//文档编号列表新建行
+			addfield2(){//文件编号列表新建行
 				var obj2 = {
                     STEP:'',
 					CERTIFICATE_NUM:'',

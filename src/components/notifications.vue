@@ -182,6 +182,7 @@
 		components: {
 			vheader,
 			navs_header,
+			 navs_left,
 			tableControle,
 			notificationsmask,
 

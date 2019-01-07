@@ -65,7 +65,7 @@
 						<el-col :span="5" class="lefttree">
 							<div class="lefttreebg">
 								<div class="left_tree_title clearfix" @click="min3max()">
-									<div class="pull-left pr20" v-if="ismin">文档树</div>
+									<div class="pull-left pr20" v-if="ismin">文件树</div>
 									<span class="pull-right navbar-minimalize minimalize-styl-2">
 										<i class="icon-doubleok icon-double-angle-left blue"></i>
 									</span>
@@ -88,7 +88,7 @@
 							<el-table :data="samplesList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="文档目录编号" sortable width="140px" prop="DIRECTORY_NUM" v-if="this.checkedName.indexOf('样品编号')!=-1">
+								<el-table-column label="文件目录编号" sortable width="140px" prop="DIRECTORY_NUM" v-if="this.checkedName.indexOf('样品编号')!=-1">
 								</el-table-column>
 								<el-table-column label="目录名称" sortable width="200px" prop="DIRECTORY_DESCRIPTION" v-if="this.checkedName.indexOf('样品类别')!=-1">
 								</el-table-column>

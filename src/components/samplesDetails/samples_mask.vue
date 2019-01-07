@@ -711,7 +711,7 @@
 				this.selval = val;
 			},
 			addfield() { 
-				//插入行到文件文档Table中
+				//插入行到文件文件Table中
 				var obj = {
                     ITEMNUM:'',
                     ITEM_STEP:'',

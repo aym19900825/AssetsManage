@@ -402,8 +402,9 @@
 					</div>
 					<div class="el-dialog__footer">
 						<el-form-item>
+							<el-button type="primary" class="btn-primarys" @click="saveAndUpdate('WORKPLAN')">保存</el-button>
+							<el-button type="success" @click="saveAndSubmit('WORKPLAN')" v-show="addtitle">保存并继续</el-button>
 							<el-button @click='close'>取消</el-button>
-							<el-button type="primary" class="btn-primarys" @click="submitForm">保存</el-button>
 						</el-form-item>
 					</div>
 				</el-form>
@@ -835,7 +836,8 @@
 				views:true,
 				dept:true,
 				categoryList:[],
-				proindex:0
+				proindex:0,
+				falg:false
 			};
 		},
 		methods: {
@@ -1374,47 +1376,68 @@
 			// 	return parseFloat(s.replace(/[^\d\.-]/g, "")); 
 			// },
 			// 保存users/saveOrUpdate
-			submitForm() {
+			save(WORKPLAN) {
 				this.$refs.WORKPLAN.validate((valid) => {
 					if (valid) {
-				if(!this.isEditList){
-					for(let i=0;i<this.worlplanlist.length;i++){
-						console.log(this.worlplanlist[i].CHECKCOST);
-						let b = parseFloat(this.worlplanlist[i].CHECKCOST.replace(/[^\d\.-]/g, ""));
-						this.worlplanlist[i].CHECKCOST = b;
-					}
-					this.WORKPLAN.WORLPLANLINEList = this.worlplanlist;
-					var url = this.basic_url +'/api-apps/app/workplan/saveOrUpdate';
-					this.$axios.post(url, this.WORKPLAN).then((res) => {
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '保存成功',
-								type: 'success'
+						if(!this.isEditList){
+							for(let i=0;i<this.worlplanlist.length;i++){
+								console.log(this.worlplanlist[i].CHECKCOST);
+								let b = parseFloat(this.worlplanlist[i].CHECKCOST.replace(/[^\d\.-]/g, ""));
+								this.worlplanlist[i].CHECKCOST = b;
+							}
+							this.WORKPLAN.WORLPLANLINEList = this.worlplanlist;
+							var url = this.basic_url +'/api-apps/app/workplan/saveOrUpdate';
+							this.$axios.post(url, this.WORKPLAN).then((res) => {
+								if(res.data.resp_code == 0) {
+									this.$message({
+										message: '保存成功',
+										type: 'success'
+									});
+									//重新加载数据
+										this.$emit('request');
+										this.$emit('reset');
+										// this.visible();
+								}else{
+									this.$message({
+										message: res.data.message,
+										type: 'error'
+									});
+								}
+							}).catch((err) => {
+								this.$message({
+									message: '网络错误，请重试',
+									type: 'error'
+								});
 							});
-							this.show = false;
-							this.$emit('request');
 						}else{
 							this.$message({
-								message: res.data.message,
-								type: 'error'
+								message: '您还没有在编辑数据，需保存',
+								type: 'warning'
 							});
 						}
-					}).catch((err) => {
+						this.falg = true;
+					} else {
+						this.show = true;
 						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
+							message: '未填写完整，请填写',
+							type: 'warning'
 						});
-					});
-				}else{
-					this.$message({
-						message: '您还没有在编辑数据，需保存',
-						type: 'warning'
-					});
-				}
-	  			} else {
-			            return false;
-			        }
+						this.falg = false;
+					}
 	  			});
+			},
+			//保存
+			saveAndUpdate(WORKPLAN) {
+				this.save(WORKPLAN);
+				if(this.falg){
+					this.show = false;
+				}
+			},
+			//保存并继续
+			saveAndSubmit(WORKPLAN) {
+				this.save(WORKPLAN);
+				// this.visible();
+				this.visible();
 			},
 			loadMore () {
 			   if (this.loadSign) {
@@ -1423,7 +1446,7 @@
 			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
 			       return
 			     }
-			     setTimeout(() => {
+			    setTimeout(() => {
 			       this.loadSign = true
 			     }, 1000)
 			     this.requestData()

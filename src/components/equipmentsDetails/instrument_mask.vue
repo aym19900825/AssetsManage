@@ -53,10 +53,10 @@
 							<!-- 设备保管人员情况 -->
 							<el-collapse-item title="设备保管人员情况" name="2">
 								<el-form-item v-for="item in keeperInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
-									<el-input v-model="dataInfo[item.prop]" :type="item.type"  :disabled="true">
+									<el-input v-model="dataInfo[item.prop]" v-if="item.type=='input'&&item.prop =='KEEPER'" :type="item.type"  :disabled="true">
 										<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="addPeople"></el-button>
 									</el-input>
-									<!-- <el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'&&item.prop!='KEEPER'" :disabled="noedit"></el-input> -->
+									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'&&item.prop!='KEEPER'" :disabled="noedit"></el-input>
 								</el-form-item>
 							</el-collapse-item>
 
@@ -624,7 +624,7 @@
 					this.selectData = res.data;
 				});
 			},
-			addpeople(){
+			addPeople(){
 				console.log(123);
 				this.$emit('request');
 				this.dialogVisible = true;

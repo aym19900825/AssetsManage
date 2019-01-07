@@ -179,6 +179,7 @@
 <script>
 	import Config from '../config.js'
 	import vheader from './common/vheader.vue'
+	import navs_left from './common/left_navs/nav_left5.vue'
 	import navs_header from './common/nav_tabs.vue'
 	import workorders_mask from './common/workorders_mask.vue'
 	export default {
@@ -186,6 +187,7 @@
 		components: {
 			vheader,
 			navs_header,
+			navs_left,
 			workorders_mask
 		},
 		data() {

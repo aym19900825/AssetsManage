@@ -165,8 +165,8 @@
 					</div>
 					<div class="el-dialog__footer">
 						    
-						    <el-button type="primary" @click="saveAndUpdate('adddeptForm')">保存</el-button>
-						    <el-button type="success" @click="saveAndSubmit('adddeptForm')" v-show="addtitle">保存并继续</el-button>
+						    <el-button type="primary" @click="saveAndUpdate">保存</el-button>
+						    <el-button type="success" @click="saveAndSubmit" v-show="addtitle">保存并继续</el-button>
 						<!--	<el-button type="primary" class="btn-primarys" @click="submitForm('adddeptForm')">提交</el-button>-->
 							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion">修订</el-button>
 							<el-button @click="close">取消</el-button> 
@@ -648,12 +648,13 @@
 				}).catch((wrong) => {})
 			},
 			//保存
-			save(adddeptForm) {
+			save() {
 				console.log(this.adddeptForm);
-				this.$refs[adddeptForm].validate((valid) => {
+				var _this = this;
+				this.$refs.adddeptForm.validate((valid) => {
 		          if (valid) {
-		          	this.adddeptForm.status=((this.adddeptForm.status=="1"||this.adddeptForm.status=='活动') ? '1' : '0');
-					var url = this.basic_url + '/api-user/depts/saveOrUpdate';
+		          	_this.adddeptForm.status=((_this.adddeptForm.status=="1"||_this.adddeptForm.status=='活动') ? '1' : '0');
+					var url = _this.basic_url + '/api-user/depts/saveOrUpdate';
 //					this.adddeptForm = {
 //						 "id":this.adddeptForm.id,
 //						 "pid":this.adddeptForm.pid,
@@ -664,8 +665,8 @@
 //					     "teltphone":this.adddeptForm.teltphone,
 //					     "tips":this.adddeptForm.tips
 //					}
-					// console.log(this.adddeptForm);
-					this.$axios.post(url, this.adddeptForm).then((res) => {
+					 console.log(_this.adddeptForm);
+					this.$axios.post(url, _this.adddeptForm).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -694,15 +695,15 @@
 		        });
 				
 			},
-			saveAndUpdate(adddeptForm){
-				this.save(adddeptForm);
+			saveAndUpdate(){
+				this.save();
 				if(this.falg){
 					this.show = false;
 				}
 				this.$emit('request');
 			},
-			saveAndSubmit(adddeptForm){
-				this.save(adddeptForm);
+			saveAndSubmit(){
+				this.save();
 				this.$emit('reset');
 				this.$emit('request');
 			},

@@ -70,6 +70,7 @@ import approving from '@/components/workflow/approving'//审批意见
 import flowhistory from '@/components/workflow/flowhistory'//流程历史
 import flowmap from '@/components/workflow/flowmap'//流程地图
 
+
 Vue.use(Router)
   const routes = [
     {//登录页

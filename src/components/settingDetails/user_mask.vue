@@ -16,7 +16,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form status-icon :model="user"  :rules="rules" ref="user" :label-position="labelPositions" class="demo-user">
+				<el-form status-icon :model="user" inline-message :rules="rules" ref="user" :label-position="labelPositions" class="demo-user">
 					<div class="accordion">
 						<el-collapse v-model="activeNames">
 							<!--<el-collapse-item title="基础信息" name="1">
@@ -83,6 +83,7 @@
 									<el-col :span="8">
 										<el-form-item label="姓名" prop="nickname" label-width="100px">
 											<el-input v-model="user.nickname" :disabled="noedit"></el-input>
+											<span class="error"></span>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -413,46 +414,30 @@
 
 <script>
 	import Config from '../../config.js'
+	import { isSpecificKey } from '../../core/util/hxqhValidators.js'
+	import { isLetterNumber } from '../../core/util/hxqhValidators.js'
+	import { isUserName } from '../../core/util/hxqhValidators.js'
+	import { isPhone } from '../../core/util/hxqhValidators.js'
+	import { isEmail } from '../../core/util/hxqhValidators.js'
+
+	import { isNickname } from '../../core/util/hxqhValidators.js'
+	import { isWorknumber } from '../../core/util/hxqhValidators.js'
+	import { isIdnumber } from '../../core/util/hxqhValidators.js'
+	import { isIpaddress } from '../../core/util/hxqhValidators.js'
+
+	import { isMacaddress } from '../../core/util/hxqhValidators.js'
+	import { isTips } from '../../core/util/hxqhValidators.js'
+	import { isFillTips } from '../../core/util/hxqhValidators.js'
+	import { isInteger } from '../../core/util/hxqhValidators.js'
+
 	export default {
 		name: 'masks',
 		props: {
 			page: Object,
 		},
-		//		props: ['user','page'],
+		//	props: ['user','page'],
 
 		data() {
-			var validateIdnumber = (rule, value, callback) => { //验证身份证号
-				if(value && (!(/\d{17}[\d|x]|\d{15}/).test(value) || (value.length !== 15 && value.length !== 18))) {
-					callback(new Error('身份证号码不符合规范'))
-				} else {
-					callback()
-				}
-			};
-			var validatePhone = (rule, value, callback) => {
-				if(value === '') {
-					return callback(new Error('手机号不能为空'));
-				} else {
-					if(value !== '') {
-						var reg = /^1[3456789]\d{9}$/;
-						if(!reg.test(value)) {
-							callback(new Error('请输入有效的手机号码'));
-						}
-						callback();
-					}
-				}
-			};
-			var validateEmail = (rule, value, callback) => { //验证电子邮箱
-				if(value === '') {
-					callback(new Error('电子邮箱不能为空'));
-				} else {
-					var reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-					if(!reg.test(value)) {
-						callback(new Error('请输入有效的邮箱'));
-					} else {
-						callback();
-					}
-				}
-			};
 			return {
 				basic_url: Config.dev_url,
 				user: {
@@ -520,16 +505,22 @@
 					deptName: [{required: true,message: '必填',trigger: 'blur'}], //名称
 					education: [{required: true,message: '必填',trigger: 'blur'}],
 					roleId: [{required: true,trigger: 'blur',message: '必填',}],
-					username: [{required: true,trigger: 'blur',message: '必填',}],
+					username: [
+						{required: true,message: '必填',trigger: 'blur',},
+						{validator: isUserName, trigger: 'blur'},//引用 isUserName
+						{type: 'string', min: 4, max:20, message: '用户名不小于4位，不大于20位', trigger: 'blur'},
+					],
 					password: [{required: true,trigger: 'blur',message: '必填',}],
 					sex: [{required: true,trigger: 'blur',message: '必填'}],
 					ispermit_authorization: [{required: true,trigger: 'change',message: '必填'}], //授权
 					islogin: [{required: true,trigger: 'change',message: '必填'}], //登陆
 					mac_address: [{required: true,trigger: 'blur',message: '必填',}],
 					ip_address: [{required: true,trigger: 'blur',message: '必填',}],
-					idnumber: [{required: true,trigger: 'blur',validator: validateIdnumber}],
-					phone: [{required: true,trigger: 'blur',validator: validatePhone}],
-					email: [{required: true,trigger: 'blur',validator: validateEmail,}],
+					nickname: [{required: true,trigger: 'blur',validator: isNickname}],
+					worknumber: [{required: true,trigger: 'blur',validator: isWorknumber}],
+					idnumber: [{required: true,trigger: 'blur',validator: isIdnumber}],
+					phone: [{required: true,trigger: 'blur',validator: isPhone}],
+					email: [{required: true,trigger: 'blur',validator: isEmail}],
 					step: [{required: true,trigger: 'blur',message: '必填',}],
 					t_date: [{required: true,trigger: 'blur',message: '必填',}],
 					t_description: [{required: true,trigger: 'blur',message: '必填',}],
@@ -538,6 +529,10 @@
 					c_date: [{required: true,trigger: 'blur',message: '必填',}],
 					c_num: [{required: true,trigger: 'blur',message: '必填',}],
 					c_name: [{required: true,trigger: 'blur',message: '必填',}],
+					ipaddress: [{required: false,trigger: 'blur',validator: isIpaddress}],
+					macaddress: [{required: false,trigger: 'blur',validator: isMacaddress}],
+					post: [{required: false,trigger: 'blur',validator: isSpecificKey}],
+					tips: [{required: false,trigger: 'blur',validator: isSpecificKey}],
 
 				},
 				//tree树菜单
@@ -617,7 +612,7 @@
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.user.createby = res.data.id;
 					this.user.createbyName = res.data.nickname;
-					console.log(this.user.createbyName);
+					// console.log(this.user.createbyName);
 					this.user.enterby = res.data.id
 					this.user.enterbyName = res.data.nickname;
 					var date = new Date();

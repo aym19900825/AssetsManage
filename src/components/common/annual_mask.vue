@@ -1371,51 +1371,58 @@
 				$(".mask_div").css("margin", "7% 10%");
 				$(".mask_div").css("top", "0");
 			},
-			// rmoney(s) 
-			// { 
-			// 	return parseFloat(s.replace(/[^\d\.-]/g, "")); 
-			// },
 			// 保存users/saveOrUpdate
 			save(WORKPLAN) {
 				this.$refs.WORKPLAN.validate((valid) => {
 					if (valid) {
-						if(!this.isEditList){
-							for(let i=0;i<this.worlplanlist.length;i++){
-								console.log(this.worlplanlist[i].CHECKCOST);
-								let b = parseFloat(this.worlplanlist[i].CHECKCOST.replace(/[^\d\.-]/g, ""));
-								this.worlplanlist[i].CHECKCOST = b;
-							}
-							this.WORKPLAN.WORLPLANLINEList = this.worlplanlist;
-							var url = this.basic_url +'/api-apps/app/workplan/saveOrUpdate';
-							this.$axios.post(url, this.WORKPLAN).then((res) => {
-								if(res.data.resp_code == 0) {
-									this.$message({
-										message: '保存成功',
-										type: 'success'
-									});
-									//重新加载数据
-										this.$emit('request');
-										this.$emit('reset');
-										// this.visible();
-								}else{
-									this.$message({
-										message: res.data.message,
-										type: 'error'
-									});
-								}
-							}).catch((err) => {
-								this.$message({
-									message: '网络错误，请重试',
-									type: 'error'
-								});
-							});
-						}else{
-							this.$message({
-								message: '您还没有在编辑数据，需保存',
+						if(this.worlplanlist.length<=0&&this.basisList.length<=0&&this.proTestList.length<=0){
+			        		this.$message({
+								message: '年度计划列表、检测依据、检测项目与要求是必填项，请填写！',
 								type: 'warning'
 							});
+							return false;
+			        	}else{
+							if(!this.isEditList){
+								for(let i=0;i<this.worlplanlist.length;i++){
+									console.log(this.worlplanlist[i].CHECKCOST);
+									let b = parseFloat(this.worlplanlist[i].CHECKCOST.replace(/[^\d\.-]/g, ""));
+									this.worlplanlist[i].CHECKCOST = b;
+								}
+								this.WORKPLAN.WORLPLANLINEList = this.worlplanlist;
+								var url = this.basic_url +'/api-apps/app/workplan/saveOrUpdate';
+								this.$axios.post(url, this.WORKPLAN).then((res) => {
+									if(res.data.resp_code == 0) {
+										this.$message({
+											message: '保存成功',
+											type: 'success'
+										});
+										//重新加载数据
+											this.$emit('request');
+											this.$emit('reset');
+											// this.visible();
+									}else{
+										this.$message({
+											message: res.data.message,
+											type: 'error'
+										});
+									}
+								}).catch((err) => {
+									this.$message({
+										message: '网络错误，请重试',
+										type: 'error'
+									});
+								});
+							}
+							else{
+								this.$message({
+									message: '您还没有在编辑数据，需保存',
+									type: 'warning'
+								});
+								this.falg = false;
+							}
+							
 						}
-						this.falg = true;
+						// this.falg = true;
 					} else {
 						this.show = true;
 						this.$message({

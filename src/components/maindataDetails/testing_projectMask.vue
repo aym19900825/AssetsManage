@@ -185,6 +185,7 @@
 
 <script>
 	import Config from '../../config.js'
+	import Validators from '../../core/util/validators.js'
 	export default {
 		name: 'masks',
 		props: {
@@ -214,24 +215,24 @@
 			},
 		},
 		data() {
-			var validateNum = (rule, value, callback) => {
-				if(value != ""){
-		             if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
-		                 callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
-		             }else{
-		                 callback();
-		             }
-		         }else{
-		             callback();
-		         }
-			};
-			var validateP_NAME = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('请填写项目名称'));
-				} else {
-					callback();
-				}
-			};
+			// var validateNum = (rule, value, callback) => {
+			// 	if(value != ""){
+		 //             if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
+		 //                 callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
+		 //             }else{
+		 //                 callback();
+		 //             }
+		 //         }else{
+		 //             callback();
+		 //         }
+			// };
+			// var validateP_NAME = (rule, value, callback) => {
+			// 	if(value === '') {
+			// 		callback(new Error('请填写项目名称'));
+			// 	} else {
+			// 		callback();
+			// 	}
+			// };
 			var validateQUANTITY = (rule, value, callback) => {
 				if(value === '') {
 					callback(new Error('单价不能为空'));
@@ -275,16 +276,11 @@
 				//				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				rules: { //需要验证的字段
-					P_NUM: [{
-						required: false,
-						trigger: 'change',
-						validator: validateNum,
-					}],
-					P_NAME: [{
-						required: true,
-						trigger: 'blur',
-						validator: validateP_NAME,
-					}],
+					P_NUM: [{ required: false, trigger: 'change', validator: Validators.isCodeNum}],
+					P_NAME: [
+						{ required: true, trigger: 'blur', message: '必填'},
+						{validator: Validators.isChinese, trigger: 'blur'},
+					],
 					QUANTITY: [{
 						required: true,
 						trigger: 'blur',
@@ -292,14 +288,16 @@
 					}],
 					QUALIFICATION: [{
 						required: true,
-						trigger: 'blur',
+						trigger: 'change',
 						validator: validateQUALIFICATION,
 					}],
 					DOCLINKS_NUM: [{
 						required: true,
-						trigger: 'blur',
+						trigger: 'change',
 						validator: validateDOCLINKS_NUM,
 					}],
+					FIELD: [{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],
+					CHILD_FIELD: [{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],
 				},
 				//testing_projectForm:{},//检验/检测项目数据组
 				//tree
@@ -457,6 +455,7 @@
 				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)', 'ig'), "$1,");
 				// // this.dataInfo.CHECTCOST="￥" + num.join(".");
 				this.testing_projectForm.QUANTITY = num.join(".");
+
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.testing_projectForm.DEPARTMENT = res.data.deptName;
 					this.testing_projectForm.CHANGEBY = res.data.nickname;

@@ -292,7 +292,10 @@
 	          rules: {//required: true,必填标题加红*
 	          	roleId: [{required: true,trigger: 'blur',message: '必填',}],
 		        nickname: [{required: true,trigger: 'blur',validator: Validators.isNickname}],
-	          	worknumber: [{required: true,trigger: 'blur',validator: Validators.isWorknumber}],
+	          	worknumber: [
+					{required: true,trigger: 'blur',message: '必填'},
+					{validator: Validators.isWorknumber, trigger: 'blur'},//引用 isWorknumber
+				],
 		        email: [{required: true, trigger: 'blur',validator: Validators.isEmail}],
 		        telephone: [{required: false,trigger: 'blur',validator: Validators.istelephone}],
 		        phone: [{ required: true, trigger: 'blur',validator: Validators.isPhone}],

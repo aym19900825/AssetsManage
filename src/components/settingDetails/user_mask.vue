@@ -504,7 +504,10 @@
 					mac_address: [{required: true,trigger: 'blur',message: '必填',}],
 					ip_address: [{required: true,trigger: 'blur',message: '必填',}],
 					nickname: [{required: true,trigger: 'blur',validator: Validators.isNickname}],
-					worknumber: [{required: true,trigger: 'blur',validator: Validators.isWorknumber}],
+					worknumber: [
+						{required: true,trigger: 'blur',message: '必填'},
+						{validator: Validators.isWorknumber, trigger: 'blur'},//引用 isWorknumber
+					],
 					idnumber: [{required: true,trigger: 'blur',validator: Validators.isIdnumber}],
 					phone: [{required: true,trigger: 'blur',validator: Validators.isPhone}],
 					email: [{required: true,trigger: 'blur',validator: Validators.isEmail}],

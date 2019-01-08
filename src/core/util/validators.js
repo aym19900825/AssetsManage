@@ -23,8 +23,8 @@
 覆盖的优先级： 自定义规则 > 选项规则 > 默认规则
 **/
 const validators = {
-	isLetterNumber:function (str) {// 英文、数字
-		const letterNumber = /^[A-Za-z0-9]+$/;
+	isLetterNumber:function (str) {// 英文、数字或下划线
+		const letterNumber = /^\w+$/;
 		return letterNumber.test(str);
 	},
 
@@ -48,6 +48,15 @@ const validators = {
 		return urlregex.test(textval);
 	},
 
+	isChina:function (str) {/* 仅限中文*/
+		const reg = /^[\u4e00-\u9fa5]{0,}$/;
+		return reg.test(str);
+	},
+
+	toNum:function(str) {
+		const price = "/\$|\,/g,''";
+		return price.test(str);
+	},
 
 //---------------------------------------------------------------------------------------------//
 	isSpecificKey:function (rule, value, callback) { //不允许特殊字符
@@ -70,10 +79,11 @@ const validators = {
 				callback(new Error('不支持特殊符号'));
 			} else {
 				var targ = /^[a-zA-Z][a-zA-Z0-9_]*$/;
-				if( !isLetterNumber(value)){
-					callback(new Error('用户名只能由字母数字下划线组成'));
+				if( !targ.test(value)){
+					callback(new Error('只能由字母数字下划线组成'));
+				} else {
+					callback();
 				}
-				callback();
 			}
 		}
 	},
@@ -116,16 +126,33 @@ const validators = {
 
 	isWorknumber:function (rule, value, callback) {//验证工号
 	    if(!value) {
-			callback(new Error('不能为空'));
+			callback();
 		} else {
 			if(!validators.isSpecificWord(value)) {
 				callback(new Error('不支持特殊符号'));
 			} else {
-				var targ = /^[A-Za-z0-9]+$/;
-				if( !targ.test(value)){
-					callback(new Error('工号只支持英文、数字'));
+				if(!validators.isLetterNumber(value)) {
+					callback(new Error('只支持英文、数字'));
+				} else {
+					callback();
 				}
-				callback();
+			}
+		}
+	},
+
+	
+	isCodeNum:function (rule, value, callback) {// 验证编码号
+		if(!value){
+			callback();
+		} else {
+			if(!validators.isSpecificWord(value)) {
+				callback(new Error('不支持特殊符号'));
+			} else {
+				if(!validators.isLetterNumber(value)) {
+					callback(new Error('仅支持英文、数字和下划线'));
+				} else {
+					callback();
+				}
 			}
 		}
 	},
@@ -134,7 +161,7 @@ const validators = {
 		if(value && (!(/\d{17}[\d|x]|\d{15}/).test(value) || (value.length !== 15 && value.length !== 18))) {
 			callback(new Error('身份证号码不符合规范'))
 		} else {
-			callback()
+			callback();
 		}
 	},
 
@@ -142,7 +169,7 @@ const validators = {
 		if(value && (!(/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/).test(value))) {
 			callback(new Error('IP地址不符合规范，xxx.xxx.xxx.xxx'))
 		} else {
-			callback()
+			callback();
 		}
 	},
 
@@ -150,7 +177,7 @@ const validators = {
 		if(value && (!(/^[A-F0-9]{2}(-[A-F0-9]{2}){5}$|^[A-F0-9]{2}(:[A-F0-9]{2}){5}$/).test(value))) {
 			callback(new Error('MAC地址不符合规范，xx-xx-xx-xx-xx-xx'))
 		} else {
-			callback()
+			callback();
 		}
 	},
 
@@ -160,9 +187,9 @@ const validators = {
 		} else {
 			if(!validators.isSpecificWord(value)) {
 				callback(new Error('不支持特殊符号'));
+			} else {
+				callback();
 			}
-			callback();
-			
 		}
 	},
 
@@ -170,7 +197,7 @@ const validators = {
 		if (value && (!(/^[0-9]{6}$/).test(value))) {
 			callback(new Error('邮政编码不符合规范'))
 		} else {
-			callback()
+			callback();
 		}
 	},
 
@@ -183,10 +210,12 @@ const validators = {
 		}
 	},
 
+
+
 	// 验证是否整数
 	isInteger:function (rule, value, callback) {
 		if (!value) {
-			return callback(new Error('输入不可以为空'));
+			callback();
 		}
 		setTimeout(() => {
 			if (!Number(value)) {
@@ -207,7 +236,7 @@ const validators = {
 	// 验证是否是[0-1]的小数
 	isDecimal:function (rule, value, callback) {
 		if (!value) {
-			return callback(new Error('输入不可以为空'));
+			callback(new Error('不可以为空'));
 		}
 		setTimeout(() => {
 			if (!Number(value)) {
@@ -222,11 +251,28 @@ const validators = {
 		}, 1000);
 	},
 
+	// 价格限两位小数
+	isPrice:function (rule, value, callback) {
+		if (!value) {
+			callback(new Error('不可以为空'));
+		}
+		setTimeout(() => {
+			if(!validators.isSpecificWord(value)) {
+				callback(new Error('不支持特殊符号'));
+			} else {
+				if (!Number(value)) {
+					callback(new Error('请输入数字'));
+				} else {
+					callback();
+				}
+			}
+		}, 500);
+	},
 
 	// 验证端口是否在[0,65535]之间
 	isPort:function (rule, value, callback) {
 		if (!value) {
-			return callback(new Error('输入不可以为空'));
+			return callback(new Error('不可以为空'));
 		}
 		setTimeout(() => {
 			if (value == '' || typeof(value) == undefined) {
@@ -243,6 +289,22 @@ const validators = {
 		}, 1000);
 	},
 
+
+	isChinese:function (rule, value, callback) { //仅限中文
+		if(!value) {
+			callback();
+		} else {
+			if(!validators.isSpecificWord(value)) {
+				callback(new Error('不支持特殊符号'));
+			} else {
+				if(!validators.isChina(value)) {
+					callback(new Error('仅限中文'));
+				} else {
+					callback();
+				}
+			}
+		}
+	},
 
 
 };

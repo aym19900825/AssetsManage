@@ -22,6 +22,7 @@
 **/
 
 
+
 // 英文、数字
 export function isLetterNumber(str) {
 	const letterNumber = /^[A-Za-z0-9]+$/;
@@ -37,7 +38,7 @@ export function isSpecificWord(str) {
 			}
 		}
 	return true;
-};
+}
 
 /* 小写字母*/
 export function isLowerCase(str) {
@@ -62,7 +63,7 @@ export function isSpecificKey(rule, value, callback) {
 			callback();
 		}
 	}
-};
+}
 
 //验证用户名
 export function isUserName(rule, value, callback) { 
@@ -79,7 +80,7 @@ export function isUserName(rule, value, callback) {
 			callback();
 		}
 	}
-};
+}
 
 //验证手机号
 export function isPhone(rule, value, callback) {
@@ -105,7 +106,7 @@ export function isEmail (rule, value, callback) { //验证电子邮箱
 			callback();
 		}
 	}
-};
+}
 
 	
 export function isNickname (rule, value, callback) {//验证人员姓名
@@ -118,7 +119,7 @@ export function isNickname (rule, value, callback) {//验证人员姓名
 			callback();
 		}
 	}
-};
+}
 
 
 export function isWorknumber (rule, value, callback) {//验证工号
@@ -135,7 +136,7 @@ export function isWorknumber (rule, value, callback) {//验证工号
 			callback();
 		}
 	}
-};
+}
 
 export function isIdnumber (rule, value, callback) { //验证身份证号
 	if(value && (!(/\d{17}[\d|x]|\d{15}/).test(value) || (value.length !== 15 && value.length !== 18))) {
@@ -143,7 +144,7 @@ export function isIdnumber (rule, value, callback) { //验证身份证号
 	} else {
 		callback()
 	}
-};
+}
 
 
 export function isIpaddress (rule, value, callback) { //验证IP地址
@@ -152,7 +153,7 @@ export function isIpaddress (rule, value, callback) { //验证IP地址
 	} else {
 		callback()
 	}
-};
+}
 
 export function isMacaddress (rule, value, callback) { //验证MAC地址
 	if(value && (!(/^[A-F0-9]{2}(-[A-F0-9]{2}){5}$|^[A-F0-9]{2}(:[A-F0-9]{2}){5}$/).test(value))) {
@@ -160,7 +161,7 @@ export function isMacaddress (rule, value, callback) { //验证MAC地址
 	} else {
 		callback()
 	}
-};
+}
 
 export function isFillTips (rule, value, callback) {//验证备注
 	if(!value) {
@@ -172,7 +173,25 @@ export function isFillTips (rule, value, callback) {//验证备注
 		callback();
 		
 	}
-};
+}
+
+export function iszipcode (rule, value, callback) {//验证邮政编码
+	if (value && (!(/^[0-9]{6}$/).test(value))) {
+		callback(new Error('邮政编码不符合规范'))
+	} else {
+		callback()
+	}
+}
+
+export function istelephone (rule, value, callback) {//验证电话号码
+	var reg = /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/;
+	if (!reg.test(value)) {
+		callback(new Error('请输入有效的电话号码，格式为：0000-0000000'));
+	} else {
+		callback();
+	}
+}
+
 
 // 验证是否整数
 export function isInteger(rule, value, callback) {

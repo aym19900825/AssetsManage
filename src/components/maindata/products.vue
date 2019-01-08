@@ -78,8 +78,8 @@
 										机构
 									</span>
 									<div class="pull-right"> -->
-									<el-form-item label="机构" prop="DEPARTMENT">
-										<el-select clearable v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="请选择" style="width: 90%;border-radius:none">
+									<el-form-item label="机构" prop="DEPTID">
+										<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择" style="width: 90%;border-radius:none">
 										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 										</el-select>
 									</el-form-item>
@@ -119,7 +119,7 @@
 							</el-table-column>-->
 								<el-table-column label="版本" width="100" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1" align="right">
 								</el-table-column>
-								<el-table-column label="机构" width="185" sortable prop="DEPARTMENTDesc" v-if="this.checkedName.indexOf('机构')!=-1">
+								<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
 								</el-table-column>
 								<!-- <el-table-column label="录入人" width="155" prop="ENTERBY" sortable v-if="this.checkedName.indexOf('录入人')!=-1">
 								</el-table-column> -->
@@ -208,7 +208,7 @@
 					},
 					{
 						label: '机构',
-						prop: 'DEPARTMENTDesc'
+						prop: 'DEPTIDDesc'
 					},
 					// {
 					// 	label: '信息状态',
@@ -245,7 +245,7 @@
 					PRO_NUM: '',
 					PRO_NAME: '',
 					VERSION: '',
-					DEPARTMENT: ''
+					DEPTID: ''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -451,13 +451,14 @@
 					PRO_NUM: this.searchList.PRO_NUM,
 					PRO_NAME: this.searchList.PRO_NAME,
 					VERSION: this.searchList.VERSION,
-					DEPARTMENT: this.searchList.DEPARTMENT,
+					DEPTID: this.searchList.DEPTID,
 					// STATUS: this.searchList.STATUS,
 				}
 				var url = this.basic_url + '/api-apps/app/product';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
+					console.log(res.data);
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)

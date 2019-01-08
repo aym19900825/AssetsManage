@@ -59,8 +59,8 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="机构" prop="DEPARTMENT">
-										<el-select clearable v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="请选择">
+									<el-form-item label="机构" prop="DEPTID">
+										<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择" @click="getCompany">
 										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 										</el-select>
 									</el-form-item>
@@ -85,9 +85,10 @@
 									</template>
 								</el-table-column>
 								<el-table-column label="模板描述" sortable prop="DECRIPTION" v-if="this.checkedName.indexOf('模板描述')!=-1">
-								</el-table-column>							             <el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
+								</el-table-column>							             
+								<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>
-								<el-table-column label="机构" width="185" sortable prop="DEPARTMENTDesc" v-if="this.checkedName.indexOf('机构')!=-1">
+								<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
@@ -161,7 +162,7 @@
 					},
 					{
 						label: '机构',
-						prop: 'DEPARTMENT'
+						prop: 'DEPTIDDesc'
 					},
 				],
 				selUser: [],
@@ -175,7 +176,7 @@
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
 				searchList: { //点击高级搜索后显示的内容
 					DECRIPTION: '',
-					DEPARTMENT: '',
+					DEPTID: '',
 					// PHONE: '',
 					// CONTACT_ADDRESS: '',
 					// STATUS: ''
@@ -384,7 +385,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 					DECRIPTION: this.searchList.DECRIPTION,
-					DEPARTMENT: this.searchList.DEPARTMENT,
+					DEPTID: this.searchList.DEPTID,
 				}
 				var url = this.basic_url + '/api-apps/app/rawDataTem';
 				this.$axios.get(url, {

@@ -60,7 +60,7 @@
 					</div>
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
-						<el-form status-icon inline-message :model="searchList" label-width="110px">
+						<el-form inline-message :model="searchList" label-width="110px">
 							<el-row :gutter="5">
 								<el-col :span="6">
 									<el-form-item label="工作任务单编号" prop="WONUM">

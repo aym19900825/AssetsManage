@@ -16,7 +16,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form status-icon :model="user" inline-message :rules="rules" ref="user" :label-position="labelPositions" class="demo-user">
+				<el-form :model="user" inline-message :rules="rules" ref="user" :label-position="labelPositions" class="demo-user">
 					<div class="accordion">
 						<el-collapse v-model="activeNames">
 							<!--<el-collapse-item title="基础信息" name="1">

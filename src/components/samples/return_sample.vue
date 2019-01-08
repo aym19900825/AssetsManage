@@ -47,7 +47,7 @@
 					</div>
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
-						<el-form status-icon :model="searchList">
+						<el-form :model="searchList">
 							<el-row :gutter="5">
 								<el-col :span="6">
 									<el-form-item label="样品序号" prop="ITEMNUM" label-width="85px">

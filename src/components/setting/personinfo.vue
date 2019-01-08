@@ -27,7 +27,7 @@
 		<!--右侧内容显示 Begin-->
 		<div class="wrapper wrapper-content">
 			<div class="ibox-content" :style="{height: fullHeight}">
-				<el-form status-icon ref="personinfo" :model="personinfo" :rules="rules" label-width="80px" :label-position="labelPosition">
+				<el-form ref="personinfo" :model="personinfo" :rules="rules" label-width="80px" :label-position="labelPosition">
 					<el-collapse v-model="activeNames">
 						<el-collapse-item title="账号设置" name="1">
 							<el-row :gutter="30">

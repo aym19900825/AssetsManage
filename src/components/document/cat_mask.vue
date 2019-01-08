@@ -16,7 +16,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form status-icon :model="dataInfo"  ref="dataInfo" label-width="100px">
+				<el-form :model="dataInfo"  ref="dataInfo" label-width="100px">
 					<div class="accordion">
 						<div class="accordion" id="information">
 							<el-collapse v-model="activeNames">

@@ -17,7 +17,7 @@
 			</div>
 			<div class="mask_content">
 				<!-- status-icon 验证后文本框上显示对勾图标 -->
-				<el-form status-icon inline-message :model="WORKPLAN" :label-position="labelPosition" :rules="rules" ref="WORKPLAN" label-width="85px">
+				<el-form inline-message :model="WORKPLAN" :label-position="labelPosition" :rules="rules" ref="WORKPLAN" label-width="85px">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="基本信息" name="1">
@@ -412,7 +412,7 @@
 		<el-dialog title="检测依据" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
 			<!-- 高级查询划出 Begin-->
 			<div class="pb10">
-				<el-form status-icon :model="searchList" label-width="70px">
+				<el-form :model="searchList" label-width="70px">
 					<el-row :gutter="10" class="pb10">
 						<el-col :span="6">
 							<el-input v-model="searchList.S_NUM">
@@ -508,7 +508,7 @@
 		<el-dialog title="检测项目测试与要求" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
 			<!-- 高级查询划出 Begin-->
 			<div class="pb10">
-				<el-form status-icon :model="searchList" label-width="70px">
+				<el-form :model="searchList" label-width="70px">
 					<el-row :gutter="10">
 						<el-col :span="5">
 							<el-input v-model="searchList.P_NUM">

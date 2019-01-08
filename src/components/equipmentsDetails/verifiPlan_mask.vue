@@ -17,7 +17,7 @@
                 </div>
             </div>
             <div class="mask_content">
-				<el-form status-icon :model="dataInfo" :rules="rules"   ref="dataInfo" class="demo-user">
+				<el-form :model="dataInfo" :rules="rules"   ref="dataInfo" class="demo-user">
 					<div class="accordion">
 						<!-- 设备header信息 -->
 						<el-collapse v-model="activeNames">

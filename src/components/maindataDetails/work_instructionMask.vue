@@ -235,7 +235,7 @@
 					this.WORK_INSTRUCTION.DEPARTMENT = res.data.deptName;
 					this.WORK_INSTRUCTION.ENTERBY = res.data.nickname;
 					var date = new Date();
-					this.WORK_INSTRUCTION.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					this.WORK_INSTRUCTION.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 					if( opt!='new' ){
 						//深拷贝数据
 						let _obj = JSON.stringify(this.WORK_INSTRUCTION);
@@ -437,6 +437,7 @@
 			},
 			// 保存users/saveOrUpdate
 			save(WORK_INSTRUCTION) {
+				console.log(this.WORK_INSTRUCTION);
 				this.$refs[WORK_INSTRUCTION].validate((valid) => {
 					if(valid) {
 						this.WORK_INSTRUCTION.STATUS = ((this.WORK_INSTRUCTION.STATUS == "1" || this.WORK_INSTRUCTION.STATUS == '活动') ? '1' : '0');

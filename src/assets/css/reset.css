@@ -112,6 +112,33 @@ i, cite, em, var, address, dfn {
 
 
 /*滚动条*/
+@-moz-document url-prefix(http://),url-prefix(https://) {   
+    /* 滚动条颜色 */  
+    scrollbar {   
+       -moz-appearance: none !important;   
+       background: #F5F5F5 !important;   
+    }   
+    /* 滚动条按钮颜色 */  
+    thumb,scrollbarbutton {   
+       -moz-appearance: none !important;   
+       background-color: rgba(59,66,78,.7) !important;   
+    }   
+    /* 鼠标悬停时按钮颜色 */  
+      
+    thumb:hover,scrollbarbutton:hover {   
+       -moz-appearance: none !important;   
+       background-color: #F5F5F5 !important;   
+    }   
+    /* 隐藏上下箭头 */  
+    scrollbarbutton {   
+       display: none !important;   
+    }   
+    /* 纵向滚动条宽度 */  
+    scrollbar[orient="vertical"] {   
+      min-width: 6px !important;
+    }   
+}
+
 /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
 ::-webkit-scrollbar,#style-1::-webkit-scrollbar
 {

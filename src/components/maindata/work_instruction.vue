@@ -64,8 +64,8 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="机构" prop="DEPARTMENT" label-width="50px">
-										<el-select clearable v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="请选择">
+									<el-form-item label="机构" prop="DEPARTMENTDesc" label-width="50px">
+										<el-select clearable v-model="searchList.DEPARTMENTDesc" filterable allow-create default-first-option placeholder="请选择">
 										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 										</el-select>
 									</el-form-item>
@@ -403,6 +403,8 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
+					console.log('下方是想要获取的数据');
+					console.log(res.data);
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)

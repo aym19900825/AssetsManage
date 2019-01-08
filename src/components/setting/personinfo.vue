@@ -87,7 +87,7 @@
 
 								<el-col :span="8">
 						 			 <el-form-item label="角色">
-						 				<el-select v-model="personinfo.roles" multiple :disabled="noedit">
+						 				<el-select v-model="personinfo.roles" multiple>
 											<el-option v-for="item in selectData" :key="item.name" :value="item.id" :label="item.name"></el-option>
 										</el-select>
 						 			</el-form-item>	
@@ -178,9 +178,22 @@
 						 	</el-row>
 						 	<!-- 第四行 -->
 						 	<el-row :gutter="30">
+								<el-col :span="8">
+									<el-form-item label="IP地址" prop="ipaddress" label-width="100px">
+										<el-input v-model="personinfo.ipaddress"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="8">
+									<el-form-item label="MAC地址" prop="macaddress" label-width="100px">
+										<el-input v-model="personinfo.macaddress"></el-input>
+									</el-form-item>
+								</el-col>
+							</el-row>
+						 	<!-- 第五行 -->
+						 	<el-row :gutter="30">
 						 		<el-col :span="24">
 						 			 <el-form-item label="备注">
-								    <el-input  type="textarea" :rows="3" v-model="personinfo.tips"></el-input>
+								    <el-input type="textarea" :rows="3" v-model="personinfo.tips"></el-input>
 								  </el-form-item>	
 						 		</el-col>
 						 	</el-row>
@@ -213,7 +226,15 @@
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
 	import navs_header from '../common/nav_tabs.vue'
-
+	export function checkSpecificKey(str) {//特殊字符申明
+		var specialKey = "[`~!#^&*()=|{}':;',\\[\\].<>/?~！#……&*——|{}‘；：”“']‘'"; 
+			for (var i = 0; i < str.length; i++) {
+				if (specialKey.indexOf(str.substr(i, 1)) != -1) {
+					return false;
+				}
+			}
+		return true;
+	};
 	export default {
 		name: 'personinfo',
 		components: {
@@ -222,22 +243,31 @@
 		},
 		data() {
 		    var checknickname= (rule, value, callback) => {//验证人员姓名
-		        if (value === '') {
-		          return callback(new Error('人员姓名不能为空'));
-		        }
-		         callback();
+		       if(value === '') {
+					callback(new Error('人员姓名不能为空'));
+				} else {
+					if(!checkSpecificKey(value)) {
+						callback(new Error('不支持特殊符号'));
+					} else {
+						callback();
+					}
+				}
 		    };
 
 		    var checklaborcode = (rule, value, callback) => {//验证工号
-			    if (value === '') {
-			          return callback(new Error('工号不能为空'));
-			    } else {
-					var targ = /^[A-Za-z0-9]+$/;
-					if( !targ.test(value)){
-	                    callback(new Error('工号只支持英文、数字'));
-	                }
-					callback();
-				}	        
+			    if(value === '') {
+					callback(new Error('工号不能为空'));
+				} else {
+					if(!checkSpecificKey(value)) {
+						callback(new Error('不支持特殊符号'));
+					} else {
+						var targ = /^[A-Za-z0-9]+$/;
+						if( !targ.test(value)){
+							callback(new Error('工号只支持英文、数字'));
+						}
+						callback();
+					}
+				}
 			};
 
 		    var checkemail = (rule, value, callback) => {//验证电子邮箱
@@ -291,6 +321,35 @@
   				}
 		    };
 
+		    var checkipaddress = (rule, value, callback) => { //验证IP地址
+				if(value !== '') {
+					var reg = /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/;
+					if(!reg.test(value)) {
+						callback(new Error('IP地址不符合规范，xxx.xxx.xxx.xxx'));
+					} else {
+						callback();
+					}
+				}
+			};
+
+			var checkmacaddress = (rule, value, callback) => { //验证MAC地址
+				if(value !== '') {
+					var reg = /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/;
+					if(!reg.test(value)) {
+						callback(new Error('IP地址不符合规范，xxx.xxx.xxx.xxx'));
+					} else {
+						callback();
+					}
+				}
+			};
+
+			var checktips = (rule, value, callback) => {//验证备注
+				if(!checkSpecificKey(value)) {
+					callback(new Error('不支持特殊符号'));
+				} else {
+					callback();
+				}
+			};
 			return {
 				basic_url: Config.dev_url,
 				editSearch: '',
@@ -301,6 +360,7 @@
 				activeNames: ['1','2'],//手风琴数量
 				show:false,			  
 				userList: [],
+				selectData: [], //
 				isShow: false,
 				ismin:true,
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
@@ -330,6 +390,8 @@
 	          		tips:'',//备注
 	          		telephone:'',//联系电话
 	          		zipcode:'',//邮编
+	          		ipaddress:'',//IP地址
+	          		macaddress:'',//MAC地址
 	          		//logintype: [],//登录方式
 	          		//rex:'',//传真号
 	          		//orders:'',//排序号
@@ -342,28 +404,18 @@
 					children: "subDepts",
 					label: "fullname"
 				},
-	          rules:{
-		        nickname: [//required: true,必填标题加红*
-		            { required: true, validator: checknickname, trigger: 'blur' }
-		          ],
-	          	laborcode: [
-		            { required: true, validator: checklaborcode, trigger: 'blur' }
-		          ],
-		        email: [
-		            { required: true, validator: checkemail, trigger: 'blur' }
-		          ],
-		        telephone: [
-		            { validator: checktelephone, trigger: 'blur' }
-		          ],
-		        phone: [
-		            { required: true, validator: checkphone, trigger: 'blur' }
-		          ],
-		        idnumber: [
-		            { validator: checkidnumber, trigger: 'blur' }
-		          ],
-		        zipcode: [
-		            { validator: checkzipcode, trigger: 'blur' }
-		          ]
+	          rules:{//required: true,必填标题加红*
+		        nickname: [{ required: true, validator: checknickname, trigger: 'blur' }],
+	          	laborcode: [{ required: true, validator: checklaborcode, trigger: 'blur' }],
+		        email: [{ required: true, validator: checkemail, trigger: 'blur' }],
+		        telephone: [{ validator: checktelephone, trigger: 'blur' }],
+		        phone: [{ required: true, validator: checkphone, trigger: 'blur' }],
+		        idnumber: [{ validator: checkidnumber, trigger: 'blur' }],
+		        zipcode: [{ validator: checkzipcode, trigger: 'blur' }],
+          		ipaddress: [{required: false, validator: checkipaddress, trigger: 'blur' }],
+          		macaddress: [{required: false, validator: checkmacaddress, trigger: 'blur' }],
+          		tips: [{required: false,trigger: 'blur',validator: checktips}],
+
 	          },
 	          leftNavs: [//leftNavs左侧菜单数据
 					{
@@ -418,14 +470,22 @@
 					this.dialogVisible = true;
 				});
 			},
-			getRole() {//角色
-				this.editSearch = 'roles';
+			//角色
+			getRole() {
+				this.editSearch = 'role';
+				var page = this.page.currentPage;
+				var limit = this.page.pageSize;
 				var url = this.basic_url + '/api-user/roles';
 				this.$axios.get(url, {
+					params: {
+						page: page,
+						limit: limit,
+					},
 				}).then((res) => {
-					this.resourceData = res.data.data;
-					this.dialogVisible = true;
-				});
+					this.selectData = res.data.data;
+				}).catch(error => {
+					console.log('请求失败');
+				})
 			},
 			getCheckedNodes() {//获取树菜单节点
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
@@ -523,6 +583,9 @@
 				$(".wrapper").css("padding-left", "220px");
 				$(".navs>li").css("margin", "0px 10px");
 			}
+		},
+		mounted() {
+			this.getRole();
 		},
 	}
 </script>

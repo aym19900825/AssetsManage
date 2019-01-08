@@ -516,11 +516,14 @@
 					islogin: [{required: true,trigger: 'change',message: '必填'}], //登陆
 					mac_address: [{required: true,trigger: 'blur',message: '必填',}],
 					ip_address: [{required: true,trigger: 'blur',message: '必填',}],
-					nickname: [{required: true,trigger: 'blur',validator: isNickname}],
-					worknumber: [{required: true,trigger: 'blur',validator: isWorknumber}],
-					idnumber: [{required: true,trigger: 'blur',validator: isIdnumber}],
-					phone: [{required: true,trigger: 'blur',validator: isPhone}],
-					email: [{required: true,trigger: 'blur',validator: isEmail}],
+					nickname: [{required: true,trigger: 'blur',validator: Validators.isNickname}],
+					worknumber: [
+						{required: true,trigger: 'blur',message: '必填'},
+						{validator: Validators.isWorknumber, trigger: 'blur'},//引用 isWorknumber
+					],
+					idnumber: [{required: true,trigger: 'blur',validator: Validators.isIdnumber}],
+					phone: [{required: true,trigger: 'blur',validator: Validators.isPhone}],
+					email: [{required: true,trigger: 'blur',validator: Validators.isEmail}],
 					step: [{required: true,trigger: 'blur',message: '必填',}],
 					t_date: [{required: true,trigger: 'blur',message: '必填',}],
 					t_description: [{required: true,trigger: 'blur',message: '必填',}],

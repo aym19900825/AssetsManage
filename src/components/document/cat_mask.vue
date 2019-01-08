@@ -15,37 +15,59 @@
 					</span>
 				</div>
 			</div>
-			<div class="mask_content" style="height: 300px;">
-				<el-form status-icon :model="dataInfo" :rules="rules"   ref="dataInfo" label-width="100px" class="demo-user">
+			<div class="mask_content">
+				<el-form status-icon :model="dataInfo"  ref="dataInfo" label-width="100px">
 					<div class="accordion">
+						<div class="accordion" id="information">
+							<el-collapse v-model="activeNames">
+								<el-collapse-item title="基本信息" name="1">
+									<el-row :gutter="5" class="pt10">
+										<el-col :span="6">
+											<el-form-item label="类别名称" prop="dataInfo.categoryname">
+												<el-input v-model="dataInfo.categoryname"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+								</el-collapse-item>
+								
+								<el-collapse-item title="关键字列表" name="2" class="ml30">
+									<div class="table-func">
+										<el-button type="success" size="mini" round @click="addKWord">
+											<i class="icon-add"></i>
+											<font>新建行</font>
+										</el-button>
+									</div>
 
-						<!-- 设备基本信息 -->
-						<el-collapse v-model="activeNames">
-							<el-collapse-item title="关键字类别信息" name="1">
-								<el-row :gutter="20" class="pb10">
-									<el-col :span="5" class="pull-right">
-										<!-- <el-input v-model="dataInfo.STATUS==1?'活动':'不活动'" :disabled="true">
-											<template slot="prepend">信息状态</template>
-										</el-input> -->
-									</el-col>
-								</el-row>
-								<el-form-item v-for="item in basicInfo" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
-									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && item.prop !='A_PRICE' "></el-input>
-									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'"></el-input>
-									<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'">
-									</el-date-picker>
-									<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'">
-										<el-radio :label="it.label" v-for="it in item.opts"></el-radio>
-									</el-radio-group>
-									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && item.prop =='A_PRICE' " @blur="handlePrice"></el-input>
-								</el-form-item>
-							</el-collapse-item>
-						</el-collapse>
-					</div>
-
-					<div class="el-dialog__footer">
-						<el-button @click='close'>取消</el-button>
-						<el-button type="primary" @click='submitForm'>提交</el-button>
+									<el-table :data="dataInfo.tb_keyword2List" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100% ;">
+										<el-table-column prop="iconOperation" fixed width="50px">
+											<template slot-scope="scope">
+												<i class="el-icon-check" v-if="scope.row.isEditing"  @click="changeState(scope.row)">
+												</i>
+												<i class="el-icon-edit" v-if="!scope.row.isEditing"  @click="changeState(scope.row)">
+												</i>
+											</template>
+										</el-table-column>
+										<el-table-column label="名称" sortable prop="keywordname">
+											<template slot-scope="scope">
+												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.keywordname"></el-input>
+												<span v-if="!scope.row.isEditing">{{scope.row.keywordname}}</span>
+											</template>
+										</el-table-column>
+										<el-table-column fixed="right" label="操作">
+											<template slot-scope="scope">
+												<el-button type="text" size="small" @click="delKey(scope.$index,scope.row)">
+													移除
+												</el-button>
+											</template>
+										</el-table-column>
+									</el-table>
+								</el-collapse-item>
+							</el-collapse>
+						</div>
+						<div class="el-dialog__footer">
+							<el-button @click='close'>取消</el-button>
+							<el-button type="primary" @click='submitForm'>提交</el-button>
+						</div>
 					</div>
 				</el-form>
 			</div>
@@ -62,19 +84,10 @@
 		data() {
 			return {
 				rules: {
-					categoryname: [
-						{ required: true, message: '请输入分类名称', trigger: 'blur' },
-					]
+					// categoryname: [
+					// 	{ required: true, message: '请输入分类名称', trigger: 'blur' },
+					// ]
 				},
-				basicInfo: [
-					{
-						label: '分类名称',
-						prop: 'categoryname',
-						width: '70%',
-						type: 'input',
-						displayType: 'inline-block'
-					}
-				],
 
 				basic_url: Config.dev_url,
 
@@ -99,15 +112,54 @@
 				dataInfo: {
 					'id': '',	
                     'categoryname': '',
-                    'userid': 0,	
-                    'username': '',
+					'userid': 0,	
+					'username': '',
                     'createtime': '',	
                     'deptid': 0,
-                    'deptfullname': ''
+					'deptfullname': '',
+					'tb_keyword2List': [],
 				},
 			};
 		},
 		methods: {
+			delKey(index,row){
+				if(row.id!=''){
+					var url = this.basic_url + '/api-apps/app/tb_keyword2/' + row.id;
+					this.$axios.delete(url, {}).then((res) => {
+						if(res.data.resp_code == 0){
+							this.dataInfo.tb_keyword2List.splice(index,1);
+						}else{
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'error'
+							});
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+				}else{
+					this.dataInfo.tb_keyword2List.splice(index,1);
+				}
+			},
+			changeState(data){
+				data.isEditing = !data.isEditing;
+			},
+			addKWord(){
+				this.dataInfo.tb_keyword2List.push({
+					'keywordname': '',
+					'createtime': this.dataInfo.createtime,
+					'deptid': this.dataInfo.deptid,
+					'deptfullname': this.dataInfo.deptfullname,
+					'id': '',
+					'userid': this.dataInfo.userid,	
+					'username': this.dataInfo.username,
+					'isEditing': true,
+					'categoryid': this.dataInfo.id
+				});
+			},
 			getUser(opt){
 				var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url,{}).then((res) => {
@@ -144,11 +196,20 @@
 				this.getUser('new');
 			},
 			// 这里是修改
-			detail(dataid) {
+			detail() {
 				this.dataInfo = this.detailData;
+				var id = this.detailData.id;
+				this.getData(id);
 				this.modify = true;
 				this.show = true;
 				this.getUser();
+			},
+			getData(id){
+				var url = this.basic_url + '/api-apps/app/tbCategory2/' + id;
+				this.$axios.get(url, {
+				}).then((res) => {
+					this.dataInfo = res.data;
+				}).catch((wrong) => {})
 			},
 			//点击关闭按钮
 			close() {
@@ -156,16 +217,17 @@
 				this.$emit('request');
 			},
 			resetForm(){
-				this.dataInfo =  {
+				this.dataInfo = {
 					'id': '',	
                     'categoryname': '',
-                    'userid': '',	
-                    'username': '',
+					'userid': '',	
+					'username': '',
                     'createtime': '',	
                     'deptid': '',
-                    'deptfullname': ''
+					'deptfullname': '',
+					'tb_keyword2List': [],
 				};
-				this.$refs['dataInfo'].resetFields();
+				// this.$refs['dataInfo'].resetFields();
 				this.show = false;
 			},
 			toggle(e) { //大弹出框大小切换

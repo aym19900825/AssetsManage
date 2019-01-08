@@ -38,7 +38,7 @@ export default {
     	basic_url: Config.dev_url,
         innerVisible: false,
        active: 0,
-//     approvalProcessProject:[],
+     approvalProcessProject:[],
 //     approvalProcessProject:[
 //         {id:'0',title:"检验员审批",opinionName:"王华",opinionStatus:"error",opinion:"驳回，明细有误。",opinionDate:"2018-12-26 14:35:23"},
 //         {id:'1',title:"检验员审批",opinionName:"王华",opinionStatus:"success",opinion:"同意。",opinionDate:"2018-12-26 14:35:23"},

@@ -20,7 +20,7 @@
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基本信息" name="1">
-								<el-row class="pb10"style="margin-right: 5px;">
+								<el-row class="pb10" style="margin-right: 5px;">
 									<el-col :span="3" class="pull-right">
 										<el-input v-model="dataInfo.VERSION" :disabled="true">
 											<template slot="prepend">版本</template>
@@ -85,8 +85,8 @@
 								</el-row>
 								<el-row>
 									<el-col :span="8" v-if="dept">
-										<el-form-item label="机构" prop="DEPARTMENT">
-											<el-input v-model="dataInfo.DEPARTMENT" :disabled="true"></el-input>
+										<el-form-item label="机构" prop="DEPTIDDesc">
+											<el-input v-model="dataInfo.DEPTIDDesc" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -371,16 +371,17 @@
 			getUser(opt){
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					if(opt!='new'){
-						this.dataInfo.DEPARTMENT = res.data.deptName;
-						this.dataInfo.CHANGEBY = res.data.nickname;
+						this.dataInfo.DEPTID = res.data.deptId;
+						this.dataInfo.CHANGEBY = res.data.id;
 						var date = new Date();
 						this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
 						//深拷贝数据
 						let _obj = JSON.stringify(this.dataInfo);
 						this.DATAINFO = JSON.parse(_obj);
 					}else if(opt =='new'){
-						this.dataInfo.DEPARTMENT = res.data.deptName;
-						this.dataInfo.ENTERBY = res.data.nickname;
+						this.dataInfo.DEPARTMENT = '';
+						this.dataInfo.DEPTID = res.data.deptId;
+						this.dataInfo.ENTERBY = res.data.id;
 						var date = new Date();
 						this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 						//深拷贝数据

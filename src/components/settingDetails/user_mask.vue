@@ -414,21 +414,7 @@
 
 <script>
 	import Config from '../../config.js'
-	import { isSpecificKey } from '../../core/util/hxqhValidators.js'
-	import { isLetterNumber } from '../../core/util/hxqhValidators.js'
-	import { isUserName } from '../../core/util/hxqhValidators.js'
-	import { isPhone } from '../../core/util/hxqhValidators.js'
-	import { isEmail } from '../../core/util/hxqhValidators.js'
-
-	import { isNickname } from '../../core/util/hxqhValidators.js'
-	import { isWorknumber } from '../../core/util/hxqhValidators.js'
-	import { isIdnumber } from '../../core/util/hxqhValidators.js'
-	import { isIpaddress } from '../../core/util/hxqhValidators.js'
-
-	import { isMacaddress } from '../../core/util/hxqhValidators.js'
-	import { isTips } from '../../core/util/hxqhValidators.js'
-	import { isFillTips } from '../../core/util/hxqhValidators.js'
-	import { isInteger } from '../../core/util/hxqhValidators.js'
+	import Validators from '../../core/util/validators.js'
 
 	export default {
 		name: 'masks',
@@ -507,7 +493,7 @@
 					roleId: [{required: true,trigger: 'blur',message: '必填',}],
 					username: [
 						{required: true,message: '必填',trigger: 'blur',},
-						{validator: isUserName, trigger: 'blur'},//引用 isUserName
+						{validator: Validators.isUserName, trigger: 'blur'},//引用 isUserName
 						{type: 'string', min: 4, max:20, message: '用户名不小于4位，不大于20位', trigger: 'blur'},
 					],
 					password: [{required: true,trigger: 'blur',message: '必填',}],
@@ -532,10 +518,10 @@
 					c_date: [{required: true,trigger: 'blur',message: '必填',}],
 					c_num: [{required: true,trigger: 'blur',message: '必填',}],
 					c_name: [{required: true,trigger: 'blur',message: '必填',}],
-					ipaddress: [{required: false,trigger: 'blur',validator: isIpaddress}],
-					macaddress: [{required: false,trigger: 'blur',validator: isMacaddress}],
-					post: [{required: false,trigger: 'blur',validator: isSpecificKey}],
-					tips: [{required: false,trigger: 'blur',validator: isSpecificKey}],
+					ipaddress: [{required: false,trigger: 'blur',validator: Validators.isIpaddress}],
+					macaddress: [{required: false,trigger: 'blur',validator: Validators.isMacaddress}],
+					post: [{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],
+					tips: [{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],
 
 				},
 				//tree树菜单

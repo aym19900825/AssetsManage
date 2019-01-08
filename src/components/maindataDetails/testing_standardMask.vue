@@ -26,21 +26,6 @@
 											<template slot="prepend">版本</template>
 										</el-input>
 									</el-col>
-									<!--<el-col :span="5" class="pull-right" v-if="modify">
-										<el-input v-model="dataInfo.STATUS=='1'?'活动':'不活动'" :disabled="true">
-											<template slot="prepend">信息状态</template>
-										</el-input>
-									</el-col>
-									<el-col :span="5" class="pull-right" v-else>
-										<el-input v-model="dataInfo.STATUS" :disabled="true">
-											<template slot="prepend">信息状态</template>
-										</el-input>
-									</el-col>-->
-									 <!-- <el-col :span="6" class="pull-right">
-										<el-input v-model="dataInfo.S_NUM" :disabled="true">
-											<template slot="prepend">产品编号</template>
-										</el-input>
-									</el-col> --> 
 								</el-row>
 								<el-row>
 									<el-col :span="8">

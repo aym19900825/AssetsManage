@@ -61,8 +61,8 @@
 								</el-row>
 								<el-row>
 									<el-col :span="8" v-if="dept">
-										<el-form-item label="机构" prop="DEPARTMENT">
-											<el-input v-model="PRODUCT.DEPARTMENT" :disabled="true"></el-input>
+										<el-form-item label="机构" prop="DEPTIDDesc">
+											<el-input v-model="PRODUCT.DEPTIDDesc" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -70,8 +70,8 @@
 							<el-collapse-item title="其它" name="2"  v-show="views">
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="录入人" prop="ENTERBY">
-											<el-input v-model="PRODUCT.ENTERBY" :disabled="edit"></el-input>
+										<el-form-item label="录入人" prop="ENTERBYDesc">
+											<el-input v-model="PRODUCT.ENTERBYDesc" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -80,8 +80,8 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="修改人" prop="CHANGEBY">
-											<el-input v-model="PRODUCT.CHANGEBY" placeholder="当前修改人" :disabled="edit"></el-input>
+										<el-form-item label="修改人" prop="CHANGEBYDesc">
+											<el-input v-model="PRODUCT.CHANGEBYDesc" placeholder="当前修改人" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -255,10 +255,14 @@
 				this.statusshow2 = false;
 
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					this.PRODUCT.DEPARTMENT = res.data.deptName;
-					this.PRODUCT.ENTERBY = res.data.nickname;
+					console.log(res.data);
+					this.PRODUCT.DEPTID = res.data.deptId;
+					// this.PRODUCT.DEPTIDDesc = res.data.deptName;
+					this.PRODUCT.ENTERBY = res.data.id;
+					// this.PRODUCT.ENTERBYDesc = res.data.nickname;
 					var date = new Date();
 					this.PRODUCT.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
+					this.PRODUCT.DEPARTMENT = '';
 					this.PRODUCT.VERSION = '1';
 					this.PRODUCT.STATUS = '活动';
 				}).catch((err) => {
@@ -284,8 +288,9 @@
 				this.statusshow2 = true;
 
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					this.PRODUCT.DEPARTMENT = res.data.deptName;
-					this.PRODUCT.CHANGEBY = res.data.nickname;
+					this.PRODUCT.DEPTID = res.data.deptId;
+					this.PRODUCT.CHANGEBY = res.data.id;
+					// this.PRODUCT.CHANGEBYDesc = res.data.nickname;
 					var date = new Date();
 					this.PRODUCT.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
 					//深拷贝数据
@@ -312,6 +317,8 @@
 			},
 			// 保存users/saveOrUpdate
 			save(PRODUCT) {
+				console.log('=====');
+				console.log(this.PRODUCT);
 				this.$refs[PRODUCT].validate((valid) => {
 					if(valid) {
 						this.PRODUCT.STATUS = ((this.PRODUCT.STATUS == "1" || this.PRODUCT.STATUS == '活动') ? '1' : '0');

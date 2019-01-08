@@ -88,8 +88,8 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8" v-if="dept">
-										<el-form-item label="机构" prop="DEPARTMENT">
-											<el-input v-model="testing_projectForm.DEPARTMENT" :disabled="true"></el-input>
+										<el-form-item label="机构" prop="DEPTIDDesc">
+											<el-input v-model="testing_projectForm.DEPTIDDesc" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>	
@@ -97,8 +97,8 @@
 							<el-collapse-item title="其他" name="2" v-show="views">
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="录入人" prop="ENTERBY">
-											<el-input v-model="testing_projectForm.ENTERBY" :disabled="true"></el-input>
+										<el-form-item label="录入人" prop="ENTERBYDesc">
+											<el-input v-model="testing_projectForm.ENTERBYDesc" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -107,8 +107,8 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="修改人" prop="CHANGEBY">
-											<el-input v-model="testing_projectForm.CHANGEBY" :disabled="true"></el-input>
+										<el-form-item label="修改人" prop="CHANGEBYDesc">
+											<el-input v-model="testing_projectForm.CHANGEBYDesc" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -168,7 +168,7 @@
 								</el-table-column>
 								<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
 								</el-table-column>
-								<el-table-column label="机构" width="120" prop="DEPARTMENTDesc" sortable>
+								<el-table-column label="机构" width="120" prop="DEPTIDDesc" sortable>
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
@@ -423,8 +423,9 @@
 			visible() { //添加内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 //					this.testing_projectForm.DEPARTMENT = res.data.companyName;
-					this.testing_projectForm.DEPARTMENT = res.data.deptName;
-					this.testing_projectForm.ENTERBY = res.data.nickname;
+					this.testing_projectForm.DEPARTMENT = '';
+					this.testing_projectForm.DEPTID = res.data.deptId;
+					this.testing_projectForm.ENTERBY = res.data.id;
 					var date = new Date();
 					this.testing_projectForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err) => {
@@ -457,8 +458,8 @@
 				this.testing_projectForm.QUANTITY = num.join(".");
 
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					this.testing_projectForm.DEPARTMENT = res.data.deptName;
-					this.testing_projectForm.CHANGEBY = res.data.nickname;
+					this.testing_projectForm.DEPTID = res.data.deptId;
+					this.testing_projectForm.CHANGEBY = res.data.id;
 					var date = new Date();
 					this.testing_projectForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 					//深拷贝数据

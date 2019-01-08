@@ -20,27 +20,12 @@
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基本信息" name="1">
-								<el-row class="pb10"style="margin-right: 5px;">
+								<el-row class="pb10" style="margin-right: 5px;">
 									<el-col :span="3" class="pull-right">
 										<el-input v-model="dataInfo.VERSION" :disabled="true">
 											<template slot="prepend">版本</template>
 										</el-input>
 									</el-col>
-									<!--<el-col :span="5" class="pull-right" v-if="modify">
-										<el-input v-model="dataInfo.STATUS=='1'?'活动':'不活动'" :disabled="true">
-											<template slot="prepend">信息状态</template>
-										</el-input>
-									</el-col>
-									<el-col :span="5" class="pull-right" v-else>
-										<el-input v-model="dataInfo.STATUS" :disabled="true">
-											<template slot="prepend">信息状态</template>
-										</el-input>
-									</el-col>-->
-									 <!-- <el-col :span="6" class="pull-right">
-										<el-input v-model="dataInfo.S_NUM" :disabled="true">
-											<template slot="prepend">产品编号</template>
-										</el-input>
-									</el-col> --> 
 								</el-row>
 								<el-row>
 									<el-col :span="8">
@@ -85,8 +70,8 @@
 								</el-row>
 								<el-row>
 									<el-col :span="8" v-if="dept">
-										<el-form-item label="机构" prop="DEPARTMENT">
-											<el-input v-model="dataInfo.DEPARTMENT" :disabled="true"></el-input>
+										<el-form-item label="机构" prop="DEPTIDDesc">
+											<el-input v-model="dataInfo.DEPTIDDesc" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -97,8 +82,8 @@
 							<el-collapse-item title="其它" name="3" v-show="views">
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="录入人" prop="ENTERBY">
-											<el-input v-model="dataInfo.ENTERBY" :disabled="true"></el-input>
+										<el-form-item label="录入人" prop="ENTERBYDesc">
+											<el-input v-model="dataInfo.ENTERBYDesc" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -107,8 +92,8 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="修改人" prop="CHANGEBY">
-											<el-input v-model="dataInfo.CHANGEBY" :disabled="true"></el-input>
+										<el-form-item label="修改人" prop="CHANGEBYDesc">
+											<el-input v-model="dataInfo.CHANGEBYDesc" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -367,16 +352,17 @@
 			getUser(opt){
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					if(opt!='new'){
-						this.dataInfo.DEPARTMENT = res.data.deptName;
-						this.dataInfo.CHANGEBY = res.data.nickname;
+						this.dataInfo.DEPTID = res.data.deptId;
+						this.dataInfo.CHANGEBY = res.data.id;
 						var date = new Date();
 						this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
 						//深拷贝数据
 						let _obj = JSON.stringify(this.dataInfo);
 						this.DATAINFO = JSON.parse(_obj);
 					}else if(opt =='new'){
-						this.dataInfo.DEPARTMENT = res.data.deptName;
-						this.dataInfo.ENTERBY = res.data.nickname;
+						this.dataInfo.DEPARTMENT = '';
+						this.dataInfo.DEPTID = res.data.deptId;
+						this.dataInfo.ENTERBY = res.data.id;
 						var date = new Date();
 						this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 						//深拷贝数据

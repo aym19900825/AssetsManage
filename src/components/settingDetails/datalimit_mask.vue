@@ -1,11 +1,10 @@
 <template>
 	<div>
-		
 		<el-dialog title="数据范围" :visible.sync="dialogVisible" width="30%">
-			<el-select v-model="value" placeholder="请选择">
+			<el-select v-model="value" placeholder="请选择" @change="valueChange">
     		<el-option v-for="item in options":key="item.value":label="item.label" :value="item.value"></el-option>
   			</el-select>
-			<el-tree ref="tree" :data="depetData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @check-change="handleCheckChange" @click="getCheckedKeys"  default-expand-all>
+			<el-tree class="tree" ref="tree" :data="depetData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @check-change="handleCheckChange" @click="getCheckedKeys"  default-expand-all>
 			</el-tree>
 			<span slot="footer" class="dialog-footer">
 		       <el-button @click="dialogVisible = false">取 消</el-button>
@@ -18,6 +17,7 @@
 <script>
 	import Config from '../../config.js'
 	export default {
+		 props:["roleIds"],//第一种方式
 		name: 'masks',
 		data() {
 			return {
@@ -43,12 +43,25 @@
 
 		},
 		methods: {
+			visible() {
+				this.dialogVisible = true;
+			},
 			handleCheckChange(data, checked, indeterminate) {
 				this.cccData = data;
 			},
 			getCheckedKeys() {
 				console.log(this.$refs.tree.getCheckedKeys());
 			},
+			valueChange(){
+				console.log(this.roleIds);
+				if(this.value==2){
+				    this.depet(this.roleIds);
+					$('.tree').show();
+				}else{
+					$('.tree').hide();
+				}
+			},
+			
 			depet(id) {
 				console.log(id);
 				this.roId = id;
@@ -99,6 +112,7 @@
 					});
 				});
 			},
+			//显示勾选
 			setChecked(arr) {
 				this.$refs.tree.setCheckedKeys(arr);
 			},
@@ -126,11 +140,12 @@
 				for(var i = 0; i < permission.length; i++) {
 					deptIds.push(permission[i].id);
 				}
+				console.log(deptIds);
 				var data = {
-					deptIds: deptIds,
-					roleid: this.roId,
+					deptids: deptIds,
+//					roleid: this.roId,
 				}
-				var url = this.basic_url + '/api-user/depts/dataScopeSave'
+				var url = this.basic_url + '/api-user/roles/'+this.roId+'/'+this.value;
 				this.$axios.post(url, data).then((res) => {
 					console.log(res);
 					if(res.data.resp_code == 0) {
@@ -147,8 +162,27 @@
 					});
 				});
 			},
-
-		}
+			getdetail(id){
+				console.log(id)
+				var url = this.basic_url + '/api-user/roles/' + id;
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+					this.value=res.data.datascope;
+					if(res.data.datascope==2){
+						this.depet(id);
+						$('.tree').show();
+				}else{
+					$('.tree').hide();
+				}
+				this.dialogVisible = true;
+				});
+			}
+		},
+		mounted() {
+			console.log(123);
+			this.getdetail();
+			
+		},
 	
 	}
 </script>

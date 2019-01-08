@@ -1,17 +1,29 @@
 <template>
 <div>
     <el-dialog title="关键字" :visible.sync="param.visible">
-        <p class="selTab">已选择：</p>
-        <p class="chooseTab">请选择（点击对应的关键字即可选中）</p>
-        <div v-for="item in cateList" class="keyCat">
+        <p class="selTab">已选择：
+            <el-tag class="tag" 
+                type="success" 
+                v-for="item in selkeys" 
+                style="margin-right: 10px;margin-bottom: 20px;"  
+                @close="closeTag(item)"
+                closable>{{item.keywordname}}
+            </el-tag>
+        </p>
+        <div class="keyCat">
             <p class="catTit">关键字类别</p>
-            <el-tag type="success">关键字001</el-tag>
+            <el-tag class="tag" type="success" @click.native="getKeys(item)" v-for="item in cateList" style="margin-right: 10px; min-width: 80px;">{{item.categoryname}}</el-tag>
         </div>
+        <div class="keyCat">
+            <p class="catTit">关键字</p>
+            <el-tag class="tag" type="success"  @click.native="setSel(item)" v-for="item in keywords" style="margin-right: 10px; min-width: 80px;">{{item.keywordname}}</el-tag>
+        </div>
+        <p class="tips">请选择关键字类别，然后点击选择的关键字</p>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="resetDir">取 消</el-button>
-            <el-button type="primary" @click="addDir">确 定</el-button>
+            <el-button @click="reset">取 消</el-button>
+            <el-button type="primary" @click="save">确 定</el-button>
         </div>
-        <el-pagination 
+        <!-- <el-pagination 
             background 
             class="pull-right pt10" 
             @size-change="sizeChange" 
@@ -22,7 +34,7 @@
             layout="total, sizes, prev, pager, next" 
             :total="page.totalCount"
         >
-		</el-pagination>
+		</el-pagination> -->
     </el-dialog>  
 </div>
 </template>
@@ -40,26 +52,57 @@ export default {
                 pageSize: 10,
                 totalCount: 0
             },
-            cateList: []
+            cateList: [],
+            keywords: [],
+            selkeys: [],
+            delKeys: []
         }
     },
     props: ['param'],
     methods: {
-        resetDir(){},
-        addDir(){},
-        sizeChange(){},
-        currentChange(){},
-        getData(){
-            if(this.docParm.model == 'new'){
-                return false;
+        reset(){
+            this.selkeys = [];
+            this.keywords = [];
+            this.delKeys = [];
+        },
+        save(){
+            var url = this.file_url + '/file/fileKeyword';
+            var catList = [];
+            var selkeys = this.selkeys;
+            for(var i=0; i<selkeys.length; i++){
+                if(selkeys[i].filekeywordid == ''){
+                    catList.push({
+                        filekeywordid: selkeys[i].filekeywordid,
+                        keywordid: selkeys[i].id,
+                        categoryid: selkeys[i].categoryid
+                    });
+                }else{
+                    catList.push({
+                        filekeywordid: selkeys[i].filekeywordid,
+                        keywordid: selkeys[i].keywordid,
+                        categoryid: selkeys[i].categoryid
+                    });
+                }
+                
             }
-            var pageNum = this.page.currentPage - 1;
-            var url = this.file_url + '/file/fileList?page=' + pageNum + '&size=' + this.page.pageSize;
-            this.$axios.post(url,{
-                'appname': this.docParm.appname,
-                'recordid': this.docParm.recordid,
-            }).then((res) => {
-                this.doc = res.data.fileList;
+            var postData = {
+                fileid: this.param.fileid,
+                categoryKeywordList: catList,
+                deleteFilekeywordidList: this.delKeys
+            };
+            this.$axios.post(url,postData).then((res) => {
+                if(res.data.code==1){
+                    this.$message({
+                        message: res.data.message,
+                        type: 'success'
+                    });
+                }else{
+                    this.$message({
+                        message: res.data.message,
+                        type: 'error'
+                    });
+                }
+                this.param.visible = false;
             }).catch((err) => {
                 this.$message({
                     message: '网络错误，请重试',
@@ -67,7 +110,36 @@ export default {
                 });
             });
         },
-        requestData(){
+        closeTag(item){
+            if(item.filekeywordid != ''){
+                this.delKeys.push(item.filekeywordid);
+            }
+            this.selkeys.splice(this.selkeys.indexOf(item), 1);
+        },
+        setSel(item){
+            var arr = this.selkeys.filter(function (val) {
+                if(val.id == item.id){
+                    return val;
+                }
+            });
+            if(arr.length == 0){
+                item.filekeywordid = '';
+                this.selkeys.push(item);
+            }
+        },
+        getKeys(item){
+            var url = this.basic_url + '/api-apps/app/tbCategory2/' + item.id;
+            this.$axios.get(url,{
+            }).then((res) => {
+                this.keywords = res.data.tb_keyword2List;
+            }).catch((err) => {
+                this.$message({
+                    message: '网络错误，请重试',
+                    type: 'error'
+                });
+            });
+        },
+        getKeyCats(){
             var data = {
                 page: this.page.currentPage,
                 limit: this.page.pageSize,
@@ -76,13 +148,21 @@ export default {
             this.$axios.get(url, {
                 params: data
             }).then((res) => {
-                this.page.totalCount = res.data.count;
+                // this.page.totalCount = res.data.count;
                 this.cateList = res.data.data;
+            }).catch((wrong) => {});
+        },
+        requestData(){
+            var url = this.file_url + '/file/fileKeywordList';
+            this.$axios.post(url, {
+                'fileid': this.param.fileid
+            }).then((res) => {
+                this.selkeys = res.data;
             }).catch((wrong) => {});
         }
     },
     mounted(){
-        this.requestData();
+        this.getKeyCats();
     }
 }
 </script>
@@ -102,5 +182,12 @@ export default {
 }
 .chooseTab{
     text-align: center;
+}
+.tag{
+    cursor: pointer;
+}
+.tips{
+    color: #ccc;
+    font-size: 12px;
 }
 </style>

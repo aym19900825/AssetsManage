@@ -70,8 +70,8 @@
 								</el-row>
 								<el-row>
 									<el-col :span="8" v-if="dept">
-										<el-form-item label="机构" prop="DEPARTMENT">
-											<el-input v-model="CATEGORY.DEPARTMENT" :disabled="edit"></el-input>
+										<el-form-item label="机构" prop="DEPTIDDesc">
+											<el-input v-model="CATEGORY.DEPTIDDesc" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -225,9 +225,9 @@
 				//				this.CATEGORY.NUM =  this.rand(1000,9999);
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					console.log(res.data);
-					this.CATEGORY.DEPARTMENT = res.data.deptName;
+					this.CATEGORY.DEPTID = res.data.deptId;
 					this.CATEGORY.ENTERBY = res.data.id;
-					this.CATEGORY.ENTERBYDesc = res.data.nickname;
+					// this.CATEGORY.ENTERBYDesc = res.data.nickname;
 					var date = new Date();
 					this.CATEGORY.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 				}).catch((err) => {
@@ -263,9 +263,9 @@
 				this.statusshow1 = false;
 				this.statusshow2 = true;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					this.CATEGORY.DEPARTMENT = res.data.deptName;
+					this.CATEGORY.DEPTID = res.data.deptId;//传给后台机构id
 					this.CATEGORY.CHANGEBY = res.data.id;
-					this.CATEGORY.CHANGEBYDesc = res.data.nickname;
+					// this.CATEGORY.CHANGEBYDesc = res.data.nickname;
 					var date = new Date();
 					this.CATEGORY.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
 					//深拷贝数据
@@ -405,6 +405,8 @@
 			},
 			// 保存users/saveOrUpdate
 			save(CATEGORY) {
+				console.log(233333);
+				console.log(this.CATEGORY);
 				this.$refs[CATEGORY].validate((valid) => {
 					if(valid) {
 						this.CATEGORY.STATUS = ((this.CATEGORY.STATUS == "1" || this.CATEGORY.STATUS == '活动') ? '1' : '0');

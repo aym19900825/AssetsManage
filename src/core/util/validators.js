@@ -1,8 +1,9 @@
 /** 这个文件只允许放表单验证方法 
-只能输入数字："^[0-9]*$"。 
-只能输入n位的数字："^\d{n}$"。 
-只能输入至少n位的数字："^\d{n,}$"。 
-只能输入m~n位的数字：。"^\d{m,n}$" 
+
+只能输入数字："^[0-9]*$"。
+只能输入n位的数字："^\d{n}$"。
+只能输入至少n位的数字："^\d{n,}$"。
+只能输入m~n位的数字："^\d{m,n}$"。
 只能输入零和非零开头的数字："^(0|[1-9][0-9]*)$"。 
 只能输入有两位小数的正实数："^[0-9]+(.[0-9]{2})?$"。 
 只能输入有1~3位小数的正实数："^[0-9]+(.[0-9]{1,3})?$"。 
@@ -19,6 +20,7 @@
 只能输入汉字："^[\u4e00-\u9fa5]{0,}$"
 以英文字母开头，只能包含英文字母、数字、下划线："^[a-zA-Z][a-zA-Z0-9_]*$"。
 
+覆盖的优先级： 自定义规则 > 选项规则 > 默认规则
 **/
 const validators = {
 	isLetterNumber:function (str) {// 英文、数字
@@ -46,6 +48,8 @@ const validators = {
 		return urlregex.test(textval);
 	},
 
+
+//---------------------------------------------------------------------------------------------//
 	isSpecificKey:function (rule, value, callback) { //不允许特殊字符
 		if(!value) {
 			callback();
@@ -177,7 +181,69 @@ const validators = {
 		} else {
 			callback();
 		}
-	}
+	},
+
+	// 验证是否整数
+	isInteger:function (rule, value, callback) {
+		if (!value) {
+			return callback(new Error('输入不可以为空'));
+		}
+		setTimeout(() => {
+			if (!Number(value)) {
+				callback(new Error('请输入正整数'));
+			} else {
+				const re = /^[0-9]*[1-9][0-9]*$/;
+				const rsCheck = re.test(value);
+				if (!rsCheck) {
+					callback(new Error('请输入正整数'));
+				} else {
+					callback();
+				}
+			}
+		}, 1000);
+	},
+	 
+	 
+	// 验证是否是[0-1]的小数
+	isDecimal:function (rule, value, callback) {
+		if (!value) {
+			return callback(new Error('输入不可以为空'));
+		}
+		setTimeout(() => {
+			if (!Number(value)) {
+				callback(new Error('请输入数字'));
+			} else {
+				if (value < 0 || value > 1) {
+					callback(new Error('请输入[0,1]之间的数字'));
+				} else {
+					callback();
+				}
+			}
+		}, 1000);
+	},
+
+
+	// 验证端口是否在[0,65535]之间
+	isPort:function (rule, value, callback) {
+		if (!value) {
+			return callback(new Error('输入不可以为空'));
+		}
+		setTimeout(() => {
+			if (value == '' || typeof(value) == undefined) {
+				callback(new Error('请输入端口值'));
+			} else {
+				const re = /^([0-9]|[1-9]\d|[1-9]\d{2}|[1-9]\d{3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])$/;
+				const rsCheck = re.test(value);
+				if (!rsCheck) {
+					callback(new Error('请输入在[0-65535]之间的端口值'));
+				} else {
+					callback();
+				}
+			}
+		}, 1000);
+	},
+
+
 
 };
 

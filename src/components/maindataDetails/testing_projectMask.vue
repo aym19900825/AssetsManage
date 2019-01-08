@@ -16,7 +16,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form inline-message :model="testing_projectForm" :rules="rules" ref="testing_projectForm" label-width="100px">
+				<el-form inline-message :label-position="labelPosition" :model="testing_projectForm" :rules="rules" ref="testing_projectForm"  >
 					<div class="accordion">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基本信息" name="1">
@@ -68,13 +68,17 @@
 											</el-input>
 										</el-form-item>
 									</el-col>
+<<<<<<< HEAD
+									<!-- <el-col :span="8">
+=======
 									<el-col :span="8">
+>>>>>>> 89f9c43824e2dc7927e94a2645fafd52cac89054
 										<el-form-item label="人员资质" prop="QUALIFICATION" label-width="100px">
 											<el-input v-model="testing_projectForm.QUALIFICATION" :disabled="true">
 												<el-button slot="append" icon="el-icon-search" @click="getpepole"></el-button>
 											</el-input>
 										</el-form-item>
-									</el-col>
+									</el-col> -->
 								</el-row>
 								<el-row>
 									<el-col :span="8">
@@ -101,7 +105,7 @@
 										<font>新建行</font>
 									</el-button>
 								</div>
-								<el-table :header-cell-style="rowClass" :fig="true" :data="testing_projectForm.QUALIFICATIONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.qualifications', order: 'descending'}">
+								<el-table :header-cell-style="rowClass" :fit="true" :data="testing_projectForm.QUALIFICATIONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'testing_projectForm.QUALIFICATIONList', order: 'descending'}">
 									<el-table-column prop="iconOperation" fixed width="50px">
 										<template slot-scope="scope">
 											<i class="el-icon-check" v-if="scope.row.isEditing"></i>
@@ -138,7 +142,7 @@
 									<el-table-column prop="C_DATE" label="资质有效期" sortable width="200px">
 										<template slot-scope="scope">
 											<el-form-item :prop="'QUALIFICATIONList.'+scope.$index + '.C_DATE'">
-												<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.C_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+												<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.C_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width:100%">
 												</el-date-picker>
 												<span v-else="v-else">{{scope.row.C_DATE}}</span>
 											</el-form-item>
@@ -314,6 +318,7 @@
 			};
 			return {
 				testing_projectForm:{
+					VERSION:'1',
 					QUALIFICATIONList:[]
 				},
 				falg:false,//保存验证需要的
@@ -335,7 +340,7 @@
 				up: false,
 				index:0,
 				activeNames: ['1','2','3'], //手风琴数量
-				//				labelPosition: 'top', //表格
+				labelPosition: 'right', //表格
 				dialogVisible: false, //对话框
 				rules: { //需要验证的字段
 					P_NUM: [{
@@ -382,7 +387,7 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-				initcost: '',
+				// initcost: '',
 				TESTING_PROJECTFORM:{},//
 				addtitle:true,
 				modifytitle:false,
@@ -398,6 +403,7 @@
 				dialogVisible2:false,//作业指导书弹出框
 				WORK_INSTRUCTIONList:[],
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
+				isEditing: true
 			};
 		},
 		methods: {
@@ -450,7 +456,7 @@
 			//金额两位小数点千位分隔符，四舍五入
 			toPrice() {
 				var money = document.getElementById("cost").value;
-				this.initcost = money;
+				// this.initcost = money;
 				var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
 				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)', 'ig'), "$1,");
 				// this.dataInfo.CHECTCOST="￥" + num.join(".");
@@ -537,15 +543,9 @@
 				// this.show = true;
 			},
 
-			detail() { //修改内容时从父组件带过来的
-				// this.testing_projectForm.QUANTITY
-				this.initcost = this.testing_projectForm.QUANTITY;
-				var money = this.initcost.toString().replace(/\,|\￥/g, "")
-				var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
-				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)', 'ig'), "$1,");
-				// // this.dataInfo.CHECTCOST="￥" + num.join(".");
-				this.testing_projectForm.QUANTITY = num.join(".");
+			detail(dataid) { //修改内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
+					console.log(res.data);
 					this.testing_projectForm.DEPTID = res.data.deptId;
 					this.testing_projectForm.CHANGEBY = res.data.id;
 					var date = new Date();
@@ -558,7 +558,17 @@
 						message: '网络错误，请重试',
 						type: 'error'
 					})
-				})
+				});
+				var url = this.basic_url + '/api-apps/app/inspectionPro/' + dataid;
+				this.$axios.get(url, {}).then((res) => {
+					// console.log(res.data);
+					this.testing_projectForm = res.data;
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					})
+				});
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.viewtitle = false;
@@ -685,7 +695,7 @@
 			save(testing_projectForm) {
 				var _this = this;
 				this.$refs[testing_projectForm].validate((valid) => {
-					this.testing_projectForm.QUANTITY = _this.initcost;
+					// this.testing_projectForm.QUANTITY = _this.initcost;
 					if(valid) {
 						this.testing_projectForm.STATUS = ((_this.testing_projectForm.STATUS == "1" || this.testing_projectForm.STATUS == '活动') ? '1' : '0');
 						var url = this.basic_url + '/api-apps/app/inspectionPro/saveOrUpdate';

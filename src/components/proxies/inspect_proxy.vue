@@ -315,6 +315,7 @@
 				up: false,
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: {
+					V_NAME:'',
 					ITEM_NAME: '',
 					REPORT_NUM: '',
 					PROXYNUM: '',
@@ -505,6 +506,7 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
+					V_NAME:this.searchList.V_NAME,
 					ITEM_NAME: this.searchList.ITEM_NAME,
 					REPORT_NUM: this.searchList.REPORT_NUM,
 					PROXYNUM: this.searchList.PROXYNUM,

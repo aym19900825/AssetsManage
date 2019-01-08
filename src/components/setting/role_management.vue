@@ -103,8 +103,8 @@
 				</div>
 			</div>
 			<rolemask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></rolemask>
-			<datalimitmask ref="limit" v-bind:page=page></datalimitmask>
-			<rolemeunmask ref="role" v-bind:page=page></rolemeunmask>
+			<datalimitmask ref="limit" :roleIds="roleIds"></datalimitmask>
+			<rolemeunmask ref="role"></rolemeunmask>
 			<!--右侧内容显示 End-->
 		</div>
 	</div>
@@ -179,6 +179,7 @@
 					totalCount: 0
 				},
 				selData:[],
+				roleIds:{},
 			}
 		},
 		methods: {
@@ -260,7 +261,9 @@
 					});
 					return;
 				} else {
-					this.$refs.limit.depet(this.selData[0].id);
+					this.roleIds=this.selData[0].id//传到数据范围
+//					this.$refs.limit.visible();					
+					this.$refs.limit.getdetail(this.selData[0].id);
 				}
 			},
 			//修改

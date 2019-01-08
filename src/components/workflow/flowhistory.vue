@@ -1,8 +1,6 @@
 <template>
 <div class="stepComponent" >
-    <div class="stepsTitle">
-        流程历史
-    </div>
+	<el-dialog title="流程历史" :visible.sync="innerVisible" width="45%">
     <div class="approvalProcess" >
         <el-steps :active="active" direction="vertical">
            <el-step :title="item.title" :status="item.opinionStatus" v-for="item in approvalProcessProject" :id="item.id">
@@ -25,17 +23,19 @@
         </el-steps>
         <el-button style="margin-top: 12px;" @click="next">下一步</el-button>
     </div>
- 
+ </el-dialog>
 </div>
 </template>
 <script>
- 
+ import Config from '../../config.js';
 export default {
    components: {
   },
   props: ['data', 'defaultActive'],
   data() {
     return {
+    	basic_url: Config.dev_url,
+        innerVisible: false,
        active: 0,
        approvalProcessProject:[
            {id:'0',title:"检验员审批",opinionName:"王华",opinionStatus:"error",opinion:"驳回，明细有误。",opinionDate:"2018-12-26 14:35:23"},
@@ -46,13 +46,16 @@ export default {
        ],
     };
   },
-   watch: {
-  },
-  mounted() {
-  },
-  computed: {
-  },
   methods: {
+  	close() {
+				this.innerVisible = false;
+			},
+	open() {
+				this.innerVisible = true;
+			},
+	visible() {
+					this.open();
+		  	},
      next() {
         if (this.active++ > 2) this.active = 0;
       },

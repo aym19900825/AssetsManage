@@ -175,7 +175,7 @@
 							</el-pagination>
 							<!-- 表格 End-->
 			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible2 = false" style="margin-left: 37%;">取 消</el-button>
+		       <el-button @click="dialogVisible2 = false">取 消</el-button>
 		       <el-button type="primary" @click="addwork">确 定</el-button>
 		    </span>
 		</el-dialog>
@@ -676,12 +676,32 @@
 				});
 			},
 			dailogconfirm() { //小弹出框确认按钮事件
-				this.dialogVisible = false;
-				this.testing_projectForm.QUALIFICATION = this.selval[0].c_name;
+				if(this.selval.length == 0){
+					this.$message({
+						message: '请选择数据',
+						type: 'warning'
+					});
+				}else{
+					this.dialogVisible = false;
+					this.testing_projectForm.QUALIFICATION = this.selval[0].c_name;
+				}
 			},
 			addwork() { //小弹出框确认按钮事件
-				this.dialogVisible2 = false;
-				this.testing_projectForm.DOCLINKS_NUM = this.selval[0].DESCRIPTION;
+				console.log(this.selval.length);
+				if(this.selval.length == 0){
+					this.$message({
+						message: '请选择数据',
+						type: 'warning'
+					});
+				}else if(this.selval.length>1){
+					this.$message({
+						message: '不可以同时选择多条数据',
+						type: 'warning'
+					});
+				}else{
+					this.dialogVisible2 = false;
+					this.testing_projectForm.DOCLINKS_NUM = this.selval[0].DESCRIPTION;
+				}
 			},
 			handleClose(done) {
 				this.$confirm('确认关闭？')
@@ -732,6 +752,7 @@
 <style>
 	@import '../../assets/css/mask-modules.css';
 	#cost {
-		text-align: right;
+		text-align: right !important;
+		padding-right: 30px;
 	}
 </style>

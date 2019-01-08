@@ -70,8 +70,8 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="机构" prop="DEPARTMENT">
-										<el-select clearable v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="请选择">
+									<el-form-item label="机构" prop="DEPTID">
+										<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
 									    	<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 										</el-select>
 									</el-form-item>
@@ -117,7 +117,7 @@
 							</el-table-column>
 							<el-table-column label="版本" width="70" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1" align="right">
 							</el-table-column>
-							<el-table-column label="机构" width="180" sortable prop="DEPARTMENTDesc" v-if="this.checkedName.indexOf('机构')!=-1">
+							<el-table-column label="机构" width="180" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
 							</el-table-column>
 							<!-- <el-table-column label="录入人" width="120" prop="ENTERBY" sortable  v-if="this.checkedName.indexOf('录入人')!=-1"> -->
 							</el-table-column>
@@ -227,7 +227,7 @@
 					},
 					{
 						label: '机构',
-						prop: 'DEPARTMENTDesc'
+						prop: 'DEPTIDDesc'
 					},
 					// {
 					// 	label: '录入人',
@@ -261,7 +261,7 @@
 					P_NUM: '',
 					P_NAME: '',
 					VERSION: '',
-					DEPARTMENT:'',
+					DEPTID:'',
 					// STATUS:'',
 				},
 				//tree
@@ -492,7 +492,7 @@
 					P_NUM: this.searchList.P_NUM,
 					P_NAME: this.searchList.P_NAME,
 					VERSION: this.searchList.VERSION,
-					DEPARTMENT: this.searchList.DEPARTMENT,
+					DEPTID: this.searchList.DEPTID,
 					// STATUS: this.searchList.STATUS,
 				}
 				var url = this.basic_url + '/api-apps/app/inspectionPro';

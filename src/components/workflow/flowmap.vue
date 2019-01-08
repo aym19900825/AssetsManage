@@ -1,11 +1,15 @@
 <template>
 <div class="stepComponent">
-    <div class="stepsTitle">
-        流程地图
-    </div>
-    <div class="processing_content text-center">
-      图片占位位
-    </div>
+	<el-dialog title="流程地图" :visible.sync="innerVisible" width="45%">
+	    <div class="processing_content text-center">
+	      <div id="image" style="width:100%;height:100%;overflow: auto;">
+            <div class="layui-form-item">
+                <image id="showImages1" style="display: none;"></image>
+                <image id="showImages2"></image>
+            </div>
+           </div>
+	    </div>
+    </el-dialog>
 </div>
 </template>
 <script>

@@ -64,7 +64,7 @@
 								<el-row>
 									<el-col :span="8">
 										<el-form-item label="用户名" v-if="modify" label-width="100px">
-											<el-input v-model="user.username" :disabled="true"></el-input>
+											<el-input v-model="user.username" :disabled="noedit"></el-input>
 										</el-form-item>
 										<el-form-item label="用户名" prop="username" v-else label-width="100px">
 											<el-input v-model="user.username" :disabled="noedit"></el-input>
@@ -193,7 +193,7 @@
 								<el-row>
 									<el-col :span="24">
 										<el-form-item label="备注" prop="tips" label-width="100px">
-											<el-input type="textarea" :rows="3" v-model="user.tips" :disabled="noedit"></el-input>
+											<el-input type="textarea" v-model="user.tips" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -414,7 +414,21 @@
 
 <script>
 	import Config from '../../config.js'
-	import Validators from '../../core/util/validators.js'
+	import { isSpecificKey } from '../../core/util/hxqhValidators.js'
+	import { isLetterNumber } from '../../core/util/hxqhValidators.js'
+	import { isUserName } from '../../core/util/hxqhValidators.js'
+	import { isPhone } from '../../core/util/hxqhValidators.js'
+	import { isEmail } from '../../core/util/hxqhValidators.js'
+
+	import { isNickname } from '../../core/util/hxqhValidators.js'
+	import { isWorknumber } from '../../core/util/hxqhValidators.js'
+	import { isIdnumber } from '../../core/util/hxqhValidators.js'
+	import { isIpaddress } from '../../core/util/hxqhValidators.js'
+
+	import { isMacaddress } from '../../core/util/hxqhValidators.js'
+	import { isTips } from '../../core/util/hxqhValidators.js'
+	import { isFillTips } from '../../core/util/hxqhValidators.js'
+	import { isInteger } from '../../core/util/hxqhValidators.js'
 
 	export default {
 		name: 'masks',
@@ -433,7 +447,6 @@
 					traings: [],
 					qualifications: [],
 				},
-				
 				options: [{
 						value: '高中',
 						label: '高中'
@@ -494,7 +507,7 @@
 					roleId: [{required: true,trigger: 'blur',message: '必填',}],
 					username: [
 						{required: true,message: '必填',trigger: 'blur',},
-						{validator: Validators.isUserName, trigger: 'blur'},//引用 isUserName
+						{validator: isUserName, trigger: 'blur'},//引用 isUserName
 						{type: 'string', min: 4, max:20, message: '用户名不小于4位，不大于20位', trigger: 'blur'},
 					],
 					password: [{required: true,trigger: 'blur',message: '必填',}],
@@ -504,7 +517,10 @@
 					mac_address: [{required: true,trigger: 'blur',message: '必填',}],
 					ip_address: [{required: true,trigger: 'blur',message: '必填',}],
 					nickname: [{required: true,trigger: 'blur',validator: Validators.isNickname}],
-					worknumber: [{required: true,trigger: 'blur',validator: Validators.isWorknumber}],
+					worknumber: [
+						{required: true,trigger: 'blur',message: '必填'},
+						{validator: Validators.isWorknumber, trigger: 'blur'},//引用 isWorknumber
+					],
 					idnumber: [{required: true,trigger: 'blur',validator: Validators.isIdnumber}],
 					phone: [{required: true,trigger: 'blur',validator: Validators.isPhone}],
 					email: [{required: true,trigger: 'blur',validator: Validators.isEmail}],
@@ -516,10 +532,10 @@
 					c_date: [{required: true,trigger: 'blur',message: '必填',}],
 					c_num: [{required: true,trigger: 'blur',message: '必填',}],
 					c_name: [{required: true,trigger: 'blur',message: '必填',}],
-					ipaddress: [{required: false,trigger: 'blur',validator: Validators.isIpaddress}],
-					macaddress: [{required: false,trigger: 'blur',validator: Validators.isMacaddress}],
-					post: [{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],
-					tips: [{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],
+					ipaddress: [{required: false,trigger: 'blur',validator: isIpaddress}],
+					macaddress: [{required: false,trigger: 'blur',validator: isMacaddress}],
+					post: [{required: false,trigger: 'blur',validator: isSpecificKey}],
+					tips: [{required: false,trigger: 'blur',validator: isSpecificKey}],
 
 				},
 				//tree树菜单
@@ -777,7 +793,7 @@
 				});
 				var url = this.basic_url + '/api-user/users/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
-					// console.log(res.data);
+					console.log(res.data);
 					this.user = res.data;
 					this.user.sex = this.user.sex ? '男' : '女';
 					this.user.enabled = this.user.enabled ? '活动' : '不活动';
@@ -786,7 +802,7 @@
 					this.user.roleId = [];
 					var roles = this.user.roles;
 					for(var i = 0; i < roles.length; i++) {
-						this.user.roleId.push(roles[i].name);
+						this.user.roleId.push(roles[i].id);
 					}
 					this.show = true;
 				}).catch((err) => {
@@ -864,7 +880,7 @@
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
 			},
 
-			//保存users/saveOrUpdate
+			//			保存users/saveOrUpdate
 			save() {
 				var _this = this;
 				this.$refs.user.validate((valid) => {
@@ -957,8 +973,8 @@
 			//所属机构
 			getDept() {
 				this.editSearch = 'dept';
-				// var page = this.page.currentPage;
-				// var limit = this.page.pageSize;
+				var page = this.page.currentPage;
+				var limit = this.page.pageSize;
 				//				var type = "2";
 				var url = this.basic_url + '/api-user/depts/treeMap';
 				//				var url = '/api/api-user/depts/treeByType';
@@ -967,7 +983,6 @@
 					//						type: type
 					//					},
 				}).then((res) => {
-					console.log(res);
 					this.resourceData = res.data;
 					this.dialogVisible = true;
 				});
@@ -978,7 +993,12 @@
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
 				var url = this.basic_url + '/api-user/roles';
-				this.$axios.get(url, {}).then((res) => {
+				this.$axios.get(url, {
+					params: {
+						page: page,
+						limit: limit,
+					},
+				}).then((res) => {
 					this.selectData = res.data.data;
 				}).catch(error => {
 					console.log('请求失败');

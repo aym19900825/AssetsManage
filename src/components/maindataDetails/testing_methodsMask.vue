@@ -119,6 +119,7 @@
 
 <script>
 	import Config from '../../config.js'
+	import Validators from '../../core/util/validators.js'
 	import docTable from '../common/doc.vue'
 	export default {
 		name: 'testing_mask',
@@ -147,17 +148,17 @@
 			}
 		},
 		data() {
-			var validateNum = (rule, value, callback) => {
-				if(value != ""){
-		             if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
-		                 callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
-		             }else{
-		                 callback();
-		             }
-		         }else{
-		             callback();
-		         }
-			};
+			// var validateNum = (rule, value, callback) => {
+			// 	if(value != ""){
+		 //             if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
+		 //                 callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
+		 //             }else{
+		 //                 callback();
+		 //             }
+		 //         }else{
+		 //             callback();
+		 //         }
+			// };
 			return {
 				docParm: {
 					'model': 'new',
@@ -202,19 +203,22 @@
 				rules: { //定义需要校验数据的名称
 					M_NUM: [{
 						required: false,
-						trigger: 'change',
-						validator: validateNum,
+						trigger: 'change',//validateNum
+						validator: Validators.isCodeNum,
 					}],
 					M_NAME: [
 						{ required: true, message: '请填写中文名称', trigger: 'blur' },
-						{ min: 5, max: 35, message: '长度在 5 到 35 个字符', trigger: 'blur' }
+						{ min: 5, max: 35, message: '长度在 5 到 35 个字符', trigger: 'blur' },
+						{validator: Validators.isChinese, trigger: 'blur'},
 					],
 					M_ENAME: [
 						{ required: true, message: '请填写英文名称', trigger: 'blur' },
-						{ min: 5, max: 50, message: '长度在 5 到 15 个字符', trigger: 'blur' }
+						{ min: 5, max: 50, message: '长度在 5 到 15 个字符', trigger: 'blur' },
+						{validator: Validators.isEnglish, trigger: 'blur'},
 					],
 					M_TYPE: [
-						{ required: true, message: '请填写', trigger: 'change' }
+						{ required: true, message: '请填写', trigger: 'change' },
+						{validator: Validators.isSpecificKey, trigger: 'blur'},
 					]
 				},
 				hintshow:false,

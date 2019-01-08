@@ -55,15 +55,15 @@ export default {
 		  	},
 		    //同意
 		    submitForm(){
-		    	var flag=true;
 		    	this.$refs.approveForm.validate((valid) => {	
 		    	var url = this.basic_url + '/api-apps/app/inspectPro/flow/'+this.approvingData;	
 				this.approveForm = {
+							"end":false,
 					 		"flag": true,
 							"opinion":this.approveForm.opinion,
 					}
-				this.$axios.post(url, {}).then((res) => {
-				console.log(res);
+				this.$axios.post(url, this.approveForm).then((res) => {
+				console.log(this.approveForm);
 					if(res.data.resp_code == 1) {
 							this.$message({
 								message:res.data.resp_msg,
@@ -74,31 +74,34 @@ export default {
 								message:res.data.resp_msg,
 								type: 'success'
 							});
+							this.close();
 				    }
 				});
 		    });
 		    },
 		    //驳回
 		    rejectForm(){
-		    	var flag=false;
 		    	this.$refs.approveForm.validate((valid) => {	
 		    	var url = this.basic_url + '/api-apps/app/inspectPro/flow/'+this.approvingData;	
 				this.approveForm = {
+							"end":false,
 					 		"flag": false,
 							"opinion":this.approveForm.opinion,
 					}
-				this.$axios.post(url, {}).then((res) => {
+				this.$axios.post(url, this.approveForm).then((res) => {
 				console.log(res);
 					if(res.data.resp_code == 1) {
 							this.$message({
 								message:res.data.resp_msg,
 								type: 'warning'
 							});
+							this.close();
 				    }else{
 				    	this.$message({
 								message:res.data.resp_msg,
 								type: 'success'
 							});
+							this.close();
 				    }
 				});
 		    });

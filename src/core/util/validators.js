@@ -19,16 +19,16 @@
 验证是否含有^%&',;=?$\"等字符："[^%&',;=?$\x22]+"。 
 只能输入汉字："^[\u4e00-\u9fa5]{0,}$"
 以英文字母开头，只能包含英文字母、数字、下划线："^[a-zA-Z][a-zA-Z0-9_]*$"。
-
+只能输入汉字、英文字母和数字"/^[\u0391-\uFFE5A-Za-z0-9]+$/"。
 覆盖的优先级： 自定义规则 > 选项规则 > 默认规则
 **/
 const validators = {
-	isLetterNumber:function (str) {// 英文、数字
-		const letterNumber = /^[A-Za-z0-9]+$/;
+	LetterNumber:function (str) {// 英文、数字或下划线
+		const letterNumber = /^\w+$/;
 		return letterNumber.test(str);
 	},
 
-	isSpecificWord:function (str) {// 特殊字符
+	SpecificWord:function (str) {// 特殊字符
 		var specialKey = "[`~!#^&*()=|{}':;',\\[\\].<>/?~！#……&*{}‘；']‘'"; 
 			for (var i = 0; i < str.length; i++) {
 				if (specialKey.indexOf(str.substr(i, 1)) != -1) {
@@ -38,14 +38,24 @@ const validators = {
 		return true;
 	},
 
-	isLowerCase:function (str) {/* 小写字母*/
+	LowerCase:function (str) {/* 小写字母*/
 		const reg = /^[a-z]+$/;
 		return reg.test(str);
 	},
 
-	isURL:function (textval) {/* 合法URL*/
+	URL:function (textval) {/* 合法URL*/
 		const urlregex = /^(https?|ftp):\/\/([a-zA-Z0-9.-]+(:[a-zA-Z0-9.&%$-]+)*@)*((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}|([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(:[0-9]+)*(\/($|[a-zA-Z0-9.,?'\\+&%$#=~_-]+))*$/;
 		return urlregex.test(textval);
+	},
+
+	Mandarin:function (str) {/* 仅限中文*/
+		const mandarins = /^[\u4e00-\u9fa5]{0,}$/;
+		return mandarins.test(str);
+	},
+
+	Englishs:function (str) {/* 仅限英文*/
+		const eng = /^[A-Za-z]+$/;
+		return eng.test(str);
 	},
 
 
@@ -54,7 +64,7 @@ const validators = {
 		if(!value) {
 			callback();
 		} else {
-			if(!validators.isSpecificWord(value)) {
+			if(!validators.SpecificWord(value)) {
 				callback(new Error('不支持特殊符号'));
 			} else {
 				callback();
@@ -66,14 +76,15 @@ const validators = {
 		if(!value) {
 			callback(new Error('不能为空'));
 		} else {
-			if(!validators.isSpecificWord(value)) {
+			if(!validators.SpecificWord(value)) {
 				callback(new Error('不支持特殊符号'));
 			} else {
 				var targ = /^[a-zA-Z][a-zA-Z0-9_]*$/;
-				if( !isLetterNumber(value)){
-					callback(new Error('用户名只能由字母数字下划线组成'));
+				if( !targ.test(value)){
+					callback(new Error('只能由字母数字下划线组成'));
+				} else {
+					callback();
 				}
-				callback();
 			}
 		}
 	},
@@ -106,7 +117,7 @@ const validators = {
 	   if(!value) {
 			callback(new Error('不能为空'));
 		} else {
-			if(!validators.isSpecificWord(value)) {
+			if(!validators.SpecificWord(value)) {
 				callback(new Error('不支持特殊符号'));
 			} else {
 				callback();
@@ -116,16 +127,34 @@ const validators = {
 
 	isWorknumber:function (rule, value, callback) {//验证工号
 	    if(!value) {
-			callback(new Error('不能为空'));
+			callback();
 		} else {
-			if(!validators.isSpecificWord(value)) {
+			if(!validators.SpecificWord(value)) {
 				callback(new Error('不支持特殊符号'));
 			} else {
-				var targ = /^[A-Za-z0-9]+$/;
-				if( !targ.test(value)){
-					callback(new Error('工号只支持英文、数字'));
+				if(!validators.LetterNumber(value)) {
+					callback(new Error('只支持英文、数字'));
+				} else {
+					callback();
 				}
-				callback();
+			}
+		}
+	},
+
+	
+	isCodeNum:function (rule, value, callback) {// 验证编码号
+		if(!value){
+			callback();
+		} else {
+			if(!validators.SpecificWord(value)) {
+				callback(new Error('不支持特殊符号'));
+			} else {
+				var reg = /^[0-9a-zA-Z()（）]+$/
+				if(!reg.test(value)) {
+					callback(new Error('仅支持数字、字母或括号'));
+				} else {
+					callback();
+				}
 			}
 		}
 	},
@@ -134,7 +163,7 @@ const validators = {
 		if(value && (!(/\d{17}[\d|x]|\d{15}/).test(value) || (value.length !== 15 && value.length !== 18))) {
 			callback(new Error('身份证号码不符合规范'))
 		} else {
-			callback()
+			callback();
 		}
 	},
 
@@ -142,7 +171,7 @@ const validators = {
 		if(value && (!(/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/).test(value))) {
 			callback(new Error('IP地址不符合规范，xxx.xxx.xxx.xxx'))
 		} else {
-			callback()
+			callback();
 		}
 	},
 
@@ -150,7 +179,7 @@ const validators = {
 		if(value && (!(/^[A-F0-9]{2}(-[A-F0-9]{2}){5}$|^[A-F0-9]{2}(:[A-F0-9]{2}){5}$/).test(value))) {
 			callback(new Error('MAC地址不符合规范，xx-xx-xx-xx-xx-xx'))
 		} else {
-			callback()
+			callback();
 		}
 	},
 
@@ -158,11 +187,11 @@ const validators = {
 		if(!value) {
 			callback(new Error('不能为空'));
 		} else {
-			if(!validators.isSpecificWord(value)) {
+			if(!validators.SpecificWord(value)) {
 				callback(new Error('不支持特殊符号'));
+			} else {
+				callback();
 			}
-			callback();
-			
 		}
 	},
 
@@ -170,7 +199,7 @@ const validators = {
 		if (value && (!(/^[0-9]{6}$/).test(value))) {
 			callback(new Error('邮政编码不符合规范'))
 		} else {
-			callback()
+			callback();
 		}
 	},
 
@@ -183,10 +212,12 @@ const validators = {
 		}
 	},
 
+
+
 	// 验证是否整数
 	isInteger:function (rule, value, callback) {
 		if (!value) {
-			return callback(new Error('输入不可以为空'));
+			callback();
 		}
 		setTimeout(() => {
 			if (!Number(value)) {
@@ -207,7 +238,7 @@ const validators = {
 	// 验证是否是[0-1]的小数
 	isDecimal:function (rule, value, callback) {
 		if (!value) {
-			return callback(new Error('输入不可以为空'));
+			callback(new Error('不可以为空'));
 		}
 		setTimeout(() => {
 			if (!Number(value)) {
@@ -222,11 +253,28 @@ const validators = {
 		}, 1000);
 	},
 
+	// 价格限两位小数
+	isPrice:function (rule, value, callback) {
+		if (!value) {
+			callback(new Error('不可以为空'));
+		}
+		setTimeout(() => {
+			if(!validators.SpecificWord(value)) {
+				callback(new Error('不支持特殊符号'));
+			} else {
+				if (!Number(value)) {
+					callback(new Error('请输入数字'));
+				} else {
+					callback();
+				}
+			}
+		}, 500);
+	},
 
 	// 验证端口是否在[0,65535]之间
 	isPort:function (rule, value, callback) {
 		if (!value) {
-			return callback(new Error('输入不可以为空'));
+			return callback(new Error('不可以为空'));
 		}
 		setTimeout(() => {
 			if (value == '' || typeof(value) == undefined) {
@@ -243,6 +291,38 @@ const validators = {
 		}, 1000);
 	},
 
+
+	isChinese:function (rule, value, callback) { //仅限中文
+		if(!value) {
+			callback();
+		} else {
+			if(!validators.SpecificWord(value)) {
+				callback(new Error('不支持特殊符号'));
+			} else {
+				if(!validators.Mandarin(value)) {
+					callback(new Error('仅限中文'));
+				} else {
+					callback();
+				}
+			}
+		}
+	},
+
+	isEnglish:function (rule, value, callback) { //仅限英语
+		if(!value) {
+			callback();
+		} else {
+			if(!validators.SpecificWord(value)) {
+				callback(new Error('不支持特殊符号'));
+			} else {
+				if(!validators.Englishs(value)) {
+					callback(new Error('仅限英文'));
+				} else {
+					callback();
+				}
+			}
+		}
+	},
 
 
 };

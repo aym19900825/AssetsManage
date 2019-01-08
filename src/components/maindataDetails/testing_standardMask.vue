@@ -30,7 +30,7 @@
 								<el-row>
 									<el-col :span="8">
 										<el-form-item label="标准编号" prop="S_NUM">
-											<el-input v-model="dataInfo.S_NUM" :disabled="noedit"></el-input>
+											<el-input v-model="dataInfo.S_NUM" :disabled="noedit" placeholder="编码不填写可自动生成"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -134,6 +134,7 @@
 
 <script>
 	import Config from '../../config.js'
+	import Validators from '../../core/util/validators.js'
 	import docTable from '../common/doc.vue'
 	export default {
 		name: 'masks',
@@ -281,19 +282,14 @@
 					}
 				],
 				rules: {
-//					S_NUM: [{ required: true, message: '必填', trigger: 'blur' }],//名称
-					S_NAME: [{//名称
-						required: true,
-						trigger: 'blur',
-						validator: validateSname,
-					}],
-					S_ENGNAME: [{//英文名称
-						required: true,
-						trigger: 'blur',
-						validator: validateEname,
-					}],
+					S_NUM: [{required: false, trigger: 'blur',validator: Validators.isCodeNum}],//编号
+					S_NAME: [{required: true, trigger: 'blur',validator: Validators.isWorknumber}],//中文名称
+					S_ENGNAME: [{required: true, trigger: 'blur', validator: Validators.isInteger}],//英文名称
 //					RELEASETIME:[{required: true, message: '必填', trigger: 'change'}],
-					RELEASE_UNIT: [{required: true,trigger: 'blur',message: '必填',}],
+					RELEASE_UNIT: [
+						{required: true,trigger: 'blur',message: '必填',},
+						{validator: Validators.isSpecificKey, trigger: 'blur'},
+					],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据

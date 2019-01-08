@@ -20,7 +20,7 @@
 				<el-form :model="dataInfo" :label-position="labelPositions" :rules="rules" ref="dataInfo" status-icon inline-message  class="demo-ruleForm">
 					<div class="text-center" v-show="viewtitle">
 						<el-button class="start" type="success" round plain size="mini" @click="startup"><i class="icon-start"></i> 启动流程</el-button>
-						<el-button class="" type="warning" round plain size="mini" @click="approvals"><i class="icon-edit-3"></i> 审批</el-button>
+						<el-button class="approval" type="warning" round plain size="mini" @click="approvals"><i class="icon-edit-3"></i> 审批</el-button>
 						<el-button type="primary" round plain size="mini" @click="flowmap"><i class="icon-git-pull-request"></i> 流程地图</el-button>
 						<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
 					</div>
@@ -684,7 +684,7 @@
 		<!--审批页面-->
 		<approvalmask :approvingData="approvingData" ref="approvalChild" ></approvalmask>
 		<!--流程历史-->
-		<flowhistorymask ref="flowhistoryChild" ></flowhistorymask>
+		<flowhistorymask  ref="flowhistoryChild" ></flowhistorymask>
 		<flowmapmask  ref="flowmapChild" ></flowmapmask>
 	</div>
 </template>
@@ -1111,7 +1111,9 @@
 					console.log(res);
 					if(res.data.resp_code==1){
 						$(".approval").hide();
+						$(".start").show();
 					}else{
+						$(".approval").show();
 						$(".start").hide();
 					}
 				});
@@ -1300,26 +1302,14 @@
 			},
 			//流程历史
 			flowhistory(){
-				this.$refs.flowhistoryChild.visible();
+				console.log(this.dataid);
+//				this.$refs.flowhistoryChild.open();
+				this.$refs.flowhistoryChild.getdata(this.dataid);
 			},
 			//流程地图
 			flowmap(){
-				this.$refs.flowmapChild.visible();
-				var url = this.basic_url + '/api-apps/app/inspectPro/flow/image/'+this.dataid;
-				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
-					if(res.data.resp_code == 1) {
-							this.$message({
-								message:res.data.resp_msg,
-								type: 'warning'
-							});
-				    }else{
-				    	this.$message({
-								message:res.data.resp_msg,
-								type: 'success'
-							});
-				    }
-				});
+				console.log(this.dataid);
+				this.$refs.flowmapChild.getimage(this.dataid);
 			},
 			requestData(index) {
 				var data = {

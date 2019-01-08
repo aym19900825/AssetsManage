@@ -3,15 +3,15 @@
 	<el-dialog title="流程历史" :visible.sync="innerVisible" width="45%">
     <div class="approvalProcess" >
         <el-steps :active="active" direction="vertical">
-           <el-step :title="item.title" :status="item.opinionStatus" v-for="item in approvalProcessProject" :id="item.id">
+           <el-step :title="item.nodeName" :status="item.flag" v-for="item in approvalProcessProject" :id="item.id">
             <template slot="description" >
              <div class="step-row">
                 <el-row :gutter="30" class="processing_content">
                   <el-col :span="16" class="font13 gray">
-                    <span>审批人： <label class="blue">{{item.opinionName}}</label></span>
+                    <span>审批人： <label class="blue">{{item.opName}}</label></span>
                   </el-col>
                   <el-col :span="8" class="font13 text-right gray">
-                    <span><i class="icon-time"></i> {{item.opinionDate}}</span>
+                    <span><i class="icon-time"></i> {{item.createTime}}</span>
                   </el-col>
                   <el-col :span="24">
                    <span>{{item.opinion}}</span>
@@ -21,7 +21,7 @@
              </template>
            </el-step>
         </el-steps>
-        <el-button style="margin-top: 12px;" @click="next">下一步</el-button>
+        <!--<el-button style="margin-top: 12px;" @click="next">下一步</el-button>-->
     </div>
  </el-dialog>
 </div>
@@ -29,6 +29,7 @@
 <script>
  import Config from '../../config.js';
 export default {
+	 props:["approvingData"],//第一种方式
    components: {
   },
   props: ['data', 'defaultActive'],
@@ -37,13 +38,14 @@ export default {
     	basic_url: Config.dev_url,
         innerVisible: false,
        active: 0,
-       approvalProcessProject:[
-           {id:'0',title:"检验员审批",opinionName:"王华",opinionStatus:"error",opinion:"驳回，明细有误。",opinionDate:"2018-12-26 14:35:23"},
-           {id:'1',title:"检验员审批",opinionName:"王华",opinionStatus:"success",opinion:"同意。",opinionDate:"2018-12-26 14:35:23"},
-           { id:'2',title:"组长审批",opinionName:"李亮",opinionStatus:"success",opinion:"同意，建议归档。",opinionDate:"2018-12-26 16:25:34"},
-           { id:'3',title:"复查长审批",opinionName:"陈明明",opinionStatus:"success",opinion:"同意。",opinionDate:"2018-12-27 09:25:45"},
-           { id:'4',title:"站长审批",opinionName:"刘国富",opinionStatus:"wait",opinion:"待审核",opinionDate:""},
-       ],
+//     approvalProcessProject:[],
+//     approvalProcessProject:[
+//         {id:'0',title:"检验员审批",opinionName:"王华",opinionStatus:"error",opinion:"驳回，明细有误。",opinionDate:"2018-12-26 14:35:23"},
+//         {id:'1',title:"检验员审批",opinionName:"王华",opinionStatus:"success",opinion:"同意。",opinionDate:"2018-12-26 14:35:23"},
+//         { id:'2',title:"组长审批",opinionName:"李亮",opinionStatus:"success",opinion:"同意，建议归档。",opinionDate:"2018-12-26 16:25:34"},
+//         { id:'3',title:"复查长审批",opinionName:"陈明明",opinionStatus:"success",opinion:"同意。",opinionDate:"2018-12-27 09:25:45"},
+//         { id:'4',title:"站长审批",opinionName:"刘国富",opinionStatus:"wait",opinion:"待审核",opinionDate:""},
+//     ],
     };
   },
   methods: {
@@ -56,9 +58,26 @@ export default {
 	visible() {
 					this.open();
 		  	},
-     next() {
-        if (this.active++ > 2) this.active = 0;
-      },
+	getdata(id){
+		console.log(id);
+		var url = this.basic_url + '/api-apps/app/inspectPro/flow/history/'+id;
+		this.innerVisible = true;
+		this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+					for(var i=0;i<res.data.datas.length;i++){
+						if(res.data.datas[i].flag==true){
+							res.data.datas[i].flag="success";
+						}else{
+							res.data.datas[i].flag="error";
+						}
+					}
+					this.approvalProcessProject = res.data.datas;
+					this.innerVisible = true;
+				});
+	},
+//   next() {
+//      if (this.active++ > 2) this.active = 0;
+//    },
   }
 };
 </script>

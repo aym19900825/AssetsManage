@@ -405,6 +405,8 @@
 			},
 			// 保存users/saveOrUpdate
 			save(CATEGORY) {
+				console.log(233333);
+				console.log(this.CATEGORY);
 				this.$refs[CATEGORY].validate((valid) => {
 					if(valid) {
 						this.CATEGORY.STATUS = ((this.CATEGORY.STATUS == "1" || this.CATEGORY.STATUS == '活动') ? '1' : '0');

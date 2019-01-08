@@ -47,8 +47,8 @@
 								</el-row>
 								<el-row>
 									<el-col :span="8" v-if="dept">
-										<el-form-item label="机构" prop="DEPARTMENT">
-											<el-input v-model="WORK_INSTRUCTION.DEPARTMENT" :disabled="edit"></el-input>
+										<el-form-item label="机构" prop="DEPTIDDesc">
+											<el-input v-model="WORK_INSTRUCTION.DEPTIDDesc" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -59,8 +59,8 @@
 							<el-collapse-item title="其它" name="3" v-show="views">
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="录入人" prop="FAX">
-											<el-input v-model="WORK_INSTRUCTION.ENTERBY" :disabled="edit"></el-input>
+										<el-form-item label="录入人" prop="ENTERBYDesc">
+											<el-input v-model="WORK_INSTRUCTION.ENTERBYDesc" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -69,8 +69,8 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="修改人" prop="CHANGEBY">
-											<el-input v-model="WORK_INSTRUCTION.CHANGEBY" placeholder="当前修改人" :disabled="edit"></el-input>
+										<el-form-item label="修改人" prop="CHANGEBYDesc">
+											<el-input v-model="WORK_INSTRUCTION.CHANGEBYDesc" placeholder="当前修改人" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -232,8 +232,9 @@
 			},
 			getUser(opt){
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					this.WORK_INSTRUCTION.DEPARTMENT = res.data.deptName;
-					this.WORK_INSTRUCTION.ENTERBY = res.data.nickname;
+					this.WORK_INSTRUCTION.DEPARTMENT = '';
+					this.WORK_INSTRUCTION.DEPTID = res.data.deptId;
+					this.WORK_INSTRUCTION.ENTERBY = res.data.id;
 					var date = new Date();
 					this.WORK_INSTRUCTION.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 					if( opt!='new' ){

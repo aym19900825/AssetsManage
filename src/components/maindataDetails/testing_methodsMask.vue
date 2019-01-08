@@ -70,7 +70,7 @@
 									</el-col>
 									<el-col :span="8" v-if="dept">
 										<el-form-item label="机构">
-											<el-input v-model="testingForm.DEPARTMENT" :disabled="true"></el-input>
+											<el-input v-model="testingForm.DEPTIDDesc" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -82,7 +82,7 @@
 								<el-row>
 									<el-col :span="8">
 										<el-form-item label="录入人">
-											<el-input v-model="testingForm.ENTERBY" :disabled="true"></el-input>
+											<el-input v-model="testingForm.ENTERBYDesc" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -92,7 +92,7 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="修改人">
-											<el-input v-model="testingForm.CHANGEBY" :disabled="true"></el-input>
+											<el-input v-model="testingForm.CHANGEBYDesc" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -246,8 +246,9 @@
 			},
 			getUser(opt){
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					this.testingForm.DEPARTMENT=res.data.deptName;
-					this.testingForm.ENTERBY=res.data.nickname;
+					this.testingForm.DEPARTMENT = '';
+					this.testingForm.DEPTID = res.data.deptId;
+					this.testingForm.ENTERBY = res.data.id;
 					var date=new Date();
 					this.testingForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 					if(opt != 'new'){

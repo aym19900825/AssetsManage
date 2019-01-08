@@ -31,20 +31,20 @@
 										</el-select> -->
 									</el-col>
 								</el-row>
-                              <!-- <el-form label-width="100px"> -->
+                              <!-- <el-form label-width="100"> -->
 								<el-row :gutter="30">
 									<el-col :span="8">
-										<el-form-item label="组织机构代码" prop="CODE">
+										<el-form-item label="组织机构代码" prop="CODE" label-width="110">
 											<el-input v-model="CUSTOMER.CODE" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="单位名称" prop="NAME" >
+										<el-form-item label="单位名称" prop="NAME" label-width="100">
 											<el-input v-model="CUSTOMER.NAME" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="类型" prop="TYPE">
+										<el-form-item label="类型" prop="TYPE" label-width="100">
 											<el-select v-model="CUSTOMER.TYPE" placeholder="请选择" style="width: 100%" :disabled="noedit">
 												<el-option v-for="(data,index) in SeleCUST_TYPE" :key="index" :value="data.code" :label="data.name"></el-option>
 												</el-option>
@@ -64,31 +64,31 @@
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="8">
-										<el-form-item label="邮箱" prop="EMAIL">
+										<el-form-item label="邮箱" prop="EMAIL" label-width="110">
 											<el-input v-model="CUSTOMER.EMAIL" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="联系地址" prop="CONTACT_ADDRESS">
+										<el-form-item label="联系地址" prop="CONTACT_ADDRESS" label-width="100">
 											<el-input v-model="CUSTOMER.CONTACT_ADDRESS" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="邮政编码" prop="ZIPCODE">
+										<el-form-item label="邮政编码" prop="ZIPCODE" label-width="100">
 											<el-input v-model="CUSTOMER.ZIPCODE" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="8">
-										<el-form-item label="传真" prop="FAX">
+										<el-form-item label="传真" prop="FAX" label-width="110">
 											<el-input v-model="CUSTOMER.FAX" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="24">
-										<el-form-item label="备注" prop="MEMO">
+										<el-form-item label="备注" prop="MEMO" label-width="110">
 											<el-input v-model="CUSTOMER.MEMO" type="textarea" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
@@ -117,27 +117,35 @@
 
 									    <el-table-column label="序号" sortable width="120px" prop="STEP">
 									      <template slot-scope="scope">
-									      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STEP" disabled></el-input><span v-show="!scope.row.isEditing" >{{scope.row.STEP}}</span>
+									      	<el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.STEP'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+										      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STEP" disabled></el-input><span v-show="!scope.row.isEditing" >{{scope.row.STEP}}</span>
+										      </el-form-item>
 									      </template>
 									    </el-table-column>
 
 									    <el-table-column label="证书编号" sortable width="120px" prop="CERTIFICATE_NUM">
 									      <template slot-scope="scope">
-									      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.CERTIFICATE_NUM" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.CERTIFICATE_NUM}}</span>
+									      	<el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.CERTIFICATE_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+										      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.CERTIFICATE_NUM" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.CERTIFICATE_NUM}}</span>
+										      </el-form-item>
 									      </template>
 									    </el-table-column>
 
 										<el-table-column prop="CERTIFICATE_NAME" label="证书名称" sortable>
 									      <template slot-scope="scope">
-									         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.CERTIFICATE_NAME" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.CERTIFICATE_NAME}}</span>
+									         <el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.CERTIFICATE_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+										         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.CERTIFICATE_NAME" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.CERTIFICATE_NAME}}</span>
+										     </el-form-item>
 									      </template>
 									    </el-table-column>
 
 									    <el-table-column prop="ACTIVE_DATE" label="资质有效期" sortable width="160">
 									      <template slot-scope="scope">
-									      	<el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.ACTIVE_DATE'" >
-									         <el-date-picker style="width: 90%" v-show="scope.row.isEditing" v-model="scope.row.ACTIVE_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd"></el-date-picker>
-									        <span v-show="!scope.row.isEditing" >{{scope.row.ACTIVE_DATE}}</span>
+									      	<el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.ACTIVE_DATE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+										      	<el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.ACTIVE_DATE'" >
+										         <el-date-picker style="width: 90%" v-show="scope.row.isEditing" v-model="scope.row.ACTIVE_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd"></el-date-picker>
+										        <span v-show="!scope.row.isEditing" >{{scope.row.ACTIVE_DATE}}</span>
+										    </el-form-item>
 									    </el-form-item>
 									      </template>
 									    </el-table-column>
@@ -155,14 +163,14 @@
 									    <el-table-column prop="REASION" label="附件" sortable width="120px">
 									      <template slot-scope="scope">
 									        <el-upload	class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/"
-														:on-preview="handlePreview"
-														:on-remove="handleRemove"
-														:before-remove="beforeRemove"
-														multiple
-														:limit="3"
-														:on-exceed="handleExceed"
-														:file-list="fileList">
-														<el-button size="small" type="primary">点击上传</el-button>
+												:on-preview="handlePreview"
+												:on-remove="handleRemove"
+												:before-remove="beforeRemove"
+												multiple
+												:limit="3"
+												:on-exceed="handleExceed"
+												:file-list="fileList">
+												<el-button size="small" type="primary">点击上传</el-button>
 											</el-upload>
 									      </template>
 									    </el-table-column>
@@ -245,7 +253,7 @@
 								</el-tabs>
 							</div>
 							<el-collapse-item title="其它" name="3"  v-show="views">
-								<!-- <el-form label-width="100px"> -->
+								<!-- <el-form label-width="100"> -->
 									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="录入人" prop="ENTERBY">
@@ -394,6 +402,7 @@
 					CUSTOMER_PERSONList:[]
 				},
 				rules: {
+					CODE:[{required: true,trigger: 'blur',validator: Validators.isWorknumber}],
 					NAME:[{required: true,trigger: 'blur',validator: validateName}],
 					CONTACT_ADDRESS:[{required: true,trigger: 'blur',validator: validateAddress}],
 					PERSON:[{required: true,trigger: 'blur',validator: validatePerson}],

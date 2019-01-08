@@ -16,7 +16,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="menu" :rules="rules" ref="menu" label-width="100px" class="demo-user">
+				<el-form :model="menu" :rules="rules" ref="menu" label-width="100" class="demo-user">
 					<div class="accordion">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基础信息" name="1">

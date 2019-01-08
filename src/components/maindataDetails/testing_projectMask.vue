@@ -44,25 +44,25 @@
 								</el-row>
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="编码" prop="P_NUM" label-width="100px">
+										<el-form-item label="编码" prop="P_NUM" label-width="100">
 											<el-input v-model="testing_projectForm.P_NUM" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="16">
-										<el-form-item label="项目名称" prop="P_NAME" label-width="100px">
+										<el-form-item label="项目名称" prop="P_NAME" label-width="100">
 											<el-input v-model="testing_projectForm.P_NAME"  onmouseover="this.title=this.value" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="单价(元)" prop="QUANTITY" label-width="100px">
+										<el-form-item label="单价(元)" prop="QUANTITY" label-width="100">
 											<!-- <el-input-number type="number" :precision="2" v-model.number="testing_projectForm.QUANTITY" :step="5" :max="100000" style="width: 100%;"></el-input-number> -->
 											<el-input v-model="testing_projectForm.QUANTITY" id="cost" @blur="toPrice" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="作业指导书" prop="DOCLINKS_NUM" label-width="100px">
+										<el-form-item label="作业指导书" prop="DOCLINKS_NUM" label-width="100">
 											<el-input v-model="testing_projectForm.DOCLINKS_NUM" :disabled="true">
 												<el-button slot="append" icon="icon-search" @click="getwork" :disabled="noedit"></el-button>
 											</el-input>
@@ -73,7 +73,7 @@
 =======
 									<el-col :span="8">
 >>>>>>> 89f9c43824e2dc7927e94a2645fafd52cac89054
-										<el-form-item label="人员资质" prop="QUALIFICATION" label-width="100px">
+										<el-form-item label="人员资质" prop="QUALIFICATION" label-width="100">
 											<el-input v-model="testing_projectForm.QUALIFICATION" :disabled="true">
 												<el-button slot="append" icon="el-icon-search" @click="getpepole"></el-button>
 											</el-input>
@@ -82,17 +82,17 @@
 								</el-row>
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="领域" prop="FIELD" label-width="100px">
+										<el-form-item label="领域" prop="FIELD" label-width="100">
 											<el-input v-model="testing_projectForm.FIELD" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="子领域" prop="CHILD_FIELD" label-width="100px">
+										<el-form-item label="子领域" prop="CHILD_FIELD" label-width="100">
 											<el-input v-model="testing_projectForm.CHILD_FIELD" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8" v-if="dept">
-										<el-form-item label="机构" prop="DEPTIDDesc" label-width="100px">
+										<el-form-item label="机构" prop="DEPTIDDesc" label-width="100">
 											<el-input v-model="testing_projectForm.DEPTIDDesc" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>

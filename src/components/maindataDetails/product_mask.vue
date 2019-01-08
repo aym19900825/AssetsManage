@@ -16,7 +16,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="PRODUCT" inline-message :rules="rules" ref="PRODUCT" label-width="100px" class="demo-adduserForm">
+				<el-form :model="PRODUCT" inline-message :rules="rules" ref="PRODUCT" label-width="100" class="demo-adduserForm">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="名称" name="1">

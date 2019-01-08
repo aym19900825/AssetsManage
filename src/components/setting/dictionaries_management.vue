@@ -45,13 +45,13 @@
 					<el-form :model="searchList" label-width="70px">
 						<el-row :gutter="10">
 							<el-col :span="5">
-								<el-form-item label="类型编码" prop="code" label-width="100px">
+								<el-form-item label="类型编码" prop="code" label-width="100">
 									<el-input v-model="searchList.code">
 									</el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
-								<el-form-item label="类型名称" prop="name" label-width="100px">
+								<el-form-item label="类型名称" prop="name" label-width="100">
 									<el-input v-model="searchList.name">
 									</el-input>
 								</el-form-item>

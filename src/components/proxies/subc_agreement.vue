@@ -50,7 +50,7 @@
 					<el-form :model="searchList" label-width="70px">
 						<el-row :gutter="5">
 							<el-col :span="5">
-								<el-form-item label="分包协议编号" prop="PROXY_CONTRACT_NUM" label-width="100px">
+								<el-form-item label="分包协议编号" prop="PROXY_CONTRACT_NUM" label-width="100">
 									<el-input v-model="searchList.PROXY_CONTRACT_NUM"></el-input>
 								</el-form-item>
 							</el-col>

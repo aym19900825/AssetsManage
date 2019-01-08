@@ -92,6 +92,8 @@
 							<el-table :data="fileList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'fileList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
+								<el-table-column label="名称" sortable prop="filename" v-if="this.checkedName.indexOf('名称')!=-1">
+								</el-table-column>
 								<el-table-column label="状态" sortable width="200px" prop="filestatus" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
 								<el-table-column label="大小" sortable  width="140px" prop="filesize" v-if="this.checkedName.indexOf('大小')!=-1">
@@ -239,8 +241,10 @@
 			}
 		},
 		methods: {
-			showAuth(){
+			showAuth(row){
 				this.param.visible = true;
+				this.param.fileid = row.fileid;
+				this.$refs.keyword.requestData();
 			},
 			resetDir(){
 				this.dir.dirName = '';

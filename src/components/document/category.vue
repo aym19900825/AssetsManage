@@ -206,7 +206,7 @@
 					});
 					return;
 				} else {
-					this.$refs.child.detail(this.selMenu[0]);
+					this.$refs.child.detail();
 				}
 			},
 			//高级查询

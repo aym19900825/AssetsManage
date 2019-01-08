@@ -83,6 +83,7 @@
 
 <script>
 	import Config from '../../config.js'
+	import Validators from '../../core/util/validators.js'
 	import docTable from '../common/doc.vue'
 	export default {
 		name: 'masks',
@@ -107,24 +108,24 @@
 			page: Object,
 		},
 		data() {
-			var validateNum = (rule, value, callback) => {
-				if(value != ""){
-		             if((/^[0-9a-zA-Z()]+$/).test(value) == false){
-		                 callback(new Error("请填写数字或字母（编码不填写可自动生成）"));
-		             }else{
-		                 callback();
-		             }
-		         }else{
-		             callback();
-		         }
-			};
-			var validateDeci = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('请填写产品类别名称'));
-				} else {
-					callback();
-				}
-			};
+			// var validateNum = (rule, value, callback) => {
+			// 	if(value != ""){
+		 //             if((/^[0-9a-zA-Z()]+$/).test(value) == false){
+		 //                 callback(new Error("请填写数字或字母（编码不填写可自动生成）"));
+		 //             }else{
+		 //                 callback();
+		 //             }
+		 //         }else{
+		 //             callback();
+		 //         }
+			// };
+			// var validateDeci = (rule, value, callback) => {
+			// 	if(value === '') {
+			// 		callback(new Error('请填写产品类别名称'));
+			// 	} else {
+			// 		callback();
+			// 	}
+			// };
 			return {
 				docParm: {
 					'model': 'new',
@@ -154,13 +155,12 @@
 					NUM: [{
 						required: false,
 						trigger: 'change',
-						validator: validateNum,
+						validator: Validators.isCodeNum,
 					}],
-					DECRIPTION: [{
-						required: true,
-						trigger: 'blur',
-						validator: validateDeci,
-					}],
+					DECRIPTION: [
+						{required: true, message: '请填写', trigger: 'blur'},
+						{validator: Validators.isSpecificKey, trigger: 'blur'},
+					],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据

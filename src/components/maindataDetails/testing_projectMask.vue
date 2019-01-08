@@ -44,32 +44,32 @@
 								</el-row>
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="编码" prop="P_NUM">
+										<el-form-item label="编码" prop="P_NUM" label-width="100px">
 											<el-input v-model="testing_projectForm.P_NUM" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="16">
-										<el-form-item label="项目名称" prop="P_NAME">
+										<el-form-item label="项目名称" prop="P_NAME" label-width="100px">
 											<el-input v-model="testing_projectForm.P_NAME"  onmouseover="this.title=this.value" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="单价(元)" prop="QUANTITY">
+										<el-form-item label="单价(元)" prop="QUANTITY" label-width="100px">
 											<!-- <el-input-number type="number" :precision="2" v-model.number="testing_projectForm.QUANTITY" :step="5" :max="100000" style="width: 100%;"></el-input-number> -->
 											<el-input v-model="testing_projectForm.QUANTITY" id="cost" @blur="toPrice" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="作业指导书" prop="DOCLINKS_NUM">
+										<el-form-item label="作业指导书" prop="DOCLINKS_NUM" label-width="100px">
 											<el-input v-model="testing_projectForm.DOCLINKS_NUM" :disabled="true">
 												<el-button slot="append" icon="icon-search" @click="getwork" :disabled="noedit"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="人员资质" prop="QUALIFICATION">
+										<el-form-item label="人员资质" prop="QUALIFICATION" label-width="100px">
 											<el-input v-model="testing_projectForm.QUALIFICATION" :disabled="true">
 												<el-button slot="append" icon="el-icon-search" @click="getpepole"></el-button>
 											</el-input>
@@ -78,23 +78,82 @@
 								</el-row>
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="领域" prop="FIELD">
+										<el-form-item label="领域" prop="FIELD" label-width="100px">
 											<el-input v-model="testing_projectForm.FIELD" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="子领域" prop="CHILD_FIELD">
+										<el-form-item label="子领域" prop="CHILD_FIELD" label-width="100px">
 											<el-input v-model="testing_projectForm.CHILD_FIELD" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8" v-if="dept">
-										<el-form-item label="机构" prop="DEPTIDDesc">
+										<el-form-item label="机构" prop="DEPTIDDesc" label-width="100px">
 											<el-input v-model="testing_projectForm.DEPTIDDesc" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>	
 							</el-collapse-item>
-							<el-collapse-item title="其他" name="2" v-show="views">
+							<el-collapse-item title="人员资质" name="2">
+								<div class="table-func" v-show="noviews">
+									<el-button type="success" size="mini" round @click="addfield">
+										<i class="icon-add"></i>
+										<font>新建行</font>
+									</el-button>
+								</div>
+								<el-table :header-cell-style="rowClass" :fig="true" :data="testing_projectForm.QUALIFICATIONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.qualifications', order: 'descending'}">
+									<el-table-column prop="iconOperation" fixed width="50px">
+										<template slot-scope="scope">
+											<i class="el-icon-check" v-if="scope.row.isEditing"></i>
+											<i class="el-icon-edit" v-else="v-else"></i>
+										</template>
+									</el-table-column>
+									<el-table-column prop="STEP" label="序号" sortable width="120px" label-width="150px">
+										<template slot-scope="scope">
+											<el-form-item :prop="'QUALIFICATIONList.'+scope.$index + '.STEP'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STEP" placeholder="请输入要求" :disabled="true">
+												</el-input>
+												<span v-else="v-else">{{scope.row.STEP}}</span>
+											</el-form-item>
+										</template>
+									</el-table-column>
+									<el-table-column prop="C_NUM" label="证书编号" sortable width="180px">
+										<template slot-scope="scope">
+											<el-form-item :prop="'QUALIFICATIONList.'+scope.$index + '.C_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.C_NUM" placeholder="请输入委托方名称">
+												</el-input>
+												<span v-else="v-else">{{scope.row.C_NUM}}</span>
+											</el-form-item>
+										</template>
+									</el-table-column>
+									<el-table-column prop="C_NAME" label="证书名称" sortable width="300px">
+										<template slot-scope="scope">
+											<el-form-item :prop="'QUALIFICATIONList.'+scope.$index + '.C_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.C_NAME" placeholder="请输入委托方名称">
+												</el-input>
+												<span v-else="v-else">{{scope.row.C_NAME}}</span>
+											</el-form-item>
+										</template>
+									</el-table-column>
+									<el-table-column prop="C_DATE" label="资质有效期" sortable width="200px">
+										<template slot-scope="scope">
+											<el-form-item :prop="'QUALIFICATIONList.'+scope.$index + '.C_DATE'">
+												<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.C_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+												</el-date-picker>
+												<span v-else="v-else">{{scope.row.C_DATE}}</span>
+											</el-form-item>
+										</template>
+									</el-table-column>
+									<el-table-column fixed="right" label="操作" width="120">
+										<template slot-scope="scope">
+											<el-button @click.native.prevent="deleteRow(scope.$index,testing_projectForm.QUALIFICATIONList)" type="text" size="small">
+												移除
+											</el-button>
+										</template>
+									</el-table-column>
+								</el-table>
+							</el-collapse-item>
+							<el-collapse-item title="其他" name="3" v-show="views">
 								<el-row>
 									<el-col :span="8">
 										<el-form-item label="录入人" prop="ENTERBYDesc">
@@ -185,60 +244,59 @@
 
 <script>
 	import Config from '../../config.js'
-	import Validators from '../../core/util/validators.js'
 	export default {
 		name: 'masks',
-		props: {
-			page: {
-				type: Object,
-			},
-			testing_projectForm: {
-				type: Object,
-				default: function() {
-					return {
-						VERSION: '',
-						STATUS: '',
-						P_NUM: '',
-						P_NAME: '',
-						QUANTITY: '',
-						QUALIFICATION: '',
-						FIELD: '',
-						CHILD_FIELD: '',
-						DOCLINKS_NUM: '',
-						DEPARTMENT: '',
-						ENTERBY: '',
-						ENTERDATE: '',
-						CHANGEBY: '',
-						CHANGEDATE: '',
-					}
-				}
-			},
-		},
+		// props: {
+		// 	page: {
+		// 		type: Object,
+		// 	},
+		// 	testing_projectForm: {
+		// 		type: Object,
+		// 		default: function() {
+		// 			return {
+		// 				VERSION: '',
+		// 				STATUS: '',
+		// 				P_NUM: '',
+		// 				P_NAME: '',
+		// 				QUANTITY: '',
+		// 				QUALIFICATION: '',
+		// 				FIELD: '',
+		// 				CHILD_FIELD: '',
+		// 				DOCLINKS_NUM: '',
+		// 				DEPARTMENT: '',
+		// 				ENTERBY: '',
+		// 				ENTERDATE: '',
+		// 				CHANGEBY: '',
+		// 				CHANGEDATE: '',
+		// 			}
+		// 		}
+		// 	},
+		// },
 		data() {
-			// var validateNum = (rule, value, callback) => {
-			// 	if(value != ""){
-		 //             if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
-		 //                 callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
-		 //             }else{
-		 //                 callback();
-		 //             }
-		 //         }else{
-		 //             callback();
-		 //         }
-			// };
-			// var validateP_NAME = (rule, value, callback) => {
-			// 	if(value === '') {
-			// 		callback(new Error('请填写项目名称'));
-			// 	} else {
-			// 		callback();
-			// 	}
-			// };
-			var validateQUANTITY = (rule, value, callback) => {
+			var validateNum = (rule, value, callback) => {
+				if(value != ""){
+		             if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
+		                 callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
+		             }else{
+		                 callback();
+		             }
+		         }else{
+		             callback();
+		         }
+			};
+			var validateP_NAME = (rule, value, callback) => {
 				if(value === '') {
-					callback(new Error('单价不能为空'));
+					callback(new Error('请填写项目名称'));
 				} else {
 					callback();
 				}
+			};
+			var validateQUANTITY = (rule, value, callback) => {
+				if(value === ""){
+					 callback(new Error("请填写数字"));
+				}else{
+		             callback();
+		        }
 			};
 			var validateQUALIFICATION = (rule, value, callback) => {
 				if(value === '') {
@@ -255,6 +313,9 @@
 				}
 			};
 			return {
+				testing_projectForm:{
+					QUALIFICATIONList:[]
+				},
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				editSearch: '',
@@ -272,15 +333,21 @@
 				isok2: false,
 				down: true,
 				up: false,
-				activeNames: ['1','2'], //手风琴数量
+				index:0,
+				activeNames: ['1','2','3'], //手风琴数量
 				//				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				rules: { //需要验证的字段
-					P_NUM: [{ required: false, trigger: 'change', validator: Validators.isCodeNum}],
-					P_NAME: [
-						{ required: true, trigger: 'blur', message: '必填'},
-						{validator: Validators.isChinese, trigger: 'blur'},
-					],
+					P_NUM: [{
+						required: false,
+						trigger: 'change',
+						validator: validateNum,
+					}],
+					P_NAME: [{
+						required: true,
+						trigger: 'blur',
+						validator: validateP_NAME,
+					}],
 					QUANTITY: [{
 						required: true,
 						trigger: 'blur',
@@ -288,16 +355,14 @@
 					}],
 					QUALIFICATION: [{
 						required: true,
-						trigger: 'change',
+						trigger: 'blur',
 						validator: validateQUALIFICATION,
 					}],
 					DOCLINKS_NUM: [{
 						required: true,
-						trigger: 'change',
+						trigger: 'blur',
 						validator: validateDOCLINKS_NUM,
 					}],
-					FIELD: [{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],
-					CHILD_FIELD: [{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],
 				},
 				//testing_projectForm:{},//检验/检测项目数据组
 				//tree
@@ -336,6 +401,30 @@
 			};
 		},
 		methods: {
+			addfield() {
+				this.index = this.index + 1;
+				var obj = {
+					ID:'',
+					STEP: this.index,
+					C_NUM: '',
+					C_NAME: '',
+					C_DATE: '',
+					isEditing: true
+				};
+				this.testing_projectForm.QUALIFICATIONList.push(obj);
+			},
+			//刪除新建行
+			deleteRow(index, rows) { //Table-操作列中的删除行
+				rows.splice(index, 1);
+
+			},
+			iconOperation(row, column, cell, event) {
+				if(column.property === "iconOperation") {
+
+					row.isEditing = !row.isEditing;
+
+				}
+			},
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -456,7 +545,6 @@
 				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)', 'ig'), "$1,");
 				// // this.dataInfo.CHECTCOST="￥" + num.join(".");
 				this.testing_projectForm.QUANTITY = num.join(".");
-
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.testing_projectForm.DEPTID = res.data.deptId;
 					this.testing_projectForm.CHANGEBY = res.data.id;

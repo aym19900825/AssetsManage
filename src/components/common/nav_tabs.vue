@@ -139,7 +139,6 @@ export default {
             this.$router.push({path: '/index'});
         },
         closeOther(){
-        	
             this.tabs = [this.selectedTab];
             console.log(this.tabs);
             this.$store.dispatch('setClickedNavAct',this.tabs);
@@ -160,8 +159,6 @@ export default {
            
         },
         showClick(items){
-        	console.log(1111);
-        	console.log(items);
 	        this.tabs = this.$store.state.clickedNavs;
 	        if(this.$route.path!=this.$store.state.clickedNavs.url){
 				for(var i = 0; i < this.tabs.length; i++){

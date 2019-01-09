@@ -140,7 +140,6 @@ export default {
         },
         closeOther(){
             this.tabs = [this.selectedTab];
-            console.log(this.tabs);
             this.$store.dispatch('setClickedNavAct',this.tabs);
             console.log(this.$store.state.clickedNavs);
 //          sessionStorage.setItem('clickedNav',JSON.stringify({arr:this.tabs}));

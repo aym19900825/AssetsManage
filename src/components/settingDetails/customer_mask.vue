@@ -103,12 +103,12 @@
 							<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 								<el-tabs v-model="activeName" @tab-click="handleClick">
 									<el-tab-pane label="资质信息" name="first">
-										<div class="table-func table-funcb">
-									<el-button type="success" size="mini" round @click="addfield">
-										<i class="icon-add"></i>
-										<font>新建行</font>
-									</el-button>
-								</div>
+										<div class="table-func table-funcb" v-show="noviews">
+											<el-button type="success" size="mini" round @click="addfield">
+												<i class="icon-add"></i>
+												<font>新建行</font>
+											</el-button>
+										</div>
 								<!-- <el-form :label-position="labelPosition" :rules="rules"> -->
 									<el-table :header-cell-style="rowClass" :fit="true" :data="CUSTOMER.CUSTOMER_QUALIFICATIONList" row-key="ID" border stripe max-height="260" highlight-current-row style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER.CUSTOMER_QUALIFICATIONList', order: 'descending'}">
 									    <el-table-column prop="iconOperation" fixed width="50px">
@@ -123,11 +123,10 @@
 									    <el-table-column label="序号" sortable width="120px" prop="STEP">
 									      <template slot-scope="scope">
 									      	<el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.STEP'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-										      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STEP" disabled></el-input><span v-show="!scope.row.isEditing" >{{scope.row.STEP}}</span>
+										      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.$index + 1" :disabled="noedit"></el-input><span v-show="!scope.row.isEditing" >{{scope.row.STEP}}</span>
 										      </el-form-item>
 									      </template>
 									    </el-table-column>
-
 									    <el-table-column label="证书编号" sortable width="120px" prop="CERTIFICATE_NUM">
 									      <template slot-scope="scope">
 									      	<el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.CERTIFICATE_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
@@ -191,7 +190,7 @@
 								  <!-- </el-form> -->
 									</el-tab-pane>
 									<el-tab-pane label="客户联系人" name="second">
-										<div class="table-func table-funcb">
+										<div class="table-func table-funcb" v-show="noviews">
 											<el-button type="success" size="mini" round @click="addrela">
 												<i class="icon-add"></i>
 												<font>新建行</font>
@@ -211,7 +210,7 @@
 											    <el-table-column label="序号" sortable width="120px" prop="STEP">
 											      <template slot-scope="scope">
 											      	<el-form-item :prop="'CUSTOMER_PERSONList.'+scope.$index + '.STEP'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-												      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STEP" disabled></el-input>
+												      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.$index + 1" :disabled="noedit"></el-input>
 												      	<span v-show="!scope.row.isEditing" >{{scope.row.STEP}}</span>
 												      </el-form-item>
 											      </template>

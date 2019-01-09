@@ -73,7 +73,7 @@
 											<el-table-column prop="sort" label="排序" sortable width="120">
 												<template slot-scope="scope">
 													<el-form-item :prop="'subDicts.'+scope.$index + '.sort'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.sort" placeholder="请输入">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.$index + 1" placeholder="请输入">
 														</el-input>
 														<span v-else="v-else">{{scope.row.sort}}</span>
 													</el-form-item>

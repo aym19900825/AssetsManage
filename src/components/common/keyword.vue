@@ -1,6 +1,6 @@
 <template>
 <div>
-    <el-dialog title="关键字" :visible.sync="param.visible">
+    <el-dialog title="关键字" :visible.sync="param.visible" :before-close="reset">
         <p class="selTab">已选择：
             <el-tag class="tag" 
                 type="success" 
@@ -64,6 +64,7 @@ export default {
             this.selkeys = [];
             this.keywords = [];
             this.delKeys = [];
+            this.param.visible = false;
         },
         save(){
             var url = this.file_url + '/file/fileKeyword';
@@ -102,7 +103,7 @@ export default {
                         type: 'error'
                     });
                 }
-                this.param.visible = false;
+                this.reset();
             }).catch((err) => {
                 this.$message({
                     message: '网络错误，请重试',
@@ -118,12 +119,13 @@ export default {
         },
         setSel(item){
             var arr = this.selkeys.filter(function (val) {
-                if(val.id == item.id){
+                if(val.keywordid == item.id){
                     return val;
                 }
             });
             if(arr.length == 0){
                 item.filekeywordid = '';
+                item.keywordid = item.id;
                 this.selkeys.push(item);
             }
         },

@@ -46,11 +46,11 @@
 									</el-input>
 								</el-col>
 								
-								<el-col :span="7">
+								<!-- <el-col :span="7">
 									<el-input v-model="searchList.keywordidDesc">
 										<template slot="prepend">关键字</template>
 										</el-input>
-								</el-col>
+								</el-col> -->
 								<el-col :span="3">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
 								</el-col>
@@ -82,11 +82,11 @@
 										<i :class="scope.row.filedelete==1?'el-icon-check':''"></i>
 									</template>
 								</el-table-column>
-								<el-table-column label="上传" sortable prop="fileupload" v-if="this.checkedName.indexOf('上传')!=-1">
+								<!-- <el-table-column label="上传" sortable prop="fileupload" v-if="this.checkedName.indexOf('上传')!=-1">
 									<template slot-scope="scope">
 										<i :class="scope.row.fileupload==1?'el-icon-check':''"></i>
 									</template>
-								</el-table-column>
+								</el-table-column> -->
 								<el-table-column label="下载" sortable prop="filedownload" v-if="this.checkedName.indexOf('下载')!=-1">
 									<template slot-scope="scope">
 										<i :class="scope.row.filedownload==1?'el-icon-check':''"></i>
@@ -144,7 +144,7 @@
 					'关键字',
 					'查看',
 					'删除',
-					'上传',
+					// '上传',
 					'下载',
 					'复制',
 					'编辑',
@@ -166,10 +166,10 @@
 						label: '删除',
 						prop: 'filedelete'
 					},
-					{
-						label: '上传',
-						prop: 'fileupload'
-					},
+					// {
+					// 	label: '上传',
+					// 	prop: 'fileupload'
+					// },
 					{
 						label: '下载',
 						prop: 'filedownload'

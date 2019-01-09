@@ -69,12 +69,12 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="传真" prop="FAX" label-width="110px">
-											<el-input v-model="CUSTOMER.FAX" :disabled="noedit"></el-input>
+										<el-form-item label="电话" prop="PHONE" label-width="100px">
+											<el-input v-model="CUSTOMER.PHONE" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="传真" prop="FAX" label-width="110px">
+										<el-form-item label="传真" prop="FAX" label-width="100px">
 											<el-input v-model="CUSTOMER.FAX" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
@@ -82,7 +82,7 @@
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="16">
-										<el-form-item label="联系地址" prop="CONTACT_ADDRESS" label-width="100px">
+										<el-form-item label="联系地址" prop="CONTACT_ADDRESS" label-width="110px">
 											<el-input v-model="CUSTOMER.CONTACT_ADDRESS" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>

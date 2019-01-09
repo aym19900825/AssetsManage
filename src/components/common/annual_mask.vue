@@ -165,19 +165,23 @@
 								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入内容"></el-input><span v-if="!scope.row.isEditing">{{scope.row.MODEL}}</span>
 								      </template>
 								    </el-table-column>
-									<el-table-column prop="VENDOR" label="生产企业编号" sortable width="120px">
+									<!-- <el-table-column prop="VENDOR" label="生产企业编号" sortable width="120px">
 								      <template slot-scope="scope">
 								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDOR" placeholder="请输入内容"></el-input><span v-if="!scope.row.isEditing">{{scope.row.VENDOR}}</span>
 								      </template>
-								    </el-table-column>
+								    </el-table-column> -->
 									<el-table-column prop="V_NAME" label="生产企业名称" sortable width="120px">
 								      <template slot-scope="scope">
-								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAME" placeholder="请输入内容"></el-input><span v-if="!scope.row.isEditing">{{scope.row.V_NAME}}</span>
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAME" :disabled="true" placeholder="请输入内容">
+											<el-button slot="append" icon="el-icon-search" @click="prodeptbtn(scope.row)"></el-button>
+										</el-input><span v-if="!scope.row.isEditing">{{scope.row.V_NAME}}</span>
 								      </template>
 								    </el-table-column>
 									<el-table-column prop="SJ_NAME" label="受检企业名称" sortable width="120px">
 								      <template slot-scope="scope">
-								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.SJ_NAME" placeholder="请输入内容"></el-input><span v-if="!scope.row.isEditing">{{scope.row.SJ_NAME}}</span>
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.SJ_NAME" :disabled="true" placeholder="请输入内容">
+											<el-button slot="append" icon="el-icon-search" @click="getdeptbtn(scope.row)"></el-button>
+										</el-input><span v-if="!scope.row.isEditing">{{scope.row.SJ_NAME}}</span>
 								      </template>
 								    </el-table-column>
 								    <el-table-column prop="MEMO" label="近三年监督抽查情况" sortable width="260px">
@@ -487,7 +491,6 @@
 				</el-table-column>
 				<el-table-column label="标准名称" width="220" sortable prop="S_NAME">
 				</el-table-column>
-				</el-table-column>
 				<el-table-column label="英文名称" width="220" sortable prop="S_ENGNAME">
 				</el-table-column>
 				<el-table-column label="状态" width="100" sortable prop="STATUS">
@@ -657,6 +660,37 @@
 		    </span>
 		</el-dialog>
 		<!-- 产品名称 End -->
+		<!-- 生产企业名称、受检企业名称 Begin -->
+		<el-dialog :visible.sync="diaVisCustom" width="80%" :before-close="handleClose">
+			<el-table :data="customerList" border stripe :header-cell-style="rowClass" :height="fullHeight" style="width: 100%;" :default-sort="{prop:'customerList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table-column type="selection" width="55" fixed align="center">
+				</el-table-column>
+				<el-table-column label="组织机构代码" width="200" sortable prop="CODE">
+				</el-table-column>
+				<el-table-column label="单位名称" width="300" sortable prop="NAME">
+				</el-table-column>
+				<el-table-column label="联系地址" sortable prop="CONTACT_ADDRESS">
+				</el-table-column>
+				<!-- <el-table-column label="联系电话" sortable prop="PHONE" v-if="this.checkedName.indexOf('联系电话')!=-1">
+				</el-table-column> -->	
+				<!--<el-table-column label="信息状态" sortable width="100" prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
+				</el-table-column>-->
+			</el-table>
+			<el-pagination background class="pull-right pt10"
+				@size-change="sizeChange"
+				@current-change="currentChange"
+				:current-page="page.currentPage"
+				:page-sizes="[10, 20, 30, 40]"
+				:page-size="page.pageSize"
+				layout="total, sizes, prev, pager, next"
+				:total="page.totalCount">
+			</el-pagination>
+			<span slot="footer" class="dialog-footer">
+		       <el-button @click="diaVisCustom = false" style="margin-left: 37%;">取 消</el-button>
+		       <el-button type="primary" @click="adddeptname">确 定</el-button>
+		    </span>
+		</el-dialog>
+		<!-- 生产企业名称、受检企业名称 End -->
 	</div>
 </template>
 
@@ -794,6 +828,7 @@
 				dialogVisible2: false, //对话框
 				dialogVisible3: false, //对话框
 				dialogVisible4: false, //对话框
+				diaVisCustom:false,//生产企业、受检企业对话框
 				searchList: { //点击高级搜索后显示的内容
 					S_NUM: '',
 					S_NAME: '',
@@ -849,8 +884,11 @@
 				views:true,
 				dept:true,
 				categoryList:[],
-				proindex:0,
-				falg:false
+				proindex:0,//生产企业一条数据标识
+				deptindex:0,//受检企业一条数据标识
+				falg:false,
+				customerList:[],//生产企业、受检企业数据取自custom
+				deptnum:''//生产企业名称、受检企业名称标识号码
 			};
 		},
 		methods: {
@@ -887,6 +925,31 @@
 					row.isEditing = !row.isEditing;
 				});
 			},
+			//生产企业名称
+			prodeptbtn(item){
+				this.$emit('request');
+				this.diaVisCustom = true;
+				this.proindex = item;
+				this.deptnum = '1';
+			},
+			//受检企业名称
+			getdeptbtn(item){
+				this.$emit('request');
+				this.diaVisCustom = true;
+				this.deptindex = item;
+				this.deptnum = '2';
+			},
+			//生产企业、受检企业名称
+			adddeptname(){
+				if(this.deptnum == '1'){
+					this.proindex.V_NAME = this.selUser[0].NAME;
+				}else if(this.deptnum == '2'){
+					this.deptindex.SJ_NAME = this.selUser[0].NAME;
+				}
+				this.diaVisCustom = false;
+				this.$emit('request');
+			},
+			
 			//删除计划列表
 			delPlan(index,row,TableName,delList){
 				if(row.ID){
@@ -1646,6 +1709,33 @@
 						}
 					}
 					this.productList = newarr;
+				}).catch((wrong) => {})
+
+				var url = this.basic_url + '/api-apps/app/customer';
+				this.$axios.get(url, {
+					params: data
+				}).then((res) => {
+					console.log(res);
+					this.page.totalCount = res.data.count;	
+					//总的页数
+					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
+					if(this.page.currentPage >= totalPage){
+						 this.loadSign = false
+					}else{
+						this.loadSign=true
+					}
+					this.commentArr[this.page.currentPage]=res.data.data
+					let newarr=[]
+					for(var i = 1; i <= totalPage; i++){
+					
+						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
+							
+							for(var j = 0; j < this.commentArr[i].length; j++){
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}					
+					this.customerList = newarr;
 				}).catch((wrong) => {})
 			},
 			handleClose(done) {

@@ -68,11 +68,8 @@
 											</el-input>
 										</el-form-item>
 									</el-col>
-<<<<<<< HEAD
 									<!-- <el-col :span="8">
-=======
 									<el-col :span="8">
->>>>>>> 89f9c43824e2dc7927e94a2645fafd52cac89054
 										<el-form-item label="人员资质" prop="QUALIFICATION" label-width="100px">
 											<el-input v-model="testing_projectForm.QUALIFICATION" :disabled="true">
 												<el-button slot="append" icon="el-icon-search" @click="getpepole"></el-button>
@@ -105,7 +102,7 @@
 										<font>新建行</font>
 									</el-button>
 								</div>
-								<el-table :header-cell-style="rowClass" :fit="true" :data="testing_projectForm.QUALIFICATIONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'testing_projectForm.QUALIFICATIONList', order: 'descending'}">
+								<el-table :header-cell-style="rowClass" :fit="true" :data="testing_projectForm.QUALIFICATIONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'testing_projectForm.QUALIQUALIFICATIONListFICATIONList', order: 'descending'}">
 									<el-table-column prop="iconOperation" fixed width="50px">
 										<template slot-scope="scope">
 											<i class="el-icon-check" v-if="scope.row.isEditing"></i>
@@ -318,8 +315,22 @@
 			};
 			return {
 				testing_projectForm:{
-					VERSION:'1',
-					QUALIFICATIONList:[]
+					CHANGEBY: '',
+					CHILD_FIELD:'',
+					DEPARTMENT:'',
+					DOCLINKS_NUM: '',
+					ENTERBY:'',
+					ENTERDATE: '',
+					FIELD: '',
+					ID: '',
+					P_NAME: '',
+					P_NUM: '',
+					QUALIFICATION: '',
+					QUALIFICATIONList: [],
+					QUANTITY: '',
+					STATUS: '1',
+					VERSION: 1,
+					WORK_INSTRUCTIONList: []
 				},
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
@@ -422,7 +433,6 @@
 			//刪除新建行
 			deleteRow(index, rows) { //Table-操作列中的删除行
 				rows.splice(index, 1);
-
 			},
 			iconOperation(row, column, cell, event) {
 				if(column.property === "iconOperation") {
@@ -546,6 +556,7 @@
 			detail(dataid) { //修改内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					console.log(res.data);
+					this.testing_projectForm.DEPARTMENT = '';
 					this.testing_projectForm.DEPTID = res.data.deptId;
 					this.testing_projectForm.CHANGEBY = res.data.id;
 					var date = new Date();

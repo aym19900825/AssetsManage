@@ -176,7 +176,7 @@
 		</div>
 		<!-- 弹出 -->
 		<el-dialog title="机构" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" default-expand-all>
+			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" default-expand-all @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
 			</el-tree>
 			<span slot="footer" class="dialog-footer">
 		       <el-button @click="dialogVisible = false">取 消</el-button>
@@ -341,6 +341,23 @@
 			}
 		},
 		methods: {
+			handleNodeClick(data) { //获取勾选树菜单节点
+				//				console.log(data);
+			},
+			handleClicks(data,checked, indeterminate) {
+				this.getCheckboxData = data;
+           		 this.i++;
+            		if(this.i%2==0){
+                	if(checked){
+                    	this.$refs.tree.setCheckedNodes([]);
+                    	this.$refs.tree.setCheckedNodes([data]);
+                    	//交叉点击节点
+               		 }else{
+                     this.$refs.tree.setCheckedNodes([]);
+                    	//点击已经选中的节点，置空
+                	 }
+            		}
+        	},
 			//获取负责人数据
 			getPerson(){
 				this.requestData();

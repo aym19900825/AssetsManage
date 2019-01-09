@@ -16,8 +16,16 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<div class="accordion">
+				
 					<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo"  class="demo-form-inline" status-icon inline-message>
+						<div class="text-center" v-show="viewtitle">
+						<el-button class="start" type="success" round plain size="mini" @click="startup"><i class="icon-start"></i> 启动流程</el-button>
+						<el-button class="approval" type="warning" round plain size="mini" @click="approvals"><i class="icon-edit-3"></i> 审批</el-button>
+						<el-button type="primary" round plain size="mini" @click="flowmap"><i class="icon-git-pull-request"></i> 流程地图</el-button>
+						<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
+						<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
+					</div>
+					   <div class="accordion">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="类型" name="1">
 								<el-row :gutter="20" class="pb10">
@@ -100,8 +108,9 @@
 									</el-col>
 									
 									<el-col :span="8">
-										<el-form-item label="项目负责人" prop="P_LEADER" label-width="110px">
-											<el-input v-model="dataInfo.P_LEADER" :disabled="noedit">
+										<el-form-item label="项目负责人" prop="P_LEADERDesc" label-width="110px">
+											<el-input v-model="dataInfo.P_LEADERDesc" :disabled="true">
+												<el-button :disabled="noedit" slot="append" icon="el-icon-search" @click="addperbtn()"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -386,8 +395,8 @@
 								</el-row>
 							</el-collapse-item>
 						</el-collapse>
+						</div>
 					</el-form>
-				</div>
 				<div class="el-dialog__footer" v-show="noviews">
                     <el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
 					<el-button type="success" v-show="addtitle" @click='saveAndSubmit()'>保存并继续</el-button>
@@ -477,18 +486,38 @@
 		    </span>
 		</el-dialog>
 		<!-- 产品名称 End -->
+		
+		<!--审批页面-->
+		<approvalmask :approvingData="approvingData" ref="approvalChild" ></approvalmask>
+		<!--流程历史-->
+		<flowhistorymask :approvingData="approvingData"  ref="flowhistoryChild" ></flowhistorymask>
+		<!--流程地图-->
+		<flowmapmask :approvingData="approvingData" ref="flowmapChild" ></flowmapmask>
+		<!--当前责任人-->
+		<vewPoplemask :approvingData="approvingData"  ref="vewPopleChild" ></vewPoplemask>
 	</div>
 </template>
 
 <script>
 	import Config from '../../config.js'
+	import approvalmask from '../workflow/approving.vue'
+	import flowhistorymask from '../workflow/flowhistory.vue'
+	import flowmapmask from '../workflow/flowmap.vue'
+	import vewPoplemask from '../workflow/vewPople.vue'
 	export default {
 		name: 'masks',
+		components: {
+			 approvalmask,
+			 flowhistorymask,
+			 flowmapmask,
+			 vewPoplemask
+		},
 		//				props: {
 		//					page: Object ,
 		//				},
 		data() {
 			return {
+				approvingData:{},//流程的数据
 				loadSign:true,//加载
 				commentArr:{},
 				falg:false,//保存验证需要的
@@ -506,27 +535,6 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-				options: [{
-						value: '金化站',
-						label: '金化站'
-					},
-					{
-						value: '通号站',
-						label: '通号站'
-					},
-					{
-						value: '运包站',
-						label: '运包站'
-					},
-					{
-						value: '机报站',
-						label: '机报站'
-					},
-					{
-						value: '接触网站',
-						label: '接触网站'
-					},
-				],
 				value: '',
 				selUser: [],
 				edit: true, //禁填
@@ -595,7 +603,9 @@
 				resourceData: [], //数组，我这里是通过接口获取数据
 				productList:[],
 				customerList:[],
-				selectData:[]
+				selectData:[],
+				dataid:2,//修改和查看带过的id
+				workNot:'workNot',//appname
 			};
 		},
 		methods: {
@@ -641,7 +651,6 @@
 						type: type
 					},
 				}).then((res) => {
-					console.log(res.data);
 					this.selectData = res.data;
 				});
 			},
@@ -784,10 +793,7 @@
 			detail(dataid) {
 				var url = this.basic_url + '/api-apps/app/workNot/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(111);
-					console.log(res);
 					this.dataInfo = res.data;
-                    console.log(this.dataInfo);
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -798,7 +804,6 @@
 				var usersUrl = this.basic_url + '/api-user/users/currentMap'
 				this.$axios.get(usersUrl, {}).then((res) => {
 					this.dataInfo.CHANGEBY = res.data.nickname;
-					console.log(this.dataInfo.CHANGEBY);
 					var date = new Date();
 					this.dataInfo.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
 				}).catch((err) => {
@@ -817,6 +822,7 @@
 			},
 			//这是查看
 			view(dataid) {
+				this.dataid=dataid;	
 				this.addtitle = false;
 				this.viewtitle = true;
 				this.views = true; //
@@ -832,6 +838,17 @@
 						message: '网络错误，请重试',
 						type: 'error'
 					});
+				});
+				//判断启动流程和审批的按钮是否显示
+				var url = this.basic_url + '/api-apps/app/workNot/flow/isStart/'+dataid;
+				this.$axios.get(url, {}).then((res) => {
+					if(res.data.resp_code==1){
+						$(".approval").hide();
+						$(".start").show();
+					}else{
+						$(".approval").show();
+						$(".start").hide();
+					}
 				});
 			},
 			//上传文件 Begin
@@ -981,7 +998,7 @@
 			// 	// 	});
 			// 	// });
 			// },
-			dailogconfirm(type) { //小弹出框确认按钮事件
+			dailogconfirm(type) { //选择人员确定按钮
 				this.dialogVisible = false;
 				if(this.type == '1') {
 					console.log(12345);
@@ -992,6 +1009,26 @@
 					this.dataInfo.ACCEPT_PERSON = this.selUser[0].id;
 					this.dataInfo.ACCEPT_PERSONDesc = this.selUser[0].nickname;
 				}
+			},
+			//项目负责人放大镜
+			addperbtn(){
+				var params = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				}
+				console.log(this.dataInfo.CJDW);
+				var url = this.basic_url + '/api-user/users/usersByDept?deptId='+this.dataInfo.CJDW;
+				this.$axios.get(url, {
+					params: params
+				}).then((res) => {
+					console.log(res.data);
+					this.gridData = res.data.data;
+					// this.gridData = res.data.data;
+					// this.dialogVisible = true;
+					this.type = '1';
+				});
+				this.$emit('request');
+				this.dialogVisible = true;				
 			},
 			//生成委托书
 			build(){
@@ -1035,6 +1072,73 @@
 			     this.requestData()
 			   }
 			 },
+			 //启动流程
+			startup(){
+				console.log(12345);
+				console.log(this.dataid);
+				var url = this.basic_url + '/api-apps/app/workNot/flow/'+this.dataid;
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+					if(res.data.resp_code == 1) {
+							this.$message({
+								message:res.data.resp_msg,
+								type: 'warning'
+							});
+				    }else{
+				    	this.$message({
+								message:res.data.resp_msg,
+								type: 'success'
+							});
+				    }
+				});
+			},
+			//审批流程
+			approvals(){
+				console.log(122);
+				this.approvingData.id =this.dataid;
+				this.approvingData.app=this.workNot;
+				var url = this.basic_url + '/api-apps/app/'+this.workNot+'/flow/isEnd/'+this.dataid;
+		    		this.$axios.get(url, {}).then((res) => {
+		    			if(res.data.resp_code == 0) {
+							this.$message({
+								message:res.data.resp_msg,
+								type: 'warning'
+							});
+		    			}else{
+		    				var url = this.basic_url + '/api-apps/app/'+this.workNot+'/flow/isExecute/'+this.dataid;
+		    				this.$axios.get(url, {}).then((res) => {
+				    			if(res.data.resp_code == 1) {
+										this.$message({
+											message:res.data.resp_msg,
+											type: 'warning'
+										});
+								}else{
+									this.$refs.approvalChild.visible();
+								}
+		    		});
+		    		}
+				});
+			},
+			//流程历史
+			flowhistory(){
+				console.log(this.dataid);
+				this.approvingData.id =this.dataid;
+				this.approvingData.app=this.workNot;
+//				this.$refs.flowhistoryChild.open();
+				this.$refs.flowhistoryChild.getdata(this.dataid);
+			},
+			//流程地图
+			flowmap(){
+				this.approvingData.id =this.dataid;
+				this.approvingData.app=this.workNot;
+				this.$refs.flowmapChild.getimage(this.dataid);
+			},
+			//当前责任人
+			viewpepole(){
+				this.approvingData.id =this.dataid;
+				this.approvingData.app=this.workNot;
+				this.$refs.vewPopleChild.getvewPople(this.dataid);
+			},
 			requestData(index) {//高级查询字段
 				var data = {
 					page: this.page.currentPage,
@@ -1068,7 +1172,6 @@
 				this.$axios.get(this.basic_url + '/api-apps/app/customer', {
 					params: data
 				}).then((res) => {
-					console.log(res);
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -1107,6 +1210,5 @@
 	
 	#cost {
 		text-align: right !important;
-		padding-right: 30px;
 	}
 </style>

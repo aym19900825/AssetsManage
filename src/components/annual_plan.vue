@@ -297,7 +297,7 @@
 				},
 				//tree
 				resourceData: [
-					{label: '监督抽查'},
+					{label: '监督审查'},
 					{label: '质量抽查'}
 				], //数组，我这里是通过接口获取数据，
 				resourceDialogisShow: false,
@@ -460,15 +460,24 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
+					console.log(res.data);
+					for(var i=0;i<res.data.data.length;i++){
+						if(res.data.data[i].TYPE  == '1'){
+							res.data.data[i].TYPE  = '监督审查';
+						}else if(res.data.data[i].TYPE  == '0'){
+							res.data.data[i].TYPE  = '质量抽查';
+						}
+					}
 					this.userList = res.data.data;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
-				this.userList.forEach((item, index) => {
-					var id = item.id;
-					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
-						this.userList.role = res.data.roles[0].name;
-					}).catch((wrong) => {})
-				})
+
+				// this.userList.forEach((item, index) => {
+				// 	var id = item.id;
+				// 	this.$axios.get('/users/' + id + '/roles', data).then((res) => {
+				// 		this.userList.role = res.data.roles[0].name;
+				// 	}).catch((wrong) => {})
+				// })
 			},
 			//机构树
 			// getKey() {
@@ -504,12 +513,12 @@
 				this.requestData();
 			},
 			handleNodeClick(data) {
-				if(data.type == '1') {
-					this.companyId = data.id;
-					this.deptId = '';
-				} else {
-					this.deptId = data.id;
-					this.companyId = '';
+				console.log(data);
+				console.log(data.label);
+				if(data.label == '监督审查'){
+					this.searchList.TYPE =  '1';
+				}else if(data.label == '质量抽查'){
+					this.searchList.TYPE =  '0';
 				}
 				this.requestData();
 			},

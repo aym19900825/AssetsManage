@@ -14,37 +14,10 @@
 				</div>
 			</div>
 			<div class="mask_content">
-			<el-form :model="dataInfo"  :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
+			<el-form :model="dataInfo" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
 				<div class="accordion" id="information">
 					<el-collapse v-model="activeNames">
 						<el-collapse-item title="基本信息" name="1">
-							<el-row :gutter="30">
-								<el-col :span="8">
-									<el-form-item label="表名" prop="name">
-										<el-input v-model="dataInfo.name"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="8">
-									<el-form-item label="描述" prop="description">
-										<el-input v-model="dataInfo.description"></el-input>
-									</el-form-item>
-								</el-col>
-							</el-row>
-						</el-collapse-item>
-						<el-collapse-item title="基本信息" name="1">
-							<el-row :gutter="30">
-								<el-col :span="8">
-									<el-form-item label="表名" prop="name">
-										<el-input v-model="dataInfo.name"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="8">
-									<el-form-item label="描述" prop="description">
-										<el-input v-model="dataInfo.description"></el-input>
-									</el-form-item>
-								</el-col>
-							</el-row>
-						</el-collapse-item><el-collapse-item title="基本信息" name="1">
 							<el-row :gutter="30">
 								<el-col :span="8">
 									<el-form-item label="表名" prop="name">
@@ -245,21 +218,18 @@
 					attributes:[]
 				},
 				rules: {
-					name: [{
-						required: true,
-						trigger: 'blur',
-						validator: validateName,
-					}],
-					description: [{
-						required: true,
-						trigger: 'blur',
-						validator: validateDecri,
-					}],
-					leadname: [{
-						required: true,
-						trigger: 'blur',
-						validator: validateDecri,
-					}],
+					name: [
+						{ required: true, message: '必填',trigger: 'blur'},
+						{ validator: Validators.isEnglish, trigger: 'blur'},
+					],
+					description: [
+						{ required: true, message: '必填',trigger: 'blur'},
+						{ validator: Validators.isSpecificKey, trigger: 'blur'}
+					],
+					// leadname: [
+					// 	{ required: true, message: '必填',trigger: 'blur'},
+					// 	{ validator: Validators.isEnglish, trigger: 'blur'},
+					// ],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据

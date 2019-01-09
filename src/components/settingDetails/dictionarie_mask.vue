@@ -73,7 +73,7 @@
 											<el-table-column prop="sort" label="排序" sortable width="120">
 												<template slot-scope="scope">
 													<el-form-item :prop="'subDicts.'+scope.$index + '.sort'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.sort" placeholder="请输入">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.$index + 1" placeholder="请输入">
 														</el-input>
 														<span v-else="v-else">{{scope.row.sort}}</span>
 													</el-form-item>
@@ -171,8 +171,16 @@
 //				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				rules: {
-					name: [{required: true, trigger: 'blur', validator: validatePass}],
-					code: [{required: true, trigger: 'blur', validator: validatePass}],
+					code: [
+						{ required: true, message: '必填',trigger: 'blur'},
+						{ validator: Validators.isEnglish, trigger: 'blur'}
+					],
+					name: [
+						{ required: true, message: '必填',trigger: 'blur'},
+						{ validator: Validators.isSpecificKey, trigger: 'blur'}
+					],
+					sort: [{ required: false, trigger: 'blur',validator: Validators.isSpecificKey}],
+					tips: [{ required: false, trigger: 'blur', validator: Validators.isSpecificKey}],
 				},
 				addtitle:true,
 				modifytitle:false,
@@ -221,6 +229,7 @@
 				this.reset();
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.dictionarieForm.createUser=res.data.id;
+					this.dictionarieForm.sort=0;
 					var date=new Date();
 					this.dictionarieForm.createTime = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 				}).catch((err)=>{

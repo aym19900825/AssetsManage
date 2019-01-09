@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/page/login/login'//登录页
 import index from '@/components/index'//首页
+import task from '@/components/task'//代办
 import all_icons from '@/components/common/all_icons'//所有图标
 import ztree from '@/components/common/ztree' //树菜单
 
@@ -82,6 +83,11 @@ Vue.use(Router)
       path: '/index',
       name: 'index',
       component: index
+    },
+     {//代办
+      path: '/task',
+      name: 'task',
+      component: task
     },
     {//年度计划
       path: '/annual_plan',

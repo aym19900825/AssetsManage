@@ -138,6 +138,7 @@
 	import Config from '../config.js'
 	import vheader from './common/vheader.vue'
 	import navs_header from './common/nav_tabs.vue'
+	import navs_left from './common/left_navs/nav_left5.vue'
 	import product2child from './inspection_project/product2.vue'//产品名称
 	import inspectionSta2child from './inspection_project/inspectionSta2.vue'//检验/检测标准
 	import inspectionPro2child from './inspection_project/inspectionPro2.vue'//检验/检测项目
@@ -151,6 +152,7 @@
 		name: 'inspection_project',
 		components: {
 			vheader,
+			navs_left,
 			navs_header,
 			product2child,//产品名称
 			inspectionSta2child,//检验/检测标准

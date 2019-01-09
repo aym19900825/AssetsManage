@@ -31,20 +31,20 @@
 										</el-select> -->
 									</el-col>
 								</el-row>
-                              <!-- <el-form label-width="100"> -->
+                              <!-- <el-form label-width="100px"> -->
 								<el-row :gutter="30">
 									<el-col :span="8">
-										<el-form-item label="组织机构代码" prop="CODE" label-width="110">
+										<el-form-item label="组织机构代码" prop="CODE" label-width="110px">
 											<el-input v-model="CUSTOMER.CODE" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="单位名称" prop="NAME" label-width="100">
+										<el-form-item label="单位名称" prop="NAME" label-width="100px">
 											<el-input v-model="CUSTOMER.NAME" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="类型" prop="TYPE" label-width="100">
+										<el-form-item label="类型" prop="TYPE" label-width="100px">
 											<el-select v-model="CUSTOMER.TYPE" placeholder="请选择" style="width: 100%" :disabled="noedit">
 												<el-option v-for="(data,index) in SeleCUST_TYPE" :key="index" :value="data.code" :label="data.name"></el-option>
 												</el-option>
@@ -64,31 +64,37 @@
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="8">
-										<el-form-item label="邮箱" prop="EMAIL" label-width="110">
+										<el-form-item label="邮箱" prop="EMAIL" label-width="110px">
 											<el-input v-model="CUSTOMER.EMAIL" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="联系地址" prop="CONTACT_ADDRESS" label-width="100">
+										<el-form-item label="电话" prop="PHONE" label-width="100px">
+											<el-input v-model="CUSTOMER.PHONE" :disabled="noedit"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="传真" prop="FAX" label-width="100px">
+											<el-input v-model="CUSTOMER.FAX" :disabled="noedit"></el-input>
+										</el-form-item>
+									</el-col>
+									
+								</el-row>
+								<el-row :gutter="30">
+									<el-col :span="16">
+										<el-form-item label="联系地址" prop="CONTACT_ADDRESS" label-width="110px">
 											<el-input v-model="CUSTOMER.CONTACT_ADDRESS" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="邮政编码" prop="ZIPCODE" label-width="100">
+										<el-form-item label="邮政编码" prop="ZIPCODE" label-width="100px">
 											<el-input v-model="CUSTOMER.ZIPCODE" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row :gutter="30">
-									<el-col :span="8">
-										<el-form-item label="传真" prop="FAX" label-width="110">
-											<el-input v-model="CUSTOMER.FAX" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row :gutter="30">
 									<el-col :span="24">
-										<el-form-item label="备注" prop="MEMO" label-width="110">
+										<el-form-item label="备注" prop="MEMO" label-width="110px">
 											<el-input v-model="CUSTOMER.MEMO" type="textarea" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
@@ -253,7 +259,7 @@
 								</el-tabs>
 							</div>
 							<el-collapse-item title="其它" name="3"  v-show="views">
-								<!-- <el-form label-width="100"> -->
+								<!-- <el-form label-width="100px"> -->
 									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="录入人" prop="ENTERBY">

@@ -229,10 +229,10 @@
 				} else {
 					var changeMenu = selData[0];
 					// console.log(changeMenu.children.length);
-					// if(changeMenu.children == null){
+					if(changeMenu.children == null){
 						var id = changeMenu.id;
 						console.log(id);
-						var url = this.basic_url + '/api/api-user/menus/' + id;
+						var url = this.basic_url + '/api-user/menus/' + id;
 						this.$axios.delete(url, {}).then((res) => { //.delete 传数据方法
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
@@ -248,15 +248,15 @@
 								type: 'error'
 							});
 						});
-					// }else if(typeof(changeMenu.children)!='undefined' && changeMenu.children.length>0){
-					// 	this.$message({
-					// 		message: '先删除子菜单',
-					// 		type: 'error'
-					// 	});
-					// }
-					// else {
-					// 	// return;
-					// }
+					}else if(typeof(changeMenu.children)!='undefined' && changeMenu.children.length>0){
+						this.$message({
+							message: '先删除子菜单',
+							type: 'error'
+						});
+					}
+					else {
+						// return;
+					}
 				}
 			},
 

@@ -16,7 +16,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="menu" :rules="rules" ref="menu" label-width="100" class="demo-user">
+				<el-form :model="menu" :rules="rules" ref="menu" label-width="100px" class="demo-user">
 					<div class="accordion">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基础信息" name="1">
@@ -119,6 +119,7 @@
 
 <script>
 	import Config from '../../config.js'
+	import Validators from '../../core/util/validators.js'
 	import deliver from '../../assets/js/deliver.js'
 	import all_icons from '../common/all_icons.vue'//弹出框
 	export default {

@@ -55,7 +55,7 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="6">
-									<el-form-item label="收回入库时间" prop="ACCEPT_DATE" label-width="100">
+									<el-form-item label="收回入库时间" prop="ACCEPT_DATE" label-width="100px">
 										<div class="block">
 										    <el-date-picker
 										      v-model="searchList.ACCEPT_DATE"

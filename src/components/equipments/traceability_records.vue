@@ -50,7 +50,7 @@
 					<el-form :model="searchList" label-width="70px">
 						<el-row :gutter="10">
 							<el-col :span="5">
-								<el-form-item label="溯源记录编号" prop="RECORDNUM" label-width="100">
+								<el-form-item label="溯源记录编号" prop="RECORDNUM" label-width="100px">
 									<el-input v-model="searchList.RECORDNUM"></el-input>
 								</el-form-item>
 							</el-col>
@@ -72,7 +72,7 @@
 						</el-row>
 						<el-row :gutter="10">
 							<el-col :span="5">
-								<el-form-item label="溯源方式" prop="PM_MODEL" label-width="100">
+								<el-form-item label="溯源方式" prop="PM_MODEL" label-width="100px">
 									<el-input v-model="searchList.PM_MODEL"></el-input>
 								</el-form-item>
 							</el-col>

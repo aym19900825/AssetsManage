@@ -50,7 +50,7 @@
 					<el-form :model="searchList" label-width="70px">
 						<el-row :gutter="10">
 							<el-col :span="5">
-								<el-form-item label="组织机构代码" prop="CODE" label-width="100">
+								<el-form-item label="组织机构代码" prop="CODE" label-width="100px">
 									<el-input v-model="searchList.CODE">
 									</el-input>
 								</el-form-item>

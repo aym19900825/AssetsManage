@@ -62,27 +62,26 @@
 										</el-form-item>-->
 									</el-col>
 								</el-row>
-								<el-row :gutter="30">
+								<!-- <el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="邮箱" prop="EMAIL" label-width="110px">
 											<el-input v-model="CUSTOMER.EMAIL" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="传真" prop="FAX" label-width="110px">
-											<el-input v-model="CUSTOMER.FAX" :disabled="noedit"></el-input>
+										<el-form-item label="电话" prop="PHONE" label-width="100px">
+											<el-input v-model="CUSTOMER.PHONE" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="传真" prop="FAX" label-width="110px">
+										<el-form-item label="传真" prop="FAX" label-width="100px">
 											<el-input v-model="CUSTOMER.FAX" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
-									
-								</el-row>
+								</el-row> -->
 								<el-row :gutter="30">
 									<el-col :span="16">
-										<el-form-item label="联系地址" prop="CONTACT_ADDRESS" label-width="100px">
+										<el-form-item label="联系地址" prop="CONTACT_ADDRESS" label-width="110px">
 											<el-input v-model="CUSTOMER.CONTACT_ADDRESS" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
@@ -304,71 +303,71 @@
 	export default {
 		name: 'customer_masks',
 		data() {
-            var validateName = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
-            var validatePerson = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
+          //   var validateName = (rule, value, callback) => {
+          //       if (value === '') {
+          //           callback(new Error('必填'));
+          //       }else {
+          //           callback();
+          //       }
+          //   };
+          //   var validatePerson = (rule, value, callback) => {
+          //       if (value === '') {
+          //           callback(new Error('必填'));
+          //       }else {
+          //           callback();
+          //       }
+          //   };
             
-            var validateAddress = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请填写联系地址'));
-                }else {
-                    callback();
-                }
-            };
-            var validatePhone = (rule, value, callback) => {
-                if (value === '') {
-		            callback(new Error('请填写联系电话'));
-		        } else {
-			        var reg = /^1[34578]\d{9}$/;
-			        if(!reg.test(value)){
-			            callback(new Error('请输入有效的电话'));
-			        }else{
-			        	callback();
-			        }
-		        }
-            };
-            var validateEmail = (rule, value, callback) => {
-                if (value === '') {
-		            callback(new Error('电子邮箱不能为空'));
-		        } else {
-			        var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-			        if(!reg.test(value)){
-			            callback(new Error('请输入有效的邮箱'));
-			        }else{
-			        	callback();
-			        }
-		        }
-            };
-            var validateZipcode = (rule, value, callback) => {
-                if (value === '') {
-		            callback(new Error('邮政编码不能为空'));
-		        } else {
-			        var reg= /^[0-9]{6}$/;
-			        if(!reg.test(value)){
-			            callback(new Error('请输入有效的邮政编码'));
-			        }else{
-			        	callback();
-			        }
-		        }
-            };
-            var validateName = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请填写单位名称'));
-                }else {
-                    callback();
-                }
-            };
+          //   var validateAddress = (rule, value, callback) => {
+          //       if (value === '') {
+          //           callback(new Error('请填写联系地址'));
+          //       }else {
+          //           callback();
+          //       }
+          //   };
+          //   var validatePhone = (rule, value, callback) => {
+          //       if (value === '') {
+		        //     callback(new Error('请填写联系电话'));
+		        // } else {
+			       //  var reg = /^1[34578]\d{9}$/;
+			       //  if(!reg.test(value)){
+			       //      callback(new Error('请输入有效的电话'));
+			       //  }else{
+			       //  	callback();
+			       //  }
+		        // }
+          //   };
+          //   var validateEmail = (rule, value, callback) => {
+          //       if (value === '') {
+		        //     callback(new Error('电子邮箱不能为空'));
+		        // } else {
+			       //  var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+			       //  if(!reg.test(value)){
+			       //      callback(new Error('请输入有效的邮箱'));
+			       //  }else{
+			       //  	callback();
+			       //  }
+		        // }
+          //   };
+          //   var validateZipcode = (rule, value, callback) => {
+          //       if (value === '') {
+		        //     callback(new Error('邮政编码不能为空'));
+		        // } else {
+			       //  var reg= /^[0-9]{6}$/;
+			       //  if(!reg.test(value)){
+			       //      callback(new Error('请输入有效的邮政编码'));
+			       //  }else{
+			       //  	callback();
+			       //  }
+		        // }
+          //   };
+          //   var validateName = (rule, value, callback) => {
+          //       if (value === '') {
+          //           callback(new Error('请填写单位名称'));
+          //       }else {
+          //           callback();
+          //       }
+          //   };
 			return {
 				basic_url: Config.dev_url,
 				personinfo:false,
@@ -408,13 +407,23 @@
 					CUSTOMER_PERSONList:[]
 				},
 				rules: {
-					CODE:[{required: true,trigger: 'blur',validator: Validators.isWorknumber}],
-					NAME:[{required: true,trigger: 'blur',validator: validateName}],
-					CONTACT_ADDRESS:[{required: true,trigger: 'blur',validator: validateAddress}],
-					PERSON:[{required: true,trigger: 'blur',validator: validatePerson}],
-					PHONE:[{required: true,trigger: 'blur',validator: validatePhone}],
-					EMAIL:[{required: true,trigger: 'blur',validator: validateEmail}],
-					ZIPCODE:[{required: true,trigger: 'blur',validator: validateZipcode}],
+					CODE:[
+						{required: true,message: '必填',trigger: 'blur'},
+						{validator: Validators.isWorknumber, trigger: 'blur'}
+					],
+					NAME:[
+						{required: true,message: '必填',trigger: 'blur'},
+						{validator: Validators.isNickname, trigger: 'blur'}
+					],
+					CONTACT_ADDRESS:[
+						{required: true,message: '必填',trigger: 'blur'},
+						{validator: Validators.isSpecificKey, trigger: 'blur'}
+					],
+					MEMO:[{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],
+					ZIPCODE:[{required: false,trigger: 'blur',validator: Validators.isZipcode}],
+					// PERSON:[{required: true,trigger: 'blur',validator: validatePerson}],
+					// PHONE:[{required: true,trigger: 'blur',validator: validatePhone}],
+					// EMAIL:[{required: true,trigger: 'blur',validator: validateEmail}],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -423,6 +432,7 @@
 					pageSize: 10,
 					totalCount: 0
 				},
+				falg:true,
 				index:0,
 				addtitle:true,
 				modifytitle:false,
@@ -586,7 +596,7 @@
 					});
 				});
 				this.$axios.get(this.basic_url + '/api-apps/app/customer/' + dataid, {}).then((res) => {
-					console.log(res.data);
+					// console.log(res.data);
 					this.CUSTOMER = res.data;
 					//console.log(this.CUSTOMER.STATUS==1);
 					this.CUSTOMER.STATUS=this.CUSTOMER.STATUS=="1"? '活动' : '不活动';
@@ -690,9 +700,15 @@
 							type: 'error'
 						});
 					});
+					this.falg = true;
 		          } else {
-		            return false;
-		          }
+		            this.show = true;
+						this.$message({
+							message: '有必填项未填写，请重新填写',
+							type: 'warning',
+						});
+						this.falg = false;
+		          	}
 		        });
 			},
 			saveAndUpdate(){

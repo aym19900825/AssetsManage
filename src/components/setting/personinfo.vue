@@ -296,12 +296,18 @@
 					{required: true,trigger: 'blur',message: '必填'},
 					{validator: Validators.isWorknumber, trigger: 'blur'},//引用 isWorknumber
 				],
-		        email: [{required: true, trigger: 'blur',validator: Validators.isEmail}],
-		        telephone: [{required: false,trigger: 'blur',validator: Validators.istelephone}],
-		        phone: [{ required: true, trigger: 'blur',validator: Validators.isPhone}],
+		        email: [
+					{required: true,trigger: 'blur',message: '必填'},
+					{validator: Validators.isEmail, trigger: 'blur'},
+				],
+		        telephone: [{required: false,trigger: 'blur',validator: Validators.isTelephone}],
+		        phone:  [
+					{required: true,trigger: 'blur',message: '必填'},
+					{validator: Validators.isPhone, trigger: 'blur'},
+				],
 		        idnumber: [{required: false,trigger: 'blur',validator: Validators.isIdnumber}],
 		        address: [{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],
-		        zipcode: [{required: false,trigger: 'blur',validator: Validators.iszipcode}],
+		        zipcode: [{required: false,trigger: 'blur',validator: Validators.isZipcode}],
           		ipaddress: [{required: false,trigger: 'blur',validator: Validators.isIpaddress}],
           		macaddress: [{required: false,trigger: 'blur',validator: Validators.isMacaddress}],
           		post: [{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],

@@ -58,8 +58,8 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="3">
-									<el-form-item label="是否停用" prop="INACTIVE" label-width="70px">
-										<el-select clearable v-model="searchList.INACTIVE" placeholder="" style="width: 100%;">
+									<el-form-item label="是否停用" prop="inactive" label-width="70px">
+										<el-select clearable v-model="searchList.inactive" placeholder="" style="width: 100%;">
 											<el-option v-for="item in stopoptions" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
 										</el-select>
@@ -85,7 +85,7 @@
 								</el-table-column>
 								<el-table-column label="角色名称" sortable prop="name" v-if="this.checkedName.indexOf('角色名称')!=-1">
 								</el-table-column>
-								<el-table-column label="是否停用" sortable prop="INACTIVE" v-if="this.checkedName.indexOf('是否停用')!=-1">
+								<el-table-column label="是否停用" sortable prop="inactive" :formatter="judge" v-if="this.checkedName.indexOf('是否停用')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
@@ -157,7 +157,7 @@
 					},
 					{
 						label: '是否停用',
-						prop: 'INACTIVE'
+						prop: 'inactive'
 					}
 				],
 				buttons: [],//请求回的按钮
@@ -206,6 +206,9 @@
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
 				this.requestData();
+			},
+			judge(data) {//是否停用
+				return data.inactive=="1" ? '是' : '否'
 			},
 			//请求页面的button接口
 		    getbutton(childByValue){
@@ -323,31 +326,48 @@
 						type: 'warning'
 					});
 					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时删除多个数据',
-						type: 'warning'
-					});
-					return;
 				} else {
-					var changeUser = selData[0];
-					var id = changeUser.id;
-					var url = this.basic_url + '/api-user/roles/' + id;
-					//.delete 传数据方法
-					this.$axios.delete(url, {}).then((res) => {
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
+					var url = this.basic_url + '/api-user/roles/deletes';
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					console.log(changeUser[0]);
+					for(var i = 0; i < changeUser.length; i++) {
+						deleteid.push(changeUser[i].id);
+						console.log(deleteid);
+					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+					var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {
+							params: data
+						}).then((res) => { //.delete 传数据方法
+							//resp_code == 0是后台返回的请求成功的信息
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '删除成功',
-								type: 'success'
+								message: '网络错误，请重试',
+								type: 'error'
 							});
-							this.requestData();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
+					}).catch(() => {
+
 					});
 				}
 			},

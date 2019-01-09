@@ -22,23 +22,13 @@
                 <font><img class="userimg" /></font>
                 <i class="el-icon-arrow-down icon-arrow2-down"></i>
               </span>
-              <el-dropdown-menu slot="dropdown">
+              <el-dropdown-menu slot="dropdown" class="scrollbar" style="max-height:300px">
                 <el-dropdown-item v-for="item in GetRoles" >
                     <div @click = "clickfun($event)">
-                        {{item.name}}
+                        <i class="icon-man mr10"></i>{{item.name}}
                     </div>
                 </el-dropdown-item>
-                
-                <!-- <el-dropdown-item>
-                    <router-link to="/personinfo">
-                        <img class="userimgs" src="../../assets/img/male.png" />管理员
-                    </router-link>
-                </el-dropdown-item>
-                <el-dropdown-item>
-                    <router-link to="/personinfo">
-                        <img class="userimgs" src="../../assets/img/male.png" />站长
-                    </router-link>
-                </el-dropdown-item> -->
+               
 
                 <el-dropdown-item class="border-linet pt10 mt10">
                     <router-link to="/personinfo">
@@ -74,6 +64,7 @@ export default {
             basic_url: Config.dev_url,
             username: '',
             nickname: '',
+            GetRole: this.GetRoles,
             GetRoles:[],//获取当前角色
         }
     },

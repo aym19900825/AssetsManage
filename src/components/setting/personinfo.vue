@@ -27,7 +27,7 @@
 		<!--右侧内容显示 Begin-->
 		<div class="wrapper wrapper-content">
 			<div class="ibox-content" :style="{height: fullHeight}">
-				<el-form status-icon ref="personinfo" :model="personinfo" :rules="rules" label-width="80px" :label-position="labelPosition">
+				<el-form ref="personinfo" :model="personinfo" :rules="rules" label-width="80px" :label-position="labelPosition">
 					<el-collapse v-model="activeNames">
 						<el-collapse-item title="账号设置" name="1">
 							<el-row :gutter="30">
@@ -86,7 +86,7 @@
 								</el-col>
 
 								<el-col :span="8">
-					 				<el-form-item label="角色" prop="roleId" label-width="100px">
+					 				<el-form-item label="角色" prop="roleId" label-width="100">
 										<el-select v-model="personinfo.roleId" multiple placeholder="请选择" style="width: 100%">
 											<el-option v-for="item in selectData" :key="item.name" :value="item.id" :label="item.name"></el-option>
 										</el-select>
@@ -179,12 +179,12 @@
 						 	<!-- 第四行 -->
 						 	<el-row :gutter="30">
 								<el-col :span="8">
-									<el-form-item label="IP地址" prop="ipaddress" label-width="100px">
+									<el-form-item label="IP地址" prop="ipaddress" label-width="100">
 										<el-input v-model="personinfo.ipaddress"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="8">
-									<el-form-item label="MAC地址" prop="macaddress" label-width="100px">
+									<el-form-item label="MAC地址" prop="macaddress" label-width="100">
 										<el-input v-model="personinfo.macaddress"></el-input>
 									</el-form-item>
 								</el-col>

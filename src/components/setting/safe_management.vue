@@ -13,7 +13,7 @@
 		<!--右侧内容显示 Begin-->
 		<div class="wrapper wrapper-content">
 			<div class="ibox-content">
-				<el-form status-icon ref="safemanage" :model="safemanage" label-width="80px" :label-position="labelPosition">
+				<el-form ref="safemanage" :model="safemanage" label-width="80px" :label-position="labelPosition">
 					<el-collapse v-model="activeNames">
 						<el-collapse-item title="安全管理" name="1">
 							<el-row :gutter="30">

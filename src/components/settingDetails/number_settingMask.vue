@@ -16,7 +16,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="numbsetForm"  :rules="rules" ref="numbsetForm" label-width="100px" status-icon>
+				<el-form :model="numbsetForm"  :rules="rules" ref="numbsetForm" label-width="100" status-icon>
 					<div class="accordion">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基础信息" name="1">
@@ -39,7 +39,7 @@
 								</el-row>
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="自动编号名称" prop="AUTOKEY" label-width="110px">
+										<el-form-item label="自动编号名称" prop="AUTOKEY" label-width="110">
 											<el-input v-model="numbsetForm.AUTOKEY" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
@@ -54,14 +54,14 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8" v-if="dept">
-											<el-form-item label="机构" label-width="110px">
+											<el-form-item label="机构" label-width="110">
 												<el-input v-model="numbsetForm.DEPARTMENT" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="24">
-										<el-form-item label="备注" label-width="110px">
+										<el-form-item label="备注" label-width="110">
 											<el-input type="textarea" v-model="numbsetForm.MEMO" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
@@ -70,7 +70,7 @@
 							<el-collapse-item title="其它" name="2"  v-show="views">
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="录入人"  label-width="110px">
+										<el-form-item label="录入人"  label-width="110">
 											<el-input v-model="numbsetForm.ENTERBY" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
@@ -87,7 +87,7 @@
 								</el-row>
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="修改时间"  label-width="110px">
+										<el-form-item label="修改时间"  label-width="110">
 											<el-input v-model="numbsetForm.CHANGEDATE" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>

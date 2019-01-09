@@ -49,7 +49,7 @@
 
 				<!-- 高级查询划出 Begin-->
 				<div v-show="search">
-						<el-form status-icon :model="searchList" label-width="45px">
+						<el-form :model="searchList" label-width="45px">
 							<el-row :gutter="10">
 								<el-col :span="5">
 									<el-form-item label="编码" prop="P_NUM">
@@ -143,7 +143,7 @@
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
-		<projectmask :testing_projectForm="testing_projectForm" ref="child" @request="requestData" @reset="reset" v-bind:page=page ></projectmask>
+		<projectmask ref="child" @request="requestData" @reset="reset" v-bind:page=page ></projectmask>
 	
 	</div>
 </div>
@@ -396,8 +396,9 @@
 					});
 					return;
 				} else {
+					console.log('===='+this.selMenu[0].ID);
 					this.testing_projectForm = this.selMenu[0]; 
-					this.$refs.child.detail();
+					this.$refs.child.detail(this.selMenu[0].ID); 
 				}
 			},
 			//查看

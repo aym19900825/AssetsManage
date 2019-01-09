@@ -15,7 +15,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form status-icon :model="adddeptForm"  :rules="rules" ref="adddeptForm" label-width="100px" id="demo-adduserForm">
+				<el-form :model="adddeptForm"  :rules="rules" ref="adddeptForm" label-width="100" id="demo-adduserForm">
 					<div class="accordion">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="机构信息" name="1">

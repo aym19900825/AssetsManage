@@ -15,7 +15,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form status-icon :model="dataInfo" :rules="rules"   ref="dataInfo" label-width="100px" class="demo-user">
+				<el-form :model="dataInfo" :rules="rules"   ref="dataInfo" label-width="100" class="demo-user">
 					<div class="accordion">
 
 						<!-- 关键字授权信息 -->

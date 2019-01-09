@@ -47,7 +47,7 @@
 					</div>
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
-						<el-form status-icon :model="searchList" label-width="70px">
+						<el-form :model="searchList" label-width="70px">
 							<el-row :gutter="5">
 								<el-col :span="3">
 									<el-form-item label="样品序号" prop="ITEMNUM" label-width="70px">
@@ -55,7 +55,7 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="6">
-									<el-form-item label="收回入库时间" prop="ACCEPT_DATE" label-width="100px">
+									<el-form-item label="收回入库时间" prop="ACCEPT_DATE" label-width="100">
 										<div class="block">
 										    <el-date-picker
 										      v-model="searchList.ACCEPT_DATE"

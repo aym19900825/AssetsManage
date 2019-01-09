@@ -16,7 +16,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="samplesForm" :label-position="labelPosition" :rules="rules" ref="samplesForm" label-width="110px" status-icon inline-message>
+				<el-form :model="samplesForm" :label-position="labelPosition" :rules="rules" ref="samplesForm" label-width="110" status-icon inline-message>
 					<div class="accordion">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基础信息" name="1">
@@ -110,17 +110,17 @@
 							<el-collapse-item title="其他" name="2" v-show="views">
 								<el-row >
 									<el-col :span="8">
-										<el-form-item label="录入人" prop="ENTERBY" label-width="110px">
+										<el-form-item label="录入人" prop="ENTERBY" label-width="110">
 											<el-input v-model="samplesForm.ENTERBY" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="录入时间" prop="ENTERDATE" label-width="110px">
+										<el-form-item label="录入时间" prop="ENTERDATE" label-width="110">
 											<el-input v-model="samplesForm.ENTERDATE" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="录入人机构" prop="DEPARTMENT" label-width="110px">
+										<el-form-item label="录入人机构" prop="DEPARTMENT" label-width="110">
 											<el-input v-model="samplesForm.DEPARTMENT" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>

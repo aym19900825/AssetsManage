@@ -16,7 +16,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="user" :label-position="labelPosition" :rules="rules" ref="user" label-width="100px" class="demo-user">
+				<el-form :model="user" :label-position="labelPosition" :rules="rules" ref="user" label-width="100" class="demo-user">
 					<div class="accordion" id="information">
 						<div class="mask_tab-block">
 							<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">

@@ -61,10 +61,10 @@
 					</div>
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
-						<el-form status-icon :model="searchList">
+						<el-form :model="searchList">
 							<el-row :gutter="5">
 								<el-col :span="6">
-									<el-form-item label="委托单位名称" prop="V_NAME"  label-width="100px">
+									<el-form-item label="委托单位名称" prop="V_NAME"  label-width="100">
 										<el-input v-model="searchList.V_NAME"></el-input>
 									</el-form-item>
 								</el-col>
@@ -74,19 +74,19 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="检测报告编号" prop="REPORT_NUM" label-width="100px">
+									<el-form-item label="检测报告编号" prop="REPORT_NUM" label-width="100">
 										<el-input v-model="searchList.REPORT_NUM"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="检测委托书编号" prop="PROXYNUM" label-width="110px">
+									<el-form-item label="检测委托书编号" prop="PROXYNUM" label-width="110">
 										<el-input v-model="searchList.PROXYNUM"></el-input>
 									</el-form-item>
 								</el-col>
 							</el-row>
 							<el-row :gutter="5">
 								<el-col :span="6">
-									<el-form-item label="完成日期" prop="COMPDATE" label-width="100px">
+									<el-form-item label="完成日期" prop="COMPDATE" label-width="100">
 										<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%">
 									</el-date-picker>
 									</el-form-item>

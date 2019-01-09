@@ -16,7 +16,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form status-icon :model="user" inline-message :rules="rules" ref="user" :label-position="labelPositions" class="demo-user">
+				<el-form :model="user" inline-message :rules="rules" ref="user" :label-position="labelPositions" class="demo-user">
 					<div class="accordion">
 						<el-collapse v-model="activeNames">
 							<!--<el-collapse-item title="基础信息" name="1">
@@ -64,7 +64,7 @@
 								<el-row>
 									<el-col :span="8">
 										<el-form-item label="用户名" v-if="modify" label-width="100px">
-											<el-input v-model="user.username" :disabled="true"></el-input>
+											<el-input v-model="user.username" :disabled="noedit"></el-input>
 										</el-form-item>
 										<el-form-item label="用户名" prop="username" v-else label-width="100px">
 											<el-input v-model="user.username" :disabled="noedit"></el-input>
@@ -193,7 +193,7 @@
 								<el-row>
 									<el-col :span="24">
 										<el-form-item label="备注" prop="tips" label-width="100px">
-											<el-input type="textarea" :rows="3" v-model="user.tips" :disabled="noedit"></el-input>
+											<el-input type="textarea" v-model="user.tips" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -433,7 +433,6 @@
 					traings: [],
 					qualifications: [],
 				},
-				
 				options: [{
 						value: '高中',
 						label: '高中'
@@ -780,7 +779,7 @@
 				});
 				var url = this.basic_url + '/api-user/users/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
-					// console.log(res.data);
+					console.log(res.data);
 					this.user = res.data;
 					this.user.sex = this.user.sex ? '男' : '女';
 					this.user.enabled = this.user.enabled ? '活动' : '不活动';
@@ -789,7 +788,7 @@
 					this.user.roleId = [];
 					var roles = this.user.roles;
 					for(var i = 0; i < roles.length; i++) {
-						this.user.roleId.push(roles[i].name);
+						this.user.roleId.push(roles[i].id);
 					}
 					this.show = true;
 				}).catch((err) => {
@@ -867,7 +866,7 @@
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
 			},
 
-			//保存users/saveOrUpdate
+			//			保存users/saveOrUpdate
 			save() {
 				var _this = this;
 				this.$refs.user.validate((valid) => {
@@ -960,8 +959,8 @@
 			//所属机构
 			getDept() {
 				this.editSearch = 'dept';
-				// var page = this.page.currentPage;
-				// var limit = this.page.pageSize;
+				var page = this.page.currentPage;
+				var limit = this.page.pageSize;
 				//				var type = "2";
 				var url = this.basic_url + '/api-user/depts/treeMap';
 				//				var url = '/api/api-user/depts/treeByType';
@@ -970,7 +969,6 @@
 					//						type: type
 					//					},
 				}).then((res) => {
-					console.log(res);
 					this.resourceData = res.data;
 					this.dialogVisible = true;
 				});
@@ -981,7 +979,12 @@
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
 				var url = this.basic_url + '/api-user/roles';
-				this.$axios.get(url, {}).then((res) => {
+				this.$axios.get(url, {
+					params: {
+						page: page,
+						limit: limit,
+					},
+				}).then((res) => {
 					this.selectData = res.data.data;
 				}).catch(error => {
 					console.log('请求失败');

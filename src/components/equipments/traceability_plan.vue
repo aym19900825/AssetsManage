@@ -48,7 +48,7 @@
 				</div>
 				<!-- 高级查询划出 Begin-->
 				<div v-show="search">
-					<el-form status-icon :model="searchList" label-width="70px">
+					<el-form :model="searchList" label-width="70px">
 						<el-row :gutter="10">
 							<el-col :span="5">
 								<el-form-item label="计划编号" prop="PMNUM">
@@ -61,7 +61,7 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="6">
-								<el-form-item label="设备编号" prop="ASSETNUM" label-width="100px">
+								<el-form-item label="设备编号" prop="ASSETNUM" label-width="100">
 									<el-input v-model="searchList.ASSETNUM"></el-input>
 								</el-form-item>
 							</el-col>
@@ -85,7 +85,7 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="6">
-								<el-form-item label="溯源完成日期" prop="COMP_DATE" label-width="100px">
+								<el-form-item label="溯源完成日期" prop="COMP_DATE" label-width="100">
 									<div class="block">
 									    <el-date-picker
 									      v-model="searchList.COMP_DATE"

@@ -52,7 +52,7 @@
 												<el-input v-model="dataInfo.V_NAME">
 												</el-input>
 											</el-form-item>-->
-											<el-form-item label="名称" prop="V_NAME" label-width="110px">
+											<el-form-item label="名称" prop="V_NAME" label-width="110">
 												<el-input v-model="dataInfo.V_NAME" :disabled="edit" width="100%">
 													<el-button slot="append" icon="el-icon-search" @click="getCustomer(1)">
 													</el-button>
@@ -60,38 +60,38 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="地址" prop="V_ADDRESS" label-width="110px">
+											<el-form-item label="地址" prop="V_ADDRESS" label-width="110">
 												<el-input v-model="dataInfo.V_ADDRESS" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="邮编" prop="V_ZIPCODE" label-width="110px">
+											<el-form-item label="邮编" prop="V_ZIPCODE" label-width="110">
 												<el-input v-model="dataInfo.V_ZIPCODE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row >
 										<el-col :span="8">
-											<el-form-item label="姓名" prop="V_PERSON" label-width="110px">
+											<el-form-item label="姓名" prop="V_PERSON" label-width="110">
 												<el-input v-model="dataInfo.V_PERSON" :disabled="edit">
 													 <el-button slot="append" icon="el-icon-search" @click="addname"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="电话" prop="V_PHONE" label-width="110px">
+											<el-form-item label="电话" prop="V_PHONE" label-width="110">
 												<el-input v-model="dataInfo.V_PHONE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="责任单位" prop="R_VENDOR" label-width="110px" :disabled="noedit">
+											<el-form-item label="责任单位" prop="R_VENDOR" label-width="110" :disabled="noedit">
 												<el-input v-model="dataInfo.R_VENDOR" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row >
 										<el-col :span="8" style="display: none;">
-											<el-form-item label="委托单位编号" prop="VENDOR" label-width="110px">
+											<el-form-item label="委托单位编号" prop="VENDOR" label-width="110">
 												<el-input v-model="dataInfo.VENDOR"></el-input>
 											</el-form-item>
 										</el-col>
@@ -109,7 +109,7 @@
 							<el-collapse-item title="样品" name="2" >
 									<el-row >
 										<el-col :span="8">
-											<el-form-item label="名称" prop="ITEM_NAME" label-width="110px">
+											<el-form-item label="名称" prop="ITEM_NAME" label-width="110">
 												<el-input v-model="dataInfo.ITEM_NAME" :disabled="true">
 													<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="addsample"></el-button>
 												</el-input>
@@ -117,14 +117,14 @@
 										</el-col>
 									
 										<el-col :span="8">
-											<el-form-item label="型号" prop="ITEM_MODEL" label-width="110px">
+											<el-form-item label="型号" prop="ITEM_MODEL" label-width="110">
 												<el-input v-model="dataInfo.ITEM_MODEL" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row >
 										<el-col :span="8">
-											<el-form-item label="数量" prop="ITEM_QUALITY" label-width="110px">
+											<el-form-item label="数量" prop="ITEM_QUALITY" label-width="110">
 												<el-input v-model="dataInfo.ITEM_QUALITY" :disabled="noedit">
 												</el-input>
 
@@ -136,14 +136,14 @@
 											</el-form-item>
 										</el-col>-->
 										<el-col :span="8">
-											<el-form-item label="保密要求" prop="ITEM_SECRECY" label-width="110px">
+											<el-form-item label="保密要求" prop="ITEM_SECRECY" label-width="110">
 												<el-input v-model="dataInfo.ITEM_SECRECY" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row>
 										<el-col :span="10">
-											<el-form-item label="取样方式" prop="ITEM_METHOD" label-width="110px">
+											<el-form-item label="取样方式" prop="ITEM_METHOD" label-width="110">
 												<el-radio-group v-model="dataInfo.ITEM_METHOD" :disabled="noedit">
 													<el-radio label="委托方送样"></el-radio>
 													<el-radio label="抽样"></el-radio>
@@ -152,7 +152,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="14">
-											<el-form-item label="检后处理" prop="ITEM_DISPOSITION" label-width="110px">
+											<el-form-item label="检后处理" prop="ITEM_DISPOSITION" label-width="110">
 												<el-radio-group v-model="dataInfo.ITEM_DISPOSITION" :disabled="noedit">
 													<el-radio label="自提"></el-radio>
 													<el-radio label="邮寄"></el-radio>
@@ -166,13 +166,13 @@
 							<el-collapse-item title="检验" name="3">
 								<el-row>
 								<el-col :span="8">
-											<el-form-item label="完成日期" prop="COMPDATE" label-width="110px">
+											<el-form-item label="完成日期" prop="COMPDATE" label-width="110">
 												<el-date-picker v-model="dataInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
 												</el-date-picker>
 											</el-form-item>
 								</el-col>
 								<el-col :span="8">
-											<el-form-item label="完成方式" prop="COMPMODE" label-width="110px">
+											<el-form-item label="完成方式" prop="COMPMODE" label-width="110">
 												<el-radio-group v-model="dataInfo.COMPMODE" :disabled="noedit">
 													<el-radio label="加急"></el-radio>
 													<el-radio label="正常"></el-radio>
@@ -180,7 +180,7 @@
 											</el-form-item>
 								</el-col>
 								</el-row>
-									<el-form-item label="抽样方案/判定依据" prop="REMARKS" label-width="110px">
+									<el-form-item label="抽样方案/判定依据" prop="REMARKS" label-width="110">
 										<el-input v-model="dataInfo.REMARKS" :disabled="noedit"></el-input>
 									</el-form-item>
 									
@@ -444,12 +444,12 @@
 							</div>
 							<el-collapse-item name="7">
 										<el-col :span="8">
-											<el-form-item label="检验报告编号" prop="REPORT_NUM" label-width="110px">
+											<el-form-item label="检验报告编号" prop="REPORT_NUM" label-width="110">
 												<el-input v-model="dataInfo.REPORT_NUM" :disabled="noedit" ></el-input>
 											</el-form-item>
 										</el-col>
                                         <el-col :span="10">
-											<el-form-item label="格式" prop="REPORT_FOMAT" label-width="110px">
+											<el-form-item label="格式" prop="REPORT_FOMAT" label-width="110">
 												<el-radio-group v-model="dataInfo.REPORT_FOMAT" :disabled="noedit">
 													<el-radio label="认证中心"></el-radio>
 													<el-radio label="国家中心"></el-radio>
@@ -457,7 +457,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="6">
-											<el-form-item label="标识" prop="CNAS_OR_CMA_ID" label-width="110px">
+											<el-form-item label="标识" prop="CNAS_OR_CMA_ID" label-width="110">
 												<el-radio-group v-model="dataInfo.CNAS_OR_CMA_ID" :disabled="noedit">
 													<el-radio label="CNAS"></el-radio>
 												</el-radio-group>
@@ -465,12 +465,12 @@
 										</el-col>
 									
 										<el-col :span="8">
-											<el-form-item label="交委托方分数" prop="REPORT_QUALITY" label-width="110px">
+											<el-form-item label="交委托方分数" prop="REPORT_QUALITY" label-width="110">
 												<el-input v-model="dataInfo.REPORT_QUALITY" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="14">
-											<el-form-item label="发送方式" prop="REPORT_MODE" label-width="110px">
+											<el-form-item label="发送方式" prop="REPORT_MODE" label-width="110">
 												<el-radio-group v-model="dataInfo.REPORT_MODE" :disabled="noedit">
 													<el-radio label="自提"></el-radio>
 													<el-radio label="邮寄"></el-radio>
@@ -481,28 +481,28 @@
 										
 								
 										<el-col :span="8">
-											<el-form-item label="检验收费" prop="CHECK_COST" label-width="110px">
+											<el-form-item label="检验收费" prop="CHECK_COST" label-width="110">
 												<el-input v-model="dataInfo.CHECK_COST" id="cost" @blur="toPrice" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="标准费用" prop="CONTRACTCOST" label-width="110px">
+											<el-form-item label="标准费用" prop="CONTRACTCOST" label-width="110">
 												<el-input v-model="dataInfo.CONTRACTCOST" id="stacost"  @blur="staPrice" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="实收费用" prop="ACTUALCOST" label-width="110px">
+											<el-form-item label="实收费用" prop="ACTUALCOST" label-width="110">
 												<el-input v-model="dataInfo.ACTUALCOST" id="actualcost"  @blur="actualPrice" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 
 										<el-col :span="8">
-											<el-form-item label="实收比例" prop="ACTUAL_PERCENT" label-width="110px">
+											<el-form-item label="实收比例" prop="ACTUAL_PERCENT" label-width="110">
 												<el-input v-model="dataInfo.ACTUAL_PERCENT" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="付款方式" prop="PAYMENT_METHOD" label-width="110px">
+											<el-form-item label="付款方式" prop="PAYMENT_METHOD" label-width="110">
 												<el-select v-model="dataInfo.PAYMENT_METHOD" placeholder="请选择" style="width: 100%;" :disabled="noedit">
 													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 													</el-option>
@@ -516,7 +516,7 @@
 										</el-col>-->
 
 										<el-col :span="8">
-											<el-form-item label="主检组" prop="MAINGROUP" label-width="110px">
+											<el-form-item label="主检组" prop="MAINGROUP" label-width="110">
 												<el-select v-model="dataInfo.MAINGROUP" placeholder="请选择" style="width: 100%;">
 													<el-option v-for="item in option" :key="item.value" :label="item.label" :value="item.value">
 													</el-option>
@@ -524,24 +524,24 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="主检负责人" prop="LEADER" label-width="110px">
+											<el-form-item label="主检负责人" prop="LEADER" label-width="110">
 													<el-input v-model="dataInfo.LEADER" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8" style="display:none;" label-width="110px">
+										<el-col :span="8" style="display:none;" label-width="110">
 											<el-form-item label="生产单位编号" prop="PRODUCT_UNIT">
 												<el-input v-model="dataInfo.PRODUCT_UNIT" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									    <el-col :span="16">
-										<el-form-item label="生产单位名称" prop="P_NAME" label-width="110px">
+										<el-form-item label="生产单位名称" prop="P_NAME" label-width="110">
 											<el-input v-model="dataInfo.P_NAME" :disabled="edit" >
 												<el-button slot="append" icon="el-icon-search" @click="getCustomer(2)"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
 										<el-col :span="24">
-											<el-form-item label="备注" prop="MEMO" label-width="110px">
+											<el-form-item label="备注" prop="MEMO" label-width="110">
 												<el-input type="textarea" rows="5" v-model="dataInfo.MEMO" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -551,29 +551,29 @@
 								<div class="accordion-body tab-content">
 									<el-row >
 										<el-col :span="8">
-											<el-form-item label="录入人" prop="ENTERBY" label-width="110px">
+											<el-form-item label="录入人" prop="ENTERBY" label-width="110">
 												<el-input v-model="dataInfo.ENTERBY" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="录入时间" prop="ENTERDATE" label-width="110px">
+											<el-form-item label="录入时间" prop="ENTERDATE" label-width="110">
 												<el-input v-model="dataInfo.ENTERDATE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="录入人机构" prop="ORGID" label-width="110px">
+											<el-form-item label="录入人机构" prop="ORGID" label-width="110">
 												<el-input v-model="dataInfo.ORGID" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row >
 										<el-col :span="8">
-											<el-form-item label="修改人" prop="CHANGEBY" label-width="110px">
+											<el-form-item label="修改人" prop="CHANGEBY" label-width="110">
 												<el-input v-model="dataInfo.CHANGEBY" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改时间" prop="CHANGEDATE" label-width="110px">
+											<el-form-item label="修改时间" prop="CHANGEDATE" label-width="110">
 												<el-input v-model="dataInfo.CHANGEDATE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>

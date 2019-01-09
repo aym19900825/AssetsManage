@@ -17,7 +17,7 @@
 			</div>
 			<div class="mask_content">
 				<!-- status-icon 验证后文本框上显示对勾图标 -->
-				<el-form status-icon inline-message :model="WORKPLAN" :label-position="labelPosition" :rules="rules" ref="WORKPLAN" label-width="85px">
+				<el-form inline-message :model="WORKPLAN" :label-position="labelPosition" :rules="rules" ref="WORKPLAN" label-width="85px">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames" @change="handleChange">
 							<el-collapse-item title="基本信息" name="1">
@@ -163,6 +163,21 @@
 								    <el-table-column prop="MODEL" label="规格型号" sortable width="120px">
 								      <template slot-scope="scope">
 								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入内容"></el-input><span v-if="!scope.row.isEditing">{{scope.row.MODEL}}</span>
+								      </template>
+								    </el-table-column>
+									<el-table-column prop="VENDOR" label="生产企业编号" sortable width="120px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDOR" placeholder="请输入内容"></el-input><span v-if="!scope.row.isEditing">{{scope.row.VENDOR}}</span>
+								      </template>
+								    </el-table-column>
+									<el-table-column prop="V_NAME" label="生产企业名称" sortable width="120px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAME" placeholder="请输入内容"></el-input><span v-if="!scope.row.isEditing">{{scope.row.V_NAME}}</span>
+								      </template>
+								    </el-table-column>
+									<el-table-column prop="SJ_NAME" label="受检企业名称" sortable width="120px">
+								      <template slot-scope="scope">
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.SJ_NAME" placeholder="请输入内容"></el-input><span v-if="!scope.row.isEditing">{{scope.row.SJ_NAME}}</span>
 								      </template>
 								    </el-table-column>
 								    <el-table-column prop="MEMO" label="近三年监督抽查情况" sortable width="260px">
@@ -412,7 +427,7 @@
 		<el-dialog title="检测依据" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
 			<!-- 高级查询划出 Begin-->
 			<div class="pb10">
-				<el-form status-icon :model="searchList" label-width="70px">
+				<el-form :model="searchList" label-width="70px">
 					<el-row :gutter="10" class="pb10">
 						<el-col :span="6">
 							<el-input v-model="searchList.S_NUM">
@@ -508,7 +523,7 @@
 		<el-dialog title="检测项目测试与要求" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
 			<!-- 高级查询划出 Begin-->
 			<div class="pb10">
-				<el-form status-icon :model="searchList" label-width="70px">
+				<el-form :model="searchList" label-width="70px">
 					<el-row :gutter="10">
 						<el-col :span="5">
 							<el-input v-model="searchList.P_NUM">
@@ -1114,7 +1129,9 @@
 						'WP_LINENUM': this.index,
 						'ITEM_NAME': '',
 						'MODEL': '',
+						'VENDOR':'',
 						'V_NAME': '',
+						'SJ_NAME':'',
 						'BASIS': '',
 						'P_NAME': '',
 						//todo  默认值暂时为0
@@ -1269,10 +1286,10 @@
 					for(var i=0, len=worlplanlist.length; i<len; i++){
 						worlplanlist[i].isEditing = false;
 						worlplanlist[i].frontId = this.frontId++;
-						var cost = worlplanlist[i].CHECKCOST.toString();
-						var num = parseFloat(this.toNum(cost)).toFixed(2).toString().split(".");
-						num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
-						worlplanlist[i].CHECKCOST = num.join(".");
+						// var cost = worlplanlist[i].CHECKCOST.toString();
+						// var num = parseFloat(this.toNum(cost)).toFixed(2).toString().split(".");
+						// num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
+						// worlplanlist[i].CHECKCOST = num.join(".");
 					}
 					this.basisList = res.data.WORLPLANLINEList.length > 0 ? res.data.WORLPLANLINEList[0].WORLPLANLINE_BASISList : [];
 					this.proTestList = res.data.WORLPLANLINEList.length > 0 ? res.data.WORLPLANLINEList[0].WORLPLANLINE_PROJECTList : [];
@@ -1389,8 +1406,8 @@
 										});
 										return false;
 									}
-									let b = parseFloat(this.worlplanlist[i].CHECKCOST.replace(/[^\d\.-]/g, ""));
-									this.worlplanlist[i].CHECKCOST = b;
+									// let b = parseFloat(this.worlplanlist[i].CHECKCOST.replace(/[^\d\.-]/g, ""));
+									// this.worlplanlist[i].CHECKCOST = b;
 								}
 								this.WORKPLAN.WORLPLANLINEList = this.worlplanlist;
 								var url = this.basic_url +'/api-apps/app/workplan/saveOrUpdate';

@@ -183,7 +183,7 @@ export function iszipcode (rule, value, callback) {//验证邮政编码
 	}
 }
 
-export function istelephone (rule, value, callback) {//验证电话号码
+export function isTelephone (rule, value, callback) {//验证电话号码
 	var reg = /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/;
 	if (!reg.test(value)) {
 		callback(new Error('请输入有效的电话号码，格式为：0000-0000000'));

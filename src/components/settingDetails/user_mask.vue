@@ -508,8 +508,14 @@
 						{validator: Validators.isWorknumber, trigger: 'blur'},//引用 isWorknumber
 					],
 					idnumber: [{required: true,trigger: 'blur',validator: Validators.isIdnumber}],
-					phone: [{required: true,trigger: 'blur',validator: Validators.isPhone}],
-					email: [{required: true,trigger: 'blur',validator: Validators.isEmail}],
+					phone: [
+						{required: true,trigger: 'blur',message: '必填'},
+						{validator: Validators.isPhone, trigger: 'blur'},
+					],
+					email: [
+						{required: true,trigger: 'blur',message: '必填'},
+						{validator: Validators.isEmail, trigger: 'blur'},
+					],
 					step: [{required: true,trigger: 'blur',message: '必填',}],
 					t_date: [{required: true,trigger: 'blur',message: '必填',}],
 					t_description: [{required: true,trigger: 'blur',message: '必填',}],
@@ -779,7 +785,7 @@
 				});
 				var url = this.basic_url + '/api-user/users/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res.data);
+					// console.log(res.data);
 					this.user = res.data;
 					this.user.sex = this.user.sex ? '男' : '女';
 					this.user.enabled = this.user.enabled ? '活动' : '不活动';

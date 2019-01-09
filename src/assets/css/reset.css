@@ -137,8 +137,6 @@ i, cite, em, var, address, dfn {
 }
 .scrollbar
 {
-	height: 300px;
-	width: 100%;
 	overflow-y: auto;
 	overflow-x: auto;
 }
@@ -539,7 +537,7 @@ h6 {
     margin-bottom: 5px;
 }
 .el-textarea__inner {padding-left: 5px; padding-right: 5px;}
-
+.el-form-item__error {z-index: 990;}
 
 /**/
 .searchlist{

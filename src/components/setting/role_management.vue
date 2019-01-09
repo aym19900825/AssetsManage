@@ -58,8 +58,8 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="3">
-									<el-form-item label="是否停用" prop="INACTIVE" label-width="70px">
-										<el-select clearable v-model="searchList.INACTIVE" placeholder="" style="width: 100%;">
+									<el-form-item label="是否停用" prop="inactive" label-width="70px">
+										<el-select clearable v-model="searchList.inactive" placeholder="" style="width: 100%;">
 											<el-option v-for="item in stopoptions" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
 										</el-select>
@@ -85,7 +85,7 @@
 								</el-table-column>
 								<el-table-column label="角色名称" sortable prop="name" v-if="this.checkedName.indexOf('角色名称')!=-1">
 								</el-table-column>
-								<el-table-column label="是否停用" sortable prop="INACTIVE" v-if="this.checkedName.indexOf('是否停用')!=-1">
+								<el-table-column label="是否停用" sortable prop="inactive" :formatter="judge" v-if="this.checkedName.indexOf('是否停用')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
@@ -157,7 +157,7 @@
 					},
 					{
 						label: '是否停用',
-						prop: 'INACTIVE'
+						prop: 'inactive'
 					}
 				],
 				buttons: [],//请求回的按钮
@@ -206,6 +206,9 @@
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
 				this.requestData();
+			},
+			judge(data) {//是否停用
+				return data.inactive=="1" ? '是' : '否'
 			},
 			//请求页面的button接口
 		    getbutton(childByValue){

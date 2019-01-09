@@ -183,7 +183,7 @@ const validators = {
 		}
 	},
 
-	iszipcode:function (rule, value, callback) {//验证邮政编码
+	isZipcode:function (rule, value, callback) {//验证邮政编码
 		if (value && (!(/^[0-9]{6}$/).test(value))) {
 			callback(new Error('请输入有效的邮政编码'))
 		} else {

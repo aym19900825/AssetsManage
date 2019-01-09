@@ -11,18 +11,18 @@
         </ul>
         <div class="nav-head pull-right nav-right">
             <el-badge :value="200" :max="99" class="item pt5 mr30">
-                <a href="#"><i class="icon-notice"></i></a>
+               <router-link :to="{path:'/task'}"><i class="icon-notice"></i></router-link>
             </el-badge>
            
 
             <el-dropdown placement="top" trigger="click">
               <span class="el-dropdown-link white">
-                <font class="roles pr10">{{username}}<br>{{nickname}}</font>
+                <font class="roles pr10">{{username}}<br>{{GetRolesname}}</font>
                 <font class="pr10">您好</font>
                 <font><img class="userimg" /></font>
                 <i class="el-icon-arrow-down icon-arrow2-down"></i>
               </span>
-              <el-dropdown-menu slot="dropdown">
+              <el-dropdown-menu slot="dropdown" class="scrollbar" style="height:300px">
                 <el-dropdown-item v-for="item in GetRoles" >
                     <div @click = "clickfun($event)">
                         {{item.name}}
@@ -74,6 +74,7 @@ export default {
             basic_url: Config.dev_url,
             username: '',
             nickname: '',
+            GetRolesname:'',
             GetRoles:[],//获取当前角色
         }
     },
@@ -98,6 +99,7 @@ export default {
         getData(){//获取当前用户信息
             var url = this.basic_url + '/api-user/users/currentMap';
             this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+            	console.log(res);
                     this.username = res.data.username;
                     this.nickname = res.data.nickname;
                     this.userid = res.data.id;
@@ -112,6 +114,8 @@ export default {
             var url = this.basic_url + '/api-user/roles/current';
             this.$axios.get(url, {}).then((res) => {
                 this.GetRoles = res.data;
+                this.GetRolesname=this.GetRoles[0].name;
+            	console.log(this.GetRolesname);
                 if(res.data!=null&&res.data.length>0)
                 {
                     let item = res.data[0];
@@ -129,12 +133,12 @@ export default {
       		// e.target 是你当前点击的元素
       		// e.currentTarget 是你绑定事件的元素
       	    var content=$.trim(e.target.innerHTML)
+      	    this.GetRolesname=content;
       	    var GetRoles=this.GetRoles
       	    for(let i=0;i<GetRoles.length;i++){
       	    	if(GetRoles[i].name==content){
       	    		var roId=this.GetRoles[i].id
                      this.$store.dispatch('setRoleIdAct',roId);
-                     console.log("roleid"+this.$store.state.roleid);
       	    	}
       	    }
 

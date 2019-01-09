@@ -2,10 +2,10 @@
 <div>
     <div class="table-func">
         <form method="post" id="file" action="" enctype="multipart/form-data" style="float: left;" v-show="docParm.model!='new'">
-            <el-button type="warn" size="mini" round class="a-upload" id="upload">
+            <el-button type="warn" size="mini" round class="a-upload">
                 <i class="el-icon-upload2"></i>
                 <font>上传</font>
-                <input id="excelFile" type="file" name="uploadFile" @change="upload" v-if="docParm.model!='new'"/>
+                <input id="excelFile" type="file" name="uploadFile" @change="upload" v-show="docParm.model!='new'"/>
             </el-button>
         </form>
         <el-button type="warn" size="mini" round class="a-upload" @click="uploadTip" v-show="docParm.model=='new'">
@@ -97,8 +97,11 @@ export default {
         },
         autoLoad(){
             setTimeout(function(){
-                $('#upload').click();
-            },500);
+                $('#excelFile').click();
+            },2000);
+        },
+        testAuto(){
+            $('#excelFile').click();
         },
         sizeChange(val) {
             this.page.pageSize = val;

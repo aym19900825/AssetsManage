@@ -307,7 +307,7 @@
 				],
 		        idnumber: [{required: false,trigger: 'blur',validator: Validators.isIdnumber}],
 		        address: [{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],
-		        zipcode: [{required: false,trigger: 'blur',validator: Validators.iszipcode}],
+		        zipcode: [{required: false,trigger: 'blur',validator: Validators.isZipcode}],
           		ipaddress: [{required: false,trigger: 'blur',validator: Validators.isIpaddress}],
           		macaddress: [{required: false,trigger: 'blur',validator: Validators.isMacaddress}],
           		post: [{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],

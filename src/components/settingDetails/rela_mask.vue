@@ -194,7 +194,7 @@
 					leadlength: ''
 				}],
 				rules: {
-					companyName: [{ required: true, trigger: 'change', validator: validatePass1,}],
+					// companyName: [{ required: true, trigger: 'change', validator: validatePass1,}],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，

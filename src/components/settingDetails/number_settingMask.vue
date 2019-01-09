@@ -137,24 +137,24 @@
 			}
 		},
 		data() {
-			var validateAUTOKEY = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请填写自动编号名称'));
-                }else {
-                    callback();
-                }
-            };
-            var validateS_NUM = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请填写起始数'));
-                }else {
-                	var targ=/^([0-9]*|[0-9]{1}\d*\.\d{1}?\d*)$/;
-                	if (!targ.test(value)) {
-                		callback(new Error('起始数须为数字'));
-                	}
-                    callback();
-                }
-            };
+			// var validateAUTOKEY = (rule, value, callback) => {
+   //              if (value === '') {
+   //                  callback(new Error('请填写自动编号名称'));
+   //              }else {
+   //                  callback();
+   //              }
+   //          };
+   //          var validateS_NUM = (rule, value, callback) => {
+   //              if (value === '') {
+   //                  callback(new Error('请填写起始数'));
+   //              }else {
+   //              	var targ=/^([0-9]*|[0-9]{1}\d*\.\d{1}?\d*)$/;
+   //              	if (!targ.test(value)) {
+   //              		callback(new Error('起始数须为数字'));
+   //              	}
+   //                  callback();
+   //              }
+   //          };
            
 			return {
 				basic_url: Config.dev_url,
@@ -176,8 +176,15 @@
 				isok2: false,
 //				labelPosition: 'top',//标题在上方显示
 				rules:{
-          			AUTOKEY: [{required: true, validator: validateAUTOKEY, trigger: 'blur'}],
-          			S_NUM:[{  required: true, validator: validateS_NUM, trigger: 'blur'}]
+          			AUTOKEY:[
+						{ required: true, message: '必填', trigger: 'blur'},
+						{ validator: Validators.isWorknumber, trigger: 'blur'}
+					],
+					PREFIX:[{ required: false, trigger: 'blur', validator: Validators.isEnglish}],
+          			S_NUM:[
+						{ required: true, message: '必填', trigger: 'blur'},
+						{ validator: Validators.isInteger, trigger: 'blur'}
+					],
           		
 	          	},
 	          	addtitle:true,

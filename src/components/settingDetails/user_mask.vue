@@ -64,7 +64,7 @@
 								<el-row>
 									<el-col :span="8">
 										<el-form-item label="用户名" v-if="modify" label-width="100px">
-											<el-input v-model="user.username" :disabled="noedit"></el-input>
+											<el-input v-model="user.username" :disabled="true"></el-input>
 										</el-form-item>
 										<el-form-item label="用户名" prop="username" v-else label-width="100px">
 											<el-input v-model="user.username" :disabled="noedit"></el-input>
@@ -218,7 +218,7 @@
 												<el-table-column prop="step" label="序号" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'qualifications.'+scope.$index + '.step'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.step" placeholder="请输入要求" :disabled="true">
+															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.$index + 1" placeholder="请输入要求" :disabled="noedit">
 															</el-input>
 															<span v-else="v-else">{{scope.row.step}}</span>
 														</el-form-item>
@@ -260,7 +260,7 @@
 														</el-form-item>
 													</template>
 												</el-table-column> -->
-												<el-table-column prop="enterdate" label="录入时间" sortable width="120px">
+												<el-table-column prop="enterdate" label="录入时间" sortable>
 													<template slot-scope="scope">
 														<el-form-item :prop="'qualifications.'+scope.$index + '.enterdate'">
 															<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.enterdate" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
@@ -314,7 +314,7 @@
 												<el-table-column prop="step" label="序号" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'traings.'+scope.$index + '.step'">
-															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.step" placeholder="请输入要求">
+															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.$index + 1" :disabled="noedit">
 															</el-input>
 															<span v-else="v-else">{{scope.row.step}}</span>
 														</el-form-item>

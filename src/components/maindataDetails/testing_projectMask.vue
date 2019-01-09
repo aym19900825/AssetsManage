@@ -862,6 +862,6 @@
 	@import '../../assets/css/mask-modules.css';
 	#cost {
 		text-align: right !important;
-		padding-right: 30px;
+		/* padding-right: 30px; */
 	}
 </style>

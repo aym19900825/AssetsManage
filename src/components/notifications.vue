@@ -58,7 +58,7 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="受检产品名称" prop="ITEM_NAME" label-width="110">
+									<el-form-item label="受检产品名称" prop="ITEM_NAME" label-width="110px">
 										<el-input v-model="searchList.ITEM_NAME"></el-input>
 									</el-form-item>
 								</el-col>
@@ -85,7 +85,7 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="完成日期" prop="COMPDATE" label-width="110">
+									<el-form-item label="完成日期" prop="COMPDATE" label-width="110px">
 										<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd" style="width: 100%">
 										</el-date-picker>
 									</el-form-item>

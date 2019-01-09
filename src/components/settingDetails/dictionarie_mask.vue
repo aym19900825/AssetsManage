@@ -23,19 +23,19 @@
 							<el-collapse-item title="基础信息" name="1">
 								<el-row :gutter="30">
 									<el-col :span="8">
-										<el-form-item label="类型编码" prop="code" label-width="100">
+										<el-form-item label="类型编码" prop="code" label-width="100px">
 											<el-input v-model="dictionarieForm.code" :disabled="noedit">
 											</el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="类型名称" prop="name" label-width="100">
+										<el-form-item label="类型名称" prop="name" label-width="100px">
 											<el-input v-model="dictionarieForm.name" :disabled="noedit">
 											</el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="排序" prop="sort" label-width="100">
+										<el-form-item label="排序" prop="sort" label-width="100px">
 											<el-input v-model="dictionarieForm.sort" :disabled="noedit">
 											</el-input>
 										</el-form-item>
@@ -43,7 +43,7 @@
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="24">
-										<el-form-item label="备注" prop="tips" label-width="100">
+										<el-form-item label="备注" prop="tips" label-width="100px">
 											<el-input type="textarea" row="2" v-model="dictionarieForm.tips" :disabled="noedit">
 											</el-input>
 										</el-form-item>
@@ -126,6 +126,7 @@
 
 <script>
 	import Config from '../../config.js'
+	import Validators from '../../core/util/validators.js'
 	export default {
 		name: 'masks',
 		components: {

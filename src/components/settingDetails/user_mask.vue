@@ -63,25 +63,25 @@
 								<!-- 第一行 -->
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="用户名" v-if="modify" label-width="100">
+										<el-form-item label="用户名" v-if="modify" label-width="100px">
 											<el-input v-model="user.username" :disabled="noedit"></el-input>
 										</el-form-item>
-										<el-form-item label="用户名" prop="username" v-else label-width="100">
+										<el-form-item label="用户名" prop="username" v-else label-width="100px">
 											<el-input v-model="user.username" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="密码" v-if="modify" label-width="100">
+										<el-form-item label="密码" v-if="modify" label-width="100px">
 											<el-input type="password" v-model="user.password" :disabled="true">
 												<el-button slot="append" icon="icon-edit" @click="editpassword"></el-button>
 											</el-input>
 										</el-form-item>
-										<el-form-item label="密码" prop="password" v-else label-width="100">
+										<el-form-item label="密码" prop="password" v-else label-width="100px">
 											<el-input type="password" v-model="user.password" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="姓名" prop="nickname" label-width="100">
+										<el-form-item label="姓名" prop="nickname" label-width="100px">
 											<el-input v-model="user.nickname" :disabled="noedit"></el-input>
 											<span class="error"></span>
 										</el-form-item>
@@ -89,17 +89,17 @@
 								</el-row>
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="职务" prop="post" label-width="100">
+										<el-form-item label="职务" prop="post" label-width="100px">
 											<el-input v-model="user.post" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="工号" prop="worknumber" label-width="100">
+										<el-form-item label="工号" prop="worknumber" label-width="100px">
 											<el-input v-model="user.worknumber" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="性別" prop="sex" label-width="100">
+										<el-form-item label="性別" prop="sex" label-width="100px">
 											<el-radio-group v-model="user.sex" :disabled="noedit">
 												<el-radio label="男"></el-radio>
 												<el-radio label="女"></el-radio>
@@ -109,30 +109,30 @@
 								</el-row>
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="身份证号" prop="idnumber" label-width="100">
+										<el-form-item label="身份证号" prop="idnumber" label-width="100px">
 											<el-input v-model="user.idnumber" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="手机号" prop="phone" label-width="100">
+										<el-form-item label="手机号" prop="phone" label-width="100px">
 											<el-input v-model="user.phone" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="电子邮箱" prop="email" label-width="100">
+										<el-form-item label="电子邮箱" prop="email" label-width="100px">
 											<el-input v-model="user.email" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="用户有效期" prop="user_active_date" label-width="100">
+										<el-form-item label="用户有效期" prop="user_active_date" label-width="100px">
 											<el-date-picker v-model="user.user_active_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd HH:mm:ss" :disabled="noedit">
 											</el-date-picker>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="允许授权" prop="ispermit" label-width="100">
+										<el-form-item label="允许授权" prop="ispermit" label-width="100px">
 											<el-radio-group v-model="user.ispermit" :disabled="noedit">
 												<el-radio label="是"></el-radio>
 												<el-radio label="否"></el-radio>
@@ -140,7 +140,7 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="允许登录" prop="islogin" label-width="100">
+										<el-form-item label="允许登录" prop="islogin" label-width="100px">
 											<el-radio-group v-model="user.islogin" :disabled="noedit">
 												<el-radio label="是"></el-radio>
 												<el-radio label="否"></el-radio>
@@ -150,7 +150,7 @@
 								</el-row>
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="所属机构" prop="deptName" label-width="100">
+										<el-form-item label="所属机构" prop="deptName" label-width="100px">
 											<el-input v-model="user.deptName" :disabled="edit" >
 												<el-button slot="append" icon="el-icon-search" @click="getDept" :disabled="noedit"></el-button>
 											</el-input>
@@ -163,7 +163,7 @@
 										</el-form-item>-->
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="学历" prop="education" label-width="100">
+										<el-form-item label="学历" prop="education" label-width="100px">
 											<el-select v-model="user.education" placeholder="硕士" style="width: 100%" :disabled="noedit">
 												<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 												</el-option>
@@ -171,7 +171,7 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="角色" prop="roleId" label-width="100">
+										<el-form-item label="角色" prop="roleId" label-width="100px">
 											<el-select v-model="user.roleId" multiple :disabled="noedit" value-key="item.id" >
 												<el-option v-for="item in selectData" :key="item.name" :value="item.id" :label="item.name"></el-option>
 											</el-select>
@@ -180,19 +180,19 @@
 								</el-row>
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="IP地址" prop="ipaddress" label-width="100">
+										<el-form-item label="IP地址" prop="ipaddress" label-width="100px">
 											<el-input v-model="user.ipaddress" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="MAC地址" prop="macaddress" label-width="100">
+										<el-form-item label="MAC地址" prop="macaddress" label-width="100px">
 											<el-input v-model="user.macaddress" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row>
 									<el-col :span="24">
-										<el-form-item label="备注" prop="tips" label-width="100">
+										<el-form-item label="备注" prop="tips" label-width="100px">
 											<el-input type="textarea" v-model="user.tips" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
@@ -364,23 +364,23 @@
 								<!-- 第一行 -->
 								<el-row :gutter="30">
 									<el-col :span="8">
-										<el-form-item label="录入人" prop="createby" label-width="100">
+										<el-form-item label="录入人" prop="createby" label-width="100px">
 											<el-input v-model="user.createbyName" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="录入时间" prop="createTime" label-width="100">
+										<el-form-item label="录入时间" prop="createTime" label-width="100px">
 											<el-input v-model="user.createTime" :disabled="edit">
 											</el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="修改人" prop="updateby" label-width="100">
+										<el-form-item label="修改人" prop="updateby" label-width="100px">
 											<el-input v-model="user.updateby" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="修改时间" prop="updateTime" label-width="100">
+										<el-form-item label="修改时间" prop="updateTime" label-width="100px">
 											<el-input v-model="user.updateTime" :disabled="edit">
 											</el-input>
 										</el-form-item>

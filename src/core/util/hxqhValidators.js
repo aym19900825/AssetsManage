@@ -175,7 +175,7 @@ export function isFillTips (rule, value, callback) {//验证备注
 	}
 }
 
-export function iszipcode (rule, value, callback) {//验证邮政编码
+export function isZipcode (rule, value, callback) {//验证邮政编码
 	if (value && (!(/^[0-9]{6}$/).test(value))) {
 		callback(new Error('邮政编码不符合规范'))
 	} else {

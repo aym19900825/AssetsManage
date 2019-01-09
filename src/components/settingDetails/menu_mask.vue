@@ -176,8 +176,15 @@
 				fullHeight: document.documentElement.clientHeight - 200 +'px',//获取浏览器高度
 				rules: {
 					// pName: [{required: true,trigger: 'blur',validator: validatePass}],
-					name: [{required: true,trigger: 'blur',validator: validatePass}],
-					url: [{required: true,trigger: 'blur',validator: validatePass}],
+					name: [
+						{required: true,message: '必填',trigger: 'blur'},
+						{validator: Validators.isNickname, trigger: 'blur'}
+					],
+					url: [
+						{required: true,message: '必填',trigger: 'blur'},
+						{validator: Validators.isSpecificKey, trigger: 'blur'}
+					],
+					sort: [{required: false,trigger: 'blur',validator: Validators.isInteger}],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，

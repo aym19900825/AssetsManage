@@ -171,8 +171,16 @@
 //				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				rules: {
-					name: [{required: true, trigger: 'blur', validator: validatePass}],
-					code: [{required: true, trigger: 'blur', validator: validatePass}],
+					code: [
+						{ required: true, message: '必填',trigger: 'blur'},
+						{ validator: Validators.isEnglish, trigger: 'blur'}
+					],
+					name: [
+						{ required: true, message: '必填',trigger: 'blur'},
+						{ validator: Validators.isSpecificKey, trigger: 'blur'}
+					],
+					sort: [{ required: false, trigger: 'blur',validator: Validators.isSpecificKey}],
+					tips: [{ required: false, trigger: 'blur', validator: Validators.isSpecificKey}],
 				},
 				addtitle:true,
 				modifytitle:false,
@@ -221,6 +229,7 @@
 				this.reset();
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.dictionarieForm.createUser=res.data.id;
+					this.dictionarieForm.sort=0;
 					var date=new Date();
 					this.dictionarieForm.createTime = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 				}).catch((err)=>{

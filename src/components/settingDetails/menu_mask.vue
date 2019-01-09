@@ -259,6 +259,10 @@
 
 			//保存users/saveOrUpdate
 			submitForm() {
+				console.log(this.menu.parentId);
+				if(this.menu.parentId == ''){
+					this.menu.parentId = '-1';
+				}
 				this.$refs.menu.validate((valid) => {
 					if(valid) {
 						this.menu.hidden=this.menu.hidden?1:0

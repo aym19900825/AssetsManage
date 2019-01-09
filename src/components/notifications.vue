@@ -335,6 +335,8 @@
 				this.$axios.get(url, {}).then((res) => {
 					console.log(res.data);
 					this.selectData = res.data; 
+					console.log(2333333);
+					console.log(this.selectData);
 				}).catch(error => {
 					console.log('请求失败');
 				})
@@ -565,13 +567,17 @@
 				return data;
 			},
 			handleNodeClick(data) {
-				console.log(data);
-				if(data.type == '1') {
-					this.companyId = data.id;
-					this.deptId = '';
-				} else {
-					this.deptId = data.id;
-					this.companyId = '';
+				// console.log(data.label);
+				// console.log(233333333);
+				// console.log(this.selectData[0].code);
+				console.log(this.selectData);
+				for(var i = 0;i<this.selectData.length;i++){
+					if(data.label ==  this.selectData[i].name){
+						console.log(data.label);
+						console.log(this.selectData[i].name);
+						console.log(this.selectData[i].code);
+						 this.searchList.TYPE = this.selectData[i].code;
+					}
 				}
 				this.requestData();
 			},

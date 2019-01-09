@@ -68,11 +68,7 @@
 											</el-input>
 										</el-form-item>
 									</el-col>
-<<<<<<< HEAD
 									<!-- <el-col :span="8">
-=======
-									<el-col :span="8">
->>>>>>> 89f9c43824e2dc7927e94a2645fafd52cac89054
 										<el-form-item label="人员资质" prop="QUALIFICATION" label-width="100">
 											<el-input v-model="testing_projectForm.QUALIFICATION" :disabled="true">
 												<el-button slot="append" icon="el-icon-search" @click="getpepole"></el-button>

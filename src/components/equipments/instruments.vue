@@ -3,7 +3,7 @@
 <div>
 	<div class="headerbg">
 		<vheader></vheader>
-		<navs_header ref='navsheader'></navs_header>
+		<navs_header ref="navsheader"></navs_header>
 	</div>
 	<div class="contentbg">
 		<!--左侧菜单内容显示 Begin-->
@@ -489,6 +489,7 @@
 				return row.enabled;
 			},
 			childByValue:function(childValue) {
+				console.log(111);
         		// childValue就是子组件传过来的值
         		console.log(childValue);
         		this.$refs.navsheader.showClick(childValue);

@@ -17,10 +17,12 @@
 export default {
    components: {
   },
-  props: ['data', 'defaultActive'],
+  props:["approvingData"],//第一种方式
   data() {
     return {
-    basic_url: Config.dev_url,  
+    basic_url: Config.dev_url, 
+    appname:'',
+    id:'',
     innerVisible: false,
     };
   },
@@ -28,30 +30,32 @@ export default {
 	  	open() {
 					this.innerVisible = true;
 				},
-	  	getimage(id){
-	  		var countNum = 0;
-	  		var url = this.basic_url + '/api-apps/app/inspectPro/flow/image/'+id;
-					this.$axios.get(url, {}).then((res) => {
+	  	getimage(){
+	  		console.log(this.approvingData);
+	  		this.id=this.approvingData.id;
+	    	this.appname=this.approvingData.app;
+	    	var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/isStart/'+this.id;
+	   	        this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+					if(res.data.resp_code == 1) {
 						console.log(res);
-						this.innerVisible = true;
-						
+							this.$message({
+								message:res.data.resp_msg,
+								type: 'warning'
+							});
+				    }else{
+				    	var countNum = 0;
+	  		var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/image/'+this.id;
+					this.$axios.get(url, {}).then((res) => {
 						 var result = res.data.datas;
 						 result= $.parseJSON(result).images;
-	//					 result=eval('(' + result + ')');
-						//result= $.parseJSON( result);
 	            		var imgObj1 = document.getElementById("showImages1");
 	            		var img1 = $(imgObj1);
 	            		$("#showImages1").attr("src","data:image/png;base64," + result[0]);
-	           			 //imgObj1.src = "data:image/png;base64," + result[0];
 	            		var imgObj2 = document.getElementById("showImages2");
 	            		var img2 = $(imgObj2);
-	           			// imgObj2.src = "data:image/png;base64," + result[1];
 				          $("#showImages2").attr("src","data:image/png;base64," + result[1]);
-				//          $("#showImages1").show();
-				            window.setInterval(function () {
-				                //获取网页中id=myImg的图片对象元素
-				//              var imgObj = document.getElementById("showImages")
-				//              imgObj.src = "data:image/png;base64,"+result[countNum] ;
+				            //window.setInterval(function () {
 				                if (countNum == 0) {
 				                    $("#showImages1").show();
 				                    $("#showImages2").hide();
@@ -62,12 +66,13 @@ export default {
 				                countNum++;
 				                if (countNum == 2) {
 				                    countNum = 0;//回到了原点
-				                }
-				            }, 1000);
-									
-								});
-	  	}
-	      
+				                } 
+				            //}, 1000);
+						});
+						this.open();
+					}
+               });
+	  	}     
 	  }
 };
 </script>

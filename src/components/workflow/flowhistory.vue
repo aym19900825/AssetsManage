@@ -32,13 +32,15 @@ export default {
 	 props:["approvingData"],//第一种方式
    components: {
   },
-  props: ['data', 'defaultActive'],
+  props: ['approvingData'],
   data() {
     return {
     	basic_url: Config.dev_url,
+    	appname:'',
+   		id:'',
         innerVisible: false,
-       active: 0,
-     approvalProcessProject:[],
+       	active: 0,
+     	approvalProcessProject:[],
 //     approvalProcessProject:[
 //         {id:'0',title:"检验员审批",opinionName:"王华",opinionStatus:"error",opinion:"驳回，明细有误。",opinionDate:"2018-12-26 14:35:23"},
 //         {id:'1',title:"检验员审批",opinionName:"王华",opinionStatus:"success",opinion:"同意。",opinionDate:"2018-12-26 14:35:23"},
@@ -58,23 +60,34 @@ export default {
 	visible() {
 					this.open();
 		  	},
-	getdata(id){
-		console.log(id);
-		var url = this.basic_url + '/api-apps/app/inspectPro/flow/history/'+id;
-		this.innerVisible = true;
-		this.$axios.get(url, {}).then((res) => {
+	getdata(){
+		this.id=this.approvingData.id;
+	    this.appname=this.approvingData.app;
+	   	 var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/isStart/'+this.id;
+	   	        this.$axios.get(url, {}).then((res) => {
 					console.log(res);
-					for(var i=0;i<res.data.datas.length;i++){
-						if(res.data.datas[i].flag==true){
-							res.data.datas[i].flag="success";
-						}else{
-							res.data.datas[i].flag="error";
-						}
+					if(res.data.resp_code == 1) {
+						console.log(res);
+							this.$message({
+								message:res.data.resp_msg,
+								type: 'warning'
+							});
+				    }else{
+				    	var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/history/'+this.id;
+		    				this.$axios.get(url, {}).then((res) => {
+		    					for(var i=0;i<res.data.datas.length;i++){
+										if(res.data.datas[i].flag==true){
+											res.data.datas[i].flag="success";
+										}else{
+											res.data.datas[i].flag="error";
+										}
+									}
+									this.approvalProcessProject = res.data.datas;
+									this.innerVisible = true;
+							});
 					}
-					this.approvalProcessProject = res.data.datas;
-					this.innerVisible = true;
-				});
-	},
+                });
+               },
 //   next() {
 //      if (this.active++ > 2) this.active = 0;
 //    },

@@ -27,6 +27,8 @@ export default {
   
   data() {
     return {
+    appname:'',
+    id:'',
     basic_url: Config.dev_url,
       approveForm: {
         opinion: '',
@@ -55,8 +57,12 @@ export default {
 		  	},
 		    //同意
 		    submitForm(){
+		    	console.log(this.approvingData);
+		    	this. id=this.approvingData.id;
+		    	this. appname=this.approvingData.app;
 		    	this.$refs.approveForm.validate((valid) => {	
-		    	var url = this.basic_url + '/api-apps/app/inspectPro/flow/'+this.approvingData;	
+		    	var url = this.basic_url + '/api-apps/app/'+this. appname+'/flow/'+this. id;	
+		    	console.log(url);
 				this.approveForm = {
 							"end":false,
 					 		"flag": true,
@@ -65,6 +71,7 @@ export default {
 				this.$axios.post(url, this.approveForm).then((res) => {
 				console.log(this.approveForm);
 					if(res.data.resp_code == 1) {
+						console.log(res);
 							this.$message({
 								message:res.data.resp_msg,
 								type: 'warning'
@@ -81,8 +88,10 @@ export default {
 		    },
 		    //驳回
 		    rejectForm(){
+		    	this. id=this.approvingData.id;
+		    	this. appname=this.approvingData.app;
 		    	this.$refs.approveForm.validate((valid) => {	
-		    	var url = this.basic_url + '/api-apps/app/inspectPro/flow/'+this.approvingData;	
+		    	var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/'+this. id;	
 				this.approveForm = {
 							"end":false,
 					 		"flag": false,

@@ -77,7 +77,7 @@
 								</el-row>
 							</el-collapse-item>
 							<el-collapse-item title="文件" name="2">
-								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
+								<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save"></doc-table>
 							</el-collapse-item>
 							<el-collapse-item title="其它" name="3" v-show="views">
 								<el-row>
@@ -318,7 +318,7 @@
 				this.editDataInfo = this.dataInfo[val];
 			},
 			saveEditBox(){
-				var  editProp = this.editDataInfoProp;
+				var editProp = this.editDataInfoProp;
 				this.dataInfo[editProp] = this.editDataInfo;
 				this.resetEditBox();
 			},
@@ -539,29 +539,39 @@
 				});
 			},
 			// 保存users/saveOrUpdate
-			save(dataInfo) {
-				this.$refs[dataInfo].validate((valid) => {
+			save(opt) {
+				this.$refs['dataInfo'].validate((valid) => {
 					this.dataInfo.RELEASETIME =  this.$moment(this.dataInfo.RELEASETIME).format("YYYY-MM-DD HH:mm:ss");
 					this.dataInfo.STARTETIME = this.$moment(this.dataInfo.STARTETIME).format("YYYY-MM-DD HH:mm:ss");
+					if(!valid && opt == 'docUpload'){
+						this.$message({
+							message: '请先正确填写信息，再进行文档上传',
+							type: 'warn'
+						});
+					}
 					if (valid) {
 						this.dataInfo.STATUS = ((this.dataInfo.STATUS == "1"||this.dataInfo.STATUS == '活动') ? '1' : '0');
-//					this.dataInfo.STATUS=this.dataInfo.STATUS=="活动" ? '1' : '0';
 						var url = this.basic_url + '/api-apps/app/inspectionSta/saveOrUpdate';
 						this.$axios.post(url, this.dataInfo).then((res) => {
 							if(res.data.resp_code == 0) {
-								this.$message({
-									message: '保存成功',
-									type: 'success'
-								});
-								//重新加载数据
-								this.$emit('request');
-								this.$emit('reset');
-								this.$refs['dataInfo'].resetFields();
-								this.visible();
+								if(opt == 'docUpload'){
+									this.docParm.recordid = res.data.datas.id;
+									this.docParm.model = 'edit';
+									this.$refs.docTable.autoLoad();
+									this.dataInfo.ID = res.data.datas.id;
+								}else{
+									this.$message({
+										message: '保存成功',
+										type: 'success'
+									});
+									this.$emit('request');
+									this.$emit('reset');
+									this.$refs['dataInfo'].resetFields();
+									this.visible();
+								}
 							}else{
 								this.show = true;
 								if(res.data.resp_code == 1) {
-									//res.data.resp_msg!=''后台返回提示信息
 									if( res.data.resp_msg!=''){
 									 	this.$message({
 											message: res.data.resp_msg,

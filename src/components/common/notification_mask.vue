@@ -100,8 +100,9 @@
 									</el-col>
 									
 									<el-col :span="8">
-										<el-form-item label="项目负责人" prop="P_LEADER" label-width="110px">
-											<el-input v-model="dataInfo.P_LEADER" :disabled="noedit">
+										<el-form-item label="项目负责人" prop="P_LEADERDesc" label-width="110px">
+											<el-input v-model="dataInfo.P_LEADERDesc" :disabled="true">
+												<el-button :disabled="noedit" slot="append" icon="el-icon-search" @click="addperbtn()"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -506,27 +507,6 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-				options: [{
-						value: '金化站',
-						label: '金化站'
-					},
-					{
-						value: '通号站',
-						label: '通号站'
-					},
-					{
-						value: '运包站',
-						label: '运包站'
-					},
-					{
-						value: '机报站',
-						label: '机报站'
-					},
-					{
-						value: '接触网站',
-						label: '接触网站'
-					},
-				],
 				value: '',
 				selUser: [],
 				edit: true, //禁填
@@ -981,7 +961,7 @@
 			// 	// 	});
 			// 	// });
 			// },
-			dailogconfirm(type) { //小弹出框确认按钮事件
+			dailogconfirm(type) { //选择人员确定按钮
 				this.dialogVisible = false;
 				if(this.type == '1') {
 					console.log(12345);
@@ -992,6 +972,26 @@
 					this.dataInfo.ACCEPT_PERSON = this.selUser[0].id;
 					this.dataInfo.ACCEPT_PERSONDesc = this.selUser[0].nickname;
 				}
+			},
+			//项目负责人放大镜
+			addperbtn(){
+				var params = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				}
+				console.log(this.dataInfo.CJDW);
+				var url = this.basic_url + '/api-user/users/usersByDept?deptId='+this.dataInfo.CJDW;
+				this.$axios.get(url, {
+					params: params
+				}).then((res) => {
+					console.log(res.data);
+					this.gridData = res.data.data;
+					// this.gridData = res.data.data;
+					// this.dialogVisible = true;
+					this.type = '1';
+				});
+				this.$emit('request');
+				this.dialogVisible = true;				
 			},
 			//生成委托书
 			build(){

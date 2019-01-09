@@ -260,7 +260,7 @@
 			//保存users/saveOrUpdate
 			submitForm() {
 				console.log(this.menu.parentId);
-				if(this.menu.parentId == ''){
+				if(this.menu.parentId == ''){//上级为空给后台传-1表示为一级菜单
 					this.menu.parentId = '-1';
 				}
 				this.$refs.menu.validate((valid) => {

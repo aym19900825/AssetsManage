@@ -20,7 +20,7 @@
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基本信息" name="1">
-								<el-row class="pb10"style="margin-right: 5px;">
+								<el-row class="pb10" style="margin-right: 5px;">
 									<el-col :span="3" class="pull-right">
 										<el-input v-model="dataInfo.VERSION" :disabled="true">
 											<template slot="prepend">版本</template>
@@ -30,7 +30,7 @@
 								<el-row>
 									<el-col :span="8">
 										<el-form-item label="标准编号" prop="S_NUM">
-											<el-input v-model="dataInfo.S_NUM" :disabled="noedit"></el-input>
+											<el-input v-model="dataInfo.S_NUM" :disabled="noedit" placeholder="编码不填写可自动生成"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -70,8 +70,8 @@
 								</el-row>
 								<el-row>
 									<el-col :span="8" v-if="dept">
-										<el-form-item label="机构" prop="DEPARTMENT">
-											<el-input v-model="dataInfo.DEPARTMENT" :disabled="true"></el-input>
+										<el-form-item label="机构" prop="DEPTIDDesc">
+											<el-input v-model="dataInfo.DEPTIDDesc" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -82,8 +82,8 @@
 							<el-collapse-item title="其它" name="3" v-show="views">
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="录入人" prop="ENTERBY">
-											<el-input v-model="dataInfo.ENTERBY" :disabled="true"></el-input>
+										<el-form-item label="录入人" prop="ENTERBYDesc">
+											<el-input v-model="dataInfo.ENTERBYDesc" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -92,8 +92,8 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="修改人" prop="CHANGEBY">
-											<el-input v-model="dataInfo.CHANGEBY" :disabled="true"></el-input>
+										<el-form-item label="修改人" prop="CHANGEBYDesc">
+											<el-input v-model="dataInfo.CHANGEBYDesc" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -134,6 +134,7 @@
 
 <script>
 	import Config from '../../config.js'
+	import Validators from '../../core/util/validators.js'
 	import docTable from '../common/doc.vue'
 	export default {
 		name: 'masks',
@@ -281,19 +282,14 @@
 					}
 				],
 				rules: {
-//					S_NUM: [{ required: true, message: '必填', trigger: 'blur' }],//名称
-					S_NAME: [{//名称
-						required: true,
-						trigger: 'blur',
-						validator: validateSname,
-					}],
-					S_ENGNAME: [{//英文名称
-						required: true,
-						trigger: 'blur',
-						validator: validateEname,
-					}],
+					S_NUM: [{required: false, trigger: 'blur',validator: Validators.isCodeNum}],//编号
+					S_NAME: [{required: true, trigger: 'blur',validator: Validators.isWorknumber}],//中文名称
+					S_ENGNAME: [{required: true, trigger: 'blur', validator: Validators.isInteger}],//英文名称
 //					RELEASETIME:[{required: true, message: '必填', trigger: 'change'}],
-					RELEASE_UNIT: [{required: true,trigger: 'blur',message: '必填',}],
+					RELEASE_UNIT: [
+						{required: true,trigger: 'blur',message: '必填',},
+						{validator: Validators.isSpecificKey, trigger: 'blur'},
+					],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -356,16 +352,17 @@
 			getUser(opt){
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					if(opt!='new'){
-						this.dataInfo.DEPARTMENT = res.data.deptName;
-						this.dataInfo.CHANGEBY = res.data.nickname;
+						this.dataInfo.DEPTID = res.data.deptId;
+						this.dataInfo.CHANGEBY = res.data.id;
 						var date = new Date();
 						this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
 						//深拷贝数据
 						let _obj = JSON.stringify(this.dataInfo);
 						this.DATAINFO = JSON.parse(_obj);
 					}else if(opt =='new'){
-						this.dataInfo.DEPARTMENT = res.data.deptName;
-						this.dataInfo.ENTERBY = res.data.nickname;
+						this.dataInfo.DEPARTMENT = '';
+						this.dataInfo.DEPTID = res.data.deptId;
+						this.dataInfo.ENTERBY = res.data.id;
 						var date = new Date();
 						this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 						//深拷贝数据

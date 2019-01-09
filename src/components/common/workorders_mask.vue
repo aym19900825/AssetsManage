@@ -16,7 +16,7 @@
 			</div>
 			<div class="mask_content">
 				<!-- status-icon 验证后文本框上显示对勾图标 -->
-				<el-form status-icon :model="workorderForm" :label-position="labelPosition" :rules="rules" ref="workorderForm" label-width="110px">
+				<el-form :model="workorderForm" :label-position="labelPosition" :rules="rules" ref="workorderForm" label-width="110px">
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames">
 							<!-- 样品信息列表 Begin-->

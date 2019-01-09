@@ -70,7 +70,7 @@
 									</el-col>
 									<el-col :span="8" v-if="dept">
 										<el-form-item label="机构">
-											<el-input v-model="testingForm.DEPARTMENT" :disabled="true"></el-input>
+											<el-input v-model="testingForm.DEPTIDDesc" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -82,7 +82,7 @@
 								<el-row>
 									<el-col :span="8">
 										<el-form-item label="录入人">
-											<el-input v-model="testingForm.ENTERBY" :disabled="true"></el-input>
+											<el-input v-model="testingForm.ENTERBYDesc" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -92,7 +92,7 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="修改人">
-											<el-input v-model="testingForm.CHANGEBY" :disabled="true"></el-input>
+											<el-input v-model="testingForm.CHANGEBYDesc" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -119,6 +119,7 @@
 
 <script>
 	import Config from '../../config.js'
+	import Validators from '../../core/util/validators.js'
 	import docTable from '../common/doc.vue'
 	export default {
 		name: 'testing_mask',
@@ -147,17 +148,17 @@
 			}
 		},
 		data() {
-			var validateNum = (rule, value, callback) => {
-				if(value != ""){
-		             if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
-		                 callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
-		             }else{
-		                 callback();
-		             }
-		         }else{
-		             callback();
-		         }
-			};
+			// var validateNum = (rule, value, callback) => {
+			// 	if(value != ""){
+		 //             if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
+		 //                 callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
+		 //             }else{
+		 //                 callback();
+		 //             }
+		 //         }else{
+		 //             callback();
+		 //         }
+			// };
 			return {
 				docParm: {
 					'model': 'new',
@@ -202,19 +203,22 @@
 				rules: { //定义需要校验数据的名称
 					M_NUM: [{
 						required: false,
-						trigger: 'change',
-						validator: validateNum,
+						trigger: 'change',//validateNum
+						validator: Validators.isCodeNum,
 					}],
 					M_NAME: [
 						{ required: true, message: '请填写中文名称', trigger: 'blur' },
-						{ min: 5, max: 35, message: '长度在 5 到 35 个字符', trigger: 'blur' }
+						{ min: 5, max: 35, message: '长度在 5 到 35 个字符', trigger: 'blur' },
+						{validator: Validators.isChinese, trigger: 'blur'},
 					],
 					M_ENAME: [
 						{ required: true, message: '请填写英文名称', trigger: 'blur' },
-						{ min: 5, max: 50, message: '长度在 5 到 15 个字符', trigger: 'blur' }
+						{ min: 5, max: 50, message: '长度在 5 到 15 个字符', trigger: 'blur' },
+						{validator: Validators.isEnglish, trigger: 'blur'},
 					],
 					M_TYPE: [
-						{ required: true, message: '请填写', trigger: 'change' }
+						{ required: true, message: '请填写', trigger: 'change' },
+						{validator: Validators.isSpecificKey, trigger: 'blur'},
 					]
 				},
 				hintshow:false,
@@ -246,8 +250,9 @@
 			},
 			getUser(opt){
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					this.testingForm.DEPARTMENT=res.data.deptName;
-					this.testingForm.ENTERBY=res.data.nickname;
+					this.testingForm.DEPARTMENT = '';
+					this.testingForm.DEPTID = res.data.deptId;
+					this.testingForm.ENTERBY = res.data.id;
 					var date=new Date();
 					this.testingForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 					if(opt != 'new'){

@@ -15,7 +15,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form status-icon :model="adddeptForm"  :rules="rules" ref="adddeptForm" label-width="100px" id="demo-adduserForm">
+				<el-form :model="adddeptForm"  :rules="rules" ref="adddeptForm" label-width="100px" id="demo-adduserForm">
 					<div class="accordion">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="机构信息" name="1">
@@ -226,6 +226,7 @@
 
 <script>
 	import Config from '../../config.js'
+	import Validators from '../../core/util/validators.js'
 	export default {
 		name: 'masks',
 		props: {
@@ -386,11 +387,10 @@
 						trigger: 'blur',
 						validator: validateStep,
 					}],
-					fullname: [{//机构名称
-   						required:true,
-						trigger: 'blur',
-						validator: validateFullname,
-					}],
+					fullname: [
+						{required:true, trigger: 'blur', message: '必填'},
+						{validator: Validators.isSpecificKey, trigger: 'blur'},
+					],//机构名称
 					org_range: [{//选择机构类型
    						required:true,
 						trigger: 'change',
@@ -416,7 +416,7 @@
 						trigger: 'blur',
 						validator: validateEmail,
 					}],
-					
+					code:[{required: false,trigger: 'blur',validator: Validators.isWorknumber}],
 	          	},
 			};
 		},

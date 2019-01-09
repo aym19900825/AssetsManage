@@ -70,8 +70,8 @@
 							<el-collapse-item title="其它" name="2"  v-show="views">
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="录入人" prop="ENTERBY">
-											<el-input v-model="PRODUCT.ENTERBY" :disabled="edit"></el-input>
+										<el-form-item label="录入人" prop="ENTERBYDesc">
+											<el-input v-model="PRODUCT.ENTERBYDesc" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -80,8 +80,8 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="修改人" prop="CHANGEBY">
-											<el-input v-model="PRODUCT.CHANGEBY" placeholder="当前修改人" :disabled="edit"></el-input>
+										<el-form-item label="修改人" prop="CHANGEBYDesc">
+											<el-input v-model="PRODUCT.CHANGEBYDesc" placeholder="当前修改人" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -259,9 +259,10 @@
 					this.PRODUCT.DEPTID = res.data.deptId;
 					// this.PRODUCT.DEPTIDDesc = res.data.deptName;
 					this.PRODUCT.ENTERBY = res.data.id;
-					this.PRODUCT.ENTERBYDesc = res.data.nickname;
+					// this.PRODUCT.ENTERBYDesc = res.data.nickname;
 					var date = new Date();
 					this.PRODUCT.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
+					this.PRODUCT.DEPARTMENT = '';
 					this.PRODUCT.VERSION = '1';
 					this.PRODUCT.STATUS = '活动';
 				}).catch((err) => {
@@ -288,8 +289,8 @@
 
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.PRODUCT.DEPTID = res.data.deptId;
-					this.PRODUCT.CHANGEBY = res.data.nickname;
-					this.PRODUCT.CHANGEBYDesc = res.data.nickname;
+					this.PRODUCT.CHANGEBY = res.data.id;
+					// this.PRODUCT.CHANGEBYDesc = res.data.nickname;
 					var date = new Date();
 					this.PRODUCT.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
 					//深拷贝数据

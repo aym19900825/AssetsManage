@@ -27,36 +27,30 @@
 		<!--左侧菜单内容显示 End-->
 		<!--右侧内容显示 Begin-->
 		<div class="wrapper wrapper-content">
-			<EasyScrollbar>
-    			<div id="wrapper" :style="{height: fullHeight}">
-					<div id="information" style="height: inherit;">
-						<div class="ibox-content">
-							<el-collapse v-model="activeNames">
-								<el-collapse-item title="修改密码" name="1">
-									<el-form :model="passwordedit" status-icon :rules="rules2" ref="passwordedit" label-width="100px" class="demo-ruleForm" :label-position="labelPosition">
-										  <el-form-item label="当前用户" prop="username">
-										    <el-input v-model.number="passwordedit.username" disabled></el-input>
-										  </el-form-item>
-										  <el-form-item label="原始密码" prop="oldpassword">
-										    <el-input type="password" v-model.number="passwordedit.oldpassword"></el-input>
-										  </el-form-item>
-										  <el-form-item label="密码" prop="newpassword">
-										    <el-input type="password" v-model="passwordedit.newpassword" autocomplete="off"></el-input>
-										  </el-form-item>
-										  <el-form-item label="确认密码" prop="checkPass">
-										    <el-input type="password" v-model="passwordedit.checkPass" autocomplete="off"></el-input>
-										  </el-form-item>
-									</el-form>
-								</el-collapse-item>
-							</el-collapse>
-							<div class="content-footer">
-							    <button class="btn btn-default btn-large" @click="tips('passwordedit')">重置</button>
-							    <button class="btn btn-primarys btn-large" @click="submitForm('passwordedit')">保存</button>
-							</div>
-						</div>
-					</div>
+			<div class="ibox-content" :style="{height: fullHeight}">
+				<el-collapse v-model="activeNames">
+					<el-collapse-item title="修改密码" name="1">
+						<el-form :model="passwordedit" status-icon :rules="rules2" ref="passwordedit" label-width="100px" class="demo-ruleForm" :label-position="labelPosition">
+							  <el-form-item label="当前用户" prop="username">
+							    <el-input v-model.number="passwordedit.username" disabled></el-input>
+							  </el-form-item>
+							  <el-form-item label="原始密码" prop="oldpassword">
+							    <el-input type="password" v-model.number="passwordedit.oldpassword"></el-input>
+							  </el-form-item>
+							  <el-form-item label="密码" prop="newpassword">
+							    <el-input type="password" v-model="passwordedit.newpassword" autocomplete="off"></el-input>
+							  </el-form-item>
+							  <el-form-item label="确认密码" prop="checkPass">
+							    <el-input type="password" v-model="passwordedit.checkPass" autocomplete="off"></el-input>
+							  </el-form-item>
+						</el-form>
+					</el-collapse-item>
+				</el-collapse>
+				<div class="content-footer">
+				    <button class="btn btn-default btn-large" @click="tips('passwordedit')">重置</button>
+				    <button class="btn btn-primarys btn-large" @click="submitForm('passwordedit')">保存</button>
 				</div>
-			</EasyScrollbar>
+			</div>
 		</div>
 		<!--右侧内容显示 End-->
 	</div>
@@ -151,17 +145,6 @@ export default {
 		};
 
     },
-	mounted(){
-		// 获取浏览器可视区域高度
-		var _this = this;
-		var clientHeight = $(window).height() - 100;    //document.body.clientWidth;
-		_this.$refs.homePagess.style.height = clientHeight + 'px';
-		window.onresize = function() {
-			var clientHeight = $(window).height() - 100;
-			_this.$refs.homePagess.style.height = clientHeight + 'px';
-		};
-		this.getData();
-	},
     methods: {
     	getData(){
     		var url = this.basic_url + '/api-user/users/currentMap';
@@ -232,7 +215,10 @@ export default {
 			$(".wrapper").css("padding-left", "220px");
 			$(".navs>li").css("margin", "0px 10px");
 		}
-    }
+    },
+    mounted(){
+		this.getData();
+	},
 }
 </script>
 

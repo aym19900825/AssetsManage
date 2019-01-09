@@ -119,6 +119,7 @@
 
 <script>
 	import Config from '../../config.js'
+	import Validators from '../../core/util/validators.js'
 	import deliver from '../../assets/js/deliver.js'
 	import all_icons from '../common/all_icons.vue'//弹出框
 	export default {

@@ -54,7 +54,7 @@
 					</div>
 					<!-- 高级查询划出 -->
 					<div v-show="search">
-						<el-form status-icon :model="searchDept" label-width="70px">
+						<el-form :model="searchDept" label-width="70px">
 							<el-row :gutter="10">
 								<el-col :span="5">
 									<el-form-item label="机构名称" prop="fullname" label-width="70px">

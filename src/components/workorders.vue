@@ -60,7 +60,7 @@
 					</div>
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
-						<el-form inline-message :model="searchList" label-width="110">
+						<el-form inline-message :model="searchList" label-width="110px">
 							<el-row :gutter="5">
 								<el-col :span="6">
 									<el-form-item label="工作任务单编号" prop="WONUM">
@@ -92,7 +92,7 @@
 							</el-row>
 							<el-row :gutter="5">
 								<el-col :span="6">
-									<el-form-item label="委托书编号" prop="PROXYNUM" label-width="110">
+									<el-form-item label="委托书编号" prop="PROXYNUM" label-width="110px">
 										<el-input v-model="searchList.PROXYNUM">
 										</el-input>
 									</el-form-item>

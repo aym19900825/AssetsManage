@@ -15,7 +15,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="adddeptForm" :label-position="labelPosition" :rules="rules" ref="adddeptForm" label-width="100" class="demo-adduserForm">
+				<el-form :model="adddeptForm" :label-position="labelPosition" :rules="rules" ref="adddeptForm" label-width="100px" class="demo-adduserForm">
 					<div class="accordion">
 						<div class="mask_tab-block">
 							<div class="mask_tab-head clearfix">

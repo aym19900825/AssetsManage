@@ -14,7 +14,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-			<el-form :model="dataInfo"  :rules="rules" ref="dataInfo" label-width="100" class="demo-user">
+			<el-form :model="dataInfo"  :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
 				<div class="accordion" id="information">
 					<el-collapse v-model="activeNames">
 						<el-collapse-item title="基本信息" name="1">
@@ -174,6 +174,7 @@
 
 <script>
 	import Config from '../../config.js'
+	import Validators from '../../core/util/validators.js'
 	export default {
 		name: 'masks',
 		data() {

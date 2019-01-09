@@ -86,7 +86,7 @@
 								</el-col>
 
 								<el-col :span="8">
-					 				<el-form-item label="角色" prop="roleId" label-width="100">
+					 				<el-form-item label="角色" prop="roleId" label-width="100px">
 										<el-select v-model="personinfo.roleId" multiple placeholder="请选择" style="width: 100%">
 											<el-option v-for="item in selectData" :key="item.name" :value="item.id" :label="item.name"></el-option>
 										</el-select>
@@ -179,12 +179,12 @@
 						 	<!-- 第四行 -->
 						 	<el-row :gutter="30">
 								<el-col :span="8">
-									<el-form-item label="IP地址" prop="ipaddress" label-width="100">
+									<el-form-item label="IP地址" prop="ipaddress" label-width="100px">
 										<el-input v-model="personinfo.ipaddress"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="8">
-									<el-form-item label="MAC地址" prop="macaddress" label-width="100">
+									<el-form-item label="MAC地址" prop="macaddress" label-width="100px">
 										<el-input v-model="personinfo.macaddress"></el-input>
 									</el-form-item>
 								</el-col>

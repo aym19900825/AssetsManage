@@ -283,7 +283,7 @@
 				],
 				rules: {
 					S_NUM: [{required: false, trigger: 'blur',validator: Validators.isCodeNum}],//编号
-					S_NAME: [{required: true, trigger: 'blur',validator: Validators.isWorknumber}],//中文名称
+					S_NAME: [{required: true, trigger: 'blur',validator: Validators.isNickname}],//中文名称
 					S_ENGNAME: [{required: true, trigger: 'blur', validator: Validators.isInteger}],//英文名称
 //					RELEASETIME:[{required: true, message: '必填', trigger: 'change'}],
 					RELEASE_UNIT: [

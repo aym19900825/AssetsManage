@@ -62,7 +62,7 @@
 										</el-form-item>-->
 									</el-col>
 								</el-row>
-								<el-row :gutter="30">
+								<!-- <el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="邮箱" prop="EMAIL" label-width="110px">
 											<el-input v-model="CUSTOMER.EMAIL" :disabled="noedit"></el-input>
@@ -78,8 +78,7 @@
 											<el-input v-model="CUSTOMER.FAX" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
-									
-								</el-row>
+								</el-row> -->
 								<el-row :gutter="30">
 									<el-col :span="16">
 										<el-form-item label="联系地址" prop="CONTACT_ADDRESS" label-width="110px">
@@ -409,12 +408,13 @@
 				},
 				rules: {
 					CODE:[{required: true,trigger: 'blur',validator: Validators.isWorknumber}],
-					NAME:[{required: true,trigger: 'blur',validator: validateName}],
-					CONTACT_ADDRESS:[{required: true,trigger: 'blur',validator: validateAddress}],
-					PERSON:[{required: true,trigger: 'blur',validator: validatePerson}],
-					PHONE:[{required: true,trigger: 'blur',validator: validatePhone}],
-					EMAIL:[{required: true,trigger: 'blur',validator: validateEmail}],
-					ZIPCODE:[{required: true,trigger: 'blur',validator: validateZipcode}],
+					NAME:[{required: true,trigger: 'blur',validator: Validators.isNickname}],
+					CONTACT_ADDRESS:[{required: true,trigger: 'blur',validator: Validators.isSpecificKey}],
+					MEMO:[{required: true,trigger: 'blur',validator: Validators.isSpecificKey}],
+					// PERSON:[{required: true,trigger: 'blur',validator: validatePerson}],
+					// PHONE:[{required: true,trigger: 'blur',validator: validatePhone}],
+					// EMAIL:[{required: true,trigger: 'blur',validator: validateEmail}],
+					// ZIPCODE:[{required: true,trigger: 'blur',validator: validateZipcode}],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据

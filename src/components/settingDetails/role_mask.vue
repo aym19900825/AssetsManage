@@ -23,7 +23,7 @@
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="角色编码" prop="code">
-											<el-input v-model="roleList.code" :disabled="edit"></el-input>
+											<el-input v-model="roleList.code" :disabled="modify"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -43,8 +43,8 @@
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="24">
-										<el-form-item label="备注" prop="MEMO">
-											<el-input type="textarea" v-model="roleList.MEMO" placeholder="请填写" :disabled="noedit"></el-input>
+										<el-form-item label="备注" prop="tips">
+											<el-input type="textarea" v-model="roleList.tips" placeholder="请填写" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -122,14 +122,7 @@
 	export default {
 		name: 'masks',
 		data() {
-			//验证name
-			var validatePass1 = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('请填写角色名称'));
-				} else {
-					callback();
-				}
-			};
+			
 			return {
 				basic_url: Config.dev_url,
 				value: '',
@@ -180,25 +173,18 @@
 				roleList: { //表格数据
 					name: '',
 					code: '',
+					tips: '',
 					deptId: '',
-					tips: ''
 				},
 				rules: { //验证表单
-					name: [{
-						required: true,
-						trigger: 'blur',
-						validator: validatePass1,
-					}],
-					range: [{
-						required: true,
-						message: '请选择机构属性',
-						trigger: 'change'
-					}]
-					// range: [{
-					// 	required: true,
-					// 	trigger: 'change',
-					// 	validator: validatePass2,
-					// }]
+					code: [{ required: false, trigger: 'blur', validator: Validators.isWorknumber}],
+					name: [
+						{required: true, message: '必填' ,trigger: 'blur',},
+						{validator: Validators.isNickname, trigger: 'blur'},
+					],
+					tips: [{ required: false, trigger: 'blur', validator: Validators.isSpecificKey}],
+					range: [{ required: true, message: '请选择机构属性', trigger: 'chang'}]
+					
 				},
 				//tree
 				resourceData:[],
@@ -288,8 +274,8 @@
 				this.roleList = {
 					name: '',
 					code: '',
+					tips: '',
 					deptName: '',
-					tips: ''
 				}
 				this.$refs["roleList"].resetFields();
 			},
@@ -298,8 +284,8 @@
 			},
 			//点击按钮显示弹窗
 			visible() {
-				var randnum = this.rand(1000, 9999);
-				this.roleList.code = randnum;
+				// var randnum = this.rand(1000, 9999);
+				// this.roleList.code = randnum;
 				this.stopshow = true;
 				this.stopselect = false;
 				this.roleList.INACTIVE = '否';
@@ -334,7 +320,6 @@
 				var url = this.basic_url + '/api-user/roles/' + id;
 				this.$axios.get(url, {}).then((res) => {
 					this.roleList = res.data;
-
 					this.show = true;
 				}).catch((err) => {
 					this.$message({
@@ -395,27 +380,28 @@
 			//保存信息
 			submitForm() {
 				this.$refs.roleList.validate((valid) => {
-					// if(valid) {	
-					var url = this.basic_url + '/api-user/roles/saveOrUpdate';
-					this.$axios.post(url, this.roleList).then((res) => {
-						if(res.data.resp_code == 0) {
+					if(valid) {	
+						var url = this.basic_url + '/api-user/roles/saveOrUpdate';
+						this.$axios.post(url, this.roleList).then((res) => {
+							console.log(res);
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '保存成功',
+									type: 'success',
+								});
+								this.show = false;
+								//重新加载数据
+								this.$emit('request')
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '保存成功',
-								type: 'success',
+								message: '网络错误，请重试',
+								type: 'error'
 							});
-							this.show = false;
-							//重新加载数据
-							this.$emit('request')
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
-					});
-					// } else {
-					// 	return false;
-					// }
+					} else {
+						return false;
+					}
 				})
 			},
 			//所在机构

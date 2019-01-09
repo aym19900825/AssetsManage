@@ -176,16 +176,8 @@
 				isok2: false,
 //				labelPosition: 'top',//标题在上方显示
 				rules:{
-          			AUTOKEY: [{ 
-   						required: true,
-   						validator: validateAUTOKEY,
-   						trigger: 'blur' 
-   					}],
-          			S_NUM:[{ 
-   						required: true,
-   						validator: validateS_NUM,
-   						trigger: 'blur' 
-   					}]
+          			AUTOKEY: [{required: true, validator: validateAUTOKEY, trigger: 'blur'}],
+          			S_NUM:[{  required: true, validator: validateS_NUM, trigger: 'blur'}]
           		
 	          	},
 	          	addtitle:true,

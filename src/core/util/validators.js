@@ -90,38 +90,26 @@ const validators = {
 	},
 
 	isPhone:function (rule, value, callback) {//验证手机号
-		if (!value) {
-			callback(new Error('不能为空'));
+		if(value && (!(/^1[3456789]\d{9}$/).test(value))) {
+			callback(new Error('请输入有效的手机号'))
+		} else {
+			callback();
 		}
-		var pattern = /^1[3456789]\d{9}$/
-		if(pattern.test(value)){
-			return callback()
-		}
-		callback(new Error('请输入有效的手机号码'))
 	},
 
 	isEmail:function (rule, value, callback) { //验证电子邮箱
-		if(!value) {
-			callback(new Error('不能为空'));
+		if(value && (!(/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/).test(value))) {
+			callback(new Error('邮箱地址不符合规范，xxx@xxx.xxx'))
 		} else {
-			var reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-			if(!reg.test(value)) {
-				callback(new Error('请输入有效的邮箱'));
-			} else {
-				callback();
-			}
+			callback();
 		}
 	},
 
 	isNickname:function (rule, value, callback) {//验证人员姓名
-	   if(!value) {
-			callback(new Error('不能为空'));
+	   if(value && (!validators.SpecificWord(value))) {
+			callback(new Error('不支持特殊符号'));
 		} else {
-			if(!validators.SpecificWord(value)) {
-				callback(new Error('不支持特殊符号'));
-			} else {
-				callback();
-			}
+			callback();
 		}
 	},
 
@@ -161,7 +149,7 @@ const validators = {
 
 	isIdnumber:function (rule, value, callback) { //验证身份证号
 		if(value && (!(/\d{17}[\d|x]|\d{15}/).test(value) || (value.length !== 15 && value.length !== 18))) {
-			callback(new Error('身份证号码不符合规范'))
+			callback(new Error('请输入有效的身份证号'))
 		} else {
 			callback();
 		}
@@ -197,16 +185,15 @@ const validators = {
 
 	iszipcode:function (rule, value, callback) {//验证邮政编码
 		if (value && (!(/^[0-9]{6}$/).test(value))) {
-			callback(new Error('邮政编码不符合规范'))
+			callback(new Error('请输入有效的邮政编码'))
 		} else {
 			callback();
 		}
 	},
 
-	istelephone:function (rule, value, callback) {//验证电话号码
-		var reg = /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/;
-		if (!reg.test(value)) {
-			callback(new Error('请输入有效的电话号码，格式为：0000-0000000'));
+	isTelephone:function (rule, value, callback) {//验证电话号码、传真
+		if (value && (!(/^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/).test(value))) {
+			callback(new Error('请输入有效的电话/传真号，xxx-xxxxxxx'));
 		} else {
 			callback();
 		}

@@ -175,6 +175,7 @@
 				modifytitle:false,
 				fullHeight: document.documentElement.clientHeight - 200 +'px',//获取浏览器高度
 				rules: {
+					// pName: [{required: true,trigger: 'blur',validator: validatePass}],
 					name: [{required: true,trigger: 'blur',validator: validatePass}],
 					url: [{required: true,trigger: 'blur',validator: validatePass}],
 				},

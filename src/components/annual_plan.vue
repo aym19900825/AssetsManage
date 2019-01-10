@@ -26,9 +26,9 @@
 								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-inventory-line-callout"></i>导出
 								</button>
-								<button type="button" class="btn btn-primarys button-margin">
+								<!-- <button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-edit"></i>编辑
-								</button>
+								</button> -->
 								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-send"></i>发布
 								</button>

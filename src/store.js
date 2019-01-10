@@ -12,7 +12,10 @@ import Vuex from 'vuex'
       name: '首页',
       url: '/index'},
      //要设置的初始属性值
-     clickedNav:[],
+     clickedNav:[{
+      css: 'icon-user',
+      name: '首页',
+      url: '/index'}]
    };
 	//组件获取 state 用 vuex 的 getter
    const getters = {   //实时监听state值的变化(最新状态)
@@ -31,7 +34,7 @@ import Vuex from 'vuex'
     getSelectedNav(state){
        return state.selectedNav;
     },
-    getSelectedNav(state){
+    getClickedNav(state){
        return state.clickedNav;
     },
   
@@ -53,7 +56,7 @@ import Vuex from 'vuex'
       setSelectedNav(state,selectedNav){
           state.selectedNav=selectedNav;
       },
-      setSelectedNav(state,clickedNav){
+      setClickedNav(state,clickedNav){
           state.clickedNav=clickedNav;
       }
     };
@@ -74,7 +77,7 @@ import Vuex from 'vuex'
       setSelectedNavAct(context,selectedNav){
           context.commit('setSelectedNav',selectedNav);
       },
-      setClickedNavAct(context,selectedNav){
+      setClickedNavAct(context,clickedNav){
           context.commit('setClickedNav',clickedNav);
       }
   };

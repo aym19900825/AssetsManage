@@ -37,9 +37,11 @@ export default {
 	
 	methods: {
 		addClickNav(item){
+
 			var flag = false;
-			for(var i = 0; i < this.$clickedNav.length; i++){
-				if(item.name == this.$clickedNav[i].name){
+			console.log(this.$store.state.clickedNav);
+			for(var i = 0; i < this.$store.state.clickedNav.length; i++){
+				if(item.name == this.$store.state.clickedNav[i].name){
 					flag = true;
 				}
 			}
@@ -62,6 +64,8 @@ export default {
 			this.$selectedNav=item;
 			//点击的值传给user
 			this.$emit('childByValue',item);
+//			console.log("left5 click:");
+//          console.log( this.$clickedNav );
 		},
 		min2max(){//左侧菜单正常和变小切换
         	if($(".navbar-static-side").width()=="220"){
@@ -84,7 +88,30 @@ export default {
 			$(".navbar-static-side").css("width", "220px");
 			$(".wrapper").css("padding-left", "220px");
 			$(".navs>li").css("margin", "0px 10px");
-		},	
+		},
+		getleft(){
+			console.log(8888888);
+		var _this = this;
+		var data = {
+			menuId: this.$store.state.navid,
+			roleId: this.$store.state.roleid,
+		};
+		var url = _this.basic_url + '/api-user/menus/findSecondByRoleIdAndFisrtMenu';
+		_this.$axios.get(url, {params: data}).then((res) => {			
+			console.log(res);
+			if(_this.$route.path!=_this.$selectedNav.url){
+				_this.$selectedNav=res.data[0]
+			}
+			_this.leftNavs = res.data;
+			_this.$emit('childByValue',_this.$selectedNav);//传值给父亲
+		}).catch((wrong) => {
+			_this.$message({
+				message: '网络错误，请重试左侧1',
+				type: 'error'
+			});
+		});
+		}
+		
 	},
 	mounted() {
 		var _this = this;
@@ -94,6 +121,7 @@ export default {
 		};
 		var url = _this.basic_url + '/api-user/menus/findSecondByRoleIdAndFisrtMenu';
 		_this.$axios.get(url, {params: data}).then((res) => {			
+			console.log(res);
 			if(_this.$route.path!=_this.$selectedNav.url){
 				_this.$selectedNav=res.data[0]
 			}

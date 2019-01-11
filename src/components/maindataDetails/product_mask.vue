@@ -256,6 +256,7 @@
 
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					console.log(res.data);
+					this.PRODUCT.ID = '',
 					this.PRODUCT.DEPTID = res.data.deptId;
 					// this.PRODUCT.DEPTIDDesc = res.data.deptName;
 					this.PRODUCT.ENTERBY = res.data.id;

@@ -580,7 +580,6 @@
 									this.docParm.recordid = res.data.datas.id;
 									this.docParm.model = 'edit';
 									setTimeout(function(){
-										console.log('autoLoad');
 										_this.$refs.docTable.autoLoad();
 									},500);
 									this.dataInfo.ID = res.data.datas.id;

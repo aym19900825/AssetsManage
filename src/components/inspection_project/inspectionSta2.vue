@@ -441,7 +441,7 @@
 	z-index: 998;
 	position:absolute;
 	top: -35px;
-	left: 0px;
+	right: 0px;
 }
 .el-card:hover .table-func  {display: block;}
 </style>

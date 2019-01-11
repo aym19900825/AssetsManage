@@ -23,9 +23,9 @@
 								<button type="button" class="btn btn-green" @click="showDir" id="">
                                 	<i class="icon-add"></i>新建文件夹
                       			 </button>
-								<button type="button" class="btn btn-blue button-margin" @click="modify">
+								<!-- <button type="button" class="btn btn-blue button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改文件夹
-								</button>
+								</button> -->
 								<button type="button" class="btn btn-red button-margin" @click="delDir">
 								    <i class="icon-trash"></i>删除文件夹
 								</button>
@@ -104,9 +104,10 @@
 								<el-table-column
 									fixed="right"
 									label="操作"
-									width="100">
+									width="200">
 									<template slot-scope="scope">
 										<el-button @click="showAuth(scope.row)" type="text" size="small">关键字</el-button>
+										<el-button @click="delFile(scope.$index,scope.row,)" type="text" size="small">删除</el-button>
 									</template>
 								</el-table-column>
 							</el-table>
@@ -241,6 +242,28 @@
 			}
 		},
 		methods: {
+			delFile(index,row){
+				var url = this.file_url + '/file/deleteFile/' + row.fileid;
+                this.$axios.delete(url,{}).then((res) => {
+                    if(res.data.code == 1){
+                        this.$message({
+                            message: '删除成功',
+                            type: 'success'
+						});
+						this.fileList.splice(index, 1);
+                    }else{
+                        this.$message({
+                            message: '删除失败',
+                            type: 'error'
+                        });
+                    }
+                }).catch((err) => {
+                    this.$message({
+                        message: '网络错误，请重试',
+                        type: 'error'
+                    });
+                });
+			},
 			showAuth(row){
 				this.param.visible = true;
 				this.param.fileid = row.fileid;

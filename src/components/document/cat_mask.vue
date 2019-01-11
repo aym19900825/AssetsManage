@@ -124,7 +124,7 @@
 		methods: {
 			delKey(index,row){
 				if(row.id!=''){
-					var url = this.basic_url + '/api-apps/app/tb_keyword2/' + row.id;
+					var url = this.basic_url + '/api-apps/app/tbCategory2/tb_keyword2/' + row.id;
 					this.$axios.delete(url, {}).then((res) => {
 						if(res.data.resp_code == 0){
 							this.dataInfo.tb_keyword2List.splice(index,1);

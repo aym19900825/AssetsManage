@@ -1476,41 +1476,12 @@
 								var url = this.basic_url +'/api-apps/app/workplan/saveOrUpdate';
 								this.$axios.post(url, this.WORKPLAN).then((res) => {
 									if(res.data.resp_code == 0) {
+										//重新加载数据
+										this.falg = true;
 										this.$message({
 											message: '保存成功',
 											type: 'success'
 										});
-										//重新加载数据
-											this.falg = true;
-											// this.reset();
-											// this.WORKPLAN = {
-											// 	'ID': '',
-											// 	'WP_NUM': '',
-											// 	'DESCRIPTION': '',
-											// 	'YEAR': year,	
-											// 	'TYPE': '',
-											// 	'STATUS': '草稿',
-											// 	'LEADER_STATUS': '未开始',
-											// 	'STATUSDATE': date,
-											// 	'ITEMTYPE': '',
-											// 	'PROP_UNIT': '',
-											// 	'ENTERBY': '当前人',
-											// 	'ENTERDATE': date,
-											// 	'CHANGEBY': '',
-											// 	'CHANGEDATE': '',
-											// 	'COMPACTOR': '',
-											// 	'C_PERSON': '',
-											// 	'APPRPERSON': '',
-											// 	'REPORTDATE': date,
-											// 	'MEMO': '',
-											// 	'MESSSTATUS': '1',
-											// 	'SYNCHRONIZATION_TIME': ''
-											// };
-											// this.worlplanlist = []; //年度计划列表
-											// this.basisList = []; //检测依据
-											// this.proTestList = []; //项目检测和要求
-											// this.isEditList = false;
-											// this.$emit('request');
 									}else{
 										this.falg = false;
 										this.$message({
@@ -1575,14 +1546,17 @@
 			//保存
 			saveAndUpdate(WORKPLAN) {
 				this.save(WORKPLAN);
-				// if(this.falg){
+				if(this.falg){
 					this.show = false;
-				// }
+				}else{
+					this.show = true;
+				}
 			},
 			//保存并继续
 			saveAndSubmit(WORKPLAN) {
 				this.save(WORKPLAN);
-				this.$emit('reset');
+				// this.$emit('reset');
+				this.reset();
 				// this.show = true;
 			},
 			loadMore () {
@@ -1678,15 +1652,7 @@
 					
 					this.projectList = newarr;
 				}).catch((wrong) => {})
-				// var data = {
-				// 	page: this.page.currentPage,
-				// 	limit: this.page.pageSize,
-				// 	PRO_NUM: this.searchList.PRO_NUM,
-				// 	PRO_NAME: this.searchList.PRO_NAME,
-				// 	VERSION: this.searchList.VERSION,
-				// 	DEPARTMENT: this.searchList.DEPARTMENT,
-				// 	// STATUS: this.searchList.STATUS,
-				// }
+				
 				var url = this.basic_url + '/api-apps/app/product';
 				this.$axios.get(url, {
 					params: data

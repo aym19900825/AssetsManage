@@ -17,7 +17,6 @@
 			<div class="mask_content">
 				<el-form :model="dataInfo" :rules="rules"   ref="dataInfo" label-width="100px" class="demo-user">
 					<div class="accordion">
-
 						<!-- 关键字授权信息 -->
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="关键字授权信息" name="1">
@@ -29,26 +28,28 @@
 									</el-col>
 								</el-row>
 								<el-form-item v-for="item in basicInfo" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
-									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'"></el-input>
-									<el-checkbox-group 
+									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" disabled></el-input>
+									<!-- <el-checkbox-group 
 										v-model="dataInfo[item.prop]"
 										v-if="item.type=='checkbox'" >
 										<el-checkbox style="line-height: 40px;" v-for="item in authorities" :label="item.label" :key="item.val">{{item.label}}</el-checkbox>
+									</el-checkbox-group> -->
+									<el-input v-model="dataInfo[item.prop]" :disabled="true" v-if="item.label=='姓名'">
+										<el-button slot="append" icon="el-icon-search" @click="addUser"></el-button>
+									</el-input>
+									<el-input v-model="dataInfo[item.prop]" :disabled="true" v-if="item.label=='关键字'">
+										<el-button slot="append" icon="el-icon-search" @click="addKeyW"></el-button>
+									</el-input>
+								</el-form-item>
+								<el-form-item v-for="item in selKeyW" :label="item.keywordname">
+									<el-checkbox-group v-model="item.checkedList">
+										<el-checkbox label="显示"></el-checkbox>
+										<el-checkbox label="编辑"></el-checkbox>
+										<el-checkbox label="删除"></el-checkbox>
+										<el-checkbox label="打印"></el-checkbox>
+										<el-checkbox label="下载"></el-checkbox>
+										<el-checkbox label="复制"></el-checkbox>
 									</el-checkbox-group>
-									<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'&&item.label=='姓名'">
-										<el-option v-for="item in usernames"
-										:key="item.id"
-										:label="item.nickname"
-										:value="item.id">
-										</el-option>
-									</el-select>
-									<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'&&item.label=='关键字'">
-										<el-option v-for="item in keywords"
-										:key="item.id"
-										:label="item.keywordname"
-										:value="item.id">
-										</el-option>
-									</el-select>
 								</el-form-item>
 							</el-collapse-item>
 						</el-collapse>
@@ -62,16 +63,45 @@
 			</div>
 			<!--底部-->
 		</div>
+		<vchoose ref="choose" :chooseParam = "chooseParam" @tranFormData = 'getChoose'></vchoose>
 	</div>
 </template>
 
 <script>
 	import Config from '../../config.js'
+	import vchoose from '../common/dataChoose.vue'
 	export default {
 		name: 'masks',
+		components: {
+			vchoose,
+		},
 		props: ['detailData'],
 		data() {
 			return {
+				chooseParam: {
+					visible: false,
+					title: "用户列表",
+					listName: 'user',
+					selMax: 1,
+					tableHeader: [
+						{
+							propName: 'username',
+							labelName: '用户姓名'
+						},
+						{
+							propName: 'deptName',
+							labelName: '组织机构'
+						}
+
+					],
+					search: [
+						{
+							name: 'deptId',
+							val: ''
+						}
+					],
+					url: '/api-user/users'
+				},
 				rules: {
 					userid: [
 						{ required: true, message: '请选择用户', trigger: 'blur' },
@@ -86,9 +116,16 @@
 				basicInfo: [
 					{
 						label: '姓名',
-						prop: 'userid',
+						prop: 'username',
 						width: '50%',
 						type: 'select',
+						displayType: 'inline-block'
+					},
+					{
+						label: '机构名称',
+						prop: 'deptName',
+						width: '30%',
+						type: 'input',
 						displayType: 'inline-block'
 					},
 					{
@@ -97,14 +134,15 @@
 						width: '50%',
 						type: 'select',
 						displayType: 'inline-block'
-					},
-					{
-						label: '授权',
-						prop: 'authority',
-						width: '100%',
-						type: 'checkbox',
-						displayType: 'inline-block'
 					}
+					// ,
+					// {
+					// 	label: '授权',
+					// 	prop: 'authority',
+					// 	width: '100%',
+					// 	type: 'checkbox',
+					// 	displayType: 'inline-block'
+					// }
 				],
 				authorities: [
 					{
@@ -125,10 +163,11 @@
 					},{
 						label: '复制',
 						val: 'fileduplicate'
-					},{
-						label: '上传',
-						val: 'fileupload'
-					}
+					},
+					// {
+					// 	label: '上传',
+					// 	val: 'fileupload'
+					// }
 				],
 
 				basic_url: Config.dev_url,
@@ -155,21 +194,101 @@
 					'id': '',  //主键ID，必填但页面没有字段
 					'authority': [],
 					'keywordid': '',
-					'userid': ''
+					'userid': '',
+					'deptName': '',
+					'username': ''
 				},
 				pmRecordList: [],
 
 				usernames: [],
-				keywords: []
+				keywords: [],
+				selKeyW: [],
+				deptid: ''
 			};
 		},
 		methods: {
-			//点击按钮显示弹窗
+			getChoose(data){
+				var selData = data.data;
+				if(data.listName == 'user'){
+					this.dataInfo.userid =  selData[0].id;
+					this.dataInfo.username = selData[0].username;
+				}else{
+					for(var i=0; i<selData.length; i++){
+						var obj = {
+							keywordid: selData[i].id,
+							categoryid: selData[i].categoryid,
+							keywordname: selData[i].keywordname,
+							checkedList: [
+								'显示'
+							]
+						}
+						this.selKeyW.push(obj);
+					}
+					
+				}
+			},
+			addKeyW(){
+				this.chooseParam = {
+					title: "关键字列表",
+					listName: 'keywordList',
+					selMax: 1000,
+					tableHeader: [
+						{
+							propName: 'categoryidDesc',
+							labelName: '类别'
+						},
+						{
+							propName: 'keywordname',
+							labelName: '关键字'
+						}
+					],
+					search: [],
+					url: '/api-apps/app/tbKeyword2'
+				};
+				this.$refs.choose.getData('new',this.chooseParam);
+			},
+			addUser(){
+				this.chooseParam = {
+					title: "用户列表",
+					listName: 'user',
+					selMax: 1,
+					tableHeader: [
+						{
+							propName: 'username',
+							labelName: '用户姓名'
+						},
+						{
+							propName: 'deptName',
+							labelName: '组织机构'
+						}
+
+					],
+					search: [
+						{
+							name: 'deptId',
+							val: ''
+						}
+					],
+					url: '/api-user/users'
+				};
+				this.chooseParam.search[0].val = this.deptid;
+				this.$refs.choose.getData('new',this.chooseParam);
+			},
+			getUser(opt){
+				this.$axios.get(this.basic_url +'/api-user/users/currentMap', {}).then((res) => {
+					this.deptid = res.data.deptId;
+					this.dataInfo.deptName = res.data.deptName;
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+			},
 			visible() {
 				this.modify=false;
 				this.show = true;
 			},
-			// 这里是修改
 			detail() {
 				var detailData = this.detailData;
 				var labelAuth = this.authorities;
@@ -184,6 +303,7 @@
 				this.dataInfo.keywordprivilegeid = detailData.id;
 				this.dataInfo.keywordid = detailData.keywordid;
 				this.dataInfo.userid = detailData.userid;
+				this.selUser(detailData.userid);
 
 				this.modify = true;
 				this.show = true;
@@ -295,23 +415,6 @@
 					}
 				});
 			},
-			getUsers(){
-				var url = this.basic_url + '/api-user/users';
-				var data = {
-					page: 1,
-					limit: 1000
-				}
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					this.usernames = res.data.data;
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
-			},
 			getKeyWords(){
 				var data = {
 					page: 1,
@@ -326,7 +429,7 @@
 			}
 		},
 		mounted() {
-			this.getUsers();
+			this.getUser();
 			this.getKeyWords();
 		},
 

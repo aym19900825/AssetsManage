@@ -24,7 +24,8 @@
 						<el-form :inline="true" :model="formInline">
 							<el-form-item label="部门名称">
 								<el-select v-model="formInline.DEPARTMENT" placeholder="请选择部门" @change="requestData_productType2">
-									<el-option v-for="item in DEPARTMENTS" :key="item.value" :label="item.label" :value="item.value">{{ item.label }}</el-option>
+									<!-- <el-option v-for="item in DEPARTMENTS" :key="item.value" :label="item.label" :value="item.value">{{ item.label }}</el-option> -->
+									<el-option v-for="(data,index) in Select_DEPARTMENT" :key="index" :value="data.id" :label="data.fullname"></el-option>
 								</el-select>
 							</el-form-item>
 						</el-form>
@@ -167,28 +168,29 @@
 		data() {
 			return {
 				basic_url: Config.dev_url,
-				DEPARTMENTS: [{
-					value: '总公司',
-					label: '总公司'
-					}, {
-					value: '金化站',
-					label: '金化站'
-					}, {
-					value: '运包站',
-					label: '运包站'
-					}, {
-					value: '通号站',
-					label: '通号站'
-					}, {
-					value: '机辆站',
-					label: '机辆站'
-					}, {
-					value: '接触网站',
-					label: '接触网站'
-				}],
+				// DEPARTMENTS: [{
+				// 	value: '总公司',
+				// 	label: '总公司'
+				// 	}, {
+				// 	value: '金化站',
+				// 	label: '金化站'
+				// 	}, {
+				// 	value: '运包站',
+				// 	label: '运包站'
+				// 	}, {
+				// 	value: '通号站',
+				// 	label: '通号站'
+				// 	}, {
+				// 	value: '机辆站',
+				// 	label: '机辆站'
+				// 	}, {
+				// 	value: '接触网站',
+				// 	label: '接触网站'
+				// }],
+      			Select_DEPARTMENT:[],//获取样品信息-样品状态
       			fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				formInline: {//选择站点显示数据
-					DEPARTMENT: '金化站',//this.currentDept,
+					DEPARTMENT: '',//this.currentDept,
 				},
 				productType2Form:{//产品类别数据组
 					inspectionList: []
@@ -300,7 +302,15 @@
 			indexMethod(index) {
 				return index + 1;
 			},
-			
+			getDEPARTMENT() {//获取机构数据
+				var url = this.basic_url + '/api-user/depts/';
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+					this.Select_DEPARTMENT = res.data.data;
+				}).catch(error => {
+					console.log('请求失败');
+				})
+			},
 			requestData_productType2(index) {//加载数据
 				var _this = this;
 				var data = {
@@ -336,12 +346,15 @@
 					
 					this.productType2Form.inspectionList = newarr;
 
-					setTimeout(function(){
-						_this.viewchildRow(_this.productType2Form.inspectionList[0].ID,_this.productType2Form.inspectionList[0].NUM);
-					},0);
+					if (this.productType2Form.inspectionList.length[0].ID = 0) {
+						console.log('暂无数据');
+					} else {
+						setTimeout(function(){
+							_this.viewchildRow(_this.productType2Form.inspectionList[0].ID,_this.productType2Form.inspectionList[0].NUM);
+						},0);
+					}
 
 					this.$refs.singleTable.setCurrentRow(this.productType2Form.inspectionList[0]);//默认选中第一条数据
-
 				}).catch((wrong) => {})
 			},
 			
@@ -458,6 +471,7 @@
 		},
 		
 		mounted() {
+			this.getDEPARTMENT();
 			this.requestData_productType2();
 		},
 	}

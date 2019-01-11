@@ -22,7 +22,7 @@
                 <font><img class="userimg" /></font>
                 <i class="el-icon-arrow-down icon-arrow2-down"></i>
               </span>
-              <el-dropdown-menu slot="dropdown" class="scrollbar" style="height:300px">
+              <el-dropdown-menu slot="dropdown" class="scrollbar" style="max-height:300px">
                 <el-dropdown-item v-for="item in GetRoles" >
                     <div @click = "clickfun($event)">
                         {{item.name}}

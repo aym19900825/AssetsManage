@@ -212,6 +212,7 @@
 						type: type
 					},
 				}).then((res) => {
+					console.log(233333);
 					console.log(res.data);
 					this.selectData = res.data;
 				});
@@ -420,7 +421,6 @@
 		},
 		mounted() {
 			this.requestData();
-			this.$refs.navsheader.sessionGet();
 			this.getCompany();
 		},
 	}

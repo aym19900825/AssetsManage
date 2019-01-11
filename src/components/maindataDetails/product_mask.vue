@@ -333,8 +333,8 @@
 								});
 								//重新加载数据
 								this.$emit('request');
-								this.$emit('reset');
-								this.visible();
+								// this.$emit('reset');
+								// this.visible();
 							}else{
 								this.show = true;
 								if(res.data.resp_code == 1) {
@@ -343,7 +343,8 @@
 									 	this.$message({
 											message: res.data.resp_msg,
 											type: 'warning'
-									 	});
+										 });
+										 console.log(res.data.resp_msg);
 									}else{
 										this.$message({
 											message:'相同数据不可重复添加！',

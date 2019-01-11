@@ -256,6 +256,7 @@
 
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					console.log(res.data);
+					this.PRODUCT.ID = '',
 					this.PRODUCT.DEPTID = res.data.deptId;
 					// this.PRODUCT.DEPTIDDesc = res.data.deptName;
 					this.PRODUCT.ENTERBY = res.data.id;
@@ -333,8 +334,8 @@
 								});
 								//重新加载数据
 								this.$emit('request');
-								this.$emit('reset');
-								this.visible();
+								// this.$emit('reset');
+								// this.visible();
 							}else{
 								this.show = true;
 								if(res.data.resp_code == 1) {
@@ -343,7 +344,8 @@
 									 	this.$message({
 											message: res.data.resp_msg,
 											type: 'warning'
-									 	});
+										 });
+										 console.log(res.data.resp_msg);
 									}else{
 										this.$message({
 											message:'相同数据不可重复添加！',

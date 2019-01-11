@@ -89,7 +89,7 @@
 									    <el-date-picker
 									      v-model="searchList.ENTERDATE"
 									      type="date"
-									      placeholder="录入时间" style="width: 100%">
+									      placeholder="录入时间" style="width: 100%"   value-format="yyyy-MM-dd">
 									    </el-date-picker>
 								  	</div>
 								</el-form-item>
@@ -166,7 +166,7 @@
 								</el-table-column>
 								<el-table-column label="修改时间" sortable width="100px" prop="ENTERDATE" v-if="this.checkedName.indexOf('修改时间')!=-1" :formatter="dateFormat">
 								</el-table-column>
-								</el-table-column><el-table-column label="编辑状态" sortable width="100px" prop="STATUS" v-if="this.checkedName.indexOf('编辑状态')!=-1">
+								<el-table-column label="编辑状态" sortable width="100px" prop="STATUSDesc" v-if="this.checkedName.indexOf('编辑状态')!=-1">
 								</el-table-column>
 								<!-- <el-table-column label="执行状态" sortable  width="120px" prop="LEADER_STATUS" v-if="this.checkedName.indexOf('执行状态')!=-1">
 								</el-table-column> -->
@@ -257,7 +257,7 @@
 					},
 					{
 						label: '编辑状态',
-						prop: 'STATUS'
+						prop: 'STATUSDesc'
 					},
 					// {
 					// 	label: '执行状态',
@@ -444,6 +444,8 @@
 				this.selUser = val;
 			},
 			requestData(index) {
+				console.log(this.searchList.STATUS);
+				console.log(this.searchList.ENTERDATE);
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,

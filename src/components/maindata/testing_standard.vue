@@ -87,13 +87,13 @@
 							<el-row :gutter="20">
 								<el-col :span="5">
 									<el-form-item label="发布时间" prop="RELEASETIME">
-										<el-date-picker v-model="searchList.RELEASETIME" type="date" placeholder="发布时间" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%">
+										<el-date-picker v-model="searchList.RELEASETIME" type="date" placeholder="发布时间" value-format="yyyy-MM-dd" style="width: 100%">
 										</el-date-picker>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
 									<el-form-item label="启用时间" prop="STARTETIME">
-										<el-date-picker v-model="searchList.STARTETIME" type="date" placeholder="启用时间" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%">>
+										<el-date-picker v-model="searchList.STARTETIME" type="date" placeholder="启用时间" value-format="yyyy-MM-dd" style="width: 100%">>
 										</el-date-picker>
 									</el-form-item>
 								</el-col>

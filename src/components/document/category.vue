@@ -50,14 +50,14 @@
 						<el-form :model="searchList" label-width="70px">
 							<el-row :gutter="30" class="pb5">
 								<el-col :span="7">
-									<el-input v-model="searchList.categoryname">
-										<template slot="prepend">分类名称</template>
+									<el-input v-model="searchList.categoryidDesc">
+										<template slot="prepend">类别</template>
 									</el-input>
 								</el-col>
 								<el-col :span="7">
-									<el-input v-model="searchList.username">
-										<template slot="prepend">用户名称</template>
-										</el-input>
+									<el-input v-model="searchList.keywordname">
+										<template slot="prepend">关键字</template>
+									</el-input>
 								</el-col>
 								<el-col :span="3">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
@@ -70,16 +70,18 @@
 					<el-row :gutter="0">
 						<el-col class="leftcont v-resize">
 							<!-- 表格 -->
-							<el-table :data="samplesList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="selChange">
+							<el-table :data="samplesList" border :height="fullHeight" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="selChange">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="分类名称" sortable  prop="categoryname" v-if="this.checkedName.indexOf('分类名称')!=-1">
+								<el-table-column label="分类" sortable prop="categoryidDesc" v-if="this.checkedName.indexOf('分类')!=-1">
 								</el-table-column>
-								<el-table-column label="用户名称" sortable  prop="username" v-if="this.checkedName.indexOf('用户名称')!=-1">
+								<el-table-column label="关键字" sortable prop="keywordname" v-if="this.checkedName.indexOf('关键字')!=-1">
 								</el-table-column>
-								<el-table-column label="部门名称" sortable  prop="deptfullname" v-if="this.checkedName.indexOf('部门名称')!=-1">
+								<el-table-column label="用户名称" sortable prop="username" v-if="this.checkedName.indexOf('用户名称')!=-1">
 								</el-table-column>
-								<el-table-column label="创建时间" sortable  prop="createtime" v-if="this.checkedName.indexOf('创建时间')!=-1">
+								<el-table-column label="用户部门" sortable prop="deptfullname" v-if="this.checkedName.indexOf('用户部门')!=-1">
+								</el-table-column>
+								<el-table-column label="创建时间" sortable prop="createtime" v-if="this.checkedName.indexOf('创建时间')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
@@ -125,21 +127,26 @@
 
 				//选择显示数据
 				checkedName: [
-					'分类名称',
+					'关键字',
+					'分类',
 					'用户名称',
-					'部门名称',
-					'创建时间'
+					'用户部门',
+					'创建时间',
 				],
 				tableHeader: [{
-						label: '分类名称',
-						prop: 'categoryname'
+						label: '关键字',
+						prop: 'keywordname'
+					},
+					{
+						label: '分类',
+						prop: 'categoryidDesc'
 					},
 					{
 						label: '用户名称',
 						prop: 'username'
 					},
 					{
-						label: '部门名称',
+						label: '用户部门',
 						prop: 'deptfullname'
 					},
 					{
@@ -154,8 +161,8 @@
 				down: true,
 				up: false,
 				searchList: {
-					'categoryname': '',
-					'username': ''
+					'categoryidDesc': '',
+					'keywordname': ''
 				},
 				
 				page: {
@@ -252,7 +259,7 @@
 						});
 						return;
 					}
-					var url = this.basic_url + '/api-apps/app/tbCategory2/deletes';
+					var url = this.basic_url + '/api-apps/app/tbKeyword2/deletes';
 					var changeMenu = selData;
 					var deleteid = [];
 					for (var i = 0; i < changeMenu.length; i++) {
@@ -289,10 +296,10 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					categoryname: this.searchList.categoryname,
-					username: this.searchList.username,
+					categoryidDesc: this.searchList.categoryidDesc,
+					keywordname: this.searchList.keywordname
 				};
-				var url = this.basic_url + '/api-apps/app/tbCategory2';
+				var url = this.basic_url + '/api-apps/app/tbKeyword2';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {

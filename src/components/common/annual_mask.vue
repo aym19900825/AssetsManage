@@ -1163,9 +1163,7 @@
 					this.commentArr[this.page.currentPage] = res.data.data
 					let newarr = []
 					for(var i = 1; i <= totalPage; i++) {
-
 						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-
 							for(var j = 0; j < this.commentArr[i].length; j++) {
 								newarr.push(this.commentArr[i][j])
 							}
@@ -1275,7 +1273,6 @@
 	    				this.WORKPLAN.CHANGEBY = res.data.nickname;
 	    				var date = new Date();
 						this.WORKPLAN.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
-
 						this.docParm.userid = res.data.id;
 						this.docParm.username = res.data.username;
 						this.docParm.deptid = res.data.deptId;
@@ -1321,7 +1318,6 @@
 				this.basisList = []; //检测依据
 				this.proTestList = []; //项目检测和要求
 				this.isEditList = false;
-
 				this.docParm = {
 					'model': 'new',
 					'appname': 'WORKPLAN',
@@ -1329,7 +1325,6 @@
 					'appid': 39 
 				};
 				this.getUser('new');
-
 				this.addtitle = true;
             	this.modifytitle = false;
             	this.modify=false;
@@ -1356,7 +1351,6 @@
 					}
 					this.basisList = res.data.WORLPLANLINEList.length > 0 ? res.data.WORLPLANLINEList[0].WORLPLANLINE_BASISList : [];
 					this.proTestList = res.data.WORLPLANLINEList.length > 0 ? res.data.WORLPLANLINEList[0].WORLPLANLINE_PROJECTList : [];
-
 					this.getUser('edit');
 					var _this = this;
 					setTimeout(function(){
@@ -1676,7 +1670,6 @@
 					}
 					this.productList = newarr;
 				}).catch((wrong) => {})
-
 				var url = this.basic_url + '/api-apps/app/customer';
 				this.$axios.get(url, {
 					params: data

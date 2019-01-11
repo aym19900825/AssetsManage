@@ -60,7 +60,7 @@
 								<el-col :span="3">
 									<el-form-item label="是否停用" prop="inactive" label-width="70px">
 										<el-select clearable v-model="searchList.inactive" placeholder="" style="width: 100%;">
-											<el-option v-for="item in stopoptions" :key="item.value" :label="item.label" :value="item.value">
+											<el-option v-for="(data,index) in stopoptions" :key="index" :label="data.label" :value="data.value">
 											</el-option>
 										</el-select>
 									</el-form-item>
@@ -134,10 +134,10 @@
 				basic_url: Config.dev_url,
 				value:'',
 				stopoptions: [{
-					value: '1',
+					value: "1",
 					label: '是'
 				}, {
-					value: '0',
+					value: "2",
 					label: '否'
 				}],
 				selUser: [],
@@ -222,7 +222,6 @@
 					console.log(111)
 					console.log(res);
 					this.buttons = res.data;
-					
 				}).catch((wrong) => {})
 
 		    },
@@ -386,6 +385,8 @@
 			},
 			//页面加载数据
 			requestData(index) {
+				console.log(this.searchList.inactive);
+				console.log(typeof(this.searchList.inactive));
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -396,7 +397,8 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(res);
+					console.log(123);
+					console.log(res.data);
 					this.roleList = res.data.data;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})

@@ -656,6 +656,7 @@
 						isEditing: true
 					};
 					this.user.qualifications.push(obj);
+					console.log(typeof(this.user.qualifications));
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -676,8 +677,9 @@
 			},
 			//刪除新建行
 			deleteRow(index, rows) { //Table-操作列中的删除行
+				console.log(index);
+				console.log(rows);
 				rows.splice(index, 1);
-
 			},
 			//
 			handleClicks(data,checked, indeterminate) {

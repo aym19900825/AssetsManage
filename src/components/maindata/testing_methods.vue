@@ -363,7 +363,7 @@
 			//查看
 			 view(data) {
 			 	this.testingForm = data;
-				this.$refs.child.view(item);
+				this.$refs.child.view(data);
 			},
 			//高级查询
 			modestsearch() {
@@ -455,6 +455,7 @@
 					DEPARTMENT: this.searchList.DEPARTMENT,
 					M_ENAME: this.searchList.M_ENAME,
 					M_TYPE: this.searchList.M_TYPE,
+					DEPTID: this.searchList.DEPTID,
 					STATUS: this.searchList.STATUS,
 				}
 				var url = this.basic_url + '/api-apps/app/inspectionMet';

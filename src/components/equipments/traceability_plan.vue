@@ -90,7 +90,7 @@
 									    <el-date-picker
 									      v-model="searchList.COMP_DATE"
 									      type="date"
-									      placeholder="请选择" style="width: 100%">
+									      placeholder="请选择" style="width: 100%"  value-format="yyyy-MM-dd">
 									    </el-date-picker>
 								  	</div>
 								</el-form-item>
@@ -105,7 +105,7 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :header-cell-style="rowClass" :data="userList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+						<el-table :header-cell-style="rowClass" :data="userList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 							</el-table-column>
 							<el-table-column label="溯源计划编号" width="200" sortable prop="PMNUM" v-if="this.checkedName.indexOf('溯源计划编号')!=-1">
@@ -128,7 +128,7 @@
 							</el-table-column>
 							<el-table-column label="溯源周期" width="100" sortable prop="FREQUENCY" v-if="this.checkedName.indexOf('溯源周期')!=-1">
 							</el-table-column>
-							<el-table-column label="溯源机构" width="100" sortable prop="PM_MECHANISM" v-if="this.checkedName.indexOf('溯源机构')!=-1">
+							<el-table-column label="溯源机构" width="100" sortable prop="PM_MECHANISMDesc" v-if="this.checkedName.indexOf('溯源机构')!=-1">
 							</el-table-column>
 							<el-table-column label="前次溯源起止时间" width="180" sortable prop="PM_START_END" :formatter="dateFormat" v-if="this.checkedName.indexOf('前次溯源起止时间')!=-1">
 							</el-table-column>
@@ -203,51 +203,51 @@
 				tableHeader: [
 					{
 						label: '溯源计划编号',
-						prop: 'username'
+						prop: 'PMNUM'
 					},
 					{
 						label: '计划描述',
-						prop: 'nickname'
+						prop: 'DESCRIPTION'
 					},
 					{
 						label: '设备编号',
-						prop: 'telephone'
+						prop: 'ASSETNUM'
 					},
 					{
 						label: '设备名称',
-						prop: 'deptName'
+						prop: 'A_NAME'
 					},
 					{
 						label: '规格型号',
-						prop: 'enabled'
+						prop: 'MODEL'
 					},
 					{
 						label: '制造商',
-						prop: 'enabled'
+						prop: 'VENDOR'
 					},
 					{
 						label: '溯源方式',
-						prop: 'enabled'
+						prop: 'TRACEABILITY'
 					},
 					{
 						label: '溯源周期',
-						prop: 'enabled'
+						prop: 'FREQUENCY'
 					},
 					{
 						label: '溯源机构',
-						prop: 'enabled'
+						prop: 'PM_MECHANISMDesc'
 					},
 					{
 						label: '前次溯源起止时间',
-						prop: 'enabled'
+						prop: 'PM_START_END'
 					},
 					{
 						label: '本次溯源计划时间',
-						prop: 'enabled'
+						prop: 'PM_PLANDATE'
 					},
 					{
 						label: '溯源完成日期',
-						prop: 'enabled'
+						prop: 'COMP_DATE'
 					}
 				],
 				leftNavs: [//leftNavs左侧菜单数据
@@ -460,14 +460,14 @@
 				return data.enabled ? '启用' : '冻结'
 			},
 			//时间格式化  
-			dateFormat(row, column) {
-				var date = row[column.property];
-				if(date == undefined) {
-					return "";
-				}
-				return this.$moment(date).format("YYYY-MM-DD");
-				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
-			},
+			// dateFormat(row, column) {
+			// 	var date = row[column.property];
+			// 	if(date == undefined) {
+			// 		return "";
+			// 	}
+			// 	return this.$moment(date).format("YYYY-MM-DD");
+			// 	// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
+			// },
 			insert() {
 				this.users.push(this.user)
 			},

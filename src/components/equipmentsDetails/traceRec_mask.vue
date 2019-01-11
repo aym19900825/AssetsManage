@@ -378,7 +378,8 @@
 			};
 		},
 		methods: {
-			getUser(){
+			getUser(opt){
+				console.log(opt);
 				var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url,{}).then((res) => {
 					if(opt=='new'){

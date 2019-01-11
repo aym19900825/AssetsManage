@@ -53,6 +53,8 @@
 								</el-table-column>
 								<el-table-column label="状态" sortable width="200px" prop="filestatus" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
+								<el-table-column label="上传时间" sortable width="200px" prop="uploadtime" v-if="this.checkedName.indexOf('上传时间')!=-1">
+								</el-table-column>
 								<el-table-column label="大小" sortable  width="140px" prop="filesize" v-if="this.checkedName.indexOf('大小')!=-1">
 									<template slot-scope="scope">
 										<span v-text="scope.row.filesize+'M'"></span>
@@ -120,7 +122,8 @@
 				checkedName: [
 					'名称', 
 					'状态',
-					'大小'
+					'大小',
+					'上传时间'
 				],
 				tableHeader: [{
 						label: '名称',
@@ -133,6 +136,10 @@
 					{
 						label: '大小',
 						prop: 'filesize'
+					},
+					{
+						label: '上传时间',
+						prop: 'uploadtime'
 					}
 				],
 				companyId: '',
@@ -182,7 +189,6 @@
                         + '&username=' + this.userParm.username
                         + '&deptid=' + this.userParm.deptid
                         + '&deptfullname=' + this.userParm.deptfullname;
-                
                 window.open(url); 
 			},
 			showDo(row){

@@ -47,14 +47,9 @@
 						<el-form :model="searchList" label-width="70px">
 							<el-row :gutter="30" class="pb5">
 								<el-col :span="7">
-									<el-input v-model="searchList.V_NAME">
-										<template slot="prepend">分类名称</template>
+									<el-input v-model="searchList.appname">
+										<template slot="prepend">应用名称</template>
 									</el-input>
-								</el-col>
-								<el-col :span="7">
-									<el-input v-model="searchList.DESCRIPTION">
-										<template slot="prepend">信息状态</template>
-										</el-input>
 								</el-col>
 								<el-col :span="3">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
@@ -93,6 +88,8 @@
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="名称" sortable prop="filename" v-if="this.checkedName.indexOf('名称')!=-1">
+								</el-table-column>
+								<el-table-column label="应用" sortable prop="appname" v-if="this.checkedName.indexOf('应用')!=-1">
 								</el-table-column>
 								<el-table-column label="状态" sortable width="200px" prop="filestatus" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
@@ -163,6 +160,7 @@
 				},
 				resolve: function(){},
 				node: {},
+				parentNode: {},
 				dirDialog: false,
 				dir: {
 					'dirName': ''
@@ -190,7 +188,8 @@
 				checkedName: [
 					'名称', 
 					'状态',
-					'大小'
+					'大小',
+					'应用'
 				],
 				tableHeader: [{
 						label: '名称',
@@ -203,6 +202,10 @@
 					{
 						label: '大小',
 						prop: 'filesize'
+					},
+					{
+						label: '应用',
+						prop: 'appname'
 					}
 				],
 				companyId: '',
@@ -214,8 +217,7 @@
 				down: true,
 				up: false,
 				searchList: {
-					'CLASSFICATION': '',
-					'STATUS': ''
+					'appname': ''
 				},
 				//tree树菜单
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -309,7 +311,7 @@
 					for(var i=0; i<pathList.length; i++){
 						pathList[i].name = pathList[i].foldername;
 					}
-					return resolve(pathList);
+					this.loadNode(this.node, this.resolve, 'loadThisNode' , pathList);
 				});
 			},
 			upload(e){
@@ -358,6 +360,9 @@
 				this.page.currentPage = 1;
 				this.docId = data.id;
 				this.node = data;
+				console.log('handleNodeClick');
+				console.log(data);
+				this.parentNode = data.parent;
 				this.getFileList();
 			},
 			getFileList(){
@@ -366,7 +371,8 @@
 					'pathid': this.docId,
 					'deptid': this.docParm.deptid,
 					'page': this.page.currentPage - 1,
-					'size': this.page.pageSize
+					'size': this.page.pageSize,
+					'appname': this.searchList.appname
 				}).then((res) => {
 					this.fileList = res.data.fileList.fileList;
 					this.page.totalCount = res.data.fileList.total;
@@ -386,16 +392,21 @@
 					});
 				});
 			},
-			loadNode(node, resolve) {
+			loadNode(node, resolve, opt, param) {
+				if(opt == 'loadThisNode'){
+					var pathList = param;
+					return this.resolve(pathList);
+				}
 				this.resolve = resolve;
 				this.node = node;
 				let that = this;
 				var url = that.file_url + '/file/pathList';
 				var pathid = 2;
+				console.log(node);
 				if(node.level === 0){
 					pathid = 0;
 				}else{
-					pathid = node.data.id;
+					pathid = node.data.id || node.id;
 				}
 				if(that.deptId == 0){
 					setTimeout(function(){
@@ -454,13 +465,16 @@
 			},
 			sizeChange(val) {//分页，总页数
 				this.page.pageSize = val;
+				this.getFileList();
 			},
 			currentChange(val) {//分页，当前页
 				this.page.currentPage = val;
+				this.getFileList();
 			},
 			searchinfo(index) {//高级查询
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
+				this.getFileList();
 			},
 			//修改用戶
 			modify() {
@@ -499,6 +513,7 @@
 								message: '删除成功',
 								type: 'success'
 							});
+							this.loadNode(this.parentNode,this.resolve);
 						}else{
 							this.$message({
 								message: res.data.message,

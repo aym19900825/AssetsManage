@@ -154,7 +154,8 @@
 					'deptid': 1,
 					'deptfullname': '',
 					'appname': '',
-					'appid': 1
+					'appid': 1,
+					'save': false
 				},
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
@@ -259,12 +260,14 @@
 			},
 			visible() {//添加内容时从父组件带过来的
 				this.getUser('new');
+				var _this = this;
 				setTimeout(function(){
-					this.docParm.model = 'new';
-					this.docParm.appname = 'INSPECTION_METHOD2';
-					this.docParm.recordid = this.testingForm.ID;
-					this.docParm.appid = 32;
-					this.$refs.docTable.getData();
+					_this.docParm.model = 'new';
+					_this.docParm.appname = 'INSPECTION_METHOD2';
+					_this.docParm.recordid = _this.testingForm.ID;
+					_this.docParm.appid = 32;
+					_this.docParm.save = false;
+					_this.$refs.docTable.getData();
 				},100);
             	this.addtitle = true;
 				this.modifytitle = false;
@@ -568,21 +571,17 @@
 			save(opt) {
 				var _this = this;
 				this.$refs['testingForm'].validate((valid) => {
-					if(!valid && opt == 'docUpload'){
-						this.$message({
-							message: '请先正确填写信息，再进行文档上传',
-							type: 'warn'
-						});
-					}
 					if (valid) {
 					    _this.testingForm.STATUS=_this.testingForm.STATUS=="活动" ? '1' : '0';
 						var url = this.basic_url + '/api-apps/app/inspectionMet/saveOrUpdate';
 						this.$axios.post(url,_this.testingForm).then((res) => {
 							if(res.data.resp_code == 0) {
-								if(opt == 'docUpload'){
+								if(opt != 'uploadDoc'){
 									this.docParm.recordid = res.data.datas.id;
 									this.docParm.model = 'edit';
-									this.$refs.docTable.autoLoad();
+									setTimeout(function(){
+										_this.$refs.docTable.autoLoad();
+									},500);
 									this.dataInfo.ID = res.data.datas.id;
 								}else{
 									this.$message({
@@ -630,14 +629,14 @@
 			},
 			//保存
 			saveAndUpdate(testingForm){
-				this.save(testingForm);
+				this.save('userSave');
 				if(this.falg){
 					this.show = false;
 				}
 			},
 			//保存并继续
 			saveAndSubmit(testingForm){
-				this.save(testingForm);
+				this.save('userSave');
 				this.show = true;
 			},
 			handleClose(done) { //大弹出框确定关闭按钮

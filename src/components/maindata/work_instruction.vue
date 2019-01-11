@@ -439,7 +439,6 @@
 		},
 		mounted() {
 			this.requestData();
-			this.$refs.navsheader.sessionGet();
 			this.getCompany();
 		},
 	}

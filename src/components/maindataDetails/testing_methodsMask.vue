@@ -314,7 +314,7 @@
 				}
 			},
 			//这是查看
-			view() {
+			view(item) {
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;

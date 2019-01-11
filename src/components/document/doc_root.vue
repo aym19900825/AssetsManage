@@ -130,6 +130,7 @@
 			</div>
 		</el-dialog>
 		<vkeyword ref="keyword" :param="param"></vkeyword>
+		<vchoose ref="choose" :chooseParam = "chooseParam" @tranFormData = 'getChoose'></vchoose>
 	</div>
 </template>
 <script>
@@ -142,6 +143,7 @@
 	import vueDropzone from 'vue2-dropzone'
 	import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 	import vkeyword from '../common/keyword.vue'
+	import vchoose from '../common/dataChoose.vue'
 	export default {
 		name: 'samples',//接样
 		components: {
@@ -151,10 +153,36 @@
 			tableControle,
 			samplesmask,
 			vueDropzone,
-			vkeyword
+			vkeyword,
+			vchoose
 		},
 		data() {
 			return {
+				chooseParam: {
+					selShow: false,
+					visible: false,
+					title: "用户列表",
+					listName: 'user',
+					selMax: 1,
+					tableHeader: [
+						{
+							propName: 'username',
+							labelName: '用户姓名'
+						},
+						{
+							propName: 'deptName',
+							labelName: '组织机构'
+						}
+
+					],
+					search: [
+						{
+							name: 'deptId',
+							val: ''
+						}
+					],
+					url: '/api-user/users'
+				},
 				param: {
 					visible: false,
 				},
@@ -267,9 +295,30 @@
                 });
 			},
 			showAuth(row){
-				this.param.visible = true;
-				this.param.fileid = row.fileid;
-				this.$refs.keyword.requestData();
+				this.chooseParam = {
+					title: "关键字列表",
+					selShow: true,
+					listName: 'keywordList',
+					selMax: 1000,
+					tableHeader: [
+						{
+							propName: 'categoryidDesc',
+							labelName: '类别'
+						},
+						{
+							propName: 'keywordname',
+							labelName: '关键字'
+						}
+					],
+					search: [],
+					url: '/api-apps/app/tbKeyword2'
+				};
+				this.$refs.choose.getData('new',this.chooseParam);
+				// this.param.fileid = row.fileid;
+				// this.$refs.keyword.requestData();
+			},
+			getChoose(){
+
 			},
 			resetDir(){
 				this.dir.dirName = '';
@@ -360,8 +409,6 @@
 				this.page.currentPage = 1;
 				this.docId = data.id;
 				this.node = data;
-				console.log('handleNodeClick');
-				console.log(data);
 				this.parentNode = data.parent;
 				this.getFileList();
 			},

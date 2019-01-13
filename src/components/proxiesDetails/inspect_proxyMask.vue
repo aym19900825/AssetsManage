@@ -616,7 +616,7 @@
 		</el-dialog>
 		<!-- 样品名称 Begin -->
 		<el-dialog title="样品名称" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
-			<el-table :data="samplesList" :header-cell-style="rowClass" border stripe height="400px" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+			<el-table :data="samplesList" :header-cell-style="rowClass" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 				<el-table-column type="selection" width="55" fixed align="center">
 				</el-table-column>
 				<el-table-column label="样品编号" sortable width="200px" prop="ITEMNUM">
@@ -650,7 +650,7 @@
 			<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 			</el-pagination>
 			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible2 = false" style="margin-left: 37%;">取 消</el-button>
+		       <el-button @click="dialogVisible2 = false">取 消</el-button>
 		       <el-button type="primary" @click="addsamplename">确 定</el-button>
 		    </span>
 		</el-dialog>
@@ -675,7 +675,7 @@
 			<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 			</el-pagination>
 			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible3 = false" style="margin-left: 37%;">取 消</el-button>
+		       <el-button @click="dialogVisible3 = false">取 消</el-button>
 		       <el-button type="primary" @click="addcusname">确 定</el-button>
 		    </span>
 		</el-dialog>

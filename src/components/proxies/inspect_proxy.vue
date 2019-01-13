@@ -349,7 +349,6 @@
 			}
 		},
 		methods: {
-			 
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'

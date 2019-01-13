@@ -995,7 +995,7 @@
 					this.dataInfo.ENTERBY = res.data.id;
 					// this.dataInfo.ORGID = res.data.deptName
 					var date = new Date();
-					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -1017,7 +1017,7 @@
 					this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
 					this.dataInfo.CHANGEBY = res.data.id;
 					var date = new Date();
-					this.dataInfo.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
+					this.dataInfo.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd");
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',

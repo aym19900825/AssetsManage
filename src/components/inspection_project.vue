@@ -312,7 +312,7 @@
 				this.$axios.get(this.basic_url + '/api-apps/app/productType?DEPTID=' + this.departmentId, {
 					params: data
 				}).then((res) => {
-					console.log(res.data);
+					// console.log(res.data);
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -364,6 +364,7 @@
 				this.depId = 128;
 				var currenturl = this.basic_url + '/api-user/depts/findByPid/' + this.depId;
 				this.$axios.get(currenturl, {}).then((res) => {
+					console.log(res.data);
 					this.Select_DEPTID = res.data;
 				}).catch(error => {
 					console.log('请求失败');
@@ -562,7 +563,6 @@
 			this.getDEPTID();
 			this.getData();
 			this.requestData_productType2();
-			// this.addprobtn();
 		},
 	}
 </script>

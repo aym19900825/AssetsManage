@@ -9,7 +9,7 @@
 			<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left>
 			<!--左侧菜单内容显示 End-->
 			<!--右侧内容显示 Begin-->
-			<div class="wrapper wrapper-content">
+			<div id="wrapper-content" class="wrapper">
 				<div class="ibox-content">
 					<!--<navs_button></navs_button>-->
 					<div class="fixed-table-toolbar clearfix">
@@ -197,10 +197,14 @@
 		name: 'user_management',
 		components: {
 			'vheader': vheader,
-			'navs_header': navs_header,
 			'navs_left': navs_left,
+			'navs_header': navs_header,
 			'inspectmask': inspectmask,
 		},
+//		created() {
+//  		this.getRouterData()
+//		},
+
 		data() {
 			return {
 				basic_url: Config.dev_url,
@@ -336,7 +340,6 @@
 					label: "fullname"
 				},
 				treeData: [],
-				userData: [],
 				page: {
 					currentPage: 1,
 					pageSize: 10,
@@ -345,6 +348,7 @@
 			}
 		},
 		methods: {
+			 
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
@@ -435,6 +439,13 @@
 			 view(id) {
 				this.$refs.child.view(id);
 			},
+			getRouterData() {
+      		// 只是改了query，其他都不变
+				  this.id = this.$route.query.bizid;
+				  console.log('bizid', this.id);
+				  this.$refs.child.view(this.id);
+				 },
+
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
@@ -602,6 +613,9 @@
 			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
+        		console.log(111);
+        		// childValue就是子组件传过来的值
+        		console.log(childValue);
         		this.$refs.navsheader.showClick(childValue);
       		},
 		},
@@ -611,7 +625,7 @@
 			this.getKey();
 		},
 		mounted() {
-		
+			this.getRouterData();
 		},
 	}
 </script>

@@ -274,7 +274,7 @@
 				    'STATE': '',
 					'ENTERBY': '',
 					'ENTERDATE': '',
-					'DEPARTMEMT': '',
+					'DEPTID': '',
 					'STATUS': '1',
 					'tableList': []
 				},

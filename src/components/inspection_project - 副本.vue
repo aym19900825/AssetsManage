@@ -190,7 +190,7 @@
       			Select_DEPTID:[],//获取机构部门
       			fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				formInline: {//选择站点显示数据
-					DEPTID: '',//this.currentDept,
+					DEPTID: [],//this.currentDept,
 				},
 				productType2Form:{//产品类别数据组
 					inspectionList: []
@@ -257,7 +257,6 @@
 			SelChange(val) {
 				this.selData = val;
 			},
-			
 			
 			// modifyversion (row) {//点击修改后给当前修改人和修改时间赋值				
 			// 	row.isEditing = !row.isEditing				
@@ -387,9 +386,10 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					DEPTID: this.formInline.DEPTID,//点击部门名称下拉菜单显示数据
+					DEPTID: this.formInline.DEPTID.id,//点击部门名称下拉菜单显示数据
 				}
-				var url = this.basic_url + '/api-apps/app/productType2';
+				
+				var url = this.basic_url + '/api-apps/app/productType2?DEPTID=' + this.departmentId;
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
@@ -462,7 +462,7 @@
 							"VERSION": '',
 							"DEPTID": '',
 							"CHANGEBY": '',
-							"CHANGEDATE":'',
+							"CHANGEDATE": '',
 							"isEditing": true,
 						};
 						this.productType2Form.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
@@ -478,7 +478,6 @@
 			},
 			saveRow (row) {//Table-操作列中的保存行
 				this.$refs['productType2Form'].validate((valid) => {
-					row.VERSION = row.VERSION + 1;//修改保存后版本号+1
 		          if (valid) {
 					var url = this.basic_url + '/api-apps/app/productType2/saveOrUpdate';
 					var submitData = {
@@ -549,6 +548,7 @@
 				this.catedata.ENTERDATE = this.selData[0].ENTERDATE;
 				this.$emit('request');
 			},
+			
 			viewchildRow(id,num) {//查看子项数据
 				this.$refs.product2child.viewfield_product2(id,num);
 			},

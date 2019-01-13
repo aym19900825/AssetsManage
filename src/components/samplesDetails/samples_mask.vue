@@ -346,9 +346,9 @@
 		</el-dialog>
 		<!--点击委托书编号弹出框 Begin-->
 		<!-- 产品类别 Begin -->
-		<el-dialog title="产品类别" height="400px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
+		<el-dialog title="产品类别" height="300px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
 			<!-- 第二层弹出的表格 Begin-->
-			<el-table :header-cell-style="rowClass" :data="categoryList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+			<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 				<el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column>
 				<el-table-column label="编码" width="155" sortable prop="NUM">
@@ -368,14 +368,14 @@
 			</el-pagination>
 			<!-- 表格 End-->
 			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible3 = false" style="margin-left: 37%;">取 消</el-button>
+		       <el-button @click="dialogVisible3 = false">取 消</el-button>
 		       <el-button type="primary" @click="addproclass">确 定</el-button>
 		    </span>
 		</el-dialog>
 		<!-- 产品类别 End -->
 		<!-- 收样人、接样人 Begin -->
-		<el-dialog height="400px" :visible.sync="dialogVisible4" width="80%" :before-close="handleClose">
-			<el-table :data="userList" border stripe :header-cell-style="rowClass" height="400px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+		<el-dialog height="300px" :visible.sync="dialogVisible4" width="80%" :before-close="handleClose">
+			<el-table :data="userList" border stripe :header-cell-style="rowClass" height="300px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed align="center">
 								</el-table-column>
 								<el-table-column label="用户名" sortable width="140px" prop="username">
@@ -392,7 +392,7 @@
 							<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
 			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible4 = false" style="margin-left: 37%;">取 消</el-button>
+		       <el-button @click="dialogVisible4 = false">取 消</el-button>
 		       <el-button type="primary" @click="addPerson">确 定</el-button>
 		    </span>
 		</el-dialog>

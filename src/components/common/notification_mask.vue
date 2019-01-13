@@ -454,7 +454,7 @@
 							<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
 			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible1 = false" style="margin-left: 37%;">取 消</el-button>
+		       <el-button @click="dialogVisible1 = false">取 消</el-button>
 		       <el-button type="primary" @click="addproname">确 定</el-button>
 		    </span>
 		</el-dialog>
@@ -481,7 +481,7 @@
 				            :total="page.totalCount">
 				        </el-pagination>
 			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible2 = false" style="margin-left: 37%;">取 消</el-button>
+		       <el-button @click="dialogVisible2 = false">取 消</el-button>
 		       <el-button type="primary" @click="addcomname">确 定</el-button>
 		    </span>
 		</el-dialog>

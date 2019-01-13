@@ -91,7 +91,7 @@
 							<el-row :gutter="5">
 								<el-col :span="6">
 									<el-form-item label="完成日期" prop="COMPDATE" label-width="110px">
-										<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%">
+										<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd" style="width: 100%">
 									</el-date-picker>
 									</el-form-item>
 								</el-col>

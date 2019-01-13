@@ -406,7 +406,7 @@
 
 										    <el-table-column fixed="right" label="操作" width="120">
 										      <template slot-scope="scope">
-										        <el-button @click.native.prevent="deleteRow(index, row)" type="text" size="small">
+										        <el-button @click="deleteRow(scope.$index, WorkorderBasisList)" type="text" size="small">
 										          移除
 										        </el-button>
 										      </template>
@@ -864,6 +864,7 @@
 			addworkordernum(){
 				console.log(this.selMenu[0]);
 				this.workorderForm.PROXYNUM = this.selMenu[0].PROXYNUM;
+				this.workorderForm.PROXY_VERSION = this.selMenu[0].VERSION;
 				this.dialogVisible1 = false;
 				this.$emit('request');
 			},

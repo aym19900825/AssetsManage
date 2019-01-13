@@ -630,8 +630,20 @@
 				this.dialogVisible = true;
 			},
 			addpeoname(){
-				this.dialogVisible = false;
-				this.dataInfo.KEEPER = this.selUser[0].nickname;
+				if(this.selUser.length == 0){
+					this.$message({
+						message: '请选择数据',
+						type: 'warning'
+					});
+				}else if(this.selUser.length > 1){
+					this.$message({
+						message: '不可同时选择多条数据',
+						type: 'warning'
+					});
+				}else{
+					this.dataInfo.KEEPER = this.selUser[0].nickname;
+					this.dialogVisible = false;
+				}
 				this.$emit('request');
 			},
 			SelChange(val) {

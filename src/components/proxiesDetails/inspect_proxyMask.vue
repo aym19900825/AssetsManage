@@ -551,8 +551,8 @@
 								<div class="accordion-body tab-content">
 									<el-row >
 										<el-col :span="8">
-											<el-form-item label="录入人" prop="ENTERBY" label-width="110px">
-												<el-input v-model="dataInfo.ENTERBY" :disabled="edit"></el-input>
+											<el-form-item label="录入人" prop="ENTERBYDesc" label-width="110px">
+												<el-input v-model="dataInfo.ENTERBYDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -568,8 +568,8 @@
 									</el-row>
 									<el-row >
 										<el-col :span="8">
-											<el-form-item label="修改人" prop="CHANGEBY" label-width="110px">
-												<el-input v-model="dataInfo.CHANGEBY" :disabled="edit"></el-input>
+											<el-form-item label="修改人" prop="CHANGEBYDesc" label-width="110px">
+												<el-input v-model="dataInfo.CHANGEBYDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -979,8 +979,8 @@
 			//点击按钮显示弹窗
 			visible() {
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					this.dataInfo.DEPT = res.data.deptName;
-					this.dataInfo.ENTERBY = res.data.nickname;
+					this.dataInfo.DEPTID = res.data.deptId;
+					this.dataInfo.ENTERBY = res.data.id;
 					this.dataInfo.ORGID = res.data.deptName
 					var date = new Date();
 					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
@@ -1002,7 +1002,8 @@
 			detail(dataid) {
 				var usersUrl = this.basic_url + '/api-user/users/currentMap'
 				this.$axios.get(usersUrl, {}).then((res) => {
-					this.dataInfo.CHANGEBY = res.data.nickname;
+					this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
+					this.dataInfo.CHANGEBY = res.data.id;
 					var date = new Date();
 					this.dataInfo.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
 				}).catch((err) => {
@@ -1102,6 +1103,7 @@
 				this.noedit = true;
 				var url = this.basic_url + '/api-apps/app/inspectPro/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
+					console.log(res.data);
 					this.dataInfo = res.data;
 					this.show = true;
 				}).catch((err) => {

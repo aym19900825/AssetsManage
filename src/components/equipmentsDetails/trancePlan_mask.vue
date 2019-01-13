@@ -478,9 +478,21 @@
 			},
 			//设备名称弹出框确定按钮
 			addinstruname(){
-				this.dataInfo.A_NAME = this.selName[0].DESCRIPTION;
-				this.dialogVisname = false;
-				this.$emit('request');
+				if(this.selName.length == 0){
+					this.$message({
+						message: '请选择数据',
+						type: 'warning'
+					});
+				}else if(this.selName.length > 1){
+					this.$message({
+						message: '不可同时选择多条数据',
+						type: 'warning'
+					});
+				}else{
+					this.dataInfo.A_NAME = this.selName[0].DESCRIPTION;
+					this.dialogVisname = false;
+					this.$emit('request');
+				}
 			},
 			getUser(opt){
 				var url = this.basic_url + '/api-user/users/currentMap';

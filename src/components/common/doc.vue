@@ -1,16 +1,16 @@
 <template>
 <div>
     <div class="table-func">
-        <form method="post" id="file" action="" enctype="multipart/form-data" style="float: left;" v-show="docParm.model!='new'">
+        <form method="post" id="file" action="" enctype="multipart/form-data" style="float: left;" v-show="docParm.save">
             <el-button type="warn" size="mini" round class="a-upload">
                 <i class="el-icon-upload2"></i>
                 <font>上传</font>
-                <input id="excelFile" type="file" name="uploadFile" @change="upload" v-show="docParm.model!='new'"/>
+                <input id="excelFile" type="file" name="uploadFile" @change="upload" v-show="docParm.save"/>
             </el-button>
         </form>
-        <el-button type="warn" size="mini" round class="a-upload" @click="uploadTip" v-show="docParm.model=='new'">
-                <i class="el-icon-upload2"></i>
-                <font>上传</font>
+        <el-button type="warn" size="mini" round class="a-upload" @click="uploadTip" v-show="!docParm.save">
+            <i class="el-icon-upload2"></i>
+            <font>上传</font>
         </el-button>
         <el-button type="error" size="mini" @click="download" round  style="margin-left: 10px;">
             <i class="el-icon-download"></i>
@@ -54,6 +54,17 @@
         :total="page.totalCount">
     </el-pagination>
     <vkeyword ref="keyword" :param="param"></vkeyword>
+    <el-dialog
+        title="提示"
+        :visible.sync="tipSaveShow"
+        width="30%"
+        :before-close="reset">
+        <span>文档上传前会自动保存数据</span>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="reset">取 消</el-button>
+            <el-button type="primary" @click="saveMain">确 定</el-button>
+        </span>
+    </el-dialog>
 </div>
 </template>
 
@@ -81,19 +92,26 @@ export default {
                 pageSize: 10,
                 totalCount: 0
             },
+            tipSaveShow: false
         }
     },
     props: ['docParm'],
     methods: {
+        reset(){
+            this.tipSaveShow = false;
+        },
+        saveMain(){
+            var _this = this;
+            this.$emit('saveParent','uploadDoc');
+            this.reset();
+        },
         showAuth(row){
             this.param.visible = true;
             this.param.fileid = row.fileid;
             this.$refs.keyword.requestData();
         },
         uploadTip(){
-            if(this.docParm.model == 'new'){
-                this.$emit('saveParent','docUpload');
-            }
+            this.tipSaveShow = true;
         },
         autoLoad(){
             setTimeout(function(){

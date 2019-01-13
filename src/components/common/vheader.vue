@@ -22,7 +22,7 @@
                 <font><img class="userimg" /></font>
                 <i class="el-icon-arrow-down icon-arrow2-down"></i>
               </span>
-              <el-dropdown-menu slot="dropdown" class="scrollbar" style="height:300px">
+              <el-dropdown-menu slot="dropdown" class="scrollbar" style="max-height:300px">
                 <el-dropdown-item v-for="item in GetRoles" >
                     <div @click = "clickfun($event)">
                         {{item.name}}
@@ -99,7 +99,7 @@ export default {
         getData(){//获取当前用户信息
             var url = this.basic_url + '/api-user/users/currentMap';
             this.$axios.get(url, {}).then((res) => {//获取当前用户信息
-            	console.log(res);
+            	// console.log(res);
                     this.username = res.data.username;
                     this.nickname = res.data.nickname;
                     this.userid = res.data.id;
@@ -115,7 +115,7 @@ export default {
             this.$axios.get(url, {}).then((res) => {
                 this.GetRoles = res.data;
                 this.GetRolesname=this.GetRoles[0].name;
-            	console.log(this.GetRolesname);
+            	// console.log(this.GetRolesname);
                 if(res.data!=null&&res.data.length>0)
                 {
                     let item = res.data[0];

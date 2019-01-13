@@ -102,7 +102,7 @@
 										<font>新建行</font>
 									</el-button>
 								</div>
-								<el-table :header-cell-style="rowClass" :fit="true" :data="testing_projectForm.QUALIFICATIONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'testing_projectForm.QUALIQUALIFICATIONListFICATIONList', order: 'descending'}">
+								<el-table :header-cell-style="rowClass" :fit="true" :data="testing_projectForm.QUALIFICATIONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'testing_projectForm.QUALIFICATIONList', order: 'descending'}">
 									<el-table-column prop="iconOperation" fixed width="50px">
 										<template slot-scope="scope">
 											<i class="el-icon-check" v-if="scope.row.isEditing"></i>
@@ -526,6 +526,24 @@
 			},
 
 			visible() { //添加内容时从父组件带过来的
+				this.testing_projectForm = {
+					CHANGEBY: '',
+					CHILD_FIELD:'',
+					DEPARTMENT:'',
+					DOCLINKS_NUM: '',
+					ENTERBY:'',
+					ENTERDATE: '',
+					FIELD: '',
+					ID: '',
+					P_NAME: '',
+					P_NUM: '',
+					QUALIFICATION: '',
+					QUALIFICATIONList: [],
+					QUANTITY: '',
+					STATUS: '1',
+					VERSION: 1,
+					WORK_INSTRUCTIONList: []
+				},
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 //					this.testing_projectForm.DEPARTMENT = res.data.companyName;
 					this.testing_projectForm.DEPARTMENT = '';
@@ -560,7 +578,7 @@
 					this.testing_projectForm.DEPTID = res.data.deptId;
 					this.testing_projectForm.CHANGEBY = res.data.id;
 					var date = new Date();
-					this.testing_projectForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					this.testing_projectForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
 					//深拷贝数据
 					let _obj = JSON.stringify(this.testing_projectForm);
         			this.TESTING_PROJECTFORM = JSON.parse(_obj);

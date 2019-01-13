@@ -198,7 +198,7 @@
 			// 这里是修改
 			detail() {
 				this.dataInfo = this.detailData;
-				var id = this.detailData.id;
+				var id = this.detailData.categoryid;
 				this.getData(id);
 				this.modify = true;
 				this.show = true;

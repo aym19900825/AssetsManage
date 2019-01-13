@@ -15,15 +15,6 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
-                                	<i class="icon-add"></i>新增
-                      			 </button>
-								<button type="button" class="btn btn-blue button-margin" @click="modify">
-								    <i class="icon-edit"></i>修改
-								</button>
-								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
-								    <i class="icon-trash"></i>删除
-								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 						    		<i class="icon-search"></i>高级查询
 						    		<i class="icon-arrow1-down" v-show="down"></i>
@@ -41,14 +32,9 @@
 						<el-form :model="searchList" label-width="70px">
 							<el-row :gutter="30" class="pb5">
 								<el-col :span="7">
-									<el-input v-model="searchList.V_NAME">
-										<template slot="prepend">分类名称</template>
+									<el-input v-model="searchList.filename">
+										<template slot="prepend">名称</template>
 									</el-input>
-								</el-col>
-								<el-col :span="7">
-									<el-input v-model="searchList.DESCRIPTION">
-										<template slot="prepend">信息状态</template>
-										</el-input>
 								</el-col>
 								<el-col :span="3">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
@@ -60,34 +46,42 @@
 					<el-row :gutter="0">
 						<el-col class="leftcont v-resize">
 							<!-- 表格 -->
-							<el-table :data="samplesList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
+							<el-table :data="fileList" border :height="fullHeight" style="width: 100%;" :default-sort="{prop:'fileList', order: 'descending'}">
+								<!-- <el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
+								</el-table-column> -->
+								<el-table-column label="名称" sortable prop="filename" v-if="this.checkedName.indexOf('名称')!=-1">
 								</el-table-column>
-								<el-table-column label="文件编号" sortable width="140px" prop="DIRECTORY_NUM" v-if="this.checkedName.indexOf('文件编号')!=-1">
+								<el-table-column label="状态" sortable width="200px" prop="filestatus" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
-								<el-table-column label="文件描述" sortable width="200px" prop="DIRECTORY_DESCRIPTION" v-if="this.checkedName.indexOf('文件描述')!=-1">
+								<el-table-column label="上传时间" sortable width="200px" prop="uploadtime" v-if="this.checkedName.indexOf('上传时间')!=-1">
 								</el-table-column>
-								<el-table-column label="创建人" sortable prop="PARENT" v-if="this.checkedName.indexOf('创建人')!=-1">
+								<el-table-column label="大小" sortable  width="140px" prop="filesize" v-if="this.checkedName.indexOf('大小')!=-1">
+									<template slot-scope="scope">
+										<span v-text="scope.row.filesize+'M'"></span>
+									</template>
 								</el-table-column>
-								<el-table-column label="创建时间" sortable prop="STATUS" v-if="this.checkedName.indexOf('创建时间')!=-1">
-								</el-table-column>
-								<el-table-column label="所属对象名" sortable prop="SYNCHRONIZATION_TIME" v-if="this.checkedName.indexOf('所属对象名')!=-1">
-								</el-table-column>
-								<el-table-column label="所属对象ID" sortable prop="SYNCHRONIZATION_TIME" v-if="this.checkedName.indexOf('所属对象ID')!=-1">
-								</el-table-column>
-								<el-table-column label="版本" sortable prop="SYNCHRONIZATION_TIME" v-if="this.checkedName.indexOf('版本')!=-1">
-								</el-table-column>
-								<el-table-column label="状态" sortable prop="SYNCHRONIZATION_TIME" v-if="this.checkedName.indexOf('状态')!=-1">
+								<el-table-column
+									fixed="right"
+									label="操作"
+									width="200">
+									<template slot-scope="scope">
+										<el-popover
+											placement="top"
+											trigger="click">
+											<div style="text-align: right; margin: 0">
+												<el-button size="mini" type="text" :disabled="fileAuth.fileread==0">显示</el-button>
+												<el-button size="mini" type="text" :disabled="fileAuth.filedownload==0" @click="download(scope.row)">下载</el-button>
+												<el-button size="mini" type="text" :disabled="fileAuth.fileedit==0">编辑</el-button>
+												<el-button size="mini" type="text" :disabled="fileAuth.fileprint==0">打印</el-button>
+												<el-button size="mini" type="text" :disabled="fileAuth.fileduplicate==0">复制</el-button>
+												<el-button size="mini" type="text" :disabled="fileAuth.filedelete==0">删除</el-button>
+											</div>
+											<el-button @click="showDo(scope.row)" type="text" size="small" slot="reference">文件权限</el-button>
+										</el-popover>
+									</template>
 								</el-table-column>
 							</el-table>
-							
-							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" 
-								@size-change="sizeChange" 
-								@current-change="currentChange" 
-								:current-page="page.currentPage" 
-								:page-sizes="[10, 20, 30, 40]" 
-								layout="total, sizes, prev, pager, next" 
-								:total="page.totalCount">
+							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
 							<!-- 表格 -->
 						</el-col>
@@ -118,66 +112,47 @@
 		},
 		data() {
 			return {
+				visible2: false,
 				basic_url: Config.dev_url,
+				file_url: Config.file_url,
 				isShow: false,
 				ismin: true,
 				loadSign: true, //加载
 				commentArr: {},
 				checkedName: [
-					'文件编号',
-					'文件描述',
-					'创建人',
-					'创建时间',
-					'所属对象名',
-					'所属对象ID',
-					'版本',
-					'状态'
+					'名称', 
+					'状态',
+					'大小',
+					'上传时间'
 				],
 				tableHeader: [{
-						label: '文件编号',
-						prop: 'DOCLINKS'
-					},
-					{
-						label: '文件描述',
-						prop: 'DIRECTORY_DESCRIPTION'
-					},
-					{
-						label: '创建人',
-						prop: 'P_NAME'
-					},
-					{
-						label: '创建时间',
-						prop: 'P_NAME'
-					},
-					{
-						label: '所属对象名',
-						prop: 'DESCRIPTION'
-					},
-					{
-						label: '所属对象ID',
-						prop: 'MODEL'
-					},
-					{
-						label: '版本',
-						prop: 'QUATITY'
+						label: '名称',
+						prop: 'filename'
 					},
 					{
 						label: '状态',
-						prop: 'ACCEPT_PERSON'
+						prop: 'filestatus'
+					},
+					{
+						label: '大小',
+						prop: 'filesize'
+					},
+					{
+						label: '上传时间',
+						prop: 'uploadtime'
 					}
 				],
 				companyId: '',
 				deptId: '',
 				selMenu: [],
-				samplesList: [],
+				fileList: [],
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				search: false,
 				show: false,
 				down: true,
 				up: false,
 				searchList: {
-					'CLASSFICATION': '',
-					'STATUS': ''
+					'filename': ''
 				},
 				//tree树菜单
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -193,56 +168,40 @@
 					pageSize: 10,
 					totalCount: 0
 				},
+				userParm: {},
+				fileAuth: {
+					filedelete: 0,
+					filedownload: 0,
+					fileduplicate: 0,
+					fileedit: 0,
+					fileprint: 0,
+					fileread: 0,
+					fileupload: 0,
+				},
+				fileAuthShow: false,
 				samplesForm: {}//修改子组件时传递数据
 			}
 		},
 		methods: {
-			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
-				return(
-					<span>
-		              <i class={data.iconClass}></i>
-		              <span>{node.label}</span>
-		            </span>
-				);
+			download(row){
+				var url = row.filepath 
+                        + '&userid=' + this.userParm.userid
+                        + '&username=' + this.userParm.username
+                        + '&deptid=' + this.userParm.deptid
+                        + '&deptfullname=' + this.userParm.deptfullname;
+                window.open(url); 
 			},
-			// 点击节点
-			nodeClick: function(m) {
-				if(m.iconClass != 'icon-file-text') {
-					if(m.iconClass == 'icon-file-normal') {
-						m.iconClass = 'icon-file-open';
-					} else {
-						m.iconClass = 'icon-file-normal';
-					}
-				}
-				this.handleNodeClick();
+			showDo(row){
+				var data = {
+					"userid": this.userParm.userid,
+					"fileid": row.fileid
+				};
+				var url = this.file_url + '/file/privilege';
+				this.$axios.post(url, data).then((res) => {
+					this.fileAuth = res.data;
+					console.log(this.fileAuth.fileread==0);
+				}).catch((wrong) => {})
 			},
-			expandClick: function(m) {
-				if(m.iconClass != 'icon-file-text') {
-					if(m.iconClass == 'icon-file-normal') {
-						m.iconClass = 'icon-file-open';
-					} else {
-						m.iconClass = 'icon-file-normal';
-					}
-				}
-				m.isFolder = !m.isFolder;
-			},
-
-			
-			//表格滚动加载
-			loadMore () {
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page.currentPage++
-			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     this.requestData()
-//			     console.log('到底了', this.page.currentPage)
-			   }
-			 },
 			tableControle(data) {//控制表格列显示隐藏
 				this.checkedName = data;
 			},
@@ -258,10 +217,6 @@
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
 				this.requestData();
-			},
-			//添加样品管理
-			openAddMgr() {
-				this.$refs.child.visible();
 			},
 			//修改用戶
 			modify() {
@@ -335,32 +290,6 @@
                 	});
 				}
 			},
-			// 导入
-			importData() {
-
-			},
-			// 导出
-			exportData() {
-
-			},
-			// 打印
-			Printing() {
-
-			},
-			judge(data) {
-				//taxStatus 布尔值
-				return data.DESCRIPTION ? '启用' : '冻结'
-			},
-			
-			//时间格式化  
-			dateFormat(row, column) {
-				var date = row[column.property];
-				if(date == undefined) {
-					return "";
-				}
-				return this.$moment(date).format("YYYY-MM-DD"); 
-			},
-
 			SelChange(val) {//选中值后赋值给一个自定义的数组：selMenu
 				this.selMenu = val;
 			},
@@ -368,49 +297,14 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					CLASSFICATION: this.searchList.CLASSFICATION,//委托单位名称
-					STATUS: this.searchList.STATUS,//样品名称
+					userid: this.userParm.userid,
+					filename: this.searchList.filename
 				}
-				var url = this.basic_url + '/api-apps/app/item';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					
-					this.page.totalCount = res.data.count;
-					//总的页数
-					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false
-					} else {
-						this.loadSign = true
-					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
-
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.samplesList = newarr;
+				var url = this.file_url + '/file/baseKeywordList';
+				this.$axios.post(url, data).then((res) => {
+					this.page.totalCount = res.data.total;
+					this.fileList = res.data.vBaseKeywordFiles;
 				}).catch((wrong) => {})
-				
-			},
-			
-			formatter(row, column) {
-				return row.enabled;
-			},
-			//生产单位树
-			getKey() {
-				let that = this;
-				var url = this.basic_url + '/api-user/depts/tree';
-				this.$axios.get(url, {}).then((res) => {
-					this.resourceData = res.data;
-					this.treeData = this.transformTree(this.resourceData);
-				});
 			},
 			transformTree(data) {
 				for(var i = 0; i < data.length; i++) {
@@ -457,14 +351,24 @@
 				this.ismin = !this.ismin;
 			},
 			childByValue:function(childValue) {
-        		// childValue就是子组件传过来的值
         		this.$refs.navsheader.showClick(childValue);
       		},
 		},
-		
 		mounted() {// 在页面挂载前就发起请求
-			this.requestData();
-			this.getKey();
+			var url = this.basic_url + '/api-user/users/currentMap';
+			this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+				this.userParm.userid = res.data.id;
+				this.userParm.username = res.data.username;
+				this.userParm.deptid = res.data.deptId;
+				this.userParm.deptName = res.data.deptName;
+				this.requestData();
+			}).catch((err) => {
+				this.$message({
+					message: '网络错误，请重试',
+					type: 'error'
+				});
+			});
+			
 		},
 	}
 </script>

@@ -1093,6 +1093,8 @@
 				this.vuews = false
 				this.modify = false;
 				this.show = true;
+				this.addtitle = true;
+				this.modifytitle = false;
 			},
 
 			// 这里是修改
@@ -1125,11 +1127,11 @@
 						message: '网络错误，请重试',
 						type: 'error'
 					});
-					this.addtitle = false;
-					this.modifytitle = true;
-					this.modify = true;
-					this.show = true;
 				});
+				this.addtitle = false;
+				this.modifytitle = true;
+				this.modify = true;
+				this.show = true;
 			},
 			
 			childMethods() {//添加内容时从父组件带过来的

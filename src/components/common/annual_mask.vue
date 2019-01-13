@@ -637,23 +637,23 @@
 		<!-- 产品名称 Begin -->
 		<el-dialog title="产品名称" :visible.sync="dialogVisible4" width="80%" :before-close="handleClose">
 			<el-table  :header-cell-style="rowClass" :data="productList" line-center border stripe height="400px" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-								<el-table-column type="selection" fixed width="55" align="center">
-								</el-table-column>
-								<el-table-column label="编码" width="155" sortable prop="PRO_NUM">
-								</el-table-column>
-								<el-table-column label="名称" sortable prop="PRO_NAME">
-								</el-table-column>
-								<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
-								</el-table-column>
-								<el-table-column label="机构" width="185" sortable prop="DEPARTMENTDesc">
-								</el-table-column>
-								<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
-								</el-table-column>
-								<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat">
-								</el-table-column>
-							</el-table>
-							<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-							</el-pagination>
+					<el-table-column type="selection" fixed width="55" align="center">
+					</el-table-column>
+					<el-table-column label="编码" width="155" sortable prop="PRO_NUM">
+					</el-table-column>
+					<el-table-column label="名称" sortable prop="PRO_NAME">
+					</el-table-column>
+					<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
+					</el-table-column>
+					<el-table-column label="机构" width="185" sortable prop="DEPARTMENTDesc">
+					</el-table-column>
+					<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
+					</el-table-column>
+					<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat">
+					</el-table-column>
+				</el-table>
+				<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+				</el-pagination>
 			<span slot="footer" class="dialog-footer">
 		       <el-button @click="dialogVisible4 = false" style="margin-left: 37%;">取 消</el-button>
 		       <el-button type="primary" @click="addproname">确 定</el-button>
@@ -770,7 +770,7 @@
                 }
             };
             var validateBasislist = (rule, value, callback) => {
-            	console.log(rule, value, callback);
+            	// console.log(rule, value, callback);
                 if (value === '') {
                     callback(new Error('请选择检测依据'));
                 }else {
@@ -976,9 +976,9 @@
 			//下达任务通知书
 			assign(item){
 				var dataid = item.ID;
-				console.log(dataid);
-				console.log(item);
-				console.log(item.ISCREATED);
+				// console.log(dataid);
+				// console.log(item);
+				// console.log(item.ISCREATED);
 				if(item.ISCREATED == 1){
 					this.$message({
 						message: '已经下达工作任务通知书，请勿重复下达',
@@ -1142,8 +1142,8 @@
 			},
 			addprobtn(){
 				this.dialogVisible3 = true;
-				console.log(23333);
-				console.log(this.WORKPLAN.PROP_UNIT);
+				// console.log(23333);
+				// console.log(this.WORKPLAN.PROP_UNIT);
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -1151,7 +1151,7 @@
 				this.$axios.get(this.basic_url + '/api-apps/app/productType?DEPTID='+this.WORKPLAN.PROP_UNIT, {
 					params: data
 				}).then((res) => {
-					console.log(res.data);
+					// console.log(res.data);
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -1163,9 +1163,7 @@
 					this.commentArr[this.page.currentPage] = res.data.data
 					let newarr = []
 					for(var i = 1; i <= totalPage; i++) {
-
 						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-
 							for(var j = 0; j < this.commentArr[i].length; j++) {
 								newarr.push(this.commentArr[i][j])
 							}
@@ -1275,7 +1273,6 @@
 	    				this.WORKPLAN.CHANGEBY = res.data.nickname;
 	    				var date = new Date();
 						this.WORKPLAN.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
-
 						this.docParm.userid = res.data.id;
 						this.docParm.username = res.data.username;
 						this.docParm.deptid = res.data.deptId;
@@ -1321,7 +1318,6 @@
 				this.basisList = []; //检测依据
 				this.proTestList = []; //项目检测和要求
 				this.isEditList = false;
-
 				this.docParm = {
 					'model': 'new',
 					'appname': 'WORKPLAN',
@@ -1329,7 +1325,6 @@
 					'appid': 39 
 				};
 				this.getUser('new');
-
 				this.addtitle = true;
             	this.modifytitle = false;
             	this.modify=false;
@@ -1356,7 +1351,6 @@
 					}
 					this.basisList = res.data.WORLPLANLINEList.length > 0 ? res.data.WORLPLANLINEList[0].WORLPLANLINE_BASISList : [];
 					this.proTestList = res.data.WORLPLANLINEList.length > 0 ? res.data.WORLPLANLINEList[0].WORLPLANLINE_PROJECTList : [];
-
 					this.getUser('edit');
 					var _this = this;
 					setTimeout(function(){
@@ -1388,7 +1382,7 @@
 					// 	type: type
 					// },
 				}).then((res) => {
-					console.log(res.data);
+					// console.log(res.data);
 					this.selectData = res.data;
 				});
 				this.viewtitle = false;
@@ -1676,7 +1670,6 @@
 					}
 					this.productList = newarr;
 				}).catch((wrong) => {})
-
 				var url = this.basic_url + '/api-apps/app/customer';
 				this.$axios.get(url, {
 					params: data

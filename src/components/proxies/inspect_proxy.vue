@@ -67,6 +67,11 @@
 						<el-form :model="searchList">
 							<el-row :gutter="5">
 								<el-col :span="6">
+									<el-form-item label="检测委托书编号" prop="PROXYNUM" label-width="110px">
+										<el-input v-model="searchList.PROXYNUM"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="6">
 									<el-form-item label="委托单位名称" prop="V_NAME"  label-width="100px">
 										<el-input v-model="searchList.V_NAME"></el-input>
 									</el-form-item>
@@ -81,15 +86,11 @@
 										<el-input v-model="searchList.REPORT_NUM"></el-input>
 									</el-form-item>
 								</el-col>
-								<el-col :span="5">
-									<el-form-item label="检测委托书编号" prop="PROXYNUM" label-width="110px">
-										<el-input v-model="searchList.PROXYNUM"></el-input>
-									</el-form-item>
-								</el-col>
+								
 							</el-row>
 							<el-row :gutter="5">
 								<el-col :span="6">
-									<el-form-item label="完成日期" prop="COMPDATE" label-width="100px">
+									<el-form-item label="完成日期" prop="COMPDATE" label-width="110px">
 										<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%">
 									</el-date-picker>
 									</el-form-item>
@@ -100,7 +101,7 @@
 									</el-form-item>
 								</el-col -->
 								<el-col :span="5">
-									<el-form-item label="状态" prop="STATUS" label-width="70px">
+									<el-form-item label="状态" prop="STATUS" label-width="100px">
 										<el-select clearable v-model="searchList.STATUS" placeholder="选择状态" style="width: 100%">
 											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>

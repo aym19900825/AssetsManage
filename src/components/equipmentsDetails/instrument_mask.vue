@@ -488,7 +488,7 @@
 				otherInfo: [
 					{
 						label: '录入人',
-						prop: 'ENTERBY',
+						prop: 'ENTERBYDesc',
 						width: '30%',
 						type: 'input',
 						displayType: 'inline-block'
@@ -502,14 +502,14 @@
 					},
 					{
 						label: '机构',
-						prop: 'DEPARTMENT',
+						prop: 'DEPTIDDesc',
 						width: '30%',
 						type: 'input',
 						displayType: 'inline-block'
 					},
 					{
 						label: '修改人',
-						prop: 'CHANGEBY',
+						prop: 'CHANGEBYDesc',
 						width: '30%',
 						type: 'input',
 						displayType: 'inline-block'
@@ -574,7 +574,7 @@
 					'CHANGEDATE': '',	
 					'ENTERBY': '',
 					'ENTERDATE': '',	
-					'DEPARTMENT': '',	
+					'DEPTID': '',	
 					'MEMO': '',	
 					'STATUS': '1',
 					'SYNCHRONIZATION_TIME': '',
@@ -630,8 +630,20 @@
 				this.dialogVisible = true;
 			},
 			addpeoname(){
-				this.dialogVisible = false;
-				this.dataInfo.KEEPER = this.selUser[0].nickname;
+				if(this.selUser.length == 0){
+					this.$message({
+						message: '请选择数据',
+						type: 'warning'
+					});
+				}else if(this.selUser.length > 1){
+					this.$message({
+						message: '不可同时选择多条数据',
+						type: 'warning'
+					});
+				}else{
+					this.dataInfo.KEEPER = this.selUser[0].nickname;
+					this.dialogVisible = false;
+				}
 				this.$emit('request');
 			},
 			SelChange(val) {
@@ -669,13 +681,15 @@
 				var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url,{}).then((res) => {
 					if(opt == 'new'){
-                        this.dataInfo.CHANGEBY = res.data.username;
-				        this.dataInfo.CHANGEDATE = this.getToday();
-				        this.dataInfo.ENTERBY = res.data.username;
+                        // this.dataInfo.CHANGEBY = res.data.username;
+						// this.dataInfo.CHANGEDATE = this.getToday();
+						this.dataInfo.DEPTID = res.data.deptId;
+						this.dataInfo.ENTERBY = res.data.id;
 				        this.dataInfo.ENTERDATE = this.getToday();
-						this.dataInfo.DEPARTMENT = res.data.deptName;
+						// this.dataInfo.DEPARTMENT = res.data.deptName;
 					}else{
-						this.dataInfo.CHANGEBY = res.data.username;
+						this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
+						this.dataInfo.CHANGEBY = res.data.id;
 						this.dataInfo.CHANGEDATE = this.getToday();
 						this.docParm.userid = res.data.id;
 						this.docParm.username = res.data.username;
@@ -947,6 +961,5 @@
 	@import '../../assets/css/mask-modules.css';
 	#cost{
 		text-align: right !important;
-		padding-right: 30px;
 	}
 </style>

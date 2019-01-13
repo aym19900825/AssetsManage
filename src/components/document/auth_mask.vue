@@ -21,36 +21,52 @@
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="关键字授权信息" name="1">
 								<el-row :gutter="20" class="pb10">
-									<el-col :span="5" class="pull-right">
-										<!-- <el-input v-model="dataInfo.STATUS==1?'活动':'不活动'" :disabled="true">
-											<template slot="prepend">信息状态</template>
-										</el-input> -->
-									</el-col>
+									<el-col :span="5" class="pull-right"></el-col>
 								</el-row>
 								<el-form-item v-for="item in basicInfo" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
 									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" disabled></el-input>
-									<!-- <el-checkbox-group 
-										v-model="dataInfo[item.prop]"
-										v-if="item.type=='checkbox'" >
-										<el-checkbox style="line-height: 40px;" v-for="item in authorities" :label="item.label" :key="item.val">{{item.label}}</el-checkbox>
-									</el-checkbox-group> -->
 									<el-input v-model="dataInfo[item.prop]" :disabled="true" v-if="item.label=='姓名'">
 										<el-button slot="append" icon="el-icon-search" @click="addUser"></el-button>
 									</el-input>
-									<el-input v-model="dataInfo[item.prop]" :disabled="true" v-if="item.label=='关键字'">
-										<el-button slot="append" icon="el-icon-search" @click="addKeyW"></el-button>
-									</el-input>
 								</el-form-item>
-								<el-form-item v-for="item in selKeyW" :label="item.keywordname">
-									<el-checkbox-group v-model="item.checkedList">
-										<el-checkbox label="显示"></el-checkbox>
-										<el-checkbox label="编辑"></el-checkbox>
-										<el-checkbox label="删除"></el-checkbox>
-										<el-checkbox label="打印"></el-checkbox>
-										<el-checkbox label="下载"></el-checkbox>
-										<el-checkbox label="复制"></el-checkbox>
-									</el-checkbox-group>
-								</el-form-item>
+							</el-collapse-item>
+							<el-collapse-item title="关键字授权列表" name="2" class="ml30">
+								<div class="table-func">
+									<el-button type="success" size="mini" round @click="addKeyW">
+										<i class="icon-add"></i>
+										<font>新建行</font>
+									</el-button>
+								</div>
+
+								<el-table :data="selKeyW" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100% ;">
+									<el-table-column label="类别名称" sortable prop="categoryidDesc">
+										<template slot-scope="scope">
+											<span>{{scope.row.categoryidDesc}}</span>
+										</template>
+									</el-table-column>
+									<el-table-column label="关键字" sortable prop="keywordidDesc">
+										<template slot-scope="scope">
+											<span>{{scope.row.keywordidDesc}}</span>
+										</template>
+									</el-table-column>
+									<el-table-column fixed="right" label="授权" width="600px">
+										<template slot-scope="scope">
+											<el-checkbox-group v-model="scope.row.checkedList">
+												<el-checkbox label="显示"></el-checkbox>
+												<el-checkbox label="编辑"></el-checkbox>
+												<el-checkbox label="删除"></el-checkbox>
+												<el-checkbox label="打印"></el-checkbox>
+												<el-checkbox label="下载"></el-checkbox>
+												<el-checkbox label="复制"></el-checkbox>
+											</el-checkbox-group>
+										</template>
+									</el-table-column>
+									<el-table-column fixed="right" label="操作">
+										<template slot-scope="scope">
+											<el-button @click="del(scope.row,scope.$index)" type="text">删除</el-button>
+										</template>
+									</el-table-column>
+								</el-table>
 							</el-collapse-item>
 						</el-collapse>
 					</div>
@@ -106,9 +122,6 @@
 					userid: [
 						{ required: true, message: '请选择用户', trigger: 'blur' },
 					],
-					keywordid: [
-						{ required: true, message: '请选择关键字', trigger: 'blur' },
-					],
 					authority: [
 						{ required: true, message: '请选择授权类型', trigger: 'blur' },
 					]
@@ -128,13 +141,6 @@
 						type: 'input',
 						displayType: 'inline-block'
 					},
-					{
-						label: '关键字',
-						prop: 'keywordid',
-						width: '50%',
-						type: 'select',
-						displayType: 'inline-block'
-					}
 					// ,
 					// {
 					// 	label: '授权',
@@ -207,6 +213,36 @@
 			};
 		},
 		methods: {
+			del(row,index){
+				console.log('del');
+				if(!row.id){
+					this.selKeyW.splice(index,1);
+				}else{
+					var url = this.basic_url + '/api-apps/app/tbKeywordPrivilege2/deletes';
+					var data = {
+						ids: row.id,
+					}
+					this.$axios.delete(url, {params: data}).then((res) => {//.delete 传数据方法
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '删除成功',
+								type: 'success'
+							});
+							this.selKeyW.splice(index,1);
+						}else{
+							this.$message({
+								message: res.data.code_msg,
+								type: 'success'
+							});
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+				}
+			},
 			getChoose(data){
 				var selData = data.data;
 				if(data.listName == 'user'){
@@ -217,6 +253,7 @@
 						var obj = {
 							keywordid: selData[i].id,
 							categoryid: selData[i].categoryid,
+							categoryidDesc: selData[i].categoryidDesc,
 							keywordname: selData[i].keywordname,
 							checkedList: [
 								'显示'
@@ -291,22 +328,37 @@
 			},
 			detail() {
 				var detailData = this.detailData;
-				var labelAuth = this.authorities;
-				for(var i in labelAuth){
-					for(var n=0; n<labelAuth.length; n++){
-						var item = labelAuth[n].val;
-						if(detailData[item] == 1){
-							this.dataInfo.authority.push(labelAuth[n].label);
+				this.dataInfo.userid = detailData.userid;
+				this.dataInfo.username = detailData.username;
+				
+				var data = {
+					page: 1,
+					limit: 10,
+					userid: this.dataInfo.userid
+				};
+				var url = this.basic_url + '/api-apps/app/tbKeywordPrivilege2';
+				this.$axios.get(url, {
+					params: data
+				}).then((res) => {
+					var selKeyW = res.data.data;
+					var labelAuth = this.authorities;
+					for(let i=0; i<selKeyW.length; i++){
+						selKeyW[i].checkedList = [];
+						for(let n=0; n<labelAuth.length; n++){
+							console.log('selKeyW');
+							var item = labelAuth[n].val;
+							if(selKeyW[i][item] == 1){
+								selKeyW[i].checkedList.push(labelAuth[n].label);
+							}
 						}
 					}
-				}
-				this.dataInfo.keywordprivilegeid = detailData.id;
-				this.dataInfo.keywordid = detailData.keywordid;
-				this.dataInfo.userid = detailData.userid;
-				this.selUser(detailData.userid);
+					this.selKeyW = selKeyW;
+					
+					this.modify = true;
+					this.show = true;
+				}).catch((wrong) => {});
 
-				this.modify = true;
-				this.show = true;
+				
 			},
 			//点击关闭按钮
 			close() {
@@ -350,51 +402,50 @@
 
 			submitForm() {
 				var _this = this;
-				var url = this.basic_url + '/api-apps/app/tbKeywordPrivilege2/saveOrUpdate';
+				var url = this.basic_url + '/api-apps/app/tbKeywordPrivilege2/batchSaveOrUpdate';
 				this.$refs['dataInfo'].validate((valid) => {
-					var submitData = {
-						'id': '',  //主键ID，必填但页面没有字段
-						'keywordid': this.dataInfo.keywordid,
-						'userid': this.dataInfo.userid,
-						'fileread': 0,
-						'fileedit': 0,
-						'fileprint': 0,
-						'fileupload': 0,
-						'filedownload': 0,
-						'fileduplicate': 0,
-						'filedelete': 0,
-					};
-					var authorities = this.dataInfo.authority;
-					var labelAuth = this.authorities;
-					
-					if(_this.modify){
-						submitData.id = _this.detailData.id;
-					}
-					for(var i in authorities){
-						for(var n=0; n<labelAuth.length; n++){
-							if(labelAuth[n].label == authorities[i]){
-								var item =  labelAuth[n].val;
-								submitData[item] = 1;
-							}
-						}
-					}
-
-					var users = this.usernames;
-					for(var j=0; j<users.length; j++){
-						if(users[j].id == _this.dataInfo.userid){
-							submitData.username = users[j].username;
-						}
-					}
-
-					var keywords = this.keywords;
-					for(var m=0; m<keywords.length; m++){
-						if(keywords[m].id == _this.dataInfo.keywordid){
-							submitData.categoryid = keywords[m].categoryid;
-						}
+					if(this.selKeyW.length == 0){
+						this.resetForm();
+						this.$emit('request');
+						return;
 					}
 
 					if (valid) {
-						this.$axios.post(url, submitData).then((res) => {
+						var param = {
+							datas: []
+						};
+						var selData = this.selKeyW;
+						for(let i=0; i<selData.length; i++){
+							var submitData = {
+								'id': selData[i].id,  //主键ID，必填但页面没有字段
+								'userid': this.dataInfo.userid,
+								'username': this.dataInfo.username,
+								'keywordid': selData[i].keywordid,
+								'keywordidDesc': selData[i].keywordidDesc,
+								'categoryidDesc': selData[i].categoryidDesc,
+								'categoryid': selData[i].categoryid,
+								
+								'fileread': 0,
+								'fileedit': 0,
+								'fileprint': 0,
+								'fileupload': 0,
+								'filedownload': 0,
+								'fileduplicate': 0,
+								'filedelete': 0,
+							};
+							var authorities =  selData[i].checkedList;
+							var labelAuth = this.authorities;
+							for(let j in authorities){
+								for(var n=0; n<labelAuth.length; n++){
+									if(labelAuth[n].label == authorities[j]){
+										var item =  labelAuth[n].val;
+										submitData[item] = 1;
+									}
+								}
+							}
+							param.datas.push(submitData);
+						}
+						this.$axios.post(url, param).then((res) => {
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',

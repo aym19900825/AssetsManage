@@ -55,8 +55,14 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
-								<el-form-item label="检查日期" prop="C_MEMO">
-									<el-input v-model="searchList.C_MEMO"></el-input>
+								<el-form-item label="检查日期" prop="C_DATE">
+									<div class="block">
+									    <el-date-picker
+									      v-model="searchList.C_DATE"
+									      type="date"
+									      placeholder="录入时间" style="width: 100%"  value-format="yyyy-MM-dd">
+									    </el-date-picker>
+								  	</div>
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">

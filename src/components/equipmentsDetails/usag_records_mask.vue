@@ -289,14 +289,14 @@
                 otherInfo: [
                     {
                         label: '录入人',
-                        prop: 'ENTERBY',
+                        prop: 'ENTERBYDesc',
                         width: '30%',
                         type: 'input',
                         displayType: 'inline-block'
                     },
                     {
                         label: '机构',
-                        prop: 'DEPARTMENT',
+                        prop: 'DEPTIDDesc',
                         width: '30%',
                         type: 'input',
                         displayType: 'inline-block'
@@ -310,7 +310,7 @@
                     },
                     {
 						label: '修改人',
-						prop: 'CHANGEBY',
+						prop: 'CHANGEBYDesc',
 						width: '30%',
 						type: 'input',
 						displayType: 'inline-block'
@@ -456,7 +456,9 @@
 			getUser(){
 				var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url,{}).then((res) => {
-				        this.dataInfo.ENTERBY = res.data.username;
+						this.dataInfo.DEPTID = res.data.deptId;
+						this.dataInfo.ENTERBY = res.data.id;
+				        // this.dataInfo.ENTERBY = res.data.username;
 				        this.dataInfo.ENTERDATE = this.getToday();
 				}).catch((err) => {
 					this.$message({
@@ -468,9 +470,10 @@
 			getModiuser(){
 				var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url,{}).then((res) => {
-				        this.dataInfo.CHANGEBY = res.data.username;
+						this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
+						this.dataInfo.CHANGEBY = res.data.id;
 				        this.dataInfo.CHANGEDATE = this.getToday();
-						this.dataInfo.DEPARTMENT = res.data.deptName;
+						// this.dataInfo.DEPARTMENT = res.data.deptName;
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',

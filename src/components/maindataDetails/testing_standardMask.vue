@@ -118,8 +118,8 @@
 		</div>
 
 		<el-dialog title="信息" :visible.sync="dialogFormVisible"  :before-close="resetEditBox">
-			<el-form>
-				<el-form-item label="英文名称" :label-width="formLabelWidth">
+			<el-form >
+				<el-form-item label="英文名称" :label-width="formLabelWidth" prop="editDataInfo">
 					<el-input type="textarea" :rows="4" v-model="editDataInfo" autocomplete="off"></el-input>
 				</el-form-item>
 				<el-form-item class="text-center pt20">
@@ -284,7 +284,11 @@
 				rules: {
 					S_NUM: [{required: false, trigger: 'blur',validator: Validators.isCodeNum}],//编号
 					S_NAME: [{required: true, trigger: 'blur',validator: Validators.isNickname}],//中文名称
-					S_ENGNAME: [{required: true, trigger: 'blur', validator: Validators.isInteger}],//英文名称
+					S_ENGNAME: [{required: true, trigger: 'blur', validator: Validators.isEnglish}],//英文名称
+					editDataInfoProp: [
+						{required: true,trigger: 'blur',message: '必填',},
+						{validator: Validators.isEnglish,trigger: 'blur'}
+					],
 //					RELEASETIME:[{required: true, message: '必填', trigger: 'change'}],
 					RELEASE_UNIT: [
 						{required: true,trigger: 'blur',message: '必填',},

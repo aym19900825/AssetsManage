@@ -71,7 +71,8 @@ import approving from '@/components/workflow/approving'//审批意见
 import flowhistory from '@/components/workflow/flowhistory'//流程历史
 import flowmap from '@/components/workflow/flowmap'//流程地图
 
-
+import flow_management from '@/components/flow/flow_management'//流程模型
+import flow_process from '@/components/flow/flow_process'//流程模型
 Vue.use(Router)
   const routes = [
     {//登录页
@@ -346,7 +347,17 @@ Vue.use(Router)
       path: '/doc_list',
       name: 'doc_list',
       component: doc_list
-    }
+    },
+     {//流程模型
+      path: '/flow_management',
+      name: 'flow_management',
+      component: flow_management
+    },
+    {//工作流管理
+      path: '/flow_process',
+      name: 'flow_process',
+      component: flow_process
+    },
 ];
 
 const router = new Router({

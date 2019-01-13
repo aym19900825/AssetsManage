@@ -9,7 +9,7 @@
 			<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left>
 			<!--左侧菜单内容显示 End-->
 			<!--右侧内容显示 Begin-->
-			<div class="wrapper wrapper-content">
+			<div id="wrapper-content" class="wrapper">
 				<div class="ibox-content">
 					<!--<navs_button></navs_button>-->
 					<div class="fixed-table-toolbar clearfix">
@@ -67,6 +67,11 @@
 						<el-form :model="searchList">
 							<el-row :gutter="5">
 								<el-col :span="6">
+									<el-form-item label="检测委托书编号" prop="PROXYNUM" label-width="110px">
+										<el-input v-model="searchList.PROXYNUM"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="6">
 									<el-form-item label="委托单位名称" prop="V_NAME"  label-width="100px">
 										<el-input v-model="searchList.V_NAME"></el-input>
 									</el-form-item>
@@ -81,15 +86,11 @@
 										<el-input v-model="searchList.REPORT_NUM"></el-input>
 									</el-form-item>
 								</el-col>
-								<el-col :span="5">
-									<el-form-item label="检测委托书编号" prop="PROXYNUM" label-width="110px">
-										<el-input v-model="searchList.PROXYNUM"></el-input>
-									</el-form-item>
-								</el-col>
+								
 							</el-row>
 							<el-row :gutter="5">
 								<el-col :span="6">
-									<el-form-item label="完成日期" prop="COMPDATE" label-width="100px">
+									<el-form-item label="完成日期" prop="COMPDATE" label-width="110px">
 										<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%">
 									</el-date-picker>
 									</el-form-item>
@@ -100,7 +101,7 @@
 									</el-form-item>
 								</el-col -->
 								<el-col :span="5">
-									<el-form-item label="状态" prop="STATUS" label-width="70px">
+									<el-form-item label="状态" prop="STATUS" label-width="100px">
 										<el-select clearable v-model="searchList.STATUS" placeholder="选择状态" style="width: 100%">
 											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
@@ -197,10 +198,14 @@
 		name: 'user_management',
 		components: {
 			'vheader': vheader,
-			'navs_header': navs_header,
 			'navs_left': navs_left,
+			'navs_header': navs_header,
 			'inspectmask': inspectmask,
 		},
+//		created() {
+//  		this.getRouterData()
+//		},
+
 		data() {
 			return {
 				basic_url: Config.dev_url,
@@ -336,7 +341,6 @@
 					label: "fullname"
 				},
 				treeData: [],
-				userData: [],
 				page: {
 					currentPage: 1,
 					pageSize: 10,
@@ -345,6 +349,7 @@
 			}
 		},
 		methods: {
+			 
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
@@ -435,6 +440,13 @@
 			 view(id) {
 				this.$refs.child.view(id);
 			},
+			getRouterData() {
+      		// 只是改了query，其他都不变
+				  this.id = this.$route.query.bizid;
+				  console.log('bizid', this.id);
+				  this.$refs.child.view(this.id);
+				 },
+
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
@@ -602,6 +614,9 @@
 			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
+        		console.log(111);
+        		// childValue就是子组件传过来的值
+        		console.log(childValue);
         		this.$refs.navsheader.showClick(childValue);
       		},
 		},
@@ -611,7 +626,7 @@
 			this.getKey();
 		},
 		mounted() {
-		
+			this.getRouterData();
 		},
 	}
 </script>

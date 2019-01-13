@@ -4,12 +4,93 @@
 			<vheader ></vheader>
 			<navs_header ref='navsheader'></navs_header>	
 		</div>
-		
+        <div class="contentbg">
+	    	<div class="wrapper-content">
+				<div class="ibox-content">
+					<!--<navs_button></navs_button>-->
+					<div class="fixed-table-toolbar clearfix">
+						<div class="bs-bars pull-left">
+							<div class="hidden-xs" id="roleTableToolbar" role="group">
+								<button type="button" class="btn btn-green" @click="audit">
+                                	<i class="icon-add"></i>审核
+                      			</button>
+								<button type="button" class="btn btn-primarys button-margin" >
+						    		<i class="icon-search"></i>高级查询
+								</button>
+							</div>
+						</div>
+						<div class="columns columns-right btn-group pull-right">
+							<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
+							<div class="keep-open btn-group" title="列">
+								<el-dropdown :hide-on-click="false" class="pl10 btn btn-default btn-outline">
+									<span class="el-dropdown-link">
+										<font class="J_tabClose"><i class="icon-menu3"></i></font>
+										<i class="el-icon-arrow-down icon-arrow2-down"></i>
+									</span>
+									<el-dropdown-menu slot="dropdown">
+										<el-checkbox-group v-model="checkedName">
+											<el-dropdown-item v-for="(item,index) in tableHeader" :key="index">
+												<el-checkbox :label="item.label" name="type"></el-checkbox>
+											</el-dropdown-item>
+										</el-checkbox-group>
+									</el-dropdown-menu>
+								</el-dropdown>
+							</div>
+						</div>
+					</div>
+					<!-- 高级查询划出 Begin-->
+					<div v-show="search">
+						<el-form :model="searchList">
+							<el-row :gutter="5">
+								<el-col :span="6">
+									<!--<el-form-item label="流程类型" prop="V_NAME"  label-width="100px">
+										<el-input v-model="searchList.V_NAME"></el-input>
+									</el-form-item>-->
+								</el-col>
+								<el-col :span="5">
+									<el-form-item label="时间" prop="createTime" label-width="70px">
+										<el-input v-model="searchList.createTime"></el-input>
+									</el-form-item>
+								</el-col>
+								<!--<el-col :span="5">
+									<el-form-item label="代办/已办" prop="REPORT_NUM" label-width="100px">
+										<el-input v-model="searchList.REPORT_NUM"></el-input>
+									</el-form-item>
+								</el-col>-->
+							</el-row>
+						</el-form>
+					</div>
+					<!-- 高级查询划出 End-->
+
+					<el-row :gutter="10">
+						<el-col :span="24" class="leftcont v-resize">
+							<!-- 表格 -->
+							<el-table :data="todoList" :header-cell-style="rowClass" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'todoList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
+								</el-table-column>
+								<el-table-column label="数据id" sortable width="140px" prop="bizid" v-if="this.checkedName.indexOf('数据id')!=-1">
+								</el-table-column>
+								<el-table-column label="App" sortable width="140px" prop="app" v-if="this.checkedName.indexOf('App')!=-1">
+								</el-table-column>
+								<el-table-column label="当前环节" sortable width="140px" prop="name" v-if="this.checkedName.indexOf('当前环节')!=-1">
+								</el-table-column>
+								<el-table-column label="创建时间" sortable width="140px" prop="createTime" v-if="this.checkedName.indexOf('当前环节')!=-1">
+								</el-table-column>
+							</el-table>
+							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							</el-pagination>
+							<!-- 表格 -->
+						</el-col>
+					</el-row>
+				</div>
+			</div>
+        </div>
 </div>
 </template>
 
 <script>
 import Config from '../config.js'
+//import maskrouter from '../maskrouter.js'
 import vheader from './common/vheader.vue'
 import navs_header from './common/nav_tabs.vue'
 
@@ -23,10 +104,94 @@ export default {
     data() {
       return {
       	basic_url: Config.dev_url,
+      	fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
+      	search: false,
+      	todoList:[],
+      	commentArr: {},
+      	checkedName: [
+					'数据id',
+					'App',
+					'当前环节',
+					'创建时间'
+					],
+		tableHeader: [{
+			label: '数据id',
+			prop: 'bizid'
+		},
+		{
+			label: 'App',
+			prop: 'app'
+		},
+		{
+			label: '当前环节',
+			prop: 'name'
+		},
+		{
+			label: '创建时间',
+			prop: 'createTime'
+		}],
+		searchList: {
+					createTime:'',	
+				},
+		page: {
+				currentPage: 1,
+				pageSize: 10,
+				totalCount: 0
+				},			
       }
     },
   
 	methods: {
+		//表头居中
+		rowClass({ row, rowIndex}) {
+			    return 'text-align:center'
+			},
+		//审核	
+		audit(){
+			if(this.selUser.length == 0) {
+					this.$message({
+						message: '请您选择要审核的数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selUser.length > 1) {
+					this.$message({
+						message: '不可同时审核多条数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					this.$router.push({path: '/inspect_proxy',query: { bizid: this.selUser[0].bizid,}});
+					this.$store.dispatch('setMenuIdAct','106');
+					console.log(this.$store.state.menuid);
+			    }
+		},
+		//点击的数据
+		SelChange(val) {
+				this.selUser = val;
+	    },
+	    sizeChange(val) {
+				this.page.pageSize = val;
+				this.requestData();
+		},
+		currentChange(val) {
+			this.page.currentPage = val;
+			this.requestData();
+		},
+		//滚动加载更多
+		loadMore() {
+			if(this.loadSign) {
+				this.loadSign = false
+				this.page.currentPage++
+					if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+						return
+					}
+				setTimeout(() => {
+					this.loadSign = true
+				}, 1000)
+				this.requestData();
+			}
+		},
 		requestData() {
 //				var data = {
 //					page: this.page.currentPage,
@@ -40,26 +205,28 @@ export default {
 				var url = this.basic_url + '/api-apps/app/flow/flow/todo';
 				this.$axios.get(url, {}).then((res) => {
 					console.log(res.data);
-//					this.page.totalCount = res.data.count;
-//					//总的页数
-//					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-//					if(this.page.currentPage >= totalPage) {
-//						this.loadSign = false
-//					} else {
-//						this.loadSign = true
-//					}
-//					this.commentArr[this.page.currentPage] = res.data.data
-//					let newarr = []
-//					for(var i = 1; i <= totalPage; i++) {
-//						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-//							for(var j = 0; j < this.commentArr[i].length; j++) {
-//								newarr.push(this.commentArr[i][j])
-//							}
-//						}
-//					}
-//					this.productList = newarr;
-//				}).catch((wrong) => {})
-	});
+					this.page.totalCount = res.data.count;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
+					}
+					this.commentArr[this.page.currentPage] = res.data.data
+					let newarr = []
+					for(var i = 1; i <= totalPage; i++) {
+						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+							for(var j = 0; j < this.commentArr[i].length; j++) {
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					this.todoList = newarr;
+				}).catch((wrong) => {
+					
+					
+				})
 	},
 },
 	  mounted(){
@@ -71,89 +238,6 @@ export default {
 
 <style scoped>
 @import '../assets/css/mask-modules.css';
-
-/*工作统计*/
-.echart_title {
-	left: 15px;
-	right: 15px;
-	line-height:20px;
-	padding-bottom: 10px;
-	height: 35px;
-	position: absolute;
-	top: 15px;
-	z-index: 80;
-}
-.big_numb { color: #333333; font-size: 28px; line-height:32px; }
-.small_font { color: #BDBDBD; font-size:10px; line-height:15px;}
-.middle_font { color: #121958; font-size: 12px;  line-height:20px;}
-
-
-
-/*半圆统计图效果*/
-
-.wracircle {
-	width: 140px; /* Set the size of the progress bar */
-	height: 140px;
-	position: absolute; /* Enable clipping */
-	transform:rotate(270deg);
-	clip: rect(0px, 140px, 140px, 70px); /* Hide half of the progress bar */
-}
-
-/* Set the sizes of the elements that make up the progress bar */
-.circle {
-	width: 140px;
-	height: 140px;
-	border: 10px solid #9399F3;
-	border-radius: 70px;
-	position: absolute;
-	z-index: 1;
-	clip: rect(0px, 70px, 140px, 0px);
-}
-.wracircle:after {
-	content: '';
-	width: 140px;
-	height: 140px;
-	position: absolute;
-	z-index: -1;
-	border: 10px solid #EBF4F7;
-	border-radius: 70px;
-}
-.circle_font {
-	position: absolute;
-	z-index: 6;
-	width:100%;
-	height: 55%;
-	top: 30px;
-	right: 0px;
-	bottom: 0px;
-	text-align: center; 
-	transform:rotate(90deg);
-}
-.circle_font p {
-	font-size: 12px;
-}
-.circle_font p.font20 {font-size: 20px;}
-/* Using the data attributes for the animation selectors. */
-/* Base settings for all animated elements */
-div[data-anim~=base] {
-  -webkit-animation-iteration-count: 1;  /* Only run once */
-  -webkit-animation-fill-mode: forwards; /* Hold the last keyframe */
-  -webkit-animation-timing-function:linear; /* Linear animation */
-}
-
-.wracircle[data-anim~=wracircle] {
-  -webkit-animation-duration: 0.01s; /* Complete keyframes asap */
-  -webkit-animation-delay: 3s; /* Wait half of the animation */
-  -webkit-animation-name: close-wracircle; /* Keyframes name */
-}
-.circle[data-anim~=left] {
-  -webkit-animation-duration: 1s; /* Full animation time */
-  -webkit-animation-name: left-spin;
-}
-/* 改变工作完成情况数据，公式（180/100*n） */
-@-webkit-keyframes left-spin {
-	from {-webkit-transform: rotate(0deg);} to {-webkit-transform: rotate(82deg);}
-}
 
 </style>
 

@@ -161,8 +161,8 @@
 		name: 'instruments',
 		components: {
 			vheader,
-			navs_left,
 			navs_header,
+			navs_left,
 			instrumentsmask,
 			tableControle,
 		},

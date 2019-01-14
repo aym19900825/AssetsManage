@@ -120,8 +120,16 @@ export default {
                 }
 //              sessionStorage.setItem('clickedNav',JSON.stringify({arr:_this.tabs}));
 //              sessionStorage.setItem('selectedNav',JSON.stringify(_this.selectedTab));
-                this.$router.push({path: _this.selectedTab.navherf});
-                return false;
+				this.$store.dispatch('setClickedNavAct',_this.tabs);
+				this.$store.dispatch('setSelectedNavAct',_this.selectedTab);
+				if(_this.selectedTab.parentId!=-1){
+					this.$store.dispatch('setMenuIdAct',_this.selectedTab.parentId);//点击时重新给meunid赋值	
+				}else{
+					//如果只有一级菜单
+					this.$store.dispatch('setMenuIdAct','');
+				}
+                this.$router.push({path: _this.selectedTab.url});
+//              return false;
             }
         },
         closeSel(){
@@ -141,13 +149,11 @@ export default {
         closeOther(){
             this.tabs = [this.selectedTab];
             this.$store.dispatch('setClickedNavAct',this.tabs);
-            console.log(this.$store.state.clickedNavs);
 //          sessionStorage.setItem('clickedNav',JSON.stringify({arr:this.tabs}));
         },
         showSelected(item){
         	this.selectedTab = item;
         	this.$store.dispatch('setSelectedNavAct',item);
-			console.log(item);
 			this.$router.push({path: item.url});
 			if(item.parentId!=-1){
 				this.$store.dispatch('setMenuIdAct',item.parentId);//点击时重新给meunid赋值	

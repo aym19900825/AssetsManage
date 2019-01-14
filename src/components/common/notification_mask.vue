@@ -589,14 +589,14 @@
 				dialogVisible1:false,
 				dialogVisible2:false,
 				rules: {
-					TYPE: [{required: true,message: '必填',trigger: 'blur'}], //名称
+					// TYPE: [{required: true,message: '必填',trigger: 'blur'}], //名称
 					// WP_NUM: [{
 					// 	required: true,
 					// 	message: '必填',
 					// 	trigger: 'blur'
 					// }], //计划编号
-					TYPE:[{required: true,trigger: 'blur',message: '必填',}],
-					CJDW: [{required: true,trigger: 'blur',message: '必填',}], //承检单位
+					TYPE:[{required: true,trigger: 'change',message: '必填',}],
+					CJDW: [{required: true,trigger: 'change',message: '必填',}], //承检单位
 					P_LEADERDesc: [{required: true,trigger: 'change',message: '必填',}], //项目负责人
 					ITEM_NAME: [{required: true,trigger: 'blur',message: '必填',}], //受检产品名称
 					ITEM_MODEL: [{required: true,trigger: 'blur',message: '必填'}], //受检产品型号

@@ -57,14 +57,14 @@
 										</el-input>
 									</el-form-item>
 								</el-col>
-								<el-col :span="3">
+								<!-- <el-col :span="3">
 									<el-form-item label="是否停用" prop="inactive" label-width="70px">
 										<el-select clearable v-model="searchList.inactive" placeholder="" style="width: 100%;">
 											<el-option v-for="(data,index) in stopoptions" :key="index" :label="data.label" :value="data.value">
 											</el-option>
 										</el-select>
 									</el-form-item>
-								</el-col>
+								</el-col> -->
 								<el-col :span="2">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 								</el-col>

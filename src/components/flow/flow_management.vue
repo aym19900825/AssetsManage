@@ -13,18 +13,18 @@
 				<div class="ibox-content">
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
-							<!--<div class="hidden-xs" id="roleTableToolbar" role="group">
+							<div class="hidden-xs" id="roleTableToolbar" role="group">
 								<button type="button" class="btn btn-green" @click="openAddMgr">
                                 	<i class="icon-add"></i>添加
                       			 </button>
-								<button type="button" class="btn btn-blue button-margin" @click="modify">
-								    <i class="icon-edit"></i>修改
+								<button type="button" class="btn btn-blue button-margin" @click="editor">
+								    <i class="icon-edit"></i>编辑
 								</button>
 								<button type="button" class="btn btn-red button-margin" @click="delinfo">
 								    <i class="icon-trash"></i>删除
 								</button>
 								<button type="button" class="btn btn-primarys button-margin">
-							    	<i class="icon-upload-cloud"></i>导入
+							    	<i class="icon-upload-cloud"></i>发布
 								</button>
 								<button type="button" class="btn btn-primarys button-margin">
 							    	<i class="icon-download-cloud"></i>导出
@@ -32,15 +32,10 @@
 								<button type="button" class="btn btn-primarys button-margin">
 							    	<i class="icon-print"></i>打印
 								</button>
-								<button type="button" class="btn btn-primarys button-margin">
-							    	<i class="icon-alert-triangle"></i>中止
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
+								<!--<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 						    		<i class="icon-search"></i>高级查询
-						    		<i class="icon-arrow1-down" v-show="down"></i>
-						    		<i class="icon-arrow1-up" v-show="up"></i>
-								</button>
-							</div>-->
+								</button>-->
+							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
 							<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
@@ -142,6 +137,8 @@
 				</div>
 			</div>
 		</div>
+		<flowmanmask  ref="child" @request="requestData" ></flowmanmask>
+		<iframemask  ref="childIframe" ></iframemask>
 	</div>		
 </div>	
 </template>
@@ -151,13 +148,16 @@ import Config from '../../config.js'
 import vheader from '../common/vheader.vue'
 import navs_left from '../common/left_navs/nav_left5.vue'
 import navs_header from '../common/nav_tabs.vue'
-
+import flowmanmask from '../flowDetails/flow_manMask.vue'
+import iframemask from '../flowDetails/ifram.vue'
 export default {
 	name: 'task',
 		components: {
 			vheader,
 			navs_header,
-			navs_left
+			navs_left,
+			flowmanmask,
+			iframemask
 		},
 
     data() {
@@ -242,6 +242,12 @@ export default {
 				this.requestData();
 			}
 		},
+		//添加
+		openAddMgr() {
+//		    this.$refs.child.resetNew();
+			this.$refs.child.visible();
+			
+		},
 		requestData() {
 //				var data = {
 //					page: this.page.currentPage,
@@ -255,7 +261,6 @@ export default {
 
 				var url = this.basic_url + '/api-flow/flow/model';
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res.data);
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
@@ -278,6 +283,63 @@ export default {
 					
 					
 				})
+		},
+		//修改
+		editor(){
+			if(this.selUser.length == 0) {
+					this.$message({
+						message: '请您选择要修改的流程',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selUser.length > 1) {
+					this.$message({
+						message: '不可同时修改多个流程',
+						type: 'warning'
+					});
+					return;
+				} else {
+					console.log(this.selUser[0]);
+					this.$refs.childIframe.visible(this.selUser[0].id);
+				}
+		},
+		//删除
+		delinfo(){
+			var selData = this.selUser;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请您选择要删除的数据',
+						type: 'warning'
+					});
+					return;
+				} else if(selData.length > 1) {
+					this.$message({
+						message: '不可同时删除多个数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					var changeMenu = selData[0];
+					var id=changeMenu.id
+					console.log(id);
+						var url = this.basic_url + '/api-flow/flow/model/'+id;
+						this.$axios.delete(url, {}).then((res) => { //.delete 传数据方法
+							//resp_code == 0是后台返回的请求成功的信息
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
+							this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+						});
+					}
+			
 		},
 		childByValue:function(childValue) {
         		// childValue就是子组件传过来的值

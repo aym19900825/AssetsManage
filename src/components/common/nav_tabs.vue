@@ -152,9 +152,19 @@ export default {
                 name: '首页',
                 url: '/index'
         	};
+        	var flag = false;
             this.tabs = [this.selectedTab];
             this.tabs.unshift(item);
-            this.$store.dispatch('setClickedNavAct',this.tabs);
+			for(var i = 0; i < this.$store.state.clickedNavs.length; i++){
+				if(item.name == this.$store.state.clickedNavs[i].name){
+					flag = true;
+				}
+			}
+			if(!flag){
+				this.tabs.unshift(item);
+				this.$store.dispatch('setClickedNavAct',this.tabs);
+			}
+				this.$router.push({path: item.url});
 //         this.$store.state.clickedNavs.push(item);
 //          sessionStorage.setItem('clickedNav',JSON.stringify({arr:this.tabs}));
         },

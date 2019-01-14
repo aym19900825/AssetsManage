@@ -1,5 +1,5 @@
 /** 这个文件只允许放表单验证方法 
-
+正则表达式：
 只能输入数字："^[0-9]*$"。
 只能输入n位的数字："^\d{n}$"。
 只能输入至少n位的数字："^\d{n,}$"。
@@ -29,7 +29,7 @@ const validators = {
 	},
 
 	SpecificWord:function (str) {// 特殊字符
-		var specialKey = "[`~!#^&*()=|{}':;',\\[\\].<>/?~！#……&*{}‘；']‘'"; 
+		var specialKey = "[`~!#^&*()=|{}':;',\\[\\].<>?~！#……&*{}‘；']‘'"; 
 			for (var i = 0; i < str.length; i++) {
 				if (specialKey.indexOf(str.substr(i, 1)) != -1) {
 					return false;
@@ -43,9 +43,15 @@ const validators = {
 		return reg.test(str);
 	},
 
-	URL:function (textval) {/* 合法URL*/
-		const urlregex = /^(https?|ftp):\/\/([a-zA-Z0-9.-]+(:[a-zA-Z0-9.&%$-]+)*@)*((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}|([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(:[0-9]+)*(\/($|[a-zA-Z0-9.,?'\\+&%$#=~_-]+))*$/;
-		return urlregex.test(textval);
+	URL:function (str) {/* 合法URL*/
+		const urlregex =  "[`#^&*()={}';',\\[\\]<>?~！#……&*{}‘；']‘'"; 
+		for (var i = 0; i < str.length; i++) {
+				if (urlregex.indexOf(str.substr(i, 1)) != -1) {
+					return false;
+				}
+			}
+		// const urlregex = /^(https?|ftp):\/\/([a-zA-Z0-9.-]+(:[a-zA-Z0-9.&%$-]+)*@)*((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}|([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(:[0-9]+)*(\/($|[a-zA-Z0-9.,?'\\+&%$#=~_-]+))*$/;
+		return true;
 	},
 
 	Mandarin:function (str) {/* 仅限中文*/
@@ -191,7 +197,7 @@ const validators = {
 		}
 	},
 
-	isTelephone:function (rule, value, callback) {//验证电话号码、传真
+	isTelephone:function (rule, value, callback) {//验证电话号码/传真
 		if (value && (!(/^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/).test(value))) {
 			callback(new Error('请输入有效的电话/传真号，xxx-xxxxxxx'));
 		} else {
@@ -199,7 +205,17 @@ const validators = {
 		}
 	},
 
-
+	isLinkURL:function (rule, value, callback) { //验证连接地址
+		if(!value) {
+			callback();
+		} else {
+			if(!validators.URL(value)) {
+				callback(new Error('输入有效的URL'));
+			} else {
+				callback();
+			}
+		}
+	},
 
 	// 验证是否整数
 	isInteger:function (rule, value, callback) {

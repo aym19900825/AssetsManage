@@ -274,7 +274,7 @@
 				    'STATE': '',
 					'ENTERBY': '',
 					'ENTERDATE': '',
-					'DEPARTMEMT': '',
+					'DEPTID': '',
 					'STATUS': '1',
 					'tableList': []
 				},
@@ -308,12 +308,11 @@
 						this.CATEGORY.DEPTID = res.data.deptId;//传给后台机构id
 						this.CATEGORY.CHANGEBY = res.data.id;
 				        this.dataInfo.CHANGEDATE = this.getToday();
-
+					}
 						this.docParm.userid = res.data.id;
 						this.docParm.username = res.data.username;
 						this.docParm.deptid = res.data.deptId;
 						this.docParm.deptfullname = res.data.deptName;
-					}
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',

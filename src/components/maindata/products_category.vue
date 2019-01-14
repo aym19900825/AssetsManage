@@ -88,7 +88,7 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格 Begin-->
-							<el-table :header-cell-style="rowClass" :data="categoryList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table :header-cell-style="rowClass" :data="categoryList" v-loading="loading" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="编码" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('编码')!=-1">
@@ -148,8 +148,9 @@
 		data() {
 			return {
 				basic_url: Config.dev_url,
-				loadSign: true, //加载
+				loadSign: true, //鼠标滚动加载数据
 				commentArr: {},
+				loading: false,//默认加载数据时显示loading动画
 				value: '',
 				options: [{
 					value: '1',
@@ -449,12 +450,13 @@
 					// CONTACT_ADDRESS: this.searchList.CONTACT_ADDRESS,
 					// STATUS: this.searchList.STATUS
 				}
-				console.log(this.searchList.DEPTID);
+				// console.log(this.searchList.DEPTID);
 				var url = this.basic_url + '/api-apps/app/productType';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(res.data);
+					// console.log(res.data);
+					
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)

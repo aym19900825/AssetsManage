@@ -77,7 +77,7 @@
 								<el-col :span="6">
 									<el-form-item label="完成日期" prop="COMPLETE_DATE" label-width="80px">
 										<div class="block">
-									    	<el-date-picker v-model="searchList.COMPLETE_DATE" type="date" placeholder="请选择" style="width: 100%">
+									    	<el-date-picker v-model="searchList.COMPLETE_DATE" type="date" placeholder="请选择" style="width: 100%" value-format="yyyy-MM-dd">
 									    	</el-date-picker>
 								  		</div>
 									</el-form-item>
@@ -100,7 +100,7 @@
 								<el-col :span="6">
 									<el-form-item label="录入日期" prop="ENTERDATE" label-width="80px">
 										<div class="block">
-									    	<el-date-picker v-model="searchList.ENTERDATE" type="date" placeholder="请选择" style="width: 100%">
+									    	<el-date-picker v-model="searchList.ENTERDATE" type="date" placeholder="请选择" style="width: 100%" value-format="yyyy-MM-dd">
 									    	</el-date-picker>
 								  		</div>
 									</el-form-item>

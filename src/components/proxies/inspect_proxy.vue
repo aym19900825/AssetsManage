@@ -9,7 +9,7 @@
 			<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left>
 			<!--左侧菜单内容显示 End-->
 			<!--右侧内容显示 Begin-->
-			<div class="wrapper wrapper-content">
+			<div id="wrapper-content" class="wrapper">
 				<div class="ibox-content">
 					<!--<navs_button></navs_button>-->
 					<div class="fixed-table-toolbar clearfix">
@@ -67,6 +67,11 @@
 						<el-form :model="searchList">
 							<el-row :gutter="5">
 								<el-col :span="6">
+									<el-form-item label="检测委托书编号" prop="PROXYNUM" label-width="110px">
+										<el-input v-model="searchList.PROXYNUM"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="6">
 									<el-form-item label="委托单位名称" prop="V_NAME"  label-width="100px">
 										<el-input v-model="searchList.V_NAME"></el-input>
 									</el-form-item>
@@ -81,16 +86,12 @@
 										<el-input v-model="searchList.REPORT_NUM"></el-input>
 									</el-form-item>
 								</el-col>
-								<el-col :span="5">
-									<el-form-item label="检测委托书编号" prop="PROXYNUM" label-width="110px">
-										<el-input v-model="searchList.PROXYNUM"></el-input>
-									</el-form-item>
-								</el-col>
+								
 							</el-row>
 							<el-row :gutter="5">
 								<el-col :span="6">
-									<el-form-item label="完成日期" prop="COMPDATE" label-width="100px">
-										<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%">
+									<el-form-item label="完成日期" prop="COMPDATE" label-width="110px">
+										<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd" style="width: 100%">
 									</el-date-picker>
 									</el-form-item>
 								</el-col>
@@ -100,9 +101,9 @@
 									</el-form-item>
 								</el-col -->
 								<el-col :span="5">
-									<el-form-item label="状态" prop="STATUS" label-width="70px">
+									<el-form-item label="状态" prop="STATUS" label-width="100px">
 										<el-select clearable v-model="searchList.STATUS" placeholder="选择状态" style="width: 100%">
-											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+											<el-option v-for="(data,index) in options" :key="index" :label="data.label" :value="data.value">
 											</el-option>
 										</el-select>
 									</el-form-item>
@@ -149,6 +150,8 @@
 								</el-table-column>
 								<el-table-column label="样品名称" sortable width="140px" prop="ITEM_NAME" v-if="this.checkedName.indexOf('样品名称')!=-1">
 								</el-table-column>
+								<el-table-column label="状态" width="200px" prop="STATUS" sortable v-if="this.checkedName.indexOf('状态')!=-1">
+								</el-table-column>
 								<el-table-column label="样品型号" sortable width="140px" prop="ITEM_MODEL" v-if="this.checkedName.indexOf('样品型号')!=-1">
 								</el-table-column>
 								<!-- <el-table-column label="样品信息状态" sortable width="200px" prop="ITEM_STATUS" v-if="this.checkedName.indexOf('样品信息状态')!=-1">
@@ -163,8 +166,7 @@
 								</el-table-column>
 								<el-table-column label="主检组" width="140px" prop="MAINGROUP" sortable  v-if="this.checkedName.indexOf('主检组')!=-1">
 								</el-table-column>
-								<!--<el-table-column label="信息状态" width="200px" prop="STATUS" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
-								</el-table-column>-->
+								
 								<!--<el-table-column label="录入人" width="200px" prop="ENTERBY" sortable  v-if="this.checkedName.indexOf('录入人')!=-1">
 								</el-table-column>-->
 								<el-table-column label="录入时间" width="140px" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
@@ -197,10 +199,14 @@
 		name: 'user_management',
 		components: {
 			'vheader': vheader,
-			'navs_header': navs_header,
 			'navs_left': navs_left,
+			'navs_header': navs_header,
 			'inspectmask': inspectmask,
 		},
+//		created() {
+//  		this.getRouterData()
+//		},
+
 		data() {
 			return {
 				basic_url: Config.dev_url,
@@ -234,6 +240,7 @@
 					'委托单位名称',
 					'生产单位名称',
 					'样品名称',
+					'状态',
 					'样品型号',
 					// '样品信息状态',
 					'检测依据',
@@ -261,6 +268,10 @@
 					{
 						label: '样品名称',
 						prop: 'ITEM_NAME'
+					},
+					{
+						label: '状态',
+						prop: 'STATUS'
 					},
 					{
 						label: '样品型号',
@@ -336,7 +347,6 @@
 					label: "fullname"
 				},
 				treeData: [],
-				userData: [],
 				page: {
 					currentPage: 1,
 					pageSize: 10,
@@ -350,12 +360,7 @@
 			    return 'text-align:center'
 			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
-				return(
-					<span>
-		              <i class={data.iconClass}></i>
-		              <span>{node.label}</span>
-		            </span>
-				);
+				return (<span><i class={data.iconClass}></i><span>{node.label}</span></span>)
 			},
 			// 点击节点
 			nodeClick: function(m) {
@@ -435,6 +440,13 @@
 			 view(id) {
 				this.$refs.child.view(id);
 			},
+			getRouterData() {
+      		// 只是改了query，其他都不变
+				  this.id = this.$route.query.bizid;
+				  console.log('bizid', this.id);
+				  this.$refs.child.view(this.id);
+				 },
+
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
@@ -541,7 +553,21 @@
 							}
 						}
 					}
-
+					for(var i = 0;i<newarr.length;i++){
+						if(newarr[i].STATUS == '1'){
+							newarr[i].STATUS = '草稿'
+						} else if(newarr[i].STATUS == '2'){
+							newarr[i].STATUS = '审批中'
+						} else if(newarr[i].STATUS == '3'){
+							newarr[i].STATUS = '已发布'
+						} else if(newarr[i].STATUS == '4'){
+							newarr[i].STATUS = '已取消'
+						} else if(newarr[i].STATUS == '5'){
+							newarr[i].STATUS = '已结束'
+						} else if(newarr[i].STATUS == '0'){
+							newarr[i].STATUS = '驳回'
+						}
+					}
 					this.inspectList = newarr;
 				}).catch((wrong) => {})
 			},
@@ -602,6 +628,9 @@
 			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
+        		console.log(111);
+        		// childValue就是子组件传过来的值
+        		console.log(childValue);
         		this.$refs.navsheader.showClick(childValue);
       		},
 		},
@@ -611,7 +640,7 @@
 			this.getKey();
 		},
 		mounted() {
-		
+			this.getRouterData();
 		},
 	}
 </script>

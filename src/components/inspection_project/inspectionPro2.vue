@@ -19,13 +19,13 @@
 			</div>
 			<el-form :model="inspectionPro2Form" status-icon inline-message ref="inspectionPro2Form" class="el-radio__table">
 			  <el-table ref="singleTable" :data="(Array.isArray(inspectionPro2Form.inspectionList)?inspectionPro2Form.inspectionList:[]).filter(data => !search || data.P_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250" highlight-current-row style="width: 100%;" :default-sort="{prop:'inspectionPro2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
-			  	<!-- <el-table-column label="所属标准" width="80" prop="S_NUM">
+			  	<el-table-column label="所属标准" width="80" prop="S_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.S_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" disabled></el-input><span v-else="v-else">{{scope.row.S_NUM}}</span>
 					</el-form-item>
 			      </template>
-			    </el-table-column> -->
+			    </el-table-column>
 
 			  	<el-table-column label="项目编号" sortable width="100" prop="P_NUM">
 			      <template slot-scope="scope">
@@ -38,8 +38,8 @@
 			    <el-table-column label="项目名称" sortable width="160" prop="P_NAME">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.P_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NAME" placeholder="请输入内容">
-			        		<el-button slot="append" icon="icon-search"></el-button>
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NAME" :disabled="true" placeholder="请输入内容">
+			        		<el-button slot="append" icon="icon-search" @click="addprobtn(scope.row)"></el-button>
 			        	</el-input><span v-else="v-else">{{scope.row.P_NAME}}</span>
 					</el-form-item>
 			      </template>
@@ -117,6 +117,34 @@
 			<!-- 表格 End-->
 		</div>
 	</el-card>
+
+		<!-- 检验/检测项目 Begin -->
+		<el-dialog title="选择基础数据——检验/检测项目" height="300px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
+			<!-- 第二层弹出的表格 Begin-->
+			<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table-column type="selection" fixed width="55" align="center">
+				</el-table-column>
+				<el-table-column label="编码" width="155" sortable prop="S_NUM">
+				</el-table-column>
+				<el-table-column label="名称" sortable prop="S_NUM">
+				</el-table-column>
+				<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
+				</el-table-column>
+				<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc">
+				</el-table-column>
+				<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
+				</el-table-column>
+				<el-table-column label="修改时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
+				</el-table-column>
+			</el-table>
+			
+			<!-- 表格 End-->
+			<span slot="footer" class="dialog-footer">
+		       <el-button @click="dialogVisible3 = false">取 消</el-button>
+		       <el-button type="primary" @click="addproclass">确 定</el-button>
+		    </span>
+		</el-dialog>
+		<!-- 检验/检测项目 End -->
 </div>
 </template>
 <script>
@@ -133,6 +161,11 @@
 					inspectionList: []
 				},
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
+					departmentId: '',//当前用户机构号
+					categoryList:[],//获取产品数据
+					catedata:'',//获取产品类别一条数据放到table行中
+					dialogVisible3: false, //对话框
+					selData:[],
 				isEditing: '',
 				loadSign:true,//加载
 				commentArr:{},//下拉加载
@@ -294,8 +327,21 @@
 					
 				}).catch((wrong) => {})
 			},
-			// handleNodeClick(data) {
-			// },
+			//获取导入表格勾选信息
+			SelChange(val) {
+				this.selData = val;
+			},
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    return 'text-align:center'
+			},
+			handleClose(done) {//关闭选择产品类别弹出框
+				this.$confirm('确认关闭？')
+					.then(_ => {
+						done();
+					})
+					.catch(_ => {});
+			},
 			formatter(row, column) {
 				return row.enabled;
 			},
@@ -311,20 +357,22 @@
 				}
 				if (isEditingflag==false){
                 	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-                		var currentUser, currentDate
+                		var currentUser, currentDate, currentDept;
 						this.currentUser=res.data.nickname;
+						this.currentDept=res.data.deptid;
 						var date=new Date();
 						this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 						var index=this.$moment(date).format("YYYYMMDDHHmmss");
 						var obj = {
+							"S_NUM": this.parentId,//所属类别编号
+							"P_NUM": '',
 							"P_NAME": '',
 							"UNITCOST": '',
 							"STATUS": '1',
-							"S_NUM": this.parentId,//所属类别编号
-							"P_NUM": '',
-							"VERSION": 1,
-							"CHANGEBY": this.currentUser,
-							"CHANGEDATE": this.currentDate,
+							"VERSION": '',
+							"DEPTID": this.currentDept,
+							"ENTERBY": this.currentUser,
+							"ENTERDATE": this.currentDate,
 							"isEditing": true,
 						};
 						this.inspectionPro2Form.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
@@ -346,12 +394,13 @@
 					var submitData = {
 						"ID":row.ID,
 						"S_NUM": row.S_NUM,
+					    "P_NUM": row.P_NUM,
 						"P_NAME": row.P_NAME,
 						"UNITCOST":  row.UNITCOST,
 						"STATUS": row.STATUS,
-						"CHANGEBY": row.CHANGEBY,
-					    "CHANGEDATE": row.CHANGEDATE,
-					    "P_NUM": row.P_NUM,
+						"DEPTIDS": row.STATUS,
+						"ENTERBY": row.CHANGEBY,
+					    "ENTERDATE": row.CHANGEDATE,
 					    "VERSION": row.VERSION,
 					}
 					this.$axios.post(url, submitData).then((res) => {
@@ -399,7 +448,13 @@
 
             	});
 			},
-			addchildRow(row) {//添加子项数据
+			addproclass() { //小弹出框确认按钮事件
+				this.dialogVisible3 = false
+				this.catedata.P_NUM = this.selData[0].P_NUM;
+				this.catedata.P_NAME = this.selData[0].P_NAME;
+				this.catedata.UNITCOST = this.selData[0].UNITCOST;
+				this.catedata.VERSION = this.selData[0].VERSION;
+				this.$emit('request');
 			},
 			viewchildRow(ID,P_NUM) {//查看子项数据
 				var data = {

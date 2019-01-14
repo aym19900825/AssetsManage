@@ -17,7 +17,7 @@
 			</div>
 			<div class="mask_content">
 				
-					<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo"  class="demo-form-inline" status-icon inline-message>
+					<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo"  class="demo-form-inline" inline-message>
 						<div class="text-center" v-show="viewtitle">
 						<el-button class="start" type="success" round plain size="mini" @click="startup"><i class="icon-start"></i> 启动流程</el-button>
 						<el-button class="approval" type="warning" round plain size="mini" @click="approvals"><i class="icon-edit-3"></i> 审批</el-button>
@@ -46,8 +46,8 @@
 										</el-input>
 									</el-col>
 								</el-row>
-								<el-radio-group v-model="dataInfo.TYPE" :disabled="noedit">
-									
+								<el-form-item label="" prop="TYPE">
+									<el-radio-group v-model="dataInfo.TYPE" :disabled="noedit">
 										<el-col :span="4">
 											<el-radio label="1">监督抽查</el-radio>
 										</el-col>
@@ -82,7 +82,8 @@
 											<el-radio label="11">其它</el-radio>
 										</el-col>
 									
-								</el-radio-group>
+									</el-radio-group>
+								</el-form-item>
 							</el-collapse-item>
 							<el-collapse-item title="基本信息" name="2">
 									<el-col :span="8">
@@ -204,20 +205,26 @@
 													<span v-show="!scope.row.isEditing">{{scope.row.S_NUM}}</span>
 													</el-form-item>
 												</template>
-												
 											</el-table-column>
-											<el-table-column prop="S_DESC" label="检验标准内容" sortable width="200px">
+											<!-- <el-table-column prop="S_NAME" label="检验标准内容" sortable width="200px">
 												<template slot-scope="scope">
-													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_DESC" placeholder="请输入内容"></el-input>
-													<span v-show="!scope.row.isEditing">{{scope.row.S_DESC}}</span>
+													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_NAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
+													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NAME" placeholder="请输入内容"></el-input>
+													<span v-show="!scope.row.isEditing">{{scope.row.S_NAME}}</span>
 													</el-form-item>
 												</template>
-											</el-table-column>
+											</el-table-column> -->
 											<el-table-column prop="S_NAME" label="检验标准名称" sortable width="200px">
 												<template slot-scope="scope">
 													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_NAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NAME" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.S_NAME}}</span>
+													</el-form-item>
+												</template>
+											</el-table-column>
+											<el-table-column prop="S_ENGNAME" label="英文名称" sortable width="200px">
+												<template slot-scope="scope">
+													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_ENGNAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
+													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_ENGNAME" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.S_ENGNAME}}</span>
 													</el-form-item>
 												</template>
 											</el-table-column>
@@ -366,8 +373,8 @@
 							<el-collapse-item title="其他" name="7" v-show="views">
 								<el-row >
 									<el-col :span="8">
-										<el-form-item label="录入人" prop="ENTERBY" label-width="110px">
-											<el-input v-model="dataInfo.ENTERBY" :disabled="edit"></el-input>
+										<el-form-item label="录入人" prop="ENTERBYDesc" label-width="110px">
+											<el-input v-model="dataInfo.ENTERBYDesc" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -376,15 +383,15 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="录入人机构" prop="ORGID" label-width="110px">
-											<el-input v-model="dataInfo.ORGID" :disabled="edit"></el-input>
+										<el-form-item label="机构" prop="DEPTIDDesc" label-width="110px">
+											<el-input v-model="dataInfo.DEPTIDDesc" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="修改人" prop="CHANGEBY" label-width="110px">
-											<el-input v-model="dataInfo.CHANGEBY" :disabled="edit"></el-input>
+										<el-form-item label="修改人" prop="CHANGEBYDesc" label-width="110px">
+											<el-input v-model="dataInfo.CHANGEBYDesc" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -454,7 +461,7 @@
 							<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
 			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible1 = false" style="margin-left: 37%;">取 消</el-button>
+		       <el-button @click="dialogVisible1 = false">取 消</el-button>
 		       <el-button type="primary" @click="addproname">确 定</el-button>
 		    </span>
 		</el-dialog>
@@ -481,7 +488,7 @@
 				            :total="page.totalCount">
 				        </el-pagination>
 			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible2 = false" style="margin-left: 37%;">取 消</el-button>
+		       <el-button @click="dialogVisible2 = false">取 消</el-button>
 		       <el-button type="primary" @click="addcomname">确 定</el-button>
 		    </span>
 		</el-dialog>
@@ -582,21 +589,23 @@
 				dialogVisible1:false,
 				dialogVisible2:false,
 				rules: {
-					TYPE: [{required: true,message: '必填',trigger: 'blur'}], //名称
+					// TYPE: [{required: true,message: '必填',trigger: 'blur'}], //名称
 					// WP_NUM: [{
 					// 	required: true,
 					// 	message: '必填',
 					// 	trigger: 'blur'
 					// }], //计划编号
-
-					CJDW: [{required: true,trigger: 'blur',message: '必填',}], //承检单位
-					P_LEADERDesc: [{required: true,trigger: 'blur',message: '必填',}], //项目负责人
+					TYPE:[{required: true,trigger: 'change',message: '必填',}],
+					CJDW: [{required: true,trigger: 'change',message: '必填',}], //承检单位
+					P_LEADERDesc: [{required: true,trigger: 'change',message: '必填',}], //项目负责人
 					ITEM_NAME: [{required: true,trigger: 'blur',message: '必填',}], //受检产品名称
 					ITEM_MODEL: [{required: true,trigger: 'blur',message: '必填'}], //受检产品型号
 					V_NAME: [{required: true,trigger: 'blur',message: '必填'}], //受检企业
 					VENDOR: [{required: true,trigger: 'blur',message: '必填'}], //受检企业编号
 					QUALITY: [{required: true,trigger: 'change',message: '必填'}], //样品数量
 					CHECTCOST: [{required: true,trigger: 'blur',message: '必填',	}], //检验检测费用
+					XD_DATE: [{type: 'string',required: true,message: '请选择',trigger: 'change'}],//下达日期
+					SOLUTION: [{required: true,trigger: 'blur',message: '必填',	}],//抽样方案
 					// REMARKS: [{required: true,trigger: 'blur',message: '必填',}],
 				},
 				//tree
@@ -659,18 +668,44 @@
 				this.dialogVisible1 = true;
 			},
 			addproname(){//产品名称弹框确定选中数据
-				this.dialogVisible1 = false;
-				this.dataInfo.ITEM_NAME = this.selUser[0].PRO_NAME;
-				this.$emit('request');
+				if(this.selUser.length == 0){
+					this.$message({
+						message: '请选择数据',
+						type: 'warning'
+					});
+				}else if(this.selUser.length > 1){
+					this.$message({
+						message: '不可同时选择多条数据',
+						type: 'warning'
+					});
+				}else{
+					this.dialogVisible1 = false;
+					this.dataInfo.ITEM_NAME = this.selUser[0].PRO_NAME;
+					this.$emit('request');
+				}
 			},
 			addCompany(){
 				this.$emit('request');
 				this.dialogVisible2 = true;
 			},                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
 			addcomname(){  
-				this.dialogVisible2 = false;
-				this.dataInfo.V_NAME = this.selUser[0].NAME;
-				this.$emit('request');
+				if(this.selUser.length == 0){
+					this.$message({
+						message: '请选择数据',
+						type: 'warning'
+					});
+				}else if(this.selUser.length > 1){
+					this.$message({
+						message: '不可同时选择多条数据',
+						type: 'warning'
+					});
+				}else{
+					this.dialogVisible2 = false;
+					this.dataInfo.V_NAME = this.selUser[0].NAME;//名称
+					this.dataInfo.V_ADDRESS = this.selUser[0].CONTACT_ADDRESS;//地址
+					this.dataInfo.V_ZIPCODE = this.selUser[0].ZIPCODE;//邮编
+					this.$emit('request');
+				}
 			},
 			handleNodeClick(data) { //获取勾选树菜单节点
 				//				console.log(data);
@@ -734,10 +769,9 @@
 				var obj = {
 					NUMBER: '1',
 					S_NUM: '',
-					S_DESC: '',
-					VERSION: '',
 					S_NAME: '',
-					S_ENGNAME: 'sss',
+					S_ENGNAME: '',
+					VERSION: '',
 					STATUS: '1',
 					isEditing: true
 				};
@@ -770,9 +804,9 @@
 			visible() {
 				this.reset();
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					this.dataInfo.DEPT = res.data.deptName;
-					this.dataInfo.ENTERBY = res.data.nickname;
-					this.dataInfo.ORGID = res.data.deptName
+					this.dataInfo.DEPTID = res.data.deptId;
+					this.dataInfo.ENTERBY = res.data.id;
+					// this.dataInfo.ORGID = res.data.deptName
 					var date = new Date();
 					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD ");
 				}).catch((err) => {
@@ -784,6 +818,7 @@
 				
 				this.addtitle = true;
 				this.modifytitle = false;
+				this.viewtitle = false;
 				this.views = false; //
 				this.noviews = true;
 				this.edit = true;
@@ -803,7 +838,8 @@
 				this.show = true;
 				var usersUrl = this.basic_url + '/api-user/users/currentMap'
 				this.$axios.get(usersUrl, {}).then((res) => {
-					this.dataInfo.CHANGEBY = res.data.nickname;
+					this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
+					this.dataInfo.CHANGEBY = res.data.id;
 					var date = new Date();
 					this.dataInfo.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
 				}).catch((err) => {
@@ -814,6 +850,7 @@
 				});
 				this.addtitle = false;
 				this.modifytitle = true;
+				this.viewtitle = false;
 				this.noviews = true;
 				this.views = false; //
 				this.edit = true;
@@ -824,6 +861,7 @@
 			view(dataid) {
 				this.dataid=dataid;	
 				this.addtitle = false;
+				this.modifytitle = false;
 				this.viewtitle = true;
 				this.views = true; //
 				this.noviews = false;
@@ -899,6 +937,7 @@
 			},
 			// 保存users/saveOrUpdate
 			save() {
+				console.log(this.dataInfo);
 				this.$refs.dataInfo.validate((valid) => {
 		          if (valid) {
 							if(this.dataInfo.WORK_NOTICE_CHECKBASISList.length<=0&&this.dataInfo.WORK_NOTICE_CHECKPROJECTList.length<=0){
@@ -999,15 +1038,27 @@
 			// 	// });
 			// },
 			dailogconfirm(type) { //选择人员确定按钮
-				this.dialogVisible = false;
-				if(this.type == '1') {
-					console.log(12345);
-					this.dataInfo.P_LEADER = this.selUser[0].id;
-					console.log(this.dataInfo.P_LEADER);
-					this.dataInfo.P_LEADERDesc = this.selUser[0].nickname;
-				} else {
-					this.dataInfo.ACCEPT_PERSON = this.selUser[0].id;
-					this.dataInfo.ACCEPT_PERSONDesc = this.selUser[0].nickname;
+				if(this.selUser.length == 0){
+					this.$message({
+						message: '请选择数据',
+						type: 'warning'
+					});
+				}else if(this.selUser.length > 1){
+					this.$message({
+						message: '不可同时选择多条数据',
+						type: 'warning'
+					});
+				}else{
+					this.dialogVisible = false;
+					if(this.type == '1') {
+						console.log(12345);
+						this.dataInfo.P_LEADER = this.selUser[0].id;
+						console.log(this.dataInfo.P_LEADER);
+						this.dataInfo.P_LEADERDesc = this.selUser[0].nickname;
+					} else {
+						this.dataInfo.ACCEPT_PERSON = this.selUser[0].id;
+						this.dataInfo.ACCEPT_PERSONDesc = this.selUser[0].nickname;
+					}
 				}
 			},
 			//项目负责人放大镜
@@ -1042,6 +1093,7 @@
 					return;
 				}else{
 					this.$axios.get(this.basic_url + '/api-apps/app/workNot/operate/createInspectProxy?ID=' + dataid, {}).then((res) => {
+						console.log(res.data);
 						if(res.data.resp_code == 0) {
 							this.$message({
 								message: '生成委托书成功',

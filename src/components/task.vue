@@ -176,9 +176,9 @@ export default {
 					return;
 				} else {
 					console.log(this.selUser[0]);
-//					this.$router.push({path: '/notifications',query: { bizid: this.selUser[0].bizid,}});
-//					this.$store.dispatch('setMenuIdAct',this.selUser[0].bizFirstMenuId);
-//					console.log(this.$store.state.menuid);
+					this.$router.push({path: '/inspect_proxy',query: { bizid: this.selUser[0].bizid,}});
+					this.$store.dispatch('setMenuIdAct',this.selUser[0].bizFirstMenuId);
+					console.log(this.$store.state.menuid);
 			    }
 		},
 		//点击的数据

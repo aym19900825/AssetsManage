@@ -69,7 +69,7 @@
 											placement="top"
 											trigger="click">
 											<div style="text-align: right; margin: 0">
-												<el-button size="mini" type="text" :disabled="fileAuth.fileread==0">显示</el-button>
+												<el-button size="mini" type="text" :disabled="fileAuth.fileread==0"  @click="read(scope.row)">显示</el-button>
 												<el-button size="mini" type="text" :disabled="fileAuth.filedownload==0" @click="download(scope.row)">下载</el-button>
 												<el-button size="mini" type="text" :disabled="fileAuth.fileedit==0">编辑</el-button>
 												<el-button size="mini" type="text" :disabled="fileAuth.fileprint==0">打印</el-button>
@@ -115,6 +115,7 @@
 				visible2: false,
 				basic_url: Config.dev_url,
 				file_url: Config.file_url,
+			    po_url:Config.po_url,//pageoffice 服务路径
 				isShow: false,
 				ismin: true,
 				loadSign: true, //加载
@@ -185,6 +186,14 @@
 		methods: {
 			download(row){
 				var url = row.filepath 
+                        + '&userid=' + this.userParm.userid
+                        + '&username=' + this.userParm.username
+                        + '&deptid=' + this.userParm.deptid
+                        + '&deptfullname=' + this.userParm.deptfullname;
+                window.open(url); 
+			},
+			read(row){
+				var url = this.po_url +"/show?filename=" +row.filename
                         + '&userid=' + this.userParm.userid
                         + '&username=' + this.userParm.username
                         + '&deptid=' + this.userParm.deptid

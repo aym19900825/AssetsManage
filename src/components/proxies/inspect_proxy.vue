@@ -619,6 +619,7 @@
 			this.getKey();
 		},
 		mounted() {
+			console.log(this.$route.query.bizid);
 			if(this.$route.query.bizid!=undefined){
 				this.getRouterData();
 			}

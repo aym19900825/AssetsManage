@@ -1141,6 +1141,9 @@
 								message:res.data.resp_msg,
 								type: 'success'
 							});
+							this.requestData();
+							$(".approval").show();
+							$(".start").hide();
 				    }
 				});
 			},

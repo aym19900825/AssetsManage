@@ -96,9 +96,7 @@
 											<el-input v-model="workorderForm.ITEM_STATU" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
-									
 								</el-row>
-								
 								<el-row >
 									<el-col :span="8">
 										<el-form-item label="样品编号" prop="ITEMNUM">

@@ -541,13 +541,17 @@
 			},
 			// 保存users/saveOrUpdate
 			save(opt) {
+				console.log('docUpload');
+				console.log(opt);
 				this.$refs['dataInfo'].validate((valid) => {
 					this.dataInfo.RELEASETIME =  this.$moment(this.dataInfo.RELEASETIME).format("YYYY-MM-DD HH:mm:ss");
 					this.dataInfo.STARTETIME = this.$moment(this.dataInfo.STARTETIME).format("YYYY-MM-DD HH:mm:ss");
+					console.log('docUpload');
 					if(!valid && opt == 'docUpload'){
+						console.log('message');
 						this.$message({
 							message: '请先正确填写信息，再进行文档上传',
-							type: 'warn'
+							type: 'warning'
 						});
 					}
 					if (valid) {

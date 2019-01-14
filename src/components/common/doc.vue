@@ -102,7 +102,7 @@ export default {
         },
         saveMain(){
             var _this = this;
-            this.$emit('saveParent','uploadDoc');
+            this.$emit('saveParent','docUpload');
             this.reset();
         },
         showAuth(row){

@@ -94,8 +94,8 @@ export default {
 			// console.log(111111);
 			$('.navbar-default').hide();
 			// console.log($("#wrapper-content"));
-			$(".wrapper").css({"padding-left":"0px"})
-			$("#wrapper-content").css({"padding-left":"0px"});
+//			$(".wrapper").css({"padding-left":"0px"})
+//			$("#wrapper-content").css({"padding-left":"0px"});
 			// console.log($("#wrapper-content"));
 		     _this.$emit('childByValue',_this.$store.state.selectedNav);
 		}else{
@@ -113,13 +113,13 @@ export default {
 					_this.$store.dispatch('setSelectedNavAct',res.data[0]);
 				}
 				$('.navbar-default').show();
-				$(".wrapper").css({"padding-left":"220px"});
+//				$(".wrapper").css({"padding-left":"220px"});
 				_this.leftNavs = res.data;
 				//子传父
 				 _this.$emit('childByValue',_this.$store.state.selectedNav);
 			}else{
 				$('.navbar-default').hide();
-				$(".wrapper").css({"padding-left":"0px"});
+//				$(".wrapper").css({"padding-left":"0px"});
 				 _this.$emit('childByValue',_this.$store.state.selectedNav);
 				 
 			}

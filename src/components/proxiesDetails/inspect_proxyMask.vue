@@ -1284,6 +1284,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				}
+				console.log(this.customid);
 				var url = this.basic_url + '/api-apps/app/customer/CUSTOMER/'+ this.customid;
 				this.$axios.get(url, {
 					params: data

@@ -53,6 +53,7 @@ import reports from '@/components/reports'//报表管理
 import inspect_proxy from '@/components/proxies/inspect_proxy'//检验委托书
 import subc_agreement from '@/components/proxies/subc_agreement'//分包协议
 
+import equipment_management from '@/components/equipments/equipment_management'//设备管理
 import instruments from '@/components/equipments/instruments'//仪器和计量器具
 import usag_tending_records from '@/components/equipments/usag_tending_records'//使用/维护保养记录
 import traceability_plan from '@/components/equipments/traceability_plan'//溯源计划
@@ -192,6 +193,11 @@ Vue.use(Router)
       path: '/subc_agreement',
       name: 'subc_agreement',
       component: subc_agreement
+    },
+    {//设备管理
+      path: '/equipment_management',
+      name: 'equipment_management',
+      component: equipment_management
     },
     {//仪器和计量器具
       path: '/instruments',

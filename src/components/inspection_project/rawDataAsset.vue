@@ -400,6 +400,6 @@
 	position: absolute;
     right: 100px;
     bottom: -40px;
-    z-index: 9999;
+    z-index: 88;
 }
 </style>

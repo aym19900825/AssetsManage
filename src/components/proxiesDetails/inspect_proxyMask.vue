@@ -196,7 +196,7 @@
 											</el-button>
 										</div>
 
-										<el-table :data="dataInfo.INSPECT_PROXY_PROJECList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.INSPECT_PROXY_PROJECList', order: 'descending'}">
+										<el-table :data="dataInfo.INSPECT_PROXY_BASISList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.INSPECT_PROXY_BASISList', order: 'descending'}">
 
 											<el-table-column prop="iconOperation" fixed label="" width="50px">
 												<template slot-scope="scope">
@@ -207,8 +207,8 @@
 
 											<el-table-column prop="S_NUM" label="标准编号" sortable width="150px">
 												<template slot-scope="scope">
-													<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.S_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入委托方名称">
+													<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.S_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入">
 														   <el-button slot="append" icon="el-icon-search"></el-button>
 													</el-input>
 													<span v-else="v-else">{{scope.row.S_NUM}}</span>
@@ -218,8 +218,8 @@
 
 											<el-table-column prop="S_DESC" label="标准内容" sortable>
 												<template slot-scope="scope">
-													<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.S_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_DESC" placeholder="请输入委托方名称">	
+													<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.S_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_DESC" placeholder="请输入">	
 													</el-input>
 													<span v-else="v-else">{{scope.row.S_DESC}}</span>
 													</el-form-item>
@@ -238,8 +238,8 @@
 											
 											<el-table-column prop="VERSION" label="版本" sortable width="120px">
 												<template slot-scope="scope">
-													<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入分包方名称">
+													<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入">
 													</el-input>
 													<span v-else="v-else">{{scope.row.VERSION}}</span>
 													</el-form-item>
@@ -248,7 +248,7 @@
 											
 											<el-table-column fixed="right" label="操作" width="120px">
 												<template slot-scope="scope">
-													<el-button @click.native.prevent="deleteRow(scope.$index,dataInfo.INSPECT_PROXY_PROJECList)" type="text" size="small">
+													<el-button @click.native.prevent="deleteRow(scope.$index,dataInfo.INSPECT_PROXY_BASISList)" type="text" size="small">
 														移除
 													</el-button>
 												</template>
@@ -263,7 +263,7 @@
 											</el-button>
 										</div>
                                         
-										<el-table :data="dataInfo.INSPECT_PROXY_BASISList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.INSPECT_PROXY_BASISList', order: 'descending'}">
+										<el-table :data="dataInfo.INSPECT_PROXY_PROJECList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.INSPECT_PROXY_PROJECList', order: 'descending'}">
 
 											<el-table-column prop="iconOperation" fixed label="" width="50px">
 												<template slot-scope="scope">
@@ -274,7 +274,7 @@
 								
 											<el-table-column prop="P_NUM" label="检验项目编号" sortable width="120px">
 												<template slot-scope="scope">
-												<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.P_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+												<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.P_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="请输入">
 														   <el-button slot="append" icon="el-icon-search"></el-button>
 													</el-input>
@@ -285,8 +285,8 @@
 
 											<el-table-column prop="P_DESC" label="检验项目描述" sortable>
 												<template slot-scope="scope">
-													<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.P_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入委托方名称">
+													<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.P_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入">
 													</el-input>
 													<span v-else="v-else">{{scope.row.P_DESC}}</span>
 													</el-form-item>	
@@ -295,8 +295,8 @@
 
 											<el-table-column prop="REMARKS" label="内容" sortable>
 												<template slot-scope="scope">
-													<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" placeholder="请输入要求">		
+													<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" placeholder="请输入">		
 													</el-input>
 													<span v-else="v-else">{{scope.row.REMARKS}}</span>
 													</el-form-item>	
@@ -315,8 +315,8 @@
 
 											<el-table-column prop="VERSION" label="项目版本" sortable width="120px">
 												<template slot-scope="scope">
-													<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入分包方名称">
+													<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入">
 													</el-input>
 													<span v-else="v-else">{{scope.row.VERSION}}</span>
 													</el-form-item>	
@@ -324,12 +324,11 @@
 											</el-table-column>
 											<el-table-column fixed="right" label="操作" width="120">
 												<template slot-scope="scope">
-													<el-button @click.native.prevent="deleteRow(scope.$index,dataInfo.INSPECT_PROXY_BASISList)" type="text" size="small">
+													<el-button @click.native.prevent="deleteRow(scope.$index,dataInfo.INSPECT_PROXY_PROJECList)" type="text" size="small">
 														移除
 													</el-button>
 												</template>
 											</el-table-column>
-
 										</el-table>
 								    </el-tab-pane>
 								    <el-tab-pane label="分包要求" name="third">
@@ -561,8 +560,8 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="录入人机构" prop="ORGID" label-width="110px">
-												<el-input v-model="dataInfo.ORGID" :disabled="edit"></el-input>
+											<el-form-item label="机构" prop="DEPTIDDesc" label-width="110px">
+												<el-input v-model="dataInfo.DEPTIDDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -617,7 +616,7 @@
 		</el-dialog>
 		<!-- 样品名称 Begin -->
 		<el-dialog title="样品名称" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
-			<el-table :data="samplesList" :header-cell-style="rowClass" border stripe height="400px" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+			<el-table :data="samplesList" :header-cell-style="rowClass" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 				<el-table-column type="selection" width="55" fixed align="center">
 				</el-table-column>
 				<el-table-column label="样品编号" sortable width="200px" prop="ITEMNUM">
@@ -651,7 +650,7 @@
 			<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 			</el-pagination>
 			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible2 = false" style="margin-left: 37%;">取 消</el-button>
+		       <el-button @click="dialogVisible2 = false">取 消</el-button>
 		       <el-button type="primary" @click="addsamplename">确 定</el-button>
 		    </span>
 		</el-dialog>
@@ -676,7 +675,7 @@
 			<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 			</el-pagination>
 			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible3 = false" style="margin-left: 37%;">取 消</el-button>
+		       <el-button @click="dialogVisible3 = false">取 消</el-button>
 		       <el-button type="primary" @click="addcusname">确 定</el-button>
 		    </span>
 		</el-dialog>
@@ -928,6 +927,17 @@
 			//新建行
 			addfieldBasis() {
 				var obj = {
+					P_NUM: '',
+					P_DESC: '',
+					REMARKS:'',
+					VERSION: '',
+					STATUS: '1',
+					isEditing: true
+				};
+				this.dataInfo.INSPECT_PROXY_PROJECList.push(obj);
+			},
+			addfieldProject() {
+				var obj = {
 					S_NUM: '',
 					S_DESC: '',
 					VERSION: '',
@@ -935,17 +945,6 @@
 					isEditing: true
 				};
 				this.dataInfo.INSPECT_PROXY_BASISList.push(obj);
-			},
-			addfieldProject() {
-				var obj = {
-					P_NUM: '',
-					P_DESC: '',
-					REMARKS: '',
-					VERSION: '',
-					STATUS: '1',
-					isEditing: true
-				};
-				this.dataInfo.INSPECT_PROXY_PROJECList.push(obj);
 			},
 			addcheckProCont() {
 				var obj = {
@@ -967,9 +966,21 @@
 				this.dialogVisible2 = true;
 			},
 			addsamplename(){
-				this.dialogVisible2 = false;
-				this.dataInfo.ITEM_NAME = this.selval[0].DESCRIPTION;
-				this.$emit('request');
+				if(this.selval.length == 0){
+					this.$message({
+						message: '请选择数据',
+						type: 'warning'
+					});
+				}else if(this.selval.length > 1){
+					this.$message({
+						message: '不可同时选择多条数据',
+						type: 'warning'
+					});
+				}else{
+					this.dialogVisible2 = false;
+					this.dataInfo.ITEM_NAME = this.selval[0].DESCRIPTION;
+					this.$emit('request');
+				}
 			},
 			//刪除新建行
 			deleteRow(index,rows) {//Table-操作列中的删除行
@@ -978,12 +989,13 @@
 			},
 			//点击按钮显示弹窗
 			visible() {
+				this.reset();
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.dataInfo.DEPTID = res.data.deptId;
 					this.dataInfo.ENTERBY = res.data.id;
-					this.dataInfo.ORGID = res.data.deptName
+					// this.dataInfo.ORGID = res.data.deptName
 					var date = new Date();
-					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -1005,7 +1017,7 @@
 					this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
 					this.dataInfo.CHANGEBY = res.data.id;
 					var date = new Date();
-					this.dataInfo.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
+					this.dataInfo.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd");
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -1015,6 +1027,7 @@
 				
 				var url = this.basic_url +'/api-apps/app/inspectPro/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
+					console.log(res.data);
 					this.dataInfo = res.data;
 					this.show = true;
 					//深拷贝数据
@@ -1159,48 +1172,44 @@
 			// 保存users/saveOrUpdate
 			save(dataInfo) {
 				this.$refs['dataInfo'].validate((valid) => {
-					// this.dataInfo.CHECK_COST = this.initcost;
-					// this.dataInfo.CONTRACTCOST = this.initsta;
-					// this.dataInfo.ACTUALCOST = this.initactual;
 			        if (valid) {
-							if(this.dataInfo.INSPECT_PROXY_BASISList.length<=0&&this.dataInfo.INSPECT_PROXY_PROJECList.length<=0&&this.dataInfo.CHECK_PROXY_CONTRACTList.length<=0){
+						if(this.dataInfo.INSPECT_PROXY_BASISList.length<=0&&this.dataInfo.INSPECT_PROXY_PROJECList.length<=0&&this.dataInfo.CHECK_PROXY_CONTRACTList.length<=0){
 			        		this.$message({
-							message: '检验依据和检验项目与要求和分包要求是必填项，请填写！',
-							type: 'warning'
-						});
-						return false;
-			        	}else{
-			        this.dataInfo.ITEM_STATUS=this.dataInfo.ITEM_STATUS==1;
-			        this.dataInfo.MESSSTATUS= this.dataInfo.MESSSTATUS==1;//信息状态
-			        console.log(this.dataInfo);
-					var url = this.basic_url + '/api-apps/app/inspectPro/saveOrUpdate';
-					
-					
-					this.$axios.post(url, this.dataInfo).then((res) => {
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '保存成功',
-								type: 'success'
+								message: '检验依据和检验项目与要求和分包要求是必填项，请填写！',
+								type: 'warning'
 							});
-							//重新加载数据
-							this.$emit('request');
-							this.reset();
+							return false;
+			        	}else{
+							this.dataInfo.ITEM_STATUS=this.dataInfo.ITEM_STATUS==1;
+							this.dataInfo.MESSSTATUS= this.dataInfo.MESSSTATUS==1;//信息状态
+							console.log(this.dataInfo);
+							var url = this.basic_url + '/api-apps/app/inspectPro/saveOrUpdate';
+							this.$axios.post(url, this.dataInfo).then((res) => {
+								if(res.data.resp_code == 0) {
+									this.$message({
+										message: '保存成功',
+										type: 'success'
+									});
+									//重新加载数据
+									this.$emit('request');
+									this.reset();
+								}
+							}).catch((err) => {
+								this.$message({
+									message: '网络错误，请重试',
+									type: 'error'
+								});
+							});
 						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
-					});}
-					this.falg = true;
-			          } else {
+						this.falg = true;
+			        }else{
 			          	this.show = true;
-			           this.$message({
+			            this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
 						});
 			           this.falg = false;
-			          }
+			        }
 				});
 			},
 			saveAndUpdate(dataInfo){
@@ -1241,22 +1250,33 @@
 				});
 			},
 			dailogconfirm(type) { //小弹出框确认按钮事件
-				this.dialogVisible = false;
-				if(this.type == '1') {
-					console.log(this.selval[0].ID);
-					
-				this.customid = this.selval[0].ID;
-				console.log(this.customid);
-				this.dataInfo.VENDOR=this.selval[0].CODE;
-				this.dataInfo.V_NAME = this.selval[0].NAME;
-				this.dataInfo.V_ADDRESS = this.selval[0].CONTACT_ADDRESS;
-				this.dataInfo.V_ZIPCODE = this.selval[0].ZIPCODE;
-				this.dataInfo.V_PERSON = this.selval[0].PERSON;
-				this.dataInfo.V_PHONE = this.selval[0].PHONE;
-				} else {
-					this.dataInfo.PRODUCT_UNIT= this.selval[0].CODE;
-					console.log(this.dataInfo.PRODUCT_UNIT);
-					this.dataInfo.P_NAME = this.selval[0].NAME;
+				if(this.selval.length == 0){
+					this.$message({
+						message: '请选择数据',
+						type: 'warning'
+					});
+				}else if(this.selval.length > 1){
+					this.$message({
+						message: '不可同时选择多条数据',
+						type: 'warning'
+					});
+				}else{
+					this.dialogVisible = false;
+					if(this.type == '1') {
+						console.log(this.selval[0].ID);
+						this.customid = this.selval[0].ID;
+						console.log(this.customid);
+						this.dataInfo.VENDOR=this.selval[0].CODE;
+						this.dataInfo.V_NAME = this.selval[0].NAME;
+						this.dataInfo.V_ADDRESS = this.selval[0].CONTACT_ADDRESS;
+						this.dataInfo.V_ZIPCODE = this.selval[0].ZIPCODE;
+						this.dataInfo.V_PERSON = this.selval[0].PERSON;
+						this.dataInfo.V_PHONE = this.selval[0].PHONE;
+					} else {
+						this.dataInfo.PRODUCT_UNIT= this.selval[0].CODE;
+						console.log(this.dataInfo.PRODUCT_UNIT);
+						this.dataInfo.P_NAME = this.selval[0].NAME;
+					}
 				}
 			},
 			addname(){
@@ -1273,9 +1293,21 @@
 				this.dialogVisible3 = true;
 			},
 			addcusname(){
-				this.dataInfo.V_PERSON = this.selval[0].PERSON;
-				this.dataInfo.V_PHONE = this.selval[0].PHONE;
-				this.dialogVisible3 = false;
+				if(this.selval.length == 0){
+					this.$message({
+						message: '请选择数据',
+						type: 'warning'
+					});
+				}else if(this.selval.length > 1){
+					this.$message({
+						message: '不可同时选择多条数据',
+						type: 'warning'
+					});
+				}else{
+					this.dataInfo.V_PERSON = this.selval[0].PERSON;
+					this.dataInfo.V_PHONE = this.selval[0].PHONE;
+					this.dialogVisible3 = false;
+				}
 			},
 			SelChange(val) {
 				this.selval = val;

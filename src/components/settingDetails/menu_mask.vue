@@ -182,7 +182,7 @@
 					],
 					url: [
 						{required: true,message: '必填',trigger: 'blur'},
-						{validator: Validators.isSpecificKey, trigger: 'blur'}
+						{validator: Validators.isLinkURL, trigger: 'blur'}
 					],
 					sort: [{required: false,trigger: 'blur',validator: Validators.isInteger}],
 				},

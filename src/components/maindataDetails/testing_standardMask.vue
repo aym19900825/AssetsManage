@@ -117,7 +117,7 @@
 			</el-form>
 		</div>
 
-		<el-dialog title="信息" :visible.sync="dialogFormVisible"  :before-close="resetEditBox">
+		<el-dialog title="信息" :visible.sync="dialogFormVisible" :before-close="resetEditBox">
 			<el-form >
 				<el-form-item label="英文名称" :label-width="formLabelWidth" prop="editDataInfo">
 					<el-input type="textarea" :rows="4" v-model="editDataInfo" autocomplete="off"></el-input>

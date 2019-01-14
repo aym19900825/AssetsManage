@@ -115,18 +115,18 @@
 			return {
 				basic_url: Config.dev_url,
 				checkedName: [
-					'序号',
+					// '序号',
 					'机构名称',
 					'机构编码',
 					'版本',
 					'电话号',
 				],
 				columns: [
-					{
-						text: '序号',
-						dataIndex: 'step',
-						isShow:true,
-					},
+					// {
+					// 	text: '序号',
+					// 	dataIndex: 'step',
+					// 	isShow:true,
+					// },
 					{
 						text: '机构名称',
 						dataIndex: 'fullname',

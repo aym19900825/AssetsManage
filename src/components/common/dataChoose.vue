@@ -126,7 +126,7 @@ export default {
            }else{
                 var transData = {
                    listName: this.chooseParam.listName,
-                   data: this.showSelData
+                   data: this.selData
                 }
                 this.$emit('tranFormData', transData);
                 this.reset();

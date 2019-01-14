@@ -70,7 +70,7 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="4">
-									<el-form-item label="类别" prop="TYPE" label-width="45px">
+									<el-form-item label="类型" prop="TYPE" label-width="45px">
 										<el-select clearable v-model="searchList.TYPE" placeholder="请选择类别" style="width: 100%;">
 												<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
 											</el-select>

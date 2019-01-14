@@ -386,7 +386,6 @@
 			//页面加载数据
 			requestData(index) {
 				console.log(this.searchList.inactive);
-				console.log(typeof(this.searchList.inactive));
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -397,7 +396,6 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(123);
 					console.log(res.data);
 					this.roleList = res.data.data;
 					this.page.totalCount = res.data.count;

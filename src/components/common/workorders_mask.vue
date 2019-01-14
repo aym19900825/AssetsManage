@@ -67,11 +67,14 @@
 											</el-input>
 										</el-form-item>
 									</el-col>
-									<!--<el-col :span="8">
+									<el-col :span="8">
 										<el-form-item label="是否主任务单？" prop="IS_MAIN">
-											<el-switch v-model="workorderForm.IS_MAIN"></el-switch>
+											<el-select clearable v-model="workorderForm.IS_MAIN" filterable allow-create default-first-option placeholder="请选择" style="width:100%">
+												<el-option label="是" value="1"></el-option>
+												<el-option label="否" value="0"></el-option>
+											</el-select>
 										</el-form-item>
-									</el-col>-->
+									</el-col>
 									
 								</el-row>
 
@@ -85,21 +88,19 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="规格型号" prop="ITEM_MODEL">
-											<el-input v-model="workorderForm.ITEM_MODEL"></el-input>
+											<el-input v-model="workorderForm.ITEM_MODEL" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="样品状态" prop="ITEM_STATU">
-											<el-input v-model="workorderForm.ITEM_STATU"></el-input>
+											<el-input v-model="workorderForm.ITEM_STATU" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
-									
 								</el-row>
-								
 								<el-row >
 									<el-col :span="8">
 										<el-form-item label="样品编号" prop="ITEMNUM">
-											<el-input v-model="workorderForm.ITEMNUM" ></el-input>
+											<el-input v-model="workorderForm.ITEMNUM" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -314,7 +315,7 @@
 					            	<el-row >
 										<el-col :span="8">
 											<el-form-item label="报告模板">
-												<el-input placeholder="请输入内容" v-model="workorderForm.CHECK_BASIS">
+												<el-input placeholder="请输入内容" v-model="workorderForm.P_NUM">
 													 <el-button slot="append" icon="el-icon-search"></el-button>
 												</el-input>
 											</el-form-item>
@@ -406,7 +407,7 @@
 
 										    <el-table-column fixed="right" label="操作" width="120">
 										      <template slot-scope="scope">
-										        <el-button @click.native.prevent="deleteRow(index, row)" type="text" size="small">
+										        <el-button @click="deleteRow(scope.$index, WorkorderBasisList)" type="text" size="small">
 										          移除
 										        </el-button>
 										      </template>
@@ -551,11 +552,12 @@
 								</el-tabs>
 							</div>
 							<!-- 录入人信息 Begin-->
-							<el-collapse-item title="其他" name="7" v-show="views">
+							<!-- <el-collapse-item title="其他" name="7" v-show="views"> -->
+							<el-collapse-item title="其他" name="7">
 								<el-row >
 									<el-col :span="8">
-										<el-form-item label="录入人" prop="ENTERBY">
-											<el-input v-model="workorderForm.ENTERBY" :disabled="true"></el-input>
+										<el-form-item label="录入人" prop="ENTERBYDesc">
+											<el-input v-model="workorderForm.ENTERBYDesc" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -564,15 +566,15 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="机构" prop="ORG_CODE">
-											<el-input v-model="workorderForm.ORG_CODE" :disabled="true"></el-input>
+										<el-form-item label="机构" prop="DEPTIDDesc">
+											<el-input v-model="workorderForm.DEPTIDDesc" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row >
 									<el-col :span="8">
-										<el-form-item label="修改人" prop="CHANGEBY">
-											<el-input v-model="workorderForm.CHANGEBY" :disabled="true"></el-input>
+										<el-form-item label="修改人" prop="CHANGEBYDesc">
+											<el-input v-model="workorderForm.CHANGEBYDesc" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -748,15 +750,15 @@
 				activeName: 'first', //tabs
 				activeNames: ['1','2','3','4','5','6','7'],//手风琴数量
 				labelPosition: 'right', //表格
-				searchList: { //点击高级搜索后显示的内容
-					WONUM: '',//工作任务单编号
-					ITEM_NAME: '',//样品名称
-					PROXYNUM: '',//委托书编号
-					STATE: '',//状态
-					COMPLETE_DATE: '',//完成日期
-					ENTERBY: '',//录入人
-					ENTERDATE: '',//录入日期
-				},
+				// searchList: { //点击高级搜索后显示的内容
+				// 	WONUM: '',//工作任务单编号
+				// 	ITEM_NAME: '',//样品名称
+				// 	PROXYNUM: '',//委托书编号
+				// 	STATE: '',//状态
+				// 	COMPLETE_DATE: '',//完成日期
+				// 	ENTERBY: '',//录入人
+				// 	ENTERDATE: '',//录入日期
+				// },
 				dataList:[{
 					name:'',
 					description:''
@@ -862,20 +864,46 @@
 				this.dialogVisible1 = true;
 			},
 			addworkordernum(){
-				console.log(this.selMenu[0]);
-				this.workorderForm.PROXYNUM = this.selMenu[0].PROXYNUM;
-				this.dialogVisible1 = false;
-				this.$emit('request');
+				if(this.selMenu.length == 0){
+					this.$message({
+						message: '请选择数据',
+						type: 'warning'
+					});
+				}else if(this.selMenu.length > 1){
+					this.$message({
+						message: '不可同时选择多条数据',
+						type: 'warning'
+					});
+				}else{
+					this.workorderForm.PROXYNUM = this.selMenu[0].PROXYNUM;
+					this.workorderForm.PROXY_VERSION = this.selMenu[0].VERSION;
+					this.dialogVisible1 = false;
+					this.$emit('request');
+				}
 			},
 			addsample(){
 				this.$emit('request');
 				this.dialogVisible3 = true;
 			},
 			addsamplename(){
-				console.log(this.selMenu[0]);
-				this.workorderForm.ITEM_NAME = this.selMenu[0].DESCRIPTION;
-				this.dialogVisible3 = false;
-				this.$emit('request');
+				if(this.selMenu.length == 0){
+					this.$message({
+						message: '请选择数据',
+						type: 'warning'
+					});
+				}else if(this.selMenu.length > 1){
+					this.$message({
+						message: '不可同时选择多条数据',
+						type: 'warning'
+					});
+				}else{
+					this.workorderForm.ITEM_NAME = this.selMenu[0].DESCRIPTION;//样品名称
+					this.workorderForm.ITEM_MODEL = this.selMenu[0].MODEL;//规格型号
+					this.workorderForm.ITEM_STATU = this.selMenu[0].STATE;//样品状态
+					this.workorderForm.ITEMNUM = this.selMenu[0].ITEMNUM;//样品编号
+					this.dialogVisible3 = false;
+					this.$emit('request');
+				}
 			},
 			addperson(num){
 				this.numtips = num;
@@ -883,15 +911,27 @@
 				this.dialogVisible2 = true;
 			},
 			addpersonname(){
-				if(this.numtips == '1'){
-					this.workorderForm.MASTER_INSPECTOR = this.selMenu[0].username;
-				}else if(this.numtips == '2'){
-					this.workorderForm.ITEM_PROFESSIONAL_GROUP = this.selMenu[0].username;
-				}else if(this.numtips == '3'){
-					this.workorderForm.RETURN_ITEM_USER = this.selMenu[0].username;
+				if(this.selMenu.length == 0){
+					this.$message({
+						message: '请选择数据',
+						type: 'warning'
+					});
+				}else if(this.selMenu.length > 1){
+					this.$message({
+						message: '不可同时选择多条数据',
+						type: 'warning'
+					});
+				}else{
+					if(this.numtips == '1'){
+						this.workorderForm.MASTER_INSPECTOR = this.selMenu[0].username;
+					}else if(this.numtips == '2'){
+						this.workorderForm.ITEM_PROFESSIONAL_GROUP = this.selMenu[0].username;
+					}else if(this.numtips == '3'){
+						this.workorderForm.RETURN_ITEM_USER = this.selMenu[0].username;
+					}
+					this.dialogVisible2 = false;
+					this.$emit('request');
 				}
-				this.dialogVisible2 = false;
-				this.$emit('request');
 			},
    			//获取样品信息-样品状态
 			getITEM_STATUS() {
@@ -974,7 +1014,6 @@
 		        if(column.property ==="iconOperation"){
 		            row.isEditing = !row.isEditing;
 		            this.isEditList = row.isEditing;
-		        	
 		        	console.log(row.isEditing);
 		            if(!row.isEditing){
 		            	//保存
@@ -989,7 +1028,6 @@
 				   		this.WorkorderProjectList = row.WorkorderProjectList;
 				   		console.log(row);
 		        	}
-		        	
 		        }
 		    },
 
@@ -1082,8 +1120,13 @@
 				var date = new Date();
 				this.workorderForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-	    			this.workorderForm.ENTERBY = res.data.nickname;
-	    			this.workorderForm.ORG_CODE = res.data.deptName;
+	    			// this.workorderForm.ENTERBY = res.data.nickname;
+					// this.workorderForm.ORG_CODE = res.data.deptName;
+					this.workorderForm.DEPTID = res.data.deptId;
+					this.workorderForm.ENTERBY = res.data.id;
+					// this.dataInfo.ORGID = res.data.deptName
+					var date = new Date();
+					this.workorderForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -1102,9 +1145,10 @@
 				this.views = false;
 				this.modify = true;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-	    			this.workorderForm.CHANGEBY = res.data.nickname;
-	    			var date = new Date();
-					this.workorderForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
+	    			this.workorderForm.DEPTID = res.data.deptId;//传给后台机构id
+					this.workorderForm.CHANGEBY = res.data.id;
+					var date = new Date();
+					this.workorderForm.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd");
 				}).catch((err) => {
 					this.$message({
 						
@@ -1137,10 +1181,10 @@
 			childMethods() {//添加内容时从父组件带过来的
 				var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url,{}).then((res)=>{
-					this.workorderForm.ORG_CODE=res.data.deptName;
-					this.workorderForm.ENTERBY=res.data.nickname;
-					var date=new Date();
-					this.workorderForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
+					this.workorderForm.DEPTID = res.data.deptId;
+					this.workorderForm.ENTERBY = res.data.id;
+					var date = new Date();
+					this.workorderForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 				}).catch((err)=>{
 					this.$message({
 						message:'网络错误，请重试',

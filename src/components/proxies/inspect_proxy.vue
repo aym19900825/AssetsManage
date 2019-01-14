@@ -91,7 +91,7 @@
 							<el-row :gutter="5">
 								<el-col :span="6">
 									<el-form-item label="完成日期" prop="COMPDATE" label-width="110px">
-										<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%">
+										<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd" style="width: 100%">
 									</el-date-picker>
 									</el-form-item>
 								</el-col>
@@ -103,7 +103,7 @@
 								<el-col :span="5">
 									<el-form-item label="状态" prop="STATUS" label-width="100px">
 										<el-select clearable v-model="searchList.STATUS" placeholder="选择状态" style="width: 100%">
-											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+											<el-option v-for="(data,index) in options" :key="index" :label="data.label" :value="data.value">
 											</el-option>
 										</el-select>
 									</el-form-item>
@@ -150,6 +150,8 @@
 								</el-table-column>
 								<el-table-column label="样品名称" sortable width="140px" prop="ITEM_NAME" v-if="this.checkedName.indexOf('样品名称')!=-1">
 								</el-table-column>
+								<el-table-column label="状态" width="200px" prop="STATUS" sortable v-if="this.checkedName.indexOf('状态')!=-1">
+								</el-table-column>
 								<el-table-column label="样品型号" sortable width="140px" prop="ITEM_MODEL" v-if="this.checkedName.indexOf('样品型号')!=-1">
 								</el-table-column>
 								<!-- <el-table-column label="样品信息状态" sortable width="200px" prop="ITEM_STATUS" v-if="this.checkedName.indexOf('样品信息状态')!=-1">
@@ -164,8 +166,7 @@
 								</el-table-column>
 								<el-table-column label="主检组" width="140px" prop="MAINGROUP" sortable  v-if="this.checkedName.indexOf('主检组')!=-1">
 								</el-table-column>
-								<!--<el-table-column label="信息状态" width="200px" prop="STATUS" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
-								</el-table-column>-->
+								
 								<!--<el-table-column label="录入人" width="200px" prop="ENTERBY" sortable  v-if="this.checkedName.indexOf('录入人')!=-1">
 								</el-table-column>-->
 								<el-table-column label="录入时间" width="140px" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
@@ -239,6 +240,7 @@
 					'委托单位名称',
 					'生产单位名称',
 					'样品名称',
+					'状态',
 					'样品型号',
 					// '样品信息状态',
 					'检测依据',
@@ -266,6 +268,10 @@
 					{
 						label: '样品名称',
 						prop: 'ITEM_NAME'
+					},
+					{
+						label: '状态',
+						prop: 'STATUS'
 					},
 					{
 						label: '样品型号',
@@ -349,7 +355,6 @@
 			}
 		},
 		methods: {
-			 
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
@@ -548,7 +553,21 @@
 							}
 						}
 					}
-
+					for(var i = 0;i<newarr.length;i++){
+						if(newarr[i].STATUS == '1'){
+							newarr[i].STATUS = '草稿'
+						} else if(newarr[i].STATUS == '2'){
+							newarr[i].STATUS = '审批中'
+						} else if(newarr[i].STATUS == '3'){
+							newarr[i].STATUS = '已发布'
+						} else if(newarr[i].STATUS == '4'){
+							newarr[i].STATUS = '已取消'
+						} else if(newarr[i].STATUS == '5'){
+							newarr[i].STATUS = '已结束'
+						} else if(newarr[i].STATUS == '0'){
+							newarr[i].STATUS = '驳回'
+						}
+					}
 					this.inspectList = newarr;
 				}).catch((wrong) => {})
 			},

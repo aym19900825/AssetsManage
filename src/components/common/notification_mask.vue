@@ -46,8 +46,8 @@
 										</el-input>
 									</el-col>
 								</el-row>
-								<el-radio-group v-model="dataInfo.TYPE" :disabled="noedit">
-									
+								<el-form-item label="" prop="TYPE">
+									<el-radio-group v-model="dataInfo.TYPE" :disabled="noedit">
 										<el-col :span="4">
 											<el-radio label="1">监督抽查</el-radio>
 										</el-col>
@@ -82,7 +82,8 @@
 											<el-radio label="11">其它</el-radio>
 										</el-col>
 									
-								</el-radio-group>
+									</el-radio-group>
+								</el-form-item>
 							</el-collapse-item>
 							<el-collapse-item title="基本信息" name="2">
 									<el-col :span="8">
@@ -204,7 +205,6 @@
 													<span v-show="!scope.row.isEditing">{{scope.row.S_NUM}}</span>
 													</el-form-item>
 												</template>
-												
 											</el-table-column>
 											<!-- <el-table-column prop="S_NAME" label="检验标准内容" sortable width="200px">
 												<template slot-scope="scope">
@@ -589,21 +589,23 @@
 				dialogVisible1:false,
 				dialogVisible2:false,
 				rules: {
-					TYPE: [{required: true,message: '必填',trigger: 'blur'}], //名称
+					// TYPE: [{required: true,message: '必填',trigger: 'blur'}], //名称
 					// WP_NUM: [{
 					// 	required: true,
 					// 	message: '必填',
 					// 	trigger: 'blur'
 					// }], //计划编号
-
-					CJDW: [{required: true,trigger: 'blur',message: '必填',}], //承检单位
-					P_LEADERDesc: [{required: true,trigger: 'blur',message: '必填',}], //项目负责人
+					TYPE:[{required: true,trigger: 'change',message: '必填',}],
+					CJDW: [{required: true,trigger: 'change',message: '必填',}], //承检单位
+					P_LEADERDesc: [{required: true,trigger: 'change',message: '必填',}], //项目负责人
 					ITEM_NAME: [{required: true,trigger: 'blur',message: '必填',}], //受检产品名称
 					ITEM_MODEL: [{required: true,trigger: 'blur',message: '必填'}], //受检产品型号
 					V_NAME: [{required: true,trigger: 'blur',message: '必填'}], //受检企业
 					VENDOR: [{required: true,trigger: 'blur',message: '必填'}], //受检企业编号
 					QUALITY: [{required: true,trigger: 'change',message: '必填'}], //样品数量
 					CHECTCOST: [{required: true,trigger: 'blur',message: '必填',	}], //检验检测费用
+					XD_DATE: [{type: 'string',required: true,message: '请选择',trigger: 'change'}],//下达日期
+					SOLUTION: [{required: true,trigger: 'blur',message: '必填',	}],//抽样方案
 					// REMARKS: [{required: true,trigger: 'blur',message: '必填',}],
 				},
 				//tree
@@ -699,7 +701,9 @@
 					});
 				}else{
 					this.dialogVisible2 = false;
-					this.dataInfo.V_NAME = this.selUser[0].NAME;
+					this.dataInfo.V_NAME = this.selUser[0].NAME;//名称
+					this.dataInfo.V_ADDRESS = this.selUser[0].CONTACT_ADDRESS;//地址
+					this.dataInfo.V_ZIPCODE = this.selUser[0].ZIPCODE;//邮编
 					this.$emit('request');
 				}
 			},
@@ -933,6 +937,7 @@
 			},
 			// 保存users/saveOrUpdate
 			save() {
+				console.log(this.dataInfo);
 				this.$refs.dataInfo.validate((valid) => {
 		          if (valid) {
 							if(this.dataInfo.WORK_NOTICE_CHECKBASISList.length<=0&&this.dataInfo.WORK_NOTICE_CHECKPROJECTList.length<=0){
@@ -1088,6 +1093,7 @@
 					return;
 				}else{
 					this.$axios.get(this.basic_url + '/api-apps/app/workNot/operate/createInspectProxy?ID=' + dataid, {}).then((res) => {
+						console.log(res.data);
 						if(res.data.resp_code == 0) {
 							this.$message({
 								message: '生成委托书成功',

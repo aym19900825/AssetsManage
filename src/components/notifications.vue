@@ -567,10 +567,6 @@
 				return data;
 			},
 			handleNodeClick(data) {
-				// console.log(data.label);
-				// console.log(233333333);
-				// console.log(this.selectData[0].code);
-				console.log(this.selectData);
 				for(var i = 0;i<this.selectData.length;i++){
 					if(data.label ==  this.selectData[i].name){
 						console.log(data.label);

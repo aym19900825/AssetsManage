@@ -23,7 +23,7 @@
                 <i class="el-icon-arrow-down icon-arrow2-down"></i>
               </span>
               <el-dropdown-menu slot="dropdown" class="scrollbar" style="max-height:300px">
-                <el-dropdown-item v-for="item in GetRoles" >
+                <el-dropdown-item v-for="(item,index) in GetRoles" :key="index">
                     <div @click = "clickfun($event)">
                         {{item.name}}
                     </div>

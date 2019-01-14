@@ -61,7 +61,7 @@ export default {
 		    	this. id=this.approvingData.id;
 		    	this. appname=this.approvingData.app;
 		    	this.$refs.approveForm.validate((valid) => {	
-		    	var url = this.basic_url + '/api-apps/app/'+this. appname+'/flow/'+this. id;	
+		    	var url = this.basic_url + '/api-apps/app/'+this. appname+'/flow/'+this.id;	
 		    	console.log(url);
 				this.approveForm = {
 							"end":false,

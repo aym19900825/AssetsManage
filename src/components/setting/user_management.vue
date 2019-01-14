@@ -256,12 +256,7 @@
 			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
 				//console.log();
-				return(
-					<span>
-		              <i class={data.iconClass}></i>
-		              <span>{node.label}</span>
-		            </span>
-				);
+				return (<span><i class={data.iconClass}></i><span>{node.label}</span></span>)
 			},
 			// 点击节点
 			nodeClick: function(m) {
@@ -303,11 +298,12 @@
 					//console.log('到底了', this.page.currentPage)
 				}
 			},
-			
+			//获取pageSize
 			sizeChange(val) {
 				this.page.pageSize = val;
 				this.requestData();
 			},
+			//获取currentPage
 			currentChange(val) {
 				this.page.currentPage = val;
 				this.requestData();

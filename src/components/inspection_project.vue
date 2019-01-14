@@ -22,7 +22,7 @@
 								</el-button>
 							</div>
 						<el-form :inline="true" :model="formInline">
-							<el-form-item label="部门名称">
+							<el-form-item label="部门名称" prop="DEPTID">
 								<el-select v-model="formInline.DEPTID" placeholder="请选择部门" v-if="departmentId==128" @change="requestData_productType2">
 									<el-option v-for="(data,index) in Select_DEPTID" :key="index" :value="data.id" :label="data.fullname"></el-option>
 								</el-select>
@@ -195,8 +195,9 @@
 				productType2Form:{//产品类别数据组
 					inspectionList: []
 				},
-				departmentId: '',
+				departmentId: '',//当前用户机构号
 				categoryList:[],//获取产品类型数据
+				catedata:'',//获取产品类别一条数据放到table行中
 				selData:[],
 				isEditing: '',
 				loadSign:true,//加载
@@ -224,7 +225,6 @@
 				inspectionSta2Id: 0,//获取子表检验/检测标准ID
 				inspectionPro2Id: 0,//获取子表检验/检测项目ID
 				dialogVisible3: false, //对话框
-				catedata:''//获取产品类别一条数据放到table行中
 			}
 		},
 		methods: {
@@ -348,21 +348,31 @@
 				return index + 1;
 			},
 			getDEPTID() {//获取机构部门数据
-				this.depId = 128;
-				var currenturl = this.basic_url + '/api-user/depts/findByPid/' + this.depId;
-				this.$axios.get(currenturl, {}).then((res) => {
-					// console.log(res.data);
-					this.Select_DEPTID = res.data;
-				}).catch(error => {
-					console.log('请求失败');
-				})
+				var url = this.basic_url + '/api-user/users/currentMap';
+	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+                this.departmentId = res.data.deptId;
+
+					var currenturl = this.basic_url + '/api-user/depts/findByPid/' + this.departmentId;
+					this.$axios.get(currenturl, {}).then((res) => {
+						// console.log(res.data);
+						this.Select_DEPTID = res.data;
+					}).catch(error => {
+						console.log('请求失败');
+					})
+
+				 }).catch((err) => {
+	                this.$message({
+	                    message: '网络错误，请重试',
+	                    type: 'error'
+	                });
+	            });
 			},
 
 			getData(){//获取当前用户信息
 	            var url = this.basic_url + '/api-user/users/currentMap';
 	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
                     this.departmentId = res.data.deptId;
-
+                    	
                     	var depturl = this.basic_url + '/api-user/depts/'+ this.departmentId;
 			            this.$axios.get(depturl, {}).then((res) => {//根据当前用户信息查询它的组织机构
 		                    this.formInline.DEPTID = res.data.fullname;
@@ -373,6 +383,8 @@
 			                    type: 'error'
 			                });
 			            });
+
+
 	            }).catch((err) => {
 	                this.$message({
 	                    message: '网络错误，请重试',
@@ -382,13 +394,14 @@
 
 	            
 	        },
-			requestData_productType2(index) {//加载数据
+			requestData_productType2(val) {//加载数据
 				var _this = this;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 					DEPTID: this.formInline.DEPTID,//点击部门名称下拉菜单显示数据
 				}
+				
 				var url = this.basic_url + '/api-apps/app/productType2';
 				this.$axios.get(url, {
 					params: data
@@ -415,26 +428,28 @@
 						}
 					}
 					
-					this.productType2Form.inspectionList = newarr;
-					if (this.productType2Form.inspectionList.length[0].ID = 0) {
-						console.log('暂无数据');
-					} else {
-						setTimeout(function(){
-							_this.viewchildRow(_this.productType2Form.inspectionList[0].ID,_this.productType2Form.inspectionList[0].NUM);
-						},0);
+					this.productType2Form.inspectionList = newarr;//滚动加载更多
+
+					//默认主表第一条数据
+					if(this.productType2Form.inspectionList.length > 0){
+						this.viewchildRow(this.productType2Form.inspectionList[0].ID,this.productType2Form.inspectionList[0].NUM);
+					}else{
+						this.viewchildRow('null');
 					}
+					
 
 					this.$refs.singleTable.setCurrentRow(this.productType2Form.inspectionList[0]);//默认选中第一条数据
 				}).catch((wrong) => {})
 			},
-			handleClose(done) {//关闭弹出框
+			
+			handleClose(done) {//关闭选择产品类别弹出框
 				this.$confirm('确认关闭？')
 					.then(_ => {
 						done();
 					})
 					.catch(_ => {});
 			},
-			formatter(row, column) {
+			formatter(row, column) {//禁止产品类别行编辑
 				return row.enabled;
 			},
 			addfield_productType2() { //插入行到产品类别Table中
@@ -450,19 +465,19 @@
 				if (isEditingflag==false){
                 	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
                 		// console.log(res);
-                		var currentUser, currentDate, currentDept
+                		var currentUser, currentDate, currentDept;
 						this.currentUser=res.data.nickname;
-						this.currentDept=res.data.deptName;
+						this.currentDept=res.data.deptid;
 						var date=new Date();
 						this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 						var obj = {
 							"TYPE": '',
-							"STATUS": '',
+							"STATUS": 1,
 							"NUM": '',
 							"VERSION": '',
-							"DEPTID": '',
-							"CHANGEBY": '',
-							"CHANGEDATE":'',
+							"DEPTID": this.currentDept,
+						    "ENTERBY": this.currentUser,
+						    "ENTERDATE": this.currentDate,
 							"isEditing": true,
 						};
 						this.productType2Form.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
@@ -488,8 +503,8 @@
 					    "VERSION": row.VERSION,
 					    "DEPTID": row.DEPTID,
 						"STATUS": row.STATUS,
-						"CHANGEBY": row.CHANGEBY,
-					    "CHANGEDATE": row.CHANGEDATE,
+					    "ENTERBY": row.ENTERBY,
+					    "ENTERDATE": row.ENTERDATE,
 					}
 					this.$axios.post(url, submitData).then((res) => {
 						if(res.data.resp_code == 0) {
@@ -541,12 +556,6 @@
 				this.catedata.NUM = this.selData[0].ID;
 				this.catedata.TYPE = this.selData[0].TYPE;
 				this.catedata.VERSION = this.selData[0].VERSION;
-				this.catedata.DEPTID = this.selData[0].DEPTID;
-				this.catedata.STATUS = this.selData[0].STATUS;
-				this.catedata.CHANGEBY = this.selData[0].CHANGEBY;
-				this.catedata.CHANGEDATE = this.selData[0].CHANGEDATE;
-				this.catedata.ENTERBY = this.selData[0].ENTERBY;
-				this.catedata.ENTERDATE = this.selData[0].ENTERDATE;
 				this.$emit('request');
 			},
 			viewchildRow(id,num) {//查看子项数据

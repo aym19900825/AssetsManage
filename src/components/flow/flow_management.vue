@@ -23,7 +23,7 @@
 								<button type="button" class="btn btn-red button-margin" @click="delinfo">
 								    <i class="icon-trash"></i>删除
 								</button>
-								<button type="button" class="btn btn-primarys button-margin">
+								<button type="button" class="btn btn-primarys button-margin" @click="release">
 							    	<i class="icon-upload-cloud"></i>发布
 								</button>
 								<button type="button" class="btn btn-primarys button-margin">
@@ -284,7 +284,7 @@ export default {
 					
 				})
 		},
-		//修改
+		//修改（编辑）
 		editor(){
 			if(this.selUser.length == 0) {
 					this.$message({
@@ -341,6 +341,49 @@ export default {
 					}
 			
 		},
+		//发布
+		release(){
+			if(this.selUser.length == 0) {
+					this.$message({
+						message: '请您选择要修改的流程',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selUser.length > 1) {
+					this.$message({
+						message: '不可同时修改多个流程',
+						type: 'warning'
+					});
+					return;
+				} else {
+					console.log(this.selUser[0]);
+					console.log(this.selUser[0].deploymentId);
+					var id=this.selUser[0].id;
+					var url = this.basic_url + '/api-flow/flow/model/'+id+'/deploy';
+					console.log(url);
+					this.$axios.get(url, {}).then((res) => {
+						console.log(res);
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: 'res.data.resp_msg',
+									type: 'success'
+								});
+								this.requestData();
+							}else{
+								this.$message({
+									message: 'res.data.resp_msg',
+									type: 'warning'
+								});
+							}
+						}).catch((err) => {
+							this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+						});
+				}
+		},
+
 		childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
         		this.$refs.navsheader.showClick(childValue);

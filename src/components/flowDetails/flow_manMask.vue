@@ -143,7 +143,6 @@
 							console.log(res);
 							if(res.status ==200) {
      						this.$refs.child.visible();
-
 							}
 						}).catch((err) => {
 							this.$message({

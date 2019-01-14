@@ -130,7 +130,7 @@
 			</div>
 		</el-dialog>
 		<vkeyword ref="keyword" :param="param"></vkeyword>
-		<vchoose ref="choose" :chooseParam = "chooseParam" @tranFormData = 'getChoose'></vchoose>
+		<!-- <vchoose ref="choose" :chooseParam = "chooseParam" @tranFormData = 'getChoose'></vchoose> -->
 	</div>
 </template>
 <script>
@@ -294,31 +294,41 @@
                     });
                 });
 			},
+			// showAuth(row){
+			// 	this.chooseParam = {
+			// 		title: "关键字列表",
+			// 		selShow: true,
+			// 		listName: 'keywordList',
+			// 		selMax: 1000,
+			// 		tableHeader: [
+			// 			{
+			// 				propName: 'categoryidDesc',
+			// 				labelName: '类别'
+			// 			},
+			// 			{
+			// 				propName: 'keywordname',
+			// 				labelName: '关键字'
+			// 			}
+			// 		],
+			// 		search: [],
+			// 		url: '/api-apps/app/tbKeyword2'
+			// 	};
+			// 	this.$refs.choose.getData('new',this.chooseParam);
+			// 	this.selFileId = row.fileid;
+			// 	// this.param.fileid = row.fileid;
+			// 	// this.$refs.keyword.requestData();
+			// },
 			showAuth(row){
-				this.chooseParam = {
-					title: "关键字列表",
-					selShow: true,
-					listName: 'keywordList',
-					selMax: 1000,
-					tableHeader: [
-						{
-							propName: 'categoryidDesc',
-							labelName: '类别'
-						},
-						{
-							propName: 'keywordname',
-							labelName: '关键字'
-						}
-					],
-					search: [],
-					url: '/api-apps/app/tbKeyword2'
-				};
-				this.$refs.choose.getData('new',this.chooseParam);
-				// this.param.fileid = row.fileid;
-				// this.$refs.keyword.requestData();
+				this.param.visible = true;
+				this.param.fileid = row.fileid;
+				this.$refs.keyword.getData();
+				this.$refs.keyword.requestData();
 			},
-			getChoose(){
-
+			getChoose(data){
+				// listName: this.chooseParam.listName,
+                // data: this.selData
+				var selData = data.data;
+				
 			},
 			resetDir(){
 				this.dir.dirName = '';

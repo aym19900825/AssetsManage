@@ -154,6 +154,7 @@ export default {
         	};
         	var flag = false;
             this.tabs = [this.selectedTab];
+            console.log(this.tabs);
             this.tabs.unshift(item);
 			for(var i = 0; i < this.$store.state.clickedNavs.length; i++){
 				if(item.name == this.$store.state.clickedNavs[i].name){
@@ -162,7 +163,7 @@ export default {
 			}
 			if(!flag){
 				this.tabs.unshift(item);
-				this.$store.dispatch('setClickedNavAct',this.tabs);
+				this.$store.state.clickedNavs.push(this.tabs)
 			}
 				this.$router.push({path: item.url});
 //         this.$store.state.clickedNavs.push(item);

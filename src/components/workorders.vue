@@ -135,11 +135,11 @@
 							<el-table :header-cell-style="rowClass" :data="userList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
-								<el-table-column label="工作任务单编号" sortable width="280px" prop="WONUM" v-if="this.checkedName.indexOf('工作任务单编号')!=-1">
+								<el-table-column label="工作任务单编号" sortable width="140px" prop="WONUM" v-if="this.checkedName.indexOf('工作任务单编号')!=-1">
 								</el-table-column>
 								<el-table-column label="样品名称" sortable width="180px" prop="ITEM_NAME" v-if="this.checkedName.indexOf('样品名称')!=-1">
 								</el-table-column>
-								<el-table-column label="样品型号" sortable width="200px" prop="ITEM_MODEL" v-if="this.checkedName.indexOf('样品型号')!=-1">
+								<el-table-column label="样品型号" sortable width="180px" prop="ITEM_MODEL" v-if="this.checkedName.indexOf('样品型号')!=-1">
 								</el-table-column>
 								<el-table-column label="样品状态" sortable  width="100px" prop="ITEM_STATUS" v-if="this.checkedName.indexOf('样品状态')!=-1">
 								</el-table-column>

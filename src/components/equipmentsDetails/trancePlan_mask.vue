@@ -105,7 +105,7 @@
 				<!--底部-->
 			</div>
 			<!--设备名称 Begin-->
-			<el-dialog :visible.sync="dialogVisname" width="60%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisname" width="60%" :before-close="handleClose">
 				<el-table :header-cell-style="rowClass" :data="assetList" border stripe height="400px" style="width: 100%;" :default-sort="{prop:'assetList', order: 'descending'}" @selection-change="SelectChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed align="center">
 								</el-table-column>

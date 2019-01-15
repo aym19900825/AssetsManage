@@ -626,7 +626,7 @@
 				</div>
 			</div>
 			<!--委托书编号 Begin-->
-			<el-dialog title="委托书编号" :visible.sync="dialogVisible1" width="80%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="委托书编号" :visible.sync="dialogVisible1" width="80%" :before-close="handleClose">
 					<el-table :data="inspectList" :header-cell-style="rowClass" border stripe height="400px" style="width: 100%;" :default-sort="{prop:'inspectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 						<el-table-column type="selection" width="55" fixed align="center">
 						</el-table-column>
@@ -671,7 +671,7 @@
 				</el-dialog>
 			<!--委托书编号 End-->
 			<!--主检员 Begin-->
-			<el-dialog title="委托书编号" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="委托书编号" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
 					<el-table :data="userList" border stripe :header-cell-style="rowClass"  style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 						<el-table-column type="selection" width="55" fixed align="center">
 						</el-table-column>
@@ -695,7 +695,7 @@
 				</el-dialog>
 			<!--主检员 End-->
 			<!-- 样品名称 Begin -->
-			<el-dialog title="样品名称" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="样品名称" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
 				<el-table :data="samplesList" :header-cell-style="rowClass" border stripe height="400px" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" width="55" fixed align="center">
 					</el-table-column>

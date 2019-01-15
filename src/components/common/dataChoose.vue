@@ -1,6 +1,6 @@
 <template>
 <div>
-    <el-dialog :title="chooseParam.title" :visible.sync="dialogShow" :before-close="reset">
+    <el-dialog :modal-append-to-body="false" :title="chooseParam.title" :visible.sync="dialogShow" :before-close="reset">
         <p class="selTab" v-show="chooseParam.selShow">已选择：
             <el-tag class="tag" 
                 type="success" 

@@ -204,7 +204,7 @@
 				</div>
 			<!--底部-->
 			</div>
-			<el-dialog title=样品编号 :visible.sync="sampleDialog" width="80%" :before-close="resetSample">
+			<el-dialog :modal-append-to-body="false" title=样品编号 :visible.sync="sampleDialog" width="80%" :before-close="resetSample">
 				<div class="pb10">
 					<el-form :model="searchList" label-width="70px">
 						<el-row :gutter="10" class="pb10">

@@ -118,7 +118,7 @@
 		</div>
 		<!-- <samplesmask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></samplesmask> -->
 		<!--右侧内容显示 End-->
-		<el-dialog title="文件夹" :visible.sync="dirDialog">
+		<el-dialog :modal-append-to-body="false" title="文件夹" :visible.sync="dirDialog">
 			<el-form :model="dir" label-width="80px">
 				<el-form-item label="名称">
 					<el-input v-model="dir.dirName"></el-input>

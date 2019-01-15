@@ -176,7 +176,7 @@
 				</div>
 			</div>
 			<!-- 弹出 -->
-			<el-dialog title="机构" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="机构" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
 				<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" default-expand-all @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
 				</el-tree>
 				<span slot="footer" class="dialog-footer">
@@ -186,7 +186,7 @@
 			</el-dialog>
 
 			<!--负责人 Begin-->
-			<el-dialog title="选择负责人" :visible.sync="dialogLeader" width="80%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="选择负责人" :visible.sync="dialogLeader" width="80%" :before-close="handleClose">
 				<div class="accordion" id="information">
 					<div class="mask_tab-block">
 						<!-- <div class="mask_tab-head clearfix">

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<el-dialog title="数据范围" :visible.sync="dialogVisible" width="30%">
+		<el-dialog :modal-append-to-body="false" title="数据范围" :visible.sync="dialogVisible" width="30%">
 			<el-select v-model="value" placeholder="请选择" @change="valueChange">
     		<el-option v-for="item in options":key="item.value":label="item.label" :value="item.value"></el-option>
   			</el-select>

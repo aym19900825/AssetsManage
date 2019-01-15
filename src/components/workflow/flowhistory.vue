@@ -1,6 +1,6 @@
 <template>
 <div class="stepComponent" >
-	<el-dialog title="流程历史" :visible.sync="innerVisible" width="45%">
+	<el-dialog :modal-append-to-body="false" title="流程历史" :visible.sync="innerVisible" width="45%">
     <div class="approvalProcess" >
         <el-steps :active="active" direction="vertical">
            <el-step :title="item.nodeName" :status="item.flag" v-for="item in approvalProcessProject" :id="item.id">

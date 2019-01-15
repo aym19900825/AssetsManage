@@ -468,7 +468,7 @@
 					console.log(res.data);
 					for(var i=0;i<res.data.data.length;i++){
 						if(res.data.data[i].TYPE  == '1'){
-							res.data.data[i].TYPE  = '监督审查';
+							res.data.data[i].TYPE  = '监督抽查';
 						}else if(res.data.data[i].TYPE  == '3'){
 							res.data.data[i].TYPE  = '质量抽查';
 						}

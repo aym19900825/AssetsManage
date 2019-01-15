@@ -24,7 +24,7 @@
 								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
 							    <i class="icon-trash"></i>删除
 							</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="importData">
+								<!-- <button type="button" class="btn btn-primarys button-margin" @click="importData">
 							    <i class="icon-upload-cloud"></i>导入
 							</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="exportData">
@@ -35,7 +35,7 @@
 							</button>
 							<button type="button" class="btn btn-primarys button-margin" @click="Configuration">
 							    <i class="icon-cpu"></i>配置关系
-							</button>
+							</button> -->
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 					    		<i class="icon-search"></i>高级查询
 					    		<i class="icon-arrow1-down" v-show="down"></i>
@@ -57,25 +57,18 @@
 						<el-form :model="searchList" label-width="45px">
 							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-form-item label="编码" prop="NUM">
-										<el-input v-model="searchList.NUM"></el-input>
+									<el-form-item label="编码" prop="CLASSIFY_NUM">
+										<el-input v-model="searchList.CLASSIFY_NUM"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="名称" prop="TYPE">
-										<el-input v-model="searchList.TYPE"></el-input>
+									<el-form-item label="分类描述" prop="CLASSIFY_DESCRIPTION" label-width="80px">
+										<el-input v-model="searchList.CLASSIFY_DESCRIPTION"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="版本" prop="VERSION">
-										<el-input v-model="searchList.VERSION"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="5">
-									<el-form-item label="机构" prop="DEPTID">
-										<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
-										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
-										</el-select>
+									<el-form-item label="父级分类" prop="PARENT" label-width="80px">
+										<el-input v-model="searchList.PARENT"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="2">
@@ -97,16 +90,14 @@
 										</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="名称" sortable prop="TYPE" v-if="this.checkedName.indexOf('名称')!=-1">
+								<el-table-column label="分类描述" sortable prop="CLASSIFY_DESCRIPTION" v-if="this.checkedName.indexOf('分类描述')!=-1">
 								</el-table-column>
 								<!--<el-table-column label="信息状态" width="155" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
  								<template slot-scope="scope" >
  									<span v-text="scope.row.STATUS=='1'?'活动':'不活动'"></span>
  								</template>
 							</el-table-column>-->
-								<el-table-column label="版本" width="100" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1" align="right">
-								</el-table-column>
-								<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
+                                <el-table-column label="父级分类" sortable prop="PARENT" v-if="this.checkedName.indexOf('父级分类')!=-1">
 								</el-table-column>
 								<!-- <el-table-column label="录入人" width="155" prop="ENTERBY" sortable v-if="this.checkedName.indexOf('录入人')!=-1">
 								</el-table-column> -->
@@ -171,11 +162,9 @@
 				},
 				checkedName: [
 					'编码',
-					'名称',
-					'版本',
-					'机构',
+                    '分类描述',
+                    '父级分类',
 					// '信息状态',
-					
 					// '录入人',
 					'录入时间',
 					// '修改人',
@@ -186,16 +175,12 @@
 						prop: 'CLASSIFY_NUM'
 					},
 					{
-						label: '名称',
-						prop: 'TYPE'
-					},
-					{
-						label: '版本',
-						prop: 'VERSION'
-					},
-					{
-						label: '机构',
-						prop: 'DEPARTMENTDesc'
+						label: '分类描述',
+						prop: 'CLASSIFY_DESCRIPTION'
+                    },
+                    {
+						label: '父级分类',
+						prop: 'PARENT'
 					},
 					// {
 					// 	label: '信息状态',
@@ -228,10 +213,9 @@
 				ismin: true,
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
 				searchList: { //点击高级搜索后显示的内容
-					NUM:'',
-					TYPE: '',
-					VERSION:'',
-					DEPTID: '',
+					CLASSIFY_NUM:'',
+					CLASSIFY_DESCRIPTION: '',
+					PARENT:'',
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -364,7 +348,7 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/productType/deletes';
+					var url = this.basic_url + '/api-apps/app/assetClass/deletes';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -442,16 +426,12 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					NUM:this.searchList.NUM,
-					TYPE: this.searchList.TYPE,
-					VERSION:this.searchList.VERSION,
-					DEPTID: this.searchList.DEPTID,
-					// PHONE: this.searchList.PHONE,
-					// CONTACT_ADDRESS: this.searchList.CONTACT_ADDRESS,
-					// STATUS: this.searchList.STATUS
+					CLASSIFY_NUM:this.searchList.CLASSIFY_NUM,
+					CLASSIFY_DESCRIPTION: this.searchList.CLASSIFY_DESCRIPTION,
+					PARENT:this.searchList.PARENT,
 				}
 				// console.log(this.searchList.DEPTID);
-				var url = this.basic_url + '/api-apps/app/productType';
+				var url = this.basic_url + '/api-apps/app/assetClass';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {

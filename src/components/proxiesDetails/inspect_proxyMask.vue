@@ -587,7 +587,7 @@
 							<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
 							<el-button type="success"  v-show="addtitle" @click="saveAndSubmit('dataInfo')">保存并继续</el-button>
 							<el-button v-show="modifytitle" type="btn btn-primarys" @click="modifyversion('dataInfo')">修订</el-button>
-							<el-button type="success" v-show="!addtitle" @click="build(dataInfo)">生成工作处理单</el-button>
+							<el-button type="success" v-show="!addtitle" @click="build(dataInfo)">生成工作任务单</el-button>
 							<el-button @click='close'>取消</el-button>
 						</div>
 					</el-form>
@@ -926,12 +926,12 @@
 						console.log(res.data);
 						if(res.data.resp_code == 0) {
 							this.$message({
-								message: '生成工作处理单成功',
+								message: '生成工作任务单成功',
 								type: 'success'
 							});
 						}else{
 							this.$message({
-							message: '已经生成工作处理单，请勿重复生成',
+							message: '已经生成工作任务单，请勿重复生成',
 							type: 'warning'
 						});
 						}

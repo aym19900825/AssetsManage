@@ -135,7 +135,7 @@
 									</el-table>
 								</el-collapse-item>
 								<el-collapse-item title="文件" name="3">
-									<doc-table ref="docTable" :docParm = "docParm"></doc-table>
+									<doc-table ref="docTable" :docParm = "docParm"  @saveParent = "save"></doc-table>
 								</el-collapse-item>
 								<el-collapse-item title="其他" name="4" v-show="!addtitle">
 	                            	<el-form-item label-width="120px" v-for="item in otherInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-if="item.prop=='DEPARTMENT'" v-show="dept">
@@ -179,7 +179,6 @@
 					'username': '',
 					'deptid': 1,
 					'deptfullname': '',
-					'appname': '',
 					'appid': 1
 				},
 				rules: {
@@ -399,9 +398,9 @@
 				
 				this.docParm = {
 					'model': 'new',
-					'appname': 'checkPlan',
+					'appname': '期间核查计划',
 					'recordid': 1,
-					'appid': 71
+					'appid': 52
 				};
 				this.getUser('new');
 			},
@@ -419,9 +418,9 @@
 					var _this = this;
 					setTimeout(function(){
 						_this.docParm.model = 'edit';
-						_this.docParm.appname = 'checkPlan';
+						_this.docParm.appname = '期间核查计划';
 						_this.docParm.recordid = _this.dataInfo.ID;
-						_this.docParm.appid = 71;
+						_this.docParm.appid = 52;
 						_this.$refs.docTable.getData();
 					},100);
 
@@ -502,22 +501,33 @@
 				$(".mask_div").css("top", "100px");
 			},
 
-			save(dataInfo) {
+			save(opt) {
 				var _this = this;
 				var url = this.basic_url + '/api-apps/app/checkPlan/saveOrUpdate';
 				this.$refs['dataInfo'].validate((valid) => {
+					if(!valid && opt == 'docUpload'){
+						this.$message({
+							message: '请先正确填写信息，再进行文档上传',
+							type: 'warning'
+						});
+					}
 					if (valid) {
 						this.dataInfo.CHECK_PLAN_LINEList = this.dataInfo.tableList;
-						console.log(_this.dataInfo);
 						this.$axios.post(url, _this.dataInfo).then((res) => {
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',
 									type: 'success',
 								});
-								
-								this.$emit('request');
-								this.resetForm();
+								if(opt == 'docUpload'){
+									this.docParm.recordid = res.data.datas.id;
+									this.docParm.model = 'edit';
+									this.$refs.docTable.autoLoad();
+									this.dataInfo.ID = res.data.datas.id;
+								}else{
+									this.$emit('request');
+									this.resetForm();
+								}
 							}
 						}).catch((err) => {
 							this.$message({

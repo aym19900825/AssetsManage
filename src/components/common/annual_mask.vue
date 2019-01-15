@@ -380,7 +380,7 @@
 								</el-collapse-item> -->
 								<!-- 文件编号列表 End -->
 								<el-collapse-item title="文件" name="6">
-									<doc-table ref="docTable" :docParm = "docParm"></doc-table>
+									<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save"></doc-table>
 								</el-collapse-item>
 								<!-- 录入人信息 Begin-->
 								<el-collapse-item title="其他" name="7" v-if="dept">
@@ -424,7 +424,7 @@
 				</div>
 			</div>
 			<!-- 检测依据弹出框begin -->
-			<el-dialog title="检测依据" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
+			<el-dialog title="检测依据" :visible.sync="dialogVisible" width="80%" :before-close="handleClose" :modal-append-to-body='false'>
 				<!-- 高级查询划出 Begin-->
 				<div class="pb10">
 					<el-form :model="searchList" label-width="70px">
@@ -519,7 +519,7 @@
 			<!-- 检测依据弹出框 End -->
 
 			<!-- 检测项目与要求弹出框 Begin -->
-			<el-dialog title="检测项目测试与要求" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
+			<el-dialog title="检测项目测试与要求" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose" :modal-append-to-body='false'>
 				<!-- 高级查询划出 Begin-->
 				<div class="pb10">
 					<el-form :model="searchList" label-width="70px">
@@ -603,7 +603,7 @@
 			</el-dialog>
 			<!-- 检测项目与要求 End -->
 			<!-- 产品类别 Begin -->
-			<el-dialog title="产品类别" height="400px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
+			<el-dialog title="产品类别" height="400px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose" :modal-append-to-body='false'>
 				<!-- 第二层弹出的表格 Begin-->
 				<el-table :header-cell-style="rowClass" :data="categoryList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" fixed width="55" align="center">
@@ -631,7 +631,7 @@
 			</el-dialog>
 			<!-- 产品类别 End -->
 			<!-- 产品名称 Begin -->
-			<el-dialog title="产品名称" :visible.sync="dialogVisible4" width="80%" :before-close="handleClose">
+			<el-dialog title="产品名称" :visible.sync="dialogVisible4" width="80%" :before-close="handleClose" :modal-append-to-body='false'>
 				<el-table  :header-cell-style="rowClass" :data="productList" line-center border stripe height="400px" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 									<el-table-column type="selection" fixed width="55" align="center">
 									</el-table-column>
@@ -657,7 +657,7 @@
 			</el-dialog>
 			<!-- 产品名称 End -->
 			<!-- 生产企业名称、受检企业名称 Begin -->
-			<el-dialog :visible.sync="diaVisCustom" width="80%" :before-close="handleClose">
+			<el-dialog :visible.sync="diaVisCustom" width="80%" :before-close="handleClose" :modal-append-to-body='false'>
 				<el-table :data="customerList" border stripe :header-cell-style="rowClass" :height="fullHeight" style="width: 100%;" :default-sort="{prop:'customerList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" width="55" fixed align="center">
 					</el-table-column>
@@ -777,7 +777,6 @@
 			return {
 				docParm: {
 					'model': 'new',
-					'appname': '',
 					'recordid': 1,
 					'userid': 1,
 					'username': '',
@@ -860,15 +859,15 @@
 					CODE: [{required: true,trigger: 'blur',validator: validateCode,}],
 					NAME:[{required: true,trigger: 'blur',validator: validateName,}],
 					DESCRIPTION:[{required: true,message: '请填写计划描述',trigger: 'blur'}],
-					TYPE:[{required: true,message: '请选择类别',trigger: 'change'}],
+					TYPE:[{required: true,message: '请选择类别', trigger: 'change'}],
 					COMPACTOR:[{required: true,message: '请填写编制人',trigger: 'blur'}],
 					C_PERSON:[{required: true,message: '请填写审核人',trigger: 'blur'}],
 					APPRPERSON:[{required: true,message: '请填写批准人',trigger: 'blur'}],
 					CONTACT_ADDRESS:[{required: true,trigger:'blur',validator: validateAddress,}],
 					PHONE:[{required: true,trigger: 'blur',validator: validatePhone,}],
 					EMAIL:[{required: true,trigger: 'blur',validator:validateEmail,}],
-					PROP_UNIT:[{required: true,validator: validateUnit,trigger: 'change'}],//提出单位 
-       				ITEMTYPE:[{required: true,validator: validateItemtype,trigger: 'change' }],//产品类别 
+					PROP_UNIT:[{required: true,validator: validateUnit, trigger: 'change'}],//提出单位 
+       				ITEMTYPE:[{required: true,validator: validateItemtype, trigger: 'blur' }],//产品类别 
        				YEAR: [{type: 'string',required: true,message: '请选择年度',trigger: 'change' }],//年度
        				REPORTDATE: [{type: 'string',required: true,message: '请选择提报日期',trigger: 'change'}],//提报日期
        				//检测依据 
@@ -920,9 +919,7 @@
 				var money = document.getElementById("cost").value;
 				var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
 				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
-				// this.dataInfo.CHECTCOST="￥" + num.join(".");
 				item.CHECKCOST = num.join(".");
-				console.log(item.CHECKCOST);
 			},
 			//检测项目与要求修改和保存状态
 			changeEdit(row){
@@ -1024,34 +1021,31 @@
 			},
    			//年度计划表格函数
    			iconOperation(row){
-                console.log(row);
                 row.isEditing = !row.isEditing;
-             this.isEditList = row.isEditing;
-             //如果有编辑状态的数据，保存上一条处于编辑状态的数据
-             var editId = this.editPlan.frontId;
-             if(editId){
-                 var worlplanlist = this.worlplanlist;
-                 for(var i=0, len=worlplanlist.length; i<len; i++){
-                     if(editId == worlplanlist[i].frontId){
-                         worlplanlist[i].WORLPLANLINE_PROJECTList = JSON.parse(JSON.stringify(this.proTestList));
-                         worlplanlist[i].WORLPLANLINE_BASISList = JSON.parse(JSON.stringify(this.basisList));
-                         worlplanlist[i].isEditing = false;
-                     }
-                 }
-             }
-             
-             if(row.isEditing){
-                 //编辑
-                 this.editPlan = row;
-                 this.proTestList = row.WORLPLANLINE_PROJECTList;
-                    this.basisList = row.WORLPLANLINE_BASISList;
-             }else{
-                 this.editPlan = {};
-                 this.proTestList = [];
-                 this.basisList = [];
-             }
-             console.log(row);
-         },
+				this.isEditList = row.isEditing;
+				//如果有编辑状态的数据，保存上一条处于编辑状态的数据
+				var editId = this.editPlan.frontId;
+				if(editId){
+					var worlplanlist = this.worlplanlist;
+					for(var i=0, len=worlplanlist.length; i<len; i++){
+						if(editId == worlplanlist[i].frontId){
+							worlplanlist[i].WORLPLANLINE_PROJECTList = JSON.parse(JSON.stringify(this.proTestList));
+							worlplanlist[i].WORLPLANLINE_BASISList = JSON.parse(JSON.stringify(this.basisList));
+							worlplanlist[i].isEditing = false;
+						}
+					}
+             	}
+				if(row.isEditing){
+					//编辑
+					this.editPlan = row;
+					this.proTestList = row.WORLPLANLINE_PROJECTList;
+						this.basisList = row.WORLPLANLINE_BASISList;
+				}else{
+					this.editPlan = {};
+					this.proTestList = [];
+					this.basisList = [];
+				}
+        	},
    			//上传文件 Begin
 			handleExceed(files, fileList) {
 				this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
@@ -1227,7 +1221,6 @@
 			},
 			
 			addfield1(){//年度计划列表新建行
-			console.log(this.isEditList);
 				if (this.isEditList == false){
                 	var date=new Date();
 					this.currentDate = this.$moment(date).format("YYYY-MM-DD");
@@ -1372,9 +1365,9 @@
 				this.isEditList = false;
 				this.docParm = {
 					'model': 'new',
-					'appname': 'WORKPLAN',
+					'appname': '年度计划',
 					'recordid': 1,
-					'appid': 39 
+					'appid': 20
 				};
 				this.getUser('new');
 				this.addtitle = true;
@@ -1397,10 +1390,6 @@
 					for(var i=0, len=worlplanlist.length; i<len; i++){
 						worlplanlist[i].isEditing = false;
 						worlplanlist[i].frontId = this.frontId++;
-						// var cost = worlplanlist[i].CHECKCOST.toString();
-						// var num = parseFloat(this.toNum(cost)).toFixed(2).toString().split(".");
-						// num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
-						// worlplanlist[i].CHECKCOST = num.join(".");
 					}
 					this.basisList = res.data.WORLPLANLINEList.length > 0 ? res.data.WORLPLANLINEList[0].WORLPLANLINE_BASISList : [];
 					this.proTestList = res.data.WORLPLANLINEList.length > 0 ? res.data.WORLPLANLINEList[0].WORLPLANLINE_PROJECTList : [];
@@ -1408,9 +1397,9 @@
 					var _this = this;
 					setTimeout(function(){
 						_this.docParm.model = 'edit';
-						_this.docParm.appname = 'WORKPLAN';
+						_this.docParm.appname = '年度计划';
 						_this.docParm.recordid = _this.WORKPLAN.ID;
-						_this.docParm.appid = 39;
+						_this.docParm.appid = 20;
 						_this.$refs.docTable.getData();
 					},100);
 					var type = "2";
@@ -1435,7 +1424,6 @@
 					// 	type: type
 					// },
 				}).then((res) => {
-					console.log(res.data);
 					this.selectData = res.data;
 				});
 				this.viewtitle = false;
@@ -1504,13 +1492,17 @@
 				$(".mask_div").css("height", "80%");
 				$(".mask_div").css("top", "100px");
 			},
-			// 保存users/saveOrUpdate
-			save(WORKPLAN) {
+			save(opt) {
 				this.$refs.WORKPLAN.validate((valid) => {
+					if(!valid && opt == 'docUpload'){
+						this.$message({
+							message: '请先正确填写信息，再进行文档上传',
+							type: 'warning'
+						});
+					}
 					if (valid) {
 						if(this.worlplanlist.length>0){
 							for(var i=0;i<this.worlplanlist.length;i++){
-								//验证子子表
 								if(!this.worlplanlist[i].WORLPLANLINE_PROJECTList||!this.worlplanlist[i].WORLPLANLINE_BASISList||this.worlplanlist[i].WORLPLANLINE_PROJECTList.length == 0||this.worlplanlist[i].WORLPLANLINE_BASISList.length == 0){
 									this.$message({
 										message: '检测依据、检测项目与要求是必填项，请填写！',
@@ -1523,12 +1515,19 @@
 										var url = this.basic_url +'/api-apps/app/workplan/saveOrUpdate';
 										this.$axios.post(url, this.WORKPLAN).then((res) => {
 											if(res.data.resp_code == 0) {
-												this.$message({
-													message: '保存成功',
-													type: 'success'
-                                                });
-                                                this.show = false;
-							                    this.$emit('request');
+												if(opt == 'docUpload'){
+													this.docParm.recordid = res.data.datas.id;
+													this.docParm.model = 'edit';
+													this.$refs.docTable.autoLoad();
+													this.WORKPLAN.ID = res.data.datas.id;
+												}else{
+													this.$message({
+														message: '保存成功',
+														type: 'success'
+													});
+													this.show = false;
+													this.$emit('request');
+												}
 											}else{
                                                 this.$message({
                                                     message: res.data.message,

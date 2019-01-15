@@ -107,6 +107,7 @@ export default {
         },
         saveMain(){
             var _this = this;
+            console.log('saveMain');
             this.$emit('saveParent','docUpload');
             this.reset();
         },

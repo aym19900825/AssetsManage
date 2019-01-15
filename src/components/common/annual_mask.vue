@@ -142,7 +142,7 @@
 								    </el-table-column>
 								    <el-table-column label="序号" sortable width="120px" prop="WP_LINENUM">
 								      <template slot-scope="scope">
-								      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_LINENUM" disabled></el-input><span v-if="!scope.row.isEditing">{{scope.row.WP_LINENUM}}</span>
+								      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.$index + 1" disabled></el-input><span v-if="!scope.row.isEditing">{{scope.$index + 1}}</span>
 								      </template>
 								    </el-table-column>
 									<el-table-column prop="ITEM_NAME" label="产品名称" sortable width="120px">
@@ -284,11 +284,11 @@
 						            		<el-table-column prop="P_DESC" label="检验项目描述" width="250"></el-table-column>
 						            		<el-table-column prop="REMARKS" label="要求" width="200">
 						            			<template slot-scope="scope">
-										        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" placeholder="请输入内容">
+										        	<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入内容">
 										        	</el-input>
-										        	<span v-if="!scope.row.isEditing">
+										        	<!-- <span v-if="!scope.row.isEditing">
 										        		{{scope.row.REMARKS}}
-										        	</span>
+										        	</span> -->
 										      </template>
 						            		</el-table-column>
 						            		<el-table-column prop="VERSION" label="版本" width="80"></el-table-column>
@@ -1225,12 +1225,12 @@
 			console.log(this.isEditList);
 				if (this.isEditList == false){
                 	var date=new Date();
-					this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
-					var index=this.$moment(date).format("YYYYMMDDHHmmss");
+					this.currentDate = this.$moment(date).format("YYYY-MM-DD");
+					this.index = this.index + 1;
 					var obj = {
 						'ID': '',
 						'WP_NUM': 10001,
-						'WP_LINENUM': index,
+						'WP_LINENUM': this.index,
 						'ITEM_NAME': '',
 						'MODEL': '',
 						'V_NAME': '',
@@ -1246,7 +1246,8 @@
 						'STATUS': '1',
 						'VENDOR':  ''
 					};
-					this.worlplanlist.unshift(obj);
+					// this.worlplanlist.unshift(obj);
+					this.worlplanlist.push(obj);
 					this.editPlan = this.worlplanlist[0];
 					this.basisList = [];
 					this.proTestList = [];

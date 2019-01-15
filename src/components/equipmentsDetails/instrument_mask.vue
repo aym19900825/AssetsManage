@@ -77,7 +77,7 @@
 									</el-table>
 								</el-collapse-item>
 								<el-collapse-item title="文件" name="4">
-									<doc-table ref="docTable" :docParm = "docParm"></doc-table>
+									<doc-table ref="docTable" :docParm = "docParm"  @saveParent = "save"></doc-table>
 								</el-collapse-item>
 								
 								<!-- 其他信息 -->
@@ -156,7 +156,6 @@
 					'username': '',
 					'deptid': 1,
 					'deptfullname': '',
-					'appname': '',
 					'appid': 1
 				},
 				rules: {
@@ -692,11 +691,12 @@
 						this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
 						this.dataInfo.CHANGEBY = res.data.id;
 						this.dataInfo.CHANGEDATE = this.getToday();
-						this.docParm.userid = res.data.id;
-						this.docParm.username = res.data.username;
-						this.docParm.deptid = res.data.deptId;
-						this.docParm.deptfullname = res.data.deptName;
 					}
+
+					this.docParm.userid = res.data.id;
+					this.docParm.username = res.data.username;
+					this.docParm.deptid = res.data.deptId;
+					this.docParm.deptfullname = res.data.deptName;
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -745,9 +745,9 @@
 
 				this.docParm = {
 					'model': 'new',
-					'appname': 'ASSET',
+					'appname': '仪器和计量器具',
 					'recordid': 1,
-					'appid': 66
+					'appid': 47
 				};
 				this.getUser('new');
 			},
@@ -771,14 +771,13 @@
 				var _this = this;
 				setTimeout(function(){
 					_this.docParm.model = 'edit';
-					_this.docParm.appname = 'ASSET';
+					_this.docParm.appname = '仪器和计量器具';
 					_this.docParm.recordid = _this.dataInfo.ID;
-					_this.docParm.appid = 66;
+					_this.docParm.appid = 47;
 					_this.$refs.docTable.getData();
 				},100);
 
 				this.show = true;
-//				this.getPmList();
 			},
 			//这是查看
 			view(data) {
@@ -870,23 +869,32 @@
 				$(".mask_div").css("top", "100px");
 			},
 
-			save(dataInfo) {
+			save(opt) {
 				var _this = this;
-				console.log(_this.dataInfo);
 				var url = this.basic_url + '/api-apps/app/asset/saveOrUpdate';
 				this.$refs['dataInfo'].validate((valid) => {
+					if(!valid && opt == 'docUpload'){
+						this.$message({
+							message: '请先正确填写信息，再进行文档上传',
+							type: 'warning'
+						});
+					}
 					if (valid) {
 						this.$axios.post(url, _this.dataInfo).then((res) => {
 							if(res.data.resp_code == 0) {
-								this.$message({
-									message: '保存成功',
-									type: 'success',
-								});
-								
-								this.$emit('request');
-								this.reset();
-								// this.$emit('reset');
-								// this.visible();
+								if(opt == 'docUpload'){
+									this.docParm.recordid = res.data.datas.id;
+									this.docParm.model = 'edit';
+									this.$refs.docTable.autoLoad();
+									this.dataInfo.ID = res.data.datas.id;
+								}else{
+									this.$message({
+										message: '保存成功',
+										type: 'success',
+									});
+									this.$emit('request');
+									this.reset();
+								}
 							}
 						}).catch((err) => {
 							this.$message({

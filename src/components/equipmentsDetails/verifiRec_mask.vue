@@ -49,7 +49,7 @@
 								</el-collapse-item>
 								<!-- 文件管理 -->
 								<el-collapse-item title="文件" name="2">
-									<doc-table ref="docTable" :docParm = "docParm"></doc-table>
+									<doc-table ref="docTable" :docParm = "docParm"  @saveParent = "save"></doc-table>
 								</el-collapse-item>
 								<!-- 其他信息 -->
 								<el-collapse-item title="其他" name="3" v-show="!addtitle">
@@ -364,7 +364,6 @@
 					'username': '',
 					'deptid': 1,
 					'deptfullname': '',
-					'appname': '',
 					'appid': 1
 				},
 				addtitle:true,
@@ -440,10 +439,9 @@
 				this.getUser('new');
 				this.docParm = {
 					'model': 'new',
-					'appname': 'CHECK_RECORD',
+					'appname': '期间核查记录',
 					'recordid': 1,
-					'appid': 73
-
+					'appid': 54
 				};
 			},
 			// 这里是修改
@@ -465,9 +463,9 @@
 				this.getUser();
 				this.docParm = {
 					'model': 'edit',
-					'appname': 'CHECK_RECORD',
+					'appname': '期间核查记录',
 					'recordid': this.detailData.ID,
-					'appid': 73
+					'appid': 54
 				};
 				this.$refs.docTable.getData();
 			},
@@ -544,20 +542,32 @@
 				$(".mask_div").css("top", "100px");
 			},
 
-			save(dataInfo) {
+			save(opt) {
 				var _this = this;
 				var url = this.basic_url + '/api-apps/app/checkRecord/saveOrUpdate';
 				this.$refs['dataInfo'].validate((valid) => {
+					if(!valid && opt == 'docUpload'){
+						this.$message({
+							message: '请先正确填写信息，再进行文档上传',
+							type: 'warning'
+						});
+					}
 					if (valid) {
-						console.log(_this.dataInfo);
 						this.$axios.post(url, _this.dataInfo).then((res) => {
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',
 									type: 'success',
 								});
-								this.$emit('request');
-								this.resetForm();
+								if(opt == 'docUpload'){
+									this.docParm.recordid = res.data.datas.id;
+									this.docParm.model = 'edit';
+									this.$refs.docTable.autoLoad();
+									this.dataInfo.ID = res.data.datas.id;
+								}else{
+									this.$emit('request');
+									this.resetForm();
+								}
 							}
 						}).catch((err) => {
 							this.$message({

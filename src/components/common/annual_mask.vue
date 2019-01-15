@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="mask" v-if="show"></div>
-		<div class="mask_divbg" v-if="show">
+		<div class="mask_divbg" v-show="show">
 			<div class="mask_div">
 				<div class="mask_title_div clearfix">
 					<div class="mask_title" v-show="addtitle">添加年度计划</div>
@@ -66,7 +66,7 @@
 											<el-form-item label="类别" prop="TYPE"  label-width="85px">
 												<el-select v-model="WORKPLAN.TYPE" placeholder="请选择">
 													<el-option label="监督抽查" value="1"></el-option>
-													<el-option label="质量抽查" value="0"></el-option>
+													<el-option label="质量抽查" value="3"></el-option>
 												</el-select>
 											</el-form-item>
 										</el-col>
@@ -1116,7 +1116,7 @@
 						//新选来的数据ID为空
 						selData[i].ID = '';
 						//产品要求
-						selData[i].REMARKS = '';
+						selData[i].REMARKS = this.editPlan.REMARKS;
 						//产品编号
 						selData[i].WP_NUM = this.WORKPLAN.WP_NUM;
 						selData[i].WP_LINENUM = this.editPlan.WP_LINENUM;

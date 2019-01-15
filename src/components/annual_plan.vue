@@ -117,8 +117,8 @@
 							<el-col :span="5">
 								<el-form-item label="类型" prop="TYPE" label-width="45px">
 									<el-select clearable v-model="searchList.TYPE" filterable allow-create default-first-option placeholder="请选择" style="width:100%">
-									    <el-option label="监督审查" value="1"></el-option>
-							      		<el-option label="质量抽查" value="0"></el-option>
+									    <el-option label="监督抽查" value="1"></el-option>
+							      		<el-option label="质量抽查" value="3"></el-option>
 									</el-select>
 								</el-form-item>
 							</el-col>
@@ -300,7 +300,7 @@
 				},
 				//tree
 				resourceData: [
-					{label: '监督审查'},
+					{label: '监督抽查'},
 					{label: '质量抽查'}
 				], //数组，我这里是通过接口获取数据，
 				resourceDialogisShow: false,
@@ -469,7 +469,7 @@
 					for(var i=0;i<res.data.data.length;i++){
 						if(res.data.data[i].TYPE  == '1'){
 							res.data.data[i].TYPE  = '监督审查';
-						}else if(res.data.data[i].TYPE  == '0'){
+						}else if(res.data.data[i].TYPE  == '3'){
 							res.data.data[i].TYPE  = '质量抽查';
 						}
 					}
@@ -520,10 +520,10 @@
 			handleNodeClick(data) {
 				console.log(data);
 				console.log(data.label);
-				if(data.label == '监督审查'){
+				if(data.label == '监督抽查'){
 					this.searchList.TYPE =  '1';
 				}else if(data.label == '质量抽查'){
-					this.searchList.TYPE =  '0';
+					this.searchList.TYPE =  '3';
 				}
 				this.requestData();
 			},

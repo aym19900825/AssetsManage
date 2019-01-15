@@ -96,11 +96,10 @@
 								</el-collapse-item>
 							</el-collapse>
 						</div>
-						<div class="content-footer"v-show="noviews">
-							<el-form-item>
-								<button @click="cancelForm" class="btn btn-default btn-large">取消</button>
-								<button type="primary" class="btn btn-primarys btn-large" @click="submitForm('numbsetForm')">提交</button>
-							</el-form-item>
+
+						<div class="el-dialog__footer" v-show="noviews">
+							<el-button type="primary" @click="submitForm('numbsetForm')">保存</el-button>
+							<el-button @click="cancelForm">取消</el-button>
 						</div>
 					</el-form>
 				</div>

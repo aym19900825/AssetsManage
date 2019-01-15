@@ -84,9 +84,9 @@
 					</el-collapse>
 				</el-form>
 
-				<div class="content-footer">
-					<button class="btn btn-default btn-large" @click="resetForm('safemanage')">重置</button>
-					<button class="btn btn-primarys btn-large" @click="submitForm('safemanage')">保存</button>
+				<div class="el-dialog__footer">
+					<el-button type="primary" @click="submitForm('safemanage')">保存</el-button>
+					<el-button @click="resetForm('safemanage')">重置</el-button>
 				</div>
 			</div>
 		</div>

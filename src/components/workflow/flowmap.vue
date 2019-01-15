@@ -1,6 +1,6 @@
 <template>
 <div class="stepComponent">
-	<el-dialog title="流程地图" :visible.sync="innerVisible" width="70%">
+	<el-dialog :modal-append-to-body="false" title="流程地图" :visible.sync="innerVisible" width="70%">
 	    <div class="processing_content text-center">
 	      <div id="image" style="width:100%;height:100%;overflow: auto;">
             <div class="layui-form-item">

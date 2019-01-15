@@ -308,7 +308,7 @@
 				</div>
 			</div>
 			<!--点击委托书编号弹出框 Begin-->
-			<el-dialog :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
 				<el-table :data="gridData" height="400px" @selection-change="SelChange">
 						<el-table-column type="selection" width="55" fixed >
 						</el-table-column>
@@ -347,7 +347,7 @@
 			</el-dialog>
 			<!--点击委托书编号弹出框 Begin-->
 			<!-- 产品类别 Begin -->
-			<el-dialog title="产品类别" height="300px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="产品类别" height="300px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
 				<!-- 第二层弹出的表格 Begin-->
 				<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" fixed width="55" align="center">
@@ -375,7 +375,7 @@
 			</el-dialog>
 			<!-- 产品类别 End -->
 			<!-- 收样人、接样人 Begin -->
-			<el-dialog height="300px" :visible.sync="dialogVisible4" width="80%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible4" height="300px" width="80%" :before-close="handleClose">
 				<el-table :data="userList" border stripe :header-cell-style="rowClass" height="300px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 									<el-table-column type="selection" width="55" fixed align="center">
 									</el-table-column>

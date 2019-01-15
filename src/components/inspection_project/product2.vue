@@ -110,7 +110,7 @@
 	</el-card>
 
 	<!-- 产品 Begin -->
-		<el-dialog title="选择基础数据——产品" height="300px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
+		<el-dialog :modal-append-to-body="false" title="选择基础数据——产品" height="300px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
 			<!-- 第二层弹出的表格 Begin-->
 			<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 				<el-table-column type="selection" fixed width="55" align="center">

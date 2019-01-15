@@ -424,7 +424,7 @@
 				</div>
 			</div>
 			<!-- 检测依据弹出框begin -->
-			<el-dialog title="检测依据" :visible.sync="dialogVisible" width="80%" :before-close="handleClose" :modal-append-to-body='false'>
+			<el-dialog :modal-append-to-body="false" title="检测依据" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
 				<!-- 高级查询划出 Begin-->
 				<div class="pb10">
 					<el-form :model="searchList" label-width="70px">
@@ -519,7 +519,7 @@
 			<!-- 检测依据弹出框 End -->
 
 			<!-- 检测项目与要求弹出框 Begin -->
-			<el-dialog title="检测项目测试与要求" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose" :modal-append-to-body='false'>
+			<el-dialog :modal-append-to-body="false" title="检测项目测试与要求" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
 				<!-- 高级查询划出 Begin-->
 				<div class="pb10">
 					<el-form :model="searchList" label-width="70px">
@@ -603,7 +603,7 @@
 			</el-dialog>
 			<!-- 检测项目与要求 End -->
 			<!-- 产品类别 Begin -->
-			<el-dialog title="产品类别" height="400px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose" :modal-append-to-body='false'>
+			<el-dialog :modal-append-to-body="false" title="产品类别" height="400px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
 				<!-- 第二层弹出的表格 Begin-->
 				<el-table :header-cell-style="rowClass" :data="categoryList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" fixed width="55" align="center">
@@ -631,7 +631,7 @@
 			</el-dialog>
 			<!-- 产品类别 End -->
 			<!-- 产品名称 Begin -->
-			<el-dialog title="产品名称" :visible.sync="dialogVisible4" width="80%" :before-close="handleClose" :modal-append-to-body='false'>
+			<el-dialog :modal-append-to-body="false" title="产品名称" :visible.sync="dialogVisible4" width="80%" :before-close="handleClose">
 				<el-table  :header-cell-style="rowClass" :data="productList" line-center border stripe height="400px" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 									<el-table-column type="selection" fixed width="55" align="center">
 									</el-table-column>
@@ -657,7 +657,7 @@
 			</el-dialog>
 			<!-- 产品名称 End -->
 			<!-- 生产企业名称、受检企业名称 Begin -->
-			<el-dialog :visible.sync="diaVisCustom" width="80%" :before-close="handleClose" :modal-append-to-body='false'>
+			<el-dialog :visible.sync="diaVisCustom" width="80%" :before-close="handleClose">
 				<el-table :data="customerList" border stripe :header-cell-style="rowClass" :height="fullHeight" style="width: 100%;" :default-sort="{prop:'customerList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" width="55" fixed align="center">
 					</el-table-column>

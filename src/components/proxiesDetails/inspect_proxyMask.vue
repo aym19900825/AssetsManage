@@ -594,7 +594,7 @@
 				</div>
 			</div>
 
-			<el-dialog :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
 				<el-table :data="gridData" @selection-change="SelChange">
 					<el-table-column type="selection" width="55" fixed>
 					</el-table-column>
@@ -617,7 +617,7 @@
 	  			</span>
 			</el-dialog>
 			<!-- 样品名称 Begin -->
-			<el-dialog title="样品名称" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="样品名称" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
 				<el-table :data="samplesList" :header-cell-style="rowClass" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" width="55" fixed align="center">
 					</el-table-column>
@@ -658,7 +658,7 @@
 			</el-dialog>
 			<!-- 样品名称 End -->
 			<!-- 客户联系人 Begin -->
-			<el-dialog title="客户联系人" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="客户联系人" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
 				<el-table :header-cell-style="rowClass" :data="CUSTOMER_PERSONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @selection-change="SelChange" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER.CUSTOMER_PERSONList', order: 'descending'}">
 					<el-table-column type="selection" width="55" fixed align="center">
 					</el-table-column>

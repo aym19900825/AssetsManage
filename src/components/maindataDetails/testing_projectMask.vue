@@ -191,7 +191,7 @@
 					</el-form>
 				</div>
 			</div>
-			<el-dialog :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
 				<el-table :data="gridData" @selection-change="SelChange">
 					<el-table-column type="selection" width="55" fixed>
 					</el-table-column>
@@ -212,7 +212,7 @@
 	  			</span>
 			</el-dialog>
 			<!-- 作业指导书 Begin -->
-			<el-dialog title="作业指导书" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="作业指导书" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
 				<!-- 第二层弹出的表格 Begin-->
 				<el-table :header-cell-style="rowClass" :data="WORK_INSTRUCTIONList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'WORK_INSTRUCTIONList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 									<el-table-column type="selection" fixed width="55" align="center">

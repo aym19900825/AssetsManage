@@ -1,6 +1,6 @@
 <template>
 <div>
-	<el-dialog title="审批" :visible.sync="innerVisible" width="60%">
+	<el-dialog :modal-append-to-body="false" title="审批" :visible.sync="innerVisible" width="60%">
   <el-form ref="approveForm" :model="approveForm" :rules="rules" label-width="120px" class="demo-ruleForm">
     <el-row :gutter="30">
       <el-col :span="23" :offset="0">

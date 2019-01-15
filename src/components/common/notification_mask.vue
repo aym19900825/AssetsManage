@@ -412,7 +412,7 @@
 					</div>
 				</div>
 			</div>
-			<el-dialog :visible.sync="dialogVisible" width="60%" :before-close="handleClose" :modal-append-to-body='false'>
+			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
 				<el-table :data="gridData" @selection-change="SelChange">
 					<el-table-column type="selection" width="55" fixed>
 					</el-table-column>
@@ -432,7 +432,7 @@
 	    			<el-button type="primary" @click="dailogconfirm()">确 定</el-button>
 	  			</span>
 			</el-dialog>
-			<!-- <el-dialog title="承检部门" :visible.sync="dialogVisiblecompany" width="30%" :before-close="handleClose">
+			<!-- <el-dialog :modal-append-to-body="false" title="承检部门" :visible.sync="dialogVisiblecompany" width="30%" :before-close="handleClose">
 				<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @check-change="handleCheckChange">
 				</el-tree>
 				<span slot="footer" class="dialog-footer">
@@ -441,7 +441,7 @@
 			    </span>
 			</el-dialog> -->
 			<!-- 产品名称 Begin -->
-			<el-dialog title="产品名称" :visible.sync="dialogVisible1" width="80%" :before-close="handleClose" :modal-append-to-body='false'>
+			<el-dialog :modal-append-to-body="false" title="产品名称" :visible.sync="dialogVisible1" width="80%" :before-close="handleClose">
 				<el-table  :header-cell-style="rowClass" :data="productList" line-center border stripe height="400px" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 									<el-table-column type="selection" fixed width="55" align="center">
 									</el-table-column>
@@ -467,7 +467,7 @@
 			</el-dialog>
 			<!-- 产品名称 End -->
 			<!-- 受检企业 Begin -->
-			<el-dialog title="受检企业" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose" :modal-append-to-body='false'>
+			<el-dialog :modal-append-to-body="false" title="受检企业" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
 				<el-table :data="customerList" border stripe :header-cell-style="rowClass" height="400px" style="width: 100%;" :default-sort="{prop:'customerList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed align="center">
 								</el-table-column>

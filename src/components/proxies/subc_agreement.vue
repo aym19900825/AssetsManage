@@ -70,7 +70,7 @@
 									    <el-date-picker
 									      v-model="searchList.ENTERDATE"
 									      type="date" style="width: 100%;"
-									      placeholder="录入时间">
+									      placeholder="录入时间" value-format="yyyy-MM-dd">
 									    </el-date-picker>
 								  </div>
 								</el-form-item>

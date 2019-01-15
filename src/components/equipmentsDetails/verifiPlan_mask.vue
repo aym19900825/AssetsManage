@@ -304,11 +304,12 @@
 						this.CATEGORY.DEPTID = res.data.deptId;
 						this.CATEGORY.ENTERBY = res.data.id;
 						this.dataInfo.ENTERDATE = this.getToday();
-					}else{
-						this.CATEGORY.DEPTID = res.data.deptId;//传给后台机构id
-						this.CATEGORY.CHANGEBY = res.data.id;
-				        this.dataInfo.CHANGEDATE = this.getToday();
 					}
+					// else{
+						// this.CATEGORY.DEPTID = res.data.deptId;//传给后台机构id
+						// this.CATEGORY.CHANGEBY = res.data.id;
+				        // this.dataInfo.CHANGEDATE = this.getToday();
+					// }
 						this.docParm.userid = res.data.id;
 						this.docParm.username = res.data.username;
 						this.docParm.deptid = res.data.deptId;

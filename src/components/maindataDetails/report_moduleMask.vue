@@ -41,7 +41,7 @@
 								</el-row>
 							</el-collapse-item>
 							<el-collapse-item title="文件" name="2">
-								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
+								<doc-table ref="docTable" :docParm = "docParm" @saveParent = 'save'></doc-table>
 							</el-collapse-item>
 							<el-collapse-item title="其它" name="3" v-show="views">
 								<el-row>
@@ -70,8 +70,8 @@
 						</el-collapse>
 					</div>
 					<div class="el-dialog__footer" v-show="noviews">
-						<el-button type="primary" @click="saveAndUpdate('CATEGORY')">保存</el-button>
-						<el-button type="success" @click="saveAndSubmit('CATEGORY')" v-show="addtitle">保存并继续</el-button>
+						<el-button type="primary" @click="saveAndUpdate">保存</el-button>
+						<el-button type="success" @click="saveAndSubmit" v-show="addtitle">保存并继续</el-button>
 						<!-- <el-button v-if="modify" type="success" @click="update('CATEGORY')">启用</el-button> -->
 						<el-button @click="close">取消</el-button>
 					</div>
@@ -199,15 +199,17 @@
 					this.CATEGORY.DEPARTMENT = '';
 					this.CATEGORY.DEPTID = res.data.deptId;
 					this.CATEGORY.ENTERBY = res.data.id;
+
+					this.docParm.userid = res.data.id;
+					this.docParm.username = res.data.username;
+					this.docParm.deptid = res.data.deptId;
+					this.docParm.deptfullname = res.data.deptName;
+
 					var date = new Date();
 					this.CATEGORY.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 					if(opt!='new'){
 						let _obj = JSON.stringify(this.CATEGORY);
 						this.category = JSON.parse(_obj);
-						this.docParm.userid = res.data.id;
-						this.docParm.username = res.data.username;
-						this.docParm.deptid = res.data.deptId;
-						this.docParm.deptfullname = res.data.deptName;
 					}
 				}).catch((err) => {
 					this.$message({
@@ -218,7 +220,6 @@
 			},
 			//点击按钮显示弹窗
 			visible() {
-				
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.viewtitle = false;
@@ -233,9 +234,9 @@
 				
 				this.docParm = {
 					'model': 'new',
-					'appname': 'INSPECTION_REPORT_TEMPLATE2',
+					'appname': '检验检测项目_原始数据模板',
 					'recordid': 1,
-					'appid': 34
+					'appid': 17
 				};
 				this.getUser('new');
 //				this.show = true;
@@ -258,9 +259,9 @@
 				var _this = this;
 				setTimeout(function(){
 					_this.docParm.model = 'edit';
-					_this.docParm.appname = 'INSPECTION_REPORT_TEMPLATE2';
+					_this.docParm.appname = '检验检测项目_原始数据模板';
 					_this.docParm.recordid = _this.CATEGORY.ID;
-					_this.docParm.appid = 34;
+					_this.docParm.appid = 17;
 					_this.$refs.docTable.getData();
 				},100);
 				this.show = true;
@@ -448,22 +449,35 @@
 				$(".mask_div").css("top", "0");
 			},
 			// 保存users/saveOrUpdate
-			save(CATEGORY) {
-				this.$refs[CATEGORY].validate((valid) => {
+			save(opt) {
+				this.$refs['CATEGORY'].validate((valid) => {
+					console.log('CATEGORY');
+					if(!valid && opt == 'docUpload'){
+						console.log('message');
+						this.$message({
+							message: '请先正确填写信息，再进行文档上传',
+							type: 'warning'
+						});
+					}
 					if(valid) {
 						this.CATEGORY.STATUS = ((this.CATEGORY.STATUS == "1" || this.CATEGORY.STATUS == '活动') ? '1' : '0');
 						var url = this.basic_url + '/api-apps/app/inspectionRepTem/saveOrUpdate';
 						this.$axios.post(url, this.CATEGORY).then((res) => {
-							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',
 									type: 'success'
 								});
-								//重新加载数据
-								this.$emit('request');
-								this.$emit('reset');
-								this.visible();
+								if(opt == 'docUpload'){
+									this.docParm.recordid = res.data.datas.id;
+									this.docParm.model = 'edit';
+									this.$refs.docTable.autoLoad();
+									this.CATEGORY.ID = res.data.datas.id;
+								}else{
+									this.$emit('request');
+									this.$emit('reset');
+									this.visible();
+								}
 							}else{
 								this.show = true;
 								if(res.data.resp_code == 1) {
@@ -500,15 +514,15 @@
 			},
 			
 			//保存
-			saveAndUpdate(CATEGORY) {
-				this.save(CATEGORY);
+			saveAndUpdate() {
+				this.save();
 				if(this.falg){
 					this.show = false;
 				}
 			},
 			//保存并继续
-			saveAndSubmit(CATEGORY) {
-				this.save(CATEGORY);
+			saveAndSubmit() {
+				this.save();
 				// this.visible();
 				this.show = true;
 			},

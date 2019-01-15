@@ -1087,19 +1087,17 @@
 			build(){
 				console.log(this.dataInfo.ISCREATED);
 				var dataid = this.dataInfo.ID;
-				if(this.dataInfo.ISCREATED == 1){
-					this.$message({
-						message: '已经生成委托书，请勿重复生成',
-						type: 'warning'
-					});
-					return;
-				}else{
 					this.$axios.get(this.basic_url + '/api-apps/app/workNot/operate/createInspectProxy?ID=' + dataid, {}).then((res) => {
 						console.log(res.data);
 						if(res.data.resp_code == 0) {
 							this.$message({
 								message: '生成委托书成功',
 								type: 'success'
+							});
+						}else{
+							this.$message({
+							message: '已经生成委托书，请勿重复生成',
+							type: 'warning'
 							});
 						}
 					}).catch((err) => {
@@ -1108,7 +1106,6 @@
 							type: 'error'
 						});
 					});
-				}
 			},
 			SelChange(val) {
 				this.selUser = val;

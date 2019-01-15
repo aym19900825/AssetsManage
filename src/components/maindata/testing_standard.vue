@@ -382,7 +382,7 @@
 					CHANGEDATE: ''
 				};
 				if(this.$refs['dataInfo'] !== undefined) {
-					this.$refs['dataInfo'].resetFields();
+					//this.$refs['dataInfo'].resetFields();
 				}
 			},
 			//添加

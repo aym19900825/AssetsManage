@@ -124,9 +124,11 @@
 			<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 				<el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column>
-				<el-table-column label="编码" width="155" sortable prop="S_NUM">
+				<el-table-column label="编码" width="155" sortable prop="P_NUM">
 				</el-table-column>
-				<el-table-column label="名称" sortable prop="S_NUM">
+				<el-table-column label="名称" sortable prop="P_NUM">
+				</el-table-column>
+				<el-table-column label="单价" sortable align="right" prop="UNITCOST">
 				</el-table-column>
 				<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
 				</el-table-column>
@@ -224,6 +226,37 @@
 			   //   this.requestData_inspectionPro2()
 			   // }
 			 },
+			addprobtn(row){//查找基础数据中的检验/检测项目
+			 	this.catedata = row;//弹出框中选中的数据赋值给到table行中
+				this.dialogVisible3 = true;
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				};
+				this.$axios.get(this.basic_url + '/api-apps/app/inspectionPro?DEPTID=' + this.departmentId, {
+					params: data
+				}).then((res) => {
+					// console.log(res.data);
+					this.page.totalCount = res.data.count;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
+					}
+					this.commentArr[this.page.currentPage] = res.data.data
+					let newarr = []
+					for(var i = 1; i <= totalPage; i++) {
+						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+							for(var j = 0; j < this.commentArr[i].length; j++) {
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					this.categoryList = newarr;
+				}).catch((wrong) => {})
+			},
 			sizeChange(val) {//页数
 		      this.page.pageSize = val;
 		      this.requestData_inspectionPro2();
@@ -234,7 +267,7 @@
 		    },
 			searchinfo(index) {
 				this.page.currentPage = 1;
-				this.page.pageSize = 10;
+				this.page.pageSize = 30;
 				this.requestData_inspectionPro2();
 			},
 			judge(data) {//taxStatus 信息状态布尔值
@@ -351,7 +384,7 @@
 					if (this.inspectionPro2Form.inspectionList[i].isEditing==false){
 						isEditingflag=false;
 					}else{
-                        isEditingflag=true;
+                        isEditingflag=true;   
                         break;
 					}
 				}

@@ -154,7 +154,7 @@
 				product2Form:{
 					inspectionList: []
 				},
-				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
+				fullHeight: document.documentElement.clientHeight - 100+'px',//获取浏览器高度
 					departmentId: '',//当前用户机构号
 					categoryList:[],//获取产品数据
 					catedata:'',//获取产品类别一条数据放到table行中

@@ -1,507 +1,508 @@
 <template>
 	<div>
-		<div class="mask" v-show="show"></div>
-		<div class="mask_div" v-show="show">
-			<div class="mask_title_div clearfix">
-				<div class="mask_title" v-show="addtitle">添加工作任务通知书</div>
-				<div class="mask_title" v-show="modifytitle">修改工作任务通知书</div>
-				<div class="mask_title" v-show="viewtitle">查看工作任务通知书</div>
-				<div class="mask_anniu">
-					<span class="mask_span mask_max" @click='toggle'>						 
-						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
-					</span>
-					<span class="mask_span" @click='close'>
-						<i class="icon-close1"></i>
-					</span>
-				</div>
-			</div>
-			<div class="mask_content">
-				
-					<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo"  class="demo-form-inline" inline-message>
-						<div class="text-center" v-show="viewtitle">
-						<el-button class="start" type="success" round plain size="mini" @click="startup"><i class="icon-start"></i> 启动流程</el-button>
-						<el-button class="approval" type="warning" round plain size="mini" @click="approvals"><i class="icon-edit-3"></i> 审批</el-button>
-						<el-button type="primary" round plain size="mini" @click="flowmap"><i class="icon-git-pull-request"></i> 流程地图</el-button>
-						<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
-						<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
+		<div class="mask" v-if="show"></div>
+		<div class="mask_divbg" v-if="show">
+			<div class="mask_div">
+				<div class="mask_title_div clearfix">
+					<div class="mask_title" v-show="addtitle">添加工作任务通知书</div>
+					<div class="mask_title" v-show="modifytitle">修改工作任务通知书</div>
+					<div class="mask_title" v-show="viewtitle">查看工作任务通知书</div>
+					<div class="mask_anniu">
+						<span class="mask_span mask_max" @click='toggle'>						 
+							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
+						</span>
+						<span class="mask_span" @click='close'>
+							<i class="icon-close1"></i>
+						</span>
 					</div>
-					   <div class="accordion">
-						<el-collapse v-model="activeNames">
-							<el-collapse-item title="类型" name="1">
-								<el-row :gutter="20" class="pb10">
-
-									<!-- <el-col :span="5" class="pull-right">
-										<el-input v-model="dataInfo.STATUS=='1'?'活动':'不活动'" :disabled="true">
-											<template slot="prepend">信息状态</template>
-										</el-input>
-									</el-col> -->
-									<el-col :span="4" class="pull-right">
-										<el-input v-model="dataInfo.STATE" :disabled="edit">
-											<template slot="prepend">状态</template>
-										</el-input>
-									</el-col>
-									<el-col :span="5" class="pull-right">
-										<el-input v-model="dataInfo.N_CODE" :disabled="edit" placeholder="自动生成">
-											<template slot="prepend">编号</template>
-										</el-input>
-									</el-col>
-								</el-row>
-								<el-form-item label="" prop="TYPE">
-									<el-radio-group v-model="dataInfo.TYPE" :disabled="noedit">
-										<el-col :span="4">
-											<el-radio label="1">监督抽查</el-radio>
-										</el-col>
-										<el-col :span="4">
-											<el-radio label="2">监督抽查复查</el-radio>
-										</el-col>
-										<el-col :span="4">
-											<el-radio label="3">质量抽查</el-radio>
-										</el-col>
-										<el-col :span="4">
-											<el-radio label="4">质量抽查复查</el-radio>
-										</el-col>
-										<el-col :span="4">
-											<el-radio label="5">生产许可证</el-radio>
-										</el-col>
-										<el-col :span="4">
-											<el-radio label="6">认定检验检测</el-radio>
-										</el-col>
-										<el-col :span="4">
-											<el-radio label="7">鉴定试验</el-radio>
-										</el-col>
-										<el-col :span="4">
-											<el-radio label="8">委托检验检测</el-radio>
-										</el-col>
-										<el-col :span="4">
-											<el-radio label="9">专项抽查</el-radio>
-										</el-col>
-										<el-col :span="4">
-											<el-radio label="10">专项抽查复查</el-radio>
-										</el-col>
-										<el-col :span="4">
-											<el-radio label="11">其它</el-radio>
-										</el-col>
-									
-									</el-radio-group>
-								</el-form-item>
-							</el-collapse-item>
-							<el-collapse-item title="基本信息" name="2">
-									<el-col :span="8">
-										<el-form-item label="计划编号" prop="WP_NUM" label-width="110px">
-											<el-input v-model="dataInfo.WP_NUM" :disabled="edit">
-											</el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="任务号" prop="TASKNUM" label-width="110px">
-											<el-input v-model="dataInfo.TASKNUM" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="承检单位" prop="CJDW" :disabled="noedit" label-width="110px">
-											<!-- <el-input v-model="dataInfo.CJDW" :disabled="edit">
-												<el-button slot="append" icon="el-icon-search" @click="getCompany"></el-button>
-											</el-input> -->
-											<el-select clearable v-model="dataInfo.CJDW" filterable allow-create default-first-option placeholder="请选择">
-												<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
-											</el-select>
-										</el-form-item>
-									</el-col>
-									
-									<el-col :span="8">
-										<el-form-item label="项目负责人" prop="P_LEADERDesc" label-width="110px">
-											<el-input v-model="dataInfo.P_LEADERDesc" :disabled="true">
-												<el-button :disabled="noedit" slot="append" icon="el-icon-search" @click="addperbtn()"></el-button>
-											</el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="受检产品名称" prop="ITEM_NAME" label-width="110px">
-											<el-input v-model="dataInfo.ITEM_NAME" :disabled="true">
-												   <el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="addproduct"></el-button>
-											</el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="受检产品型号" prop="ITEM_MODEL" label-width="110px">
-											<el-input v-model="dataInfo.ITEM_MODEL" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-							</el-collapse-item>
-							<!-- <el-collapse-item title="依据" name="3">
-								 字段列表 Begin
-								
-								字段列表 End 
-							</el-collapse-item> -->
-							<el-collapse-item title="检验检测要求" name="4" label-width="100px">
-									<el-row>
-									<el-col :span="6">
-										<el-form-item label="受检企业" prop="V_NAME" label-width="110px">
-											<el-input v-model="dataInfo.V_NAME" :disabled="true">
-												   <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addCompany"></el-button>
-											</el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="6">
-										<el-form-item label="受检企业编号" prop="VENDOR" label-width="110px">
-											<el-input v-model="dataInfo.VENDOR" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="6">
-										<el-form-item label="样品数量" prop="QUALITY" label-width="110px">
-											<el-input v-model="dataInfo.QUALITY" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="6">
-										<el-form-item label="接收人" prop="ACCEPT_PERSONDesc" label-width="110px">
-											<el-input v-model="dataInfo.ACCEPT_PERSONDesc" :disabled="edit">
-												<el-button slot="append" icon="el-icon-search" @click="getPeople(2)"></el-button>
-											</el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row>
-									<el-form-item label="抽样方案/判定依据" prop="SOLUTION" label-width="110px">
-										<el-input v-model="dataInfo.SOLUTION" :disabled="noedit"></el-input>
-									</el-form-item>
-								</el-row>
-							</el-collapse-item>
-							<!-- <el-collapse-item title="检验检测项目" name="5">
-								 字段列表 Begin
-								
-								字段列表 End
-							</el-collapse-item> -->
-							<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
-								<el-tabs v-model="activeName" @tab-click="handleClick">
-									<el-tab-pane label="依据" name="first">
-										<div class="table-func table-funcb">
-											<el-button type="success" size="mini" round @click="addfieldBasis">
-												<i class="icon-add"></i>
-												<font>新建</font>
-											</el-button>
-										</div>
-
-										<el-table :data="dataInfo.WORK_NOTICE_CHECKBASISList" row-key="ID" border stripe :fit="true" max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.WORK_NOTICE_CHECKBASISList', order: 'descending'}">
-
-											<el-table-column prop="iconOperation" fixed width="50px">
-												<template slot-scope="scope">
-													<i class="el-icon-check" v-if="scope.row.isEditing">
-								      	</i>
-													<i class="el-icon-edit"  v-else="v-else">
-								      	</i>
-												</template>
-											</el-table-column>
-											<el-table-column label="序号" sortable width="80px" prop="NUMBER">
-												<template slot-scope="scope">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.NUMBER" disabled></el-input><span v-show="!scope.row.isEditing">{{scope.row.NUMBER}}</span>
-												</template>
-											</el-table-column>
-											<el-table-column label="检验标准编号" sortable width="120px" prop="S_NUM">
-												<template slot-scope="scope">
-													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入内容">
-														   <el-button slot="append" icon="el-icon-search"></el-button>
-													</el-input>
-													<span v-show="!scope.row.isEditing">{{scope.row.S_NUM}}</span>
-													</el-form-item>
-												</template>
-											</el-table-column>
-											<!-- <el-table-column prop="S_NAME" label="检验标准内容" sortable width="200px">
-												<template slot-scope="scope">
-													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_NAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NAME" placeholder="请输入内容"></el-input>
-													<span v-show="!scope.row.isEditing">{{scope.row.S_NAME}}</span>
-													</el-form-item>
-												</template>
-											</el-table-column> -->
-											<el-table-column prop="S_NAME" label="检验标准名称" sortable width="200px">
-												<template slot-scope="scope">
-													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_NAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NAME" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.S_NAME}}</span>
-													</el-form-item>
-												</template>
-											</el-table-column>
-											<el-table-column prop="S_ENGNAME" label="英文名称" sortable width="200px">
-												<template slot-scope="scope">
-													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_ENGNAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_ENGNAME" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.S_ENGNAME}}</span>
-													</el-form-item>
-												</template>
-											</el-table-column>
-											<el-table-column prop="VERSION" label="版本" sortable width="120px">
-												<template slot-scope="scope">
-													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入内容"></el-input>
-													<span v-show="!scope.row.isEditing">{{scope.row.VERSION}}</span>
-													</el-form-item>
-												</template>
-											</el-table-column>
-											<!-- <el-table-column prop="STATUS" label="信息状态" sortable width="120px">
-												<template slot-scope="scope">
-													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.STATUS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.STATUS}}</span>
-													</el-form-item>
-												</template>
-											</el-table-column> -->
-											<el-table-column label="附件" sortable width="120px">
-												<template slot-scope="scope">
-													<el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="3" :on-exceed="handleExceed" :file-list="fileList">
-														<el-button size="small" type="primary">点击上传</el-button>
-													</el-upload>
-												</template>
-											</el-table-column>
-											<el-table-column fixed="right" label="操作" width="100">
-												<template slot-scope="scope">
-													<el-button @click="deleteRow(scope.$index, dataInfo.WORK_NOTICE_CHECKBASISList)" type="text" size="small">
-														移除
-													</el-button>
-												</template>
-											</el-table-column>
-										</el-table>
-									</el-tab-pane>
-									<el-tab-pane label="检验检测项目" name="second">
-										<div class="table-func table-funcb">
-											<el-button type="success" size="mini" round @click="addfieldProject">
-												<i class="icon-add"></i>
-												<font>新建</font>
-											</el-button>
-										</div>
-										<el-table :data="dataInfo.WORK_NOTICE_CHECKPROJECTList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.WORK_NOTICE_CHECKPROJECTList', order: 'descending'}">
-											<el-table-column prop="iconOperation" fixed width="50px">
-												<template slot-scope="scope">
-													<i class="el-icon-check" v-show="scope.row.isEditing">
-								      	</i>
-													<i class="el-icon-edit" v-show="!scope.row.isEditing">
-								      	</i>
-												</template>
-											</el-table-column>
-											<el-table-column label="序号" sortable width="120px" prop="NUMBER">
-												<template slot-scope="scope">
-													<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.NUMBER'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.NUMBER" disabled></el-input><span v-show="!scope.row.isEditing">{{scope.row.NUMBER}}</span>
-													</el-form-item>
-												</template>
-											</el-table-column>
-											<el-table-column label="检验检测项目编号" sortable width="145px" prop="P_NUM">
-												<template slot-scope="scope">
-													<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.P_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="请输入内容">
-														   <el-button slot="append" icon="el-icon-search"></el-button>
-													</el-input>
-													<span v-show="!scope.row.isEditing">{{scope.row.P_NUM}}</span>
-													</el-form-item>
-												</template>
-											</el-table-column>
-											<el-table-column prop="P_DESC" label="检验检测项目内容" sortable width="200px">
-												<template slot-scope="scope">
-													<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.P_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入内容"></el-input>
-													<span v-show="!scope.row.isEditing">{{scope.row.P_DESC}}</span>
-													</el-form-item>
-												</template>
-											</el-table-column>
-											<el-table-column prop="REMARKS" label="要求" sortable width="150px">
-												<template slot-scope="scope">
-													<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" placeholder="请输入内容"></el-input>
-													<span v-show="!scope.row.isEditing">{{scope.row.REMARKS}}</span>
-													</el-form-item>
-												</template>
-											</el-table-column>
-											<el-table-column prop="VERSION" label="版本" sortable width="80px">
-												<template slot-scope="scope">
-													<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入内容"></el-input>
-													<span v-show="!scope.row.isEditing">{{scope.row.VERSION}}</span>
-													</el-form-item>
-												</template>
-											</el-table-column>
-											<!-- <el-table-column prop="STATUS" label="信息状态" sortable width="120px">
-												<template slot-scope="scope">
-													<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + 'STATUS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input>
-													<span v-show="!scope.row.isEditing">{{scope.row.STATUS}}</span>
-													</el-form-item>
-												</template>
-											</el-table-column> -->
-											<el-table-column label="附件" sortable width="120px">
-												<template slot-scope="scope">
-													<el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="3" :on-exceed="handleExceed" :file-list="fileList">
-														<el-button size="small" type="primary">点击上传</el-button>
-													</el-upload>
-												</template>
-											</el-table-column>
-											<el-table-column fixed="right" label="操作" width="100">
-												<template slot-scope="scope">
-													<el-button @click="deleteRow(scope.$index, dataInfo.WORK_NOTICE_CHECKPROJECTList)" type="text" size="small">
-														移除
-													</el-button>
-												</template>
-											</el-table-column>
-										</el-table>
-									</el-tab-pane>
-								</el-tabs>
-							</div>
-							<el-collapse-item name="6">
-								<el-row >
-									<el-col :span="8">
-										<el-form-item label="完成日期" prop="COMPDATE" label-width="110px">
-											<el-date-picker v-model="dataInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" :disabled="noedit" style="width: 100%">
-											</el-date-picker>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="检验检测费用" prop="CHECTCOST" label-width="110px">
-											<el-input v-model="dataInfo.CHECTCOST" :disabled="noedit" id="cost" @blur="toPrice"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="下达日期" prop="XD_DATE" label-width="110px">
-											<el-date-picker v-model="dataInfo.XD_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" :disabled="noedit" style="width: 100%">
-											</el-date-picker>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row :gutter="30">
-									<el-col :span="24">
-										<el-form-item label="备注" prop="MEMO" label-width="110px">
-											<el-input type="textarea" rows="5" v-model="dataInfo.MEMO" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-							</el-collapse-item>
-							<el-collapse-item title="其他" name="7" v-show="views">
-								<el-row >
-									<el-col :span="8">
-										<el-form-item label="录入人" prop="ENTERBYDesc" label-width="110px">
-											<el-input v-model="dataInfo.ENTERBYDesc" :disabled="edit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="录入时间" prop="ENTERDATE" label-width="110px">
-											<el-input v-model="dataInfo.ENTERDATE" :disabled="edit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="机构" prop="DEPTIDDesc" label-width="110px">
-											<el-input v-model="dataInfo.DEPTIDDesc" :disabled="edit"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row>
-									<el-col :span="8">
-										<el-form-item label="修改人" prop="CHANGEBYDesc" label-width="110px">
-											<el-input v-model="dataInfo.CHANGEBYDesc" :disabled="edit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="修改时间" prop="CHANGEDATE" label-width="110px">
-											<el-input v-model="dataInfo.CHANGEDATE" :disabled="edit"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-							</el-collapse-item>
-						</el-collapse>
+				</div>
+				<div class="mask_content">
+						<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" class="demo-form-inline" inline-message>
+							<div class="text-center" v-show="viewtitle">
+							<el-button class="start" type="success" round plain size="mini" @click="startup"><i class="icon-start"></i> 启动流程</el-button>
+							<el-button class="approval" type="warning" round plain size="mini" @click="approvals"><i class="icon-edit-3"></i> 审批</el-button>
+							<el-button type="primary" round plain size="mini" @click="flowmap"><i class="icon-git-pull-request"></i> 流程地图</el-button>
+							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
+							<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
 						</div>
-					</el-form>
-				<div class="el-dialog__footer" v-show="noviews">
-                    <el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
-					<el-button type="success" v-show="addtitle" @click='saveAndSubmit()'>保存并继续</el-button>
-					<el-button type="success" v-show="!addtitle" @click="build">生成委托书</el-button>
-					<el-button @click='close'>取消</el-button>
+						   <div class="accordion">
+							<el-collapse v-model="activeNames">
+								<el-collapse-item title="类型" name="1">
+									<el-row :gutter="20" class="pb10">
+
+										<!-- <el-col :span="5" class="pull-right">
+											<el-input v-model="dataInfo.STATUS=='1'?'活动':'不活动'" :disabled="true">
+												<template slot="prepend">信息状态</template>
+											</el-input>
+										</el-col> -->
+										<el-col :span="4" class="pull-right">
+											<el-input v-model="dataInfo.STATE" :disabled="edit">
+												<template slot="prepend">状态</template>
+											</el-input>
+										</el-col>
+										<el-col :span="5" class="pull-right">
+											<el-input v-model="dataInfo.N_CODE" :disabled="edit" placeholder="自动生成">
+												<template slot="prepend">编号</template>
+											</el-input>
+										</el-col>
+									</el-row>
+									<el-form-item label="" prop="TYPE">
+										<el-radio-group v-model="dataInfo.TYPE" :disabled="noedit">
+											<el-col :span="4">
+												<el-radio label="1">监督抽查</el-radio>
+											</el-col>
+											<el-col :span="4">
+												<el-radio label="2">监督抽查复查</el-radio>
+											</el-col>
+											<el-col :span="4">
+												<el-radio label="3">质量抽查</el-radio>
+											</el-col>
+											<el-col :span="4">
+												<el-radio label="4">质量抽查复查</el-radio>
+											</el-col>
+											<el-col :span="4">
+												<el-radio label="5">生产许可证</el-radio>
+											</el-col>
+											<el-col :span="4">
+												<el-radio label="6">认定检验检测</el-radio>
+											</el-col>
+											<el-col :span="4">
+												<el-radio label="7">鉴定试验</el-radio>
+											</el-col>
+											<el-col :span="4">
+												<el-radio label="8">委托检验检测</el-radio>
+											</el-col>
+											<el-col :span="4">
+												<el-radio label="9">专项抽查</el-radio>
+											</el-col>
+											<el-col :span="4">
+												<el-radio label="10">专项抽查复查</el-radio>
+											</el-col>
+											<el-col :span="4">
+												<el-radio label="11">其它</el-radio>
+											</el-col>
+										
+										</el-radio-group>
+									</el-form-item>
+								</el-collapse-item>
+								<el-collapse-item title="基本信息" name="2">
+										<el-col :span="8">
+											<el-form-item label="计划编号" prop="WP_NUM" label-width="110px">
+												<el-input v-model="dataInfo.WP_NUM" :disabled="edit">
+												</el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="任务号" prop="TASKNUM" label-width="110px">
+												<el-input v-model="dataInfo.TASKNUM" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="承检单位" prop="CJDW" :disabled="noedit" label-width="110px">
+												<!-- <el-input v-model="dataInfo.CJDW" :disabled="edit">
+													<el-button slot="append" icon="el-icon-search" @click="getCompany"></el-button>
+												</el-input> -->
+												<el-select clearable v-model="dataInfo.CJDW" filterable allow-create default-first-option placeholder="请选择">
+													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+												</el-select>
+											</el-form-item>
+										</el-col>
+										
+										<el-col :span="8">
+											<el-form-item label="项目负责人" prop="P_LEADERDesc" label-width="110px">
+												<el-input v-model="dataInfo.P_LEADERDesc" :disabled="true">
+													<el-button :disabled="noedit" slot="append" icon="el-icon-search" @click="addperbtn()"></el-button>
+												</el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="受检产品名称" prop="ITEM_NAME" label-width="110px">
+												<el-input v-model="dataInfo.ITEM_NAME" :disabled="true">
+													   <el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="addproduct"></el-button>
+												</el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="受检产品型号" prop="ITEM_MODEL" label-width="110px">
+												<el-input v-model="dataInfo.ITEM_MODEL" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+								</el-collapse-item>
+								<!-- <el-collapse-item title="依据" name="3">
+									 字段列表 Begin
+									
+									字段列表 End 
+								</el-collapse-item> -->
+								<el-collapse-item title="检验检测要求" name="4" label-width="100px">
+										<el-row>
+										<el-col :span="6">
+											<el-form-item label="受检企业" prop="V_NAME" label-width="110px">
+												<el-input v-model="dataInfo.V_NAME" :disabled="true">
+													   <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addCompany"></el-button>
+												</el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="6">
+											<el-form-item label="受检企业编号" prop="VENDOR" label-width="110px">
+												<el-input v-model="dataInfo.VENDOR" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="6">
+											<el-form-item label="样品数量" prop="QUALITY" label-width="110px">
+												<el-input v-model="dataInfo.QUALITY" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="6">
+											<el-form-item label="接收人" prop="ACCEPT_PERSONDesc" label-width="110px">
+												<el-input v-model="dataInfo.ACCEPT_PERSONDesc" :disabled="edit">
+													<el-button slot="append" icon="el-icon-search" @click="getPeople(2)"></el-button>
+												</el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-form-item label="抽样方案/判定依据" prop="SOLUTION" label-width="110px">
+											<el-input v-model="dataInfo.SOLUTION" :disabled="noedit"></el-input>
+										</el-form-item>
+									</el-row>
+								</el-collapse-item>
+								<!-- <el-collapse-item title="检验检测项目" name="5">
+									 字段列表 Begin
+									
+									字段列表 End
+								</el-collapse-item> -->
+								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
+									<el-tabs v-model="activeName" @tab-click="handleClick">
+										<el-tab-pane label="依据" name="first">
+											<div class="table-func table-funcb">
+												<el-button type="success" size="mini" round @click="addfieldBasis">
+													<i class="icon-add"></i>
+													<font>新建</font>
+												</el-button>
+											</div>
+
+											<el-table :data="dataInfo.WORK_NOTICE_CHECKBASISList" row-key="ID" border stripe :fit="true" max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.WORK_NOTICE_CHECKBASISList', order: 'descending'}">
+
+												<el-table-column prop="iconOperation" fixed width="50px">
+													<template slot-scope="scope">
+														<i class="el-icon-check" v-if="scope.row.isEditing">
+									      	</i>
+														<i class="el-icon-edit"  v-else="v-else">
+									      	</i>
+													</template>
+												</el-table-column>
+												<el-table-column label="序号" sortable width="80px" prop="NUMBER">
+													<template slot-scope="scope">
+														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.NUMBER" disabled></el-input><span v-show="!scope.row.isEditing">{{scope.row.NUMBER}}</span>
+													</template>
+												</el-table-column>
+												<el-table-column label="检验标准编号" sortable width="120px" prop="S_NUM">
+													<template slot-scope="scope">
+														<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
+														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入内容">
+															   <el-button slot="append" icon="el-icon-search"></el-button>
+														</el-input>
+														<span v-show="!scope.row.isEditing">{{scope.row.S_NUM}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column>
+												<!-- <el-table-column prop="S_NAME" label="检验标准内容" sortable width="200px">
+													<template slot-scope="scope">
+														<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_NAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
+														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NAME" placeholder="请输入内容"></el-input>
+														<span v-show="!scope.row.isEditing">{{scope.row.S_NAME}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column> -->
+												<el-table-column prop="S_NAME" label="检验标准名称" sortable width="200px">
+													<template slot-scope="scope">
+														<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_NAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
+														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NAME" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.S_NAME}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column>
+												<el-table-column prop="S_ENGNAME" label="英文名称" sortable width="200px">
+													<template slot-scope="scope">
+														<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_ENGNAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
+														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_ENGNAME" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.S_ENGNAME}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column>
+												<el-table-column prop="VERSION" label="版本" sortable width="120px">
+													<template slot-scope="scope">
+														<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
+														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入内容"></el-input>
+														<span v-show="!scope.row.isEditing">{{scope.row.VERSION}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column>
+												<!-- <el-table-column prop="STATUS" label="信息状态" sortable width="120px">
+													<template slot-scope="scope">
+														<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.STATUS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
+														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.STATUS}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column> -->
+												<el-table-column label="附件" sortable width="120px">
+													<template slot-scope="scope">
+														<el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="3" :on-exceed="handleExceed" :file-list="fileList">
+															<el-button size="small" type="primary">点击上传</el-button>
+														</el-upload>
+													</template>
+												</el-table-column>
+												<el-table-column fixed="right" label="操作" width="100">
+													<template slot-scope="scope">
+														<el-button @click="deleteRow(scope.$index, dataInfo.WORK_NOTICE_CHECKBASISList)" type="text" size="small">
+															移除
+														</el-button>
+													</template>
+												</el-table-column>
+											</el-table>
+										</el-tab-pane>
+										<el-tab-pane label="检验检测项目" name="second">
+											<div class="table-func table-funcb">
+												<el-button type="success" size="mini" round @click="addfieldProject">
+													<i class="icon-add"></i>
+													<font>新建</font>
+												</el-button>
+											</div>
+											<el-table :data="dataInfo.WORK_NOTICE_CHECKPROJECTList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.WORK_NOTICE_CHECKPROJECTList', order: 'descending'}">
+												<el-table-column prop="iconOperation" fixed width="50px">
+													<template slot-scope="scope">
+														<i class="el-icon-check" v-show="scope.row.isEditing">
+									      	</i>
+														<i class="el-icon-edit" v-show="!scope.row.isEditing">
+									      	</i>
+													</template>
+												</el-table-column>
+												<el-table-column label="序号" sortable width="120px" prop="NUMBER">
+													<template slot-scope="scope">
+														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.NUMBER'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
+														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.NUMBER" disabled></el-input><span v-show="!scope.row.isEditing">{{scope.row.NUMBER}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column>
+												<el-table-column label="检验检测项目编号" sortable width="145px" prop="P_NUM">
+													<template slot-scope="scope">
+														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.P_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
+														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="请输入内容">
+															   <el-button slot="append" icon="el-icon-search"></el-button>
+														</el-input>
+														<span v-show="!scope.row.isEditing">{{scope.row.P_NUM}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column>
+												<el-table-column prop="P_DESC" label="检验检测项目内容" sortable width="200px">
+													<template slot-scope="scope">
+														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.P_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
+														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入内容"></el-input>
+														<span v-show="!scope.row.isEditing">{{scope.row.P_DESC}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column>
+												<el-table-column prop="REMARKS" label="要求" sortable width="150px">
+													<template slot-scope="scope">
+														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
+														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" placeholder="请输入内容"></el-input>
+														<span v-show="!scope.row.isEditing">{{scope.row.REMARKS}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column>
+												<el-table-column prop="VERSION" label="版本" sortable width="80px">
+													<template slot-scope="scope">
+														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
+														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入内容"></el-input>
+														<span v-show="!scope.row.isEditing">{{scope.row.VERSION}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column>
+												<!-- <el-table-column prop="STATUS" label="信息状态" sortable width="120px">
+													<template slot-scope="scope">
+														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + 'STATUS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
+														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input>
+														<span v-show="!scope.row.isEditing">{{scope.row.STATUS}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column> -->
+												<el-table-column label="附件" sortable width="120px">
+													<template slot-scope="scope">
+														<el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="3" :on-exceed="handleExceed" :file-list="fileList">
+															<el-button size="small" type="primary">点击上传</el-button>
+														</el-upload>
+													</template>
+												</el-table-column>
+												<el-table-column fixed="right" label="操作" width="100">
+													<template slot-scope="scope">
+														<el-button @click="deleteRow(scope.$index, dataInfo.WORK_NOTICE_CHECKPROJECTList)" type="text" size="small">
+															移除
+														</el-button>
+													</template>
+												</el-table-column>
+											</el-table>
+										</el-tab-pane>
+									</el-tabs>
+								</div>
+								<el-collapse-item name="6">
+									<el-row >
+										<el-col :span="8">
+											<el-form-item label="完成日期" prop="COMPDATE" label-width="110px">
+												<el-date-picker v-model="dataInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" :disabled="noedit" style="width: 100%">
+												</el-date-picker>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="检验检测费用" prop="CHECTCOST" label-width="110px">
+												<el-input v-model="dataInfo.CHECTCOST" :disabled="noedit" id="cost" @blur="toPrice"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="下达日期" prop="XD_DATE" label-width="110px">
+												<el-date-picker v-model="dataInfo.XD_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" :disabled="noedit" style="width: 100%">
+												</el-date-picker>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row :gutter="30">
+										<el-col :span="24">
+											<el-form-item label="备注" prop="MEMO" label-width="110px">
+												<el-input type="textarea" rows="5" v-model="dataInfo.MEMO" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+								</el-collapse-item>
+								<el-collapse-item title="其他" name="7" v-show="views">
+									<el-row >
+										<el-col :span="8">
+											<el-form-item label="录入人" prop="ENTERBYDesc" label-width="110px">
+												<el-input v-model="dataInfo.ENTERBYDesc" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="录入时间" prop="ENTERDATE" label-width="110px">
+												<el-input v-model="dataInfo.ENTERDATE" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="机构" prop="DEPTIDDesc" label-width="110px">
+												<el-input v-model="dataInfo.DEPTIDDesc" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="修改人" prop="CHANGEBYDesc" label-width="110px">
+												<el-input v-model="dataInfo.CHANGEBYDesc" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="修改时间" prop="CHANGEDATE" label-width="110px">
+												<el-input v-model="dataInfo.CHANGEDATE" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+								</el-collapse-item>
+							</el-collapse>
+							</div>
+						</el-form>
+					<div class="el-dialog__footer" v-show="noviews">
+	                    <el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
+						<el-button type="success" v-show="addtitle" @click='saveAndSubmit()'>保存并继续</el-button>
+						<el-button type="success" v-show="!addtitle" @click="build">生成委托书</el-button>
+						<el-button @click='close'>取消</el-button>
+					</div>
 				</div>
 			</div>
-		</div>
-		<el-dialog :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
-			<el-table :data="gridData" @selection-change="SelChange">
-				<el-table-column type="selection" width="55" fixed>
-				</el-table-column>
-				<el-table-column label="ID" sortable width="50px" prop="id">
-				</el-table-column>
-				<el-table-column label="姓名" sortable width="200px" prop="nickname">
-				</el-table-column>
-				<el-table-column label="机构" sortable width="200px" prop="deptName">
-				</el-table-column>
-				<el-table-column label="公司" sortable width="200px" prop="companyName">
-				</el-table-column>
-			</el-table>
-			<el-pagination background class="pull-right" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-			</el-pagination>
-			<span slot="footer" class="dialog-footer" v-if="noviews">
-    			<el-button @click="dialogVisible = false">取 消</el-button>
-    			<el-button type="primary" @click="dailogconfirm()">确 定</el-button>
-  			</span>
-		</el-dialog>
-		<!-- <el-dialog title="承检部门" :visible.sync="dialogVisiblecompany" width="30%" :before-close="handleClose">
-			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @check-change="handleCheckChange">
-			</el-tree>
-			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisiblecompany = false">取 消</el-button>
-		       <el-button type="primary" @click="diaconfirmcom();" >确 定</el-button>
-		    </span>
-		</el-dialog> -->
-		<!-- 产品名称 Begin -->
-		<el-dialog title="产品名称" :visible.sync="dialogVisible1" width="80%" :before-close="handleClose">
-			<el-table  :header-cell-style="rowClass" :data="productList" line-center border stripe height="400px" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-								<el-table-column type="selection" fixed width="55" align="center">
+			<el-dialog :visible.sync="dialogVisible" width="60%" :before-close="handleClose" :modal-append-to-body='false'>
+				<el-table :data="gridData" @selection-change="SelChange">
+					<el-table-column type="selection" width="55" fixed>
+					</el-table-column>
+					<el-table-column label="ID" sortable width="50px" prop="id">
+					</el-table-column>
+					<el-table-column label="姓名" sortable width="200px" prop="nickname">
+					</el-table-column>
+					<el-table-column label="机构" sortable width="200px" prop="deptName">
+					</el-table-column>
+					<el-table-column label="公司" sortable width="200px" prop="companyName">
+					</el-table-column>
+				</el-table>
+				<el-pagination background class="pull-right" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+				</el-pagination>
+				<span slot="footer" class="dialog-footer" v-if="noviews">
+	    			<el-button @click="dialogVisible = false">取 消</el-button>
+	    			<el-button type="primary" @click="dailogconfirm()">确 定</el-button>
+	  			</span>
+			</el-dialog>
+			<!-- <el-dialog title="承检部门" :visible.sync="dialogVisiblecompany" width="30%" :before-close="handleClose">
+				<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @check-change="handleCheckChange">
+				</el-tree>
+				<span slot="footer" class="dialog-footer">
+			       <el-button @click="dialogVisiblecompany = false">取 消</el-button>
+			       <el-button type="primary" @click="diaconfirmcom();" >确 定</el-button>
+			    </span>
+			</el-dialog> -->
+			<!-- 产品名称 Begin -->
+			<el-dialog title="产品名称" :visible.sync="dialogVisible1" width="80%" :before-close="handleClose" :modal-append-to-body='false'>
+				<el-table  :header-cell-style="rowClass" :data="productList" line-center border stripe height="400px" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+									<el-table-column type="selection" fixed width="55" align="center">
+									</el-table-column>
+									<el-table-column label="编码" width="155" sortable prop="PRO_NUM">
+									</el-table-column>
+									<el-table-column label="名称" sortable prop="PRO_NAME">
+									</el-table-column>
+									<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
+									</el-table-column>
+									<el-table-column label="机构" width="185" sortable prop="DEPARTMENTDesc">
+									</el-table-column>
+									<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
+									</el-table-column>
+									<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat">
+									</el-table-column>
+								</el-table>
+								<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+								</el-pagination>
+				<span slot="footer" class="dialog-footer">
+			       <el-button @click="dialogVisible1 = false">取 消</el-button>
+			       <el-button type="primary" @click="addproname">确 定</el-button>
+			    </span>
+			</el-dialog>
+			<!-- 产品名称 End -->
+			<!-- 受检企业 Begin -->
+			<el-dialog title="受检企业" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose" :modal-append-to-body='false'>
+				<el-table :data="customerList" border stripe :header-cell-style="rowClass" height="400px" style="width: 100%;" :default-sort="{prop:'customerList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+								<el-table-column type="selection" width="55" fixed align="center">
 								</el-table-column>
-								<el-table-column label="编码" width="155" sortable prop="PRO_NUM">
+								<el-table-column label="组织机构代码" width="200" sortable prop="CODE">
 								</el-table-column>
-								<el-table-column label="名称" sortable prop="PRO_NAME">
+								<el-table-column label="单位名称" width="300" sortable prop="NAME">
 								</el-table-column>
-								<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
-								</el-table-column>
-								<el-table-column label="机构" width="185" sortable prop="DEPARTMENTDesc">
-								</el-table-column>
-								<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
-								</el-table-column>
-								<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat">
+								<el-table-column label="联系地址" sortable prop="CONTACT_ADDRESS">
 								</el-table-column>
 							</el-table>
-							<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-							</el-pagination>
-			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible1 = false">取 消</el-button>
-		       <el-button type="primary" @click="addproname">确 定</el-button>
-		    </span>
-		</el-dialog>
-		<!-- 产品名称 End -->
-		<!-- 受检企业 Begin -->
-		<el-dialog title="受检企业" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
-			<el-table :data="customerList" border stripe :header-cell-style="rowClass" height="400px" style="width: 100%;" :default-sort="{prop:'customerList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-							<el-table-column type="selection" width="55" fixed align="center">
-							</el-table-column>
-							<el-table-column label="组织机构代码" width="200" sortable prop="CODE">
-							</el-table-column>
-							<el-table-column label="单位名称" width="300" sortable prop="NAME">
-							</el-table-column>
-							<el-table-column label="联系地址" sortable prop="CONTACT_ADDRESS">
-							</el-table-column>
-						</el-table>
-						<el-pagination background class="pull-right pt10"
-				            @size-change="sizeChange"
-				            @current-change="currentChange"
-				            :current-page="page.currentPage"
-				            :page-sizes="[10, 20, 30, 40]"
-				            :page-size="page.pageSize"
-				            layout="total, sizes, prev, pager, next"
-				            :total="page.totalCount">
-				        </el-pagination>
-			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible2 = false">取 消</el-button>
-		       <el-button type="primary" @click="addcomname">确 定</el-button>
-		    </span>
-		</el-dialog>
-		<!-- 产品名称 End -->
-		
-		<!--审批页面-->
-		<approvalmask :approvingData="approvingData" ref="approvalChild" ></approvalmask>
-		<!--流程历史-->
-		<flowhistorymask :approvingData="approvingData"  ref="flowhistoryChild" ></flowhistorymask>
-		<!--流程地图-->
-		<flowmapmask :approvingData="approvingData" ref="flowmapChild" ></flowmapmask>
-		<!--当前责任人-->
-		<vewPoplemask :approvingData="approvingData"  ref="vewPopleChild" ></vewPoplemask>
+							<el-pagination background class="pull-right pt10"
+					            @size-change="sizeChange"
+					            @current-change="currentChange"
+					            :current-page="page.currentPage"
+					            :page-sizes="[10, 20, 30, 40]"
+					            :page-size="page.pageSize"
+					            layout="total, sizes, prev, pager, next"
+					            :total="page.totalCount">
+					        </el-pagination>
+				<span slot="footer" class="dialog-footer">
+			       <el-button @click="dialogVisible2 = false">取 消</el-button>
+			       <el-button type="primary" @click="addcomname">确 定</el-button>
+			    </span>
+			</el-dialog>
+			<!-- 产品名称 End -->
+			
+			<!--审批页面-->
+			<approvalmask :approvingData="approvingData" ref="approvalChild" ></approvalmask>
+			<!--流程历史-->
+			<flowhistorymask :approvingData="approvingData"  ref="flowhistoryChild" ></flowhistorymask>
+			<!--流程地图-->
+			<flowmapmask :approvingData="approvingData" ref="flowmapChild" ></flowmapmask>
+			<!--当前责任人-->
+			<vewPoplemask :approvingData="approvingData"  ref="vewPopleChild" ></vewPoplemask>
+		</div>
 	</div>
 </template>
 
@@ -649,7 +650,10 @@
 					WORK_NOTICE_CHECKBASISList: [],
 					WORK_NOTICE_CHECKPROJECTList: []
 				}
-					this.$refs["dataInfo"].resetFields();
+				// this.$nextTick(() => {
+				// 	this.$refs.form.resetFields();
+				// });
+				// this.$refs["dataInfo"].resetFields();
 			},
 			//机构值
 			getCompany() {
@@ -918,22 +922,20 @@
 					this.rebackDialog();
 				}
 			},
-			maxDialog(e) {
+			maxDialog(e) { //定义大弹出框一个默认大小
 				this.isok1 = false;
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
-				$(".mask_div").css("margin", "0%");
 				$(".mask_div").css("top", "60px");
 			},
 			//还原按钮
-			rebackDialog() {
+			rebackDialog() { //大弹出框还原成默认大小
 				this.isok1 = true;
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
-				$(".mask_div").css("margin", "7% 10%");
-				$(".mask_div").css("top", "0");
+				$(".mask_div").css("top", "100px");
 			},
 			// 保存users/saveOrUpdate
 			save() {

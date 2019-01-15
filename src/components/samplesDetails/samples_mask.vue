@@ -501,7 +501,7 @@
 					ACCEPT_DATE: '',//收样日期
 					RECIP_PERSON: '',//接样人
 					RECIP_DATE: '',//接样日期
-					STATE: '草稿',//状态
+					STATE: '待检',//状态
 					VERSION: '1',//版本
 					STATUSDATE: '',//状态日期
 					ENTERBY: '',//录入人

@@ -92,8 +92,8 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="样品状态" prop="ITEM_STATU">
-											<el-input v-model="workorderForm.ITEM_STATU" :disabled="true"></el-input>
+										<el-form-item label="样品状态" prop="ITEM_STATUS">
+											<el-input v-model="workorderForm.ITEM_STATUS" ></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -174,7 +174,7 @@
 				            	<div class="clearfix pt10">
 					            	<el-row>
 										<el-col :span="8">
-											<el-form-item label="委托方提供技术资料" label-width="140px">
+											<el-form-item label="委托方提供技术资料">
 												<el-input placeholder="请输入内容" v-model="workorderForm.TECHNICAL_INFORMATION"></el-input>
 											</el-form-item>
 										</el-col>
@@ -244,10 +244,11 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="样品状态" prop="ITEM_STATUS">
-												<el-select v-model="workorderForm.ITEM_STATUS" style="width: 100%">
+											<el-form-item label="样品状态" prop="ITEM_STATU">
+												<el-input v-model="workorderForm.ITEM_STATU" ></el-input>
+												<!--<el-select v-model="workorderForm.ITEM_STATUS" style="width: 100%">
 													<el-option v-for="(data,index) in Select_ITEM_STATUS" :key="index" :value="data.code" :label="data.name"></el-option>
-												</el-select>
+												</el-select>-->
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -362,7 +363,7 @@
 											</el-button>
 										</div>
 
-										<el-table :data="WorkorderBasisList" row-key="ID" border stripe :fit="true" max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation">
+										<el-table :data="workorderForm.WORKORDER_BASISList" row-key="ID" border stripe :fit="true" max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;">
 										    <el-table-column prop="iconOperation" fixed width="50px">
 										      <template slot-scope="scope">
 										      	<i class="el-icon-check" v-show="scope.row.isEditing">
@@ -374,7 +375,7 @@
 
 										    <el-table-column label="标准编号" sortable width="160px" prop="S_NUM">
 										      <template slot-scope="scope">
-										      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" disabled>
+										      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" >
 													  <el-button slot="append" icon="el-icon-search"></el-button>
 												</el-input>
 												<span v-show="!scope.row.isEditing">{{scope.row.S_NUM}}</span>
@@ -395,7 +396,7 @@
 
 										    <el-table-column prop="VERSION" label="标准版本" sortable width="120px">
 										      <template slot-scope="scope">
-										         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" :disabled="true"></el-input><span v-show="!scope.row.isEditing">{{scope.row.VERSION}}</span>
+										         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" ></el-input><span v-show="!scope.row.isEditing">{{scope.row.VERSION}}</span>
 										      </template>
 										    </el-table-column>
 
@@ -407,7 +408,7 @@
 
 										    <el-table-column fixed="right" label="操作" width="120">
 										      <template slot-scope="scope">
-										        <el-button @click="deleteRow(scope.$index, WorkorderBasisList)" type="text" size="small">
+										        <el-button type="text" size="small">
 										          移除
 										        </el-button>
 										      </template>
@@ -421,59 +422,57 @@
 												<font>新建行</font>
 											</el-button>
 										</div>
-						            	<el-table :data="WorkorderProjectList" border stripe :fit="true" max-height="260" style="width: 100%;" :default-sort="{prop:'workorderbasisList', order: 'descending'}">
+						            	<el-table :data="workorderForm.WORKORDER_PROJECTList" border stripe :fit="true" max-height="260" style="width: 100%;" :default-sort="{prop:'workorderbasisList', order: 'descending'}">
+						            		<el-table-column prop="iconOperation" fixed width="50px">
+										      <template slot-scope="scope">
+										      	<i class="el-icon-check" v-show="scope.row.isEditing">
+										      	</i>
+										      	<i class="el-icon-edit" v-show="!scope.row.isEditing">
+										      	</i>
+										      </template>
+										    </el-table-column>
 						            		<el-table-column prop="P_NUM" label="检测项目编号" sortable>
 														<template slot-scope="scope">
-															<el-form-item :prop="'workorderbasisList.'+scope.$index + '.P_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+															
 															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="请输入">	
 															</el-input>
 															<span v-else="v-else">{{scope.row.P_NUM}}</span>
-															</el-form-item>
+														
 														</template>
 											</el-table-column>
 											<el-table-column prop="P_DESC" label="检测项目名称" sortable>
 														<template slot-scope="scope">
-															<el-form-item :prop="'workorderbasisList.'+scope.$index + '.P_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入">	
 															</el-input>
 															<span v-else="v-else">{{scope.row.P_DESC}}</span>
-															</el-form-item>
 														</template>
 											</el-table-column>
 						          			<el-table-column prop="HOSTPERSON" label="主检员" sortable>
 														<template slot-scope="scope">
-															<el-form-item :prop="'workorderbasisList.'+scope.$index + '.HOSTPERSON'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.HOSTPERSON" placeholder="请输入">
 															</el-input>
 															<span v-else="v-else">{{scope.row.HOSTPERSON}}</span>
-															</el-form-item>
 														</template>
 											</el-table-column>
 											<el-table-column prop="FOLLOWPERSON" label="从检员" sortable>
 														<template slot-scope="scope">
-															<el-form-item :prop="'workorderbasisList.'+scope.$index + '.FOLLOWPERSON'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.FOLLOWPERSON" placeholder="请输入">	
 															</el-input>
 															<span v-else="v-else">{{scope.row.FOLLOWPERSON}}</span>
-															</el-form-item>
 														</template>
 											</el-table-column>
 						            		<el-table-column prop="REMARKS" label="要求" sortable>
 														<template slot-scope="scope">
-															<el-form-item :prop="'workorderbasisList.'+scope.$index + '.REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" placeholder="请输入">	
 															</el-input>
 															<span v-else="v-else">{{scope.row.REMARKS}}</span>
-															</el-form-item>
 														</template>
 											</el-table-column>
 						            		<el-table-column prop="VERSION" label="版本" sortable>
 														<template slot-scope="scope">
-															<el-form-item :prop="'workorderbasisList.'+scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入">	
 															</el-input>
 															<span v-else="v-else">{{scope.row.VERSION}}</span>
-															</el-form-item>
 														</template>
 											</el-table-column>
 										      <el-table-column fixed="right" label="操作" width="120">
@@ -487,23 +486,37 @@
 									</el-tab-pane>
 									<el-tab-pane label="检验员信息" name="third">
 										<div class="table-func table-funcb">
-											<el-button type="success" size="mini" round><i class="icon-add"></i><font>新建行</font>
+											<el-button type="success" size="mini" round @click="addfield3">
+												<i class="icon-add"></i><font>新建行</font>
 											</el-button>
 										</div>
-						            	<el-table :data="WorkorderPersonList" border stripe :fit="true" max-height="260" style="width: 100%;" :default-sort="{prop:'WorkorderPersonList', order: 'descending'}">
+						            	<el-table :data="workorderForm.WORKORDER_CHECKPERSONList" border stripe :fit="true" max-height="260" style="width: 100%;" :default-sort="{prop:'WORKORDER_CHECKPERSONList', order: 'descending'}">
+						            		<el-table-column prop="iconOperation" fixed width="50px">
+										      <template slot-scope="scope">
+										      	<i class="el-icon-check" v-show="scope.row.isEditing">
+										      	</i>
+										      	<i class="el-icon-edit" v-show="!scope.row.isEditing">
+										      	</i>
+										      </template>
+										    </el-table-column>
 						            		<el-table-column label="人员姓名" sortable prop="NAME">
 										      <template slot-scope="scope">
-										      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NAME" disabled></el-input><span v-else="v-else">{{scope.row.NAME}}</span>
+										      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NAME"></el-input><span v-else="v-else">{{scope.row.NAME}}</span>
+										      </template>
+										    </el-table-column>
+										    <el-table-column label="用户名" sortable prop="USER">
+										      <template slot-scope="scope">
+										      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.USER"></el-input><span v-else="v-else">{{scope.row.USER}}</span>
 										      </template>
 										    </el-table-column>
 										    <el-table-column label="机构" sortable prop="DEPARTMENT">
 										      <template slot-scope="scope">
-										      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DEPARTMENT" disabled></el-input><span v-else="v-else">{{scope.row.DEPARTMENT}}</span>
+										      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DEPARTMENT"></el-input><span v-else="v-else">{{scope.row.DEPARTMENT}}</span>
 										      </template>
 										    </el-table-column>
 										    <el-table-column label="电话" sortable prop="TELPHONE">
 										      <template slot-scope="scope">
-										      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.TELPHONE" disabled></el-input><span v-else="v-else">{{scope.row.TELPHONE}}</span>
+										      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.TELPHONE"></el-input><span v-else="v-else">{{scope.row.TELPHONE}}</span>
 										      </template>
 										    </el-table-column>
 						            		<el-table-column fixed="right" label="操作" width="120">
@@ -517,26 +530,35 @@
 									</el-tab-pane>
 									<el-tab-pane label="原始数据模板" name="fourth">
 										<div class="table-func table-funcb">
-											<el-button type="success" size="mini" round><i class="icon-add"></i><font>新建行</font>
+											<el-button type="success" size="mini" round @click="addfield4">
+												<i class="icon-add"></i><font>新建行</font>
 											</el-button>
 										</div>
-										<el-table :data="SourceDataTemplateList" border stripe :fit="true" max-height="260" style="width: 100%;" :default-sort="{prop:'SourceDataTemplateList', order: 'descending'}">
+										<el-table :data="workorderForm.WORKORDER_DATA_TEMPLATEList" border stripe :fit="true" max-height="260" style="width: 100%;" :default-sort="{prop:'WORKORDER_DATA_TEMPLATEList', order: 'descending'}">
+											<el-table-column prop="iconOperation" fixed width="50px">
+										      <template slot-scope="scope">
+										      	<i class="el-icon-check" v-show="scope.row.isEditing">
+										      	</i>
+										      	<i class="el-icon-edit" v-show="!scope.row.isEditing">
+										      	</i>
+										      </template>
+										    </el-table-column>
 											<el-table-column label="模板编号" sortable prop="D_NUM">
 										      <template slot-scope="scope">
-										      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.D_NUM" disabled></el-input><span v-else="v-else">{{scope.row.D_NUM}}</span>
+										      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.D_NUM"></el-input><span v-else="v-else">{{scope.row.D_NUM}}</span>
 										      </template>
 										    </el-table-column>
 										    <el-table-column label="模板描述" sortable prop="DESC">
 										      <template slot-scope="scope">
-										      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DESC" disabled></el-input><span v-else="v-else">{{scope.row.DESC}}</span>
+										      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DESC"></el-input><span v-else="v-else">{{scope.row.DESC}}</span>
 										      </template>
 										    </el-table-column>
 										    <el-table-column label="模板状态" sortable prop="STATUS">
 										      <template slot-scope="scope">
-										      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" disabled></el-input><span v-else="v-else">{{scope.row.STATUS}}</span>
+										      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS"></el-input><span v-else="v-else">{{scope.row.STATUS}}</span>
 										      </template>
 										    </el-table-column>
-						            		<el-table-column prop="VERSION" label="预览"></el-table-column>
+						            		<el-table-column label="预览"></el-table-column>
 						            		<el-table-column fixed="right" label="操作" width="80">
 										      <template slot-scope="scope">
 										        <el-button
@@ -588,7 +610,7 @@
 						</el-collapse>
 					</div>
 					<div class="el-dialog__footer">
-							<el-button type="primary" @click="submitForm('workorderForm')">保存</el-button>
+							<el-button type="primary" @click="submitForm()">保存</el-button>
 							<el-button type="success" v-show="addtitle">保存并继续</el-button>
 							<el-button @click='close'>取消</el-button>
 					</div>
@@ -642,7 +664,7 @@
 	<!--委托书编号 End-->
 	<!--主检员 Begin-->
 	<el-dialog title="委托书编号" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
-			<el-table :data="userList" border stripe :header-cell-style="rowClass" :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+			<el-table :data="userList" border stripe :header-cell-style="rowClass"  style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 				<el-table-column type="selection" width="55" fixed align="center">
 				</el-table-column>
 				<el-table-column label="用户名" sortable width="140px" prop="username">
@@ -724,16 +746,11 @@
 			dialogVisible3:false,
 			inspectList:[],
 			workorderForm: {
-					// WorkorderBasisList: [],//检测依据
-					// WorkorderProjectList: [],//检测项目与要求
-					// WorkorderPersonList: [],//检验员信息
-					// SourceDataTemplateList: [],//原始数据模板
-					// WORKORDER_REPORT_TEMPLATE:[],//报告模版
-					WORKORDER_BASISList:[],//检测依据
-					WORKORDER_PROJECTList:[],//检测项目
-					WORKORDER_CHECKPERSONList:[],//检验员信息
-					WORKORDER_DATA_TEMPLATEList:[],//原始数据模板
-					WORKORDER_REPORT_TEMPLATEList:[],//报告模板
+				WORKORDER_BASISList:[],//检测依据
+				WORKORDER_PROJECTList:[],//检测项目
+				WORKORDER_CHECKPERSONList:[],//检验员信息
+				WORKORDER_DATA_TEMPLATEList:[],//原始数据模板
+				WORKORDER_REPORT_TEMPLATEList:[],//报告模板
 				},
 				basic_url: Config.dev_url,
 				loadSign:true,//加载
@@ -771,8 +788,7 @@
 				Select_ITEM_RECEPT_STATUS:[],//获取样品信息-样品接收状态
 				Select_ITEM_CHECK_STATUS:[],//获取样品信息-样品检后状态
 				Select_ITEM_MANAGEMENT:[],//获取样品信息-样品处置
-				standardList: [],//检测依据数据
-				projectList: [],//检测项目与要求
+				
 				fileList:[],//上传附件数据
 				
 
@@ -828,10 +844,6 @@
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
-				WorkorderBasisList: [], //检测依据列表
-				WorkorderProjectList: [], //检测项目与要求列表
-				WorkorderPersonList: [], //检验员信息列表
-				SourceDataTemplateList: [], //原始数据模板列表
 				isEditList: false,  //年度计划列表编辑装填
 				editPlan: {},  //编辑中的内容
 				selval:[],
@@ -897,9 +909,11 @@
 						type: 'warning'
 					});
 				}else{
+					console.log(this.selMenu[0]);
+					console.log(this.selMenu[0].MODEL);
 					this.workorderForm.ITEM_NAME = this.selMenu[0].DESCRIPTION;//样品名称
 					this.workorderForm.ITEM_MODEL = this.selMenu[0].MODEL;//规格型号
-					this.workorderForm.ITEM_STATU = this.selMenu[0].STATE;//样品状态
+					this.workorderForm.ITEM_STATUS = this.selMenu[0].STATE;//样品状态
 					this.workorderForm.ITEMNUM = this.selMenu[0].ITEMNUM;//样品编号
 					this.dialogVisible3 = false;
 					this.$emit('request');
@@ -1010,26 +1024,26 @@
 				console.log(value);
 			},
    			//年度计划表格函数
-   			iconOperation(row, column, cell, event){
-		        if(column.property ==="iconOperation"){
-		            row.isEditing = !row.isEditing;
-		            this.isEditList = row.isEditing;
-		        	console.log(row.isEditing);
-		            if(!row.isEditing){
-		            	//保存
-		            	var WorkorderBasisList = this.WorkorderBasisList;
-		        		row.WorkorderPersonList = JSON.parse(JSON.stringify(this.WorkorderPersonList));
-		        		row.WorkorderProjectList = JSON.parse(JSON.stringify(this.WorkorderProjectList));
-						console.log(row);
-		        	}else{
-		        		//编辑
-		        		this.editPlan = row;
-		        		this.WorkorderPersonList = row.WorkorderPersonList;
-				   		this.WorkorderProjectList = row.WorkorderProjectList;
-				   		console.log(row);
-		        	}
-		        }
-		    },
+// 			iconOperation(row, column, cell, event){
+//		        if(column.property ==="iconOperation"){
+//		            row.isEditing = !row.isEditing;
+//		            this.isEditList = row.isEditing;
+//		        	console.log(row.isEditing);
+//		            if(!row.isEditing){
+//		            	//保存
+//		            	var WorkorderBasisList = this.WorkorderBasisList;
+//		        		row.WorkorderPersonList = JSON.parse(JSON.stringify(this.WorkorderPersonList));
+//		        		row.WorkorderProjectList = JSON.parse(JSON.stringify(this.WorkorderProjectList));
+//						console.log(row);
+//		        	}else{
+//		        		//编辑
+//		        		this.editPlan = row;
+//		        		this.WorkorderPersonList = row.WorkorderPersonList;
+//				   		this.WorkorderProjectList = row.WorkorderProjectList;
+//				   		console.log(row);
+//		        	}
+//		        }
+//		    },
 
    			//上传文件 Begin
 			handleRemove(file, fileList) {
@@ -1057,66 +1071,70 @@
 			},
 			
 			addfield1(){//检测依据列表新建行
-                	var date=new Date();
-					this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
-					var index=this.$moment(date).format("YYYYMMDDHHmmss");
-					var obj = {
-						'S_NUM': 10001,
-						'WP_LINENUM': index,
-						'ITEM_NAME': '',
-						'MODEL': '',
-						'V_NAME': '',
-						'BASIS': '',
-						'P_NAME': '',
-						'CHECKCOST': '',
-						'REASION': '',
-						'MEMO': '',
-						'isEditing': true,
-					};
-					this.WorkorderBasisList.push(obj);//检验检测依据
-					this.WorkorderProjectList = [];//检测项目与要求
-					this.WorkorderPersonList = [];//检测员
-					this.SourceDataTemplateList=[];//原始数据模板
-					this.WORKORDER_REPORT_TEMPLATE=[];//检测报告模板
-					this.isEditList = true;
+				
+            	var date=new Date();
+				this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
+				var index=this.$moment(date).format("YYYYMMDDHHmmss");
+				var obj = {
+					'S_NUM': '',
+					'WP_LINENUM': index,
+					'ITEM_NAME': '',
+					'MODEL': '',
+					'V_NAME': '',
+					'BASIS': '',
+					'P_NAME': '',
+					'CHECKCOST': '',
+					'REASION': '',
+					'MEMO': '',
+					'isEditing': true,
+				};
+				this.workorderForm.WORKORDER_BASISList.push(obj);//检验检测依据
 			},
 			addfield2() {
 				var obj = {
-					step: '',
-					t_date: '',
-					t_description: '',
-					status: '',
-					isEditing: true
+					'P_NUM': '',
+					'P_DESC': '',
+					'HOSTPERSON': '',
+					'FOLLOWPERSON': '',
+					'REMARKS':'',
+					'VERSION':'',
+					'isEditing': true,
 				};
-				this.workorderForm.WorkorderProjectList.push(obj);
+				this.workorderForm.WORKORDER_PROJECTList.push(obj);
 			},
-			addfield2(){
+			//检验员
+			addfield3(){
 				var obj = {
-						'WP_LINENUM':'',
-						'S_NAME': '',
-						'MODEL': '',
-						'V_NAME': '',
-						'BASIS': '',
-						'P_NAME': '',
-						'CHECKCOST': '',
-						'REASION': '',
-						'MEMO': '',
-						'isEditing': true,
-					};
+					'NAME':'',
+					'TELPHONE': '',
+					'DEPARTMENT': '',
+					'isEditing': true,
+				};
+					this.workorderForm.WORKORDER_CHECKPERSONList.push(obj);
+			},
+			//原始数据模版
+			addfield4(){
+				var obj = {
+					'D_NUM':'',
+					'D_DESC': '',
+					'STATUS': '',
+					'isEditing': true,
+				};
+					this.workorderForm.WORKORDER_DATA_TEMPLATEList.push(obj);
 			},
 			
 			//点击添加，修改按钮显示弹窗
 			visible() {
 				//主题信息置空
-				this.workorderForm.WORKORDER_BASIS = [];
+				this.workorderForm= [];
 				// 检测依据表数据置空
-				this.workorderForm.WORKORDER_BASIS[0].WorkorderBasisList = [];
+				this.workorderForm.WORKORDER_BASISList = [];
 				//检测项目与要求数据置空
-				this.workorderForm.WORKORDER_BASIS[0].WorkorderProjectList = [];
+				this.workorderForm.WORKORDER_PROJECTList = [];
 				//检验员信息数据置空
-				this.workorderForm.WORKORDER_BASIS[0].WorkorderPersonList = [];
+				this.workorderForm.WORKORDER_CHECKPERSONList = [];
 				// 原始数据模板置空
-				this.workorderForm.WORKORDER_BASIS[0].SourceDataTemplateList = [];
+				this.workorderForm.WORKORDER_DATA_TEMPLATEList = [];
 				var date = new Date();
 				this.workorderForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
@@ -1151,20 +1169,13 @@
 					this.workorderForm.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd");
 				}).catch((err) => {
 					this.$message({
-						
-						message: '网络错误，请重试123',
+						message: '网络错误，请重试',
 						type: 'error',
 					});
 				});
 				var url = this.basic_url + '/api-apps/app/workorder/' + dataid;
 				this.$axios.get(this.basic_url + '/api-apps/app/workorder/' + dataid, {}).then((res) => {
-					this.workorderForm = res.data;
-					this.WorkorderBasisList = res.data.WorkorderBasisList;
-					this.WorkorderBasisList = res.data.WorkorderBasisList;
-					this.WorkorderPersonList = res.data.WorkorderPersonList;
-					this.SourceDataTemplateList = res.data.SourceDataTemplateList;
-					// this.WorkorderProjectList = res.data.WorkorderBasisList.length > 0 ? res.data.WorkorderBasisList[0].WorkorderProjectList : [];
-					
+				this.workorderForm = res.data;	
 					this.show = true;
 				}).catch((err) => {
 					this.$message({
@@ -1198,15 +1209,12 @@
 			},
 			
 			// 保存users/saveOrUpdate
-			submitForm(formName) {
-				this.$refs[formName].validate((valid) => {
+			submitForm() {
+				this.$refs.workorderForm.validate((valid) => {
 		          if (valid) {
-		  			// this.workorderForm.WorkorderBasisList[0].WorkorderProjectList = this.inspectionList_child.WorkorderProjectList;
-		  			// this.workorderForm.WorkorderBasisList[0].WorkorderPersonList = this.inspectionList_child.WorkorderPersonList;
-		  			// console.log(this.inspectionList_child);
-		  			// this.workorderForm.WORKORDER_BASIS.push(this.inspectionList_child);
-					var url = this.basic_url + '/apps-center/app/workorder/saveOrUpdate';
-					this.$axios.post(url, this.workorderForm).then((res) => {
+					var url = this.basic_url + '/api-apps/app/workorder/saveOrUpdate';
+					console.log(this.workorderForm);
+					this.$axios.post(url,this.workorderForm).then((res) => {
 						console.log(res);
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -1294,6 +1302,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				}
+				//委托书
 				this.$axios.get(this.basic_url + '/api-apps/app/inspectPro', {
 					params: data
 				}).then((res) => {
@@ -1317,7 +1326,7 @@
 					}
 					this.inspectList = newarr;
 				}).catch((wrong) => {})
-
+                //用户
 				this.$axios.get(this.basic_url + '/api-user/users', {
 					params: data
 				}).then((res) => {
@@ -1342,14 +1351,14 @@
 							}
 						}
 					}
-
+                    
 					this.userList = newarr;
 				}).catch((wrong) => {})
-
+               //接样
 				this.$axios.get(this.basic_url + '/api-apps/app/item', {
 					params: data
 				}).then((res) => {
-					
+					console.log(res);
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)

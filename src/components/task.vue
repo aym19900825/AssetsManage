@@ -175,8 +175,9 @@ export default {
 					});
 					return;
 				} else {
-					console.log(this.selUser[0]);
-					this.$router.push({path: '/inspect_proxy',query: { bizid: this.selUser[0].bizid,}});
+					console.log(this.selUser[0].bizMenuUrl);
+					console.log(this.selUser[0].bizId);
+					this.$router.push({path:this.selUser[0].bizMenuUrl ,query: { bizId: this.selUser[0].bizId,}});
 					this.$store.dispatch('setMenuIdAct',this.selUser[0].bizFirstMenuId);
 					console.log(this.$store.state.menuid);
 			    }

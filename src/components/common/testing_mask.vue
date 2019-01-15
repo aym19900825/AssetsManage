@@ -285,31 +285,28 @@
 			//form表单内容清空
 			resetNew() {
 				this.testingForm = { //给表单数据渲染值
-						VERSION: '1',
-						STATUS: '活动',
-						M_NUM: 'TRO100012',
-						M_NAME: '',
-						M_ENAME: '',
-						M_TYPE: '',
-						DEPARTMENT: '',
-						ENTERBY: '',
+					VERSION: '1',
+					STATUS: '活动',
+					M_NUM: 'TRO100012',
+					M_NAME: '',
+					M_ENAME: '',
+					M_TYPE: '',
+					DEPARTMENT: '',
+					ENTERBY: '',
+					ENTERDATE: '',
+					CHANGEBY: '',
+					CHANGEDATE: '',
+					attributes: [{ //字段列表
+						COLUMNID: '',
+						FILESNUMBER: '',
+						FILSEDESC: '',
+						ENTERB: '',
 						ENTERDATE: '',
-						CHANGEBY: '',
-						CHANGEDATE: '',
-						attributes: [{ //字段列表
-							COLUMNID: '',
-							FILESNUMBER: '',
-							FILSEDESC: '',
-							ENTERB: '',
-							ENTERDATE: '',
-							FILESURL: ''
-						}]
-					}
-					//this.$refs["testingForm"].resetFields();
+						FILESURL: ''
+					}]
+				}
+				//this.$refs["testingForm"].resetFields();
 			},
-            
-			
-
 			addfield() {//添加文件行信息
 				var obj = {
 					COLUMNID: '',

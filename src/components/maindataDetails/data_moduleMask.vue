@@ -41,7 +41,7 @@
 								</el-row>
 							</el-collapse-item>
 							<el-collapse-item title="文件" name="2">
-								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
+								<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save"></doc-table>
 							</el-collapse-item>
 							<el-collapse-item title="其它" name="3" v-show="views">
 								<el-row>
@@ -108,24 +108,6 @@
 			page: Object,
 		},
 		data() {
-			// var validateNum = (rule, value, callback) => {
-			// 	if(value != ""){
-		 //             if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
-		 //                 callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
-		 //             }else{
-		 //                 callback();
-		 //             }
-		 //         }else{
-		 //             callback();
-		 //         }
-			// };
-			// var validateDeci = (rule, value, callback) => {
-			// 	if(value === '') {
-			// 		callback(new Error('请填写产品类别名称'));
-			// 	} else {
-			// 		callback();
-			// 	}
-			// };
 			return {
 				docParm: {
 					'model': 'new',
@@ -213,14 +195,16 @@
 					this.CATEGORY.DEPTID = res.data.deptId;
 					this.CATEGORY.ENTERBY = res.data.id;
 					var date = new Date();
+
+					this.docParm.userid = res.data.id;
+					this.docParm.username = res.data.username;
+					this.docParm.deptid = res.data.deptId;
+					this.docParm.deptfullname = res.data.deptName;
+
 					this.CATEGORY.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 					if(opt != 'new'){
 						let _obj = JSON.stringify(this.CATEGORY);
 						this.category = JSON.parse(_obj);
-						this.docParm.userid = res.data.id;
-						this.docParm.username = res.data.username;
-						this.docParm.deptid = res.data.deptId;
-						this.docParm.deptfullname = res.data.deptName;
 					}
 				}).catch((err) => {
 					this.$message({
@@ -234,9 +218,9 @@
 				this.getUser('new');
 				this.docParm = {
 					'model': 'new',
-					'appname': 'RAW_DATA_TEMPATE2',
+					'appname': '检验检测项目_原始数据模板',
 					'recordid': 1,
-					'appid': 33
+					'appid': 17
 				};
 				this.addtitle = true;
 				this.modifytitle = false;
@@ -268,9 +252,9 @@
 				var _this = this;
 				setTimeout(function(){
 					_this.docParm.model = 'edit';
-					_this.docParm.appname = 'RAW_DATA_TEMPATE2';
+					_this.docParm.appname = '检验检测项目_原始数据模板';
 					_this.docParm.recordid = _this.CATEGORY.ID;
-					_this.docParm.appid = 33;
+					_this.docParm.appid = 17;
 					_this.$refs.docTable.getData();
 				},100);
 				this.show = true;
@@ -344,22 +328,33 @@
 				$(".mask_div").css("top", "0");
 			},
 			// 保存users/saveOrUpdate
-			save(CATEGORY) {
-				this.$refs[CATEGORY].validate((valid) => {
+			save(opt) {
+				this.$refs['CATEGORY'].validate((valid) => {
+					if(!valid && opt == 'docUpload'){
+						this.$message({
+							message: '请先正确填写信息，再进行文档上传',
+							type: 'warning'
+						});
+					}
 					if(valid) {
 						this.CATEGORY.STATUS = ((this.CATEGORY.STATUS == "1" || this.CATEGORY.STATUS == '活动') ? '1' : '0');
 						var url = this.basic_url + '/api-apps/app/rawDataTem/saveOrUpdate';
 						this.$axios.post(url, this.CATEGORY).then((res) => {
-							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',
 									type: 'success'
 								});
-								//重新加载数据
-								this.$emit('request');
-								this.$emit('reset');
-								this.visible();
+								if(opt == 'docUpload'){
+									this.docParm.recordid = res.data.datas.id;
+									this.docParm.model = 'edit';
+									this.$refs.docTable.autoLoad();
+									this.CATEGORY.ID = res.data.datas.id;
+								}else{
+									this.$emit('request');
+									this.$emit('reset');
+									this.visible();
+								}
 							}else{
 								this.show = true;
 								if(res.data.resp_code == 1) {

@@ -1,14 +1,14 @@
 <template>
 <div>
     <div class="table-func">
-        <form method="post" id="file" action="" enctype="multipart/form-data" style="float: left;" v-show="docParm.save">
+        <form method="post" id="file" action="" enctype="multipart/form-data" style="float: left;" v-show="docParm.model!='new'">
             <el-button type="warn" size="mini" round class="a-upload">
                 <i class="el-icon-upload2"></i>
                 <font>上传</font>
-                <input id="excelFile" type="file" name="uploadFile" @change="upload" v-show="docParm.save"/>
+                <input id="excelFile" type="file" name="uploadFile" @change="upload" v-if="docParm.model!='new'"/>
             </el-button>
         </form>
-        <el-button type="warn" size="mini" round class="a-upload" @click="uploadTip" v-show="!docParm.save">
+        <el-button type="warn" size="mini" round class="a-upload" @click="uploadTip" v-show="docParm.model=='new'">
             <i class="el-icon-upload2"></i>
             <font>上传</font>
         </el-button>
@@ -16,6 +16,10 @@
             <i class="el-icon-download"></i>
             <font>下载</font>
         </el-button>
+        <!-- <el-button type="error" size="mini" @click="testAuto" round  style="margin-left: 10px;">
+            <i class="el-icon-download"></i>
+            <font>测试上传</font>
+        </el-button> -->
         <el-button type="error" size="mini" @click="delFile" round>
             <i class="el-icon-delete"></i>
             <font>删除行</font>
@@ -58,7 +62,8 @@
         title="提示"
         :visible.sync="tipSaveShow"
         width="30%"
-        :before-close="reset">
+        :before-close="reset"
+        :modal-append-to-body="false">
         <span>文档上传前会自动保存数据</span>
         <span slot="footer" class="dialog-footer">
             <el-button @click="reset">取 消</el-button>
@@ -108,19 +113,22 @@ export default {
         showAuth(row){
             this.param.visible = true;
             this.param.fileid = row.fileid;
-            this.$refs.keyword.requestData();
+            this.$refs.keyword.getData();
+			this.$refs.keyword.requestData();
         },
         uploadTip(){
             this.tipSaveShow = true;
         },
         autoLoad(){
             setTimeout(function(){
+                console.log($('#excelFile'));
                 $('#excelFile').click();
-            },2000);
+            },500);
         },
-        testAuto(){
-            $('#excelFile').click();
-        },
+        // testAuto(){
+        //     var _this = this;
+            
+        // },
         sizeChange(val) {
             this.page.pageSize = val;
             this.getData();

@@ -113,7 +113,7 @@
 			page: {
 				type: Object,
 			},
-			testingForm: { //接收主表单中填写的数据信息
+			testingForm: { 
 				type: Object,
 				default: function() {
 					return {
@@ -133,21 +133,9 @@
 			}
 		},
 		data() {
-			// var validateNum = (rule, value, callback) => {
-			// 	if(value != ""){
-		 //             if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
-		 //                 callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
-		 //             }else{
-		 //                 callback();
-		 //             }
-		 //         }else{
-		 //             callback();
-		 //         }
-			// };
 			return {
 				docParm: {
 					'model': 'new',
-					'appname': '',
 					'recordid': 1,
 					'userid': 1,
 					'username': '',
@@ -177,7 +165,6 @@
 				dialogVisible: false, //对话框
 				edit: true, //禁填
 				activeNames: ['1', '2', '3'], //手风琴数量
-//				labelPosition: 'top', //表单标题在上方
 				addtitle: true,
 				modifytitle: false,
 				testing_filesForm:{//文件文件数据组
@@ -223,11 +210,9 @@
 			};
 		},
 		methods: {
-			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
 			},
-			//编码提示
 			hint(){
 				this.hintshow = true;
 			},
@@ -263,9 +248,9 @@
 				var _this = this;
 				setTimeout(function(){
 					_this.docParm.model = 'new';
-					_this.docParm.appname = 'INSPECTION_METHOD2';
+					_this.docParm.appname = '检验检测项目_检验/检测方法';
 					_this.docParm.recordid = _this.testingForm.ID;
-					_this.docParm.appid = 32;
+					_this.docParm.appid = 16;
 					_this.docParm.save = false;
 					_this.$refs.docTable.getData();
 				},100);
@@ -301,9 +286,9 @@
 				var _this = this;
 				setTimeout(function(){
 					_this.docParm.model = 'edit';
-					_this.docParm.appname = 'INSPECTION_METHOD2';
+					_this.docParm.appname = '检验检测项目_检验/检测方法';
 					_this.docParm.recordid = _this.testingForm.ID;
-					_this.docParm.appid = 32;
+					_this.docParm.appid = 16;
 					_this.$refs.docTable.getData();
 				},100);
 			},
@@ -454,15 +439,6 @@
 				this.$refs['testing_filesForm'].validate((valid) => {
 		          	if (valid) {
 						var url = this.basic_url + '/api-apps/app/doclinks/saveOrUpdate';
-	//					var submitData = {
-//						"ID":row.ID,
-//					    "DOCLINKS": row.DOCLINKS,
-//						"DESCRIPTION": row.DESCRIPTION,
-//					    "DOC_SIZE": row.DOC_SIZE,
-//						"ROUTE": row.ROUTE,
-//						"ENTERBY": row.ENTERBY,
-//					    "ENTERDATE": row.ENTERDATE,
-//					}
 						this.$axios.post(url, this.submitData).then((res) => {
 							if(res.data.resp_code == 0) {
 								this.$message({
@@ -569,20 +545,25 @@
 			},
 			//执行保存
 			save(opt) {
+				console.log('testingForm-----save');
 				var _this = this;
 				this.$refs['testingForm'].validate((valid) => {
+					if(!valid && opt == 'docUpload'){
+						this.$message({
+							message: '请先正确填写信息，再进行文档上传',
+							type: 'warning'
+						});
+					}
 					if (valid) {
 					    _this.testingForm.STATUS=_this.testingForm.STATUS=="活动" ? '1' : '0';
 						var url = this.basic_url + '/api-apps/app/inspectionMet/saveOrUpdate';
 						this.$axios.post(url,_this.testingForm).then((res) => {
 							if(res.data.resp_code == 0) {
-								if(opt != 'uploadDoc'){
+								if(opt == 'docUpload'){
 									this.docParm.recordid = res.data.datas.id;
 									this.docParm.model = 'edit';
-									setTimeout(function(){
-										_this.$refs.docTable.autoLoad();
-									},500);
-									this.dataInfo.ID = res.data.datas.id;
+									this.$refs.docTable.autoLoad();
+									this.testingForm.ID = res.data.datas.id;
 								}else{
 									this.$message({
 										message: '保存成功',

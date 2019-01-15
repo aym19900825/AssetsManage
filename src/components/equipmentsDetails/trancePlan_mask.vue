@@ -502,15 +502,14 @@
 							this.dataInfo.DEPTID = res.data.deptId;
 							this.dataInfo.ENTERBY = res.data.id;
 							this.dataInfo.ENTERDATE = this.getToday();
-						}else if(opt == 'edit'){
-							console.log(1);
-							this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
-							console.log(2);
-							this.dataInfo.CHANGEBY = res.data.id;
-							console.log(3);
-							this.dataInfo.CHANGEDATE = this.getToday();
-							console.log(4);
-							this.dataInfo.DEPARTMENT = res.data.deptName;
+						}else{
+							// this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
+							// console.log(2);
+							// this.dataInfo.CHANGEBY = res.data.id;
+							// console.log(3);
+							// this.dataInfo.CHANGEDATE = this.getToday();
+							// console.log(4);
+							// this.dataInfo.DEPARTMENT = res.data.deptName;
 						
 							this.docParm.userid = res.data.id;
 							this.docParm.username = res.data.username;

@@ -465,6 +465,8 @@
 			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
+        		console.log(111111111);
+        		console.log(childValue);
         		this.$refs.navsheader.showClick(childValue);
       		},
 

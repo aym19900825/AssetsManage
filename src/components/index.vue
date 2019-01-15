@@ -157,8 +157,11 @@ export default {
 				console.log(res);
 				if(res.data!="undefined"&&res.data.length>0){
 					item = res.data[0];
+					console.log(item);
 				}
+				
 					_this.$store.dispatch('setSelectedNavAct',item);
+					console.log(_this.$store.state.selectedNav);
 //					_this.$selectedNav=item;
 					var flag="1";
 					for(var i=0;i<_this.$store.state.clickedNavs.length;i++){
@@ -178,6 +181,7 @@ export default {
 					}
 					if(flag=="0"){
 						_this.$store.state.clickedNavs.push(item);
+						console.log(item);
 					}
 			}).catch((wrong) => {
 			});

@@ -19,8 +19,8 @@
 				<div class="mask_content">
 					<el-form :model="dataInfo" :label-position="labelPositions" :rules="rules" ref="dataInfo" status-icon inline-message  class="demo-ruleForm">
 						<div class="text-center" v-show="viewtitle">
-							<el-button class="start" type="success" round plain size="mini" @click="startup"><i class="icon-start"></i> 启动流程</el-button>
-							<el-button class="approval" type="warning" round plain size="mini" @click="approvals"><i class="icon-edit-3"></i> 审批</el-button>
+							<el-button id="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 启动流程</el-button>
+							<el-button id="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
 							<el-button type="primary" round plain size="mini" @click="flowmap"><i class="icon-git-pull-request"></i> 流程地图</el-button>
 							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
 							<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
@@ -780,6 +780,8 @@
 				views: false,
 				noviews: true, //保存的按钮
 				modify: false,
+				start:false,
+				approval:false,
 				activeName: 'first',//tabs
 				activeNames: ['1', '2', '3', '4', '5', '6', '7', '8', ], //手风琴数量
 				labelPosition: 'top', //表格
@@ -1154,12 +1156,15 @@
 				//判断启动流程和审批的按钮是否显示
 				var url = this.basic_url + '/api-apps/app/inspectPro/flow/isStart/'+dataid;
 				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
 					if(res.data.resp_code==1){
-						$(".approval").hide();
-						$(".start").show();
+						console.log(111);
+						this.start=true;
+						this.approval=false;
 					}else{
-						$(".approval").show();
-						$(".start").hide();
+						console.log(222);
+						this.start=false;
+						this.approval=true;
 					}
 				});
 			},
@@ -1355,8 +1360,8 @@
 								type: 'success'
 							});
 							this.requestData();
-							$(".approval").show();
-							$(".start").hide();
+							this.start=false;
+							this.approval=true;
 				    }
 				});
 			},

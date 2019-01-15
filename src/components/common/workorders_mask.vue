@@ -20,9 +20,9 @@
 					<!-- status-icon 验证后文本框上显示对勾图标 -->
 					<el-form :model="workorderForm" :label-position="labelPosition" :rules="rules" ref="workorderForm" label-width="110px">
 						<div class="text-center" v-show="viewtitle">
-							<el-button class="start" type="success" round plain size="mini" @click="startup"><i class="icon-start"></i> 启动流程</el-button>
-							<el-button class="approval" type="warning" round plain size="mini" @click="approvals"><i class="icon-edit-3"></i> 审批</el-button>
-							<el-button type="primary" round plain size="mini" @click="flowmap"><i class="icon-git-pull-request"></i> 流程地图</el-button>
+							<el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 启动流程</el-button>
+							<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
+							<el-button type="primary" round plain size="mini" @click="flowmap" ><i class="icon-git-pull-request"></i> 流程地图</el-button>
 							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
 							<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
 						</div>
@@ -796,6 +796,8 @@
 				views: false,
 				edit: true, //禁填
 				noedit:false,
+				approval:false,
+				start:false,
 				activeName: 'first', //tabs
 				activeNames: ['1','2','3','4','5','6','7'],//手风琴数量
 				labelPosition: 'right', //表格
@@ -1166,8 +1168,8 @@
 								type: 'success'
 							});
 							this.requestData();
-							$(".approval").show();
-							$(".start").hide();
+							this.start=false;
+							this.approval=true;
 				    }
 				});
 			},
@@ -1365,6 +1367,20 @@
 						message: '网络错误，请重试',
 						type: 'error'
 					});
+				});
+				//判断启动流程和审批的按钮是否显示
+				var url = this.basic_url + '/api-apps/app/workorder/flow/isStart/'+dataid;
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+					if(res.data.resp_code==1){
+						console.log(111);
+						this.start=true;
+						this.approval=false;
+					}else{
+						console.log(222);
+						this.start=false;
+						this.approval=true;
+					}
 				});
 			},
 			// 保存users/saveOrUpdate

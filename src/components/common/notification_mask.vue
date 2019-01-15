@@ -19,9 +19,9 @@
 				<div class="mask_content">
 						<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" class="demo-form-inline" inline-message>
 							<div class="text-center" v-show="viewtitle">
-							<el-button class="start" type="success" round plain size="mini" @click="startup"><i class="icon-start"></i> 启动流程</el-button>
-							<el-button class="approval" type="warning" round plain size="mini" @click="approvals"><i class="icon-edit-3"></i> 审批</el-button>
-							<el-button type="primary" round plain size="mini" @click="flowmap"><i class="icon-git-pull-request"></i> 流程地图</el-button>
+							<el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 启动流程</el-button>
+							<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
+							<el-button type="primary" round plain size="mini" @click="flowmap" ><i class="icon-git-pull-request"></i> 流程地图</el-button>
 							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
 							<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
 						</div>
@@ -562,6 +562,8 @@
 				modify: false,
 				views: false,
 				noviews: true, //保存的按钮
+				approval:false,
+				start:false,
 				activeName: 'first', //tabs
 				activeNames: ['1', '2', '3', '4', '5', '6', '7'], //手风琴数量
 				labelPosition: 'right', //表格
@@ -886,11 +888,11 @@
 				var url = this.basic_url + '/api-apps/app/workNot/flow/isStart/'+dataid;
 				this.$axios.get(url, {}).then((res) => {
 					if(res.data.resp_code==1){
-						$(".approval").hide();
-						$(".start").show();
+						this.start=true;
+						this.approval=false;
 					}else{
-						$(".approval").show();
-						$(".start").hide();
+						this.start=false;
+						this.approval=true;
 					}
 				});
 			},

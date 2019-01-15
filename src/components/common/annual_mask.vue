@@ -65,7 +65,7 @@
 										<el-form-item label="类别" prop="TYPE"  label-width="85px">
 											<el-select v-model="WORKPLAN.TYPE" placeholder="请选择">
 												<el-option label="监督抽查" value="1"></el-option>
-												<el-option label="质量抽查" value="0"></el-option>
+												<el-option label="质量抽查" value="3"></el-option>
 											</el-select>
 										</el-form-item>
 									</el-col>
@@ -510,10 +510,10 @@
 			<el-pagination background class="pull-right pt10 pb10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 			</el-pagination>
 			<!-- 第二层弹出的表格 End -->
-			<span slot="footer" class="dialog-footer">
+			<div slot="footer" class="dialog-footer">
 		       <el-button @click="dialogVisible = false">取 消</el-button>
 		       <el-button type="primary" @click="addbasis">确 定</el-button>
-		    </span>
+		    </div>
 		</el-dialog>
 		<!-- 检测依据弹出框 End -->
 
@@ -930,15 +930,17 @@
 			},
 			//生产企业名称
 			prodeptbtn(item){
-				this.$emit('request');
+				this.requestData();
 				this.diaVisCustom = true;
+				// this.$emit('request');
 				this.proindex = item;
 				this.deptnum = '1';
 			},
 			//受检企业名称
 			getdeptbtn(item){
-				this.$emit('request');
+				this.requestData();
 				this.diaVisCustom = true;
+				// this.$emit('request');
 				this.deptindex = item;
 				this.deptnum = '2';
 			},
@@ -961,7 +963,8 @@
 						this.deptindex.SJ_NAME = this.selUser[0].NAME;
 					}
 					this.diaVisCustom = false;
-					this.$emit('request');
+					// this.$emit('request');
+					this.requestData();
 				}
 			},
 			
@@ -1111,7 +1114,7 @@
 						//新选来的数据ID为空
 						selData[i].ID = '';
 						//产品要求
-						selData[i].REMARKS = '';
+						selData[i].REMARKS = this.editPlan.REMARKS;
 						//产品编号
 						selData[i].WP_NUM = this.WORKPLAN.WP_NUM;
 						selData[i].WP_LINENUM = this.editPlan.WP_LINENUM;

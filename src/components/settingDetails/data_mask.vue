@@ -1,147 +1,149 @@
 <template>
 	<div>
 		<div class="mask" v-show="show"></div>
-		<div class="mask_div" v-show="show">
-			<div class="mask_title_div clearfix">
-				<div class="mask_title">添加数据库表</div>
-				<div class="mask_anniu">
-					<span class="mask_span mask_max" @click='toggle'>						 
-						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
-					</span>
-					<span class="mask_span" @click='close'>
-						<i class="icon-close1"></i>
-					</span>
+		<div class="mask_divbg" v-show="show">
+			<div class="mask_div">
+				<div class="mask_title_div clearfix">
+					<div class="mask_title">添加数据库表</div>
+					<div class="mask_anniu">
+						<span class="mask_span mask_max" @click='toggle'>						 
+							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
+						</span>
+						<span class="mask_span" @click='close'>
+							<i class="icon-close1"></i>
+						</span>
+					</div>
 				</div>
+				<div class="mask_content">
+				<el-form :model="dataInfo" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
+					<div class="accordion" id="information">
+						<el-collapse v-model="activeNames">
+							<el-collapse-item title="基本信息" name="1">
+								<el-row :gutter="30">
+									<el-col :span="8">
+										<el-form-item label="表名" prop="name">
+											<el-input v-model="dataInfo.name"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="描述" prop="description">
+											<el-input v-model="dataInfo.description"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+							</el-collapse-item>
+							<el-collapse-item title="字段列表" name="2">
+								<!-- 字段列表 Begin-->
+								<div class="table-func">
+									<el-button type="primary" size="mini" round  @click="importdia">
+										<i class="icon-upload-cloud"></i>
+										<font>导入</font>
+									</el-button>
+									<el-button type="success" size="mini" round @click="addfield">
+										<i class="icon-add"></i>
+										<font>新建</font>
+									</el-button>
+								</div>
+					            <el-table :data="dataInfo.attributes" row-key="ID" border stripe height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.attributes', order: 'descending'}">
+								    <el-table-column prop="iconOperation" fixed width="50px">
+									    <template slot-scope="scope">
+									      	<i class="el-icon-check" v-show="scope.row.isEditing">
+									      	</i>
+									      	<i class="el-icon-edit" v-show="!scope.row.isEditing">
+									      	</i>
+									    </template>
+								    </el-table-column>
+								    <el-table-column label="字段名" sortable width="180px" prop="columnname">
+									    <template slot-scope="scope">
+									      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.columnname" disabled></el-input><span v-show="!scope.row.isEditing" >{{scope.row.columnname}}</span>
+									    </template>
+								    </el-table-column>
+								    <el-table-column label="字段描述" sortable width="180px" prop="description">
+									    <template slot-scope="scope">
+									      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.description" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.description}}</span>
+									    </template>
+								    </el-table-column>
+									<el-table-column prop="type" label="字段类型" sortable width="120px">
+									    <template slot-scope="scope">
+									        <el-select v-show="scope.row.isEditing" size="small" v-model="scope.row.S_DESC" placeholder="选择字段类型">
+											    <el-option label="字符串(string)" value="string"></el-option>
+											    <el-option label="浮点类型(float)" value="float"></el-option>
+											    <el-option label="整数(int)" value="int"></el-option>
+											    <el-option label="长整型(long)" value="long"></el-option>
+											    <el-option label="双精度(double)" value="double"></el-option>
+											    <el-option label="日期(date)" value="date"></el-option>
+											    <el-option label="时间(time)" value="time"></el-option>
+											</el-select>
+									        <span v-show="!scope.row.isEditing">{{scope.row.type}}</span>
+									    </template>
+								    </el-table-column>
+								    <el-table-column prop="length" label="长度" sortable width="150px">
+									    <template slot-scope="scope">
+									       	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.length" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.length}}</span>
+									    </template>
+								    </el-table-column>
+								    <el-table-column prop="retain" label="小数点位数" sortable width="180px">
+									    <template slot-scope="scope">
+									        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.retain" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.retain}}</span>
+									    </template>
+								    </el-table-column>
+								    <el-table-column fixed="right" label="操作" width="120">
+									    <template slot-scope="scope">
+									        <el-button @click = "deleteRow(scope.$index, dataInfo.attributes)" type="text" size="small">
+									          移除
+									        </el-button>
+									    </template>
+								    </el-table-column>
+								</el-table>
+								<!-- 字段列表 End -->
+							</el-collapse-item>
+						</el-collapse>
+					</div>			
+					<div class="el-dialog__footer">
+						<el-button @click='close'>取消</el-button>
+						<el-button type="primary" @click="submitForm('dataInfo')">提交</el-button>
+					</div>
+				</el-form>
 			</div>
-			<div class="mask_content">
-			<el-form :model="dataInfo" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
-				<div class="accordion" id="information">
-					<el-collapse v-model="activeNames">
-						<el-collapse-item title="基本信息" name="1">
-							<el-row :gutter="30">
-								<el-col :span="8">
-									<el-form-item label="表名" prop="name">
-										<el-input v-model="dataInfo.name"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="8">
-									<el-form-item label="描述" prop="description">
-										<el-input v-model="dataInfo.description"></el-input>
-									</el-form-item>
-								</el-col>
-							</el-row>
-						</el-collapse-item>
-						<el-collapse-item title="字段列表" name="2">
-							<!-- 字段列表 Begin-->
-							<div class="table-func">
-								<el-button type="primary" size="mini" round  @click="importdia">
-									<i class="icon-upload-cloud"></i>
-									<font>导入</font>
-								</el-button>
-								<el-button type="success" size="mini" round @click="addfield">
-									<i class="icon-add"></i>
-									<font>新建</font>
-								</el-button>
-							</div>
-				            <el-table :data="dataInfo.attributes" row-key="ID" border stripe height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.attributes', order: 'descending'}">
-							    <el-table-column prop="iconOperation" fixed width="50px">
-								    <template slot-scope="scope">
-								      	<i class="el-icon-check" v-show="scope.row.isEditing">
-								      	</i>
-								      	<i class="el-icon-edit" v-show="!scope.row.isEditing">
-								      	</i>
-								    </template>
-							    </el-table-column>
-							    <el-table-column label="字段名" sortable width="180px" prop="columnname">
-								    <template slot-scope="scope">
-								      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.columnname" disabled></el-input><span v-show="!scope.row.isEditing" >{{scope.row.columnname}}</span>
-								    </template>
-							    </el-table-column>
-							    <el-table-column label="字段描述" sortable width="180px" prop="description">
-								    <template slot-scope="scope">
-								      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.description" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.description}}</span>
-								    </template>
-							    </el-table-column>
-								<el-table-column prop="type" label="字段类型" sortable width="120px">
-								    <template slot-scope="scope">
-								        <el-select v-show="scope.row.isEditing" size="small" v-model="scope.row.S_DESC" placeholder="选择字段类型">
-										    <el-option label="字符串(string)" value="string"></el-option>
-										    <el-option label="浮点类型(float)" value="float"></el-option>
-										    <el-option label="整数(int)" value="int"></el-option>
-										    <el-option label="长整型(long)" value="long"></el-option>
-										    <el-option label="双精度(double)" value="double"></el-option>
-										    <el-option label="日期(date)" value="date"></el-option>
-										    <el-option label="时间(time)" value="time"></el-option>
-										</el-select>
-								        <span v-show="!scope.row.isEditing">{{scope.row.type}}</span>
-								    </template>
-							    </el-table-column>
-							    <el-table-column prop="length" label="长度" sortable width="150px">
-								    <template slot-scope="scope">
-								       	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.length" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.length}}</span>
-								    </template>
-							    </el-table-column>
-							    <el-table-column prop="retain" label="小数点位数" sortable width="180px">
-								    <template slot-scope="scope">
-								        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.retain" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.retain}}</span>
-								    </template>
-							    </el-table-column>
-							    <el-table-column fixed="right" label="操作" width="120">
-								    <template slot-scope="scope">
-								        <el-button @click = "deleteRow(scope.$index, dataInfo.attributes)" type="text" size="small">
-								          移除
-								        </el-button>
-								    </template>
-							    </el-table-column>
-							</el-table>
-							<!-- 字段列表 End -->
-						</el-collapse-item>
-					</el-collapse>
-				</div>			
-				<div class="el-dialog__footer">
-					<el-button @click='close'>取消</el-button>
-					<el-button type="primary" @click="submitForm('dataInfo')">提交</el-button>
-				</div>
-			</el-form>
-		</div>
-		</div>
+			</div>
 		<!-- 弹出 -->
-		<el-dialog title="添加数据库表" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
-			<div class="accordion" id="information">
-				<div class="mask_tab-block">
-					<div class="mask_tab-head clearfix">
-						<div class="accordion_title">
-							<span class="accordion-toggle">导入标准字段</span>
+			<el-dialog title="添加数据库表" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
+				<div class="accordion" id="information">
+					<div class="mask_tab-block">
+						<div class="mask_tab-head clearfix">
+							<div class="accordion_title">
+								<span class="accordion-toggle">导入标准字段</span>
+							</div>
+							<div class="col_but" @click="col_but('col_but1')">
+								<i class="icon-arrow1-down" v-show="down"></i><i class="icon-arrow1-up" v-show="up"></i>
+							</div>
 						</div>
-						<div class="col_but" @click="col_but('col_but1')">
-							<i class="icon-arrow1-down" v-show="down"></i><i class="icon-arrow1-up" v-show="up"></i>
+						<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
+						<!-- 第二层弹出的表格 -->
+							<el-table :data="leaddata" style="width: 100%;margin: 0 auto;" :default-sort="{prop:'leaddata', order: 'descending'}" @selection-change="SelChange">
+								<el-table-column type="selection" width="55" >
+								</el-table-column>
+								<el-table-column label="字段名称" sortable width="150" prop="columnname">
+								</el-table-column>
+								<el-table-column label="字段描述" sortable width="200" prop="description">
+								</el-table-column>
+								<el-table-column label="字段类型" sortable width="150" prop="type">
+								</el-table-column>
+								<el-table-column label="字段长度" sortable width="100" prop="length">
+								</el-table-column>
+								<el-table-column label="小数点位数" sortable width="180" prop="retain">
+								</el-table-column>							
+							</el-table>
+							<!-- 表格 -->
 						</div>
-					</div>
-					<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
-					<!-- 第二层弹出的表格 -->
-						<el-table :data="leaddata" style="width: 100%;margin: 0 auto;" :default-sort="{prop:'leaddata', order: 'descending'}" @selection-change="SelChange">
-							<el-table-column type="selection" width="55" >
-							</el-table-column>
-							<el-table-column label="字段名称" sortable width="150" prop="columnname">
-							</el-table-column>
-							<el-table-column label="字段描述" sortable width="200" prop="description">
-							</el-table-column>
-							<el-table-column label="字段类型" sortable width="150" prop="type">
-							</el-table-column>
-							<el-table-column label="字段长度" sortable width="100" prop="length">
-							</el-table-column>
-							<el-table-column label="小数点位数" sortable width="180" prop="retain">
-							</el-table-column>							
-						</el-table>
-						<!-- 表格 -->
 					</div>
 				</div>
-			</div>
-			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible = false">取 消</el-button>
-		       <el-button type="primary" @click="leadadddata">确 定</el-button>
-		    </span>
-		</el-dialog>
+				<span slot="footer" class="dialog-footer">
+			       <el-button @click="dialogVisible = false">取 消</el-button>
+			       <el-button type="primary" @click="leadadddata">确 定</el-button>
+			    </span>
+			</el-dialog>
+		</div>
 	</div>
 </template>
 
@@ -241,15 +243,15 @@
 					name:'',
 					description:'',
 					attributes:[{//字段列表
-					columnname: '',
-					description: '',
-					type:'',
-					length: '',
-					retain: '',
-					isEditing:true
-				}]
-				},
-                this.$refs["dataInfo"].resetFields();
+						columnname: '',
+						description: '',
+						type:'',
+						length: '',
+						retain: '',
+						isEditing:true
+					}]
+				}
+                // this.$refs["dataInfo"].resetFields();
             },
 			
 			//获取导入表格勾选信息
@@ -349,22 +351,20 @@
 					this.rebackDialog();
 				}
 			},
-			maxDialog(e) {
+			maxDialog(e) { //定义大弹出框一个默认大小
 				this.isok1 = false;
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
-				$(".mask_div").css("margin", "0%");
 				$(".mask_div").css("top", "60px");
 			},
 			//还原按钮
-			rebackDialog() {
+			rebackDialog() { //大弹出框还原成默认大小
 				this.isok1 = true;
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
-				$(".mask_div").css("margin", "7% 10%");
-				$(".mask_div").css("top", "0");
+				$(".mask_div").css("top", "100px");
 			},
 			// 保存users/saveOrUpdate
 			submitForm(dataInfo) {

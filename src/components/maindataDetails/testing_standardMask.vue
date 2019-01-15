@@ -1,134 +1,135 @@
 <template>
 	<div>
-		<div class="mask" v-show="show"></div>
-		<div class="mask_div" v-show="show">
-			<div class="mask_title_div clearfix">
-				<div class="mask_title" v-show="addtitle">添加检验/检测标准</div>
-				<div class="mask_title" v-show="modifytitle">修改检验/检测标准</div>
-				<div class="mask_title" v-show="viewtitle">查看检验/检测标准</div>
-				<div class="mask_anniu">
-					<span class="mask_span mask_max" @click='toggle'>						 
-						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
-					</span>
-					<span class="mask_span" @click='close'>
-						<i class="icon-close1"></i>
-					</span>
+		<div class="mask" v-if="show"></div>
+		<div class="mask_divbg" v-if="show">
+			<div class="mask_div">
+				<div class="mask_title_div clearfix">
+					<div class="mask_title" v-show="addtitle">添加检验/检测标准</div>
+					<div class="mask_title" v-show="modifytitle">修改检验/检测标准</div>
+					<div class="mask_title" v-show="viewtitle">查看检验/检测标准</div>
+					<div class="mask_anniu">
+						<span class="mask_span mask_max" @click='toggle'>						 
+							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
+						</span>
+						<span class="mask_span" @click='close'>
+							<i class="icon-close1"></i>
+						</span>
+					</div>
 				</div>
-			</div>
-			<el-form :model="dataInfo" inline-message :rules="rules" ref="dataInfo" label-width="80px" class="demo-user">
-				<div class="mask_content">
-					<div class="accordion" id="information">
-						<el-collapse v-model="activeNames">
-							<el-collapse-item title="基本信息" name="1">
-								<el-row class="pb10" style="margin-right: 5px;">
-									<el-col :span="3" class="pull-right">
-										<el-input v-model="dataInfo.VERSION" :disabled="true">
-											<template slot="prepend">版本</template>
-										</el-input>
-									</el-col>
-								</el-row>
-								<el-row>
-									<el-col :span="8">
-										<el-form-item label="标准编号" prop="S_NUM">
-											<el-input v-model="dataInfo.S_NUM" :disabled="noedit" placeholder="编码不填写可自动生成"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-tooltip class="item" effect="dark" :content="dataInfo.S_NAME" placement="top">
-											<el-form-item label="标准名称" prop="S_NAME">
-												<el-input v-model="dataInfo.S_NAME" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-tooltip>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="英文名称" prop="S_ENGNAME">
-											<el-input v-model="dataInfo.S_ENGNAME" :disabled="noedit" @focus="editBox('S_ENGNAME')">
-												<!-- <el-button slot="append" @click="dialogFormVisible = true" icon="icon-maximization"></el-button> -->
+				<el-form :model="dataInfo" inline-message :rules="rules" ref="dataInfo" label-width="80px" class="demo-user">
+					<div class="mask_content">
+						<div class="accordion" id="information">
+							<el-collapse v-model="activeNames">
+								<el-collapse-item title="基本信息" name="1">
+									<el-row class="pb10" style="margin-right: 5px;">
+										<el-col :span="3" class="pull-right">
+											<el-input v-model="dataInfo.VERSION" :disabled="true">
+												<template slot="prepend">版本</template>
 											</el-input>
-											
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row>
-									<el-col :span="8">
-										<el-form-item label="发布时间" prop="RELEASETIME">
-											<el-date-picker v-model="dataInfo.RELEASETIME" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width:100%"  :disabled="noedit">
-											</el-date-picker>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="启用时间" prop="STARTETIME">
-											<el-date-picker v-model="dataInfo.STARTETIME" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width:100%"  :disabled="noedit">
-											</el-date-picker>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="发布单位" prop="RELEASE_UNIT">
-											<el-input v-model="dataInfo.RELEASE_UNIT" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row>
-									<el-col :span="8" v-if="dept">
-										<el-form-item label="机构" prop="DEPTIDDesc">
-											<el-input v-model="dataInfo.DEPTIDDesc" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-							</el-collapse-item>
-							<el-collapse-item title="文件" name="2">
-								<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save"></doc-table>
-							</el-collapse-item>
-							<el-collapse-item title="其它" name="3" v-show="views">
-								<el-row>
-									<el-col :span="8">
-										<el-form-item label="录入人" prop="ENTERBYDesc">
-											<el-input v-model="dataInfo.ENTERBYDesc" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="录入时间" prop="ENTERDATE">
-											<el-input v-model="dataInfo.ENTERDATE" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="修改人" prop="CHANGEBYDesc">
-											<el-input v-model="dataInfo.CHANGEBYDesc" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="修改时间" prop="CHANGEDATE">
-											<el-input v-model="dataInfo.CHANGEDATE" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-							</el-collapse-item>
-						</el-collapse>
-					</div>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="标准编号" prop="S_NUM">
+												<el-input v-model="dataInfo.S_NUM" :disabled="noedit" placeholder="编码不填写可自动生成"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-tooltip class="item" effect="dark" :content="dataInfo.S_NAME" placement="top">
+												<el-form-item label="标准名称" prop="S_NAME">
+													<el-input v-model="dataInfo.S_NAME" :disabled="noedit"></el-input>
+												</el-form-item>
+											</el-tooltip>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="英文名称" prop="S_ENGNAME">
+												<el-input v-model="dataInfo.S_ENGNAME" :disabled="noedit" @focus="editBox('S_ENGNAME')">
+													<!-- <el-button slot="append" @click="dialogFormVisible = true" icon="icon-maximization"></el-button> -->
+												</el-input>
+												
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="发布时间" prop="RELEASETIME">
+												<el-date-picker v-model="dataInfo.RELEASETIME" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width:100%"  :disabled="noedit">
+												</el-date-picker>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="启用时间" prop="STARTETIME">
+												<el-date-picker v-model="dataInfo.STARTETIME" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width:100%"  :disabled="noedit">
+												</el-date-picker>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="发布单位" prop="RELEASE_UNIT">
+												<el-input v-model="dataInfo.RELEASE_UNIT" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="8" v-if="dept">
+											<el-form-item label="机构" prop="DEPTIDDesc">
+												<el-input v-model="dataInfo.DEPTIDDesc" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+								</el-collapse-item>
+								<el-collapse-item title="文件" name="2">
+									<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save"></doc-table>
+								</el-collapse-item>
+								<el-collapse-item title="其它" name="3" v-show="views">
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="录入人" prop="ENTERBYDesc">
+												<el-input v-model="dataInfo.ENTERBYDesc" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="录入时间" prop="ENTERDATE">
+												<el-input v-model="dataInfo.ENTERDATE" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="修改人" prop="CHANGEBYDesc">
+												<el-input v-model="dataInfo.CHANGEBYDesc" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="修改时间" prop="CHANGEDATE">
+												<el-input v-model="dataInfo.CHANGEDATE" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+								</el-collapse-item>
+							</el-collapse>
+						</div>
 
-					<div class="el-dialog__footer" v-show="noviews">
-							<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并继续</el-button>
-							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('dataInfo')">修订</el-button>
-							<!-- <el-button v-if="modify" type="success" @click="update('dataInfo')">启用</el-button> -->
-							<el-button @click="close">取消</el-button>
+						<div class="el-dialog__footer" v-show="noviews">
+								<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
+								<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并继续</el-button>
+								<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('dataInfo')">修订</el-button>
+								<!-- <el-button v-if="modify" type="success" @click="update('dataInfo')">启用</el-button> -->
+								<el-button @click="close">取消</el-button>
+						</div>
 					</div>
-				</div>
-			</el-form>
+				</el-form>
+			</div>
+
+			<el-dialog title="信息" :visible.sync="dialogFormVisible" :before-close="resetEditBox">
+				<el-form >
+					<el-form-item label="英文名称" :label-width="formLabelWidth" prop="editDataInfo">
+						<el-input type="textarea" :rows="4" v-model="editDataInfo" autocomplete="off"></el-input>
+					</el-form-item>
+					<el-form-item class="text-center pt20">
+						<el-button @click="resetEditBox">取 消</el-button>
+						<el-button type="primary" @click="saveEditBox">确 定</el-button>
+					</el-form-item>
+				</el-form>
+			</el-dialog>
 		</div>
-
-		<el-dialog title="信息" :visible.sync="dialogFormVisible" :before-close="resetEditBox">
-			<el-form >
-				<el-form-item label="英文名称" :label-width="formLabelWidth" prop="editDataInfo">
-					<el-input type="textarea" :rows="4" v-model="editDataInfo" autocomplete="off"></el-input>
-				</el-form-item>
-				<el-form-item class="text-center pt20">
-					<el-button @click="resetEditBox">取 消</el-button>
-					<el-button type="primary" @click="saveEditBox">确 定</el-button>
-				</el-form-item>
-			</el-form>
-		</el-dialog>
-
 	</div>
 </template>
 
@@ -457,22 +458,20 @@
 					this.rebackDialog();
 				}
 			},
-			maxDialog(e) {
+			maxDialog(e) { //定义大弹出框一个默认大小
 				this.isok1 = false;
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
-				$(".mask_div").css("margin", "0%");
 				$(".mask_div").css("top", "60px");
 			},
 			//还原按钮
-			rebackDialog() {
+			rebackDialog() { //大弹出框还原成默认大小
 				this.isok1 = true;
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
-				$(".mask_div").css("margin", "7% 10%");
-				$(".mask_div").css("top", "0");
+				$(".mask_div").css("top", "100px");
 			},
 			//修订
 			modifyversion(){
@@ -567,7 +566,7 @@
 									});
 									this.$emit('request');
 									this.$emit('reset');
-									this.$refs['dataInfo'].resetFields();
+									//this.$refs['dataInfo'].resetFields();
 									this.visible();
 								}
 							}else{

@@ -1,23 +1,33 @@
 .mask{
-	width: 100%;
-    height: 100%;
+	/*width: 100%;
+    height: 100%;*/
     background: rgba(0, 0, 0, .5);
     position: fixed;
     display: block;
-    top: 0px;
+    top: 60px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
     z-index: 1000;
-    margin-top:60px;
+    /*margin-top:60px;*/
+}
+.mask_divbg {
+	position: absolute;
+	z-index: 1009;
+	width: 100%;
+	height: 100%;
+    top: 0px;
+    bottom: 0px;
 }
 .mask_div{
-    position: absolute;
-    z-index: 1001;
+	position: relative;
     width: 80%;
-    margin: 7% 10%;
     background:#F3F6FA;	
     border-radius: 0px;
     height: 80%;
-    top: 0px;
+    top: 100px;
     bottom: 0px;
+    margin:0px auto;
     overflow: hidden;
 }
 .mask_title_div{

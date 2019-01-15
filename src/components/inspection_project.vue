@@ -9,7 +9,7 @@
 			<!-- <navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left>  -->
 		<!--左侧菜单调用 End-->
 		<!--右侧内容显示 Begin-->
-		<div class="wrapper wrapper-content wrapperall">
+		<div class="wrapper wrapper-content wrapperall" :style="{height: fullHeight}">
 			<div class="ibox-content">
 				<!--部门名称 Begin-->
 				<el-row :gutter="0">

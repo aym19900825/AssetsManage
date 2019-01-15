@@ -1,8 +1,8 @@
 <template>
  <div> 
- 		<!--<el-dialog title="" :visible.sync="innerVisible" width="100%"height="100%">-->
- 		<div class="masks" v-if="show"></div>
-		<div class="masks_div" v-if="show">
+	<div class="masks" v-if="show"></div>
+	<div class="mask_divbg" v-if="show">
+		<div class="masks_div">
 			<div class="mask_title_div clearfix">
 				<div class="mask_title" >添加流程模型</div>
 				<div class="mask_anniu">
@@ -16,8 +16,8 @@
 			</div>			
 		   <iframe :src="this.url +'/designer/modeler.html?modelId='+this.modelId" id="flowIframe" width="100%" height="100%" frameborder="0" scrolling="no" >
 		   </iframe>
-	    </el-dialog>
-   		</div>
+		</div>
+   	</div>
  </div>
 </template>
 
@@ -61,22 +61,20 @@
 					this.rebackDialog();
 				}
 			},
-			maxDialog(e) {
+			maxDialog(e) { //定义大弹出框一个默认大小
 				this.isok1 = false;
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
-				$(".mask_div").css("margin", "0%");
 				$(".mask_div").css("top", "60px");
 			},
 			//还原按钮
-			rebackDialog() {
+			rebackDialog() { //大弹出框还原成默认大小
 				this.isok1 = true;
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
-				$(".mask_div").css("margin", "7% 10%");
-				$(".mask_div").css("top", "0");
+				$(".mask_div").css("top", "100px");
 			},
   },
    mounted(){

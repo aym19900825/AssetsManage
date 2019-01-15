@@ -1,126 +1,125 @@
 <template>
 	<div>
-		<div class="mask" v-show="show"></div>
-		<div class="mask_div" v-show="show">
-			<!---->
-			<div class="mask_title_div clearfix">
-				<div class="mask_title" v-show="addtitle">添加字典数据</div>
-				<div class="mask_title" v-show="modifytitle">修改字典数据</div>
-				<div class="mask_title" v-show="viewtitle">查看字典数据</div>
-				<div class="mask_anniu">
-					<span class="mask_span mask_max" @click='toggle'>
-						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
-					</span>
-					<span class="mask_span" @click='close'>
-						<i class="icon-close1"></i>
-					</span>
+		<div class="mask" v-if="show"></div>
+		<div class="mask_divbg" v-if="show">
+			<div class="mask_div">
+				<div class="mask_title_div clearfix">
+					<div class="mask_title" v-show="addtitle">添加字典数据</div>
+					<div class="mask_title" v-show="modifytitle">修改字典数据</div>
+					<div class="mask_title" v-show="viewtitle">查看字典数据</div>
+					<div class="mask_anniu">
+						<span class="mask_span mask_max" @click='toggle'>
+							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
+						</span>
+						<span class="mask_span" @click='close'>
+							<i class="icon-close1"></i>
+						</span>
+					</div>
+				</div>
+				<div class="mask_content">
+					<el-form :model="dictionarieForm" :rules="rules" ref="dictionarieForm" class="demo-user">
+						<div class="accordion">
+							<el-collapse v-model="activeNames">
+								<el-collapse-item title="基础信息" name="1">
+									<el-row :gutter="30">
+										<el-col :span="8">
+											<el-form-item label="类型编码" prop="code" label-width="100px">
+												<el-input v-model="dictionarieForm.code" :disabled="noedit">
+												</el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="类型名称" prop="name" label-width="100px">
+												<el-input v-model="dictionarieForm.name" :disabled="noedit">
+												</el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="排序" prop="sort" label-width="100px">
+												<el-input v-model="dictionarieForm.sort" :disabled="noedit">
+												</el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row :gutter="30">
+										<el-col :span="24">
+											<el-form-item label="备注" prop="tips" label-width="100px">
+												<el-input type="textarea" row="2" v-model="dictionarieForm.tips" :disabled="noedit">
+												</el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									
+								</el-collapse-item>
+
+								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
+									<el-tabs v-model="activeName" @tab-click="handleClick">
+										<el-tab-pane label="字典值列表" name="first">
+											<div class="table-func table-funcb" v-show="noviews">
+												<el-button type="success" size="mini" round @click="addfield1">
+													<i class="icon-add"></i><font>新建行</font>
+												</el-button>
+											</div>
+											<el-table :header-cell-style="rowClass" :fig="true" :data="dictionarieForm.subDicts" row-key="ID" border stripe max-height="260" highlight-current-row style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dictionarieForm.subDicts', order: 'descending'}">
+												<el-table-column prop="iconOperation" fixed width="50">
+													<template slot-scope="scope">
+														<div v-show="noviews" style="width: 50px;">
+															<i class="el-icon-check" v-if="scope.row.isEditing"></i>
+															<i class="el-icon-edit" v-else="v-else"></i>
+														</div>
+													</template>
+												</el-table-column>
+
+												<el-table-column prop="sort" label="排序" sortable width="120">
+													<template slot-scope="scope">
+														<el-form-item :prop="'subDicts.'+scope.$index + '.sort'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.$index + 1" placeholder="请输入">
+															</el-input>
+															<span v-else="v-else">{{scope.row.sort}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column>
+												<!-- <el-table-column width="50"></el-table-column> -->
+												<el-table-column prop="name" label="值名称" sortable>
+													<template slot-scope="scope">
+														<el-form-item :prop="'subDicts.'+scope.$index + '.name'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.name" placeholder="请输入值名称">
+															</el-input>
+															<span v-else="v-else">{{scope.row.name}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column>
+												<el-table-column prop="code" label="值代号" sortable>
+													<template slot-scope="scope">
+														<el-form-item :prop="'subDicts.'+scope.$index + '.code'">
+															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.code" placeholder="请输入值名称的代号，一般用数字表示">
+															</el-input>
+															<span v-else="v-else">{{scope.row.code}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column>
+												<el-table-column fixed="right" label="操作" width="120">
+													<template slot-scope="scope">
+														<el-button @click.native.prevent="deleteRow(scope.$index,dictionarieForm.subDicts)" type="text" size="small">
+															移除
+														</el-button>
+													</template>
+												</el-table-column>
+											</el-table>
+										</el-tab-pane>
+									</el-tabs>
+								</div>
+							</el-collapse>
+						</div>
+
+						<div class="el-dialog__footer" v-show="noviews">
+							<el-button @click='close'>取消</el-button>
+							<el-button type="primary" @click='submitForm'>提交</el-button>
+						</div>
+					</el-form>
 				</div>
 			</div>
-			<div class="mask_content">
-				<el-form :model="dictionarieForm" :rules="rules" ref="dictionarieForm" class="demo-user">
-					<div class="accordion">
-						<el-collapse v-model="activeNames">
-							<el-collapse-item title="基础信息" name="1">
-								<el-row :gutter="30">
-									<el-col :span="8">
-										<el-form-item label="类型编码" prop="code" label-width="100px">
-											<el-input v-model="dictionarieForm.code" :disabled="noedit">
-											</el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="类型名称" prop="name" label-width="100px">
-											<el-input v-model="dictionarieForm.name" :disabled="noedit">
-											</el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="排序" prop="sort" label-width="100px">
-											<el-input v-model="dictionarieForm.sort" :disabled="noedit">
-											</el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row :gutter="30">
-									<el-col :span="24">
-										<el-form-item label="备注" prop="tips" label-width="100px">
-											<el-input type="textarea" row="2" v-model="dictionarieForm.tips" :disabled="noedit">
-											</el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								
-							</el-collapse-item>
-
-							<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
-								<el-tabs v-model="activeName" @tab-click="handleClick">
-									<el-tab-pane label="字典值列表" name="first">
-										<div class="table-func table-funcb" v-show="noviews">
-											<el-button type="success" size="mini" round @click="addfield1">
-												<i class="icon-add"></i><font>新建行</font>
-											</el-button>
-										</div>
-										<el-table :header-cell-style="rowClass" :fig="true" :data="dictionarieForm.subDicts" row-key="ID" border stripe max-height="260" highlight-current-row style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dictionarieForm.subDicts', order: 'descending'}">
-											<el-table-column prop="iconOperation" fixed width="50">
-												<template slot-scope="scope">
-													<div v-show="noviews" style="width: 50px;">
-														<i class="el-icon-check" v-if="scope.row.isEditing"></i>
-														<i class="el-icon-edit" v-else="v-else"></i>
-													</div>
-												</template>
-											</el-table-column>
-
-											<el-table-column prop="sort" label="排序" sortable width="120">
-												<template slot-scope="scope">
-													<el-form-item :prop="'subDicts.'+scope.$index + '.sort'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.$index + 1" placeholder="请输入">
-														</el-input>
-														<span v-else="v-else">{{scope.row.sort}}</span>
-													</el-form-item>
-												</template>
-											</el-table-column>
-											<!-- <el-table-column width="50"></el-table-column> -->
-											<el-table-column prop="name" label="值名称" sortable>
-												<template slot-scope="scope">
-													<el-form-item :prop="'subDicts.'+scope.$index + '.name'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.name" placeholder="请输入值名称">
-														</el-input>
-														<span v-else="v-else">{{scope.row.name}}</span>
-													</el-form-item>
-												</template>
-											</el-table-column>
-											<el-table-column prop="code" label="值代号" sortable>
-												<template slot-scope="scope">
-													<el-form-item :prop="'subDicts.'+scope.$index + '.code'">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.code" placeholder="请输入值名称的代号，一般用数字表示">
-														</el-input>
-														<span v-else="v-else">{{scope.row.code}}</span>
-													</el-form-item>
-												</template>
-											</el-table-column>
-											<el-table-column fixed="right" label="操作" width="120">
-												<template slot-scope="scope">
-													<el-button @click.native.prevent="deleteRow(scope.$index,dictionarieForm.subDicts)" type="text" size="small">
-														移除
-													</el-button>
-												</template>
-											</el-table-column>
-										</el-table>
-									</el-tab-pane>
-								</el-tabs>
-							</div>
-						</el-collapse>
-					</div>
-
-					<div class="el-dialog__footer" v-show="noviews">
-						<el-button @click='close'>取消</el-button>
-						<el-button type="primary" @click='submitForm'>提交</el-button>
-					</div>
-				</el-form>
-			</div>
 		</div>
-
-		
 	</div>
 </template>
 
@@ -328,8 +327,6 @@
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
-				$(".mask_div").css("margin", "0%");
-				$(".mask_div").css("top", "60px");
 			},
 			//还原按钮
 			rebackDialog() {
@@ -337,8 +334,6 @@
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
-				$(".mask_div").css("margin", "7% 10%");
-				$(".mask_div").css("top", "0");
 			},
 			//保存users/saveOrUpdate
 			submitForm() {

@@ -1,102 +1,104 @@
 <template>
 	<div>
 		<div class="mask" v-if="show"></div>
-		<div class="mask_div" v-if="show">
-			<div class="mask_title_div clearfix">
-				<div class="mask_title" v-show="addtitle">添加检验/检测方法</div>
-				<div class="mask_title" v-show="modifytitle">修改检验/检测方法</div>
-				<div class="mask_title" v-show="viewtitle">查看检验/检测方法</div>
-				<div class="mask_anniu">
-					<span class="mask_span mask_max" @click='toggle'>
-						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
-					</span>
-					<span class="mask_span" @click='close'>
-						<i class="icon-close1"></i>
-					</span>
+		<div class="mask_divbg" v-if="show">
+			<div class="mask_div">
+				<div class="mask_title_div clearfix">
+					<div class="mask_title" v-show="addtitle">添加检验/检测方法</div>
+					<div class="mask_title" v-show="modifytitle">修改检验/检测方法</div>
+					<div class="mask_title" v-show="viewtitle">查看检验/检测方法</div>
+					<div class="mask_anniu">
+						<span class="mask_span mask_max" @click='toggle'>
+							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
+						</span>
+						<span class="mask_span" @click='close'>
+							<i class="icon-close1"></i>
+						</span>
+					</div>
 				</div>
-			</div>
-			<div class="mask_content">
-					<div class="accordion">
-						<el-collapse v-model="activeNames">
-							<el-form :model="testingForm" inline-message :rules="rules" ref="testingForm" label-width="100px" status-icon>
-								<el-collapse-item title="基础信息" name="1">
-									<el-row :gutter="20" class="pb10">
-										<el-col :span="3" class="pull-right">
-											<el-input  v-model="testingForm.VERSION" :disabled="true">
-												<template slot="prepend">版本</template>
-											</el-input>
-										</el-col>
-									</el-row>
-									<el-row>
-										<el-col :span="8">
-											<el-form-item label="编码" prop="M_NUM" >
-												<el-input v-model="testingForm.M_NUM" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="中文名称" prop="M_NAME" >
-												<el-input v-model="testingForm.M_NAME" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="英文名称" prop="M_ENAME" >
-												<el-input v-model="testingForm.M_ENAME" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<el-row>
-										<el-col :span="8">
-											<el-form-item label="类别" prop="M_TYPE">
-												<!-- <el-select v-model="testingForm.M_TYPE" placeholder="请选择类别" style="width: 100%;">
-													<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
-												</el-select> -->
-												<el-input v-model="testingForm.M_TYPE" placeholder="请输入类别" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8" v-if="dept">
-											<el-form-item label="机构">
-												<el-input v-model="testingForm.DEPTIDDesc" :disabled="true"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
+				<div class="mask_content">
+						<div class="accordion">
+							<el-collapse v-model="activeNames">
+								<el-form :model="testingForm" inline-message :rules="rules" ref="testingForm" label-width="100px" status-icon>
+									<el-collapse-item title="基础信息" name="1">
+										<el-row :gutter="20" class="pb10">
+											<el-col :span="3" class="pull-right">
+												<el-input  v-model="testingForm.VERSION" :disabled="true">
+													<template slot="prepend">版本</template>
+												</el-input>
+											</el-col>
+										</el-row>
+										<el-row>
+											<el-col :span="8">
+												<el-form-item label="编码" prop="M_NUM" >
+													<el-input v-model="testingForm.M_NUM" :disabled="noedit"></el-input>
+												</el-form-item>
+											</el-col>
+											<el-col :span="8">
+												<el-form-item label="中文名称" prop="M_NAME" >
+													<el-input v-model="testingForm.M_NAME" :disabled="noedit"></el-input>
+												</el-form-item>
+											</el-col>
+											<el-col :span="8">
+												<el-form-item label="英文名称" prop="M_ENAME" >
+													<el-input v-model="testingForm.M_ENAME" :disabled="noedit"></el-input>
+												</el-form-item>
+											</el-col>
+										</el-row>
+										<el-row>
+											<el-col :span="8">
+												<el-form-item label="类别" prop="M_TYPE">
+													<!-- <el-select v-model="testingForm.M_TYPE" placeholder="请选择类别" style="width: 100%;">
+														<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
+													</el-select> -->
+													<el-input v-model="testingForm.M_TYPE" placeholder="请输入类别" :disabled="noedit"></el-input>
+												</el-form-item>
+											</el-col>
+											<el-col :span="8" v-if="dept">
+												<el-form-item label="机构">
+													<el-input v-model="testingForm.DEPTIDDesc" :disabled="true"></el-input>
+												</el-form-item>
+											</el-col>
+										</el-row>
+									</el-collapse-item>
+									<el-collapse-item title="其它" name="2" v-show="views">
+										<el-row>
+											<el-col :span="8">
+												<el-form-item label="录入人">
+													<el-input v-model="testingForm.ENTERBYDesc" :disabled="true"></el-input>
+												</el-form-item>
+											</el-col>
+											<el-col :span="8">
+												<el-form-item label="录入时间">
+													<el-input v-model="testingForm.ENTERDATE" :disabled="true"></el-input>
+												</el-form-item>
+											</el-col>
+											<el-col :span="8">
+												<el-form-item label="修改人">
+													<el-input v-model="testingForm.CHANGEBYDesc" :disabled="true"></el-input>
+												</el-form-item>
+											</el-col>
+											<el-col :span="8">
+												<el-form-item label="修改日期">
+													<el-input v-model="testingForm.CHANGEDATE" :disabled="true"></el-input>
+												</el-form-item>
+											</el-col>
+										</el-row>
+									</el-collapse-item>
+								</el-form>
+								<el-collapse-item title="文件" name="3">
+									<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save"></doc-table>
 								</el-collapse-item>
-								<el-collapse-item title="其它" name="2" v-show="views">
-									<el-row>
-										<el-col :span="8">
-											<el-form-item label="录入人">
-												<el-input v-model="testingForm.ENTERBYDesc" :disabled="true"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="录入时间">
-												<el-input v-model="testingForm.ENTERDATE" :disabled="true"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="修改人">
-												<el-input v-model="testingForm.CHANGEBYDesc" :disabled="true"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="修改日期">
-												<el-input v-model="testingForm.CHANGEDATE" :disabled="true"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-								</el-collapse-item>
-							</el-form>
-							<el-collapse-item title="文件" name="3">
-								<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save"></doc-table>
-							</el-collapse-item>
-						</el-collapse>
-					</div>
-					<div class="content-footer" v-show="noviews">
-						<el-button type="primary" @click="saveAndUpdate('testingForm')">保存</el-button>
-						<el-button type="success" @click="saveAndSubmit('testingForm')" v-show="addtitle">保存并继续</el-button>
-						<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('testingForm')">修订</el-button>
-						<!-- <el-button v-if="modify" type="success" @click="update('testingForm')">启用</el-button> -->
-						<el-button @click="close">取消</el-button>
-					</div>
+							</el-collapse>
+						</div>
+						<div class="content-footer" v-show="noviews">
+							<el-button type="primary" @click="saveAndUpdate('testingForm')">保存</el-button>
+							<el-button type="success" @click="saveAndSubmit('testingForm')" v-show="addtitle">保存并继续</el-button>
+							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('testingForm')">修订</el-button>
+							<!-- <el-button v-if="modify" type="success" @click="update('testingForm')">启用</el-button> -->
+							<el-button @click="close">取消</el-button>
+						</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -530,8 +532,6 @@
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
-				$(".mask_div").css("margin", "0%");
-				$(".mask_div").css("top", "60px");
 			},
 			//还原按钮
 			rebackDialog() {
@@ -539,8 +539,6 @@
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
-				$(".mask_div").css("margin", "7% 10%");
-				$(".mask_div").css("top", "0");
 			},
 			//点击更新按钮
 			update(testingForm) {

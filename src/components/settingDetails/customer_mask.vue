@@ -1,296 +1,298 @@
 <template>
 	<div>
 		<div class="mask" v-if="show"></div>
-		<div class="mask_div" v-if="show">
-			<div class="mask_title_div clearfix">
-				<div class="mask_title" v-show="addtitle">添加客户</div>
-				<div class="mask_title" v-show="modifytitle">修改客户</div>
-				<div class="mask_title" v-show="viewtitle">查看客户</div>
-				<div class="mask_anniu">
-					<span class="mask_span mask_max" @click='toggle'>
-						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
-					</span>
-					<span class="mask_span" @click='close'>
-						<i class="icon-close1"></i>
-					</span>
+		<div class="mask_divbg" v-if="show">
+			<div class="mask_div">
+				<div class="mask_title_div clearfix">
+					<div class="mask_title" v-show="addtitle">添加客户</div>
+					<div class="mask_title" v-show="modifytitle">修改客户</div>
+					<div class="mask_title" v-show="viewtitle">查看客户</div>
+					<div class="mask_anniu">
+						<span class="mask_span mask_max" @click='toggle'>
+							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
+						</span>
+						<span class="mask_span" @click='close'>
+							<i class="icon-close1"></i>
+						</span>
+					</div>
 				</div>
-			</div>
-			<div class="mask_content"><!-- status-icon验证后小对号 -->
-				<el-form inline-message ref="CUSTOMER" :model="CUSTOMER" :rules="rules" class="demo-adduserForm" :label-position="labelPosition">
-					<div class="accordion" id="information">
-						<el-collapse v-model="activeNames">
-							<el-collapse-item title="基本信息" name="1">
-								<el-row :gutter="20" class="pb10" style='display:none;'>
-									<el-col :span="5" class="pull-right">
-										<!-- <el-input v-model="CUSTOMER.STATUS" :disabled="true">
-											<template slot="prepend">信息状态</template>
-										</el-input> -->
-										<!-- <el-select v-model="CUSTOMER.STATUS" placeholder="请选择状态">
-											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-											</el-option>
-										</el-select> -->
-									</el-col>
-								</el-row>
-                              <!-- <el-form label-width="100px"> -->
-								<el-row :gutter="30">
-									<el-col :span="8">
-										<el-form-item label="组织机构代码" prop="CODE" label-width="110px">
-											<el-input v-model="CUSTOMER.CODE" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="单位名称" prop="NAME" label-width="100px">
-											<el-input v-model="CUSTOMER.NAME" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="类型" prop="TYPE" label-width="100px">
-											<el-select v-model="CUSTOMER.TYPE" placeholder="请选择" style="width: 100%" :disabled="noedit">
-												<el-option v-for="(data,index) in SeleCUST_TYPE" :key="index" :value="data.code" :label="data.name"></el-option>
+				<div class="mask_content"><!-- status-icon验证后小对号 -->
+					<el-form inline-message ref="CUSTOMER" :model="CUSTOMER" :rules="rules" class="demo-adduserForm" :label-position="labelPosition">
+						<div class="accordion" id="information">
+							<el-collapse v-model="activeNames">
+								<el-collapse-item title="基本信息" name="1">
+									<el-row :gutter="20" class="pb10" style='display:none;'>
+										<el-col :span="5" class="pull-right">
+											<!-- <el-input v-model="CUSTOMER.STATUS" :disabled="true">
+												<template slot="prepend">信息状态</template>
+											</el-input> -->
+											<!-- <el-select v-model="CUSTOMER.STATUS" placeholder="请选择状态">
+												<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 												</el-option>
-											</el-select>
-										</el-form-item>
-										<!--<el-form-item label="类型" prop="TYPE">
-											<el-select style="width: 100%;" v-model="CUSTOMER.TYPE" placeholder="类型">
-										      	<el-option label="委托" value="委托">	
-										      	</el-option>
-										      	<el-option label="分包" value="分包">
-										      	</el-option>
-										      	<el-option label="两者皆是" value="两者皆是">	
-										      	</el-option>
-										    </el-select>
-										</el-form-item>-->
-									</el-col>
-								</el-row>
-								<!-- <el-row :gutter="30">
-									<el-col :span="8">
-										<el-form-item label="邮箱" prop="EMAIL" label-width="110px">
-											<el-input v-model="CUSTOMER.EMAIL" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="电话" prop="PHONE" label-width="100px">
-											<el-input v-model="CUSTOMER.PHONE" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="传真" prop="FAX" label-width="100px">
-											<el-input v-model="CUSTOMER.FAX" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row> -->
-								<el-row :gutter="30">
-									<el-col :span="16">
-										<el-form-item label="联系地址" prop="CONTACT_ADDRESS" label-width="110px">
-											<el-input v-model="CUSTOMER.CONTACT_ADDRESS" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="邮政编码" prop="ZIPCODE" label-width="100px">
-											<el-input v-model="CUSTOMER.ZIPCODE" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row :gutter="30">
-									<el-col :span="24">
-										<el-form-item label="备注" prop="MEMO" label-width="110px">
-											<el-input v-model="CUSTOMER.MEMO" type="textarea" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-							<!-- </el-form> -->
-							</el-collapse-item>
-							<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
-								<el-tabs v-model="activeName" @tab-click="handleClick">
-									<el-tab-pane label="资质信息" name="first">
-										<div class="table-func table-funcb" v-show="noviews">
-											<el-button type="success" size="mini" round @click="addfield">
-												<i class="icon-add"></i>
-												<font>新建行</font>
-											</el-button>
-										</div>
-								<!-- <el-form :label-position="labelPosition" :rules="rules"> -->
-									<el-table :header-cell-style="rowClass" :fit="true" :data="CUSTOMER.CUSTOMER_QUALIFICATIONList" row-key="ID" border stripe max-height="260" highlight-current-row style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER.CUSTOMER_QUALIFICATIONList', order: 'descending'}">
-									    <el-table-column prop="iconOperation" fixed width="50px">
-									      <template slot-scope="scope">
-									      	<i class="el-icon-check" v-show="scope.row.isEditing">
-									      	</i>
-									      	<i class="el-icon-edit" v-show="!scope.row.isEditing">
-									      	</i>
-									      </template>
-									    </el-table-column>
-
-									    <el-table-column label="序号" sortable width="120px" prop="STEP">
-									      <template slot-scope="scope">
-									      	<el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.STEP'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-										      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.$index + 1" :disabled="noedit"></el-input><span v-show="!scope.row.isEditing" >{{scope.row.STEP}}</span>
-										      </el-form-item>
-									      </template>
-									    </el-table-column>
-									    <el-table-column label="证书编号" sortable width="120px" prop="CERTIFICATE_NUM">
-									      <template slot-scope="scope">
-									      	<el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.CERTIFICATE_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-										      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.CERTIFICATE_NUM" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.CERTIFICATE_NUM}}</span>
-										      </el-form-item>
-									      </template>
-									    </el-table-column>
-
-										<el-table-column prop="CERTIFICATE_NAME" label="证书名称" sortable>
-									      <template slot-scope="scope">
-									         <el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.CERTIFICATE_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-										         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.CERTIFICATE_NAME" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.CERTIFICATE_NAME}}</span>
-										     </el-form-item>
-									      </template>
-									    </el-table-column>
-
-									    <el-table-column prop="ACTIVE_DATE" label="资质有效期" sortable width="160">
-									      <template slot-scope="scope">
-									      	<el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.ACTIVE_DATE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-										      	<el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.ACTIVE_DATE'" >
-										         <el-date-picker style="width: 90%" v-show="scope.row.isEditing" v-model="scope.row.ACTIVE_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd"></el-date-picker>
-										        <span v-show="!scope.row.isEditing" >{{scope.row.ACTIVE_DATE}}</span>
-										    </el-form-item>
-									    </el-form-item>
-									      </template>
-									    </el-table-column>
-									    <!-- <el-table-column prop="STATUS" label="信息状态" sortable width="120px">
-									      <template slot-scope="scope">
-									        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.STATUS}}</span>
-									      </template>
-									    </el-table-column> -->
-									    <el-table-column prop="MEMO" label="备注" sortable width="120px">
-									      <template slot-scope="scope">
-									        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.MEMO" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.MEMO}}</span>
-									      </template>
-									    </el-table-column>
-
-									    <el-table-column prop="REASION" label="附件" sortable width="120px">
-									      <template slot-scope="scope">
-									        <el-upload	class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/"
-												:on-preview="handlePreview"
-												:on-remove="handleRemove"
-												:before-remove="beforeRemove"
-												multiple
-												:limit="3"
-												:on-exceed="handleExceed"
-												:file-list="fileList">
-												<el-button size="small" type="primary">点击上传</el-button>
-											</el-upload>
-									      </template>
-									    </el-table-column>
-
-									    <el-table-column fixed="right" label="操作" width="120">
-									      <template slot-scope="scope">
-									        <el-button @click = "deleteRow(scope.$index, CUSTOMER.CUSTOMER_QUALIFICATIONList)" type="text" size="small">
-									          移除
-									        </el-button>
-									      </template>
-									    </el-table-column>
-									  </el-table>
-								  <!-- </el-form> -->
-									</el-tab-pane>
-									<el-tab-pane label="客户联系人" name="second">
-										<div class="table-func table-funcb" v-show="noviews">
-											<el-button type="success" size="mini" round @click="addrela">
-												<i class="icon-add"></i>
-												<font>新建行</font>
-											</el-button>
-										</div>
-										<!-- <el-form :label-position="labelPosition" :rules="rules"> -->
-											<el-table :header-cell-style="rowClass" :fit="true" :data="CUSTOMER.CUSTOMER_PERSONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER.CUSTOMER_PERSONList', order: 'descending'}">
-											    <el-table-column prop="iconOperation" fixed width="50px">
-											      <template slot-scope="scope">
-											      	<i class="el-icon-check" v-show="scope.row.isEditing">
-											      	</i>
-											      	<i class="el-icon-edit" v-show="!scope.row.isEditing">
-											      	</i>
-											      </template>
-											    </el-table-column>
-
-											    <el-table-column label="序号" sortable width="120px" prop="STEP">
-											      <template slot-scope="scope">
-											      	<el-form-item :prop="'CUSTOMER_PERSONList.'+scope.$index + '.STEP'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-												      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.$index + 1" :disabled="noedit"></el-input>
-												      	<span v-show="!scope.row.isEditing" >{{scope.row.STEP}}</span>
-												      </el-form-item>
-											      </template>
-											    </el-table-column>
-
-											    <el-table-column label="联系人" sortable width="150px" prop="PERSON">
-											      <template slot-scope="scope">
-											      	<el-form-item :prop="'CUSTOMER_PERSONList.'+scope.$index + '.PERSON'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-												      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.PERSON" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.PERSON}}</span>
-												      </el-form-item>
-											      </template>
-											    </el-table-column>
-
-												<el-table-column prop="PHONE" label="联系电话" sortable width="150px">
-											      <template slot-scope="scope">
-											      	<el-form-item :prop="'CUSTOMER_PERSONList.'+scope.$index + '.PHONE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-												         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.PHONE" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.PHONE}}</span>
-												     </el-form-item>
-											      </template>
-											    </el-table-column>
-
-											    <el-table-column prop="FAX" label="传真" sortable width="150px">
-											       <template slot-scope="scope">
-											         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.FAX" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.FAX}}</span>
-											      </template>
-											    </el-table-column>
-											    <el-table-column prop="EMAIL" label="邮箱" sortable>
-											      <template slot-scope="scope">
-											      	<el-form-item :prop="'CUSTOMER_PERSONList.'+scope.$index + '.EMAIL'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-												    	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.EMAIL" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.EMAIL}}</span>
-												    </el-form-item>
-											      </template>
-											    </el-table-column>
-											    <el-table-column fixed="right" label="操作" width="120">
-											      <template slot-scope="scope">
-											        <el-button @click = "deleteRow(scope.$index, CUSTOMER.CUSTOMER_PERSONList)" type="text" size="small">
-											          移除
-											        </el-button>
-											      </template>
-											    </el-table-column>
-											  </el-table>
-								  		<!-- </el-form> -->
-									</el-tab-pane>
-								</el-tabs>
-							</div>
-							<el-collapse-item title="其它" name="3"  v-show="views">
-								<!-- <el-form label-width="100px"> -->
+											</el-select> -->
+										</el-col>
+									</el-row>
+	                              <!-- <el-form label-width="100px"> -->
 									<el-row :gutter="30">
 										<el-col :span="8">
-											<el-form-item label="录入人" prop="ENTERBY">
-												<el-input v-model="CUSTOMER.ENTERBY" placeholder="当前录入人" :disabled="edit"></el-input>
+											<el-form-item label="组织机构代码" prop="CODE" label-width="110px">
+												<el-input v-model="CUSTOMER.CODE" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="录入时间" prop="ENTERDATE">
-												<el-input v-model="CUSTOMER.ENTERDATE" placeholder="当前录入时间" :disabled="edit"></el-input>
+											<el-form-item label="单位名称" prop="NAME" label-width="100px">
+												<el-input v-model="CUSTOMER.NAME" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改人" prop="CHANGEBY">
-												<el-input v-model="CUSTOMER.CHANGEBY" placeholder="记录当前修改人" :disabled="edit"></el-input>
+											<el-form-item label="类型" prop="TYPE" label-width="100px">
+												<el-select v-model="CUSTOMER.TYPE" placeholder="请选择" style="width: 100%" :disabled="noedit">
+													<el-option v-for="(data,index) in SeleCUST_TYPE" :key="index" :value="data.code" :label="data.name"></el-option>
+													</el-option>
+												</el-select>
+											</el-form-item>
+											<!--<el-form-item label="类型" prop="TYPE">
+												<el-select style="width: 100%;" v-model="CUSTOMER.TYPE" placeholder="类型">
+											      	<el-option label="委托" value="委托">	
+											      	</el-option>
+											      	<el-option label="分包" value="分包">
+											      	</el-option>
+											      	<el-option label="两者皆是" value="两者皆是">	
+											      	</el-option>
+											    </el-select>
+											</el-form-item>-->
+										</el-col>
+									</el-row>
+									<!-- <el-row :gutter="30">
+										<el-col :span="8">
+											<el-form-item label="邮箱" prop="EMAIL" label-width="110px">
+												<el-input v-model="CUSTOMER.EMAIL" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改时间" prop="CHANGEDATE">
-												<el-input v-model="CUSTOMER.CHANGEDATE" placeholder="自动记录当前修改时间" :disabled="edit"></el-input>
+											<el-form-item label="电话" prop="PHONE" label-width="100px">
+												<el-input v-model="CUSTOMER.PHONE" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="传真" prop="FAX" label-width="100px">
+												<el-input v-model="CUSTOMER.FAX" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row> -->
+									<el-row :gutter="30">
+										<el-col :span="16">
+											<el-form-item label="联系地址" prop="CONTACT_ADDRESS" label-width="110px">
+												<el-input v-model="CUSTOMER.CONTACT_ADDRESS" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="邮政编码" prop="ZIPCODE" label-width="100px">
+												<el-input v-model="CUSTOMER.ZIPCODE" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row :gutter="30">
+										<el-col :span="24">
+											<el-form-item label="备注" prop="MEMO" label-width="110px">
+												<el-input v-model="CUSTOMER.MEMO" type="textarea" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 								<!-- </el-form> -->
-							</el-collapse-item>
-						</el-collapse>
-					</div>
-					<div class="el-dialog__footer" v-show="noviews">
-						<el-button type="primary" @click="saveAndUpdate('CUSTOMER')">保存</el-button>
-						<el-button type="success" @click="saveAndSubmit('CUSTOMER')" v-show="addtitle">保存并继续</el-button>
-						<el-button @click='close'>取消</el-button>
-						<!--<el-button type="primary" class="btn-primarys" @click="submitForm('CUSTOMER')">提交</el-button>-->
-					</div>
-				</el-form>
+								</el-collapse-item>
+								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
+									<el-tabs v-model="activeName" @tab-click="handleClick">
+										<el-tab-pane label="资质信息" name="first">
+											<div class="table-func table-funcb" v-show="noviews">
+												<el-button type="success" size="mini" round @click="addfield">
+													<i class="icon-add"></i>
+													<font>新建行</font>
+												</el-button>
+											</div>
+									<!-- <el-form :label-position="labelPosition" :rules="rules"> -->
+										<el-table :header-cell-style="rowClass" :fit="true" :data="CUSTOMER.CUSTOMER_QUALIFICATIONList" row-key="ID" border stripe max-height="260" highlight-current-row style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER.CUSTOMER_QUALIFICATIONList', order: 'descending'}">
+										    <el-table-column prop="iconOperation" fixed width="50px">
+										      <template slot-scope="scope">
+										      	<i class="el-icon-check" v-show="scope.row.isEditing">
+										      	</i>
+										      	<i class="el-icon-edit" v-show="!scope.row.isEditing">
+										      	</i>
+										      </template>
+										    </el-table-column>
+
+										    <el-table-column label="序号" sortable width="120px" prop="STEP">
+										      <template slot-scope="scope">
+										      	<el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.STEP'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+											      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.$index + 1" :disabled="noedit"></el-input><span v-show="!scope.row.isEditing" >{{scope.row.STEP}}</span>
+											      </el-form-item>
+										      </template>
+										    </el-table-column>
+										    <el-table-column label="证书编号" sortable width="120px" prop="CERTIFICATE_NUM">
+										      <template slot-scope="scope">
+										      	<el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.CERTIFICATE_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+											      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.CERTIFICATE_NUM" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.CERTIFICATE_NUM}}</span>
+											      </el-form-item>
+										      </template>
+										    </el-table-column>
+
+											<el-table-column prop="CERTIFICATE_NAME" label="证书名称" sortable>
+										      <template slot-scope="scope">
+										         <el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.CERTIFICATE_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+											         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.CERTIFICATE_NAME" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.CERTIFICATE_NAME}}</span>
+											     </el-form-item>
+										      </template>
+										    </el-table-column>
+
+										    <el-table-column prop="ACTIVE_DATE" label="资质有效期" sortable width="160">
+										      <template slot-scope="scope">
+										      	<el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.ACTIVE_DATE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+											      	<el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.ACTIVE_DATE'" >
+											         <el-date-picker style="width: 90%" v-show="scope.row.isEditing" v-model="scope.row.ACTIVE_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd"></el-date-picker>
+											        <span v-show="!scope.row.isEditing" >{{scope.row.ACTIVE_DATE}}</span>
+											    </el-form-item>
+										    </el-form-item>
+										      </template>
+										    </el-table-column>
+										    <!-- <el-table-column prop="STATUS" label="信息状态" sortable width="120px">
+										      <template slot-scope="scope">
+										        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.STATUS}}</span>
+										      </template>
+										    </el-table-column> -->
+										    <el-table-column prop="MEMO" label="备注" sortable width="120px">
+										      <template slot-scope="scope">
+										        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.MEMO" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.MEMO}}</span>
+										      </template>
+										    </el-table-column>
+
+										    <el-table-column prop="REASION" label="附件" sortable width="120px">
+										      <template slot-scope="scope">
+										        <el-upload	class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/"
+													:on-preview="handlePreview"
+													:on-remove="handleRemove"
+													:before-remove="beforeRemove"
+													multiple
+													:limit="3"
+													:on-exceed="handleExceed"
+													:file-list="fileList">
+													<el-button size="small" type="primary">点击上传</el-button>
+												</el-upload>
+										      </template>
+										    </el-table-column>
+
+										    <el-table-column fixed="right" label="操作" width="120">
+										      <template slot-scope="scope">
+										        <el-button @click = "deleteRow(scope.$index, CUSTOMER.CUSTOMER_QUALIFICATIONList)" type="text" size="small">
+										          移除
+										        </el-button>
+										      </template>
+										    </el-table-column>
+										  </el-table>
+									  <!-- </el-form> -->
+										</el-tab-pane>
+										<el-tab-pane label="客户联系人" name="second">
+											<div class="table-func table-funcb" v-show="noviews">
+												<el-button type="success" size="mini" round @click="addrela">
+													<i class="icon-add"></i>
+													<font>新建行</font>
+												</el-button>
+											</div>
+											<!-- <el-form :label-position="labelPosition" :rules="rules"> -->
+												<el-table :header-cell-style="rowClass" :fit="true" :data="CUSTOMER.CUSTOMER_PERSONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER.CUSTOMER_PERSONList', order: 'descending'}">
+												    <el-table-column prop="iconOperation" fixed width="50px">
+												      <template slot-scope="scope">
+												      	<i class="el-icon-check" v-show="scope.row.isEditing">
+												      	</i>
+												      	<i class="el-icon-edit" v-show="!scope.row.isEditing">
+												      	</i>
+												      </template>
+												    </el-table-column>
+
+												    <el-table-column label="序号" sortable width="120px" prop="STEP">
+												      <template slot-scope="scope">
+												      	<el-form-item :prop="'CUSTOMER_PERSONList.'+scope.$index + '.STEP'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+													      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.$index + 1" :disabled="noedit"></el-input>
+													      	<span v-show="!scope.row.isEditing" >{{scope.row.STEP}}</span>
+													      </el-form-item>
+												      </template>
+												    </el-table-column>
+
+												    <el-table-column label="联系人" sortable width="150px" prop="PERSON">
+												      <template slot-scope="scope">
+												      	<el-form-item :prop="'CUSTOMER_PERSONList.'+scope.$index + '.PERSON'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+													      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.PERSON" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.PERSON}}</span>
+													      </el-form-item>
+												      </template>
+												    </el-table-column>
+
+													<el-table-column prop="PHONE" label="联系电话" sortable width="150px">
+												      <template slot-scope="scope">
+												      	<el-form-item :prop="'CUSTOMER_PERSONList.'+scope.$index + '.PHONE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+													         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.PHONE" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.PHONE}}</span>
+													     </el-form-item>
+												      </template>
+												    </el-table-column>
+
+												    <el-table-column prop="FAX" label="传真" sortable width="150px">
+												       <template slot-scope="scope">
+												         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.FAX" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.FAX}}</span>
+												      </template>
+												    </el-table-column>
+												    <el-table-column prop="EMAIL" label="邮箱" sortable>
+												      <template slot-scope="scope">
+												      	<el-form-item :prop="'CUSTOMER_PERSONList.'+scope.$index + '.EMAIL'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+													    	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.EMAIL" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.EMAIL}}</span>
+													    </el-form-item>
+												      </template>
+												    </el-table-column>
+												    <el-table-column fixed="right" label="操作" width="120">
+												      <template slot-scope="scope">
+												        <el-button @click = "deleteRow(scope.$index, CUSTOMER.CUSTOMER_PERSONList)" type="text" size="small">
+												          移除
+												        </el-button>
+												      </template>
+												    </el-table-column>
+												  </el-table>
+									  		<!-- </el-form> -->
+										</el-tab-pane>
+									</el-tabs>
+								</div>
+								<el-collapse-item title="其它" name="3"  v-show="views">
+									<!-- <el-form label-width="100px"> -->
+										<el-row :gutter="30">
+											<el-col :span="8">
+												<el-form-item label="录入人" prop="ENTERBY">
+													<el-input v-model="CUSTOMER.ENTERBY" placeholder="当前录入人" :disabled="edit"></el-input>
+												</el-form-item>
+											</el-col>
+											<el-col :span="8">
+												<el-form-item label="录入时间" prop="ENTERDATE">
+													<el-input v-model="CUSTOMER.ENTERDATE" placeholder="当前录入时间" :disabled="edit"></el-input>
+												</el-form-item>
+											</el-col>
+											<el-col :span="8">
+												<el-form-item label="修改人" prop="CHANGEBY">
+													<el-input v-model="CUSTOMER.CHANGEBY" placeholder="记录当前修改人" :disabled="edit"></el-input>
+												</el-form-item>
+											</el-col>
+											<el-col :span="8">
+												<el-form-item label="修改时间" prop="CHANGEDATE">
+													<el-input v-model="CUSTOMER.CHANGEDATE" placeholder="自动记录当前修改时间" :disabled="edit"></el-input>
+												</el-form-item>
+											</el-col>
+										</el-row>
+									<!-- </el-form> -->
+								</el-collapse-item>
+							</el-collapse>
+						</div>
+						<div class="el-dialog__footer" v-show="noviews">
+							<el-button type="primary" @click="saveAndUpdate('CUSTOMER')">保存</el-button>
+							<el-button type="success" @click="saveAndSubmit('CUSTOMER')" v-show="addtitle">保存并继续</el-button>
+							<el-button @click='close'>取消</el-button>
+							<!--<el-button type="primary" class="btn-primarys" @click="submitForm('CUSTOMER')">提交</el-button>-->
+						</div>
+					</el-form>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -664,8 +666,6 @@
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
-				$(".mask_div").css("margin", "0%");
-				$(".mask_div").css("top", "60px");
 			},
 			//还原按钮
 			rebackDialog() {
@@ -673,8 +673,6 @@
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
-				$(".mask_div").css("margin", "7% 10%");
-				$(".mask_div").css("top", "0");
 			},
 			// 保存users/saveOrUpdate
 			save() {

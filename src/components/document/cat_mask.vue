@@ -1,77 +1,78 @@
 <template>
 	<div>
-		<div class="mask" v-show="show"></div>
-		<div class="mask_div" v-show="show">
-			<!---->
-			<div class="mask_title_div clearfix">
-				<div class="mask_title" v-show="!modify">添加关键字类别</div>
-				<div class="mask_title" v-show="modify">修改关键字类别</div>
-				<div class="mask_anniu">
-					<span class="mask_span mask_max" @click='toggle'>
-						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
-					</span>
-					<span class="mask_span" @click='close'>
-						<i class="icon-close1"></i>
-					</span>
-				</div>
-			</div>
-			<div class="mask_content">
-				<el-form :model="dataInfo"  ref="dataInfo" label-width="100px">
-					<div class="accordion">
-						<div class="accordion" id="information">
-							<el-collapse v-model="activeNames">
-								<el-collapse-item title="基本信息" name="1">
-									<el-row :gutter="5" class="pt10">
-										<el-col :span="6">
-											<el-form-item label="类别名称" prop="dataInfo.categoryname">
-												<el-input v-model="dataInfo.categoryname"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-								</el-collapse-item>
-								
-								<el-collapse-item title="关键字列表" name="2" class="ml30">
-									<div class="table-func">
-										<el-button type="success" size="mini" round @click="addKWord">
-											<i class="icon-add"></i>
-											<font>新建行</font>
-										</el-button>
-									</div>
-
-									<el-table :data="dataInfo.tb_keyword2List" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100% ;">
-										<el-table-column prop="iconOperation" fixed width="50px">
-											<template slot-scope="scope">
-												<i class="el-icon-check" v-if="scope.row.isEditing"  @click="changeState(scope.row)">
-												</i>
-												<i class="el-icon-edit" v-if="!scope.row.isEditing"  @click="changeState(scope.row)">
-												</i>
-											</template>
-										</el-table-column>
-										<el-table-column label="名称" sortable prop="keywordname">
-											<template slot-scope="scope">
-												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.keywordname"></el-input>
-												<span v-if="!scope.row.isEditing">{{scope.row.keywordname}}</span>
-											</template>
-										</el-table-column>
-										<el-table-column fixed="right" label="操作">
-											<template slot-scope="scope">
-												<el-button type="text" size="small" @click="delKey(scope.$index,scope.row)">
-													移除
-												</el-button>
-											</template>
-										</el-table-column>
-									</el-table>
-								</el-collapse-item>
-							</el-collapse>
-						</div>
-						<div class="el-dialog__footer">
-							<el-button @click='close'>取消</el-button>
-							<el-button type="primary" @click='submitForm'>提交</el-button>
-						</div>
+		<div class="mask" v-if="show"></div>
+		<div class="mask_divbg" v-if="show">
+			<div class="mask_div">
+				<div class="mask_title_div clearfix">
+					<div class="mask_title" v-show="!modify">添加关键字类别</div>
+					<div class="mask_title" v-show="modify">修改关键字类别</div>
+					<div class="mask_anniu">
+						<span class="mask_span mask_max" @click='toggle'>
+							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
+						</span>
+						<span class="mask_span" @click='close'>
+							<i class="icon-close1"></i>
+						</span>
 					</div>
-				</el-form>
+				</div>
+				<div class="mask_content">
+					<el-form :model="dataInfo"  ref="dataInfo" label-width="100px">
+						<div class="accordion">
+							<div class="accordion" id="information">
+								<el-collapse v-model="activeNames">
+									<el-collapse-item title="基本信息" name="1">
+										<el-row :gutter="5" class="pt10">
+											<el-col :span="6">
+												<el-form-item label="类别名称" prop="dataInfo.categoryname">
+													<el-input v-model="dataInfo.categoryname"></el-input>
+												</el-form-item>
+											</el-col>
+										</el-row>
+									</el-collapse-item>
+									
+									<el-collapse-item title="关键字列表" name="2" class="ml30">
+										<div class="table-func">
+											<el-button type="success" size="mini" round @click="addKWord">
+												<i class="icon-add"></i>
+												<font>新建行</font>
+											</el-button>
+										</div>
+
+										<el-table :data="dataInfo.tb_keyword2List" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100% ;">
+											<el-table-column prop="iconOperation" fixed width="50px">
+												<template slot-scope="scope">
+													<i class="el-icon-check" v-if="scope.row.isEditing"  @click="changeState(scope.row)">
+													</i>
+													<i class="el-icon-edit" v-if="!scope.row.isEditing"  @click="changeState(scope.row)">
+													</i>
+												</template>
+											</el-table-column>
+											<el-table-column label="名称" sortable prop="keywordname">
+												<template slot-scope="scope">
+													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.keywordname"></el-input>
+													<span v-if="!scope.row.isEditing">{{scope.row.keywordname}}</span>
+												</template>
+											</el-table-column>
+											<el-table-column fixed="right" label="操作">
+												<template slot-scope="scope">
+													<el-button type="text" size="small" @click="delKey(scope.$index,scope.row)">
+														移除
+													</el-button>
+												</template>
+											</el-table-column>
+										</el-table>
+									</el-collapse-item>
+								</el-collapse>
+							</div>
+							<div class="el-dialog__footer">
+								<el-button @click='close'>取消</el-button>
+								<el-button type="primary" @click='submitForm'>提交</el-button>
+							</div>
+						</div>
+					</el-form>
+				</div>
+				<!--底部-->
 			</div>
-			<!--底部-->
 		</div>
 	</div>
 </template>
@@ -227,7 +228,7 @@
 					'deptfullname': '',
 					'tb_keyword2List': [],
 				};
-				// this.$refs['dataInfo'].resetFields();
+				// //this.$refs['dataInfo'].resetFields();
 				this.show = false;
 			},
 			toggle(e) { //大弹出框大小切换
@@ -242,8 +243,6 @@
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
-				$(".mask_div").css("margin", "0%");
-				$(".mask_div").css("top", "60px");
 			},
 
 			rebackDialog() { //大弹出框还原成默认大小
@@ -251,8 +250,6 @@
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
-				$(".mask_div").css("margin", "7% 10%");
-				$(".mask_div").css("top", "0");
 			},
 
 			submitForm() {

@@ -1,54 +1,56 @@
 <template>
 	<div>
 		<div class="mask" v-if="show"></div>
-		<div class="mask_div" v-if="show">
-			<div class="mask_title_div clearfix">
-				<div class="mask_title" >添加流程模型</div>
-				<div class="mask_anniu">
-					<span class="mask_span mask_max" @click='toggle'>
-						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
-					</span>
-					<span class="mask_span" @click='close'>
-						<i class="icon-close1"></i>
-					</span>
+		<div class="mask_divbg" v-if="show">
+			<div class="mask_div">
+				<div class="mask_title_div clearfix">
+					<div class="mask_title" >添加流程模型</div>
+					<div class="mask_anniu">
+						<span class="mask_span mask_max" @click='toggle'>
+							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
+						</span>
+						<span class="mask_span" @click='close'>
+							<i class="icon-close1"></i>
+						</span>
+					</div>
 				</div>
+				<div class="mask_content">
+					<el-form :model="modelflow" inline-message :rules="rules" label-width="100px" ref="modelflow">
+						<div class="accordion" id="information">
+							<el-collapse v-model="activeNames">
+								<el-collapse-item title="新建模型" name="1">
+										<el-col :span="8">
+											<el-form-item label="模型标识" prop="key">
+												<el-input v-model="modelflow.key"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="模型类型" prop="category">
+												<el-input v-model="modelflow.category"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="模型名称" prop="name">
+												<el-input v-model="modelflow.name"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="模型描述" prop="description">
+												<el-input v-model="modelflow.description"></el-input>
+											</el-form-item>
+										</el-col>
+								</el-collapse-item>
+								
+							</el-collapse>
+						</div>
+						<div class="el-dialog__footer">
+							<el-button type="primary" @click="saveAndUpdate">保存</el-button>
+							<el-button @click="close">取消</el-button>
+						</div>
+					</el-form>
+				</div>
+				<iframemask  ref="child" :modelId="modelId"></iframemask>
 			</div>
-			<div class="mask_content">
-				<el-form :model="modelflow" inline-message :rules="rules" label-width="100px" ref="modelflow">
-					<div class="accordion" id="information">
-						<el-collapse v-model="activeNames">
-							<el-collapse-item title="新建模型" name="1">
-									<el-col :span="8">
-										<el-form-item label="模型标识" prop="key">
-											<el-input v-model="modelflow.key"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="模型类型" prop="category">
-											<el-input v-model="modelflow.category"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="模型名称" prop="name">
-											<el-input v-model="modelflow.name"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="模型描述" prop="description">
-											<el-input v-model="modelflow.description"></el-input>
-										</el-form-item>
-									</el-col>
-							</el-collapse-item>
-							
-						</el-collapse>
-					</div>
-					<div class="el-dialog__footer">
-						<el-button type="primary" @click="saveAndUpdate">保存</el-button>
-						<el-button @click="close">取消</el-button>
-					</div>
-				</el-form>
-			</div>
-			<iframemask  ref="child" :modelId="modelId"></iframemask>
 		</div>
 	</div>
 </template>
@@ -120,8 +122,6 @@
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
-				$(".mask_div").css("margin", "0%");
-				$(".mask_div").css("top", "60px");
 			},
 			//还原按钮
 			rebackDialog() {
@@ -129,8 +129,6 @@
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
-				$(".mask_div").css("margin", "7% 10%");
-				$(".mask_div").css("top", "0");
 			},
 			// 保存users/saveOrUpdate
 			save() {

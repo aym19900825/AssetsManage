@@ -1,110 +1,112 @@
 <template>
 	<div>
 		<div class="mask" v-if="show"></div>
-		<div class="mask_div" v-if="show">
-			<div class="mask_title_div clearfix">
-				<div class="mask_title" v-show="addtitle">添加自动编号设置</div>
-				<div class="mask_title" v-show="modifytitle">修改自动编号设置</div>
-				<div class="mask_title" v-show="viewtitle">查看自动编号设置</div>
-				<div class="mask_anniu">
-					<span class="mask_span mask_max" @click='toggle'>
-						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
-					</span>
-					<span class="mask_span" @click='close'>
-						<i class="icon-close1"></i>
-					</span>
+		<div class="mask_divbg" v-if="show">
+			<div class="mask_div">
+				<div class="mask_title_div clearfix">
+					<div class="mask_title" v-show="addtitle">添加自动编号设置</div>
+					<div class="mask_title" v-show="modifytitle">修改自动编号设置</div>
+					<div class="mask_title" v-show="viewtitle">查看自动编号设置</div>
+					<div class="mask_anniu">
+						<span class="mask_span mask_max" @click='toggle'>
+							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
+						</span>
+						<span class="mask_span" @click='close'>
+							<i class="icon-close1"></i>
+						</span>
+					</div>
 				</div>
-			</div>
-			<div class="mask_content">
-				<el-form :model="numbsetForm"  :rules="rules" ref="numbsetForm" label-width="100px" status-icon>
-					<div class="accordion">
-						<el-collapse v-model="activeNames">
-							<el-collapse-item title="基础信息" name="1">
-								<el-row :gutter="20">
-									<!-- <el-col :span="4" class="pull-right" v-if="modify">
-										<el-input v-model="numbsetForm.STATUS==1?'活动':'不活动'" :disabled="true">
-											<template slot="prepend">信息状态</template>
-										</el-input>
-									</el-col> -->
-									<!-- <el-col :span="4" class="pull-right" v-else>
-										<el-input v-model="numbsetForm.STATUS" :disabled="true">
-											<template slot="prepend">信息状态</template>
-										</el-input>
-									</el-col> -->
-										<!-- <el-select v-model="numbsetForm.STATUS" placeholder="请选择信息状态">
-											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-											</el-option>
-										</el-select> -->
-									</el-col>
-								</el-row>
-								<el-row>
-									<el-col :span="8">
-										<el-form-item label="自动编号名称" prop="AUTOKEY" label-width="110px">
-											<el-input v-model="numbsetForm.AUTOKEY" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="前缀">
-											<el-input v-model="numbsetForm.PREFIX" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="起始数" prop="S_NUM">
-											<el-input v-model="numbsetForm.S_NUM" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8" v-if="dept">
-											<el-form-item label="机构" label-width="110px">
-												<el-input v-model="numbsetForm.DEPARTMENT" :disabled="true"></el-input>
+				<div class="mask_content">
+					<el-form :model="numbsetForm"  :rules="rules" ref="numbsetForm" label-width="100px" status-icon>
+						<div class="accordion">
+							<el-collapse v-model="activeNames">
+								<el-collapse-item title="基础信息" name="1">
+									<el-row :gutter="20">
+										<!-- <el-col :span="4" class="pull-right" v-if="modify">
+											<el-input v-model="numbsetForm.STATUS==1?'活动':'不活动'" :disabled="true">
+												<template slot="prepend">信息状态</template>
+											</el-input>
+										</el-col> -->
+										<!-- <el-col :span="4" class="pull-right" v-else>
+											<el-input v-model="numbsetForm.STATUS" :disabled="true">
+												<template slot="prepend">信息状态</template>
+											</el-input>
+										</el-col> -->
+											<!-- <el-select v-model="numbsetForm.STATUS" placeholder="请选择信息状态">
+												<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+												</el-option>
+											</el-select> -->
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="自动编号名称" prop="AUTOKEY" label-width="110px">
+												<el-input v-model="numbsetForm.AUTOKEY" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
-								</el-row>
-								<el-row :gutter="30">
-									<el-col :span="24">
-										<el-form-item label="备注" label-width="110px">
-											<el-input type="textarea" v-model="numbsetForm.MEMO" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-							</el-collapse-item>
-							<el-collapse-item title="其它" name="2"  v-show="views">
-								<el-row>
-									<el-col :span="8">
-										<el-form-item label="录入人"  label-width="110px">
-											<el-input v-model="numbsetForm.ENTERBY" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="录入时间" label-width="80px">
-											<el-input v-model="numbsetForm.ENTERDATE" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-									<el-form-item label="修改人" label-width="80px">
-											<el-input v-model="numbsetForm.CHANGEBY" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row>
-									<el-col :span="8">
-										<el-form-item label="修改时间"  label-width="110px">
-											<el-input v-model="numbsetForm.CHANGEDATE" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-							</el-collapse-item>
-						</el-collapse>
-					</div>
-					<div class="content-footer"v-show="noviews">
-						<el-form-item>
-							<button @click="cancelForm" class="btn btn-default btn-large">取消</button>
-							<button type="primary" class="btn btn-primarys btn-large" @click="submitForm('numbsetForm')">提交</button>
-						</el-form-item>
-					</div>
-				</el-form>
+										<el-col :span="8">
+											<el-form-item label="前缀">
+												<el-input v-model="numbsetForm.PREFIX" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="起始数" prop="S_NUM">
+												<el-input v-model="numbsetForm.S_NUM" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8" v-if="dept">
+												<el-form-item label="机构" label-width="110px">
+													<el-input v-model="numbsetForm.DEPARTMENT" :disabled="true"></el-input>
+												</el-form-item>
+											</el-col>
+									</el-row>
+									<el-row :gutter="30">
+										<el-col :span="24">
+											<el-form-item label="备注" label-width="110px">
+												<el-input type="textarea" v-model="numbsetForm.MEMO" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+								</el-collapse-item>
+								<el-collapse-item title="其它" name="2"  v-show="views">
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="录入人"  label-width="110px">
+												<el-input v-model="numbsetForm.ENTERBY" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="录入时间" label-width="80px">
+												<el-input v-model="numbsetForm.ENTERDATE" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+										<el-form-item label="修改人" label-width="80px">
+												<el-input v-model="numbsetForm.CHANGEBY" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="修改时间"  label-width="110px">
+												<el-input v-model="numbsetForm.CHANGEDATE" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+								</el-collapse-item>
+							</el-collapse>
+						</div>
+						<div class="content-footer"v-show="noviews">
+							<el-form-item>
+								<button @click="cancelForm" class="btn btn-default btn-large">取消</button>
+								<button type="primary" class="btn btn-primarys btn-large" @click="submitForm('numbsetForm')">提交</button>
+							</el-form-item>
+						</div>
+					</el-form>
+				</div>
 			</div>
+			<!-- 弹出 -->
 		</div>
-		<!-- 弹出 -->
 	</div>
 </template>
 
@@ -306,8 +308,6 @@
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
-				$(".mask_div").css("margin", "0%");
-				$(".mask_div").css("top", "60px");
 
 			},
 			//还原按钮
@@ -316,8 +316,6 @@
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
-				$(".mask_div").css("margin", "7% 10%");
-				$(".mask_div").css("top", "0");
 
 			},
 			//保存

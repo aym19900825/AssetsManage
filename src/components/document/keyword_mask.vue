@@ -1,55 +1,55 @@
 <template>
 	<div>
-		<div class="mask" v-show="show"></div>
-		<div class="mask_div" v-show="show">
-			<!---->
-			<div class="mask_title_div clearfix">
-				<div class="mask_title" v-show="!modify">添加关键字</div>
-				<div class="mask_title" v-show="modify">修改关键字</div>
-				<div class="mask_anniu">
-					<span class="mask_span mask_max" @click='toggle'>
-						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
-					</span>
-					<span class="mask_span" @click='close'>
-						<i class="icon-close1"></i>
-					</span>
+		<div class="mask" v-if="show"></div>
+		<div class="mask_divbg" v-if="show">
+			<div class="mask_div">
+				<div class="mask_title_div clearfix">
+					<div class="mask_title" v-show="!modify">添加关键字</div>
+					<div class="mask_title" v-show="modify">修改关键字</div>
+					<div class="mask_anniu">
+						<span class="mask_span mask_max" @click='toggle'>
+							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
+						</span>
+						<span class="mask_span" @click='close'>
+							<i class="icon-close1"></i>
+						</span>
+					</div>
+				</div>
+				<div class="mask_content">
+					<el-form :model="dataInfo" :rules="rules"   ref="dataInfo" label-width="100px" class="demo-user">
+						<div class="accordion">
+
+							<!-- 设备基本信息 -->
+							<el-collapse v-model="activeNames">
+								<el-collapse-item title="关键字信息" name="1">
+									<el-row :gutter="20" class="pb10">
+										<el-col :span="5" class="pull-right">
+											<!-- <el-input v-model="dataInfo.STATUS==1?'活动':'不活动'" :disabled="true">
+												<template slot="prepend">信息状态</template>
+											</el-input> -->
+										</el-col>
+									</el-row>
+									<el-form-item v-for="item in basicInfo" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
+										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'"></el-input>
+										<el-select v-model="dataInfo[item.prop]" placeholder="请选择" v-if="item.type == 'select'">
+											<el-option v-for="item in cats"
+											:key="item.id"
+											:label="item.categoryname"
+											:value="item.id">
+											</el-option>
+										</el-select>
+									</el-form-item>
+								</el-collapse-item>
+							</el-collapse>
+						</div>
+
+						<div class="el-dialog__footer">
+							<el-button @click='close'>取消</el-button>
+							<el-button type="primary" @click='submitForm'>提交</el-button>
+						</div>
+					</el-form>
 				</div>
 			</div>
-			<div class="mask_content">
-				<el-form :model="dataInfo" :rules="rules"   ref="dataInfo" label-width="100px" class="demo-user">
-					<div class="accordion">
-
-						<!-- 设备基本信息 -->
-						<el-collapse v-model="activeNames">
-							<el-collapse-item title="关键字信息" name="1">
-								<el-row :gutter="20" class="pb10">
-									<el-col :span="5" class="pull-right">
-										<!-- <el-input v-model="dataInfo.STATUS==1?'活动':'不活动'" :disabled="true">
-											<template slot="prepend">信息状态</template>
-										</el-input> -->
-									</el-col>
-								</el-row>
-								<el-form-item v-for="item in basicInfo" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
-									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'"></el-input>
-									<el-select v-model="dataInfo[item.prop]" placeholder="请选择" v-if="item.type == 'select'">
-										<el-option v-for="item in cats"
-										:key="item.id"
-										:label="item.categoryname"
-										:value="item.id">
-										</el-option>
-									</el-select>
-								</el-form-item>
-							</el-collapse-item>
-						</el-collapse>
-					</div>
-
-					<div class="el-dialog__footer">
-						<el-button @click='close'>取消</el-button>
-						<el-button type="primary" @click='submitForm'>提交</el-button>
-					</div>
-				</el-form>
-			</div>
-			<!--底部-->
 		</div>
 	</div>
 </template>
@@ -180,7 +180,7 @@
 					'deptid': '',
 					'deptfullname': ''
 				};
-				this.$refs['dataInfo'].resetFields();
+				//this.$refs['dataInfo'].resetFields();
 				this.show = false;
 			},
 			toggle(e) { //大弹出框大小切换
@@ -195,8 +195,6 @@
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
-				$(".mask_div").css("margin", "0%");
-				$(".mask_div").css("top", "60px");
 			},
 
 			rebackDialog() { //大弹出框还原成默认大小
@@ -204,8 +202,6 @@
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
-				$(".mask_div").css("margin", "7% 10%");
-				$(".mask_div").css("top", "0");
 			},
 
 			submitForm() {

@@ -1,8 +1,9 @@
 <template>
 <!-- 使用/维护保养记录 -->
 	<div>
-		<div class="mask" v-show="show"></div>
-		<div class="mask_div" v-show="show">
+		<div class="mask" v-if="show"></div>
+		<div class="mask_divbg" v-if="show">
+			<div class="mask_div">
 			<!-- <div class="mask_content"> -->
                 <div class="mask_title_div clearfix">
                 	<div class="mask_title" v-show="addtitle">添加使用/维护保养记录</div>
@@ -18,220 +19,221 @@
                     </div>
                 </div>
                 <div class="mask_content">
-				<el-form :model="dataInfo" :rules="rules"   ref="dataInfo" class="demo-user">
-					<div class="accordion">
-						<!-- 设备header信息 -->
-						<el-collapse v-model="activeNames">							
-                            <el-collapse-item name="1">
-                                <el-form-item label-width="120px" v-for="item in basicInfo" :key="item.id" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
-									<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'" @change="selChange" :disabled="noedit">
-										<el-option v-for="item in item.option"
-										:key="item.ID"
-										:label="item.ASSETNUM"
-										:value="item.ASSETNUM">
-										</el-option>
-									</el-select>
-                                    <el-input v-model="dataInfo[item.prop]" :type="item.type" disabled v-if="item.type == 'input'"></el-input>
-                                </el-form-item>
-                            </el-collapse-item>
-                            <!-- 使用记录、维护保养 Begin-->
-							<div class="el-collapse-item pt10 pr20 pb20 ml60" aria-expanded="true" accordion>
-								<el-tabs v-model="activeName" @tab-click="handleClick">
-								    <el-tab-pane label="设备使用记录信息" name="first">
-								    	<div class="table-func table-funcb">
-									<el-button type="success" size="mini" round @click="addLine('tableList')" :disabled="noedit">
-										<i class="icon-add"></i>
-										<font>新建行</font>
-									</el-button>
+					<el-form :model="dataInfo" :rules="rules"   ref="dataInfo" class="demo-user">
+						<div class="accordion">
+							<!-- 设备header信息 -->
+							<el-collapse v-model="activeNames">							
+	                            <el-collapse-item name="1">
+	                                <el-form-item label-width="120px" v-for="item in basicInfo" :key="item.id" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
+										<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'" @change="selChange" :disabled="noedit">
+											<el-option v-for="item in item.option"
+											:key="item.ID"
+											:label="item.ASSETNUM"
+											:value="item.ASSETNUM">
+											</el-option>
+										</el-select>
+	                                    <el-input v-model="dataInfo[item.prop]" :type="item.type" disabled v-if="item.type == 'input'"></el-input>
+	                                </el-form-item>
+	                            </el-collapse-item>
+	                            <!-- 使用记录、维护保养 Begin-->
+								<div class="el-collapse-item pt10 pr20 pb20 ml60" aria-expanded="true" accordion>
+									<el-tabs v-model="activeName" @tab-click="handleClick">
+									    <el-tab-pane label="设备使用记录信息" name="first">
+									    	<div class="table-func table-funcb">
+										<el-button type="success" size="mini" round @click="addLine('tableList')" :disabled="noedit">
+											<i class="icon-add"></i>
+											<font>新建行</font>
+										</el-button>
+									</div>
+									<el-table :header-cell-style="rowClass" :data="dataInfo.tableList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'dataInfo.pmRecord', order: 'descending'}">
+										<el-table-column prop="iconOperation" fixed label="" width="50px">
+											<template slot-scope="scope">
+												<i class="el-icon-check" v-if="scope.row.isEditing"  @click="changeEdit(scope.row)"></i>
+												<i class="el-icon-edit" v-else="v-else" @click="changeEdit(scope.row)"></i>
+											</template>
+										</el-table-column>
+	                                    <el-table-column type="index" sortable label="序号" width="50">
+	                                    </el-table-column>
+										<el-table-column prop="USEDATE" label="使用日期" sortable width="120px">
+											<template slot-scope="scope">
+												<el-form-item :prop="'tableList.'+scope.$index + '.USEDATE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+													<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.USEDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+	                                                </el-date-picker>
+	                                                <span v-else="v-else">{{scope.row.USEDATE}}</span>
+												</el-form-item>
+											</template>
+										</el-table-column>
+										<el-table-column prop="S_NUM" label="样品编号" sortable width="120px">
+											<template slot-scope="scope">
+												<el-form-item :prop="'tableList.'+scope.$index + '.S_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+	                                                <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入样品编号">
+														<el-button slot="append" icon="icon-search" @click="changeNum(scope.row)"></el-button>
+													</el-input>
+	                                                <span v-else="v-else">{{scope.row.S_NUM}}</span>
+												</el-form-item>
+											</template>
+										</el-table-column>
+	                                    <!-- 项目名称无 -->
+										<el-table-column prop="USE_START" label="使用起始时间" sortable width="120px">
+											<template slot-scope="scope">
+												<el-form-item :prop="'tableList.'+scope.$index + '.USE_START'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+	                                                <el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.USE_START" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+	                                                </el-date-picker>
+	                                                <span v-else="v-else">{{scope.row.USE_START}}</span>
+												</el-form-item>
+											</template>
+										</el-table-column>
+	                                    <el-table-column prop="USE_END" label="使用终止时间" sortable width="120px">
+											<template slot-scope="scope">
+												<el-form-item :prop="'tableList.'+scope.$index + '.USE_END'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+	                                                <el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.USE_END" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+	                                                </el-date-picker>
+	                                                <span v-else="v-else">{{scope.row.USE_END}}</span>
+												</el-form-item>
+											</template>
+										</el-table-column>
+	                                    <el-table-column prop="ASSETOPRATION" label="设备运行情况" sortable width="120px">
+											<template slot-scope="scope">
+												<el-form-item :prop="'tableList.'+scope.$index + '.ASSETOPRATION'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+	                                                <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ASSETOPRATION" placeholder="请输入设备运行情况">
+	                                                </el-input>
+	                                                <span v-else="v-else">{{scope.row.ASSETOPRATION}}</span>
+												</el-form-item>
+											</template>
+										</el-table-column>
+	                                    <el-table-column prop="USE_PERSON" label="使用人" sortable width="100px">
+											<template slot-scope="scope">
+												<el-form-item :prop="'tableList.'+scope.$index + '.USE_PERSON'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+	                                                <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.USE_PERSON" placeholder="请输入使用人">
+	                                                </el-input>
+	                                                <span v-else="v-else">{{scope.row.USE_PERSON}}</span>
+												</el-form-item>
+											</template>
+										</el-table-column>
+	                                    <el-table-column prop="MEMO" label="备注" sortable>
+											<template slot-scope="scope">
+												<el-form-item :prop="'tableList.'+scope.$index + '.MEMO'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+	                                                <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MEMO" placeholder="请输入备注">
+	                                                </el-input>
+	                                                <span v-else="v-else">{{scope.row.MEMO}}</span>
+												</el-form-item>
+											</template>
+										</el-table-column>
+										<el-table-column label="操作" sortable width="70px">
+											<template slot-scope="scope">
+												<el-button type="danger" size="mini" round  @click="delLine(scope.$index,scope.row,'tableList')" :disabled="noedit">
+													<i class="el-icon-delete"></i>
+												</el-button>
+											</template>
+										</el-table-column>
+									</el-table>
+									    </el-tab-pane>
+									    <el-tab-pane label="设备维护保养记录信息" name="second">
+									    	<div class="table-func table-funcb">
+										<el-button type="success" size="mini" round @click="addLine('maintenList')" :disabled="noedit">
+											<i class="icon-add"></i>
+											<font>新建行</font>
+										</el-button>
+									</div>
+									<el-table :header-cell-style="rowClass" :data="dataInfo.maintenList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'dataInfo.pmRecord', order: 'descending'}">
+										<el-table-column prop="iconOperation" fixed width="50px">
+											<template slot-scope="scope">
+												<i class="el-icon-check" v-if="scope.row.isEditing"  @click="changeEdit(scope.row)"></i>
+												<i class="el-icon-edit" v-else="v-else"  @click="changeEdit(scope.row)"></i>
+											</template>
+										</el-table-column>
+	                                    <el-table-column type="index" sortable label="序号" width="50">
+	                                    </el-table-column>
+										<el-table-column prop="PROJECT" label="维护项目" sortable width="120px">
+											<template slot-scope="scope">
+												<el-form-item :prop="'maintenList.'+scope.$index + '.PROJECT'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+	                                                <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROJECT" placeholder="请输入维护项目">
+	                                                </el-input>
+	                                                <span v-else="v-else">{{scope.row.PROJECT}}</span>
+												</el-form-item>
+											</template>
+										</el-table-column>
+										<el-table-column prop="W_DATE" label="维护时间" sortable>
+											<template slot-scope="scope">
+												<el-form-item :prop="'maintenList.'+scope.$index + '.W_DATE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+	                                                 <el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.W_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+	                                                </el-date-picker>
+	                                                <span v-else="v-else">{{scope.row.W_DATE}}</span>
+												</el-form-item>
+											</template>
+										</el-table-column>
+	                                    <el-table-column prop="W_PERSON" label="维护人" sortable>
+											<template slot-scope="scope">
+												<el-form-item :prop="'maintenList.'+scope.$index + '.W_PERSON'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+	                                                <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.W_PERSON" placeholder="请输入维护人">
+	                                                </el-input>
+	                                                <span v-else="v-else">{{scope.row.W_PERSON}}</span>
+												</el-form-item>
+											</template>
+										</el-table-column>
+										<el-table-column label="操作" sortable width="70px">
+											<template slot-scope="scope">
+												<el-button type="danger" size="mini" round  @click="delLine(scope.$index,scope.row,'maintenList')" :disabled="noedit">
+													<i class="el-icon-delete"></i>
+												</el-button>
+											</template>
+										</el-table-column>
+									</el-table>
+									    </el-tab-pane>
+									</el-tabs>
 								</div>
-								<el-table :header-cell-style="rowClass" :data="dataInfo.tableList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'dataInfo.pmRecord', order: 'descending'}">
-									<el-table-column prop="iconOperation" fixed label="" width="50px">
-										<template slot-scope="scope">
-											<i class="el-icon-check" v-if="scope.row.isEditing"  @click="changeEdit(scope.row)"></i>
-											<i class="el-icon-edit" v-else="v-else" @click="changeEdit(scope.row)"></i>
-										</template>
-									</el-table-column>
-                                    <el-table-column type="index" sortable label="序号" width="50">
-                                    </el-table-column>
-									<el-table-column prop="USEDATE" label="使用日期" sortable width="120px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'tableList.'+scope.$index + '.USEDATE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-												<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.USEDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
-                                                </el-date-picker>
-                                                <span v-else="v-else">{{scope.row.USEDATE}}</span>
-											</el-form-item>
-										</template>
-									</el-table-column>
-									<el-table-column prop="S_NUM" label="样品编号" sortable width="120px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'tableList.'+scope.$index + '.S_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-                                                <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入样品编号">
-													<el-button slot="append" icon="icon-search" @click="changeNum(scope.row)"></el-button>
-												</el-input>
-                                                <span v-else="v-else">{{scope.row.S_NUM}}</span>
-											</el-form-item>
-										</template>
-									</el-table-column>
-                                    <!-- 项目名称无 -->
-									<el-table-column prop="USE_START" label="使用起始时间" sortable width="120px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'tableList.'+scope.$index + '.USE_START'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-                                                <el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.USE_START" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
-                                                </el-date-picker>
-                                                <span v-else="v-else">{{scope.row.USE_START}}</span>
-											</el-form-item>
-										</template>
-									</el-table-column>
-                                    <el-table-column prop="USE_END" label="使用终止时间" sortable width="120px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'tableList.'+scope.$index + '.USE_END'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-                                                <el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.USE_END" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
-                                                </el-date-picker>
-                                                <span v-else="v-else">{{scope.row.USE_END}}</span>
-											</el-form-item>
-										</template>
-									</el-table-column>
-                                    <el-table-column prop="ASSETOPRATION" label="设备运行情况" sortable width="120px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'tableList.'+scope.$index + '.ASSETOPRATION'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-                                                <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ASSETOPRATION" placeholder="请输入设备运行情况">
-                                                </el-input>
-                                                <span v-else="v-else">{{scope.row.ASSETOPRATION}}</span>
-											</el-form-item>
-										</template>
-									</el-table-column>
-                                    <el-table-column prop="USE_PERSON" label="使用人" sortable width="100px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'tableList.'+scope.$index + '.USE_PERSON'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-                                                <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.USE_PERSON" placeholder="请输入使用人">
-                                                </el-input>
-                                                <span v-else="v-else">{{scope.row.USE_PERSON}}</span>
-											</el-form-item>
-										</template>
-									</el-table-column>
-                                    <el-table-column prop="MEMO" label="备注" sortable>
-										<template slot-scope="scope">
-											<el-form-item :prop="'tableList.'+scope.$index + '.MEMO'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-                                                <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MEMO" placeholder="请输入备注">
-                                                </el-input>
-                                                <span v-else="v-else">{{scope.row.MEMO}}</span>
-											</el-form-item>
-										</template>
-									</el-table-column>
-									<el-table-column label="操作" sortable width="70px">
-										<template slot-scope="scope">
-											<el-button type="danger" size="mini" round  @click="delLine(scope.$index,scope.row,'tableList')" :disabled="noedit">
-												<i class="el-icon-delete"></i>
-											</el-button>
-										</template>
-									</el-table-column>
-								</el-table>
-								    </el-tab-pane>
-								    <el-tab-pane label="设备维护保养记录信息" name="second">
-								    	<div class="table-func table-funcb">
-									<el-button type="success" size="mini" round @click="addLine('maintenList')" :disabled="noedit">
-										<i class="icon-add"></i>
-										<font>新建行</font>
-									</el-button>
-								</div>
-								<el-table :header-cell-style="rowClass" :data="dataInfo.maintenList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'dataInfo.pmRecord', order: 'descending'}">
-									<el-table-column prop="iconOperation" fixed width="50px">
-										<template slot-scope="scope">
-											<i class="el-icon-check" v-if="scope.row.isEditing"  @click="changeEdit(scope.row)"></i>
-											<i class="el-icon-edit" v-else="v-else"  @click="changeEdit(scope.row)"></i>
-										</template>
-									</el-table-column>
-                                    <el-table-column type="index" sortable label="序号" width="50">
-                                    </el-table-column>
-									<el-table-column prop="PROJECT" label="维护项目" sortable width="120px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'maintenList.'+scope.$index + '.PROJECT'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-                                                <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROJECT" placeholder="请输入维护项目">
-                                                </el-input>
-                                                <span v-else="v-else">{{scope.row.PROJECT}}</span>
-											</el-form-item>
-										</template>
-									</el-table-column>
-									<el-table-column prop="W_DATE" label="维护时间" sortable>
-										<template slot-scope="scope">
-											<el-form-item :prop="'maintenList.'+scope.$index + '.W_DATE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-                                                 <el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.W_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
-                                                </el-date-picker>
-                                                <span v-else="v-else">{{scope.row.W_DATE}}</span>
-											</el-form-item>
-										</template>
-									</el-table-column>
-                                    <el-table-column prop="W_PERSON" label="维护人" sortable>
-										<template slot-scope="scope">
-											<el-form-item :prop="'maintenList.'+scope.$index + '.W_PERSON'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-                                                <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.W_PERSON" placeholder="请输入维护人">
-                                                </el-input>
-                                                <span v-else="v-else">{{scope.row.W_PERSON}}</span>
-											</el-form-item>
-										</template>
-									</el-table-column>
-									<el-table-column label="操作" sortable width="70px">
-										<template slot-scope="scope">
-											<el-button type="danger" size="mini" round  @click="delLine(scope.$index,scope.row,'maintenList')" :disabled="noedit">
-												<i class="el-icon-delete"></i>
-											</el-button>
-										</template>
-									</el-table-column>
-								</el-table>
-								    </el-tab-pane>
-								</el-tabs>
-							</div>
-							<!-- 使用记录、维护保养 End-->
-                            <el-collapse-item title="其他" name="4" v-show="!addtitle">
-                            	<el-form-item label-width="120px" v-for="item in otherInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-if="item.prop=='DEPARTMENT'" v-show="dept">
-                                    <el-input v-model="dataInfo[item.prop]" :type="item.type" disabled v-if="item.prop=='DEPARTMENT'"></el-input>
-                                </el-form-item>	
-                                <el-form-item label-width="120px" v-for="item in otherInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-show="views">
-                                    <el-input v-if="item.type=='input'" v-model="dataInfo[item.prop]" :type="item.type" disabled></el-input>
-                                    <el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" disabled style="width:100%"></el-date-picker>
-                                </el-form-item>	
-                            </el-collapse-item>
-						</el-collapse>
-					</div>
-					<div class="el-dialog__footer" v-show="noviews">
-						<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
-						<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并继续</el-button>
-						<el-button @click='close'>取消</el-button>
-						<!-- <el-button type="primary" @click='submitForm'>提交</el-button> -->
-					</div>
-				</el-form>
+								<!-- 使用记录、维护保养 End-->
+	                            <el-collapse-item title="其他" name="4" v-show="!addtitle">
+	                            	<el-form-item label-width="120px" v-for="item in otherInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-if="item.prop=='DEPARTMENT'" v-show="dept">
+	                                    <el-input v-model="dataInfo[item.prop]" :type="item.type" disabled v-if="item.prop=='DEPARTMENT'"></el-input>
+	                                </el-form-item>	
+	                                <el-form-item label-width="120px" v-for="item in otherInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-show="views">
+	                                    <el-input v-if="item.type=='input'" v-model="dataInfo[item.prop]" :type="item.type" disabled></el-input>
+	                                    <el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" disabled style="width:100%"></el-date-picker>
+	                                </el-form-item>	
+	                            </el-collapse-item>
+							</el-collapse>
+						</div>
+						<div class="el-dialog__footer" v-show="noviews">
+							<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
+							<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并继续</el-button>
+							<el-button @click='close'>取消</el-button>
+							<!-- <el-button type="primary" @click='submitForm'>提交</el-button> -->
+						</div>
+					</el-form>
 				</div>
 			<!--底部-->
-		</div>
-		<el-dialog title=样品编号 :visible.sync="sampleDialog" width="80%" :before-close="resetSample">
-			<div class="pb10">
-				<el-form :model="searchList" label-width="70px">
-					<el-row :gutter="10" class="pb10">
-						<el-col :span="6">
-							<el-input v-model="searchList.DESCRIPTION">
-								<template slot="prepend">样品名称</template>
-							</el-input>
-						</el-col>
-						<el-col :span="2">
-							<el-button type="primary" @click="searchSam" size="small" style="margin:4px">搜索</el-button>
-						</el-col>
-					</el-row>
-				</el-form>
 			</div>
-			<el-table :data="sampleList" border stripe style="width: 100%;" @selection-change="selNum" :default-sort="{prop:'sampleList', order: 'descending'}">
-				<el-table-column type="selection" width="55" fixed>
-				</el-table-column>
-				<el-table-column label="样品编号" sortable prop="ITEMNUM">
-				</el-table-column>
-				<el-table-column label="样品名称" sortable prop="DESCRIPTION">
-				</el-table-column>
-			</el-table>
-			<span slot="footer" class="dialog-footer" style="text-align: center;">
-		       <el-button @click="resetSample">取 消</el-button>
-		       <el-button type="primary" @click="addSample">确 定</el-button>
-		    </span>
-		</el-dialog> 
-		<!-- 设备编号弹出框 end-->
+			<el-dialog title=样品编号 :visible.sync="sampleDialog" width="80%" :before-close="resetSample">
+				<div class="pb10">
+					<el-form :model="searchList" label-width="70px">
+						<el-row :gutter="10" class="pb10">
+							<el-col :span="6">
+								<el-input v-model="searchList.DESCRIPTION">
+									<template slot="prepend">样品名称</template>
+								</el-input>
+							</el-col>
+							<el-col :span="2">
+								<el-button type="primary" @click="searchSam" size="small" style="margin:4px">搜索</el-button>
+							</el-col>
+						</el-row>
+					</el-form>
+				</div>
+				<el-table :data="sampleList" border stripe style="width: 100%;" @selection-change="selNum" :default-sort="{prop:'sampleList', order: 'descending'}">
+					<el-table-column type="selection" width="55" fixed>
+					</el-table-column>
+					<el-table-column label="样品编号" sortable prop="ITEMNUM">
+					</el-table-column>
+					<el-table-column label="样品名称" sortable prop="DESCRIPTION">
+					</el-table-column>
+				</el-table>
+				<span slot="footer" class="dialog-footer" style="text-align: center;">
+			       <el-button @click="resetSample">取 消</el-button>
+			       <el-button type="primary" @click="addSample">确 定</el-button>
+			    </span>
+			</el-dialog> 
+			<!-- 设备编号弹出框 end-->
+		</div>
 	</div>
 </template>
 
@@ -627,7 +629,7 @@
 					'tableList': [],
 					'maintenList': []
 				};
-				this.$refs['dataInfo'].resetFields();
+				//this.$refs['dataInfo'].resetFields();
 				// this.show = false;
 			},
 			toggle(e) { //大弹出框大小切换
@@ -642,8 +644,6 @@
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
-				$(".mask_div").css("margin", "0%");
-				$(".mask_div").css("top", "60px");
 			},
 
 			rebackDialog() { //大弹出框还原成默认大小
@@ -651,8 +651,6 @@
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
-				$(".mask_div").css("margin", "7% 10%");
-				$(".mask_div").css("top", "0");
 			},
 			save(dataInfo) {
 				var _this = this;

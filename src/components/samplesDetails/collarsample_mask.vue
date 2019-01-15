@@ -1,216 +1,218 @@
 <template>
 	<div>
 		<div class="mask" v-if="show"></div>
-		<div class="mask_div" v-if="show">
-			<div class="mask_title_div clearfix">
-				<div class="mask_title" v-show="addtitle">添加领样</div>
-				<div class="mask_title" v-show="modifytitle">修改领样</div>
-				<div class="mask_title" v-show="viewtitle">查看领样</div>
-				<div class="mask_anniu">
-					<span class="mask_span mask_max" @click='toggle'>
-						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
-					</span>
-					<span class="mask_span" @click='close'>
-						<i class="icon-close1"></i>
-					</span>
+		<div class="mask_divbg" v-if="show">
+			<div class="mask_div">
+				<div class="mask_title_div clearfix">
+					<div class="mask_title" v-show="addtitle">添加领样</div>
+					<div class="mask_title" v-show="modifytitle">修改领样</div>
+					<div class="mask_title" v-show="viewtitle">查看领样</div>
+					<div class="mask_anniu">
+						<span class="mask_span mask_max" @click='toggle'>
+							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
+						</span>
+						<span class="mask_span" @click='close'>
+							<i class="icon-close1"></i>
+						</span>
+					</div>
+				</div>
+				<div class="mask_content">
+					<el-form :model="samplesForm" :label-position="labelPosition" :rules="rules" ref="samplesForm" label-width="100px" status-icon inline-message>
+						<div class="accordion">
+							<el-collapse v-model="activeNames">
+								<el-collapse-item title="基础信息" name="1">
+									<el-row :gutter="20" class="pb10">
+										<!--<el-col :span="4" class="pull-right">
+											<el-input v-model="samplesForm.STATUS" :disabled="true">
+												<template slot="prepend">信息状态</template>
+											</el-input>
+										</el-col>-->
+										<el-col :span="4" class="pull-right">
+											<el-input v-model="samplesForm.STATE" :disabled="true">
+												<template slot="prepend">状态</template>
+											</el-input>
+										</el-col>
+										<el-col :span="6" class="pull-right">
+											<el-input placeholder="自动获取" v-model="samplesForm.ITEMNUM" :disabled="true">
+												<template slot="prepend">样品序号</template>
+											</el-input>
+										</el-col>
+									</el-row>
+
+									<el-row >
+										<!-- <el-col :span="8">
+											<el-form-item label="样品子表ID" prop="ITEM_LINE_ID">
+												<el-input v-model="samplesForm.ITEM_LINE_ID" :disabled="true">
+													<el-button slot="append" icon="el-icon-search" @click="getProxy"></el-button>
+												</el-input>
+											</el-form-item>
+										</el-col> -->
+										<el-col :span="8">
+											<el-form-item label="样品编号" prop="ITEM_LINE_ID">
+												<el-input v-model="samplesForm.ITEM_LINE_ID" :disabled="true">
+													<el-button slot="append" icon="el-icon-search" @click="getProxy"></el-button>
+												</el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="样品名称" prop="DESCRIPTION">
+												<el-input v-model="samplesForm.DESCRIPTION" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="类别" prop="TYPE">
+												<!-- <el-select v-model="samplesForm.TYPE" placeholder="请选择类别" style="width: 100%;" :disabled="noedit">
+													<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
+												</el-select> -->
+												<el-input v-model="samplesForm.TYPE" :disabled="true">
+													<el-button slot="append" icon="el-icon-search" @click="addprobtn"></el-button>
+												</el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="型号" prop="MODEL">
+												<el-input v-model="samplesForm.MODEL" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="数量" prop="QUALITY">
+												<el-input-number v-model="samplesForm.QUALITY" :min="1" :step="5" :max="100" label="描述文字" style="width: 100%" :disabled="noedit"></el-input-number >
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="状态日期" prop="STATUSDATE">
+												<el-input v-model="samplesForm.STATUSDATE" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="收样人" prop="ACCEPT_PERSON">
+												<el-input v-model="samplesForm.ACCEPT_PERSON" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="收样日期" prop="ACCEPT_DATE">
+												<el-date-picker v-model="samplesForm.ACCEPT_DATE" type="date" :disabled="noedit"placeholder="请选择收样日期" value-format="yyyy-MM-dd" style="width: 100%;">
+												</el-date-picker>
+											</el-form-item>
+										</el-col>
+									</el-row>
+
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="领样人" prop="GRANT_PERSON">
+												<el-input v-model="samplesForm.GRANT_PERSON" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="领样日期" prop="GRANT_DATE">
+												<el-date-picker v-model="samplesForm.GRANT_DATE" type="date" placeholder="请选择领样日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
+												</el-date-picker>
+											</el-form-item>
+										</el-col>
+										
+									</el-row>
+
+									<el-row>
+										<el-col :span="24">
+											<el-form-item label="其他资料" prop="OTHER">
+												<el-input v-model="samplesForm.OTHER" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="24">
+											<el-form-item label="备注" prop="MEMO">
+												<el-input type="textarea" rows="5" v-model="samplesForm.MEMO":disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+
+								</el-collapse-item>
+								<el-collapse-item title="其他" name="3" v-show="views">
+									<el-row >
+										<el-col :span="8">
+											<el-form-item label="录入人" prop="ENTERBY" label-width="110px">
+												<el-input v-model="samplesForm.ENTERBY" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="录入时间" prop="ENTERDATE" label-width="110px">
+												<el-input v-model="samplesForm.ENTERDATE" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="录入人机构" prop="DEPARTMENT" label-width="110px">
+												<el-input v-model="samplesForm.DEPARTMENT" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="修改人">
+												<el-input v-model="samplesForm.CHANGEBY" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="修改日期">
+												<el-input v-model="samplesForm.CHANGEDATE" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+
+									</el-row>
+								</el-collapse-item>
+							</el-collapse>
+						</div>
+						<div class="content-footer">
+							<el-button type="primary" @click="saveAndUpdate('samplesForm')">保存</el-button>
+							<el-button type="success" @click="saveAndSubmit('samplesForm')">保存并继续</el-button>
+							<el-button @click="close">取消</el-button> 
+						</div>
+					</el-form>
 				</div>
 			</div>
-			<div class="mask_content">
-				<el-form :model="samplesForm" :label-position="labelPosition" :rules="rules" ref="samplesForm" label-width="100px" status-icon inline-message>
-					<div class="accordion">
-						<el-collapse v-model="activeNames">
-							<el-collapse-item title="基础信息" name="1">
-								<el-row :gutter="20" class="pb10">
-									<!--<el-col :span="4" class="pull-right">
-										<el-input v-model="samplesForm.STATUS" :disabled="true">
-											<template slot="prepend">信息状态</template>
-										</el-input>
-									</el-col>-->
-									<el-col :span="4" class="pull-right">
-										<el-input v-model="samplesForm.STATE" :disabled="true">
-											<template slot="prepend">状态</template>
-										</el-input>
-									</el-col>
-									<el-col :span="6" class="pull-right">
-										<el-input placeholder="自动获取" v-model="samplesForm.ITEMNUM" :disabled="true">
-											<template slot="prepend">样品序号</template>
-										</el-input>
-									</el-col>
-								</el-row>
-
-								<el-row >
-									<!-- <el-col :span="8">
-										<el-form-item label="样品子表ID" prop="ITEM_LINE_ID">
-											<el-input v-model="samplesForm.ITEM_LINE_ID" :disabled="true">
-												<el-button slot="append" icon="el-icon-search" @click="getProxy"></el-button>
-											</el-input>
-										</el-form-item>
-									</el-col> -->
-									<el-col :span="8">
-										<el-form-item label="样品编号" prop="ITEM_LINE_ID">
-											<el-input v-model="samplesForm.ITEM_LINE_ID" :disabled="true">
-												<el-button slot="append" icon="el-icon-search" @click="getProxy"></el-button>
-											</el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="样品名称" prop="DESCRIPTION">
-											<el-input v-model="samplesForm.DESCRIPTION" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="类别" prop="TYPE">
-											<!-- <el-select v-model="samplesForm.TYPE" placeholder="请选择类别" style="width: 100%;" :disabled="noedit">
-												<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
-											</el-select> -->
-											<el-input v-model="samplesForm.TYPE" :disabled="true">
-												<el-button slot="append" icon="el-icon-search" @click="addprobtn"></el-button>
-											</el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-
-								<el-row>
-									<el-col :span="8">
-										<el-form-item label="型号" prop="MODEL">
-											<el-input v-model="samplesForm.MODEL" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="数量" prop="QUALITY">
-											<el-input-number v-model="samplesForm.QUALITY" :min="1" :step="5" :max="100" label="描述文字" style="width: 100%" :disabled="noedit"></el-input-number >
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="状态日期" prop="STATUSDATE">
-											<el-input v-model="samplesForm.STATUSDATE" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-
-								<el-row>
-									<el-col :span="8">
-										<el-form-item label="收样人" prop="ACCEPT_PERSON">
-											<el-input v-model="samplesForm.ACCEPT_PERSON" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="收样日期" prop="ACCEPT_DATE">
-											<el-date-picker v-model="samplesForm.ACCEPT_DATE" type="date" :disabled="noedit"placeholder="请选择收样日期" value-format="yyyy-MM-dd" style="width: 100%;">
-											</el-date-picker>
-										</el-form-item>
-									</el-col>
-								</el-row>
-
-								<el-row>
-									<el-col :span="8">
-										<el-form-item label="领样人" prop="GRANT_PERSON">
-											<el-input v-model="samplesForm.GRANT_PERSON" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="领样日期" prop="GRANT_DATE">
-											<el-date-picker v-model="samplesForm.GRANT_DATE" type="date" placeholder="请选择领样日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
-											</el-date-picker>
-										</el-form-item>
-									</el-col>
-									
-								</el-row>
-
-								<el-row>
-									<el-col :span="24">
-										<el-form-item label="其他资料" prop="OTHER">
-											<el-input v-model="samplesForm.OTHER" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="24">
-										<el-form-item label="备注" prop="MEMO">
-											<el-input type="textarea" rows="5" v-model="samplesForm.MEMO":disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-
-							</el-collapse-item>
-							<el-collapse-item title="其他" name="3" v-show="views">
-								<el-row >
-									<el-col :span="8">
-										<el-form-item label="录入人" prop="ENTERBY" label-width="110px">
-											<el-input v-model="samplesForm.ENTERBY" :disabled="edit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="录入时间" prop="ENTERDATE" label-width="110px">
-											<el-input v-model="samplesForm.ENTERDATE" :disabled="edit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="录入人机构" prop="DEPARTMENT" label-width="110px">
-											<el-input v-model="samplesForm.DEPARTMENT" :disabled="edit"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row>
-									<el-col :span="8">
-										<el-form-item label="修改人">
-											<el-input v-model="samplesForm.CHANGEBY" :disabled="edit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="修改日期">
-											<el-input v-model="samplesForm.CHANGEDATE" :disabled="edit"></el-input>
-										</el-form-item>
-									</el-col>
-
-								</el-row>
-							</el-collapse-item>
-						</el-collapse>
-					</div>
-					<div class="content-footer">
-						<el-button type="primary" @click="saveAndUpdate('samplesForm')">保存</el-button>
-						<el-button type="success" @click="saveAndSubmit('samplesForm')">保存并继续</el-button>
-						<el-button @click="close">取消</el-button> 
-					</div>
-				</el-form>
-			</div>
+			<!--点击委托书编号弹出框 Begin-->
+			<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+				<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @check-change="handleCheckChange">
+				</el-tree>
+				<span slot="footer" class="dialog-footer">
+			       <el-button @click="dialogVisible = false">取 消</el-button>
+			       <el-button type="primary" @click="dailogconfirm();" >确 定</el-button>
+			    </span>
+			</el-dialog>
+			<!--点击委托书编号弹出框 Begin-->
+			<!-- 产品类别 Begin -->
+			<el-dialog title="产品类别" height="300px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
+				<!-- 第二层弹出的表格 Begin-->
+				<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+					<el-table-column type="selection" fixed width="55" align="center">
+					</el-table-column>
+					<el-table-column label="编码" width="155" sortable prop="NUM">
+					</el-table-column>
+					<el-table-column label="名称" sortable prop="TYPE">
+					</el-table-column>
+					<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
+					</el-table-column>
+					<el-table-column label="机构" width="185" sortable prop="DEPARTMENTDesc">
+					</el-table-column>
+					<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
+					</el-table-column>
+					<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat">
+					</el-table-column>
+				</el-table>
+				<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+				</el-pagination>
+				<!-- 表格 End-->
+				<span slot="footer" class="dialog-footer">
+			       <el-button @click="dialogVisible3 = false">取 消</el-button>
+			       <el-button type="primary" @click="addproclass">确 定</el-button>
+			    </span>
+			</el-dialog>
+			<!-- 产品类别 End -->
 		</div>
-		<!--点击委托书编号弹出框 Begin-->
-		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @check-change="handleCheckChange">
-			</el-tree>
-			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible = false">取 消</el-button>
-		       <el-button type="primary" @click="dailogconfirm();" >确 定</el-button>
-		    </span>
-		</el-dialog>
-		<!--点击委托书编号弹出框 Begin-->
-		<!-- 产品类别 Begin -->
-		<el-dialog title="产品类别" height="300px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
-			<!-- 第二层弹出的表格 Begin-->
-			<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-				<el-table-column type="selection" fixed width="55" align="center">
-				</el-table-column>
-				<el-table-column label="编码" width="155" sortable prop="NUM">
-				</el-table-column>
-				<el-table-column label="名称" sortable prop="TYPE">
-				</el-table-column>
-				<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
-				</el-table-column>
-				<el-table-column label="机构" width="185" sortable prop="DEPARTMENTDesc">
-				</el-table-column>
-				<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
-				</el-table-column>
-				<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat">
-				</el-table-column>
-			</el-table>
-			<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-			</el-pagination>
-			<!-- 表格 End-->
-			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible3 = false">取 消</el-button>
-		       <el-button type="primary" @click="addproclass">确 定</el-button>
-		    </span>
-		</el-dialog>
-		<!-- 产品类别 End -->
 	</div>
 </template>
 
@@ -487,8 +489,6 @@
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
-				$(".mask_div").css("margin", "0%");
-				$(".mask_div").css("top", "60px");
 
 			},
 			//还原按钮
@@ -497,8 +497,6 @@
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
-				$(".mask_div").css("margin", "7% 10%");
-				$(".mask_div").css("top", "0");
 
 			},
 			//点击提交按钮执行保存

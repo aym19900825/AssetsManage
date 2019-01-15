@@ -1,161 +1,163 @@
 <template>
 <!-- 添加溯源记录 -->
 	<div>
-		<div class="mask" v-show="show"></div>
-		<div class="mask_div" v-show="show">
-            <div class="mask_title_div clearfix">
-            	<div class="mask_title" v-show="addtitle">添加期间和核查计划</div>
-					<div class="mask_title" v-show="modifytitle">修改期间和核查计划</div>
-					<div class="mask_title" v-show="viewtitle">查看期间和核查计划</div>
-                <div class="mask_anniu">
-                    <span class="mask_span mask_max" @click='toggle'>
-                        <i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
-                    </span>
-                    <span class="mask_span" @click='close'>
-                        <i class="icon-close1"></i>
-                    </span>
-                </div>
-            </div>
-            <div class="mask_content">
-				<el-form :model="dataInfo" :rules="rules"   ref="dataInfo" class="demo-user">
-					<div class="accordion">
-						<!-- 设备header信息 -->
-						<el-collapse v-model="activeNames">
-                            <el-collapse-item name="1">
-                                <el-form-item label-width="120px" v-for="item in basicInfo" :label="item.label" :key="item.id":prop="item.prop" :style="{ width: item.width, display: item.displayType}">
-									<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" :disabled="item.disabled"></el-date-picker>
-                                    <el-input v-model="dataInfo[item.prop]" :type="item.type" disabled v-if="item.type == 'input'" :disabled="noedit"></el-input>
-                                </el-form-item>
-                            </el-collapse-item>
-						    <el-collapse-item title="设备期间检查计划信息" name="2">
-                                <div class="table-func">
-									<el-button type="warning" size="mini" round @click="addLine('tableList')" :disabled="noedit">
-										<i class="el-icon-upload"></i>
-										<font>导入</font>
-									</el-button>
-									<el-button type="success" size="mini" round @click="addLine" :disabled="noedit">
-										<i class="icon-add"></i>
-										<font>新建行</font>
-									</el-button>
-								</div>
-								<el-table :header-cell-style="rowClass" :data="dataInfo.tableList" row-key="ID" border stripe :fit="true" max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'dataInfo.pmRecord', order: 'descending'}">
-									<el-table-column prop="iconOperation" fixed label="" width="50px">
-										<template slot-scope="scope">
-											<i class="el-icon-check" v-if="scope.row.isEditing"  @click="changeEdit(scope.row)"></i>
-											<i class="el-icon-edit" v-else="v-else" @click="changeEdit(scope.row)"></i>
-										</template>
-									</el-table-column>
-                                    <el-table-column type="index" sortable label="序号" width="50">
-                                    </el-table-column>
-									<el-table-column prop="ASSETNUM" label="设备编号" sortable width="120px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'tableList.'+scope.$index + '.ASSETNUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-												<el-select  size="small"  v-if="scope.row.isEditing" v-model="scope.row.ASSETNUM" filterable placeholder="请选择" @change="selChange($event,scope.row)">
-													<el-option v-for="item in assets"
-													:key="item.ID"
-													:label="item.ASSETNUM"
-													:value="item.ASSETNUM">
-													</el-option>
-												</el-select>
-                                                <span v-else="v-else">{{scope.row.ASSETNUM}}</span>
-											</el-form-item>
-										</template>
-									</el-table-column>
-									<el-table-column prop="A_NAME" label="设备名称" sortable width="120px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'tableList.'+scope.$index + '.A_NAME'">
-												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.A_NAME" placeholder="请输入设备名称">
-                                                </el-input>
-                                                <span v-else="v-else">{{scope.row.A_NAME}}</span>
-											</el-form-item>
-										</template>
-									</el-table-column>
-									<el-table-column prop="MODEL" label="规格型号" sortable width="120px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'tableList.'+scope.$index + '.MODEL'">
-												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入规格型号">
-                                                </el-input>
-                                                <span v-else="v-else">{{scope.row.MODEL}}</span>
-											</el-form-item>
-										</template>
-									</el-table-column>
-									<el-table-column prop="PM_ZQ" label="溯源周期" sortable width="120px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'tableList.'+scope.$index + '.PM_ZQ'">
-												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PM_ZQ" placeholder="请输入溯源周期">
-                                                </el-input>
-                                                <span v-else="v-else">{{scope.row.PM_ZQ}}</span>
-											</el-form-item>
-										</template>
-									</el-table-column>
-									<el-table-column prop="PM_YXQ" label="溯源有效期" sortable width="120px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'tableList.'+scope.$index + '.PM_YXQ'">
-												<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.PM_YXQ" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
-                                                </el-date-picker>
-                                                <span v-else="v-else">{{scope.row.PM_YXQ}}</span>
-											</el-form-item>
-										</template>
-									</el-table-column>
-									<el-table-column prop="C_PLAN_DATE" label="计划期间核查时间" sortable width="150px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'tableList.'+scope.$index + '.C_PLAN_DATE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-                                                <el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.C_PLAN_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
-                                                </el-date-picker>
-                                                <span v-else="v-else">{{scope.row.C_PLAN_DATE}}</span>
-											</el-form-item>
-										</template>
-									</el-table-column>
-                                    <el-table-column prop="COMPDATE" label="执行时间" sortable width="100px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'tableList.'+scope.$index + '.COMPDATE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-                                                <el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
-                                                </el-date-picker>
-                                                <span v-else="v-else">{{scope.row.COMPDATE}}</span>
-											</el-form-item>
-										</template>
-									</el-table-column>
-                                    <el-table-column prop="CHECKMEMO" label="核查结果" sortable width="120px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'tableList.'+scope.$index + '.CHECKMEMO'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-                                                <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHECKMEMO" placeholder="请输入核查结果">
-                                                </el-input>
-                                                <span v-else="v-else">{{scope.row.CHECKMEMO}}</span>
-											</el-form-item>
-										</template>
-									</el-table-column>
-									<el-table-column label="操作" sortable width="80px">
-										<template slot-scope="scope">
-											<el-button type="danger" size="mini" round  @click="delLine(scope.$index,scope.row)">
-												<i class="el-icon-delete"></i>
-											</el-button>
-										</template>
-									</el-table-column>
-								</el-table>
-							</el-collapse-item>
-							<el-collapse-item title="文件" name="3">
-								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
-							</el-collapse-item>
-							<el-collapse-item title="其他" name="4" v-show="!addtitle">
-                            	<el-form-item label-width="120px" v-for="item in otherInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-if="item.prop=='DEPARTMENT'" v-show="dept">
-                                    <el-input v-model="dataInfo[item.prop]" :type="item.type" disabled v-if="item.prop=='DEPARTMENT'"></el-input>
-                                </el-form-item>	
-                                <el-form-item label-width="120px" v-for="item in otherInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-show="views">
-                                    <el-input v-if="item.type=='input'" v-model="dataInfo[item.prop]" :type="item.type" disabled></el-input>
-                                    <el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" disabled style="width:100%"></el-date-picker>
-                                </el-form-item>	
-                            </el-collapse-item>
-						</el-collapse>
-					</div>
-					<div class="el-dialog__footer" v-show="noviews">
-						<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
-						<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并继续</el-button>
-						<el-button @click='close'>取消</el-button>
-						<!-- <el-button type="primary" @click='submitForm'>提交</el-button> -->
-					</div>
-				</el-form>
+		<div class="mask" v-if="show"></div>
+		<div class="mask_divbg" v-if="show">
+			<div class="mask_div">
+	            <div class="mask_title_div clearfix">
+	            	<div class="mask_title" v-show="addtitle">添加期间和核查计划</div>
+						<div class="mask_title" v-show="modifytitle">修改期间和核查计划</div>
+						<div class="mask_title" v-show="viewtitle">查看期间和核查计划</div>
+	                <div class="mask_anniu">
+	                    <span class="mask_span mask_max" @click='toggle'>
+	                        <i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
+	                    </span>
+	                    <span class="mask_span" @click='close'>
+	                        <i class="icon-close1"></i>
+	                    </span>
+	                </div>
+	            </div>
+	            <div class="mask_content">
+					<el-form :model="dataInfo" :rules="rules"   ref="dataInfo" class="demo-user">
+						<div class="accordion">
+							<!-- 设备header信息 -->
+							<el-collapse v-model="activeNames">
+	                            <el-collapse-item name="1">
+	                                <el-form-item label-width="120px" v-for="item in basicInfo" :label="item.label" :key="item.id":prop="item.prop" :style="{ width: item.width, display: item.displayType}">
+										<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" :disabled="item.disabled"></el-date-picker>
+	                                    <el-input v-model="dataInfo[item.prop]" :type="item.type" disabled v-if="item.type == 'input'" :disabled="noedit"></el-input>
+	                                </el-form-item>
+	                            </el-collapse-item>
+							    <el-collapse-item title="设备期间检查计划信息" name="2">
+	                                <div class="table-func">
+										<el-button type="warning" size="mini" round @click="addLine('tableList')" :disabled="noedit">
+											<i class="el-icon-upload"></i>
+											<font>导入</font>
+										</el-button>
+										<el-button type="success" size="mini" round @click="addLine" :disabled="noedit">
+											<i class="icon-add"></i>
+											<font>新建行</font>
+										</el-button>
+									</div>
+									<el-table :header-cell-style="rowClass" :data="dataInfo.tableList" row-key="ID" border stripe :fit="true" max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'dataInfo.pmRecord', order: 'descending'}">
+										<el-table-column prop="iconOperation" fixed label="" width="50px">
+											<template slot-scope="scope">
+												<i class="el-icon-check" v-if="scope.row.isEditing"  @click="changeEdit(scope.row)"></i>
+												<i class="el-icon-edit" v-else="v-else" @click="changeEdit(scope.row)"></i>
+											</template>
+										</el-table-column>
+	                                    <el-table-column type="index" sortable label="序号" width="50">
+	                                    </el-table-column>
+										<el-table-column prop="ASSETNUM" label="设备编号" sortable width="120px">
+											<template slot-scope="scope">
+												<el-form-item :prop="'tableList.'+scope.$index + '.ASSETNUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+													<el-select  size="small"  v-if="scope.row.isEditing" v-model="scope.row.ASSETNUM" filterable placeholder="请选择" @change="selChange($event,scope.row)">
+														<el-option v-for="item in assets"
+														:key="item.ID"
+														:label="item.ASSETNUM"
+														:value="item.ASSETNUM">
+														</el-option>
+													</el-select>
+	                                                <span v-else="v-else">{{scope.row.ASSETNUM}}</span>
+												</el-form-item>
+											</template>
+										</el-table-column>
+										<el-table-column prop="A_NAME" label="设备名称" sortable width="120px">
+											<template slot-scope="scope">
+												<el-form-item :prop="'tableList.'+scope.$index + '.A_NAME'">
+													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.A_NAME" placeholder="请输入设备名称">
+	                                                </el-input>
+	                                                <span v-else="v-else">{{scope.row.A_NAME}}</span>
+												</el-form-item>
+											</template>
+										</el-table-column>
+										<el-table-column prop="MODEL" label="规格型号" sortable width="120px">
+											<template slot-scope="scope">
+												<el-form-item :prop="'tableList.'+scope.$index + '.MODEL'">
+													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入规格型号">
+	                                                </el-input>
+	                                                <span v-else="v-else">{{scope.row.MODEL}}</span>
+												</el-form-item>
+											</template>
+										</el-table-column>
+										<el-table-column prop="PM_ZQ" label="溯源周期" sortable width="120px">
+											<template slot-scope="scope">
+												<el-form-item :prop="'tableList.'+scope.$index + '.PM_ZQ'">
+													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PM_ZQ" placeholder="请输入溯源周期">
+	                                                </el-input>
+	                                                <span v-else="v-else">{{scope.row.PM_ZQ}}</span>
+												</el-form-item>
+											</template>
+										</el-table-column>
+										<el-table-column prop="PM_YXQ" label="溯源有效期" sortable width="120px">
+											<template slot-scope="scope">
+												<el-form-item :prop="'tableList.'+scope.$index + '.PM_YXQ'">
+													<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.PM_YXQ" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+	                                                </el-date-picker>
+	                                                <span v-else="v-else">{{scope.row.PM_YXQ}}</span>
+												</el-form-item>
+											</template>
+										</el-table-column>
+										<el-table-column prop="C_PLAN_DATE" label="计划期间核查时间" sortable width="150px">
+											<template slot-scope="scope">
+												<el-form-item :prop="'tableList.'+scope.$index + '.C_PLAN_DATE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+	                                                <el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.C_PLAN_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+	                                                </el-date-picker>
+	                                                <span v-else="v-else">{{scope.row.C_PLAN_DATE}}</span>
+												</el-form-item>
+											</template>
+										</el-table-column>
+	                                    <el-table-column prop="COMPDATE" label="执行时间" sortable width="100px">
+											<template slot-scope="scope">
+												<el-form-item :prop="'tableList.'+scope.$index + '.COMPDATE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+	                                                <el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+	                                                </el-date-picker>
+	                                                <span v-else="v-else">{{scope.row.COMPDATE}}</span>
+												</el-form-item>
+											</template>
+										</el-table-column>
+	                                    <el-table-column prop="CHECKMEMO" label="核查结果" sortable width="120px">
+											<template slot-scope="scope">
+												<el-form-item :prop="'tableList.'+scope.$index + '.CHECKMEMO'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+	                                                <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHECKMEMO" placeholder="请输入核查结果">
+	                                                </el-input>
+	                                                <span v-else="v-else">{{scope.row.CHECKMEMO}}</span>
+												</el-form-item>
+											</template>
+										</el-table-column>
+										<el-table-column label="操作" sortable width="80px">
+											<template slot-scope="scope">
+												<el-button type="danger" size="mini" round  @click="delLine(scope.$index,scope.row)">
+													<i class="el-icon-delete"></i>
+												</el-button>
+											</template>
+										</el-table-column>
+									</el-table>
+								</el-collapse-item>
+								<el-collapse-item title="文件" name="3">
+									<doc-table ref="docTable" :docParm = "docParm"></doc-table>
+								</el-collapse-item>
+								<el-collapse-item title="其他" name="4" v-show="!addtitle">
+	                            	<el-form-item label-width="120px" v-for="item in otherInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-if="item.prop=='DEPARTMENT'" v-show="dept">
+	                                    <el-input v-model="dataInfo[item.prop]" :type="item.type" disabled v-if="item.prop=='DEPARTMENT'"></el-input>
+	                                </el-form-item>	
+	                                <el-form-item label-width="120px" v-for="item in otherInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-show="views">
+	                                    <el-input v-if="item.type=='input'" v-model="dataInfo[item.prop]" :type="item.type" disabled></el-input>
+	                                    <el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" disabled style="width:100%"></el-date-picker>
+	                                </el-form-item>	
+	                            </el-collapse-item>
+							</el-collapse>
+						</div>
+						<div class="el-dialog__footer" v-show="noviews">
+							<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
+							<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并继续</el-button>
+							<el-button @click='close'>取消</el-button>
+							<!-- <el-button type="primary" @click='submitForm'>提交</el-button> -->
+						</div>
+					</el-form>
+				</div>
+				<!--底部-->
 			</div>
-			<!--底部-->
 		</div>
 	</div>
 </template>
@@ -473,7 +475,7 @@
 					'STATUS': '1',
 					'tableList': []
 				};
-				this.$refs['dataInfo'].resetFields();
+				//this.$refs['dataInfo'].resetFields();
 				// this.show = false;
 			},
 			toggle(e) { //大弹出框大小切换
@@ -488,8 +490,6 @@
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
-				$(".mask_div").css("margin", "0%");
-				$(".mask_div").css("top", "60px");
 			},
 
 			rebackDialog() { //大弹出框还原成默认大小
@@ -497,8 +497,6 @@
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
-				$(".mask_div").css("margin", "7% 10%");
-				$(".mask_div").css("top", "0");
 			},
 
 			save(dataInfo) {

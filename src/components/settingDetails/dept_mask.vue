@@ -1,226 +1,228 @@
 <template>
 	<div>
 		<div class="mask" v-if="show"></div>
-		<div class="mask_div" v-if="show">
-			<div class="mask_title_div clearfix">
-				<div class="mask_title" v-show="addtitle">添加机构</div>
-				<div class="mask_title" v-show="modifytitle">修改机构</div>
-				<div class="mask_anniu">
-					<span class="mask_span mask_max" @click='toggle'>
-						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
-					</span>
-					<span class="mask_span" @click='close'>
-						<i class="icon-close1"></i>
-					</span>
+		<div class="mask_divbg" v-if="show">
+			<div class="mask_div">
+				<div class="mask_title_div clearfix">
+					<div class="mask_title" v-show="addtitle">添加机构</div>
+					<div class="mask_title" v-show="modifytitle">修改机构</div>
+					<div class="mask_anniu">
+						<span class="mask_span mask_max" @click='toggle'>
+							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
+						</span>
+						<span class="mask_span" @click='close'>
+							<i class="icon-close1"></i>
+						</span>
+					</div>
 				</div>
-			</div>
-			<div class="mask_content">
-				<el-form :model="adddeptForm" :rules="rules" ref="adddeptForm" label-width="100px" id="demo-adduserForm">
-					<div class="accordion">
-						<el-collapse v-model="activeNames">
-							<el-collapse-item title="机构信息" name="1">
-								<el-row :gutter="30">
-									<el-col :span="4" class="pull-right pb10" >
-										<el-input v-model="adddeptForm.version" :disabled="edit">
-											<template slot="prepend">版本</template>
-										</el-input>
-									</el-col>
-									<el-col :span="4" class="pull-right" v-if="modify" style="display: none;">
-											<el-input v-model="adddeptForm.status==1?'活动':'不活动'" :disabled="edit" >
-												<template slot="prepend">信息状态</template>
+				<div class="mask_content">
+					<el-form :model="adddeptForm" :rules="rules" ref="adddeptForm" label-width="100px" id="demo-adduserForm">
+						<div class="accordion">
+							<el-collapse v-model="activeNames">
+								<el-collapse-item title="机构信息" name="1">
+									<el-row :gutter="30">
+										<el-col :span="4" class="pull-right pb10" >
+											<el-input v-model="adddeptForm.version" :disabled="edit">
+												<template slot="prepend">版本</template>
 											</el-input>
-									</el-col>
-									<el-col :span="4" class="pull-right" v-else style="display: none;">
-											<el-input v-model="adddeptForm.status" :disabled="edit" >
-												<template slot="prepend">信息状态</template>
-											</el-input>
-									</el-col>
-								</el-row>
-								<el-row :gutter="30">
-									<el-col :span="8">
-										<el-form-item label="机构序号" prop="step">
-											<el-input  v-model="adddeptForm.step">
-											</el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="机构编码" prop="code">
-											<el-input v-model="adddeptForm.code">
-											</el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="机构名称" prop="fullname">
-											<el-input v-model="adddeptForm.fullname">
-											</el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row :gutter="30">
-									<el-col :span="8">
-										<el-form-item label="上级机构" prop="parent">
-											<el-input v-model="adddeptForm.parent" :disabled="edit">
-												<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
-											</el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="机构类型" prop="org_range">
-											<el-select v-model="adddeptForm.org_range" placeholder="请选择" style="width: 100%">
-												<el-option v-for="(data,index) in Selectsys_depttype" :key="index" :value="data.code" :label="data.name"></el-option>
-												</el-option>
-											</el-select>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="机构属性" prop="type">
-											<el-select v-model="adddeptForm.type" placeholder="请选择" style="width: 100%">
-												<el-option v-for="(data,index) in SelectDEPT_TYPE" :key="index" :value="data.code" :label="data.name"></el-option>
-											</el-select>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row :gutter="30">
-									<el-col :span="8">
-										<el-form-item label="是否停用" prop="inactive">
-											<el-input v-if="stopcontent" v-model="adddeptForm.inactive" :disabled="edit"></el-input>
-											<el-select v-if="stopselect" v-model="adddeptForm.inactive" placeholder="请选择" style="width: 100%">
-												<el-option v-for="item in stopoptions" :key="item.value" :label="item.label" :value="item.value">
-												</el-option>
-											</el-select>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="联系地址">
-											<el-input v-model="adddeptForm.address"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="邮政编码">
-											<el-input v-model="adddeptForm.zipcode">
-											</el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row :gutter="30">
-									<el-col :span="8">
-										<el-form-item label="负责人">
-											<el-input v-model="adddeptForm.leaderName" :disabled="edit">
-												<el-button slot="append" icon="el-icon-search" @click="getPerson"></el-button>
-											</el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="电话" prop="telephone">
-											<el-input v-model="adddeptForm.telephone"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="传真" prop="fax">
-											<el-input v-model="adddeptForm.fax">
-											</el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row :gutter="30">
-									<el-col :span="8">
-										<el-form-item label="邮箱" prop="email">
-											<el-input v-model="adddeptForm.email"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row :gutter="30">
-									<el-col :span="24">
-										<el-form-item label="备注" prop="tips">
-											<el-input :rows="3" type="textarea" v-model="adddeptForm.tips" placeholder="请输入"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row :gutter="30" v-show="personinfo">
-									<el-col :span="8">
-										<el-form-item label="录入人" prop="enterby">
-											<el-input v-model="adddeptForm.enterby" :disabled="edit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="录入时间" prop="enterdate">
-											<el-input v-model="adddeptForm.enterdate" :disabled="edit">
-											</el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="修改人" prop="changeby">
-											<el-input v-model="adddeptForm.changeby" :disabled="edit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="修改时间" prop="changedate">
-											<el-input v-model="adddeptForm.changedate" :disabled="edit">
-											</el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-							</el-collapse-item>
-						</el-collapse>
-					</div>
-					<div class="el-dialog__footer">
-						    
-						    <el-button type="primary" @click="saveAndUpdate">保存</el-button>
-						    <el-button type="success" @click="saveAndSubmit" v-show="addtitle">保存并继续</el-button>
-						<!--	<el-button type="primary" class="btn-primarys" @click="submitForm('adddeptForm')">提交</el-button>-->
-							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion">修订</el-button>
-							<el-button @click="close">取消</el-button> 
-					</div>
-				</el-form>
-			</div>
-		</div>
-		<!-- 弹出 -->
-		<el-dialog title="机构" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" default-expand-all @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
-			</el-tree>
-			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible = false">取 消</el-button>
-		       <el-button type="primary" @click="queding();" >确 定</el-button>
-		    </span>
-		</el-dialog>
-
-		<!--负责人 Begin-->
-		<el-dialog title="选择负责人" :visible.sync="dialogLeader" width="80%" :before-close="handleClose">
-			<div class="accordion" id="information">
-				<div class="mask_tab-block">
-					<!-- <div class="mask_tab-head clearfix">
-						<div class="accordion_title">
-							<span class="accordion-toggle">选择负责人</span>
+										</el-col>
+										<el-col :span="4" class="pull-right" v-if="modify" style="display: none;">
+												<el-input v-model="adddeptForm.status==1?'活动':'不活动'" :disabled="edit" >
+													<template slot="prepend">信息状态</template>
+												</el-input>
+										</el-col>
+										<el-col :span="4" class="pull-right" v-else style="display: none;">
+												<el-input v-model="adddeptForm.status" :disabled="edit" >
+													<template slot="prepend">信息状态</template>
+												</el-input>
+										</el-col>
+									</el-row>
+									<el-row :gutter="30">
+										<el-col :span="8">
+											<el-form-item label="机构序号" prop="step">
+												<el-input  v-model="adddeptForm.step">
+												</el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="机构编码" prop="code">
+												<el-input v-model="adddeptForm.code">
+												</el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="机构名称" prop="fullname">
+												<el-input v-model="adddeptForm.fullname">
+												</el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row :gutter="30">
+										<el-col :span="8">
+											<el-form-item label="上级机构" prop="parent">
+												<el-input v-model="adddeptForm.parent" :disabled="edit">
+													<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
+												</el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="机构类型" prop="org_range">
+												<el-select v-model="adddeptForm.org_range" placeholder="请选择" style="width: 100%">
+													<el-option v-for="(data,index) in Selectsys_depttype" :key="index" :value="data.code" :label="data.name"></el-option>
+													</el-option>
+												</el-select>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="机构属性" prop="type">
+												<el-select v-model="adddeptForm.type" placeholder="请选择" style="width: 100%">
+													<el-option v-for="(data,index) in SelectDEPT_TYPE" :key="index" :value="data.code" :label="data.name"></el-option>
+												</el-select>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row :gutter="30">
+										<el-col :span="8">
+											<el-form-item label="是否停用" prop="inactive">
+												<el-input v-if="stopcontent" v-model="adddeptForm.inactive" :disabled="edit"></el-input>
+												<el-select v-if="stopselect" v-model="adddeptForm.inactive" placeholder="请选择" style="width: 100%">
+													<el-option v-for="item in stopoptions" :key="item.value" :label="item.label" :value="item.value">
+													</el-option>
+												</el-select>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="联系地址">
+												<el-input v-model="adddeptForm.address"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="邮政编码">
+												<el-input v-model="adddeptForm.zipcode">
+												</el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row :gutter="30">
+										<el-col :span="8">
+											<el-form-item label="负责人">
+												<el-input v-model="adddeptForm.leaderName" :disabled="edit">
+													<el-button slot="append" icon="el-icon-search" @click="getPerson"></el-button>
+												</el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="电话" prop="telephone">
+												<el-input v-model="adddeptForm.telephone"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="传真" prop="fax">
+												<el-input v-model="adddeptForm.fax">
+												</el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row :gutter="30">
+										<el-col :span="8">
+											<el-form-item label="邮箱" prop="email">
+												<el-input v-model="adddeptForm.email"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row :gutter="30">
+										<el-col :span="24">
+											<el-form-item label="备注" prop="tips">
+												<el-input :rows="3" type="textarea" v-model="adddeptForm.tips" placeholder="请输入"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row :gutter="30" v-show="personinfo">
+										<el-col :span="8">
+											<el-form-item label="录入人" prop="enterby">
+												<el-input v-model="adddeptForm.enterby" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="录入时间" prop="enterdate">
+												<el-input v-model="adddeptForm.enterdate" :disabled="edit">
+												</el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="修改人" prop="changeby">
+												<el-input v-model="adddeptForm.changeby" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="修改时间" prop="changedate">
+												<el-input v-model="adddeptForm.changedate" :disabled="edit">
+												</el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+								</el-collapse-item>
+							</el-collapse>
 						</div>
-					</div> -->
-					<!-- 第二层弹出的表格 -->
-						<el-table :data="userList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-								<el-table-column type="selection" width="55" fixed>
-								</el-table-column>
-								<el-table-column label="账号" sortable width="140px" prop="username">
-								</el-table-column>
-								<el-table-column label="姓名" sortable width="200px" prop="nickname">
-								</el-table-column>
-								<el-table-column label="机构" sortable width="150px" prop="deptName">
-								</el-table-column>
-								<el-table-column label="公司" sortable width="200px" prop="companyName">
-								</el-table-column>
-								<el-table-column label="信息状态" sortable width="200px" prop="enabled" :formatter="judge">
-								</el-table-column>
-								<el-table-column label="创建时间" width="200px" prop="createTime" sortable :formatter="dateFormat">
-								</el-table-column>
-							</el-table>
-							<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-							</el-pagination>
-						<!-- 表格 -->
+						<div class="el-dialog__footer">
+							    
+							    <el-button type="primary" @click="saveAndUpdate">保存</el-button>
+							    <el-button type="success" @click="saveAndSubmit" v-show="addtitle">保存并继续</el-button>
+							<!--	<el-button type="primary" class="btn-primarys" @click="submitForm('adddeptForm')">提交</el-button>-->
+								<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion">修订</el-button>
+								<el-button @click="close">取消</el-button> 
+						</div>
+					</el-form>
 				</div>
 			</div>
-			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogLeader = false">取 消</el-button>
-		       <el-button type="primary" @click="addleader">确 定</el-button>
-		    </span>
-		</el-dialog>
-		<!--负责人 End-->
+			<!-- 弹出 -->
+			<el-dialog title="机构" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+				<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" default-expand-all @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
+				</el-tree>
+				<span slot="footer" class="dialog-footer">
+			       <el-button @click="dialogVisible = false">取 消</el-button>
+			       <el-button type="primary" @click="queding();" >确 定</el-button>
+			    </span>
+			</el-dialog>
+
+			<!--负责人 Begin-->
+			<el-dialog title="选择负责人" :visible.sync="dialogLeader" width="80%" :before-close="handleClose">
+				<div class="accordion" id="information">
+					<div class="mask_tab-block">
+						<!-- <div class="mask_tab-head clearfix">
+							<div class="accordion_title">
+								<span class="accordion-toggle">选择负责人</span>
+							</div>
+						</div> -->
+						<!-- 第二层弹出的表格 -->
+							<el-table :data="userList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+									<el-table-column type="selection" width="55" fixed>
+									</el-table-column>
+									<el-table-column label="账号" sortable width="140px" prop="username">
+									</el-table-column>
+									<el-table-column label="姓名" sortable width="200px" prop="nickname">
+									</el-table-column>
+									<el-table-column label="机构" sortable width="150px" prop="deptName">
+									</el-table-column>
+									<el-table-column label="公司" sortable width="200px" prop="companyName">
+									</el-table-column>
+									<el-table-column label="信息状态" sortable width="200px" prop="enabled" :formatter="judge">
+									</el-table-column>
+									<el-table-column label="创建时间" width="200px" prop="createTime" sortable :formatter="dateFormat">
+									</el-table-column>
+								</el-table>
+								<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+								</el-pagination>
+							<!-- 表格 -->
+					</div>
+				</div>
+				<span slot="footer" class="dialog-footer">
+			       <el-button @click="dialogLeader = false">取 消</el-button>
+			       <el-button type="primary" @click="addleader">确 定</el-button>
+			    </span>
+			</el-dialog>
+			<!--负责人 End-->
+		</div>
 	</div>
 </template>
 
@@ -552,8 +554,6 @@
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
-				$(".mask_div").css("margin", "0%");
-				$(".mask_div").css("top", "60px");
 
 			},
 			//还原按钮
@@ -562,8 +562,6 @@
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
-				$(".mask_div").css("margin", "7% 10%");
-				$(".mask_div").css("top", "0");
 
 			},
 			//获取负责人数据

@@ -390,11 +390,12 @@
 						this.dataInfo.ENTERBY = res.data.id;
 						this.dataInfo.CHANGEDATE = this.getToday();
 						// this.dataInfo.DEPARTMENT = res.data.deptName;	
-					}else{
-						this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
-						this.dataInfo.CHANGEBY = res.data.id;
-						this.dataInfo.CHANGEDATE = this.getToday();
 					}
+					// else{
+						// this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
+						// this.dataInfo.CHANGEBY = res.data.id;
+						// this.dataInfo.CHANGEDATE = this.getToday();
+					// }
 					this.docParm.userid = res.data.id;
 					this.docParm.username = res.data.username;
 					this.docParm.deptid = res.data.deptId;
@@ -514,8 +515,11 @@
 					'DEPARTMENT': '',
 					'STATUS': '1'
 				}
+
 				//this.$refs['dataInfo'].resetFields();
 				this.show = false;
+
+
 			},
 			toggle(e) { //大弹出框大小切换
 				if(this.isok1) {
@@ -529,6 +533,7 @@
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
+				$(".mask_div").css("top", "60px");
 			},
 
 			rebackDialog() { //大弹出框还原成默认大小
@@ -536,6 +541,7 @@
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
+				$(".mask_div").css("top", "100px");
 			},
 
 			save(dataInfo) {

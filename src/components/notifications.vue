@@ -416,7 +416,12 @@
 			 view(id) {
 				this.$refs.child.view(id);
 			},
-			
+			//代办跳转
+			getRouterData() {
+      		// 只是改了query，其他都不变
+				  this.id = this.$route.query.bizId;
+				  this.$refs.child.view(this.id);
+			},
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
@@ -502,7 +507,6 @@
 				this.selUser = val;
 			},
 			requestData(index) {
-				console.log('==='+this.searchList.TYPE);
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -567,15 +571,8 @@
 				return data;
 			},
 			handleNodeClick(data) {
-				// console.log(data.label);
-				// console.log(233333333);
-				// console.log(this.selectData[0].code);
-				console.log(this.selectData);
 				for(var i = 0;i<this.selectData.length;i++){
 					if(data.label ==  this.selectData[i].name){
-						console.log(data.label);
-						console.log(this.selectData[i].name);
-						console.log(this.selectData[i].code);
 						 this.searchList.TYPE = this.selectData[i].code;
 					}
 				}
@@ -583,7 +580,6 @@
 			},
 //			树节点的内容区的渲染 Function
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
-				console.log(node);console.log(data);console.log(store);
 				return(
 					<span>
               			<i class={data.iconClass}></i>
@@ -632,11 +628,18 @@
       		},
 			
 		},
-		mounted() {
+		beforeMount() {
+			// 在页面挂载前就发起请求
 			this.requestData();
 //			this.getKey();
 			this.getType();
 			this.getCompany();
+		},
+		mounted() {
+			console.log(this.$route.query.bizId);
+			if(this.$route.query.bizId!=undefined){
+				this.getRouterData();
+			}
 		},
 	}
 </script>

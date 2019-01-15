@@ -2,7 +2,7 @@
 	<div>
 		<div class="mask" v-if="show"></div>
 		<div class="mask_divbg" v-if="show">
-			<div class="mask_div" v-if="show">
+			<div class="mask_div">
 				<div class="mask_title_div clearfix">
 					<div class="mask_title" v-show="addtitle">添加作业指导书</div>
 					<div class="mask_title" v-show="modifytitle">修改作业指导书</div>
@@ -55,7 +55,7 @@
 									</el-row>
 								</el-collapse-item>
 								<el-collapse-item title="文件" name="2">
-									<doc-table ref="docTable" :docParm = "docParm"></doc-table>
+									<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save"></doc-table>
 								</el-collapse-item>
 								<el-collapse-item title="其它" name="3" v-show="views">
 									<el-row>
@@ -124,28 +124,9 @@
 			page: Object,
 		},
 		data() {
-			// var validateNum = (rule, value, callback) => {
-			// 	if(value != ""){
-		 //             if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
-		 //                 callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
-		 //             }else{
-		 //                 callback();
-		 //             }
-		 //         }else{
-		 //             callback();
-		 //         }
-			// };
-			// var validateType = (rule, value, callback) => {
-			// 	if(value === '') {
-			// 		callback(new Error('请填写产品类别名称'));
-			// 	} else {
-			// 		callback();
-			// 	}
-			// };
 			return {
 				docParm: {
 					'model': 'new',
-					'appname': '',
 					'recordid': 1,
 					'userid': 1,
 					'username': '',
@@ -239,14 +220,16 @@
 					this.WORK_INSTRUCTION.ENTERBY = res.data.id;
 					var date = new Date();
 					this.WORK_INSTRUCTION.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
+
+					this.docParm.userid = res.data.id;
+					this.docParm.username = res.data.username;
+					this.docParm.deptid = res.data.deptId;
+					this.docParm.deptfullname = res.data.deptName;
+
 					if( opt!='new' ){
 						//深拷贝数据
 						let _obj = JSON.stringify(this.WORK_INSTRUCTION);
 						this.work_instruction = JSON.parse(_obj);
-						this.docParm.userid = res.data.id;
-						this.docParm.username = res.data.username;
-						this.docParm.deptid = res.data.deptId;
-						this.docParm.deptfullname = res.data.deptName;
 					}
 					
 				}).catch((err) => {
@@ -271,9 +254,9 @@
 				this.statusshow2 = false;
 				this.docParm = {
 					'model': 'new',
-					'appname': 'WORK_INSTRUCTION',
+					'appname': '作业指导书',
 					'recordid': 1,
-					'appid': 26
+					'appid': 10
 				};
 				this.getUser('new');
 //				this.show = true;
@@ -295,9 +278,9 @@
 				var _this = this;
 				setTimeout(function(){
 					_this.docParm.model = 'edit';
-					_this.docParm.appname = 'WORK_INSTRUCTION';
+					_this.docParm.appname = '作业指导书';
 					_this.docParm.recordid = _this.WORK_INSTRUCTION.ID;
-					_this.docParm.appid = 26;
+					_this.docParm.appid = 10;
 					_this.$refs.docTable.getData();
 				},100);
 				this.show = true;
@@ -421,41 +404,50 @@
 					this.rebackDialog();
 				}
 			},
-			maxDialog(e) {
+			maxDialog(e) { //定义大弹出框一个默认大小
 				this.isok1 = false;
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
+				$(".mask_div").css("top", "60px");
 			},
 			//还原按钮
-			rebackDialog() {
+			rebackDialog() { //大弹出框还原成默认大小
 				this.isok1 = true;
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
+				$(".mask_div").css("top", "100px");
 			},
-			// 保存users/saveOrUpdate
-			save(WORK_INSTRUCTION) {
-				console.log(this.WORK_INSTRUCTION);
-				this.$refs[WORK_INSTRUCTION].validate((valid) => {
+			save(opt) {
+				this.$refs['WORK_INSTRUCTION'].validate((valid) => {
+					if(!valid && opt == 'docUpload'){
+						this.$message({
+							message: '请先正确填写信息，再进行文档上传',
+							type: 'warning'
+						});
+					}
 					if(valid) {
 						this.WORK_INSTRUCTION.STATUS = ((this.WORK_INSTRUCTION.STATUS == "1" || this.WORK_INSTRUCTION.STATUS == '活动') ? '1' : '0');
 						var url = this.basic_url + '/api-apps/app/workIns/saveOrUpdate';
 						this.$axios.post(url, this.WORK_INSTRUCTION).then((res) => {
-							//resp_code == 0是后台返回的请求成功的信息
+							this.$message({
+								message: '保存成功',
+								type: 'success'
+							});
 							if(res.data.resp_code == 0) {
-								this.$message({
-									message: '保存成功',
-									type: 'success'
-								});
-								//重新加载数据
-								this.$emit('request');
-								this.$emit('reset');
-								this.visible();
+								if(opt == 'docUpload'){
+									this.docParm.recordid = res.data.datas.id;
+									this.docParm.model = 'edit';
+									this.WORK_INSTRUCTION.ID = res.data.datas.id;
+								}else{
+									this.$emit('request');
+									this.$emit('reset');
+									this.visible();
+								}
 							}else{
 								this.show = true;
 								if(res.data.resp_code == 1) {
-									//res.data.resp_msg!=''后台返回提示信息
 									if( res.data.resp_msg!=''){
 									 	this.$message({
 											message: res.data.resp_msg,
@@ -486,7 +478,6 @@
 					}
 				});
 			},
-			
 			//保存
 			saveAndUpdate(WORK_INSTRUCTION) {
 				this.save(WORK_INSTRUCTION);

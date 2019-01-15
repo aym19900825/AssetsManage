@@ -81,8 +81,6 @@
 									<el-input v-model="searchList.YEAR"></el-input>
 								</el-form-item>
 							</el-col>
-						</el-row>
-						<el-row :gutter="10">
 							<el-col :span="5">
 								 <el-form-item label="录入时间" prop="ENTERDATE">
 									<div class="block">
@@ -94,6 +92,8 @@
 								  	</div>
 								</el-form-item>
 							</el-col>
+						</el-row>
+						<el-row :gutter="10">
 							<el-col :span="5">
 								<el-form-item label="编辑状态" prop="STATUS">
 									<el-select v-model="searchList.STATUS" placeholder="请选择" style="width: 100%" clearable>
@@ -106,6 +106,15 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
+								<el-form-item label="执行状态" prop="LEADER_STATUS">
+									<el-select v-model="searchList.LEADER_STATUS" placeholder="请选择" style="width: 100%" clearable>
+										<el-option label="未开始" value="1"></el-option>
+										<el-option label="进行中" value="2"></el-option>
+										<el-option label="已完成" value="3"></el-option>
+									</el-select>
+								</el-form-item>
+							</el-col>
+							<el-col :span="5">
 								<el-form-item label="类型" prop="TYPE" label-width="45px">
 									<el-select clearable v-model="searchList.TYPE" filterable allow-create default-first-option placeholder="请选择" style="width:100%">
 									    <el-option label="监督审查" value="1"></el-option>
@@ -113,13 +122,7 @@
 									</el-select>
 								</el-form-item>
 							</el-col>
-							<!-- <el-col :span="5">
-								<el-select v-model="searchList.LEADER_STATUS" placeholder="执行状态" style="width: 100%">
-								    <el-option label="未开始" value="未开始"></el-option>
-								    <el-option label="进行中" value="进行中"></el-option>
-								    <el-option label="已完成" value="已完成"></el-option>
-								</el-select>
-							</el-col> -->
+							
 							<el-col :span="4">
 								<el-button type="primary" @click="searchinfo" size="small" style="margin-top: 2px">搜索</el-button>
 							</el-col>
@@ -168,8 +171,8 @@
 								</el-table-column>
 								<el-table-column label="编辑状态" sortable width="100px" prop="STATUSDesc" v-if="this.checkedName.indexOf('编辑状态')!=-1">
 								</el-table-column>
-								<!-- <el-table-column label="执行状态" sortable  width="120px" prop="LEADER_STATUS" v-if="this.checkedName.indexOf('执行状态')!=-1">
-								</el-table-column> -->
+								<el-table-column label="执行状态" sortable  width="120px" prop="LEADER_STATUSDesc" v-if="this.checkedName.indexOf('执行状态')!=-1">
+								</el-table-column>
 								<el-table-column label="类型" sortable  width="100px" prop="TYPE" v-if="this.checkedName.indexOf('类型')!=-1">
 								</el-table-column>
 								<el-table-column label="提报日期" sortable prop="REPORTDATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('提报日期')!=-1">
@@ -225,7 +228,7 @@
 					// '信息状态'
 					'修改时间',
 					'编辑状态',
-					// '执行状态',
+					'执行状态',
 					'类型',
 					'提报日期',
 
@@ -259,10 +262,10 @@
 						label: '编辑状态',
 						prop: 'STATUSDesc'
 					},
-					// {
-					// 	label: '执行状态',
-					// 	prop: 'LEADER_STATUS'
-					// },
+					{
+						label: '执行状态',
+						prop: 'LEADER_STATUSDesc'
+					},
 					{
 						label: '类型',
 						prop: 'TYPE'

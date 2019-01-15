@@ -498,16 +498,20 @@
 			getUser(opt){
 				var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url,{}).then((res) => {
+						console.log(res);
 						if(opt == 'new'){
 							this.dataInfo.DEPTID = res.data.deptId;
 							this.dataInfo.ENTERBY = res.data.id;
 							this.dataInfo.ENTERDATE = this.getToday();
 						}else{
-							this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
-							this.dataInfo.CHANGEBY = res.data.id;
-							this.dataInfo.CHANGEDATE = this.getToday();
+							// this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
+							// console.log(2);
+							// this.dataInfo.CHANGEBY = res.data.id;
+							// console.log(3);
+							// this.dataInfo.CHANGEDATE = this.getToday();
+							// console.log(4);
 							// this.dataInfo.DEPARTMENT = res.data.deptName;
-
+						
 							this.docParm.userid = res.data.id;
 							this.docParm.username = res.data.username;
 							this.docParm.deptid = res.data.deptId;
@@ -515,7 +519,7 @@
 						}
 				}).catch((err) => {
 					this.$message({
-						message: '网络错误，请重试',
+						message: '网络错误，请重试1',
 						type: 'error'
 					});
 				});
@@ -565,7 +569,7 @@
 					this.pmRecordList = res.data.data;
 				}).catch((err) => {
 					this.$message({
-						message: '网络错误，请重试',
+						message: '网络错误，请重试2',
 						type: 'error'
 					});
 				});
@@ -595,6 +599,7 @@
 			},
 			// 这里是修改
 			detail(dataid) {
+				console.log(this.dataInfo);
 				this.dataInfo = this.detailData;
 				this.addtitle = false;
 				this.modifytitle = true;
@@ -673,6 +678,7 @@
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
+				$(".mask_div").css("top", "60px");
 			},
 
 			rebackDialog() { //大弹出框还原成默认大小
@@ -680,6 +686,7 @@
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
+				$(".mask_div").css("top", "100px");
 			},
 
 			save(dataInfo) {
@@ -700,7 +707,7 @@
 							}
 						}).catch((err) => {
 							this.$message({
-								message: '网络错误，请重试',
+								message: '网络错误，请重试3',
 								type: 'error'
 							});
 						});

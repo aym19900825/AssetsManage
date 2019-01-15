@@ -210,7 +210,6 @@
 
 				docParm: {
 					'model': 'new',
-					'appname': '',
 					'recordid': 1,
 					'userid': 1,
 					'username': '',
@@ -402,9 +401,9 @@
 				this.getUser('new');
 				this.docParm = {
 					'model': 'new',
-					'appname': 'INSPECTION_STANDARDS2',
+					'appname': '检验检测项目_检验/检测标准',
 					'recordid': 1,
-					'appid': 29
+					'appid': 13
 				};
 				// this.show = true;
 			},
@@ -426,9 +425,9 @@
 				var _this = this;
 				setTimeout(function(){
 					_this.docParm.model = 'edit';
-					_this.docParm.appname = 'INSPECTION_STANDARDS2';
+					_this.docParm.appname = '检验检测项目_检验/检测标准';
 					_this.docParm.recordid = _this.dataInfo.ID;
-					_this.docParm.appid = 29;
+					_this.docParm.appid = 13;
 					_this.$refs.docTable.getData();
 				},100);
 				this.show = true;
@@ -459,18 +458,20 @@
 					this.rebackDialog();
 				}
 			},
-			maxDialog(e) {
+			maxDialog(e) { //定义大弹出框一个默认大小
 				this.isok1 = false;
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
+				$(".mask_div").css("top", "60px");
 			},
 			//还原按钮
-			rebackDialog() {
+			rebackDialog() { //大弹出框还原成默认大小
 				this.isok1 = true;
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
+				$(".mask_div").css("top", "100px");
 			},
 			//修订
 			modifyversion(){
@@ -542,9 +543,10 @@
 					this.dataInfo.RELEASETIME =  this.$moment(this.dataInfo.RELEASETIME).format("YYYY-MM-DD HH:mm:ss");
 					this.dataInfo.STARTETIME = this.$moment(this.dataInfo.STARTETIME).format("YYYY-MM-DD HH:mm:ss");
 					if(!valid && opt == 'docUpload'){
+						console.log('message');
 						this.$message({
 							message: '请先正确填写信息，再进行文档上传',
-							type: 'warn'
+							type: 'warning'
 						});
 					}
 					if (valid) {

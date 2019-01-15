@@ -287,31 +287,28 @@
 			//form表单内容清空
 			resetNew() {
 				this.testingForm = { //给表单数据渲染值
-						VERSION: '1',
-						STATUS: '活动',
-						M_NUM: 'TRO100012',
-						M_NAME: '',
-						M_ENAME: '',
-						M_TYPE: '',
-						DEPARTMENT: '',
-						ENTERBY: '',
+					VERSION: '1',
+					STATUS: '活动',
+					M_NUM: 'TRO100012',
+					M_NAME: '',
+					M_ENAME: '',
+					M_TYPE: '',
+					DEPARTMENT: '',
+					ENTERBY: '',
+					ENTERDATE: '',
+					CHANGEBY: '',
+					CHANGEDATE: '',
+					attributes: [{ //字段列表
+						COLUMNID: '',
+						FILESNUMBER: '',
+						FILSEDESC: '',
+						ENTERB: '',
 						ENTERDATE: '',
-						CHANGEBY: '',
-						CHANGEDATE: '',
-						attributes: [{ //字段列表
-							COLUMNID: '',
-							FILESNUMBER: '',
-							FILSEDESC: '',
-							ENTERB: '',
-							ENTERDATE: '',
-							FILESURL: ''
-						}]
-					}
-					//this.$refs["testingForm"].resetFields();
+						FILESURL: ''
+					}]
+				}
+				//this.$refs["testingForm"].resetFields();
 			},
-            
-			
-
 			addfield() {//添加文件行信息
 				var obj = {
 					COLUMNID: '',
@@ -394,15 +391,15 @@
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
-
+				$(".mask_div").css("top", "60px");
 			},
 			//还原按钮
-			rebackDialog() {
+			rebackDialog() { //大弹出框还原成默认大小
 				this.isok1 = true;
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
-
+				$(".mask_div").css("top", "100px");
 			},
 			//保存
 			submitForm(testingForm) {

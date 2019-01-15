@@ -2,7 +2,7 @@
 	<div class="heder clearfix white">
         <div class="logo"></div>
         <ul class="nav-head pull-left">
-            <li class="current" @click="appCenter"><router-link :to="{path:'/index'}">应用中心</router-link></li>
+            <li class="current" ><router-link :to="{path:'/index'}">应用中心</router-link></li>
             <!-- <li><router-link :to="{path:'/dashboardList'}" >程序设计器</router-link></li>
             <li><router-link :to="{path:'/dashboardList'}" >权限管理</router-link></li>
             <li>
@@ -10,11 +10,11 @@
             </li> -->
         </ul>
         <div class="nav-head pull-right nav-right">
-            <el-badge :value="200" :max="99" class="item pt5 mr30">
-               <router-link :to="{path:'/task'}"><i class="icon-notice"></i></router-link>
-            </el-badge>
-           
-
+	            <el-badge :value="200" :max="99" class="item pt5 mr30" >
+	            	<span class="lingdang" @click="appCenter">
+	            		<i class="icon-notice"></i>
+	            	</span>
+	            </el-badge>
             <el-dropdown placement="top" trigger="click">
               <span class="el-dropdown-link white">
                 <font class="roles pr10">{{username}}<br>{{GetRolesname}}</font>
@@ -23,7 +23,7 @@
                 <i class="el-icon-arrow-down icon-arrow2-down"></i>
               </span>
               <el-dropdown-menu slot="dropdown" class="scrollbar" style="max-height:300px">
-                <el-dropdown-item v-for="item in GetRoles" >
+                <el-dropdown-item v-for="(item,index) in GetRoles" :key="index">
                     <div @click = "clickfun($event)">
                         {{item.name}}
                     </div>
@@ -82,7 +82,6 @@ export default {
     	cleanAll(){
             this.$router.push({ path: '/',name: 'Login',});
             sessionStorage.clear();
-                console.log(1234567);
 //    		sessionStorage.setItem("",JSON.stringify(this.$store.state))
 			this.$store.dispatch('setClickedNavAct',[{
                 css: 'icon-user',
@@ -94,7 +93,6 @@ export default {
                 url: '/index'});
             this.$store.dispatch('setRoleIdAct',null);
             this.$store.dispatch('setNavIdAct',null);
-            console.log(this.$store.state);
     	},
         getData(){//获取当前用户信息
             var url = this.basic_url + '/api-user/users/currentMap';
@@ -121,7 +119,6 @@ export default {
                     let item = res.data[0];
                     if(this.$store.state.roleid==null||typeof(this.$store.state.roleid)==undefined){
 //                  	this.$store.dispatch('setRoleIdAct',item.id);
-                   		console.log(item.id);
                    	}
                 }
             }).catch(error => {
@@ -153,21 +150,21 @@ export default {
                 url: '/index'});
     	},
         appCenter(){
-//      	var item={
-//      		css: 'icon-user',
-//              name: '首页',
-//              url: '/index'};
-//      	if(this.$route.path!=this.$store.state.clickedNavs.url){
-//				for(var i = 0; i < this.tabs.length; i++){
-//					if(this.$route.path == this.tabs[i].url){
-//						this.selectedTab = this.tabs[i];
-//					}
-//				}
-//			}else{
-//				this.$store.state.clickedNavs.push(item);
-//				this.$store.dispatch('setSelectedNavAct',item);
-//			}
-        }
+        	var item={
+        		css: 'icon-user',
+                name: '代办任务',
+                url: '/task'};
+        	var flag = false;
+			for(var i = 0; i < this.$store.state.clickedNavs.length; i++){
+				if(item.name == this.$store.state.clickedNavs[i].name){
+					flag = true;
+				}
+			}
+			if(!flag){
+				this.$store.state.clickedNavs.push(item);
+			}
+				this.$router.push({path: item.url});
+        },
         
     },
     mounted(){
@@ -177,7 +174,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped>	
 .heder{
     width:100%;
     height:60px;
@@ -239,12 +236,6 @@ a:hover .userimgs {border:2px solid #9153f1;}
 .userimgs {width:16px; height:16px; margin-right:9px; border-radius:3px;}
 
 .lingdang{
-	position: relative;
-    width:24px;
-    height:24px!important;
-    color:#fff;
-    font-size:20px;
-    line-height: 20px;
     display: inline-block;
 } 
 .lindang  .icon-notice{

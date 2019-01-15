@@ -922,18 +922,20 @@
 					this.rebackDialog();
 				}
 			},
-			maxDialog(e) {
+			maxDialog(e) { //定义大弹出框一个默认大小
 				this.isok1 = false;
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
+				$(".mask_div").css("top", "60px");
 			},
 			//还原按钮
-			rebackDialog() {
+			rebackDialog() { //大弹出框还原成默认大小
 				this.isok1 = true;
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
+				$(".mask_div").css("top", "100px");
 			},
 			// 保存users/saveOrUpdate
 			save() {
@@ -1141,6 +1143,9 @@
 								message:res.data.resp_msg,
 								type: 'success'
 							});
+							this.requestData();
+							$(".approval").show();
+							$(".start").hide();
 				    }
 				});
 			},

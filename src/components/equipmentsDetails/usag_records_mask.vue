@@ -644,6 +644,7 @@
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
+				$(".mask_div").css("top", "60px");
 			},
 
 			rebackDialog() { //大弹出框还原成默认大小
@@ -651,31 +652,39 @@
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
+				$(".mask_div").css("top", "100px");
 			},
 			save(dataInfo) {
 				var _this = this;
 				var url = this.basic_url + '/api-apps/app/asset/saveOrUpdate';
 				this.$refs['dataInfo'].validate((valid) => {
 					if (valid) {
-						this.dataInfo.ASSET_USEList = this.dataInfo.tableList;
-						this.dataInfo.ASSET_MAINTENANCEList = this.dataInfo.maintenList;
-						this.$axios.post(url, _this.dataInfo).then((res) => {
-							if(res.data.resp_code == 0) {
-								this.$message({
-									message: '保存成功',
-									type: 'success',
-								});
-								
-								this.$emit('request');
-								this.resetForm();
-							}
-						}).catch((err) => {
+						if(this.dataInfo.tableList.length==0 || this.dataInfo.maintenList.length == 0){
 							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
+								message: '表格信息为必填内容',
+								type: 'warning',
 							});
-						});
-						this.falg=true;
+						}else{
+							this.dataInfo.ASSET_USEList = this.dataInfo.tableList;
+							this.dataInfo.ASSET_MAINTENANCEList = this.dataInfo.maintenList;
+							this.$axios.post(url, _this.dataInfo).then((res) => {
+								if(res.data.resp_code == 0) {
+									this.$message({
+										message: '保存成功',
+										type: 'success',
+									});
+									
+									this.$emit('request');
+									this.resetForm();
+								}
+							}).catch((err) => {
+								this.$message({
+									message: '网络错误，请重试',
+									type: 'error'
+								});
+							});
+							this.falg=true;
+						}
 					} else {
 						this.show = true;
 						this.$message({

@@ -74,6 +74,10 @@
 								</el-table-column>
 								<el-table-column label="当前环节" sortable width="140px" prop="name" v-if="this.checkedName.indexOf('当前环节')!=-1">
 								</el-table-column>
+								<el-table-column label="应用" sortable width="140px" prop="appDesc" v-if="this.checkedName.indexOf('App')!=-1">
+								</el-table-column>
+								<el-table-column label="单据号" sortable width="140px" prop="bizNum" v-if="this.checkedName.indexOf('当前环节')!=-1">
+								</el-table-column>
 								<el-table-column label="创建时间" sortable width="140px" prop="createTime" v-if="this.checkedName.indexOf('当前环节')!=-1">
 								</el-table-column>
 							</el-table>
@@ -112,7 +116,9 @@ export default {
 					'数据id',
 					'App',
 					'当前环节',
-					'创建时间'
+					'创建时间',
+					'应用',
+					'单据号',
 					],
 		tableHeader: [{
 			label: '数据id',
@@ -125,6 +131,14 @@ export default {
 		{
 			label: '当前环节',
 			prop: 'name'
+		},
+		{
+			label: '应用',
+			prop: 'appDesc'
+		},
+		{
+			label: '单据号',
+			prop: 'bizNum'
 		},
 		{
 			label: '创建时间',
@@ -161,8 +175,10 @@ export default {
 					});
 					return;
 				} else {
-					this.$router.push({path: '/inspect_proxy',query: { bizid: this.selUser[0].bizid,}});
-					this.$store.dispatch('setMenuIdAct','106');
+					console.log(this.selUser[0].bizMenuUrl);
+					console.log(this.selUser[0].bizId);
+					this.$router.push({path:this.selUser[0].bizMenuUrl ,query: { bizId: this.selUser[0].bizId,}});
+					this.$store.dispatch('setMenuIdAct',this.selUser[0].bizFirstMenuId);
 					console.log(this.$store.state.menuid);
 			    }
 		},

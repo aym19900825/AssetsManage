@@ -484,7 +484,7 @@
 					this.rebackDialog();
 				}
 			},
-			maxDialog(e) { //大弹出框距离头部少60px
+			maxDialog(e) { //定义大弹出框一个默认大小
 				this.isok1 = false;
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
@@ -492,7 +492,7 @@
 
 			},
 			//还原按钮
-			rebackDialog() {
+			rebackDialog() { //大弹出框还原成默认大小
 				this.isok1 = true;
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");

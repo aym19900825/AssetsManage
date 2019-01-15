@@ -4,7 +4,7 @@
     background: rgba(0, 0, 0, .5);
     position: fixed;
     display: block;
-    top: 0px;
+    top: 60px;
     bottom: 0px;
     left: 0px;
     right: 0px;
@@ -25,7 +25,7 @@
     background:#F3F6FA;	
     border-radius: 0px;
     height: 80%;
-    top: 60px;
+    top: 100px;
     bottom: 0px;
     margin:0px auto;
     overflow: hidden;

@@ -1,85 +1,87 @@
 <template>
 	<div>
-		<div class="mask" v-show="show"></div>
-		<div class="mask_div" v-show="show">
-			<div class="mask_title_div clearfix">
-				<div class="mask_title" v-show="!modify">添加关键字授权</div>
-				<div class="mask_title" v-show="modify">修改关键字授权</div>
-				<div class="mask_anniu">
-					<span class="mask_span mask_max" @click='toggle'>
-						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
-					</span>
-					<span class="mask_span" @click='close'>
-						<i class="icon-close1"></i>
-					</span>
+		<div class="mask" v-if="show"></div>
+		<div class="mask_divbg" v-if="show">
+			<div class="mask_div">
+				<div class="mask_title_div clearfix">
+					<div class="mask_title" v-show="!modify">添加关键字授权</div>
+					<div class="mask_title" v-show="modify">修改关键字授权</div>
+					<div class="mask_anniu">
+						<span class="mask_span mask_max" @click='toggle'>
+							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
+						</span>
+						<span class="mask_span" @click='close'>
+							<i class="icon-close1"></i>
+						</span>
+					</div>
 				</div>
-			</div>
-			<div class="mask_content">
-				<el-form :model="dataInfo" :rules="rules"   ref="dataInfo" label-width="100px" class="demo-user">
-					<div class="accordion">
-						<!-- 关键字授权信息 -->
-						<el-collapse v-model="activeNames">
-							<el-collapse-item title="关键字授权信息" name="1">
-								<el-row :gutter="20" class="pb10">
-									<el-col :span="5" class="pull-right"></el-col>
-								</el-row>
-								<el-form-item v-for="item in basicInfo" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
-									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" disabled></el-input>
-									<el-input v-model="dataInfo[item.prop]" :disabled="true" v-if="item.label=='姓名'">
-										<el-button slot="append" icon="el-icon-search" @click="addUser"></el-button>
-									</el-input>
-								</el-form-item>
-							</el-collapse-item>
-							<el-collapse-item title="关键字授权列表" name="2" class="ml30">
-								<div class="table-func">
-									<el-button type="success" size="mini" round @click="addKeyW">
-										<i class="icon-add"></i>
-										<font>新建行</font>
-									</el-button>
-								</div>
+				<div class="mask_content">
+					<el-form :model="dataInfo" :rules="rules"   ref="dataInfo" label-width="100px" class="demo-user">
+						<div class="accordion">
+							<!-- 关键字授权信息 -->
+							<el-collapse v-model="activeNames">
+								<el-collapse-item title="关键字授权信息" name="1">
+									<el-row :gutter="20" class="pb10">
+										<el-col :span="5" class="pull-right"></el-col>
+									</el-row>
+									<el-form-item v-for="item in basicInfo" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
+										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" disabled></el-input>
+										<el-input v-model="dataInfo[item.prop]" :disabled="true" v-if="item.label=='姓名'">
+											<el-button slot="append" icon="el-icon-search" @click="addUser"></el-button>
+										</el-input>
+									</el-form-item>
+								</el-collapse-item>
+								<el-collapse-item title="关键字授权列表" name="2" class="ml30">
+									<div class="table-func">
+										<el-button type="success" size="mini" round @click="addKeyW">
+											<i class="icon-add"></i>
+											<font>新建行</font>
+										</el-button>
+									</div>
 
-								<el-table :data="selKeyW" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100% ;">
-									<el-table-column label="类别名称" sortable prop="categoryidDesc">
-										<template slot-scope="scope">
-											<span>{{scope.row.categoryidDesc}}</span>
-										</template>
-									</el-table-column>
-									<el-table-column label="关键字" sortable prop="keywordidDesc">
-										<template slot-scope="scope">
-											<span>{{scope.row.keywordidDesc}}</span>
-										</template>
-									</el-table-column>
-									<el-table-column fixed="right" label="授权" width="600px">
-										<template slot-scope="scope">
-											<el-checkbox-group v-model="scope.row.checkedList">
-												<el-checkbox label="显示"></el-checkbox>
-												<el-checkbox label="编辑"></el-checkbox>
-												<el-checkbox label="删除"></el-checkbox>
-												<el-checkbox label="打印"></el-checkbox>
-												<el-checkbox label="下载"></el-checkbox>
-												<el-checkbox label="复制"></el-checkbox>
-											</el-checkbox-group>
-										</template>
-									</el-table-column>
-									<el-table-column fixed="right" label="操作">
-										<template slot-scope="scope">
-											<el-button @click="del(scope.row,scope.$index)" type="text">删除</el-button>
-										</template>
-									</el-table-column>
-								</el-table>
-							</el-collapse-item>
-						</el-collapse>
-					</div>
+									<el-table :data="selKeyW" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100% ;">
+										<el-table-column label="类别名称" sortable prop="categoryidDesc">
+											<template slot-scope="scope">
+												<span>{{scope.row.categoryidDesc}}</span>
+											</template>
+										</el-table-column>
+										<el-table-column label="关键字" sortable prop="keywordidDesc">
+											<template slot-scope="scope">
+												<span>{{scope.row.keywordidDesc}}</span>
+											</template>
+										</el-table-column>
+										<el-table-column fixed="right" label="授权" width="600px">
+											<template slot-scope="scope">
+												<el-checkbox-group v-model="scope.row.checkedList">
+													<el-checkbox label="显示"></el-checkbox>
+													<el-checkbox label="编辑"></el-checkbox>
+													<el-checkbox label="删除"></el-checkbox>
+													<el-checkbox label="打印"></el-checkbox>
+													<el-checkbox label="下载"></el-checkbox>
+													<el-checkbox label="复制"></el-checkbox>
+												</el-checkbox-group>
+											</template>
+										</el-table-column>
+										<el-table-column fixed="right" label="操作">
+											<template slot-scope="scope">
+												<el-button @click="del(scope.row,scope.$index)" type="text">删除</el-button>
+											</template>
+										</el-table-column>
+									</el-table>
+								</el-collapse-item>
+							</el-collapse>
+						</div>
 
-					<div class="el-dialog__footer">
-						<el-button @click='close'>取消</el-button>
-						<el-button type="primary" @click='submitForm'>提交</el-button>
-					</div>
-				</el-form>
+						<div class="el-dialog__footer">
+							<el-button @click='close'>取消</el-button>
+							<el-button type="primary" @click='submitForm'>提交</el-button>
+						</div>
+					</el-form>
+				</div>
+				<!--底部-->
 			</div>
-			<!--底部-->
+			<vchoose ref="choose" :chooseParam = "chooseParam" @tranFormData = 'getChoose'></vchoose>
 		</div>
-		<vchoose ref="choose" :chooseParam = "chooseParam" @tranFormData = 'getChoose'></vchoose>
 	</div>
 </template>
 
@@ -372,7 +374,7 @@
 					'keywordid': '',
 					'userid': ''
 				};
-				this.$refs['dataInfo'].resetFields();
+				//this.$refs['dataInfo'].resetFields();
 				this.show = false;
 			},
 			toggle(e) { //大弹出框大小切换
@@ -387,7 +389,6 @@
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
-				$(".mask_div").css("margin", "0%");
 				$(".mask_div").css("top", "60px");
 			},
 
@@ -396,8 +397,7 @@
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
-				$(".mask_div").css("margin", "7% 10%");
-				$(".mask_div").css("top", "0");
+				$(".mask_div").css("top", "100px");
 			},
 
 			submitForm() {

@@ -1,74 +1,75 @@
 <template>
 	<div>
 		<div class="mask" v-show="show1"></div>
-		<div class="mask_div"  v-show="show1">
-			<!---->
-			<div class="mask_title_div clearfix">
-				<div class="mask_title">{{}}-数据限制</div>
-				<div class="mask_anniu">
-					<span class="mask_span mask_max" @click='toggle'>
-						 
-						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
-					</span>
-					<span class="mask_span" @click='close'>
-						<i class="icon-close1"></i>
-					</span>
+		<div class="mask_divbg" v-show="show">
+			<div class="mask_div">
+				<div class="mask_title_div clearfix">
+					<div class="mask_title">{{}}-数据限制</div>
+					<div class="mask_anniu">
+						<span class="mask_span mask_max" @click='toggle'>
+							 
+							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
+						</span>
+						<span class="mask_span" @click='close'>
+							<i class="icon-close1"></i>
+						</span>
+					</div>
 				</div>
-			</div>
-			<div class="mask_content">
-				<el-form :model="user" :label-position="labelPosition" :rules="rules" ref="user" label-width="100px" class="demo-user">
-					<div class="accordion" id="information">
-						<div class="mask_tab-block">
-							<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
-								<el-row :gutter="30">
-									<el-col :span="12">
-										<el-form-item label="应用名称" prop="companyName">
-											<el-input v-model="user.companyName" :disabled="edit">
-												<el-button slot="append" icon="el-icon-search" @click="getCompany"></el-button>
-											</el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="12">
-										<el-form-item label="表名称" prop="companyName">
-											<el-input v-model="user.companyName" :disabled="edit">
-												<el-button slot="append" icon="el-icon-search" @click="getCompany"></el-button>
-											</el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row :gutter="30">
-									<el-col :span="12">
-										<el-form-item label="限制方式" prop="sex">
-											<el-radio-group v-model="user.sexName">
-												<el-radio label="默认"></el-radio>
-												<el-radio label="自定义"></el-radio>
-											</el-radio-group>
-										</el-form-item>
-									</el-col>
-									<el-col :span="12">
-										<el-form-item label="字段名" prop="deptName">
-											<el-input v-model="user.deptName" :disabled="edit">
-												<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
-											</el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row :gutter="30">
-									<el-col :span="24">
-										<el-form-item label="限制范围" prop="password">
-											<el-input type="textarea" v-model="user.password" placeholder="请填写"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
+				<div class="mask_content">
+					<el-form :model="user" :label-position="labelPosition" :rules="rules" ref="user" label-width="100px" class="demo-user">
+						<div class="accordion" id="information">
+							<div class="mask_tab-block">
+								<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
+									<el-row :gutter="30">
+										<el-col :span="12">
+											<el-form-item label="应用名称" prop="companyName">
+												<el-input v-model="user.companyName" :disabled="edit">
+													<el-button slot="append" icon="el-icon-search" @click="getCompany"></el-button>
+												</el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="12">
+											<el-form-item label="表名称" prop="companyName">
+												<el-input v-model="user.companyName" :disabled="edit">
+													<el-button slot="append" icon="el-icon-search" @click="getCompany"></el-button>
+												</el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row :gutter="30">
+										<el-col :span="12">
+											<el-form-item label="限制方式" prop="sex">
+												<el-radio-group v-model="user.sexName">
+													<el-radio label="默认"></el-radio>
+													<el-radio label="自定义"></el-radio>
+												</el-radio-group>
+											</el-form-item>
+										</el-col>
+										<el-col :span="12">
+											<el-form-item label="字段名" prop="deptName">
+												<el-input v-model="user.deptName" :disabled="edit">
+													<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
+												</el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row :gutter="30">
+										<el-col :span="24">
+											<el-form-item label="限制范围" prop="password">
+												<el-input type="textarea" v-model="user.password" placeholder="请填写"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+								</div>
 							</div>
 						</div>
-					</div>
 
-					<div class="el-dialog__footer">
-						<el-button @click='close'>取消</el-button>
-						<el-button type="primary" @click='submitForm()'>保存</el-button>
-					</div>
-				</el-form>
+						<div class="el-dialog__footer">
+							<el-button @click='close'>取消</el-button>
+							<el-button type="primary" @click='submitForm()'>保存</el-button>
+						</div>
+					</el-form>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -300,22 +301,20 @@
 					this.rebackDialog();
 				}
 			},
-			maxDialog(e) {
+			maxDialog(e) { //定义大弹出框一个默认大小
 				this.isok1 = false;
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
-				$(".mask_div").css("margin", "0%");
 				$(".mask_div").css("top", "60px");
 			},
 			//还原按钮
-			rebackDialog() {
+			rebackDialog() { //大弹出框还原成默认大小
 				this.isok1 = true;
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
-				$(".mask_div").css("margin", "7% 10%");
-				$(".mask_div").css("top", "0");
+				$(".mask_div").css("top", "100px");
 			},
 			getCheckedNodes() {
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()

@@ -1,119 +1,122 @@
 <template>
 	<div>
-		<div class="mask" v-show="show"></div>
-		<div class="mask_div" v-show="show">
-			<!---->
-			<div class="mask_title_div clearfix">
-				<div class="mask_title" v-show="addtitle">添加菜单</div>
-				<div class="mask_title" v-show="modifytitle">修改菜单</div>
-				<div class="mask_anniu">
-					<span class="mask_span mask_max" @click='toggle'>
-						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
-					</span>
-					<span class="mask_span" @click='close'>
-						<i class="icon-close1"></i>
-					</span>
+		<div class="mask" v-if="show"></div>
+		<div class="mask_divbg" v-if="show">
+			<div class="mask_div">
+				<div class="mask_title_div clearfix">
+					<div class="mask_title" v-show="addtitle">添加菜单</div>
+					<div class="mask_title" v-show="modifytitle">修改菜单</div>
+					<div class="mask_anniu">
+						<span class="mask_span mask_max" @click='toggle'>
+							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
+						</span>
+						<span class="mask_span" @click='close'>
+							<i class="icon-close1"></i>
+						</span>
+					</div>
+				</div>
+				<div class="mask_content">
+					<el-form :model="menu" :rules="rules" ref="menu" label-width="100px" class="demo-user">
+						<div class="accordion">
+							<el-collapse v-model="activeNames">
+								<el-collapse-item title="基础信息" name="1">
+									<el-row :gutter="30">
+										<el-col :span="24">
+											<el-form-item label="所属上级" prop="pName">
+												<el-input v-model="menu.pName" :disabled="edit">
+													<el-button slot="append" icon="el-icon-search" @click="getParentId"></el-button>
+												</el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row :gutter="30">
+										<el-col :span="8">
+											<el-form-item label="菜单名称" prop="name">
+												<el-input v-model="menu.name">
+												</el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="链接地址" prop="url">
+												<el-input v-model="menu.url">
+												</el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="排序" prop="sort">
+												<el-input v-model="menu.sort">
+												</el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+
+									<el-row :gutter="30">
+										<!--是否影藏-->
+										<el-col :span="8">
+											<el-form-item label="是否显示" prop="hidden">
+												<el-switch active-color="#5B7BFA" inactive-color="#dadde5" v-model="menu.hidden" @change="changeval">
+												</el-switch>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="菜单图标" prop="css">
+												<el-input v-model="menu.css" :disabled="edit">
+													<i :class="menu.css" slot="prepend"></i>
+													<el-button slot="append" icon="el-icon-search" @click="getCss"></el-button>
+												</el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+								</el-collapse-item>
+							</el-collapse>
+						</div>
+
+						<div class="el-dialog__footer">
+							<el-button @click='close'>取消</el-button>
+							<el-button type="primary" @click='submitForm'>提交</el-button>
+						</div>
+					</el-form>
 				</div>
 			</div>
-			<div class="mask_content">
-				<el-form :model="menu" :rules="rules" ref="menu" label-width="100px" class="demo-user">
-					<div class="accordion">
-						<el-collapse v-model="activeNames">
-							<el-collapse-item title="基础信息" name="1">
-								<el-row :gutter="30">
-									<el-col :span="24">
-										<el-form-item label="所属上级" prop="pName">
-											<el-input v-model="menu.pName" :disabled="edit">
-												<el-button slot="append" icon="el-icon-search" @click="getParentId"></el-button>
-											</el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row :gutter="30">
-									<el-col :span="8">
-										<el-form-item label="菜单名称" prop="name">
-											<el-input v-model="menu.name">
-											</el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="链接地址" prop="url">
-											<el-input v-model="menu.url">
-											</el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="排序" prop="sort">
-											<el-input v-model="menu.sort">
-											</el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-
-								<el-row :gutter="30">
-									<!--是否影藏-->
-									<el-col :span="8">
-										<el-form-item label="是否显示" prop="hidden">
-											<el-switch active-color="#5B7BFA" inactive-color="#dadde5" v-model="menu.hidden" @change="changeval">
-											</el-switch>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="菜单图标" prop="css">
-											<el-input v-model="menu.css" :disabled="edit">
-												<i :class="menu.css" slot="prepend"></i>
-												<el-button slot="append" icon="el-icon-search" @click="getCss"></el-button>
-											</el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-							</el-collapse-item>
-						</el-collapse>
-					</div>
-
-					<div class="el-dialog__footer">
-						<el-button @click='close'>取消</el-button>
-						<el-button type="primary" @click='submitForm'>提交</el-button>
-					</div>
-				</el-form>
-			</div>
+			<!--提示弹出框 Begin-->
+			<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+				<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps">
+				</el-tree>
+				<div slot="footer" class="dialog__footer">
+			       <el-button @click="dialogVisible = false">取 消</el-button>
+			       <el-button type="primary" @click="confirm();" >确 定</el-button>
+			    </div>
+			</el-dialog>
+			<!--提示弹出框 End-->
 		</div>
 
-		<!--提示弹出框 Begin-->
-		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps">
-			</el-tree>
-			<div slot="footer" class="dialog__footer">
-		       <el-button @click="dialogVisible = false">取 消</el-button>
-		       <el-button type="primary" @click="confirm();" >确 定</el-button>
-		    </div>
-		</el-dialog>
-		<!--提示弹出框 End-->
-
-		<!--图标弹出 Begin-->
-        <div class="mask" v-show="show2"></div>
-		<div class="mask_div" v-show="show2">
-			<div class="mask_title_div clearfix">
-				<div class="mask_title">应用中心图标</div>
-				<div class="mask_anniu">
-					<span class="mask_span mask_max" @click='toggle'>
-						 
-						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
-					</span>
-					<span class="mask_span" @click='close1'>
-						<i class="icon-close1"></i>
-					</span>
+			<!--图标弹出 Begin-->
+	        <div class="mask" v-show="show2"></div>
+			<div class="mask_divbg" v-show="show2">
+				<div class="mask_div">
+					<div class="mask_title_div clearfix">
+						<div class="mask_title">应用中心图标</div>
+						<div class="mask_anniu">
+							<span class="mask_span mask_max" @click='toggle'>
+								 
+								<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
+							</span>
+							<span class="mask_span" @click='close1'>
+								<i class="icon-close1"></i>
+							</span>
+						</div>
+					</div>
+					<div id="FHScrollbar" :style="{height: fullHeight}">
+						<all_icons v-on:childByValue="childByValue"></all_icons>
+						<div slot="footer" class="el-dialog__footer">
+							<el-button @click="dialogVisible = false">取 消</el-button>
+							<el-button type="primary" @click="confirm2();" >确 定</el-button>
+						</div>
+					</div>
 				</div>
 			</div>
-			<div id="FHScrollbar" :style="{height: fullHeight}">
-				<all_icons v-on:childByValue="childByValue"></all_icons>
-				<div slot="footer" class="el-dialog__footer">
-					<el-button @click="dialogVisible = false">取 消</el-button>
-					<el-button type="primary" @click="confirm2();" >确 定</el-button>
-				</div>
-			</div>
-		</div>
-		<!--图标弹出 End-->	    
+			<!--图标弹出 End-->	    
+		
 	</div>
 </template>
 
@@ -244,22 +247,20 @@
 					this.rebackDialog();
 				}
 			},
-			maxDialog(e) {
+			maxDialog(e) { //定义大弹出框一个默认大小
 				this.isok1 = false;
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
-				$(".mask_div").css("margin", "0%");
 				$(".mask_div").css("top", "60px");
 			},
 			//还原按钮
-			rebackDialog() {
+			rebackDialog() { //大弹出框还原成默认大小
 				this.isok1 = true;
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
-				$(".mask_div").css("margin", "7% 10%");
-				$(".mask_div").css("top", "0");
+				$(".mask_div").css("top", "100px");
 			},
 			getCheckedNodes() {
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()

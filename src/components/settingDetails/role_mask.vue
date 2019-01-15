@@ -1,118 +1,120 @@
 <template>
 	<div>
-		<div class="mask" v-show="show"></div>
-		<div class="mask_div" v-show="show">
-			<div class="mask_title_div clearfix">
-				<div class="mask_title" v-show="addtitle">添加角色</div>
-				<div class="mask_title" v-show="modifytitle">修改角色</div>
-				<div class="mask_title" v-show="viewtitle">查看角色</div>
-				<div class="mask_anniu">
-					<span class="mask_span mask_max" @click='toggle'> 
-						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
-					</span>
-					<span class="mask_span" @click='close'>
-						<i class="icon-close1"></i>
-					</span>
+		<div class="mask" v-if="show"></div>
+		<div class="mask_divbg" v-if="show">
+			<div class="mask_div">
+				<div class="mask_title_div clearfix">
+					<div class="mask_title" v-show="addtitle">添加角色</div>
+					<div class="mask_title" v-show="modifytitle">修改角色</div>
+					<div class="mask_title" v-show="viewtitle">查看角色</div>
+					<div class="mask_anniu">
+						<span class="mask_span mask_max" @click='toggle'> 
+							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
+						</span>
+						<span class="mask_span" @click='close'>
+							<i class="icon-close1"></i>
+						</span>
+					</div>
+				</div>
+				<div class="mask_content">
+					<el-form :model="roleList" :rules="rules" ref="roleList" label-width="110px" class="demo-user">
+						<div class="accordion">
+							<el-collapse v-model="activeNames">
+								<el-collapse-item title="基础信息" name="1">
+									<el-row :gutter="30">
+										<el-col :span="8">
+											<el-form-item label="角色编码" prop="code">
+												<el-input v-model="roleList.code" :disabled="modify"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="角色名称" prop="name">
+												<el-input v-model="roleList.name" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="是否停用" prop="inactive">
+												<!--<el-input v-if="stopshow" v-model="roleList.inactive" :disabled="edit"></el-input>-->
+												<el-select  v-model="roleList.inactive" placeholder="请选择" style="width: 100%" :disabled="noedit">
+													<el-option v-for="item in stopoptions" :key="item.value" :label="item.label" :value="item.value">
+													</el-option>
+												</el-select>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row :gutter="30">
+										<el-col :span="24">
+											<el-form-item label="备注" prop="tips">
+												<el-input type="textarea" v-model="roleList.tips" placeholder="请填写" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<!--<el-row :gutter="30">
+										<el-col :span="8">
+											<el-form-item label="数据授权范围" prop="range">
+												<el-select placeholder="请选择" v-model="roleList.range" style="width: 100%" @change="selectValue">
+													<el-option v-for="item in dataoptions" :key="item.value" :label="item.label" :value="item.value">
+													</el-option>
+												</el-select>-->
+												<!-- 树 Begen-->
+												<!--<div class="lefttreebg">-->
+													<!-- <div class="left_tree_title clearfix">
+														<div class="pull-left pr20">数据授权范围</div>
+														<span class="pull-right navbar-minimalize minimalize-styl-2">
+															<i class="icon-doubleok icon-double-angle-left blue"></i>
+														</span>
+													</div> -->
+													<!--<div class="left_treebg" style="height: 400px;display:none;">
+														<div class="p15">
+															<el-tree ref="tree" class="filter-tree" :data="deptData" node-key="id" default-expand-all :indent="22" :render-content="renderContent" :props="resourceProps" @node-click="handleNodeClick">
+															</el-tree>
+														</div>
+													</div>
+												</div>-->
+												<!-- 树 End-->
+											<!--</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="角色授权" prop="roleright">-->
+												<!-- 树 Begen-->
+												<!--<div class="lefttreebg">-->
+													<!-- <div class="left_tree_title clearfix">
+														<div class="pull-left pr20">角色授权</div>
+														<span class="pull-right navbar-minimalize minimalize-styl-2">
+															<i class="icon-doubleok icon-double-angle-left blue"></i>
+														</span>
+													</div> -->
+													<!--<div class="left_treebg" style="height: 400px">
+														<div class="p15">
+															<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent" :props="resourceProps" @node-click="handleNodeClick">
+															</el-tree>
+														</div>
+													</div>
+												</div>-->
+												<!-- 树 End-->
+											<!--</el-form-item>
+										</el-col>
+									</el-row>-->
+								</el-collapse-item>
+							</el-collapse>
+						</div>
+						<div class="el-dialog__footer" v-show="noviews">
+							<el-button @click='close'>取消</el-button>
+							<el-button type="primary" @click='submitForm()'>保存</el-button>
+						</div>
+					</el-form>
 				</div>
 			</div>
-			<div class="mask_content">
-				<el-form :model="roleList" :rules="rules" ref="roleList" label-width="110px" class="demo-user">
-					<div class="accordion">
-						<el-collapse v-model="activeNames">
-							<el-collapse-item title="基础信息" name="1">
-								<el-row :gutter="30">
-									<el-col :span="8">
-										<el-form-item label="角色编码" prop="code">
-											<el-input v-model="roleList.code" :disabled="modify"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="角色名称" prop="name">
-											<el-input v-model="roleList.name" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="是否停用" prop="inactive">
-											<!--<el-input v-if="stopshow" v-model="roleList.inactive" :disabled="edit"></el-input>-->
-											<el-select  v-model="roleList.inactive" placeholder="请选择" style="width: 100%" :disabled="noedit">
-												<el-option v-for="item in stopoptions" :key="item.value" :label="item.label" :value="item.value">
-												</el-option>
-											</el-select>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row :gutter="30">
-									<el-col :span="24">
-										<el-form-item label="备注" prop="tips">
-											<el-input type="textarea" v-model="roleList.tips" placeholder="请填写" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<!--<el-row :gutter="30">
-									<el-col :span="8">
-										<el-form-item label="数据授权范围" prop="range">
-											<el-select placeholder="请选择" v-model="roleList.range" style="width: 100%" @change="selectValue">
-												<el-option v-for="item in dataoptions" :key="item.value" :label="item.label" :value="item.value">
-												</el-option>
-											</el-select>-->
-											<!-- 树 Begen-->
-											<!--<div class="lefttreebg">-->
-												<!-- <div class="left_tree_title clearfix">
-													<div class="pull-left pr20">数据授权范围</div>
-													<span class="pull-right navbar-minimalize minimalize-styl-2">
-														<i class="icon-doubleok icon-double-angle-left blue"></i>
-													</span>
-												</div> -->
-												<!--<div class="left_treebg" style="height: 400px;display:none;">
-													<div class="p15">
-														<el-tree ref="tree" class="filter-tree" :data="deptData" node-key="id" default-expand-all :indent="22" :render-content="renderContent" :props="resourceProps" @node-click="handleNodeClick">
-														</el-tree>
-													</div>
-												</div>
-											</div>-->
-											<!-- 树 End-->
-										<!--</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="角色授权" prop="roleright">-->
-											<!-- 树 Begen-->
-											<!--<div class="lefttreebg">-->
-												<!-- <div class="left_tree_title clearfix">
-													<div class="pull-left pr20">角色授权</div>
-													<span class="pull-right navbar-minimalize minimalize-styl-2">
-														<i class="icon-doubleok icon-double-angle-left blue"></i>
-													</span>
-												</div> -->
-												<!--<div class="left_treebg" style="height: 400px">
-													<div class="p15">
-														<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent" :props="resourceProps" @node-click="handleNodeClick">
-														</el-tree>
-													</div>
-												</div>
-											</div>-->
-											<!-- 树 End-->
-										<!--</el-form-item>
-									</el-col>
-								</el-row>-->
-							</el-collapse-item>
-						</el-collapse>
-					</div>
-					<div class="el-dialog__footer" v-show="noviews">
-						<el-button @click='close'>取消</el-button>
-						<el-button type="primary" @click='submitForm()'>保存</el-button>
-					</div>
-				</el-form>
-			</div>
+			<!-- 弹出 -->
+			<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+				<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick" @check-change="handleCheckChange">
+				</el-tree>
+				<span slot="footer" class="dialog-footer">
+			       <el-button @click="dialogVisible = false">取 消</el-button>
+			       <el-button type="primary" @click="queding();" >确 定</el-button>
+			    </span>
+			</el-dialog>
 		</div>
-		<!-- 弹出 -->
-		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick" @check-change="handleCheckChange">
-			</el-tree>
-			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible = false">取 消</el-button>
-		       <el-button type="primary" @click="queding();" >确 定</el-button>
-		    </span>
-		</el-dialog>
 	</div>
 </template>
 
@@ -277,7 +279,7 @@
 					tips: '',
 					deptName: '',
 				}
-				this.$refs["roleList"].resetFields();
+				// this.$refs["roleList"].resetFields();
 			},
 			rand(min, max) {
 				return Math.floor(Math.random() * (max - min)) + min;
@@ -357,22 +359,20 @@
 				}
 			},
 			//放大按钮
-			maxDialog(e) {
+			maxDialog(e) { //定义大弹出框一个默认大小
 				this.isok1 = false;
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
-				$(".mask_div").css("margin", "0%");
 				$(".mask_div").css("top", "60px");
 			},
 			//还原按钮
-			rebackDialog() {
+			rebackDialog() { //大弹出框还原成默认大小
 				this.isok1 = true;
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
-				$(".mask_div").css("margin", "7% 10%");
-				$(".mask_div").css("top", "0");
+				$(".mask_div").css("top", "100px");
 			},
 			getCheckedNodes() {
 				this.cccData = this.$refs.tree.getCheckedNodes()

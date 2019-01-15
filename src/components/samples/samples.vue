@@ -155,7 +155,7 @@
 								</el-table-column>
 								<el-table-column label="接样日期" sortable width="140px" :formatter="dateFormat" prop="RECIP_DATE" v-if="this.checkedName.indexOf('接样日期')!=-1">
 								</el-table-column>
-								<el-table-column label="状态" sortable width="100px" prop="STATE" v-if="this.checkedName.indexOf('状态')!=-1">
+								<el-table-column label="样品状态" sortable width="100px" prop="STATE" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
 								<!--<el-table-column label="信息状态" sortable width="140px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
 								</el-table-column>-->

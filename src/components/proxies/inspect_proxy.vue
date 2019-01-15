@@ -184,7 +184,6 @@
 		<inspectmask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></inspectmask>
 		<!--右侧内容显示 End-->
 	</div>
-	</div>
 </template>
 <script>
 	import Config from '../../config.js'

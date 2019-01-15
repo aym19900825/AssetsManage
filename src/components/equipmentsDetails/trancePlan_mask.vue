@@ -78,7 +78,7 @@
 								</el-table>
 							</el-collapse-item>
 							<el-collapse-item title="文件" name="3">
-								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
+								<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save"></doc-table>
 							</el-collapse-item>
 							<!-- 其他信息 -->
 							<el-collapse-item title="其他" name="4" v-show="!addtitle">
@@ -502,20 +502,11 @@
 							this.dataInfo.DEPTID = res.data.deptId;
 							this.dataInfo.ENTERBY = res.data.id;
 							this.dataInfo.ENTERDATE = this.getToday();
-						}else{
-							// this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
-							// console.log(2);
-							// this.dataInfo.CHANGEBY = res.data.id;
-							// console.log(3);
-							// this.dataInfo.CHANGEDATE = this.getToday();
-							// console.log(4);
-							// this.dataInfo.DEPARTMENT = res.data.deptName;
-						
-							this.docParm.userid = res.data.id;
-							this.docParm.username = res.data.username;
-							this.docParm.deptid = res.data.deptId;
-							this.docParm.deptfullname = res.data.deptName;
 						}
+						this.docParm.userid = res.data.id;
+						this.docParm.username = res.data.username;
+						this.docParm.deptid = res.data.deptId;
+						this.docParm.deptfullname = res.data.deptName;
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试1',
@@ -572,7 +563,6 @@
 						type: 'error'
 					});
 				});
-					
 			},
 			//点击按钮显示弹窗
 			visible() {
@@ -589,9 +579,9 @@
 				this.statusshow2 = false;
 				this.docParm = {
 					'model': 'new',
-					'appname': 'PM_PLAN',
+					'appname': '溯源计划',
 					'recordid': 1,
-					'appid': 69
+					'appid': 50
 				};
 				this.getUser('new');
 				this.show = true;
@@ -617,9 +607,9 @@
 				var _this = this;
 				setTimeout(function(){
 					_this.docParm.model = 'edit';
-					_this.docParm.appname = 'PM_PLAN';
+					_this.docParm.appname = '溯源计划';
 					_this.docParm.recordid = _this.dataInfo.ID;
-					_this.docParm.appid = 69;
+					_this.docParm.appid = 50;
 					_this.$refs.docTable.getData();
 				},100);
 				this.getPmList();
@@ -690,11 +680,16 @@
 				$(".mask_div").css("top", "0");
 			},
 
-			save(dataInfo) {
-				console.log(this.dataInfo);
+			save(opt) {
 				var _this = this;
 				var url = this.basic_url + '/api-apps/app/pmPlan/saveOrUpdate';
 				this.$refs['dataInfo'].validate((valid) => {
+					if(!valid && opt == 'docUpload'){
+						this.$message({
+							message: '请先正确填写信息，再进行文档上传',
+							type: 'warning'
+						});
+					}
 					if (valid) {
 						this.$axios.post(url, _this.dataInfo).then((res) => {
 							if(res.data.resp_code == 0) {
@@ -702,9 +697,16 @@
 									message: '保存成功',
 									type: 'success',
 								});
-								this.resetForm();
-								this.pmRecordList = [];
-								this.$emit('request');
+								if(opt == 'docUpload'){
+									this.docParm.recordid = res.data.datas.id;
+									this.docParm.model = 'edit';
+									this.$refs.docTable.autoLoad();
+									this.dataInfo.ID = res.data.datas.id;
+								}else{
+									this.resetForm();
+									this.pmRecordList = [];
+									this.$emit('request');
+								}
 							}
 						}).catch((err) => {
 							this.$message({
@@ -712,7 +714,7 @@
 								type: 'error'
 							});
 						});
-					this.falg=true;
+						this.falg=true;
 					} else {
 						this.show = true;
 						this.$message({

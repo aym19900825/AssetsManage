@@ -19,6 +19,13 @@
 				<div class="mask_content">
 					<!-- status-icon 验证后文本框上显示对勾图标 -->
 					<el-form :model="workorderForm" :label-position="labelPosition" :rules="rules" ref="workorderForm" label-width="110px">
+						<div class="text-center" v-show="viewtitle">
+							<el-button class="start" type="success" round plain size="mini" @click="startup"><i class="icon-start"></i> 启动流程</el-button>
+							<el-button class="approval" type="warning" round plain size="mini" @click="approvals"><i class="icon-edit-3"></i> 审批</el-button>
+							<el-button type="primary" round plain size="mini" @click="flowmap"><i class="icon-git-pull-request"></i> 流程地图</el-button>
+							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
+							<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
+						</div>
 						<div class="accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<!-- 样品信息列表 Begin-->
@@ -728,12 +735,24 @@
 			    </span>
 			</el-dialog>
 			<!-- 样品名称 End -->
+			<!--审批页面-->
+			<approvalmask :approvingData="approvingData" ref="approvalChild" ></approvalmask>
+			<!--流程历史-->
+			<flowhistorymask :approvingData="approvingData"  ref="flowhistoryChild" ></flowhistorymask>
+			<!--流程地图-->
+			<flowmapmask :approvingData="approvingData" ref="flowmapChild" ></flowmapmask>
+			<!--当前责任人-->
+			<vewPoplemask :approvingData="approvingData"  ref="vewPopleChild" ></vewPoplemask>
 		</div>
 	</div>
 </template>
 
 <script>
 	import Config from '../../config.js'
+	import approvalmask from '../workflow/approving.vue'
+	import flowhistorymask from '../workflow/flowhistory.vue'
+	import flowmapmask from '../workflow/flowmap.vue'
+	import vewPoplemask from '../workflow/vewPople.vue'
 	export default {
 		name: 'masks',
 		props: {
@@ -741,8 +760,15 @@
 				type: Object,
 			}
 		},
+		components: {
+			 approvalmask,
+			 flowhistorymask,
+			 flowmapmask,
+			 vewPoplemask
+		},
 		data() {
 			return {
+			approvingData:{},//流程传的数据
 			dialogVisible1:false,
 			dialogVisible2:false,
 			dialogVisible3:false,
@@ -851,7 +877,8 @@
 				selval:[],
 				userList:[],
 				samplesList:[],
-				numtips:''
+				numtips:'',
+				workorder:'workorder',//appname
 			};
 		},
 		methods: {
@@ -1121,7 +1148,74 @@
             deleteRow(index, rows) {//Table-操作列中的删除行
 				rows.splice(index, 1);
 			},
-
+			//启动流程
+			startup(){
+				console.log(12345);
+				console.log(this.dataid);
+				var url = this.basic_url + '/api-apps/app/workorder/flow/'+this.dataid;
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+					if(res.data.resp_code == 1) {
+							this.$message({
+								message:res.data.resp_msg,
+								type: 'warning'
+							});
+				    }else{
+				    	this.$message({
+								message:res.data.resp_msg,
+								type: 'success'
+							});
+							this.requestData();
+							$(".approval").show();
+							$(".start").hide();
+				    }
+				});
+			},
+			//审批流程
+			approvals(){
+				this.approvingData.id =this.dataid;
+				this.approvingData.app=this.workorder;
+				 var url = this.basic_url + '/api-apps/app/'+this.workorder+'/flow/isEnd/'+this.dataid;
+		    		this.$axios.get(url, {}).then((res) => {
+		    			if(res.data.resp_code == 0) {
+							this.$message({
+								message:res.data.resp_msg,
+								type: 'warning'
+							});
+		    			}else{
+		    				var url = this.basic_url + '/api-apps/app/'+this.workorder+'/flow/isExecute/'+this.dataid;
+		    				this.$axios.get(url, {}).then((res) => {
+				    			if(res.data.resp_code == 1) {
+										this.$message({
+											message:res.data.resp_msg,
+											type: 'warning'
+										});
+								}else{
+									this.$refs.approvalChild.visible();
+								}
+		    		});
+		    		}
+				});
+			},
+			//流程历史
+			flowhistory(){
+				this.approvingData.id =this.dataid;
+				this.approvingData.app=this.workorder;
+//				this.$refs.flowhistoryChild.open();
+				this.$refs.flowhistoryChild.getdata(this.dataid);
+			},
+			//流程地图
+			flowmap(){
+				this.approvingData.id =this.dataid;
+				this.approvingData.app=this.workorder;
+				this.$refs.flowmapChild.getimage();
+			},
+			//当前责任人
+			viewpepole(){
+				this.approvingData.id =this.dataid;
+				this.approvingData.app=this.workorder;
+				this.$refs.vewPopleChild.getvewPople(this.dataid);
+			},
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selMenu = val;
@@ -1254,6 +1348,7 @@
 			},
 			//这是查看
 			view(dataid) {
+				this.dataid=dataid;	
 				this.modifytitle = false;
 				this.addtitle = false;
 				this.viewtitle = true;

@@ -718,7 +718,7 @@
 			};
 
 			return {
-				approvingData:{},
+				approvingData:{},//流程传的数据
 				loadSign:true,//加载
 				commentArr:{},
 				falg:false,//保存验证需要的

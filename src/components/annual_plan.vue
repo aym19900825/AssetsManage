@@ -6,7 +6,9 @@
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单调用 Begin-->
-			<!-- <navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left> -->
+			<div style="display:none;">
+				<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left>
+			</div>
 			<!--左侧菜单调用 End-->
 			<div class="wrapper wrapper-content wrapperall">
 				<div class="ibox-content">
@@ -468,7 +470,7 @@
 					console.log(res.data);
 					for(var i=0;i<res.data.data.length;i++){
 						if(res.data.data[i].TYPE  == '1'){
-							res.data.data[i].TYPE  = '监督审查';
+							res.data.data[i].TYPE  = '监督抽查';
 						}else if(res.data.data[i].TYPE  == '3'){
 							res.data.data[i].TYPE  = '质量抽查';
 						}

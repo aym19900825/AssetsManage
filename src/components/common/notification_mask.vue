@@ -142,11 +142,11 @@
 												</el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="6">
+										<!-- <el-col :span="6">
 											<el-form-item label="受检企业编号" prop="VENDOR" label-width="110px">
-												<el-input v-model="dataInfo.VENDOR" :disabled="noedit"></el-input>
+												<el-input v-model="dataInfo.VENDOR" :disabled="true"></el-input>
 											</el-form-item>
-										</el-col>
+										</el-col> -->
 										<el-col :span="6">
 											<el-form-item label="样品数量" prop="QUALITY" label-width="110px">
 												<el-input v-model="dataInfo.QUALITY" :disabled="noedit"></el-input>
@@ -700,7 +700,7 @@
 					});
 				}else if(this.selUser.length > 1){
 					this.$message({
-						message: '不可同时选择多条数据',
+						message: '不可同时选择多条数据11',
 						type: 'warning'
 					});
 				}else{
@@ -708,6 +708,7 @@
 					this.dataInfo.V_NAME = this.selUser[0].NAME;//名称
 					this.dataInfo.V_ADDRESS = this.selUser[0].CONTACT_ADDRESS;//地址
 					this.dataInfo.V_ZIPCODE = this.selUser[0].ZIPCODE;//邮编
+					// this.dataInfo.VENDOR = this.selUser[0].CODE;//受检企业编号
 					this.$emit('request');
 				}
 			},

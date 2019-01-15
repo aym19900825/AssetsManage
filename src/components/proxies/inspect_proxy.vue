@@ -16,7 +16,7 @@
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
 								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
-                                	<i class="icon-add"></i>添加1
+                                	<i class="icon-add"></i>添加
                       			 </button>
 								<button type="button" class="btn btn-blue button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改
@@ -436,8 +436,7 @@
 			},
 			getRouterData() {
       		// 只是改了query，其他都不变
-				  this.id = this.$route.query.bizid;
-				  console.log('bizid', this.id);
+				  this.id = this.$route.query.bizId;
 				  this.$refs.child.view(this.id);
 			},
 			//高级查询
@@ -607,7 +606,6 @@
 			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
-        		console.log(111);
         		// childValue就是子组件传过来的值
         		console.log(childValue);
         		this.$refs.navsheader.showClick(childValue);
@@ -619,8 +617,8 @@
 			this.getKey();
 		},
 		mounted() {
-			console.log(this.$route.query.bizid);
-			if(this.$route.query.bizid!=undefined){
+			console.log(this.$route.query.bizId);
+			if(this.$route.query.bizId!=undefined){
 				this.getRouterData();
 			}
 		},

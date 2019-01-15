@@ -388,11 +388,12 @@
 						this.dataInfo.ENTERBY = res.data.id;
 						this.dataInfo.CHANGEDATE = this.getToday();
 						// this.dataInfo.DEPARTMENT = res.data.deptName;	
-					}else{
-						this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
-						this.dataInfo.CHANGEBY = res.data.id;
-						this.dataInfo.CHANGEDATE = this.getToday();
 					}
+					// else{
+						// this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
+						// this.dataInfo.CHANGEBY = res.data.id;
+						// this.dataInfo.CHANGEDATE = this.getToday();
+					// }
 					this.docParm.userid = res.data.id;
 					this.docParm.username = res.data.username;
 					this.docParm.deptid = res.data.deptId;

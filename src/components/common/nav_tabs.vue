@@ -136,19 +136,37 @@ export default {
             this.closeTab( this.selectedTab);
         },
         closeAll(){
-            _this.$store.dispatch('setClickedNavAct',[{
+            this.$store.dispatch('setClickedNavAct',[{
                 css: 'icon-user',
                 name: '首页',
                 url: '/index'}]);
-            _this.$store.dispatch('setSelectedNavAct',{
+            this.$store.dispatch('setSelectedNavAct',{
                 css: 'icon-user',
                 name: '首页',
                 url: '/index'});
             this.$router.push({path: '/index'});
         },
         closeOther(){
+        	var item={
+        		 css: 'icon-user',
+                name: '首页',
+                url: '/index'
+        	};
+        	var flag = false;
             this.tabs = [this.selectedTab];
-            this.$store.dispatch('setClickedNavAct',this.tabs);
+            console.log(this.tabs);
+            this.tabs.unshift(item);
+			for(var i = 0; i < this.$store.state.clickedNavs.length; i++){
+				if(item.name == this.$store.state.clickedNavs[i].name){
+					flag = true;
+				}
+			}
+			if(!flag){
+				this.tabs.unshift(item);
+				this.$store.state.clickedNavs.push(this.tabs)
+			}
+				this.$router.push({path: item.url});
+//         this.$store.state.clickedNavs.push(item);
 //          sessionStorage.setItem('clickedNav',JSON.stringify({arr:this.tabs}));
         },
         showSelected(item){

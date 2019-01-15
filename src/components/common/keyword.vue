@@ -1,6 +1,9 @@
 <template>
 <div>
-    <el-dialog title="关键字" :visible.sync="param.visible" :before-close="reset">
+    <el-dialog title="关键字" 
+        :visible.sync="param.visible" 
+        :before-close="reset"  
+        :modal-append-to-body="false">
         <p class="selTab">已选择：
             <el-tag class="tag" 
                 type="success" 
@@ -97,7 +100,7 @@ export default {
             //处理分页时，分页记忆失去之前数据，500必须大于setSelectRow的时间
             setTimeout(function(){
                 _this.changePageCoreRecordData();
-            },500);
+            },800);
         },
         //分页
         sizeChange(val) {

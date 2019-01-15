@@ -424,7 +424,7 @@
 				</div>
 			</div>
 			<!-- 检测依据弹出框begin -->
-			<el-dialog title="检测依据" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
+			<el-dialog title="检测依据" :visible.sync="dialogVisible" width="80%" :before-close="handleClose" :modal-append-to-body='false'>
 				<!-- 高级查询划出 Begin-->
 				<div class="pb10">
 					<el-form :model="searchList" label-width="70px">
@@ -519,7 +519,7 @@
 			<!-- 检测依据弹出框 End -->
 
 			<!-- 检测项目与要求弹出框 Begin -->
-			<el-dialog title="检测项目测试与要求" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
+			<el-dialog title="检测项目测试与要求" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose" :modal-append-to-body='false'>
 				<!-- 高级查询划出 Begin-->
 				<div class="pb10">
 					<el-form :model="searchList" label-width="70px">
@@ -603,7 +603,7 @@
 			</el-dialog>
 			<!-- 检测项目与要求 End -->
 			<!-- 产品类别 Begin -->
-			<el-dialog title="产品类别" height="400px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
+			<el-dialog title="产品类别" height="400px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose" :modal-append-to-body='false'>
 				<!-- 第二层弹出的表格 Begin-->
 				<el-table :header-cell-style="rowClass" :data="categoryList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" fixed width="55" align="center">
@@ -631,7 +631,7 @@
 			</el-dialog>
 			<!-- 产品类别 End -->
 			<!-- 产品名称 Begin -->
-			<el-dialog title="产品名称" :visible.sync="dialogVisible4" width="80%" :before-close="handleClose">
+			<el-dialog title="产品名称" :visible.sync="dialogVisible4" width="80%" :before-close="handleClose" :modal-append-to-body='false'>
 				<el-table  :header-cell-style="rowClass" :data="productList" line-center border stripe height="400px" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 									<el-table-column type="selection" fixed width="55" align="center">
 									</el-table-column>
@@ -657,7 +657,7 @@
 			</el-dialog>
 			<!-- 产品名称 End -->
 			<!-- 生产企业名称、受检企业名称 Begin -->
-			<el-dialog :visible.sync="diaVisCustom" width="80%" :before-close="handleClose">
+			<el-dialog :visible.sync="diaVisCustom" width="80%" :before-close="handleClose" :modal-append-to-body='false'>
 				<el-table :data="customerList" border stripe :header-cell-style="rowClass" :height="fullHeight" style="width: 100%;" :default-sort="{prop:'customerList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" width="55" fixed align="center">
 					</el-table-column>
@@ -860,15 +860,15 @@
 					CODE: [{required: true,trigger: 'blur',validator: validateCode,}],
 					NAME:[{required: true,trigger: 'blur',validator: validateName,}],
 					DESCRIPTION:[{required: true,message: '请填写计划描述',trigger: 'blur'}],
-					TYPE:[{required: true,message: '请选择类别',trigger: 'change'}],
+					TYPE:[{required: true,message: '请选择类别', trigger: 'change'}],
 					COMPACTOR:[{required: true,message: '请填写编制人',trigger: 'blur'}],
 					C_PERSON:[{required: true,message: '请填写审核人',trigger: 'blur'}],
 					APPRPERSON:[{required: true,message: '请填写批准人',trigger: 'blur'}],
 					CONTACT_ADDRESS:[{required: true,trigger:'blur',validator: validateAddress,}],
 					PHONE:[{required: true,trigger: 'blur',validator: validatePhone,}],
 					EMAIL:[{required: true,trigger: 'blur',validator:validateEmail,}],
-					PROP_UNIT:[{required: true,validator: validateUnit,trigger: 'change'}],//提出单位 
-       				ITEMTYPE:[{required: true,validator: validateItemtype,trigger: 'change' }],//产品类别 
+					PROP_UNIT:[{required: true,validator: validateUnit, trigger: 'change'}],//提出单位 
+       				ITEMTYPE:[{required: true,validator: validateItemtype, trigger: 'blur' }],//产品类别 
        				YEAR: [{type: 'string',required: true,message: '请选择年度',trigger: 'change' }],//年度
        				REPORTDATE: [{type: 'string',required: true,message: '请选择提报日期',trigger: 'change'}],//提报日期
        				//检测依据 

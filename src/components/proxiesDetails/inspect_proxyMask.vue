@@ -19,8 +19,10 @@
 				<div class="mask_content">
 					<el-form :model="dataInfo" :label-position="labelPositions" :rules="rules" ref="dataInfo" status-icon inline-message  class="demo-ruleForm">
 						<div class="text-center" v-show="viewtitle">
-							<el-button id="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 启动流程</el-button>
-							<el-button id="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
+							<span v-if="this.dataInfo.STATE!=3">
+								<el-button id="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 启动流程</el-button>
+								<el-button id="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
+							</span>
 							<el-button type="primary" round plain size="mini" @click="flowmap"><i class="icon-git-pull-request"></i> 流程地图</el-button>
 							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
 							<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
@@ -916,9 +918,7 @@
 		    },
 			iconOperation(row, column, cell, event) {
 				if(column.property === "iconOperation") {
-					console.log(row.isEditing);
 					row.isEditing = !row.isEditing;
-					console.log(row.isEditing);
 				}
 			},
 			//生成委托书
@@ -926,7 +926,6 @@
 				var dataid = this.dataInfo.ID;
 					var Url = this.basic_url + '/api-apps/app/inspectPro/operate/createWorkorder?ID='+dataid;
 					this.$axios.get(Url, {}).then((res) => {
-						console.log(res.data);
 						if(res.data.resp_code == 0) {
 							this.$message({
 								message: '生成工作任务单成功',
@@ -1043,7 +1042,6 @@
 			detailgetData() {
 			var url = this.basic_url +'/api-apps/app/inspectPro/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res.data);
 					this.dataInfo = res.data;
 					this.show = true;
 					//深拷贝数据
@@ -1147,28 +1145,13 @@
 				this.edit = true;
 				this.noedit = true;
 				this.detailgetData();
-				
-//				var url = this.basic_url + '/api-apps/app/inspectPro/' + dataid;
-//				this.$axios.get(url, {}).then((res) => {
-//					console.log(res.data);
-//					this.dataInfo = res.data;
-//					this.show = true;
-//				}).catch((err) => {
-//					this.$message({
-//						message: '网络错误，请重试',
-//						type: 'error'
-//					});
-//				});
 				//判断启动流程和审批的按钮是否显示
 				var url = this.basic_url + '/api-apps/app/inspectPro/flow/isStart/'+dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					if(res.data.resp_code==1){
-						console.log(111);
 						this.start=true;
 						this.approval=false;
 					}else{
-						console.log(222);
 						this.start=false;
 						this.approval=true;
 					}

@@ -398,6 +398,7 @@
 			},
 			//修改用戶
 			modify() {
+				console.log(this.selUser);
 				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
@@ -411,11 +412,53 @@
 					});
 					return;
 				} else {
+					if(this.selUser[0].STATE==3||this.selUser[0].STATE==2){
+							this.$message({
+							message: '已启动的流程，不允许修改数据，只可以查看。',
+							type: 'warning'
+						});
+						this.$refs.child.view(this.selUser[0].ID);
+					}
+					//驳回
+					else if(this.selUser[0].STATE==0){
+						console.log(111222);
+//						/flow/task/isPromoterNode 当前是否为发起人节点
+					var url = this.basic_url + '/api-apps/app/flow/isPromoterNode/'+this.selUser[0].ID;
+					this.$axios.get(url, {}).then((res) => {
+						console.log(res);
+//					  	if(res.data.resp_code==1){
+//							console.log(11);
+//							this.start=true;
+//							this.approval=false;
+//						}else{
+//							console.log(22);
+//						this.start=false;
+//							this.approval=true;
+//						}
+					});
+//					/app/{app}/flow/isExecute/{id}
+					var url = this.basic_url + '/api-apps/app/flow/isExecute/'+this.selUser[0].ID;
+					this.$axios.get(url, {}).then((res) => {
+						console.log(res);
+//					  	if(res.data.resp_code==1){
+//							console.log(11);
+//							this.start=true;
+//							this.approval=false;
+//						}else{
+//							console.log(22);
+//						this.start=false;
+//							this.approval=true;
+//						}
+					});
+
+					}
+					
 					this.$refs.child.detail(this.selUser[0].ID);
 				}
 			},
 			//查看
 			 view(id) {
+			 	console.log(id);
 				this.$refs.child.view(id);
 			},
 			//代办跳转

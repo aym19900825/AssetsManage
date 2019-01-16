@@ -19,8 +19,10 @@
 				<div class="mask_content">
 						<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" class="demo-form-inline" inline-message>
 							<div class="text-center" v-show="viewtitle">
+							<span v-if="this.dataInfo.STATE!=3">	
 							<el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 启动流程</el-button>
 							<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
+							</span>
 							<el-button type="primary" round plain size="mini" @click="flowmap" ><i class="icon-git-pull-request"></i> 流程地图</el-button>
 							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
 							<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
@@ -832,11 +834,10 @@
 				this.noedit = false;
 			},
 			detailgetData() {
-			var url = this.basic_url +'/api-apps/app/workNot/' + this.dataid;
+				var url = this.basic_url +'/api-apps/app/workNot/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					console.log(res.data);
 					this.dataInfo = res.data;
-					this.show = true;
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -880,19 +881,18 @@
 				this.edit = true;
 				this.noedit = true;
 				this.detailgetData();
+				this.show = true;
 				//判断启动流程和审批的按钮是否显示
 				var url = this.basic_url + '/api-apps/app/workNot/flow/isStart/'+dataid;
-				this.$axios.get(url, {}).then((res) => {
-					if(res.data.resp_code==1){
-						console.log(11);
-						this.start=true;
-						this.approval=false;
-					}else{
-						console.log(22);
-						this.start=false;
-						this.approval=true;
-					}
-				});
+					this.$axios.get(url, {}).then((res) => {
+					  if(res.data.resp_code==1){
+							this.start=true;
+							this.approval=false;
+						}else{
+							this.start=false;
+							this.approval=true;
+						}
+					});
 			},
 			//上传文件 Begin
 			handleRemove(file, fileList) {
@@ -1071,7 +1071,6 @@
 				this.$axios.get(url, {
 					params: params
 				}).then((res) => {
-					console.log(res.data);
 					this.gridData = res.data.data;
 					// this.gridData = res.data.data;
 					// this.dialogVisible = true;
@@ -1082,10 +1081,9 @@
 			},
 			//生成委托书
 			build(){
-				console.log(this.dataInfo.ISCREATED);
 				var dataid = this.dataInfo.ID;
-					this.$axios.get(this.basic_url + '/api-apps/app/workNot/operate/createInspectProxy?ID=' + dataid, {}).then((res) => {
-						console.log(res.data);
+				    var url=this.basic_url + '/api-apps/app/workNot/operate/createInspectProxy?ID=' + dataid;
+					this.$axios.get(url, {}).then((res) => {
 						if(res.data.resp_code == 0) {
 							this.$message({
 								message: '生成委托书成功',

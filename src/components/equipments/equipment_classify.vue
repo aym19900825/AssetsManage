@@ -70,7 +70,7 @@
                         <el-col :span="5" class="lefttree">
 							<div class="lefttreebg">
 								<div class="left_tree_title clearfix" @click="min3max()">
-									<div class="pull-left pr20" v-if="ismin">器具</div>
+									<div class="pull-left pr20" v-if="ismin">设备分类</div>
 									<span class="pull-right navbar-minimalize minimalize-styl-2">
 										<i class="icon-doubleok icon-double-angle-left blue"></i>
 									</span>
@@ -208,7 +208,7 @@
 					}
                 ],
                 //tree
-                resourceData: [], //数组，我这里是通过接口获取数据，
+                // resourceData: [], //数组，我这里是通过接口获取数据，
                 treeData: [],
 				selUser: [],
 				categoryList: [],
@@ -228,10 +228,10 @@
 				resourceData: [], //数组，我这里是通过接口获取数据，
 				resourceDialogisShow: false,
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
-				resourceProps: {
-					categorymaskren: "subDepts",
-					label: "simplename"
-				},
+				// resourceProps: {
+				// 	categorymaskren: "subDepts",
+				// 	label: "simplename"
+				// },
 				page: { //分页显示
 					currentPage: 1,
 					pageSize: 10,
@@ -239,6 +239,10 @@
 				},
 				CATEGORY: {},//修改子组件时传递数据
 				selectData: [],
+				resourceProps: {
+					children: "children",
+					label: "CLASSIFY_DESCRIPTION"
+				},
 			}
 		},
 		methods: {
@@ -247,18 +251,18 @@
 			    return 'text-align:center'
 			},
 			//机构值
-			getCompany() {
-				var type = "2";
-				var url = this.basic_url + '/api-user/depts/treeByType';
-				this.$axios.get(url, {
-					params: {
-						type: type
-					},
-				}).then((res) => {
-					console.log(res.data);
-					this.selectData = res.data;
-				});
-			},
+			// getCompany() {
+			// 	var type = "2";
+			// 	var url = this.basic_url + '/api-user/depts/treeByType';
+			// 	this.$axios.get(url, {
+			// 		params: {
+			// 			type: type
+			// 		},
+			// 	}).then((res) => {
+			// 		console.log(res.data);
+			// 		this.selectData = res.data;
+			// 	});
+			// },
 			//表格滚动加载
 			loadMore() {
 				if(this.loadSign) {
@@ -446,6 +450,33 @@
 				}
 				this.ismin = !this.ismin;
 			},
+			// 点击节点
+			nodeClick: function(m) {
+				if(m.iconClass != 'icon-file-text') {
+					if(m.iconClass == 'icon-file-normal') {
+						m.iconClass = 'icon-file-open';
+					} else {
+						m.iconClass = 'icon-file-normal';
+					}
+				}
+				this.handleNodeClick();
+			},
+			expandClick: function(m) {
+				if(m.iconClass != 'icon-file-text') {
+					if(m.iconClass == 'icon-file-normal') {
+						m.iconClass = 'icon-file-open';
+					} else {
+						m.iconClass = 'icon-file-normal';
+					}
+				}
+				m.isFolder = !m.isFolder;
+			},
+			handleNodeClick(data) {
+				// console.log(123123123);
+				// console.log(data);
+				this.searchList.CLASSIFY_DESCRIPTION = data.CLASSIFY_DESCRIPTION;
+				this.requestData();
+			},
 			requestData(index) {
 				var data = {
 					page: this.page.currentPage,
@@ -483,7 +514,7 @@
 					this.categoryList = newarr;
 				}).catch((wrong) => {})
 			},
-			handleNodeClick(data) {},
+			// handleNodeClick(data) {},
 			formatter(row, column) {
 				return row.enabled;
 			},
@@ -496,17 +527,23 @@
               //机构树
 			getKey() {
 				let that = this;
-				var url = this.basic_url + '/api-user/depts/tree';
+				// 192.168.1.169:9100/api-apps/app/assetClass/tree?tree_id=CLASSIFY_NUM&tree_pid=PARENT
+				var url = this.basic_url + '/api-apps/app/assetClass/tree?tree_id=CLASSIFY_NUM&tree_pid=PARENT';
 				this.$axios.get(url, {}).then((res) => {
-					this.resourceData = res.data;
+					console.log(2333);
+					console.log(res.data);
+					this.resourceData = res.data.datas;
 					this.treeData = this.transformTree(this.resourceData);
 				});
 			},
-
+			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
+				//console.log();
+				return (<span><i class={data.iconClass}></i><span>{node.label}</span></span>)
+			},
 		},
 		mounted() {
 			this.requestData();
-            this.getCompany();
+            // this.getCompany();
             this.getKey();
 		},
 	}

@@ -67,15 +67,15 @@
 								<el-col :span="5">
 									<el-form-item label="承检单位" prop="CJDW" label-width="75px">
 										<el-select clearable v-model="searchList.CJDW" filterable allow-create default-first-option placeholder="请选择">
-										    <el-option v-for="(data,index) in selectDept" :key="index" :value="data.id" :label="data.fullname"></el-option>
+											<el-option v-for="(data,index) in selectDept" :key="index" :value="data.id" :label="data.fullname"></el-option>
 										</el-select>
 									</el-form-item>
 								</el-col>
 								<el-col :span="4">
 									<el-form-item label="类型" prop="TYPE" label-width="45px">
 										<el-select clearable v-model="searchList.TYPE" placeholder="请选择类别" style="width: 100%;">
-												<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
-											</el-select>
+											<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
+										</el-select>
 									</el-form-item>
 								</el-col>
 							</el-row>
@@ -167,7 +167,7 @@
 				</div>
 			</div>
 			<!--右侧内容显示 End-->
-			<notificationsmask  @request="requestData" ref="child" v-bind:page=page></notificationsmask>
+			<notificationsmask @request="requestData" ref="child" v-bind:page=page></notificationsmask>
 		</div>
 	</div>
 </template>
@@ -184,7 +184,7 @@
 		components: {
 			vheader,
 			navs_header,
-			 navs_left,
+			navs_left,
 			tableControle,
 			notificationsmask,
 
@@ -192,7 +192,7 @@
 		data() {
 			return {
 				basic_url: Config.dev_url,
-				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
+				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
 				value: '',
 				options: [{
 					value: '选项1',
@@ -216,8 +216,8 @@
 					'抽样方案',
 					'完成日期',
 					'信息状态',
-//					'录入人',
-//					'录入时间'
+					//					'录入人',
+					//					'录入时间'
 				],
 				tableHeader: [{
 						label: '工作任务通知书编号',
@@ -263,10 +263,10 @@
 						label: '信息状态',
 						prop: 'STATUS'
 					},
-//					{
-//						label: '录入人',
-//						prop: 'ENTERBY'
-//					},
+					//					{
+					//						label: '录入人',
+					//						prop: 'ENTERBY'
+					//					},
 					//					{
 					//						label: '录入时间',
 					//						prop: 'ENTERDATE'
@@ -291,18 +291,39 @@
 					STATUS: ''
 				},
 				//tree
-				resourceData: [{ 
-					label: '监督抽查'},
-					{label: '监督抽查复查'},
-					{label: '质量抽查'},
-					{label: '质量抽查复查'},
-					{label: '生产许可证'},
-					{label: '认定检验检测'},
-					{label: '鉴定试验'},
-					{label: '委托检验检测'},
-					{label: '专项抽查'},
-					{label: '专项抽查复查'},
-					{label: '其它'},
+				resourceData: [{
+						label: '监督抽查'
+					},
+					{
+						label: '监督抽查复查'
+					},
+					{
+						label: '质量抽查'
+					},
+					{
+						label: '质量抽查复查'
+					},
+					{
+						label: '生产许可证'
+					},
+					{
+						label: '认定检验检测'
+					},
+					{
+						label: '鉴定试验'
+					},
+					{
+						label: '委托检验检测'
+					},
+					{
+						label: '专项抽查'
+					},
+					{
+						label: '专项抽查复查'
+					},
+					{
+						label: '其它'
+					},
 				], //数组，我这里是通过接口获取数据，
 				resourceDialogisShow: false,
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
@@ -336,7 +357,7 @@
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=type';
 				this.$axios.get(url, {}).then((res) => {
 					console.log(res.data);
-					this.selectData = res.data; 
+					this.selectData = res.data;
 					console.log(2333333);
 					console.log(this.selectData);
 				}).catch(error => {
@@ -344,9 +365,12 @@
 				})
 			},
 			//表头居中
-			rowClass({ row, rowIndex}) {
-			    // console.log(rowIndex) //表头行标号为0
-			    return 'text-align:center'
+			rowClass({
+				row,
+				rowIndex
+			}) {
+				// console.log(rowIndex) //表头行标号为0
+				return 'text-align:center'
 			},
 			//机构值
 			getCompany() {
@@ -412,60 +436,51 @@
 					});
 					return;
 				} else {
-					if(this.selUser[0].STATE==3||this.selUser[0].STATE==2){
-							this.$message({
+					if(this.selUser[0].STATE == 3 || this.selUser[0].STATE == 2) {
+						this.$message({
 							message: '已启动的流程，不允许修改数据，只可以查看。',
 							type: 'warning'
 						});
 						this.$refs.child.view(this.selUser[0].ID);
 					}
 					//驳回
-					else if(this.selUser[0].STATE==0){
-						console.log(111222);
-//						/flow/task/isPromoterNode 当前是否为发起人节点
-					var url = this.basic_url + '/api-apps/app/flow/isPromoterNode/'+this.selUser[0].ID;
-					this.$axios.get(url, {}).then((res) => {
-						console.log(res);
-//					  	if(res.data.resp_code==1){
-//							console.log(11);
-//							this.start=true;
-//							this.approval=false;
-//						}else{
-//							console.log(22);
-//						this.start=false;
-//							this.approval=true;
-//						}
-					});
-//					/app/{app}/flow/isExecute/{id}
-					var url = this.basic_url + '/api-apps/app/flow/isExecute/'+this.selUser[0].ID;
-					this.$axios.get(url, {}).then((res) => {
-						console.log(res);
-//					  	if(res.data.resp_code==1){
-//							console.log(11);
-//							this.start=true;
-//							this.approval=false;
-//						}else{
-//							console.log(22);
-//						this.start=false;
-//							this.approval=true;
-//						}
-					});
-
+					else if(this.selUser[0].STATE == 0) {
+						var url = this.basic_url + '/api-apps/app/workNot/flow/isExecute/' + this.selUser[0].ID;
+						this.$axios.get(url, {}).then((res) => {
+							console.log(res);
+							if(res.data.resp_code == 0) {
+								var url = this.basic_url + '/api-apps/app/workNot/flow/isPromoterNode/' + this.selUser[0].ID;
+								this.$axios.get(url, {}).then((res) => {
+									console.log(res);
+									if(res.data.resp_code == 0) {
+										this.$refs.child.detail(this.selUser[0].ID);
+									} else {
+										this.$message({
+											message: res.data.resp_msg,
+											type: 'warning'
+										});
+									}
+								});
+							} else {
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'warning'
+									});
+							}
+						});
 					}
-					
-					this.$refs.child.detail(this.selUser[0].ID);
 				}
 			},
 			//查看
-			 view(id) {
-			 	console.log(id);
+			view(id) {
+				console.log(id);
 				this.$refs.child.view(id);
 			},
 			//代办跳转
 			getRouterData() {
-      		// 只是改了query，其他都不变
-				  this.id = this.$route.query.bizId;
-				  this.$refs.child.view(this.id);
+				// 只是改了query，其他都不变
+				this.id = this.$route.query.bizId;
+				this.$refs.child.view(this.id);
 			},
 			//高级查询
 			modestsearch() {
@@ -592,14 +607,14 @@
 			},
 
 			//机构树
-//			getKey() {
-//				let that = this;
-//				var url = this.basic_url + '/api-user/depts/tree';
-//				this.$axios.get(url, {}).then((res) => {
-//					this.resourceData = res.data;
-//					this.treeData = this.transformTree(this.resourceData);
-//				});
-//			},
+			//			getKey() {
+			//				let that = this;
+			//				var url = this.basic_url + '/api-user/depts/tree';
+			//				this.$axios.get(url, {}).then((res) => {
+			//					this.resourceData = res.data;
+			//					this.treeData = this.transformTree(this.resourceData);
+			//				});
+			//			},
 
 			transformTree(data) {
 				for(var i = 0; i < data.length; i++) {
@@ -616,15 +631,19 @@
 				return data;
 			},
 			handleNodeClick(data) {
-				for(var i = 0;i<this.selectData.length;i++){
-					if(data.label ==  this.selectData[i].name){
-						 this.searchList.TYPE = this.selectData[i].code;
+				for(var i = 0; i < this.selectData.length; i++) {
+					if(data.label == this.selectData[i].name) {
+						this.searchList.TYPE = this.selectData[i].code;
 					}
 				}
 				this.requestData();
 			},
-//			树节点的内容区的渲染 Function
-			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
+			//			树节点的内容区的渲染 Function
+			renderContent(h, {
+				node,
+				data,
+				store
+			}) { //自定义Element树菜单显示图标
 				return(
 					<span>
               			<i class={data.iconClass}></i>
@@ -684,22 +703,22 @@
 			formatter(row, column) {
 				return row.enabled;
 			},
-			childByValue:function(childValue) {
-        		// childValue就是子组件传过来的值
-        		this.$refs.navsheader.showClick(childValue);
-      		},
-			
+			childByValue: function(childValue) {
+				// childValue就是子组件传过来的值
+				this.$refs.navsheader.showClick(childValue);
+			},
+
 		},
 		beforeMount() {
 			// 在页面挂载前就发起请求
 			this.requestData();
-//			this.getKey();
+			//			this.getKey();
 			this.getType();
 			this.getCompany();
 		},
 		mounted() {
 			console.log(this.$route.query.bizId);
-			if(this.$route.query.bizId!=undefined){
+			if(this.$route.query.bizId != undefined) {
 				this.getRouterData();
 			}
 		},

@@ -1872,4 +1872,10 @@
 	.ml60 {margin-left: 60px;}
 	#cost{text-align: right !important;}
 	#costshow{float: right;}
+	.el-dialog__footer {
+		padding: 19px 20px 20px;
+		text-align: center;
+		-webkit-box-sizing: border-box;
+		box-sizing: border-box;
+	}
 </style>

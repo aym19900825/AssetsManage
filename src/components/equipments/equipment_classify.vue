@@ -24,18 +24,6 @@
 								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
 							    <i class="icon-trash"></i>删除
 							</button>
-								<!-- <button type="button" class="btn btn-primarys button-margin" @click="importData">
-							    <i class="icon-upload-cloud"></i>导入
-							</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="exportData">
-							    <i class="icon-download-cloud"></i>导出
-							</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="Printing">
-							    <i class="icon-print"></i>打印
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="Configuration">
-							    <i class="icon-cpu"></i>配置关系
-							</button> -->
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 					    		<i class="icon-search"></i>高级查询
 					    		<i class="icon-arrow1-down" v-show="down"></i>
@@ -79,7 +67,23 @@
 					</div>
 					<!-- 高级查询划出 End-->
 					<el-row :gutter="0">
-						<el-col :span="24">
+                        <el-col :span="5" class="lefttree">
+							<div class="lefttreebg">
+								<div class="left_tree_title clearfix" @click="min3max()">
+									<div class="pull-left pr20" v-if="ismin">器具</div>
+									<span class="pull-right navbar-minimalize minimalize-styl-2">
+										<i class="icon-doubleok icon-double-angle-left blue"></i>
+									</span>
+								</div>
+								<div class="left_treebg" :style="{height: fullHeight}">
+									<div class="p15" v-if="ismin">
+										<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all  :indent="22" :render-content="renderContent"  :props="resourceProps" @node-click="handleNodeClick">
+										</el-tree>
+									</div>
+								</div>
+							</div>
+						</el-col>
+						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 Begin-->
 							<el-table :header-cell-style="rowClass" :data="categoryList" v-loading="loading" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
@@ -202,7 +206,10 @@
 						label: '修改时间',
 						prop: 'CHANGEDATE'
 					}
-				],
+                ],
+                //tree
+                resourceData: [], //数组，我这里是通过接口获取数据，
+                treeData: [],
 				selUser: [],
 				categoryList: [],
 				search: false,
@@ -286,15 +293,14 @@
 			reset() {
 				this.CATEGORY = {
 					ID: '',
-					NUM: '',
-					TYPE: '',
-					STATUS: '活动',
-					VERSION: '1',
-					DEPARTMENT: '',
-					ENTERBY: '',
-					ENTERDATE: '',
-					CHANGEBY: '',
-					CHANGEDATE: ''
+					STATUS: '1',
+                    CLASSIFY_NUM:'',
+                    CLASSIFY_DESCRIPTION:'',
+                    PARENT:'',
+                    ENTERBY:'',
+                    NTERDATE:'',
+                    CHANGEBY:'',
+                    CHANGEDATE:''
 				};
 				if(this.$refs['CATEGORY'] !== undefined) {
 					this.$refs['CATEGORY'].resetFields();
@@ -421,6 +427,24 @@
 			},
 			SelChange(val) {
 				this.selUser = val;
+            },
+            min3max() { //左侧菜单正常和变小切换
+				if($(".lefttree").hasClass("el-col-5")) {
+					$(".lefttree").removeClass("el-col-5");
+					$(".lefttree").addClass("el-col-1");
+					$(".leftcont").removeClass("el-col-19");
+					$(".leftcont").addClass("el-col-23");
+					$(".icon-doubleok").removeClass("icon-double-angle-left");
+					$(".icon-doubleok").addClass("icon-double-angle-right");
+				} else {
+					$(".lefttree").removeClass("el-col-1");
+					$(".lefttree").addClass("el-col-5");
+					$(".leftcont").removeClass("el-col-23");
+					$(".leftcont").addClass("el-col-19");
+					$(".icon-doubleok").removeClass("icon-double-angle-right");
+					$(".icon-doubleok").addClass("icon-double-angle-left");
+				}
+				this.ismin = !this.ismin;
 			},
 			requestData(index) {
 				var data = {
@@ -466,12 +490,22 @@
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
         		this.$refs.navsheader.showClick(childValue);
-      		},
+              },
+              //机构树
+			getKey() {
+				let that = this;
+				var url = this.basic_url + '/api-user/depts/tree';
+				this.$axios.get(url, {}).then((res) => {
+					this.resourceData = res.data;
+					this.treeData = this.transformTree(this.resourceData);
+				});
+			},
 
 		},
 		mounted() {
 			this.requestData();
-			this.getCompany();
+            this.getCompany();
+            this.getKey();
 		},
 	}
 </script>

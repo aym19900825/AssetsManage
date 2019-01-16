@@ -37,12 +37,12 @@
 											</el-input>
 										</el-col>-->
 										<el-col :span="4" class="pull-right">
-											<el-input placeholder="自动生成" v-model="workorderForm.STATE" :disabled="true">
+											<el-input  v-model="workorderForm.STATEDesc" :disabled="edit">
 													<template slot="prepend">状态</template>
 											</el-input>
 										</el-col>
 										<el-col :span="6" class="pull-right">
-											<el-input placeholder="自动生成" v-model="workorderForm.WONUM" :disabled="true">
+											<el-input placeholder="自动生成" v-model="workorderForm.WONUM" :disabled="edit">
 													<template slot="prepend">工作任务单编号</template>
 											</el-input>
 										</el-col>
@@ -736,7 +736,7 @@
 			</el-dialog>
 			<!-- 样品名称 End -->
 			<!--审批页面-->
-			<approvalmask :approvingData="approvingData" ref="approvalChild" ></approvalmask>
+			<approvalmask :approvingData="approvingData" ref="approvalChild" @detail="detailgetData"  ></approvalmask>
 			<!--流程历史-->
 			<flowhistorymask :approvingData="approvingData"  ref="flowhistoryChild" ></flowhistorymask>
 			<!--流程地图-->
@@ -995,8 +995,6 @@
 						type: 'warning'
 					});
 				}else{
-					// console.log(this.selMenu[0]);
-					// console.log(this.selMenu[0].MODEL);
 					this.workorderForm.ITEM_NAME = this.selMenu[0].DESCRIPTION;//样品名称
 					this.workorderForm.ITEM_MODEL = this.selMenu[0].MODEL;//规格型号
 					this.workorderForm.ITEM_STATUS = this.selMenu[0].STATE;//样品状态
@@ -1315,9 +1313,23 @@
 				this.noedit = false;
 				
 			},
+			detailgetData() {
+			var url = this.basic_url +'/api-apps/app/workorder/' + this.dataid;
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res.data);
+					this.workorderForm = res.data;
+					this.show = true;
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+			},	
 
 			// 这里是修改
 			detail(dataid) {
+				this.dataid=dataid;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 	    			this.workorderForm.DEPTID = res.data.deptId;//传给后台机构id
 					this.workorderForm.CHANGEBY = res.data.id;
@@ -1329,16 +1341,19 @@
 						type: 'error',
 					});
 				});
-				var url = this.basic_url + '/api-apps/app/workorder/' + dataid;
-				this.$axios.get(this.basic_url + '/api-apps/app/workorder/' + dataid, {}).then((res) => {
-				this.workorderForm = res.data;	
-					this.show = true;
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
+//				var url = this.basic_url + '/api-apps/app/workorder/' + dataid;
+//				this.$axios.get(url, {}).then((res) => {
+//				console.log(111);
+//				console.log(res);	
+//				this.workorderForm = res.data;	
+//					this.show = true;
+//				}).catch((err) => {
+//					this.$message({
+//						message: '网络错误，请重试',
+//						type: 'error'
+//					});
+//				});
+				this.detailgetData();
 				this.views = false;
 				this.addtitle = false;
 				this.modifytitle = true;
@@ -1350,6 +1365,7 @@
 			},
 			//这是查看
 			view(dataid) {
+				this.dataid=dataid;
 				this.dataid=dataid;	
 				this.modifytitle = false;
 				this.addtitle = false;
@@ -1358,17 +1374,18 @@
 				this.noviews = false;
 				this.edit = true;
 				this.noedit = true;
-				var url = this.basic_url + '/api-apps/app/workorder/' + dataid;
-				this.$axios.get(url, {}).then((res) => {
-					this.workorderForm = res.data;
-					this.show = true;
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
+//				var url = this.basic_url + '/api-apps/app/workorder/' + dataid;
+//				this.$axios.get(url, {}).then((res) => {
+//					this.workorderForm = res.data;
+//					this.show = true;
+//				}).catch((err) => {
+//					this.$message({
+//						message: '网络错误，请重试',
+//						type: 'error'
+//					});
+//				});
 				//判断启动流程和审批的按钮是否显示
+				this.detailgetData();
 				var url = this.basic_url + '/api-apps/app/workorder/flow/isStart/'+dataid;
 				this.$axios.get(url, {}).then((res) => {
 					console.log(res);

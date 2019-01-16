@@ -558,7 +558,7 @@
 				</div>
 				<!-- 高级查询划出 End-->
 				<!-- 第二层弹出的表格 Begin-->
-				<el-table :data="projectList" height="400px" border stripe style="width: 100%;" :default-sort="{prop:'projectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table  :data="projectList" height="400px" border stripe style="width: 100%;" :default-sort="{prop:'projectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" width="55" fixed>
 					</el-table-column>
 					<el-table-column label="检验/检测项编号" width="150" sortable prop="P_NUM">
@@ -657,7 +657,7 @@
 			</el-dialog>
 			<!-- 产品名称 End -->
 			<!-- 生产企业名称、受检企业名称 Begin -->
-			<el-dialog :visible.sync="diaVisCustom" width="80%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" :visible.sync="diaVisCustom" width="80%" :before-close="handleClose">
 				<el-table :data="customerList" border stripe :header-cell-style="rowClass" :height="fullHeight" style="width: 100%;" :default-sort="{prop:'customerList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" width="55" fixed align="center">
 					</el-table-column>
@@ -874,6 +874,7 @@
 					basisList:[{required: true,validator: validateBasislist,trigger: 'change'}],//产品类别
 					ITEM_NAME:[{required: true,message: '请填写',trigger: 'blur'}], //产品名称 
 					MODEL:[{required: true,message: '请填写',trigger: 'blur'}],
+					REMARKS:[{required: true,message: '请填写',trigger: 'blur'}],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -891,7 +892,8 @@
 				deptindex:0,//受检企业一条数据标识
 				falg:false,
 				customerList:[],//生产企业、受检企业数据取自custom
-				deptnum:''//生产企业名称、受检企业名称标识号码
+				deptnum:'',//生产企业名称、受检企业名称标识号码
+				requestnum:0,//更新表格数据标识
 			};
 		},
 		methods: {
@@ -929,18 +931,22 @@
 			},
 			//生产企业名称
 			prodeptbtn(item){
-				this.requestData();
+				// this.requestData();
+				this.requestDeptname();
 				this.diaVisCustom = true;
 				// this.$emit('request');
 				this.proindex = item;
+				this.requestnum = '3';
 				this.deptnum = '1';
 			},
 			//受检企业名称
 			getdeptbtn(item){
-				this.requestData();
+				// this.requestData();
+				this.requestDeptname();
 				this.diaVisCustom = true;
 				// this.$emit('request');
 				this.deptindex = item;
+				this.requestnum = '3';
 				this.deptnum = '2';
 			},
 			//生产企业、受检企业名称
@@ -963,7 +969,7 @@
 					}
 					this.diaVisCustom = false;
 					// this.$emit('request');
-					this.requestData();
+					this.requestDeptname();
 				}
 			},
 			
@@ -994,30 +1000,33 @@
 			//下达任务通知书
 			assign(item){
 				var dataid = item.ID;
-				console.log(dataid);
-				console.log(item);
-				console.log(item.ISCREATED);
 				if(item.ISCREATED == 1){
 					this.$message({
 						message: '已经下达工作任务通知书，请勿重复下达',
 						type: 'warning'
 					});
-					return;
+					// return;
 				}else{
 					this.$axios.get(this.basic_url + '/api-apps/app/workplan/operate/createWorkNotice?ID=' + dataid, {}).then((res) => {
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '下达工作任务通知书成功',
-								type: 'success'
-							});
-						}
-					}).catch((err) => {
+					if(res.data.resp_code == 0) {
 						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
+							message: '下达工作任务通知书成功',
+							type: 'success'
 						});
+					}else{
+						this.$message({
+							message: res.data.resp_msg,
+							type: 'warning'
+						});
+					}
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
 					});
+				});
 				}
+				
 			},
    			//年度计划表格函数
    			iconOperation(row){
@@ -1145,7 +1154,8 @@
 				}
 			},
 			addproduct(item){//产品名称按钮
-				this.$emit('request');
+				this.requestProname();
+				this.requestnum = '2';
 				this.dialogVisible4 = true;
 				this.proindex = item;
 			},
@@ -1166,25 +1176,164 @@
 					this.$emit('request');
 				}
 			},
+			//产品名称数据
+			requestProname(){
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				};
+				var url = this.basic_url + '/api-apps/app/product';
+				this.$axios.get(url, {
+					params: data
+				}).then((res) => {
+					this.page.totalCount = res.data.count;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
+					}
+					this.commentArr[this.page.currentPage] = res.data.data
+					let newarr = []
+					for(var i = 1; i <= totalPage; i++) {
+						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+							for(var j = 0; j < this.commentArr[i].length; j++) {
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					this.productList = newarr;
+				}).catch((wrong) => {})
+			},
             //tabs
 			handleClick(tab, event) {
 //		        console.log(tab, event);
 		    },
             //检测依据弹出框
             basisleadbtn(){
-            	this.$emit('request');
-            	this.requestData();
+				this.requestBasis();
+            	// this.$emit('request');
+				// this.requestData();
+				this.requestnum = '4';
 				this.dialogVisible = true;
 			},
 			basisleadbtn2(){
-				this.$emit('request');
-				this.requestData();
+				this.requestProject();
+				this.requestnum = '5';
+				// this.$emit('request');
+				// this.requestData();
 				this.dialogVisible2 = true;
+			},
+			//检测依据数据
+			requestBasis(){
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				};
+				var url = this.basic_url +'/api-apps/app/inspectionSta';
+				this.$axios.get(url, {
+					params: data
+				}).then((res) => {
+					console.log(2333333);
+					console.log(res.data);
+					this.page.totalCount = res.data.count;	
+					//总的页数
+					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
+					if(this.page.currentPage >= totalPage){
+						 this.loadSign = false
+					}else{
+						this.loadSign=true
+					}
+					this.commentArr[this.page.currentPage]=res.data.data
+					let newarr=[]
+					for(var i = 1; i <= totalPage; i++){
+					
+						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
+							
+							for(var j = 0; j < this.commentArr[i].length; j++){
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					this.standardList = newarr;
+				}).catch((wrong) => {})
+			},
+			//检测项目数据
+			requestProject(){
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				};
+				this.$axios.get(this.basic_url +'/api-apps/app/inspectionPro', {
+					params: data
+				}).then((res) => {
+					console.log(2333333);
+					console.log(res.data);
+					this.page.totalCount = res.data.count;	
+					//总的页数
+					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
+					if(this.page.currentPage >= totalPage){
+						 this.loadSign = false
+					}else{
+						this.loadSign=true
+					}
+					this.commentArr[this.page.currentPage]=res.data.data
+					let newarr=[]
+					for(var i = 1; i <= totalPage; i++){
+					
+						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
+							
+							for(var j = 0; j < this.commentArr[i].length; j++){
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					
+					this.projectList = newarr;
+				}).catch((wrong) => {})
 			},
 			addprobtn(){
 				this.dialogVisible3 = true;
-				console.log(23333);
-				console.log(this.WORKPLAN.PROP_UNIT);
+				this.requestnum = '1';
+				this.requesCategory();
+			},
+			//企业名称
+			requestDeptname(){
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				};
+				var url = this.basic_url + '/api-apps/app/customer';
+				this.$axios.get(url, {
+					params: data
+				}).then((res) => {
+					console.log(2333333);
+					console.log(res.data);
+					this.page.totalCount = res.data.count;	
+					//总的页数
+					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
+					if(this.page.currentPage >= totalPage){
+						 this.loadSign = false
+					}else{
+						this.loadSign=true
+					}
+					this.commentArr[this.page.currentPage]=res.data.data
+					let newarr=[]
+					for(var i = 1; i <= totalPage; i++){
+					
+						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
+							
+							for(var j = 0; j < this.commentArr[i].length; j++){
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}					
+					this.customerList = newarr;
+				}).catch((wrong) => {})
+			},
+			//产品类别数据
+			requesCategory(){
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -1529,8 +1678,9 @@
 													this.$emit('request');
 												}
 											}else{
+												console.log(res.data);
                                                 this.$message({
-                                                    message: res.data.message,
+                                                    message: res.data.resp_msg,
                                                     type: 'error'
                                                 });
                                             }
@@ -1622,140 +1772,86 @@
 			    setTimeout(() => {
 			       this.loadSign = true
 			     }, 1000)
-			     this.requestData()
+				//  this.requestData()
+				if(this.requestnum == '1'){
+					this.requesCategory();
+				}else if(this.requestnum == '2'){
+					this.requestProname();
+				}else if(this.requestnum == '3'){
+					this.requestDeptname();
+				}else if(this.requestnum == '4'){
+					this.requestBasis();
+				}else if(this.requestnum == '5'){
+					this.requestProject();
+				}
 			   }
 			 },
 			sizeChange(val) {
 				this.page.pageSize = val;
-				this.requestData();
+				if(this.requestnum == '1'){
+					this.requesCategory();
+				}else if(this.requestnum == '2'){
+					this.requestProname();
+				}else if(this.requestnum == '3'){
+					this.requestDeptname();
+				}else if(this.requestnum == '4'){
+					this.requestBasis();
+				}else if(this.requestnum == '5'){
+					this.requestProject();
+				}
 			},
 			currentChange(val) {
 				this.page.currentPage = val;
-				this.requestData();
+				if(this.requestnum == '1'){
+					this.requesCategory();
+				}else if(this.requestnum == '2'){
+					this.requestProname();
+				}else if(this.requestnum == '3'){
+					this.requestDeptname();
+				}else if(this.requestnum == '4'){
+					this.requestBasis();
+				}else if(this.requestnum == '5'){
+					this.requestProject();
+				}
 			},
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
-				this.requestData();
+				if(this.requestnum == '1'){
+					this.requesCategory();
+				}else if(this.requestnum == '2'){
+					this.requestProname();
+				}else if(this.requestnum == '3'){
+					this.requestDeptname();
+				}else if(this.requestnum == '4'){
+					this.requestBasis();
+				}else if(this.requestnum == '5'){
+					this.requestProject();
+				}
 			},
-			requestData(index) {//高级查询字段
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-					S_NUM: this.searchList.S_NUM,
-					S_NAME: this.searchList.S_NAME,
-					VERSION: this.searchList.VERSION,
-					DEPARTMENT: this.searchList.DEPARTMENT,
-					RELEASETIME: this.searchList.RELEASETIME,
-					STARTETIME: this.searchList.STARTETIME,
-					STATUS: this.searchList.STATUS,
-					P_NUM: this.searchList.P_NUM,
-					DEPARTMENT: this.searchList.DEPARTMENT,
-					P_NAME: this.searchList.P_NAME,
-					VERSION: this.searchList.VERSION,
-					STATUS: this.searchList.STATUS,
-				};
-				var url = this.basic_url +'/api-apps/app/inspectionSta';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					this.page.totalCount = res.data.count;	
-					//总的页数
-					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
-					if(this.page.currentPage >= totalPage){
-						 this.loadSign = false
-					}else{
-						this.loadSign=true
-					}
-					this.commentArr[this.page.currentPage]=res.data.data
-					let newarr=[]
-					for(var i = 1; i <= totalPage; i++){
-					
-						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
-							
-							for(var j = 0; j < this.commentArr[i].length; j++){
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.standardList = newarr;
-				}).catch((wrong) => {})
-				this.$axios.get(this.basic_url +'/api-apps/app/inspectionPro', {
-					params: data
-				}).then((res) => {
-					this.page.totalCount = res.data.count;	
-					//总的页数
-					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
-					if(this.page.currentPage >= totalPage){
-						 this.loadSign = false
-					}else{
-						this.loadSign=true
-					}
-					this.commentArr[this.page.currentPage]=res.data.data
-					let newarr=[]
-					for(var i = 1; i <= totalPage; i++){
-					
-						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
-							
-							for(var j = 0; j < this.commentArr[i].length; j++){
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					
-					this.projectList = newarr;
-				}).catch((wrong) => {})
+			// requestData(index) {//高级查询字段
+			// 	var data = {
+			// 		page: this.page.currentPage,
+			// 		limit: this.page.pageSize,
+			// 		S_NUM: this.searchList.S_NUM,
+			// 		S_NAME: this.searchList.S_NAME,
+			// 		VERSION: this.searchList.VERSION,
+			// 		DEPARTMENT: this.searchList.DEPARTMENT,
+			// 		RELEASETIME: this.searchList.RELEASETIME,
+			// 		STARTETIME: this.searchList.STARTETIME,
+			// 		STATUS: this.searchList.STATUS,
+			// 		P_NUM: this.searchList.P_NUM,
+			// 		DEPARTMENT: this.searchList.DEPARTMENT,
+			// 		P_NAME: this.searchList.P_NAME,
+			// 		VERSION: this.searchList.VERSION,
+			// 		STATUS: this.searchList.STATUS,
+			// 	};
+			
+			
 				
-				var url = this.basic_url + '/api-apps/app/product';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					this.page.totalCount = res.data.count;
-					//总的页数
-					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false
-					} else {
-						this.loadSign = true
-					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.productList = newarr;
-				}).catch((wrong) => {})
-				var url = this.basic_url + '/api-apps/app/customer';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					console.log(res);
-					this.page.totalCount = res.data.count;	
-					//总的页数
-					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
-					if(this.page.currentPage >= totalPage){
-						 this.loadSign = false
-					}else{
-						this.loadSign=true
-					}
-					this.commentArr[this.page.currentPage]=res.data.data
-					let newarr=[]
-					for(var i = 1; i <= totalPage; i++){
-					
-						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
-							
-							for(var j = 0; j < this.commentArr[i].length; j++){
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}					
-					this.customerList = newarr;
-				}).catch((wrong) => {})
-			},
+			
+			
+			// },
 			handleClose(done) {
 				this.$confirm('确认关闭？')
 					.then(_ => {
@@ -1765,7 +1861,7 @@
 			}
 		},
 		mounted() {
-			this.requestData();
+			// this.requestData();
 			this.getCompany();
 		},
 	}

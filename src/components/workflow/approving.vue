@@ -58,8 +58,8 @@ export default {
 		    //同意
 		    submitForm(){
 		    	console.log(this.approvingData);
-		    	this. id=this.approvingData.id;
-		    	this. appname=this.approvingData.app;
+		    	this.id=this.approvingData.id;
+		    	this.appname=this.approvingData.app;
 		    	this.$refs.approveForm.validate((valid) => {	
 		    	var url = this.basic_url + '/api-apps/app/'+this. appname+'/flow/'+this.id;	
 		    	console.log(url);
@@ -82,14 +82,17 @@ export default {
 								type: 'success'
 							});
 							this.close();
+							//调用父页面的方法刷新页面
+							this.$emit('detail');
 				    }
 				});
 		    });
 		    },
 		    //驳回
 		    rejectForm(){
-		    	this. id=this.approvingData.id;
-		    	this. appname=this.approvingData.app;
+		    	console.log(this.approvingData);
+		    	this.id=this.approvingData.id;
+		    	this.appname=this.approvingData.app;
 		    	this.$refs.approveForm.validate((valid) => {	
 		    	var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/'+this. id;	
 				this.approveForm = {
@@ -111,6 +114,8 @@ export default {
 								type: 'success'
 							});
 							this.close();
+							//调用父页面的方法刷新页面
+							this.$emit('detail');
 				    }
 				});
 		    });

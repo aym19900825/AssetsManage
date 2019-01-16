@@ -4,9 +4,9 @@
 		<div class="mask_divbg" v-if="show">
 			<div class="mask_div">
 				<div class="mask_title_div clearfix">
-					<div class="mask_title" v-show="addtitle">添加设备分类</div>
-					<div class="mask_title" v-show="modifytitle">修改设备分类</div>
-					<div class="mask_title" v-show="viewtitle">查看设备分类</div>
+					<div class="mask_title" v-show="addtitle">添加应用管理</div>
+					<div class="mask_title" v-show="modifytitle">修改应用管理</div>
+					<div class="mask_title" v-show="viewtitle">查看应用管理</div>
 					<div class="mask_anniu">
 						<span class="mask_span mask_max" @click='toggle'>
 							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -20,23 +20,59 @@
 					<el-form :model="CATEGORY" inline-message :rules="rules" ref="CATEGORY" label-width="100px" class="demo-adduserForm">
 						<div class="accordion" id="information">
 							<el-collapse v-model="activeNames">
-								<el-collapse-item title="设备分类" name="1">
+								<el-collapse-item title="产品类别" name="1">
+									<el-row class="pb10">
+										<el-col :span="3" class="pull-right">
+											<el-input v-model="CATEGORY.VERSION" :disabled="true">
+												<template slot="prepend">版本</template>
+											</el-input>
+										</el-col>
+										<!--<el-col :span="5" class="pull-right" v-if="modify">
+											<el-input v-model="CATEGORY.STATUS=='1'?'活动':'不活动'" :disabled="true">
+												<template slot="prepend">信息状态</template>
+											</el-input>
+										</el-col>
+										<el-col :span="5" class="pull-right" v-else>
+											<el-input v-model="CATEGORY.STATUS" :disabled="true">
+												<template slot="prepend">信息状态</template>
+											</el-input>
+										</el-col>-->
+										<!--<template slot-scope="scope">
+												<label>信息状态</label>
+	 									       <span v-text="scope.STATUS=='1'?'活动':'不活动'"></span>-->
+										<!--<span>{{scope.STATUS}}</span>
+	 									       	
+	 									       </span>
+	 								        </template>-->
+
+										<!-- <el-select v-model="CATEGORY.STATUS" placeholder="请选择信息状态">
+												<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+												</el-option>
+											</el-select> -->
+										</el-col>
+									</el-row>
+
 									<el-row>
+										<!-- <el-col :span="8">
+											<el-form-item label="类别编号" prop="NUM">
+												<el-input v-model="CATEGORY.NUM" :disabled="edit" placeholder="自动生成"></el-input>
+											</el-form-item>
+										</el-col> -->
 										<el-col :span="8">
-											<el-form-item label="编码" prop="CLASSIFY_NUM">
-												<el-input v-model="CATEGORY.CLASSIFY_NUM" :disabled="noedit"></el-input>
+											<el-form-item label="编码" prop="NUM">
+												<el-input v-model="CATEGORY.NUM" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="16">
-											<el-form-item label="分类描述" prop="CLASSIFY_DESCRIPTION">
-												<el-input v-model="CATEGORY.CLASSIFY_DESCRIPTION" :disabled="noedit"></el-input>
+											<el-form-item label="名称" prop="TYPE">
+												<el-input v-model="CATEGORY.TYPE" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row>
-										<el-col :span="8">
-											<el-form-item label="父级分类" prop="PARENT">
-												<el-input v-model="CATEGORY.PARENT" :disabled="noedit"></el-input>
+										<el-col :span="8" v-if="dept">
+											<el-form-item label="机构" prop="DEPTIDDesc">
+												<el-input v-model="CATEGORY.DEPTIDDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -51,11 +87,6 @@
 										<el-col :span="8">
 											<el-form-item label="录入时间" prop="ENTERDATE">
 												<el-input v-model="CATEGORY.ENTERDATE" :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
-                                        <el-col :span="8">
-											<el-form-item label="机构" prop="DEPTIDDesc">
-												<el-input v-model="CATEGORY.DEPTIDDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -75,7 +106,7 @@
 						<div class="el-dialog__footer" v-show="noviews">
 							<el-button type="primary" @click="saveAndUpdate('CATEGORY')">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit('CATEGORY')" v-show="addtitle">保存并继续</el-button>
-							<!-- <el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('CATEGORY')">修订</el-button> -->
+							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('CATEGORY')">修订</el-button>
 							<!-- <el-button v-if="modify" type="success" @click="update('CATEGORY')">启用</el-button> -->
 							<el-button @click="close">取消</el-button>
 						</div>
@@ -148,13 +179,16 @@
 				dialogVisible: false, //对话框
 				selectData: [],
 				rules: {
-					CLASSIFY_NUM: [{
+					NUM: [{
 						required: false,
 						trigger: 'change',
 						validator: validateNum,
 					}],
-					CLASSIFY_DESCRIPTION: [{required: true,trigger: 'blur',message: '请填写分类描述'}],
-                    PARENT: [{required: true,trigger: 'blur',message: '请填写父级分类'}],
+					TYPE: [{
+						required: true,
+						trigger: 'blur',
+						validator: validateType,
+					}],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -168,8 +202,8 @@
 				noviews:true,//按钮
 				modify:false,//修订
 				hintshow:false,
-				// statusshow1:true,
-				// statusshow2:false,
+				statusshow1:true,
+				statusshow2:false,
 			};
 		},
 		methods: {
@@ -213,8 +247,8 @@
 				this.noviews = true;//按钮
 				this.modify = false;//修订
 				this.hintshow = false;
-				// this.statusshow1 = true;
-				// this.statusshow2 = false;
+				this.statusshow1 = true;
+				this.statusshow2 = false;
 //				this.show = true;
 			},
 			// 这里是修改
@@ -228,8 +262,8 @@
 				this.noviews = true;//按钮
 				this.hintshow = false;
 				this.modify = true;//修订
-				// this.statusshow1 = false;
-				// this.statusshow2 = true;
+				this.statusshow1 = false;
+				this.statusshow2 = true;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.CATEGORY.DEPTID = res.data.deptId;//传给后台机构id
 					this.CATEGORY.CHANGEBY = res.data.id;
@@ -376,7 +410,7 @@
 				this.$refs[CATEGORY].validate((valid) => {
 					if(valid) {
 						this.CATEGORY.STATUS = ((this.CATEGORY.STATUS == "1" || this.CATEGORY.STATUS == '活动') ? '1' : '0');
-						var url = this.basic_url + '/api-apps/app/assetClass/saveOrUpdate';
+						var url = this.basic_url + '/api-apps/app/productType/saveOrUpdate';
 						this.$axios.post(url, this.CATEGORY).then((res) => {
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {

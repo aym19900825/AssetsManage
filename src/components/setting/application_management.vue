@@ -42,28 +42,16 @@
 
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
-						<el-form :model="searchList" label-width="45px">
+						<el-form :model="searchList" label-width="70px">
 							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-form-item label="编码" prop="NUM">
-										<el-input v-model="searchList.NUM"></el-input>
+									<el-form-item label="应用名称" prop="name">
+										<el-input v-model="searchList.name"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="名称" prop="TYPE">
-										<el-input v-model="searchList.TYPE"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="5">
-									<el-form-item label="版本" prop="VERSION">
-										<el-input v-model="searchList.VERSION"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="5">
-									<el-form-item label="机构" prop="DEPTID">
-										<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
-										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
-										</el-select>
+									<el-form-item label="应用描述" prop="description">
+										<el-input v-model="searchList.description"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="2">
@@ -76,7 +64,7 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格 Begin-->
-							<el-table :header-cell-style="rowClass" :data="categoryList" v-loading="loading" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table :header-cell-style="rowClass" :data="applicationList" v-loading="loading" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'applicationList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="应用英文名称" width="155" sortable prop="code" v-if="this.checkedName.indexOf('应用英文名称')!=-1">
@@ -85,24 +73,36 @@
 										</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="应用名称" sortable prop="name" v-if="this.checkedName.indexOf('应用名称')!=-1">
+								<el-table-column label="应用名称" width="150" sortable prop="name" v-if="this.checkedName.indexOf('应用名称')!=-1">
 								</el-table-column>
 								<!--<el-table-column label="信息状态" width="155" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
  								<template slot-scope="scope" >
  									<span v-text="scope.row.STATUS=='1'?'活动':'不活动'"></span>
  								</template>
 							</el-table-column>-->
-								<el-table-column label="版本" width="100" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1" align="right">
+								<el-table-column label="处理类" width="250" sortable prop="handleclass" v-if="this.checkedName.indexOf('处理类')!=-1" align="right">
 								</el-table-column>
-								<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
+								<el-table-column label="应用描述" width="185" sortable prop="description" v-if="this.checkedName.indexOf('应用描述')!=-1">
 								</el-table-column>
-								<!-- <el-table-column label="录入人" width="155" prop="ENTERBY" sortable v-if="this.checkedName.indexOf('录入人')!=-1">
+								<el-table-column label="数据库表" width="185" sortable prop="object_id" v-if="this.checkedName.indexOf('数据库表')!=-1">
+								</el-table-column>
+								<el-table-column label="模块" width="185" sortable prop="module" v-if="this.checkedName.indexOf('模块')!=-1">
+								</el-table-column>
+								<el-table-column label="排序" width="185" sortable prop="sort" v-if="this.checkedName.indexOf('排序')!=-1">
+								</el-table-column>
+								<!-- <el-table-column label="创建人" width="155" prop="createUser" sortable v-if="this.checkedName.indexOf('创建人')!=-1">
 								</el-table-column> -->
-								<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
+								<el-table-column label="创建时间" width="120" prop="createTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>
-								<!-- <el-table-column label="修改人" width="155" prop="CHANGEBY" sortable v-if="this.checkedName.indexOf('修改人')!=-1">
+								<!-- <el-table-column label="修改人" width="155" prop="updateUser" sortable v-if="this.checkedName.indexOf('修改人')!=-1">
 								</el-table-column> -->
-								<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
+								<el-table-column label="变更时间" width="120" prop="updateTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
+								</el-table-column>
+								<el-table-column label="流程" width="120" prop="flowkey" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('流程')!=-1">
+								</el-table-column>
+								<el-table-column label="流程代办单据号" width="120" prop="flow_todo_num" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('流程代办单据号')!=-1">
+								</el-table-column>
+								<el-table-column label="流程代办描述" width="120" prop="flow_todo_desc" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('流程代办描述')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
@@ -158,56 +158,80 @@
 					deptId: ''
 				},
 				checkedName: [
-					'编码',
-					'名称',
-					'版本',
-					'机构',
-					// '信息状态',
-					
-					// '录入人',
-					'录入时间',
-					// '修改人',
-					'修改时间'
+					'应用英文名称',
+					'应用名称',
+					'处理类',
+					'类型',
+					'应用描述',
+					'数据库表',
+					'模块',
+					'排序',
+					'创建时间',
+					'变更时间',
+					'流程',
+					'流程代办单据号',
+					'流程代办描述'
 				],
 				tableHeader: [{
-						label: '编码',
-						prop: 'NUM'
+						label: '应用英文名称',
+						prop: 'code'
 					},
 					{
-						label: '名称',
-						prop: 'TYPE'
+						label: '应用名称',
+						prop: 'name'
 					},
 					{
-						label: '版本',
-						prop: 'VERSION'
+						label: '处理类',
+						prop: 'handleclass'
 					},
 					{
-						label: '机构',
-						prop: 'DEPARTMENTDesc'
+						label: '类型',
+						prop: 'type'
 					},
+					{
+						label: '应用描述',
+						prop: 'description'
+					},
+					{
+						label: '数据库表',
+						prop: 'object_id'
+					},
+					{
+						label: '模块',
+						prop: 'module'
+					},
+					{
+						label: '排序',
+						prop: 'sort'
+					},
+					{
+						label: '创建时间',
+						prop: 'createTime'
+					},
+					{
+						label: '变更时间',
+						prop: 'updateTime'
+					},
+					{
+						label: '流程',
+						prop: 'flowkey'
+					},
+					{
+						label: '流程代办单据号',
+						prop: 'flow_todo_num'
+					},
+					{
+						label: '流程代办描述',
+						prop: '流程代办描述'
+					},
+
 					// {
 					// 	label: '信息状态',
 					// 	prop: 'STATUS'
 					// },
-					// {
-					// 	label: '录入人',
-					// 	prop: 'ENTERBY'
-					// },
-					{
-						label: '录入时间',
-						prop: 'ENTERDATE'
-					},
-					// {
-					// 	label: '修改人',
-					// 	prop: 'CHANGEBY'
-					// },
-					{
-						label: '修改时间',
-						prop: 'CHANGEDATE'
-					}
 				],
 				selUser: [],
-				categoryList: [],
+				applicationList: [],
 				search: false,
 				show: false,
 				down: true,
@@ -216,10 +240,8 @@
 				ismin: true,
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
 				searchList: { //点击高级搜索后显示的内容
-					NUM:'',
-					TYPE: '',
-					VERSION:'',
-					DEPTID: '',
+					name:'',
+					description: '',
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -351,8 +373,15 @@
 						type: 'warning'
 					});
 					return;
-				} else {
-					var url = this.basic_url + '/api-apps/app/productType/deletes';
+				}else if(selData.length > 1){
+					this.$message({
+						message: '不可删除多条数据',
+						type: 'warning'
+					});
+					return;
+				}else {
+					var id = this.selUser[0].id;
+					var url = this.basic_url + '/api-apps/appcfg/'+id;
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -430,20 +459,16 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					NUM:this.searchList.NUM,
-					TYPE: this.searchList.TYPE,
-					VERSION:this.searchList.VERSION,
-					DEPTID: this.searchList.DEPTID,
-					// PHONE: this.searchList.PHONE,
-					// CONTACT_ADDRESS: this.searchList.CONTACT_ADDRESS,
-					// STATUS: this.searchList.STATUS
+					name:this.searchList.name,
+					description: this.searchList.description,
 				}
 				// console.log(this.searchList.DEPTID);
-				var url = this.basic_url + '/api-apps/app/productType';
+				var url = this.basic_url + '/api-apps/appcfg';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					// console.log(res.data);
+					console.log(23333333);
+					console.log(res.data);
 					
 					this.page.totalCount = res.data.count;
 					//总的页数
@@ -464,7 +489,7 @@
 							}
 						}
 					}
-					this.categoryList = newarr;
+					this.applicationList = newarr;
 				}).catch((wrong) => {})
 			},
 			handleNodeClick(data) {},

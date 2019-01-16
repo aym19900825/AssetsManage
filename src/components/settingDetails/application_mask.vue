@@ -17,86 +17,101 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form :model="CATEGORY" inline-message :rules="rules" ref="CATEGORY" label-width="100px" class="demo-adduserForm">
+					<el-form :model="CATEGORY" inline-message :rules="rules" ref="CATEGORY" label-width="110px" class="demo-adduserForm">
 						<div class="accordion" id="information">
 							<el-collapse v-model="activeNames">
-								<el-collapse-item title="产品类别" name="1">
-									<el-row class="pb10">
-										<el-col :span="3" class="pull-right">
-											<el-input v-model="CATEGORY.VERSION" :disabled="true">
-												<template slot="prepend">版本</template>
-											</el-input>
-										</el-col>
-										<!--<el-col :span="5" class="pull-right" v-if="modify">
-											<el-input v-model="CATEGORY.STATUS=='1'?'活动':'不活动'" :disabled="true">
-												<template slot="prepend">信息状态</template>
-											</el-input>
-										</el-col>
-										<el-col :span="5" class="pull-right" v-else>
-											<el-input v-model="CATEGORY.STATUS" :disabled="true">
-												<template slot="prepend">信息状态</template>
-											</el-input>
-										</el-col>-->
-										<!--<template slot-scope="scope">
-												<label>信息状态</label>
-	 									       <span v-text="scope.STATUS=='1'?'活动':'不活动'"></span>-->
-										<!--<span>{{scope.STATUS}}</span>
-	 									       	
-	 									       </span>
-	 								        </template>-->
-
-										<!-- <el-select v-model="CATEGORY.STATUS" placeholder="请选择信息状态">
-												<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-												</el-option>
-											</el-select> -->
-										</el-col>
-									</el-row>
-
+								<el-collapse-item title="应用管理" name="1">
 									<el-row>
-										<!-- <el-col :span="8">
-											<el-form-item label="类别编号" prop="NUM">
-												<el-input v-model="CATEGORY.NUM" :disabled="edit" placeholder="自动生成"></el-input>
-											</el-form-item>
-										</el-col> -->
 										<el-col :span="8">
-											<el-form-item label="编码" prop="NUM">
-												<el-input v-model="CATEGORY.NUM" :disabled="noedit"></el-input>
+											<el-form-item label="应用英文名称" prop="code">
+												<el-input v-model="CATEGORY.code" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="16">
-											<el-form-item label="名称" prop="TYPE">
-												<el-input v-model="CATEGORY.TYPE" :disabled="noedit"></el-input>
+										<el-col :span="8">
+											<el-form-item label="应用名称" prop="name">
+												<el-input v-model="CATEGORY.name" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="处理类" prop="handleclass">
+												<el-input v-model="CATEGORY.handleclass" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row>
-										<el-col :span="8" v-if="dept">
-											<el-form-item label="机构" prop="DEPTIDDesc">
-												<el-input v-model="CATEGORY.DEPTIDDesc" :disabled="edit"></el-input>
+										<el-col :span="8">
+											<el-form-item label="类型" prop="type">
+												<el-input v-model="CATEGORY.type" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="应用描述" prop="description">
+												<el-input v-model="CATEGORY.description" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="数据库表" prop="object_id">
+												<el-input v-model="CATEGORY.object_id" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="模块" prop="module">
+												<el-input v-model="CATEGORY.module" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="排序" prop="sort">
+												<el-input v-model="CATEGORY.sort" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="流程" prop="flowkey">
+												<el-input v-model="CATEGORY.flowkey" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="流程代办单据号" prop="flow_todo_num">
+												<el-input v-model="CATEGORY.flow_todo_num" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="流程代办描述" prop="flow_todo_desc">
+												<el-input v-model="CATEGORY.flow_todo_desc" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<!-- <el-row>
+										<el-col :span="8" v-if="dept">
+											<el-form-item label="机构" prop="">
+												<el-input v-model="CATEGORY.flowkey" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row> -->
 								</el-collapse-item>
 								<el-collapse-item title="其它" name="2" v-show="views">
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="录入人" prop="ENTERBYDesc">
-												<el-input v-model="CATEGORY.ENTERBYDesc" :disabled="edit"></el-input>
+											<el-form-item label="创建人" prop="createUser">
+												<el-input v-model="CATEGORY.createUser" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="录入时间" prop="ENTERDATE">
-												<el-input v-model="CATEGORY.ENTERDATE" :disabled="edit"></el-input>
+											<el-form-item label="创建时间" prop="createTime">
+												<el-input v-model="CATEGORY.createTime" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改人" prop="CHANGEBYDesc">
-												<el-input v-model="CATEGORY.CHANGEBYDesc" placeholder="当前修改人" :disabled="edit"></el-input>
+											<el-form-item label="修改人" prop="updateUser">
+												<el-input v-model="CATEGORY.updateUser" placeholder="当前修改人" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改时间" prop="CHANGEDATE">
-												<el-input v-model="CATEGORY.CHANGEDATE" placeholder="当前修改时间" :disabled="edit"></el-input>
+											<el-form-item label="变更时间" prop="updateTime">
+												<el-input v-model="CATEGORY.updateTime" placeholder="当前修改时间" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -104,9 +119,9 @@
 							</el-collapse>
 						</div>
 						<div class="el-dialog__footer" v-show="noviews">
-							<el-button type="primary" @click="saveAndUpdate('CATEGORY')">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit('CATEGORY')" v-show="addtitle">保存并继续</el-button>
-							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('CATEGORY')">修订</el-button>
+							<el-button type="primary" @click="saveAndUpdate">保存</el-button>
+							<el-button type="success" @click="saveAndSubmit" v-show="addtitle">保存并继续</el-button>
+							<!-- <el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('CATEGORY')">修订</el-button> -->
 							<!-- <el-button v-if="modify" type="success" @click="update('CATEGORY')">启用</el-button> -->
 							<el-button @click="close">取消</el-button>
 						</div>
@@ -224,14 +239,15 @@
 			},
 			//点击按钮显示弹窗
 			visible() {
+				this.CATEGORY.id = '';
 				//				this.CATEGORY.NUM =  this.rand(1000,9999);
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					console.log(res.data);
-					this.CATEGORY.DEPTID = res.data.deptId;
-					this.CATEGORY.ENTERBY = res.data.id;
+					// this.CATEGORY.DEPTID = res.data.deptId;
+					this.CATEGORY.createUser = res.data.id;
 					// this.CATEGORY.ENTERBYDesc = res.data.nickname;
 					var date = new Date();
-					this.CATEGORY.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
+					this.CATEGORY.createTime = this.$moment(date).format("YYYY-MM-DD HH:MM:SS");
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -265,11 +281,12 @@
 				this.statusshow1 = false;
 				this.statusshow2 = true;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					this.CATEGORY.DEPTID = res.data.deptId;//传给后台机构id
-					this.CATEGORY.CHANGEBY = res.data.id;
+					
+					// this.CATEGORY.DEPTID = res.data.deptId;//传给后台机构id
+					this.CATEGORY.updateUser = res.data.id;
 					// this.CATEGORY.CHANGEBYDesc = res.data.nickname;
 					var date = new Date();
-					this.CATEGORY.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
+					this.CATEGORY.updateTime = this.$moment(date).format("YYYY-MM-DD HH:MM:SS");
 					//深拷贝数据
 					let _obj = JSON.stringify(this.CATEGORY);
         			this.category = JSON.parse(_obj);
@@ -294,85 +311,61 @@
 				this.show = true;				
 			},
 			//点击修订按钮
-			modifyversion(CATEGORY) {
-				this.$refs[CATEGORY].validate((valid) => {
-					if(valid) {
-						var category=JSON.stringify(this.category); 
-	 					var CATEGORY=JSON.stringify(this.CATEGORY);
-					 	if(category==CATEGORY){
-					  	this.$message({
-								message: '没有修改内容，不允许修订！',
-								type: 'warning'
-							});
-							return false;
-					    }else{
-							var url = this.basic_url + '/api-apps/app/productType/operate/upgraded';
-							this.$axios.post(url, this.CATEGORY).then((res) => {
-								//resp_code == 0是后台返回的请求成功的信息
-								if(res.data.resp_code == 0) {
-									this.$message({
-										message: '修订成功',
-										type: 'success'
-									});
-									//重新加载数据
-									this.$emit('request');
-									this.show = false;
-								}else{
-								this.show = true;
-								if(res.data.resp_code == 1) {
-									//res.data.resp_msg!=''后台返回提示信息
-									if( res.data.resp_msg!=''){
-									 	this.$message({
-											message: res.data.resp_msg,
-											type: 'warning'
-									 	});
-									}else{
-										this.$message({
-											message:'相同数据不可重复修订！',
-											type: 'warning'
-										});
-									}
-								}
-							}		
-							}).catch((err) => {
-								this.$message({
-									message: '网络错误，请重试',
-									type: 'error'
-								});
-							});
-						}
-					} else {
-						this.$message({
-							message: '未填写完整，请填写',
-							type: 'warning'
-						});
-					}
-				});
-			},
-			//点击更新按钮
-			update(CATEGORY) {
-				var data = {
-					id: this.CATEGORY.ID,
-				}
-				this.$axios.get(this.basic_url+ '/api-apps/app/productType/operate/updateRelate', {
-					params: data
-				}).then((res) => {
-					console.log(res.data.resp_code);
-					if(res.data.resp_code == 0) {
-						this.$message({
-							message: '更新成功',
-							type: 'success'
-						});
-					}else{
-						return;
-					}
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
-			},
+			// modifyversion(CATEGORY) {
+			// 	this.$refs[CATEGORY].validate((valid) => {
+			// 		if(valid) {
+			// 			var category=JSON.stringify(this.category); 
+	 		// 			var CATEGORY=JSON.stringify(this.CATEGORY);
+			// 		 	if(category==CATEGORY){
+			// 		  	this.$message({
+			// 					message: '没有修改内容，不允许修订！',
+			// 					type: 'warning'
+			// 				});
+			// 				return false;
+			// 		    }else{
+			// 				var url = this.basic_url + '/api-apps/app/productType/operate/upgraded';
+			// 				this.$axios.post(url, this.CATEGORY).then((res) => {
+			// 					//resp_code == 0是后台返回的请求成功的信息
+			// 					if(res.data.resp_code == 0) {
+			// 						this.$message({
+			// 							message: '修订成功',
+			// 							type: 'success'
+			// 						});
+			// 						//重新加载数据
+			// 						this.$emit('request');
+			// 						this.show = false;
+			// 					}else{
+			// 					this.show = true;
+			// 					if(res.data.resp_code == 1) {
+			// 						//res.data.resp_msg!=''后台返回提示信息
+			// 						if( res.data.resp_msg!=''){
+			// 						 	this.$message({
+			// 								message: res.data.resp_msg,
+			// 								type: 'warning'
+			// 						 	});
+			// 						}else{
+			// 							this.$message({
+			// 								message:'相同数据不可重复修订！',
+			// 								type: 'warning'
+			// 							});
+			// 						}
+			// 					}
+			// 				}		
+			// 				}).catch((err) => {
+			// 					this.$message({
+			// 						message: '网络错误，请重试',
+			// 						type: 'error'
+			// 					});
+			// 				});
+			// 			}
+			// 		} else {
+			// 			this.$message({
+			// 				message: '未填写完整，请填写',
+			// 				type: 'warning'
+			// 			});
+			// 		}
+			// 	});
+			// },
 			//点击关闭按钮
 			close() {
 				this.show = false;
@@ -404,13 +397,28 @@
 				$(".mask_div").css("top", "100px");
 			},
 			// 保存users/saveOrUpdate
-			save(CATEGORY) {
-				console.log(233333);
-				console.log(this.CATEGORY);
-				this.$refs[CATEGORY].validate((valid) => {
+			save() {
+				// var test = {
+				// 	code: "string",
+  				// 	createTime: "2019-01-16 10:29:48",
+				// 	createUser: 0,
+				// 	description: "string",
+				// 	flowTodoDesc: "string",
+				// 	flowTodoNum: "string",
+				// 	flowkey: "string",
+				// 	handleclass: "string",
+				// 	id: "",
+				// 	module: "string",
+				// 	name: "string",
+				// 	objectId: 0,
+				// 	sort: 0,
+				// 	type: 0,
+				// 	updateTime: "2019-01-16 10:29:48",
+				// 	updateUser: 0
+				// };
+				this.$refs.CATEGORY.validate((valid) => {
 					if(valid) {
-						this.CATEGORY.STATUS = ((this.CATEGORY.STATUS == "1" || this.CATEGORY.STATUS == '活动') ? '1' : '0');
-						var url = this.basic_url + '/api-apps/app/productType/saveOrUpdate';
+						var url = this.basic_url + '/api-apps/appcfg/saveOrUpdate';
 						this.$axios.post(url, this.CATEGORY).then((res) => {
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
@@ -458,15 +466,15 @@
 			},
 			
 			//保存
-			saveAndUpdate(CATEGORY) {
-				this.save(CATEGORY);
+			saveAndUpdate() {
+				this.save();
 				if(this.falg){
 					this.show = false;
 				}
 			},
 			//保存并继续
-			saveAndSubmit(CATEGORY) {
-				this.save(CATEGORY);
+			saveAndSubmit() {
+				this.save();
 				// this.visible();
 				this.show = true;
 			},

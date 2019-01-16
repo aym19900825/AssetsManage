@@ -2,7 +2,7 @@
 	<div >
 	<el-dialog :modal-append-to-body="false" title="当前责任人" :visible.sync="innerVisible" width="40%">
 		  <!--<el-form ref="approveForm" :model="approveForm" :rules="rules" label-width="120px" class="demo-ruleForm">-->
-	     <el-input type="textarea" rows="5" v-model="user"></el-input>
+	     <el-input disabled type="textarea" rows="5" v-model="user"></el-input>
 	<!--    </el-form>-->
     </el-dialog>
 </div>

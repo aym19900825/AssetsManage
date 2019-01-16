@@ -36,7 +36,7 @@
 											</el-input>
 										</el-col> -->
 										<el-col :span="4" class="pull-right">
-											<el-input v-model="dataInfo.STATE" :disabled="edit">
+											<el-input v-model="dataInfo.STATEDesc" :disabled="edit">
 												<template slot="prepend">状态</template>
 											</el-input>
 										</el-col>
@@ -495,7 +495,7 @@
 			<!-- 产品名称 End -->
 			
 			<!--审批页面-->
-			<approvalmask :approvingData="approvingData" ref="approvalChild" ></approvalmask>
+			<approvalmask :approvingData="approvingData" ref="approvalChild" @detail="detailgetData"></approvalmask>
 			<!--流程历史-->
 			<flowhistorymask :approvingData="approvingData"  ref="flowhistoryChild" ></flowhistorymask>
 			<!--流程地图-->
@@ -831,18 +831,22 @@
 				this.edit = true;
 				this.noedit = false;
 			},
-			// 这里是修改
-			detail(dataid) {
-				var url = this.basic_url + '/api-apps/app/workNot/' + dataid;
+			detailgetData() {
+			var url = this.basic_url +'/api-apps/app/workNot/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
+					console.log(res.data);
 					this.dataInfo = res.data;
+					this.show = true;
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
 						type: 'error'
 					});
 				});
-				this.show = true;
+			},	
+			// 这里是修改
+			detail(dataid) {
+				this.dataid=dataid;
 				var usersUrl = this.basic_url + '/api-user/users/currentMap'
 				this.$axios.get(usersUrl, {}).then((res) => {
 					this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
@@ -855,6 +859,7 @@
 						type: 'error'
 					});
 				});
+				this.detailgetData();
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.viewtitle = false;
@@ -866,7 +871,7 @@
 			},
 			//这是查看
 			view(dataid) {
-				this.dataid=dataid;	
+				this.dataid=dataid;
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;
@@ -874,23 +879,16 @@
 				this.noviews = false;
 				this.edit = true;
 				this.noedit = true;
-				var url = this.basic_url + '/api-apps/app/workNot/' + dataid;
-				this.$axios.get(url, {}).then((res) => {
-					this.dataInfo = res.data;
-					this.show = true;
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
+				this.detailgetData();
 				//判断启动流程和审批的按钮是否显示
 				var url = this.basic_url + '/api-apps/app/workNot/flow/isStart/'+dataid;
 				this.$axios.get(url, {}).then((res) => {
 					if(res.data.resp_code==1){
+						console.log(11);
 						this.start=true;
 						this.approval=false;
 					}else{
+						console.log(22);
 						this.start=false;
 						this.approval=true;
 					}
@@ -942,7 +940,6 @@
 			},
 			// 保存users/saveOrUpdate
 			save() {
-				console.log(this.dataInfo);
 				this.$refs.dataInfo.validate((valid) => {
 		          if (valid) {
 							if(this.dataInfo.WORK_NOTICE_CHECKBASISList.length<=0&&this.dataInfo.WORK_NOTICE_CHECKPROJECTList.length<=0){
@@ -1056,9 +1053,7 @@
 				}else{
 					this.dialogVisible = false;
 					if(this.type == '1') {
-						console.log(12345);
 						this.dataInfo.P_LEADER = this.selUser[0].id;
-						console.log(this.dataInfo.P_LEADER);
 						this.dataInfo.P_LEADERDesc = this.selUser[0].nickname;
 					} else {
 						this.dataInfo.ACCEPT_PERSON = this.selUser[0].id;
@@ -1072,7 +1067,6 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				}
-				console.log(this.dataInfo.CJDW);
 				var url = this.basic_url + '/api-user/users/usersByDept?deptId='+this.dataInfo.CJDW;
 				this.$axios.get(url, {
 					params: params

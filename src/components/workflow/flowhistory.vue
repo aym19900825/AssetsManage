@@ -61,6 +61,7 @@ export default {
 					this.open();
 		  	},
 	getdata(){
+		console.log(this.approvingData);
 		this.id=this.approvingData.id;
 	    this.appname=this.approvingData.app;
 	   	 var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/isStart/'+this.id;
@@ -75,6 +76,7 @@ export default {
 				    }else{
 				    	var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/history/'+this.id;
 		    				this.$axios.get(url, {}).then((res) => {
+		    					console.log(res);
 		    					for(var i=0;i<res.data.datas.length;i++){
 										if(res.data.datas[i].flag==true){
 											res.data.datas[i].flag="success";

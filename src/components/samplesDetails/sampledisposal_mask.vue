@@ -50,7 +50,7 @@
 										<el-col :span="8">
 											<el-form-item label="样品编号" prop="ITEM_LINE_ID">
 												<el-input v-model="samplesForm.ITEM_LINE_ID" :disabled="edit">
-													<el-button slot="append" icon="el-icon-search" @click="getProxy"></el-button>
+													<el-button slot="append" icon="el-icon-search" @click="getsample"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -162,6 +162,48 @@
 			</el-dialog>
 			<!--点击委托书编号弹出框 Begin-->
 		</div>
+		<!-- 样品编号 Begin -->
+			<el-dialog :modal-append-to-body="false" title="样品编号" height="300px" :visible.sync="dialogsample" width="80%" :before-close="handleClose">
+				<!-- 第二层弹出的表格 Begin-->
+				<el-table :data="samplesList" :header-cell-style="rowClass" border stripe height="400px" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+					<el-table-column type="selection" width="55" fixed align="center">
+					</el-table-column>
+					<el-table-column label="样品编号" sortable width="200px" prop="ITEMNUM">
+					</el-table-column>
+					<el-table-column label="样品名称" sortable width="200px" prop="DESCRIPTION">
+					</el-table-column>
+					<el-table-column label="样品类别" sortable width="200px" prop="TYPE">
+					</el-table-column>
+					<el-table-column label="委托单位" sortable width="200px" prop="V_NAME">
+					</el-table-column>
+					<el-table-column label="生产单位" sortable width="200px" prop="P_NAME">
+					</el-table-column>
+					<el-table-column label="型号" width="100px" prop="MODEL" sortable>
+					</el-table-column>
+					<el-table-column label="数量" width="100px" prop="QUATITY" sortable>
+					</el-table-column>
+					<el-table-column label="收样人" sortable width="140px" prop="ACCEPT_PERSON">
+					</el-table-column>
+					<el-table-column label="收样日期" sortable width="140px" :formatter="dateFormat" prop="ACCEPT_DATE">
+					</el-table-column>
+					<el-table-column label="接样人" sortable width="140px" prop="RECIP_PERSON">
+					</el-table-column>
+					<el-table-column label="接样日期" sortable width="140px" :formatter="dateFormat" prop="RECIP_DATE">
+					</el-table-column>
+					<el-table-column label="样品状态" sortable width="100px" prop="STATE">
+					</el-table-column>
+					<!--<el-table-column label="信息状态" sortable width="140px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
+					</el-table-column>-->
+				</el-table>
+				<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+				</el-pagination>
+				<!-- 表格 End-->
+				<span slot="footer" class="dialog-footer">
+			       <el-button @click="dialogsample = false">取 消</el-button>
+			       <el-button type="primary" @click="addsamplebtn">确 定</el-button>
+			    </span>
+			</el-dialog>
+			<!-- 样品编号 End -->
 	</div>
 </template>
 
@@ -200,6 +242,8 @@
 		},
 		data() {
 			return {
+				loadSign: true, //加载
+				commentArr: {},
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				value: '',
@@ -270,9 +314,41 @@
 					// 	{ required: true, message: '状态日期不能为空', trigger: 'blur' }
 					// ]
 				},
+				dialogsample:false,
+				page: {
+					currentPage: 1,
+					pageSize: 10,
+					totalCount: 0
+				},
+				samplesList:[]
 			};
 		},
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    return 'text-align:center'
+			},
+			sizeChange(val) {
+				this.page.pageSize = val;
+				this.requestData();
+			},
+			currentChange(val) {
+				this.page.currentPage = val;
+				this.requestData();
+			},
+			//样品编号
+			getsample(){
+				this.requestData();
+				this.dialogsample = true;
+			},
+			addsamplebtn(){
+				this.samplesForm.ITEM_LINE_ID = this.selUser[0].ITEMNUM;//样品编号
+				this.dialogsample = false;
+				this.requestData();
+			},
+			SelChange(val) {
+				this.selUser = val;
+			},
 			//获取委托书编号数据
 			getProxy() {
 				this.editSearch = 'dept';
@@ -463,6 +539,50 @@
 				this.save(samplesForm);
 				// this.$emit('reset');
 				// this.$emit('request');
+			},
+			//表格滚动加载
+			loadMore() {
+				if(this.loadSign) {
+					this.loadSign = false
+					this.page.currentPage++
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							return
+						}
+					setTimeout(() => {
+						this.loadSign = true
+					}, 1000)
+					this.requestData()
+				}
+			},
+			requestData(index) {//高级查询字段
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				};
+				this.$axios.get(this.basic_url + '/api-apps/app/item', {
+					params: data
+				}).then((res) => {
+					this.page.totalCount = res.data.count;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
+					}
+					this.commentArr[this.page.currentPage] = res.data.data
+					let newarr = []
+					for(var i = 1; i <= totalPage; i++) {
+
+						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+
+							for(var j = 0; j < this.commentArr[i].length; j++) {
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					this.samplesList = newarr;
+				}).catch((wrong) => {})
 			},
 			handleClose(done) { //大弹出框确定关闭按钮
 				this.$confirm('确认关闭？')

@@ -20,7 +20,7 @@
 										<input id="excelFile" type="file" name="uploadFile" @change="upload"/>
 									</button>
 								</form>
-								<button type="button" class="btn btn-green" @click="showDir" id="">
+								<button type="button" class="btn btn-green" @click="showDir">
                                 	<i class="icon-add"></i>新建文件夹
                       			 </button>
 								<!-- <button type="button" class="btn btn-blue button-margin" @click="modify">
@@ -294,30 +294,6 @@
                     });
                 });
 			},
-			// showAuth(row){
-			// 	this.chooseParam = {
-			// 		title: "关键字列表",
-			// 		selShow: true,
-			// 		listName: 'keywordList',
-			// 		selMax: 1000,
-			// 		tableHeader: [
-			// 			{
-			// 				propName: 'categoryidDesc',
-			// 				labelName: '类别'
-			// 			},
-			// 			{
-			// 				propName: 'keywordname',
-			// 				labelName: '关键字'
-			// 			}
-			// 		],
-			// 		search: [],
-			// 		url: '/api-apps/app/tbKeyword2'
-			// 	};
-			// 	this.$refs.choose.getData('new',this.chooseParam);
-			// 	this.selFileId = row.fileid;
-			// 	// this.param.fileid = row.fileid;
-			// 	// this.$refs.keyword.requestData();
-			// },
 			showAuth(row){
 				this.param.visible = true;
 				this.param.fileid = row.fileid;
@@ -415,6 +391,7 @@
 				this.docId = data.id;
 				this.node = data;
 				this.parentNode = data.parent;
+				// this.refreshLazyTree();
 				this.getFileList();
 			},
 			getFileList(){
@@ -450,7 +427,6 @@
 					return this.resolve(pathList);
 				}
 				this.resolve = resolve;
-				this.node = node;
 				let that = this;
 				var url = that.file_url + '/file/pathList';
 				var pathid = 2;
@@ -490,7 +466,6 @@
 						return resolve(pathList);
 					});
 				}
-				
 			},
 			nodeClick(m) {
 				if(m.iconClass != 'icon-file-text') {
@@ -552,8 +527,30 @@
 				this.down = !this.down,
 					this.up = !this.up
 			},
+			// refreshLazyTree(node, children) {
+			// 	var theChildren = node.childNodes
+			// 	theChildren.splice(0, theChildren.length)
+			// 	this.loadNode();
+			// },
+			findTreeId(parentid,chooseData){
+				var data = chooseData;
+				for(var i=0; i<data.length; i++){
+					var flag = true;
+					if(data.id == parentid){
+						data.splice(i,1);
+						flag = false;
+					}
+					if(flag){
+						this.findTreeId(parentid, data[i]);
+					}
+				}
+			},
 			// 删除
 			delDir() {
+				var parentid = this.node.parentid;
+				this.findTreeId(parentid, this.$refs.tree._data.root.childNodes);
+				console.log(this.$refs);
+				return;
 				var url = this.file_url + '/file/deletePath/' + this.docId;
 				this.$confirm('确定删除此文件夹吗？', '提示', {
 					confirmButtonText: '确定',
@@ -565,7 +562,6 @@
 								message: '删除成功',
 								type: 'success'
 							});
-							this.loadNode(this.parentNode,this.resolve);
 						}else{
 							this.$message({
 								message: res.data.message,

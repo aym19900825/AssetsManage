@@ -1,6 +1,6 @@
 <template>
 	<div >
-	<el-dialog title="当前责任人" :visible.sync="innerVisible" width="40%">
+	<el-dialog :modal-append-to-body="false" title="当前责任人" :visible.sync="innerVisible" width="40%">
 		  <!--<el-form ref="approveForm" :model="approveForm" :rules="rules" label-width="120px" class="demo-ruleForm">-->
 	     <el-input type="textarea" rows="5" v-model="user"></el-input>
 	<!--    </el-form>-->
@@ -9,7 +9,7 @@
 </template>
 
 <script>
-	 import Config from '../../config.js'; 
+	import Config from '../../config.js'; 
 	export default {
 	  props:["approvingData"],//第一种方式
 	    name: 'vewPoplemask',

@@ -19,8 +19,8 @@
 				<div class="mask_content">
 					<el-form :model="dataInfo" :label-position="labelPositions" :rules="rules" ref="dataInfo" status-icon inline-message  class="demo-ruleForm">
 						<div class="text-center" v-show="viewtitle">
-							<el-button class="start" type="success" round plain size="mini" @click="startup"><i class="icon-start"></i> 启动流程</el-button>
-							<el-button class="approval" type="warning" round plain size="mini" @click="approvals"><i class="icon-edit-3"></i> 审批</el-button>
+							<el-button id="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 启动流程</el-button>
+							<el-button id="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
 							<el-button type="primary" round plain size="mini" @click="flowmap"><i class="icon-git-pull-request"></i> 流程地图</el-button>
 							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
 							<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
@@ -587,14 +587,14 @@
 							<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
 							<el-button type="success"  v-show="addtitle" @click="saveAndSubmit('dataInfo')">保存并继续</el-button>
 							<el-button v-show="modifytitle" type="btn btn-primarys" @click="modifyversion('dataInfo')">修订</el-button>
-							<el-button type="success" v-show="!addtitle" @click="build(dataInfo)">生成工作处理单</el-button>
+							<el-button type="success" v-show="!addtitle" @click="build(dataInfo)">生成工作任务单</el-button>
 							<el-button @click='close'>取消</el-button>
 						</div>
 					</el-form>
 				</div>
 			</div>
 
-			<el-dialog :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
 				<el-table :data="gridData" @selection-change="SelChange">
 					<el-table-column type="selection" width="55" fixed>
 					</el-table-column>
@@ -617,7 +617,7 @@
 	  			</span>
 			</el-dialog>
 			<!-- 样品名称 Begin -->
-			<el-dialog title="样品名称" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="样品名称" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
 				<el-table :data="samplesList" :header-cell-style="rowClass" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" width="55" fixed align="center">
 					</el-table-column>
@@ -658,7 +658,7 @@
 			</el-dialog>
 			<!-- 样品名称 End -->
 			<!-- 客户联系人 Begin -->
-			<el-dialog title="客户联系人" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="客户联系人" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
 				<el-table :header-cell-style="rowClass" :data="CUSTOMER_PERSONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @selection-change="SelChange" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER.CUSTOMER_PERSONList', order: 'descending'}">
 					<el-table-column type="selection" width="55" fixed align="center">
 					</el-table-column>
@@ -780,6 +780,8 @@
 				views: false,
 				noviews: true, //保存的按钮
 				modify: false,
+				start:false,
+				approval:false,
 				activeName: 'first',//tabs
 				activeNames: ['1', '2', '3', '4', '5', '6', '7', '8', ], //手风琴数量
 				labelPosition: 'top', //表格
@@ -926,12 +928,12 @@
 						console.log(res.data);
 						if(res.data.resp_code == 0) {
 							this.$message({
-								message: '生成工作处理单成功',
+								message: '生成工作任务单成功',
 								type: 'success'
 							});
 						}else{
 							this.$message({
-							message: '已经生成工作处理单，请勿重复生成',
+							message: '已经生成工作任务单，请勿重复生成',
 							type: 'warning'
 						});
 						}
@@ -1154,12 +1156,15 @@
 				//判断启动流程和审批的按钮是否显示
 				var url = this.basic_url + '/api-apps/app/inspectPro/flow/isStart/'+dataid;
 				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
 					if(res.data.resp_code==1){
-						$(".approval").hide();
-						$(".start").show();
+						console.log(111);
+						this.start=true;
+						this.approval=false;
 					}else{
-						$(".approval").show();
-						$(".start").hide();
+						console.log(222);
+						this.start=false;
+						this.approval=true;
 					}
 				});
 			},
@@ -1355,8 +1360,8 @@
 								type: 'success'
 							});
 							this.requestData();
-							$(".approval").show();
-							$(".start").hide();
+							this.start=false;
+							this.approval=true;
 				    }
 				});
 			},

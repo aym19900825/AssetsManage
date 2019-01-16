@@ -182,7 +182,7 @@
 				</div>
 			</div>
 			<!-- 弹出 -->
-			<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
 				<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps">
 				</el-tree>
 				<span slot="footer" class="dialog-footer">

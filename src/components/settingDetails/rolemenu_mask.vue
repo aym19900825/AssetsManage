@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<el-dialog title="权限配置" :visible.sync="dialogVisible" width="30%"  >
+		<el-dialog :modal-append-to-body="false" title="权限配置" :visible.sync="dialogVisible" width="30%"  >
 			<el-tree ref="tree" :data="menuData" show-checkbox node-key="id"  :props="resourceProps" @check-change="handleCheckChange" @click="getCheckedKeys" default-expand-all>
 			</el-tree>
 			<span slot="footer" class="dialog-footer">

@@ -107,7 +107,7 @@
 			</div>
 			</div>
 		<!-- 弹出 -->
-			<el-dialog title="添加数据库表" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="添加数据库表" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
 				<div class="accordion" id="information">
 					<div class="mask_tab-block">
 						<div class="mask_tab-head clearfix">

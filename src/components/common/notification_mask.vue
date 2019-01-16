@@ -19,9 +19,9 @@
 				<div class="mask_content">
 						<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" class="demo-form-inline" inline-message>
 							<div class="text-center" v-show="viewtitle">
-							<el-button class="start" type="success" round plain size="mini" @click="startup"><i class="icon-start"></i> 启动流程</el-button>
-							<el-button class="approval" type="warning" round plain size="mini" @click="approvals"><i class="icon-edit-3"></i> 审批</el-button>
-							<el-button type="primary" round plain size="mini" @click="flowmap"><i class="icon-git-pull-request"></i> 流程地图</el-button>
+							<el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 启动流程</el-button>
+							<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
+							<el-button type="primary" round plain size="mini" @click="flowmap" ><i class="icon-git-pull-request"></i> 流程地图</el-button>
 							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
 							<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
 						</div>
@@ -412,7 +412,7 @@
 					</div>
 				</div>
 			</div>
-			<el-dialog :visible.sync="dialogVisible" width="60%" :before-close="handleClose" :modal-append-to-body='false'>
+			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
 				<el-table :data="gridData" @selection-change="SelChange">
 					<el-table-column type="selection" width="55" fixed>
 					</el-table-column>
@@ -432,7 +432,7 @@
 	    			<el-button type="primary" @click="dailogconfirm()">确 定</el-button>
 	  			</span>
 			</el-dialog>
-			<!-- <el-dialog title="承检部门" :visible.sync="dialogVisiblecompany" width="30%" :before-close="handleClose">
+			<!-- <el-dialog :modal-append-to-body="false" title="承检部门" :visible.sync="dialogVisiblecompany" width="30%" :before-close="handleClose">
 				<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @check-change="handleCheckChange">
 				</el-tree>
 				<span slot="footer" class="dialog-footer">
@@ -441,7 +441,7 @@
 			    </span>
 			</el-dialog> -->
 			<!-- 产品名称 Begin -->
-			<el-dialog title="产品名称" :visible.sync="dialogVisible1" width="80%" :before-close="handleClose" :modal-append-to-body='false'>
+			<el-dialog :modal-append-to-body="false" title="产品名称" :visible.sync="dialogVisible1" width="80%" :before-close="handleClose">
 				<el-table  :header-cell-style="rowClass" :data="productList" line-center border stripe height="400px" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 									<el-table-column type="selection" fixed width="55" align="center">
 									</el-table-column>
@@ -467,7 +467,7 @@
 			</el-dialog>
 			<!-- 产品名称 End -->
 			<!-- 受检企业 Begin -->
-			<el-dialog title="受检企业" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose" :modal-append-to-body='false'>
+			<el-dialog :modal-append-to-body="false" title="受检企业" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
 				<el-table :data="customerList" border stripe :header-cell-style="rowClass" height="400px" style="width: 100%;" :default-sort="{prop:'customerList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed align="center">
 								</el-table-column>
@@ -562,6 +562,8 @@
 				modify: false,
 				views: false,
 				noviews: true, //保存的按钮
+				approval:false,
+				start:false,
 				activeName: 'first', //tabs
 				activeNames: ['1', '2', '3', '4', '5', '6', '7'], //手风琴数量
 				labelPosition: 'right', //表格
@@ -886,11 +888,11 @@
 				var url = this.basic_url + '/api-apps/app/workNot/flow/isStart/'+dataid;
 				this.$axios.get(url, {}).then((res) => {
 					if(res.data.resp_code==1){
-						$(".approval").hide();
-						$(".start").show();
+						this.start=true;
+						this.approval=false;
 					}else{
-						$(".approval").show();
-						$(".start").hide();
+						this.start=false;
+						this.approval=true;
 					}
 				});
 			},

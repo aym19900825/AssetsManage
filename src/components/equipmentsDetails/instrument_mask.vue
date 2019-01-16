@@ -103,7 +103,7 @@
 				<!--底部-->
 			</div>
 			<!--设备保管人 Begin-->
-			<el-dialog :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
 				<el-table :data="userList" border stripe :header-cell-style="rowClass" height="400px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" width="55" fixed align="center">
 					</el-table-column>

@@ -586,13 +586,13 @@
 							</el-collapse>
 						</div>
 						<div class="el-dialog__footer" v-show="noviews">
-							<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
-							<el-button type="success"  v-show="addtitle" @click="saveAndSubmit('dataInfo')">保存并继续</el-button>
-							<el-button v-show="modifytitle" type="btn btn-primarys" @click="modifyversion('dataInfo')">修订</el-button>
+							<el-button type="primary" @click="saveAndUpdate">保存</el-button>
+							<el-button type="success"  v-show="addtitle" @click="saveAndSubmit">保存并继续</el-button>
+							<el-button v-show="modifytitle" type="btn btn-primarys" @click="modifyversion">修订</el-button>
 							<el-button @click='close'>取消</el-button>
 						</div>
 						<div class="el-dialog__footer" v-show="views">
-							<el-button type="success" v-if="this.dataInfo.STATUS == 3" @click="build('dataInfo')">生成工作任务单</el-button>
+							<el-button type="success" v-if="this.dataInfo.STATUS == 3" @click="build">生成工作任务单</el-button>
 						</div>
 					</el-form>
 				</div>
@@ -776,7 +776,8 @@
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				dataInfo: {
-					STATUS: '草稿',
+					STATUS: '1',
+					STATUSDesc:'草稿',
 					VERSION:'1',
 					INSPECT_PROXY_PROJECList: [],
 					INSPECT_PROXY_BASISList: [],
@@ -951,7 +952,8 @@
 			reset() {					
 				this.dataInfo={
 					VERSION: '1',
-					STATUS: '草稿',
+					STATUS: '1',
+					STATUSDesc:'草稿',
 					V_NAME:'',
 					MEMO:'',
 					LEADER:'',
@@ -970,7 +972,7 @@
 				}
 			},
 			//生成委托书
-			build(dataInfo){
+			build(){
 				var dataid = this.dataInfo.ID;
 					var Url = this.basic_url + '/api-apps/app/inspectPro/operate/createWorkorder?ID='+dataid;
 					this.$axios.get(Url, {}).then((res) => {
@@ -1237,8 +1239,8 @@
 				$(".mask_div").css("top", "100px");
 			},
 			// 保存users/saveOrUpdate
-			save(dataInfo) {
-				this.$refs['dataInfo'].validate((valid) => {
+			save() {
+				this.$refs.dataInfo.validate((valid) => {
 			        if (valid) {
 						if(this.dataInfo.INSPECT_PROXY_BASISList.length<=0&&this.dataInfo.INSPECT_PROXY_PROJECList.length<=0&&this.dataInfo.CHECK_PROXY_CONTRACTList.length<=0){
 			        		this.$message({
@@ -1247,8 +1249,8 @@
 							});
 							return false;
 			        	}else{
-							this.dataInfo.ITEM_STATUS=this.dataInfo.ITEM_STATUS==1;
-							this.dataInfo.MESSSTATUS= this.dataInfo.MESSSTATUS==1;//信息状态
+//							this.dataInfo.ITEM_STATUS=this.dataInfo.ITEM_STATUS==1;
+//							this.dataInfo.MESSSTATUS= this.dataInfo.MESSSTATUS==1;//信息状态
 							console.log(this.dataInfo);
 							var url = this.basic_url + '/api-apps/app/inspectPro/saveOrUpdate';
 							this.$axios.post(url, this.dataInfo).then((res) => {
@@ -1279,14 +1281,14 @@
 			        }
 				});
 			},
-			saveAndUpdate(dataInfo){
-				this.save(dataInfo);
+			saveAndUpdate(){
+				this.save();
 				if(this.falg){
 					this.show = false;
 				}
 			},
-			saveAndSubmit(dataInfo){
-				this.save(dataInfo);
+			saveAndSubmit(){
+				this.save();
 				this.show = true;			
 			},
 			handleClose(done) {

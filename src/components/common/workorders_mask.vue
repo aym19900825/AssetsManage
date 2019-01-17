@@ -974,6 +974,8 @@
 					ORG_CODE: '',//录入人机构
 					CHANGEBY: '',//修改人
 					CHANGEDATE: '',//修改日期
+					STATEDesc:'草稿',
+					STATE:'1',
 					WorkorderBasisList: [],//检测依据
 					WorkorderProjectList: [],//检测项目与要求
 					WorkorderPersonList: [],//检验员信息

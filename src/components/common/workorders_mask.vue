@@ -994,7 +994,6 @@
 				this.requestData();
 			},
 			addworkorder(){
-				this.$emit('request');
 				this.dialogVisible1 = true;
 			},
 			addworkordernum(){
@@ -1431,7 +1430,7 @@
 							});
 							this.show = false;
 							//重新加载数据
-							this.$emit('request')
+							this.$emit('requests');
 						}
 					}).catch((err) => {
 						this.$message({

@@ -185,7 +185,7 @@
 					            	<div class="clearfix pt10">
 						            	<el-row>
 											<el-col :span="8">
-												<el-form-item label="委托方提供技术资料">
+												<el-form-item label="委托方提供技术资料" label-width="140px">
 													<el-input placeholder="请输入内容" v-model="workorderForm.TECHNICAL_INFORMATION" :disabled="noedit"></el-input>
 												</el-form-item>
 											</el-col>
@@ -1343,18 +1343,6 @@
 						type: 'error',
 					});
 				});
-//				var url = this.basic_url + '/api-apps/app/workorder/' + dataid;
-//				this.$axios.get(url, {}).then((res) => {
-//				console.log(111);
-//				console.log(res);	
-//				this.workorderForm = res.data;	
-//					this.show = true;
-//				}).catch((err) => {
-//					this.$message({
-//						message: '网络错误，请重试',
-//						type: 'error'
-//					});
-//				});
 				this.detailgetData();
 				this.views = false;
 				this.addtitle = false;
@@ -1376,16 +1364,6 @@
 				this.noviews = false;
 				this.edit = true;
 				this.noedit = true;
-//				var url = this.basic_url + '/api-apps/app/workorder/' + dataid;
-//				this.$axios.get(url, {}).then((res) => {
-//					this.workorderForm = res.data;
-//					this.show = true;
-//				}).catch((err) => {
-//					this.$message({
-//						message: '网络错误，请重试',
-//						type: 'error'
-//					});
-//				});
 				//判断启动流程和审批的按钮是否显示
 				this.detailgetData();
 				var url = this.basic_url + '/api-apps/app/workorder/flow/isStart/'+dataid;

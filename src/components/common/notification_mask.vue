@@ -836,8 +836,8 @@
 			detailgetData() {
 				var url = this.basic_url +'/api-apps/app/workNot/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res.data);
 					this.dataInfo = res.data;
+					this.show = true;
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -881,7 +881,6 @@
 				this.edit = true;
 				this.noedit = true;
 				this.detailgetData();
-				this.show = true;
 				//判断启动流程和审批的按钮是否显示
 				var url = this.basic_url + '/api-apps/app/workNot/flow/isStart/'+dataid;
 					this.$axios.get(url, {}).then((res) => {

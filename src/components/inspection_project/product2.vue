@@ -417,6 +417,7 @@
 						"NUM": row.NUM,
 						"PRO_NAME": row.PRO_NAME,
 						"STATUS": row.STATUS,
+						"DEPTID": row.DEPTID,
 						"ENTERBY": row.ENTERBY,
 					    "ENTERDATE": row.ENTERDATE,
 					    "PRO_NUM": row.PRO_NUM,

@@ -124,32 +124,5 @@ export default {
 </script>
 
 <style>
-.el-form-item {
-margin-bottom: 20px;
-}
-.demo-ruleForm{
-	padding-top:0px;
-}
-.mask{
-	width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, .5);
-    position: fixed;
-    display: block;
-    top: 0px;
-    z-index: 1001;
-    margin-top:60px;
-}
-.masks_div{
-    position: absolute;
-    z-index: 1002;
-    width: 50%;
-    margin: 20% 20%;
-    background:#F3F6FA;	
-    border-radius: 0px;
-    height: 50%;
-    top: 0px;
-    bottom: 0px;
-    overflow: hidden;
-}
+
 </style>

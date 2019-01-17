@@ -30,11 +30,11 @@
 	                            </el-collapse-item>
 							    <el-collapse-item title="设备期间检查计划信息" name="2">
 	                                <div class="table-func">
-										<el-button type="warning" size="mini" round @click="addLine('tableList')" :disabled="noedit">
+										<el-button type="warning" size="mini" round @click="addLine('tableList')" v-show="!viewtitle">
 											<i class="el-icon-upload"></i>
 											<font>导入</font>
 										</el-button>
-										<el-button type="success" size="mini" round @click="addLine" :disabled="noedit">
+										<el-button type="success" size="mini" round @click="addLine" v-show="!viewtitle">
 											<i class="icon-add"></i>
 											<font>新建行</font>
 										</el-button>

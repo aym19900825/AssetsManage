@@ -258,7 +258,7 @@
 									    <el-table-column fixed="right" label="操作" width="100px">
 									      <template slot-scope="scope">
 									        <el-button @click = "deleteRow(scope.$index, samplesForm.ITEM_LINEList)" type="text" size="small">
-									          移除
+									          <i class="icon-trash red"></i>
 									        </el-button>
 									      </template>
 									    </el-table-column>

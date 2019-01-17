@@ -56,7 +56,7 @@
 									<el-tabs v-model="activeName" @tab-click="handleClick">
 										<el-tab-pane label="字典值列表" name="first">
 											<div class="table-func table-funcb" v-show="noviews">
-												<el-button type="success" size="mini" round @click="addfield1">
+												<el-button type="success" size="mini" round @click="addfield1" v-show="!viewtitle">
 													<i class="icon-add"></i><font>新建行</font>
 												</el-button>
 											</div>
@@ -101,7 +101,7 @@
 												<el-table-column fixed="right" label="操作" width="120">
 													<template slot-scope="scope">
 														<el-button @click.native.prevent="deleteRow(scope.$index,dictionarieForm.subDicts)" type="text" size="small">
-															移除
+															<i class="icon-trash red"></i>
 														</el-button>
 													</template>
 												</el-table-column>

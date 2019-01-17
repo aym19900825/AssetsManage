@@ -40,7 +40,7 @@
 									<el-tabs v-model="activeName" @tab-click="handleClick">
 									    <el-tab-pane label="设备使用记录信息" name="first">
 									    	<div class="table-func table-funcb">
-										<el-button type="success" size="mini" round @click="addLine('tableList')" :disabled="noedit">
+										<el-button type="success" size="mini" round @click="addLine('tableList')" v-show="!viewtitle">
 											<i class="icon-add"></i>
 											<font>新建行</font>
 										</el-button>
@@ -130,7 +130,7 @@
 									    </el-tab-pane>
 									    <el-tab-pane label="设备维护保养记录信息" name="second">
 									    	<div class="table-func table-funcb">
-										<el-button type="success" size="mini" round @click="addLine('maintenList')" :disabled="noedit">
+										<el-button type="success" size="mini" round @click="addLine('maintenList')" v-show="!viewtitle">
 											<i class="icon-add"></i>
 											<font>新建行</font>
 										</el-button>

@@ -241,6 +241,13 @@
 			}
 		},
 		data() {
+			var validateItemid = (rule, value, callback) => {//样品编号
+                if (this.samplesForm.ITEM_LINE_ID === undefined || this.samplesForm.ITEM_LINE_ID === '' || this.samplesForm.ITEM_LINE_ID === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
 			return {
 				loadSign: true, //加载
 				commentArr: {},
@@ -286,8 +293,8 @@
 				isEditing: '',
 				commentArr:{},//下拉加载
 				rules: { //定义需要校验数据的名称
-					ITEM_LINE_ID: [
-						{ required: true, message: '请选择样品子表ID', trigger: 'blur' }
+					ITEM_LINE_ID: [//样品编号
+						{ required: true,validator: validateItemid}
 					],
 					ACCEPT_PERSON: [
 						{ required: true, message: '请填写样品承接人', trigger: 'blur' }

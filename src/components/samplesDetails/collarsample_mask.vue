@@ -297,6 +297,27 @@
 			}
 		},
 		data() {
+			var validateItemid = (rule, value, callback) => {//样品编号
+                if (this.samplesForm.ITEM_LINE_ID === undefined || this.samplesForm.ITEM_LINE_ID === '' || this.samplesForm.ITEM_LINE_ID === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
+			var validateDescri = (rule, value, callback) => {//样品名称
+                if (this.samplesForm.DESCRIPTION === undefined || this.samplesForm.DESCRIPTION === '' || this.samplesForm.DESCRIPTION === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
+			var validateType = (rule, value, callback) => {//类别
+                if (this.samplesForm.TYPE === undefined || this.samplesForm.TYPE === '' || this.samplesForm.TYPE === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
 			return {
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
@@ -340,14 +361,14 @@
 				isEditing: '',
 				commentArr:{},//下拉加载
 				rules: { //定义需要校验数据的名称
-					ITEM_LINE_ID: [
-						{ required: true, message: '请选择样品子表ID', trigger: 'blur' }
+					ITEM_LINE_ID: [//样品编号
+						{ required: true,validator: validateItemid}
 					],
-					DESCRIPTION: [
-						{ required: true, message: '请填写样品名称', trigger: 'blur' }
+					DESCRIPTION: [//样品名称
+						{ required: true,validator: validateDescri}
 					],
-					TYPE: [
-						{ required: true, message: '请选择类别', trigger: 'change' }
+					TYPE: [//类别
+						{ required: true,validator: validateType}
 					],
 					MODEL: [
 						{ required: true, message: '型号不能为空', trigger: 'blur' }

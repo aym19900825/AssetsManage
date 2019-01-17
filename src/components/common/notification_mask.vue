@@ -526,6 +526,15 @@
 		//					page: Object ,
 		//				},
 		data() {
+			 var validateItemdata = (rule, value, callback) => {
+				 console.log(value);
+				 console.log(this.dataInfo.P_LEADERDesc);
+                if (this.dataInfo.P_LEADERDesc === undefined || this.dataInfo.P_LEADERDesc === '' || this.dataInfo.P_LEADERDesc === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
 			return {
 				approvingData:{},//流程的数据
 				loadSign:true,//加载
@@ -602,10 +611,10 @@
 					// }], //计划编号
 					TYPE:[{required: true,trigger: 'change',message: '必填',}],
 					CJDW: [{required: true,trigger: 'change',message: '必填',}], //承检单位
-					P_LEADERDesc: [{required: true,trigger: 'change',message: '必填',}], //项目负责人
-					ITEM_NAME: [{required: true,trigger: 'blur',message: '必填',}], //受检产品名称
+					P_LEADERDesc: [{required: true,validator: validateItemdata}], //项目负责人
+					ITEM_NAME: [{required: true,validator: validateItemdata}], //受检产品名称
 					ITEM_MODEL: [{required: true,trigger: 'blur',message: '必填'}], //受检产品型号
-					V_NAME: [{required: true,trigger: 'blur',message: '必填'}], //受检企业
+					V_NAME: [{required: true,validator: validateItemdata}], //受检企业
 					VENDOR: [{required: true,trigger: 'blur',message: '必填'}], //受检企业编号
 					QUALITY: [{required: true,trigger: 'change',message: '必填'}], //样品数量
 					CHECTCOST: [{required: true,trigger: 'blur',message: '必填',	}], //检验检测费用
@@ -1243,6 +1252,9 @@
 					this.customerList = newarr;
 				}).catch((wrong) => {})
 			},
+		},
+		watch(){
+
 		},
 		mounted() {
 			this.requestData();

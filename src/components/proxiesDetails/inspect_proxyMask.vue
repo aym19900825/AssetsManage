@@ -193,7 +193,7 @@
 									<el-tabs v-model="activeName" @tab-click="handleClick">
 									    <el-tab-pane label="检验依据" name="first">
 									    	<div class="table-func table-funcb">
-												<el-button type="success" size="mini" round @click="addfieldProject">
+												<el-button type="success" size="mini" round @click="addfieldProject"  v-show="!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建行</font>
 												</el-button>
@@ -260,7 +260,7 @@
 									    </el-tab-pane>
 									    <el-tab-pane label="检验项目与要求" name="second">
 									    	<div class="table-func table-funcb">
-												<el-button type="success" size="mini" round @click="addfieldBasis">
+												<el-button type="success" size="mini" round @click="addfieldBasis"  v-show="!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建行</font>
 												</el-button>
@@ -336,7 +336,7 @@
 									    </el-tab-pane>
 									    <el-tab-pane label="分包要求" name="third">
 									    	<div class="table-func table-funcb">
-												<el-button type="success" size="mini" round @click="addcheckProCont">
+												<el-button type="success" size="mini" round @click="addcheckProCont"  v-show="!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建行</font>
 												</el-button>
@@ -1195,6 +1195,7 @@
 				this.noviews = false;
 				this.edit = true;
 				this.noedit = true;
+				this.isEditing=false;
 				this.detailgetData();
 				//判断启动流程和审批的按钮是否显示
 				var url = this.basic_url + '/api-apps/app/inspectPro/flow/isStart/'+dataid;

@@ -101,8 +101,8 @@
 										</el-col>
 									
 										<el-col :span="8" v-show="addtitle">
-											<el-form-item label="承检单位" prop="CJDW" :disabled="noedit" label-width="110px">
-												<el-select clearable v-model="dataInfo.CJDW" filterable allow-create default-first-option placeholder="请选择">
+											<el-form-item label="承检单位" prop="CJDW"  label-width="110px">
+												<el-select clearable v-model="dataInfo.CJDW" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit">
 													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 												</el-select>
 											</el-form-item>
@@ -110,7 +110,7 @@
 										
 										<el-col :span="8" v-show="!addtitle">
 											<el-form-item label="承检单位" prop="CJDWDesc" :disabled="noedit" label-width="110px">
-												<el-select clearable v-model="dataInfo.CJDWDesc" filterable allow-create default-first-option placeholder="请选择">
+												<el-select clearable v-model="dataInfo.CJDWDesc" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit">
 													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 												</el-select>
 											</el-form-item>
@@ -183,7 +183,7 @@
 									<el-tabs v-model="activeName" @tab-click="handleClick">
 										<el-tab-pane label="依据" name="first">
 											<div class="table-func table-funcb">
-												<el-button type="success" size="mini" round @click="addfieldBasis">
+												<el-button type="success" size="mini" round @click="addfieldBasis" v-show="!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建</font>
 												</el-button>
@@ -269,7 +269,7 @@
 										</el-tab-pane>
 										<el-tab-pane label="检验检测项目" name="second">
 											<div class="table-func table-funcb">
-												<el-button type="success" size="mini" round @click="addfieldProject">
+												<el-button type="success" size="mini" round @click="addfieldProject" v-show="!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建</font>
 												</el-button>

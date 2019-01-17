@@ -16,7 +16,8 @@ import data_module from '@/components/maindata/data_module'//原始数据模板
 import report_module from '@/components/maindata/report_module'//检验/检测报告模板
 import work_instruction from '@/components/maindata/work_instruction'//作业指导书
 
-
+import application_management from '@/components/setting/application_management'//应用管理
+import button_configure from '@/components/setting/button_configure'//按钮配置
 import customer_management from '@/components/setting/customer_management'//客户管理
 import user_management from '@/components/setting/user_management'//用户管理
 import dept_management from '@/components/setting/dept_management'//机构管理
@@ -248,6 +249,16 @@ Vue.use(Router)
       path: '/menu_management',
       name: 'menu_management',
       component: menu_management
+    },
+     {//应用管理
+      path: '/application_management',
+      name: 'application_management',
+      component: application_management
+    },
+     {//按钮配置
+      path: '/button_configure',
+      name: 'button_configure',
+      component: button_configure
     },
     {//角色管理
       path: '/role_management',

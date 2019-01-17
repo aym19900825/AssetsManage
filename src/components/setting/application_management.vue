@@ -42,21 +42,16 @@
 
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
-						<el-form :model="searchList" label-width="45px">
+						<el-form :model="searchList" label-width="70px">
 							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-form-item label="编码" prop="CLASSIFY_NUM">
-										<el-input v-model="searchList.CLASSIFY_NUM"></el-input>
+									<el-form-item label="应用名称" prop="name">
+										<el-input v-model="searchList.name"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="分类描述" prop="CLASSIFY_DESCRIPTION" label-width="80px">
-										<el-input v-model="searchList.CLASSIFY_DESCRIPTION"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="5">
-									<el-form-item label="父级分类" prop="PARENT" label-width="80px">
-										<el-input v-model="searchList.PARENT"></el-input>
+									<el-form-item label="应用描述" prop="description">
+										<el-input v-model="searchList.description"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="2">
@@ -67,49 +62,47 @@
 					</div>
 					<!-- 高级查询划出 End-->
 					<el-row :gutter="0">
-                        <el-col :span="5" class="lefttree">
-							<div class="lefttreebg">
-								<div class="left_tree_title clearfix" @click="min3max()">
-									<div class="pull-left pr20" v-if="ismin">设备分类</div>
-									<span class="pull-right navbar-minimalize minimalize-styl-2">
-										<i class="icon-doubleok icon-double-angle-left blue"></i>
-									</span>
-								</div>
-								<div class="left_treebg" :style="{height: fullHeight}">
-									<div class="p15" v-if="ismin">
-										<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all  :indent="22" :render-content="renderContent"  :props="resourceProps" @node-click="handleNodeClick">
-										</el-tree>
-									</div>
-								</div>
-							</div>
-						</el-col>
-						<el-col :span="19" class="leftcont v-resize">
+						<el-col :span="24">
 							<!-- 表格 Begin-->
-							<el-table :header-cell-style="rowClass" :data="categoryList" v-loading="loading" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table :header-cell-style="rowClass" :data="applicationList" v-loading="loading" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'applicationList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
-								<el-table-column label="编码" width="155" sortable prop="CLASSIFY_NUM" v-if="this.checkedName.indexOf('编码')!=-1">
+								<el-table-column label="应用英文名称" width="155" sortable prop="code" v-if="this.checkedName.indexOf('应用英文名称')!=-1">
 									<template slot-scope="scope">
-										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.CLASSIFY_NUM}}
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.code}}
 										</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="分类描述" sortable prop="CLASSIFY_DESCRIPTION" v-if="this.checkedName.indexOf('分类描述')!=-1">
+								<el-table-column label="应用名称" width="150" sortable prop="name" v-if="this.checkedName.indexOf('应用名称')!=-1">
 								</el-table-column>
 								<!--<el-table-column label="信息状态" width="155" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
  								<template slot-scope="scope" >
  									<span v-text="scope.row.STATUS=='1'?'活动':'不活动'"></span>
  								</template>
 							</el-table-column>-->
-                                <el-table-column label="父级分类" sortable prop="PARENT" v-if="this.checkedName.indexOf('父级分类')!=-1">
+								<el-table-column label="处理类" width="250" sortable prop="handleclass" v-if="this.checkedName.indexOf('处理类')!=-1" align="right">
 								</el-table-column>
-								<!-- <el-table-column label="录入人" width="155" prop="ENTERBY" sortable v-if="this.checkedName.indexOf('录入人')!=-1">
-								</el-table-column> -->
-								<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
+								<el-table-column label="应用描述" width="185" sortable prop="description" v-if="this.checkedName.indexOf('应用描述')!=-1">
 								</el-table-column>
-								<!-- <el-table-column label="修改人" width="155" prop="CHANGEBY" sortable v-if="this.checkedName.indexOf('修改人')!=-1">
+								<el-table-column label="数据库表" width="185" sortable prop="object_id" v-if="this.checkedName.indexOf('数据库表')!=-1">
+								</el-table-column>
+								<el-table-column label="模块" width="185" sortable prop="module" v-if="this.checkedName.indexOf('模块')!=-1">
+								</el-table-column>
+								<el-table-column label="排序" width="185" sortable prop="sort" v-if="this.checkedName.indexOf('排序')!=-1">
+								</el-table-column>
+								<!-- <el-table-column label="创建人" width="155" prop="createUser" sortable v-if="this.checkedName.indexOf('创建人')!=-1">
 								</el-table-column> -->
-								<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
+								<el-table-column label="创建时间" width="120" prop="createTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
+								</el-table-column>
+								<!-- <el-table-column label="修改人" width="155" prop="updateUser" sortable v-if="this.checkedName.indexOf('修改人')!=-1">
+								</el-table-column> -->
+								<el-table-column label="变更时间" width="120" prop="updateTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
+								</el-table-column>
+								<el-table-column label="流程" width="120" prop="flowkey" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('流程')!=-1">
+								</el-table-column>
+								<el-table-column label="流程代办单据号" width="120" prop="flow_todo_num" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('流程代办单据号')!=-1">
+								</el-table-column>
+								<el-table-column label="流程代办描述" width="120" prop="flow_todo_desc" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('流程代办描述')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
@@ -129,7 +122,7 @@
 	import vheader from '../common/vheader.vue'
 	import navs_header from '../common/nav_tabs.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import categorymask from '../equipmentsDetails/equipmentClassify_mask.vue'
+	import categorymask from '../settingDetails/application_Mask.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	export default {
 		name: 'customer_management',
@@ -165,53 +158,80 @@
 					deptId: ''
 				},
 				checkedName: [
-					'编码',
-                    '分类描述',
-                    '父级分类',
-					// '信息状态',
-					// '录入人',
-					'录入时间',
-					// '修改人',
-					'修改时间'
+					'应用英文名称',
+					'应用名称',
+					'处理类',
+					'类型',
+					'应用描述',
+					'数据库表',
+					'模块',
+					'排序',
+					'创建时间',
+					'变更时间',
+					'流程',
+					'流程代办单据号',
+					'流程代办描述'
 				],
 				tableHeader: [{
-						label: '编码',
-						prop: 'CLASSIFY_NUM'
+						label: '应用英文名称',
+						prop: 'code'
 					},
 					{
-						label: '分类描述',
-						prop: 'CLASSIFY_DESCRIPTION'
-                    },
-                    {
-						label: '父级分类',
-						prop: 'PARENT'
+						label: '应用名称',
+						prop: 'name'
 					},
+					{
+						label: '处理类',
+						prop: 'handleclass'
+					},
+					{
+						label: '类型',
+						prop: 'type'
+					},
+					{
+						label: '应用描述',
+						prop: 'description'
+					},
+					{
+						label: '数据库表',
+						prop: 'object_id'
+					},
+					{
+						label: '模块',
+						prop: 'module'
+					},
+					{
+						label: '排序',
+						prop: 'sort'
+					},
+					{
+						label: '创建时间',
+						prop: 'createTime'
+					},
+					{
+						label: '变更时间',
+						prop: 'updateTime'
+					},
+					{
+						label: '流程',
+						prop: 'flowkey'
+					},
+					{
+						label: '流程代办单据号',
+						prop: 'flow_todo_num'
+					},
+					{
+						label: '流程代办描述',
+						prop: '流程代办描述'
+					},
+
 					// {
 					// 	label: '信息状态',
 					// 	prop: 'STATUS'
 					// },
-					// {
-					// 	label: '录入人',
-					// 	prop: 'ENTERBY'
-					// },
-					{
-						label: '录入时间',
-						prop: 'ENTERDATE'
-					},
-					// {
-					// 	label: '修改人',
-					// 	prop: 'CHANGEBY'
-					// },
-					{
-						label: '修改时间',
-						prop: 'CHANGEDATE'
-					}
-                ],
-                //tree
-                // resourceData: [], //数组，我这里是通过接口获取数据，
-                treeData: [],
+				],
 				selUser: [],
-				categoryList: [],
+				applicationList: [],
 				search: false,
 				show: false,
 				down: true,
@@ -220,18 +240,17 @@
 				ismin: true,
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
 				searchList: { //点击高级搜索后显示的内容
-					CLASSIFY_NUM:'',
-					CLASSIFY_DESCRIPTION: '',
-					PARENT:'',
+					name:'',
+					description: '',
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
 				resourceDialogisShow: false,
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
-				// resourceProps: {
-				// 	categorymaskren: "subDepts",
-				// 	label: "simplename"
-				// },
+				resourceProps: {
+					categorymaskren: "subDepts",
+					label: "simplename"
+				},
 				page: { //分页显示
 					currentPage: 1,
 					pageSize: 10,
@@ -239,10 +258,6 @@
 				},
 				CATEGORY: {},//修改子组件时传递数据
 				selectData: [],
-				resourceProps: {
-					children: "children",
-					label: "CLASSIFY_DESCRIPTION"
-				},
 			}
 		},
 		methods: {
@@ -251,18 +266,18 @@
 			    return 'text-align:center'
 			},
 			//机构值
-			// getCompany() {
-			// 	var type = "2";
-			// 	var url = this.basic_url + '/api-user/depts/treeByType';
-			// 	this.$axios.get(url, {
-			// 		params: {
-			// 			type: type
-			// 		},
-			// 	}).then((res) => {
-			// 		console.log(res.data);
-			// 		this.selectData = res.data;
-			// 	});
-			// },
+			getCompany() {
+				var type = "2";
+				var url = this.basic_url + '/api-user/depts/treeByType';
+				this.$axios.get(url, {
+					params: {
+						type: type
+					},
+				}).then((res) => {
+					console.log(res.data);
+					this.selectData = res.data;
+				});
+			},
 			//表格滚动加载
 			loadMore() {
 				if(this.loadSign) {
@@ -297,14 +312,15 @@
 			reset() {
 				this.CATEGORY = {
 					ID: '',
-					STATUS: '1',
-                    CLASSIFY_NUM:'',
-                    CLASSIFY_DESCRIPTION:'',
-                    PARENT:'',
-                    ENTERBY:'',
-                    NTERDATE:'',
-                    CHANGEBY:'',
-                    CHANGEDATE:''
+					NUM: '',
+					TYPE: '',
+					STATUS: '活动',
+					VERSION: '1',
+					DEPARTMENT: '',
+					ENTERBY: '',
+					ENTERDATE: '',
+					CHANGEBY: '',
+					CHANGEDATE: ''
 				};
 				if(this.$refs['CATEGORY'] !== undefined) {
 					this.$refs['CATEGORY'].resetFields();
@@ -357,8 +373,15 @@
 						type: 'warning'
 					});
 					return;
-				} else {
-					var url = this.basic_url + '/api-apps/app/assetClass/deletes';
+				}else if(selData.length > 1){
+					this.$message({
+						message: '不可删除多条数据',
+						type: 'warning'
+					});
+					return;
+				}else {
+					var id = this.selUser[0].id;
+					var url = this.basic_url + '/api-apps/appcfg/'+id;
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -431,66 +454,21 @@
 			},
 			SelChange(val) {
 				this.selUser = val;
-            },
-            min3max() { //左侧菜单正常和变小切换
-				if($(".lefttree").hasClass("el-col-5")) {
-					$(".lefttree").removeClass("el-col-5");
-					$(".lefttree").addClass("el-col-1");
-					$(".leftcont").removeClass("el-col-19");
-					$(".leftcont").addClass("el-col-23");
-					$(".icon-doubleok").removeClass("icon-double-angle-left");
-					$(".icon-doubleok").addClass("icon-double-angle-right");
-				} else {
-					$(".lefttree").removeClass("el-col-1");
-					$(".lefttree").addClass("el-col-5");
-					$(".leftcont").removeClass("el-col-23");
-					$(".leftcont").addClass("el-col-19");
-					$(".icon-doubleok").removeClass("icon-double-angle-right");
-					$(".icon-doubleok").addClass("icon-double-angle-left");
-				}
-				this.ismin = !this.ismin;
-			},
-			// 点击节点
-			nodeClick: function(m) {
-				if(m.iconClass != 'icon-file-text') {
-					if(m.iconClass == 'icon-file-normal') {
-						m.iconClass = 'icon-file-open';
-					} else {
-						m.iconClass = 'icon-file-normal';
-					}
-				}
-				this.handleNodeClick();
-			},
-			expandClick: function(m) {
-				if(m.iconClass != 'icon-file-text') {
-					if(m.iconClass == 'icon-file-normal') {
-						m.iconClass = 'icon-file-open';
-					} else {
-						m.iconClass = 'icon-file-normal';
-					}
-				}
-				m.isFolder = !m.isFolder;
-			},
-			handleNodeClick(data) {
-				// console.log(123123123);
-				// console.log(data);
-				this.searchList.CLASSIFY_DESCRIPTION = data.CLASSIFY_DESCRIPTION;
-				this.requestData();
 			},
 			requestData(index) {
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					CLASSIFY_NUM:this.searchList.CLASSIFY_NUM,
-					CLASSIFY_DESCRIPTION: this.searchList.CLASSIFY_DESCRIPTION,
-					PARENT:this.searchList.PARENT,
+					name:this.searchList.name,
+					description: this.searchList.description,
 				}
 				// console.log(this.searchList.DEPTID);
-				var url = this.basic_url + '/api-apps/app/assetClass';
+				var url = this.basic_url + '/api-apps/appcfg';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					// console.log(res.data);
+					console.log(23333333);
+					console.log(res.data);
 					
 					this.page.totalCount = res.data.count;
 					//总的页数
@@ -511,44 +489,26 @@
 							}
 						}
 					}
-					this.categoryList = newarr;
+					this.applicationList = newarr;
 				}).catch((wrong) => {})
 			},
-			// handleNodeClick(data) {},
+			handleNodeClick(data) {},
 			formatter(row, column) {
 				return row.enabled;
 			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
-        		console.log(111111111);
-        		console.log(childValue);
         		this.$refs.navsheader.showClick(childValue);
-              },
-              //机构树
-			getKey() {
-				let that = this;
-				// 192.168.1.169:9100/api-apps/app/assetClass/tree?tree_id=CLASSIFY_NUM&tree_pid=PARENT
-				var url = this.basic_url + '/api-apps/app/assetClass/tree?tree_id=CLASSIFY_NUM&tree_pid=PARENT';
-				this.$axios.get(url, {}).then((res) => {
-					console.log(2333);
-					console.log(res.data);
-					this.resourceData = res.data.datas;
-					this.treeData = this.transformTree(this.resourceData);
-				});
-			},
-			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
-				//console.log();
-				return (<span><i class={data.iconClass}></i><span>{node.label}</span></span>)
-			},
+      		},
+
 		},
 		mounted() {
 			this.requestData();
-            // this.getCompany();
-            this.getKey();
+			this.getCompany();
 		},
 	}
 </script>
 
-<style scoped>
+<style>
 
 </style>

@@ -309,7 +309,8 @@
 				}
 			};
 			var validateDOCLINKS_NUM = (rule, value, callback) => {
-				if(value === '') {
+				console.log(this.testing_projectForm.DOCLINKS_NUM);
+				if(this.testing_projectForm.DOCLINKS_NUM === '') {
 					callback(new Error('请选择作业指导书'));
 				} else {
 					callback();
@@ -378,7 +379,7 @@
 					}],
 					DOCLINKS_NUM: [{
 						required: true,
-						trigger: 'blur',
+						// trigger: 'blur',
 						validator: validateDOCLINKS_NUM,
 					}],
 				},

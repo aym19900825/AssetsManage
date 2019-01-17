@@ -19,8 +19,10 @@
 				<div class="mask_content">
 					<el-form :model="dataInfo" :label-position="labelPositions" :rules="rules" ref="dataInfo" status-icon inline-message  class="demo-ruleForm">
 						<div class="text-center" v-show="viewtitle">
-							<el-button id="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 启动流程</el-button>
-							<el-button id="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
+							<span v-if="this.dataInfo.STATUS!=3">
+								<el-button id="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 启动流程</el-button>
+								<el-button id="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
+							</span>
 							<el-button type="primary" round plain size="mini" @click="flowmap"><i class="icon-git-pull-request"></i> 流程地图</el-button>
 							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
 							<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
@@ -35,7 +37,7 @@
 											</el-input>
 										</el-col>
 										<el-col :span="5" class="pull-right">
-											<el-input v-model="dataInfo.STATUS" :disabled="edit">
+											<el-input v-model="dataInfo.STATUSDesc" :disabled="edit">
 												<template slot="prepend">状态</template>
 											</el-input>
 										</el-col>
@@ -587,8 +589,10 @@
 							<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
 							<el-button type="success"  v-show="addtitle" @click="saveAndSubmit('dataInfo')">保存并继续</el-button>
 							<el-button v-show="modifytitle" type="btn btn-primarys" @click="modifyversion('dataInfo')">修订</el-button>
-							<el-button type="success" v-show="!addtitle" @click="build(dataInfo)">生成工作任务单</el-button>
 							<el-button @click='close'>取消</el-button>
+						</div>
+						<div class="el-dialog__footer" v-show="views">
+							<el-button type="success" v-if="this.dataInfo.STATUS == 3" @click="build('dataInfo')">生成工作任务单</el-button>
 						</div>
 					</el-form>
 				</div>
@@ -683,7 +687,7 @@
 			</el-dialog>
 			<!-- 客户联系人 End -->
 		<!--审批页面-->
-			<approvalmask :approvingData="approvingData" ref="approvalChild" ></approvalmask>
+			<approvalmask :approvingData="approvingData" ref="approvalChild"  @detail="detailgetData"></approvalmask>
 			<!--流程历史-->
 			<flowhistorymask :approvingData="approvingData"  ref="flowhistoryChild" ></flowhistorymask>
 			<!--流程地图-->
@@ -787,7 +791,6 @@
 				labelPosition: 'top', //表格
 				labelPositions: 'right',
 				dialogVisible: false, //对话框
-
 				rules: {
 					V_NAME: [{ required: true, message: '必填', trigger: 'blur' }],//名称
 					V_ADDRESS: [{ required: true, message: '必填', trigger: 'blur' }],//地址
@@ -825,7 +828,7 @@
 				dialogVisible3:false,
 				samplesList:[],
 				customid:1,
-				dataid:2,//修改和查看带过的id
+				dataid:'',//修改和查看带过的id
 				inspectPro:'inspectPro',//appname
 				CUSTOMER_PERSONList:[]
 			};
@@ -915,9 +918,7 @@
 		    },
 			iconOperation(row, column, cell, event) {
 				if(column.property === "iconOperation") {
-					console.log(row.isEditing);
 					row.isEditing = !row.isEditing;
-					console.log(row.isEditing);
 				}
 			},
 			//生成委托书
@@ -925,7 +926,6 @@
 				var dataid = this.dataInfo.ID;
 					var Url = this.basic_url + '/api-apps/app/inspectPro/operate/createWorkorder?ID='+dataid;
 					this.$axios.get(Url, {}).then((res) => {
-						console.log(res.data);
 						if(res.data.resp_code == 0) {
 							this.$message({
 								message: '生成工作任务单成功',
@@ -1038,8 +1038,26 @@
 				this.edit = true;
 				this.noedit = false;
 			},
+			//
+			detailgetData() {
+			var url = this.basic_url +'/api-apps/app/inspectPro/' + this.dataid;
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res)
+					this.dataInfo = res.data;
+					this.show = true;
+					//深拷贝数据
+					let _obj = JSON.stringify(this.dataInfo);
+        			this.datainfo = JSON.parse(_obj);
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+			},	
 			// 这里是修改
 			detail(dataid) {
+				this.dataid=dataid;
 				var usersUrl = this.basic_url + '/api-user/users/currentMap'
 				this.$axios.get(usersUrl, {}).then((res) => {
 					this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
@@ -1052,22 +1070,7 @@
 						type: 'error'
 					});
 				});
-				
-				var url = this.basic_url +'/api-apps/app/inspectPro/' + dataid;
-				this.$axios.get(url, {}).then((res) => {
-					console.log(res.data);
-					this.dataInfo = res.data;
-					this.show = true;
-					//深拷贝数据
-					let _obj = JSON.stringify(this.dataInfo);
-        			this.datainfo = JSON.parse(_obj);
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
-				
+				this.detailgetData();
 				this.modifytitle = true;
 				this.addtitle = false;
 				this.viewtitle = false;
@@ -1142,27 +1145,14 @@
 				this.noviews = false;
 				this.edit = true;
 				this.noedit = true;
-				var url = this.basic_url + '/api-apps/app/inspectPro/' + dataid;
-				this.$axios.get(url, {}).then((res) => {
-					console.log(res.data);
-					this.dataInfo = res.data;
-					this.show = true;
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
+				this.detailgetData();
 				//判断启动流程和审批的按钮是否显示
 				var url = this.basic_url + '/api-apps/app/inspectPro/flow/isStart/'+dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					if(res.data.resp_code==1){
-						console.log(111);
 						this.start=true;
 						this.approval=false;
 					}else{
-						console.log(222);
 						this.start=false;
 						this.approval=true;
 					}
@@ -1367,6 +1357,7 @@
 			},
 			//审批流程
 			approvals(){
+				console.log(this.dataid);
 				this.approvingData.id =this.dataid;
 				this.approvingData.app=this.inspectPro;
 				 var url = this.basic_url + '/api-apps/app/'+this.inspectPro+'/flow/isEnd/'+this.dataid;

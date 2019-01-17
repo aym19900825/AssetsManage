@@ -20,8 +20,10 @@
 					<!-- status-icon 验证后文本框上显示对勾图标 -->
 					<el-form :model="workorderForm" :label-position="labelPosition" :rules="rules" ref="workorderForm" label-width="110px">
 						<div class="text-center" v-show="viewtitle">
+							<span v-if="this.workorderForm.STATE!=3">
 							<el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 启动流程</el-button>
 							<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
+							</span>
 							<el-button type="primary" round plain size="mini" @click="flowmap" ><i class="icon-git-pull-request"></i> 流程地图</el-button>
 							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
 							<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
@@ -37,12 +39,12 @@
 											</el-input>
 										</el-col>-->
 										<el-col :span="4" class="pull-right">
-											<el-input placeholder="自动生成" v-model="workorderForm.STATE" :disabled="true">
+											<el-input  v-model="workorderForm.STATEDesc" :disabled="edit">
 													<template slot="prepend">状态</template>
 											</el-input>
 										</el-col>
 										<el-col :span="6" class="pull-right">
-											<el-input placeholder="自动生成" v-model="workorderForm.WONUM" :disabled="true">
+											<el-input placeholder="自动生成" v-model="workorderForm.WONUM" :disabled="edit">
 													<template slot="prepend">工作任务单编号</template>
 											</el-input>
 										</el-col>
@@ -183,7 +185,7 @@
 					            	<div class="clearfix pt10">
 						            	<el-row>
 											<el-col :span="8">
-												<el-form-item label="委托方提供技术资料">
+												<el-form-item label="委托方提供技术资料" label-width="140px">
 													<el-input placeholder="请输入内容" v-model="workorderForm.TECHNICAL_INFORMATION" :disabled="noedit"></el-input>
 												</el-form-item>
 											</el-col>
@@ -736,7 +738,7 @@
 			</el-dialog>
 			<!-- 样品名称 End -->
 			<!--审批页面-->
-			<approvalmask :approvingData="approvingData" ref="approvalChild" ></approvalmask>
+			<approvalmask :approvingData="approvingData" ref="approvalChild" @detail="detailgetData"  ></approvalmask>
 			<!--流程历史-->
 			<flowhistorymask :approvingData="approvingData"  ref="flowhistoryChild" ></flowhistorymask>
 			<!--流程地图-->
@@ -995,8 +997,6 @@
 						type: 'warning'
 					});
 				}else{
-					// console.log(this.selMenu[0]);
-					// console.log(this.selMenu[0].MODEL);
 					this.workorderForm.ITEM_NAME = this.selMenu[0].DESCRIPTION;//样品名称
 					this.workorderForm.ITEM_MODEL = this.selMenu[0].MODEL;//规格型号
 					this.workorderForm.ITEM_STATUS = this.selMenu[0].STATE;//样品状态
@@ -1315,9 +1315,23 @@
 				this.noedit = false;
 				
 			},
+			detailgetData() {
+			var url = this.basic_url +'/api-apps/app/workorder/' + this.dataid;
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res.data);
+					this.workorderForm = res.data;
+					this.show = true;
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+			},	
 
 			// 这里是修改
 			detail(dataid) {
+				this.dataid=dataid;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 	    			this.workorderForm.DEPTID = res.data.deptId;//传给后台机构id
 					this.workorderForm.CHANGEBY = res.data.id;
@@ -1329,16 +1343,7 @@
 						type: 'error',
 					});
 				});
-				var url = this.basic_url + '/api-apps/app/workorder/' + dataid;
-				this.$axios.get(this.basic_url + '/api-apps/app/workorder/' + dataid, {}).then((res) => {
-				this.workorderForm = res.data;	
-					this.show = true;
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
+				this.detailgetData();
 				this.views = false;
 				this.addtitle = false;
 				this.modifytitle = true;
@@ -1350,6 +1355,7 @@
 			},
 			//这是查看
 			view(dataid) {
+				this.dataid=dataid;
 				this.dataid=dataid;	
 				this.modifytitle = false;
 				this.addtitle = false;
@@ -1358,17 +1364,8 @@
 				this.noviews = false;
 				this.edit = true;
 				this.noedit = true;
-				var url = this.basic_url + '/api-apps/app/workorder/' + dataid;
-				this.$axios.get(url, {}).then((res) => {
-					this.workorderForm = res.data;
-					this.show = true;
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
 				//判断启动流程和审批的按钮是否显示
+				this.detailgetData();
 				var url = this.basic_url + '/api-apps/app/workorder/flow/isStart/'+dataid;
 				this.$axios.get(url, {}).then((res) => {
 					console.log(res);

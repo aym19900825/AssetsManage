@@ -993,12 +993,7 @@
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
 				var url = this.basic_url + '/api-user/roles';
-				this.$axios.get(url, {
-					params: {
-						page: page,
-						limit: limit,
-					},
-				}).then((res) => {
+				this.$axios.get(url, {}).then((res) => {
 					this.selectData = res.data.data;
 				}).catch(error => {
 					console.log('请求失败');

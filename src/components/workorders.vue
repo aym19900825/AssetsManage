@@ -178,7 +178,7 @@
 					</div>
 				</div>
 			</div>
-			<workorders_mask :workorderForm="workorderForm" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></workorders_mask>
+			<workorders_mask :workorderForm="workorderForm" ref="child" @requests="requestData" @requestTree="getKey" v-bind:page=page></workorders_mask>
 		</div>
 	</div>
 </template>

@@ -994,7 +994,6 @@
 				this.requestData();
 			},
 			addworkorder(){
-				this.$emit('request');
 				this.dialogVisible1 = true;
 			},
 			addworkordernum(){
@@ -1305,7 +1304,7 @@
 				var obj = {
 					D_NUM:'',
 					D_DESC: '',
-					STATUS: '',
+					STATUS: '1',
 					isEditing: true,
 				};
 					this.workorderForm.WORKORDER_DATA_TEMPLATEList.push(obj);
@@ -1431,7 +1430,7 @@
 							});
 							this.show = false;
 							//重新加载数据
-							this.$emit('request')
+							this.$emit('requests');
 						}
 					}).catch((err) => {
 						this.$message({

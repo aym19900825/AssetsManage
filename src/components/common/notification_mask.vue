@@ -157,7 +157,7 @@
 										</el-col> -->
 										<el-col :span="6">
 											<el-form-item label="样品数量" prop="QUALITY" label-width="110px">
-												<el-input v-model="dataInfo.QUALITY" :disabled="noedit"></el-input>
+												<el-input v-model.number="dataInfo.QUALITY" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="6">
@@ -637,7 +637,7 @@
 					ITEM_MODEL: [{required: true,trigger: 'blur',message: '必填'}], //受检产品型号
 					V_NAME: [{required: true,validator: validateVname}], //受检企业
 					VENDOR: [{required: true,trigger: 'blur',message: '必填'}], //受检企业编号
-					QUALITY: [{required: true,trigger: 'change',message: '必填'}], //样品数量
+					QUALITY: [{required: true,message: '必填'},{ type: 'number', message: '必须为数字值'}], //样品数量
 					CHECTCOST: [{required: true,trigger: 'blur',message: '必填',	}], //检验检测费用
 					XD_DATE: [{type: 'string',required: true,message: '请选择',trigger: 'change'}],//下达日期
 					SOLUTION: [{required: true,trigger: 'blur',message: '必填',	}],//抽样方案

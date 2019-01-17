@@ -187,7 +187,7 @@
 								</el-collapse-item>
 								<el-collapse-item title="样品" name="2">								
 									<div class="table-func">
-										<el-button type="success" size="mini" round @click="addfield">
+										<el-button type="success" size="mini" round @click="addfield"v-show="!viewtitle">
 											<i class="icon-add"></i>
 											<font>新建行</font>
 										</el-button>
@@ -258,7 +258,7 @@
 									    <el-table-column fixed="right" label="操作" width="100px">
 									      <template slot-scope="scope">
 									        <el-button @click = "deleteRow(scope.$index, samplesForm.ITEM_LINEList)" type="text" size="small">
-									          移除
+									          <i class="icon-trash red"></i>
 									        </el-button>
 									      </template>
 									    </el-table-column>

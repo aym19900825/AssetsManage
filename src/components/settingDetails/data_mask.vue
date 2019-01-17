@@ -53,17 +53,17 @@
 									      	</i>
 									    </template>
 								    </el-table-column>
-								    <el-table-column label="字段名" sortable width="180px" prop="columnname">
+								    <el-table-column label="字段名" sortable width="220px" prop="columnname">
 									    <template slot-scope="scope">
 									      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.columnname" disabled></el-input><span v-show="!scope.row.isEditing" >{{scope.row.columnname}}</span>
 									    </template>
 								    </el-table-column>
-								    <el-table-column label="字段描述" sortable width="180px" prop="description">
+								    <el-table-column label="字段描述" sortable width="220px" prop="description">
 									    <template slot-scope="scope">
 									      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.description" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.description}}</span>
 									    </template>
 								    </el-table-column>
-									<el-table-column prop="type" label="字段类型" sortable width="120px">
+									<el-table-column prop="type" label="字段类型" sortable width="220px">
 									    <template slot-scope="scope">
 									        <el-select v-show="scope.row.isEditing" size="small" v-model="scope.row.S_DESC" placeholder="选择字段类型">
 											    <el-option label="字符串(string)" value="string"></el-option>
@@ -77,20 +77,20 @@
 									        <span v-show="!scope.row.isEditing">{{scope.row.type}}</span>
 									    </template>
 								    </el-table-column>
-								    <el-table-column prop="length" label="长度" sortable width="150px">
+								    <el-table-column prop="length" label="长度" sortable width="220px">
 									    <template slot-scope="scope">
 									       	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.length" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.length}}</span>
 									    </template>
 								    </el-table-column>
-								    <el-table-column prop="retain" label="小数点位数" sortable width="180px">
+								    <el-table-column prop="retain" label="小数点位数" sortable>
 									    <template slot-scope="scope">
 									        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.retain" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.retain}}</span>
 									    </template>
 								    </el-table-column>
-								    <el-table-column fixed="right" label="操作" width="120">
+								    <el-table-column fixed="right" label="操作" width="60">
 									    <template slot-scope="scope">
 									        <el-button @click = "deleteRow(scope.$index, dataInfo.attributes)" type="text" size="small">
-									          移除
+									          <i class="icon-trash red"></i>
 									        </el-button>
 									    </template>
 								    </el-table-column>

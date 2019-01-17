@@ -183,7 +183,7 @@
 										    <el-table-column fixed="right" label="操作" width="120">
 										      <template slot-scope="scope">
 										        <el-button @click = "deleteRow(scope.$index, CUSTOMER.CUSTOMER_QUALIFICATIONList)" type="text" size="small">
-										          移除
+										          <i class="icon-trash red"></i>
 										        </el-button>
 										      </template>
 										    </el-table-column>
@@ -248,7 +248,7 @@
 												    <el-table-column fixed="right" label="操作" width="120">
 												      <template slot-scope="scope">
 												        <el-button @click = "deleteRow(scope.$index, CUSTOMER.CUSTOMER_PERSONList)" type="text" size="small">
-												          移除
+												         <i class="icon-trash red"></i>
 												        </el-button>
 												      </template>
 												    </el-table-column>

@@ -364,11 +364,11 @@
 									<el-tabs v-model="activeName" @tab-click="handleClick">
 										<el-tab-pane label="检测依据" name="first">
 											<div class="table-func table-funcb">
-												<el-button type="primary" size="mini" round>
+												<el-button type="primary" size="mini" round v-show="!viewtitle">
 													<i class="icon-upload-cloud"></i>
 													<font>导入</font>
 												</el-button>
-												<el-button type="success" size="mini" round @click="addfield1">
+												<el-button type="success" size="mini" round @click="addfield1" v-show="!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建行</font>
 												</el-button>
@@ -419,8 +419,8 @@
 
 											    <el-table-column fixed="right" label="操作" width="120">
 											      <template slot-scope="scope">
-											        <el-button type="text" size="small">
-											          移除
+											         <el-button @click.native.prevent="deleteRow(scope.$index,workorderForm.WORKORDER_BASISList)" type="text" size="small">
+											      <i class="icon-trash red"></i>
 											        </el-button>
 											      </template>
 											    </el-table-column>
@@ -428,7 +428,7 @@
 										</el-tab-pane>
 										<el-tab-pane label="检测项目与要求" name="second">
 											<div class="table-func table-funcb">
-												<el-button type="success" size="mini" round @click="addfield2">
+												<el-button type="success" size="mini" round @click="addfield2" v-show="!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建行</font>
 												</el-button>
@@ -488,8 +488,8 @@
 												</el-table-column>
 											      <el-table-column fixed="right" label="操作" width="120">
 											      <template slot-scope="scope">
-											        <el-button @click.native.prevent="deleteRow(index, row)" type="text" size="small">
-											          移除
+											         <el-button @click.native.prevent="deleteRow(scope.$index,workorderForm.WORKORDER_PROJECTList)" type="text" size="small">
+											      <i class="icon-trash red"></i>
 											        </el-button>
 											      </template>
 											    </el-table-column>
@@ -497,7 +497,7 @@
 										</el-tab-pane>
 										<el-tab-pane label="检验员信息" name="third">
 											<div class="table-func table-funcb">
-												<el-button type="success" size="mini" round @click="addfield3">
+												<el-button type="success" size="mini" round @click="addfield3" v-show="!viewtitle">
 													<i class="icon-add"></i><font>新建行</font>
 												</el-button>
 											</div>
@@ -532,8 +532,8 @@
 											    </el-table-column>
 							            		<el-table-column fixed="right" label="操作" width="120">
 											      <template slot-scope="scope">
-											        <el-button @click.native.prevent="deleteRow(index, row)" type="text" size="small">
-											          移除
+											        <el-button @click.native.prevent="deleteRow(scope.$index,workorderForm.WORKORDER_CHECKPERSONList)" type="text" size="small">
+											       <i class="icon-trash red"></i>
 											        </el-button>
 											      </template>
 											    </el-table-column>
@@ -541,7 +541,7 @@
 										</el-tab-pane>
 										<el-tab-pane label="原始数据模板" name="fourth">
 											<div class="table-func table-funcb">
-												<el-button type="success" size="mini" round @click="addfield4">
+												<el-button type="success" size="mini" round @click="addfield4" v-show="!viewtitle">
 													<i class="icon-add"></i><font>新建行</font>
 												</el-button>
 											</div>
@@ -572,11 +572,8 @@
 							            		<el-table-column label="预览"></el-table-column>
 							            		<el-table-column fixed="right" label="操作" width="80">
 											      <template slot-scope="scope">
-											        <el-button
-											          @click.native.prevent="deleteRow(index, row)"
-											          type="text"
-											          size="small">
-											          	<i class="icon-trash red"></i>
+											      	  <el-button @click.native.prevent="deleteRow(scope.$index,workorderForm.WORKORDER_DATA_TEMPLATEList)" type="text" size="small">
+											        <i class="icon-trash red"></i>
 											        </el-button>
 											      </template>
 											    </el-table-column>
@@ -816,99 +813,99 @@
 				WORKORDER_CHECKPERSONList:[],//检验员信息
 				WORKORDER_DATA_TEMPLATEList:[],//原始数据模板
 				WORKORDER_REPORT_TEMPLATEList:[],//报告模板
-				},
-				basic_url: Config.dev_url,
-				loadSign:true,//加载
-				commentArr:{},
-				selMenu:[],
-				show: false,
-				modify:false,
-				isok1: true,
-				isok2: false,
-				down: true,
-				up: false,
-				addtitle:true,//添加弹出框titile
-				modifytitle:false,//修改弹出框titile
-				viewtitle: false, //查看弹出框title
-				views: false,
-				edit: true, //禁填
-				noedit:false,
-				approval:false,
-				start:false,
-				activeName: 'first', //tabs
-				activeNames: ['1','2','3','4','5','6','7'],//手风琴数量
-				labelPosition: 'right', //表格
-				// searchList: { //点击高级搜索后显示的内容
-				// 	WONUM: '',//工作任务单编号
-				// 	ITEM_NAME: '',//样品名称
-				// 	PROXYNUM: '',//委托书编号
-				// 	STATE: '',//状态
-				// 	COMPLETE_DATE: '',//完成日期
-				// 	ENTERBY: '',//录入人
-				// 	ENTERDATE: '',//录入日期
-				// },
-				search:'',
-				selectData:[],//获取接收人、承接人、负责人
-				Select_ITEM_STATUS:[],//获取样品信息-样品状态
-				Select_ITEM_SOURCE:[],//获取样品信息-样品来源
-				Select_COMPLETE_MODE:[],//获取样品信息-完成方式
-				Select_ITEM_RECEPT_STATUS:[],//获取样品信息-样品接收状态
-				Select_ITEM_CHECK_STATUS:[],//获取样品信息-样品检后状态
-				Select_ITEM_MANAGEMENT:[],//获取样品信息-样品处置
-				
-				fileList:[],//上传附件数据
-				
+			},
+			basic_url: Config.dev_url,
+			loadSign:true,//加载
+			commentArr:{},
+			selMenu:[],
+			show: false,
+			modify:false,
+			isok1: true,
+			isok2: false,
+			down: true,
+			up: false,
+			addtitle:true,//添加弹出框titile
+			modifytitle:false,//修改弹出框titile
+			viewtitle: false, //查看弹出框title
+			views: false,
+			edit: true, //禁填
+			noedit:false,
+			approval:false,
+			start:false,
+			activeName: 'first', //tabs
+			activeNames: ['1','2','3','4','5','6','7'],//手风琴数量
+			labelPosition: 'right', //表格
+			// searchList: { //点击高级搜索后显示的内容
+			// 	WONUM: '',//工作任务单编号
+			// 	ITEM_NAME: '',//样品名称
+			// 	PROXYNUM: '',//委托书编号
+			// 	STATE: '',//状态
+			// 	COMPLETE_DATE: '',//完成日期
+			// 	ENTERBY: '',//录入人
+			// 	ENTERDATE: '',//录入日期
+			// },
+			search:'',
+			selectData:[],//获取接收人、承接人、负责人
+			Select_ITEM_STATUS:[],//获取样品信息-样品状态
+			Select_ITEM_SOURCE:[],//获取样品信息-样品来源
+			Select_COMPLETE_MODE:[],//获取样品信息-完成方式
+			Select_ITEM_RECEPT_STATUS:[],//获取样品信息-样品接收状态
+			Select_ITEM_CHECK_STATUS:[],//获取样品信息-样品检后状态
+			Select_ITEM_MANAGEMENT:[],//获取样品信息-样品处置
+			
+			fileList:[],//上传附件数据
+			
 
-				rules: {
-					PROXYNUM: [//委托书编号
-						{ required: true, validator: validateProxynum}
-					],
-					PROXY_VERSION: [//委托书版本
-						{ required: true, validator: validateProxyversion}
-					],
-					WONUM: [
-						{ required: true, message: '不能为空', trigger: 'blur' }
-					],
-					ITEM_NAME: [//样品名称
-						{ required: true,validator: validateItemname}
-					],
-					ITEM_MODEL: [//规格型号
-						{ required: true,validator: validateItemname}
-					],
-					ITEMNUM: [//样品编号
-						{ required: true,validator: validateItemnum}
-					],
-					ITEM_STATU: [
-						{ required: true, message: '不能为空', trigger: 'blur' }
-					],
-					ITEM_STATUS: [
-						{ required: true, message: '不能为空', trigger: 'blur' }
-					],
-					ITEM_SOURCE: [
-						{ required: true, message: '不能为空', trigger: 'change' }
-					],
-					ITEM_QUALITY: [
-						{ required: true, message: '不能为空', trigger: 'blur' }
-					],
-					CHECK_BASIS: [
-						{ required: true, message: '不能为空', trigger: 'blur' }
-					],
-					COMPLETE_DATE: [
-						{ required: true, message: '不能为空', trigger: 'blur' }
-					],
-					COMPLETE_MODE: [
-						{ required: true, message: '不能为空', trigger: 'blur' }
-					],
-					ITEM_RECEPT_STATUS: [
-						{ required: true, message: '不能为空', trigger: 'blur' }
-					],
-					ITEM_PROFESSIONAL_GROUP: [
-						{ required: true, message: '不能为空', trigger: 'blur' }
-					],
-					STATUS: [
-						{ required: true, message: '不能为空', trigger: 'blur' }
-					],
-				},
+			rules: {
+				PROXYNUM: [//委托书编号
+					{ required: true, validator: validateProxynum}
+				],
+				PROXY_VERSION: [//委托书版本
+					{ required: true, validator: validateProxyversion}
+				],
+				WONUM: [
+					{ required: true, message: '不能为空', trigger: 'blur' }
+				],
+				ITEM_NAME: [//样品名称
+					{ required: true,validator: validateItemname}
+				],
+				ITEM_MODEL: [//规格型号
+					{ required: true,validator: validateItemname}
+				],
+				ITEMNUM: [//样品编号
+					{ required: true,validator: validateItemnum}
+				],
+				ITEM_STATU: [
+					{ required: true, message: '不能为空', trigger: 'blur' }
+				],
+				ITEM_STATUS: [
+					{ required: true, message: '不能为空', trigger: 'blur' }
+				],
+				ITEM_SOURCE: [
+					{ required: true, message: '不能为空', trigger: 'change' }
+				],
+				ITEM_QUALITY: [
+					{ required: true, message: '不能为空', trigger: 'blur' }
+				],
+				CHECK_BASIS: [
+					{ required: true, message: '不能为空', trigger: 'blur' }
+				],
+				COMPLETE_DATE: [
+					{ required: true, message: '不能为空', trigger: 'blur' }
+				],
+				COMPLETE_MODE: [
+					{ required: true, message: '不能为空', trigger: 'blur' }
+				],
+				ITEM_RECEPT_STATUS: [
+					{ required: true, message: '不能为空', trigger: 'blur' }
+				],
+				ITEM_PROFESSIONAL_GROUP: [
+					{ required: true, message: '不能为空', trigger: 'blur' }
+				],
+				STATUS: [
+					{ required: true, message: '不能为空', trigger: 'blur' }
+				],
+			},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
 				isEditList: false,  //年度计划列表编辑装填
@@ -976,10 +973,10 @@
 					CHANGEDATE: '',//修改日期
 					STATEDesc:'草稿',
 					STATE:'1',
-					WorkorderBasisList: [],//检测依据
-					WorkorderProjectList: [],//检测项目与要求
-					WorkorderPersonList: [],//检验员信息
-					SourceDataTemplateList: [],//原始数据模板
+					WORKORDER_BASISList:[],//检测依据
+					WORKORDER_PROJECTList:[],//检测项目
+					WORKORDER_CHECKPERSONList:[],//检验员信息
+					WORKORDER_DATA_TEMPLATEList:[],//原始数据模板
 				};
             },
 			handleClick(tab, event) {
@@ -997,7 +994,6 @@
 				this.requestData();
 			},
 			addworkorder(){
-				this.$emit('request');
 				this.dialogVisible1 = true;
 			},
 			addworkordernum(){
@@ -1266,49 +1262,50 @@
 				this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 				var index=this.$moment(date).format("YYYYMMDDHHmmss");
 				var obj = {
-					'S_NUM': '',
-					'WP_LINENUM': index,
-					'ITEM_NAME': '',
-					'MODEL': '',
-					'V_NAME': '',
-					'BASIS': '',
-					'P_NAME': '',
-					'CHECKCOST': '',
-					'REASION': '',
-					'MEMO': '',
-					'isEditing': true,
+					S_NUM: '',
+					WP_LINENUM: index,
+					ITEM_NAME: '',
+					MODEL: '',
+					V_NAME: '',
+					BASIS: '',
+					P_NAME: '',
+					CHECKCOST: '',
+					REASION: '',
+					MEMO: '',
+					isEditing: true,
 				};
+				console.log(typeof(this.workorderForm.WORKORDER_BASISList));
 				this.workorderForm.WORKORDER_BASISList.push(obj);//检验检测依据
 			},
 			addfield2() {
 				var obj = {
-					'P_NUM': '',
-					'P_DESC': '',
-					'HOSTPERSON': '',
-					'FOLLOWPERSON': '',
-					'REMARKS':'',
-					'VERSION':'',
-					'isEditing': true,
+					P_NUM: '',
+					P_DESC: '',
+					HOSTPERSON: '',
+					FOLLOWPERSON: '',
+					REMARKS:'',
+					VERSION:'',
+					isEditing: true,
 				};
 				this.workorderForm.WORKORDER_PROJECTList.push(obj);
 			},
 			//检验员
 			addfield3(){
 				var obj = {
-					'NAME':'',
-					'TELPHONE': '',
-					'DEPARTMENT': '',
-					'isEditing': true,
+					NAME:'',
+					TELPHONE: '',
+					DEPARTMENT: '',
+					isEditing: true,
 				};
 					this.workorderForm.WORKORDER_CHECKPERSONList.push(obj);
 			},
 			//原始数据模版
 			addfield4(){
 				var obj = {
-					'D_NUM':'',
-					'D_DESC': '',
-					'STATUS': '',
-					'isEditing': true,
+					D_NUM:'',
+					D_DESC: '',
+					STATUS: '1',
+					isEditing: true,
 				};
 					this.workorderForm.WORKORDER_DATA_TEMPLATEList.push(obj);
 			},
@@ -1433,7 +1430,7 @@
 							});
 							this.show = false;
 							//重新加载数据
-							this.$emit('request')
+							this.$emit('requests');
 						}
 					}).catch((err) => {
 						this.$message({

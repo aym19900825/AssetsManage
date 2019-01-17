@@ -33,8 +33,9 @@
 											</el-input>
 										</el-col>
 										<el-col :span="6" class="pull-right">
-											<el-input placeholder="自动获取" v-model="samplesForm.ITEMNUM" :disabled="true">
+											<el-input v-model="samplesForm.ITEM_STEP" :disabled="true">
 												<template slot="prepend">样品序号</template>
+												<el-button slot="append" icon="el-icon-search" @click="addsamplenum"></el-button>
 											</el-input>
 										</el-col>
 									</el-row>
@@ -48,8 +49,8 @@
 											</el-form-item>
 										</el-col> -->
 										<el-col :span="8">
-											<el-form-item label="样品编号" prop="ITEM_LINE_ID">
-												<el-input v-model="samplesForm.ITEM_LINE_ID" :disabled="true">
+											<el-form-item label="样品编号" prop="ITEMNUM">
+												<el-input v-model="samplesForm.ITEMNUM" :disabled="true">
 													<el-button slot="append" icon="el-icon-search" @click="getsample"></el-button>
 												</el-input>
 											</el-form-item>
@@ -226,6 +227,38 @@
 			    </span>
 			</el-dialog>
 			<!-- 样品编号 End -->
+
+			<!-- 样品序号 Begin -->
+			<el-dialog :modal-append-to-body="false" title="样品序号" height="300px" :visible.sync="dialogsamplenum" width="80%" :before-close="handleClose">
+				<!-- 第二层弹出的表格 Begin-->
+				<el-table :data="samplenumList" :header-cell-style="rowClass" border stripe height="400px" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+					<el-table-column type="selection" width="55" fixed align="center">
+					</el-table-column>
+					<el-table-column label="样品编号" sortable width="200px" prop="ITEMNUM">
+					</el-table-column>
+					<el-table-column label="样品序号" sortable width="200px" prop="ITEM_STEP">
+					</el-table-column>
+					<el-table-column label="单件码" sortable width="200px" prop="SN">
+					</el-table-column>
+					<el-table-column label="样品状态" sortable width="200px" prop="STATE">
+					</el-table-column>
+					<el-table-column label="录入时间" sortable width="140px" :formatter="dateFormat" prop="ENTERDATE">
+					</el-table-column>
+					<el-table-column label="修改时间" sortable width="100px" prop="CHANGEDATE">
+					</el-table-column>
+					<!--<el-table-column label="信息状态" sortable width="140px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
+					</el-table-column>-->
+				</el-table>
+				<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+				</el-pagination>
+				<!-- 表格 End-->
+				<span slot="footer" class="dialog-footer">
+			       <el-button @click="dialogsamplenum = false">取 消</el-button>
+			       <el-button type="primary" @click="addsamplenumbtn">确 定</el-button>
+			    </span>
+			</el-dialog>
+			<!-- 样品序号 End -->
+
 			<!-- 产品类别 Begin -->
 			<el-dialog :modal-append-to-body="false" title="产品类别" height="300px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
 				<!-- 第二层弹出的表格 Begin-->
@@ -270,8 +303,8 @@
 				type: Object,
 				default: function() {
 					return {
-						ITEM_LINE_ID: '',//样品子表ID
-						ITEMNUM: '',//样品编号
+						ITEMNUM: '',//样品子表ID
+						ITEM_STEP: '',//样品序号
 						TYPE: '',//样品类别
 						VENDOR: '',//样品编号编号
 						DESCRIPTION: '',//样品名称
@@ -298,7 +331,7 @@
 		},
 		data() {
 			var validateItemid = (rule, value, callback) => {//样品编号
-                if (this.samplesForm.ITEM_LINE_ID === undefined || this.samplesForm.ITEM_LINE_ID === '' || this.samplesForm.ITEM_LINE_ID === null) {
+                if (this.samplesForm.ITEMNUM === undefined || this.samplesForm.ITEMNUM === '' || this.samplesForm.ITEMNUM === null) {
                     callback(new Error('必填'));
                 }else {
                     callback();
@@ -361,7 +394,7 @@
 				isEditing: '',
 				commentArr:{},//下拉加载
 				rules: { //定义需要校验数据的名称
-					ITEM_LINE_ID: [//样品编号
+					ITEMNUM: [//样品编号
 						{ required: true,validator: validateItemid}
 					],
 					DESCRIPTION: [//样品名称
@@ -392,13 +425,15 @@
 				dialogVisible3: false, //对话框
 				categoryList:[],
 				selUser:[],
-				dialogsample:false,
+				dialogsample:false,//显隐样品编号数据弹出框
+				samplenumList:[],//样品序号
 				page: {
 					currentPage: 1,
 					pageSize: 10,
 					totalCount: 0
 				},
-				samplesList:[]
+				samplesList:[],//样品编号
+				dialogsamplenum:false,//样品序号
 			};
 		},
 		methods: {
@@ -421,10 +456,24 @@
 			},
 			addsamplebtn(){
 				console.log(this.selUser[0]);
-				this.samplesForm.ITEM_LINE_ID = this.selUser[0].ITEMNUM;//样品编号
+				this.samplesForm.ITEMNUM = this.selUser[0].ITEMNUM;//样品编号
 				this.samplesForm.DESCRIPTION = this.selUser[0].DESCRIPTION;//样品名称
 				this.dialogsample = false;
 				this.requestData();
+			},
+			//样品序号
+			addsamplenum(){
+				this.dialogsamplenum = true;
+				console.log(this.samplesForm.ITEMNUM);
+				this.$axios.get(this.basic_url + '/api-apps/app/itemgrant?ITEMNUM_wheres='+this.samplesForm.ITEMNUM, {
+
+				}).then((res) => {
+					this.samplenumList = res.data.data;
+				}).catch((wrong) => {})
+			},
+			addsamplenumbtn(){
+				this.samplesForm.ITEM_STEP = this.selUser[0].ITEM_STEP;
+				this.dialogsamplenum = false;
 			},
 			//获取委托书编号数据
 			// getProxy() {
@@ -451,10 +500,10 @@
 				this.placetext = false;
 				this.dialogVisible = false;
 				if(this.editSearch == 'company') {
-					this.samplesForm.ITEM_LINE_ID = this.getCheckboxData.id;
+					this.samplesForm.ITEMNUM = this.getCheckboxData.id;
 					this.samplesForm.DESCRIPTION = this.getCheckboxData.fullname;
 				} else {
-					this.samplesForm.ITEM_LINE_ID = this.getCheckboxData.id;
+					this.samplesForm.ITEMNUM = this.getCheckboxData.id;
 					this.samplesForm.DESCRIPTION = this.getCheckboxData.fullname;
 				}
 			},

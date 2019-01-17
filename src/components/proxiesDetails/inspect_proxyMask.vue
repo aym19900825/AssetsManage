@@ -720,7 +720,55 @@
 					callback();
 				}
 			};
-
+			var validateVname = (rule, value, callback) => {//名称
+                if (this.dataInfo.V_NAME === undefined || this.dataInfo.V_NAME === '' || this.dataInfo.V_NAME === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
+			var validateVaddress = (rule, value, callback) => {//地址
+                if (this.dataInfo.V_ADDRESS === undefined || this.dataInfo.V_ADDRESS === '' || this.dataInfo.V_ADDRESS === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
+			var validateVzipcode = (rule, value, callback) => {//邮编
+                if (this.dataInfo.V_ZIPCODE === undefined || this.dataInfo.V_ZIPCODE === '' || this.dataInfo.V_ZIPCODE === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
+			var validateVperson = (rule, value, callback) => {//联系人姓名
+                if (this.dataInfo.V_PERSON === undefined || this.dataInfo.V_PERSON === '' || this.dataInfo.V_PERSON === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
+			var validateVphone = (rule, value, callback) => {//联系人电话
+                if (this.dataInfo.V_PHONE === undefined || this.dataInfo.V_PHONE === '' || this.dataInfo.V_PHONE === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
+			var validateItemname = (rule, value, callback) => {//样品名称
+                if (this.dataInfo.ITEM_NAME === undefined || this.dataInfo.ITEM_NAME === '' || this.dataInfo.ITEM_NAME === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
+			var validatePname = (rule, value, callback) => {//生产单位名称
+                if (this.dataInfo.P_NAME === undefined || this.dataInfo.P_NAME === '' || this.dataInfo.P_NAME === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
 			return {
 				approvingData:{},
 				loadSign:true,//加载
@@ -793,23 +841,23 @@
 				labelPositions: 'right',
 				dialogVisible: false, //对话框
 				rules: {
-					V_NAME: [{ required: true, message: '必填', trigger: 'blur' }],//名称
-					V_ADDRESS: [{ required: true, message: '必填', trigger: 'blur' }],//地址
-					V_ZIPCODE: [{ required: true, message: '必填', trigger: 'blur' }],//邮编
-					V_PERSON: [{ required: true, message: '必填', trigger: 'blur' }],//联系人姓名
-					V_PHONE: [{ required: true, message: '必填', trigger: 'blur' }],//联系人电话
+					V_NAME: [{ required: true, validator: validateVname}],//名称
+					V_ADDRESS: [{ required: true,validator: validateVaddress}],//地址
+					V_ZIPCODE: [{ required: true,validator: validateVzipcode}],//邮编
+					V_PERSON: [{ required: true,validator: validateVperson}],//联系人姓名
+					V_PHONE: [{ required: true,validator: validateVphone}],//联系人电话
 					R_VENDOR: [{ required: true, message: '必填', trigger: 'blur' }],//责任单位
 					VENDOR: [{ required: true, message: '必填', trigger: 'blur' }],//委托单位编号
-					P_NAME: [{ required: true, message: '必填', trigger: 'blur' }],//生产单位名称
+					P_NAME: [{ required: true,validator: validatePname}],//生产单位名称
 					PRODUCT_UNIT:[{required: true, message: '必填', trigger: 'blur'}],//生成单位编号
-					ITEM_NAME: [{ required: true, message: '必填', trigger: 'blur' }],//名称
+					ITEM_NAME: [{ required: true,validator: validateItemname}],//样品名称
 					ITEM_ID: [{ required: true, message: '必填', trigger: 'blur' }],//标识
 					ITEM_MODEL: [{ required: true, message: '必填', trigger: 'blur' }],//型号
 					ITEM_QUALITY: [{ required: true, message: '必填', trigger: 'blur' }],//数量
 //					ITEM_STATUS: [{ required: true, message: '必填', trigger: 'blur' }],//样品信息状态
 					ITEM_SECRECY: [{ required: true, message: '必填', trigger: 'blur' }],//保密要求
-					ITEM_METHOD: [{ required: true, message: '必填', trigger: 'blur' }],//取样方式
-					ITEM_DISPOSITION: [{ required: true, message: '必填', trigger: 'blur' }],//检后处理
+					ITEM_METHOD: [{ required: true, message: '必填', trigger: 'change' }],//取样方式
+					ITEM_DISPOSITION: [{ required: true, message: '必填', trigger: 'change' }],//检后处理
 					REMARKS: [{ required: true, message: '必填', trigger: 'blur' }],//抽样方案/判定依据
 					COMPDATE: [{ required: true, message: '必填', trigger: 'blur' }],//完成日期
 					PROXYNUM: [{ required: true, message: '必填', trigger: 'blur' }],//编号

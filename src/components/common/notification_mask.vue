@@ -99,12 +99,18 @@
 												<el-input v-model="dataInfo.TASKNUM" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8">
+									
+										<el-col :span="8" v-show="addtitle">
 											<el-form-item label="承检单位" prop="CJDW" :disabled="noedit" label-width="110px">
-												<!-- <el-input v-model="dataInfo.CJDW" :disabled="edit">
-													<el-button slot="append" icon="el-icon-search" @click="getCompany"></el-button>
-												</el-input> -->
 												<el-select clearable v-model="dataInfo.CJDW" filterable allow-create default-first-option placeholder="请选择">
+													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+												</el-select>
+											</el-form-item>
+										</el-col>
+										
+										<el-col :span="8" v-show="!addtitle">
+											<el-form-item label="承检单位" prop="CJDWDesc" :disabled="noedit" label-width="110px">
+												<el-select clearable v-model="dataInfo.CJDWDesc" filterable allow-create default-first-option placeholder="请选择">
 													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 												</el-select>
 											</el-form-item>
@@ -861,8 +867,8 @@
 			detailgetData() {
 				var url = this.basic_url +'/api-apps/app/workNot/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
-					this.dataInfo = res.data;
+					this.dataInfo = res.data; 
+					this.dataInfo.CJDW=this.dataInfo.CJDWDesc;
 					this.show = true;
 				}).catch((err) => {
 					this.$message({
@@ -973,8 +979,7 @@
 							type: 'warning'
 						});
 						return false;
-			        }else{
-					console.log(this.dataInfo);
+			       }else{
 					var url = this.basic_url + '/api-apps/app/workNot/saveOrUpdate';
 					this.$axios.post(url, this.dataInfo).then((res) => {
 						if(res.data.resp_code == 0) {
@@ -1143,11 +1148,8 @@
 			 },
 			 //启动流程
 			startup(){
-				console.log(12345);
-				console.log(this.dataid);
 				var url = this.basic_url + '/api-apps/app/workNot/flow/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					if(res.data.resp_code == 1) {
 							this.$message({
 								message:res.data.resp_msg,
@@ -1166,7 +1168,6 @@
 			},
 			//审批流程
 			approvals(){
-				console.log(122);
 				this.approvingData.id =this.dataid;
 				this.approvingData.app=this.workNot;
 				var url = this.basic_url + '/api-apps/app/'+this.workNot+'/flow/isEnd/'+this.dataid;
@@ -1193,7 +1194,6 @@
 			},
 			//流程历史
 			flowhistory(){
-				console.log(this.dataid);
 				this.approvingData.id =this.dataid;
 				this.approvingData.app=this.workNot;
 //				this.$refs.flowhistoryChild.open();
@@ -1266,9 +1266,6 @@
 					this.customerList = newarr;
 				}).catch((wrong) => {})
 			},
-		},
-		watch(){
-
 		},
 		mounted() {
 			this.requestData();

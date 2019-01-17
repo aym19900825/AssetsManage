@@ -409,9 +409,11 @@
 					<div class="el-dialog__footer" v-show="noviews">
 	                    <el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
 						<el-button type="success" v-show="addtitle" @click='saveAndSubmit()'>保存并继续</el-button>
-						<el-button type="success" v-show="!addtitle" @click="build">生成委托书</el-button>
 						<el-button @click='close'>取消</el-button>
 					</div>
+					<div class="el-dialog__footer" v-show="views">
+							<el-button type="success" v-if="this.dataInfo.STATE == 3" @click="build">生成委托书</el-button>
+					</div>	
 				</div>
 			</div>
 			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
@@ -836,6 +838,7 @@
 			detailgetData() {
 				var url = this.basic_url +'/api-apps/app/workNot/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
 					this.dataInfo = res.data;
 					this.show = true;
 				}).catch((err) => {

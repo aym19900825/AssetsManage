@@ -364,11 +364,11 @@
 									<el-tabs v-model="activeName" @tab-click="handleClick">
 										<el-tab-pane label="检测依据" name="first">
 											<div class="table-func table-funcb">
-												<el-button type="primary" size="mini" round>
+												<el-button type="primary" size="mini" round v-show="!viewtitle">
 													<i class="icon-upload-cloud"></i>
 													<font>导入</font>
 												</el-button>
-												<el-button type="success" size="mini" round @click="addfield1">
+												<el-button type="success" size="mini" round @click="addfield1" v-show="!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建行</font>
 												</el-button>
@@ -419,8 +419,8 @@
 
 											    <el-table-column fixed="right" label="操作" width="120">
 											      <template slot-scope="scope">
-											        <el-button type="text" size="small">
-											          移除
+											         <el-button @click.native.prevent="deleteRow(scope.$index,workorderForm.WORKORDER_BASISList)" type="text" size="small">
+											      <i class="icon-trash red"></i>
 											        </el-button>
 											      </template>
 											    </el-table-column>
@@ -428,7 +428,7 @@
 										</el-tab-pane>
 										<el-tab-pane label="检测项目与要求" name="second">
 											<div class="table-func table-funcb">
-												<el-button type="success" size="mini" round @click="addfield2">
+												<el-button type="success" size="mini" round @click="addfield2" v-show="!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建行</font>
 												</el-button>
@@ -488,8 +488,8 @@
 												</el-table-column>
 											      <el-table-column fixed="right" label="操作" width="120">
 											      <template slot-scope="scope">
-											        <el-button @click.native.prevent="deleteRow(index, row)" type="text" size="small">
-											          移除
+											         <el-button @click.native.prevent="deleteRow(scope.$index,workorderForm.WORKORDER_PROJECTList)" type="text" size="small">
+											      <i class="icon-trash red"></i>
 											        </el-button>
 											      </template>
 											    </el-table-column>
@@ -497,7 +497,7 @@
 										</el-tab-pane>
 										<el-tab-pane label="检验员信息" name="third">
 											<div class="table-func table-funcb">
-												<el-button type="success" size="mini" round @click="addfield3">
+												<el-button type="success" size="mini" round @click="addfield3" v-show="!viewtitle">
 													<i class="icon-add"></i><font>新建行</font>
 												</el-button>
 											</div>
@@ -532,8 +532,8 @@
 											    </el-table-column>
 							            		<el-table-column fixed="right" label="操作" width="120">
 											      <template slot-scope="scope">
-											        <el-button @click.native.prevent="deleteRow(index, row)" type="text" size="small">
-											          移除
+											        <el-button @click.native.prevent="deleteRow(scope.$index,workorderForm.WORKORDER_CHECKPERSONList)" type="text" size="small">
+											       <i class="icon-trash red"></i>
 											        </el-button>
 											      </template>
 											    </el-table-column>
@@ -541,7 +541,7 @@
 										</el-tab-pane>
 										<el-tab-pane label="原始数据模板" name="fourth">
 											<div class="table-func table-funcb">
-												<el-button type="success" size="mini" round @click="addfield4">
+												<el-button type="success" size="mini" round @click="addfield4" v-show="!viewtitle">
 													<i class="icon-add"></i><font>新建行</font>
 												</el-button>
 											</div>
@@ -572,11 +572,8 @@
 							            		<el-table-column label="预览"></el-table-column>
 							            		<el-table-column fixed="right" label="操作" width="80">
 											      <template slot-scope="scope">
-											        <el-button
-											          @click.native.prevent="deleteRow(index, row)"
-											          type="text"
-											          size="small">
-											          	<i class="icon-trash red"></i>
+											      	  <el-button @click.native.prevent="deleteRow(scope.$index,workorderForm.WORKORDER_DATA_TEMPLATEList)" type="text" size="small">
+											        <i class="icon-trash red"></i>
 											        </el-button>
 											      </template>
 											    </el-table-column>

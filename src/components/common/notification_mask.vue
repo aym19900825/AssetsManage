@@ -528,10 +528,22 @@
 		//					page: Object ,
 		//				},
 		data() {
-			 var validateItemdata = (rule, value, callback) => {
-				 console.log(value);
-				 console.log(this.dataInfo.P_LEADERDesc);
+			 var validateItemleader = (rule, value, callback) => {//项目负责人
                 if (this.dataInfo.P_LEADERDesc === undefined || this.dataInfo.P_LEADERDesc === '' || this.dataInfo.P_LEADERDesc === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
+			 var validateproname = (rule, value, callback) => {//受检产品名称
+                if (this.dataInfo.ITEM_NAME === undefined || this.dataInfo.ITEM_NAME === '' || this.dataInfo.ITEM_NAME === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
+			 var validateVname = (rule, value, callback) => {//受检企业
+                if (this.dataInfo.V_NAME === undefined || this.dataInfo.V_NAME === '' || this.dataInfo.V_NAME === null) {
                     callback(new Error('必填'));
                 }else {
                     callback();
@@ -613,10 +625,10 @@
 					// }], //计划编号
 					TYPE:[{required: true,trigger: 'change',message: '必填',}],
 					CJDW: [{required: true,trigger: 'change',message: '必填',}], //承检单位
-					P_LEADERDesc: [{required: true,validator: validateItemdata}], //项目负责人
-					ITEM_NAME: [{required: true,validator: validateItemdata}], //受检产品名称
+					P_LEADERDesc: [{required: true,validator: validateItemleader}], //项目负责人
+					ITEM_NAME: [{required: true,validator: validateproname}], //受检产品名称
 					ITEM_MODEL: [{required: true,trigger: 'blur',message: '必填'}], //受检产品型号
-					V_NAME: [{required: true,validator: validateItemdata}], //受检企业
+					V_NAME: [{required: true,validator: validateVname}], //受检企业
 					VENDOR: [{required: true,trigger: 'blur',message: '必填'}], //受检企业编号
 					QUALITY: [{required: true,trigger: 'change',message: '必填'}], //样品数量
 					CHECTCOST: [{required: true,trigger: 'blur',message: '必填',	}], //检验检测费用

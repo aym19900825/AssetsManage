@@ -73,8 +73,8 @@
 									<el-row >
 										<el-col :span="8">
 											<el-form-item label="主检员" prop="MASTER_INSPECTOR" >
-												<el-input v-model="workorderForm.MASTER_INSPECTOR" :disabled="noedit">
-													<el-button slot="append" icon="el-icon-search" @click="addperson('1')"></el-button>
+												<el-input v-model="workorderForm.MASTER_INSPECTOR" :disabled="true">
+													<el-button slot="append" icon="el-icon-search" @click="addperson('1')" :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -769,6 +769,41 @@
 			 vewPoplemask
 		},
 		data() {
+			var validateProxynum = (rule, value, callback) => {//委托书编号
+                if (this.workorderForm.PROXYNUM === undefined || this.workorderForm.PROXYNUM === '' || this.workorderForm.PROXYNUM === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
+			var validateProxyversion = (rule, value, callback) => {//委托书版本
+                if (this.workorderForm.PROXY_VERSION === undefined || this.workorderForm.PROXY_VERSION === '' || this.workorderForm.PROXY_VERSION === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
+			var validateItemname = (rule, value, callback) => {//样品名称
+                if (this.workorderForm.ITEM_NAME === undefined || this.workorderForm.ITEM_NAME === '' || this.workorderForm.ITEM_NAME === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
+			var validateItemname = (rule, value, callback) => {//规格型号
+                if (this.workorderForm.ITEM_MODEL === undefined || this.workorderForm.ITEM_MODEL === '' || this.workorderForm.ITEM_MODEL === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
+			var validateItemnum = (rule, value, callback) => {//样品编号
+                if (this.workorderForm.ITEMNUM === undefined || this.workorderForm.ITEMNUM === '' || this.workorderForm.ITEMNUM === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
 			return {
 			approvingData:{},//流程传的数据
 			dialogVisible1:false,
@@ -825,23 +860,23 @@
 				
 
 				rules: {
-					PROXYNUM: [
-						{ required: true, message: '不能为空', trigger: 'blur' }
+					PROXYNUM: [//委托书编号
+						{ required: true, validator: validateProxynum}
 					],
-					PROXY_VERSION: [
-						{ required: true, message: '不能为空', trigger: 'blur' }
+					PROXY_VERSION: [//委托书版本
+						{ required: true, validator: validateProxyversion}
 					],
 					WONUM: [
 						{ required: true, message: '不能为空', trigger: 'blur' }
 					],
-					ITEM_NAME: [
-						{ required: true, message: '不能为空', trigger: 'blur' }
+					ITEM_NAME: [//样品名称
+						{ required: true,validator: validateItemname}
 					],
-					ITEM_MODEL: [
-						{ required: true, message: '不能为空', trigger: 'blur' }
+					ITEM_MODEL: [//规格型号
+						{ required: true,validator: validateItemname}
 					],
-					ITEMNUM: [
-						{ required: true, message: '不能为空', trigger: 'blur' }
+					ITEMNUM: [//样品编号
+						{ required: true,validator: validateItemnum}
 					],
 					ITEM_STATU: [
 						{ required: true, message: '不能为空', trigger: 'blur' }
@@ -850,7 +885,7 @@
 						{ required: true, message: '不能为空', trigger: 'blur' }
 					],
 					ITEM_SOURCE: [
-						{ required: true, message: '不能为空', trigger: 'blur' }
+						{ required: true, message: '不能为空', trigger: 'change' }
 					],
 					ITEM_QUALITY: [
 						{ required: true, message: '不能为空', trigger: 'blur' }

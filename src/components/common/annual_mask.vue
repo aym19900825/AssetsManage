@@ -774,6 +774,14 @@
                     callback();
                 }
             };
+			//放大镜选择验证
+			var validateItemdata = (rule, value, callback) => {
+                if (this.WORKPLAN.ITEMTYPE === undefined || this.WORKPLAN.ITEMTYPE === '' || this.WORKPLAN.ITEMTYPE === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
 			return {
 				docParm: {
 					'model': 'new',
@@ -867,7 +875,7 @@
 					PHONE:[{required: true,trigger: 'blur',validator: validatePhone,}],
 					EMAIL:[{required: true,trigger: 'blur',validator:validateEmail,}],
 					PROP_UNIT:[{required: true,validator: validateUnit, trigger: 'change'}],//提出单位 
-       				ITEMTYPE:[{required: true,validator: validateItemtype, trigger: 'blur' }],//产品类别 
+       				ITEMTYPE:[{required: true,validator: validateItemdata}],//产品类别 
        				YEAR: [{type: 'string',required: true,message: '请选择年度',trigger: 'change' }],//年度
        				REPORTDATE: [{type: 'string',required: true,message: '请选择提报日期',trigger: 'change'}],//提报日期
        				//检测依据 

@@ -206,12 +206,14 @@
 
 									    <el-table-column fixed="right" label="操作" width="120">
 									      <template slot-scope="scope">
-									        <el-button @click="delPlan(scope.$index,scope.row, 'WORLPLANLINE','worlplanlist')" type="text" size="small">
-									          <i class="icon-trash red"></i>
+									        <el-button type="danger" circle title="删除" @click="delPlan(scope.$index,scope.row, 'WORLPLANLINE','worlplanlist')"  size="small" v-show="!viewtitle">
+									          <i class="icon-trash"></i>
 									        </el-button>
-									        <el-button @click="assign(scope.row)" type="text" size="small" v-if="assignshow">
-									          下达
+
+									        <el-button type="primary" circle title="下达任务通知书" @click="assign(scope.row)" size="small" v-if="assignshow">
+									          <i class="icon-send"></i>
 									        </el-button>
+
 									      </template>
 									    </el-table-column>
 									</el-table>
@@ -246,7 +248,7 @@
 											        <el-button
 											          @click="delPlan(scope.$index,scope.row,'WORLPLANLINE_BASIS','basisList')"
 											          type="text"
-											          size="small">
+											          size="small" v-show="!viewtitle">
 											          	<i class="icon-trash red"></i>
 											        </el-button>
 											      </template>
@@ -298,7 +300,7 @@
 											        <el-button
 											          @click="delPlan(scope.$index,scope.row,'WORLPLANLINE_PROJECT','proTestList')" 
 											          type="text"
-											          size="small">
+											          size="small" v-show="!viewtitle">
 											          	<i class="icon-trash red"></i>
 											        </el-button>
 											      </template>

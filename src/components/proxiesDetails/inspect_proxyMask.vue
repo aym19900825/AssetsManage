@@ -19,7 +19,7 @@
 				<div class="mask_content">
 					<el-form :model="dataInfo" :label-position="labelPositions" :rules="rules" ref="dataInfo" status-icon inline-message  class="demo-ruleForm">
 						<div class="text-center" v-show="viewtitle">
-							<span v-if="this.dataInfo.STATE!=3">
+							<span v-if="this.dataInfo.STATUS!=3">
 								<el-button id="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 启动流程</el-button>
 								<el-button id="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
 							</span>
@@ -1042,6 +1042,7 @@
 			detailgetData() {
 			var url = this.basic_url +'/api-apps/app/inspectPro/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
+					console.log(res)
 					this.dataInfo = res.data;
 					this.show = true;
 					//深拷贝数据

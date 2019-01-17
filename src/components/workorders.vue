@@ -372,7 +372,39 @@
 					});
 					return;
 				} else {
-					this.$refs.child.detail(this.selMenu[0].ID);
+					if(this.selMenu[0].STATE == 3 || this.selMenu[0].STATE == 2) {
+						this.$message({
+							message: '已启动的流程，不允许修改数据，只可以查看。',
+							type: 'warning'
+						});
+						this.$refs.child.view(this.selMenu[0].ID);
+					}
+					//驳回
+					else if(this.selMenu[0].STATE == 0) {
+						var url = this.basic_url + '/api-apps/app/inspectPro/flow/isExecute/' + this.selMenu[0].ID;
+						this.$axios.get(url, {}).then((res) => {
+							if(res.data.resp_code == 0) {
+								var url = this.basic_url + '/api-apps/app/inspectPro/flow/isPromoterNode/' + this.selMenu[0].ID;
+								this.$axios.get(url, {}).then((res) => {
+									if(res.data.resp_code == 0) {
+										this.$refs.child.detail(this.selMenu[0].ID);
+									} else {
+										this.$message({
+											message: res.data.resp_msg,
+											type: 'warning'
+										});
+									}
+								});
+							} else {
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'warning'
+									});
+							}
+						});
+					}else{
+						this.$refs.child.detail(this.selMenu[0].ID);	
+					}
 				}
 			},
 			//查看

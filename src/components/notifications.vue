@@ -468,6 +468,8 @@
 									});
 							}
 						});
+					}else{
+						this.$refs.child.detail(this.selUser[0].ID);	
 					}
 				}
 			},

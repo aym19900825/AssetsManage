@@ -587,7 +587,8 @@
 					TASKNUM: '',
 					SOLUTION: '',
 					COMPDATE: '',
-					STATE: '草稿',
+					STATE: '1',
+					STATEDesc: '草稿',
 					ENTERBY: '',
 					STATUS: '',
 					WORK_NOTICE_CHECKBASISList: [],
@@ -650,7 +651,8 @@
 					TASKNUM: '',
 					SOLUTION: '',
 					COMPDATE: '',
-					STATE: '草稿',
+					STATE: '1',
+					STATEDesc: '草稿',
 					ENTERBY: '',
 					STATUS: '',
 					WORK_NOTICE_CHECKBASISList: [],
@@ -950,10 +952,8 @@
 							type: 'warning'
 						});
 						return false;
-			        	}else{
-					if( this.dataInfo.STATE == "草稿" ){
-						this.dataInfo.STATE = this.dataInfo.STATE == "1"
-					}
+			        }else{
+					console.log(this.dataInfo);
 					var url = this.basic_url + '/api-apps/app/workNot/saveOrUpdate';
 					this.$axios.post(url, this.dataInfo).then((res) => {
 						if(res.data.resp_code == 0) {

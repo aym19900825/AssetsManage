@@ -104,9 +104,16 @@
 										</el-col>
 									</el-row>
 									<el-row :gutter="30">
-										<el-col :span="8">
+										<el-col :span="8" v-show="!addtitle" >
 											<el-form-item label="负责人">
 												<el-input v-model="adddeptForm.leaderName" :disabled="edit">
+													<el-button slot="append" icon="el-icon-search" @click="getPerson"></el-button>
+												</el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8"  v-show="addtitle">
+											<el-form-item label="负责人">
+												<el-input v-model="adddeptForm.leader" :disabled="edit">
 													<el-button slot="append" icon="el-icon-search" @click="getPerson"></el-button>
 												</el-input>
 											</el-form-item>
@@ -367,6 +374,7 @@
 			},
 			SelChange(val) {
 				this.selUser = val;
+				console.log(val);
 			},
 			loadMore() {
 				if(this.loadSign) {
@@ -499,6 +507,7 @@
 			},
 			//修改
 			detail() {
+				console.log(this.adddeptForm.leader);
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 	    			this.adddeptForm.changeby = res.data.nickname;
 	    			var date=new Date();
@@ -512,24 +521,24 @@
 				});
 
 
-				var page = this.page.currentPage;
-				var limit = this.page.pageSize;
-				var url = this.basic_url + '/api-user/users/';
-				this.$axios.get(url, {
-					params: {
-						page: page,
-						limit: limit,
-					},
-				}).then((res) => {
-					console.log(res.data);
-					this.adddeptForm.leader = res.data.id;//给负责人显示用户名称
-					
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
+//				var page = this.page.currentPage;
+//				var limit = this.page.pageSize;
+//				var url = this.basic_url + '/api-user/users/';
+//				this.$axios.get(url, {
+//					params: {
+//						page: page,
+//						limit: limit,
+//					},
+//				}).then((res) => {
+//					console.log(res.data);
+//					this.adddeptForm.leader = res.data.id;//给负责人显示用户名称
+//					
+//				}).catch((err) => {
+//					this.$message({
+//						message: '网络错误，请重试',
+//						type: 'error'
+//					});
+//				});
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.modify = true;
@@ -608,19 +617,19 @@
 				this.$refs.adddeptForm.validate((valid) => {
 		          if (valid) {
 		          	_this.adddeptForm.status=((_this.adddeptForm.status=="1"||_this.adddeptForm.status=='活动') ? '1' : '0');
-		          	// _this.adddeptForm.leader = _this.selData[0].id;
+//		          	 _this.adddeptForm.leader = _this.selData[0].id;
 		          
 					var url = _this.basic_url + '/api-user/depts/saveOrUpdate';
-//					this.adddeptForm = {
-//						 "id":this.adddeptForm.id,
-//						 "pid":this.adddeptForm.pid,
-//						 "fullname":this.adddeptForm.fullname,
-//					     "simplename":this.adddeptForm.simplename,
-//					    "type":this.adddeptForm.type,
-//					    "code":this.adddeptForm.code,
-//					     "teltphone":this.adddeptForm.teltphone,
-//					     "tips":this.adddeptForm.tips
-//					}
+					_this.adddeptForm = {
+						 "id":this.adddeptForm.id,
+						 "pid":this.adddeptForm.pid,
+						 "fullname":this.adddeptForm.fullname,
+					     "simplename":this.adddeptForm.simplename,
+					    "type":this.adddeptForm.type,
+					    "code":this.adddeptForm.code,
+					     "teltphone":this.adddeptForm.teltphone,
+					     "tips":this.adddeptForm.tips
+					}
 					console.log(_this.adddeptForm);
 					this.$axios.post(url, _this.adddeptForm).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
@@ -630,7 +639,7 @@
 								type: 'success'
 							});
 //							//重新加载数据
-							this.$emit('request');
+//							this.$emit('request');
 							// this.$refs["adddeptForm"].resetFields();//清空验证
 						}
 					}).catch((err) => {

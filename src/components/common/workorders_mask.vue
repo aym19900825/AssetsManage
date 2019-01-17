@@ -1305,7 +1305,7 @@
 				var obj = {
 					D_NUM:'',
 					D_DESC: '',
-					STATUS: '',
+					STATUS: '1',
 					isEditing: true,
 				};
 					this.workorderForm.WORKORDER_DATA_TEMPLATEList.push(obj);

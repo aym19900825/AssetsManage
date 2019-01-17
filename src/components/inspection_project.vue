@@ -23,13 +23,13 @@
 							</div>
 						<el-form :inline="true" :model="formInline">
 							<el-form-item label="部门名称" prop="DEPTID">
-								<el-select v-model="formInline.DEPTID" placeholder="请选择部门" v-if="departmentId==128" @change="requestData_productType2">
+								<el-select v-model="formInline.DEPTID" placeholder="请选择部门" @change="requestData_productType2">
 									<el-option v-for="(data,index) in Select_DEPTID" :key="index" :value="data.id" :label="data.fullname"></el-option>
 								</el-select>
 
-								<el-select v-model="formInline.DEPTID" placeholder="请选择部门" v-else disabled @change="requestData_productType2">
+								<!-- <el-select v-model="formInline.DEPTID" placeholder="请选择部门" v-else disabled @change="requestData_productType2">
 									<el-option v-for="(data,index) in Select_DEPTID" :key="index" :value="data.id" :label="data.fullname"></el-option>
-								</el-select>
+								</el-select> -->
 							</el-form-item>
 						</el-form>
 						</div>
@@ -112,7 +112,7 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<el-tabs>
-						    	<el-tab-pane label="专业组"><professionGrochild ref="professionGrochild"></professionGrochild></el-tab-pane>
+						    	<el-tab-pane label="专业组"><professionGrochild ref="professionGrochild" :parentIds="formInline.DEPTID"></professionGrochild></el-tab-pane>
 						    	<el-tab-pane label="检验/检测方法"><inspectionMet2child ref="inspectionMet2child"></inspectionMet2child></el-tab-pane>
 						    	<el-tab-pane label="原始数据模板"><rawDataTem2child ref="rawDataTem2child"></rawDataTem2child></el-tab-pane>
 						    	<el-tab-pane label="检验/检测报告模板"><inspectionRepTem2child ref="inspectionRepTem2child"></inspectionRepTem2child></el-tab-pane>
@@ -350,12 +350,22 @@
 			getDEPTID() {//获取机构部门数据
 				var url = this.basic_url + '/api-user/users/currentMap';
 	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
-                this.departmentId = res.data.deptId;
-
+                	this.departmentId = res.data.deptId;
+                	var departName = res.data.deptName;
 					var currenturl = this.basic_url + '/api-user/depts/findByPid/' + this.departmentId;
 					this.$axios.get(currenturl, {}).then((res) => {
-						// console.log(res.data);
+						console.log(res.data);
 						this.Select_DEPTID = res.data;
+						if (this.departmentId == 128) {
+							this.formInline.DEPTID = res.data[0].id;
+						} else {
+							this.Select_DEPTID.push({
+								id: this.departmentId,
+								fullname: departName
+							});
+							this.formInline.DEPTID = this.departmentId;
+						}
+						this.requestData_productType2();
 					}).catch(error => {
 						console.log('请求失败');
 					})
@@ -368,32 +378,32 @@
 	            });
 			},
 
-			getData(){//获取当前用户信息
-	            var url = this.basic_url + '/api-user/users/currentMap';
-	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
-                    this.departmentId = res.data.deptId;
+			// getData(){//获取当前用户信息
+	  //           var url = this.basic_url + '/api-user/users/currentMap';
+	  //           this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+   //                  this.departmentIds = res.data.deptId;
                     	
-                    	var depturl = this.basic_url + '/api-user/depts/'+ this.departmentId;
-			            this.$axios.get(depturl, {}).then((res) => {//根据当前用户信息查询它的组织机构
-		                    this.formInline.DEPTID = res.data.fullname;
-		                    // console.log(this.departmentId);
-			            }).catch((err) => {
-			                this.$message({
-			                    message: '网络错误，请重试',
-			                    type: 'error'
-			                });
-			            });
+   //                  	var depturl = this.basic_url + '/api-user/depts/'+ this.departmentIds;
+			//             this.$axios.get(depturl, {}).then((res) => {//根据当前用户信息查询它的组织机构
+		 //                    // this.formInline.DEPTID = res.data.id;
+		 //                    // console.log(this.departmentId);
+			//             }).catch((err) => {
+			//                 this.$message({
+			//                     message: '网络错误，请重试',
+			//                     type: 'error'
+			//                 });
+			//             });
 
 
-	            }).catch((err) => {
-	                this.$message({
-	                    message: '网络错误，请重试',
-	                    type: 'error'
-	                });
-	            });
+	  //           }).catch((err) => {
+	  //               this.$message({
+	  //                   message: '网络错误，请重试',
+	  //                   type: 'error'
+	  //               });
+	  //           });
 
 	            
-	        },
+	  //       },
 			requestData_productType2(val) {//加载数据
 				var _this = this;
 				var data = {
@@ -569,8 +579,8 @@
 		
 		mounted() {
 			this.getDEPTID();
-			this.getData();
-			this.requestData_productType2();
+			// this.getData();
+			// this.requestData_productType2();
 		},
 	}
 </script>

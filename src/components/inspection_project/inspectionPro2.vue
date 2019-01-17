@@ -19,13 +19,13 @@
 			</div>
 			<el-form :model="inspectionPro2Form" status-icon inline-message ref="inspectionPro2Form" class="el-radio__table">
 			  <el-table ref="singleTable" :data="(Array.isArray(inspectionPro2Form.inspectionList)?inspectionPro2Form.inspectionList:[]).filter(data => !search || data.P_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250" highlight-current-row style="width: 100%;" :default-sort="{prop:'inspectionPro2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
-			  	<el-table-column label="所属标准" width="80" prop="S_NUM">
+			  	<!-- <el-table-column label="所属标准" width="80" prop="S_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.S_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" disabled></el-input><span v-else="v-else">{{scope.row.S_NUM}}</span>
 					</el-form-item>
 			      </template>
-			    </el-table-column>
+			    </el-table-column> -->
 
 			  	<el-table-column label="项目编号" sortable width="100" prop="P_NUM">
 			      <template slot-scope="scope">
@@ -126,7 +126,7 @@
 				</el-table-column>
 				<el-table-column label="编码" width="155" sortable prop="P_NUM">
 				</el-table-column>
-				<el-table-column label="名称" sortable prop="P_NUM">
+				<el-table-column label="名称" sortable prop="P_NAME">
 				</el-table-column>
 				<el-table-column label="单价" sortable align="right" prop="UNITCOST">
 				</el-table-column>
@@ -147,7 +147,7 @@
 		    </span>
 		</el-dialog>
 		<!-- 检验/检测项目 End -->
-</div>
+	</div>
 </template>
 <script>
 	import Config from '../../config.js'
@@ -431,7 +431,7 @@
 						"P_NAME": row.P_NAME,
 						"UNITCOST":  row.UNITCOST,
 						"STATUS": row.STATUS,
-						"DEPTIDS": row.STATUS,
+						"DEPTID": row.DEPTID,
 						"ENTERBY": row.CHANGEBY,
 					    "ENTERDATE": row.CHANGEDATE,
 					    "VERSION": row.VERSION,

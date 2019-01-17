@@ -145,6 +145,13 @@
 					callback();
 				}
 			};
+			var validateKeeper = (rule, value, callback) => {//类别
+                if (this.dataInfo.KEEPER === undefined || this.dataInfo.KEEPER === '' || this.dataInfo.KEEPER === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
 			return {
 				loadSign:true,//加载
 				commentArr:{},
@@ -190,7 +197,7 @@
 						{ required: true, message: '请选择是否需要溯源', trigger: 'blur' },
 					],
 					KEEPER: [
-						{ required: true, message: '请输入保管人', trigger: 'blur' },
+						{ required: true,validator: validateKeeper},//设备保管人
 					],
 					ACCEPT_DATE: [
 						{ required: true, message: '请输入接收日期', trigger: 'blur' },

@@ -425,6 +425,13 @@
 		//	props: ['user','page'],
 
 		data() {
+			var validatedeptname = (rule, value, callback) => {//所属机构
+                if (this.user.deptName === undefined || this.user.deptName === '' || this.user.deptName === null) {
+                    callback(new Error('请选择所属机构'));
+                }else {
+                    callback();
+                }
+            };
 			return {
 				basic_url: Config.dev_url,
 				user: {
@@ -489,7 +496,7 @@
 				//				default-expand-all:true,
 				i:0,
 				rules: {
-					deptName: [{required: true,message: '必填',trigger: 'blur'}], //名称
+					deptName: [{required: true,validator: validatedeptname}], //所属机构
 					education: [{required: true,message: '必填',trigger: 'blur'}],
 					roleId: [{required: true,trigger: 'blur',message: '必填',}],
 					username: [

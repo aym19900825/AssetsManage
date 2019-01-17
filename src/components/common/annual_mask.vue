@@ -123,11 +123,11 @@
 								<!-- 年度计划列表 Begin-->
 								<el-collapse-item title="年度计划列表" name="2" class="ml30">
 									<div class="table-func">
-										<el-button type="primary" size="mini" round>
+										<el-button type="primary" size="mini" round v-show="!viewtitle">
 											<i class="icon-upload-cloud"></i>
 											<font>导入</font>
 										</el-button>
-										<el-button type="success" size="mini" round  @click="addfield1">
+										<el-button type="success" size="mini" round  @click="addfield1" v-show="!viewtitle">
 											<i class="icon-add"></i>
 											<font>新建行</font>
 										</el-button>
@@ -207,7 +207,7 @@
 									    <el-table-column fixed="right" label="操作" width="120">
 									      <template slot-scope="scope">
 									        <el-button @click="delPlan(scope.$index,scope.row, 'WORLPLANLINE','worlplanlist')" type="text" size="small">
-									          移除
+									          <i class="icon-trash red"></i>
 									        </el-button>
 									        <el-button @click="assign(scope.row)" type="text" size="small" v-if="assignshow">
 									          下达

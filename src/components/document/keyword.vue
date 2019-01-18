@@ -301,7 +301,6 @@
 					this.page.totalCount = res.data.count;
 					this.samplesList = res.data.data;
 				}).catch((wrong) => {})
-				
 			},
 			
 			min3max() { //左侧菜单正常和变小切换

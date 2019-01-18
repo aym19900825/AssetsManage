@@ -72,29 +72,16 @@
 										</el-input>
 									</el-form-item>
 								</el-col>
-								<el-col :span="6">
-								<!-- <div >
-									<span class="pull-left" style="border:1px solid #D8DEE6;border-right:none;background-color: #F3F6FA;width: 24%;height:35px;text-align: center; border-radius:3px 0 0 3px; padding-top:6px;color: #5B6371;" >
-										机构
-									</span>
-									<div class="pull-right"> -->
+								<el-col :span="5">
 									<el-form-item label="机构" prop="DEPTID">
 										<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择" style="width: 90%;border-radius:none">
 										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 										</el-select>
 									</el-form-item>
-									<!-- </div>
-								</div> -->
-									
 								</el-col>
-								<!-- <el-col :span="2">
-									<el-select v-model="searchList.STATUS" placeholder="请选择信息状态">
-										<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-										</el-option>
-									</el-select>
-								</el-col> -->
-								<el-col :span="2">
-									<el-button class="pull-right" type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+								<el-col :span="4">
+									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -316,6 +303,16 @@
 				this.page.currentPage = val;
 				this.requestData();
 			},
+			//重置
+			resetbtn(){
+				this.searchList =  { //点击高级搜索后显示的内容
+					PRO_NUM: '',
+					PRO_NAME: '',
+					VERSION: '',
+					DEPTID: ''
+				};
+			},
+			//搜索
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;

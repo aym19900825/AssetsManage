@@ -625,8 +625,8 @@
 				</div>
 			</div>
 			<!--委托书编号 Begin-->
-			<el-dialog :modal-append-to-body="false" title="委托书编号" :visible.sync="dialogVisible1" width="80%" :before-close="handleClose">
-					<el-table :data="inspectList" :header-cell-style="rowClass" border stripe height="400px" style="width: 100%;" :default-sort="{prop:'inspectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+			<el-dialog :modal-append-to-body="false" title="委托书编号" :visible.sync="dialogVisible1" width="80%" >
+					<el-table :data="inspectList" border stripe :header-cell-style="rowClass"  style="width: 100%;" :default-sort="{prop:'inspectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore('inspect')">	
 						<el-table-column type="selection" width="55" fixed align="center">
 						</el-table-column>
 						<el-table-column label="检验委托书编号" sortable width="130px" prop="PROXYNUM">
@@ -671,7 +671,7 @@
 			<!--委托书编号 End-->
 			<!--主检员 Begin-->
 			<el-dialog :modal-append-to-body="false" title="委托书编号" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
-					<el-table :data="userList" border stripe :header-cell-style="rowClass"  style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+					<el-table :data="userList" border stripe :header-cell-style="rowClass"  style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore('user')">
 						<el-table-column type="selection" width="55" fixed align="center">
 						</el-table-column>
 						<el-table-column label="用户名" sortable width="140px" prop="username">
@@ -695,7 +695,7 @@
 			<!--主检员 End-->
 			<!-- 样品名称 Begin -->
 			<el-dialog :modal-append-to-body="false" title="样品名称" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
-				<el-table :data="samplesList" :header-cell-style="rowClass" border stripe height="400px" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+					<el-table :data="samplesList" border stripe :header-cell-style="rowClass"  style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore('samples')">
 					<el-table-column type="selection" width="55" fixed align="center">
 					</el-table-column>
 					<el-table-column label="样品编号" sortable width="200px" prop="ITEMNUM">
@@ -725,7 +725,6 @@
 					<!--<el-table-column label="信息状态" sortable width="140px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
 					</el-table-column>-->
 				</el-table>
-				
 				<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 				<span slot="footer" class="dialog-footer">
@@ -852,59 +851,24 @@
 			Select_ITEM_RECEPT_STATUS:[],//获取样品信息-样品接收状态
 			Select_ITEM_CHECK_STATUS:[],//获取样品信息-样品检后状态
 			Select_ITEM_MANAGEMENT:[],//获取样品信息-样品处置
-			
 			fileList:[],//上传附件数据
-			
-
 			rules: {
-				PROXYNUM: [//委托书编号
-					{ required: true, validator: validateProxynum}
-				],
-				PROXY_VERSION: [//委托书版本
-					{ required: true, validator: validateProxyversion}
-				],
-				WONUM: [
-					{ required: true, message: '不能为空', trigger: 'blur' }
-				],
-				ITEM_NAME: [//样品名称
-					{ required: true,validator: validateItemname}
-				],
-				ITEM_MODEL: [//规格型号
-					{ required: true,validator: validateItemname}
-				],
-				ITEMNUM: [//样品编号
-					{ required: true,validator: validateItemnum}
-				],
-				ITEM_STATU: [
-					{ required: true, message: '不能为空', trigger: 'blur' }
-				],
-				ITEM_STATUS: [
-					{ required: true, message: '不能为空', trigger: 'blur' }
-				],
-				ITEM_SOURCE: [
-					{ required: true, message: '不能为空', trigger: 'change' }
-				],
-				ITEM_QUALITY: [
-					{ required: true, message: '不能为空', trigger: 'blur' }
-				],
-				CHECK_BASIS: [
-					{ required: true, message: '不能为空', trigger: 'blur' }
-				],
-				COMPLETE_DATE: [
-					{ required: true, message: '不能为空', trigger: 'blur' }
-				],
-				COMPLETE_MODE: [
-					{ required: true, message: '不能为空', trigger: 'blur' }
-				],
-				ITEM_RECEPT_STATUS: [
-					{ required: true, message: '不能为空', trigger: 'blur' }
-				],
-				ITEM_PROFESSIONAL_GROUP: [
-					{ required: true, message: '不能为空', trigger: 'blur' }
-				],
-				STATUS: [
-					{ required: true, message: '不能为空', trigger: 'blur' }
-				],
+				PROXYNUM: [{ required: true, validator: validateProxynum}],//委托书编号
+				PROXY_VERSION: [{ required: true, validator: validateProxyversion}],//委托书版本
+				WONUM: [{ required: true, message: '不能为空', trigger: 'blur' }],
+				ITEM_NAME: [{ required: true,validator: validateItemname}],//样品名称
+				ITEM_MODEL: [{ required: true,validator: validateItemname}],//规格型号
+				ITEMNUM: [{ required: true,validator: validateItemnum}],//样品编号
+				ITEM_STATU: [{ required: true, message: '不能为空', trigger: 'blur' }],
+				ITEM_STATUS: [{ required: true, message: '不能为空', trigger: 'blur' }],
+				ITEM_SOURCE: [{ required: true, message: '不能为空', trigger: 'change' }],
+				ITEM_QUALITY: [{ required: true, message: '不能为空', trigger: 'blur' }],
+				CHECK_BASIS: [{ required: true, message: '不能为空', trigger: 'blur' }],
+				COMPLETE_DATE: [{ required: true, message: '不能为空', trigger: 'blur' }],
+				COMPLETE_MODE: [{ required: true, message: '不能为空', trigger: 'blur' }],
+				ITEM_RECEPT_STATUS: [{ required: true, message: '不能为空', trigger: 'blur' }],
+				ITEM_PROFESSIONAL_GROUP: [{ required: true, message: '不能为空', trigger: 'blur' }],
+				STATUS: [{ required: true, message: '不能为空', trigger: 'blur' }],
 			},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -994,7 +958,40 @@
 				this.requestData();
 			},
 			addworkorder(){
-				this.dialogVisible1 = true;
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				}
+				//委托书
+				this.$axios.get(this.basic_url + '/api-apps/app/inspectPro', {params: data}).then((res) => {
+					console.log(res);
+					this.page.totalCount = res.data.count;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
+					}
+					this.commentArr[this.page.currentPage] = res.data.data
+					let newarr = []
+					for(var i = 1; i <= totalPage; i++) {
+						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+
+							for(var j = 0; j < this.commentArr[i].length; j++) {
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					this.inspectList = newarr;
+					this.dialogVisible1 = true;
+				}).catch((wrong) => {
+					this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+				})
+				
 			},
 			addworkordernum(){
 				if(this.selMenu.length == 0){
@@ -1488,7 +1485,8 @@
 					})
 					.catch(_ => {});
 			},
-			loadMore () {
+			loadMore (item) {
+				console.log(item);
 			    if (this.loadSign) {
 			      this.loadSign = false
 			      this.page.currentPage++
@@ -1498,39 +1496,22 @@
 					setTimeout(() => {
 					this.loadSign = true
 					}, 1000)
-					this.requestData()
+					if(item=="inspect"){
+						this.addworkorder();
+					}
+					
+					
 			    }
 			},	
-			requestData(index) {
+			getinspectList(){
+				
+			},
+			getuser(){
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				}
-				//委托书
-				this.$axios.get(this.basic_url + '/api-apps/app/inspectPro', {
-					params: data
-				}).then((res) => {
-					this.page.totalCount = res.data.count;
-					//总的页数
-					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false
-					} else {
-						this.loadSign = true
-					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.inspectList = newarr;
-				}).catch((wrong) => {})
-                //用户
+				 //用户
 				this.$axios.get(this.basic_url + '/api-user/users', {
 					params: data
 				}).then((res) => {
@@ -1557,7 +1538,10 @@
 					}
                     
 					this.userList = newarr;
-				}).catch((wrong) => {})
+				}).catch((wrong) => {})	
+			},
+			requestData() {
+				
                //接样
 				this.$axios.get(this.basic_url + '/api-apps/app/item', {
 					params: data
@@ -1595,6 +1579,8 @@
 			this.getITEM_RECEPT_STATUS();//页面打开加载-样品接收状态
 			this.getITEM_CHECK_STATUS();//页面打开加载-样品检后状态
 			this.getITEM_MANAGEMENT();//页面打开加载-样品处置
+//			this.getinspectList();//委托书编号
+			this.getuser();//用户
 			this.requestData();
 		},
 	}

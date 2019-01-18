@@ -125,9 +125,10 @@
 								</el-form-item>
 							</el-col>
 							
-							<el-col :span="4">
-								<el-button type="primary" @click="searchinfo" size="small" style="margin-top: 2px">搜索</el-button>
-							</el-col>
+                                    <el-col :span="4">
+									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
+								</el-col>
 						</el-row>
 					</el-form>
 				</div>
@@ -349,6 +350,18 @@
 		      this.page.currentPage = val;
 		      this.requestData();
 		    },
+		    	resetbtn(){
+				this.searchList =  { //点击高级搜索后显示的内容
+					WP_NUM: '',
+					DESCRIPTION: '',
+					TYPE: '',
+					YEAR: '',
+					ENTERDATE:'',
+					ENTERBY:'',
+					STATUS:'',
+					LEADER_STATUS:''
+				};
+			},
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;

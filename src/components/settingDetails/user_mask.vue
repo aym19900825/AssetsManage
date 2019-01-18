@@ -203,7 +203,7 @@
 									<el-tabs v-model="activeName" @tab-click="handleClick">
 										<el-tab-pane label="资质信息" name="first">
 											<div class="table-func table-funcb" v-show="noviews">
-												<el-button type="success" size="mini" round @click="addfield1">
+												<el-button type="success" size="mini" round @click="addfield1" v-show="!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建行</font>
 												</el-button>
@@ -291,7 +291,7 @@
 													<el-table-column fixed="right" label="操作" width="120">
 														<template slot-scope="scope">
 															<el-button @click.native.prevent="deleteRow(scope.$index,user.qualifications)" type="text" size="small">
-																移除
+																<i class="icon-trash red"></i>
 															</el-button>
 														</template>
 													</el-table-column>
@@ -300,7 +300,7 @@
 										</el-tab-pane>
 										<el-tab-pane label="培训" name="second">
 											<div class="table-func table-funcb" v-show="noviews">
-												<el-button type="success" size="mini" round @click="addfield2">
+												<el-button type="success" size="mini" round @click="addfield2" v-show="!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建行</font>
 												</el-button>
@@ -353,7 +353,7 @@
 													<el-table-column fixed="right" label="操作" width="120">
 														<template slot-scope="scope">
 															<el-button @click.native.prevent="deleteRow(scope.$index,user.traings)" type="text" size="small">
-																移除
+																<i class="icon-trash red"></i>
 															</el-button>
 														</template>
 													</el-table-column>
@@ -425,6 +425,13 @@
 		//	props: ['user','page'],
 
 		data() {
+			var validatedeptname = (rule, value, callback) => {//所属机构
+                if (this.user.deptName === undefined || this.user.deptName === '' || this.user.deptName === null) {
+                    callback(new Error('请选择所属机构'));
+                }else {
+                    callback();
+                }
+            };
 			return {
 				basic_url: Config.dev_url,
 				user: {
@@ -489,7 +496,7 @@
 				//				default-expand-all:true,
 				i:0,
 				rules: {
-					deptName: [{required: true,message: '必填',trigger: 'blur'}], //名称
+					deptName: [{required: true,validator: validatedeptname}], //所属机构
 					education: [{required: true,message: '必填',trigger: 'blur'}],
 					roleId: [{required: true,trigger: 'blur',message: '必填',}],
 					username: [
@@ -986,12 +993,7 @@
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
 				var url = this.basic_url + '/api-user/roles';
-				this.$axios.get(url, {
-					params: {
-						page: page,
-						limit: limit,
-					},
-				}).then((res) => {
+				this.$axios.get(url, {}).then((res) => {
 					this.selectData = res.data.data;
 				}).catch(error => {
 					console.log('请求失败');

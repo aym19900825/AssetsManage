@@ -19,7 +19,7 @@
 				<div class="mask_content">
 					<el-form :model="dataInfo" :label-position="labelPositions" :rules="rules" ref="dataInfo" status-icon inline-message  class="demo-ruleForm">
 						<div class="text-center" v-show="viewtitle">
-							<span v-if="this.dataInfo.STATE!=3">
+							<span v-if="this.dataInfo.STATUS!=3">
 								<el-button id="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 启动流程</el-button>
 								<el-button id="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
 							</span>
@@ -193,7 +193,7 @@
 									<el-tabs v-model="activeName" @tab-click="handleClick">
 									    <el-tab-pane label="检验依据" name="first">
 									    	<div class="table-func table-funcb">
-												<el-button type="success" size="mini" round @click="addfieldProject">
+												<el-button type="success" size="mini" round @click="addfieldProject"  v-show="!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建行</font>
 												</el-button>
@@ -260,7 +260,7 @@
 									    </el-tab-pane>
 									    <el-tab-pane label="检验项目与要求" name="second">
 									    	<div class="table-func table-funcb">
-												<el-button type="success" size="mini" round @click="addfieldBasis">
+												<el-button type="success" size="mini" round @click="addfieldBasis"  v-show="!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建行</font>
 												</el-button>
@@ -336,7 +336,7 @@
 									    </el-tab-pane>
 									    <el-tab-pane label="分包要求" name="third">
 									    	<div class="table-func table-funcb">
-												<el-button type="success" size="mini" round @click="addcheckProCont">
+												<el-button type="success" size="mini" round @click="addcheckProCont"  v-show="!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建行</font>
 												</el-button>
@@ -586,13 +586,13 @@
 							</el-collapse>
 						</div>
 						<div class="el-dialog__footer" v-show="noviews">
-							<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
-							<el-button type="success"  v-show="addtitle" @click="saveAndSubmit('dataInfo')">保存并继续</el-button>
-							<el-button v-show="modifytitle" type="btn btn-primarys" @click="modifyversion('dataInfo')">修订</el-button>
+							<el-button type="primary" @click="saveAndUpdate">保存</el-button>
+							<el-button type="success"  v-show="addtitle" @click="saveAndSubmit">保存并继续</el-button>
+							<el-button v-show="modifytitle" type="btn btn-primarys" @click="modifyversion">修订</el-button>
 							<el-button @click='close'>取消</el-button>
 						</div>
 						<div class="el-dialog__footer" v-show="views">
-							<el-button type="success" v-if="this.dataInfo.STATUS == 3" @click="build('dataInfo')">生成工作任务单</el-button>
+							<el-button type="success" v-if="this.dataInfo.STATUS == 3" @click="build">生成工作任务单</el-button>
 						</div>
 					</el-form>
 				</div>
@@ -720,7 +720,55 @@
 					callback();
 				}
 			};
-
+			var validateVname = (rule, value, callback) => {//名称
+                if (this.dataInfo.V_NAME === undefined || this.dataInfo.V_NAME === '' || this.dataInfo.V_NAME === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
+			var validateVaddress = (rule, value, callback) => {//地址
+                if (this.dataInfo.V_ADDRESS === undefined || this.dataInfo.V_ADDRESS === '' || this.dataInfo.V_ADDRESS === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
+			var validateVzipcode = (rule, value, callback) => {//邮编
+                if (this.dataInfo.V_ZIPCODE === undefined || this.dataInfo.V_ZIPCODE === '' || this.dataInfo.V_ZIPCODE === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
+			var validateVperson = (rule, value, callback) => {//联系人姓名
+                if (this.dataInfo.V_PERSON === undefined || this.dataInfo.V_PERSON === '' || this.dataInfo.V_PERSON === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
+			var validateVphone = (rule, value, callback) => {//联系人电话
+                if (this.dataInfo.V_PHONE === undefined || this.dataInfo.V_PHONE === '' || this.dataInfo.V_PHONE === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
+			var validateItemname = (rule, value, callback) => {//样品名称
+                if (this.dataInfo.ITEM_NAME === undefined || this.dataInfo.ITEM_NAME === '' || this.dataInfo.ITEM_NAME === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
+			var validatePname = (rule, value, callback) => {//生产单位名称
+                if (this.dataInfo.P_NAME === undefined || this.dataInfo.P_NAME === '' || this.dataInfo.P_NAME === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
 			return {
 				approvingData:{},
 				loadSign:true,//加载
@@ -728,7 +776,8 @@
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				dataInfo: {
-					STATUS: '草稿',
+					STATUS: '1',
+					STATUSDesc:'草稿',
 					VERSION:'1',
 					INSPECT_PROXY_PROJECList: [],
 					INSPECT_PROXY_BASISList: [],
@@ -792,23 +841,23 @@
 				labelPositions: 'right',
 				dialogVisible: false, //对话框
 				rules: {
-					V_NAME: [{ required: true, message: '必填', trigger: 'blur' }],//名称
-					V_ADDRESS: [{ required: true, message: '必填', trigger: 'blur' }],//地址
-					V_ZIPCODE: [{ required: true, message: '必填', trigger: 'blur' }],//邮编
-					V_PERSON: [{ required: true, message: '必填', trigger: 'blur' }],//联系人姓名
-					V_PHONE: [{ required: true, message: '必填', trigger: 'blur' }],//联系人电话
+					V_NAME: [{ required: true, validator: validateVname}],//名称
+					V_ADDRESS: [{ required: true,validator: validateVaddress}],//地址
+					V_ZIPCODE: [{ required: true,validator: validateVzipcode}],//邮编
+					V_PERSON: [{ required: true,validator: validateVperson}],//联系人姓名
+					V_PHONE: [{ required: true,validator: validateVphone}],//联系人电话
 					R_VENDOR: [{ required: true, message: '必填', trigger: 'blur' }],//责任单位
 					VENDOR: [{ required: true, message: '必填', trigger: 'blur' }],//委托单位编号
-					P_NAME: [{ required: true, message: '必填', trigger: 'blur' }],//生产单位名称
+					P_NAME: [{ required: true,validator: validatePname}],//生产单位名称
 					PRODUCT_UNIT:[{required: true, message: '必填', trigger: 'blur'}],//生成单位编号
-					ITEM_NAME: [{ required: true, message: '必填', trigger: 'blur' }],//名称
+					ITEM_NAME: [{ required: true,validator: validateItemname}],//样品名称
 					ITEM_ID: [{ required: true, message: '必填', trigger: 'blur' }],//标识
 					ITEM_MODEL: [{ required: true, message: '必填', trigger: 'blur' }],//型号
 					ITEM_QUALITY: [{ required: true, message: '必填', trigger: 'blur' }],//数量
 //					ITEM_STATUS: [{ required: true, message: '必填', trigger: 'blur' }],//样品信息状态
 					ITEM_SECRECY: [{ required: true, message: '必填', trigger: 'blur' }],//保密要求
-					ITEM_METHOD: [{ required: true, message: '必填', trigger: 'blur' }],//取样方式
-					ITEM_DISPOSITION: [{ required: true, message: '必填', trigger: 'blur' }],//检后处理
+					ITEM_METHOD: [{ required: true, message: '必填', trigger: 'change' }],//取样方式
+					ITEM_DISPOSITION: [{ required: true, message: '必填', trigger: 'change' }],//检后处理
 					REMARKS: [{ required: true, message: '必填', trigger: 'blur' }],//抽样方案/判定依据
 					COMPDATE: [{ required: true, message: '必填', trigger: 'blur' }],//完成日期
 					PROXYNUM: [{ required: true, message: '必填', trigger: 'blur' }],//编号
@@ -903,7 +952,8 @@
 			reset() {					
 				this.dataInfo={
 					VERSION: '1',
-					STATUS: '草稿',
+					STATUS: '1',
+					STATUSDesc:'草稿',
 					V_NAME:'',
 					MEMO:'',
 					LEADER:'',
@@ -922,7 +972,7 @@
 				}
 			},
 			//生成委托书
-			build(dataInfo){
+			build(){
 				var dataid = this.dataInfo.ID;
 					var Url = this.basic_url + '/api-apps/app/inspectPro/operate/createWorkorder?ID='+dataid;
 					this.$axios.get(Url, {}).then((res) => {
@@ -1042,6 +1092,7 @@
 			detailgetData() {
 			var url = this.basic_url +'/api-apps/app/inspectPro/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
+					console.log(res)
 					this.dataInfo = res.data;
 					this.show = true;
 					//深拷贝数据
@@ -1144,6 +1195,7 @@
 				this.noviews = false;
 				this.edit = true;
 				this.noedit = true;
+				this.isEditing=false;
 				this.detailgetData();
 				//判断启动流程和审批的按钮是否显示
 				var url = this.basic_url + '/api-apps/app/inspectPro/flow/isStart/'+dataid;
@@ -1188,8 +1240,8 @@
 				$(".mask_div").css("top", "100px");
 			},
 			// 保存users/saveOrUpdate
-			save(dataInfo) {
-				this.$refs['dataInfo'].validate((valid) => {
+			save() {
+				this.$refs.dataInfo.validate((valid) => {
 			        if (valid) {
 						if(this.dataInfo.INSPECT_PROXY_BASISList.length<=0&&this.dataInfo.INSPECT_PROXY_PROJECList.length<=0&&this.dataInfo.CHECK_PROXY_CONTRACTList.length<=0){
 			        		this.$message({
@@ -1198,8 +1250,8 @@
 							});
 							return false;
 			        	}else{
-							this.dataInfo.ITEM_STATUS=this.dataInfo.ITEM_STATUS==1;
-							this.dataInfo.MESSSTATUS= this.dataInfo.MESSSTATUS==1;//信息状态
+//							this.dataInfo.ITEM_STATUS=this.dataInfo.ITEM_STATUS==1;
+//							this.dataInfo.MESSSTATUS= this.dataInfo.MESSSTATUS==1;//信息状态
 							console.log(this.dataInfo);
 							var url = this.basic_url + '/api-apps/app/inspectPro/saveOrUpdate';
 							this.$axios.post(url, this.dataInfo).then((res) => {
@@ -1230,14 +1282,14 @@
 			        }
 				});
 			},
-			saveAndUpdate(dataInfo){
-				this.save(dataInfo);
+			saveAndUpdate(){
+				this.save();
 				if(this.falg){
 					this.show = false;
 				}
 			},
-			saveAndSubmit(dataInfo){
-				this.save(dataInfo);
+			saveAndSubmit(){
+				this.save();
 				this.show = true;			
 			},
 			handleClose(done) {

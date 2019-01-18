@@ -431,6 +431,7 @@
 					    "S_NUM": row.S_NUM,
 						"S_NAME": row.S_NAME,
 						"STATUS": row.STATUS,
+						"DEPTID": row.DEPTID,
 						"RELEASETIME": row.RELEASETIME,
 						"STARTETIME": row.STARTETIME,
 						"ENTERBY": row.ENTERBY,

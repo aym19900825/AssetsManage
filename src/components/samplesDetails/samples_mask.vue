@@ -187,7 +187,7 @@
 								</el-collapse-item>
 								<el-collapse-item title="样品" name="2">								
 									<div class="table-func">
-										<el-button type="success" size="mini" round @click="addfield">
+										<el-button type="success" size="mini" round @click="addfield"v-show="!viewtitle">
 											<i class="icon-add"></i>
 											<font>新建行</font>
 										</el-button>
@@ -258,7 +258,7 @@
 									    <el-table-column fixed="right" label="操作" width="100px">
 									      <template slot-scope="scope">
 									        <el-button @click = "deleteRow(scope.$index, samplesForm.ITEM_LINEList)" type="text" size="small">
-									          移除
+									          <i class="icon-trash red"></i>
 									        </el-button>
 									      </template>
 									    </el-table-column>
@@ -412,6 +412,62 @@
 		 	},
 		 },
 		data() {
+			var validateProxynum = (rule, value, callback) => {//委托书编号
+                if (this.samplesForm.PROXYNUM === undefined || this.samplesForm.PROXYNUM === '' || this.samplesForm.PROXYNUM === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
+			var validateVendor = (rule, value, callback) => {//委托单位编号
+                if (this.samplesForm.VENDOR === undefined || this.samplesForm.VENDOR === '' || this.samplesForm.VENDOR === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
+			var validateVname = (rule, value, callback) => {//委托单位名称
+                if (this.samplesForm.V_NAME === undefined || this.samplesForm.V_NAME === '' || this.samplesForm.V_NAME === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
+			var validateProcompany = (rule, value, callback) => {//生产单位编号
+                if (this.samplesForm.PRODUCT_COMPANY === undefined || this.samplesForm.PRODUCT_COMPANY === '' || this.samplesForm.PRODUCT_COMPANY === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
+			var validatePname = (rule, value, callback) => {//生产单位名称
+                if (this.samplesForm.P_NAME === undefined || this.samplesForm.P_NAME === '' || this.samplesForm.P_NAME === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
+			var validateDescri = (rule, value, callback) => {//样品名称
+                if (this.samplesForm.DESCRIPTION === undefined || this.samplesForm.DESCRIPTION === '' || this.samplesForm.DESCRIPTION === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
+			var validateProcode  = (rule, value, callback) => {//产品标识代码
+                if (this.samplesForm.PRODUCT_CODE === undefined || this.samplesForm.PRODUCT_CODE === '' || this.samplesForm.PRODUCT_CODE === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
+			var validateType = (rule, value, callback) => {//类别
+                if (this.samplesForm.TYPE === undefined || this.samplesForm.TYPE === '' || this.samplesForm.TYPE === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
 			return {
 				loadSign:true,//加载
 				commentArr:{},
@@ -463,14 +519,15 @@
 				commentArr:{},//下拉加载
 				tips:'1',
 				rules: { //定义需要校验数据的名称
-					VENDOR: [{ required: true, message: '请填写委托单位编号', trigger: 'blur' }],
-					V_NAME: [{ required: true, message: '请填写委托单位名称', trigger: 'blur' }],
-					PRODUCT_COMPANY: [{ required: true, message: '请填写生产单位编号', trigger: 'blur' }],
-					P_NAME: [{ required: true, message: '请填写生产单位名称', trigger: 'blur' }],
-					DESCRIPTION: [{ required: true, message: '请填写样品名称', trigger: 'blur' }],
-					PRODUCT_CODE: [{ required: true, message: '请填写产品标识代码', trigger: 'blur' }],
+					PROXYNUM: [{ required: true,validator: validateProxynum}],//委托书编号
+					VENDOR: [{ required: true,validator: validateVendor}],//委托单位编号
+					V_NAME: [{ required: true,validator: validateVname}],//委托单位名称
+					PRODUCT_COMPANY: [{ required: true,validator: validateProcompany}],//生产单位编号
+					P_NAME: [{ required: true,validator: validatePname}],//生产单位名称
+					DESCRIPTION: [{ required: true,validator: validateDescri}],//样品名称
+					PRODUCT_CODE: [{ required: true,validator: validateProcode}],//产品标识代码
 					SN: [{ required: true, message: '必填', trigger: 'blur' }],
-					TYPE: [{ required: true, message: '请选择类别', trigger: 'change' }],
+					TYPE: [{ required: true,validator: validateType}],//类别
 					QUATITY: [{ required: true, message: '请填写数量', trigger: 'blur' }],
 					ACCEPTDATE: [{ required: true, message: '入库时间不能为空', trigger: 'blur' }],
 					ACCEPT_DATE: [{ required: true, message: '收样日期不能为空', trigger: 'blur' }],

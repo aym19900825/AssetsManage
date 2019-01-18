@@ -175,6 +175,13 @@
 					}
 				}, 1000);
 			};
+			var validateAname = (rule, value, callback) => {//类别
+                if (this.dataInfo.A_NAME === undefined || this.dataInfo.A_NAME === '' || this.dataInfo.A_NAME === null) {
+                    callback(new Error('请选择设备名称'));
+                }else {
+                    callback();
+                }
+            };
 			return {
 				loadSign: true, //加载
 				commentArr: {},
@@ -200,8 +207,8 @@
 					ASSETNUM: [
 						{ required: true, message: '请输入设备编号', trigger: 'blur' },
 					],
-					A_NAME: [
-						{ required: true, message: '请输入设备名称', trigger: 'blur' },
+					A_NAME: [//设备名称
+						{ required: true,validator: validateAname},
 					],
 					MODEL: [
 						{ required: true, message: '请选择规格型号', trigger: 'blur' },

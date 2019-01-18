@@ -1,80 +1,81 @@
 <template>
 <!-- 溯源记录 -->
 	<div>
-		<div class="mask" v-show="show"></div>
-		<div class="mask_div" v-show="show">
-			<!---->
-			<div class="mask_title_div clearfix">
-				<div class="mask_title" v-show="addtitle">添加溯源记录</div>
-					<div class="mask_title" v-show="modifytitle">修改溯源记录</div>
-					<div class="mask_title" v-show="viewtitle">查看溯源记录</div>
-				<div class="mask_anniu">
-					<span class="mask_span mask_max" @click='toggle'>
-						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
-					</span>
-					<span class="mask_span" @click='close'>
-						<i class="icon-close1"></i>
-					</span>
+		<div class="mask" v-if="show"></div>
+		<div class="mask_divbg" v-if="show">
+			<div class="mask_div">
+				<div class="mask_title_div clearfix">
+					<div class="mask_title" v-show="addtitle">添加溯源记录</div>
+						<div class="mask_title" v-show="modifytitle">修改溯源记录</div>
+						<div class="mask_title" v-show="viewtitle">查看溯源记录</div>
+					<div class="mask_anniu">
+						<span class="mask_span mask_max" @click='toggle'>
+							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
+						</span>
+						<span class="mask_span" @click='close'>
+							<i class="icon-close1"></i>
+						</span>
+					</div>
 				</div>
-			</div>
-			<div class="mask_content">
-				<el-form :model="dataInfo" :rules="rules"   ref="dataInfo" label-width="100px" class="demo-user">
-					<div class="accordion">
+				<div class="mask_content">
+					<el-form :model="dataInfo" :rules="rules"   ref="dataInfo" label-width="100px" class="demo-user">
+						<div class="accordion">
 
-						<!-- 设备基本信息 -->
-						<el-collapse v-model="activeNames">
-							<el-collapse-item name="1">
-								<el-row :gutter="20" class="pb10">
-									<el-col :span="5" class="pull-right">
-										<el-input v-model="dataInfo.ASSETNUM" :disabled="true">
-											<template slot="prepend">设备编号</template>
-										</el-input>
-									</el-col>
-								</el-row>
-								<el-form-item v-for="item in basicInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" label-width="160px">
-									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" style="width: 220px;" :disabled="noedit"></el-input>
-									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'&&item.prop=='model'" style="width: 220px;" :disabled="true"></el-input>
-									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'" :disabled="noedit"></el-input>
-									<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" :disabled="noedit">
-									</el-date-picker>
-									<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'" :disabled="noedit">
-										<el-radio :label="it.label" v-for="it in item.opts" :key="it.id"></el-radio>
-									</el-radio-group>
-									<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'" @change="selChange" :disabled="noedit">
-										<el-option v-for="item in assets"
-										:key="item.ID"
-										:label="item.DESCRIPTION"
-										:value="item.DESCRIPTION">
-										</el-option>
-									</el-select>
-								</el-form-item>
-							</el-collapse-item>
-							<el-collapse-item title="文件" name="2">
-								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
-							</el-collapse-item>
-							<!-- 其他信息 -->
-							<el-collapse-item title="其他" name="3" v-show="!addtitle">
-								<el-form-item v-for="item in otherInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-if="item.prop=='DEPARTMENT'" v-show="dept">
-									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.prop=='DEPARTMENT'" disabled></el-input>
-								</el-form-item>	
-								<el-form-item v-for="item in otherInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-show="views">
-									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" disabled></el-input>
-									<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" disabled style="width:100%">
-									</el-date-picker>
-								</el-form-item>		
-							</el-collapse-item>
-						</el-collapse>
-					</div>
+							<!-- 设备基本信息 -->
+							<el-collapse v-model="activeNames">
+								<el-collapse-item name="1">
+									<el-row :gutter="20" class="pb10">
+										<el-col :span="5" class="pull-right">
+											<el-input v-model="dataInfo.ASSETNUM" :disabled="true">
+												<template slot="prepend">设备编号</template>
+											</el-input>
+										</el-col>
+									</el-row>
+									<el-form-item v-for="item in basicInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" label-width="160px">
+										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" style="width: 220px;" :disabled="noedit"></el-input>
+										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'&&item.prop=='model'" style="width: 220px;" :disabled="true"></el-input>
+										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'" :disabled="noedit"></el-input>
+										<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" :disabled="noedit">
+										</el-date-picker>
+										<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'" :disabled="noedit">
+											<el-radio :label="it.label" v-for="it in item.opts" :key="it.id"></el-radio>
+										</el-radio-group>
+										<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'" @change="selChange" :disabled="noedit">
+											<el-option v-for="item in assets"
+											:key="item.ID"
+											:label="item.DESCRIPTION"
+											:value="item.DESCRIPTION">
+											</el-option>
+										</el-select>
+									</el-form-item>
+								</el-collapse-item>
+								<el-collapse-item title="文件" name="2">
+									<doc-table ref="docTable" :docParm = "docParm"  @saveParent = "save"></doc-table>
+								</el-collapse-item>
+								<!-- 其他信息 -->
+								<el-collapse-item title="其他" name="3" v-show="!addtitle">
+									<el-form-item v-for="item in otherInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-if="item.prop=='DEPARTMENT'" v-show="dept">
+										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.prop=='DEPARTMENT'" disabled></el-input>
+									</el-form-item>	
+									<el-form-item v-for="item in otherInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-show="views">
+										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" disabled></el-input>
+										<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" disabled style="width:100%">
+										</el-date-picker>
+									</el-form-item>		
+								</el-collapse-item>
+							</el-collapse>
+						</div>
 
-					<div class="el-dialog__footer" v-show="noviews">
-						<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
-						<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并继续</el-button>
-						<el-button @click='close'>取消</el-button>
-						<!-- <el-button type="primary" @click='submitForm'>提交</el-button> -->
-					</div>
-				</el-form>
+						<div class="el-dialog__footer" v-show="noviews">
+							<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
+							<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并继续</el-button>
+							<el-button @click='close'>取消</el-button>
+							<!-- <el-button type="primary" @click='submitForm'>提交</el-button> -->
+						</div>
+					</el-form>
+				</div>
+				<!--底部-->
 			</div>
-			<!--底部-->
 		</div>
 	</div>
 </template>
@@ -283,7 +284,7 @@
 				otherInfo: [
 					{
 						label: '录入人',
-						prop: 'ENTERBY',
+						prop: 'ENTERBYDesc',
 						width: '30%',
 						type: 'input',
 						displayType: 'inline-block'
@@ -297,14 +298,14 @@
 					},
 					{
 						label: '机构',
-						prop: 'DEPARTMENT',
+						prop: 'DEPTIDDesc',
 						width: '30%',
 						type: 'input',
 						displayType: 'inline-block'
 					},
 					{
 						label: '修改人',
-						prop: 'CHANGEBY',
+						prop: 'CHANGEBYDesc',
 						width: '30%',
 						type: 'input',
 						displayType: 'inline-block'
@@ -361,7 +362,7 @@
 					'STATUS': '1',	//活动1，不活动0
 					'ENTERBY': '',
 					'ENTERDATE': '',	
-					'DEPARTMENT': '',
+					'DEPTID': '',
 				},
 				assets: [],
 				addtitle:true,
@@ -378,22 +379,19 @@
 			};
 		},
 		methods: {
-			getUser(){
+			getUser(opt){
+				console.log(opt);
 				var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url,{}).then((res) => {
 					if(opt=='new'){
-						this.dataInfo.ENTERBY = res.data.username;
+						this.dataInfo.DEPTID = res.data.deptId;
+						this.dataInfo.ENTERBY = res.data.id;
 						this.dataInfo.ENTERDATE = this.getToday();
-					}else{
-						this.dataInfo.CHANGEBY = res.data.username;
-				        this.dataInfo.CHANGEDATE = this.getToday();
-						this.dataInfo.DEPARTMENT = res.data.deptName;
-
-						this.docParm.userid = res.data.id;
-						this.docParm.username = res.data.username;
-						this.docParm.deptid = res.data.deptId;
-						this.docParm.deptfullname = res.data.deptName;
 					}
+					this.docParm.userid = res.data.id;
+					this.docParm.username = res.data.username;
+					this.docParm.deptid = res.data.deptId;
+					this.docParm.deptfullname = res.data.deptName;
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -439,9 +437,9 @@
 
 				this.docParm = {
 					'model': 'new',
-					'appname': 'pmRecord',
+					'appname': '溯源记录',
 					'recordid': 1,
-					'appid': 70
+					'appid': 51
 				};
 				this.getUser('new');
 			},
@@ -464,9 +462,9 @@
 				var _this = this;
 				setTimeout(function(){
 					_this.docParm.model = 'edit';
-					_this.docParm.appname = 'pmRecord';
+					_this.docParm.appname = '溯源记录';
 					_this.docParm.recordid = _this.detailData.ID;
-					_this.docParm.appid = 70;
+					_this.docParm.appid = 51;
 					_this.$refs.docTable.getData();
 				},100);
 				this.dataInfo = this.detailData;
@@ -515,7 +513,7 @@
 					'ENTERDATE': '',	
 					'DEPARTMENT': '',
 				}
-				this.$refs['dataInfo'].resetFields();
+				//this.$refs['dataInfo'].resetFields();
 				// this.show = false;
 			},
 			toggle(e) { //大弹出框大小切换
@@ -530,7 +528,6 @@
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
-				$(".mask_div").css("margin", "0%");
 				$(".mask_div").css("top", "60px");
 			},
 
@@ -539,14 +536,19 @@
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
-				$(".mask_div").css("margin", "7% 10%");
-				$(".mask_div").css("top", "0");
+				$(".mask_div").css("top", "100px");
 			},
 
-			save(dataInfo) {
+			save(opt) {
 				var _this = this;
 				var url = this.basic_url + '/api-apps/app/pmRecord/saveOrUpdate';
 				this.$refs['dataInfo'].validate((valid) => {
+					if(!valid && opt == 'docUpload'){
+						this.$message({
+							message: '请先正确填写信息，再进行文档上传',
+							type: 'warning'
+						});
+					}
 					if (valid) {
 						this.$axios.post(url, _this.dataInfo).then((res) => {
 							if(res.data.resp_code == 0) {
@@ -554,8 +556,15 @@
 									message: '保存成功',
 									type: 'success',
 								});
-								this.$emit('request');
-								this.resetForm();
+								if(opt == 'docUpload'){
+									this.docParm.recordid = res.data.datas.id;
+									this.docParm.model = 'edit';
+									this.$refs.docTable.autoLoad();
+									this.dataInfo.ID = res.data.datas.id;
+								}else{
+									this.$emit('request');
+									this.resetForm();
+								}
 							}else{
 
 							}

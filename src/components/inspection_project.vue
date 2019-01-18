@@ -6,10 +6,10 @@
 	</div>
 	<div class="contentbg">
 		<!--左侧菜单调用 Begin-->
-			<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left> 
+			<!-- <navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left>  -->
 		<!--左侧菜单调用 End-->
 		<!--右侧内容显示 Begin-->
-		<div class="wrapper wrapper-content wrapperall">
+		<div class="wrapper wrapper-content wrapperall" :style="{height: fullHeight}">
 			<div class="ibox-content">
 				<!--部门名称 Begin-->
 				<el-row :gutter="0">
@@ -22,10 +22,14 @@
 								</el-button>
 							</div>
 						<el-form :inline="true" :model="formInline">
-							<el-form-item label="部门名称">
-								<el-select v-model="formInline.DEPARTMENT" placeholder="请选择部门" @change="requestData_productType2">
-									<el-option v-for="item in DEPARTMENTS" :key="item.value" :label="item.label" :value="item.value">{{ item.label }}</el-option>
+							<el-form-item label="部门名称" prop="DEPTID">
+								<el-select v-model="formInline.DEPTID" placeholder="请选择部门" @change="requestData_productType2">
+									<el-option v-for="(data,index) in Select_DEPTID" :key="index" :value="data.id" :label="data.fullname"></el-option>
 								</el-select>
+
+								<!-- <el-select v-model="formInline.DEPTID" placeholder="请选择部门" v-else disabled @change="requestData_productType2">
+									<el-option v-for="(data,index) in Select_DEPTID" :key="index" :value="data.id" :label="data.fullname"></el-option>
+								</el-select> -->
 							</el-form-item>
 						</el-form>
 						</div>
@@ -50,7 +54,7 @@
 
 								  	<el-table-column label="类别编号" sortable width="100" prop="NUM" class="pl30">
 								      <template slot-scope="scope">
-								        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+								        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'">
 								        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" placeholder="自动生成" :disabled="true"></el-input><span class="blue" @click="viewchildRow(scope.row.ID,scope.row.NUM)" v-else="v-else">{{scope.row.NUM}}</span>
 										</el-form-item>
 								      </template>
@@ -59,23 +63,12 @@
 								    <el-table-column label="类别名称" sortable prop="TYPE">
 								      <template slot-scope="scope">
 								        <el-form-item :prop="'inspectionList.'+scope.$index + '.TYPE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-								        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.TYPE" placeholder="请输入内容">
-								        		<el-button slot="append" icon="icon-search"></el-button>
+								        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.TYPE" placeholder="请选择" :disabled="true">
+								        		<el-button slot="append" icon="icon-search" @click="addprobtn(scope.row)"></el-button>
 								        	</el-input><span v-else="v-else">{{scope.row.TYPE}}</span>
 										</el-form-item>
 								      </template>
 								    </el-table-column>
-
-								    <!-- <el-table-column label="所属部门" sortable width="160" prop="DEPARTMENT">
-								      <template slot-scope="scope">
-								        <el-form-item :prop="'inspectionList.'+scope.$index + '.DEPARTMENT'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-								        	<el-select v-if="scope.row.isEditing" v-model="scope.row.DEPARTMENT" placeholder="请选择">
-												<el-option v-for="item in DEPARTMENTS" :key="item.value" :label="item.label" :value="item.label"></el-option>
-											</el-select><span v-else="v-else">{{scope.row.DEPARTMENT}}</span>
-										</el-form-item>
-								      </template>
-								    </el-table-column> -->
-								    <!-- @cell-click="iconOperation" -->
 
 								    <el-table-column prop="iconOperation" fixed="right" label="操作" width="50">
 								      <template slot-scope="scope">
@@ -119,7 +112,7 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<el-tabs>
-						    	<el-tab-pane label="专业组"><professionGrochild ref="professionGrochild"></professionGrochild></el-tab-pane>
+						    	<el-tab-pane label="专业组"><professionGrochild ref="professionGrochild" :parentIds="formInline.DEPTID"></professionGrochild></el-tab-pane>
 						    	<el-tab-pane label="检验/检测方法"><inspectionMet2child ref="inspectionMet2child"></inspectionMet2child></el-tab-pane>
 						    	<el-tab-pane label="原始数据模板"><rawDataTem2child ref="rawDataTem2child"></rawDataTem2child></el-tab-pane>
 						    	<el-tab-pane label="检验/检测报告模板"><inspectionRepTem2child ref="inspectionRepTem2child"></inspectionRepTem2child></el-tab-pane>
@@ -132,6 +125,33 @@
 		</div>
 	<!--右侧内容显示 End-->
 	</div>
+	<!-- 产品类别 Begin -->
+		<el-dialog :modal-append-to-body="false" title="选择基础数据——产品类别" height="300px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
+			<!-- 第二层弹出的表格 Begin-->
+			<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table-column type="selection" fixed width="55" align="center">
+				</el-table-column>
+				<el-table-column label="编码" width="155" sortable prop="NUM">
+				</el-table-column>
+				<el-table-column label="名称" sortable prop="TYPE">
+				</el-table-column>
+				<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
+				</el-table-column>
+				<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc">
+				</el-table-column>
+				<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
+				</el-table-column>
+				<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat">
+				</el-table-column>
+			</el-table>
+			
+			<!-- 表格 End-->
+			<span slot="footer" class="dialog-footer">
+		       <el-button @click="dialogVisible3 = false">取 消</el-button>
+		       <el-button type="primary" @click="addproclass">确 定</el-button>
+		    </span>
+		</el-dialog>
+		<!-- 产品类别 End -->
 </div>
 </template>
 <script>
@@ -167,33 +187,18 @@
 		data() {
 			return {
 				basic_url: Config.dev_url,
-				DEPARTMENTS: [{
-					value: '总公司',
-					label: '总公司'
-					}, {
-					value: '金化站',
-					label: '金化站'
-					}, {
-					value: '运包站',
-					label: '运包站'
-					}, {
-					value: '通号站',
-					label: '通号站'
-					}, {
-					value: '机辆站',
-					label: '机辆站'
-					}, {
-					value: '接触网站',
-					label: '接触网站'
-				}],
+      			Select_DEPTID:[],//获取机构部门
       			fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				formInline: {//选择站点显示数据
-					DEPARTMENT: '金化站',//this.currentDept,
+					DEPTID: '',//this.currentDept,
 				},
 				productType2Form:{//产品类别数据组
 					inspectionList: []
 				},
-
+				departmentId: '',//当前用户机构号
+				categoryList:[],//获取产品类型数据
+				catedata:'',//获取产品类别一条数据放到table行中
+				selData:[],
 				isEditing: '',
 				loadSign:true,//加载
 				commentArr:{},//下拉加载
@@ -219,9 +224,14 @@
 				product2Id: 0,//获取子表产品ID
 				inspectionSta2Id: 0,//获取子表检验/检测标准ID
 				inspectionPro2Id: 0,//获取子表检验/检测项目ID
+				dialogVisible3: false, //对话框
 			}
 		},
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    return 'text-align:center'
+			},
 			childMsd_product2(data){//赋值给子表产品ID
 				this.$refs.inspectionSta2child.viewfield_inspectionSta2(data.id,data.num);
 			},
@@ -243,6 +253,11 @@
 					row.isEditing = !row.isEditing
 				}
 			},
+			//获取导入表格勾选信息
+			SelChange(val) {
+				this.selData = val;
+			},
+			
 			
 			// modifyversion (row) {//点击修改后给当前修改人和修改时间赋值				
 			// 	row.isEditing = !row.isEditing				
@@ -261,18 +276,50 @@
 			// },
 
 			loadMore () {//表格滚动加载
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page.currentPage++
-			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     this.requestData_productType2()
-			   }
+			   // if (this.loadSign) {
+			   //   this.loadSign = false
+			   //   this.page.currentPage++
+			   //   if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+			   //     return
+			   //   }
+			   //   setTimeout(() => {
+			   //     this.loadSign = true
+			   //   }, 1000)
+			   //   this.requestData_productType2()
+			   // }
 			 },
+
+			 addprobtn(row){//查找基础数据中的类别名称
+			 	this.catedata = row;//弹出框中选中的数据赋值给到table行中
+				this.dialogVisible3 = true;
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				};
+				this.$axios.get(this.basic_url + '/api-apps/app/productType?DEPTID=' + this.departmentId, {
+					params: data
+				}).then((res) => {
+					// console.log(res.data);
+					this.page.totalCount = res.data.count;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
+					}
+					this.commentArr[this.page.currentPage] = res.data.data
+					let newarr = []
+					for(var i = 1; i <= totalPage; i++) {
+						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+							for(var j = 0; j < this.commentArr[i].length; j++) {
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					this.categoryList = newarr;
+				}).catch((wrong) => {})
+			},
 			sizeChange(val) {//页数
 		      this.page.pageSize = val;
 		      this.requestData_productType2();
@@ -300,14 +347,71 @@
 			indexMethod(index) {
 				return index + 1;
 			},
-			
-			requestData_productType2(index) {//加载数据
+			getDEPTID() {//获取机构部门数据
+				var url = this.basic_url + '/api-user/users/currentMap';
+	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+                	this.departmentId = res.data.deptId;
+                	var departName = res.data.deptName;
+					var currenturl = this.basic_url + '/api-user/depts/findByPid/' + this.departmentId;
+					this.$axios.get(currenturl, {}).then((res) => {
+						console.log(res.data);
+						this.Select_DEPTID = res.data;
+						if (this.departmentId == 128) {
+							this.formInline.DEPTID = res.data[0].id;
+						} else {
+							this.Select_DEPTID.push({
+								id: this.departmentId,
+								fullname: departName
+							});
+							this.formInline.DEPTID = this.departmentId;
+						}
+						this.requestData_productType2();
+					}).catch(error => {
+						console.log('请求失败');
+					})
+
+				 }).catch((err) => {
+	                this.$message({
+	                    message: '网络错误，请重试',
+	                    type: 'error'
+	                });
+	            });
+			},
+
+			// getData(){//获取当前用户信息
+	  //           var url = this.basic_url + '/api-user/users/currentMap';
+	  //           this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+   //                  this.departmentIds = res.data.deptId;
+                    	
+   //                  	var depturl = this.basic_url + '/api-user/depts/'+ this.departmentIds;
+			//             this.$axios.get(depturl, {}).then((res) => {//根据当前用户信息查询它的组织机构
+		 //                    // this.formInline.DEPTID = res.data.id;
+		 //                    // console.log(this.departmentId);
+			//             }).catch((err) => {
+			//                 this.$message({
+			//                     message: '网络错误，请重试',
+			//                     type: 'error'
+			//                 });
+			//             });
+
+
+	  //           }).catch((err) => {
+	  //               this.$message({
+	  //                   message: '网络错误，请重试',
+	  //                   type: 'error'
+	  //               });
+	  //           });
+
+	            
+	  //       },
+			requestData_productType2(val) {//加载数据
 				var _this = this;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					DEPARTMENT: this.formInline.DEPARTMENT,//点击部门名称下拉菜单显示数据
+					DEPTID: this.formInline.DEPTID,//点击部门名称下拉菜单显示数据
 				}
+				
 				var url = this.basic_url + '/api-apps/app/productType2';
 				this.$axios.get(url, {
 					params: data
@@ -334,18 +438,28 @@
 						}
 					}
 					
-					this.productType2Form.inspectionList = newarr;
+					this.productType2Form.inspectionList = newarr;//滚动加载更多
 
-					setTimeout(function(){
-						_this.viewchildRow(_this.productType2Form.inspectionList[0].ID,_this.productType2Form.inspectionList[0].NUM);
-					},0);
+					//默认主表第一条数据
+					if(this.productType2Form.inspectionList.length > 0){
+						this.viewchildRow(this.productType2Form.inspectionList[0].ID,this.productType2Form.inspectionList[0].NUM);
+					}else{
+						this.viewchildRow('null');
+					}
+					
 
 					this.$refs.singleTable.setCurrentRow(this.productType2Form.inspectionList[0]);//默认选中第一条数据
-
 				}).catch((wrong) => {})
 			},
 			
-			formatter(row, column) {
+			handleClose(done) {//关闭选择产品类别弹出框
+				this.$confirm('确认关闭？')
+					.then(_ => {
+						done();
+					})
+					.catch(_ => {});
+			},
+			formatter(row, column) {//禁止产品类别行编辑
 				return row.enabled;
 			},
 			addfield_productType2() { //插入行到产品类别Table中
@@ -360,20 +474,20 @@
 				}
 				if (isEditingflag==false){
                 	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-                		console.log(res);
-                		var currentUser, currentDate, currentDept
+                		// console.log(res);
+                		var currentUser, currentDate, currentDept;
 						this.currentUser=res.data.nickname;
-						this.currentDept=res.data.deptName;
+						this.currentDept=res.data.deptid;
 						var date=new Date();
 						this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 						var obj = {
 							"TYPE": '',
-							"STATUS": '活动',
+							"STATUS": 1,
 							"NUM": '',
-							"VERSION": 1,
-							"DEPARTMENT": this.currentDept,
-							"CHANGEBY": this.currentUser,
-							"CHANGEDATE": this.currentDate,
+							"VERSION": '',
+							"DEPTID": this.currentDept,
+						    "ENTERBY": this.currentUser,
+						    "ENTERDATE": this.currentDate,
 							"isEditing": true,
 						};
 						this.productType2Form.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
@@ -397,10 +511,10 @@
 						"TYPE": row.TYPE,
 					    "NUM": row.NUM,
 					    "VERSION": row.VERSION,
-					    "DEPARTMENT": row.DEPARTMENT,
+					    "DEPTID": row.DEPTID,
 						"STATUS": row.STATUS,
-						"CHANGEBY": row.CHANGEBY,
-					    "CHANGEDATE": row.CHANGEDATE,
+					    "ENTERBY": row.ENTERBY,
+					    "ENTERDATE": row.ENTERDATE,
 					}
 					this.$axios.post(url, submitData).then((res) => {
 						if(res.data.resp_code == 0) {
@@ -447,18 +561,26 @@
 
             	});
 			},
-			
+			addproclass() { //小弹出框确认按钮事件
+				this.dialogVisible3 = false;
+				this.catedata.NUM = this.selData[0].ID;
+				this.catedata.TYPE = this.selData[0].TYPE;
+				this.catedata.VERSION = this.selData[0].VERSION;
+				this.$emit('request');
+			},
 			viewchildRow(id,num) {//查看子项数据
 				this.$refs.product2child.viewfield_product2(id,num);
 			},
-			childByValue:function(childValue) {
+			// childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
-        		this.$refs.navsheader.showClick(childValue);
-      		},
+        		// this.$refs.navsheader.showClick(childValue);
+      		// },
 		},
 		
 		mounted() {
-			this.requestData_productType2();
+			this.getDEPTID();
+			// this.getData();
+			// this.requestData_productType2();
 		},
 	}
 </script>

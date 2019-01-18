@@ -1,127 +1,129 @@
 <template>
 	<div>
-		<div class="mask" v-show="show"></div>
-		<div class="mask_div" v-show="show">
-			<div class="mask_title_div clearfix">
-				<div class="mask_title">配置关系</div>
-				<div class="mask_anniu">
-					<span class="mask_span mask_max" @click='toggle'>						 
-						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
-					</span>
-					<span class="mask_span" @click='close'>
-						<i class="icon-close1"></i>
-					</span>
+		<div class="mask" v-if="show"></div>
+		<div class="mask_divbg" v-if="show">
+			<div class="mask_div">
+				<div class="mask_title_div clearfix">
+					<div class="mask_title">配置关系</div>
+					<div class="mask_anniu">
+						<span class="mask_span mask_max" @click='toggle'>						 
+							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
+						</span>
+						<span class="mask_span" @click='close'>
+							<i class="icon-close1"></i>
+						</span>
+					</div>
 				</div>
-			</div>
-			<div class="mask_content">
-				<el-form :model="dataInfo" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
-					<div class="accordion" id="information">
-							<el-collapse v-model="activeNames">
-								<el-collapse-item title="配置关系" name="2">
-									<!-- 字段列表 Begin-->
-									<div class="table-func">
-										<el-button type="success" size="mini" round @click="addfield">
-											<i class="icon-add"></i>
-											<font>新建</font>
-										</el-button>
-									</div>
-									<el-form :data="fieldList">
-					                <el-form-item>
-					                	<el-row :gutter="20">
-					                		<el-col :span="4">
-					                            <el-form-item label="关系名称"></el-form-item>
-					                        </el-col>
-					                        <el-col :span="5">
-					                            <el-form-item label="父表对象"></el-form-item>
-					                        </el-col>
-					                        <el-col :span="5">
-					                            <el-form-item label="字表对象"></el-form-item>
-					                        </el-col>
-					                        <el-col :span="4">
-					                            <el-form-item label="where子句"></el-form-item>
-					                        </el-col>
-					                        <el-col :span="4">
-					                            <el-form-item label="备注"></el-form-item>
-					                        </el-col>
-					                        <el-col :span="2">
-					                            <el-form-item label="操作"></el-form-item>
-					                        </el-col>
-					                	</el-row>
-					                    <el-row :gutter="20" v-for="(item,key) in fieldList" :key="key"><!-- ：key避免重复 -->
-					                        <el-col :span="4">
-					                            <el-input type="text"  placeholder="请输入人物" v-model="item.leadname"></el-input>
-					                        </el-col>
-					                        <el-col :span="5">
-					                            <el-input v-model="item.leaddecri" :disabled="edit">
-												<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
-											</el-input>
-					                        </el-col>
-					                        <el-col :span="5">
-					                            <el-input v-model="item.leaddecri" :disabled="edit">
-												<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
+				<div class="mask_content">
+					<el-form :model="dataInfo" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
+						<div class="accordion" id="information">
+								<el-collapse v-model="activeNames">
+									<el-collapse-item title="配置关系" name="2">
+										<!-- 字段列表 Begin-->
+										<div class="table-func">
+											<el-button type="success" size="mini" round @click="addfield">
+												<i class="icon-add"></i>
+												<font>新建</font>
+											</el-button>
+										</div>
+										<el-form :data="fieldList">
+						                <el-form-item>
+						                	<el-row :gutter="20">
+						                		<el-col :span="4">
+						                            <el-form-item label="关系名称"></el-form-item>
+						                        </el-col>
+						                        <el-col :span="5">
+						                            <el-form-item label="父表对象"></el-form-item>
+						                        </el-col>
+						                        <el-col :span="5">
+						                            <el-form-item label="字表对象"></el-form-item>
+						                        </el-col>
+						                        <el-col :span="4">
+						                            <el-form-item label="where子句"></el-form-item>
+						                        </el-col>
+						                        <el-col :span="4">
+						                            <el-form-item label="备注"></el-form-item>
+						                        </el-col>
+						                        <el-col :span="2">
+						                            <el-form-item label="操作"></el-form-item>
+						                        </el-col>
+						                	</el-row>
+						                    <el-row :gutter="20" v-for="(item,key) in fieldList" :key="key"><!-- ：key避免重复 -->
+						                        <el-col :span="4">
+						                            <el-input type="text"  placeholder="请输入人物" v-model="item.leadname"></el-input>
+						                        </el-col>
+						                        <el-col :span="5">
+						                            <el-input v-model="item.leaddecri" :disabled="edit">
+													<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
 												</el-input>
-					                        </el-col>
-					                        <el-col :span="4">
-					                            <el-input type="text"  placeholder="请输入关系" v-model="item.leadprecision"></el-input>
-					                        </el-col>
-					                        <el-col :span="4">
-					                            <el-input type="text"  placeholder="请输入关系" v-model="item.leadlength"></el-input>
-					                        </el-col>
-					                        <el-col :span="2">
-					                            <i class="el-icon-delete" @click="delfield(item)" style="color: red"></i>
-					                        </el-col>
-					                    </el-row>
-					                </el-form-item>
-					            </el-form>
-								<!-- 字段列表 End -->
-								</el-collapse-item>
-							</el-collapse>
-						<!-- </div> -->
-					</div>	
-					<div class="el-dialog__footer">
-						<el-button @click='close'>取消</el-button>
-						<el-button type="primary" @click='submitForm()'>提交</el-button>
-					</div>
-				</el-form>
-			</div>
-		</div>
-		<!-- 弹出 -->
-		<el-dialog title="添加数据库表" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
-			<div class="accordion" id="information">
-				<div class="mask_tab-block">
-					<div class="mask_tab-head clearfix">
-						<div class="accordion_title">
-							<span class="accordion-toggle">导入标准字段</span>
+						                        </el-col>
+						                        <el-col :span="5">
+						                            <el-input v-model="item.leaddecri" :disabled="edit">
+													<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
+													</el-input>
+						                        </el-col>
+						                        <el-col :span="4">
+						                            <el-input type="text"  placeholder="请输入关系" v-model="item.leadprecision"></el-input>
+						                        </el-col>
+						                        <el-col :span="4">
+						                            <el-input type="text"  placeholder="请输入关系" v-model="item.leadlength"></el-input>
+						                        </el-col>
+						                        <el-col :span="2">
+						                            <i class="el-icon-delete" @click="delfield(item)" style="color: red"></i>
+						                        </el-col>
+						                    </el-row>
+						                </el-form-item>
+						            </el-form>
+									<!-- 字段列表 End -->
+									</el-collapse-item>
+								</el-collapse>
+							<!-- </div> -->
+						</div>	
+						<div class="el-dialog__footer">
+							<el-button type="primary" @click='submitForm()'>提交</el-button>
+							<el-button @click='close'>取消</el-button>
 						</div>
-						<div class="col_but" @click="col_but('col_but1')">
-							<i class="icon-arrow1-down" v-show="down"></i><i class="icon-arrow1-up" v-show="up"></i>
-						</div>
-					</div>
-					<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
-						<!-- 第二层弹出的表格 -->
-						<el-table :data="leaddata" style="width: 100%;margin: 0 auto;" :default-sort="{prop:'leaddata', order: 'descending'}" @selection-change="SelChange">
-							<el-table-column type="selection" width="55" >
-							</el-table-column>
-							<el-table-column label="字段名称" sortable width="150" prop="leadname">
-							</el-table-column>
-							<el-table-column label="字段描述" sortable width="200" prop="leaddecri">
-							</el-table-column>
-							<el-table-column label="字段类型" sortable width="150" prop="leadtype">
-							</el-table-column>
-							<el-table-column label="小数点位数" sortable width="180" prop="leadprecision">
-							</el-table-column>
-							<el-table-column label="字段长度" sortable width="100" prop="leadlength">
-							</el-table-column>
-						</el-table>
-						<!-- 表格 -->
-					</div>
+					</el-form>
 				</div>
 			</div>
-			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible = false">取 消</el-button>
-		       <el-button type="primary" @click="leadadddata">确 定</el-button>
-		    </span>
-		</el-dialog>
+			<!-- 弹出 -->
+			<el-dialog :modal-append-to-body="false" title="添加数据库表" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
+				<div class="accordion" id="information">
+					<div class="mask_tab-block">
+						<div class="mask_tab-head clearfix">
+							<div class="accordion_title">
+								<span class="accordion-toggle">导入标准字段</span>
+							</div>
+							<div class="col_but" @click="col_but('col_but1')">
+								<i class="icon-arrow1-down" v-show="down"></i><i class="icon-arrow1-up" v-show="up"></i>
+							</div>
+						</div>
+						<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
+							<!-- 第二层弹出的表格 -->
+							<el-table :data="leaddata" style="width: 100%;margin: 0 auto;" :default-sort="{prop:'leaddata', order: 'descending'}" @selection-change="SelChange">
+								<el-table-column type="selection" width="55" >
+								</el-table-column>
+								<el-table-column label="字段名称" sortable width="150" prop="leadname">
+								</el-table-column>
+								<el-table-column label="字段描述" sortable width="200" prop="leaddecri">
+								</el-table-column>
+								<el-table-column label="字段类型" sortable width="150" prop="leadtype">
+								</el-table-column>
+								<el-table-column label="小数点位数" sortable width="180" prop="leadprecision">
+								</el-table-column>
+								<el-table-column label="字段长度" sortable width="100" prop="leadlength">
+								</el-table-column>
+							</el-table>
+							<!-- 表格 -->
+						</div>
+					</div>
+				</div>
+				<span slot="footer" class="dialog-footer">
+			       <el-button @click="dialogVisible = false">取 消</el-button>
+			       <el-button type="primary" @click="leadadddata">确 定</el-button>
+			    </span>
+			</el-dialog>
+		</div>
 	</div>
 </template>
 
@@ -290,22 +292,20 @@
 					this.rebackDialog();
 				}
 			},
-			maxDialog(e) {
+			maxDialog(e) { //定义大弹出框一个默认大小
 				this.isok1 = false;
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
-				$(".mask_div").css("margin", "0%");
 				$(".mask_div").css("top", "60px");
 			},
 			//还原按钮
-			rebackDialog() {
+			rebackDialog() { //大弹出框还原成默认大小
 				this.isok1 = true;
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
-				$(".mask_div").css("margin", "7% 10%");
-				$(".mask_div").css("top", "0");
+				$(".mask_div").css("top", "100px");
 			},	
 			// 保存users/saveOrUpdate
 			submitForm() {

@@ -1,81 +1,83 @@
 <template>
 	<div>
 		<div class="mask" v-if="show"></div>
-		<div class="mask_div" v-if="show">
-			<div class="mask_title_div clearfix">
-				<div class="mask_title" v-show="addtitle">添加检验/检测报告模板</div>
-				<div class="mask_title" v-show="modifytitle">修改检验/检测报告模板</div>
-				<div class="mask_title" v-show="viewtitle">查看检验/检测报告模板</div>
-				<div class="mask_anniu">
-					<span class="mask_span mask_max" @click='toggle'>
-						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
-					</span>
-					<span class="mask_span" @click='close'>
-						<i class="icon-close1"></i>
-					</span>
+		<div class="mask_divbg" v-if="show">
+			<div class="mask_div">
+				<div class="mask_title_div clearfix">
+					<div class="mask_title" v-show="addtitle">添加检验/检测报告模板</div>
+					<div class="mask_title" v-show="modifytitle">修改检验/检测报告模板</div>
+					<div class="mask_title" v-show="viewtitle">查看检验/检测报告模板</div>
+					<div class="mask_anniu">
+						<span class="mask_span mask_max" @click='toggle'>
+							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
+						</span>
+						<span class="mask_span" @click='close'>
+							<i class="icon-close1"></i>
+						</span>
+					</div>
 				</div>
-			</div>
-			<div class="mask_content">
-				<el-form :model="CATEGORY" inline-message :rules="rules" ref="CATEGORY" label-width="100px" class="demo-adduserForm">
-					<div class="accordion" id="information">
-						<el-collapse v-model="activeNames">
-							<el-collapse-item title="检验/检测报告模板" name="1">
-								<el-row>
-									<el-col :span="8">
-										<el-form-item label="编码" prop="NUM">
-											<el-input v-model="CATEGORY.NUM" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="16">
-										<el-form-item label="模板描述" prop="DECRIPTION">
-											<el-input v-model="CATEGORY.DECRIPTION" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row>
-									<el-col :span="8" v-if="dept">
-										<el-form-item label="机构" prop="DEPTIDDesc">
-											<el-input v-model="CATEGORY.DEPTIDDesc" :disabled="edit"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-							</el-collapse-item>
-							<el-collapse-item title="文件" name="2">
-								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
-							</el-collapse-item>
-							<el-collapse-item title="其它" name="3" v-show="views">
-								<el-row>
-									<el-col :span="8">
-										<el-form-item label="录入人" prop="ENTERBYDesc">
-											<el-input v-model="CATEGORY.ENTERBYDesc" :disabled="edit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="录入时间" prop="ENTERDATE">
-											<el-input v-model="CATEGORY.ENTERDATE" :disabled="edit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="修改人" prop="CHANGEBYDesc">
-											<el-input v-model="CATEGORY.CHANGEBYDesc" placeholder="当前修改人" :disabled="edit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="修改时间" prop="CHANGEDATE">
-											<el-input v-model="CATEGORY.CHANGEDATE" placeholder="当前修改时间" :disabled="edit"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-							</el-collapse-item>
-						</el-collapse>
-					</div>
-					<div class="el-dialog__footer" v-show="noviews">
-						<el-button type="primary" @click="saveAndUpdate('CATEGORY')">保存</el-button>
-						<el-button type="success" @click="saveAndSubmit('CATEGORY')" v-show="addtitle">保存并继续</el-button>
-						<!-- <el-button v-if="modify" type="success" @click="update('CATEGORY')">启用</el-button> -->
-						<el-button @click="close">取消</el-button>
-					</div>
-				</el-form>
+				<div class="mask_content">
+					<el-form :model="CATEGORY" inline-message :rules="rules" ref="CATEGORY" label-width="100px" class="demo-adduserForm">
+						<div class="accordion" id="information">
+							<el-collapse v-model="activeNames">
+								<el-collapse-item title="检验/检测报告模板" name="1">
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="编码" prop="NUM">
+												<el-input v-model="CATEGORY.NUM" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="16">
+											<el-form-item label="模板描述" prop="DECRIPTION">
+												<el-input v-model="CATEGORY.DECRIPTION" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="8" v-if="dept">
+											<el-form-item label="机构" prop="DEPTIDDesc">
+												<el-input v-model="CATEGORY.DEPTIDDesc" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+								</el-collapse-item>
+								<el-collapse-item title="文件" name="2">
+									<doc-table ref="docTable" :docParm = "docParm"></doc-table>
+								</el-collapse-item>
+								<el-collapse-item title="其它" name="3" v-show="views">
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="录入人" prop="ENTERBYDesc">
+												<el-input v-model="CATEGORY.ENTERBYDesc" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="录入时间" prop="ENTERDATE">
+												<el-input v-model="CATEGORY.ENTERDATE" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="修改人" prop="CHANGEBYDesc">
+												<el-input v-model="CATEGORY.CHANGEBYDesc" placeholder="当前修改人" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="修改时间" prop="CHANGEDATE">
+												<el-input v-model="CATEGORY.CHANGEDATE" placeholder="当前修改时间" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+								</el-collapse-item>
+							</el-collapse>
+						</div>
+						<div class="el-dialog__footer" v-show="noviews">
+							<el-button type="primary" @click="saveAndUpdate('CATEGORY')">保存</el-button>
+							<el-button type="success" @click="saveAndSubmit('CATEGORY')" v-show="addtitle">保存并继续</el-button>
+							<!-- <el-button v-if="modify" type="success" @click="update('CATEGORY')">启用</el-button> -->
+							<el-button @click="close">取消</el-button>
+						</div>
+					</el-form>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -199,15 +201,17 @@
 					this.CATEGORY.DEPARTMENT = '';
 					this.CATEGORY.DEPTID = res.data.deptId;
 					this.CATEGORY.ENTERBY = res.data.id;
+
+					this.docParm.userid = res.data.id;
+					this.docParm.username = res.data.username;
+					this.docParm.deptid = res.data.deptId;
+					this.docParm.deptfullname = res.data.deptName;
+
 					var date = new Date();
 					this.CATEGORY.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 					if(opt!='new'){
 						let _obj = JSON.stringify(this.CATEGORY);
 						this.category = JSON.parse(_obj);
-						this.docParm.userid = res.data.id;
-						this.docParm.username = res.data.username;
-						this.docParm.deptid = res.data.deptId;
-						this.docParm.deptfullname = res.data.deptName;
 					}
 				}).catch((err) => {
 					this.$message({
@@ -218,7 +222,6 @@
 			},
 			//点击按钮显示弹窗
 			visible() {
-				
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.viewtitle = false;
@@ -233,9 +236,9 @@
 				
 				this.docParm = {
 					'model': 'new',
-					'appname': 'INSPECTION_REPORT_TEMPLATE2',
+					'appname': '检验检测项目_原始数据模板',
 					'recordid': 1,
-					'appid': 34
+					'appid': 17
 				};
 				this.getUser('new');
 //				this.show = true;
@@ -258,9 +261,9 @@
 				var _this = this;
 				setTimeout(function(){
 					_this.docParm.model = 'edit';
-					_this.docParm.appname = 'INSPECTION_REPORT_TEMPLATE2';
+					_this.docParm.appname = '检验检测项目_原始数据模板';
 					_this.docParm.recordid = _this.CATEGORY.ID;
-					_this.docParm.appid = 34;
+					_this.docParm.appid = 17;
 					_this.$refs.docTable.getData();
 				},100);
 				this.show = true;
@@ -430,40 +433,51 @@
 					this.rebackDialog();
 				}
 			},
-			maxDialog(e) {
+			maxDialog(e) { //定义大弹出框一个默认大小
 				this.isok1 = false;
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
-				$(".mask_div").css("margin", "0%");
 				$(".mask_div").css("top", "60px");
 			},
 			//还原按钮
-			rebackDialog() {
+			rebackDialog() { //大弹出框还原成默认大小
 				this.isok1 = true;
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
-				$(".mask_div").css("margin", "7% 10%");
-				$(".mask_div").css("top", "0");
+				$(".mask_div").css("top", "100px");
 			},
 			// 保存users/saveOrUpdate
-			save(CATEGORY) {
-				this.$refs[CATEGORY].validate((valid) => {
+			save(opt) {
+				this.$refs['CATEGORY'].validate((valid) => {
+					console.log('CATEGORY');
+					if(!valid && opt == 'docUpload'){
+						console.log('message');
+						this.$message({
+							message: '请先正确填写信息，再进行文档上传',
+							type: 'warning'
+						});
+					}
 					if(valid) {
 						this.CATEGORY.STATUS = ((this.CATEGORY.STATUS == "1" || this.CATEGORY.STATUS == '活动') ? '1' : '0');
 						var url = this.basic_url + '/api-apps/app/inspectionRepTem/saveOrUpdate';
 						this.$axios.post(url, this.CATEGORY).then((res) => {
-							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',
 									type: 'success'
 								});
-								//重新加载数据
-								this.$emit('request');
-								this.$emit('reset');
-								this.visible();
+								if(opt == 'docUpload'){
+									this.docParm.recordid = res.data.datas.id;
+									this.docParm.model = 'edit';
+									this.$refs.docTable.autoLoad();
+									this.CATEGORY.ID = res.data.datas.id;
+								}else{
+									this.$emit('request');
+									this.$emit('reset');
+									this.visible();
+								}
 							}else{
 								this.show = true;
 								if(res.data.resp_code == 1) {
@@ -500,15 +514,15 @@
 			},
 			
 			//保存
-			saveAndUpdate(CATEGORY) {
-				this.save(CATEGORY);
+			saveAndUpdate() {
+				this.save();
 				if(this.falg){
 					this.show = false;
 				}
 			},
 			//保存并继续
-			saveAndSubmit(CATEGORY) {
-				this.save(CATEGORY);
+			saveAndSubmit() {
+				this.save();
 				// this.visible();
 				this.show = true;
 			},

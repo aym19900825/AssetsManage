@@ -1,414 +1,415 @@
 <template>
 	<div>
-		<div class="mask" v-show="show"></div>
-		<div class="mask_div" v-show="show">
-			<div class="mask_title_div clearfix">
-				<div class="mask_title" v-show="addtitle">添加用户</div>
-				<div class="mask_title" v-show="modifytitle">修改用户</div>
-				<div class="mask_title" v-show="viewtitle">查看用户</div>
-				<div class="mask_anniu">
-					<span class="mask_span mask_max" @click='toggle'>
-						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
-					</span>
-					<span class="mask_span" @click='close'>
-						<i class="icon-close1"></i>
-					</span>
+		<div class="mask" v-if="show"></div>
+		<div class="mask_divbg" v-if="show">
+			<div class="mask_div">
+				<div class="mask_title_div clearfix">
+					<div class="mask_title" v-show="addtitle">添加用户</div>
+					<div class="mask_title" v-show="modifytitle">修改用户</div>
+					<div class="mask_title" v-show="viewtitle">查看用户</div>
+					<div class="mask_anniu">
+						<span class="mask_span mask_max" @click='toggle'>
+							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
+						</span>
+						<span class="mask_span" @click='close'>
+							<i class="icon-close1"></i>
+						</span>
+					</div>
 				</div>
-			</div>
-			<div class="mask_content">
-				<el-form :model="user" inline-message :rules="rules" ref="user" :label-position="labelPositions" class="demo-user">
-					<div class="accordion">
-						<el-collapse v-model="activeNames">
-							<!--<el-collapse-item title="基础信息" name="1">
-								<el-row :gutter="30">
-									<el-col :span="24">
-										<el-form-item label="所属组织" prop="companyName">
-											<el-input v-model="user.companyName" :disabled="edit">
-												<el-button slot="append" icon="el-icon-search" @click="getCompany"></el-button>
-											</el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row :gutter="30">
-									<el-col :span="24">
-										<el-form-item label="所属机构" prop="deptName">
-											<el-input v-model="user.deptName" :disabled="edit">
-												<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
-											</el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
+				<div class="mask_content">
+					<el-form :model="user" inline-message :rules="rules" ref="user" :label-position="labelPositions" class="demo-user">
+						<div class="accordion">
+							<el-collapse v-model="activeNames">
+								<!--<el-collapse-item title="基础信息" name="1">
+									<el-row :gutter="30">
+										<el-col :span="24">
+											<el-form-item label="所属组织" prop="companyName">
+												<el-input v-model="user.companyName" :disabled="edit">
+													<el-button slot="append" icon="el-icon-search" @click="getCompany"></el-button>
+												</el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row :gutter="30">
+										<el-col :span="24">
+											<el-form-item label="所属机构" prop="deptName">
+												<el-input v-model="user.deptName" :disabled="edit">
+													<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
+												</el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
 
-								<el-row :gutter="30">
-									<el-col :span="12">
-										<el-form-item label="登录名称" prop="username">
-											<el-input class = "usernames" v-model="user.username" ></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="12">
-										<el-form-item label="登录口令" prop="password">
-											<el-input type="password" v-model="user.password"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-							</el-collapse-item>-->
-							<el-collapse-item title="用户基本资料" name="1">
-								<!-- <el-row :gutter="20" class="pb10">
-									<el-col :span="5" class="pull-right">
-										<el-input v-model="user.enabled" :disabled="edit">
-											<template slot="prepend">信息状态</template>
-										</el-input>
-									</el-col>
-								</el-row> -->
-								<!-- 第一行 -->
-								<el-row>
-									<el-col :span="8">
-										<el-form-item label="用户名" v-if="modify" label-width="100px">
-											<el-input v-model="user.username" :disabled="true"></el-input>
-										</el-form-item>
-										<el-form-item label="用户名" prop="username" v-else label-width="100px">
-											<el-input v-model="user.username" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="密码" v-if="modify" label-width="100px">
-											<el-input type="password" v-model="user.password" :disabled="true">
-												<el-button slot="append" icon="icon-edit" @click="editpassword"></el-button>
+									<el-row :gutter="30">
+										<el-col :span="12">
+											<el-form-item label="登录名称" prop="username">
+												<el-input class = "usernames" v-model="user.username" ></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="12">
+											<el-form-item label="登录口令" prop="password">
+												<el-input type="password" v-model="user.password"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+								</el-collapse-item>-->
+								<el-collapse-item title="用户基本资料" name="1">
+									<!-- <el-row :gutter="20" class="pb10">
+										<el-col :span="5" class="pull-right">
+											<el-input v-model="user.enabled" :disabled="edit">
+												<template slot="prepend">信息状态</template>
 											</el-input>
-										</el-form-item>
-										<el-form-item label="密码" prop="password" v-else label-width="100px">
-											<el-input type="password" v-model="user.password" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="姓名" prop="nickname" label-width="100px">
-											<el-input v-model="user.nickname" :disabled="noedit"></el-input>
-											<span class="error"></span>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row>
-									<el-col :span="8">
-										<el-form-item label="职务" prop="post" label-width="100px">
-											<el-input v-model="user.post" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="工号" prop="worknumber" label-width="100px">
-											<el-input v-model="user.worknumber" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="性別" prop="sex" label-width="100px">
-											<el-radio-group v-model="user.sex" :disabled="noedit">
-												<el-radio label="男"></el-radio>
-												<el-radio label="女"></el-radio>
-											</el-radio-group>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row>
-									<el-col :span="8">
-										<el-form-item label="身份证号" prop="idnumber" label-width="100px">
-											<el-input v-model="user.idnumber" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="手机号" prop="phone" label-width="100px">
-											<el-input v-model="user.phone" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="电子邮箱" prop="email" label-width="100px">
-											<el-input v-model="user.email" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row>
-									<el-col :span="8">
-										<el-form-item label="用户有效期" prop="user_active_date" label-width="100px">
-											<el-date-picker v-model="user.user_active_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd HH:mm:ss" :disabled="noedit">
-											</el-date-picker>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="允许授权" prop="ispermit" label-width="100px">
-											<el-radio-group v-model="user.ispermit" :disabled="noedit">
-												<el-radio label="是"></el-radio>
-												<el-radio label="否"></el-radio>
-											</el-radio-group>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="允许登录" prop="islogin" label-width="100px">
-											<el-radio-group v-model="user.islogin" :disabled="noedit">
-												<el-radio label="是"></el-radio>
-												<el-radio label="否"></el-radio>
-											</el-radio-group>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row>
-									<el-col :span="8">
-										<el-form-item label="所属机构" prop="deptName" label-width="100px">
-											<el-input v-model="user.deptName" :disabled="edit" >
-												<el-button slot="append" icon="el-icon-search" @click="getDept" :disabled="noedit"></el-button>
-											</el-input>
-										</el-form-item>
-										<!--<el-form-item label="所属机构" prop="deptName" >
-												<el-select v-model="user.deptName" placeholder="请选择">
-													<el-option v-for="item in option1" :key="item.value" :label="item.label" :value="item.value">
+										</el-col>
+									</el-row> -->
+									<!-- 第一行 -->
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="用户名" v-if="modify" label-width="100px">
+												<el-input v-model="user.username" :disabled="true"></el-input>
+											</el-form-item>
+											<el-form-item label="用户名" prop="username" v-else label-width="100px">
+												<el-input v-model="user.username" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="密码" v-if="modify" label-width="100px">
+												<el-input type="password" v-model="user.password" :disabled="true">
+													<el-button slot="append" icon="icon-edit" @click="editpassword"></el-button>
+												</el-input>
+											</el-form-item>
+											<el-form-item label="密码" prop="password" v-else label-width="100px">
+												<el-input type="password" v-model="user.password" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="姓名" prop="nickname" label-width="100px">
+												<el-input v-model="user.nickname" :disabled="noedit"></el-input>
+												<span class="error"></span>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="职务" prop="post" label-width="100px">
+												<el-input v-model="user.post" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="工号" prop="worknumber" label-width="100px">
+												<el-input v-model="user.worknumber" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="性別" prop="sex" label-width="100px">
+												<el-radio-group v-model="user.sex" :disabled="noedit">
+													<el-radio label="男"></el-radio>
+													<el-radio label="女"></el-radio>
+												</el-radio-group>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="身份证号" prop="idnumber" label-width="100px">
+												<el-input v-model="user.idnumber" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="手机号" prop="phone" label-width="100px">
+												<el-input v-model="user.phone" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="电子邮箱" prop="email" label-width="100px">
+												<el-input v-model="user.email" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="用户有效期" prop="user_active_date" label-width="100px">
+												<el-date-picker v-model="user.user_active_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd HH:mm:ss" :disabled="noedit">
+												</el-date-picker>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="允许授权" prop="ispermit" label-width="100px">
+												<el-radio-group v-model="user.ispermit" :disabled="noedit">
+													<el-radio label="是"></el-radio>
+													<el-radio label="否"></el-radio>
+												</el-radio-group>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="允许登录" prop="islogin" label-width="100px">
+												<el-radio-group v-model="user.islogin" :disabled="noedit">
+													<el-radio label="是"></el-radio>
+													<el-radio label="否"></el-radio>
+												</el-radio-group>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="所属机构" prop="deptName" label-width="100px">
+												<el-input v-model="user.deptName" :disabled="edit" >
+													<el-button slot="append" icon="el-icon-search" @click="getDept" :disabled="noedit"></el-button>
+												</el-input>
+											</el-form-item>
+											<!--<el-form-item label="所属机构" prop="deptName" >
+													<el-select v-model="user.deptName" placeholder="请选择">
+														<el-option v-for="item in option1" :key="item.value" :label="item.label" :value="item.value">
+														</el-option>
+													</el-select>
+											</el-form-item>-->
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="学历" prop="education" label-width="100px">
+												<el-select v-model="user.education" placeholder="硕士" style="width: 100%" :disabled="noedit">
+													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 													</el-option>
 												</el-select>
-										</el-form-item>-->
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="学历" prop="education" label-width="100px">
-											<el-select v-model="user.education" placeholder="硕士" style="width: 100%" :disabled="noedit">
-												<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-												</el-option>
-											</el-select>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="角色" prop="roleId" label-width="100px">
-											<el-select v-model="user.roleId" multiple :disabled="noedit" value-key="item.id" >
-												<el-option v-for="item in selectData" :key="item.name" :value="item.id" :label="item.name"></el-option>
-											</el-select>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row>
-									<el-col :span="8">
-										<el-form-item label="IP地址" prop="ipaddress" label-width="100px">
-											<el-input v-model="user.ipaddress" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="MAC地址" prop="macaddress" label-width="100px">
-											<el-input v-model="user.macaddress" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row>
-									<el-col :span="24">
-										<el-form-item label="备注" prop="tips" label-width="100px">
-											<el-input type="textarea" v-model="user.tips" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-							</el-collapse-item>
-							<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
-								<el-tabs v-model="activeName" @tab-click="handleClick">
-									<el-tab-pane label="资质信息" name="first">
-										<div class="table-func table-funcb" v-show="noviews">
-											<el-button type="success" size="mini" round @click="addfield1">
-												<i class="icon-add"></i>
-												<font>新建行</font>
-											</el-button>
-										</div>
-										<!-- <el-form :label-position="labelPosition" :rules="rules"> -->
-											<el-table :header-cell-style="rowClass" :fig="true" :data="user.qualifications" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.qualifications', order: 'descending'}">
-												<el-table-column prop="iconOperation" fixed width="50px">
-													<template slot-scope="scope">
-														<i class="el-icon-check" v-if="scope.row.isEditing"></i>
-														<i class="el-icon-edit" v-else="v-else"></i>
-													</template>
-												</el-table-column>
-												<el-table-column prop="step" label="序号" sortable width="120px">
-													<template slot-scope="scope">
-														<el-form-item :prop="'qualifications.'+scope.$index + '.step'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.$index + 1" placeholder="请输入要求" :disabled="noedit">
-															</el-input>
-															<span v-else="v-else">{{scope.row.step}}</span>
-														</el-form-item>
-													</template>
-												</el-table-column>
-												<el-table-column prop="c_num" label="证书编号" sortable width="180px">
-													<template slot-scope="scope">
-														<el-form-item :prop="'qualifications.'+scope.$index + '.c_num'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.c_num" placeholder="请输入委托方名称">
-															</el-input>
-															<span v-else="v-else">{{scope.row.c_num}}</span>
-														</el-form-item>
-													</template>
-												</el-table-column>
-												<el-table-column prop="c_name" label="证书名称" sortable width="200px">
-													<template slot-scope="scope">
-														<el-form-item :prop="'qualifications.'+scope.$index + '.c_name'">
-															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.c_name" placeholder="请输入委托方名称">
-															</el-input>
-															<span v-else="v-else">{{scope.row.c_name}}</span>
-														</el-form-item>
-													</template>
-												</el-table-column>
-												<el-table-column prop="c_date" label="资质有效期" sortable width="200px">
-													<template slot-scope="scope">
-														<el-form-item :prop="'qualifications.'+scope.$index + '.c_date'">
-															<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.c_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
-															</el-date-picker>
-															<span v-else="v-else">{{scope.row.c_date}}</span>
-														</el-form-item>
-													</template>
-												</el-table-column>
-												<!-- <el-table-column prop="enterby" label="录入人" sortable width="120px">
-													<template slot-scope="scope">
-														<el-form-item :prop="'qualifications.'+scope.$index + '.enterbyName'">
-															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.enterbyName" placeholder="请输入要求">
-															</el-input>
-															<span v-else="v-else">{{scope.row.enterbyName}}</span>
-														</el-form-item>
-													</template>
-												</el-table-column> -->
-												<el-table-column prop="enterdate" label="录入时间" sortable>
-													<template slot-scope="scope">
-														<el-form-item :prop="'qualifications.'+scope.$index + '.enterdate'">
-															<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.enterdate" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
-															</el-date-picker>
-															<span v-else="v-else">{{scope.row.enterdate}}</span>
-														</el-form-item>
-													</template>
-												</el-table-column>
-												<!-- <el-table-column prop="status" label="信息状态" sortable width="120px">
-													<template slot-scope="scope">
-														<el-form-item :prop="'qualifications.'+scope.$index + '.status'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.status" placeholder="请输入要求">
-															</el-input>
-															<span v-else="v-else">{{scope.row.status}}</span>
-														</el-form-item>
-													</template>
-												</el-table-column> -->
-												<!--<el-table-column prop="VERSION" label="上传附件" sortable width="120px">
-										<template slot-scope="scope">
-											<el-form-item :prop="'user_qualifications.'+scope.$index + '.VERSION'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-											<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入分包方名称">
-											</el-input>
-											<span v-else="v-else">{{scope.row.VERSION}}</span>
 											</el-form-item>
-										</template>
-									</el-table-column>-->
-												<el-table-column fixed="right" label="操作" width="120">
-													<template slot-scope="scope">
-														<el-button @click.native.prevent="deleteRow(scope.$index,user.qualifications)" type="text" size="small">
-															移除
-														</el-button>
-													</template>
-												</el-table-column>
-											</el-table>
-										<!-- </el-form> -->
-									</el-tab-pane>
-									<el-tab-pane label="培训" name="second">
-										<div class="table-func table-funcb" v-show="noviews">
-											<el-button type="success" size="mini" round @click="addfield2">
-												<i class="icon-add"></i>
-												<font>新建行</font>
-											</el-button>
-										</div>
-											<el-table :header-cell-style="rowClass" :fit="true" :data="user.traings" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.traings', order: 'descending'}">
-												<el-table-column prop="iconOperation" fixed label="" width="50px">
-													<template slot-scope="scope">
-														<i class="el-icon-check" v-if="scope.row.isEditing"></i>
-														<i class="el-icon-edit" v-else="v-else"></i>
-													</template>
-												</el-table-column>
-												<el-table-column prop="step" label="序号" sortable width="120px">
-													<template slot-scope="scope">
-														<el-form-item :prop="'traings.'+scope.$index + '.step'">
-															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.$index + 1" :disabled="noedit">
-															</el-input>
-															<span v-else="v-else">{{scope.row.step}}</span>
-														</el-form-item>
-													</template>
-												</el-table-column>
-												<el-table-column prop="t_date" label="培训时间" sortable width="240px">
-													<template slot-scope="scope">
-														<el-form-item :prop="'traings.'+scope.$index + '.t_date'">
-															<!--<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.t_date" placeholder="请输入委托方名称">
-											</el-input>-->
-															<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.t_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd hh:mm:ss">
-															</el-date-picker>
-															<span v-else="v-else">{{scope.row.t_date}}</span>
-														</el-form-item>
-													</template>
-												</el-table-column>
-												<el-table-column prop="t_description" label="培训内容" sortable>
-													<template slot-scope="scope">
-														<el-form-item :prop="'traings.'+scope.$index + '.t_description'">
-															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.t_description" placeholder="请输入委托方名称">
-															</el-input>
-															<span v-else="v-else">{{scope.row.t_description}}</span>
-														</el-form-item>
-													</template>
-												</el-table-column>
-												<!-- <el-table-column prop="status" label="信息状态" sortable width="120px">
-													<template slot-scope="scope">
-														<el-form-item :prop="'traings.'+scope.$index + '.status'">
-															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.status" placeholder="请输入要求">
-															</el-input>
-															<span v-else="v-else">{{scope.row.status}}</span>
-														</el-form-item>
-													</template>
-												</el-table-column> -->
-												<el-table-column fixed="right" label="操作" width="120">
-													<template slot-scope="scope">
-														<el-button @click.native.prevent="deleteRow(scope.$index,user.traings)" type="text" size="small">
-															移除
-														</el-button>
-													</template>
-												</el-table-column>
-											</el-table>
-									</el-tab-pane>
-								</el-tabs>
-							</div>
-							<el-collapse-item title="其他" name="4" v-show="views">
-								<!-- 第一行 -->
-								<el-row :gutter="30">
-									<el-col :span="8">
-										<el-form-item label="录入人" prop="createby" label-width="100px">
-											<el-input v-model="user.createbyName" :disabled="edit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="录入时间" prop="createTime" label-width="100px">
-											<el-input v-model="user.createTime" :disabled="edit">
-											</el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="修改人" prop="updateby" label-width="100px">
-											<el-input v-model="user.updateby" :disabled="edit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="修改时间" prop="updateTime" label-width="100px">
-											<el-input v-model="user.updateTime" :disabled="edit">
-											</el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-							</el-collapse-item>
-						</el-collapse>
-					</div>
-					<div class="el-dialog__footer" v-show="noviews">
-						<el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
-						<el-button type="success" @click='saveAndSubmit()' v-show="addtitle">保存并继续</el-button>
-						<el-button @click='close'>取消</el-button>
-					</div>
-				</el-form>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="角色" prop="roleId" label-width="100px">
+												<el-select v-model="user.roleId" multiple :disabled="noedit" value-key="item.id" >
+													<el-option v-for="item in selectData" :key="item.name" :value="item.id" :label="item.name"></el-option>
+												</el-select>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="IP地址" prop="ipaddress" label-width="100px">
+												<el-input v-model="user.ipaddress" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="MAC地址" prop="macaddress" label-width="100px">
+												<el-input v-model="user.macaddress" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="24">
+											<el-form-item label="备注" prop="tips" label-width="100px">
+												<el-input type="textarea" v-model="user.tips" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+								</el-collapse-item>
+								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
+									<el-tabs v-model="activeName" @tab-click="handleClick">
+										<el-tab-pane label="资质信息" name="first">
+											<div class="table-func table-funcb" v-show="noviews">
+												<el-button type="success" size="mini" round @click="addfield1" v-show="!viewtitle">
+													<i class="icon-add"></i>
+													<font>新建行</font>
+												</el-button>
+											</div>
+											<!-- <el-form :label-position="labelPosition" :rules="rules"> -->
+												<el-table :header-cell-style="rowClass" :fig="true" :data="user.qualifications" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.qualifications', order: 'descending'}">
+													<el-table-column prop="iconOperation" fixed width="50px">
+														<template slot-scope="scope">
+															<i class="el-icon-check" v-if="scope.row.isEditing"></i>
+															<i class="el-icon-edit" v-else="v-else"></i>
+														</template>
+													</el-table-column>
+													<el-table-column prop="step" label="序号" sortable width="120px">
+														<template slot-scope="scope">
+															<el-form-item :prop="'qualifications.'+scope.$index + '.step'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.$index + 1" placeholder="请输入要求" :disabled="noedit">
+																</el-input>
+																<span v-else="v-else">{{scope.row.step}}</span>
+															</el-form-item>
+														</template>
+													</el-table-column>
+													<el-table-column prop="c_num" label="证书编号" sortable width="180px">
+														<template slot-scope="scope">
+															<el-form-item :prop="'qualifications.'+scope.$index + '.c_num'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.c_num" placeholder="请输入委托方名称">
+																</el-input>
+																<span v-else="v-else">{{scope.row.c_num}}</span>
+															</el-form-item>
+														</template>
+													</el-table-column>
+													<el-table-column prop="c_name" label="证书名称" sortable width="200px">
+														<template slot-scope="scope">
+															<el-form-item :prop="'qualifications.'+scope.$index + '.c_name'">
+																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.c_name" placeholder="请输入委托方名称">
+																</el-input>
+																<span v-else="v-else">{{scope.row.c_name}}</span>
+															</el-form-item>
+														</template>
+													</el-table-column>
+													<el-table-column prop="c_date" label="资质有效期" sortable width="200px">
+														<template slot-scope="scope">
+															<el-form-item :prop="'qualifications.'+scope.$index + '.c_date'">
+																<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.c_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+																</el-date-picker>
+																<span v-else="v-else">{{scope.row.c_date}}</span>
+															</el-form-item>
+														</template>
+													</el-table-column>
+													<!-- <el-table-column prop="enterby" label="录入人" sortable width="120px">
+														<template slot-scope="scope">
+															<el-form-item :prop="'qualifications.'+scope.$index + '.enterbyName'">
+																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.enterbyName" placeholder="请输入要求">
+																</el-input>
+																<span v-else="v-else">{{scope.row.enterbyName}}</span>
+															</el-form-item>
+														</template>
+													</el-table-column> -->
+													<el-table-column prop="enterdate" label="录入时间" sortable>
+														<template slot-scope="scope">
+															<el-form-item :prop="'qualifications.'+scope.$index + '.enterdate'">
+																<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.enterdate" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+																</el-date-picker>
+																<span v-else="v-else">{{scope.row.enterdate}}</span>
+															</el-form-item>
+														</template>
+													</el-table-column>
+													<!-- <el-table-column prop="status" label="信息状态" sortable width="120px">
+														<template slot-scope="scope">
+															<el-form-item :prop="'qualifications.'+scope.$index + '.status'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.status" placeholder="请输入要求">
+																</el-input>
+																<span v-else="v-else">{{scope.row.status}}</span>
+															</el-form-item>
+														</template>
+													</el-table-column> -->
+													<!--<el-table-column prop="VERSION" label="上传附件" sortable width="120px">
+											<template slot-scope="scope">
+												<el-form-item :prop="'user_qualifications.'+scope.$index + '.VERSION'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入分包方名称">
+												</el-input>
+												<span v-else="v-else">{{scope.row.VERSION}}</span>
+												</el-form-item>
+											</template>
+										</el-table-column>-->
+													<el-table-column fixed="right" label="操作" width="120">
+														<template slot-scope="scope">
+															<el-button @click.native.prevent="deleteRow(scope.$index,user.qualifications)" type="text" size="small">
+																<i class="icon-trash red"></i>
+															</el-button>
+														</template>
+													</el-table-column>
+												</el-table>
+											<!-- </el-form> -->
+										</el-tab-pane>
+										<el-tab-pane label="培训" name="second">
+											<div class="table-func table-funcb" v-show="noviews">
+												<el-button type="success" size="mini" round @click="addfield2" v-show="!viewtitle">
+													<i class="icon-add"></i>
+													<font>新建行</font>
+												</el-button>
+											</div>
+												<el-table :header-cell-style="rowClass" :fit="true" :data="user.traings" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.traings', order: 'descending'}">
+													<el-table-column prop="iconOperation" fixed label="" width="50px">
+														<template slot-scope="scope">
+															<i class="el-icon-check" v-if="scope.row.isEditing"></i>
+															<i class="el-icon-edit" v-else="v-else"></i>
+														</template>
+													</el-table-column>
+													<el-table-column prop="step" label="序号" sortable width="120px">
+														<template slot-scope="scope">
+															<el-form-item :prop="'traings.'+scope.$index + '.step'">
+																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.$index + 1" :disabled="noedit">
+																</el-input>
+																<span v-else="v-else">{{scope.row.step}}</span>
+															</el-form-item>
+														</template>
+													</el-table-column>
+													<el-table-column prop="t_date" label="培训时间" sortable width="240px">
+														<template slot-scope="scope">
+															<el-form-item :prop="'traings.'+scope.$index + '.t_date'">
+																<!--<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.t_date" placeholder="请输入委托方名称">
+												</el-input>-->
+																<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.t_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd hh:mm:ss">
+																</el-date-picker>
+																<span v-else="v-else">{{scope.row.t_date}}</span>
+															</el-form-item>
+														</template>
+													</el-table-column>
+													<el-table-column prop="t_description" label="培训内容" sortable>
+														<template slot-scope="scope">
+															<el-form-item :prop="'traings.'+scope.$index + '.t_description'">
+																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.t_description" placeholder="请输入委托方名称">
+																</el-input>
+																<span v-else="v-else">{{scope.row.t_description}}</span>
+															</el-form-item>
+														</template>
+													</el-table-column>
+													<!-- <el-table-column prop="status" label="信息状态" sortable width="120px">
+														<template slot-scope="scope">
+															<el-form-item :prop="'traings.'+scope.$index + '.status'">
+																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.status" placeholder="请输入要求">
+																</el-input>
+																<span v-else="v-else">{{scope.row.status}}</span>
+															</el-form-item>
+														</template>
+													</el-table-column> -->
+													<el-table-column fixed="right" label="操作" width="120">
+														<template slot-scope="scope">
+															<el-button @click.native.prevent="deleteRow(scope.$index,user.traings)" type="text" size="small">
+																<i class="icon-trash red"></i>
+															</el-button>
+														</template>
+													</el-table-column>
+												</el-table>
+										</el-tab-pane>
+									</el-tabs>
+								</div>
+								<el-collapse-item title="其他" name="4" v-show="views">
+									<!-- 第一行 -->
+									<el-row :gutter="30">
+										<el-col :span="8">
+											<el-form-item label="录入人" prop="createby" label-width="100px">
+												<el-input v-model="user.createbyName" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="录入时间" prop="createTime" label-width="100px">
+												<el-input v-model="user.createTime" :disabled="edit">
+												</el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="修改人" prop="updateby" label-width="100px">
+												<el-input v-model="user.updateby" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="修改时间" prop="updateTime" label-width="100px">
+												<el-input v-model="user.updateTime" :disabled="edit">
+												</el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+								</el-collapse-item>
+							</el-collapse>
+						</div>
+						<div class="el-dialog__footer" v-show="noviews">
+							<el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
+							<el-button type="success" @click='saveAndSubmit()' v-show="addtitle">保存并继续</el-button>
+							<el-button @click='close'>取消</el-button>
+						</div>
+					</el-form>
+				</div>
+				<!--底部-->
 			</div>
-			<!--底部-->
+			<!--弹出-->
+
+			<el-dialog :modal-append-to-body="false" title="机构" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+				<el-tree ref="tree" :data="resourceData" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
+				</el-tree>
+				<span slot="footer" class="dialog-footer">
+			       <el-button @click="dialogVisible = false">取 消</el-button>
+			       <el-button type="primary" @click="dailogconfirm();" >确 定</el-button>
+			    </span>
+			</el-dialog>
 		</div>
-		<!--弹出-->
-
-		<el-dialog title="机构" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-			<el-tree ref="tree" :data="resourceData" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
-			</el-tree>
-			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible = false">取 消</el-button>
-		       <el-button type="primary" @click="dailogconfirm();" >确 定</el-button>
-		    </span>
-		</el-dialog>
-
 	</div>
 </template>
 
@@ -424,6 +425,13 @@
 		//	props: ['user','page'],
 
 		data() {
+			var validatedeptname = (rule, value, callback) => {//所属机构
+                if (this.user.deptName === undefined || this.user.deptName === '' || this.user.deptName === null) {
+                    callback(new Error('请选择所属机构'));
+                }else {
+                    callback();
+                }
+            };
 			return {
 				basic_url: Config.dev_url,
 				user: {
@@ -488,7 +496,7 @@
 				//				default-expand-all:true,
 				i:0,
 				rules: {
-					deptName: [{required: true,message: '必填',trigger: 'blur'}], //名称
+					deptName: [{required: true,validator: validatedeptname}], //所属机构
 					education: [{required: true,message: '必填',trigger: 'blur'}],
 					roleId: [{required: true,trigger: 'blur',message: '必填',}],
 					username: [
@@ -656,6 +664,7 @@
 						isEditing: true
 					};
 					this.user.qualifications.push(obj);
+					console.log(typeof(this.user.qualifications));
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -676,8 +685,9 @@
 			},
 			//刪除新建行
 			deleteRow(index, rows) { //Table-操作列中的删除行
+				console.log(index);
+				console.log(rows);
 				rows.splice(index, 1);
-
 			},
 			//
 			handleClicks(data,checked, indeterminate) {
@@ -856,7 +866,6 @@
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
-				$(".mask_div").css("margin", "0%");
 				$(".mask_div").css("top", "60px");
 			},
 
@@ -865,8 +874,7 @@
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
-				$(".mask_div").css("margin", "7% 10%");
-				$(".mask_div").css("top", "0");
+				$(".mask_div").css("top", "100px");
 			},
 			getCheckedNodes() { //获取树菜单节点
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
@@ -985,12 +993,7 @@
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
 				var url = this.basic_url + '/api-user/roles';
-				this.$axios.get(url, {
-					params: {
-						page: page,
-						limit: limit,
-					},
-				}).then((res) => {
+				this.$axios.get(url, {}).then((res) => {
 					this.selectData = res.data.data;
 				}).catch(error => {
 					console.log('请求失败');

@@ -1,131 +1,132 @@
 <template>
 	<div>
-		<div class="mask" v-show="show"></div>
-		<div class="mask_div" v-show="show">
-			<!---->
-			<div class="mask_title_div clearfix">
-				<div class="mask_title" v-show="addtitle">添加仪器和计量器具</div>
-				<div class="mask_title" v-show="modifytitle">修改仪器和计量器具</div>
-				<div class="mask_title" v-show="viewtitle">查看仪器和计量器具</div>
-				<div class="mask_anniu">
-					<span class="mask_span mask_max" @click='toggle'>
-						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
-					</span>
-					<span class="mask_span" @click='close'>
-						<i class="icon-close1"></i>
-					</span>
+		<div class="mask" v-if="show"></div>
+		<div class="mask_divbg" v-if="show">
+			<div class="mask_div">
+				<div class="mask_title_div clearfix">
+					<div class="mask_title" v-show="addtitle">添加仪器和计量器具</div>
+					<div class="mask_title" v-show="modifytitle">修改仪器和计量器具</div>
+					<div class="mask_title" v-show="viewtitle">查看仪器和计量器具</div>
+					<div class="mask_anniu">
+						<span class="mask_span mask_max" @click='toggle'>
+							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
+						</span>
+						<span class="mask_span" @click='close'>
+							<i class="icon-close1"></i>
+						</span>
+					</div>
 				</div>
-			</div>
-			<div class="mask_content">
-				<el-form :model="dataInfo" :rules="rules"   ref="dataInfo" label-width="100px" class="demo-user">
-					<div class="accordion">
+				<div class="mask_content">
+					<el-form :model="dataInfo" :rules="rules"   ref="dataInfo" label-width="100px" class="demo-user">
+						<div class="accordion">
 
-						<!-- 设备基本信息 -->
-						<el-collapse v-model="activeNames">
-							<el-collapse-item title="设备基本信息" name="1">
-								<el-row :gutter="20" class="pb10">
-									<el-col :span="5" class="pull-right">
-										<el-input v-model="dataInfo.ASSETNUM" :disabled="true">
-											<template slot="prepend">设备编号</template>
+							<!-- 设备基本信息 -->
+							<el-collapse v-model="activeNames">
+								<el-collapse-item title="设备基本信息" name="1">
+									<el-row :gutter="20" class="pb10">
+										<el-col :span="5" class="pull-right">
+											<el-input v-model="dataInfo.ASSETNUM" :disabled="true">
+												<template slot="prepend">设备编号</template>
+											</el-input>
+										</el-col>
+										<!-- <el-col :span="5" class="pull-right">
+											<el-input v-model="dataInfo.STATUS==1?'活动':'不活动'" :disabled="true">
+												<template slot="prepend">信息状态</template>
+											</el-input>
+										</el-col> -->
+									</el-row>
+									<el-form-item v-for="item in basicInfo" :key="item.id" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
+										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && item.prop !='A_PRICE' " :disabled="noedit"></el-input>
+										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'" :disabled="noedit"></el-input>
+										<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" :disabled="noedit">
+										</el-date-picker>
+										<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'" :disabled="noedit">
+											<el-radio :label="it.label" v-for="it in item.opts" :key="it.id"></el-radio>
+										</el-radio-group>
+										<el-select clearable v-model="dataInfo[item.prop]"  v-if="item.type=='select'" filterable allow-create default-first-option placeholder="请选择">
+											<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+										</el-select>
+										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && item.prop =='A_PRICE' " @blur="handlePrice" :disabled="noedit" id="cost"></el-input>
+									</el-form-item>
+								</el-collapse-item>
+
+								<!-- 设备保管人员情况 -->
+								<el-collapse-item title="设备保管人员情况" name="2">
+									<el-form-item v-for="item in keeperInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
+										<el-input v-model="dataInfo[item.prop]" v-if="item.type=='input'&&item.prop =='KEEPER'" :type="item.type"  :disabled="true">
+											<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="addPeople"></el-button>
 										</el-input>
-									</el-col>
-									<!-- <el-col :span="5" class="pull-right">
-										<el-input v-model="dataInfo.STATUS==1?'活动':'不活动'" :disabled="true">
-											<template slot="prepend">信息状态</template>
-										</el-input>
-									</el-col> -->
-								</el-row>
-								<el-form-item v-for="item in basicInfo" :key="item.id" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
-									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && item.prop !='A_PRICE' " :disabled="noedit"></el-input>
-									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'" :disabled="noedit"></el-input>
-									<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" :disabled="noedit">
-									</el-date-picker>
-									<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'" :disabled="noedit">
-										<el-radio :label="it.label" v-for="it in item.opts" :key="it.id"></el-radio>
-									</el-radio-group>
-									<el-select clearable v-model="dataInfo[item.prop]"  v-if="item.type=='select'" filterable allow-create default-first-option placeholder="请选择">
-										<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
-									</el-select>
-									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && item.prop =='A_PRICE' " @blur="handlePrice" :disabled="noedit" id="cost"></el-input>
-								</el-form-item>
-							</el-collapse-item>
+										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'&&item.prop!='KEEPER'" :disabled="noedit"></el-input>
+									</el-form-item>
+								</el-collapse-item>
 
-							<!-- 设备保管人员情况 -->
-							<el-collapse-item title="设备保管人员情况" name="2">
-								<el-form-item v-for="item in keeperInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
-									<el-input v-model="dataInfo[item.prop]" v-if="item.type=='input'&&item.prop =='KEEPER'" :type="item.type"  :disabled="true">
-										<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="addPeople"></el-button>
-									</el-input>
-									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'&&item.prop!='KEEPER'" :disabled="noedit"></el-input>
-								</el-form-item>
-							</el-collapse-item>
+							    <el-collapse-item title="设备溯源信息状态" name="3" v-show="modify">
+									<el-table :header-cell-style="rowClass" :fit="true" :data="pmRecordList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'pmRecordList', order: 'descending'}">
+										<el-table-column type="index" sortable label="序号" width="50">
+	                                    </el-table-column>
+										<el-table-column prop="RECORDNUM" label="溯源记录编号" sortable width="120px">
+										</el-table-column>
+										<el-table-column prop="PM_DATE" label="溯源日期" sortable width="120px">
+										</el-table-column>
+										<el-table-column prop="R_DESC" label="溯源确认内容" sortable >
+										</el-table-column>
+										<el-table-column prop="R_CONCLUSION" label="溯源确认结论" sortable width="200px">
+										</el-table-column>
+										<el-table-column prop="STATUS" label="溯源信息状态" sortable width="120px">
+										</el-table-column>
+									</el-table>
+								</el-collapse-item>
+								<el-collapse-item title="文件" name="4">
+									<doc-table ref="docTable" :docParm = "docParm"  @saveParent = "save"></doc-table>
+								</el-collapse-item>
+								
+								<!-- 其他信息 -->
+								<el-collapse-item title="其他" name="5" v-show="!addtitle">
+									<el-form-item v-for="item in otherInfo" :key="item.id" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-if="item.prop=='DEPARTMENT'" v-show="dept">
+										<el-input v-model="dataInfo[item.prop]" :type="item.type" disabled v-if="item.prop=='DEPARTMENT'"></el-input>
+									</el-form-item>
+									<el-form-item   v-for="item in otherInfo" :key="item.id" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-show="views">
+										<el-input v-model="dataInfo[item.prop]" :type="item.type" disabled ></el-input>
+									</el-form-item>	
+								</el-collapse-item>
+							</el-collapse>
+						</div>
 
-						    <el-collapse-item title="设备溯源信息状态" name="3" v-show="modify">
-								<el-table :header-cell-style="rowClass" :fit="true" :data="pmRecordList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'pmRecordList', order: 'descending'}">
-									<el-table-column type="index" sortable label="序号" width="50">
-                                    </el-table-column>
-									<el-table-column prop="RECORDNUM" label="溯源记录编号" sortable width="120px">
-									</el-table-column>
-									<el-table-column prop="PM_DATE" label="溯源日期" sortable width="120px">
-									</el-table-column>
-									<el-table-column prop="R_DESC" label="溯源确认内容" sortable >
-									</el-table-column>
-									<el-table-column prop="R_CONCLUSION" label="溯源确认结论" sortable width="200px">
-									</el-table-column>
-									<el-table-column prop="STATUS" label="溯源信息状态" sortable width="120px">
-									</el-table-column>
-								</el-table>
-							</el-collapse-item>
-							<el-collapse-item title="文件" name="4">
-								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
-							</el-collapse-item>
-							
-							<!-- 其他信息 -->
-							<el-collapse-item title="其他" name="5" v-show="!addtitle">
-								<el-form-item v-for="item in otherInfo" :key="item.id" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-if="item.prop=='DEPARTMENT'" v-show="dept">
-									<el-input v-model="dataInfo[item.prop]" :type="item.type" disabled v-if="item.prop=='DEPARTMENT'"></el-input>
-								</el-form-item>
-								<el-form-item   v-for="item in otherInfo" :key="item.id" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-show="views">
-									<el-input v-model="dataInfo[item.prop]" :type="item.type" disabled ></el-input>
-								</el-form-item>	
-							</el-collapse-item>
-						</el-collapse>
-					</div>
-
-					<div class="el-dialog__footer" v-show="noviews">
-						<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
-						<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并继续</el-button>
-						<el-button @click='close'>取消</el-button>
-						<!-- <el-button type="primary" @click='submitForm'>提交</el-button> -->
-					</div>
-				</el-form>
+						<div class="el-dialog__footer" v-show="noviews">
+							<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
+							<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并继续</el-button>
+							<el-button @click='close'>取消</el-button>
+							<!-- <el-button type="primary" @click='submitForm'>提交</el-button> -->
+						</div>
+					</el-form>
+				</div>
+				<!--底部-->
 			</div>
-			<!--底部-->
+			<!--设备保管人 Begin-->
+			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
+				<el-table :data="userList" border stripe :header-cell-style="rowClass" height="400px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+					<el-table-column type="selection" width="55" fixed align="center">
+					</el-table-column>
+					<el-table-column label="用户名" sortable width="140px" prop="username">
+					</el-table-column>
+					<el-table-column label="姓名" sortable width="200px" prop="nickname">
+					</el-table-column>
+					<el-table-column label="机构" sortable width="150px" prop="deptName">
+					</el-table-column>
+					<el-table-column label="公司" sortable prop="companyName">
+					</el-table-column>
+					<el-table-column label="创建时间" prop="createTime" width="100px" sortable :formatter="dateFormat">
+					</el-table-column>
+				</el-table>
+				<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+				</el-pagination>
+				<span slot="footer" class="dialog-footer" v-if="noviews">
+	    			<el-button @click="dialogVisible = false">取 消</el-button>
+	    			<el-button type="primary" @click="addpeoname()">确 定</el-button>
+	  			</span>
+			</el-dialog>
+			<!--设备保管人 End-->
 		</div>
-		<!--设备保管人 Begin-->
-		<el-dialog :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
-			<el-table :data="userList" border stripe :header-cell-style="rowClass" height="400px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-				<el-table-column type="selection" width="55" fixed align="center">
-				</el-table-column>
-				<el-table-column label="用户名" sortable width="140px" prop="username">
-				</el-table-column>
-				<el-table-column label="姓名" sortable width="200px" prop="nickname">
-				</el-table-column>
-				<el-table-column label="机构" sortable width="150px" prop="deptName">
-				</el-table-column>
-				<el-table-column label="公司" sortable prop="companyName">
-				</el-table-column>
-				<el-table-column label="创建时间" prop="createTime" width="100px" sortable :formatter="dateFormat">
-				</el-table-column>
-			</el-table>
-			<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-			</el-pagination>
-			<span slot="footer" class="dialog-footer" v-if="noviews">
-    			<el-button @click="dialogVisible = false">取 消</el-button>
-    			<el-button type="primary" @click="addpeoname()">确 定</el-button>
-  			</span>
-		</el-dialog>
-		<!--设备保管人 End-->
 	</div>
 </template>
 
@@ -144,6 +145,13 @@
 					callback();
 				}
 			};
+			var validateKeeper = (rule, value, callback) => {//类别
+                if (this.dataInfo.KEEPER === undefined || this.dataInfo.KEEPER === '' || this.dataInfo.KEEPER === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
 			return {
 				loadSign:true,//加载
 				commentArr:{},
@@ -155,7 +163,6 @@
 					'username': '',
 					'deptid': 1,
 					'deptfullname': '',
-					'appname': '',
 					'appid': 1
 				},
 				rules: {
@@ -190,7 +197,7 @@
 						{ required: true, message: '请选择是否需要溯源', trigger: 'blur' },
 					],
 					KEEPER: [
-						{ required: true, message: '请输入保管人', trigger: 'blur' },
+						{ required: true,validator: validateKeeper},//设备保管人
 					],
 					ACCEPT_DATE: [
 						{ required: true, message: '请输入接收日期', trigger: 'blur' },
@@ -488,7 +495,7 @@
 				otherInfo: [
 					{
 						label: '录入人',
-						prop: 'ENTERBY',
+						prop: 'ENTERBYDesc',
 						width: '30%',
 						type: 'input',
 						displayType: 'inline-block'
@@ -502,14 +509,14 @@
 					},
 					{
 						label: '机构',
-						prop: 'DEPARTMENT',
+						prop: 'DEPTIDDesc',
 						width: '30%',
 						type: 'input',
 						displayType: 'inline-block'
 					},
 					{
 						label: '修改人',
-						prop: 'CHANGEBY',
+						prop: 'CHANGEBYDesc',
 						width: '30%',
 						type: 'input',
 						displayType: 'inline-block'
@@ -574,7 +581,7 @@
 					'CHANGEDATE': '',	
 					'ENTERBY': '',
 					'ENTERDATE': '',	
-					'DEPARTMENT': '',	
+					'DEPTID': '',	
 					'MEMO': '',	
 					'STATUS': '1',
 					'SYNCHRONIZATION_TIME': '',
@@ -630,8 +637,20 @@
 				this.dialogVisible = true;
 			},
 			addpeoname(){
-				this.dialogVisible = false;
-				this.dataInfo.KEEPER = this.selUser[0].nickname;
+				if(this.selUser.length == 0){
+					this.$message({
+						message: '请选择数据',
+						type: 'warning'
+					});
+				}else if(this.selUser.length > 1){
+					this.$message({
+						message: '不可同时选择多条数据',
+						type: 'warning'
+					});
+				}else{
+					this.dataInfo.KEEPER = this.selUser[0].nickname;
+					this.dialogVisible = false;
+				}
 				this.$emit('request');
 			},
 			SelChange(val) {
@@ -669,19 +688,22 @@
 				var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url,{}).then((res) => {
 					if(opt == 'new'){
-                        this.dataInfo.CHANGEBY = res.data.username;
-				        this.dataInfo.CHANGEDATE = this.getToday();
-				        this.dataInfo.ENTERBY = res.data.username;
+                        // this.dataInfo.CHANGEBY = res.data.username;
+						// this.dataInfo.CHANGEDATE = this.getToday();
+						this.dataInfo.DEPTID = res.data.deptId;
+						this.dataInfo.ENTERBY = res.data.id;
 				        this.dataInfo.ENTERDATE = this.getToday();
-						this.dataInfo.DEPARTMENT = res.data.deptName;
+						// this.dataInfo.DEPARTMENT = res.data.deptName;
 					}else{
-						this.dataInfo.CHANGEBY = res.data.username;
+						this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
+						this.dataInfo.CHANGEBY = res.data.id;
 						this.dataInfo.CHANGEDATE = this.getToday();
-						this.docParm.userid = res.data.id;
-						this.docParm.username = res.data.username;
-						this.docParm.deptid = res.data.deptId;
-						this.docParm.deptfullname = res.data.deptName;
 					}
+
+					this.docParm.userid = res.data.id;
+					this.docParm.username = res.data.username;
+					this.docParm.deptid = res.data.deptId;
+					this.docParm.deptfullname = res.data.deptName;
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -730,9 +752,9 @@
 
 				this.docParm = {
 					'model': 'new',
-					'appname': 'ASSET',
+					'appname': '仪器和计量器具',
 					'recordid': 1,
-					'appid': 66
+					'appid': 47
 				};
 				this.getUser('new');
 			},
@@ -756,14 +778,13 @@
 				var _this = this;
 				setTimeout(function(){
 					_this.docParm.model = 'edit';
-					_this.docParm.appname = 'ASSET';
+					_this.docParm.appname = '仪器和计量器具';
 					_this.docParm.recordid = _this.dataInfo.ID;
-					_this.docParm.appid = 66;
+					_this.docParm.appid = 47;
 					_this.$refs.docTable.getData();
 				},100);
 
 				this.show = true;
-//				this.getPmList();
 			},
 			//这是查看
 			view(data) {
@@ -822,7 +843,7 @@
 					'STATUS': '1',
 					'SYNCHRONIZATION_TIME': '',
 				};
-				this.$refs['dataInfo'].resetFields();
+				//this.$refs['dataInfo'].resetFields();
 				// this.show = false;
 			},
 			toggle(e) { //大弹出框大小切换
@@ -844,7 +865,6 @@
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
-				$(".mask_div").css("margin", "0%");
 				$(".mask_div").css("top", "60px");
 			},
 
@@ -853,27 +873,35 @@
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
-				$(".mask_div").css("margin", "7% 10%");
-				$(".mask_div").css("top", "0");
+				$(".mask_div").css("top", "100px");
 			},
 
-			save(dataInfo) {
+			save(opt) {
 				var _this = this;
-				console.log(_this.dataInfo);
 				var url = this.basic_url + '/api-apps/app/asset/saveOrUpdate';
 				this.$refs['dataInfo'].validate((valid) => {
+					if(!valid && opt == 'docUpload'){
+						this.$message({
+							message: '请先正确填写信息，再进行文档上传',
+							type: 'warning'
+						});
+					}
 					if (valid) {
 						this.$axios.post(url, _this.dataInfo).then((res) => {
 							if(res.data.resp_code == 0) {
-								this.$message({
-									message: '保存成功',
-									type: 'success',
-								});
-								
-								this.$emit('request');
-								this.reset();
-								// this.$emit('reset');
-								// this.visible();
+								if(opt == 'docUpload'){
+									this.docParm.recordid = res.data.datas.id;
+									this.docParm.model = 'edit';
+									this.$refs.docTable.autoLoad();
+									this.dataInfo.ID = res.data.datas.id;
+								}else{
+									this.$message({
+										message: '保存成功',
+										type: 'success',
+									});
+									this.$emit('request');
+									this.reset();
+								}
 							}
 						}).catch((err) => {
 							this.$message({
@@ -947,6 +975,5 @@
 	@import '../../assets/css/mask-modules.css';
 	#cost{
 		text-align: right !important;
-		padding-right: 30px;
 	}
 </style>

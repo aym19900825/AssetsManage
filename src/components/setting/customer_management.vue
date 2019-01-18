@@ -50,7 +50,7 @@
 					<el-form :model="searchList" label-width="70px">
 						<el-row :gutter="10">
 							<el-col :span="5">
-								<el-form-item label="组织机构代码" prop="CODE" label-width="100px">
+								<el-form-item label="统一信用代码/组织机构代码" prop="CODE" label-width="100px">
 									<el-input v-model="searchList.CODE">
 									</el-input>
 								</el-form-item>
@@ -93,7 +93,7 @@
 						<el-table :data="customerList" border stripe :header-cell-style="rowClass" :height="fullHeight" style="width: 100%;" :default-sort="{prop:'customerList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 							</el-table-column>
-							<el-table-column label="组织机构代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('组织机构代码')!=-1">
+							<el-table-column label="统一信用代码/组织机构代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('统一信用代码/组织机构代码')!=-1">
 								<template slot-scope="scope">
 									<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.CODE}}
 									</p>
@@ -102,6 +102,10 @@
 							<el-table-column label="单位名称" width="300" sortable prop="NAME" v-if="this.checkedName.indexOf('单位名称')!=-1">
 							</el-table-column>
 							<el-table-column label="联系地址" sortable prop="CONTACT_ADDRESS" v-if="this.checkedName.indexOf('联系地址')!=-1">
+							</el-table-column>
+							<el-table-column label="类型" sortable prop="TYPE" v-if="this.checkedName.indexOf('类型')!=-1">
+							</el-table-column>
+							<el-table-column label="备注" sortable prop="MEMO" v-if="this.checkedName.indexOf('备注')!=-1">
 							</el-table-column>
 							<!-- <el-table-column label="联系电话" sortable prop="PHONE" v-if="this.checkedName.indexOf('联系电话')!=-1">
 							</el-table-column> -->	
@@ -167,15 +171,17 @@
 			        deptId: ''
 		        },
 				checkedName: [
-					'组织机构代码',
+					'统一信用代码/组织机构代码',
 					'单位名称',
 					'联系地址',
+					'类型',
+					'备注',
 					// '联系电话',
 					// '信息状态',
 				],
 				tableHeader: [
 					{
-						label: '组织机构代码',
+						label: '统一信用代码/组织机构代码',
 						prop: 'CODE'
 					},
 					{
@@ -185,6 +191,14 @@
 					{
 						label: '联系地址',
 						prop: 'CONTACT_ADDRESS'
+					},
+					{
+						label: '类型',
+						prop: 'TYPE'
+					},
+					{
+						label: '备注',
+						prop: 'MEMO'
 					},
 					// {
 					// 	label: '联系电话',

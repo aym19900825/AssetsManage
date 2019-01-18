@@ -67,12 +67,18 @@
 							</el-col> -->
 							<el-col :span="5">
 								<el-form-item label="录入时间" prop="ENTERDATE">
-									<el-input v-model="searchList.ENTERDATE"></el-input>
+									<div class="block">
+									    <el-date-picker
+									      v-model="searchList.ENTERDATE"
+									      type="date"
+									      placeholder="请选择" style="width: 100%"  value-format="yyyy-MM-dd">
+									    </el-date-picker>
+								  	</div>
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
-								<el-form-item label="机构" prop="DEPARTMEMT" label-width="45px">
-									<el-select clearable v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="请选择">
+								<el-form-item label="机构" prop="DEPTID" label-width="45px">
+									<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
 										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 										</el-select>
 								</el-form-item>
@@ -87,7 +93,7 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :header-cell-style="rowClass" :data="userList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+						<el-table :header-cell-style="rowClass" :data="userList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 							</el-table-column>
 							<el-table-column label="期间核查计划编号" width="200" sortable prop="C_PLANNUM" v-if="this.checkedName.indexOf('期间核查计划编号')!=-1">
@@ -102,7 +108,7 @@
 							</el-table-column> -->
 							<el-table-column label="录入时间" sortable prop="ENTERDATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 							</el-table-column>						
-							<el-table-column label="机构" sortable prop="DEPARTMEMTDesc" v-if="this.checkedName.indexOf('机构')!=-1">
+							<el-table-column label="机构" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
 							</el-table-column>
 						</el-table>
 						<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
@@ -127,7 +133,7 @@
 <script>
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
-	import navs_left from '../common/left_navs/nav_left4.vue'
+	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_header from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import detailPage from '../equipmentsDetails/verifiPlan_mask.vue'
@@ -180,7 +186,7 @@
 					},
 					{
 						label: '机构',
-						prop: 'DEPARTMEMTDesc'
+						prop: 'DEPTIDDesc'
 					}
 				],
 				leftNavs: [//leftNavs左侧菜单数据
@@ -349,22 +355,30 @@
 						type: 'warning'
 					});
 					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时删除多个数据',
-						type: 'warning'
-					});
-					return;
 				} else {
-					this.$confirm('确定要删除此数据吗?', '提示', {
+					var url = this.basic_url + '/api-apps/app/checkPlan/deletes';
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					for(var i = 0; i < changeUser.length; i++) {
+						deleteid.push(changeUser[i].ID);
+					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+					var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除此数据吗？', '提示', {
 						confirmButtonText: '确定',
 						cancelButtonText: '取消',
-						type: 'warning'
-					}).then(() => {
-						var changeUser = selData[0];
-						var id = changeUser.ID;
-						var url = this.basic_url + '/api-apps/app/checkPlan/' + id;
-						this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {
+							params: data
+						}).then((res) => { //.delete 传数据方法
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
 								this.$message({
@@ -372,11 +386,6 @@
 									type: 'success'
 								});
 								this.requestData();
-							}else{
-								this.$message({
-									message: res.data.resp_msg,
-									type: 'success'
-								});
 							}
 						}).catch((err) => {
 							this.$message({
@@ -384,7 +393,9 @@
 								type: 'error'
 							});
 						});
-					}).catch(() => {});   
+					}).catch(() => {
+
+					});
 				}
 			},
 			// 导入
@@ -429,7 +440,7 @@
 					DESCRIPTION: this.searchList.DESCRIPTION,
 					ENTERBY: this.searchList.ENTERBY,
 					ENTERDATE: this.searchList.ENTERDATE,
-					DEPARTMEMT: this.searchList.ENDEPARTMEMTTERBY,
+					DEPTID: this.searchList.DEPTID,
 				}
 				var url = this.basic_url + '/api-apps/app/checkPlan';
 				this.$axios.get(url, {

@@ -219,12 +219,7 @@
 		},
 		methods: {
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
-				return(
-					<span>
-		              <i class={data.iconClass}></i>
-		              <span>{node.label}</span>
-		            </span>
-				);
+				return (<span><i class={data.iconClass}></i><span>{node.label}</span></span>)
 			},
 			// 点击节点
 			nodeClick: function(m) {
@@ -296,7 +291,7 @@
 					});
 					return;
 				} else {
-					this.$refs.child.detail(this.selMenu[0].ID);
+					this.$refs.child.detail();
 				}
 			},
 			//高级查询

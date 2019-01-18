@@ -20,7 +20,7 @@
 										<input id="excelFile" type="file" name="uploadFile" @change="upload"/>
 									</button>
 								</form>
-								<button type="button" class="btn btn-green" @click="showDir" id="">
+								<button type="button" class="btn btn-green" @click="showDir">
                                 	<i class="icon-add"></i>新建文件夹
                       			 </button>
 								<!-- <button type="button" class="btn btn-blue button-margin" @click="modify">
@@ -47,14 +47,9 @@
 						<el-form :model="searchList" label-width="70px">
 							<el-row :gutter="30" class="pb5">
 								<el-col :span="7">
-									<el-input v-model="searchList.V_NAME">
-										<template slot="prepend">分类名称</template>
+									<el-input v-model="searchList.appname">
+										<template slot="prepend">应用名称</template>
 									</el-input>
-								</el-col>
-								<el-col :span="7">
-									<el-input v-model="searchList.DESCRIPTION">
-										<template slot="prepend">信息状态</template>
-										</el-input>
 								</el-col>
 								<el-col :span="3">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
@@ -94,6 +89,8 @@
 								</el-table-column>
 								<el-table-column label="名称" sortable prop="filename" v-if="this.checkedName.indexOf('名称')!=-1">
 								</el-table-column>
+								<el-table-column label="应用" sortable prop="appname" v-if="this.checkedName.indexOf('应用')!=-1">
+								</el-table-column>
 								<el-table-column label="状态" sortable width="200px" prop="filestatus" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
 								<el-table-column label="大小" sortable  width="140px" prop="filesize" v-if="this.checkedName.indexOf('大小')!=-1">
@@ -121,7 +118,7 @@
 		</div>
 		<!-- <samplesmask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></samplesmask> -->
 		<!--右侧内容显示 End-->
-		<el-dialog title="文件夹" :visible.sync="dirDialog">
+		<el-dialog :modal-append-to-body="false" title="文件夹" :visible.sync="dirDialog">
 			<el-form :model="dir" label-width="80px">
 				<el-form-item label="名称">
 					<el-input v-model="dir.dirName"></el-input>
@@ -133,6 +130,7 @@
 			</div>
 		</el-dialog>
 		<vkeyword ref="keyword" :param="param"></vkeyword>
+		<!-- <vchoose ref="choose" :chooseParam = "chooseParam" @tranFormData = 'getChoose'></vchoose> -->
 	</div>
 </template>
 <script>
@@ -145,6 +143,7 @@
 	import vueDropzone from 'vue2-dropzone'
 	import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 	import vkeyword from '../common/keyword.vue'
+	import vchoose from '../common/dataChoose.vue'
 	export default {
 		name: 'samples',//接样
 		components: {
@@ -154,15 +153,42 @@
 			tableControle,
 			samplesmask,
 			vueDropzone,
-			vkeyword
+			vkeyword,
+			vchoose
 		},
 		data() {
 			return {
+				chooseParam: {
+					selShow: false,
+					visible: false,
+					title: "用户列表",
+					listName: 'user',
+					selMax: 1,
+					tableHeader: [
+						{
+							propName: 'username',
+							labelName: '用户姓名'
+						},
+						{
+							propName: 'deptName',
+							labelName: '组织机构'
+						}
+
+					],
+					search: [
+						{
+							name: 'deptId',
+							val: ''
+						}
+					],
+					url: '/api-user/users'
+				},
 				param: {
 					visible: false,
 				},
 				resolve: function(){},
 				node: {},
+				parentNode: {},
 				dirDialog: false,
 				dir: {
 					'dirName': ''
@@ -190,7 +216,8 @@
 				checkedName: [
 					'名称', 
 					'状态',
-					'大小'
+					'大小',
+					'应用'
 				],
 				tableHeader: [{
 						label: '名称',
@@ -203,6 +230,10 @@
 					{
 						label: '大小',
 						prop: 'filesize'
+					},
+					{
+						label: '应用',
+						prop: 'appname'
 					}
 				],
 				companyId: '',
@@ -214,8 +245,7 @@
 				down: true,
 				up: false,
 				searchList: {
-					'CLASSFICATION': '',
-					'STATUS': ''
+					'appname': ''
 				},
 				//tree树菜单
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -267,7 +297,14 @@
 			showAuth(row){
 				this.param.visible = true;
 				this.param.fileid = row.fileid;
+				this.$refs.keyword.getData();
 				this.$refs.keyword.requestData();
+			},
+			getChoose(data){
+				// listName: this.chooseParam.listName,
+                // data: this.selData
+				var selData = data.data;
+				
 			},
 			resetDir(){
 				this.dir.dirName = '';
@@ -309,7 +346,7 @@
 					for(var i=0; i<pathList.length; i++){
 						pathList[i].name = pathList[i].foldername;
 					}
-					return resolve(pathList);
+					this.loadNode(this.node, this.resolve, 'loadThisNode' , pathList);
 				});
 			},
 			upload(e){
@@ -347,17 +384,14 @@
 				})
 			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
-				return(
-					<span>
-		              <i class={data.iconClass}></i>
-		              <span>{node.label}</span>
-		            </span>
-				);
+				return (<span><i class={data.iconClass}></i><span>{node.label}</span></span>)
 			},
 			handleNodeClick(data){
 				this.page.currentPage = 1;
 				this.docId = data.id;
 				this.node = data;
+				this.parentNode = data.parent;
+				// this.refreshLazyTree();
 				this.getFileList();
 			},
 			getFileList(){
@@ -366,7 +400,8 @@
 					'pathid': this.docId,
 					'deptid': this.docParm.deptid,
 					'page': this.page.currentPage - 1,
-					'size': this.page.pageSize
+					'size': this.page.pageSize,
+					'appname': this.searchList.appname
 				}).then((res) => {
 					this.fileList = res.data.fileList.fileList;
 					this.page.totalCount = res.data.fileList.total;
@@ -386,16 +421,20 @@
 					});
 				});
 			},
-			loadNode(node, resolve) {
+			loadNode(node, resolve, opt, param) {
+				if(opt == 'loadThisNode'){
+					var pathList = param;
+					return this.resolve(pathList);
+				}
 				this.resolve = resolve;
-				this.node = node;
 				let that = this;
 				var url = that.file_url + '/file/pathList';
 				var pathid = 2;
+				console.log(node);
 				if(node.level === 0){
 					pathid = 0;
 				}else{
-					pathid = node.data.id;
+					pathid = node.data.id || node.id;
 				}
 				if(that.deptId == 0){
 					setTimeout(function(){
@@ -427,7 +466,6 @@
 						return resolve(pathList);
 					});
 				}
-				
 			},
 			nodeClick(m) {
 				if(m.iconClass != 'icon-file-text') {
@@ -454,13 +492,16 @@
 			},
 			sizeChange(val) {//分页，总页数
 				this.page.pageSize = val;
+				this.getFileList();
 			},
 			currentChange(val) {//分页，当前页
 				this.page.currentPage = val;
+				this.getFileList();
 			},
 			searchinfo(index) {//高级查询
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
+				this.getFileList();
 			},
 			//修改用戶
 			modify() {
@@ -486,8 +527,30 @@
 				this.down = !this.down,
 					this.up = !this.up
 			},
+			// refreshLazyTree(node, children) {
+			// 	var theChildren = node.childNodes
+			// 	theChildren.splice(0, theChildren.length)
+			// 	this.loadNode();
+			// },
+			findTreeId(parentid,chooseData){
+				var data = chooseData;
+				for(var i=0; i<data.length; i++){
+					var flag = true;
+					if(data.id == parentid){
+						data.splice(i,1);
+						flag = false;
+					}
+					if(flag){
+						this.findTreeId(parentid, data[i]);
+					}
+				}
+			},
 			// 删除
 			delDir() {
+				var parentid = this.node.parentid;
+				this.findTreeId(parentid, this.$refs.tree._data.root.childNodes);
+				console.log(this.$refs);
+				return;
 				var url = this.file_url + '/file/deletePath/' + this.docId;
 				this.$confirm('确定删除此文件夹吗？', '提示', {
 					confirmButtonText: '确定',

@@ -16,7 +16,8 @@ import data_module from '@/components/maindata/data_module'//原始数据模板
 import report_module from '@/components/maindata/report_module'//检验/检测报告模板
 import work_instruction from '@/components/maindata/work_instruction'//作业指导书
 
-
+import application_management from '@/components/setting/application_management'//应用管理
+import button_configure from '@/components/setting/button_configure'//按钮配置
 import customer_management from '@/components/setting/customer_management'//客户管理
 import user_management from '@/components/setting/user_management'//用户管理
 import dept_management from '@/components/setting/dept_management'//机构管理
@@ -53,6 +54,7 @@ import reports from '@/components/reports'//报表管理
 import inspect_proxy from '@/components/proxies/inspect_proxy'//检验委托书
 import subc_agreement from '@/components/proxies/subc_agreement'//分包协议
 
+import equipment_classify from '@/components/equipments/equipment_classify'//设备分类
 import instruments from '@/components/equipments/instruments'//仪器和计量器具
 import usag_tending_records from '@/components/equipments/usag_tending_records'//使用/维护保养记录
 import traceability_plan from '@/components/equipments/traceability_plan'//溯源计划
@@ -71,7 +73,8 @@ import approving from '@/components/workflow/approving'//审批意见
 import flowhistory from '@/components/workflow/flowhistory'//流程历史
 import flowmap from '@/components/workflow/flowmap'//流程地图
 
-
+import flow_management from '@/components/flow/flow_management'//流程模型
+import flow_process from '@/components/flow/flow_process'//流程模型
 Vue.use(Router)
   const routes = [
     {//登录页
@@ -192,6 +195,11 @@ Vue.use(Router)
       name: 'subc_agreement',
       component: subc_agreement
     },
+    {//设备分类
+      path: '/equipment_classify',
+      name: 'equipment_classify',
+      component: equipment_classify
+    },
     {//仪器和计量器具
       path: '/instruments',
       name: 'instruments',
@@ -241,6 +249,16 @@ Vue.use(Router)
       path: '/menu_management',
       name: 'menu_management',
       component: menu_management
+    },
+     {//应用管理
+      path: '/application_management',
+      name: 'application_management',
+      component: application_management
+    },
+     {//按钮配置
+      path: '/button_configure',
+      name: 'button_configure',
+      component: button_configure
     },
     {//角色管理
       path: '/role_management',
@@ -346,7 +364,17 @@ Vue.use(Router)
       path: '/doc_list',
       name: 'doc_list',
       component: doc_list
-    }
+    },
+     {//流程模型
+      path: '/flow_management',
+      name: 'flow_management',
+      component: flow_management
+    },
+    {//工作流管理
+      path: '/flow_process',
+      name: 'flow_process',
+      component: flow_process
+    },
 ];
 
 const router = new Router({

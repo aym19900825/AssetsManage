@@ -55,8 +55,14 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
-								<el-form-item label="检查日期" prop="C_MEMO">
-									<el-input v-model="searchList.C_MEMO"></el-input>
+								<el-form-item label="检查日期" prop="C_DATE">
+									<div class="block">
+									    <el-date-picker
+									      v-model="searchList.C_DATE"
+									      type="date"
+									      placeholder="录入时间" style="width: 100%"  value-format="yyyy-MM-dd">
+									    </el-date-picker>
+								  	</div>
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
@@ -185,49 +191,6 @@
 					// 	prop: 'STATUS'
 					// }
 				],
-				leftNavs: [//leftNavs左侧菜单数据
-					{
-						navicon: 'icon-user',
-						navtitle: '用户管理',
-						navherf: '/personinfo'
-					}, {
-						navicon: 'icon-edit',
-						navtitle: '机构管理',
-						navherf: '/dept_management'
-					}, {
-						navicon: 'icon-role-site',
-						navtitle: '角色管理',
-						navherf: '/role_management'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '客户管理',
-						navherf: '/customer_management'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '产品类别',
-						navherf: '/products_category'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '产品',
-						navherf: '/products'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测标准',
-						navherf: '/testing_standard'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测项目',
-						navherf: '/testing_projects'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测方法',
-						navherf: '/testing_methods'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '自动编号设置',
-						navherf: '/number_settings'
-					}
-				],
 				companyId: '',
 				deptId: '',
 				selUser: [],
@@ -333,22 +296,30 @@
 						type: 'warning'
 					});
 					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时删除多个数据',
-						type: 'warning'
-					});
-					return;
 				} else {
-					this.$confirm('确定要删除此数据吗?', '提示', {
+					var url = this.basic_url + '/api-apps/app/checkRecord/deletes';
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					for(var i = 0; i < changeUser.length; i++) {
+						deleteid.push(changeUser[i].ID);
+					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+					var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除此数据吗？', '提示', {
 						confirmButtonText: '确定',
 						cancelButtonText: '取消',
-						type: 'warning'
-					}).then(() => {
-						var changeUser = selData[0];
-						var id = changeUser.ID;
-						var url = this.basic_url + '/api-apps/app/checkRecord/' + id;
-						this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {
+							params: data
+						}).then((res) => { //.delete 传数据方法
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
 								this.$message({
@@ -356,11 +327,6 @@
 									type: 'success'
 								});
 								this.requestData();
-							}else{
-								this.$message({
-									message: res.data.resp_msg,
-									type: 'success'
-								});
 							}
 						}).catch((err) => {
 							this.$message({
@@ -368,7 +334,9 @@
 								type: 'error'
 							});
 						});
-					}).catch(() => {});   
+					}).catch(() => {
+
+					});
 				}
 			},
 			// 导入

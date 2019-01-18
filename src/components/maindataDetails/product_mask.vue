@@ -1,106 +1,108 @@
 <template>
 	<div>
 		<div class="mask" v-if="show"></div>
-		<div class="mask_div" v-if="show">
-			<div class="mask_title_div clearfix">
-				<div class="mask_title" v-show="addtitle">添加产品</div>
-				<div class="mask_title" v-show="modifytitle">修改产品</div>
-				<div class="mask_title" v-show="viewtitle">查看产品</div>
-				<div class="mask_anniu">
-					<span class="mask_span mask_max" @click='toggle'>
-						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
-					</span>
-					<span class="mask_span" @click='close'>
-						<i class="icon-close1"></i>
-					</span>
+		<div class="mask_divbg" v-if="show">
+			<div class="mask_div">
+				<div class="mask_title_div clearfix">
+					<div class="mask_title" v-show="addtitle">添加产品</div>
+					<div class="mask_title" v-show="modifytitle">修改产品</div>
+					<div class="mask_title" v-show="viewtitle">查看产品</div>
+					<div class="mask_anniu">
+						<span class="mask_span mask_max" @click='toggle'>
+							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
+						</span>
+						<span class="mask_span" @click='close'>
+							<i class="icon-close1"></i>
+						</span>
+					</div>
 				</div>
-			</div>
-			<div class="mask_content">
-				<el-form :model="PRODUCT" inline-message :rules="rules" ref="PRODUCT" label-width="100px" class="demo-adduserForm">
-					<div class="accordion" id="information">
-						<el-collapse v-model="activeNames">
-							<el-collapse-item title="名称" name="1">
-								<el-row class="pb10">
-									<el-col :span="3" class="pull-right">
-										<el-input v-model="PRODUCT.VERSION" :disabled="true">
-											<template slot="prepend">版本</template>
-										</el-input>
-									</el-col>
-									<!--<el-col :span="5" class="pull-right" v-if="modify" style="display:none;">
-										<el-input v-model="PRODUCT.STATUS=='1'?'活动':'不活动'" :disabled="true">
-											<template slot="prepend">信息状态</template>
-										</el-input>
-									</el-col>
-									<el-col :span="5" class="pull-right" v-else style="display:none;">
-										<el-input v-model="PRODUCT.STATUS" :disabled="true">
-											<template slot="prepend">信息状态</template>
-										</el-input>
-									</el-col>-->
-									<!-- <el-select v-model="PRODUCT.STATUS" placeholder="请选择信息状态">
-											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-											</el-option>
-										</el-select> -->
-								</el-row>
+				<div class="mask_content">
+					<el-form :model="PRODUCT" inline-message :rules="rules" ref="PRODUCT" label-width="100px" class="demo-adduserForm">
+						<div class="accordion" id="information">
+							<el-collapse v-model="activeNames">
+								<el-collapse-item title="名称" name="1">
+									<el-row class="pb10">
+										<el-col :span="3" class="pull-right">
+											<el-input v-model="PRODUCT.VERSION" :disabled="true">
+												<template slot="prepend">版本</template>
+											</el-input>
+										</el-col>
+										<!--<el-col :span="5" class="pull-right" v-if="modify" style="display:none;">
+											<el-input v-model="PRODUCT.STATUS=='1'?'活动':'不活动'" :disabled="true">
+												<template slot="prepend">信息状态</template>
+											</el-input>
+										</el-col>
+										<el-col :span="5" class="pull-right" v-else style="display:none;">
+											<el-input v-model="PRODUCT.STATUS" :disabled="true">
+												<template slot="prepend">信息状态</template>
+											</el-input>
+										</el-col>-->
+										<!-- <el-select v-model="PRODUCT.STATUS" placeholder="请选择信息状态">
+												<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+												</el-option>
+											</el-select> -->
+									</el-row>
 
-								<el-row>
-									<!-- <el-col :span="8">
-										<el-form-item label="产品编号" prop="PRO_NUM">
-											<el-input v-model="PRODUCT.PRO_NUM" :disabled="edit" placeholder="自动生成"></el-input>
-										</el-form-item>
-									</el-col> -->
-									<el-col :span="8">
-										<el-form-item label="编码" prop="PRO_NUM">
-											<el-input v-model="PRODUCT.PRO_NUM" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="16">
-										<el-form-item label="产品" prop="PRO_NAME">
-											<el-input v-model="PRODUCT.PRO_NAME" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row>
-									<el-col :span="8" v-if="dept">
-										<el-form-item label="机构" prop="DEPTIDDesc">
-											<el-input v-model="PRODUCT.DEPTIDDesc" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-							</el-collapse-item>
-							<el-collapse-item title="其它" name="2"  v-show="views">
-								<el-row>
-									<el-col :span="8">
-										<el-form-item label="录入人" prop="ENTERBYDesc">
-											<el-input v-model="PRODUCT.ENTERBYDesc" :disabled="edit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="录入时间" prop="ENTERDATE">
-											<el-input v-model="PRODUCT.ENTERDATE" :disabled="edit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="修改人" prop="CHANGEBYDesc">
-											<el-input v-model="PRODUCT.CHANGEBYDesc" placeholder="当前修改人" :disabled="edit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="修改时间" prop="CHANGEDATE">
-											<el-input v-model="PRODUCT.CHANGEDATE" placeholder="当前修改时间" :disabled="edit"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-							</el-collapse-item>
-						</el-collapse>
-					</div>
-					<div class="el-dialog__footer" v-show="noviews">
-						<el-button type="primary" @click="saveAndUpdate('PRODUCT')">保存</el-button>
-						<el-button type="success" @click="saveAndSubmit('PRODUCT')" v-show="addtitle">保存并继续</el-button>
-						<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('PRODUCT')">修订</el-button>
-						<!-- <el-button v-if="modify" type="success" @click="update('PRODUCT')">启用</el-button> -->
-						<el-button @click='close'>取消</el-button>
-					</div>
-				</el-form>
+									<el-row>
+										<!-- <el-col :span="8">
+											<el-form-item label="产品编号" prop="PRO_NUM">
+												<el-input v-model="PRODUCT.PRO_NUM" :disabled="edit" placeholder="自动生成"></el-input>
+											</el-form-item>
+										</el-col> -->
+										<el-col :span="8">
+											<el-form-item label="编码" prop="PRO_NUM">
+												<el-input v-model="PRODUCT.PRO_NUM" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="16">
+											<el-form-item label="产品" prop="PRO_NAME">
+												<el-input v-model="PRODUCT.PRO_NAME" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="8" v-if="dept">
+											<el-form-item label="机构" prop="DEPTIDDesc">
+												<el-input v-model="PRODUCT.DEPTIDDesc" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+								</el-collapse-item>
+								<el-collapse-item title="其它" name="2"  v-show="views">
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="录入人" prop="ENTERBYDesc">
+												<el-input v-model="PRODUCT.ENTERBYDesc" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="录入时间" prop="ENTERDATE">
+												<el-input v-model="PRODUCT.ENTERDATE" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="修改人" prop="CHANGEBYDesc">
+												<el-input v-model="PRODUCT.CHANGEBYDesc" placeholder="当前修改人" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="修改时间" prop="CHANGEDATE">
+												<el-input v-model="PRODUCT.CHANGEDATE" placeholder="当前修改时间" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+								</el-collapse-item>
+							</el-collapse>
+						</div>
+						<div class="el-dialog__footer" v-show="noviews">
+							<el-button type="primary" @click="saveAndUpdate('PRODUCT')">保存</el-button>
+							<el-button type="success" @click="saveAndSubmit('PRODUCT')" v-show="addtitle">保存并继续</el-button>
+							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('PRODUCT')">修订</el-button>
+							<!-- <el-button v-if="modify" type="success" @click="update('PRODUCT')">启用</el-button> -->
+							<el-button @click='close'>取消</el-button>
+						</div>
+					</el-form>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -256,6 +258,7 @@
 
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					console.log(res.data);
+					this.PRODUCT.ID = '',
 					this.PRODUCT.DEPTID = res.data.deptId;
 					// this.PRODUCT.DEPTIDDesc = res.data.deptName;
 					this.PRODUCT.ENTERBY = res.data.id;
@@ -333,8 +336,8 @@
 								});
 								//重新加载数据
 								this.$emit('request');
-								this.$emit('reset');
-								this.visible();
+								// this.$emit('reset');
+								// this.visible();
 							}else{
 								this.show = true;
 								if(res.data.resp_code == 1) {
@@ -343,7 +346,8 @@
 									 	this.$message({
 											message: res.data.resp_msg,
 											type: 'warning'
-									 	});
+										 });
+										 console.log(res.data.resp_msg);
 									}else{
 										this.$message({
 											message:'相同数据不可重复添加！',
@@ -460,22 +464,20 @@
 					this.rebackDialog();
 				}
 			},
-			maxDialog(e) {
+			maxDialog(e) { //定义大弹出框一个默认大小
 				this.isok1 = false;
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
-				$(".mask_div").css("margin", "0%");
 				$(".mask_div").css("top", "60px");
 			},
 			//还原按钮
-			rebackDialog() {
+			rebackDialog() { //大弹出框还原成默认大小
 				this.isok1 = true;
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
-				$(".mask_div").css("margin", "7% 10%");
-				$(".mask_div").css("top", "0");
+				$(".mask_div").css("top", "100px");
 			},
 			handleClose(done) {
 				this.$confirm('确认关闭？')

@@ -1,77 +1,79 @@
 <template>
 <!-- 期间核查记录 -->
 	<div>
-		<div class="mask" v-show="show"></div>
-		<div class="mask_div" v-show="show">
-			<div class="mask_title_div clearfix">
-				<div class="mask_title" v-show="addtitle">添加期间核查记录</div>
-					<div class="mask_title" v-show="modifytitle">修改期间核查记录</div>
-					<div class="mask_title" v-show="viewtitle">查看期间核查记录</div>
-				<div class="mask_anniu">
-					<span class="mask_span mask_max" @click='toggle'>
-						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
-					</span>
-					<span class="mask_span" @click='close'>
-						<i class="icon-close1"></i>
-					</span>
+		<div class="mask" v-if="show"></div>
+		<div class="mask_divbg" v-if="show">
+			<div class="mask_div">
+				<div class="mask_title_div clearfix">
+					<div class="mask_title" v-show="addtitle">添加期间核查记录</div>
+						<div class="mask_title" v-show="modifytitle">修改期间核查记录</div>
+						<div class="mask_title" v-show="viewtitle">查看期间核查记录</div>
+					<div class="mask_anniu">
+						<span class="mask_span mask_max" @click='toggle'>
+							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
+						</span>
+						<span class="mask_span" @click='close'>
+							<i class="icon-close1"></i>
+						</span>
+					</div>
 				</div>
-			</div>
-			<div class="mask_content">
-				<el-form :model="dataInfo" :rules="rules"   ref="dataInfo" label-width="100px" class="demo-user">
-					<div class="accordion">
-						<!-- 设备基本信息 -->
-						<el-collapse v-model="activeNames">
-							<el-collapse-item name="1">
-								<el-row :gutter="20" class="pb10">
-									<el-col :span="5" class="pull-right">
-										<el-input v-model="dataInfo.C_RECORDNUM" :disabled="true">
-											<template slot="prepend">核查记录编号</template>
-										</el-input>
-									</el-col>
-								</el-row>
-								<el-form-item v-for="item in basicInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" label-width="160px">
-									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" style="width: 220px;" :disabled="noedit"></el-input>
-									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'" :disabled="noedit"></el-input>
-									<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" :disabled="noedit">
-									</el-date-picker>
-									<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'" :disabled="noedit">
-										<el-radio :label="it.label" v-for="it in item.opts" :key="it.id"></el-radio>
-									</el-radio-group>
-									<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'" @change="selChange" :disabled="noedit">
-										<el-option v-for="item in assets"
-										:key="item.ID"
-										:label="item.DESCRIPTION"
-										:value="item.DESCRIPTION">
-										</el-option>
-									</el-select>
-								</el-form-item>
-							</el-collapse-item>
-							<!-- 文件管理 -->
-							<el-collapse-item title="文件" name="2">
-								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
-							</el-collapse-item>
-							<!-- 其他信息 -->
-							<el-collapse-item title="其他" name="3" v-show="!addtitle">
-								<el-form-item label-width="120px" v-for="item in otherInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-if="item.prop=='DEPARTMENT'" v-show="dept">
-                                    <el-input v-model="dataInfo[item.prop]" :type="item.type" disabled v-if="item.prop=='DEPARTMENT'"></el-input>
-                                </el-form-item>	
-                                <el-form-item label-width="120px" v-for="item in otherInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-show="views">
-                                    <el-input v-if="item.type=='input'" v-model="dataInfo[item.prop]" :type="item.type" disabled></el-input>
-                                    <el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" disabled style="width:100%"></el-date-picker>
-                                </el-form-item>		
-							</el-collapse-item>
-						</el-collapse>
-					</div>
+				<div class="mask_content">
+					<el-form :model="dataInfo" :rules="rules"   ref="dataInfo" label-width="100px" class="demo-user">
+						<div class="accordion">
+							<!-- 设备基本信息 -->
+							<el-collapse v-model="activeNames">
+								<el-collapse-item name="1">
+									<el-row :gutter="20" class="pb10">
+										<el-col :span="5" class="pull-right">
+											<el-input v-model="dataInfo.C_RECORDNUM" :disabled="true">
+												<template slot="prepend">核查记录编号</template>
+											</el-input>
+										</el-col>
+									</el-row>
+									<el-form-item v-for="item in basicInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" label-width="160px">
+										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" style="width: 220px;" :disabled="noedit"></el-input>
+										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'" :disabled="noedit"></el-input>
+										<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" :disabled="noedit">
+										</el-date-picker>
+										<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'" :disabled="noedit">
+											<el-radio :label="it.label" v-for="it in item.opts" :key="it.id"></el-radio>
+										</el-radio-group>
+										<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'" @change="selChange" :disabled="noedit">
+											<el-option v-for="item in assets"
+											:key="item.ID"
+											:label="item.DESCRIPTION"
+											:value="item.DESCRIPTION">
+											</el-option>
+										</el-select>
+									</el-form-item>
+								</el-collapse-item>
+								<!-- 文件管理 -->
+								<el-collapse-item title="文件" name="2">
+									<doc-table ref="docTable" :docParm = "docParm"  @saveParent = "save"></doc-table>
+								</el-collapse-item>
+								<!-- 其他信息 -->
+								<el-collapse-item title="其他" name="3" v-show="!addtitle">
+									<el-form-item label-width="120px" v-for="item in otherInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-if="item.prop=='DEPARTMENT'" v-show="dept">
+	                                    <el-input v-model="dataInfo[item.prop]" :type="item.type" disabled v-if="item.prop=='DEPARTMENT'"></el-input>
+	                                </el-form-item>	
+	                                <el-form-item label-width="120px" v-for="item in otherInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-show="views">
+	                                    <el-input v-if="item.type=='input'" v-model="dataInfo[item.prop]" :type="item.type" disabled></el-input>
+	                                    <el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" disabled style="width:100%"></el-date-picker>
+	                                </el-form-item>		
+								</el-collapse-item>
+							</el-collapse>
+						</div>
 
-					<div class="el-dialog__footer" v-show="noviews">
-						<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
-						<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并继续</el-button>
-						<el-button @click='close'>取消</el-button>
-						<!-- <el-button type="primary" @click='submitForm'>提交</el-button> -->
-					</div>
-				</el-form>
+						<div class="el-dialog__footer" v-show="noviews">
+							<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
+							<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并继续</el-button>
+							<el-button @click='close'>取消</el-button>
+							<!-- <el-button type="primary" @click='submitForm'>提交</el-button> -->
+						</div>
+					</el-form>
+				</div>
+				<!--底部-->
 			</div>
-			<!--底部-->
 		</div>
 	</div>
 </template>
@@ -274,7 +276,7 @@
 				otherInfo: [
 					{
 						label: '录入人',
-						prop: 'ENTERBY',
+						prop: 'ENTERBYDesc',
 						width: '30%',
 						type: 'input',
 						displayType: 'inline-block'
@@ -288,14 +290,14 @@
 					},
 					{
 						label: '机构',
-						prop: 'DEPARTMENT',
+						prop: 'DEPTIDDesc',
 						width: '30%',
 						type: 'input',
 						displayType: 'inline-block'
 					},
                     {
 						label: '修改人',
-						prop: 'CHANGEBY',
+						prop: 'CHANGEBYDesc',
 						width: '30%',
 						type: 'input',
 						displayType: 'inline-block'
@@ -350,7 +352,7 @@
 					'APPR_DATE': '',
 					'ENTERBY': '',
 					'ENTERDATE': '',
-					'DEPARTMENT': '',
+					'DEPTID': '',
 					'STATUS': '1'
 				},
 				assets: [],
@@ -362,7 +364,6 @@
 					'username': '',
 					'deptid': 1,
 					'deptfullname': '',
-					'appname': '',
 					'appid': 1
 				},
 				addtitle:true,
@@ -384,10 +385,16 @@
 				var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url,{}).then((res) => {
 					if(opt == 'new'){
-				       this.dataInfo.CHANGEBY = res.data.username;
+						this.dataInfo.DEPTID = res.data.deptId;
+						this.dataInfo.ENTERBY = res.data.id;
 						this.dataInfo.CHANGEDATE = this.getToday();
-						this.dataInfo.DEPARTMENT = res.data.deptName;	
+						// this.dataInfo.DEPARTMENT = res.data.deptName;	
 					}
+					// else{
+						// this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
+						// this.dataInfo.CHANGEBY = res.data.id;
+						// this.dataInfo.CHANGEDATE = this.getToday();
+					// }
 					this.docParm.userid = res.data.id;
 					this.docParm.username = res.data.username;
 					this.docParm.deptid = res.data.deptId;
@@ -432,10 +439,9 @@
 				this.getUser('new');
 				this.docParm = {
 					'model': 'new',
-					'appname': 'CHECK_RECORD',
+					'appname': '期间核查记录',
 					'recordid': 1,
-					'appid': 73
-
+					'appid': 54
 				};
 			},
 			// 这里是修改
@@ -457,9 +463,9 @@
 				this.getUser();
 				this.docParm = {
 					'model': 'edit',
-					'appname': 'CHECK_RECORD',
+					'appname': '期间核查记录',
 					'recordid': this.detailData.ID,
-					'appid': 73
+					'appid': 54
 				};
 				this.$refs.docTable.getData();
 			},
@@ -507,8 +513,11 @@
 					'DEPARTMENT': '',
 					'STATUS': '1'
 				}
-				this.$refs['dataInfo'].resetFields();
+
+				//this.$refs['dataInfo'].resetFields();
 				this.show = false;
+
+
 			},
 			toggle(e) { //大弹出框大小切换
 				if(this.isok1) {
@@ -522,7 +531,6 @@
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
-				$(".mask_div").css("margin", "0%");
 				$(".mask_div").css("top", "60px");
 			},
 
@@ -531,24 +539,35 @@
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
-				$(".mask_div").css("margin", "7% 10%");
-				$(".mask_div").css("top", "0");
+				$(".mask_div").css("top", "100px");
 			},
 
-			save(dataInfo) {
+			save(opt) {
 				var _this = this;
 				var url = this.basic_url + '/api-apps/app/checkRecord/saveOrUpdate';
 				this.$refs['dataInfo'].validate((valid) => {
+					if(!valid && opt == 'docUpload'){
+						this.$message({
+							message: '请先正确填写信息，再进行文档上传',
+							type: 'warning'
+						});
+					}
 					if (valid) {
-						console.log(_this.dataInfo);
 						this.$axios.post(url, _this.dataInfo).then((res) => {
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',
 									type: 'success',
 								});
-								this.$emit('request');
-								this.resetForm();
+								if(opt == 'docUpload'){
+									this.docParm.recordid = res.data.datas.id;
+									this.docParm.model = 'edit';
+									this.$refs.docTable.autoLoad();
+									this.dataInfo.ID = res.data.datas.id;
+								}else{
+									this.$emit('request');
+									this.resetForm();
+								}
 							}
 						}).catch((err) => {
 							this.$message({

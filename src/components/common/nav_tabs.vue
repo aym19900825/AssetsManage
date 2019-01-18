@@ -120,34 +120,58 @@ export default {
                 }
 //              sessionStorage.setItem('clickedNav',JSON.stringify({arr:_this.tabs}));
 //              sessionStorage.setItem('selectedNav',JSON.stringify(_this.selectedTab));
-                this.$router.push({path: _this.selectedTab.navherf});
-                return false;
+				this.$store.dispatch('setClickedNavAct',_this.tabs);
+				this.$store.dispatch('setSelectedNavAct',_this.selectedTab);
+				if(_this.selectedTab.parentId!=-1){
+					this.$store.dispatch('setMenuIdAct',_this.selectedTab.parentId);//点击时重新给meunid赋值	
+				}else{
+					//如果只有一级菜单
+					this.$store.dispatch('setMenuIdAct','');
+				}
+                this.$router.push({path: _this.selectedTab.url});
+//              return false;
             }
         },
         closeSel(){
             this.closeTab( this.selectedTab);
         },
         closeAll(){
-            _this.$store.dispatch('setClickedNavAct',[{
+            this.$store.dispatch('setClickedNavAct',[{
                 css: 'icon-user',
                 name: '首页',
                 url: '/index'}]);
-            _this.$store.dispatch('setSelectedNavAct',{
+            this.$store.dispatch('setSelectedNavAct',{
                 css: 'icon-user',
                 name: '首页',
                 url: '/index'});
             this.$router.push({path: '/index'});
         },
         closeOther(){
+        	var item={
+        		 css: 'icon-user',
+                name: '首页',
+                url: '/index'
+        	};
+        	var flag = false;
             this.tabs = [this.selectedTab];
-            this.$store.dispatch('setClickedNavAct',this.tabs);
-            console.log(this.$store.state.clickedNavs);
+            console.log(this.tabs);
+            this.tabs.unshift(item);
+			for(var i = 0; i < this.$store.state.clickedNavs.length; i++){
+				if(item.name == this.$store.state.clickedNavs[i].name){
+					flag = true;
+				}
+			}
+			if(!flag){
+				this.tabs.unshift(item);
+				this.$store.state.clickedNavs.push(this.tabs)
+			}
+				this.$router.push({path: item.url});
+//         this.$store.state.clickedNavs.push(item);
 //          sessionStorage.setItem('clickedNav',JSON.stringify({arr:this.tabs}));
         },
         showSelected(item){
         	this.selectedTab = item;
         	this.$store.dispatch('setSelectedNavAct',item);
-			console.log(item);
 			this.$router.push({path: item.url});
 			if(item.parentId!=-1){
 				this.$store.dispatch('setMenuIdAct',item.parentId);//点击时重新给meunid赋值	
@@ -172,7 +196,7 @@ export default {
     },
     mounted(){
       	this.showClick(this.$store.state.setClickedNav);
-      	console.log(this.$store.state.setClickedNav);
+      	// console.log(this.$store.state.setClickedNav);
 //   	this.showSelected(this.$store.state.setSelectedNav);
 
     },

@@ -114,9 +114,9 @@
 								</el-table-column>
 								<!--<el-table-column label="样品子表ID" sortable width="200px" prop="ITEM_LINE_ID" v-if="this.checkedName.indexOf('样品子表ID')!=-1">
 								</el-table-column>-->
-								<el-table-column label="样品序号" sortable width="200px" prop="ITEMNUM" v-if="this.checkedName.indexOf('样品序号')!=-1">
+								<el-table-column label="样品序号" sortable width="200px" prop="ITEM_STEP" v-if="this.checkedName.indexOf('样品序号')!=-1">
 									<template slot-scope="scope">
-										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.ITEMNUM}}
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.ITEM_STEP}}
 										</p>
 									</template>
 								</el-table-column>
@@ -179,7 +179,7 @@
 				loadSign: true, //加载
 				commentArr: {},
 				checkedName: [
-					'样品子表ID',
+					// '样品子表ID',
 					'样品序号',
 					'样品类别',
 					'样品名称',
@@ -199,7 +199,7 @@
 //					},
 					{
 						label: '样品序号',
-						prop: 'ITEMNUM'
+						prop: 'ITEM_STEP'
 					},
 					{
 						label: '样品类别',
@@ -276,12 +276,7 @@
 			    return 'text-align:center'
 			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
-				return(
-					<span>
-		              <i class={data.iconClass}></i>
-		              <span>{node.label}</span>
-		            </span>
-				);
+				return (<span><i class={data.iconClass}></i><span>{node.label}</span></span>)
 			},
 			// 点击节点
 			nodeClick: function(m) {
@@ -355,7 +350,7 @@
 					ACCEPT_DATE: '',//收样日期
 					GRANT_PERSON: '',//领样人
 					GRANT_DATE: '',//领样日期
-					STATE: '草稿',//状态
+					STATE: '在检',//状态
 					STATUSDATE: '',//状态日期
 					ENTERBY: '',//录入人
 					ENTERDATE: '',//录入时间

@@ -38,8 +38,8 @@
 			    <el-table-column label="标准名称" sortable prop="S_NAME">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.S_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NAME" placeholder="请输入内容">
-			        		<el-button slot="append" icon="icon-search"></el-button>
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NAME" :disabled="true" placeholder="请输入内容">
+			        		<el-button slot="append" icon="icon-search" @click="addprobtn(scope.row)"></el-button>
 			        	</el-input><span v-else="v-else">{{scope.row.S_NAME}}</span>
 					</el-form-item>
 			      </template>
@@ -113,6 +113,34 @@
 			<!-- 表格 End-->
 		</div>
 	</el-card>
+
+	<!-- 检验/检测标准 Begin -->
+		<el-dialog :modal-append-to-body="false" title="选择基础数据——检验/检测标准" height="300px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
+			<!-- 第二层弹出的表格 Begin-->
+			<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table-column type="selection" fixed width="55" align="center">
+				</el-table-column>
+				<el-table-column label="编码" width="155" sortable prop="S_NUM">
+				</el-table-column>
+				<el-table-column label="名称" sortable prop="S_NUM">
+				</el-table-column>
+				<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
+				</el-table-column>
+				<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc">
+				</el-table-column>
+				<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
+				</el-table-column>
+				<el-table-column label="修改时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
+				</el-table-column>
+			</el-table>
+			
+			<!-- 表格 End-->
+			<span slot="footer" class="dialog-footer">
+		       <el-button @click="dialogVisible3 = false">取 消</el-button>
+		       <el-button type="primary" @click="addproclass">确 定</el-button>
+		    </span>
+		</el-dialog>
+		<!-- 检验/检测标准 End -->
 </div>
 </template>
 <script>
@@ -131,6 +159,11 @@
 					inspectionList: []
 				},
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
+					departmentId: '',//当前用户机构号
+					categoryList:[],//获取产品数据
+					catedata:'',//获取产品类别一条数据放到table行中
+					dialogVisible3: false, //对话框
+					selData:[],
 				isEditing: '',
 				loadSign:true,//加载
 				commentArr:{},//下拉加载
@@ -163,9 +196,7 @@
 					row.isEditing = !row.isEditing
 				}
 			},
-			operationChild(row){
-
-			},
+			
 			modifyversion (row) {//点击修改后给当前修改人和修改时间赋值
 				 this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					row.CHANGEBY=res.data.nickname;
@@ -183,18 +214,49 @@
 				})
 			},
 			loadMore () {//表格滚动加载
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page.currentPage++
-			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     this.requestData_inspectionSta2()
-			   }
+			   // if (this.loadSign) {
+			   //   this.loadSign = false
+			   //   this.page.currentPage++
+			   //   if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+			   //     return
+			   //   }
+			   //   setTimeout(() => {
+			   //     this.loadSign = true
+			   //   }, 1000)
+			   //   this.requestData_inspectionSta2()
+			   // }
 			 },
+			 addprobtn(row){//查找基础数据中的检验/检测标准
+			 	this.catedata = row;//弹出框中选中的数据赋值给到table行中
+				this.dialogVisible3 = true;
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				};
+				this.$axios.get(this.basic_url + '/api-apps/app/inspectionSta?DEPTID=' + this.departmentId, {
+					params: data
+				}).then((res) => {
+					// console.log(res.data);
+					this.page.totalCount = res.data.count;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
+					}
+					this.commentArr[this.page.currentPage] = res.data.data
+					let newarr = []
+					for(var i = 1; i <= totalPage; i++) {
+						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+							for(var j = 0; j < this.commentArr[i].length; j++) {
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					this.categoryList = newarr;
+				}).catch((wrong) => {})
+			},
 			sizeChange(val) {//页数
 		      this.page.pageSize = val;
 		      this.requestData_inspectionSta2();
@@ -297,8 +359,21 @@
 					
 				}).catch((wrong) => {})
 			},
-			// handleNodeClick(data) {
-			// },
+			//获取导入表格勾选信息
+			SelChange(val) {
+				this.selData = val;
+			},
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    return 'text-align:center'
+			},
+			handleClose(done) {//关闭选择产品类别弹出框
+				this.$confirm('确认关闭？')
+					.then(_ => {
+						done();
+					})
+					.catch(_ => {});
+			},
 			formatter(row, column) {
 				return row.enabled;
 			},
@@ -314,22 +389,24 @@
 				}
 				if (isEditingflag==false){
                 	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-                		var currentUser, currentDate
+                		var currentUser, currentDate, currentDept;
 						this.currentUser=res.data.nickname;
+						this.currentDept=res.data.deptid;
 						var date=new Date();
 						this.currentDate = this.$moment(date).format("YYYY-MM-DD");
 						this.currentDateTime = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 						var index=this.$moment(date).format("YYYYMMDDHHmmss");
 						var obj = {
 							"PRO_NUM": this.parentId,//所属类别编号
+							"S_NUM": '',
 							"S_NAME": '',
 							"STATUS": '1',
-							"S_NUM": '',
-							"VERSION": 1,
+							"VERSION": '',
+							"DEPTID": this.currentDept,
 							"RELEASETIME": this.currentDate,
 							"STARTETIME": this.currentDate,
-							"CHANGEBY": this.currentUser,
-							"CHANGEDATE": this.currentDateTime,
+							"ENTERBY": this.currentUser,
+							"ENTERDATE": this.currentDateTime,
 							"isEditing": true,
 						};
 						this.inspectionSta2Form.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
@@ -351,13 +428,14 @@
 					var submitData = {
 						"ID":row.ID,
 						"PRO_NUM": row.PRO_NUM,
+					    "S_NUM": row.S_NUM,
 						"S_NAME": row.S_NAME,
 						"STATUS": row.STATUS,
+						"DEPTID": row.DEPTID,
 						"RELEASETIME": row.RELEASETIME,
 						"STARTETIME": row.STARTETIME,
-						"CHANGEBY": row.CHANGEBY,
-					    "CHANGEDATE": row.CHANGEDATE,
-					    "S_NUM": row.S_NUM,
+						"ENTERBY": row.ENTERBY,
+					    "ENTERDATE": row.ENTERDATE,
 					    "VERSION": row.VERSION,
 					}
 					this.$axios.post(url, submitData).then((res) => {
@@ -405,7 +483,12 @@
 
             	});
 			},
-			addchildRow(row) {//添加子项数据
+			addproclass() { //小弹出框确认按钮事件
+				this.dialogVisible3 = false
+				this.catedata.S_NUM = this.selData[0].S_NUM;
+				this.catedata.S_NAME = this.selData[0].S_NAME;
+				this.catedata.VERSION = this.selData[0].VERSION;
+				this.$emit('request');
 			},
 			viewchildRow(ID,S_NUM) {//查看子项数据
 				var data = {
@@ -441,7 +524,7 @@
 	z-index: 998;
 	position:absolute;
 	top: -35px;
-	left: 0px;
+	right: 0px;
 }
 .el-card:hover .table-func  {display: block;}
 </style>

@@ -1,6 +1,5 @@
 <template>
-<div>
-
+	<div>
 		<div class="text item">
 			<div class="clearfix relative">
 				<!-- <div class="columns pull-left"><el-button type="primary" size="small">关联父级</el-button></div> -->
@@ -38,8 +37,8 @@
 			    <el-table-column label="专业组名称" sortable prop="PROF_GROUP">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.PROF_GROUP'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROF_GROUP" placeholder="请输入内容">
-			        		<el-button slot="append" icon="icon-search"></el-button>
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROF_GROUP" :disabled="true" placeholder="请输入内容">
+			        		<el-button slot="append" icon="icon-search" @click="addprobtn(scope.row)"></el-button>
 			        	</el-input><span v-else="v-else">{{scope.row.PROF_GROUP}}</span>
 					</el-form-item>
 			      </template>
@@ -109,6 +108,36 @@
 			<!-- 表格 End-->
 		</div>
 
+		<!-- 专业组 Begin -->
+		<el-dialog :modal-append-to-body="false" title="选择基础数据——专业组" height="300px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
+			<!-- 第二层弹出的表格 Begin-->
+			<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table-column type="selection" fixed width="55" align="center">
+				</el-table-column>
+				<el-table-column label="ID号" width="125" sortable prop="id">
+				</el-table-column>
+				<el-table-column label="所属ID号" width="155" sortable prop="pid">
+				</el-table-column>
+				<el-table-column label="名称" sortable prop="fullname">
+				</el-table-column>
+				<el-table-column label="机构编码" width="185" sortable prop="code">
+				</el-table-column>
+				<el-table-column label="版本" width="100" sortable prop="version" align="right">
+				</el-table-column>
+				<el-table-column label="创建时间" width="120" prop="createTime" sortable :formatter="dateFormat">
+				</el-table-column>
+				<el-table-column label="修改时间" width="120" prop="updateTime" sortable :formatter="dateFormat">
+				</el-table-column>
+			</el-table>
+			
+			<!-- 表格 End-->
+			<span slot="footer" class="dialog-footer">
+		       <el-button @click="dialogVisible3 = false">取 消</el-button>
+		       <el-button type="primary" @click="addproclass">确 定</el-button>
+		    </span>
+		</el-dialog>
+		<!-- 专业组 End -->
+
 </div>
 </template>
 <script>
@@ -118,6 +147,8 @@
 		components: {
 			
 		},
+		props: ['parentIds'],
+
 		data() {
 			return {
 				basic_url: Config.dev_url,
@@ -125,6 +156,11 @@
 					inspectionList: []
 				},
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
+					departmentId: '',//当前用户机构号
+					categoryList:[],//获取产品数据
+					catedata:'',//获取产品类别一条数据放到table行中
+					dialogVisible3: false, //对话框
+					selData:[],
 				isEditing: '',
 				loadSign:true,//加载
 				commentArr:{},//下拉加载
@@ -147,6 +183,7 @@
 					pageSize: 10,
 					totalCount: 0
 				},
+				parentId: 1
 			}
 		},
 		methods: {
@@ -182,6 +219,50 @@
 			   //   this.requestData_professionGro()
 			   // }
 			 },
+			addprobtn(row){//查找基础数据中的检验/检测项目
+			 	var url = this.basic_url + '/api-user/users/currentMap';
+	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+                this.departmentId = res.data.deptId;
+                console.log(this.departmentId);
+				 	this.catedata = row;//弹出框中选中的数据赋值给到table行中
+					this.dialogVisible3 = true;
+					var data = {
+						page: this.page.currentPage,
+						limit: this.page.pageSize,
+					};
+					console.log(this.parentIds);
+					// this.$axios.get(this.basic_url + '/api-user/depts/findByPid/' + this.departmentId, {
+					this.$axios.get(this.basic_url + '/api-user/depts/findByPid/' + this.parentIds, {
+						params: data
+					}).then((res) => {
+						// console.log(res.data);
+						this.page.totalCount = res.data.count;
+						//总的页数
+						let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+						if(this.page.currentPage >= totalPage) {
+							this.loadSign = false
+						} else {
+							this.loadSign = true
+						}
+						this.commentArr[this.page.currentPage] = res.data.data
+						let newarr = []
+						for(var i = 1; i <= totalPage; i++) {
+							if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+								for(var j = 0; j < this.commentArr[i].length; j++) {
+									newarr.push(this.commentArr[i][j])
+								}
+							}
+						}
+						this.categoryList = newarr;
+					}).catch((wrong) => {})
+
+				 }).catch((err) => {
+	                this.$message({
+	                    message: '网络错误，请重试',
+	                    type: 'error'
+	                });
+	            });
+			},
 			sizeChange(val) {//页数
 		      this.page.pageSize = val;
 		      this.requestData_professionGro();
@@ -273,7 +354,21 @@
 
 				}).catch((wrong) => {})
 			},
-			
+			//获取导入表格勾选信息
+			SelChange(val) {
+				this.selData = val;
+			},
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    return 'text-align:center'
+			},
+			handleClose(done) {//关闭选择产品类别弹出框
+				this.$confirm('确认关闭？')
+					.then(_ => {
+						done();
+					})
+					.catch(_ => {});
+			},
 			formatter(row, column) {
 				return row.enabled;
 			},
@@ -289,18 +384,20 @@
 				}
 				if (isEditingflag==false){
                 	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-                		var currentUser, currentDate
+                		var currentUser, currentDate, currentDept;
 						this.currentUser=res.data.nickname;
+						this.currentDept=res.data.deptid;
 						var date=new Date();
 						this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 						var obj = {
-							"PROF_GROUP": '',
-							"STATUS": '1',
 							"P_NUM": this.parentId,
 							"PROF_NUM": '',
-							"VERSION": 1,
-							"CHANGEBY": this.currentUser,
-							"CHANGEDATE": this.currentDate,
+							"PROF_GROUP": '',
+							"STATUS": '1',
+							"VERSION": '',
+							"DEPTID": this.currentDept,
+							"ENTERBY": this.currentUser,
+							"ENTERDATE": this.currentDate,
 							"isEditing": true,
 						};
 						this.professionGroForm.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
@@ -322,11 +419,12 @@
 					var submitData = {
 						"ID":row.ID,
 						"P_NUM": row.P_NUM,
+					    "PROF_NUM": row.PROF_NUM,
 						"PROF_GROUP": row.PROF_GROUP,
 						"STATUS": row.STATUS,
-						"CHANGEBY": row.CHANGEBY,
-					    "CHANGEDATE": row.CHANGEDATE,
-					    "PROF_NUM": row.PROF_NUM,
+						"DEPTID": row.DEPTID,
+						"ENTERBY": row.ENTERBY,
+					    "ENTERDATE": row.ENTERDATE,
 					    "VERSION": row.VERSION,
 					}
 					this.$axios.post(url, submitData).then((res) => {
@@ -374,6 +472,13 @@
 
             	});
 			},
+			addproclass() { //小弹出框确认按钮事件
+				this.dialogVisible3 = false
+				this.catedata.PROF_NUM = this.selData[0].PROF_NUM;
+				this.catedata.PROF_GROUP = this.selData[0].PROF_GROUP;
+				this.catedata.VERSION = this.selData[0].VERSION;
+				this.$emit('request');
+			},
 		},
 		
 		// mounted() {
@@ -404,7 +509,7 @@
 	position: absolute;
     right: 100px;
     bottom: -40px;
-    z-index: 9999;
+    z-index: 88;
 }
 
 </style>

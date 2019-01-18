@@ -6,7 +6,9 @@
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
-			<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left> 
+			<div style="display:none;">
+			 	<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left>
+			</div> 	
 			<!--左侧菜单内容显示 End-->
 			<div class="wrapper wrapper-content wrapperall">
 				<div class="ibox-content">
@@ -77,7 +79,7 @@
 								<el-col :span="6">
 									<el-form-item label="完成日期" prop="COMPLETE_DATE" label-width="80px">
 										<div class="block">
-									    	<el-date-picker v-model="searchList.COMPLETE_DATE" type="date" placeholder="请选择" style="width: 100%">
+									    	<el-date-picker v-model="searchList.COMPLETE_DATE" type="date" placeholder="请选择" style="width: 100%" value-format="yyyy-MM-dd">
 									    	</el-date-picker>
 								  		</div>
 									</el-form-item>
@@ -100,7 +102,7 @@
 								<el-col :span="6">
 									<el-form-item label="录入日期" prop="ENTERDATE" label-width="80px">
 										<div class="block">
-									    	<el-date-picker v-model="searchList.ENTERDATE" type="date" placeholder="请选择" style="width: 100%">
+									    	<el-date-picker v-model="searchList.ENTERDATE" type="date" placeholder="请选择" style="width: 100%" value-format="yyyy-MM-dd">
 									    	</el-date-picker>
 								  		</div>
 									</el-form-item>
@@ -135,11 +137,15 @@
 							<el-table :header-cell-style="rowClass" :data="userList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
-								<el-table-column label="工作任务单编号" sortable width="280px" prop="WONUM" v-if="this.checkedName.indexOf('工作任务单编号')!=-1">
+								<el-table-column label="工作任务单编号" sortable width="140px" prop="WONUM" v-if="this.checkedName.indexOf('工作任务单编号')!=-1">
+									<template slot-scope="scope">
+									<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.WONUM}}
+										</p>
+									</template>	
 								</el-table-column>
 								<el-table-column label="样品名称" sortable width="180px" prop="ITEM_NAME" v-if="this.checkedName.indexOf('样品名称')!=-1">
 								</el-table-column>
-								<el-table-column label="样品型号" sortable width="200px" prop="ITEM_MODEL" v-if="this.checkedName.indexOf('样品型号')!=-1">
+								<el-table-column label="样品型号" sortable width="180px" prop="ITEM_MODEL" v-if="this.checkedName.indexOf('样品型号')!=-1">
 								</el-table-column>
 								<el-table-column label="样品状态" sortable  width="100px" prop="ITEM_STATUS" v-if="this.checkedName.indexOf('样品状态')!=-1">
 								</el-table-column>
@@ -172,7 +178,7 @@
 					</div>
 				</div>
 			</div>
-			<workorders_mask :workorderForm="workorderForm" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></workorders_mask>
+			<workorders_mask :workorderForm="workorderForm" ref="child" @requests="requestData" @requestTree="getKey" v-bind:page=page></workorders_mask>
 		</div>
 	</div>
 </template>
@@ -348,60 +354,8 @@
 			},
 			//添加检验工作处理到子组件
 			openAddMgr() {
-				this.workorderForm = {
-					PROXYNUM: '',//委托书编号
-					PROXY_VERSION: '',//委托书版本
-					PARENT_NUM: '',//父任务单编号
-					IS_MAIN: '',//是否主任务单？
-					MASTER_INSPECTOR: '',//主检员
-					STATE: '',//信息状态
-					STATUS: '',//状态
-					WONUM: '',//工作任务单编号
-					ITEM_NAME: '',//样品名称
-					ITEM_MODEL: '',//规格型号
-					ITEM_TRADEMARK: '',//商标标识
-					ITEMNUM: '',//样品编号
-					CHECK_DATE: '',//抽样日期
-					PRODUCT_DATE: '',//生产日期/批
-					ITEM_STATU: '',//填写的样品状态
-					ITEM_STATUS: '',//选择的样品状态
-					ARRIVAL_DATE: '',//到站日期
-					ITEM_QUALITY: '',//样品数量
-					ITEM_SOURCE: '',//样品来源
-					CHECK_BASIS: '',//抽样方案/判定依据
-					TECHNICAL_INFORMATION: '',//委托方提供技术资料
-					SUB_PROJECT: '',//分包项目
-					SPECIAL_REQUIREMENTS: '',//特殊要求
-					ITEM_RECCEPT_USER: '',//样品接收人
-					ITEM_RECEPT_DATE: '',//样品接收日期
-					COMPLETE_DATE: '',//完成日期
-					COMPLETE_MODE: '',//完成方式
-					ITEM_RECEPT_STATUS: '',//样品接收状态
-					ITEM_PROFESSIONAL_GROUP: '',//样品承接人(专业组)
-					UNDERTAKE_DATE: '',//样品承接日期
-					ITEM_RETURN_QUALITY: '',//样品返回数量
-					RETURN_ITEM_USER: '',//样品返回接收人
-					RETURN_ITEM_DATE: '',//样品返回日期
-					ITEM_CHECK_STATUS: '',//样品检后状态
-					ITEM_MANAGEMENT: '',//样品处置
-					ITEM_UNDERTAKE_USER: '',//样品承接人
-					PROFESSIONAL: '',//专业技术/质量负责人
-					CHECK_BASIS: '',//报告模板
-					SEND: '',//是否寄出
-					FILE: '',//是否归档
-					SEND_DATE: '',//寄出时间
-					FILE_DATE: '',//归档时间
-					ENTERBY: '',//录入人
-					ENTERDATE: '',//录入日期
-					ORG_CODE: '',//录入人机构
-					CHANGEBY: '',//修改人
-					CHANGEDATE: '',//修改日期
-					WorkorderBasisList: [],//检测依据
-					WorkorderProjectList: [],//检测项目与要求
-					WorkorderPersonList: [],//检验员信息
-					SourceDataTemplateList: [],//原始数据模板
-				};
-				this.$refs.child.childMethods();
+				
+				this.$refs.child.visible();
 			},
 			//修改检验工作处理到子组件
 			modify() {
@@ -418,8 +372,44 @@
 					});
 					return;
 				} else {
-					this.$refs.child.detail(this.selMenu[0].ID);
+					if(this.selMenu[0].STATE == 3 || this.selMenu[0].STATE == 2) {
+						this.$message({
+							message: '已启动的流程，不允许修改数据，只可以查看。',
+							type: 'warning'
+						});
+						this.$refs.child.view(this.selMenu[0].ID);
+					}
+					//驳回
+					else if(this.selMenu[0].STATE == 0) {
+						var url = this.basic_url + '/api-apps/app/inspectPro/flow/isExecute/' + this.selMenu[0].ID;
+						this.$axios.get(url, {}).then((res) => {
+							if(res.data.resp_code == 0) {
+								var url = this.basic_url + '/api-apps/app/inspectPro/flow/isPromoterNode/' + this.selMenu[0].ID;
+								this.$axios.get(url, {}).then((res) => {
+									if(res.data.resp_code == 0) {
+										this.$refs.child.detail(this.selMenu[0].ID);
+									} else {
+										this.$message({
+											message: res.data.resp_msg,
+											type: 'warning'
+										});
+									}
+								});
+							} else {
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'warning'
+									});
+							}
+						});
+					}else{
+						this.$refs.child.detail(this.selMenu[0].ID);	
+					}
 				}
+			},
+			//查看
+			view(id) {
+				this.$refs.child.view(id);
 			},
 			//高级查询
 			modestsearch() {

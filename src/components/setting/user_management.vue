@@ -82,9 +82,10 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="机构名称" prop="deptName" label-width="70px">
-										<el-input v-model="searchList.deptName">
-										</el-input>
+									<el-form-item label="机构名称" prop="deptId" label-width="70px">
+										<el-select clearable v-model="searchList.deptId" filterable allow-create default-first-option placeholder="请选择" style="width: 90%;border-radius:none">
+										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+										</el-select>
 									</el-form-item>
 								</el-col>
 								<el-col :span="2">
@@ -228,7 +229,7 @@
 				searchList: {
 					nickname: '',
 					username: '',
-					deptName: ''
+					deptId: ''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -245,7 +246,8 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-				user: {}//修改子组件时传递数据
+				user: {},//修改子组件时传递数据
+				selectData: [],
 			}
 		},
 		methods: {
@@ -254,14 +256,22 @@
 			    // console.log(rowIndex) //表头行标号为0
 			    return 'text-align:center'
 			},
+			//机构值
+			getCompany() {
+				var type = "2";
+				var url = this.basic_url + '/api-user/depts/treeByType';
+				this.$axios.get(url, {
+					params: {
+						type: type
+					},
+				}).then((res) => {
+					console.log(res.data);
+					this.selectData = res.data;
+				});
+			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
 				//console.log();
-				return(
-					<span>
-		              <i class={data.iconClass}></i>
-		              <span>{node.label}</span>
-		            </span>
-				);
+				return (<span><i class={data.iconClass}></i><span>{node.label}</span></span>)
 			},
 			// 点击节点
 			nodeClick: function(m) {
@@ -303,11 +313,12 @@
 					//console.log('到底了', this.page.currentPage)
 				}
 			},
-			
+			//获取pageSize
 			sizeChange(val) {
 				this.page.pageSize = val;
 				this.requestData();
 			},
+			//获取currentPage
 			currentChange(val) {
 				this.page.currentPage = val;
 				this.requestData();
@@ -557,19 +568,19 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					deptName: this.searchList.deptName,
+					deptId: this.searchList.deptId,
 					nickname: this.searchList.nickname,
 					username: this.searchList.username,
 //					searchKey: 'createTime',
 //					searchValue: this.searchList.createTime,
 					companyId: this.companyId,
-					deptId: this.deptId
+					// deptId: this.deptId
 				}
 				var url = this.basic_url + '/api-user/users';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(res);
+					console.log(res.data);
 					//this.userList = res.data.data;
 					this.page.totalCount = res.data.count;
 					//总的页数
@@ -631,7 +642,7 @@
 					this.companyId = data.id;
 					this.deptId = '';
 				} else {
-					this.deptId = data.id;
+					this.searchList.deptId = data.id;
 					this.companyId = '';
 				}
 				this.requestData();
@@ -669,6 +680,7 @@
 			// 在页面挂载前就发起请求
 			this.requestData();
 			this.getKey();
+			this.getCompany();
 //			this.getbutton();
 //			this.$refs.navleft.getleft();
 		}

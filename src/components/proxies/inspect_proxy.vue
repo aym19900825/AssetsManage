@@ -9,7 +9,7 @@
 			<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left>
 			<!--左侧菜单内容显示 End-->
 			<!--右侧内容显示 Begin-->
-			<div class="wrapper wrapper-content">
+			<div id="wrapper-content" class="wrapper">
 				<div class="ibox-content">
 					<!--<navs_button></navs_button>-->
 					<div class="fixed-table-toolbar clearfix">
@@ -21,7 +21,7 @@
 								<button type="button" class="btn btn-blue button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改
 								</button>
-								<button type="button" class="btn btn-red button-margin" @click="delinfo">
+								<button type="button" class="btn btn-red button-margin"  @click="delinfo">
 								    <i class="icon-trash"></i>删除
 								</button>
 								<button type="button" class="btn btn-primarys button-margin">
@@ -184,7 +184,6 @@
 		<inspectmask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></inspectmask>
 		<!--右侧内容显示 End-->
 	</div>
-	</div>
 </template>
 <script>
 	import Config from '../../config.js'
@@ -197,10 +196,14 @@
 		name: 'user_management',
 		components: {
 			'vheader': vheader,
-			'navs_header': navs_header,
 			'navs_left': navs_left,
+			'navs_header': navs_header,
 			'inspectmask': inspectmask,
 		},
+//		created() {
+//  		this.getRouterData()
+//		},
+
 		data() {
 			return {
 				basic_url: Config.dev_url,
@@ -336,7 +339,6 @@
 					label: "fullname"
 				},
 				treeData: [],
-				userData: [],
 				page: {
 					currentPage: 1,
 					pageSize: 10,
@@ -345,17 +347,13 @@
 			}
 		},
 		methods: {
+			 
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
 			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
-				return(
-					<span>
-		              <i class={data.iconClass}></i>
-		              <span>{node.label}</span>
-		            </span>
-				);
+				return (<span><i class={data.iconClass}></i><span>{node.label}</span></span>)
 			},
 			// 点击节点
 			nodeClick: function(m) {
@@ -428,12 +426,49 @@
 					});
 					return;
 				} else {
-					this.$refs.child.detail(this.selUser[0].ID);
+					if(this.selUser[0].STATE == 3 || this.selUser[0].STATE == 2) {
+						this.$message({
+							message: '已启动的流程，不允许修改数据，只可以查看。',
+							type: 'warning'
+						});
+						this.$refs.child.view(this.selUser[0].ID);
+					}
+					//驳回
+					else if(this.selUser[0].STATE == 0) {
+						var url = this.basic_url + '/api-apps/app/inspectPro/flow/isExecute/' + this.selUser[0].ID;
+						this.$axios.get(url, {}).then((res) => {
+							if(res.data.resp_code == 0) {
+								var url = this.basic_url + '/api-apps/app/inspectPro/flow/isPromoterNode/' + this.selUser[0].ID;
+								this.$axios.get(url, {}).then((res) => {
+									if(res.data.resp_code == 0) {
+										this.$refs.child.detail(this.selUser[0].ID);
+									} else {
+										this.$message({
+											message: res.data.resp_msg,
+											type: 'warning'
+										});
+									}
+								});
+							} else {
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'warning'
+									});
+							}
+						});
+					}else{
+						this.$refs.child.detail(this.selUser[0].ID);	
+					}
 				}
 			},
 			//查看
 			 view(id) {
 				this.$refs.child.view(id);
+			},
+			getRouterData() {
+      		// 只是改了query，其他都不变
+				  this.id = this.$route.query.bizId;
+				  this.$refs.child.view(this.id);
 			},
 			//高级查询
 			modestsearch() {
@@ -441,7 +476,7 @@
 				this.down = !this.down,
 					this.up = !this.up
 			},
-			// 删除
+//			// 删除
 			delinfo() {
 				var selData = this.selUser;
 				if(selData.length == 0) {
@@ -492,7 +527,7 @@
 					});
 				}
 			},
-			
+//			
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -602,6 +637,8 @@
 			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
+        		// childValue就是子组件传过来的值
+        		console.log(childValue);
         		this.$refs.navsheader.showClick(childValue);
       		},
 		},
@@ -611,7 +648,10 @@
 			this.getKey();
 		},
 		mounted() {
-		
+			console.log(this.$route.query.bizId);
+			if(this.$route.query.bizId!=undefined){
+				this.getRouterData();
+			}
 		},
 	}
 </script>

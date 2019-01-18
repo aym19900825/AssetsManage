@@ -6,7 +6,9 @@
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单调用 Begin-->
-			<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left> 
+			<div style="display:none;">
+				<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left>
+			</div>
 			<!--左侧菜单调用 End-->
 			<div class="wrapper wrapper-content wrapperall">
 				<div class="ibox-content">
@@ -81,19 +83,19 @@
 									<el-input v-model="searchList.YEAR"></el-input>
 								</el-form-item>
 							</el-col>
-						</el-row>
-						<el-row :gutter="10">
 							<el-col :span="5">
 								 <el-form-item label="录入时间" prop="ENTERDATE">
 									<div class="block">
 									    <el-date-picker
 									      v-model="searchList.ENTERDATE"
 									      type="date"
-									      placeholder="录入时间" style="width: 100%">
+									      placeholder="录入时间" style="width: 100%"   value-format="yyyy-MM-dd">
 									    </el-date-picker>
 								  	</div>
 								</el-form-item>
 							</el-col>
+						</el-row>
+						<el-row :gutter="10">
 							<el-col :span="5">
 								<el-form-item label="编辑状态" prop="STATUS">
 									<el-select v-model="searchList.STATUS" placeholder="请选择" style="width: 100%" clearable>
@@ -106,20 +108,23 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
-								<el-form-item label="类型" prop="TYPE" label-width="45px">
-									<el-select clearable v-model="searchList.TYPE" filterable allow-create default-first-option placeholder="请选择" style="width:100%">
-									    <el-option label="监督审查" value="1"></el-option>
-							      		<el-option label="质量抽查" value="0"></el-option>
+								<el-form-item label="执行状态" prop="LEADER_STATUS">
+									<el-select v-model="searchList.LEADER_STATUS" placeholder="请选择" style="width: 100%" clearable>
+										<el-option label="未开始" value="1"></el-option>
+										<el-option label="进行中" value="2"></el-option>
+										<el-option label="已完成" value="3"></el-option>
 									</el-select>
 								</el-form-item>
 							</el-col>
-							<!-- <el-col :span="5">
-								<el-select v-model="searchList.LEADER_STATUS" placeholder="执行状态" style="width: 100%">
-								    <el-option label="未开始" value="未开始"></el-option>
-								    <el-option label="进行中" value="进行中"></el-option>
-								    <el-option label="已完成" value="已完成"></el-option>
-								</el-select>
-							</el-col> -->
+							<el-col :span="5">
+								<el-form-item label="类型" prop="TYPE" label-width="45px">
+									<el-select clearable v-model="searchList.TYPE" filterable allow-create default-first-option placeholder="请选择" style="width:100%">
+									    <el-option label="监督抽查" value="1"></el-option>
+							      		<el-option label="质量抽查" value="3"></el-option>
+									</el-select>
+								</el-form-item>
+							</el-col>
+							
 							<el-col :span="4">
 								<el-button type="primary" @click="searchinfo" size="small" style="margin-top: 2px">搜索</el-button>
 							</el-col>
@@ -166,10 +171,10 @@
 								</el-table-column>
 								<el-table-column label="修改时间" sortable width="100px" prop="ENTERDATE" v-if="this.checkedName.indexOf('修改时间')!=-1" :formatter="dateFormat">
 								</el-table-column>
-								</el-table-column><el-table-column label="编辑状态" sortable width="100px" prop="STATUS" v-if="this.checkedName.indexOf('编辑状态')!=-1">
+								<el-table-column label="编辑状态" sortable width="100px" prop="STATUSDesc" v-if="this.checkedName.indexOf('编辑状态')!=-1">
 								</el-table-column>
-								<!-- <el-table-column label="执行状态" sortable  width="120px" prop="LEADER_STATUS" v-if="this.checkedName.indexOf('执行状态')!=-1">
-								</el-table-column> -->
+								<el-table-column label="执行状态" sortable  width="120px" prop="LEADER_STATUSDesc" v-if="this.checkedName.indexOf('执行状态')!=-1">
+								</el-table-column>
 								<el-table-column label="类型" sortable  width="100px" prop="TYPE" v-if="this.checkedName.indexOf('类型')!=-1">
 								</el-table-column>
 								<el-table-column label="提报日期" sortable prop="REPORTDATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('提报日期')!=-1">
@@ -225,7 +230,7 @@
 					// '信息状态'
 					'修改时间',
 					'编辑状态',
-					// '执行状态',
+					'执行状态',
 					'类型',
 					'提报日期',
 
@@ -257,12 +262,12 @@
 					},
 					{
 						label: '编辑状态',
-						prop: 'STATUS'
+						prop: 'STATUSDesc'
 					},
-					// {
-					// 	label: '执行状态',
-					// 	prop: 'LEADER_STATUS'
-					// },
+					{
+						label: '执行状态',
+						prop: 'LEADER_STATUSDesc'
+					},
 					{
 						label: '类型',
 						prop: 'TYPE'
@@ -297,7 +302,7 @@
 				},
 				//tree
 				resourceData: [
-					{label: '监督审查'},
+					{label: '监督抽查'},
 					{label: '质量抽查'}
 				], //数组，我这里是通过接口获取数据，
 				resourceDialogisShow: false,
@@ -444,6 +449,8 @@
 				this.selUser = val;
 			},
 			requestData(index) {
+				console.log(this.searchList.STATUS);
+				console.log(this.searchList.ENTERDATE);
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -463,8 +470,8 @@
 					console.log(res.data);
 					for(var i=0;i<res.data.data.length;i++){
 						if(res.data.data[i].TYPE  == '1'){
-							res.data.data[i].TYPE  = '监督审查';
-						}else if(res.data.data[i].TYPE  == '0'){
+							res.data.data[i].TYPE  = '监督抽查';
+						}else if(res.data.data[i].TYPE  == '3'){
 							res.data.data[i].TYPE  = '质量抽查';
 						}
 					}
@@ -515,10 +522,10 @@
 			handleNodeClick(data) {
 				console.log(data);
 				console.log(data.label);
-				if(data.label == '监督审查'){
+				if(data.label == '监督抽查'){
 					this.searchList.TYPE =  '1';
 				}else if(data.label == '质量抽查'){
-					this.searchList.TYPE =  '0';
+					this.searchList.TYPE =  '3';
 				}
 				this.requestData();
 			},

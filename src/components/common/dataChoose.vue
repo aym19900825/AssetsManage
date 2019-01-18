@@ -1,6 +1,15 @@
 <template>
 <div>
-    <el-dialog :title="chooseParam.title" :visible.sync="dialogShow" :before-close="reset">
+    <el-dialog :modal-append-to-body="false" :title="chooseParam.title" :visible.sync="dialogShow" :before-close="reset">
+        <p class="selTab" v-show="chooseParam.selShow">已选择：
+            <el-tag class="tag" 
+                type="success" 
+                v-for="item in selData" 
+                style="margin-right: 10px;margin-bottom: 20px;"  
+                @close="closeTag(item)"
+                closable>{{item.keywordname}}
+            </el-tag>
+        </p>
         <el-table :data="list" row-key="ID" border stripe highlight-current-row style="width: 100%;"  @selection-change="handleSelData">
             <el-table-column type="selection" width="55">
             </el-table-column>
@@ -43,6 +52,7 @@ export default {
                 totalCount: 0
             },
             selData: [],
+            showSelData: [],
             dialogShow: false,
         }
     },
@@ -76,6 +86,7 @@ export default {
             for(var i=0; i<searchParm.length; i++){
                 data[searchParm[i].name] = searchParm[i].val;
             }
+            // this.showSelData = this.showSelData.concat(this.selData);
             this.$axios.get(url, {
                 params: data
             }).then((res) => {
@@ -98,6 +109,7 @@ export default {
                 totalCount: 0
             };
             this.selData = [];
+            this.showSelData = [];
         },
         save(){
            if(this.selData.length > this.chooseParam.selMax){
@@ -119,6 +131,9 @@ export default {
                 this.$emit('tranFormData', transData);
                 this.reset();
            }
+        },
+        closeTag(item){
+            this.selkeys.splice(this.selkeys.indexOf(item), 1);
         }
     }
 }

@@ -37,8 +37,8 @@
 			    <el-table-column label="产品名称" sortable prop="PRO_NAME">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.PRO_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PRO_NAME" placeholder="请输入内容">
-			        		<el-button slot="append" icon="icon-search"></el-button>
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PRO_NAME" :disabled="true" placeholder="请选择">
+			        		<el-button slot="append" icon="icon-search" @click="addprobtn(scope.row)"></el-button>
 			        	</el-input><span v-else="v-else">{{scope.row.PRO_NAME}}</span>
 					</el-form-item>
 			      </template>
@@ -56,15 +56,15 @@
 			      </template>
 			    </el-table-column> -->
 
-			    <!-- <el-table-column prop="CHANGEBY" label="修改人" sortable width="120">
+			    <!-- <el-table-column prop="ENTERBY" label="修改人" sortable width="120">
 			      <template slot-scope="scope">
-			        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHANGEBY" placeholder="请输入内容" disabled></el-input><span v-else="v-else">{{scope.row.CHANGEBY}}</span>
+			        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ENTERBY" placeholder="请输入内容" disabled></el-input><span v-else="v-else">{{scope.row.ENTERBY}}</span>
 			      </template>
 			    </el-table-column> -->
 
-			     <!-- <el-table-column prop="CHANGEDATE" label="修改时间" sortable width="160" :formatter="dateFormat">
+			     <!-- <el-table-column prop="ENTERDATE" label="修改时间" sortable width="160" :formatter="dateFormat">
 			      <template slot-scope="scope">
-			      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHANGEDATE" disabled></el-input><span v-else="v-else">{{scope.row.CHANGEDATE}}</span>
+			      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ENTERDATE" disabled></el-input><span v-else="v-else">{{scope.row.ENTERDATE}}</span>
 			      </template>
 			    </el-table-column> -->
 
@@ -108,6 +108,34 @@
 			
 		</div>
 	</el-card>
+
+	<!-- 产品 Begin -->
+		<el-dialog :modal-append-to-body="false" title="选择基础数据——产品" height="300px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
+			<!-- 第二层弹出的表格 Begin-->
+			<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table-column type="selection" fixed width="55" align="center">
+				</el-table-column>
+				<el-table-column label="编码" width="155" sortable prop="PRO_NUM">
+				</el-table-column>
+				<el-table-column label="名称" sortable prop="PRO_NAME">
+				</el-table-column>
+				<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
+				</el-table-column>
+				<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc">
+				</el-table-column>
+				<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
+				</el-table-column>
+				<el-table-column label="修改时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
+				</el-table-column>
+			</el-table>
+			
+			<!-- 表格 End-->
+			<span slot="footer" class="dialog-footer">
+		       <el-button @click="dialogVisible3 = false">取 消</el-button>
+		       <el-button type="primary" @click="addproclass">确 定</el-button>
+		    </span>
+		</el-dialog>
+		<!-- 产品 End -->
 </div>
 
 </template>
@@ -126,7 +154,12 @@
 				product2Form:{
 					inspectionList: []
 				},
-				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
+				fullHeight: document.documentElement.clientHeight - 100+'px',//获取浏览器高度
+					departmentId: '',//当前用户机构号
+					categoryList:[],//获取产品数据
+					catedata:'',//获取产品类别一条数据放到table行中
+					dialogVisible3: false, //对话框
+					selData:[],
 				isEditing: '',
 				loadSign:true,//加载
 				commentArr:{},//下拉加载
@@ -163,9 +196,9 @@
 			},
 			modifyversion (row) {//点击修改后给当前修改人和修改时间赋值
 				 this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					row.CHANGEBY=res.data.nickname;
+					row.ENTERBY=res.data.nickname;
 					var date=new Date();
-					row.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
+					row.ENTERDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 					//console.log(row);
 					
 				}).catch((err)=>{
@@ -188,6 +221,37 @@
 			     this.requestData_product2()
 			   }
 			 },
+			 addprobtn(row){//查找基础数据中的产品名称
+			 	this.catedata = row;//弹出框中选中的数据赋值给到table行中
+				this.dialogVisible3 = true;
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				};
+				this.$axios.get(this.basic_url + '/api-apps/app/product?DEPTID=' + this.departmentId, {
+					params: data
+				}).then((res) => {
+					// console.log(res.data);
+					this.page.totalCount = res.data.count;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
+					}
+					this.commentArr[this.page.currentPage] = res.data.data
+					let newarr = []
+					for(var i = 1; i <= totalPage; i++) {
+						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+							for(var j = 0; j < this.commentArr[i].length; j++) {
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					this.categoryList = newarr;
+				}).catch((wrong) => {})
+			},
 			sizeChange(val) {//页数
 		      this.page.pageSize = val;
 		      this.requestData_product2();
@@ -285,11 +349,24 @@
 
 				}).catch((wrong) => {})
 			},
-			
-			formatter(row, column) {
+			//获取导入表格勾选信息
+			SelChange(val) {
+				this.selData = val;
+			},
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    return 'text-align:center'
+			},
+			handleClose(done) {//关闭选择产品类别弹出框
+				this.$confirm('确认关闭？')
+					.then(_ => {
+						done();
+					})
+					.catch(_ => {});
+			},
+			formatter(row, column) {//禁止产品行编辑
 				return row.enabled;
 			},
-
 			addfield_product2(NUM) { //插入行到产品类型Table中
 				var isEditingflag=false;
 				//console.log(this.product2Form.inspectionList);
@@ -303,18 +380,20 @@
 				}
 				if (isEditingflag==false){
                 	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-                		var currentUser, currentDate
+                		var currentUser, currentDatee, currentDept;
 						this.currentUser=res.data.nickname;
+						this.currentDept=res.data.deptid;
 						var date=new Date();
 						this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 						var obj = {
-							"PRO_NAME": '',
-							"STATUS": '1',
 							"NUM": this.parentId,//所属类别编号
 							"PRO_NUM": '',
-							"VERSION": 1,
-							"CHANGEBY": this.currentUser,
-							"CHANGEDATE": this.currentDate,
+							"PRO_NAME": '',
+							"STATUS": '1',
+							"VERSION": '',
+							"DEPTID": this.currentDept,
+							"ENTERBY": this.currentUser,
+							"ENTERDATE": this.currentDate,
 							"isEditing": true,
 						};
 						this.product2Form.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
@@ -338,8 +417,9 @@
 						"NUM": row.NUM,
 						"PRO_NAME": row.PRO_NAME,
 						"STATUS": row.STATUS,
-						"CHANGEBY": row.CHANGEBY,
-					    "CHANGEDATE": row.CHANGEDATE,
+						"DEPTID": row.DEPTID,
+						"ENTERBY": row.ENTERBY,
+					    "ENTERDATE": row.ENTERDATE,
 					    "PRO_NUM": row.PRO_NUM,
 					    "VERSION": row.VERSION,
 					}
@@ -388,7 +468,13 @@
 
             	});
 			},
-			addchildRow(row) {//添加子项数据
+			
+			addproclass() { //小弹出框确认按钮事件
+				this.dialogVisible3 = false
+				this.catedata.PRO_NUM = this.selData[0].PRO_NUM;
+				this.catedata.PRO_NAME = this.selData[0].PRO_NAME;
+				this.catedata.VERSION = this.selData[0].VERSION;
+				this.$emit('request');
 			},
 			viewchildRow(ID,PRO_NUM) {//查看子项数据
 				var data = {

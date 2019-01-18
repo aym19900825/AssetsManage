@@ -292,12 +292,7 @@
 			    return 'text-align:center'
 			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
-				return(
-					<span>
-		              <i class={data.iconClass}></i>
-		              <span>{node.label}</span>
-		            </span>
-				);
+				return (<span><i class={data.iconClass}></i><span>{node.label}</span></span>)
 			},
 			// 点击节点
 			nodeClick: function(m) {
@@ -366,7 +361,7 @@
 					DO_PERSON: '',//处理人
 					DO_DATE: '',//处理日期
 					MEMO: '',//备注
-					STATE: '草稿',//状态
+					STATE: '已检',//状态
 					STATUS: '',//信息状态
 					ENTERBY: '',//录入人
 					ENTERDATE: '',//录入时间

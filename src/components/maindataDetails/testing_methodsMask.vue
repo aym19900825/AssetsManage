@@ -1,102 +1,104 @@
 <template>
 	<div>
 		<div class="mask" v-if="show"></div>
-		<div class="mask_div" v-if="show">
-			<div class="mask_title_div clearfix">
-				<div class="mask_title" v-show="addtitle">添加检验/检测方法</div>
-				<div class="mask_title" v-show="modifytitle">修改检验/检测方法</div>
-				<div class="mask_title" v-show="viewtitle">查看检验/检测方法</div>
-				<div class="mask_anniu">
-					<span class="mask_span mask_max" @click='toggle'>
-						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
-					</span>
-					<span class="mask_span" @click='close'>
-						<i class="icon-close1"></i>
-					</span>
+		<div class="mask_divbg" v-if="show">
+			<div class="mask_div">
+				<div class="mask_title_div clearfix">
+					<div class="mask_title" v-show="addtitle">添加检验/检测方法</div>
+					<div class="mask_title" v-show="modifytitle">修改检验/检测方法</div>
+					<div class="mask_title" v-show="viewtitle">查看检验/检测方法</div>
+					<div class="mask_anniu">
+						<span class="mask_span mask_max" @click='toggle'>
+							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
+						</span>
+						<span class="mask_span" @click='close'>
+							<i class="icon-close1"></i>
+						</span>
+					</div>
 				</div>
-			</div>
-			<div class="mask_content">
-					<div class="accordion">
-						<el-collapse v-model="activeNames">
-							<el-form :model="testingForm" inline-message :rules="rules" ref="testingForm" label-width="100px" status-icon>
-								<el-collapse-item title="基础信息" name="1">
-									<el-row :gutter="20" class="pb10">
-										<el-col :span="3" class="pull-right">
-											<el-input  v-model="testingForm.VERSION" :disabled="true">
-												<template slot="prepend">版本</template>
-											</el-input>
-										</el-col>
-									</el-row>
-									<el-row>
-										<el-col :span="8">
-											<el-form-item label="编码" prop="M_NUM" >
-												<el-input v-model="testingForm.M_NUM" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="中文名称" prop="M_NAME" >
-												<el-input v-model="testingForm.M_NAME" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="英文名称" prop="M_ENAME" >
-												<el-input v-model="testingForm.M_ENAME" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<el-row>
-										<el-col :span="8">
-											<el-form-item label="类别" prop="M_TYPE">
-												<!-- <el-select v-model="testingForm.M_TYPE" placeholder="请选择类别" style="width: 100%;">
-													<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
-												</el-select> -->
-												<el-input v-model="testingForm.M_TYPE" placeholder="请输入类别" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8" v-if="dept">
-											<el-form-item label="机构">
-												<el-input v-model="testingForm.DEPTIDDesc" :disabled="true"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
+				<div class="mask_content">
+						<div class="accordion">
+							<el-collapse v-model="activeNames">
+								<el-form :model="testingForm" inline-message :rules="rules" ref="testingForm" label-width="100px" status-icon>
+									<el-collapse-item title="基础信息" name="1">
+										<el-row :gutter="20" class="pb10">
+											<el-col :span="3" class="pull-right">
+												<el-input  v-model="testingForm.VERSION" :disabled="true">
+													<template slot="prepend">版本</template>
+												</el-input>
+											</el-col>
+										</el-row>
+										<el-row>
+											<el-col :span="8">
+												<el-form-item label="编码" prop="M_NUM" >
+													<el-input v-model="testingForm.M_NUM" :disabled="noedit"></el-input>
+												</el-form-item>
+											</el-col>
+											<el-col :span="8">
+												<el-form-item label="中文名称" prop="M_NAME" >
+													<el-input v-model="testingForm.M_NAME" :disabled="noedit"></el-input>
+												</el-form-item>
+											</el-col>
+											<el-col :span="8">
+												<el-form-item label="英文名称" prop="M_ENAME" >
+													<el-input v-model="testingForm.M_ENAME" :disabled="noedit"></el-input>
+												</el-form-item>
+											</el-col>
+										</el-row>
+										<el-row>
+											<el-col :span="8">
+												<el-form-item label="类别" prop="M_TYPE">
+													<!-- <el-select v-model="testingForm.M_TYPE" placeholder="请选择类别" style="width: 100%;">
+														<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
+													</el-select> -->
+													<el-input v-model="testingForm.M_TYPE" placeholder="请输入类别" :disabled="noedit"></el-input>
+												</el-form-item>
+											</el-col>
+											<el-col :span="8" v-if="dept">
+												<el-form-item label="机构">
+													<el-input v-model="testingForm.DEPTIDDesc" :disabled="true"></el-input>
+												</el-form-item>
+											</el-col>
+										</el-row>
+									</el-collapse-item>
+									<el-collapse-item title="其它" name="2" v-show="views">
+										<el-row>
+											<el-col :span="8">
+												<el-form-item label="录入人">
+													<el-input v-model="testingForm.ENTERBYDesc" :disabled="true"></el-input>
+												</el-form-item>
+											</el-col>
+											<el-col :span="8">
+												<el-form-item label="录入时间">
+													<el-input v-model="testingForm.ENTERDATE" :disabled="true"></el-input>
+												</el-form-item>
+											</el-col>
+											<el-col :span="8">
+												<el-form-item label="修改人">
+													<el-input v-model="testingForm.CHANGEBYDesc" :disabled="true"></el-input>
+												</el-form-item>
+											</el-col>
+											<el-col :span="8">
+												<el-form-item label="修改日期">
+													<el-input v-model="testingForm.CHANGEDATE" :disabled="true"></el-input>
+												</el-form-item>
+											</el-col>
+										</el-row>
+									</el-collapse-item>
+								</el-form>
+								<el-collapse-item title="文件" name="3">
+									<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save"></doc-table>
 								</el-collapse-item>
-								<el-collapse-item title="其它" name="2" v-show="views">
-									<el-row>
-										<el-col :span="8">
-											<el-form-item label="录入人">
-												<el-input v-model="testingForm.ENTERBYDesc" :disabled="true"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="录入时间">
-												<el-input v-model="testingForm.ENTERDATE" :disabled="true"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="修改人">
-												<el-input v-model="testingForm.CHANGEBYDesc" :disabled="true"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="修改日期">
-												<el-input v-model="testingForm.CHANGEDATE" :disabled="true"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-								</el-collapse-item>
-							</el-form>
-							<el-collapse-item title="文件" name="3">
-								<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save"></doc-table>
-							</el-collapse-item>
-						</el-collapse>
-					</div>
-					<div class="content-footer" v-show="noviews">
-						<el-button type="primary" @click="saveAndUpdate('testingForm')">保存</el-button>
-						<el-button type="success" @click="saveAndSubmit('testingForm')" v-show="addtitle">保存并继续</el-button>
-						<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('testingForm')">修订</el-button>
-						<!-- <el-button v-if="modify" type="success" @click="update('testingForm')">启用</el-button> -->
-						<el-button @click="close">取消</el-button>
-					</div>
+							</el-collapse>
+						</div>
+						<div class="content-footer" v-show="noviews">
+							<el-button type="primary" @click="saveAndUpdate('testingForm')">保存</el-button>
+							<el-button type="success" @click="saveAndSubmit('testingForm')" v-show="addtitle">保存并继续</el-button>
+							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('testingForm')">修订</el-button>
+							<!-- <el-button v-if="modify" type="success" @click="update('testingForm')">启用</el-button> -->
+							<el-button @click="close">取消</el-button>
+						</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -113,7 +115,7 @@
 			page: {
 				type: Object,
 			},
-			testingForm: { //接收主表单中填写的数据信息
+			testingForm: { 
 				type: Object,
 				default: function() {
 					return {
@@ -133,28 +135,17 @@
 			}
 		},
 		data() {
-			// var validateNum = (rule, value, callback) => {
-			// 	if(value != ""){
-		 //             if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
-		 //                 callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
-		 //             }else{
-		 //                 callback();
-		 //             }
-		 //         }else{
-		 //             callback();
-		 //         }
-			// };
 			return {
 				docParm: {
 					'model': 'new',
-					'appname': '',
 					'recordid': 1,
 					'userid': 1,
 					'username': '',
 					'deptid': 1,
 					'deptfullname': '',
 					'appname': '',
-					'appid': 1
+					'appid': 1,
+					'save': false
 				},
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
@@ -176,7 +167,6 @@
 				dialogVisible: false, //对话框
 				edit: true, //禁填
 				activeNames: ['1', '2', '3'], //手风琴数量
-//				labelPosition: 'top', //表单标题在上方
 				addtitle: true,
 				modifytitle: false,
 				testing_filesForm:{//文件文件数据组
@@ -222,11 +212,9 @@
 			};
 		},
 		methods: {
-			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
 			},
-			//编码提示
 			hint(){
 				this.hintshow = true;
 			},
@@ -259,12 +247,14 @@
 			},
 			visible() {//添加内容时从父组件带过来的
 				this.getUser('new');
+				var _this = this;
 				setTimeout(function(){
-					this.docParm.model = 'new';
-					this.docParm.appname = 'INSPECTION_METHOD2';
-					this.docParm.recordid = this.testingForm.ID;
-					this.docParm.appid = 32;
-					this.$refs.docTable.getData();
+					_this.docParm.model = 'new';
+					_this.docParm.appname = '检验检测项目_检验/检测方法';
+					_this.docParm.recordid = _this.testingForm.ID;
+					_this.docParm.appid = 16;
+					_this.docParm.save = false;
+					_this.$refs.docTable.getData();
 				},100);
             	this.addtitle = true;
 				this.modifytitle = false;
@@ -298,9 +288,9 @@
 				var _this = this;
 				setTimeout(function(){
 					_this.docParm.model = 'edit';
-					_this.docParm.appname = 'INSPECTION_METHOD2';
+					_this.docParm.appname = '检验检测项目_检验/检测方法';
 					_this.docParm.recordid = _this.testingForm.ID;
-					_this.docParm.appid = 32;
+					_this.docParm.appid = 16;
 					_this.$refs.docTable.getData();
 				},100);
 			},
@@ -311,7 +301,7 @@
 				}
 			},
 			//这是查看
-			view() {
+			view(item) {
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;
@@ -451,15 +441,6 @@
 				this.$refs['testing_filesForm'].validate((valid) => {
 		          	if (valid) {
 						var url = this.basic_url + '/api-apps/app/doclinks/saveOrUpdate';
-	//					var submitData = {
-//						"ID":row.ID,
-//					    "DOCLINKS": row.DOCLINKS,
-//						"DESCRIPTION": row.DESCRIPTION,
-//					    "DOC_SIZE": row.DOC_SIZE,
-//						"ROUTE": row.ROUTE,
-//						"ENTERBY": row.ENTERBY,
-//					    "ENTERDATE": row.ENTERDATE,
-//					}
 						this.$axios.post(url, this.submitData).then((res) => {
 							if(res.data.resp_code == 0) {
 								this.$message({
@@ -522,22 +503,20 @@
 					this.rebackDialog();
 				}
 			},
-			maxDialog(e) { //大弹出框距离头部少60px
+			maxDialog(e) { //定义大弹出框一个默认大小
 				this.isok1 = false;
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
-				$(".mask_div").css("margin", "0%");
 				$(".mask_div").css("top", "60px");
 			},
 			//还原按钮
-			rebackDialog() {
+			rebackDialog() { //大弹出框还原成默认大小
 				this.isok1 = true;
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
-				$(".mask_div").css("margin", "7% 10%");
-				$(".mask_div").css("top", "0");
+				$(".mask_div").css("top", "100px");
 			},
 			//点击更新按钮
 			update(testingForm) {
@@ -566,12 +545,13 @@
 			},
 			//执行保存
 			save(opt) {
+				console.log('testingForm-----save');
 				var _this = this;
 				this.$refs['testingForm'].validate((valid) => {
 					if(!valid && opt == 'docUpload'){
 						this.$message({
 							message: '请先正确填写信息，再进行文档上传',
-							type: 'warn'
+							type: 'warning'
 						});
 					}
 					if (valid) {
@@ -583,7 +563,7 @@
 									this.docParm.recordid = res.data.datas.id;
 									this.docParm.model = 'edit';
 									this.$refs.docTable.autoLoad();
-									this.dataInfo.ID = res.data.datas.id;
+									this.testingForm.ID = res.data.datas.id;
 								}else{
 									this.$message({
 										message: '保存成功',
@@ -630,14 +610,14 @@
 			},
 			//保存
 			saveAndUpdate(testingForm){
-				this.save(testingForm);
+				this.save('userSave');
 				if(this.falg){
 					this.show = false;
 				}
 			},
 			//保存并继续
 			saveAndSubmit(testingForm){
-				this.save(testingForm);
+				this.save('userSave');
 				this.show = true;
 			},
 			handleClose(done) { //大弹出框确定关闭按钮

@@ -60,7 +60,7 @@
 								<el-col :span="3">
 									<el-form-item label="是否停用" prop="inactive" label-width="70px">
 										<el-select clearable v-model="searchList.inactive" placeholder="" style="width: 100%;">
-											<el-option v-for="item in stopoptions" :key="item.value" :label="item.label" :value="item.value">
+											<el-option v-for="(data,index) in stopoptions" :key="index" :label="data.label" :value="data.value">
 											</el-option>
 										</el-select>
 									</el-form-item>
@@ -86,6 +86,8 @@
 								<el-table-column label="角色名称" sortable prop="name" v-if="this.checkedName.indexOf('角色名称')!=-1">
 								</el-table-column>
 								<el-table-column label="是否停用" sortable prop="inactive" :formatter="judge" v-if="this.checkedName.indexOf('是否停用')!=-1">
+								</el-table-column>
+								<el-table-column label="备注" sortable prop="tips"  v-if="this.checkedName.indexOf('备注')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
@@ -134,17 +136,18 @@
 				basic_url: Config.dev_url,
 				value:'',
 				stopoptions: [{
-					value: '1',
+					value: "1",
 					label: '是'
 				}, {
-					value: '0',
+					value: "2",
 					label: '否'
 				}],
 				selUser: [],
 				checkedName: [//控制表格列的显示隐藏相关数据
 					'角色编码',
 					'角色名称',
-					'是否停用'
+					'是否停用',
+					'备注',
 				],
 				tableHeader: [//控制表格列的显示隐藏相关数据
 					{
@@ -158,6 +161,10 @@
 					{
 						label: '是否停用',
 						prop: 'inactive'
+					},
+					{
+						label: '备注',
+						prop: 'tips'
 					}
 				],
 				buttons: [],//请求回的按钮
@@ -222,7 +229,6 @@
 					console.log(111)
 					console.log(res);
 					this.buttons = res.data;
-					
 				}).catch((wrong) => {})
 
 		    },
@@ -386,6 +392,7 @@
 			},
 			//页面加载数据
 			requestData(index) {
+				console.log(this.searchList.inactive);
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -396,7 +403,7 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(res);
+					console.log(res.data);
 					this.roleList = res.data.data;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})

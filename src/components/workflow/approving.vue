@@ -1,6 +1,6 @@
 <template>
 <div>
-	<el-dialog title="审批" :visible.sync="innerVisible" width="60%">
+	<el-dialog :modal-append-to-body="false" title="审批" :visible.sync="innerVisible" width="60%">
   <el-form ref="approveForm" :model="approveForm" :rules="rules" label-width="120px" class="demo-ruleForm">
     <el-row :gutter="30">
       <el-col :span="23" :offset="0">
@@ -58,10 +58,10 @@ export default {
 		    //同意
 		    submitForm(){
 		    	console.log(this.approvingData);
-		    	this. id=this.approvingData.id;
-		    	this. appname=this.approvingData.app;
+		    	this.id=this.approvingData.id;
+		    	this.appname=this.approvingData.app;
 		    	this.$refs.approveForm.validate((valid) => {	
-		    	var url = this.basic_url + '/api-apps/app/'+this. appname+'/flow/'+this. id;	
+		    	var url = this.basic_url + '/api-apps/app/'+this. appname+'/flow/'+this.id;	
 		    	console.log(url);
 				this.approveForm = {
 							"end":false,
@@ -82,14 +82,17 @@ export default {
 								type: 'success'
 							});
 							this.close();
+							//调用父页面的方法刷新页面
+							this.$emit('detail');
 				    }
 				});
 		    });
 		    },
 		    //驳回
 		    rejectForm(){
-		    	this. id=this.approvingData.id;
-		    	this. appname=this.approvingData.app;
+		    	console.log(this.approvingData);
+		    	this.id=this.approvingData.id;
+		    	this.appname=this.approvingData.app;
 		    	this.$refs.approveForm.validate((valid) => {	
 		    	var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/'+this. id;	
 				this.approveForm = {
@@ -111,6 +114,8 @@ export default {
 								type: 'success'
 							});
 							this.close();
+							//调用父页面的方法刷新页面
+							this.$emit('detail');
 				    }
 				});
 		    });
@@ -124,32 +129,5 @@ export default {
 </script>
 
 <style>
-.el-form-item {
-margin-bottom: 20px;
-}
-.demo-ruleForm{
-	padding-top:0px;
-}
-.mask{
-	width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, .5);
-    position: fixed;
-    display: block;
-    top: 0px;
-    z-index: 1001;
-    margin-top:60px;
-}
-.masks_div{
-    position: absolute;
-    z-index: 1002;
-    width: 50%;
-    margin: 20% 20%;
-    background:#F3F6FA;	
-    border-radius: 0px;
-    height: 50%;
-    top: 0px;
-    bottom: 0px;
-    overflow: hidden;
-}
+
 </style>

@@ -70,7 +70,7 @@
 									    <el-date-picker
 									      v-model="searchList.ENTERDATE"
 									      type="date" style="width: 100%;"
-									      placeholder="录入时间">
+									      placeholder="录入时间" value-format="yyyy-MM-dd">
 									    </el-date-picker>
 								  </div>
 								</el-form-item>
@@ -450,12 +450,7 @@
 			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
 				console.log();
-				return(
-					<span>
-		              <i class={data.iconClass}></i>
-		              <span>{node.label}</span>
-		            </span>
-				);
+				return (<span><i class={data.iconClass}></i><span>{node.label}</span></span>)
 			},
 			// 点击节点
 			nodeClick: function(m) {

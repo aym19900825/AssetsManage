@@ -12,7 +12,11 @@ import Vuex from 'vuex'
       name: '首页',
       url: '/index'},
      //要设置的初始属性值
+<<<<<<< HEAD
+     clickedNav:[{
+=======
      clickedNavs:[{
+>>>>>>> 8f192f0bc1ba654365c575ae9c6012562b8b4dad
       css: 'icon-user',
       name: '首页',
       url: '/index'}]
@@ -35,7 +39,11 @@ import Vuex from 'vuex'
        return state.selectedNav;
     },
     getClickedNav(state){
+<<<<<<< HEAD
+       return state.clickedNav;
+=======
        return state.clickedNavs;
+>>>>>>> 8f192f0bc1ba654365c575ae9c6012562b8b4dad
     },
   
    };
@@ -56,8 +64,13 @@ import Vuex from 'vuex'
       setSelectedNav(state,selectedNav){
           state.selectedNav=selectedNav;
       },
+<<<<<<< HEAD
+      setClickedNav(state,clickedNav){
+          state.clickedNav=clickedNav;
+=======
       setClickedNav(state,clickedNavs){
           state.clickedNavs=clickedNavs;
+>>>>>>> 8f192f0bc1ba654365c575ae9c6012562b8b4dad
       }
     };
     //组件触发动作用 vuex 的 action
@@ -77,8 +90,13 @@ import Vuex from 'vuex'
       setSelectedNavAct(context,selectedNav){
           context.commit('setSelectedNav',selectedNav);
       },
+<<<<<<< HEAD
+      setClickedNavAct(context,clickedNav){
+          context.commit('setClickedNav',clickedNav);
+=======
       setClickedNavAct(context,clickedNavs){
           context.commit('setClickedNav',clickedNavs);
+>>>>>>> 8f192f0bc1ba654365c575ae9c6012562b8b4dad
       }
   };
 

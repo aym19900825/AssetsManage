@@ -12,6 +12,7 @@
   "dependencies": {
     "ajv": "^6.0.0",
     "axios": "^0.18.0",
+    "babel-polyfill": "^6.26.0",
     "bootstrap": "^3.3.6",
     "dropzone": "^5.5.1",
     "easyscroll": "^1.0.1",

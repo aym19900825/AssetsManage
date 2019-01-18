@@ -113,7 +113,7 @@ export default {
         },
         save(){
            if(this.selData.length > this.chooseParam.selMax){
-                var msg = '最多选择' + this.selData.length + '条数据，请重新选择';
+                var msg = '最多选择' + this.chooseParam.selMax + '条数据，请重新选择';
                 this.$message({
                     message: msg,
                     type: 'warning'

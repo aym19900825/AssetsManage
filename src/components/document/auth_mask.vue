@@ -38,7 +38,11 @@
 											<font>新建行</font>
 										</el-button>
 									</div>
-
+									<div>
+										<el-checkbox-group v-model="checkAuth" @change="handleAuth" v-show="selKeyW.length>0">
+											<el-checkbox   v-for="item in authOptions" :label="item" :key="item"></el-checkbox>
+										</el-checkbox-group>
+									</div>
 									<el-table :data="selKeyW" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100% ;">
 										<el-table-column label="类别名称" sortable prop="categoryidDesc">
 											<template slot-scope="scope">
@@ -96,6 +100,10 @@
 		props: ['detailData'],
 		data() {
 			return {
+				authOptions: ['显示','编辑','删除','打印','下载','复制'],
+				checkAuth: [],
+				selBefore: [],
+
 				chooseParam: {
 					visible: false,
 					title: "用户列表",
@@ -211,10 +219,44 @@
 				usernames: [],
 				keywords: [],
 				selKeyW: [],
-				deptid: ''
+				deptid: '',
 			};
 		},
 		methods: {
+			handleAuth(value){
+				var _this = this;
+				var increaseFlag = false;
+				var selKeyW = this.selKeyW;
+				var selKeys = [];
+				var selKey = '';
+				
+				if(this.selBefore.length > value.length){
+					increaseFlag = false;
+					selKeys = this.selBefore.filter(function(item){
+						if(value.indexOf(item) == -1){
+							return item;
+						};
+					});
+				}else{
+					increaseFlag = true;
+					selKeys = value.filter(function(item){
+						if(_this.selBefore.indexOf(item) == -1){
+							return item;
+						};
+					});
+				}
+
+				selKey = selKeys[0];
+				for(var i=0; i<selKeyW.length; i++){
+					if(selKeyW[i].checkedList.indexOf(selKey)==-1 && increaseFlag){
+						selKeyW[i].checkedList.push(selKey);
+					};
+					if(selKeyW[i].checkedList.indexOf(selKey) && !increaseFlag){
+						selKeyW[i].checkedList.splice(selKeyW[i].checkedList.indexOf(selKey),1);
+					}
+				}
+				this.selBefore = value;
+			},
 			del(row,index){
 				console.log('del');
 				if(!row.id){
@@ -256,7 +298,7 @@
 							keywordid: selData[i].id,
 							categoryid: selData[i].categoryid,
 							categoryidDesc: selData[i].categoryidDesc,
-							keywordname: selData[i].keywordname,
+							keywordidDesc: selData[i].keywordname,
 							checkedList: [
 								'显示'
 							]
@@ -374,6 +416,7 @@
 					'keywordid': '',
 					'userid': ''
 				};
+				this.selKeyW = [];
 				//this.$refs['dataInfo'].resetFields();
 				this.show = false;
 			},

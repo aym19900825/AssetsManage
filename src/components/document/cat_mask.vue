@@ -4,8 +4,8 @@
 		<div class="mask_divbg" v-if="show">
 			<div class="mask_div">
 				<div class="mask_title_div clearfix">
-					<div class="mask_title" v-show="!modify">添加关键字类别</div>
-					<div class="mask_title" v-show="modify">修改关键字类别</div>
+					<div class="mask_title" v-show="!modify">添加关键字类别/关键字</div>
+					<div class="mask_title" v-show="modify">修改关键字类别/关键字</div>
 					<div class="mask_anniu">
 						<span class="mask_span mask_max" @click='toggle'>
 							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -24,7 +24,9 @@
 										<el-row :gutter="5" class="pt10">
 											<el-col :span="6">
 												<el-form-item label="类别名称" prop="dataInfo.categoryname">
-													<el-input v-model="dataInfo.categoryname"></el-input>
+													<el-input v-model="dataInfo.categoryname">
+														<el-button slot="append" icon="el-icon-search" @click="chooseCat"></el-button>
+													</el-input>
 												</el-form-item>
 											</el-col>
 										</el-row>
@@ -74,14 +76,19 @@
 				<!--底部-->
 			</div>
 		</div>
+		<vchoose ref="choose" :chooseParam = "chooseParam" @tranFormData = 'getChoose'></vchoose>
 	</div>
 </template>
 
 <script>
 	import Config from '../../config.js'
+	import vchoose from '../common/dataChoose.vue'
 	export default {
 		name: 'masks',
 		props: ['detailData'],
+		components: {
+			vchoose,
+		},
 		data() {
 			return {
 				rules: {
@@ -120,9 +127,37 @@
 					'deptfullname': '',
 					'tb_keyword2List': [],
 				},
+				chooseParam: {}
 			};
 		},
 		methods: {
+			chooseCat(){
+				this.chooseParam = {
+					title: "关键字类别列表",
+					listName: 'keywordCat',
+					selMax: 1,
+					tableHeader: [
+						{
+							propName: 'categoryname',
+							labelName: '关键字类别'
+						},
+						{
+							propName: 'createtime',
+							labelName: '创建时间'
+						}
+
+					],
+					search: [],
+					url: '/api-apps/app/tbCategory2'
+				};
+				this.$refs.choose.getData('new',this.chooseParam);
+			},
+			getChoose(data){
+				var selData = data.data;
+				this.dataInfo.id = selData[0].id;
+				this.dataInfo.categoryname = selData[0].categoryname;
+				this.getData(this.dataInfo.id);
+			},
 			delKey(index,row){
 				if(row.id!=''){
 					var url = this.basic_url + '/api-apps/app/tbCategory2/tb_keyword2/' + row.id;

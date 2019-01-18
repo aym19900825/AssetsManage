@@ -113,10 +113,10 @@
 						<el-col :span="24">
 							<el-tabs>
 						    	<el-tab-pane label="专业组"><professionGrochild ref="professionGrochild" :parentIds="formInline.DEPTID"></professionGrochild></el-tab-pane>
-						    	<el-tab-pane label="检验/检测方法"><inspectionMet2child ref="inspectionMet2child"></inspectionMet2child></el-tab-pane>
-						    	<el-tab-pane label="原始数据模板"><rawDataTem2child ref="rawDataTem2child"></rawDataTem2child></el-tab-pane>
-						    	<el-tab-pane label="检验/检测报告模板"><inspectionRepTem2child ref="inspectionRepTem2child"></inspectionRepTem2child></el-tab-pane>
-						    	<el-tab-pane label="检测仪器"><rawDataAssetchild ref="rawDataAssetchild"></rawDataAssetchild></el-tab-pane>
+						    	<el-tab-pane label="检验/检测方法"><inspectionMet2child ref="inspectionMet2child" :parentIds="formInline.DEPTID"></inspectionMet2child></el-tab-pane>
+						    	<el-tab-pane label="原始数据模板"><rawDataTem2child ref="rawDataTem2child" :parentIds="formInline.DEPTID"></rawDataTem2child></el-tab-pane>
+						    	<el-tab-pane label="检验/检测报告模板"><inspectionRepTem2child ref="inspectionRepTem2child" :parentIds="formInline.DEPTID"></inspectionRepTem2child></el-tab-pane>
+						    	<el-tab-pane label="检测仪器"><rawDataAssetchild ref="rawDataAssetchild" :parentIds="formInline.DEPTID"></rawDataAssetchild></el-tab-pane>
 						    </el-tabs>
 						</el-col>
 					</el-row>
@@ -127,8 +127,13 @@
 	</div>
 	<!-- 产品类别 Begin -->
 		<el-dialog :modal-append-to-body="false" title="选择基础数据——产品类别" height="300px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
-			<!-- 第二层弹出的表格 Begin-->
-			<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+			<!--搜索框 Begin-->
+			<div class="columns pull-right" style="width: 160px;">
+				<el-input placeholder="请输入标准名称" v-model="search">
+				</el-input>
+			</div>
+			<!--搜索框 End-->
+			<el-table :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.TYPE.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 				<el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column>
 				<el-table-column label="编码" width="155" sortable prop="NUM">
@@ -144,7 +149,6 @@
 				<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat">
 				</el-table-column>
 			</el-table>
-			
 			<!-- 表格 End-->
 			<span slot="footer" class="dialog-footer">
 		       <el-button @click="dialogVisible3 = false">取 消</el-button>
@@ -225,6 +229,7 @@
 				inspectionSta2Id: 0,//获取子表检验/检测标准ID
 				inspectionPro2Id: 0,//获取子表检验/检测项目ID
 				dialogVisible3: false, //对话框
+				parentId: 1
 			}
 		},
 		methods: {
@@ -463,6 +468,7 @@
 				return row.enabled;
 			},
 			addfield_productType2() { //插入行到产品类别Table中
+				
 				var isEditingflag=false;
 				for(var i=0;i<this.productType2Form.inspectionList.length; i++){
 					if (this.productType2Form.inspectionList[i].isEditing==false){
@@ -500,6 +506,7 @@
 	            } else {
 	                this.$message.warning("请先保存当前编辑项");
 				}
+				
 			},
 			saveRow (row) {//Table-操作列中的保存行
 				this.$refs['productType2Form'].validate((valid) => {
@@ -563,7 +570,7 @@
 			},
 			addproclass() { //小弹出框确认按钮事件
 				this.dialogVisible3 = false;
-				this.catedata.NUM = this.selData[0].ID;
+				this.catedata.NUM = this.selData[0].NUM;
 				this.catedata.TYPE = this.selData[0].TYPE;
 				this.catedata.VERSION = this.selData[0].VERSION;
 				this.$emit('request');

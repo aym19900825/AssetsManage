@@ -17,7 +17,7 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form :model="dataInfo" :label-position="labelPositions" :rules="rules" ref="dataInfo" status-icon inline-message  class="demo-ruleForm">
+					<el-form :model="dataInfo" :label-position="labelPositions" :rules="rules" ref="dataInfo"  inline-message  class="demo-ruleForm">
 						<div class="text-center" v-show="viewtitle">
 							<span v-if="this.dataInfo.STATUS!=3">
 								<el-button id="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 启动流程</el-button>
@@ -128,7 +128,7 @@
 										<el-row >
 											<el-col :span="8">
 												<el-form-item label="数量" prop="ITEM_QUALITY" label-width="110px">
-													<el-input v-model="dataInfo.ITEM_QUALITY" :disabled="noedit">
+													<el-input v-model.number="dataInfo.ITEM_QUALITY" :disabled="noedit">
 													</el-input>
 
 												</el-form-item>
@@ -417,7 +417,7 @@
 								
 												<el-table-column prop="CHECKCOST" label="检验检测费用" sortable width="120px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.CHECKCOST'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.CHECKCOST'" :rules="[{required: true, message: '请输入数字', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" id="testprice" @blur="testPrice(scope.row)" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input>
 														<span v-else="v-else">{{scope.row.CHECKCOST}}</span>
 														</el-form-item>
@@ -468,7 +468,7 @@
 										
 											<el-col :span="8">
 												<el-form-item label="交委托方分数" prop="REPORT_QUALITY" label-width="110px">
-													<el-input v-model="dataInfo.REPORT_QUALITY" :disabled="noedit"></el-input>
+													<el-input v-model.number="dataInfo.REPORT_QUALITY" :disabled="noedit"></el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="14">
@@ -483,18 +483,18 @@
 											
 									
 											<el-col :span="8">
-												<el-form-item label="检验收费" prop="CHECK_COST" label-width="110px">
-													<el-input v-model="dataInfo.CHECK_COST" id="cost" @blur="toPrice" :disabled="noedit"></el-input>
+												<el-form-item label="检验收费（元）" prop="CHECK_COST" label-width="110px">
+													<el-input  v-model="dataInfo.CHECK_COST" id="cost" @blur="toPrice" :disabled="noedit"></el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
-												<el-form-item label="标准费用" prop="CONTRACTCOST" label-width="110px">
-													<el-input v-model="dataInfo.CONTRACTCOST" id="stacost"  @blur="staPrice" :disabled="noedit"></el-input>
+												<el-form-item label="标准费用（元）" prop="CONTRACTCOST" label-width="110px">
+													<el-input  v-model="dataInfo.CONTRACTCOST" id="stacost"  @blur="staPrice" :disabled="noedit"></el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
-												<el-form-item label="实收费用" prop="ACTUALCOST" label-width="110px">
-													<el-input v-model="dataInfo.ACTUALCOST" id="actualcost"  @blur="actualPrice" :disabled="noedit"></el-input>
+												<el-form-item label="实收费用（元）" prop="ACTUALCOST" label-width="110px">
+													<el-input  v-model="dataInfo.ACTUALCOST" id="actualcost"  @blur="actualPrice" :disabled="noedit"></el-input>
 												</el-form-item>
 											</el-col>
 
@@ -769,6 +769,21 @@
                     callback();
                 }
             };
+            //var exp = /^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/;
+            //金额验证
+            var price=(rule, value, callback) => {//生产单位名称 
+				var exp = /^(-)?\d{1,3}(,\d{3})*(.\d+)?$/;
+				console.log(value);
+				if(value != '' && value!=undefined){
+					if(exp.test(value)==false){ 
+	                    callback(new Error('请输入数字'));
+	              }else{
+	                    callback();
+	                }
+				}else {
+					callback();
+				}
+           };
 			return {
 				approvingData:{},
 				loadSign:true,//加载
@@ -853,7 +868,7 @@
 					ITEM_NAME: [{ required: true,validator: validateItemname}],//样品名称
 					ITEM_ID: [{ required: true, message: '必填', trigger: 'blur' }],//标识
 					ITEM_MODEL: [{ required: true, message: '必填', trigger: 'blur' }],//型号
-					ITEM_QUALITY: [{ required: true, message: '必填', trigger: 'blur' }],//数量
+					ITEM_QUALITY: [{ required: true, message: '必填', trigger: 'blur'},{ type: 'number', message: '请输入数字'}],//数量
 //					ITEM_STATUS: [{ required: true, message: '必填', trigger: 'blur' }],//样品信息状态
 					ITEM_SECRECY: [{ required: true, message: '必填', trigger: 'blur' }],//保密要求
 					ITEM_METHOD: [{ required: true, message: '必填', trigger: 'change' }],//取样方式
@@ -861,18 +876,18 @@
 					REMARKS: [{ required: true, message: '必填', trigger: 'blur' }],//抽样方案/判定依据
 					COMPDATE: [{ required: true, message: '必填', trigger: 'blur' }],//完成日期
 					PROXYNUM: [{ required: true, message: '必填', trigger: 'blur' }],//编号
-					REPORT_QUALITY: [{ required: true, message: '必填', trigger: 'blur' }],//交委托方分数
+					REPORT_QUALITY: [{ required: true, message: '必填', trigger: 'blur' },{ type: 'number', message: '请输入数字'}],//交委托方分数
 					REPORT_MODE: [{ required: true, message: '必填', trigger: 'change' }],//发送方式
 					REPORT_FOMAT: [{ required: true, message: '必填', trigger: 'change' }],//格式
-//					MAINGROUP: [{ required: true, message: '必填', trigger: 'change' }],//主检组
-//					LEADER: [{ required: true, message: '必填', trigger: 'blur' }],//主检负责人
-					MEMO: [{ required: true, message: '必填', trigger: 'blur' }],//备注
+					MAINGROUP: [{ required: true, message: '必填', trigger: 'change' }],//主检组
+					LEADER: [{ required: true, message: '必填', trigger: 'blur' }],//主检负责人
+//					MEMO: [{ required: true, message: '必填', trigger: 'blur' }],//备注
+					CHECK_COST:[{required: false,trigger: 'change',validator:price}],
+					ACTUALCOST:[{trigger: 'blur',validator:price}],
+					CONTRACTCOST:[{trigger: 'blur',  validator:price}],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
-				// initcost:'',
-				// initsta:'',
-				// initactual:'',
 				dialogVisible2:false,
 				dialogVisible3:false,
 				samplesList:[],

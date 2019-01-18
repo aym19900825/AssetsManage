@@ -16,7 +16,7 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form :model="dataInfo" :rules="rules"   ref="dataInfo" label-width="100px" class="demo-user">
+					<el-form :model="dataInfo" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
 						<div class="accordion">
 							<!-- 关键字授权信息 -->
 							<el-collapse v-model="activeNames">
@@ -38,7 +38,11 @@
 											<font>新建行</font>
 										</el-button>
 									</div>
-
+										<div style="position: absolute; z-index: 99; right: 260px; top: 60px;">
+											<el-checkbox-group v-model="checkAuth" @change="handleAuth" v-show="selKeyW.length>0">
+												<el-checkbox v-for="item in authOptions" :label="item" :key="item"></el-checkbox>
+											</el-checkbox-group>
+										</div>
 									<el-table :data="selKeyW" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100% ;">
 										<el-table-column label="类别名称" sortable prop="categoryidDesc">
 											<template slot-scope="scope">
@@ -50,6 +54,7 @@
 												<span>{{scope.row.keywordidDesc}}</span>
 											</template>
 										</el-table-column>
+
 										<el-table-column fixed="right" label="授权" width="600px">
 											<template slot-scope="scope">
 												<el-checkbox-group v-model="scope.row.checkedList">
@@ -62,7 +67,7 @@
 												</el-checkbox-group>
 											</template>
 										</el-table-column>
-										<el-table-column fixed="right" label="操作">
+										<el-table-column fixed="right" width="150px" label="操作">
 											<template slot-scope="scope">
 												<el-button @click="del(scope.row,scope.$index)" type="text">删除</el-button>
 											</template>
@@ -74,7 +79,7 @@
 
 						<div class="el-dialog__footer">
 							<el-button @click='close'>取消</el-button>
-							<el-button type="primary" @click='submitForm'>提交</el-button>
+							<el-button type="primary" @click='submitForm'>保存</el-button>
 						</div>
 					</el-form>
 				</div>
@@ -96,6 +101,10 @@
 		props: ['detailData'],
 		data() {
 			return {
+				authOptions: ['显示','编辑','删除','打印','下载','复制'],
+				checkAuth: [],
+				selBefore: [],
+
 				chooseParam: {
 					visible: false,
 					title: "用户列表",
@@ -211,10 +220,45 @@
 				usernames: [],
 				keywords: [],
 				selKeyW: [],
-				deptid: ''
+				deptid: '',
 			};
 		},
 		methods: {
+			
+			handleAuth(value){
+				var _this = this;
+				var increaseFlag = false;
+				var selKeyW = this.selKeyW;
+				var selKeys = [];
+				var selKey = '';
+				
+				if(this.selBefore.length > value.length){
+					increaseFlag = false;
+					selKeys = this.selBefore.filter(function(item){
+						if(value.indexOf(item) == -1){
+							return item;
+						};
+					});
+				}else{
+					increaseFlag = true;
+					selKeys = value.filter(function(item){
+						if(_this.selBefore.indexOf(item) == -1){
+							return item;
+						};
+					});
+				}
+
+				selKey = selKeys[0];
+				for(var i=0; i<selKeyW.length; i++){
+					if(selKeyW[i].checkedList.indexOf(selKey)==-1 && increaseFlag){
+						selKeyW[i].checkedList.push(selKey);
+					};
+					if(selKeyW[i].checkedList.indexOf(selKey) && !increaseFlag){
+						selKeyW[i].checkedList.splice(selKeyW[i].checkedList.indexOf(selKey),1);
+					}
+				}
+				this.selBefore = value;
+			},
 			del(row,index){
 				console.log('del');
 				if(!row.id){
@@ -256,7 +300,7 @@
 							keywordid: selData[i].id,
 							categoryid: selData[i].categoryid,
 							categoryidDesc: selData[i].categoryidDesc,
-							keywordname: selData[i].keywordname,
+							keywordidDesc: selData[i].keywordname,
 							checkedList: [
 								'显示'
 							]
@@ -313,7 +357,7 @@
 				this.chooseParam.search[0].val = this.deptid;
 				this.$refs.choose.getData('new',this.chooseParam);
 			},
-			getUser(opt){
+			getUser(){
 				this.$axios.get(this.basic_url +'/api-user/users/currentMap', {}).then((res) => {
 					this.deptid = res.data.deptId;
 					this.dataInfo.deptName = res.data.deptName;
@@ -332,7 +376,7 @@
 				var detailData = this.detailData;
 				this.dataInfo.userid = detailData.userid;
 				this.dataInfo.username = detailData.username;
-				
+				this.getUser();
 				var data = {
 					page: 1,
 					limit: 10,
@@ -374,6 +418,7 @@
 					'keywordid': '',
 					'userid': ''
 				};
+				this.selKeyW = [];
 				//this.$refs['dataInfo'].resetFields();
 				this.show = false;
 			},

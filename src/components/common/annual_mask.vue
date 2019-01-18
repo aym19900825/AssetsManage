@@ -1477,11 +1477,11 @@
 	    				this.WORKPLAN.CHANGEBY = res.data.nickname;
 	    				var date = new Date();
 						this.WORKPLAN.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
-						this.docParm.userid = res.data.id;
-						this.docParm.username = res.data.username;
-						this.docParm.deptid = res.data.deptId;
-						this.docParm.deptfullname = res.data.deptName;
 					}
+					this.docParm.userid = res.data.id;
+					this.docParm.username = res.data.username;
+					this.docParm.deptid = res.data.deptId;
+					this.docParm.deptfullname = res.data.deptName;
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',

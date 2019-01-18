@@ -773,12 +773,17 @@
             //金额验证
             var price=(rule, value, callback) => {//生产单位名称 
 				var exp = /^(-)?\d{1,3}(,\d{3})*(.\d+)?$/;
-               if(!(exp.test(value))){ 
-                    callback(new Error('请输入数字'));
-                }else {
-                    callback();
-                }
-            };
+				console.log(value);
+				if(value != '' && value!=undefined){
+					if(exp.test(value)==false){ 
+	                    callback(new Error('请输入数字'));
+	              }else{
+	                    callback();
+	                }
+				}else {
+					callback();
+				}
+           };
 			return {
 				approvingData:{},
 				loadSign:true,//加载
@@ -874,12 +879,12 @@
 					REPORT_QUALITY: [{ required: true, message: '必填', trigger: 'blur' },{ type: 'number', message: '请输入数字'}],//交委托方分数
 					REPORT_MODE: [{ required: true, message: '必填', trigger: 'change' }],//发送方式
 					REPORT_FOMAT: [{ required: true, message: '必填', trigger: 'change' }],//格式
-//					MAINGROUP: [{ required: true, message: '必填', trigger: 'change' }],//主检组
-//					LEADER: [{ required: true, message: '必填', trigger: 'blur' }],//主检负责人
-					MEMO: [{ required: true, message: '必填', trigger: 'blur' }],//备注
-					CHECK_COST:[{required: false,trigger: 'blur',validator:price}],
-					ACTUALCOST:[{required: false,trigger: 'blur',validator:price}],
-					CONTRACTCOST:[{required: false,trigger: 'blur',  validator:price}],
+					MAINGROUP: [{ required: true, message: '必填', trigger: 'change' }],//主检组
+					LEADER: [{ required: true, message: '必填', trigger: 'blur' }],//主检负责人
+//					MEMO: [{ required: true, message: '必填', trigger: 'blur' }],//备注
+					CHECK_COST:[{required: false,trigger: 'change',validator:price}],
+					ACTUALCOST:[{trigger: 'blur',validator:price}],
+					CONTRACTCOST:[{trigger: 'blur',  validator:price}],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据

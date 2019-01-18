@@ -119,15 +119,6 @@
 												</el-form-item>
 											</template>
 										</el-table-column>
-										<el-table-column prop="C_NUM" label="证书编号" sortable width="180px">
-											<template slot-scope="scope">
-												<el-form-item :prop="'QUALIFICATIONList.'+scope.$index + '.C_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.C_NUM" placeholder="请输入委托方名称">
-													</el-input>
-													<span v-else="v-else">{{scope.row.C_NUM}}</span>
-												</el-form-item>
-											</template>
-										</el-table-column>
 										<el-table-column prop="C_NAME" label="证书名称" sortable width="300px">
 											<template slot-scope="scope">
 												<el-form-item :prop="'QUALIFICATIONList.'+scope.$index + '.C_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
@@ -137,19 +128,10 @@
 												</el-form-item>
 											</template>
 										</el-table-column>
-										<el-table-column prop="C_DATE" label="资质有效期" sortable width="200px">
-											<template slot-scope="scope">
-												<el-form-item :prop="'QUALIFICATIONList.'+scope.$index + '.C_DATE'">
-													<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.C_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width:100%">
-													</el-date-picker>
-													<span v-else="v-else">{{scope.row.C_DATE}}</span>
-												</el-form-item>
-											</template>
-										</el-table-column>
 										<el-table-column fixed="right" label="操作" width="120">
 											<template slot-scope="scope">
-												<el-button @click.native.prevent="deleteRow(scope.$index,testing_projectForm.QUALIFICATIONList)" type="text" size="small">
-													移除
+												<el-button @click.native.prevent="deleteRow(scope.$index,testing_projectForm.QUALIFICATIONList)" type="text" size="small" v-show="!viewtitle">
+                                                 <i class="icon-trash red"></i>
 												</el-button>
 											</template>
 										</el-table-column>
@@ -197,8 +179,6 @@
 					</el-table-column>
 					<!-- <el-table-column label="用户名" sortable width="100px" prop="user">
 					</el-table-column> -->
-					<el-table-column label="证书编号" sortable width="200px" prop="c_num">
-					</el-table-column>
 					<el-table-column label="证书名称" sortable width="200px" prop="c_name">
 					</el-table-column>
 					<el-table-column label="资质有效期" sortable prop="c_date">

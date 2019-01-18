@@ -468,7 +468,7 @@
 										
 											<el-col :span="8">
 												<el-form-item label="交委托方分数" prop="REPORT_QUALITY" label-width="110px">
-													<el-input v-model="dataInfo.REPORT_QUALITY" :disabled="noedit"></el-input>
+													<el-input v-model.number="dataInfo.REPORT_QUALITY" :disabled="noedit"></el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="14">
@@ -863,7 +863,7 @@
 					ITEM_NAME: [{ required: true,validator: validateItemname}],//样品名称
 					ITEM_ID: [{ required: true, message: '必填', trigger: 'blur' }],//标识
 					ITEM_MODEL: [{ required: true, message: '必填', trigger: 'blur' }],//型号
-					ITEM_QUALITY: [{ required: true, message: '必填', trigger: 'blur'}, { type: 'number', message: '请输入数字'}],//数量
+					ITEM_QUALITY: [{ required: true, message: '必填', trigger: 'blur'},{ type: 'number', message: '请输入数字'}],//数量
 //					ITEM_STATUS: [{ required: true, message: '必填', trigger: 'blur' }],//样品信息状态
 					ITEM_SECRECY: [{ required: true, message: '必填', trigger: 'blur' }],//保密要求
 					ITEM_METHOD: [{ required: true, message: '必填', trigger: 'change' }],//取样方式
@@ -871,7 +871,7 @@
 					REMARKS: [{ required: true, message: '必填', trigger: 'blur' }],//抽样方案/判定依据
 					COMPDATE: [{ required: true, message: '必填', trigger: 'blur' }],//完成日期
 					PROXYNUM: [{ required: true, message: '必填', trigger: 'blur' }],//编号
-					REPORT_QUALITY: [{ required: true, message: '必填', trigger: 'blur' }],//交委托方分数
+					REPORT_QUALITY: [{ required: true, message: '必填', trigger: 'blur' },{ type: 'number', message: '请输入数字'}],//交委托方分数
 					REPORT_MODE: [{ required: true, message: '必填', trigger: 'change' }],//发送方式
 					REPORT_FOMAT: [{ required: true, message: '必填', trigger: 'change' }],//格式
 //					MAINGROUP: [{ required: true, message: '必填', trigger: 'change' }],//主检组

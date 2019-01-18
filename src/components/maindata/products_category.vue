@@ -78,9 +78,14 @@
 										</el-select>
 									</el-form-item>
 								</el-col>
-								<el-col :span="2">
-									<el-button class="pull-right" type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+								<!-- <el-col :span="2">
+									
+								</el-col> -->
+								<el-col :span="4">
+									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px">重置</el-button>
 								</el-col>
+								
 							</el-row>
 						</el-form>
 					</div>
@@ -293,6 +298,16 @@
 				this.page.currentPage = val;
 				this.requestData();
 			},
+			//重置
+			resetbtn(){
+				this.searchList = {
+					NUM:'',
+					TYPE: '',
+					VERSION:'',
+					DEPTID: '',
+				};
+			},
+			//搜索
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;

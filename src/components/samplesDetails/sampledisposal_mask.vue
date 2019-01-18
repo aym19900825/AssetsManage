@@ -382,9 +382,21 @@
 				this.dialogsample = true;
 			},
 			addsamplebtn(){
-				this.samplesForm.ITEMNUM = this.selUser[0].ITEMNUM;//样品编号
-				this.dialogsample = false;
-				this.requestData();
+				if(this.selUser.length == 0){
+					this.$message({
+						message:'请选择数据',
+						type:'warning'
+					})
+				}else if(this.selUser.length > 1){
+					this.$message({
+						message:'不可选择多条数据',
+						type:'warning'
+					})
+				}else{
+					this.samplesForm.ITEMNUM = this.selUser[0].ITEMNUM;//样品编号
+					this.dialogsample = false;
+					this.requestData();
+				}
 			},
 			SelChange(val) {
 				this.selUser = val;
@@ -399,8 +411,20 @@
 				}).catch((wrong) => {})
 			},
 			addsamplenumbtn(){
-				this.samplesForm.ITEM_STEP = this.selUser[0].ITEM_STEP;
-				this.dialogsamplenum = false;
+				if(this.selUser.length == 0){
+					this.$message({
+						message:'请选择数据',
+						type:'warning'
+					})
+				}else if(this.selUser.length > 1){
+					this.$message({
+						message:'不可选择多条数据',
+						type:'warning'
+					})
+				}else{
+					this.samplesForm.ITEM_STEP = this.selUser[0].ITEM_STEP;
+					this.dialogsamplenum = false;
+				}
 			},
 			//获取委托书编号数据
 			getProxy() {

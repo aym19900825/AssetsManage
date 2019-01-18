@@ -352,7 +352,7 @@
 												<el-table-column prop="PROXY_CONTRACT_NUM" label="分包协议编号" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.PROXY_CONTRACT_NUM'" >
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROXY_CONTRACT_NUM" placeholder="">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROXY_CONTRACT_NUM" :disabled="true" placeholder="自动生成">
 														</el-input>
 														<span v-else="v-else">{{scope.row.PROXY_CONTRACT_NUM}}</span>
 														</el-form-item>

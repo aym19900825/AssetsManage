@@ -99,16 +99,16 @@
 							</el-table-column>
 							<el-table-column label="编码" width="150" sortable prop="P_NUM" v-if="this.checkedName.indexOf('编码')!=-1">
 								<template slot-scope="scope">
-									<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.P_NUM}}
+									<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.P_NUM}}
 									</p>
 								</template>
 							</el-table-column>
 							<el-table-column label="名称" width="220" sortable prop="P_NAME" v-if="this.checkedName.indexOf('名称')!=-1">
 							</el-table-column>
-							<el-table-column label="单价(元)" width="120" align="right" sortable prop="QUANTITY" v-if="this.checkedName.indexOf('单价')!=-1">
+							<el-table-column label="单价(元)" width="120" align="right" sortable prop="UNITCOST" v-if="this.checkedName.indexOf('单价')!=-1">
 							</el-table-column>
-							<el-table-column label="人员资质" width="180" sortable prop="QUALIFICATION" v-if="this.checkedName.indexOf('人员资质')!=-1">
-							</el-table-column>
+							<!-- <el-table-column label="人员资质" width="180" sortable prop="QUALIFICATION" v-if="this.checkedName.indexOf('人员资质')!=-1">
+							</el-table-column> -->
 							<!--<el-table-column label="信息状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
 							</el-table-column>-->
 							<!--<el-table-column label="文件" width="120" sortable prop="DOCLINKP_NAME" v-if="this.checkedName.indexOf('文件')!=-1">-->
@@ -182,7 +182,7 @@
 					'编码',
 					'名称',
 					'单价',
-					'人员资质',
+					// '人员资质',
 					// '信息状态',
 					'领域',
 					'子领域',
@@ -204,12 +204,12 @@
 					},
 					{
 						label: '单价',
-						prop: 'QUANTITY'
+						prop: 'UNITCOST'
 					},
-					{
-						label: '人员资质',
-						prop: 'QUALIFICATION'
-					},
+					// {
+					// 	label: '人员资质',
+					// 	prop: 'QUALIFICATION'
+					// },
 					// {
 					// 	label: '信息状态',
 					// 	prop: 'STATUS'
@@ -411,9 +411,9 @@
 				}
 			},
 			//查看
-			 view(data) {
-			 	this.testing_projectForm = data; 
-				this.$refs.child.view();
+			 view(dataid) {
+			 	// this.testing_projectForm = data; 
+				this.$refs.child.view(dataid);
 			},
 			//高级查询
 			modestsearch() {

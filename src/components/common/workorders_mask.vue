@@ -626,6 +626,7 @@
 			</div>
 			<!--委托书编号 Begin-->
 			<el-dialog :modal-append-to-body="false" title="委托书编号" :visible.sync="dialogVisible1" width="80%" >
+				<div class="scrollbar" style="max-height: 400px;">
 					<el-table :data="inspectList" border stripe :header-cell-style="rowClass"  style="width: 100%;" :default-sort="{prop:'inspectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore('inspect')">	
 						<el-table-column type="selection" width="55" fixed align="center">
 						</el-table-column>
@@ -639,8 +640,6 @@
 						</el-table-column>
 						<el-table-column label="样品型号" sortable width="140px" prop="ITEM_MODEL">
 						</el-table-column>
-						<!-- <el-table-column label="样品信息状态" sortable width="200px" prop="ITEM_STATUS" v-if="this.checkedName.indexOf('样品信息状态')!=-1">
-						</el-table-column> -->
 						<el-table-column label="检测依据" width="200px" prop="REMARKS" sortable>
 						</el-table-column>
 						<el-table-column label="完成日期" width="140px" prop="COMPDATE" sortable  :formatter="dateFormat" data-type = "">
@@ -651,26 +650,23 @@
 						</el-table-column>
 						<el-table-column label="主检组" width="140px" prop="MAINGROUP" sortable>
 						</el-table-column>
-						<!--<el-table-column label="信息状态" width="200px" prop="STATUS" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
-						</el-table-column>-->
-						<!--<el-table-column label="录入人" width="200px" prop="ENTERBY" sortable  v-if="this.checkedName.indexOf('录入人')!=-1">
-						</el-table-column>-->
 						<el-table-column label="录入时间" width="140px" prop="ENTERDATE" sortable :formatter="dateFormat">
 						</el-table-column>
 						<el-table-column label="版本" width="80" prop="VERSION" sortable>
 						</el-table-column>
 					</el-table>
-					
+				</div>	
 					<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 					</el-pagination>
 					<span slot="footer" class="dialog-footer">
+					   <el-button type="primary" @click="addworkordernum">确 定</el-button>
 				       <el-button @click="dialogVisible1 = false">取 消</el-button>
-				       <el-button type="primary" @click="addworkordernum">确 定</el-button>
 				    </span>
 				</el-dialog>
 			<!--委托书编号 End-->
 			<!--主检员 Begin-->
-			<el-dialog :modal-append-to-body="false" title="委托书编号" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="主检员" :visible.sync="dialogVisible2" width="80%">
+				<div class="scrollbar" style="max-height: 400px;">
 					<el-table :data="userList" border stripe :header-cell-style="rowClass"  style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore('user')">
 						<el-table-column type="selection" width="55" fixed align="center">
 						</el-table-column>
@@ -685,16 +681,18 @@
 						<el-table-column label="创建时间" prop="createTime" width="100px" sortable :formatter="dateFormat">
 						</el-table-column>
 					</el-table>
+				</div> 
 					<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 					</el-pagination>
 					<span slot="footer" class="dialog-footer">
-				       <el-button @click="dialogVisible2 = false">取 消</el-button>
 				       <el-button type="primary" @click="addpersonname">确 定</el-button>
-				    </span>
+				       <el-button @click="dialogVisible2 = false">取 消</el-button>
+				    </span>   
 				</el-dialog>
 			<!--主检员 End-->
 			<!-- 样品名称 Begin -->
-			<el-dialog :modal-append-to-body="false" title="样品名称" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="样品名称" :visible.sync="dialogVisible3" width="80%">
+				<div class="scrollbar" style="max-height: 400px;">
 					<el-table :data="samplesList" border stripe :header-cell-style="rowClass"  style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore('samples')">
 					<el-table-column type="selection" width="55" fixed align="center">
 					</el-table-column>
@@ -722,14 +720,13 @@
 					</el-table-column>
 					<el-table-column label="状态" sortable width="100px" prop="STATE">
 					</el-table-column>
-					<!--<el-table-column label="信息状态" sortable width="140px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
-					</el-table-column>-->
 				</el-table>
+				</div>
 				<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 				<span slot="footer" class="dialog-footer">
-			       <el-button @click="dialogVisible3 = false">取 消</el-button>
 			       <el-button type="primary" @click="addsamplename">确 定</el-button>
+			       <el-button @click="dialogVisible3 = false">取 消</el-button>
 			    </span>
 			</el-dialog>
 			<!-- 样品名称 End -->
@@ -753,11 +750,6 @@
 	import vewPoplemask from '../workflow/vewPople.vue'
 	export default {
 		name: 'masks',
-		props: {
-			page: {
-				type: Object,
-			}
-		},
 		components: {
 			 approvalmask,
 			 flowhistorymask,
@@ -879,6 +871,11 @@
 				samplesList:[],
 				numtips:'',
 				workorder:'workorder',//appname
+				page: {
+					currentPage: 1,
+					pageSize: 10,
+					totalCount: 0
+				},
 			};
 		},
 		methods: {
@@ -957,41 +954,9 @@
 				this.page.currentPage = val;
 				this.requestData();
 			},
-			addworkorder(){
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-				}
-				//委托书
-				this.$axios.get(this.basic_url + '/api-apps/app/inspectPro', {params: data}).then((res) => {
-					console.log(res);
-					this.page.totalCount = res.data.count;
-					//总的页数
-					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
-					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false
-					} else {
-						this.loadSign = true
-					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.inspectList = newarr;
-					this.dialogVisible1 = true;
-				}).catch((wrong) => {
-					this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
-				})
-				
+			//委托书编号
+			addworkorder(){	
+			this.dialogVisible1 = true;	
 			},
 			addworkordernum(){
 				if(this.selMenu.length == 0){
@@ -1161,17 +1126,6 @@
 //		        }
 //		    },
 
-   			//上传文件 Begin
-			handleRemove(file, fileList) {
-			},
-			handlePreview(file) {
-			},
-			handleExceed(files, fileList) {
-				this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-			},
-			beforeRemove(file, fileList) {
-				return this.$confirm(`确定移除 ${ file.name }？`);
-			},
 			//信息状态 End
    			judge(data) {
 				return data.STATUS ? '活动' : '不活动'
@@ -1349,7 +1303,6 @@
 			detailgetData() {
 			var url = this.basic_url +'/api-apps/app/workorder/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res.data);
 					this.workorderForm = res.data;
 					this.show = true;
 				}).catch((err) => {
@@ -1486,24 +1439,59 @@
 					.catch(_ => {});
 			},
 			loadMore (item) {
-				console.log(item);
 			    if (this.loadSign) {
-			      this.loadSign = false
+			      this.loadSign = false;
 			      this.page.currentPage++
 			      if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
 			        return
 			    	}
 					setTimeout(() => {
-					this.loadSign = true
+					this.loadSign = true;
 					}, 1000)
 					if(item=="inspect"){
-						this.addworkorder();
+						this.getinspectList();
+					}else if(item=="user"){
+						this.getuser();
+					}else{
+						this.getsamples();
 					}
 					
 					
 			    }
 			},	
 			getinspectList(){
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				}
+				//委托书
+				this.$axios.get(this.basic_url + '/api-apps/app/inspectPro', {params: data}).then((res) => {
+					console.log(res);
+					this.page.totalCount = res.data.count;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
+					}
+					this.commentArr[this.page.currentPage] = res.data.data
+					let newarr = []
+					for(var i = 1; i <= totalPage; i++) {
+						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+
+							for(var j = 0; j < this.commentArr[i].length; j++) {
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					this.inspectList = newarr;
+				}).catch((wrong) => {
+					this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+				})
 				
 			},
 			getuser(){
@@ -1540,8 +1528,11 @@
 					this.userList = newarr;
 				}).catch((wrong) => {})	
 			},
-			requestData() {
-				
+			getsamples() {
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				}
                //接样
 				this.$axios.get(this.basic_url + '/api-apps/app/item', {
 					params: data
@@ -1571,6 +1562,11 @@
 			},
 
 		},
+		beforeMount() {
+			this.getinspectList();//委托书编号
+			this.getuser();//用户
+			this.getsamples();
+		},
 		mounted() {
 			this.getITEM_STATUS();//页面打开加载-样品状态
 			this.getITEM_SOURCE();//页面打开加载-样品来源
@@ -1579,9 +1575,6 @@
 			this.getITEM_RECEPT_STATUS();//页面打开加载-样品接收状态
 			this.getITEM_CHECK_STATUS();//页面打开加载-样品检后状态
 			this.getITEM_MANAGEMENT();//页面打开加载-样品处置
-//			this.getinspectList();//委托书编号
-			this.getuser();//用户
-			this.requestData();
 		},
 	}
 </script>

@@ -88,7 +88,7 @@
 								</el-table-column>
 								<el-table-column label="模块" width="185" sortable prop="module" v-if="this.checkedName.indexOf('模块')!=-1">
 								</el-table-column>
-								<el-table-column label="排序" width="185" sortable prop="sort" v-if="this.checkedName.indexOf('排序')!=-1">
+								<el-table-column label="排序" width="120" align="right" sortable prop="sort" v-if="this.checkedName.indexOf('排序')!=-1">
 								</el-table-column>
 								<!-- <el-table-column label="创建人" width="155" prop="createUser" sortable v-if="this.checkedName.indexOf('创建人')!=-1">
 								</el-table-column> -->
@@ -100,9 +100,9 @@
 								</el-table-column>
 								<el-table-column label="流程" width="120" prop="flowkey" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('流程')!=-1">
 								</el-table-column>
-								<el-table-column label="流程代办单据号" width="120" prop="flow_todo_num" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('流程代办单据号')!=-1">
+								<el-table-column label="流程代办单据号" width="180" prop="flow_todo_num" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('流程代办单据号')!=-1">
 								</el-table-column>
-								<el-table-column label="流程代办描述" width="120" prop="flow_todo_desc" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('流程代办描述')!=-1">
+								<el-table-column label="流程代办描述" width="180" prop="flow_todo_desc" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('流程代办描述')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">

@@ -1,5 +1,5 @@
 <template>
-	<div  class="navbar-default navbar-static-side" :style="{height: fullHeight}">
+	<div  class="navbar-default navbar-static-side scrollbar" :style="{height: fullHeight}">
 		<div class="navbarbg" @click="min2max()">
 			<span class="navbar-minimalize minimalize-styl-2">
 				<i class="icon-menu1"></i> 
@@ -19,7 +19,6 @@
 
 <script>
 import Config from '../../../config.js'
-//import navs_header from '../nav_tabs.vue'
 export default {
 	name: 'navs',
 	

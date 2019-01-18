@@ -26,6 +26,7 @@ import vueztree from 'vue-ztree-2.0/dist/vue-ztree-2.0.umd.min.js'
 import EasyScroll from 'easyscroll'//自定义滚动条
 import common from './assets/js/common.js'
 import store from './store.js'
+import 'babel-polyfill'
 
 
 //import './jquery/dist/jquery.min.js'

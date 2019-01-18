@@ -99,12 +99,18 @@
 												<el-input v-model="dataInfo.TASKNUM" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8">
-											<el-form-item label="承检单位" prop="CJDW" :disabled="noedit" label-width="110px">
-												<!-- <el-input v-model="dataInfo.CJDW" :disabled="edit">
-													<el-button slot="append" icon="el-icon-search" @click="getCompany"></el-button>
-												</el-input> -->
-												<el-select clearable v-model="dataInfo.CJDW" filterable allow-create default-first-option placeholder="请选择">
+									
+										<el-col :span="8" v-show="addtitle">
+											<el-form-item label="承检单位" prop="CJDW"  label-width="110px">
+												<el-select clearable v-model="dataInfo.CJDW" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit">
+													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+												</el-select>
+											</el-form-item>
+										</el-col>
+										
+										<el-col :span="8" v-show="!addtitle">
+											<el-form-item label="承检单位" prop="CJDWDesc" :disabled="noedit" label-width="110px">
+												<el-select clearable v-model="dataInfo.CJDWDesc" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit">
 													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 												</el-select>
 											</el-form-item>
@@ -151,7 +157,7 @@
 										</el-col> -->
 										<el-col :span="6">
 											<el-form-item label="样品数量" prop="QUALITY" label-width="110px">
-												<el-input v-model="dataInfo.QUALITY" :disabled="noedit"></el-input>
+												<el-input v-model.number="dataInfo.QUALITY" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="6">
@@ -177,7 +183,7 @@
 									<el-tabs v-model="activeName" @tab-click="handleClick">
 										<el-tab-pane label="依据" name="first">
 											<div class="table-func table-funcb">
-												<el-button type="success" size="mini" round @click="addfieldBasis">
+												<el-button type="success" size="mini" round @click="addfieldBasis" v-show="!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建</font>
 												</el-button>
@@ -263,7 +269,7 @@
 										</el-tab-pane>
 										<el-tab-pane label="检验检测项目" name="second">
 											<div class="table-func table-funcb">
-												<el-button type="success" size="mini" round @click="addfieldProject">
+												<el-button type="success" size="mini" round @click="addfieldProject" v-show="!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建</font>
 												</el-button>
@@ -528,10 +534,22 @@
 		//					page: Object ,
 		//				},
 		data() {
-			 var validateItemdata = (rule, value, callback) => {
-				 console.log(value);
-				 console.log(this.dataInfo.P_LEADERDesc);
+			 var validateItemleader = (rule, value, callback) => {//项目负责人
                 if (this.dataInfo.P_LEADERDesc === undefined || this.dataInfo.P_LEADERDesc === '' || this.dataInfo.P_LEADERDesc === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
+			 var validateproname = (rule, value, callback) => {//受检产品名称
+                if (this.dataInfo.ITEM_NAME === undefined || this.dataInfo.ITEM_NAME === '' || this.dataInfo.ITEM_NAME === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
+			 var validateVname = (rule, value, callback) => {//受检企业
+                if (this.dataInfo.V_NAME === undefined || this.dataInfo.V_NAME === '' || this.dataInfo.V_NAME === null) {
                     callback(new Error('必填'));
                 }else {
                     callback();
@@ -596,7 +614,8 @@
 					TASKNUM: '',
 					SOLUTION: '',
 					COMPDATE: '',
-					STATE: '草稿',
+					STATE: '1',
+					STATEDesc: '草稿',
 					ENTERBY: '',
 					STATUS: '',
 					WORK_NOTICE_CHECKBASISList: [],
@@ -613,12 +632,12 @@
 					// }], //计划编号
 					TYPE:[{required: true,trigger: 'change',message: '必填',}],
 					CJDW: [{required: true,trigger: 'change',message: '必填',}], //承检单位
-					P_LEADERDesc: [{required: true,validator: validateItemdata}], //项目负责人
-					ITEM_NAME: [{required: true,validator: validateItemdata}], //受检产品名称
+					P_LEADERDesc: [{required: true,validator: validateItemleader}], //项目负责人
+					ITEM_NAME: [{required: true,validator: validateproname}], //受检产品名称
 					ITEM_MODEL: [{required: true,trigger: 'blur',message: '必填'}], //受检产品型号
-					V_NAME: [{required: true,validator: validateItemdata}], //受检企业
+					V_NAME: [{required: true,validator: validateVname}], //受检企业
 					VENDOR: [{required: true,trigger: 'blur',message: '必填'}], //受检企业编号
-					QUALITY: [{required: true,trigger: 'change',message: '必填'}], //样品数量
+					QUALITY: [{required: true,message: '必填'},{ type: 'number', message: '必须为数字值'}], //样品数量
 					CHECTCOST: [{required: true,trigger: 'blur',message: '必填',	}], //检验检测费用
 					XD_DATE: [{type: 'string',required: true,message: '请选择',trigger: 'change'}],//下达日期
 					SOLUTION: [{required: true,trigger: 'blur',message: '必填',	}],//抽样方案
@@ -659,7 +678,8 @@
 					TASKNUM: '',
 					SOLUTION: '',
 					COMPDATE: '',
-					STATE: '草稿',
+					STATE: '1',
+					STATEDesc: '草稿',
 					ENTERBY: '',
 					STATUS: '',
 					WORK_NOTICE_CHECKBASISList: [],
@@ -847,8 +867,8 @@
 			detailgetData() {
 				var url = this.basic_url +'/api-apps/app/workNot/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
-					this.dataInfo = res.data;
+					this.dataInfo = res.data; 
+					this.dataInfo.CJDW=this.dataInfo.CJDWDesc;
 					this.show = true;
 				}).catch((err) => {
 					this.$message({
@@ -893,6 +913,7 @@
 				this.edit = true;
 				this.noedit = true;
 				this.detailgetData();
+				this.isEditing=false;
 				//判断启动流程和审批的按钮是否显示
 				var url = this.basic_url + '/api-apps/app/workNot/flow/isStart/'+dataid;
 					this.$axios.get(url, {}).then((res) => {
@@ -959,10 +980,7 @@
 							type: 'warning'
 						});
 						return false;
-			        	}else{
-					if( this.dataInfo.STATE == "草稿" ){
-						this.dataInfo.STATE = this.dataInfo.STATE == "1"
-					}
+			       }else{
 					var url = this.basic_url + '/api-apps/app/workNot/saveOrUpdate';
 					this.$axios.post(url, this.dataInfo).then((res) => {
 						if(res.data.resp_code == 0) {
@@ -1131,11 +1149,8 @@
 			 },
 			 //启动流程
 			startup(){
-				console.log(12345);
-				console.log(this.dataid);
 				var url = this.basic_url + '/api-apps/app/workNot/flow/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					if(res.data.resp_code == 1) {
 							this.$message({
 								message:res.data.resp_msg,
@@ -1154,7 +1169,6 @@
 			},
 			//审批流程
 			approvals(){
-				console.log(122);
 				this.approvingData.id =this.dataid;
 				this.approvingData.app=this.workNot;
 				var url = this.basic_url + '/api-apps/app/'+this.workNot+'/flow/isEnd/'+this.dataid;
@@ -1181,7 +1195,6 @@
 			},
 			//流程历史
 			flowhistory(){
-				console.log(this.dataid);
 				this.approvingData.id =this.dataid;
 				this.approvingData.app=this.workNot;
 //				this.$refs.flowhistoryChild.open();
@@ -1254,9 +1267,6 @@
 					this.customerList = newarr;
 				}).catch((wrong) => {})
 			},
-		},
-		watch(){
-
 		},
 		mounted() {
 			this.requestData();

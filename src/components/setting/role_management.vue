@@ -87,6 +87,8 @@
 								</el-table-column>
 								<el-table-column label="是否停用" sortable prop="inactive" :formatter="judge" v-if="this.checkedName.indexOf('是否停用')!=-1">
 								</el-table-column>
+								<el-table-column label="备注" sortable prop="tips"  v-if="this.checkedName.indexOf('备注')!=-1">
+								</el-table-column>
 							</el-table>
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
 					            @size-change="sizeChange"
@@ -144,7 +146,8 @@
 				checkedName: [//控制表格列的显示隐藏相关数据
 					'角色编码',
 					'角色名称',
-					'是否停用'
+					'是否停用',
+					'备注',
 				],
 				tableHeader: [//控制表格列的显示隐藏相关数据
 					{
@@ -158,6 +161,10 @@
 					{
 						label: '是否停用',
 						prop: 'inactive'
+					},
+					{
+						label: '备注',
+						prop: 'tips'
 					}
 				],
 				buttons: [],//请求回的按钮

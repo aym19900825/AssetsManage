@@ -123,11 +123,11 @@
 								<!-- 年度计划列表 Begin-->
 								<el-collapse-item title="年度计划列表" name="2" class="ml30">
 									<div class="table-func">
-										<el-button type="primary" size="mini" round>
+										<el-button type="primary" size="mini" round v-show="!viewtitle">
 											<i class="icon-upload-cloud"></i>
 											<font>导入</font>
 										</el-button>
-										<el-button type="success" size="mini" round  @click="addfield1">
+										<el-button type="success" size="mini" round  @click="addfield1" v-show="!viewtitle">
 											<i class="icon-add"></i>
 											<font>新建行</font>
 										</el-button>
@@ -206,12 +206,14 @@
 
 									    <el-table-column fixed="right" label="操作" width="120">
 									      <template slot-scope="scope">
-									        <el-button @click="delPlan(scope.$index,scope.row, 'WORLPLANLINE','worlplanlist')" type="text" size="small">
-									          移除
+									        <el-button type="danger" circle title="删除" @click="delPlan(scope.$index,scope.row, 'WORLPLANLINE','worlplanlist')"  size="small" v-show="!viewtitle">
+									          <i class="icon-trash"></i>
 									        </el-button>
-									        <el-button @click="assign(scope.row)" type="text" size="small" v-if="assignshow">
-									          下达
+
+									        <el-button type="primary" circle title="下达任务通知书" @click="assign(scope.row)" size="small" v-if="assignshow">
+									          <i class="icon-send"></i>
 									        </el-button>
+
 									      </template>
 									    </el-table-column>
 									</el-table>
@@ -246,7 +248,7 @@
 											        <el-button
 											          @click="delPlan(scope.$index,scope.row,'WORLPLANLINE_BASIS','basisList')"
 											          type="text"
-											          size="small">
+											          size="small" v-show="!viewtitle">
 											          	<i class="icon-trash red"></i>
 											        </el-button>
 											      </template>
@@ -298,7 +300,7 @@
 											        <el-button
 											          @click="delPlan(scope.$index,scope.row,'WORLPLANLINE_PROJECT','proTestList')" 
 											          type="text"
-											          size="small">
+											          size="small" v-show="!viewtitle">
 											          	<i class="icon-trash red"></i>
 											        </el-button>
 											      </template>
@@ -774,6 +776,14 @@
                     callback();
                 }
             };
+			//放大镜选择验证
+			var validateItemdata = (rule, value, callback) => {
+                if (this.WORKPLAN.ITEMTYPE === undefined || this.WORKPLAN.ITEMTYPE === '' || this.WORKPLAN.ITEMTYPE === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
 			return {
 				docParm: {
 					'model': 'new',
@@ -867,7 +877,7 @@
 					PHONE:[{required: true,trigger: 'blur',validator: validatePhone,}],
 					EMAIL:[{required: true,trigger: 'blur',validator:validateEmail,}],
 					PROP_UNIT:[{required: true,validator: validateUnit, trigger: 'change'}],//提出单位 
-       				ITEMTYPE:[{required: true,validator: validateItemtype, trigger: 'blur' }],//产品类别 
+       				ITEMTYPE:[{required: true,validator: validateItemdata}],//产品类别 
        				YEAR: [{type: 'string',required: true,message: '请选择年度',trigger: 'change' }],//年度
        				REPORTDATE: [{type: 'string',required: true,message: '请选择提报日期',trigger: 'change'}],//提报日期
        				//检测依据 

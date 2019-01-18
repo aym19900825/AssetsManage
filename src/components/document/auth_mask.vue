@@ -78,7 +78,7 @@
 
 						<div class="el-dialog__footer">
 							<el-button @click='close'>取消</el-button>
-							<el-button type="primary" @click='submitForm'>提交</el-button>
+							<el-button type="primary" @click='submitForm'>保存</el-button>
 						</div>
 					</el-form>
 				</div>
@@ -355,7 +355,7 @@
 				this.chooseParam.search[0].val = this.deptid;
 				this.$refs.choose.getData('new',this.chooseParam);
 			},
-			getUser(opt){
+			getUser(){
 				this.$axios.get(this.basic_url +'/api-user/users/currentMap', {}).then((res) => {
 					this.deptid = res.data.deptId;
 					this.dataInfo.deptName = res.data.deptName;
@@ -374,7 +374,7 @@
 				var detailData = this.detailData;
 				this.dataInfo.userid = detailData.userid;
 				this.dataInfo.username = detailData.username;
-				
+				this.getUser();
 				var data = {
 					page: 1,
 					limit: 10,

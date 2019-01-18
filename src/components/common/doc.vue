@@ -1,18 +1,22 @@
 <template>
 <div>
     <div class="table-func">
-        <form method="post" id="file" action="" enctype="multipart/form-data" style="float: left;">
-            <el-button type="warn" size="mini" round class="a-upload" :disabled="docParm.model=='new'?true:false">
+        <form method="post" id="file" action="" enctype="multipart/form-data" style="float: left;" v-show="docParm.model!='new'">
+            <el-button type="warn" size="mini" round class="a-upload">
                 <i class="el-icon-upload2"></i>
                 <font>上传</font>
-                <input id="excelFile" type="file" name="uploadFile" @change="upload" v-if="docParm.model=='edit'"/>
+                <input id="excelFile" type="file" name="uploadFile" @change="upload" v-show="docParm.model!='new'"/>
             </el-button>
         </form>
-        <el-button type="error" size="mini" @click="download" round :disabled="docParm.model=='new'?true:false" style="margin-left: 10px;">
+        <el-button type="warn" size="mini" round class="a-upload" @click="uploadTip" v-show="docParm.model=='new'">
+                <i class="el-icon-upload2"></i>
+                <font>上传</font>
+        </el-button>
+        <el-button type="error" size="mini" @click="download" round  style="margin-left: 10px;">
             <i class="el-icon-download"></i>
             <font>下载</font>
         </el-button>
-        <el-button type="error" size="mini" @click="delFile" round :disabled="docParm.model=='new'?true:false">
+        <el-button type="error" size="mini" @click="delFile" round>
             <i class="el-icon-delete"></i>
             <font>删除行</font>
         </el-button>
@@ -31,6 +35,14 @@
                 <span v-text="scope.row.filesize+'M'"></span>
             </template>
         </el-table-column>
+        <el-table-column
+            fixed="right"
+            label="操作"
+            width="100">
+            <template slot-scope="scope">
+                <el-button @click="showAuth(scope.row)" type="text" size="small">关键字</el-button>
+            </template>
+        </el-table-column>
     </el-table>
     <el-pagination class="pageLeft"
         @size-change="sizeChange"
@@ -41,15 +53,23 @@
         layout="total, sizes, prev, pager, next"
         :total="page.totalCount">
     </el-pagination>
+    <vkeyword ref="keyword" :param="param"></vkeyword>
 </div>
 </template>
 
 <script>
 import Config from '../../config.js'
+import vkeyword from '../common/keyword.vue'
 export default {
     name: 'nav_tabs',
-      data(){
+    components: {
+        vkeyword
+    },
+    data(){
         return {
+            param: {
+                visible: false,
+            },
             basic_url: Config.dev_url,
             file_url: Config.file_url,
             doc: [],
@@ -65,6 +85,24 @@ export default {
     },
     props: ['docParm'],
     methods: {
+        showAuth(row){
+            this.param.visible = true;
+            this.param.fileid = row.fileid;
+            this.$refs.keyword.requestData();
+        },
+        uploadTip(){
+            if(this.docParm.model == 'new'){
+                this.$emit('saveParent','docUpload');
+            }
+        },
+        autoLoad(){
+            setTimeout(function(){
+                $('#excelFile').click();
+            },2000);
+        },
+        testAuto(){
+            $('#excelFile').click();
+        },
         sizeChange(val) {
             this.page.pageSize = val;
             this.getData();
@@ -104,7 +142,7 @@ export default {
                     });
                 }else{
                     this.$message({
-                        message: '文档已成功上传至服务器',
+                        message: '文件已成功上传至服务器',
                         type: 'success'
                     });
                 }
@@ -142,7 +180,12 @@ export default {
                     type: 'warning'
                 });
             }else{
-                var url = this.selFiles[0].filepath;
+                var url = this.selFiles[0].filepath 
+                        + '&userid=' + this.docParm.userid
+                        + '&username=' + this.docParm.username
+                        + '&deptid=' + this.docParm.deptid
+                        + '&deptfullname=' + this.docParm.deptfullname;
+                
                 window.open(url); 
             }
         },

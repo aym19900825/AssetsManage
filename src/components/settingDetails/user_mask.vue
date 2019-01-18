@@ -16,7 +16,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form status-icon :model="user"  :rules="rules" ref="user" :label-position="labelPositions" class="demo-user">
+				<el-form :model="user" inline-message :rules="rules" ref="user" :label-position="labelPositions" class="demo-user">
 					<div class="accordion">
 						<el-collapse v-model="activeNames">
 							<!--<el-collapse-item title="基础信息" name="1">
@@ -63,8 +63,8 @@
 								<!-- 第一行 -->
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="用户名" v-if="modify"label-width="100px">
-											<el-input v-model="user.username" :disabled="noedit"></el-input>
+										<el-form-item label="用户名" v-if="modify" label-width="100px">
+											<el-input v-model="user.username" :disabled="true"></el-input>
 										</el-form-item>
 										<el-form-item label="用户名" prop="username" v-else label-width="100px">
 											<el-input v-model="user.username" :disabled="noedit"></el-input>
@@ -83,6 +83,7 @@
 									<el-col :span="8">
 										<el-form-item label="姓名" prop="nickname" label-width="100px">
 											<el-input v-model="user.nickname" :disabled="noedit"></el-input>
+											<span class="error"></span>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -200,7 +201,7 @@
 							<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 								<el-tabs v-model="activeName" @tab-click="handleClick">
 									<el-tab-pane label="资质信息" name="first">
-										<div class="table-func table-funcb">
+										<div class="table-func table-funcb" v-show="noviews">
 											<el-button type="success" size="mini" round @click="addfield1">
 												<i class="icon-add"></i>
 												<font>新建行</font>
@@ -217,7 +218,7 @@
 												<el-table-column prop="step" label="序号" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'qualifications.'+scope.$index + '.step'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.step" placeholder="请输入要求" :disabled="true">
+															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.$index + 1" placeholder="请输入要求" :disabled="noedit">
 															</el-input>
 															<span v-else="v-else">{{scope.row.step}}</span>
 														</el-form-item>
@@ -259,7 +260,7 @@
 														</el-form-item>
 													</template>
 												</el-table-column> -->
-												<el-table-column prop="enterdate" label="录入时间" sortable width="120px">
+												<el-table-column prop="enterdate" label="录入时间" sortable>
 													<template slot-scope="scope">
 														<el-form-item :prop="'qualifications.'+scope.$index + '.enterdate'">
 															<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.enterdate" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
@@ -297,7 +298,7 @@
 										<!-- </el-form> -->
 									</el-tab-pane>
 									<el-tab-pane label="培训" name="second">
-										<div class="table-func table-funcb">
+										<div class="table-func table-funcb" v-show="noviews">
 											<el-button type="success" size="mini" round @click="addfield2">
 												<i class="icon-add"></i>
 												<font>新建行</font>
@@ -313,7 +314,7 @@
 												<el-table-column prop="step" label="序号" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'traings.'+scope.$index + '.step'">
-															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.step" placeholder="请输入要求">
+															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.$index + 1" :disabled="noedit">
 															</el-input>
 															<span v-else="v-else">{{scope.row.step}}</span>
 														</el-form-item>
@@ -388,9 +389,9 @@
 							</el-collapse-item>
 						</el-collapse>
 					</div>
-					<div class="el-dialog__footer">
+					<div class="el-dialog__footer" v-show="noviews">
 						<el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
-						<el-button type="success" @click='saveAndSubmit()' v-show="addtitle">保存并添加</el-button>
+						<el-button type="success" @click='saveAndSubmit()' v-show="addtitle">保存并继续</el-button>
 						<el-button @click='close'>取消</el-button>
 					</div>
 				</el-form>
@@ -413,46 +414,16 @@
 
 <script>
 	import Config from '../../config.js'
+	import Validators from '../../core/util/validators.js'
+
 	export default {
 		name: 'masks',
 		props: {
 			page: Object,
 		},
-		//		props: ['user','page'],
+		//	props: ['user','page'],
 
 		data() {
-			var validateIdnumber = (rule, value, callback) => { //验证身份证号
-				if(value && (!(/\d{17}[\d|x]|\d{15}/).test(value) || (value.length !== 15 && value.length !== 18))) {
-					callback(new Error('身份证号码不符合规范'))
-				} else {
-					callback()
-				}
-			};
-			var validatePhone = (rule, value, callback) => {
-				if(value === '') {
-					return callback(new Error('手机号不能为空'));
-				} else {
-					if(value !== '') {
-						var reg = /^1[3456789]\d{9}$/;
-						if(!reg.test(value)) {
-							callback(new Error('请输入有效的手机号码'));
-						}
-						callback();
-					}
-				}
-			};
-			var validateEmail = (rule, value, callback) => { //验证电子邮箱
-				if(value === '') {
-					callback(new Error('电子邮箱不能为空'));
-				} else {
-					var reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-					if(!reg.test(value)) {
-						callback(new Error('请输入有效的邮箱'));
-					} else {
-						callback();
-					}
-				}
-			};
 			return {
 				basic_url: Config.dev_url,
 				user: {
@@ -520,16 +491,31 @@
 					deptName: [{required: true,message: '必填',trigger: 'blur'}], //名称
 					education: [{required: true,message: '必填',trigger: 'blur'}],
 					roleId: [{required: true,trigger: 'blur',message: '必填',}],
-					username: [{required: true,trigger: 'blur',message: '必填',}],
+					username: [
+						{required: true,message: '必填',trigger: 'blur',},
+						{validator: Validators.isUserName, trigger: 'blur'},//引用 isUserName
+						{type: 'string', min: 4, max:20, message: '用户名不小于4位，不大于20位', trigger: 'blur'},
+					],
 					password: [{required: true,trigger: 'blur',message: '必填',}],
 					sex: [{required: true,trigger: 'blur',message: '必填'}],
 					ispermit_authorization: [{required: true,trigger: 'change',message: '必填'}], //授权
 					islogin: [{required: true,trigger: 'change',message: '必填'}], //登陆
 					mac_address: [{required: true,trigger: 'blur',message: '必填',}],
 					ip_address: [{required: true,trigger: 'blur',message: '必填',}],
-					idnumber: [{required: true,trigger: 'blur',validator: validateIdnumber}],
-					phone: [{required: true,trigger: 'blur',validator: validatePhone}],
-					email: [{required: true,trigger: 'blur',validator: validateEmail,}],
+					nickname: [{required: true,trigger: 'blur',validator: Validators.isNickname}],
+					worknumber: [
+						{required: true,trigger: 'blur',message: '必填'},
+						{validator: Validators.isWorknumber, trigger: 'blur'},//引用 isWorknumber
+					],
+					idnumber: [{required: true,trigger: 'blur',validator: Validators.isIdnumber}],
+					phone: [
+						{required: true,trigger: 'blur',message: '必填'},
+						{validator: Validators.isPhone, trigger: 'blur'},
+					],
+					email: [
+						{required: true,trigger: 'blur',message: '必填'},
+						{validator: Validators.isEmail, trigger: 'blur'},
+					],
 					step: [{required: true,trigger: 'blur',message: '必填',}],
 					t_date: [{required: true,trigger: 'blur',message: '必填',}],
 					t_description: [{required: true,trigger: 'blur',message: '必填',}],
@@ -538,6 +524,10 @@
 					c_date: [{required: true,trigger: 'blur',message: '必填',}],
 					c_num: [{required: true,trigger: 'blur',message: '必填',}],
 					c_name: [{required: true,trigger: 'blur',message: '必填',}],
+					ipaddress: [{required: false,trigger: 'blur',validator: Validators.isIpaddress}],
+					macaddress: [{required: false,trigger: 'blur',validator: Validators.isMacaddress}],
+					post: [{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],
+					tips: [{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],
 
 				},
 				//tree树菜单
@@ -617,7 +607,7 @@
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.user.createby = res.data.id;
 					this.user.createbyName = res.data.nickname;
-					console.log(this.user.createbyName);
+					// console.log(this.user.createbyName);
 					this.user.enterby = res.data.id
 					this.user.enterbyName = res.data.nickname;
 					var date = new Date();
@@ -783,7 +773,7 @@
 				var usersUrl = this.basic_url + '/api-user/users/currentMap';
 
 				this.$axios.get(usersUrl, {}).then((res) => {
-					
+					//console.log(res.data);
 					this.user.changeby = res.data.nickname;
 					var date = new Date();
 					this.user.changedate = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
@@ -795,7 +785,7 @@
 				});
 				var url = this.basic_url + '/api-user/users/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res.data);
+					// console.log(res.data);
 					this.user = res.data;
 					this.user.sex = this.user.sex ? '男' : '女';
 					this.user.enabled = this.user.enabled ? '活动' : '不活动';
@@ -887,7 +877,7 @@
 				var _this = this;
 				this.$refs.user.validate((valid) => {
 					if(valid) {
-//						_this.user.enabled = _this.user.enabled == '活动' ? 'true' : 'false';
+						_this.user.enabled = true;
 						_this.user.ispermit = _this.user.ispermit == '是' ? '1' : '2';
 						_this.user.islogin = _this.user.islogin == '是' ? '1' : '2';
 						var user = _this.user;
@@ -918,7 +908,7 @@
 									type: 'success',
 								});
 								this.$emit('request');
-								this.$refs["user"].resetFields(); //清空表单验证
+//								this.$refs["user"].resetFields(); //清空表单验证
 							}
 						}).catch((err) => {
 							this.$message({
@@ -945,7 +935,7 @@
 				}
 				this.$emit('request');
 			},
-			//保存并添加
+			//保存并继续
 			saveAndSubmit() {
 				this.save();
 				this.reset();

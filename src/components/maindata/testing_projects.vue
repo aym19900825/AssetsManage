@@ -2,7 +2,7 @@
 <div>
 	<div class="headerbg">
 		<vheader></vheader>
-		<navs_header></navs_header>
+		<navs_header  ref="navsheader"></navs_header>
 	</div>
 	<div class="contentbg">
 		<!--左侧菜单内容显示 Begin-->
@@ -18,7 +18,7 @@
 							<button type="button" class="btn btn-green" @click="openAddMgr">
 	                        	<i class="icon-add"></i>添加
 	              			 </button>
-							<button type="button" class="btn btn-bule button-margin" @click="modify">
+							<button type="button" class="btn btn-blue button-margin" @click="modify">
 							    <i class="icon-edit"></i>修改
 							</button>
 							<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
@@ -49,7 +49,7 @@
 
 				<!-- 高级查询划出 Begin-->
 				<div v-show="search">
-						<el-form status-icon :model="searchList" label-width="45px">
+						<el-form :model="searchList" label-width="45px">
 							<el-row :gutter="10">
 								<el-col :span="5">
 									<el-form-item label="编码" prop="P_NUM">
@@ -70,8 +70,8 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="机构" prop="DEPARTMENT">
-										<el-select clearable v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="请选择">
+									<el-form-item label="机构" prop="DEPTID">
+										<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
 									    	<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 										</el-select>
 									</el-form-item>
@@ -98,7 +98,7 @@
 							</el-table-column>
 							<el-table-column label="编码" width="150" sortable prop="P_NUM" v-if="this.checkedName.indexOf('编码')!=-1">
 								<template slot-scope="scope">
-									<p @click=view(scope.row)>{{scope.row.P_NUM}}
+									<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.P_NUM}}
 									</p>
 								</template>
 							</el-table-column>
@@ -110,14 +110,14 @@
 							</el-table-column>
 							<!--<el-table-column label="信息状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
 							</el-table-column>-->
-							<!--<el-table-column label="文档" width="120" sortable prop="DOCLINKP_NAME" v-if="this.checkedName.indexOf('文档')!=-1">-->
+							<!--<el-table-column label="文件" width="120" sortable prop="DOCLINKP_NAME" v-if="this.checkedName.indexOf('文件')!=-1">-->
 							<el-table-column label="领域" width="120" sortable prop="FIELD" v-if="this.checkedName.indexOf('领域')!=-1">
 							</el-table-column>
 							<el-table-column label="子领域" width="120" sortable prop="CHILD_FIELD" v-if="this.checkedName.indexOf('子领域')!=-1">
 							</el-table-column>
 							<el-table-column label="版本" width="70" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1" align="right">
 							</el-table-column>
-							<el-table-column label="机构" width="180" sortable prop="DEPARTMENTDesc" v-if="this.checkedName.indexOf('机构')!=-1">
+							<el-table-column label="机构" width="180" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
 							</el-table-column>
 							<!-- <el-table-column label="录入人" width="120" prop="ENTERBY" sortable  v-if="this.checkedName.indexOf('录入人')!=-1"> -->
 							</el-table-column>
@@ -143,7 +143,7 @@
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
-		<projectmask :testing_projectForm="testing_projectForm" ref="child" @request="requestData" @reset="reset" v-bind:page=page ></projectmask>
+		<projectmask ref="child" @request="requestData" @reset="reset" v-bind:page=page ></projectmask>
 	
 	</div>
 </div>
@@ -227,7 +227,7 @@
 					},
 					{
 						label: '机构',
-						prop: 'DEPARTMENTDesc'
+						prop: 'DEPTIDDesc'
 					},
 					// {
 					// 	label: '录入人',
@@ -261,7 +261,7 @@
 					P_NUM: '',
 					P_NAME: '',
 					VERSION: '',
-					DEPARTMENT:'',
+					DEPTID:'',
 					// STATUS:'',
 				},
 				//tree
@@ -396,8 +396,9 @@
 					});
 					return;
 				} else {
+					console.log('===='+this.selMenu[0].ID);
 					this.testing_projectForm = this.selMenu[0]; 
-					this.$refs.child.detail();
+					this.$refs.child.detail(this.selMenu[0].ID); 
 				}
 			},
 			//查看
@@ -492,7 +493,7 @@
 					P_NUM: this.searchList.P_NUM,
 					P_NAME: this.searchList.P_NAME,
 					VERSION: this.searchList.VERSION,
-					DEPARTMENT: this.searchList.DEPARTMENT,
+					DEPTID: this.searchList.DEPTID,
 					// STATUS: this.searchList.STATUS,
 				}
 				var url = this.basic_url + '/api-apps/app/inspectionPro';

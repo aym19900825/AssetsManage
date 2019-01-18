@@ -47,8 +47,8 @@
 								</el-row>
 								<el-row>
 									<el-col :span="8" v-if="dept">
-										<el-form-item label="机构" prop="DEPARTMENT">
-											<el-input v-model="WORK_INSTRUCTION.DEPARTMENT" :disabled="edit"></el-input>
+										<el-form-item label="机构" prop="DEPTIDDesc">
+											<el-input v-model="WORK_INSTRUCTION.DEPTIDDesc" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -59,8 +59,8 @@
 							<el-collapse-item title="其它" name="3" v-show="views">
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="录入人" prop="FAX">
-											<el-input v-model="WORK_INSTRUCTION.ENTERBY" :disabled="edit"></el-input>
+										<el-form-item label="录入人" prop="ENTERBYDesc">
+											<el-input v-model="WORK_INSTRUCTION.ENTERBYDesc" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -69,8 +69,8 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="修改人" prop="CHANGEBY">
-											<el-input v-model="WORK_INSTRUCTION.CHANGEBY" placeholder="当前修改人" :disabled="edit"></el-input>
+										<el-form-item label="修改人" prop="CHANGEBYDesc">
+											<el-input v-model="WORK_INSTRUCTION.CHANGEBYDesc" placeholder="当前修改人" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -84,7 +84,7 @@
 					</div>
 					<div class="el-dialog__footer" v-show="noviews">
 						<el-button type="primary" @click="saveAndUpdate('WORK_INSTRUCTION')">保存</el-button>
-						<el-button type="success" @click="saveAndSubmit('WORK_INSTRUCTION')" v-show="addtitle">保存并添加</el-button>
+						<el-button type="success" @click="saveAndSubmit('WORK_INSTRUCTION')" v-show="addtitle">保存并继续</el-button>
 						<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('WORK_INSTRUCTION')">修订</el-button>
 						<el-button @click="close">取消</el-button>
 					</div>
@@ -96,6 +96,7 @@
 
 <script>
 	import Config from '../../config.js'
+	import Validators from '../../core/util/validators.js'
 	import docTable from '../common/doc.vue'
 	export default {
 		name: 'masks',
@@ -121,24 +122,24 @@
 			page: Object,
 		},
 		data() {
-			var validateNum = (rule, value, callback) => {
-				if(value != ""){
-		             if((/^[0-9a-zA-Z()]+$/).test(value) == false){
-		                 callback(new Error("请填写数字或字母（编码不填写可自动生成）"));
-		             }else{
-		                 callback();
-		             }
-		         }else{
-		             callback();
-		         }
-			};
-			var validateType = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('请填写产品类别名称'));
-				} else {
-					callback();
-				}
-			};
+			// var validateNum = (rule, value, callback) => {
+			// 	if(value != ""){
+		 //             if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
+		 //                 callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
+		 //             }else{
+		 //                 callback();
+		 //             }
+		 //         }else{
+		 //             callback();
+		 //         }
+			// };
+			// var validateType = (rule, value, callback) => {
+			// 	if(value === '') {
+			// 		callback(new Error('请填写产品类别名称'));
+			// 	} else {
+			// 		callback();
+			// 	}
+			// };
 			return {
 				docParm: {
 					'model': 'new',
@@ -168,15 +169,14 @@
 					NUM: [{
 						required: false,
 						trigger: 'change',
-						validator: validateNum,
+						validator: Validators.isCodeNum,
 					}],
-					DESCRIPTION: [{
-						required: true,
-						trigger: 'blur',
-						validator: validateType,
-					}],
+					DESCRIPTION: [
+						{required: true, message: '请填写', trigger: 'blur'},
+						{validator: Validators.isSpecificKey, trigger: 'blur'},
+					],
 				},
-				testing_filesForm:{//文件文档数据组
+				testing_filesForm:{//文件文件数据组
 					inspectionList: []
 				},
 				//tree
@@ -232,10 +232,11 @@
 			},
 			getUser(opt){
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					this.WORK_INSTRUCTION.DEPARTMENT = res.data.deptName;
-					this.WORK_INSTRUCTION.ENTERBY = res.data.nickname;
+					this.WORK_INSTRUCTION.DEPARTMENT = '';
+					this.WORK_INSTRUCTION.DEPTID = res.data.deptId;
+					this.WORK_INSTRUCTION.ENTERBY = res.data.id;
 					var date = new Date();
-					this.WORK_INSTRUCTION.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					this.WORK_INSTRUCTION.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 					if( opt!='new' ){
 						//深拷贝数据
 						let _obj = JSON.stringify(this.WORK_INSTRUCTION);
@@ -366,7 +367,7 @@
 					}
 				});
 			},
-			addfield_doclinks() { //插入行到文件文档Table中
+			addfield_doclinks() { //插入行到文件文件Table中
 				var isEditingflag=false;
 				for(var i=0;i<this.testing_filesForm.inspectionList.length; i++){
 					if (this.testing_filesForm.inspectionList[i].isEditing==false){
@@ -437,6 +438,7 @@
 			},
 			// 保存users/saveOrUpdate
 			save(WORK_INSTRUCTION) {
+				console.log(this.WORK_INSTRUCTION);
 				this.$refs[WORK_INSTRUCTION].validate((valid) => {
 					if(valid) {
 						this.WORK_INSTRUCTION.STATUS = ((this.WORK_INSTRUCTION.STATUS == "1" || this.WORK_INSTRUCTION.STATUS == '活动') ? '1' : '0');
@@ -494,7 +496,7 @@
 					this.show = false;
 				}
 			},
-			//保存并添加
+			//保存并继续
 			saveAndSubmit(WORK_INSTRUCTION) {
 				this.save(WORK_INSTRUCTION);
 				this.show = true;

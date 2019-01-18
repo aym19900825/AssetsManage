@@ -18,7 +18,7 @@
 								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加
                       			 </button>
-								<button type="button" class="btn btn-bule button-margin" @click="modify">
+								<button type="button" class="btn btn-blue button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改
 								</button>
 								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
@@ -38,7 +38,7 @@
 					</div>
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search" class="pb10">
-						<el-form status-icon :model="searchList" label-width="70px">
+						<el-form :model="searchList" label-width="70px">
 							<el-row :gutter="30" class="pb5">
 								<el-col :span="7">
 									<el-input v-model="searchList.keywordname">
@@ -46,7 +46,7 @@
 									</el-input>
 								</el-col>
 								<el-col :span="7">
-									<el-input v-model="searchList.categoryid">
+									<el-input v-model="searchList.categoryidDesc">
 										<template slot="prepend">关键字分类ID</template>
 									</el-input>
 								</el-col>
@@ -85,7 +85,7 @@
 								</el-table-column>
 								<el-table-column label="关键字" sortable prop="keywordname" v-if="this.checkedName.indexOf('关键字')!=-1">
 								</el-table-column>
-								<el-table-column label="分类" sortable prop="categoryid" v-if="this.checkedName.indexOf('分类')!=-1">
+								<el-table-column label="分类" sortable prop="categoryidDesc" v-if="this.checkedName.indexOf('分类')!=-1">
 								</el-table-column>
 								<el-table-column label="用户名称" sortable prop="username" v-if="this.checkedName.indexOf('用户名称')!=-1">
 								</el-table-column>
@@ -151,7 +151,7 @@
 					},
 					{
 						label: '分类',
-						prop: 'categoryid'
+						prop: 'categoryidDesc'
 					},
 					{
 						label: '用户名称',
@@ -175,7 +175,7 @@
 				up: false,
 				searchList: {
 					keywordname: '',
-					categoryid: ''
+					categoryidDesc: ''
 				},
 				page: {
 					currentPage: 1,
@@ -242,14 +242,14 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/item/deletes';
+					var url = this.basic_url + '/api-apps/app/tbKeyword2/deletes';
 					//changeMenu为勾选的数据
 					var changeMenu = selData;
 					//deleteid为id的数组
 					var deleteid = [];
 					var ids;
 					for (var i = 0; i < changeMenu.length; i++) {
-						deleteid.push(changeMenu[i].ID);
+						deleteid.push(changeMenu[i].id);
 					}
 					//ids为deleteid数组用逗号拼接的字符串
 					ids = deleteid.toString(',');
@@ -268,6 +268,11 @@
 									type: 'success'
 								});
 								this.requestData();
+							}else{
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'success'
+								});
 							}
 						}).catch((err) => {
 							this.$message({
@@ -287,11 +292,8 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					keywordname: this.searchList.keywordname,
+					categoryidDesc: this.searchList.categoryidDesc,
 				}
-				if(this.searchList.categoryid != ''){
-					this.searchList.categoryid = parseInt(this.searchList.categoryid);
-				};
 				var url = this.basic_url + '/api-apps/app/tbKeyword2';
 				this.$axios.get(url, {
 					params: data

@@ -19,7 +19,7 @@
 								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加
                       			 </button>
-								<button type="button" class="btn btn-bule button-margin" @click="modify">
+								<button type="button" class="btn btn-blue button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改
 								</button>
 								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
@@ -48,8 +48,13 @@
 					</div>
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
-						<el-form status-icon :model="searchList" label-width="70px">
+						<el-form :model="searchList" label-width="70px">
 							<el-row :gutter="5">
+								<el-col :span="7">
+									<el-form-item label="样品编号" prop="ITEMNUM">
+										<el-input v-model="searchList.ITEMNUM"></el-input>
+									</el-form-item>
+								</el-col>
 								<el-col :span="7">
 									<el-form-item label="样品类别" prop="TYPE">
 										<el-input v-model="searchList.TYPE"></el-input>
@@ -60,11 +65,11 @@
 										<el-input v-model="searchList.V_NAME"></el-input>
 									</el-form-item>
 								</el-col>
-								<el-col :span="7">
+								<!-- <el-col :span="7">
 									<el-form-item label="生产单位" prop="P_NAME">
 										<el-input v-model="searchList.P_NAME"></el-input>
 									</el-form-item>
-								</el-col>
+								</el-col> -->
 								
 								
 							</el-row>
@@ -126,17 +131,17 @@
 								</el-table-column>
 								<el-table-column label="样品编号" sortable width="200px" prop="ITEMNUM" v-if="this.checkedName.indexOf('样品编号')!=-1">
 									<template slot-scope="scope">
-										<p @click=view(scope.row.ID)>{{scope.row.ITEMNUM}}
+										<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.ITEMNUM}}
 										</p>
 									</template>
+								</el-table-column>
+								<el-table-column label="样品名称" sortable width="200px" prop="DESCRIPTION" v-if="this.checkedName.indexOf('样品名称')!=-1">
 								</el-table-column>
 								<el-table-column label="样品类别" sortable width="200px" prop="TYPE" v-if="this.checkedName.indexOf('样品类别')!=-1">
 								</el-table-column>
 								<el-table-column label="委托单位" sortable width="200px" prop="V_NAME" v-if="this.checkedName.indexOf('委托单位')!=-1">
 								</el-table-column>
 								<el-table-column label="生产单位" sortable width="200px" prop="P_NAME" v-if="this.checkedName.indexOf('生产单位')!=-1">
-								</el-table-column>
-								<el-table-column label="样品名称" sortable width="200px" prop="DESCRIPTION" v-if="this.checkedName.indexOf('样品名称')!=-1">
 								</el-table-column>
 								<el-table-column label="型号" width="100px" prop="MODEL" sortable v-if="this.checkedName.indexOf('型号')!=-1">
 								</el-table-column>
@@ -194,10 +199,10 @@
 				commentArr: {},
 				checkedName: [
 					'样品编号',
+					'样品名称',
 					'样品类别',
 					'委托单位',
 					'生产单位',
-					'样品名称',
 					'型号',
 					'数量',
 					'收样人',
@@ -212,6 +217,10 @@
 						prop: 'ITEMNUM'
 					},
 					{
+						label: '样品名称',
+						prop: 'DESCRIPTION'
+					},
+					{
 						label: '样品类别',
 						prop: 'TYPE'
 					},
@@ -223,10 +232,7 @@
 						label: '生产单位',
 						prop: 'P_NAME'
 					},
-					{
-						label: '样品名称',
-						prop: 'DESCRIPTION'
-					},
+					
 					{
 						label: '型号',
 						prop: 'MODEL'
@@ -262,10 +268,11 @@
 				down: true,
 				up: false,
 				searchList: {
+					ITEMNUM:'',//样品编号
 					V_NAME: '',//委托单位名称
 					DESCRIPTION: '',//样品名称
 					ACCEPT_PERSON: '',//收样人
-					P_NAME: '',//生产单位名称
+					// P_NAME: '',//生产单位名称
 					TYPE: '',//样品类别
 					ACCEPT_DATE: '',//收样日期
 				},
@@ -461,11 +468,11 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-
+					ITEMNUM: this.searchList.ITEMNUM,//样品编号
 					V_NAME: this.searchList.V_NAME,//委托单位名称
 					DESCRIPTION: this.searchList.DESCRIPTION,//样品名称
 					ACCEPT_PERSON: this.searchList.ACCEPT_PERSON,//收样人
-					P_NAME: this.searchList.P_NAME,//生产单位名称
+					// P_NAME: this.searchList.P_NAME,//生产单位名称
 					TYPE: this.searchList.TYPE,//样品类别
 					ACCEPT_DATE: this.searchList.ACCEPT_DATE//收样日期
 				}

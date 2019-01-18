@@ -19,7 +19,7 @@
 								<!-- <button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加
                       			</button> -->
-								<button type="button" class="btn btn-bule button-margin" @click="modify">
+								<button type="button" class="btn btn-blue button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改
 								</button>
 								<!-- <button type="button" class="btn btn-red button-margin" @click="deluserinfo">
@@ -42,7 +42,7 @@
 
 				<!-- 高级查询划出 Begin-->
 				<div v-show="search">
-					<el-form status-icon :model="searchList" label-width="70px">
+					<el-form :model="searchList" label-width="70px">
 						<el-row :gutter="10">
 							<el-col :span="5">
 								<el-form-item label="自动编号名称" prop="AUTOKEY" label-width="100px">
@@ -66,7 +66,7 @@
 							</el-table-column>
 							<el-table-column label="自动编号名称" width="140" sortable prop="AUTOKEY" v-if="this.checkedName.indexOf('自动编号名称')!=-1">
 								<template slot-scope="scope">
-									<p @click=view(scope.row)>{{scope.row.AUTOKEY}}
+									<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.AUTOKEY}}
 									</p>
 								</template>
 							</el-table-column>
@@ -290,6 +290,9 @@
 			 view(item) {
 			 	this.numbsetForm = item;
 				this.$refs.child.view(item);
+			},
+			open(){
+				this.show = true;
 			},
 			//高级查询
 			modestsearch() {

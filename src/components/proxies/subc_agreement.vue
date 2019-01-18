@@ -2,7 +2,7 @@
 <div>
 	<div class="headerbg">
 		<vheader></vheader>
-		<navs_header></navs_header>
+		<navs_header ref="navsheader"></navs_header>
 	</div>
 	<div class="contentbg">
 		<!--左侧菜单内容显示 Begin-->
@@ -18,7 +18,7 @@
 							<!-- <button type="button" class="btn btn-green" @click="openAddMgr" id="">
 	                        	<i class="icon-add"></i>添加
 	              			 </button>
-							<button type="button" class="btn btn-bule button-margin" @click="modify">
+							<button type="button" class="btn btn-blue button-margin" @click="modify">
 							    <i class="icon-edit"></i>修改
 							</button>
 							<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
@@ -47,7 +47,7 @@
 				</div>
 				<!-- 高级查询划出 Begin-->
 				<div v-show="search">
-					<el-form status-icon :model="searchList" label-width="70px">
+					<el-form :model="searchList" label-width="70px">
 						<el-row :gutter="5">
 							<el-col :span="5">
 								<el-form-item label="分包协议编号" prop="PROXY_CONTRACT_NUM" label-width="100px">
@@ -155,7 +155,6 @@
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_header from '../common/nav_tabs.vue' 
-	import table from '../plugin/table/table-normal.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	export default {
 		name: 'user_management',
@@ -164,7 +163,6 @@
 			navs_left,
 			navs_header,
 			tableControle,
-			table
 		},
 		data() {
 			return {
@@ -419,16 +417,10 @@
 					params: data
 				}).then((res) => {
 					console.log(111);
-					console.log(res);
+					console.log(res.data);
 					this.subagree = res.data.data;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
-				// this.subagree.forEach((item, index) => {
-				// 	var id = item.id;
-				// 	this.$axios.get('/users/' + id + '/roles', data).then((res) => {
-				// 		this.subagree.role = res.data.roles[0].name;
-				// 	}).catch((wrong) => {})
-				// })
 			},
 			loadMore () {
 			   if (this.loadSign) {
@@ -502,6 +494,22 @@
 					this.resourceData = res.data;
 					this.treeData = this.transformTree(this.resourceData);
 				});
+			},
+			transformTree(data) {
+				
+				for(var i = 0; i < data.length; i++) {
+					data[i].name = data[i].fullname;
+					if(!data[i].pid || $.isArray(data[i].subDepts)) {
+						data[i].iconClass = 'icon-file-normal';
+					} else {
+						data[i].iconClass = 'icon-file-text';
+					}
+					if($.isArray(data[i].subDepts)) {
+						data[i].children = this.transformTree(data[i].subDepts);
+					}
+				}
+				return data;
+				
 			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值

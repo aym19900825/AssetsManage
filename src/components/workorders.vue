@@ -2,9 +2,12 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header></navs_header>
+			<navs_header ref="navsheader"></navs_header>
 		</div>
 		<div class="contentbg">
+			<!--左侧菜单内容显示 Begin-->
+			<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left> 
+			<!--左侧菜单内容显示 End-->
 			<div class="wrapper wrapper-content wrapperall">
 				<div class="ibox-content">
 					<!--<navs_button></navs_button>-->
@@ -14,7 +17,7 @@
 								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加
                       			 </button>
-								<button type="button" class="btn btn-bule button-margin" @click="modify">
+								<button type="button" class="btn btn-blue button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改
 								</button>
 								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
@@ -57,7 +60,7 @@
 					</div>
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
-						<el-form status-icon inline-message :model="searchList" label-width="110px">
+						<el-form inline-message :model="searchList" label-width="110px">
 							<el-row :gutter="5">
 								<el-col :span="6">
 									<el-form-item label="工作任务单编号" prop="WONUM">
@@ -176,6 +179,7 @@
 <script>
 	import Config from '../config.js'
 	import vheader from './common/vheader.vue'
+	import navs_left from './common/left_navs/nav_left5.vue'
 	import navs_header from './common/nav_tabs.vue'
 	import workorders_mask from './common/workorders_mask.vue'
 	export default {
@@ -183,6 +187,7 @@
 		components: {
 			vheader,
 			navs_header,
+			navs_left,
 			workorders_mask
 		},
 		data() {
@@ -594,7 +599,11 @@
 					$(".icon-doubleok").addClass("icon-double-angle-left");
 				}
 				this.ismin = !this.ismin;
-			}
+			},
+			childByValue:function(childValue) {
+        		// childValue就是子组件传过来的值
+        		this.$refs.navsheader.showClick(childValue);
+      		},
 		},
 		mounted() {
 			this.requestData();

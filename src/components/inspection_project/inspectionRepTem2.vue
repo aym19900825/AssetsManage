@@ -18,13 +18,13 @@
 		<el-form :model="inspectionRepTem2Form" ref="inspectionRepTem2Form">
 		  <el-table :data="inspectionRepTem2Form.inspectionList.filter(data => !search || data.DECRIPTION.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'inspectionRepTem2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
 			
-		  	<!-- <el-table-column label="所属项目编号" width="120" prop="P_NUM">
+		  	<el-table-column label="所属项目编号" width="120" prop="P_NUM">
 		      <template slot-scope="scope">
 		        <el-form-item :prop="'inspectionList.'+scope.$index + '.P_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" disabled></el-input><span v-else="v-else">{{scope.row.P_NUM}}</span>
 				</el-form-item>
 		      </template>
-		    </el-table-column> -->
+		    </el-table-column>
 
 		  	<el-table-column label="报告编号" width="160" prop="NUM">
 		      <template slot-scope="scope">
@@ -208,14 +208,14 @@
 			indexMethod(index) {
 				return index + 1;
 			},
-			viewfield_inspectionRepTem2(ID){//点击父级筛选出子级数据
-				if(ID=='null'){
+			viewfield_inspectionRepTem2(id,num){//点击父级筛选出子级数据
+				if(id=='null'){
 					this.inspectionRepTem2Form.inspectionList = []; 
 					return false;
 					//todo  相关数据设置
 				}
-				var url = this.basic_url + '/api-apps/app/inspectionRepTem2/INSPECTION_PROJECT2/' + ID;
-
+				this.parentId = num;
+				var url = this.basic_url + '/api-apps/app/inspectionRepTem2/INSPECTION_PROJECT2/' + id;
 				this.$axios.get(url, {}).then((res) => {
 					//console.log(res);
 					this.page.totalCount = res.data.count;	
@@ -231,6 +231,9 @@
 					for(var j = 0; j < this.inspectionRepTem2Form.inspectionList.length; j++){
 						this.inspectionRepTem2Form.inspectionList[j].isEditing = false;
 					}
+
+					this.$refs.singleTable.setCurrentRow(this.inspectionRepTem2Form.inspectionList[0]);//默认选中第一条数据
+
 				}).catch((wrong) => {})
 			},
 			requestData_inspectionRepTem2(index) {//加载数据
@@ -266,8 +269,7 @@
 					this.inspectionRepTem2Form.inspectionList = newarr;
 				}).catch((wrong) => {})
 			},
-			handleNodeClick(data) {
-			},
+			
 			formatter(row, column) {
 				return row.enabled;
 			},
@@ -287,12 +289,11 @@
 						this.currentUser=res.data.nickname;
 						var date=new Date();
 						this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
-						var index=this.$moment(date).format("YYYYMMDDHHmmss");
 						var obj = {
 							"DECRIPTION": '',
-							"STATUS": '活动',
-							"P_NUM": P_NUM,
-							"NUM": 'AS' + index,
+							"STATUS": '1',
+							"P_NUM": this.parentId,
+							"NUM": '',
 							"VERSION": 1,
 							"CHANGEBY": this.currentUser,
 							"CHANGEDATE": this.currentDate,
@@ -372,10 +373,9 @@
 			
 		},
 		
-		mounted() {
-			this.requestData_inspectionRepTem2();
-			
-		},
+		// mounted() {
+		// 	this.requestData_inspectionRepTem2();
+		// },
 		
 
 	}

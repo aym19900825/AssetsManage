@@ -18,7 +18,7 @@
 								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加
                       			 </button>
-								<button type="button" class="btn btn-bule button-margin" @click="modify">
+								<button type="button" class="btn btn-blue button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改
 								</button>
 								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
@@ -47,7 +47,7 @@
 					</div>
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
-						<el-form status-icon :model="searchList" label-width="70px">
+						<el-form :model="searchList" label-width="70px">
 							<el-row :gutter="5">
 								<el-col :span="3">
 									<el-form-item label="样品序号" prop="ITEMNUM" label-width="70px">
@@ -122,7 +122,7 @@
 								</el-table-column>
 								<el-table-column label="样品子表ID" sortable width="120px" prop="ITEM_LINE_ID" v-if="this.checkedName.indexOf('样品子表ID')!=-1">
 									<template slot-scope="scope">
-										<p @click=view(scope.row)>{{scope.row.ITEM_LINE_ID}}
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.ITEM_LINE_ID}}
 										</p>
 									</template>
 								</el-table-column>

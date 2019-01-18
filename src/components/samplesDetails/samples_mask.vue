@@ -30,6 +30,7 @@
 										<el-input  v-model="samplesForm.STATE" :disabled="true">
 											<template slot="prepend">状态</template>
 										</el-input>
+										<!-- <el-input v-for="(data,index) in Select_STATUS" :key="index" :value="data.code" :label="data.name"></el-input> -->
 									</el-col>
 									
 									<el-col :span="7" class="pull-right">
@@ -40,62 +41,62 @@
 								</el-row>
 									<el-row>
 									<el-col :span="8">
-										<el-form-item label="委托书编号" prop="PROXYNUM">
+										<el-form-item label="委托书编号" prop="PROXYNUM" label-width="110px">
 											<el-input v-model="samplesForm.PROXYNUM" :disabled="edit">
 												<el-button slot="append" icon="el-icon-search" @click="getProxy"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="委托单位编号" prop="VENDOR">
+										<el-form-item label="委托单位编号" prop="VENDOR" label-width="110px">
 											<el-input v-model="samplesForm.VENDOR" :disabled="noedit" ></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="委托单位名称" prop="V_NAME">
+										<el-form-item label="委托单位名称" prop="V_NAME" label-width="110px">
 											<el-input v-model="samplesForm.V_NAME" :disabled="noedit" ></el-input>
 										</el-form-item>
 									</el-col>
 									</el-row>
 									<el-row>
 									<el-col :span="8">
-										<el-form-item label="生产单位编号" prop="PRODUCT_COMPANY">
+										<el-form-item label="生产单位编号" prop="PRODUCT_COMPANY" label-width="110px">
 											<el-input v-model="samplesForm.PRODUCT_COMPANY" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="生产单位名称" prop="P_NAME">
+										<el-form-item label="生产单位名称" prop="P_NAME" label-width="110px">
 											<el-input v-model="samplesForm.P_NAME" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="样品名称" prop="DESCRIPTION">
+										<el-form-item label="样品名称" prop="DESCRIPTION" label-width="110px">
 											<el-input v-model="samplesForm.DESCRIPTION" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									</el-row>
 									<el-row>
 									<el-col :span="8">
-										<el-form-item label="产品标识代码" prop="PRODUCT_CODE">
+										<el-form-item label="产品标识代码" prop="PRODUCT_CODE" label-width="110px">
 											<el-input v-model="samplesForm.PRODUCT_CODE" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="型号" prop="MODEL">
+										<el-form-item label="型号" prop="MODEL" label-width="110px">
 											<el-input v-model="samplesForm.MODEL" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="数量" prop="QUATITY">
-											<el-input-number v-model="samplesForm.QUATITY" :min="1" :step="5" :max="100" label="描述文字" style="width: 100%" :disabled="noedit"></el-input-number>
+										<el-form-item label="数量" prop="QUATITY" label-width="110px">
+											<el-input-number v-model="samplesForm.QUATITY" :min="1" :step="1" :max="100" label="描述文字" style="width: 100%" :disabled="noedit"></el-input-number>
 										</el-form-item>
 									</el-col>
 									</el-row>
 									<el-row>
 									<el-col :span="8">
-										<el-form-item label="类别" prop="TYPE">
-											<el-input v-model="samplesForm.TYPE" :disabled="noedit">
-												<el-button slot="append" icon="el-icon-search" @click="getcategory"></el-button>
+										<el-form-item label="类别" prop="TYPE" label-width="110px">
+											<el-input v-model="samplesForm.TYPE" :disabled="true">
+												<el-button slot="append" icon="el-icon-search" @click="getcategory" :disabled="noedit"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -107,7 +108,7 @@
 										</el-form-item>
 									</el-col>-->
 									<el-col :span="16">
-										<el-form-item label="其他资料" prop="OTHER" >
+										<el-form-item label="其他资料" prop="OTHER" label-width="110px">
 											<el-input v-model="samplesForm.OTHER" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
@@ -115,7 +116,7 @@
 								
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="入库时间" prop="ACCEPTDATE" >
+										<el-form-item label="入库时间" prop="ACCEPTDATE" label-width="110px">
 											<div class="block">
 											    <el-date-picker
 											      v-model="samplesForm.ACCEPTDATE"
@@ -126,12 +127,14 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="收样人" prop="ACCEPT_PERSON" >
-											<el-input v-model="samplesForm.ACCEPT_PERSON":disabled="noedit"></el-input>
+										<el-form-item label="收样人" prop="ACCEPT_PERSON" label-width="110px">
+											<el-input v-model="samplesForm.ACCEPT_PERSON":disabled="true">
+												<el-button slot="append" icon="el-icon-search" @click="getReceive" :disabled="noedit"></el-button>
+											</el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="收样日期" prop="ACCEPT_DATE">
+										<el-form-item label="收样日期" prop="ACCEPT_DATE" label-width="110px">
 											<div class="block">
 											    <el-date-picker
 											      v-model="samplesForm.ACCEPT_DATE"
@@ -144,12 +147,14 @@
 								   </el-row>
 								   <el-row>
 									<el-col :span="8">
-										<el-form-item label="接样人" prop="RECIP_PERSON" >
-											<el-input v-model="samplesForm.RECIP_PERSON" :disabled="noedit"></el-input>
+										<el-form-item label="接样人" prop="RECIP_PERSON" label-width="110px">
+											<el-input v-model="samplesForm.RECIP_PERSON" :disabled="true">
+												<el-button slot="append" icon="el-icon-search" @click="getCatch" :disabled="noedit"></el-button>
+											</el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="接样日期" prop="RECIP_DATE">
+										<el-form-item label="接样日期" prop="RECIP_DATE" label-width="110px">
 											<div class="block">
 											    <el-date-picker
 											       v-model="samplesForm.RECIP_DATE"
@@ -160,7 +165,7 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="状态日期" prop="STATUSDATE" >
+										<el-form-item label="状态日期" prop="STATUSDATE" label-width="110px">
 											<div class="block">
 											    <el-date-picker
 											        v-model="samplesForm.STATUSDATE"
@@ -173,13 +178,11 @@
 									</el-row>
 									<el-row>
 									<el-col :span="24">
-										<el-form-item label="备注" prop="MEMO">
+										<el-form-item label="备注" prop="MEMO" label-width="110px">
 											<el-input type="textarea" rows="5" v-model="samplesForm.MEMO" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
-								
-
 							</el-collapse-item>
 							<el-collapse-item title="样品" name="2">								
 								<div class="table-func">
@@ -188,8 +191,8 @@
 										<font>新建行</font>
 									</el-button>
 								</div>
-								<el-form :label-position="labelPosition" :rules="rules">
-								<el-table :header-cell-style="rowClass" :data="samplesForm.ITEM_LINEList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'samplesForm.ITEM_LINEList', order: 'descending'}">
+								<!-- <el-form :label-position="labelPosition" :rules="rules" > -->
+								<el-table :fit="true" max-height="260px" :header-cell-style="rowClass" :data="samplesForm.ITEM_LINEList" row-key="ID" border stripe highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'samplesForm.ITEM_LINEList', order: 'descending'}">
 								    <el-table-column prop="iconOperation" fixed width="50px">
 								      <template slot-scope="scope">
 								      	<i class="el-icon-check" v-show="scope.row.isEditing">
@@ -198,10 +201,11 @@
 								      	</i>
 								      </template>
 								    </el-table-column>
-
-								    <el-table-column label="样品编号" sortable width="170px" prop="ITEMNUM">
+	
+								    <el-table-column label="样品编号" sortable width="170px" prop="ITEMNUM" >
 								      <template slot-scope="scope">
-								      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.ITEMNUM" :disabled="edit"></el-input>
+								      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.ITEMNUM" :disabled="edit" placeholder="自动获取">
+								      	</el-input>
 								      	<span v-show="!scope.row.isEditing" >{{scope.row.ITEMNUM}}</span>
 								      </template>
 								    </el-table-column>
@@ -213,17 +217,21 @@
 								      </template>
 								    </el-table-column>
 
-									<el-table-column prop="SN" label="单件码" sortable width="170px">
+									<el-table-column prop="SN" label="单件码" sortable width="170px" >
 								      <template slot-scope="scope">
-								         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.SN" placeholder="请输入内容"></el-input>
-								         <span v-show="!scope.row.isEditing">{{scope.row.SN}}</span>
+										  	<el-form-item  label-width="0px" :prop="'ITEM_LINEList.'+scope.$index + '.SN'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.SN" placeholder="必填">
+												</el-input>
+												<span v-else="v-else">{{scope.row.SN}}</span>
+											</el-form-item>
 								      </template>
 								    </el-table-column>
 
 									<el-table-column prop="STATE" label="样品状态" sortable width="170px">
 								      <template slot-scope="scope">
-								        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STATE" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.STATUS}}</span>
-								      </template>
+								        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATE" placeholder="请输入内容"></el-input>
+								      	<span v-else="v-else">{{scope.row.STATE}}</span>
+									  </template>
 								    </el-table-column>
 								    
 								   <!--  <el-table-column prop="ENTERBY" label="录入人" sortable width="120px">
@@ -235,7 +243,7 @@
 
 								    <el-table-column prop="ENTERDATE" label="录入时间" sortable>
 								      <template slot-scope="scope">
-								      	<el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.ENTERDATE'" >
+								      	<el-form-item  label-width="0px" :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.ENTERDATE'" >
 								         <el-date-picker style="width: 90%" v-show="scope.row.isEditing" v-model="scope.row.ENTERDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd"></el-date-picker>
 								        <span v-show="!scope.row.isEditing" >{{scope.row.ENTERDATE}}</span>
 								    	</el-form-item>
@@ -248,13 +256,13 @@
 								    </el-table-column> -->
 								    <el-table-column fixed="right" label="操作" width="100px">
 								      <template slot-scope="scope">
-								        <el-button @click = "deleteRow(scope.$index, CUSTOMER.CUSTOMER_QUALIFICATIONList)" type="text" size="small">
+								        <el-button @click = "deleteRow(scope.$index, samplesForm.ITEM_LINEList)" type="text" size="small">
 								          移除
 								        </el-button>
 								      </template>
 								    </el-table-column>
 								  </el-table>
-								  </el-form>
+								  <!-- </el-form> -->
 							</el-collapse-item>
 							<el-collapse-item title="其他" name="3" v-show="views">
 								<el-row >
@@ -292,7 +300,7 @@
 					</div>
 					<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
-							<el-button type="success" v-show="addtitle" @click='saveAndSubmit()'>保存并添加</el-button>
+							<el-button type="success" v-show="addtitle" @click='saveAndSubmit()'>保存并继续</el-button>
 							<el-button @click='close'>取消</el-button>
 					</div>
 				</el-form>
@@ -300,7 +308,7 @@
 		</div>
 		<!--点击委托书编号弹出框 Begin-->
 		<el-dialog :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
-			<el-table :data="gridData" @selection-change="SelChange">
+			<el-table :data="gridData" height="400px" @selection-change="SelChange">
 					<el-table-column type="selection" width="55" fixed >
 					</el-table-column>
 					<el-table-column label="检验委托书编号" sortable width="140px" prop="PROXYNUM" >
@@ -337,6 +345,58 @@
   			</span>
 		</el-dialog>
 		<!--点击委托书编号弹出框 Begin-->
+		<!-- 产品类别 Begin -->
+		<el-dialog title="产品类别" height="400px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
+			<!-- 第二层弹出的表格 Begin-->
+			<el-table :header-cell-style="rowClass" :data="categoryList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table-column type="selection" fixed width="55" align="center">
+				</el-table-column>
+				<el-table-column label="编码" width="155" sortable prop="NUM">
+				</el-table-column>
+				<el-table-column label="名称" sortable prop="TYPE">
+				</el-table-column>
+				<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
+				</el-table-column>
+				<el-table-column label="机构" width="185" sortable prop="DEPARTMENTDesc">
+				</el-table-column>
+				<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
+				</el-table-column>
+				<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat">
+				</el-table-column>
+			</el-table>
+			<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+			</el-pagination>
+			<!-- 表格 End-->
+			<span slot="footer" class="dialog-footer">
+		       <el-button @click="dialogVisible3 = false" style="margin-left: 37%;">取 消</el-button>
+		       <el-button type="primary" @click="addproclass">确 定</el-button>
+		    </span>
+		</el-dialog>
+		<!-- 产品类别 End -->
+		<!-- 收样人、接样人 Begin -->
+		<el-dialog height="400px" :visible.sync="dialogVisible4" width="80%" :before-close="handleClose">
+			<el-table :data="userList" border stripe :header-cell-style="rowClass" height="400px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+								<el-table-column type="selection" width="55" fixed align="center">
+								</el-table-column>
+								<el-table-column label="用户名" sortable width="140px" prop="username">
+								</el-table-column>
+								<el-table-column label="姓名" sortable width="200px" prop="nickname">
+								</el-table-column>
+								<el-table-column label="机构" sortable width="150px" prop="deptName">
+								</el-table-column>
+								<el-table-column label="公司" sortable prop="companyName">
+								</el-table-column>
+								<el-table-column label="创建时间" prop="createTime" width="100px" sortable :formatter="dateFormat">
+								</el-table-column>
+							</el-table>
+							<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							</el-pagination>
+			<span slot="footer" class="dialog-footer">
+		       <el-button @click="dialogVisible4 = false" style="margin-left: 37%;">取 消</el-button>
+		       <el-button type="primary" @click="addPerson">确 定</el-button>
+		    </span>
+		</el-dialog>
+		<!-- 收样人、接样人 End -->
 	</div>
 </template>
 
@@ -351,6 +411,8 @@
 		 },
 		data() {
 			return {
+				loadSign:true,//加载
+				commentArr:{},
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				value: '',
@@ -361,7 +423,13 @@
 					value: '0',
 					label: '不活动'
 				}],
+				page: { //分页显示
+					currentPage: 1,
+					pageSize: 10,
+					totalCount: 0
+				},
 				selectData: [], //获取检验/检测方法类别
+				Select_STATUS:[],//获取样品信息-样品状态-new
 				modify:false,//修订、修改人、修改日期
 				edit: true, //禁填
 				noedit:false,
@@ -371,7 +439,10 @@
 				isok2: false,
 				down: true,
 				up: false,
+				fullHeight: document.documentElement.clientHeight - 210+'px',
 				dialogVisible: false, //对话框
+				dialogVisible3:false,//产品类别弹出框
+				dialogVisible4:false,//接样人、收样人弹出框
 				activeNames: ['1', '2','3'], //手风琴数量
 				labelPosition: 'right', //表单标题在上方
 				addtitle: true,
@@ -382,16 +453,21 @@
 				samplesForm:{
 					ITEM_LINEList:[]
 				},
+				categoryList:[],
+				userList:[],
 				//Tree树菜单数据
 				gridData: [], //彈出框的數據
 				isEditing: '',
 				commentArr:{},//下拉加载
+				tips:'1',
 				rules: { //定义需要校验数据的名称
 					VENDOR: [{ required: true, message: '请填写委托单位编号', trigger: 'blur' }],
 					V_NAME: [{ required: true, message: '请填写委托单位名称', trigger: 'blur' }],
 					PRODUCT_COMPANY: [{ required: true, message: '请填写生产单位编号', trigger: 'blur' }],
 					P_NAME: [{ required: true, message: '请填写生产单位名称', trigger: 'blur' }],
 					DESCRIPTION: [{ required: true, message: '请填写样品名称', trigger: 'blur' }],
+					PRODUCT_CODE: [{ required: true, message: '请填写产品标识代码', trigger: 'blur' }],
+					SN: [{ required: true, message: '必填', trigger: 'blur' }],
 					TYPE: [{ required: true, message: '请选择类别', trigger: 'change' }],
 					QUATITY: [{ required: true, message: '请填写数量', trigger: 'blur' }],
 					ACCEPTDATE: [{ required: true, message: '入库时间不能为空', trigger: 'blur' }],
@@ -448,8 +524,14 @@
 			},
 			
 			dailogconfirm(type) { //小弹出框确认按钮事件
-				this.dialogVisible = false;
-				this.samplesForm.PROXYNUM=this.selval[0].PROXYNUM;
+				
+				if(this.selval.length == 0){
+					this.$message({
+						message:'未选择数据',
+						type:'warning'
+					})
+				}else if(this.selval.length == 1){
+					this.samplesForm.PROXYNUM=this.selval[0].PROXYNUM;
 					this.samplesForm.V_NAME=this.selval[0].V_NAME;
 					this.samplesForm.VENDOR=this.selval[0].VENDOR;
 					this.samplesForm.PROXYNUM=this.selval[0].PROXYNUM;
@@ -459,6 +541,13 @@
 					this.samplesForm.PRODUCT_CODE=this.selval[0].ITEM_ID;//产品标识代码
 					this.samplesForm.MODEL=this.selval[0].ITEM_MODEL;
 					this.samplesForm.QUATITY=this.selval[0].ITEM_QUALITY;
+					this.dialogVisible = false;
+				}else{
+					this.$message({
+						message:'不可选择多条数据',
+						type:'warning'
+					})
+				}
 			},
 
 			SelChange(val) {
@@ -588,18 +677,41 @@
 			},
 			//
 			getcategory(){
-				var url = this.basic_url + '/api-apps/app/productType';
-				this.$axios.get(url, {}).then((res) => {
-					this.selectData = res.data;
-				}).catch(error => {
-					console.log('');
-				})
+				this.dialogVisible3 = true;				
+			},
+			//收样人
+			getReceive(){
+				this.tips = '1';
+				this.$emit('request');
+				this.dialogVisible4 = true;
+			},
+			//接样人
+			getCatch(){
+				this.tips = '2';
+				this.$emit('request');
+				this.dialogVisible4 = true;
+			},
+			addPerson(){
+				if (this.tips == '1') {
+					this.samplesForm.ACCEPT_PERSON = this.selval[0].username; //收样人
+					this.dialogVisible4 = false;
+					this.$emit('request');
+				}else if(this.tips == '2'){
+					this.samplesForm.RECIP_PERSON = this.selval[0].username;//接样人
+					this.dialogVisible4 = false;
+					this.$emit('request');
+				}
+			},
+			addproclass(){
+				this.samplesForm.TYPE = this.selval[0].TYPE;
+				this.dialogVisible3 = false;
+				this.$emit('request');
 			},
 			SelChange(val) {
 				this.selval = val;
 			},
 			addfield() { 
-				//插入行到文件文档Table中
+				//插入行到文件文件Table中
 				var obj = {
                     ITEMNUM:'',
                     ITEM_STEP:'',
@@ -654,6 +766,8 @@
 			//点击关闭按钮
 			close() {
 				this.show = false;
+				this.dialogVisible3 = false;
+				this.dialogVisible4 = false;
 				this.$emit('request');
 			},
 			// cancelForm() {
@@ -692,25 +806,33 @@
 			save() {
 				this.$refs.samplesForm.validate((valid) => {
 					if (valid) {
-						var url = this.basic_url + '/api-apps/app/item/saveOrUpdate';
-						this.$axios.post(url, this.samplesForm).then((res) => {
-							console.log(res);
-							//resp_code == 0是后台返回的请求成功的信息
-							if(res.data.resp_code == 0) {
-								this.$message({
-									message: '保存成功',
-									type: 'success'
-								});
-								//重新加载数据
-								 this.$emit('request');
-							}
-						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
+						if(this.samplesForm.ITEM_LINEList.length<=0){
+			        		this.$message({
+								message: '样品表格是必填项，请填写！',
+								type: 'warning'
 							});
-						});
-						this.falg = true;
+							return false;
+			        	}else{
+							var url = this.basic_url + '/api-apps/app/item/saveOrUpdate';
+							this.$axios.post(url, this.samplesForm).then((res) => {
+								console.log(res);
+								//resp_code == 0是后台返回的请求成功的信息
+								if(res.data.resp_code == 0) {
+									this.$message({
+										message: '保存成功',
+										type: 'success'
+									});
+									//重新加载数据
+									this.$emit('request');
+								}
+							}).catch((err) => {
+								this.$message({
+									message: '网络错误，请重试',
+									type: 'error'
+								});
+							});
+							this.falg = true;
+						}
 					} else {
 						this.show = true;
 						this.$message({
@@ -729,11 +851,91 @@
 				}
 				this.$emit('request');
 			},
-			//保存并添加
+			//保存并继续
 			saveAndSubmit(){
 				this.save();
 				this.reset();
 				this.$emit('request');
+			},
+			loadMore () {
+			   if (this.loadSign) {
+			     this.loadSign = false
+			     this.page.currentPage++
+			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+			       return
+			     }
+			     setTimeout(() => {
+			       this.loadSign = true
+			     }, 1000)
+			     this.requestData()
+			   }
+			 },
+			requestData(index) {//高级查询字段
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				};
+				this.$axios.get(this.basic_url + '/api-apps/app/productType', {
+					params: data
+				}).then((res) => {
+					// console.log(res.data);
+					this.page.totalCount = res.data.count;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
+					}
+					this.commentArr[this.page.currentPage] = res.data.data
+					let newarr = []
+					for(var i = 1; i <= totalPage; i++) {
+
+						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+
+							for(var j = 0; j < this.commentArr[i].length; j++) {
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					this.categoryList = newarr;
+				}).catch((wrong) => {})
+				var url = this.basic_url + '/api-user/users';
+				this.$axios.get(url, {
+					params: data
+				}).then((res) => {
+					console.log(res);
+					//this.userList = res.data.data;
+					this.page.totalCount = res.data.count;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
+					}
+					this.commentArr[this.page.currentPage] = res.data.data
+					let newarr = []
+					for(var i = 1; i <= totalPage; i++) {
+
+						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+
+							for(var j = 0; j < this.commentArr[i].length; j++) {
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					this.userList = newarr;
+				}).catch((wrong) => {})
+			},
+			getITEM_STATUS() {//获取样品状态
+				var url =  this.basic_url + '/api-user/dicts/findChildsByCode?code=ITEM_STATUS';
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res)
+					// this.Select_STATUS = res.data;
+				}).catch(error => {
+					console.log('请求失败');
+				})
 			},
 			handleClose(done) { //大弹出框确定关闭按钮
 				this.$confirm('确认关闭？')
@@ -745,6 +947,8 @@
 		},
 		mounted() {
 			this.getType();
+			this.requestData();
+			this.getITEM_STATUS();
 		},
 	}
 </script>

@@ -18,7 +18,7 @@
 								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加
                       			 </button>
-								<button type="button" class="btn btn-bule button-margin" @click="modify">
+								<button type="button" class="btn btn-blue button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改
 								</button>
 								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
@@ -38,41 +38,19 @@
 					</div>
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search" class="pb10">
-						<el-form status-icon :model="searchList" label-width="70px">
+						<el-form :model="searchList" label-width="70px">
 							<el-row :gutter="30" class="pb5">
 								<el-col :span="7">
-									<el-input v-model="searchList.V_NAME">
-										<template slot="prepend">委托单位名称</template>
+									<el-input v-model="searchList.username">
+										<template slot="prepend">姓名</template>
 									</el-input>
 								</el-col>
 								
-								<el-col :span="7">
-									<el-input v-model="searchList.DESCRIPTION">
-										<template slot="prepend">样品名称</template>
+								<!-- <el-col :span="7">
+									<el-input v-model="searchList.keywordidDesc">
+										<template slot="prepend">关键字</template>
 										</el-input>
-								</el-col>
-								<el-col :span="7">
-									<el-input v-model="searchList.ACCEPT_PERSON" label-width="58px">
-									<template slot="prepend">收样人</template>
-										</el-input>
-								</el-col>
-							</el-row>
-							<el-row :gutter="30">
-								<el-col :span="7">				
-									<el-input v-model="searchList.P_NAME">
-										<template slot="prepend">生产单位名称</template>
-									</el-input>
-								</el-col>
-								<el-col :span="7">
-									<el-input v-model="searchList.TYPE">
-									<template slot="prepend">样品类别</template>
-										</el-input>
-								</el-col>
-								<el-col :span="7">
-									<el-input v-model="searchList.ACCEPT_DATE" label-width="70px">
-									<template slot="prepend">收样日期</template>
-										</el-input>
-								</el-col>
+								</el-col> -->
 								<el-col :span="3">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
 								</el-col>
@@ -85,15 +63,44 @@
 							<el-table :data="samplesList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="用户ID" sortable width="140px" prop="USER" v-if="this.checkedName.indexOf('样品编号')!=-1">
+								<el-table-column label="姓名" sortable width="140px" prop="username" v-if="this.checkedName.indexOf('姓名')!=-1">
 								</el-table-column>
-								<el-table-column label="姓名" sortable width="200px" prop="USERNAME" v-if="this.checkedName.indexOf('样品类别')!=-1">
+								<el-table-column label="关键字" sortable prop="keywordidDesc" v-if="this.checkedName.indexOf('关键字')!=-1">
 								</el-table-column>
-								<el-table-column label="关键字编号" sortable prop="KEYNUM" v-if="this.checkedName.indexOf('委托单位')!=-1">
+								<el-table-column label="查看" sortable prop="fileread" v-if="this.checkedName.indexOf('查看')!=-1">
+									<template slot-scope="scope">
+										<i :class="scope.row.fileread==1?'el-icon-check':''"></i>
+									</template>
 								</el-table-column>
-								<el-table-column label="信息状态" sortable prop="STATUS" v-if="this.checkedName.indexOf('生产单位')!=-1">
+								<el-table-column label="编辑" sortable prop="fileedit" v-if="this.checkedName.indexOf('编辑')!=-1">
+									<template slot-scope="scope">
+										<i :class="scope.row.fileedit==1?'el-icon-check':''"></i>
+									</template>
 								</el-table-column>
-								<el-table-column label="同步时间" sortable prop="SYNCHRONIZATION_TIME" v-if="this.checkedName.indexOf('样品名称')!=-1">
+								<el-table-column label="删除" sortable prop="filedelete" v-if="this.checkedName.indexOf('删除')!=-1">
+									<template slot-scope="scope">
+										<i :class="scope.row.filedelete==1?'el-icon-check':''"></i>
+									</template>
+								</el-table-column>
+								<!-- <el-table-column label="上传" sortable prop="fileupload" v-if="this.checkedName.indexOf('上传')!=-1">
+									<template slot-scope="scope">
+										<i :class="scope.row.fileupload==1?'el-icon-check':''"></i>
+									</template>
+								</el-table-column> -->
+								<el-table-column label="下载" sortable prop="filedownload" v-if="this.checkedName.indexOf('下载')!=-1">
+									<template slot-scope="scope">
+										<i :class="scope.row.filedownload==1?'el-icon-check':''"></i>
+									</template>
+								</el-table-column>
+								<el-table-column label="打印" sortable prop="fileprint" v-if="this.checkedName.indexOf('打印')!=-1">
+									<template slot-scope="scope">
+										<i :class="scope.row.fileprint==1?'el-icon-check':''"></i>
+									</template>
+								</el-table-column>
+								<el-table-column label="复制" sortable prop="fileduplicate" v-if="this.checkedName.indexOf('复制')!=-1">
+									<template slot-scope="scope">
+										<i :class="scope.row.fileduplicate==1?'el-icon-check':''"></i>
+									</template>
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
@@ -104,7 +111,7 @@
 				</div>
 			</div>
 		</div>
-		<authmask  ref="child" @request="requestData"></authmask>
+		<authmask  ref="child" @request="requestData" :detailData="selMenu[0]"></authmask>
 		<!--右侧内容显示 End-->
 	</div>
 	</div>
@@ -133,64 +140,52 @@
 				loadSign: true, //加载
 				commentArr: {},
 				checkedName: [
-					'样品编号',
-					'样品类别',
-					'委托单位',
-					'生产单位',
-					'样品名称',
-					'型号',
-					'数量',
-					'收样人',
-					'收样日期',
-					'接样人',
-					'接样日期',
-					'状态',
-					'信息状态',
+					'姓名',
+					'关键字',
+					'查看',
+					'删除',
+					// '上传',
+					'下载',
+					'复制',
+					'编辑',
+					'打印',
 				],
 				tableHeader: [{
-						label: '样品编号',
-						prop: 'ITEMNUM'
+						label: '姓名',
+						prop: 'username'
 					},
 					{
-						label: '样品类别',
-						prop: 'TYPE'
+						label: '关键字',
+						prop: 'keywordidDesc'
 					},
 					{
-						label: '委托单位',
-						prop: 'P_NAME'
+						label: '查看',
+						prop: 'fileread'
 					},
 					{
-						label: '生产单位',
-						prop: 'P_NAME'
+						label: '删除',
+						prop: 'filedelete'
+					},
+					// {
+					// 	label: '上传',
+					// 	prop: 'fileupload'
+					// },
+					{
+						label: '下载',
+						prop: 'filedownload'
 					},
 					{
-						label: '样品名称',
-						prop: 'DESCRIPTION'
+						label: '复制',
+						prop: 'fileduplicate'
 					},
 					{
-						label: '型号',
-						prop: 'MODEL'
+						label: '编辑',
+						prop: 'fileedit'
 					},
 					{
-						label: '数量',
-						prop: 'QUATITY'
-					},
-					{
-						label: '收样人',
-						prop: 'ACCEPT_PERSON'
-					},
-					{
-						label: '收样日期',
-						prop: 'ACCEPT_DATE'
-					},
-					{
-						label: '状态',
-						prop: 'STATE'
-					},
-					{
-						label: '信息状态',
-						prop: 'STATUS'
-					},
+						label: '打印',
+						prop: 'fileprint'
+					}
 				],
 				companyId: '',
 				deptId: '',
@@ -202,12 +197,8 @@
 				down: true,
 				up: false,
 				searchList: {
-					V_NAME: '',//委托单位名称
-					DESCRIPTION: '',//样品名称
-					ACCEPT_PERSON: '',//收样人
-					P_NAME: '',//生产单位名称
-					TYPE: '',//样品类别
-					ACCEPT_DATE: '',//收样日期
+					keywordidDesc: '',
+					username: ''
 				},
 				//tree树菜单
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -256,8 +247,6 @@
 				}
 				m.isFolder = !m.isFolder;
 			},
-
-			
 			//表格滚动加载
 			loadMore () {
 			   if (this.loadSign) {
@@ -270,7 +259,6 @@
 			       this.loadSign = true
 			     }, 1000)
 			     this.requestData()
-//			     console.log('到底了', this.page.currentPage)
 			   }
 			 },
 			tableControle(data) {//控制表格列显示隐藏
@@ -327,32 +315,36 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/item/deletes';
+					var url = this.basic_url + '/api-apps/app/tbKeywordPrivilege2/deletes';
 					//changeMenu为勾选的数据
 					var changeMenu = selData;
 					//deleteid为id的数组
 					var deleteid = [];
 					var ids;
 					for (var i = 0; i < changeMenu.length; i++) {
-						deleteid.push(changeMenu[i].ID);
+						deleteid.push(changeMenu[i].id);
 					}
 					//ids为deleteid数组用逗号拼接的字符串
 					ids = deleteid.toString(',');
                     var data = {
 						ids: ids,
 					}
-					this.$confirm('确定删除此数据吗？', '提示', {
+					this.$confirm('确定删除这些数据吗？', '提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                     }).then(({ value }) => {
                         this.$axios.delete(url, {params: data}).then((res) => {//.delete 传数据方法
-						//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '删除成功',
 									type: 'success'
 								});
 								this.requestData();
+							}else{
+								this.$message({
+									message: res.data.code_msg,
+									type: 'success'
+								});
 							}
 						}).catch((err) => {
 							this.$message({
@@ -365,32 +357,6 @@
                 	});
 				}
 			},
-			// 导入
-			importData() {
-
-			},
-			// 导出
-			exportData() {
-
-			},
-			// 打印
-			Printing() {
-
-			},
-			judge(data) {
-				//taxStatus 布尔值
-				return data.DESCRIPTION ? '启用' : '冻结'
-			},
-			
-			//时间格式化  
-			dateFormat(row, column) {
-				var date = row[column.property];
-				if(date == undefined) {
-					return "";
-				}
-				return this.$moment(date).format("YYYY-MM-DD"); 
-			},
-
 			SelChange(val) {//选中值后赋值给一个自定义的数组：selMenu
 				this.selMenu = val;
 			},
@@ -398,32 +364,15 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-
+					username: this.searchList.username,
+					keywordidDesc: this.searchList.keywordidDesc
 				}
 				var url = this.basic_url + '/api-apps/app/tbKeywordPrivilege2';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;
-					//总的页数
-					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false
-					} else {
-						this.loadSign = true
-					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
-
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					// this.samplesList = newarr;
+					this.samplesList = res.data.data;
 				}).catch((wrong) => {})
 				
 			},

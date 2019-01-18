@@ -18,7 +18,7 @@
 								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加
                       			 </button>
-								<button type="button" class="btn btn-bule button-margin" @click="modify">
+								<button type="button" class="btn btn-blue button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改
 								</button>
 								<button type="button" class="btn btn-red button-margin" @click="del">
@@ -47,7 +47,7 @@
 					</div>
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search" class="pb10">
-						<el-form status-icon :model="searchList" label-width="70px">
+						<el-form :model="searchList" label-width="70px">
 							<el-row :gutter="30" class="pb5">
 								<el-col :span="7">
 									<el-input v-model="searchList.categoryname">
@@ -206,7 +206,7 @@
 					});
 					return;
 				} else {
-					this.$refs.child.detail(this.selMenu[0]);
+					this.$refs.child.detail();
 				}
 			},
 			//高级查询
@@ -214,6 +214,19 @@
 				this.search = !this.search;
 				this.down = !this.down,
 					this.up = !this.up
+			},
+			getKeyWords(catId){
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+					categoryid: catId ,
+				}
+				var url = this.basic_url + '/api-apps/app/tbKeyword2';
+				this.$axios.get(url, {
+					params: data
+				}).then((res) => {
+					return res.data.count;
+				}).catch((wrong) => {})
 			},
 			// 删除
 			del() {
@@ -224,7 +237,21 @@
 						type: 'warning'
 					});
 					return;
-				} else {
+				}else if(selData.length > 1){
+					this.$message({
+						message: '不可同时删除多条数据',
+						type: 'error'
+					});
+					return;
+				}else {
+					var sonLength = this.getKeyWords(selData[0].id);
+					if(sonLength>0){
+						this.$message({
+							message: '请先删除此类别下的关键字后再删除此数据',
+							type: 'error'
+						});
+						return;
+					}
 					var url = this.basic_url + '/api-apps/app/tbCategory2/deletes';
 					var changeMenu = selData;
 					var deleteid = [];
@@ -252,9 +279,7 @@
 								type: 'error'
 							});
 						});
-                    }).catch(() => {
-
-                	});
+                    }).catch(() => {});
 				}
 			},
 			selChange(val) {

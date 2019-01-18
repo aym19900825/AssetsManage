@@ -2,7 +2,7 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header></navs_header>
+			<navs_header  ref="navsheader"></navs_header>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
@@ -19,7 +19,7 @@
 								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
 	                        	<i class="icon-add"></i>添加
 	              			 </button>
-								<button type="button" class="btn btn-bule button-margin" @click="modify">
+								<button type="button" class="btn btn-blue button-margin" @click="modify">
 							    <i class="icon-edit"></i>修改
 							</button>
 								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
@@ -50,7 +50,7 @@
 
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
-						<el-form status-icon :model="searchList" label-width="70px">
+						<el-form :model="searchList" label-width="70px">
 							<el-row :gutter="10">
 								<el-col :span="5">
 									<el-form-item label="标准编号" prop="S_NUM">
@@ -77,8 +77,8 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="4">
-									<el-form-item label="机构" prop="DEPARTMENT" label-width="45px">
-										<el-select clearable v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="请选择">
+									<el-form-item label="机构" prop="DEPTID" label-width="45px">
+										<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
 									    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 									</el-select>
 									</el-form-item>
@@ -121,7 +121,7 @@
 								</el-table-column> -->
 								<el-table-column label="标准编号" width="120" sortable prop="S_NUM" v-if="this.checkedName.indexOf('标准编号')!=-1">
 									<template slot-scope="scope">
-										<p @click=view(scope.row)>{{scope.row.S_NUM}}
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.S_NUM}}
 										</p>
 									</template>
 								</el-table-column>
@@ -137,7 +137,7 @@
 								</el-table-column>
 								<el-table-column label="版本" width="70" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1" align="right">
 								</el-table-column>
-								<el-table-column label="机构" width="180" sortable prop="DEPARTMENTDesc" v-if="this.checkedName.indexOf('机构')!=-1">
+								<el-table-column label="机构" width="180" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
 								</el-table-column>
 								<!-- <el-table-column label="录入人" width="120" prop="ENTERBY" sortable v-if="this.checkedName.indexOf('录入人')!=-1"> -->
 								<!-- </el-table-column> -->
@@ -252,7 +252,7 @@
 					},
 					{
 						label: '机构',
-						prop: 'DEPARTMENTDesc'
+						prop: 'DEPTIDDesc'
 					},
 					// {
 					// 	label: '录入人',
@@ -289,7 +289,7 @@
 					S_NUM: '',
 					S_NAME: '',
 					VERSION: '',
-					DEPARTMENT: '',
+					DEPTID: '',
 					RELEASETIME: '',
 					STARTETIME: '',
 					STATUS: '',
@@ -507,7 +507,7 @@
 					S_NAME: this.searchList.S_NAME,
 					VERSION: this.searchList.VERSION,
 					S_ENGNAME: this.searchList.S_ENGNAME,
-					DEPARTMENT: this.searchList.DEPARTMENT,
+					DEPTID: this.searchList.DEPTID,
 					RELEASETIME: this.searchList.RELEASETIME,
 					STARTETIME: this.searchList.STARTETIME,
 					STATUS: this.searchList.STATUS,

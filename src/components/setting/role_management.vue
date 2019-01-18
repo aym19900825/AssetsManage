@@ -15,10 +15,14 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+				
+								<!--<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+									<i :class="item.icon"></i>{{item.name}}
+								</button>-->
+								 <button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加
                       			</button>
-								<button type="button" class="btn btn-bule button-margin" @click="modify">
+								<button type="button" class="btn btn-blue button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改
 								</button>
 								<button type="button" class="btn btn-red button-margin" @click="delroleinfo">
@@ -35,7 +39,7 @@
 						    		<i class="icon-search"></i>高级查询
 						    		<i class="icon-arrow1-down" v-show="down"></i>
 						    		<i class="icon-arrow1-up" v-show="up"></i>
-								</button>
+								</button> 
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -45,7 +49,7 @@
 					</div>
 					<!-- 高级查询划出 -->
 					<div v-show="search">
-						<el-form status-icon :model="searchList">
+						<el-form :model="searchList">
 							<el-row :gutter="10">
 								<el-col :span="5">
 									<el-form-item label="角色名称" prop="name" label-width="70px">
@@ -54,8 +58,8 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="3">
-									<el-form-item label="是否停用" prop="INACTIVE" label-width="70px">
-										<el-select clearable v-model="searchList.INACTIVE" placeholder="" style="width: 100%;">
+									<el-form-item label="是否停用" prop="inactive" label-width="70px">
+										<el-select clearable v-model="searchList.inactive" placeholder="" style="width: 100%;">
 											<el-option v-for="item in stopoptions" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
 										</el-select>
@@ -76,13 +80,12 @@
 								</el-table-column>
 								<el-table-column label="角色编码" sortable prop="code" v-if="this.checkedName.indexOf('角色编码')!=-1">
 									<template slot-scope="scope">
-										<p @click=view(scope.row)>{{scope.row.code}}
-										</p>
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.code}}</p>
 									</template>
 								</el-table-column>
 								<el-table-column label="角色名称" sortable prop="name" v-if="this.checkedName.indexOf('角色名称')!=-1">
 								</el-table-column>
-								<el-table-column label="是否停用" sortable prop="INACTIVE" v-if="this.checkedName.indexOf('是否停用')!=-1">
+								<el-table-column label="是否停用" sortable prop="inactive" :formatter="judge" v-if="this.checkedName.indexOf('是否停用')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
@@ -100,8 +103,8 @@
 				</div>
 			</div>
 			<rolemask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></rolemask>
-			<datalimitmask ref="limit" v-bind:page=page></datalimitmask>
-			<rolemeunmask ref="role" v-bind:page=page></rolemeunmask>
+			<datalimitmask ref="limit" :roleIds="roleIds"></datalimitmask>
+			<rolemeunmask ref="role"></rolemeunmask>
 			<!--右侧内容显示 End-->
 		</div>
 	</div>
@@ -154,9 +157,10 @@
 					},
 					{
 						label: '是否停用',
-						prop: 'INACTIVE'
+						prop: 'inactive'
 					}
 				],
+				buttons: [],//请求回的按钮
 				roleList: [],//表格数据
 				search: false,
 				down: true,
@@ -175,6 +179,7 @@
 					totalCount: 0
 				},
 				selData:[],
+				roleIds:{},
 			}
 		},
 		methods: {
@@ -202,6 +207,41 @@
 				this.page.pageSize = 10;
 				this.requestData();
 			},
+			judge(data) {//是否停用
+				return data.inactive=="1" ? '是' : '否'
+			},
+			//请求页面的button接口
+		    getbutton(childByValue){
+		    	console.log(childByValue);
+		    	var data = {
+					menuId: childByValue.id,
+					roleId: this.$store.state.roleid,
+				};
+				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
+				this.$axios.get(url, {params: data}).then((res) => {
+					console.log(111)
+					console.log(res);
+					this.buttons = res.data;
+					
+				}).catch((wrong) => {})
+
+		    },
+			 //请求点击
+		    getbtn(item){
+		    	if(item.name=="添加"){
+		         this.openAddMgr();
+		    	}else if(item.name=="修改"){
+		    	 this.modify();
+		    	}else if(item.name=="高级查询"){
+		    	 this.modestsearch();
+		    	}else if(item.name=="活动"){
+		    		this.unfreeze();
+		    	}else if(item.name=="不活动"){
+		    		this.freezeAccount();
+		    	}else if(item.name=="删除"){
+		    		this.deluserinfo();
+		    	}
+		    },
 			//添加用戶
 			openAddMgr() {
 				this.$refs.child.resetNew();
@@ -224,7 +264,9 @@
 					});
 					return;
 				} else {
-					this.$refs.limit.depet(this.selData[0].id);
+					this.roleIds=this.selData[0].id//传到数据范围
+//					this.$refs.limit.visible();					
+					this.$refs.limit.getdetail(this.selData[0].id);
 				}
 			},
 			//修改
@@ -284,31 +326,48 @@
 						type: 'warning'
 					});
 					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时删除多个数据',
-						type: 'warning'
-					});
-					return;
 				} else {
-					var changeUser = selData[0];
-					var id = changeUser.id;
-					var url = this.basic_url + '/api-user/roles/' + id;
-					//.delete 传数据方法
-					this.$axios.delete(url, {}).then((res) => {
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
+					var url = this.basic_url + '/api-user/roles/deletes';
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					console.log(changeUser[0]);
+					for(var i = 0; i < changeUser.length; i++) {
+						deleteid.push(changeUser[i].id);
+						console.log(deleteid);
+					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+					var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {
+							params: data
+						}).then((res) => { //.delete 传数据方法
+							//resp_code == 0是后台返回的请求成功的信息
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '删除成功',
-								type: 'success'
+								message: '网络错误，请重试',
+								type: 'error'
 							});
-							this.requestData();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
+					}).catch(() => {
+
 					});
 				}
 			},
@@ -365,10 +424,17 @@
 				}
 				return data;
 			},
+			childByValue:function(childValue) {
+        		// childValue就是子组件传过来的值
+        		console.log(childValue);
+        		// this.$refs.navsheader.showClick(childValue);
+        		this.getbutton(childValue);
+      		},
 		},
 		mounted() {
 			this.requestData();
 			this.getKey();
+			this.getbutton();
 		},
 	}
 </script>

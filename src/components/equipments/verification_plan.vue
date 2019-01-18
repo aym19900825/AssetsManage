@@ -3,11 +3,11 @@
 <div>
 	<div class="headerbg">
 		<vheader></vheader>
-		<navs_header></navs_header>
+		<navs_header ref='navsheader'></navs_header>
 	</div>
 	<div class="contentbg">
 		<!--左侧菜单内容显示 Begin-->
-		<navs_left></navs_left>
+		<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left>
 		<!--左侧菜单内容显示 End-->
 
 		<!--右侧内容显示 Begin-->
@@ -19,7 +19,7 @@
 							<button type="button" class="btn btn-green" @click="openAddMgr" id="">
 	                        	<i class="icon-add"></i>添加
 	              			 </button>
-							<button type="button" class="btn btn-bule button-margin" @click="modify">
+							<button type="button" class="btn btn-blue button-margin" @click="modify">
 							    <i class="icon-edit"></i>修改
 							</button>
 							<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
@@ -48,7 +48,7 @@
 				</div>
 				<!-- 高级查询划出 Begin-->
 				<div v-show="search">
-					<el-form status-icon :model="searchList" label-width="70px">
+					<el-form :model="searchList" label-width="70px">
 						<el-row :gutter="10">
 							<el-col :span="6">
 								<el-form-item label="期间核查计划编号" prop="C_PLANNUM" label-width="130px">
@@ -72,7 +72,9 @@
 							</el-col>
 							<el-col :span="5">
 								<el-form-item label="机构" prop="DEPARTMEMT" label-width="45px">
-									<el-input v-model="searchList.DEPARTMEMT"></el-input>
+									<el-select clearable v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="请选择">
+										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+										</el-select>
 								</el-form-item>
 							</el-col>
 							<el-col :span="2">
@@ -90,7 +92,7 @@
 							</el-table-column>
 							<el-table-column label="期间核查计划编号" width="200" sortable prop="C_PLANNUM" v-if="this.checkedName.indexOf('期间核查计划编号')!=-1">
 								<template slot-scope="scope">
-									<p @click=view(scope.row.ID)>{{scope.row.C_PLANNUM}}
+									<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.C_PLANNUM}}
 									</p>
 								</template>
 							</el-table-column>
@@ -98,9 +100,9 @@
 							</el-table-column>
 							<!-- <el-table-column label="录入人" sortable prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
 							</el-table-column> -->
-							<el-table-column label="录入时间" sortable prop="ENTERDATE" :formatter="dateFormat"v-if="this.checkedName.indexOf('录入时间')!=-1">
+							<el-table-column label="录入时间" sortable prop="ENTERDATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 							</el-table-column>						
-							<el-table-column label="机构" sortable prop="DEPARTMEMT" v-if="this.checkedName.indexOf('机构')!=-1">
+							<el-table-column label="机构" sortable prop="DEPARTMEMTDesc" v-if="this.checkedName.indexOf('机构')!=-1">
 							</el-table-column>
 						</el-table>
 						<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
@@ -178,7 +180,7 @@
 					},
 					{
 						label: '机构',
-						prop: 'DEPARTMEMT'
+						prop: 'DEPARTMEMTDesc'
 					}
 				],
 				leftNavs: [//leftNavs左侧菜单数据
@@ -259,12 +261,26 @@
 					totalCount: 0
 				},
 				aaaData:[],
+				selectData: [],
 			}
 		},
 		methods: {
 			//表头居中
 			rowClass({ row, rowIndex}) {
 				return 'text-align:center'
+			},
+			//机构值
+			getCompany() {
+				var type = "2";
+				var url = this.basic_url + '/api-user/depts/treeByType';
+				this.$axios.get(url, {
+					params: {
+						type: type
+					},
+				}).then((res) => {
+					console.log(res.data);
+					this.selectData = res.data;
+				});
 			},
 			tableControle(data){
 				this.checkedName = data;
@@ -442,6 +458,11 @@
 			formatter(row, column) {
 				return row.enabled;
 			},
+			childByValue:function(childValue) {
+        		// childValue就是子组件传过来的值
+        		console.log(childValue);
+        		this.$refs.navsheader.showClick(childValue);
+      		},
 		},
 		mounted(){
              // 注册scroll事件并监听  
@@ -454,6 +475,7 @@
 
 		mounted() {
 			this.requestData();
+			this.getCompany();
 		},
 	}
 </script>

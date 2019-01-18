@@ -5,7 +5,7 @@
 				<button type="button" class="btn btn-green" onclick="openAddMgr()" id="">
                                 <i class="icon-add"></i>添加
                        </button>
-				<button type="button" class="btn btn-bule button-margin" onclick="MgrUser.openChangeUser()" id="">
+				<button type="button" class="btn btn-blue button-margin" onclick="MgrUser.openChangeUser()" id="">
 						    <i class="icon-edit"></i>修改
 						</button>
 				<button type="button" class="btn btn-red button-margin" onclick="MgrUser.delMgrUser()" id="">

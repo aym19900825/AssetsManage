@@ -34,8 +34,8 @@
 								</el-row>
 								<el-row>
 									<el-col :span="8" v-if="dept">
-										<el-form-item label="机构" prop="DEPARTMENT">
-											<el-input v-model="CATEGORY.DEPARTMENT" :disabled="edit"></el-input>
+										<el-form-item label="机构" prop="DEPTIDDesc">
+											<el-input v-model="CATEGORY.DEPTIDDesc" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -46,8 +46,8 @@
 							<el-collapse-item title="其它" name="3" v-show="views">
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="录入人" prop="ENTERBY">
-											<el-input v-model="CATEGORY.ENTERBY" :disabled="edit"></el-input>
+										<el-form-item label="录入人" prop="ENTERBYDesc">
+											<el-input v-model="CATEGORY.ENTERBYDesc" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -56,8 +56,8 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="修改人" prop="CHANGEBY">
-											<el-input v-model="CATEGORY.CHANGEBY" placeholder="当前修改人" :disabled="edit"></el-input>
+										<el-form-item label="修改人" prop="CHANGEBYDesc">
+											<el-input v-model="CATEGORY.CHANGEBYDesc" placeholder="当前修改人" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -71,8 +71,8 @@
 					</div>
 					<div class="el-dialog__footer" v-show="noviews">
 						<el-button type="primary" @click="saveAndUpdate('CATEGORY')">保存</el-button>
-						<el-button type="success" @click="saveAndSubmit('CATEGORY')" v-show="addtitle">保存并添加</el-button>
-						<el-button v-if="modify" type="success" @click="update('CATEGORY')">启用</el-button>
+						<el-button type="success" @click="saveAndSubmit('CATEGORY')" v-show="addtitle">保存并继续</el-button>
+						<!-- <el-button v-if="modify" type="success" @click="update('CATEGORY')">启用</el-button> -->
 						<el-button @click="close">取消</el-button>
 					</div>
 				</el-form>
@@ -83,6 +83,7 @@
 
 <script>
 	import Config from '../../config.js'
+	import Validators from '../../core/util/validators.js'
 	import docTable from '../common/doc.vue'
 	export default {
 		name: 'masks',
@@ -107,24 +108,24 @@
 			page: Object,
 		},
 		data() {
-			var validateNum = (rule, value, callback) => {
-				if(value != ""){
-		             if((/^[0-9a-zA-Z()]+$/).test(value) == false){
-		                 callback(new Error("请填写数字或字母（编码不填写可自动生成）"));
-		             }else{
-		                 callback();
-		             }
-		         }else{
-		             callback();
-		         }
-			};
-			var validateDeci = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('请填写产品类别名称'));
-				} else {
-					callback();
-				}
-			};
+			// var validateNum = (rule, value, callback) => {
+			// 	if(value != ""){
+		 //             if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
+		 //                 callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
+		 //             }else{
+		 //                 callback();
+		 //             }
+		 //         }else{
+		 //             callback();
+		 //         }
+			// };
+			// var validateDeci = (rule, value, callback) => {
+			// 	if(value === '') {
+			// 		callback(new Error('请填写产品类别名称'));
+			// 	} else {
+			// 		callback();
+			// 	}
+			// };
 			return {
 				docParm: {
 					'model': 'new',
@@ -154,13 +155,12 @@
 					NUM: [{
 						required: false,
 						trigger: 'change',
-						validator: validateNum,
+						validator: Validators.isCodeNum,
 					}],
-					DECRIPTION: [{
-						required: true,
-						trigger: 'blur',
-						validator: validateDeci,
-					}],
+					DECRIPTION: [
+						{required: true, message: '请填写', trigger: 'blur'},
+						{validator: Validators.isSpecificKey, trigger: 'blur'},
+					],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -176,7 +176,7 @@
 				hintshow:false,
 				statusshow1:true,
 				statusshow2:false,
-				testing_filesForm:{//文件文档数据组
+				testing_filesForm:{//文件文件数据组
 					inspectionList: []
 				},
 			};
@@ -209,10 +209,11 @@
 			},
 			getUser(opt){
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					this.CATEGORY.DEPARTMENT = res.data.deptName;
-					this.CATEGORY.ENTERBY = res.data.nickname;
+					this.CATEGORY.DEPARTMENT = '';
+					this.CATEGORY.DEPTID = res.data.deptId;
+					this.CATEGORY.ENTERBY = res.data.id;
 					var date = new Date();
-					this.CATEGORY.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					this.CATEGORY.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 					if(opt != 'new'){
 						let _obj = JSON.stringify(this.CATEGORY);
 						this.category = JSON.parse(_obj);
@@ -401,7 +402,7 @@
 					this.show = false;
 				}
 			},
-			//保存并添加
+			//保存并继续
 			saveAndSubmit(CATEGORY) {
 				this.save(CATEGORY);
 				// this.visible();
@@ -412,7 +413,7 @@
 					row.isEditing = !row.isEditing
 				}
 			},
-			addfield_doclinks() { //插入行到文件文档Table中
+			addfield_doclinks() { //插入行到文件文件Table中
 				var isEditingflag=false;
 				for(var i=0;i<this.testing_filesForm.inspectionList.length; i++){
 					if (this.testing_filesForm.inspectionList[i].isEditing==false){
@@ -484,7 +485,7 @@
 			},
 
 			deleteRow(row) {//Table-操作列中的删除行
-				this.$confirm('确定删除此文件文档吗？', '提示', {
+				this.$confirm('确定删除此文件文件吗？', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                 }).then(({ value }) => {

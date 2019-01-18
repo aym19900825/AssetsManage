@@ -2,11 +2,11 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header></navs_header>
+			<navs_header ref="navsheader"></navs_header>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单调用 Begin-->
-			<!-- <navs_left></navs_left> -->
+			<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left> 
 			<!--左侧菜单调用 End-->
 			<div class="wrapper wrapper-content wrapperall">
 				<div class="ibox-content">
@@ -16,8 +16,8 @@
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
 								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加
-                      			 </button>
-								<button type="button" class="btn btn-bule button-margin" @click="modify">
+                      			</button>
+								<button type="button" class="btn btn-blue button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改
 								</button>
 								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
@@ -26,9 +26,9 @@
 								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-inventory-line-callout"></i>导出
 								</button>
-								<button type="button" class="btn btn-primarys button-margin">
+								<!-- <button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-edit"></i>编辑
-								</button>
+								</button> -->
 								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-send"></i>发布
 								</button>
@@ -63,7 +63,7 @@
 					</div>
 					<!-- 高级查询划出 Begin-->
 				<div v-show="search">
-					<el-form status-icon :model="searchList" label-width="70px">
+					<el-form :model="searchList" label-width="70px">
 						<el-row :gutter="10">
 							<el-col :span="5">
 								<el-form-item label="编号" prop="WP_NUM">
@@ -151,7 +151,7 @@
 								</el-table-column>
 								<el-table-column label="编号" sortable width="100px" prop="WP_NUM" v-if="this.checkedName.indexOf('编号')!=-1">
 									<template slot-scope="scope">
-										<p @click=view(scope.row.ID)>{{scope.row.WP_NUM}}
+										<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.WP_NUM}}
 										</p>
 									</template>
 								</el-table-column>
@@ -191,14 +191,14 @@
 					</div>
 				</div>
 			</div>
-			<annualmask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></annualmask>
+			<annualmask ref="child" @request="requestData" v-bind:page=page></annualmask>
 		</div>
 	</div>
 </template>
 <script>
 	import Config from '../config.js'
 	import vheader from './common/vheader.vue'
-	import navs_left from './common/left_navs/nav_left2.vue'
+	import navs_left from './common/left_navs/nav_left5.vue'
 	import navs_header from './common/nav_tabs.vue'
 	import annualmask from './common/annual_mask.vue'
 	import assetsTree from './plugin/vue-tree/tree.vue'
@@ -280,10 +280,6 @@
 				companyId: '',
 				deptId: '',
 				selUser: [],
-				'启用': true,
-				'冻结': false,
-				'男': true,
-				'女': false,
 				userList: [],
 				search: false,
 				show: false,
@@ -300,12 +296,14 @@
 					LEADER_STATUS:''
 				},
 				//tree
-				resourceData: [], //数组，我这里是通过接口获取数据，
+				resourceData: [
+					{label: '监督审查'},
+					{label: '质量抽查'}
+				], //数组，我这里是通过接口获取数据，
 				resourceDialogisShow: false,
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
 				resourceProps: {
-					children: "subDepts",
-					label: "fullname"
+					label: "label"
 				},
 				treeData: [],
 				userData:[],
@@ -318,9 +316,9 @@
 		},
 	methods: {
 		//表头居中
-			rowClass({ row, rowIndex}) {
-			    return 'text-align:center'
-			},
+		rowClass({ row, rowIndex}) {
+		    return 'text-align:center'
+		},
 		renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
 			return(<span><i class={data.iconClass}></i><span>{node.label}</span></span>);
 		},
@@ -462,25 +460,34 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
+					console.log(res.data);
+					for(var i=0;i<res.data.data.length;i++){
+						if(res.data.data[i].TYPE  == '1'){
+							res.data.data[i].TYPE  = '监督审查';
+						}else if(res.data.data[i].TYPE  == '0'){
+							res.data.data[i].TYPE  = '质量抽查';
+						}
+					}
 					this.userList = res.data.data;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
-				this.userList.forEach((item, index) => {
-					var id = item.id;
-					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
-						this.userList.role = res.data.roles[0].name;
-					}).catch((wrong) => {})
-				})
+
+				// this.userList.forEach((item, index) => {
+				// 	var id = item.id;
+				// 	this.$axios.get('/users/' + id + '/roles', data).then((res) => {
+				// 		this.userList.role = res.data.roles[0].name;
+				// 	}).catch((wrong) => {})
+				// })
 			},
 			//机构树
-			getKey() {
-				let that = this;
-				var url = this.basic_url + '/api-user/depts/tree';
-				this.$axios.get(url, {}).then((res) => {
-					this.resourceData = res.data;
-					this.treeData = this.transformTree(this.resourceData);
-				});
-			},
+			// getKey() {
+			// 	let that = this;
+			// 	var url = this.basic_url + '/api-user/depts/tree';
+			// 	this.$axios.get(url, {}).then((res) => {
+			// 		this.resourceData = res.data;
+			// 		this.treeData = this.transformTree(this.resourceData);
+			// 	});
+			// },
 			transformTree(data){
 				for(var i=0; i<data.length; i++){
 					data[i].name = data[i].fullname;
@@ -506,12 +513,12 @@
 				this.requestData();
 			},
 			handleNodeClick(data) {
-				if(data.type == '1') {
-					this.companyId = data.id;
-					this.deptId = '';
-				} else {
-					this.deptId = data.id;
-					this.companyId = '';
+				console.log(data);
+				console.log(data.label);
+				if(data.label == '监督审查'){
+					this.searchList.TYPE =  '1';
+				}else if(data.label == '质量抽查'){
+					this.searchList.TYPE =  '0';
 				}
 				this.requestData();
 			},
@@ -535,13 +542,14 @@
 					$(".icon-doubleok").addClass("icon-double-angle-left");
 				}
 				this.ismin = !this.ismin;
-			}
+			},
+			childByValue:function(childValue) {
+        		// childValue就是子组件传过来的值
+        		this.$refs.navsheader.showClick(childValue);
+      		},
 		},
 		mounted() {
-			this.requestData();
-			this.getKey();
-
-			
+			this.requestData();	
 		},
 	}
 </script>

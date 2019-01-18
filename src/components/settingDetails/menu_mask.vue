@@ -16,7 +16,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="menu"  :rules="rules" ref="menu" label-width="100px" class="demo-user">
+				<el-form :model="menu" :rules="rules" ref="menu" label-width="100px" class="demo-user">
 					<div class="accordion">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基础信息" name="1">
@@ -119,6 +119,7 @@
 
 <script>
 	import Config from '../../config.js'
+	import Validators from '../../core/util/validators.js'
 	import deliver from '../../assets/js/deliver.js'
 	import all_icons from '../common/all_icons.vue'//弹出框
 	export default {
@@ -174,8 +175,16 @@
 				modifytitle:false,
 				fullHeight: document.documentElement.clientHeight - 200 +'px',//获取浏览器高度
 				rules: {
-					name: [{required: true,trigger: 'change',validator: validatePass}],
-					soft: [{required: true,trigger: 'change',validator: validatePass}],
+					// pName: [{required: true,trigger: 'blur',validator: validatePass}],
+					name: [
+						{required: true,message: '必填',trigger: 'blur'},
+						{validator: Validators.isNickname, trigger: 'blur'}
+					],
+					url: [
+						{required: true,message: '必填',trigger: 'blur'},
+						{validator: Validators.isSpecificKey, trigger: 'blur'}
+					],
+					sort: [{required: false,trigger: 'blur',validator: Validators.isInteger}],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -258,6 +267,10 @@
 
 			//保存users/saveOrUpdate
 			submitForm() {
+				console.log(this.menu.parentId);
+				if(this.menu.parentId == ''){//上级为空给后台传-1表示为一级菜单
+					this.menu.parentId = '-1';
+				}
 				this.$refs.menu.validate((valid) => {
 					if(valid) {
 						this.menu.hidden=this.menu.hidden?1:0

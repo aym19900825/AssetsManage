@@ -18,7 +18,7 @@
 								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加
                       			 </button>
-								<button type="button" class="btn btn-bule button-margin" @click="modify">
+								<button type="button" class="btn btn-blue button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改
 								</button>
 								<button type="button" class="btn btn-red button-margin" @click="delinfo">
@@ -32,6 +32,9 @@
 								</button>
 								<button type="button" class="btn btn-primarys button-margin">
 							    	<i class="icon-print"></i>打印
+								</button>
+								<button type="button" class="btn btn-primarys button-margin">
+							    	<i class="icon-alert-triangle"></i>中止
 								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 						    		<i class="icon-search"></i>高级查询
@@ -61,7 +64,7 @@
 					</div>
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
-						<el-form status-icon :model="searchList">
+						<el-form :model="searchList">
 							<el-row :gutter="5">
 								<el-col :span="6">
 									<el-form-item label="委托单位名称" prop="V_NAME"  label-width="100px">
@@ -136,7 +139,7 @@
 								</el-table-column>
 								<el-table-column label="检验委托书编号" sortable width="130px" prop="PROXYNUM" v-if="this.checkedName.indexOf('检验委托书编号')!=-1">
 									<template slot-scope="scope">
-										<p @click=view(scope.row.ID)>{{scope.row.PROXYNUM}}
+										<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.PROXYNUM}}
 										</p>
 									</template>
 								</el-table-column>
@@ -308,10 +311,6 @@
 				companyId: '',
 				deptId: '',
 				selUser: [],
-				'启用': true,
-				'冻结': false,
-				'男': true,
-				'女': false,
 				inspectList: [],
 				search: false,
 				show: false,
@@ -319,6 +318,7 @@
 				up: false,
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: {
+					V_NAME:'',
 					ITEM_NAME: '',
 					REPORT_NUM: '',
 					PROXYNUM: '',
@@ -509,6 +509,7 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
+					V_NAME:this.searchList.V_NAME,
 					ITEM_NAME: this.searchList.ITEM_NAME,
 					REPORT_NUM: this.searchList.REPORT_NUM,
 					PROXYNUM: this.searchList.PROXYNUM,

@@ -16,8 +16,14 @@
 				</div>
 			</div>
 			<div class="mask_content">
-
 				<el-form :model="dataInfo" :label-position="labelPositions" :rules="rules" ref="dataInfo" status-icon inline-message  class="demo-ruleForm">
+					<div class="text-center" v-show="viewtitle">
+						<el-button class="start" type="success" round plain size="mini" @click="startup"><i class="icon-start"></i> 启动流程</el-button>
+						<el-button class="approval" type="warning" round plain size="mini" @click="approvals"><i class="icon-edit-3"></i> 审批</el-button>
+						<el-button type="primary" round plain size="mini" @click="flowmap"><i class="icon-git-pull-request"></i> 流程地图</el-button>
+						<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
+						<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
+					</div>
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="委托单位" name="1">
@@ -49,7 +55,6 @@
 											<el-form-item label="名称" prop="V_NAME" label-width="110px">
 												<el-input v-model="dataInfo.V_NAME" :disabled="edit" width="100%">
 													<el-button slot="append" icon="el-icon-search" @click="getCustomer(1)">
-														   <el-button slot="append" icon="el-icon-search"></el-button>
 													</el-button>
 												</el-input>
 											</el-form-item>
@@ -69,6 +74,7 @@
 										<el-col :span="8">
 											<el-form-item label="姓名" prop="V_PERSON" label-width="110px">
 												<el-input v-model="dataInfo.V_PERSON" :disabled="edit">
+													 <el-button slot="append" icon="el-icon-search" @click="addname"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -94,18 +100,18 @@
 							<!--<el-collapse-item title="生产单位" name="2">
 								<el-row >
 									<el-col :span="8" style="display:none;">
-											<el-form-item label="生产单位编号" prop="PRODUCT_UNIT">
-												<el-input v-model="dataInfo.PRODUCT_UNIT"></el-input>
-											</el-form-item>
+										<el-form-item label="生产单位编号" prop="PRODUCT_UNIT">
+											<el-input v-model="dataInfo.PRODUCT_UNIT"></el-input>
+										</el-form-item>
 									</el-col>
-									
 								</el-row>
 							</el-collapse-item>-->
 							<el-collapse-item title="样品" name="2" >
 									<el-row >
 										<el-col :span="8">
 											<el-form-item label="名称" prop="ITEM_NAME" label-width="110px">
-												<el-input v-model="dataInfo.ITEM_NAME" :disabled="noedit">
+												<el-input v-model="dataInfo.ITEM_NAME" :disabled="true">
+													<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="addsample"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -247,9 +253,7 @@
 													</el-button>
 												</template>
 											</el-table-column>
-
 										</el-table>
-								    	
 								    </el-tab-pane>
 								    <el-tab-pane label="检验项目与要求" name="second">
 								    	<div class="table-func table-funcb">
@@ -375,9 +379,9 @@
 
 											<el-table-column prop="P_REMARKS" label="检验检测项目内容" sortable width="280px">
 												<template slot-scope="scope">
-														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.P_REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入">
-													</el-input
+													<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.P_REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入">
+														</el-input>
 													<span v-else="v-else">{{scope.row.P_REMARKS}}</span>
 													</el-form-item>
 												</template>
@@ -411,8 +415,8 @@
 							
 											<el-table-column prop="CHECKCOST" label="检验检测费用" sortable width="120px">
 												<template slot-scope="scope">
-													<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.Q_TYPE'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input>
+													<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.CHECKCOST'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+													<el-input v-if="scope.row.isEditing" id="testprice" @blur="testPrice(scope.row)" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input>
 													<span v-else="v-else">{{scope.row.CHECKCOST}}</span>
 													</el-form-item>
 												</template>
@@ -439,8 +443,6 @@
 								</el-tabs>
 							</div>
 							<el-collapse-item name="7">
-								
-									
 										<el-col :span="8">
 											<el-form-item label="检验报告编号" prop="REPORT_NUM" label-width="110px">
 												<el-input v-model="dataInfo.REPORT_NUM" :disabled="noedit" ></el-input>
@@ -583,8 +585,8 @@
 					</div>
 					<div class="el-dialog__footer" v-show="noviews">
 						<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
-						<el-button type="success"  v-show="addtitle" @click="saveAndSubmit('dataInfo')">保存并添加</el-button>
-						<el-button v-show="modifytitle" type="primary"@click="modifyversion('dataInfo')">修订</el-button>
+						<el-button type="success"  v-show="addtitle" @click="saveAndSubmit('dataInfo')">保存并继续</el-button>
+						<el-button v-show="modifytitle" type="btn btn-primarys" @click="modifyversion('dataInfo')">修订</el-button>
 						<el-button @click='close'>取消</el-button>
 					</div>
 				</el-form>
@@ -613,14 +615,97 @@
     			<el-button type="primary" @click="dailogconfirm()">确 定</el-button>
   			</span>
 		</el-dialog>
-
+		<!-- 样品名称 Begin -->
+		<el-dialog title="样品名称" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
+			<el-table :data="samplesList" :header-cell-style="rowClass" border stripe height="400px" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table-column type="selection" width="55" fixed align="center">
+				</el-table-column>
+				<el-table-column label="样品编号" sortable width="200px" prop="ITEMNUM">
+				</el-table-column>
+				<el-table-column label="样品名称" sortable width="200px" prop="DESCRIPTION">
+				</el-table-column>
+				<el-table-column label="样品类别" sortable width="200px" prop="TYPE">
+				</el-table-column>
+				<el-table-column label="委托单位" sortable width="200px" prop="V_NAME">
+				</el-table-column>
+				<el-table-column label="生产单位" sortable width="200px" prop="P_NAME">
+				</el-table-column>
+				<el-table-column label="型号" width="100px" prop="MODEL" sortable>
+				</el-table-column>
+				<el-table-column label="数量" width="100px" prop="QUATITY" sortable>
+				</el-table-column>
+				<el-table-column label="收样人" sortable width="140px" prop="ACCEPT_PERSON">
+				</el-table-column>
+				<el-table-column label="收样日期" sortable width="140px" :formatter="dateFormat" prop="ACCEPT_DATE">
+				</el-table-column>
+				<el-table-column label="接样人" sortable width="140px" prop="RECIP_PERSON">
+				</el-table-column>
+				<el-table-column label="接样日期" sortable width="140px" :formatter="dateFormat" prop="RECIP_DATE">
+				</el-table-column>
+				<el-table-column label="状态" sortable width="100px" prop="STATE">
+				</el-table-column>
+				<!--<el-table-column label="信息状态" sortable width="140px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
+				</el-table-column>-->
+			</el-table>
+			
+			<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+			</el-pagination>
+			<span slot="footer" class="dialog-footer">
+		       <el-button @click="dialogVisible2 = false" style="margin-left: 37%;">取 消</el-button>
+		       <el-button type="primary" @click="addsamplename">确 定</el-button>
+		    </span>
+		</el-dialog>
+		<!-- 样品名称 End -->
+		<!-- 客户联系人 Begin -->
+		<el-dialog title="客户联系人" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
+			<el-table :header-cell-style="rowClass" :data="CUSTOMER_PERSONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @selection-change="SelChange" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER.CUSTOMER_PERSONList', order: 'descending'}">
+				<el-table-column type="selection" width="55" fixed align="center">
+				</el-table-column>
+				<!-- <el-table-column label="序号" sortable width="120px" prop="STEP">
+				</el-table-column> -->
+				<el-table-column label="联系人" sortable width="150px" prop="PERSON">
+				</el-table-column>
+				<el-table-column prop="PHONE" label="联系电话" sortable width="150px">
+				</el-table-column>
+				<el-table-column prop="FAX" label="传真" sortable width="150px">
+				</el-table-column>
+				<el-table-column prop="EMAIL" label="邮箱" sortable>
+				</el-table-column>
+			</el-table>
+			
+			<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+			</el-pagination>
+			<span slot="footer" class="dialog-footer">
+		       <el-button @click="dialogVisible3 = false" style="margin-left: 37%;">取 消</el-button>
+		       <el-button type="primary" @click="addcusname">确 定</el-button>
+		    </span>
+		</el-dialog>
+		<!-- 客户联系人 End -->
+	<!--审批页面-->
+		<approvalmask :approvingData="approvingData" ref="approvalChild" ></approvalmask>
+		<!--流程历史-->
+		<flowhistorymask :approvingData="approvingData"  ref="flowhistoryChild" ></flowhistorymask>
+		<!--流程地图-->
+		<flowmapmask :approvingData="approvingData" ref="flowmapChild" ></flowmapmask>
+		<!--当前责任人-->
+		<vewPoplemask :approvingData="approvingData"  ref="vewPopleChild" ></vewPoplemask>
 	</div>
 </template>
 
 <script>
 	import Config from '../../config.js';
+	import approvalmask from '../workflow/approving.vue'
+	import flowhistorymask from '../workflow/flowhistory.vue'
+	import flowmapmask from '../workflow/flowmap.vue'
+	import vewPoplemask from '../workflow/vewPople.vue'
 	export default {
 		name: 'masks',
+		components: {
+			 approvalmask,
+			 flowhistorymask,
+			 flowmapmask,
+			 vewPoplemask
+		},
 		data() {
 			var validate = (rule, value, callback) => {
 				if(value === '') {
@@ -631,6 +716,9 @@
 			};
 
 			return {
+				approvingData:{},
+				loadSign:true,//加载
+				commentArr:{},
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				dataInfo: {
@@ -726,19 +814,64 @@
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
-				initcost:'',
-				initsta:'',
-				initactual:''
+				// initcost:'',
+				// initsta:'',
+				// initactual:'',
+				dialogVisible2:false,
+				dialogVisible3:false,
+				samplesList:[],
+				customid:1,
+				dataid:2,//修改和查看带过的id
+				inspectPro:'inspectPro',//appname
+				CUSTOMER_PERSONList:[]
 			};
 		},
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    return 'text-align:center'
+			},	
+			toNum(str) {
+				return str.replace(/\,|\￥/g, "");
+			},
+			//金额两位小数点千位分隔符，四舍五入
+			testPrice(item){
+				var money = document.getElementById("testprice").value;
+				if(money == ''){
+					return;
+				}else{
+					var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
+					num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
+					item.CHECKCOST = num.join(".");
+				}
+			},	
+			dateFormat(row, column) {
+				var date = row[column.property];
+				if(date == undefined) {
+					return "";
+				}
+				return this.$moment(date).format("YYYY-MM-DD");
+			},
+			loadMore () {
+			   if (this.loadSign) {
+			     this.loadSign = false
+			     this.page.currentPage++
+			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+			       return
+			     }
+			     setTimeout(() => {
+			       this.loadSign = true
+			     }, 1000)
+			     this.requestData()
+			   }
+			 },	
 			toNum(str) {
 				return str.replace(/\,|\￥/g, "");
 			},
 			//金额两位小数点千位分隔符，四舍五入
 			toPrice(){
 				var money = document.getElementById("cost").value;
-				this.initcost = money;
+				// this.initcost = money;
 				var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
 				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
 				// this.dataInfo.CHECTCOST="￥" + num.join(".");
@@ -746,7 +879,7 @@
 			},
 			staPrice(){
 				var money = document.getElementById("stacost").value;
-				this.initsta = money;
+				// this.initsta = money;
 				var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
 				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
 				// this.dataInfo.CHECTCOST="￥" + num.join(".");
@@ -754,7 +887,7 @@
 			},
 			actualPrice(){
 				var money = document.getElementById("actualcost").value;
-				this.initactual = money;
+				// this.initactual = money;
 				var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
 				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
 				// this.dataInfo.CHECTCOST="￥" + num.join(".");
@@ -829,7 +962,15 @@
 				};
 				this.dataInfo.CHECK_PROXY_CONTRACTList.push(obj);
 			},
-
+			addsample(){
+				this.$emit('request');
+				this.dialogVisible2 = true;
+			},
+			addsamplename(){
+				this.dialogVisible2 = false;
+				this.dataInfo.ITEM_NAME = this.selval[0].DESCRIPTION;
+				this.$emit('request');
+			},
 			//刪除新建行
 			deleteRow(index,rows) {//Table-操作列中的删除行
 				rows.splice(index,1);
@@ -873,7 +1014,6 @@
 				
 				var url = this.basic_url +'/api-apps/app/inspectPro/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					this.dataInfo = res.data;
 					this.show = true;
 					//深拷贝数据
@@ -952,6 +1092,8 @@
 			},
 			//这是查看
 			view(dataid) {
+				this.dataid=dataid;				
+				this.modifytitle = false;
 				this.addtitle = false;
 				this.viewtitle = true;
 				this.views = true; //
@@ -967,6 +1109,17 @@
 						message: '网络错误，请重试',
 						type: 'error'
 					});
+				});
+				//判断启动流程和审批的按钮是否显示
+				var url = this.basic_url + '/api-apps/app/inspectPro/flow/isStart/'+dataid;
+				this.$axios.get(url, {}).then((res) => {
+					if(res.data.resp_code==1){
+						$(".approval").hide();
+						$(".start").show();
+					}else{
+						$(".approval").show();
+						$(".start").hide();
+					}
 				});
 			},
 			//点击关闭按钮
@@ -1003,11 +1156,10 @@
 			},
 			// 保存users/saveOrUpdate
 			save(dataInfo) {
-				console.log(this.dataInfo);
 				this.$refs['dataInfo'].validate((valid) => {
-					this.dataInfo.CHECK_COST = this.initcost;
-					this.dataInfo.CONTRACTCOST = this.initsta;
-					this.dataInfo.ACTUALCOST = this.initactual;
+					// this.dataInfo.CHECK_COST = this.initcost;
+					// this.dataInfo.CONTRACTCOST = this.initsta;
+					// this.dataInfo.ACTUALCOST = this.initactual;
 			        if (valid) {
 							if(this.dataInfo.INSPECT_PROXY_BASISList.length<=0&&this.dataInfo.INSPECT_PROXY_PROJECList.length<=0&&this.dataInfo.CHECK_PROXY_CONTRACTList.length<=0){
 			        		this.$message({
@@ -1089,6 +1241,10 @@
 			dailogconfirm(type) { //小弹出框确认按钮事件
 				this.dialogVisible = false;
 				if(this.type == '1') {
+					console.log(this.selval[0].ID);
+					
+				this.customid = this.selval[0].ID;
+				console.log(this.customid);
 				this.dataInfo.VENDOR=this.selval[0].CODE;
 				this.dataInfo.V_NAME = this.selval[0].NAME;
 				this.dataInfo.V_ADDRESS = this.selval[0].CONTACT_ADDRESS;
@@ -1101,11 +1257,133 @@
 					this.dataInfo.P_NAME = this.selval[0].NAME;
 				}
 			},
-
+			addname(){
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				}
+				var url = this.basic_url + '/api-apps/app/customer/CUSTOMER/'+ this.customid;
+				this.$axios.get(url, {
+					params: data
+				}).then((res) => {
+					this.CUSTOMER_PERSONList = res.data.CUSTOMER_PERSONList;
+				});
+				this.dialogVisible3 = true;
+			},
+			addcusname(){
+				this.dataInfo.V_PERSON = this.selval[0].PERSON;
+				this.dataInfo.V_PHONE = this.selval[0].PHONE;
+				this.dialogVisible3 = false;
+			},
 			SelChange(val) {
 				this.selval = val;
 			},
-		}
+			//启动流程
+			startup(){
+				console.log(12345);
+				console.log(this.dataid);
+				var url = this.basic_url + '/api-apps/app/inspectPro/flow/'+this.dataid;
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+					if(res.data.resp_code == 1) {
+							this.$message({
+								message:res.data.resp_msg,
+								type: 'warning'
+							});
+				    }else{
+				    	this.$message({
+								message:res.data.resp_msg,
+								type: 'success'
+							});
+							this.requestData();
+							$(".approval").show();
+							$(".start").hide();
+				    }
+				});
+			},
+			//审批流程
+			approvals(){
+				this.approvingData.id =this.dataid;
+				this.approvingData.app=this.inspectPro;
+				 var url = this.basic_url + '/api-apps/app/'+this.inspectPro+'/flow/isEnd/'+this.dataid;
+		    		this.$axios.get(url, {}).then((res) => {
+		    			if(res.data.resp_code == 0) {
+							this.$message({
+								message:res.data.resp_msg,
+								type: 'warning'
+							});
+		    			}else{
+		    				var url = this.basic_url + '/api-apps/app/'+this.inspectPro+'/flow/isExecute/'+this.dataid;
+		    				this.$axios.get(url, {}).then((res) => {
+				    			if(res.data.resp_code == 1) {
+										this.$message({
+											message:res.data.resp_msg,
+											type: 'warning'
+										});
+								}else{
+									this.$refs.approvalChild.visible();
+								}
+		    		});
+		    		}
+				});
+			},
+			//流程历史
+			flowhistory(){
+				this.approvingData.id =this.dataid;
+				this.approvingData.app=this.inspectPro;
+//				this.$refs.flowhistoryChild.open();
+				this.$refs.flowhistoryChild.getdata(this.dataid);
+			},
+			//流程地图
+			flowmap(){
+				this.approvingData.id =this.dataid;
+				this.approvingData.app=this.inspectPro;
+				this.$refs.flowmapChild.getimage();
+			},
+			//当前责任人
+			viewpepole(){
+				this.approvingData.id =this.dataid;
+				this.approvingData.app=this.inspectPro;
+				this.$refs.vewPopleChild.getvewPople(this.dataid);
+			},
+			requestData(index) {
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				}
+				var url = this.basic_url + '/api-apps/app/item';
+				this.$axios.get(url, {
+					params: data
+				}).then((res) => {
+					
+					this.page.totalCount = res.data.count;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
+					}
+					this.commentArr[this.page.currentPage] = res.data.data
+					let newarr = []
+					for(var i = 1; i <= totalPage; i++) {
+
+						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+
+							for(var j = 0; j < this.commentArr[i].length; j++) {
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					this.samplesList = newarr;
+				}).catch((wrong) => {})
+				
+			},
+		},
+		mounted() {
+			this.requestData();
+			
+		},
 	}
 </script>
 

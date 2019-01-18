@@ -17,7 +17,7 @@
                     <i class="el-icon-arrow-down icon-arrow2-down"></i>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item class="divider"><span @click="closeSel">定位当前选项卡</span></el-dropdown-item>
+                    <el-dropdown-item class="divider"><span @click="closeSel">关闭当前选项卡</span></el-dropdown-item>
                     <el-dropdown-item class="J_tabCloseAll border-lineb"><span @click="closeAll">关闭全部选项卡</span></el-dropdown-item>
                     <el-dropdown-item class="J_tabCloseOther"><span @click="closeOther">关闭其他选项卡</span></el-dropdown-item>
                   </el-dropdown-menu>
@@ -33,7 +33,7 @@
                         <i class="el-icon-arrow-down icon-arrow2-down"></i>
                       </span>
                       <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item class="divider"><span @click="closeSel">定位当前选项卡</span></el-dropdown-item>
+                        <el-dropdown-item class="divider"><span @click="closeSel">关闭当前选项卡</span></el-dropdown-item>
                         <el-dropdown-item class="J_tabCloseAll border-lineb"><span @click="closeAll">关闭全部选项卡</span></el-dropdown-item>
                         <el-dropdown-item class="J_tabCloseOther"><span @click="closeOther">关闭其他选项卡</span></el-dropdown-item>
                       </el-dropdown-menu>
@@ -92,15 +92,15 @@ export default {
             var tabs = _this.tabs;
             if(tabs.length == 1){
                 //只有一个选项卡
-                this.$router.push({path: '/index'});
-                sessionStorage.setItem('clickedNav',JSON.stringify({arr:[{
-                    name: '首页',
-                    url: '/index'
-                }]}));
-                sessionStorage.setItem('selectedNav',JSON.stringify({
-                    css: 'icon-user',
-                    name: '首页',
-                    url: '/index'}));
+                _this.$router.push({path: '/index'});
+                _this.$store.dispatch('setClickedNavAct',[{
+                css: 'icon-user',
+                name: '首页',
+                url: '/index'}]);
+            	_this.$store.dispatch('setSelectedNavAct',{
+                css: 'icon-user',
+                name: '首页',
+                url: '/index'});
             }else{
                 var selectedIndex = 0;
                 _this.tabs = _this.tabs.filter(function(item,index){
@@ -128,30 +128,38 @@ export default {
             this.closeTab( this.selectedTab);
         },
         closeAll(){
-            sessionStorage.setItem('clickedNav',JSON.stringify({arr:[{
-                name: '首页',
-                url: '/index'
-            }]}));
-            sessionStorage.setItem('selectedNav',JSON.stringify({
+            _this.$store.dispatch('setClickedNavAct',[{
                 css: 'icon-user',
                 name: '首页',
-                url: '/index'}));
+                url: '/index'}]);
+            _this.$store.dispatch('setSelectedNavAct',{
+                css: 'icon-user',
+                name: '首页',
+                url: '/index'});
             this.$router.push({path: '/index'});
         },
         closeOther(){
             this.tabs = [this.selectedTab];
-            sessionStorage.setItem('clickedNav',JSON.stringify({arr:this.tabs}));
+            this.$store.dispatch('setClickedNavAct',this.tabs);
+            console.log(this.$store.state.clickedNavs);
+//          sessionStorage.setItem('clickedNav',JSON.stringify({arr:this.tabs}));
         },
         showSelected(item){
-        	console.log(item);
         	this.selectedTab = item;
-//        	this.$store.dispatch('setSelectedNavAct',item);
-          	this.$store.dispatch('setNavIdAct',item.parentId);//点击时重新给meunid赋值
-            this.$router.push({path: item.url});
+        	this.$store.dispatch('setSelectedNavAct',item);
+			console.log(item);
+			this.$router.push({path: item.url});
+			if(item.parentId!=-1){
+				this.$store.dispatch('setMenuIdAct',item.parentId);//点击时重新给meunid赋值	
+			}else{
+				//如果只有一级菜单
+				this.$store.dispatch('setMenuIdAct','');
+			}
+           
         },
         showClick(items){
-	        this.tabs = this.$clickedNav;
-	        if(this.$route.path!=this.$selectedNav.url){
+	        this.tabs = this.$store.state.clickedNavs;
+	        if(this.$route.path!=this.$store.state.clickedNavs.url){
 				for(var i = 0; i < this.tabs.length; i++){
 					if(this.$route.path == this.tabs[i].url){
 						this.selectedTab = this.tabs[i];
@@ -160,11 +168,13 @@ export default {
 			}else{
 				this.selectedTab = items;
 			}
-	        console.log(this.selectedTab);
         }
     },
     mounted(){
-      	this.showClick(this.$selectedNav);
+      	this.showClick(this.$store.state.setClickedNav);
+      	console.log(this.$store.state.setClickedNav);
+//   	this.showSelected(this.$store.state.setSelectedNav);
+
     },
 }
 </script>
@@ -269,6 +279,7 @@ export default {
 
 .page-tabs span .icon-close2 {
     color: #97A3B4;
+    margin-left: 2px;
 }
 .page-tabs span.active .icon-close2 {
     color: #E97A9B;

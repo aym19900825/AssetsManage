@@ -2,7 +2,7 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header></navs_header>
+			<navs_header  ref="navsheader"></navs_header>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
@@ -19,7 +19,7 @@
 								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
 		                        	<i class="icon-add"></i>添加
 		              			 </button>
-								<button type="button" class="btn btn-bule button-margin" @click="modify">
+								<button type="button" class="btn btn-blue button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改
 								</button>
 								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
@@ -50,7 +50,7 @@
 
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
-						<el-form status-icon :model="searchList" label-width="45px">
+						<el-form :model="searchList" label-width="45px">
 							<el-row>
 								<el-col :span="5">
 									<el-form-item label="编码" prop="M_NUM">
@@ -85,8 +85,8 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="6">
-									<el-form-item label="机构" prop="DEPARTMENT" label-width="90px">
-										<el-select clearable v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="请选择">
+									<el-form-item label="机构" prop="DEPTID" label-width="90px">
+										<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
 										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 										</el-select>
 									</el-form-item>
@@ -113,7 +113,7 @@
 								</el-table-column>
 								<el-table-column label="编码" width="170" sortable prop="M_NUM" v-if="this.checkedName.indexOf('编码')!=-1">
 									<template slot-scope="scope">
-										<p @click=view(scope.row)>{{scope.row.M_NUM}}
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.M_NUM}}
 										</p>
 									</template>
 								</el-table-column>
@@ -127,7 +127,7 @@
 								</el-table-column>-->
 								<el-table-column label="版本" width="70" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1" align="right">
 								</el-table-column>
-								<el-table-column label="机构" sortable prop="DEPARTMENTDesc" v-if="this.checkedName.indexOf('机构')!=-1">
+								<el-table-column label="机构" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
 								</el-table-column>
 								<!-- <el-table-column label="录入人" width="120" prop="ENTERBY" sortable v-if="this.checkedName.indexOf('录入人')!=-1">
 								</el-table-column> -->
@@ -208,17 +208,17 @@
 						label: '类别',
 						prop: 'M_TYPE'
 					},
-					{
-						label: '信息状态',
-						prop: 'STATUS'
-					},
+					// {
+					// 	label: '信息状态',
+					// 	prop: 'STATUS'
+					// },
 					{
 						label: '版本',
 						prop: 'VERSION'
 					},
 					{
 						label: '机构',
-						prop: 'DEPARTMENT'
+						prop: 'DEPTIDDesc'
 					},
 					// {
 					// 	label: '录入人',
@@ -255,7 +255,8 @@
 				searchList: { //点击高级搜索后显示的内容
 					nickname: '',
 					enabled: '',
-					createTime: ''
+					createTime: '',
+					DEPTID:''
 				},
 				page: { //分页显示
 					currentPage: 1,

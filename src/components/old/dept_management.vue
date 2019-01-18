@@ -14,7 +14,7 @@
 								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加
                        			</button>
-								<button type="button" class="btn btn-bule button-margin" @click="modify" id="">
+								<button type="button" class="btn btn-blue button-margin" @click="modify" id="">
 						    		<i class="icon-edit"></i>修改
 								</button>
 								<button type="button" class="btn btn-red button-margin" id="" @click="deluserinfo">
@@ -47,7 +47,7 @@
 					</div>
 					<!-- 高级查询划出 -->
 					<div v-show="search">
-						<el-form status-icon :model="searchDept" label-width="70px">
+						<el-form :model="searchDept" label-width="70px">
 							<el-row :gutter="10">
 								<el-col :span="5">
 									<el-form-item label="机构名称">

@@ -14,7 +14,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="dataInfo"  :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
+				<el-form :model="dataInfo" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
 					<div class="accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="配置关系" name="2">
@@ -127,6 +127,7 @@
 
 <script>
 	import Config from '../../config.js'
+	import Validators from '../../core/util/validators.js'
 	export default {
 		name: 'masks',
 		data() {
@@ -193,11 +194,7 @@
 					leadlength: ''
 				}],
 				rules: {
-					companyName: [{
-						required: true,
-						//trigger: 'change',
-						// validator: validatePass1,
-					}],
+					// companyName: [{ required: true, trigger: 'change', validator: validatePass1,}],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，

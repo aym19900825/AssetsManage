@@ -61,8 +61,8 @@
 								</el-row>
 								<el-row>
 									<el-col :span="8" v-if="dept">
-										<el-form-item label="机构" prop="DEPARTMENT">
-											<el-input v-model="PRODUCT.DEPARTMENT" :disabled="true"></el-input>
+										<el-form-item label="机构" prop="DEPTIDDesc">
+											<el-input v-model="PRODUCT.DEPTIDDesc" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -70,8 +70,8 @@
 							<el-collapse-item title="其它" name="2"  v-show="views">
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="录入人" prop="ENTERBY">
-											<el-input v-model="PRODUCT.ENTERBY" :disabled="edit"></el-input>
+										<el-form-item label="录入人" prop="ENTERBYDesc">
+											<el-input v-model="PRODUCT.ENTERBYDesc" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -80,8 +80,8 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="修改人" prop="CHANGEBY">
-											<el-input v-model="PRODUCT.CHANGEBY" placeholder="当前修改人" :disabled="edit"></el-input>
+										<el-form-item label="修改人" prop="CHANGEBYDesc">
+											<el-input v-model="PRODUCT.CHANGEBYDesc" placeholder="当前修改人" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -95,9 +95,9 @@
 					</div>
 					<div class="el-dialog__footer" v-show="noviews">
 						<el-button type="primary" @click="saveAndUpdate('PRODUCT')">保存</el-button>
-						<el-button type="success" @click="saveAndSubmit('PRODUCT')" v-show="addtitle">保存并添加</el-button>
+						<el-button type="success" @click="saveAndSubmit('PRODUCT')" v-show="addtitle">保存并继续</el-button>
 						<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('PRODUCT')">修订</el-button>
-						<el-button v-if="modify" type="success" @click="update('PRODUCT')">启用</el-button>
+						<!-- <el-button v-if="modify" type="success" @click="update('PRODUCT')">启用</el-button> -->
 						<el-button @click='close'>取消</el-button>
 					</div>
 				</el-form>
@@ -132,8 +132,8 @@
 		data() {
 			var validateNum = (rule, value, callback) => {
 				if(value != ""){
-		             if((/^[0-9a-zA-Z()]+$/).test(value) == false){
-		                 callback(new Error("请填写数字或字母（编码不填写可自动生成）"));
+		             if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
+		                 callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
 		             }else{
 		                 callback();
 		             }
@@ -145,7 +145,11 @@
 				if(value === '') {
 					callback(new Error('请填写产品名称'));
 				} else {
-					callback();
+					if((/^[!@#$%^&*";',.~！@#￥%……&*《》？，。?、|]+$/).test(value) == true){
+		                 callback(new Error("请规范填写名称"));
+		            }else{
+		                callback();
+		            }
 				}
 			};
 			return {
@@ -251,10 +255,14 @@
 				this.statusshow2 = false;
 
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					this.PRODUCT.DEPARTMENT = res.data.deptName;
-					this.PRODUCT.ENTERBY = res.data.nickname;
+					console.log(res.data);
+					this.PRODUCT.DEPTID = res.data.deptId;
+					// this.PRODUCT.DEPTIDDesc = res.data.deptName;
+					this.PRODUCT.ENTERBY = res.data.id;
+					// this.PRODUCT.ENTERBYDesc = res.data.nickname;
 					var date = new Date();
 					this.PRODUCT.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
+					this.PRODUCT.DEPARTMENT = '';
 					this.PRODUCT.VERSION = '1';
 					this.PRODUCT.STATUS = '活动';
 				}).catch((err) => {
@@ -280,8 +288,9 @@
 				this.statusshow2 = true;
 
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					this.PRODUCT.DEPARTMENT = res.data.deptName;
-					this.PRODUCT.CHANGEBY = res.data.nickname;
+					this.PRODUCT.DEPTID = res.data.deptId;
+					this.PRODUCT.CHANGEBY = res.data.id;
+					// this.PRODUCT.CHANGEBYDesc = res.data.nickname;
 					var date = new Date();
 					this.PRODUCT.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
 					//深拷贝数据
@@ -308,6 +317,8 @@
 			},
 			// 保存users/saveOrUpdate
 			save(PRODUCT) {
+				console.log('=====');
+				console.log(this.PRODUCT);
 				this.$refs[PRODUCT].validate((valid) => {
 					if(valid) {
 						this.PRODUCT.STATUS = ((this.PRODUCT.STATUS == "1" || this.PRODUCT.STATUS == '活动') ? '1' : '0');
@@ -378,7 +389,7 @@
  					// console.log(product);console.log(PRODUCT);
 					 	if(product == PRODUCT){
 						  	this.$message({
-								message: '没有修改不能修改',
+								message: '没有修改内容，不允许修订',
 								type: 'warning'
 							});
 							return false;

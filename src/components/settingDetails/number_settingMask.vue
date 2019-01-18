@@ -110,6 +110,7 @@
 
 <script>
 	import Config from '../../config.js'
+	import Validators from '../../core/util/validators.js'
 	export default {
 		name: 'masks',
 		props: {
@@ -136,24 +137,24 @@
 			}
 		},
 		data() {
-			var validateAUTOKEY = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请填写自动编号名称'));
-                }else {
-                    callback();
-                }
-            };
-            var validateS_NUM = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请填写起始数'));
-                }else {
-                	var targ=/^([0-9]*|[0-9]{1}\d*\.\d{1}?\d*)$/;
-                	if (!targ.test(value)) {
-                		callback(new Error('起始数须为数字'));
-                	}
-                    callback();
-                }
-            };
+			// var validateAUTOKEY = (rule, value, callback) => {
+   //              if (value === '') {
+   //                  callback(new Error('请填写自动编号名称'));
+   //              }else {
+   //                  callback();
+   //              }
+   //          };
+   //          var validateS_NUM = (rule, value, callback) => {
+   //              if (value === '') {
+   //                  callback(new Error('请填写起始数'));
+   //              }else {
+   //              	var targ=/^([0-9]*|[0-9]{1}\d*\.\d{1}?\d*)$/;
+   //              	if (!targ.test(value)) {
+   //              		callback(new Error('起始数须为数字'));
+   //              	}
+   //                  callback();
+   //              }
+   //          };
            
 			return {
 				basic_url: Config.dev_url,
@@ -174,19 +175,16 @@
 				isok1: true,
 				isok2: false,
 //				labelPosition: 'top',//标题在上方显示
-				addtitle:true,
-				modifytitle:false,
 				rules:{
-          			AUTOKEY: [{ 
-   						required: true,
-   						validator: validateAUTOKEY,
-   						trigger: 'blur' 
-   					}],
-          			S_NUM:[{ 
-   						required: true,
-   						validator: validateS_NUM,
-   						trigger: 'blur' 
-   					}]
+          			AUTOKEY:[
+						{ required: true, message: '必填', trigger: 'blur'},
+						{ validator: Validators.isWorknumber, trigger: 'blur'}
+					],
+					PREFIX:[{ required: false, trigger: 'blur', validator: Validators.isEnglish}],
+          			S_NUM:[
+						{ required: true, message: '必填', trigger: 'blur'},
+						{ validator: Validators.isInteger, trigger: 'blur'}
+					],
           		
 	          	},
 	          	addtitle:true,
@@ -220,7 +218,7 @@
 				}
             },
             childMethods() {//添加内容时从父组件带过来的
-            	console.log(this.numbsetForm);
+            	//console.log(this.numbsetForm);
             	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.numbsetForm.DEPARTMENT=res.data.deptName;
 					this.numbsetForm.ENTERBY=res.data.nickname;
@@ -279,7 +277,7 @@
 				this.views = true;//录入修改人信息
 				this.noviews = false;//按钮
 				// this.numbsetForm = item;
-				console.log(this.numbsetForm);
+				//console.log(this.numbsetForm);
 				this.show = true;				
 			},
 			//点击关闭按钮

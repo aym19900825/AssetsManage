@@ -17,7 +17,7 @@
                 </div>
             </div>
             <div class="mask_content">
-				<el-form status-icon :model="dataInfo" :rules="rules"   ref="dataInfo" class="demo-user">
+				<el-form :model="dataInfo" :rules="rules"   ref="dataInfo" class="demo-user">
 					<div class="accordion">
 						<!-- 设备header信息 -->
 						<el-collapse v-model="activeNames">
@@ -133,7 +133,7 @@
 									</el-table-column>
 								</el-table>
 							</el-collapse-item>
-							<el-collapse-item title="文档" name="3">
+							<el-collapse-item title="文件" name="3">
 								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
 							</el-collapse-item>
 							<el-collapse-item title="其他" name="4" v-show="!addtitle">
@@ -149,7 +149,7 @@
 					</div>
 					<div class="el-dialog__footer" v-show="noviews">
 						<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
-						<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并添加</el-button>
+						<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并继续</el-button>
 						<el-button @click='close'>取消</el-button>
 						<!-- <el-button type="primary" @click='submitForm'>提交</el-button> -->
 					</div>

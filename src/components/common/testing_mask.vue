@@ -15,7 +15,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form status-icon :model="testingForm" :label-position="labelPosition" :rules="rules" ref="testingForm" label-width="100px" class="demo-adduserForm">
+				<el-form :model="testingForm" :label-position="labelPosition" :rules="rules" ref="testingForm" label-width="100px" class="demo-adduserForm">
 					<div class="accordion">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基础信息" name="1">
@@ -88,7 +88,7 @@
 									</el-row>
 								
 							</el-collapse-item>
-							<el-collapse-item title="文档" name="2">
+							<el-collapse-item title="文件" name="2">
 								<!-- 字段列表 Begin-->
 								<div class="table-func">
 									<el-button type="primary" size="mini" round @click="importdia">
@@ -108,10 +108,10 @@
 												<el-form-item label="序号"></el-form-item>
 											</el-col>
 											<el-col :span="3">
-												<el-form-item label="文档编号"></el-form-item>
+												<el-form-item label="文件编号"></el-form-item>
 											</el-col>
 											<el-col :span="7">
-												<el-form-item label="文档描述"></el-form-item>
+												<el-form-item label="文件描述"></el-form-item>
 											</el-col>
 											<el-col :span="3">
 												<el-form-item label="创建人"></el-form-item>
@@ -131,10 +131,10 @@
 												<el-input type="text" placeholder="请输入序号" v-model="item.COLUMNID"></el-input>
 											</el-col>
 											<el-col :span="3">
-												<el-input type="text" placeholder="请输入文档编号" v-model="item.FILESNUMBER"></el-input>
+												<el-input type="text" placeholder="请输入文件编号" v-model="item.FILESNUMBER"></el-input>
 											</el-col>
 											<el-col :span="7">
-												<el-input type="text" placeholder="文档描述" v-model="item.FILSEDESC"></el-input>
+												<el-input type="text" placeholder="文件描述" v-model="item.FILSEDESC"></el-input>
 											</el-col>
 											<el-col :span="3">
 												<el-input type="text" placeholder="创建人" v-model="item.ENTERB"></el-input>
@@ -310,7 +310,7 @@
             
 			
 
-			addfield() {//添加文档行信息
+			addfield() {//添加文件行信息
 				var obj = {
 					COLUMNID: '',
 					FILESNUMBER: '',

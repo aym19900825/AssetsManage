@@ -15,7 +15,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form status-icon :model="adddeptForm"  :rules="rules" ref="adddeptForm" label-width="100px" id="demo-adduserForm">
+				<el-form :model="adddeptForm" :rules="rules" ref="adddeptForm" label-width="100px" id="demo-adduserForm">
 					<div class="accordion">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="机构信息" name="1">
@@ -105,7 +105,7 @@
 								<el-row :gutter="30">
 									<el-col :span="8">
 										<el-form-item label="负责人">
-											<el-input v-model="adddeptForm.leaderDesc" :disabled="edit">
+											<el-input v-model="adddeptForm.leaderName" :disabled="edit">
 												<el-button slot="append" icon="el-icon-search" @click="getPerson"></el-button>
 											</el-input>
 										</el-form-item>
@@ -131,7 +131,7 @@
 								</el-row>
 								<el-row :gutter="30">
 									<el-col :span="24">
-										<el-form-item label="备注">
+										<el-form-item label="备注" prop="tips">
 											<el-input :rows="3" type="textarea" v-model="adddeptForm.tips" placeholder="请输入"></el-input>
 										</el-form-item>
 									</el-col>
@@ -165,8 +165,8 @@
 					</div>
 					<div class="el-dialog__footer">
 						    
-						    <el-button type="primary" @click="saveAndUpdate('adddeptForm')">保存</el-button>
-						    <el-button type="success" @click="saveAndSubmit('adddeptForm')" v-show="addtitle">保存并添加</el-button>
+						    <el-button type="primary" @click="saveAndUpdate">保存</el-button>
+						    <el-button type="success" @click="saveAndSubmit" v-show="addtitle">保存并继续</el-button>
 						<!--	<el-button type="primary" class="btn-primarys" @click="submitForm('adddeptForm')">提交</el-button>-->
 							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion">修订</el-button>
 							<el-button @click="close">取消</el-button> 
@@ -176,7 +176,7 @@
 		</div>
 		<!-- 弹出 -->
 		<el-dialog title="机构" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" default-expand-all>
+			<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" default-expand-all @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
 			</el-tree>
 			<span slot="footer" class="dialog-footer">
 		       <el-button @click="dialogVisible = false">取 消</el-button>
@@ -226,6 +226,7 @@
 
 <script>
 	import Config from '../../config.js'
+	import Validators from '../../core/util/validators.js'
 	export default {
 		name: 'masks',
 		props: {
@@ -262,69 +263,6 @@
 			}
 		},
 		data() {
-
-			//验证机构序号
-			var validateStep = (rule, value, callback) => {
-				 if (value === '') {
-			          return callback(new Error('机构序号不能为空'));
-			    } else {
-					var targ = /^[A-Za-z0-9]+$/;
-					if( !targ.test(value)){
-	                    callback(new Error('序号只支持英文、数字'));
-	                }
-					callback();
-				}
-			};
-
-			//验证机构名称
-			var validateFullname = (rule, value, callback) => {
-				if (value === '') {
-		          return callback(new Error('机构名称不能为空'));
-		        }
-		         callback();
-			};
-			//验证机构类型
-			var validateOrgrange = (rule, value, callback) => {
-				if (value === '') {
-		          return callback(new Error('请选择机构类型'));
-		        }
-		         callback();
-			};
-			//验证机构属性
-			var validateType = (rule, value, callback) => {
-				if (value === '') {
-		          return callback(new Error('请选择机构属性'));
-		        }
-		         callback();
-			};
-
-			//验证电话号码
-			var validatePhone = (rule, value, callback) => {
-				if (value && (!(/^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/).test(value))) {
-  				    callback(new Error('请输入有效的电话号码'))
-  				} else {
-  				    callback()
-  				}
-			};
-
-			//验证传真
-			var validateFax = (rule, value, callback) => {
-				if (value && (!(/^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/).test(value))) {
-  				    callback(new Error('请输入有效的传真，格式为：0000-0000000'))
-  				} else {
-  				    callback()
-  				}
-			};
-
-			//验证邮箱
-			var validateEmail = (rule, value, callback) => {
-				if (value && (!(/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/).test(value))) {
-  				    callback(new Error('请输入有效的邮箱'))
-  				} else {
-  				    callback()
-  				}
-			};
-
 			return {
 				basic_url: Config.dev_url,
 				value: '',
@@ -349,6 +287,7 @@
 				showcode:true,
 				selMenu:[],
 				selUser: [],
+				selData: [],//获取当前负责人
 				SelectDEPT_TYPE:[],//获取机构属性
 				Selectsys_depttype:[],//获取机构类型
 				activeNames: ['1'], //手风琴数量
@@ -381,46 +320,44 @@
 					label: "fullname"
 				},
 				rules:{
-   					step: [{//机构序号
-   						required:true,
-						trigger: 'blur',
-						validator: validateStep,
-					}],
-					fullname: [{//机构名称
-   						required:true,
-						trigger: 'blur',
-						validator: validateFullname,
-					}],
-					org_range: [{//选择机构类型
-   						required:true,
-						trigger: 'change',
-						validator: validateOrgrange,
-					}],
-   					type: [{//选择机构属性
-   						required:true,
-						trigger: 'change',
-						validator: validateType,
-					}],
-   					telephone: [{//电话
-   						required:false,
-						trigger: 'blur',
-						validator: validatePhone,
-					}],
-					fax: [{//传真
-   						required:false,
-						trigger: 'blur',
-						validator: validateFax,
-					}],
-					email: [{//邮箱
-   						required:false,
-						trigger: 'blur',
-						validator: validateEmail,
-					}],
-					
-	          	},
-			};
+   					step: [{required:true,trigger: 'blur',validator: Validators.isWorknumber}],//机构序号
+					fullname: [
+						{required:true, trigger: 'blur', message: '必填'},
+						{validator: Validators.isNickname, trigger: 'blur'},
+					],//机构名称
+					org_range: [{required:true,trigger: 'change',message: '请选择机构类型'}],//选择机构类型
+   					type: [{required:true,trigger: 'change',message: '请选择机构属性'}],//选择机构属性
+   					telephone: [{required:false,trigger: 'blur',validator: Validators.isTelephone}],//电话
+					fax: [{required:false,trigger: 'blur',validator: Validators.isTelephone}],//传真
+					email:[{required:false, trigger: 'blur', validator: Validators.isEmail,}],//邮箱
+					code:[{required: false,trigger: 'blur',validator: Validators.isWorknumber}],//机构属性
+					address:[{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],//联系地址
+					zipcode:[{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],//邮政编码
+					telephone:[{required: false,trigger: 'blur',validator: Validators.isTelephone}],//电话
+					fax:[{required: false,trigger: 'blur',validator: Validators.isTelephone}],//传真
+					email:[{required: false,trigger: 'blur',validator: Validators.isEmail}],//邮箱
+					tips:[{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],//备注
+				}
+			}
 		},
 		methods: {
+			handleNodeClick(data) { //获取勾选树菜单节点
+				//				console.log(data);
+			},
+			handleClicks(data,checked, indeterminate) {
+				this.getCheckboxData = data;
+           		 this.i++;
+            		if(this.i%2==0){
+                	if(checked){
+                    	this.$refs.tree.setCheckedNodes([]);
+                    	this.$refs.tree.setCheckedNodes([data]);
+                    	//交叉点击节点
+               		 }else{
+                     this.$refs.tree.setCheckedNodes([]);
+                    	//点击已经选中的节点，置空
+                	 }
+            		}
+        	},
 			//获取负责人数据
 			getPerson(){
 				this.requestData();
@@ -479,7 +416,7 @@
 					return;
 				} else {
 					this.adddeptForm.leader = selData[0].id;
-					this.adddeptForm.leaderDesc = selData[0].nickname;
+					this.adddeptForm.leaderName = selData[0].nickname;
 					this.dialogLeader = false;
 				}
 			},
@@ -572,12 +509,32 @@
 					});
 				});
 
+
+				var page = this.page.currentPage;
+				var limit = this.page.pageSize;
+				var url = this.basic_url + '/api-user/users/';
+				this.$axios.get(url, {
+					params: {
+						page: page,
+						limit: limit,
+					},
+				}).then((res) => {
+					console.log(res.data);
+					this.adddeptForm.leader = res.data.id;//给负责人显示用户名称
+					
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.modify = true;
 				this.stopcontent = false;
 				this.stopselect = true;
 				this.show = true;
+
 			},
 			//点击关闭按钮
 			close() {
@@ -648,12 +605,14 @@
 				}).catch((wrong) => {})
 			},
 			//保存
-			save(adddeptForm) {
-				console.log(this.adddeptForm);
-				this.$refs[adddeptForm].validate((valid) => {
+			save() {
+				var _this = this;
+				this.$refs.adddeptForm.validate((valid) => {
 		          if (valid) {
-		          	this.adddeptForm.status=((this.adddeptForm.status=="1"||this.adddeptForm.status=='活动') ? '1' : '0');
-					var url = this.basic_url + '/api-user/depts/saveOrUpdate';
+		          	_this.adddeptForm.status=((_this.adddeptForm.status=="1"||_this.adddeptForm.status=='活动') ? '1' : '0');
+		          	// _this.adddeptForm.leader = _this.selData[0].id;
+		          
+					var url = _this.basic_url + '/api-user/depts/saveOrUpdate';
 //					this.adddeptForm = {
 //						 "id":this.adddeptForm.id,
 //						 "pid":this.adddeptForm.pid,
@@ -664,8 +623,8 @@
 //					     "teltphone":this.adddeptForm.teltphone,
 //					     "tips":this.adddeptForm.tips
 //					}
-					// console.log(this.adddeptForm);
-					this.$axios.post(url, this.adddeptForm).then((res) => {
+					console.log(_this.adddeptForm);
+					this.$axios.post(url, _this.adddeptForm).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -694,15 +653,15 @@
 		        });
 				
 			},
-			saveAndUpdate(adddeptForm){
-				this.save(adddeptForm);
+			saveAndUpdate(){
+				this.save();
 				if(this.falg){
 					this.show = false;
 				}
 				this.$emit('request');
 			},
-			saveAndSubmit(adddeptForm){
-				this.save(adddeptForm);
+			saveAndSubmit(){
+				this.save();
 				this.$emit('reset');
 				this.$emit('request');
 			},

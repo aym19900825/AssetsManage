@@ -16,7 +16,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form status-icon :model="dataInfo" :rules="rules"   ref="dataInfo" label-width="100px" class="demo-user">
+				<el-form :model="dataInfo" :rules="rules"   ref="dataInfo" label-width="100px" class="demo-user">
 					<div class="accordion">
 
 						<!-- 设备基本信息 -->
@@ -107,13 +107,13 @@
 				getCheckboxData: {},
 
 				dataInfo: {
-					'keywordid': 1,
-					'categoryid': 1,	
+					'keywordid': '',
+					'categoryid': '',	
 					'keywordname': '',
-					'userid': 1,
+					'userid': '',
 					'username': '',
 					'createtime': '',
-					'deptid': 1,
+					'deptid': '',
 					'deptfullname': ''
 				},
 				cats: []
@@ -126,7 +126,7 @@
 					if(opt == 'new'){
 						this.dataInfo.userid = res.data.id;
 						this.dataInfo.username = res.data.username;
-						this.dataInfo.createtime = '10:06:48';
+						this.dataInfo.createtime = this.getToday();
 						this.dataInfo.deptid = res.data.deptId;
 						this.dataInfo.deptfullname = res.data.deptName;
 					}else{
@@ -144,8 +144,9 @@
 			},
 			getToday(){
 				var date = new Date();
-				var month = date.getMonth()+1;
-				var str = date.getFullYear() + '-' + month + '-'+ date.getDate();
+				var month = date.getMonth();
+				month++;
+				var str = date.getFullYear() + '-' + month + '-'+ date.getDate() + ' ' +  date.getHours() + ':' + date.getMinutes()+ ':' + date.getSeconds() ;
 				return str;
 			},
 			//点击按钮显示弹窗
@@ -170,13 +171,13 @@
 			},
 			resetForm(){
 				this.dataInfo =  {
-					'keywordid': 1,
-					'categoryid': 1,	
+					'keywordid': '',
+					'categoryid': '',	
 					'keywordname': '',
-					'userid': 1,
+					'userid': '',
 					'username': '',
 					'createtime': '',
-					'deptid': 1,
+					'deptid': '',
 					'deptfullname': ''
 				};
 				this.$refs['dataInfo'].resetFields();
@@ -212,6 +213,9 @@
 				var url = this.basic_url + '/api-apps/app/tbKeyword2/saveOrUpdate';
 				this.$refs['dataInfo'].validate((valid) => {
 					if (valid) {
+						if(!this.modify){
+							this.dataInfo.createtime = this.getToday();
+						}
 						this.$axios.post(url, _this.dataInfo).then((res) => {
 							if(res.data.resp_code == 0) {
 								this.$message({
@@ -220,6 +224,11 @@
 								});
 								this.resetForm();
 								this.$emit('request');
+							}else{
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'error',
+								});
 							}
 						}).catch((err) => {
 							this.$message({

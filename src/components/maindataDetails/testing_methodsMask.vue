@@ -16,99 +16,87 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form :model="testingForm" inline-message :rules="rules" ref="testingForm" label-width="100px" status-icon>
 					<div class="accordion">
 						<el-collapse v-model="activeNames">
-							<el-collapse-item title="基础信息" name="1">
-								<el-row :gutter="20" class="pb10">
-									<el-col :span="3" class="pull-right">
-										<el-input  v-model="testingForm.VERSION" :disabled="true">
-											<template slot="prepend">版本</template>
-										</el-input>
-									</el-col>
-									<!--<el-col :span="4" class="pull-right" v-if="modify">
-										<el-input v-model="testingForm.STATUS=='1'?'活动':'不活动'" :disabled="true">
-											<template slot="prepend">信息状态</template>
-										</el-input>
-									</el-col>
-									<el-col :span="4" class="pull-right" v-else>
-										<el-input v-model="testingForm.STATUS" :disabled="true">
-											<template slot="prepend">信息状态</template>
-										</el-input>
-									</el-col>-->
-									<el-col :span="5" class="pull-right">
-										<el-input v-model="testingForm.M_NUM" @focus="hint" @input="hinthide" :disabled="noedit">
-											<template slot="prepend">编码</template>
-										</el-input>
-										<span v-if="hintshow" style="color:rgb(103,194,58);font-size: 12px">可填写，若不填写系统将自动生成</span>
-									</el-col>
-								</el-row>
-
-								<el-row>
-									<el-col :span="8">
-										<el-form-item label="中文名称" prop="M_NAME" >
-											<el-input v-model="testingForm.M_NAME" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="英文名称" prop="M_ENAME" >
-											<el-input v-model="testingForm.M_ENAME" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="类别" prop="M_TYPE">
-											<!-- <el-select v-model="testingForm.M_TYPE" placeholder="请选择类别" style="width: 100%;">
-												<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
-											</el-select> -->
-											<el-input v-model="testingForm.M_TYPE" placeholder="请输入类别" :disabled="noedit"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row>
-									<el-col :span="8" v-if="dept">
-										<el-form-item label="机构">
-											<el-input v-model="testingForm.DEPARTMENT" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-							</el-collapse-item>
-							<el-collapse-item title="文件" name="2">
-								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
-							</el-collapse-item>
-							<el-collapse-item title="其它" name="3" v-show="views">
-								<el-row>
-									<el-col :span="8">
-										<el-form-item label="录入人">
-											<el-input v-model="testingForm.ENTERBY" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="录入时间">
-											<el-input v-model="testingForm.ENTERDATE" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="修改人">
-											<el-input v-model="testingForm.CHANGEBY" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="修改日期">
-											<el-input v-model="testingForm.CHANGEDATE" :disabled="true"></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
+							<el-form :model="testingForm" inline-message :rules="rules" ref="testingForm" label-width="100px" status-icon>
+								<el-collapse-item title="基础信息" name="1">
+									<el-row :gutter="20" class="pb10">
+										<el-col :span="3" class="pull-right">
+											<el-input  v-model="testingForm.VERSION" :disabled="true">
+												<template slot="prepend">版本</template>
+											</el-input>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="编码" prop="M_NUM" >
+												<el-input v-model="testingForm.M_NUM" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="中文名称" prop="M_NAME" >
+												<el-input v-model="testingForm.M_NAME" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="英文名称" prop="M_ENAME" >
+												<el-input v-model="testingForm.M_ENAME" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="类别" prop="M_TYPE">
+												<!-- <el-select v-model="testingForm.M_TYPE" placeholder="请选择类别" style="width: 100%;">
+													<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
+												</el-select> -->
+												<el-input v-model="testingForm.M_TYPE" placeholder="请输入类别" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8" v-if="dept">
+											<el-form-item label="机构">
+												<el-input v-model="testingForm.DEPTIDDesc" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+								</el-collapse-item>
+								<el-collapse-item title="其它" name="2" v-show="views">
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="录入人">
+												<el-input v-model="testingForm.ENTERBYDesc" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="录入时间">
+												<el-input v-model="testingForm.ENTERDATE" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="修改人">
+												<el-input v-model="testingForm.CHANGEBYDesc" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="修改日期">
+												<el-input v-model="testingForm.CHANGEDATE" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+								</el-collapse-item>
+							</el-form>
+							<el-collapse-item title="文件" name="3">
+								<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save"></doc-table>
 							</el-collapse-item>
 						</el-collapse>
 					</div>
 					<div class="content-footer" v-show="noviews">
 						<el-button type="primary" @click="saveAndUpdate('testingForm')">保存</el-button>
-						<el-button type="success" @click="saveAndSubmit('testingForm')" v-show="addtitle">保存并添加</el-button>
+						<el-button type="success" @click="saveAndSubmit('testingForm')" v-show="addtitle">保存并继续</el-button>
 						<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('testingForm')">修订</el-button>
-						<el-button v-if="modify" type="success" @click="update('testingForm')">启用</el-button>
+						<!-- <el-button v-if="modify" type="success" @click="update('testingForm')">启用</el-button> -->
 						<el-button @click="close">取消</el-button>
 					</div>
-				</el-form>
 			</div>
 		</div>
 	</div>
@@ -116,6 +104,7 @@
 
 <script>
 	import Config from '../../config.js'
+	import Validators from '../../core/util/validators.js'
 	import docTable from '../common/doc.vue'
 	export default {
 		name: 'testing_mask',
@@ -144,6 +133,17 @@
 			}
 		},
 		data() {
+			// var validateNum = (rule, value, callback) => {
+			// 	if(value != ""){
+		 //             if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
+		 //                 callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
+		 //             }else{
+		 //                 callback();
+		 //             }
+		 //         }else{
+		 //             callback();
+		 //         }
+			// };
 			return {
 				docParm: {
 					'model': 'new',
@@ -179,23 +179,31 @@
 //				labelPosition: 'top', //表单标题在上方
 				addtitle: true,
 				modifytitle: false,
-				testing_filesForm:{//文件文档数据组
+				testing_filesForm:{//文件文件数据组
 					inspectionList: []
 				},
 				TESTINGFORM:{},//
 				isEditing: '',
 				commentArr:{},//下拉加载
 				rules: { //定义需要校验数据的名称
+					M_NUM: [{
+						required: false,
+						trigger: 'change',//validateNum
+						validator: Validators.isCodeNum,
+					}],
 					M_NAME: [
 						{ required: true, message: '请填写中文名称', trigger: 'blur' },
-						{ min: 5, max: 35, message: '长度在 5 到 35 个字符', trigger: 'blur' }
+						{ min: 5, max: 35, message: '长度在 5 到 35 个字符', trigger: 'blur' },
+						{validator: Validators.isChinese, trigger: 'blur'},
 					],
 					M_ENAME: [
 						{ required: true, message: '请填写英文名称', trigger: 'blur' },
-						{ min: 5, max: 50, message: '长度在 5 到 15 个字符', trigger: 'blur' }
+						{ min: 5, max: 50, message: '长度在 5 到 15 个字符', trigger: 'blur' },
+						{validator: Validators.isEnglish, trigger: 'blur'},
 					],
 					M_TYPE: [
-						{ required: true, message: '请填写', trigger: 'change' }
+						{ required: true, message: '请填写', trigger: 'change' },
+						{validator: Validators.isSpecificKey, trigger: 'blur'},
 					]
 				},
 				hintshow:false,
@@ -227,20 +235,20 @@
 			},
 			getUser(opt){
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					this.testingForm.DEPARTMENT=res.data.deptName;
-					this.testingForm.ENTERBY=res.data.nickname;
+					this.testingForm.DEPARTMENT = '';
+					this.testingForm.DEPTID = res.data.deptId;
+					this.testingForm.ENTERBY = res.data.id;
 					var date=new Date();
 					this.testingForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 					if(opt != 'new'){
 						//深拷贝数据
 						let _obj = JSON.stringify(this.testingForm);
 						this.TESTINGFORM = JSON.parse(_obj);
-
-						this.docParm.userid = res.data.id;
-						this.docParm.username = res.data.username;
-						this.docParm.deptid = res.data.deptId;
-						this.docParm.deptfullname = res.data.deptName;
 					}
+					this.docParm.userid = res.data.id;
+					this.docParm.username = res.data.username;
+					this.docParm.deptid = res.data.deptId;
+					this.docParm.deptfullname = res.data.deptName;
 				}).catch((err)=>{
 					this.$message({
 						message:'网络错误，请重试',
@@ -251,14 +259,13 @@
 			},
 			visible() {//添加内容时从父组件带过来的
 				this.getUser('new');
-
-				this.docParm = {
-					'model': 'edit',
-					'appname': 'INSPECTION_METHOD2',
-					'recordid': this.testingForm.ID,
-					'appid':32
-				};
-				
+				setTimeout(function(){
+					this.docParm.model = 'new';
+					this.docParm.appname = 'INSPECTION_METHOD2';
+					this.docParm.recordid = this.testingForm.ID;
+					this.docParm.appid = 32;
+					this.$refs.docTable.getData();
+				},100);
             	this.addtitle = true;
 				this.modifytitle = false;
 				this.viewtitle = false;
@@ -273,7 +280,6 @@
             	// this.show = true;
 			},
 			detail() { //修改内容时从父组件带过来的
-				this.getUser('edit');
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.viewtitle = false;
@@ -324,7 +330,7 @@
 	 					// console.log(testingForm);
 					 	if(testingForm==TESTINGFORM){
 					  		this.$message({
-								message: '没有修改不能修改',
+								message: '没有修改内容，不允许修订',
 								type: 'warning'
 							});
 							return false;
@@ -404,7 +410,7 @@
 				})
 			},
 
-			addfield_doclinks() { //插入行到文件文档Table中
+			addfield_doclinks() { //插入行到文件文件Table中
 				var isEditingflag=false;
 				for(var i=0;i<this.testing_filesForm.inspectionList.length; i++){
 					if (this.testing_filesForm.inspectionList[i].isEditing==false){
@@ -476,7 +482,7 @@
 			},
 
 			deleteRow(row) {//Table-操作列中的删除行
-				this.$confirm('确定删除此文件文档吗？', '提示', {
+				this.$confirm('确定删除此文件文件吗？', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                 }).then(({ value }) => {
@@ -559,25 +565,34 @@
 				});
 			},
 			//执行保存
-			save(testingForm) {
+			save(opt) {
 				var _this = this;
-				this.$refs[testingForm].validate((valid) => {
+				this.$refs['testingForm'].validate((valid) => {
+					if(!valid && opt == 'docUpload'){
+						this.$message({
+							message: '请先正确填写信息，再进行文档上传',
+							type: 'warn'
+						});
+					}
 					if (valid) {
 					    _this.testingForm.STATUS=_this.testingForm.STATUS=="活动" ? '1' : '0';
 						var url = this.basic_url + '/api-apps/app/inspectionMet/saveOrUpdate';
 						this.$axios.post(url,_this.testingForm).then((res) => {
-							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
-								this.$message({
-									message: '保存成功',
-									type: 'success'
-								});
-								
-								
-								//重新加载数据
-								this.$emit('request');
-								this.$emit('reset');
-								this.visible();	
+								if(opt == 'docUpload'){
+									this.docParm.recordid = res.data.datas.id;
+									this.docParm.model = 'edit';
+									this.$refs.docTable.autoLoad();
+									this.dataInfo.ID = res.data.datas.id;
+								}else{
+									this.$message({
+										message: '保存成功',
+										type: 'success'
+									});
+									this.$emit('request');
+									this.$emit('reset');
+									this.visible();	
+								}
 							}else{
 								this.show = true;
 								if(res.data.resp_code == 1) {
@@ -620,7 +635,7 @@
 					this.show = false;
 				}
 			},
-			//保存并添加
+			//保存并继续
 			saveAndSubmit(testingForm){
 				this.save(testingForm);
 				this.show = true;

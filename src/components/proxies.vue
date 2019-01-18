@@ -23,7 +23,7 @@
 										<button type="button" class="btn btn-green" @click="openAddMgr" id="">
 				                        	<i class="icon-add"></i>添加
 				              			 </button>
-										<button type="button" class="btn btn-bule button-margin" @click="modify">
+										<button type="button" class="btn btn-blue button-margin" @click="modify">
 										    <i class="icon-edit"></i>修改
 										</button>
 										<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
@@ -54,7 +54,7 @@
 
 							<!-- 高级查询划出 Begin-->
 							<div v-show="search" class="pb10">
-								<el-form status-icon :model="searchList" label-width="70px">
+								<el-form :model="searchList" label-width="70px">
 									<el-row :gutter="10">
 										<el-col :span="5">
 											<el-input v-model="searchList.typename">

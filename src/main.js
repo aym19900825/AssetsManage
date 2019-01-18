@@ -27,6 +27,7 @@ import EasyScroll from 'easyscroll'//自定义滚动条
 import common from './assets/js/common.js'
 import store from './store.js'
 
+
 //import './jquery/dist/jquery.min.js'
 //import 'bootstrap/dist/css/bootstrap.min.css'
 //import 'bootstrap/dist/js/bootstrap.min.js'
@@ -37,6 +38,7 @@ import store from './store.js'
 //import 'ztree/css/zTreeStyle/zTreeStyle.css'
 //import './assets/bootstrap/bootstrap.min.css'
 //import './assets/bootstrap/bootstrap.min.js'
+
 
 
 Vue.directive('loadmore', {
@@ -53,18 +55,18 @@ Vue.directive('loadmore', {
 })
 
 Vue.config.productionTip = false
-let selectedNav={
-	css: 'icon-user',
-	name: '首页',
-	url: '/index'}
-
-
-var clickedNav=new Array();
-clickedNav[0]=selectedNav
-//tab 上选中的页面  只能有一个
-Vue.prototype.$selectedNav = selectedNav //选中的tab
-//所有tab的页面
-Vue.prototype.$clickedNav = clickedNav   //点选的tab
+//let selectedNav={
+//	css: 'icon-user',
+//	name: '首页',
+//	url: '/index'}
+//
+//
+//var clickedNav=new Array();
+//clickedNav[0]=selectedNav
+////tab 上选中的页面  只能有一个
+//Vue.prototype.$selectedNav = selectedNav //选中的tab
+////所有tab的页面
+//Vue.prototype.$clickedNav = clickedNav   //点选的tab
 
 
 
@@ -73,7 +75,7 @@ Vue.prototype.$moment = moment//赋值使用
 Vue.prototype.common = common
 Vue.use(ElementUI)
 Vue.use(vueztree)
-Vue.use(EasyScroll)//自定义滚动条
+// Vue.use(EasyScroll)//自定义滚动条
 //Vue.use(infiniteScroll)
 
 new Vue({

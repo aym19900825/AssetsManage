@@ -21,7 +21,7 @@
 								<!--<button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加
                       			</button>
-								<button type="button" class="btn btn-bule button-margin" @click="modify">
+								<button type="button" class="btn btn-blue button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改
 								</button>
 								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
@@ -67,7 +67,7 @@
 					</div>
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
-						<el-form status-icon :model="searchList">
+						<el-form :model="searchList">
 							<el-row :gutter="10">
 								<el-col :span="5">
 									<el-form-item label="用户名" prop="username" label-width="55px">
@@ -119,7 +119,7 @@
 								</el-table-column>
 								<el-table-column label="用户名" sortable width="140px" prop="username" v-if="this.checkedName.indexOf('用户名')!=-1">
 									<template slot-scope="scope">
-										<p @click=view(scope.row.id)>{{scope.row.username}}
+										<p class="blue" title="点击查看详情" @click=view(scope.row.id)>{{scope.row.username}}
 										</p>
 									</template>
 								</el-table-column>
@@ -317,7 +317,7 @@
 				this.page.pageSize = 10;
 				this.requestData();
 			},
-			//请求页面的菜单接口
+			//请求页面的button接口
 		    getbutton(childByValue){
 		    	console.log(childByValue);
 		    	var data = {
@@ -347,6 +347,8 @@
 		    		this.freezeAccount();
 		    	}else if(item.name=="删除"){
 		    		this.deluserinfo();
+		    	}else if(item.name=="重置密码"){
+		    		this.resetPwd();
 		    	}
 		    },
 			//添加用戶
@@ -567,7 +569,8 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					//					this.userList = res.data.data;
+					console.log(res);
+					//this.userList = res.data.data;
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)

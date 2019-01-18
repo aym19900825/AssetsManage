@@ -1,5 +1,4 @@
 <template>
-	
 	<div  class="navbar-default navbar-static-side" :style="{height: fullHeight}">
 		<div class="navbarbg" @click="min2max()">
 			<span class="navbar-minimalize minimalize-styl-2">
@@ -39,14 +38,20 @@ export default {
 		addClickNav(item){
 
 			var flag = false;
+<<<<<<< HEAD
 			console.log(this.$store.state.clickedNav);
 			for(var i = 0; i < this.$store.state.clickedNav.length; i++){
 				if(item.name == this.$store.state.clickedNav[i].name){
+=======
+			for(var i = 0; i < this.$store.state.clickedNavs.length; i++){
+				if(item.name == this.$store.state.clickedNavs[i].name){
+>>>>>>> 8f192f0bc1ba654365c575ae9c6012562b8b4dad
 					flag = true;
 				}
 			}
 			if(!flag){
-				this.$clickedNav.push(item);
+//				this.$store.state.clickedNavs = this.$store.state.clickedNavs.slice();
+				this.$store.state.clickedNavs.push(item);
 				setTimeout(function(){
 		 			var left = $('.page-tabs').offset().left; 
 		            //tabs总宽度
@@ -61,7 +66,8 @@ export default {
 		            }
 				},0);				
 			}
-			this.$selectedNav=item;
+//			this.$selectedNav=item;
+			this.$store.dispatch('setSelectedNavAct',item);
 			//点击的值传给user
 			this.$emit('childByValue',item);
 //			console.log("left5 click:");
@@ -115,24 +121,50 @@ export default {
 	},
 	mounted() {
 		var _this = this;
-		var data = {
-			menuId: this.$store.state.navid,
-			roleId: this.$store.state.roleid,
-		};
+		console.log(_this.$store.state.menuid);
+		if(typeof(_this.$store.state.menuid)=="undefined"){
+			console.log(111111);
+			$('.navbar-default').hide();
+		     _this.$emit('childByValue',_this.$store.state.selectedNav);
+		}else{
+		    var data = {
+			menuId: _this.$store.state.menuid,
+			roleId: _this.$store.state.roleid,
+			};
 		var url = _this.basic_url + '/api-user/menus/findSecondByRoleIdAndFisrtMenu';
+<<<<<<< HEAD
 		_this.$axios.get(url, {params: data}).then((res) => {			
 			console.log(res);
 			if(_this.$route.path!=_this.$selectedNav.url){
 				_this.$selectedNav=res.data[0]
+=======
+		_this.$axios.get(url, {params: data}).then((res) => {
+			if(res.data.length>0&&res.data!='undefined'){
+			
+				if(_this.$route.path!=_this.$store.state.selectedNav.url){
+					//赋值
+	//				_this.$selectedNav=res.data[0]
+					_this.$store.dispatch('setSelectedNavAct',res.data[0]);
+				}
+				$('.navbar-default').show();
+				_this.leftNavs = res.data;
+				//子传父
+				 _this.$emit('childByValue',_this.$store.state.selectedNav);
+			}else{
+				$('.navbar-default').hide();
+				 _this.$emit('childByValue',_this.$store.state.selectedNav);
+				 
+>>>>>>> 8f192f0bc1ba654365c575ae9c6012562b8b4dad
 			}
-			_this.leftNavs = res.data;
-			_this.$emit('childByValue',_this.$selectedNav);
+				
 		}).catch((wrong) => {
 			_this.$message({
 				message: '网络错误，请重试左侧1',
 				type: 'error'
 			});
 		});
+		}
+		
 		
 		
 	}

@@ -7,7 +7,6 @@ import axios  from 'axios'
 axios.interceptors.request.use(
   request => {
     var token = sessionStorage.getItem('access_token');
-//  console.log("token："+token);
     if (token) {
         request.headers.Authorization = 'Bearer ' + token;
     }
@@ -20,10 +19,10 @@ axios.interceptors.request.use(
 
 // http response 拦截器
 axios.interceptors.response.use(
-response => {
-    return response
-},
-error => {
+  response => {
+      return response;
+  },
+  error => {
     if (error.response) {
       switch (error.response.status) {
         case 401:
@@ -32,8 +31,8 @@ error => {
           router.push({ path: '/' });
       }
     }
-    return Promise.reject(error.response.data)
-},
+    return Promise.reject(error.response.data);
+  },
 )
 
 Vue.prototype.$axios = axios

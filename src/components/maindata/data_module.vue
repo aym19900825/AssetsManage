@@ -18,7 +18,7 @@
 								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
 	                        	<i class="icon-add"></i>添加
 	              			 </button>
-								<button type="button" class="btn btn-bule button-margin" @click="modify">
+								<button type="button" class="btn btn-blue button-margin" @click="modify">
 							    <i class="icon-edit"></i>修改
 							</button>
 								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
@@ -51,7 +51,7 @@
 
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
-						<el-form status-icon :model="searchList" label-width="70px">
+						<el-form :model="searchList" label-width="70px">
 							<el-row :gutter="10">
 								<el-col :span="5">
 									<el-form-item label="模板描述" prop="DECRIPTION">
@@ -59,8 +59,8 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="机构" prop="DEPARTMENT">
-										<el-select clearable v-model="searchList.DEPARTMENT" filterable allow-create default-first-option placeholder="请选择">
+									<el-form-item label="机构" prop="DEPTID">
+										<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
 										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 										</el-select>
 									</el-form-item>
@@ -80,14 +80,15 @@
 								</el-table-column>
 								<el-table-column label="编码" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('编码')!=-1">
 									<template slot-scope="scope">
-										<p @click=view(scope.row)>{{scope.row.NUM}}
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.NUM}}
 										</p>
 									</template>
 								</el-table-column>
 								<el-table-column label="模板描述" sortable prop="DECRIPTION" v-if="this.checkedName.indexOf('模板描述')!=-1">
-								</el-table-column>							             <el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
+								</el-table-column>							             
+								<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>
-								<el-table-column label="机构" width="185" sortable prop="DEPARTMENTDesc" v-if="this.checkedName.indexOf('机构')!=-1">
+								<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
@@ -161,7 +162,7 @@
 					},
 					{
 						label: '机构',
-						prop: 'DEPARTMENT'
+						prop: 'DEPTIDDesc'
 					},
 				],
 				selUser: [],
@@ -175,7 +176,7 @@
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
 				searchList: { //点击高级搜索后显示的内容
 					DECRIPTION: '',
-					DEPARTMENT: '',
+					DEPTID: '',
 					// PHONE: '',
 					// CONTACT_ADDRESS: '',
 					// STATUS: ''
@@ -384,7 +385,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 					DECRIPTION: this.searchList.DECRIPTION,
-					DEPARTMENT: this.searchList.DEPARTMENT,
+					DEPTID: this.searchList.DEPTID,
 				}
 				var url = this.basic_url + '/api-apps/app/rawDataTem';
 				this.$axios.get(url, {

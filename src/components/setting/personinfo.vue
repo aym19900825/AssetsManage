@@ -27,7 +27,7 @@
 		<!--右侧内容显示 Begin-->
 		<div class="wrapper wrapper-content">
 			<div class="ibox-content" :style="{height: fullHeight}">
-				<el-form status-icon ref="personinfo" :model="personinfo" :rules="rules" label-width="80px" :label-position="labelPosition">
+				<el-form ref="personinfo" :model="personinfo" :rules="rules" label-width="80px" :label-position="labelPosition">
 					<el-collapse v-model="activeNames">
 						<el-collapse-item title="账号设置" name="1">
 							<el-row :gutter="30">
@@ -40,8 +40,8 @@
 										<el-input v-model="personinfo.nickname"></el-input>
 									</el-form-item>
 
-									<el-form-item label="工号" prop="laborcode">
-								    	<el-input v-model="personinfo.laborcode"></el-input>
+									<el-form-item label="工号" prop="worknumber">
+								    	<el-input v-model="personinfo.worknumber"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="8">
@@ -74,23 +74,23 @@
 						 	<!-- 第三行 -->
 						 	<el-row :gutter="30">
 								<el-col :span="8">
-									<el-form-item label="所属机构" prop="deptID" v-if="personinfo.username === 'admin'">
-										<el-input v-model="personinfo.deptID" disabled>
+									<el-form-item label="所属机构" prop="deptName" v-if="personinfo.username === 'admin'">
+										<el-input v-model="personinfo.deptName" disabled>
 										<el-button slot="append" icon="icon-search" @click="getDept"></el-button>
 										</el-input>
 									</el-form-item>
-									<el-form-item label="所属机构" prop="deptID" v-else>
-										<el-input v-model="personinfo.deptID" disabled>
+									<el-form-item label="所属机构" prop="deptName" v-else>
+										<el-input v-model="personinfo.deptName" disabled>
 										</el-input>
 									</el-form-item>
 								</el-col>
 
 								<el-col :span="8">
-						 			 <el-form-item label="角色">
-						 				<el-select v-model="personinfo.roles" multiple :disabled="noedit">
+					 				<el-form-item label="角色" prop="roleId" label-width="100px">
+										<el-select v-model="personinfo.roleId" multiple placeholder="请选择" style="width: 100%">
 											<el-option v-for="item in selectData" :key="item.name" :value="item.id" :label="item.name"></el-option>
 										</el-select>
-						 			</el-form-item>	
+									</el-form-item>
 						 		</el-col>
 
 						 		<el-col :span="8">
@@ -110,7 +110,7 @@
 											</el-radio-group>
 								  </el-form-item>	
 						 		</el-col>
-						 		<el-col :span="9">
+						 		<!-- <el-col :span="9">
 						 			 <el-form-item label="登录方式">
 									    <el-checkbox-group v-model="personinfo.logintype">
 											<el-checkbox label="口令登录" name="type" checked disabled></el-checkbox>
@@ -118,7 +118,7 @@
 											<el-checkbox label="数字证书" name="type" disabled></el-checkbox>
 								    	</el-checkbox-group>
 								  </el-form-item>	
-						 		</el-col>
+						 		</el-col> -->
 						 	</el-row>
 						</el-collapse-item>
 						
@@ -166,7 +166,7 @@
 						 	<!-- 第三行 -->
 						 	<el-row :gutter="30">
 						 		<el-col :span="16">
-						 			 <el-form-item label="地址">
+						 			 <el-form-item label="地址" prop="address">
 								    <el-input v-model="personinfo.address"></el-input>
 								  </el-form-item>	
 						 		</el-col>
@@ -178,10 +178,23 @@
 						 	</el-row>
 						 	<!-- 第四行 -->
 						 	<el-row :gutter="30">
+								<el-col :span="8">
+									<el-form-item label="IP地址" prop="ipaddress" label-width="100px">
+										<el-input v-model="personinfo.ipaddress"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="8">
+									<el-form-item label="MAC地址" prop="macaddress" label-width="100px">
+										<el-input v-model="personinfo.macaddress"></el-input>
+									</el-form-item>
+								</el-col>
+							</el-row>
+						 	<!-- 第五行 -->
+						 	<el-row :gutter="30">
 						 		<el-col :span="24">
-						 			 <el-form-item label="备注">
-								    <el-input  type="textarea" :rows="3" v-model="personinfo.tips"></el-input>
-								  </el-form-item>	
+						 			<el-form-item label="备注" prop="tips">
+								    	<el-input type="textarea" :rows="3" v-model="personinfo.tips"></el-input>
+									</el-form-item>	
 						 		</el-col>
 						 	</el-row>
 						</el-collapse-item>
@@ -197,12 +210,12 @@
 	</div>
 	<!--右侧内容显示 End-->
   	<!--弹出框内容显示 Begin-->
-	<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-		<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" check-strictly="true">
+	<el-dialog title="机构" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+		<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick" @check-change="handleClicks" check-strictly="true">
 		</el-tree>
 		<span slot="footer" class="dialog-footer">
 			<el-button @click="dialogVisible = false">取 消</el-button>
-			<el-button type="primary" @click="confirms();" >确 定</el-button>
+			<el-button type="primary" @click="dailogconfirm();" >确 定</el-button>
 	    </span>
 	</el-dialog>
 	<!--弹出框内容显示 End-->
@@ -211,9 +224,10 @@
 
 <script>
 	import Config from '../../config.js'
+	import Validators from '../../core/util/validators.js'
 	import vheader from '../common/vheader.vue'
 	import navs_header from '../common/nav_tabs.vue'
-
+	
 	export default {
 		name: 'personinfo',
 		components: {
@@ -221,76 +235,6 @@
 			navs_header,
 		},
 		data() {
-		    var checknickname= (rule, value, callback) => {//验证人员姓名
-		        if (value === '') {
-		          return callback(new Error('人员姓名不能为空'));
-		        }
-		         callback();
-		    };
-
-		    var checklaborcode = (rule, value, callback) => {//验证工号
-			    if (value === '') {
-			          return callback(new Error('工号不能为空'));
-			    } else {
-					var targ = /^[A-Za-z0-9]+$/;
-					if( !targ.test(value)){
-	                    callback(new Error('工号只支持英文、数字'));
-	                }
-					callback();
-				}	        
-			};
-
-		    var checkemail = (rule, value, callback) => {//验证电子邮箱
-		        if (value === '') {
-		            callback(new Error('电子邮箱不能为空'));
-		        } else {
-			        var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-			        if(!reg.test(value)){
-			            callback(new Error('请输入有效的邮箱'));
-			        }else{
-			        	callback();
-			        }
-		        }
-		    };
-	    	var checktelephone = (rule, value, callback) => {//验证电话号码
-	        	var reg = /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/;
-	        	if (!reg.test(value)) {
-			    	console.log(reg)
-			    	callback(new Error('请输入有效的电话号码，格式为：0000-0000000'));
-			    } else {
-			    	callback();
-			    }
-		      };
-
-		    var checkphone = (rule, value, callback) => {//验证手机号
-		        if (value === '') {
-		          return callback(new Error('手机号不能为空'));
-		        } else {
-	          		if (value !== '') {
-	            		var reg=/^1[3456789]\d{9}$/;
-			            if(!reg.test(value)){
-			            	callback(new Error('请输入有效的手机号码'));
-			            }
-	            		callback();
-	        		}
-	        	}
-		    };
-
-			var checkidnumber = (rule, value, callback) => {//验证身份证号
-				if (value && (!(/\d{17}[\d|x]|\d{15}/).test(value) || (value.length !== 15 && value.length !== 18))) {
-  				    callback(new Error('身份证号码不符合规范'))
-  				} else {
-  				    callback()
-  				}
-		    };
-		    var checkzipcode = (rule, value, callback) => {//验证邮政编码
-		        if (value && (!(/^[0-9]{6}$/).test(value))) {
-  				    callback(new Error('邮政编码不符合规范'))
-  				} else {
-  				    callback()
-  				}
-		    };
-
 			return {
 				basic_url: Config.dev_url,
 				editSearch: '',
@@ -299,8 +243,9 @@
 				'男': 1,
 				'女': 0,
 				activeNames: ['1','2'],//手风琴数量
-				show:false,			  
+				show:false,
 				userList: [],
+				selectData: [], //
 				isShow: false,
 				ismin:true,
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
@@ -308,7 +253,7 @@
 	            labelPosition: 'top',
 	            dialogVisible: false, //对话框
 	            personinfo:{
-	          		laborcode:'',//工号
+	          		worknumber:'',//工号
 	          		companyId: '',//所属组织ID
 	          		companyName: '',//所属组织
 	          		deptId: '',//所属机构ID
@@ -320,9 +265,9 @@
 	          		password:'',//登录口令
 	          		birthday:'',//出生日期
 	          		sex:'',//性别
-	          		sex:'',//性别名称
 	          		idnumber:'',//身份证号
-	          		roles:'',//角色
+					roleId: [],//角色ID
+	          		roles: [],//角色
 	          		entrytime:'',//入职日
 	          		email:'',//邮箱
 	          		phone:'',//手机
@@ -330,6 +275,8 @@
 	          		tips:'',//备注
 	          		telephone:'',//联系电话
 	          		zipcode:'',//邮编
+	          		ipaddress:'',//IP地址
+	          		macaddress:'',//MAC地址
 	          		//logintype: [],//登录方式
 	          		//rex:'',//传真号
 	          		//orders:'',//排序号
@@ -342,28 +289,29 @@
 					children: "subDepts",
 					label: "fullname"
 				},
-	          rules:{
-		        nickname: [//required: true,必填标题加红*
-		            { required: true, validator: checknickname, trigger: 'blur' }
-		          ],
-	          	laborcode: [
-		            { required: true, validator: checklaborcode, trigger: 'blur' }
-		          ],
+	          rules: {//required: true,必填标题加红*
+	          	roleId: [{required: true,trigger: 'blur',message: '必填',}],
+		        nickname: [{required: true,trigger: 'blur',validator: Validators.isNickname}],
+	          	worknumber: [
+					{required: true,trigger: 'blur',message: '必填'},
+					{validator: Validators.isWorknumber, trigger: 'blur'},//引用 isWorknumber
+				],
 		        email: [
-		            { required: true, validator: checkemail, trigger: 'blur' }
-		          ],
-		        telephone: [
-		            { validator: checktelephone, trigger: 'blur' }
-		          ],
-		        phone: [
-		            { required: true, validator: checkphone, trigger: 'blur' }
-		          ],
-		        idnumber: [
-		            { validator: checkidnumber, trigger: 'blur' }
-		          ],
-		        zipcode: [
-		            { validator: checkzipcode, trigger: 'blur' }
-		          ]
+					{required: true,trigger: 'blur',message: '必填'},
+					{validator: Validators.isEmail, trigger: 'blur'},
+				],
+		        telephone: [{required: false,trigger: 'blur',validator: Validators.isTelephone}],
+		        phone:  [
+					{required: true,trigger: 'blur',message: '必填'},
+					{validator: Validators.isPhone, trigger: 'blur'},
+				],
+		        idnumber: [{required: false,trigger: 'blur',validator: Validators.isIdnumber}],
+		        address: [{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],
+		        zipcode: [{required: false,trigger: 'blur',validator: Validators.isZipcode}],
+          		ipaddress: [{required: false,trigger: 'blur',validator: Validators.isIpaddress}],
+          		macaddress: [{required: false,trigger: 'blur',validator: Validators.isMacaddress}],
+          		post: [{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],
+				tips: [{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],
 	          },
 	          leftNavs: [//leftNavs左侧菜单数据
 					{
@@ -379,18 +327,21 @@
 			}
 		
 		},
-		mounted(){
-			this.getData();
-		},
 		
 		methods: {  
 			getData(){//获取当前用户信息
 	    		var url = this.basic_url + '/api-user/users/currentMap';
-	    		this.$axios.get(url, {}).then((res) => {
-	    			//console.log(res.data);
+	    		this.$axios.get(url, {}).then((res) => { 
 	    			//res.data.enabled ? '启用' : '冻结';
 	    			//res.data.sex ? '男' : '女';
 	    			this.personinfo=res.data;
+	    			this.personinfo.roleId = [];
+	    			var roles =res.data.roles;
+	    			 // console.log(roles);
+	    			for(var i = 0; i < roles.length; i++) {
+						this.personinfo.roleId.push(roles[i].id);
+					}
+	    			
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -398,39 +349,54 @@
 					});
 				});
 	    	},
-			
-			getCompany() {//所属组织
-				this.editSearch = 'company';
-				var url = this.basic_url + '/api-user/depts/type';
-				this.$axios.get(url, {
-				}).then((res) => {
-					this.resourceData = res.data.data;
-					this.dialogVisible = true;
-				});
-
+	    	handleNodeClick(data) { //获取勾选树菜单节点
+				//console.log(data);
 			},
+			handleClicks(data,checked, indeterminate) {//获取机构勾选树菜单节点
+				this.getCheckboxData = data;
+           		 this.i++;
+            		if(this.i%2==0){
+                	if(checked){
+                    	this.$refs.tree.setCheckedNodes([]);
+                    	this.$refs.tree.setCheckedNodes([data]);
+                    	//交叉点击节点
+               		 }else{
+                     this.$refs.tree.setCheckedNodes([]);
+                    	//点击已经选中的节点，置空
+                	 }
+            		}
+        	},
+			// getCompany() {//所属组织
+			// 	this.editSearch = 'company';
+			// 	var url = this.basic_url + '/api-user/depts/type';
+			// 	this.$axios.get(url, {}).then((res) => {
+			// 		this.resourceData = res.data.data;
+			// 		this.dialogVisible = true;
+			// 	});
+			// },
 			getDept() {//所属机构
 				this.editSearch = 'dept';
-				var url = this.basic_url + '/api-user/depts/type';
-				this.$axios.get(url, {
-				}).then((res) => {
+				var url = this.basic_url + '/api-user/depts/treeMap';
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
 					this.resourceData = res.data.data;
 					this.dialogVisible = true;
 				});
 			},
-			getRole() {//角色
-				this.editSearch = 'roles';
+			//角色
+			getRole() {
 				var url = this.basic_url + '/api-user/roles';
-				this.$axios.get(url, {
-				}).then((res) => {
-					this.resourceData = res.data.data;
-					this.dialogVisible = true;
-				});
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res.data.data);
+					this.selectData = res.data.data;
+				}).catch(error => {
+					console.log('请求失败');
+				})
 			},
 			getCheckedNodes() {//获取树菜单节点
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
 			},
-			confirms() {//弹出框确定按钮调用数据
+			dailogconfirm() {//弹出框确定按钮调用数据
 				this.getCheckedNodes();
 				this.dialogVisible = false;
 				if(this.editSearch == 'company') {
@@ -455,10 +421,26 @@
 			            var url = this.basic_url + '/api-user/users/me';
 			            var personinfo=this.personinfo;
 			            personinfo.sex = personinfo.sex == '男' ? 1 : 0;
-			            personinfo.enabled = personinfo.enabledName == '启用' ? 1 : 0;
-			            console.log(this.personinfo)
+						var roleId = "";
+						if(typeof(personinfo.roleId) != 'undefind' && personinfo.roleId.length > 0) {
+							var arr = [];
+							personinfo.roleId.forEach(function(item) {
+								var roles = _this.selectData;
+								for(var j = 0; j < roles.length; j++) {
+									if(roles[j].id == item) {
+										arr.push(roles[j]);
+										roleId = roleId + roles[j].id + ",";
+									}
+								}
+							});
+							personinfo.roleId = roleId;
+							personinfo.roles = arr;
+						} else {
+							personinfo.roleId = '';
+							personinfo.roles = [];
+						}
 			            this.$axios.put(url, this.personinfo).then((res) => {
-							console.log(res.data.resp_code);
+							// console.log(res.data.resp_code);
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
 								this.$message({
@@ -523,6 +505,10 @@
 				$(".wrapper").css("padding-left", "220px");
 				$(".navs>li").css("margin", "0px 10px");
 			}
+		},
+		mounted() {
+			this.getData();
+			this.getRole();
 		},
 	}
 </script>

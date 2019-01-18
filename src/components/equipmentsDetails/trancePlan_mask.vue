@@ -17,7 +17,7 @@
 				</div>
 			</div>
 			<div class="mask_content">
-				<el-form status-icon :model="dataInfo" :rules="rules"   ref="dataInfo" label-width="100px" class="demo-user">
+				<el-form :model="dataInfo" :rules="rules"   ref="dataInfo" label-width="100px" class="demo-user">
 					<div class="accordion">
 
 						<!-- 设备基本信息 -->
@@ -32,20 +32,26 @@
 								</el-row>
 								<el-form-item v-for="item in basicInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" label-width="160px">
 									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" style="width: 220px;" :disabled="noedit"></el-input>
+									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='selname'&&item.prop=='A_NAME'" style="width: 220px;" :disabled="true">
+										<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="addinstru"></el-button>
+									</el-input>
 									<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'"></el-input>
 									<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" :disabled="noedit">
 									</el-date-picker>
 									<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'" :disabled="noedit">
 										<el-radio :label="it.label" v-for="it in item.opts" :key="it.id"></el-radio>
 									</el-radio-group>
-									<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'" @change="selChange" :disabled="noedit">
+									<el-select clearable v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'" @change="selChange" :disabled="noedit">
 										<el-option v-for="item in assets"
 										:key="item.ID"
 										:label="item.DESCRIPTION"
 										:value="item.DESCRIPTION">
 										</el-option>
 									</el-select>
-									<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'sel'" style="width: 60px;" :disabled="noedit">
+									<el-select clearable v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'seldept'" :disabled="noedit">
+										<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+									</el-select>
+									<el-select clearable v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'sel'" style="width: 60px;" :disabled="noedit">
 										<el-option v-for="item in time"
 										:key="item"
 										:label="item"
@@ -71,7 +77,7 @@
 									</el-table-column>
 								</el-table>
 							</el-collapse-item>
-							<el-collapse-item title="文档" name="3">
+							<el-collapse-item title="文件" name="3">
 								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
 							</el-collapse-item>
 							<!-- 其他信息 -->
@@ -90,7 +96,7 @@
 
 					<div class="el-dialog__footer" v-show="noviews">
 						<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
-						<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并添加</el-button>
+						<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并继续</el-button>
 						<el-button @click='close'>取消</el-button>
 						<!-- <el-button type="primary" @click='submitForm'>提交</el-button> -->
 					</div>
@@ -98,6 +104,53 @@
 			</div>
 			<!--底部-->
 		</div>
+		<!--设备名称 Begin-->
+		<el-dialog :visible.sync="dialogVisname" width="60%" :before-close="handleClose">
+			<el-table :header-cell-style="rowClass" :data="assetList" border stripe height="400px" style="width: 100%;" :default-sort="{prop:'assetList', order: 'descending'}" @selection-change="SelectChange" v-loadmore="loadMore">
+							<el-table-column type="selection" width="55" fixed align="center">
+							</el-table-column>
+							<el-table-column label="设备编号" width="130" sortable prop="ASSETNUM">
+							</el-table-column>
+							<el-table-column label="设备名称" width="200" sortable prop="DESCRIPTION">
+							</el-table-column>
+							<el-table-column label="型号" sortable prop="MODEL">
+							</el-table-column>
+							<el-table-column label="技术指标" width="120" sortable prop="ASSET_KPI">
+							</el-table-column>						
+							<el-table-column label="制造商" width="140" sortable prop="VENDOR">
+							</el-table-column>
+							<el-table-column label="出厂编号" width="160" sortable prop="FACTOR_NUM">
+							</el-table-column>
+							<el-table-column label="价格(万元)" width="140" sortable prop="A_PRICE">
+							</el-table-column>
+							<el-table-column label="接受日期" width="140" sortable prop="ACCEPT_DATE" :formatter="dateFormat">
+							</el-table-column>
+							<el-table-column label="启用日期" width="140" sortable prop="S_DATE" :formatter="dateFormat">
+							</el-table-column>						
+							<el-table-column label="配置地址" width="140" sortable prop="C_ADDRESS">
+							</el-table-column>
+							<el-table-column label="接收状态" width="120" sortable prop="A_STATUS">
+							</el-table-column>
+							<el-table-column label="保管人" width="200" sortable prop="KEEPER">
+							</el-table-column>						
+							<el-table-column label="备注" width="200" sortable prop="MEMO">
+							</el-table-column>
+						</el-table>
+						<el-pagination background class="pull-right pt10"
+				            @size-change="sizeChange"
+				            @current-change="currentChange"
+				            :current-page="page.currentPage"
+				            :page-sizes="[10, 20, 30, 40]"
+				            :page-size="page.pageSize"
+				            layout="total, sizes, prev, pager, next"
+				            :total="page.totalCount">
+				        </el-pagination>
+			<span slot="footer" class="dialog-footer" v-if="noviews">
+    			<el-button @click="dialogVisname = false">取 消</el-button>
+    			<el-button type="primary" @click="addinstruname">确 定</el-button>
+  			</span>
+		</el-dialog>
+		<!--设备名称 End-->
 	</div>
 </template>
 
@@ -122,6 +175,8 @@
 				}, 1000);
 			};
 			return {
+				loadSign: true, //加载
+				commentArr: {},
 				docParm: {
 					'model': 'new',
 					'appname': '',
@@ -211,7 +266,7 @@
 						label: '设备名称',
 						prop: 'A_NAME',
 						width: '50%',
-						type: 'select',
+						type: 'selname',
 						displayType: 'inline-block'
 					},
 					{
@@ -247,7 +302,7 @@
 						label: '溯源机构',
 						prop: 'PM_MECHANISM',
 						width: '50%',
-						type: 'input',
+						type: 'seldept',
 						displayType: 'inline-block'
 					},
 					{
@@ -383,12 +438,49 @@
 				hintshow:false,
 				statusshow1:true,
 				statusshow2:false,
+				dialogVisname:false,//设备名称弹出框
+				assetList:[],//弹出框数据
+				selName:'',//表格勾选数据
+				page: {//分页显示
+					currentPage: 1,
+					pageSize: 10,
+					totalCount: 0
+				},
 			};
 		},
 		methods: {
 			//表头居中
 			rowClass({ row, rowIndex}) {
 				return 'text-align:center'
+			},
+			SelectChange(val){
+				this.selName = val;
+			},
+			sizeChange(val) {
+		      this.page.pageSize = val;
+		      this.requestData();
+		    },
+		    currentChange(val) {
+		      this.page.currentPage = val;
+		      this.requestData();
+			},
+			dateFormat(row, column) {
+				var date = row[column.property];
+				if(date == undefined) {
+					return "";
+				}
+				return this.$moment(date).format("YYYY-MM-DD");
+			},
+			//设备名称放大镜按钮
+			addinstru(){
+				this.$emit('request');
+				this.dialogVisname = true;
+			},
+			//设备名称弹出框确定按钮
+			addinstruname(){
+				this.dataInfo.A_NAME = this.selName[0].DESCRIPTION;
+				this.dialogVisname = false;
+				this.$emit('request');
 			},
 			getUser(opt){
 				var url = this.basic_url + '/api-user/users/currentMap';
@@ -411,6 +503,19 @@
 						message: '网络错误，请重试',
 						type: 'error'
 					});
+				});
+			},
+			//机构值
+			getCompany() {
+				var type = "2";
+				var url = this.basic_url + '/api-user/depts/treeByType';
+				this.$axios.get(url, {
+					params: {
+						type: type
+					},
+				}).then((res) => {
+					console.log(res.data);
+					this.selectData = res.data;
 				});
 			},
 			getToday(){
@@ -609,8 +714,63 @@
 				this.save(dataInfo);
 				this.show = true;
 			},
+			handleClose(done) {
+				this.$confirm('确认关闭？')
+					.then(_ => {
+						done();
+					})
+					.catch(_ => {});
+			},
+			loadMore() {
+				if(this.loadSign) {
+					this.loadSign = false
+					this.page.currentPage++
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							return
+						}
+					setTimeout(() => {
+						this.loadSign = true
+					}, 1000)
+					this.requestData()
+					//console.log('到底了', this.page.currentPage)
+				}
+			},
+			requestData(index) {
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				}
+				var url = this.basic_url + '/api-apps/app/asset';
+				this.$axios.get(url, {
+					params: data
+				}).then((res) => {
+					this.page.totalCount = res.data.count;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
+					}
+					this.commentArr[this.page.currentPage] = res.data.data
+					let newarr = []
+					for(var i = 1; i <= totalPage; i++) {
+
+						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+
+							for(var j = 0; j < this.commentArr[i].length; j++) {
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					this.assetList = newarr;
+				}).catch((wrong) => {})
+				
+			},
 		},
 		mounted() {
+			this.requestData();
+			this.getCompany();
 			var url = this.basic_url + '/api-apps/app/asset';
 			this.$axios.get(url, {
 				params: {}

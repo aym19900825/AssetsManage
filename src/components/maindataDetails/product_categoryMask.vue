@@ -38,7 +38,7 @@
 									</el-col>-->
 									<!--<template slot-scope="scope">
 											<label>信息状态</label>
- 									       <!--  <span v-text="scope.STATUS=='1'?'活动':'不活动'"></span>-->
+ 									       <span v-text="scope.STATUS=='1'?'活动':'不活动'"></span>-->
 									<!--<span>{{scope.STATUS}}</span>
  									       	
  									       </span>
@@ -70,8 +70,8 @@
 								</el-row>
 								<el-row>
 									<el-col :span="8" v-if="dept">
-										<el-form-item label="机构" prop="DEPARTMENT">
-											<el-input v-model="CATEGORY.DEPARTMENT" :disabled="edit"></el-input>
+										<el-form-item label="机构" prop="DEPTIDDesc">
+											<el-input v-model="CATEGORY.DEPTIDDesc" :disabled="edit"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -104,9 +104,9 @@
 					</div>
 					<div class="el-dialog__footer" v-show="noviews">
 						<el-button type="primary" @click="saveAndUpdate('CATEGORY')">保存</el-button>
-						<el-button type="success" @click="saveAndSubmit('CATEGORY')" v-show="addtitle">保存并添加</el-button>
+						<el-button type="success" @click="saveAndSubmit('CATEGORY')" v-show="addtitle">保存并继续</el-button>
 						<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('CATEGORY')">修订</el-button>
-						<el-button v-if="modify" type="success" @click="update('CATEGORY')">启用</el-button>
+						<!-- <el-button v-if="modify" type="success" @click="update('CATEGORY')">启用</el-button> -->
 						<el-button @click="close">取消</el-button>
 					</div>
 				</el-form>
@@ -142,8 +142,8 @@
 		data() {
 			var validateNum = (rule, value, callback) => {
 				if(value != ""){
-		             if((/^[0-9a-zA-Z()]+$/).test(value) == false){
-		                 callback(new Error("请填写数字或字母（编码不填写可自动生成）"));
+		             if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
+		                 callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
 		             }else{
 		                 callback();
 		             }
@@ -155,7 +155,11 @@
 				if(value === '') {
 					callback(new Error('请填写产品类别名称'));
 				} else {
-					callback();
+					if((/^[!@#$%^&*";',.~！@#￥%……&*《》？，。?、|]+$/).test(value) == true){
+		                 callback(new Error("请规范填写名称"));
+		            }else{
+		                callback();
+		            }
 				}
 			};
 			return {
@@ -221,9 +225,9 @@
 				//				this.CATEGORY.NUM =  this.rand(1000,9999);
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					console.log(res.data);
-					this.CATEGORY.DEPARTMENT = res.data.deptName;
+					this.CATEGORY.DEPTID = res.data.deptId;
 					this.CATEGORY.ENTERBY = res.data.id;
-					this.CATEGORY.ENTERBYDesc = res.data.nickname;
+					// this.CATEGORY.ENTERBYDesc = res.data.nickname;
 					var date = new Date();
 					this.CATEGORY.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 				}).catch((err) => {
@@ -259,9 +263,9 @@
 				this.statusshow1 = false;
 				this.statusshow2 = true;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					this.CATEGORY.DEPARTMENT = res.data.deptName;
+					this.CATEGORY.DEPTID = res.data.deptId;//传给后台机构id
 					this.CATEGORY.CHANGEBY = res.data.id;
-					this.CATEGORY.CHANGEBYDesc = res.data.nickname;
+					// this.CATEGORY.CHANGEBYDesc = res.data.nickname;
 					var date = new Date();
 					this.CATEGORY.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
 					//深拷贝数据
@@ -401,6 +405,8 @@
 			},
 			// 保存users/saveOrUpdate
 			save(CATEGORY) {
+				console.log(233333);
+				console.log(this.CATEGORY);
 				this.$refs[CATEGORY].validate((valid) => {
 					if(valid) {
 						this.CATEGORY.STATUS = ((this.CATEGORY.STATUS == "1" || this.CATEGORY.STATUS == '活动') ? '1' : '0');
@@ -458,7 +464,7 @@
 					this.show = false;
 				}
 			},
-			//保存并添加
+			//保存并继续
 			saveAndSubmit(CATEGORY) {
 				this.save(CATEGORY);
 				// this.visible();

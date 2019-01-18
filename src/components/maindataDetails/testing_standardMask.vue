@@ -20,32 +20,17 @@
 					<div class="accordion" id="information">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基本信息" name="1">
-								<el-row class="pb10"style="margin-right: 5px;">
+								<el-row class="pb10" style="margin-right: 5px;">
 									<el-col :span="3" class="pull-right">
 										<el-input v-model="dataInfo.VERSION" :disabled="true">
 											<template slot="prepend">版本</template>
 										</el-input>
 									</el-col>
-									<!--<el-col :span="5" class="pull-right" v-if="modify">
-										<el-input v-model="dataInfo.STATUS=='1'?'活动':'不活动'" :disabled="true">
-											<template slot="prepend">信息状态</template>
-										</el-input>
-									</el-col>
-									<el-col :span="5" class="pull-right" v-else>
-										<el-input v-model="dataInfo.STATUS" :disabled="true">
-											<template slot="prepend">信息状态</template>
-										</el-input>
-									</el-col>-->
-									 <!-- <el-col :span="6" class="pull-right">
-										<el-input v-model="dataInfo.S_NUM" :disabled="true">
-											<template slot="prepend">产品编号</template>
-										</el-input>
-									</el-col> --> 
 								</el-row>
 								<el-row>
 									<el-col :span="8">
 										<el-form-item label="标准编号" prop="S_NUM">
-											<el-input v-model="dataInfo.S_NUM" :disabled="noedit"></el-input>
+											<el-input v-model="dataInfo.S_NUM" :disabled="noedit" placeholder="编码不填写可自动生成"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -85,20 +70,20 @@
 								</el-row>
 								<el-row>
 									<el-col :span="8" v-if="dept">
-										<el-form-item label="机构" prop="DEPARTMENT">
-											<el-input v-model="dataInfo.DEPARTMENT" :disabled="true"></el-input>
+										<el-form-item label="机构" prop="DEPTIDDesc">
+											<el-input v-model="dataInfo.DEPTIDDesc" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 							</el-collapse-item>
 							<el-collapse-item title="文件" name="2">
-								<doc-table ref="docTable" :docParm = "docParm"></doc-table>
+								<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save"></doc-table>
 							</el-collapse-item>
 							<el-collapse-item title="其它" name="3" v-show="views">
 								<el-row>
 									<el-col :span="8">
-										<el-form-item label="录入人" prop="ENTERBY">
-											<el-input v-model="dataInfo.ENTERBY" :disabled="true"></el-input>
+										<el-form-item label="录入人" prop="ENTERBYDesc">
+											<el-input v-model="dataInfo.ENTERBYDesc" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -107,8 +92,8 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="修改人" prop="CHANGEBY">
-											<el-input v-model="dataInfo.CHANGEBY" :disabled="true"></el-input>
+										<el-form-item label="修改人" prop="CHANGEBYDesc">
+											<el-input v-model="dataInfo.CHANGEBYDesc" :disabled="true"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -123,9 +108,9 @@
 
 					<div class="el-dialog__footer" v-show="noviews">
 							<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并添加</el-button>
+							<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并继续</el-button>
 							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('dataInfo')">修订</el-button>
-							<el-button v-if="modify" type="success" @click="update('dataInfo')">启用</el-button>
+							<!-- <el-button v-if="modify" type="success" @click="update('dataInfo')">启用</el-button> -->
 							<el-button @click="close">取消</el-button>
 					</div>
 				</div>
@@ -149,6 +134,7 @@
 
 <script>
 	import Config from '../../config.js'
+	import Validators from '../../core/util/validators.js'
 	import docTable from '../common/doc.vue'
 	export default {
 		name: 'masks',
@@ -188,7 +174,33 @@
 				if(value === '') {
 					callback(new Error('请填写描述'));
 				} else {
-					callback();
+					if((/^[!@#$%^&*:";',.~！@#￥%……&*《》？，。?、|]+$/).test(value) == true){
+		                 callback(new Error("请规范填写名称"));
+		            }else{
+		                callback();
+		            }
+				}
+			};
+			var validateSname = (rule, value, callback) => {
+				if(value === '') {
+					callback(new Error('请填写标准名称'));
+				} else {
+					if((/^[!@#$%^&*:";',.~！@#￥%……&*《》？，。?、|]+$/).test(value) == true){
+		                 callback(new Error("请规范填写标准名称"));
+		            }else{
+		                callback();
+		            }
+				}
+			};
+			var validateEname = (rule, value, callback) => {
+				if(value === '') {
+					callback(new Error('请填写标准名称'));
+				} else {
+					if((/^[!@#$%^&*";',.~！@#￥%……&*《》？，。?、|]+$/).test(value) == true){
+		                 callback(new Error("请规范填写标准名称"));
+		            }else{
+		                callback();
+		            }
 				}
 			};
 			return {
@@ -270,10 +282,14 @@
 					}
 				],
 				rules: {
-//					S_NUM: [{ required: true, message: '必填', trigger: 'blur' }],//名称
-					S_NAME: [{ required: true, message: '必填', trigger: 'blur' }],//名称
+					S_NUM: [{required: false, trigger: 'blur',validator: Validators.isCodeNum}],//编号
+					S_NAME: [{required: true, trigger: 'blur',validator: Validators.isNickname}],//中文名称
+					S_ENGNAME: [{required: true, trigger: 'blur', validator: Validators.isInteger}],//英文名称
 //					RELEASETIME:[{required: true, message: '必填', trigger: 'change'}],
-					RELEASE_UNIT: [{required: true,trigger: 'blur',message: '必填',}],
+					RELEASE_UNIT: [
+						{required: true,trigger: 'blur',message: '必填',},
+						{validator: Validators.isSpecificKey, trigger: 'blur'},
+					],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -293,13 +309,12 @@
 		},
 		methods: {
 			editBox(val){
-				console.log('edit=========');
 				this.dialogFormVisible = true;
 				this.editDataInfoProp = val;
 				this.editDataInfo = this.dataInfo[val];
 			},
 			saveEditBox(){
-				var  editProp = this.editDataInfoProp;
+				var editProp = this.editDataInfoProp;
 				this.dataInfo[editProp] = this.editDataInfo;
 				this.resetEditBox();
 			},
@@ -337,10 +352,19 @@
 			getUser(opt){
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					if(opt!='new'){
-						this.dataInfo.DEPARTMENT = res.data.deptName;
-						this.dataInfo.CHANGEBY = res.data.nickname;
+						this.dataInfo.DEPTID = res.data.deptId;
+						this.dataInfo.CHANGEBY = res.data.id;
 						var date = new Date();
 						this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
+						//深拷贝数据
+						let _obj = JSON.stringify(this.dataInfo);
+						this.DATAINFO = JSON.parse(_obj);
+					}else if(opt =='new'){
+						this.dataInfo.DEPARTMENT = '';
+						this.dataInfo.DEPTID = res.data.deptId;
+						this.dataInfo.ENTERBY = res.data.id;
+						var date = new Date();
+						this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 						//深拷贝数据
 						let _obj = JSON.stringify(this.dataInfo);
 						this.DATAINFO = JSON.parse(_obj);
@@ -454,11 +478,11 @@
 		          		var DATAINFO = JSON.stringify(this.DATAINFO); //接过来的数据
  						var dataInfo = JSON.stringify(this.dataInfo); //获取新新的数据
 				 		if(dataInfo == DATAINFO){
-				  		this.$message({
-							message: '没有修改不能修改',
-							type: 'warning'
-						});
-						return false;
+							this.$message({
+								message: '没有修改内容，不允许修订',
+								type: 'warning'
+							});
+							return false;
 					  	}else{
 							var url = this.basic_url + '/api-apps/app/inspectionSta/operate/upgraded';
 							this.$axios.post(url,this.dataInfo).then((res) => {
@@ -512,29 +536,39 @@
 				});
 			},
 			// 保存users/saveOrUpdate
-			save(dataInfo) {
-				this.$refs[dataInfo].validate((valid) => {
+			save(opt) {
+				this.$refs['dataInfo'].validate((valid) => {
 					this.dataInfo.RELEASETIME =  this.$moment(this.dataInfo.RELEASETIME).format("YYYY-MM-DD HH:mm:ss");
 					this.dataInfo.STARTETIME = this.$moment(this.dataInfo.STARTETIME).format("YYYY-MM-DD HH:mm:ss");
+					if(!valid && opt == 'docUpload'){
+						this.$message({
+							message: '请先正确填写信息，再进行文档上传',
+							type: 'warn'
+						});
+					}
 					if (valid) {
 						this.dataInfo.STATUS = ((this.dataInfo.STATUS == "1"||this.dataInfo.STATUS == '活动') ? '1' : '0');
-//					this.dataInfo.STATUS=this.dataInfo.STATUS=="活动" ? '1' : '0';
 						var url = this.basic_url + '/api-apps/app/inspectionSta/saveOrUpdate';
 						this.$axios.post(url, this.dataInfo).then((res) => {
 							if(res.data.resp_code == 0) {
-								this.$message({
-									message: '保存成功',
-									type: 'success'
-								});
-								//重新加载数据
-								this.$emit('request');
-								this.$emit('reset');
-								this.$refs['dataInfo'].resetFields();
-								this.visible();
+								if(opt == 'docUpload'){
+									this.docParm.recordid = res.data.datas.id;
+									this.docParm.model = 'edit';
+									this.$refs.docTable.autoLoad();
+									this.dataInfo.ID = res.data.datas.id;
+								}else{
+									this.$message({
+										message: '保存成功',
+										type: 'success'
+									});
+									this.$emit('request');
+									this.$emit('reset');
+									this.$refs['dataInfo'].resetFields();
+									this.visible();
+								}
 							}else{
 								this.show = true;
 								if(res.data.resp_code == 1) {
-									//res.data.resp_msg!=''后台返回提示信息
 									if( res.data.resp_msg!=''){
 									 	this.$message({
 											message: res.data.resp_msg,
@@ -572,7 +606,7 @@
 					this.show = false;
 				}
 			},
-			//保存并添加
+			//保存并继续
 			saveAndSubmit(dataInfo){
 				this.save(dataInfo);
 				this.$emit('reset');

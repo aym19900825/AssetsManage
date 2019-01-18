@@ -1,5 +1,5 @@
 <template>
-	<div  class="navbar-default navbar-static-side" :style="{height: fullHeight}">
+	<div  class="navbar-default navbar-static-side scrollbar" :style="{height: fullHeight}">
 		<div class="navbarbg" @click="min2max()">
 			<span class="navbar-minimalize minimalize-styl-2">
 				<i class="icon-menu1"></i> 
@@ -19,7 +19,6 @@
 
 <script>
 import Config from '../../../config.js'
-//import navs_header from '../nav_tabs.vue'
 export default {
 	name: 'navs',
 	
@@ -36,16 +35,9 @@ export default {
 	
 	methods: {
 		addClickNav(item){
-
 			var flag = false;
-<<<<<<< HEAD
-			console.log(this.$store.state.clickedNav);
-			for(var i = 0; i < this.$store.state.clickedNav.length; i++){
-				if(item.name == this.$store.state.clickedNav[i].name){
-=======
 			for(var i = 0; i < this.$store.state.clickedNavs.length; i++){
 				if(item.name == this.$store.state.clickedNavs[i].name){
->>>>>>> 8f192f0bc1ba654365c575ae9c6012562b8b4dad
 					flag = true;
 				}
 			}
@@ -70,8 +62,6 @@ export default {
 			this.$store.dispatch('setSelectedNavAct',item);
 			//点击的值传给user
 			this.$emit('childByValue',item);
-//			console.log("left5 click:");
-//          console.log( this.$clickedNav );
 		},
 		min2max(){//左侧菜单正常和变小切换
         	if($(".navbar-static-side").width()=="220"){
@@ -94,30 +84,7 @@ export default {
 			$(".navbar-static-side").css("width", "220px");
 			$(".wrapper").css("padding-left", "220px");
 			$(".navs>li").css("margin", "0px 10px");
-		},
-		getleft(){
-			console.log(8888888);
-		var _this = this;
-		var data = {
-			menuId: this.$store.state.navid,
-			roleId: this.$store.state.roleid,
-		};
-		var url = _this.basic_url + '/api-user/menus/findSecondByRoleIdAndFisrtMenu';
-		_this.$axios.get(url, {params: data}).then((res) => {			
-			console.log(res);
-			if(_this.$route.path!=_this.$selectedNav.url){
-				_this.$selectedNav=res.data[0]
-			}
-			_this.leftNavs = res.data;
-			_this.$emit('childByValue',_this.$selectedNav);//传值给父亲
-		}).catch((wrong) => {
-			_this.$message({
-				message: '网络错误，请重试左侧1',
-				type: 'error'
-			});
-		});
-		}
-		
+		},	
 	},
 	mounted() {
 		var _this = this;
@@ -136,12 +103,6 @@ export default {
 			roleId: _this.$store.state.roleid,
 			};
 		var url = _this.basic_url + '/api-user/menus/findSecondByRoleIdAndFisrtMenu';
-<<<<<<< HEAD
-		_this.$axios.get(url, {params: data}).then((res) => {			
-			console.log(res);
-			if(_this.$route.path!=_this.$selectedNav.url){
-				_this.$selectedNav=res.data[0]
-=======
 		_this.$axios.get(url, {params: data}).then((res) => {
 			if(res.data.length>0&&res.data!='undefined'){
 			     // console.log(_this.$route.path);
@@ -160,7 +121,6 @@ export default {
 //				$(".wrapper").css({"padding-left":"0px"});
 				 _this.$emit('childByValue',_this.$store.state.selectedNav);
 				 
->>>>>>> 8f192f0bc1ba654365c575ae9c6012562b8b4dad
 			}
 				
 		}).catch((wrong) => {

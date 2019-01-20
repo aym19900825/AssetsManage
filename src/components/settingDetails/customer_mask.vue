@@ -591,7 +591,15 @@
 					});
 				});
 				this.$axios.get(this.basic_url + '/api-apps/app/customer/' + dataid, {}).then((res) => {
-					// console.log(res.data);
+					console.log(res.data);
+					//资质
+					for(var i = 0;i<res.data.CUSTOMER_QUALIFICATIONList.length;i++){
+						res.data.CUSTOMER_QUALIFICATIONList[i].isEditing = false;
+					}
+					//客户联系人
+					for(var i = 0;i<res.data.CUSTOMER_PERSONList.length;i++){
+						res.data.CUSTOMER_PERSONList[i].isEditing = false;
+					}
 					this.CUSTOMER = res.data;
 					//console.log(this.CUSTOMER.STATUS==1);
 					this.CUSTOMER.STATUS=this.CUSTOMER.STATUS=="1"? '活动' : '不活动';

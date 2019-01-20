@@ -276,6 +276,9 @@
 				});
 				var url = this.basic_url + '/api-user/dicts/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
+					for(var i = 0;i<res.data.subDicts.length;i++){
+						res.data.subDicts[i].isEditing = false;
+					}
 					this.dictionarieForm = res.data;
 					// console.log(this.dictionarieForm.subDicts);
 					this.show = true;

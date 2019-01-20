@@ -467,7 +467,7 @@
 											</el-col>
 										
 											<el-col :span="8">
-												<el-form-item label="交委托方分数" prop="REPORT_QUALITY" label-width="110px">
+												<el-form-item label="交委托方份数" prop="REPORT_QUALITY" label-width="110px">
 													<el-input v-model.number="dataInfo.REPORT_QUALITY" :disabled="noedit"></el-input>
 												</el-form-item>
 											</el-col>

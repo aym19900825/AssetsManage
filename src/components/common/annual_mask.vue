@@ -438,50 +438,57 @@
 				<!-- 高级查询划出 Begin-->
 				<div class="pb10">
 					<el-form :model="searchList" label-width="70px">
-						<el-row :gutter="10" class="pb10">
+						<el-row :gutter="10">
 							<el-col :span="6">
-								<el-input v-model="searchList.S_NUM">
-									<template slot="prepend">标准编号</template>
-								</el-input>
+								<el-form-item label="标准编号" prop="S_NUM">
+									<el-input v-model="searchList.S_NUM"></el-input>
+								</el-form-item>
 							</el-col>
 							<el-col :span="6">
-								<el-input v-model="searchList.S_NAME">
-									<template slot="prepend">标准名称</template>
-								</el-input>
+								<el-form-item label="标准名称" prop="S_NAME">
+									<el-input v-model="searchList.S_NAME"></el-input>
+								</el-form-item>
 							</el-col>
 							<el-col :span="6">
-								<el-input v-model="searchList.S_ENGNAME">
-									<template slot="prepend">英文名称</template>
-								</el-input>
+								<el-form-item label="英文名称" prop="S_ENGNAME">
+									<el-input v-model="searchList.S_ENGNAME"></el-input>
+								</el-form-item>
 							</el-col>
 							<el-col :span="6">
-								<el-input v-model="searchList.VERSION">
-									<template slot="prepend">版本</template>
-								</el-input>
+								<el-form-item label="版本" prop="VERSION">
+									<el-input v-model="searchList.VERSION"></el-input>
+								</el-form-item>
 							</el-col>		
 						</el-row>
-						<el-row :gutter="20">
+						<el-row :gutter="10">
 							<el-col :span="6">
-								<el-input v-model="searchList.DEPARTMENT">
-									<template slot="prepend">录入人机构</template>
-								</el-input>
+								<el-form-item label="机构" prop="DEPTID">
+									<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
+										<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+									</el-select>
+								</el-form-item>
 							</el-col>
 							<el-col :span="6">
-								<el-date-picker style="width: 100%" v-model="searchList.RELEASETIME" type="date" placeholder="发布时间" value-format="yyyy-MM-dd HH:mm:ss">
-								</el-date-picker>
+								<el-form-item label="发布时间" prop="RELEASETIME">
+									<el-date-picker style="width: 100%" v-model="searchList.RELEASETIME" type="date" placeholder="发布时间" value-format="yyyy-MM-dd">
+									</el-date-picker>
+								</el-form-item>
 							</el-col>
 							<el-col :span="6">
-								<el-date-picker style="width: 100%" v-model="searchList.STARTETIME" type="date" placeholder="启用时间" value-format="yyyy-MM-dd HH:mm:ss">
-								</el-date-picker>
+								<el-form-item label="启用时间" prop="STARTETIME">
+									<el-date-picker style="width: 100%" v-model="searchList.STARTETIME" type="date" placeholder="启用时间" value-format="yyyy-MM-dd">
+									</el-date-picker>
+								</el-form-item>
 							</el-col>
-							<el-col :span="3">
+							<!-- <el-col :span="3">
 								<el-select style="width: 120%" v-model="searchList.STATUS" placeholder="请选择信息状态">
 									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 									</el-option>
 								</el-select>
-							</el-col>
-							<el-col :span="2">
-								<el-button type="primary" @click="searchinfo" size="small" style="position:absolute;right:10px;">搜索</el-button>
+							</el-col> -->
+							<el-col :span="4">
+								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
@@ -507,14 +514,14 @@
 					</el-table-column>
 					<el-table-column label="版本" width="100" sortable prop="VERSION">
 					</el-table-column>
-					<el-table-column label="录入人机构" width="180" sortable prop="DEPARTMENT">
+					<el-table-column label="机构" width="180" sortable prop="DEPTIDDesc">
 					</el-table-column>
-					<el-table-column label="录入人" width="120" prop="ENTERBY" sortable>
-					</el-table-column>
+					<!-- <el-table-column label="录入人" width="120" prop="ENTERBY" sortable>
+					</el-table-column> -->
 					<el-table-column label="录入时间" width="160" prop="ENTERDATE" sortable>
 					</el-table-column>
-					<el-table-column label="修改人" width="120" prop="CHANGEBY" sortable>
-					</el-table-column>
+					<!-- <el-table-column label="修改人" width="120" prop="CHANGEBY" sortable>
+					</el-table-column> -->
 					<el-table-column label="修改时间" width="160" prop="CHANGEDATE" sortable>
 					</el-table-column>
 				</el-table>
@@ -534,34 +541,37 @@
 				<div class="pb10">
 					<el-form :model="searchList" label-width="70px">
 						<el-row :gutter="10">
-							<el-col :span="5">
-								<el-input v-model="searchList.P_NUM">
-									<template slot="prepend">项目编号</template>
-								</el-input>
-							</el-col>
-							<el-col :span="5">
-								<el-input v-model="searchList.DEPARTMENT">
-									<template slot="prepend">录入人机构</template>
-								</el-input>
-							</el-col>
-							<el-col :span="5">
-								<el-input v-model="searchList.P_NAME">
-									<template slot="prepend">项目名称</template>
-								</el-input>
-							</el-col>
-							<el-col :span="4">
-								<el-input v-model="searchList.VERSION">
-									<template slot="prepend">版本</template>
-								</el-input>
-							</el-col>
-							<el-col :span="3">
+								<el-col :span="5">
+									<el-form-item label="项目编号" prop="P_NUM">
+										<el-input v-model="searchList.P_NUM"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="5">
+									<el-form-item label="机构" prop="DEPTID">
+										<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
+											<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+										</el-select>
+									</el-form-item>
+								</el-col>
+								<el-col :span="5">
+									<el-form-item label="项目名称" prop="P_NAME">
+										<el-input v-model="searchList.P_NAME"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="5">
+									<el-form-item label="版本" prop="VERSION">
+										<el-input v-model="searchList.VERSION"></el-input>
+									</el-form-item>
+								</el-col>
+							<!-- <el-col :span="3">
 								<el-select v-model="searchList.STATUS" placeholder="请选择信息状态">
 									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 									</el-option>
 								</el-select>
-							</el-col>
-							<el-col :span="2">
-								<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+							</el-col> -->
+							<el-col :span="4">
+								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
@@ -927,6 +937,23 @@
 					this.selectData = res.data;
 				});
 			},
+			//重置
+			resetbtn(){
+				this.searchList = {
+					S_NUM:'',
+					S_NAME:'',
+					VERSION:'',
+					DEPARTMENT:'',
+					RELEASETIME:'',
+					STARTETIME:'',
+					STATUS:'',
+					P_NUM:'',
+					DEPTID:'',
+					P_NAME:'',
+					VERSION:'',
+					STATUS:'',
+				};
+			},
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
@@ -1248,6 +1275,14 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
+					S_NUM: this.searchList.S_NUM,
+					S_NAME: this.searchList.S_NAME,
+					S_ENGNAME:this.searchList.S_ENGNAME,
+					VERSION: this.searchList.VERSION,
+					DEPTID: this.searchList.DEPTID,
+					RELEASETIME: this.searchList.RELEASETIME,
+					STARTETIME: this.searchList.STARTETIME,
+					// STATUS: this.searchList.STATUS,
 				};
 				var url = this.basic_url +'/api-apps/app/inspectionSta';
 				this.$axios.get(url, {
@@ -1282,6 +1317,17 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
+					S_NAME: this.searchList.S_NAME,
+					VERSION: this.searchList.VERSION,
+					DEPARTMENT: this.searchList.DEPARTMENT,
+					RELEASETIME: this.searchList.RELEASETIME,
+					STARTETIME: this.searchList.STARTETIME,
+					STATUS: this.searchList.STATUS,
+					P_NUM: this.searchList.P_NUM,
+					DEPTID: this.searchList.DEPTID,
+					P_NAME: this.searchList.P_NAME,
+					VERSION: this.searchList.VERSION,
+					STATUS: this.searchList.STATUS,
 				};
 				this.$axios.get(this.basic_url +'/api-apps/app/inspectionPro', {
 					params: data

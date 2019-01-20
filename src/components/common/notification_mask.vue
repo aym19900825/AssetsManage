@@ -191,7 +191,7 @@
 
 											<el-table :data="dataInfo.WORK_NOTICE_CHECKBASISList" row-key="ID" border stripe :fit="true" max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.WORK_NOTICE_CHECKBASISList', order: 'descending'}">
 
-												<el-table-column prop="iconOperation" fixed width="50px">
+												<el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 													<template slot-scope="scope">
 														<i class="el-icon-check" v-if="scope.row.isEditing">
 									      	</i>
@@ -255,10 +255,10 @@
 														</el-upload>
 													</template>
 												</el-table-column>
-												<el-table-column fixed="right" label="操作" width="100">
+												<el-table-column fixed="right" label="操作" width="100" >
 													<template slot-scope="scope">
-														<el-button @click="deleteRow(scope.$index, dataInfo.WORK_NOTICE_CHECKBASISList)" type="text" size="small">
-															移除
+														<el-button @click="deleteRow(scope.$index, dataInfo.WORK_NOTICE_CHECKBASISList)" type="text" size="small" v-if="!viewtitle">
+															<i class="icon-trash red"></i>
 														</el-button>
 													</template>
 												</el-table-column>
@@ -272,7 +272,7 @@
 												</el-button>
 											</div>
 											<el-table :data="dataInfo.WORK_NOTICE_CHECKPROJECTList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.WORK_NOTICE_CHECKPROJECTList', order: 'descending'}">
-												<el-table-column prop="iconOperation" fixed width="50px">
+												<el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 													<template slot-scope="scope">
 														<i class="el-icon-check" v-show="scope.row.isEditing">
 									      	</i>
@@ -331,10 +331,10 @@
 														</el-upload>
 													</template>
 												</el-table-column>
-												<el-table-column fixed="right" label="操作" width="100">
+												<el-table-column fixed="right" label="操作" width="100" >
 													<template slot-scope="scope">
-														<el-button @click="deleteRow(scope.$index, dataInfo.WORK_NOTICE_CHECKPROJECTList)" type="text" size="small">
-															移除
+														<el-button @click="deleteRow(scope.$index, dataInfo.WORK_NOTICE_CHECKPROJECTList)" type="text" size="small" v-if="!viewtitle">
+															<i class="icon-trash red"></i>
 														</el-button>
 													</template>
 												</el-table-column>

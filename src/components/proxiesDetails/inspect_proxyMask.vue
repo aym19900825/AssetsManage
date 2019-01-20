@@ -201,7 +201,7 @@
 
 											<el-table :data="dataInfo.INSPECT_PROXY_BASISList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.INSPECT_PROXY_BASISList', order: 'descending'}">
 
-												<el-table-column prop="iconOperation" fixed label="" width="50px">
+												<el-table-column prop="iconOperation" fixed label="" width="50px" v-if="!viewtitle">
 													<template slot-scope="scope">
 														<i class="el-icon-check" v-if="scope.row.isEditing"></i>
 														<i class="el-icon-edit" v-else="v-else"></i>
@@ -251,8 +251,8 @@
 												
 												<el-table-column fixed="right" label="操作" width="120px">
 													<template slot-scope="scope">
-														<el-button @click.native.prevent="deleteRow(scope.$index,dataInfo.INSPECT_PROXY_BASISList)" type="text" size="small">
-															移除
+														<el-button @click.native.prevent="deleteRow(scope.$index,dataInfo.INSPECT_PROXY_BASISList)" type="text" size="small" v-if="!viewtitle">
+															 <i class="icon-trash red"></i>
 														</el-button>
 													</template>
 												</el-table-column>
@@ -268,7 +268,7 @@
 	                                        
 											<el-table :data="dataInfo.INSPECT_PROXY_PROJECList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.INSPECT_PROXY_PROJECList', order: 'descending'}">
 
-												<el-table-column prop="iconOperation" fixed label="" width="50px">
+												<el-table-column prop="iconOperation" fixed label="" width="50px" v-if="!viewtitle">
 													<template slot-scope="scope">
 														<i class="el-icon-check" v-if="scope.row.isEditing"></i>
 														<i class="el-icon-edit" v-else="v-else"></i>
@@ -327,8 +327,8 @@
 												</el-table-column>
 												<el-table-column fixed="right" label="操作" width="120">
 													<template slot-scope="scope">
-														<el-button @click.native.prevent="deleteRow(scope.$index,dataInfo.INSPECT_PROXY_PROJECList)" type="text" size="small">
-															移除
+														<el-button @click.native.prevent="deleteRow(scope.$index,dataInfo.INSPECT_PROXY_PROJECList)" type="text" size="small" v-if="!viewtitle">
+														 <i class="icon-trash red"></i>
 														</el-button>
 													</template>
 												</el-table-column>
@@ -344,7 +344,7 @@
 
 											<el-table :data="dataInfo.CHECK_PROXY_CONTRACTList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.CHECK_PROXY_CONTRACTList', order: 'descending'}">
 
-												<el-table-column prop="iconOperation" fixed label="" width="50px">
+												<el-table-column prop="iconOperation" fixed label="" width="50px" v-if="!viewtitle">
 													<template slot-scope="scope"><i class="el-icon-check" v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else="v-else"></i></template>
 												</el-table-column>
 
@@ -434,8 +434,8 @@
 
 												<el-table-column fixed="right" label="操作" width="120">
 													<template slot-scope="scope">
-														<el-button @click.native.prevent="deleteRow(scope.$index,dataInfo.CHECK_PROXY_CONTRACTList)" type="text" size="small">
-															移除
+														<el-button @click.native.prevent="deleteRow(scope.$index,dataInfo.CHECK_PROXY_CONTRACTList)" type="text" size="small" v-if="!viewtitle">
+															 <i class="icon-trash red"></i>
 														</el-button>
 													</template>
 												</el-table-column>

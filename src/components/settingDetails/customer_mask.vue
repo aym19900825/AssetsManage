@@ -104,15 +104,15 @@
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName" @tab-click="handleClick">
 										<el-tab-pane label="资质信息" name="first">
-											<div class="table-func table-funcb" v-show="noviews">
-												<el-button type="success" size="mini" round @click="addfield">
+											<div class="table-func table-funcb" >
+												<el-button type="success" size="mini" round @click="addfield" v-show="!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建行</font>
 												</el-button>
 											</div>
 									<!-- <el-form :label-position="labelPosition" :rules="rules"> -->
 										<el-table :header-cell-style="rowClass" :fit="true" :data="CUSTOMER.CUSTOMER_QUALIFICATIONList" row-key="ID" border stripe max-height="260" highlight-current-row style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER.CUSTOMER_QUALIFICATIONList', order: 'descending'}">
-										    <el-table-column prop="iconOperation" fixed width="50px">
+										    <el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 										      <template slot-scope="scope">
 										      	<i class="el-icon-check" v-show="scope.row.isEditing">
 										      	</i>
@@ -175,7 +175,7 @@
 										      </template>
 										    </el-table-column>
 
-										    <el-table-column fixed="right" label="操作" width="120">
+										    <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 										      <template slot-scope="scope">
 										        <el-button @click = "deleteRow(scope.$index, CUSTOMER.CUSTOMER_QUALIFICATIONList)" type="text" size="small">
 										          <i class="icon-trash red"></i>
@@ -186,15 +186,15 @@
 									  <!-- </el-form> -->
 										</el-tab-pane>
 										<el-tab-pane label="客户联系人" name="second">
-											<div class="table-func table-funcb" v-show="noviews">
-												<el-button type="success" size="mini" round @click="addrela">
+											<div class="table-func table-funcb">
+												<el-button type="success" size="mini" round @click="addrela" v-show="!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建行</font>
 												</el-button>
 											</div>
 											<!-- <el-form :label-position="labelPosition" :rules="rules"> -->
 												<el-table :header-cell-style="rowClass" :fit="true" :data="CUSTOMER.CUSTOMER_PERSONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER.CUSTOMER_PERSONList', order: 'descending'}">
-												    <el-table-column prop="iconOperation" fixed width="50px">
+												    <el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 												      <template slot-scope="scope">
 												      	<i class="el-icon-check" v-show="scope.row.isEditing">
 												      	</i>
@@ -240,7 +240,7 @@
 													    </el-form-item>
 												      </template>
 												    </el-table-column>
-												    <el-table-column fixed="right" label="操作" width="120">
+												    <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 												      <template slot-scope="scope">
 												        <el-button @click = "deleteRow(scope.$index, CUSTOMER.CUSTOMER_PERSONList)" type="text" size="small">
 												         <i class="icon-trash red"></i>

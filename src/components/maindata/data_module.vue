@@ -388,7 +388,7 @@
 			SelChange(val) {
 				this.selUser = val;
 			},
-			requestData(index) {
+			requestData() {
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -419,7 +419,12 @@
 						}
 					}
 					this.categoryList = newarr;
-				}).catch((wrong) => {})
+				}).catch((wrong) => {
+					this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+				})
 			},
 			handleNodeClick(data) {},
 			formatter(row, column) {

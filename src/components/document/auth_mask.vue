@@ -16,7 +16,7 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form :model="dataInfo" :rules="rules"   ref="dataInfo" label-width="100px" class="demo-user">
+					<el-form :model="dataInfo" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
 						<div class="accordion">
 							<!-- 关键字授权信息 -->
 							<el-collapse v-model="activeNames">
@@ -38,11 +38,11 @@
 											<font>新建行</font>
 										</el-button>
 									</div>
-									<div>
-										<el-checkbox-group v-model="checkAuth" @change="handleAuth" v-show="selKeyW.length>0">
-											<el-checkbox   v-for="item in authOptions" :label="item" :key="item"></el-checkbox>
-										</el-checkbox-group>
-									</div>
+										<div style="position: absolute; z-index: 99; right: 260px; top: 60px;">
+											<el-checkbox-group v-model="checkAuth" @change="handleAuth" v-show="selKeyW.length>0">
+												<el-checkbox v-for="item in authOptions" :label="item" :key="item"></el-checkbox>
+											</el-checkbox-group>
+										</div>
 									<el-table :data="selKeyW" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100% ;">
 										<el-table-column label="类别名称" sortable prop="categoryidDesc">
 											<template slot-scope="scope">
@@ -54,6 +54,7 @@
 												<span>{{scope.row.keywordidDesc}}</span>
 											</template>
 										</el-table-column>
+
 										<el-table-column fixed="right" label="授权" width="600px">
 											<template slot-scope="scope">
 												<el-checkbox-group v-model="scope.row.checkedList">
@@ -66,7 +67,7 @@
 												</el-checkbox-group>
 											</template>
 										</el-table-column>
-										<el-table-column fixed="right" label="操作">
+										<el-table-column fixed="right" width="150px" label="操作">
 											<template slot-scope="scope">
 												<el-button @click="del(scope.row,scope.$index)" type="text">删除</el-button>
 											</template>
@@ -223,6 +224,7 @@
 			};
 		},
 		methods: {
+			
 			handleAuth(value){
 				var _this = this;
 				var increaseFlag = false;

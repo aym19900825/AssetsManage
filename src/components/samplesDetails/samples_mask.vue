@@ -129,7 +129,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="收样人" prop="ACCEPT_PERSON" label-width="110px">
-												<el-input v-model="samplesForm.ACCEPT_PERSON":disabled="true">
+												<el-input v-model="samplesForm.ACCEPT_PERSON" :disabled="true">
 													<el-button slot="append" icon="el-icon-search" @click="getReceive" :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
@@ -187,7 +187,7 @@
 								</el-collapse-item>
 								<el-collapse-item title="样品" name="2">								
 									<div class="table-func">
-										<el-button type="success" size="mini" round @click="addfield"v-show="!viewtitle">
+										<el-button type="success" size="mini" round @click="addfield" v-show="!viewtitle">
 											<i class="icon-add"></i>
 											<font>新建行</font>
 										</el-button>
@@ -267,8 +267,8 @@
 								<el-collapse-item title="其他" name="3" v-show="views">
 									<el-row >
 										<el-col :span="8">
-											<el-form-item label="录入人" prop="ENTERBY" label-width="110px">
-												<el-input v-model="samplesForm.ENTERBY" :disabled="edit"></el-input>
+											<el-form-item label="录入人" prop="ENTERBYDesc" label-width="110px">
+												<el-input v-model="samplesForm.ENTERBYDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -277,15 +277,15 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="录入人机构" prop="DEPARTMENT" label-width="110px">
-												<el-input v-model="samplesForm.DEPARTMENT" :disabled="edit"></el-input>
+											<el-form-item label="机构" prop="DEPTIDDesc" label-width="110px">
+												<el-input v-model="samplesForm.DEPTIDDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
-									<el-row v-if="modify">
+									<el-row>
 										<el-col :span="8">
 											<el-form-item label="修改人">
-												<el-input v-model="samplesForm.CHANGEBY" :disabled="edit"></el-input>
+												<el-input v-model="samplesForm.CHANGEBYDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -510,7 +510,7 @@
 				userList:[],
 				//Tree树菜单数据
 				gridData: [], //彈出框的數據
-				isEditing: '',
+				isEditing: false,
 				commentArr:{},//下拉加载
 				tips:'1',
 				rules: { //定义需要校验数据的名称
@@ -618,8 +618,8 @@
 			visible() {//添加内容时从父组件带过来的
 				this.samplesForm.ACCEPT_DATE =  '2018-10-10';//收样日期
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					this.samplesForm.DEPARTMENT=res.data.deptName;
-					this.samplesForm.ENTERBY=res.data.nickname;
+					this.samplesForm.DEPTID = res.data.deptId;
+					this.samplesForm.ENTERBY = res.data.id;
 					var date=new Date();
 					this.samplesForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 				}).catch((err)=>{
@@ -630,15 +630,19 @@
 				})
 				this.reset();
 				this.addtitle = true;
-            	this.modifytitle = false;
+				this.modifytitle = false;
+				this.viewtitle = false;
+				this.noviews = true;
             	this.modify=false;
-            	this.show = true;
+				this.show = true;
+				this.views = false;
             	this.edit = true;
 				this.noedit = false;
 			},
 			detail(dataid) { //修改内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					this.samplesForm.CHANGEBY=res.data.nickname;
+					this.samplesForm.DEPTID = res.data.deptId;//传给后台机构id
+					this.samplesForm.CHANGEBY = res.data.id;
 					var date=new Date();
 					this.samplesForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{
@@ -648,6 +652,12 @@
 					})
 				})
 				this.$axios.get(this.basic_url + '/api-apps/app/item/' + dataid, {}).then((res) => {
+					console.log(23333);
+					console.log(res.data);
+					for(var i=0;i<res.data.ITEM_LINEList.length;i++){
+						res.data.ITEM_LINEList[i].isEditing = false;
+					}
+					console.log(res.data);
 					this.samplesForm = res.data;
 				}).catch((err) => {
 					this.$message({
@@ -659,6 +669,8 @@
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.modify = true;
+				this.views = false;
+				this.noviews = true;
 				this.show = true;
 				this.edit = true;
 				this.noedit = false;
@@ -666,8 +678,9 @@
 			//这是查看
 			view(dataid) {
 				this.addtitle = false;
+				this.modifytitle = false;
 				this.viewtitle = true;
-				this.views = true; //
+				this.views = true; 
 				this.noviews = false;
 				this.edit = true;
 				this.noedit = true;

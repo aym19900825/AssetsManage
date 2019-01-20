@@ -30,7 +30,7 @@
 			  	<el-table-column label="项目编号" sortable width="100" prop="P_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.P_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" disabled></el-input><span class="blue" @click="viewchildRow(scope.row.ID,scope.row.P_NUM)" v-else="v-else">{{scope.row.P_NUM}}</span>
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="自动生成" disabled></el-input><span class="blue" @click="viewchildRow(scope.row.ID,scope.row.P_NUM)" v-else="v-else">{{scope.row.P_NUM}}</span>
 					</el-form-item>
 			      </template>
 			    </el-table-column>
@@ -38,7 +38,7 @@
 			    <el-table-column label="项目名称" sortable width="160" prop="P_NAME">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.P_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NAME" :disabled="true" placeholder="请输入内容">
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NAME" :disabled="true" placeholder="请选择">
 			        		<el-button slot="append" icon="icon-search" @click="addprobtn(scope.row)"></el-button>
 			        	</el-input><span v-else="v-else">{{scope.row.P_NAME}}</span>
 					</el-form-item>
@@ -379,44 +379,51 @@
 				return row.enabled;
 			},
 			addfield_inspectionPro2(S_NUM) { //插入行到产品类型Table中
-				var isEditingflag=false;
-				for(var i=0;i<this.inspectionPro2Form.inspectionList.length; i++){
-					if (this.inspectionPro2Form.inspectionList[i].isEditing==false){
-						isEditingflag=false;
-					}else{
-                        isEditingflag=true;   
-                        break;
-					}
-				}
-				if (isEditingflag==false){
-                	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-                		var currentUser, currentDate, currentDept;
-						this.currentUser=res.data.nickname;
-						this.currentDept=res.data.deptid;
-						var date=new Date();
-						this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
-						var index=this.$moment(date).format("YYYYMMDDHHmmss");
-						var obj = {
-							"S_NUM": this.parentId,//所属类别编号
-							"P_NUM": '',
-							"P_NAME": '',
-							"UNITCOST": '',
-							"STATUS": '1',
-							"VERSION": '',
-							"DEPTID": this.currentDept,
-							"ENTERBY": this.currentUser,
-							"ENTERDATE": this.currentDate,
-							"isEditing": true,
-						};
-						this.inspectionPro2Form.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
-					}).catch((err)=>{
-						this.$message({
-							message:'网络错误，请重试',
-							type:'error'
-						})
+				if (this.parentId == 1) {
+					this.$message({
+						message:'请选择所属检验/检测标准',
+						type:'warning'
 					})
-	            } else {
-	                this.$message.warning("请先保存当前编辑项");
+				} else {
+					var isEditingflag=false;
+					for(var i=0;i<this.inspectionPro2Form.inspectionList.length; i++){
+						if (this.inspectionPro2Form.inspectionList[i].isEditing==false){
+							isEditingflag=false;
+						}else{
+	                        isEditingflag=true;   
+	                        break;
+						}
+					}
+					if (isEditingflag==false){
+	                	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
+	                		var currentUser, currentDate, currentDept;
+							this.currentUser=res.data.nickname;
+							this.currentDept=res.data.deptid;
+							var date=new Date();
+							this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
+							var index=this.$moment(date).format("YYYYMMDDHHmmss");
+							var obj = {
+								"S_NUM": this.parentId,//所属类别编号
+								"P_NUM": '',
+								"P_NAME": '',
+								"UNITCOST": '',
+								"STATUS": '1',
+								"VERSION": '',
+								"DEPTID": this.currentDept,
+								"ENTERBY": this.currentUser,
+								"ENTERDATE": this.currentDate,
+								"isEditing": true,
+							};
+							this.inspectionPro2Form.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
+						}).catch((err)=>{
+							this.$message({
+								message:'网络错误，请重试',
+								type:'error'
+							})
+						})
+		            } else {
+		                this.$message.warning("请先保存当前编辑项");
+					}
 				}
 			},
 			saveRow (row) {//Table-操作列中的保存行

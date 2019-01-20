@@ -374,7 +374,7 @@
 												</el-button>
 											</div>
 
-											<el-table :data="workorderForm.WORKORDER_BASISList" row-key="ID" border stripe :fit="true" max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;">
+											<el-table :data="workorderForm.WORKORDER_BASISList" row-key="ID" border stripe :fit="true" max-height="260" @cell-click="iconOperation" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'workorderForm.WORKORDER_BASISList', order: 'descending'}">
 											    <el-table-column prop="iconOperation" fixed width="50px">
 											      <template slot-scope="scope">
 											      	<i class="el-icon-check" v-show="scope.row.isEditing">
@@ -433,7 +433,7 @@
 													<font>新建行</font>
 												</el-button>
 											</div>
-							            	<el-table :data="workorderForm.WORKORDER_PROJECTList" border stripe :fit="true" max-height="260" style="width: 100%;" :default-sort="{prop:'workorderbasisList', order: 'descending'}">
+							            	<el-table :data="workorderForm.WORKORDER_PROJECTList" border stripe :fit="true" max-height="260" @cell-click="iconOperation" style="width: 100%;" :default-sort="{prop:'workorderbasisList', order: 'descending'}">
 							            		<el-table-column prop="iconOperation" fixed width="50px">
 											      <template slot-scope="scope">
 											      	<i class="el-icon-check" v-show="scope.row.isEditing">
@@ -501,7 +501,7 @@
 													<i class="icon-add"></i><font>新建行</font>
 												</el-button>
 											</div>
-							            	<el-table :data="workorderForm.WORKORDER_CHECKPERSONList" border stripe :fit="true" max-height="260" style="width: 100%;" :default-sort="{prop:'WORKORDER_CHECKPERSONList', order: 'descending'}">
+							            	<el-table :data="workorderForm.WORKORDER_CHECKPERSONList" border stripe :fit="true" max-height="260" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'WORKORDER_CHECKPERSONList', order: 'descending'}">
 							            		<el-table-column prop="iconOperation" fixed width="50px">
 											      <template slot-scope="scope">
 											      	<i class="el-icon-check" v-show="scope.row.isEditing">
@@ -545,7 +545,7 @@
 													<i class="icon-add"></i><font>新建行</font>
 												</el-button>
 											</div>
-											<el-table :data="workorderForm.WORKORDER_DATA_TEMPLATEList" border stripe :fit="true" max-height="260" style="width: 100%;" :default-sort="{prop:'WORKORDER_DATA_TEMPLATEList', order: 'descending'}">
+											<el-table :data="workorderForm.WORKORDER_DATA_TEMPLATEList" border stripe :fit="true" max-height="260" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'WORKORDER_DATA_TEMPLATEList', order: 'descending'}">
 												<el-table-column prop="iconOperation" fixed width="50px">
 											      <template slot-scope="scope">
 											      	<i class="el-icon-check" v-show="scope.row.isEditing">
@@ -876,6 +876,7 @@
 					pageSize: 10,
 					totalCount: 0
 				},
+				isEditing: true
 			};
 		},
 		methods: {
@@ -939,7 +940,14 @@
 					WORKORDER_CHECKPERSONList:[],//检验员信息
 					WORKORDER_DATA_TEMPLATEList:[],//原始数据模板
 				};
-            },
+			},
+			iconOperation(row, column, cell, event) {
+				if(column.property === "iconOperation") {
+
+					row.isEditing = !row.isEditing;
+
+				}
+			},
 			handleClick(tab, event) {
 //		        console.log(tab, event);
 		    },
@@ -1303,6 +1311,27 @@
 			detailgetData() {
 			var url = this.basic_url +'/api-apps/app/workorder/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
+					console.log(res.data);
+					//依据
+					console.log(11);
+					for(var i = 0;i<res.data.WORKORDER_BASISList.length;i++){
+						res.data.WORKORDER_BASISList[i].isEditing = false;
+					}
+					//项目
+					console.log(222);
+					for(var i = 0;i<res.data.WORKORDER_PROJECTList.length;i++){
+						res.data.WORKORDER_PROJECTList[i].isEditing = false;
+					}
+					//检验员
+					console.log(333);
+					for(var i = 0;i<res.data.WORKORDER_CHECKPERSONList.length;i++){
+						res.data.WORKORDER_CHECKPERSONList[i].isEditing = false;
+					}
+					//原始数据
+					console.log(333);
+					for(var i = 0;i<res.data.WORKORDER_DATA_TEMPLATEList.length;i++){
+						res.data.WORKORDER_DATA_TEMPLATEList[i].isEditing = false;
+					}
 					this.workorderForm = res.data;
 					this.show = true;
 				}).catch((err) => {

@@ -16,12 +16,12 @@
 				</div>
 			</div>
 			<el-form :model="professionGroForm" ref="professionGroForm">
-			  <el-table :data="professionGroForm.inspectionList.filter(data => !search || data.PROF_GROUP.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'professionGroForm.inspectionList', order: 'descending'}" v-loadmore="loadMore">
+			  <el-table :data="professionGroForm.inspectionList.filter(data => !search || data.PROF_GROUP.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'professionGroForm.inspectionList', order: 'descending'}" v-loadmore="loadMore">
 
 			  	<el-table-column label="所属项目编号" width="120" prop="P_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.P_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" disabled></el-input><span v-else="v-else">{{scope.row.P_NUM}}</span>
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="自动生成" disabled></el-input><span v-else="v-else">{{scope.row.P_NUM}}</span>
 					</el-form-item>
 			      </template>
 			    </el-table-column>
@@ -29,7 +29,7 @@
 			  	<el-table-column label="专业组编号" width="160" prop="PROF_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.PROF_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROF_NUM" disabled></el-input><span v-else="v-else">{{scope.row.PROF_NUM}}</span>
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROF_NUM" placeholder="自动生成" disabled></el-input><span v-else="v-else">{{scope.row.PROF_NUM}}</span>
 					</el-form-item>
 			      </template>
 			    </el-table-column>
@@ -37,7 +37,7 @@
 			    <el-table-column label="专业组名称" sortable prop="PROF_GROUP">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.PROF_GROUP'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROF_GROUP" :disabled="true" placeholder="请输入内容">
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROF_GROUP" :disabled="true" placeholder="请选择">
 			        		<el-button slot="append" icon="icon-search" @click="addprobtn(scope.row)"></el-button>
 			        	</el-input><span v-else="v-else">{{scope.row.PROF_GROUP}}</span>
 					</el-form-item>
@@ -82,15 +82,16 @@
 				 <el-table-column prop="iconOperation" fixed="right" label="操作" width="80">
 			      <template slot-scope="scope">
 			        <el-button type="text" id="Edit" size="medium" @click.native.prevent="saveRow(scope.row)" v-if="scope.row.isEditing">
-			        	<i class="icon-check" title="保存"></i>
+						<i class="icon-check" title="保存"></i>
 					</el-button>
+					<el-button @click="deleteRow(scope.row)" type="text" size="medium" title="删除" v-else="v-else">
+						<i class="icon-trash red"></i>
+			        </el-button>
 					<!-- <el-button type="text" size="medium" @click.native.prevent="modifyversion(scope.row)">
 			        	<i class="icon-edit" title="修改"></i>
 					</el-button> -->
 
-			        <el-button @click="deleteRow(scope.row)" type="text" size="medium" title="删除" v-else="v-else">
-			          <i class="icon-trash red"></i>
-			        </el-button>
+			       
 			      </template>
 			    </el-table-column>
 			  </el-table>
@@ -114,13 +115,13 @@
 			<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 				<el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column>
-				<el-table-column label="ID号" width="125" sortable prop="id">
+				<el-table-column label="专业组编号" width="125" sortable prop="id">
 				</el-table-column>
-				<el-table-column label="所属ID号" width="155" sortable prop="pid">
-				</el-table-column>
-				<el-table-column label="名称" sortable prop="fullname">
+				<el-table-column label="所属编号" width="155" sortable prop="pid">
 				</el-table-column>
 				<el-table-column label="机构编码" width="185" sortable prop="code">
+				</el-table-column>
+				<el-table-column label="名称" sortable prop="fullname">
 				</el-table-column>
 				<el-table-column label="版本" width="100" sortable prop="version" align="right">
 				</el-table-column>
@@ -220,48 +221,16 @@
 			   // }
 			 },
 			addprobtn(row){//查找基础数据中的检验/检测项目
-			 	var url = this.basic_url + '/api-user/users/currentMap';
-	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
-                this.departmentId = res.data.deptId;
-                console.log(this.departmentId);
-				 	this.catedata = row;//弹出框中选中的数据赋值给到table行中
-					this.dialogVisible3 = true;
-					var data = {
-						page: this.page.currentPage,
-						limit: this.page.pageSize,
-					};
-					console.log(this.parentIds);
-					// this.$axios.get(this.basic_url + '/api-user/depts/findByPid/' + this.departmentId, {
-					this.$axios.get(this.basic_url + '/api-user/depts/findByPid/' + this.parentIds, {
-						params: data
-					}).then((res) => {
-						// console.log(res.data);
-						this.page.totalCount = res.data.count;
-						//总的页数
-						let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-						if(this.page.currentPage >= totalPage) {
-							this.loadSign = false
-						} else {
-							this.loadSign = true
-						}
-						this.commentArr[this.page.currentPage] = res.data.data
-						let newarr = []
-						for(var i = 1; i <= totalPage; i++) {
-							if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-								for(var j = 0; j < this.commentArr[i].length; j++) {
-									newarr.push(this.commentArr[i][j])
-								}
-							}
-						}
-						this.categoryList = newarr;
-					}).catch((wrong) => {})
-
-				 }).catch((err) => {
-	                this.$message({
-	                    message: '网络错误，请重试',
-	                    type: 'error'
-	                });
-	            });
+				this.catedata = row;//弹出框中选中的数据赋值给到table行中
+				this.dialogVisible3 = true;
+				var currenturl = this.basic_url + '/api-user/depts/findByPid/' + this.parentIds;
+				this.$axios.get(currenturl, {}).then((res) => {
+					// console.log(res.data);
+					this.categoryList = res.data;
+					
+				}).catch(error => {
+					console.log('请求失败');
+				})
 			},
 			sizeChange(val) {//页数
 		      this.page.pageSize = val;
@@ -328,7 +297,7 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(res);
+					// console.log(res);
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -372,43 +341,50 @@
 			formatter(row, column) {
 				return row.enabled;
 			},
-			addfield_professionGro(P_NUM) { //插入行到产品类型Table中
-				var isEditingflag=false;
-				for(var i=0;i<this.professionGroForm.inspectionList.length; i++){
-					if (this.professionGroForm.inspectionList[i].isEditing==false){
-						isEditingflag=false;
-					}else{
-                        isEditingflag=true;
-                        break;
-					}
-				}
-				if (isEditingflag==false){
-                	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-                		var currentUser, currentDate, currentDept;
-						this.currentUser=res.data.nickname;
-						this.currentDept=res.data.deptid;
-						var date=new Date();
-						this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
-						var obj = {
-							"P_NUM": this.parentId,
-							"PROF_NUM": '',
-							"PROF_GROUP": '',
-							"STATUS": '1',
-							"VERSION": '',
-							"DEPTID": this.currentDept,
-							"ENTERBY": this.currentUser,
-							"ENTERDATE": this.currentDate,
-							"isEditing": true,
-						};
-						this.professionGroForm.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
-					}).catch((err)=>{
-						this.$message({
-							message:'网络错误，请重试',
-							type:'error'
-						})
+			addfield_professionGro(P_NUM) { //插入行到专业组Table中
+				if (this.parentId == 1) {
+					this.$message({
+						message:'请选择所属检验/检测项目',
+						type:'warning'
 					})
-	            } else {
-	                this.$message.warning("请先保存当前编辑项");
+				} else {
+					var isEditingflag=false;
+					for(var i=0;i<this.professionGroForm.inspectionList.length; i++){
+						if (this.professionGroForm.inspectionList[i].isEditing==false){
+							isEditingflag=false;
+						}else{
+	                        isEditingflag=true;
+	                        break;
+						}
+					}
+					if (isEditingflag==false){
+	                	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
+	                		var currentUser, currentDate, currentDept;
+							this.currentUser=res.data.nickname;
+							this.currentDept=res.data.deptid;
+							var date=new Date();
+							this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
+							var obj = {
+								"P_NUM": this.parentId,
+								"PROF_NUM": '',
+								"PROF_GROUP": '',
+								"STATUS": '1',
+								"VERSION": '',
+								"DEPTID": this.currentDept,
+								"ENTERBY": this.currentUser,
+								"ENTERDATE": this.currentDate,
+								"isEditing": true,
+							};
+							this.professionGroForm.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
+						}).catch((err)=>{
+							this.$message({
+								message:'网络错误，请重试',
+								type:'error'
+							})
+						})
+		            } else {
+		                this.$message.warning("请先保存当前编辑项");
+					}
 				}
 			},
 			saveRow (row) {//Table-操作列中的保存行
@@ -448,11 +424,12 @@
 		        });
 			},
 			deleteRow(row) {//Table-操作列中的删除行
-				this.$confirm('确定删除此产品类型吗？', '提示', {
+				this.$confirm('确定删除此数据吗？', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                 }).then(({ value }) => {
                 	var url = this.basic_url + '/api-apps/app/professionGro/' + row.ID;
+                	console.log(row.ID);
                     this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 					//resp_code == 0 是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -474,8 +451,8 @@
 			},
 			addproclass() { //小弹出框确认按钮事件
 				this.dialogVisible3 = false
-				this.catedata.PROF_NUM = this.selData[0].PROF_NUM;
-				this.catedata.PROF_GROUP = this.selData[0].PROF_GROUP;
+				this.catedata.PROF_NUM = this.selData[0].id;
+				this.catedata.PROF_GROUP = this.selData[0].fullname;
 				this.catedata.VERSION = this.selData[0].VERSION;
 				this.$emit('request');
 			},

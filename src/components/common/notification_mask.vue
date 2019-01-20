@@ -199,10 +199,7 @@
 									      	</i>
 													</template>
 												</el-table-column>
-												<el-table-column label="序号" sortable width="80px" prop="NUMBER">
-													<template slot-scope="scope">
-														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.NUMBER" disabled></el-input><span v-show="!scope.row.isEditing">{{scope.row.NUMBER}}</span>
-													</template>
+												<el-table-column label="序号" sortable width="80px" prop="NUMBER" type="index">
 												</el-table-column>
 												<el-table-column label="检验标准编号" sortable width="120px" prop="S_NUM">
 													<template slot-scope="scope">
@@ -283,12 +280,7 @@
 									      	</i>
 													</template>
 												</el-table-column>
-												<el-table-column label="序号" sortable width="120px" prop="NUMBER">
-													<template slot-scope="scope">
-														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.NUMBER'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.NUMBER" disabled></el-input><span v-show="!scope.row.isEditing">{{scope.row.NUMBER}}</span>
-														</el-form-item>
-													</template>
+												<el-table-column label="序号" sortable width="120px" prop="NUMBER" type="index">
 												</el-table-column>
 												<el-table-column label="检验检测项目编号" sortable width="145px" prop="P_NUM">
 													<template slot-scope="scope">
@@ -867,12 +859,20 @@
 			detailgetData() {
 				var url = this.basic_url +'/api-apps/app/workNot/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
+					//依据对号控制
+					for(var i = 0; i<res.data.WORK_NOTICE_CHECKBASISList.length;i++){
+						res.data.WORK_NOTICE_CHECKBASISList[i].isEditing = false;
+					}
+					//项目要求对号控制
+					for(var j = 0; j<res.data.WORK_NOTICE_CHECKPROJECTList.length;j++){
+						res.data.WORK_NOTICE_CHECKPROJECTList[j].isEditing = false;
+					}
 					this.dataInfo = res.data; 
 					this.dataInfo.CJDW=this.dataInfo.CJDWDesc;
 					this.show = true;
 				}).catch((err) => {
 					this.$message({
-						message: '网络错误，请重试',
+						message: '网络错误，请重试1',
 						type: 'error'
 					});
 				});

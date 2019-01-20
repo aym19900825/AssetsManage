@@ -1,15 +1,17 @@
 <template>
 	<div>
 		<el-dialog :modal-append-to-body="false" title="数据范围" :visible.sync="dialogVisible" width="30%">
-			<el-select v-model="value" placeholder="请选择" @change="valueChange">
-    		<el-option v-for="item in options":key="item.value":label="item.label" :value="item.value"></el-option>
-  			</el-select>
-			<el-tree class="tree" ref="tree" :data="depetData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @check-change="handleCheckChange" @click="getCheckedKeys"  default-expand-all>
-			</el-tree>
-			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible = false">取 消</el-button>
-		       <el-button type="primary" @click="determine();" >确 定</el-button>
-		    </span>
+			<div class="scrollbar" style="max-height: 400px;">
+				<el-select v-model="value" placeholder="请选择" @change="valueChange">
+	    		<el-option v-for="item in options":key="item.value":label="item.label" :value="item.value"></el-option>
+	  			</el-select>
+				<el-tree class="tree" ref="tree" :data="depetData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @check-change="handleCheckChange" @click="getCheckedKeys"  default-expand-all>
+				</el-tree>
+				<div slot="footer" class="el-dialog__footer">
+			       <el-button type="primary" @click="determine();" >确 定</el-button>
+			       <el-button @click="dialogVisible = false">取 消</el-button>
+			    </div>
+			</div>
 		</el-dialog>
 	</div>
 </template>

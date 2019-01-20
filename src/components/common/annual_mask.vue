@@ -41,8 +41,15 @@
 										</el-col>
 									</el-row>
 									<el-row :gutter="5" class="pt10">
-										<el-col :span="6">
+										<el-col :span="6" v-show="addtitle">
 											<el-form-item label="提出单位" prop="PROP_UNIT"  label-width="85px">
+												<el-select clearable v-model="WORKPLAN.PROP_UNIT" filterable allow-create default-first-option placeholder="请选择">
+													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+												</el-select>
+											</el-form-item>
+										</el-col>
+										<el-col :span="6" v-show="!addtitle">
+											<el-form-item label="提出单位" prop="PROP_UNITDesc"  label-width="85px">
 												<el-select clearable v-model="WORKPLAN.PROP_UNIT" filterable allow-create default-first-option placeholder="请选择">
 													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 												</el-select>
@@ -231,7 +238,8 @@
 											</div>
 											<!-- <el-form :model="basisList" :rules="rules" ref="basisList" prop="basisList"> -->
 							            	<el-table :header-cell-style="rowClass" :data="basisList" border stripe :fit="true" max-length="260px" style="width: 100%;" :default-sort="{prop:'basisList', order: 'descending'}">
-							            		<el-table-column prop="WP_NUM" label="所属计划编号" width="150">
+							            		<el-table-column prop="NUMBER" label="序号" width="150" type="index"></el-table-column>
+												<el-table-column prop="WP_NUM" label="所属计划编号" width="150">
 							            			<!-- <template slot-scope="scope">
 											        	<span>{{scope.$index + 1}}</span>
 											      	</template> -->
@@ -272,7 +280,7 @@
 											      	</i>
 											      </template>
 											    </el-table-column> -->
-
+												<el-table-column prop="NUMBER" label="序号" width="150" type="index"></el-table-column>
 							            		<el-table-column prop="WP_NUM" label="所属计划编号" width="130">
 							            			<template slot-scope="scope">
 											        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_NUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_NUM}}</span>

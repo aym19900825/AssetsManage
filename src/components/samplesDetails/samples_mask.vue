@@ -192,7 +192,6 @@
 											<font>新建行</font>
 										</el-button>
 									</div>
-									<!-- <el-form :label-position="labelPosition" :rules="rules" > -->
 									<el-table :fit="true" max-height="260px" :header-cell-style="rowClass" :data="samplesForm.ITEM_LINEList" row-key="ID" border stripe highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'samplesForm.ITEM_LINEList', order: 'descending'}">
 									    <el-table-column prop="iconOperation" fixed width="50px">
 									      <template slot-scope="scope">
@@ -244,7 +243,7 @@
 
 									    <el-table-column prop="ENTERDATE" label="录入时间" sortable>
 									      <template slot-scope="scope">
-									      	<el-form-item  label-width="0px" :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.ENTERDATE'" >
+									      	<el-form-item  label-width="0px" :prop="'ITEM_LINEList.'+scope.$index + '.ENTERDATE'" >
 									         <el-date-picker style="width: 90%" v-show="scope.row.isEditing" v-model="scope.row.ENTERDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd"></el-date-picker>
 									        <span v-show="!scope.row.isEditing" >{{scope.row.ENTERDATE}}</span>
 									    	</el-form-item>
@@ -302,6 +301,7 @@
 						<div class="content-footer" v-show="noviews">
 								<el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
 								<el-button type="success" v-show="addtitle" @click='saveAndSubmit()'>保存并继续</el-button>
+								<el-button type="primary" v-show="modifytitle" @click='generate()'>生成委托书</el-button>
 								<el-button @click='close'>取消</el-button>
 						</div>
 					</el-form>
@@ -377,21 +377,21 @@
 			<!-- 收样人、接样人 Begin -->
 			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible4" height="300px" width="80%" :before-close="handleClose">
 				<el-table :data="userList" border stripe :header-cell-style="rowClass" height="300px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-									<el-table-column type="selection" width="55" fixed align="center">
-									</el-table-column>
-									<el-table-column label="用户名" sortable width="140px" prop="username">
-									</el-table-column>
-									<el-table-column label="姓名" sortable width="200px" prop="nickname">
-									</el-table-column>
-									<el-table-column label="机构" sortable width="150px" prop="deptName">
-									</el-table-column>
-									<el-table-column label="公司" sortable prop="companyName">
-									</el-table-column>
-									<el-table-column label="创建时间" prop="createTime" width="100px" sortable :formatter="dateFormat">
-									</el-table-column>
-								</el-table>
-								<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-								</el-pagination>
+					<el-table-column type="selection" width="55" fixed align="center">
+					</el-table-column>
+					<el-table-column label="用户名" sortable width="140px" prop="username">
+					</el-table-column>
+					<el-table-column label="姓名" sortable width="200px" prop="nickname">
+					</el-table-column>
+					<el-table-column label="机构" sortable width="150px" prop="deptName">
+					</el-table-column>
+					<el-table-column label="公司" sortable prop="companyName">
+					</el-table-column>
+					<el-table-column label="创建时间" prop="createTime" width="100px" sortable :formatter="dateFormat">
+					</el-table-column>
+				</el-table>
+					<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+					</el-pagination>
 				<span slot="footer" class="dialog-footer">
 			       <el-button @click="dialogVisible4 = false">取 消</el-button>
 			       <el-button type="primary" @click="addPerson">确 定</el-button>
@@ -406,11 +406,6 @@
 	import Config from '../../config.js'
 	export default {
 		name: 'samples_mask',
-		 props: {
-		 	page: {
-		 		type: Object,
-		 	},
-		 },
 		data() {
 			var validateProxynum = (rule, value, callback) => {//委托书编号
                 if (this.samplesForm.PROXYNUM === undefined || this.samplesForm.PROXYNUM === '' || this.samplesForm.PROXYNUM === null) {
@@ -577,11 +572,9 @@
 				var url = this.basic_url + '/api-apps/app/inspectPro';
 				this.$axios.get(url, {}).then((res) => {
 					this.gridData= res.data.data;
-					
 				});
 					this.dialogVisible = true;
 			},
-			
 			dailogconfirm(type) { //小弹出框确认按钮事件
 				
 				if(this.selval.length == 0){
@@ -694,21 +687,6 @@
 					row.isEditing = !row.isEditing
 				}
 			},
-			
-			modifyversion (row) {//点击修改后给当前修改人和修改日期赋值
-				 this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					row.CHANGEBY=res.data.nickname;
-					var date=new Date();
-					row.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
-					//console.log(row);
-					
-				}).catch((err)=>{
-					this.$message({
-						message:'网络错误，请重试',
-						type:'error'
-					})
-				})
-			},
 			sizeChange(val) {
 				this.page.pageSize = val;
 				this.requestData();
@@ -783,41 +761,7 @@
                 };
                 this.samplesForm.ITEM_LINEList.push(obj);
 			},
-//			saveRow (row) {//Table-操作列中的保存行
-//				this.$refs['samples_itemlineForm'].validate((valid) => {
-//		          if (valid) {
-//					var url = this.basic_url + '/api-apps/app/itemline/saveOrUpdate';
-//					var submitData = {
-//						"ID":row.ID,
-//					    "ITEMNUM": row.ITEMNUM,
-//						"ITEM_STEP": row.ITEM_STEP,
-//						"SN": row.SN,
-//						"STATE": row.STATE,
-//						"STATUS": row.STATUS,
-//						"ENTERBY": row.ENTERBY,
-//						"ENTERDATE":row.ENTERDATE,
-//					}
-//					this.$axios.post(url, submitData).then((res) => {
-//						if(res.data.resp_code == 0) {
-//							this.$message({
-//								message: '保存成功',
-//								type: 'success'
-//							});
-//							//重新加载数据
-//							this.requestData_doclinks();
-//						}
-//					}).catch((err) => {
-//						this.$message({
-//							message: '网络错误，请重试',
-//							type: 'error'
-//						});
-//					});
-//		          } else {
-//		            return false;
-//		          }
-//		        });
-//			},
-			
+
 			deleteRow(index, rows) {//Table-操作列中的删除行
 				rows.splice(index, 1);
 			},
@@ -872,8 +816,6 @@
 			        	}else{
 							var url = this.basic_url + '/api-apps/app/item/saveOrUpdate';
 							this.$axios.post(url, this.samplesForm).then((res) => {
-								console.log(res);
-								//resp_code == 0是后台返回的请求成功的信息
 								if(res.data.resp_code == 0) {
 									this.$message({
 										message: '保存成功',
@@ -913,6 +855,46 @@
 				this.save();
 				this.reset();
 				this.$emit('request');
+			},
+			//生成委托书
+			generate(){
+				console.log(this.samplesForm);
+				var dataid = this.samplesForm.ID;
+				var url =this.basic_url + '/api-apps/app/item/operate/isExcProxy?ID=' +dataid;
+				this.$axios.get(url,{}).then((res) => {
+					console.log(res);
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message:res.data.resp_msg,
+								type: 'success'
+							});
+						var url =this.basic_url + '/api-apps/app/item/operate/createInspectProxy?ID='+dataid;
+						this.$axios.get(url, {}).then((res) => {
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message:res.data.resp_msg,
+									type: 'success'
+								});
+							}
+						}).catch((err) => {
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'error'
+							});
+						});
+						
+						}else{
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'error'
+							});
+						}
+					}).catch((err) => {
+						this.$message({
+							message: res.data.resp_msg,
+							type: 'error'
+						});
+					});
 			},
 			loadMore () {
 			   if (this.loadSign) {

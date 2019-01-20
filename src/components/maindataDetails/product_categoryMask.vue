@@ -175,20 +175,11 @@
 				down: true,
 				up: false,
 				activeNames: ['1','2'], //手风琴数量
-				//				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				selectData: [],
 				rules: {
-					NUM: [{
-						required: false,
-						trigger: 'change',
-						validator: validateNum,
-					}],
-					TYPE: [{
-						required: true,
-						trigger: 'blur',
-						validator: validateType,
-					}],
+					NUM: [{required: false,trigger: 'change',validator: validateNum,}],
+					TYPE: [{required: true,trigger: 'blur',validator: validateType,}],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据

@@ -112,7 +112,7 @@
 										</el-table-column>
 										<el-table-column prop="STEP" label="序号" sortable width="120px" label-width="150px" type="index">
 										</el-table-column>
-										<el-table-column prop="C_NAME" label="证书名称" sortable width="300px">
+										<el-table-column prop="C_NAME" label="证书名称" sortable>
 											<template slot-scope="scope">
 												<el-form-item :prop="'QUALIFICATIONList.'+scope.$index + '.C_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.C_NAME" placeholder="请输入委托方名称">

@@ -41,8 +41,15 @@
 										</el-col>
 									</el-row>
 									<el-row :gutter="5" class="pt10">
-										<el-col :span="6">
+										<el-col :span="6" v-show="addtitle">
 											<el-form-item label="提出单位" prop="PROP_UNIT"  label-width="85px">
+												<el-select clearable v-model="WORKPLAN.PROP_UNIT" filterable allow-create default-first-option placeholder="请选择">
+													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+												</el-select>
+											</el-form-item>
+										</el-col>
+										<el-col :span="6" v-show="!addtitle">
+											<el-form-item label="提出单位" prop="PROP_UNITDesc"  label-width="85px">
 												<el-select clearable v-model="WORKPLAN.PROP_UNIT" filterable allow-create default-first-option placeholder="请选择">
 													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 												</el-select>

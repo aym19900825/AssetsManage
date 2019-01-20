@@ -216,14 +216,7 @@
 															<i class="el-icon-edit" v-else="v-else"></i>
 														</template>
 													</el-table-column>
-													<el-table-column prop="step" label="序号" sortable width="120px">
-														<template slot-scope="scope">
-															<el-form-item :prop="'qualifications.'+scope.$index + '.step'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.$index + 1" placeholder="请输入要求" :disabled="noedit">
-																</el-input>
-																<span v-else="v-else">{{scope.row.step}}</span>
-															</el-form-item>
-														</template>
+													<el-table-column prop="step" label="序号" sortable width="120px" type="index">
 													</el-table-column>
 													<el-table-column prop="c_num" label="证书编号" sortable width="180px">
 														<template slot-scope="scope">
@@ -312,14 +305,7 @@
 															<i class="el-icon-edit" v-else="v-else"></i>
 														</template>
 													</el-table-column>
-													<el-table-column prop="step" label="序号" sortable width="120px">
-														<template slot-scope="scope">
-															<el-form-item :prop="'traings.'+scope.$index + '.step'">
-																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.$index + 1" :disabled="noedit">
-																</el-input>
-																<span v-else="v-else">{{scope.row.step}}</span>
-															</el-form-item>
-														</template>
+													<el-table-column prop="step" label="序号" sortable width="120px" type="index">
 													</el-table-column>
 													<el-table-column prop="t_date" label="培训时间" sortable width="240px">
 														<template slot-scope="scope">

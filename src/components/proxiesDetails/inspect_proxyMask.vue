@@ -1107,6 +1107,21 @@
 			detailgetData() {
 			var url = this.basic_url +'/api-apps/app/inspectPro/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
+					console.log(111);
+					//依据
+					for(var i = 0;i<res.data.INSPECT_PROXY_BASISList.length;i++){
+						res.data.INSPECT_PROXY_BASISList[i].isEditing = false;
+					}
+					console.log(222);
+					//要求
+					for(var m = 0;m<res.data.INSPECT_PROXY_PROJECList.length;m++){
+						res.data.INSPECT_PROXY_PROJECList[m].isEditing = false;
+					}
+					console.log(333);
+					//分包要求
+					for(var n = 0;n<res.data.CHECK_PROXY_CONTRACTList.length;n++){
+						res.data.CHECK_PROXY_CONTRACTList[n].isEditing = false;
+					}
 					console.log(res)
 					this.dataInfo = res.data;
 					this.show = true;

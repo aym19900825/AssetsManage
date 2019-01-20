@@ -121,12 +121,7 @@
 										      </template>
 										    </el-table-column>
 
-										    <el-table-column label="序号" sortable width="120px" prop="STEP">
-										      <template slot-scope="scope">
-										      	<el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.STEP'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-											      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.$index + 1" :disabled="noedit"></el-input><span v-show="!scope.row.isEditing" >{{scope.row.STEP}}</span>
-											      </el-form-item>
-										      </template>
+										    <el-table-column label="序号" sortable width="120px" prop="STEP" type="index">
 										    </el-table-column>
 										    <el-table-column label="证书编号" sortable width="120px" prop="CERTIFICATE_NUM">
 										      <template slot-scope="scope">
@@ -208,14 +203,14 @@
 												      </template>
 												    </el-table-column>
 
-												    <el-table-column label="序号" sortable width="120px" prop="STEP">
+												    <!-- <el-table-column label="序号" sortable width="120px" prop="STEP">
 												      <template slot-scope="scope">
 												      	<el-form-item :prop="'CUSTOMER_PERSONList.'+scope.$index + '.STEP'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 													      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.$index + 1" :disabled="noedit"></el-input>
 													      	<span v-show="!scope.row.isEditing" >{{scope.row.STEP}}</span>
 													      </el-form-item>
 												      </template>
-												    </el-table-column>
+												    </el-table-column> -->
 
 												    <el-table-column label="联系人" sortable width="150px" prop="PERSON">
 												      <template slot-scope="scope">
@@ -473,9 +468,8 @@
 		    },
 			//新建行
 			addfield(){
-				this.index = this.index + 1;
 				var obj = {
-                    STEP:this.index,
+                    STEP:'',
                     CERTIFICATE_NUM:'',
 					CERTIFICATE_NAME:'',
 					ACTIVE_DATE:'',
@@ -487,9 +481,9 @@
 			},
 			//新建行
 			addrela(){
-				this.index = this.index + 1;
+				// this.index = this.index + 1;
 				var obj = {
-					STEP:this.index,
+					// STEP:this.index,
 					ID:'',
                     CODE:'',
                     PERSON:'',

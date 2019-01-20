@@ -136,8 +136,8 @@
 								<el-collapse-item title="其他" name="3" v-show="views">
 									<el-row >
 										<el-col :span="8">
-											<el-form-item label="录入人" prop="ENTERBY" label-width="110px">
-												<el-input v-model="samplesForm.ENTERBY" :disabled="edit"></el-input>
+											<el-form-item label="录入人" prop="ENTERBYDesc" label-width="110px">
+												<el-input v-model="samplesForm.ENTERBYDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -146,15 +146,15 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="录入人机构" prop="DEPARTMENT" label-width="110px">
-												<el-input v-model="samplesForm.DEPARTMENT" :disabled="edit"></el-input>
+											<el-form-item label="录入人机构" prop="DEPTIDDesc" label-width="110px">
+												<el-input v-model="samplesForm.DEPTIDDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="修改人">
-												<el-input v-model="samplesForm.CHANGEBY" :disabled="edit"></el-input>
+											<el-form-item label="修改人" prop="CHANGEBYDesc">
+												<el-input v-model="samplesForm.CHANGEBYDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -543,8 +543,8 @@
 			},
 			childMethods() {//添加内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					console.log(res);
-					this.samplesForm.ENTERBY=res.data.nickname;
+					this.samplesForm.DEPTID = res.data.deptId;
+					this.samplesForm.ENTERBY = res.data.id;
 					var date=new Date();
 					this.samplesForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 					this.samplesForm.STATUSDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
@@ -563,7 +563,8 @@
 			},
 			detail() { //修改内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					this.samplesForm.CHANGEBY=res.data.nickname;
+					this.samplesForm.DEPTID = res.data.deptId;//传给后台机构id
+					this.samplesForm.CHANGEBY = res.data.id;
 					var date=new Date();
 					this.samplesForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{

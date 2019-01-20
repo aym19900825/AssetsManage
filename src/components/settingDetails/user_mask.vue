@@ -210,7 +210,7 @@
 											</div>
 											<!-- <el-form :label-position="labelPosition" :rules="rules"> -->
 												<el-table :header-cell-style="rowClass" :fig="true" :data="user.qualifications" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.qualifications', order: 'descending'}">
-													<el-table-column prop="iconOperation" fixed width="50px">
+													<el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 														<template slot-scope="scope">
 															<i class="el-icon-check" v-if="scope.row.isEditing"></i>
 															<i class="el-icon-edit" v-else="v-else"></i>
@@ -281,7 +281,7 @@
 												</el-form-item>
 											</template>
 										</el-table-column>-->
-													<el-table-column fixed="right" label="操作" width="120">
+													<el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 														<template slot-scope="scope">
 															<el-button @click.native.prevent="deleteRow(scope.$index,user.qualifications)" type="text" size="small">
 																<i class="icon-trash red"></i>
@@ -293,19 +293,19 @@
 										</el-tab-pane>
 										<el-tab-pane label="培训" name="second">
 											<div class="table-func table-funcb" v-show="noviews">
-												<el-button type="success" size="mini" round @click="addfield2" v-show="!viewtitle">
+												<el-button type="success" size="mini" round @click="addfield2" v-if="!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建行</font>
 												</el-button>
 											</div>
 												<el-table :header-cell-style="rowClass" :fit="true" :data="user.traings" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.traings', order: 'descending'}">
-													<el-table-column prop="iconOperation" fixed label="" width="50px">
+													<el-table-column prop="iconOperation" fixed label="" width="50px" v-if="!viewtitle">
 														<template slot-scope="scope">
 															<i class="el-icon-check" v-if="scope.row.isEditing"></i>
 															<i class="el-icon-edit" v-else="v-else"></i>
 														</template>
 													</el-table-column>
-													<el-table-column prop="step" label="序号" sortable width="120px" type="index">
+													<el-table-column label="序号" sortable width="120px" type="index">
 													</el-table-column>
 													<el-table-column prop="t_date" label="培训时间" sortable width="240px">
 														<template slot-scope="scope">
@@ -336,7 +336,7 @@
 															</el-form-item>
 														</template>
 													</el-table-column> -->
-													<el-table-column fixed="right" label="操作" width="120">
+													<el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 														<template slot-scope="scope">
 															<el-button @click.native.prevent="deleteRow(scope.$index,user.traings)" type="text" size="small">
 																<i class="icon-trash red"></i>
@@ -636,9 +636,8 @@
 					this.enterby = res.data.id
 					var date = new Date();
 					this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
-					this.index = this.index + 1;
 					var obj = {
-						step: this.index,
+						step: '',
 						c_num: '',
 						c_name: '',
 						c_date: '',
@@ -661,7 +660,7 @@
 			},
 			addfield2() {
 				var obj = {
-					step: '',
+					step: '1',
 					t_date: '',
 					t_description: '',
 					status: '',
@@ -769,8 +768,6 @@
 				var usersUrl = this.basic_url + '/api-user/users/currentMap';
 
 				this.$axios.get(usersUrl, {}).then((res) => {
-					console.log(23333);
-					console.log(res.data);
 					this.user.changeby = res.data.nickname;
 					var date = new Date();
 					this.user.changedate = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
@@ -782,7 +779,15 @@
 				});
 				var url = this.basic_url + '/api-user/users/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
-					// console.log(res.data);
+					//资质信息
+					for(var i = 0;i<res.data.qualifications.length;i++){
+						res.data.qualifications[i].isEditing = false;
+					}
+					console.log(222);
+					//培训
+					for(var i = 0;i<res.data.traings.length;i++){
+						res.data.traings[i].isEditing = false;
+					}
 					this.user = res.data;
 					this.user.sex = this.user.sex ? '男' : '女';
 					this.user.enabled = this.user.enabled ? '活动' : '不活动';

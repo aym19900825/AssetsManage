@@ -546,7 +546,21 @@
                 }else {
                     callback();
                 }
-            };
+			};
+			 //金额验证
+            var price=(rule, value, callback) => { 
+				var exp = /^(-)?\d{1,3}(,\d{3})*(.\d+)?$/;
+				console.log(value);
+				if(value != '' && value!=undefined){
+					if(exp.test(value)==false){ 
+	                    callback(new Error('请输入数字'));
+	              }else{
+	                    callback();
+	                }
+				}else {
+					callback();
+				}
+           };
 			return {
 				approvingData:{},//流程的数据
 				loadSign:true,//加载
@@ -630,7 +644,7 @@
 					V_NAME: [{required: true,validator: validateVname}], //受检企业
 					VENDOR: [{required: true,trigger: 'blur',message: '必填'}], //受检企业编号
 					QUALITY: [{required: true,message: '必填'},{ type: 'number', message: '必须为数字值'}], //样品数量
-					CHECTCOST: [{required: true,trigger: 'blur',message: '必填',	}], //检验检测费用
+					CHECTCOST:[{required: false,trigger: 'change',validator:price}], //检验检测费用
 					XD_DATE: [{type: 'string',required: true,message: '请选择',trigger: 'change'}],//下达日期
 					SOLUTION: [{required: true,trigger: 'blur',message: '必填',	}],//抽样方案
 					// REMARKS: [{required: true,trigger: 'blur',message: '必填',}],

@@ -289,6 +289,20 @@
 					callback();
 				}
 			};
+			 //金额验证
+            var price=(rule, value, callback) => {//生产单位名称 
+				var exp = /^(-)?\d{1,3}(,\d{3})*(.\d+)?$/;
+				console.log(value);
+				if(value != '' && value!=undefined){
+					if(exp.test(value)==false){ 
+	                    callback(new Error('请输入数字'));
+	              }else{
+	                    callback();
+	                }
+				}else {
+					callback();
+				}
+           };
 			return {
 				testing_projectForm:{
 					CHANGEBY: '',
@@ -353,6 +367,7 @@
 						// trigger: 'blur',
 						validator: validateDOCLINKS_NUM,
 					}],
+					UNITCOST:[{required: false,trigger: 'change',validator:price}],
 				},
 				//testing_projectForm:{},//检验/检测项目数据组
 				//tree

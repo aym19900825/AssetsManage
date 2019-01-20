@@ -140,7 +140,7 @@
 										</el-button>
 									</div>
 									<el-table :data="worlplanlist" :header-cell-style="rowClass"  row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100% ;"  :default-sort="{prop:'worlplanlist', order: 'descending'}" v-loadmore="loadMore">
-									    <el-table-column prop="iconOperation" fixed width="50px">
+									    <el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 									      <template slot-scope="scope" >
 									      	<i class="el-icon-check" v-if="scope.row.isEditing" @click="iconOperation(scope.row)">
 									      	</i>
@@ -211,7 +211,7 @@
 									      </template>
 									    </el-table-column> -->
 
-									    <el-table-column fixed="right" label="操作" width="120">
+									    <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 									      <template slot-scope="scope">
 									        <el-button type="danger" circle title="删除" @click="delPlan(scope.$index,scope.row, 'WORLPLANLINE','worlplanlist')"  size="small" v-show="!viewtitle">
 									          <i class="icon-trash"></i>
@@ -256,7 +256,7 @@
 											        <el-button
 											          @click="delPlan(scope.$index,scope.row,'WORLPLANLINE_BASIS','basisList')"
 											          type="text"
-											          size="small" v-show="!viewtitle">
+											          size="small" v-if="!viewtitle">
 											          	<i class="icon-trash red"></i>
 											        </el-button>
 											      </template>
@@ -303,7 +303,7 @@
 											      </template>
 							            		</el-table-column>
 							            		<el-table-column prop="VERSION" label="版本" width="80"></el-table-column>
-							            		<el-table-column fixed="right" label="操作" width="80">
+							            		<el-table-column fixed="right" label="操作" width="80" v-if="!viewtitle">
 											      <template slot-scope="scope">
 											        <el-button
 											          @click="delPlan(scope.$index,scope.row,'WORLPLANLINE_PROJECT','proTestList')" 
@@ -1551,6 +1551,11 @@
 			detail(dataid) {
 				this.assignshow = true;
 				this.$axios.get(this.basic_url +'/api-apps/app/workplan/' + dataid, {}).then((res) => {
+					console.log(res.data);
+					console.log(res.data.WORLPLANLINEList.length);
+					for(var i = 0; i<res.data.WORLPLANLINEList.length; i++){
+							res.data.WORLPLANLINEList[i].isEditing = false;
+					}
 					this.WORKPLAN = res.data;
 					this.worlplanlist = res.data.WORLPLANLINEList;
 					var worlplanlist = res.data.WORLPLANLINEList;

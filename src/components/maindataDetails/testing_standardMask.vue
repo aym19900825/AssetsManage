@@ -207,7 +207,6 @@
 			return {
 				editDataInfo: '',
 				editDataInfoProp: '',
-
 				docParm: {
 					'model': 'new',
 					'recordid': 1,
@@ -397,7 +396,6 @@
 				this.hintshow = false;
 				this.statusshow1 = true;
 				this.statusshow2 = false;
-
 				this.getUser('new');
 				this.docParm = {
 					'model': 'new',
@@ -420,7 +418,6 @@
 				this.modify = true;//修订
 				this.statusshow1 = false;
 				this.statusshow2 = true;
-
 				this.getUser('edit');
 				var _this = this;
 				setTimeout(function(){
@@ -475,7 +472,7 @@
 			},
 			//修订
 			modifyversion(){
-				this.$refs[dataInfo].validate((valid) => {
+				this.$refs.dataInfo.validate((valid) => {
 		          	if (valid) {
 		          		var DATAINFO = JSON.stringify(this.DATAINFO); //接过来的数据
  						var dataInfo = JSON.stringify(this.dataInfo); //获取新新的数据

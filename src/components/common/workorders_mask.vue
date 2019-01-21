@@ -398,13 +398,6 @@
 											      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NAME"></el-input><span v-show="!scope.row.isEditing">{{scope.row.S_NAME}}</span>
 											      </template>
 											    </el-table-column>
-
-												<el-table-column prop="S_ENGNAME" label="英文名称" sortable>
-											      <template slot-scope="scope">
-											         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_ENGNAME" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.S_ENGNAME}}</span>
-											      </template>
-											    </el-table-column>
-
 											    <el-table-column prop="VERSION" label="标准版本" sortable width="120px">
 											      <template slot-scope="scope">
 											         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" ></el-input><span v-show="!scope.row.isEditing">{{scope.row.VERSION}}</span>

@@ -40,7 +40,7 @@
 											</el-input>
 										</el-col>
 									</el-row>
-										<el-row>
+									<el-row>
 										<el-col :span="8">
 											<el-form-item label="委托书编号" prop="PROXYNUM" label-width="110px">
 												<el-input v-model="samplesForm.PROXYNUM" :disabled="edit">
@@ -50,33 +50,33 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="委托单位编号" prop="VENDOR" label-width="110px">
-												<el-input v-model="samplesForm.VENDOR" :disabled="noedit" ></el-input>
+												<el-input v-model="samplesForm.VENDOR" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="委托单位名称" prop="V_NAME" label-width="110px">
-												<el-input v-model="samplesForm.V_NAME" :disabled="noedit" ></el-input>
+												<el-input v-model="samplesForm.V_NAME" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										</el-row>
 										<el-row>
 										<el-col :span="8">
 											<el-form-item label="生产单位编号" prop="PRODUCT_COMPANY" label-width="110px">
-												<el-input v-model="samplesForm.PRODUCT_COMPANY" :disabled="noedit"></el-input>
+												<el-input v-model="samplesForm.PRODUCT_COMPANY" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="生产单位名称" prop="P_NAME" label-width="110px">
-												<el-input v-model="samplesForm.P_NAME" :disabled="noedit"></el-input>
+												<el-input v-model="samplesForm.P_NAME" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="样品名称" prop="DESCRIPTION" label-width="110px">
-												<el-input v-model="samplesForm.DESCRIPTION" :disabled="noedit"></el-input>
+												<el-input v-model="samplesForm.DESCRIPTION" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
-										</el-row>
-										<el-row>
+									</el-row>
+									<el-row>
 										<el-col :span="8">
 											<el-form-item label="产品标识代码" prop="PRODUCT_CODE" label-width="110px">
 												<el-input v-model="samplesForm.PRODUCT_CODE" :disabled="noedit"></el-input>
@@ -92,8 +92,8 @@
 												<el-input-number v-model="samplesForm.QUATITY" :min="1" :step="1" :max="100" label="描述文字" style="width: 100%" :disabled="noedit"></el-input-number>
 											</el-form-item>
 										</el-col>
-										</el-row>
-										<el-row>
+									</el-row>
+									<el-row>
 										<el-col :span="8">
 											<el-form-item label="类别" prop="TYPE" label-width="110px">
 												<el-input v-model="samplesForm.TYPE" :disabled="true">
@@ -114,7 +114,6 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
-									
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="入库时间" prop="ACCEPTDATE" label-width="110px">
@@ -145,8 +144,8 @@
 												</div>
 											</el-form-item>
 										</el-col>
-									   </el-row>
-									   <el-row>
+									</el-row>
+									<el-row>
 										<el-col :span="8">
 											<el-form-item label="接样人" prop="RECIP_PERSON" label-width="110px">
 												<el-input v-model="samplesForm.RECIP_PERSON" :disabled="true">
@@ -176,8 +175,8 @@
 												</div>
 											</el-form-item>
 										</el-col>
-										</el-row>
-										<el-row>
+									</el-row>
+									<el-row>
 										<el-col :span="24">
 											<el-form-item label="备注" prop="MEMO" label-width="110px">
 												<el-input type="textarea" rows="5" v-model="samplesForm.MEMO" :disabled="noedit"></el-input>
@@ -571,6 +570,7 @@
 			getProxy() {
 				var url = this.basic_url + '/api-apps/app/inspectPro';
 				this.$axios.get(url, {}).then((res) => {
+					console.log(res.data);
 					this.gridData= res.data.data;
 				});
 					this.dialogVisible = true;

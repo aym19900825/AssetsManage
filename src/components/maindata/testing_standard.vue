@@ -419,7 +419,7 @@
 					return;
 				} else {
 					this.dataInfo = this.selUser[0];
-					this.$refs.child.detail();
+					this.$refs.child.detail(this.selUser[0].ID);
 				}
 			},
 			//查看

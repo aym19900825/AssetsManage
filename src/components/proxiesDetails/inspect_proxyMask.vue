@@ -51,10 +51,6 @@
 									
 										<el-row>
 											<el-col :span="8">
-												<!--<el-form-item label="名称" prop="V_NAME">
-													<el-input v-model="dataInfo.V_NAME">
-													</el-input>
-												</el-form-item>-->
 												<el-form-item label="名称" prop="V_NAME" label-width="110px">
 													<el-input v-model="dataInfo.V_NAME" :disabled="edit" width="100%">
 														<el-button slot="append" icon="el-icon-search" @click="getCustomer(1)">

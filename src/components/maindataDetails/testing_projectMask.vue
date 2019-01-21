@@ -115,7 +115,7 @@
 										<el-table-column prop="C_NAME" label="证书名称" sortable>
 											<template slot-scope="scope">
 												<el-form-item :prop="'QUALIFICATIONList.'+scope.$index + '.C_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.C_NAME" placeholder="请输入委托方名称">
+													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.C_NAME" placeholder="请输入证书名称">
 													</el-input>
 													<span v-else="v-else">{{scope.row.C_NAME}}</span>
 												</el-form-item>

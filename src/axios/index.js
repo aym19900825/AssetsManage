@@ -1,18 +1,25 @@
 import Vue from 'vue'
 import router from '../router'
 import axios  from 'axios' 
+import { Loading } from 'element-ui';
 
 // axios.defaults.headers.post['Content-Type'] = 'application/json';
-
+var loading;
 axios.interceptors.request.use(
   request => {
     var token = sessionStorage.getItem('access_token');
     if (token) {
         request.headers.Authorization = 'Bearer ' + token;
     }
+    loading = Loading.service({
+      fullscreen: true,
+      text: '拼命加载中...',
+      background: 'rgba(0, 0, 0, 0.8)'
+    });
     return request;
   },
   err => {
+    loading.close();
     return Promise.reject(err)
   },
 )
@@ -20,7 +27,12 @@ axios.interceptors.request.use(
 // http response 拦截器
 axios.interceptors.response.use(
   response => {
-      return response;
+    // 同一个页面在mouted中存在多个请求，出现loading页面闪烁
+    var _this = this;
+    setTimeout(function(){
+      loading.close();
+    },500);
+    return response;
   },
   error => {
     if (error.response) {

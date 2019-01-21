@@ -100,17 +100,9 @@
 											</el-form-item>
 										</el-col>
 									
-										<el-col :span="8" v-show="addtitle">
+										<el-col :span="8" >
 											<el-form-item label="承检单位" prop="CJDW"  label-width="110px">
 												<el-select clearable v-model="dataInfo.CJDW" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit">
-													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
-												</el-select>
-											</el-form-item>
-										</el-col>
-										
-										<el-col :span="8" v-show="!addtitle">
-											<el-form-item label="承检单位" prop="CJDWDesc" :disabled="noedit" label-width="110px">
-												<el-select clearable v-model="dataInfo.CJDWDesc" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit">
 													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 												</el-select>
 											</el-form-item>
@@ -119,7 +111,7 @@
 										<el-col :span="8">
 											<el-form-item label="项目负责人" prop="P_LEADERDesc" label-width="110px">
 												<el-input v-model="dataInfo.P_LEADERDesc" :disabled="true">
-													<el-button :disabled="noedit" slot="append" icon="el-icon-search" @click="addperbtn()"></el-button>
+													<el-button :disabled="noedit" slot="append" icon="el-icon-search" @click="addperbtn"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -886,7 +878,7 @@
 					this.show = true;
 				}).catch((err) => {
 					this.$message({
-						message: '网络错误，请重试1',
+						message: '网络错误，请重试',
 						type: 'error'
 					});
 				});
@@ -1106,7 +1098,14 @@
 			},
 			//项目负责人放大镜
 			addperbtn(){
-				var params = {
+				console.log(this.dataInfo.CJDW);
+				if(this.dataInfo.CJDW==""||this.dataInfo.CJDW=="undefined"){
+					this.$message({
+							message: '请先选择承建单位',
+							type: 'warning'
+							});
+				}else{
+					var params = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				}
@@ -1119,8 +1118,9 @@
 					// this.dialogVisible = true;
 					this.type = '1';
 				});
-				this.$emit('request');
-				this.dialogVisible = true;				
+				this.dialogVisible = true;	
+				}
+							
 			},
 			//生成委托书
 			build(){

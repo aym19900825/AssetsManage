@@ -27,7 +27,6 @@ axios.interceptors.request.use(
 // http response 拦截器
 axios.interceptors.response.use(
   response => {
-    // 同一个页面在mouted中存在多个请求，出现loading页面闪烁
     var _this = this;
     setTimeout(function(){
       loading.close();
@@ -35,7 +34,9 @@ axios.interceptors.response.use(
     return response;
   },
   error => {
-    if (error.response) {
+    loading.close();
+    router.push({ path: '/' });
+    if (error && error.response) {
       switch (error.response.status) {
         case 401:
           router.push({ path: '/' });

@@ -168,17 +168,21 @@
 								</el-table-column>
 								<!-- <el-table-column label="录入人" sortable width="210px" prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
 								</el-table-column> -->
-								<el-table-column label="录入时间" sortable width="100px" prop="ENTERDATE" v-if="this.checkedName.indexOf('录入时间')!=-1" :formatter="dateFormat">
+								<el-table-column label="类型" sortable  width="100px" prop="TYPE" v-if="this.checkedName.indexOf('类型')!=-1">
 								</el-table-column>
-								<el-table-column label="修改时间" sortable width="100px" prop="ENTERDATE" v-if="this.checkedName.indexOf('修改时间')!=-1" :formatter="dateFormat">
+								<el-table-column label="产品类别" sortable width="100px" prop="ITEMTYPE" v-if="this.checkedName.indexOf('产品类别')!=-1" :formatter="dateFormat">
+								</el-table-column>
+								<el-table-column label="提出单位" sortable width="100px" prop="PROP_UNIT" v-if="this.checkedName.indexOf('提出单位')!=-1" :formatter="dateFormat">
+								</el-table-column>
+								<el-table-column label="提报日期" sortable prop="REPORTDATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('提报日期')!=-1">
 								</el-table-column>
 								<el-table-column label="编辑状态" sortable width="100px" prop="STATUSDesc" v-if="this.checkedName.indexOf('编辑状态')!=-1">
 								</el-table-column>
 								<el-table-column label="执行状态" sortable  width="120px" prop="LEADER_STATUSDesc" v-if="this.checkedName.indexOf('执行状态')!=-1">
 								</el-table-column>
-								<el-table-column label="类型" sortable  width="100px" prop="TYPE" v-if="this.checkedName.indexOf('类型')!=-1">
+								<el-table-column label="录入时间" sortable width="100px" prop="ENTERDATE" v-if="this.checkedName.indexOf('录入时间')!=-1" :formatter="dateFormat">
 								</el-table-column>
-								<el-table-column label="提报日期" sortable prop="REPORTDATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('提报日期')!=-1">
+								<el-table-column label="修改时间" sortable width="100px" prop="ENTERDATE" v-if="this.checkedName.indexOf('修改时间')!=-1" :formatter="dateFormat">
 								</el-table-column>
 								<!-- <el-table-column label="信息状态" sortable  width="380px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
 								</el-table-column> -->
@@ -249,6 +253,14 @@
 						label: '年度',
 						prop: 'YEAR'
 					},
+					{
+						label: '类型',
+						prop: 'TYPE'
+					},
+					{
+						label: '产品类别',
+						prop: 'ITEMTYPE'
+					},
 					// {
 					// 	label: '录入人',
 					// 	prop: 'ENTERBY'
@@ -268,10 +280,6 @@
 					{
 						label: '执行状态',
 						prop: 'LEADER_STATUSDesc'
-					},
-					{
-						label: '类型',
-						prop: 'TYPE'
 					},
 					{
 						label: '提报日期',

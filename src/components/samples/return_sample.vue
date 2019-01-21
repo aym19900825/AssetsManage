@@ -50,8 +50,8 @@
 						<el-form :model="searchList">
 							<el-row :gutter="5">
 								<el-col :span="6">
-									<el-form-item label="样品序号" prop="ITEMNUM" label-width="85px">
-										<el-input v-model="searchList.ITEMNUM"></el-input>
+									<el-form-item label="样品序号" prop="ITEM_STEP" label-width="85px">
+										<el-input v-model="searchList.ITEM_STEP"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="6">
@@ -121,13 +121,13 @@
 							<el-table :data="samplesList":header-cell-style="rowClass" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
-								<el-table-column label="样品子表ID" sortable width="120px" prop="ITEM_LINE_ID" v-if="this.checkedName.indexOf('样品子表ID')!=-1">
+								<el-table-column label="样品编号" sortable width="120px" prop="ITEMNUM" v-if="this.checkedName.indexOf('样品编号')!=-1">
 									<template slot-scope="scope">
-										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.ITEM_LINE_ID}}
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.ITEMNUM}}
 										</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="样品序号" sortable width="100px" prop="ITEMNUM" v-if="this.checkedName.indexOf('样品序号')!=-1">
+								<el-table-column label="样品序号" sortable width="100px" prop="ITEM_STEP" v-if="this.checkedName.indexOf('样品序号')!=-1">
 								</el-table-column>
 								<el-table-column label="数量" width="100px" prop="QUALITY" sortable v-if="this.checkedName.indexOf('数量')!=-1">
 								</el-table-column>
@@ -188,7 +188,7 @@
 				loadSign: true, //加载
 				commentArr: {},
 				checkedName: [
-					'样品子表ID',
+					'样品编号',
 					'样品序号',
 					'数量',
 					'收回入库时间',
@@ -202,12 +202,12 @@
 					'信息状态',
 				],
 				tableHeader: [{
-						label: '样品子表ID',
-						prop: 'ITEM_LINE_ID'
+						label: '样品编号',
+						prop: 'ITEMNUM'
 					},
 					{
 						label: '样品序号',
-						prop: 'ITEMNUM'
+						prop: 'ITEM_STEP'
 					},
 					{
 						label: '数量',
@@ -265,7 +265,7 @@
 					ITEMNUM: '',//样品编号
 					APPR_PERSON: '',//处理批准人
 					ACCEPT_PERSON: '',//样品承接人
-					ITEMNUM: '',//样品序号
+					ITEM_STEP: '',//样品序号
 					APPR_DATE: '',//批准日期
 					ACCEPT_DATE: '',//收样日期
 				},
@@ -485,7 +485,7 @@
 					ITEMNUM: this.searchList.ITEMNUM,//样品编号
 					APPR_PERSON: this.searchList.APPR_PERSON,//处理批准人
 					ACCEPT_PERSON: this.searchList.ACCEPT_PERSON,//样品承接人
-					ITEMNUM: this.searchList.ITEMNUM,//样品序号
+					ITEM_STEP: this.searchList.ITEM_STEP,//样品序号
 					APPR_DATE: this.searchList.APPR_DATE,//批准日期
 					ACCEPT_DATE: this.searchList.ACCEPT_DATE//收样日期
 				}

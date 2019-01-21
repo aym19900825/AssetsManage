@@ -15,7 +15,7 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+								<button type="button" class="btn btn-green" @click="openAddMgr">
                                 	<i class="icon-add"></i>添加
                       			 </button>
 								<button type="button" class="btn btn-blue button-margin" @click="modify">
@@ -418,7 +418,7 @@
 			},
 			//添加
 			openAddMgr() {
-//				this.$refs.child.resetNew();
+				this.$refs.child.reset();
 				this.$refs.child.visible();
 				this.$refs.child.open();
 				

@@ -42,10 +42,112 @@
 										</el-col>
 									</el-row>
 								</el-collapse-item>
-								<el-collapse-item title="文件" name="2">
+								<el-collapse-item title="原始数据模板单元信息" name="2">
+									<div class="table-func" v-show="noviews">
+										<el-button type="success" size="mini" round @click="addfield">
+											<i class="icon-add"></i>
+											<font>新建行</font>
+										</el-button>
+									</div>
+									<el-table :header-cell-style="rowClass" :fit="true" :data="CATEGORY.RAW_DATA_TEMPATE_DETAILList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'CATEGORY.RAW_DATA_TEMPATE_DETAILList', order: 'descending'}">
+										<el-table-column prop="iconOperation" fixed width="50px" v-show="!viewtitle">
+											<template slot-scope="scope">
+												<i class="el-icon-check" v-if="scope.row.isEditing"></i>
+												<i class="el-icon-edit" v-else="v-else"></i>
+											</template>
+										</el-table-column>
+										<el-table-column label="序号" sortable width="80px" label-width="150px" type="index">
+										</el-table-column>
+										<el-table-column prop="ROWNUMBER" label="列号" sortable width="120px">
+											<template slot-scope="scope">
+													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ROWNUMBER" placeholder="请输入">
+													</el-input>
+													<span v-else="v-else">{{scope.row.ROWNUMBER}}</span>
+											</template>
+										</el-table-column>
+										<el-table-column prop="COLNUMBER" label="行号" sortable width="120px">
+											<template slot-scope="scope">
+												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.COLNUMBER" placeholder="请输入">
+												</el-input>
+												<span v-else="v-else">{{scope.row.COLNUMBER}}</span>
+											</template>
+										</el-table-column>
+										<el-table-column prop="DATALENGTH" label="数据长度" sortable width="120px">
+											<template slot-scope="scope">
+												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DATALENGTH" placeholder="请输入">
+												</el-input>
+												<span v-else="v-else">{{scope.row.DATALENGTH}}</span>
+											</template>
+										</el-table-column>
+										<el-table-column prop="DATATYPE" label="值类型" sortable width="120px">
+											<template slot-scope="scope">
+												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DATATYPE" placeholder="请输入">
+												</el-input>
+												<span v-else="v-else">{{scope.row.DATATYPE}}</span>
+											</template>
+										</el-table-column>
+										<el-table-column prop="DESCRIPTION" label="单元格描述" sortable width="150px">
+											<template slot-scope="scope">
+												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DESCRIPTION" placeholder="请输入">
+												</el-input>
+												<span v-else="v-else">{{scope.row.DESCRIPTION}}</span>
+											</template>
+										</el-table-column>
+										<el-table-column prop="FORMULA" label="计算公式" sortable width="150px">
+											<template slot-scope="scope">
+												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.FORMULA" placeholder="请输入">
+												</el-input>
+												<span v-else="v-else">{{scope.row.FORMULA}}</span>
+											</template>
+										</el-table-column>
+										<el-table-column prop="GRIDTYPE" label="单元格类型" sortable width="150px">
+											<template slot-scope="scope">
+												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.GRIDTYPE" placeholder="请输入">
+												</el-input>
+												<span v-else="v-else">{{scope.row.GRIDTYPE}}</span>
+											</template>
+										</el-table-column>
+										<el-table-column prop="HASFORMULA" label="是否使用计算公式" sortable width="180px">
+											<template slot-scope="scope">
+												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.HASFORMULA" placeholder="请输入">
+												</el-input>
+												<span v-else="v-else">{{scope.row.HASFORMULA}}</span>
+											</template>
+										</el-table-column>
+										<el-table-column prop="COLSPAN" label="合并列" sortable width="120px">
+											<template slot-scope="scope">
+												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.COLSPAN" placeholder="请输入">
+												</el-input>
+												<span v-else="v-else">{{scope.row.COLSPAN}}</span>
+											</template>
+										</el-table-column>
+										<el-table-column prop="ROWSPAN" label="合并行" sortable width="120px">
+											<template slot-scope="scope">
+												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ROWSPAN" placeholder="请输入">
+												</el-input>
+												<span v-else="v-else">{{scope.row.ROWSPAN}}</span>
+											</template>
+										</el-table-column>
+										<el-table-column prop="ISSPAN" label="是否合并" sortable width="120px">
+											<template slot-scope="scope">
+												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ISSPAN" placeholder="请输入">
+												</el-input>
+												<span v-else="v-else">{{scope.row.ISSPAN}}</span>
+											</template>
+										</el-table-column>
+										<el-table-column fixed="right" label="操作" width="120">
+											<template slot-scope="scope">
+												<el-button @click="deletemodule(scope.$index,CATEGORY.RAW_DATA_TEMPATE_DETAILList)" type="text" size="small" v-show="!viewtitle">
+                                                 <i class="icon-trash red"></i>
+												</el-button>
+											</template>
+										</el-table-column>
+									</el-table>
+								</el-collapse-item>
+								<el-collapse-item title="文件" name="3">
 									<doc-table ref="docTable" :docParm = "docParm"></doc-table>
 								</el-collapse-item>
-								<el-collapse-item title="其它" name="3" v-show="views">
+								<el-collapse-item title="其它" name="4" v-show="views">
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="录入人" prop="ENTERBYDesc">
@@ -91,25 +193,25 @@
 	export default {
 		name: 'masks',
 		components: {docTable},
-		props: {
-			CATEGORY: {
-				type: Object,
-				default: function() {
-					return {
-						ID: '',
-						NUM: '',
-						DECRIPTION: '',
-						STATUS: '',
-						DEPARTMENT: '',
-						ENTERBY: '',
-						ENTERDATE: '',
-						CHANGEBY: '',
-						CHANGEDATE: ''
-					}
-				}
-			},
-			page: Object,
-		},
+		// props: {
+		// 	CATEGORY: {
+		// 		type: Object,
+		// 		default: function() {
+		// 			return {
+		// 				ID: '',
+		// 				NUM: '',
+		// 				DECRIPTION: '',
+		// 				STATUS: '',
+		// 				DEPARTMENT: '',
+		// 				ENTERBY: '',
+		// 				ENTERDATE: '',
+		// 				CHANGEBY: '',
+		// 				CHANGEDATE: ''
+		// 			}
+		// 		}
+		// 	},
+		// 	page: Object,
+		// },
 		data() {
 			return {
 				docParm: {
@@ -132,7 +234,7 @@
 				isok2: false,
 				down: true,
 				up: false,
-				activeNames: ['1','2','3'], //手风琴数量
+				activeNames: ['1','2','3','4'], //手风琴数量
 				//				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				selectData: [],
@@ -161,6 +263,9 @@
 				hintshow:false,
 				statusshow1:true,
 				statusshow2:false,
+				CATEGORY:{
+					RAW_DATA_TEMPATE_DETAILList:[]
+				},
 				testing_filesForm:{//文件文件数据组
 					inspectionList: []
 				},
@@ -170,6 +275,28 @@
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
+			},
+			addfield() {
+				var obj = {
+					ID:'',
+					ROWNUMBER:'',
+					COLNUMBER:'',
+					DATALENGTH:'',
+					DATATYPE:'',
+					DESCRIPTION:'',
+					FORMULA:'',
+					GRIDTYPE:'',
+					HASFORMULA:'',
+					COLSPAN:'',
+					ROWSPAN:'',
+					ISSPAN:'',
+					isEditing: true
+				};
+				this.CATEGORY.RAW_DATA_TEMPATE_DETAILList.push(obj);
+			},
+			//刪除新建行
+			deletemodule(index, rows) { //Table-操作列中的删除行
+				rows.splice(index, 1);
 			},
 			//获取导入表格勾选信息
 			SelChange(val) {
@@ -239,7 +366,7 @@
 //				this.show = true;
 			},
 			// 这里是修改
-			detail() {
+			detail(dataid) {
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.viewtitle = false;
@@ -253,6 +380,21 @@
 				this.statusshow2 = true;
 				this.getUser('edit');
 				var _this = this;
+				var url = this.basic_url + '/api-apps/app/rawDataTem/' + dataid;
+				this.$axios.get(url, {}).then((res) => {
+					console.log(23333);
+					console.log(res.data);
+					for(var i=0;i<res.data.RAW_DATA_TEMPATE_DETAILList.length;i++){
+						res.data.RAW_DATA_TEMPATE_DETAILList[i].isEditing = false;
+					}
+					this.CATEGORY = res.data;
+
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					})
+				});
 				setTimeout(function(){
 					_this.docParm.model = 'edit';
 					_this.docParm.appname = '检验检测项目_原始数据模板';

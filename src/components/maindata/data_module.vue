@@ -273,14 +273,14 @@
 				}
 
 			},
-			//添加类别
+			//添加
 			openAddMgr() {
 				this.reset();
 				this.$refs.categorymask.open(); // 方法1
 				this.$refs.categorymask.visible();
 				
 			},
-			//修改类别
+			//修改
 			modify() {
 				if(this.selUser.length == 0) {
 					this.$message({
@@ -296,7 +296,7 @@
 					return;
 				} else {
 					this.CATEGORY = this.selUser[0];
-					this.$refs.categorymask.detail();
+					this.$refs.categorymask.detail(this.selUser[0].ID);
 				}
 			},
 			//查看

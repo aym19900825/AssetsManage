@@ -191,9 +191,9 @@
 									      	</i>
 													</template>
 												</el-table-column>
-												<el-table-column label="序号" sortable width="88px" prop="NUMBER" type="index">
+												<el-table-column label="序号" sortable width="80px" prop="NUMBER" type="index">
 												</el-table-column>
-												<el-table-column label="检验标准编号" sortable width="263px" prop="S_NUM">
+												<el-table-column label="检验标准编号" sortable width="120px" prop="S_NUM">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入内容">
@@ -211,14 +211,21 @@
 														</el-form-item>
 													</template>
 												</el-table-column> -->
-												<el-table-column prop="S_NAME" label="检验标准名称" sortable width="263px">
+												<el-table-column prop="S_NAME" label="检验标准名称" sortable width="200px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_NAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NAME" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.S_NAME}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
-												<el-table-column prop="VERSION" label="版本" sortable width="263px">
+												<el-table-column prop="S_ENGNAME" label="英文名称" sortable width="200px">
+													<template slot-scope="scope">
+														<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_ENGNAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
+														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_ENGNAME" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.S_ENGNAME}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column>
+												<el-table-column prop="VERSION" label="版本" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入内容"></el-input>
@@ -233,14 +240,14 @@
 														</el-form-item>
 													</template>
 												</el-table-column> -->
-												<el-table-column label="附件" sortable width="132px">
+												<el-table-column label="附件" sortable width="120px">
 													<template slot-scope="scope">
 														<el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="3" :on-exceed="handleExceed" :file-list="fileList">
 															<el-button size="small" type="primary">点击上传</el-button>
 														</el-upload>
 													</template>
 												</el-table-column>
-												<el-table-column fixed="right" label="操作" width="72" >
+												<el-table-column fixed="right" label="操作" width="100" >
 													<template slot-scope="scope">
 														<el-button @click="deleteRow(scope.$index, dataInfo.WORK_NOTICE_CHECKBASISList)" type="text" size="small" v-if="!viewtitle">
 															<i class="icon-trash red"></i>
@@ -265,9 +272,9 @@
 									      	</i>
 													</template>
 												</el-table-column>
-												<el-table-column label="序号" sortable width="88px" prop="NUMBER" type="index">
+												<el-table-column label="序号" sortable width="120px" prop="NUMBER" type="index">
 												</el-table-column>
-												<el-table-column label="检验检测项目编号" sortable width="197px" prop="P_NUM">
+												<el-table-column label="检验检测项目编号" sortable width="145px" prop="P_NUM">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.P_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="请输入内容">
@@ -277,7 +284,7 @@
 														</el-form-item>
 													</template>
 												</el-table-column>
-												<el-table-column prop="P_DESC" label="检验检测项目内容" sortable width="197px">
+												<el-table-column prop="P_DESC" label="检验检测项目内容" sortable width="200px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.P_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入内容"></el-input>
@@ -285,7 +292,7 @@
 														</el-form-item>
 													</template>
 												</el-table-column>
-												<el-table-column prop="REMARKS" label="要求" sortable width="197px">
+												<el-table-column prop="REMARKS" label="要求" sortable width="150px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" placeholder="请输入内容"></el-input>
@@ -293,7 +300,7 @@
 														</el-form-item>
 													</template>
 												</el-table-column>
-												<el-table-column prop="VERSION" label="版本" sortable width="197px">
+												<el-table-column prop="VERSION" label="版本" sortable width="80px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入内容"></el-input>
@@ -309,14 +316,14 @@
 														</el-form-item>
 													</template>
 												</el-table-column> -->
-												<el-table-column label="附件" sortable width="132px">
+												<el-table-column label="附件" sortable width="120px">
 													<template slot-scope="scope">
 														<el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="3" :on-exceed="handleExceed" :file-list="fileList">
 															<el-button size="small" type="primary">点击上传</el-button>
 														</el-upload>
 													</template>
 												</el-table-column>
-												<el-table-column fixed="right" label="操作" width="72px" >
+												<el-table-column fixed="right" label="操作" width="100" >
 													<template slot-scope="scope">
 														<el-button @click="deleteRow(scope.$index, dataInfo.WORK_NOTICE_CHECKPROJECTList)" type="text" size="small" v-if="!viewtitle">
 															<i class="icon-trash red"></i>
@@ -690,6 +697,7 @@
 						type: type
 					},
 				}).then((res) => {
+	               console.log(res);
 					this.selectData = res.data;
 				});
 			},
@@ -887,7 +895,7 @@
 					this.dataInfo.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
 				}).catch((err) => {
 					this.$message({
-						message: '网络错误，请重试',
+						message: '网络错误，请重试1',
 						type: 'error'
 					});
 				});
@@ -975,11 +983,20 @@
 		          if (valid) {
 							if(this.dataInfo.WORK_NOTICE_CHECKBASISList.length<=0&&this.dataInfo.WORK_NOTICE_CHECKPROJECTList.length<=0){
 			        		this.$message({
-							message: '依据和检验检测项目是必填项，请填写！',
-							type: 'warning'
-						});
+								message: '依据和检验检测项目是必填项，请填写！',
+								type: 'warning'
+						    });
 						return false;
 			       }else{
+			        console.log(this.dataInfo.CJDW);	
+			        if(typeof(this.dataInfo.CJDW) != 'undefind') {
+			        	 console.log(this.selectData);
+			        	 for(var j=0;j<this.selectData.length;j++){
+			        	 	if(this.dataInfo.CJDW==this.selectData[j].fullname){
+			        	 		this.dataInfo.CJDW=this.selectData[j].id
+			        	 	}
+			        	 }		
+			        }
 					var url = this.basic_url + '/api-apps/app/workNot/saveOrUpdate';
 					this.$axios.post(url, this.dataInfo).then((res) => {
 						if(res.data.resp_code == 0) {

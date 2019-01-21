@@ -576,7 +576,6 @@
 					this.dialogVisible = true;
 			},
 			dailogconfirm(type) { //小弹出框确认按钮事件
-				
 				if(this.selval.length == 0){
 					this.$message({
 						message:'未选择数据',
@@ -594,7 +593,7 @@
 					this.samplesForm.MODEL=this.selval[0].ITEM_MODEL;
 					this.samplesForm.QUATITY=this.selval[0].ITEM_QUALITY;
 					this.dialogVisible = false;
-				}else{
+				}else if(this.selval.length > 1){
 					this.$message({
 						message:'不可选择多条数据',
 						type:'warning'
@@ -742,20 +741,44 @@
 				this.dialogVisible4 = true;
 			},
 			addPerson(){
-				if (this.tips == '1') {
-					this.samplesForm.ACCEPT_PERSON = this.selval[0].username; //收样人
-					this.dialogVisible4 = false;
-					this.$emit('request');
-				}else if(this.tips == '2'){
-					this.samplesForm.RECIP_PERSON = this.selval[0].username;//接样人
-					this.dialogVisible4 = false;
-					this.$emit('request');
+				if(this.selval.length == 0){
+					this.$message({
+						message: '未选择数据',
+						type: 'warning'
+					});
+				}else if(this.selval.length > 1){
+					this.$message({
+						message: '不可选择多条数据',
+						type: 'warning'
+					});
+				}else{
+					if (this.tips == '1') {
+						this.samplesForm.ACCEPT_PERSON = this.selval[0].username; //收样人
+						this.dialogVisible4 = false;
+						this.$emit('request');
+					}else if(this.tips == '2'){
+						this.samplesForm.RECIP_PERSON = this.selval[0].username;//接样人
+						this.dialogVisible4 = false;
+						this.$emit('request');
+					}
 				}
 			},
 			addproclass(){
-				this.samplesForm.TYPE = this.selval[0].TYPE;
-				this.dialogVisible3 = false;
-				this.$emit('request');
+				if(this.selval.length == 0){
+					this.$message({
+						message: '未选择数据',
+						type: 'warning'
+					});
+				}else if(this.selval.length > 1){
+					this.$message({
+						message: '不可选择多条数据',
+						type: 'warning'
+					});
+				}else{
+					this.samplesForm.TYPE = this.selval[0].TYPE;
+					this.dialogVisible3 = false;
+					this.$emit('request');
+				}
 			},
 			SelChange(val) {
 				this.selval = val;

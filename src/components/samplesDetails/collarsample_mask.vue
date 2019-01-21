@@ -455,16 +455,26 @@
 				this.dialogsample = true;
 			},
 			addsamplebtn(){
-				console.log(this.selUser[0]);
-				this.samplesForm.ITEMNUM = this.selUser[0].ITEMNUM;//样品编号
-				this.samplesForm.DESCRIPTION = this.selUser[0].DESCRIPTION;//样品名称
-				this.dialogsample = false;
-				this.requestData();
+				if(this.selUser.length == 0){
+					this.$message({
+						message: '未选择数据',
+						type: 'warning'
+					});
+				}else if(this.selUser.length > 1){
+					this.$message({
+						message: '不可选择多条数据',
+						type: 'warning'
+					});
+				}else{
+					this.samplesForm.ITEMNUM = this.selUser[0].ITEMNUM;//样品编号
+					this.samplesForm.DESCRIPTION = this.selUser[0].DESCRIPTION;//样品名称
+					this.dialogsample = false;
+					this.requestData();
+				}
 			},
 			//样品序号
 			addsamplenum(){
 				this.dialogsamplenum = true;
-				console.log(this.samplesForm.ITEMNUM);
 				this.$axios.get(this.basic_url + '/api-apps/app/itemline?ITEMNUM_wheres='+this.samplesForm.ITEMNUM, {
 
 				}).then((res) => {
@@ -472,8 +482,20 @@
 				}).catch((wrong) => {})
 			},
 			addsamplenumbtn(){
-				this.samplesForm.ITEM_STEP = this.selUser[0].ITEM_STEP;
-				this.dialogsamplenum = false;
+				if(this.selUser.length == 0){
+					this.$message({
+						message: '未选择数据',
+						type: 'warning'
+					});
+				}else if(this.selUser.length > 1){
+					this.$message({
+						message: '不可选择多条数据',
+						type: 'warning'
+					});
+				}else{
+					this.samplesForm.ITEM_STEP = this.selUser[0].ITEM_STEP;
+					this.dialogsamplenum = false;
+				}
 			},
 			//获取委托书编号数据
 			// getProxy() {
@@ -515,10 +537,21 @@
 				this.dialogVisible3 = true;				
 			},
 			addproclass() { //小弹出框确认按钮事件
-				this.dialogVisible3 = false;
-				console.log(this.selUser[0].TYPE);
-				this.samplesForm.TYPE = this.selUser[0].TYPE;
-				this.$emit('request');
+				if(this.selUser.length == 0){
+					this.$message({
+						message: '未选择数据',
+						type: 'warning'
+					});
+				}else if(this.selUser.length > 1){
+					this.$message({
+						message: '不可选择多条数据',
+						type: 'warning'
+					});
+				}else{
+					this.dialogVisible3 = false;
+					this.samplesForm.TYPE = this.selUser[0].TYPE;
+					this.$emit('request');
+				}
 			},
 			//小弹出框关闭按钮事件
 			handleClose(done) {

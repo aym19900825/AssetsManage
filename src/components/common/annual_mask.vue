@@ -41,16 +41,9 @@
 										</el-col>
 									</el-row>
 									<el-row :gutter="5" class="pt10">
-										<el-col :span="6" v-show="addtitle">
+										<el-col :span="6">
 											<el-form-item label="提出单位" prop="PROP_UNIT"  label-width="85px">
 												<el-select clearable v-model="WORKPLAN.PROP_UNIT" filterable allow-create default-first-option placeholder="请选择">
-													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
-												</el-select>
-											</el-form-item>
-										</el-col>
-										<el-col :span="6" v-show="!addtitle">
-											<el-form-item label="提出单位" prop="PROP_UNITDesc"  label-width="85px">
-												<el-select clearable v-model="WORKPLAN.PROP_UNITDesc" filterable allow-create default-first-option placeholder="请选择">
 													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 												</el-select>
 											</el-form-item>
@@ -1597,12 +1590,13 @@
 			detail(dataid) {
 				this.assignshow = true;
 				this.$axios.get(this.basic_url +'/api-apps/app/workplan/' + dataid, {}).then((res) => {
-					console.log(res.data);
-					console.log(res.data.WORLPLANLINEList.length);
 					for(var i = 0; i<res.data.WORLPLANLINEList.length; i++){
 							res.data.WORLPLANLINEList[i].isEditing = false;
 					}
+					console.log(2333333);
+					console.log(res.data);
 					this.WORKPLAN = res.data;
+					this.WORKPLAN.PROP_UNIT=this.WORKPLAN.PROP_UNITDesc;
 					this.worlplanlist = res.data.WORLPLANLINEList;
 					var worlplanlist = res.data.WORLPLANLINEList;
 					for(var i=0, len=worlplanlist.length; i<len; i++){

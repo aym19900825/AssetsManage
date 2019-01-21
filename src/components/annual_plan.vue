@@ -230,14 +230,19 @@
 					'编号',
 					'描述',
 					'年度',
+					'类型',
 					// '录入人',
+					'产品类别',
+					'提出单位',
+					'提报日期',
+					'编辑状态',
+					'执行状态',
+					'执行状态',
 					'录入时间',
 					// '信息状态'
 					'修改时间',
-					'编辑状态',
-					'执行状态',
-					'类型',
-					'提报日期',
+					
+				
 
 				],
 				tableHeader: [
@@ -261,6 +266,18 @@
 						label: '产品类别',
 						prop: 'ITEMTYPE'
 					},
+					{
+						label: '提出单位',
+						prop: 'PROP_UNITE'
+					},
+					{
+						label: '提报日期',
+						prop: 'REPORTDATE'
+					},
+					{
+						label: '执行状态',
+						prop: 'LEADER_STATUSDesc'
+					},
 					// {
 					// 	label: '录入人',
 					// 	prop: 'ENTERBY'
@@ -270,21 +287,9 @@
 						prop: 'ENTERDATE'
 					},
 					{
-						label: '修改时间',
+					label: '修改时间',
 						prop: 'CHANGEDATE'
 					},
-					{
-						label: '编辑状态',
-						prop: 'STATUSDesc'
-					},
-					{
-						label: '执行状态',
-						prop: 'LEADER_STATUSDesc'
-					},
-					{
-						label: '提报日期',
-						prop: 'REPORTDATE'
-					}
 					// {
 					// 	label: '信息状态',
 					// 	prop: 'STATUS'

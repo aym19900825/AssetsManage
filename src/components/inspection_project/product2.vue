@@ -110,14 +110,20 @@
 	</el-card>
 
 	<!-- 产品 Begin -->
-		<el-dialog :modal-append-to-body="false" title="选择基础数据——产品" height="300px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
+		<el-dialog :modal-append-to-body="false" title="选择基础数据——产品" height="300px" :visible.sync="dialogVisible3" width="80%">
+			<!--搜索框 Begin-->
+			<div class="columns pull-right child-search">
+				<el-input placeholder="请输入产品名称" v-model="search">
+				</el-input>
+			</div>
+			<!--搜索框 End-->
 			<!-- 第二层弹出的表格 Begin-->
-			<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+			<el-table :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.PRO_NAME.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 				<el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column>
-				<el-table-column label="编码" width="155" sortable prop="PRO_NUM">
+				<el-table-column label="产品编码" width="155" sortable prop="PRO_NUM">
 				</el-table-column>
-				<el-table-column label="名称" sortable prop="PRO_NAME">
+				<el-table-column label="产品名称" sortable prop="PRO_NAME">
 				</el-table-column>
 				<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
 				</el-table-column>
@@ -183,7 +189,8 @@
 					totalCount: 0
 				},
 
-				parentId: 1
+				parentId: 1,
+				selParentId: 1 //父类选中id
 
 				// childData: {}
 			}
@@ -209,17 +216,17 @@
 				})
 			},
 			loadMore () {//表格滚动加载
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page.currentPage++
-			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     this.requestData_product2()
-			   }
+			   // if (this.loadSign) {
+			   //   this.loadSign = false
+			   //   this.page.currentPage++
+			   //   if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+			   //     return
+			   //   }
+			   //   setTimeout(() => {
+			   //     this.loadSign = true
+			   //   }, 1000)
+			   //   this.viewfield_product2(this.selParentId,this.parentId);
+			   // }
 			 },
 			 addprobtn(row){//查找基础数据中的产品名称
 			 	this.catedata = row;//弹出框中选中的数据赋值给到table行中
@@ -254,16 +261,16 @@
 			},
 			sizeChange(val) {//页数
 		      this.page.pageSize = val;
-		      this.requestData_product2();
+		      this.viewfield_product2(this.selParentId,this.parentId);
 		    },
 		    currentChange(val) {//当前页
 		      this.page.currentPage = val;
-		      this.requestData_product2();
+		      this.viewfield_product2(this.selParentId,this.parentId);
 		    },
 			searchinfo(index) {//设置默认分页数
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
-				this.requestData_product2();
+				this.viewfield_product2(this.selParentId,this.parentId);
 			},
 			judge(data) {//taxStatus 信息状态布尔值
 				return data.enabled ? '活动' : '不活动'
@@ -285,6 +292,7 @@
 					//todo  相关数据设置
 				}
 				this.parentId = num;
+				this.selParentId = id;
 				var url = this.basic_url + '/api-apps/app/productType2/' + id;
 				this.$axios.get(url, {}).then((res) => {
 					this.page.totalCount = res.data.count;	
@@ -430,7 +438,8 @@
 								type: 'success'
 							});
 							//重新加载数据
-							this.requestData_product2();
+							// this.requestData_product2();
+							this.viewfield_product2(this.selParentId,this.parentId);//重新加载父级选中的数据下所有子数据
 						}
 					}).catch((err) => {
 						this.$message({
@@ -456,7 +465,7 @@
 								message: '删除成功',
 								type: 'success'
 							});
-							this.requestData_product2();
+							this.viewfield_product2(this.selParentId,this.parentId);
 						}
 					}).catch((err) => {
 						this.$message({

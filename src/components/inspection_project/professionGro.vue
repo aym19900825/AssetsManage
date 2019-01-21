@@ -110,9 +110,15 @@
 		</div>
 
 		<!-- 专业组 Begin -->
-		<el-dialog :modal-append-to-body="false" title="选择基础数据——专业组" height="300px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
+		<el-dialog :modal-append-to-body="false" title="选择基础数据——专业组" height="300px" :visible.sync="dialogVisible3" width="80%">
+			<!--搜索框 Begin-->
+			<div class="columns pull-right child-search">
+				<el-input placeholder="请输入专业组名称" v-model="search">
+				</el-input>
+			</div>
+			<!--搜索框 End-->
 			<!-- 第二层弹出的表格 Begin-->
-			<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+			<el-table :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.fullname.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 				<el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column>
 				<el-table-column label="专业组编号" width="125" sortable prop="id">
@@ -121,7 +127,7 @@
 				</el-table-column>
 				<el-table-column label="机构编码" width="185" sortable prop="code">
 				</el-table-column>
-				<el-table-column label="名称" sortable prop="fullname">
+				<el-table-column label="专业组名称" sortable prop="fullname">
 				</el-table-column>
 				<el-table-column label="版本" width="100" sortable prop="version" align="right">
 				</el-table-column>
@@ -234,16 +240,16 @@
 			},
 			sizeChange(val) {//页数
 		      this.page.pageSize = val;
-		      this.requestData_professionGro();
+		      this.viewfield_professionGro(this.selParentId,this.parentId);
 		    },
 		    currentChange(val) {//当前页
 		      this.page.currentPage = val;
-		      this.requestData_professionGro();
+		      this.viewfield_professionGro(this.selParentId,this.parentId);
 		    },
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
-				this.requestData_professionGro();
+				this.viewfield_professionGro(this.selParentId,this.parentId);
 			},
 			judge(data) {//taxStatus 信息状态布尔值
 				return data.enabled ? '活动' : '不活动'
@@ -266,6 +272,7 @@
 					//todo  相关数据设置
 				}
 				this.parentId = num;
+				this.selParentId = id;
 				var url = this.basic_url + '/api-apps/app/professionGro/INSPECTION_PROJECT2/' + id;
 				this.$axios.get(url, {}).then((res) => {
 					//console.log(res);
@@ -402,6 +409,7 @@
 						"ENTERBY": row.ENTERBY,
 					    "ENTERDATE": row.ENTERDATE,
 					    "VERSION": row.VERSION,
+					    "VERSION": row.VERSION,
 					}
 					this.$axios.post(url, submitData).then((res) => {
 						if(res.data.resp_code == 0) {
@@ -410,7 +418,8 @@
 								type: 'success'
 							});
 							//重新加载数据
-							this.requestData_professionGro();
+							// this.requestData_professionGro();
+							this.viewfield_professionGro(this.selParentId,this.parentId);//重新加载父级选中的数据下所有子数据
 						}
 					}).catch((err) => {
 						this.$message({
@@ -429,7 +438,7 @@
                     cancelButtonText: '取消',
                 }).then(({ value }) => {
                 	var url = this.basic_url + '/api-apps/app/professionGro/' + row.ID;
-                	console.log(row.ID);
+                	// console.log(row.ID);
                     this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 					//resp_code == 0 是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -437,7 +446,7 @@
 								message: '删除成功',
 								type: 'success'
 							});
-							this.requestData_professionGro();
+							this.viewfield_professionGro(this.selParentId,this.parentId);
 						}
 					}).catch((err) => {
 						this.$message({

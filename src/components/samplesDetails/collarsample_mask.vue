@@ -465,7 +465,7 @@
 			addsamplenum(){
 				this.dialogsamplenum = true;
 				console.log(this.samplesForm.ITEMNUM);
-				this.$axios.get(this.basic_url + '/api-apps/app/itemgrant?ITEMNUM_wheres='+this.samplesForm.ITEMNUM, {
+				this.$axios.get(this.basic_url + '/api-apps/app/itemline?ITEMNUM_wheres='+this.samplesForm.ITEMNUM, {
 
 				}).then((res) => {
 					this.samplenumList = res.data.data;

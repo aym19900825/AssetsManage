@@ -397,7 +397,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 					name: this.searchList.name,
-					inactive:this.searchList.inactive
+					inactive: this.searchList.inactive
 				}
 				var url = this.basic_url + '/api-user/roles';
 				this.$axios.get(url, {

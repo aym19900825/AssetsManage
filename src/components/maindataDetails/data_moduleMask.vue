@@ -188,7 +188,6 @@
 
 <script>
 	import Config from '../../config.js'
-	import Validators from '../../core/util/validators.js'
 	import docTable from '../common/doc.vue'
 	export default {
 		name: 'masks',
@@ -241,12 +240,12 @@
 				rules: {
 					NUM: [{
 						required: false,
-						trigger: 'change',
-						validator: Validators.isCodeNum,
+						trigger: 'blur',
+						validator: this.Validators.isCodeNum,
 					}],
 					DECRIPTION: [
 						{required: true, message: '请填写', trigger: 'blur'},
-						{validator: Validators.isSpecificKey, trigger: 'blur'},
+						{validator: this.Validators.isSpecificKey, trigger: 'blur'},
 					],
 				},
 				//tree

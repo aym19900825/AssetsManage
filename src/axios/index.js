@@ -35,8 +35,12 @@ axios.interceptors.response.use(
   },
   error => {
     loading.close();
+
+    if (error.response) {
+
     router.push({ path: '/' });
     if (error && error.response) {
+
       switch (error.response.status) {
         case 401:
           router.push({ path: '/' });
@@ -45,7 +49,9 @@ axios.interceptors.response.use(
       }
     }
     return Promise.reject(error.response.data);
+    }
   },
+
 )
 
 Vue.prototype.$axios = axios

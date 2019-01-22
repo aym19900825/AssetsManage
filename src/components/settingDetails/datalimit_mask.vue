@@ -182,7 +182,7 @@
 		},
 		mounted() {
 			console.log(123);
-			this.getdetail();
+//			this.getdetail();
 			
 		},
 	

@@ -435,13 +435,13 @@
         		// childValue就是子组件传过来的值
         		console.log(childValue);
         		// this.$refs.navsheader.showClick(childValue);
-        		this.getbutton(childValue);
+//      		this.getbutton(childValue);
       		},
 		},
 		mounted() {
 			this.requestData();
 			this.getKey();
-			this.getbutton();
+//			this.getbutton();
 		},
 	}
 </script>

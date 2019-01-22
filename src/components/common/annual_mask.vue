@@ -41,37 +41,29 @@
 										</el-col>
 									</el-row>
 									<el-row :gutter="5" class="pt10">
-										<el-col :span="6" v-show="addtitle">
+										<el-col :span="6">
 											<el-form-item label="提出单位" prop="PROP_UNIT"  label-width="85px">
 												<el-select clearable v-model="WORKPLAN.PROP_UNIT" filterable allow-create default-first-option placeholder="请选择">
 													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 												</el-select>
 											</el-form-item>
 										</el-col>
-										<el-col :span="6" v-show="!addtitle">
-											<el-form-item label="提出单位" prop="PROP_UNITDesc" label-width="85px">
-												<el-select clearable v-model="WORKPLAN.PROP_UNITDesc" placeholder="请选择">
-													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
-												</el-select>
-											</el-form-item>
-										</el-col>
-										
 										<el-col :span="6">
-											<el-form-item label="产品类别" prop="ITEMTYPE" label-width="85px">
+											<el-form-item label="产品类别" prop="ITEMTYPE"  label-width="85px">
 												<el-input v-model="WORKPLAN.ITEMTYPE" :disabled="true">
 													<el-button slot="append" icon="el-icon-search" @click="addprobtn"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="12">
-											<el-form-item label="计划描述" prop="DESCRIPTION" label-width="85px">
+											<el-form-item label="计划描述" prop="DESCRIPTION"  label-width="85px">
 												<el-input v-model="WORKPLAN.DESCRIPTION"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row :gutter="5">
 										<el-col :span="6">
-											<el-form-item label="类别" prop="TYPE" label-width="85px">
+											<el-form-item label="类别" prop="TYPE"  label-width="85px">
 												<el-select v-model="WORKPLAN.TYPE" placeholder="请选择">
 													<el-option label="监督抽查" value="1"></el-option>
 													<el-option label="质量抽查" value="3"></el-option>
@@ -79,24 +71,24 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="6">
-											<el-form-item label="编制人" prop="COMPACTOR" label-width="85px">
+											<el-form-item label="编制人" prop="COMPACTOR"  label-width="85px">
 												<el-input v-model="WORKPLAN.COMPACTOR"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="6">
-											<el-form-item label="审核人" prop="C_PERSON" label-width="85px">
+											<el-form-item label="审核人" prop="C_PERSON"  label-width="85px">
 												<el-input v-model="WORKPLAN.C_PERSON"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="6">
-											<el-form-item label="批准人" prop="APPRPERSON" label-width="85px">
+											<el-form-item label="批准人" prop="APPRPERSON"  label-width="85px">
 												<el-input v-model="WORKPLAN.APPRPERSON"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row :gutter="5">
 										<el-col :span="6">
-											<el-form-item label="提报日期" prop="REPORTDATE" label-width="85px">
+											<el-form-item label="提报日期" prop="REPORTDATE"  label-width="85px">
 											<div class="block">
 											    <el-date-picker
 											      v-model="WORKPLAN.REPORTDATE"
@@ -107,7 +99,7 @@
 											 </el-form-item>
 										</el-col>
 										<el-col :span="6">
-											<el-form-item label="年度" prop="YEAR" label-width="85px">
+											<el-form-item label="年度" prop="YEAR"  label-width="85px">
 												<div class="block">
 												    <el-date-picker
 												      v-model="WORKPLAN.YEAR"
@@ -135,12 +127,12 @@
 											<i class="icon-upload-cloud"></i>
 											<font>导入</font>
 										</el-button>
-										<el-button type="success" size="mini" round @click="addfield1" v-show="!viewtitle">
+										<el-button type="success" size="mini" round  @click="addfield1" v-show="!viewtitle">
 											<i class="icon-add"></i>
 											<font>新建行</font>
 										</el-button>
 									</div>
-									<el-table :data="worlplanlist" :header-cell-style="rowClass" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100% ;" :default-sort="{prop:'worlplanlist', order: 'descending'}" v-loadmore="loadMore">
+									<el-table :data="worlplanlist" :header-cell-style="rowClass"  row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100% ;"  :default-sort="{prop:'worlplanlist', order: 'descending'}" v-loadmore="loadMore">
 									    <el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 									      <template slot-scope="scope" >
 									      	<i class="el-icon-check" v-if="scope.row.isEditing" @click="iconOperation(scope.row)">
@@ -394,29 +386,29 @@
 									<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save"></doc-table>
 								</el-collapse-item>
 								<!-- 录入人信息 Begin-->
-								<el-collapse-item title="其他" name="7" v-if="dept">
+								<el-collapse-item title="其他" name="7" v-show="views">
 									<el-row :gutter="30">
-										<el-col :span="8"  v-show="views">
+										<el-col :span="8">
 											<el-form-item label="录入人" prop="ENTERBYDesc" label-width="85px">
 												<el-input v-model="WORKPLAN.ENTERBYDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8" v-show="views">
+										<el-col :span="8">
 											<el-form-item label="录入日期" prop="ENTERDATE" label-width="85px">
 												<el-input v-model="WORKPLAN.ENTERDATE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8" v-show="views">
+										<el-col :span="8">
 											<el-form-item label="修改人" prop="CHANGEBYDesc" label-width="85px">
 												<el-input v-model="WORKPLAN.CHANGEBYDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8" v-show="views">
+										<el-col :span="8">
 											<el-form-item label="修改日期" prop="CHANGEDATE" label-width="85px">
 												<el-input v-model="WORKPLAN.CHANGEDATE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8" v-if="dept">
+										<el-col :span="8">
 											<el-form-item label="机构" prop="DEPTIDDesc" label-width="85px">
 												<el-input v-model="WORKPLAN.DEPTIDDesc" :disabled="edit"></el-input>
 											</el-form-item>
@@ -489,7 +481,7 @@
 							</el-col> -->
 							<el-col :span="4">
 								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
+								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
@@ -529,9 +521,9 @@
 				<el-pagination background class="pull-right pt10 pb10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 				<!-- 第二层弹出的表格 End -->
-				<div slot="footer" class="dialog-footer">
-			       <el-button @click="dialogVisible = false">取 消</el-button>
+				<div slot="footer" class="el-dialog__footer">
 			       <el-button type="primary" @click="addbasis">确 定</el-button>
+			       <el-button @click="dialogVisible = false">取 消</el-button>
 			    </div>
 			</el-dialog>
 			<!-- 检测依据弹出框 End -->
@@ -572,14 +564,14 @@
 							</el-col> -->
 							<el-col :span="4">
 								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
+								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
 				</div>
 				<!-- 高级查询划出 End-->
 				<!-- 第二层弹出的表格 Begin-->
-				<el-table :data="projectList" height="400px" border stripe style="width: 100%;" :default-sort="{prop:'projectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table  :data="projectList" height="400px" border stripe style="width: 100%;" :default-sort="{prop:'projectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" width="55" fixed>
 					</el-table-column>
 					<el-table-column label="检验/检测项编号" width="150" sortable prop="P_NUM">
@@ -617,9 +609,9 @@
 		            :total="page.totalCount">
 		        </el-pagination>
 				<!-- 表格 End-->
-				<span slot="footer" class="dialog-footer">
-			       <el-button @click="dialogVisible2 = false">取 消</el-button>
+				<span slot="footer" class="el-dialog__footer">
 			       <el-button type="primary" @click="addbasis2">确 定</el-button>
+			       <el-button @click="dialogVisible2 = false">取 消</el-button>
 			    </span>
 			</el-dialog>
 			<!-- 检测项目与要求 End -->
@@ -645,7 +637,7 @@
 				<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 				<!-- 表格 End-->
-				<span slot="footer" class="dialog-footer">
+				<span slot="footer" class="el-dialog__footer">
 			       <el-button type="primary" @click="addproclass">确 定</el-button>
 			       <el-button @click="dialogVisible3 = false">取 消</el-button>
 			    </span>
@@ -654,26 +646,26 @@
 			<!-- 产品名称 Begin -->
 			<el-dialog :modal-append-to-body="false" title="产品名称" :visible.sync="dialogVisible4" width="80%" :before-close="handleClose">
 				<el-table  :header-cell-style="rowClass" :data="productList" line-center border stripe height="400px" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-						<el-table-column type="selection" fixed width="55" align="center">
-						</el-table-column>
-						<el-table-column label="编码" width="155" sortable prop="PRO_NUM">
-						</el-table-column>
-						<el-table-column label="名称" sortable prop="PRO_NAME">
-						</el-table-column>
-						<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
-						</el-table-column>
-						<el-table-column label="机构" width="185" sortable prop="DEPARTMENTDesc">
-						</el-table-column>
-						<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
-						</el-table-column>
-						<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat">
-						</el-table-column>
-					</el-table>
-					<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-					</el-pagination>
-				<span slot="footer" class="dialog-footer">
-			       <el-button @click="dialogVisible4 = false">取 消</el-button>
+									<el-table-column type="selection" fixed width="55" align="center">
+									</el-table-column>
+									<el-table-column label="编码" width="155" sortable prop="PRO_NUM">
+									</el-table-column>
+									<el-table-column label="名称" sortable prop="PRO_NAME">
+									</el-table-column>
+									<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
+									</el-table-column>
+									<el-table-column label="机构" width="185" sortable prop="DEPARTMENTDesc">
+									</el-table-column>
+									<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
+									</el-table-column>
+									<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat">
+									</el-table-column>
+								</el-table>
+								<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+								</el-pagination>
+				<span slot="footer" class="el-dialog__footer">
 			       <el-button type="primary" @click="addproname">确 定</el-button>
+			       <el-button @click="dialogVisible4 = false">取 消</el-button>
 			    </span>
 			</el-dialog>
 			<!-- 产品名称 End -->
@@ -702,10 +694,10 @@
 					layout="total, sizes, prev, pager, next"
 					:total="page.totalCount">
 				</el-pagination>
-				<span slot="footer" class="dialog-footer">
+				<div slot="footer" class="el-dialog__footer">
 			       <el-button @click="diaVisCustom = false">取 消</el-button>
 			       <el-button type="primary" @click="adddeptname">确 定</el-button>
-			    </span>
+			    </div>
 			</el-dialog>
 			<!-- 生产企业名称、受检企业名称 End -->
 		</div>
@@ -719,90 +711,90 @@
 		name: 'masks',
 		components: {docTable},
 		data() {
-			// var validateCode = (rule, value, callback) => {
-   //              if (value === '') {
-   //                  callback(new Error('必填'));
-   //              }else {
-   //                  callback();
-   //              }
-   //          };
-   //          var validateName = (rule, value, callback) => {
-   //              if (value === '') {
-   //                  callback(new Error('必填'));
-   //              }else {
-   //                  callback();
-   //              }
-   //          };
-   //          var validateAddress = (rule, value, callback) => {
-   //              if (value === '') {
-   //                  callback(new Error('请填写联系地址'));
-   //              }else {
-   //                  callback();
-   //              }
-   //          };
-   //          var validatePhone = (rule, value, callback) => {
-   //              if (value === '') {
-   //                  callback(new Error('请填写联系电话'));
-   //              }else {
-   //                  callback();
-   //              }
-   //          };
-   //          var validateEmail = (rule, value, callback) => {
-   //              if (value === '') {
-		 //            callback(new Error('电子邮箱不能为空'));
-		 //        } else {
-			//         var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-			//         if(!reg.test(value)){
-			//             callback(new Error('请输入有效的邮箱'));
-			//         }else{
-			//         	callback();
-			//         }
-		 //        }
-   //          };
-   //          var validateName = (rule, value, callback) => {
-   //              if (value === '') {
-   //                  callback(new Error(''));
-   //              }else {
-   //                  callback();
-   //              }
-   //          };
-   //          var validateUnit = (rule, value, callback) => {
-   //              if (value === '') {
-   //                  callback(new Error('请选择提出单位'));
-   //              }else {
-   //                  callback();
-   //              }
-   //          };
-   //          var validateItemtype = (rule, value, callback) => {
-   //              if (value === '') {
-   //                  callback(new Error('请填写产品类别'));
-   //              }else {
-   //                  callback();
-   //              }
-   //          };
-   //          var validateType = (rule, value, callback) => {
-   //              if (value === '') {
-   //                  callback(new Error('请选择计划类型'));
-   //              }else {
-   //                  callback();
-   //              }
-   //          };
-   //          var validateBasislist = (rule, value, callback) => {
-   //          	console.log(rule, value, callback);
-   //              if (value === '') {
-   //                  callback(new Error('请选择检测依据'));
-   //              }else {
-   //                  callback();
-   //              }
-   //          };
+			var validateCode = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
+            var validateName = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
+            var validateAddress = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请填写联系地址'));
+                }else {
+                    callback();
+                }
+            };
+            var validatePhone = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请填写联系电话'));
+                }else {
+                    callback();
+                }
+            };
+            var validateEmail = (rule, value, callback) => {
+                if (value === '') {
+		            callback(new Error('电子邮箱不能为空'));
+		        } else {
+			        var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+			        if(!reg.test(value)){
+			            callback(new Error('请输入有效的邮箱'));
+			        }else{
+			        	callback();
+			        }
+		        }
+            };
+            var validateName = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error(''));
+                }else {
+                    callback();
+                }
+            };
+            var validateUnit = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请选择提出单位'));
+                }else {
+                    callback();
+                }
+            };
+            var validateItemtype = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请填写产品类别'));
+                }else {
+                    callback();
+                }
+            };
+            var validateType = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请选择计划类型'));
+                }else {
+                    callback();
+                }
+            };
+            var validateBasislist = (rule, value, callback) => {
+            	console.log(rule, value, callback);
+                if (value === '') {
+                    callback(new Error('请选择检测依据'));
+                }else {
+                    callback();
+                }
+            };
 			//放大镜选择验证
-			// var validateItemdata = (rule, value, callback) => {
-   //              if (this.WORKPLAN.ITEMTYPE === undefined || this.WORKPLAN.ITEMTYPE === '' || this.WORKPLAN.ITEMTYPE === null) {
-   //                  callback(new Error('必填'));
-   //              }else {
-   //                  callback();
-   //              }
-   //          };
+			var validateItemdata = (rule, value, callback) => {
+                if (this.WORKPLAN.ITEMTYPE === undefined || this.WORKPLAN.ITEMTYPE === '' || this.WORKPLAN.ITEMTYPE === null) {
+                    callback(new Error('必填'));
+                }else {
+                    callback();
+                }
+            };
 			return {
 				docParm: {
 					'model': 'new',
@@ -885,43 +877,25 @@
 				},
 				
 				rules: {
-					CODE: [{required: true, trigger: 'blur', validator: this.Validators.isWorknumber,}],
-					NAME:[{required: true, trigger: 'blur', validator: this.Validators.isNickname,}],
-					DESCRIPTION:[
-						{required: true, trigger: 'blur', message: '必填'},
-						{trigger: 'blur', validator: this.Validators.isSpecificKey},
-					],
-
-					TYPE:[{required: true, message: '请选择类别', trigger: 'change'}],
-
-					COMPACTOR:[
-						{required: true, trigger: 'blur', validator: this.Validators.isNickname},
-					],
-					C_PERSON:[
-						{required: true, trigger: 'blur', message: '必填'},
-						{trigger: 'blur', validator: this.Validators.isNickname}
-					],
-					APPRPERSON:[
-						{required: true, trigger: 'blur', message: '必填'},
-						{trigger: 'blur', validator: this.Validators.isNickname}
-					],
-
-					// CONTACT_ADDRESS:[{required: true,trigger:'blur', validator: this.Validators,isSpecificKey}],
-					PHONE:[{required: true, trigger: 'blur', validator: this.Validators.isPhone}],
-					EMAIL:[{required: true, trigger: 'blur', validator: this.Validators.isEmail}],
-
-					PROP_UNIT:[{required: true, message: '请选择提出单位', trigger: 'change'}],//提出单位 
-       				ITEMTYPE:[{required: true, message: '请选择产品类别', trigger: 'change'}],//产品类别
-       				YEAR: [{required: true, type: 'date', trigger: 'change', message: '请选择年度' }],//年度
-       				REPORTDATE: [{required: true, type: 'date',trigger: 'change', message: '请选择提报日期'}],//提报日期
+					// CODE: [{required: true,trigger: 'blur',validator: validateCode,}],
+					// NAME:[{required: true,trigger: 'blur',validator: validateName,}],
+					DESCRIPTION:[{required: true,trigger: 'blur',validator: this.Validators.isFillTips}],
+					TYPE:[{required: true,message: '请选择类别', trigger: 'change'}],
+					COMPACTOR:[{required: true,message: '请填写编制人',trigger: 'blur'}],
+					C_PERSON:[{required: true,message: '请填写审核人',trigger: 'blur'}],
+					APPRPERSON:[{required: true,message: '请填写批准人',trigger: 'blur'}],
+					CONTACT_ADDRESS:[{required: true,trigger:'blur',validator: validateAddress,}],
+					PHONE:[{required: true,trigger: 'blur',validator: validatePhone,}],
+					EMAIL:[{required: true,trigger: 'blur',validator:validateEmail,}],
+					PROP_UNIT:[{required: true,validator: validateUnit, trigger: 'change'}],//提出单位 
+       				ITEMTYPE:[{required: true,validator: validateItemdata}],//产品类别 
+       				YEAR: [{type: 'string',required: true,message: '请选择年度',trigger: 'change' }],//年度
+       				REPORTDATE: [{type: 'string',required: true,message: '请选择提报日期',trigger: 'change'}],//提报日期
        				//检测依据 
-					basisList:[
-						{required: true, trigger: 'change', message: '必填'},
-						{trigger: 'blur', validator: this.Validators.isSpecificKey}
-					],
-					ITEM_NAME:[{required: true, message: '必填', trigger: 'blur'}], //产品名称 
-					MODEL:[{required: true, message: '必填', trigger: 'blur'}],
-					REMARKS:[{required: true, message: '必填', trigger: 'blur'}],
+					basisList:[{required: true,validator: validateBasislist,trigger: 'change'}],//产品类别
+					ITEM_NAME:[{required: true,message: '请填写',trigger: 'blur'}], //产品名称 
+					MODEL:[{required: true,message: '请填写',trigger: 'blur'}],
+					REMARKS:[{required: true,message: '请填写',trigger: 'blur'}],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -1307,8 +1281,8 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					// console.log(2333333);
-					// console.log(res.data);
+					console.log(2333333);
+					console.log(res.data);
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -1351,8 +1325,8 @@
 				this.$axios.get(this.basic_url +'/api-apps/app/inspectionPro', {
 					params: data
 				}).then((res) => {
-					// console.log(2333333);
-					// console.log(res.data);
+					console.log(2333333);
+					console.log(res.data);
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -1391,8 +1365,8 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					// console.log(2333333);
-					// console.log(res.data);
+					console.log(2333333);
+					console.log(res.data);
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -1424,7 +1398,7 @@
 				this.$axios.get(this.basic_url + '/api-apps/app/productType?DEPTID='+this.WORKPLAN.PROP_UNIT, {
 					params: data
 				}).then((res) => {
-					// console.log(res.data);
+					console.log(res.data);
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -1823,7 +1797,7 @@
 					'ID': '',
 					'WP_NUM': '',
 					'DESCRIPTION': '',
-					'YEAR': year,
+					'YEAR': year,	
 					'TYPE': '',
 					'STATUS': '1',
 					'LEADER_STATUS': '1',
@@ -1947,9 +1921,6 @@
 			// 		VERSION: this.searchList.VERSION,
 			// 		STATUS: this.searchList.STATUS,
 			// 	};
-			
-			
-				
 			
 			
 			// },

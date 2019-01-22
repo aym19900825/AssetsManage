@@ -43,8 +43,7 @@ textarea{
     /* border: none;
     border-bottom:1px solid #DFE5EA; */
 }
-.el-input-number {line-height: 33px;}
-
+.el-input-number,.el-input__icon {line-height: 33px;}
 
 
 

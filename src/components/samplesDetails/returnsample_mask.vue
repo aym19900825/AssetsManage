@@ -338,7 +338,10 @@
 				},
 				dialogsample:false,//样品编号
 				dialogsamplenum:false,//样品序号
-				samplesList:[]//样品编号弹出框表格数据来源
+				samplesList:[],//样品编号弹出框表格数据来源
+				samplenumList:[],
+				loadSign:false,
+				commentArr:{},//下拉加载
 			};
 		},
 		methods: {
@@ -551,6 +554,20 @@
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
 				$(".mask_div").css("top", "100px");
+			},
+			//表格滚动加载
+			loadMore() {
+				if(this.loadSign) {
+					this.loadSign = false
+					this.page.currentPage++
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							return
+						}
+					setTimeout(() => {
+						this.loadSign = true
+					}, 1000)
+					this.requestData()
+				}
 			},
 			//点击提交按钮执行保存
 			save(samplesForm) {

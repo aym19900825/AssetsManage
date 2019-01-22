@@ -42,8 +42,8 @@
 									</el-row>
 									<el-row :gutter="5" class="pt10">
 										<el-col :span="6" v-show="addtitle">
-											<el-form-item label="提出单位" prop="PROP_UNIT" label-width="85px">
-												<el-select clearable v-model="WORKPLAN.PROP_UNIT" placeholder="请选择">
+											<el-form-item label="提出单位" prop="PROP_UNIT"  label-width="85px">
+												<el-select clearable v-model="WORKPLAN.PROP_UNIT" filterable allow-create default-first-option placeholder="请选择">
 													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 												</el-select>
 											</el-form-item>
@@ -55,6 +55,7 @@
 												</el-select>
 											</el-form-item>
 										</el-col>
+										
 										<el-col :span="6">
 											<el-form-item label="产品类别" prop="ITEMTYPE" label-width="85px">
 												<el-input v-model="WORKPLAN.ITEMTYPE" :disabled="true">
@@ -1615,12 +1616,17 @@
 			detail(dataid) {
 				this.assignshow = true;
 				this.$axios.get(this.basic_url +'/api-apps/app/workplan/' + dataid, {}).then((res) => {
-					console.log(res.data);
-					console.log(res.data.WORLPLANLINEList.length);
 					for(var i = 0; i<res.data.WORLPLANLINEList.length; i++){
 							res.data.WORLPLANLINEList[i].isEditing = false;
 					}
+					console.log(2333333);
+					console.log(res.data);
 					this.WORKPLAN = res.data;
+					for(var j=0;j<this.selectData.length;j++){
+						if(this.WORKPLAN.PROP_UNIT==this.selectData[j].id){
+							this.WORKPLAN.PROP_UNIT=this.selectData[j].fullname
+						}
+					}
 					this.worlplanlist = res.data.WORLPLANLINEList;
 					var worlplanlist = res.data.WORLPLANLINEList;
 					for(var i=0, len=worlplanlist.length; i<len; i++){
@@ -1747,6 +1753,14 @@
 									return false;
 								}else{
 									if(!this.isEditList){
+										if(typeof(this.WORKPLAN.PROP_UNIT) != 'undefined') {
+											console.log(this.selectData);
+											for(var j=0;j<this.selectData.length;j++){
+												if(this.WORKPLAN.PROP_UNIT==this.selectData[j].fullname){
+													this.WORKPLAN.PROP_UNIT=this.selectData[j].id
+												}
+											}		
+										}
 										this.WORKPLAN.WORLPLANLINEList = this.worlplanlist;
 										var url = this.basic_url +'/api-apps/app/workplan/saveOrUpdate';
 										this.$axios.post(url, this.WORKPLAN).then((res) => {

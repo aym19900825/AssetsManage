@@ -166,7 +166,7 @@
 										<el-col :span="8">
 											<el-form-item label="学历" prop="education" label-width="100px">
 												<el-select v-model="user.education" placeholder="硕士" style="width: 100%" :disabled="noedit">
-													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+													<el-option v-for="(item,index) in options" :key="index" :label="item.label" :value="item.value">
 													</el-option>
 												</el-select>
 											</el-form-item>
@@ -174,7 +174,7 @@
 										<el-col :span="8">
 											<el-form-item label="角色" prop="roleId" label-width="100px">
 												<el-select v-model="user.roleId" multiple :disabled="noedit" value-key="item.id" >
-													<el-option v-for="item in selectData" :key="item.name" :value="item.id" :label="item.name"></el-option>
+													<el-option v-for="(item,index) in selectData" :key="index" :value="item.id" :label="item.name"></el-option>
 												</el-select>
 											</el-form-item>
 										</el-col>

@@ -28,7 +28,7 @@
 											</el-input>
 										</el-col>-->
 										<el-col :span="4" class="pull-right">
-											<el-input v-model="samplesForm.STATE" :disabled="true">
+											<el-input v-model="samplesForm.STATEDesc" :disabled="true">
 												<template slot="prepend">状态</template>
 											</el-input>
 										</el-col>
@@ -318,7 +318,7 @@
 						ACCEPT_DATE: '',//收样日期
 						GRANT_PERSON: '',//领样人
 						GRANT_DATE: '',//领样日期
-						STATE: '1',//状态
+						STATE: '',//状态
 						STATUSDATE: '',//状态日期
 						ENTERBY: '',//录入人
 						ENTERDATE: '',//录入时间

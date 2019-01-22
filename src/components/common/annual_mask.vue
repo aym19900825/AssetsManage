@@ -386,29 +386,29 @@
 									<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save"></doc-table>
 								</el-collapse-item>
 								<!-- 录入人信息 Begin-->
-								<el-collapse-item title="其他" name="7" v-if="dept">
+								<el-collapse-item title="其他" name="7" v-show="views">
 									<el-row :gutter="30">
-										<el-col :span="8"  v-show="views">
+										<el-col :span="8">
 											<el-form-item label="录入人" prop="ENTERBYDesc" label-width="85px">
 												<el-input v-model="WORKPLAN.ENTERBYDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8" v-show="views">
+										<el-col :span="8">
 											<el-form-item label="录入日期" prop="ENTERDATE" label-width="85px">
 												<el-input v-model="WORKPLAN.ENTERDATE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8" v-show="views">
+										<el-col :span="8">
 											<el-form-item label="修改人" prop="CHANGEBYDesc" label-width="85px">
 												<el-input v-model="WORKPLAN.CHANGEBYDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8" v-show="views">
+										<el-col :span="8">
 											<el-form-item label="修改日期" prop="CHANGEDATE" label-width="85px">
 												<el-input v-model="WORKPLAN.CHANGEDATE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8" v-if="dept">
+										<el-col :span="8">
 											<el-form-item label="机构" prop="DEPTIDDesc" label-width="85px">
 												<el-input v-model="WORKPLAN.DEPTIDDesc" :disabled="edit"></el-input>
 											</el-form-item>

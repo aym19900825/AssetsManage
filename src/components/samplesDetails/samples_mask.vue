@@ -28,7 +28,7 @@
 											</el-input>
 										</el-col>-->
 										<el-col :span="4" class="pull-right">
-											<el-input  v-model="samplesForm.STATE" :disabled="true">
+											<el-input  v-model="samplesForm.STATEDesc" :disabled="true">
 												<template slot="prepend">状态</template>
 											</el-input>
 											<!-- <el-input v-for="(data,index) in Select_STATUS" :key="index" :value="data.code" :label="data.name"></el-input> -->
@@ -554,7 +554,8 @@
 					ACCEPT_DATE: '',//收样日期
 					RECIP_PERSON: '',//接样人
 					RECIP_DATE: '',//接样日期
-					STATE: '待检',//状态
+					STATE: '1',//状态
+					STATEDesc: '待检',
 					VERSION: '1',//版本
 					STATUSDATE: '',//状态日期
 					ENTERBY: '',//录入人
@@ -651,13 +652,12 @@
 					})
 				})
 				this.$axios.get(this.basic_url + '/api-apps/app/item/' + dataid, {}).then((res) => {
-					console.log(23333);
-					console.log(res.data);
 					for(var i=0;i<res.data.ITEM_LINEList.length;i++){
 						res.data.ITEM_LINEList[i].isEditing = false;
 					}
-					console.log(res.data);
 					this.samplesForm = res.data;
+					console.log(233333);
+					console.log(this.samplesForm.STATE);
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -686,6 +686,15 @@
 				var url = this.basic_url + '/api-apps/app/item/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
 					this.samplesForm = res.data;
+					if(this.samplesForm.STATE == '1'){
+						this.samplesForm.STATE == '待检';
+					}else if(this.samplesForm.STATE == '2'){
+						this.samplesForm.STATE == '在检';
+					}else if(this.samplesForm.STATE == '3'){
+						this.samplesForm.STATE == '已检';
+					}else{
+						this.samplesForm.STATE == '留存';
+					}
 					this.show = true;
 				}).catch((err) => {
 					this.$message({

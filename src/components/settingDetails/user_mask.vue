@@ -637,7 +637,7 @@
 					var date = new Date();
 					this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 					var obj = {
-						step: '',
+						step: 1,
 						c_num: '',
 						c_name: '',
 						c_date: '',
@@ -660,7 +660,7 @@
 			},
 			addfield2() {
 				var obj = {
-					step: '1',
+					step: 1,
 					t_date: '',
 					t_description: '',
 					status: '',

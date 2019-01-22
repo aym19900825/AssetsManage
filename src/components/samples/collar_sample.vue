@@ -136,7 +136,7 @@
 								</el-table-column>
 								<el-table-column label="领样日期" sortable width="100px" :formatter="dateFormat" prop="GRANT_DATE" v-if="this.checkedName.indexOf('领样日期')!=-1">
 								</el-table-column>
-								<el-table-column label="状态" sortable width="100px" prop="STATE" v-if="this.checkedName.indexOf('状态')!=-1" >
+								<el-table-column label="状态" sortable width="100px" prop="STATEDesc" v-if="this.checkedName.indexOf('状态')!=-1" >
 								</el-table-column>
 								<!--<el-table-column label="信息状态" sortable width="140px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
 								</el-table-column>-->
@@ -227,7 +227,7 @@
 					},
 					{
 						label: '状态',
-						prop: 'STATE'
+						prop: 'STATEDesc'
 					},
 					{
 						label: '信息状态',
@@ -349,7 +349,8 @@
 					ACCEPT_DATE: '',//收样日期
 					GRANT_PERSON: '',//领样人
 					GRANT_DATE: '',//领样日期
-					STATE: '在检',//状态
+					STATE: '2',//状态
+					STATEDesc:'在检',
 					STATUSDATE: '',//状态日期
 					ENTERBY: '',//录入人
 					ENTERDATE: '',//录入时间
@@ -449,22 +450,7 @@
 			// 打印
 			Printing() {
 
-			},
-//			judge(data) {
-//				console.log(data.STATE);
-//				if(data.STATE==1){
-//					return data.STATE='草稿'
-//				}else if(data.STATE=='2'){
-//					return data.STATE='审批中'
-//				}else if(data.STATE=='3'){
-//					return data.STATE='已发布'
-//				}else if(data.STATE=='4'){
-//					return data.STATE='已取消'
-//				}else{
-//					return data.STATE='驳回'
-//				}
-//			},
-			
+			},			
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -493,7 +479,6 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)

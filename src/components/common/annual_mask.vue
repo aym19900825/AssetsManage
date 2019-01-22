@@ -521,9 +521,9 @@
 				<el-pagination background class="pull-right pt10 pb10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 				<!-- 第二层弹出的表格 End -->
-				<div slot="footer" class="dialog-footer">
-			       <el-button @click="dialogVisible = false">取 消</el-button>
+				<div slot="footer" class="el-dialog__footer">
 			       <el-button type="primary" @click="addbasis">确 定</el-button>
+			       <el-button @click="dialogVisible = false">取 消</el-button>
 			    </div>
 			</el-dialog>
 			<!-- 检测依据弹出框 End -->
@@ -609,9 +609,9 @@
 		            :total="page.totalCount">
 		        </el-pagination>
 				<!-- 表格 End-->
-				<span slot="footer" class="dialog-footer">
-			       <el-button @click="dialogVisible2 = false">取 消</el-button>
+				<span slot="footer" class="el-dialog__footer">
 			       <el-button type="primary" @click="addbasis2">确 定</el-button>
+			       <el-button @click="dialogVisible2 = false">取 消</el-button>
 			    </span>
 			</el-dialog>
 			<!-- 检测项目与要求 End -->
@@ -637,9 +637,9 @@
 				<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 				<!-- 表格 End-->
-				<span slot="footer" class="dialog-footer">
-			       <el-button @click="dialogVisible3 = false">取 消</el-button>
+				<span slot="footer" class="el-dialog__footer">
 			       <el-button type="primary" @click="addproclass">确 定</el-button>
+			       <el-button @click="dialogVisible3 = false">取 消</el-button>
 			    </span>
 			</el-dialog>
 			<!-- 产品类别 End -->
@@ -663,9 +663,9 @@
 								</el-table>
 								<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 								</el-pagination>
-				<span slot="footer" class="dialog-footer">
-			       <el-button @click="dialogVisible4 = false">取 消</el-button>
+				<span slot="footer" class="el-dialog__footer">
 			       <el-button type="primary" @click="addproname">确 定</el-button>
+			       <el-button @click="dialogVisible4 = false">取 消</el-button>
 			    </span>
 			</el-dialog>
 			<!-- 产品名称 End -->
@@ -694,10 +694,10 @@
 					layout="total, sizes, prev, pager, next"
 					:total="page.totalCount">
 				</el-pagination>
-				<span slot="footer" class="dialog-footer">
+				<div slot="footer" class="el-dialog__footer">
 			       <el-button @click="diaVisCustom = false">取 消</el-button>
 			       <el-button type="primary" @click="adddeptname">确 定</el-button>
-			    </span>
+			    </div>
 			</el-dialog>
 			<!-- 生产企业名称、受检企业名称 End -->
 		</div>
@@ -877,22 +877,34 @@
 				},
 				
 				rules: {
-					CODE: [{required: true,trigger: 'blur',validator: validateCode,}],
-					NAME:[{required: true,trigger: 'blur',validator: validateName,}],
-					DESCRIPTION:[{required: true,message: '请填写计划描述',trigger: 'blur'}],
+					// CODE: [{required: true,trigger: 'blur',validator: validateCode,}],
+					// NAME:[{required: true,trigger: 'blur',validator: validateName,}],
+					PROP_UNIT:[{required: true,validator: validateUnit, trigger: 'change'}],//提出单位 
+					basisList:[{required: true,validator: validateBasislist,trigger: 'change'}],//产品类别
+					DESCRIPTION:[{required: true,trigger: 'blur',validator: this.Validators.isFillTips}],
+
 					TYPE:[{required: true,message: '请选择类别', trigger: 'change'}],
-					COMPACTOR:[{required: true,message: '请填写编制人',trigger: 'blur'}],
-					C_PERSON:[{required: true,message: '请填写审核人',trigger: 'blur'}],
-					APPRPERSON:[{required: true,message: '请填写批准人',trigger: 'blur'}],
+
+					COMPACTOR:[
+						{required: true, trigger: 'blur',message: '必填' },
+						{trigger: 'blur', validator: this.Validators.isNickname},
+					],//编制人
+					C_PERSON:[
+						{required: true, trigger: 'blur',message: '必填' },
+						{trigger: 'blur', validator: this.Validators.isNickname},
+					],//审核人
+					APPRPERSON:[
+						{required: true, trigger: 'blur',message: '必填' },
+						{trigger: 'blur', validator: this.Validators.isNickname},
+					],//批准人
+
 					CONTACT_ADDRESS:[{required: true,trigger:'blur',validator: validateAddress,}],
 					PHONE:[{required: true,trigger: 'blur',validator: validatePhone,}],
 					EMAIL:[{required: true,trigger: 'blur',validator:validateEmail,}],
-					PROP_UNIT:[{required: true,validator: validateUnit, trigger: 'change'}],//提出单位 
        				ITEMTYPE:[{required: true,validator: validateItemdata}],//产品类别 
        				YEAR: [{type: 'string',required: true,message: '请选择年度',trigger: 'change' }],//年度
        				REPORTDATE: [{type: 'string',required: true,message: '请选择提报日期',trigger: 'change'}],//提报日期
        				//检测依据 
-					basisList:[{required: true,validator: validateBasislist,trigger: 'change'}],//产品类别
 					ITEM_NAME:[{required: true,message: '请填写',trigger: 'blur'}], //产品名称 
 					MODEL:[{required: true,message: '请填写',trigger: 'blur'}],
 					REMARKS:[{required: true,message: '请填写',trigger: 'blur'}],
@@ -1921,9 +1933,6 @@
 			// 		VERSION: this.searchList.VERSION,
 			// 		STATUS: this.searchList.STATUS,
 			// 	};
-			
-			
-				
 			
 			
 			// },

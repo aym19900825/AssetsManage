@@ -202,36 +202,36 @@
 			//获取pageSize
 			sizeChange(val) {
 		      this.page.pageSize = val;
-		      this.requestData();
+//		      this.requestData();
 		    },
 		    //获取currentPage
 		    currentChange(val) {
 		      this.page.currentPage = val;
-		      this.requestData();
+//		      this.requestData();
 		    },
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
-				this.requestData();
+//				this.requestData();
 			},
 			judge(data) {//是否停用
 				return data.inactive=="1" ? '是' : '否'
 			},
-			//请求页面的button接口
-		    getbutton(childByValue){
-		    	console.log(childByValue);
-		    	var data = {
-					menuId: childByValue.id,
-					roleId: this.$store.state.roleid,
-				};
-				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
-				this.$axios.get(url, {params: data}).then((res) => {
-					console.log(111)
-					console.log(res);
-					this.buttons = res.data;
-				}).catch((wrong) => {})
-
-		    },
+//			//请求页面的button接口
+//		    getbutton(childByValue){
+//		    	console.log(childByValue);
+//		    	var data = {
+//					menuId: childByValue.id,
+//					roleId: this.$store.state.roleid,
+//				};
+//				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
+//				this.$axios.get(url, {params: data}).then((res) => {
+//					console.log(111)
+//					console.log(res);
+//					this.buttons = res.data;
+//				}).catch((wrong) => {})
+//
+//		    },
 			 //请求点击
 		    getbtn(item){
 		    	if(item.name=="添加"){
@@ -366,7 +366,7 @@
 									message: '删除成功',
 									type: 'success'
 								});
-								this.requestData();
+//								this.requestData();
 							}
 						}).catch((err) => {
 							this.$message({
@@ -393,13 +393,13 @@
 				this.selUser = val;
 			},
 			//页面加载数据
-			requestData(index) {
+			requestData() {
 				console.log(this.searchList.inactive);
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 					name: this.searchList.name,
-					inactive:this.searchList.inactive
+					inactive: this.searchList.inactive
 				}
 				var url = this.basic_url + '/api-user/roles';
 				this.$axios.get(url, {
@@ -437,13 +437,13 @@
         		// childValue就是子组件传过来的值
         		console.log(childValue);
         		// this.$refs.navsheader.showClick(childValue);
-        		this.getbutton(childValue);
+//      		this.getbutton(childValue);
       		},
 		},
 		mounted() {
 			this.requestData();
 			this.getKey();
-			this.getbutton();
+//			this.getbutton();
 		},
 	}
 </script>

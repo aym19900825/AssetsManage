@@ -18,7 +18,6 @@
 
 <script>
 	import Config from '../../config.js'
-	import Validators from '../../core/util/validators.js'
 	export default {
 		 props:["roleIds"],//第一种方式
 		name: 'masks',
@@ -184,7 +183,7 @@
 		},
 		mounted() {
 			console.log(123);
-			this.getdetail();
+//			this.getdetail();
 			
 		},
 	

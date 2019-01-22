@@ -43,8 +43,7 @@ textarea{
     /* border: none;
     border-bottom:1px solid #DFE5EA; */
 }
-.el-input-number {line-height: 33px;}
-
+.el-input-number,.el-input__icon {line-height: 33px;}
 
 
 
@@ -173,7 +172,7 @@ textarea:focus,button:focus,
 
 
 
-
+.child-search {width:180px; position:absolute; right:80px; top:20px;}
 
 
 /*------------------------文本框默认内容提示字颜色 By Heliping------------------------*/

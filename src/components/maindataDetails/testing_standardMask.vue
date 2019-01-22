@@ -135,7 +135,6 @@
 
 <script>
 	import Config from '../../config.js'
-	import Validators from '../../core/util/validators.js'
 	import docTable from '../common/doc.vue'
 	export default {
 		name: 'masks',
@@ -281,17 +280,17 @@
 					}
 				],
 				rules: {
-					S_NUM: [{required: false, trigger: 'blur',validator: Validators.isCodeNum}],//编号
-					S_NAME: [{required: true, trigger: 'blur',validator: Validators.isNickname}],//中文名称
-					S_ENGNAME: [{required: true, trigger: 'blur', validator: Validators.isEnglish}],//英文名称
+					S_NUM: [{required: false, trigger: 'blur',validator: this.Validators.isCodeNum}],//编号
+					S_NAME: [{required: true, trigger: 'blur',validator: this.Validators.isNickname}],//中文名称
+					S_ENGNAME: [{required: true, trigger: 'blur', validator: this.Validators.isEnglish}],//英文名称
 					editDataInfoProp: [
 						{required: true,trigger: 'blur',message: '必填',},
-						{validator: Validators.isEnglish,trigger: 'blur'}
+						{validator: this.Validators.isEnglish,trigger: 'blur'}
 					],
 //					RELEASETIME:[{required: true, message: '必填', trigger: 'change'}],
 					RELEASE_UNIT: [
 						{required: true,trigger: 'blur',message: '必填',},
-						{validator: Validators.isSpecificKey, trigger: 'blur'},
+						{validator: this.Validators.isSpecificKey, trigger: 'blur'},
 					],
 				},
 				//tree

@@ -70,7 +70,7 @@
 								</div>
 								<div class="left_treebg" :style="{height: fullHeight}">
 									<div class="p15" v-if="ismin">
-										<el-tree ref="tree" 
+										<el-tree ref="tree"
 										 :render-content="renderContent" 
 										 :load="loadNode"
 										 node-key="id"

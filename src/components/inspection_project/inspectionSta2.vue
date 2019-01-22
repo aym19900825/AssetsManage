@@ -19,13 +19,13 @@
 			</div>
 			<el-form :model="inspectionSta2Form" status-icon inline-message ref="inspectionSta2Form" class="el-radio__table">
 			  <el-table ref="singleTable" :data="inspectionSta2Form.inspectionList.filter(data => !search || data.S_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250" highlight-current-row style="width: 100%;" :default-sort="{prop:'inspectionSta2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
-				<!-- <el-table-column label="所属产品" width="80" prop="PRO_NUM">
+				<el-table-column label="所属产品" width="80" prop="PRO_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.PRO_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PRO_NUM" disabled></el-input><span v-else="v-else">{{scope.row.PRO_NUM}}</span>
 					</el-form-item>
 			      </template>
-			    </el-table-column> -->
+			    </el-table-column>
 
 			  	<el-table-column label="标准编码" sortable width="100" prop="S_NUM">
 			      <template slot-scope="scope">
@@ -115,14 +115,20 @@
 	</el-card>
 
 	<!-- 检验/检测标准 Begin -->
-		<el-dialog :modal-append-to-body="false" title="选择基础数据——检验/检测标准" height="300px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
+		<el-dialog :modal-append-to-body="false" title="选择基础数据——检验/检测标准" height="300px" :visible.sync="dialogVisible3" width="80%">
+			<!--搜索框 Begin-->
+			<div class="columns pull-right child-search">
+				<el-input placeholder="请输入标准名称" v-model="search">
+				</el-input>
+			</div>
+			<!--搜索框 End-->
 			<!-- 第二层弹出的表格 Begin-->
-			<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+			<el-table :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.S_NUM.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 				<el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column>
-				<el-table-column label="编码" width="155" sortable prop="S_NUM">
+				<el-table-column label="标准编码" width="155" sortable prop="S_NUM">
 				</el-table-column>
-				<el-table-column label="名称" sortable prop="S_NUM">
+				<el-table-column label="标准名称" sortable prop="S_NUM">
 				</el-table-column>
 				<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
 				</el-table-column>
@@ -259,16 +265,16 @@
 			},
 			sizeChange(val) {//页数
 		      this.page.pageSize = val;
-		      this.requestData_inspectionSta2();
+		      this.viewfield_inspectionSta2(this.selParentId,this.parentId);
 		    },
 		    currentChange(val) {//当前页
 		      this.page.currentPage = val;
-		      this.requestData_inspectionSta2();
+		      this.viewfield_inspectionSta2(this.selParentId,this.parentId);
 		    },
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
-				this.requestData_inspectionSta2();
+				this.viewfield_inspectionSta2(this.selParentId,this.parentId);
 			},
 			judge(data) {//taxStatus 信息状态布尔值
 				return data.enabled ? '活动' : '不活动'
@@ -293,6 +299,7 @@
 					//todo  相关数据设置
 				}
 				this.parentId = num;
+				this.selParentId = id;
 				var url = this.basic_url + '/api-apps/app/inspectionSta2/PRODUCT2/' + id;
 				this.$axios.get(url, {}).then((res) => {
 					this.page.totalCount = res.data.count;	
@@ -452,7 +459,8 @@
 								type: 'success'
 							});
 							//重新加载数据
-							this.requestData_inspectionSta2();
+							// this.requestData_inspectionSta2();
+							this.viewfield_inspectionSta2(this.selParentId,this.parentId);//重新加载父级选中的数据下所有子数据
 						}
 					}).catch((err) => {
 						this.$message({
@@ -478,7 +486,7 @@
 								message: '删除成功',
 								type: 'success'
 							});
-							this.requestData_inspectionSta2();
+							this.viewfield_inspectionSta2(this.selParentId,this.parentId);
 						}
 					}).catch((err) => {
 						this.$message({

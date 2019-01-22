@@ -118,8 +118,11 @@
 					// '序号',
 					'机构名称',
 					'机构编码',
+					'上级机构',
+					'机构属性',
+					'负责人',
 					'版本',
-					'电话号',
+					'备注',
 				],
 				columns: [
 					// {
@@ -138,15 +141,30 @@
 						isShow:true,
 					},
 					{
+						text: '上级机构',
+						dataIndex: 'parent',
+						isShow:true,
+					},
+					{
+						text: '机构属性',
+						dataIndex: 'type',
+						isShow:true,
+					},
+					{
+						text: '负责人',
+						dataIndex: 'leader',
+						isShow:true,
+					},
+					{
 						text: '版本',
 						dataIndex: 'version',
 						isShow:true,
 					},
 					{
-						text: '电话号',
-						dataIndex: 'telephone',
+						text: '备注',
+						dataIndex: 'tips',
 						isShow:true,
-					}
+					},
 				],
 
 				companyId: '',

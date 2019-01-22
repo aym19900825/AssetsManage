@@ -193,7 +193,7 @@
 												</el-table-column>
 												<el-table-column label="序号" sortable width="80px" prop="NUMBER" type="index">
 												</el-table-column>
-												<el-table-column label="检验标准编号" sortable width="120px" prop="S_NUM">
+												<el-table-column label="检验标准编号" sortable width="200px" prop="S_NUM">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入内容">
@@ -225,7 +225,7 @@
 														</el-form-item>
 													</template>
 												</el-table-column>
-												<el-table-column prop="VERSION" label="版本" sortable width="120px">
+												<el-table-column prop="VERSION" label="版本" sortable width="200px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入内容"></el-input>
@@ -243,7 +243,7 @@
 												<el-table-column label="附件" sortable width="120px">
 													<template slot-scope="scope">
 														<el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="3" :on-exceed="handleExceed" :file-list="fileList">
-															<el-button size="small" type="primary">点击上传</el-button>
+															<el-button size="small" type="primary" v-if="!viewtitle">点击上传</el-button>
 														</el-upload>
 													</template>
 												</el-table-column>

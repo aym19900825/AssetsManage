@@ -374,8 +374,8 @@
 												</el-button>
 											</div>
 
-											<el-table :data="workorderForm.WORKORDER_BASISList" row-key="ID" border stripe :fit="true" max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;">
-											    <el-table-column prop="iconOperation" fixed width="50px">
+											<el-table :data="workorderForm.WORKORDER_BASISList" row-key="ID" border stripe :fit="true" max-height="260" @cell-click="iconOperation" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'workorderForm.WORKORDER_BASISList', order: 'descending'}">
+											    <el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 											      <template slot-scope="scope">
 											      	<i class="el-icon-check" v-show="scope.row.isEditing">
 											      	</i>
@@ -398,13 +398,6 @@
 											      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NAME"></el-input><span v-show="!scope.row.isEditing">{{scope.row.S_NAME}}</span>
 											      </template>
 											    </el-table-column>
-
-												<el-table-column prop="S_ENGNAME" label="英文名称" sortable>
-											      <template slot-scope="scope">
-											         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_ENGNAME" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.S_ENGNAME}}</span>
-											      </template>
-											    </el-table-column>
-
 											    <el-table-column prop="VERSION" label="标准版本" sortable width="120px">
 											      <template slot-scope="scope">
 											         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" ></el-input><span v-show="!scope.row.isEditing">{{scope.row.VERSION}}</span>
@@ -417,7 +410,7 @@
 											      </template>
 											    </el-table-column> -->
 
-											    <el-table-column fixed="right" label="操作" width="120">
+											    <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 											      <template slot-scope="scope">
 											         <el-button @click.native.prevent="deleteRow(scope.$index,workorderForm.WORKORDER_BASISList)" type="text" size="small">
 											      <i class="icon-trash red"></i>
@@ -433,8 +426,8 @@
 													<font>新建行</font>
 												</el-button>
 											</div>
-							            	<el-table :data="workorderForm.WORKORDER_PROJECTList" border stripe :fit="true" max-height="260" style="width: 100%;" :default-sort="{prop:'workorderbasisList', order: 'descending'}">
-							            		<el-table-column prop="iconOperation" fixed width="50px">
+							            	<el-table :data="workorderForm.WORKORDER_PROJECTList" border stripe :fit="true" max-height="260" @cell-click="iconOperation" style="width: 100%;" :default-sort="{prop:'workorderbasisList', order: 'descending'}">
+							            		<el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 											      <template slot-scope="scope">
 											      	<i class="el-icon-check" v-show="scope.row.isEditing">
 											      	</i>
@@ -486,7 +479,7 @@
 																<span v-else="v-else">{{scope.row.VERSION}}</span>
 															</template>
 												</el-table-column>
-											      <el-table-column fixed="right" label="操作" width="120">
+											      <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 											      <template slot-scope="scope">
 											         <el-button @click.native.prevent="deleteRow(scope.$index,workorderForm.WORKORDER_PROJECTList)" type="text" size="small">
 											      <i class="icon-trash red"></i>
@@ -501,8 +494,8 @@
 													<i class="icon-add"></i><font>新建行</font>
 												</el-button>
 											</div>
-							            	<el-table :data="workorderForm.WORKORDER_CHECKPERSONList" border stripe :fit="true" max-height="260" style="width: 100%;" :default-sort="{prop:'WORKORDER_CHECKPERSONList', order: 'descending'}">
-							            		<el-table-column prop="iconOperation" fixed width="50px">
+							            	<el-table :data="workorderForm.WORKORDER_CHECKPERSONList" border stripe :fit="true" max-height="260" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'WORKORDER_CHECKPERSONList', order: 'descending'}">
+							            		<el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 											      <template slot-scope="scope">
 											      	<i class="el-icon-check" v-show="scope.row.isEditing">
 											      	</i>
@@ -530,7 +523,7 @@
 											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.TELPHONE"></el-input><span v-else="v-else">{{scope.row.TELPHONE}}</span>
 											      </template>
 											    </el-table-column>
-							            		<el-table-column fixed="right" label="操作" width="120">
+							            		<el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 											      <template slot-scope="scope">
 											        <el-button @click.native.prevent="deleteRow(scope.$index,workorderForm.WORKORDER_CHECKPERSONList)" type="text" size="small">
 											       <i class="icon-trash red"></i>
@@ -545,8 +538,8 @@
 													<i class="icon-add"></i><font>新建行</font>
 												</el-button>
 											</div>
-											<el-table :data="workorderForm.WORKORDER_DATA_TEMPLATEList" border stripe :fit="true" max-height="260" style="width: 100%;" :default-sort="{prop:'WORKORDER_DATA_TEMPLATEList', order: 'descending'}">
-												<el-table-column prop="iconOperation" fixed width="50px">
+											<el-table :data="workorderForm.WORKORDER_DATA_TEMPLATEList" border stripe :fit="true" max-height="260" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'WORKORDER_DATA_TEMPLATEList', order: 'descending'}">
+												<el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 											      <template slot-scope="scope">
 											      	<i class="el-icon-check" v-show="scope.row.isEditing">
 											      	</i>
@@ -556,21 +549,25 @@
 											    </el-table-column>
 												<el-table-column label="模板编号" sortable prop="D_NUM">
 											      <template slot-scope="scope">
-											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.D_NUM"></el-input><span v-else="v-else">{{scope.row.D_NUM}}</span>
+											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.D_NUM" :disabled="edit">
+											      		<el-button slot="append" icon="el-icon-search" @click="templateNumber(scope.row) "></el-button>
+											      	</el-input>
+											      	<span v-else="v-else">{{scope.row.D_NUM}}</span>
 											      </template>
 											    </el-table-column>
 											    <el-table-column label="模板描述" sortable prop="DESC">
 											      <template slot-scope="scope">
-											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DESC"></el-input><span v-else="v-else">{{scope.row.DESC}}</span>
+											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DESC" :disabled="edit"></el-input>
+											      	<span v-else="v-else">{{scope.row.DESC}}</span>
 											      </template>
 											    </el-table-column>
-											    <el-table-column label="模板状态" sortable prop="STATUS">
+											    <!--<el-table-column label="模板状态" sortable prop="STATUS">
 											      <template slot-scope="scope">
 											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS"></el-input><span v-else="v-else">{{scope.row.STATUS}}</span>
 											      </template>
-											    </el-table-column>
+											    </el-table-column>-->
 							            		<el-table-column label="预览"></el-table-column>
-							            		<el-table-column fixed="right" label="操作" width="80">
+							            		<el-table-column fixed="right" label="操作" width="80" v-if="!viewtitle" >
 											      <template slot-scope="scope">
 											      	  <el-button @click.native.prevent="deleteRow(scope.$index,workorderForm.WORKORDER_DATA_TEMPLATEList)" type="text" size="small">
 											        <i class="icon-trash red"></i>
@@ -724,12 +721,32 @@
 				</div>
 				<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
-				<span slot="footer" class="dialog-footer">
+				<div slot="footer" class="dialog-footer">
 			       <el-button type="primary" @click="addsamplename">确 定</el-button>
 			       <el-button @click="dialogVisible3 = false">取 消</el-button>
-			    </span>
+			    </div>
 			</el-dialog>
 			<!-- 样品名称 End -->
+			<el-dialog :modal-append-to-body="false" title="原始数据模版" :visible.sync="dialogtemplate" width="80%">
+				<el-table :header-cell-style="rowClass" :data="categoryList" border stripe style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+					<el-table-column type="selection" fixed width="55" align="center">
+					</el-table-column>
+					<el-table-column label="编码" width="155" sortable prop="NUM">
+					</el-table-column>
+					<el-table-column label="模板描述" sortable prop="DECRIPTION">
+					</el-table-column>							             
+					<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
+					</el-table-column>
+					<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc">
+					</el-table-column>
+				</el-table>
+				<el-pagination background class="pull-right pt10"@size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+				</el-pagination>
+				<div slot="footer" class="dialog-footer">
+			       <el-button type="primary" @click="determinetemplate">确 定</el-button>
+			       <el-button @click="dialogtemplate = false">取 消</el-button>
+			   </div>
+			</el-dialog>
 			<!--审批页面-->
 			<approvalmask :approvingData="approvingData" ref="approvalChild" @detail="detailgetData"  ></approvalmask>
 			<!--流程历史-->
@@ -797,6 +814,7 @@
 			dialogVisible1:false,
 			dialogVisible2:false,
 			dialogVisible3:false,
+			dialogtemplate:false,
 			inspectList:[],
 			workorderForm: {
 				WORKORDER_BASISList:[],//检测依据
@@ -865,10 +883,10 @@
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
 				isEditList: false,  //年度计划列表编辑装填
-				editPlan: {},  //编辑中的内容
 				selval:[],
 				userList:[],
 				samplesList:[],
+				categoryList:[],
 				numtips:'',
 				workorder:'workorder',//appname
 				page: {
@@ -876,6 +894,8 @@
 					pageSize: 10,
 					totalCount: 0
 				},
+				isEditing: true,
+				modulenum:'s'
 			};
 		},
 		methods: {
@@ -939,7 +959,14 @@
 					WORKORDER_CHECKPERSONList:[],//检验员信息
 					WORKORDER_DATA_TEMPLATEList:[],//原始数据模板
 				};
-            },
+			},
+			iconOperation(row, column, cell, event) {
+				if(column.property === "iconOperation") {
+
+					row.isEditing = !row.isEditing;
+
+				}
+			},
 			handleClick(tab, event) {
 //		        console.log(tab, event);
 		    },
@@ -973,11 +1000,9 @@
 					this.workorderForm.PROXYNUM = this.selMenu[0].PROXYNUM;
 					this.workorderForm.PROXY_VERSION = this.selMenu[0].VERSION;
 					this.dialogVisible1 = false;
-					this.$emit('request');
 				}
 			},
 			addsample(){
-				this.$emit('request');
 				this.dialogVisible3 = true;
 			},
 			addsamplename(){
@@ -997,12 +1022,10 @@
 					this.workorderForm.ITEM_STATUS = this.selMenu[0].STATE;//样品状态
 					this.workorderForm.ITEMNUM = this.selMenu[0].ITEMNUM;//样品编号
 					this.dialogVisible3 = false;
-					this.$emit('request');
 				}
 			},
 			addperson(num){
 				this.numtips = num;
-				this.$emit('request');
 				this.dialogVisible2 = true;
 			},
 			addpersonname(){
@@ -1028,6 +1051,31 @@
 					this.$emit('request');
 				}
 			},
+			 //模版编号
+            templateNumber(item){
+            	this.modulenum = item;
+            	this.dialogtemplate=true;
+//          	this.getTemplate();
+            },
+            //原始数据模版确定
+            determinetemplate(){
+            	if(this.selMenu.length == 0){
+					this.$message({
+						message: '请选择数据',
+						type: 'warning'
+					});
+				}else if(this.selMenu.length > 1){
+					this.$message({
+						message: '不可同时选择多条数据',
+						type: 'warning'
+					});
+				}else{
+//					D_NUM，workorderForm.WORKORDER_DATA_TEMPLATEList，DESC
+					this.modulenum.D_NUM = this.selMenu[0].NUM;//样品名称
+					this.modulenum.DESC = this.selMenu[0].DECRIPTION;//样品名称	
+					this.dialogtemplate = false;
+				}
+            },
    			//获取样品信息-样品状态
 			getITEM_STATUS() {
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=ITEM_STATUS';
@@ -1099,33 +1147,11 @@
 					console.log('请求失败');
 				})
 			},
-
+           
 			//更改样品数量
 			handleChangeQuality(value) {
 				console.log(value);
 			},
-   			//年度计划表格函数
-// 			iconOperation(row, column, cell, event){
-//		        if(column.property ==="iconOperation"){
-//		            row.isEditing = !row.isEditing;
-//		            this.isEditList = row.isEditing;
-//		        	console.log(row.isEditing);
-//		            if(!row.isEditing){
-//		            	//保存
-//		            	var WorkorderBasisList = this.WorkorderBasisList;
-//		        		row.WorkorderPersonList = JSON.parse(JSON.stringify(this.WorkorderPersonList));
-//		        		row.WorkorderProjectList = JSON.parse(JSON.stringify(this.WorkorderProjectList));
-//						console.log(row);
-//		        	}else{
-//		        		//编辑
-//		        		this.editPlan = row;
-//		        		this.WorkorderPersonList = row.WorkorderPersonList;
-//				   		this.WorkorderProjectList = row.WorkorderProjectList;
-//				   		console.log(row);
-//		        	}
-//		        }
-//		    },
-
 			//信息状态 End
    			judge(data) {
 				return data.STATUS ? '活动' : '不活动'
@@ -1303,6 +1329,23 @@
 			detailgetData() {
 			var url = this.basic_url +'/api-apps/app/workorder/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
+					console.log(res.data);
+					//依据
+					for(var i = 0;i<res.data.WORKORDER_BASISList.length;i++){
+						res.data.WORKORDER_BASISList[i].isEditing = false;
+					}
+					//项目
+					for(var i = 0;i<res.data.WORKORDER_PROJECTList.length;i++){
+						res.data.WORKORDER_PROJECTList[i].isEditing = false;
+					}
+					//检验员
+					for(var i = 0;i<res.data.WORKORDER_CHECKPERSONList.length;i++){
+						res.data.WORKORDER_CHECKPERSONList[i].isEditing = false;
+					}
+					//原始数据
+					for(var i = 0;i<res.data.WORKORDER_DATA_TEMPLATEList.length;i++){
+						res.data.WORKORDER_DATA_TEMPLATEList[i].isEditing = false;
+					}
 					this.workorderForm = res.data;
 					this.show = true;
 				}).catch((err) => {
@@ -1339,7 +1382,6 @@
 			},
 			//这是查看
 			view(dataid) {
-				this.dataid=dataid;
 				this.dataid=dataid;	
 				this.modifytitle = false;
 				this.addtitle = false;
@@ -1452,8 +1494,10 @@
 						this.getinspectList();
 					}else if(item=="user"){
 						this.getuser();
-					}else{
+					}else if(item=="samples"){
 						this.getsamples();
+					}else{
+						this.getTemplate();
 					}
 					
 					
@@ -1560,12 +1604,46 @@
 					this.samplesList = newarr;
 				}).catch((wrong) => {})
 			},
+			getTemplate(){
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				}
+				var url = this.basic_url + '/api-apps/app/rawDataTem';
+				this.$axios.get(url, {}).then((res) => {
+					this.page.totalCount = res.data.count;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false;
+					} else {
+						this.loadSign = true;
+					}
+					this.commentArr[this.page.currentPage] = res.data.data
+					let newarr = [];
+					for(var i = 1; i <= totalPage; i++) {
+
+						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+
+							for(var j = 0; j < this.commentArr[i].length; j++) {
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					console.log(this.categoryList);
+					this.categoryList = newarr;
+				}).catch((wrong) => {
+					this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+				})
+			},
 
 		},
 		beforeMount() {
-			this.getinspectList();//委托书编号
-			this.getuser();//用户
-			this.getsamples();
+			
+			
 		},
 		mounted() {
 			this.getITEM_STATUS();//页面打开加载-样品状态
@@ -1575,6 +1653,10 @@
 			this.getITEM_RECEPT_STATUS();//页面打开加载-样品接收状态
 			this.getITEM_CHECK_STATUS();//页面打开加载-样品检后状态
 			this.getITEM_MANAGEMENT();//页面打开加载-样品处置
+			this.getTemplate();//
+			this.getinspectList();//委托书编号
+			this.getuser();//用户
+			this.getsamples();//样品
 		},
 	}
 </script>

@@ -17,7 +17,7 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form inline-message :label-position="labelPosition" :model="testing_projectForm" :rules="rules" ref="testing_projectForm"  >
+					<el-form inline-message :model="testing_projectForm" :rules="rules" ref="testing_projectForm"  >
 						<div class="accordion">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基本信息" name="1">
@@ -57,9 +57,9 @@
 									</el-row>
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="单价(元)" prop="QUANTITY" label-width="100px">
+											<el-form-item label="单价(元)" prop="UNITCOST" label-width="100px">
 												<!-- <el-input-number type="number" :precision="2" v-model.number="testing_projectForm.QUANTITY" :step="5" :max="100000" style="width: 100%;"></el-input-number> -->
-												<el-input v-model="testing_projectForm.QUANTITY" id="cost" @blur="toPrice" :disabled="noedit"></el-input>
+												<el-input v-model="testing_projectForm.UNITCOST" id="cost" @blur="toPrice" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -104,25 +104,18 @@
 										</el-button>
 									</div>
 									<el-table :header-cell-style="rowClass" :fit="true" :data="testing_projectForm.QUALIFICATIONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'testing_projectForm.QUALIFICATIONList', order: 'descending'}">
-										<el-table-column prop="iconOperation" fixed width="50px">
+										<el-table-column prop="iconOperation" fixed width="50px" v-show="!viewtitle">
 											<template slot-scope="scope">
 												<i class="el-icon-check" v-if="scope.row.isEditing"></i>
 												<i class="el-icon-edit" v-else="v-else"></i>
 											</template>
 										</el-table-column>
-										<el-table-column prop="STEP" label="序号" sortable width="120px" label-width="150px">
-											<template slot-scope="scope">
-												<el-form-item :prop="'QUALIFICATIONList.'+scope.$index + '.STEP'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STEP" placeholder="请输入要求" :disabled="true">
-													</el-input>
-													<span v-else="v-else">{{scope.row.STEP}}</span>
-												</el-form-item>
-											</template>
+										<el-table-column prop="STEP" label="序号" sortable width="120px" label-width="150px" type="index">
 										</el-table-column>
-										<el-table-column prop="C_NAME" label="证书名称" sortable width="300px">
+										<el-table-column prop="C_NAME" label="证书名称" sortable>
 											<template slot-scope="scope">
 												<el-form-item :prop="'QUALIFICATIONList.'+scope.$index + '.C_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.C_NAME" placeholder="请输入委托方名称">
+													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.C_NAME" placeholder="请输入证书名称">
 													</el-input>
 													<span v-else="v-else">{{scope.row.C_NAME}}</span>
 												</el-form-item>
@@ -140,22 +133,22 @@
 								<el-collapse-item title="其他" name="3" v-show="views">
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="录入人" prop="ENTERBYDesc">
+											<el-form-item label="录入人" prop="ENTERBYDesc" label-width="100px">
 												<el-input v-model="testing_projectForm.ENTERBYDesc" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="录入时间" prop="ENTERDATE">
+											<el-form-item label="录入时间" prop="ENTERDATE" label-width="100px">
 												<el-input v-model="testing_projectForm.ENTERDATE" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改人" prop="CHANGEBYDesc">
+											<el-form-item label="修改人" prop="CHANGEBYDesc" label-width="100px">
 												<el-input v-model="testing_projectForm.CHANGEBYDesc" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改时间" prop="CHANGEDATE">
+											<el-form-item label="修改时间" prop="CHANGEDATE" label-width="100px">
 												<el-input v-model="testing_projectForm.CHANGEDATE" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
@@ -296,6 +289,20 @@
 					callback();
 				}
 			};
+			 //金额验证
+            var price=(rule, value, callback) => {//生产单位名称 
+				var exp = /^(-)?\d{1,3}(,\d{3})*(.\d+)?$/;
+				console.log(value);
+				if(value != '' && value!=undefined){
+					if(exp.test(value)==false){ 
+	                    callback(new Error('请输入数字'));
+	              }else{
+	                    callback();
+	                }
+				}else {
+					callback();
+				}
+           };
 			return {
 				testing_projectForm:{
 					CHANGEBY: '',
@@ -332,9 +339,7 @@
 				isok2: false,
 				down: true,
 				up: false,
-				index:0,
 				activeNames: ['1','2','3'], //手风琴数量
-				labelPosition: 'right', //表格
 				dialogVisible: false, //对话框
 				rules: { //需要验证的字段
 					P_NUM: [{
@@ -362,6 +367,7 @@
 						// trigger: 'blur',
 						validator: validateDOCLINKS_NUM,
 					}],
+					UNITCOST:[{required: false,trigger: 'change',validator:price}],
 				},
 				//testing_projectForm:{},//检验/检测项目数据组
 				//tree
@@ -402,10 +408,9 @@
 		},
 		methods: {
 			addfield() {
-				this.index = this.index + 1;
 				var obj = {
 					ID:'',
-					STEP: this.index,
+					STEP: '',
 					C_NUM: '',
 					C_NAME: '',
 					C_DATE: '',
@@ -453,7 +458,7 @@
 				var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
 				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)', 'ig'), "$1,");
 				// this.dataInfo.CHECTCOST="￥" + num.join(".");
-				this.testing_projectForm.QUANTITY = num.join(".");
+				this.testing_projectForm.UNITCOST = num.join(".");
 			},
 			getCompany() { //文件查询接口，暂无通，待修改
 				this.editSearch = 'DOCLINKS';
@@ -574,7 +579,11 @@
 				var url = this.basic_url + '/api-apps/app/inspectionPro/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
 					// console.log(res.data);
+					for(var i=0;i<res.data.QUALIFICATIONList.length;i++){
+						res.data.QUALIFICATIONList[i].isEditing = false;
+					}
 					this.testing_projectForm = res.data;
+
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -595,7 +604,17 @@
 				this.show = true;
 			},
 			//这是查看
-			view() {
+			view(dataid) {
+				var url = this.basic_url + '/api-apps/app/inspectionPro/' + dataid;
+				this.$axios.get(url, {}).then((res) => {
+					// console.log(res.data);
+					this.testing_projectForm = res.data;
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					})
+				});
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;
@@ -716,7 +735,7 @@
 								type: 'success'
 							});
 							this.$emit('reset');
-     						this.$refs['testing_projectForm'].resetFields();
+     						// this.$refs['testing_projectForm'].resetFields();
 							this.$emit('request');
 							this.visible();
 						}else{

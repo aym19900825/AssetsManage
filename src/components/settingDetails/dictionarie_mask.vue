@@ -125,7 +125,6 @@
 
 <script>
 	import Config from '../../config.js'
-	import Validators from '../../core/util/validators.js'
 	export default {
 		name: 'masks',
 		components: {
@@ -172,14 +171,14 @@
 				rules: {
 					code: [
 						{ required: true, message: '必填',trigger: 'blur'},
-						{ validator: Validators.isEnglish, trigger: 'blur'}
+						{ validator: this.Validators.isEnglish, trigger: 'blur'}
 					],
 					name: [
 						{ required: true, message: '必填',trigger: 'blur'},
-						{ validator: Validators.isSpecificKey, trigger: 'blur'}
+						{ validator: this.Validators.isSpecificKey, trigger: 'blur'}
 					],
-					sort: [{ required: false, trigger: 'blur',validator: Validators.isSpecificKey}],
-					tips: [{ required: false, trigger: 'blur', validator: Validators.isSpecificKey}],
+					sort: [{ required: false, trigger: 'blur',validator: this.Validators.isSpecificKey}],
+					tips: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],
 				},
 				addtitle:true,
 				modifytitle:false,
@@ -276,6 +275,9 @@
 				});
 				var url = this.basic_url + '/api-user/dicts/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
+					for(var i = 0;i<res.data.subDicts.length;i++){
+						res.data.subDicts[i].isEditing = false;
+					}
 					this.dictionarieForm = res.data;
 					// console.log(this.dictionarieForm.subDicts);
 					this.show = true;

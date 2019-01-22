@@ -85,7 +85,6 @@
 
 <script>
 	import Config from '../../config.js'
-	import Validators from '../../core/util/validators.js'
 	import docTable from '../common/doc.vue'
 	export default {
 		name: 'masks',
@@ -157,11 +156,11 @@
 					NUM: [{
 						required: false,
 						trigger: 'change',
-						validator: Validators.isCodeNum,
+						validator: this.Validators.isCodeNum,
 					}],
 					DECRIPTION: [
 						{required: true, message: '请填写', trigger: 'blur'},
-						{validator: Validators.isSpecificKey, trigger: 'blur'},
+						{validator: this.Validators.isSpecificKey, trigger: 'blur'},
 					],
 				},
 				//tree
@@ -401,7 +400,7 @@
 				this.$axios.get(this.basic_url+ '/api-apps/app/inspectionRepTem/operate/updateRelate', {
 					params: data
 				}).then((res) => {
-					console.log(res);
+					// console.log(res);
 					console.log(res.data.resp_code);
 					if(res.data.resp_code == 0) {
 						this.$message({

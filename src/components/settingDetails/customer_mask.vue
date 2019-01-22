@@ -104,15 +104,15 @@
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName" @tab-click="handleClick">
 										<el-tab-pane label="资质信息" name="first">
-											<div class="table-func table-funcb" v-show="noviews">
-												<el-button type="success" size="mini" round @click="addfield">
+											<div class="table-func table-funcb" >
+												<el-button type="success" size="mini" round @click="addfield" v-show="!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建行</font>
 												</el-button>
 											</div>
 									<!-- <el-form :label-position="labelPosition" :rules="rules"> -->
 										<el-table :header-cell-style="rowClass" :fit="true" :data="CUSTOMER.CUSTOMER_QUALIFICATIONList" row-key="ID" border stripe max-height="260" highlight-current-row style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER.CUSTOMER_QUALIFICATIONList', order: 'descending'}">
-										    <el-table-column prop="iconOperation" fixed width="50px">
+										    <el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 										      <template slot-scope="scope">
 										      	<i class="el-icon-check" v-show="scope.row.isEditing">
 										      	</i>
@@ -121,12 +121,7 @@
 										      </template>
 										    </el-table-column>
 
-										    <el-table-column label="序号" sortable width="120px" prop="STEP">
-										      <template slot-scope="scope">
-										      	<el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.STEP'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-											      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.$index + 1" :disabled="noedit"></el-input><span v-show="!scope.row.isEditing" >{{scope.row.STEP}}</span>
-											      </el-form-item>
-										      </template>
+										    <el-table-column label="序号" sortable width="120px" prop="STEP" type="index">
 										    </el-table-column>
 										    <el-table-column label="证书编号" sortable width="120px" prop="CERTIFICATE_NUM">
 										      <template slot-scope="scope">
@@ -180,7 +175,7 @@
 										      </template>
 										    </el-table-column>
 
-										    <el-table-column fixed="right" label="操作" width="120">
+										    <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 										      <template slot-scope="scope">
 										        <el-button @click = "deleteRow(scope.$index, CUSTOMER.CUSTOMER_QUALIFICATIONList)" type="text" size="small">
 										          <i class="icon-trash red"></i>
@@ -191,15 +186,15 @@
 									  <!-- </el-form> -->
 										</el-tab-pane>
 										<el-tab-pane label="客户联系人" name="second">
-											<div class="table-func table-funcb" v-show="noviews">
-												<el-button type="success" size="mini" round @click="addrela">
+											<div class="table-func table-funcb">
+												<el-button type="success" size="mini" round @click="addrela" v-show="!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建行</font>
 												</el-button>
 											</div>
 											<!-- <el-form :label-position="labelPosition" :rules="rules"> -->
 												<el-table :header-cell-style="rowClass" :fit="true" :data="CUSTOMER.CUSTOMER_PERSONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER.CUSTOMER_PERSONList', order: 'descending'}">
-												    <el-table-column prop="iconOperation" fixed width="50px">
+												    <el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 												      <template slot-scope="scope">
 												      	<i class="el-icon-check" v-show="scope.row.isEditing">
 												      	</i>
@@ -208,14 +203,14 @@
 												      </template>
 												    </el-table-column>
 
-												    <el-table-column label="序号" sortable width="120px" prop="STEP">
+												    <!-- <el-table-column label="序号" sortable width="120px" prop="STEP">
 												      <template slot-scope="scope">
 												      	<el-form-item :prop="'CUSTOMER_PERSONList.'+scope.$index + '.STEP'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 													      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.$index + 1" :disabled="noedit"></el-input>
 													      	<span v-show="!scope.row.isEditing" >{{scope.row.STEP}}</span>
 													      </el-form-item>
 												      </template>
-												    </el-table-column>
+												    </el-table-column> -->
 
 												    <el-table-column label="联系人" sortable width="150px" prop="PERSON">
 												      <template slot-scope="scope">
@@ -245,7 +240,7 @@
 													    </el-form-item>
 												      </template>
 												    </el-table-column>
-												    <el-table-column fixed="right" label="操作" width="120">
+												    <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 												      <template slot-scope="scope">
 												        <el-button @click = "deleteRow(scope.$index, CUSTOMER.CUSTOMER_PERSONList)" type="text" size="small">
 												         <i class="icon-trash red"></i>
@@ -300,7 +295,6 @@
 
 <script>
 	import Config from '../../config.js'
-	import Validators from '../../core/util/validators.js'
 	export default {
 		name: 'customer_masks',
 		data() {
@@ -410,18 +404,18 @@
 				rules: {
 					CODE:[
 						{required: true,message: '必填',trigger: 'blur'},
-						{validator: Validators.isWorknumber, trigger: 'blur'}
+						{validator: this.Validators.isWorknumber, trigger: 'blur'}
 					],
 					NAME:[
 						{required: true,message: '必填',trigger: 'blur'},
-						{validator: Validators.isNickname, trigger: 'blur'}
+						{validator: this.Validators.isNickname, trigger: 'blur'}
 					],
 					CONTACT_ADDRESS:[
 						{required: true,message: '必填',trigger: 'blur'},
-						{validator: Validators.isSpecificKey, trigger: 'blur'}
+						{validator: this.Validators.isSpecificKey, trigger: 'blur'}
 					],
-					MEMO:[{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],
-					ZIPCODE:[{required: false,trigger: 'blur',validator: Validators.isZipcode}],
+					MEMO:[{required: false,trigger: 'blur',validator: this.Validators.isSpecificKey}],
+					ZIPCODE:[{required: false,trigger: 'blur',validator: this.Validators.isZipcode}],
 					// PERSON:[{required: true,trigger: 'blur',validator: validatePerson}],
 					// PHONE:[{required: true,trigger: 'blur',validator: validatePhone}],
 					// EMAIL:[{required: true,trigger: 'blur',validator: validateEmail}],
@@ -473,9 +467,8 @@
 		    },
 			//新建行
 			addfield(){
-				this.index = this.index + 1;
 				var obj = {
-                    STEP:this.index,
+                    STEP:'',
                     CERTIFICATE_NUM:'',
 					CERTIFICATE_NAME:'',
 					ACTIVE_DATE:'',
@@ -487,9 +480,9 @@
 			},
 			//新建行
 			addrela(){
-				this.index = this.index + 1;
+				// this.index = this.index + 1;
 				var obj = {
-					STEP:this.index,
+					// STEP:this.index,
 					ID:'',
                     CODE:'',
                     PERSON:'',
@@ -597,7 +590,15 @@
 					});
 				});
 				this.$axios.get(this.basic_url + '/api-apps/app/customer/' + dataid, {}).then((res) => {
-					// console.log(res.data);
+					console.log(res.data);
+					//资质
+					for(var i = 0;i<res.data.CUSTOMER_QUALIFICATIONList.length;i++){
+						res.data.CUSTOMER_QUALIFICATIONList[i].isEditing = false;
+					}
+					//客户联系人
+					for(var i = 0;i<res.data.CUSTOMER_PERSONList.length;i++){
+						res.data.CUSTOMER_PERSONList[i].isEditing = false;
+					}
 					this.CUSTOMER = res.data;
 					//console.log(this.CUSTOMER.STATUS==1);
 					this.CUSTOMER.STATUS=this.CUSTOMER.STATUS=="1"? '活动' : '不活动';

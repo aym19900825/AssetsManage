@@ -50,8 +50,8 @@
 						<el-form :model="searchList" label-width="70px">
 							<el-row :gutter="5">
 								<el-col :span="3">
-									<el-form-item label="样品序号" prop="ITEMNUM" label-width="70px">
-										<el-input v-model="searchList.ITEMNUM"></el-input>
+									<el-form-item label="样品序号" prop="ITEM_STEP" label-width="70px">
+										<el-input v-model="searchList.ITEM_STEP"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="6">
@@ -120,7 +120,7 @@
 							<el-table :data="samplesList" :header-cell-style="rowClass" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
-								<el-table-column label="样品子表ID" sortable width="120px" prop="ITEMNUM" v-if="this.checkedName.indexOf('样品子表ID')!=-1">
+								<el-table-column label="样品编号" sortable width="120px" prop="ITEMNUM" v-if="this.checkedName.indexOf('样品编号')!=-1">
 									<template slot-scope="scope">
 										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.ITEMNUM}}
 										</p>
@@ -189,8 +189,7 @@
 				loadSign: true, //加载
 				commentArr: {},
 				checkedName: [
-					'样品子表ID',
-					'样品序号',
+					'样品编号',
 					'样品序号',
 					'数量',
 					'收回入库时间',
@@ -204,7 +203,7 @@
 					'信息状态',
 				],
 				tableHeader: [{
-						label: '样品子表ID',
+						label: '样品编号',
 						prop: 'ITEMNUM'
 					},
 					{

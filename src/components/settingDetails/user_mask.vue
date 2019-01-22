@@ -210,20 +210,13 @@
 											</div>
 											<!-- <el-form :label-position="labelPosition" :rules="rules"> -->
 												<el-table :header-cell-style="rowClass" :fig="true" :data="user.qualifications" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.qualifications', order: 'descending'}">
-													<el-table-column prop="iconOperation" fixed width="50px">
+													<el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 														<template slot-scope="scope">
 															<i class="el-icon-check" v-if="scope.row.isEditing"></i>
 															<i class="el-icon-edit" v-else="v-else"></i>
 														</template>
 													</el-table-column>
-													<el-table-column prop="step" label="序号" sortable width="120px">
-														<template slot-scope="scope">
-															<el-form-item :prop="'qualifications.'+scope.$index + '.step'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.$index + 1" placeholder="请输入要求" :disabled="noedit">
-																</el-input>
-																<span v-else="v-else">{{scope.row.step}}</span>
-															</el-form-item>
-														</template>
+													<el-table-column prop="step" label="序号" sortable width="120px" type="index">
 													</el-table-column>
 													<el-table-column prop="c_num" label="证书编号" sortable width="180px">
 														<template slot-scope="scope">
@@ -288,7 +281,7 @@
 												</el-form-item>
 											</template>
 										</el-table-column>-->
-													<el-table-column fixed="right" label="操作" width="120">
+													<el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 														<template slot-scope="scope">
 															<el-button @click.native.prevent="deleteRow(scope.$index,user.qualifications)" type="text" size="small">
 																<i class="icon-trash red"></i>
@@ -300,26 +293,19 @@
 										</el-tab-pane>
 										<el-tab-pane label="培训" name="second">
 											<div class="table-func table-funcb" v-show="noviews">
-												<el-button type="success" size="mini" round @click="addfield2" v-show="!viewtitle">
+												<el-button type="success" size="mini" round @click="addfield2" v-if="!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建行</font>
 												</el-button>
 											</div>
 												<el-table :header-cell-style="rowClass" :fit="true" :data="user.traings" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.traings', order: 'descending'}">
-													<el-table-column prop="iconOperation" fixed label="" width="50px">
+													<el-table-column prop="iconOperation" fixed label="" width="50px" v-if="!viewtitle">
 														<template slot-scope="scope">
 															<i class="el-icon-check" v-if="scope.row.isEditing"></i>
 															<i class="el-icon-edit" v-else="v-else"></i>
 														</template>
 													</el-table-column>
-													<el-table-column prop="step" label="序号" sortable width="120px">
-														<template slot-scope="scope">
-															<el-form-item :prop="'traings.'+scope.$index + '.step'">
-																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.$index + 1" :disabled="noedit">
-																</el-input>
-																<span v-else="v-else">{{scope.row.step}}</span>
-															</el-form-item>
-														</template>
+													<el-table-column label="序号" sortable width="120px" type="index">
 													</el-table-column>
 													<el-table-column prop="t_date" label="培训时间" sortable width="240px">
 														<template slot-scope="scope">
@@ -350,7 +336,7 @@
 															</el-form-item>
 														</template>
 													</el-table-column> -->
-													<el-table-column fixed="right" label="操作" width="120">
+													<el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 														<template slot-scope="scope">
 															<el-button @click.native.prevent="deleteRow(scope.$index,user.traings)" type="text" size="small">
 																<i class="icon-trash red"></i>
@@ -415,8 +401,6 @@
 
 <script>
 	import Config from '../../config.js'
-	import Validators from '../../core/util/validators.js'
-
 	export default {
 		name: 'masks',
 		props: {
@@ -493,7 +477,7 @@
 				addtitle: true, //添加弹出框titile
 				modifytitle: false, //修改弹出框titile
 				modify: false,
-				//				default-expand-all:true,
+				//default-expand-all:true,
 				i:0,
 				rules: {
 					deptName: [{required: true,validator: validatedeptname}], //所属机构
@@ -501,7 +485,7 @@
 					roleId: [{required: true,trigger: 'blur',message: '必填',}],
 					username: [
 						{required: true,message: '必填',trigger: 'blur',},
-						{validator: Validators.isUserName, trigger: 'blur'},//引用 isUserName
+						{validator: this.Validators.isUserName, trigger: 'blur'},//引用 isUserName
 						{type: 'string', min: 4, max:20, message: '用户名不小于4位，不大于20位', trigger: 'blur'},
 					],
 					password: [{required: true,trigger: 'blur',message: '必填',}],
@@ -510,19 +494,19 @@
 					islogin: [{required: true,trigger: 'change',message: '必填'}], //登陆
 					mac_address: [{required: true,trigger: 'blur',message: '必填',}],
 					ip_address: [{required: true,trigger: 'blur',message: '必填',}],
-					nickname: [{required: true,trigger: 'blur',validator: Validators.isNickname}],
+					nickname: [{required: true,trigger: 'blur',validator: this.Validators.isNickname}],
 					worknumber: [
 						{required: true,trigger: 'blur',message: '必填'},
-						{validator: Validators.isWorknumber, trigger: 'blur'},//引用 isWorknumber
+						{validator: this.Validators.isWorknumber, trigger: 'blur'},//引用 isWorknumber
 					],
-					idnumber: [{required: true,trigger: 'blur',validator: Validators.isIdnumber}],
+					idnumber: [{required: true,trigger: 'blur',validator: this.Validators.isIdnumber}],
 					phone: [
 						{required: true,trigger: 'blur',message: '必填'},
-						{validator: Validators.isPhone, trigger: 'blur'},
+						{validator: this.Validators.isPhone, trigger: 'blur'},
 					],
 					email: [
 						{required: true,trigger: 'blur',message: '必填'},
-						{validator: Validators.isEmail, trigger: 'blur'},
+						{validator: this.Validators.isEmail, trigger: 'blur'},
 					],
 					step: [{required: true,trigger: 'blur',message: '必填',}],
 					t_date: [{required: true,trigger: 'blur',message: '必填',}],
@@ -532,11 +516,10 @@
 					c_date: [{required: true,trigger: 'blur',message: '必填',}],
 					c_num: [{required: true,trigger: 'blur',message: '必填',}],
 					c_name: [{required: true,trigger: 'blur',message: '必填',}],
-					ipaddress: [{required: false,trigger: 'blur',validator: Validators.isIpaddress}],
-					macaddress: [{required: false,trigger: 'blur',validator: Validators.isMacaddress}],
-					post: [{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],
-					tips: [{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],
-
+					ipaddress: [{required: false,trigger: 'blur',validator: this.Validators.isIpaddress}],
+					macaddress: [{required: false,trigger: 'blur',validator: this.Validators.isMacaddress}],
+					post: [{required: false,trigger: 'blur',validator: this.Validators.isSpecificKey}],
+					tips: [{required: false,trigger: 'blur',validator: this.Validators.isSpecificKey}],
 				},
 				//tree树菜单
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -650,9 +633,8 @@
 					this.enterby = res.data.id
 					var date = new Date();
 					this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
-					this.index = this.index + 1;
 					var obj = {
-						step: this.index,
+						step: '',
 						c_num: '',
 						c_name: '',
 						c_date: '',
@@ -675,7 +657,7 @@
 			},
 			addfield2() {
 				var obj = {
-					step: '',
+					step: '1',
 					t_date: '',
 					t_description: '',
 					status: '',
@@ -783,7 +765,6 @@
 				var usersUrl = this.basic_url + '/api-user/users/currentMap';
 
 				this.$axios.get(usersUrl, {}).then((res) => {
-					//console.log(res.data);
 					this.user.changeby = res.data.nickname;
 					var date = new Date();
 					this.user.changedate = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
@@ -795,7 +776,15 @@
 				});
 				var url = this.basic_url + '/api-user/users/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
-					// console.log(res.data);
+					//资质信息
+					for(var i = 0;i<res.data.qualifications.length;i++){
+						res.data.qualifications[i].isEditing = false;
+					}
+					console.log(222);
+					//培训
+					for(var i = 0;i<res.data.traings.length;i++){
+						res.data.traings[i].isEditing = false;
+					}
 					this.user = res.data;
 					this.user.sex = this.user.sex ? '男' : '女';
 					this.user.enabled = this.user.enabled ? '活动' : '不活动';

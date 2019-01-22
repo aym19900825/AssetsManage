@@ -41,9 +41,16 @@
 										</el-col>
 									</el-row>
 									<el-row :gutter="5" class="pt10">
-										<el-col :span="6">
+										<el-col :span="6" v-show="addtitle">
 											<el-form-item label="提出单位" prop="PROP_UNIT"  label-width="85px">
 												<el-select clearable v-model="WORKPLAN.PROP_UNIT" filterable allow-create default-first-option placeholder="请选择">
+													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+												</el-select>
+											</el-form-item>
+										</el-col>
+										<el-col :span="6" v-show="!addtitle">
+											<el-form-item label="提出单位" prop="PROP_UNITDesc"  label-width="85px">
+												<el-select clearable v-model="WORKPLAN.PROP_UNITDesc" filterable allow-create default-first-option placeholder="请选择">
 													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 												</el-select>
 											</el-form-item>
@@ -133,7 +140,7 @@
 										</el-button>
 									</div>
 									<el-table :data="worlplanlist" :header-cell-style="rowClass"  row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100% ;"  :default-sort="{prop:'worlplanlist', order: 'descending'}" v-loadmore="loadMore">
-									    <el-table-column prop="iconOperation" fixed width="50px">
+									    <el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 									      <template slot-scope="scope" >
 									      	<i class="el-icon-check" v-if="scope.row.isEditing" @click="iconOperation(scope.row)">
 									      	</i>
@@ -175,13 +182,13 @@
 													<span v-else="v-else">{{scope.row.V_NAME}}</span>
 											</template>
 										</el-table-column>
-										<el-table-column prop="SJ_NAME" label="受检企业名称" sortable width="120px">
+										<!-- <el-table-column prop="SJ_NAME" label="受检企业名称" sortable width="120px">
 									      <template slot-scope="scope">
 									        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.SJ_NAME" :disabled="true" placeholder="请输入内容">
 												<el-button slot="append" icon="el-icon-search" @click="getdeptbtn(scope.row)"></el-button>
 											</el-input><span v-if="!scope.row.isEditing">{{scope.row.SJ_NAME}}</span>
 									      </template>
-									    </el-table-column>
+									    </el-table-column> -->
 									    <el-table-column prop="MEMO" label="近三年监督抽查情况" sortable width="260px">
 									      <template slot-scope="scope">
 									        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MEMO" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.MEMO}}</span>
@@ -204,7 +211,7 @@
 									      </template>
 									    </el-table-column> -->
 
-									    <el-table-column fixed="right" label="操作" width="120">
+									    <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 									      <template slot-scope="scope">
 									        <el-button type="danger" circle title="删除" @click="delPlan(scope.$index,scope.row, 'WORLPLANLINE','worlplanlist')"  size="small" v-show="!viewtitle">
 									          <i class="icon-trash"></i>
@@ -231,7 +238,8 @@
 											</div>
 											<!-- <el-form :model="basisList" :rules="rules" ref="basisList" prop="basisList"> -->
 							            	<el-table :header-cell-style="rowClass" :data="basisList" border stripe :fit="true" max-length="260px" style="width: 100%;" :default-sort="{prop:'basisList', order: 'descending'}">
-							            		<el-table-column prop="WP_NUM" label="所属计划编号" width="150">
+							            		<el-table-column prop="NUMBER" label="序号" width="150" type="index"></el-table-column>
+												<el-table-column prop="WP_NUM" label="所属计划编号" width="150">
 							            			<!-- <template slot-scope="scope">
 											        	<span>{{scope.$index + 1}}</span>
 											      	</template> -->
@@ -239,7 +247,7 @@
 											        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_NUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_NUM}}</span>
 											      	</template>
 							            		</el-table-column>
-							            		<el-table-column prop="WP_LINENUM" label="所属计划行号" width="150"></el-table-column>
+							            		<el-table-column prop="WP_LINENUM" label="所属计划序号" width="150"></el-table-column>
 							            		<el-table-column prop="S_NUM" label="标准编号" width="130"></el-table-column>
 							            		<el-table-column prop="S_NAME" label="标准名称" width="350"></el-table-column>
 							            		<el-table-column prop="VERSION" label="版本" width="80"></el-table-column>
@@ -248,7 +256,7 @@
 											        <el-button
 											          @click="delPlan(scope.$index,scope.row,'WORLPLANLINE_BASIS','basisList')"
 											          type="text"
-											          size="small" v-show="!viewtitle">
+											          size="small" v-if="!viewtitle">
 											          	<i class="icon-trash red"></i>
 											        </el-button>
 											      </template>
@@ -272,13 +280,13 @@
 											      	</i>
 											      </template>
 											    </el-table-column> -->
-
+												<el-table-column prop="NUMBER" label="序号" width="150" type="index"></el-table-column>
 							            		<el-table-column prop="WP_NUM" label="所属计划编号" width="130">
 							            			<template slot-scope="scope">
 											        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_NUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_NUM}}</span>
 											      	</template>
 							            		</el-table-column>
-							            		<el-table-column label="所属计划行号" sortable width="120px" prop="WP_LINENUM">
+							            		<el-table-column label="所属计划序号" sortable width="120px" prop="WP_LINENUM">
 											      <template slot-scope="scope">
 											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_LINENUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_LINENUM}}</span>
 											      </template>
@@ -295,7 +303,7 @@
 											      </template>
 							            		</el-table-column>
 							            		<el-table-column prop="VERSION" label="版本" width="80"></el-table-column>
-							            		<el-table-column fixed="right" label="操作" width="80">
+							            		<el-table-column fixed="right" label="操作" width="80" v-if="!viewtitle">
 											      <template slot-scope="scope">
 											        <el-button
 											          @click="delPlan(scope.$index,scope.row,'WORLPLANLINE_PROJECT','proTestList')" 
@@ -430,50 +438,57 @@
 				<!-- 高级查询划出 Begin-->
 				<div class="pb10">
 					<el-form :model="searchList" label-width="70px">
-						<el-row :gutter="10" class="pb10">
+						<el-row :gutter="10">
 							<el-col :span="6">
-								<el-input v-model="searchList.S_NUM">
-									<template slot="prepend">标准编号</template>
-								</el-input>
+								<el-form-item label="标准编号" prop="S_NUM">
+									<el-input v-model="searchList.S_NUM"></el-input>
+								</el-form-item>
 							</el-col>
 							<el-col :span="6">
-								<el-input v-model="searchList.S_NAME">
-									<template slot="prepend">标准名称</template>
-								</el-input>
+								<el-form-item label="标准名称" prop="S_NAME">
+									<el-input v-model="searchList.S_NAME"></el-input>
+								</el-form-item>
 							</el-col>
 							<el-col :span="6">
-								<el-input v-model="searchList.S_ENGNAME">
-									<template slot="prepend">英文名称</template>
-								</el-input>
+								<el-form-item label="英文名称" prop="S_ENGNAME">
+									<el-input v-model="searchList.S_ENGNAME"></el-input>
+								</el-form-item>
 							</el-col>
 							<el-col :span="6">
-								<el-input v-model="searchList.VERSION">
-									<template slot="prepend">版本</template>
-								</el-input>
+								<el-form-item label="版本" prop="VERSION">
+									<el-input v-model="searchList.VERSION"></el-input>
+								</el-form-item>
 							</el-col>		
 						</el-row>
-						<el-row :gutter="20">
+						<el-row :gutter="10">
 							<el-col :span="6">
-								<el-input v-model="searchList.DEPARTMENT">
-									<template slot="prepend">录入人机构</template>
-								</el-input>
+								<el-form-item label="机构" prop="DEPTID">
+									<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
+										<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+									</el-select>
+								</el-form-item>
 							</el-col>
 							<el-col :span="6">
-								<el-date-picker style="width: 100%" v-model="searchList.RELEASETIME" type="date" placeholder="发布时间" value-format="yyyy-MM-dd HH:mm:ss">
-								</el-date-picker>
+								<el-form-item label="发布时间" prop="RELEASETIME">
+									<el-date-picker style="width: 100%" v-model="searchList.RELEASETIME" type="date" placeholder="发布时间" value-format="yyyy-MM-dd">
+									</el-date-picker>
+								</el-form-item>
 							</el-col>
 							<el-col :span="6">
-								<el-date-picker style="width: 100%" v-model="searchList.STARTETIME" type="date" placeholder="启用时间" value-format="yyyy-MM-dd HH:mm:ss">
-								</el-date-picker>
+								<el-form-item label="启用时间" prop="STARTETIME">
+									<el-date-picker style="width: 100%" v-model="searchList.STARTETIME" type="date" placeholder="启用时间" value-format="yyyy-MM-dd">
+									</el-date-picker>
+								</el-form-item>
 							</el-col>
-							<el-col :span="3">
+							<!-- <el-col :span="3">
 								<el-select style="width: 120%" v-model="searchList.STATUS" placeholder="请选择信息状态">
 									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 									</el-option>
 								</el-select>
-							</el-col>
-							<el-col :span="2">
-								<el-button type="primary" @click="searchinfo" size="small" style="position:absolute;right:10px;">搜索</el-button>
+							</el-col> -->
+							<el-col :span="4">
+								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
@@ -499,14 +514,14 @@
 					</el-table-column>
 					<el-table-column label="版本" width="100" sortable prop="VERSION">
 					</el-table-column>
-					<el-table-column label="录入人机构" width="180" sortable prop="DEPARTMENT">
+					<el-table-column label="机构" width="180" sortable prop="DEPTIDDesc">
 					</el-table-column>
-					<el-table-column label="录入人" width="120" prop="ENTERBY" sortable>
-					</el-table-column>
+					<!-- <el-table-column label="录入人" width="120" prop="ENTERBY" sortable>
+					</el-table-column> -->
 					<el-table-column label="录入时间" width="160" prop="ENTERDATE" sortable>
 					</el-table-column>
-					<el-table-column label="修改人" width="120" prop="CHANGEBY" sortable>
-					</el-table-column>
+					<!-- <el-table-column label="修改人" width="120" prop="CHANGEBY" sortable>
+					</el-table-column> -->
 					<el-table-column label="修改时间" width="160" prop="CHANGEDATE" sortable>
 					</el-table-column>
 				</el-table>
@@ -526,34 +541,37 @@
 				<div class="pb10">
 					<el-form :model="searchList" label-width="70px">
 						<el-row :gutter="10">
-							<el-col :span="5">
-								<el-input v-model="searchList.P_NUM">
-									<template slot="prepend">项目编号</template>
-								</el-input>
-							</el-col>
-							<el-col :span="5">
-								<el-input v-model="searchList.DEPARTMENT">
-									<template slot="prepend">录入人机构</template>
-								</el-input>
-							</el-col>
-							<el-col :span="5">
-								<el-input v-model="searchList.P_NAME">
-									<template slot="prepend">项目名称</template>
-								</el-input>
-							</el-col>
-							<el-col :span="4">
-								<el-input v-model="searchList.VERSION">
-									<template slot="prepend">版本</template>
-								</el-input>
-							</el-col>
-							<el-col :span="3">
+								<el-col :span="5">
+									<el-form-item label="项目编号" prop="P_NUM">
+										<el-input v-model="searchList.P_NUM"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="5">
+									<el-form-item label="机构" prop="DEPTID">
+										<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
+											<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+										</el-select>
+									</el-form-item>
+								</el-col>
+								<el-col :span="5">
+									<el-form-item label="项目名称" prop="P_NAME">
+										<el-input v-model="searchList.P_NAME"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="5">
+									<el-form-item label="版本" prop="VERSION">
+										<el-input v-model="searchList.VERSION"></el-input>
+									</el-form-item>
+								</el-col>
+							<!-- <el-col :span="3">
 								<el-select v-model="searchList.STATUS" placeholder="请选择信息状态">
 									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 									</el-option>
 								</el-select>
-							</el-col>
-							<el-col :span="2">
-								<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+							</el-col> -->
+							<el-col :span="4">
+								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
@@ -607,7 +625,7 @@
 			<!-- 产品类别 Begin -->
 			<el-dialog :modal-append-to-body="false" title="产品类别" height="400px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
 				<!-- 第二层弹出的表格 Begin-->
-				<el-table :header-cell-style="rowClass" :data="categoryList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="400px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" fixed width="55" align="center">
 					</el-table-column>
 					<el-table-column label="编码" width="155" sortable prop="NUM">
@@ -918,6 +936,23 @@
 				}).then((res) => {
 					this.selectData = res.data;
 				});
+			},
+			//重置
+			resetbtn(){
+				this.searchList = {
+					S_NUM:'',
+					S_NAME:'',
+					VERSION:'',
+					DEPARTMENT:'',
+					RELEASETIME:'',
+					STARTETIME:'',
+					STATUS:'',
+					P_NUM:'',
+					DEPTID:'',
+					P_NAME:'',
+					VERSION:'',
+					STATUS:'',
+				};
 			},
 			//表头居中
 			rowClass({ row, rowIndex}) {
@@ -1240,6 +1275,14 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
+					S_NUM: this.searchList.S_NUM,
+					S_NAME: this.searchList.S_NAME,
+					S_ENGNAME:this.searchList.S_ENGNAME,
+					VERSION: this.searchList.VERSION,
+					DEPTID: this.searchList.DEPTID,
+					RELEASETIME: this.searchList.RELEASETIME,
+					STARTETIME: this.searchList.STARTETIME,
+					// STATUS: this.searchList.STATUS,
 				};
 				var url = this.basic_url +'/api-apps/app/inspectionSta';
 				this.$axios.get(url, {
@@ -1274,6 +1317,17 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
+					S_NAME: this.searchList.S_NAME,
+					VERSION: this.searchList.VERSION,
+					DEPARTMENT: this.searchList.DEPARTMENT,
+					RELEASETIME: this.searchList.RELEASETIME,
+					STARTETIME: this.searchList.STARTETIME,
+					STATUS: this.searchList.STATUS,
+					P_NUM: this.searchList.P_NUM,
+					DEPTID: this.searchList.DEPTID,
+					P_NAME: this.searchList.P_NAME,
+					VERSION: this.searchList.VERSION,
+					STATUS: this.searchList.STATUS,
 				};
 				this.$axios.get(this.basic_url +'/api-apps/app/inspectionPro', {
 					params: data
@@ -1543,6 +1597,11 @@
 			detail(dataid) {
 				this.assignshow = true;
 				this.$axios.get(this.basic_url +'/api-apps/app/workplan/' + dataid, {}).then((res) => {
+					console.log(res.data);
+					console.log(res.data.WORLPLANLINEList.length);
+					for(var i = 0; i<res.data.WORLPLANLINEList.length; i++){
+							res.data.WORLPLANLINEList[i].isEditing = false;
+					}
 					this.WORKPLAN = res.data;
 					this.worlplanlist = res.data.WORLPLANLINEList;
 					var worlplanlist = res.data.WORLPLANLINEList;

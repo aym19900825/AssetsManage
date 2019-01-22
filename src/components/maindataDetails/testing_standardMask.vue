@@ -135,7 +135,6 @@
 
 <script>
 	import Config from '../../config.js'
-	import Validators from '../../core/util/validators.js'
 	import docTable from '../common/doc.vue'
 	export default {
 		name: 'masks',
@@ -207,7 +206,6 @@
 			return {
 				editDataInfo: '',
 				editDataInfoProp: '',
-
 				docParm: {
 					'model': 'new',
 					'recordid': 1,
@@ -282,17 +280,17 @@
 					}
 				],
 				rules: {
-					S_NUM: [{required: false, trigger: 'blur',validator: Validators.isCodeNum}],//编号
-					S_NAME: [{required: true, trigger: 'blur',validator: Validators.isNickname}],//中文名称
-					S_ENGNAME: [{required: true, trigger: 'blur', validator: Validators.isEnglish}],//英文名称
+					S_NUM: [{required: false, trigger: 'blur',validator: this.Validators.isCodeNum}],//编号
+					S_NAME: [{required: true, trigger: 'blur',validator: this.Validators.isNickname}],//中文名称
+					S_ENGNAME: [{required: true, trigger: 'blur', validator: this.Validators.isEnglish}],//英文名称
 					editDataInfoProp: [
 						{required: true,trigger: 'blur',message: '必填',},
-						{validator: Validators.isEnglish,trigger: 'blur'}
+						{validator: this.Validators.isEnglish,trigger: 'blur'}
 					],
 //					RELEASETIME:[{required: true, message: '必填', trigger: 'change'}],
 					RELEASE_UNIT: [
 						{required: true,trigger: 'blur',message: '必填',},
-						{validator: Validators.isSpecificKey, trigger: 'blur'},
+						{validator: this.Validators.isSpecificKey, trigger: 'blur'},
 					],
 				},
 				//tree
@@ -397,7 +395,6 @@
 				this.hintshow = false;
 				this.statusshow1 = true;
 				this.statusshow2 = false;
-
 				this.getUser('new');
 				this.docParm = {
 					'model': 'new',
@@ -420,7 +417,6 @@
 				this.modify = true;//修订
 				this.statusshow1 = false;
 				this.statusshow2 = true;
-
 				this.getUser('edit');
 				var _this = this;
 				setTimeout(function(){
@@ -475,7 +471,7 @@
 			},
 			//修订
 			modifyversion(){
-				this.$refs[dataInfo].validate((valid) => {
+				this.$refs.dataInfo.validate((valid) => {
 		          	if (valid) {
 		          		var DATAINFO = JSON.stringify(this.DATAINFO); //接过来的数据
  						var dataInfo = JSON.stringify(this.dataInfo); //获取新新的数据

@@ -51,10 +51,6 @@
 									
 										<el-row>
 											<el-col :span="8">
-												<!--<el-form-item label="名称" prop="V_NAME">
-													<el-input v-model="dataInfo.V_NAME">
-													</el-input>
-												</el-form-item>-->
 												<el-form-item label="名称" prop="V_NAME" label-width="110px">
 													<el-input v-model="dataInfo.V_NAME" :disabled="edit" width="100%">
 														<el-button slot="append" icon="el-icon-search" @click="getCustomer(1)">
@@ -201,7 +197,7 @@
 
 											<el-table :data="dataInfo.INSPECT_PROXY_BASISList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.INSPECT_PROXY_BASISList', order: 'descending'}">
 
-												<el-table-column prop="iconOperation" fixed label="" width="50px">
+												<el-table-column prop="iconOperation" fixed label="" width="50px" v-if="!viewtitle">
 													<template slot-scope="scope">
 														<i class="el-icon-check" v-if="scope.row.isEditing"></i>
 														<i class="el-icon-edit" v-else="v-else"></i>
@@ -251,8 +247,8 @@
 												
 												<el-table-column fixed="right" label="操作" width="120px">
 													<template slot-scope="scope">
-														<el-button @click.native.prevent="deleteRow(scope.$index,dataInfo.INSPECT_PROXY_BASISList)" type="text" size="small">
-															移除
+														<el-button @click.native.prevent="deleteRow(scope.$index,dataInfo.INSPECT_PROXY_BASISList)" type="text" size="small" v-if="!viewtitle">
+															 <i class="icon-trash red"></i>
 														</el-button>
 													</template>
 												</el-table-column>
@@ -268,7 +264,7 @@
 	                                        
 											<el-table :data="dataInfo.INSPECT_PROXY_PROJECList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.INSPECT_PROXY_PROJECList', order: 'descending'}">
 
-												<el-table-column prop="iconOperation" fixed label="" width="50px">
+												<el-table-column prop="iconOperation" fixed label="" width="50px" v-if="!viewtitle">
 													<template slot-scope="scope">
 														<i class="el-icon-check" v-if="scope.row.isEditing"></i>
 														<i class="el-icon-edit" v-else="v-else"></i>
@@ -327,8 +323,8 @@
 												</el-table-column>
 												<el-table-column fixed="right" label="操作" width="120">
 													<template slot-scope="scope">
-														<el-button @click.native.prevent="deleteRow(scope.$index,dataInfo.INSPECT_PROXY_PROJECList)" type="text" size="small">
-															移除
+														<el-button @click.native.prevent="deleteRow(scope.$index,dataInfo.INSPECT_PROXY_PROJECList)" type="text" size="small" v-if="!viewtitle">
+														 <i class="icon-trash red"></i>
 														</el-button>
 													</template>
 												</el-table-column>
@@ -344,7 +340,7 @@
 
 											<el-table :data="dataInfo.CHECK_PROXY_CONTRACTList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.CHECK_PROXY_CONTRACTList', order: 'descending'}">
 
-												<el-table-column prop="iconOperation" fixed label="" width="50px">
+												<el-table-column prop="iconOperation" fixed label="" width="50px" v-if="!viewtitle">
 													<template slot-scope="scope"><i class="el-icon-check" v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else="v-else"></i></template>
 												</el-table-column>
 
@@ -352,7 +348,7 @@
 												<el-table-column prop="PROXY_CONTRACT_NUM" label="分包协议编号" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.PROXY_CONTRACT_NUM'" >
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROXY_CONTRACT_NUM" placeholder="">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROXY_CONTRACT_NUM" :disabled="true" placeholder="自动生成">
 														</el-input>
 														<span v-else="v-else">{{scope.row.PROXY_CONTRACT_NUM}}</span>
 														</el-form-item>
@@ -434,8 +430,8 @@
 
 												<el-table-column fixed="right" label="操作" width="120">
 													<template slot-scope="scope">
-														<el-button @click.native.prevent="deleteRow(scope.$index,dataInfo.CHECK_PROXY_CONTRACTList)" type="text" size="small">
-															移除
+														<el-button @click.native.prevent="deleteRow(scope.$index,dataInfo.CHECK_PROXY_CONTRACTList)" type="text" size="small" v-if="!viewtitle">
+															 <i class="icon-trash red"></i>
 														</el-button>
 													</template>
 												</el-table-column>
@@ -467,7 +463,7 @@
 											</el-col>
 										
 											<el-col :span="8">
-												<el-form-item label="交委托方分数" prop="REPORT_QUALITY" label-width="110px">
+												<el-form-item label="交委托方份数" prop="REPORT_QUALITY" label-width="110px">
 													<el-input v-model.number="dataInfo.REPORT_QUALITY" :disabled="noedit"></el-input>
 												</el-form-item>
 											</el-col>
@@ -1107,6 +1103,21 @@
 			detailgetData() {
 			var url = this.basic_url +'/api-apps/app/inspectPro/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
+					console.log(111);
+					//依据
+					for(var i = 0;i<res.data.INSPECT_PROXY_BASISList.length;i++){
+						res.data.INSPECT_PROXY_BASISList[i].isEditing = false;
+					}
+					console.log(222);
+					//要求
+					for(var m = 0;m<res.data.INSPECT_PROXY_PROJECList.length;m++){
+						res.data.INSPECT_PROXY_PROJECList[m].isEditing = false;
+					}
+					console.log(333);
+					//分包要求
+					for(var n = 0;n<res.data.CHECK_PROXY_CONTRACTList.length;n++){
+						res.data.CHECK_PROXY_CONTRACTList[n].isEditing = false;
+					}
 					console.log(res)
 					this.dataInfo = res.data;
 					this.show = true;

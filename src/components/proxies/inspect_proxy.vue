@@ -15,7 +15,7 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+								<button type="button" class="btn btn-green" @click="openAddMgr">
                                 	<i class="icon-add"></i>添加
                       			 </button>
 								<button type="button" class="btn btn-blue button-margin" @click="modify">
@@ -146,8 +146,8 @@
 								</el-table-column>
 								<el-table-column label="委托单位名称" sortable width="140px" prop="V_NAME" v-if="this.checkedName.indexOf('委托单位名称')!=-1">
 								</el-table-column>
-								<el-table-column label="生产单位名称" sortable width="140px" prop="P_NAME" v-if="this.checkedName.indexOf('生产单位名称')!=-1">
-								</el-table-column>
+								<!-- <el-table-column label="生产单位名称" sortable width="140px" prop="P_NAME" v-if="this.checkedName.indexOf('生产单位名称')!=-1">
+								</el-table-column> -->
 								<el-table-column label="样品名称" sortable width="140px" prop="ITEM_NAME" v-if="this.checkedName.indexOf('样品名称')!=-1">
 								</el-table-column>
 								<el-table-column label="样品型号" sortable width="140px" prop="ITEM_MODEL" v-if="this.checkedName.indexOf('样品型号')!=-1">
@@ -418,7 +418,7 @@
 			},
 			//添加
 			openAddMgr() {
-//				this.$refs.child.resetNew();
+				this.$refs.child.reset();
 				this.$refs.child.visible();
 				this.$refs.child.open();
 				

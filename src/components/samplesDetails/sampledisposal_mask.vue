@@ -110,11 +110,11 @@
 										</el-col>
 									</el-row>
 								</el-collapse-item>
-								<el-collapse-item title="其他" name="2" v-show="views">
+								<el-collapse-item title="其他" name="2" v-show="viewtitle">
 									<el-row >
 										<el-col :span="8">
-											<el-form-item label="录入人" prop="ENTERBY">
-												<el-input v-model="samplesForm.ENTERBY" :disabled="edit"></el-input>
+											<el-form-item label="录入人" prop="ENTERBYDesc">
+												<el-input v-model="samplesForm.ENTERBYDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -123,15 +123,15 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="录入人机构" prop="DEPARTMENT">
-												<el-input v-model="samplesForm.DEPARTMENT" :disabled="edit"></el-input>
+											<el-form-item label="机构" prop="DEPTIDDesc">
+												<el-input v-model="samplesForm.DEPTIDDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="修改人">
-												<el-input v-model="samplesForm.CHANGEBY" :disabled="edit"></el-input>
+												<el-input v-model="samplesForm.CHANGEBYDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -404,7 +404,7 @@
 			//样品序号
 			addsamplenum(){
 				this.dialogsamplenum = true;
-				this.$axios.get(this.basic_url + '/api-apps/app/itemgrant?ITEMNUM_wheres='+this.samplesForm.ITEMNUM, {
+				this.$axios.get(this.basic_url + '/api-apps/app/itemline?ITEMNUM_wheres='+this.samplesForm.ITEMNUM, {
 
 				}).then((res) => {
 					this.samplenumList = res.data.data;
@@ -472,7 +472,8 @@
 			childMethods() {//添加内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					// this.samplesForm.DEPARTMENT=res.data.deptName;
-					this.samplesForm.ENTERBY=res.data.nickname;
+					this.samplesForm.DEPTID = res.data.deptId;
+					this.samplesForm.ENTERBY = res.data.id;
 					var date=new Date();
 					this.samplesForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 					this.samplesForm.ACCEPT_DATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
@@ -485,14 +486,16 @@
 				})
 				this.addtitle = true;
             	this.modifytitle = false;
-            	this.modify=false;
+				this.modify=false;
+				this.noviews = true;
             	this.show = true;
             	this.edit = true;
 				this.noedit = false;
 			},
 			detail() { //修改内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					this.samplesForm.CHANGEBY=res.data.nickname;
+					this.samplesForm.DEPTID = res.data.deptId;//传给后台机构id
+					this.samplesForm.CHANGEBY = res.data.id;
 					var date=new Date();
 					this.samplesForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{
@@ -505,6 +508,7 @@
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.modify = true;
+				this.noviews = true;
 				this.show = true;
 				this.edit = true;
 				this.noedit = false;

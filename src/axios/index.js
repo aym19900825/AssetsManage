@@ -35,7 +35,7 @@ axios.interceptors.response.use(
   },
   error => {
     loading.close();
-    router.push({ path: '/' });
+    // router.push({ path: '/' });
     if (error && error.response) {
       switch (error.response.status) {
         case 401:

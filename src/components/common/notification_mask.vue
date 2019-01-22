@@ -697,6 +697,7 @@
 						type: type
 					},
 				}).then((res) => {
+	               console.log(res);
 					this.selectData = res.data;
 				});
 			},
@@ -894,7 +895,7 @@
 					this.dataInfo.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
 				}).catch((err) => {
 					this.$message({
-						message: '网络错误，请重试',
+						message: '网络错误，请重试1',
 						type: 'error'
 					});
 				});
@@ -982,11 +983,20 @@
 		          if (valid) {
 							if(this.dataInfo.WORK_NOTICE_CHECKBASISList.length<=0&&this.dataInfo.WORK_NOTICE_CHECKPROJECTList.length<=0){
 			        		this.$message({
-							message: '依据和检验检测项目是必填项，请填写！',
-							type: 'warning'
-						});
+								message: '依据和检验检测项目是必填项，请填写！',
+								type: 'warning'
+						    });
 						return false;
 			       }else{
+			        console.log(this.dataInfo.CJDW);	
+			        if(typeof(this.dataInfo.CJDW) != 'undefind') {
+			        	 console.log(this.selectData);
+			        	 for(var j=0;j<this.selectData.length;j++){
+			        	 	if(this.dataInfo.CJDW==this.selectData[j].fullname){
+			        	 		this.dataInfo.CJDW=this.selectData[j].id
+			        	 	}
+			        	 }		
+			        }
 					var url = this.basic_url + '/api-apps/app/workNot/saveOrUpdate';
 					this.$axios.post(url, this.dataInfo).then((res) => {
 						if(res.data.resp_code == 0) {

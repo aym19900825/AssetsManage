@@ -82,11 +82,14 @@
 													<el-input v-model="dataInfo.V_PHONE" :disabled="edit"></el-input>
 												</el-form-item>
 											</el-col>
-											<el-col :span="8">
-												<el-form-item label="责任单位" prop="R_VENDOR" label-width="110px" :disabled="noedit">
-													<el-input v-model="dataInfo.R_VENDOR" :disabled="noedit"></el-input>
-												</el-form-item>
-											</el-col>
+											
+											<el-col :span="8" >
+											<el-form-item label="承检单位" prop="R_VENDOR"  label-width="110px">
+												<el-select clearable v-model="dataInfo.R_VENDOR" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit"  v-on:change="indexSelect($event)">
+													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+												</el-select>
+											</el-form-item>
+										</el-col>
 										</el-row>
 										<el-row >
 											<el-col :span="8" style="display: none;">
@@ -515,15 +518,16 @@
 
 											<el-col :span="8">
 												<el-form-item label="主检组" prop="MAINGROUP" label-width="110px">
-													<el-select v-model="dataInfo.MAINGROUP" placeholder="请选择" style="width: 100%;">
-														<el-option v-for="item in option" :key="item.value" :label="item.label" :value="item.value">
-														</el-option>
-													</el-select>
+													<el-input v-model="dataInfo.LEADER" :disabled="noedit">
+															<el-button slot="append" icon="el-icon-search" @click="getmaingroup"></el-button>
+													</el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
 												<el-form-item label="主检负责人" prop="LEADER" label-width="110px">
-														<el-input v-model="dataInfo.LEADER" :disabled="noedit"></el-input>
+														<el-input v-model="dataInfo.LEADER" :disabled="noedit">
+															<el-button slot="append" icon="el-icon-search" @click="getmainuser"></el-button>
+														</el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8" style="display:none;" label-width="110px">
@@ -769,7 +773,6 @@
             //金额验证
             var price=(rule, value, callback) => {//生产单位名称 
 				var exp = /^(-)?\d{1,3}(,\d{3})*(.\d+)?$/;
-				console.log(value);
 				if(value != '' && value!=undefined){
 					if(exp.test(value)==false){ 
 	                    callback(new Error('请输入数字'));
@@ -815,14 +818,6 @@
 				}, {
 					value: '其他',
 					label: '其他'
-				}],
-				value: '',
-				option: [{
-					value: '金属组',
-					label: '金属组'
-				}, {
-					value: '涂料组',
-					label: '涂料组'
 				}],
 				value: '',
 				selval:[],
@@ -890,7 +885,10 @@
 				customid:1,
 				dataid:'',//修改和查看带过的id
 				inspectPro:'inspectPro',//appname
-				CUSTOMER_PERSONList:[]
+				CUSTOMER_PERSONList:[],//
+				maingroup:[],//主检组
+				selectData:[],//承建单位
+//				deptid:'',//机构id
 			};
 		},
 		methods: {
@@ -1051,7 +1049,7 @@
 				this.dataInfo.CHECK_PROXY_CONTRACTList.push(obj);
 			},
 			addsample(){
-				this.$emit('request');
+//				this.$emit('request');
 				this.dialogVisible2 = true;
 			},
 			addsamplename(){
@@ -1068,7 +1066,7 @@
 				}else{
 					this.dialogVisible2 = false;
 					this.dataInfo.ITEM_NAME = this.selval[0].DESCRIPTION;
-					this.$emit('request');
+//					this.$emit('request');
 				}
 			},
 			//刪除新建行
@@ -1078,13 +1076,13 @@
 			},
 			//点击按钮显示弹窗
 			visible() {
-				this.reset();
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.dataInfo.DEPTID = res.data.deptId;
 					this.dataInfo.ENTERBY = res.data.id;
 					// this.dataInfo.ORGID = res.data.deptName
 					var date = new Date();
 					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
+					this.show = true;
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -1103,22 +1101,18 @@
 			detailgetData() {
 			var url = this.basic_url +'/api-apps/app/inspectPro/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(111);
 					//依据
 					for(var i = 0;i<res.data.INSPECT_PROXY_BASISList.length;i++){
 						res.data.INSPECT_PROXY_BASISList[i].isEditing = false;
 					}
-					console.log(222);
 					//要求
 					for(var m = 0;m<res.data.INSPECT_PROXY_PROJECList.length;m++){
 						res.data.INSPECT_PROXY_PROJECList[m].isEditing = false;
 					}
-					console.log(333);
 					//分包要求
 					for(var n = 0;n<res.data.CHECK_PROXY_CONTRACTList.length;n++){
 						res.data.CHECK_PROXY_CONTRACTList[n].isEditing = false;
 					}
-					console.log(res)
 					this.dataInfo = res.data;
 					this.show = true;
 					//深拷贝数据
@@ -1131,6 +1125,9 @@
 					});
 				});
 			},	
+			indexSelect(event){
+				console(event.target.value);
+			},
 			// 这里是修改
 			detail(dataid) {
 				this.dataid=dataid;
@@ -1325,6 +1322,45 @@
 					})
 					.catch(_ => {});
 			},
+			//主检组
+			getmaingroup(){
+				console.log(this.dataInfo.R_VENDOR);
+				var url = this.basic_url + '/api-user/depts/findByPid/'+this.dataInfo.R_VENDOR;
+				this.$axios.get(url, {}).then((res) => {
+	               console.log(res);
+					this.maingroup = res.data;
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+			},
+			getmainuser(){
+			   console.log(this.dataInfo.MAINGROUP);
+			   var url = this.basic_url + '/api-user/users/usersByDept?DETID='+this.dataInfo.MAINGROUP;
+			   this.$axios.get(url, {}).then((res) => {
+	               console.log(res);
+//					this.maingroup = res.data;
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+			},
+//			assetList(){
+//				var url = this.basic_url + '/api-user/users/usersByDept?DETID='+this.dataInfo.R_VENDOR;
+//			   this.$axios.get(url, {}).then((res) => {
+//	               console.log(res);
+////					this.maingroup = res.data;
+//				}).catch((err) => {
+//					this.$message({
+//						message: '网络错误，请重试',
+//						type: 'error'
+//					});
+//				});
+//			},
 			//获取负责人和接收人
 			getCustomer(type) {
 				// type  1 這是負責人  2 這個事接收人
@@ -1336,8 +1372,6 @@
 				this.$axios.get(url, {
 					params: params
 				}).then((res) => {
-					console.log(23333);
-					console.log(res.data);
 					this.page.totalCount = res.data.count;
 					
 					this.gridData = res.data.data;
@@ -1359,9 +1393,7 @@
 				}else{
 					this.dialogVisible = false;
 					if(this.type == '1') {
-						console.log(this.selval[0].ID);
 						this.customid = this.selval[0].ID;
-						console.log(this.customid);
 						this.dataInfo.VENDOR=this.selval[0].CODE;
 						this.dataInfo.V_NAME = this.selval[0].NAME;
 						this.dataInfo.V_ADDRESS = this.selval[0].CONTACT_ADDRESS;
@@ -1370,7 +1402,6 @@
 						this.dataInfo.V_PHONE = this.selval[0].PHONE;
 					} else {
 						this.dataInfo.PRODUCT_UNIT= this.selval[0].CODE;
-						console.log(this.dataInfo.PRODUCT_UNIT);
 						this.dataInfo.P_NAME = this.selval[0].NAME;
 					}
 				}
@@ -1380,7 +1411,6 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				}
-				console.log(this.customid);
 				var url = this.basic_url + '/api-apps/app/customer/CUSTOMER/'+ this.customid;
 				this.$axios.get(url, {
 					params: data
@@ -1406,16 +1436,14 @@
 					this.dialogVisible3 = false;
 				}
 			},
+			
 			SelChange(val) {
 				this.selval = val;
 			},
 			//启动流程
 			startup(){
-				console.log(12345);
-				console.log(this.dataid);
 				var url = this.basic_url + '/api-apps/app/inspectPro/flow/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					if(res.data.resp_code == 1) {
 							this.$message({
 								message:res.data.resp_msg,
@@ -1434,7 +1462,6 @@
 			},
 			//审批流程
 			approvals(){
-				console.log(this.dataid);
 				this.approvingData.id =this.dataid;
 				this.approvingData.app=this.inspectPro;
 				 var url = this.basic_url + '/api-apps/app/'+this.inspectPro+'/flow/isEnd/'+this.dataid;
@@ -1511,10 +1538,22 @@
 				}).catch((wrong) => {})
 				
 			},
+			getCompany() {
+				var type = "2";
+				var url = this.basic_url + '/api-user/depts/treeByType';
+				this.$axios.get(url, {
+					params: {
+						type: type
+					},
+				}).then((res) => {
+	               console.log(res);
+					this.selectData = res.data;
+				});
+			},
 		},
 		mounted() {
 			this.requestData();
-			
+			this.getCompany();
 		},
 	}
 </script>

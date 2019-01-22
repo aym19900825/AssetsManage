@@ -407,16 +407,19 @@
 						delete this.adddeptForm._level;
 						delete this.adddeptForm._parent;
 						delete this.adddeptForm._show;
-						console.log(this.adddeptForm);
+						
 					}
+					console.log(111);
+					console.log(typeof(this.adddeptForm));
+					console.log(JSON.stringify(this.adddeptForm));
 					//深拷贝数据
-					let _obj = JSON.stringify(this.adddeptForm);
-					console.log(_obj);
-        			this.ADDDEPTFORM = JSON.parse(_obj);
+					let obj = JSON.stringify(this.adddeptForm);
+					console.log(obj);
+        			this.ADDDEPTFORM = JSON.parse(obj);
 					
 				}).catch((err) => {
 					this.$message({
-						message: '网络错误，请重试',
+						message: '网络错误，请重试1',
 						type: 'error'
 					});
 				});

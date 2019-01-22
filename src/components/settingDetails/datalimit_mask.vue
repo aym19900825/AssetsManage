@@ -52,10 +52,8 @@
 				this.cccData = data;
 			},
 			getCheckedKeys() {
-				console.log(this.$refs.tree.getCheckedKeys());
 			},
 			valueChange(){
-				console.log(this.roleIds);
 				if(this.value==2){
 				    this.depet(this.roleIds);
 					$('.tree').show();
@@ -65,12 +63,10 @@
 			},
 			
 			depet(id) {
-				console.log(id);
 				this.roId = id;
 				var arr = [];
 				var url = this.basic_url + '/api-user/depts/getTreeMapByRoleId/'+id;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res.data);
 					this.depetData = res.data;
 					var depetData = res.data
 					for(var a = 0; a < depetData.length; a++) {
@@ -83,7 +79,6 @@
 										arr.push(depetData[a].children[b].id);
 										if(depetData[a].children[b].children!=null&&depetData[a].children[b].children.length > 0) {
 											arr.pop(depetData[a].children[b].id)
-											console.log(depetData[a].children[b].children.length);
 											for(var c = 0; c < depetData[a].children[b].children.length; c++) {
 												if(depetData[a].children[b].children[c].checked) {
 													arr.push(depetData[a].children[b].children[c].id);
@@ -134,22 +129,20 @@
 				var deptIds = [];
 				var permission = this.$refs.tree.getCheckedNodes(); // 获取当前的选中的数据{对象}
 				var menu = this.$refs.tree.getHalfCheckedNodes();
-				console.log(menu); //父的
-				console.log(permission); //勾選的子
+//				console.log(menu); //父的
+//				console.log(permission); //勾選的子
 				for(var j = 0; j < menu.length; j++) {
 					deptIds.push(menu[j].id);
 				}
 				for(var i = 0; i < permission.length; i++) {
 					deptIds.push(permission[i].id);
 				}
-				console.log(deptIds);
 				var data = {
 					deptids: deptIds,
 //					roleid: this.roId,
 				}
 				var url = this.basic_url + '/api-user/roles/'+this.roId+'/'+this.value;
 				this.$axios.post(url, data).then((res) => {
-					console.log(res);
 					if(res.data.resp_code == 0) {
 						this.$message({
 							message: '操作成功',

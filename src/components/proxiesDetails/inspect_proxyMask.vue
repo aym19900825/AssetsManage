@@ -85,7 +85,7 @@
 											
 											<el-col :span="8" >
 											<el-form-item label="承检单位" prop="R_VENDOR"  label-width="110px">
-												<el-select clearable v-model="dataInfo.R_VENDOR" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit"  v-on:change="indexSelect($event)">
+												<el-select clearable v-model="dataInfo.R_VENDOR" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit"  @change="RVENDORSelect($event)">
 													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 												</el-select>
 											</el-form-item>
@@ -112,7 +112,7 @@
 										<el-row >
 											<el-col :span="8">
 												<el-form-item label="名称" prop="ITEM_NAME" label-width="110px">
-													<el-input v-model="dataInfo.ITEM_NAME" :disabled="true">
+													<el-input v-model="dataInfo.ITEM_NAME" :disabled="edit">
 														<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="addsample"></el-button>
 													</el-input>
 												</el-form-item>
@@ -120,14 +120,14 @@
 										
 											<el-col :span="8">
 												<el-form-item label="型号" prop="ITEM_MODEL" label-width="110px">
-													<el-input v-model="dataInfo.ITEM_MODEL" :disabled="noedit"></el-input>
+													<el-input v-model="dataInfo.ITEM_MODEL" :disabled="edit"></el-input>
 												</el-form-item>
 											</el-col>
 										</el-row>
 										<el-row >
 											<el-col :span="8">
 												<el-form-item label="数量" prop="ITEM_QUALITY" label-width="110px">
-													<el-input v-model.number="dataInfo.ITEM_QUALITY" :disabled="noedit">
+													<el-input v-model.number="dataInfo.ITEM_QUALITY" :disabled="edit">
 													</el-input>
 
 												</el-form-item>
@@ -361,7 +361,7 @@
 												<el-table-column prop="PROXYNUM" label="委托书编号" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.PROXYNUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROXYNUM" placeholder="自动生成" :disabled="true">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROXYNUM" placeholder="请输入委托方名称">
 														</el-input>
 														<span v-else="v-else">{{scope.row.PROXYNUM}}</span>
 														</el-form-item>
@@ -517,17 +517,17 @@
 											</el-col>-->
 
 											<el-col :span="8">
-												<el-form-item label="主检组" prop="MAINGROUP" label-width="110px">
-													<el-input v-model="dataInfo.LEADER" :disabled="noedit">
-															<el-button slot="append" icon="el-icon-search" @click="getmaingroup"></el-button>
-													</el-input>
-												</el-form-item>
+												<el-form-item label="主检组" prop="MAINGROUP"  label-width="110px">
+												<el-select clearable v-model="dataInfo.MAINGROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @change="getmaingroup($event)" @visible-change="visablemaingroup($event)" >
+													<el-option v-for="(data,index) in maingroup" :key="index" :value="data.id" :label="data.fullname"></el-option>
+												</el-select>
+											</el-form-item>
 											</el-col>
 											<el-col :span="8">
 												<el-form-item label="主检负责人" prop="LEADER" label-width="110px">
-														<el-input v-model="dataInfo.LEADER" :disabled="noedit">
-															<el-button slot="append" icon="el-icon-search" @click="getmainuser"></el-button>
-														</el-input>
+														<el-select clearable v-model="dataInfo.LEADER" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @visible-change="visableleader($event)" >
+													<el-option v-for="(data,index) in leaderdata" :key="index" :value="data.id" :label="data.username"></el-option>
+												</el-select>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8" style="display:none;" label-width="110px">
@@ -888,7 +888,9 @@
 				CUSTOMER_PERSONList:[],//
 				maingroup:[],//主检组
 				selectData:[],//承建单位
+				leaderdata:[],//主检负责人
 //				deptid:'',//机构id
+
 			};
 		},
 		methods: {
@@ -1066,6 +1068,8 @@
 				}else{
 					this.dialogVisible2 = false;
 					this.dataInfo.ITEM_NAME = this.selval[0].DESCRIPTION;
+					this.dataInfo.ITEM_MODEL = this.selval[0].MODEL;
+					this.dataInfo.ITEM_QUALITY = this.selval[0].QUALITY;
 //					this.$emit('request');
 				}
 			},
@@ -1125,9 +1129,7 @@
 					});
 				});
 			},	
-			indexSelect(event){
-				console(event.target.value);
-			},
+			
 			// 这里是修改
 			detail(dataid) {
 				this.dataid=dataid;
@@ -1322,45 +1324,50 @@
 					})
 					.catch(_ => {});
 			},
-			//主检组
-			getmaingroup(){
-				console.log(this.dataInfo.R_VENDOR);
-				var url = this.basic_url + '/api-user/depts/findByPid/'+this.dataInfo.R_VENDOR;
-				this.$axios.get(url, {}).then((res) => {
-	               console.log(res);
-					this.maingroup = res.data;
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
+			visablemaingroup:function(callback){    //只有回调参数为false时才触发 ctx.getAreaListDataSearch(vc,1)这个函数;
+			    if(callback){
+			    	if(this.dataInfo.R_VENDOR==""||this.dataInfo.R_VENDOR==undefined){
+						this.$message({
+							message: '请先输入承建单位',
+							type: 'error'
+						});
+			    	}
+			    }	
 			},
-			getmainuser(){
-			   console.log(this.dataInfo.MAINGROUP);
-			   var url = this.basic_url + '/api-user/users/usersByDept?DETID='+this.dataInfo.MAINGROUP;
-			   this.$axios.get(url, {}).then((res) => {
-	               console.log(res);
-//					this.maingroup = res.data;
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
+			visableleader:function(callback){
+				 if(callback){
+			    	if(this.dataInfo.MAINGROUP==""||this.dataInfo.MAINGROUP==undefined){
+						this.$message({
+							message: '请先输入主检组',
+							type: 'error'
+						});
+			    	}
+			    }	
 			},
-//			assetList(){
-//				var url = this.basic_url + '/api-user/users/usersByDept?DETID='+this.dataInfo.R_VENDOR;
-//			   this.$axios.get(url, {}).then((res) => {
-//	               console.log(res);
-////					this.maingroup = res.data;
-//				}).catch((err) => {
-//					this.$message({
-//						message: '网络错误，请重试',
-//						type: 'error'
-//					});
-//				});
-//			},
+			//承检单位带出主检组
+			RVENDORSelect(RVENDORid){
+				var url = this.basic_url + '/api-user/depts/findByPid/'+RVENDORid;
+					this.$axios.get(url, {}).then((res) => {
+						this.maingroup = res.data;
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+			},
+			//主检组带出主检负责人
+			getmaingroup(maingroupid){
+				var url = this.basic_url + '/api-user/users/usersByDept?deptId='+maingroupid;
+		   			this.$axios.get(url, {}).then((res) => {
+						this.leaderdata = res.data.data;
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});		
+			},
 			//获取负责人和接收人
 			getCustomer(type) {
 				// type  1 這是負責人  2 這個事接收人
@@ -1546,7 +1553,6 @@
 						type: type
 					},
 				}).then((res) => {
-	               console.log(res);
 					this.selectData = res.data;
 				});
 			},

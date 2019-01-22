@@ -125,7 +125,6 @@
 
 <script>
 	import Config from '../../config.js'
-	import Validators from '../../core/util/validators.js'
 	export default {
 		name: 'masks',
 		components: {
@@ -172,14 +171,14 @@
 				rules: {
 					code: [
 						{ required: true, message: '必填',trigger: 'blur'},
-						{ validator: Validators.isEnglish, trigger: 'blur'}
+						{ validator: this.Validators.isEnglish, trigger: 'blur'}
 					],
 					name: [
 						{ required: true, message: '必填',trigger: 'blur'},
-						{ validator: Validators.isSpecificKey, trigger: 'blur'}
+						{ validator: this.Validators.isSpecificKey, trigger: 'blur'}
 					],
-					sort: [{ required: false, trigger: 'blur',validator: Validators.isSpecificKey}],
-					tips: [{ required: false, trigger: 'blur', validator: Validators.isSpecificKey}],
+					sort: [{ required: false, trigger: 'blur',validator: this.Validators.isSpecificKey}],
+					tips: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],
 				},
 				addtitle:true,
 				modifytitle:false,

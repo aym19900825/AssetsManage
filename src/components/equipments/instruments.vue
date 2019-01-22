@@ -146,7 +146,7 @@
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
-		<instrumentsmask :detailData="aaaData[0]" ref="child" @request="requestData"></instrumentsmask>
+		<instrumentsmask :detailData="selUser[0]" ref="child" @request="requestData"></instrumentsmask>
 	</div>
 </div>
 </template>

@@ -64,6 +64,12 @@ const validators = {
 		return eng.test(str);
 	},
 
+	Numbers:function (str) {// 仅限数字
+		const numbe = /^[0-9]*$/;
+		return numbe.test(str);
+	},
+
+
 
 //---------------------------------------------------------------------------------------------//
 	isSpecificKey:function (rule, value, callback) { //不允许特殊字符
@@ -115,7 +121,11 @@ const validators = {
 	   if(value && (!validators.SpecificWord(value))) {
 			callback(new Error('不支持特殊符号'));
 		} else {
-			callback();
+			if(validators.Numbers(value)) {
+				callback(new Error('不只支持全数字'));
+			} else {
+				callback();
+			}
 		}
 	},
 
@@ -327,6 +337,15 @@ const validators = {
 		}
 	},
 
+	
+	isChoosedata:function (rule, value, callback) {//放大镜选择验证
+		// (value == '' || typeof(value) == undefined)
+        if (typeof(value) == undefined || value == '' || value == null) {
+            callback(new Error('请选择数据'));
+        }else {
+            callback();
+        }
+    }
 
 };
 

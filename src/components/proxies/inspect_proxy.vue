@@ -420,7 +420,6 @@
 			openAddMgr() {
 				this.$refs.child.reset();
 				this.$refs.child.visible();
-				this.$refs.child.open();
 				
 			},
 			//修改

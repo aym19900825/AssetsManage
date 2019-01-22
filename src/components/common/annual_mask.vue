@@ -41,16 +41,9 @@
 										</el-col>
 									</el-row>
 									<el-row :gutter="5" class="pt10">
-										<el-col :span="6" v-show="addtitle">
+										<el-col :span="6">
 											<el-form-item label="提出单位" prop="PROP_UNIT"  label-width="85px">
 												<el-select clearable v-model="WORKPLAN.PROP_UNIT" filterable allow-create default-first-option placeholder="请选择">
-													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
-												</el-select>
-											</el-form-item>
-										</el-col>
-										<el-col :span="6" v-show="!addtitle">
-											<el-form-item label="提出单位" prop="PROP_UNITDesc"  label-width="85px">
-												<el-select clearable v-model="WORKPLAN.PROP_UNITDesc" filterable allow-create default-first-option placeholder="请选择">
 													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 												</el-select>
 											</el-form-item>
@@ -393,29 +386,29 @@
 									<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save"></doc-table>
 								</el-collapse-item>
 								<!-- 录入人信息 Begin-->
-								<el-collapse-item title="其他" name="7" v-if="dept">
+								<el-collapse-item title="其他" name="7" v-show="views">
 									<el-row :gutter="30">
-										<el-col :span="8"  v-show="views">
+										<el-col :span="8">
 											<el-form-item label="录入人" prop="ENTERBYDesc" label-width="85px">
 												<el-input v-model="WORKPLAN.ENTERBYDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8" v-show="views">
+										<el-col :span="8">
 											<el-form-item label="录入日期" prop="ENTERDATE" label-width="85px">
 												<el-input v-model="WORKPLAN.ENTERDATE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8" v-show="views">
+										<el-col :span="8">
 											<el-form-item label="修改人" prop="CHANGEBYDesc" label-width="85px">
 												<el-input v-model="WORKPLAN.CHANGEBYDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8" v-show="views">
+										<el-col :span="8">
 											<el-form-item label="修改日期" prop="CHANGEDATE" label-width="85px">
 												<el-input v-model="WORKPLAN.CHANGEDATE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8" v-if="dept">
+										<el-col :span="8">
 											<el-form-item label="机构" prop="DEPTIDDesc" label-width="85px">
 												<el-input v-model="WORKPLAN.DEPTIDDesc" :disabled="edit"></el-input>
 											</el-form-item>
@@ -528,9 +521,9 @@
 				<el-pagination background class="pull-right pt10 pb10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 				<!-- 第二层弹出的表格 End -->
-				<div slot="footer" class="dialog-footer">
-			       <el-button @click="dialogVisible = false">取 消</el-button>
+				<div slot="footer" class="el-dialog__footer">
 			       <el-button type="primary" @click="addbasis">确 定</el-button>
+			       <el-button @click="dialogVisible = false">取 消</el-button>
 			    </div>
 			</el-dialog>
 			<!-- 检测依据弹出框 End -->
@@ -616,9 +609,9 @@
 		            :total="page.totalCount">
 		        </el-pagination>
 				<!-- 表格 End-->
-				<span slot="footer" class="dialog-footer">
-			       <el-button @click="dialogVisible2 = false">取 消</el-button>
+				<span slot="footer" class="el-dialog__footer">
 			       <el-button type="primary" @click="addbasis2">确 定</el-button>
+			       <el-button @click="dialogVisible2 = false">取 消</el-button>
 			    </span>
 			</el-dialog>
 			<!-- 检测项目与要求 End -->
@@ -644,9 +637,9 @@
 				<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 				<!-- 表格 End-->
-				<span slot="footer" class="dialog-footer">
-			       <el-button @click="dialogVisible3 = false">取 消</el-button>
+				<span slot="footer" class="el-dialog__footer">
 			       <el-button type="primary" @click="addproclass">确 定</el-button>
+			       <el-button @click="dialogVisible3 = false">取 消</el-button>
 			    </span>
 			</el-dialog>
 			<!-- 产品类别 End -->
@@ -670,9 +663,9 @@
 								</el-table>
 								<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 								</el-pagination>
-				<span slot="footer" class="dialog-footer">
-			       <el-button @click="dialogVisible4 = false">取 消</el-button>
+				<span slot="footer" class="el-dialog__footer">
 			       <el-button type="primary" @click="addproname">确 定</el-button>
+			       <el-button @click="dialogVisible4 = false">取 消</el-button>
 			    </span>
 			</el-dialog>
 			<!-- 产品名称 End -->
@@ -701,10 +694,10 @@
 					layout="total, sizes, prev, pager, next"
 					:total="page.totalCount">
 				</el-pagination>
-				<span slot="footer" class="dialog-footer">
+				<div slot="footer" class="el-dialog__footer">
 			       <el-button @click="diaVisCustom = false">取 消</el-button>
 			       <el-button type="primary" @click="adddeptname">确 定</el-button>
-			    </span>
+			    </div>
 			</el-dialog>
 			<!-- 生产企业名称、受检企业名称 End -->
 		</div>
@@ -884,22 +877,34 @@
 				},
 				
 				rules: {
-					CODE: [{required: true,trigger: 'blur',validator: validateCode,}],
-					NAME:[{required: true,trigger: 'blur',validator: validateName,}],
-					DESCRIPTION:[{required: true,message: '请填写计划描述',trigger: 'blur'}],
+					// CODE: [{required: true,trigger: 'blur',validator: validateCode,}],
+					// NAME:[{required: true,trigger: 'blur',validator: validateName,}],
+					PROP_UNIT:[{required: true,validator: validateUnit, trigger: 'change'}],//提出单位 
+					basisList:[{required: true,validator: validateBasislist,trigger: 'change'}],//产品类别
+					DESCRIPTION:[{required: true,trigger: 'blur',validator: this.Validators.isFillTips}],
+
 					TYPE:[{required: true,message: '请选择类别', trigger: 'change'}],
-					COMPACTOR:[{required: true,message: '请填写编制人',trigger: 'blur'}],
-					C_PERSON:[{required: true,message: '请填写审核人',trigger: 'blur'}],
-					APPRPERSON:[{required: true,message: '请填写批准人',trigger: 'blur'}],
+
+					COMPACTOR:[
+						{required: true, trigger: 'blur',message: '必填' },
+						{trigger: 'blur', validator: this.Validators.isNickname},
+					],//编制人
+					C_PERSON:[
+						{required: true, trigger: 'blur',message: '必填' },
+						{trigger: 'blur', validator: this.Validators.isNickname},
+					],//审核人
+					APPRPERSON:[
+						{required: true, trigger: 'blur',message: '必填' },
+						{trigger: 'blur', validator: this.Validators.isNickname},
+					],//批准人
+
 					CONTACT_ADDRESS:[{required: true,trigger:'blur',validator: validateAddress,}],
 					PHONE:[{required: true,trigger: 'blur',validator: validatePhone,}],
 					EMAIL:[{required: true,trigger: 'blur',validator:validateEmail,}],
-					PROP_UNIT:[{required: true,validator: validateUnit, trigger: 'change'}],//提出单位 
        				ITEMTYPE:[{required: true,validator: validateItemdata}],//产品类别 
        				YEAR: [{type: 'string',required: true,message: '请选择年度',trigger: 'change' }],//年度
        				REPORTDATE: [{type: 'string',required: true,message: '请选择提报日期',trigger: 'change'}],//提报日期
        				//检测依据 
-					basisList:[{required: true,validator: validateBasislist,trigger: 'change'}],//产品类别
 					ITEM_NAME:[{required: true,message: '请填写',trigger: 'blur'}], //产品名称 
 					MODEL:[{required: true,message: '请填写',trigger: 'blur'}],
 					REMARKS:[{required: true,message: '请填写',trigger: 'blur'}],
@@ -1597,12 +1602,17 @@
 			detail(dataid) {
 				this.assignshow = true;
 				this.$axios.get(this.basic_url +'/api-apps/app/workplan/' + dataid, {}).then((res) => {
-					console.log(res.data);
-					console.log(res.data.WORLPLANLINEList.length);
 					for(var i = 0; i<res.data.WORLPLANLINEList.length; i++){
 							res.data.WORLPLANLINEList[i].isEditing = false;
 					}
+					console.log(2333333);
+					console.log(res.data);
 					this.WORKPLAN = res.data;
+					for(var j=0;j<this.selectData.length;j++){
+						if(this.WORKPLAN.PROP_UNIT==this.selectData[j].id){
+							this.WORKPLAN.PROP_UNIT=this.selectData[j].fullname
+						}
+					}
 					this.worlplanlist = res.data.WORLPLANLINEList;
 					var worlplanlist = res.data.WORLPLANLINEList;
 					for(var i=0, len=worlplanlist.length; i<len; i++){
@@ -1729,6 +1739,14 @@
 									return false;
 								}else{
 									if(!this.isEditList){
+										if(typeof(this.WORKPLAN.PROP_UNIT) != 'undefined') {
+											console.log(this.selectData);
+											for(var j=0;j<this.selectData.length;j++){
+												if(this.WORKPLAN.PROP_UNIT==this.selectData[j].fullname){
+													this.WORKPLAN.PROP_UNIT=this.selectData[j].id
+												}
+											}		
+										}
 										this.WORKPLAN.WORLPLANLINEList = this.worlplanlist;
 										var url = this.basic_url +'/api-apps/app/workplan/saveOrUpdate';
 										this.$axios.post(url, this.WORKPLAN).then((res) => {
@@ -1915,9 +1933,6 @@
 			// 		VERSION: this.searchList.VERSION,
 			// 		STATUS: this.searchList.STATUS,
 			// 	};
-			
-			
-				
 			
 			
 			// },

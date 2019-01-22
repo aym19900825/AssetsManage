@@ -106,7 +106,6 @@
 
 <script>
 	import Config from '../../config.js'
-	import Validators from '../../core/util/validators.js'
 	import docTable from '../common/doc.vue'
 	export default {
 		name: 'testing_mask',
@@ -179,21 +178,21 @@
 					M_NUM: [{
 						required: false,
 						trigger: 'change',//validateNum
-						validator: Validators.isCodeNum,
+						validator: this.Validators.isCodeNum,
 					}],
 					M_NAME: [
 						{ required: true, message: '请填写中文名称', trigger: 'blur' },
 						{ min: 5, max: 35, message: '长度在 5 到 35 个字符', trigger: 'blur' },
-						{validator: Validators.isChinese, trigger: 'blur'},
+						{validator: this.Validators.isChinese, trigger: 'blur'},
 					],
 					M_ENAME: [
 						{ required: true, message: '请填写英文名称', trigger: 'blur' },
 						{ min: 5, max: 50, message: '长度在 5 到 15 个字符', trigger: 'blur' },
-						{validator: Validators.isEnglish, trigger: 'blur'},
+						{validator: this.Validators.isEnglish, trigger: 'blur'},
 					],
 					M_TYPE: [
 						{ required: true, message: '请填写', trigger: 'change' },
-						{validator: Validators.isSpecificKey, trigger: 'blur'},
+						{validator: this.Validators.isSpecificKey, trigger: 'blur'},
 					]
 				},
 				hintshow:false,

@@ -166,7 +166,7 @@
 										<el-col :span="8">
 											<el-form-item label="学历" prop="education" label-width="100px">
 												<el-select v-model="user.education" placeholder="硕士" style="width: 100%" :disabled="noedit">
-													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+													<el-option v-for="(item,index) in options" :key="index" :label="item.label" :value="item.value">
 													</el-option>
 												</el-select>
 											</el-form-item>
@@ -174,7 +174,7 @@
 										<el-col :span="8">
 											<el-form-item label="角色" prop="roleId" label-width="100px">
 												<el-select v-model="user.roleId" multiple :disabled="noedit" value-key="item.id" >
-													<el-option v-for="item in selectData" :key="item.name" :value="item.id" :label="item.name"></el-option>
+													<el-option v-for="(item,index) in selectData" :key="index" :value="item.id" :label="item.name"></el-option>
 												</el-select>
 											</el-form-item>
 										</el-col>
@@ -401,8 +401,6 @@
 
 <script>
 	import Config from '../../config.js'
-	import Validators from '../../core/util/validators.js'
-
 	export default {
 		name: 'masks',
 		props: {
@@ -479,7 +477,7 @@
 				addtitle: true, //添加弹出框titile
 				modifytitle: false, //修改弹出框titile
 				modify: false,
-				//				default-expand-all:true,
+				//default-expand-all:true,
 				i:0,
 				rules: {
 					deptName: [{required: true,validator: validatedeptname}], //所属机构
@@ -487,7 +485,7 @@
 					roleId: [{required: true,trigger: 'blur',message: '必填',}],
 					username: [
 						{required: true,message: '必填',trigger: 'blur',},
-						{validator: Validators.isUserName, trigger: 'blur'},//引用 isUserName
+						{validator: this.Validators.isUserName, trigger: 'blur'},//引用 isUserName
 						{type: 'string', min: 4, max:20, message: '用户名不小于4位，不大于20位', trigger: 'blur'},
 					],
 					password: [{required: true,trigger: 'blur',message: '必填',}],
@@ -496,19 +494,19 @@
 					islogin: [{required: true,trigger: 'change',message: '必填'}], //登陆
 					mac_address: [{required: true,trigger: 'blur',message: '必填',}],
 					ip_address: [{required: true,trigger: 'blur',message: '必填',}],
-					nickname: [{required: true,trigger: 'blur',validator: Validators.isNickname}],
+					nickname: [{required: true,trigger: 'blur',validator: this.Validators.isNickname}],
 					worknumber: [
 						{required: true,trigger: 'blur',message: '必填'},
-						{validator: Validators.isWorknumber, trigger: 'blur'},//引用 isWorknumber
+						{validator: this.Validators.isWorknumber, trigger: 'blur'},//引用 isWorknumber
 					],
-					idnumber: [{required: true,trigger: 'blur',validator: Validators.isIdnumber}],
+					idnumber: [{required: true,trigger: 'blur',validator: this.Validators.isIdnumber}],
 					phone: [
 						{required: true,trigger: 'blur',message: '必填'},
-						{validator: Validators.isPhone, trigger: 'blur'},
+						{validator: this.Validators.isPhone, trigger: 'blur'},
 					],
 					email: [
 						{required: true,trigger: 'blur',message: '必填'},
-						{validator: Validators.isEmail, trigger: 'blur'},
+						{validator: this.Validators.isEmail, trigger: 'blur'},
 					],
 					step: [{required: true,trigger: 'blur',message: '必填',}],
 					t_date: [{required: true,trigger: 'blur',message: '必填',}],
@@ -518,11 +516,10 @@
 					c_date: [{required: true,trigger: 'blur',message: '必填',}],
 					c_num: [{required: true,trigger: 'blur',message: '必填',}],
 					c_name: [{required: true,trigger: 'blur',message: '必填',}],
-					ipaddress: [{required: false,trigger: 'blur',validator: Validators.isIpaddress}],
-					macaddress: [{required: false,trigger: 'blur',validator: Validators.isMacaddress}],
-					post: [{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],
-					tips: [{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],
-
+					ipaddress: [{required: false,trigger: 'blur',validator: this.Validators.isIpaddress}],
+					macaddress: [{required: false,trigger: 'blur',validator: this.Validators.isMacaddress}],
+					post: [{required: false,trigger: 'blur',validator: this.Validators.isSpecificKey}],
+					tips: [{required: false,trigger: 'blur',validator: this.Validators.isSpecificKey}],
 				},
 				//tree树菜单
 				resourceData: [], //数组，我这里是通过接口获取数据，

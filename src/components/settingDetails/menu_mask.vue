@@ -122,7 +122,6 @@
 
 <script>
 	import Config from '../../config.js'
-	import Validators from '../../core/util/validators.js'
 	import deliver from '../../assets/js/deliver.js'
 	import all_icons from '../common/all_icons.vue'//弹出框
 	export default {
@@ -181,13 +180,13 @@
 					// pName: [{required: true,trigger: 'blur',validator: validatePass}],
 					name: [
 						{required: true,message: '必填',trigger: 'blur'},
-						{validator: Validators.isNickname, trigger: 'blur'}
+						{validator: this.Validators.isNickname, trigger: 'blur'}
 					],
 					url: [
 						{required: true,message: '必填',trigger: 'blur'},
-						{validator: Validators.isLinkURL, trigger: 'blur'}
+						{validator: this.Validators.isLinkURL, trigger: 'blur'}
 					],
-					sort: [{required: false,trigger: 'blur',validator: Validators.isInteger}],
+					sort: [{required: false,trigger: 'blur',validator: this.Validators.isInteger}],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，

@@ -85,7 +85,6 @@
 
 <script>
 	import Config from '../../config.js'
-	import Validators from '../../core/util/validators.js'
 	import docTable from '../common/doc.vue'
 	export default {
 		name: 'masks',
@@ -110,24 +109,6 @@
 			page: Object,
 		},
 		data() {
-			// var validateNum = (rule, value, callback) => {
-			// 	if(value != ""){
-		 //             if((/^[0-9a-zA-Z()]+$/).test(value) == false){
-		 //                 callback(new Error("请填写数字或字母（编码不填写可自动生成）"));
-		 //             }else{
-		 //                 callback();
-		 //             }
-		 //         }else{
-		 //             callback();
-		 //         }
-			// };
-			// var validateDeci = (rule, value, callback) => {
-			// 	if(value === '') {
-			// 		callback(new Error('请填写产品类别名称'));
-			// 	} else {
-			// 		callback();
-			// 	}
-			// };
 			return {
 				docParm: {
 					'model': 'new',
@@ -156,12 +137,12 @@
 				rules: {
 					NUM: [{
 						required: false,
-						trigger: 'change',
-						validator: Validators.isCodeNum,
+						trigger: 'blur',
+						validator: this.Validators.isCodeNum,
 					}],
 					DECRIPTION: [
 						{required: true, message: '请填写', trigger: 'blur'},
-						{validator: Validators.isSpecificKey, trigger: 'blur'},
+						{validator: this.Validators.isSpecificKey, trigger: 'blur'},
 					],
 				},
 				//tree
@@ -401,7 +382,7 @@
 				this.$axios.get(this.basic_url+ '/api-apps/app/inspectionRepTem/operate/updateRelate', {
 					params: data
 				}).then((res) => {
-					console.log(res);
+					// console.log(res);
 					console.log(res.data.resp_code);
 					if(res.data.resp_code == 0) {
 						this.$message({

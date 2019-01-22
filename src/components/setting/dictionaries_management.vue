@@ -214,21 +214,10 @@
 		      this.page.currentPage = val;
 		      this.requestData();
 		    },
-			searchinfo(index) {//高级查询
-				var data = {
-					params: {
-						page: 1,
-						limit: 10,
-						code: this.searchList.code,
-						name: this.searchList.name
-					}
-				};
-				var url = this.basic_url + '/api-user/dicts';
-				this.$axios.get(url, data).then((res) => {
-					this.dictionarieList = res.data.data;
-				}).catch((wrong) => {
-
-				})
+			searchinfo(index) {
+				this.page.currentPage = 1;
+				this.page.pageSize = 10;
+				this.requestData();
 			},
 			openAddData() {//添加数据
 				this.dictionarieForm = {
@@ -337,9 +326,12 @@
 				this.selDictionarie = val;
 			},
 			requestData(index) {//高级查询字段
+				console.log(this.searchList.name);
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
+					code: this.searchList.code,
+					name: this.searchList.name
 				}
 				var url = this.basic_url + '/api-user/dicts';
 				this.$axios.get(url, {
@@ -356,9 +348,7 @@
 					this.commentArr[this.page.currentPage]=res.data.data
 					let newarr=[]
 					for(var i = 1; i <= totalPage; i++){
-					
 						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
-							
 							for(var j = 0; j < this.commentArr[i].length; j++){
 								newarr.push(this.commentArr[i][j])
 							}

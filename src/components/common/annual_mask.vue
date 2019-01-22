@@ -1596,7 +1596,11 @@
 					console.log(2333333);
 					console.log(res.data);
 					this.WORKPLAN = res.data;
-					this.WORKPLAN.PROP_UNIT=this.WORKPLAN.PROP_UNITDesc;
+					for(var j=0;j<this.selectData.length;j++){
+						if(this.WORKPLAN.PROP_UNIT==this.selectData[j].id){
+							this.WORKPLAN.PROP_UNIT=this.selectData[j].fullname
+						}
+					}
 					this.worlplanlist = res.data.WORLPLANLINEList;
 					var worlplanlist = res.data.WORLPLANLINEList;
 					for(var i=0, len=worlplanlist.length; i<len; i++){
@@ -1723,6 +1727,14 @@
 									return false;
 								}else{
 									if(!this.isEditList){
+										if(typeof(this.WORKPLAN.PROP_UNIT) != 'undefined') {
+											console.log(this.selectData);
+											for(var j=0;j<this.selectData.length;j++){
+												if(this.WORKPLAN.PROP_UNIT==this.selectData[j].fullname){
+													this.WORKPLAN.PROP_UNIT=this.selectData[j].id
+												}
+											}		
+										}
 										this.WORKPLAN.WORLPLANLINEList = this.worlplanlist;
 										var url = this.basic_url +'/api-apps/app/workplan/saveOrUpdate';
 										this.$axios.post(url, this.WORKPLAN).then((res) => {

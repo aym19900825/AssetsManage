@@ -41,15 +41,8 @@
 										</el-col>
 									</el-row>
 									<el-row :gutter="5" class="pt10">
-										<el-col :span="6" v-show="addtitle">
+										<el-col :span="6">
 											<el-form-item label="提出单位" prop="PROP_UNIT"  label-width="85px">
-												<el-select clearable v-model="WORKPLAN.PROP_UNIT" filterable allow-create default-first-option placeholder="请选择">
-													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
-												</el-select>
-											</el-form-item>
-										</el-col>
-										<el-col :span="6" v-show="!addtitle">
-											<el-form-item label="提出单位" prop="PROP_UNITDesc"  label-width="85px">
 												<el-select clearable v-model="WORKPLAN.PROP_UNIT" filterable allow-create default-first-option placeholder="请选择">
 													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 												</el-select>
@@ -182,13 +175,13 @@
 													<span v-else="v-else">{{scope.row.V_NAME}}</span>
 											</template>
 										</el-table-column>
-										<el-table-column prop="SJ_NAME" label="受检企业名称" sortable width="120px">
+										<!-- <el-table-column prop="SJ_NAME" label="受检企业名称" sortable width="120px">
 									      <template slot-scope="scope">
 									        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.SJ_NAME" :disabled="true" placeholder="请输入内容">
 												<el-button slot="append" icon="el-icon-search" @click="getdeptbtn(scope.row)"></el-button>
 											</el-input><span v-if="!scope.row.isEditing">{{scope.row.SJ_NAME}}</span>
 									      </template>
-									    </el-table-column>
+									    </el-table-column> -->
 									    <el-table-column prop="MEMO" label="近三年监督抽查情况" sortable width="260px">
 									      <template slot-scope="scope">
 									        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MEMO" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.MEMO}}</span>
@@ -247,7 +240,7 @@
 											        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_NUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_NUM}}</span>
 											      	</template>
 							            		</el-table-column>
-							            		<el-table-column prop="WP_LINENUM" label="所属计划行号" width="150"></el-table-column>
+							            		<el-table-column prop="WP_LINENUM" label="所属计划序号" width="150"></el-table-column>
 							            		<el-table-column prop="S_NUM" label="标准编号" width="130"></el-table-column>
 							            		<el-table-column prop="S_NAME" label="标准名称" width="350"></el-table-column>
 							            		<el-table-column prop="VERSION" label="版本" width="80"></el-table-column>
@@ -286,7 +279,7 @@
 											        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_NUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_NUM}}</span>
 											      	</template>
 							            		</el-table-column>
-							            		<el-table-column label="所属计划行号" sortable width="120px" prop="WP_LINENUM">
+							            		<el-table-column label="所属计划序号" sortable width="120px" prop="WP_LINENUM">
 											      <template slot-scope="scope">
 											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_LINENUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_LINENUM}}</span>
 											      </template>
@@ -625,7 +618,7 @@
 			<!-- 产品类别 Begin -->
 			<el-dialog :modal-append-to-body="false" title="产品类别" height="400px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
 				<!-- 第二层弹出的表格 Begin-->
-				<el-table :header-cell-style="rowClass" :data="categoryList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="400px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" fixed width="55" align="center">
 					</el-table-column>
 					<el-table-column label="编码" width="155" sortable prop="NUM">
@@ -1597,12 +1590,17 @@
 			detail(dataid) {
 				this.assignshow = true;
 				this.$axios.get(this.basic_url +'/api-apps/app/workplan/' + dataid, {}).then((res) => {
-					console.log(res.data);
-					console.log(res.data.WORLPLANLINEList.length);
 					for(var i = 0; i<res.data.WORLPLANLINEList.length; i++){
 							res.data.WORLPLANLINEList[i].isEditing = false;
 					}
+					console.log(2333333);
+					console.log(res.data);
 					this.WORKPLAN = res.data;
+					for(var j=0;j<this.selectData.length;j++){
+						if(this.WORKPLAN.PROP_UNIT==this.selectData[j].id){
+							this.WORKPLAN.PROP_UNIT=this.selectData[j].fullname
+						}
+					}
 					this.worlplanlist = res.data.WORLPLANLINEList;
 					var worlplanlist = res.data.WORLPLANLINEList;
 					for(var i=0, len=worlplanlist.length; i<len; i++){
@@ -1729,6 +1727,14 @@
 									return false;
 								}else{
 									if(!this.isEditList){
+										if(typeof(this.WORKPLAN.PROP_UNIT) != 'undefined') {
+											console.log(this.selectData);
+											for(var j=0;j<this.selectData.length;j++){
+												if(this.WORKPLAN.PROP_UNIT==this.selectData[j].fullname){
+													this.WORKPLAN.PROP_UNIT=this.selectData[j].id
+												}
+											}		
+										}
 										this.WORKPLAN.WORLPLANLINEList = this.worlplanlist;
 										var url = this.basic_url +'/api-apps/app/workplan/saveOrUpdate';
 										this.$axios.post(url, this.WORKPLAN).then((res) => {

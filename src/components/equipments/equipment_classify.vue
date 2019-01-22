@@ -536,6 +536,22 @@
 					this.treeData = this.transformTree(this.resourceData);
 				});
 			},
+			transformTree(data) {
+				for(var i = 0; i < data.length; i++) {
+					data[i].name = data[i].fullname;
+					if(!data[i].pid || $.isArray(data[i].subDepts)) {
+						data[i].iconClass = 'icon-file-normal';
+					} else {
+						data[i].iconClass = 'icon-file-text';
+					}
+					if($.isArray(data[i].subDepts)) {
+						data[i].children = this.transformTree(data[i].subDepts);
+					}
+				}
+
+				return data;
+				
+			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
 				//console.log();
 				return (<span><i class={data.iconClass}></i><span>{node.label}</span></span>)

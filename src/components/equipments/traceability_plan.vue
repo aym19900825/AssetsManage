@@ -152,7 +152,7 @@
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
-		<detailPage :detailData="aaaData[0]" ref="child" @request="requestData"></detailPage>
+		<detailPage :detailData="selUser[0]" ref="child" @request="requestData"></detailPage>
 	</div>
 </div>
 </template>

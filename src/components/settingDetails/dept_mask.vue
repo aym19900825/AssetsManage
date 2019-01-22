@@ -559,12 +559,24 @@
 				});
 			},
 			queding() {
-				this.getCheckedNodes();
-				this.placetext = false;
-				this.dialogVisible = false;				
-				this.adddeptForm.pid = this.checkedNodes[0].id;
-				this.adddeptForm.parent = this.checkedNodes[0].fullname;
-				
+				console.log(this.checkedNodes);
+				if(this.checkedNodes == undefined){
+					this.$message({
+						message:'请选择数据',
+						type:'warning'
+					})
+				// }else if(this.checkedNodes.length > 1){
+				// 	this.$message({
+				// 		message:'不可选择多条数据',
+				// 		type:'warning'
+				// 	})
+				}else{
+					this.getCheckedNodes();
+					this.placetext = false;
+					this.dialogVisible = false;				
+					this.adddeptForm.pid = this.checkedNodes[0].id;
+					this.adddeptForm.parent = this.checkedNodes[0].fullname;
+				}				
 			},
 			getCheckedNodes() {
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()

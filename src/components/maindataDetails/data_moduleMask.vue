@@ -240,7 +240,7 @@
 				rules: {
 					NUM: [{
 						required: false,
-						trigger: 'change',
+						trigger: 'blur',
 						validator: this.Validators.isCodeNum,
 					}],
 					DECRIPTION: [

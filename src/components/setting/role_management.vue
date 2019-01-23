@@ -341,10 +341,8 @@
 					//deleteid为id的数组
 					var deleteid = [];
 					var ids;
-					console.log(changeUser[0]);
 					for(var i = 0; i < changeUser.length; i++) {
 						deleteid.push(changeUser[i].id);
-						console.log(deleteid);
 					}
 					//ids为deleteid数组用逗号拼接的字符串
 					ids = deleteid.toString(',');
@@ -394,7 +392,6 @@
 			},
 			//页面加载数据
 			requestData() {
-				console.log(this.searchList.inactive);
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -405,7 +402,6 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(res.data);
 					this.roleList = res.data.data;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})

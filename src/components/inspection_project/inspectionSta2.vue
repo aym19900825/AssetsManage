@@ -19,13 +19,13 @@
 			</div>
 			<el-form :model="inspectionSta2Form" status-icon inline-message ref="inspectionSta2Form" class="el-radio__table">
 			  <el-table ref="singleTable" :data="inspectionSta2Form.inspectionList.filter(data => !search || data.S_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250" highlight-current-row style="width: 100%;" :default-sort="{prop:'inspectionSta2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
-				<el-table-column label="所属产品" width="80" prop="PRO_NUM">
+				<!-- <el-table-column label="所属产品" width="80" prop="PRO_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.PRO_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PRO_NUM" disabled></el-input><span v-else="v-else">{{scope.row.PRO_NUM}}</span>
 					</el-form-item>
 			      </template>
-			    </el-table-column>
+			    </el-table-column> -->
 
 			  	<el-table-column label="标准编码" sortable width="100" prop="S_NUM">
 			      <template slot-scope="scope">
@@ -142,8 +142,8 @@
 			
 			<!-- 表格 End-->
 			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible3 = false">取 消</el-button>
 		       <el-button type="primary" @click="addproclass">确 定</el-button>
+		       <el-button @click="dialogVisible3 = false">取 消</el-button>
 		    </span>
 		</el-dialog>
 		<!-- 检验/检测标准 End -->
@@ -157,7 +157,7 @@
 		components: {
 			
 		},
-		// props: ['inspectionSta2Form'],
+		props: ['parentIds'],
 		data() {
 			return {
 				basic_url: Config.dev_url,
@@ -239,7 +239,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				this.$axios.get(this.basic_url + '/api-apps/app/inspectionSta?DEPTID=' + this.departmentId, {
+				this.$axios.get(this.basic_url + '/api-apps/app/inspectionSta?DEPTID=' + this.parentIds, {
 					params: data
 				}).then((res) => {
 					// console.log(res.data);

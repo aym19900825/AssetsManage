@@ -110,38 +110,38 @@
 	</el-card>
 
 	<!-- 产品 Begin -->
-		<el-dialog :modal-append-to-body="false" title="选择基础数据——产品" height="300px" :visible.sync="dialogVisible3" width="80%">
-			<!--搜索框 Begin-->
-			<div class="columns pull-right child-search">
-				<el-input placeholder="请输入产品名称" v-model="search">
-				</el-input>
-			</div>
-			<!--搜索框 End-->
-			<!-- 第二层弹出的表格 Begin-->
-			<el-table :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.PRO_NAME.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-				<el-table-column type="selection" fixed width="55" align="center">
-				</el-table-column>
-				<el-table-column label="产品编码" width="155" sortable prop="PRO_NUM">
-				</el-table-column>
-				<el-table-column label="产品名称" sortable prop="PRO_NAME">
-				</el-table-column>
-				<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
-				</el-table-column>
-				<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc">
-				</el-table-column>
-				<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
-				</el-table-column>
-				<el-table-column label="修改时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
-				</el-table-column>
-			</el-table>
-			
-			<!-- 表格 End-->
-			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible3 = false">取 消</el-button>
-		       <el-button type="primary" @click="addproclass">确 定</el-button>
-		    </span>
-		</el-dialog>
-		<!-- 产品 End -->
+	<el-dialog :modal-append-to-body="false" title="选择基础数据——产品" height="300px" :visible.sync="dialogVisible3" width="80%">
+		<!--搜索框 Begin-->
+		<div class="columns pull-right child-search">
+			<el-input placeholder="请输入产品名称" v-model="search">
+			</el-input>
+		</div>
+		<!--搜索框 End-->
+		<!-- 第二层弹出的表格 Begin-->
+		<el-table :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.PRO_NAME.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+			<el-table-column type="selection" fixed width="55" align="center">
+			</el-table-column>
+			<el-table-column label="产品编码" width="155" sortable prop="PRO_NUM">
+			</el-table-column>
+			<el-table-column label="产品名称" sortable prop="PRO_NAME">
+			</el-table-column>
+			<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
+			</el-table-column>
+			<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc">
+			</el-table-column>
+			<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
+			</el-table-column>
+			<el-table-column label="修改时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
+			</el-table-column>
+		</el-table>
+		
+		<!-- 表格 End-->
+		<span slot="footer" class="dialog-footer">
+	       <el-button type="primary" @click="addproclass">确 定</el-button>
+	       <el-button @click="dialogVisible3 = false">取 消</el-button>
+	    </span>
+	</el-dialog>
+	<!-- 产品 End -->
 </div>
 
 </template>
@@ -153,7 +153,7 @@
 		components: {
 			
 		},
-
+		props: ['parentIds'],
 		data() {
 			return {
 				basic_url: Config.dev_url,
@@ -235,10 +235,10 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				this.$axios.get(this.basic_url + '/api-apps/app/product?DEPTID=' + this.departmentId, {
+				this.$axios.get(this.basic_url + '/api-apps/app/product?DEPTID=' + this.parentIds, {
 					params: data
 				}).then((res) => {
-					// console.log(res.data);
+					// console.log(this.departmentId);
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)

@@ -1613,8 +1613,6 @@
 					for(var i = 0; i<res.data.WORLPLANLINEList.length; i++){
 							res.data.WORLPLANLINEList[i].isEditing = false;
 					}
-					console.log(2333333);
-					console.log(res.data);
 					this.WORKPLAN = res.data;
 					for(var j=0;j<this.selectData.length;j++){
 						if(this.WORKPLAN.PROP_UNIT==this.selectData[j].id){
@@ -1685,6 +1683,11 @@
 				var url = this.basic_url + '/api-apps/app/workplan/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
 					this.WORKPLAN = res.data;
+					for(var j=0;j<this.selectData.length;j++){
+						if(this.WORKPLAN.PROP_UNIT==this.selectData[j].id){
+							this.WORKPLAN.PROP_UNIT=this.selectData[j].fullname
+						}
+					}
 					this.worlplanlist = res.data.WORLPLANLINEList;
 					var worlplanlist = res.data.WORLPLANLINEList;
 					for(var i=0, len=worlplanlist.length; i<len; i++){

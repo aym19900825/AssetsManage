@@ -43,7 +43,7 @@
 									<el-row :gutter="5" class="pt10">
 										<el-col :span="6">
 											<el-form-item label="提出单位" prop="PROP_UNIT"  label-width="85px">
-												<el-select clearable v-model="WORKPLAN.PROP_UNIT" filterable allow-create default-first-option placeholder="请选择"  :disabled="noedit">
+												<el-select clearable v-model="WORKPLAN.PROP_UNIT" filterable allow-create default-first-option placeholder="请选择">
 													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 												</el-select>
 											</el-form-item>
@@ -51,20 +51,20 @@
 										<el-col :span="6">
 											<el-form-item label="产品类别" prop="ITEMTYPE"  label-width="85px">
 												<el-input v-model="WORKPLAN.ITEMTYPE" :disabled="true">
-													<el-button slot="append" icon="el-icon-search" @click="addprobtn"  :disabled="noedit"></el-button>
+													<el-button slot="append" icon="el-icon-search" @click="addprobtn"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="12">
 											<el-form-item label="计划描述" prop="DESCRIPTION"  label-width="85px">
-												<el-input v-model="WORKPLAN.DESCRIPTION"  :disabled="noedit"></el-input>
+												<el-input v-model="WORKPLAN.DESCRIPTION"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row :gutter="5">
 										<el-col :span="6">
 											<el-form-item label="类别" prop="TYPE"  label-width="85px">
-												<el-select v-model="WORKPLAN.TYPE" placeholder="请选择"  :disabled="noedit">
+												<el-select v-model="WORKPLAN.TYPE" placeholder="请选择">
 													<el-option label="监督抽查" value="1"></el-option>
 													<el-option label="质量抽查" value="3"></el-option>
 												</el-select>
@@ -72,17 +72,17 @@
 										</el-col>
 										<el-col :span="6">
 											<el-form-item label="编制人" prop="COMPACTOR"  label-width="85px">
-												<el-input v-model="WORKPLAN.COMPACTOR" :disabled="noedit"></el-input>
+												<el-input v-model="WORKPLAN.COMPACTOR"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="6">
 											<el-form-item label="审核人" prop="C_PERSON"  label-width="85px">
-												<el-input v-model="WORKPLAN.C_PERSON" :disabled="noedit"></el-input>
+												<el-input v-model="WORKPLAN.C_PERSON"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="6">
 											<el-form-item label="批准人" prop="APPRPERSON"  label-width="85px">
-												<el-input v-model="WORKPLAN.APPRPERSON" :disabled="noedit"></el-input>
+												<el-input v-model="WORKPLAN.APPRPERSON"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -91,9 +91,9 @@
 											<el-form-item label="提报日期" prop="REPORTDATE"  label-width="85px">
 											<div class="block">
 											    <el-date-picker
-											      v-model="WORKPLAN.REPORTDATE "
+											      v-model="WORKPLAN.REPORTDATE"
 											      type="date"
-											      placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 100%":disabled="noedit">
+											      placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 100%">
 											    </el-date-picker>
 											  </div>
 											 </el-form-item>
@@ -107,7 +107,7 @@
 												      placeholder="选择年度"
 												      value-format="yyyy"
 												      format="yyyy"
-												      :default-value="WORKPLAN.YEAR" style="width: 100%" :disabled="noedit">
+												      :default-value="WORKPLAN.YEAR" style="width: 100%">
 												    </el-date-picker>
 												</div>
 											</el-form-item>
@@ -230,8 +230,8 @@
 											</div>
 											<!-- <el-form :model="basisList" :rules="rules" ref="basisList" prop="basisList"> -->
 							            	<el-table :header-cell-style="rowClass" :data="basisList" border stripe :fit="true" max-length="260px" style="width: 100%;" :default-sort="{prop:'basisList', order: 'descending'}">
-							            		<el-table-column prop="NUMBER" label="序号" width="150" type="index"></el-table-column>
-												<el-table-column prop="WP_NUM" label="所属计划编号" width="150">
+							            		<el-table-column prop="NUMBER" label="序号" sortable width="150" type="index"></el-table-column>
+												<el-table-column prop="WP_NUM" label="所属计划编号" sortable width="150">
 							            			<!-- <template slot-scope="scope">
 											        	<span>{{scope.$index + 1}}</span>
 											      	</template> -->
@@ -239,10 +239,10 @@
 											        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_NUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_NUM}}</span>
 											      	</template>
 							            		</el-table-column>
-							            		<el-table-column prop="WP_LINENUM" label="所属计划序号" width="150"></el-table-column>
-							            		<el-table-column prop="S_NUM" label="标准编号" width="130"></el-table-column>
-							            		<el-table-column prop="S_NAME" label="标准名称" width="350"></el-table-column>
-							            		<el-table-column prop="VERSION" label="版本" width="80"></el-table-column>
+							            		<el-table-column prop="WP_LINENUM" label="所属计划序号" sortable width="150"></el-table-column>
+							            		<el-table-column prop="S_NUM" label="标准编号" sortable width="130"></el-table-column>
+							            		<el-table-column prop="S_NAME" label="标准名称" sortable width="350"></el-table-column>
+							            		<el-table-column prop="VERSION" label="版本" sortable width="80"></el-table-column>
 							            		<el-table-column fixed="right" label="操作" width="80">
 											      <template slot-scope="scope">
 											        <el-button
@@ -418,9 +418,9 @@
 							</el-collapse>
 						</div>
 						<div class="el-dialog__footer">
-							<el-button type="primary" @click="saveAndUpdate('WORKPLAN')" v-if="!viewtitle">保存</el-button>
+							<el-button type="primary" @click="saveAndUpdate('WORKPLAN')">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit('WORKPLAN')" v-show="addtitle">保存并继续</el-button>
-							<el-button @click='close' v-if="!viewtitle">取消</el-button>
+							<el-button @click='close'>取消</el-button>
 						</div>
 					</el-form>
 				</div>
@@ -520,9 +520,9 @@
 				<el-pagination background class="pull-right pt10 pb10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 				<!-- 第二层弹出的表格 End -->
-				<div slot="footer" class="el-dialog__footer">
-			       <el-button type="primary" @click="addbasis">确 定</el-button>
+				<div slot="footer" class="dialog-footer">
 			       <el-button @click="dialogVisible = false">取 消</el-button>
+			       <el-button type="primary" @click="addbasis">确 定</el-button>
 			    </div>
 			</el-dialog>
 			<!-- 检测依据弹出框 End -->
@@ -608,9 +608,9 @@
 		            :total="page.totalCount">
 		        </el-pagination>
 				<!-- 表格 End-->
-				<span slot="footer" class="el-dialog__footer">
-			       <el-button type="primary" @click="addbasis2">确 定</el-button>
+				<span slot="footer" class="dialog-footer">
 			       <el-button @click="dialogVisible2 = false">取 消</el-button>
+			       <el-button type="primary" @click="addbasis2">确 定</el-button>
 			    </span>
 			</el-dialog>
 			<!-- 检测项目与要求 End -->
@@ -636,9 +636,9 @@
 				<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 				<!-- 表格 End-->
-				<span slot="footer" class="el-dialog__footer">
-			       <el-button type="primary" @click="addproclass">确 定</el-button>
+				<span slot="footer" class="dialog-footer">
 			       <el-button @click="dialogVisible3 = false">取 消</el-button>
+			       <el-button type="primary" @click="addproclass">确 定</el-button>
 			    </span>
 			</el-dialog>
 			<!-- 产品类别 End -->
@@ -662,9 +662,9 @@
 								</el-table>
 								<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 								</el-pagination>
-				<span slot="footer" class="el-dialog__footer">
-			       <el-button type="primary" @click="addproname">确 定</el-button>
+				<span slot="footer" class="dialog-footer">
 			       <el-button @click="dialogVisible4 = false">取 消</el-button>
+			       <el-button type="primary" @click="addproname">确 定</el-button>
 			    </span>
 			</el-dialog>
 			<!-- 产品名称 End -->
@@ -693,10 +693,10 @@
 					layout="total, sizes, prev, pager, next"
 					:total="page.totalCount">
 				</el-pagination>
-				<div slot="footer" class="el-dialog__footer">
+				<span slot="footer" class="dialog-footer">
 			       <el-button @click="diaVisCustom = false">取 消</el-button>
 			       <el-button type="primary" @click="adddeptname">确 定</el-button>
-			    </div>
+			    </span>
 			</el-dialog>
 			<!-- 生产企业名称、受检企业名称 End -->
 		</div>
@@ -876,34 +876,22 @@
 				},
 				
 				rules: {
-					// CODE: [{required: true,trigger: 'blur',validator: validateCode,}],
-					// NAME:[{required: true,trigger: 'blur',validator: validateName,}],
-					PROP_UNIT:[{required: true,validator: validateUnit, trigger: 'change'}],//提出单位 
-					basisList:[{required: true,validator: validateBasislist,trigger: 'change'}],//产品类别
-					DESCRIPTION:[{required: true,trigger: 'blur',validator: this.Validators.isFillTips}],
-
+					CODE: [{required: true,trigger: 'blur',validator: validateCode,}],
+					NAME:[{required: true,trigger: 'blur',validator: validateName,}],
+					DESCRIPTION:[{required: true,message: '请填写计划描述',trigger: 'blur'}],
 					TYPE:[{required: true,message: '请选择类别', trigger: 'change'}],
-
-					COMPACTOR:[
-						{required: true, trigger: 'blur',message: '必填' },
-						{trigger: 'blur', validator: this.Validators.isNickname},
-					],//编制人
-					C_PERSON:[
-						{required: true, trigger: 'blur',message: '必填' },
-						{trigger: 'blur', validator: this.Validators.isNickname},
-					],//审核人
-					APPRPERSON:[
-						{required: true, trigger: 'blur',message: '必填' },
-						{trigger: 'blur', validator: this.Validators.isNickname},
-					],//批准人
-
+					COMPACTOR:[{required: true,message: '请填写编制人',trigger: 'blur'}],
+					C_PERSON:[{required: true,message: '请填写审核人',trigger: 'blur'}],
+					APPRPERSON:[{required: true,message: '请填写批准人',trigger: 'blur'}],
 					CONTACT_ADDRESS:[{required: true,trigger:'blur',validator: validateAddress,}],
 					PHONE:[{required: true,trigger: 'blur',validator: validatePhone,}],
 					EMAIL:[{required: true,trigger: 'blur',validator:validateEmail,}],
+					PROP_UNIT:[{required: true,validator: validateUnit, trigger: 'change'}],//提出单位 
        				ITEMTYPE:[{required: true,validator: validateItemdata}],//产品类别 
        				YEAR: [{type: 'string',required: true,message: '请选择年度',trigger: 'change' }],//年度
        				REPORTDATE: [{type: 'string',required: true,message: '请选择提报日期',trigger: 'change'}],//提报日期
        				//检测依据 
+					basisList:[{required: true,validator: validateBasislist,trigger: 'change'}],//产品类别
 					ITEM_NAME:[{required: true,message: '请填写',trigger: 'blur'}], //产品名称 
 					MODEL:[{required: true,message: '请填写',trigger: 'blur'}],
 					REMARKS:[{required: true,message: '请填写',trigger: 'blur'}],
@@ -1932,6 +1920,9 @@
 			// 		VERSION: this.searchList.VERSION,
 			// 		STATUS: this.searchList.STATUS,
 			// 	};
+			
+			
+				
 			
 			
 			// },

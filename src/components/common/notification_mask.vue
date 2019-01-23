@@ -137,7 +137,7 @@
 										<el-col :span="8">
 											<el-form-item label="受检企业" prop="V_NAME" label-width="140px">
 												<el-input v-model="dataInfo.V_NAME" :disabled="true">
-													   <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addCompany"></el-button>
+													   <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addCompany" ></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -154,7 +154,7 @@
 										<el-col :span="6">
 											<el-form-item label="接收人" prop="ACCEPT_PERSONDesc" label-width="110px">
 												<el-input v-model="dataInfo.ACCEPT_PERSONDesc" :disabled="edit">
-													<el-button slot="append" icon="el-icon-search" @click="getPeople(2)"></el-button>
+													<el-button slot="append" icon="el-icon-search" @click="getPeople(2)" :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>

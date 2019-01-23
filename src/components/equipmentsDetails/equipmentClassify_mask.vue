@@ -149,12 +149,16 @@
 				selectData: [],
 				rules: {
 					CLASSIFY_NUM: [{
-						required: false,
-						trigger: 'change',
-						validator: validateNum,
+						required: false, trigger: 'change', validator: this.Validators.isWorknumber
 					}],
-					CLASSIFY_DESCRIPTION: [{required: true,trigger: 'blur',message: '请填写分类描述'}],
-                    PARENT: [{required: true,trigger: 'blur',message: '请填写父级分类'}],
+					CLASSIFY_DESCRIPTION: [
+						{required: true,trigger: 'blur', message: '必填'},
+						{trigger: 'blur', validator: this.Validators.isSpecificKey}
+					],
+                    PARENT: [
+						{required: true,trigger: 'blur', message: '必填'},
+						{trigger: 'blur', validator: this.Validators.isSpecificKey}
+					],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据

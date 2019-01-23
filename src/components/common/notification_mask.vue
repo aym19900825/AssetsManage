@@ -631,7 +631,7 @@
 			addproduct(){//受检产品名称
 				this.$refs.productchild.visible();
 			},
-			
+			//单位
 			addCompany(){
 				this.$refs.enterprisechild.visible();
 			},                                                                                                                                                                                                                                                                                                                                                                                                                                                                           

@@ -205,17 +205,17 @@
 				})
 			},
 			loadMore () {//表格滚动加载
-			   // if (this.loadSign) {
-			   //   this.loadSign = false
-			   //   this.page.currentPage++
-			   //   if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			   //     return
-			   //   }
-			   //   setTimeout(() => {
-			   //     this.loadSign = true
-			   //   }, 1000)
-			   //   this.requestData_rawDataTem2()
-			   // }
+			   if (this.loadSign) {
+			     this.loadSign = false
+			     this.page.currentPage++
+			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+			       return
+			     }
+			     setTimeout(() => {
+			       this.loadSign = true
+			     }, 1000)
+			     this.viewfield_rawDataTem2(this.selParentId,this.parentId);
+			   }
 			 },
 			 addprobtn(row){//查找基础数据中的检验/检测项目
 				this.catedata = row;//弹出框中选中的数据赋值给到table行中
@@ -382,8 +382,9 @@
 								"P_NUM": this.parentId,
 								"NUM": '',
 								"DECRIPTION": '',
-								"STATUS": '1',
+								"STATUS": '',
 								"VERSION": '',
+								"DEPTID": '',
 								"CHANGEBY": this.currentUser,
 								"CHANGEDATE": this.currentDate,
 								"isEditing": true,
@@ -411,9 +412,10 @@
 					    "NUM": row.NUM,
 						"DECRIPTION": row.DECRIPTION,
 						"STATUS": row.STATUS,
+					    "VERSION": row.VERSION,
+					    "DEPTID": row.DEPTID,
 						"CHANGEBY": row.CHANGEBY,
 					    "CHANGEDATE": row.CHANGEDATE,
-					    "VERSION": row.VERSION,
 					}
 					this.$axios.post(url, submitData).then((res) => {
 						if(res.data.resp_code == 0) {
@@ -465,6 +467,7 @@
 				this.dialogVisible3 = false
 				this.catedata.NUM = this.selData[0].NUM;
 				this.catedata.DECRIPTION = this.selData[0].DECRIPTION;
+				this.catedata.DEPTID = this.selData[0].DEPTID;
 				this.catedata.VERSION = this.selData[0].VERSION;
 				this.$emit('request');
 			},

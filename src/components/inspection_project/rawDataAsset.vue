@@ -208,7 +208,7 @@
 			   //   setTimeout(() => {
 			   //     this.loadSign = true
 			   //   }, 1000)
-			   //   this.requestData_rawDataAsset()
+			   //   this.viewfield_rawDataAsset(this.selParentId,this.parentId);
 			   // }
 			 },
 			 addprobtn(row){//查找基础数据中的检验/检测项目
@@ -221,8 +221,8 @@
 				this.$axios.get(this.basic_url + '/api-apps/app/asset?DEPTID=' + this.parentIds, {
 					params: data
 				}).then((res) => {
-					console.log(this.parentIds);
-					console.log(res.data);
+					// console.log(this.parentIds);
+					// console.log(res.data);
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -245,16 +245,16 @@
 			},
 			sizeChange(val) {//页数
 		      this.page.pageSize = val;
-		      this.requestData_rawDataAsset();
+		      this.viewfield_rawDataAsset(this.selParentId,this.parentId);
 		    },
 		    currentChange(val) {//当前页
 		      this.page.currentPage = val;
-		      this.requestData_rawDataAsset();
+		      this.viewfield_rawDataAsset(this.selParentId,this.parentId);
 		    },
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
-				this.requestData_rawDataAsset();
+				this.viewfield_rawDataAsset(this.selParentId,this.parentId);
 			},
 			judge(data) {//taxStatus 信息状态布尔值
 				return data.enabled ? '活动' : '不活动'
@@ -374,9 +374,10 @@
 							var obj = {
 								"P_NUM": this.parentId,
 								"DECRIPTION": '',
-								"STATUS": '1',
+								"STATUS": '',
 								"NUM": '',
-								"VERSION": 1,
+								"VERSION": '',
+								"DEPTID": '',
 								"CHANGEBY": this.currentUser,
 								"CHANGEDATE": this.currentDate,
 								"isEditing": true,
@@ -404,9 +405,10 @@
 					    "NUM": row.NUM,
 						"DECRIPTION": row.DECRIPTION,
 						"STATUS": row.STATUS,
+					    "VERSION": row.VERSION,
+					    "DEPTID": row.DEPTID,
 						"CHANGEBY": row.CHANGEBY,
 					    "CHANGEDATE": row.CHANGEDATE,
-					    "VERSION": row.VERSION,
 					}
 					this.$axios.post(url, submitData).then((res) => {
 						if(res.data.resp_code == 0) {
@@ -415,7 +417,8 @@
 								type: 'success'
 							});
 							//重新加载数据
-							this.requestData_rawDataAsset();
+							// this.requestData_rawDataAsset();
+							this.viewfield_rawDataAsset(this.selParentId,this.parentId);
 						}
 					}).catch((err) => {
 						this.$message({
@@ -441,7 +444,7 @@
 								message: '删除成功',
 								type: 'success'
 							});
-							this.requestData_rawDataAsset();
+							this.viewfield_rawDataAsset(this.selParentId,this.parentId);
 						}
 					}).catch((err) => {
 						this.$message({
@@ -457,14 +460,15 @@
 				this.dialogVisible3 = false
 				this.catedata.NUM = this.selData[0].ASSETNUM;
 				this.catedata.DECRIPTION = this.selData[0].DESCRIPTION;
+				this.catedata.DEPTID = this.selData[0].DEPTID;
 				this.catedata.VERSION = this.selData[0].VERSION;
 				this.$emit('request');
 			},
 		},
 		
-		mounted() {
-			this.requestData_rawDataAsset();
-		},
+		// mounted() {
+		// 	this.requestData_rawDataAsset();
+		// },
 		
 
 	}

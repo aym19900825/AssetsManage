@@ -27,7 +27,7 @@ import EasyScroll from 'easyscroll'//自定义滚动条
 import common from './assets/js/common.js'
 import store from './store.js'
 import 'babel-polyfill'
-
+import Validators from './core/util/validators.js'
 
 //import './jquery/dist/jquery.min.js'
 //import 'bootstrap/dist/css/bootstrap.min.css'
@@ -74,6 +74,7 @@ Vue.config.productionTip = false
 Vue.prototype.$echarts = echarts
 Vue.prototype.$moment = moment//赋值使用
 Vue.prototype.common = common
+Vue.prototype.Validators = Validators
 Vue.use(ElementUI)
 Vue.use(vueztree)
 // Vue.use(EasyScroll)//自定义滚动条

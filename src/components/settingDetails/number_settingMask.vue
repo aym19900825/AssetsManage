@@ -111,7 +111,6 @@
 
 <script>
 	import Config from '../../config.js'
-	import Validators from '../../core/util/validators.js'
 	export default {
 		name: 'masks',
 		props: {
@@ -179,12 +178,12 @@
 				rules:{
           			AUTOKEY:[
 						{ required: true, message: '必填', trigger: 'blur'},
-						{ validator: Validators.isWorknumber, trigger: 'blur'}
+						{ validator: this.Validators.isWorknumber, trigger: 'blur'}
 					],
-					PREFIX:[{ required: false, trigger: 'blur', validator: Validators.isEnglish}],
+					PREFIX:[{ required: false, trigger: 'blur', validator: this.Validators.isEnglish}],
           			S_NUM:[
 						{ required: true, message: '必填', trigger: 'blur'},
-						{ validator: Validators.isInteger, trigger: 'blur'}
+						{ validator: this.Validators.isInteger, trigger: 'blur'}
 					],
           		
 	          	},

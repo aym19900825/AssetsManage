@@ -120,11 +120,9 @@
 
 <script>
 	import Config from '../../config.js'
-	import Validators from '../../core/util/validators.js'
 	export default {
 		name: 'masks',
 		data() {
-			
 			return {
 				basic_url: Config.dev_url,
 				value: '',
@@ -179,12 +177,12 @@
 					deptId: '',
 				},
 				rules: { //验证表单
-					code: [{ required: false, trigger: 'blur', validator: Validators.isWorknumber}],
+					code: [{ required: false, trigger: 'blur', validator: this.Validators.isWorknumber}],
 					name: [
 						{required: true, message: '必填' ,trigger: 'blur',},
-						{validator: Validators.isNickname, trigger: 'blur'},
+						{validator: this.Validators.isNickname, trigger: 'blur'},
 					],
-					tips: [{ required: false, trigger: 'blur', validator: Validators.isSpecificKey}],
+					tips: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],
 					range: [{ required: true, message: '请选择机构属性', trigger: 'chang'}]
 					
 				},

@@ -295,7 +295,6 @@
 
 <script>
 	import Config from '../../config.js'
-	import Validators from '../../core/util/validators.js'
 	export default {
 		name: 'customer_masks',
 		data() {
@@ -405,18 +404,18 @@
 				rules: {
 					CODE:[
 						{required: true,message: '必填',trigger: 'blur'},
-						{validator: Validators.isWorknumber, trigger: 'blur'}
+						{validator: this.Validators.isWorknumber, trigger: 'blur'}
 					],
 					NAME:[
 						{required: true,message: '必填',trigger: 'blur'},
-						{validator: Validators.isNickname, trigger: 'blur'}
+						{validator: this.Validators.isNickname, trigger: 'blur'}
 					],
 					CONTACT_ADDRESS:[
 						{required: true,message: '必填',trigger: 'blur'},
-						{validator: Validators.isSpecificKey, trigger: 'blur'}
+						{validator: this.Validators.isSpecificKey, trigger: 'blur'}
 					],
-					MEMO:[{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],
-					ZIPCODE:[{required: false,trigger: 'blur',validator: Validators.isZipcode}],
+					MEMO:[{required: false,trigger: 'blur',validator: this.Validators.isSpecificKey}],
+					ZIPCODE:[{required: false,trigger: 'blur',validator: this.Validators.isZipcode}],
 					// PERSON:[{required: true,trigger: 'blur',validator: validatePerson}],
 					// PHONE:[{required: true,trigger: 'blur',validator: validatePhone}],
 					// EMAIL:[{required: true,trigger: 'blur',validator: validateEmail}],

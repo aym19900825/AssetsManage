@@ -235,7 +235,7 @@
 
 <script>
 	import Config from '../../config.js'
-	import Validators from '../../core/util/validators.js'
+	// import Validators from '../../core/util/validators.js'
 	export default {
 		name: 'masks',
 		props: {
@@ -326,23 +326,23 @@
 					label: "fullname"
 				},
 				rules:{
-   					step: [{required:true,trigger: 'blur',validator: Validators.isWorknumber}],//机构序号
+   					step: [{required:true,trigger: 'blur',validator: this.Validators.isWorknumber}],//机构序号
 					fullname: [
 						{required:true, trigger: 'blur', message: '必填'},
-						{validator: Validators.isNickname, trigger: 'blur'},
+						{validator: this.Validators.isNickname, trigger: 'blur'},
 					],//机构名称
 					org_range: [{required:true,trigger: 'change',message: '请选择机构类型'}],//选择机构类型
    					type: [{required:true,trigger: 'change',message: '请选择机构属性'}],//选择机构属性
-   					telephone: [{required:false,trigger: 'blur',validator: Validators.isTelephone}],//电话
-					fax: [{required:false,trigger: 'blur',validator: Validators.isTelephone}],//传真
-					email:[{required:false, trigger: 'blur', validator: Validators.isEmail,}],//邮箱
-					code:[{required: false,trigger: 'blur',validator: Validators.isWorknumber}],//机构属性
-					address:[{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],//联系地址
-					zipcode:[{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],//邮政编码
-					telephone:[{required: false,trigger: 'blur',validator: Validators.isTelephone}],//电话
-					fax:[{required: false,trigger: 'blur',validator: Validators.isTelephone}],//传真
-					email:[{required: false,trigger: 'blur',validator: Validators.isEmail}],//邮箱
-					tips:[{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],//备注
+   					telephone: [{required:false,trigger: 'blur',validator: this.Validators.isTelephone}],//电话
+					fax: [{required:false,trigger: 'blur',validator: this.Validators.isTelephone}],//传真
+					email:[{required:false, trigger: 'blur', validator: this.Validators.isEmail,}],//邮箱
+					code:[{required: false,trigger: 'blur',validator: this.Validators.isWorknumber}],//机构属性
+					address:[{required: false,trigger: 'blur',validator: this.Validators.isSpecificKey}],//联系地址
+					zipcode:[{required: false,trigger: 'blur',validator: this.Validators.isSpecificKey}],//邮政编码
+					telephone:[{required: false,trigger: 'blur',validator: this.Validators.isTelephone}],//电话
+					fax:[{required: false,trigger: 'blur',validator: this.Validators.isTelephone}],//传真
+					email:[{required: false,trigger: 'blur',validator: this.Validators.isEmail}],//邮箱
+					tips:[{required: false,trigger: 'blur',validator: this.Validators.isSpecificKey}],//备注
 				}
 			}
 		},

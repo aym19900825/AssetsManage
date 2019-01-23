@@ -126,19 +126,19 @@
 	<!--右侧内容显示 End-->
 	</div>
 	<!-- 产品类别 Begin -->
-		<el-dialog :modal-append-to-body="false" title="选择基础数据——产品类别" height="300px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
+		<el-dialog :modal-append-to-body="false" title="选择基础数据——产品类别" height="300px" :visible.sync="dialogVisible3" width="80%">
 			<!--搜索框 Begin-->
-			<div class="columns pull-right" style="width: 160px;">
-				<el-input placeholder="请输入标准名称" v-model="search">
+			<div class="columns pull-right child-search">
+				<el-input placeholder="请输入类别名称" v-model="search">
 				</el-input>
 			</div>
 			<!--搜索框 End-->
 			<el-table :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.TYPE.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 				<el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column>
-				<el-table-column label="编码" width="155" sortable prop="NUM">
+				<el-table-column label="类别编码" width="155" sortable prop="NUM">
 				</el-table-column>
-				<el-table-column label="名称" sortable prop="TYPE">
+				<el-table-column label="类别名称" sortable prop="TYPE">
 				</el-table-column>
 				<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
 				</el-table-column>

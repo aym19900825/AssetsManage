@@ -54,7 +54,7 @@
 										<el-col :span="8">
 											<el-form-item label="委托书编号" prop="PROXYNUM">
 												<el-input v-model="workorderForm.PROXYNUM" :disabled="edit">
-													<el-button slot="append" icon="el-icon-search" @click="addworkorder"></el-button>
+													<el-button slot="append" icon="el-icon-search" @click="addworkorder" :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -93,7 +93,7 @@
 										<el-col :span="8">
 											<el-form-item label="样品名称" prop="ITEM_NAME">
 												<el-input v-model="workorderForm.ITEM_NAME" :disabled="edit">
-													<el-button slot="append" icon="el-icon-search" @click="addsample"></el-button>
+													<el-button slot="append" icon="el-icon-search" @click="addsample" :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -241,7 +241,7 @@
 														<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.nickname"></el-option>
 													</el-select> -->
 													<el-input v-model="workorderForm.ITEM_PROFESSIONAL_GROUP" :disabled="edit">
-														<el-button slot="append" icon="el-icon-search" @click="addperson('2')"></el-button>
+														<el-button slot="append" icon="el-icon-search" @click="addperson('2')" :disabled="noedit"></el-button>
 													</el-input>
 												</el-form-item>
 											</el-col>
@@ -276,7 +276,7 @@
 														<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.nickname"></el-option>
 													</el-select> -->
 													<el-input v-model="workorderForm.RETURN_ITEM_USER" :disabled="edit">
-														<el-button slot="append" icon="el-icon-search" @click="addperson('3')"></el-button>
+														<el-button slot="append" icon="el-icon-search" @click="addperson('3')" :disabled="noedit"></el-button>
 													</el-input>
 												</el-form-item>
 											</el-col>
@@ -328,7 +328,7 @@
 											<el-col :span="8">
 												<el-form-item label="报告模板">
 													<el-input placeholder="请输入内容" v-model="workorderForm.P_NUM" :disabled="noedit">
-														 <el-button slot="append" icon="el-icon-search"></el-button>
+														 <el-button slot="append" icon="el-icon-search" :disabled="noedit"></el-button>
 													</el-input>
 												</el-form-item>
 											</el-col>
@@ -613,7 +613,7 @@
 								<!-- 录入人信息 End -->
 							</el-collapse>
 						</div>
-						<div class="el-dialog__footer">
+						<div class="el-dialog__footer" v-if="!viewtitle">
 								<el-button type="primary" @click="submitForm()">保存</el-button>
 								<el-button type="success" v-show="addtitle">保存并继续</el-button>
 								<el-button @click='close'>取消</el-button>

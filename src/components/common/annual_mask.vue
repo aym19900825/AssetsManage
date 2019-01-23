@@ -43,7 +43,7 @@
 									<el-row :gutter="5" class="pt10">
 										<el-col :span="6">
 											<el-form-item label="提出单位" prop="PROP_UNIT"  label-width="85px">
-												<el-select clearable v-model="WORKPLAN.PROP_UNIT" filterable allow-create default-first-option placeholder="请选择">
+												<el-select clearable v-model="WORKPLAN.PROP_UNIT" filterable allow-create default-first-option placeholder="请选择"  :disabled="noedit">
 													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 												</el-select>
 											</el-form-item>
@@ -51,20 +51,20 @@
 										<el-col :span="6">
 											<el-form-item label="产品类别" prop="ITEMTYPE"  label-width="85px">
 												<el-input v-model="WORKPLAN.ITEMTYPE" :disabled="true">
-													<el-button slot="append" icon="el-icon-search" @click="addprobtn"></el-button>
+													<el-button slot="append" icon="el-icon-search" @click="addprobtn"  :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="12">
 											<el-form-item label="计划描述" prop="DESCRIPTION"  label-width="85px">
-												<el-input v-model="WORKPLAN.DESCRIPTION"></el-input>
+												<el-input v-model="WORKPLAN.DESCRIPTION"  :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row :gutter="5">
 										<el-col :span="6">
 											<el-form-item label="类别" prop="TYPE"  label-width="85px">
-												<el-select v-model="WORKPLAN.TYPE" placeholder="请选择">
+												<el-select v-model="WORKPLAN.TYPE" placeholder="请选择"  :disabled="noedit">
 													<el-option label="监督抽查" value="1"></el-option>
 													<el-option label="质量抽查" value="3"></el-option>
 												</el-select>
@@ -72,17 +72,17 @@
 										</el-col>
 										<el-col :span="6">
 											<el-form-item label="编制人" prop="COMPACTOR"  label-width="85px">
-												<el-input v-model="WORKPLAN.COMPACTOR"></el-input>
+												<el-input v-model="WORKPLAN.COMPACTOR" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="6">
 											<el-form-item label="审核人" prop="C_PERSON"  label-width="85px">
-												<el-input v-model="WORKPLAN.C_PERSON"></el-input>
+												<el-input v-model="WORKPLAN.C_PERSON" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="6">
 											<el-form-item label="批准人" prop="APPRPERSON"  label-width="85px">
-												<el-input v-model="WORKPLAN.APPRPERSON"></el-input>
+												<el-input v-model="WORKPLAN.APPRPERSON" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -91,9 +91,9 @@
 											<el-form-item label="提报日期" prop="REPORTDATE"  label-width="85px">
 											<div class="block">
 											    <el-date-picker
-											      v-model="WORKPLAN.REPORTDATE"
+											      v-model="WORKPLAN.REPORTDATE "
 											      type="date"
-											      placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 100%">
+											      placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 100%":disabled="noedit">
 											    </el-date-picker>
 											  </div>
 											 </el-form-item>
@@ -107,7 +107,7 @@
 												      placeholder="选择年度"
 												      value-format="yyyy"
 												      format="yyyy"
-												      :default-value="WORKPLAN.YEAR" style="width: 100%">
+												      :default-value="WORKPLAN.YEAR" style="width: 100%" :disabled="noedit">
 												    </el-date-picker>
 												</div>
 											</el-form-item>
@@ -152,7 +152,6 @@
 														<el-button slot="append" icon="el-icon-search" @click="addproduct(scope.row)"></el-button>
 													</el-input>
 													<span v-if="!scope.row.isEditing">{{scope.row.ITEM_NAME}}</span>
-												</el-form-item>
 											</template>
 										</el-table-column>
 									    <el-table-column prop="MODEL" label="规格型号" sortable width="120px">
@@ -419,9 +418,9 @@
 							</el-collapse>
 						</div>
 						<div class="el-dialog__footer">
-							<el-button type="primary" @click="saveAndUpdate('WORKPLAN')">保存</el-button>
+							<el-button type="primary" @click="saveAndUpdate('WORKPLAN')" v-if="!viewtitle">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit('WORKPLAN')" v-show="addtitle">保存并继续</el-button>
-							<el-button @click='close'>取消</el-button>
+							<el-button @click='close' v-if="!viewtitle">取消</el-button>
 						</div>
 					</el-form>
 				</div>

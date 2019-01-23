@@ -291,6 +291,8 @@
 					});
 					return;
 				} else {
+					console.log(2333333);
+					console.log(this.selData[0].id);
 					this.$refs.child.detail(this.selData[0].id);
 				}
 			},

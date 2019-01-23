@@ -28,7 +28,7 @@
 											</el-input>
 										</el-col>-->
 										<el-col :span="4" class="pull-right">
-											<el-input v-model="samplesForm.STATE" :disabled="true">
+											<el-input v-model="samplesForm.STATEDesc" :disabled="true">
 												<template slot="prepend">状态</template>
 											</el-input>
 										</el-col>
@@ -179,7 +179,7 @@
 					</el-table-column>
 					<el-table-column label="接样日期" sortable width="140px" :formatter="dateFormat" prop="RECIP_DATE">
 					</el-table-column>
-					<el-table-column label="样品状态" sortable width="100px" prop="STATE">
+					<el-table-column label="样品状态" sortable width="100px" prop="STATEDesc">
 					</el-table-column>
 					<!--<el-table-column label="信息状态" sortable width="140px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
 					</el-table-column>-->

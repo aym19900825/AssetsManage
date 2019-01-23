@@ -35,10 +35,8 @@ axios.interceptors.response.use(
   },
   error => {
     loading.close();
+    // router.push({ path: '/' });
 
-    if (error.response) {
-
-    router.push({ path: '/' });
     if (error && error.response) {
 
       switch (error.response.status) {
@@ -49,7 +47,6 @@ axios.interceptors.response.use(
       }
     }
     return Promise.reject(error.response.data);
-    }
   },
 
 )

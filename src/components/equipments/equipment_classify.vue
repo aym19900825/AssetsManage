@@ -169,9 +169,7 @@
                     '分类描述',
                     '父级分类',
 					// '信息状态',
-					// '录入人',
 					'录入时间',
-					// '修改人',
 					'修改时间'
 				],
 				tableHeader: [{
@@ -190,18 +188,10 @@
 					// 	label: '信息状态',
 					// 	prop: 'STATUS'
 					// },
-					// {
-					// 	label: '录入人',
-					// 	prop: 'ENTERBY'
-					// },
 					{
 						label: '录入时间',
 						prop: 'ENTERDATE'
 					},
-					// {
-					// 	label: '修改人',
-					// 	prop: 'CHANGEBY'
-					// },
 					{
 						label: '修改时间',
 						prop: 'CHANGEDATE'
@@ -339,7 +329,7 @@
 			},
 			//查看
 			 view(data) {
-			 	this.CATEGORY =data;
+			 	this.CATEGORY = data;
 				this.$refs.categorymask.view();
 			},
 			//高级查询
@@ -524,10 +514,9 @@
         		console.log(childValue);
         		this.$refs.navsheader.showClick(childValue);
               },
-              //机构树
+            //  机构树
 			getKey() {
 				let that = this;
-				// 192.168.1.169:9100/api-apps/app/assetClass/tree?tree_id=CLASSIFY_NUM&tree_pid=PARENT
 				var url = this.basic_url + '/api-apps/app/assetClass/tree?tree_id=CLASSIFY_NUM&tree_pid=PARENT';
 				this.$axios.get(url, {}).then((res) => {
 					console.log(2333);
@@ -538,7 +527,7 @@
 			},
 			transformTree(data) {
 				for(var i = 0; i < data.length; i++) {
-					data[i].name = data[i].fullname;
+					data[i].name = data[i].CLASSIFY_DESCRIPTION;
 					if(!data[i].pid || $.isArray(data[i].subDepts)) {
 						data[i].iconClass = 'icon-file-normal';
 					} else {

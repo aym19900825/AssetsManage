@@ -154,14 +154,11 @@ export default {
             this.$store.dispatch('setMenuIdAct',item.id);
 			var url = _this.basic_url + '/api-user/menus/findSecondByRoleIdAndFisrtMenu';
 			_this.$axios.get(url, {params: data}).then((res) => {
-				console.log(res);
 				if(res.data!="undefined"&&res.data.length>0){
 					item = res.data[0];
-					console.log(item);
 				}
 				
 					_this.$store.dispatch('setSelectedNavAct',item);
-					console.log(_this.$store.state.selectedNav);
 //					_this.$selectedNav=item;
 					var flag="1";
 					for(var i=0;i<_this.$store.state.clickedNavs.length;i++){
@@ -181,7 +178,6 @@ export default {
 					}
 					if(flag=="0"){
 						_this.$store.state.clickedNavs.push(item);
-						console.log(item);
 						setTimeout(function(){
 				 			var left = $('.page-tabs').offset().left; 
 				            //tabs总宽度
@@ -234,7 +230,10 @@ export default {
 	        this.$axios.get(url, {}).then((res) => {
 	            this.applistdata = res.data;
 	        }).catch(error => {
-	            console.log('请求失败');
+	           this.$message({
+					message: '网络错误，请重试',
+					type: 'error'
+				});
 	        })
         },
 	},
@@ -253,17 +252,22 @@ export default {
         	this.$store.dispatch('setRoleIdAct',res.data.id);
       		this.getFirstMenus(roleid);
       		}).catch(error => {
-            console.log('请求失败111');
+            this.$message({
+					message: '网络错误，请重试',
+					type: 'error'
+				});
        		})
 		}else{
 			var roleid=this.$store.state.roleid;
 	        var url = this.basic_url + '/api-user/menus/findFirstByRoleId/' + roleid;
 	        
 	        this.$axios.get(url, {}).then((res) => {
-	        	console.log(res);
 	            this.applistdata = res.data;
 	        }).catch(error => {
-	            console.log('请求失败');
+	           this.$message({
+					message: '网络错误，请重试',
+					type: 'error'
+				});
 	        })
 		}
       	

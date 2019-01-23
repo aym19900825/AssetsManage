@@ -82,7 +82,6 @@
 											<el-col :span="4">
 												<el-radio label="11">其它</el-radio>
 											</el-col>
-										
 										</el-radio-group>
 									</el-form-item>
 								</el-collapse-item>
@@ -138,7 +137,7 @@
 										<el-col :span="8">
 											<el-form-item label="受检企业" prop="V_NAME" label-width="140px">
 												<el-input v-model="dataInfo.V_NAME" :disabled="true">
-													   <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addCompany"></el-button>
+													   <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addCompany" ></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -155,7 +154,7 @@
 										<el-col :span="6">
 											<el-form-item label="接收人" prop="ACCEPT_PERSONDesc" label-width="110px">
 												<el-input v-model="dataInfo.ACCEPT_PERSONDesc" :disabled="edit">
-													<el-button slot="append" icon="el-icon-search" @click="getPeople(2)"></el-button>
+													<el-button slot="append" icon="el-icon-search" @click="getPeople(2)" :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -191,7 +190,7 @@
 												</el-table-column>
 												<el-table-column label="序号" sortable width="80px" prop="NUMBER" type="index">
 												</el-table-column>
-												<el-table-column label="检验标准编号" sortable width="120px" prop="S_NUM">
+												<el-table-column label="检验标准编号" sortable width="200px" prop="S_NUM">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入内容">
@@ -223,7 +222,7 @@
 														</el-form-item>
 													</template>
 												</el-table-column>
-												<el-table-column prop="VERSION" label="版本" sortable>
+												<el-table-column prop="VERSION" label="版本" sortable width="200px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入内容"></el-input>
@@ -241,7 +240,7 @@
 												<el-table-column label="附件" sortable width="120px">
 													<template slot-scope="scope">
 														<el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="3" :on-exceed="handleExceed" :file-list="fileList">
-															<el-button size="small" type="primary">点击上传</el-button>
+															<el-button size="small" type="primary" v-if="!viewtitle">点击上传</el-button>
 														</el-upload>
 													</template>
 												</el-table-column>
@@ -402,8 +401,9 @@
 					</div>	
 				</div>
 			</div>
+			<!-- 人员 -->
 			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
-				<el-table :data="gridData" @selection-change="SelChange">
+				<el-table :header-cell-style="rowClass" :data="gridData" line-center border stripe height="400px" style="width: 100%;" :default-sort="{prop:'gridData', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" width="55" fixed>
 					</el-table-column>
 					<el-table-column label="ID" sortable width="50px" prop="id">
@@ -417,73 +417,15 @@
 				</el-table>
 				<el-pagination background class="pull-right" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
-				<span slot="footer" class="dialog-footer" v-if="noviews">
+				<span slot="footer" class="dialog-footer">
 	    			<el-button type="primary" @click="dailogconfirm()">确 定</el-button>
 	    			<el-button @click="dialogVisible = false">取 消</el-button>
 	  			</span>
 			</el-dialog>
-			<!-- <el-dialog :modal-append-to-body="false" title="承检部门" :visible.sync="dialogVisiblecompany" width="30%" :before-close="handleClose">
-				<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @check-change="handleCheckChange">
-				</el-tree>
-				<span slot="footer" class="dialog-footer">
-			       <el-button type="primary" @click="diaconfirmcom();" >确 定</el-button>
-			       <el-button @click="dialogVisiblecompany = false">取 消</el-button>
-			    </span>
-			</el-dialog> -->
-			<!-- 产品名称 Begin -->
-			<el-dialog :modal-append-to-body="false" title="产品名称" :visible.sync="dialogVisible1" width="80%" :before-close="handleClose">
-				<el-table :header-cell-style="rowClass" :data="productList" line-center border stripe height="400px" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-						<el-table-column type="selection" fixed width="55" align="center">
-						</el-table-column>
-						<el-table-column label="编码" width="155" sortable prop="PRO_NUM">
-						</el-table-column>
-						<el-table-column label="名称" sortable prop="PRO_NAME">
-						</el-table-column>
-						<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
-						</el-table-column>
-						<el-table-column label="机构" width="185" sortable prop="DEPARTMENTDesc">
-						</el-table-column>
-						<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
-						</el-table-column>
-						<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat">
-						</el-table-column>
-					</el-table>
-					<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-					</el-pagination>
-				<span slot="footer" class="dialog-footer">
-			       <el-button type="primary" @click="addproname">确 定</el-button>
-			       <el-button @click="dialogVisible1 = false">取 消</el-button>
-			    </span>
-			</el-dialog>
-			<!-- 产品名称 End -->
-			<!-- 受检企业 Begin -->
-			<el-dialog :modal-append-to-body="false" title="受检企业" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
-				<el-table :data="customerList" border stripe :header-cell-style="rowClass" height="400px" style="width: 100%;" :default-sort="{prop:'customerList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-						<el-table-column type="selection" width="55" fixed align="center">
-						</el-table-column>
-						<el-table-column label="组织机构代码" width="200" sortable prop="CODE">
-						</el-table-column>
-						<el-table-column label="单位名称" width="300" sortable prop="NAME">
-						</el-table-column>
-						<el-table-column label="联系地址" sortable prop="CONTACT_ADDRESS">
-						</el-table-column>
-					</el-table>
-					<el-pagination background class="pull-right pt10"
-			            @size-change="sizeChange"
-			            @current-change="currentChange"
-			            :current-page="page.currentPage"
-			            :page-sizes="[10, 20, 30, 40]"
-			            :page-size="page.pageSize"
-			            layout="total, sizes, prev, pager, next"
-			            :total="page.totalCount">
-			        </el-pagination>
-				<span slot="footer" class="dialog-footer">
-			       <el-button type="primary" @click="addcomname">确 定</el-button>
-			       <el-button @click="dialogVisible2 = false">取 消</el-button>
-			    </span>
-			</el-dialog>
-			<!-- 产品名称 End -->
-			
+			<!-- 产品名称  -->
+			<productmask ref="productchild" @appenddata="appenddata"></productmask>
+			<!--受检企业-->
+			<enterprisemask ref="enterprisechild" @appendname="appendname"></enterprisemask>
 			<!--审批页面-->
 			<approvalmask :approvingData="approvingData" ref="approvalChild" @detail="detailgetData"></approvalmask>
 			<!--流程历史-->
@@ -498,21 +440,22 @@
 
 <script>
 	import Config from '../../config.js'
-	import approvalmask from '../workflow/approving.vue'
-	import flowhistorymask from '../workflow/flowhistory.vue'
-	import flowmapmask from '../workflow/flowmap.vue'
-	import vewPoplemask from '../workflow/vewPople.vue'
+	import productmask from '../common/common_mask/productlistmask.vue'//产品
+	import enterprisemask from '../common/common_mask/enterprisemask.vue'//受检企业
+	import approvalmask from '../workflow/approving.vue'//审批页面
+	import flowhistorymask from '../workflow/flowhistory.vue'//流程历史
+	import flowmapmask from '../workflow/flowmap.vue'//流程地图
+	import vewPoplemask from '../workflow/vewPople.vue'//当前责任人
 	export default {
 		name: 'masks',
 		components: {
 			 approvalmask,
 			 flowhistorymask,
 			 flowmapmask,
-			 vewPoplemask
+			 vewPoplemask,
+			 productmask,
+			 enterprisemask
 		},
-		//				props: {
-		//					page: Object ,
-		//				},
 		data() {
 			 var validateItemleader = (rule, value, callback) => {//项目负责人
                 if (this.dataInfo.P_LEADERDesc === undefined || this.dataInfo.P_LEADERDesc === '' || this.dataInfo.P_LEADERDesc === null) {
@@ -565,7 +508,7 @@
 				},
 				page: {
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				value: '',
@@ -593,8 +536,6 @@
 				activeNames: ['1', '2', '3', '4', '5', '6', '7'], //手风琴数量
 				labelPosition: 'right', //表格
 				dialogVisible: false, //对话框
-				dialogVisiblecompany: false, //对话框
-				editSearch: '',
 				dataInfo: { //添加数据库列表信息
 					N_CODE: '',
 					TYPE: '',
@@ -615,15 +556,7 @@
 					WORK_NOTICE_CHECKBASISList: [],
 					WORK_NOTICE_CHECKPROJECTList: []
 				},
-				dialogVisible1:false,
-				dialogVisible2:false,
 				rules: {
-					// TYPE: [{required: true,message: '必填',trigger: 'blur'}], //名称
-					// WP_NUM: [{
-					// 	required: true,
-					// 	message: '必填',
-					// 	trigger: 'blur'
-					// }], //计划编号
 					TYPE:[{required: true, message: '请至少选择一个', trigger: 'change'}],
 					CJDW: [{required: true,trigger: 'change',message: '必填',}], //承检单位
 					P_LEADERDesc: [{required: true, trigger: 'blur', message: '请选择'}], //项目负责人
@@ -639,9 +572,7 @@
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
-				productList:[],
-				customerList:[],
-				selectData:[],
+				selectData:[],//承检单位数据
 				dataid:2,//修改和查看带过的id
 				workNot:'workNot',//appname
 			};
@@ -698,50 +629,13 @@
 				});
 			},
 			addproduct(){//受检产品名称
-				this.$emit('request');
-				this.dialogVisible1 = true;
+				this.$refs.productchild.visible();
 			},
-			addproname(){//产品名称弹框确定选中数据
-				if(this.selUser.length == 0){
-					this.$message({
-						message: '请选择数据',
-						type: 'warning'
-					});
-				}else if(this.selUser.length > 1){
-					this.$message({
-						message: '不可同时选择多条数据',
-						type: 'warning'
-					});
-				}else{
-					this.dialogVisible1 = false;
-					this.dataInfo.ITEM_NAME = this.selUser[0].PRO_NAME;
-					this.$emit('request');
-				}
-			},
+			
 			addCompany(){
-				this.$emit('request');
-				this.dialogVisible2 = true;
+				this.$refs.enterprisechild.visible();
 			},                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
-			addcomname(){  
-				if(this.selUser.length == 0){
-					this.$message({
-						message: '请选择数据',
-						type: 'warning'
-					});
-				}else if(this.selUser.length > 1){
-					this.$message({
-						message: '不可同时选择多条数据11',
-						type: 'warning'
-					});
-				}else{
-					this.dialogVisible2 = false;
-					this.dataInfo.V_NAME = this.selUser[0].NAME;//名称
-					this.dataInfo.V_ADDRESS = this.selUser[0].CONTACT_ADDRESS;//地址
-					this.dataInfo.V_ZIPCODE = this.selUser[0].ZIPCODE;//邮编
-					// this.dataInfo.VENDOR = this.selUser[0].CODE;//受检企业编号
-					this.$emit('request');
-				}
-			},
+
 			handleNodeClick(data) { //获取勾选树菜单节点
 				//				console.log(data);
 			},
@@ -751,21 +645,7 @@
 			getCheckedNodes() { //获取树菜单节点
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
 			},
-			// getCompany() {
-			// 	this.editSearch = 'dept';
-			// 	var page = this.page.currentPage;
-			// 	var limit = this.page.pageSize;
-			// 	var type = "2";
-			// 	var url = this.basic_url + '/api-user/depts/treeByType';
-			// 	this.$axios.get(url, {
-			// 		params: {
-			// 			type: type
-			// 		},
-			// 	}).then((res) => {
-			// 		this.resourceData = res.data;
-			// 		this.dialogVisiblecompany = true;
-			// 	});
-			// },
+			
 			toNum(str) {
 				return str.replace(/\,|\￥/g, "");
 			},
@@ -793,11 +673,9 @@
 			},
 			sizeChange(val) {
 				this.page.pageSize = val;
-				//				this.requestData();
 			},
 			currentChange(val) {
 				this.page.currentPage = val;
-				//				this.requestData();
 			},
 			//新建行
 			addfieldBasis() {
@@ -831,9 +709,6 @@
 				if(index !== -1) {
 					this.dataInfo.WORK_NOTICE_CHECKBASISList.splice(index, 1);
 				}
-			},
-			importdia() {
-				this.dialogVisible = true;
 			},
 			//点击按钮显示弹窗
 			visible() {
@@ -973,6 +848,16 @@
 				$(".mask_div").css("height", "80%");
 				$(".mask_div").css("top", "100px");
 			},
+			//接到产品的值
+			appenddata(value){
+				console.log(1111111);
+				console.log(value);
+				this.dataInfo.ITEM_NAME=value;
+			},
+			appendname(value){
+				this.dataInfo.V_NAME = value;//名称
+			},
+			
 			// 保存users/saveOrUpdate
 			save() {
 				this.$refs.dataInfo.validate((valid) => {
@@ -1051,35 +936,14 @@
 					limit: this.page.pageSize,
 				}
 				var url = this.basic_url + '/api-user/users';
-				this.$axios.get(url, {
-					params: params
-				}).then((res) => {
+				this.$axios.get(url, {params: params}).then((res) => {
 					this.page.totalCount = res.data.count;
 					this.gridData = res.data.data;
 					this.dialogVisible = true;
 					this.type = type;
 				});
 			},
-			// diaconfirmcom() {
-			// 	this.getCheckedNodes();
-			// 	this.placetext = false;
-			// 	this.dialogVisiblecompany = false;
-			// 	//承检单位
-			// 	this.dataInfo.CJDW = this.getCheckboxData.id;
-			// 	this.dataInfo.CJDWDesc = this.getCheckboxData.fullname;
-			// 	//单位负责人
-			// 	this.dataInfo.P_LEADER = this.getCheckboxData.leader;
-			// 	// var dataid = this.getCheckboxData.leader;
-			// 	// var url = this.basic_url + '/api-user/users/' + dataid;
-			// 	// this.$axios.get(url, {}).then((res) => {
-			// 	// 	this.dataInfo.P_LEADERDesc = res.data.nickname;
-			// 	// }).catch((err) => {
-			// 	// 	this.$message({
-			// 	// 		message: '网络错误，请重试',
-			// 	// 		type: 'error'
-			// 	// 	});
-			// 	// });
-			// },
+			
 			dailogconfirm(type) { //选择人员确定按钮
 				if(this.selUser.length == 0){
 					this.$message({
@@ -1120,8 +984,6 @@
 					params: params
 				}).then((res) => {
 					this.gridData = res.data.data;
-					// this.gridData = res.data.data;
-					// this.dialogVisible = true;
 					this.type = '1';
 				});
 				this.dialogVisible = true;	
@@ -1232,64 +1094,9 @@
 				this.approvingData.app=this.workNot;
 				this.$refs.vewPopleChild.getvewPople(this.dataid);
 			},
-			requestData(index) {//高级查询字段
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-				};
-				
-				var url = this.basic_url + '/api-apps/app/product';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					this.page.totalCount = res.data.count;
-					//总的页数
-					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false
-					} else {
-						this.loadSign = true
-					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.productList = newarr;
-				}).catch((wrong) => {})
-				//受检企业
-				this.$axios.get(this.basic_url + '/api-apps/app/customer', {
-					params: data
-				}).then((res) => {
-					this.page.totalCount = res.data.count;	
-					//总的页数
-					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
-					if(this.page.currentPage >= totalPage){
-						 this.loadSign = false
-					}else{
-						this.loadSign=true
-					}
-					this.commentArr[this.page.currentPage]=res.data.data
-					let newarr=[]
-					for(var i = 1; i <= totalPage; i++){
-					
-						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
-							
-							for(var j = 0; j < this.commentArr[i].length; j++){
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}					
-					this.customerList = newarr;
-				}).catch((wrong) => {})
-			},
+			
 		},
 		mounted() {
-			this.requestData();
 			this.getCompany();
 		},
 	}

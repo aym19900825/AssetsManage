@@ -43,7 +43,7 @@
 										<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'" :disabled="noedit">
 											<el-radio :label="it.label" v-for="it in item.opts" :key="it.id"></el-radio>
 										</el-radio-group>
-										<el-select clearable v-model="dataInfo[item.prop]"  v-if="item.type=='select'" filterable allow-create default-first-option placeholder="请选择">
+										<el-select clearable v-model="dataInfo[item.prop]"  v-if="item.type=='select'" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit">
 											<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 										</el-select>
 										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && item.prop =='A_PRICE' " @blur="handlePrice" :disabled="noedit" id="cost"></el-input>
@@ -120,10 +120,11 @@
 				</el-table>
 				<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
-				<span slot="footer" class="dialog-footer" v-if="noviews">
-	    			<el-button @click="dialogVisible = false">取 消</el-button>
+
+				<div slot="footer" class="el-dialog__footer" v-if="noviews">
 	    			<el-button type="primary" @click="addpeoname()">确 定</el-button>
-	  			</span>
+	    			<el-button @click="dialogVisible = false">取 消</el-button>
+	  			</div>
 			</el-dialog>
 			<!--设备保管人 End-->
 		</div>
@@ -167,43 +168,51 @@
 				},
 				rules: {
 					ASSETNUM: [
-						{ required: true, message: '请输入设备编号', trigger: 'blur' },
+						{ required: true, trigger: 'blur', validator: this.Validators.isWorknumber },
 					],
 					DESCRIPTION: [
-						{ required: true, message: '请输入设备名称', trigger: 'blur' },
+						{ required: true, message: '必填', trigger: 'blur' },
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
 					CONFIG_UNIT: [
-						{ required: true, message: '请输入配置单位', trigger: 'blur' },
+						{ required: true, message: '必填', trigger: 'change' },
 					],
 					INS_SITE: [
-						{ required: true, message: '请输入安装地点', trigger: 'blur' },
+						{ required: true, message: '必填', trigger: 'blur' },
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
-					VENDOR: [
-						{ required: true, message: '请输入制造商', trigger: 'blur' },
+					VENDOR: [//制造商
+						{ required: true, message: '必填', trigger: 'blur' },
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
-					MODEL: [
-						{ required: true, message: '请输入规格型号', trigger: 'blur' },
+					MODEL: [//规格型号
+						{ required: true, message: '必填', trigger: 'blur' },
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
-					ASSET_KPI: [
-						{ required: true, message: '请输入设备状态', trigger: 'blur' },
+					ASSET_KPI: [//设备状态
+						{ required: true, message: '必填', trigger: 'blur' },
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
-					OPTION_STATUS: [
-						{ required: true, message: '请输入设备使用状态', trigger: 'blur' },
+					OPTION_STATUS: [//设备使用状态
+						{ required: true, message: '必填', trigger: 'blur' },
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
-					ISMETER: [
-						{ required: true, message: '请选择是否计量器具', trigger: 'blur' },
+					ISMETER: [//是否计量器具
+						{ required: true, message: '必填', trigger: 'blur' },
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
-					ISPM: [
-						{ required: true, message: '请选择是否需要溯源', trigger: 'blur' },
+					ISPM: [//是否需要溯源
+						{ required: true, message: '必填', trigger: 'blur' },
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
 					KEEPER: [
 						{ required: true,validator: validateKeeper},//设备保管人
 					],
-					ACCEPT_DATE: [
-						{ required: true, message: '请输入接收日期', trigger: 'blur' },
+					ACCEPT_DATE: [//接收日期
+						{ type: 'date', required: true, message: '请选择日期', trigger: 'change' },
 					],
 					S_DATE: [
-						{ required: true, message: '请输入启用日期', trigger: 'blur' },
+						{ type: 'date', required: true, message: '请选择日期', trigger: 'change' },
 					],
 					C_ADDRESS: [
 						{ required: true, message: '请输入配置地址', trigger: 'blur' },

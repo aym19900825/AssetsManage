@@ -6,7 +6,7 @@
     <el-table-column type="selection" width="55" fixed align="center">
 		</el-table-column>
     <el-table-column v-for="(column, index) in columns" :key="column.dataIndex"
-      :label="column.text" v-if="column.isShow">
+      :label="column.text" v-if="column.isShow && column.dataIndex != 'version'">
       <template slot-scope="scope">
         <span v-if="spaceIconShow(index)" v-for="(space, levelIndex) in scope.row._level" class="ms-tree-space"></span>
         <span class="button is-outlined is-primary is-small" v-if="toggleIconShow(index,scope.row)" @click="toggle(scope.$index)">
@@ -18,7 +18,19 @@
         <span v-else>{{scope.row[column.dataIndex]}}</span>          
       </template>
     </el-table-column>
-    
+    <el-table-column v-for="(column, index) in columns" :key="column.dataIndex"
+      :label="column.text" v-if="column.isShow && column.dataIndex == 'version'" align="right">
+      <template slot-scope="scope">
+        <span v-if="spaceIconShow(index)" v-for="(space, levelIndex) in scope.row._level" class="ms-tree-space"></span>
+        <span class="button is-outlined is-primary is-small" v-if="toggleIconShow(index,scope.row)" @click="toggle(scope.$index)">
+          <i v-if="!scope.row._expanded" class="el-icon-caret-right" aria-hidden="true"></i>
+          <i v-if="scope.row._expanded" class="el-icon-caret-bottom" aria-hidden="true"></i>
+        </span>
+        <span v-else-if="index===0" class="ms-tree-space"></span>
+        <span v-if="index===0"@click=view(scope.row)>{{scope.row[column.dataIndex]}}</span>
+        <span v-else>{{scope.row[column.dataIndex]}}</span>          
+      </template>
+    </el-table-column>
   </el-table>
 </template>
 <script>

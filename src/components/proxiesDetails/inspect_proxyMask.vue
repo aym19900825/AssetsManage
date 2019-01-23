@@ -46,58 +46,50 @@
 												<template slot="prepend">编号</template>
 											</el-input>
 										</el-col>
-
 									</el-row>
-									
-										<el-row>
-											<el-col :span="8">
-												<el-form-item label="名称" prop="V_NAME" label-width="110px">
-													<el-input v-model="dataInfo.V_NAME" :disabled="edit" width="100%">
-														<el-button slot="append" icon="el-icon-search" @click="getCustomer(1)" :disabled="noedit">
-														</el-button>
-													</el-input>
-												</el-form-item>
-											</el-col>
-											<el-col :span="8">
-												<el-form-item label="地址" prop="V_ADDRESS" label-width="110px">
-													<el-input v-model="dataInfo.V_ADDRESS" :disabled="edit"></el-input>
-												</el-form-item>
-											</el-col>
-											<el-col :span="8">
-												<el-form-item label="邮编" prop="V_ZIPCODE" label-width="110px">
-													<el-input v-model="dataInfo.V_ZIPCODE" :disabled="edit"></el-input>
-												</el-form-item>
-											</el-col>
-										</el-row>
-										<el-row >
-											<el-col :span="8">
-												<el-form-item label="姓名" prop="V_PERSON" label-width="110px">
-													<el-input v-model="dataInfo.V_PERSON" :disabled="edit">
-														 <el-button slot="append" icon="el-icon-search" @click="addname" :disabled="noedit"></el-button>
-													</el-input>
-												</el-form-item>
-											</el-col>
-											<el-col :span="8">
-												<el-form-item label="电话" prop="V_PHONE" label-width="110px">
-													<el-input v-model="dataInfo.V_PHONE" :disabled="edit"></el-input>
-												</el-form-item>
-											</el-col>
-											
-											<el-col :span="8" >
-											<el-form-item label="承检单位" prop="R_VENDOR"  label-width="110px">
-												<el-select clearable v-model="dataInfo.R_VENDOR" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit"  @change="RVENDORSelect($event)">
-													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
-												</el-select>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="名称" prop="V_NAME" label-width="110px">
+												<el-input v-model="dataInfo.V_NAME" :disabled="edit" width="100%">
+													<el-button slot="append" icon="el-icon-search" @click="getCustomer(1)">
+													</el-button>
+												</el-input>
+
 											</el-form-item>
 										</el-col>
-										</el-row>
-										<el-row >
-											<el-col :span="8" style="display: none;">
-												<el-form-item label="委托单位编号" prop="VENDOR" label-width="110px">
-													<el-input v-model="dataInfo.VENDOR"></el-input>
-												</el-form-item>
-											</el-col>
-										</el-row>
+										<el-col :span="8">
+											<el-form-item label="地址" prop="V_ADDRESS" label-width="110px">
+												<el-input v-model="dataInfo.V_ADDRESS" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="邮编" prop="V_ZIPCODE" label-width="110px">
+												<el-input v-model="dataInfo.V_ZIPCODE" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row >
+										<el-col :span="8">
+											<el-form-item label="姓名" prop="V_PERSON" label-width="110px">
+												<el-input v-model="dataInfo.V_PERSON" :disabled="edit">
+													 <el-button slot="append" icon="el-icon-search" @click="addname"></el-button>
+												</el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="电话" prop="V_PHONE" label-width="110px">
+												<el-input v-model="dataInfo.V_PHONE" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+										
+									</el-row>
+									<el-row >
+										<el-col :span="8" style="display: none;">
+											<el-form-item label="委托单位编号" prop="VENDOR" label-width="110px">
+												<el-input v-model="dataInfo.VENDOR"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
 								</el-collapse-item>
 								<!--<el-collapse-item title="生产单位" name="2">
 									<el-row >
@@ -444,104 +436,122 @@
 									</el-tabs>
 								</div>
 								<el-collapse-item name="7">
-											<el-col :span="8">
-												<el-form-item label="检验报告编号" prop="REPORT_NUM" label-width="110px">
-													<el-input v-model="dataInfo.REPORT_NUM" :disabled="noedit" ></el-input>
-												</el-form-item>
-											</el-col>
-	                                        <el-col :span="10">
-												<el-form-item label="格式" prop="REPORT_FOMAT" label-width="110px">
-													<el-radio-group v-model="dataInfo.REPORT_FOMAT" :disabled="noedit">
-														<el-radio label="认证中心"></el-radio>
-														<el-radio label="国家中心"></el-radio>
-													</el-radio-group>
-												</el-form-item>
-											</el-col>
-											<el-col :span="6">
-												<el-form-item label="标识" prop="CNAS_OR_CMA_ID" label-width="110px">
-													<el-radio-group v-model="dataInfo.CNAS_OR_CMA_ID" :disabled="noedit">
-														<el-radio label="CNAS"></el-radio>
-													</el-radio-group>
-												</el-form-item>
-											</el-col>
-										
-											<el-col :span="8">
-												<el-form-item label="交委托方份数" prop="REPORT_QUALITY" label-width="110px">
-													<el-input v-model.number="dataInfo.REPORT_QUALITY" :disabled="noedit"></el-input>
-												</el-form-item>
-											</el-col>
-											<el-col :span="14">
-												<el-form-item label="发送方式" prop="REPORT_MODE" label-width="110px">
-													<el-radio-group v-model="dataInfo.REPORT_MODE" :disabled="noedit">
-														<el-radio label="自提"></el-radio>
-														<el-radio label="邮寄"></el-radio>
-														<el-radio label="其他"></el-radio>
-													</el-radio-group>
-												</el-form-item>
-											</el-col>
-											
-									
-											<el-col :span="8">
-												<el-form-item label="检验收费（元）" prop="CHECK_COST" label-width="110px">
-													<el-input  v-model="dataInfo.CHECK_COST" id="cost" @blur="toPrice" :disabled="noedit"></el-input>
-												</el-form-item>
-											</el-col>
-											<el-col :span="8">
-												<el-form-item label="标准费用（元）" prop="CONTRACTCOST" label-width="110px">
-													<el-input  v-model="dataInfo.CONTRACTCOST" id="stacost"  @blur="staPrice" :disabled="noedit"></el-input>
-												</el-form-item>
-											</el-col>
-											<el-col :span="8">
-												<el-form-item label="实收费用（元）" prop="ACTUALCOST" label-width="110px">
-													<el-input  v-model="dataInfo.ACTUALCOST" id="actualcost"  @blur="actualPrice" :disabled="noedit"></el-input>
-												</el-form-item>
-											</el-col>
-
-											<el-col :span="8">
-												<el-form-item label="实收比例" prop="ACTUAL_PERCENT" label-width="110px">
-													<el-input v-model="dataInfo.ACTUAL_PERCENT" :disabled="noedit"></el-input>
-												</el-form-item>
-											</el-col>
-											<el-col :span="8">
-												<el-form-item label="付款方式" prop="PAYMENT_METHOD" label-width="110px">
-													<el-select v-model="dataInfo.PAYMENT_METHOD" placeholder="请选择" style="width: 100%;" :disabled="noedit">
-														<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-														</el-option>
-													</el-select>
-												</el-form-item>
-											</el-col>
-											<!--<el-col :span="8">
-												<el-form-item label="信息状态" prop="MESSSTATUS">
-													<el-input v-model="dataInfo.MESSSTATUS"></el-input>
-												</el-form-item>
-											</el-col>-->
-
-											<el-col :span="8">
-												<el-form-item label="主检组" prop="MAINGROUP"  label-width="110px">
-												<el-select clearable v-model="dataInfo.MAINGROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @change="getmaingroup($event)" @visible-change="visablemaingroup($event)" >
-													<el-option v-for="(data,index) in maingroup" :key="index" :value="data.id" :label="data.fullname"></el-option>
-												</el-select>
-											</el-form-item>
-											</el-col>
-											<el-col :span="8">
-												<el-form-item label="主检负责人" prop="LEADER" label-width="110px">
-														<el-select clearable v-model="dataInfo.LEADER" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @visible-change="visableleader($event)" >
-													<el-option v-for="(data,index) in leaderdata" :key="index" :value="data.id" :label="data.username"></el-option>
-												</el-select>
-												</el-form-item>
-											</el-col>
-											<el-col :span="8" style="display:none;" label-width="110px">
-												<el-form-item label="生产单位编号" prop="PRODUCT_UNIT">
-													<el-input v-model="dataInfo.PRODUCT_UNIT" :disabled="noedit"></el-input>
-												</el-form-item>
-											</el-col>
-										    <el-col :span="16">
-											<el-form-item label="生产单位名称" prop="P_NAME" label-width="110px">
-												<el-input v-model="dataInfo.P_NAME" :disabled="edit" >
-													<el-button slot="append" icon="el-icon-search" @click="getCustomer(2)" :disabled="noedit"></el-button>
-												</el-input>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="检验报告编号" prop="REPORT_NUM" label-width="110px">
+												<el-input v-model="dataInfo.REPORT_NUM" :disabled="noedit" ></el-input>
 											</el-form-item>
 										</el-col>
+                                        <el-col :span="10">
+											<el-form-item label="格式" prop="REPORT_FOMAT" label-width="110px">
+												<el-radio-group v-model="dataInfo.REPORT_FOMAT" :disabled="noedit">
+													<el-radio label="认证中心"></el-radio>
+													<el-radio label="国家中心"></el-radio>
+												</el-radio-group>
+											</el-form-item>
+										</el-col>
+										<el-col :span="6">
+											<el-form-item label="标识" prop="CNAS_OR_CMA_ID" label-width="110px">
+												<el-radio-group v-model="dataInfo.CNAS_OR_CMA_ID" :disabled="noedit">
+													<el-radio label="CNAS"></el-radio>
+												</el-radio-group>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="交委托方份数" prop="REPORT_QUALITY" label-width="110px">
+												<el-input v-model.number="dataInfo.REPORT_QUALITY" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="发送方式" prop="REPORT_MODE" label-width="110px">
+												<el-radio-group v-model="dataInfo.REPORT_MODE" :disabled="noedit">
+													<el-radio label="自提"></el-radio>
+													<el-radio label="邮寄"></el-radio>
+													<el-radio label="其他"></el-radio>
+												</el-radio-group>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="付款方式" prop="PAYMENT_METHOD" label-width="110px">
+												<el-select v-model="dataInfo.PAYMENT_METHOD" placeholder="请选择" style="width: 100%;" :disabled="noedit">
+													<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+													</el-option>
+												</el-select>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8" style="display:none;" label-width="110px">
+											<el-form-item label="生产单位编号" prop="PRODUCT_UNIT">
+												<el-input v-model="dataInfo.PRODUCT_UNIT" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+									    <el-col :span="16">
+										<el-form-item label="生产单位名称" prop="P_NAME" label-width="110px">
+											<el-input v-model="dataInfo.P_NAME" :disabled="edit" >
+												<el-button slot="append" icon="el-icon-search" @click="getCustomer(2)"></el-button>
+											</el-input>
+										</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="检验收费（元）" prop="CHECK_COST" label-width="110px">
+												<el-input  v-model="dataInfo.CHECK_COST" id="cost" @blur="toPrice" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>	
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="实收费用（元）" prop="ACTUALCOST" label-width="110px">
+												<el-input  v-model="dataInfo.ACTUALCOST" id="actualcost"  @blur="actualPrice" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="实收比例" prop="ACTUAL_PERCENT" label-width="110px">
+												<el-input v-model="dataInfo.ACTUAL_PERCENT" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="标准费用（元）" prop="CONTRACTCOST" label-width="110px">
+												<el-input  v-model="dataInfo.CONTRACTCOST" id="stacost"  @blur="staPrice" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<!--<el-col :span="8">
+											<el-form-item label="信息状态" prop="MESSSTATUS">
+												<el-input v-model="dataInfo.MESSSTATUS"></el-input>
+											</el-form-item>
+										</el-col>-->
+										<el-col :span="8" >
+											<el-form-item label="承检单位" prop="R_VENDOR"  label-width="110px">
+												<el-select clearable v-model="dataInfo.R_VENDOR" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit"  @change="RVENDORSelect($event)">
+													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+												</el-select>
+
+												</el-form-item>
+											</el-col>
+										<el-col :span="8" style="display:none;" label-width="110px">
+											<el-form-item label="生产单位编号" prop="PRODUCT_UNIT">
+												<el-input v-model="dataInfo.PRODUCT_UNIT" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="主检组" prop="MAINGROUP"  label-width="110px">
+											<el-select clearable v-model="dataInfo.MAINGROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @change="getmaingroup($event)" @visible-change="visablemaingroup($event)" >
+												<el-option v-for="(data,index) in maingroup" :key="index" :value="data.id" :label="data.fullname"></el-option>
+											</el-select>
+										</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="主检负责人" prop="LEADER" label-width="110px">
+													<el-select clearable v-model="dataInfo.LEADER" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @visible-change="visableleader($event)" >
+												<el-option v-for="(data,index) in leaderdata" :key="index" :value="data.id" :label="data.username"></el-option>
+											</el-select>
+											</el-form-item>
+										</el-col>
+									</el-row>		
 											<el-col :span="24">
 												<el-form-item label="备注" prop="MEMO" label-width="110px">
 													<el-input type="textarea" rows="5" v-model="dataInfo.MEMO" :disabled="noedit"></el-input>
@@ -597,7 +607,7 @@
 					</el-form>
 				</div>
 			</div>
-
+			<!--生产单位-->
 			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
 				<el-table :data="gridData" @selection-change="SelChange">
 					<el-table-column type="selection" width="55" fixed>
@@ -621,45 +631,7 @@
 	  			</span>
 			</el-dialog>
 			<!-- 样品名称 Begin -->
-			<el-dialog :modal-append-to-body="false" title="样品名称" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
-				<el-table :data="samplesList" :header-cell-style="rowClass" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-					<el-table-column type="selection" width="55" fixed align="center">
-					</el-table-column>
-					<el-table-column label="样品编号" sortable width="200px" prop="ITEMNUM">
-					</el-table-column>
-					<el-table-column label="样品名称" sortable width="200px" prop="DESCRIPTION">
-					</el-table-column>
-					<el-table-column label="样品类别" sortable width="200px" prop="TYPE">
-					</el-table-column>
-					<el-table-column label="委托单位" sortable width="200px" prop="V_NAME">
-					</el-table-column>
-					<el-table-column label="生产单位" sortable width="200px" prop="P_NAME">
-					</el-table-column>
-					<el-table-column label="型号" width="100px" prop="MODEL" sortable>
-					</el-table-column>
-					<el-table-column label="数量" width="100px" prop="QUATITY" sortable>
-					</el-table-column>
-					<el-table-column label="收样人" sortable width="140px" prop="ACCEPT_PERSON">
-					</el-table-column>
-					<el-table-column label="收样日期" sortable width="140px" :formatter="dateFormat" prop="ACCEPT_DATE">
-					</el-table-column>
-					<el-table-column label="接样人" sortable width="140px" prop="RECIP_PERSON">
-					</el-table-column>
-					<el-table-column label="接样日期" sortable width="140px" :formatter="dateFormat" prop="RECIP_DATE">
-					</el-table-column>
-					<el-table-column label="状态" sortable width="100px" prop="STATE">
-					</el-table-column>
-					<!--<el-table-column label="信息状态" sortable width="140px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
-					</el-table-column>-->
-				</el-table>
-				
-				<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-				</el-pagination>
-				<span slot="footer" class="dialog-footer">
-			       <el-button @click="dialogVisible2 = false">取 消</el-button>
-			       <el-button type="primary" @click="addsamplename">确 定</el-button>
-			    </span>
-			</el-dialog>
+			
 			<!-- 样品名称 End -->
 			<!-- 客户联系人 Begin -->
 			<el-dialog :modal-append-to-body="false" title="客户联系人" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
@@ -686,6 +658,8 @@
 			    </span>
 			</el-dialog>
 			<!-- 客户联系人 End -->
+			<!-- 样品名称  -->
+			<sampletmask ref="samplechild" @appenddes="appenddes" @appendmod="appendmod" @appendqua="appendqua"  ></sampletmask>
 		<!--审批页面-->
 			<approvalmask :approvingData="approvingData" ref="approvalChild"  @detail="detailgetData"></approvalmask>
 			<!--流程历史-->
@@ -700,6 +674,7 @@
 
 <script>
 	import Config from '../../config.js';
+	import sampletmask from '../common/common_mask/samplemask.vue'//样品名称
 	import approvalmask from '../workflow/approving.vue'
 	import flowhistorymask from '../workflow/flowhistory.vue'
 	import flowmapmask from '../workflow/flowmap.vue'
@@ -710,7 +685,8 @@
 			 approvalmask,
 			 flowhistorymask,
 			 flowmapmask,
-			 vewPoplemask
+			 vewPoplemask,
+			 sampletmask,
 		},
 		data() {
 			var validate = (rule, value, callback) => {
@@ -793,6 +769,7 @@
 					STATUS: '1',
 					STATUSDesc:'草稿',
 					VERSION:'1',
+					ITEM_NAME:'',
 					INSPECT_PROXY_PROJECList: [],
 					INSPECT_PROXY_BASISList: [],
 					CHECK_PROXY_CONTRACTList: [],
@@ -1051,28 +1028,9 @@
 				this.dataInfo.CHECK_PROXY_CONTRACTList.push(obj);
 			},
 			addsample(){
-//				this.$emit('request');
-				this.dialogVisible2 = true;
+			this.$refs.samplechild.visible();
 			},
-			addsamplename(){
-				if(this.selval.length == 0){
-					this.$message({
-						message: '请选择数据',
-						type: 'warning'
-					});
-				}else if(this.selval.length > 1){
-					this.$message({
-						message: '不可同时选择多条数据',
-						type: 'warning'
-					});
-				}else{
-					this.dialogVisible2 = false;
-					this.dataInfo.ITEM_NAME = this.selval[0].DESCRIPTION;
-					this.dataInfo.ITEM_MODEL = this.selval[0].MODEL;
-					this.dataInfo.ITEM_QUALITY = this.selval[0].QUALITY;
-//					this.$emit('request');
-				}
-			},
+			
 			//刪除新建行
 			deleteRow(index,rows) {//Table-操作列中的删除行
 				rows.splice(index,1);
@@ -1264,6 +1222,19 @@
 				$(".mask_div").css("height", "80%");
 				$(".mask_div").css("top", "100px");
 			},
+			appenddes(value){
+				console.log(value);
+				console.log(11111);				
+				this.dataInfo.ITEM_NAME = value;//名称
+				console.log(name);
+				console.log(this.dataInfo.ITEM_NAME);
+			},
+			appendmod(value){
+				this.dataInfo.ITEM_MODEL=value;
+			},
+			appendqua(value){
+				this.dataInfo.ITEM_QUALITY=value;
+			},
 			// 保存users/saveOrUpdate
 			save() {
 				this.$refs.dataInfo.validate((valid) => {
@@ -1376,11 +1347,8 @@
 					limit: this.page.pageSize,
 				}
 				var url = this.basic_url + '/api-apps/app/customer';
-				this.$axios.get(url, {
-					params: params
-				}).then((res) => {
+				this.$axios.get(url, {params: params}).then((res) => {
 					this.page.totalCount = res.data.count;
-					
 					this.gridData = res.data.data;
 					this.dialogVisible = true;
 					this.type = type;
@@ -1513,36 +1481,6 @@
 				this.$refs.vewPopleChild.getvewPople(this.dataid);
 			},
 			requestData(index) {
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-				}
-				var url = this.basic_url + '/api-apps/app/item';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					
-					this.page.totalCount = res.data.count;
-					//总的页数
-					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false
-					} else {
-						this.loadSign = true
-					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
-
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.samplesList = newarr;
-				}).catch((wrong) => {})
 				
 			},
 			getCompany() {
@@ -1561,6 +1499,20 @@
 			this.requestData();
 			this.getCompany();
 		},
+		watch:{
+       	appenddes(value){
+				console.log(value);
+				console.log(11111);				
+				this.dataInfo.ITEM_NAME = value;//名称
+				console.log(this.dataInfo.ITEM_NAME);
+			},
+			appendmod(value){
+				this.dataInfo.ITEM_MODEL=value;
+			},
+			appendqua(value){
+				this.dataInfo.ITEM_QUALITY=value;
+			},
+    	}
 	}
 </script>
 

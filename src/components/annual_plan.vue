@@ -172,7 +172,7 @@
 								</el-table-column>
 								<el-table-column label="产品类别" sortable width="100px" prop="ITEMTYPE" v-if="this.checkedName.indexOf('产品类别')!=-1">
 								</el-table-column>
-								<el-table-column label="提出单位" sortable width="100px" prop="PROP_UNIT" v-if="this.checkedName.indexOf('提出单位')!=-1">
+								<el-table-column label="提出单位" sortable width="100px" prop="PROP_UNITDesc" v-if="this.checkedName.indexOf('提出单位')!=-1">
 								</el-table-column>
 								<el-table-column label="提报日期" sortable width="140px" prop="REPORTDATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('提报日期')!=-1">
 								</el-table-column>
@@ -265,7 +265,7 @@
 					},
 					{
 						label: '提出单位',
-						prop: 'PROP_UNITE'
+						prop: 'PROP_UNITEDesc'
 					},
 					{
 						label: '提报日期',

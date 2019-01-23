@@ -926,6 +926,9 @@
 				customerList:[],//生产企业、受检企业数据取自custom
 				deptnum:'',//生产企业名称、受检企业名称标识号码
 				requestnum:0,//更新表格数据标识
+				itemtypenum:'',//当前选择的产品类别编号，用作参数请求产品名称
+				pronamenum:'',//当前选择的产品名称编号，用作参数请求依据
+				basisnums:'',//当前选择的依据编号字符串，用作参数请求检测项目
 			};
 		},
 		methods: {
@@ -1132,6 +1135,15 @@
 					});
 					return;
 				} else {
+					var changeUser = this.selUser;
+					//basisnum为依据编号的数组
+					var basisnum = [];
+					for (var i = 0; i < changeUser.length; i++) {
+						basisnum.push(changeUser[i].S_NUM);
+					}
+					//basisnums为basisnum数组用逗号拼接的字符串
+					this.basisnums = basisnum.toString(',');
+
 					//循环push页面正常显示
 					for(var i = 0;i<selData.length;i++){
 						//新选来的数据ID为空
@@ -1143,6 +1155,7 @@
 						selData[i].NUMBER = this.proTestList.length>0?this.proTestList[this.proTestList.length-1].NUMBER+i+1 :
 							1;
 						this.basisList.push(JSON.parse(JSON.stringify(selData[i])));
+						// basisnum.push(changeUser[i].S_NUM);//选择的数据的编号
 					}
 					this.dialogVisible = false;
 					this.$message({
@@ -1198,6 +1211,7 @@
 					});
 				}else{
 					this.dialogVisible3 = false;
+					this.itemtypenum = this.selUser[0].NUM;
 					this.WORKPLAN.ITEMTYPE = this.selUser[0].TYPE;
 					this.$emit('request');
 				}
@@ -1221,6 +1235,7 @@
 					});
 				}else{
 					this.dialogVisible4 = false;
+					this.pronamenum = this.selUser[0].PRO_NUM;
 					this.proindex.ITEM_NAME = this.selUser[0].PRO_NAME;
 					this.$emit('request');
 				}
@@ -1231,10 +1246,14 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				var url = this.basic_url + '/api-apps/app/product';
+				console.log(123456);
+				console.log(this.itemtypenum);
+				var url = this.basic_url + '/api-apps/app/product2?NUM_wheres='+this.itemtypenum;
+				console.log(url);
 				this.$axios.get(url, {
-					params: data
+					
 				}).then((res) => {
+					console.log(res.data);
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -1288,12 +1307,12 @@
 					STARTETIME: this.searchList.STARTETIME,
 					// STATUS: this.searchList.STATUS,
 				};
-				var url = this.basic_url +'/api-apps/app/inspectionSta';
+				console.log(111111);
+				console.log(this.pronamenum);
+				var url = this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.pronamenum;
 				this.$axios.get(url, {
-					params: data
+					
 				}).then((res) => {
-					console.log(2333333);
-					console.log(res.data);
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -1333,8 +1352,10 @@
 					VERSION: this.searchList.VERSION,
 					STATUS: this.searchList.STATUS,
 				};
-				this.$axios.get(this.basic_url +'/api-apps/app/inspectionPro', {
-					params: data
+				console.log(1454324565);
+				console.log(this.basisnums);
+				this.$axios.get(this.basic_url +'/api-apps/app/inspectionPro2?S_NUM_where_in='+this.basisnums, {
+				
 				}).then((res) => {
 					console.log(2333333);
 					console.log(res.data);
@@ -1406,7 +1427,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				this.$axios.get(this.basic_url + '/api-apps/app/productType?DEPTID='+this.WORKPLAN.PROP_UNIT, {
+				this.$axios.get(this.basic_url + '/api-apps/app/productType2?DEPTID='+this.WORKPLAN.PROP_UNIT, {
 					params: data
 				}).then((res) => {
 					console.log(res.data);
@@ -1604,8 +1625,6 @@
 					for(var i = 0; i<res.data.WORLPLANLINEList.length; i++){
 							res.data.WORLPLANLINEList[i].isEditing = false;
 					}
-					console.log(2333333);
-					console.log(res.data);
 					this.WORKPLAN = res.data;
 					for(var j=0;j<this.selectData.length;j++){
 						if(this.WORKPLAN.PROP_UNIT==this.selectData[j].id){
@@ -1676,6 +1695,11 @@
 				var url = this.basic_url + '/api-apps/app/workplan/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
 					this.WORKPLAN = res.data;
+					for(var j=0;j<this.selectData.length;j++){
+						if(this.WORKPLAN.PROP_UNIT==this.selectData[j].id){
+							this.WORKPLAN.PROP_UNIT=this.selectData[j].fullname
+						}
+					}
 					this.worlplanlist = res.data.WORLPLANLINEList;
 					var worlplanlist = res.data.WORLPLANLINEList;
 					for(var i=0, len=worlplanlist.length; i<len; i++){

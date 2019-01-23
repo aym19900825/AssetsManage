@@ -36,6 +36,7 @@ axios.interceptors.response.use(
   error => {
     loading.close();
     // router.push({ path: '/' });
+    console.log(error);
 
     if (error && error.response) {
 

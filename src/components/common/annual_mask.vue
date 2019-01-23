@@ -230,8 +230,8 @@
 											</div>
 											<!-- <el-form :model="basisList" :rules="rules" ref="basisList" prop="basisList"> -->
 							            	<el-table :header-cell-style="rowClass" :data="basisList" border stripe :fit="true" max-length="260px" style="width: 100%;" :default-sort="{prop:'basisList', order: 'descending'}">
-							            		<el-table-column prop="NUMBER" label="序号" width="150" type="index"></el-table-column>
-												<el-table-column prop="WP_NUM" label="所属计划编号" width="150">
+							            		<el-table-column prop="NUMBER" label="序号" sortable width="150" type="index"></el-table-column>
+												<el-table-column prop="WP_NUM" label="所属计划编号" sortable width="150">
 							            			<!-- <template slot-scope="scope">
 											        	<span>{{scope.$index + 1}}</span>
 											      	</template> -->
@@ -239,10 +239,10 @@
 											        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_NUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_NUM}}</span>
 											      	</template>
 							            		</el-table-column>
-							            		<el-table-column prop="WP_LINENUM" label="所属计划序号" width="150"></el-table-column>
-							            		<el-table-column prop="S_NUM" label="标准编号" width="130"></el-table-column>
-							            		<el-table-column prop="S_NAME" label="标准名称" width="350"></el-table-column>
-							            		<el-table-column prop="VERSION" label="版本" width="80"></el-table-column>
+							            		<el-table-column prop="WP_LINENUM" label="所属计划序号" sortable width="150"></el-table-column>
+							            		<el-table-column prop="S_NUM" label="标准编号" sortable width="130"></el-table-column>
+							            		<el-table-column prop="S_NAME" label="标准名称" sortable width="350"></el-table-column>
+							            		<el-table-column prop="VERSION" label="版本" sortable width="80"></el-table-column>
 							            		<el-table-column fixed="right" label="操作" width="80">
 											      <template slot-scope="scope">
 											        <el-button

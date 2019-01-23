@@ -375,9 +375,9 @@
 								"P_NUM": this.parentId,
 								"PROF_NUM": '',
 								"PROF_GROUP": '',
-								"STATUS": '1',
+								"STATUS": '',
 								"VERSION": '',
-								"DEPTID": this.currentDept,
+								"DEPTID": '',
 								"ENTERBY": this.currentUser,
 								"ENTERDATE": this.currentDate,
 								"isEditing": true,
@@ -462,6 +462,7 @@
 				this.dialogVisible3 = false
 				this.catedata.PROF_NUM = this.selData[0].code;
 				this.catedata.PROF_GROUP = this.selData[0].fullname;
+				this.catedata.DEPTID = this.selData[0].DEPTID;
 				this.catedata.VERSION = this.selData[0].VERSION;
 				this.$emit('request');
 			},

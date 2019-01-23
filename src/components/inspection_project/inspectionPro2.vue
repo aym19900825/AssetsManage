@@ -403,10 +403,11 @@
 					}
 					if (isEditingflag==false){
 	                	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-	                		var currentUser, currentDate, currentDept;
+	                		var currentUser, currentDate;
 							this.currentUser=res.data.nickname;
-							this.currentDept=res.data.deptid;
 							var date=new Date();
+							// console.log(res.data.deptId);
+							// console.log(this.parentIds);
 							this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 							var index=this.$moment(date).format("YYYYMMDDHHmmss");
 							var obj = {
@@ -414,9 +415,9 @@
 								"P_NUM": '',
 								"P_NAME": '',
 								"UNITCOST": '',
-								"STATUS": '1',
+								"STATUS": '',
 								"VERSION": '',
-								"DEPTID": this.currentDept,
+								"DEPTID": '',
 								"ENTERBY": this.currentUser,
 								"ENTERDATE": this.currentDate,
 								"isEditing": true,
@@ -501,6 +502,7 @@
 				this.catedata.P_NUM = this.selData[0].P_NUM;
 				this.catedata.P_NAME = this.selData[0].P_NAME;
 				this.catedata.UNITCOST = this.selData[0].UNITCOST;
+				this.catedata.DEPTID = this.selData[0].DEPTID;
 				this.catedata.VERSION = this.selData[0].VERSION;
 				this.$emit('request');
 			},

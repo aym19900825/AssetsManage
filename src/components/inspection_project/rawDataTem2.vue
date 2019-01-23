@@ -382,8 +382,9 @@
 								"P_NUM": this.parentId,
 								"NUM": '',
 								"DECRIPTION": '',
-								"STATUS": '1',
+								"STATUS": '',
 								"VERSION": '',
+								"DEPTID": '',
 								"CHANGEBY": this.currentUser,
 								"CHANGEDATE": this.currentDate,
 								"isEditing": true,
@@ -411,9 +412,10 @@
 					    "NUM": row.NUM,
 						"DECRIPTION": row.DECRIPTION,
 						"STATUS": row.STATUS,
+					    "VERSION": row.VERSION,
+					    "DEPTID": row.DEPTID,
 						"CHANGEBY": row.CHANGEBY,
 					    "CHANGEDATE": row.CHANGEDATE,
-					    "VERSION": row.VERSION,
 					}
 					this.$axios.post(url, submitData).then((res) => {
 						if(res.data.resp_code == 0) {
@@ -465,6 +467,7 @@
 				this.dialogVisible3 = false
 				this.catedata.NUM = this.selData[0].NUM;
 				this.catedata.DECRIPTION = this.selData[0].DECRIPTION;
+				this.catedata.DEPTID = this.selData[0].DEPTID;
 				this.catedata.VERSION = this.selData[0].VERSION;
 				this.$emit('request');
 			},

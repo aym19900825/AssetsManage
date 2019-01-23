@@ -360,7 +360,7 @@
                 	var departName = res.data.deptName;
 					var currenturl = this.basic_url + '/api-user/depts/findByPid/' + this.departmentId;
 					this.$axios.get(currenturl, {}).then((res) => {
-						console.log(res.data);
+						// console.log(res.data);
 						this.Select_DEPTID = res.data;
 						if (this.departmentId == 128) {
 							this.formInline.DEPTID = res.data[0].id;
@@ -455,18 +455,16 @@
 				}
 				if (isEditingflag==false){
                 	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-                		
                 		var currentUser, currentDate;
 						this.currentUser=res.data.nickname;
-						this.currentDept=this.formInline.DEPTID;
 						var date=new Date();
 						this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 						var obj = {
 							"TYPE": '',
-							"STATUS": 1,
+							"STATUS": '',
 							"NUM": '',
 							"VERSION": '',
-							"DEPTID": this.currentDept,
+							"DEPTID": '',
 						    "ENTERBY": this.currentUser,
 						    "ENTERDATE": this.currentDate,
 							"isEditing": true,
@@ -547,6 +545,7 @@
 				this.dialogVisible3 = false;
 				this.catedata.NUM = this.selData[0].NUM;
 				this.catedata.TYPE = this.selData[0].TYPE;
+				this.catedata.DEPTID = this.selData[0].DEPTID;
 				this.catedata.VERSION = this.selData[0].VERSION;
 				this.$emit('request');
 			},

@@ -221,8 +221,8 @@
 				this.$axios.get(this.basic_url + '/api-apps/app/asset?DEPTID=' + this.parentIds, {
 					params: data
 				}).then((res) => {
-					console.log(this.parentIds);
-					console.log(res.data);
+					// console.log(this.parentIds);
+					// console.log(res.data);
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -374,9 +374,10 @@
 							var obj = {
 								"P_NUM": this.parentId,
 								"DECRIPTION": '',
-								"STATUS": '1',
+								"STATUS": '',
 								"NUM": '',
-								"VERSION": 1,
+								"VERSION": '',
+								"DEPTID": '',
 								"CHANGEBY": this.currentUser,
 								"CHANGEDATE": this.currentDate,
 								"isEditing": true,
@@ -404,9 +405,10 @@
 					    "NUM": row.NUM,
 						"DECRIPTION": row.DECRIPTION,
 						"STATUS": row.STATUS,
+					    "VERSION": row.VERSION,
+					    "DEPTID": row.DEPTID,
 						"CHANGEBY": row.CHANGEBY,
 					    "CHANGEDATE": row.CHANGEDATE,
-					    "VERSION": row.VERSION,
 					}
 					this.$axios.post(url, submitData).then((res) => {
 						if(res.data.resp_code == 0) {
@@ -457,6 +459,7 @@
 				this.dialogVisible3 = false
 				this.catedata.NUM = this.selData[0].ASSETNUM;
 				this.catedata.DECRIPTION = this.selData[0].DESCRIPTION;
+				this.catedata.DEPTID = this.selData[0].DEPTID;
 				this.catedata.VERSION = this.selData[0].VERSION;
 				this.$emit('request');
 			},

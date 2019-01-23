@@ -268,8 +268,8 @@
 				this.$axios.get(this.basic_url + '/api-apps/app/inspectionMet?DEPTID=' + this.parentIds, {
 					params: data
 				}).then((res) => {
-					console.log(this.parentIds);
-					console.log(res.data);
+					// console.log(this.parentIds);
+					// console.log(res.data);
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -426,8 +426,9 @@
 								"M_NAME": '',
 								"M_ENAME": '',
 								"M_TYPE": '',
-								"STATUS": '1',
+								"STATUS": '',
 								"VERSION": '',
+								"DEPTID": '',
 								"ENTERBY": this.currentUser,
 								"ENTERDATE": this.currentDate,
 								"isEditing": true,
@@ -458,6 +459,7 @@
 						"M_TYPE": row.M_TYPE,
 						"STATUS": row.STATUS,
 					    "VERSION": row.VERSION,
+					    "DEPTID": row.DEPTID,
 						"ENTERBY": row.CHANGEBY,
 					    "ENTERDATE": row.CHANGEDATE,
 					}
@@ -513,6 +515,7 @@
 				this.catedata.M_NAME = this.selData[0].M_NAME;
 				this.catedata.M_ENAME = this.selData[0].M_ENAME;
 				this.catedata.M_TYPE = this.selData[0].M_TYPE;
+				this.catedata.DEPTID = this.selData[0].DEPTID;
 				this.catedata.VERSION = this.selData[0].VERSION;
 				this.$emit('request');
 			},

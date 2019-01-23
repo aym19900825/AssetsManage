@@ -145,10 +145,10 @@
 					            layout="total, sizes, prev, pager, next"
 					            :total="page.totalCount">
 					        </el-pagination>
-				<span slot="footer" class="dialog-footer" v-if="noviews">
-	    			<el-button @click="dialogVisname = false">取 消</el-button>
+				<div slot="footer" class="el-dialog__footer" v-if="noviews">
 	    			<el-button type="primary" @click="addinstruname">确 定</el-button>
-	  			</span>
+	    			<el-button @click="dialogVisname = false">取 消</el-button>
+	  			</div>
 			</el-dialog>
 			<!--设备名称 End-->
 		</div>

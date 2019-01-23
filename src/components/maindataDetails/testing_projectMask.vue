@@ -104,7 +104,7 @@
 										</el-button>
 									</div>
 									<el-table :header-cell-style="rowClass" :fit="true" :data="testing_projectForm.QUALIFICATIONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'testing_projectForm.QUALIFICATIONList', order: 'descending'}">
-										<el-table-column prop="iconOperation" fixed width="50px" v-show="!viewtitle">
+										<el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 											<template slot-scope="scope">
 												<i class="el-icon-check" v-if="scope.row.isEditing"></i>
 												<i class="el-icon-edit" v-else="v-else"></i>

@@ -617,6 +617,8 @@
 				let that = this;
 				var url = this.basic_url + '/api-user/depts/tree';
 				this.$axios.get(url, {}).then((res) => {
+					console.log(2333);
+					console.log(res.data);
 					this.resourceData = res.data;
 					this.treeData = this.transformTree(this.resourceData);
 				});

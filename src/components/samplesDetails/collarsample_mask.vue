@@ -28,14 +28,14 @@
 											</el-input>
 										</el-col>-->
 										<el-col :span="4" class="pull-right">
-											<el-input v-model="samplesForm.STATE" :disabled="true">
+											<el-input v-model="samplesForm.STATEDesc" :disabled="true">
 												<template slot="prepend">状态</template>
 											</el-input>
 										</el-col>
 										<el-col :span="6" class="pull-right">
 											<el-input v-model="samplesForm.ITEM_STEP" :disabled="true">
 												<template slot="prepend">样品序号</template>
-												<el-button slot="append" icon="el-icon-search" @click="addsamplenum"></el-button>
+												<el-button slot="append" icon="el-icon-search" @click="addsamplenum" :disabled="noedit"></el-button>
 											</el-input>
 										</el-col>
 									</el-row>
@@ -51,7 +51,7 @@
 										<el-col :span="8">
 											<el-form-item label="样品编号" prop="ITEMNUM">
 												<el-input v-model="samplesForm.ITEMNUM" :disabled="true">
-													<el-button slot="append" icon="el-icon-search" @click="getsample"></el-button>
+													<el-button slot="append" icon="el-icon-search" @click="getsample" :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -66,7 +66,7 @@
 													<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
 												</el-select> -->
 												<el-input v-model="samplesForm.TYPE" :disabled="true">
-													<el-button slot="append" icon="el-icon-search" @click="addprobtn"></el-button>
+													<el-button slot="append" icon="el-icon-search" @click="addprobtn" :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -167,8 +167,8 @@
 								</el-collapse-item>
 							</el-collapse>
 						</div>
-						<div class="content-footer">
-							<el-button type="primary" @click="saveAndUpdate('samplesForm')">保存</el-button>
+						<div class="content-footer" v-if="!viewtitle">
+							<el-button type="primary" @click="saveAndUpdate('samplesForm')" >保存</el-button>
 							<el-button type="success" @click="saveAndSubmit('samplesForm')">保存并继续</el-button>
 							<el-button @click="close">取消</el-button> 
 						</div>
@@ -318,7 +318,7 @@
 						ACCEPT_DATE: '',//收样日期
 						GRANT_PERSON: '',//领样人
 						GRANT_DATE: '',//领样日期
-						STATE: '1',//状态
+						STATE: '',//状态
 						STATUSDATE: '',//状态日期
 						ENTERBY: '',//录入人
 						ENTERDATE: '',//录入时间
@@ -567,6 +567,7 @@
 			//这是查看
 			view() {
 				this.addtitle = false;
+				this.modifytitle = false;
 				this.viewtitle = true;
 				this.views = true; //
 				this.noviews = false;

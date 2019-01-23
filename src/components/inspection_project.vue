@@ -455,10 +455,10 @@
 				}
 				if (isEditingflag==false){
                 	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-                		// console.log(res);
-                		var currentUser, currentDate, currentDept;
+                		
+                		var currentUser, currentDate;
 						this.currentUser=res.data.nickname;
-						this.currentDept=res.data.deptid;
+						this.currentDept=this.formInline.DEPTID;
 						var date=new Date();
 						this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 						var obj = {

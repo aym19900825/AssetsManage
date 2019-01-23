@@ -165,6 +165,7 @@
 				});
 			},
 			getdetail(id){
+				console.log(123456);
 				console.log(id)
 				var url = this.basic_url + '/api-user/roles/' + id;
 				this.$axios.get(url, {}).then((res) => {

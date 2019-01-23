@@ -145,7 +145,7 @@
 								</el-table-column>
 								<el-table-column label="备注" sortable width="160px" prop="MEMO" v-if="this.checkedName.indexOf('备注')!=-1">
 								</el-table-column>
-								<el-table-column label="状态" sortable width="140px" prop="STATE" v-if="this.checkedName.indexOf('状态')!=-1">
+								<el-table-column label="状态" sortable width="140px" prop="STATEDesc" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
 								<!--<el-table-column label="信息状态" sortable width="140px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
 								</el-table-column>-->
@@ -243,7 +243,7 @@
 					},
 					{
 						label: '状态',
-						prop: 'STATE'
+						prop: 'STATEDesc'
 					},
 					{
 						label: '信息状态',
@@ -361,7 +361,8 @@
 					DO_PERSON: '',//处理人
 					DO_DATE: '',//处理日期
 					MEMO: '',//备注
-					STATE: '已检',//状态
+					STATE: '3',//状态
+					STATEDesc:'已检',
 					STATUS: '',//信息状态
 					ENTERBY: '',//录入人
 					ENTERDATE: '',//录入时间

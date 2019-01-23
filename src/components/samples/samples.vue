@@ -65,13 +65,6 @@
 										<el-input v-model="searchList.V_NAME"></el-input>
 									</el-form-item>
 								</el-col>
-								<!-- <el-col :span="7">
-									<el-form-item label="生产单位" prop="P_NAME">
-										<el-input v-model="searchList.P_NAME"></el-input>
-									</el-form-item>
-								</el-col> -->
-								
-								
 							</el-row>
 							<el-row :gutter="5">
 								<el-col :span="7">
@@ -155,7 +148,7 @@
 								</el-table-column>
 								<el-table-column label="接样日期" sortable width="140px" :formatter="dateFormat" prop="RECIP_DATE" v-if="this.checkedName.indexOf('接样日期')!=-1">
 								</el-table-column>
-								<el-table-column label="样品状态" sortable width="100px" prop="STATE" v-if="this.checkedName.indexOf('状态')!=-1">
+								<el-table-column label="状态" sortable width="100px" prop="STATEDesc" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
 								<!--<el-table-column label="信息状态" sortable width="140px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
 								</el-table-column>-->
@@ -251,7 +244,7 @@
 					},
 					{
 						label: '状态',
-						prop: 'STATE'
+						prop: 'STATEDesc'
 					},
 					{
 						label: '信息状态',
@@ -475,7 +468,7 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					
+					console.log(res.data);
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -493,7 +486,7 @@
 							for(var j = 0; j < this.commentArr[i].length; j++) {
 								newarr.push(this.commentArr[i][j])
 							}
-						}
+						}0
 					}
 					this.samplesList = newarr;
 				}).catch((wrong) => {})

@@ -104,9 +104,9 @@
 							</div>
 						</el-card>
 					</el-col>
-					<el-col :span="6" class="v-resize"><product2child @parentMsd_product2="childMsd_product2" ref="product2child"></product2child></el-col>
-					<el-col :span="6" class="v-resize"><inspectionSta2child @parentMsd_inspectionSta2="childMsd_inspectionSta2" ref="inspectionSta2child"></inspectionSta2child></el-col>
-					<el-col :span="6" class="v-resize"><inspectionPro2child @parentMsd_inspectionPro2="childMsd_inspectionPro2" ref="inspectionPro2child"></inspectionPro2child></el-col>
+					<el-col :span="6" class="v-resize"><product2child @parentMsd_product2="childMsd_product2" ref="product2child" :parentIds="formInline.DEPTID"></product2child></el-col>
+					<el-col :span="6" class="v-resize"><inspectionSta2child @parentMsd_inspectionSta2="childMsd_inspectionSta2" ref="inspectionSta2child" :parentIds="formInline.DEPTID"></inspectionSta2child></el-col>
+					<el-col :span="6" class="v-resize"><inspectionPro2child @parentMsd_inspectionPro2="childMsd_inspectionPro2" ref="inspectionPro2child" :parentIds="formInline.DEPTID"></inspectionPro2child></el-col>
 				</el-row>
 				<div class="el-collapse-item mt10 pt10 pb10" aria-expanded="true" accordion>
 					<el-row :gutter="0">
@@ -151,8 +151,8 @@
 			</el-table>
 			<!-- 表格 End-->
 			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible3 = false">取 消</el-button>
 		       <el-button type="primary" @click="addproclass">确 定</el-button>
+		       <el-button @click="dialogVisible3 = false">取 消</el-button>
 		    </span>
 		</el-dialog>
 		<!-- 产品类别 End -->
@@ -301,10 +301,11 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				this.$axios.get(this.basic_url + '/api-apps/app/productType?DEPTID=' + this.departmentId, {
+				// var parentIds=this.formInline.DEPTID;//获取下拉列表中的所属机构ID
+				this.$axios.get(this.basic_url + '/api-apps/app/productType?DEPTID=' + this.formInline.DEPTID, {
 					params: data
 				}).then((res) => {
-					// console.log(res.data);
+					// console.log();
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -383,32 +384,6 @@
 	            });
 			},
 
-			// getData(){//获取当前用户信息
-	  //           var url = this.basic_url + '/api-user/users/currentMap';
-	  //           this.$axios.get(url, {}).then((res) => {//获取当前用户信息
-   //                  this.departmentIds = res.data.deptId;
-                    	
-   //                  	var depturl = this.basic_url + '/api-user/depts/'+ this.departmentIds;
-			//             this.$axios.get(depturl, {}).then((res) => {//根据当前用户信息查询它的组织机构
-		 //                    // this.formInline.DEPTID = res.data.id;
-		 //                    // console.log(this.departmentId);
-			//             }).catch((err) => {
-			//                 this.$message({
-			//                     message: '网络错误，请重试',
-			//                     type: 'error'
-			//                 });
-			//             });
-
-
-	  //           }).catch((err) => {
-	  //               this.$message({
-	  //                   message: '网络错误，请重试',
-	  //                   type: 'error'
-	  //               });
-	  //           });
-
-	            
-	  //       },
 			requestData_productType2(val) {//加载数据
 				var _this = this;
 				var data = {

@@ -139,8 +139,8 @@
 			
 			<!-- 表格 End-->
 			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible3 = false">取 消</el-button>
 		       <el-button type="primary" @click="addproclass">确 定</el-button>
+		       <el-button @click="dialogVisible3 = false">取 消</el-button>
 		    </span>
 		</el-dialog>
 		<!-- 专业组 End -->
@@ -460,7 +460,7 @@
 			},
 			addproclass() { //小弹出框确认按钮事件
 				this.dialogVisible3 = false
-				this.catedata.PROF_NUM = this.selData[0].id;
+				this.catedata.PROF_NUM = this.selData[0].code;
 				this.catedata.PROF_GROUP = this.selData[0].fullname;
 				this.catedata.VERSION = this.selData[0].VERSION;
 				this.$emit('request');

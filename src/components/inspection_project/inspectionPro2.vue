@@ -147,8 +147,8 @@
 			
 			<!-- 表格 End-->
 			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible3 = false">取 消</el-button>
 		       <el-button type="primary" @click="addproclass">确 定</el-button>
+		       <el-button @click="dialogVisible3 = false">取 消</el-button>
 		    </span>
 		</el-dialog>
 		<!-- 检验/检测项目 End -->
@@ -161,6 +161,7 @@
 		components: {
 			
 		},
+		props: ['parentIds'],
 		data() {
 			return {
 				basic_url: Config.dev_url,
@@ -219,17 +220,17 @@
 				})
 			},
 			loadMore () {//表格滚动加载
-			   // if (this.loadSign) {
-			   //   this.loadSign = false
-			   //   this.page.currentPage++
-			   //   if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			   //     return
-			   //   }
-			   //   setTimeout(() => {
-			   //     this.loadSign = true
-			   //   }, 1000)
-			   //   this.requestData_inspectionPro2()
-			   // }
+			   if (this.loadSign) {
+			     this.loadSign = false
+			     this.page.currentPage++
+			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+			       return
+			     }
+			     setTimeout(() => {
+			       this.loadSign = true
+			     }, 1000)
+			     this.viewfield_inspectionPro2(this.selParentId,this.parentId);
+			   }
 			 },
 			addprobtn(row){//查找基础数据中的检验/检测项目
 			 	this.catedata = row;//弹出框中选中的数据赋值给到table行中
@@ -238,7 +239,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				this.$axios.get(this.basic_url + '/api-apps/app/inspectionPro?DEPTID=' + this.departmentId, {
+				this.$axios.get(this.basic_url + '/api-apps/app/inspectionPro?DEPTID=' + this.parentIds, {
 					params: data
 				}).then((res) => {
 					// console.log(res.data);

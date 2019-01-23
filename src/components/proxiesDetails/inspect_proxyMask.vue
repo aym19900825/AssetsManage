@@ -54,6 +54,7 @@
 													<el-button slot="append" icon="el-icon-search" @click="getCustomer(1)">
 													</el-button>
 												</el-input>
+
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -528,6 +529,21 @@
 												<el-select clearable v-model="dataInfo.R_VENDOR" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit"  @change="RVENDORSelect($event)">
 													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 												</el-select>
+<<<<<<< HEAD
+=======
+												</el-form-item>
+											</el-col>
+											<el-col :span="8" style="display:none;" label-width="110px">
+												<el-form-item label="生产单位编号" prop="PRODUCT_UNIT">
+													<el-input v-model="dataInfo.PRODUCT_UNIT" :disabled="noedit"></el-input>
+												</el-form-item>
+											</el-col>
+										    <el-col :span="16">
+											<el-form-item label="生产单位名称" prop="P_NAME" label-width="110px">
+												<el-input v-model="dataInfo.P_NAME" :disabled="edit" >
+													<el-button slot="append" icon="el-icon-search" @click="getCustomer(2)" :disabled="noedit"></el-button>
+												</el-input>
+>>>>>>> cf4a0a576e8f92f269b6071a6859f99a608bd827
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">

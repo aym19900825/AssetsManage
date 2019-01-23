@@ -133,8 +133,8 @@
 			
 			<!-- 表格 End-->
 			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible3 = false">取 消</el-button>
 		       <el-button type="primary" @click="addproclass">确 定</el-button>
+		       <el-button @click="dialogVisible3 = false">取 消</el-button>
 		    </span>
 		</el-dialog>
 		<!-- 检验/检测报告模板 End -->
@@ -215,7 +215,7 @@
 			   //   setTimeout(() => {
 			   //     this.loadSign = true
 			   //   }, 1000)
-			   //   this.requestData_inspectionRepTem2()
+			   //   this.viewfield_inspectionRepTem2(this.selParentId,this.parentId);
 			   // }
 			 },
 			 addprobtn(row){//查找基础数据中的检验/检测项目

@@ -208,7 +208,7 @@
 			   //   setTimeout(() => {
 			   //     this.loadSign = true
 			   //   }, 1000)
-			   //   this.requestData_rawDataAsset()
+			   //   this.viewfield_rawDataAsset(this.selParentId,this.parentId);
 			   // }
 			 },
 			 addprobtn(row){//查找基础数据中的检验/检测项目
@@ -245,16 +245,16 @@
 			},
 			sizeChange(val) {//页数
 		      this.page.pageSize = val;
-		      this.requestData_rawDataAsset();
+		      this.viewfield_rawDataAsset(this.selParentId,this.parentId);
 		    },
 		    currentChange(val) {//当前页
 		      this.page.currentPage = val;
-		      this.requestData_rawDataAsset();
+		      this.viewfield_rawDataAsset(this.selParentId,this.parentId);
 		    },
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
-				this.requestData_rawDataAsset();
+				this.viewfield_rawDataAsset(this.selParentId,this.parentId);
 			},
 			judge(data) {//taxStatus 信息状态布尔值
 				return data.enabled ? '活动' : '不活动'
@@ -417,7 +417,8 @@
 								type: 'success'
 							});
 							//重新加载数据
-							this.requestData_rawDataAsset();
+							// this.requestData_rawDataAsset();
+							this.viewfield_rawDataAsset(this.selParentId,this.parentId);
 						}
 					}).catch((err) => {
 						this.$message({
@@ -443,7 +444,7 @@
 								message: '删除成功',
 								type: 'success'
 							});
-							this.requestData_rawDataAsset();
+							this.viewfield_rawDataAsset(this.selParentId,this.parentId);
 						}
 					}).catch((err) => {
 						this.$message({
@@ -465,9 +466,9 @@
 			},
 		},
 		
-		mounted() {
-			this.requestData_rawDataAsset();
-		},
+		// mounted() {
+		// 	this.requestData_rawDataAsset();
+		// },
 		
 
 	}

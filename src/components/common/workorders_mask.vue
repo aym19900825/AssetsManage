@@ -613,7 +613,7 @@
 								<!-- 录入人信息 End -->
 							</el-collapse>
 						</div>
-						<div class="el-dialog__footer">
+						<div class="el-dialog__footer" v-if="!viewtitle">
 								<el-button type="primary" @click="submitForm()">保存</el-button>
 								<el-button type="success" v-show="addtitle">保存并继续</el-button>
 								<el-button @click='close'>取消</el-button>

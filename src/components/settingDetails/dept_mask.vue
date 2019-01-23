@@ -410,8 +410,8 @@
 						
 					}
 					console.log(111);
-					console.log(typeof(this.adddeptForm));
-					console.log(JSON.stringify(this.adddeptForm));
+					console.log(this.adddeptForm);
+//					console.log(JSON.stringify(this.adddeptForm));
 					//深拷贝数据
 					let obj = JSON.stringify(this.adddeptForm);
 					console.log(obj);

@@ -35,7 +35,7 @@
 										<el-col :span="6" class="pull-right">
 											<el-input v-model="samplesForm.ITEM_STEP" :disabled="edit">
 												<template slot="prepend">样品序号</template>
-												<el-button slot="append" icon="el-icon-search" @click="addsamplenum"></el-button>
+												<el-button slot="append" icon="el-icon-search" @click="addsamplenum" :disabled="noedit"></el-button>
 											</el-input>
 										</el-col>
 									</el-row>
@@ -51,7 +51,7 @@
 										<el-col :span="8">
 											<el-form-item label="样品编号" prop="ITEMNUM">
 												<el-input v-model="samplesForm.ITEMNUM" :disabled="edit">
-													<el-button slot="append" icon="el-icon-search" @click="getsample"></el-button>
+													<el-button slot="append" icon="el-icon-search" @click="getsample" :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>

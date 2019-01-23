@@ -160,7 +160,7 @@
 										      </template>
 										    </el-table-column>
 
-										    <el-table-column prop="REASION" label="附件" sortable width="120px">
+										    <el-table-column prop="REASION" label="附件" sortable width="120px" v-if="!viewtitle">
 										      <template slot-scope="scope">
 										        <el-upload	class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/"
 													:on-preview="handlePreview"

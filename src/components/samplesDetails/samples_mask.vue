@@ -44,7 +44,7 @@
 										<el-col :span="8">
 											<el-form-item label="委托书编号" prop="PROXYNUM" label-width="110px">
 												<el-input v-model="samplesForm.PROXYNUM" :disabled="edit">
-													<el-button slot="append" icon="el-icon-search" @click="getProxy"></el-button>
+													<el-button slot="append" icon="el-icon-search" @click="getProxy" :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -192,7 +192,7 @@
 										</el-button>
 									</div>
 									<el-table :fit="true" max-height="260px" :header-cell-style="rowClass" :data="samplesForm.ITEM_LINEList" row-key="ID" border stripe highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'samplesForm.ITEM_LINEList', order: 'descending'}">
-									    <el-table-column prop="iconOperation" fixed width="50px">
+									    <el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 									      <template slot-scope="scope">
 									      	<i class="el-icon-check" v-show="scope.row.isEditing">
 									      	</i>
@@ -253,7 +253,7 @@
 									        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.CHANGEBY" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.CHANGEBY}}</span>
 									      </template>
 									    </el-table-column> -->
-									    <el-table-column fixed="right" label="操作" width="100px">
+									    <el-table-column fixed="right" label="操作" width="100px" v-if="!viewtitle">
 									      <template slot-scope="scope">
 									        <el-button @click = "deleteRow(scope.$index, samplesForm.ITEM_LINEList)" type="text" size="small">
 									          <i class="icon-trash red"></i>

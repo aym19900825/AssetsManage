@@ -53,7 +53,7 @@
 											<el-col :span="8">
 												<el-form-item label="名称" prop="V_NAME" label-width="110px">
 													<el-input v-model="dataInfo.V_NAME" :disabled="edit" width="100%">
-														<el-button slot="append" icon="el-icon-search" @click="getCustomer(1)">
+														<el-button slot="append" icon="el-icon-search" @click="getCustomer(1)" :disabled="noedit">
 														</el-button>
 													</el-input>
 												</el-form-item>
@@ -73,7 +73,7 @@
 											<el-col :span="8">
 												<el-form-item label="姓名" prop="V_PERSON" label-width="110px">
 													<el-input v-model="dataInfo.V_PERSON" :disabled="edit">
-														 <el-button slot="append" icon="el-icon-search" @click="addname"></el-button>
+														 <el-button slot="append" icon="el-icon-search" @click="addname" :disabled="noedit"></el-button>
 													</el-input>
 												</el-form-item>
 											</el-col>
@@ -538,7 +538,7 @@
 										    <el-col :span="16">
 											<el-form-item label="生产单位名称" prop="P_NAME" label-width="110px">
 												<el-input v-model="dataInfo.P_NAME" :disabled="edit" >
-													<el-button slot="append" icon="el-icon-search" @click="getCustomer(2)"></el-button>
+													<el-button slot="append" icon="el-icon-search" @click="getCustomer(2)" :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>

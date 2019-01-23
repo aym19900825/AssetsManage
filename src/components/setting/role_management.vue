@@ -182,7 +182,7 @@
 				treeData: [],//树
 				page: {//页码
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				selData:[],
@@ -402,6 +402,7 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
+					console.log(res);
 					this.roleList = res.data.data;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})

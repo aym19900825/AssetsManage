@@ -28,8 +28,7 @@
 <script>
 	import Config from '../../../config.js';
 	export default {
-//	props:["approvingData"],//第一种方式
-  name: 'product',
+  name: 'customer',
   
   data() {
     return {

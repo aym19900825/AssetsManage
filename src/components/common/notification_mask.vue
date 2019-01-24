@@ -108,6 +108,13 @@
 									</el-row>
 									<el-row>
 										<el-col :span="8">
+											<el-form-item label="产品类别" prop="PRODUCT_TYPE" label-width="110px">
+												<el-input v-model="dataInfo.PRODUCT_TYPE" :disabled="true">
+													   <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addcategory"></el-button>
+												</el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
 											<el-form-item label="受检产品名称" prop="ITEM_NAME" label-width="110px">
 												<el-input v-model="dataInfo.ITEM_NAME" :disabled="true">
 													   <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addproduct"></el-button>
@@ -425,6 +432,8 @@
 	    			<el-button @click="dialogVisible = false">取 消</el-button>
 	  			</span>
 			</el-dialog>
+			<!-- 产品类别  -->
+			<categorymask ref="categorychild" @categorydata="categorydata"></categorymask>
 			<!-- 产品名称  -->
 			<productmask ref="productchild" @appenddata="appenddata"></productmask>
 			<!--受检企业-->
@@ -447,6 +456,7 @@
 
 <script>
 	import Config from '../../config.js'
+	import categorymask from '../common/common_mask/categorylistmask.vue'//产品
 	import productmask from '../common/common_mask/productlistmask.vue'//产品
 	import enterprisemask from '../common/common_mask/enterprisemask.vue'//受检企业
 	import approvalmask from '../workflow/approving.vue'//审批页面
@@ -462,6 +472,7 @@
 			 flowhistorymask,
 			 flowmapmask,
 			 vewPoplemask,
+			 categorymask,
 			 productmask,
 			 enterprisemask,
 			 teststandardmask,
@@ -586,8 +597,10 @@
 				selectData:[],//承检单位数据
 				dataid:2,//修改和查看带过的id
 				workNot:'workNot',//appname
+				catenum:'',//产品类别作为参数传值给依据
 				pronum:'',//产品作为参数传值给依据
 				basisnum:'',////依据选中数据们字符串作为参数传值给项目
+				PRODUCT_TYPE:''//产品类别
 			};
 		},
 		methods: {
@@ -637,13 +650,17 @@
 						type: type
 					},
 				}).then((res) => {
-	               console.log(res);
 					this.selectData = res.data;
 				});
 			},
-			addproduct(){//受检产品名称
+			addcategory(){//产品类别
 				console.log(this.dataInfo.CJDW);
-				this.$refs.productchild.visible(this.dataInfo.CJDW);
+				this.$refs.categorychild.visible(this.dataInfo.CJDW);
+			},
+			addproduct(){//受检产品名称
+				console.log(234+'======');
+				console.log(this.catenum);
+				this.$refs.productchild.visible(this.catenum);
 			},
 			//单位
 			addCompany(type){
@@ -861,6 +878,15 @@
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
 				$(".mask_div").css("top", "100px");
+			},
+			//接到产品类别的值
+			categorydata(value){
+				console.log(233333);
+				console.log(value);
+				this.catenum = value[0];
+				this.dataInfo.PRODUCT_TYPE  = value[1];
+				console.log(233124245234);
+				console.log(this.dataInfo.PRODUCT_TYPE);
 			},
 			//接到产品的值
 			appenddata(value){

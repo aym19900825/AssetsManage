@@ -116,6 +116,7 @@
 											<template slot-scope="scope">
 												<el-form-item :prop="'QUALIFICATIONList.'+scope.$index + '.C_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.C_NAME" placeholder="请输入证书名称">
+														<el-button slot="append" icon="icon-search" @click="getpepole(scope.row)" :disabled="noedit"></el-button>
 													</el-input>
 													<span v-else="v-else">{{scope.row.C_NAME}}</span>
 												</el-form-item>
@@ -167,7 +168,7 @@
 				</div>
 			</div>
 			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
-				<el-table :data="gridData" @selection-change="SelChange">
+				<el-table :data="gridData" @selection-change="SelChange" height="400px">
 					<el-table-column type="selection" width="55" fixed>
 					</el-table-column>
 					<!-- <el-table-column label="用户名" sortable width="100px" prop="user">
@@ -403,7 +404,8 @@
 				dialogVisible2:false,//作业指导书弹出框
 				WORK_INSTRUCTIONList:[],
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
-				isEditing: true
+				isEditing: true,
+				peoplegrid:'',//人员资质当前这行放大镜
 			};
 		},
 		methods: {
@@ -786,20 +788,17 @@
 				this.save(testing_projectForm);
 				this.show = true;
 			},
-			getpepole() {
-				// type  1 這是負責人  2 這個事接收人
-				//				var params = {
-				//					page: this.page.currentPage,
-				//					limit: this.page.pageSize,
-				//				}
+			getpepole(item) {
+				console.log(233333312432342);
+				console.log(item);
+				this.peoplegrid = item;
 				var url = this.basic_url + '/api-user/users/qualifications';
 				this.$axios.get(url, {
-					//					params: params
+					
 				}).then((res) => {
 					this.page.totalCount = res.data.count;
 					this.gridData = res.data.data;
 					this.dialogVisible = true;
-					//					this.type = type;
 				});
 			},
 			dailogconfirm() { //小弹出框确认按钮事件
@@ -808,9 +807,15 @@
 						message: '请选择数据',
 						type: 'warning'
 					});
+				}else if(this.selval.length > 1){
+					this.$message({
+						message: ' 不可选择多条数据',
+						type: 'warning'
+					});
 				}else{
+					console.log(111111);
+					this.peoplegrid.C_NAME = this.selval[0].c_name;
 					this.dialogVisible = false;
-					this.testing_projectForm.QUALIFICATION = this.selval[0].c_name;
 				}
 			},
 			addwork() { //小弹出框确认按钮事件

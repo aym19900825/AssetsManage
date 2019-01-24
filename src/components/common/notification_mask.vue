@@ -137,7 +137,7 @@
 										<el-col :span="8">
 											<el-form-item label="受检企业" prop="V_NAME" label-width="140px">
 												<el-input v-model="dataInfo.V_NAME" :disabled="true">
-													   <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addCompany" ></el-button>
+													   <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addCompany('notivname')" ></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -429,7 +429,7 @@
 			<!-- 产品名称  -->
 			<productmask ref="productchild" @appenddata="appenddata"></productmask>
 			<!--受检企业-->
-			<enterprisemask ref="enterprisechild" @appendname="appendname"></enterprisemask>
+			<enterprisemask ref="enterprisechild" @appendnames="appendnames"></enterprisemask>
 			<!--审批页面-->
 			<approvalmask :approvingData="approvingData" ref="approvalChild" @detail="detailgetData"></approvalmask>
 			<!--流程历史-->
@@ -644,8 +644,8 @@
 				this.$refs.productchild.visible(this.DEPTID);
 			},
 			//单位
-			addCompany(){
-				this.$refs.enterprisechild.visible();
+			addCompany(type){
+				this.$refs.enterprisechild.visible(type);
 			},                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
 
 			handleNodeClick(data) { //获取勾选树菜单节点
@@ -862,11 +862,9 @@
 			},
 			//接到产品的值
 			appenddata(value){
-				console.log(1111111);
-				console.log(value);
 				this.dataInfo.ITEM_NAME=value;
 			},
-			appendname(value){
+			appendnames(value){
 				this.dataInfo.V_NAME = value;//名称
 			},
 			
@@ -1070,7 +1068,7 @@
 								message:res.data.resp_msg,
 								type: 'success'
 							});
-							this.requestData();
+							this.detailgetData();
 							$(".approval").show();
 							$(".start").hide();
 				    }

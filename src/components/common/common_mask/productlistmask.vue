@@ -10,7 +10,7 @@
 				</el-table-column>
 				<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
 				</el-table-column>
-				<el-table-column label="机构" width="185" sortable prop="DEPARTMENTDesc">
+				<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc">
 				</el-table-column>
 				<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
 				</el-table-column>

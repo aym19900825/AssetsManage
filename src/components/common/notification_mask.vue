@@ -206,7 +206,7 @@
 														</el-form-item>
 													</template>
 												</el-table-column>
-												<el-table-column prop="S_NAME" label="检验标准名称" sortable width="200px">
+												<el-table-column prop="S_NAME" label="检验标准名称" sortable>
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_NAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NAME" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.S_NAME}}</span>

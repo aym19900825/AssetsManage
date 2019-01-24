@@ -71,10 +71,10 @@
 					</el-table-column>
 					<el-table-column label="标准名称" width="220" sortable prop="S_NAME">
 					</el-table-column>
-					<el-table-column label="英文名称" width="220" sortable prop="S_ENGNAME">
-					</el-table-column>
-					<el-table-column label="状态" width="100" sortable prop="STATUS">
-					</el-table-column>
+					<!-- <el-table-column label="英文名称" width="220" sortable prop="S_ENGNAME">
+					</el-table-column> -->
+					<!-- <el-table-column label="状态" width="100" sortable prop="STATUS">
+					</el-table-column> -->
 					<el-table-column label="发布时间" width="160" sortable prop="RELEASETIME">
 					</el-table-column>
 					<el-table-column label="启用时间" width="160" sortable prop="STARTETIME">

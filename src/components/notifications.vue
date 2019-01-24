@@ -519,7 +519,15 @@
 					var deleteid = [];
 					var ids;
 					for(var i = 0; i < changeUser.length; i++) {
+						if(changeUser[i].STATE!=1){
+						 	this.$message({
+								message: '您的数据中有已启动的流程，所以能删除',
+								type: 'error'
+							});
+							return;
+						}else{
 						deleteid.push(changeUser[i].ID);
+						}
 					}
 					//ids为deleteid数组用逗号拼接的字符串
 					ids = deleteid.toString(',');

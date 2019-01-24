@@ -911,9 +911,17 @@
 						    });
 						return false;
 			       }else{
-			        console.log(this.dataInfo.CJDW);	
+			        console.log(this.dataInfo.CJDW);
+			         var oDate1 = new Date(this.dataInfo.XD_DATE); //下达日期
+    				 var oDate2 = new Date(this.dataInfo.COMPDATE);//完成日期
+    				  if(oDate1.getTime() > oDate2.getTime()){ 
+        						this.$message({
+								message: '完成时间不能早于下达时间',
+								type: 'warning'
+							}); 
+						return;	
+    				  }
 			        if(typeof(this.dataInfo.CJDW) != 'undefind') {
-			        	 console.log(this.selectData);
 			        	 for(var j=0;j<this.selectData.length;j++){
 			        	 	if(this.dataInfo.CJDW==this.selectData[j].fullname){
 			        	 		this.dataInfo.CJDW=this.selectData[j].id

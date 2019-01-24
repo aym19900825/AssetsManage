@@ -51,7 +51,7 @@
 										<el-col :span="8">
 											<el-form-item label="名称" prop="V_NAME" label-width="110px">
 												<el-input v-model="dataInfo.V_NAME" :disabled="edit" width="100%">
-													<el-button slot="append" icon="el-icon-search" @click="getCustomer(1)">
+													<el-button slot="append" icon="el-icon-search" @click="getCustomer('vname')">
 													</el-button>
 												</el-input>
 
@@ -491,7 +491,7 @@
 									    <el-col :span="16">
 										<el-form-item label="生产单位名称" prop="P_NAME" label-width="110px">
 											<el-input v-model="dataInfo.P_NAME" :disabled="edit" >
-												<el-button slot="append" icon="el-icon-search" @click="getCustomer(2)"></el-button>
+												<el-button slot="append" icon="el-icon-search" @click="getCustomer('pname')"></el-button>
 											</el-input>
 										</el-form-item>
 										</el-col>
@@ -607,39 +607,11 @@
 					</el-form>
 				</div>
 			</div>
-			<!--生产单位-->
-			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
-				<el-table :data="gridData" @selection-change="SelChange">
-					<el-table-column type="selection" width="55" fixed>
-					</el-table-column>
-					<el-table-column label="组织机构代码" sortable width="100px" prop="CODE">
-					</el-table-column>
-					<el-table-column label="单位名称" sortable width="200px" prop="NAME">
-					</el-table-column>
-					<el-table-column label="联系人" sortable width="100px" prop="PERSON">
-					</el-table-column>
-					<el-table-column label="联系地址" sortable width="200px" prop="CONTACT_ADDRESS">
-					</el-table-column>
-					<el-table-column label="联系电话" sortable width="200px" prop="PHONE">
-					</el-table-column>
-				</el-table>
-				<el-pagination background class="pull-right" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-				</el-pagination>
-				<span slot="footer" class="dialog-footer">
-	    			<el-button @click="dialogVisible = false">取 消</el-button>
-	    			<el-button type="primary" @click="dailogconfirm()">确 定</el-button>
-	  			</span>
-			</el-dialog>
-			<!-- 样品名称 Begin -->
-			
-			<!-- 样品名称 End -->
 			<!-- 客户联系人 Begin -->
-			<el-dialog :modal-append-to-body="false" title="客户联系人" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
-				<el-table :header-cell-style="rowClass" :data="CUSTOMER_PERSONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @selection-change="SelChange" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER.CUSTOMER_PERSONList', order: 'descending'}">
+			<el-dialog :modal-append-to-body="false" title="客户联系人" :visible.sync="dialogVisibleuser" width="80%" :before-close="handleClose">
+				<el-table :header-cell-style="rowClass" :data="CUSTOMER_PERSONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @selection-change="SelChange" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER_PERSONList', order: 'descending'}" v-loadmore="loadMore">
 					<el-table-column type="selection" width="55" fixed align="center">
 					</el-table-column>
-					<!-- <el-table-column label="序号" sortable width="120px" prop="STEP">
-					</el-table-column> -->
 					<el-table-column label="联系人" sortable width="150px" prop="PERSON">
 					</el-table-column>
 					<el-table-column prop="PHONE" label="联系电话" sortable width="150px">
@@ -653,13 +625,15 @@
 				<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 				<span slot="footer" class="dialog-footer">
-			       <el-button @click="dialogVisible3 = false">取 消</el-button>
 			       <el-button type="primary" @click="addcusname">确 定</el-button>
+			       <el-button @click="dialogVisibleuser = false">取 消</el-button>
 			    </span>
 			</el-dialog>
 			<!-- 客户联系人 End -->
 			<!-- 样品名称  -->
 			<sampletmask ref="samplechild" @appenddes="appenddes" @appendmod="appendmod" @appendqua="appendqua"  ></sampletmask>
+			<!--受检企业-->
+			<enterprisemask ref="enterprisechild" @appendname="appendname" @appendadd="appendadd" @appendzip="appendzip"@appendnames="appendnames" @appendid="appendid"></enterprisemask>
 		<!--审批页面-->
 			<approvalmask :approvingData="approvingData" ref="approvalChild"  @detail="detailgetData"></approvalmask>
 			<!--流程历史-->
@@ -675,6 +649,7 @@
 <script>
 	import Config from '../../config.js';
 	import sampletmask from '../common/common_mask/samplemask.vue'//样品名称
+	import enterprisemask from '../common/common_mask/enterprisemask.vue'//企业
 	import approvalmask from '../workflow/approving.vue'
 	import flowhistorymask from '../workflow/flowhistory.vue'
 	import flowmapmask from '../workflow/flowmap.vue'
@@ -687,6 +662,7 @@
 			 flowmapmask,
 			 vewPoplemask,
 			 sampletmask,
+			 enterprisemask,
 		},
 		data() {
 			var validate = (rule, value, callback) => {
@@ -770,6 +746,20 @@
 					STATUSDesc:'草稿',
 					VERSION:'1',
 					ITEM_NAME:'',
+					VENDOR:'',
+					ITEM_NAME:'',
+					ITEM_MODEL:'',
+					ITEM_QUALITY:'',
+					ITEM_SECRECY:'',
+					ITEM_METHOD:'',
+					ITEM_DISPOSITION:'',
+					COMPDATE:'',
+					COMPMODE:'',
+					REMARKS:'',
+					V_NAME:'',
+					V_ADDRESS:'',
+					V_ZIPCODE:'',
+					P_NAME:'',
 					INSPECT_PROXY_PROJECList: [],
 					INSPECT_PROXY_BASISList: [],
 					CHECK_PROXY_CONTRACTList: [],
@@ -822,7 +812,6 @@
 				activeNames: ['1', '2', '3', '4', '5', '6', '7', '8', ], //手风琴数量
 				labelPosition: 'top', //表格
 				labelPositions: 'right',
-				dialogVisible: false, //对话框
 				rules: {
 					V_NAME: [{ required: true, validator: validateVname}],//名称
 					V_ADDRESS: [{ required: true,validator: validateVaddress}],//地址
@@ -856,10 +845,8 @@
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
-				dialogVisible2:false,
-				dialogVisible3:false,
-				samplesList:[],
-				customid:1,
+				dialogVisibleuser:false,
+				customid:"",
 				dataid:'',//修改和查看带过的id
 				inspectPro:'inspectPro',//appname
 				CUSTOMER_PERSONList:[],//
@@ -942,10 +929,21 @@
 					VERSION: '1',
 					STATUS: '1',
 					STATUSDesc:'草稿',
+					ITEM_NAME:'',
+					VENDOR:'',
+					ITEM_NAME:'',
+					ITEM_MODEL:'',
+					ITEM_QUALITY:'',
+					ITEM_SECRECY:'',
+					ITEM_METHOD:'',
+					ITEM_DISPOSITION:'',
+					COMPDATE:'',
+					COMPMODE:'',
+					REMARKS:'',
 					V_NAME:'',
-					MEMO:'',
-					LEADER:'',
-					MAINGROUP:'',
+					V_ADDRESS:'',
+					V_ZIPCODE:'',
+					P_NAME:'',
 					INSPECT_PROXY_PROJECList: [],
 					INSPECT_PROXY_BASISList: [],
 					CHECK_PROXY_CONTRACTList: [],
@@ -1028,7 +1026,7 @@
 				this.dataInfo.CHECK_PROXY_CONTRACTList.push(obj);
 			},
 			addsample(){
-			this.$refs.samplechild.visible();
+				this.$refs.samplechild.visible();
 			},
 			
 			//刪除新建行
@@ -1222,18 +1220,32 @@
 				$(".mask_div").css("height", "80%");
 				$(".mask_div").css("top", "100px");
 			},
-			appenddes(value){
-				console.log(value);
-				console.log(11111);				
+			//样品
+			appenddes(value){			
 				this.dataInfo.ITEM_NAME = value;//名称
-				console.log(name);
-				console.log(this.dataInfo.ITEM_NAME);
 			},
 			appendmod(value){
 				this.dataInfo.ITEM_MODEL=value;
 			},
 			appendqua(value){
 				this.dataInfo.ITEM_QUALITY=value;
+			},
+			//委托单位
+			appendname(value){		
+				this.dataInfo.V_NAME = value;//名称
+			},
+			appendadd(value){
+				this.dataInfo.V_ADDRESS=value;
+			},
+			appendzip(value){
+				this.dataInfo.V_ZIPCODE=value;
+			},
+			appendid(value){
+				this.customid=value;
+			},
+			//生成单位
+			appendnames(value){
+				this.dataInfo.P_NAME=value;
 			},
 			// 保存users/saveOrUpdate
 			save() {
@@ -1341,58 +1353,31 @@
 			},
 			//获取负责人和接收人
 			getCustomer(type) {
-				// type  1 這是負責人  2 這個事接收人
-				var params = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-				}
-				var url = this.basic_url + '/api-apps/app/customer';
-				this.$axios.get(url, {params: params}).then((res) => {
-					this.page.totalCount = res.data.count;
-					this.gridData = res.data.data;
-					this.dialogVisible = true;
-					this.type = type;
-				});
+				this.$refs.enterprisechild.visible(type);
 			},
-			dailogconfirm(type) { //小弹出框确认按钮事件
-				if(this.selval.length == 0){
+			addname(){
+				var customid=this.customid;
+				if(customid==""||customid=="undenfiend"){
 					this.$message({
-						message: '请选择数据',
-						type: 'warning'
-					});
-				}else if(this.selval.length > 1){
-					this.$message({
-						message: '不可同时选择多条数据',
+						message: '请先选委托单位名称',
 						type: 'warning'
 					});
 				}else{
-					this.dialogVisible = false;
-					if(this.type == '1') {
-						this.customid = this.selval[0].ID;
-						this.dataInfo.VENDOR=this.selval[0].CODE;
-						this.dataInfo.V_NAME = this.selval[0].NAME;
-						this.dataInfo.V_ADDRESS = this.selval[0].CONTACT_ADDRESS;
-						this.dataInfo.V_ZIPCODE = this.selval[0].ZIPCODE;
-						this.dataInfo.V_PERSON = this.selval[0].PERSON;
-						this.dataInfo.V_PHONE = this.selval[0].PHONE;
-					} else {
-						this.dataInfo.PRODUCT_UNIT= this.selval[0].CODE;
-						this.dataInfo.P_NAME = this.selval[0].NAME;
-					}
+					this.requestData();	
 				}
 			},
-			addname(){
+			requestData(){
 				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-				}
-				var url = this.basic_url + '/api-apps/app/customer/CUSTOMER/'+ this.customid;
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					this.CUSTOMER_PERSONList = res.data.CUSTOMER_PERSONList;
-				});
-				this.dialogVisible3 = true;
+						page: this.page.currentPage,
+						limit: this.page.pageSize,
+					}
+					var url = this.basic_url + '/api-apps/app/customer/CUSTOMER/'+ this.customid;
+					this.$axios.get(url, {
+						params: data
+					}).then((res) => {
+						this.CUSTOMER_PERSONList = res.data.CUSTOMER_PERSONList;
+					});
+					this.dialogVisibleuser = true;
 			},
 			addcusname(){
 				if(this.selval.length == 0){
@@ -1408,7 +1393,7 @@
 				}else{
 					this.dataInfo.V_PERSON = this.selval[0].PERSON;
 					this.dataInfo.V_PHONE = this.selval[0].PHONE;
-					this.dialogVisible3 = false;
+					this.dialogVisibleuser = false;
 				}
 			},
 			
@@ -1429,7 +1414,7 @@
 								message:res.data.resp_msg,
 								type: 'success'
 							});
-							this.requestData();
+							this.detailgetData();
 							this.start=false;
 							this.approval=true;
 				    }
@@ -1480,9 +1465,6 @@
 				this.approvingData.app=this.inspectPro;
 				this.$refs.vewPopleChild.getvewPople(this.dataid);
 			},
-			requestData(index) {
-				
-			},
 			getCompany() {
 				var type = "2";
 				var url = this.basic_url + '/api-user/depts/treeByType';
@@ -1496,23 +1478,8 @@
 			},
 		},
 		mounted() {
-			this.requestData();
 			this.getCompany();
 		},
-		watch:{
-       	appenddes(value){
-				console.log(value);
-				console.log(11111);				
-				this.dataInfo.ITEM_NAME = value;//名称
-				console.log(this.dataInfo.ITEM_NAME);
-			},
-			appendmod(value){
-				this.dataInfo.ITEM_MODEL=value;
-			},
-			appendqua(value){
-				this.dataInfo.ITEM_QUALITY=value;
-			},
-    	}
 	}
 </script>
 

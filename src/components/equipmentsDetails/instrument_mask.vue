@@ -167,17 +167,17 @@
 					'appid': 1
 				},
 				rules: {
-					ASSETNUM: [
-						{ required: true, trigger: 'blur', validator: this.Validators.isWorknumber },
+					ASSETNUM: [//设备编号
+						{ required: true, trigger: 'blur', validator: this.Validators.isWorknumber},
 					],
-					DESCRIPTION: [
-						{ required: true, message: '必填', trigger: 'blur' },
+					DESCRIPTION: [//设备名称
+						{ required: true, message: '必填', trigger: 'blur'},
 						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
-					CONFIG_UNIT: [
-						{ required: true, message: '必填', trigger: 'change' },
+					CONFIG_UNIT: [//配置单位
+						{ required: true, message: '必填', trigger: 'change'},
 					],
-					INS_SITE: [
+					INS_SITE: [//安装地点
 						{ required: true, message: '必填', trigger: 'blur' },
 						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
@@ -189,48 +189,74 @@
 						{ required: true, message: '必填', trigger: 'blur' },
 						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
-					ASSET_KPI: [//设备状态
+					ASSET_KPI: [//技术指标
 						{ required: true, message: '必填', trigger: 'blur' },
 						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
+					],
+					SUPPORT_ASSET: [//配套设备
+						{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
 					OPTION_STATUS: [//设备使用状态
 						{ required: true, message: '必填', trigger: 'blur' },
 						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
 					ISMETER: [//是否计量器具
-						{ required: true, message: '必填', trigger: 'blur' },
-						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
+						{ required: true, trigger: 'change', validator: this.Validators.isChoosedata},
 					],
 					ISPM: [//是否需要溯源
-						{ required: true, message: '必填', trigger: 'blur' },
-						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
+						{ required: true, trigger: 'change', validator: this.Validators.isChoosedata},
 					],
-					KEEPER: [
-						{ required: true,validator: validateKeeper},//设备保管人
+					KEEPER: [//设备保管人
+						{ required: true, trigger: 'blur', validator: this.Validators.isChoosedata},
 					],
 					ACCEPT_DATE: [//接收日期
 						{ type: 'date', required: true, message: '请选择日期', trigger: 'change' },
 					],
-					S_DATE: [
+					USEDATE: [//使用日期
 						{ type: 'date', required: true, message: '请选择日期', trigger: 'change' },
 					],
-					C_ADDRESS: [
-						{ required: true, message: '请输入配置地址', trigger: 'blur' },
+					S_DATE: [//启用日期
+						{ type: 'date', required: true, message: '请选择日期', trigger: 'change' },
 					],
-					A_STATU: [
-						{ required: true, message: '请输入接收状态', trigger: 'blur' },
+					C_ADDRESS: [//配置地址
+						{ required: true, message: '必填', trigger: 'blur' },
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
-					MODE1: [
-						{ required: true, message: '请选择鉴定/校准/验证方式', trigger: 'blur' },
+					MODE1: [//检定/验证
+						{ required: true, trigger: 'change', validator: this.Validators.isChoosedata},
 					],
-					STATUS: [
-						{ required: true, message: '请输入信息状态', trigger: 'blur' },
+					STATE: [//设备状态
+						{ required: true, trigger: 'change', validator: this.Validators.isChoosedata},
 					],
-					A_STATUS: [
-						{ required: true, message: '请输入接收状态', trigger: 'blur' },
+					MODE: [//维护方式
+						{ required: true, trigger: 'change', validator: this.Validators.isChoosedata},
 					],
-					A_PRICE: [
-						{ validator: checkNum, trigger: 'blur' },
+					STATUS: [//信息状态
+						{ required: true, trigger: 'blur', validator: this.Validators.isWorknumber},
+					],
+					A_STATUS: [//接收状态
+						{ required: true, trigger: 'change', validator: this.Validators.isChoosedata},
+					],
+					TYPE: [//设备分类
+						{ required: true, trigger: 'change', validator: this.Validators.isChoosedata},
+					],
+					A_PRICE: [//设备价值
+						{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey },
+					],
+					FACTOR_NUM: [//出厂编号
+						{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey },
+					],
+					SUPPLIER: [//供货单位
+						{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey },
+					],
+					ACCEPT_NUM: [//验收单号
+						{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey},
+					],
+					TECHNICAL_DATA: [//技术资料
+						{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey },
+					],
+					MEMO: [//备注
+						{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey },
 					],
 				},
 				basicInfo: [

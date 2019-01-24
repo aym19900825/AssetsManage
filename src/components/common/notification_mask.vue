@@ -213,13 +213,13 @@
 														</el-form-item>
 													</template>
 												</el-table-column>
-												<el-table-column prop="S_ENGNAME" label="英文名称" sortable width="200px">
+												<!-- <el-table-column prop="S_ENGNAME" label="英文名称" sortable width="200px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_ENGNAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_ENGNAME" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.S_ENGNAME}}</span>
 														</el-form-item>
 													</template>
-												</el-table-column>
+												</el-table-column> -->
 												<el-table-column prop="VERSION" label="版本" sortable width="200px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
@@ -294,8 +294,7 @@
 												<el-table-column prop="REMARKS" label="要求" sortable width="150px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" placeholder="请输入内容"></el-input>
-														<span v-show="!scope.row.isEditing">{{scope.row.REMARKS}}</span>
+															<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入内容"></el-input>
 														</el-form-item>
 													</template>
 												</el-table-column>
@@ -587,6 +586,8 @@
 				selectData:[],//承检单位数据
 				dataid:2,//修改和查看带过的id
 				workNot:'workNot',//appname
+				pronum:'',//产品作为参数传值给依据
+				basisnum:'',////依据选中数据们字符串作为参数传值给项目
 			};
 		},
 		methods: {
@@ -641,7 +642,8 @@
 				});
 			},
 			addproduct(){//受检产品名称
-				this.$refs.productchild.visible(this.DEPTID);
+				console.log(this.dataInfo.CJDW);
+				this.$refs.productchild.visible(this.dataInfo.CJDW);
 			},
 			//单位
 			addCompany(){
@@ -862,9 +864,11 @@
 			},
 			//接到产品的值
 			appenddata(value){
-				console.log(1111111);
-				console.log(value);
-				this.dataInfo.ITEM_NAME=value;
+				this.pronum = value[0];
+				this.dataInfo.ITEM_NAME = value[1];
+				console.log(23356642131);
+				console.log(this.pronum);
+				console.log(this.dataInfo.ITEM_NAME);
 			},
 			appendname(value){
 				this.dataInfo.V_NAME = value;//名称
@@ -1043,7 +1047,10 @@
 			 },
 			 //检测依据列表
 			addbasis(value){
-				for(var i = 0;i<value.length;i++){
+				console.log(23987528);
+				console.log(value);
+				this.basisnum = value[0];
+				for(var i = 1;i<value.length;i++){
 					this.dataInfo.WORK_NOTICE_CHECKBASISList.push(value[i]);
 				}
 				// this.dataInfo.WORK_NOTICE_CHECKBASISList = value;
@@ -1123,11 +1130,11 @@
 			},
 			//检测依据放大镜
 			basisleadbtn(){
-				this.$refs.standardchild.basislead();
+				this.$refs.standardchild.basislead(this.pronum);
 			},
 			//检测项目放大镜
 			basisleadbtn2(){
-				this.$refs.projectchild.projectlead();
+				this.$refs.projectchild.projectlead(this.basisnum);
 			}
 		},
 		mounted() {

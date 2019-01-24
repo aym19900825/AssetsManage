@@ -45,7 +45,7 @@
 			currentPage: 1,
 			pageSize: 20,
 			totalCount: 0
-			},
+		},
 		DEPTID:'',//当前选择的机构值
     }
   },
@@ -80,6 +80,7 @@
   	visible(DEPTID) {
 		this.DEPTID = DEPTID;
 		this.dialogProduct = true;
+		this.requestData();
   	},
   	loadMore () {
 	   if (this.loadSign) {
@@ -136,14 +137,16 @@
 			});
 		}else{
 			this.dialogProduct = false;
-			var value=this.selUser[0].PRO_NAME;
-			this.$emit('appenddata',value);
+			var proarr = [];
+			proarr.push(this.selUser[0].PRO_NUM);
+			proarr.push(this.selUser[0].PRO_NAME);
+			this.$emit('appenddata',proarr);
 			this.requestData();
 		}
 	},
   },
   mounted() {
-		this.requestData();
+		// this.requestData();
 	},
 }
 </script>

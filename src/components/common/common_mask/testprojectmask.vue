@@ -118,7 +118,8 @@
             STATUS: '',
         },
         projectList: [],//检测项目与要求
-        selectData:[],
+		selectData:[],
+		basisnum:''//检测依据传递过来的请求数据参数
     }
   },
 
@@ -178,8 +179,10 @@
 	close() {
 		this.dialogProduct = false;
     },
-    projectlead(){
-        this.dialogVisible = true;
+    projectlead(basisnum){
+		this.basisnum = basisnum;
+		this.dialogVisible = true;
+		this.requestData();
     },
     addbasis(){
         var selData = this.selUser;
@@ -241,10 +244,7 @@
             VERSION: this.searchList.VERSION,
             STATUS: this.searchList.STATUS,
         };
-        console.log(1454324565);
-        console.log(this.basisnums);
-        // this.$axios.get(this.basic_url +'/api-apps/app/inspectionPro2?S_NUM_where_in='+this.basisnums, {
-            this.$axios.get(this.basic_url +'/api-apps/app/inspectionPro', {
+        this.$axios.get(this.basic_url +'/api-apps/app/inspectionPro2?S_NUM_where_in='+this.basisnum, {
         
         }).then((res) => {
             console.log(2333333);

@@ -154,19 +154,13 @@ export default {
         	};
         	var flag = false;
             this.tabs = [this.selectedTab];
-            console.log(this.tabs);
-			for(var i = 0; i < this.$store.state.clickedNavs.length; i++){
-				if(item.name == this.$store.state.clickedNavs[i].name){
-					flag = true;
+            console.log(this.selectedTab);
+				if(this.selectedTab.name!="首页"){
+					this.tabs.unshift(item);
 				}
-			}
-			if(!flag){
-				this.tabs.unshift(item);
-				this.$store.state.clickedNavs.push(this.tabs)
-			}
+				this.$store.dispatch('setClickedNavAct',this.tabs);
 				this.$router.push({path: item.url});
-//         this.$store.state.clickedNavs.push(item);
-//          sessionStorage.setItem('clickedNav',JSON.stringify({arr:this.tabs}));
+
         },
         showSelected(item){
         	this.selectedTab = item;

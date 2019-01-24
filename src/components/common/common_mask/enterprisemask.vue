@@ -38,6 +38,7 @@
 		loadSign:true,//加载
 		commentArr:{},
 		selUser: [],//接勾选的值
+		type:0,
 		page: {
 			currentPage: 1,
 			pageSize: 20,
@@ -73,7 +74,8 @@
 	close() {
 		this.dialogCustomer = false;
 	},
-  	visible() {
+  	visible(type) {
+  		this.type=type;
 		this.dialogCustomer = true;
   	},
   	loadMore () {
@@ -97,7 +99,6 @@
 		this.$axios.get(this.basic_url + '/api-apps/app/customer', {
 			params: data
 		}).then((res) => {
-			console.log(res);
 			this.page.totalCount = res.data.count;	
 			//总的页数
 			let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -132,13 +133,23 @@
 				type: 'warning'
 			});
 		}else{
+			if(this.type=="vname"){ 
+				var name=this.selUser[0].NAME;//名称
+				var address=this.selUser[0].CONTACT_ADDRESS;//地址 
+				var	zipcode=this.selUser[0].ZIPCODE;//地址
+				var id=this.selUser[0].ID;
+				this.$emit('appendname',name);
+				this.$emit('appendadd',address);
+				this.$emit('appendzip',zipcode);
+				this.$emit('appendid',id);
+			}else if(this.type="pname"){
+				var names=this.selUser[0].NAME;//生产单位
+				this.$emit('appendnames',names);
+			}else if(this.type="notivname"){
+				var names=this.selUser[0].NAME;//生产单位
+				this.$emit('appendnames',names);
+			}
 			this.dialogCustomer = false;
-			var name=this.selUser[0].NAME;//名称
-			var address=this.selUser[0].CONTACT_ADDRESS;//地址 
-			var	zipcode=this.selUser[0].ZIPCODE;//地址
-			this.$emit('appendname',name);
-//			this.$emit('appendadd',address);
-//			this.$emit('appendzip',zipcode);
 			this.requestData();
 		}
 	},

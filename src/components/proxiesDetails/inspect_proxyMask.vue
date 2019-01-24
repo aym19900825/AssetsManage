@@ -105,7 +105,7 @@
 											<el-col :span="8">
 												<el-form-item label="名称" prop="ITEM_NAME" label-width="110px">
 													<el-input v-model="dataInfo.ITEM_NAME" :disabled="edit">
-														<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="addsample"></el-button>
+														<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="addsample('inspect_proxy')"></el-button>
 													</el-input>
 												</el-form-item>
 											</el-col>
@@ -631,7 +631,7 @@
 			</el-dialog>
 			<!-- 客户联系人 End -->
 			<!-- 样品名称  -->
-			<sampletmask ref="samplechild" @appenddes="appenddes" @appendmod="appendmod" @appendqua="appendqua"  ></sampletmask>
+			<sampletmask ref="samplechild" @appenddes="appenddes" @appendmod="appendmod" @appendqua="appendqua"></sampletmask>
 			<!--受检企业-->
 			<enterprisemask ref="enterprisechild" @appendname="appendname" @appendadd="appendadd" @appendzip="appendzip"@appendnames="appendnames" @appendid="appendid"></enterprisemask>
 		<!--审批页面-->
@@ -1025,8 +1025,8 @@
 				};
 				this.dataInfo.CHECK_PROXY_CONTRACTList.push(obj);
 			},
-			addsample(){
-				this.$refs.samplechild.visible();
+			addsample(type){
+				this.$refs.samplechild.visible(type);
 			},
 			
 			//刪除新建行
@@ -1221,7 +1221,7 @@
 				$(".mask_div").css("top", "100px");
 			},
 			//样品
-			appenddes(value){			
+			appenddes(value){
 				this.dataInfo.ITEM_NAME = value;//名称
 			},
 			appendmod(value){

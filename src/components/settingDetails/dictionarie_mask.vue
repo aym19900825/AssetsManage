@@ -98,7 +98,7 @@
 														</el-form-item>
 													</template>
 												</el-table-column>
-												<el-table-column fixed="right" label="操作" width="120">
+												<el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 													<template slot-scope="scope">
 														<el-button @click.native.prevent="deleteRow(scope.$index,dictionarieForm.subDicts)" type="text" size="small">
 															<i class="icon-trash red"></i>

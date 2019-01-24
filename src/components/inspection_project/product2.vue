@@ -216,17 +216,17 @@
 				})
 			},
 			loadMore () {//表格滚动加载
-			   // if (this.loadSign) {
-			   //   this.loadSign = false
-			   //   this.page.currentPage++
-			   //   if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			   //     return
-			   //   }
-			   //   setTimeout(() => {
-			   //     this.loadSign = true
-			   //   }, 1000)
-			   //   this.viewfield_product2(this.selParentId,this.parentId);
-			   // }
+			   if (this.loadSign) {
+			     this.loadSign = false
+			     this.page.currentPage++
+			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+			       return
+			     }
+			     setTimeout(() => {
+			       this.loadSign = true
+			     }, 1000)
+			     this.viewfield_product2(this.selParentId,this.parentId);
+			   }
 			 },
 			 addprobtn(row){//查找基础数据中的产品名称
 			 	this.catedata = row;//弹出框中选中的数据赋值给到table行中
@@ -388,18 +388,18 @@
 				}
 				if (isEditingflag==false){
                 	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-                		var currentUser, currentDatee, currentDept;
+                		var currentUser, currentDatee;
 						this.currentUser=res.data.nickname;
-						this.currentDept=res.data.deptid;
 						var date=new Date();
+						console.log(this.currentDept);
 						this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 						var obj = {
 							"NUM": this.parentId,//所属类别编号
 							"PRO_NUM": '',
 							"PRO_NAME": '',
-							"STATUS": '1',
+							"STATUS": '',
 							"VERSION": '',
-							"DEPTID": this.currentDept,
+							"DEPTID": '',
 							"ENTERBY": this.currentUser,
 							"ENTERDATE": this.currentDate,
 							"isEditing": true,
@@ -482,6 +482,7 @@
 				this.dialogVisible3 = false
 				this.catedata.PRO_NUM = this.selData[0].PRO_NUM;
 				this.catedata.PRO_NAME = this.selData[0].PRO_NAME;
+				this.catedata.DEPTID = this.selData[0].DEPTID;
 				this.catedata.VERSION = this.selData[0].VERSION;
 				this.$emit('request');
 			},

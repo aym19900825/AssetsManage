@@ -214,17 +214,17 @@
 				})
 			},
 			loadMore () {//表格滚动加载
-			   // if (this.loadSign) {
-			   //   this.loadSign = false
-			   //   this.page.currentPage++
-			   //   if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			   //     return
-			   //   }
-			   //   setTimeout(() => {
-			   //     this.loadSign = true
-			   //   }, 1000)
-			   //   this.requestData_professionGro()
-			   // }
+			   if (this.loadSign) {
+			     this.loadSign = false
+			     this.page.currentPage++
+			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+			       return
+			     }
+			     setTimeout(() => {
+			       this.loadSign = true
+			     }, 1000)
+			     this.viewfield_professionGro(this.selParentId,this.parentId);
+			   }
 			 },
 			addprobtn(row){//查找基础数据中的检验/检测项目
 				this.catedata = row;//弹出框中选中的数据赋值给到table行中
@@ -233,7 +233,6 @@
 				this.$axios.get(currenturl, {}).then((res) => {
 					// console.log(res.data);
 					this.categoryList = res.data;
-					
 				}).catch(error => {
 					console.log('请求失败');
 				})
@@ -375,9 +374,9 @@
 								"P_NUM": this.parentId,
 								"PROF_NUM": '',
 								"PROF_GROUP": '',
-								"STATUS": '1',
+								"STATUS": '',
 								"VERSION": '',
-								"DEPTID": this.currentDept,
+								"DEPTID": '',
 								"ENTERBY": this.currentUser,
 								"ENTERDATE": this.currentDate,
 								"isEditing": true,
@@ -462,6 +461,7 @@
 				this.dialogVisible3 = false
 				this.catedata.PROF_NUM = this.selData[0].code;
 				this.catedata.PROF_GROUP = this.selData[0].fullname;
+				this.catedata.DEPTID = this.selData[0].DEPTID;
 				this.catedata.VERSION = this.selData[0].VERSION;
 				this.$emit('request');
 			},

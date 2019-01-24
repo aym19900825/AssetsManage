@@ -173,21 +173,27 @@
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName" @tab-click="handleClick">
 										<el-tab-pane label="依据" name="first">
-											<div class="table-func table-funcb">
+											<!-- <div class="table-func table-funcb">
 												<el-button type="success" size="mini" round @click="addfieldBasis" v-show="!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建</font>
+												</el-button>
+											</div> -->
+											<div class="table-func table-funcb">
+												<el-button type="primary" size="mini" round @click="basisleadbtn">
+													<i class="icon-search"></i>
+													<font>选择</font>
 												</el-button>
 											</div>
 
 											<el-table :data="dataInfo.WORK_NOTICE_CHECKBASISList" row-key="ID" border stripe :fit="true" max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.WORK_NOTICE_CHECKBASISList', order: 'descending'}">
 
-												<el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
+												<!-- <el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 													<template slot-scope="scope">
 														<i class="el-icon-check" v-if="scope.row.isEditing"></i>
 														<i class="el-icon-edit" v-else="v-else"></i>
 													</template>
-												</el-table-column>
+												</el-table-column> -->
 												<el-table-column label="序号" sortable width="80px" prop="NUMBER" type="index">
 												</el-table-column>
 												<el-table-column label="检验标准编号" sortable width="200px" prop="S_NUM">
@@ -200,14 +206,6 @@
 														</el-form-item>
 													</template>
 												</el-table-column>
-												<!-- <el-table-column prop="S_NAME" label="检验标准内容" sortable width="200px">
-													<template slot-scope="scope">
-														<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_NAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NAME" placeholder="请输入内容"></el-input>
-														<span v-show="!scope.row.isEditing">{{scope.row.S_NAME}}</span>
-														</el-form-item>
-													</template>
-												</el-table-column> -->
 												<el-table-column prop="S_NAME" label="检验标准名称" sortable width="200px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_NAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
@@ -254,19 +252,25 @@
 											</el-table>
 										</el-tab-pane>
 										<el-tab-pane label="检验检测项目" name="second">
-											<div class="table-func table-funcb">
+											<!-- <div class="table-func table-funcb">
 												<el-button type="success" size="mini" round @click="addfieldProject" v-show="!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建</font>
 												</el-button>
+											</div> -->
+											<div class="table-func table-funcb">
+												<el-button type="primary" size="mini" round @click="basisleadbtn2">
+													<i class="icon-search"></i>
+													<font>选择</font>
+												</el-button>
 											</div>
 											<el-table :data="dataInfo.WORK_NOTICE_CHECKPROJECTList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.WORK_NOTICE_CHECKPROJECTList', order: 'descending'}">
-												<el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
+												<!-- <el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 													<template slot-scope="scope">
 														<i class="el-icon-check" v-show="scope.row.isEditing"></i>
 														<i class="el-icon-edit" v-show="!scope.row.isEditing"></i>
 													</template>
-												</el-table-column>
+												</el-table-column> -->
 												<el-table-column label="序号" sortable width="120px" prop="NUMBER" type="index">
 												</el-table-column>
 												<el-table-column label="检验检测项目编号" sortable width="145px" prop="P_NUM">
@@ -434,6 +438,10 @@
 			<flowmapmask :approvingData="approvingData" ref="flowmapChild" ></flowmapmask>
 			<!--当前责任人-->
 			<vewPoplemask :approvingData="approvingData"  ref="vewPopleChild" ></vewPoplemask>
+			<!-- 检测依据  -->
+			<teststandardmask ref="standardchild" @testbasis="addbasis"></teststandardmask>
+			<!-- 检测项目  -->
+			<testprojectmask ref="projectchild" @testproject="addproject"></testprojectmask>
 		</div>
 	</div>
 </template>
@@ -446,6 +454,8 @@
 	import flowhistorymask from '../workflow/flowhistory.vue'//流程历史
 	import flowmapmask from '../workflow/flowmap.vue'//流程地图
 	import vewPoplemask from '../workflow/vewPople.vue'//当前责任人
+	import teststandardmask from '../common/common_mask/teststandardmask.vue'//检测依据
+	import testprojectmask from '../common/common_mask/testprojectmask.vue'//检测依据
 	export default {
 		name: 'masks',
 		components: {
@@ -454,7 +464,9 @@
 			 flowmapmask,
 			 vewPoplemask,
 			 productmask,
-			 enterprisemask
+			 enterprisemask,
+			 teststandardmask,
+			 testprojectmask
 		},
 		data() {
 			 var validateItemleader = (rule, value, callback) => {//项目负责人
@@ -629,7 +641,7 @@
 				});
 			},
 			addproduct(){//受检产品名称
-				this.$refs.productchild.visible();
+				this.$refs.productchild.visible(this.DEPTID);
 			},
 			//单位
 			addCompany(type){
@@ -1027,6 +1039,21 @@
 			     this.requestData()
 			   }
 			 },
+			 //检测依据列表
+			addbasis(value){
+				for(var i = 0;i<value.length;i++){
+					this.dataInfo.WORK_NOTICE_CHECKBASISList.push(value[i]);
+				}
+				// this.dataInfo.WORK_NOTICE_CHECKBASISList = value;
+			},
+			 //检测项目列表
+			addproject(value){
+				for(var i = 0;i<value.length;i++){
+					value[i].P_DESC = value[i].P_NAME;
+					this.dataInfo.WORK_NOTICE_CHECKPROJECTList.push(value[i]);
+				}
+				// this.dataInfo.WORK_NOTICE_CHECKPROJECTList = value;
+			},
 			 //启动流程
 			startup(){
 				var url = this.basic_url + '/api-apps/app/workNot/flow/'+this.dataid;
@@ -1092,7 +1119,14 @@
 				this.approvingData.app=this.workNot;
 				this.$refs.vewPopleChild.getvewPople(this.dataid);
 			},
-			
+			//检测依据放大镜
+			basisleadbtn(){
+				this.$refs.standardchild.basislead();
+			},
+			//检测项目放大镜
+			basisleadbtn2(){
+				this.$refs.projectchild.projectlead();
+			}
 		},
 		mounted() {
 			this.getCompany();

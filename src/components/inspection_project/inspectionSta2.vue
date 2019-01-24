@@ -402,9 +402,8 @@
 					}
 					if (isEditingflag==false){
 	                	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-	                		var currentUser, currentDate, currentDept;
+	                		var currentUser, currentDate;
 							this.currentUser=res.data.nickname;
-							this.currentDept=res.data.deptid;
 							var date=new Date();
 							this.currentDate = this.$moment(date).format("YYYY-MM-DD");
 							this.currentDateTime = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
@@ -413,9 +412,9 @@
 								"PRO_NUM": this.parentId,//所属类别编号
 								"S_NUM": '',
 								"S_NAME": '',
-								"STATUS": '1',
+								"STATUS": '',
 								"VERSION": '',
-								"DEPTID": this.currentDept,
+								"DEPTID": '',
 								"RELEASETIME": this.currentDate,
 								"STARTETIME": this.currentDate,
 								"ENTERBY": this.currentUser,
@@ -502,6 +501,7 @@
 				this.dialogVisible3 = false
 				this.catedata.S_NUM = this.selData[0].S_NUM;
 				this.catedata.S_NAME = this.selData[0].S_NAME;
+				this.catedata.DEPTID = this.selData[0].DEPTID;
 				this.catedata.VERSION = this.selData[0].VERSION;
 				this.$emit('request');
 			},

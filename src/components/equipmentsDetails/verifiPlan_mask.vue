@@ -40,7 +40,7 @@
 										</el-button>
 									</div>
 									<el-table :header-cell-style="rowClass" :data="dataInfo.tableList" row-key="ID" border stripe :fit="true" max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'dataInfo.pmRecord', order: 'descending'}">
-										<el-table-column prop="iconOperation" fixed label="" width="50px">
+										<el-table-column prop="iconOperation" fixed label="" width="50px" v-if="!viewtitle">
 											<template slot-scope="scope">
 												<i class="el-icon-check" v-if="scope.row.isEditing"  @click="changeEdit(scope.row)"></i>
 												<i class="el-icon-edit" v-else="v-else" @click="changeEdit(scope.row)"></i>
@@ -116,7 +116,7 @@
 												</el-form-item>
 											</template>
 										</el-table-column>
-	                                    <el-table-column prop="CHECKMEMO" label="核查结果" sortable width="120px">
+	                                    <el-table-column prop="CHECKMEMO" label="核查结果">
 											<template slot-scope="scope">
 												<el-form-item :prop="'tableList.'+scope.$index + '.CHECKMEMO'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 	                                                <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHECKMEMO" placeholder="请输入核查结果">
@@ -125,7 +125,7 @@
 												</el-form-item>
 											</template>
 										</el-table-column>
-										<el-table-column label="操作" sortable width="80px">
+										<el-table-column label="操作" sortable width="80px" v-if="!viewtitle">
 											<template slot-scope="scope">
 												<el-button type="danger" size="mini" round  @click="delLine(scope.$index,scope.row)">
 													<i class="el-icon-delete"></i>

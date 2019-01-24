@@ -245,17 +245,17 @@
 				})
 			},
 			loadMore () {//表格滚动加载
-			   // if (this.loadSign) {
-			   //   this.loadSign = false
-			   //   this.page.currentPage++
-			   //   if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			   //     return
-			   //   }
-			   //   setTimeout(() => {
-			   //     this.loadSign = true
-			   //   }, 1000)
-			   //   this.requestData_inspectionMet2()
-			   // }
+			   if (this.loadSign) {
+			     this.loadSign = false
+			     this.page.currentPage++
+			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+			       return
+			     }
+			     setTimeout(() => {
+			       this.loadSign = true
+			     }, 1000)
+			     this.viewfield_inspectionMet2(this.selParentId,this.parentId);
+			   }
 			 },
 			 // /api-apps/app/inspection_method?DEPTID=' + this.parentIds;
 			 addprobtn(row){//查找基础数据中的检验/检测项目
@@ -268,8 +268,8 @@
 				this.$axios.get(this.basic_url + '/api-apps/app/inspectionMet?DEPTID=' + this.parentIds, {
 					params: data
 				}).then((res) => {
-					console.log(this.parentIds);
-					console.log(res.data);
+					// console.log(this.parentIds);
+					// console.log(res.data);
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -426,8 +426,9 @@
 								"M_NAME": '',
 								"M_ENAME": '',
 								"M_TYPE": '',
-								"STATUS": '1',
+								"STATUS": '',
 								"VERSION": '',
+								"DEPTID": '',
 								"ENTERBY": this.currentUser,
 								"ENTERDATE": this.currentDate,
 								"isEditing": true,
@@ -458,6 +459,7 @@
 						"M_TYPE": row.M_TYPE,
 						"STATUS": row.STATUS,
 					    "VERSION": row.VERSION,
+					    "DEPTID": row.DEPTID,
 						"ENTERBY": row.CHANGEBY,
 					    "ENTERDATE": row.CHANGEDATE,
 					}
@@ -513,6 +515,7 @@
 				this.catedata.M_NAME = this.selData[0].M_NAME;
 				this.catedata.M_ENAME = this.selData[0].M_ENAME;
 				this.catedata.M_TYPE = this.selData[0].M_TYPE;
+				this.catedata.DEPTID = this.selData[0].DEPTID;
 				this.catedata.VERSION = this.selData[0].VERSION;
 				this.$emit('request');
 			},

@@ -46,6 +46,7 @@
 			pageSize: 20,
 			totalCount: 0
 			},
+		DEPTID:'',//当前选择的机构值
     }
   },
 
@@ -76,7 +77,8 @@
 	close() {
 		this.dialogProduct = false;
 	},
-  	visible() {
+  	visible(DEPTID) {
+		this.DEPTID = DEPTID;
 		this.dialogProduct = true;
   	},
   	loadMore () {
@@ -97,7 +99,7 @@
 			page: this.page.currentPage,
 			limit: this.page.pageSize,
 		};
-		var url = this.basic_url + '/api-apps/app/product';
+		var url = this.basic_url + '/api-apps/app/product2?DEPTID='+this.DEPTID;
 		this.$axios.get(url, {
 			params: data
 		}).then((res) => {
@@ -141,8 +143,8 @@
 	},
   },
   mounted() {
-			this.requestData();
-		},
+		this.requestData();
+	},
 }
 </script>
 

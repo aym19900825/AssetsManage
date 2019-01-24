@@ -227,10 +227,10 @@
 					<el-table-column label="样品名称" sortable prop="DESCRIPTION">
 					</el-table-column>
 				</el-table>
-				<span slot="footer" class="dialog-footer" style="text-align: center;">
-			       <el-button @click="resetSample">取 消</el-button>
+				<div slot="footer" class="el-dialog__footer">
 			       <el-button type="primary" @click="addSample">确 定</el-button>
-			    </span>
+			       <el-button @click="resetSample">取 消</el-button>
+			    </div>
 			</el-dialog> 
 			<!-- 设备编号弹出框 end-->
 		</div>

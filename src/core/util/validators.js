@@ -341,7 +341,7 @@ const validators = {
 	isChoosedata:function (rule, value, callback) {//放大镜选择验证
 		// (value == '' || typeof(value) == undefined)
         if (typeof(value) == undefined || value == '' || value == null) {
-            callback(new Error('请选择数据'));
+            callback(new Error('请选择'));
         }else {
             callback();
         }

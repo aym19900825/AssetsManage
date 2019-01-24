@@ -219,17 +219,17 @@
 										<el-table-column prop="SN" label="单件码" sortable width="170px" >
 									      <template slot-scope="scope">
 											  	<el-form-item  label-width="0px" :prop="'ITEM_LINEList.'+scope.$index + '.SN'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.SN" placeholder="必填">
+													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.SN" placeholder="请填写">
 													</el-input>
 													<span v-else="v-else">{{scope.row.SN}}</span>
 												</el-form-item>
 									      </template>
 									    </el-table-column>
 
-										<el-table-column prop="STATE" label="样品状态" sortable width="170px">
+										<el-table-column prop="STATEDesc" label="样品状态" sortable width="170px">
 									      <template slot-scope="scope">
-									        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATE" placeholder="请输入内容"></el-input>
-									      	<span v-else="v-else">{{scope.row.STATE}}</span>
+									        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATEDesc" placeholder="请输入内容" :disabled="true"></el-input>
+									      	<span v-else="v-else">{{scope.row.STATEDesc}}</span>
 										  </template>
 									    </el-table-column>
 									    
@@ -652,6 +652,7 @@
 					})
 				})
 				this.$axios.get(this.basic_url + '/api-apps/app/item/' + dataid, {}).then((res) => {
+					console.log(res.data);
 					for(var i=0;i<res.data.ITEM_LINEList.length;i++){
 						res.data.ITEM_LINEList[i].isEditing = false;
 					}
@@ -798,7 +799,8 @@
                     ITEMNUM:'',
                     ITEM_STEP:'',
                     SN:'',
-                    STATE:'',
+					STATE:'1',
+					STATEDesc:'待检',
                     ENTERBY:'',
                     ENTERDATE:'',
                     CHANGEBY:'',

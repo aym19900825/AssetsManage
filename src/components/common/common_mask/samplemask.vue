@@ -53,6 +53,7 @@
 		loadSign:true,//加载
 		commentArr:{},
 		selval: [],//接勾选的值
+		type:'',
 		page: {
 			currentPage: 1,
 			pageSize: 20,
@@ -88,7 +89,8 @@
 	close() {
 		this.dialogsample = false;
 	},
-  	visible() {
+  	visible(type) {
+  		this.type=type;
 		this.dialogsample = true;
   	},
   	loadMore () {
@@ -147,13 +149,24 @@
 				type: 'warning'
 			});
 		}else{
+			if(this.type=="inspect_proxy"){
+				var description=this.selval[0].DESCRIPTION;	
+				var model=this.selval[0].MODEL;
+				var quatity=this.selval[0].QUATITY;
+				this.$emit('appenddes',description);
+				this.$emit('appendmod',model);
+				this.$emit('appendqua',quatity);
+			}else{
+			    var name= this.selval[0].DESCRIPTION;//样品名称
+			    var model= this.selval[0].MODEL;//规格型号
+				var state = this.selval[0].STATE;//样品状态
+				var itemnum = this.selval[0].ITEMNUM;//样品编号	
+				this.$emit('appendname',description);
+				this.$emit('appendmod',model);
+				this.$emit('appendsta',state);
+				this.$emit('appendite',itemnum);
+			}
 			this.dialogsample = false;
-			var description=this.selval[0].DESCRIPTION;	
-			var model=this.selval[0].MODEL;
-			var quatity=this.selval[0].QUATITY;
-			this.$emit('appenddes',description);
-			this.$emit('appendmod',model);
-			this.$emit('appendqua',quatity);
 			this.requestData();
 		}
 	},

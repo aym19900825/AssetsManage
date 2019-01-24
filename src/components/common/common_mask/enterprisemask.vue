@@ -38,7 +38,7 @@
 		loadSign:true,//加载
 		commentArr:{},
 		selUser: [],//接勾选的值
-		type:0,
+		type:'',
 		page: {
 			currentPage: 1,
 			pageSize: 20,

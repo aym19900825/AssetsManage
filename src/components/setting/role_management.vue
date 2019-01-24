@@ -399,9 +399,7 @@
 					inactive: this.searchList.inactive
 				}
 				var url = this.basic_url + '/api-user/roles';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
+				this.$axios.get(url, {params: data}).then((res) => {
 					console.log(res);
 					this.roleList = res.data.data;
 					this.page.totalCount = res.data.count;

@@ -113,8 +113,7 @@
   data() {
     return {
 		basic_url: Config.dev_url,
-		productList: [],
-		dialogProduct: false,
+		dialogVisible: false,
 		loadSign:true,//加载
 		commentArr:{},
 		selUser: [],//接勾选的值
@@ -122,7 +121,18 @@
 			currentPage: 1,
 			pageSize: 20,
 			totalCount: 0
-			},
+        },
+        searchList: { //点击高级搜索后显示的内容
+            S_NUM: '',
+            S_NAME: '',
+            VERSION: '',
+            DEPARTMENT: '',
+            RELEASETIME: '',
+            STARTETIME: '',
+            STATUS: '',
+        },
+        standardList:[],
+        selectData:[],
     }
   },
 
@@ -133,7 +143,36 @@
 			return "";
 		}
 		return this.$moment(date).format("YYYY-MM-DD");
-	},
+    },
+    //重置
+    resetbtn(){
+        this.searchList = {
+            S_NUM:'',
+            S_NAME:'',
+            VERSION:'',
+            DEPARTMENT:'',
+            RELEASETIME:'',
+            STARTETIME:'',
+            STATUS:'',
+            P_NUM:'',
+            DEPTID:'',
+            P_NAME:'',
+            VERSION:'',
+            STATUS:'',
+        };
+    },
+    //提出单位
+    getCompany() {
+        var type = "2";
+        var url = this.basic_url + '/api-user/depts/treeByType';
+        this.$axios.get(url, {
+            params: {
+                type: type
+            },
+        }).then((res) => {
+            this.selectData = res.data;
+        });
+    },
   	//表头居中
 	rowClass({ row, rowIndex}) {
 	    return 'text-align:center'
@@ -152,11 +191,38 @@
   	//点击关闭按钮
 	close() {
 		this.dialogProduct = false;
-	},
-  	visible() {
-		this.dialogProduct = true;
-  	},
-  	loadMore () {
+    },
+    basislead(){
+        this.dialogVisible = true;
+    },
+    addbasis(){
+        var selData = this.selUser;
+        if(selData.length == 0) {
+            this.$message({
+                message: '请选择数据',
+                type: 'warning'
+            });
+            return;
+        } else {
+            var changeUser = this.selUser;
+            var list = [];
+            //basisnum为依据编号的数组
+            var basisnum = [];
+            for (var i = 0; i < changeUser.length; i++) {
+                basisnum.push(changeUser[i].S_NUM);
+            }
+            //basisnums为basisnum数组用逗号拼接的字符串
+            this.basisnums = basisnum.toString(',');
+            for(var i = 0;i<this.selUser.length;i++){
+                list.push(this.selUser[i]);
+            }
+            console.log(list);
+            this.$emit('testbasis',list);
+            this.dialogVisible = false;
+			this.requestData();
+        }
+    },
+    loadMore () {
 	   if (this.loadSign) {
 	     this.loadSign = false
 	     this.page.currentPage++
@@ -168,35 +234,53 @@
 	     }, 1000)
 	     this.requestData();
 	   }
-	},
+    },
+    searchinfo(index) {
+        this.page.currentPage = 1;
+        this.page.pageSize = 10;
+        this.requestData();
+    },
 	requestData(){
 		var data = {
-			page: this.page.currentPage,
-			limit: this.page.pageSize,
-		};
-		var url = this.basic_url + '/api-apps/app/product';
-		this.$axios.get(url, {
-			params: data
-		}).then((res) => {
-			this.page.totalCount = res.data.count;
-			//总的页数
-			let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-			if(this.page.currentPage >= totalPage) {
-				this.loadSign = false
-			} else {
-				this.loadSign = true
-			}
-			this.commentArr[this.page.currentPage] = res.data.data
-			let newarr = []
-			for(var i = 1; i <= totalPage; i++) {
-				if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-					for(var j = 0; j < this.commentArr[i].length; j++) {
-						newarr.push(this.commentArr[i][j])
-					}
-				}
-			}
-			this.productList = newarr;
-		}).catch((wrong) => {})
+            page: this.page.currentPage,
+            limit: this.page.pageSize,
+            S_NUM: this.searchList.S_NUM,
+            S_NAME: this.searchList.S_NAME,
+            S_ENGNAME:this.searchList.S_ENGNAME,
+            VERSION: this.searchList.VERSION,
+            DEPTID: this.searchList.DEPTID,
+            RELEASETIME: this.searchList.RELEASETIME,
+            STARTETIME: this.searchList.STARTETIME,
+            // STATUS: this.searchList.STATUS,
+        };
+        console.log(111111);
+        console.log(this.pronamenum);
+        // var url = this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.pronamenum;
+        var url = this.basic_url +'/api-apps/app/inspectionSta';
+        this.$axios.get(url, {
+            
+        }).then((res) => {
+            this.page.totalCount = res.data.count;	
+            //总的页数
+            let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
+            if(this.page.currentPage >= totalPage){
+                    this.loadSign = false
+            }else{
+                this.loadSign=true
+            }
+            this.commentArr[this.page.currentPage]=res.data.data
+            let newarr=[]
+            for(var i = 1; i <= totalPage; i++){
+            
+                if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
+                    
+                    for(var j = 0; j < this.commentArr[i].length; j++){
+                        newarr.push(this.commentArr[i][j])
+                    }
+                }
+            }
+            this.standardList = newarr;
+        }).catch((wrong) => {})
 	},
 	determine(){
 		if(this.selUser.length == 0){
@@ -215,10 +299,18 @@
 			this.$emit('appenddata',value);
 			this.requestData();
 		}
-	},
+    },
+    handleClose(done) {
+        this.$confirm('确认关闭？')
+            .then(_ => {
+                done();
+            })
+            .catch(_ => {});
+    }
   },
   mounted() {
-			this.requestData();
+            this.requestData();
+            this.getCompany();
 		},
 }
 </script>

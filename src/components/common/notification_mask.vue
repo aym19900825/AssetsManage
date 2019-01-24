@@ -439,7 +439,9 @@
 			<!--当前责任人-->
 			<vewPoplemask :approvingData="approvingData"  ref="vewPopleChild" ></vewPoplemask>
 			<!-- 检测依据  -->
-			<teststandardmask ref="standardchild" @appenddata="appenddata"></teststandardmask>
+			<teststandardmask ref="standardchild" @testbasis="addbasis"></teststandardmask>
+			<!-- 检测项目  -->
+			<testprojectmask ref="projectchild" @testproject="addproject"></testprojectmask>
 		</div>
 	</div>
 </template>
@@ -453,6 +455,7 @@
 	import flowmapmask from '../workflow/flowmap.vue'//流程地图
 	import vewPoplemask from '../workflow/vewPople.vue'//当前责任人
 	import teststandardmask from '../common/common_mask/teststandardmask.vue'//检测依据
+	import testprojectmask from '../common/common_mask/testprojectmask.vue'//检测依据
 	export default {
 		name: 'masks',
 		components: {
@@ -461,7 +464,9 @@
 			 flowmapmask,
 			 vewPoplemask,
 			 productmask,
-			 enterprisemask
+			 enterprisemask,
+			 teststandardmask,
+			 testprojectmask
 		},
 		data() {
 			 var validateItemleader = (rule, value, callback) => {//项目负责人
@@ -636,7 +641,7 @@
 				});
 			},
 			addproduct(){//受检产品名称
-				this.$refs.productchild.visible();
+				this.$refs.productchild.visible(this.DEPTID);
 			},
 			//单位
 			addCompany(){
@@ -1036,6 +1041,21 @@
 			     this.requestData()
 			   }
 			 },
+			 //检测依据列表
+			addbasis(value){
+				for(var i = 0;i<value.length;i++){
+					this.dataInfo.WORK_NOTICE_CHECKBASISList.push(value[i]);
+				}
+				// this.dataInfo.WORK_NOTICE_CHECKBASISList = value;
+			},
+			 //检测项目列表
+			addproject(value){
+				for(var i = 0;i<value.length;i++){
+					value[i].P_DESC = value[i].P_NAME;
+					this.dataInfo.WORK_NOTICE_CHECKPROJECTList.push(value[i]);
+				}
+				// this.dataInfo.WORK_NOTICE_CHECKPROJECTList = value;
+			},
 			 //启动流程
 			startup(){
 				var url = this.basic_url + '/api-apps/app/workNot/flow/'+this.dataid;
@@ -1101,7 +1121,14 @@
 				this.approvingData.app=this.workNot;
 				this.$refs.vewPopleChild.getvewPople(this.dataid);
 			},
-			
+			//检测依据放大镜
+			basisleadbtn(){
+				this.$refs.standardchild.basislead();
+			},
+			//检测项目放大镜
+			basisleadbtn2(){
+				this.$refs.projectchild.projectlead();
+			}
 		},
 		mounted() {
 			this.getCompany();

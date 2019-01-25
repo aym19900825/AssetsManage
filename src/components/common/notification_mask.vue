@@ -129,7 +129,7 @@
 										<el-col :span="8">
 											<el-form-item label="项目负责人" prop="P_LEADERDesc" label-width="110px">
 												<el-input v-model="dataInfo.P_LEADERDesc" :disabled="true">
-													<el-button :disabled="noedit" slot="append" icon="el-icon-search" @click="addperbtn"></el-button>
+													<el-button :disabled="noedit" slot="append" icon="el-icon-search" @click="addperbtn('leader')"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -161,7 +161,7 @@
 										<el-col :span="6">
 											<el-form-item label="接收人" prop="ACCEPT_PERSONDesc" label-width="110px">
 												<el-input v-model="dataInfo.ACCEPT_PERSONDesc" :disabled="edit">
-													<el-button slot="append" icon="el-icon-search" @click="getPeople(2)" :disabled="noedit"></el-button>
+													<el-button slot="append" icon="el-icon-search" @click="addperbtn('accept')" :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -412,7 +412,26 @@
 				</div>
 			</div>
 			<!-- 人员 -->
-			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose"  title="用户信息" >
+				<el-form :model="searchList">
+							<el-row :gutter="10">
+								<el-col :span="5">
+									<el-form-item label="用户名" prop="username" label-width="55px">
+										<el-input v-model="searchList.username">
+										</el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="5">
+									<el-form-item label="姓名" prop="nickname" label-width="45px">
+										<el-input v-model="searchList.nickname">
+										</el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="2">
+									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+								</el-col>
+							</el-row>
+						</el-form>
 				<el-table :header-cell-style="rowClass" :data="gridData" line-center border stripe height="400px" style="width: 100%;" :default-sort="{prop:'gridData', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" width="55" fixed>
 					</el-table-column>
@@ -428,7 +447,7 @@
 				<el-pagination background class="pull-right" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 				<span slot="footer" class="dialog-footer">
-	    			<el-button type="primary" @click="dailogconfirm()">确 定</el-button>
+	    			<el-button type="primary" @click="dailogconfirm">确 定</el-button>
 	    			<el-button @click="dialogVisible = false">取 消</el-button>
 	  			</span>
 			</el-dialog>
@@ -532,6 +551,10 @@
 					currentPage: 1,
 					pageSize: 20,
 					totalCount: 0
+				},
+				searchList: {
+					nickname: '',
+					username: '',
 				},
 				value: '',
 				selUser: [],
@@ -654,12 +677,9 @@
 				});
 			},
 			addcategory(){//产品类别
-				console.log(this.dataInfo.CJDW);
 				this.$refs.categorychild.visible(this.dataInfo.CJDW);
 			},
 			addproduct(){//受检产品名称
-				console.log(234+'======');
-				console.log(this.catenum);
 				this.$refs.productchild.visible(this.catenum);
 			},
 			//单位
@@ -881,12 +901,8 @@
 			},
 			//接到产品类别的值
 			categorydata(value){
-				console.log(233333);
-				console.log(value);
 				this.catenum = value[0];
 				this.dataInfo.PRODUCT_TYPE  = value[1];
-				console.log(233124245234);
-				console.log(this.dataInfo.PRODUCT_TYPE);
 			},
 			//接到产品的值
 			appenddata(value){
@@ -978,23 +994,38 @@
 					})
 					.catch(_ => {});
 			},
-			//获取负责人和接收人
-			getPeople(type) {
-				// type  1 這是負責人  2 這個事接收人
-				var params = {
+			searchinfo() {
+				this.page.currentPage = 1;
+				this.page.pageSize = 20;
+				this.addperbtn();
+			},
+			//项目负责人放大镜
+			addperbtn(type){
+				// console.log(this.dataInfo.CJDW);
+				if(this.dataInfo.CJDW==""||this.dataInfo.CJDW=="undefined"){
+					this.$message({
+						message: '请先选择承检单位',
+						type: 'warning'
+						});
+				}else{
+					var params = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
+					deptId: this.searchList.deptId,
+					nickname: this.searchList.nickname,
+					username: this.searchList.username,
 				}
-				var url = this.basic_url + '/api-user/users';
-				this.$axios.get(url, {params: params}).then((res) => {
-					this.page.totalCount = res.data.count;
+				var url = this.basic_url + '/api-user/users/usersByDept?deptId='+this.dataInfo.CJDW;
+				this.$axios.get(url, {
+					params: params
+				}).then((res) => {
 					this.gridData = res.data.data;
-					this.dialogVisible = true;
-					this.type = type;
 				});
+				this.dialogVisible = true;	
+				this.type=type;
+				}
 			},
-			
-			dailogconfirm(type) { //选择人员确定按钮
+			dailogconfirm() { //选择人员确定按钮
 				if(this.selUser.length == 0){
 					this.$message({
 						message: '请选择数据',
@@ -1007,7 +1038,8 @@
 					});
 				}else{
 					this.dialogVisible = false;
-					if(this.type == '1') {
+					console.log(this.type);
+					if(this.type == 'leader') {
 						this.dataInfo.P_LEADER = this.selUser[0].id;
 						this.dataInfo.P_LEADERDesc = this.selUser[0].nickname;
 					} else {
@@ -1015,30 +1047,6 @@
 						this.dataInfo.ACCEPT_PERSONDesc = this.selUser[0].nickname;
 					}
 				}
-			},
-			//项目负责人放大镜
-			addperbtn(){
-				// console.log(this.dataInfo.CJDW);
-				if(this.dataInfo.CJDW==""||this.dataInfo.CJDW=="undefined"){
-					this.$message({
-						message: '请先选择承检单位',
-						type: 'warning'
-						});
-				}else{
-					var params = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-				}
-				var url = this.basic_url + '/api-user/users/usersByDept?deptId='+this.dataInfo.CJDW;
-				this.$axios.get(url, {
-					params: params
-				}).then((res) => {
-					this.gridData = res.data.data;
-					this.type = '1';
-				});
-				this.dialogVisible = true;	
-				}
-							
 			},
 			//生成委托书
 			build(){

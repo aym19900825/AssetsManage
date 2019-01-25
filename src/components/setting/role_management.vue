@@ -182,7 +182,7 @@
 				treeData: [],//树
 				page: {//页码
 					currentPage: 1,
-					pageSize: 20,
+					pageSize: 10,
 					totalCount: 0
 				},
 				selData:[],
@@ -202,17 +202,17 @@
 			//获取pageSize
 			sizeChange(val) {
 		      this.page.pageSize = val;
-//		      this.requestData();
+		      this.requestData();
 		    },
 		    //获取currentPage
 		    currentChange(val) {
 		      this.page.currentPage = val;
-//		      this.requestData();
+		      this.requestData();
 		    },
 			searchinfo(index) {
 				this.page.currentPage = 1;
-				this.page.pageSize = 10;
-//				this.requestData();
+				this.page.pageSize = 20;
+				this.requestData();
 			},
 			judge(data) {//是否停用
 				return data.inactive=="1" ? '是' : '否'
@@ -364,7 +364,7 @@
 									message: '删除成功',
 									type: 'success'
 								});
-//								this.requestData();
+								this.requestData();
 							}
 						}).catch((err) => {
 							this.$message({
@@ -398,6 +398,8 @@
 					name: this.searchList.name,
 					inactive: this.searchList.inactive
 				}
+				console.log(23333);
+				console.log(data);
 				var url = this.basic_url + '/api-user/roles';
 				this.$axios.get(url, {params: data}).then((res) => {
 					console.log(res);

@@ -89,7 +89,10 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="数量" prop="QUATITY" label-width="110px">
-												<el-input-number v-model="samplesForm.QUATITY" :min="1" :step="1" :max="100" label="描述文字" style="width: 100%" :disabled="noedit"></el-input-number>
+												<el-input-number v-model="samplesForm.QUATITY" :min="1" :step="1" :max="200" label="描述文字" style="width: 60%" :disabled="noedit"></el-input-number>
+												<el-button class="table-funbc" type="success" size="mini" round @click="addfield" v-show="!viewtitle">
+													<font>样品新建</font>
+												</el-button>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -121,7 +124,7 @@
 												    <el-date-picker
 												      v-model="samplesForm.ACCEPTDATE"
 												      type="date"
-												      placeholder="选择日期" style="width:100%" value-format="yyyy-MM-dd":disabled="noedit">
+												      placeholder="选择日期" style="width:100%" value-format="yyyy-MM-dd" :disabled="noedit">
 												    </el-date-picker>
 												</div>
 											</el-form-item>
@@ -185,13 +188,13 @@
 									</el-row>
 								</el-collapse-item>
 								<el-collapse-item title="样品" name="2">								
-									<div class="table-func">
+									<!-- <div class="table-func">
 										<el-button type="success" size="mini" round @click="addfield" v-show="!viewtitle">
 											<i class="icon-add"></i>
 											<font>新建行</font>
 										</el-button>
-									</div>
-									<el-table :fit="true" max-height="260px" :header-cell-style="rowClass" :data="samplesForm.ITEM_LINEList" row-key="ID" border stripe highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'samplesForm.ITEM_LINEList', order: 'descending'}">
+									</div> -->
+									<el-table :fit="true" max-height="260" :header-cell-style="rowClass" :data="samplesForm.ITEM_LINEList" row-key="ID" border stripe highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'samplesForm.ITEM_LINEList', order: 'descending'}">
 									    <el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 									      <template slot-scope="scope">
 									      	<i class="el-icon-check" v-show="scope.row.isEditing">
@@ -211,18 +214,18 @@
 
 									    <el-table-column label="样品序号" sortable width="170px" prop="ITEM_STEP">
 									      <template slot-scope="scope">
-									      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.ITEM_STEP" placeholder="请输入内容"></el-input>
+									      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.ITEM_STEP" :disabled="true"></el-input>
 									      	<span v-show="!scope.row.isEditing">{{scope.row.ITEM_STEP}}</span>
 									      </template>
 									    </el-table-column>
 
 										<el-table-column prop="SN" label="单件码" sortable width="170px" >
 									      <template slot-scope="scope">
-											  	<el-form-item  label-width="0px" :prop="'ITEM_LINEList.'+scope.$index + '.SN'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+											  	<!-- <el-form-item  label-width="0px" :prop="'ITEM_LINEList.'+scope.$index + '.SN'" :rules="{required: true, message: '不能为空', trigger: 'blur'}"> -->
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.SN" placeholder="请填写">
 													</el-input>
 													<span v-else="v-else">{{scope.row.SN}}</span>
-												</el-form-item>
+												<!-- </el-form-item> -->
 									      </template>
 									    </el-table-column>
 
@@ -243,7 +246,7 @@
 									    <el-table-column prop="ENTERDATE" label="录入时间" sortable>
 									      <template slot-scope="scope">
 									      	<el-form-item  label-width="0px" :prop="'ITEM_LINEList.'+scope.$index + '.ENTERDATE'" >
-									         <el-date-picker style="width: 90%" v-show="scope.row.isEditing" v-model="scope.row.ENTERDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd"></el-date-picker>
+									         <el-date-picker style="width: 90%" v-show="scope.row.isEditing" v-model="scope.row.ENTERDATE" type="date" :disabled="true" value-format="yyyy-MM-dd"></el-date-picker>
 									        <span v-show="!scope.row.isEditing" >{{scope.row.ENTERDATE}}</span>
 									    	</el-form-item>
 									      </template>
@@ -253,13 +256,13 @@
 									        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.CHANGEBY" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.CHANGEBY}}</span>
 									      </template>
 									    </el-table-column> -->
-									    <el-table-column fixed="right" label="操作" width="100px" v-if="!viewtitle">
+									    <!-- <el-table-column fixed="right" label="操作" width="100px" v-if="!viewtitle">
 									      <template slot-scope="scope">
 									        <el-button @click = "deleteRow(scope.$index, samplesForm.ITEM_LINEList)" type="text" size="small">
 									          <i class="icon-trash red"></i>
 									        </el-button>
 									      </template>
-									    </el-table-column>
+									    </el-table-column> -->
 									  </el-table>
 									  <!-- </el-form> -->
 								</el-collapse-item>
@@ -795,23 +798,29 @@
 			},
 			addfield() { 
 				//插入行到文件文件Table中
-				var obj = {
-                    ITEMNUM:'',
-                    ITEM_STEP:'',
-                    SN:'',
-					STATE:'1',
-					STATEDesc:'待检',
-                    ENTERBY:'',
-                    ENTERDATE:'',
-                    CHANGEBY:'',
-					isEditing: true
-                };
-                this.samplesForm.ITEM_LINEList.push(obj);
+				console.log(this.samplesForm.QUATITY);
+				this.samplesForm.ITEM_LINEList = [];
+				var date=new Date();
+				var time = this.$moment(date).format("YYYY-MM-DD");
+				for(var i = 0;i<this.samplesForm.QUATITY;i++){
+					var obj = {
+						ITEMNUM:'',
+						ITEM_STEP:i+1,
+						SN:'',
+						STATE:'1',
+						STATEDesc:'待检',
+						ENTERBY:'',
+						ENTERDATE:time,
+						CHANGEBY:'',
+						isEditing: true
+					};
+					this.samplesForm.ITEM_LINEList.push(obj);
+				}
 			},
 
-			deleteRow(index, rows) {//Table-操作列中的删除行
-				rows.splice(index, 1);
-			},
+			// deleteRow(index, rows) {//Table-操作列中的删除行
+			// 	rows.splice(index, 11);
+			// },
 			
 			//点击关闭按钮
 			close() {
@@ -1039,6 +1048,11 @@
 	}
 </script>
 
-<style scoped>
+<style>
 	@import '../../assets/css/mask-modules.css';
+	.table-funbc {
+		position: absolute;
+		top: 3px;
+		right: 2px;
+	}
 </style>

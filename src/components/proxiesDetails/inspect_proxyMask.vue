@@ -181,6 +181,7 @@
 								</el-collapse-item>
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									 <!-- <el-form :label-position="labelPosition"> -->
+									
 									<el-tabs v-model="activeName" @tab-click="handleClick">
 									    <el-tab-pane label="检验依据" name="first">
 									    	<div class="table-func table-funcb">

@@ -419,7 +419,7 @@
 				this.page.currentPage = val;
 				this.requestData();
 			},
-				resetbtn(){
+			resetbtn(){
 				this.searchList =  { //点击高级搜索后显示的内容
 					N_CODE: '',
 					ITEM_NAME: '',
@@ -603,7 +603,7 @@
 					N_CODE: this.searchList.N_CODE,
 					ITEM_NAME: this.searchList.ITEM_NAME,
 					CJDW: this.searchList.CJDW,
-					TYPE: this.searchList.TYPE,
+					TYPE_wheres: this.searchList.TYPE,//精确查询类别
 					XD_DATE: this.searchList.XD_DATE,
 					COMPDATE: this.searchList.COMPDATE,
 					STATUS: this.searchList.STATUS,
@@ -664,6 +664,8 @@
 				for(var i = 0; i < this.selectData.length; i++) {
 					if(data.label == this.selectData[i].name) {
 						this.searchList.TYPE = this.selectData[i].code;
+						console.log(this.selectData[i].code);
+						console.log(this.searchList.TYPE);
 					}
 				}
 				this.requestData();

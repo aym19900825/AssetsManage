@@ -1,6 +1,49 @@
 <template>
 	<div>
 		<el-dialog :modal-append-to-body="false" title="样品名称" :visible.sync="dialogsample" width="80%">
+			<el-form :model="searchList" label-width="70px">
+					<el-col :span="7">
+						<el-form-item label="样品编号" prop="ITEMNUM">
+							<el-input v-model="searchList.ITEMNUM"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="7">
+						<el-form-item label="样品类别" prop="TYPE">
+							<el-input v-model="searchList.TYPE"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="7">
+						<el-form-item label="委托单位" prop="V_NAME">
+							<el-input v-model="searchList.V_NAME"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="7">
+						<el-form-item label="样品名称" prop="DESCRIPTION">
+							<el-input v-model="searchList.DESCRIPTION"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="7">
+						<el-form-item label="收样人" prop="ACCEPT_PERSON">
+							<el-input v-model="searchList.ACCEPT_PERSON"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="5">
+						<el-form-item label="收样日期" prop="ACCEPT_DATE">
+							<div class="block">
+							    <el-date-picker
+							      v-model="searchList.ACCEPT_DATE"
+							      type="date"
+							      placeholder="请选择" style="width: 100%">
+							    </el-date-picker>
+					  		</div>
+					</el-form-item>
+					</el-col>
+					<el-col :span="3">
+						<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+						<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
+					</el-col>
+				</el-row>
+			</el-form>
 		<el-table :data="samplesList" :header-cell-style="rowClass" border stripe height="400px" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 			<el-table-column type="selection" width="55" fixed align="center">
 			</el-table-column>
@@ -58,7 +101,15 @@
 			currentPage: 1,
 			pageSize: 20,
 			totalCount: 0
-			},
+		},
+		searchList: {
+			ITEMNUM:'',//样品编号
+			V_NAME: '',//委托单位名称
+			DESCRIPTION: '',//样品名称
+			ACCEPT_PERSON: '',//收样人
+			TYPE: '',//样品类别
+			ACCEPT_DATE: '',//收样日期
+		},
     }
   },
 
@@ -85,6 +136,21 @@
 		this.page.currentPage = val;
 		this.requestData();
 	},
+	searchinfo() {//高级查询
+			this.page.currentPage = 1;
+			this.page.pageSize = 20;
+			this.requestData();
+	},
+	resetbtn(){
+		this.searchList =  { //点击高级搜索后显示的内容
+			ITEMNUM:'',
+			V_NAME: '',
+			DESCRIPTION: '',
+			ACCEPT_PERSON: '',
+			TYPE: '',
+			ACCEPT_DATE:'',
+		};
+	},
   	//点击关闭按钮
 	close() {
 		this.dialogsample = false;
@@ -110,12 +176,17 @@
 		var data = {
 			page: this.page.currentPage,
 			limit: this.page.pageSize,
+			ITEMNUM: this.searchList.ITEMNUM,//样品编号
+			V_NAME: this.searchList.V_NAME,//委托单位名称
+			DESCRIPTION: this.searchList.DESCRIPTION,//样品名称
+			ACCEPT_PERSON: this.searchList.ACCEPT_PERSON,//收样人
+			TYPE: this.searchList.TYPE,//样品类别
+			ACCEPT_DATE: this.searchList.ACCEPT_DATE//收样日期
 		}
 		var url = this.basic_url + '/api-apps/app/item';
 		this.$axios.get(url, {
 			params: data
 		}).then((res) => {
-			
 			this.page.totalCount = res.data.count;
 			//总的页数
 			let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)

@@ -1,6 +1,42 @@
 <template>
 	<div>
 		<el-dialog :modal-append-to-body="false" title="委托书编号" :visible.sync="dialoginspect" width="80%" >
+			<el-form :model="searchList">
+				<el-row :gutter="5">
+					<el-col :span="6">
+						<el-form-item label="委托单位名称" prop="V_NAME"  label-width="100px">
+							<el-input v-model="searchList.V_NAME"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="5">
+						<el-form-item label="样品名称" prop="ITEM_NAME" label-width="70px">
+							<el-input v-model="searchList.ITEM_NAME"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="5">
+						<el-form-item label="检测报告编号" prop="REPORT_NUM" label-width="100px">
+							<el-input v-model="searchList.REPORT_NUM"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="5">
+						<el-form-item label="检测委托书编号" prop="PROXYNUM" label-width="110px">
+							<el-input v-model="searchList.PROXYNUM"></el-input>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row :gutter="5">
+					<el-col :span="6">
+						<el-form-item label="完成日期" prop="COMPDATE" label-width="100px">
+							<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%">
+						</el-date-picker>
+						</el-form-item>
+					</el-col>
+                    <el-col :span="4">
+					<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+					<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
+				</el-col>
+				</el-row>
+			</el-form>
 			<el-table :data="inspectList" border stripe :header-cell-style="rowClass"  style="width: 100%;"height="400px" :default-sort="{prop:'inspectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore('inspect')">	
 				<el-table-column type="selection" width="55" fixed align="center">
 				</el-table-column>
@@ -57,6 +93,13 @@
 			pageSize: 20,
 			totalCount: 0
 			},
+		searchList: {
+				V_NAME:'',
+				ITEM_NAME: '',
+				REPORT_NUM: '',
+				PROXYNUM: '',
+				COMPDATE: '',
+			},
     }
   },
 
@@ -83,6 +126,20 @@
 		this.page.currentPage = val;
 		this.requestData();
 	},
+	resetbtn(){
+		this.searchList =  { //点击高级搜索后显示的内容
+			V_NAME:'',
+			ITEM_NAME: '',
+			REPORT_NUM: '',
+			PROXYNUM: '',
+			COMPDATE: '',
+		};
+	},
+	searchinfo() {
+		this.page.currentPage = 1;
+		this.page.pageSize = 20;
+		this.requestData();
+	},
   	//点击关闭按钮
 	close() {
 		this.dialoginspect = false;
@@ -107,10 +164,14 @@
 		var data = {
 				page: this.page.currentPage,
 				limit: this.page.pageSize,
+				V_NAME:this.searchList.V_NAME,
+				ITEM_NAME: this.searchList.ITEM_NAME,
+				REPORT_NUM: this.searchList.REPORT_NUM,
+				PROXYNUM: this.searchList.PROXYNUM,
+				COMPDATE: this.searchList.COMPDATE,
 			}
 			//委托书
 			this.$axios.get(this.basic_url + '/api-apps/app/inspectPro', {params: data}).then((res) => {
-				console.log(res);
 				this.page.totalCount = res.data.count;
 				//总的页数
 				let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);

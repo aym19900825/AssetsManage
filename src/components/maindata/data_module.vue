@@ -213,8 +213,6 @@
 						type: type
 					},
 				}).then((res) => {
-					console.log(233333);
-					console.log(res.data);
 					this.selectData = res.data;
 				});
 			},
@@ -395,6 +393,7 @@
 					DECRIPTION: this.searchList.DECRIPTION,
 					DEPTID: this.searchList.DEPTID,
 				}
+				console.log(data);
 				var url = this.basic_url + '/api-apps/app/rawDataTem';
 				this.$axios.get(url, {
 					params: data

@@ -1,9 +1,30 @@
 <template>
 	<div>
-		<!-- 产品类别 Begin -->
-			<el-dialog :modal-append-to-body="false" title="产品类别" height="400px" :visible.sync="dialogCategory" width="80%" :before-close="handleClose">
-				<!-- 第二层弹出的表格 Begin-->
-				<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="400px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+		<el-dialog :modal-append-to-body="false" title="产品类别" height="400px" :visible.sync="dialogCategory" width="80%" :before-close="handleClose">
+			<el-form :model="searchList" label-width="45px">
+				<el-row :gutter="10">
+					<el-col :span="5">
+						<el-form-item label="编码" prop="NUM">
+							<el-input v-model="searchList.NUM"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="5">
+						<el-form-item label="名称" prop="TYPE">
+							<el-input v-model="searchList.TYPE"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="5">
+						<el-form-item label="版本" prop="VERSION">
+							<el-input v-model="searchList.VERSION"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="4">
+						<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+						<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
+					</el-col>
+				</el-row>
+			</el-form>
+			<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="400px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" fixed width="55" align="center">
 					</el-table-column>
 					<el-table-column label="编码" width="155" sortable prop="NUM">
@@ -26,15 +47,13 @@
 			       <el-button type="primary" @click="determine">确 定</el-button>
 			       <el-button @click="dialogCategory = false">取 消</el-button>
 			    </span>
-			</el-dialog>
-			<!-- 产品类别 End -->
+		</el-dialog>
 	</div>
 </template>
 
 <script>
 	import Config from '../../../config.js';
 	export default {
-//	props:["approvingData"],//第一种方式
   name: 'category',
   
   data() {
@@ -44,14 +63,19 @@
 		loadSign:true,//加载
 		commentArr:{},
 		selUser: [],//接勾选的值
+		DEPTID:'',//当前选择的机构值
+        categoryList:[],
+        dialogCategory:false,
 		page: {
 			currentPage: 1,
 			pageSize: 20,
 			totalCount: 0
 		},
-        DEPTID:'',//当前选择的机构值
-        categoryList:[],
-        dialogCategory:false
+		searchList: {
+			NUM:'',
+			VERSION:'',
+			DEPTID: '',
+		},
     }
   },
 
@@ -77,6 +101,18 @@
 	currentChange(val) {
 		this.page.currentPage = val;
 		this.requestData();
+	},
+	searchinfo() {
+		this.page.currentPage = 1;
+		this.page.pageSize = 20;
+		this.requestData();
+	},
+	resetbtn(){
+		this.searchList = {
+			NUM:'',
+			VERSION:'',
+			DEPTID: '',
+		}
 	},
   	//点击关闭按钮
 	close() {
@@ -104,6 +140,9 @@
 		var data = {
 			page: this.page.currentPage,
 			limit: this.page.pageSize,
+			NUM:this.searchList.NUM,
+			TYPE: this.searchList.TYPE,
+			VERSION:this.searchList.VERSION,
 		};
 		var url = this.basic_url + '/api-apps/app/productType2?DEPTID='+this.DEPTID;
 		this.$axios.get(url, {

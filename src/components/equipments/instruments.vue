@@ -95,7 +95,23 @@
 					</div>
 				<!-- 高级查询划出 End-->
 				<el-row :gutter="0">
-					<el-col :span="24">
+					<el-col :span="5" class="lefttree">
+							<div class="lefttreebg">
+								<div class="left_tree_title clearfix" @click="min3max()">
+									<div class="pull-left pr20" v-if="ismin">设备分类</div>
+									<span class="pull-right navbar-minimalize minimalize-styl-2">
+										<i class="icon-doubleok icon-double-angle-left blue"></i>
+									</span>
+								</div>
+								<div class="left_treebg" :style="{height: fullHeight}">
+									<div class="p15" v-if="ismin">
+										<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all  :indent="22" :render-content="renderContent"  :props="resourceProps" @node-click="handleNodeClick">
+										</el-tree>
+									</div>
+								</div>
+							</div>
+						</el-col>
+					<el-col :span="19">
 						<!-- 表格 Begin-->
 						<el-table :header-cell-style="rowClass" :data="assetList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'assetList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
@@ -289,19 +305,36 @@
 				resourceDialogisShow: false,
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
 				resourceProps: {
-					children: "subDepts",
-					label: "simplename"
+					children: "children",
+					label: "CLASSIFY_DESCRIPTION"
 				},
-				userData:[],
 				page: {//分页显示
 					currentPage: 1,
 					pageSize: 10,
 					totalCount: 0
 				},
-				aaaData:[],
+				treeData: [],
 			}
 		},
 		methods: {
+			min3max() { //左侧菜单正常和变小切换
+				if($(".lefttree").hasClass("el-col-5")) {
+					$(".lefttree").removeClass("el-col-5");
+					$(".lefttree").addClass("el-col-1");
+					$(".leftcont").removeClass("el-col-19");
+					$(".leftcont").addClass("el-col-23");
+					$(".icon-doubleok").removeClass("icon-double-angle-left");
+					$(".icon-doubleok").addClass("icon-double-angle-right");
+				} else {
+					$(".lefttree").removeClass("el-col-1");
+					$(".lefttree").addClass("el-col-5");
+					$(".leftcont").removeClass("el-col-23");
+					$(".leftcont").addClass("el-col-19");
+					$(".icon-doubleok").removeClass("icon-double-angle-right");
+					$(".icon-doubleok").addClass("icon-double-angle-left");
+				}
+				this.ismin = !this.ismin;
+			},
 			//表头居中
 			rowClass({ row, rowIndex}) {
 				return 'text-align:center'
@@ -328,14 +361,13 @@
 			},
 			//修改
 			modify() {
-				this.aaaData = this.selUser;
-				if(this.aaaData.length == 0) {
+				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
 						type: 'warning'
 					});
 					return;
-				} else if(this.aaaData.length > 1) {
+				} else if(this.selUser.length > 1) {
 					this.$message({
 						message: '不可同时修改多条数据',
 						type: 'warning'
@@ -347,8 +379,6 @@
 			},
 			//查看
 			 view(data) {
-			 	console.log(data);
-			 	// this.dataInfo = data;
 				this.$refs.child.view(data);
 			},
 			//高级查询
@@ -429,7 +459,6 @@
 					return "";
 				}
 				return this.$moment(date).format("YYYY-MM-DD");
-				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
 			},
 			
 			SelChange(val) {
@@ -446,7 +475,6 @@
 					OPTION_STATUS:  this.searchList.OPTION_STATUS,
 				}
 				var url = this.basic_url + '/api-apps/app/asset';
-				
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
@@ -472,8 +500,36 @@
 						}
 					}
 					this.assetList = newarr;
-				}).catch((wrong) => {})
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				})
 				
+			},
+			//  机构树
+			getKey() {
+				let that = this;
+				var url = this.basic_url + '/api-apps/app/assetClass/tree?tree_id=CLASSIFY_NUM&tree_pid=PARENT';
+				this.$axios.get(url, {}).then((res) => {
+					this.resourceData = res.data.datas;
+					this.treeData = this.transformTree(this.resourceData);
+				});
+			},
+			transformTree(data) {
+				for(var i = 0; i < data.length; i++) {
+					data[i].name = data[i].fullname;
+					if(!data[i].pid || $.isArray(data[i].subDepts)) {
+						data[i].iconClass = 'icon-file-normal';
+					} else {
+						data[i].iconClass = 'icon-file-text';
+					}
+					if($.isArray(data[i].subDepts)) {
+						data[i].children = this.transformTree(data[i].subDepts);
+					}
+				}
+				return data;
 			},
 			loadMore() {
 				if(this.loadSign) {
@@ -495,19 +551,15 @@
 				return row.enabled;
 			},
 			childByValue:function(childValue) {
-				console.log(111);
-        		// childValue就是子组件传过来的值
-        		console.log(childValue);
         		this.$refs.navsheader.showClick(childValue);
       		},
+      		renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
+				return (<span><i class={data.iconClass}></i><span>{node.label}</span></span>)
+			},
 		},
 		mounted(){
 			this.requestData();
-             // 注册scroll事件并监听  
-             let self = this;
-              $(".div-table").scroll(function(){
-                self.loadMore();
-            })
+            this.getKey();
         },
 	}
 </script>

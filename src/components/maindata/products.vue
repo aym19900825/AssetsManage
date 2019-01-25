@@ -313,7 +313,7 @@
 				};
 			},
 			//搜索
-			searchinfo(index) {
+			searchinfo() {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
 				this.requestData();
@@ -441,7 +441,7 @@
 			SelChange(val) {
 				this.selUser = val;
 			},
-			requestData(index) {
+			requestData() {
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,

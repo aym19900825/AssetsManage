@@ -299,9 +299,11 @@
 					// }
 					
 					this.menuList = result;
-					console.log('==='+result+'===');
+					console.log(result);
 					this.page.totalCount = res.data.count;
-				}).catch((wrong) => {})
+				}).catch((wrong) => {
+					
+				})
 			},
 
 			handleNodeClick(data) {},

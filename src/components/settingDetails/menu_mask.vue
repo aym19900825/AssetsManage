@@ -219,7 +219,7 @@
 			},
 			
 			// 这里是修改
-			detail() {
+			detail(selMenu) {
 					this.addtitle=false;
 				    this.modifytitle=true;
 					this.show = true;

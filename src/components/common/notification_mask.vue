@@ -995,7 +995,7 @@
 				// console.log(this.dataInfo.CJDW);
 				if(this.dataInfo.CJDW==""||this.dataInfo.CJDW=="undefined"){
 					this.$message({
-						message: '请先选择承建单位',
+						message: '请先选择承检单位',
 						type: 'warning'
 						});
 				}else{

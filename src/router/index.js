@@ -52,6 +52,7 @@ import reports from '@/components/reports'//报表管理
 
 
 import inspect_proxy from '@/components/proxies/inspect_proxy'//检验委托书
+import check_proxy from '@/components/proxies/check_proxy'//检测委托书
 import subc_agreement from '@/components/proxies/subc_agreement'//分包协议
 
 import equipment_classify from '@/components/equipments/equipment_classify'//设备分类
@@ -176,7 +177,13 @@ Vue.use(Router)
       path: '/inspect_proxy',
       name: 'inspect_proxy',
       component: inspect_proxy
-    },{//审批意见
+    },
+    {//检测委托书
+      path: '/check_proxy',
+      name: 'check_proxy',
+      component: check_proxy
+    },
+    {//审批意见
       path: '/approving',
       name: 'approving',
       component: approving

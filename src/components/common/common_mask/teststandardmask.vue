@@ -320,4 +320,10 @@
 </script>
 
 <style>
+.el-dialog__footer {
+	padding: 19px 20px 20px;
+	text-align: center;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
 </style>

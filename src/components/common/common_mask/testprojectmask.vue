@@ -83,7 +83,7 @@
 				<!-- 表格 End-->
 				<span slot="footer" class="el-dialog__footer">
 			       <el-button type="primary" @click="addbasis">确 定</el-button>
-			       <el-button @click="dialogVisible2 = false">取 消</el-button>
+			       <el-button @click="dialogVisible = false">取 消</el-button>
 			    </span>
 			</el-dialog>
 			<!-- 检测项目与要求 End -->
@@ -310,4 +310,10 @@
 </script>
 
 <style>
+.el-dialog__footer {
+	padding: 19px 20px 20px;
+	text-align: center;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
 </style>

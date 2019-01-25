@@ -138,7 +138,7 @@
 							<el-table :data="inspectList" :header-cell-style="rowClass" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'inspectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
-								<el-table-column label="检验委托书编号" sortable width="130px" prop="PROXYNUM" v-if="this.checkedName.indexOf('检验委托书编号')!=-1">
+								<el-table-column label="检测委托书编号" sortable width="130px" prop="PROXYNUM" v-if="this.checkedName.indexOf('检测委托书编号')!=-1">
 									<template slot-scope="scope">
 										<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.PROXYNUM}}
 										</p>
@@ -182,7 +182,7 @@
 				</div>
 			</div>
 		</div>
-		<inspectmask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></inspectmask>
+		<checkmask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></checkmask>
 		<!--右侧内容显示 End-->
 	</div>
 </template>
@@ -191,7 +191,7 @@
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_header from '../common/nav_tabs.vue'
-	import inspectmask from '../proxiesDetails/inspect_proxyMask.vue'
+	import checkmask from '../proxiesDetails/check_proxyMask.vue'
 
 	export default {
 		name: 'user_management',
@@ -199,7 +199,7 @@
 			'vheader': vheader,
 			'navs_left': navs_left,
 			'navs_header': navs_header,
-			'inspectmask': inspectmask,
+			'checkmask': checkmask,
 		},
 //		created() {
 //  		this.getRouterData()
@@ -234,7 +234,7 @@
 				loadSign: true, //加载
 				commentArr: {},
 				checkedName: [
-					'检验委托书编号',
+					'检测委托书编号',
 					'委托单位名称',
 					'生产单位名称',
 					'样品名称',
@@ -251,7 +251,7 @@
 					'版本'
 				],
 				tableHeader: [{
-						label: '检验委托书编号',
+						label: '检测委托书编号',
 						prop: 'PROXYNUM'
 					},
 					{

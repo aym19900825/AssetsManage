@@ -172,12 +172,11 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="角色" prop="roleId" label-width="100px">
-												<el-select v-model="user.roleId" multiple :disabled="noedit" value-key="item.id" >
-													<el-option v-for="(item,index) in selectData" :key="index" :value="item.id" :label="item.name"></el-option>
-												</el-select>
+											<el-form-item label="ERP" prop="erp_orgname" label-width="100px">
+												<el-input v-model="user.erp_orgname" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
+										
 									</el-row>
 									<el-row>
 										<el-col :span="8">
@@ -188,6 +187,13 @@
 										<el-col :span="8">
 											<el-form-item label="MAC地址" prop="macaddress" label-width="100px">
 												<el-input v-model="user.macaddress" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="角色" prop="roleId" label-width="100px">
+												<el-select v-model="user.roleId" multiple :disabled="noedit" value-key="item.id" >
+													<el-option v-for="(item,index) in selectData" :key="index" :value="item.id" :label="item.name"></el-option>
+												</el-select>
 											</el-form-item>
 										</el-col>
 									</el-row>

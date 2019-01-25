@@ -597,7 +597,12 @@
 					}
 
 					this.inspectList = newarr;
-				}).catch((wrong) => {})
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				})
 			},
 
 			//机构树

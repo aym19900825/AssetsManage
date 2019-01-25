@@ -96,8 +96,8 @@
 				</el-pagination>
 				<!-- 第二层弹出的表格 End -->
 				<div slot="footer" class="dialog-footer">
+					<el-button type="primary" @click="addbasis">确 定</el-button>
 			       <el-button @click="dialogVisible = false">取 消</el-button>
-			       <el-button type="primary" @click="addbasis">确 定</el-button>
 			    </div>
 			</el-dialog>
 			<!-- 检测依据弹出框 End -->

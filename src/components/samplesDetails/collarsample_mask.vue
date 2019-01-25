@@ -240,7 +240,7 @@
 					</el-table-column>
 					<el-table-column label="单件码" sortable width="200px" prop="SN">
 					</el-table-column>
-					<el-table-column label="样品状态" sortable width="200px" prop="STATE">
+					<el-table-column label="样品状态" sortable width="200px" prop="STATEDesc">
 					</el-table-column>
 					<el-table-column label="录入时间" sortable width="140px" :formatter="dateFormat" prop="ENTERDATE">
 					</el-table-column>

@@ -48,7 +48,7 @@ import inspection_project from '@/components/inspection_project'//检验/检测�
 import test from '@/components/test'//检验/检测项目管理
 import files_search from '@/components/files_search'//文件查询
 import interfaces from '@/components/interfaces'//接口
-import reports from '@/components/reports'//报表管理
+import reports from '@/components/reports/reports'//报表管理
 
 
 import inspect_proxy from '@/components/proxies/inspect_proxy'//检验委托书
@@ -341,6 +341,7 @@ Vue.use(Router)
       name: 'reports',
       component: reports
     },
+    
     {//机构管理
       path: '/testing',
       name: 'testing',

@@ -2,11 +2,11 @@
 <div>
 	<div class="headerbg">
 		<vheader></vheader>
-		<navs_header></navs_header>
+		<navs_header ref="navsheader"></navs_header>
 	</div>
 	<div class="contentbg">
 		<!--左侧菜单内容显示 Begin-->
-		<navs_left></navs_left>
+		<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left>
 		<!--左侧菜单内容显示 End-->
 
 		<!--右侧内容显示 Begin-->
@@ -97,11 +97,11 @@
 </div>
 </template>
 <script>
-	import Config from '../config.js'
-	import vheader from './common/vheader.vue'
-	import navs_left from './common/left_navs/nav_left2.vue'
-	import navs_header from './common/nav_tabs.vue'
-	import tableControle from './plugin/table-controle/controle.vue'
+	import Config from '../../config.js';
+	import vheader from '../common/vheader.vue'
+	import navs_left from '../common/left_navs/nav_left5.vue'
+	import navs_header from '../common/nav_tabs.vue'
+	import tableControle from '../plugin/table-controle/controle.vue'
 	export default {
 		name: 'user_management',
 		components: {
@@ -154,49 +154,6 @@
 						prop: 'enabled'
 					}
 				],
-				leftNavs: [//leftNavs左侧菜单数据
-					{
-						navicon: 'icon-user',
-						navtitle: '用户管理',
-						navherf: '/personinfo'
-					}, {
-						navicon: 'icon-edit',
-						navtitle: '机构管理',
-						navherf: '/dept_management'
-					}, {
-						navicon: 'icon-role-site',
-						navtitle: '角色管理',
-						navherf: '/role_management'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '客户管理',
-						navherf: '/customer_management'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '产品类别',
-						navherf: '/products_category'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '产品',
-						navherf: '/products'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测标准',
-						navherf: '/testing_standard'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测项目',
-						navherf: '/testing_projects'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测方法',
-						navherf: '/testing_methods'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '自动编号设置',
-						navherf: '/number_settings'
-					}
-				],
 				companyId: '',
 				deptId: '',
 				selUser: [],
@@ -231,12 +188,6 @@
 				},
 				aaaData:[],
 			}
-		},
-
-		mounted(){
-			
-
-			
 		},
 		methods: {
 			tableControle(data){
@@ -355,7 +306,7 @@
 			SelChange(val) {
 				this.selUser = val;
 			},
-			requestData(index) {
+			requestData() {
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -393,16 +344,13 @@
 			formatter(row, column) {
 				return row.enabled;
 			},
+			childByValue:function(childValue) {
+    		// childValue就是子组件传过来的值
+    		// childValue就是子组件传过来的值
+    		console.log(childValue);
+    		this.$refs.navsheader.showClick(childValue);
+      		},
 		},
-		mounted(){
-             // 注册scroll事件并监听  
-             let self = this;
-              $(".div-table").scroll(function(){
-                self.loadMore();
-            })
-        },
-
-
 		mounted() {
 			this.requestData();
 		},

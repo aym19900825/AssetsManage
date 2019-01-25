@@ -522,7 +522,6 @@
 			 //金额验证
             var price=(rule, value, callback) => { 
 				var exp = /^(-)?\d{1,3}(,\d{3})*(.\d+)?$/;
-				console.log(value);
 				if(value != '' && value!=undefined){
 					if(exp.test(value)==false){ 
 	                    callback(new Error('请输入数字'));
@@ -623,7 +622,8 @@
 				catenum:'',//产品类别作为参数传值给依据
 				pronum:'',//产品作为参数传值给依据
 				basisnum:'',////依据选中数据们字符串作为参数传值给项目
-				PRODUCT_TYPE:''//产品类别
+				PRODUCT_TYPE:'',//产品类别
+				username:'',
 			};
 		},
 		methods: {
@@ -767,6 +767,7 @@
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.dataInfo.DEPTID = res.data.deptId;
 					this.dataInfo.ENTERBY = res.data.id;
+					this.username=res.data.username;
 					// this.dataInfo.ORGID = res.data.deptName
 					var date = new Date();
 					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD ");
@@ -850,8 +851,20 @@
 							this.start=true;
 							this.approval=false;
 						}else{
-							this.start=false;
-							this.approval=true;
+						var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/Executors/'+dataid;
+						this.$axios.get(url, {}).then((res) => {
+							var resullt=res.data.datas;
+							var users='';
+							for(var i=0;i<resullt.length;i++){
+								if(resullt[i].username!=this.username){
+									this.approval=false;
+									this.start=false;
+								}else{
+									this.approval=true;
+									this.start=false;
+								}
+							}
+						});
 						}
 					});
 			},
@@ -908,9 +921,6 @@
 			appenddata(value){
 				this.pronum = value[0];
 				this.dataInfo.ITEM_NAME = value[1];
-				console.log(23356642131);
-				console.log(this.pronum);
-				console.log(this.dataInfo.ITEM_NAME);
 			},
 			appendnames(value){
 				this.dataInfo.V_NAME = value;//名称
@@ -926,8 +936,7 @@
 								type: 'warning'
 						    });
 						return false;
-			       }else{
-			        console.log(this.dataInfo.CJDW);
+			      }else{
 			         var oDate1 = new Date(this.dataInfo.XD_DATE); //下达日期
     				 var oDate2 = new Date(this.dataInfo.COMPDATE);//完成日期
     				  if(oDate1.getTime() > oDate2.getTime()){ 
@@ -1038,7 +1047,6 @@
 					});
 				}else{
 					this.dialogVisible = false;
-					console.log(this.type);
 					if(this.type == 'leader') {
 						this.dataInfo.P_LEADER = this.selUser[0].id;
 						this.dataInfo.P_LEADERDesc = this.selUser[0].nickname;
@@ -1089,8 +1097,6 @@
 			 },
 			 //检测依据列表
 			addbasis(value){
-				console.log(23987528);
-				console.log(value);
 				this.basisnum = value[0];
 				for(var i = 1;i<value.length;i++){
 					this.dataInfo.WORK_NOTICE_CHECKBASISList.push(value[i]);
@@ -1119,9 +1125,21 @@
 								message:res.data.resp_msg,
 								type: 'success'
 							});
+						var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/Executors/'+this.dataid;
+						this.$axios.get(url, {}).then((res) => {
+								var resullt=res.data.datas;
+								var users='';
+								for(var i=0;i<resullt.length;i++){
+									if(resullt[i].username!=this.username){
+										this.approval=false;
+										this.start=false;
+									}else{
+										this.approval=true;
+										this.start=false;
+									}
+								}
+						});
 							this.detailgetData();
-							$(".approval").show();
-							$(".start").hide();
 				    }
 				});
 			},

@@ -854,6 +854,7 @@
 				maingroup:[],//主检组
 				selectData:[],//承建单位
 				leaderdata:[],//主检负责人
+				username:'',
 //				deptid:'',//机构id
 
 			};
@@ -1038,8 +1039,10 @@
 			//点击按钮显示弹窗
 			visible() {
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
+					console.log(res);
 					this.dataInfo.DEPTID = res.data.deptId;
 					this.dataInfo.ENTERBY = res.data.id;
+					this.username=res.data.username;
 					// this.dataInfo.ORGID = res.data.deptName
 					var date = new Date();
 					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
@@ -1186,8 +1189,21 @@
 						this.start=true;
 						this.approval=false;
 					}else{
-						this.start=false;
-						this.approval=true;
+						var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/Executors/'+dataid;
+						this.$axios.get(url, {}).then((res) => {
+							console.log(res.data.datas);
+							var resullt=res.data.datas;
+							var users='';
+							for(var i=0;i<resullt.length;i++){
+								if(resullt[i].username!=this.username){
+									this.approval=false;
+									this.start=false;
+								}else{
+									this.approval=true;
+									this.start=false;
+								}
+							}
+						});
 					}
 				});
 			},
@@ -1415,9 +1431,22 @@
 								message:res.data.resp_msg,
 								type: 'success'
 							});
+						var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/Executors/'+this.dataid;
+							this.$axios.get(url, {}).then((res) => {
+									console.log(res.data.datas);
+									var resullt=res.data.datas;
+									var users='';
+									for(var i=0;i<resullt.length;i++){
+										if(resullt[i].username!=this.username){
+											this.approval=false;
+											this.start=false;
+										}else{
+											this.approval=true;
+											this.start=false;
+										}
+									}
+							});
 							this.detailgetData();
-							this.start=false;
-							this.approval=true;
 				    }
 				});
 			},

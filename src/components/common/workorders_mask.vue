@@ -804,7 +804,8 @@
 					totalCount: 0
 				},
 				isEditing: true,
-				modulenum:'s'
+				modulenum:'s',
+				username:'',
 			};
 		},
 		methods: {
@@ -1038,8 +1039,6 @@
 			},
 			//启动流程
 			startup(){
-				console.log(12345);
-				console.log(this.dataid);
 				var url = this.basic_url + '/api-apps/app/workorder/flow/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					console.log(res);
@@ -1053,9 +1052,22 @@
 								message:res.data.resp_msg,
 								type: 'success'
 							});
+							var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/Executors/'+this.dataid;
+							this.$axios.get(url, {}).then((res) => {
+									console.log(res.data.datas);
+									var resullt=res.data.datas;
+									var users='';
+									for(var i=0;i<resullt.length;i++){
+										if(resullt[i].username!=this.username){
+											this.approval=false;
+											this.start=false;
+										}else{
+											this.approval=true;
+											this.start=false;
+										}
+									}
+							});
 							this.detailgetData();
-							this.start=false;
-							this.approval=true;
 				    }
 				});
 			},
@@ -1168,11 +1180,9 @@
 				var date = new Date();
 				this.workorderForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-	    			// this.workorderForm.ENTERBY = res.data.nickname;
-					// this.workorderForm.ORG_CODE = res.data.deptName;
 					this.workorderForm.DEPTID = res.data.deptId;
 					this.workorderForm.ENTERBY = res.data.id;
-					// this.dataInfo.ORGID = res.data.deptName
+					this.username=res.data.username;
 					var date = new Date();
 					this.workorderForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 				}).catch((err) => {
@@ -1265,8 +1275,21 @@
 						this.start=true;
 						this.approval=false;
 					}else{
-						this.start=false;
-						this.approval=true;
+						var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/Executors/'+dataid;
+						this.$axios.get(url, {}).then((res) => {
+							console.log(res.data.datas);
+							var resullt=res.data.datas;
+							var users='';
+							for(var i=0;i<resullt.length;i++){
+								if(resullt[i].username!=this.username){
+									this.approval=false;
+									this.start=false;
+								}else{
+									this.approval=true;
+									this.start=false;
+								}
+							}
+						});
 					}
 				});
 			},

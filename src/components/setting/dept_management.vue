@@ -62,8 +62,9 @@
 										</el-input>
 									</el-form-item>
 								</el-col>
-								<el-col :span="2">
-									<el-button type="primary" @click="searchinfo" size="small"  style="margin-top:2px">搜索</el-button>
+								<el-col :span="4">
+									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -282,11 +283,16 @@
 
 				})
 			},
+			resetbtn(){
+				this.searchDept = {//高级查询
+					simplename:'',
+					fullname:''
+				};
+			},
 			//添加
 			openAddMgr() {
 				this.reset();
 				this.$refs.child.visible();
-
 			},
 			//修改
 			modify() {

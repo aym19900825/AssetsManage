@@ -23,9 +23,10 @@
 							<!-- 设备header信息 -->
 							<el-collapse v-model="activeNames">
 	                            <el-collapse-item name="1">
-	                                <el-form-item label-width="120px" v-for="item in basicInfo" :label="item.label" :key="item.id":prop="item.prop" :style="{ width: item.width, display: item.displayType}">
+	                                <el-form-item label-width="120px" v-for="item in basicInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
 										<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" :disabled="item.disabled"></el-date-picker>
-	                                    <el-input v-model="dataInfo[item.prop]" :type="item.type" disabled v-if="item.type == 'input'" :disabled="noedit"></el-input>
+	                                    <el-input v-model="dataInfo[item.prop]" :type="item.type" disabled v-if="item.type == 'input'&&item.prop == 'C_PLANNUM'" :disabled="true" placeholder="自动生成"></el-input>
+										 <el-input v-model="dataInfo[item.prop]" :type="item.type" disabled v-if="item.type == 'input'&&item.prop != 'C_PLANNUM'" :disabled="noedit"></el-input>
 	                                </el-form-item>
 	                            </el-collapse-item>
 							    <el-collapse-item title="设备期间检查计划信息" name="2">

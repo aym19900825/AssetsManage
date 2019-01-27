@@ -126,18 +126,24 @@
 								</el-table-column>
 								<el-table-column label="姓名" sortable width="200px" prop="nickname" v-if="this.checkedName.indexOf('姓名')!=-1">
 								</el-table-column>
-								<!--<el-table-column label="性别" sortable width="100px" prop="sex" :formatter="sexName" v-if="this.checkedName.indexOf('性别')!=-1">
-								</el-table-column>-->
+								<el-table-column label="性别" sortable width="100px" prop="GENDER" :formatter="sexName" v-if="this.checkedName.indexOf('性别')!=-1">
+								</el-table-column>
 								<el-table-column label="机构" sortable width="150px" prop="deptName" v-if="this.checkedName.indexOf('机构')!=-1">
 								</el-table-column>
-								<el-table-column label="公司" sortable prop="companyName" v-if="this.checkedName.indexOf('公司')!=-1">
+								<el-table-column label="手机号" sortable width="150px" prop="phone" v-if="this.checkedName.indexOf('手机号')!=-1">
 								</el-table-column>
+								<el-table-column label="员工号" sortable width="150px" prop="worknumber" v-if="this.checkedName.indexOf('员工号')!=-1">
+								</el-table-column>
+								<el-table-column label="用户有效期" prop="user_active_date" width="150px" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('用户有效期')!=-1">
+								</el-table-column>
+								<!-- <el-table-column label="公司" sortable prop="companyName" v-if="this.checkedName.indexOf('公司')!=-1">
+								</el-table-column> -->
 
 								<!--<el-table-column label="信息状态" sortable width="200px" prop="enabled" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
 
 								</el-table-column>-->
-								<el-table-column label="创建时间" prop="createTime" width="100px" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('创建时间')!=-1">
-								</el-table-column>
+								<!-- <el-table-column label="创建时间" prop="createTime" width="100px" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('创建时间')!=-1">
+								</el-table-column> -->
 							</el-table>
 							<!-- <span class="demonstration">显示总数</span>" -->
 							<!-- <el-pagination background layout="prev, pager, next" :total="2" style="float:right;margin-top:10px;"> -->
@@ -182,10 +188,14 @@
 				checkedName: [
 					'用户名',
 					'姓名',
+					'性别',
 					'机构',
-					'公司',
+					'手机号',
+					'员工号',
+					'用户有效期',
+					// '公司',
 					// '信息状态',
-					'创建时间'
+					// '创建时间'
 				],
 				buttons: [],//请求回的按钮
 				tableHeader: [{
@@ -197,21 +207,33 @@
 						prop: 'nickname'
 					},
 					{
+						label: '性别',
+						prop: 'GENDER'
+					},
+					{
 						label: '机构',
 						prop: 'deptName'
 					},
 					{
-						label: '公司',
-						prop: 'companyName'
+						label: '手机号',
+						prop: 'phone'
+					},
+					{
+						label: '员工号',
+						prop: 'worknumber'
+					},
+					{
+						label: '用户有效期',
+						prop: 'user_active_date'
 					},
 					// {
 					// 	label: '信息状态',
 					// 	prop: 'enabled'
 					// },
-					{
-						label: '创建时间',
-						prop: 'createTime'
-					}
+					// {
+					// 	label: '创建时间',
+					// 	prop: 'createTime'
+					// }
 				],
 				leftitem:'',//点击左侧传过来的
 				companyId: '',

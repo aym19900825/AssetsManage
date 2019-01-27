@@ -73,7 +73,7 @@
 						</el-row>
 						<el-row :gutter="10">
 							<el-col :span="5">
-								<el-form-item label="溯源周期" prop="FREQUENCY" >
+								<el-form-item label="溯源周期" prop="FREQUENCY">
 									<el-input v-model="searchList.FREQUENCY"></el-input>
 								</el-form-item>
 							</el-col>
@@ -122,11 +122,13 @@
 							</el-table-column>						
 							<el-table-column label="规格型号" width="120" sortable prop="MODEL" v-if="this.checkedName.indexOf('规格型号')!=-1">
 							</el-table-column>
-							<el-table-column label="制造商" width="100" sortable prop="VENDOR" v-if="this.checkedName.indexOf('制造商')!=-1">
+							<el-table-column label="制造商" width="160" sortable prop="VENDOR" v-if="this.checkedName.indexOf('制造商')!=-1">
 							</el-table-column>
 							<el-table-column label="溯源方式" width="110" sortable prop="TRACEABILITY" v-if="this.checkedName.indexOf('溯源方式')!=-1">
 							</el-table-column>
 							<el-table-column label="溯源周期" width="100" sortable prop="FREQUENCY" v-if="this.checkedName.indexOf('溯源周期')!=-1">
+							</el-table-column>
+							<el-table-column label="单位" width="60" sortable prop="FREQUENCYUNIT" v-if="this.checkedName.indexOf('单位')!=-1">
 							</el-table-column>
 							<el-table-column label="溯源机构" width="100" sortable prop="PM_MECHANISMDesc" v-if="this.checkedName.indexOf('溯源机构')!=-1">
 							</el-table-column>
@@ -195,6 +197,7 @@
 					'制造商',
 					'溯源方式',
 					'溯源周期',
+					'单位',
 					'溯源机构',	
 					'前次溯源起止时间',
 					'本次溯源计划时间',
@@ -234,6 +237,10 @@
 						prop: 'FREQUENCY'
 					},
 					{
+						label: '单位',
+						prop: 'FREQUENCYUNIT'
+					},
+					{
 						label: '溯源机构',
 						prop: 'PM_MECHANISMDesc'
 					},
@@ -250,49 +257,7 @@
 						prop: 'COMP_DATE'
 					}
 				],
-				leftNavs: [//leftNavs左侧菜单数据
-					{
-						navicon: 'icon-user',
-						navtitle: '用户管理',
-						navherf: '/personinfo'
-					}, {
-						navicon: 'icon-edit',
-						navtitle: '机构管理',
-						navherf: '/dept_management'
-					}, {
-						navicon: 'icon-role-site',
-						navtitle: '角色管理',
-						navherf: '/role_management'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '客户管理',
-						navherf: '/customer_management'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '产品类别',
-						navherf: '/products_category'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '产品',
-						navherf: '/products'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测标准',
-						navherf: '/testing_standard'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测项目',
-						navherf: '/testing_projects'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '检验/检测方法',
-						navherf: '/testing_methods'
-					}, {
-						navicon: 'icon-file-text',
-						navtitle: '自动编号设置',
-						navherf: '/number_settings'
-					}
-				],
+				
 				companyId: '',
 				deptId: '',
 				selUser: [],

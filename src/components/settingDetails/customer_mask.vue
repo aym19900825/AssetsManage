@@ -48,7 +48,6 @@
 											<el-form-item label="类型" prop="TYPE" label-width="100px">
 												<el-select v-model="CUSTOMER.TYPE" placeholder="请选择" style="width: 100%" :disabled="noedit">
 													<el-option v-for="(data,index) in SeleCUST_TYPE" :key="index" :value="data.code" :label="data.name"></el-option>
-													</el-option>
 												</el-select>
 											</el-form-item>
 											<!--<el-form-item label="类型" prop="TYPE">
@@ -101,6 +100,7 @@
 									</el-row>
 								<!-- </el-form> -->
 								</el-collapse-item>
+								
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName" @tab-click="handleClick">
 										<el-tab-pane label="资质信息" name="first">
@@ -123,6 +123,7 @@
 
 										    <el-table-column label="序号" sortable width="120px" prop="STEP" type="index">
 										    </el-table-column>
+
 										    <el-table-column label="证书编号" sortable width="120px" prop="CERTIFICATE_NUM">
 										      <template slot-scope="scope">
 										      	<el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.CERTIFICATE_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
@@ -240,6 +241,7 @@
 													    </el-form-item>
 												      </template>
 												    </el-table-column>
+
 												    <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 												      <template slot-scope="scope">
 												        <el-button @click = "deleteRow(scope.$index, CUSTOMER.CUSTOMER_PERSONList)" type="text" size="small">

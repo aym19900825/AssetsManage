@@ -60,11 +60,6 @@
 									<el-input v-model="searchList.DESCRIPTION"></el-input>
 								</el-form-item>
 							</el-col>
-							<!-- <el-col :span="5">
-								<el-input v-model="searchList.ENTERBY">
-									<template slot="prepend">录入人</template>
-								</el-input>
-							</el-col> -->
 							<el-col :span="5">
 								<el-form-item label="录入时间" prop="ENTERDATE">
 									<div class="block">
@@ -76,15 +71,16 @@
 								  	</div>
 								</el-form-item>
 							</el-col>
-							<el-col :span="5">
+							<el-col :span="4">
 								<el-form-item label="机构" prop="DEPTID" label-width="45px">
 									<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
 										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 										</el-select>
 								</el-form-item>
 							</el-col>
-							<el-col :span="2">
+							<el-col :span="4">
 								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
@@ -311,6 +307,15 @@
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
 				this.requestData();
+			},
+			resetbtn(){
+				this.searchList = { //点击高级搜索后显示的内容
+					C_PLANNUM: '',
+					DESCRIPTION: '',
+					ENTERBY: '',
+					ENTERDATE: '',
+					DEPARTMEMT: '',
+				};
 			},
 			//添加用戶
 			openAddMgr() {

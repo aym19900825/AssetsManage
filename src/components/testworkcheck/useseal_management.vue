@@ -119,8 +119,6 @@
 			</div>
 			<!--右侧内容显示 End-->
 			<usesealmask :USESEAL="USESEAL" ref="usesealmask" @request="requestData" v-bind:page=page></usesealmask>
-            <!-- 检测项目  -->
-			<inspectmask ref="inspectchild" @inspect="addinspect"></inspectmask>
 		</div>
 	</div>
 </template>
@@ -131,7 +129,6 @@
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import usesealmask from '../testworkcheckDetails/usesealMask.vue'
     import tableControle from '../plugin/table-controle/controle.vue'
-    import inspectmask from '../common/common_mask/inspectmask.vue'//委托书编号
 	export default {
 		name: 'useseal_management',
 		components: {
@@ -140,7 +137,6 @@
 			navs_header,
 			usesealmask,
             tableControle,
-            inspectmask
 		},
 		data() {
 			return {
@@ -359,9 +355,7 @@
 					});
 				}
             },
-            addinspect(){//委托书编号
-				this.$refs.inspectchild.visible(this.dataInfo.CJDW);
-			},
+            
 			// 导入
 			importData() {
 

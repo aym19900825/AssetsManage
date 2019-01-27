@@ -247,7 +247,7 @@
 				sampleDialog: false,
 				rules: {
 					ASSETNUM: [
-						{ required: true, message: '请输入设备编号', trigger: 'blur' },
+						{ required: true, trigger: 'blur', validator: this.Validators.isChoosedata },
 					]
 				},
 				basicInfo: [

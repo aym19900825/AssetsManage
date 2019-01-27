@@ -18,11 +18,11 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form :model="dataInfo" :rules="rules"   ref="dataInfo" label-width="100px" class="demo-user">
+					<el-form :model="dataInfo" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
 						<div class="accordion">
 							<!-- 设备基本信息 -->
 							<el-collapse v-model="activeNames">
-								<el-collapse-item name="1">
+								<el-collapse-item title="基本信息" name="1">
 									<el-row :gutter="20" class="pb10">
 										<el-col :span="5" class="pull-right">
 											<el-input v-model="dataInfo.C_RECORDNUM" :disabled="true">
@@ -31,20 +31,26 @@
 										</el-col>
 									</el-row>
 									<el-form-item v-for="item in basicInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" label-width="160px">
-										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" style="width: 220px;" :disabled="noedit"></el-input>
-										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'" :disabled="noedit"></el-input>
-										<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" :disabled="noedit">
+
+										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" :placeholder="item.placeholder" style="width: 220px;" :disabled="noedit || item.disabled""></el-input>
+
+										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'" :placeholder="item.placeholder" :disabled="noedit"></el-input>
+
+										<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" :placeholder="item.placeholder" v-if="item.type=='date'" :disabled="noedit">
 										</el-date-picker>
-										<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'" :disabled="noedit">
+
+										<el-radio-group v-model="dataInfo[item.prop]" :placeholder="item.placeholder" v-if="item.type=='radio'" :disabled="noedit">
 											<el-radio :label="it.label" v-for="it in item.opts" :key="it.id"></el-radio>
 										</el-radio-group>
-										<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'" @change="selChange" :disabled="noedit">
+
+										<el-select v-model="dataInfo[item.prop]" filterable :placeholder="item.placeholder" v-if="item.type == 'select'" @change="selChange" :disabled="noedit">
 											<el-option v-for="item in assets"
 											:key="item.ID"
 											:label="item.DESCRIPTION"
 											:value="item.DESCRIPTION">
 											</el-option>
 										</el-select>
+
 									</el-form-item>
 								</el-collapse-item>
 								<!-- 文件管理 -->
@@ -100,63 +106,66 @@
 			};
 			return {
 				rules: {
-					DESCRIPTION: [
-						{ required: true, message: '请输入记录描述', trigger: 'blur' },
-					],
 					A_NAME: [
 						{ required: true, message: '请输入设备名称', trigger: 'blur' },
 					],
-					MODEL: [
-						{ required: true, message: '请输入规格型号', trigger: 'blur' },
-					],
-					ASSETNUM: [
-						{ required: true, message: '请输入设备编号', trigger: 'blur' },
+					// ASSETNUM: [
+					// 	{ required: true, message: '请输入设备编号', trigger: 'blur' },
+					// ],
+					// MODEL: [
+					// 	{ required: true, message: '请输入规格型号', trigger: 'blur' },
+					// ],
+					DESCRIPTION: [
+						{ required: true, message: '必填', trigger: 'blur'},
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
 					C_DATE: [
-						{ required: true, message: '请输入核查日期', trigger: 'blur' },
+						{ required: true, message: '请选择', trigger: 'blur' },
 					],
 					WD: [
-						{ validator: checkNum, trigger: 'blur' }
+						{ required: false, validator: this.Validators.isPrice, trigger: 'blur' }
 					],
 					SD: [
-						{ validator: checkNum, trigger: 'blur' }
+						{ required: false, validator: this.Validators.isPrice, trigger: 'blur' }
 					],
 					C_SITE: [
-						{ required: true, message: '请输入检查地点', trigger: 'blur' },
+						{ required: true, message: '必填', trigger: 'blur'},
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
 					C_SIC_BASISTE: [
-						{ required: true, message: '请输入检查依据', trigger: 'blur' },
+						{ required: true, message: '必填', trigger: 'blur'},
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
 					C_KPI: [
-						{ required: true, message: '请输入指标要求', trigger: 'blur' },
+						{ required: true, message: '必填', trigger: 'blur'},
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
 					C_RECORD: [
-						{ required: true, message: '请输入检查记录', trigger: 'blur' },
+						{ required: true, message: '必填', trigger: 'blur'},
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
 					C_MEMO: [
-						{ required: true, message: '请输入检查结论', trigger: 'blur' },
+						{ required: true, message: '必填', trigger: 'blur'},
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
 					C_PERSON: [
-						{ required: true, message: '请输入核查人', trigger: 'blur' },
+						{ required: true, message: '必填', trigger: 'blur' },
+						{ trigger: 'blur', validator: this.Validators.isNickname},
 					],
 					APPR_PERSON: [
-						{ required: true, message: '请输入审核人', trigger: 'blur' },
+						{ required: true, message: '必填', trigger: 'blur' },
+						{ trigger: 'blur', validator: this.Validators.isNickname},
 					],
 					COMP_PERSON: [
-						{ required: true, message: '请输入批准人', trigger: 'blur' },
+						{ required: true, message: '必填', trigger: 'blur' },
+						{ trigger: 'blur', validator: this.Validators.isNickname},
 					],
 					APPR_DATE: [
-						{ required: true, message: '请输入批准日期', trigger: 'blur' },
-					],
-
-					STATUS: [
-						{ required: true, message: '请输入信息状态', trigger: 'blur' },
+						{ required: true, message: '请选择', trigger: 'blur' },
 					],
 					S_MEMO: [
-						{ required: true, message: '请输入特殊情况说明', trigger: 'blur' },
-					],
-					DESCRIPTION: [
-						{ required: true, message: '请输入记录描述', trigger: 'blur' },
+						{ required: true, message: '必填', trigger: 'blur'},
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
 				},
 				basicInfo: [
@@ -165,13 +174,7 @@
 						prop: 'A_NAME',
 						width: '30%',
 						type: 'select',
-						displayType: 'inline-block'
-					},
-					{
-						label: '规格型号',
-						prop: 'MODEL',
-						width: '30%',
-						type: 'input',
+						placeholder: '请选择',
 						displayType: 'inline-block'
 					},
 					{
@@ -179,13 +182,25 @@
 						prop: 'ASSETNUM',
 						width: '30%',
 						type: 'input',
-						displayType: 'inline-block'
+						placeholder: '自动获取',
+						displayType: 'inline-block',
+						disabled: true
+					},
+					{
+						label: '规格型号',
+						prop: 'MODEL',
+						width: '30%',
+						type: 'input',
+						placeholder: '自动获取',
+						displayType: 'inline-block',
+						disabled: true
 					},
 					{
 						label: '核查日期',
 						prop: 'C_DATE',
 						width: '30%',
 						type: 'date',
+						placeholder: '请选择',
 						displayType: 'inline-block'
 					},
 					{
@@ -193,6 +208,7 @@
 						prop: 'WD',
 						width: '30%',
 						type: 'input',
+						placeholder: '请填写',
 						displayType: 'inline-block'
 					},
 					{
@@ -200,6 +216,7 @@
 						prop: 'SD',
 						width: '30%',
 						type: 'input',
+						placeholder: '请填写',
 						displayType: 'inline-block'
 					},
 					{
@@ -207,6 +224,7 @@
 						prop: 'C_KPI',
 						width: '100%',
 						type: 'textarea',
+						placeholder: '请填写',
 						displayType: 'inline-block'
 					},
 					{
@@ -214,6 +232,7 @@
 						prop: 'C_RECORD',
 						width: '100%',
 						type: 'textarea',
+						placeholder: '请填写',
 						displayType: 'inline-block'
 					},
 					{
@@ -221,6 +240,7 @@
 						prop: 'C_MEMO',
 						width: '100%',
 						type: 'textarea',
+						placeholder: '请填写',
 						displayType: 'inline-block'
 					},
 					{
@@ -228,6 +248,7 @@
 						prop: 'DESCRIPTION',
 						width: '100%',
 						type: 'textarea',
+						placeholder: '请填写',
 						displayType: 'inline-block'
 					},
 					{
@@ -235,6 +256,7 @@
 						prop: 'C_PERSON',
 						width: '30%',
 						type: 'input',
+						placeholder: '请填写',
 						displayType: 'inline-block'
 					},
 					{
@@ -242,6 +264,7 @@
 						prop: 'APPR_PERSON',
 						width: '30%',
 						type: 'input',
+						placeholder: '请填写',
 						displayType: 'inline-block'
 					},
 					{
@@ -249,6 +272,7 @@
 						prop: 'COMP_PERSON',
 						width: '30%',
 						type: 'input',
+						placeholder: '请填写',
 						displayType: 'inline-block'
 					},
 					{
@@ -256,6 +280,7 @@
 						prop: 'APPR_DATE',
 						width: '30%',
 						type: 'date',
+						placeholder: '请选择',
 						displayType: 'inline-block'
 					},
 					{
@@ -263,6 +288,7 @@
 						prop: 'C_SITE',
 						width: '30%',
 						type: 'input',
+						placeholder: '请填写',
 						displayType: 'inline-block'
 					},
 					{
@@ -270,6 +296,7 @@
 						prop: 'C_BASIS',
 						width: '30%',
 						type: 'input',
+						placeholder: '请填写',
 						displayType: 'inline-block'
 					}
 				],

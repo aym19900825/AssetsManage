@@ -18,40 +18,47 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form :model="dataInfo" :rules="rules"   ref="dataInfo" label-width="100px" class="demo-user">
+					<el-form :model="dataInfo" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
 						<div class="accordion">
-
 							<!-- 设备基本信息 -->
 							<el-collapse v-model="activeNames">
-								<el-collapse-item name="1">
+								<el-collapse-item title="基本信息" name="1">
 									<el-row :gutter="20" class="pb10">
 										<el-col :span="5" class="pull-right">
-											<el-input v-model="dataInfo.ASSETNUM" :disabled="true">
-												<template slot="prepend">设备编号</template>
+											<el-input v-model="dataInfo.RECORDNUM" :disabled="true">
+												<template slot="prepend">溯源记录编号</template>
 											</el-input>
 										</el-col>
 									</el-row>
 									<el-form-item v-for="item in basicInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" label-width="160px">
-										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" style="width: 220px;" :disabled="noedit"></el-input>
-										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'&&item.prop=='model'" style="width: 220px;" :disabled="true"></el-input>
-										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'" :disabled="noedit"></el-input>
-										<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" :disabled="noedit">
+										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" style="width: 220px;" :disabled="noedit || item.disabled" :placeholder="item.placeholder" ></el-input>
+
+										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'&&item.prop=='model'" style="width: 220px;" :disabled="true" :placeholder="item.placeholder" ></el-input>
+
+										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'" :disabled="noedit" :placeholder="item.placeholder"></el-input>
+
+										<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" :disabled="noedit" :placeholder="item.placeholder" >
 										</el-date-picker>
+
 										<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'" :disabled="noedit">
 											<el-radio :label="it.label" v-for="it in item.opts" :key="it.id"></el-radio>
 										</el-radio-group>
-										<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'" @change="selChange" :disabled="noedit">
+
+										<el-select v-model="dataInfo[item.prop]" filterable :placeholder="item.placeholder" v-if="item.type == 'select'" @change="selChange" :disabled="noedit">
 											<el-option v-for="item in assets"
 											:key="item.ID"
 											:label="item.DESCRIPTION"
 											:value="item.DESCRIPTION">
 											</el-option>
 										</el-select>
+
 									</el-form-item>
 								</el-collapse-item>
+
 								<el-collapse-item title="文件" name="2">
-									<doc-table ref="docTable" :docParm = "docParm"  @saveParent = "save"></doc-table>
+									<doc-table ref="docTable" :docParm="docParm" @saveParent="save"></doc-table>
 								</el-collapse-item>
+
 								<!-- 其他信息 -->
 								<el-collapse-item title="其他" name="3" v-show="!addtitle">
 									<el-form-item v-for="item in otherInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-if="item.prop=='DEPARTMENT'" v-show="dept">
@@ -113,57 +120,66 @@
 					'appid': 1
 				},
 				rules: {
-
-					ASSETNUM: [
-						{ required: true, message: '请输入设备编号', trigger: 'blur' },
+					RECORDNUM: [
+						{ required: true, trigger: 'blur', validator: this.Validators.isWorknumber},
+					],
+					// ASSETNUM: [
+					// 	{ required: true, message: '请输入设备编号', trigger: 'blur' },
+					// ],
+					// MODEL: [
+					// 	{ required: true, message: '请输入规格型号', trigger: 'blur' },
+					// ],
+					C_NUM: [
+						{ required: true, message: '必填', trigger: 'blur' },
+						{ trigger: 'blur', validator: this.Validators.isWorknumber},
 					],
 					A_NAME: [
-						{ required: true, message: '请输入设备名称', trigger: 'blur' },
-					],
-					MODEL: [
-						{ required: true, message: '请输入规格型号', trigger: 'blur' },
+						{ required: true, message: '必填', trigger: 'blur' },
+						{ trigger: 'blur', validator: this.Validators.isWorknumber},
 					],
 					PM_MODEL: [
-						{ required: true, message: '请选择溯源方式', trigger: 'blur' },
+						{ required: true, message: '请选择', trigger: 'blur' },
 					],
 					PM_DATE: [
-						{ required: true, message: '请输入溯源日期', trigger: 'blur' },
+						{ required: true, message: '请选择', trigger: 'blur' },
 					],
 					R_CONCLUSION: [
-						{ required: true, message: '请输入确认结论', trigger: 'blur' },
-					],
-					C_NUM: [
-						{ required: true, message: '请输入证书编号', trigger: 'blur' },
+						{ required: true, message: '必填', trigger: 'blur' },
+						{ trigger: 'blur', validator: this.Validators.isWorknumber},
 					],
 					A_KPI: [
-						{ required: true, message: '请输入性能指标要求', trigger: 'blur' },
+						{ required: true, message: '必填', trigger: 'blur' },
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
 					SORUCE: [
-						{ required: true, message: '请输入指标确认来源', trigger: 'blur' },
+						{ required: true, message: '必填', trigger: 'blur' },
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
 					R_DESC: [
-						{ required: true, message: '请输入确认内容', trigger: 'blur' },
+						{ required: true, message: '必填', trigger: 'blur' },
+						{ trigger: 'blur', validator: this.Validators.isWorknumber},
 					],
 					C_PERSON: [
-						{ required: true, message: '请输入确认人', trigger: 'blur' },
+						{ required: true, message: '必填', trigger: 'blur' },
+						{ trigger: 'blur', validator: this.Validators.isNickname},
 					],
 					C_DATE: [
-						{ required: true, message: '请输入确认日期', trigger: 'blur' },
+						{ required: true, message: '请选择', trigger: 'blur' },
 					],
 					APPR_PERSON: [
-						{ required: true, message: '请输入审核人', trigger: 'blur' },
+						{ required: true, message: '必填', trigger: 'blur' },
+						{ trigger: 'blur', validator: this.Validators.isNickname},
 					],
 					APPR_DATE: [
-						{ required: true, message: '请输入审核日期', trigger: 'blur' },
-					],
-					STATUS: [
-						{ required: true, message: '请输入信息状态', trigger: 'blur' },
+						{ required: true, message: '请选择', trigger: 'blur' },
 					],
 					S_MEMO: [
-						{ required: true, message: '请输入特殊情况说明', trigger: 'blur' },
+						{ required: true, message: '必填', trigger: 'blur' },
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
 					DESCRIPTION: [
-						{ required: true, message: '请输入记录描述', trigger: 'blur' },
+						{ required: true, message: '必填', trigger: 'blur' },
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
 				},
 				basicInfo: [
@@ -172,20 +188,33 @@
 						prop: 'A_NAME',
 						width: '30%',
 						type: 'select',
+						placeholder: '请选择',
 						displayType: 'inline-block'
+					},
+					{
+						label: '设备编号',
+						prop: 'ASSETNUM',
+						width: '30%',
+						type: 'input',
+						placeholder: '自动获取',
+						displayType: 'inline-block',
+						disabled: true
 					},
 					{
 						label: '规格型号',
 						prop: 'MODEL',
 						width: '30%',
 						type: 'input',
-						displayType: 'inline-block'
+						placeholder: '自动获取',
+						displayType: 'inline-block',
+						disabled: true
 					},
 					{
 						label: '证书编号',
 						prop: 'C_NUM',
 						width: '30%',
 						type: 'input',
+						placeholder: '请填写',
 						displayType: 'inline-block'
 					},
 					{
@@ -193,6 +222,7 @@
 						prop: 'PM_DATE',
 						width: '30%',
 						type: 'date',
+						placeholder: '请选择',
 						displayType: 'inline-block'
 					},
 					{
@@ -215,6 +245,7 @@
 						prop: 'A_KPI',
 						width: '100%',
 						type: 'textarea',
+						placeholder: '请填写',
 						displayType: 'inline-block'
 					},
 					{
@@ -222,6 +253,7 @@
 						prop: 'SORUCE',
 						width: '100%',
 						type: 'textarea',
+						placeholder: '请填写',
 						displayType: 'inline-block'
 					},
 					{
@@ -229,6 +261,7 @@
 						prop: 'R_DESC',
 						width: '100%',
 						type: 'textarea',
+						placeholder: '请填写',
 						displayType: 'inline-block'
 					},
 					{
@@ -236,6 +269,7 @@
 						prop: 'R_CONCLUSION',
 						width: '100%',
 						type: 'textarea',
+						placeholder: '请填写',
 						displayType: 'inline-block'
 					},
 					{
@@ -243,6 +277,7 @@
 						prop: 'C_PERSON',
 						width: '30%',
 						type: 'input',
+						placeholder: '请填写',
 						displayType: 'inline-block'
 					},
 					{
@@ -250,6 +285,7 @@
 						prop: 'C_DATE',
 						width: '30%',
 						type: 'date',
+						placeholder: '请选择',
 						displayType: 'inline-block'
 					},
 					{
@@ -257,6 +293,7 @@
 						prop: 'APPR_PERSON',
 						width: '30%',
 						type: 'input',
+						placeholder: '请填写',
 						displayType: 'inline-block'
 					},
 					{
@@ -264,6 +301,7 @@
 						prop: 'APPR_DATE',
 						width: '30%',
 						type: 'date',
+						placeholder: '请选择',
 						displayType: 'inline-block'
 					},
 					{
@@ -271,6 +309,7 @@
 						prop: 'S_MEMO',
 						width: '100%',
 						type: 'textarea',
+						placeholder: '请填写',
 						displayType: 'inline-block'
 					},
 					{
@@ -278,6 +317,7 @@
 						prop: 'DESCRIPTION',
 						width: '100%',
 						type: 'textarea',
+						placeholder: '请填写',
 						displayType: 'inline-block'
 					},
 				],
@@ -380,7 +420,7 @@
 		},
 		methods: {
 			getUser(opt){
-				console.log(opt);
+				// console.log(opt);
 				var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url,{}).then((res) => {
 					if(opt=='new'){
@@ -434,7 +474,6 @@
 				this.statusshow1 = true;
 				this.statusshow2 = false;
 				this.show = true;
-
 				this.docParm = {
 					'model': 'new',
 					'appname': '溯源记录',
@@ -457,7 +496,6 @@
 				this.statusshow1 = true;
 				this.statusshow2 = false;
 				this.show = true;
-
 				this.getUser('edit');
 				var _this = this;
 				setTimeout(function(){

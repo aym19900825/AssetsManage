@@ -441,11 +441,11 @@
 									<el-input v-model="searchList.S_NAME"></el-input>
 								</el-form-item>
 							</el-col>
-							<el-col :span="6">
+							<!-- <el-col :span="6">
 								<el-form-item label="英文名称" prop="S_ENGNAME">
 									<el-input v-model="searchList.S_ENGNAME"></el-input>
 								</el-form-item>
-							</el-col>
+							</el-col> -->
 							<el-col :span="6">
 								<el-form-item label="版本" prop="VERSION">
 									<el-input v-model="searchList.VERSION"></el-input>
@@ -496,10 +496,10 @@
 					</el-table-column>
 					<el-table-column label="标准名称" width="220" sortable prop="S_NAME">
 					</el-table-column>
-					<el-table-column label="英文名称" width="220" sortable prop="S_ENGNAME">
-					</el-table-column>
-					<el-table-column label="状态" width="100" sortable prop="STATUS">
-					</el-table-column>
+					<!-- <el-table-column label="英文名称" width="220" sortable prop="S_ENGNAME">
+					</el-table-column> -->
+					<!-- <el-table-column label="状态" width="100" sortable prop="STATUS">
+					</el-table-column> -->
 					<el-table-column label="发布时间" width="160" sortable prop="RELEASETIME">
 					</el-table-column>
 					<el-table-column label="启用时间" width="160" sortable prop="STARTETIME">
@@ -579,22 +579,22 @@
 					</el-table-column>
 					<el-table-column label="人员资质" width="180" sortable prop="QUALIFICATION">
 					</el-table-column>
-					<el-table-column label="状态" width="100" sortable prop="STATUS" :formatter="judge">
-					</el-table-column>
+					<!-- <el-table-column label="状态" width="100" sortable prop="STATUS" :formatter="judge">
+					</el-table-column> -->
 					<el-table-column label="领域" width="120" sortable prop="FIELD" >
 					</el-table-column>
 					<el-table-column label="子领域" width="120" sortable prop="CHILD_FIELD">
 					</el-table-column>
 					<el-table-column label="版本" width="100" sortable prop="VERSION">
 					</el-table-column>
-					<el-table-column label="录入人机构" width="180" sortable prop="DEPARTMENT">
+					<el-table-column label="机构" width="180" sortable prop="DEPTIDDesc">
 					</el-table-column>
-					<el-table-column label="录入人" width="120" prop="ENTERBY" sortable>
-					</el-table-column>
+					<!-- <el-table-column label="录入人" width="120" prop="ENTERBY" sortable>
+					</el-table-column> -->
 					<el-table-column label="录入时间" width="160" prop="ENTERDATE" sortable :formatter="dateFormat">
 					</el-table-column>
-					<el-table-column label="修改人" width="120" prop="CHANGEBY" sortable>
-					</el-table-column>
+					<!-- <el-table-column label="修改人" width="120" prop="CHANGEBY" sortable>
+					</el-table-column> -->
 					<el-table-column label="修改时间" width="160" prop="CHANGEDATE" sortable :formatter="dateFormat">
 					</el-table-column>
 				</el-table>
@@ -626,7 +626,7 @@
 					</el-table-column>
 					<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
 					</el-table-column>
-					<el-table-column label="机构" width="185" sortable prop="DEPARTMENTDesc">
+					<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc">
 					</el-table-column>
 					<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
 					</el-table-column>
@@ -653,7 +653,7 @@
 									</el-table-column>
 									<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
 									</el-table-column>
-									<el-table-column label="机构" width="185" sortable prop="DEPARTMENTDesc">
+									<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc">
 									</el-table-column>
 									<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
 									</el-table-column>
@@ -929,6 +929,7 @@
 				itemtypenum:'',//当前选择的产品类别编号，用作参数请求产品名称
 				pronamenum:'',//当前选择的产品名称编号，用作参数请求依据
 				basisnums:'',//当前选择的依据编号字符串，用作参数请求检测项目
+				noedit:false
 			};
 		},
 		methods: {

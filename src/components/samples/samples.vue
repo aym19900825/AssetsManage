@@ -80,17 +80,17 @@
 								<el-col :span="5">
 									<el-form-item label="收样日期" prop="ACCEPT_DATE">
 										<div class="block">
-									    <el-date-picker
-									      v-model="searchList.ACCEPT_DATE"
-									      type="date"
-									      placeholder="请选择" style="width: 100%">
-									    </el-date-picker>
-								  	</div>
-								</el-form-item>
+											<el-date-picker
+											v-model="searchList.ACCEPT_DATE"
+											type="date"
+											placeholder="请选择" style="width: 100%">
+											</el-date-picker>
+										</div>
 									</el-form-item>
 								</el-col>
-								<el-col :span="3">
+								<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -347,6 +347,17 @@
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
 				this.requestData();
+			},
+			//重置
+			resetbtn(){
+				this.searchList = {
+					ITEMNUM:'',//样品编号
+					V_NAME: '',//委托单位名称
+					DESCRIPTION: '',//样品名称
+					ACCEPT_PERSON: '',//收样人
+					TYPE: '',//样品类别
+					ACCEPT_DATE: '',//收样日期
+				};
 			},
 			//添加样品管理
 			openAddMgr() {

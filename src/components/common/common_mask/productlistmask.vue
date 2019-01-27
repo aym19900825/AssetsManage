@@ -10,7 +10,7 @@
 				</el-table-column>
 				<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
 				</el-table-column>
-				<el-table-column label="机构" width="185" sortable prop="DEPARTMENTDesc">
+				<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc">
 				</el-table-column>
 				<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
 				</el-table-column>
@@ -45,8 +45,9 @@
 			currentPage: 1,
 			pageSize: 20,
 			totalCount: 0
-			},
+		},
 		DEPTID:'',//当前选择的机构值
+		NUM:'',//类别编号
     }
   },
 
@@ -77,9 +78,44 @@
 	close() {
 		this.dialogProduct = false;
 	},
-  	visible(DEPTID) {
-		this.DEPTID = DEPTID;
+	addprobtn(){
+		this.dialogVisible3 = true;
+		this.requestnum = '1';
+		this.requesCategory();
+	},
+	//产品类别数据
+			requesCategory(){
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				};
+				this.$axios.get(this.basic_url + '/api-apps/app/productType2?DEPTID='+this.WORKPLAN.PROP_UNIT, {
+					params: data
+				}).then((res) => {
+					this.page.totalCount = res.data.count;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
+					}
+					this.commentArr[this.page.currentPage] = res.data.data
+					let newarr = []
+					for(var i = 1; i <= totalPage; i++) {
+						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+							for(var j = 0; j < this.commentArr[i].length; j++) {
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					this.categoryList = newarr;
+				}).catch((wrong) => {})
+			},
+  	visible(NUM) {
+		this.NUM = NUM;
 		this.dialogProduct = true;
+		this.requestData();
   	},
   	loadMore () {
 	   if (this.loadSign) {
@@ -99,9 +135,9 @@
 			page: this.page.currentPage,
 			limit: this.page.pageSize,
 		};
-		var url = this.basic_url + '/api-apps/app/product2?DEPTID='+this.DEPTID;
+		var url = this.basic_url + '/api-apps/app/product2?NUM_wheres='+this.NUM;
 		this.$axios.get(url, {
-			params: data
+			
 		}).then((res) => {
 			this.page.totalCount = res.data.count;
 			//总的页数
@@ -136,14 +172,16 @@
 			});
 		}else{
 			this.dialogProduct = false;
-			var value=this.selUser[0].PRO_NAME;
-			this.$emit('appenddata',value);
+			var proarr = [];
+			proarr.push(this.selUser[0].PRO_NUM);
+			proarr.push(this.selUser[0].PRO_NAME);
+			this.$emit('appenddata',proarr);
 			this.requestData();
 		}
 	},
   },
   mounted() {
-		this.requestData();
+		// this.requestData();
 	},
 }
 </script>

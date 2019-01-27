@@ -49,8 +49,8 @@
 					<div v-show="search">
 						<el-form :model="searchList" label-width="70px">
 							<el-row :gutter="5">
-								<el-col :span="3">
-									<el-form-item label="样品序号" prop="ITEM_STEP" label-width="70px">
+								<el-col :span="6">
+									<el-form-item label="样品序号" prop="ITEM_STEP" label-width="85px">
 										<el-input v-model="searchList.ITEM_STEP"></el-input>
 									</el-form-item>
 								</el-col>
@@ -65,18 +65,20 @@
 									  	</div>
 									</el-form-item>
 								</el-col>
-								<el-col :span="4">
+								<el-col :span="6">
 									<el-form-item label="样品承接人" prop="ACCEPT_PERSON" label-width="85px">
 										<el-input v-model="searchList.ACCEPT_PERSON"></el-input>
 									</el-form-item>
 								</el-col>
-								<el-col :span="4">
+							</el-row>
+							<el-row :gutter="5">
+								<el-col :span="6">
 									<el-form-item label="处理批准人" prop="APPR_PERSON" label-width="85px">
 										<el-input v-model="searchList.APPR_PERSON"></el-input>
 									</el-form-item>
 								</el-col>
-								<el-col :span="5">
-									<el-form-item label="批准日期" prop="APPR_DATE" label-width="75px">
+								<el-col :span="6">
+									<el-form-item label="批准日期" prop="APPR_DATE" label-width="100px">
 										<div class="block">
 										    <el-date-picker
 										      v-model="searchList.APPR_DATE"
@@ -87,8 +89,9 @@
 									</el-form-item>
 								</el-col>
 								
-								<el-col :span="2">
+								<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -349,6 +352,17 @@
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
 				this.requestData();
+			},
+			//重置
+			resetbtn(){
+				this.searchList = {
+					ITEMNUM: '',//样品子表ID
+					ITEM_STEP: '',//样品序号
+					ACCEPT_PERSON: '',//样品承接人
+					ACCEPT_DATE: '',//收样日期
+					APPR_PERSON: '',//处理批准人
+					APPR_DATE: '',//批准日期
+				};
 			},
 			//添加样品管理
 			openAddMgr() {

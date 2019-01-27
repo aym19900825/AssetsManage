@@ -139,6 +139,8 @@
 								</el-table-column>
 								<el-table-column label="下达日期" width="130" sortable prop="XD_DATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('下达日期')!=-1">
 								</el-table-column>
+								<el-table-column label="任务号" width="120" prop="TASKNUM" sortable v-if="this.checkedName.indexOf('任务号')!=-1">
+								</el-table-column>
 								<el-table-column label="受检产品名称" width="150" sortable prop="ITEM_NAME" v-if="this.checkedName.indexOf('受检产品名称')!=-1">
 								</el-table-column>
 								<el-table-column label="受检产品型号" width="120" sortable prop="ITEM_MODEL" v-if="this.checkedName.indexOf('受检产品型号')!=-1">
@@ -147,11 +149,12 @@
 								</el-table-column>
 								<el-table-column label="承检单位" width="150" sortable prop="CJDWDesc" v-if="this.checkedName.indexOf('承检单位')!=-1">
 								</el-table-column>
-								<el-table-column label="任务号" width="120" prop="TASKNUM" sortable v-if="this.checkedName.indexOf('任务号')!=-1">
-								</el-table-column>
+								
 								<el-table-column label="抽样方案" width="120" prop="SOLUTION" sortable v-if="this.checkedName.indexOf('抽样方案')!=-1">
 								</el-table-column>
 								<el-table-column label="完成日期" width="130" prop="COMPDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('完成日期')!=-1">
+								</el-table-column>
+								<el-table-column label="状态" width="130" prop="STATEDesc" sortable v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
 								<!-- <el-table-column label="信息状态" width="120" prop="STATUS" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
 								</el-table-column> -->
@@ -216,7 +219,8 @@
 					'任务号',
 					'抽样方案',
 					'完成日期',
-					'信息状态',
+					'状态',
+					// '信息状态',
 					//					'录入人',
 					//					'录入时间'
 				],
@@ -261,9 +265,13 @@
 						prop: 'COMPDATE'
 					},
 					{
-						label: '信息状态',
-						prop: 'STATUS'
+						label: '状态',
+						prop: 'STATEDesc'
 					},
+					// {
+					// 	label: '信息状态',
+					// 	prop: 'STATUS'
+					// },
 					//					{
 					//						label: '录入人',
 					//						prop: 'ENTERBY'
@@ -411,7 +419,7 @@
 				this.page.currentPage = val;
 				this.requestData();
 			},
-				resetbtn(){
+			resetbtn(){
 				this.searchList =  { //点击高级搜索后显示的内容
 					N_CODE: '',
 					ITEM_NAME: '',
@@ -519,7 +527,15 @@
 					var deleteid = [];
 					var ids;
 					for(var i = 0; i < changeUser.length; i++) {
+						if(changeUser[i].STATE!=1){
+						 	this.$message({
+								message: '您的数据中有已启动的流程，所以能删除',
+								type: 'error'
+							});
+							return;
+						}else{
 						deleteid.push(changeUser[i].ID);
+						}
 					}
 					//ids为deleteid数组用逗号拼接的字符串
 					ids = deleteid.toString(',');
@@ -587,7 +603,7 @@
 					N_CODE: this.searchList.N_CODE,
 					ITEM_NAME: this.searchList.ITEM_NAME,
 					CJDW: this.searchList.CJDW,
-					TYPE: this.searchList.TYPE,
+					TYPE_wheres: this.searchList.TYPE,//精确查询类别
 					XD_DATE: this.searchList.XD_DATE,
 					COMPDATE: this.searchList.COMPDATE,
 					STATUS: this.searchList.STATUS,
@@ -648,6 +664,8 @@
 				for(var i = 0; i < this.selectData.length; i++) {
 					if(data.label == this.selectData[i].name) {
 						this.searchList.TYPE = this.selectData[i].code;
+						console.log(this.selectData[i].code);
+						console.log(this.searchList.TYPE);
 					}
 				}
 				this.requestData();

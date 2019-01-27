@@ -48,10 +48,11 @@ import inspection_project from '@/components/inspection_project'//检验/检测�
 import test from '@/components/test'//检验/检测项目管理
 import files_search from '@/components/files_search'//文件查询
 import interfaces from '@/components/interfaces'//接口
-import reports from '@/components/reports'//报表管理
+import reports from '@/components/reports/reports'//报表管理
 
 
 import inspect_proxy from '@/components/proxies/inspect_proxy'//检验委托书
+import check_proxy from '@/components/proxies/check_proxy'//检测委托书
 import subc_agreement from '@/components/proxies/subc_agreement'//分包协议
 
 import equipment_classify from '@/components/equipments/equipment_classify'//设备分类
@@ -176,7 +177,13 @@ Vue.use(Router)
       path: '/inspect_proxy',
       name: 'inspect_proxy',
       component: inspect_proxy
-    },{//审批意见
+    },
+    {//检测委托书
+      path: '/check_proxy',
+      name: 'check_proxy',
+      component: check_proxy
+    },
+    {//审批意见
       path: '/approving',
       name: 'approving',
       component: approving
@@ -334,6 +341,7 @@ Vue.use(Router)
       name: 'reports',
       component: reports
     },
+    
     {//机构管理
       path: '/testing',
       name: 'testing',

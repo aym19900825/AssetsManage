@@ -93,7 +93,7 @@
 										<el-col :span="8">
 											<el-form-item label="样品名称" prop="ITEM_NAME">
 												<el-input v-model="workorderForm.ITEM_NAME" :disabled="edit">
-													<el-button slot="append" icon="el-icon-search" @click="addsample" :disabled="noedit"></el-button>
+													<el-button slot="append" icon="el-icon-search" @click="addsample('workorder')" :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -614,53 +614,13 @@
 							</el-collapse>
 						</div>
 						<div class="el-dialog__footer" v-if="!viewtitle">
-								<el-button type="primary" @click="submitForm()">保存</el-button>
+								<el-button type="primary" @click="submitForm">保存</el-button>
 								<el-button type="success" v-show="addtitle">保存并继续</el-button>
 								<el-button @click='close'>取消</el-button>
 						</div>
 					</el-form>
 				</div>
 			</div>
-			<!--委托书编号 Begin-->
-			<el-dialog :modal-append-to-body="false" title="委托书编号" :visible.sync="dialogVisible1" width="80%" >
-				<div class="scrollbar" style="max-height: 400px;">
-					<el-table :data="inspectList" border stripe :header-cell-style="rowClass"  style="width: 100%;" :default-sort="{prop:'inspectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore('inspect')">	
-						<el-table-column type="selection" width="55" fixed align="center">
-						</el-table-column>
-						<el-table-column label="检验委托书编号" sortable width="130px" prop="PROXYNUM">
-						</el-table-column>
-						<el-table-column label="委托单位名称" sortable width="140px" prop="V_NAME">
-						</el-table-column>
-						<el-table-column label="生产单位名称" sortable width="140px" prop="P_NAME">
-						</el-table-column>
-						<el-table-column label="样品名称" sortable width="140px" prop="ITEM_NAME">
-						</el-table-column>
-						<el-table-column label="样品型号" sortable width="140px" prop="ITEM_MODEL">
-						</el-table-column>
-						<el-table-column label="检测依据" width="200px" prop="REMARKS" sortable>
-						</el-table-column>
-						<el-table-column label="完成日期" width="140px" prop="COMPDATE" sortable  :formatter="dateFormat" data-type = "">
-						</el-table-column>
-						<el-table-column label="完成方式" width="100px" prop="COMPMODE" sortable>
-						</el-table-column>
-						<el-table-column label="检测报告编号" width="140px" prop="REPORT_NUM" sortable>
-						</el-table-column>
-						<el-table-column label="主检组" width="140px" prop="MAINGROUP" sortable>
-						</el-table-column>
-						<el-table-column label="录入时间" width="140px" prop="ENTERDATE" sortable :formatter="dateFormat">
-						</el-table-column>
-						<el-table-column label="版本" width="80" prop="VERSION" sortable>
-						</el-table-column>
-					</el-table>
-				</div>	
-					<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-					</el-pagination>
-					<span slot="footer" class="dialog-footer">
-					   <el-button type="primary" @click="addworkordernum">确 定</el-button>
-				       <el-button @click="dialogVisible1 = false">取 消</el-button>
-				    </span>
-				</el-dialog>
-			<!--委托书编号 End-->
 			<!--主检员 Begin-->
 			<el-dialog :modal-append-to-body="false" title="主检员" :visible.sync="dialogVisible2" width="80%">
 				<div class="scrollbar" style="max-height: 400px;">
@@ -687,66 +647,13 @@
 				    </span>   
 				</el-dialog>
 			<!--主检员 End-->
-			<!-- 样品名称 Begin -->
-			<el-dialog :modal-append-to-body="false" title="样品名称" :visible.sync="dialogVisible3" width="80%">
-				<div class="scrollbar" style="max-height: 400px;">
-					<el-table :data="samplesList" border stripe :header-cell-style="rowClass"  style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore('samples')">
-					<el-table-column type="selection" width="55" fixed align="center">
-					</el-table-column>
-					<el-table-column label="样品编号" sortable width="200px" prop="ITEMNUM">
-					</el-table-column>
-					<el-table-column label="样品名称" sortable width="200px" prop="DESCRIPTION">
-					</el-table-column>
-					<el-table-column label="样品类别" sortable width="200px" prop="TYPE">
-					</el-table-column>
-					<el-table-column label="委托单位" sortable width="200px" prop="V_NAME">
-					</el-table-column>
-					<el-table-column label="生产单位" sortable width="200px" prop="P_NAME">
-					</el-table-column>
-					<el-table-column label="型号" width="100px" prop="MODEL" sortable>
-					</el-table-column>
-					<el-table-column label="数量" width="100px" prop="QUATITY" sortable>
-					</el-table-column>
-					<el-table-column label="收样人" sortable width="140px" prop="ACCEPT_PERSON">
-					</el-table-column>
-					<el-table-column label="收样日期" sortable width="140px" :formatter="dateFormat" prop="ACCEPT_DATE">
-					</el-table-column>
-					<el-table-column label="接样人" sortable width="140px" prop="RECIP_PERSON">
-					</el-table-column>
-					<el-table-column label="接样日期" sortable width="140px" :formatter="dateFormat" prop="RECIP_DATE">
-					</el-table-column>
-					<el-table-column label="状态" sortable width="100px" prop="STATE">
-					</el-table-column>
-				</el-table>
-				</div>
-				<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-				</el-pagination>
-				<div slot="footer" class="dialog-footer">
-			       <el-button type="primary" @click="addsamplename">确 定</el-button>
-			       <el-button @click="dialogVisible3 = false">取 消</el-button>
-			    </div>
-			</el-dialog>
-			<!-- 样品名称 End -->
-			<el-dialog :modal-append-to-body="false" title="原始数据模版" :visible.sync="dialogtemplate" width="80%">
-				<el-table :header-cell-style="rowClass" :data="categoryList" border stripe style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-					<el-table-column type="selection" fixed width="55" align="center">
-					</el-table-column>
-					<el-table-column label="编码" width="155" sortable prop="NUM">
-					</el-table-column>
-					<el-table-column label="模板描述" sortable prop="DECRIPTION">
-					</el-table-column>							             
-					<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
-					</el-table-column>
-					<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc">
-					</el-table-column>
-				</el-table>
-				<el-pagination background class="pull-right pt10"@size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-				</el-pagination>
-				<div slot="footer" class="dialog-footer">
-			       <el-button type="primary" @click="determinetemplate">确 定</el-button>
-			       <el-button @click="dialogtemplate = false">取 消</el-button>
-			   </div>
-			</el-dialog>
+			
+			<!--委托书编号-->
+			<inspectmask ref="inspectchild" @appendpro="appendpro" @appendver="appendver"></inspectmask>
+			<!-- 样品名称  -->
+			<sampletmask ref="samplechild" @appendname="appendname" @appendmod="appendmod" @appendsta="appendsta" @appendite="appendite"  ></sampletmask>
+			<!-- 原始模版  -->
+			<templatemask ref="templatechild" @appendnum="appendnum" @appenddes="appenddes" ></templatemask>
 			<!--审批页面-->
 			<approvalmask :approvingData="approvingData" ref="approvalChild" @detail="detailgetData"  ></approvalmask>
 			<!--流程历史-->
@@ -761,6 +668,9 @@
 
 <script>
 	import Config from '../../config.js'
+	import inspectmask from '../common/common_mask/inspectmask.vue'//委托书
+	import sampletmask from '../common/common_mask/samplemask.vue'//样品
+	import templatemask from '../common/common_mask/templatemask.vue'//模版
 	import approvalmask from '../workflow/approving.vue'
 	import flowhistorymask from '../workflow/flowhistory.vue'
 	import flowmapmask from '../workflow/flowmap.vue'
@@ -771,7 +681,10 @@
 			 approvalmask,
 			 flowhistorymask,
 			 flowmapmask,
-			 vewPoplemask
+			 vewPoplemask,
+			 inspectmask,
+			 sampletmask,
+			 templatemask
 		},
 		data() {
 			var validateProxynum = (rule, value, callback) => {//委托书编号
@@ -811,11 +724,7 @@
             };
 			return {
 			approvingData:{},//流程传的数据
-			dialogVisible1:false,
 			dialogVisible2:false,
-			dialogVisible3:false,
-			dialogtemplate:false,
-			inspectList:[],
 			workorderForm: {
 				WORKORDER_BASISList:[],//检测依据
 				WORKORDER_PROJECTList:[],//检测项目
@@ -891,11 +800,12 @@
 				workorder:'workorder',//appname
 				page: {
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				isEditing: true,
-				modulenum:'s'
+				modulenum:'s',
+				username:'',
 			};
 		},
 		methods: {
@@ -969,60 +879,41 @@
 			},
 			handleClick(tab, event) {
 //		        console.log(tab, event);
-		    },
-			// SelChange(val) {
-			// 	this.selval = val;
-			// },
+		   },
 			sizeChange(val) {
 				this.page.pageSize = val;
-				this.requestData();
+				this.getuser();
 			},
 			currentChange(val) {
 				this.page.currentPage = val;
-				this.requestData();
+				this.getuser();
 			},
 			//委托书编号
 			addworkorder(){	
-			this.dialogVisible1 = true;	
+				this.$refs.inspectchild.visible();
 			},
-			addworkordernum(){
-				if(this.selMenu.length == 0){
-					this.$message({
-						message: '请选择数据',
-						type: 'warning'
-					});
-				}else if(this.selMenu.length > 1){
-					this.$message({
-						message: '不可同时选择多条数据',
-						type: 'warning'
-					});
-				}else{
-					this.workorderForm.PROXYNUM = this.selMenu[0].PROXYNUM;
-					this.workorderForm.PROXY_VERSION = this.selMenu[0].VERSION;
-					this.dialogVisible1 = false;
-				}
+			appendpro(value){
+				this.workorderForm.PROXYNUM =value;
+					
 			},
-			addsample(){
-				this.dialogVisible3 = true;
+			appendver(value){
+				this.workorderForm.PROXY_VERSION =value;
 			},
-			addsamplename(){
-				if(this.selMenu.length == 0){
-					this.$message({
-						message: '请选择数据',
-						type: 'warning'
-					});
-				}else if(this.selMenu.length > 1){
-					this.$message({
-						message: '不可同时选择多条数据',
-						type: 'warning'
-					});
-				}else{
-					this.workorderForm.ITEM_NAME = this.selMenu[0].DESCRIPTION;//样品名称
-					this.workorderForm.ITEM_MODEL = this.selMenu[0].MODEL;//规格型号
-					this.workorderForm.ITEM_STATUS = this.selMenu[0].STATE;//样品状态
-					this.workorderForm.ITEMNUM = this.selMenu[0].ITEMNUM;//样品编号
-					this.dialogVisible3 = false;
-				}
+			//样品
+			addsample(type){
+				this.$refs.samplechild.visible(type);
+			},
+			appendname(value){
+				this.workorderForm.ITEM_NAME = value;//样品名称
+			},
+			appendmod(value){
+				this.workorderForm.ITEM_MODEL = value;//样品名称
+			},
+			appendsta(value){
+				this.workorderForm.ITEM_STATUS = value;//样品名称
+			},
+			appendite(value){
+				this.workorderForm.ITEMNUM = value;//样品名称
 			},
 			addperson(num){
 				this.numtips = num;
@@ -1048,33 +939,19 @@
 						this.workorderForm.RETURN_ITEM_USER = this.selMenu[0].username;
 					}
 					this.dialogVisible2 = false;
-					this.$emit('request');
 				}
 			},
 			 //模版编号
             templateNumber(item){
             	this.modulenum = item;
-            	this.dialogtemplate=true;
-//          	this.getTemplate();
+            	this.$refs.templatechild.visible();
+
             },
-            //原始数据模版确定
-            determinetemplate(){
-            	if(this.selMenu.length == 0){
-					this.$message({
-						message: '请选择数据',
-						type: 'warning'
-					});
-				}else if(this.selMenu.length > 1){
-					this.$message({
-						message: '不可同时选择多条数据',
-						type: 'warning'
-					});
-				}else{
-//					D_NUM，workorderForm.WORKORDER_DATA_TEMPLATEList，DESC
-					this.modulenum.D_NUM = this.selMenu[0].NUM;//样品名称
-					this.modulenum.DESC = this.selMenu[0].DECRIPTION;//样品名称	
-					this.dialogtemplate = false;
-				}
+            appendnum(value){
+            	this.modulenum.D_NUM=value;
+            },
+            appenddes(value){
+            	this.modulenum.DESC=value;
             },
    			//获取样品信息-样品状态
 			getITEM_STATUS() {
@@ -1162,8 +1039,6 @@
 			},
 			//启动流程
 			startup(){
-				console.log(12345);
-				console.log(this.dataid);
 				var url = this.basic_url + '/api-apps/app/workorder/flow/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					console.log(res);
@@ -1177,9 +1052,22 @@
 								message:res.data.resp_msg,
 								type: 'success'
 							});
-							this.requestData();
-							this.start=false;
-							this.approval=true;
+							var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/Executors/'+this.dataid;
+							this.$axios.get(url, {}).then((res) => {
+									console.log(res.data.datas);
+									var resullt=res.data.datas;
+									var users='';
+									for(var i=0;i<resullt.length;i++){
+										if(resullt[i].username!=this.username){
+											this.approval=false;
+											this.start=false;
+										}else{
+											this.approval=true;
+											this.start=false;
+										}
+									}
+							});
+							this.detailgetData();
 				    }
 				});
 			},
@@ -1289,24 +1177,12 @@
 			
 			//点击添加，修改按钮显示弹窗
 			visible() {
-				//主题信息置空
-//				this.workorderForm= [];
-//				// 检测依据表数据置空
-//				this.workorderForm.WORKORDER_BASISList = [];
-//				//检测项目与要求数据置空
-//				this.workorderForm.WORKORDER_PROJECTList = [];
-//				//检验员信息数据置空
-//				this.workorderForm.WORKORDER_CHECKPERSONList = [];
-//				// 原始数据模板置空
-//				this.workorderForm.WORKORDER_DATA_TEMPLATEList = [];
 				var date = new Date();
 				this.workorderForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-	    			// this.workorderForm.ENTERBY = res.data.nickname;
-					// this.workorderForm.ORG_CODE = res.data.deptName;
 					this.workorderForm.DEPTID = res.data.deptId;
 					this.workorderForm.ENTERBY = res.data.id;
-					// this.dataInfo.ORGID = res.data.deptName
+					this.username=res.data.username;
 					var date = new Date();
 					this.workorderForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 				}).catch((err) => {
@@ -1396,13 +1272,24 @@
 				this.$axios.get(url, {}).then((res) => {
 					console.log(res);
 					if(res.data.resp_code==1){
-						console.log(111);
 						this.start=true;
 						this.approval=false;
 					}else{
-						console.log(222);
-						this.start=false;
-						this.approval=true;
+						var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/Executors/'+dataid;
+						this.$axios.get(url, {}).then((res) => {
+							console.log(res.data.datas);
+							var resullt=res.data.datas;
+							var users='';
+							for(var i=0;i<resullt.length;i++){
+								if(resullt[i].username!=this.username){
+									this.approval=false;
+									this.start=false;
+								}else{
+									this.approval=true;
+									this.start=false;
+								}
+							}
+						});
 					}
 				});
 			},
@@ -1490,54 +1377,11 @@
 					setTimeout(() => {
 					this.loadSign = true;
 					}, 1000)
-					if(item=="inspect"){
-						this.getinspectList();
-					}else if(item=="user"){
+					
 						this.getuser();
-					}else if(item=="samples"){
-						this.getsamples();
-					}else{
-						this.getTemplate();
-					}
-					
-					
 			    }
 			},	
-			getinspectList(){
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-				}
-				//委托书
-				this.$axios.get(this.basic_url + '/api-apps/app/inspectPro', {params: data}).then((res) => {
-					console.log(res);
-					this.page.totalCount = res.data.count;
-					//总的页数
-					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
-					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false
-					} else {
-						this.loadSign = true
-					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.inspectList = newarr;
-				}).catch((wrong) => {
-					this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
-				})
-				
-			},
+			
 			getuser(){
 				var data = {
 					page: this.page.currentPage,
@@ -1572,79 +1416,9 @@
 					this.userList = newarr;
 				}).catch((wrong) => {})	
 			},
-			getsamples() {
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-				}
-               //接样
-				this.$axios.get(this.basic_url + '/api-apps/app/item', {
-					params: data
-				}).then((res) => {
-					console.log(res);
-					this.page.totalCount = res.data.count;
-					//总的页数
-					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false
-					} else {
-						this.loadSign = true
-					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
-
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.samplesList = newarr;
-				}).catch((wrong) => {})
-			},
-			getTemplate(){
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-				}
-				var url = this.basic_url + '/api-apps/app/rawDataTem';
-				this.$axios.get(url, {}).then((res) => {
-					this.page.totalCount = res.data.count;
-					//总的页数
-					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
-					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false;
-					} else {
-						this.loadSign = true;
-					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = [];
-					for(var i = 1; i <= totalPage; i++) {
-
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					console.log(this.categoryList);
-					this.categoryList = newarr;
-				}).catch((wrong) => {
-					this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
-				})
-			},
-
-		},
-		beforeMount() {
-			
 			
 		},
+		
 		mounted() {
 			this.getITEM_STATUS();//页面打开加载-样品状态
 			this.getITEM_SOURCE();//页面打开加载-样品来源
@@ -1653,10 +1427,7 @@
 			this.getITEM_RECEPT_STATUS();//页面打开加载-样品接收状态
 			this.getITEM_CHECK_STATUS();//页面打开加载-样品检后状态
 			this.getITEM_MANAGEMENT();//页面打开加载-样品处置
-			this.getTemplate();//
-			this.getinspectList();//委托书编号
 			this.getuser();//用户
-			this.getsamples();//样品
 		},
 	}
 </script>

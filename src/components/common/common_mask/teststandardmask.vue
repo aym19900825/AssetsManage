@@ -71,10 +71,10 @@
 					</el-table-column>
 					<el-table-column label="标准名称" width="220" sortable prop="S_NAME">
 					</el-table-column>
-					<el-table-column label="英文名称" width="220" sortable prop="S_ENGNAME">
-					</el-table-column>
-					<el-table-column label="状态" width="100" sortable prop="STATUS">
-					</el-table-column>
+					<!-- <el-table-column label="英文名称" width="220" sortable prop="S_ENGNAME">
+					</el-table-column> -->
+					<!-- <el-table-column label="状态" width="100" sortable prop="STATUS">
+					</el-table-column> -->
 					<el-table-column label="发布时间" width="160" sortable prop="RELEASETIME">
 					</el-table-column>
 					<el-table-column label="启用时间" width="160" sortable prop="STARTETIME">
@@ -96,8 +96,8 @@
 				</el-pagination>
 				<!-- 第二层弹出的表格 End -->
 				<div slot="footer" class="dialog-footer">
+					<el-button type="primary" @click="addbasis">确 定</el-button>
 			       <el-button @click="dialogVisible = false">取 消</el-button>
-			       <el-button type="primary" @click="addbasis">确 定</el-button>
 			    </div>
 			</el-dialog>
 			<!-- 检测依据弹出框 End -->
@@ -132,7 +132,8 @@
             STATUS: '',
         },
         standardList:[],
-        selectData:[],
+		selectData:[],
+		pronum:'',
     }
   },
 
@@ -192,8 +193,10 @@
 	close() {
 		this.dialogProduct = false;
     },
-    basislead(){
-        this.dialogVisible = true;
+    basislead(pronum){
+		this.pronum = pronum;
+		this.dialogVisible = true;
+		this.requestData();
     },
     addbasis(){
         var selData = this.selUser;
@@ -205,17 +208,19 @@
             return;
         } else {
             var changeUser = this.selUser;
-            var list = [];
+			var list = [];
             //basisnum为依据编号的数组
             var basisnum = [];
             for (var i = 0; i < changeUser.length; i++) {
                 basisnum.push(changeUser[i].S_NUM);
             }
             //basisnums为basisnum数组用逗号拼接的字符串
-            this.basisnums = basisnum.toString(',');
+			var basisnums = basisnum.toString(',');
+			list.push(basisnums);
             for(var i = 0;i<this.selUser.length;i++){
                 list.push(this.selUser[i]);
-            }
+			}
+			console.log('========');
             console.log(list);
             this.$emit('testbasis',list);
             this.dialogVisible = false;
@@ -254,9 +259,8 @@
             // STATUS: this.searchList.STATUS,
         };
         console.log(111111);
-        console.log(this.pronamenum);
-        // var url = this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.pronamenum;
-        var url = this.basic_url +'/api-apps/app/inspectionSta';
+        console.log(this.pronum);
+        var url = this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.pronum;
         this.$axios.get(url, {
             
         }).then((res) => {
@@ -316,4 +320,10 @@
 </script>
 
 <style>
+.el-dialog__footer {
+	padding: 19px 20px 20px;
+	text-align: center;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
 </style>

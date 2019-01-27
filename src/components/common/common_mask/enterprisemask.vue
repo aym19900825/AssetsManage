@@ -1,6 +1,31 @@
 <template>
 	<div>
 		<el-dialog :modal-append-to-body="false" title="受检企业" :visible.sync="dialogCustomer" width="80%">
+			<el-form :model="searchList" label-width="70px">
+				<el-row :gutter="10">
+					<el-col :span="5">
+						<el-form-item label="统一信用代码" prop="CODE" label-width="100px">
+							<el-input v-model="searchList.CODE">
+							</el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="5">
+						<el-form-item label="单位名称" prop="NAME">
+							<el-input v-model="searchList.NAME">
+							</el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="5">
+						<el-form-item label="联系地址" prop="CONTACT_ADDRESS">
+							<el-input v-model="searchList.CONTACT_ADDRESS">
+							</el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="2">
+						<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+					</el-col>
+				</el-row>
+			</el-form>
 			<el-table :header-cell-style="rowClass" :data="customerList" line-center border stripe height="400px" style="width: 100%;" :default-sort="{prop:'customerList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 				<el-table-column type="selection" width="55" fixed align="center">
 				</el-table-column>
@@ -38,7 +63,12 @@
 		loadSign:true,//加载
 		commentArr:{},
 		selUser: [],//接勾选的值
-		type:0,
+		type:'',
+		searchList: {
+					NAME: '',
+					CODE: '',
+					CONTACT_ADDRESS: '',
+				},
 		page: {
 			currentPage: 1,
 			pageSize: 20,
@@ -70,6 +100,11 @@
 		this.page.currentPage = val;
 		this.requestData();
 	},
+	searchinfo() {
+		this.page.currentPage = 1;
+		this.page.pageSize = 20;
+		this.requestData();
+	},
   	//点击关闭按钮
 	close() {
 		this.dialogCustomer = false;
@@ -95,6 +130,9 @@
 		var data = {
 			page: this.page.currentPage,
 			limit: this.page.pageSize,
+			NAME: this.searchList.NAME,
+			CODE: this.searchList.CODE,
+			CONTACT_ADDRESS: this.searchList.CONTACT_ADDRESS,
 		};
 		this.$axios.get(this.basic_url + '/api-apps/app/customer', {
 			params: data

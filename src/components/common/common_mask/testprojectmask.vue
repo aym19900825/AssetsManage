@@ -52,22 +52,22 @@
 					</el-table-column>
 					<el-table-column label="人员资质" width="180" sortable prop="QUALIFICATION">
 					</el-table-column>
-					<el-table-column label="状态" width="100" sortable prop="STATUS" :formatter="judge">
-					</el-table-column>
+					<!-- <el-table-column label="状态" width="100" sortable prop="STATUS" :formatter="judge">
+					</el-table-column> -->
 					<el-table-column label="领域" width="120" sortable prop="FIELD" >
 					</el-table-column>
 					<el-table-column label="子领域" width="120" sortable prop="CHILD_FIELD">
 					</el-table-column>
 					<el-table-column label="版本" width="100" sortable prop="VERSION">
 					</el-table-column>
-					<el-table-column label="录入人机构" width="180" sortable prop="DEPARTMENT">
+					<el-table-column label="机构" width="180" sortable prop="DEPTIDDesc">
 					</el-table-column>
-					<el-table-column label="录入人" width="120" prop="ENTERBY" sortable>
-					</el-table-column>
+					<!-- <el-table-column label="录入人" width="120" prop="ENTERBY" sortable>
+					</el-table-column> -->
 					<el-table-column label="录入时间" width="160" prop="ENTERDATE" sortable :formatter="dateFormat">
 					</el-table-column>
-					<el-table-column label="修改人" width="120" prop="CHANGEBY" sortable>
-					</el-table-column>
+					<!-- <el-table-column label="修改人" width="120" prop="CHANGEBY" sortable>
+					</el-table-column> -->
 					<el-table-column label="修改时间" width="160" prop="CHANGEDATE" sortable :formatter="dateFormat">
 					</el-table-column>
 				</el-table>
@@ -83,7 +83,7 @@
 				<!-- 表格 End-->
 				<span slot="footer" class="el-dialog__footer">
 			       <el-button type="primary" @click="addbasis">确 定</el-button>
-			       <el-button @click="dialogVisible2 = false">取 消</el-button>
+			       <el-button @click="dialogVisible = false">取 消</el-button>
 			    </span>
 			</el-dialog>
 			<!-- 检测项目与要求 End -->
@@ -118,7 +118,8 @@
             STATUS: '',
         },
         projectList: [],//检测项目与要求
-        selectData:[],
+		selectData:[],
+		basisnum:''//检测依据传递过来的请求数据参数
     }
   },
 
@@ -178,8 +179,10 @@
 	close() {
 		this.dialogProduct = false;
     },
-    projectlead(){
-        this.dialogVisible = true;
+    projectlead(basisnum){
+		this.basisnum = basisnum;
+		this.dialogVisible = true;
+		this.requestData();
     },
     addbasis(){
         var selData = this.selUser;
@@ -241,10 +244,7 @@
             VERSION: this.searchList.VERSION,
             STATUS: this.searchList.STATUS,
         };
-        console.log(1454324565);
-        console.log(this.basisnums);
-        // this.$axios.get(this.basic_url +'/api-apps/app/inspectionPro2?S_NUM_where_in='+this.basisnums, {
-            this.$axios.get(this.basic_url +'/api-apps/app/inspectionPro', {
+        this.$axios.get(this.basic_url +'/api-apps/app/inspectionPro2?S_NUM_where_in='+this.basisnum, {
         
         }).then((res) => {
             console.log(2333333);
@@ -310,4 +310,10 @@
 </script>
 
 <style>
+.el-dialog__footer {
+	padding: 19px 20px 20px;
+	text-align: center;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
 </style>

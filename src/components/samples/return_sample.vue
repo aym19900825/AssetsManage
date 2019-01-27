@@ -88,8 +88,9 @@
 									  	</div>
 									</el-form-item>
 								</el-col>
-								<el-col :span="3">
+								<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -347,6 +348,17 @@
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
 				this.requestData();
+			},
+			//重置
+			resetbtn(){
+				this.searchList = {
+					ITEMNUM: '',//样品编号
+					APPR_PERSON: '',//处理批准人
+					ACCEPT_PERSON: '',//样品承接人
+					ITEM_STEP: '',//样品序号
+					APPR_DATE: '',//批准日期
+					ACCEPT_DATE: '',//收样日期
+				};
 			},
 			//添加样品管理
 			openAddMgr() {

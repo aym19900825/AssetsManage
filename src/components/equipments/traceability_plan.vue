@@ -95,9 +95,10 @@
 								  	</div>
 								</el-form-item>
 							</el-col>
-							<el-col :span="2">
-								<el-button type="primary" @click="searchinfo" size="small" style="margin-top: 2px">搜索</el-button>
-							</el-col>
+							<el-col :span="4">
+									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
+								</el-col>
 						</el-row>
 					</el-form>
 				</div>
@@ -318,6 +319,17 @@
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
 				this.requestData();
+			},
+			resetbtn(){
+				this.searchList = { //点击高级搜索后显示的内容
+					A_NAME: '',
+					PMNUM: '',
+					ASSETNUM: '',
+					PM_MECHANISM: '',
+					DESCRIPTION: '',
+					COMP_DATE: '',
+					FREQUENCY: ''
+				};
 			},
 			//时间格式化  
 			dateFormat(row, column) {

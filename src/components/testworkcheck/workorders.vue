@@ -6,11 +6,9 @@
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
-			<div style="display:none;">
-			 	<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left>
-			</div> 	
+			 	<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left>	
 			<!--左侧菜单内容显示 End-->
-			<div class="wrapper wrapper-content wrapperall">
+			<div class="wrapper wrapper-content">
 				<div class="ibox-content">
 					<!--<navs_button></navs_button>-->
 					<div class="fixed-table-toolbar clearfix">
@@ -184,11 +182,11 @@
 	</div>
 </template>
 <script>
-	import Config from '../config.js'
-	import vheader from './common/vheader.vue'
-	import navs_left from './common/left_navs/nav_left5.vue'
-	import navs_header from './common/nav_tabs.vue'
-	import workorders_mask from './common/workorders_mask.vue'
+	import Config from '../../config.js'
+	import vheader from '../common/vheader.vue'
+	import navs_left from '../common/left_navs/nav_left5.vue'
+	import navs_header from '../common/nav_tabs.vue'
+	import workorders_mask from '../testworkcheckDetails/workorders_mask.vue'
 	export default {
 		name: 'workorders',
 		components: {

@@ -16,19 +16,19 @@
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
 								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
-	                        	<i class="icon-add"></i>添加
-	              			 </button>
+                                    <i class="icon-add"></i>添加
+                                </button>
 								<button type="button" class="btn btn-blue button-margin" @click="modify">
-							    <i class="icon-edit"></i>修改
-							</button>
+                                    <i class="icon-edit"></i>修改
+                                </button>
 								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
-							    <i class="icon-trash"></i>删除
-							</button>
+                                    <i class="icon-trash"></i>删除
+                                </button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-					    		<i class="icon-search"></i>高级查询
-					    		<i class="icon-arrow1-down" v-show="down"></i>
-					    		<i class="icon-arrow1-up" v-show="up"></i>
-							</button>
+                                    <i class="icon-search"></i>高级查询
+                                    <i class="icon-arrow1-down" v-show="down"></i>
+                                    <i class="icon-arrow1-up" v-show="up"></i>
+                                </button>
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -42,21 +42,37 @@
 
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
-						<el-form :model="searchList" label-width="70px">
+						<el-form :model="searchList" label-width="45px">
 							<el-row :gutter="10">
-								<el-col :span="5">
-									<el-form-item label="应用名称" prop="name">
-										<el-input v-model="searchList.name"></el-input>
+                                <el-col :span="7">
+									<el-form-item label="工作任务单编号" prop="WONUM" label-width="110px">
+										<el-input v-model="searchList.WONUM"></el-input>
 									</el-form-item>
 								</el-col>
-								<el-col :span="5">
-									<el-form-item label="应用描述" prop="description">
-										<el-input v-model="searchList.description"></el-input>
+								<el-col :span="7">
+									<el-form-item label="委托书编号" prop="PROXYNUM" label-width="100px">
+										<el-input v-model="searchList.PROXYNUM"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="7">
+									<el-form-item label="用印人" prop="USER" label-width="80px">
+										<el-input v-model="searchList.USER"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="7">
+									<el-form-item label="归还时间" prop="GHTIME" label-width="110px">
+										<el-date-picker v-model="searchList.GHTIME" type="date" placeholder="请选择" value-format="yyyy-MM-dd" style="width: 100%;">
+										</el-date-picker>
+									</el-form-item>
+								</el-col>
+								<el-col :span="7">
+									<el-form-item label="归还接收人" prop="GHUSER" label-width="100px">
+										<el-input v-model="searchList.GHUSER"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -65,46 +81,34 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格 Begin-->
-							<el-table :header-cell-style="rowClass" :data="applicationList" v-loading="loading" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'applicationList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table :header-cell-style="rowClass" :data="USESEAL" v-loading="loading" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'USESEAL', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
-								<el-table-column label="应用英文名称" width="155" sortable prop="code" v-if="this.checkedName.indexOf('应用英文名称')!=-1">
+								<el-table-column label="工作任务单编号" width="155" sortable prop="WONUM" v-if="this.checkedName.indexOf('工作任务单编号')!=-1">
 									<template slot-scope="scope">
-										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.code}}
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.WONUM}}
 										</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="应用名称" width="150" sortable prop="name" v-if="this.checkedName.indexOf('应用名称')!=-1">
+                                <el-table-column label="委托书编号" sortable prop="PROXYNUM" v-if="this.checkedName.indexOf('委托书编号')!=-1">
 								</el-table-column>
-								<!--<el-table-column label="信息状态" width="155" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
+								<el-table-column label="委托书版本" sortable prop="PROXY_VERSION" v-if="this.checkedName.indexOf('委托书版本')!=-1">
+								</el-table-column>
+								<el-table-column label="用印人" width="100" sortable prop="USERDesc" v-if="this.checkedName.indexOf('用印人')!=-1">
+								</el-table-column>
+								<el-table-column label="用印时间" width="185" sortable prop="USETIME" v-if="this.checkedName.indexOf('用印时间')!=-1" :formatter="dateFormat">
+								</el-table-column>
+                                <el-table-column label="用印人机构" width="120" sortable prop="SEAL_DEPARTMENTDesc" v-if="this.checkedName.indexOf('用印人机构')!=-1">
+								</el-table-column>
+                                <el-table-column label="归还时间" width="100" sortable prop="GHTIME" v-if="this.checkedName.indexOf('归还时间')!=-1" :formatter="dateFormat">
+								</el-table-column>
+                                <el-table-column label="归还接收人" width="120" sortable prop="GHUSERDesc" v-if="this.checkedName.indexOf('归还接收人')!=-1">
+								</el-table-column>
+                                <!--<el-table-column label="信息状态" width="155" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
  								<template slot-scope="scope" >
  									<span v-text="scope.row.STATUS=='1'?'活动':'不活动'"></span>
  								</template>
 							</el-table-column>-->
-								<el-table-column label="处理类" width="250" sortable prop="handleclass" v-if="this.checkedName.indexOf('处理类')!=-1" align="right">
-								</el-table-column>
-								<el-table-column label="应用描述" width="185" sortable prop="description" v-if="this.checkedName.indexOf('应用描述')!=-1">
-								</el-table-column>
-								<el-table-column label="数据库表" width="185" sortable prop="object_id" v-if="this.checkedName.indexOf('数据库表')!=-1">
-								</el-table-column>
-								<el-table-column label="模块" width="185" sortable prop="module" v-if="this.checkedName.indexOf('模块')!=-1">
-								</el-table-column>
-								<el-table-column label="排序" width="120" align="right" sortable prop="sort" v-if="this.checkedName.indexOf('排序')!=-1">
-								</el-table-column>
-								<!-- <el-table-column label="创建人" width="155" prop="createUser" sortable v-if="this.checkedName.indexOf('创建人')!=-1">
-								</el-table-column> -->
-								<el-table-column label="创建时间" width="120" prop="createTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
-								</el-table-column>
-								<!-- <el-table-column label="修改人" width="155" prop="updateUser" sortable v-if="this.checkedName.indexOf('修改人')!=-1">
-								</el-table-column> -->
-								<el-table-column label="变更时间" width="120" prop="updateTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
-								</el-table-column>
-								<el-table-column label="流程" width="120" prop="flowkey" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('流程')!=-1">
-								</el-table-column>
-								<el-table-column label="流程代办单据号" width="180" prop="flow_todo_num" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('流程代办单据号')!=-1">
-								</el-table-column>
-								<el-table-column label="流程代办描述" width="180" prop="flow_todo_desc" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('流程代办描述')!=-1">
-								</el-table-column>
 							</el-table>
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
@@ -114,7 +118,7 @@
 				</div>
 			</div>
 			<!--右侧内容显示 End-->
-			<categorymask :CATEGORY="CATEGORY" ref="categorymask" @request="requestData" @reset="reset" v-bind:page=page></categorymask>
+			<usesealmask :USESEAL="USESEAL" ref="usesealmask" @request="requestData" v-bind:page=page></usesealmask>
 		</div>
 	</div>
 </template>
@@ -123,16 +127,16 @@
 	import vheader from '../common/vheader.vue'
 	import navs_header from '../common/nav_tabs.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import categorymask from '../settingDetails/application_Mask.vue'
-	import tableControle from '../plugin/table-controle/controle.vue'
+	import usesealmask from '../testworkcheckDetails/usesealMask.vue'
+    import tableControle from '../plugin/table-controle/controle.vue'
 	export default {
-		name: 'customer_management',
+		name: 'useseal_management',
 		components: {
 			vheader,
 			navs_left,
 			navs_header,
-			categorymask,
-			tableControle,
+			usesealmask,
+            tableControle,
 		},
 		data() {
 			return {
@@ -148,91 +152,51 @@
 					value: '0',
 					label: '不活动'
 				}],
-				searchData: {
-					page: 1,
-					limit: 10, //分页显示数
-					nickname: '',
-					enabled: '',
-					searchKey: '',
-					searchValue: '',
-					companyId: '',
-					deptId: ''
-				},
 				checkedName: [
-					'应用英文名称',
-					'应用名称',
-					'处理类',
-					'类型',
-					'应用描述',
-					'数据库表',
-					'模块',
-					'排序',
-					'创建时间',
-					'变更时间',
-					'流程',
-					'流程代办单据号',
-					'流程代办描述'
+                    '工作任务单编号',
+					'委托书编号',
+                    '委托书版本',
+                    '用印人',
+                    '用印时间',
+                    '用印人机构',
+                    '归还时间',
+                    '归还接收人',
 				],
-				tableHeader: [{
-						label: '应用英文名称',
-						prop: 'code'
+				tableHeader: [
+                    {
+						label: '工作任务单编号',
+						prop: 'WONUM'
+					},{
+						label: '委托书编号',
+						prop: 'PROXYNUM'
 					},
 					{
-						label: '应用名称',
-						prop: 'name'
+						label: '委托书版本',
+						prop: 'PROXY_VERSION'
 					},
 					{
-						label: '处理类',
-						prop: 'handleclass'
+						label: '用印人',
+						prop: 'USERDesc'
 					},
 					{
-						label: '类型',
-						prop: 'type'
+						label: '用印时间',
+						prop: 'USETIME'
 					},
 					{
-						label: '应用描述',
-						prop: 'description'
+						label: '用印人机构',
+						prop: 'SEAL_DEPARTMENTDesc'
 					},
 					{
-						label: '数据库表',
-						prop: 'object_id'
+						label: '归还时间',
+						prop: 'GHTIME'
 					},
 					{
-						label: '模块',
-						prop: 'module'
-					},
-					{
-						label: '排序',
-						prop: 'sort'
-					},
-					{
-						label: '创建时间',
-						prop: 'createTime'
-					},
-					{
-						label: '变更时间',
-						prop: 'updateTime'
-					},
-					{
-						label: '流程',
-						prop: 'flowkey'
-					},
-					{
-						label: '流程代办单据号',
-						prop: 'flow_todo_num'
-					},
-					{
-						label: '流程代办描述',
-						prop: '流程代办描述'
-					},
-
-					// {
-					// 	label: '信息状态',
-					// 	prop: 'STATUS'
-					// },
+						label: '归还接收人',
+						prop: 'GHUSERDesc'
+					}
 				],
 				selUser: [],
-				applicationList: [],
+				USESEAL: [],
 				search: false,
 				show: false,
 				down: true,
@@ -240,44 +204,28 @@
 				isShow: false,
 				ismin: true,
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
-				searchList: { //点击高级搜索后显示的内容
-					name:'',
-					description: '',
+                searchList: { //点击高级搜索后显示的内容
+                    WONUM:'',
+					PROXYNUM:'',
+					USER: '',
+					GHTIME:'',
+                    GHUSER: '',
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
 				resourceDialogisShow: false,
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
-				resourceProps: {
-					categorymaskren: "subDepts",
-					label: "simplename"
-				},
 				page: { //分页显示
 					currentPage: 1,
 					pageSize: 10,
 					totalCount: 0
 				},
-				CATEGORY: {},//修改子组件时传递数据
-				selectData: [],
 			}
 		},
 		methods: {
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
-			},
-			//机构值
-			getCompany() {
-				var type = "2";
-				var url = this.basic_url + '/api-user/depts/treeByType';
-				this.$axios.get(url, {
-					params: {
-						type: type
-					},
-				}).then((res) => {
-					console.log(res.data);
-					this.selectData = res.data;
-				});
 			},
 			//表格滚动加载
 			loadMore() {
@@ -304,41 +252,27 @@
 				this.page.currentPage = val;
 				this.requestData();
 			},
+			//重置
+			resetbtn(){
+				this.searchList = {
+					WONUM:'',
+					PROXYNUM:'',
+					USER: '',
+					GHTIME:'',
+                    GHUSER: '',
+				};
+			},
+			//搜索
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
 				this.requestData();
 			},
-			resetbtn(){
-				this.searchList = { //点击高级搜索后显示的内容
-					name:'',
-					description: '',
-				};
-			},
-			//清空
-			reset() {
-				this.CATEGORY = {
-					ID: '',
-					NUM: '',
-					TYPE: '',
-					STATUS: '活动',
-					VERSION: '1',
-					DEPARTMENT: '',
-					ENTERBY: '',
-					ENTERDATE: '',
-					CHANGEBY: '',
-					CHANGEDATE: ''
-				};
-				if(this.$refs['CATEGORY'] !== undefined) {
-					this.$refs['CATEGORY'].resetFields();
-				}
-
-			},
+			
 			//添加类别
 			openAddMgr() {
-				this.reset();
-				this.$refs.categorymask.open(); // 方法1
-				this.$refs.categorymask.visible();
+				this.$refs.usesealmask.open(); // 方法1
+				this.$refs.usesealmask.visible();
 				
 			},
 			//修改类别
@@ -356,14 +290,12 @@
 					});
 					return;
 				} else {
-					this.CATEGORY = this.selUser[0];
-					this.$refs.categorymask.detail();
+					this.$refs.usesealmask.detail(this.selUser[0]);
 				}
 			},
 			//查看
 			 view(data) {
-			 	this.CATEGORY =data;
-				this.$refs.categorymask.view();
+				this.$refs.usesealmask.view(data);
 			},
 			//高级查询
 			modestsearch() {
@@ -380,15 +312,8 @@
 						type: 'warning'
 					});
 					return;
-				}else if(selData.length > 1){
-					this.$message({
-						message: '不可删除多条数据',
-						type: 'warning'
-					});
-					return;
-				}else {
-					var id = this.selUser[0].id;
-					var url = this.basic_url + '/api-apps/appcfg/'+id;
+				} else {
+					var url = this.basic_url + '/api-apps/app/sealUse/deletes';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -429,7 +354,8 @@
 
 					});
 				}
-			},
+            },
+            
 			// 导入
 			importData() {
 
@@ -465,18 +391,17 @@
 			requestData(index) {
 				var data = {
 					page: this.page.currentPage,
-					limit: this.page.pageSize,
-					name:this.searchList.name,
-					description: this.searchList.description,
+                    limit: this.page.pageSize,
+                    WONUM:this.searchList.WONUM,
+					PROXYNUM:this.searchList.PROXYNUM,
+					USER: this.searchList.USER,
+					GHTIME:this.searchList.GHTIME,
+                    GHUSER: this.searchList.GHUSER,
 				}
-				// console.log(this.searchList.DEPTID);
-				var url = this.basic_url + '/api-apps/appcfg';
+				var url = this.basic_url + '/api-apps/app/sealUse';
 				this.$axios.get(url, {
 					params: data
-				}).then((res) => {
-					console.log(23333333);
-					console.log(res.data);
-					
+				}).then((res) => {					
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -488,7 +413,6 @@
 					this.commentArr[this.page.currentPage] = res.data.data
 					let newarr = []
 					for(var i = 1; i <= totalPage; i++) {
-
 						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
 
 							for(var j = 0; j < this.commentArr[i].length; j++) {
@@ -496,7 +420,7 @@
 							}
 						}
 					}
-					this.applicationList = newarr;
+					this.USESEAL = newarr;
 				}).catch((wrong) => {})
 			},
 			handleNodeClick(data) {},
@@ -511,11 +435,10 @@
 		},
 		mounted() {
 			this.requestData();
-			this.getCompany();
 		},
 	}
 </script>
 
-<style>
+<style scoped>
 
 </style>

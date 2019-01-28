@@ -90,6 +90,7 @@
 										<el-col :span="8">
 											<el-form-item label="样品数量" prop="QUATITY" label-width="110px">
 												<el-input-number v-model="samplesForm.QUATITY" :min="1" :step="1" :max="200" label="描述文字" style="width: 60%" :disabled="noedit"></el-input-number>
+												
 												<el-button class="table-funbc" type="success" size="mini" round @click="addfield" v-show="!viewtitle">
 													<font>生成列表</font>
 												</el-button>

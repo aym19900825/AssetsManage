@@ -241,7 +241,7 @@
 						{ required: true, trigger: 'change', validator: this.Validators.isChoosedata},
 					],
 					A_PRICE: [//设备价值
-						{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey },
+						{ required: true, trigger: 'blur', message: '必填',},
 					],
 					FACTOR_NUM: [//出厂编号
 						{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey },

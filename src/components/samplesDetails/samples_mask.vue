@@ -17,7 +17,7 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form :model="samplesForm" :label-position="labelPosition" :rules="rules" ref="samplesForm" label-width="110px" inline-message status-icon class="demo-form-inline">
+					<el-form :model="samplesForm" :label-position="labelPosition" :rules="rules" ref="samplesForm" label-width="110px" status-icon class="demo-form-inline">
 						<div class="accordion">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基础信息" name="1">
@@ -88,10 +88,10 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="数量" prop="QUATITY" label-width="110px">
+											<el-form-item label="样品数量" prop="QUATITY" label-width="110px">
 												<el-input-number v-model="samplesForm.QUATITY" :min="1" :step="1" :max="200" label="描述文字" style="width: 60%" :disabled="noedit"></el-input-number>
 												<el-button class="table-funbc" type="success" size="mini" round @click="addfield" v-show="!viewtitle">
-													<font>样品新建</font>
+													<font>生成列表</font>
 												</el-button>
 											</el-form-item>
 										</el-col>
@@ -295,16 +295,15 @@
 												<el-input v-model="samplesForm.CHANGEDATE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
-
 									</el-row>
 								</el-collapse-item>
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show="noviews">
-								<el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
-								<el-button type="success" v-show="addtitle" @click='saveAndSubmit()'>保存并继续</el-button>
-								<el-button type="primary" v-show="modifytitle" @click='generate()'>生成委托书</el-button>
-								<el-button @click='close'>取消</el-button>
+							<el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
+							<el-button type="success" v-show="addtitle" @click='saveAndSubmit()'>保存并继续</el-button>
+							<el-button type="primary" v-show="modifytitle" @click='generate()'>生成委托书</el-button>
+							<el-button @click='close'>取消</el-button>
 						</div>
 					</el-form>
 				</div>
@@ -326,9 +325,9 @@
 						</el-table-column>
 						<el-table-column label="样品信息状态" sortable width="200px" prop="ITEM_STATUS">
 						</el-table-column>
-						<el-table-column label="检测依据" width="200px" prop="REMARKS" sortable  >
+						<el-table-column label="检测依据" width="200px" prop="REMARKS" sortable>
 						</el-table-column>
-						<el-table-column label="完成日期" width="200px" prop="COMPDATE" sortable  :formatter="dateFormat" type="date" >
+						<el-table-column label="完成日期" width="200px" prop="COMPDATE" sortable :formatter="dateFormat" type="date" >
 						</el-table-column>
 						<el-table-column label="完成方式" width="200px" prop="COMPMODE" sortable >
 						</el-table-column>
@@ -336,16 +335,15 @@
 						</el-table-column>
 						<el-table-column label="主检组" width="200px" prop="MAINGROUP" sortable >
 						</el-table-column>
-									<!--<el-table-column label="信息状态" width="200px" prop="STATUS" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
-									</el-table-column>-->
-			
+							<!--<el-table-column label="信息状态" width="200px" prop="STATUS" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
+							</el-table-column>-->
 					</el-table>	
-					<el-pagination background class="pull-right pt10"  @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+					<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 					</el-pagination>
-					<span slot="footer" class="dialog-footer">
-	    			<el-button @click="dialogVisible = false">取 消</el-button>
+				<div slot="footer" class="el-dialog__footer">
 	    			<el-button type="primary" @click="dailogconfirm()">确 定</el-button>
-	  			</span>
+	    			<el-button @click="dialogVisible = false">取 消</el-button>
+	  			</div>
 			</el-dialog>
 			<!--点击委托书编号弹出框 Begin-->
 			<!-- 产品类别 Begin -->
@@ -370,10 +368,10 @@
 				<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 				<!-- 表格 End-->
-				<span slot="footer" class="dialog-footer">
-			       <el-button @click="dialogVisible3 = false">取 消</el-button>
+				<div slot="footer" class="el-dialog__footer">
 			       <el-button type="primary" @click="addproclass">确 定</el-button>
-			    </span>
+			       <el-button @click="dialogVisible3 = false">取 消</el-button>
+			    </div>
 			</el-dialog>
 			<!-- 产品类别 End -->
 			<!-- 收样人、接样人 Begin -->
@@ -394,10 +392,10 @@
 				</el-table>
 					<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 					</el-pagination>
-				<span slot="footer" class="dialog-footer">
-			       <el-button @click="dialogVisible4 = false">取 消</el-button>
+				<div slot="footer" class="el-dialog__footer">
 			       <el-button type="primary" @click="addPerson">确 定</el-button>
-			    </span>
+			       <el-button @click="dialogVisible4 = false">取 消</el-button>
+			    </div>
 			</el-dialog>
 			<!-- 收样人、接样人 End -->
 		</div>
@@ -409,62 +407,62 @@
 	export default {
 		name: 'samples_mask',
 		data() {
-			var validateProxynum = (rule, value, callback) => {//委托书编号
-                if (this.samplesForm.PROXYNUM === undefined || this.samplesForm.PROXYNUM === '' || this.samplesForm.PROXYNUM === null) {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
-			var validateVendor = (rule, value, callback) => {//委托单位编号
-                if (this.samplesForm.VENDOR === undefined || this.samplesForm.VENDOR === '' || this.samplesForm.VENDOR === null) {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
-			var validateVname = (rule, value, callback) => {//委托单位名称
-                if (this.samplesForm.V_NAME === undefined || this.samplesForm.V_NAME === '' || this.samplesForm.V_NAME === null) {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
-			var validateProcompany = (rule, value, callback) => {//生产单位编号
-                if (this.samplesForm.PRODUCT_COMPANY === undefined || this.samplesForm.PRODUCT_COMPANY === '' || this.samplesForm.PRODUCT_COMPANY === null) {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
-			var validatePname = (rule, value, callback) => {//生产单位名称
-                if (this.samplesForm.P_NAME === undefined || this.samplesForm.P_NAME === '' || this.samplesForm.P_NAME === null) {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
-			var validateDescri = (rule, value, callback) => {//样品名称
-                if (this.samplesForm.DESCRIPTION === undefined || this.samplesForm.DESCRIPTION === '' || this.samplesForm.DESCRIPTION === null) {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
-			var validateProcode  = (rule, value, callback) => {//产品标识代码
-                if (this.samplesForm.PRODUCT_CODE === undefined || this.samplesForm.PRODUCT_CODE === '' || this.samplesForm.PRODUCT_CODE === null) {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
-			var validateType = (rule, value, callback) => {//类别
-                if (this.samplesForm.TYPE === undefined || this.samplesForm.TYPE === '' || this.samplesForm.TYPE === null) {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
+			// var validateProxynum = (rule, value, callback) => {//委托书编号
+   //              if (this.samplesForm.PROXYNUM === undefined || this.samplesForm.PROXYNUM === '' || this.samplesForm.PROXYNUM === null) {
+   //                  callback(new Error('必填'));
+   //              }else {
+   //                  callback();
+   //              }
+   //          };
+			// var validateVendor = (rule, value, callback) => {//委托单位编号
+   //              if (this.samplesForm.VENDOR === undefined || this.samplesForm.VENDOR === '' || this.samplesForm.VENDOR === null) {
+   //                  callback(new Error('必填'));
+   //              }else {
+   //                  callback();
+   //              }
+   //          };
+			// var validateVname = (rule, value, callback) => {//委托单位名称
+   //              if (this.samplesForm.V_NAME === undefined || this.samplesForm.V_NAME === '' || this.samplesForm.V_NAME === null) {
+   //                  callback(new Error('必填'));
+   //              }else {
+   //                  callback();
+   //              }
+   //          };
+			// var validateProcompany = (rule, value, callback) => {//生产单位编号
+   //              if (this.samplesForm.PRODUCT_COMPANY === undefined || this.samplesForm.PRODUCT_COMPANY === '' || this.samplesForm.PRODUCT_COMPANY === null) {
+   //                  callback(new Error('必填'));
+   //              }else {
+   //                  callback();
+   //              }
+   //          };
+			// var validatePname = (rule, value, callback) => {//生产单位名称
+   //              if (this.samplesForm.P_NAME === undefined || this.samplesForm.P_NAME === '' || this.samplesForm.P_NAME === null) {
+   //                  callback(new Error('必填'));
+   //              }else {
+   //                  callback();
+   //              }
+   //          };
+			// var validateDescri = (rule, value, callback) => {//样品名称
+   //              if (this.samplesForm.DESCRIPTION === undefined || this.samplesForm.DESCRIPTION === '' || this.samplesForm.DESCRIPTION === null) {
+   //                  callback(new Error('必填'));
+   //              }else {
+   //                  callback();
+   //              }
+   //          };
+			// var validateProcode  = (rule, value, callback) => {//产品标识代码
+   //              if (this.samplesForm.PRODUCT_CODE === undefined || this.samplesForm.PRODUCT_CODE === '' || this.samplesForm.PRODUCT_CODE === null) {
+   //                  callback(new Error('必填'));
+   //              }else {
+   //                  callback();
+   //              }
+   //          };
+			// var validateType = (rule, value, callback) => {//类别
+   //              if (this.samplesForm.TYPE === undefined || this.samplesForm.TYPE === '' || this.samplesForm.TYPE === null) {
+   //                  callback(new Error('必填'));
+   //              }else {
+   //                  callback();
+   //              }
+   //          };
 			return {
 				loadSign:true,//加载
 				commentArr:{},
@@ -516,20 +514,26 @@
 				commentArr:{},//下拉加载
 				tips:'1',
 				rules: { //定义需要校验数据的名称
-					PROXYNUM: [{ required: true,validator: validateProxynum}],//委托书编号
-					VENDOR: [{ required: true,validator: validateVendor}],//委托单位编号
-					V_NAME: [{ required: true,validator: validateVname}],//委托单位名称
-					PRODUCT_COMPANY: [{ required: true,validator: validateProcompany}],//生产单位编号
-					P_NAME: [{ required: true,validator: validatePname}],//生产单位名称
-					DESCRIPTION: [{ required: true,validator: validateDescri}],//样品名称
-					PRODUCT_CODE: [{ required: true,validator: validateProcode}],//产品标识代码
+					PROXYNUM: [{ required: true, trigger: 'blur', message: '必填'}],//委托书编号
+					VENDOR: [{ required: true, trigger: 'blur', message: '必填'}],//委托单位编号
+					V_NAME: [{ required: true, trigger: 'blur', message: '必填'}],//委托单位名称
+					PRODUCT_COMPANY: [{ required: true, trigger: 'blur', message: '必填'}],//生产单位编号
+					P_NAME: [{ required: true, trigger: 'blur', message: '必填'}],//生产单位名称
+					DESCRIPTION: [{ required: true, trigger: 'blur', message: '必填'}],//样品名称
+					PRODUCT_CODE: [
+						{ required: true, trigger: 'blur', message: '必填',},
+						{ trigger: 'blur', validator: this.Validators.isWorknumber},
+					],//产品标识代码
 					SN: [{ required: true, message: '必填', trigger: 'blur' }],
-					TYPE: [{ required: true,validator: validateType}],//类别
-					QUATITY: [{ required: true, message: '请填写数量', trigger: 'blur' }],
-					ACCEPTDATE: [{ required: true, message: '入库时间不能为空', trigger: 'blur' }],
-					ACCEPT_DATE: [{ required: true, message: '收样日期不能为空', trigger: 'blur' }],
-					RECIP_DATE: [{ required: true, message: '接样日期不能为空', trigger: 'blur' }],
-					STATUSDATE: [{ required: true, message: '状态日期不能为空', trigger: 'blur' }],
+					TYPE: [{ required: true, trigger: 'blur', message: '必填'}],//类别
+					QUATITY: [{ required: true, trigger: 'blur', validator: this.Validators.isInteger}],
+					ACCEPTDATE: [{ type: 'date', required: true, message: '请选择', trigger: 'change' }],
+					ACCEPT_DATE: [{ type: 'date', required: true, message: '请选择', trigger: 'change' }],
+					RECIP_DATE: [{ type: 'date', required: true, message: '请选择', trigger: 'change' }],
+					STATUSDATE: [{ type: 'date', required: true, message: '请选择', trigger: 'change' }],
+					MODEL: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//型号
+					OTHER: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//其它资料
+					MEMO: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//备注
 				},
 			};
 		},

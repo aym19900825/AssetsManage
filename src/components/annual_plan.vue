@@ -25,7 +25,7 @@
 								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
 								    <i class="icon-trash"></i>删除
 								</button>
-								<button type="button" class="btn btn-primarys button-margin">
+								<button type="button" class="btn btn-primarys button-margin" @click="exportData">
 								    <i class="icon-inventory-line-callout"></i>导出
 								</button>
 								<!-- <button type="button" class="btn btn-primarys button-margin">
@@ -201,7 +201,7 @@
 					</div>
 				</div>
 			</div>
-			<annualmask ref="child" @request="requestData" v-bind:page=page></annualmask>
+			<!-- <annualmask ref="child" @request="requestData" v-bind:page=page></annualmask> -->
 		</div>
 	</div>
 </template>
@@ -210,7 +210,7 @@
 	import vheader from './common/vheader.vue'
 	import navs_left from './common/left_navs/nav_left5.vue'
 	import navs_header from './common/nav_tabs.vue'
-	import annualmask from './common/annual_mask.vue'
+	// import annualmask from './common/annual_mask.vue'
 	import assetsTree from './plugin/vue-tree/tree.vue'
 	export default {
 		name: 'annual_plan',
@@ -219,7 +219,7 @@
 			'navs_header': navs_header,
 			'navs_left': navs_left,
 			'v-assetsTree': assetsTree,
-			'annualmask': annualmask
+			// 'annualmask': annualmask
 		},
 		data() {
 			return {
@@ -359,7 +359,7 @@
 		      this.page.currentPage = val;
 		      this.requestData();
 		    },
-		    	resetbtn(){
+		    resetbtn(){
 				this.searchList =  { //点击高级搜索后显示的内容
 					WP_NUM: '',
 					DESCRIPTION: '',
@@ -411,6 +411,7 @@
 			},
 			// 删除
 			deluserinfo() {
+				console.log(this.selUser[0]);
 				var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({
@@ -445,6 +446,11 @@
 									type: 'success'
 								});
 								this.requestData();
+							}else{
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'warning'
+								});
 							}
 						}).catch((err) => {
 							this.$message({
@@ -455,6 +461,29 @@
                     }).catch(() => {
 
                 	});
+				}
+			},
+			// 导出
+			exportData() {
+				console.log(2333);
+				var url = this.basic_url + '/api-apps/app/workplan/exportExc?access_token='+sessionStorage.getItem('access_token');
+				console.log(sessionStorage.getItem('access_token'));
+				var xhr = new XMLHttpRequest();
+				console.log("workplan:"+url);
+				xhr.open('POST', url, true);
+				console.log(3);
+				xhr.responseType = "blob";
+				console.log(4);
+				xhr.setRequestHeader("client_type", "DESKTOP_WEB");
+				console.log(5);
+				xhr.onload = function() {
+					console.log(this.status);
+					if (this.status == 200) {
+						var blob = this.response;
+						var objecturl = URL.createObjectURL(blob);
+						window.location.href = objecturl;
+						console.log(123);
+					}
 				}
 			},
 			//发布

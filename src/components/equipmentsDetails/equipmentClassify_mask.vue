@@ -35,8 +35,10 @@
 									</el-row>
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="父级分类" prop="PARENT">
-												<el-input v-model="CATEGORY.PARENT" :disabled="noedit"></el-input>
+											<el-form-item label="父级分类" prop="PARENTDesc">
+												<el-input v-model="CATEGORY.PARENTDesc" :disabled="true">
+													<el-button slot="append" icon="el-icon-search" @click="addparclass"  :disabled="noedit"></el-button>
+												</el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -82,6 +84,15 @@
 					</el-form>
 				</div>
 			</div>
+			<!-- 弹出 -->
+			<el-dialog :modal-append-to-body="false" title="设备分类" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+				<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" default-expand-all @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
+				</el-tree>
+				<span slot="footer" class="dialog-footer">
+			       <el-button @click="dialogVisible = false">取 消</el-button>
+			       <el-button type="primary" @click="queding();" >确 定</el-button>
+			    </span>
+			</el-dialog>
 		</div>
 	</div>
 </template>
@@ -160,8 +171,13 @@
 						{trigger: 'blur', validator: this.Validators.isSpecificKey}
 					],
 				},
+				resourceProps: {
+					children: "children",
+					label: "CLASSIFY_DESCRIPTION"
+				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
+				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
 				category:{},//从父组件接过来的值
 				addtitle:true,
 				modifytitle:false,
@@ -191,6 +207,72 @@
 			//生成随机数函数
 			rand(min, max) {
 				return Math.floor(Math.random() * (max - min)) + min;
+			},
+			handleNodeClick(data) {
+			},
+			//父级分类
+			addparclass(){
+				this.dialogVisible = true;
+				let that = this;
+				var url = this.basic_url + '/api-apps/app/assetClass/tree?tree_id=CLASSIFY_NUM&tree_pid=PARENT';
+				this.$axios.get(url, {}).then((res) => {
+					this.resourceData = res.data.datas;
+					this.treeData = this.transformTree(this.resourceData);
+					console.log(1111111);
+					console.log(this.resourceData);
+				});
+			},
+			queding() {
+				console.log(233333);
+				console.log(this.checkedNodes);
+				this.getCheckedNodes();
+				if(this.checkedNodes == ''){
+					this.$message({
+						message:'请选择数据',
+						type:'warning'
+					})
+				}else{					
+					this.placetext = false;
+					this.dialogVisible = false;				
+					this.CATEGORY.PARENT = this.checkedNodes[0].CLASSIFY_NUM;
+					this.CATEGORY.PARENTDesc = this.checkedNodes[0].CLASSIFY_DESCRIPTION;
+				}				
+			},
+			handleNodeClick(data) { //获取勾选树菜单节点
+				//console.log(data);
+			},
+			handleClicks(data,checked, indeterminate) {
+				this.getCheckboxData = data;
+           		 this.i++;
+            		if(this.i%2==0){
+                	if(checked){
+                    	this.$refs.tree.setCheckedNodes([]);
+                    	this.$refs.tree.setCheckedNodes([data]);
+                    	//交叉点击节点
+               		 }else{
+                     this.$refs.tree.setCheckedNodes([]);
+                    	//点击已经选中的节点，置空
+                	}
+            	}
+			},
+			transformTree(data) {
+				for(var i = 0; i < data.length; i++) {
+					data[i].name = data[i].fullname;
+					if(!data[i].pid || $.isArray(data[i].subDepts)) {
+						data[i].iconClass = 'icon-file-normal';
+					} else {
+						data[i].iconClass = 'icon-file-text';
+					}
+					if($.isArray(data[i].subDepts)) {
+						data[i].children = this.transformTree(data[i].subDepts);
+					}
+				}
+				return data;
+			},
+			getCheckedNodes() {
+				console.log(1234567890);
+				this.checkedNodes = this.$refs.tree.getCheckedNodes()
+				console.log(this.checkedNodes);
 			},
 			//点击按钮显示弹窗
 			visible() {
@@ -375,9 +457,10 @@
 			},
 			// 保存users/saveOrUpdate
 			save(CATEGORY) {
-				console.log(233333);
-				console.log(this.CATEGORY);
 				this.$refs[CATEGORY].validate((valid) => {
+					if(this.CATEGORY.PARENT == ''||this.CATEGORY.PARENT == undefined){
+						this.CATEGORY.PARENT = '0';
+					}
 					if(valid) {
 						this.CATEGORY.STATUS = ((this.CATEGORY.STATUS == "1" || this.CATEGORY.STATUS == '活动') ? '1' : '0');
 						var url = this.basic_url + '/api-apps/app/assetClass/saveOrUpdate';

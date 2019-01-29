@@ -191,7 +191,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="角色" prop="roleId" label-width="100px">
-												<el-select v-model="user.roleId" multiple :disabled="noedit" value-key="item.id" >
+												<el-select v-model="user.roleId" multiple :disabled="noedit"  default-first-option value-key="item.id" @change="change" >
 													<el-option v-for="(item,index) in selectData" :key="index" :value="item.id" :label="item.name"></el-option>
 												</el-select>
 											</el-form-item>
@@ -609,6 +609,9 @@
 			};
 		},
 		methods: {
+			change(){
+				this.user.roleId=this.user.roleId.slice(0);
+			},
 			editpassword(){//点击修改密码按钮跳转到修改密码页面
 		      	this.$router.push({path: '/passwordedit'})
 		    },

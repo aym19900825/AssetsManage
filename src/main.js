@@ -42,19 +42,37 @@ import Validators from './core/util/validators.js'
 
 
 
-Vue.directive('loadmore', {
-	bind(el, binding) {
-	    const selectWrap = el.querySelector('.el-table__body-wrapper')
-	    selectWrap.addEventListener('scroll', function() {
-	      let sign = 100
-	      const scrollDistance = this.scrollHeight - this.scrollTop - this.clientHeight
-	      if (scrollDistance <= sign) {
-	        binding.value()
-	      }
-	    })
-	}
-})
+//Vue.prototype.$up2down = 'down'
+//Vue.prototype.$currentPage = 1
+//Vue.directive('loadmore', {
+//	 //1-被绑定
+//	bind(el, binding, vnode) {
+//	    const selectWrap = el.querySelector('.el-table__body-wrapper')
+//	    selectWrap.addEventListener('scroll', function() {
+//	      	let sign = 100
+//	      	const scrollDistance = this.scrollHeight - this.scrollTop - this.clientHeight
+//	      	if((scrollDistance<scroll_old) && (scroll_old!=0)){
+//				this.$up2down = 'down'
+//				this.$currentPage = binding.value();
+//	      	}
+//	      	if((scrollDistance>scroll_old) && (scroll_old!=0)){
+//				this.$up2down = 'up'
+//				this.$currentPage = binding.value();
+//	      	}
+//	      	console.log(this.$currentPage)
+//	      	scroll_old=scrollDistance
+//	      	console.log(scrollDistance)
+//	      	console.log(this.$up2down)
+////	      	if (scrollDistance <= sign) {
+////	        	binding.value()
+////	        	//console.log(binding)
+////	      	}
+//	    })
+//	}
+//
+//})
 
+//window.addEventListener('scroll', this.handleScroll, true);
 Vue.config.productionTip = false
 //let selectedNav={
 //	css: 'icon-user',

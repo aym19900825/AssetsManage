@@ -49,7 +49,7 @@ import test from '@/components/test'//检验/检测项目管理
 import files_search from '@/components/files_search'//文件查询
 import interfaces from '@/components/interfaces'//接口
 import reports from '@/components/reports/reports'//报表管理
-
+import reportfile from '@/components/reports/reportfile'//报表文件
 
 import inspect_proxy from '@/components/proxies/inspect_proxy'//检验委托书
 import check_proxy from '@/components/proxies/check_proxy'//检测委托书
@@ -341,7 +341,11 @@ Vue.use(Router)
       name: 'reports',
       component: reports
     },
-    
+    {//报表管理
+      path: '/reportfile',
+      name: 'reportfile',
+      component: reportfile
+    },
     {//机构管理
       path: '/testing',
       name: 'testing',

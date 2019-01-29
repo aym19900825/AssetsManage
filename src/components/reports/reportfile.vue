@@ -67,28 +67,13 @@
 						<el-table :data="reportsList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'reportsList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 							</el-table-column>
-							<el-table-column label="代码" width="200" sortable prop="code" v-if="this.checkedName.indexOf('代码')!=-1">
-							</el-table-column>
+							
 							<el-table-column label="报表名称" width="200" sortable prop="name" v-if="this.checkedName.indexOf('报表名称')!=-1">
 							</el-table-column>
-							<el-table-column label="id" sortable prop="id" v-if="this.checkedName.indexOf('id')!=-1">
-							</el-table-column>
-							<el-table-column label="报表文件" sortable prop="file" v-if="this.checkedName.indexOf('报表文件')!=-1">
-							</el-table-column>
-							</el-table-column>
-							<el-table-column label="备注" sortable prop="remarks"v-if="this.checkedName.indexOf('备注')!=-1">
-							</el-table-column>
-							<el-table-column label="类型" sortable prop="type"v-if="this.checkedName.indexOf('类型')!=-1">
-							</el-table-column>						
-							<el-table-column label="录入人" sortable prop="createby" v-if="this.checkedName.indexOf('录入人')!=-1">
-							</el-table-column>	
-							<el-table-column label="录入时间" sortable prop="createdate" v-if="this.checkedName.indexOf('录入时间')!=-1">
+							<el-table-column label="录入人" sortable prop="createby" v-if="this.checkedName.indexOf('修改人')!=-1">
 							</el-table-column>	
 							<el-table-column label="修改人" sortable prop="updateby" v-if="this.checkedName.indexOf('修改人')!=-1">
-							</el-table-column>	
-						
-							<el-table-column label="修改日期" sortable prop="updatedate" v-if="this.checkedName.indexOf('修改日期')!=-1">
-							</el-table-column>	
+							</el-table-column>		
 						<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
 				            @size-change="sizeChange"
 				            @current-change="currentChange"
@@ -105,7 +90,7 @@
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
-		<reportmask ref="child"  @request="requestData" ></reportmask>
+		<iframemask ref="child"  @request="requestData" ></iframemask>
 	</div>
 </div>
 </template>
@@ -115,7 +100,7 @@
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_header from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
-	import reportmask from '../reportDetails/reportConfigurationMask.vue'
+	import iframemask from '../reportDetails/reportfileMask.vue'
 	export default {
 		name: 'report',
 		components: {
@@ -123,65 +108,29 @@
 			navs_left,
 			navs_header,
 			tableControle,
-			reportmask
+			iframemask
 		},
 		data() {
 			return {
 				basic_url: Config.dev_url,
 				checkedName: [
-					'代码',
 					'报表名称',
-					'id',
-					'报表文件',
-					'备注',
-					'类型',
 					'录入人',
-					'录入时间',
 					'修改人',
-					'修改日期'
 				],
 				tableHeader: [
 					{
-						label: '代码',
-						prop: 'username'
-					},
-					{
 						label: '报表名称',
 						prop: 'nickname'
-					},
-					{
-						label: 'id',
-						prop: 'id'
-					},
-					{
-						label: '报表文件',
-						prop: 'deptName'
-					},
-					{
-						label: '备注',
-						prop: 'remarks'
-					},
-					{
-						label: '类型',
-						prop: 'type'
 					},
 					{
 						label: '录入人',
 						prop: 'createby'
 					},
 					{
-						label: '录入时间',
-						prop: 'createdate'
-					},
-					{
 						label: '修改人',
 						prop: 'updateby'
 					},
-					{
-						label: '修改日期',
-						prop: 'updatedate'
-					},
-					
 				],
 				selUser: [],
 				reportsList: [],
@@ -225,7 +174,7 @@
 			openAddMgr() {
 				this.$refs.child.visible();
 			},
-			//修改用戶
+			//修改
 			modify() {
 				if(this.selUser.length == 0) {
 					this.$message({
@@ -320,7 +269,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				}
-				var url = this.basic_url + '/api-report/report';
+				var url = this.basic_url + '/api-report/reportFile';
 				this.$axios.get(url, {params: data}).then((res) => {
 					this.reportsList = res.data.data;
 					this.page.totalCount = res.data.count;

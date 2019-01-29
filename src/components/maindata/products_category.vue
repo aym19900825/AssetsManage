@@ -15,23 +15,46 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+							<button type="button" class="btn btn-green" @click="openAddMgr" id="">
 	                        	<i class="icon-add"></i>添加
-	              			 </button>
-								<button type="button" class="btn btn-blue button-margin" @click="modify">
+	              			</button>
+							<button type="button" class="btn btn-blue button-margin" @click="modify">
 							    <i class="icon-edit"></i>修改
 							</button>
-								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
+							<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
 							    <i class="icon-trash"></i>删除
 							</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="importData">
-							    <i class="icon-upload-cloud"></i>导入
-							</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="exportData">
+							<el-dropdown size="small" split-button type="primary" style="margin-top:1px;">
+    								导入
+								<el-dropdown-menu slot="dropdown">
+    								<el-dropdown-item>
+    									<div @click="download">下载模版</div>
+    								</el-dropdown-item>
+    								
+    								<el-dropdown-item>
+									<el-upload
+							          ref="upload"
+							          class="upload"
+							          :action="uploadUrl()"
+							          :on-success="handleSuccess"
+							          :limit=1
+							          multiple
+							          method:="post"
+									  :file-list="fileList">
+									          <div>上传</div>
+									</el-upload>
+    								</el-dropdown-item>
+						  		</el-dropdown-menu>
+							</el-dropdown>
+					
+							<button type="button" class="btn btn-primarys button-margin" @click="exportData">
 							    <i class="icon-download-cloud"></i>导出
 							</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="Printing">
+							<button type="button" class="btn btn-primarys button-margin" @click="Printing">
 							    <i class="icon-print"></i>打印
+							</button>
+							<button type="button" class="btn btn-primarys button-margin" @click="reportData">
+							    <i class="icon-download-cloud"></i>报表
 							</button>
 							<button type="button" class="btn btn-primarys button-margin" @click="Configuration">
 							    <i class="icon-cpu"></i>配置关系
@@ -127,6 +150,7 @@
 			</div>
 			<!--右侧内容显示 End-->
 			<categorymask :CATEGORY="CATEGORY" ref="categorymask" @request="requestData" @reset="reset" v-bind:page=page></categorymask>
+			
 		</div>
 	</div>
 </template>
@@ -152,6 +176,7 @@
 				loadSign: true, //鼠标滚动加载数据
 				commentArr: {},
 				loading: false,//默认加载数据时显示loading动画
+				fileList:[],
 				value: '',
 				options: [{
 					value: '1',
@@ -272,7 +297,7 @@
 			//表格滚动加载
 			loadMore() {
 				if(this.loadSign) {
-					this.loadSign = false
+					this.loadSign = false;
 					this.page.currentPage++
 						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
 							return
@@ -417,17 +442,57 @@
 					});
 				}
 			},
+			handleSuccess(response, file, fileList){
+				console.log(response);
+				console.log(file);
+				console.log(fileList);
+			},
+			uploadUrl(){
+                var url = this.basic_url +'/api-apps/app/productType/importExc?access_token='+sessionStorage.getItem('access_token');
+                return url;
+                
+            },
+          	
 			// 导入
-			importData() {
-
+			download() {
+				console.log(1234);
+				var url = this.basic_url + '/api-apps/app/productType/importExcTemplete?access_token='+sessionStorage.getItem('access_token');
+           var xhr = new XMLHttpRequest();
+            xhr.open('POST', url, true);
+            xhr.responseType = "blob";
+            xhr.setRequestHeader("client_type", "DESKTOP_WEB");
+            xhr.onload = function() {
+                if (this.status == 200) {
+                    var blob = this.response;
+                    var objecturl = URL.createObjectURL(blob);
+                    window.location.href = objecturl;
+                }
+            }
+            xhr.send();
 			},
 			// 导出
 			exportData() {
-
+           var url = this.basic_url + '/api-apps/app/productType/exportExc?access_token='+sessionStorage.getItem('access_token');
+           var xhr = new XMLHttpRequest();
+            xhr.open('POST', url, true);
+            xhr.responseType = "blob";
+            xhr.setRequestHeader("client_type", "DESKTOP_WEB");
+            xhr.onload = function() {
+                if (this.status == 200) {
+                    var blob = this.response;
+                    var objecturl = URL.createObjectURL(blob);
+                    window.location.href = objecturl;
+                }
+            }
+            xhr.send();
 			},
 			// 打印
 			Printing() {
 
+			},
+			//报表
+			reportData(){
+				
 			},
 			// 配置关系
 			Configuration() {
@@ -503,7 +568,8 @@
 		mounted() {
 			this.requestData();
 			this.getCompany();
-		},
+		 	
+		}
 	}
 </script>
 

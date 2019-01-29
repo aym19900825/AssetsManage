@@ -80,7 +80,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="数量" prop="QUALITY">
-												<el-input-number v-model="samplesForm.QUALITY" :min="1" :step="5" :max="100" label="描述文字" style="width: 100%" :disabled="noedit"></el-input-number >
+												<el-input-number v-model="samplesForm.QUALITY" :min="1" :step="5" :max="10000" label="描述文字" style="width: 100%" :disabled="noedit"></el-input-number >
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -330,27 +330,7 @@
 			}
 		},
 		data() {
-			var validateItemid = (rule, value, callback) => {//样品编号
-                if (this.samplesForm.ITEMNUM === undefined || this.samplesForm.ITEMNUM === '' || this.samplesForm.ITEMNUM === null) {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
-			var validateDescri = (rule, value, callback) => {//样品名称
-                if (this.samplesForm.DESCRIPTION === undefined || this.samplesForm.DESCRIPTION === '' || this.samplesForm.DESCRIPTION === null) {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
-			var validateType = (rule, value, callback) => {//类别
-                if (this.samplesForm.TYPE === undefined || this.samplesForm.TYPE === '' || this.samplesForm.TYPE === null) {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
+		
 			return {
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
@@ -395,32 +375,38 @@
 				commentArr:{},//下拉加载
 				rules: { //定义需要校验数据的名称
 					ITEMNUM: [//样品编号
-						{ required: true,validator: validateItemid}
+						{ required: true, message: '必填', trigger: 'blur' }
 					],
 					DESCRIPTION: [//样品名称
-						{ required: true,validator: validateDescri}
+						{ required: true, message: '必填', trigger: 'blur' }
 					],
 					TYPE: [//类别
-						{ required: true,validator: validateType}
+						{ required: true, message: '必填', trigger: 'blur' }
 					],
-					MODEL: [
-						{ required: true, message: '型号不能为空', trigger: 'blur' }
+					MODEL: [//型号
+						{ required: true, message: '必填', trigger: 'blur' },
+						{trigger: 'blur', validator: this.Validators.isSpecificKey}
 					],
-					QUALITY: [
-						{ required: true, message: '请填写数量', trigger: 'blur' }
+					QUALITY: [//数量
+						{ required: true, message: '必填', trigger: 'blur' },
+						{trigger: 'blur', validator: this.Validators.isInteger}
 					],
-					ACCEPT_PERSON: [
-						{ required: true, message: '请填写收样人', trigger: 'blur' }
+					ACCEPT_PERSON: [//收样人
+						{ required: true, message: '必填', trigger: 'blur' },
+						{trigger: 'blur', validator: this.Validators.isNickname}
 					],
-					ACCEPT_DATE: [
-						{ required: true, message: '收样日期不能为空', trigger: 'blur' }
+					ACCEPT_DATE: [//收样时间
+						{ type: 'date', required: true, message: '请选择', trigger: 'change' }
 					],
-					GRANT_PERSON: [
-						{ required: true, message: '领样人不能为空', trigger: 'blur' }
+					GRANT_PERSON: [//领样人
+						{ required: true, message: '必填', trigger: 'blur' },
+						{trigger: 'blur', validator: this.Validators.isNickname}
 					],
-					GRANT_DATE: [
-						{ required: true, message: '领样日期不能为空', trigger: 'blur' }
+					GRANT_DATE: [//领样时间
+						{ type: 'date', required: true, message: '请选择', trigger: 'change' }
 					],
+					OTHER: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//其它资料
+					MEMO: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//备注
 				},
 				dialogVisible3: false, //对话框
 				categoryList:[],

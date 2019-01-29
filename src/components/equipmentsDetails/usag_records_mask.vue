@@ -19,17 +19,17 @@
                     </div>
                 </div>
                 <div class="mask_content">
-					<el-form :model="dataInfo" :rules="rules"   ref="dataInfo" class="demo-user">
+					<el-form :model="dataInfo" :rules="rules" ref="dataInfo" class="demo-user">
 						<div class="accordion">
 							<!-- 设备header信息 -->
 							<el-collapse v-model="activeNames">							
-	                            <el-collapse-item name="1">
+	                            <el-collapse-item title="基本信息" name="1">
 	                                <el-form-item label-width="120px" v-for="item in basicInfo" :key="item.id" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
 										<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'" @change="selChange" :disabled="noedit">
 											<el-option v-for="item in item.option"
 											:key="item.ID"
 											:label="item.ASSETNUM"
-											:value="item.ASSETNUM">
+											:value="item.ID">
 											</el-option>
 										</el-select>
 	                                    <el-input v-model="dataInfo[item.prop]" :type="item.type" disabled v-if="item.type == 'input'"></el-input>
@@ -247,7 +247,7 @@
 				sampleDialog: false,
 				rules: {
 					ASSETNUM: [
-						{ required: true, message: '请输入设备编号', trigger: 'blur' },
+						{ required: true, trigger: 'blur', validator: this.Validators.isChoosedata },
 					]
 				},
 				basicInfo: [
@@ -548,7 +548,7 @@
 			selChange(val){
 				var data = this.basicInfo[0].option;
 				var selData = data.filter(function(item){
-					if(item.ASSETNUM == val){
+					if(item.ID == val){
 						return item;
 					}
 				});

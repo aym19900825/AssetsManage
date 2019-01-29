@@ -17,7 +17,7 @@
 					</div>
 				</div>
 				<div class="mask_content">
-						<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" class="demo-form-inline" inline-message>
+						<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" class="demo-form-inline">
 							<div class="text-center" v-show="viewtitle">
 							<span v-if="this.dataInfo.STATE!=3">	
 							<el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 启动流程</el-button>
@@ -602,16 +602,26 @@
 				},
 				rules: {
 					TYPE:[{required: true, message: '请至少选择一个', trigger: 'change'}],
-					CJDW: [{required: true,trigger: 'change',message: '必填',}], //承检单位
+					TASKNUM:[{required: false, trigger: 'change', validator:this.Validators.isSpecificKey}],
+					CJDW: [{required: true,trigger: 'change',message: '请选择',}], //承检单位
 					P_LEADERDesc: [{required: true, trigger: 'blur', message: '请选择'}], //项目负责人
 					ITEM_NAME: [{required: true, trigger: 'blur', message:'请选择'}], //受检产品名称
-					ITEM_MODEL: [{required: true,trigger: 'blur',message: '必填'}], //受检产品型号
+					ITEM_MODEL: [
+						{required: true,trigger: 'blur',message: '必填'},
+						{trigger: 'blur', validator:this.Validators.isSpecificKey}
+					], //受检产品型号
 					V_NAME: [{required: true,validator: validateVname}], //受检企业
 					VENDOR: [{required: true,trigger: 'blur',message: '必填'}], //受检企业编号
 					QUALITY: [{required: true,message: '必填'},{ type: 'number', message: '必须为数字值'}], //样品数量
 					CHECTCOST:[{required: false,trigger: 'change',validator:price}], //检验检测费用
 					XD_DATE: [{type: 'string',required: true,message: '请选择',trigger: 'change'}],//下达日期
-					SOLUTION: [{required: true,trigger: 'blur',message: '必填',	}],//抽样方案
+					SOLUTION: [
+						{required: true,trigger: 'blur',message: '必填',	},
+						{trigger: 'blur',validator: this.Validators.isSpecificKey},
+					],//抽样方案
+					MEMO: [
+						{required: false, trigger: 'blur', validator: this.Validators.isSpecificKey},
+					],
 					// REMARKS: [{required: true,trigger: 'blur',message: '必填',}],
 				},
 				//tree

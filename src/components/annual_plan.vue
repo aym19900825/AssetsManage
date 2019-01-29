@@ -31,10 +31,10 @@
 								<!-- <button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-edit"></i>编辑
 								</button> -->
-								<button type="button" class="btn btn-primarys button-margin">
+								<button type="button" class="btn btn-primarys button-margin" @click="releasebtn">
 								    <i class="icon-send"></i>发布
 								</button>
-								<button type="button" class="btn btn-primarys button-margin">
+								<button type="button" class="btn btn-primarys button-margin" @click="cancelbtn">
 								    <i class="icon-close1"></i>取消
 								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
@@ -445,6 +445,112 @@
 									type: 'success'
 								});
 								this.requestData();
+							}
+						}).catch((err) => {
+							this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+						});
+                    }).catch(() => {
+
+                	});
+				}
+			},
+			//发布
+			releasebtn(){
+				var selData = this.selUser;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请您选择要发布的数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					//releaseid为id的数组
+					var releaseid = [];
+					var ids;
+					for (var i = 0; i < changeUser.length; i++) {
+						releaseid.push(changeUser[i].ID);
+					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = releaseid.toString(',');
+                    // var data = {
+					// 	ids: ids,
+					// }
+					var url = this.basic_url + '/api-apps/app/workplan/operate/release?ids='+ids;
+					
+					this.$confirm('确定发布此数据吗？', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                    }).then(({ value }) => {
+                        this.$axios.get(url, {}).then((res) => {
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '发布成功',
+									type: 'success'
+								});
+								this.requestData();
+							}else{
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'warning'
+								});
+							}
+						}).catch((err) => {
+							this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+						});
+                    }).catch(() => {
+
+                	});
+				}
+			},
+			//取消
+			cancelbtn(){
+				var selData = this.selUser;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请您选择要取消的数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					//cancelid为id的数组
+					var cancelid = [];
+					var ids;
+					for (var i = 0; i < changeUser.length; i++) {
+						cancelid.push(changeUser[i].ID);
+					}
+					//ids为cancelid数组用逗号拼接的字符串
+					ids = cancelid.toString(',');
+                    // var data = {
+					// 	ids: ids,
+					// }
+					var url = this.basic_url + '/api-apps/app/workplan/operate/cancel?ids='+ids;
+					
+					this.$confirm('确定发布此数据吗？', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                    }).then(({ value }) => {
+                        this.$axios.get(url, {}).then((res) => {
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '取消成功',
+									type: 'success'
+								});
+								this.requestData();
+							}else{
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'warning'
+								});
 							}
 						}).catch((err) => {
 							this.$message({

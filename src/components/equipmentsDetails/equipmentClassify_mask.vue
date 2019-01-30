@@ -218,13 +218,9 @@
 				this.$axios.get(url, {}).then((res) => {
 					this.resourceData = res.data.datas;
 					this.treeData = this.transformTree(this.resourceData);
-					console.log(1111111);
-					console.log(this.resourceData);
 				});
 			},
 			queding() {
-				console.log(233333);
-				console.log(this.checkedNodes);
 				this.getCheckedNodes();
 				if(this.checkedNodes == ''){
 					this.$message({
@@ -270,15 +266,12 @@
 				return data;
 			},
 			getCheckedNodes() {
-				console.log(1234567890);
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
-				console.log(this.checkedNodes);
 			},
 			//点击按钮显示弹窗
 			visible() {
 				//				this.CATEGORY.NUM =  this.rand(1000,9999);
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					console.log(res.data);
 					this.CATEGORY.DEPTID = res.data.deptId;
 					this.CATEGORY.ENTERBY = res.data.id;
 					// this.CATEGORY.ENTERBYDesc = res.data.nickname;
@@ -286,7 +279,7 @@
 					this.CATEGORY.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 				}).catch((err) => {
 					this.$message({
-						message: '网络错误，请重试',
+						message: '网络错误，请重试111',
 						type: 'error'
 					});
 				});
@@ -323,11 +316,11 @@
 					var date = new Date();
 					this.CATEGORY.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
 					//深拷贝数据
-					let _obj = JSON.stringify(this.CATEGORY);
-        			this.category = JSON.parse(_obj);
+					// let _obj = JSON.stringify(this.CATEGORY);
+        			// this.category = JSON.parse(_obj);
 				}).catch((err) => {
 					this.$message({
-						message: '网络错误，请重试',
+						message: '网络错误，请重试222',
 						type: 'error'
 					});
 				});
@@ -335,7 +328,6 @@
 			},
 			//这是查看
 			view() {
-				console.log(this.CATEGORY);
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;
@@ -388,7 +380,7 @@
 							}		
 							}).catch((err) => {
 								this.$message({
-									message: '网络错误，请重试',
+									message: '网络错误，请重试333',
 									type: 'error'
 								});
 							});
@@ -409,7 +401,6 @@
 				this.$axios.get(this.basic_url+ '/api-apps/app/productType/operate/updateRelate', {
 					params: data
 				}).then((res) => {
-					console.log(res.data.resp_code);
 					if(res.data.resp_code == 0) {
 						this.$message({
 							message: '更新成功',
@@ -420,7 +411,7 @@
 					}
 				}).catch((err) => {
 					this.$message({
-						message: '网络错误，请重试',
+						message: '网络错误，请重试444',
 						type: 'error'
 					});
 				});
@@ -472,7 +463,7 @@
 									type: 'success'
 								});
 								//重新加载数据
-								this.$emit('request');
+								// this.$emit('request');
 								this.$emit('reset');
 								this.visible();
 							}else{
@@ -494,7 +485,7 @@
 							}
 						}).catch((err) => {
 							this.$message({
-								message: '网络错误，请重试',
+								message: '网络错误，请重试555',
 								type: 'error'
 							});
 						});

@@ -132,12 +132,8 @@
 								</el-table-column>
 								<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
 								</el-table-column>
-								<!-- <el-table-column label="录入人" width="155" prop="ENTERBY" sortable v-if="this.checkedName.indexOf('录入人')!=-1">
-								</el-table-column> -->
 								<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>
-								<!-- <el-table-column label="修改人" width="155" prop="CHANGEBY" sortable v-if="this.checkedName.indexOf('修改人')!=-1">
-								</el-table-column> -->
 								<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
 								</el-table-column>
 							</el-table>
@@ -201,10 +197,7 @@
 					'版本',
 					'机构',
 					// '信息状态',
-					
-					// '录入人',
 					'录入时间',
-					// '修改人',
 					'修改时间'
 				],
 				tableHeader: [{
@@ -227,18 +220,10 @@
 					// 	label: '信息状态',
 					// 	prop: 'STATUS'
 					// },
-					// {
-					// 	label: '录入人',
-					// 	prop: 'ENTERBY'
-					// },
 					{
 						label: '录入时间',
 						prop: 'ENTERDATE'
 					},
-					// {
-					// 	label: '修改人',
-					// 	prop: 'CHANGEBY'
-					// },
 					{
 						label: '修改时间',
 						prop: 'CHANGEDATE'
@@ -450,7 +435,6 @@
 			uploadUrl(){
                 var url = this.basic_url +'/api-apps/app/productType/importExc?access_token='+sessionStorage.getItem('access_token');
                 return url;
-                
             },
           	
 			// 导入
@@ -471,20 +455,40 @@
             xhr.send();
 			},
 			// 导出
+		// 	exportData() {
+        //    var url = this.basic_url + '/api-apps/app/productType/exportExc?access_token='+sessionStorage.getItem('access_token');
+        //    var xhr = new XMLHttpRequest();
+        //     xhr.open('POST', url, true);
+        //     xhr.responseType = "blob";
+        //     xhr.setRequestHeader("client_type", "DESKTOP_WEB");
+        //     xhr.onload = function() {
+        //         if (this.status == 200) {
+        //             var blob = this.response;
+        //             var objecturl = URL.createObjectURL(blob);
+        //             window.location.href = objecturl;
+        //         }
+        //     }
+        //     xhr.send();
+		// 	},
+			// 导出
 			exportData() {
-           var url = this.basic_url + '/api-apps/app/productType/exportExc?access_token='+sessionStorage.getItem('access_token');
-           var xhr = new XMLHttpRequest();
-            xhr.open('POST', url, true);
-            xhr.responseType = "blob";
-            xhr.setRequestHeader("client_type", "DESKTOP_WEB");
-            xhr.onload = function() {
-                if (this.status == 200) {
-                    var blob = this.response;
-                    var objecturl = URL.createObjectURL(blob);
-                    window.location.href = objecturl;
-                }
-            }
-            xhr.send();
+           		var url = this.basic_url + '/api-apps/app/productType/exportExc?access_token='+sessionStorage.getItem('access_token');
+          		 var xhr = new XMLHttpRequest();
+            	xhr.open('POST', url, true);
+            	xhr.responseType = "blob";
+            	xhr.setRequestHeader("client_type", "DESKTOP_WEB");
+            	xhr.onload = function() {
+                	if (this.status == 200) {
+						var filename = "productType.xls";
+						var blob = this.response;
+						var link = document.createElement('a');
+						var objecturl = URL.createObjectURL(blob);
+						link.href = objecturl;
+						link.download = filename;
+						link.click();
+                	}
+            	}
+            	xhr.send();
 			},
 			// 打印
 			Printing() {
@@ -522,17 +526,11 @@
 					TYPE: this.searchList.TYPE,
 					VERSION:this.searchList.VERSION,
 					DEPTID: this.searchList.DEPTID,
-					// PHONE: this.searchList.PHONE,
-					// CONTACT_ADDRESS: this.searchList.CONTACT_ADDRESS,
-					// STATUS: this.searchList.STATUS
 				}
-				// console.log(this.searchList.DEPTID);
 				var url = this.basic_url + '/api-apps/app/productType';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					// console.log(res.data);
-					
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)

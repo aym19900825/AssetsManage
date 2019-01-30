@@ -135,10 +135,6 @@
 										</el-col>
 									</el-row>
 								</el-collapse-item>
-								<!-- <el-collapse-item title="依据" name="3">
-									字段列表 Begin
-									字段列表 End 
-								</el-collapse-item> -->
 								<el-collapse-item title="检验检测要求" name="4" label-width="100px">
 										<el-row>
 										<el-col :span="8">
@@ -148,11 +144,6 @@
 												</el-input>
 											</el-form-item>
 										</el-col>
-										<!-- <el-col :span="6">
-											<el-form-item label="受检企业编号" prop="VENDOR" label-width="110px">
-												<el-input v-model="dataInfo.VENDOR" :disabled="true"></el-input>
-											</el-form-item>
-										</el-col> -->
 										<el-col :span="6">
 											<el-form-item label="样品数量" prop="QUALITY" label-width="110px">
 												<el-input v-model.number="dataInfo.QUALITY" :disabled="noedit"></el-input>
@@ -172,20 +163,9 @@
 										</el-form-item>
 									</el-row>
 								</el-collapse-item>
-								<!-- <el-collapse-item title="检验检测项目" name="5">
-									 字段列表 Begin
-									
-									字段列表 End
-								</el-collapse-item> -->
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName" @tab-click="handleClick">
 										<el-tab-pane label="依据" name="first">
-											<!-- <div class="table-func table-funcb">
-												<el-button type="success" size="mini" round @click="addfieldBasis" v-show="!viewtitle">
-													<i class="icon-add"></i>
-													<font>新建</font>
-												</el-button>
-											</div> -->
 											<div class="table-func table-funcb">
 												<el-button type="primary" size="mini" round @click="basisleadbtn">
 													<i class="icon-search"></i>
@@ -194,13 +174,6 @@
 											</div>
 
 											<el-table :data="dataInfo.WORK_NOTICE_CHECKBASISList" row-key="ID" border stripe :fit="true" max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.WORK_NOTICE_CHECKBASISList', order: 'descending'}">
-
-												<!-- <el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
-													<template slot-scope="scope">
-														<i class="el-icon-check" v-if="scope.row.isEditing"></i>
-														<i class="el-icon-edit" v-else="v-else"></i>
-													</template>
-												</el-table-column> -->
 												<el-table-column label="序号" sortable width="80px" prop="NUMBER" type="index">
 												</el-table-column>
 												<el-table-column label="检验标准编号" sortable width="200px" prop="S_NUM">
@@ -220,13 +193,6 @@
 														</el-form-item>
 													</template>
 												</el-table-column>
-												<!-- <el-table-column prop="S_ENGNAME" label="英文名称" sortable width="200px">
-													<template slot-scope="scope">
-														<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_ENGNAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_ENGNAME" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.S_ENGNAME}}</span>
-														</el-form-item>
-													</template>
-												</el-table-column> -->
 												<el-table-column prop="VERSION" label="版本" sortable width="200px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
@@ -259,12 +225,6 @@
 											</el-table>
 										</el-tab-pane>
 										<el-tab-pane label="检验检测项目" name="second">
-											<!-- <div class="table-func table-funcb">
-												<el-button type="success" size="mini" round @click="addfieldProject" v-show="!viewtitle">
-													<i class="icon-add"></i>
-													<font>新建</font>
-												</el-button>
-											</div> -->
 											<div class="table-func table-funcb">
 												<el-button type="primary" size="mini" round @click="basisleadbtn2">
 													<i class="icon-search"></i>
@@ -272,12 +232,6 @@
 												</el-button>
 											</div>
 											<el-table :data="dataInfo.WORK_NOTICE_CHECKPROJECTList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.WORK_NOTICE_CHECKPROJECTList', order: 'descending'}">
-												<!-- <el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
-													<template slot-scope="scope">
-														<i class="el-icon-check" v-show="scope.row.isEditing"></i>
-														<i class="el-icon-edit" v-show="!scope.row.isEditing"></i>
-													</template>
-												</el-table-column> -->
 												<el-table-column label="序号" sortable width="120px" prop="NUMBER" type="index">
 												</el-table-column>
 												<el-table-column label="检验检测项目编号" sortable width="145px" prop="P_NUM">
@@ -715,7 +669,6 @@
 				var money = document.getElementById("cost").value;
 				var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
 				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)', 'ig'), "$1,");
-				// this.dataInfo.CHECTCOST="￥" + num.join(".");
 				this.dataInfo.CHECTCOST = num.join(".");
 			},
 
@@ -840,7 +793,6 @@
 				this.views = false; //
 				this.edit = true;
 				this.noedit = false;
-
 			},
 			//这是查看
 			view(dataid) {
@@ -1020,7 +972,6 @@
 			},
 			//项目负责人放大镜
 			addperbtn(type){
-				// console.log(this.dataInfo.CJDW);
 				if(this.dataInfo.CJDW==""||this.dataInfo.CJDW=="undefined"){
 					this.$message({
 						message: '请先选择承检单位',
@@ -1111,7 +1062,6 @@
 				for(var i = 1;i<value.length;i++){
 					this.dataInfo.WORK_NOTICE_CHECKBASISList.push(value[i]);
 				}
-				// this.dataInfo.WORK_NOTICE_CHECKBASISList = value;
 			},
 			 //检测项目列表
 			addproject(value){
@@ -1119,7 +1069,6 @@
 					value[i].P_DESC = value[i].P_NAME;
 					this.dataInfo.WORK_NOTICE_CHECKPROJECTList.push(value[i]);
 				}
-				// this.dataInfo.WORK_NOTICE_CHECKPROJECTList = value;
 			},
 			 //启动流程
 			startup(){

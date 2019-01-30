@@ -242,7 +242,6 @@
 			classByValue: function (childValue) {
 		        // childValue就是子组件传过来的
 		        this.selUser = childValue
-		       console.log(childValue);
 //		        this.selMenu[0].hidden ? '1' : '0'
 		        
 		    },
@@ -255,7 +254,6 @@
 			},
 			//修改类别
 			modify() {
-				console.log(this.selUser.length);
 				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',

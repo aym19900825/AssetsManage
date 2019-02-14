@@ -1598,6 +1598,8 @@
 				}).then((res) => {
 					this.selectData = res.data;
 				});
+				console.log(233333333);
+				console.log(this.WORKPLAN.PROP_UNIT);
 				this.viewtitle = false;
 				this.addtitle = false;
 				this.modifytitle = true;

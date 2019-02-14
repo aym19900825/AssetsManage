@@ -87,7 +87,18 @@ Vue.config.productionTip = false
 ////所有tab的页面
 //Vue.prototype.$clickedNav = clickedNav   //点选的tab
 
-
+Vue.directive('loadmore', {
+	bind(el, binding) {
+	    const selectWrap = el.querySelector('.el-table__body-wrapper')
+	    selectWrap.addEventListener('scroll', function() {
+	      let sign = 100
+	      const scrollDistance = this.scrollHeight - this.scrollTop - this.clientHeight
+	      if (scrollDistance <= sign) {
+	        binding.value()
+	      }
+	    })
+	}
+})
 
 Vue.prototype.$echarts = echarts
 Vue.prototype.$moment = moment//赋值使用

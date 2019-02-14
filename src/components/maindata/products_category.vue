@@ -53,7 +53,7 @@
 							<button type="button" class="btn btn-primarys button-margin" @click="Printing">
 							    <i class="icon-print"></i>打印
 							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="reportData">
+							<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
 							    <i class="icon-download-cloud"></i>报表
 							</button>
 							<button type="button" class="btn btn-primarys button-margin" @click="Configuration">
@@ -112,7 +112,7 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格 Begin-->
-							<el-table :header-cell-style="rowClass" :data="categoryList" v-loading="loading" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table :header-cell-style="rowClass" :data="categoryList" v-loading="loading" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" >
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="编码" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('编码')!=-1">
@@ -150,7 +150,8 @@
 			</div>
 			<!--右侧内容显示 End-->
 			<categorymask :CATEGORY="CATEGORY" ref="categorymask" @request="requestData" @reset="reset" v-bind:page=page></categorymask>
-			
+			<!--报表-->
+			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 		</div>
 	</div>
 </template>
@@ -161,6 +162,7 @@
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import categorymask from '../maindataDetails/product_categoryMask.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
+	import reportmask from'../reportDetails/reportMask.vue'
 	export default {
 		name: 'customer_management',
 		components: {
@@ -169,15 +171,20 @@
 			navs_header,
 			categorymask,
 			tableControle,
+			reportmask
 		},
 		data() {
 			return {
+				scroll_old:0,
+				up2down:'down',
+				reportData:{},//流程的数据
 				basic_url: Config.dev_url,
 				loadSign: true, //鼠标滚动加载数据
 				commentArr: {},
 				loading: false,//默认加载数据时显示loading动画
 				fileList:[],
 				value: '',
+				productType:'productType',//appname
 				options: [{
 					value: '1',
 					label: '活动'
@@ -269,7 +276,7 @@
 				},
 				page: { //分页显示
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				CATEGORY: {},//修改子组件时传递数据
@@ -295,17 +302,30 @@
 				});
 			},
 			//表格滚动加载
-			loadMore() {
-				if(this.loadSign) {
-					this.loadSign = false;
-					this.page.currentPage++
+			loadMore(up2down) {
+				console.log(up2down)
+				console.log(this.loadSign)
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++
 						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							return
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
 						}
+					}else{
+						this.page.currentPage--
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1
+							return false;
+						}
+					}
+					this.loadSign = false;
+					console.log('this.page.currentPage',this.page.currentPage)
 					setTimeout(() => {
 						this.loadSign = true
 					}, 1000)
 					this.requestData()
+					
 				}
 			},
 			tableControle(data) {
@@ -433,7 +453,7 @@
 							}
 						}).catch((err) => {
 							this.$message({
-								message: '网络错误，请重试',
+								message: '网络错误，请重试2',
 								type: 'error'
 							});
 						});
@@ -491,8 +511,9 @@
 
 			},
 			//报表
-			reportData(){
-				
+			reportdata(){
+				this.reportData.app=this.productType;
+				this.$refs.reportChild.visible();
 			},
 			// 配置关系
 			Configuration() {
@@ -541,19 +562,24 @@
 					} else {
 						this.loadSign = true
 					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
-
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.categoryList = newarr;
-				}).catch((wrong) => {})
+//					this.commentArr[this.page.currentPage] = res.data.data
+//					let newarr = []
+//					for(var i = 1; i <= totalPage; i++) {
+//
+//						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+//
+//							for(var j = 0; j < this.commentArr[i].length; j++) {
+//								newarr.push(this.commentArr[i][j])
+//							}
+//						}
+//					}
+					this.categoryList = res.data.data;
+				}).catch((wrong) => {
+					this.$message({
+								message: '网络错误，请重试1',
+								type: 'error'
+							});
+				})
 			},
 			handleNodeClick(data) {},
 			formatter(row, column) {
@@ -562,12 +588,33 @@
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
         		this.$refs.navsheader.showClick(childValue);
-      		},
-
+      		}
 		},
 		mounted() {
 			this.requestData();
-			this.getCompany();
+			this.getCompany();			
+			const selectWrap = document.querySelector('.el-table__body-wrapper')
+			var that=this
+			selectWrap.addEventListener('scroll', function(e){
+//				console.log(e)
+			    var scrollDistance = this.scrollHeight - this.scrollTop - this.clientHeight
+			    let sign = 100
+				console.log(scrollDistance)
+//				console.log(that.scroll_old)
+				console.log(this.scrollTop) 
+		      	if(scrollDistance <= sign){
+		      		that.loadMore('down')
+		      	}else if(this.scrollTop < 1){
+		      		that.loadMore('up')
+		      		this.scrollTop = 2
+		      	}else{
+		      		//return false;
+		      	}
+//		      	that.scroll_old=scrollDistance
+//		      	setTimeout(() => {
+//					that.loadSign = true
+//				}, 1000)
+			}, true);
 		 	
 		}
 	}

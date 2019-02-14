@@ -70,7 +70,7 @@
 							
 							<el-table-column label="报表名称" width="200" sortable prop="name" v-if="this.checkedName.indexOf('报表名称')!=-1">
 							</el-table-column>
-							<el-table-column label="录入人" sortable prop="createby" v-if="this.checkedName.indexOf('修改人')!=-1">
+							<el-table-column label="录入人" sortable prop="createby" v-if="this.checkedName.indexOf('录入人')!=-1">
 							</el-table-column>	
 							<el-table-column label="修改人" sortable prop="updateby" v-if="this.checkedName.indexOf('修改人')!=-1">
 							</el-table-column>		
@@ -255,12 +255,7 @@
 				return this.$moment(date).format("YYYY-MM-DD");
 				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
 			},
-			insert() {
-				this.users.push(this.user)
-			},
-			remove(index) {
-				this.users.splice(index, 1)
-			},
+			
 			SelChange(val) {
 				this.selUser = val;
 			},
@@ -273,7 +268,12 @@
 				this.$axios.get(url, {params: data}).then((res) => {
 					this.reportsList = res.data.data;
 					this.page.totalCount = res.data.count;
-				}).catch((wrong) => {})
+				}).catch((wrong) => {
+					this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+				})
 				
 			},
 			loadMore () {

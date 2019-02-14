@@ -91,13 +91,9 @@
 								</el-table-column>
 								<el-table-column label="排序" width="120" align="right" sortable prop="sort" v-if="this.checkedName.indexOf('排序')!=-1">
 								</el-table-column>
-								<!-- <el-table-column label="创建人" width="155" prop="createUser" sortable v-if="this.checkedName.indexOf('创建人')!=-1">
-								</el-table-column> -->
-								<el-table-column label="创建时间" width="120" prop="createTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
+								<el-table-column label="创建时间" width="120" prop="createTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('创建时间')!=-1">
 								</el-table-column>
-								<!-- <el-table-column label="修改人" width="155" prop="updateUser" sortable v-if="this.checkedName.indexOf('修改人')!=-1">
-								</el-table-column> -->
-								<el-table-column label="变更时间" width="120" prop="updateTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
+								<el-table-column label="变更时间" width="120" prop="updateTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('变更时间')!=-1">
 								</el-table-column>
 								<el-table-column label="流程" width="120" prop="flowkey" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('流程')!=-1">
 								</el-table-column>
@@ -114,7 +110,7 @@
 				</div>
 			</div>
 			<!--右侧内容显示 End-->
-			<categorymask :CATEGORY="CATEGORY" ref="categorymask" @request="requestData" @reset="reset" v-bind:page=page></categorymask>
+			<categorymask :dataInfo="dataInfo" ref="categorymask" @request="requestData" @reset="reset" v-bind:page=page></categorymask>
 		</div>
 	</div>
 </template>
@@ -162,7 +158,6 @@
 					'应用英文名称',
 					'应用名称',
 					'处理类',
-					'类型',
 					'应用描述',
 					'数据库表',
 					'模块',
@@ -257,27 +252,13 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-				CATEGORY: {},//修改子组件时传递数据
-				selectData: [],
+				dataInfo: {},//修改子组件时传递数据
 			}
 		},
 		methods: {
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
-			},
-			//机构值
-			getCompany() {
-				var type = "2";
-				var url = this.basic_url + '/api-user/depts/treeByType';
-				this.$axios.get(url, {
-					params: {
-						type: type
-					},
-				}).then((res) => {
-					console.log(res.data);
-					this.selectData = res.data;
-				});
 			},
 			//表格滚动加载
 			loadMore() {
@@ -317,7 +298,7 @@
 			},
 			//清空
 			reset() {
-				this.CATEGORY = {
+				this.dataInfo = {
 					ID: '',
 					NUM: '',
 					TYPE: '',
@@ -329,8 +310,8 @@
 					CHANGEBY: '',
 					CHANGEDATE: ''
 				};
-				if(this.$refs['CATEGORY'] !== undefined) {
-					this.$refs['CATEGORY'].resetFields();
+				if(this.$refs['dataInfo'] !== undefined) {
+					this.$refs['dataInfo'].resetFields();
 				}
 
 			},
@@ -356,13 +337,13 @@
 					});
 					return;
 				} else {
-					this.CATEGORY = this.selUser[0];
-					this.$refs.categorymask.detail();
+					this.dataInfo = this.selUser[0];
+					this.$refs.categorymask.detail( this.selUser[0].Id);
 				}
 			},
 			//查看
 			 view(data) {
-			 	this.CATEGORY =data;
+			 	this.dataInfo =data;
 				this.$refs.categorymask.view();
 			},
 			//高级查询
@@ -469,14 +450,10 @@
 					name:this.searchList.name,
 					description: this.searchList.description,
 				}
-				// console.log(this.searchList.DEPTID);
 				var url = this.basic_url + '/api-apps/appcfg';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(23333333);
-					console.log(res.data);
-					
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -511,7 +488,6 @@
 		},
 		mounted() {
 			this.requestData();
-			this.getCompany();
 		},
 	}
 </script>

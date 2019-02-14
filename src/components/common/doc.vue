@@ -45,6 +45,7 @@
             width="100">
             <template slot-scope="scope">
                 <el-button @click="showAuth(scope.row)" type="text" size="small">关键字</el-button>
+                <el-button @click="readAuth(scope.row)" type="text" size="small">查看</el-button>
             </template>
         </el-table-column>
     </el-table>
@@ -88,6 +89,7 @@ export default {
             },
             basic_url: Config.dev_url,
             file_url: Config.file_url,
+            po_url:Config.po_url,//pageoffice 服务路径
             doc: [],
             fileList: [],
             selFiles: [],
@@ -116,6 +118,19 @@ export default {
             this.param.fileid = row.fileid;
             this.$refs.keyword.getData();
 			this.$refs.keyword.requestData();
+        },
+        readAuth(row){
+
+            var url = this.po_url+"/show?filename=" +row.filename
+                        + '&fileid=' +  row.fileid
+                        + '&userid=' +  this.docParm.userid
+                        + '&username=' + this.docParm.username
+                        + '&deptid=' + this.docParm.deptid
+                        + '&deptfullname=' + this.docParm.deptfullname
+                        + '&recordid=' + this.docParm.recordid
+                        + '&appname=' + this.docParm.appname
+                        + '&appid=' + this.docParm.appid;
+             window.open(url); 
         },
         uploadTip(){
             this.tipSaveShow = true;

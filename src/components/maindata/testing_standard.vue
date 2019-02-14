@@ -118,8 +118,6 @@
 							<el-table :header-cell-style="rowClass" :data="standardList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'standardList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column  type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
-								<!-- <el-table-column label="主键编号" width="120" sortable prop="ID" v-if="this.checkedName.indexOf('主键编号')!=-1">
-								</el-table-column> -->
 								<el-table-column label="标准编号" width="120" sortable prop="S_NUM" v-if="this.checkedName.indexOf('标准编号')!=-1">
 									<template slot-scope="scope">
 										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.S_NUM}}
@@ -140,12 +138,8 @@
 								</el-table-column>
 								<el-table-column label="机构" width="180" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
 								</el-table-column>
-								<!-- <el-table-column label="录入人" width="120" prop="ENTERBY" sortable v-if="this.checkedName.indexOf('录入人')!=-1"> -->
-								<!-- </el-table-column> -->
 								<el-table-column label="录入时间" width="100" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>
-								<!-- <el-table-column label="修改人" width="120" prop="CHANGEBY" sortable v-if="this.checkedName.indexOf('修改人')!=-1">
-								</el-table-column> -->
 								<el-table-column label="修改时间" width="100" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
 								</el-table-column>
 							</el-table>
@@ -166,7 +160,6 @@
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_header from '../common/nav_tabs.vue'
-	//	import table from '../plugin/table/table-normal.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import standardmask from '../maindataDetails/testing_standardMask.vue'
 	export default {
@@ -176,7 +169,6 @@
 			vheader,
 			navs_header,
 			tableControle,
-			//			table,
 			navs_left,
 			standardmask
 		},
@@ -197,7 +189,6 @@
 				searchData: {
 					page: 1,
 					limit: 10, //分页显示数
-
 					searchKey: '',
 					searchValue: '',
 					companyId: '',
@@ -213,16 +204,10 @@
 					'启用时间',
 					'版本',
 					'机构',
-					// '录入人',
 					'录入时间',
-					// '修改人',
 					'修改时间'
 				],
 				tableHeader: [
-					// {
-					// 	label: '主键编号',
-					// 	prop: 'ID'
-					// },
 					{
 						label: '标准编号',
 						prop: 'S_NUM'
@@ -255,18 +240,10 @@
 						label: '机构',
 						prop: 'DEPTIDDesc'
 					},
-					// {
-					// 	label: '录入人',
-					// 	prop: 'ENTERBY'
-					// },
 					{
 						label: '录入时间',
 						prop: 'ENTERDATE'
 					},
-					// {
-					// 	label: '修改人',
-					// 	prop: 'CHANGEBY'
-					// },
 					{
 						label: '修改时间',
 						prop: 'CHANGEDATE'
@@ -344,7 +321,6 @@
 						this.loadSign = true
 					}, 1000)
 					this.requestData()
-					//			     console.log('到底了', this.page.currentPage)
 				}
 			},
 			tableControle(data) {
@@ -491,7 +467,23 @@
 			},
 			// 导出
 			exportData() {
-
+           		var url = this.basic_url + '/api-apps/app/inspectionSta/exportExc?access_token='+sessionStorage.getItem('access_token');
+          		 var xhr = new XMLHttpRequest();
+            	xhr.open('POST', url, true);
+            	xhr.responseType = "blob";
+            	xhr.setRequestHeader("client_type", "DESKTOP_WEB");
+            	xhr.onload = function() {
+                	if (this.status == 200) {
+						var filename = "inspectionSta.xls";
+						var blob = this.response;
+						var link = document.createElement('a');
+						var objecturl = URL.createObjectURL(blob);
+						link.href = objecturl;
+						link.download = filename;
+						link.click();
+                	}
+            	}
+            	xhr.send();
 			},
 			// 打印
 			Printing() {
@@ -548,8 +540,6 @@
 						}
 					}
 					this.standardList = newarr;
-					//	this.standardList = res.data.data;
-					//	this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
 
 			},

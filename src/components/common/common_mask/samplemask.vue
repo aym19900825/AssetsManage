@@ -232,7 +232,7 @@
 			    var model= this.selval[0].MODEL;//规格型号
 				var state = this.selval[0].STATE;//样品状态
 				var itemnum = this.selval[0].ITEMNUM;//样品编号	
-				this.$emit('appendname',description);
+				this.$emit('appendname',name);
 				this.$emit('appendmod',model);
 				this.$emit('appendsta',state);
 				this.$emit('appendite',itemnum);

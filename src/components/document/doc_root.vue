@@ -71,12 +71,13 @@
 								<div class="left_treebg" :style="{height: fullHeight}">
 									<div class="p15" v-if="ismin">
 										<el-tree ref="tree"
-										 :render-content="renderContent" 
-										 :load="loadNode"
-										 node-key="id"
-										 lazy
-										 :props="props"
-										 @node-click="handleNodeClick">
+										 	:render-content="renderContent" 
+										 	:load="loadNode"
+										 	node-key="id"
+										 	lazy
+										 	:props="props"
+										 	@node-click="handleNodeClick">
+										<!-- @node-click="handleNodeClick"> -->
 										</el-tree>
 									</div>
 								</div>
@@ -383,8 +384,27 @@
 					}
 				})
 			},
+			append(node, data) {
+				const newChild = { id: 56, label: 'testtest'};
+				node.childNodes.push(newChild);
+			},
+
+			remove(node, data) {
+				const parent = node.parent;
+				const children = parent.childNodes || parent.data;
+				const index = children.findIndex(d => d.id === data.id);
+				children.splice(index, 1);
+			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
-				return (<span><i class={data.iconClass}></i><span>{node.label}</span></span>)
+				return (
+					<span class="custom-tree-node">
+						<span>{node.label}</span>
+						<span>
+							<el-button size="mini" type="text" on-click={ () => this.append(node, data) }>添加</el-button>
+							<el-button size="mini" type="text" on-click={ () => this.remove(node, data) }>删除</el-button>
+						</span>
+					</span>
+				);
 			},
 			handleNodeClick(data){
 				this.page.currentPage = 1;
@@ -424,13 +444,13 @@
 			loadNode(node, resolve, opt, param) {
 				if(opt == 'loadThisNode'){
 					var pathList = param;
-					return this.resolve(pathList);
+					this.node.doCreateChildren(pathList)
+					// return this.resolve(pathList);
 				}
 				this.resolve = resolve;
 				let that = this;
 				var url = that.file_url + '/file/pathList';
 				var pathid = 2;
-				console.log(node);
 				if(node.level === 0){
 					pathid = 0;
 				}else{
@@ -449,6 +469,7 @@
 								pathList[i].id =  pathList[i].pathid;
 								pathList[i].name = pathList[i].foldername;
 							}
+							// this.node.doCreateChildren(pathList);
 							return resolve(pathList);
 						});
 					}, 1000);
@@ -475,7 +496,6 @@
 						m.iconClass = 'icon-file-normal';
 					}
 				}
-				// this.handleNodeClick();
 			},
 			expandClick: function(m) {
 				if(m.iconClass != 'icon-file-text') {
@@ -527,11 +547,6 @@
 				this.down = !this.down,
 					this.up = !this.up
 			},
-			// refreshLazyTree(node, children) {
-			// 	var theChildren = node.childNodes
-			// 	theChildren.splice(0, theChildren.length)
-			// 	this.loadNode();
-			// },
 			findTreeId(parentid,chooseData){
 				var data = chooseData;
 				for(var i=0; i<data.length; i++){
@@ -547,34 +562,40 @@
 			},
 			// 删除
 			delDir() {
-				var parentid = this.node.parentid;
-				this.findTreeId(parentid, this.$refs.tree._data.root.childNodes);
-				console.log(this.$refs);
-				return;
-				var url = this.file_url + '/file/deletePath/' + this.docId;
-				this.$confirm('确定删除此文件夹吗？', '提示', {
-					confirmButtonText: '确定',
-					cancelButtonText: '取消',
-				}).then(({ value }) => {
-					this.$axios.delete(url, {}).then((res) => {
-						if(res.data.code == 1) {
-							this.$message({
-								message: '删除成功',
-								type: 'success'
-							});
-						}else{
-							this.$message({
-								message: res.data.message,
-								type: 'error'
-							});
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
-					});
-				}).catch(() => {});
+				console.log(this.node);
+				const parent = this.node.parent;
+				const children = parent.data.children || parent.data;
+				const index = children.findIndex(d => d.id === data.id);
+				children.splice(index, 1);
+
+				// var parentid = this.node.parentid;
+				// this.findTreeId(parentid, this.$refs.tree._data.root.childNodes);
+				// console.log(this.$refs);
+				// return;
+				// var url = this.file_url + '/file/deletePath/' + this.docId;
+				// this.$confirm('确定删除此文件夹吗？', '提示', {
+				// 	confirmButtonText: '确定',
+				// 	cancelButtonText: '取消',
+				// }).then(({ value }) => {
+				// 	this.$axios.delete(url, {}).then((res) => {
+				// 		if(res.data.code == 1) {
+				// 			this.$message({
+				// 				message: '删除成功',
+				// 				type: 'success'
+				// 			});
+				// 		}else{
+				// 			this.$message({
+				// 				message: res.data.message,
+				// 				type: 'error'
+				// 			});
+				// 		}
+				// 	}).catch((err) => {
+				// 		this.$message({
+				// 			message: '网络错误，请重试',
+				// 			type: 'error'
+				// 		});
+				// 	});
+				// }).catch(() => {});
 			},
 			SelChange(val) {//选中值后赋值给一个自定义的数组：selMenu
 				this.selMenu = val;

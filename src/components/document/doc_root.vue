@@ -77,7 +77,6 @@
 										 	lazy
 										 	:props="props"
 										 	@node-click="handleNodeClick">
-										<!-- @node-click="handleNodeClick"> -->
 										</el-tree>
 									</div>
 								</div>
@@ -393,7 +392,32 @@
 				const parent = node.parent;
 				const children = parent.childNodes || parent.data;
 				const index = children.findIndex(d => d.id === data.id);
-				children.splice(index, 1);
+				
+				var url = this.file_url + '/file/deletePath/' + node.data.id;
+				this.$confirm('确定删除此文件夹吗？', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+				}).then(({ value }) => {
+					this.$axios.delete(url, {}).then((res) => {
+						if(res.data.code == 1) {
+							children.splice(index, 1);
+							this.$message({
+								message: '删除成功',
+								type: 'success'
+							});
+						}else{
+							this.$message({
+								message: res.data.message,
+								type: 'error'
+							});
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+				}).catch(() => {});
 			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
 				return (
@@ -562,16 +586,11 @@
 			},
 			// 删除
 			delDir() {
-				console.log(this.node);
 				const parent = this.node.parent;
 				const children = parent.data.children || parent.data;
 				const index = children.findIndex(d => d.id === data.id);
 				children.splice(index, 1);
 
-				// var parentid = this.node.parentid;
-				// this.findTreeId(parentid, this.$refs.tree._data.root.childNodes);
-				// console.log(this.$refs);
-				// return;
 				// var url = this.file_url + '/file/deletePath/' + this.docId;
 				// this.$confirm('确定删除此文件夹吗？', '提示', {
 				// 	confirmButtonText: '确定',

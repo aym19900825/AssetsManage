@@ -26,9 +26,9 @@
 								<!-- <button type="button" class="btn btn-blue button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改文件夹
 								</button> -->
-								<button type="button" class="btn btn-red button-margin" @click="delDir">
+								<!-- <button type="button" class="btn btn-red button-margin" @click="delDir">
 								    <i class="icon-trash"></i>删除文件夹
-								</button>
+								</button> -->
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 						    		<i class="icon-search"></i>高级查询
 						    		<i class="icon-arrow1-down" v-show="down"></i>
@@ -421,11 +421,10 @@
 			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
 				return (
-					<span class="custom-tree-node">
-						<span>{node.label}</span>
-						<span>
-							<el-button size="mini" type="text" on-click={ () => this.append(node, data) }>添加</el-button>
-							<el-button size="mini" type="text" on-click={ () => this.remove(node, data) }>删除</el-button>
+					<span class="custom-tree-node" style=" display: block; width: 100%;">
+						<span style="display: block; float: left; margin-top: 3px;">{node.label}</span>
+						<span style="display: block;float: right;">
+							<el-button size="mini" icon="icon-trash" type="text" on-click={ () => this.remove(node, data) }></el-button>
 						</span>
 					</span>
 				);
@@ -468,8 +467,8 @@
 			loadNode(node, resolve, opt, param) {
 				if(opt == 'loadThisNode'){
 					var pathList = param;
-					this.node.doCreateChildren(pathList)
-					// return this.resolve(pathList);
+					// this.node.doCreateChildren(pathList)
+					return this.resolve(pathList);
 				}
 				this.resolve = resolve;
 				let that = this;

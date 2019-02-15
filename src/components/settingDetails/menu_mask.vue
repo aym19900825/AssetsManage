@@ -219,10 +219,17 @@
 			},
 			
 			// 这里是修改
-			detail(selMenu) {
-					this.addtitle=false;
-				    this.modifytitle=true;
-					this.show = true;
+			detail(item) {
+				console.log(23333);
+				console.log(item.hidden);
+				this.addtitle=false;
+				this.modifytitle=true;
+				if(item.hidden == '0'){
+					item.hidden = true;
+				}else if(item.hidden == '1'){
+					item.hidden = false;
+				}
+				this.show = true;
 			},
 			//这是查看
 			view() {
@@ -238,6 +245,7 @@
 			//点击关闭按钮
 			close() {
 				this.show = false;
+				this.$emit('request');
 			},
 			toggle(e) {
 				if(this.isok1 == true) {
@@ -267,15 +275,13 @@
 
 			//保存users/saveOrUpdate
 			submitForm() {
-				console.log(this.menu.parentId);
 				if(this.menu.parentId == ''){//上级为空给后台传-1表示为一级菜单
 					this.menu.parentId = '-1';
 				}
 				this.$refs.menu.validate((valid) => {
 					if(valid) {
-						this.menu.hidden=this.menu.hidden?1:0
-						var menu = this.menu;						
-						console.log(menu)
+						this.menu.hidden = this.menu.hidden?0:1;
+						var menu = this.menu;			
 						var url = this.basic_url + '/api-user/menus/saveOrUpdate';
 						this.menutest={
 								"id":this.menu.id,
@@ -365,8 +371,7 @@
 					.catch(_ => {});
 			},
 			changeval(Callbackvaule){
-			
-//				this.menu.hidden=Callbackvaule?1:0
+				// this.menu.hidden=Callbackvaule?1:0;
 			},
 			toggleStatus(state){
 			

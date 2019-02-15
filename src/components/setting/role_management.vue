@@ -65,8 +65,9 @@
 										</el-select>
 									</el-form-item>
 								</el-col>
-								<el-col :span="2">
+								<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -213,6 +214,12 @@
 				this.page.currentPage = 1;
 				this.page.pageSize = 20;
 				this.requestData();
+			},
+			resetbtn(){
+				this.searchList = {//高级查询数据
+					name: '',
+					inactive:''
+				};
 			},
 			judge(data) {//是否停用
 				return data.inactive=="1" ? '是' : '否'

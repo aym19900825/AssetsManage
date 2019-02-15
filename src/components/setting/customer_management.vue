@@ -49,8 +49,8 @@
 				<div v-show="search">
 					<el-form :model="searchList" label-width="70px">
 						<el-row :gutter="10">
-							<el-col :span="5">
-								<el-form-item label="统一信用代码/组织机构代码" prop="CODE" label-width="100px">
+							<el-col :span="8">
+								<el-form-item label="统一信用代码/组织机构代码" prop="CODE" label-width="190px">
 									<el-input v-model="searchList.CODE">
 									</el-input>
 								</el-form-item>
@@ -80,8 +80,9 @@
 									</el-option>
 								</el-select>
 							</el-col> -->
-							<el-col :span="2">
+							<el-col :span="4">
 								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
@@ -283,6 +284,15 @@
 				this.page.pageSize = 10;
 				this.requestData();
 			},
+			resetbtn(){
+				this.searchList = { //点击高级搜索后显示的内容
+					NAME: '',
+					CODE: '',
+					PHONE: '',
+					CONTACT_ADDRESS: '',
+					STATUS: ''
+				};
+			},
 			//添加用戶
 			openAddMgr() {
 				this.$refs.child.open();
@@ -370,7 +380,23 @@
 			},
 			// 导出
 			exportData() {
-				
+           		var url = this.basic_url + '/api-apps/app/customer/exportExc?access_token='+sessionStorage.getItem('access_token');
+          		 var xhr = new XMLHttpRequest();
+            	xhr.open('POST', url, true);
+            	xhr.responseType = "blob";
+            	xhr.setRequestHeader("client_type", "DESKTOP_WEB");
+            	xhr.onload = function() {
+                	if (this.status == 200) {
+						var filename = "customer.xls";
+						var blob = this.response;
+						var link = document.createElement('a');
+						var objecturl = URL.createObjectURL(blob);
+						link.href = objecturl;
+						link.download = filename;
+						link.click();
+                	}
+            	}
+            	xhr.send();
 			},
 			// 打印
 			Printing() {

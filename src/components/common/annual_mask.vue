@@ -28,12 +28,6 @@
 													<template slot="prepend">编辑状态</template>
 											</el-input>
 										</el-col>
-										<!-- <el-col :span="5" class="pull-right">
-											<el-select v-model="WORKPLAN.TYPE" placeholder="类别">
-										    	<el-option label="监督抽查" value="1"></el-option>
-										    	<el-option label="质量抽查" value="0"></el-option>
-											</el-select>
-										</el-col> -->
 										<el-col :span="5" class="pull-right">
 											<el-input v-model="WORKPLAN.WP_NUM" placeholder="自动生成" :disabled="edit">
 													<template slot="prepend">编号</template>
@@ -161,11 +155,6 @@
 													<span v-else="v-else">{{scope.row.MODEL}}</span>
 										  </template>
 									    </el-table-column>
-										<!-- <el-table-column prop="VENDOR" label="生产企业编号" sortable width="120px">
-									      <template slot-scope="scope">
-									        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDOR" placeholder="请输入内容"></el-input><span v-if="!scope.row.isEditing">{{scope.row.VENDOR}}</span>
-									      </template>
-									    </el-table-column> -->
 										<el-table-column prop="V_NAME" label="生产企业名称" sortable width="120px">
 											<template slot-scope="scope">
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAME" placeholder="请输入内容" :disabled="true">
@@ -174,13 +163,6 @@
 													<span v-else="v-else">{{scope.row.V_NAME}}</span>
 											</template>
 										</el-table-column>
-										<!-- <el-table-column prop="SJ_NAME" label="受检企业名称" sortable width="120px">
-									      <template slot-scope="scope">
-									        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.SJ_NAME" :disabled="true" placeholder="请输入内容">
-												<el-button slot="append" icon="el-icon-search" @click="getdeptbtn(scope.row)"></el-button>
-											</el-input><span v-if="!scope.row.isEditing">{{scope.row.SJ_NAME}}</span>
-									      </template>
-									    </el-table-column> -->
 									    <el-table-column prop="MEMO" label="近三年监督抽查情况" sortable width="260px">
 									      <template slot-scope="scope">
 									        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MEMO" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.MEMO}}</span>
@@ -196,13 +178,6 @@
 									        		<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REASION" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.REASION}}</span>
 										  </template>
 									    </el-table-column>
-
-									    <!-- <el-table-column prop="MEMO" label="近三年监督抽查情况" sortable width="160px">
-									      <template slot-scope="scope">
-									        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入内容"></el-input><span v-if="!scope.row.isEditing">{{scope.row.MODEL}}</span>
-									      </template>
-									    </el-table-column> -->
-
 									    <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 									      <template slot-scope="scope">
 									        <el-button type="danger" circle title="删除" @click="delPlan(scope.$index,scope.row, 'WORLPLANLINE','worlplanlist')"  size="small" v-show="!viewtitle">
@@ -264,14 +239,6 @@
 												</el-button>
 											</div>
 							            	<el-table :header-cell-style="rowClass" :data="proTestList" border stripe :fit="true" max-height="260" style="width: 100%;" :default-sort="{prop:'proTestList', order: 'descending'}">
-							            	    <!-- <el-table-column prop="iconOperation" fixed width="50px">
-											      <template slot-scope="scope" >
-											      	<i class="el-icon-check" v-if="scope.row.isEditing" @click="changeEdit(scope.row)">
-											      	</i>
-											      	<i class="el-icon-edit" v-if="!scope.row.isEditing" @click="changeEdit(scope.row)">
-											      	</i>
-											      </template>
-											    </el-table-column> -->
 												<el-table-column prop="NUMBER" label="序号" width="150" type="index"></el-table-column>
 							            		<el-table-column prop="WP_NUM" label="所属计划编号" width="130">
 							            			<template slot-scope="scope">
@@ -289,9 +256,6 @@
 							            			<template slot-scope="scope">
 											        	<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入内容">
 											        	</el-input>
-											        	<!-- <span v-if="!scope.row.isEditing">
-											        		{{scope.row.REMARKS}}
-											        	</span> -->
 											      </template>
 							            		</el-table-column>
 							            		<el-table-column prop="VERSION" label="版本" width="80"></el-table-column>
@@ -441,11 +405,6 @@
 									<el-input v-model="searchList.S_NAME"></el-input>
 								</el-form-item>
 							</el-col>
-							<!-- <el-col :span="6">
-								<el-form-item label="英文名称" prop="S_ENGNAME">
-									<el-input v-model="searchList.S_ENGNAME"></el-input>
-								</el-form-item>
-							</el-col> -->
 							<el-col :span="6">
 								<el-form-item label="版本" prop="VERSION">
 									<el-input v-model="searchList.VERSION"></el-input>
@@ -496,8 +455,6 @@
 					</el-table-column>
 					<el-table-column label="标准名称" width="220" sortable prop="S_NAME">
 					</el-table-column>
-					<!-- <el-table-column label="英文名称" width="220" sortable prop="S_ENGNAME">
-					</el-table-column> -->
 					<!-- <el-table-column label="状态" width="100" sortable prop="STATUS">
 					</el-table-column> -->
 					<el-table-column label="发布时间" width="160" sortable prop="RELEASETIME">
@@ -508,12 +465,8 @@
 					</el-table-column>
 					<el-table-column label="机构" width="180" sortable prop="DEPTIDDesc">
 					</el-table-column>
-					<!-- <el-table-column label="录入人" width="120" prop="ENTERBY" sortable>
-					</el-table-column> -->
 					<el-table-column label="录入时间" width="160" prop="ENTERDATE" sortable>
 					</el-table-column>
-					<!-- <el-table-column label="修改人" width="120" prop="CHANGEBY" sortable>
-					</el-table-column> -->
 					<el-table-column label="修改时间" width="160" prop="CHANGEDATE" sortable>
 					</el-table-column>
 				</el-table>
@@ -589,12 +542,8 @@
 					</el-table-column>
 					<el-table-column label="机构" width="180" sortable prop="DEPTIDDesc">
 					</el-table-column>
-					<!-- <el-table-column label="录入人" width="120" prop="ENTERBY" sortable>
-					</el-table-column> -->
 					<el-table-column label="录入时间" width="160" prop="ENTERDATE" sortable :formatter="dateFormat">
 					</el-table-column>
-					<!-- <el-table-column label="修改人" width="120" prop="CHANGEBY" sortable>
-					</el-table-column> -->
 					<el-table-column label="修改时间" width="160" prop="CHANGEDATE" sortable :formatter="dateFormat">
 					</el-table-column>
 				</el-table>
@@ -645,23 +594,23 @@
 			<!-- 产品名称 Begin -->
 			<el-dialog :modal-append-to-body="false" title="产品名称" :visible.sync="dialogVisible4" width="80%" :before-close="handleClose">
 				<el-table  :header-cell-style="rowClass" :data="productList" line-center border stripe height="400px" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-									<el-table-column type="selection" fixed width="55" align="center">
-									</el-table-column>
-									<el-table-column label="编码" width="155" sortable prop="PRO_NUM">
-									</el-table-column>
-									<el-table-column label="名称" sortable prop="PRO_NAME">
-									</el-table-column>
-									<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
-									</el-table-column>
-									<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc">
-									</el-table-column>
-									<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
-									</el-table-column>
-									<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat">
-									</el-table-column>
-								</el-table>
-								<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-								</el-pagination>
+					<el-table-column type="selection" fixed width="55" align="center">
+					</el-table-column>
+					<el-table-column label="编码" width="155" sortable prop="PRO_NUM">
+					</el-table-column>
+					<el-table-column label="名称" sortable prop="PRO_NAME">
+					</el-table-column>
+					<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
+					</el-table-column>
+					<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc">
+					</el-table-column>
+					<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
+					</el-table-column>
+					<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat">
+					</el-table-column>
+				</el-table>
+				<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+				</el-pagination>
 				<span slot="footer" class="el-dialog__footer">
 			       <el-button type="primary" @click="addproname">确 定</el-button>
 			       <el-button @click="dialogVisible4 = false">取 消</el-button>
@@ -679,8 +628,6 @@
 					</el-table-column>
 					<el-table-column label="联系地址" sortable prop="CONTACT_ADDRESS">
 					</el-table-column>
-					<!-- <el-table-column label="联系电话" sortable prop="PHONE" v-if="this.checkedName.indexOf('联系电话')!=-1">
-					</el-table-column> -->	
 					<!--<el-table-column label="信息状态" sortable width="100" prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
 					</el-table-column>-->
 				</el-table>
@@ -779,7 +726,6 @@
                 }
             };
             var validateBasislist = (rule, value, callback) => {
-            	console.log(rule, value, callback);
                 if (value === '') {
                     callback(new Error('请选择检测依据'));
                 }else {
@@ -876,8 +822,6 @@
 				},
 				
 				rules: {
-					// CODE: [{required: true,trigger: 'blur',validator: validateCode,}],
-					// NAME:[{required: true,trigger: 'blur',validator: validateName,}],
 					PROP_UNIT:[{required: true,validator: validateUnit, trigger: 'change'}],//提出单位 
 					basisList:[{required: true,validator: validateBasislist,trigger: 'change'}],//产品类别
 					DESCRIPTION:[{required: true,trigger: 'blur',validator: this.Validators.isFillTips}],
@@ -1028,7 +972,6 @@
 			
 			//删除计划列表
 			delPlan(index,row,TableName,delList){
-				console.log(row);
 				if(row.ID){
 					var url = this.basic_url +'/api-apps/app/workplan/' + TableName +'/' + row.ID;
 					this.$axios.delete(url, {}).then((res) => {
@@ -1247,14 +1190,10 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				console.log(123456);
-				console.log(this.itemtypenum);
 				var url = this.basic_url + '/api-apps/app/product2?NUM_wheres='+this.itemtypenum;
-				console.log(url);
 				this.$axios.get(url, {
 					
 				}).then((res) => {
-					console.log(res.data);
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -1282,16 +1221,12 @@
             //检测依据弹出框
             basisleadbtn(){
 				this.requestBasis();
-            	// this.$emit('request');
-				// this.requestData();
 				this.requestnum = '4';
 				this.dialogVisible = true;
 			},
 			basisleadbtn2(){
 				this.requestProject();
 				this.requestnum = '5';
-				// this.$emit('request');
-				// this.requestData();
 				this.dialogVisible2 = true;
 			},
 			//检测依据数据
@@ -1306,10 +1241,7 @@
 					DEPTID: this.searchList.DEPTID,
 					RELEASETIME: this.searchList.RELEASETIME,
 					STARTETIME: this.searchList.STARTETIME,
-					// STATUS: this.searchList.STATUS,
 				};
-				console.log(111111);
-				console.log(this.pronamenum);
 				var url = this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.pronamenum;
 				this.$axios.get(url, {
 					
@@ -1353,13 +1285,9 @@
 					VERSION: this.searchList.VERSION,
 					STATUS: this.searchList.STATUS,
 				};
-				console.log(1454324565);
-				console.log(this.basisnums);
 				this.$axios.get(this.basic_url +'/api-apps/app/inspectionPro2?S_NUM_where_in='+this.basisnums, {
 				
 				}).then((res) => {
-					console.log(2333333);
-					console.log(res.data);
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -1398,8 +1326,6 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(2333333);
-					console.log(res.data);
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -1431,7 +1357,6 @@
 				this.$axios.get(this.basic_url + '/api-apps/app/productType2?DEPTID='+this.WORKPLAN.PROP_UNIT, {
 					params: data
 				}).then((res) => {
-					console.log(res.data);
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -1764,7 +1689,6 @@
 								}else{
 									if(!this.isEditList){
 										if(typeof(this.WORKPLAN.PROP_UNIT) != 'undefined') {
-											console.log(this.selectData);
 											for(var j=0;j<this.selectData.length;j++){
 												if(this.WORKPLAN.PROP_UNIT==this.selectData[j].fullname){
 													this.WORKPLAN.PROP_UNIT=this.selectData[j].id
@@ -1789,7 +1713,6 @@
 													this.$emit('request');
 												}
 											}else{
-												console.log(res.data);
                                                 this.$message({
                                                     message: res.data.resp_msg,
                                                     type: 'error'

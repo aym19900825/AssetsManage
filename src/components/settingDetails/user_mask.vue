@@ -191,7 +191,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="角色" prop="roleId" label-width="100px">
-												<el-select v-model="user.roleId" multiple :disabled="noedit" value-key="item.id" >
+												<el-select v-model="user.roleId" multiple :disabled="noedit"  default-first-option value-key="item.id" @change="change" >
 													<el-option v-for="(item,index) in selectData" :key="index" :value="item.id" :label="item.name"></el-option>
 												</el-select>
 											</el-form-item>
@@ -351,6 +351,61 @@
 													</el-table-column>
 												</el-table>
 										</el-tab-pane>
+
+										<el-tab-pane label="IP地址管理" name="third">
+											<div class="table-func table-funcb" v-show="noviews">
+												<el-button type="success" size="mini" round @click="addfield3" v-if="!viewtitle">
+													<i class="icon-add"></i>
+													<font>新建行</font>
+												</el-button>
+											</div>
+												<el-table :header-cell-style="rowClass" :fit="true" :data="user.IpList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.IpList', order: 'descending'}">
+													<el-table-column prop="iconOperation" fixed label="" width="50px" v-if="!viewtitle">
+														<template slot-scope="scope">
+															<i class="el-icon-check" v-if="scope.row.isEditing"></i>
+															<i class="el-icon-edit" v-else="v-else"></i>
+														</template>
+													</el-table-column>
+
+													<el-table-column label="序号" sortable width="120px" prop="STEP">
+													   <template slot-scope="scope">
+													      <el-form-item :prop="'IpList.'+scope.$index + '.STEP'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+													         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.$index + 1" disabled></el-input>
+													         <span v-show="!scope.row.isEditing" >{{scope.row.STEP}}</span>
+													      </el-form-item>
+													   </template>
+													</el-table-column>
+
+													<el-table-column prop="IP_BEGIN" label="起始IP地址" sortable>
+														<template slot-scope="scope">
+															<el-form-item :prop="'IpList.'+scope.$index + '.IP_BEGIN'">
+																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.IP_BEGIN" placeholder="请输入起始IP地址">
+																</el-input>
+																<span v-else="v-else">{{scope.row.IP_BEGIN}}</span>
+															</el-form-item>
+														</template>
+													</el-table-column>
+
+													<el-table-column prop="IP_END" label="结束IP地址" sortable>
+														<template slot-scope="scope">
+															<el-form-item :prop="'IpList.'+scope.$index + '.IP_END'">
+																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.IP_END" placeholder="请输入结束IP地址">
+																</el-input>
+																<span v-else="v-else">{{scope.row.IP_END}}</span>
+															</el-form-item>
+														</template>
+													</el-table-column>
+													
+													<el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
+														<template slot-scope="scope">
+															<el-button @click.native.prevent="deleteRow(scope.$index,user.IpList)" type="text" size="small">
+																<i class="icon-trash red"></i>
+															</el-button>
+														</template>
+													</el-table-column>
+
+												</el-table>
+										</el-tab-pane>
 									</el-tabs>
 								</div>
 								<el-collapse-item title="其他" name="4" v-show="views">
@@ -430,6 +485,7 @@
 					roles: [],
 					traings: [],
 					qualifications: [],
+					IpList: [],
 				},
 				options: [{
 						value: '高中',
@@ -553,6 +609,9 @@
 			};
 		},
 		methods: {
+			change(){
+				this.user.roleId=this.user.roleId.slice(0);
+			},
 			editpassword(){//点击修改密码按钮跳转到修改密码页面
 		      	this.$router.push({path: '/passwordedit'})
 		    },
@@ -596,6 +655,7 @@
 					enabled: true,
 					traings: [],
 					qualifications: [],
+					IpList: [],
 				}
 			},
 			//点击按钮显示弹窗
@@ -671,10 +731,20 @@
 				};
 				this.user.traings.push(obj);
 			},
+
+			addfield3() {
+				var obj = {
+					STEP: 1,
+					IP_BEGIN: '',
+					IP_END: '',
+					isEditing: true
+				};
+				this.user.IpList.push(obj);
+			},
 			//刪除新建行
 			deleteRow(index, rows) { //Table-操作列中的删除行
-				console.log(index);
-				console.log(rows);
+				// console.log(index);
+				// console.log(rows);
 				rows.splice(index, 1);
 			},
 			//
@@ -723,6 +793,7 @@
 					enabled: true,
 					traings: [],
 					qualifications: [],
+					IpList: [],
 				};
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 
@@ -786,10 +857,15 @@
 					for(var i = 0;i<res.data.qualifications.length;i++){
 						res.data.qualifications[i].isEditing = false;
 					}
-					console.log(222);
+					
 					//培训
 					for(var i = 0;i<res.data.traings.length;i++){
 						res.data.traings[i].isEditing = false;
+					}
+
+					//IP地址管理
+					for(var i = 0;i<res.data.IpList.length;i++){
+						res.data.IpList[i].isEditing = false;
 					}
 					this.user = res.data;
 					this.user.sex = this.user.sex ? '男' : '女';
@@ -958,8 +1034,7 @@
 					},
 				}).then((res) => {
 					this.resourceData = res.data;
-
-					console.log(res.data)
+					// console.log(res.data)
 					this.dialogVisible = true;
 				});
 

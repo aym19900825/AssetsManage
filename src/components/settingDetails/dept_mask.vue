@@ -563,6 +563,7 @@
 			},
 			queding() {
 				console.log(this.checkedNodes);
+				this.getCheckedNodes();
 				if(this.checkedNodes == undefined){
 					this.$message({
 						message:'请选择数据',
@@ -574,7 +575,6 @@
 				// 		type:'warning'
 				// 	})
 				}else{
-					this.getCheckedNodes();
 					this.placetext = false;
 					this.dialogVisible = false;				
 					this.adddeptForm.pid = this.checkedNodes[0].id;

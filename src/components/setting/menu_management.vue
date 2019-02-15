@@ -203,7 +203,7 @@
 					return;
 				} else {
 					this.menu = this.selMenu[0]; 
-					this.$refs.child.detail();
+					this.$refs.child.detail(this.selMenu[0]);
 				}
 			},
 			// 查看

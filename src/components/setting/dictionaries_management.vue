@@ -42,22 +42,23 @@
 
 				<!-- 高级查询划出 Begin-->
 				<div v-show="search">
-					<el-form :model="searchList" label-width="70px">
+					<el-form :model="searchList">
 						<el-row :gutter="10">
 							<el-col :span="5">
-								<el-form-item label="类型编码" prop="code" label-width="100px">
+								<el-form-item label="类型编码" prop="code" label-width="70px">
 									<el-input v-model="searchList.code">
 									</el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
-								<el-form-item label="类型名称" prop="name" label-width="100px">
+								<el-form-item label="类型名称" prop="name" label-width="70px">
 									<el-input v-model="searchList.name">
 									</el-input>
 								</el-form-item>
 							</el-col>
-							<el-col :span="2">
+							<el-col :span="4">
 								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
@@ -218,6 +219,12 @@
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
 				this.requestData();
+			},
+			resetbtn(){
+				this.searchList = { //点击高级搜索后显示的内容
+					code: '',
+					name: '',
+				};
 			},
 			openAddData() {//添加数据
 				this.dictionarieForm = {

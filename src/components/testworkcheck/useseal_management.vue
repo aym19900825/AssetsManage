@@ -2,13 +2,12 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header  ref="navsheader"></navs_header>
+			<navs_header ref="navsheader"></navs_header>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
-			<navs_left></navs_left>
+			<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left>
 			<!--左侧菜单内容显示 End-->
-
 			<!--右侧内容显示 Begin-->
 			<div class="wrapper wrapper-content">
 				<div class="ibox-content">
@@ -17,28 +16,19 @@
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
 								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
-	                        	<i class="icon-add"></i>添加
-	              			 </button>
+                                    <i class="icon-add"></i>添加
+                                </button>
 								<button type="button" class="btn btn-blue button-margin" @click="modify">
-							    <i class="icon-edit"></i>修改
-							</button>
+                                    <i class="icon-edit"></i>修改
+                                </button>
 								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
-							    <i class="icon-trash"></i>删除
-							</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="importData">
-							    <i class="icon-upload-cloud"></i>导入
-							</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="exportData">
-							    <i class="icon-download-cloud"></i>导出
-							</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="Printing">
-							    <i class="icon-print"></i>打印
-							</button>
+                                    <i class="icon-trash"></i>删除
+                                </button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-					    		<i class="icon-search"></i>高级查询
-					    		<i class="icon-arrow1-down" v-show="down"></i>
-					    		<i class="icon-arrow1-up" v-show="up"></i>
-							</button>
+                                    <i class="icon-search"></i>高级查询
+                                    <i class="icon-arrow1-down" v-show="down"></i>
+                                    <i class="icon-arrow1-up" v-show="up"></i>
+                                </button>
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -54,29 +44,30 @@
 					<div v-show="search">
 						<el-form :model="searchList" label-width="45px">
 							<el-row :gutter="10">
-								<el-col :span="5">
-									<el-form-item label="编码" prop="PRO_NUM">
-										<el-input v-model="searchList.PRO_NUM">
-										</el-input>
+                                <el-col :span="7">
+									<el-form-item label="工作任务单编号" prop="WONUM" label-width="110px">
+										<el-input v-model="searchList.WONUM"></el-input>
 									</el-form-item>
 								</el-col>
-								<el-col :span="5">
-									<el-form-item label="名称" prop="PRO_NAME">
-										<el-input v-model="searchList.PRO_NAME">
-										</el-input>
+								<el-col :span="7">
+									<el-form-item label="委托书编号" prop="PROXYNUM" label-width="100px">
+										<el-input v-model="searchList.PROXYNUM"></el-input>
 									</el-form-item>
 								</el-col>
-								<el-col :span="5">
-									<el-form-item label="版本" prop="VERSION">
-										<el-input v-model="searchList.VERSION">
-										</el-input>
+								<el-col :span="7">
+									<el-form-item label="用印人" prop="USER" label-width="80px">
+										<el-input v-model="searchList.USER"></el-input>
 									</el-form-item>
 								</el-col>
-								<el-col :span="5">
-									<el-form-item label="机构" prop="DEPTID">
-										<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择" style="width: 90%;border-radius:none">
-										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
-										</el-select>
+								<el-col :span="7">
+									<el-form-item label="归还时间" prop="GHTIME" label-width="110px">
+										<el-date-picker v-model="searchList.GHTIME" type="date" placeholder="请选择" value-format="yyyy-MM-dd" style="width: 100%;">
+										</el-date-picker>
+									</el-form-item>
+								</el-col>
+								<el-col :span="7">
+									<el-form-item label="归还接收人" prop="GHUSER" label-width="100px">
+										<el-input v-model="searchList.GHUSER"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="4">
@@ -90,63 +81,69 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格 Begin-->
-							<el-table  :header-cell-style="rowClass" :data="productList" line-center border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table :header-cell-style="rowClass" :data="USESEAL" v-loading="loading" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'USESEAL', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
-								<el-table-column label="编码" width="155" sortable prop="PRO_NUM" v-if="this.checkedName.indexOf('编码')!=-1">
+								<el-table-column label="工作任务单编号" width="155" sortable prop="WONUM" v-if="this.checkedName.indexOf('工作任务单编号')!=-1">
 									<template slot-scope="scope">
-										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.PRO_NUM}}
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.WONUM}}
 										</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="名称" sortable prop="PRO_NAME" v-if="this.checkedName.indexOf('名称')!=-1">
+                                <el-table-column label="委托书编号" sortable prop="PROXYNUM" v-if="this.checkedName.indexOf('委托书编号')!=-1">
 								</el-table-column>
+								<el-table-column label="委托书版本" sortable prop="PROXY_VERSION" v-if="this.checkedName.indexOf('委托书版本')!=-1">
 								</el-table-column>
-								<!--<el-table-column label="信息状态" width="155" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
+								<el-table-column label="用印人" width="100" sortable prop="USERDesc" v-if="this.checkedName.indexOf('用印人')!=-1">
+								</el-table-column>
+								<el-table-column label="用印时间" width="185" sortable prop="USETIME" v-if="this.checkedName.indexOf('用印时间')!=-1" :formatter="dateFormat">
+								</el-table-column>
+                                <el-table-column label="用印人机构" width="120" sortable prop="SEAL_DEPARTMENTDesc" v-if="this.checkedName.indexOf('用印人机构')!=-1">
+								</el-table-column>
+                                <el-table-column label="归还时间" width="100" sortable prop="GHTIME" v-if="this.checkedName.indexOf('归还时间')!=-1" :formatter="dateFormat">
+								</el-table-column>
+                                <el-table-column label="归还接收人" width="120" sortable prop="GHUSERDesc" v-if="this.checkedName.indexOf('归还接收人')!=-1">
+								</el-table-column>
+                                <!--<el-table-column label="信息状态" width="155" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
+ 								<template slot-scope="scope" >
+ 									<span v-text="scope.row.STATUS=='1'?'活动':'不活动'"></span>
+ 								</template>
 							</el-table-column>-->
-								<el-table-column label="版本" width="100" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1" align="right">
-								</el-table-column>
-								<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
-								</el-table-column>
-								<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
-								</el-table-column>
-								<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
-								</el-table-column>
 							</el-table>
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
 							<!-- 表格 End-->
 						</el-col>
 					</el-row>
-
 				</div>
 			</div>
 			<!--右侧内容显示 End-->
-			<productmask :PRODUCT="PRODUCT" ref="child" @request="requestData" @reset="reset" v-bind:page=page></productmask>
+			<usesealmask :USESEAL="USESEAL" ref="usesealmask" @request="requestData" v-bind:page=page></usesealmask>
 		</div>
 	</div>
 </template>
 <script>
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
-	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_header from '../common/nav_tabs.vue'
-	import productmask from '../maindataDetails/product_mask.vue'
-	import tableControle from '../plugin/table-controle/controle.vue'
+	import navs_left from '../common/left_navs/nav_left5.vue'
+	import usesealmask from '../testworkcheckDetails/usesealMask.vue'
+    import tableControle from '../plugin/table-controle/controle.vue'
 	export default {
-		name: 'customer_management',
+		name: 'useseal_management',
 		components: {
 			vheader,
 			navs_left,
 			navs_header,
-			productmask,
-			tableControle,
+			usesealmask,
+            tableControle,
 		},
 		data() {
 			return {
 				basic_url: Config.dev_url,
-				loadSign: true, //加载
+				loadSign: true, //鼠标滚动加载数据
 				commentArr: {},
+				loading: false,//默认加载数据时显示loading动画
 				value: '',
 				options: [{
 					value: '1',
@@ -155,56 +152,51 @@
 					value: '0',
 					label: '不活动'
 				}],
-				searchData: {
-					page: 1,
-					limit: 10, //分页显示数
-					nickname: '',
-					enabled: '',
-					searchKey: '',
-					searchValue: '',
-					companyId: '',
-					deptId: ''
-				},
 				checkedName: [
-					'编码',
-					'名称',
-					'版本',
-					'机构',
-					// '信息状态',
-					'录入时间',
-					'修改时间'
+                    '工作任务单编号',
+					'委托书编号',
+                    '委托书版本',
+                    '用印人',
+                    '用印时间',
+                    '用印人机构',
+                    '归还时间',
+                    '归还接收人',
 				],
-				tableHeader: [{
-						label: '编码',
-						prop: 'PRO_NUM'
+				tableHeader: [
+                    {
+						label: '工作任务单编号',
+						prop: 'WONUM'
+					},{
+						label: '委托书编号',
+						prop: 'PROXYNUM'
 					},
 					{
-						label: '名称',
-						prop: 'PRO_NAME'
+						label: '委托书版本',
+						prop: 'PROXY_VERSION'
 					},
 					{
-						label: '版本',
-						prop: 'VERSION'
+						label: '用印人',
+						prop: 'USERDesc'
 					},
 					{
-						label: '机构',
-						prop: 'DEPTIDDesc'
-					},
-					// {
-					// 	label: '信息状态',
-					// 	prop: 'STATUS'
-					// },
-					{
-						label: '录入时间',
-						prop: 'ENTERDATE'
+						label: '用印时间',
+						prop: 'USETIME'
 					},
 					{
-						label: '修改时间',
-						prop: 'CHANGEDATE'
+						label: '用印人机构',
+						prop: 'SEAL_DEPARTMENTDesc'
+					},
+					{
+						label: '归还时间',
+						prop: 'GHTIME'
+					},
+					{
+						label: '归还接收人',
+						prop: 'GHUSERDesc'
 					}
 				],
 				selUser: [],
-				productList: [],
+				USESEAL: [],
 				search: false,
 				show: false,
 				down: true,
@@ -212,46 +204,28 @@
 				isShow: false,
 				ismin: true,
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
-				searchList: { //点击高级搜索后显示的内容
-					PRO_NUM: '',
-					PRO_NAME: '',
-					VERSION: '',
-					DEPTID: ''
+                searchList: { //点击高级搜索后显示的内容
+                    WONUM:'',
+					PROXYNUM:'',
+					USER: '',
+					GHTIME:'',
+                    GHUSER: '',
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
 				resourceDialogisShow: false,
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
-				resourceProps: {
-					children: "subDepts",
-					label: "simplename"
-				},
-				PRODUCT: {}, //修改子组件时传递数据
 				page: { //分页显示
 					currentPage: 1,
 					pageSize: 10,
 					totalCount: 0
 				},
-		        selectData: [],
 			}
 		},
 		methods: {
 			//表头居中
 			rowClass({ row, rowIndex}) {
-			    // console.log(rowIndex) //表头行标号为0
 			    return 'text-align:center'
-			},
-			//机构值
-			getCompany() {
-				var type = "2";
-				var url = this.basic_url + '/api-user/depts/treeByType';
-				this.$axios.get(url, {
-					params: {
-						type: type
-					},
-				}).then((res) => {
-					this.selectData = res.data;
-				});
 			},
 			//表格滚动加载
 			loadMore() {
@@ -270,14 +244,6 @@
 			tableControle(data) {
 				this.checkedName = data;
 			},
-			//时间格式化  
-			dateFormat(row, column) {
-				var date = row[column.property];
-				if(date == undefined) {
-					return "";
-				}
-				return this.$moment(date).format("YYYY-MM-DD");
-			},
 			sizeChange(val) {
 				this.page.pageSize = val;
 				this.requestData();
@@ -288,44 +254,29 @@
 			},
 			//重置
 			resetbtn(){
-				this.searchList =  { //点击高级搜索后显示的内容
-					PRO_NUM: '',
-					PRO_NAME: '',
-					VERSION: '',
-					DEPTID: ''
+				this.searchList = {
+					WONUM:'',
+					PROXYNUM:'',
+					USER: '',
+					GHTIME:'',
+                    GHUSER: '',
 				};
 			},
 			//搜索
-			searchinfo() {
+			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
 				this.requestData();
 			},
-			//清空
-			reset() {
-				this.PRODUCT = {
-					PRO_NUM: '',
-					PRO_NAME: '',
-					STATUS: '活动',
-					VERSION: '1',
-					ENTERBY: '',
-					ENTERDATE: '',
-					CHANGEBY: '',
-					CHANGEDATE: ''
-				};
-				if(this.$refs['PRODUCT'] !== undefined) {
-					this.$refs['PRODUCT'].resetFields();
-				}
-			},
-			//添加
+			
+			//添加类别
 			openAddMgr() {
-				this.reset();
-				this.$refs.child.open();
-				this.$refs.child.visible();
+				this.$refs.usesealmask.open(); // 方法1
+				this.$refs.usesealmask.visible();
+				
 			},
-			//修改用戶
+			//修改类别
 			modify() {
-
 				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
@@ -339,14 +290,12 @@
 					});
 					return;
 				} else {
-					this.PRODUCT = this.selUser[0];
-					this.$refs.child.detail();
+					this.$refs.usesealmask.detail(this.selUser[0]);
 				}
 			},
 			//查看
 			 view(data) {
-			 	this.PRODUCT = data;
-				this.$refs.child.view();
+				this.$refs.usesealmask.view(data);
 			},
 			//高级查询
 			modestsearch() {
@@ -364,7 +313,7 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/product/deletes';
+					var url = this.basic_url + '/api-apps/app/sealUse/deletes';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -405,55 +354,54 @@
 
 					});
 				}
-			},
+            },
+            
 			// 导入
 			importData() {
 
 			},
 			// 导出
 			exportData() {
-           		var url = this.basic_url + '/api-apps/app/product/exportExc?access_token='+sessionStorage.getItem('access_token');
-          		 var xhr = new XMLHttpRequest();
-            	xhr.open('POST', url, true);
-            	xhr.responseType = "blob";
-            	xhr.setRequestHeader("client_type", "DESKTOP_WEB");
-            	xhr.onload = function() {
-                	if (this.status == 200) {
-						var filename = "product.xls";
-						var blob = this.response;
-						var link = document.createElement('a');
-						var objecturl = URL.createObjectURL(blob);
-						link.href = objecturl;
-						link.download = filename;
-						link.click();
-                	}
-            	}
-            	xhr.send();
+
 			},
 			// 打印
 			Printing() {
 
 			},
+			// 配置关系
+			Configuration() {
+				this.$router.push({
+					path: '/inspection_project'
+				});
+			},
 			judge(data) {
-				return data.STATUS == "1" ? '活动' : '不活动'
+				data.STATUS = data.STATUS == "1" ? '活动' : '不活动'
+			},
+			//时间格式化  
+			dateFormat(row, column) {
+				var date = row[column.property];
+				if(date == undefined) {
+					return "";
+				}
+				return this.$moment(date).format("YYYY-MM-DD");
 			},
 			SelChange(val) {
 				this.selUser = val;
 			},
-			requestData() {
+			requestData(index) {
 				var data = {
 					page: this.page.currentPage,
-					limit: this.page.pageSize,
-					PRO_NUM: this.searchList.PRO_NUM,
-					PRO_NAME: this.searchList.PRO_NAME,
-					VERSION: this.searchList.VERSION,
-					DEPTID: this.searchList.DEPTID,
-					// STATUS: this.searchList.STATUS,
+                    limit: this.page.pageSize,
+                    WONUM:this.searchList.WONUM,
+					PROXYNUM:this.searchList.PROXYNUM,
+					USER: this.searchList.USER,
+					GHTIME:this.searchList.GHTIME,
+                    GHUSER: this.searchList.GHUSER,
 				}
-				var url = this.basic_url + '/api-apps/app/product';
+				var url = this.basic_url + '/api-apps/app/sealUse';
 				this.$axios.get(url, {
 					params: data
-				}).then((res) => {
+				}).then((res) => {					
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -466,33 +414,31 @@
 					let newarr = []
 					for(var i = 1; i <= totalPage; i++) {
 						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+
 							for(var j = 0; j < this.commentArr[i].length; j++) {
 								newarr.push(this.commentArr[i][j])
 							}
 						}
 					}
-					this.productList = newarr;
+					this.USESEAL = newarr;
 				}).catch((wrong) => {})
 			},
 			handleNodeClick(data) {},
 			formatter(row, column) {
 				return row.enabled;
 			},
+			childByValue:function(childValue) {
+        		// childValue就是子组件传过来的值
+        		this.$refs.navsheader.showClick(childValue);
+      		},
+
 		},
 		mounted() {
 			this.requestData();
-			this.getCompany();
 		},
 	}
 </script>
 
-<style>
-input[type="text"], input[type="password"], textarea {
-    height: 35px;
-    padding: 0px 5px;
-    background-color: #FFFFFF;
-    border-radius: 0px;
-    border-left:none;
-    border: 1px solid #DFE5EA;
-}
+<style scoped>
+
 </style>

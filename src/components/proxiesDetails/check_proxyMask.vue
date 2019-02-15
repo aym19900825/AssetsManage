@@ -990,6 +990,7 @@
 				},
 			handleClick(tab, event) {
 //		        console.log(tab, event);
+
 		    },
 			iconOperation(row, column, cell, event) {
 				if(column.property === "iconOperation") {

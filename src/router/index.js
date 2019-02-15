@@ -42,14 +42,15 @@ import return_sample from '@/components/samples/return_sample'//样品管理-返
 import sample_disposal from '@/components/samples/sample_disposal'//样品管理-样品处置
 
 
-import workorders from '@/components/workorders'//工作任务单
+import workorders from '@/components/testworkcheck/workorders'//工作任务单
+import useseal_management from '@/components/testworkcheck/useseal_management'//用印管理
 import devices from '@/components/devices'//设备管理
 import inspection_project from '@/components/inspection_project'//检验/检测项目管理
 import test from '@/components/test'//检验/检测项目管理
 import files_search from '@/components/files_search'//文件查询
 import interfaces from '@/components/interfaces'//接口
 import reports from '@/components/reports/reports'//报表管理
-
+import reportfile from '@/components/reports/reportfile'//报表文件
 
 import inspect_proxy from '@/components/proxies/inspect_proxy'//检验委托书
 import check_proxy from '@/components/proxies/check_proxy'//检测委托书
@@ -311,6 +312,11 @@ Vue.use(Router)
       name: 'workorders',
       component: workorders
     },
+    {//用印管理
+      path: '/useseal_management',
+      name: 'useseal_management',
+      component: useseal_management
+    },
     {//设备管理
       path: '/devices',
       name: 'devices',
@@ -341,7 +347,11 @@ Vue.use(Router)
       name: 'reports',
       component: reports
     },
-    
+    {//报表管理
+      path: '/reportfile',
+      name: 'reportfile',
+      component: reportfile
+    },
     {//机构管理
       path: '/testing',
       name: 'testing',

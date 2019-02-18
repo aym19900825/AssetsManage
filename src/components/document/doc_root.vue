@@ -76,7 +76,8 @@
 										 	node-key="id"
 										 	lazy
 										 	:props="props"
-										 	@node-click="handleNodeClick">
+										 	@node-click="handleNodeClick"
+											v-if="treeShow">
 										</el-tree>
 									</div>
 								</div>
@@ -158,6 +159,7 @@
 		},
 		data() {
 			return {
+				treeShow: true,
 				chooseParam: {
 					selShow: false,
 					visible: false,
@@ -331,7 +333,12 @@
 							message: '新建成功',
 							type: 'success'
 						});
-						this.loadThisNode();
+						this.treeShow = false;
+						var that = this;
+						setTimeout(function(){
+							that.treeShow = true;
+						},500);
+						// this.loadThisNode();
 					}
 				})
 			},

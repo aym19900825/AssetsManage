@@ -835,7 +835,7 @@
 				this.statusshow1 = false;
 				this.statusshow2 = true;
 
-				//				$('.usernames .el-input__inner').attr('disabled',true);
+				//	$('.usernames .el-input__inner').attr('disabled',true);
 				var usersUrl = this.basic_url + '/api-user/users/currentMap';
 
 				this.$axios.get(usersUrl, {}).then((res) => {
@@ -861,9 +861,9 @@
 					}
 
 					//IP地址管理
-					for(var i = 0;i<res.data.IpList.length;i++){
-						res.data.IpList[i].isEditing = false;
-					}
+					// for(var i = 0;i<res.data.IpList.length;i++){
+					// 	res.data.IpList[i].isEditing = false;
+					// }
 					this.user = res.data;
 					this.user.sex = this.user.sex ? '男' : '女';
 					this.user.enabled = this.user.enabled ? '活动' : '不活动';
@@ -936,7 +936,6 @@
 				$(".mask_div").height(document.body.clientHeight - 60);
 				$(".mask_div").css("top", "60px");
 			},
-
 			rebackDialog() { //大弹出框还原成默认大小
 				this.isok1 = true;
 				this.isok2 = false;
@@ -948,7 +947,7 @@
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
 			},
 
-			//			保存users/saveOrUpdate
+			//	保存users/saveOrUpdate
 			save() {
 				var _this = this;
 				this.$refs.user.validate((valid) => {

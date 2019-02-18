@@ -1618,6 +1618,16 @@
 				this.noviews = false;
 				this.edit = true;
 				this.noedit = true;
+
+				var _this = this;
+				setTimeout(function(){
+					_this.docParm.model = 'view';
+					_this.docParm.appname = '年度计划';
+					_this.docParm.recordid = _this.WORKPLAN.ID;
+					_this.docParm.appid = 20;
+					_this.$refs.docTable.getData();
+				},100);
+
 				var url = this.basic_url + '/api-apps/app/workplan/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
 					this.WORKPLAN = res.data;

@@ -73,6 +73,7 @@
 										<el-tree ref="tree"
 										 	:render-content="renderContent" 
 										 	:load="loadNode"
+											:default-expanded-keys=treeIdSel
 										 	node-key="id"
 										 	lazy
 										 	:props="props"
@@ -160,6 +161,7 @@
 		data() {
 			return {
 				treeShow: true,
+				treeIdSel: [],
 				chooseParam: {
 					selShow: false,
 					visible: false,
@@ -337,7 +339,7 @@
 						var that = this;
 						setTimeout(function(){
 							that.treeShow = true;
-						},500);
+						},200);
 						// this.loadThisNode();
 					}
 				})
@@ -441,6 +443,8 @@
 				this.docId = data.id;
 				this.node = data;
 				this.parentNode = data.parent;
+				this.treeIdSel.indexOf(data.id)==-1?this.treeIdSel.push(data.id):this.treeIdSel.splice(this.treeIdSel.indexOf(data.id),1);
+				console.log(this.treeIdSel);
 				// this.refreshLazyTree();
 				this.getFileList();
 			},

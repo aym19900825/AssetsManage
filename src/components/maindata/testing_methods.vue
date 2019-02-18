@@ -433,7 +433,23 @@
 			},
 			// 导出
 			exportData() {
-
+           		var url = this.basic_url + '/api-apps/app/inspectionMet/exportExc?access_token='+sessionStorage.getItem('access_token');
+          		 var xhr = new XMLHttpRequest();
+            	xhr.open('POST', url, true);
+            	xhr.responseType = "blob";
+            	xhr.setRequestHeader("client_type", "DESKTOP_WEB");
+            	xhr.onload = function() {
+                	if (this.status == 200) {
+						var filename = "inspectionMet.xls";
+						var blob = this.response;
+						var link = document.createElement('a');
+						var objecturl = URL.createObjectURL(blob);
+						link.href = objecturl;
+						link.download = filename;
+						link.click();
+                	}
+            	}
+            	xhr.send();
 			},
 			// 打印
 			Printing() {

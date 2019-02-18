@@ -25,16 +25,13 @@
 								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
 								    <i class="icon-trash"></i>删除
 								</button>
-								<button type="button" class="btn btn-primarys button-margin">
+								<button type="button" class="btn btn-primarys button-margin" @click="exportData">
 								    <i class="icon-inventory-line-callout"></i>导出
 								</button>
-								<!-- <button type="button" class="btn btn-primarys button-margin">
-								    <i class="icon-edit"></i>编辑
-								</button> -->
-								<button type="button" class="btn btn-primarys button-margin">
+								<button type="button" class="btn btn-primarys button-margin" @click="releasebtn">
 								    <i class="icon-send"></i>发布
 								</button>
-								<button type="button" class="btn btn-primarys button-margin">
+								<button type="button" class="btn btn-primarys button-margin" @click="cancelbtn">
 								    <i class="icon-close1"></i>取消
 								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
@@ -165,9 +162,6 @@
 								</el-table-column>
 								<el-table-column label="年度" sortable width="80px" prop="YEAR" v-if="this.checkedName.indexOf('年度')!=-1">
 								</el-table-column>
-								</el-table-column>
-								<!-- <el-table-column label="录入人" sortable width="210px" prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
-								</el-table-column> -->
 								<el-table-column label="类型" sortable  width="100px" prop="TYPE" v-if="this.checkedName.indexOf('类型')!=-1">
 								</el-table-column>
 								<el-table-column label="产品类别" sortable width="100px" prop="ITEMTYPE" v-if="this.checkedName.indexOf('产品类别')!=-1">
@@ -231,7 +225,6 @@
 					'描述',
 					'年度',
 					'类型',
-					// '录入人',
 					'产品类别',
 					'提出单位',
 					'提报日期',
@@ -275,10 +268,6 @@
 						label: '执行状态',
 						prop: 'LEADER_STATUSDesc'
 					},
-					// {
-					// 	label: '录入人',
-					// 	prop: 'ENTERBY'
-					// },
 					{
 						label: '录入时间',
 						prop: 'ENTERDATE'
@@ -359,7 +348,7 @@
 		      this.page.currentPage = val;
 		      this.requestData();
 		    },
-		    	resetbtn(){
+		    resetbtn(){
 				this.searchList =  { //点击高级搜索后显示的内容
 					WP_NUM: '',
 					DESCRIPTION: '',
@@ -376,12 +365,12 @@
 				this.page.pageSize = 10;
 				this.requestData();
 			},
-			//添加用戶
+			//添加
 			openAddMgr() {
 				// this.$refs.child.resetNew();
 				this.$refs.child.visible();
 			},
-			//修改用戶
+			//修改
 			modify() {
 				if(this.selUser.length == 0) {
 					this.$message({
@@ -438,13 +427,143 @@
                         cancelButtonText: '取消',
                     }).then(({ value }) => {
                         this.$axios.delete(url, {params: data}).then((res) => {
-                        	console.log(res.data);
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '删除成功',
 									type: 'success'
 								});
 								this.requestData();
+							}else{
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'warning'
+								});
+							}
+						}).catch((err) => {
+							this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+						});
+                    }).catch(() => {
+
+                	});
+				}
+			},
+			// 导出
+			exportData() {
+           		var url = this.basic_url + '/api-apps/app/workplan/exportExc?access_token='+sessionStorage.getItem('access_token');
+          		 var xhr = new XMLHttpRequest();
+            	xhr.open('POST', url, true);
+            	xhr.responseType = "blob";
+            	xhr.setRequestHeader("client_type", "DESKTOP_WEB");
+            	xhr.onload = function() {
+                	if (this.status == 200) {
+						var filename = "workplan.xls";
+						var blob = this.response;
+						var link = document.createElement('a');
+						var objecturl = URL.createObjectURL(blob);
+						link.href = objecturl;
+						link.download = filename;
+						link.click();
+                	}
+            	}
+            	xhr.send();
+			},
+			//发布
+			releasebtn(){
+				var selData = this.selUser;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请您选择要发布的数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					//releaseid为id的数组
+					var releaseid = [];
+					var ids;
+					for (var i = 0; i < changeUser.length; i++) {
+						releaseid.push(changeUser[i].ID);
+					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = releaseid.toString(',');
+                    // var data = {
+					// 	ids: ids,
+					// }
+					var url = this.basic_url + '/api-apps/app/workplan/operate/release?ids='+ids;
+					
+					this.$confirm('确定发布此数据吗？', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                    }).then(({ value }) => {
+                        this.$axios.get(url, {}).then((res) => {
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '发布成功',
+									type: 'success'
+								});
+								this.requestData();
+							}else{
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'warning'
+								});
+							}
+						}).catch((err) => {
+							this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+						});
+                    }).catch(() => {
+
+                	});
+				}
+			},
+			//取消
+			cancelbtn(){
+				var selData = this.selUser;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请您选择要取消的数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					//cancelid为id的数组
+					var cancelid = [];
+					var ids;
+					for (var i = 0; i < changeUser.length; i++) {
+						cancelid.push(changeUser[i].ID);
+					}
+					//ids为cancelid数组用逗号拼接的字符串
+					ids = cancelid.toString(',');
+                    // var data = {
+					// 	ids: ids,
+					// }
+					var url = this.basic_url + '/api-apps/app/workplan/operate/cancel?ids='+ids;
+					
+					this.$confirm('确定发布此数据吗？', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                    }).then(({ value }) => {
+                        this.$axios.get(url, {}).then((res) => {
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '取消成功',
+									type: 'success'
+								});
+								this.requestData();
+							}else{
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'warning'
+								});
 							}
 						}).catch((err) => {
 							this.$message({
@@ -471,8 +590,6 @@
 				this.selUser = val;
 			},
 			requestData(index) {
-				console.log(this.searchList.STATUS);
-				console.log(this.searchList.ENTERDATE);
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -489,7 +606,6 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(res.data);
 					for(var i=0;i<res.data.data.length;i++){
 						if(res.data.data[i].TYPE  == '1'){
 							res.data.data[i].TYPE  = '监督抽查';
@@ -542,8 +658,6 @@
 				this.requestData();
 			},
 			handleNodeClick(data) {
-				console.log(data);
-				console.log(data.label);
 				if(data.label == '监督抽查'){
 					this.searchList.TYPE =  '1';
 				}else if(data.label == '质量抽查'){

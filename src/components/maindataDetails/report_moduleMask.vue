@@ -258,7 +258,16 @@
 				this.noedit = true;//表单内容
 				this.views = true;//录入修改人信息
 				this.noviews = false;//按钮
-				this.show = true;				
+				this.show = true;
+
+				var _this = this;
+				setTimeout(function(){
+					_this.docParm.model = 'view';
+					_this.docParm.appname = '检验检测项目_原始数据模板';
+					_this.docParm.recordid = _this.CATEGORY.ID;
+					_this.docParm.appid = 17;
+					_this.$refs.docTable.getData();
+				},100);				
 			},
 			iconOperation(row, column, cell, event){//切换Table-操作列中的修改、保存
 				if(column.property ==="iconOperation"){

@@ -15,7 +15,7 @@
 				<div class="fixed-table-toolbar clearfix">
 					<div class="bs-bars pull-left">
 						<div class="hidden-xs" id="roleTableToolbar" role="group">
-							<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+							<button type="button" class="btn btn-green" @click="openAddMgr">
 	                        	<i class="icon-add"></i>添加
 	              			 </button>
 							<button type="button" class="btn btn-blue button-margin" @click="modify">
@@ -64,20 +64,31 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :data="userList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+						<el-table :data="reportsList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'reportsList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 							</el-table-column>
-							<el-table-column label="组织机构代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('组织机构代码')!=-1">
+							<el-table-column label="代码" width="200" sortable prop="code" v-if="this.checkedName.indexOf('代码')!=-1">
 							</el-table-column>
-							<el-table-column label="单位名称" width="200" sortable prop="NAME" v-if="this.checkedName.indexOf('单位名称')!=-1">
+							<el-table-column label="报表名称" width="200" sortable prop="name" v-if="this.checkedName.indexOf('报表名称')!=-1">
 							</el-table-column>
-							<el-table-column label="联系电话" sortable prop="PHONE" v-if="this.checkedName.indexOf('联系电话')!=-1">
+							<el-table-column label="id" sortable prop="id" v-if="this.checkedName.indexOf('id')!=-1">
 							</el-table-column>
-							<el-table-column label="联系地址" sortable prop="CONTACT_ADDRESS" v-if="this.checkedName.indexOf('联系地址')!=-1">
+							<el-table-column label="报表文件" sortable prop="file" v-if="this.checkedName.indexOf('报表文件')!=-1">
+							</el-table-column>
+							</el-table-column>
+							<el-table-column label="备注" sortable prop="remarks"v-if="this.checkedName.indexOf('备注')!=-1">
+							</el-table-column>
+							<el-table-column label="类型" sortable prop="type"v-if="this.checkedName.indexOf('类型')!=-1">
 							</el-table-column>						
-							<el-table-column label="信息状态" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
-							</el-table-column>
-						</el-table>
+							<el-table-column label="录入人" sortable prop="createby" v-if="this.checkedName.indexOf('录入人')!=-1">
+							</el-table-column>	
+							<el-table-column label="录入时间" sortable prop="createdate" v-if="this.checkedName.indexOf('录入时间')!=-1">
+							</el-table-column>	
+							<el-table-column label="修改人" sortable prop="updateby" v-if="this.checkedName.indexOf('修改人')!=-1">
+							</el-table-column>	
+						
+							<el-table-column label="修改日期" sortable prop="updatedate" v-if="this.checkedName.indexOf('修改日期')!=-1">
+							</el-table-column>	
 						<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
 				            @size-change="sizeChange"
 				            @current-change="currentChange"
@@ -88,11 +99,13 @@
 				            :total="page.totalCount">
 				        </el-pagination>
 						<!-- 表格 End-->
+						</el-table>
 					</el-col>
 				</el-row>
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
+		<reportmask ref="child"  @request="requestData" ></reportmask>
 	</div>
 </div>
 </template>
@@ -102,64 +115,76 @@
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_header from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
+	import reportmask from '../reportDetails/reportConfigurationMask.vue'
 	export default {
-		name: 'user_management',
+		name: 'report',
 		components: {
 			vheader,
 			navs_left,
 			navs_header,
 			tableControle,
+			reportmask
 		},
 		data() {
 			return {
 				basic_url: Config.dev_url,
-				dataUrl: '/api/api-user/users',
-				searchData: {
-			        page: 1,
-			        limit: 10,//分页显示数
-			        nickname: '',
-			        enabled: '',
-			        searchKey: '',
-			        searchValue: '',
-			        companyId: '',
-			        deptId: ''
-		        },
 				checkedName: [
-					'组织机构代码',
-					'单位名称',
-					'性别',
-					'联系电话',
-					'联系地址',
-					'信息状态'
+					'代码',
+					'报表名称',
+					'id',
+					'报表文件',
+					'备注',
+					'类型',
+					'录入人',
+					'录入时间',
+					'修改人',
+					'修改日期'
 				],
 				tableHeader: [
 					{
-						label: '组织机构代码',
+						label: '代码',
 						prop: 'username'
 					},
 					{
-						label: '单位名称',
+						label: '报表名称',
 						prop: 'nickname'
 					},
 					{
-						label: '联系电话',
-						prop: 'telephone'
+						label: 'id',
+						prop: 'id'
 					},
 					{
-						label: '联系地址',
+						label: '报表文件',
 						prop: 'deptName'
 					},
 					{
-						label: '信息状态',
-						prop: 'enabled'
-					}
+						label: '备注',
+						prop: 'remarks'
+					},
+					{
+						label: '类型',
+						prop: 'type'
+					},
+					{
+						label: '录入人',
+						prop: 'createby'
+					},
+					{
+						label: '录入时间',
+						prop: 'createdate'
+					},
+					{
+						label: '修改人',
+						prop: 'updateby'
+					},
+					{
+						label: '修改日期',
+						prop: 'updatedate'
+					},
+					
 				],
-				companyId: '',
-				deptId: '',
 				selUser: [],
-				'启用': true,
-				'冻结': false,
-				userList: [],
+				reportsList: [],
 				search: false,
 				show: false,
 				down: true,
@@ -172,21 +197,11 @@
 					enabled: '',
 					createTime: ''
 				},
-				//tree
-				resourceData: [], //数组，我这里是通过接口获取数据，
-				resourceDialogisShow: false,
-				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
-				resourceProps: {
-					children: "subDepts",
-					label: "simplename"
-				},
-				userData:[],
 				page: {//分页显示
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
-				aaaData:[],
 			}
 		},
 		methods: {
@@ -201,33 +216,31 @@
 		      this.page.currentPage = val;
 		      this.requestData();
 		    },
-			searchinfo(index) {
+			searchinfo() {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
 				this.requestData();
 			},
-			//添加用戶
+			//添加
 			openAddMgr() {
-//				this.$refs.child.resetNew();
 				this.$refs.child.visible();
 			},
 			//修改用戶
 			modify() {
-				this.aaaData = this.selUser;
-				if(this.aaaData.length == 0) {
+				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要修改的用户',
 						type: 'warning'
 					});
 					return;
-				} else if(this.aaaData.length > 1) {
+				} else if(this.selUser.length > 1) {
 					this.$message({
 						message: '不可同时修改多个用户',
 						type: 'warning'
 					});
 					return;
 				} else {
-					this.$refs.child.detail();
+					this.$refs.child.detail(this.selUser[0].id);
 				}
 			},
 			//高级查询
@@ -252,9 +265,8 @@
 					});
 					return;
 				} else {
-					var changeUser = selData[0];
-					var id = changeUser.id;
-					var url = this.basic_url + '/api-user/users/' + id;
+					var id = selData[0].id;
+					var url = this.basic_url + '/api-report/report/' + id;
 					this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -284,10 +296,7 @@
 			Printing() {
 				
 			},
-			judge(data) {
-				//taxStatus 布尔值
-				return data.enabled ? '启用' : '冻结'
-			},
+			
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -310,18 +319,10 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					nickname: this.searchList.nickname,
-					enabled: this.searchList.enabled,
-					searchKey: 'createTime',
-					searchValue: this.searchList.createTime,
-					companyId: this.companyId,
-					deptId: this.deptId
 				}
-				var url = this.basic_url + '/api-user/users';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					this.userList = res.data.data;
+				var url = this.basic_url + '/api-report/report';
+				this.$axios.get(url, {params: data}).then((res) => {
+					this.reportsList = res.data.data;
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
 				

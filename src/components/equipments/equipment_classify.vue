@@ -67,8 +67,8 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="父级分类" prop="PARENT" label-width="80px">
-										<el-input v-model="searchList.PARENT"></el-input>
+									<el-form-item label="父级分类" prop="PARENTDesc" label-width="80px">
+										<el-input v-model="searchList.PARENTDesc"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="4">
@@ -81,7 +81,7 @@
 					<!-- 高级查询划出 End-->
 					<el-row :gutter="0">
 						<el-col :span="24">
-							 <tree_grid :columns="columns" :tree-structure="true" :data-source="categoryList"  ></tree_grid>
+							 <tree_grid :columns="columns" :tree-structure="true" :data-source="categoryList" v-on:childByValue="classByValue"></tree_grid>
 
 							<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
@@ -144,7 +144,7 @@
 			          },
 			          {
 			            text: '父级分类',
-			            dataIndex: 'PARENT',
+			            dataIndex: 'PARENTDesc',
 			            isShow:true,
 			          },
 			          {
@@ -239,6 +239,12 @@
 				}
 
 			},
+			classByValue: function (childValue) {
+		        // childValue就是子组件传过来的
+		        this.selUser = childValue
+//		        this.selMenu[0].hidden ? '1' : '0'
+		        
+		    },
 			//添加类别
 			openAddMgr() {
 				this.reset();
@@ -262,7 +268,7 @@
 					return;
 				} else {
 					this.CATEGORY = this.selUser[0];
-					this.$refs.categorymask.detail();
+					this.$refs.categorymask.detail(this.selUser[0]);
 				}
 			},
 			//查看
@@ -319,7 +325,7 @@
 							}
 						}).catch((err) => {
 							this.$message({
-								message: '网络错误，请重试',
+								message: '网络错误，请重试1',
 								type: 'error'
 							});
 						});
@@ -413,7 +419,7 @@
 					this.categoryList = res.data.datas;
 				}).catch((wrong) => {
 					this.$message({
-						message: '网络错误，请重试',
+						message: '网络错误，请重试2',
 						type: 'error'
 					})
 				})

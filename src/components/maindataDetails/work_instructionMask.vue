@@ -293,7 +293,16 @@
 				this.noedit = true;//表单内容
 				this.views = true;//录入修改人信息
 				this.noviews = false;//按钮
-				this.show = true;				
+				this.show = true;	
+				
+				var _this = this;
+				setTimeout(function(){
+					_this.docParm.model = 'view';
+					_this.docParm.appname = '作业指导书';
+					_this.docParm.recordid = _this.WORK_INSTRUCTION.ID;
+					_this.docParm.appid = 10;
+					_this.$refs.docTable.getData();
+				},100);
 			},
 			//点击修订按钮
 			modifyversion(WORK_INSTRUCTION) {

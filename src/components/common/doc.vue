@@ -1,18 +1,18 @@
 <template>
 <div>
     <div class="table-func">
-        <form method="post" id="file" action="" enctype="multipart/form-data" style="float: left;" v-show="docParm.model!='new'">
+        <form method="post" id="file" action="" enctype="multipart/form-data" style="float: left;" v-show="docParm.model=='edit'">
             <el-button type="warn" size="mini" round class="a-upload">
                 <i class="el-icon-upload2"></i>
                 <font>上传</font>
-                <input id="excelFile" type="file" name="uploadFile" @change="upload" v-if="docParm.model!='new'"/>
+                <input id="excelFile" type="file" name="uploadFile" @change="upload" v-if="docParm.model=='edit'"/>
             </el-button>
         </form>
         <el-button type="warn" size="mini" round class="a-upload" @click="uploadTip" v-show="docParm.model=='new'">
             <i class="el-icon-upload2"></i>
             <font>上传</font>
         </el-button>
-        <el-button type="error" size="mini" @click="download" round  style="margin-left: 10px;">
+        <el-button type="error" size="mini" @click="download" round  style="margin-left: 10px;" v-if="docParm.model=='edit'">
             <i class="el-icon-download"></i>
             <font>下载</font>
         </el-button>
@@ -20,7 +20,7 @@
             <i class="el-icon-download"></i>
             <font>测试上传</font>
         </el-button> -->
-        <el-button type="error" size="mini" @click="delFile" round>
+        <el-button type="error" size="mini" @click="delFile" round v-if="docParm.model=='edit'">
             <i class="el-icon-delete"></i>
             <font>删除行</font>
         </el-button>
@@ -43,8 +43,9 @@
             fixed="right"
             label="操作"
             width="100">
-            <template slot-scope="scope">
+            <template slot-scope="scope" v-if="docParm.model=='edit'">
                 <el-button @click="showAuth(scope.row)" type="text" size="small">关键字</el-button>
+                <el-button @click="readAuth(scope.row)" type="text" size="small">查看</el-button>
             </template>
         </el-table-column>
     </el-table>
@@ -88,6 +89,7 @@ export default {
             },
             basic_url: Config.dev_url,
             file_url: Config.file_url,
+            po_url:Config.po_url,//pageoffice 服务路径
             doc: [],
             fileList: [],
             selFiles: [],
@@ -116,6 +118,19 @@ export default {
             this.param.fileid = row.fileid;
             this.$refs.keyword.getData();
 			this.$refs.keyword.requestData();
+        },
+        readAuth(row){
+
+            var url = this.po_url+"/show?filename=" +row.filename
+                        + '&fileid=' +  row.fileid
+                        + '&userid=' +  this.docParm.userid
+                        + '&username=' + this.docParm.username
+                        + '&deptid=' + this.docParm.deptid
+                        + '&deptfullname=' + this.docParm.deptfullname
+                        + '&recordid=' + this.docParm.recordid
+                        + '&appname=' + this.docParm.appname
+                        + '&appid=' + this.docParm.appid;
+             window.open(url); 
         },
         uploadTip(){
             this.tipSaveShow = true;

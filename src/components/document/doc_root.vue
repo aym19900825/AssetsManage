@@ -26,9 +26,9 @@
 								<!-- <button type="button" class="btn btn-blue button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改文件夹
 								</button> -->
-								<button type="button" class="btn btn-red button-margin" @click="delDir">
+								<!-- <button type="button" class="btn btn-red button-margin" @click="delDir">
 								    <i class="icon-trash"></i>删除文件夹
-								</button>
+								</button> -->
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 						    		<i class="icon-search"></i>高级查询
 						    		<i class="icon-arrow1-down" v-show="down"></i>
@@ -71,12 +71,14 @@
 								<div class="left_treebg" :style="{height: fullHeight}">
 									<div class="p15" v-if="ismin">
 										<el-tree ref="tree"
-										 :render-content="renderContent" 
-										 :load="loadNode"
-										 node-key="id"
-										 lazy
-										 :props="props"
-										 @node-click="handleNodeClick">
+										 	:render-content="renderContent" 
+										 	:load="loadNode"
+											:default-expanded-keys=treeIdSel
+										 	node-key="id"
+										 	lazy
+										 	:props="props"
+										 	@node-click="handleNodeClick"
+											v-if="treeShow">
 										</el-tree>
 									</div>
 								</div>
@@ -158,6 +160,8 @@
 		},
 		data() {
 			return {
+				treeShow: true,
+				treeIdSel: [],
 				chooseParam: {
 					selShow: false,
 					visible: false,
@@ -331,7 +335,12 @@
 							message: '新建成功',
 							type: 'success'
 						});
-						this.loadThisNode();
+						this.treeShow = false;
+						var that = this;
+						setTimeout(function(){
+							that.treeShow = true;
+						},200);
+						// this.loadThisNode();
 					}
 				})
 			},
@@ -383,14 +392,59 @@
 					}
 				})
 			},
+			append(node, data) {
+				const newChild = { id: 56, label: 'testtest'};
+				node.childNodes.push(newChild);
+			},
+
+			remove(node, data) {
+				const parent = node.parent;
+				const children = parent.childNodes || parent.data;
+				const index = children.findIndex(d => d.id === data.id);
+				
+				var url = this.file_url + '/file/deletePath/' + node.data.id;
+				this.$confirm('确定删除此文件夹吗？', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+				}).then(({ value }) => {
+					this.$axios.delete(url, {}).then((res) => {
+						if(res.data.code == 1) {
+							children.splice(index, 1);
+							this.$message({
+								message: '删除成功',
+								type: 'success'
+							});
+						}else{
+							this.$message({
+								message: res.data.message,
+								type: 'error'
+							});
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+				}).catch(() => {});
+			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
-				return (<span><i class={data.iconClass}></i><span>{node.label}</span></span>)
+				return (
+					<span class="custom-tree-node" style=" display: block; width: 100%;">
+						<span style="display: block; float: left; margin-top: 3px;">{node.label}</span>
+						<span style="display: block;float: right;">
+							<el-button size="mini" icon="icon-trash" type="text" on-click={ () => this.remove(node, data) }></el-button>
+						</span>
+					</span>
+				);
 			},
 			handleNodeClick(data){
 				this.page.currentPage = 1;
 				this.docId = data.id;
 				this.node = data;
 				this.parentNode = data.parent;
+				this.treeIdSel.indexOf(data.id)==-1?this.treeIdSel.push(data.id):this.treeIdSel.splice(this.treeIdSel.indexOf(data.id),1);
+				console.log(this.treeIdSel);
 				// this.refreshLazyTree();
 				this.getFileList();
 			},
@@ -424,13 +478,13 @@
 			loadNode(node, resolve, opt, param) {
 				if(opt == 'loadThisNode'){
 					var pathList = param;
+					// this.node.doCreateChildren(pathList)
 					return this.resolve(pathList);
 				}
 				this.resolve = resolve;
 				let that = this;
 				var url = that.file_url + '/file/pathList';
 				var pathid = 2;
-				console.log(node);
 				if(node.level === 0){
 					pathid = 0;
 				}else{
@@ -449,6 +503,7 @@
 								pathList[i].id =  pathList[i].pathid;
 								pathList[i].name = pathList[i].foldername;
 							}
+							// this.node.doCreateChildren(pathList);
 							return resolve(pathList);
 						});
 					}, 1000);
@@ -475,7 +530,6 @@
 						m.iconClass = 'icon-file-normal';
 					}
 				}
-				// this.handleNodeClick();
 			},
 			expandClick: function(m) {
 				if(m.iconClass != 'icon-file-text') {
@@ -527,11 +581,6 @@
 				this.down = !this.down,
 					this.up = !this.up
 			},
-			// refreshLazyTree(node, children) {
-			// 	var theChildren = node.childNodes
-			// 	theChildren.splice(0, theChildren.length)
-			// 	this.loadNode();
-			// },
 			findTreeId(parentid,chooseData){
 				var data = chooseData;
 				for(var i=0; i<data.length; i++){
@@ -547,34 +596,35 @@
 			},
 			// 删除
 			delDir() {
-				var parentid = this.node.parentid;
-				this.findTreeId(parentid, this.$refs.tree._data.root.childNodes);
-				console.log(this.$refs);
-				return;
-				var url = this.file_url + '/file/deletePath/' + this.docId;
-				this.$confirm('确定删除此文件夹吗？', '提示', {
-					confirmButtonText: '确定',
-					cancelButtonText: '取消',
-				}).then(({ value }) => {
-					this.$axios.delete(url, {}).then((res) => {
-						if(res.data.code == 1) {
-							this.$message({
-								message: '删除成功',
-								type: 'success'
-							});
-						}else{
-							this.$message({
-								message: res.data.message,
-								type: 'error'
-							});
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
-					});
-				}).catch(() => {});
+				const parent = this.node.parent;
+				const children = parent.data.children || parent.data;
+				const index = children.findIndex(d => d.id === data.id);
+				children.splice(index, 1);
+
+				// var url = this.file_url + '/file/deletePath/' + this.docId;
+				// this.$confirm('确定删除此文件夹吗？', '提示', {
+				// 	confirmButtonText: '确定',
+				// 	cancelButtonText: '取消',
+				// }).then(({ value }) => {
+				// 	this.$axios.delete(url, {}).then((res) => {
+				// 		if(res.data.code == 1) {
+				// 			this.$message({
+				// 				message: '删除成功',
+				// 				type: 'success'
+				// 			});
+				// 		}else{
+				// 			this.$message({
+				// 				message: res.data.message,
+				// 				type: 'error'
+				// 			});
+				// 		}
+				// 	}).catch((err) => {
+				// 		this.$message({
+				// 			message: '网络错误，请重试',
+				// 			type: 'error'
+				// 		});
+				// 	});
+				// }).catch(() => {});
 			},
 			SelChange(val) {//选中值后赋值给一个自定义的数组：selMenu
 				this.selMenu = val;

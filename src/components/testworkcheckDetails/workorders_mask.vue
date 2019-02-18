@@ -157,7 +157,13 @@
 												<el-input-number type="number" v-model.number="workorderForm.ITEM_QUALITY" @change="handleChangeQuality" :min="1" :max="1000" label="描述文字" style="width: 100%" :disabled="noedit"></el-input-number>
 											</el-form-item>
 										</el-col>
-
+										<el-col :span="8" >
+											<el-form-item label="承检单位" prop="CJDW"  label-width="110px">
+												<el-select clearable v-model="workorderForm.CJDW" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit"  @change="RVENDORSelect($event)">
+													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+												</el-select>
+											</el-form-item>
+										</el-col>
 									</el-row>
 								</el-collapse-item>
 								<!-- 样品信息列表 End-->
@@ -236,21 +242,23 @@
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
-												<el-form-item label="样品承接人(专业组)" label-width="150px">
-													<!-- <el-select v-model="workorderForm.ITEM_PROFESSIONAL_GROUP" style="width: 100%">
-														<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.nickname"></el-option>
-													</el-select> -->
-													<el-input v-model="workorderForm.ITEM_PROFESSIONAL_GROUP" :disabled="edit">
+												<!-- <el-form-item label="样品承接人(专业组)" label-width="150px"> -->
+													<!-- <el-input v-model="workorderForm.ITEM_PROFESSIONAL_GROUP" :disabled="edit">
 														<el-button slot="append" icon="el-icon-search" @click="addperson('2')" :disabled="noedit"></el-button>
-													</el-input>
-												</el-form-item>
+													</el-input> -->
+													<el-form-item label="样品承接人(专业组)" prop="ITEM_PROFESSIONAL_GROUP"  label-width="150px">
+														<el-select clearable v-model="workorderForm.ITEM_PROFESSIONAL_GROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit"
+														>
+															<el-option v-for="(data,index) in maingroup" :key="index" :value="data.id" :label="data.fullname"></el-option>
+														</el-select>
+													</el-form-item>
 											</el-col>
 										</el-row>
 
 										<el-row>
 											<el-col :span="8">
 												<el-form-item label="样品承接日期">
-													<el-date-picker v-model="workorderForm.UNDERTAKE_DATE" type="date" placeholder="请选择完成日期" value-format="yyyy-MM-dd" style="width: 100%;":disabled="noedit">
+													<el-date-picker v-model="workorderForm.UNDERTAKE_DATE" type="date" placeholder="请选择完成日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
 													</el-date-picker>
 												</el-form-item>
 											</el-col>
@@ -305,16 +313,16 @@
 											</el-col>
 											<el-col :span="8">
 												<el-form-item label="样品承接人">
-													<el-select v-model="workorderForm.ITEM_UNDERTAKE_USER" style="width: 100%" :disabled="noedit">
-														<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.nickname"></el-option>
-													</el-select>
+													<el-input v-model="workorderForm.ITEM_UNDERTAKE_USER" :disabled="edit">
+														<el-button slot="append" icon="el-icon-search" @click="addperson('sampleget')" :disabled="noedit"></el-button>
+													</el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
 												<el-form-item label="专业技术/质量负责人" label-width="150px">
-													<el-select v-model="workorderForm.PROFESSIONAL" style="width: 100%" :disabled="noedit">
-														<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.username"></el-option>
-													</el-select>
+													<el-input v-model="workorderForm.PROFESSIONAL" :disabled="edit">
+														<el-button slot="append" icon="el-icon-search" @click="addperson('qualityperson')" :disabled="noedit"></el-button>
+													</el-input>
 												</el-form-item>
 											</el-col>
 										</el-row>
@@ -577,7 +585,17 @@
 							            	</el-table>
 										</el-tab-pane>
 									</el-tabs>
+									<div class="pt10">
+										<el-row>
+											<el-col :span="24">
+												<el-form-item label="备注" prop="MEMO" label-width="45px">
+													<el-input type="textarea" :row="3" v-model="workorderForm.MEMO" :disabled="noedit"></el-input>
+												</el-form-item>
+											</el-col>
+										</el-row>
+									</div>
 								</div>
+								
 								<!-- 录入人信息 Begin-->
 								<el-collapse-item title="其他" name="7" v-show="views">
 									<el-row >
@@ -621,8 +639,8 @@
 					</el-form>
 				</div>
 			</div>
-			<!--主检员 Begin-->
-			<el-dialog :modal-append-to-body="false" title="主检员" :visible.sync="dialogVisible2" width="80%">
+			<!--人员信息 Begin-->
+			<el-dialog :modal-append-to-body="false" title="人员信息" :visible.sync="dialogVisible2" width="80%">
 				<div class="scrollbar" style="max-height: 400px;">
 					<el-table :data="userList" border stripe :header-cell-style="rowClass"  style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore('user')">
 						<el-table-column type="selection" width="55" fixed align="center">
@@ -763,7 +781,7 @@
 			// 	ENTERDATE: '',//录入日期
 			// },
 			search:'',
-			selectData:[],//获取接收人、承接人、负责人
+			selectData:[],//承检单位
 			Select_ITEM_STATUS:[],//获取样品信息-样品状态
 			Select_ITEM_SOURCE:[],//获取样品信息-样品来源
 			Select_COMPLETE_MODE:[],//获取样品信息-完成方式
@@ -806,6 +824,7 @@
 				isEditing: true,
 				modulenum:'s',
 				username:'',
+				maingroup:[]//专业组
 			};
 		},
 		methods: {
@@ -820,6 +839,7 @@
 					PARENT_NUM: '',//父任务单编号
 					IS_MAIN: '',//是否主任务单？
 					MASTER_INSPECTOR: '',//主检员
+					CJDW:'',//承检单位
 					STATE: '',//信息状态
 					STATUS: '',//状态
 					WONUM: '',//工作任务单编号
@@ -872,9 +892,7 @@
 			},
 			iconOperation(row, column, cell, event) {
 				if(column.property === "iconOperation") {
-
 					row.isEditing = !row.isEditing;
-
 				}
 			},
 			handleClick(tab, event) {
@@ -916,6 +934,7 @@
 				this.workorderForm.ITEMNUM = value;//样品名称
 			},
 			addperson(num){
+				this.getuser();
 				this.numtips = num;
 				this.dialogVisible2 = true;
 			},
@@ -932,14 +951,42 @@
 					});
 				}else{
 					if(this.numtips == '1'){
-						this.workorderForm.MASTER_INSPECTOR = this.selMenu[0].username;
+						this.workorderForm.MASTER_INSPECTOR = this.selMenu[0].nickname;
 					}else if(this.numtips == '2'){
-						this.workorderForm.ITEM_PROFESSIONAL_GROUP = this.selMenu[0].username;
+						this.workorderForm.ITEM_PROFESSIONAL_GROUP = this.selMenu[0].nickname;
 					}else if(this.numtips == '3'){
-						this.workorderForm.RETURN_ITEM_USER = this.selMenu[0].username;
+						this.workorderForm.RETURN_ITEM_USER = this.selMenu[0].nickname;
+					}else if(this.numtips == 'sampleget'){
+						this.workorderForm.ITEM_UNDERTAKE_USER = this.selMenu[0].nickname;
+					}else if(this.numtips == 'qualityperson'){
+						this.workorderForm.PROFESSIONAL = this.selMenu[0].nickname;
 					}
 					this.dialogVisible2 = false;
+					this.getuser();
 				}
+			},
+			getCompany() {
+				var type = "2";
+				var url = this.basic_url + '/api-user/depts/treeByType';
+				this.$axios.get(url, {
+					params: {
+						type: type
+					},
+				}).then((res) => {
+					this.selectData = res.data;
+				});
+			},
+			//承检单位带出样品承接人(专业组)
+			RVENDORSelect(RVENDORid){
+				var url = this.basic_url + '/api-user/depts/findByPid/'+RVENDORid;
+					this.$axios.get(url, {}).then((res) => {
+						this.maingroup = res.data;
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
 			},
 			 //模版编号
             templateNumber(item){
@@ -1377,8 +1424,7 @@
 					setTimeout(() => {
 					this.loadSign = true;
 					}, 1000)
-					
-						this.getuser();
+					this.getuser();
 			    }
 			},	
 			
@@ -1387,8 +1433,11 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				}
+				console.log('===================');
+				console.log(this.workorderForm.CJDW);
+				console.log('===================');
 				 //用户
-				this.$axios.get(this.basic_url + '/api-user/users', {
+				this.$axios.get(this.basic_url + '/api-user/users?deptId='+this.workorderForm.CJDW, {
 					params: data
 				}).then((res) => {
 					console.log(res);
@@ -1428,6 +1477,7 @@
 			this.getITEM_CHECK_STATUS();//页面打开加载-样品检后状态
 			this.getITEM_MANAGEMENT();//页面打开加载-样品处置
 			this.getuser();//用户
+			this.getCompany();
 		},
 	}
 </script>

@@ -36,8 +36,8 @@
 									</el-row>
 									<el-row :gutter="5" class="pt10">
 										<el-col :span="6">
-											<el-form-item label="提出单位" prop="PROP_UNIT"  label-width="85px">
-												<el-select clearable v-model="WORKPLAN.PROP_UNIT" filterable allow-create default-first-option placeholder="请选择"  :disabled="noedit">
+											<el-form-item label="提出单位" prop="PROP_UNITDesc"  label-width="85px">
+												<el-select clearable v-model="WORKPLAN.PROP_UNITDesc" filterable allow-create default-first-option placeholder="请选择"  :disabled="noedit">
 													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 												</el-select>
 											</el-form-item>
@@ -814,15 +814,14 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-				WORKPLAN:{
-				},
+				WORKPLAN:{},
 				inspectionList_child: {
 					 WORLPLANLINE_BASISList:[],
 					 WORLPLANLINE_PROJECTList:[]
 				},
 				
 				rules: {
-					PROP_UNIT:[{required: true,validator: validateUnit, trigger: 'change'}],//提出单位 
+					PROP_UNITDesc:[{required: true,validator: validateUnit, trigger: 'change'}],//提出单位 
 					basisList:[{required: true,validator: validateBasislist,trigger: 'change'}],//产品类别
 					DESCRIPTION:[{required: true,trigger: 'blur',validator: this.Validators.isFillTips}],
 
@@ -1161,10 +1160,11 @@
 				}
 			},
 			addproduct(item){//产品名称按钮
-				this.requestProname();
-				this.requestnum = '2';
-				this.dialogVisible4 = true;
-				this.proindex = item;
+				if(this.WORKPLAN.ITEMTYPE)
+					this.requestProname();
+					this.requestnum = '2';
+					this.dialogVisible4 = true;
+					this.proindex = item;
 			},
 			addproname(){//产品名称弹框确定选中数据
 				if(this.selUser.length == 0){
@@ -1312,9 +1312,16 @@
 				}).catch((wrong) => {})
 			},
 			addprobtn(){
-				this.dialogVisible3 = true;
-				this.requestnum = '1';
-				this.requesCategory();
+				if(this.WORKPLAN.PROP_UNITDesc == null||this.WORKPLAN.PROP_UNITDesc == undefined || this.WORKPLAN.PROP_UNITDesc == ''){
+					this.$message({
+						message: '请先选择提出单位',
+						type: 'warning'
+					});
+				}else{
+					this.dialogVisible3 = true;
+					this.requestnum = '1';
+					this.requesCategory();
+				}
 			},
 			//企业名称
 			requestDeptname(){
@@ -1354,7 +1361,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				this.$axios.get(this.basic_url + '/api-apps/app/productType2?DEPTID='+this.WORKPLAN.PROP_UNIT, {
+				this.$axios.get(this.basic_url + '/api-apps/app/productType2?DEPTID='+this.WORKPLAN.PROP_UNITDesc, {
 					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;
@@ -1551,12 +1558,14 @@
 					for(var i = 0; i<res.data.WORLPLANLINEList.length; i++){
 							res.data.WORLPLANLINEList[i].isEditing = false;
 					}
+					console.log(3333344444);
+					console.log(res.data);
 					this.WORKPLAN = res.data;
-					for(var j=0;j<this.selectData.length;j++){
-						if(this.WORKPLAN.PROP_UNIT==this.selectData[j].id){
-							this.WORKPLAN.PROP_UNIT=this.selectData[j].fullname
-						}
-					}
+					// for(var j=0;j<this.selectData.length;j++){
+					// 	if(this.WORKPLAN.PROP_UNIT == this.selectData[j].id){
+					// 		this.WORKPLAN.PROP_UNITDesc = this.selectData[j].fullname
+					// 	}
+					// }
 					this.worlplanlist = res.data.WORLPLANLINEList;
 					var worlplanlist = res.data.WORLPLANLINEList;
 					for(var i=0, len=worlplanlist.length; i<len; i++){
@@ -1592,14 +1601,12 @@
 				var type = "2";
 				var url = this.basic_url + '/api-user/depts/treeByType?id='+this.WORKPLAN.PROP_UNIT;
 				this.$axios.get(url, {
-					// params: {
-					// 	type: type
-					// },
+
 				}).then((res) => {
 					this.selectData = res.data;
 				});
 				console.log(233333333);
-				console.log(this.WORKPLAN.PROP_UNIT);
+				console.log(this.WORKPLAN);
 				this.viewtitle = false;
 				this.addtitle = false;
 				this.modifytitle = true;
@@ -1690,13 +1697,22 @@
 									return false;
 								}else{
 									if(!this.isEditList){
-										if(typeof(this.WORKPLAN.PROP_UNIT) != 'undefined') {
-											for(var j=0;j<this.selectData.length;j++){
-												if(this.WORKPLAN.PROP_UNIT==this.selectData[j].fullname){
-													this.WORKPLAN.PROP_UNIT=this.selectData[j].id
-												}
-											}		
-										}
+										// if(typeof(this.WORKPLAN.PROP_UNITDesc) != 'undefined') {
+										// 	console.log(4444445555);
+										// 	console.log(this.selectData);
+										// 	for(var j=0;j<this.selectData.length;j++){
+										// 		console.log(this.selectData[j].fullname);
+										// 		console.log(this.selectData[j].id);
+										// 		console.log(this.WORKPLAN.PROP_UNITDesc);
+										// 		if(this.WORKPLAN.PROP_UNITDesc == this.selectData[j].fullname){
+										// 			this.WORKPLAN.PROP_UNIT = this.selectData[j].id;
+										// 		}
+										// 	}
+										// 	console.log('======');
+										// 	console.log(this.WORKPLAN.PROP_UNIT);	
+										// 	console.log('======');	
+										// }
+										this.WORKPLAN.PROP_UNIT = this.WORKPLAN.PROP_UNITDesc;
 										this.WORKPLAN.WORLPLANLINEList = this.worlplanlist;
 										var url = this.basic_url +'/api-apps/app/workplan/saveOrUpdate';
 										this.$axios.post(url, this.WORKPLAN).then((res) => {

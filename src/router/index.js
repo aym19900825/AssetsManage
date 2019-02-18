@@ -43,6 +43,8 @@ import sample_disposal from '@/components/samples/sample_disposal'//样品管理
 
 
 import workorders from '@/components/testworkcheck/workorders'//工作任务单
+import testingdata from '@/components/testworkcheck/testingdata'//检验/检测数据
+import testingreport from '@/components/testworkcheck/testingreport'//检验/检测报告
 import useseal_management from '@/components/testworkcheck/useseal_management'//用印管理
 import devices from '@/components/devices'//设备管理
 import inspection_project from '@/components/inspection_project'//检验/检测项目管理
@@ -311,6 +313,16 @@ Vue.use(Router)
       path: '/workorders',
       name: 'workorders',
       component: workorders
+    },
+    {//检验/检测数据
+      path: '/testingdata',
+      name: 'testingdata',
+      component: testingdata
+    },
+    {//检验/检测报告
+      path: '/testingreport',
+      name: 'testingreport',
+      component: testingreport
     },
     {//用印管理
       path: '/useseal_management',

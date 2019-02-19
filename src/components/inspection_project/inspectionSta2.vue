@@ -220,17 +220,17 @@
 				})
 			},
 			loadMore () {//表格滚动加载
-			   // if (this.loadSign) {
-			   //   this.loadSign = false
-			   //   this.page.currentPage++
-			   //   if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			   //     return
-			   //   }
-			   //   setTimeout(() => {
-			   //     this.loadSign = true
-			   //   }, 1000)
-			   //   this.requestData_inspectionSta2()
-			   // }
+			   if (this.loadSign) {
+			     this.loadSign = false
+			     this.page.currentPage++
+			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+			       return
+			     }
+			     setTimeout(() => {
+			       this.loadSign = true
+			     }, 1000)
+			     this.requestData_inspectionSta2()
+			   }
 			 },
 			 addprobtn(row){//查找基础数据中的检验/检测标准
 			 	this.catedata = row;//弹出框中选中的数据赋值给到table行中
@@ -387,7 +387,7 @@
 			addfield_inspectionSta2(PRO_NUM) { //插入行到产品类别Table中
 				if (this.parentId == 1) {
 					this.$message({
-						message:'请选择所属产品类别',
+						message:'请选择所属产品',
 						type:'warning'
 					})
 				} else {

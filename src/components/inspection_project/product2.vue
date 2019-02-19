@@ -118,7 +118,7 @@
 		</div>
 		<!--搜索框 End-->
 		<!-- 第二层弹出的表格 Begin-->
-		<el-table :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.PRO_NAME.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+		<el-table :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.PRO_NAME.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" >
 			<el-table-column type="selection" fixed width="55" align="center">
 			</el-table-column>
 			<el-table-column label="产品编码" width="155" sortable prop="PRO_NUM">
@@ -377,21 +377,24 @@
 			},
 			addfield_product2(NUM) { //插入行到产品类型Table中
 				var isEditingflag=false;
-				//console.log(this.product2Form.inspectionList);
-				for(var i=0;i<this.product2Form.inspectionList.length; i++){
-					if (this.product2Form.inspectionList[i].isEditing==false){
-						isEditingflag=false;
-					}else{
-                        isEditingflag=true;
-                        break;
+				if(Array.isArray(this.product2Form.inspectionList)){
+					for(var i=0;i<this.product2Form.inspectionList.length; i++){
+						if (this.product2Form.inspectionList[i].isEditing==false){
+							isEditingflag=false;
+						}else{
+	                        isEditingflag=true;
+	                        break;
+						}
 					}
+				}else{
+					this.product2Form.inspectionList = [];
 				}
+				
 				if (isEditingflag==false){
                 	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
                 		var currentUser, currentDatee;
 						this.currentUser=res.data.nickname;
 						var date=new Date();
-						console.log(this.currentDept);
 						this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 						var obj = {
 							"NUM": this.parentId,//所属类别编号

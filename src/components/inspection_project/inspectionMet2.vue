@@ -406,6 +406,7 @@
 					})
 				} else {
 					var isEditingflag=false;
+					console.log(this.inspectionMet2Form.inspectionList);
 					for(var i=0;i<this.inspectionMet2Form.inspectionList.length; i++){
 						if (this.inspectionMet2Form.inspectionList[i].isEditing==false){
 							isEditingflag=false;
@@ -414,6 +415,7 @@
 	                        break;
 						}
 					}
+					
 					if (isEditingflag==false){
 	                	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 	                		var currentUser, currentDate

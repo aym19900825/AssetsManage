@@ -11,9 +11,9 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button type="button" class="btn btn-green" @click="audit">
+								<!-- <button type="button" class="btn btn-green" @click="audit">
                                 	<i class="icon-add"></i>审核
-                      			</button>
+                      			</button> -->
 								<button type="button" class="btn btn-primarys button-margin" >
 						    		<i class="icon-search"></i>高级查询
 								</button>
@@ -70,15 +70,21 @@
 								</el-table-column>
 								<el-table-column label="数据id" sortable width="140px" prop="bizid" v-if="this.checkedName.indexOf('数据id')!=-1">
 								</el-table-column>
+								<el-table-column label="单据号" sortable prop="bizNum" v-if="this.checkedName.indexOf('单据号')!=-1">
+									<template slot-scope="scope">
+										<p class="blue" title="点击查看详情" @click="audit">{{scope.row.bizNum}}
+										</p>
+									</template>
+								</el-table-column>
 								<el-table-column label="App" sortable width="140px" prop="app" v-if="this.checkedName.indexOf('App')!=-1">
 								</el-table-column>
-								<el-table-column label="当前环节" sortable width="140px" prop="name" v-if="this.checkedName.indexOf('当前环节')!=-1">
+								<el-table-column label="当前环节" sortable prop="name" v-if="this.checkedName.indexOf('当前环节')!=-1">
 								</el-table-column>
-								<el-table-column label="应用" sortable width="140px" prop="appDesc" v-if="this.checkedName.indexOf('App')!=-1">
+								<el-table-column label="应用" sortable prop="appDesc" v-if="this.checkedName.indexOf('应用')!=-1">
 								</el-table-column>
-								<el-table-column label="单据号" sortable width="140px" prop="bizNum" v-if="this.checkedName.indexOf('当前环节')!=-1">
+								<el-table-column label="任务状态" sortable width="100px" align="center" prop="state" v-if="this.checkedName.indexOf('任务状态')!=-1">
 								</el-table-column>
-								<el-table-column label="创建时间" sortable width="140px" prop="createTime" v-if="this.checkedName.indexOf('当前环节')!=-1">
+								<el-table-column label="创建时间" sortable width="160px" prop="createTime" v-if="this.checkedName.indexOf('创建时间')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
@@ -116,9 +122,10 @@ export default {
 					'数据id',
 					'App',
 					'当前环节',
-					'创建时间',
 					'应用',
 					'单据号',
+					'任务状态',
+					'创建时间',
 					],
 		tableHeader: [{
 			label: '数据id',
@@ -139,6 +146,10 @@ export default {
 		{
 			label: '单据号',
 			prop: 'bizNum'
+		},
+		{
+			label: '任务状态',
+			prop: 'state'
 		},
 		{
 			label: '创建时间',
@@ -175,11 +186,11 @@ export default {
 					});
 					return;
 				} else {
-					console.log(this.selUser[0]);
-					console.log(this.selUser[0].bizMenuUrl);
+					// console.log(this.selUser[0]);
+					// console.log(this.selUser[0].bizMenuUrl);
 					this.$router.push({path:this.selUser[0].bizMenuUrl ,query: { bizId: this.selUser[0].bizId,}});
 					this.$store.dispatch('setMenuIdAct',this.selUser[0].bizFirstMenuId);
-					console.log(this.$store.state.menuid);
+					// console.log(this.$store.state.menuid);
 			    }
 		},
 		//点击的数据

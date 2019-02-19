@@ -1153,8 +1153,8 @@
 				this.noedit = false;
 			},
 			//点击修订按钮
-			modifyversion(dataInfo) {
-				this.$refs[dataInfo].validate((valid) => {
+			modifyversion() {
+				this.$refs.dataInfo.validate((valid) => {
 					if(valid) {
 						var datainfo=JSON.stringify(this.datainfo); 
 	 					var dataInfo=JSON.stringify(this.dataInfo);

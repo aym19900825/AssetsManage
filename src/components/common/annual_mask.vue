@@ -36,9 +36,9 @@
 									</el-row>
 									<el-row :gutter="5" class="pt10">
 										<el-col :span="6">
-											<el-form-item label="提出单位" prop="PROP_UNITDesc"  label-width="85px">
-												<el-select clearable v-model="WORKPLAN.PROP_UNITDesc" filterable allow-create default-first-option placeholder="请选择"  :disabled="noedit">
-													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+											<el-form-item label="提出单位" prop="PROP_UNIT"  label-width="85px">
+												<el-select clearable v-model="WORKPLAN.PROP_UNIT" placeholder="请选择"  :disabled="noedit">
+													<el-option v-for="data in selectData" :key="data.id" :value="data.id" :label="data.fullname"></el-option>
 												</el-select>
 											</el-form-item>
 										</el-col>
@@ -821,7 +821,7 @@
 				},
 				
 				rules: {
-					PROP_UNITDesc:[{required: true,validator: validateUnit, trigger: 'change'}],//提出单位 
+					PROP_UNIT:[{required: true,validator: validateUnit, trigger: 'change'}],//提出单位 
 					basisList:[{required: true,validator: validateBasislist,trigger: 'change'}],//产品类别
 					DESCRIPTION:[{required: true,trigger: 'blur',validator: this.Validators.isFillTips}],
 
@@ -1312,7 +1312,7 @@
 				}).catch((wrong) => {})
 			},
 			addprobtn(){
-				if(this.WORKPLAN.PROP_UNITDesc == null||this.WORKPLAN.PROP_UNITDesc == undefined || this.WORKPLAN.PROP_UNITDesc == ''){
+				if(this.WORKPLAN.PROP_UNIT == null||this.WORKPLAN.PROP_UNIT == undefined || this.WORKPLAN.PROP_UNIT == ''){
 					this.$message({
 						message: '请先选择提出单位',
 						type: 'warning'
@@ -1361,7 +1361,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				this.$axios.get(this.basic_url + '/api-apps/app/productType2?DEPTID='+this.WORKPLAN.PROP_UNITDesc, {
+				this.$axios.get(this.basic_url + '/api-apps/app/productType2?DEPTID='+this.WORKPLAN.PROP_UNIT, {
 					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;
@@ -1630,11 +1630,11 @@
 				var url = this.basic_url + '/api-apps/app/workplan/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
 					this.WORKPLAN = res.data;
-					for(var j=0;j<this.selectData.length;j++){
-						if(this.WORKPLAN.PROP_UNIT==this.selectData[j].id){
-							this.WORKPLAN.PROP_UNIT=this.selectData[j].fullname
-						}
-					}
+					// for(var j=0;j<this.selectData.length;j++){
+					// 	if(this.WORKPLAN.PROP_UNIT==this.selectData[j].id){
+					// 		this.WORKPLAN.PROP_UNIT=this.selectData[j].fullname
+					// 	}
+					// }
 					this.worlplanlist = res.data.WORLPLANLINEList;
 					var worlplanlist = res.data.WORLPLANLINEList;
 					for(var i=0, len=worlplanlist.length; i<len; i++){
@@ -1712,7 +1712,7 @@
 										// 	console.log(this.WORKPLAN.PROP_UNIT);	
 										// 	console.log('======');	
 										// }
-										this.WORKPLAN.PROP_UNIT = this.WORKPLAN.PROP_UNITDesc;
+										// this.WORKPLAN.PROP_UNIT = this.WORKPLAN.PROP_UNITDesc;
 										this.WORKPLAN.WORLPLANLINEList = this.worlplanlist;
 										var url = this.basic_url +'/api-apps/app/workplan/saveOrUpdate';
 										this.$axios.post(url, this.WORKPLAN).then((res) => {

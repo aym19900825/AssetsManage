@@ -303,18 +303,18 @@
 			
 			//表格滚动加载
 			loadMore () {
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page.currentPage++
-			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     this.requestData()
-//			     console.log('到底了', this.page.currentPage)
-			   }
+// 			   if (this.loadSign) {
+// 			     this.loadSign = false
+// 			     this.page.currentPage++
+// 			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+// 			       return
+// 			     }
+// 			     setTimeout(() => {
+// 			       this.loadSign = true
+// 			     }, 1000)
+// 			     this.requestData()
+// //			     console.log('到底了', this.page.currentPage)
+// 			   }
 			 },
 			tableControle(data) {//控制表格列显示隐藏
 				this.checkedName = data;

@@ -528,10 +528,10 @@
 					SN: [{ required: true, message: '必填', trigger: 'blur' }],
 					TYPE: [{ required: true, trigger: 'blur', message: '必填'}],//类别
 					QUATITY: [{ required: true, trigger: 'blur', validator: this.Validators.isInteger}],
-					ACCEPTDATE: [{ type: 'date', required: true, message: '请选择', trigger: 'change' }],
-					ACCEPT_DATE: [{ type: 'date', required: true, message: '请选择', trigger: 'change' }],
-					RECIP_DATE: [{ type: 'date', required: true, message: '请选择', trigger: 'change' }],
-					STATUSDATE: [{ type: 'date', required: true, message: '请选择', trigger: 'change' }],
+					ACCEPTDATE: [{required: true, message: '请选择', trigger: 'change' }],
+					ACCEPT_DATE: [{required: true, message: '请选择', trigger: 'change' }],
+					RECIP_DATE: [{ required: true, message: '请选择', trigger: 'change' }],
+					STATUSDATE: [{required: true, message: '请选择', trigger: 'change' }],
 					MODEL: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//型号
 					OTHER: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//其它资料
 					MEMO: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//备注

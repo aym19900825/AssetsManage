@@ -89,7 +89,7 @@
 										<el-col :span="8" >
 											<el-form-item label="承检单位" prop="R_VENDOR"  label-width="110px">
 												<el-select clearable v-model="dataInfo.R_VENDOR" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit"  @change="RVENDORSelect($event)">
-													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+													<el-option v-for="data in selectData" :key="data.code" :value="data.code" :label="data.fullname"></el-option>
 												</el-select>
 											</el-form-item>
 										</el-col>
@@ -553,15 +553,15 @@
 										<el-col :span="8">
 											<el-form-item label="主检组" prop="MAINGROUP"  label-width="110px">
 											<el-select clearable v-model="dataInfo.MAINGROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @change="getmaingroup($event)" @visible-change="visablemaingroup($event)" >
-												<el-option v-for="(data,index) in maingroup" :key="index" :value="data.id" :label="data.fullname"></el-option>
+												<el-option v-for="data in maingroup" :key="data.id" :value="data.id" :label="data.fullname"></el-option>
 											</el-select>
 										</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="主检负责人" prop="LEADER" label-width="110px">
-													<el-select clearable v-model="dataInfo.LEADER" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @visible-change="visableleader($event)" >
-												<el-option v-for="(data,index) in leaderdata" :key="index" :value="data.id" :label="data.username"></el-option>
-											</el-select>
+												<el-select clearable v-model="dataInfo.LEADER" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @visible-change="visableleader($event)" >
+													<el-option v-for="data in leaderdata" :key="data.id" :value="data.id" :label="data.username"></el-option>
+												</el-select>
 											</el-form-item>
 										</el-col>
 									</el-row>	
@@ -614,7 +614,7 @@
 						<div class="el-dialog__footer" v-show="noviews">
 							<el-button type="primary" @click="saveAndUpdate">保存</el-button>
 							<el-button type="success"  v-show="addtitle" @click="saveAndSubmit">保存并继续</el-button>
-							<el-button v-show="modifytitle" type="btn btn-primarys" @click="modifyversion">修订</el-button>
+							<el-button v-show="modifytitle" type="primary" class="btn-primarys" @click="modifyversion">修订</el-button>
 							<el-button @click='close'>取消</el-button>
 						</div>
 						<div class="el-dialog__footer" v-show="views">
@@ -1133,6 +1133,7 @@
 			
 			// 这里是修改
 			detail(dataid) {
+				
 				this.dataid=dataid;
 				var usersUrl = this.basic_url + '/api-user/users/currentMap'
 				this.$axios.get(usersUrl, {}).then((res) => {
@@ -1156,8 +1157,8 @@
 				this.noedit = false;
 			},
 			//点击修订按钮
-			modifyversion(dataInfo) {
-				this.$refs[dataInfo].validate((valid) => {
+			modifyversion() {
+				this.$refs.dataInfo.validate((valid) => {
 					if(valid) {
 						var datainfo=JSON.stringify(this.datainfo); 
 	 					var dataInfo=JSON.stringify(this.dataInfo);
@@ -1176,26 +1177,26 @@
 										message: '修订成功',
 										type: 'success'
 									});
+									this.show = false;
 									//重新加载数据
 									this.$emit('request');
-									this.show = false;
 								}else{
-								this.show = true;
-								if(res.data.resp_code == 1) {
-									//res.data.resp_msg!=''后台返回提示信息
-									if( res.data.resp_msg!=''){
-									 	this.$message({
-											message: res.data.resp_msg,
-											type: 'warning'
-									 	});
-									}else{
-										this.$message({
-											message:'相同数据不可重复修订！',
-											type: 'warning'
-										});
+									this.show = true;
+									if(res.data.resp_code == 1) {
+										//res.data.resp_msg!=''后台返回提示信息
+										if( res.data.resp_msg!=''){
+											this.$message({
+												message: res.data.resp_msg,
+												type: 'warning'
+											});
+										}else{
+											this.$message({
+												message:'相同数据不可重复修订！',
+												type: 'warning'
+											});
+										}
 									}
-								}
-							}		
+								}		
 							}).catch((err) => {
 								this.$message({
 									message: '网络错误，请重试',
@@ -1359,6 +1360,9 @@
 			        	}else{
 //							this.dataInfo.ITEM_STATUS=this.dataInfo.ITEM_STATUS==1;
 //							this.dataInfo.MESSSTATUS= this.dataInfo.MESSSTATUS==1;//信息状态
+							// this.dataInfo.R_VENDOR = this.dataInfo.R_VENDORDesc;
+							// this.dataInfo.MAINGROUP = this.dataInfo.MAINGROUPDesc;
+							// this.dataInfo.LEADER = this.dataInfo.LEADERDesc;
 							var url = this.basic_url + '/api-apps/app/inspectPro/saveOrUpdate';
 							this.$axios.post(url, this.dataInfo).then((res) => {
 								if(res.data.resp_code == 0) {
@@ -1585,10 +1589,13 @@
 					},
 				}).then((res) => {
 					this.selectData = res.data;
+					console.log(2333333333);
+					console.log(this.selectData);
 				});
 			},
 		},
 		mounted() {
+			console.log(1234567890);
 			this.getCompany();
 		},
 	}

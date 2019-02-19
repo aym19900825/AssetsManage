@@ -712,7 +712,7 @@
 						isEditing: true
 					};
 					this.user.qualifications.push(obj);
-					console.log(typeof(this.user.qualifications));
+					// console.log(typeof(this.user.qualifications));
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',

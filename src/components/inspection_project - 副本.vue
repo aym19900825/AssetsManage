@@ -166,6 +166,7 @@
 	import product2child from './inspection_project/product2.vue'//产品名称
 	import inspectionSta2child from './inspection_project/inspectionSta2.vue'//检验/检测标准
 	import inspectionPro2child from './inspection_project/inspectionPro2.vue'//检验/检测项目
+
 	import professionGrochild from './inspection_project/professionGro.vue'//专业组
 	import inspectionMet2child from './inspection_project/inspectionMet2.vue'//检验/检测方法
 	import rawDataTem2child from './inspection_project/rawDataTem2.vue'//原始数据模板
@@ -180,6 +181,7 @@
 			product2child,//产品名称
 			inspectionSta2child,//检验/检测标准
 			inspectionPro2child,//检验/检测项目
+
 			professionGrochild,//专业组
 			inspectionMet2child,//检验/检测方法
 			rawDataTem2child,//原始数据模板
@@ -277,6 +279,7 @@
 			// 		})
 			// 	})
 			// },
+
 			loadMore () {//表格滚动加载
 			   if (this.loadSign) {
 			     this.loadSign = false
@@ -290,6 +293,7 @@
 			     this.requestData_productType2()
 			   }
 			 },
+
 			 addprobtn(row){//查找基础数据中的类别名称
 			 	this.catedata = row;//弹出框中选中的数据赋值给到table行中
 				this.dialogVisible3 = true;
@@ -371,6 +375,7 @@
 					}).catch(error => {
 						console.log('请求失败');
 					})
+
 				 }).catch((err) => {
 	                this.$message({
 	                    message: '网络错误，请重试',
@@ -378,6 +383,7 @@
 	                });
 	            });
 			},
+
 			requestData_productType2(val) {//加载数据
 				var _this = this;
 				var data = {
@@ -413,6 +419,7 @@
 					}
 					
 					this.productType2Form.inspectionList = newarr;//滚动加载更多
+
 					//默认主表第一条数据
 					if(this.productType2Form.inspectionList.length > 0){
 						this.viewchildRow(this.productType2Form.inspectionList[0].ID,this.productType2Form.inspectionList[0].NUM);
@@ -420,6 +427,7 @@
 						this.viewchildRow('null');
 					}
 					
+
 					this.$refs.singleTable.setCurrentRow(this.productType2Form.inspectionList[0]);//默认选中第一条数据
 				}).catch((wrong) => {})
 			},
@@ -435,7 +443,6 @@
 				return row.enabled;
 			},
 			addfield_productType2() { //插入行到产品类别Table中
-				
 				var isEditingflag=false;
 				for(var i=0;i<this.productType2Form.inspectionList.length; i++){
 					if (this.productType2Form.inspectionList[i].isEditing==false){
@@ -530,6 +537,7 @@
 						});
 					});
                 }).catch(() => {
+
             	});
 			},
 			addproclass() { //小弹出框确认按钮事件
@@ -565,6 +573,7 @@
 	padding-left: 15px;
 	padding-right: 15px;
 }
+
 .el-table td {
     padding-top: 0px;
     padding-bottom: 0px;
@@ -574,6 +583,7 @@
 	top: 0px;
     right: 0px;
 }
+
 .el-table .cell {
     display: inline-block;
 	cursor: pointer;

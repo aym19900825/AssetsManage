@@ -278,7 +278,9 @@ export default {
     top: 0;
     opacity: 0;
     filter: alpha(opacity=0);
-    cursor: pointer
+    cursor: pointer;
+    width: 80px;
+    cursor: pointer;
 }
 .upload-btn{
     color: #fff;
@@ -289,6 +291,7 @@ export default {
     height: 34px;
     line-height: 28px;
     border: none;
+    cursor: pointer;
 }
 .pageLeft{
     float: right;

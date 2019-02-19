@@ -809,6 +809,7 @@
 				//判断启动流程和审批的按钮是否显示
 				var url = this.basic_url + '/api-apps/app/workNot/flow/isStart/'+dataid;
 					this.$axios.get(url, {}).then((res) => {
+						console.log(res);
 					  if(res.data.resp_code==1){
 							this.start=true;
 							this.approval=false;

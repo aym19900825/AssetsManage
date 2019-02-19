@@ -501,7 +501,16 @@
 				this.views = true;//录入修改人信息
 				this.noviews = false;//按钮
 				// this.dataInfo = data;
-				this.show = true;				
+				this.show = true;	
+				
+				var _this = this;
+				setTimeout(function(){
+					_this.docParm.model = 'view';
+					_this.docParm.appname = '期间核查计划';
+					_this.docParm.recordid = _this.dataInfo.ID;
+					_this.docParm.appid = 52;
+					_this.$refs.docTable.getData();
+				},100);
 			},
 			//点击关闭按钮
 			close() {

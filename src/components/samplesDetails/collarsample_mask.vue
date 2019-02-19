@@ -396,14 +396,14 @@
 						{trigger: 'blur', validator: this.Validators.isNickname}
 					],
 					ACCEPT_DATE: [//收样时间
-						{ type: 'date', required: true, message: '请选择', trigger: 'change' }
+						{required: true, message: '请选择', trigger: 'change' }
 					],
 					GRANT_PERSON: [//领样人
 						{ required: true, message: '必填', trigger: 'blur' },
 						{trigger: 'blur', validator: this.Validators.isNickname}
 					],
 					GRANT_DATE: [//领样时间
-						{ type: 'date', required: true, message: '请选择', trigger: 'change' }
+						{ required: true, message: '请选择', trigger: 'change' }
 					],
 					OTHER: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//其它资料
 					MEMO: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//备注
@@ -663,7 +663,6 @@
 									message: '保存成功',
 									type: 'success'
 								});
-								// this.show = false;
 								//重新加载数据
 								this.$emit('request');
 								// this.$refs["samplesForm"].resetFields();
@@ -674,7 +673,10 @@
 								type: 'error'
 							});
 						});
+						console.log(23333);
+						console.log(this.falg);
 						this.falg = true;
+						console.log(this.falg);
 					} else {
 						this.show = true;
 						this.$message({
@@ -687,7 +689,10 @@
 			},
 			saveAndUpdate(samplesForm){
 				this.save(samplesForm);
+				console.log(11111);
+				console.log(this.falg);
 				if(this.falg){
+					console.log(this.falg);
 					this.show = false;
 				}
 				// this.$emit('request');

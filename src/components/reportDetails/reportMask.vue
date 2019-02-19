@@ -35,14 +35,21 @@
 		<!-- 表格 End-->
 		</el-table>
   </el-dialog>
+  <!--报表-->
+			<reportiframe ref="reportchild"></reportiframe>
  </div>
 </template>
 
 <script>
+	
 	import Config from '../../config.js';
+	import reportiframe from'../common/report_iframe.vue';
 	export default {
 		name: 'report',
 		 props:["reportData"],//第一种方式
+		components: {
+			reportiframe
+		},
 	    data(){
 	    	return{
 	    		basic_url: Config.dev_url,
@@ -89,8 +96,13 @@
 					var url = this.basic_url + '/api-apps/app/'+this.appname+'/reportParams/'+id;
 					this.$axios.get(url, {}).then((res) => {
 						console.log(res);
-//						this.reportsList = res.data.datas;
-//						this.innerVisible = true;
+						console.log(res.data.datas);
+						if(res.data.datas==null){
+							 this.$refs.reportchild.visible();
+							 this.close();
+						}else{
+							
+						}
 					}).catch((wrong) => {
 						this.$message({
 								message: '网络错误，请重试',

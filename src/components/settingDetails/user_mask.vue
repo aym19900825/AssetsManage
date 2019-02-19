@@ -524,8 +524,6 @@
 				value: '',
 				editSearch: '',
 				edit: true, //禁填
-				'男': true,
-				'女': false,
 				show: false,
 				isok1: true,
 				isok2: false,
@@ -838,7 +836,7 @@
 				this.statusshow1 = false;
 				this.statusshow2 = true;
 
-				//				$('.usernames .el-input__inner').attr('disabled',true);
+				//	$('.usernames .el-input__inner').attr('disabled',true);
 				var usersUrl = this.basic_url + '/api-user/users/currentMap';
 
 				this.$axios.get(usersUrl, {}).then((res) => {
@@ -864,11 +862,11 @@
 					}
 
 					//IP地址管理
-					for(var i = 0;i<res.data.IpList.length;i++){
-						res.data.IpList[i].isEditing = false;
-					}
+					// for(var i = 0;i<res.data.IpList.length;i++){
+					// 	res.data.IpList[i].isEditing = false;
+					// }
 					this.user = res.data;
-					this.user.sex = this.user.sex ? '男' : '女';
+					this.user.sex = this.user.sex=1? '男' : '女';
 					this.user.enabled = this.user.enabled ? '活动' : '不活动';
 					this.user.ispermit = this.user.ispermit == '1' ? '是' : '否';
 					this.user.islogin = this.user.islogin == '1' ? '是' : '否';
@@ -939,7 +937,6 @@
 				$(".mask_div").height(document.body.clientHeight - 60);
 				$(".mask_div").css("top", "60px");
 			},
-
 			rebackDialog() { //大弹出框还原成默认大小
 				this.isok1 = true;
 				this.isok2 = false;
@@ -951,7 +948,7 @@
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
 			},
 
-			//			保存users/saveOrUpdate
+			//	保存users/saveOrUpdate
 			save() {
 				var _this = this;
 				this.$refs.user.validate((valid) => {
@@ -960,6 +957,7 @@
 						_this.user.ispermit = _this.user.ispermit == '是' ? '1' : '2';
 						_this.user.islogin = _this.user.islogin == '是' ? '1' : '2';
 						var user = _this.user;
+						console.log();
 						user.sex = user.sexName == '男' ? 1 : 0;
 						var roleId = "";
 						if(typeof(user.roleId) != 'undefind' && user.roleId.length > 0) {

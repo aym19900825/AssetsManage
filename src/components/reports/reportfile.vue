@@ -69,6 +69,10 @@
 							</el-table-column>
 							
 							<el-table-column label="报表名称" width="200" sortable prop="name" v-if="this.checkedName.indexOf('报表名称')!=-1">
+								<template slot-scope="scope">
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.name}}
+										</p>
+									</template>
 							</el-table-column>
 							<el-table-column label="录入人" sortable prop="createby" v-if="this.checkedName.indexOf('录入人')!=-1">
 							</el-table-column>	
@@ -191,6 +195,10 @@
 				} else {
 					this.$refs.child.detail(this.selUser[0].id);
 				}
+			},
+			 view(){
+//				this.$refs.categorymask.view();
+				this.$refs.reportchild.visible();
 			},
 			//高级查询
 			modestsearch() {

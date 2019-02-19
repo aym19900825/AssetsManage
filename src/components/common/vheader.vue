@@ -235,6 +235,7 @@ a .userimgs {border:2px solid #DFE5EA;}
 a:hover .userimgs {border:2px solid #9153f1;}
 .userimgs {width:16px; height:16px; margin-right:9px; border-radius:3px;}
 
+.el-badge { cursor: pointer;}
 .lingdang{
     display: inline-block;
 } 

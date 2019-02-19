@@ -324,7 +324,12 @@
 				this.$axios.get(url, {params: data}).then((res) => {
 					this.reportsList = res.data.data;
 					this.page.totalCount = res.data.count;
-				}).catch((wrong) => {})
+				}).catch((wrong) => {
+					this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+				})
 				
 			},
 			loadMore () {

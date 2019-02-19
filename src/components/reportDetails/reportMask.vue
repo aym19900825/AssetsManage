@@ -1,8 +1,13 @@
 <template>
 	<div>
 	<el-dialog :modal-append-to-body="false" title="报表" :visible.sync="innerVisible" width="60%">
+		<div class="">
+			<button type="button" class="btn btn-green" @click="runReport">
+        		<i class="icon-add"></i>运行报表
+			</button>	
+		</div>
   		<el-table :data="reportsList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'reportsList', order: 'descending'}" @selection-change="SelChange">
-			<el-table-column type="selection" width="55" ">
+			<el-table-column type="selection" width="55">
 			</el-table-column>
 			<el-table-column label="代码" width="200" sortable prop="code">
 			</el-table-column>
@@ -43,6 +48,7 @@
 	    		basic_url: Config.dev_url,
 	    		innerVisible: false,
 	    		reportsList: [],
+	    		selreport:[],
 	    		appname:'',	
 	    	}
 	    },
@@ -61,32 +67,49 @@
 					this.open();
 					this.requestData();
 		  	},
-		  	loadMore () {
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page++
-			     if (this.page > 10) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     console.log('到底了', this.page)
-			   }
-			 },
+		  	SelChange(val) {
+				this.selreport = val;
+			},
+		  	runReport(){
+		  		if(this.selreport.length == 0) {
+					this.$message({
+						message: '请您选择要修改的数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selreport.length > 1) {
+					this.$message({
+						message: '不可同时修改多个数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					var id=this.selreport[0].id;
+					this.appname=this.reportData.app;	
+					var url = this.basic_url + '/api-apps/app/'+this.appname+'/reportParams/'+id;
+					this.$axios.get(url, {}).then((res) => {
+						console.log(res);
+//						this.reportsList = res.data.datas;
+//						this.innerVisible = true;
+					}).catch((wrong) => {
+						this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+				})
+				}
+		  		
+		  	},
 			requestData() {
 				this.appname=this.reportData.app;
-				console.log(this.appname);
-
 				var url = this.basic_url + '/api-apps/app/'+this.appname+'/report';
-				console.log(url);
 				this.$axios.get(url, {}).then((res) => {
 					console.log(res);
-					this.reportsList = res.data.data;
+					this.reportsList = res.data.datas;
 					this.innerVisible = true;
 				}).catch((wrong) => {
 					this.$message({
-							message: '网络错误，请重试1222',
+							message: '网络错误，请重试',
 							type: 'error'
 						});
 				})

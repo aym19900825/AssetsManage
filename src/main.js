@@ -91,11 +91,22 @@ Vue.directive('loadmore', {
 	bind(el, binding) {
 	    const selectWrap = el.querySelector('.el-table__body-wrapper')
 	    selectWrap.addEventListener('scroll', function() {
-	      let sign = 100
-	      const scrollDistance = this.scrollHeight - this.scrollTop - this.clientHeight
-	      if (scrollDistance <= sign) {
-	        binding.value()
-	      }
+	      	let sign = 1
+	      	const scrollDistance = this.scrollHeight - this.scrollTop - this.clientHeight;
+//	      	console.log(scrollDistance);
+	      	console.log(this.scrollTop);
+		    if (scrollDistance <= sign) {
+		    	sessionStorage.setItem('up2down','down');
+		        binding.value();
+		        this.scrollTop = 2;
+	      	}else if(this.scrollTop < sign){
+	      		sessionStorage.setItem('up2down','up');
+	      		binding.value();
+	      		this.scrollTop = 2;
+	      		
+	      	}else{
+	      		return false;
+	      	}
 	    })
 	}
 })

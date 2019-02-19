@@ -89,16 +89,16 @@
 													<el-option v-for="item in selectData" :key="item.id" :value="item.id" :label="item.name"></el-option>
 												</el-select>
 											</el-form-item>-->
-											<!--<el-form-item label="报表类型" prop="reports" label-width="100px">
-												<el-input v-model="dataInfo.reports" :disabled="edit" >
-													<el-button slot="append" icon="el-icon-search" @click="getreport" :disabled="noedit"></el-button>
-												</el-input>
-											</el-form-item>-->
 											<el-form-item label="报表类型" prop="reportId" label-width="100px">
-												<el-select v-model="dataInfo.reportId" multiple :disabled="noedit"  default-first-option  >
+												<el-select v-model="dataInfo.reportId" multiple :disabled="noedit">
 													<el-option v-for="item in selectData" :key="item.id" :value="item.id" :label="item.name"></el-option>
 												</el-select>
 											</el-form-item>
+											<!--<el-form-item label="报表类型" prop="reportId" label-width="100px">
+												<el-select v-model="dataInfo.reportId" multiple :disabled="noedit"  default-first-option  >
+													<el-option v-for="item in selectData" :key="item.id" :value="item.id" :label="item.name"></el-option>
+												</el-select>
+											</el-form-item>-->
 										</el-col>	
 									</el-row>
 									<!-- <el-row>
@@ -156,29 +156,7 @@
 		components: {
 			reportmask	
 		},
-		props: {
-			dataInfo: {
-				type: Object,
-				default: function() {
-					return {
-						ID: '',
-						NUM: '',
-						TYPE: '',
-						STATUS: '',
-						VERSION: '',
-						DEPARTMENT: '',
-						ENTERBY: '',
-						ENTERDATE: '',
-						CHANGEBY: '',
-						CHANGEDATE: '',
-						reportId:[],
-						reports:[],
-						report:'',
-					}
-				}
-			},
-			page: Object,
-		},
+		
 		data() {
 			var validateNum = (rule, value, callback) => {
 				if(value != ""){
@@ -227,6 +205,9 @@
 				hintshow:false,
 				statusshow1:true,
 				statusshow2:false,
+				dataInfo:{
+					
+				}
 			};
 		},
 		methods: {
@@ -247,11 +228,8 @@
 			//点击按钮显示弹窗
 			visible() {
 				this.dataInfo.id = '';
-				//				this.dataInfo.NUM =  this.rand(1000,9999);
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					// this.dataInfo.DEPTID = res.data.deptId;
 					this.dataInfo.createUser = res.data.id;
-					// this.dataInfo.ENTERBYDesc = res.data.nickname;
 					var date = new Date();
 					this.dataInfo.createTime = this.$moment(date).format("YYYY-MM-DD HH:MM:SS");
 				}).catch((err) => {
@@ -284,13 +262,7 @@
 				this.hintshow = false;
 				this.statusshow1 = false;
 				this.statusshow2 = true;
-				console.log(dataInfo);
-					dataInfo.reportId = [];
-					var reports = dataInfo.reports;
-					for(var i = 0; i < reports.length; i++) {
-						dataInfo.reportId.push(reports[i].id);
-					}
-					this.show = true;
+				
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					
 					// this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
@@ -304,18 +276,31 @@
 						type: 'error'
 					});
 				});
-//				var url=this.basic_url + '/api-apps/appcfg/
-//				this.$axios.get(url, {}).then((res) => {
-//					
-//					
-//					
-//				this.show = true;
-//				}).catch((err) => {
-//					this.$message({
-//						message: '网络错误，请重试',
-//						type: 'error'
-//					});
-//				});
+				var url=this.basic_url + '/api-apps/appcfg/'+ id;
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+					this.dataInfo=res.data;
+					console.log(this.dataInfo.reportId);
+					if(typeof(this.dataInfo.reportId) != 'undefind'&&this.dataInfo.reportId != null&&this.dataInfo.reportId.length > 0) {
+							this.dataInfo.reportId=[];
+							var reports = this.dataInfo.reports;
+							for(var i = 0; i < reports.length; i++) {
+								this.dataInfo.reportId.push(reports[i].id);
+							}
+					}else if(this.dataInfo.reportId==null){
+						console.log(1111);
+						this.dataInfo.reportId = [];
+						this.dataInfo.reports = [];
+					}
+					
+					
+				this.show = true;
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
 					
 			},
 			//这是查看
@@ -365,10 +350,6 @@
 				var _this = this;
 				this.$refs.dataInfo.validate((valid) => {
 					if(valid) {
-//						console.log(2222);
-//						console.log(this.dataInfo);
-//						console.log(this.selectData);
-//						var dataInfo = _this.dataInfo;
 						console.log(this.dataInfo);
 						var dataInfo = _this.dataInfo;
 						var reportId = "";
@@ -383,13 +364,15 @@
 									}
 								}
 							});
-							dataInfo.reportId = reportId;
+							dataInfo.reportId = reportId.substring(0,reportId.length-1);
+//							this.dataInfo.reportId='1,2';
 							dataInfo.reports = arr;
 						} else {
 							dataInfo.reportId = '';
 							dataInfo.reports = [];
 						}
 						var url = this.basic_url + '/api-apps/appcfg/saveOrUpdate';
+						console.log(this.dataInfo);
 						this.$axios.post(url, this.dataInfo).then((res) => {
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
@@ -398,7 +381,7 @@
 									type: 'success'
 								});
 								//重新加载数据
-//								this.$emit('request');
+								this.$emit('request');
 //								this.$emit('reset');
 //								this.visible();
 							}else{
@@ -481,21 +464,7 @@
 						});
 				})	
 			},
-//			getreports() {
-//				var url = this.basic_url + '/api-user/dicts/findByCode?code=report_param_type';
-//				this.$axios.get(url, {}).then((res) => {
-//					console.log(123);
-//					console.log(res.data.subDicts);
-//					console.log(typeof(res.data.subDicts));
-//					this.selectData = res.data.subDicts;
-//					console.log(11111111);
-//				}).catch(error => {
-//					this.$message({
-//							message: '网络错误，请重试',
-//							type: 'warning'
-//						});
-//				})
-//			},
+
 		},
 		mounted() {
 			this.getreport();

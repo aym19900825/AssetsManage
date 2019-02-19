@@ -338,7 +338,8 @@
 					return;
 				} else {
 					this.dataInfo = this.selUser[0];
-					this.$refs.categorymask.detail( this.selUser[0].Id);
+					console.log(this.selUser[0]);
+					this.$refs.categorymask.detail( this.selUser[0].id);
 				}
 			},
 			//查看

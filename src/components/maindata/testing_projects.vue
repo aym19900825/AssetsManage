@@ -275,7 +275,7 @@
 				},
 				page: {//分页显示
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				testing_projectForm: {},//修改子组件时传递数据
@@ -302,42 +302,34 @@
 					this.selectData = res.data;
 				});
 			},
-			// toNum(str) {
-			// 	return str.replace(/\,|\￥/g, "");
-			// },
-			// vartoThousands(){
-			// 	var momeny = this.projectList.QUANTITY;
-			// 	console.log(momeny);
-			// 	var num = parseFloat(this.toNum(momeny)).toFixed(2).toString().split(".");
-			// 	num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
-			// 	// this.dataInfo.CHECTCOST="￥" + num.join(".");
-			// 	this.projectList.QUANTITY = num.join(".");
-			// 	console.log(num);
-	  //   		// momeny = momeny.toFixed(2);//将数字转成带有2位小数的字符串
-	    	
-			// 	// momeny = parseFloat(momeny);//将带有2位小数的字符串转成带有小数的数字
-			// 	// momeny = momeny.toLocaleString();//将带有2位小数的数字转成金额格式
-			// 	// if(momeny.indexOf(".")==-1){
-	  //  //          	momeny = momeny+".00";
-	  //  //      	}else{
-	  //  //          	momeny = momeny.split(".")[1].length<2?momeny+"0":momeny;
-	  //  //      	}
-			// 	return this.projectList.QUANTITY;
-			// },
+			
 			//表格滚动加载
-			loadMore () {
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page.currentPage++
-			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     this.requestData()
-			   }
-			 },
+			loadMore() {
+				let up2down = sessionStorage.getItem('up2down');
+				console.log(up2down)
+				console.log(this.loadSign)
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+					}else{
+						this.page.currentPage--
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1
+							return false;
+						}
+					}
+					this.loadSign = false;
+					console.log('this.page.currentPage',this.page.currentPage)
+					setTimeout(() => {
+						this.loadSign = true
+					}, 1000)
+					this.requestData()
+				}
+			},
 			tableControle(data){//控制表格列显示隐藏
 				this.checkedName = data;
 			},
@@ -526,18 +518,6 @@
 					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;
-					// for(var i = 0;i<res.data.data.length;i++){
-					// 	var money = res.data.data[i].QUANTITY.toString();
-					// 	console.log(2333);
-					// 	console.log(this.toNum(money));
-					// 	var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
-					// 	console.log(num);
-					// 	num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
-					// 	console.log(num.join("."));
-
-					// 	// this.dataInfo.CHECTCOST="￥" + num.join(".");
-					// 	this.projectList[i].QUANTITY = num.join(".");
-					// }
 					
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -546,19 +526,7 @@
 					}else{
 						this.loadSign=true
 					}
-					this.commentArr[this.page.currentPage]=res.data.data
-					let newarr=[]
-					for(var i = 1; i <= totalPage; i++){
-					
-						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
-							
-							for(var j = 0; j < this.commentArr[i].length; j++){
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					
-					this.projectList = newarr;
+					this.projectList = res.data.data;
 				}).catch((wrong) => {})
 			},
 			handleNodeClick(data) {

@@ -5,7 +5,7 @@
 			<el-table :data="reportsList" border stripe  height="400px" style="width: 100%;" :default-sort="{prop:'reportsList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 				<el-table-column type="selection" width="55" >
 				</el-table-column>
-				<el-table-column label="代码" width="200" sortable prop="code">
+				<el-table-column label="代码11122222" width="200" sortable prop="code">
 				</el-table-column>
 				<el-table-column label="报表名称" width="200" sortable prop="name">
 				</el-table-column>
@@ -100,6 +100,7 @@
 		this.dialogReport = false;
 	},
   	visible() {
+  		console.log('youqu');
 		this.dialogReport = true;
   	},
   	loadMore () {
@@ -118,7 +119,7 @@
 	getreport(){
 		var url = this.basic_url + '/api-report/report';
 		this.$axios.get(url, {}).then((res) => {
-			this.reportsList = res.data.data;
+			this.reportsList = res.data.datas;
 			this.page.totalCount = res.data.count;
 		}).catch((wrong) => {
 			this.$message({

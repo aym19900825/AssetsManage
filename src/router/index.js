@@ -401,8 +401,6 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
     if (to.meta.requireAuth) {  // 判断该路由是否需要登录权限
         var token = sessionStorage.getItem('access_token');
-        console.log(123333);
-        console.log(sessionStorage.getItem('access_token'));
         if (token) {  // 通过vuex state获取当前的token是否存在
             next();
         }

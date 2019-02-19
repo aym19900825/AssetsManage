@@ -524,8 +524,6 @@
 				value: '',
 				editSearch: '',
 				edit: true, //禁填
-				'男': true,
-				'女': false,
 				show: false,
 				isok1: true,
 				isok2: false,
@@ -868,7 +866,7 @@
 					// 	res.data.IpList[i].isEditing = false;
 					// }
 					this.user = res.data;
-					this.user.sex = this.user.sex ? '男' : '女';
+					this.user.sex = this.user.sex=1? '男' : '女';
 					this.user.enabled = this.user.enabled ? '活动' : '不活动';
 					this.user.ispermit = this.user.ispermit == '1' ? '是' : '否';
 					this.user.islogin = this.user.islogin == '1' ? '是' : '否';
@@ -959,6 +957,7 @@
 						_this.user.ispermit = _this.user.ispermit == '是' ? '1' : '2';
 						_this.user.islogin = _this.user.islogin == '是' ? '1' : '2';
 						var user = _this.user;
+						console.log();
 						user.sex = user.sexName == '男' ? 1 : 0;
 						var roleId = "";
 						if(typeof(user.roleId) != 'undefind' && user.roleId.length > 0) {
@@ -1059,10 +1058,9 @@
 			//角色
 			getRole() {
 				this.editSearch = 'role';
-				var page = this.page.currentPage;
-				var limit = this.page.pageSize;
 				var url = this.basic_url + '/api-user/roles';
 				this.$axios.get(url, {}).then((res) => {
+					console.log(typeof(res.data.data));
 					this.selectData = res.data.data;
 				}).catch(error => {
 					console.log('请求失败');

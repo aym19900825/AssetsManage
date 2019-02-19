@@ -53,7 +53,7 @@
 							<button type="button" class="btn btn-primarys button-margin" @click="Printing">
 							    <i class="icon-print"></i>打印
 							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="reportData">
+							<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
 							    <i class="icon-download-cloud"></i>报表
 							</button>
 							<button type="button" class="btn btn-primarys button-margin" @click="Configuration">
@@ -146,7 +146,8 @@
 			</div>
 			<!--右侧内容显示 End-->
 			<categorymask :CATEGORY="CATEGORY" ref="categorymask" @request="requestData" @reset="reset" v-bind:page=page></categorymask>
-			
+			<!--报表-->
+			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 		</div>
 	</div>
 </template>
@@ -157,6 +158,7 @@
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import categorymask from '../maindataDetails/product_categoryMask.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
+	import reportmask from'../reportDetails/reportMask.vue'
 	export default {
 		name: 'customer_management',
 		components: {
@@ -165,25 +167,23 @@
 			navs_header,
 			categorymask,
 			tableControle,
+			reportmask
 		},
 		data() {
 			return {
+				scroll_old:0,
+				up2down:'down',
+				reportData:{},//报表的数据
 				basic_url: Config.dev_url,
 				loadSign: true, //鼠标滚动加载数据
 				commentArr: {},
 				loading: false,//默认加载数据时显示loading动画
 				fileList:[],
 				value: '',
-				options: [{
-					value: '1',
-					label: '活动'
-				}, {
-					value: '0',
-					label: '不活动'
-				}],
+				productType:'productType',//appname
 				searchData: {
 					page: 1,
-					limit: 10, //分页显示数
+					limit: 20, //分页显示数
 					nickname: '',
 					enabled: '',
 					searchKey: '',
@@ -254,7 +254,7 @@
 				},
 				page: { //分页显示
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				CATEGORY: {},//修改子组件时传递数据
@@ -281,12 +281,25 @@
 			},
 			//表格滚动加载
 			loadMore() {
-				if(this.loadSign) {
-					this.loadSign = false;
-					this.page.currentPage++
+				let up2down = sessionStorage.getItem('up2down');
+				console.log(up2down)
+				console.log(this.loadSign)
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++
 						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							return
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
 						}
+					}else{
+						this.page.currentPage--
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1
+							return false;
+						}
+					}
+					this.loadSign = false;
+					console.log('this.page.currentPage',this.page.currentPage)
 					setTimeout(() => {
 						this.loadSign = true
 					}, 1000)
@@ -316,7 +329,7 @@
 			//搜索
 			searchinfo(index) {
 				this.page.currentPage = 1;
-				this.page.pageSize = 10;
+				this.page.pageSize = 20;
 				this.requestData();
 			},
 			//清空
@@ -454,22 +467,7 @@
             }
             xhr.send();
 			},
-			// 导出
-		// 	exportData() {
-        //    var url = this.basic_url + '/api-apps/app/productType/exportExc?access_token='+sessionStorage.getItem('access_token');
-        //    var xhr = new XMLHttpRequest();
-        //     xhr.open('POST', url, true);
-        //     xhr.responseType = "blob";
-        //     xhr.setRequestHeader("client_type", "DESKTOP_WEB");
-        //     xhr.onload = function() {
-        //         if (this.status == 200) {
-        //             var blob = this.response;
-        //             var objecturl = URL.createObjectURL(blob);
-        //             window.location.href = objecturl;
-        //         }
-        //     }
-        //     xhr.send();
-		// 	},
+			
 			// 导出
 			exportData() {
            		var url = this.basic_url + '/api-apps/app/productType/exportExc?access_token='+sessionStorage.getItem('access_token');
@@ -495,8 +493,9 @@
 
 			},
 			//报表
-			reportData(){
-				
+			reportdata(){
+				this.reportData.app=this.productType;
+				this.$refs.reportChild.visible();
 			},
 			// 配置关系
 			Configuration() {
@@ -539,19 +538,13 @@
 					} else {
 						this.loadSign = true
 					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
-
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.categoryList = newarr;
-				}).catch((wrong) => {})
+					this.categoryList = res.data.data;
+				}).catch((wrong) => {
+					this.$message({
+								message: '网络错误，请重试1',
+								type: 'error'
+							});
+				})
 			},
 			handleNodeClick(data) {},
 			formatter(row, column) {
@@ -560,12 +553,35 @@
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
         		this.$refs.navsheader.showClick(childValue);
-      		},
-
+      		}
 		},
 		mounted() {
 			this.requestData();
-			this.getCompany();
+			this.getCompany();			
+//			const selectWrap = document.querySelector('.el-table__body-wrapper')
+//			var that=this
+//			selectWrap.addEventListener('scroll', function(e){
+//				//	console.log(e);
+//				console.log(this.scrollHeight);// 滚动区域
+//				console.log(this.scrollTop);// div 到头部的距离
+//				console.log(this.clientHeight);//屏幕高度
+//				let scrollHeight = this.scrollHeight.scrollHeight; // 滚动条的总高度
+//				console.log(document.documentElement.clientHeight);// 滚动条的总高度
+//			    var scrollDistance = this.scrollHeight - this.scrollTop - this.clientHeight
+//			    let sign = 1;
+//				console.log(scrollDistance);
+//		      	if(scrollDistance <= sign){
+//		      		that.loadMore('down')
+//		      		this.scrollTop = 2;
+//		      	}else if(this.scrollTop < 1){
+//		      		that.loadMore('up')
+//		      		this.scrollTop = 2
+//		      	}else{
+//		      		return false;
+//		      	}
+//
+//			}, true);
+			
 		 	
 		}
 	}

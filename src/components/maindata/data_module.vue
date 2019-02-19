@@ -135,7 +135,7 @@
 				}],
 				searchData: {
 					page: 1,
-					limit: 10, //分页显示数
+					limit: 20, //分页显示数
 					nickname: '',
 					enabled: '',
 					searchKey: '',
@@ -192,7 +192,7 @@
 				},
 				page: { //分页显示
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				CATEGORY: {},//修改子组件时传递数据
@@ -218,12 +218,23 @@
 			},
 			//表格滚动加载
 			loadMore() {
-				if(this.loadSign) {
-					this.loadSign = false
-					this.page.currentPage++
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++
 						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							return
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
 						}
+					}else{
+						this.page.currentPage--
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1
+							return false;
+						}
+					}
+					this.loadSign = false;
+					console.log('this.page.currentPage',this.page.currentPage)
 					setTimeout(() => {
 						this.loadSign = true
 					}, 1000)
@@ -422,18 +433,7 @@
 					} else {
 						this.loadSign = true
 					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
-
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.categoryList = newarr;
+					this.categoryList = res.data.data;
 				}).catch((wrong) => {
 					this.$message({
 							message: '网络错误，请重试',

@@ -638,7 +638,12 @@
 					// 	}
 					// }
 					this.nitificationsList = res.data.data;
-				}).catch((wrong) => {})
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试1',
+						type: 'error'
+					});
+				})
 			},
 
 			//机构树

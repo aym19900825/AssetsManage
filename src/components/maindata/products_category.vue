@@ -538,9 +538,9 @@
 					this.categoryList = res.data.data;
 				}).catch((wrong) => {
 					this.$message({
-								message: '网络错误，请重试1',
-								type: 'error'
-							});
+						message: '网络错误，请重试1',
+						type: 'error'
+					});
 				})
 			},
 			handleNodeClick(data) {},

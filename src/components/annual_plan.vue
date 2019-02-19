@@ -149,7 +149,7 @@
 						</el-col>
 						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
-							<el-table :header-cell-style="rowClass" :data="userList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
+							<el-table :header-cell-style="rowClass" :data="userList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="编号" sortable width="100px" prop="WP_NUM" v-if="this.checkedName.indexOf('编号')!=-1">
@@ -219,6 +219,7 @@
 			return {
 				basic_url: Config.dev_url,
 				ismin: true,
+				loadSign: true, //加载
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				checkedName: [
 					'编号',
@@ -313,12 +314,36 @@
 				userData:[],
 				page: {
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 			}
 		},
 	methods: {
+		//表格滚动加载
+		loadMore () {
+			let up2down = sessionStorage.getItem('up2down');
+			if(this.loadSign) {					
+				if(up2down=='down'){
+					this.page.currentPage++
+					if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+						this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+						return false;
+					}
+				}else{
+					this.page.currentPage--
+					if(this.page.currentPage < 1) {
+						this.page.currentPage=1
+						return false;
+					}
+				}
+				this.loadSign = false;
+				setTimeout(() => {
+					this.loadSign = true
+				}, 1000)
+				this.requestData()
+			}
+		},
 		//表头居中
 		rowClass({ row, rowIndex}) {
 		    return 'text-align:center'
@@ -340,14 +365,19 @@
 			test(){
 				console.log(this.checkedName.indexOf('账号')!=-1);
 			},
-			sizeChange(val) {
+			sizeChange(val) {//分页，总页数
 		      this.page.pageSize = val;
 		      this.requestData();
 		    },
-		    currentChange(val) {
+		    currentChange(val) {//分页，当前页
 		      this.page.currentPage = val;
 		      this.requestData();
 		    },
+			searchinfo(index) {//高级查询
+				this.page.currentPage = 1;
+				this.page.pageSize = 20;
+				this.requestData();
+			},
 		    resetbtn(){
 				this.searchList =  { //点击高级搜索后显示的内容
 					WP_NUM: '',
@@ -359,11 +389,6 @@
 					STATUS:'',
 					LEADER_STATUS:''
 				};
-			},
-			searchinfo(index) {
-				this.page.currentPage = 1;
-				this.page.pageSize = 10;
-				this.requestData();
 			},
 			//添加
 			openAddMgr() {
@@ -606,6 +631,7 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
+					this.page.totalCount = res.data.count;
 					for(var i=0;i<res.data.data.length;i++){
 						if(res.data.data[i].TYPE  == '1'){
 							res.data.data[i].TYPE  = '监督抽查';
@@ -614,8 +640,12 @@
 						}
 					}
 					this.userList = res.data.data;
-					this.page.totalCount = res.data.count;
-				}).catch((wrong) => {})
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试1',
+						type: 'error'
+					});
+				})
 
 				// this.userList.forEach((item, index) => {
 				// 	var id = item.id;

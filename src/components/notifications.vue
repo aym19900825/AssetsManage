@@ -341,7 +341,7 @@
 				},
 				page: { //分页显示
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				treeData: [],
@@ -365,10 +365,7 @@
 			getType() {
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=type';
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res.data);
 					this.selectData = res.data;
-					console.log(2333333);
-					console.log(this.selectData);
 				}).catch(error => {
 					console.log('请求失败');
 				})
@@ -390,18 +387,27 @@
 						type: type
 					},
 				}).then((res) => {
-					console.log(res.data);
 					this.selectDept = res.data;
 				});
 			},
 			//滚动加载
 			loadMore() {
-				if(this.loadSign) {
-					this.loadSign = false
-					this.page.currentPage++
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++
 						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							return
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
 						}
+					}else{
+						this.page.currentPage--
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1
+							return false;
+						}
+					}
+					this.loadSign = false;
 					setTimeout(() => {
 						this.loadSign = true
 					}, 1000)
@@ -432,7 +438,7 @@
 			},
 			searchinfo(index) {
 				this.page.currentPage = 1;
-				this.page.pageSize = 10;
+				this.page.pageSize = 20;
 				this.requestData();
 			},
 			//添加用戶
@@ -442,7 +448,7 @@
 			},
 			//修改用戶
 			modify() {
-				console.log(this.selUser);
+				// console.log(this.selUser);
 				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
@@ -467,11 +473,11 @@
 					else if(this.selUser[0].STATE == 0) {
 						var url = this.basic_url + '/api-apps/app/workNot/flow/isExecute/' + this.selUser[0].ID;
 						this.$axios.get(url, {}).then((res) => {
-							console.log(res);
+							// console.log(res);
 							if(res.data.resp_code == 0) {
 								var url = this.basic_url + '/api-apps/app/workNot/flow/isPromoterNode/' + this.selUser[0].ID;
 								this.$axios.get(url, {}).then((res) => {
-									console.log(res);
+									// console.log(res);
 									if(res.data.resp_code == 0) {
 										this.$refs.child.detail(this.selUser[0].ID);
 									} else {
@@ -495,7 +501,7 @@
 			},
 			//查看
 			view(id) {
-				console.log(id);
+				// console.log(id);
 				this.$refs.child.view(id);
 			},
 			//代办跳转
@@ -620,20 +626,24 @@
 					} else {
 						this.loadSign = true
 					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
+					// this.commentArr[this.page.currentPage] = res.data.data
+					// let newarr = []
+					// for(var i = 1; i <= totalPage; i++) {
 
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+					// 	if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
 
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-
-					this.nitificationsList = newarr;
-				}).catch((wrong) => {})
+					// 		for(var j = 0; j < this.commentArr[i].length; j++) {
+					// 			newarr.push(this.commentArr[i][j])
+					// 		}
+					// 	}
+					// }
+					this.nitificationsList = res.data.data;
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试1',
+						type: 'error'
+					});
+				})
 			},
 
 			//机构树
@@ -664,8 +674,8 @@
 				for(var i = 0; i < this.selectData.length; i++) {
 					if(data.label == this.selectData[i].name) {
 						this.searchList.TYPE = this.selectData[i].code;
-						console.log(this.selectData[i].code);
-						console.log(this.searchList.TYPE);
+						// console.log(this.selectData[i].code);
+						// console.log(this.searchList.TYPE);
 					}
 				}
 				this.requestData();

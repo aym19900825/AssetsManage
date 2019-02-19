@@ -172,7 +172,7 @@
 		data() {
 			return {
 				scroll_old:0,
-				up2down:'down',
+				// up2down:'down',
 				reportData:{},//报表的数据
 				basic_url: Config.dev_url,
 				loadSign: true, //鼠标滚动加载数据
@@ -282,8 +282,6 @@
 			//表格滚动加载
 			loadMore() {
 				let up2down = sessionStorage.getItem('up2down');
-				console.log(up2down)
-				console.log(this.loadSign)
 				if(this.loadSign) {					
 					if(up2down=='down'){
 						this.page.currentPage++
@@ -299,7 +297,6 @@
 						}
 					}
 					this.loadSign = false;
-					console.log('this.page.currentPage',this.page.currentPage)
 					setTimeout(() => {
 						this.loadSign = true
 					}, 1000)
@@ -541,9 +538,9 @@
 					this.categoryList = res.data.data;
 				}).catch((wrong) => {
 					this.$message({
-								message: '网络错误，请重试1',
-								type: 'error'
-							});
+						message: '网络错误，请重试1',
+						type: 'error'
+					});
 				})
 			},
 			handleNodeClick(data) {},

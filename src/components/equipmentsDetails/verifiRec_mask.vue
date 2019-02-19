@@ -507,7 +507,15 @@
 				this.views = true;//录入修改人信息
 				this.noviews = false;//按钮
 				this.dataInfo = data;
-				this.show = true;				
+				this.show = true;		
+
+				this.docParm = {
+					'model': 'view',
+					'appname': '期间核查记录',
+					'recordid': this.detailData.ID,
+					'appid': 54
+				};
+				this.$refs.docTable.getData();		
 			},
 			//点击关闭按钮
 			close() {

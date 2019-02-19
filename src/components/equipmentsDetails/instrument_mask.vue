@@ -833,7 +833,16 @@
 				this.mview = true;
 				this.noviews = false;//按钮
 				this.dataInfo = data;
-				this.show = true;				
+				this.show = true;		
+				
+				var _this = this;
+				setTimeout(function(){
+					_this.docParm.model = 'view';
+					_this.docParm.appname = '仪器和计量器具';
+					_this.docParm.recordid = _this.dataInfo.ID;
+					_this.docParm.appid = 47;
+					_this.$refs.docTable.getData();
+				},100);
 			},
 			//点击关闭按钮
 			close() {

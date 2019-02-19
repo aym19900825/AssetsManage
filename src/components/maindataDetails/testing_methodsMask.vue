@@ -308,7 +308,16 @@
 				this.noedit = true;//表单内容
 				this.views = true;//录入修改人信息
 				this.noviews = false;//按钮
-				this.show = true;				
+				this.show = true;	
+
+				var _this = this;
+				setTimeout(function(){
+					_this.docParm.model = 'view';
+					_this.docParm.appname = '检验检测项目_检验/检测方法';
+					_this.docParm.recordid = _this.testingForm.ID;
+					_this.docParm.appid = 16;
+					_this.$refs.docTable.getData();
+				},100);			
 			},
 			modifyversion (testingForm) {//点击修改后给当前创建人和创建日期赋值
 				this.$refs[testingForm].validate((valid) => {

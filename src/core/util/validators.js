@@ -70,6 +70,11 @@ const validators = {
 	},
 
 
+	CompanyCode:function (str) {// 统一社会信用代码 正则验证
+		const companycode = /[1-9A-GY]{1}[1239]{1}[1-5]{1}[0-9]{5}[0-9A-Z]{10}/;
+		return companycode.test(str);
+	},
+
 
 //---------------------------------------------------------------------------------------------//
 	isSpecificKey:function (rule, value, callback) { //不允许特殊字符
@@ -78,6 +83,18 @@ const validators = {
 		} else {
 			if(!validators.SpecificWord(value)) {
 				callback(new Error('不支持特殊符号'));
+			} else {
+				callback();
+			}
+		}
+	},
+
+	isCompanyCode:function (rule, value, callback) { //统一社会信用代码
+		if(!value) {
+			callback();
+		} else {
+			if(!validators.SpecificWord(value)) {
+				callback(new Error('不是正确的统一社会信用代码'));
 			} else {
 				callback();
 			}

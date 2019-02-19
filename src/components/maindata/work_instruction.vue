@@ -203,7 +203,7 @@
 				},
 				page: { //分页显示
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				WORK_INSTRUCTION: {},//修改子组件时传递数据
@@ -231,12 +231,25 @@
 			},
 			//表格滚动加载
 			loadMore() {
-				if(this.loadSign) {
-					this.loadSign = false
-					this.page.currentPage++
+				let up2down = sessionStorage.getItem('up2down');
+				console.log(up2down)
+				console.log(this.loadSign)
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++
 						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							return
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
 						}
+					}else{
+						this.page.currentPage--
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1
+							return false;
+						}
+					}
+					this.loadSign = false;
+					console.log('this.page.currentPage',this.page.currentPage)
 					setTimeout(() => {
 						this.loadSign = true
 					}, 1000)
@@ -416,7 +429,7 @@
 			SelChange(val) {
 				this.selUser = val;
 			},
-			requestData(index) {
+			requestData() {
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -438,18 +451,7 @@
 					} else {
 						this.loadSign = true
 					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
-
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.WORK_INSTRUCTIONList = newarr;
+					this.WORK_INSTRUCTIONList = res.data.data;
 				}).catch((wrong) => {})
 			},
 			handleNodeClick(data) {},

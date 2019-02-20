@@ -36,8 +36,9 @@
 										<template slot="prepend">名称</template>
 									</el-input>
 								</el-col>
-								<el-col :span="3">
+								<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -230,6 +231,12 @@
 			currentChange(val) {//分页，当前页
 				this.page.currentPage = val;
 				this.requestData();
+			},
+		    resetbtn(){
+			this.searchList = { //点击高级搜索后显示的内容
+			filename: '',
+			};
+			this.requestData();
 			},
 			searchinfo(index) {//高级查询
 				this.page.currentPage = 1;

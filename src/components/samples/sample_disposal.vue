@@ -397,6 +397,7 @@
 					APPR_PERSON: '',//处理批准人
 					APPR_DATE: '',//批准日期
 				};
+				this.requestData();
 			},
 			//添加样品管理
 			openAddMgr() {

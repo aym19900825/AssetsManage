@@ -274,6 +274,7 @@
 					GHTIME:'',
                     GHUSER: '',
 				};
+				this.requestData();
 			},
 			//搜索
 			searchinfo(index) {

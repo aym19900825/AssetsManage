@@ -271,6 +271,7 @@
 					TYPE: '',
 					DEPTID: '',
 				};
+				this.requestData();
 			},
 			searchinfo(index) {
 				this.page.currentPage = 1;

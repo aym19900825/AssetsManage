@@ -393,6 +393,7 @@
 					APPR_DATE: '',//批准日期
 					ACCEPT_DATE: '',//收样日期
 				};
+				this.requestData();
 			},
 			//添加样品管理
 			openAddMgr() {

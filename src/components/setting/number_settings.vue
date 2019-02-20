@@ -290,6 +290,7 @@
 				this.searchList = {
 					AUTOKEY: '',
 				};
+				this.requestData();
 			},
 			openAddMgr() {//添加自动编号设置数据
 				this.numbsetForm = {

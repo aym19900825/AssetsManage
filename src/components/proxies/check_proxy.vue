@@ -423,6 +423,7 @@
 					ENTERBY: '',
 					STATUS: '',
 				};
+				this.requestData();
 			},
 			searchinfo(index) {
 				this.page.currentPage = 1;

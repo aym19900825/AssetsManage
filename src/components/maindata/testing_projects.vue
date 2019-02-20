@@ -360,6 +360,7 @@
 					VERSION: '',
 					DEPTID:'',
 				};
+				this.requestData();
 			},
 			searchinfo(index) {//高级查询
 				this.page.currentPage = 1;

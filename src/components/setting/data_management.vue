@@ -199,6 +199,7 @@
 					name:'',
 					description:''
 				};
+				this.requestData();
 			},
 			//添加数据
 			openAddMgr() {

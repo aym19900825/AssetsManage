@@ -232,6 +232,7 @@
 					name: '',
 					inactive:''
 				};
+				this.requestData();
 			},
 			judge(data) {//是否停用
 				return data.inactive=="1" ? '是' : '否'

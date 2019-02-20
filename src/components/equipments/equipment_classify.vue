@@ -220,6 +220,7 @@
 					CLASSIFY_DESCRIPTION: '',
 					PARENT:'',
 				};
+				this.requestData();
 			},
 			//清空
 			reset() {

@@ -377,6 +377,7 @@
 			        STATE: '',
 			        OPTION_STATUS: ''
 				};
+				this.requestData();
 			},
 			//添加
 			openAddMgr() {

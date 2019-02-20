@@ -339,6 +339,7 @@
 					VERSION:'',
 					DEPTID: '',
 				};
+				this.requestData();
 			},
 			//清空
 			reset() {

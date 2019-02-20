@@ -262,6 +262,7 @@
 					C_DATE: '',
 					C_MEMO: '',
 				};
+				this.requestData();
 			},
 			//添加用戶
 			openAddMgr() {

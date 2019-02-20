@@ -230,6 +230,7 @@
 					DESCRIPTION: '',
 					MODEL: ''
 				};
+				this.requestData();
 			},
 			//添加用戶
 			openAddMgr() {

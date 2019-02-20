@@ -378,6 +378,7 @@
 					username: '',
 					deptId: ''
 				};
+				this.requestData();
 			},
 			//请求页面的button接口
 		    getbutton(childByValue){

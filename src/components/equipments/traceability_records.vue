@@ -348,6 +348,7 @@
 					PM_MODEL: '',
 					C_NUM: '',
 				};
+				this.requestData();
 			},
 			//时间格式化  
 			dateFormat(row, column) {

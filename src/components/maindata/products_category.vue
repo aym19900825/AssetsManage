@@ -322,6 +322,7 @@
 					VERSION:'',
 					DEPTID: '',
 				};
+				this.requestData();
 			},
 			//搜索
 			searchinfo(index) {

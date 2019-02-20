@@ -316,6 +316,7 @@
 					name:'',
 					description: '',
 				};
+				this.requestData();
 			},
 			//清空
 			reset() {

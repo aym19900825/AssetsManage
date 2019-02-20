@@ -356,6 +356,7 @@
 					// ENTERBY: '',//录入人
 					ENTERDATE: '',//录入日期
 				};
+				this.requestData();
 			},
 			searchinfo(index) {
 				this.page.currentPage = 1;

@@ -59,8 +59,9 @@
 										<template slot="prepend">关键字</template>
 									</el-input>
 								</el-col>
-								<el-col :span="3">
+								<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -73,7 +74,7 @@
 							<el-table :data="samplesList" border :height="fullHeight" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="selChange">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
-								<el-table-column label="分类" sortable prop="categoryidDesc" v-if="this.checkedName.indexOf('分类')!=-1">
+								<el-table-column label="类别" sortable prop="categoryidDesc" v-if="this.checkedName.indexOf('类别')!=-1">
 								</el-table-column>
 								<el-table-column label="关键字" sortable prop="keywordname" v-if="this.checkedName.indexOf('关键字')!=-1">
 								</el-table-column>
@@ -128,7 +129,7 @@
 				//选择显示数据
 				checkedName: [
 					'关键字',
-					'分类',
+					'类别',
 					'用户名称',
 					'用户部门',
 					'创建时间',
@@ -138,7 +139,7 @@
 						prop: 'keywordname'
 					},
 					{
-						label: '分类',
+						label: '类别',
 						prop: 'categoryidDesc'
 					},
 					{
@@ -189,6 +190,13 @@
 				this.requestData();
 			},
 			//高级查询
+			 resetbtn(){
+			this.searchList = { //点击高级搜索后显示的内容
+			keywordname: '',
+			categoryidDesc: '',
+			};
+			this.requestData();
+			},
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;

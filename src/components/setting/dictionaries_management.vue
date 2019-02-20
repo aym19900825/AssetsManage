@@ -246,6 +246,7 @@
 					code: '',
 					name: '',
 				};
+				this.requestData();
 			},
 			openAddData() {//添加数据
 				this.dictionarieForm = {

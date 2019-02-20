@@ -288,6 +288,7 @@
 					simplename:'',
 					fullname:''
 				};
+				this.requestData();
 			},
 			//添加
 			openAddMgr() {

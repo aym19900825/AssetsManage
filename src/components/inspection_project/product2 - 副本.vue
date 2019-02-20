@@ -332,8 +332,8 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
+					console.log(res.data);
 					this.page.totalCount = res.data.count;
-					// console.log(res.data);
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
 					if(this.page.currentPage >= totalPage){
@@ -507,7 +507,6 @@
 		
 		// mounted() {
 		// 	this.requestData_product2();
-			
 		// },
 		
 
@@ -533,5 +532,8 @@
 	left: 0px;
 }
 .el-card:hover .table-func  {display: block;}
+
+
+
 
 </style>

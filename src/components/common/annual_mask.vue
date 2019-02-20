@@ -45,7 +45,7 @@
 										<el-col :span="6">
 											<el-form-item label="产品类别" prop="ITEMTYPE"  label-width="85px">
 												<el-input v-model="WORKPLAN.ITEMTYPE" :disabled="true">
-													<el-button slot="append" icon="el-icon-search" @click="addprobtn"  :disabled="noedit"></el-button>
+													<el-button slot="append" icon="el-icon-search" @click="addprobtn" :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -566,7 +566,7 @@
 			<!-- 产品类别 Begin -->
 			<el-dialog :modal-append-to-body="false" title="产品类别" height="400px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
 				<!-- 第二层弹出的表格 Begin-->
-				<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="400px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="400px" style="width:100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" fixed width="55" align="center">
 					</el-table-column>
 					<el-table-column label="编码" width="155" sortable prop="NUM">
@@ -593,7 +593,7 @@
 			<!-- 产品类别 End -->
 			<!-- 产品名称 Begin -->
 			<el-dialog :modal-append-to-body="false" title="产品名称" :visible.sync="dialogVisible4" width="80%" :before-close="handleClose">
-				<el-table  :header-cell-style="rowClass" :data="productList" line-center border stripe height="400px" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table :header-cell-style="rowClass" :data="productList" line-center border stripe height="400px" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" fixed width="55" align="center">
 					</el-table-column>
 					<el-table-column label="编码" width="155" sortable prop="PRO_NUM">
@@ -1361,7 +1361,8 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				this.$axios.get(this.basic_url + '/api-apps/app/productType2?DEPTID='+this.WORKPLAN.PROP_UNIT, {
+				console.log(this.WORKPLAN.PROP_UNIT);
+				this.$axios.get(this.basic_url + '/api-apps/app/productType2?DEPTID=' + this.WORKPLAN.PROP_UNIT, {
 					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;

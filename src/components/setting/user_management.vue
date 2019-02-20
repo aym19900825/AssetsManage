@@ -127,7 +127,7 @@
 								</el-table-column>
 								<el-table-column label="姓名" sortable width="200px" prop="nickname" v-if="this.checkedName.indexOf('姓名')!=-1">
 								</el-table-column>
-								<el-table-column label="性别" sortable width="100px" prop="GENDER" :formatter="sexName" v-if="this.checkedName.indexOf('性别')!=-1">
+								<el-table-column label="性别" sortable width="100px" prop="sexName" v-if="this.checkedName.indexOf('性别')!=-1">
 								</el-table-column>
 								<el-table-column label="机构" sortable width="150px" prop="deptName" v-if="this.checkedName.indexOf('机构')!=-1">
 								</el-table-column>
@@ -579,9 +579,7 @@
 				//taxStatus 布尔值
 				return data.enabled ? '活动' : '不活动'
 			},
-			sexName(data) {
-				return data.sex ? '男' : '女'
-			},
+			
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];

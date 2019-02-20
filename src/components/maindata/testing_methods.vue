@@ -261,7 +261,7 @@
 				},
 				page: { //分页显示
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				testingForm: {},//修改子组件时传递数据
@@ -289,20 +289,32 @@
 				});
 			},
 			//表格滚动加载
-			loadMore () {
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page.currentPage++
-			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     this.requestData()
-//			     console.log('到底了', this.page.currentPage)
-			   }
-			 },
+			loadMore() {
+				let up2down = sessionStorage.getItem('up2down');
+				console.log(up2down)
+				console.log(this.loadSign)
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+					}else{
+						this.page.currentPage--
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1
+							return false;
+						}
+					}
+					this.loadSign = false;
+					console.log('this.page.currentPage',this.page.currentPage)
+					setTimeout(() => {
+						this.loadSign = true
+					}, 1000)
+					this.requestData()
+				}
+			},
 			tableControle(data) {//控制表格列显示隐藏
 				this.checkedName = data;
 			},
@@ -323,7 +335,7 @@
 			},
 			searchinfo(index) {//高级查询
 				this.page.currentPage = 1;
-				this.page.pageSize = 10;
+				this.page.pageSize = 20;
 				this.requestData();
 			},
 			//重置
@@ -469,7 +481,7 @@
 			SelChange(val) {//选中值后赋值给一个自定义的数组：selMenu
 				this.selMenu = val;
 			},
-			requestData(index) {//高级查询字段
+			requestData() {//高级查询字段
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -494,17 +506,7 @@
 					}else{
 						this.loadSign=true
 					}
-					this.commentArr[this.page.currentPage]=res.data.data
-					let newarr=[]
-					for(var i = 1; i <= totalPage; i++){
-						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
-							
-							for(var j = 0; j < this.commentArr[i].length; j++){
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.methodsList = newarr;
+					this.methodsList = res.data.data;
 				}).catch((wrong) => {})
 			},
 

@@ -53,12 +53,12 @@
 										</el-col>
 									</el-row>
 									<el-row >
-										<el-col :span="8">
+										<!--<el-col :span="8">
 											<el-form-item label="类型" prop="type" label-width="110px">
 												<el-input v-model="dataInfo.type" :disabled="noedit">
 												</el-input>
 											</el-form-item>
-										</el-col>
+										</el-col>-->
 										<el-col :span="8">
 											<el-form-item label="备注" prop="remarks" label-width="110px">
 												<el-input v-model="dataInfo.remarks" :disabled="noedit"></el-input>
@@ -129,8 +129,11 @@
 												<el-table-column prop="type" label="类型" sortable width="220px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'params.'+scope.$index + '.type'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.type" placeholder="请输入">
-														</el-input>
+														<!--<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.type" placeholder="请输入">
+														</el-input>-->
+														<el-select v-if="scope.row.isEditing" v-model="scope.row.type" filterable allow-create default-first-option placeholder="请选择">
+										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
+										</el-select>
 														<span v-else="v-else">{{scope.row.type}}</span>
 														</el-form-item>
 													</template>
@@ -241,6 +244,7 @@
 					
 				},
 				dataid:'',//修改和查看带过的id
+				selectData:[],
 			};
 		},
 		methods: {
@@ -417,13 +421,6 @@
 			save() {
 				this.$refs.dataInfo.validate((valid) => {
 			        if (valid) {
-						if(this.dataInfo.params.length<=0){
-			        		this.$message({
-								message: '检验依据和检验项目与要求和分包要求是必填项，请填写！',
-								type: 'warning'
-							});
-							return false;
-			        }else{
 			        	console.log(this.dataInfo);
 							var url = this.basic_url + '/api-report/report/saveOrUpdate';
 							this.$axios.post(url, this.dataInfo).then((res) => {
@@ -440,11 +437,10 @@
 								}
 							}).catch((err) => {
 								this.$message({
-									message: '网络错误，请重试1',
+									message: '网络错误，请重试',
 									type: 'error'
 								});
 							});
-						}
 						this.falg = true;
 			        }else{
 			          	this.show = true;
@@ -486,9 +482,18 @@
 					});
 					this.dialogVisibleuser = true;
 			},
+			getType(){
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=report_param_type';
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+					this.selectData = res.data;
+				}).catch(error => {
+					console.log('请求失败');
+				})
+			},
 		},
 		mounted() {
-			
+			this.getType();
 		},
 	}
 </script>

@@ -524,8 +524,6 @@
 				value: '',
 				editSearch: '',
 				edit: true, //禁填
-				'男': true,
-				'女': false,
 				show: false,
 				isok1: true,
 				isok2: false,
@@ -712,7 +710,7 @@
 						isEditing: true
 					};
 					this.user.qualifications.push(obj);
-					console.log(typeof(this.user.qualifications));
+					// console.log(typeof(this.user.qualifications));
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -868,7 +866,7 @@
 					// 	res.data.IpList[i].isEditing = false;
 					// }
 					this.user = res.data;
-					this.user.sex = this.user.sex ? '男' : '女';
+					this.user.sex = this.user.sex=='1'? '男' : '女';
 					this.user.enabled = this.user.enabled ? '活动' : '不活动';
 					this.user.ispermit = this.user.ispermit == '1' ? '是' : '否';
 					this.user.islogin = this.user.islogin == '1' ? '是' : '否';
@@ -959,7 +957,7 @@
 						_this.user.ispermit = _this.user.ispermit == '是' ? '1' : '2';
 						_this.user.islogin = _this.user.islogin == '是' ? '1' : '2';
 						var user = _this.user;
-						user.sex = user.sexName == '男' ? 1 : 0;
+						user.sex = user.sex == '男' ? 1 : 0;
 						var roleId = "";
 						if(typeof(user.roleId) != 'undefind' && user.roleId.length > 0) {
 							var arr = [];
@@ -1033,7 +1031,6 @@
 					},
 				}).then((res) => {
 					this.resourceData = res.data;
-					// console.log(res.data)
 					this.dialogVisible = true;
 				});
 
@@ -1059,8 +1056,6 @@
 			//角色
 			getRole() {
 				this.editSearch = 'role';
-				var page = this.page.currentPage;
-				var limit = this.page.pageSize;
 				var url = this.basic_url + '/api-user/roles';
 				this.$axios.get(url, {}).then((res) => {
 					this.selectData = res.data.data;

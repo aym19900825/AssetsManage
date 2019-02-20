@@ -64,13 +64,17 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :data="reportsList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'reportsList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+						<el-table :data="reportsList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'reportsList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 							</el-table-column>
 							
 							<el-table-column label="报表名称" width="200" sortable prop="name" v-if="this.checkedName.indexOf('报表名称')!=-1">
+								<template slot-scope="scope">
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.name}}
+										</p>
+									</template>
 							</el-table-column>
-							<el-table-column label="录入人" sortable prop="createby" v-if="this.checkedName.indexOf('修改人')!=-1">
+							<el-table-column label="录入人" sortable prop="createby" v-if="this.checkedName.indexOf('录入人')!=-1">
 							</el-table-column>	
 							<el-table-column label="修改人" sortable prop="updateby" v-if="this.checkedName.indexOf('修改人')!=-1">
 							</el-table-column>		
@@ -112,6 +116,8 @@
 		},
 		data() {
 			return {
+				loadSign: true, //鼠标滚动加载数据
+				commentArr: {},
 				basic_url: Config.dev_url,
 				checkedName: [
 					'报表名称',
@@ -192,6 +198,10 @@
 					this.$refs.child.detail(this.selUser[0].id);
 				}
 			},
+			 view(){
+//				this.$refs.categorymask.view();
+				this.$refs.reportchild.visible();
+			},
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
@@ -255,12 +265,7 @@
 				return this.$moment(date).format("YYYY-MM-DD");
 				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
 			},
-			insert() {
-				this.users.push(this.user)
-			},
-			remove(index) {
-				this.users.splice(index, 1)
-			},
+			
 			SelChange(val) {
 				this.selUser = val;
 			},
@@ -271,23 +276,57 @@
 				}
 				var url = this.basic_url + '/api-report/reportFile';
 				this.$axios.get(url, {params: data}).then((res) => {
-					this.reportsList = res.data.data;
 					this.page.totalCount = res.data.count;
-				}).catch((wrong) => {})
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
+					}
+					this.reportsList = res.data.data;
+					// this.page.totalCount = res.data.count;
+				}).catch((wrong) => {
+					this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+				})
 				
 			},
 			loadMore () {
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page++
-			     if (this.page > 10) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     console.log('到底了', this.page)
-			   }
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+					}else{
+						this.page.currentPage--
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1
+							return false;
+						}
+					}
+					this.loadSign = false;
+					setTimeout(() => {
+						this.loadSign = true
+					}, 1000)
+					this.requestData();
+				}
+			   // if (this.loadSign) {
+			   //   this.loadSign = false
+			   //   this.page++
+			   //   if (this.page > 10) {
+			   //     return
+			   //   }
+			   //   setTimeout(() => {
+			   //     this.loadSign = true
+			   //   }, 1000)
+			   //   console.log('到底了', this.page)
+			   // }
 			 },
 			handleNodeClick(data) {
 			},

@@ -17,7 +17,6 @@ import $ from 'jquery'
 import moment from 'moment'
 import './axios'
 import vueGridLayout from 'vue-grid-layout'
-//import infiniteScroll from 'vue-infinite-scroll'//滚动加载更多
 
 // import Dropzone from 'dropzone/dist/min/dropzone.min.js'
 // import 'dropzone/dist/min/dropzone.min.css'
@@ -41,53 +40,30 @@ import Validators from './core/util/validators.js'
 //import './assets/bootstrap/bootstrap.min.js'
 
 
-
-//Vue.prototype.$up2down = 'down'
-//Vue.prototype.$currentPage = 1
-//Vue.directive('loadmore', {
-//	 //1-被绑定
-//	bind(el, binding, vnode) {
-//	    const selectWrap = el.querySelector('.el-table__body-wrapper')
-//	    selectWrap.addEventListener('scroll', function() {
-//	      	let sign = 100
-//	      	const scrollDistance = this.scrollHeight - this.scrollTop - this.clientHeight
-//	      	if((scrollDistance<scroll_old) && (scroll_old!=0)){
-//				this.$up2down = 'down'
-//				this.$currentPage = binding.value();
-//	      	}
-//	      	if((scrollDistance>scroll_old) && (scroll_old!=0)){
-//				this.$up2down = 'up'
-//				this.$currentPage = binding.value();
-//	      	}
-//	      	console.log(this.$currentPage)
-//	      	scroll_old=scrollDistance
-//	      	console.log(scrollDistance)
-//	      	console.log(this.$up2down)
-////	      	if (scrollDistance <= sign) {
-////	        	binding.value()
-////	        	//console.log(binding)
-////	      	}
-//	    })
-//	}
-//
-//})
-
-//window.addEventListener('scroll', this.handleScroll, true);
 Vue.config.productionTip = false
-//let selectedNav={
-//	css: 'icon-user',
-//	name: '首页',
-//	url: '/index'}
-//
-//
-//var clickedNav=new Array();
-//clickedNav[0]=selectedNav
-////tab 上选中的页面  只能有一个
-//Vue.prototype.$selectedNav = selectedNav //选中的tab
-////所有tab的页面
-//Vue.prototype.$clickedNav = clickedNav   //点选的tab
-
-
+Vue.directive('loadmore', {
+	bind(el, binding) {
+	    const selectWrap = el.querySelector('.el-table__body-wrapper')
+	    selectWrap.addEventListener('scroll', function() {
+	      	let sign = 1
+	      	const scrollDistance = this.scrollHeight - this.scrollTop - this.clientHeight;
+//	      	console.log(scrollDistance);
+	      	console.log(this.scrollTop);
+		    if (scrollDistance <= sign) {
+		    	sessionStorage.setItem('up2down','down');
+		        binding.value();
+		        this.scrollTop = 2;
+	      	}else if(this.scrollTop < sign){
+	      		sessionStorage.setItem('up2down','up');
+	      		binding.value();
+	      		this.scrollTop = 2;
+	      		
+	      	}else{
+	      		return false;
+	      	}
+	    })
+	}
+})
 
 Vue.prototype.$echarts = echarts
 Vue.prototype.$moment = moment//赋值使用

@@ -280,7 +280,7 @@
 				treeData: [],
 				page: {
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				samplesForm: {}//修改子组件时传递数据
@@ -319,18 +319,40 @@
 			
 			//表格滚动加载
 			loadMore () {
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page.currentPage++
-			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     this.requestData()
-//			     console.log('到底了', this.page.currentPage)
-			   }
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+					}else{
+						this.page.currentPage--
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1
+							return false;
+						}
+					}
+					this.loadSign = false;
+					setTimeout(() => {
+						this.loadSign = true
+					}, 1000)
+					this.requestData()
+				}
+
+// 			   if (this.loadSign) {
+// 			     this.loadSign = false
+// 			     this.page.currentPage++
+// 			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+// 			       return
+// 			     }
+// 			     setTimeout(() => {
+// 			       this.loadSign = true
+// 			     }, 1000)
+// 			     this.requestData()
+// //			     console.log('到底了', this.page.currentPage)
+// 			   }
 			 },
 			tableControle(data) {//控制表格列显示隐藏
 				this.checkedName = data;
@@ -345,7 +367,7 @@
 			},
 			searchinfo(index) {//高级查询
 				this.page.currentPage = 1;
-				this.page.pageSize = 10;
+				this.page.pageSize = 20;
 				this.requestData();
 			},
 			//重置
@@ -479,7 +501,7 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(res.data);
+					// console.log(res.data);
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -488,19 +510,25 @@
 					} else {
 						this.loadSign = true
 					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
+					// this.commentArr[this.page.currentPage] = res.data.data
+					// let newarr = []
+					// for(var i = 1; i <= totalPage; i++) {
 
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+					// 	if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
 
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}0
-					}
-					this.samplesList = newarr;
-				}).catch((wrong) => {})
+					// 		for(var j = 0; j < this.commentArr[i].length; j++) {
+					// 			newarr.push(this.commentArr[i][j])
+					// 		}
+					// 	}0
+					// }
+					// this.samplesList = newarr;
+					this.samplesList = res.data.data;
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试1',
+						type: 'error'
+					});
+				})
 				
 			},
 			

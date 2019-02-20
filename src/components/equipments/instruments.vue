@@ -311,7 +311,7 @@
 				},
 				page: {//分页显示
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				treeData: [],
@@ -353,7 +353,7 @@
 		    },
 			searchinfo(index) {
 				this.page.currentPage = 1;
-				this.page.pageSize = 10;
+				this.page.pageSize = 20;
 				this.requestData();
 			},
 			resetbtn(){
@@ -514,18 +514,19 @@
 					} else {
 						this.loadSign = true
 					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
+					this.assetList =  res.data.data;
+					// this.commentArr[this.page.currentPage] = res.data.data
+					// let newarr = []
+					// for(var i = 1; i <= totalPage; i++) {
 
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+					// 	if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
 
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.assetList = newarr;
+					// 		for(var j = 0; j < this.commentArr[i].length; j++) {
+					// 			newarr.push(this.commentArr[i][j])
+					// 		}
+					// 	}
+					// }
+					// this.assetList = newarr;
 				}).catch((wrong) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -558,16 +559,36 @@
 				return data;
 			},
 			loadMore() {
-				if(this.loadSign) {
-					this.loadSign = false
-					this.page.currentPage++
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++
 						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							return
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
 						}
+					}else{
+						this.page.currentPage--
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1
+							return false;
+						}
+					}
+					this.loadSign = false;
 					setTimeout(() => {
 						this.loadSign = true
 					}, 1000)
 					this.requestData()
+				// if(this.loadSign) {
+				// 	this.loadSign = false
+				// 	this.page.currentPage++
+				// 		if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+				// 			return
+				// 		}
+				// 	setTimeout(() => {
+				// 		this.loadSign = true
+				// 	}, 1000)
+				// 	this.requestData()
 					//console.log('到底了', this.page.currentPage)
 				}
 			},

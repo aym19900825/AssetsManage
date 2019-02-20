@@ -17,77 +17,94 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form :model="CATEGORY" inline-message :rules="rules" ref="CATEGORY" label-width="110px" class="demo-adduserForm">
+					<el-form :model="dataInfo"  ref="dataInfo" label-width="110px" class="demo-adduserForm">
 						<div class="accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="应用管理" name="1">
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="应用英文名称" prop="code">
-												<el-input v-model="CATEGORY.code" :disabled="noedit"></el-input>
+												<el-input v-model="dataInfo.code" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="应用名称" prop="name">
-												<el-input v-model="CATEGORY.name" :disabled="noedit"></el-input>
+												<el-input v-model="dataInfo.name" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="处理类" prop="handleclass">
-												<el-input v-model="CATEGORY.handleclass" :disabled="noedit"></el-input>
+												<el-input v-model="dataInfo.handleclass" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="类型" prop="type">
-												<el-input v-model="CATEGORY.type" :disabled="noedit"></el-input>
+												<el-input v-model="dataInfo.type" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="应用描述" prop="description">
-												<el-input v-model="CATEGORY.description" :disabled="noedit"></el-input>
+												<el-input v-model="dataInfo.description" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="数据库表" prop="object_id">
-												<el-input v-model="CATEGORY.object_id" :disabled="noedit"></el-input>
+												<el-input v-model="dataInfo.object_id" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="模块" prop="module">
-												<el-input v-model="CATEGORY.module" :disabled="noedit"></el-input>
+												<el-input v-model="dataInfo.module" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="排序" prop="sort">
-												<el-input v-model="CATEGORY.sort" :disabled="noedit"></el-input>
+												<el-input v-model="dataInfo.sort" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="流程" prop="flowkey">
-												<el-input v-model="CATEGORY.flowkey" :disabled="noedit"></el-input>
+												<el-input v-model="dataInfo.flowkey" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="流程代办单据号" prop="flow_todo_num">
-												<el-input v-model="CATEGORY.flow_todo_num" :disabled="noedit"></el-input>
+												<el-input v-model="dataInfo.flow_todo_num" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="流程代办描述" prop="flow_todo_desc">
-												<el-input v-model="CATEGORY.flow_todo_desc" :disabled="noedit"></el-input>
+												<el-input v-model="dataInfo.flow_todo_desc" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
+										<el-col :span="8">
+										<!--<el-form-item label="报表类型" prop="reportId" label-width="100px">
+												<el-select v-model="dataInfo.reportId" multiple :disabled="noedit"  default-first-option  >
+													<el-option v-for="item in selectData" :key="item.id" :value="item.id" :label="item.name"></el-option>
+												</el-select>
+											</el-form-item>-->
+											<el-form-item label="报表类型" prop="reportId" label-width="100px">
+												<el-select v-model="dataInfo.reportId" multiple :disabled="noedit">
+													<el-option v-for="item in selectData" :key="item.id" :value="item.id" :label="item.name"></el-option>
+												</el-select>
+											</el-form-item>
+											<!--<el-form-item label="报表类型" prop="reportId" label-width="100px">
+												<el-select v-model="dataInfo.reportId" multiple :disabled="noedit"  default-first-option  >
+													<el-option v-for="item in selectData" :key="item.id" :value="item.id" :label="item.name"></el-option>
+												</el-select>
+											</el-form-item>-->
+										</el-col>	
 									</el-row>
 									<!-- <el-row>
 										<el-col :span="8" v-if="dept">
 											<el-form-item label="机构" prop="">
-												<el-input v-model="CATEGORY.flowkey" :disabled="edit"></el-input>
+												<el-input v-model="dataInfo.flowkey" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row> -->
@@ -96,22 +113,22 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="创建人" prop="createUser">
-												<el-input v-model="CATEGORY.createUser" :disabled="edit"></el-input>
+												<el-input v-model="dataInfo.createUser" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="创建时间" prop="createTime">
-												<el-input v-model="CATEGORY.createTime" :disabled="edit"></el-input>
+												<el-input v-model="dataInfo.createTime" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="修改人" prop="updateUser">
-												<el-input v-model="CATEGORY.updateUser" placeholder="当前修改人" :disabled="edit"></el-input>
+												<el-input v-model="dataInfo.updateUser" placeholder="当前修改人" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="变更时间" prop="updateTime">
-												<el-input v-model="CATEGORY.updateTime" placeholder="当前修改时间" :disabled="edit"></el-input>
+												<el-input v-model="dataInfo.updateTime" placeholder="当前修改时间" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -121,41 +138,25 @@
 						<div class="el-dialog__footer" v-show="noviews">
 							<el-button type="primary" @click="saveAndUpdate">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit" v-show="addtitle">保存并继续</el-button>
-							<!-- <el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('CATEGORY')">修订</el-button> -->
-							<!-- <el-button v-if="modify" type="success" @click="update('CATEGORY')">启用</el-button> -->
 							<el-button @click="close">取消</el-button>
 						</div>
 					</el-form>
 				</div>
 			</div>
+			<reportmask  ref="reportmask" @reportid="reportid" @reports="reports"></reportmask>
 		</div>
 	</div>
 </template>
 
 <script>
 	import Config from '../../config.js'
+	import reportmask from '../common/common_mask/reportmask.vue'
 	export default {
 		name: 'masks',
-		props: {
-			CATEGORY: {
-				type: Object,
-				default: function() {
-					return {
-						ID: '',
-						NUM: '',
-						TYPE: '',
-						STATUS: '',
-						VERSION: '',
-						DEPARTMENT: '',
-						ENTERBY: '',
-						ENTERDATE: '',
-						CHANGEBY: '',
-						CHANGEDATE: ''
-					}
-				}
-			},
-			page: Object,
+		components: {
+			reportmask	
 		},
+		
 		data() {
 			var validateNum = (rule, value, callback) => {
 				if(value != ""){
@@ -190,24 +191,9 @@
 				down: true,
 				up: false,
 				activeNames: ['1','2'], //手风琴数量
-				//				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				selectData: [],
-				rules: {
-					NUM: [{
-						required: false,
-						trigger: 'change',
-						validator: validateNum,
-					}],
-					TYPE: [{
-						required: true,
-						trigger: 'blur',
-						validator: validateType,
-					}],
-				},
 				//tree
-				resourceData: [], //数组，我这里是通过接口获取数据
-				category:{},//从父组件接过来的值
 				addtitle:true,
 				modifytitle:false,
 				viewtitle:false,
@@ -219,35 +205,33 @@
 				hintshow:false,
 				statusshow1:true,
 				statusshow2:false,
+				dataInfo:{
+					
+				}
 			};
 		},
 		methods: {
-			//编码提示
-			// hint(){
-			// 	this.hintshow = true;
-			// },
-			// hinthide(){
-			// 	this.hintshow = false;
-			// },
+			reportid(value){
+				this.dataInfo.reportId = value;
+			},
+			reports(value){
+				console.log(value);
+				console.log(value.toString());
+				this.dataInfo.report = value.toString();
+				console.log(111111);
+				console.log(this.dataInfo.report);
+			},
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selUser = val;
 			},
-			//生成随机数函数
-			rand(min, max) {
-				return Math.floor(Math.random() * (max - min)) + min;
-			},
 			//点击按钮显示弹窗
 			visible() {
-				this.CATEGORY.id = '';
-				//				this.CATEGORY.NUM =  this.rand(1000,9999);
+				this.dataInfo.id = '';
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					console.log(res.data);
-					// this.CATEGORY.DEPTID = res.data.deptId;
-					this.CATEGORY.createUser = res.data.id;
-					// this.CATEGORY.ENTERBYDesc = res.data.nickname;
+					this.dataInfo.createUser = res.data.id;
 					var date = new Date();
-					this.CATEGORY.createTime = this.$moment(date).format("YYYY-MM-DD HH:MM:SS");
+					this.dataInfo.createTime = this.$moment(date).format("YYYY-MM-DD HH:MM:SS");
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -261,14 +245,13 @@
 				this.noedit = false;//表单内容
 				this.views = false;//录入修改人信息
 				this.noviews = true;//按钮
-				this.modify = false;//修订
 				this.hintshow = false;
 				this.statusshow1 = true;
 				this.statusshow2 = false;
 //				this.show = true;
 			},
 			// 这里是修改
-			detail() {
+			detail(id) {
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.viewtitle = false;
@@ -277,30 +260,51 @@
 				this.views = false;//录入修改人信息
 				this.noviews = true;//按钮
 				this.hintshow = false;
-				this.modify = true;//修订
 				this.statusshow1 = false;
 				this.statusshow2 = true;
+				
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					
-					// this.CATEGORY.DEPTID = res.data.deptId;//传给后台机构id
-					this.CATEGORY.updateUser = res.data.id;
-					// this.CATEGORY.CHANGEBYDesc = res.data.nickname;
+					// this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
+					this.dataInfo.updateUser = res.data.id;
+					// this.dataInfo.CHANGEBYDesc = res.data.nickname;
 					var date = new Date();
-					this.CATEGORY.updateTime = this.$moment(date).format("YYYY-MM-DD HH:MM:SS");
-					//深拷贝数据
-					let _obj = JSON.stringify(this.CATEGORY);
-        			this.category = JSON.parse(_obj);
+					this.dataInfo.updateTime = this.$moment(date).format("YYYY-MM-DD HH:MM:SS");
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
 						type: 'error'
 					});
 				});
+				var url=this.basic_url + '/api-apps/appcfg/'+ id;
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+					this.dataInfo=res.data;
+					console.log(this.dataInfo.reportId);
+					if(typeof(this.dataInfo.reportId) != 'undefind'&&this.dataInfo.reportId != null&&this.dataInfo.reportId.length > 0) {
+							this.dataInfo.reportId=[];
+							var reports = this.dataInfo.reports;
+							for(var i = 0; i < reports.length; i++) {
+								this.dataInfo.reportId.push(reports[i].id);
+							}
+					}else if(this.dataInfo.reportId==null){
+						console.log(1111);
+						this.dataInfo.reportId = [];
+						this.dataInfo.reports = [];
+					}
+					
+					
 				this.show = true;
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+					
 			},
 			//这是查看
 			view() {
-				console.log(this.CATEGORY);
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;
@@ -310,62 +314,7 @@
 				this.noviews = false;//按钮
 				this.show = true;				
 			},
-			//点击修订按钮
-			// modifyversion(CATEGORY) {
-			// 	this.$refs[CATEGORY].validate((valid) => {
-			// 		if(valid) {
-			// 			var category=JSON.stringify(this.category); 
-	 		// 			var CATEGORY=JSON.stringify(this.CATEGORY);
-			// 		 	if(category==CATEGORY){
-			// 		  	this.$message({
-			// 					message: '没有修改内容，不允许修订！',
-			// 					type: 'warning'
-			// 				});
-			// 				return false;
-			// 		    }else{
-			// 				var url = this.basic_url + '/api-apps/app/productType/operate/upgraded';
-			// 				this.$axios.post(url, this.CATEGORY).then((res) => {
-			// 					//resp_code == 0是后台返回的请求成功的信息
-			// 					if(res.data.resp_code == 0) {
-			// 						this.$message({
-			// 							message: '修订成功',
-			// 							type: 'success'
-			// 						});
-			// 						//重新加载数据
-			// 						this.$emit('request');
-			// 						this.show = false;
-			// 					}else{
-			// 					this.show = true;
-			// 					if(res.data.resp_code == 1) {
-			// 						//res.data.resp_msg!=''后台返回提示信息
-			// 						if( res.data.resp_msg!=''){
-			// 						 	this.$message({
-			// 								message: res.data.resp_msg,
-			// 								type: 'warning'
-			// 						 	});
-			// 						}else{
-			// 							this.$message({
-			// 								message:'相同数据不可重复修订！',
-			// 								type: 'warning'
-			// 							});
-			// 						}
-			// 					}
-			// 				}		
-			// 				}).catch((err) => {
-			// 					this.$message({
-			// 						message: '网络错误，请重试',
-			// 						type: 'error'
-			// 					});
-			// 				});
-			// 			}
-			// 		} else {
-			// 			this.$message({
-			// 				message: '未填写完整，请填写',
-			// 				type: 'warning'
-			// 			});
-			// 		}
-			// 	});
-			// },
+			
 			//点击关闭按钮
 			close() {
 				this.show = false;
@@ -398,28 +347,33 @@
 			},
 			// 保存users/saveOrUpdate
 			save() {
-				// var test = {
-				// 	code: "string",
-  				// 	createTime: "2019-01-16 10:29:48",
-				// 	createUser: 0,
-				// 	description: "string",
-				// 	flowTodoDesc: "string",
-				// 	flowTodoNum: "string",
-				// 	flowkey: "string",
-				// 	handleclass: "string",
-				// 	id: "",
-				// 	module: "string",
-				// 	name: "string",
-				// 	objectId: 0,
-				// 	sort: 0,
-				// 	type: 0,
-				// 	updateTime: "2019-01-16 10:29:48",
-				// 	updateUser: 0
-				// };
-				this.$refs.CATEGORY.validate((valid) => {
+				var _this = this;
+				this.$refs.dataInfo.validate((valid) => {
 					if(valid) {
+						console.log(this.dataInfo);
+						var dataInfo = _this.dataInfo;
+						var reportId = "";
+						if(typeof(dataInfo.reportId) != 'undefind' && dataInfo.reportId.length > 0) {
+							var arr = [];
+							dataInfo.reportId.forEach(function(item) {
+								var reports = _this.selectData;
+								for(var j = 0; j < reports.length; j++) {
+									if(reports[j].id == item) {
+										arr.push(reports[j]);
+										reportId = reportId + reports[j].id + ",";
+									}
+								}
+							});
+							dataInfo.reportId = reportId.substring(0,reportId.length-1);
+//							this.dataInfo.reportId='1,2';
+							dataInfo.reports = arr;
+						} else {
+							dataInfo.reportId = '';
+							dataInfo.reports = [];
+						}
 						var url = this.basic_url + '/api-apps/appcfg/saveOrUpdate';
-						this.$axios.post(url, this.CATEGORY).then((res) => {
+						console.log(this.dataInfo);
+						this.$axios.post(url, this.dataInfo).then((res) => {
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
 								this.$message({
@@ -428,8 +382,8 @@
 								});
 								//重新加载数据
 								this.$emit('request');
-								this.$emit('reset');
-								this.visible();
+//								this.$emit('reset');
+//								this.visible();
 							}else{
 								this.show = true;
 								if(res.data.resp_code == 1) {
@@ -493,9 +447,27 @@
 					})
 					.catch(_ => {});
 			},
+			//报表参数类型
+//			getreport(){ 
+//				this.$refs.reportmask.visible();
+//			},
+			getreport(){
+				var url = this.basic_url + '/api-report/report';
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+					this.selectData = res.data.data;
+					
+				}).catch((wrong) => {
+					this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+				})	
+			},
+
 		},
 		mounted() {
-			
+			this.getreport();
 		},
 		
 	}

@@ -420,6 +420,7 @@
 					if (valid) {
 			            var url = this.basic_url + '/api-user/users/me';
 			            var personinfo=this.personinfo;
+			            var _this=this
 			            personinfo.sex = personinfo.sex == '男' ? 1 : 0;
 						var roleId = "";
 						if(typeof(personinfo.roleId) != 'undefind' && personinfo.roleId.length > 0) {

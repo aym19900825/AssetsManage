@@ -86,7 +86,7 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :header-cell-style="rowClass" :data="userList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+						<el-table :header-cell-style="rowClass" :data="userList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 							</el-table-column>
 							<el-table-column label="记录编号" width="200" sortable prop="C_RECORDNUM" v-if="this.checkedName.indexOf('记录编号')!=-1">
@@ -220,7 +220,7 @@
 				userData:[],
 				page: {//分页显示
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				aaaData:[],
@@ -252,7 +252,7 @@
 			},
 			searchinfo(index) {
 				this.page.currentPage = 1;
-				this.page.pageSize = 10;
+				this.page.pageSize = 20;
 				this.requestData();
 			},
 			resetbtn(){
@@ -392,22 +392,52 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					this.userList = res.data.data;
 					this.page.totalCount = res.data.count;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
+					}
+					this.userList =  res.data.data;
+					// this.userList = res.data.data;
+					// this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
 			},
 			loadMore () {
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page++
-			     if (this.page > 10) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     console.log('到底了', this.page)
-			   }
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+					}else{
+						this.page.currentPage--
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1
+							return false;
+						}
+					}
+					this.loadSign = false;
+					setTimeout(() => {
+						this.loadSign = true
+					}, 1000)
+					this.requestData()
+				}
+			   // if (this.loadSign) {
+			   //   this.loadSign = false
+			   //   this.page++
+			   //   if (this.page > 10) {
+			   //     return
+			   //   }
+			   //   setTimeout(() => {
+			   //     this.loadSign = true
+			   //   }, 1000)
+			   //   console.log('到底了', this.page)
+			   // }
 			 },
 			handleNodeClick(data) {
 			},

@@ -136,7 +136,7 @@
 				treeData: [],
 				page: {
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				menu: {}//修改子组件时传递数据

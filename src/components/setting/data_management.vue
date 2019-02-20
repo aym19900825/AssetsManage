@@ -150,7 +150,7 @@
 				treeData: [],
 				page: {
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				dataList:[]
@@ -179,7 +179,7 @@
 		    },
 			searchinfo(index) {
 				this.page.currentPage = 1;
-				this.page.pageSize = 10;
+				this.page.pageSize = 20;
 				this.requestData();
 			},
 			resetbtn(){

@@ -32,7 +32,7 @@
 						<el-collapse-item title="账号设置" name="1">
 							<el-row :gutter="30">
 								<el-col :span="8">
-						 			<el-form-item label="登录名称">
+						 			<el-form-item label="用户名">
 						 				<el-input v-model="personinfo.username" disabled></el-input>
 						 			</el-form-item>
 
@@ -45,7 +45,7 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="8">
-									<el-form-item label="登录口令">
+									<el-form-item label="密码">
 					                      <el-input type="password" v-model="personinfo.password" disabled>
 					                     		<el-button slot="append" icon="icon-edit" @click="editpassword"></el-button>
 					                      </el-input>
@@ -104,7 +104,7 @@
 						 	<el-row :gutter="30">
 						 		<el-col :span="9">
 						 			<el-form-item label="允许登录" prop="islogin" label-width="100px">
-										<el-radio-group v-model="user.islogin" :disabled="noedit">
+										<el-radio-group v-model="personinfo.islogin">
 											<el-radio label="是"></el-radio>
 											<el-radio label="否"></el-radio>
 										</el-radio-group>
@@ -260,10 +260,10 @@
 	          		deptId: '',//所属机构ID
 	          		deptID: '',//所属机构
 	          		nickname:'',//人员姓名
-	          		username:'',//登录名称
+	          		username:'',//用户名
 	          		enabled:'',//配置信息状态
 	          		enabledName:'',//配置信息状态名称
-	          		password:'',//登录口令
+	          		password:'',//密码
 	          		birthday:'',//出生日期
 	          		sex:'',//性别
 	          		idnumber:'',//身份证号

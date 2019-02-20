@@ -109,7 +109,19 @@
 					<el-row>
 						<el-col :span="24">
 							<!-- 表格 Begin-->
-							<el-table :header-cell-style="rowClass" :data="methodsList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'methodsList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table :header-cell-style="rowClass" 
+									  :data="methodsList" 
+									  border 
+									  stripe 
+									  :height="fullHeight" 
+									  style="width: 100%;" 
+									  :default-sort="{prop:'methodsList', order: 'descending'}" 
+									  @selection-change="SelChange" 
+									  v-loadmore="loadMore"
+									  v-loading="loading"  
+									  element-loading-text="拼命加载中"
+    								  element-loading-spinner="el-icon-loading"
+    								  element-loading-background="rgba(0, 0, 0, 0.6)">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="编码" width="170" sortable prop="M_NUM" v-if="this.checkedName.indexOf('编码')!=-1">
@@ -169,6 +181,7 @@
 		},
 		data() {
 			return {
+				loading: false,
 				basic_url: Config.dev_url,
 				value: '',
 				options: [{
@@ -482,6 +495,7 @@
 				this.selMenu = val;
 			},
 			requestData() {//高级查询字段
+				this.loading = true;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -507,6 +521,7 @@
 						this.loadSign=true
 					}
 					this.methodsList = res.data.data;
+					this.loading = false;
 				}).catch((wrong) => {})
 			},
 

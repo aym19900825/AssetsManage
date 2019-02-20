@@ -72,7 +72,7 @@
 								</el-table-column>
 								<el-table-column label="单据号" sortable prop="bizNum" v-if="this.checkedName.indexOf('单据号')!=-1">
 									<template slot-scope="scope">
-										<p class="blue" title="点击查看详情" @click="audit">{{scope.row.bizNum}}
+										<p class="blue" title="点击查看详情" @click=audit(scope.row)>{{scope.row.bizNum}}
 										</p>
 									</template>
 								</el-table-column>
@@ -172,26 +172,11 @@ export default {
 			    return 'text-align:center'
 			},
 		//审核	
-		audit(){
-			if(this.selUser.length == 0) {
-					this.$message({
-						message: '请您选择要审核的数据',
-						type: 'warning'
-					});
-					return;
-				} else if(this.selUser.length > 1) {
-					this.$message({
-						message: '不可同时审核多条数据',
-						type: 'warning'
-					});
-					return;
-				} else {
-					// console.log(this.selUser[0]);
-					// console.log(this.selUser[0].bizMenuUrl);
-					this.$router.push({path:this.selUser[0].bizMenuUrl ,query: { bizId: this.selUser[0].bizId,}});
-					this.$store.dispatch('setMenuIdAct',this.selUser[0].bizFirstMenuId);
-					// console.log(this.$store.state.menuid);
-			    }
+		audit(item){
+			console.log(item);
+			this.$router.push({path:item.bizMenuUrl ,query: { bizId: item.bizId,}});
+			this.$store.dispatch('setMenuIdAct',item.bizFirstMenuId);
+
 		},
 		//点击的数据
 		SelChange(val) {

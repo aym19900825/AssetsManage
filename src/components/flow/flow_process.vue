@@ -113,7 +113,19 @@
 					<el-row :gutter="10">
 						<el-col :span="24" class="leftcont v-resize">
 							<!-- 表格 -->
-							<el-table :data="flowmodelList" :header-cell-style="rowClass" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'inspectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table :data="flowmodelList" 
+									  :header-cell-style="rowClass" 
+									  border 
+									  stripe 
+									  :height="fullHeight" 
+									  style="width: 100%;" 
+									  :default-sort="{prop:'inspectList', order: 'descending'}" 
+									  @selection-change="SelChange" 
+									  v-loadmore="loadMore"
+									  v-loading="loading"  
+									  element-loading-text="拼命加载中"
+    								  element-loading-spinner="el-icon-loading"
+    								  element-loading-background="rgba(0, 0, 0, 0.6)">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="流程定义ID" sortable width="130px" prop="id" v-if="this.checkedName.indexOf('流程定义ID')!=-1">
@@ -166,6 +178,7 @@ export default {
 
     data() {
       return {
+		loading: false,
       	basic_url: Config.dev_url,
       	fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
       	search: false,
@@ -266,7 +279,7 @@ export default {
 //					DEPTID: this.searchList.DEPTID,
 //					// STATUS: this.searchList.STATUS,
 //				}
-
+				this.loading = true;
 				var url = this.basic_url + '/api-flow/flow/process';
 				this.$axios.get(url, {}).then((res) => {
 					console.log(res.data);
@@ -288,6 +301,7 @@ export default {
 						}
 					}
 					this.flowmodelList = newarr;
+					this.loading = false;
 				}).catch((wrong) => {
 					
 					

@@ -54,8 +54,9 @@
 									<template slot="prepend">类型名称</template>
 								</el-input>
 							</el-col>
-							<el-col :span="2">
+							<el-col :span="4">
 								<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
@@ -64,7 +65,18 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :data="reportsList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'reportsList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+						<el-table :data="reportsList"
+								  border 
+								  stripe 
+								  :height="fullHeight" 
+								  style="width: 100%;" 
+								  :default-sort="{prop:'reportsList', order: 'descending'}" 
+								  @selection-change="SelChange" 
+								  v-loadmore="loadMore"
+								  v-loading="loading"  
+								  element-loading-text="拼命加载中"
+								  element-loading-spinner="el-icon-loading"
+								  element-loading-background="rgba(0, 0, 0, 0.6)">
 							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 							</el-table-column>
 							
@@ -116,6 +128,7 @@
 		},
 		data() {
 			return {
+				loading: false,
 				loadSign: true, //鼠标滚动加载数据
 				commentArr: {},
 				basic_url: Config.dev_url,
@@ -171,6 +184,12 @@
 		      this.page.currentPage = val;
 		      this.requestData();
 		    },
+		     resetbtn(){
+			this.searchList = { //点击高级搜索后显示的内容
+			typename: '',
+			};
+			this.requestData();
+			},
 			searchinfo() {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
@@ -270,6 +289,7 @@
 				this.selUser = val;
 			},
 			requestData() {
+				this.loading = true;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -285,6 +305,7 @@
 						this.loadSign = true
 					}
 					this.reportsList = res.data.data;
+					this.loading = false;
 					// this.page.totalCount = res.data.count;
 				}).catch((wrong) => {
 					this.$message({

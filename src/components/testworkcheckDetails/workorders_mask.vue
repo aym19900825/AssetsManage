@@ -489,8 +489,11 @@
 												</el-table-column>
 											      <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 											      <template slot-scope="scope">
-											         <el-button @click.native.prevent="deleteRow(scope.$index,workorderForm.WORKORDER_PROJECTList)" type="text" size="small">
-											      <i class="icon-trash red"></i>
+											         <el-button title="删除" @click.native.prevent="deleteRow(scope.$index,workorderForm.WORKORDER_PROJECTList)" type="text" size="small">
+											      		<i class="icon-trash red"></i>
+											        </el-button>
+													<el-button title="生成子任务单" @click.native.prevent="deleteRow(scope.$index,workorderForm.WORKORDER_PROJECTList)" type="text" size="small">
+											      		<i class="icon-send"></i>
 											        </el-button>
 											      </template>
 											    </el-table-column>
@@ -575,11 +578,20 @@
 											      </template>
 											    </el-table-column>-->
 							            		<el-table-column label="预览"></el-table-column>
-							            		<el-table-column fixed="right" label="操作" width="80" v-if="!viewtitle" >
+							            		<el-table-column fixed="right" label="操作" width="150" v-if="!viewtitle" >
 											      <template slot-scope="scope">
-											      	  <el-button @click.native.prevent="deleteRow(scope.$index,workorderForm.WORKORDER_DATA_TEMPLATEList)" type="text" size="small">
-											        <i class="icon-trash red"></i>
-											        </el-button>
+													  <el-button title="下载" type="text" size="small">
+														<i class="icon-arrow-down-circle"></i>
+													  </el-button>
+													  <el-button title="上传" type="text" size="small">
+														<i class="icon-arrow-up-circle"></i>
+													  </el-button>
+													  <el-button title="编辑" type="text" size="small">
+														<i class="icon-edit2"></i>
+													  </el-button>
+											      	  <el-button title="删除" @click.native.prevent="deleteRow(scope.$index,workorderForm.WORKORDER_DATA_TEMPLATEList)" type="text" size="small">
+														<i class="icon-trash red"></i>
+													  </el-button>
 											      </template>
 											    </el-table-column>
 							            	</el-table>

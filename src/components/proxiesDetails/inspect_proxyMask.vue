@@ -391,13 +391,13 @@
 
 												<el-table-column prop="VENDORDesc" label="分包方名称" sortable width="120px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.VENDORDesc'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<!-- <el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.VENDORDesc'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" > -->
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDORDesc" placeholder="请输入分包方名称">
 															<el-button slot="append" icon="el-icon-search" @click="getDept(scope.row)">
 															</el-button>
 														</el-input>
 														<span v-else="v-else">{{scope.row.VENDORDesc}}</span>
-														</el-form-item>
+														<!-- </el-form-item> -->
 													</template>
 												</el-table-column>
 
@@ -670,7 +670,7 @@
 			<sampletmask ref="samplechild" @appenddes="appenddes" @appendmod="appendmod" @appendqua="appendqua"></sampletmask>
 			<!--受检企业-->
 			<enterprisemask ref="enterprisechild" @appendname="appendname" @appendadd="appendadd" @appendzip="appendzip"@appendnames="appendnames" @appendid="appendid"></enterprisemask>
-		<!--审批页面-->
+			<!--审批页面-->
 			<approvalmask :approvingData="approvingData" ref="approvalChild"  @detail="detailgetData"></approvalmask>
 			<!--流程历史-->
 			<flowhistorymask :approvingData="approvingData"  ref="flowhistoryChild" ></flowhistorymask>
@@ -903,6 +903,7 @@
 				resourceData: [], //数组，我这里是通过接口获取数据
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
 				resourceProps: {
+					children: "children",
 					label: "fullname"
 				},
 				dialogVisible: false, //对话框
@@ -968,18 +969,34 @@
 			},
 			//所属上级
 			getDept(item) {
-				console.log(23333333);
+				// console.log(23333333);
+				// console.log(this.resourceProps);	
 				console.log(item);
-				var type = "2";
-				var url = this.basic_url + '/api-user/depts/treeByType';
+				// var type = "2";
+				// var url = this.basic_url + '/api-user/depts/treeByType';
+				// this.$axios.get(url, {
+				// 	params: {
+				// 		type: type
+				// 	},
+				// }).then((res) => {
+				// 	this.resourceData = res.data;
+				// 	console.log(233333);
+				// 	console.log(this.resourceData);
+				// 	this.dialogVisible = true;
+				// 	this.deptindex = item;
+				// });
+
+				var page = this.page.currentPage;
+				var limit = this.page.pageSize;
+				var url = this.basic_url + '/api-user/depts/treeMap';
 				this.$axios.get(url, {
 					params: {
-						type: type
+						page: page,
+						limit: limit,
+						// type: type
 					},
 				}).then((res) => {
 					this.resourceData = res.data;
-					console.log(233333);
-					console.log(this.resourceData);
 					this.dialogVisible = true;
 					this.deptindex = item;
 				});
@@ -1056,6 +1073,8 @@
 					STATUSDesc:'草稿',
 					ITEM_NAME:'',
 					VENDOR:'',
+					P_NUM:'',
+					PRO_NUM:'',
 					ITEM_NAME:'',
 					ITEM_MODEL:'',
 					ITEM_QUALITY:'',
@@ -1100,7 +1119,7 @@
 						}
 					}).catch((err) => {
 						this.$message({
-							message: '网络错误，请重试',
+							message: '网络错误，请重试1',
 							type: 'error'
 						});
 					});
@@ -1174,7 +1193,7 @@
 					this.show = true;
 				}).catch((err) => {
 					this.$message({
-						message: '网络错误，请重试',
+						message: '网络错误，请重试21',
 						type: 'error'
 					})
 				})
@@ -1188,26 +1207,24 @@
 			},
 			//
 			detailgetData() {
-			this.RVENDORSelect();
-			this.getmaingroup();
 			var url = this.basic_url +'/api-apps/app/inspectPro/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					console.log(res);
-					//依据
+					// 依据
 					for(var i = 0;i<res.data.INSPECT_PROXY_BASISList.length;i++){
 						res.data.INSPECT_PROXY_BASISList[i].isEditing = false;
 					}
-					//要求
+					// 要求
 					for(var m = 0;m<res.data.INSPECT_PROXY_PROJECList.length;m++){
 						res.data.INSPECT_PROXY_PROJECList[m].isEditing = false;
 					}
-					//分包要求
+					// 分包要求
 					for(var n = 0;n<res.data.CHECK_PROXY_CONTRACTList.length;n++){
 						res.data.CHECK_PROXY_CONTRACTList[n].isEditing = false;
 					}
 					res.data.R_VENDOR = Number(res.data.R_VENDOR);		
-					res.data.MAINGROUP = Number(res.data.MAINGROUP);
-					res.data.LEADER = Number(res.data.LEADER);
+					// res.data.MAINGROUP = Number(res.data.MAINGROUP);
+					// res.data.LEADER = Number(res.data.LEADER);
 					console.log(res.data);
 					console.log(typeof(res.data.MAINGROUP));
 					this.dataInfo = res.data;
@@ -1217,7 +1234,7 @@
         			this.datainfo = JSON.parse(_obj);
 				}).catch((err) => {
 					this.$message({
-						message: '网络错误，请重试',
+						message: '网络错误，请重试3',
 						type: 'error'
 					});
 				});
@@ -1234,7 +1251,7 @@
 					this.dataInfo.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd");
 				}).catch((err) => {
 					this.$message({
-						message: '网络错误，请重试',
+						message: '网络错误，请重试4',
 						type: 'error'
 					});
 				});
@@ -1290,7 +1307,7 @@
 								}		
 							}).catch((err) => {
 								this.$message({
-									message: '网络错误，请重试',
+									message: '网络错误，请重试5',
 									type: 'error'
 								});
 							});
@@ -1345,20 +1362,20 @@
 			},
 			//接到产品类别的值
 			categorydata(value){
-				this.catenum = value[0];
+				this.dataInfo.P_NUM = value[0];
 				this.dataInfo.PRODUCT_TYPE  = value[1];
 			},
 			addproduct(){//受检产品名称
-				this.$refs.productchild.visible(this.catenum);
+				this.$refs.productchild.visible(this.dataInfo.P_NUM);
 			},
 			//接到产品的值
 			appenddata(value){
-				this.pronum = value[0];
+				this.dataInfo.PRO_NUM = value[0];
 				this.dataInfo.PRODUCT = value[1];
 			},
 			//检验依据放大镜
 			basisleadbtn(){
-				this.$refs.standardchild.basislead(this.pronum);
+				this.$refs.standardchild.basislead(this.dataInfo.PRO_NUM);
 			},
 			 //检验依据列表
 			addbasis(value){
@@ -1367,6 +1384,7 @@
 					value[i].S_DESC = value[i].S_NAME;
 					this.dataInfo.INSPECT_PROXY_BASISList.push(value[i]);
 				}
+				this.dataInfo.INSPECT_PROXY_PROJECList = [];
 				// this.dataInfo.WORK_NOTICE_CHECKBASISList = value;
 			},
 			//检验项目放大镜
@@ -1467,7 +1485,7 @@
 								}
 							}).catch((err) => {
 								this.$message({
-									message: '网络错误，请重试',
+									message: '网络错误，请重试6',
 									type: 'error'
 								});
 							});
@@ -1527,22 +1545,11 @@
 						this.maingroup = res.data;
 					}).catch((err) => {
 						this.$message({
-							message: '网络错误，请重试',
+							message: '网络错误，请重试7',
 							type: 'error'
 						});
 					});
 			},
-			// RVENDOR(){
-			// 	var url = this.basic_url + '/api-user/depts/findByPid';
-			// 		this.$axios.get(url, {}).then((res) => {
-			// 			this.maingroup = res.data;
-			// 		}).catch((err) => {
-			// 			this.$message({
-			// 				message: '网络错误，请重试',
-			// 				type: 'error'
-			// 			});
-			// 		});
-			// },
 			//主检组带出主检负责人
 			getmaingroup(maingroupid){
 				var url = this.basic_url + '/api-user/users/usersByDept?deptId='+maingroupid;
@@ -1550,22 +1557,11 @@
 						this.leaderdata = res.data.data;
 					}).catch((err) => {
 						this.$message({
-							message: '网络错误，请重试',
+							message: '网络错误，请重试8',
 							type: 'error'
 						});
 					});		
 			},
-			// getmain(){
-			// 	var url = this.basic_url + '/api-user/users/usersByDept';
-		   	// 		this.$axios.get(url, {}).then((res) => {
-			// 			this.leaderdata = res.data.data;
-			// 		}).catch((err) => {
-			// 			this.$message({
-			// 				message: '网络错误，请重试',
-			// 				type: 'error'
-			// 			});
-			// 		});		
-			// },
 			//获取负责人和接收人
 			getCustomer(type) {
 				this.$refs.enterprisechild.visible(type);
@@ -1708,7 +1704,6 @@
 			},
 		},
 		mounted() {
-			console.log(1234567890);
 			this.getCompany();
 			// this.RVENDORSelect();
 			// this.getmaingroup();

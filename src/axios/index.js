@@ -11,11 +11,11 @@ axios.interceptors.request.use(
     if (token) {
         request.headers.Authorization = 'Bearer ' + token;
     }
-    loading = Loading.service({
-      fullscreen: true,
-      text: '拼命加载中...',
-      background: 'rgba(0, 0, 0, 0.8)'
-    });
+    // loading = Loading.service({
+    //   fullscreen: true,
+    //   text: '拼命加载中...',
+    //   // background: 'rgba(0, 0, 0, 0.8)'
+    // });
     return request;
   },
   err => {
@@ -28,13 +28,13 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   response => {
     var _this = this;
-    setTimeout(function(){
-      loading.close();
-    },500);
+    // setTimeout(function(){
+    //   loading.close();
+    // },500);
     return response;
   },
   error => {
-    loading.close();
+    // loading.close();
     // router.push({ path: '/' });
     console.log(error);
 

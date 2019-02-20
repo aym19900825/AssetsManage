@@ -33,6 +33,9 @@
 							<button type="button" class="btn btn-primarys button-margin" @click="Printing">
 							    <i class="icon-print"></i>打印
 							</button>
+							<button type="button" class="btn btn-primarys button-margin" @click="distribute">
+							    <i class="icon-print"></i>下发协议
+							</button>
 							<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 					    		<i class="icon-search"></i>高级查询
 					    		<i class="icon-arrow1-down" v-show="down"></i>
@@ -386,6 +389,10 @@
 			// 打印
 			Printing() {
 				
+			},
+			//下发协议
+			distribute(){
+
 			},
 			// judge(data) {
 			// 	//taxStatus 布尔值

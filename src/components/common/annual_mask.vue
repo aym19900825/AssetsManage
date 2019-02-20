@@ -1553,6 +1553,7 @@
 			},
 			// 这里是修改
 			detail(dataid) {
+				this.getCompany();
 				this.assignshow = true;
 				this.$axios.get(this.basic_url +'/api-apps/app/workplan/' + dataid, {}).then((res) => {
 					for(var i = 0; i<res.data.WORLPLANLINEList.length; i++){
@@ -1560,6 +1561,9 @@
 					}
 					console.log(3333344444);
 					console.log(res.data);
+					res.data.PROP_UNIT = Number(res.data.PROP_UNIT);
+					console.log('=======================');
+					console.log(typeof(res.data.PROP_UNIT));
 					this.WORKPLAN = res.data;
 					// for(var j=0;j<this.selectData.length;j++){
 					// 	if(this.WORKPLAN.PROP_UNIT == this.selectData[j].id){

@@ -409,8 +409,8 @@
 			requestData() {
 				var data = {
 					CLASSIFY_NUM:this.searchList.CLASSIFY_NUM,
-					// CLASSIFY_DESCRIPTION: this.searchList.CLASSIFY_DESCRIPTION,
-					// PARENT:this.searchList.PARENT,
+					CLASSIFY_DESCRIPTION: this.searchList.CLASSIFY_DESCRIPTION,
+					PARENT:this.searchList.PARENT,
 				}
 				console.log('=============');
 				console.log(this.searchList);

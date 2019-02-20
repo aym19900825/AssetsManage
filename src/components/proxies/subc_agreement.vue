@@ -106,7 +106,19 @@
 					<!-- 左侧树菜单 End-->
 					<el-col :span="19" class="leftcont v-resize">
 						<!-- 表格 Begin-->
-						<el-table :header-cell-style="rowClass" :data="subagree" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'subagree', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+						<el-table :header-cell-style="rowClass" 
+								  :data="subagree" 
+								  border 
+								  stripe 
+								  :height="fullHeight" 
+								  style="width: 100%;" 
+								  :default-sort="{prop:'subagree', order: 'descending'}" 
+								  @selection-change="SelChange" 
+								  v-loadmore="loadMore"
+								  v-loading="loading"  
+								  element-loading-text="拼命加载中"
+    							  element-loading-spinner="el-icon-loading"
+    							  element-loading-background="rgba(0, 0, 0, 0.6)">
 							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0" align="center">
 							</el-table-column>
 							<el-table-column label="分包协议编号" width="150" sortable prop="PROXY_CONTRACT_NUM" v-if="this.checkedName.indexOf('分包协议编号')!=-1">
@@ -169,6 +181,7 @@
 		},
 		data() {
 			return {
+				loading: false,
 				// dataUrl: '/api/api-user/users',
 				basic_url: Config.dev_url,
 				searchData: {
@@ -410,6 +423,7 @@
 				this.selUser = val;
 			},
 			requestData(index) {
+				this.loading = true;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -427,6 +441,7 @@
 					console.log(res.data);
 					this.subagree = res.data.data;
 					this.page.totalCount = res.data.count;
+					this.loading = false;
 				}).catch((wrong) => {})
 			},
 			loadMore () {

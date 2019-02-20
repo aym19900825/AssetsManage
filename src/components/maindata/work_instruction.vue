@@ -81,7 +81,19 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格 Begin-->
-							<el-table :header-cell-style="rowClass" :data="WORK_INSTRUCTIONList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'WORK_INSTRUCTIONList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table :header-cell-style="rowClass" 
+									  :data="WORK_INSTRUCTIONList" 
+									  border 
+									  stripe 
+									  :height="fullHeight" 
+									  style="width: 100%;" 
+									  :default-sort="{prop:'WORK_INSTRUCTIONList', order: 'descending'}"
+									   @selection-change="SelChange" 
+									   v-loadmore="loadMore"
+									   v-loading="loading"  
+									   element-loading-text="拼命加载中"
+    								   element-loading-spinner="el-icon-loading"
+    								   element-loading-background="rgba(0, 0, 0, 0.6)">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="分发号" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('分发号')!=-1">
@@ -132,6 +144,7 @@
 		},
 		data() {
 			return {
+				loading: false,
 				basic_url: Config.dev_url,
 				loadSign: true, //加载
 				commentArr: {},
@@ -431,6 +444,7 @@
 				this.selUser = val;
 			},
 			requestData() {
+				this.loading = true;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -453,6 +467,7 @@
 						this.loadSign = true
 					}
 					this.WORK_INSTRUCTIONList = res.data.data;
+					this.loading = false;
 				}).catch((wrong) => {})
 			},
 			handleNodeClick(data) {},

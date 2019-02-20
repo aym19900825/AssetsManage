@@ -125,7 +125,19 @@
 						</el-col>
 						<el-col :span="19">
 							<!-- 表格 Begin-->
-							<el-table :data="nitificationsList" :header-cell-style="rowClass" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'nitificationsList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table :data="nitificationsList" 
+									  :header-cell-style="rowClass" 
+									  border 
+									  stripe 
+									  :height="fullHeight" 
+									  style="width: 100%;" 
+									  :default-sort="{prop:'nitificationsList', order: 'descending'}" 
+									  @selection-change="SelChange" 
+									  v-loadmore="loadMore"
+									  v-loading="loading"  
+									  element-loading-text="拼命加载中"
+    								  element-loading-spinner="el-icon-loading"
+    								  element-loading-background="rgba(0, 0, 0, 0.6)">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="工作任务通知书编号" width="180" sortable prop="N_CODE" v-if="this.checkedName.indexOf('工作任务通知书编号')!=-1">
@@ -195,6 +207,7 @@
 		},
 		data() {
 			return {
+				loading: false,
 				basic_url: Config.dev_url,
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
 				value: '',
@@ -604,6 +617,7 @@
 				this.selUser = val;
 			},
 			requestData(index) {
+				this.loading = true;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -639,6 +653,7 @@
 					// 	}
 					// }
 					this.nitificationsList = res.data.data;
+					this.loading = false;
 				}).catch((wrong) => {
 					this.$message({
 						message: '网络错误，请重试1',

@@ -105,8 +105,8 @@
 						 		<el-col :span="9">
 						 			<el-form-item label="允许登录" prop="islogin" label-width="100px">
 										<el-radio-group v-model="personinfo.islogin">
-											<el-radio label="是"></el-radio>
-											<el-radio label="否"></el-radio>
+											<el-radio label="1">是</el-radio>
+											<el-radio label="2">否</el-radio>
 										</el-radio-group>
 									</el-form-item>	
 						 		</el-col>
@@ -133,8 +133,8 @@
 						 		<el-col :span="8">
 						 			<el-form-item label="性别">
 						 			 	<el-radio-group v-model="personinfo.sex">
-							 				<el-radio label="男"></el-radio>
-							 				<el-radio label="女"></el-radio>
+							 				<el-radio :label="1">男</el-radio>
+							 				<el-radio :label="0">女</el-radio>
 							 			</el-radio-group>
 						 			</el-form-item>
 						 			
@@ -335,6 +335,7 @@
 	    		this.$axios.get(url, {}).then((res) => { 
 	    			//res.data.enabled ? '启用' : '冻结';
 	    			//res.data.sex ? '男' : '女';
+	    			console.log(this.personinfo);
 	    			this.personinfo=res.data;
 	    			this.personinfo.roleId = [];
 	    			var roles =res.data.roles;

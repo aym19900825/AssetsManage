@@ -88,7 +88,7 @@ export default {
 	},
 	mounted() {
 		var _this = this;
-		 console.log(_this.$store.state.menuid);
+		 // console.log(_this.$store.state.menuid);
 		if(_this.$store.state.menuid=="undefined"||_this.$store.state.menuid=="null"){
 			// console.log(111111);
 			$('.navbar-default').hide();

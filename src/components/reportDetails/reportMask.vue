@@ -35,8 +35,10 @@
 		<!-- 表格 End-->
 		</el-table>
   </el-dialog>
-  <!--报表-->
+  <!--没有报表-->
 			<reportiframe ref="reportchild"></reportiframe>
+  <!--有报表-->
+			<reportpramiframe ref="reportpramchild" :pramList="pramList"></reportpramiframe>
  </div>
 </template>
 
@@ -44,11 +46,13 @@
 	
 	import Config from '../../config.js';
 	import reportiframe from'../common/report_iframe.vue';
+	import reportpramiframe from'../common/report_pram_iframe.vue';
 	export default {
 		name: 'report',
 		 props:["reportData"],//第一种方式
 		components: {
-			reportiframe
+			reportiframe,
+			reportpramiframe
 		},
 	    data(){
 	    	return{
@@ -56,6 +60,7 @@
 	    		innerVisible: false,
 	    		reportsList: [],
 	    		selreport:[],
+	    		pramList:{},
 	    		appname:'',	
 	    	}
 	    },
@@ -95,20 +100,24 @@
 					this.appname=this.reportData.app;	
 					var url = this.basic_url + '/api-apps/app/'+this.appname+'/reportParams/'+id;
 					this.$axios.get(url, {}).then((res) => {
-						console.log(res);
-						console.log(res.data.datas);
 						if(res.data.datas==null){
-							 this.$refs.reportchild.visible();
+							console.log(id);
+							 this.$refs.reportchild.visible(id);
 							 this.close();
 						}else{
-							
+							console.log(res);
+							console.log(res.data.datas);
+//							this.pramList=res.data.datas;
+							console.log(this.pramList);
+							this.$refs.reportpramchild.visible();
+//							this.close();
 						}
 					}).catch((wrong) => {
 						this.$message({
 								message: '网络错误，请重试',
 								type: 'error'
 							});
-				})
+					})
 				}
 		  		
 		  	},

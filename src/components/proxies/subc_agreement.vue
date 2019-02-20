@@ -78,8 +78,9 @@
 								  </div>
 								</el-form-item>
 							</el-col>
-							<el-col :span="2">
+							<el-col :span="4">
 								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
@@ -106,7 +107,19 @@
 					<!-- 左侧树菜单 End-->
 					<el-col :span="19" class="leftcont v-resize">
 						<!-- 表格 Begin-->
-						<el-table :header-cell-style="rowClass" :data="subagree" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'subagree', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+						<el-table :header-cell-style="rowClass" 
+								  :data="subagree" 
+								  border 
+								  stripe 
+								  :height="fullHeight" 
+								  style="width: 100%;" 
+								  :default-sort="{prop:'subagree', order: 'descending'}" 
+								  @selection-change="SelChange" 
+								  v-loadmore="loadMore"
+								  v-loading="loading"  
+								  element-loading-text="拼命加载中"
+    							  element-loading-spinner="el-icon-loading"
+    							  element-loading-background="rgba(0, 0, 0, 0.6)">
 							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0" align="center">
 							</el-table-column>
 							<el-table-column label="分包协议编号" width="150" sortable prop="PROXY_CONTRACT_NUM" v-if="this.checkedName.indexOf('分包协议编号')!=-1">
@@ -169,6 +182,7 @@
 		},
 		data() {
 			return {
+				loading: false,
 				// dataUrl: '/api/api-user/users',
 				basic_url: Config.dev_url,
 				searchData: {
@@ -319,6 +333,15 @@
 				this.page.pageSize = 10;
 				this.requestData();
 			},
+			resetbtn(){
+				this.searchList =  { //点击高级搜索后显示的内容
+					PROXY_CONTRACT_NUM:'',
+					PROXYNUM: '',
+					VENDOR: '',
+					ENTERDATE: '',
+				};
+				this.requestData();
+			},
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
@@ -410,6 +433,7 @@
 				this.selUser = val;
 			},
 			requestData(index) {
+				this.loading = true;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -427,6 +451,7 @@
 					console.log(res.data);
 					this.subagree = res.data.data;
 					this.page.totalCount = res.data.count;
+					this.loading = false;
 				}).catch((wrong) => {})
 			},
 			loadMore () {

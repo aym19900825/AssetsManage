@@ -94,7 +94,18 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :header-cell-style="rowClass" :data="projectList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'projectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+						<el-table :header-cell-style="rowClass" 
+								  :data="projectList" 
+								  border stripe 
+								  :height="fullHeight" 
+								  style="width: 100%;" 
+								  :default-sort="{prop:'projectList', order: 'descending'}" 
+								  @selection-change="SelChange" 
+								  v-loadmore="loadMore"
+								  v-loading="loading"  
+								  element-loading-text="拼命加载中"
+    							  element-loading-spinner="el-icon-loading"
+    							  element-loading-background="rgba(0, 0, 0, 0.6)">
 							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 							</el-table-column>
 							<el-table-column label="编码" width="150" sortable prop="P_NUM" v-if="this.checkedName.indexOf('编码')!=-1">
@@ -167,6 +178,7 @@
 		},
 		data() {
 			return {
+				loading: false,
 				basic_url: Config.dev_url,
 				value: '',
 				options: [{
@@ -348,6 +360,7 @@
 					VERSION: '',
 					DEPTID:'',
 				};
+				this.requestData();
 			},
 			searchinfo(index) {//高级查询
 				this.page.currentPage = 1;
@@ -503,6 +516,7 @@
 				this.selMenu = val;
 			},
 			requestData(index) {
+				this.loading = true;
 				var data = {//高级查询数据显示
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -527,6 +541,7 @@
 						this.loadSign=true
 					}
 					this.projectList = res.data.data;
+					this.loading = false;
 				}).catch((wrong) => {})
 			},
 			handleNodeClick(data) {

@@ -89,7 +89,19 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格 Begin-->
-							<el-table :header-cell-style="rowClass" :data="categoryList" v-loading="loading" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table :header-cell-style="rowClass" 
+									  :data="categoryList" 
+									  border 
+									  stripe 
+									  :height="fullHeight" 
+									  style="width: 100%;" 
+									  :default-sort="{prop:'categoryList', order: 'descending'}" 
+									  @selection-change="SelChange" 
+									  v-loadmore="loadMore"
+									  v-loading="loading"  
+								  	  element-loading-text="拼命加载中"
+								  	  element-loading-spinner="el-icon-loading"
+								  	  element-loading-background="rgba(0, 0, 0, 0.6)">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="编码" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('编码')!=-1">
@@ -327,6 +339,7 @@
 					VERSION:'',
 					DEPTID: '',
 				};
+				this.requestData();
 			},
 			//清空
 			reset() {
@@ -469,6 +482,7 @@
 				this.selUser = val;
 			},
 			requestData(index) {
+				this.loading = true;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -507,6 +521,7 @@
 						}
 					}
 					this.categoryList = newarr;
+					this.loading = false;
 				}).catch((wrong) => {})
 			},
 			handleNodeClick(data) {},

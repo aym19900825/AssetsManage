@@ -63,7 +63,18 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格begin-->
-							<el-table :data="dataList" border stripe  :header-cell-style="rowClass" :height="fullHeight" style="width: 100%; margin: 0 auto;" :default-sort="{prop:'dataList', order: 'descending'}" @selection-change="SelChange">
+							<el-table :data="dataList" 
+									  border 
+									  stripe  
+									  :header-cell-style="rowClass" 
+									  :height="fullHeight" 
+									  style="width: 100%; margin: 0 auto;" 
+									  :default-sort="{prop:'dataList', order: 'descending'}" 
+									  @selection-change="SelChange"
+									  v-loading="loading"  
+								  	  element-loading-text="拼命加载中"
+								  	  element-loading-spinner="el-icon-loading"
+								  	  element-loading-background="rgba(0, 0, 0, 0.6)">
 								<el-table-column fixed type="selection" width="55" align="center">
 								</el-table-column>
 								<el-table-column label="表名" sortable width="320" prop="name"  v-if="this.checkedName.indexOf('表名')!=-1">
@@ -110,6 +121,7 @@
 		},
 		data() {
 			return {
+				loading: false,
 				basic_url: Config.dev_url,
 				selUser: [],
 				'启用': true,
@@ -187,6 +199,7 @@
 					name:'',
 					description:''
 				};
+				this.requestData();
 			},
 			//添加数据
 			openAddMgr() {
@@ -300,6 +313,7 @@
 				this.selUser = val;
 			},
 			requestData(index) {
+				this.loading = true;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -312,6 +326,7 @@
 				}).then((res) => {
 					this.dataList = res.data.data;
 					this.page.totalCount = res.data.count;
+					this.loading = false;
 				}).catch((wrong) => {})
 			},
 			//机构树

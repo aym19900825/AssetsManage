@@ -670,8 +670,8 @@
 			<sampletmask ref="samplechild" @appenddes="appenddes" @appendmod="appendmod" @appendqua="appendqua"></sampletmask>
 			<!--受检企业-->
 			<enterprisemask ref="enterprisechild" @appendname="appendname" @appendadd="appendadd" @appendzip="appendzip"@appendnames="appendnames" @appendid="appendid"></enterprisemask>
-		<!--审批页面-->
-			<approvalmask :approvingData="approvingData" ref="approvalChild"  @detail="detailgetData"></approvalmask>
+			<!--审批页面-->
+			<!-- <approvalmask :approvingData="approvingData" ref="approvalChild"  @detail="detailgetData"></approvalmask> -->
 			<!--流程历史-->
 			<flowhistorymask :approvingData="approvingData"  ref="flowhistoryChild" ></flowhistorymask>
 			<!--流程地图-->
@@ -903,6 +903,7 @@
 				resourceData: [], //数组，我这里是通过接口获取数据
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
 				resourceProps: {
+					children: "children",
 					label: "fullname"
 				},
 				dialogVisible: false, //对话框
@@ -968,18 +969,34 @@
 			},
 			//所属上级
 			getDept(item) {
-				console.log(23333333);
+				// console.log(23333333);
+				// console.log(this.resourceProps);	
 				console.log(item);
-				var type = "2";
-				var url = this.basic_url + '/api-user/depts/treeByType';
+				// var type = "2";
+				// var url = this.basic_url + '/api-user/depts/treeByType';
+				// this.$axios.get(url, {
+				// 	params: {
+				// 		type: type
+				// 	},
+				// }).then((res) => {
+				// 	this.resourceData = res.data;
+				// 	console.log(233333);
+				// 	console.log(this.resourceData);
+				// 	this.dialogVisible = true;
+				// 	this.deptindex = item;
+				// });
+
+				// var page = this.page.currentPage;
+				// var limit = this.page.pageSize;
+				var url = this.basic_url + '/api-user/depts/treeMap';
 				this.$axios.get(url, {
-					params: {
-						type: type
-					},
+					// params: {
+					// 	page: page,
+					// 	limit: limit,
+					// 	// type: type
+					// },
 				}).then((res) => {
 					this.resourceData = res.data;
-					console.log(233333);
-					console.log(this.resourceData);
 					this.dialogVisible = true;
 					this.deptindex = item;
 				});
@@ -1100,7 +1117,7 @@
 						}
 					}).catch((err) => {
 						this.$message({
-							message: '网络错误，请重试',
+							message: '网络错误，请重试7',
 							type: 'error'
 						});
 					});
@@ -1174,7 +1191,7 @@
 					this.show = true;
 				}).catch((err) => {
 					this.$message({
-						message: '网络错误，请重试',
+						message: '网络错误，请重试8',
 						type: 'error'
 					})
 				})
@@ -1188,26 +1205,27 @@
 			},
 			//
 			detailgetData() {
-			this.RVENDORSelect();
-			this.getmaingroup();
+				console.log(this.dataid);
+			// this.RVENDORSelect();
+			// this.getmaingroup();
 			var url = this.basic_url +'/api-apps/app/inspectPro/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					console.log(res);
 					//依据
-					for(var i = 0;i<res.data.INSPECT_PROXY_BASISList.length;i++){
-						res.data.INSPECT_PROXY_BASISList[i].isEditing = false;
-					}
-					//要求
-					for(var m = 0;m<res.data.INSPECT_PROXY_PROJECList.length;m++){
-						res.data.INSPECT_PROXY_PROJECList[m].isEditing = false;
-					}
-					//分包要求
-					for(var n = 0;n<res.data.CHECK_PROXY_CONTRACTList.length;n++){
-						res.data.CHECK_PROXY_CONTRACTList[n].isEditing = false;
-					}
-					res.data.R_VENDOR = Number(res.data.R_VENDOR);		
-					res.data.MAINGROUP = Number(res.data.MAINGROUP);
-					res.data.LEADER = Number(res.data.LEADER);
+					// for(var i = 0;i<res.data.INSPECT_PROXY_BASISList.length;i++){
+					// 	res.data.INSPECT_PROXY_BASISList[i].isEditing = false;
+					// }
+					// //要求
+					// for(var m = 0;m<res.data.INSPECT_PROXY_PROJECList.length;m++){
+					// 	res.data.INSPECT_PROXY_PROJECList[m].isEditing = false;
+					// }
+					// //分包要求
+					// for(var n = 0;n<res.data.CHECK_PROXY_CONTRACTList.length;n++){
+					// 	res.data.CHECK_PROXY_CONTRACTList[n].isEditing = false;
+					// }
+					// res.data.R_VENDOR = Number(res.data.R_VENDOR);		
+					// res.data.MAINGROUP = Number(res.data.MAINGROUP);
+					// res.data.LEADER = Number(res.data.LEADER);
 					console.log(res.data);
 					console.log(typeof(res.data.MAINGROUP));
 					this.dataInfo = res.data;
@@ -1217,7 +1235,7 @@
         			this.datainfo = JSON.parse(_obj);
 				}).catch((err) => {
 					this.$message({
-						message: '网络错误，请重试',
+						message: '网络错误，请重试111',
 						type: 'error'
 					});
 				});
@@ -1225,6 +1243,7 @@
 			
 			// 这里是修改
 			detail(dataid) {
+				console.log(dataid);
 				this.dataid=dataid;
 				var usersUrl = this.basic_url + '/api-user/users/currentMap'
 				this.$axios.get(usersUrl, {}).then((res) => {
@@ -1234,7 +1253,7 @@
 					this.dataInfo.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd");
 				}).catch((err) => {
 					this.$message({
-						message: '网络错误，请重试',
+						message: '网络错误，请重试222',
 						type: 'error'
 					});
 				});
@@ -1290,7 +1309,7 @@
 								}		
 							}).catch((err) => {
 								this.$message({
-									message: '网络错误，请重试',
+									message: '网络错误，请重试333',
 									type: 'error'
 								});
 							});
@@ -1345,20 +1364,20 @@
 			},
 			//接到产品类别的值
 			categorydata(value){
-				this.catenum = value[0];
+				this.P_NUM = value[0];
 				this.dataInfo.PRODUCT_TYPE  = value[1];
 			},
 			addproduct(){//受检产品名称
-				this.$refs.productchild.visible(this.catenum);
+				this.$refs.productchild.visible(this.P_NUM);
 			},
 			//接到产品的值
 			appenddata(value){
-				this.pronum = value[0];
+				this.PRO_NUM = value[0];
 				this.dataInfo.PRODUCT = value[1];
 			},
 			//检验依据放大镜
 			basisleadbtn(){
-				this.$refs.standardchild.basislead(this.pronum);
+				this.$refs.standardchild.basislead(this.PRO_NUM);
 			},
 			 //检验依据列表
 			addbasis(value){
@@ -1467,7 +1486,7 @@
 								}
 							}).catch((err) => {
 								this.$message({
-									message: '网络错误，请重试',
+									message: '网络错误，请重试444',
 									type: 'error'
 								});
 							});
@@ -1527,7 +1546,7 @@
 						this.maingroup = res.data;
 					}).catch((err) => {
 						this.$message({
-							message: '网络错误，请重试',
+							message: '网络错误，请重试555',
 							type: 'error'
 						});
 					});
@@ -1550,7 +1569,7 @@
 						this.leaderdata = res.data.data;
 					}).catch((err) => {
 						this.$message({
-							message: '网络错误，请重试',
+							message: '网络错误，请重试666',
 							type: 'error'
 						});
 					});		
@@ -1708,7 +1727,6 @@
 			},
 		},
 		mounted() {
-			console.log(1234567890);
 			this.getCompany();
 			// this.RVENDORSelect();
 			// this.getmaingroup();

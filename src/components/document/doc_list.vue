@@ -46,7 +46,15 @@
 					<el-row :gutter="0">
 						<el-col class="leftcont v-resize">
 							<!-- 表格 -->
-							<el-table :data="fileList" border :height="fullHeight" style="width: 100%;" :default-sort="{prop:'fileList', order: 'descending'}">
+							<el-table :data="fileList" 
+									  border 
+									  :height="fullHeight" 
+									  style="width: 100%;" 
+									  :default-sort="{prop:'fileList', order: 'descending'}"
+									  v-loading="loading"  
+								      element-loading-text="拼命加载中"
+    							      element-loading-spinner="el-icon-loading"
+    							      element-loading-background="rgba(0, 0, 0, 0.6)">
 								<!-- <el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 								</el-table-column> -->
 								<el-table-column label="名称" sortable prop="filename" v-if="this.checkedName.indexOf('名称')!=-1">
@@ -112,6 +120,7 @@
 		},
 		data() {
 			return {
+				loading: false,
 				visible2: false,
 				basic_url: Config.dev_url,
 				file_url: Config.file_url,
@@ -303,6 +312,7 @@
 				this.selMenu = val;
 			},
 			requestData(index) {
+				this.loading = true;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -313,6 +323,7 @@
 				this.$axios.post(url, data).then((res) => {
 					this.page.totalCount = res.data.total;
 					this.fileList = res.data.vBaseKeywordFiles;
+					this.loading = false;
 				}).catch((wrong) => {})
 			},
 			transformTree(data) {

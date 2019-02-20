@@ -64,7 +64,18 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :data="reportsList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'reportsList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+						<el-table :data="reportsList"
+								  border 
+								  stripe 
+								  :height="fullHeight" 
+								  style="width: 100%;" 
+								  :default-sort="{prop:'reportsList', order: 'descending'}" 
+								  @selection-change="SelChange" 
+								  v-loadmore="loadMore"
+								  v-loading="loading"  
+								  element-loading-text="拼命加载中"
+								  element-loading-spinner="el-icon-loading"
+								  element-loading-background="rgba(0, 0, 0, 0.6)">
 							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 							</el-table-column>
 							
@@ -116,6 +127,7 @@
 		},
 		data() {
 			return {
+				loading: false,
 				loadSign: true, //鼠标滚动加载数据
 				commentArr: {},
 				basic_url: Config.dev_url,
@@ -270,6 +282,7 @@
 				this.selUser = val;
 			},
 			requestData() {
+				this.loading = true;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -285,6 +298,7 @@
 						this.loadSign = true
 					}
 					this.reportsList = res.data.data;
+					this.loading = false;
 					// this.page.totalCount = res.data.count;
 				}).catch((wrong) => {
 					this.$message({

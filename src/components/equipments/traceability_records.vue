@@ -92,7 +92,19 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :header-cell-style="rowClass" :data="userList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+						<el-table :header-cell-style="rowClass" 
+								  :data="userList" 
+								  border 
+								  stripe 
+								  :height="fullHeight" 
+								  style="width: 100%;" 
+								  :default-sort="{prop:'userList', order: 'descending'}"
+								   @selection-change="SelChange" 
+								   v-loadmore="loadMore"
+								   v-loading="loading"  
+								  element-loading-text="拼命加载中"
+    							  element-loading-spinner="el-icon-loading"
+    							  element-loading-background="rgba(0, 0, 0, 0.6)">
 							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 							</el-table-column>
 							<el-table-column label="溯源记录编号" width="120" sortable prop="RECORDNUM" v-if="this.checkedName.indexOf('溯源记录编号')!=-1">
@@ -161,6 +173,7 @@
 		},
 		data() {
 			return {
+				loading: false,
 				basic_url: Config.dev_url,
 				dataUrl: '/api/api-user/users',
 				searchData: {
@@ -479,6 +492,7 @@
 				this.selUser = val;
 			},
 			requestData(index) {
+				this.loading = true;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -500,6 +514,7 @@
 						this.loadSign = true
 					}
 					this.userList =  res.data.data;
+					this.loading = false;
 					// this.userList = res.data.data;
 					// this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})

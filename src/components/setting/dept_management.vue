@@ -72,7 +72,7 @@
 					<!-- 高级查询划出 -->
 					<el-row :gutter="10">
 						<el-col :span="24">
-							<tree_grid :columns="columns" :tree-structure="true" :data-source="deptList" v-on:childByValue="childByValue"></tree_grid>
+							<tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="deptList" v-on:childByValue="childByValue"></tree_grid>
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
 							   @size-change="sizeChange" 
 							   @current-change="currentChange" 
@@ -114,6 +114,7 @@
 		},
 		data() {
 			return {
+				loading: false,
 				basic_url: Config.dev_url,
 				checkedName: [
 					// '序号',
@@ -414,6 +415,7 @@
 			},
 
 			requestData() {//高级查询字段
+				this.loading = true;
 				var url = this.basic_url + '/api-user/depts/treeMap';
 				this.$axios.get(url, {
 //					params: data
@@ -426,6 +428,7 @@
 						}	
 					}
 					this.deptList = result;
+					this.loading = false;
 //					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
 			},

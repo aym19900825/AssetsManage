@@ -76,7 +76,18 @@
 					<div class="row">
 						<div class="col-sm-12">
 							<!-- 表格begin -->
-							<el-table :data="roleList" border stripe :header-cell-style="rowClass" :height="fullHeight" style="width: 100%;" :default-sort="{prop:'roleList', order: 'descending'}" @selection-change="SelChange">
+							<el-table :data="roleList" 
+									  border 
+									  stripe 
+									  :header-cell-style="rowClass" 
+									  :height="fullHeight" 
+									  style="width: 100%;" 
+									  :default-sort="{prop:'roleList', order: 'descending'}" 
+									  @selection-change="SelChange"
+									  v-loading="loading"  
+								  	  element-loading-text="拼命加载中"
+								  	  element-loading-spinner="el-icon-loading"
+								  	  element-loading-background="rgba(0, 0, 0, 0.6)">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="角色编码" sortable prop="code" v-if="this.checkedName.indexOf('角色编码')!=-1">
@@ -134,6 +145,7 @@
 		},
 		data() {
 			return {
+				loading: false,
 				basic_url: Config.dev_url,
 				value:'',
 				stopoptions: [{
@@ -399,19 +411,19 @@
 			},
 			//页面加载数据
 			requestData() {
+				this.loading = true;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 					name: this.searchList.name,
 					inactive: this.searchList.inactive
 				}
-				console.log(23333);
-				console.log(data);
 				var url = this.basic_url + '/api-user/roles';
 				this.$axios.get(url, {params: data}).then((res) => {
 					console.log(res);
 					this.roleList = res.data.data;
 					this.page.totalCount = res.data.count;
+					this.loading = false;
 				}).catch((wrong) => {})
 			},
 			//机构树

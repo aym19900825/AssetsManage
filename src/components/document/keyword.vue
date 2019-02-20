@@ -80,7 +80,17 @@
 						
 						<el-col class="leftcont v-resize">
 							<!-- 表格 -->
-							<el-table :data="samplesList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange">
+							<el-table :data="samplesList" 
+									  border 
+									  stripe 
+									  :height="fullHeight" 
+									  style="width: 100%;" 
+									  :default-sort="{prop:'samplesList', order: 'descending'}" 
+									  @selection-change="SelChange"
+									  v-loading="loading"  
+								      element-loading-text="拼命加载中"
+    							      element-loading-spinner="el-icon-loading"
+    							      element-loading-background="rgba(0, 0, 0, 0.6)">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="关键字" sortable prop="keywordname" v-if="this.checkedName.indexOf('关键字')!=-1">
@@ -132,6 +142,7 @@
 		},
 		data() {
 			return {
+				loading: false,
 				basic_url: Config.dev_url,
 				isShow: false,
 				ismin: true,
@@ -289,6 +300,7 @@
 				this.selMenu = val;
 			},
 			requestData(index) {
+				this.loading = true;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -300,6 +312,7 @@
 				}).then((res) => {
 					this.page.totalCount = res.data.count;
 					this.samplesList = res.data.data;
+					this.loading = false;
 				}).catch((wrong) => {})
 			},
 			

@@ -116,7 +116,19 @@
 						</el-col>
 						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
-							<el-table :data="userList" border stripe :header-cell-style="rowClass" :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table :data="userList" 
+									  border 
+									  stripe 
+									  :header-cell-style="rowClass" 
+									  :height="fullHeight" 
+									  style="width: 100%;" 
+									  :default-sort="{prop:'userList', order: 'descending'}" 
+									  @selection-change="SelChange" 
+									  v-loadmore="loadMore"
+									  v-loading="loading"  
+								  	  element-loading-text="拼命加载中"
+								  	  element-loading-spinner="el-icon-loading"
+								  	  element-loading-background="rgba(0, 0, 0, 0.6)">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="用户名" sortable width="140px" prop="username" v-if="this.checkedName.indexOf('用户名')!=-1">
@@ -180,6 +192,7 @@
 		},
 		data() {
 			return {
+				loading: false,
 				basic_url: Config.dev_url,
 				isShow: false,
 				ismin: true,
@@ -614,6 +627,7 @@
 				this.selUser = val;
 			},
 			requestData(index) {
+				this.loading = true;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -652,6 +666,7 @@
 					}
 
 					this.userList = newarr;
+					this.loading = false;
 				}).catch((wrong) => {})
 //				this.userList.forEach((item, index) => {
 //					var id = item.id;

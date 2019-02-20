@@ -86,7 +86,17 @@
 						</el-col>
 						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
-							<el-table :data="fileList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'fileList', order: 'descending'}" @selection-change="SelChange">
+							<el-table :data="fileList" 
+									  border 
+									  stripe 
+									  :height="fullHeight" 
+									  style="width: 100%;" 
+									  :default-sort="{prop:'fileList', order: 'descending'}" 
+									  @selection-change="SelChange"
+									  v-loading="loading"  
+								      element-loading-text="拼命加载中"
+    							      element-loading-spinner="el-icon-loading"
+    							      element-loading-background="rgba(0, 0, 0, 0.6)">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="名称" sortable prop="filename" v-if="this.checkedName.indexOf('名称')!=-1">
@@ -160,6 +170,7 @@
 		},
 		data() {
 			return {
+				loading: false,
 				treeShow: true,
 				treeIdSel: [],
 				chooseParam: {
@@ -345,6 +356,7 @@
 				})
 			},
 			loadThisNode(){
+				this.loading = true;
 				var url = this.file_url + '/file/pathList';
 				this.$axios.post(url, {
 					'pathid': this.docId,
@@ -356,6 +368,7 @@
 						pathList[i].name = pathList[i].foldername;
 					}
 					this.loadNode(this.node, this.resolve, 'loadThisNode' , pathList);
+					this.loading = false;
 				});
 			},
 			upload(e){

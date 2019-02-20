@@ -23,11 +23,11 @@
 							</div>
 						<el-form :inline="true" :model="formInline">
 							<el-form-item label="部门名称" prop="DEPTID">
-								<el-select v-model="formInline.DEPTID" placeholder="请选择部门" @change="requestData_productType2">
+								<el-select v-model="formInline.DEPTID" placeholder="请选择部门" @change="requestData">
 									<el-option v-for="(data,index) in Select_DEPTID" :key="index" :value="data.id" :label="data.fullname"></el-option>
 								</el-select>
 
-								<!-- <el-select v-model="formInline.DEPTID" placeholder="请选择部门" v-else disabled @change="requestData_productType2">
+								<!-- <el-select v-model="formInline.DEPTID" placeholder="请选择部门" v-else disabled @change="requestData">
 									<el-option v-for="(data,index) in Select_DEPTID" :key="index" :value="data.id" :label="data.fullname"></el-option>
 								</el-select> -->
 							</el-form-item>
@@ -214,13 +214,13 @@
 				}],
 				searchData: {
 			        page: 1,
-			        limit: 10,//分页显示数
+			        limit: 20,//分页显示数
 			        enabled: '',//信息状态
 		        },
 				search: '',//搜索
 				page: {//分页显示
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				product2Id: 0,//获取子表产品ID
@@ -278,17 +278,38 @@
 			// 	})
 			// },
 			loadMore () {//表格滚动加载
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page.currentPage++
-			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     this.requestData_productType2()
-			   }
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+					}else{
+						this.page.currentPage--
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1
+							return false;
+						}
+					}
+					this.loadSign = false;
+					setTimeout(() => {
+						this.loadSign = true
+					}, 1000)
+					this.requestData()
+				}
+			   // if (this.loadSign) {
+			   //   this.loadSign = false
+			   //   this.page.currentPage++
+			   //   if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+			   //     return
+			   //   }
+			   //   setTimeout(() => {
+			   //     this.loadSign = true
+			   //   }, 1000)
+			   //   this.requestData()
+			   // }
 			 },
 			 addprobtn(row){//查找基础数据中的类别名称
 			 	this.catedata = row;//弹出框中选中的数据赋值给到table行中
@@ -324,16 +345,16 @@
 			},
 			sizeChange(val) {//页数
 		      this.page.pageSize = val;
-		      this.requestData_productType2();
+		      this.requestData();
 		    },
 		    currentChange(val) {//当前页
 		      this.page.currentPage = val;
-		      this.requestData_productType2();
+		      this.requestData();
 		    },
 			searchinfo(index) {
 				this.page.currentPage = 1;
-				this.page.pageSize = 10;
-				this.requestData_productType2();
+				this.page.pageSize = 20;
+				this.requestData();
 			},
 			judge(data) {//taxStatus 信息状态布尔值
 				return data.enabled ? '活动' : '不活动'
@@ -367,7 +388,7 @@
 							});
 							this.formInline.DEPTID = this.departmentId;
 						}
-						this.requestData_productType2();
+						this.requestData();
 					}).catch(error => {
 						console.log('请求失败');
 					})
@@ -378,20 +399,18 @@
 	                });
 	            });
 			},
-			requestData_productType2(val) {//加载数据
+			requestData(val) {//加载数据
 				var _this = this;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 					DEPTID: this.formInline.DEPTID,//点击部门名称下拉菜单显示数据
 				}
-				
 				var url = this.basic_url + '/api-apps/app/productType2';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					//console.log(res);
-					this.page.totalCount = res.data.count;	
+					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
 					if(this.page.currentPage >= totalPage){
@@ -413,6 +432,7 @@
 					}
 					
 					this.productType2Form.inspectionList = newarr;//滚动加载更多
+
 					//默认主表第一条数据
 					if(this.productType2Form.inspectionList.length > 0){
 						this.viewchildRow(this.productType2Form.inspectionList[0].ID,this.productType2Form.inspectionList[0].NUM);
@@ -435,7 +455,6 @@
 				return row.enabled;
 			},
 			addfield_productType2() { //插入行到产品类别Table中
-				
 				var isEditingflag=false;
 				for(var i=0;i<this.productType2Form.inspectionList.length; i++){
 					if (this.productType2Form.inspectionList[i].isEditing==false){
@@ -495,7 +514,7 @@
 								type: 'success'
 							});
 							//重新加载数据
-							this.requestData_productType2();
+							this.requestData();
 						}
 					}).catch((err) => {
 						this.$message({
@@ -521,7 +540,7 @@
 								message: '删除成功',
 								type: 'success'
 							});
-							this.requestData_productType2();
+							this.requestData();
 						}
 					}).catch((err) => {
 						this.$message({
@@ -552,7 +571,7 @@
 		mounted() {
 			this.getDEPTID();
 			// this.getData();
-			// this.requestData_productType2();
+			// this.requestData();
 		},
 	}
 </script>

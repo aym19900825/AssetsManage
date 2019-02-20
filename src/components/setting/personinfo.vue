@@ -105,7 +105,7 @@
 						 		<el-col :span="9">
 						 			 <el-form-item label="配置信息状态" v-model="personinfo.enabledName">
 						 			 	<el-radio-group v-model="personinfo.enabledName">
-									    	<el-radio label="启用" ></el-radio>
+									    		<el-radio label="启用" ></el-radio>
 												<el-radio label="冻结" ></el-radio>
 											</el-radio-group>
 								  </el-form-item>	
@@ -137,6 +137,7 @@
 							 				<el-radio label="女"></el-radio>
 							 			</el-radio-group>
 						 			</el-form-item>
+						 			
 						 		</el-col>
 						 		<el-col :span="8">
 						 			<el-form-item label="手机号" prop="phone">
@@ -332,8 +333,8 @@
 			getData(){//获取当前用户信息
 	    		var url = this.basic_url + '/api-user/users/currentMap';
 	    		this.$axios.get(url, {}).then((res) => { 
-	    			//res.data.enabled ? '启用' : '冻结';
-	    			//res.data.sex ? '男' : '女';
+	    			res.data.enabled = 1 ? '启用' : '冻结';
+	    			res.data.sex = 1 ? '男' : '女';
 	    			this.personinfo=res.data;
 	    			this.personinfo.roleId = [];
 	    			var roles =res.data.roles;
@@ -378,7 +379,7 @@
 				this.editSearch = 'dept';
 				var url = this.basic_url + '/api-user/depts/treeMap';
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
+					// console.log(res);
 					this.resourceData = res.data.data;
 					this.dialogVisible = true;
 				});
@@ -421,7 +422,8 @@
 			            var url = this.basic_url + '/api-user/users/me';
 			            var personinfo=this.personinfo;
 			            var _this=this
-			            personinfo.sex = personinfo.sex == '男' ? 1 : 0;
+			            personinfo.sex = personinfo.sexName == '男' ? 1 : 0;
+			            personinfo.enabled = personinfo.enabled== '启用' ? 1 : 0;
 						var roleId = "";
 						if(typeof(personinfo.roleId) != 'undefind' && personinfo.roleId.length > 0) {
 							var arr = [];

@@ -291,24 +291,7 @@
 			},
 			getChoose(data){
 				var selData = data.data;
-				if(data.listName == 'user'){
-					this.dataInfo.userid =  selData[0].id;
-					this.dataInfo.username = selData[0].username;
-				}else{
-					for(var i=0; i<selData.length; i++){
-						var obj = {
-							keywordid: selData[i].id,
-							categoryid: selData[i].categoryid,
-							categoryidDesc: selData[i].categoryidDesc,
-							keywordidDesc: selData[i].keywordname,
-							checkedList: [
-								'显示'
-							]
-						}
-						this.selKeyW.push(obj);
-					}
-					
-				}
+				this.detail('getChoose',selData[0]);
 			},
 			addKeyW(){
 				this.chooseParam = {
@@ -372,10 +355,15 @@
 				this.modify=false;
 				this.show = true;
 			},
-			detail() {
-				var detailData = this.detailData;
-				this.dataInfo.userid = detailData.userid;
-				this.dataInfo.username = detailData.username;
+			detail(opt,paramdata) {
+				if(opt == 'getChoose'){
+					this.dataInfo.userid = paramdata.id;
+					this.dataInfo.username = paramdata.username;
+				}else{
+					var detailData = this.detailData;
+					this.dataInfo.userid = detailData.userid;
+					this.dataInfo.username = detailData.username;
+				}
 				this.getUser();
 				var data = {
 					page: 1,
@@ -391,7 +379,6 @@
 					for(let i=0; i<selKeyW.length; i++){
 						selKeyW[i].checkedList = [];
 						for(let n=0; n<labelAuth.length; n++){
-							console.log('selKeyW');
 							var item = labelAuth[n].val;
 							if(selKeyW[i][item] == 1){
 								selKeyW[i].checkedList.push(labelAuth[n].label);

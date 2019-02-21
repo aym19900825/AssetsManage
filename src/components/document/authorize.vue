@@ -178,10 +178,6 @@
 						label: '删除',
 						prop: 'filedelete'
 					},
-					// {
-					// 	label: '上传',
-					// 	prop: 'fileupload'
-					// },
 					{
 						label: '下载',
 						prop: 'filedownload'
@@ -279,11 +275,11 @@
 				this.page.currentPage = val;
 				this.requestData();
 			},
-			 resetbtn(){
-			this.searchList = { //点击高级搜索后显示的内容
-			username: '',
-			};
-			this.requestData();
+		   resetbtn(){
+				this.searchList = { //点击高级搜索后显示的内容
+					username: '',
+				};
+				this.requestData();
 			},
 			searchinfo(index) {//高级查询
 				this.page.currentPage = 1;

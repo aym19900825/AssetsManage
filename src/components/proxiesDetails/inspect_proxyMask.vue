@@ -89,7 +89,11 @@
 										<el-col :span="8" >
 											<el-form-item label="承检单位" prop="R_VENDOR"  label-width="110px">
 												<el-select clearable v-model="dataInfo.R_VENDOR" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit"  @change="RVENDORSelect($event)">
+<<<<<<< HEAD
+													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+=======
 													<el-option v-for="data in selectData" :key="data.id" :value="data.id" :label="data.fullname"></el-option>
+>>>>>>> 275ad8a34a7c110d066c9a748da75b3304b92233
 												</el-select>
 											</el-form-item>
 										</el-col>
@@ -391,13 +395,13 @@
 
 												<el-table-column prop="VENDORDesc" label="分包方名称" sortable width="120px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.VENDORDesc'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<!-- <el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.VENDORDesc'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" > -->
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDORDesc" placeholder="请输入分包方名称">
 															<el-button slot="append" icon="el-icon-search" @click="getDept(scope.row)">
 															</el-button>
 														</el-input>
 														<span v-else="v-else">{{scope.row.VENDORDesc}}</span>
-														</el-form-item>
+														<!-- </el-form-item> -->
 													</template>
 												</el-table-column>
 
@@ -564,15 +568,15 @@
 										<el-col :span="8">
 											<el-form-item label="主检组" prop="MAINGROUP"  label-width="110px">
 											<el-select clearable v-model="dataInfo.MAINGROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @change="getmaingroup($event)" @visible-change="visablemaingroup($event)" >
-												<el-option v-for="data in maingroup" :key="data.id" :value="data.id" :label="data.fullname"></el-option>
+												<el-option v-for="(data,index) in maingroup" :key="index" :value="data.id" :label="data.fullname"></el-option>
 											</el-select>
 										</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="主检负责人" prop="LEADER" label-width="110px">
-												<el-select clearable v-model="dataInfo.LEADER" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @visible-change="visableleader($event)" >
-													<el-option v-for="data in leaderdata" :key="data.id" :value="data.id" :label="data.username"></el-option>
-												</el-select>
+													<el-select clearable v-model="dataInfo.LEADER" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @visible-change="visableleader($event)" >
+												<el-option v-for="(data,index) in leaderdata" :key="index" :value="data.id" :label="data.username"></el-option>
+											</el-select>
 											</el-form-item>
 										</el-col>
 									</el-row>	
@@ -625,7 +629,7 @@
 						<div class="el-dialog__footer" v-show="noviews">
 							<el-button type="primary" @click="saveAndUpdate">保存</el-button>
 							<el-button type="success"  v-show="addtitle" @click="saveAndSubmit">保存并继续</el-button>
-							<el-button v-show="modifytitle" type="primary" class="btn-primarys" @click="modifyversion">修订</el-button>
+							<el-button v-show="modifytitle" type="btn btn-primarys" @click="modifyversion">修订</el-button>
 							<el-button @click='close'>取消</el-button>
 						</div>
 						<div class="el-dialog__footer" v-show="views">
@@ -671,7 +675,7 @@
 			<!--受检企业-->
 			<enterprisemask ref="enterprisechild" @appendname="appendname" @appendadd="appendadd" @appendzip="appendzip"@appendnames="appendnames" @appendid="appendid"></enterprisemask>
 			<!--审批页面-->
-			<!-- <approvalmask :approvingData="approvingData" ref="approvalChild"  @detail="detailgetData"></approvalmask> -->
+			<approvalmask :approvingData="approvingData" ref="approvalChild"  @detail="detailgetData"></approvalmask>
 			<!--流程历史-->
 			<flowhistorymask :approvingData="approvingData"  ref="flowhistoryChild" ></flowhistorymask>
 			<!--流程地图-->
@@ -986,15 +990,15 @@
 				// 	this.deptindex = item;
 				// });
 
-				// var page = this.page.currentPage;
-				// var limit = this.page.pageSize;
+				var page = this.page.currentPage;
+				var limit = this.page.pageSize;
 				var url = this.basic_url + '/api-user/depts/treeMap';
 				this.$axios.get(url, {
-					// params: {
-					// 	page: page,
-					// 	limit: limit,
-					// 	// type: type
-					// },
+					params: {
+						page: page,
+						limit: limit,
+						// type: type
+					},
 				}).then((res) => {
 					this.resourceData = res.data;
 					this.dialogVisible = true;
@@ -1073,6 +1077,8 @@
 					STATUSDesc:'草稿',
 					ITEM_NAME:'',
 					VENDOR:'',
+					P_NUM:'',
+					PRO_NUM:'',
 					ITEM_NAME:'',
 					ITEM_MODEL:'',
 					ITEM_QUALITY:'',
@@ -1117,7 +1123,7 @@
 						}
 					}).catch((err) => {
 						this.$message({
-							message: '网络错误，请重试7',
+							message: '网络错误，请重试1',
 							type: 'error'
 						});
 					});
@@ -1182,7 +1188,6 @@
 					console.log(res);
 					this.dataInfo.DEPTID = res.data.deptId;
 					this.dataInfo.ENTERBY = res.data.id;
-					this.username=res.data.username;
 					// this.dataInfo.ORGID = res.data.deptName
 					var date = new Date();
 					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
@@ -1191,7 +1196,7 @@
 					this.show = true;
 				}).catch((err) => {
 					this.$message({
-						message: '网络错误，请重试8',
+						message: '网络错误，请重试21',
 						type: 'error'
 					})
 				})
@@ -1205,25 +1210,22 @@
 			},
 			//
 			detailgetData() {
-				console.log(this.dataid);
-			// this.RVENDORSelect();
-			// this.getmaingroup();
 			var url = this.basic_url +'/api-apps/app/inspectPro/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					console.log(res);
-					//依据
-					// for(var i = 0;i<res.data.INSPECT_PROXY_BASISList.length;i++){
-					// 	res.data.INSPECT_PROXY_BASISList[i].isEditing = false;
-					// }
-					// //要求
-					// for(var m = 0;m<res.data.INSPECT_PROXY_PROJECList.length;m++){
-					// 	res.data.INSPECT_PROXY_PROJECList[m].isEditing = false;
-					// }
-					// //分包要求
-					// for(var n = 0;n<res.data.CHECK_PROXY_CONTRACTList.length;n++){
-					// 	res.data.CHECK_PROXY_CONTRACTList[n].isEditing = false;
-					// }
-					// res.data.R_VENDOR = Number(res.data.R_VENDOR);		
+					// 依据
+					for(var i = 0;i<res.data.INSPECT_PROXY_BASISList.length;i++){
+						res.data.INSPECT_PROXY_BASISList[i].isEditing = false;
+					}
+					// 要求
+					for(var m = 0;m<res.data.INSPECT_PROXY_PROJECList.length;m++){
+						res.data.INSPECT_PROXY_PROJECList[m].isEditing = false;
+					}
+					// 分包要求
+					for(var n = 0;n<res.data.CHECK_PROXY_CONTRACTList.length;n++){
+						res.data.CHECK_PROXY_CONTRACTList[n].isEditing = false;
+					}
+					res.data.R_VENDOR = Number(res.data.R_VENDOR);		
 					// res.data.MAINGROUP = Number(res.data.MAINGROUP);
 					// res.data.LEADER = Number(res.data.LEADER);
 					console.log(res.data);
@@ -1235,7 +1237,7 @@
         			this.datainfo = JSON.parse(_obj);
 				}).catch((err) => {
 					this.$message({
-						message: '网络错误，请重试111',
+						message: '网络错误，请重试3',
 						type: 'error'
 					});
 				});
@@ -1243,7 +1245,6 @@
 			
 			// 这里是修改
 			detail(dataid) {
-				console.log(dataid);
 				this.dataid=dataid;
 				var usersUrl = this.basic_url + '/api-user/users/currentMap'
 				this.$axios.get(usersUrl, {}).then((res) => {
@@ -1253,7 +1254,7 @@
 					this.dataInfo.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd");
 				}).catch((err) => {
 					this.$message({
-						message: '网络错误，请重试222',
+						message: '网络错误，请重试4',
 						type: 'error'
 					});
 				});
@@ -1267,8 +1268,8 @@
 				this.noedit = false;
 			},
 			//点击修订按钮
-			modifyversion() {
-				this.$refs.dataInfo.validate((valid) => {
+			modifyversion(dataInfo) {
+				this.$refs[dataInfo].validate((valid) => {
 					if(valid) {
 						var datainfo=JSON.stringify(this.datainfo); 
 	 					var dataInfo=JSON.stringify(this.dataInfo);
@@ -1287,29 +1288,29 @@
 										message: '修订成功',
 										type: 'success'
 									});
-									this.show = false;
 									//重新加载数据
 									this.$emit('request');
+									this.show = false;
 								}else{
-									this.show = true;
-									if(res.data.resp_code == 1) {
-										//res.data.resp_msg!=''后台返回提示信息
-										if( res.data.resp_msg!=''){
-											this.$message({
-												message: res.data.resp_msg,
-												type: 'warning'
-											});
-										}else{
-											this.$message({
-												message:'相同数据不可重复修订！',
-												type: 'warning'
-											});
-										}
+								this.show = true;
+								if(res.data.resp_code == 1) {
+									//res.data.resp_msg!=''后台返回提示信息
+									if( res.data.resp_msg!=''){
+									 	this.$message({
+											message: res.data.resp_msg,
+											type: 'warning'
+									 	});
+									}else{
+										this.$message({
+											message:'相同数据不可重复修订！',
+											type: 'warning'
+										});
 									}
-								}		
+								}
+							}		
 							}).catch((err) => {
 								this.$message({
-									message: '网络错误，请重试333',
+									message: '网络错误，请重试5',
 									type: 'error'
 								});
 							});
@@ -1341,19 +1342,19 @@
 						this.start=true;
 						this.approval=false;
 					}else{
-						var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/Executors/'+dataid;
+						var url = this.basic_url + '/api-apps/app/inspectPro/flow/Executors/'+dataid;
 						this.$axios.get(url, {}).then((res) => {
 							console.log(res.data.datas);
 							var resullt=res.data.datas;
 							var users='';
+							var users='';
 							for(var i=0;i<resullt.length;i++){
-								if(resullt[i].username!=this.username){
-									this.approval=false;
-									this.start=false;
-								}else{
-									this.approval=true;
-									this.start=false;
-								}
+								users = users + resullt[i].username+",";
+								console.log("users----"+users);
+							}
+							if(users.indexOf(this.username) != -1){
+								this.approval=true;
+								this.start=false;
 							}
 						});
 					}
@@ -1364,20 +1365,20 @@
 			},
 			//接到产品类别的值
 			categorydata(value){
-				this.P_NUM = value[0];
+				this.dataInfo.P_NUM = value[0];
 				this.dataInfo.PRODUCT_TYPE  = value[1];
 			},
 			addproduct(){//受检产品名称
-				this.$refs.productchild.visible(this.P_NUM);
+				this.$refs.productchild.visible(this.dataInfo.P_NUM);
 			},
 			//接到产品的值
 			appenddata(value){
-				this.PRO_NUM = value[0];
+				this.dataInfo.PRO_NUM = value[0];
 				this.dataInfo.PRODUCT = value[1];
 			},
 			//检验依据放大镜
 			basisleadbtn(){
-				this.$refs.standardchild.basislead(this.PRO_NUM);
+				this.$refs.standardchild.basislead(this.dataInfo.PRO_NUM);
 			},
 			 //检验依据列表
 			addbasis(value){
@@ -1386,6 +1387,7 @@
 					value[i].S_DESC = value[i].S_NAME;
 					this.dataInfo.INSPECT_PROXY_BASISList.push(value[i]);
 				}
+				this.dataInfo.INSPECT_PROXY_PROJECList = [];
 				// this.dataInfo.WORK_NOTICE_CHECKBASISList = value;
 			},
 			//检验项目放大镜
@@ -1470,9 +1472,6 @@
 			        	}else{
 //							this.dataInfo.ITEM_STATUS=this.dataInfo.ITEM_STATUS==1;
 //							this.dataInfo.MESSSTATUS= this.dataInfo.MESSSTATUS==1;//信息状态
-							// this.dataInfo.R_VENDOR = this.dataInfo.R_VENDORDesc;
-							// this.dataInfo.MAINGROUP = this.dataInfo.MAINGROUPDesc;
-							// this.dataInfo.LEADER = this.dataInfo.LEADERDesc;
 							var url = this.basic_url + '/api-apps/app/inspectPro/saveOrUpdate';
 							this.$axios.post(url, this.dataInfo).then((res) => {
 								if(res.data.resp_code == 0) {
@@ -1486,7 +1485,7 @@
 								}
 							}).catch((err) => {
 								this.$message({
-									message: '网络错误，请重试444',
+									message: '网络错误，请重试6',
 									type: 'error'
 								});
 							});
@@ -1546,22 +1545,11 @@
 						this.maingroup = res.data;
 					}).catch((err) => {
 						this.$message({
-							message: '网络错误，请重试555',
+							message: '网络错误，请重试7',
 							type: 'error'
 						});
 					});
 			},
-			// RVENDOR(){
-			// 	var url = this.basic_url + '/api-user/depts/findByPid';
-			// 		this.$axios.get(url, {}).then((res) => {
-			// 			this.maingroup = res.data;
-			// 		}).catch((err) => {
-			// 			this.$message({
-			// 				message: '网络错误，请重试',
-			// 				type: 'error'
-			// 			});
-			// 		});
-			// },
 			//主检组带出主检负责人
 			getmaingroup(maingroupid){
 				var url = this.basic_url + '/api-user/users/usersByDept?deptId='+maingroupid;
@@ -1569,22 +1557,11 @@
 						this.leaderdata = res.data.data;
 					}).catch((err) => {
 						this.$message({
-							message: '网络错误，请重试666',
+							message: '网络错误，请重试8',
 							type: 'error'
 						});
 					});		
 			},
-			// getmain(){
-			// 	var url = this.basic_url + '/api-user/users/usersByDept';
-		   	// 		this.$axios.get(url, {}).then((res) => {
-			// 			this.leaderdata = res.data.data;
-			// 		}).catch((err) => {
-			// 			this.$message({
-			// 				message: '网络错误，请重试',
-			// 				type: 'error'
-			// 			});
-			// 		});		
-			// },
 			//获取负责人和接收人
 			getCustomer(type) {
 				this.$refs.enterprisechild.visible(type);
@@ -1654,14 +1631,12 @@
 									var resullt=res.data.datas;
 									var users='';
 									for(var i=0;i<resullt.length;i++){
-										if(resullt[i].username!=this.username){
-											this.approval=false;
-											this.start=false;
-										}else{
-											this.approval=true;
-											this.start=false;
-										}
+										users = users + resullt[i].username+",";
 									}
+								if(users.indexOf(this.username) != -1){
+									this.approval=true;
+									this.start=false;
+								}
 							});
 							this.detailgetData();
 				    }
@@ -1721,8 +1696,6 @@
 					},
 				}).then((res) => {
 					this.selectData = res.data;
-					console.log(2333333333);
-					console.log(this.selectData);
 				});
 			},
 		},

@@ -359,7 +359,7 @@
 													<font>新建行</font>
 												</el-button>
 											</div>
-												<el-table :header-cell-style="rowClass" :fit="true" :data="user.IpList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.IpList', order: 'descending'}">
+												<el-table :header-cell-style="rowClass" :fit="true" :data="user.ips" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.ips', order: 'descending'}">
 													<el-table-column prop="iconOperation" fixed label="" width="50px" v-if="!viewtitle">
 														<template slot-scope="scope">
 															<i class="el-icon-check" v-if="scope.row.isEditing"></i>
@@ -369,7 +369,7 @@
 
 													<el-table-column label="序号" sortable width="120px" prop="STEP">
 													   <template slot-scope="scope">
-													      <el-form-item :prop="'IpList.'+scope.$index + '.STEP'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+													      <el-form-item :prop="'ips.'+scope.$index + '.STEP'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 													         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.$index + 1" disabled></el-input>
 													         <span v-show="!scope.row.isEditing" >{{scope.row.STEP}}</span>
 													      </el-form-item>
@@ -378,7 +378,7 @@
 
 													<el-table-column prop="IP_BEGIN" label="起始IP地址" sortable>
 														<template slot-scope="scope">
-															<el-form-item :prop="'IpList.'+scope.$index + '.IP_BEGIN'">
+															<el-form-item :prop="'ips.'+scope.$index + '.IP_BEGIN'">
 																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.IP_BEGIN" placeholder="请输入起始IP地址">
 																</el-input>
 																<span v-else="v-else">{{scope.row.IP_BEGIN}}</span>
@@ -388,7 +388,7 @@
 
 													<el-table-column prop="IP_END" label="结束IP地址" sortable>
 														<template slot-scope="scope">
-															<el-form-item :prop="'IpList.'+scope.$index + '.IP_END'">
+															<el-form-item :prop="'ips.'+scope.$index + '.IP_END'">
 																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.IP_END" placeholder="请输入结束IP地址">
 																</el-input>
 																<span v-else="v-else">{{scope.row.IP_END}}</span>
@@ -398,7 +398,7 @@
 													
 													<el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 														<template slot-scope="scope">
-															<el-button @click.native.prevent="deleteRow(scope.$index,user.IpList)" type="text" size="small">
+															<el-button @click.native.prevent="deleteRow(scope.$index,user.ips)" type="text" size="small">
 																<i class="icon-trash red"></i>
 															</el-button>
 														</template>
@@ -485,7 +485,7 @@
 					roles: [],
 					traings: [],
 					qualifications: [],
-					IpList: [],
+					ips: [],
 				},
 				options: [{
 						value: '高中',
@@ -653,7 +653,7 @@
 					enabled: true,
 					traings: [],
 					qualifications: [],
-					IpList: [],
+					ips: [],
 				}
 			},
 			//点击按钮显示弹窗
@@ -737,7 +737,7 @@
 					IP_END: '',
 					isEditing: true
 				};
-				this.user.IpList.push(obj);
+				this.user.ips.push(obj);
 			},
 			//刪除新建行
 			deleteRow(index, rows) { //Table-操作列中的删除行
@@ -791,7 +791,7 @@
 					enabled: true,
 					traings: [],
 					qualifications: [],
-					IpList: [],
+					ips: [],
 				};
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 
@@ -862,8 +862,8 @@
 					}
 
 					//IP地址管理
-					// for(var i = 0;i<res.data.IpList.length;i++){
-					// 	res.data.IpList[i].isEditing = false;
+					// for(var i = 0;i<res.data.ips.length;i++){
+					// 	res.data.ips[i].isEditing = false;
 					// }
 					this.user = res.data;
 					this.user.sex = this.user.sex=='1'? '男' : '女';

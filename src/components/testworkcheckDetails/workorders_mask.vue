@@ -1111,20 +1111,17 @@
 								message:res.data.resp_msg,
 								type: 'success'
 							});
-							var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/Executors/'+this.dataid;
+							var url = this.basic_url + '/api-apps/app/workorder/flow/Executors/'+this.dataid;
 							this.$axios.get(url, {}).then((res) => {
-									console.log(res.data.datas);
-									var resullt=res.data.datas;
-									var users='';
-									for(var i=0;i<resullt.length;i++){
-										if(resullt[i].username!=this.username){
-											this.approval=false;
-											this.start=false;
-										}else{
-											this.approval=true;
-											this.start=false;
-										}
-									}
+								var resullt=res.data.datas;
+								var users='';
+								for(var i=0;i<resullt.length;i++){
+									users = users + resullt[i].username+",";
+								}
+								if(users.indexOf(this.username) != -1){
+									this.approval=true;
+									this.start=false;
+								}
 							});
 							this.detailgetData();
 				    }
@@ -1293,6 +1290,7 @@
 
 			// 这里是修改
 			detail(dataid) {
+				console.log(dataid);
 				this.dataid=dataid;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 	    			this.workorderForm.DEPTID = res.data.deptId;//传给后台机构id
@@ -1317,6 +1315,7 @@
 			},
 			//这是查看
 			view(dataid) {
+				console.log(this.username);
 				this.dataid=dataid;	
 				this.modifytitle = false;
 				this.addtitle = false;
@@ -1334,19 +1333,18 @@
 						this.start=true;
 						this.approval=false;
 					}else{
-						var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/Executors/'+dataid;
+						var url = this.basic_url + '/api-apps/app/workorder/flow/Executors/'+dataid;
+						console.log(url);
 						this.$axios.get(url, {}).then((res) => {
 							console.log(res.data.datas);
 							var resullt=res.data.datas;
 							var users='';
 							for(var i=0;i<resullt.length;i++){
-								if(resullt[i].username!=this.username){
-									this.approval=false;
-									this.start=false;
-								}else{
-									this.approval=true;
-									this.start=false;
-								}
+								users = users + resullt[i].username+",";
+							}
+							if(users.indexOf(this.username) != -1){
+								this.approval=true;
+								this.start=false;
 							}
 						});
 					}
@@ -1477,6 +1475,17 @@
 					this.userList = newarr;
 				}).catch((wrong) => {})	
 			},
+			getUser(){//获取当前用户信息
+	            var url = this.basic_url + '/api-user/users/currentMap';
+	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+	                    this.username = res.data.username;
+	            }).catch((err) => {
+	                this.$message({
+	                    message: '网络错误，请重试',
+	                    type: 'error'
+	                });
+	            });
+        	},
 			
 		},
 		
@@ -1490,6 +1499,7 @@
 			this.getITEM_MANAGEMENT();//页面打开加载-样品处置
 			this.getuser();//用户
 			this.getCompany();
+			this.getUser();
 		},
 	}
 </script>

@@ -24,7 +24,7 @@
 							<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
 							    <i class="icon-trash"></i>删除
 							</button>
-							<el-dropdown size="small" split-button type="primary" style="margin-top:1px;">
+							<el-dropdown size="small" split-button type="primary" style="">
     								导入
 								<el-dropdown-menu slot="dropdown">
     								<el-dropdown-item>

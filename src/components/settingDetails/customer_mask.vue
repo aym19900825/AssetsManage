@@ -178,7 +178,7 @@
 
 										    <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 										      <template slot-scope="scope">
-										        <el-button @click = "deleteRow(scope.$index, CUSTOMER.CUSTOMER_QUALIFICATIONList)" type="text" size="small">
+										        <el-button @click = "deleteRow(scope.$index,scope.row,'tableList')" type="text" size="small">
 										          <i class="icon-trash red"></i>
 										        </el-button>
 										      </template>
@@ -244,7 +244,7 @@
 
 												    <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 												      <template slot-scope="scope">
-												        <el-button @click = "deleteRow(scope.$index, CUSTOMER.CUSTOMER_PERSONList)" type="text" size="small">
+												        <el-button @click = "deleteRow(scope.$index,scope.row,'mainList')" type="text" size="small">
 												         <i class="icon-trash red"></i>
 												        </el-button>
 												      </template>
@@ -502,8 +502,40 @@
                 this.CUSTOMER.CUSTOMER_PERSONList.push(obj);
 			},
 			//删除行
-			deleteRow(index, rows) {//Table-操作列中的删除行
-				rows.splice(index, 1);
+			deleteRow(index, row, listName){
+				console.log(row);
+				var TableName = '';
+				console.log(listName);
+				if(listName =='tableList'){
+					TableName = 'CUSTOMER_QUALIFICATION';
+				}else{
+					TableName = 'CUSTOMER_PERSON';
+				}
+				if(row.ID){
+					var url = this.basic_url + '/api-apps/app/customer/' + TableName +'/' + row.ID;
+					this.$axios.delete(url, {}).then((res) => {
+						console.log(res);
+						if(res.data.resp_code == 0){
+							this.CUSTOMER[TableName+'List'].splice(index,1);
+							this.$message({
+								message: '删除成功',
+								type: 'success'
+							});
+						}else{
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'error'
+							});
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+				}else{
+					this.CUSTOMER[listName].splice(index,1);
+				}
 			},
 		
 			//生成随机数函数
@@ -683,26 +715,34 @@
 			save() {
 				this.$refs.CUSTOMER.validate((valid) => {
 		          if (valid) {
-		          	this.CUSTOMER.STATUS=this.CUSTOMER.STATUS=="活动" ? '1' : '0';
-					var url = this.basic_url + '/api-apps/app/customer/saveOrUpdate';
-					this.$axios.post(url, this.CUSTOMER).then((res) => {
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '保存成功',
-								type: 'success'
-							});
-							//重新加载数据
-							this.$emit('request');
-							// this.$refs["CUSTOMER"].resetFields();
-						}
-					}).catch((err) => {
+					if(this.CUSTOMER.CUSTOMER_QUALIFICATIONList.length==0 || this.CUSTOMER.CUSTOMER_PERSONList.length == 0){
 						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
+							message: '表格信息为必填内容',
+							type: 'warning',
 						});
-					});
-					this.falg = true;
+						this.falg = false;
+					}else{
+						this.CUSTOMER.STATUS=this.CUSTOMER.STATUS=="活动" ? '1' : '0';
+						var url = this.basic_url + '/api-apps/app/customer/saveOrUpdate';
+						this.$axios.post(url, this.CUSTOMER).then((res) => {
+							//resp_code == 0是后台返回的请求成功的信息
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '保存成功',
+									type: 'success'
+								});
+								//重新加载数据
+								this.$emit('request');
+								// this.$refs["CUSTOMER"].resetFields();
+							}
+						}).catch((err) => {
+							this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+						});
+						this.falg = true;
+					}
 		          } else {
 		            this.show = true;
 						this.$message({

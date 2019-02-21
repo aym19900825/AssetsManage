@@ -127,7 +127,7 @@
 									  v-loadmore="loadMore"
 									  v-loading="loading"  
 								  	  element-loading-text="加载中…"
-								  	  element-loading-spinner="el-icon-loading font20"
+								  	  element-loading-spinner="el-icon-loading"
 								  	  element-loading-background="rgba(255, 255, 255, 0.9)">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>

@@ -301,7 +301,6 @@
 						type: type
 					},
 				}).then((res) => {
-					console.log(res.data);
 					this.selectData = res.data;
 				});
 			},
@@ -402,8 +401,6 @@
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					console.log(111)
-					console.log(res);
 					this.buttons = res.data;
 					
 				}).catch((wrong) => {})
@@ -614,7 +611,12 @@
 				//taxStatus 布尔值
 				return data.enabled ? '活动' : '不活动'
 			},
-			
+
+			// sexName(data) {
+			// 	return data.sex ? '男' : '女'
+			// },
+
+
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];

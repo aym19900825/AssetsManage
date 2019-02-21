@@ -81,7 +81,7 @@
 					<!-- 高级查询划出 End-->
 					<el-row :gutter="0">
 						<el-col :span="24">
-							 <tree_grid :columns="columns" :tree-structure="true" :data-source="categoryList" v-on:childByValue="classByValue"></tree_grid>
+							 <tree_grid :columns="columns" :tree-structure="true" :loading="loading" :data-source="categoryList" v-on:childByValue="classByValue"></tree_grid>
 
 							<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
@@ -220,6 +220,7 @@
 					CLASSIFY_DESCRIPTION: '',
 					PARENT:'',
 				};
+				this.requestData();
 			},
 			//清空
 			reset() {
@@ -407,10 +408,11 @@
 				this.requestData();
 			},
 			requestData() {
+				this.loading = true;
 				var data = {
 					CLASSIFY_NUM:this.searchList.CLASSIFY_NUM,
-					// CLASSIFY_DESCRIPTION: this.searchList.CLASSIFY_DESCRIPTION,
-					// PARENT:this.searchList.PARENT,
+					CLASSIFY_DESCRIPTION: this.searchList.CLASSIFY_DESCRIPTION,
+					PARENT:this.searchList.PARENT,
 				}
 				console.log('=============');
 				console.log(this.searchList);
@@ -419,6 +421,7 @@
 					params: data
 				}).then((res) => {
 					this.categoryList = res.data.datas;
+					this.loading = false;
 				}).catch((wrong) => {
 					this.$message({
 						message: '网络错误，请重试2',

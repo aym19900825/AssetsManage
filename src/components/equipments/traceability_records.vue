@@ -92,7 +92,19 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :header-cell-style="rowClass" :data="userList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+						<el-table :header-cell-style="rowClass" 
+								  :data="userList" 
+								  border 
+								  stripe 
+								  :height="fullHeight" 
+								  style="width: 100%;" 
+								  :default-sort="{prop:'userList', order: 'descending'}"
+								   @selection-change="SelChange" 
+								   v-loadmore="loadMore"
+								   v-loading="loading"  
+								  element-loading-text="拼命加载中"
+    							  element-loading-spinner="el-icon-loading"
+    							  element-loading-background="rgba(0, 0, 0, 0.6)">
 							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 							</el-table-column>
 							<el-table-column label="溯源记录编号" width="120" sortable prop="RECORDNUM" v-if="this.checkedName.indexOf('溯源记录编号')!=-1">
@@ -161,6 +173,7 @@
 		},
 		data() {
 			return {
+				loading: false,
 				basic_url: Config.dev_url,
 				dataUrl: '/api/api-user/users',
 				searchData: {
@@ -312,7 +325,7 @@
 				userData:[],
 				page: {//分页显示
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				aaaData:[],
@@ -336,7 +349,7 @@
 		    },
 			searchinfo(index) {
 				this.page.currentPage = 1;
-				this.page.pageSize = 10;
+				this.page.pageSize = 20;
 				this.requestData();
 			},
 			resetbtn(){
@@ -348,6 +361,7 @@
 					PM_MODEL: '',
 					C_NUM: '',
 				};
+				this.requestData();
 			},
 			//时间格式化  
 			dateFormat(row, column) {
@@ -479,6 +493,7 @@
 				this.selUser = val;
 			},
 			requestData(index) {
+				this.loading = true;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -493,23 +508,52 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					this.userList = res.data.data;
-					this.page.totalCount = res.data.count;
+										let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
+					}
+					this.userList =  res.data.data;
+					this.loading = false;
+					// this.userList = res.data.data;
+					// this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
 				
 			},
 			loadMore () {
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page++
-			     if (this.page > 10) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     console.log('到底了', this.page)
-			   }
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+					}else{
+						this.page.currentPage--
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1
+							return false;
+						}
+					}
+					this.loadSign = false;
+					setTimeout(() => {
+						this.loadSign = true
+					}, 1000)
+					this.requestData()
+				}
+			   // if (this.loadSign) {
+			   //   this.loadSign = false
+			   //   this.page++
+			   //   if (this.page > 10) {
+			   //     return
+			   //   }
+			   //   setTimeout(() => {
+			   //     this.loadSign = true
+			   //   }, 1000)
+			   //   console.log('到底了', this.page)
+			   // }
 			 },
 			handleNodeClick(data) {
 			},

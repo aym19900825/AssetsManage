@@ -47,7 +47,7 @@
 					</div>
 					<el-row :gutter="10">
 						<el-col :span="24">
-							 <tree_grid :columns="columns" :tree-structure="true" :data-source="menuList" v-on:childByValue="childByValue" ></tree_grid>
+							 <tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="menuList" v-on:childByValue="childByValue" ></tree_grid>
 
 							<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
@@ -80,6 +80,7 @@
 		},
 		data() {
 			return {
+			loading: false,
 			basic_url: Config.dev_url,
 		    checkedName: [
 					'菜单名称',
@@ -136,7 +137,7 @@
 				treeData: [],
 				page: {
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				menu: {}//修改子组件时传递数据
@@ -265,6 +266,7 @@
 				this.selMenu = val;
 			},
 			requestData(index) {
+				this.loading = true;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -273,33 +275,9 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(res.data);
+					this.loading = false;
 					let result=res.data
-					
-					// for(let i=0;i<result.length;i++){
-					// 	if(result[i].parentId == "-1" || result[i].parentId == "null") {
-					// 		result[i].isMenu = "目录"
-					// 	} else {
-					// 		result[i].isMenu = "菜单"
-					// 	}	
-					// 	result[i].hidden=result[i].hidden?true:false
-						// if(result[i].children.length>0){
-						// 	let children=result[i].children
-						// 	for(let j=0;j<children.length;j++){
-						// 		if(children[j].parentId == "-1" || children[j].parentId == "null") {
-						// 			children[j].isMenu = "目录"
-						// 		} else {
-						// 			children[j].isMenu = "菜单"
-						// 		}
-						// 		children[j].hidden=children[j].hidden?true:false
-						// 	}
-							
-						// 	result[i].children=children
-						// }
-					// }
-					
 					this.menuList = result;
-					console.log(result);
 					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {
 					

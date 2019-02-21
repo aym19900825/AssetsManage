@@ -2,7 +2,16 @@
   <el-table
     :data="data"
     style="width: 100%;"
-    :row-style="showTr" border stripe :header-cell-style="rowClass" :height="fullHeight" @selection-change="SelChange">
+    :row-style="showTr" 
+    border 
+    stripe 
+    :header-cell-style="rowClass" 
+    :height="fullHeight" 
+    @selection-change="SelChange"
+    v-loading="loading"  
+		element-loading-text="拼命加载中"
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 0.6)">
     <el-table-column type="selection" width="55" fixed align="center">
 		</el-table-column>
     <el-table-column v-for="(column, index) in columns" :key="column.dataIndex"
@@ -59,6 +68,12 @@
           return []
         }
       },
+      loading: {
+        type: Boolean,
+        default: function () {
+          return []
+        }
+      }, 
 // 这是数据源
       dataSource: {
         type: Array,

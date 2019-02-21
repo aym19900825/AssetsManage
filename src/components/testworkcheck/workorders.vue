@@ -133,7 +133,19 @@
 						</el-col>
 						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
-							<el-table :header-cell-style="rowClass" :data="userList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table :header-cell-style="rowClass" 
+									  :data="userList" 
+									  border 
+									  stripe 
+									  :height="fullHeight" 
+									  style="width: 100%;" 
+									  :default-sort="{prop:'userList', order: 'descending'}" 
+									  @selection-change="SelChange" 
+									  v-loadmore="loadMore"
+									  v-loading="loading"  
+									  element-loading-text="拼命加载中"
+    								  element-loading-spinner="el-icon-loading"
+    								  element-loading-background="rgba(0, 0, 0, 0.6)">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="工作任务单编号" sortable width="140px" prop="WONUM" v-if="this.checkedName.indexOf('工作任务单编号')!=-1">
@@ -197,6 +209,7 @@
 		},
 		data() {
 			return {
+				loading: false,
 				basic_url: Config.dev_url,
 				ismin: true,
 				loadSign:true,//加载
@@ -356,6 +369,7 @@
 					// ENTERBY: '',//录入人
 					ENTERDATE: '',//录入日期
 				};
+				this.requestData();
 			},
 			searchinfo(index) {
 				this.page.currentPage = 1;
@@ -507,6 +521,7 @@
 				this.selMenu = val;
 			},
 			requestData() {
+				this.loading = true;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -543,10 +558,8 @@
 							}
 						}
 					}
-					console.log(newarr);
 					this.userList = newarr;
-					console.log(this.userList);
-					
+					this.loading = false;
 				}).catch((wrong) => {})
 			},
 			//机构树

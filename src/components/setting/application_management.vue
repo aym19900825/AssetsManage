@@ -65,7 +65,19 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格 Begin-->
-							<el-table :header-cell-style="rowClass" :data="applicationList" v-loading="loading" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'applicationList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table :header-cell-style="rowClass" 
+								      :data="applicationList" 
+									  border 
+									  stripe 
+									  :height="fullHeight" 
+									  style="width: 100%;" 
+									  :default-sort="{prop:'applicationList', order: 'descending'}" 
+									  @selection-change="SelChange" 
+									  v-loadmore="loadMore"
+									  v-loading="loading"  
+								  	  element-loading-text="拼命加载中"
+								  	  element-loading-spinner="el-icon-loading"
+								  	  element-loading-background="rgba(0, 0, 0, 0.6)">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="应用英文名称" width="155" sortable prop="code" v-if="this.checkedName.indexOf('应用英文名称')!=-1">
@@ -249,7 +261,7 @@
 				},
 				page: { //分页显示
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				dataInfo: {},//修改子组件时传递数据
@@ -262,17 +274,38 @@
 			},
 			//表格滚动加载
 			loadMore() {
-				if(this.loadSign) {
-					this.loadSign = false
-					this.page.currentPage++
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++
 						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							return
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
 						}
+					}else{
+						this.page.currentPage--
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1
+							return false;
+						}
+					}
+					this.loadSign = false;
 					setTimeout(() => {
 						this.loadSign = true
 					}, 1000)
 					this.requestData()
 				}
+				// if(this.loadSign) {
+				// 	this.loadSign = false
+				// 	this.page.currentPage++
+				// 		if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+				// 			return
+				// 		}
+				// 	setTimeout(() => {
+				// 		this.loadSign = true
+				// 	}, 1000)
+				// 	this.requestData()
+				// }
 			},
 			tableControle(data) {
 				this.checkedName = data;
@@ -287,7 +320,7 @@
 			},
 			searchinfo(index) {
 				this.page.currentPage = 1;
-				this.page.pageSize = 10;
+				this.page.pageSize = 20;
 				this.requestData();
 			},
 			resetbtn(){
@@ -295,6 +328,7 @@
 					name:'',
 					description: '',
 				};
+				this.requestData();
 			},
 			//清空
 			reset() {
@@ -445,6 +479,7 @@
 				this.selUser = val;
 			},
 			requestData(index) {
+				this.loading = true;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -475,6 +510,7 @@
 						}
 					}
 					this.applicationList = newarr;
+					this.loading = false;
 				}).catch((wrong) => {})
 			},
 			handleNodeClick(data) {},

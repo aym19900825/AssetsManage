@@ -489,8 +489,11 @@
 												</el-table-column>
 											      <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 											      <template slot-scope="scope">
-											         <el-button @click.native.prevent="deleteRow(scope.$index,workorderForm.WORKORDER_PROJECTList)" type="text" size="small">
-											      <i class="icon-trash red"></i>
+											         <el-button title="删除" @click.native.prevent="deleteRow(scope.$index,workorderForm.WORKORDER_PROJECTList)" type="text" size="small">
+											      		<i class="icon-trash red"></i>
+											        </el-button>
+													<el-button title="生成子任务单" @click.native.prevent="deleteRow(scope.$index,workorderForm.WORKORDER_PROJECTList)" type="text" size="small">
+											      		<i class="icon-send"></i>
 											        </el-button>
 											      </template>
 											    </el-table-column>
@@ -575,11 +578,20 @@
 											      </template>
 											    </el-table-column>-->
 							            		<el-table-column label="预览"></el-table-column>
-							            		<el-table-column fixed="right" label="操作" width="80" v-if="!viewtitle" >
+							            		<el-table-column fixed="right" label="操作" width="150" v-if="!viewtitle" >
 											      <template slot-scope="scope">
-											      	  <el-button @click.native.prevent="deleteRow(scope.$index,workorderForm.WORKORDER_DATA_TEMPLATEList)" type="text" size="small">
-											        <i class="icon-trash red"></i>
-											        </el-button>
+													  <el-button title="下载" type="text" size="small">
+														<i class="icon-arrow-down-circle"></i>
+													  </el-button>
+													  <el-button title="上传" type="text" size="small">
+														<i class="icon-arrow-up-circle"></i>
+													  </el-button>
+													  <el-button title="编辑" type="text" size="small">
+														<i class="icon-edit2"></i>
+													  </el-button>
+											      	  <el-button title="删除" @click.native.prevent="deleteRow(scope.$index,workorderForm.WORKORDER_DATA_TEMPLATEList)" type="text" size="small">
+														<i class="icon-trash red"></i>
+													  </el-button>
 											      </template>
 											    </el-table-column>
 							            	</el-table>
@@ -1099,20 +1111,17 @@
 								message:res.data.resp_msg,
 								type: 'success'
 							});
-							var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/Executors/'+this.dataid;
+							var url = this.basic_url + '/api-apps/app/workorder/flow/Executors/'+this.dataid;
 							this.$axios.get(url, {}).then((res) => {
-									console.log(res.data.datas);
-									var resullt=res.data.datas;
-									var users='';
-									for(var i=0;i<resullt.length;i++){
-										if(resullt[i].username!=this.username){
-											this.approval=false;
-											this.start=false;
-										}else{
-											this.approval=true;
-											this.start=false;
-										}
-									}
+								var resullt=res.data.datas;
+								var users='';
+								for(var i=0;i<resullt.length;i++){
+									users = users + resullt[i].username+",";
+								}
+								if(users.indexOf(this.username) != -1){
+									this.approval=true;
+									this.start=false;
+								}
 							});
 							this.detailgetData();
 				    }
@@ -1332,7 +1341,6 @@
 							var users='';
 							for(var i=0;i<resullt.length;i++){
 								users = users + resullt[i].username+",";
-								console.log("users----"+users);
 							}
 							if(users.indexOf(this.username) != -1){
 								this.approval=true;
@@ -1467,6 +1475,17 @@
 					this.userList = newarr;
 				}).catch((wrong) => {})	
 			},
+			getUser(){//获取当前用户信息
+	            var url = this.basic_url + '/api-user/users/currentMap';
+	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+	                    this.username = res.data.username;
+	            }).catch((err) => {
+	                this.$message({
+	                    message: '网络错误，请重试',
+	                    type: 'error'
+	                });
+	            });
+        	},
 			
 		},
 		
@@ -1480,6 +1499,7 @@
 			this.getITEM_MANAGEMENT();//页面打开加载-样品处置
 			this.getuser();//用户
 			this.getCompany();
+			this.getUser();
 		},
 	}
 </script>

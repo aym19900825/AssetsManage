@@ -36,8 +36,9 @@
 										<template slot="prepend">名称</template>
 									</el-input>
 								</el-col>
-								<el-col :span="3">
+								<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -46,7 +47,15 @@
 					<el-row :gutter="0">
 						<el-col class="leftcont v-resize">
 							<!-- 表格 -->
-							<el-table :data="fileList" border :height="fullHeight" style="width: 100%;" :default-sort="{prop:'fileList', order: 'descending'}">
+							<el-table :data="fileList" 
+									  border 
+									  :height="fullHeight" 
+									  style="width: 100%;" 
+									  :default-sort="{prop:'fileList', order: 'descending'}"
+									  v-loading="loading"  
+								      element-loading-text="拼命加载中"
+    							      element-loading-spinner="el-icon-loading"
+    							      element-loading-background="rgba(0, 0, 0, 0.6)">
 								<!-- <el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 								</el-table-column> -->
 								<el-table-column label="名称" sortable prop="filename" v-if="this.checkedName.indexOf('名称')!=-1">
@@ -112,6 +121,7 @@
 		},
 		data() {
 			return {
+				loading: false,
 				visible2: false,
 				basic_url: Config.dev_url,
 				file_url: Config.file_url,
@@ -222,6 +232,12 @@
 				this.page.currentPage = val;
 				this.requestData();
 			},
+		    resetbtn(){
+			this.searchList = { //点击高级搜索后显示的内容
+			filename: '',
+			};
+			this.requestData();
+			},
 			searchinfo(index) {//高级查询
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
@@ -303,6 +319,7 @@
 				this.selMenu = val;
 			},
 			requestData(index) {
+				this.loading = true;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -313,6 +330,7 @@
 				this.$axios.post(url, data).then((res) => {
 					this.page.totalCount = res.data.total;
 					this.fileList = res.data.vBaseKeywordFiles;
+					this.loading = false;
 				}).catch((wrong) => {})
 			},
 			transformTree(data) {

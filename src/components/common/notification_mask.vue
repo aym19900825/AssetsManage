@@ -538,6 +538,7 @@
 					N_CODE: '',
 					TYPE: '',
 					XD_DATE: '',
+					PRODUCT_TYPE:'',
 					ITEM_NAME: '',
 					ITEM_MODEL: '',
 					V_NAME: '',
@@ -608,6 +609,7 @@
 					TYPE: '',
 					XD_DATE: '',
 					ITEM_NAME: '',
+					PRODUCT_TYPE:'',
 					ITEM_MODEL: '',
 					V_NAME: '',
 					VENDOR:'',
@@ -874,7 +876,7 @@
 			//接到产品类别的值
 			categorydata(value){
 				this.catenum = value[0];
-				this.dataInfo.PRODUCT_TYPE  = value[1];
+				this.dataInfo.PRODUCT_TYPE = value[1];
 			},
 			//接到产品的值
 			appenddata(value){
@@ -1081,21 +1083,20 @@
 								message:res.data.resp_msg,
 								type: 'success'
 							});
-						var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/Executors/'+this.dataid;
+						var url = this.basic_url + '/api-apps/app/workNot/flow/Executors/'+this.dataid;
 						this.$axios.get(url, {}).then((res) => {
 								var resullt=res.data.datas;
 								var users='';
 								for(var i=0;i<resullt.length;i++){
-									if(resullt[i].username!=this.username){
-										this.approval=false;
-										this.start=false;
-									}else{
-										this.approval=true;
-										this.start=false;
-									}
+								users = users + resullt[i].username+",";
+							}
+								if(users.indexOf(this.username) != -1){
+									this.approval=true;
+									this.start=false;
 								}
+								this.detailgetData();
 						});
-							this.detailgetData();
+							
 				    }
 				});
 			},
@@ -1103,7 +1104,7 @@
 			approvals(){
 				this.approvingData.id =this.dataid;
 				this.approvingData.app=this.workNot;
-				var url = this.basic_url + '/api-apps/app/'+this.workNot+'/flow/isEnd/'+this.dataid;
+				var url = this.basic_url + '/api-apps/app/workNot/flow/isEnd/'+this.dataid;
 		    		this.$axios.get(url, {}).then((res) => {
 		    			if(res.data.resp_code == 0) {
 							this.$message({
@@ -1111,7 +1112,7 @@
 								type: 'warning'
 							});
 		    			}else{
-		    				var url = this.basic_url + '/api-apps/app/'+this.workNot+'/flow/isExecute/'+this.dataid;
+		    				var url = this.basic_url + '/api-apps/app/workNot/flow/isExecute/'+this.dataid;
 		    				this.$axios.get(url, {}).then((res) => {
 				    			if(res.data.resp_code == 1) {
 										this.$message({

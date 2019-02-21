@@ -218,6 +218,7 @@
 			var basisnums = basisnum.toString(',');
 			list.push(basisnums);
             for(var i = 0;i<this.selUser.length;i++){
+				this.selUser[i].ID = '';
                 list.push(this.selUser[i]);
 			}
 			console.log('========');

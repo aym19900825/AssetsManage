@@ -68,7 +68,19 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :data="dictionarieList" border stripe :header-cell-style="rowClass" :height="fullHeight" style="width: 100%;" :default-sort="{prop:'dictionarieList', order: 'descending'}" @selection-change="SelChange"  v-loadmore="loadMore">
+						<el-table :data="dictionarieList" 
+								  border 
+								  stripe 
+								  :header-cell-style="rowClass" 
+								  :height="fullHeight" 
+								  style="width: 100%;" 
+								  :default-sort="{prop:'dictionarieList', order: 'descending'}" 
+								  @selection-change="SelChange"  
+								  v-loadmore="loadMore"
+								  v-loading="loading"  
+								  element-loading-text="拼命加载中"
+								  element-loading-spinner="el-icon-loading"
+								  element-loading-background="rgba(0, 0, 0, 0.6)">
 							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 							</el-table-column>
 
@@ -124,6 +136,7 @@
 		},
 		data() {
 			return {
+				loading: false,
 				basic_url: Config.dev_url,
 				value: '',
 				options: [{
@@ -176,7 +189,7 @@
 				},
 				page: {//分页显示
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				selData: [],
@@ -192,17 +205,38 @@
 			},
 			//表格滚动加载
 			loadMore () {
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page.currentPage++
-			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     this.requestData()
-			   }
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+					}else{
+						this.page.currentPage--
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1
+							return false;
+						}
+					}
+					this.loadSign = false;
+					setTimeout(() => {
+						this.loadSign = true
+					}, 1000)
+					this.requestData()
+				}
+			   // if (this.loadSign) {
+			   //   this.loadSign = false
+			   //   this.page.currentPage++
+			   //   if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+			   //     return
+			   //   }
+			   //   setTimeout(() => {
+			   //     this.loadSign = true
+			   //   }, 1000)
+			   //   this.requestData()
+			   // }
 			 },
 			tableControle(data){//控制表格列显示隐藏
 				this.checkedName = data;
@@ -217,7 +251,7 @@
 		    },
 			searchinfo(index) {
 				this.page.currentPage = 1;
-				this.page.pageSize = 10;
+				this.page.pageSize = 20;
 				this.requestData();
 			},
 			resetbtn(){
@@ -225,6 +259,7 @@
 					code: '',
 					name: '',
 				};
+				this.requestData();
 			},
 			openAddData() {//添加数据
 				this.dictionarieForm = {
@@ -333,7 +368,7 @@
 				this.selDictionarie = val;
 			},
 			requestData(index) {//高级查询字段
-				console.log(this.searchList.name);
+				this.loading = true;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -362,6 +397,7 @@
 						}
 					}					
 					this.dictionarieList = newarr;
+					this.loading = false;
 				}).catch((wrong) => {})
 			},
 			

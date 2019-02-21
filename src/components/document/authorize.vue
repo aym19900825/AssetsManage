@@ -51,8 +51,9 @@
 										<template slot="prepend">关键字</template>
 										</el-input>
 								</el-col> -->
-								<el-col :span="3">
+								<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -60,7 +61,17 @@
 					<!-- 高级查询划出 End-->
 						<el-col class="leftcont v-resize">
 							<!-- 表格 -->
-							<el-table :data="samplesList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table :data="samplesList" 
+									  border stripe 
+									  :height="fullHeight" 
+									  style="width: 100%;" 
+									  :default-sort="{prop:'samplesList', order: 'descending'}" 
+									  @selection-change="SelChange" 
+									  v-loadmore="loadMore"
+									   v-loading="loading"  
+								      element-loading-text="拼命加载中"
+    							      element-loading-spinner="el-icon-loading"
+    							      element-loading-background="rgba(0, 0, 0, 0.6)">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="姓名" sortable width="140px" prop="username" v-if="this.checkedName.indexOf('姓名')!=-1">
@@ -134,6 +145,7 @@
 		},
 		data() {
 			return {
+				loading: false,
 				basic_url: Config.dev_url,
 				isShow: false,
 				ismin: true,
@@ -267,6 +279,12 @@
 				this.page.currentPage = val;
 				this.requestData();
 			},
+			 resetbtn(){
+			this.searchList = { //点击高级搜索后显示的内容
+			username: '',
+			};
+			this.requestData();
+			},
 			searchinfo(index) {//高级查询
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
@@ -356,6 +374,7 @@
 				this.selMenu = val;
 			},
 			requestData(index) {
+				this.loading = true;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -368,6 +387,7 @@
 				}).then((res) => {
 					this.page.totalCount = res.data.count;
 					this.samplesList = res.data.data;
+					this.loading = false;
 				}).catch((wrong) => {})
 				
 			},

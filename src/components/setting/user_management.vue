@@ -116,7 +116,19 @@
 						</el-col>
 						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
-							<el-table :data="userList" border stripe :header-cell-style="rowClass" :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table :data="userList" 
+									  border 
+									  stripe 
+									  :header-cell-style="rowClass" 
+									  :height="fullHeight" 
+									  style="width: 100%;" 
+									  :default-sort="{prop:'userList', order: 'descending'}" 
+									  @selection-change="SelChange" 
+									  v-loadmore="loadMore"
+									  v-loading="loading"  
+								  	  element-loading-text="拼命加载中"
+								  	  element-loading-spinner="el-icon-loading"
+								  	  element-loading-background="rgba(0, 0, 0, 0.6)">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="用户名" sortable width="140px" prop="username" v-if="this.checkedName.indexOf('用户名')!=-1">
@@ -180,6 +192,7 @@
 		},
 		data() {
 			return {
+				loading: false,
 				basic_url: Config.dev_url,
 				isShow: false,
 				ismin: true,
@@ -266,7 +279,7 @@
 				userData: [],
 				page: {
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				user: {},//修改子组件时传递数据
@@ -288,7 +301,6 @@
 						type: type
 					},
 				}).then((res) => {
-					console.log(res.data);
 					this.selectData = res.data;
 				});
 			},
@@ -323,18 +335,39 @@
 				return row[property] === value;
 			},
 			loadMore() {
-				if(this.loadSign) {
-					this.loadSign = false
-					this.page.currentPage++
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++
 						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							return
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
 						}
+					}else{
+						this.page.currentPage--
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1
+							return false;
+						}
+					}
+					this.loadSign = false;
 					setTimeout(() => {
 						this.loadSign = true
 					}, 1000)
 					this.requestData()
-					//console.log('到底了', this.page.currentPage)
 				}
+				// if(this.loadSign) {
+				// 	this.loadSign = false
+				// 	this.page.currentPage++
+				// 		if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+				// 			return
+				// 		}
+				// 	setTimeout(() => {
+				// 		this.loadSign = true
+				// 	}, 1000)
+				// 	this.requestData()
+				// 	//console.log('到底了', this.page.currentPage)
+				// }
 			},
 			//获取pageSize
 			sizeChange(val) {
@@ -348,7 +381,7 @@
 			},
 			searchinfo(index) {
 				this.page.currentPage = 1;
-				this.page.pageSize = 10;
+				this.page.pageSize = 20;
 				this.requestData();
 			},
 			resetbtn(){
@@ -357,6 +390,7 @@
 					username: '',
 					deptId: ''
 				};
+				this.requestData();
 			},
 			//请求页面的button接口
 		    getbutton(childByValue){
@@ -367,8 +401,6 @@
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					console.log(111)
-					console.log(res);
 					this.buttons = res.data;
 					
 				}).catch((wrong) => {})
@@ -579,7 +611,12 @@
 				//taxStatus 布尔值
 				return data.enabled ? '活动' : '不活动'
 			},
-			
+
+			// sexName(data) {
+			// 	return data.sex ? '男' : '女'
+			// },
+
+
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -593,6 +630,7 @@
 				this.selUser = val;
 			},
 			requestData(index) {
+				this.loading = true;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -631,6 +669,7 @@
 					}
 
 					this.userList = newarr;
+					this.loading = false;
 				}).catch((wrong) => {})
 //				this.userList.forEach((item, index) => {
 //					var id = item.id;

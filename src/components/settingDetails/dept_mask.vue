@@ -610,6 +610,7 @@
 			//点击关闭按钮
 			close() {
 				this.show = false;
+				this.$emit('request');
 			},
 			toggle(e) {
 				if(this.isok1 == true) {

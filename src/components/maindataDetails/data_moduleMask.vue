@@ -137,7 +137,7 @@
 										</el-table-column>
 										<el-table-column fixed="right" label="操作" width="120">
 											<template slot-scope="scope">
-												<el-button @click="deletemodule(scope.$index,CATEGORY.RAW_DATA_TEMPATE_DETAILList)" type="text" size="small" v-show="!viewtitle">
+												<el-button @click="deletemodule(scope.$index,scope.row,'tableList')" type="text" size="small" v-show="!viewtitle">
                                                  <i class="icon-trash red"></i>
 												</el-button>
 											</template>
@@ -294,8 +294,38 @@
 				this.CATEGORY.RAW_DATA_TEMPATE_DETAILList.push(obj);
 			},
 			//刪除新建行
-			deletemodule(index, rows) { //Table-操作列中的删除行
-				rows.splice(index, 1);
+			deletemodule(index, row, listName){
+				console.log(row);
+				var TableName = '';
+				console.log(listName);
+				if(listName =='tableList'){
+					TableName = 'RAW_DATA_TEMPATE_DETAIL';
+				}
+				if(row.ID){
+					var url = this.basic_url + '/api-apps/app/rawDataTem/' + TableName +'/' + row.ID;
+					this.$axios.delete(url, {}).then((res) => {
+						console.log(res);
+						if(res.data.resp_code == 0){
+							this.testing_projectForm[TableName+'List'].splice(index,1);
+							this.$message({
+								message: '删除成功',
+								type: 'success'
+							});
+						}else{
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'error'
+							});
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+				}else{
+					this.testing_projectForm[TableName+'List'].splice(index,1);
+				}
 			},
 			//获取导入表格勾选信息
 			SelChange(val) {

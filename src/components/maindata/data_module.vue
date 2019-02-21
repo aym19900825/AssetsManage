@@ -83,9 +83,9 @@
 									  :height="fullHeight" 
 									  style="width: 100%;" 
 									  v-loading="loading"  
-									  element-loading-text="拼命加载中"
+									  element-loading-text="加载中…"
     								  element-loading-spinner="el-icon-loading"
-    								  element-loading-background="rgba(0, 0, 0, 0.6)"
+    								  element-loading-background="rgba(255, 255, 255, 0.9)"
 									  :default-sort="{prop:'categoryList', order: 'descending'}" 
 									  @selection-change="SelChange" 
 									  v-loadmore="loadMore">

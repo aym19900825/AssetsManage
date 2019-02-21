@@ -143,9 +143,9 @@
 									  @selection-change="SelChange" 
 									  v-loadmore="loadMore"
 									  v-loading="loading"  
-									  element-loading-text="拼命加载中"
+									  element-loading-text="加载中…"
     								  element-loading-spinner="el-icon-loading"
-    								  element-loading-background="rgba(0, 0, 0, 0.6)">
+    								  element-loading-background="rgba(255, 255, 255, 0.9)">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="工作任务单编号" sortable width="140px" prop="WONUM" v-if="this.checkedName.indexOf('工作任务单编号')!=-1">

@@ -117,9 +117,9 @@
 								  @selection-change="SelChange" 
 								  v-loadmore="loadMore"
 								  v-loading="loading"  
-								  element-loading-text="拼命加载中"
+								  element-loading-text="加载中…"
     							  element-loading-spinner="el-icon-loading"
-    							  element-loading-background="rgba(0, 0, 0, 0.6)">
+    							  element-loading-background="rgba(255, 255, 255, 0.9)">
 							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0" align="center">
 							</el-table-column>
 							<el-table-column label="分包协议编号" width="150" sortable prop="PROXY_CONTRACT_NUM" v-if="this.checkedName.indexOf('分包协议编号')!=-1">

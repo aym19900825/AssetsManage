@@ -102,9 +102,9 @@
 								   @selection-change="SelChange" 
 								   v-loadmore="loadMore"
 								   v-loading="loading"  
-								  element-loading-text="拼命加载中"
+								  element-loading-text="加载中…"
     							  element-loading-spinner="el-icon-loading"
-    							  element-loading-background="rgba(0, 0, 0, 0.6)">
+    							  element-loading-background="rgba(255, 255, 255, 0.9)">
 							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 							</el-table-column>
 							<el-table-column label="溯源记录编号" width="120" sortable prop="RECORDNUM" v-if="this.checkedName.indexOf('溯源记录编号')!=-1">

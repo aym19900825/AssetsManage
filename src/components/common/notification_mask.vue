@@ -730,7 +730,6 @@
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.dataInfo.DEPTID = res.data.deptId;
 					this.dataInfo.ENTERBY = res.data.id;
-					this.username=res.data.username;
 					// this.dataInfo.ORGID = res.data.deptName
 					var date = new Date();
 					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD ");
@@ -809,23 +808,20 @@
 				//判断启动流程和审批的按钮是否显示
 				var url = this.basic_url + '/api-apps/app/workNot/flow/isStart/'+dataid;
 					this.$axios.get(url, {}).then((res) => {
-						console.log(res);
 					  if(res.data.resp_code==1){
 							this.start=true;
 							this.approval=false;
 						}else{
-						var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/Executors/'+dataid;
+						var url = this.basic_url + '/api-apps/app/workNot/flow/Executors/'+dataid;
 						this.$axios.get(url, {}).then((res) => {
 							var resullt=res.data.datas;
 							var users='';
 							for(var i=0;i<resullt.length;i++){
-								if(resullt[i].username!=this.username){
-									this.approval=false;
-									this.start=false;
-								}else{
-									this.approval=true;
-									this.start=false;
-								}
+								users = users + resullt[i].username+",";
+							}
+							if(users.indexOf(this.username) != -1){
+								this.approval=true;
+								this.start=false;
 							}
 						});
 						}
@@ -1155,10 +1151,22 @@
 			//检测项目放大镜
 			basisleadbtn2(){
 				this.$refs.projectchild.projectlead(this.basisnum);
-			}
+			},
+		    getuser(){//获取当前用户信息
+	            var url = this.basic_url + '/api-user/users/currentMap';
+	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+	                    this.username = res.data.username;
+	            }).catch((err) => {
+	                this.$message({
+	                    message: '网络错误，请重试',
+	                    type: 'error'
+	                });
+	            });
+        	},
 		},
 		mounted() {
 			this.getCompany();
+			this.getuser();
 		},
 	}
 </script>

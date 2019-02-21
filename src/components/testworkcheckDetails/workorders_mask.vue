@@ -1385,6 +1385,7 @@
 			//点击关闭按钮
 			close() {
 				this.show = false;
+				this.$emit('request');
 				//this.resetNew();
 			},
 			toggle(e) {

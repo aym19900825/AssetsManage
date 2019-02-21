@@ -44,6 +44,7 @@ import sample_disposal from '@/components/samples/sample_disposal'//样品管理
 
 import workorders from '@/components/testworkcheck/workorders'//工作任务单
 import useseal_management from '@/components/testworkcheck/useseal_management'//用印管理
+import reportarchiving from '@/components/testworkcheck/reportarchiving'//报告归档
 import devices from '@/components/devices'//设备管理
 import inspection_project from '@/components/inspection_project'//检验/检测项目管理
 import test from '@/components/test'//检验/检测项目管理
@@ -316,6 +317,11 @@ Vue.use(Router)
       path: '/useseal_management',
       name: 'useseal_management',
       component: useseal_management
+    },
+     {//报告归档
+      path: '/reportarchiving',
+      name: 'reportarchiving',
+      component: reportarchiving
     },
     {//设备管理
       path: '/devices',

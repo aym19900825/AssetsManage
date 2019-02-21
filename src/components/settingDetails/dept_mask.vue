@@ -69,7 +69,6 @@
 											<el-form-item label="机构类型" prop="org_range">
 												<el-select v-model="adddeptForm.org_range" placeholder="请选择" style="width: 100%">
 													<el-option v-for="(data,index) in Selectsys_depttype" :key="index" :value="data.code" :label="data.name"></el-option>
-													</el-option>
 												</el-select>
 											</el-form-item>
 										</el-col>

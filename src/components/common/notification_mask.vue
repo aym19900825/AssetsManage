@@ -100,7 +100,7 @@
 										</el-col>
 										<el-col :span="8" >
 											<el-form-item label="承检单位" prop="CJDW" label-width="110px">
-												<el-select clearable v-model="dataInfo.CJDW" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" style="width: 100%">
+												<el-select clearable v-model="dataInfo.CJDW" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" style="width: 100%" @change="changeCJDW">
 													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 												</el-select>
 											</el-form-item>
@@ -642,11 +642,35 @@
 					this.selectData = res.data;
 				});
 			},
+			changeCJDW(){
+				this.getCompany();
+				this.dataInfo.PRODUCT_TYPE = '';
+				this.dataInfo.P_NUM = '';
+				this.dataInfo.ITEM_NAME = '';
+				this.dataInfo.PRO_NUM = '';
+				this.dataInfo.S_NUM = '';
+				this.dataInfo.WORK_NOTICE_CHECKBASISList = [];
+				this.dataInfo.WORK_NOTICE_CHECKPROJECTList = [];
+			},
 			addcategory(){//产品类别
-				this.$refs.categorychild.visible(this.dataInfo.CJDW);
+				if(this.dataInfo.CJDW == null || this.dataInfo.CJDW == '' || this.dataInfo.CJDW == undefined){
+					this.$message({
+						message: '请先选择承检单位',
+						type: 'warning'
+					});
+				}else{
+					this.$refs.categorychild.visible(this.dataInfo.CJDW);
+				}
 			},
 			addproduct(){//受检产品名称
-				this.$refs.productchild.visible(this.catenum);
+				if(this.dataInfo.P_NUM == null || this.dataInfo.P_NUM == '' || this.dataInfo.P_NUM == undefined){
+					this.$message({
+						message: '请先选择产品类别',
+						type: 'warning'
+					});
+				}else{
+					this.$refs.productchild.visible(this.dataInfo.P_NUM);
+				}
 			},
 			//单位
 			addCompany(type){
@@ -875,13 +899,21 @@
 			},
 			//接到产品类别的值
 			categorydata(value){
-				this.catenum = value[0];
+				this.dataInfo.P_NUM = value[0];
 				this.dataInfo.PRODUCT_TYPE = value[1];
+				this.dataInfo.ITEM_NAME = '';
+				this.dataInfo.PRO_NUM = '';
+				this.dataInfo.S_NUM = '';
+				this.dataInfo.WORK_NOTICE_CHECKBASISList = [];
+				this.dataInfo.WORK_NOTICE_CHECKPROJECTList = [];
 			},
 			//接到产品的值
 			appenddata(value){
-				this.pronum = value[0];
+				this.dataInfo.PRO_NUM = value[0];
 				this.dataInfo.ITEM_NAME = value[1];
+				this.dataInfo.S_NUM = '';
+				this.dataInfo.WORK_NOTICE_CHECKBASISList = [];
+				this.dataInfo.WORK_NOTICE_CHECKPROJECTList = [];
 			},
 			appendnames(value){
 				this.dataInfo.V_NAME = value;//名称
@@ -1057,10 +1089,11 @@
 			 },
 			 //检测依据列表
 			addbasis(value){
-				this.basisnum = value[0];
+				this.dataInfo.S_NUM = value[0];
 				for(var i = 1;i<value.length;i++){
 					this.dataInfo.WORK_NOTICE_CHECKBASISList.push(value[i]);
 				}
+				this.dataInfo.WORK_NOTICE_CHECKPROJECTList = [];
 			},
 			 //检测项目列表
 			addproject(value){
@@ -1147,11 +1180,25 @@
 			},
 			//检测依据放大镜
 			basisleadbtn(){
-				this.$refs.standardchild.basislead(this.pronum);
+				if(this.dataInfo.PRO_NUM == null || this.dataInfo.PRO_NUM == '' || this.dataInfo.PRO_NUM == undefined){
+					this.$message({
+						message: '请先选择产品名称',
+						type: 'warning'
+					});
+				}else{
+					this.$refs.standardchild.basislead(this.dataInfo.PRO_NUM);
+				}
 			},
 			//检测项目放大镜
 			basisleadbtn2(){
-				this.$refs.projectchild.projectlead(this.basisnum);
+				if(this.dataInfo.S_NUM == null || this.dataInfo.S_NUM == '' || this.dataInfo.S_NUM == undefined){
+					this.$message({
+						message: '请先选择检测依据列表数据',
+						type: 'warning'
+					});
+				}else{
+					this.$refs.projectchild.projectlead(this.dataInfo.S_NUM);
+				}
 			},
 		    getuser(){//获取当前用户信息
 	            var url = this.basic_url + '/api-user/users/currentMap';

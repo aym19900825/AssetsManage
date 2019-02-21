@@ -89,32 +89,12 @@
 										<el-col :span="8" >
 											<el-form-item label="承检单位" prop="R_VENDOR"  label-width="110px">
 												<el-select clearable v-model="dataInfo.R_VENDOR" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit"  @change="RVENDORSelect($event)">
-<<<<<<< HEAD
 													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
-=======
-													<el-option v-for="data in selectData" :key="data.id" :value="data.id" :label="data.fullname"></el-option>
->>>>>>> 275ad8a34a7c110d066c9a748da75b3304b92233
 												</el-select>
 											</el-form-item>
 										</el-col>
 									</el-row>
-									<!-- <el-row >
-										<el-col :span="8" style="display: none;">
-											<el-form-item label="委托单位编号" prop="VENDOR" label-width="110px">
-												<el-input v-model="dataInfo.VENDOR"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row> -->
 								</el-collapse-item>
-								<!--<el-collapse-item title="生产单位" name="2">
-									<el-row >
-										<el-col :span="8" style="display:none;">
-											<el-form-item label="生产单位编号" prop="PRODUCT_UNIT">
-												<el-input v-model="dataInfo.PRODUCT_UNIT"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-								</el-collapse-item>-->
 								<el-collapse-item title="样品" name="2" >
 										<el-row >
 											<el-col :span="8">
@@ -208,15 +188,8 @@
 										</el-form-item>
 								</el-collapse-item>
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
-									 <!-- <el-form :label-position="labelPosition"> -->
 									<el-tabs v-model="activeName" @tab-click="handleClick">
 									    <el-tab-pane label="检验依据" name="first">
-									    	<!-- <div class="table-func table-funcb">
-												<el-button type="success" size="mini" round @click="addfieldProject"  v-show="!viewtitle">
-													<i class="icon-add"></i>
-													<font>新建行</font>
-												</el-button>
-											</div> -->
 											<div class="table-func table-funcb">
 												<el-button type="primary" size="mini" round @click="basisleadbtn">
 													<i class="icon-search"></i>
@@ -225,7 +198,6 @@
 											</div>
 
 											<el-table :data="dataInfo.INSPECT_PROXY_BASISList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.INSPECT_PROXY_BASISList', order: 'descending'}">
-
 												<el-table-column prop="S_NUM" label="标准编号" sortable width="150px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.S_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
@@ -277,12 +249,6 @@
 											</el-table>
 									    </el-tab-pane>
 									    <el-tab-pane label="检验项目与要求" name="second">
-									    	<!-- <div class="table-func table-funcb">
-												<el-button type="success" size="mini" round @click="addfieldBasis"  v-show="!viewtitle">
-													<i class="icon-add"></i>
-													<font>新建行</font>
-												</el-button>
-											</div> -->
 											<div class="table-func table-funcb">
 												<el-button type="primary" size="mini" round @click="basisleadbtn2">
 													<i class="icon-search"></i>
@@ -516,11 +482,6 @@
 												</el-select>
 											</el-form-item>
 										</el-col>
-										<!-- <el-col :span="8" style="display:none;" label-width="110px">
-											<el-form-item label="生产单位编号" prop="PRODUCT_UNIT">
-												<el-input v-model="dataInfo.PRODUCT_UNIT" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col> -->
 									</el-row>
 									<el-row>
 									    <el-col :span="16">
@@ -1367,24 +1328,57 @@
 				});
 			},
 			addcategory(){//产品类别
-				this.$refs.categorychild.visible(this.dataInfo.R_VENDOR);
+				console.log(this.dataInfo.R_VENDOR == '');
+				if(this.dataInfo.R_VENDOR == null || this.dataInfo.R_VENDOR == '' || this.dataInfo.R_VENDOR == undefined){
+					this.$message({
+						message: '请先选择承检单位',
+						type: 'warning'
+					});
+				}else{
+					this.$refs.categorychild.visible(this.dataInfo.R_VENDOR);
+					
+				}
 			},
 			//接到产品类别的值
 			categorydata(value){
 				this.dataInfo.P_NUM = value[0];
 				this.dataInfo.PRODUCT_TYPE  = value[1];
+				this.dataInfo.PRODUCT = '';
+				this.dataInfo.PRO_NUM = '';
+				this.dataInfo.S_NUM = '';
+				this.dataInfo.INSPECT_PROXY_BASISList = [];
+				this.dataInfo.INSPECT_PROXY_PROJECList = [];
+				this.dataInfo.CHECK_PROXY_CONTRACTList = [];
 			},
 			addproduct(){//受检产品名称
-				this.$refs.productchild.visible(this.dataInfo.P_NUM);
+				if(this.dataInfo.P_NUM == null || this.dataInfo.P_NUM == '' || this.dataInfo.P_NUM == undefined){
+					this.$message({
+						message: '请先选择产品类别',
+						type: 'warning'
+					});
+				}else{
+					this.$refs.productchild.visible(this.dataInfo.P_NUM);
+				}
 			},
 			//接到产品的值
 			appenddata(value){
 				this.dataInfo.PRO_NUM = value[0];
 				this.dataInfo.PRODUCT = value[1];
+				this.dataInfo.S_NUM = '';
+				this.dataInfo.INSPECT_PROXY_BASISList = [];
+				this.dataInfo.INSPECT_PROXY_PROJECList = [];
+				this.dataInfo.CHECK_PROXY_CONTRACTList = [];
 			},
 			//检验依据放大镜
 			basisleadbtn(){
-				this.$refs.standardchild.basislead(this.dataInfo.PRO_NUM);
+				if(this.dataInfo.PRO_NUM == null || this.dataInfo.PRO_NUM == '' || this.dataInfo.PRO_NUM == undefined){
+					this.$message({
+						message: '请先选择产品名称',
+						type: 'warning'
+					});
+				}else{
+					this.$refs.standardchild.basislead(this.dataInfo.PRO_NUM);
+				}
 			},
 			 //检验依据列表
 			addbasis(value){
@@ -1394,11 +1388,18 @@
 					this.dataInfo.INSPECT_PROXY_BASISList.push(value[i]);
 				}
 				this.dataInfo.INSPECT_PROXY_PROJECList = [];
-				// this.dataInfo.WORK_NOTICE_CHECKBASISList = value;
+				this.dataInfo.CHECK_PROXY_CONTRACTList = [];
 			},
 			//检验项目放大镜
 			basisleadbtn2(){
-				this.$refs.projectchild.projectlead(this.dataInfo.S_NUM);
+				if(this.dataInfo.S_NUM == null || this.dataInfo.S_NUM == '' || this.dataInfo.S_NUM == undefined){
+					this.$message({
+						message: '请先选择检验依据列表数据',
+						type: 'warning'
+					});
+				}else{
+					this.$refs.projectchild.projectlead(this.dataInfo.S_NUM);
+				}
 			},
 			 //检验项目列表
 			addproject(value){
@@ -1406,7 +1407,6 @@
 					value[i].P_DESC = value[i].P_NAME;
 					this.dataInfo.INSPECT_PROXY_PROJECList.push(value[i]);
 				}
-				// this.dataInfo.WORK_NOTICE_CHECKPROJECTList = value;
 			},
 			//点击关闭按钮
 			close() {
@@ -1555,6 +1555,16 @@
 							type: 'error'
 						});
 					});
+				this.dataInfo.PRODUCT_TYPE = '';
+				this.dataInfo.P_NUM = '';
+				this.dataInfo.PRODUCT = '';
+				this.dataInfo.PRO_NUM = '';
+				this.dataInfo.S_NUM = '';
+				this.dataInfo.INSPECT_PROXY_BASISList = [];
+				this.dataInfo.INSPECT_PROXY_PROJECList = [];
+				this.dataInfo.CHECK_PROXY_CONTRACTList = [];
+				this.dataInfo.MAINGROUP = '';
+				this.dataInfo.LEADER = '';
 			},
 			//主检组带出主检负责人
 			getmaingroup(maingroupid){
@@ -1707,10 +1717,6 @@
 		},
 		mounted() {
 			this.getCompany();
-			// this.RVENDORSelect();
-			// this.getmaingroup();
-			// this.RVENDOR();
-			// this.getmain();
 		},
 	}
 </script>

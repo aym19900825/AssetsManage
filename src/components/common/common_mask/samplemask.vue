@@ -69,7 +69,7 @@
 			</el-table-column>
 			<el-table-column label="接样日期" sortable width="140px" :formatter="dateFormat" prop="RECIP_DATE">
 			</el-table-column>
-			<el-table-column label="状态" sortable width="100px" prop="STATE">
+			<el-table-column label="状态" sortable width="100px" prop="STATEDesc">
 			</el-table-column>
 		</el-table>
 				

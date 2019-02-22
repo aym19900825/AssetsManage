@@ -43,6 +43,7 @@ const sample_disposal  = r => require.ensure([], () => r(require('@/components/s
 
 const workorders  = r => require.ensure([], () => r(require('@/components/testworkcheck/workorders')), 'workorders')//工作任务单
 const useseal_management  = r => require.ensure([], () => r(require('@/components/testworkcheck/useseal_management')), 'useseal_management')//用印管理
+const reportarchiving  = r => require.ensure([], () => r(require('@/components/testworkcheck/reportarchiving')), 'reportarchiving')//报告归档
 const devices  = r => require.ensure([], () => r(require('@/components/devices')), 'devices')//设备管理
 const inspection_project  = r => require.ensure([], () => r(require('@/components/inspection_project')), 'inspection_project')//检验/检测项目管理
 const test  = r => require.ensure([], () => r(require('@/components/test')), 'test')//检验/检测项目管理
@@ -315,6 +316,11 @@ Vue.use(Router)
       path: '/useseal_management',
       name: 'useseal_management',
       component: useseal_management
+    },
+     {//报告归档
+      path: '/reportarchiving',
+      name: 'reportarchiving',
+      component: reportarchiving
     },
     {//设备管理
       path: '/devices',

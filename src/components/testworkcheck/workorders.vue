@@ -32,6 +32,9 @@
 								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-close1"></i>取消
 								</button>
+								<button type="button" class="btn btn-primarys button-margin">
+								    <i class="icon-send"></i>生成子任务单
+								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 						    		<i class="icon-search"></i>高级查询
 						    		<i class="icon-arrow1-down" v-show="down"></i>

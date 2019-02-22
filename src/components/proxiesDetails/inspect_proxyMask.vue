@@ -1328,7 +1328,6 @@
 				});
 			},
 			addcategory(){//产品类别
-				console.log(this.dataInfo.R_VENDOR == '');
 				if(this.dataInfo.R_VENDOR == null || this.dataInfo.R_VENDOR == '' || this.dataInfo.R_VENDOR == undefined){
 					this.$message({
 						message: '请先选择承检单位',
@@ -1407,6 +1406,9 @@
 					value[i].P_DESC = value[i].P_NAME;
 					this.dataInfo.INSPECT_PROXY_PROJECList.push(value[i]);
 				}
+			},
+			getProject(){
+				
 			},
 			//点击关闭按钮
 			close() {

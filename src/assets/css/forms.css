@@ -176,8 +176,8 @@ textarea:focus,button:focus,
 
 .el-input-group__append button.el-button {
     height: 33px;
-    color: #FFFFFF;
-    background-color: #409EFF;
+    color: #409EFF;
+    background-color: #ecf5ff;
     font-weight: bold;
     padding-top:10px;
     padding-bottom:10px;
@@ -188,7 +188,9 @@ textarea:focus,button:focus,
     margin-right: -17px;
     border-radius: 0 4px 4px 0;
 }
-.el-input-group__append button.el-button.is-disabled,.el-input-group__append button.el-button.is-disabled:hover { background-color: transparent; color: #5B6371;}
+.el-input-group__append button.el-button.is-disabled,.el-input-group__append button.el-button.is-disabled:hover { background-color: transparent; color: #e4e7ed;}
+.el-switch.is-disabled { opacity: .3;}
+
 
 .child-search {width:180px; position:absolute; right:80px; top:20px;}
 

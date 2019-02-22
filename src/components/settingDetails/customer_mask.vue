@@ -534,7 +534,7 @@
 						});
 					});
 				}else{
-					this.CUSTOMER[listName].splice(index,1);
+					this.CUSTOMER[TableName+'List'].splice(index,1);
 				}
 			},
 		
@@ -683,6 +683,7 @@
 			//点击关闭
 			close() {
 				this.show = false;
+				this.$emit('request');
 			},
 			open(){
 				this.show = true;

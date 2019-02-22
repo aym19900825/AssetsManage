@@ -105,11 +105,7 @@
 							 this.$refs.reportchild.visible(id);
 							 this.close();
 						}else{
-							console.log(res);
-							console.log(res.data.datas);
-//							this.pramList=res.data.datas;
-							console.log(this.pramList);
-							this.$refs.reportpramchild.visible();
+							this.$refs.reportpramchild.visible(res.data.datas);
 //							this.close();
 						}
 					}).catch((wrong) => {

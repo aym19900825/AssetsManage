@@ -32,6 +32,9 @@
 								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-close1"></i>取消
 								</button>
+								<button type="button" class="btn btn-primarys button-margin">
+								    <i class="icon-send"></i>生成子任务单
+								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 						    		<i class="icon-search"></i>高级查询
 						    		<i class="icon-arrow1-down" v-show="down"></i>
@@ -410,10 +413,10 @@
 					}
 					//驳回
 					else if(this.selMenu[0].STATE == 0) {
-						var url = this.basic_url + '/api-apps/app/inspectPro/flow/isExecute/' + this.selMenu[0].ID;
+						var url = this.basic_url + '/api-apps/app/workorder/flow/isExecute/' + this.selMenu[0].ID;
 						this.$axios.get(url, {}).then((res) => {
 							if(res.data.resp_code == 0) {
-								var url = this.basic_url + '/api-apps/app/inspectPro/flow/isPromoterNode/' + this.selMenu[0].ID;
+								var url = this.basic_url + '/api-apps/app/workorder/flow/isPromoterNode/' + this.selMenu[0].ID;
 								this.$axios.get(url, {}).then((res) => {
 									if(res.data.resp_code == 0) {
 										this.$refs.child.detail(this.selMenu[0].ID);
@@ -439,6 +442,12 @@
 			//查看
 			view(id) {
 				this.$refs.child.view(id);
+			},
+			//代办跳转
+			getRouterData() {
+				// 只是改了query，其他都不变
+				this.id = this.$route.query.bizId;
+				this.$refs.child.view(this.id);
 			},
 			//高级查询
 			modestsearch() {
@@ -537,7 +546,6 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(res)
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					this.userList=res.data.data;
@@ -564,7 +572,6 @@
 			},
 			//机构树
 			getKey() {
-				let that = this;
 				var url = this.basic_url + '/api-user/depts/tree';
 				this.$axios.get(url, {}).then((res) => {
 					this.resourceData = res.data;
@@ -634,7 +641,9 @@
 		mounted() {
 			this.requestData();
 			this.getKey();
-
+			if(this.$route.query.bizId != undefined) {
+				this.getRouterData();
+			}
 			
 		},
 	}

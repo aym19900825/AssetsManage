@@ -203,6 +203,7 @@
             //basisnums为basisnum数组用逗号拼接的字符串
             this.basisnums = basisnum.toString(',');
             for(var i = 0;i<this.selUser.length;i++){
+				this.selUser[i].ID = '';
                 list.push(this.selUser[i]);
             }
             this.$emit('testproject',list);

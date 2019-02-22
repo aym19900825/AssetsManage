@@ -89,28 +89,12 @@
 										<el-col :span="8" >
 											<el-form-item label="承检单位" prop="R_VENDOR"  label-width="110px">
 												<el-select clearable v-model="dataInfo.R_VENDOR" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit"  @change="RVENDORSelect($event)">
-													<el-option v-for="data in selectData" :key="data.id" :value="data.id" :label="data.fullname"></el-option>
+													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 												</el-select>
 											</el-form-item>
 										</el-col>
 									</el-row>
-									<!-- <el-row >
-										<el-col :span="8" style="display: none;">
-											<el-form-item label="委托单位编号" prop="VENDOR" label-width="110px">
-												<el-input v-model="dataInfo.VENDOR"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row> -->
 								</el-collapse-item>
-								<!--<el-collapse-item title="生产单位" name="2">
-									<el-row >
-										<el-col :span="8" style="display:none;">
-											<el-form-item label="生产单位编号" prop="PRODUCT_UNIT">
-												<el-input v-model="dataInfo.PRODUCT_UNIT"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-								</el-collapse-item>-->
 								<el-collapse-item title="样品" name="2" >
 										<el-row >
 											<el-col :span="8">
@@ -204,15 +188,8 @@
 										</el-form-item>
 								</el-collapse-item>
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
-									 <!-- <el-form :label-position="labelPosition"> -->
 									<el-tabs v-model="activeName" @tab-click="handleClick">
 									    <el-tab-pane label="检验依据" name="first">
-									    	<!-- <div class="table-func table-funcb">
-												<el-button type="success" size="mini" round @click="addfieldProject"  v-show="!viewtitle">
-													<i class="icon-add"></i>
-													<font>新建行</font>
-												</el-button>
-											</div> -->
 											<div class="table-func table-funcb">
 												<el-button type="primary" size="mini" round @click="basisleadbtn">
 													<i class="icon-search"></i>
@@ -221,7 +198,6 @@
 											</div>
 
 											<el-table :data="dataInfo.INSPECT_PROXY_BASISList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.INSPECT_PROXY_BASISList', order: 'descending'}">
-
 												<el-table-column prop="S_NUM" label="标准编号" sortable width="150px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.S_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
@@ -265,7 +241,7 @@
 												
 												<el-table-column fixed="right" label="操作" width="120px">
 													<template slot-scope="scope">
-														<el-button @click.native.prevent="deleteRow(scope.$index,dataInfo.INSPECT_PROXY_BASISList)" type="text" size="small" v-if="!viewtitle">
+														<el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'basisList')" type="text" size="small" v-if="!viewtitle">
 															 <i class="icon-trash red"></i>
 														</el-button>
 													</template>
@@ -273,12 +249,6 @@
 											</el-table>
 									    </el-tab-pane>
 									    <el-tab-pane label="检验项目与要求" name="second">
-									    	<!-- <div class="table-func table-funcb">
-												<el-button type="success" size="mini" round @click="addfieldBasis"  v-show="!viewtitle">
-													<i class="icon-add"></i>
-													<font>新建行</font>
-												</el-button>
-											</div> -->
 											<div class="table-func table-funcb">
 												<el-button type="primary" size="mini" round @click="basisleadbtn2">
 													<i class="icon-search"></i>
@@ -347,7 +317,7 @@
 												</el-table-column>
 												<el-table-column fixed="right" label="操作" width="120">
 													<template slot-scope="scope">
-														<el-button @click.native.prevent="deleteRow(scope.$index,dataInfo.INSPECT_PROXY_PROJECList)" type="text" size="small" v-if="!viewtitle">
+														<el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'projectList')" type="text" size="small" v-if="!viewtitle">
 														 <i class="icon-trash red"></i>
 														</el-button>
 													</template>
@@ -391,13 +361,11 @@
 
 												<el-table-column prop="VENDORDesc" label="分包方名称" sortable width="120px">
 													<template slot-scope="scope">
-														<!-- <el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.VENDORDesc'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" > -->
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDORDesc" placeholder="请输入分包方名称">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDORDesc" placeholder="请输入分包方名称">
 															<el-button slot="append" icon="el-icon-search" @click="getDept(scope.row)">
 															</el-button>
 														</el-input>
 														<span v-else="v-else">{{scope.row.VENDORDesc}}</span>
-														<!-- </el-form-item> -->
 													</template>
 												</el-table-column>
 
@@ -405,6 +373,8 @@
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.P_REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入">
+																<el-button slot="append" icon="el-icon-search" @click="getProject(scope.row)">
+																</el-button>
 															</el-input>
 														<span v-else="v-else">{{scope.row.P_REMARKS}}</span>
 														</el-form-item>
@@ -456,7 +426,7 @@
 
 												<el-table-column fixed="right" label="操作" width="120">
 													<template slot-scope="scope">
-														<el-button @click.native.prevent="deleteRow(scope.$index,dataInfo.CHECK_PROXY_CONTRACTList)" type="text" size="small" v-if="!viewtitle">
+														<el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'requestList')" type="text" size="small" v-if="!viewtitle">
 															 <i class="icon-trash red"></i>
 														</el-button>
 													</template>
@@ -512,11 +482,6 @@
 												</el-select>
 											</el-form-item>
 										</el-col>
-										<!-- <el-col :span="8" style="display:none;" label-width="110px">
-											<el-form-item label="生产单位编号" prop="PRODUCT_UNIT">
-												<el-input v-model="dataInfo.PRODUCT_UNIT" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col> -->
 									</el-row>
 									<el-row>
 									    <el-col :span="16">
@@ -564,15 +529,15 @@
 										<el-col :span="8">
 											<el-form-item label="主检组" prop="MAINGROUP"  label-width="110px">
 											<el-select clearable v-model="dataInfo.MAINGROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @change="getmaingroup($event)" @visible-change="visablemaingroup($event)" >
-												<el-option v-for="data in maingroup" :key="data.id" :value="data.id" :label="data.fullname"></el-option>
+												<el-option v-for="(data,index) in maingroup" :key="index" :value="data.id" :label="data.fullname"></el-option>
 											</el-select>
 										</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="主检负责人" prop="LEADER" label-width="110px">
-												<el-select clearable v-model="dataInfo.LEADER" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @visible-change="visableleader($event)" >
-													<el-option v-for="data in leaderdata" :key="data.id" :value="data.id" :label="data.username"></el-option>
-												</el-select>
+													<el-select clearable v-model="dataInfo.LEADER" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @visible-change="visableleader($event)" >
+												<el-option v-for="(data,index) in leaderdata" :key="index" :value="data.id" :label="data.username"></el-option>
+											</el-select>
 											</el-form-item>
 										</el-col>
 									</el-row>	
@@ -625,7 +590,7 @@
 						<div class="el-dialog__footer" v-show="noviews">
 							<el-button type="primary" @click="saveAndUpdate">保存</el-button>
 							<el-button type="success"  v-show="addtitle" @click="saveAndSubmit">保存并继续</el-button>
-							<el-button v-show="modifytitle" type="primary" class="btn-primarys" @click="modifyversion">修订</el-button>
+							<el-button v-show="modifytitle" type="btn btn-primarys" @click="modifyversion">修订</el-button>
 							<el-button @click='close'>取消</el-button>
 						</div>
 						<div class="el-dialog__footer" v-show="views">
@@ -818,7 +783,12 @@
 					P_NAME:'',
 					INSPECT_PROXY_PROJECList: [],
 					INSPECT_PROXY_BASISList: [],
-					CHECK_PROXY_CONTRACTList: [],
+					CHECK_PROXY_CONTRACTList: [
+						{
+							VENDOR: '',
+							VENDORDesc:'',
+						}
+					],
 				},
 				gridData: [], //彈出框的數據
 				page: {
@@ -920,7 +890,7 @@
 				catenum:'',//产品类别作为参数传值给依据
 				pronum:'',//产品作为参数传值给依据
 				basisnum:'',////依据选中数据们字符串作为参数传值给项目
-				deptindex:'',//分配方名称
+				deptindex:'',//分包方名称
 
 			};
 		},
@@ -969,32 +939,11 @@
 			},
 			//所属上级
 			getDept(item) {
-				// console.log(23333333);
-				// console.log(this.resourceProps);	
-				console.log(item);
-				// var type = "2";
-				// var url = this.basic_url + '/api-user/depts/treeByType';
-				// this.$axios.get(url, {
-				// 	params: {
-				// 		type: type
-				// 	},
-				// }).then((res) => {
-				// 	this.resourceData = res.data;
-				// 	console.log(233333);
-				// 	console.log(this.resourceData);
-				// 	this.dialogVisible = true;
-				// 	this.deptindex = item;
-				// });
-
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
 				var url = this.basic_url + '/api-user/depts/treeMap';
 				this.$axios.get(url, {
-					params: {
-						page: page,
-						limit: limit,
-						// type: type
-					},
+
 				}).then((res) => {
 					this.resourceData = res.data;
 					this.dialogVisible = true;
@@ -1006,21 +955,9 @@
 				console.log(123456);
 				console.log(this.checkedNodes);
 				this.getCheckedNodes();
-				// if(this.checkedNodes == undefined){
-				// 	this.$message({
-				// 		message:'请选择数据',
-				// 		type:'warning'
-				// 	})
-				// }else if(this.checkedNodes.length > 1){
-				// 	this.$message({
-				// 		message:'不可选择多条数据',
-				// 		type:'warning'
-				// 	})
-				// }else{
-					this.dialogVisible = false;				
-					this.deptindex.VENDOR = this.checkedNodes[0].id;
-					this.deptindex.VENDORDesc = this.checkedNodes[0].fullname;
-				// }				
+				this.dialogVisible = false;				
+				this.deptindex.VENDOR = this.checkedNodes[0].id;
+				this.deptindex.VENDORDesc = this.checkedNodes[0].fullname;				
 			},
 			getCheckedNodes() {
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
@@ -1159,6 +1096,7 @@
 					PROXY_CONTRACT_NUM: '',
 					PROXYNUM: '',
 					VENDOR: '',
+					VENDORDesc:'',
 					P_REMARKS: '',
 					BASIS: '',
 					REQUIRE: '',
@@ -1174,9 +1112,42 @@
 			},
 			
 			//刪除新建行
-			deleteRow(index,rows) {//Table-操作列中的删除行
-				rows.splice(index,1);
-
+			deleteRow(index, row, listName){
+				console.log(row);
+				var TableName = '';
+				console.log(listName);
+				if(listName =='basisList'){
+					TableName = 'INSPECT_PROXY_BASIS';
+				}else if(listName =='projectList'){
+					TableName = 'INSPECT_PROXY_PROJEC';
+				}else{
+					TableName = 'CHECK_PROXY_CONTRACT';
+				}
+				if(row.ID){
+					var url = this.basic_url + '/api-apps/app/inspectPro/' + TableName +'/' + row.ID;
+					this.$axios.delete(url, {}).then((res) => {
+						console.log(res);
+						if(res.data.resp_code == 0){
+							this.dataInfo[TableName+'List'].splice(index,1);
+							this.$message({
+								message: '删除成功',
+								type: 'success'
+							});
+						}else{
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'error'
+							});
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+				}else{
+					this.dataInfo[TableName+'List'].splice(index,1);
+				}
 			},
 			//点击按钮显示弹窗
 			visible() {
@@ -1184,7 +1155,6 @@
 					console.log(res);
 					this.dataInfo.DEPTID = res.data.deptId;
 					this.dataInfo.ENTERBY = res.data.id;
-					this.username=res.data.username;
 					// this.dataInfo.ORGID = res.data.deptName
 					var date = new Date();
 					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
@@ -1265,8 +1235,8 @@
 				this.noedit = false;
 			},
 			//点击修订按钮
-			modifyversion() {
-				this.$refs.dataInfo.validate((valid) => {
+			modifyversion(dataInfo) {
+				this.$refs[dataInfo].validate((valid) => {
 					if(valid) {
 						var datainfo=JSON.stringify(this.datainfo); 
 	 					var dataInfo=JSON.stringify(this.dataInfo);
@@ -1285,26 +1255,26 @@
 										message: '修订成功',
 										type: 'success'
 									});
-									this.show = false;
 									//重新加载数据
 									this.$emit('request');
+									this.show = false;
 								}else{
-									this.show = true;
-									if(res.data.resp_code == 1) {
-										//res.data.resp_msg!=''后台返回提示信息
-										if( res.data.resp_msg!=''){
-											this.$message({
-												message: res.data.resp_msg,
-												type: 'warning'
-											});
-										}else{
-											this.$message({
-												message:'相同数据不可重复修订！',
-												type: 'warning'
-											});
-										}
+								this.show = true;
+								if(res.data.resp_code == 1) {
+									//res.data.resp_msg!=''后台返回提示信息
+									if( res.data.resp_msg!=''){
+									 	this.$message({
+											message: res.data.resp_msg,
+											type: 'warning'
+									 	});
+									}else{
+										this.$message({
+											message:'相同数据不可重复修订！',
+											type: 'warning'
+										});
 									}
-								}		
+								}
+							}		
 							}).catch((err) => {
 								this.$message({
 									message: '网络错误，请重试5',
@@ -1339,57 +1309,96 @@
 						this.start=true;
 						this.approval=false;
 					}else{
-						var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/Executors/'+dataid;
+						var url = this.basic_url + '/api-apps/app/inspectPro/flow/Executors/'+dataid;
 						this.$axios.get(url, {}).then((res) => {
 							console.log(res.data.datas);
 							var resullt=res.data.datas;
 							var users='';
+							var users='';
 							for(var i=0;i<resullt.length;i++){
-								if(resullt[i].username!=this.username){
-									this.approval=false;
-									this.start=false;
-								}else{
-									this.approval=true;
-									this.start=false;
-								}
+								users = users + resullt[i].username+",";
+								console.log("users----"+users);
+							}
+							if(users.indexOf(this.username) != -1){
+								this.approval=true;
+								this.start=false;
 							}
 						});
 					}
 				});
 			},
 			addcategory(){//产品类别
-				this.$refs.categorychild.visible(this.dataInfo.R_VENDOR);
+				if(this.dataInfo.R_VENDOR == null || this.dataInfo.R_VENDOR == '' || this.dataInfo.R_VENDOR == undefined){
+					this.$message({
+						message: '请先选择承检单位',
+						type: 'warning'
+					});
+				}else{
+					this.$refs.categorychild.visible(this.dataInfo.R_VENDOR);
+					
+				}
 			},
 			//接到产品类别的值
 			categorydata(value){
 				this.dataInfo.P_NUM = value[0];
 				this.dataInfo.PRODUCT_TYPE  = value[1];
+				this.dataInfo.PRODUCT = '';
+				this.dataInfo.PRO_NUM = '';
+				this.dataInfo.S_NUM = '';
+				this.dataInfo.INSPECT_PROXY_BASISList = [];
+				this.dataInfo.INSPECT_PROXY_PROJECList = [];
+				this.dataInfo.CHECK_PROXY_CONTRACTList = [];
 			},
 			addproduct(){//受检产品名称
-				this.$refs.productchild.visible(this.dataInfo.P_NUM);
+				if(this.dataInfo.P_NUM == null || this.dataInfo.P_NUM == '' || this.dataInfo.P_NUM == undefined){
+					this.$message({
+						message: '请先选择产品类别',
+						type: 'warning'
+					});
+				}else{
+					this.$refs.productchild.visible(this.dataInfo.P_NUM);
+				}
 			},
 			//接到产品的值
 			appenddata(value){
 				this.dataInfo.PRO_NUM = value[0];
 				this.dataInfo.PRODUCT = value[1];
+				this.dataInfo.S_NUM = '';
+				this.dataInfo.INSPECT_PROXY_BASISList = [];
+				this.dataInfo.INSPECT_PROXY_PROJECList = [];
+				this.dataInfo.CHECK_PROXY_CONTRACTList = [];
 			},
 			//检验依据放大镜
 			basisleadbtn(){
-				this.$refs.standardchild.basislead(this.dataInfo.PRO_NUM);
+				if(this.dataInfo.PRO_NUM == null || this.dataInfo.PRO_NUM == '' || this.dataInfo.PRO_NUM == undefined){
+					this.$message({
+						message: '请先选择产品名称',
+						type: 'warning'
+					});
+				}else{
+					this.$refs.standardchild.basislead(this.dataInfo.PRO_NUM);
+				}
 			},
 			 //检验依据列表
 			addbasis(value){
-				this.basisnum = value[0];
+				this.dataInfo.S_NUM = value[0];
 				for(var i = 1;i<value.length;i++){
 					value[i].S_DESC = value[i].S_NAME;
 					this.dataInfo.INSPECT_PROXY_BASISList.push(value[i]);
 				}
 				this.dataInfo.INSPECT_PROXY_PROJECList = [];
-				// this.dataInfo.WORK_NOTICE_CHECKBASISList = value;
+				this.dataInfo.CHECK_PROXY_CONTRACTList = [];
 			},
 			//检验项目放大镜
 			basisleadbtn2(){
-				this.$refs.projectchild.projectlead(this.basisnum);
+				if(this.dataInfo.S_NUM == null || this.dataInfo.S_NUM == '' || this.dataInfo.S_NUM == undefined){
+					this.$message({
+						message: '请先选择检验依据列表数据',
+						type: 'warning'
+					});
+				}else{
+					this.$refs.projectchild.projectlead(this.dataInfo.S_NUM);
+				}
 			},
 			 //检验项目列表
 			addproject(value){
@@ -1397,7 +1406,9 @@
 					value[i].P_DESC = value[i].P_NAME;
 					this.dataInfo.INSPECT_PROXY_PROJECList.push(value[i]);
 				}
-				// this.dataInfo.WORK_NOTICE_CHECKPROJECTList = value;
+			},
+			getProject(){
+				
 			},
 			//点击关闭按钮
 			close() {
@@ -1469,9 +1480,6 @@
 			        	}else{
 //							this.dataInfo.ITEM_STATUS=this.dataInfo.ITEM_STATUS==1;
 //							this.dataInfo.MESSSTATUS= this.dataInfo.MESSSTATUS==1;//信息状态
-							// this.dataInfo.R_VENDOR = this.dataInfo.R_VENDORDesc;
-							// this.dataInfo.MAINGROUP = this.dataInfo.MAINGROUPDesc;
-							// this.dataInfo.LEADER = this.dataInfo.LEADERDesc;
 							var url = this.basic_url + '/api-apps/app/inspectPro/saveOrUpdate';
 							this.$axios.post(url, this.dataInfo).then((res) => {
 								if(res.data.resp_code == 0) {
@@ -1549,6 +1557,16 @@
 							type: 'error'
 						});
 					});
+				this.dataInfo.PRODUCT_TYPE = '';
+				this.dataInfo.P_NUM = '';
+				this.dataInfo.PRODUCT = '';
+				this.dataInfo.PRO_NUM = '';
+				this.dataInfo.S_NUM = '';
+				this.dataInfo.INSPECT_PROXY_BASISList = [];
+				this.dataInfo.INSPECT_PROXY_PROJECList = [];
+				this.dataInfo.CHECK_PROXY_CONTRACTList = [];
+				this.dataInfo.MAINGROUP = '';
+				this.dataInfo.LEADER = '';
 			},
 			//主检组带出主检负责人
 			getmaingroup(maingroupid){
@@ -1631,14 +1649,12 @@
 									var resullt=res.data.datas;
 									var users='';
 									for(var i=0;i<resullt.length;i++){
-										if(resullt[i].username!=this.username){
-											this.approval=false;
-											this.start=false;
-										}else{
-											this.approval=true;
-											this.start=false;
-										}
+										users = users + resullt[i].username+",";
 									}
+								if(users.indexOf(this.username) != -1){
+									this.approval=true;
+									this.start=false;
+								}
 							});
 							this.detailgetData();
 				    }
@@ -1698,17 +1714,11 @@
 					},
 				}).then((res) => {
 					this.selectData = res.data;
-					console.log(2333333333);
-					console.log(this.selectData);
 				});
 			},
 		},
 		mounted() {
 			this.getCompany();
-			// this.RVENDORSelect();
-			// this.getmaingroup();
-			// this.RVENDOR();
-			// this.getmain();
 		},
 	}
 </script>

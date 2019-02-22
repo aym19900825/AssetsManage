@@ -124,7 +124,7 @@
 										</el-table-column>
 										<el-table-column fixed="right" label="操作" width="120">
 											<template slot-scope="scope">
-												<el-button @click.native.prevent="deleteRow(scope.$index,testing_projectForm.QUALIFICATIONList)" type="text" size="small" v-show="!viewtitle">
+												<el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'tableList')" type="text" size="small" v-show="!viewtitle">
                                                  <i class="icon-trash red"></i>
 												</el-button>
 											</template>
@@ -421,14 +421,42 @@
 				this.testing_projectForm.QUALIFICATIONList.push(obj);
 			},
 			//刪除新建行
-			deleteRow(index, rows) { //Table-操作列中的删除行
-				rows.splice(index, 1);
+			deleteRow(index, row, listName){
+				console.log(row);
+				var TableName = '';
+				console.log(listName);
+				if(listName =='tableList'){
+					TableName = 'QUALIFICATION';
+				}
+				if(row.ID){
+					var url = this.basic_url + '/api-apps/app/inspectionPro/' + TableName +'/' + row.ID;
+					this.$axios.delete(url, {}).then((res) => {
+						console.log(res);
+						if(res.data.resp_code == 0){
+							this.testing_projectForm[TableName+'List'].splice(index,1);
+							this.$message({
+								message: '删除成功',
+								type: 'success'
+							});
+						}else{
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'error'
+							});
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+				}else{
+					this.testing_projectForm[TableName+'List'].splice(index,1);
+				}
 			},
 			iconOperation(row, column, cell, event) {
 				if(column.property === "iconOperation") {
-
 					row.isEditing = !row.isEditing;
-
 				}
 			},
 			//时间格式化  

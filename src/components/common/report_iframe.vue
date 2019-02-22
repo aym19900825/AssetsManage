@@ -14,7 +14,7 @@
 					</span>
 				</div>
 			</div>	
-		   <iframe :src="this.url +'/reportFile/page/preview?_report_id ='+this.modelId" id="flowIframe" width="100%" height="100%" frameborder="0" scrolling="no" >
+		   <iframe :src="this.url +'/ureport/preview?_u=mysql:test.ureport.xml'" id="flowIframe" width="100%" height="100%" frameborder="0" scrolling="no" >
 		   </iframe>
 		</div>
    	</div>
@@ -45,19 +45,20 @@
 				this.show= true;
 			},
 		  	visible(modelId) {
-		  		console.log(modelId);
-		  		if(modelId!="undefined"&&modelId!="null"){
+//		  		/console.log(modelId);
+		  		/*if(modelId!="undefined"&&modelId!="null"){
 		  			this.modelId=modelId;
-		  		}
+		  		}*/
 		  		var url=this.basic_url;
-    			url = url.substring(0,21);
-		  		this.url=url+"5300";
-		  		console.log(this.url +'/reportFile/page/preview/');
-		  		var type = "3";
-				var url = this.url +'/reportFile/page/preview';
-				this.$axios.get(url, {
+//  			url = url.substring(0,21);
+//		  		this.url=url+"5300";
+//		  		console.log(this.url +'/reportFile/page/preview/');
+//		  		var type = "3";
+				var url = this.basic_url +'api-report/reportFile/page/preview';
+				console.log(url);
+				this.$axios.post(url, {
 					params: {
-						"_report_id": type
+						"_report_id": 3
 					},
 				}).then((res) => {
 					console.log(res);

@@ -100,7 +100,7 @@
 										</el-col>
 										<el-col :span="8" >
 											<el-form-item label="承检单位" prop="CJDW" label-width="110px">
-												<el-select clearable v-model="dataInfo.CJDW" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" style="width: 100%">
+												<el-select clearable v-model="dataInfo.CJDW" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" style="width: 100%" @change="changeCJDW">
 													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 												</el-select>
 											</el-form-item>
@@ -538,6 +538,7 @@
 					N_CODE: '',
 					TYPE: '',
 					XD_DATE: '',
+					PRODUCT_TYPE:'',
 					ITEM_NAME: '',
 					ITEM_MODEL: '',
 					V_NAME: '',
@@ -608,6 +609,7 @@
 					TYPE: '',
 					XD_DATE: '',
 					ITEM_NAME: '',
+					PRODUCT_TYPE:'',
 					ITEM_MODEL: '',
 					V_NAME: '',
 					VENDOR:'',
@@ -640,11 +642,35 @@
 					this.selectData = res.data;
 				});
 			},
+			changeCJDW(){
+				this.getCompany();
+				this.dataInfo.PRODUCT_TYPE = '';
+				this.dataInfo.P_NUM = '';
+				this.dataInfo.ITEM_NAME = '';
+				this.dataInfo.PRO_NUM = '';
+				this.dataInfo.S_NUM = '';
+				this.dataInfo.WORK_NOTICE_CHECKBASISList = [];
+				this.dataInfo.WORK_NOTICE_CHECKPROJECTList = [];
+			},
 			addcategory(){//产品类别
-				this.$refs.categorychild.visible(this.dataInfo.CJDW);
+				if(this.dataInfo.CJDW == null || this.dataInfo.CJDW == '' || this.dataInfo.CJDW == undefined){
+					this.$message({
+						message: '请先选择承检单位',
+						type: 'warning'
+					});
+				}else{
+					this.$refs.categorychild.visible(this.dataInfo.CJDW);
+				}
 			},
 			addproduct(){//受检产品名称
-				this.$refs.productchild.visible(this.catenum);
+				if(this.dataInfo.P_NUM == null || this.dataInfo.P_NUM == '' || this.dataInfo.P_NUM == undefined){
+					this.$message({
+						message: '请先选择产品类别',
+						type: 'warning'
+					});
+				}else{
+					this.$refs.productchild.visible(this.dataInfo.P_NUM);
+				}
 			},
 			//单位
 			addCompany(type){
@@ -730,7 +756,6 @@
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.dataInfo.DEPTID = res.data.deptId;
 					this.dataInfo.ENTERBY = res.data.id;
-					this.username=res.data.username;
 					// this.dataInfo.ORGID = res.data.deptName
 					var date = new Date();
 					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD ");
@@ -809,23 +834,20 @@
 				//判断启动流程和审批的按钮是否显示
 				var url = this.basic_url + '/api-apps/app/workNot/flow/isStart/'+dataid;
 					this.$axios.get(url, {}).then((res) => {
-						console.log(res);
 					  if(res.data.resp_code==1){
 							this.start=true;
 							this.approval=false;
 						}else{
-						var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/Executors/'+dataid;
+						var url = this.basic_url + '/api-apps/app/workNot/flow/Executors/'+dataid;
 						this.$axios.get(url, {}).then((res) => {
 							var resullt=res.data.datas;
 							var users='';
 							for(var i=0;i<resullt.length;i++){
-								if(resullt[i].username!=this.username){
-									this.approval=false;
-									this.start=false;
-								}else{
-									this.approval=true;
-									this.start=false;
-								}
+								users = users + resullt[i].username+",";
+							}
+							if(users.indexOf(this.username) != -1){
+								this.approval=true;
+								this.start=false;
 							}
 						});
 						}
@@ -877,13 +899,21 @@
 			},
 			//接到产品类别的值
 			categorydata(value){
-				this.catenum = value[0];
-				this.dataInfo.PRODUCT_TYPE  = value[1];
+				this.dataInfo.P_NUM = value[0];
+				this.dataInfo.PRODUCT_TYPE = value[1];
+				this.dataInfo.ITEM_NAME = '';
+				this.dataInfo.PRO_NUM = '';
+				this.dataInfo.S_NUM = '';
+				this.dataInfo.WORK_NOTICE_CHECKBASISList = [];
+				this.dataInfo.WORK_NOTICE_CHECKPROJECTList = [];
 			},
 			//接到产品的值
 			appenddata(value){
-				this.pronum = value[0];
+				this.dataInfo.PRO_NUM = value[0];
 				this.dataInfo.ITEM_NAME = value[1];
+				this.dataInfo.S_NUM = '';
+				this.dataInfo.WORK_NOTICE_CHECKBASISList = [];
+				this.dataInfo.WORK_NOTICE_CHECKPROJECTList = [];
 			},
 			appendnames(value){
 				this.dataInfo.V_NAME = value;//名称
@@ -1059,10 +1089,11 @@
 			 },
 			 //检测依据列表
 			addbasis(value){
-				this.basisnum = value[0];
+				this.dataInfo.S_NUM = value[0];
 				for(var i = 1;i<value.length;i++){
 					this.dataInfo.WORK_NOTICE_CHECKBASISList.push(value[i]);
 				}
+				this.dataInfo.WORK_NOTICE_CHECKPROJECTList = [];
 			},
 			 //检测项目列表
 			addproject(value){
@@ -1085,21 +1116,20 @@
 								message:res.data.resp_msg,
 								type: 'success'
 							});
-						var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/Executors/'+this.dataid;
+						var url = this.basic_url + '/api-apps/app/workNot/flow/Executors/'+this.dataid;
 						this.$axios.get(url, {}).then((res) => {
 								var resullt=res.data.datas;
 								var users='';
 								for(var i=0;i<resullt.length;i++){
-									if(resullt[i].username!=this.username){
-										this.approval=false;
-										this.start=false;
-									}else{
-										this.approval=true;
-										this.start=false;
-									}
+								users = users + resullt[i].username+",";
+							}
+								if(users.indexOf(this.username) != -1){
+									this.approval=true;
+									this.start=false;
 								}
+								this.detailgetData();
 						});
-							this.detailgetData();
+							
 				    }
 				});
 			},
@@ -1107,7 +1137,7 @@
 			approvals(){
 				this.approvingData.id =this.dataid;
 				this.approvingData.app=this.workNot;
-				var url = this.basic_url + '/api-apps/app/'+this.workNot+'/flow/isEnd/'+this.dataid;
+				var url = this.basic_url + '/api-apps/app/workNot/flow/isEnd/'+this.dataid;
 		    		this.$axios.get(url, {}).then((res) => {
 		    			if(res.data.resp_code == 0) {
 							this.$message({
@@ -1115,7 +1145,7 @@
 								type: 'warning'
 							});
 		    			}else{
-		    				var url = this.basic_url + '/api-apps/app/'+this.workNot+'/flow/isExecute/'+this.dataid;
+		    				var url = this.basic_url + '/api-apps/app/workNot/flow/isExecute/'+this.dataid;
 		    				this.$axios.get(url, {}).then((res) => {
 				    			if(res.data.resp_code == 1) {
 										this.$message({
@@ -1150,15 +1180,41 @@
 			},
 			//检测依据放大镜
 			basisleadbtn(){
-				this.$refs.standardchild.basislead(this.pronum);
+				if(this.dataInfo.PRO_NUM == null || this.dataInfo.PRO_NUM == '' || this.dataInfo.PRO_NUM == undefined){
+					this.$message({
+						message: '请先选择产品名称',
+						type: 'warning'
+					});
+				}else{
+					this.$refs.standardchild.basislead(this.dataInfo.PRO_NUM);
+				}
 			},
 			//检测项目放大镜
 			basisleadbtn2(){
-				this.$refs.projectchild.projectlead(this.basisnum);
-			}
+				if(this.dataInfo.S_NUM == null || this.dataInfo.S_NUM == '' || this.dataInfo.S_NUM == undefined){
+					this.$message({
+						message: '请先选择检测依据列表数据',
+						type: 'warning'
+					});
+				}else{
+					this.$refs.projectchild.projectlead(this.dataInfo.S_NUM);
+				}
+			},
+		    getuser(){//获取当前用户信息
+	            var url = this.basic_url + '/api-user/users/currentMap';
+	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+	                    this.username = res.data.username;
+	            }).catch((err) => {
+	                this.$message({
+	                    message: '网络错误，请重试',
+	                    type: 'error'
+	                });
+	            });
+        	},
 		},
 		mounted() {
 			this.getCompany();
+			this.getuser();
 		},
 	}
 </script>

@@ -33,7 +33,7 @@
 								<button type="button" class="btn btn-primarys button-margin">
 							    	<i class="icon-print"></i>打印
 								</button>
-								<button type="button" class="btn btn-primarys button-margin">
+								<button type="button" class="btn btn-orange button-margin">
 							    	<i class="icon-alert-triangle"></i>中止
 								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">

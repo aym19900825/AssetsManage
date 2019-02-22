@@ -36,6 +36,16 @@
 							<div class="statisticsbg">
 								<div class="echart_title clearfix">
 									<div class="pull-left">
+										<h6>待办任务 (99+)</h6>
+									</div>
+								</div>
+								<div id="todoList" style="width: 100%; height: 140px;"></div>
+							</div>
+						</el-col>
+						<el-col :span="6">
+							<div class="statisticsbg">
+								<div class="echart_title clearfix">
+									<div class="pull-left">
 										<h6>工作完成情况</h6>
 									</div>
 									<el-dropdown class="pull-right font13 blue">
@@ -100,11 +110,6 @@
 									</div>
 									
 								</div>
-							</div>
-						</el-col>
-						<el-col :span="6">
-							<div class="statisticsbg">
-								
 							</div>
 						</el-col>
 						<!--APPList End-->

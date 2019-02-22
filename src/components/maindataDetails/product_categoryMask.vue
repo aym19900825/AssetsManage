@@ -198,24 +198,12 @@
 			};
 		},
 		methods: {
-			//编码提示
-			// hint(){
-			// 	this.hintshow = true;
-			// },
-			// hinthide(){
-			// 	this.hintshow = false;
-			// },
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selUser = val;
 			},
-			//生成随机数函数
-			rand(min, max) {
-				return Math.floor(Math.random() * (max - min)) + min;
-			},
 			//点击按钮显示弹窗
 			visible() {
-				//				this.CATEGORY.NUM =  this.rand(1000,9999);
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					console.log(res.data);
 					this.CATEGORY.DEPTID = res.data.deptId;
@@ -485,5 +473,9 @@
 </script>
 
 <style scoped>
+	.el-table__body-wrapper 
+	{
+    overflow-y:scroll;
+    }
 	@import '../../assets/css/mask-modules.css';
 </style>

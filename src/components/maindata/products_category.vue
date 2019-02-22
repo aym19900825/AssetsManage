@@ -112,9 +112,10 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格 Begin-->
+							<div style="overflow-x: auto; overflow-y: scroll; height:100%; width:100%;">
 							<el-table :header-cell-style="rowClass" :data="categoryList" v-loading="loading"  element-loading-text="加载中…"
     element-loading-spinner="el-icon-loading"
-    element-loading-background="rgba(255, 255, 255, 0.9)" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+    element-loading-background="rgba(255, 255, 255, 0.9)" border stripe :height="fullHeight" style="width: 100%; overflow:scroll;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="编码" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('编码')!=-1">
@@ -139,6 +140,7 @@
 								<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
 								</el-table-column>
 							</el-table>
+							</div>
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
 							<!-- 表格 End-->
@@ -277,7 +279,6 @@
 						type: type
 					},
 				}).then((res) => {
-					console.log(res.data);
 					this.selectData = res.data;
 				});
 			},
@@ -452,7 +453,6 @@
           	
 			// 导入
 			download() {
-				console.log(1234);
 				var url = this.basic_url + '/api-apps/app/productType/importExcTemplete?access_token='+sessionStorage.getItem('access_token');
            var xhr = new XMLHttpRequest();
             xhr.open('POST', url, true);

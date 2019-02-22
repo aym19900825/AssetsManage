@@ -289,7 +289,7 @@
 										</el-table-column>-->
 													<el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 														<template slot-scope="scope">
-															<el-button @click.native.prevent="deleteRow(scope.$index,user.qualifications)" type="text" size="small">
+															<el-button @click="deleteRow(scope.$index,scope.row,'tableList')" type="text" size="small">
 																<i class="icon-trash red"></i>
 															</el-button>
 														</template>
@@ -344,7 +344,7 @@
 													</el-table-column> -->
 													<el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 														<template slot-scope="scope">
-															<el-button @click.native.prevent="deleteRow(scope.$index,user.traings)" type="text" size="small">
+															<el-button @click="deleteRow(scope.$index,scope.row,'traingList')" type="text" size="small">
 																<i class="icon-trash red"></i>
 															</el-button>
 														</template>
@@ -398,7 +398,7 @@
 													
 													<el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 														<template slot-scope="scope">
-															<el-button @click.native.prevent="deleteRow(scope.$index,user.ips)" type="text" size="small">
+															<el-button @click="deleteRow(scope.$index,scope.row,'ipaddressList')" type="text" size="small">
 																<i class="icon-trash red"></i>
 															</el-button>
 														</template>
@@ -740,10 +740,44 @@
 				this.user.ips.push(obj);
 			},
 			//刪除新建行
-			deleteRow(index, rows) { //Table-操作列中的删除行
-				// console.log(index);
-				// console.log(rows);
-				rows.splice(index, 1);
+			deleteRow(index, row, listName){
+				console.log(row);
+				var TableName = '';
+				console.log(listName);
+				if(listName =='tableList'){
+					TableName = 'qualifications';
+				}else if(listName =='traingList'){
+					TableName = 'traings';
+				}else{
+					TableName = 'ips';
+				}
+				if(row.ID){
+					var url = this.basic_url + '/api-user/users/' + TableName +'/' + row.ID;
+					this.$axios.delete(url, {}).then((res) => {
+						console.log(res);
+						if(res.data.resp_code == 0){
+							this.user[TableName].splice(index,1);
+							this.$message({
+								message: '删除成功',
+								type: 'success'
+							});
+						}else{
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'error'
+							});
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+				}else{
+					console.log(this.user[TableName]);
+					// this.user[TableName+'List'].splice(index,1);
+					this.user[TableName].splice(index,1);
+				}
 			},
 			//
 			handleClicks(data,checked, indeterminate) {

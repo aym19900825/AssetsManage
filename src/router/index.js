@@ -77,81 +77,6 @@ const flowmap  = r => require.ensure([], () => r(require('@/components/workflow/
 
 const flow_management  = r => require.ensure([], () => r(require('@/components/flow/flow_management')), 'flow_management')//流程模型
 const flow_process  = r => require.ensure([], () => r(require('@/components/flow/flow_process')), 'flow_process')//流程模型
-// import Login from '@/page/login/login'//登录页
-// import index from '@/components/index'//首页
-// import task from '@/components/task'//代办
-// import all_icons from '@/components/common/all_icons'//所有图标
-// import ztree from '@/components/common/ztree' //树菜单
-
-
-// import products_category from '@/components/maindata/products_category'//产品类别
-// import products from '@/components/maindata/products'//产品
-// import testing_standard from '@/components/maindata/testing_standard'//检验/检测标准
-// import testing_projects from '@/components/maindata/testing_projects'//检验/检测项目
-// import testing_methods from '@/components/maindata/testing_methods'//检验/检测方法
-// import data_module from '@/components/maindata/data_module'//原始数据模板
-// import report_module from '@/components/maindata/report_module'//检验/检测报告模板
-// import work_instruction from '@/components/maindata/work_instruction'//作业指导书
-
-// import application_management from '@/components/setting/application_management'//应用管理
-// import button_configure from '@/components/setting/button_configure'//按钮配置
-// import customer_management from '@/components/setting/customer_management'//客户管理
-// import user_management from '@/components/setting/user_management'//用户管理
-// import dept_management from '@/components/setting/dept_management'//机构管理
-// import role_management from '@/components/setting/role_management'//角色管理
-// import menu_management from '@/components/setting/menu_management'//菜单管理
-// import data_management from '@/components/setting/data_management'//数据管理
-// import safe_management from '@/components/setting/safe_management'//安全管理
-// import number_settings from '@/components/setting/number_settings'//自动编号设置
-// import dictionaries_management from '@/components/setting/dictionaries_management'//字典管理
-// import personinfo from '@/components/setting/personinfo'//个人资料
-// import passwordedit from '@/components/setting/passwordedit'//修改密码
-
-// import annual_plan from '@/components/annual_plan'//年度计划
-// import notifications from '@/components/notifications'//工作任务通知书
-// import proxies from '@/components/proxies'//委托书管理
-
-// import samples from '@/components/samples/samples'//样品管理-接样
-// import collar_sample from '@/components/samples/collar_sample'//样品管理-领样
-// import return_sample from '@/components/samples/return_sample'//样品管理-返样
-// import sample_disposal from '@/components/samples/sample_disposal'//样品管理-样品处置
-
-
-// import workorders from '@/components/testworkcheck/workorders'//工作任务单
-// import useseal_management from '@/components/testworkcheck/useseal_management'//用印管理
-// import devices from '@/components/devices'//设备管理
-// import inspection_project from '@/components/inspection_project'//检验/检测项目管理
-// import test from '@/components/test'//检验/检测项目管理
-// import files_search from '@/components/files_search'//文件查询
-// import interfaces from '@/components/interfaces'//接口
-// import reports from '@/components/reports/reports'//报表管理
-// import reportfile from '@/components/reports/reportfile'//报表文件
-
-// import inspect_proxy from '@/components/proxies/inspect_proxy'//检验委托书
-// import check_proxy from '@/components/proxies/check_proxy'//检测委托书
-// import subc_agreement from '@/components/proxies/subc_agreement'//分包协议
-
-// import equipment_classify from '@/components/equipments/equipment_classify'//设备分类
-// import instruments from '@/components/equipments/instruments'//仪器和计量器具
-// import usag_tending_records from '@/components/equipments/usag_tending_records'//使用/维护保养记录
-// import traceability_plan from '@/components/equipments/traceability_plan'//溯源计划
-// import traceability_records from '@/components/equipments/traceability_records'//溯源记录
-// import verification_plan from '@/components/equipments/verification_plan'//期间核查计划
-// import verification_records from '@/components/equipments/verification_records'//期间核查记录   
-// import testing from '@/components/testing'//期间核查记录
-
-// import doc_category from '@/components/document/category'//关键字类别
-// import doc_keyword from '@/components/document/keyword'//关键字
-// import doc_authorize from '@/components/document/authorize'//关键字授权
-// import doc_root from '@/components/document/doc_root'//文件目录
-// import doc_list from '@/components/document/doc_list'//文件列表
-
-// import approving from '@/components/workflow/approving'//审批意见
-// import flowhistory from '@/components/workflow/flowhistory'//流程历史
-// import flowmap from '@/components/workflow/flowmap'//流程地图
-
-// import flow_management from '@/components/flow/flow_management'//流程模型
-// import flow_process from '@/components/flow/flow_process'//流程模型
 Vue.use(Router)
   const routes = [
     {//登录页
@@ -481,7 +406,6 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
     if (to.meta.requireAuth) {  // 判断该路由是否需要登录权限
         var token = sessionStorage.getItem('access_token');
-        console.log("token-------------"+token);
         if (token) {  // 通过vuex state获取当前的token是否存在
             next();
         }

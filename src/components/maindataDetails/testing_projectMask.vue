@@ -866,7 +866,7 @@
 					for (var i = 0; i < changeUser.length; i++) {
 						basisdesc.push(changeUser[i].DESCRIPTION);
 					}
-					//basisnums为basisnum数组用逗号拼接的字符串
+					//basisnums为basisnum数组用逗号拼接的字符串el-tag__close el-icon-close
 					this.testing_projectForm.DOCLINKS_NUM = basisdesc.toString(',');
 					console.log(this.testing_projectForm.DOCLINKS_NUM)
 					// list.push(basisnums);

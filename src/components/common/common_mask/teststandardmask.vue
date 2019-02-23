@@ -211,11 +211,14 @@
 			var list = [];
             //basisnum为依据编号的数组
             var basisnum = [];
+			var basisname = [];
             for (var i = 0; i < changeUser.length; i++) {
                 basisnum.push(changeUser[i].S_NUM);
+				basisname.push(changeUser[i].S_NAME);				
             }
             //basisnums为basisnum数组用逗号拼接的字符串
 			var basisnums = basisnum.toString(',');
+			var basisnames = basisname.toString(',');
 			list.push(basisnums);
             for(var i = 0;i<this.selUser.length;i++){
 				this.selUser[i].ID = '';
@@ -224,6 +227,8 @@
 			console.log('========');
             console.log(list);
             this.$emit('testbasis',list);
+			this.$emit('testbasisnum',basisnums);
+			this.$emit('testbasisname',basisnames);
             this.dialogVisible = false;
 			this.requestData();
         }

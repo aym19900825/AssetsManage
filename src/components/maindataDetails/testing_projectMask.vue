@@ -848,20 +848,35 @@
 			},
 			addwork() { //小弹出框确认按钮事件
 				console.log(this.selval.length);
-				if(this.selval.length == 0){
-					this.$message({
-						message: '请选择数据',
-						type: 'warning'
-					});
-				}else if(this.selval.length>1){
-					this.$message({
-						message: '不可以同时选择多条数据',
-						type: 'warning'
-					});
-				}else{
-					this.dialogVisible2 = false;
-					this.testing_projectForm.DOCLINKS_NUM = this.selval[0].DESCRIPTION;
-				}
+				// if(this.selval.length == 0){
+				// 	this.$message({
+				// 		message: '请选择数据',
+				// 		type: 'warning'
+				// 	});
+				// }else if(this.selval.length>1){
+				// 	this.$message({
+				// 		message: '不可以同时选择多条数据',
+				// 		type: 'warning'
+				// 	});
+				// }else{
+					var changeUser = this.selval;
+					var list = [];
+					//basisnum为依据编号的数组
+					var basisdesc = [];
+					for (var i = 0; i < changeUser.length; i++) {
+						basisdesc.push(changeUser[i].DESCRIPTION);
+					}
+					//basisnums为basisnum数组用逗号拼接的字符串
+					this.testing_projectForm.DOCLINKS_NUM = basisdesc.toString(',');
+					console.log(this.testing_projectForm.DOCLINKS_NUM)
+					// list.push(basisnums);
+					// for(var i = 0;i<this.selUser.length;i++){
+					// 	this.selUser[i].ID = '';
+					// 	list.push(this.selUser[i]);
+					// }
+
+					// this.dialogVisible2 = false;
+				// }
 			},
 			handleClose(done) {
 				this.$confirm('确认关闭？')

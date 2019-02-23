@@ -113,7 +113,7 @@
 											<el-col :span="8" >
 												<el-form-item label="产品类别" prop="PRODUCT_TYPE"  label-width="110px">
 													<el-input v-model="dataInfo.PRODUCT_TYPE" :disabled="true">
-														<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addcategory"></el-button>
+														<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addcategory('maintable')">'</el-button>
 													</el-input>
 												</el-form-item>
 											</el-col>
@@ -360,6 +360,36 @@
 												</el-table-column>
 
 												<el-table-column prop="VENDORDesc" label="分包方名称" sortable width="120px">
+													<template slot-scope="scope">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDORDesc" placeholder="请输入分包方名称">
+															<el-button slot="append" icon="el-icon-search" @click="getDept(scope.row)">
+															</el-button>
+														</el-input>
+														<span v-else="v-else">{{scope.row.VENDORDesc}}</span>
+													</template>
+												</el-table-column>
+
+												<el-table-column prop="PRODUCT_TYPE" label="产品类别" sortable width="120px">
+													<template slot-scope="scope">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.PRODUCT_TYPE" placeholder="请输入分包方名称">
+															<el-button slot="append" icon="el-icon-search" @click="addcategory(scope.row)">
+															</el-button>
+														</el-input>
+														<span v-else="v-else">{{scope.row.PRODUCT_TYPE}}</span>
+													</template>
+												</el-table-column>
+
+												<el-table-column prop="VENDORDesc" label="产品名称" sortable width="120px">
+													<template slot-scope="scope">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDORDesc" placeholder="请输入分包方名称">
+															<el-button slot="append" icon="el-icon-search" @click="getDept(scope.row)">
+															</el-button>
+														</el-input>
+														<span v-else="v-else">{{scope.row.VENDORDesc}}</span>
+													</template>
+												</el-table-column>
+
+												<el-table-column prop="VENDORDesc" label="检测依据" sortable width="120px">
 													<template slot-scope="scope">
 														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDORDesc" placeholder="请输入分包方名称">
 															<el-button slot="append" icon="el-icon-search" @click="getDept(scope.row)">
@@ -891,7 +921,7 @@
 				pronum:'',//产品作为参数传值给依据
 				basisnum:'',////依据选中数据们字符串作为参数传值给项目
 				deptindex:'',//分包方名称
-
+				main:'',
 			};
 		},
 		methods: {
@@ -1097,6 +1127,7 @@
 					PROXYNUM: '',
 					VENDOR: '',
 					VENDORDesc:'',
+					PRODUCT_TYPE:'',
 					P_REMARKS: '',
 					BASIS: '',
 					REQUIRE: '',
@@ -1327,27 +1358,45 @@
 					}
 				});
 			},
-			addcategory(){//产品类别
-				if(this.dataInfo.R_VENDOR == null || this.dataInfo.R_VENDOR == '' || this.dataInfo.R_VENDOR == undefined){
-					this.$message({
-						message: '请先选择承检单位',
-						type: 'warning'
-					});
+			addcategory(val){//产品类别
+				if(val == 'maintable'){
+					if(this.dataInfo.R_VENDOR == null || this.dataInfo.R_VENDOR == '' || this.dataInfo.R_VENDOR == undefined){
+						this.$message({
+							message: '请先选择承检单位',
+							type: 'warning'
+						});
+					}else{
+						this.$refs.categorychild.visible(this.dataInfo.R_VENDOR);
+						this.main = 'main';
+					}
 				}else{
-					this.$refs.categorychild.visible(this.dataInfo.R_VENDOR);
-					
+					if(this.deptindex.VENDORDesc == null || this.deptindex.VENDORDesc == '' || this.deptindex.VENDORDesc == undefined){
+						this.$message({
+							message: '请先选择分包方名称',
+							type: 'warning'
+						});
+					}else{
+						this.$refs.categorychild.visible(this.deptindex.VENDOR);
+						this.main = 'table';
+					}
 				}
+					
 			},
 			//接到产品类别的值
 			categorydata(value){
-				this.dataInfo.P_NUM = value[0];
-				this.dataInfo.PRODUCT_TYPE  = value[1];
-				this.dataInfo.PRODUCT = '';
-				this.dataInfo.PRO_NUM = '';
-				this.dataInfo.S_NUM = '';
-				this.dataInfo.INSPECT_PROXY_BASISList = [];
-				this.dataInfo.INSPECT_PROXY_PROJECList = [];
-				this.dataInfo.CHECK_PROXY_CONTRACTList = [];
+				console.log(this.main);
+				if(this.main == 'main'){
+					this.dataInfo.P_NUM = value[0];
+					this.dataInfo.PRODUCT_TYPE  = value[1];
+					this.dataInfo.PRODUCT = '';
+					this.dataInfo.PRO_NUM = '';
+					this.dataInfo.S_NUM = '';
+					this.dataInfo.INSPECT_PROXY_BASISList = [];
+					this.dataInfo.INSPECT_PROXY_PROJECList = [];
+					// this.dataInfo.CHECK_PROXY_CONTRACTList = [];
+				}else{
+					this.deptindex.PRODUCT_TYPE = value[1];
+				}
 			},
 			addproduct(){//受检产品名称
 				if(this.dataInfo.P_NUM == null || this.dataInfo.P_NUM == '' || this.dataInfo.P_NUM == undefined){
@@ -1408,7 +1457,7 @@
 				}
 			},
 			getProject(){
-				
+
 			},
 			//点击关闭按钮
 			close() {

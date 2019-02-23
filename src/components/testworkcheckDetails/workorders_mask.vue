@@ -422,7 +422,7 @@
 
 											    <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 											      <template slot-scope="scope">
-											         <el-button @click.native.prevent="deleteRow(scope.$index,workorderForm.WORKORDER_BASISList)" type="text" size="small">
+											         <el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'basisList')" type="text" size="small">
 											      <i class="icon-trash red"></i>
 											        </el-button>
 											      </template>
@@ -467,7 +467,7 @@
 												</el-table-column>
 											      <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 											      <template slot-scope="scope">
-											         <el-button title="删除" @click.native.prevent="deleteRow(scope.$index,workorderForm.WORKORDER_PROJECTList)" type="text" size="small">
+											         <el-button title="删除" @click.native.prevent="deleteRow(scope.$index,scope.row,'projectList')" type="text" size="small">
 											      		<i class="icon-trash red"></i>
 											        </el-button>
 											      </template>
@@ -516,7 +516,7 @@
 											    </el-table-column>
 							            		<el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 											      <template slot-scope="scope">
-											        <el-button @click.native.prevent="deleteRow(scope.$index,workorderForm.WORKORDER_CHECKPERSONList)" type="text" size="small">
+											        <el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'peopleList')" type="text" size="small">
 											       <i class="icon-trash red"></i>
 											        </el-button>
 											      </template>
@@ -569,7 +569,7 @@
 													  <el-button title="编辑" type="text" size="small">
 														<i class="icon-edit2"></i>
 													  </el-button>
-											      	  <el-button title="删除" @click.native.prevent="deleteRow(scope.$index,workorderForm.WORKORDER_DATA_TEMPLATEList)" type="text" size="small">
+											      	  <el-button title="删除" @click.native.prevent="deleteRow(scope.$index,scope.row,'moduleList')" type="text" size="small">
 														<i class="icon-trash red"></i>
 													  </el-button>
 											      </template>
@@ -637,7 +637,7 @@
 												
 												<el-table-column fixed="right" label="操作" width="120px">
 													<template slot-scope="scope">
-													  <el-button title="删除" type="text" size="small">
+													  <el-button title="删除" @click.native.prevent="deleteRow(scope.$index,scope.row,'equipList')" type="text" size="small">
 														<i class="icon-trash red"></i>
 													  </el-button>
 													</template>
@@ -1321,8 +1321,47 @@
 				return data.STATUS ? '活动' : '不活动'
 			},
    			
-            deleteRow(index, rows) {//Table-操作列中的删除行
-				rows.splice(index, 1);
+            //刪除新建行
+			deleteRow(index, row, listName){
+				console.log(row);
+				var TableName = '';
+				console.log(listName);
+				if(listName =='basisList'){
+					TableName = 'WORKORDER_BASIS';
+				}else if(listName =='projectList'){
+					TableName = 'WORKORDER_PROJECT';
+				}else if(listName =='peopletList'){
+					TableName = 'WORKORDER_CHECKPERSON';
+				}else if(listName =='moduleList'){
+					TableName = 'WORKORDER_DATA_TEMPLATE';
+				}else{
+					TableName = 'WORKORDER_ASSET';
+				}
+				if(row.ID){
+					var url = this.basic_url + '/api-apps/app/workorder/' + TableName +'/' + row.ID;
+					this.$axios.delete(url, {}).then((res) => {
+						console.log(res);
+						if(res.data.resp_code == 0){
+							this.workorderForm[TableName+'List'].splice(index,1);
+							this.$message({
+								message: '删除成功',
+								type: 'success'
+							});
+						}else{
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'error'
+							});
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+				}else{
+					this.workorderForm[TableName+'List'].splice(index,1);
+				}
 			},
 			//启动流程
 			startup(){
@@ -1508,6 +1547,7 @@
 					for(var i = 0;i<res.data.WORKORDER_DATA_TEMPLATEList.length;i++){
 						res.data.WORKORDER_DATA_TEMPLATEList[i].isEditing = false;
 					}
+					res.data.CJDW = Number(res.data.CJDW);
 					this.workorderForm = res.data;
 					this.show = true;
 				}).catch((err) => {

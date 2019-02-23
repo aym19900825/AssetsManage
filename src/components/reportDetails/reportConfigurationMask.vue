@@ -144,7 +144,7 @@
 												
 												<el-table-column fixed="right" label="操作" width="120">
 													<template slot-scope="scope">
-														<el-button @click ="deleteRow(scope.$index,scope.row,'tableList')" type="text" size="small" v-if="!viewtitle">
+														<el-button @click.native.prevent="deleteRow(scope.$index,dataInfo.params)" type="text" size="small" v-if="!viewtitle">
 															 <i class="icon-trash red"></i>
 														</el-button>
 													</template>
@@ -303,38 +303,8 @@
 			},
 			
 			//刪除新建行
-			deleteRow(index, row, listName){
-				console.log(row);
-				var TableName = '';
-				console.log(listName);
-				if(listName =='tableList'){
-					TableName = 'sys_report_param';
-				}
-				if(row.id){
-					var url = this.basic_url + '/api-report/report/' + TableName +'/' + row.id;
-					this.$axios.delete(url, {}).then((res) => {
-						console.log(res);
-						if(res.data.resp_code == 0){
-							this.dataInfo[TableName+'List'].splice(index,1);
-							this.$message({
-								message: '删除成功',
-								type: 'success'
-							});
-						}else{
-							this.$message({
-								message: res.data.resp_msg,
-								type: 'error'
-							});
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
-					});
-				}else{
-					this.dataInfo[TableName+'List'].splice(index,1);
-				}
+			deleteRow(index,rows) {//Table-操作列中的删除行
+				rows.splice(index,1);
 			},
 			//点击按钮显示弹窗
 			visible() {

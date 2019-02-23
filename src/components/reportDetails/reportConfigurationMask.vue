@@ -305,7 +305,6 @@
 			//刪除新建行
 			deleteRow(index,rows) {//Table-操作列中的删除行
 				rows.splice(index,1);
-
 			},
 			//点击按钮显示弹窗
 			visible() {

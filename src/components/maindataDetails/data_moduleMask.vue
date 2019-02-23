@@ -306,7 +306,7 @@
 					this.$axios.delete(url, {}).then((res) => {
 						console.log(res);
 						if(res.data.resp_code == 0){
-							this.testing_projectForm[TableName+'List'].splice(index,1);
+							this.CATEGORY[TableName+'List'].splice(index,1);
 							this.$message({
 								message: '删除成功',
 								type: 'success'
@@ -324,7 +324,7 @@
 						});
 					});
 				}else{
-					this.testing_projectForm[TableName+'List'].splice(index,1);
+					this.CATEGORY[TableName+'List'].splice(index,1);
 				}
 			},
 			//获取导入表格勾选信息

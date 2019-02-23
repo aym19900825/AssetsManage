@@ -751,8 +751,8 @@
 				}else{
 					TableName = 'ips';
 				}
-				if(row.ID){
-					var url = this.basic_url + '/api-user/users/' + TableName +'/' + row.ID;
+				if(row.id){
+					var url = this.basic_url + '/api-user/users/' + TableName +'/' + row.id;
 					this.$axios.delete(url, {}).then((res) => {
 						console.log(res);
 						if(res.data.resp_code == 0){

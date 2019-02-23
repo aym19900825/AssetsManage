@@ -668,7 +668,7 @@
 			},
 			addPeople(){
 				console.log(123);
-				this.$emit('request');
+				this.getuserinfo();
 				this.dialogVisible = true;
 			},
 			addpeoname(){
@@ -684,9 +684,9 @@
 					});
 				}else{
 					this.dataInfo.KEEPER = this.selUser[0].nickname;
-					this.dialogVisible = false;
+					this.dialogVisible = false;		
+					this.getuserinfo();			
 				}
-				this.$emit('request');
 			},
 			SelChange(val) {
 				this.selUser = val;
@@ -796,6 +796,7 @@
 			// 这里是修改
 			detail(dataid) {
 				this.dataInfo = this.detailData;
+				this.dataInfo.CONFIG_UNIT = Number(this.dataInfo.CONFIG_UNIT);
 				this.handlePrice();
 				this.addtitle = false;
 				this.modifytitle = true;
@@ -974,12 +975,12 @@
 				this.save(dataInfo);
 				this.show = true;
 			},
-			requestData(index) {//高级查询字段
+			getuserinfo() {//高级查询字段
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				this.$axios.get(this.basic_url + '/api-user/users', {
+				this.$axios.get(this.basic_url + '/api-user/users?deptId='+this.dataInfo.CONFIG_UNIT, {
 					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;
@@ -1008,7 +1009,6 @@
 			},
 		},
 		mounted() {
-			this.requestData();
 			this.getCompany();
 		},
 

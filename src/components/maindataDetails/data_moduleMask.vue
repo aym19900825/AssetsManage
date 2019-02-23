@@ -42,7 +42,7 @@
 										</el-col>
 									</el-row>
 								</el-collapse-item>
-								<el-collapse-item title="原始数据模板单元信息" name="2">
+								<!-- <el-collapse-item title="原始数据模板单元信息" name="2">
 									<div class="table-func" v-show="noviews">
 										<el-button type="success" size="mini" round @click="addfield">
 											<i class="icon-add"></i>
@@ -143,7 +143,7 @@
 											</template>
 										</el-table-column>
 									</el-table>
-								</el-collapse-item>
+								</el-collapse-item> -->
 								<el-collapse-item title="文件" name="3">
 									<doc-table ref="docTable" :docParm = "docParm"></doc-table>
 								</el-collapse-item>

@@ -157,6 +157,8 @@
 										</p>
 									</template>	
 								</el-table-column>
+								<el-table-column label="状态" sortable width="100px" prop="STATUS" v-if="this.checkedName.indexOf('状态')!=-1">
+								</el-table-column>
 								<el-table-column label="样品名称" sortable width="180px" prop="ITEM_NAME" v-if="this.checkedName.indexOf('样品名称')!=-1">
 								</el-table-column>
 								<el-table-column label="样品型号" sortable width="180px" prop="ITEM_MODEL" v-if="this.checkedName.indexOf('样品型号')!=-1">
@@ -169,10 +171,8 @@
 								</el-table-column>
 								<el-table-column label="完成方式" sortable  width="100px" prop="COMPLETE_MODE" v-if="this.checkedName.indexOf('完成方式')!=-1">
 								</el-table-column>
-								<el-table-column label="委托书编号" sortable  width="120px" prop="PROXYNUM" v-if="this.checkedName.indexOf('委托书编号')!=-1">
+								<el-table-column label="委托书编号" sortable  width="160px" prop="PROXYNUM" v-if="this.checkedName.indexOf('委托书编号')!=-1">
 								</el-table-column>
-								<!-- <el-table-column label="信息状态" sortable width="100px" prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
-								</el-table-column> -->
 								<!-- <el-table-column label="录入人" sortable width="210px" prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
 								</el-table-column> -->
 								<el-table-column label="录入时间" sortable width="210px" :formatter="dateFormat" prop="ENTERDATE" v-if="this.checkedName.indexOf('录入时间')!=-1">
@@ -220,6 +220,7 @@
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				checkedName: [
 					'工作任务单编号',
+					'状态',
 					'样品名称',
 					'样品型号',
 					'样品状态',
@@ -235,6 +236,10 @@
 					{
 						label: '工作任务单编号',
 						prop: 'WONUM'
+					},
+					{
+						label: '状态',
+						prop: 'STATE'
 					},
 					{
 						label: '样品名称',

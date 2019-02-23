@@ -162,7 +162,7 @@ export default {
 				currentPage: 1,
 				pageSize: 10,
 				totalCount: 0
-				},			
+				},
       }
     },
   
@@ -239,8 +239,8 @@ export default {
 					
 					
 				})
-	},
-},
+			},
+		},
 	  mounted(){
 	  	this.requestData();
 	},

@@ -96,16 +96,18 @@
 					});
 					return;
 				} else {
+					console.log(this.selreport[0]);
 					var id=this.selreport[0].id;
+					var file=this.selreport[0].file;
 					this.appname=this.reportData.app;	
 					var url = this.basic_url + '/api-apps/app/'+this.appname+'/reportParams/'+id;
 					this.$axios.get(url, {}).then((res) => {
 						if(res.data.datas==null){
-							console.log(id);
-							 this.$refs.reportchild.visible(id);
+							 this.$refs.reportchild.visible(file);
 							 this.close();
 						}else{
-							this.$refs.reportpramchild.visible(res.data.datas);
+							console.log(res);
+							this.$refs.reportpramchild.visible(res.data.datas,file);
 //							this.close();
 						}
 					}).catch((wrong) => {

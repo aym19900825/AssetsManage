@@ -112,6 +112,7 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格 Begin-->
+
 							<el-table :header-cell-style="rowClass" :data="categoryList" v-loading="loading"  element-loading-text="拼命加载中"
     element-loading-spinner="el-icon-loading"
     element-loading-background="rgba(0, 0, 0, 0.6)" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
@@ -277,7 +278,6 @@
 						type: type
 					},
 				}).then((res) => {
-					console.log(res.data);
 					this.selectData = res.data;
 				});
 			},
@@ -470,7 +470,6 @@
           	
 			// 导入
 			download() {
-				console.log(1234);
 				var url = this.basic_url + '/api-apps/app/productType/importExcTemplete?access_token='+sessionStorage.getItem('access_token');
            var xhr = new XMLHttpRequest();
             xhr.open('POST', url, true);

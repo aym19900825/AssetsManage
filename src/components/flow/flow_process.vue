@@ -13,7 +13,7 @@
 				<div class="ibox-content">
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
-							<div class="hidden-xs" id="roleTableToolbar" role="group">
+							<!--<div class="hidden-xs" id="roleTableToolbar" role="group">
 								<button type="button" class="btn btn-green" @click="openAddMgr">
                                 	<i class="icon-add"></i>添加
                       			 </button>
@@ -40,7 +40,7 @@
 						    		<i class="icon-arrow1-down" v-show="down"></i>
 						    		<i class="icon-arrow1-up" v-show="up"></i>
 								</button>
-							</div>
+							</div>-->
 						</div>
 						<div class="columns columns-right btn-group pull-right">
 							<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>

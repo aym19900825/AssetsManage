@@ -1,82 +1,82 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from '@/page/login/login'//登录页
-import index from '@/components/index'//首页
-import task from '@/components/task'//代办
-import all_icons from '@/components/common/all_icons'//所有图标
-import ztree from '@/components/common/ztree' //树菜单
+
+const Login = r => require.ensure([], () => r(require('@/page/login/login')), 'Login')
+const index = r => require.ensure([], () => r(require('@/components/index')), 'index')
+const task = r => require.ensure([], () => r(require('@/components/task')), 'task')
+const all_icons = r => require.ensure([], () => r(require('@/components/common/all_icons')), 'all_icons')
+const ztree = r => require.ensure([], () => r(require('@/components/common/ztree')), 'ztree')
+
+const products_category = r => require.ensure([], () => r(require('@/components/maindata/products_category')), 'products_category')
+const products = r => require.ensure([], () => r(require('@/components/maindata/products')), 'products')
+const testing_standard = r => require.ensure([], () => r(require('@/components/maindata/testing_standard')), 'testing_standard')
+const testing_projects = r => require.ensure([], () => r(require('@/components/maindata/testing_projects')), 'testing_projects')
+const testing_methods = r => require.ensure([], () => r(require('@/components/maindata/testing_methods')), 'testing_methods')
+const data_module = r => require.ensure([], () => r(require('@/components/maindata/data_module')), 'data_module')
+const report_module = r => require.ensure([], () => r(require('@/components/maindata/report_module')), 'report_module')
+const work_instruction = r => require.ensure([], () => r(require('@/components/maindata/work_instruction')), 'work_instruction')
+
+const application_management = r => require.ensure([], () => r(require('@/components/setting/application_management')), 'application_management')
+const button_configure = r => require.ensure([], () => r(require('@/components/setting/button_configure')), 'button_configure')
+const customer_management = r => require.ensure([], () => r(require('@/components/setting/customer_management')), 'customer_management')
+const user_management = r => require.ensure([], () => r(require('@/components/setting/user_management')), 'user_management')
+const dept_management = r => require.ensure([], () => r(require('@/components/setting/dept_management')), 'dept_management')
+const role_management = r => require.ensure([], () => r(require('@/components/setting/role_management')), 'role_management')
+const menu_management = r => require.ensure([], () => r(require('@/components/setting/menu_management')), 'menu_management')
+const data_management = r => require.ensure([], () => r(require('@/components/setting/data_management')), 'data_management')
+const safe_management = r => require.ensure([], () => r(require('@/components/setting/safe_management')), 'safe_management')
+const number_settings = r => require.ensure([], () => r(require('@/components/setting/number_settings')), 'number_settings')
+const dictionaries_management = r => require.ensure([], () => r(require('@/components/setting/dictionaries_management')), 'dictionaries_management')
+const personinfo = r => require.ensure([], () => r(require('@/components/setting/personinfo')), 'personinfo')
+const passwordedit = r => require.ensure([], () => r(require('@/components/setting/passwordedit')), 'passwordedit')
 
 
-import products_category from '@/components/maindata/products_category'//产品类别
-import products from '@/components/maindata/products'//产品
-import testing_standard from '@/components/maindata/testing_standard'//检验/检测标准
-import testing_projects from '@/components/maindata/testing_projects'//检验/检测项目
-import testing_methods from '@/components/maindata/testing_methods'//检验/检测方法
-import data_module from '@/components/maindata/data_module'//原始数据模板
-import report_module from '@/components/maindata/report_module'//检验/检测报告模板
-import work_instruction from '@/components/maindata/work_instruction'//作业指导书
+const notifications  = r => require.ensure([], () => r(require('@/components/notifications')), 'notifications')//工作任务通知书
+const proxies  = r => require.ensure([], () => r(require('@/components/proxies')), 'proxies')//委托书管理
+const annual_plan  = r => require.ensure([], () => r(require('@/components/annual_plan')), 'annual_plan')//年度计划
 
-import application_management from '@/components/setting/application_management'//应用管理
-import button_configure from '@/components/setting/button_configure'//按钮配置
-import customer_management from '@/components/setting/customer_management'//客户管理
-import user_management from '@/components/setting/user_management'//用户管理
-import dept_management from '@/components/setting/dept_management'//机构管理
-import role_management from '@/components/setting/role_management'//角色管理
-import menu_management from '@/components/setting/menu_management'//菜单管理
-import data_management from '@/components/setting/data_management'//数据管理
-import safe_management from '@/components/setting/safe_management'//安全管理
-import number_settings from '@/components/setting/number_settings'//自动编号设置
-import dictionaries_management from '@/components/setting/dictionaries_management'//字典管理
-import personinfo from '@/components/setting/personinfo'//个人资料
-import passwordedit from '@/components/setting/passwordedit'//修改密码
+const samples  = r => require.ensure([], () => r(require('@/components/samples/samples')), 'samples')//样品管理-接样
+const collar_sample  = r => require.ensure([], () => r(require('@/components/samples/collar_sample')), 'collar_sample')//样品管理-领样
+const return_sample  = r => require.ensure([], () => r(require('@/components/samples/return_sample')), 'return_sample')//样品管理-返样
+const sample_disposal  = r => require.ensure([], () => r(require('@/components/samples/sample_disposal')), 'sample_disposal')//样品管理-样品处置
 
 
+const workorders  = r => require.ensure([], () => r(require('@/components/testworkcheck/workorders')), 'workorders')//工作任务单
+const useseal_management  = r => require.ensure([], () => r(require('@/components/testworkcheck/useseal_management')), 'useseal_management')//用印管理
+const reportarchiving  = r => require.ensure([], () => r(require('@/components/testworkcheck/reportarchiving')), 'reportarchiving')//报告归档
+const devices  = r => require.ensure([], () => r(require('@/components/devices')), 'devices')//设备管理
+const inspection_project  = r => require.ensure([], () => r(require('@/components/inspection_project')), 'inspection_project')//检验/检测项目管理
+const test  = r => require.ensure([], () => r(require('@/components/test')), 'test')//检验/检测项目管理
+const files_search  = r => require.ensure([], () => r(require('@/components/files_search')), 'files_search')//文件查询
+const interfaces  = r => require.ensure([], () => r(require('@/components/interfaces')), 'interfaces')//接口
+const reports  = r => require.ensure([], () => r(require('@/components/reports/reports')), 'reports')//报表管理
+const reportfile  = r => require.ensure([], () => r(require('@/components/reports/reportfile')), 'reportfile')//报表文件
 
-import annual_plan from '@/components/annual_plan'//年度计划
-import notifications from '@/components/notifications'//工作任务通知书
-import proxies from '@/components/proxies'//委托书管理
+const inspect_proxy  = r => require.ensure([], () => r(require('@/components/proxies/inspect_proxy')), 'inspect_proxy')//检验委托书
+const check_proxy  = r => require.ensure([], () => r(require('@/components/proxies/check_proxy')), 'check_proxy')//检测委托书
+const subc_agreement  = r => require.ensure([], () => r(require('@/components/proxies/subc_agreement')), 'subc_agreement')//分包协议
 
-import samples from '@/components/samples/samples'//样品管理-接样
-import collar_sample from '@/components/samples/collar_sample'//样品管理-领样
-import return_sample from '@/components/samples/return_sample'//样品管理-返样
-import sample_disposal from '@/components/samples/sample_disposal'//样品管理-样品处置
+const equipment_classify  = r => require.ensure([], () => r(require('@/components/equipments/equipment_classify')), 'equipment_classify')//设备分类
+const instruments  = r => require.ensure([], () => r(require('@/components/equipments/instruments')), 'instruments')//仪器和计量器具
+const usag_tending_records  = r => require.ensure([], () => r(require('@/components/equipments/usag_tending_records')), 'usag_tending_records')//使用/维护保养记录
+const traceability_plan  = r => require.ensure([], () => r(require('@/components/equipments/traceability_plan')), 'traceability_plan')//溯源计划
+const traceability_records  = r => require.ensure([], () => r(require('@/components/equipments/traceability_records')), 'traceability_records')//溯源记录
+const verification_plan  = r => require.ensure([], () => r(require('@/components/equipments/verification_plan')), 'verification_plan')//期间核查计划
+const verification_records  = r => require.ensure([], () => r(require('@/components/equipments/verification_records')), 'verification_records')//期间核查记录   
+const testing  = r => require.ensure([], () => r(require('@/components/testing')), 'testing')//期间核查记录
 
+const doc_category  = r => require.ensure([], () => r(require('@/components/document/category')), 'doc_category')//关键字类别
+const doc_keyword  = r => require.ensure([], () => r(require('@/components/document/keyword')), 'doc_keyword')//关键字
+const doc_authorize  = r => require.ensure([], () => r(require('@/components/document/authorize')), 'doc_authorize')//关键字授权
+const doc_root  = r => require.ensure([], () => r(require('@/components/document/doc_root')), 'doc_root')//文件目录
+const doc_list  = r => require.ensure([], () => r(require('@/components/document/doc_list')), 'doc_list')//文件列表
 
-import workorders from '@/components/testworkcheck/workorders'//工作任务单
-import useseal_management from '@/components/testworkcheck/useseal_management'//用印管理
-import devices from '@/components/devices'//设备管理
-import inspection_project from '@/components/inspection_project'//检验/检测项目管理
-import test from '@/components/test'//检验/检测项目管理
-import files_search from '@/components/files_search'//文件查询
-import interfaces from '@/components/interfaces'//接口
-import reports from '@/components/reports/reports'//报表管理
-import reportfile from '@/components/reports/reportfile'//报表文件
+const approving  = r => require.ensure([], () => r(require('@/components/workflow/approving')), 'approving')//审批意见
+const flowhistory  = r => require.ensure([], () => r(require('@/components/workflow/flowhistory')), 'flowhistory')//流程历史
+const flowmap  = r => require.ensure([], () => r(require('@/components/workflow/flowmap')), 'flowmap')//流程地图
 
-import inspect_proxy from '@/components/proxies/inspect_proxy'//检验委托书
-import check_proxy from '@/components/proxies/check_proxy'//检测委托书
-import subc_agreement from '@/components/proxies/subc_agreement'//分包协议
-
-import equipment_classify from '@/components/equipments/equipment_classify'//设备分类
-import instruments from '@/components/equipments/instruments'//仪器和计量器具
-import usag_tending_records from '@/components/equipments/usag_tending_records'//使用/维护保养记录
-import traceability_plan from '@/components/equipments/traceability_plan'//溯源计划
-import traceability_records from '@/components/equipments/traceability_records'//溯源记录
-import verification_plan from '@/components/equipments/verification_plan'//期间核查计划
-import verification_records from '@/components/equipments/verification_records'//期间核查记录   
-import testing from '@/components/testing'//期间核查记录
-
-import doc_category from '@/components/document/category'//关键字类别
-import doc_keyword from '@/components/document/keyword'//关键字
-import doc_authorize from '@/components/document/authorize'//关键字授权
-import doc_root from '@/components/document/doc_root'//文件目录
-import doc_list from '@/components/document/doc_list'//文件列表
-
-import approving from '@/components/workflow/approving'//审批意见
-import flowhistory from '@/components/workflow/flowhistory'//流程历史
-import flowmap from '@/components/workflow/flowmap'//流程地图
-
-import flow_management from '@/components/flow/flow_management'//流程模型
-import flow_process from '@/components/flow/flow_process'//流程模型
+const flow_management  = r => require.ensure([], () => r(require('@/components/flow/flow_management')), 'flow_management')//流程模型
+const flow_process  = r => require.ensure([], () => r(require('@/components/flow/flow_process')), 'flow_process')//流程模型
 Vue.use(Router)
   const routes = [
     {//登录页
@@ -317,6 +317,11 @@ Vue.use(Router)
       name: 'useseal_management',
       component: useseal_management
     },
+     {//报告归档
+      path: '/reportarchiving',
+      name: 'reportarchiving',
+      component: reportarchiving
+    },
     {//设备管理
       path: '/devices',
       name: 'devices',
@@ -401,7 +406,6 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
     if (to.meta.requireAuth) {  // 判断该路由是否需要登录权限
         var token = sessionStorage.getItem('access_token');
-        console.log("token-------------"+token);
         if (token) {  // 通过vuex state获取当前的token是否存在
             next();
         }

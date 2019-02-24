@@ -34,7 +34,12 @@
                 </el-row>
             </el-form>
         </div>
-        <el-table ref="table" :data="list" border style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="selChange">
+        <el-table ref="table" 
+                  :data="list" 
+                  border 
+                  style="width: 100%;" 
+                  :default-sort="{prop:'samplesList', order: 'descending'}" 
+                  @selection-change="selChange">
             <el-table-column type="selection" width="55" fixed >
             </el-table-column>
             <el-table-column label="分类" sortable prop="categoryidDesc">
@@ -65,6 +70,7 @@ export default {
     name: 'keyword',
     data(){
         return {
+            loading: false,
             basic_url: Config.dev_url,
             file_url: Config.file_url,
             page: {

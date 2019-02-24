@@ -313,6 +313,7 @@
 			//点击关闭按钮
 			close() {
 				this.show = false;
+				this.$emit('request');
 			},
 			open(){
 				this.show = true;

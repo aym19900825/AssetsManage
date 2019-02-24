@@ -106,12 +106,6 @@
 													<el-radio label="女"></el-radio>
 												</el-radio-group>
 											</el-form-item>
-											 <!--<el-form-item label="性別" label-width="100px">
-											 	<el-radio-group :disabled="noedit">
-									            	<el-radio v-model="user.sex" :label="1" >男</el-radio>
-									            	<el-radio v-model="user.sex" :label="0" >女</el-radio>
-									            </el-radio-group>
-									         </el-form-item>-->
 										</el-col>
 									</el-row>
 									<el-row>
@@ -295,7 +289,7 @@
 										</el-table-column>-->
 													<el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 														<template slot-scope="scope">
-															<el-button @click.native.prevent="deleteRow(scope.$index,user.qualifications)" type="text" size="small">
+															<el-button @click="deleteRow(scope.$index,scope.row,'tableList')" type="text" size="small">
 																<i class="icon-trash red"></i>
 															</el-button>
 														</template>
@@ -350,7 +344,7 @@
 													</el-table-column> -->
 													<el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 														<template slot-scope="scope">
-															<el-button @click.native.prevent="deleteRow(scope.$index,user.traings)" type="text" size="small">
+															<el-button @click="deleteRow(scope.$index,scope.row,'traingList')" type="text" size="small">
 																<i class="icon-trash red"></i>
 															</el-button>
 														</template>
@@ -365,7 +359,7 @@
 													<font>新建行</font>
 												</el-button>
 											</div>
-												<el-table :header-cell-style="rowClass" :fit="true" :data="user.IpList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.IpList', order: 'descending'}">
+												<el-table :header-cell-style="rowClass" :fit="true" :data="user.ips" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.ips', order: 'descending'}">
 													<el-table-column prop="iconOperation" fixed label="" width="50px" v-if="!viewtitle">
 														<template slot-scope="scope">
 															<i class="el-icon-check" v-if="scope.row.isEditing"></i>
@@ -375,16 +369,16 @@
 
 													<el-table-column label="序号" sortable width="120px" prop="STEP">
 													   <template slot-scope="scope">
-													      <el-form-item :prop="'IpList.'+scope.$index + '.STEP'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+													      <!-- <el-form-item :prop="'ips.'+scope.$index + '.STEP'" :rules="{required: true, message: '不能为空', trigger: 'blur'}"> -->
 													         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.$index + 1" disabled></el-input>
 													         <span v-show="!scope.row.isEditing" >{{scope.row.STEP}}</span>
-													      </el-form-item>
+													      <!-- </el-form-item> -->
 													   </template>
 													</el-table-column>
 
 													<el-table-column prop="IP_BEGIN" label="起始IP地址" sortable>
 														<template slot-scope="scope">
-															<el-form-item :prop="'IpList.'+scope.$index + '.IP_BEGIN'">
+															<el-form-item :prop="'ips.'+scope.$index + '.IP_BEGIN'">
 																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.IP_BEGIN" placeholder="请输入起始IP地址">
 																</el-input>
 																<span v-else="v-else">{{scope.row.IP_BEGIN}}</span>
@@ -394,7 +388,7 @@
 
 													<el-table-column prop="IP_END" label="结束IP地址" sortable>
 														<template slot-scope="scope">
-															<el-form-item :prop="'IpList.'+scope.$index + '.IP_END'">
+															<el-form-item :prop="'ips.'+scope.$index + '.IP_END'">
 																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.IP_END" placeholder="请输入结束IP地址">
 																</el-input>
 																<span v-else="v-else">{{scope.row.IP_END}}</span>
@@ -404,7 +398,7 @@
 													
 													<el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 														<template slot-scope="scope">
-															<el-button @click.native.prevent="deleteRow(scope.$index,user.IpList)" type="text" size="small">
+															<el-button @click="deleteRow(scope.$index,scope.row,'ipaddressList')" type="text" size="small">
 																<i class="icon-trash red"></i>
 															</el-button>
 														</template>
@@ -491,7 +485,7 @@
 					roles: [],
 					traings: [],
 					qualifications: [],
-					IpList: [],
+					ips: [],
 				},
 				options: [{
 						value: '高中',
@@ -659,7 +653,7 @@
 					enabled: true,
 					traings: [],
 					qualifications: [],
-					IpList: [],
+					ips: [],
 				}
 			},
 			//点击按钮显示弹窗
@@ -743,13 +737,47 @@
 					IP_END: '',
 					isEditing: true
 				};
-				this.user.IpList.push(obj);
+				this.user.ips.push(obj);
 			},
 			//刪除新建行
-			deleteRow(index, rows) { //Table-操作列中的删除行
-				// console.log(index);
-				// console.log(rows);
-				rows.splice(index, 1);
+			deleteRow(index, row, listName){
+				console.log(row);
+				var TableName = '';
+				console.log(listName);
+				if(listName =='tableList'){
+					TableName = 'qualifications';
+				}else if(listName =='traingList'){
+					TableName = 'traings';
+				}else{
+					TableName = 'ips';
+				}
+				if(row.id){
+					var url = this.basic_url + '/api-user/users/' + TableName +'/' + row.id;
+					this.$axios.delete(url, {}).then((res) => {
+						console.log(res);
+						if(res.data.resp_code == 0){
+							this.user[TableName].splice(index,1);
+							this.$message({
+								message: '删除成功',
+								type: 'success'
+							});
+						}else{
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'error'
+							});
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+				}else{
+					console.log(this.user[TableName]);
+					// this.user[TableName+'List'].splice(index,1);
+					this.user[TableName].splice(index,1);
+				}
 			},
 			//
 			handleClicks(data,checked, indeterminate) {
@@ -797,7 +825,7 @@
 					enabled: true,
 					traings: [],
 					qualifications: [],
-					IpList: [],
+					ips: [],
 				};
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 
@@ -868,11 +896,11 @@
 					}
 
 					//IP地址管理
-					// for(var i = 0;i<res.data.IpList.length;i++){
-					// 	res.data.IpList[i].isEditing = false;
+					// for(var i = 0;i<res.data.ips.length;i++){
+					// 	res.data.ips[i].isEditing = false;
 					// }
 					this.user = res.data;
-//					this.user.sex = this.user.sex=='1'? '男' : '女';
+					this.user.sex = this.user.sex=='1'? '男' : '女';
 					this.user.enabled = this.user.enabled ? '活动' : '不活动';
 					this.user.ispermit = this.user.ispermit == '1' ? '是' : '否';
 					this.user.islogin = this.user.islogin == '1' ? '是' : '否';
@@ -960,10 +988,10 @@
 				this.$refs.user.validate((valid) => {
 					if(valid) {
 						_this.user.enabled = true;
-						_this.user.ispermit = _this.user.ispermit == '是' ? 1 : 2;
-						_this.user.islogin = _this.user.islogin == '是' ? 1 : 2;
+						_this.user.ispermit = _this.user.ispermit == '是' ? '1' : '2';
+						_this.user.islogin = _this.user.islogin == '是' ? '1' : '2';
 						var user = _this.user;
-//						user.sex = user.sex == '男' ? 1 : 0;
+						user.sex = user.sex == '男' ? 1 : 0;
 						var roleId = "";
 						if(typeof(user.roleId) != 'undefind' && user.roleId.length > 0) {
 							var arr = [];

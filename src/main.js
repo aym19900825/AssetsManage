@@ -43,12 +43,28 @@ import Validators from './core/util/validators.js'
 Vue.config.productionTip = false
 Vue.directive('loadmore', {
 	bind(el, binding) {
-	    const selectWrap = el.querySelector('.el-table__body-wrapper')
+		const selectWrap = el.querySelector('.el-table__body-wrapper');
+		// const selectWrap = el.querySelector('.el-table');
+		var scrollBeforeTop = 0;
+		var firstFlag = true;
 	    selectWrap.addEventListener('scroll', function() {
+			
+			let up2down = sessionStorage.getItem('toBtm');
+			if(up2down=='true'){
+				if(firstFlag){
+					scrollBeforeTop = this.scrollTop;
+					firstFlag = false;
+				}else{
+					console.log('firstFlag');
+					console.log(this.scrollTop >= scrollBeforeTop);
+					if(this.scrollTop >= scrollBeforeTop){
+						this.scrollTop = 1;
+						scrollBeforeTop = this.scrollTop;
+					}
+				}
+			}
 	      	let sign = 1
 	      	const scrollDistance = this.scrollHeight - this.scrollTop - this.clientHeight;
-//	      	console.log(scrollDistance);
-	      	console.log(this.scrollTop);
 		    if (scrollDistance <= sign) {
 		    	sessionStorage.setItem('up2down','down');
 		        binding.value();

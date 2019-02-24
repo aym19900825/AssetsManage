@@ -123,6 +123,8 @@
 							</el-table-column>
 							<el-table-column label="委托书编号" width="150" sortable prop="PROXYNUM" v-if="this.checkedName.indexOf('委托书编号')!=-1">
 							</el-table-column>
+							<el-table-column label="状态" width="150" sortable prop="state" v-if="this.checkedName.indexOf('状态')!=-1">
+							</el-table-column>
 							<el-table-column label="分包单位" width="150" sortable prop="VENDORDesc" v-if="this.checkedName.indexOf('分包单位')!=-1">
 							</el-table-column>
 							<el-table-column label="检验/检测项目内容" width="150" sortable prop="P_REMARKS" v-if="this.checkedName.indexOf('检验/检测项目内容')!=-1">
@@ -195,6 +197,7 @@
 				checkedName: [
 					'分包协议编号',
 					'委托书编号',
+					'状态',
 					'分包单位',
 					'检验/检测项目内容',
 					'检验检测项目依据',
@@ -215,6 +218,10 @@
 					{
 						label: '委托书编号',
 						prop: 'PROXYNUM'
+					},
+					{
+						label: '状态',
+						prop: 'state'
 					},
 					{
 						label: '分包单位',
@@ -440,7 +447,7 @@
 					ENTERBY: this.searchList.ENTERBY,
 					ENTERDATE: this.searchList.ENTERDATE
 				}
-				var url = this.basic_url + '/api-apps/app/checkProCont2';
+				var url = this.basic_url + '/api-apps/app/subcontrac';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {

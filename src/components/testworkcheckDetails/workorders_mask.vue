@@ -549,10 +549,10 @@
 											      	<span v-else="v-else">{{scope.row.D_NUM}}</span>
 											      </template>
 											    </el-table-column>
-											    <el-table-column label="模板描述" sortable prop="DESC">
+											    <el-table-column label="模板描述" sortable prop="D_DESC">
 											      <template slot-scope="scope">
-											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DESC" :disabled="edit"></el-input>
-											      	<span v-else="v-else">{{scope.row.DESC}}</span>
+											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.D_DESC" :disabled="edit"></el-input>
+											      	<span v-else="v-else">{{scope.row.D_DESC}}</span>
 											      </template>
 											    </el-table-column>
 											    <!--<el-table-column label="模板状态" sortable prop="STATUS">
@@ -825,7 +825,7 @@
 												</el-table-column>
 												<el-table-column fixed="right" label="操作" width="120">
 													<template slot-scope="scope">
-														<el-button title="生成分包协议" type="text" size="small">
+														<el-button title="生成分包协议" type="text" size="small" @click="proagree(scope.row)">
 															 <i class="icon-send red"></i>
 														</el-button>
 													</template>
@@ -1354,7 +1354,7 @@
             	this.modulenum.D_NUM=value;
             },
             appenddes(value){
-            	this.modulenum.DESC=value;
+            	this.modulenum.D_DESC=value;
             },
    			//获取样品信息-样品状态
 			getITEM_STATUS() {
@@ -1478,6 +1478,28 @@
 				}else{
 					this.workorderForm[TableName+'List'].splice(index,1);
 				}
+			},
+			//生成分包协议
+			proagree(row){
+				console.log(row);
+				var data = {
+					"WORKORDER_CONTRACTID":row.ID.toString(),
+				};
+				var url = 'http://192.168.1.115:7902/app/workorder/operate/subproject';
+				this.$axios.post(url,data).then((res) => {
+					console.log(res);
+					if(res.data.resp_code == 0) {
+						this.$message({
+							message: '生成成功',
+							type: 'success'
+						});
+					}
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
 			},
 			//启动流程
 			startup(){
@@ -1613,15 +1635,20 @@
 					STATUS: '1',
 					isEditing: true,
 				};
-					this.workorderForm.WORKORDER_DATA_TEMPLATEList.push(obj);
+				this.workorderForm.WORKORDER_DATA_TEMPLATEList.push(obj);
 			},
 			//生成报告
 			getreport(){
-				var num
-				for(var i = 0;i<this.workorderForm.WORKORDER_DATA_TEMPLATEList.length;i++){
-					
+				var changeUser = this.workorderForm.WORKORDER_DATA_TEMPLATEList;
+				//basisnum为依据编号的数组
+				var id = [];
+				for (var i = 0; i < changeUser.length; i++) {
+					id.push(changeUser[i].ID);		
 				}
-				// var url = '192.168.1.164:7800/merge/workorder/MergeWord?'+filePath=108,103&fileName=测试生成啊&num=workorderForm.WONUM&deptfullname=this.workorderForm.DEPTIDDesc
+				//basisnums为basisnum数组用逗号拼接的字符串
+				var ids = id.toString(',');
+				debugger;
+				var url = "http://192.168.1.164:7880/merge/workorder/MergeWord?filePath=145,142&fileName=测试生成啊&num="+this.workorderForm.WONUM+"&deptfullname="+this.workorderForm.DEPTIDDesc+"&recordid="+this.workorderForm.ID;
 				this.$axios.post(url, {}).then((res) => {
 					console.log(res);
 					// if(res.data.resp_code == 0) {

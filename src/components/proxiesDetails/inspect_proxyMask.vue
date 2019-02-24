@@ -1081,7 +1081,7 @@
 					row.isEditing = !row.isEditing;
 				}
 			},
-			//生成委托书
+			//生成工作任务单
 			build(){
 				var dataid = this.dataInfo.ID;
 					var Url = this.basic_url + '/api-apps/app/inspectPro/operate/createWorkorder?ID='+dataid;
@@ -1099,7 +1099,7 @@
 						}
 					}).catch((err) => {
 						this.$message({
-							message: '网络错误，请重试1',
+							message: '网络错误，请重试',
 							type: 'error'
 						});
 					});
@@ -1667,7 +1667,7 @@
 								}
 							}).catch((err) => {
 								this.$message({
-									message: '网络错误，请重试6',
+									message: '网络错误，请重试',
 									type: 'error'
 								});
 							});

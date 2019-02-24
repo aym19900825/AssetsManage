@@ -1044,6 +1044,11 @@
 					WORKORDER_REPORTList:[],//检验报告
 				};
 			},
+			//表格传过来
+			childByValue: function (childValue) {
+		        // childValue就是子组件传过来的
+		        this.selMenu = childValue
+		    },
 			iconOperation(row, column, cell, event) {
 				if(column.property === "iconOperation") {
 					row.isEditing = !row.isEditing;

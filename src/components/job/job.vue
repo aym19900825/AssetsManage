@@ -11,164 +11,34 @@
 
 			<!--右侧内容显示 Begin-->
 			<div class="wrapper wrapper-content">
-				<div class="ibox-content">
-					<div class="fixed-table-toolbar clearfix">
-						<div class="bs-bars pull-left">
-							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
-                                	<i class="icon-add"></i>添加
-                       			</button>
-                       			<!-- <button type="button" class="btn btn-green" @click="openAddMgr" id="">
-                                	<i class="icon-add"></i>添加部门
-                       			</button> -->
-                       			<button type="button" class="btn btn-blue button-margin" @click="modify" id="">
-						    		<i class="icon-edit"></i>修改
-								</button>
-								<button type="button" class="btn btn-red button-margin" id="" @click="deluserinfo">
-						    		<i class="icon-trash"></i>删除
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch" id="">
-						    		<i class="icon-search"></i>高级查询<i class="icon-arrow1-down" v-show="down"></i><i class="icon-arrow1-up" v-show="up"></i>
-								</button>
-							</div>
-						</div>
-						<div class="columns columns-right btn-group pull-right">
-							<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
-
-							<div class="keep-open btn-group" title="列">
-								<el-dropdown :hide-on-click="false" class="pl10 btn btn-default btn-outline">
-									<span class="el-dropdown-link">
-										<font class="J_tabClose"><i class="icon-menu3"></i></font>
-										<i class="el-icon-arrow-down icon-arrow2-down"></i>
-									</span>
-									<el-dropdown-menu slot="dropdown">
-										<el-checkbox-group v-model="checkedName" @change="changeCheckedName">
-											<el-dropdown-item  v-for="(item,index) in columns" :key="index">
-												<el-checkbox :label="item.text"  name="type"></el-checkbox>
-											</el-dropdown-item>
-										</el-checkbox-group>
-									</el-dropdown-menu>
-								</el-dropdown>
-							</div>
-						</div>
-					</div>
-					<!-- 高级查询划出 -->
-					<div v-show="search">
-						<el-form :model="searchDept" label-width="70px">
-							<el-row :gutter="10">
-								<el-col :span="5">
-									<el-form-item label="机构名称" prop="fullname" label-width="70px">
-										<el-input v-model="searchDept.fullname">
-										</el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="4">
-									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
-								</el-col>
-							</el-row>
-						</el-form>
-					</div>
-					<!-- 高级查询划出 -->
-					<el-row :gutter="10">
-						<el-col :span="24">
-							<tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="deptList" v-on:childByValue="childByValue"></tree_grid>
-							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
-							   @size-change="sizeChange" 
-							   @current-change="currentChange" 
-							   :current-page="page.currentPage" 
-							   :page-sizes="[10, 20, 30, 40]"
-					           :page-size="page.pageSize" 
-					           layout="total, sizes, prev, pager, next"
-					           :total="page.totalCount">
-							</el-pagination>
-						</el-col>
-					</el-row>
-					</div>
-				</div>
+				<el-row :gutter="10">
+					<el-col :span="24">
+						<iframe src="http://192.168.1.169:8888/jobinfo" id="flowIframe" width="100%" :height="fullHeight"  frameborder="0" scrolling="no" >
+				   		</iframe>
+				   	</el-col>
+				</el-row>
 			</div>
-			<!--右侧内容显示 End-->
-			<deptmask :adddeptForm="adddeptForm" ref="child" @request="requestData" @reset="reset" @requestTree="getKey" v-bind:page=page></deptmask>
 		</div>
 	</div>
 </template>
 
 <script>
 	import Config from '../../config.js'
-	import tree_grid from '../common/TreeGrid.vue'//树表格
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_header from '../common/nav_tabs.vue'
-//	import assetsTree from '../plugin/vue-tree/tree.vue'
-//	import tableControle from '../plugin/table-controle/controle.vue'
-	import deptmask from '../settingDetails/dept_mask.vue'
-
 	export default {
 		name: 'dept_management',
 		components: {
 			'vheader': vheader,
 			'navs_header': navs_header,
 			'navs_left': navs_left,
-			'deptmask': deptmask,
-			'tree_grid':tree_grid,
 		},
 		data() {
 			return {
 				loading: false,
 				basic_url: Config.dev_url,
-				checkedName: [
-					// '序号',
-					'机构名称',
-					'机构编码',
-					'上级机构',
-					'机构属性',
-					'负责人',
-					'版本',
-					'备注',
-				],
-				columns: [
-					// {
-					// 	text: '序号',
-					// 	dataIndex: 'step',
-					// 	isShow:true,
-					// },
-					{
-						text: '机构名称',
-						dataIndex: 'fullname',
-						isShow:true,
-					},
-					{
-						text: '机构编码',
-						dataIndex: 'code',
-						isShow:true,
-					},
-					{
-						text: '上级机构',
-						dataIndex: 'parent',
-						isShow:true,
-					},
-					{
-						text: '机构属性',
-						dataIndex: 'type',
-						isShow:true,
-					},
-					{
-						text: '负责人',
-						dataIndex: 'leader',
-						isShow:true,
-					},
-					{
-						text: '版本',
-						dataIndex: 'version',
-						isShow:true,
-					},
-					{
-						text: '备注',
-						dataIndex: 'tips',
-						isShow:true,
-					},
-				],
-
+				
 				companyId: '',
 				deptId: '',
 				selDept: [],
@@ -471,10 +341,14 @@
 				return row.enabled;
 			}
 		},
-		mounted() {
-			this.requestData();
-			this.getKey();
-		}
+//		mounted() {
+//			var url="http://192.168.1.169:8888/jobinfo";
+//			widow.open(url);
+//		},
+//		created(){
+//		   	var url="http://192.168.1.169:8888/jobinfo";
+//		   	window.open(url);
+// }
 	}
 </script>
 

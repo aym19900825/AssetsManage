@@ -32,9 +32,6 @@
 								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-close1"></i>取消
 								</button>
-								<button type="button" class="btn btn-primarys button-margin">
-								    <i class="icon-send"></i>生成子任务单
-								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 						    		<i class="icon-search"></i>高级查询
 						    		<i class="icon-arrow1-down" v-show="down"></i>
@@ -136,19 +133,7 @@
 						</el-col>
 						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
-							<el-table :header-cell-style="rowClass" 
-									  :data="userList" 
-									  border 
-									  stripe 
-									  :height="fullHeight" 
-									  style="width: 100%;" 
-									  :default-sort="{prop:'userList', order: 'descending'}" 
-									  @selection-change="SelChange" 
-									  v-loadmore="loadMore"
-									  v-loading="loading"  
-									  element-loading-text="加载中…"
-    								  element-loading-spinner="el-icon-loading"
-    								  element-loading-background="rgba(255, 255, 255, 0.9)">
+							<el-table :header-cell-style="rowClass" :data="userList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="工作任务单编号" sortable width="140px" prop="WONUM" v-if="this.checkedName.indexOf('工作任务单编号')!=-1">
@@ -156,8 +141,6 @@
 									<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.WONUM}}
 										</p>
 									</template>	
-								</el-table-column>
-								<el-table-column label="状态" sortable width="100px" prop="STATUS" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
 								<el-table-column label="样品名称" sortable width="180px" prop="ITEM_NAME" v-if="this.checkedName.indexOf('样品名称')!=-1">
 								</el-table-column>
@@ -171,8 +154,10 @@
 								</el-table-column>
 								<el-table-column label="完成方式" sortable  width="100px" prop="COMPLETE_MODE" v-if="this.checkedName.indexOf('完成方式')!=-1">
 								</el-table-column>
-								<el-table-column label="委托书编号" sortable  width="160px" prop="PROXYNUM" v-if="this.checkedName.indexOf('委托书编号')!=-1">
+								<el-table-column label="委托书编号" sortable  width="120px" prop="PROXYNUM" v-if="this.checkedName.indexOf('委托书编号')!=-1">
 								</el-table-column>
+								<!-- <el-table-column label="信息状态" sortable width="100px" prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
+								</el-table-column> -->
 								<!-- <el-table-column label="录入人" sortable width="210px" prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
 								</el-table-column> -->
 								<el-table-column label="录入时间" sortable width="210px" :formatter="dateFormat" prop="ENTERDATE" v-if="this.checkedName.indexOf('录入时间')!=-1">
@@ -212,7 +197,6 @@
 		},
 		data() {
 			return {
-				loading: false,
 				basic_url: Config.dev_url,
 				ismin: true,
 				loadSign:true,//加载
@@ -220,7 +204,6 @@
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				checkedName: [
 					'工作任务单编号',
-					'状态',
 					'样品名称',
 					'样品型号',
 					'样品状态',
@@ -236,10 +219,6 @@
 					{
 						label: '工作任务单编号',
 						prop: 'WONUM'
-					},
-					{
-						label: '状态',
-						prop: 'STATE'
 					},
 					{
 						label: '样品名称',
@@ -377,7 +356,6 @@
 					// ENTERBY: '',//录入人
 					ENTERDATE: '',//录入日期
 				};
-				this.requestData();
 			},
 			searchinfo(index) {
 				this.page.currentPage = 1;
@@ -413,10 +391,10 @@
 					}
 					//驳回
 					else if(this.selMenu[0].STATE == 0) {
-						var url = this.basic_url + '/api-apps/app/workorder/flow/isExecute/' + this.selMenu[0].ID;
+						var url = this.basic_url + '/api-apps/app/inspectPro/flow/isExecute/' + this.selMenu[0].ID;
 						this.$axios.get(url, {}).then((res) => {
 							if(res.data.resp_code == 0) {
-								var url = this.basic_url + '/api-apps/app/workorder/flow/isPromoterNode/' + this.selMenu[0].ID;
+								var url = this.basic_url + '/api-apps/app/inspectPro/flow/isPromoterNode/' + this.selMenu[0].ID;
 								this.$axios.get(url, {}).then((res) => {
 									if(res.data.resp_code == 0) {
 										this.$refs.child.detail(this.selMenu[0].ID);
@@ -442,12 +420,6 @@
 			//查看
 			view(id) {
 				this.$refs.child.view(id);
-			},
-			//代办跳转
-			getRouterData() {
-				// 只是改了query，其他都不变
-				this.id = this.$route.query.bizId;
-				this.$refs.child.view(this.id);
 			},
 			//高级查询
 			modestsearch() {
@@ -529,7 +501,6 @@
 				this.selMenu = val;
 			},
 			requestData() {
-				this.loading = true;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -546,6 +517,7 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
+					console.log(res)
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					this.userList=res.data.data;
@@ -566,12 +538,15 @@
 							}
 						}
 					}
+					console.log(newarr);
 					this.userList = newarr;
-					this.loading = false;
+					console.log(this.userList);
+					
 				}).catch((wrong) => {})
 			},
 			//机构树
 			getKey() {
+				let that = this;
 				var url = this.basic_url + '/api-user/depts/tree';
 				this.$axios.get(url, {}).then((res) => {
 					this.resourceData = res.data;
@@ -641,9 +616,7 @@
 		mounted() {
 			this.requestData();
 			this.getKey();
-			if(this.$route.query.bizId != undefined) {
-				this.getRouterData();
-			}
+
 			
 		},
 	}

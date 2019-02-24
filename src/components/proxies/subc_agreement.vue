@@ -15,18 +15,9 @@
 				<div class="fixed-table-toolbar clearfix">
 					<div class="bs-bars pull-left">
 						<div class="hidden-xs" id="roleTableToolbar" role="group">
-							<!-- <button type="button" class="btn btn-green" @click="openAddMgr" id="">
-	                        	<i class="icon-add"></i>添加
-	              			 </button>
 							<button type="button" class="btn btn-blue button-margin" @click="modify">
 							    <i class="icon-edit"></i>修改
 							</button>
-							<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
-							    <i class="icon-trash"></i>删除
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="importData">
-							    <i class="icon-upload-cloud"></i>导入
-							</button> -->
 							<button type="button" class="btn btn-primarys button-margin" @click="exportData">
 							    <i class="icon-download-cloud"></i>导出
 							</button>
@@ -63,7 +54,7 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
-								<el-form-item label="分包单位" prop="VENDOR" label-width="70px">
+								<el-form-item label="单位名称" prop="VENDOR" label-width="70px">
 									<el-input v-model="searchList.VENDOR"></el-input>
 								</el-form-item>
 							</el-col>
@@ -123,13 +114,23 @@
 							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0" align="center">
 							</el-table-column>
 							<el-table-column label="分包协议编号" width="150" sortable prop="PROXY_CONTRACT_NUM" v-if="this.checkedName.indexOf('分包协议编号')!=-1">
+								<template slot-scope="scope">
+									<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.PROXY_CONTRACT_NUM}}
+									</p>
+								</template>
 							</el-table-column>
 							<el-table-column label="委托书编号" width="150" sortable prop="PROXYNUM" v-if="this.checkedName.indexOf('委托书编号')!=-1">
 							</el-table-column>
-							<el-table-column label="分包单位" width="150" sortable prop="VENDORDesc" v-if="this.checkedName.indexOf('分包单位')!=-1">
+							<el-table-column label="状态" width="150" sortable prop="state" v-if="this.checkedName.indexOf('状态')!=-1">
+							</el-table-column>
+							<el-table-column label="单位名称" width="150" sortable prop="VENDORDesc" v-if="this.checkedName.indexOf('单位名称')!=-1">
+							</el-table-column>
+							<el-table-column label="分包协议类别" width="150" sortable prop="TYPE" v-if="this.checkedName.indexOf('分包协议类别')!=-1">
 							</el-table-column>
 							<el-table-column label="检验/检测项目内容" width="150" sortable prop="P_REMARKS" v-if="this.checkedName.indexOf('检验/检测项目内容')!=-1">
-							</el-table-column>						
+							</el-table-column>	
+							<el-table-column label="检验检测项目依据" width="150" sortable prop="BASIS" v-if="this.checkedName.indexOf('检验检测项目依据')!=-1">
+							</el-table-column>					
 							<el-table-column label="对环境和操作人员要求" width="180" sortable prop="REQUIRE" v-if="this.checkedName.indexOf('对环境和操作人员要求')!=-1">
 							</el-table-column>
 							<el-table-column label="对分包报告/证书的要求" width="180" sortable prop="Q_TYPE" v-if="this.checkedName.indexOf('对分包报告/证书的要求')!=-1">
@@ -162,7 +163,7 @@
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
-		<!-- <customermask @request="requestData" v-bind:page=page></customermask> -->
+		<submask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></submask>
 			<!--报表-->
 			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 	</div>
@@ -174,13 +175,16 @@
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_header from '../common/nav_tabs.vue' 
 	import tableControle from '../plugin/table-controle/controle.vue'
+	import submask from '../proxiesDetails/sub_mask.vue'
+	import reportmask from'../reportDetails/reportMask.vue'
 	export default {
-		name: 'user_management',
+		name: 'subc_agreement',
 		components: {
 			vheader,
 			navs_left,
 			navs_header,
 			tableControle,
+			submask,
 			reportmask
 		},
 		data() {
@@ -202,7 +206,9 @@
 				checkedName: [
 					'分包协议编号',
 					'委托书编号',
-					'分包单位',
+					'状态',
+					'单位名称',
+					'分包协议类别',
 					'检验/检测项目内容',
 					'检验检测项目依据',
 					'对环境和操作人员要求',
@@ -224,8 +230,16 @@
 						prop: 'PROXYNUM'
 					},
 					{
-						label: '分包单位',
+						label: '状态',
+						prop: 'state'
+					},
+					{
+						label: '单位名称',
 						prop: 'VENDOR'
+					},
+					{
+						label: '分包协议类别',
+						prop: 'TYPE'
 					},
 					{
 						label: '检验/检测项目内容',
@@ -355,8 +369,26 @@
 			openAddMgr(){
 
 			},
-			modify(){
-
+			modify() {
+				if(this.selUser.length == 0) {
+					this.$message({
+						message: '请您选择要修改的数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selUser.length > 1) {
+					this.$message({
+						message: '不可同时修改多个数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					this.$refs.child.detail(this.selUser[0].ID);	
+				}
+			},
+			//查看
+			 view(id) {
+				this.$refs.child.view(id);
 			},
 			// 删除
 			deluserinfo() {
@@ -452,7 +484,7 @@
 					ENTERBY: this.searchList.ENTERBY,
 					ENTERDATE: this.searchList.ENTERDATE
 				}
-				var url = this.basic_url + '/api-apps/app/checkProCont2';
+				var url = this.basic_url + '/api-apps/app/subcontrac';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {

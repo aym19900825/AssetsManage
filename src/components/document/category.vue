@@ -33,6 +33,9 @@
 								<!--<button type="button" class="btn btn-primarys button-margin" @click="Printing">
 								    <i class="icon-print"></i>打印
 								</button> -->
+							<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
+							    <i class="icon-clipboard"></i>报表
+							</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 						    		<i class="icon-search"></i>高级查询
 						    		<i class="icon-arrow1-down" v-show="down"></i>
@@ -110,6 +113,10 @@
 			</div>
 		</div>
 		<catmask  ref="child" @request="requestData" :detailData="selMenu[0]"></catmask>
+					<!--报表-->
+			<reportmask :reportData="reportData" ref="reportChild" 
+
+></reportmask>
 		<!--右侧内容显示 End-->
 	</div>
 	</div>
@@ -121,6 +128,7 @@
 	import navs_header from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import catmask from'./cat_mask.vue'
+	import reportmask from'../reportDetails/reportMask.vue'
 	export default {
 		name: 'samples',//接样
 		components: {
@@ -129,9 +137,11 @@
 			navs_left,
 			tableControle,
 			catmask,
+			reportmask,
 		},
 		data() {
 			return {
+				reportData:{},//报表的数据
 				loading: false,
 				basic_url: Config.dev_url,
 				ismin: true,
@@ -207,6 +217,12 @@
 			};
 			this.requestData();
 			},
+			//报表
+			reportdata(){
+				this.reportData.app=this.productType;
+				this.$refs.reportChild.visible();
+			},
+			
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;

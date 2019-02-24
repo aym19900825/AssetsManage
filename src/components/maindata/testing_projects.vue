@@ -30,6 +30,9 @@
 							<button type="button" class="btn btn-primarys button-margin" @click="exportData">
 							    <i class="icon-download-cloud"></i>导出
 							</button>
+							<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
+							    <i class="icon-file-text1"></i>报表
+							</button>
 							<button type="button" class="btn btn-primarys button-margin" @click="Printing">
 							    <i class="icon-print"></i>打印
 							</button>
@@ -158,6 +161,8 @@
 		<projectmask ref="child" @request="requestData" @reset="reset" v-bind:page=page ></projectmask>
 	
 	</div>
+		<!--报表-->
+		<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 </div>
 </template>
 <script>
@@ -167,6 +172,7 @@
 	import navs_header from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import projectmask from '../maindataDetails/testing_projectMask.vue'
+	import reportmask from'../reportDetails/reportMask.vue'
 	export default {
 		name: 'testing_projects',
 		components: {
@@ -174,10 +180,12 @@
 			navs_left,
 			navs_header,
 			tableControle,
-			projectmask
+			projectmask,
+			reportmask
 		},
 		data() {
 			return {
+				reportData:{},//报表的数据
 				loading: false,
 				basic_url: Config.dev_url,
 				value: '',
@@ -502,6 +510,12 @@
 			Printing() {
 				
 			},
+			//报表
+			reportdata(){
+				this.reportData.app=this.productType;
+				this.$refs.reportChild.visible();
+			},
+
 			
 			//时间格式化  
 			dateFormat(row, column) {

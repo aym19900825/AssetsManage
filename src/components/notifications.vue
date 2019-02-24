@@ -33,6 +33,9 @@
 								<button type="button" class="btn btn-primarys button-margin" @click="exportData">
 							    <i class="icon-download-cloud"></i>导出
 							</button>
+							<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
+							    <i class="icon-clipboard"></i>报表
+							</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="Printing">
 							    <i class="icon-print"></i>打印
 							</button>
@@ -184,6 +187,8 @@
 			</div>
 			<!--右侧内容显示 End-->
 			<notificationsmask @request="requestData" ref="child" v-bind:page=page></notificationsmask>
+			<!--报表-->
+			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 		</div>
 	</div>
 </template>
@@ -194,6 +199,7 @@
 	import navs_left from './common/left_navs/nav_left5.vue'
 	import tableControle from './plugin/table-controle/controle.vue'
 	import notificationsmask from './common/notification_mask.vue'
+	import reportmask from'./reportDetails/reportMask.vue'
 
 	export default {
 		name: 'notifications',
@@ -203,10 +209,12 @@
 			navs_left,
 			tableControle,
 			notificationsmask,
+			reportmask
 
 		},
 		data() {
 			return {
+				reportData:{},//报表的数据
 				loading: false,
 				basic_url: Config.dev_url,
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
@@ -596,6 +604,11 @@
 			// 导出
 			exportData() {
 
+			},
+						//报表
+			reportdata(){
+				this.reportData.app=this.productType;
+				this.$refs.reportChild.visible();
 			},
 			// 打印
 			Printing() {

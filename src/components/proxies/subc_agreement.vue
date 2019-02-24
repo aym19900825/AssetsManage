@@ -21,6 +21,9 @@
 							<button type="button" class="btn btn-primarys button-margin" @click="exportData">
 							    <i class="icon-download-cloud"></i>导出
 							</button>
+							<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
+							    <i class="icon-clipboard"></i>报表
+							</button>
 							<button type="button" class="btn btn-primarys button-margin" @click="Printing">
 							    <i class="icon-print"></i>打印
 							</button>
@@ -161,6 +164,8 @@
 		</div>
 		<!--右侧内容显示 End-->
 		<submask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></submask>
+			<!--报表-->
+			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 	</div>
 </div>
 </template>
@@ -171,6 +176,7 @@
 	import navs_header from '../common/nav_tabs.vue' 
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import submask from '../proxiesDetails/sub_mask.vue'
+	import reportmask from'../reportDetails/reportMask.vue'
 	export default {
 		name: 'subc_agreement',
 		components: {
@@ -179,9 +185,11 @@
 			navs_header,
 			tableControle,
 			submask,
+			reportmask
 		},
 		data() {
 			return {
+				reportData:{},//报表的数据
 				loading: false,
 				// dataUrl: '/api/api-user/users',
 				basic_url: Config.dev_url,
@@ -436,6 +444,11 @@
 			// 导出
 			exportData() {
 				
+			},
+						//报表
+			reportdata(){
+				this.reportData.app=this.productType;
+				this.$refs.reportChild.visible();
 			},
 			// 打印
 			Printing() {

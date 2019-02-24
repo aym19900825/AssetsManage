@@ -71,6 +71,10 @@ const doc_keyword  = r => require.ensure([], () => r(require('@/components/docum
 const doc_authorize  = r => require.ensure([], () => r(require('@/components/document/authorize')), 'doc_authorize')//关键字授权
 const doc_root  = r => require.ensure([], () => r(require('@/components/document/doc_root')), 'doc_root')//文件目录
 const doc_list  = r => require.ensure([], () => r(require('@/components/document/doc_list')), 'doc_list')//文件列表
+const job  = r => require.ensure([], () => r(require('@/components/job/job')), 'job')//任务管理
+const jobblog  = r => require.ensure([], () => r(require('@/components/job/jobblog')), 'jobblog')//调度日志
+const jobgroup  = r => require.ensure([], () => r(require('@/components/job/jobgroup')),'jobgroup')//执行器管理
+
 
 const approving  = r => require.ensure([], () => r(require('@/components/workflow/approving')), 'approving')//审批意见
 const flowhistory  = r => require.ensure([], () => r(require('@/components/workflow/flowhistory')), 'flowhistory')//流程历史
@@ -403,6 +407,21 @@ Vue.use(Router)
       path: '/flow_process',
       name: 'flow_process',
       component: flow_process
+    },
+    {//任务管理
+      path: '/job',
+      name: 'job',
+      component: job
+    },
+    {//任务管理
+      path: '/jobblog',
+      name: 'jobblog',
+      component: jobblog
+    },
+    {//任务管理
+      path: '/jobgroup',
+      name: 'jobgroup',
+      component: jobgroup
     },
 ];
 

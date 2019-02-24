@@ -30,6 +30,10 @@
 								<button type="button" class="btn btn-primarys button-margin" @click="exportData">
 								    <i class="icon-download-cloud"></i>导出
 								</button>
+								<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
+							    <i class="icon-clipboard"></i>报表
+							</button>
+
 								<button type="button" class="btn btn-primarys button-margin" @click="Printing">
 								    <i class="icon-print"></i>打印
 								</button>
@@ -177,6 +181,9 @@
 		</div>
 		<samplesmask :samplesForm="samplesForm" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></samplesmask>
 		<!--右侧内容显示 End-->
+
+			<!--报表-->
+    <reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 	</div>
 	</div>
 </template>
@@ -187,6 +194,7 @@
 	import navs_header from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import samplesmask from'../samplesDetails/sampledisposal_mask.vue'
+	import reportmask from'../reportDetails/reportMask.vue'
 	export default {
 		name: 'sample_disposal',//样品处理
 		components: {
@@ -195,9 +203,11 @@
 			navs_left,
 			tableControle,
 			samplesmask,
+			reportmask
 		},
 		data() {
 			return {
+				reportData:{},//报表的数据
 				loading: false,
 				basic_url: Config.dev_url,
 				isShow: false,
@@ -452,6 +462,11 @@
 				this.search = !this.search;
 				this.down = !this.down,
 					this.up = !this.up
+			},
+						//报表
+			reportdata(){
+				this.reportData.app=this.productType;
+				this.$refs.reportChild.visible();
 			},
 			// 删除
 			deluserinfo() {

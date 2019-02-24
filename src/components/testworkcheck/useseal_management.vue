@@ -24,6 +24,10 @@
 								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
                                     <i class="icon-trash"></i>删除
                                 </button>
+                              <button type="button" class="btn btn-primarys button-margin" @click="reportdata">
+							    <i class="icon-clipboard"></i>报表
+							</button>
+
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
                                     <i class="icon-search"></i>高级查询
                                     <i class="icon-arrow1-down" v-show="down"></i>
@@ -131,6 +135,8 @@
 			</div>
 			<!--右侧内容显示 End-->
 			<usesealmask :USESEAL="USESEAL" ref="usesealmask" @request="requestData" v-bind:page=page></usesealmask>
+			<!--报表-->
+			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 		</div>
 	</div>
 </template>
@@ -141,6 +147,7 @@
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import usesealmask from '../testworkcheckDetails/usesealMask.vue'
     import tableControle from '../plugin/table-controle/controle.vue'
+    import reportmask from'../reportDetails/reportMask.vue'
 	export default {
 		name: 'useseal_management',
 		components: {
@@ -149,9 +156,11 @@
 			navs_header,
 			usesealmask,
             tableControle,
+            reportmask
 		},
 		data() {
 			return {
+				reportData:{},//报表的数据
 				loading: false,
 				basic_url: Config.dev_url,
 				loadSign: true, //鼠标滚动加载数据
@@ -316,6 +325,11 @@
 				this.search = !this.search;
 				this.down = !this.down,
 				this.up = !this.up
+			},
+						//报表
+			reportdata(){
+				this.reportData.app=this.productType;
+				this.$refs.reportChild.visible();
 			},
 			// 删除
 			deluserinfo() {

@@ -20,6 +20,9 @@
 										<input id="excelFile" type="file" name="uploadFile" @change="upload"/>
 									</button>
 								</form>
+								<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
+							    <i class="icon-clipboard"></i>报表
+							</button>
 								<button type="button" class="btn btn-green" @click="showDir">
                                 	<i class="icon-add"></i>新建文件夹
                       			 </button>
@@ -127,6 +130,10 @@
 						</el-col>
 					</el-row>
 				</div>
+							<!--报表-->
+			<reportmask :reportData="reportData" ref="reportChild" 
+
+></reportmask>
 			</div>
 		</div>
 		<!-- <samplesmask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></samplesmask> -->
@@ -157,6 +164,7 @@
 	import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 	import vkeyword from '../common/keyword.vue'
 	import vchoose from '../common/dataChoose.vue'
+	import reportmask from'../reportDetails/reportMask.vue'
 	export default {
 		name: 'samples',//接样
 		components: {
@@ -167,10 +175,12 @@
 			samplesmask,
 			vueDropzone,
 			vkeyword,
-			vchoose
+			vchoose,
+			reportmask
 		},
 		data() {
 			return {
+				reportData:{},//报表的数据
 				loading: false,
 				treeShow: true,
 				treeIdSel: [],
@@ -600,6 +610,11 @@
 				this.search = !this.search;
 				this.down = !this.down,
 					this.up = !this.up
+			},
+			//报表
+			reportdata(){
+				this.reportData.app=this.productType;
+				this.$refs.reportChild.visible();
 			},
 			findTreeId(parentid,chooseData){
 				var data = chooseData;

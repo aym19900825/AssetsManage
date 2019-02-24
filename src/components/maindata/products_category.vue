@@ -24,6 +24,9 @@
 							<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
 							    <i class="icon-trash"></i>删除
 							</button>
+							<button type="button" class="btn btn-red button-margin" @click="physicsDel">
+							    <i class="icon-trash"></i>物理删除
+							</button>
 							<el-dropdown size="small" split-button type="primary" style="margin-top:1px;">
     								导入
 								<el-dropdown-menu slot="dropdown">
@@ -54,7 +57,7 @@
 							    <i class="icon-print"></i>打印
 							</button>
 							<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
-							    <i class="icon-download-cloud"></i>报表
+							    <i class="icon-clipboard"></i>报表
 							</button>
 							<button type="button" class="btn btn-primarys button-margin" @click="Configuration">
 							    <i class="icon-cpu"></i>配置关系
@@ -170,10 +173,11 @@
 			navs_header,
 			categorymask,
 			tableControle,
-			reportmask
+			reportmask,
 		},
 		data() {
 			return {
+				reportData:{},//报表的数据
 				scroll_old:0,
 				// up2down:'down',
 				reportData:{},//报表的数据
@@ -367,7 +371,6 @@
 				if(this.$refs['CATEGORY'] !== undefined) {
 					this.$refs['CATEGORY'].resetFields();
 				}
-
 			},
 			//添加类别
 			openAddMgr() {
@@ -417,6 +420,58 @@
 					return;
 				} else {
 					var url = this.basic_url + '/api-apps/app/productType/deletes';
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					for(var i = 0; i < changeUser.length; i++) {
+						deleteid.push(changeUser[i].ID);
+					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+					var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {
+							params: data
+						}).then((res) => { //.delete 传数据方法
+							//resp_code == 0是后台返回的请求成功的信息
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
+							this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+						});
+					}).catch(() => {
+
+					});
+				}
+			},
+			//物理删除
+			physicsDel(){
+				var selData = this.selUser;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请您选择要删除的数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					var url = this.basic_url + '/api-apps/app/productType/physicsDel';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组

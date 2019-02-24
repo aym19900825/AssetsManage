@@ -45,29 +45,29 @@
 						<el-form :model="searchList" label-width="45px">
 							<el-row :gutter="10">
                                 <el-col :span="7">
-									<el-form-item label="工作任务单编号" prop="WONUM" label-width="110px">
-										<el-input v-model="searchList.WONUM"></el-input>
+									<el-form-item label="报告编号" prop="REPORTNUM" label-width="110px">
+										<el-input v-model="searchList.REPORTNUM"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
-									<el-form-item label="委托书编号" prop="PROXYNUM" label-width="100px">
+									<el-form-item label="报告名称" prop="REPORTNAME" label-width="100px">
+										<el-input v-model="searchList.REPORTNAME"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="7">
+									<el-form-item label="委托书编号" prop="PROXYNUM" label-width="80px">
 										<el-input v-model="searchList.PROXYNUM"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
-									<el-form-item label="用印人" prop="USER" label-width="80px">
-										<el-input v-model="searchList.USER"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="7">
-									<el-form-item label="归还时间" prop="GHTIME" label-width="110px">
-										<el-date-picker v-model="searchList.GHTIME" type="date" placeholder="请选择" value-format="yyyy-MM-dd" style="width: 100%;">
+									<el-form-item label="归档人" prop="ONHOLEPERSON" label-width="110px">
+										<el-date-picker v-model="searchList.ONHOLEPERSON" type="date" placeholder="请选择" value-format="yyyy-MM-dd" style="width: 100%;">
 										</el-date-picker>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
-									<el-form-item label="归还接收人" prop="GHUSER" label-width="100px">
-										<el-input v-model="searchList.GHUSER"></el-input>
+									<el-form-item label="归档时间" prop="ONHOLTIME" label-width="100px">
+										<el-input v-model="searchList.ONHOLTIME"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="4">
@@ -123,7 +123,7 @@
 				</div>
 			</div>
 			<!--右侧内容显示 End-->
-			<usesealmask :USESEAL="USESEAL" ref="usesealmask" @request="requestData" v-bind:page=page></usesealmask>
+			<usesealmask  ref="usesealmask" @request="requestData" v-bind:page=page></usesealmask>
 		</div>
 	</div>
 </template>
@@ -132,10 +132,10 @@
 	import vheader from '../common/vheader.vue'
 	import navs_header from '../common/nav_tabs.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import usesealmask from '../testworkcheckDetails/usesealMask.vue'
+	import usesealmask from '../testworkcheckDetails/reprotachivingMask.vue'
     import tableControle from '../plugin/table-controle/controle.vue'
 	export default {
-		name: 'useseal_management',
+		name: 'reportachiving',
 		components: {
 			vheader,
 			navs_left,
@@ -206,11 +206,11 @@
 				ismin: true,
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
                 searchList: { //点击高级搜索后显示的内容
-                    WONUM:'',
+					REPORTNUM:'',
+					REPORTNAME:'',
 					PROXYNUM:'',
-					USER: '',
-					GHTIME:'',
-                    GHUSER: '',
+					ONHOLEPERSON: '',
+					ONHOLTIME:'',
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -256,11 +256,11 @@
 			//重置
 			resetbtn(){
 				this.searchList = {
-					WONUM:'',
+					REPORTNUM:'',
+					REPORTNAME:'',
 					PROXYNUM:'',
-					USER: '',
-					GHTIME:'',
-                    GHUSER: '',
+					ONHOLEPERSON: '',
+					ONHOLTIME:'',
 				};
 				this.requestData();
 			},
@@ -273,7 +273,7 @@
 			
 			//添加类别
 			openAddMgr() {
-				this.$refs.usesealmask.open(); // 方法1
+				// this.$refs.usesealmask.open(); // 方法1
 				this.$refs.usesealmask.visible();
 				
 			},
@@ -395,11 +395,11 @@
 				var data = {
 					page: this.page.currentPage,
                     limit: this.page.pageSize,
-                    WONUM:this.searchList.WONUM,
-					PROXYNUM:this.searchList.PROXYNUM,
-					USER: this.searchList.USER,
-					GHTIME:this.searchList.GHTIME,
-                    GHUSER: this.searchList.GHUSER,
+                    REPORTNUM:this.searchList.REPORTNUM,
+					REPORTNAME:this.searchList.REPORTNAME,
+					PROXYNUM: this.searchList.PROXYNUM,
+					ONHOLEPERSON:this.searchList.ONHOLEPERSON,
+					ONHOLTIME: this.searchList.ONHOLTIME,
 				}
 				var url = this.basic_url + '/api-apps/app/reportOnhole';
 				this.$axios.get(url, {

@@ -24,6 +24,10 @@
 								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
                                     <i class="icon-trash"></i>删除
                                 </button>
+                                <button type="button" class="btn btn-primarys button-margin" @click="reportdata">
+							    <i class="icon-clipboard"></i>报表
+							</button>
+
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
                                     <i class="icon-search"></i>高级查询
                                     <i class="icon-arrow1-down" v-show="down"></i>
@@ -96,31 +100,24 @@
     								  element-loading-background="rgba(255, 255, 255, 0.9)">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
-								<el-table-column label="工作任务单编号" width="155" sortable prop="WONUM" v-if="this.checkedName.indexOf('工作任务单编号')!=-1">
+								<el-table-column label="报告编号" width="155" sortable prop="REPORTNUM" v-if="this.checkedName.indexOf('报告编号')!=-1">
 									<template slot-scope="scope">
-										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.WONUM}}
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.REPORTNUM}}
 										</p>
 									</template>
 								</el-table-column>
-                                <el-table-column label="委托书编号" sortable prop="PROXYNUM" v-if="this.checkedName.indexOf('委托书编号')!=-1">
+                                <el-table-column label="报告名称" sortable prop="REPORTNAME" v-if="this.checkedName.indexOf('报告名称')!=-1">
 								</el-table-column>
-								<el-table-column label="委托书版本" sortable prop="PROXY_VERSION" v-if="this.checkedName.indexOf('委托书版本')!=-1">
+								<el-table-column label="委托书编号" sortable prop="PROXYNUM" v-if="this.checkedName.indexOf('委托书版本')!=-1">
 								</el-table-column>
-								<el-table-column label="用印人" width="100" sortable prop="USERDesc" v-if="this.checkedName.indexOf('用印人')!=-1">
+								<el-table-column label="归档人" width="100" sortable prop="ONHOLEPERSON" v-if="this.checkedName.indexOf('归档人')!=-1">
 								</el-table-column>
-								<el-table-column label="用印时间" width="185" sortable prop="USETIME" v-if="this.checkedName.indexOf('用印时间')!=-1" :formatter="dateFormat">
+								<el-table-column label="归档时间" width="185" sortable prop="ONHOLTIME" v-if="this.checkedName.indexOf('归档时间')!=-1" :formatter="dateFormat">
 								</el-table-column>
-                                <el-table-column label="用印人机构" width="120" sortable prop="SEAL_DEPARTMENTDesc" v-if="this.checkedName.indexOf('用印人机构')!=-1">
+                                <el-table-column label="修改时间" width="120" sortable prop="CHANGEDATE" v-if="this.checkedName.indexOf('修改时间')!=-1" :formatter="dateFormat">
 								</el-table-column>
-                                <el-table-column label="归还时间" width="100" sortable prop="GHTIME" v-if="this.checkedName.indexOf('归还时间')!=-1" :formatter="dateFormat">
+                                <el-table-column label="机构" width="100" sortable prop="DEPTID" v-if="this.checkedName.indexOf('机构')!=-1">
 								</el-table-column>
-                                <el-table-column label="归还接收人" width="120" sortable prop="GHUSERDesc" v-if="this.checkedName.indexOf('归还接收人')!=-1">
-								</el-table-column>
-                                <!--<el-table-column label="信息状态" width="155" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
- 								<template slot-scope="scope" >
- 									<span v-text="scope.row.STATUS=='1'?'活动':'不活动'"></span>
- 								</template>
-							</el-table-column>-->
 							</el-table>
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
@@ -131,6 +128,8 @@
 			</div>
 			<!--右侧内容显示 End-->
 			<usesealmask :USESEAL="USESEAL" ref="usesealmask" @request="requestData" v-bind:page=page></usesealmask>
+			<!--报表-->
+			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 		</div>
 	</div>
 </template>
@@ -141,6 +140,7 @@
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import usesealmask from '../testworkcheckDetails/usesealMask.vue'
     import tableControle from '../plugin/table-controle/controle.vue'
+    import reportmask from'../reportDetails/reportMask.vue'
 	export default {
 		name: 'useseal_management',
 		components: {
@@ -149,9 +149,11 @@
 			navs_header,
 			usesealmask,
             tableControle,
+            reportmask
 		},
 		data() {
 			return {
+				reportData:{},//报表的数据
 				loading: false,
 				basic_url: Config.dev_url,
 				loadSign: true, //鼠标滚动加载数据
@@ -166,47 +168,42 @@
 					label: '不活动'
 				}],
 				checkedName: [
-                    '工作任务单编号',
-					'委托书编号',
-                    '委托书版本',
-                    '用印人',
-                    '用印时间',
-                    '用印人机构',
-                    '归还时间',
-                    '归还接收人',
+                    '报告编号',
+					'报告名称',
+                    '委托书编号',
+                    '归档人',
+                    '归档时间',
+                    '修改时间',
+                    '机构',
 				],
 				tableHeader: [
                     {
-						label: '工作任务单编号',
-						prop: 'WONUM'
+						label: '报告编号',
+						prop: 'REPORTNUM'
 					},{
+						label: '报告名称',
+						prop: 'REPORTNAME'
+					},
+					{
 						label: '委托书编号',
 						prop: 'PROXYNUM'
 					},
 					{
-						label: '委托书版本',
-						prop: 'PROXY_VERSION'
+						label: '归档人',
+						prop: 'ONHOLEPERSON'
 					},
 					{
-						label: '用印人',
-						prop: 'USERDesc'
+						label: '归档时间',
+						prop: 'ONHOLTIME'
 					},
 					{
-						label: '用印时间',
-						prop: 'USETIME'
-					},
-					{
-						label: '用印人机构',
+						label: '修改时间',
 						prop: 'SEAL_DEPARTMENTDesc'
 					},
 					{
-						label: '归还时间',
+						label: '机构',
 						prop: 'GHTIME'
 					},
-					{
-						label: '归还接收人',
-						prop: 'GHUSERDesc'
-					}
 				],
 				selUser: [],
 				USESEAL: [],
@@ -317,6 +314,11 @@
 				this.down = !this.down,
 				this.up = !this.up
 			},
+						//报表
+			reportdata(){
+				this.reportData.app=this.productType;
+				this.$refs.reportChild.visible();
+			},
 			// 删除
 			deluserinfo() {
 				var selData = this.selUser;
@@ -413,7 +415,7 @@
 					GHTIME:this.searchList.GHTIME,
                     GHUSER: this.searchList.GHUSER,
 				}
-				var url = this.basic_url + '/api-apps/app/sealUse';
+				var url = this.basic_url + '/api-apps/app/reportOnhole';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {					

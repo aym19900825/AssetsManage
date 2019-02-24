@@ -199,15 +199,18 @@
             var basisnum = [];
 			var basisname = [];
 			var basisid = [];
+			var prover = [];//项目：版本
             for (var i = 0; i < changeUser.length; i++) {
                 basisnum.push(changeUser[i].P_NUM);
 				basisname.push(changeUser[i].P_NAME);
 				basisid.push(changeUser[i].ID);
+				prover.push(changeUser[i].P_NUM+':'+changeUser[i].VERSION);
             }
             //basisnums为basisnum数组用逗号拼接的字符串
             var basisnums = basisnum.toString(',');
 			var basisnames = basisname.toString(',');
 			var basisids = basisid.toString(',');
+			var provers = prover.toString(',');
             for(var i = 0;i<this.selUser.length;i++){
 				this.selUser[i].ID = '';
                 list.push(this.selUser[i]);
@@ -216,6 +219,7 @@
 			this.$emit('testprojectname',basisnames);
 			this.$emit('testprojectnum',basisnums);
 			this.$emit('testprojectid',basisids);
+			this.$emit('testprojectprover',provers);
             this.dialogVisible = false;
 			this.requestData();
         }

@@ -24,6 +24,9 @@
 								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
 								    <i class="icon-trash"></i>删除
 								</button>
+								<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
+							    <i class="icon-clipboard"></i>报表
+							</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 						    		<i class="icon-search"></i>高级查询
 						    		<i class="icon-arrow1-down" v-show="down"></i>
@@ -123,6 +126,10 @@
 			</div>
 		</div>
 		<authmask  ref="child" @request="requestData" :detailData="selMenu[0]"></authmask>
+					<!--报表-->
+			<reportmask :reportData="reportData" ref="reportChild" 
+
+></reportmask>
 		<!--右侧内容显示 End-->
 	</div>
 	</div>
@@ -134,6 +141,7 @@
 	import navs_header from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import authmask from'./auth_mask.vue'
+	import reportmask from'../reportDetails/reportMask.vue'
 	export default {
 		name: 'samples',//接样
 		components: {
@@ -142,9 +150,11 @@
 			navs_left,
 			tableControle,
 			authmask,
+			reportmask,
 		},
 		data() {
 			return {
+				reportData:{},//报表的数据
 				loading: false,
 				basic_url: Config.dev_url,
 				isShow: false,
@@ -313,6 +323,11 @@
 				this.search = !this.search;
 				this.down = !this.down,
 					this.up = !this.up
+			},
+			//报表
+			reportdata(){
+				this.reportData.app=this.productType;
+				this.$refs.reportChild.visible();
 			},
 			// 删除
 			deluserinfo() {

@@ -26,11 +26,18 @@
 								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-inventory-line-callout"></i>导出
 								</button>
+							<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
+							    <i class="icon-clipboard"></i>报表
+							</button>
+
 								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-send"></i>发布
 								</button>
 								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-close1"></i>取消
+								</button>
+								<button type="button" class="btn btn-primarys button-margin" @click="tasklist">
+								    <i class="icon-send"></i>生成子任务单
 								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 						    		<i class="icon-search"></i>高级查询
@@ -178,6 +185,9 @@
 				</div>
 			</div>
 			<workorders_mask :workorderForm="workorderForm" ref="child" @requests="requestData" @requestTree="getKey" v-bind:page=page></workorders_mask>
+			<!--报表-->
+			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
+			<sendtasklist ref="task"  v-bind:page=page></sendtasklist>
 		</div>
 	</div>
 </template>
@@ -187,16 +197,22 @@
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_header from '../common/nav_tabs.vue'
 	import workorders_mask from '../testworkcheckDetails/workorders_mask.vue'
+    import reportmask from'../reportDetails/reportMask.vue'
+	import sendtasklist from '../testworkcheckDetails/sendtasklist.vue'
 	export default {
 		name: 'workorders',
 		components: {
 			vheader,
 			navs_header,
 			navs_left,
-			workorders_mask
+			workorders_mask,
+			reportmask,
+			sendtasklist
 		},
 		data() {
 			return {
+				reportData:{},//报表的数据
+				loading: false,
 				basic_url: Config.dev_url,
 				ismin: true,
 				loadSign:true,//加载
@@ -417,6 +433,24 @@
 					}
 				}
 			},
+			//生成子任务单
+			tasklist(){
+				if(this.selMenu.length == 0) {
+					this.$message({
+						message: '请您选择要生成子任务单的数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selMenu.length > 1) {
+					this.$message({
+						message: '不可同时生成多条子任务单',
+						type: 'warning'
+					});
+					return;
+				} else {
+					this.$refs.task.visible(this.selMenu[0].ID);	
+				}
+			},
 			//查看
 			view(id) {
 				this.$refs.child.view(id);
@@ -426,6 +460,11 @@
 				this.search = !this.search;
 				this.down = !this.down,
 				this.up = !this.up
+			},
+			//报表
+			reportdata(){
+				this.reportData.app=this.productType;
+				this.$refs.reportChild.visible();
 			},
 			// 删除
 			deluserinfo() {

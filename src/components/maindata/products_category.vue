@@ -54,7 +54,7 @@
 							    <i class="icon-print"></i>打印
 							</button>
 							<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
-							    <i class="icon-download-cloud"></i>报表
+							    <i class="icon-clipboard"></i>报表
 							</button>
 							<button type="button" class="btn btn-primarys button-margin" @click="Configuration">
 							    <i class="icon-cpu"></i>配置关系
@@ -170,10 +170,11 @@
 			navs_header,
 			categorymask,
 			tableControle,
-			reportmask
+			reportmask,
 		},
 		data() {
 			return {
+				reportData:{},//报表的数据
 				scroll_old:0,
 				// up2down:'down',
 				reportData:{},//报表的数据

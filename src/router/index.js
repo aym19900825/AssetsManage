@@ -54,7 +54,8 @@ const reportfile  = r => require.ensure([], () => r(require('@/components/report
 
 const inspect_proxy  = r => require.ensure([], () => r(require('@/components/proxies/inspect_proxy')), 'inspect_proxy')//检验委托书
 const check_proxy  = r => require.ensure([], () => r(require('@/components/proxies/check_proxy')), 'check_proxy')//检测委托书
-const subc_agreement  = r => require.ensure([], () => r(require('@/components/proxies/subc_agreement')), 'subc_agreement')//分包协议
+const subc_agreement  = r => require.ensure([], () => r(require('@/components/proxies/subc_agreement')), 'subc_agreement')//承包方分包协议
+const distri_subc_agreement  = r => require.ensure([], () => r(require('@/components/proxies/distri_subc_agreement')), 'distri_subc_agreement')//分包方分包协议
 
 const equipment_classify  = r => require.ensure([], () => r(require('@/components/equipments/equipment_classify')), 'equipment_classify')//设备分类
 const instruments  = r => require.ensure([], () => r(require('@/components/equipments/instruments')), 'instruments')//仪器和计量器具
@@ -202,10 +203,15 @@ Vue.use(Router)
       name: 'flowmap',
       component: flowmap
     },
-    {//分包协议
+    {//承包方分包协议
       path: '/subc_agreement',
       name: 'subc_agreement',
       component: subc_agreement
+    },
+    {//分包方分包协议
+      path: '/distri_subc_agreement',
+      name: 'distri_subc_agreement',
+      component: distri_subc_agreement
     },
     {//设备分类
       path: '/equipment_classify',

@@ -24,6 +24,9 @@
 								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
 							    <i class="icon-trash"></i>删除
 							</button>
+							<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
+							    <i class="icon-clipboard"></i>报表
+							</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 					    		<i class="icon-search"></i>高级查询
 					    		<i class="icon-arrow1-down" v-show="down"></i>
@@ -56,21 +59,21 @@
 					<div v-show="search">
 						<el-form :model="searchList" label-width="45px">
 							<el-row :gutter="10">
-								<el-col :span="5">
+								<!-- <el-col :span="5">
 									<el-form-item label="编码" prop="CLASSIFY_NUM">
 										<el-input v-model="searchList.CLASSIFY_NUM"></el-input>
 									</el-form-item>
-								</el-col>
+								</el-col> -->
 								<el-col :span="5">
 									<el-form-item label="分类描述" prop="CLASSIFY_DESCRIPTION" label-width="80px">
 										<el-input v-model="searchList.CLASSIFY_DESCRIPTION"></el-input>
 									</el-form-item>
 								</el-col>
-								<el-col :span="5">
+								<!-- <el-col :span="5">
 									<el-form-item label="父级分类" prop="PARENTDesc" label-width="80px">
 										<el-input v-model="searchList.PARENTDesc"></el-input>
 									</el-form-item>
-								</el-col>
+								</el-col> -->
 								<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
@@ -91,6 +94,8 @@
 			</div>
 			<!--右侧内容显示 End-->
 			<categorymask :CATEGORY="CATEGORY" ref="categorymask" @request="requestData" @reset="reset" v-bind:page=page></categorymask>
+						<!--报表-->
+			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 		</div>
 	</div>
 </template>
@@ -101,6 +106,7 @@
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import categorymask from '../equipmentsDetails/equipmentClassify_mask.vue'
     import tree_grid from '../common/TreeGrid.vue'//树表格
+    import reportmask from'../reportDetails/reportMask.vue'
 	export default {
 		name: 'customer_management',
 		components: {
@@ -109,9 +115,11 @@
 			navs_header,
 			categorymask,
 			tree_grid,
+			reportmask
 		},
 		data() {
 			return {
+				reportData:{},//报表的数据
 				basic_url: Config.dev_url,
 				loading: false,//默认加载数据时显示loading动画
 				searchData: {
@@ -347,6 +355,11 @@
 			Printing() {
 
 			},
+			//报表
+			reportdata(){
+				this.reportData.app=this.productType;
+				this.$refs.reportChild.visible();
+			},
 			// 配置关系
 			Configuration() {
 				this.$router.push({
@@ -410,9 +423,7 @@
 			requestData() {
 				this.loading = true;
 				var data = {
-					CLASSIFY_NUM:this.searchList.CLASSIFY_NUM,
 					CLASSIFY_DESCRIPTION: this.searchList.CLASSIFY_DESCRIPTION,
-					PARENT:this.searchList.PARENT,
 				}
 				console.log('=============');
 				console.log(this.searchList);

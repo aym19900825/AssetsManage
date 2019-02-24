@@ -184,6 +184,7 @@
 			var proarr = [];
 			proarr.push(this.selUser[0].NUM);
 			proarr.push(this.selUser[0].TYPE);
+			proarr.push(this.selUser[0].VERSION);
 			this.$emit('categorydata',proarr);
 			this.requestData();
 		}

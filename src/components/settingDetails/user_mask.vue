@@ -369,10 +369,10 @@
 
 													<el-table-column label="序号" sortable width="120px" prop="STEP">
 													   <template slot-scope="scope">
-													      <el-form-item :prop="'ips.'+scope.$index + '.STEP'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+													      <!-- <el-form-item :prop="'ips.'+scope.$index + '.STEP'" :rules="{required: true, message: '不能为空', trigger: 'blur'}"> -->
 													         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.$index + 1" disabled></el-input>
 													         <span v-show="!scope.row.isEditing" >{{scope.row.STEP}}</span>
-													      </el-form-item>
+													      <!-- </el-form-item> -->
 													   </template>
 													</el-table-column>
 

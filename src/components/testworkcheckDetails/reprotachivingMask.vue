@@ -204,34 +204,35 @@
 			},
 			//点击按钮显示弹窗
 			visible() {
-				// this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-				// 	console.log(res.data);
-				// 	this.report.DEPTID = res.data.deptId;
-				// 	this.report.ENTERBY = res.data.id;
-				// 	// this.CATEGORY.ENTERBYDesc = res.data.nickname;
-				// 	var date = new Date();
-				// 	this.report.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
-				// }).catch((err) => {
-				// 	this.$message({
-				// 		message: '网络错误，请重试',
-				// 		type: 'error'
-				// 	});
-				// });
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
+					console.log(res.data);
+					this.report.DEPTID = res.data.deptId;
+					this.report.ENTERBY = res.data.id;
+					// this.CATEGORY.ENTERBYDesc = res.data.nickname;
+					var date = new Date();
+					this.report.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
 				this.addtitle = true;
-				// this.modifytitle = false;
-				// this.viewtitle = false;
-				// this.dept = false;
-				// this.noedit = false;//表单内容
-				// this.views = false;//录入修改人信息
-				// this.noviews = true;//按钮
-				// this.modify = false;//修订
-				// this.hintshow = false;
-				// this.statusshow1 = true;
-				// this.statusshow2 = false;
+				this.modifytitle = false;
+				this.viewtitle = false;
+				this.dept = false;
+				this.noedit = false;//表单内容
+				this.views = false;//录入修改人信息
+				this.noviews = true;//按钮
+				this.modify = false;//修订
+				this.hintshow = false;
+				this.statusshow1 = true;
+				this.statusshow2 = false;
 				this.show = true;
 			},
 			// 这里是修改
-			detail() {
+			detail(dataid) {
+                console.log(dataid);
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.viewtitle = false;
@@ -249,9 +250,17 @@
 					// this.CATEGreportORY.CHANGEBYDesc = res.data.nickname;
 					var date = new Date();
 					this.report.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
-					//深拷贝数据
-					let _obj = JSON.stringify(this.report);
-        			this.report = JSON.parse(_obj);
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+                });
+                var url = this.basic_url +'/api-apps/app/reportOnhole/' + dataid;
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res.data);
+					this.report = res.data;
+					this.show = true;
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -272,61 +281,61 @@
 				this.show = true;				
 			},
 			//点击修订按钮
-			modifyversion(report) {
-				this.$refs[report].validate((valid) => {
-					if(valid) {
-						var category=JSON.stringify(this.category); 
-	 					var report=JSON.stringify(this.report);
-					 	if(category==report){
-					  	this.$message({
-								message: '没有修改内容，不允许修订！',
-								type: 'warning'
-							});
-							return false;
-					    }else{
-							var url = this.basic_url + '/api-apps/app/productType/operate/upgraded';
-							this.$axios.post(url, this.report).then((res) => {
-								//resp_code == 0是后台返回的请求成功的信息
-								if(res.data.resp_code == 0) {
-									this.$message({
-										message: '修订成功',
-										type: 'success'
-									});
-									//重新加载数据
-									this.$emit('request');
-									this.show = false;
-								}else{
-								this.show = true;
-								if(res.data.resp_code == 1) {
-									//res.data.resp_msg!=''后台返回提示信息
-									if( res.data.resp_msg!=''){
-									 	this.$message({
-											message: res.data.resp_msg,
-											type: 'warning'
-									 	});
-									}else{
-										this.$message({
-											message:'相同数据不可重复修订！',
-											type: 'warning'
-										});
-									}
-								}
-							}		
-							}).catch((err) => {
-								this.$message({
-									message: '网络错误，请重试',
-									type: 'error'
-								});
-							});
-						}
-					} else {
-						this.$message({
-							message: '未填写完整，请填写',
-							type: 'warning'
-						});
-					}
-				});
-			},
+			// modifyversion(report) {
+			// 	this.$refs[report].validate((valid) => {
+			// 		if(valid) {
+			// 			var category=JSON.stringify(this.category); 
+	 		// 			var report=JSON.stringify(this.report);
+			// 		 	if(category==report){
+			// 		  	this.$message({
+			// 					message: '没有修改内容，不允许修订！',
+			// 					type: 'warning'
+			// 				});
+			// 				return false;
+			// 		    }else{
+			// 				var url = this.basic_url + '/api-apps/app/productType/operate/upgraded';
+			// 				this.$axios.post(url, this.report).then((res) => {
+			// 					//resp_code == 0是后台返回的请求成功的信息
+			// 					if(res.data.resp_code == 0) {
+			// 						this.$message({
+			// 							message: '修订成功',
+			// 							type: 'success'
+			// 						});
+			// 						//重新加载数据
+			// 						this.$emit('request');
+			// 						this.show = false;
+			// 					}else{
+			// 					this.show = true;
+			// 					if(res.data.resp_code == 1) {
+			// 						//res.data.resp_msg!=''后台返回提示信息
+			// 						if( res.data.resp_msg!=''){
+			// 						 	this.$message({
+			// 								message: res.data.resp_msg,
+			// 								type: 'warning'
+			// 						 	});
+			// 						}else{
+			// 							this.$message({
+			// 								message:'相同数据不可重复修订！',
+			// 								type: 'warning'
+			// 							});
+			// 						}
+			// 					}
+			// 				}		
+			// 				}).catch((err) => {
+			// 					this.$message({
+			// 						message: '网络错误，请重试',
+			// 						type: 'error'
+			// 					});
+			// 				});
+			// 			}
+			// 		} else {
+			// 			this.$message({
+			// 				message: '未填写完整，请填写',
+			// 				type: 'warning'
+			// 			});
+			// 		}
+			// 	});
+			// },
 			//点击关闭按钮
 			close() {
 				this.show = false;
@@ -418,7 +427,6 @@
 			//保存并继续
 			saveAndSubmit() {
 				this.save();
-				// this.visible();
 				this.show = true;
 			},
 			//时间格式化

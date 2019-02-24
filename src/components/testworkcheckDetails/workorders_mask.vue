@@ -825,7 +825,7 @@
 												</el-table-column>
 												<el-table-column fixed="right" label="操作" width="120">
 													<template slot-scope="scope">
-														<el-button title="生成分包协议" type="text" size="small">
+														<el-button title="生成分包协议" type="text" size="small" @click="proagree(scope.row)">
 															 <i class="icon-send red"></i>
 														</el-button>
 													</template>
@@ -1478,6 +1478,28 @@
 				}else{
 					this.workorderForm[TableName+'List'].splice(index,1);
 				}
+			},
+			//生成分包协议
+			proagree(row){
+				console.log(row);
+				var data = {
+					"WORKORDER_CONTRACTID":row.ID.toString(),
+				};
+				var url = 'http://192.168.1.115:7902/app/workorder/operate/subproject';
+				this.$axios.post(url,data).then((res) => {
+					console.log(res);
+					if(res.data.resp_code == 0) {
+						this.$message({
+							message: '生成成功',
+							type: 'success'
+						});
+					}
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
 			},
 			//启动流程
 			startup(){

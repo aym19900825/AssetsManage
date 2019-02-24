@@ -46,37 +46,39 @@
 
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
-						<el-form :model="searchList" label-width="45px">
+						<el-form :model="searchList" label-width="70px">
 							<el-row :gutter="10">
                                 <el-col :span="7">
-									<el-form-item label="报告编号" prop="REPORTNUM" label-width="110px">
+									<el-form-item label="报告编号" prop="REPORTNUM">
 										<el-input v-model="searchList.REPORTNUM"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
-									<el-form-item label="报告名称" prop="REPORTNAME" label-width="100px">
+									<el-form-item label="报告名称" prop="REPORTNAME">
 										<el-input v-model="searchList.REPORTNAME"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
-									<el-form-item label="委托书编号" prop="PROXYNUM" label-width="80px">
+									<el-form-item label="委托书编号" prop="PROXYNUM" label-width="90px">
 										<el-input v-model="searchList.PROXYNUM"></el-input>
 									</el-form-item>
 								</el-col>
+							</el-row>
+							<el-row :gutter="10">
 								<el-col :span="7">
-									<el-form-item label="归档人" prop="ONHOLEPERSON" label-width="110px">
-										<el-date-picker v-model="searchList.ONHOLEPERSON" type="date" placeholder="请选择" value-format="yyyy-MM-dd" style="width: 100%;">
-										</el-date-picker>
+									<el-form-item label="归档人" prop="ONHOLEPERSON" label-width="70px">
+										<el-input v-model="searchList.ONHOLEPERSON"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
-									<el-form-item label="归档时间" prop="ONHOLTIME" label-width="100px">
-										<el-input v-model="searchList.ONHOLTIME"></el-input>
+									<el-form-item label="归档时间" prop="ONHOLTIME">
+										<el-date-picker v-model="searchList.ONHOLTIME" type="date" placeholder="请选择" value-format="yyyy-MM-dd" style="width: 100%;">
+										</el-date-picker>
 									</el-form-item>
 								</el-col>
 								<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -108,7 +110,7 @@
 								</el-table-column>
                                 <el-table-column label="报告名称" sortable prop="REPORTNAME" v-if="this.checkedName.indexOf('报告名称')!=-1">
 								</el-table-column>
-								<el-table-column label="委托书编号" sortable prop="PROXYNUM" v-if="this.checkedName.indexOf('委托书版本')!=-1">
+								<el-table-column label="委托书编号" sortable prop="PROXYNUM" v-if="this.checkedName.indexOf('委托书编号')!=-1">
 								</el-table-column>
 								<el-table-column label="归档人" width="100" sortable prop="ONHOLEPERSON" v-if="this.checkedName.indexOf('归档人')!=-1">
 								</el-table-column>
@@ -116,7 +118,7 @@
 								</el-table-column>
                                 <el-table-column label="修改时间" width="120" sortable prop="CHANGEDATE" v-if="this.checkedName.indexOf('修改时间')!=-1" :formatter="dateFormat">
 								</el-table-column>
-                                <el-table-column label="机构" width="100" sortable prop="DEPTID" v-if="this.checkedName.indexOf('机构')!=-1">
+                                <el-table-column label="机构" width="100" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
@@ -198,11 +200,11 @@
 					},
 					{
 						label: '修改时间',
-						prop: 'SEAL_DEPARTMENTDesc'
+						prop: 'CHANGEDATE'
 					},
 					{
 						label: '机构',
-						prop: 'GHTIME'
+						prop: 'DEPTIDDesc'
 					},
 				],
 				selUser: [],
@@ -286,7 +288,7 @@
 				this.$refs.usesealmask.visible();
 				
 			},
-			//修改类别
+			//修改
 			modify() {
 				if(this.selUser.length == 0) {
 					this.$message({
@@ -301,7 +303,8 @@
 					});
 					return;
 				} else {
-					this.$refs.usesealmask.detail(this.selUser[0]);
+					console.log(this.selUser[0]);
+					this.$refs.usesealmask.detail(this.selUser[0].ID);
 				}
 			},
 			//查看
@@ -314,7 +317,7 @@
 				this.down = !this.down,
 				this.up = !this.up
 			},
-						//报表
+			//报表
 			reportdata(){
 				this.reportData.app=this.productType;
 				this.$refs.reportChild.visible();
@@ -329,7 +332,7 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/sealUse/deletes';
+					var url = this.basic_url + '/api-apps/app/reportOnhole/deletes';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组

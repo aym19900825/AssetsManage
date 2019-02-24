@@ -31,6 +31,9 @@
 							<button type="button" class="btn btn-primarys button-margin" @click="exportData">
 							    <i class="icon-download-cloud"></i>导出
 							</button>
+							<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
+							    <i class="icon-clipboard"></i>报表
+							</button>
 							<button type="button" class="btn btn-primarys button-margin" @click="Printing">
 							    <i class="icon-print"></i>打印
 							</button>
@@ -176,6 +179,8 @@
 		</div>
 		<!--右侧内容显示 End-->
 		<instrumentsmask :detailData="selUser[0]" ref="child" @request="requestData"></instrumentsmask>
+					<!--报表-->
+			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 	</div>
 </div>
 </template>
@@ -186,6 +191,7 @@
 	import navs_header from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import instrumentsmask from '../equipmentsDetails/instrument_mask.vue'
+	import reportmask from'../reportDetails/reportMask.vue'
 	export default {
 		name: 'instruments',
 		components: {
@@ -194,9 +200,11 @@
 			navs_left,
 			instrumentsmask,
 			tableControle,
+			reportmask
 		},
 		data() {
 			return {
+				reportData:{},//报表的数据
 				loading: false,
 				loadSign: true, //加载
 				commentArr: {},
@@ -490,6 +498,11 @@
 			// 打印
 			Printing() {
 				
+			},
+						//报表
+			reportdata(){
+				this.reportData.app=this.productType;
+				this.$refs.reportChild.visible();
 			},
 			
 			//时间格式化  

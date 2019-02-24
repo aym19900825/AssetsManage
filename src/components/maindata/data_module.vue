@@ -30,6 +30,9 @@
 								<button type="button" class="btn btn-primarys button-margin" @click="exportData">
 							    <i class="icon-download-cloud"></i>导出
 							</button>
+							<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
+							    <i class="icon-file-text1"></i>报表
+							</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="Printing">
 							    <i class="icon-print"></i>打印
 							</button>
@@ -114,6 +117,8 @@
 			<!--右侧内容显示 End-->
 			<categorymask :CATEGORY="CATEGORY" ref="categorymask" @request="requestData" @reset="reset" v-bind:page=page></categorymask>
 		</div>
+		<!--报表-->
+			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 	</div>
 </template>
 <script>
@@ -123,6 +128,7 @@
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import categorymask from '../maindataDetails/data_moduleMask.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
+	import reportmask from'../reportDetails/reportMask.vue'
 	export default {
 		name: 'customer_management',
 		components: {
@@ -131,9 +137,11 @@
 			navs_header,
 			categorymask,
 			tableControle,
+			reportmask
 		},
 		data() {
 			return {
+				reportData:{},//报表的数据
 				loading: false,//默认加载数据时显示loading动画
 				basic_url: Config.dev_url,
 				loadSign: true, //加载
@@ -413,6 +421,12 @@
 			Printing() {
 
 			},
+            // 报表
+			reportdata(){
+				this.reportData.app=this.productType;
+				this.$refs.reportChild.visible();
+			},
+
 			judge(data) {
 				data.STATUS = data.STATUS == "1" ? '活动' : '不活动'
 			},

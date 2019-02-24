@@ -28,6 +28,9 @@
 								<button type="button" class="btn btn-primarys button-margin" @click="exportData">
 								    <i class="icon-inventory-line-callout"></i>导出
 								</button>
+									<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
+							    <i class="icon-clipboard"></i>报表
+							</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="releasebtn">
 								    <i class="icon-send"></i>发布
 								</button>
@@ -208,6 +211,8 @@
 				</div>
 			</div>
 			<annualmask ref="child" @request="requestData" v-bind:page=page></annualmask>
+			<!--报表-->
+			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 		</div>
 	</div>
 </template>
@@ -218,6 +223,7 @@
 	import navs_header from './common/nav_tabs.vue'
 	import annualmask from './common/annual_mask.vue'
 	import assetsTree from './plugin/vue-tree/tree.vue'
+	import reportmask from'./reportDetails/reportMask.vue'
 	export default {
 		name: 'annual_plan',
 		components: {
@@ -225,10 +231,12 @@
 			'navs_header': navs_header,
 			'navs_left': navs_left,
 			'v-assetsTree': assetsTree,
-			'annualmask': annualmask
+			'annualmask': annualmask,
+			reportmask
 		},
 		data() {
 			return {
+				reportData:{},//报表的数据
 				loading: false,
 				basic_url: Config.dev_url,
 				ismin: true,
@@ -508,6 +516,11 @@
                 	}
             	}
             	xhr.send();
+			},
+						//报表
+			reportdata(){
+				this.reportData.app=this.productType;
+				this.$refs.reportChild.visible();
 			},
 			//发布
 			releasebtn(){

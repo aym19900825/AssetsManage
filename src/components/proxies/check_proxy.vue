@@ -30,6 +30,9 @@
 								<button type="button" class="btn btn-primarys button-margin">
 							    	<i class="icon-download-cloud"></i>导出
 								</button>
+								<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
+							    <i class="icon-clipboard"></i>报表
+							</button>
 								<button type="button" class="btn btn-primarys button-margin">
 							    	<i class="icon-print"></i>打印
 								</button>
@@ -196,6 +199,8 @@
 		</div>
 		<checkmask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></checkmask>
 		<!--右侧内容显示 End-->
+		<!--报表-->
+			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 	</div>
 </template>
 <script>
@@ -204,6 +209,7 @@
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_header from '../common/nav_tabs.vue'
 	import checkmask from '../proxiesDetails/check_proxyMask.vue'
+	import reportmask from'../reportDetails/reportMask.vue'
 
 	export default {
 		name: 'user_management',
@@ -212,6 +218,7 @@
 			'navs_left': navs_left,
 			'navs_header': navs_header,
 			'checkmask': checkmask,
+			reportmask
 		},
 //		created() {
 //  		this.getRouterData()
@@ -219,6 +226,7 @@
 
 		data() {
 			return {
+				reportData:{},//报表的数据
 				loading: false,
 				basic_url: Config.dev_url,
 				value: '',
@@ -615,7 +623,11 @@
 					this.loading = false;
 				}).catch((wrong) => {})
 			},
-
+			//报表
+			reportdata(){
+				this.reportData.app=this.productType;
+				this.$refs.reportChild.visible();
+			},
 			//机构树
 			getKey() {
 				let that = this;

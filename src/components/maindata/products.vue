@@ -32,7 +32,7 @@
 							    <i class="icon-download-cloud"></i>导出
 							</button>
 							<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
-							    <i class="icon-download-cloud"></i>报表
+							    <i class="icon-file-text1"></i>报表
 							</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="Printing">
 							    <i class="icon-print"></i>打印

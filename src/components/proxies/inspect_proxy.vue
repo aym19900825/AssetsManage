@@ -36,7 +36,7 @@
 								<button type="button" class="btn btn-primarys button-margin">
 							    	<i class="icon-print"></i>打印
 								</button>
-								<button type="button" class="btn btn-orange button-margin">
+								<button type="button" class="btn btn-orange button-margin" @click="breakoff">
 							    	<i class="icon-alert-triangle"></i>中止
 								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
@@ -496,6 +496,44 @@
 			//查看
 			 view(id) {
 				this.$refs.child.view(id);
+			},
+			//中止
+			breakoff(){
+				if(this.selUser.length == 0) {
+					this.$message({
+						message: '请您选择要修中止的数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selUser.length > 1) {
+					this.$message({
+						message: '不可同时中止多个数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					var url = this.basic_url + '/api-apps/app/inspectPro/operate/stop?ID='+this.selUser[0].ID;
+					this.$axios.get(url, {
+
+					}).then((res) => {
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '操作成功',
+								type: 'success'
+							});
+						} else {
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'warning'
+							});
+						}
+					}).catch((wrong) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					})
+				}
 			},
 			getRouterData() {
       		// 只是改了query，其他都不变

@@ -175,6 +175,7 @@
 			var proarr = [];
 			proarr.push(this.selUser[0].PRO_NUM);
 			proarr.push(this.selUser[0].PRO_NAME);
+			proarr.push(this.selUser[0].VERSION);
 			this.$emit('appenddata',proarr);
 			this.requestData();
 		}

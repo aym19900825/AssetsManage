@@ -212,23 +212,25 @@
             //basisnum为依据编号的数组
             var basisnum = [];
 			var basisname = [];
+			var prover = [];
             for (var i = 0; i < changeUser.length; i++) {
                 basisnum.push(changeUser[i].S_NUM);
-				basisname.push(changeUser[i].S_NAME);				
+				basisname.push(changeUser[i].S_NAME);	
+				prover.push(changeUser[i].S_NUM+':'+changeUser[i].VERSION);			
             }
             //basisnums为basisnum数组用逗号拼接的字符串
 			var basisnums = basisnum.toString(',');
 			var basisnames = basisname.toString(',');
+			var provers = prover.toString(',');
 			list.push(basisnums);
             for(var i = 0;i<this.selUser.length;i++){
 				this.selUser[i].ID = '';
                 list.push(this.selUser[i]);
 			}
-			console.log('========');
-            console.log(list);
             this.$emit('testbasis',list);
 			this.$emit('testbasisnum',basisnums);
 			this.$emit('testbasisname',basisnames);
+			this.$emit('testbasisprover',provers);
             this.dialogVisible = false;
 			this.requestData();
         }

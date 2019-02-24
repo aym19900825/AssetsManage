@@ -36,7 +36,7 @@
 								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-close1"></i>取消
 								</button>
-								<button type="button" class="btn btn-primarys button-margin">
+								<button type="button" class="btn btn-primarys button-margin" @click="tasklist">
 								    <i class="icon-send"></i>生成子任务单
 								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
@@ -199,6 +199,7 @@
 			<workorders_mask :workorderForm="workorderForm" ref="child" @requests="requestData" @requestTree="getKey" v-bind:page=page></workorders_mask>
 			<!--报表-->
 			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
+			<sendtasklist ref="task"  v-bind:page=page></sendtasklist>
 		</div>
 	</div>
 </template>
@@ -209,6 +210,7 @@
 	import navs_header from '../common/nav_tabs.vue'
 	import workorders_mask from '../testworkcheckDetails/workorders_mask.vue'
     import reportmask from'../reportDetails/reportMask.vue'
+	import sendtasklist from '../testworkcheckDetails/sendtasklist.vue'
 	export default {
 		name: 'workorders',
 		components: {
@@ -216,7 +218,8 @@
 			navs_header,
 			navs_left,
 			workorders_mask,
-			reportmask
+			reportmask,
+			sendtasklist
 		},
 		data() {
 			return {
@@ -446,6 +449,24 @@
 					}else{
 						this.$refs.child.detail(this.selMenu[0].ID);	
 					}
+				}
+			},
+			//生成子任务单
+			tasklist(){
+				if(this.selMenu.length == 0) {
+					this.$message({
+						message: '请您选择要生成子任务单的数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selMenu.length > 1) {
+					this.$message({
+						message: '不可同时生成多条子任务单',
+						type: 'warning'
+					});
+					return;
+				} else {
+					this.$refs.task.visible(this.selMenu[0].ID);	
 				}
 			},
 			//查看

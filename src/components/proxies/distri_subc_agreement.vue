@@ -30,9 +30,6 @@
 							<button type="button" class="btn btn-primarys button-margin" @click="exportData">
 							    <i class="icon-download-cloud"></i>导出
 							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
-							    <i class="icon-clipboard"></i>报表
-							</button>
 							<button type="button" class="btn btn-primarys button-margin" @click="Printing">
 							    <i class="icon-print"></i>打印
 							</button>
@@ -163,8 +160,6 @@
 		</div>
 		<!--右侧内容显示 End-->
 		<!-- <customermask @request="requestData" v-bind:page=page></customermask> -->
-			<!--报表-->
-			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 	</div>
 </div>
 </template>
@@ -181,11 +176,9 @@
 			navs_left,
 			navs_header,
 			tableControle,
-			reportmask
 		},
 		data() {
 			return {
-				reportData:{},//报表的数据
 				loading: false,
 				// dataUrl: '/api/api-user/users',
 				basic_url: Config.dev_url,
@@ -412,11 +405,6 @@
 			// 导出
 			exportData() {
 				
-			},
-						//报表
-			reportdata(){
-				this.reportData.app=this.productType;
-				this.$refs.reportChild.visible();
 			},
 			// 打印
 			Printing() {

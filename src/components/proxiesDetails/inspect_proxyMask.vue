@@ -351,14 +351,22 @@
 
 												<el-table-column prop="PROXYNUM" label="委托书编号" sortable width="120px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.PROXYNUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROXYNUM" placeholder="请输入委托书编号">
+														<!-- <el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.PROXYNUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" > -->
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.PROXYNUM" placeholder="请输入委托方名称">
 														</el-input>
 														<span v-else="v-else">{{scope.row.PROXYNUM}}</span>
-														</el-form-item>
+														<!-- </el-form-item> -->
 													</template>
 												</el-table-column>
-
+												<el-table-column prop="INSPECT_GROUP" label="专业组" sortable width="120px">
+													<template slot-scope="scope">
+														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.INSPECT_GROUP'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+															<el-select  clearable v-model="scope.row.INSPECT_GROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @change="getmaingroup($event)" @visible-change="visablemaingroup($event)" >
+																<el-option v-for="data in maingroup" :key="data.id" :value="data.id" :label="data.fullname"></el-option>
+															</el-select>
+														</el-form-item>	
+													</template>
+												</el-table-column>
 												<el-table-column prop="VENDORDesc" label="分包方名称" sortable width="120px">
 													<template slot-scope="scope">
 														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDORDesc" placeholder="请输入分包方名称">
@@ -668,9 +676,9 @@
 			<!-- 产品名称  -->
 			<productmask ref="productchild" @appenddata="appenddata"></productmask>
 			<!-- 检验依据  -->
-			<teststandardmask ref="standardchild" @testbasis="addbasis" @testbasisnum="testbasisnum" @testbasisname="testbasisname"></teststandardmask>
+			<teststandardmask ref="standardchild" @testbasis="addbasis" @testbasisnum="testbasisnum" @testbasisname="testbasisname" @testbasisprover="testbasisprover"></teststandardmask>
 			<!-- 检验项目  -->
-			<testprojectmask ref="projectchild" @testproject="addproject" @testprojectnum="testprojectnum" @testprojectid="testprojectid" @testprojectname="testprojectname"></testprojectmask>
+			<testprojectmask ref="projectchild" @testproject="addproject" @testprojectnum="testprojectnum" @testprojectid="testprojectid" @testprojectname="testprojectname" @testprojectprover = "testprojectprover"></testprojectmask>
 		</div>
 	</div>
 </template>
@@ -805,8 +813,23 @@
 					INSPECT_PROXY_BASISList: [],
 					CHECK_PROXY_CONTRACTList: [
 						{
-							VENDOR: '',
-							VENDORDesc:'',
+							INSPECT_GROUP:'',	
+							VENDOR: '',//承检单位
+							VENDORDesc:'',//承检单位名称
+							PT_NUM:'',//产品类别编号
+							PRODUCT_TYPE:'',//产品类别
+							PRO_NUM:'',//产品编号
+							PRODUCT:'',//产品名称
+							S_NUM:'',//检测依据编号
+							BASIS: '',//检测依据
+							PROJ_NUM:'',//检测项目编号
+							PROJECT_ID:'',//检测项目ID
+							P_REMARKS: '',//检测项目
+							P_VERSIONNUM:'',	//产品类别编号+版本
+							PRO_VERSIONNUM:'',	//产品名称编号+版本
+							S_VERSIONNUM:'',	//检验检测依据编号+版本
+							PROJ_VERSIONNUM:'',	//检测项目编号+版本
+
 						}
 					],
 				},
@@ -878,7 +901,7 @@
 					ITEM_DISPOSITION: [{ required: true, message: '必填', trigger: 'change' }],//检后处理
 					REMARKS: [{ required: true, message: '必填', trigger: 'blur' }],//抽样方案/判定依据
 					COMPDATE: [{ required: true, message: '必填', trigger: 'blur' }],//完成日期
-					PROXYNUM: [{ required: true, message: '必填', trigger: 'blur' }],//编号
+					// PROXYNUM: [{ required: true, message: '必填', trigger: 'blur' }],//编号
 					REPORT_QUALITY: [{ required: true, message: '必填', trigger: 'blur' },{ type: 'number', message: '请输入数字'}],//交委托方分数
 					REPORT_MODE: [{ required: true, message: '必填', trigger: 'change' }],//发送方式
 					REPORT_FOMAT: [{ required: true, message: '必填', trigger: 'change' }],//格式
@@ -910,7 +933,7 @@
 				catenum:'',//产品类别作为参数传值给依据
 				pronum:'',//产品作为参数传值给依据
 				basisnum:'',////依据选中数据们字符串作为参数传值给项目
-				deptindex:'',//分包方名称
+				deptindex:{},//分包方名称
 				main:'',
 			};
 		},
@@ -1115,11 +1138,22 @@
 				var obj = {
 					PROXY_CONTRACT_NUM: '',
 					PROXYNUM: '',
-					VENDOR: '',
-					VENDORDesc:'',
-					PRODUCT_TYPE:'',
-					P_REMARKS: '',
-					BASIS: '',
+					INSPECT_GROUP:'',
+					PROJECT_ID:'',
+					VENDOR: '',//承检单位
+					VENDORDesc:'',//承检单位名称
+					PT_NUM:'',//产品类别编号
+					PRODUCT_TYPE:'',//产品类别
+					PRO_NUM:'',//产品编号
+					PRODUCT:'',//产品名称
+					S_NUM:'',//检测依据编号
+					BASIS: '',//检测依据
+					PROJ_NUM:'',//检测项目编号
+					P_REMARKS: '',//检测项目
+					P_VERSIONNUM:'',	//产品类别编号+版本
+					PRO_VERSIONNUM:'',	//产品名称编号+版本
+					S_VERSIONNUM:'',	//检验检测依据编号+版本
+					PROJ_VERSIONNUM:'',	//检测项目编号+版本
 					REQUIRE: '',
 					Q_TYPE: '',
 					CHECKCOST: '',
@@ -1212,6 +1246,7 @@
 					// 分包要求
 					for(var n = 0;n<res.data.CHECK_PROXY_CONTRACTList.length;n++){
 						res.data.CHECK_PROXY_CONTRACTList[n].isEditing = false;
+
 					}
 					res.data.R_VENDOR = Number(res.data.R_VENDOR);		
 					// res.data.MAINGROUP = Number(res.data.MAINGROUP);
@@ -1349,6 +1384,7 @@
 				});
 			},
 			addcategory(val){//产品类别
+				this.deptindex = val;
 				if(val == 'maintable'){
 					if(this.dataInfo.R_VENDOR == null || this.dataInfo.R_VENDOR == '' || this.dataInfo.R_VENDOR == undefined){
 						this.$message({
@@ -1374,7 +1410,6 @@
 			},
 			//接到产品类别的值
 			categorydata(value){
-				console.log(this.main);
 				if(this.main == 'main'){
 					this.dataInfo.P_NUM = value[0];
 					this.dataInfo.PRODUCT_TYPE  = value[1];
@@ -1386,9 +1421,21 @@
 				}else{
 					this.deptindex.PT_NUM = value[0];
 					this.deptindex.PRODUCT_TYPE = value[1];
+					this.deptindex.P_VERSIONNUM = value[0]+':'+value[2];//类别编号+版本
+					this.deptindex.PRO_NUM ='';//产品编号
+					this.deptindex.PRODUCT ='';//产品名称
+					this.deptindex.S_NUM ='';//检测依据编号
+					this.deptindex.BASIS = '';//检测依据
+					this.deptindex.PROJ_NUM ='';//检测项目编号
+					this.deptindex.PROJECT_ID ='';//检测项目ID
+					this.deptindex.P_REMARKS = '';//检测项目
+					this.deptindex.PRO_VERSIONNUM ='';	//产品名称编号+版本
+					this.deptindex.S_VERSIONNUM ='';	//检验检测依据编号+版本
+					this.deptindex.PROJ_VERSIONNUM ='';	//检测项目编号+版本
 				}
 			},
 			addproduct(val){//受检产品名称
+				this.deptindex = val;
 				if(val == 'maintable'){
 					if(this.dataInfo.P_NUM == null || this.dataInfo.P_NUM == '' || this.dataInfo.P_NUM == undefined){
 						this.$message({
@@ -1422,10 +1469,19 @@
 				}else{
 					this.deptindex.PRO_NUM = value[0];
 					this.deptindex.PRODUCT = value[1];
+					this.deptindex.PRO_VERSIONNUM = value[0]+':'+value[2];//产品编号+版本
+					this.deptindex.S_NUM ='';//检测依据编号
+					this.deptindex.BASIS = '';//检测依据
+					this.deptindex.PROJ_NUM ='';//检测项目编号
+					this.deptindex.PROJECT_ID ='';//检测项目ID
+					this.deptindex.P_REMARKS = '';//检测项目
+					this.deptindex.S_VERSIONNUM ='';	//检验检测依据编号+版本
+					this.deptindex.PROJ_VERSIONNUM ='';	//检测项目编号+版本
 				}
 			},
 			//检验依据放大镜
 			basisleadbtn(val){
+				this.deptindex = val;
 				if(val == 'maintable'){
 					if(this.dataInfo.PRO_NUM == null || this.dataInfo.PRO_NUM == '' || this.dataInfo.PRO_NUM == undefined){
 						this.$message({
@@ -1462,14 +1518,22 @@
 			//分包要求检验依据编号
 			testbasisnum(value){
 				this.deptindex.S_NUM = value;
-				console.log(this.deptindex.S_NUM);
+				this.deptindex.PROJ_NUM ='';//检测项目编号
+				this.deptindex.PROJECT_ID ='';//检测项目ID
+				this.deptindex.P_REMARKS = '';//检测项目
+				this.deptindex.PROJ_VERSIONNUM ='';	//检测项目编号+版本
 			},
 			//分包要求检验依据名称
 			testbasisname(value){
 				this.deptindex.BASIS = value;
 			},
+			//检测依据编号+版本
+			testbasisprover(value){
+				this.deptindex.S_VERSIONNUM = value;
+			},
 			//检验项目放大镜
 			basisleadbtn2(val){
+				this.deptindex = val;
 				if(val == 'maintable'){
 					if(this.dataInfo.S_NUM == null || this.dataInfo.S_NUM == '' || this.dataInfo.S_NUM == undefined){
 						this.$message({
@@ -1510,6 +1574,10 @@
 			},
 			testprojectid(value){
 				this.deptindex.PROJECT_ID = value;
+			},
+			testprojectprover(value){
+				this.deptindex.PROJ_VERSIONNUM = value;
+				console.log(this.deptindex.PROJ_VERSIONNUM);
 			},
 			//点击关闭按钮
 			close() {
@@ -1572,17 +1640,22 @@
 			save() {
 				this.$refs.dataInfo.validate((valid) => {
 			        if (valid) {
+						console.log(11);
 						if(this.dataInfo.INSPECT_PROXY_BASISList.length<=0&&this.dataInfo.INSPECT_PROXY_PROJECList.length<=0&&this.dataInfo.CHECK_PROXY_CONTRACTList.length<=0){
-			        		this.$message({
+							console.log(22);
+							this.$message({
 								message: '检验依据和检验项目与要求和分包要求是必填项，请填写！',
 								type: 'warning'
 							});
 							return false;
 			        	}else{
+							console.log(33);
 //							this.dataInfo.ITEM_STATUS=this.dataInfo.ITEM_STATUS==1;
 //							this.dataInfo.MESSSTATUS= this.dataInfo.MESSSTATUS==1;//信息状态
 							var url = this.basic_url + '/api-apps/app/inspectPro/saveOrUpdate';
+							console.log(44);
 							this.$axios.post(url, this.dataInfo).then((res) => {
+								console.log(55);
 								if(res.data.resp_code == 0) {
 									this.$message({
 										message: '保存成功',
@@ -1665,7 +1738,6 @@
 				this.dataInfo.S_NUM = '';
 				this.dataInfo.INSPECT_PROXY_BASISList = [];
 				this.dataInfo.INSPECT_PROXY_PROJECList = [];
-				this.dataInfo.CHECK_PROXY_CONTRACTList = [];
 				this.dataInfo.MAINGROUP = '';
 				this.dataInfo.LEADER = '';
 			},
@@ -1820,6 +1892,7 @@
 		},
 		mounted() {
 			this.getCompany();
+			// this.RVENDORSelect($event);
 		},
 	}
 </script>

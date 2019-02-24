@@ -197,16 +197,25 @@
             var list = [];
             //basisnum为依据编号的数组
             var basisnum = [];
+			var basisname = [];
+			var basisid = [];
             for (var i = 0; i < changeUser.length; i++) {
-                basisnum.push(changeUser[i].S_NUM);
+                basisnum.push(changeUser[i].P_NUM);
+				basisname.push(changeUser[i].P_NAME);
+				basisid.push(changeUser[i].ID);
             }
             //basisnums为basisnum数组用逗号拼接的字符串
-            this.basisnums = basisnum.toString(',');
+            var basisnums = basisnum.toString(',');
+			var basisnames = basisname.toString(',');
+			var basisids = basisid.toString(',');
             for(var i = 0;i<this.selUser.length;i++){
 				this.selUser[i].ID = '';
                 list.push(this.selUser[i]);
             }
             this.$emit('testproject',list);
+			this.$emit('testprojectname',basisnames);
+			this.$emit('testprojectnum',basisnums);
+			this.$emit('testprojectid',basisids);
             this.dialogVisible = false;
 			this.requestData();
         }

@@ -91,6 +91,9 @@
 										</el-col>
 									</el-row>
 								</el-collapse-item>
+								<el-collapse-item title="文件" name="2">
+									<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save" @showLoading = "showLoading" @closeLoading = "closeLoading"></doc-table>
+								</el-collapse-item>
 							</el-collapse>
 						</div>
 						<div class="el-dialog__footer" v-show="noviews">
@@ -107,28 +110,10 @@
 
 <script>
 	import Config from '../../config.js'
+	import docTable from '../common/doc.vue'
 	export default {
 		name: 'masks',
-		// props: {
-		// 	report: {
-		// 		type: Object,
-		// 		default: function() {
-		// 			return {
-		// 				ID:'',	//报告ID
-        //                 REPORTNUM:'',	//报告编号
-        //                 REPORTNAME:'',	//报告名称
-        //                 PROXYNUM:'',	//委托书编号
-        //                 ONHOLEPERSON:'',	//归档人
-        //                 ONHOLTIME:'',	//归档时间
-        //                 CHANGEBY:'',	//修改人
-        //                 CHANGEDATE:'',	//修改时间
-        //                 DEPTID:'',	//机构ID
-        //                 DEPARTMENT:'',	//机构
-		// 			}
-		// 		}
-		// 	},
-		// 	page: Object,
-		// },
+		components: {docTable},
 		data() {
 			var validateNum = (rule, value, callback) => {
 				if(value != ""){
@@ -158,6 +143,16 @@
 				selUser: [],
 				edit: true, //禁填
 				show: false,
+				docParm: {
+					'model': 'new',
+					'recordid': 1,
+					'userid': 1,
+					'username': '',
+					'deptid': 1,
+					'deptfullname': '',
+					'appname': '',
+					'appid': 1
+				},
 				isok1: true,
 				isok2: false,
 				down: true,
@@ -184,7 +179,7 @@
 				statusshow1:true,
                 statusshow2:false,
                 report:{
-                    ID:'',	//报告ID
+                    id:'',	//报告ID
                     REPORTNUM:'',	//报告编号
                     REPORTNAME:'',	//报告名称
                     PROXYNUM:'',	//委托书编号
@@ -198,6 +193,12 @@
             }
 		},
 		methods: {
+			showLoading(){
+				this.loading = true;
+			},
+			closeLoading(){
+				this.loading = false;
+			},
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selUser = val;
@@ -205,12 +206,22 @@
 			//点击按钮显示弹窗
 			visible() {
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					console.log(res.data);
 					this.report.DEPTID = res.data.deptId;
 					this.report.ENTERBY = res.data.id;
 					// this.CATEGORY.ENTERBYDesc = res.data.nickname;
 					var date = new Date();
 					this.report.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
+					
+					this.docParm = {
+						'model': 'new',
+						'appname': '报告归档',
+						'recordid': 1,
+						'appid': 91
+					};
+					this.docParm.userid = res.data.id;
+					this.docParm.username = res.data.username;
+					this.docParm.deptid = res.data.deptId;
+					this.docParm.deptfullname = res.data.deptName;
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -232,7 +243,6 @@
 			},
 			// 这里是修改
 			detail(dataid) {
-                console.log(dataid);
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.viewtitle = false;
@@ -247,9 +257,21 @@
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.report.DEPTID = res.data.deptId;//传给后台机构id
 					this.report.CHANGEBY = res.data.id;
-					// this.CATEGreportORY.CHANGEBYDesc = res.data.nickname;
 					var date = new Date();
 					this.report.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
+
+					this.docParm.userid = res.data.id;
+					this.docParm.username = res.data.username;
+					this.docParm.deptid = res.data.deptId;
+					this.docParm.deptfullname = res.data.deptName;
+					var _this = this;
+					setTimeout(function(){
+						_this.docParm.model = 'edit';
+						_this.docParm.appname = '报告归档/检测标准';
+						_this.docParm.recordid = _this.report.id;
+						_this.docParm.appid = 91;
+						_this.$refs.docTable.getData();
+					},100);
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -258,7 +280,6 @@
                 });
                 var url = this.basic_url +'/api-apps/app/reportOnhole/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res.data);
 					this.report = res.data;
 					this.show = true;
 				}).catch((err) => {
@@ -280,62 +301,6 @@
 				this.noviews = false;//按钮
 				this.show = true;				
 			},
-			//点击修订按钮
-			// modifyversion(report) {
-			// 	this.$refs[report].validate((valid) => {
-			// 		if(valid) {
-			// 			var category=JSON.stringify(this.category); 
-	 		// 			var report=JSON.stringify(this.report);
-			// 		 	if(category==report){
-			// 		  	this.$message({
-			// 					message: '没有修改内容，不允许修订！',
-			// 					type: 'warning'
-			// 				});
-			// 				return false;
-			// 		    }else{
-			// 				var url = this.basic_url + '/api-apps/app/productType/operate/upgraded';
-			// 				this.$axios.post(url, this.report).then((res) => {
-			// 					//resp_code == 0是后台返回的请求成功的信息
-			// 					if(res.data.resp_code == 0) {
-			// 						this.$message({
-			// 							message: '修订成功',
-			// 							type: 'success'
-			// 						});
-			// 						//重新加载数据
-			// 						this.$emit('request');
-			// 						this.show = false;
-			// 					}else{
-			// 					this.show = true;
-			// 					if(res.data.resp_code == 1) {
-			// 						//res.data.resp_msg!=''后台返回提示信息
-			// 						if( res.data.resp_msg!=''){
-			// 						 	this.$message({
-			// 								message: res.data.resp_msg,
-			// 								type: 'warning'
-			// 						 	});
-			// 						}else{
-			// 							this.$message({
-			// 								message:'相同数据不可重复修订！',
-			// 								type: 'warning'
-			// 							});
-			// 						}
-			// 					}
-			// 				}		
-			// 				}).catch((err) => {
-			// 					this.$message({
-			// 						message: '网络错误，请重试',
-			// 						type: 'error'
-			// 					});
-			// 				});
-			// 			}
-			// 		} else {
-			// 			this.$message({
-			// 				message: '未填写完整，请填写',
-			// 				type: 'warning'
-			// 			});
-			// 		}
-			// 	});
-			// },
 			//点击关闭按钮
 			close() {
 				this.show = false;
@@ -367,21 +332,31 @@
 				$(".mask_div").css("top", "100px");
 			},
 			// 保存users/saveOrUpdate
-			save() {
+			save(opt) {
 				this.$refs.report.validate((valid) => {
+					if(!valid && opt == 'docUpload'){
+						this.$message({
+							message: '请先正确填写信息，再进行文档上传',
+							type: 'warning'
+						});
+					}
 					if(valid) {
 						var url = this.basic_url + '/api-apps/app/reportOnhole/saveOrUpdate';
 						this.$axios.post(url, this.report).then((res) => {
-							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
-								this.$message({
-									message: '保存成功',
-									type: 'success'
-								});
-								//重新加载数据
-								this.$emit('request');
-								// this.$emit('reset');
-								this.visible();
+								if(opt == 'docUpload'){
+									this.docParm.recordid = res.data.datas.id;
+									this.docParm.model = 'edit';
+									this.$refs.docTable.autoLoad();
+									this.report.id = res.data.datas.id;
+								}else{
+									this.$message({
+										message: '保存成功',
+										type: 'success'
+									});
+									this.$emit('request');
+									this.visible();
+								}
 							}else{
 								this.show = true;
 								if(res.data.resp_code == 1) {

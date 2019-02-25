@@ -174,10 +174,12 @@
 			});
 		}else{
 			this.dialogtemplate = false;
-			var num=this.selUser[0].NUM;
-			var des=this.selUser[0].DECRIPTION;
-			this.$emit('appendnum',num);
-			this.$emit('appenddes',des);
+			var moduleObj = {
+				id: this.selUser[0].ID,
+				num: this.selUser[0].NUM,
+				desc: this.selUser[0].DECRIPTION
+			};
+			this.$emit('showModule',moduleObj);
 			this.requestData();
 		}
 	},

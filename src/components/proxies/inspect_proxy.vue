@@ -24,6 +24,9 @@
 								<button type="button" class="btn btn-red button-margin"  @click="delinfo">
 								    <i class="icon-trash"></i>删除
 								</button>
+								<button type="button" class="btn btn-red button-margin" @click="physicsDel">
+							    <i class="icon-trash"></i>物理删除
+							</button>			
 								<button type="button" class="btn btn-primarys button-margin">
 							    	<i class="icon-upload-cloud"></i>导入
 								</button>
@@ -562,6 +565,65 @@
 					return;
 				} else {
 					var url = this.basic_url + '/api-apps/app/inspectPro/deletes';
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					for(var i = 0; i < changeUser.length; i++) {
+						if(changeUser[i].STATE!=1){
+						 	this.$message({
+								message: '您的数据中有已启动的流程，所以能删除',
+								type: 'error'
+							});
+							return;
+						}else{
+							deleteid.push(changeUser[i].ID);
+						}
+					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+					var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {
+							params: data
+						}).then((res) => { //.delete 传数据方法
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
+							this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+						});
+					}).catch(() => {
+
+					});
+				}
+			},
+					// 删除
+			physicsDel() {
+				var selData = this.selUser;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请您选择要删除的数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					var url = this.basic_url + '/api-apps/app/inspectPro/deletes/physicsDel';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组

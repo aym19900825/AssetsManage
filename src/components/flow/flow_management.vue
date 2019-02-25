@@ -23,6 +23,9 @@
 								<button type="button" class="btn btn-red button-margin" @click="delinfo">
 								    <i class="icon-trash"></i>删除
 								</button>
+<!-- 								<button type="button" class="btn btn-red button-margin" @click="delinfo">
+								    <i class="icon-trash"></i>物理删除
+								</button> -->
 								<button type="button" class="btn btn-primarys button-margin" @click="release">
 							    	<i class="icon-upload-cloud"></i>发布
 								</button>

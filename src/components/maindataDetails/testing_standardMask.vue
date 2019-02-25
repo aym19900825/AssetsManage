@@ -2,7 +2,7 @@
 	<div>
 		<div class="mask" v-if="show"></div>
 		<div class="mask_divbg" v-if="show">
-			<div class="mask_div">
+			<div class="mask_div" v-loading="loading">
 				<div class="mask_title_div clearfix">
 					<div class="mask_title" v-show="addtitle">添加检验/检测标准</div>
 					<div class="mask_title" v-show="modifytitle">修改检验/检测标准</div>
@@ -78,7 +78,7 @@
 									</el-row>
 								</el-collapse-item>
 								<el-collapse-item title="文件" name="2">
-									<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save"></doc-table>
+									<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save" @showLoading = "showLoading" @closeLoading = "closeLoading"></doc-table>
 								</el-collapse-item>
 								<el-collapse-item title="其它" name="3" v-show="views">
 									<el-row>
@@ -136,6 +136,7 @@
 <script>
 	import Config from '../../config.js'
 	import docTable from '../common/doc.vue'
+	import { Loading } from 'element-ui'
 	export default {
 		name: 'masks',
 		props: {
@@ -204,6 +205,7 @@
 				}
 			};
 			return {
+				loading: false,
 				editDataInfo: '',
 				editDataInfoProp: '',
 				docParm: {
@@ -310,6 +312,12 @@
 			};
 		},
 		methods: {
+			showLoading(){
+				this.loading = true;
+			},
+			closeLoading(){
+				this.loading = false;
+			},
 			editBox(val){
 				this.dialogFormVisible = true;
 				this.editDataInfoProp = val;
@@ -548,7 +556,6 @@
 					this.dataInfo.RELEASETIME =  this.$moment(this.dataInfo.RELEASETIME).format("YYYY-MM-DD HH:mm:ss");
 					this.dataInfo.STARTETIME = this.$moment(this.dataInfo.STARTETIME).format("YYYY-MM-DD HH:mm:ss");
 					if(!valid && opt == 'docUpload'){
-						console.log('message');
 						this.$message({
 							message: '请先正确填写信息，再进行文档上传',
 							type: 'warning'
@@ -571,7 +578,6 @@
 									});
 									this.$emit('request');
 									this.$emit('reset');
-									//this.$refs['dataInfo'].resetFields();
 									this.visible();
 								}
 							}else{

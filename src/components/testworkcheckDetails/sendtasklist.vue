@@ -164,7 +164,6 @@
 				"WORKORDER_PROJECTLISTID":this.WORKORDER_PROJECTLISTID,
 				"WORKORDER_CONTRACTLISTID":this.WORKORDER_CONTRACTLISTID
 			};
-			console.log(data);
 			var url = 'http://192.168.1.115:7902/app/workorder/operate/subtask';
 			this.$axios.post(url,data).then((res) => {
 				console.log(res);

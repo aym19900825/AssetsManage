@@ -1043,7 +1043,7 @@
 					//编辑
 					this.editPlan = row;
 					this.proTestList = row.WORLPLANLINE_PROJECTList;
-						this.basisList = row.WORLPLANLINE_BASISList;
+					this.basisList = row.WORLPLANLINE_BASISList;
 				}else{
 					this.editPlan = {};
 					this.proTestList = [];
@@ -1418,7 +1418,7 @@
 					};
 					// this.worlplanlist.unshift(obj);
 					this.worlplanlist.push(obj);
-					this.editPlan = this.worlplanlist[0];
+					this.editPlan = this.worlplanlist[this.worlplanlist.length-1];
 					this.basisList = [];
 					this.proTestList = [];
 					this.isEditList = true;
@@ -1560,22 +1560,21 @@
 					for(var i = 0; i<res.data.WORLPLANLINEList.length; i++){
 							res.data.WORLPLANLINEList[i].isEditing = false;
 					}
-					console.log(3333344444);
-					console.log(res.data);
 					res.data.PROP_UNIT = Number(res.data.PROP_UNIT);
-					console.log('=======================');
-					console.log(typeof(res.data.PROP_UNIT));
 					this.WORKPLAN = res.data;
-					// for(var j=0;j<this.selectData.length;j++){
-					// 	if(this.WORKPLAN.PROP_UNIT == this.selectData[j].id){
-					// 		this.WORKPLAN.PROP_UNITDesc = this.selectData[j].fullname
-					// 	}
-					// }
 					this.worlplanlist = res.data.WORLPLANLINEList;
 					var worlplanlist = res.data.WORLPLANLINEList;
 					for(var i=0, len=worlplanlist.length; i<len; i++){
 						worlplanlist[i].isEditing = false;
 						worlplanlist[i].frontId = this.frontId++;
+					}
+					if(res.data.WORLPLANLINEList.length > 0){
+						res.data.WORLPLANLINEList[0].isEditing = true;
+						this.basisList = res.data.WORLPLANLINEList[0].WORLPLANLINE_BASISList;
+						this.proTestList = res.data.WORLPLANLINEList[0].WORLPLANLINE_PROJECTList;
+					}else{
+						this.basisList = [];
+						this.proTestList = [];
 					}
 					this.basisList = res.data.WORLPLANLINEList.length > 0 ? res.data.WORLPLANLINEList[0].WORLPLANLINE_BASISList : [];
 					this.proTestList = res.data.WORLPLANLINEList.length > 0 ? res.data.WORLPLANLINEList[0].WORLPLANLINE_PROJECTList : [];
@@ -1610,8 +1609,6 @@
 				}).then((res) => {
 					this.selectData = res.data;
 				});
-				console.log(233333333);
-				console.log(this.WORKPLAN);
 				this.viewtitle = false;
 				this.addtitle = false;
 				this.modifytitle = true;

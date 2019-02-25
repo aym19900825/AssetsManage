@@ -136,57 +136,7 @@
 						</el-col>
 						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
-							<!--<el-table :header-cell-style="rowClass" 
-									  :data="userList" 
-									  border 
-									  stripe 
-									  :height="fullHeight" 
-									  style="width: 100%;" 
-									  :default-sort="{prop:'userList', order: 'descending'}" 
-									  @selection-change="SelChange" 
-									  v-loadmore="loadMore"
-									  v-loading="loading"  
-									  element-loading-text="加载中…"
-    								  element-loading-spinner="el-icon-loading"
-    								  element-loading-background="rgba(255, 255, 255, 0.9)">
-								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
-								</el-table-column>
-								<el-table-column label="工作任务单编号" sortable width="140px" prop="WONUM" v-if="this.checkedName.indexOf('工作任务单编号')!=-1">
-									<template slot-scope="scope">
-									<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.WONUM}}
-										</p>
-									</template>	
-								</el-table-column>
-								<el-table-column label="状态" sortable width="100px" prop="STATUS" v-if="this.checkedName.indexOf('状态')!=-1">
-								</el-table-column>
-								<el-table-column label="样品名称" sortable width="180px" prop="ITEM_NAME" v-if="this.checkedName.indexOf('样品名称')!=-1">
-								</el-table-column>
-								<el-table-column label="样品型号" sortable width="180px" prop="ITEM_MODEL" v-if="this.checkedName.indexOf('样品型号')!=-1">
-								</el-table-column>
-								<el-table-column label="样品状态" sortable  width="100px" prop="ITEM_STATUS" v-if="this.checkedName.indexOf('样品状态')!=-1">
-								</el-table-column>
-								<el-table-column label="抽样方案/判定依据" sortable width="200px" prop="CHECK_BASIS" v-if="this.checkedName.indexOf('抽样方案/判定依据')!=-1">
-								</el-table-column>
-								<el-table-column label="完成日期" sortable  width="100px" :formatter="dateFormat" prop="COMPLETE_DATE" v-if="this.checkedName.indexOf('完成日期')!=-1">
-								</el-table-column>
-								<el-table-column label="完成方式" sortable  width="100px" prop="COMPLETE_MODE" v-if="this.checkedName.indexOf('完成方式')!=-1">
-								</el-table-column>
-								<el-table-column label="委托书编号" sortable  width="160px" prop="PROXYNUM" v-if="this.checkedName.indexOf('委托书编号')!=-1">
-								</el-table-column>
-								<!-- <el-table-column label="录入人" sortable width="210px" prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
-								</el-table-column> -->
-								<tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="userList" v-on:childByValue="childByValue"></tree_grid>
-								<!--<el-table-column label="录入时间" sortable width="210px" :formatter="dateFormat" prop="ENTERDATE" v-if="this.checkedName.indexOf('录入时间')!=-1">
-								</el-table-column>-->
-							<!--</el-table>-->
-							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
-					            @size-change="sizeChange"
-					            @current-change="currentChange"
-					            :current-page="page.currentPage"
-					            :page-sizes="[10, 20, 30, 40]"
-					            :page-size="page.pageSize"
-					            layout="total, sizes, prev, pager, next" :total="page.totalCount">
-					        </el-pagination>
+							<tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="userList" v-on:childByValue="childvalue"></tree_grid>
 							<!-- 表格 -->
 						</el-col>
 					</el-row>
@@ -692,6 +642,11 @@
 				}
 				this.ismin = !this.ismin;
 			},
+			//表格传过来
+			childvalue: function (childValue) {
+		        // childValue就是子组件传过来的
+		        this.selMenu = childValue;
+		    },
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
 				this.$refs.navsheader.showClick(childValue);

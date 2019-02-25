@@ -411,27 +411,24 @@
 				var _this = this;
 				var url = this.basic_url + '/api-apps/app/rawDataTem/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(23333);
-					console.log(res.data);
 					for(var i=0;i<res.data.RAW_DATA_TEMPATE_DETAILList.length;i++){
 						res.data.RAW_DATA_TEMPATE_DETAILList[i].isEditing = false;
 					}
 					this.CATEGORY = res.data;
-
+					setTimeout(function(){
+						_this.docParm.model = 'edit';
+						_this.docParm.appname = '检验检测项目_原始数据模板';
+						_this.docParm.recordid = _this.CATEGORY.ID;
+						_this.docParm.appid = 17;
+						_this.$refs.docTable.getData();
+					},100);
+					this.show = true;
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
 						type: 'error'
 					})
 				});
-				setTimeout(function(){
-					_this.docParm.model = 'edit';
-					_this.docParm.appname = '检验检测项目_原始数据模板';
-					_this.docParm.recordid = _this.CATEGORY.ID;
-					_this.docParm.appid = 17;
-					_this.$refs.docTable.getData();
-				},100);
-				this.show = true;
 			},
 			//这是查看
 			view() {

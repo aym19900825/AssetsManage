@@ -319,6 +319,7 @@
 			sizeChange(val) {
 				this.page.pageSize = val;
 				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
 					sessionStorage.setItem('toBtm','true');
 				}else{
 					sessionStorage.setItem('toBtm','false');
@@ -328,6 +329,7 @@
 			currentChange(val) {
 				this.page.currentPage = val;
 				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
 					sessionStorage.setItem('toBtm','true');
 				}else{
 					sessionStorage.setItem('toBtm','false');

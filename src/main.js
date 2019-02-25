@@ -55,10 +55,8 @@ Vue.directive('loadmore', {
 					scrollBeforeTop = this.scrollTop;
 					firstFlag = false;
 				}else{
-					console.log('firstFlag');
-					console.log(this.scrollTop >= scrollBeforeTop);
 					if(this.scrollTop >= scrollBeforeTop){
-						this.scrollTop = 1;
+						this.scrollTop = 2;
 						scrollBeforeTop = this.scrollTop;
 					}
 				}

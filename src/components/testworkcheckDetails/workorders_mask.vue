@@ -525,15 +525,34 @@
 										</el-tab-pane>
 										<el-tab-pane label="原始数据模板" name="fourth">
 											<div class="table-func table-funcb">
-												<el-button type="success" size="mini" round @click="getreport" v-show="modifytitle">
+												<el-button style="float:left;" type="success" size="mini" round @click="getreport" v-show="modifytitle">
 													<i class="icon-add"></i><font>生成报告</font>
 												</el-button>
-												<el-button type="success" size="mini" round @click="addfield4" v-show="!viewtitle">
+												<el-button style="float:left;" type="success" size="mini" round @click="addfield4" v-show="!viewtitle">
 													<i class="icon-add"></i><font>新建行</font>
 												</el-button>
+												<form method="post" id="file" action="" enctype="multipart/form-data" style="float: left;">
+													<el-button title="上传" type="text" size="small"  class="a-upload">
+														<i class="icon-arrow-up-circle"></i>
+														<input id="excelFile" type="file" name="uploadFile" @change="upload"/>
+													</el-button>
+												</form>
+												<el-button title="下载" type="text" size="small">
+													<i class="icon-arrow-down-circle"></i>
+												</el-button>
+												<el-button title="删除" @click.native.prevent="deleteRow()" type="text" size="small">
+													<i class="icon-trash red"></i>
+												</el-button>
 											</div>
-											<el-table :data="workorderForm.WORKORDER_DATA_TEMPLATEList" border stripe :fit="true" max-height="260" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'WORKORDER_DATA_TEMPLATEList', order: 'descending'}">
-												<el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
+											<el-table :data="workorderForm.WORKORDER_DATA_TEMPLATEList" 
+													  border 
+													  stripe 
+													  :fit="true" 
+													  max-height="260" 
+													  style="width: 100%;" 
+													  @cell-click="iconOperation" 
+													  :default-sort="{prop:'WORKORDER_DATA_TEMPLATEList', order: 'descending'}">
+												<el-table-column prop="iconOperation" fixed width="50px">
 											      <template slot-scope="scope">
 											      	<i class="el-icon-check" v-show="scope.row.isEditing">
 											      	</i>
@@ -555,28 +574,16 @@
 											      	<span v-else="v-else">{{scope.row.D_DESC}}</span>
 											      </template>
 											    </el-table-column>
-											    <!--<el-table-column label="模板状态" sortable prop="STATUS">
-											      <template slot-scope="scope">
-											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS"></el-input><span v-else="v-else">{{scope.row.STATUS}}</span>
-											      </template>
-											    </el-table-column>-->
-							            		<el-table-column label="模板文件" prop="fileName"></el-table-column>
-							            		<el-table-column fixed="right" label="操作" width="150" v-if="!viewtitle" >
-											      <template slot-scope="scope">
-													  <el-button title="下载" type="text" size="small">
-														<i class="icon-arrow-down-circle"></i>
-													  </el-button>
-													  <el-button title="上传" type="text" size="small">
-														<i class="icon-arrow-up-circle"></i>
-													  </el-button>
-													  <!-- <el-button title="编辑" type="text" size="small">
-														<i class="icon-edit2"></i>
-													  </el-button> -->
-											      	  <el-button title="删除" @click.native.prevent="deleteRow(scope.$index,scope.row,'moduleList')" type="text" size="small">
-														<i class="icon-trash red"></i>
-													  </el-button>
-											      </template>
-											    </el-table-column>
+							            		<el-table-column label="模板文件大小" prop="FILESIZE">
+													<template slot-scope="scope">
+													 	<el-checkbox  v-if="!!scope.row.FILESIZE">{{scope.row.FILESIZE+'M'}}</el-checkbox>
+													</template>
+												</el-table-column>
+												<el-table-column label="上传文件大小" prop="FILESIZE_ORG">
+													<template slot-scope="scope">
+													 	<el-checkbox v-if="!!scope.row.FILESIZE_ORG">{{scope.row.FILESIZE_ORG+'M'}}</el-checkbox>
+													</template>
+												</el-table-column>
 							            	</el-table>
 										</el-tab-pane>
 										<el-tab-pane label="仪器和计量器具" name="fifth">
@@ -1087,12 +1094,56 @@
 					totalCount: 0
 				},
 				isEditing: true,
-				modulenum:'s',
+				modulenum:'',
 				username:'',
 				maingroup:[]//专业组
 			};
 		},
 		methods: {
+			upload(e){
+				var formData = new FormData();
+				var loading;
+				loading = Loading.service({
+					fullscreen: true,
+					text: '拼命上传中...',
+					background: 'rgba(F,F, F, 0.8)'
+				});
+				formData.append('files', document.getElementById('excelFile').files[0]);
+				var config = {
+					//添加请求头
+					headers: { "Content-Type": "multipart/form-data" },
+					//添加上传进度监听事件
+					onUploadProgress: e => {
+						var completeProgress = ((e.loaded / e.total * 100) | 0) + "%";
+						this.progress = completeProgress;
+					}
+				};
+				var url = '';
+				// var url = this.file_url + '/file/uploadfile?userid=' + this.docParm.userid 
+				// 		+ '&username=' + this.docParm.username
+				// 		+ '&deptid=' + this.docParm.deptid
+				// 		+ '&deptfullname=' + this.docParm.deptfullname
+				// 		+ '&recordid=' + this.docParm.recordid
+				// 		+ '&appname=' + this.docParm.appname
+				// 		+ '&appid=' + this.docParm.appid;
+				// console.log(url);
+				this.$axios.post(url, formData, config
+				).then((res)=>{
+					loading.close();
+					// this.$emit('closeLoading');
+					if(res.data.code == 0){
+						this.$message({
+							message: res.data.message,
+							type: 'error'
+						});
+					}else{
+						this.$message({
+							message: '文件已成功上传至服务器',
+							type: 'success'
+						});
+					}
+				})
+			},
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
@@ -1358,9 +1409,9 @@
 					'appname': '检验检测项目_原始数据模板',
 					'recordid': data.id,
 				}).then((res) => {
-					this.modulenum.fileName = res.data.fileList[0].filename;
-					this.modulenum.filePath = res.data.fileList[0].filepath;
-					this.modulenum.fileid = res.data.fileList[0].fileid;
+					this.modulenum.FILESIZE = res.data.fileList[0].filesize;
+					this.modulenum.FILEPATH = res.data.fileList[0].filepath;
+					this.modulenum.FILEID = res.data.fileList[0].fileid;
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -1595,7 +1646,6 @@
 			},
 			
 			addfield1(){//检测依据列表新建行
-				
             	var date=new Date();
 				this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 				var index=this.$moment(date).format("YYYYMMDDHHmmss");
@@ -1646,8 +1696,15 @@
 					D_DESC: '',
 					STATUS: '1',
 					isEditing: true,
+					FILEID: '',
+					FILEPATH: '',
+					FILESIZE: '',
+					FILEID_ORG: '',
+					FILEPATH_ORG: '',
+					FILESIZE_ORG: '',
 				};
 				this.workorderForm.WORKORDER_DATA_TEMPLATEList.push(obj);
+				console.log(this.workorderForm.WORKORDER_DATA_TEMPLATEList);
 			},
 			//生成报告
 			getreport(){
@@ -1894,9 +1951,6 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				}
-				console.log('===================');
-				console.log(this.workorderForm.CJDW);
-				console.log('===================');
 				 //用户
 				this.$axios.get(this.basic_url + '/api-user/users?deptId='+this.workorderForm.CJDW, {
 					params: data
@@ -1959,4 +2013,27 @@
 	@import '../../assets/css/mask-modules.css';
 
 	.ml60 {margin-left: 60px;}
+	.a-upload input{
+		position: absolute;
+		font-size: 100px;
+		right: 100px;
+		top: 0;
+		opacity: 0;
+		filter: alpha(opacity=0);
+		cursor: pointer;
+		width: 80px;
+		cursor: pointer;
+	}
+	.upload-btn{
+		color: #fff;
+		background-color: #286090;
+		border-radius: 4px;
+		padding: 4px 10px;
+		width: 85px;
+		height: 34px;
+		line-height: 28px;
+		border: none;
+		cursor: pointer;
+	}
+
 </style>

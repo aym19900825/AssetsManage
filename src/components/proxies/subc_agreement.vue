@@ -121,6 +121,10 @@
 							</el-table-column>
 							<el-table-column label="委托书编号" width="150" sortable prop="PROXYNUM" v-if="this.checkedName.indexOf('委托书编号')!=-1">
 							</el-table-column>
+							<el-table-column label="委托方名称" width="150" sortable prop="V_NAMEDesc" v-if="this.checkedName.indexOf('委托方名称')!=-1">
+							</el-table-column>
+							<el-table-column label="类别" width="150" sortable prop="TYPE" v-if="this.checkedName.indexOf('类别')!=-1">
+							</el-table-column>
 							<el-table-column label="状态" width="150" sortable prop="state" v-if="this.checkedName.indexOf('状态')!=-1">
 							</el-table-column>
 							<el-table-column label="单位名称" width="150" sortable prop="VENDORDesc" v-if="this.checkedName.indexOf('单位名称')!=-1">
@@ -206,6 +210,8 @@
 				checkedName: [
 					'分包协议编号',
 					'委托书编号',
+					'委托方名称',
+					'类别',
 					'状态',
 					'单位名称',
 					'分包协议类别',
@@ -228,6 +234,14 @@
 					{
 						label: '委托书编号',
 						prop: 'PROXYNUM'
+					},
+					{
+						label: '委托方名称',
+						prop: 'V_NAMEDesc'
+					},
+					{
+						label: '类别',
+						prop: 'TYPE'
 					},
 					{
 						label: '状态',

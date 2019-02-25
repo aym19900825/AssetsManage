@@ -212,8 +212,12 @@ export default {
 			this.requestData();
 		},
 		requestData() {
+			var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				}
 			var url = this.basic_url + '/api-apps/app/flow/flow/todo';
-			this.$axios.get(url, {}).then((res) => {
+			this.$axios.get(url, {params: data}).then((res) => {
 				console.log(res.data);
 				this.page.totalCount = res.data.count;
 				//总的页数

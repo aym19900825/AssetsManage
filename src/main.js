@@ -55,10 +55,12 @@ Vue.directive('loadmore', {
 				if(firstFlag){
 					scrollBeforeTop = this.scrollTop;
 					firstFlag = false;
+					this.scrollTop = 2;
 				}else{
 					if(this.scrollTop >= scrollBeforeTop){
 						this.scrollTop = 2;
 						scrollBeforeTop = this.scrollTop;
+						console.log(1);
 					}
 				}
 			}
@@ -72,6 +74,7 @@ Vue.directive('loadmore', {
 	      		sessionStorage.setItem('up2down','up');
 	      		binding.value();
 	      		this.scrollTop = 2;
+	      		console.log(2);
 	      		
 	      	}else{
 	      		return false;

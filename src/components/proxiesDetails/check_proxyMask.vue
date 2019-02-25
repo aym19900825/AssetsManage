@@ -94,23 +94,7 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
-									<el-row >
-										<el-col :span="8" style="display: none;">
-											<el-form-item label="委托单位编号" prop="VENDOR" label-width="110px">
-												<el-input v-model="dataInfo.VENDOR"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
 								</el-collapse-item>
-								<!--<el-collapse-item title="生产单位" name="2">
-									<el-row >
-										<el-col :span="8" style="display:none;">
-											<el-form-item label="生产单位编号" prop="PRODUCT_UNIT">
-												<el-input v-model="dataInfo.PRODUCT_UNIT"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-								</el-collapse-item>-->
 								<el-collapse-item title="样品" name="2" >
 										<el-row >
 											<el-col :span="8">
@@ -129,7 +113,7 @@
 											<el-col :span="8" >
 												<el-form-item label="产品类别" prop="PRODUCT_TYPE"  label-width="110px">
 													<el-input v-model="dataInfo.PRODUCT_TYPE" :disabled="true">
-														<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addcategory"></el-button>
+														<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addcategory('maintable')">'</el-button>
 													</el-input>
 												</el-form-item>
 											</el-col>
@@ -155,7 +139,7 @@
 											<el-col :span="8">
 												<el-form-item label="产品名称" prop="PRODUCT" label-width="110px">
 													<el-input v-model="dataInfo.PRODUCT" :disabled="true">
-														<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addproduct"></el-button>
+														<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addproduct('maintable')"></el-button>
 													</el-input>
 												</el-form-item>
 											</el-col>
@@ -204,24 +188,16 @@
 										</el-form-item>
 								</el-collapse-item>
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
-									 <!-- <el-form :label-position="labelPosition"> -->
 									<el-tabs v-model="activeName" @tab-click="handleClick">
 									    <el-tab-pane label="检测依据" name="first">
-									    	<!-- <div class="table-func table-funcb">
-												<el-button type="success" size="mini" round @click="addfieldProject"  v-show="!viewtitle">
-													<i class="icon-add"></i>
-													<font>新建行</font>
-												</el-button>
-											</div> -->
 											<div class="table-func table-funcb">
-												<el-button type="primary" size="mini" round @click="basisleadbtn">
+												<el-button type="primary" size="mini" round @click="basisleadbtn('maintable')">
 													<i class="icon-search"></i>
 													<font>选择</font>
 												</el-button>
 											</div>
 
 											<el-table :data="dataInfo.INSPECT_PROXY_BASISList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.INSPECT_PROXY_BASISList', order: 'descending'}">
-
 												<el-table-column prop="S_NUM" label="标准编号" sortable width="150px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.S_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
@@ -265,7 +241,7 @@
 												
 												<el-table-column fixed="right" label="操作" width="120px">
 													<template slot-scope="scope">
-														<el-button @click.native.prevent="deleteRow(scope.$index,dataInfo.INSPECT_PROXY_BASISList)" type="text" size="small" v-if="!viewtitle">
+														<el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'basisList')" type="text" size="small" v-if="!viewtitle">
 															 <i class="icon-trash red"></i>
 														</el-button>
 													</template>
@@ -273,14 +249,8 @@
 											</el-table>
 									    </el-tab-pane>
 									    <el-tab-pane label="检测项目与要求" name="second">
-									    	<!-- <div class="table-func table-funcb">
-												<el-button type="success" size="mini" round @click="addfieldBasis"  v-show="!viewtitle">
-													<i class="icon-add"></i>
-													<font>新建行</font>
-												</el-button>
-											</div> -->
 											<div class="table-func table-funcb">
-												<el-button type="primary" size="mini" round @click="basisleadbtn2">
+												<el-button type="primary" size="mini" round @click="basisleadbtn2('maintable')">
 													<i class="icon-search"></i>
 													<font>选择</font>
 												</el-button>
@@ -325,6 +295,7 @@
 														</el-form-item>	
 													</template>
 												</el-table-column>
+
 												<!--<el-table-column prop="STATUS" label="信息状态" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.STATUS'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
@@ -346,7 +317,7 @@
 												</el-table-column>
 												<el-table-column fixed="right" label="操作" width="120">
 													<template slot-scope="scope">
-														<el-button @click.native.prevent="deleteRow(scope.$index,dataInfo.INSPECT_PROXY_PROJECList)" type="text" size="small" v-if="!viewtitle">
+														<el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'projectList')" type="text" size="small" v-if="!viewtitle">
 														 <i class="icon-trash red"></i>
 														</el-button>
 													</template>
@@ -377,45 +348,86 @@
 														</el-form-item>
 													</template>
 												</el-table-column>
-
+												<el-table-column prop="V_NAMEDesc" label="委托单位" sortable width="120px">
+													<template slot-scope="scope">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAMEDesc" placeholder="请输入委托方名称">
+														</el-input>
+														<span v-else="v-else">{{scope.row.V_NAMEDesc}}</span>
+													</template>
+												</el-table-column>
 												<el-table-column prop="PROXYNUM" label="委托书编号" sortable width="120px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.PROXYNUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROXYNUM" placeholder="请输入委托方名称">
+														<!-- <el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.PROXYNUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" > -->
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.PROXYNUM" placeholder="请输入委托方名称">
 														</el-input>
 														<span v-else="v-else">{{scope.row.PROXYNUM}}</span>
-														</el-form-item>
+														<!-- </el-form-item> -->
 													</template>
 												</el-table-column>
-
-												<el-table-column prop="VENDOR" label="分包方名称" sortable width="120px">
+												<el-table-column prop="INSPECT_GROUP" label="专业组" sortable width="120px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.VENDOR'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDOR" placeholder="请输入分包方名称">
-															<el-button slot="append" icon="el-icon-search">
+														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.INSPECT_GROUP'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+															<el-select  clearable v-model="scope.row.INSPECT_GROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @change="getmaingroup($event)" @visible-change="visablemaingroup($event)" >
+																<el-option v-for="data in maingroup" :key="data.id" :value="data.id" :label="data.fullname"></el-option>
+															</el-select>
+														</el-form-item>	
+													</template>
+												</el-table-column>
+												<el-table-column prop="depttypeDesc" label="分包方名称" sortable width="120px">
+													<template slot-scope="scope">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDORDesc" placeholder="请输入分包方名称">
+															<el-button slot="append" icon="el-icon-search" @click="getDept(scope.row)">
 															</el-button>
 														</el-input>
-														<span v-else="v-else">{{scope.row.VENDOR}}</span>
-														</el-form-item>
+														<span v-else="v-else">{{scope.row.VENDORDesc}}</span>
+													</template>
+												</el-table-column>
+												<el-table-column prop="depttypeName" label="机构属性" sortable width="120px">
+													<template slot-scope="scope">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.depttypeName" placeholder="请输入分包方名称">
+														</el-input>
+														<span v-else="v-else">{{scope.row.depttypeName}}</span>
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="P_REMARKS" label="检测项目内容" sortable width="280px">
+												<el-table-column prop="PRODUCT_TYPE" label="产品类别" sortable width="120px">
+													<template slot-scope="scope">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.PRODUCT_TYPE" placeholder="请输入分包方名称">
+															<el-button slot="append" icon="el-icon-search" @click="addcategory(scope.row)">
+															</el-button>
+														</el-input>
+														<span v-else="v-else">{{scope.row.PRODUCT_TYPE}}</span>
+													</template>
+												</el-table-column>
+
+												<el-table-column prop="PRODUCT" label="产品名称" sortable width="120px">
+													<template slot-scope="scope">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.PRODUCT" placeholder="请输入分包方名称">
+															<el-button slot="append" icon="el-icon-search" @click="addproduct(scope.row)">
+															</el-button>
+														</el-input>
+														<span v-else="v-else">{{scope.row.PRODUCT}}</span>
+													</template>
+												</el-table-column>
+
+												<el-table-column prop="BASIS" label="检验检测技术依据" sortable width="150px">
+													<template slot-scope="scope">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.BASIS" placeholder="请输入分包方名称">
+															<el-button slot="append" icon="el-icon-search" @click="basisleadbtn(scope.row)">
+															</el-button>
+														</el-input>
+														<span v-else="v-else">{{scope.row.BASIS}}</span>
+													</template>
+												</el-table-column>
+
+												<el-table-column prop="P_REMARKS" label="检测项目内容" sortable width="200px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.P_REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入">
+																<el-button slot="append" icon="el-icon-search" @click="basisleadbtn2(scope.row)">
+																</el-button>
 															</el-input>
 														<span v-else="v-else">{{scope.row.P_REMARKS}}</span>
-														</el-form-item>
-													</template>
-												</el-table-column>
-
-												<el-table-column prop="BASIS" label="检测技术依据" sortable width="220px">
-													<template slot-scope="scope">
-														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.BASIS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.BASIS" placeholder="请输入">
-														</el-input>
-														<span v-else="v-else">{{scope.row.BASIS}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
@@ -455,7 +467,7 @@
 
 												<el-table-column fixed="right" label="操作" width="120">
 													<template slot-scope="scope">
-														<el-button @click.native.prevent="deleteRow(scope.$index,dataInfo.CHECK_PROXY_CONTRACTList)" type="text" size="small" v-if="!viewtitle">
+														<el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'requestList')" type="text" size="small" v-if="!viewtitle">
 															 <i class="icon-trash red"></i>
 														</el-button>
 													</template>
@@ -511,11 +523,6 @@
 												</el-select>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8" style="display:none;" label-width="110px">
-											<el-form-item label="生产单位编号" prop="PRODUCT_UNIT">
-												<el-input v-model="dataInfo.PRODUCT_UNIT" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
 									</el-row>
 									<el-row>
 									    <el-col :span="16">
@@ -555,11 +562,11 @@
 											</el-form-item>
 										</el-col>-->
 										
-										<el-col :span="8" style="display:none;" label-width="110px">
+										<!-- <el-col :span="8" style="display:none;" label-width="110px">
 											<el-form-item label="生产单位编号" prop="PRODUCT_UNIT">
 												<el-input v-model="dataInfo.PRODUCT_UNIT" :disabled="noedit"></el-input>
 											</el-form-item>
-										</el-col>
+										</el-col> -->
 										<el-col :span="8">
 											<el-form-item label="主检组" prop="MAINGROUP"  label-width="110px">
 											<el-select clearable v-model="dataInfo.MAINGROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @change="getmaingroup($event)" @visible-change="visablemaingroup($event)" >
@@ -633,6 +640,15 @@
 					</el-form>
 				</div>
 			</div>
+			<!-- 分包方名称 -->
+			<el-dialog :modal-append-to-body="false" title="分包方名称" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+				<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" default-expand-all @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
+				</el-tree>
+				<span slot="footer" class="dialog-footer">
+			       <el-button @click="dialogVisible = false">取 消</el-button>
+			       <el-button type="primary" @click="queding();" >确 定</el-button>
+			    </span>
+			</el-dialog>
 			<!-- 客户联系人 Begin -->
 			<el-dialog :modal-append-to-body="false" title="客户联系人" :visible.sync="dialogVisibleuser" width="80%" :before-close="handleClose">
 				<el-table :header-cell-style="rowClass" :data="CUSTOMER_PERSONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @selection-change="SelChange" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER_PERSONList', order: 'descending'}" v-loadmore="loadMore">
@@ -660,7 +676,7 @@
 			<sampletmask ref="samplechild" @appenddes="appenddes" @appendmod="appendmod" @appendqua="appendqua"></sampletmask>
 			<!--受检企业-->
 			<enterprisemask ref="enterprisechild" @appendname="appendname" @appendadd="appendadd" @appendzip="appendzip"@appendnames="appendnames" @appendid="appendid"></enterprisemask>
-		<!--审批页面-->
+			<!--审批页面-->
 			<approvalmask :approvingData="approvingData" ref="approvalChild"  @detail="detailgetData"></approvalmask>
 			<!--流程历史-->
 			<flowhistorymask :approvingData="approvingData"  ref="flowhistoryChild" ></flowhistorymask>
@@ -668,14 +684,16 @@
 			<flowmapmask :approvingData="approvingData" ref="flowmapChild" ></flowmapmask>
 			<!--当前责任人-->
 			<vewPoplemask :approvingData="approvingData"  ref="vewPopleChild" ></vewPoplemask>
+			<!-- 机构  -->
+			<deptmask ref="deptchild" @deptdata = "deptdata"></deptmask>
 			<!-- 产品类别  -->
 			<categorymask ref="categorychild" @categorydata="categorydata"></categorymask>
 			<!-- 产品名称  -->
 			<productmask ref="productchild" @appenddata="appenddata"></productmask>
-			<!-- 检测依据  -->
-			<teststandardmask ref="standardchild" @testbasis="addbasis"></teststandardmask>
-			<!-- 检测项目  -->
-			<testprojectmask ref="projectchild" @testproject="addproject"></testprojectmask>
+			<!-- 检验依据  -->
+			<teststandardmask ref="standardchild" @testbasis="addbasis" @testbasisnum="testbasisnum" @testbasisname="testbasisname" @testbasisprover="testbasisprover"></teststandardmask>
+			<!-- 检验项目  -->
+			<testprojectmask ref="projectchild" @testproject="addproject" @testprojectnum="testprojectnum" @testprojectid="testprojectid" @testprojectname="testprojectname" @testprojectprover = "testprojectprover"></testprojectmask>
 		</div>
 	</div>
 </template>
@@ -688,10 +706,11 @@
 	import flowhistorymask from '../workflow/flowhistory.vue'
 	import flowmapmask from '../workflow/flowmap.vue'
 	import vewPoplemask from '../workflow/vewPople.vue'
+	import deptmask from '../common/common_mask/deptmask.vue'//机构
 	import categorymask from '../common/common_mask/categorylistmask.vue'//产品类别
 	import productmask from '../common/common_mask/productlistmask.vue'//产品
 	import teststandardmask from '../common/common_mask/teststandardmask.vue'//检测依据
-	import testprojectmask from '../common/common_mask/testprojectmask.vue'//检测依据
+	import testprojectmask from '../common/common_mask/testprojectmask.vue'//检测项目
 	export default {
 		name: 'masks',
 		components: {
@@ -701,6 +720,7 @@
 			 vewPoplemask,
 			 sampletmask,
 			 enterprisemask,
+			 deptmask,
 			 categorymask,
 			 productmask,
 			 teststandardmask,
@@ -808,7 +828,27 @@
 					P_NAME:'',
 					INSPECT_PROXY_PROJECList: [],
 					INSPECT_PROXY_BASISList: [],
-					CHECK_PROXY_CONTRACTList: [],
+					CHECK_PROXY_CONTRACTList: [
+						{
+							INSPECT_GROUP:'',	
+							VENDOR: '',//承检单位
+							VENDORDesc:'',//承检单位名称
+							PT_NUM:'',//产品类别编号
+							PRODUCT_TYPE:'',//产品类别
+							PRO_NUM:'',//产品编号
+							PRODUCT:'',//产品名称
+							S_NUM:'',//检测依据编号
+							BASIS: '',//检测依据
+							PROJ_NUM:'',//检测项目编号
+							PROJECT_ID:'',//检测项目ID
+							P_REMARKS: '',//检测项目
+							P_VERSIONNUM:'',	//产品类别编号+版本
+							PRO_VERSIONNUM:'',	//产品名称编号+版本
+							S_VERSIONNUM:'',	//检验检测依据编号+版本
+							PROJ_VERSIONNUM:'',	//检测项目编号+版本
+
+						}
+					],
 				},
 				gridData: [], //彈出框的數據
 				page: {
@@ -878,7 +918,7 @@
 					ITEM_DISPOSITION: [{ required: true, message: '必填', trigger: 'change' }],//检后处理
 					REMARKS: [{ required: true, message: '必填', trigger: 'blur' }],//抽样方案/判定依据
 					COMPDATE: [{ required: true, message: '必填', trigger: 'blur' }],//完成日期
-					PROXYNUM: [{ required: true, message: '必填', trigger: 'blur' }],//编号
+					// PROXYNUM: [{ required: true, message: '必填', trigger: 'blur' }],//编号
 					REPORT_QUALITY: [{ required: true, message: '必填', trigger: 'blur' },{ type: 'number', message: '请输入数字'}],//交委托方分数
 					REPORT_MODE: [{ required: true, message: '必填', trigger: 'change' }],//发送方式
 					REPORT_FOMAT: [{ required: true, message: '必填', trigger: 'change' }],//格式
@@ -891,6 +931,12 @@
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
+				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
+				resourceProps: {
+					children: "children",
+					label: "fullname"
+				},
+				dialogVisible: false, //对话框
 				dialogVisibleuser:false,
 				customid:"",
 				dataid:'',//修改和查看带过的id
@@ -899,14 +945,33 @@
 				maingroup:[],//主检组
 				selectData:[],//承建单位
 				leaderdata:[],//主检负责人
+				username:'',
 //				deptid:'',//机构id
 				catenum:'',//产品类别作为参数传值给依据
 				pronum:'',//产品作为参数传值给依据
 				basisnum:'',////依据选中数据们字符串作为参数传值给项目
-
+				deptindex:{},//分包方名称
+				main:'',
 			};
 		},
 		methods: {
+			handleNodeClick(data) { //获取勾选树菜单节点
+				//console.log(data);
+			},
+			handleClicks(data,checked, indeterminate) {
+				this.getCheckboxData = data;
+           		 this.i++;
+            		if(this.i%2==0){
+                	if(checked){
+                    	this.$refs.tree.setCheckedNodes([]);
+                    	this.$refs.tree.setCheckedNodes([data]);
+                    	//交叉点击节点
+               		 }else{
+                     this.$refs.tree.setCheckedNodes([]);
+                    	//点击已经选中的节点，置空
+                	 }
+            		}
+        	},
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
@@ -931,6 +996,41 @@
 					return "";
 				}
 				return this.$moment(date).format("YYYY-MM-DD");
+			},
+			//所属上级
+			getDept(item) {
+				this.$refs.deptchild.visible(item);
+				this.deptindex = item;
+				// var page = this.page.currentPage;
+				// var limit = this.page.pageSize;
+				// var url = this.basic_url + '/api-user/depts/treeMap';
+				// this.$axios.get(url, {
+
+				// }).then((res) => {
+				// 	this.resourceData = res.data;
+				// 	this.dialogVisible = true;
+				// 	this.deptindex = item;
+				// });
+			},
+			//取到分包方
+			deptdata(value){
+				console.log(value);
+				this.deptName.VENDOR = value[0];//id
+				this.deptName.VENDORDesc = value[1];//名称
+				this.deptName.depttype = value[2];//机构属性id
+				this.deptName.depttypeName = value[3];//机构属性名称
+			},
+			//选择分包方名称
+			// queding() {
+			// 	console.log(123456);
+			// 	console.log(this.checkedNodes);
+			// 	this.getCheckedNodes();
+			// 	this.dialogVisible = false;				
+			// 	this.deptindex.VENDOR = this.checkedNodes[0].id;
+			// 	this.deptindex.VENDORDesc = this.checkedNodes[0].fullname;				
+			// },
+			getCheckedNodes() {
+				this.checkedNodes = this.$refs.tree.getCheckedNodes()
 			},
 			loadMore () {
 			   if (this.loadSign) {
@@ -980,6 +1080,8 @@
 					STATUSDesc:'草稿',
 					ITEM_NAME:'',
 					VENDOR:'',
+					P_NUM:'',
+					PRO_NUM:'',
 					ITEM_NAME:'',
 					ITEM_MODEL:'',
 					ITEM_QUALITY:'',
@@ -1000,14 +1102,13 @@
 				},
 			handleClick(tab, event) {
 //		        console.log(tab, event);
-
 		    },
 			iconOperation(row, column, cell, event) {
 				if(column.property === "iconOperation") {
 					row.isEditing = !row.isEditing;
 				}
 			},
-			//生成委托书
+			//生成工作任务单
 			build(){
 				var dataid = this.dataInfo.ID;
 					var Url = this.basic_url + '/api-apps/app/inspectPro/operate/createWorkorder?ID='+dataid;
@@ -1064,9 +1165,26 @@
 				var obj = {
 					PROXY_CONTRACT_NUM: '',
 					PROXYNUM: '',
-					VENDOR: '',
-					P_REMARKS: '',
-					BASIS: '',
+					V_NAME:this.customid,
+					V_NAMEDesc:this.dataInfo.V_NAME,
+					INSPECT_GROUP:'',
+					PROJECT_ID:'',
+					VENDOR: '',//承检单位
+					VENDORDesc:'',//承检单位名称
+					depttype:'',//机构属性id
+					depttypeName:'',//机构属性名称
+					PT_NUM:'',//产品类别编号
+					PRODUCT_TYPE:'',//产品类别
+					PRO_NUM:'',//产品编号
+					PRODUCT:'',//产品名称
+					S_NUM:'',//检测依据编号
+					BASIS: '',//检测依据
+					PROJ_NUM:'',//检测项目编号
+					P_REMARKS: '',//检测项目
+					P_VERSIONNUM:'',	//产品类别编号+版本
+					PRO_VERSIONNUM:'',	//产品名称编号+版本
+					S_VERSIONNUM:'',	//检验检测依据编号+版本
+					PROJ_VERSIONNUM:'',	//检测项目编号+版本
 					REQUIRE: '',
 					Q_TYPE: '',
 					CHECKCOST: '',
@@ -1080,24 +1198,58 @@
 			},
 			
 			//刪除新建行
-			deleteRow(index,rows) {//Table-操作列中的删除行
-				rows.splice(index,1);
-
+			deleteRow(index, row, listName){
+				console.log(row);
+				var TableName = '';
+				console.log(listName);
+				if(listName =='basisList'){
+					TableName = 'INSPECT_PROXY_BASIS';
+				}else if(listName =='projectList'){
+					TableName = 'INSPECT_PROXY_PROJEC';
+				}else{
+					TableName = 'CHECK_PROXY_CONTRACT';
+				}
+				if(row.ID){
+					var url = this.basic_url + '/api-apps/app/inspectPro/' + TableName +'/' + row.ID;
+					this.$axios.delete(url, {}).then((res) => {
+						console.log(res);
+						if(res.data.resp_code == 0){
+							this.dataInfo[TableName+'List'].splice(index,1);
+							this.$message({
+								message: '删除成功',
+								type: 'success'
+							});
+						}else{
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'error'
+							});
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+				}else{
+					this.dataInfo[TableName+'List'].splice(index,1);
+				}
 			},
 			//点击按钮显示弹窗
 			visible() {
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
+					console.log(res);
 					this.dataInfo.DEPTID = res.data.deptId;
 					this.dataInfo.ENTERBY = res.data.id;
 					// this.dataInfo.ORGID = res.data.deptName
 					var date = new Date();
-                    this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
-                    this.dataInfo.TYPE = '1';
-                    this.dataInfo.TYPEDesc = '检测';
+					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
+					this.dataInfo.TYPE = '1';
+					this.dataInfo.TYPEDesc = '检测';
 					this.show = true;
 				}).catch((err) => {
 					this.$message({
-						message: '网络错误，请重试',
+						message: '网络错误，请重试21',
 						type: 'error'
 					})
 				})
@@ -1113,18 +1265,25 @@
 			detailgetData() {
 			var url = this.basic_url +'/api-apps/app/inspectPro/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					//依据
+					console.log(res);
+					// 依据
 					for(var i = 0;i<res.data.INSPECT_PROXY_BASISList.length;i++){
 						res.data.INSPECT_PROXY_BASISList[i].isEditing = false;
 					}
-					//要求
+					// 要求
 					for(var m = 0;m<res.data.INSPECT_PROXY_PROJECList.length;m++){
 						res.data.INSPECT_PROXY_PROJECList[m].isEditing = false;
 					}
-					//分包要求
+					// 分包要求
 					for(var n = 0;n<res.data.CHECK_PROXY_CONTRACTList.length;n++){
 						res.data.CHECK_PROXY_CONTRACTList[n].isEditing = false;
+
 					}
+					res.data.R_VENDOR = Number(res.data.R_VENDOR);		
+					res.data.MAINGROUP = Number(res.data.MAINGROUP);
+					res.data.LEADER = Number(res.data.LEADER);
+					console.log(res.data);
+					console.log(typeof(res.data.MAINGROUP));
 					this.dataInfo = res.data;
 					this.show = true;
 					//深拷贝数据
@@ -1132,7 +1291,7 @@
         			this.datainfo = JSON.parse(_obj);
 				}).catch((err) => {
 					this.$message({
-						message: '网络错误，请重试',
+						message: '网络错误，请重试3',
 						type: 'error'
 					});
 				});
@@ -1149,7 +1308,7 @@
 					this.dataInfo.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd");
 				}).catch((err) => {
 					this.$message({
-						message: '网络错误，请重试',
+						message: '网络错误，请重试4',
 						type: 'error'
 					});
 				});
@@ -1163,8 +1322,8 @@
 				this.noedit = false;
 			},
 			//点击修订按钮
-			modifyversion() {
-				this.$refs.dataInfo.validate((valid) => {
+			modifyversion(dataInfo) {
+				this.$refs[dataInfo].validate((valid) => {
 					if(valid) {
 						var datainfo=JSON.stringify(this.datainfo); 
 	 					var dataInfo=JSON.stringify(this.dataInfo);
@@ -1205,7 +1364,7 @@
 							}		
 							}).catch((err) => {
 								this.$message({
-									message: '网络错误，请重试',
+									message: '网络错误，请重试5',
 									type: 'error'
 								});
 							});
@@ -1237,51 +1396,219 @@
 						this.start=true;
 						this.approval=false;
 					}else{
-						this.start=false;
-						this.approval=true;
+						var url = this.basic_url + '/api-apps/app/inspectPro/flow/Executors/'+dataid;
+						this.$axios.get(url, {}).then((res) => {
+							console.log(res.data.datas);
+							var resullt=res.data.datas;
+							var users='';
+							var users='';
+							for(var i=0;i<resullt.length;i++){
+								users = users + resullt[i].username+",";
+								console.log("users----"+users);
+							}
+							if(users.indexOf(this.username) != -1){
+								this.approval=true;
+								this.start=false;
+							}
+						});
 					}
 				});
 			},
-			addcategory(){//产品类别
-				this.$refs.categorychild.visible(this.dataInfo.R_VENDOR);
+			addcategory(val){//产品类别
+				this.deptindex = val;
+				if(val == 'maintable'){
+					if(this.dataInfo.R_VENDOR == null || this.dataInfo.R_VENDOR == '' || this.dataInfo.R_VENDOR == undefined){
+						this.$message({
+							message: '请先选择承检单位',
+							type: 'warning'
+						});
+					}else{
+						this.$refs.categorychild.visible(this.dataInfo.R_VENDOR);
+						this.main = 'main';
+					}
+				}else{
+					if(this.deptindex.VENDORDesc == null || this.deptindex.VENDORDesc == '' || this.deptindex.VENDORDesc == undefined){
+						this.$message({
+							message: '请先选择分包方名称',
+							type: 'warning'
+						});
+					}else{
+						this.$refs.categorychild.visible(this.deptindex.VENDOR);
+						this.main = 'table';
+					}
+				}
+					
 			},
 			//接到产品类别的值
 			categorydata(value){
-				this.catenum = value[0];
-				this.dataInfo.PRODUCT_TYPE  = value[1];
+				if(this.main == 'main'){
+					this.dataInfo.P_NUM = value[0];
+					this.dataInfo.PRODUCT_TYPE  = value[1];
+					this.dataInfo.PRODUCT = '';
+					this.dataInfo.PRO_NUM = '';
+					this.dataInfo.S_NUM = '';
+					this.dataInfo.INSPECT_PROXY_BASISList = [];
+					this.dataInfo.INSPECT_PROXY_PROJECList = [];
+				}else{
+					this.deptindex.PT_NUM = value[0];
+					this.deptindex.PRODUCT_TYPE = value[1];
+					this.deptindex.P_VERSIONNUM = value[0]+':'+value[2];//类别编号+版本
+					this.deptindex.PRO_NUM ='';//产品编号
+					this.deptindex.PRODUCT ='';//产品名称
+					this.deptindex.S_NUM ='';//检测依据编号
+					this.deptindex.BASIS = '';//检测依据
+					this.deptindex.PROJ_NUM ='';//检测项目编号
+					this.deptindex.PROJECT_ID ='';//检测项目ID
+					this.deptindex.P_REMARKS = '';//检测项目
+					this.deptindex.PRO_VERSIONNUM ='';	//产品名称编号+版本
+					this.deptindex.S_VERSIONNUM ='';	//检验检测依据编号+版本
+					this.deptindex.PROJ_VERSIONNUM ='';	//检测项目编号+版本
+				}
 			},
-			addproduct(){//受检产品名称
-				this.$refs.productchild.visible(this.catenum);
+			addproduct(val){//受检产品名称
+				this.deptindex = val;
+				if(val == 'maintable'){
+					if(this.dataInfo.P_NUM == null || this.dataInfo.P_NUM == '' || this.dataInfo.P_NUM == undefined){
+						this.$message({
+							message: '请先选择产品类别',
+							type: 'warning'
+						});
+					}else{
+						this.$refs.productchild.visible(this.dataInfo.P_NUM);
+						this.main = 'main';
+					}
+				}else{
+					if(this.deptindex.PT_NUM == null || this.deptindex.PT_NUM == '' || this.deptindex.PT_NUM == undefined){
+						this.$message({
+							message: '请先选择产品类别',
+							type: 'warning'
+						});
+					}else{
+						this.$refs.productchild.visible(this.deptindex.PT_NUM);
+						this.main = 'table';
+					}
+				}
 			},
 			//接到产品的值
 			appenddata(value){
-				this.pronum = value[0];
-				this.dataInfo.PRODUCT = value[1];
-			},
-			//检测依据放大镜
-			basisleadbtn(){
-				this.$refs.standardchild.basislead(this.pronum);
-			},
-			 //检测依据列表
-			addbasis(value){
-				this.basisnum = value[0];
-				for(var i = 1;i<value.length;i++){
-					value[i].S_DESC = value[i].S_NAME;
-					this.dataInfo.INSPECT_PROXY_BASISList.push(value[i]);
+				if(this.main == 'main'){
+					this.dataInfo.PRO_NUM = value[0];
+					this.dataInfo.PRODUCT = value[1];
+					this.dataInfo.S_NUM = '';
+					this.dataInfo.INSPECT_PROXY_BASISList = [];
+					this.dataInfo.INSPECT_PROXY_PROJECList = [];
+				}else{
+					this.deptindex.PRO_NUM = value[0];
+					this.deptindex.PRODUCT = value[1];
+					this.deptindex.PRO_VERSIONNUM = value[0]+':'+value[2];//产品编号+版本
+					this.deptindex.S_NUM ='';//检测依据编号
+					this.deptindex.BASIS = '';//检测依据
+					this.deptindex.PROJ_NUM ='';//检测项目编号
+					this.deptindex.PROJECT_ID ='';//检测项目ID
+					this.deptindex.P_REMARKS = '';//检测项目
+					this.deptindex.S_VERSIONNUM ='';	//检验检测依据编号+版本
+					this.deptindex.PROJ_VERSIONNUM ='';	//检测项目编号+版本
 				}
-				// this.dataInfo.WORK_NOTICE_CHECKBASISList = value;
+			},
+			//检验依据放大镜
+			basisleadbtn(val){
+				this.deptindex = val;
+				if(val == 'maintable'){
+					if(this.dataInfo.PRO_NUM == null || this.dataInfo.PRO_NUM == '' || this.dataInfo.PRO_NUM == undefined){
+						this.$message({
+							message: '请先选择产品名称',
+							type: 'warning'
+						});
+					}else{
+						this.$refs.standardchild.basislead(this.dataInfo.PRO_NUM);
+						this.main = 'main';
+					}
+				}else{
+					if(this.deptindex.PRO_NUM == null || this.deptindex.PRO_NUM == '' || this.deptindex.PRO_NUM == undefined){
+						this.$message({
+							message: '请先选择产品名称',
+							type: 'warning'
+						});
+					}else{
+						this.$refs.standardchild.basislead(this.deptindex.PRO_NUM);
+						this.main = 'table';
+					}
+				}
+			},
+			 //检验依据列表
+			addbasis(value){
+				if(this.main == 'main'){
+					this.dataInfo.S_NUM = value[0];
+					for(var i = 1;i<value.length;i++){
+						value[i].S_DESC = value[i].S_NAME;
+						this.dataInfo.INSPECT_PROXY_BASISList.push(value[i]);
+					}
+					this.dataInfo.INSPECT_PROXY_PROJECList = [];
+				}
+			},
+			//分包要求检验依据编号
+			testbasisnum(value){
+				this.deptindex.S_NUM = value;
+				this.deptindex.PROJ_NUM ='';//检测项目编号
+				this.deptindex.PROJECT_ID ='';//检测项目ID
+				this.deptindex.P_REMARKS = '';//检测项目
+				this.deptindex.PROJ_VERSIONNUM ='';	//检测项目编号+版本
+			},
+			//分包要求检验依据名称
+			testbasisname(value){
+				this.deptindex.BASIS = value;
+			},
+			//检测依据编号+版本
+			testbasisprover(value){
+				this.deptindex.S_VERSIONNUM = value;
 			},
 			//检测项目放大镜
-			basisleadbtn2(){
-				this.$refs.projectchild.projectlead(this.basisnum);
+			basisleadbtn2(val){
+				this.deptindex = val;
+				if(val == 'maintable'){
+					if(this.dataInfo.S_NUM == null || this.dataInfo.S_NUM == '' || this.dataInfo.S_NUM == undefined){
+						this.$message({
+							message: '请先选择检测依据列表数据',
+							type: 'warning'
+						});
+					}else{
+						this.$refs.projectchild.projectlead(this.dataInfo.S_NUM);
+						this.main = 'main';
+					}
+				}else{
+					if(this.deptindex.S_NUM == null || this.deptindex.S_NUM == '' || this.deptindex.S_NUM == undefined){
+						this.$message({
+							message: '请先选择检测依据',
+							type: 'warning'
+						});
+					}else{
+						console.log(this.deptindex.S_NUM);
+						this.$refs.projectchild.projectlead(this.deptindex.S_NUM);
+						this.main = 'table';
+					}
+				}
 			},
 			 //检测项目列表
 			addproject(value){
-				for(var i = 0;i<value.length;i++){
-					value[i].P_DESC = value[i].P_NAME;
-					this.dataInfo.INSPECT_PROXY_PROJECList.push(value[i]);
+				if(this.main == 'main'){
+					for(var i = 0;i<value.length;i++){
+						value[i].P_DESC = value[i].P_NAME;
+						this.dataInfo.INSPECT_PROXY_PROJECList.push(value[i]);
+					}
 				}
-				// this.dataInfo.WORK_NOTICE_CHECKPROJECTList = value;
+			},
+			testprojectnum(value){
+				this.deptindex.PROJ_NUM = value;
+			},
+			testprojectname(value){
+				this.deptindex.P_REMARKS = value;
+			},
+			testprojectid(value){
+				this.deptindex.PROJECT_ID = value;
+			},
+			testprojectprover(value){
+				this.deptindex.PROJ_VERSIONNUM = value;
+				console.log(this.deptindex.PROJ_VERSIONNUM);
 			},
 			//点击关闭按钮
 			close() {
@@ -1344,17 +1671,22 @@
 			save() {
 				this.$refs.dataInfo.validate((valid) => {
 			        if (valid) {
+						console.log(11);
 						if(this.dataInfo.INSPECT_PROXY_BASISList.length<=0&&this.dataInfo.INSPECT_PROXY_PROJECList.length<=0&&this.dataInfo.CHECK_PROXY_CONTRACTList.length<=0){
-			        		this.$message({
+							console.log(22);
+							this.$message({
 								message: '检测依据和检测项目与要求和分包要求是必填项，请填写！',
 								type: 'warning'
 							});
 							return false;
 			        	}else{
+							console.log(33);
 //							this.dataInfo.ITEM_STATUS=this.dataInfo.ITEM_STATUS==1;
 //							this.dataInfo.MESSSTATUS= this.dataInfo.MESSSTATUS==1;//信息状态
 							var url = this.basic_url + '/api-apps/app/inspectPro/saveOrUpdate';
+							console.log(44);
 							this.$axios.post(url, this.dataInfo).then((res) => {
+								console.log(55);
 								if(res.data.resp_code == 0) {
 									this.$message({
 										message: '保存成功',
@@ -1426,10 +1758,19 @@
 						this.maingroup = res.data;
 					}).catch((err) => {
 						this.$message({
-							message: '网络错误，请重试',
+							message: '网络错误，请重试7',
 							type: 'error'
 						});
 					});
+				this.dataInfo.PRODUCT_TYPE = '';
+				this.dataInfo.P_NUM = '';
+				this.dataInfo.PRODUCT = '';
+				this.dataInfo.PRO_NUM = '';
+				this.dataInfo.S_NUM = '';
+				this.dataInfo.INSPECT_PROXY_BASISList = [];
+				this.dataInfo.INSPECT_PROXY_PROJECList = [];
+				this.dataInfo.MAINGROUP = '';
+				this.dataInfo.LEADER = '';
 			},
 			//主检组带出主检负责人
 			getmaingroup(maingroupid){
@@ -1438,7 +1779,7 @@
 						this.leaderdata = res.data.data;
 					}).catch((err) => {
 						this.$message({
-							message: '网络错误，请重试',
+							message: '网络错误，请重试8',
 							type: 'error'
 						});
 					});		
@@ -1506,9 +1847,20 @@
 								message:res.data.resp_msg,
 								type: 'success'
 							});
+						var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/Executors/'+this.dataid;
+							this.$axios.get(url, {}).then((res) => {
+									console.log(res.data.datas);
+									var resullt=res.data.datas;
+									var users='';
+									for(var i=0;i<resullt.length;i++){
+										users = users + resullt[i].username+",";
+									}
+								if(users.indexOf(this.username) != -1){
+									this.approval=true;
+									this.start=false;
+								}
+							});
 							this.detailgetData();
-							this.start=false;
-							this.approval=true;
 				    }
 				});
 			},
@@ -1571,6 +1923,7 @@
 		},
 		mounted() {
 			this.getCompany();
+			// this.RVENDORSelect($event);
 		},
 	}
 </script>

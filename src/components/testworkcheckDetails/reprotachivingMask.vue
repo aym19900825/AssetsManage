@@ -21,13 +21,13 @@
 						<div class="accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="报告归档" name="1">
-									<el-row class="pb10">
+									<!-- <el-row class="pb10">
 										<el-col :span="3" class="pull-right">
 											<el-input v-model="report.VERSION" :disabled="true">
 												<template slot="prepend">版本</template>
 											</el-input>
 										</el-col>
-									</el-row>
+									</el-row> -->
 
 									<el-row>
 										<el-col :span="8">
@@ -205,6 +205,7 @@
 			},
 			//点击按钮显示弹窗
 			visible() {
+				this.reset();
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.report.DEPTID = res.data.deptId;
 					this.report.ENTERBY = res.data.id;
@@ -291,7 +292,8 @@
 				this.show = true;
 			},
 			//这是查看
-			view() {
+			view(data) {
+				this.report = data;
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;
@@ -355,7 +357,6 @@
 										type: 'success'
 									});
 									this.$emit('request');
-									this.visible();
 								}
 							}else{
 								this.show = true;
@@ -403,6 +404,21 @@
 			saveAndSubmit() {
 				this.save();
 				this.show = true;
+				this.reset();
+			},
+			reset(){
+				this.report = {
+                    ID:'',	//报告ID
+                    REPORTNUM:'',	//报告编号
+                    REPORTNAME:'',	//报告名称
+                    PROXYNUM:'',	//委托书编号
+                    ONHOLEPERSON:'',	//归档人
+                    ONHOLTIME:'',	//归档时间
+                    CHANGEBY:'',	//修改人
+                    CHANGEDATE:'',	//修改时间
+                    DEPTID:'',	//机构ID
+                    DEPARTMENT:'',	//机构
+                }
 			},
 			//时间格式化
 			dateFormat(row, column) {

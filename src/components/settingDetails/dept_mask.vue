@@ -66,8 +66,8 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="机构类型" prop="org_range">
-												<el-select v-model="adddeptForm.org_range" placeholder="请选择" style="width: 100%">
+											<el-form-item label="机构类型" prop="depttype">
+												<el-select v-model="adddeptForm.depttype" placeholder="请选择" style="width: 100%">
 													<el-option v-for="(data,index) in Selectsys_depttype" :key="index" :value="data.code" :label="data.name"></el-option>
 												</el-select>
 											</el-form-item>
@@ -248,7 +248,7 @@
 						code:'',
 						fullname:'',
 						parent:'',
-						org_range:'',
+						depttype:'',
 						type:'',
 						inactive:'',
 						address:'',
@@ -330,7 +330,7 @@
 						{required:true, trigger: 'blur', message: '必填'},
 						{validator: this.Validators.isNickname, trigger: 'blur'},
 					],//机构名称
-					org_range: [{required:true,trigger: 'change',message: '请选择机构类型'}],//选择机构类型
+					depttype: [{required:true,trigger: 'change',message: '请选择机构类型'}],//选择机构类型
    					type: [{required:true,trigger: 'change',message: '请选择机构属性'}],//选择机构属性
    					telephone: [{required:false,trigger: 'blur',validator: this.Validators.isTelephone}],//电话
 					fax: [{required:false,trigger: 'blur',validator: this.Validators.isTelephone}],//传真

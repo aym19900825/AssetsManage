@@ -899,16 +899,17 @@
 					// for(var i = 0;i<res.data.ips.length;i++){
 					// 	res.data.ips[i].isEditing = false;
 					// }
+					console.log(res);
 					this.user = res.data;
 					this.user.sex = this.user.sex=='1'? '男' : '女';
 					this.user.enabled = this.user.enabled ? '活动' : '不活动';
 					this.user.ispermit = this.user.ispermit == '1' ? '是' : '否';
 					this.user.islogin = this.user.islogin == '1' ? '是' : '否';
-					this.user.roleId = [];
-					var roles = this.user.roles;
-					for(var i = 0; i < roles.length; i++) {
-						this.user.roleId.push(roles[i].id);
-					}
+//					this.user.roleId = [];
+//					var roles = this.user.roles;
+//					for(var i = 0; i < roles.length; i++) {
+//						this.user.roleId.push(roles[i].id);
+//					}
 					this.show = true;
 				}).catch((err) => {
 					this.$message({

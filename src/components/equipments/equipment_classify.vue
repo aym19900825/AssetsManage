@@ -480,12 +480,11 @@
 				var data = {
 					CLASSIFY_DESCRIPTION: this.searchList.CLASSIFY_DESCRIPTION,
 				}
-				console.log('=============');
-				console.log(this.searchList);
 				var url = this.basic_url + '/api-apps/app/assetClass/tree?tree_id=CLASSIFY_NUM&tree_pid=PARENT';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
+					console.log(res);
 					this.categoryList = res.data.datas;
 					this.loading = false;
 				}).catch((wrong) => {

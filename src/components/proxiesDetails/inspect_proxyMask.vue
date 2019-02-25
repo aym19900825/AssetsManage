@@ -348,7 +348,13 @@
 														</el-form-item>
 													</template>
 												</el-table-column>
-
+												<el-table-column prop="V_NAMEDesc" label="委托单位" sortable width="120px">
+													<template slot-scope="scope">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAMEDesc" placeholder="请输入委托方名称">
+														</el-input>
+														<span v-else="v-else">{{scope.row.V_NAMEDesc}}</span>
+													</template>
+												</el-table-column>
 												<el-table-column prop="PROXYNUM" label="委托书编号" sortable width="120px">
 													<template slot-scope="scope">
 														<!-- <el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.PROXYNUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" > -->
@@ -367,13 +373,20 @@
 														</el-form-item>	
 													</template>
 												</el-table-column>
-												<el-table-column prop="VENDORDesc" label="分包方名称" sortable width="120px">
+												<el-table-column prop="depttypeDesc" label="分包方名称" sortable width="120px">
 													<template slot-scope="scope">
 														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDORDesc" placeholder="请输入分包方名称">
 															<el-button slot="append" icon="el-icon-search" @click="getDept(scope.row)">
 															</el-button>
 														</el-input>
 														<span v-else="v-else">{{scope.row.VENDORDesc}}</span>
+													</template>
+												</el-table-column>
+												<el-table-column prop="depttypeName" label="机构属性" sortable width="120px">
+													<template slot-scope="scope">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.depttypeName" placeholder="请输入分包方名称">
+														</el-input>
+														<span v-else="v-else">{{scope.row.depttypeName}}</span>
 													</template>
 												</el-table-column>
 
@@ -671,6 +684,8 @@
 			<flowmapmask :approvingData="approvingData" ref="flowmapChild" ></flowmapmask>
 			<!--当前责任人-->
 			<vewPoplemask :approvingData="approvingData"  ref="vewPopleChild" ></vewPoplemask>
+			<!-- 机构  -->
+			<deptmask ref="deptchild" @deptdata = "deptdata"></deptmask>
 			<!-- 产品类别  -->
 			<categorymask ref="categorychild" @categorydata="categorydata"></categorymask>
 			<!-- 产品名称  -->
@@ -691,6 +706,7 @@
 	import flowhistorymask from '../workflow/flowhistory.vue'
 	import flowmapmask from '../workflow/flowmap.vue'
 	import vewPoplemask from '../workflow/vewPople.vue'
+	import deptmask from '../common/common_mask/deptmask.vue'//机构
 	import categorymask from '../common/common_mask/categorylistmask.vue'//产品类别
 	import productmask from '../common/common_mask/productlistmask.vue'//产品
 	import teststandardmask from '../common/common_mask/teststandardmask.vue'//检验依据
@@ -704,6 +720,7 @@
 			 vewPoplemask,
 			 sampletmask,
 			 enterprisemask,
+			 deptmask,
 			 categorymask,
 			 productmask,
 			 teststandardmask,
@@ -982,26 +999,36 @@
 			},
 			//所属上级
 			getDept(item) {
-				var page = this.page.currentPage;
-				var limit = this.page.pageSize;
-				var url = this.basic_url + '/api-user/depts/treeMap';
-				this.$axios.get(url, {
+				this.$refs.deptchild.visible(item);
+				this.deptindex = item;
+				// var page = this.page.currentPage;
+				// var limit = this.page.pageSize;
+				// var url = this.basic_url + '/api-user/depts/treeMap';
+				// this.$axios.get(url, {
 
-				}).then((res) => {
-					this.resourceData = res.data;
-					this.dialogVisible = true;
-					this.deptindex = item;
-				});
+				// }).then((res) => {
+				// 	this.resourceData = res.data;
+				// 	this.dialogVisible = true;
+				// 	this.deptindex = item;
+				// });
+			},
+			//取到分包方
+			deptdata(value){
+				console.log(value);
+				this.deptName.VENDOR = value[0];//id
+				this.deptName.VENDORDesc = value[1];//名称
+				this.deptName.depttype = value[2];//机构属性id
+				this.deptName.depttypeName = value[3];//机构属性名称
 			},
 			//选择分包方名称
-			queding() {
-				console.log(123456);
-				console.log(this.checkedNodes);
-				this.getCheckedNodes();
-				this.dialogVisible = false;				
-				this.deptindex.VENDOR = this.checkedNodes[0].id;
-				this.deptindex.VENDORDesc = this.checkedNodes[0].fullname;				
-			},
+			// queding() {
+			// 	console.log(123456);
+			// 	console.log(this.checkedNodes);
+			// 	this.getCheckedNodes();
+			// 	this.dialogVisible = false;				
+			// 	this.deptindex.VENDOR = this.checkedNodes[0].id;
+			// 	this.deptindex.VENDORDesc = this.checkedNodes[0].fullname;				
+			// },
 			getCheckedNodes() {
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
 			},
@@ -1138,10 +1165,14 @@
 				var obj = {
 					PROXY_CONTRACT_NUM: '',
 					PROXYNUM: '',
+					V_NAME:this.customid,
+					V_NAMEDesc:this.dataInfo.V_NAME,
 					INSPECT_GROUP:'',
 					PROJECT_ID:'',
 					VENDOR: '',//承检单位
 					VENDORDesc:'',//承检单位名称
+					depttype:'',//机构属性id
+					depttypeName:'',//机构属性名称
 					PT_NUM:'',//产品类别编号
 					PRODUCT_TYPE:'',//产品类别
 					PRO_NUM:'',//产品编号
@@ -1249,8 +1280,8 @@
 
 					}
 					res.data.R_VENDOR = Number(res.data.R_VENDOR);		
-					// res.data.MAINGROUP = Number(res.data.MAINGROUP);
-					// res.data.LEADER = Number(res.data.LEADER);
+					res.data.MAINGROUP = Number(res.data.MAINGROUP);
+					res.data.LEADER = Number(res.data.LEADER);
 					console.log(res.data);
 					console.log(typeof(res.data.MAINGROUP));
 					this.dataInfo = res.data;

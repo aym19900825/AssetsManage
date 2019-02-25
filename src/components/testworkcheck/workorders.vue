@@ -26,17 +26,13 @@
 								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-inventory-line-callout"></i>导出
 								</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
-							    <i class="icon-clipboard"></i>报表
-							</button>
-
 								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-send"></i>发布
 								</button>
 								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-close1"></i>取消
 								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="tasklist">
+								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-send"></i>生成子任务单
 								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
@@ -140,7 +136,19 @@
 						</el-col>
 						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
-							<el-table :header-cell-style="rowClass" :data="userList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<!--<el-table :header-cell-style="rowClass" 
+									  :data="userList" 
+									  border 
+									  stripe 
+									  :height="fullHeight" 
+									  style="width: 100%;" 
+									  :default-sort="{prop:'userList', order: 'descending'}" 
+									  @selection-change="SelChange" 
+									  v-loadmore="loadMore"
+									  v-loading="loading"  
+									  element-loading-text="加载中…"
+    								  element-loading-spinner="el-icon-loading"
+    								  element-loading-background="rgba(255, 255, 255, 0.9)">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="工作任务单编号" sortable width="140px" prop="WONUM" v-if="this.checkedName.indexOf('工作任务单编号')!=-1">
@@ -148,6 +156,8 @@
 									<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.WONUM}}
 										</p>
 									</template>	
+								</el-table-column>
+								<el-table-column label="状态" sortable width="100px" prop="STATUS" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
 								<el-table-column label="样品名称" sortable width="180px" prop="ITEM_NAME" v-if="this.checkedName.indexOf('样品名称')!=-1">
 								</el-table-column>
@@ -161,15 +171,14 @@
 								</el-table-column>
 								<el-table-column label="完成方式" sortable  width="100px" prop="COMPLETE_MODE" v-if="this.checkedName.indexOf('完成方式')!=-1">
 								</el-table-column>
-								<el-table-column label="委托书编号" sortable  width="120px" prop="PROXYNUM" v-if="this.checkedName.indexOf('委托书编号')!=-1">
+								<el-table-column label="委托书编号" sortable  width="160px" prop="PROXYNUM" v-if="this.checkedName.indexOf('委托书编号')!=-1">
 								</el-table-column>
-								<!-- <el-table-column label="信息状态" sortable width="100px" prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
-								</el-table-column> -->
 								<!-- <el-table-column label="录入人" sortable width="210px" prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
 								</el-table-column> -->
-								<el-table-column label="录入时间" sortable width="210px" :formatter="dateFormat" prop="ENTERDATE" v-if="this.checkedName.indexOf('录入时间')!=-1">
-								</el-table-column>
-							</el-table>
+								<tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="userList" v-on:childByValue="childByValue"></tree_grid>
+								<!--<el-table-column label="录入时间" sortable width="210px" :formatter="dateFormat" prop="ENTERDATE" v-if="this.checkedName.indexOf('录入时间')!=-1">
+								</el-table-column>-->
+							<!--</el-table>-->
 							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
 					            @size-change="sizeChange"
 					            @current-change="currentChange"
@@ -185,41 +194,106 @@
 				</div>
 			</div>
 			<workorders_mask :workorderForm="workorderForm" ref="child" @requests="requestData" @requestTree="getKey" v-bind:page=page></workorders_mask>
-			<!--报表-->
-			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
-			<sendtasklist ref="task"  v-bind:page=page></sendtasklist>
 		</div>
 	</div>
 </template>
 <script>
 	import Config from '../../config.js'
+	import tree_grid from '../common/TreeGrid.vue'//树表格
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_header from '../common/nav_tabs.vue'
 	import workorders_mask from '../testworkcheckDetails/workorders_mask.vue'
-    import reportmask from'../reportDetails/reportMask.vue'
-	import sendtasklist from '../testworkcheckDetails/sendtasklist.vue'
 	export default {
 		name: 'workorders',
 		components: {
 			vheader,
+			tree_grid,
 			navs_header,
 			navs_left,
 			workorders_mask,
-			reportmask,
-			sendtasklist
 		},
 		data() {
 			return {
-				reportData:{},//报表的数据
 				loading: false,
 				basic_url: Config.dev_url,
+				checkedName: [
+				    '工作任务单编号',
+					'状态',
+					'样品名称',
+					'样品型号',
+					'样品状态',
+					'抽样方案/判定依据',
+					'完成日期',
+					'完成方式',
+					'委托书编号',
+					'录入人',
+					'录入时间'
+				],
+				columns: [
+					 {
+					 	text: '序号',
+					 	dataIndex: 'WONUM',
+					 	isShow:true,
+					 },
+					{
+						text: '机构名称',
+						dataIndex: 'STATUS',
+						isShow:true,
+					},
+					{
+						text: '机构编码',
+						dataIndex: 'ITEM_NAME',
+						isShow:true,
+					},
+					{
+						text: '上级机构',
+						dataIndex: 'ITEM_MODEL',
+						isShow:true,
+					},
+					{
+						text: '机构属性',
+						dataIndex: 'ITEM_STATUS',
+						isShow:true,
+					},
+					{
+						text: '抽样方案/判定依据',
+						dataIndex: 'CHECK_BASIS',
+						isShow:true,
+					},
+					{
+						text: '完成日期',
+						dataIndex: 'COMPLETE_DATE',
+						isShow:true,
+					},
+					{
+						text: '完成方式',
+						dataIndex: 'COMPLETE_MODE',
+						isShow:true,
+					},
+					{
+						text: '委托书编号',
+						dataIndex: 'PROXYNUM',
+						isShow:true,
+					},
+					{
+						text: '录入人',
+						dataIndex: 'ENTERBY',
+						isShow:true,
+					},
+					{
+						text: '录入时间',
+						dataIndex: 'ENTERDATE',
+						isShow:true,
+					},
+				],
 				ismin: true,
 				loadSign:true,//加载
 				commentArr:{},
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				checkedName: [
 					'工作任务单编号',
+					'状态',
 					'样品名称',
 					'样品型号',
 					'样品状态',
@@ -235,6 +309,10 @@
 					{
 						label: '工作任务单编号',
 						prop: 'WONUM'
+					},
+					{
+						label: '状态',
+						prop: 'STATE'
 					},
 					{
 						label: '样品名称',
@@ -362,7 +440,7 @@
 		      this.page.currentPage = val;
 		      this.requestData();
 		    },
-		    	resetbtn(){
+	    	resetbtn(){
 				this.searchList =  { //点击高级搜索后显示的内容
 					WONUM: '',//工作任务单编号
 					ITEM_NAME: '',//样品名称
@@ -372,6 +450,7 @@
 					// ENTERBY: '',//录入人
 					ENTERDATE: '',//录入日期
 				};
+				this.requestData();
 			},
 			searchinfo(index) {
 				this.page.currentPage = 1;
@@ -407,10 +486,10 @@
 					}
 					//驳回
 					else if(this.selMenu[0].STATE == 0) {
-						var url = this.basic_url + '/api-apps/app/inspectPro/flow/isExecute/' + this.selMenu[0].ID;
+						var url = this.basic_url + '/api-apps/app/workorder/flow/isExecute/' + this.selMenu[0].ID;
 						this.$axios.get(url, {}).then((res) => {
 							if(res.data.resp_code == 0) {
-								var url = this.basic_url + '/api-apps/app/inspectPro/flow/isPromoterNode/' + this.selMenu[0].ID;
+								var url = this.basic_url + '/api-apps/app/workorder/flow/isPromoterNode/' + this.selMenu[0].ID;
 								this.$axios.get(url, {}).then((res) => {
 									if(res.data.resp_code == 0) {
 										this.$refs.child.detail(this.selMenu[0].ID);
@@ -433,38 +512,21 @@
 					}
 				}
 			},
-			//生成子任务单
-			tasklist(){
-				if(this.selMenu.length == 0) {
-					this.$message({
-						message: '请您选择要生成子任务单的数据',
-						type: 'warning'
-					});
-					return;
-				} else if(this.selMenu.length > 1) {
-					this.$message({
-						message: '不可同时生成多条子任务单',
-						type: 'warning'
-					});
-					return;
-				} else {
-					this.$refs.task.visible(this.selMenu[0].ID);	
-				}
-			},
 			//查看
 			view(id) {
 				this.$refs.child.view(id);
+			},
+			//代办跳转
+			getRouterData() {
+				// 只是改了query，其他都不变
+				this.id = this.$route.query.bizId;
+				this.$refs.child.view(this.id);
 			},
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
 				this.down = !this.down,
 				this.up = !this.up
-			},
-			//报表
-			reportdata(){
-				this.reportData.app=this.productType;
-				this.$refs.reportChild.visible();
 			},
 			// 删除
 			deluserinfo() {
@@ -540,10 +602,8 @@
 				this.selMenu = val;
 			},
 			requestData() {
+				this.loading = true;
 				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-
 					WONUM: this.searchList.WONUM,
 					ITEM_NAME: this.searchList.ITEM_NAME,
 					PROXYNUM: this.searchList.PROXYNUM,
@@ -552,40 +612,25 @@
 					ENTERBY: this.searchList.ENTERBY,
 					ENTERDATE: this.searchList.ENTERDATE,
 				}
-				var url = this.basic_url + '/api-apps/app/workorder';
+				var url=this.basic_url +'/api-apps/app/workorder/tree?tree_id=WONUM&tree_pid=PARENT_NUM';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(res)
-					this.page.totalCount = res.data.count;	
-					//总的页数
-					this.userList=res.data.data;
-					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
-					if(this.page.currentPage >= totalPage){
-						 this.loadSign = false
-					}else{
-						this.loadSign=true
+					console.log(res);
+					let result=res.data.datas;
+					for(let i=0;i<result.length;i++){
+						if(typeof(result[i].subDepts)!="undefined"&&result[i].subDepts.length>0){
+							let subDepts=result[i].subDepts;
+							result[i].children=subDepts;
+						}	
 					}
-					this.commentArr[this.page.currentPage]=res.data.data
-					let newarr=[]
-					for(var i = 1; i <= totalPage; i++){
-					
-						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
-							
-							for(var j = 0; j < this.commentArr[i].length; j++){
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					console.log(newarr);
-					this.userList = newarr;
-					console.log(this.userList);
-					
+					this.userList=res.data.datas;
+					this.loading = false;
+
 				}).catch((wrong) => {})
 			},
 			//机构树
 			getKey() {
-				let that = this;
 				var url = this.basic_url + '/api-user/depts/tree';
 				this.$axios.get(url, {}).then((res) => {
 					this.resourceData = res.data;
@@ -655,7 +700,9 @@
 		mounted() {
 			this.requestData();
 			this.getKey();
-
+			if(this.$route.query.bizId != undefined) {
+				this.getRouterData();
+			}
 			
 		},
 	}

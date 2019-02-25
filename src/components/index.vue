@@ -32,8 +32,46 @@
 					<h3 class="pt30">工作统计</h3>
 					<el-row :gutter="20" class="applist">
 						<!--APPList Begin-->
-						<el-col :span="6">
+						<el-col :span="12">
 							<div class="statisticsbg">
+								<div class="echart_title clearfix">
+									<div class="pull-left">
+										<h6><el-badge :value="200" :max="99" class="item">待办任务</el-badge></h6>
+									</div>
+									<div class="pull-right font13 blue">
+										<router-link :to="{path:'/task'}">更多<i class="el-icon-arrow-right el-icon--right"></i></router-link>
+									</div>
+								</div>
+								<div id="todoList" class="pt40" style="width: 100%; height: 220px;">
+									<!-- 表格 -->
+									<el-table :data="todoList" :header-cell-style="rowClass" border stripe height="140" style="width: 100%;" :default-sort="{prop:'todoList', order: 'descending'}" v-loadmore="loadMore">
+										<!-- <el-table-column label="数据id" sortable width="140px" prop="bizid">
+										</el-table-column> -->
+										<el-table-column label="单据号" sortable prop="bizNum">
+											<template slot-scope="scope">
+												<p class="blue" title="点击查看详情" @click=audit(scope.row)>{{scope.row.bizNum}}
+												</p>
+											</template>
+										</el-table-column>
+										<el-table-column label="App" sortable width="140px" prop="app">
+										</el-table-column>
+										<el-table-column label="当前环节" sortable prop="name">
+										</el-table-column>
+										<el-table-column label="应用" sortable prop="appDesc">
+										</el-table-column>
+										<el-table-column label="任务状态" sortable width="100px" align="center" prop="state">
+										</el-table-column>
+										<el-table-column label="创建时间" sortable width="160px" prop="createTime">
+										</el-table-column>
+									</el-table>
+									<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+									</el-pagination>
+									<!-- 表格 -->
+								</div>
+							</div>
+						</el-col>
+						<el-col :span="6">
+							<div class="statisticsbg" style="height: 250px">
 								<div class="echart_title clearfix">
 									<div class="pull-left">
 										<h6>工作完成情况</h6>
@@ -54,17 +92,20 @@
 									<div class="pull-left">
 										<p class="big_numb">283</p>
 										<p class="small_font">工作总计</p>
-										<p class="middle_font pt10">
+										<p class="middle_font pt40">
 											待办工作: 32<br />
-											执行中: 41
+											执行中: 100<br />
+											已完成: 151
 										</p>
 									</div>
-									<div class="pull-right pt10" style="width: 140px;">
-										<div class="wracircle" data-anim="base wracircle">
-											<div class="circle" data-anim="base left" style=""></div>
-											<div class="circle_font">
-												<p class="font20">46%</p>
-												<p>工作完成率</p>
+									<div class="pull-right pt40" style="width: 140px;">
+										<div class="pt40">
+											<div class="wracircle" data-anim="base wracircle">
+												<div class="circle" data-anim="base left" style=""></div>
+												<div class="circle_font">
+													<p class="font20">46%</p>
+													<p>工作完成率</p>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -89,24 +130,21 @@
 										</el-dropdown-menu>
 									</el-dropdown>
 								</div>
-								<div id="main" style="width: 100%; height: 140px;"></div>
+								<div id="main" style="width: 100%; height: 220px;"></div>
 							</div>
 						</el-col>
-						<el-col :span="6">
+						<!-- <el-col :span="6">
 							<div class="statisticsbg">
 								<div class="echart_title clearfix">
 									<div class="pull-left">
-										<h6>注册用户人数 (1000)</h6>
+										<h6>注册用户人数 <font class="red">(1000)</font></h6>
 									</div>
-									
+									<div class="pull-right font13 blue">
+										<router-link :to="{path:'/user_management'}">更多<i class="el-icon-arrow-right el-icon--right"></i></router-link>
+									</div>
 								</div>
 							</div>
-						</el-col>
-						<el-col :span="6">
-							<div class="statisticsbg">
-								
-							</div>
-						</el-col>
+						</el-col> -->
 						<!--APPList End-->
 					</el-row>
 					<!--工作统计 End-->
@@ -139,12 +177,81 @@ export default {
       	basic_url: Config.dev_url,
         show: false,
 		fullHeight: document.documentElement.clientHeight - 100+'px',//获取浏览器高度
-		applistdata: []
+		applistdata: [],
+		todoList:[],
+		searchList: {
+				createTime:'',	
+			},
+		page: {
+			currentPage: 1,
+			pageSize: 10,
+			totalCount: 0
+			},			
 
       }
     },
   
 	methods: {
+		//表头居中
+		rowClass({ row, rowIndex}) {
+		    return 'text-align:center'
+		},
+		//审核	
+		audit(item){
+			this.$router.push({path:item.bizMenuUrl ,query: { bizId: item.bizId,}});
+			this.$store.dispatch('setMenuIdAct',item.bizFirstMenuId);
+
+		},
+		
+	    sizeChange(val) {
+				this.page.pageSize = val;
+				this.requestData();
+		},
+		currentChange(val) {
+			this.page.currentPage = val;
+			this.requestData();
+		},
+		requestData() {
+			var url = this.basic_url + '/api-apps/app/flow/flow/todo';
+			this.$axios.get(url, {}).then((res) => {
+				console.log(res.data);
+				this.page.totalCount = res.data.count;
+				//总的页数
+				let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
+				if(this.page.currentPage >= totalPage) {
+					this.loadSign = false
+				} else {
+					this.loadSign = true
+				}
+				this.commentArr[this.page.currentPage] = res.data.data
+				let newarr = []
+				for(var i = 1; i <= totalPage; i++) {
+					if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+						for(var j = 0; j < this.commentArr[i].length; j++) {
+							newarr.push(this.commentArr[i][j])
+						}
+					}
+				}
+				this.todoList = newarr;
+			}).catch((wrong) => {
+				
+				
+			})
+		},
+		//滚动加载更多
+		loadMore() {
+			if(this.loadSign) {
+				this.loadSign = false
+				this.page.currentPage++
+					if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+						return
+					}
+				setTimeout(() => {
+					this.loadSign = true
+				}, 1000)
+				this.requestData();
+			}
+		},
 		goto(item){
 	        var _this = this;
 	        var data = {
@@ -238,6 +345,8 @@ export default {
         },
 	},
 	mounted(){
+		//加载待办任务
+		this.requestData();
 		//一级菜单
 		this.initEchart();//调用饼状图图表函数名称
 		this.$refs.navsheader.showClick({
@@ -272,6 +381,7 @@ export default {
 		}
       	
 	},
+	
 }
 
 </script>
@@ -292,7 +402,7 @@ export default {
 }
 .big_numb { color: #333333; font-size: 28px; line-height:32px; }
 .small_font { color: #BDBDBD; font-size:10px; line-height:15px;}
-.middle_font { color: #121958; font-size: 12px;  line-height:20px;}
+.middle_font { color: #121958; font-size: 13px;  line-height:22px;}
 
 
 

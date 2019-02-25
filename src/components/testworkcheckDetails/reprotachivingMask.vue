@@ -4,9 +4,9 @@
 		<div class="mask_divbg" v-if="show">
 			<div class="mask_div">
 				<div class="mask_title_div clearfix">
-					<div class="mask_title" v-show="addtitle">添加产品类别</div>
-					<div class="mask_title" v-show="modifytitle">修改产品类别</div>
-					<div class="mask_title" v-show="viewtitle">查看产品类别</div>
+					<div class="mask_title" v-show="addtitle">添加报告归档</div>
+					<div class="mask_title" v-show="modifytitle">修改报告归档</div>
+					<div class="mask_title" v-show="viewtitle">查看报告归档</div>
 					<div class="mask_anniu">
 						<span class="mask_span mask_max" @click='toggle'>
 							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -17,62 +17,52 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form :model="CATEGORY" inline-message :rules="rules" ref="CATEGORY" label-width="100px" class="demo-adduserForm">
+					<el-form :model="report" inline-message :rules="rules" ref="report" label-width="100px" class="demo-adduserForm">
 						<div class="accordion" id="information">
 							<el-collapse v-model="activeNames">
-								<el-collapse-item title="产品类别" name="1">
+								<el-collapse-item title="报告归档" name="1">
 									<el-row class="pb10">
 										<el-col :span="3" class="pull-right">
-											<el-input v-model="CATEGORY.VERSION" :disabled="true">
+											<el-input v-model="report.VERSION" :disabled="true">
 												<template slot="prepend">版本</template>
 											</el-input>
-										</el-col>
-										<!--<el-col :span="5" class="pull-right" v-if="modify">
-											<el-input v-model="CATEGORY.STATUS=='1'?'活动':'不活动'" :disabled="true">
-												<template slot="prepend">信息状态</template>
-											</el-input>
-										</el-col>
-										<el-col :span="5" class="pull-right" v-else>
-											<el-input v-model="CATEGORY.STATUS" :disabled="true">
-												<template slot="prepend">信息状态</template>
-											</el-input>
-										</el-col>-->
-										<!--<template slot-scope="scope">
-												<label>信息状态</label>
-	 									       <span v-text="scope.STATUS=='1'?'活动':'不活动'"></span>-->
-										<!--<span>{{scope.STATUS}}</span>
-	 									       	
-	 									       </span>
-	 								        </template>-->
-
-										<!-- <el-select v-model="CATEGORY.STATUS" placeholder="请选择信息状态">
-												<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-												</el-option>
-											</el-select> -->
 										</el-col>
 									</el-row>
 
 									<el-row>
-										<!-- <el-col :span="8">
-											<el-form-item label="类别编号" prop="NUM">
-												<el-input v-model="CATEGORY.NUM" :disabled="edit" placeholder="自动生成"></el-input>
-											</el-form-item>
-										</el-col> -->
 										<el-col :span="8">
-											<el-form-item label="编码" prop="NUM">
-												<el-input v-model="CATEGORY.NUM" :disabled="noedit"></el-input>
+											<el-form-item label="报告编号" prop="REPORTNUM">
+												<el-input v-model="report.REPORTNUM" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="16">
-											<el-form-item label="名称" prop="TYPE">
-												<el-input v-model="CATEGORY.TYPE" :disabled="noedit"></el-input>
+										<el-col :span="8">
+											<el-form-item label="报告名称" prop="REPORTNAME">
+												<el-input v-model="report.REPORTNAME" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+                                        <el-col :span="8">
+											<el-form-item label="委托书编号" prop="PROXYNUM">
+												<el-input v-model="report.PROXYNUM" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+                                    <el-row>
+										<el-col :span="8">
+											<el-form-item label="归档人" prop="ONHOLEPERSON">
+												<el-input v-model="report.ONHOLEPERSON" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="归档时间" prop="ONHOLTIME">
+												<el-date-picker v-model="report.ONHOLTIME" type="date" placeholder="请选择日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
+												</el-date-picker>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row>
 										<el-col :span="8" v-if="dept">
 											<el-form-item label="机构" prop="DEPTIDDesc">
-												<el-input v-model="CATEGORY.DEPTIDDesc" :disabled="edit"></el-input>
+												<el-input v-model="report.DEPTIDDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -81,22 +71,22 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="录入人" prop="ENTERBYDesc">
-												<el-input v-model="CATEGORY.ENTERBYDesc" :disabled="edit"></el-input>
+												<el-input v-model="report.ENTERBYDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="录入时间" prop="ENTERDATE">
-												<el-input v-model="CATEGORY.ENTERDATE" :disabled="edit"></el-input>
+												<el-input v-model="report.ENTERDATE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="修改人" prop="CHANGEBYDesc">
-												<el-input v-model="CATEGORY.CHANGEBYDesc" placeholder="当前修改人" :disabled="edit"></el-input>
+												<el-input v-model="report.CHANGEBYDesc" placeholder="当前修改人" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="修改时间" prop="CHANGEDATE">
-												<el-input v-model="CATEGORY.CHANGEDATE" placeholder="当前修改时间" :disabled="edit"></el-input>
+												<el-input v-model="report.CHANGEDATE" placeholder="当前修改时间" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -104,10 +94,8 @@
 							</el-collapse>
 						</div>
 						<div class="el-dialog__footer" v-show="noviews">
-							<el-button type="primary" @click="saveAndUpdate('CATEGORY')">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit('CATEGORY')" v-show="addtitle">保存并继续</el-button>
-							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('CATEGORY')">修订</el-button>
-							<!-- <el-button v-if="modify" type="success" @click="update('CATEGORY')">启用</el-button> -->
+							<el-button type="primary" @click="saveAndUpdate()">保存</el-button>
+							<el-button type="success" @click="saveAndSubmit()" v-show="addtitle">保存并继续</el-button>
 							<el-button @click="close">取消</el-button>
 						</div>
 					</el-form>
@@ -121,26 +109,26 @@
 	import Config from '../../config.js'
 	export default {
 		name: 'masks',
-		props: {
-			CATEGORY: {
-				type: Object,
-				default: function() {
-					return {
-						ID: '',
-						NUM: '',
-						TYPE: '',
-						STATUS: '',
-						VERSION: '',
-						DEPARTMENT: '',
-						ENTERBY: '',
-						ENTERDATE: '',
-						CHANGEBY: '',
-						CHANGEDATE: ''
-					}
-				}
-			},
-			page: Object,
-		},
+		// props: {
+		// 	report: {
+		// 		type: Object,
+		// 		default: function() {
+		// 			return {
+		// 				ID:'',	//报告ID
+        //                 REPORTNUM:'',	//报告编号
+        //                 REPORTNAME:'',	//报告名称
+        //                 PROXYNUM:'',	//委托书编号
+        //                 ONHOLEPERSON:'',	//归档人
+        //                 ONHOLTIME:'',	//归档时间
+        //                 CHANGEBY:'',	//修改人
+        //                 CHANGEDATE:'',	//修改时间
+        //                 DEPTID:'',	//机构ID
+        //                 DEPARTMENT:'',	//机构
+		// 			}
+		// 		}
+		// 	},
+		// 	page: Object,
+		// },
 		data() {
 			var validateNum = (rule, value, callback) => {
 				if(value != ""){
@@ -194,8 +182,20 @@
 				modify:false,//修订
 				hintshow:false,
 				statusshow1:true,
-				statusshow2:false,
-			};
+                statusshow2:false,
+                report:{
+                    ID:'',	//报告ID
+                    REPORTNUM:'',	//报告编号
+                    REPORTNAME:'',	//报告名称
+                    PROXYNUM:'',	//委托书编号
+                    ONHOLEPERSON:'',	//归档人
+                    ONHOLTIME:'',	//归档时间
+                    CHANGEBY:'',	//修改人
+                    CHANGEDATE:'',	//修改时间
+                    DEPTID:'',	//机构ID
+                    DEPARTMENT:'',	//机构
+                }
+            }
 		},
 		methods: {
 			//获取导入表格勾选信息
@@ -206,11 +206,11 @@
 			visible() {
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					console.log(res.data);
-					this.CATEGORY.DEPTID = res.data.deptId;
-					this.CATEGORY.ENTERBY = res.data.id;
+					this.report.DEPTID = res.data.deptId;
+					this.report.ENTERBY = res.data.id;
 					// this.CATEGORY.ENTERBYDesc = res.data.nickname;
 					var date = new Date();
-					this.CATEGORY.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
+					this.report.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -228,10 +228,11 @@
 				this.hintshow = false;
 				this.statusshow1 = true;
 				this.statusshow2 = false;
-//				this.show = true;
+				this.show = true;
 			},
 			// 这里是修改
-			detail() {
+			detail(dataid) {
+                console.log(dataid);
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.viewtitle = false;
@@ -244,14 +245,22 @@
 				this.statusshow1 = false;
 				this.statusshow2 = true;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					this.CATEGORY.DEPTID = res.data.deptId;//传给后台机构id
-					this.CATEGORY.CHANGEBY = res.data.id;
-					// this.CATEGORY.CHANGEBYDesc = res.data.nickname;
+					this.report.DEPTID = res.data.deptId;//传给后台机构id
+					this.report.CHANGEBY = res.data.id;
+					// this.CATEGreportORY.CHANGEBYDesc = res.data.nickname;
 					var date = new Date();
-					this.CATEGORY.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
-					//深拷贝数据
-					let _obj = JSON.stringify(this.CATEGORY);
-        			this.category = JSON.parse(_obj);
+					this.report.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+                });
+                var url = this.basic_url +'/api-apps/app/reportOnhole/' + dataid;
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res.data);
+					this.report = res.data;
+					this.show = true;
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -262,7 +271,6 @@
 			},
 			//这是查看
 			view() {
-				console.log(this.CATEGORY);
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;
@@ -273,85 +281,61 @@
 				this.show = true;				
 			},
 			//点击修订按钮
-			modifyversion(CATEGORY) {
-				this.$refs[CATEGORY].validate((valid) => {
-					if(valid) {
-						var category=JSON.stringify(this.category); 
-	 					var CATEGORY=JSON.stringify(this.CATEGORY);
-					 	if(category==CATEGORY){
-					  	this.$message({
-								message: '没有修改内容，不允许修订！',
-								type: 'warning'
-							});
-							return false;
-					    }else{
-							var url = this.basic_url + '/api-apps/app/productType/operate/upgraded';
-							this.$axios.post(url, this.CATEGORY).then((res) => {
-								//resp_code == 0是后台返回的请求成功的信息
-								if(res.data.resp_code == 0) {
-									this.$message({
-										message: '修订成功',
-										type: 'success'
-									});
-									//重新加载数据
-									this.$emit('request');
-									this.show = false;
-								}else{
-								this.show = true;
-								if(res.data.resp_code == 1) {
-									//res.data.resp_msg!=''后台返回提示信息
-									if( res.data.resp_msg!=''){
-									 	this.$message({
-											message: res.data.resp_msg,
-											type: 'warning'
-									 	});
-									}else{
-										this.$message({
-											message:'相同数据不可重复修订！',
-											type: 'warning'
-										});
-									}
-								}
-							}		
-							}).catch((err) => {
-								this.$message({
-									message: '网络错误，请重试',
-									type: 'error'
-								});
-							});
-						}
-					} else {
-						this.$message({
-							message: '未填写完整，请填写',
-							type: 'warning'
-						});
-					}
-				});
-			},
-			//点击更新按钮
-			update(CATEGORY) {
-				var data = {
-					id: this.CATEGORY.ID,
-				}
-				this.$axios.get(this.basic_url+ '/api-apps/app/productType/operate/updateRelate', {
-					params: data
-				}).then((res) => {
-					console.log(res.data.resp_code);
-					if(res.data.resp_code == 0) {
-						this.$message({
-							message: '更新成功',
-							type: 'success'
-						});
-					}else{
-						return;
-					}
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
-			},
+			// modifyversion(report) {
+			// 	this.$refs[report].validate((valid) => {
+			// 		if(valid) {
+			// 			var category=JSON.stringify(this.category); 
+	 		// 			var report=JSON.stringify(this.report);
+			// 		 	if(category==report){
+			// 		  	this.$message({
+			// 					message: '没有修改内容，不允许修订！',
+			// 					type: 'warning'
+			// 				});
+			// 				return false;
+			// 		    }else{
+			// 				var url = this.basic_url + '/api-apps/app/productType/operate/upgraded';
+			// 				this.$axios.post(url, this.report).then((res) => {
+			// 					//resp_code == 0是后台返回的请求成功的信息
+			// 					if(res.data.resp_code == 0) {
+			// 						this.$message({
+			// 							message: '修订成功',
+			// 							type: 'success'
+			// 						});
+			// 						//重新加载数据
+			// 						this.$emit('request');
+			// 						this.show = false;
+			// 					}else{
+			// 					this.show = true;
+			// 					if(res.data.resp_code == 1) {
+			// 						//res.data.resp_msg!=''后台返回提示信息
+			// 						if( res.data.resp_msg!=''){
+			// 						 	this.$message({
+			// 								message: res.data.resp_msg,
+			// 								type: 'warning'
+			// 						 	});
+			// 						}else{
+			// 							this.$message({
+			// 								message:'相同数据不可重复修订！',
+			// 								type: 'warning'
+			// 							});
+			// 						}
+			// 					}
+			// 				}		
+			// 				}).catch((err) => {
+			// 					this.$message({
+			// 						message: '网络错误，请重试',
+			// 						type: 'error'
+			// 					});
+			// 				});
+			// 			}
+			// 		} else {
+			// 			this.$message({
+			// 				message: '未填写完整，请填写',
+			// 				type: 'warning'
+			// 			});
+			// 		}
+			// 	});
+			// },
 			//点击关闭按钮
 			close() {
 				this.show = false;
@@ -383,14 +367,11 @@
 				$(".mask_div").css("top", "100px");
 			},
 			// 保存users/saveOrUpdate
-			save(CATEGORY) {
-				console.log(233333);
-				console.log(this.CATEGORY);
-				this.$refs[CATEGORY].validate((valid) => {
+			save() {
+				this.$refs.report.validate((valid) => {
 					if(valid) {
-						this.CATEGORY.STATUS = ((this.CATEGORY.STATUS == "1" || this.CATEGORY.STATUS == '活动') ? '1' : '0');
-						var url = this.basic_url + '/api-apps/app/productType/saveOrUpdate';
-						this.$axios.post(url, this.CATEGORY).then((res) => {
+						var url = this.basic_url + '/api-apps/app/reportOnhole/saveOrUpdate';
+						this.$axios.post(url, this.report).then((res) => {
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
 								this.$message({
@@ -399,7 +380,7 @@
 								});
 								//重新加载数据
 								this.$emit('request');
-								this.$emit('reset');
+								// this.$emit('reset');
 								this.visible();
 							}else{
 								this.show = true;
@@ -437,16 +418,15 @@
 			},
 			
 			//保存
-			saveAndUpdate(CATEGORY) {
-				this.save(CATEGORY);
+			saveAndUpdate() {
+				this.save();
 				if(this.falg){
 					this.show = false;
 				}
 			},
 			//保存并继续
-			saveAndSubmit(CATEGORY) {
-				this.save(CATEGORY);
-				// this.visible();
+			saveAndSubmit() {
+				this.save();
 				this.show = true;
 			},
 			//时间格式化
@@ -473,9 +453,5 @@
 </script>
 
 <style scoped>
-	.el-table__body-wrapper 
-	{
-    overflow-y:scroll;
-    }
 	@import '../../assets/css/mask-modules.css';
 </style>

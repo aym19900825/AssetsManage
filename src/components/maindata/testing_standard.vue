@@ -25,6 +25,9 @@
 								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
 							    <i class="icon-trash"></i>删除
 							</button>
+								<button type="button" class="btn btn-red button-margin" @click="physicsDel">
+								    <i class="icon-trash"></i>物理删除
+								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="importData">
 							    <i class="icon-upload-cloud"></i>导入
 							</button>
@@ -33,6 +36,9 @@
 							</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="Printing">
 							    <i class="icon-print"></i>打印
+							</button>
+							<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
+							    <i class="icon-file-text1"></i>报表
 							</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 					    		<i class="icon-search"></i>高级查询
@@ -165,6 +171,8 @@
 			<!--右侧内容显示 End-->
 			<standardmask :dataInfo="dataInfo" ref="child" @request="requestData" v-bind:page=page></standardmask>
 		</div>
+<!--报表-->
+			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 	</div>
 </template>
 <script>
@@ -174,18 +182,20 @@
 	import navs_header from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import standardmask from '../maindataDetails/testing_standardMask.vue'
+	import reportmask from'../reportDetails/reportMask.vue'
 	export default {
 		name: 'testing_standard',
-
 		components: {
 			vheader,
 			navs_header,
 			tableControle,
 			navs_left,
-			standardmask
+			standardmask,
+			reportmask
 		},
 		data() {
 			return {
+				reportData:{},//报表的数据
 				loading: false,
 				basic_url: Config.dev_url,
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
@@ -486,6 +496,58 @@
 					});
 				}
 			},
+			//物理 删除
+			physicsDel() {
+				var selData = this.selUser;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请您选择要删除的数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					var url = this.basic_url + '/api-apps/app/inspectionSta/deletes/physicsDel';
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					for(var i = 0; i < changeUser.length; i++) {
+						deleteid.push(changeUser[i].ID);
+					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+					var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {
+							params: data
+						}).then((res) => { //.delete 传数据方法
+							//resp_code == 0是后台返回的请求成功的信息
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
+							this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+						});
+					}).catch(() => {
+
+					});
+				}
+			},
 			// 导入
 			importData() {
 
@@ -512,8 +574,13 @@
 			},
 			// 打印
 			Printing() {
-
 			},
+			//报表
+			reportdata(){
+				this.reportData.app=this.productType;
+				this.$refs.reportChild.visible();
+			},
+
 			judge(data) {
 				return data.STATUS == "1" ? '活动' : '不活动'
 			},

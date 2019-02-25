@@ -26,13 +26,17 @@
 								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-inventory-line-callout"></i>导出
 								</button>
+							<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
+							    <i class="icon-clipboard"></i>报表
+							</button>
+
 								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-send"></i>发布
 								</button>
 								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-close1"></i>取消
 								</button>
-								<button type="button" class="btn btn-primarys button-margin">
+								<button type="button" class="btn btn-primarys button-margin" @click="tasklist">
 								    <i class="icon-send"></i>生成子任务单
 								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
@@ -136,19 +140,7 @@
 						</el-col>
 						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
-							<el-table :header-cell-style="rowClass" 
-									  :data="userList" 
-									  border 
-									  stripe 
-									  :height="fullHeight" 
-									  style="width: 100%;" 
-									  :default-sort="{prop:'userList', order: 'descending'}" 
-									  @selection-change="SelChange" 
-									  v-loadmore="loadMore"
-									  v-loading="loading"  
-									  element-loading-text="加载中…"
-    								  element-loading-spinner="el-icon-loading"
-    								  element-loading-background="rgba(255, 255, 255, 0.9)">
+							<el-table :header-cell-style="rowClass" :data="userList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="工作任务单编号" sortable width="140px" prop="WONUM" v-if="this.checkedName.indexOf('工作任务单编号')!=-1">
@@ -193,6 +185,9 @@
 				</div>
 			</div>
 			<workorders_mask :workorderForm="workorderForm" ref="child" @requests="requestData" @requestTree="getKey" v-bind:page=page></workorders_mask>
+			<!--报表-->
+			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
+			<sendtasklist ref="task"  v-bind:page=page></sendtasklist>
 		</div>
 	</div>
 </template>
@@ -202,16 +197,21 @@
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_header from '../common/nav_tabs.vue'
 	import workorders_mask from '../testworkcheckDetails/workorders_mask.vue'
+    import reportmask from'../reportDetails/reportMask.vue'
+	import sendtasklist from '../testworkcheckDetails/sendtasklist.vue'
 	export default {
 		name: 'workorders',
 		components: {
 			vheader,
 			navs_header,
 			navs_left,
-			workorders_mask
+			workorders_mask,
+			reportmask,
+			sendtasklist
 		},
 		data() {
 			return {
+				reportData:{},//报表的数据
 				loading: false,
 				basic_url: Config.dev_url,
 				ismin: true,
@@ -372,7 +372,6 @@
 					// ENTERBY: '',//录入人
 					ENTERDATE: '',//录入日期
 				};
-				this.requestData();
 			},
 			searchinfo(index) {
 				this.page.currentPage = 1;
@@ -408,10 +407,10 @@
 					}
 					//驳回
 					else if(this.selMenu[0].STATE == 0) {
-						var url = this.basic_url + '/api-apps/app/workorder/flow/isExecute/' + this.selMenu[0].ID;
+						var url = this.basic_url + '/api-apps/app/inspectPro/flow/isExecute/' + this.selMenu[0].ID;
 						this.$axios.get(url, {}).then((res) => {
 							if(res.data.resp_code == 0) {
-								var url = this.basic_url + '/api-apps/app/workorder/flow/isPromoterNode/' + this.selMenu[0].ID;
+								var url = this.basic_url + '/api-apps/app/inspectPro/flow/isPromoterNode/' + this.selMenu[0].ID;
 								this.$axios.get(url, {}).then((res) => {
 									if(res.data.resp_code == 0) {
 										this.$refs.child.detail(this.selMenu[0].ID);
@@ -434,21 +433,38 @@
 					}
 				}
 			},
+			//生成子任务单
+			tasklist(){
+				if(this.selMenu.length == 0) {
+					this.$message({
+						message: '请您选择要生成子任务单的数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selMenu.length > 1) {
+					this.$message({
+						message: '不可同时生成多条子任务单',
+						type: 'warning'
+					});
+					return;
+				} else {
+					this.$refs.task.visible(this.selMenu[0].ID);	
+				}
+			},
 			//查看
 			view(id) {
 				this.$refs.child.view(id);
-			},
-			//代办跳转
-			getRouterData() {
-				// 只是改了query，其他都不变
-				this.id = this.$route.query.bizId;
-				this.$refs.child.view(this.id);
 			},
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
 				this.down = !this.down,
 				this.up = !this.up
+			},
+			//报表
+			reportdata(){
+				this.reportData.app=this.productType;
+				this.$refs.reportChild.visible();
 			},
 			// 删除
 			deluserinfo() {
@@ -524,7 +540,6 @@
 				this.selMenu = val;
 			},
 			requestData() {
-				this.loading = true;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -541,6 +556,7 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
+					console.log(res)
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					this.userList=res.data.data;
@@ -561,12 +577,15 @@
 							}
 						}
 					}
+					console.log(newarr);
 					this.userList = newarr;
-					this.loading = false;
+					console.log(this.userList);
+					
 				}).catch((wrong) => {})
 			},
 			//机构树
 			getKey() {
+				let that = this;
 				var url = this.basic_url + '/api-user/depts/tree';
 				this.$axios.get(url, {}).then((res) => {
 					this.resourceData = res.data;
@@ -636,9 +655,7 @@
 		mounted() {
 			this.requestData();
 			this.getKey();
-			if(this.$route.query.bizId != undefined) {
-				this.getRouterData();
-			}
+
 			
 		},
 	}

@@ -118,22 +118,21 @@
 
 												<el-table-column prop="required" label="必填" sortable width="180px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'params.'+scope.$index + '.required'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.required" placeholder="请输入">
-															</el-input>
+												<el-form-item :prop="'params.'+scope.$index + '.required'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+													<el-select v-if="scope.row.isEditing" v-model="scope.row.required" filterable allow-create default-first-option placeholder="请选择">
+										    <el-option v-for="item in options" :key="item.value" :value="item.value" :label="item.label"></el-option>
+										    		</el-select>
 														<span v-else="v-else">{{scope.row.required}}</span>
-														</el-form-item>
+												</el-form-item>
 													</template>
 												</el-table-column>
 
 												<el-table-column prop="type" label="类型" sortable width="220px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'params.'+scope.$index + '.type'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-														<!--<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.type" placeholder="请输入">
-														</el-input>-->
 														<el-select v-if="scope.row.isEditing" v-model="scope.row.type" filterable allow-create default-first-option placeholder="请选择">
-										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
-										</el-select>
+										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.name"></el-option>
+														</el-select>
 														<span v-else="v-else">{{scope.row.type}}</span>
 														</el-form-item>
 													</template>
@@ -245,6 +244,13 @@
 				},
 				dataid:'',//修改和查看带过的id
 				selectData:[],
+				options: [{
+		          value: '1',
+		          label: '是'
+		        }, {
+		          value: '0',
+		          label: '否'
+		        }]
 			};
 		},
 		methods: {
@@ -305,7 +311,6 @@
 			//刪除新建行
 			deleteRow(index,rows) {//Table-操作列中的删除行
 				rows.splice(index,1);
-
 			},
 			//点击按钮显示弹窗
 			visible() {

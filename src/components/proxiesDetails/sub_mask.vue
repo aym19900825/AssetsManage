@@ -18,16 +18,25 @@
 				</div>
 				<div class="mask_content">
 					<el-form :model="report" inline-message :rules="rules" ref="report" label-width="100px" class="demo-adduserForm">
+						<div class="text-center" v-show="viewtitle">
+							<span v-if="this.report.STATE!=3">
+							<el-button id="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 启动流程</el-button>
+							<el-button id="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
+							</span>
+							<el-button type="primary" round plain size="mini" @click="flowmap"><i class="icon-git-pull-request"></i> 流程地图</el-button>
+							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
+							<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
+						</div>
 						<div class="accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="承包方分包协议" name="1">
-									<!-- <el-row class="pb10">
-										<el-col :span="3" class="pull-right">
-											<el-input v-model="report.VERSION" :disabled="true">
-												<template slot="prepend">版本</template>
-											</el-input>
-										</el-col>
-									</el-row> -->
+									<el-row class="pb10">
+                                        <el-col :span="3" class="pull-right">
+                                            <el-input v-model="report.STATEDesc" :disabled="true">
+                                                <template slot="prepend">状态</template>
+                                            </el-input>
+                                        </el-col>
+                                    </el-row>
 
 									<el-row>
 										<el-col :span="8">
@@ -144,6 +153,13 @@
 					</el-form>
 				</div>
 			</div>
+			<!--审批页面-->
+			<approvalmask :approvingData="approvingData" ref="approvalChild"  @detail="detailgetData"></approvalmask>
+			<!--流程历史-->
+			<flowhistorymask :approvingData="approvingData"  ref="flowhistoryChild" ></flowhistorymask>
+			<!--流程地图-->
+			<flowmapmask :approvingData="approvingData" ref="flowmapChild" ></flowmapmask>
+			<!--当前责任人-->
 		</div>
 	</div>
 </template>
@@ -152,26 +168,6 @@
 	import Config from '../../config.js'
 	export default {
 		name: 'masks',
-		// props: {
-		// 	report: {
-		// 		type: Object,
-		// 		default: function() {
-		// 			return {
-		// 				ID:'',	//报告ID
-        //                 REPORTNUM:'',	//报告编号
-        //                 REPORTNAME:'',	//报告名称
-        //                 PROXYNUM:'',	//委托书编号
-        //                 ONHOLEPERSON:'',	//归档人
-        //                 ONHOLTIME:'',	//归档时间
-        //                 CHANGEBY:'',	//修改人
-        //                 CHANGEDATE:'',	//修改时间
-        //                 DEPTID:'',	//机构ID
-        //                 DEPARTMENT:'',	//机构
-		// 			}
-		// 		}
-		// 	},
-		// 	page: Object,
-		// },
 		data() {
 			var validateNum = (rule, value, callback) => {
 				if(value != ""){
@@ -196,6 +192,7 @@
 				}
 			};
 			return {
+				approvingData:{},
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				selUser: [],
@@ -226,29 +223,35 @@
 				hintshow:false,
 				statusshow1:true,
                 statusshow2:false,
+                start:false,
+				approval:false,
                 dataid:'',
+                subcontrac:'subcontrac',//appname
                 report:{
-                    ID:'',	//分包协议ID
-                    PROXY_CONTRACT_NUM:'',	//分包协议编号
-                    PROXYNUM:'',	//委托书编号
-                    V_NAME:'',//委托方名称
-                    VENDOR:'',	//单位名称
-                    CONTRACT_NATURE:'',//分包性质
-                    TYPE:'',	//分包协议类别
-                    ITEMNAME :'',//样品名称
-                    COMPDATE:'',//完成日期
-                    P_REMARKS:'',	//检验/检测项目内容
-                    BASIS:'',	//检验检测项目依据
-                    REQUIRES:'',	//对环境和操作人员要求
-                    Q_TYPE:'',	//对分包报告/证书的要求
-                    CHECKCOST:'',	//检验检测费用
-                    STATUS:'',	//信息状态
-                    ENTERBY:'',//	录入人
-                    ENTERDATE:'',	//录入时间
-                    CHANGEBY:'',	//修改人
-                    CHANGEDATE:'',	//修改时间
-
-                }
+					ID:'',  //分包协议ID
+					PROXY_CONTRACT_NUM:'',  //分包协议编号
+					PROXYNUM:'',    //委托书编号
+					V_NAME:'',//委托方名称
+					VENDOR:'',  //单位名称
+					CONTRACT_NATURE:'',//分包性质
+					STATE:'1',//流程状态
+					STATEDesc:'草稿',
+					ITEM_STATUS:'',//样品状态
+					TYPE:'',    //分包协议类别
+					ITEMNAME :'',//样品名称
+					COMPDATE:'',//完成日期
+					P_REMARKS:'',   //检验/检测项目内容
+					BASIS:'',   //检验检测项目依据
+					REQUIRES:'',    //对环境和操作人员要求
+					Q_TYPE:'',  //对分包报告/证书的要求
+					CHECKCOST:'',   //检验检测费用
+					STATUS:'',  //信息状态
+					ENTERBY:'',//   录入人
+					ENTERDATE:'',   //录入时间
+					CHANGEBY:'',    //修改人
+					CHANGEDATE:'',  //修改时间
+					
+					}
             }
 		},
 		methods: {
@@ -286,7 +289,6 @@
 			},
 			detailgetData() {
 				var url = this.basic_url + '/api-apps/app/subcontrac/' + this.dataid;
-//			var url = this.basic_url +'/api-apps/app/inspectPro/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					this.report = res.data;
 					this.show = true;
@@ -344,63 +346,75 @@
 				this.views = false; //
 				this.edit = true;
 				this.noedit = true;
+				//判断启动流程和审批的按钮是否显示
+				var url = this.basic_url + '/api-apps/app/subcontrac/flow/isStart/'+dataid;
+				this.$axios.get(url, {}).then((res) => {
+					if(res.data.resp_code==1){
+						this.start=true;
+						this.approval=false;
+					}else{
+						var url = this.basic_url + '/api-apps/app/subcontrac/flow/Executors/'+dataid;
+						this.$axios.get(url, {}).then((res) => {
+							console.log(res.data.datas);
+							var resullt=res.data.datas;
+							var users='';
+							var users='';
+							for(var i=0;i<resullt.length;i++){
+								users = users + resullt[i].username+",";
+								console.log("users----"+users);
+							}
+							if(users.indexOf(this.username) != -1){
+								this.approval=true;
+								this.start=false;
+							}
+						});
+					}
+				});
             },
-			//点击修订按钮
-			// modifyversion(report) {
-			// 	this.$refs[report].validate((valid) => {
-			// 		if(valid) {
-			// 			var category=JSON.stringify(this.category); 
-	 		// 			var report=JSON.stringify(this.report);
-			// 		 	if(category==report){
-			// 		  	this.$message({
-			// 					message: '没有修改内容，不允许修订！',
-			// 					type: 'warning'
-			// 				});
-			// 				return false;
-			// 		    }else{
-			// 				var url = this.basic_url + '/api-apps/app/productType/operate/upgraded';
-			// 				this.$axios.post(url, this.report).then((res) => {
-			// 					//resp_code == 0是后台返回的请求成功的信息
-			// 					if(res.data.resp_code == 0) {
-			// 						this.$message({
-			// 							message: '修订成功',
-			// 							type: 'success'
-			// 						});
-			// 						//重新加载数据
-			// 						this.$emit('request');
-			// 						this.show = false;
-			// 					}else{
-			// 					this.show = true;
-			// 					if(res.data.resp_code == 1) {
-			// 						//res.data.resp_msg!=''后台返回提示信息
-			// 						if( res.data.resp_msg!=''){
-			// 						 	this.$message({
-			// 								message: res.data.resp_msg,
-			// 								type: 'warning'
-			// 						 	});
-			// 						}else{
-			// 							this.$message({
-			// 								message:'相同数据不可重复修订！',
-			// 								type: 'warning'
-			// 							});
-			// 						}
-			// 					}
-			// 				}		
-			// 				}).catch((err) => {
-			// 					this.$message({
-			// 						message: '网络错误，请重试',
-			// 						type: 'error'
-			// 					});
-			// 				});
-			// 			}
-			// 		} else {
-			// 			this.$message({
-			// 				message: '未填写完整，请填写',
-			// 				type: 'warning'
-			// 			});
-			// 		}
-			// 	});
-			// },
+			//审批流程
+			approvals(){
+				this.approvingData.id =this.dataid;
+				 var url = this.basic_url + '/api-apps/app/subcontrac/flow/isEnd/'+this.dataid;
+		    		this.$axios.get(url, {}).then((res) => {
+		    			if(res.data.resp_code == 0) {
+							this.$message({
+								message:res.data.resp_msg,
+								type: 'warning'
+							});
+		    			}else{
+		    				var url = this.basic_url + '/api-apps/app/subcontrac/flow/isExecute/'+this.dataid;
+		    				this.$axios.get(url, {}).then((res) => {
+				    			if(res.data.resp_code == 1) {
+										this.$message({
+											message:res.data.resp_msg,
+											type: 'warning'
+										});
+								}else{
+									this.$refs.approvalChild.visible();
+								}
+		    		});
+		    		}
+				});
+			},
+			//流程历史
+			flowhistory(){
+				this.approvingData.id =this.dataid;
+				this.approvingData.app=this.subcontrac;
+//				this.$refs.flowhistoryChild.open();
+				this.$refs.flowhistoryChild.getdata(this.dataid);
+			},
+			//流程地图
+			flowmap(){
+				this.approvingData.id =this.dataid;
+				this.approvingData.app=this.subcontrac;
+				this.$refs.flowmapChild.getimage();
+			},
+			//当前责任人
+			viewpepole(){
+				this.approvingData.id =this.dataid;
+				this.approvingData.app=this.subcontrac;
+				this.$refs.vewPopleChild.getvewPople(this.dataid);
+			},
 			//点击关闭按钮
 			close() {
 				this.show = false;
@@ -431,6 +445,7 @@
 				$(".mask_div").css("height", "80%");
 				$(".mask_div").css("top", "100px");
 			},
+			
 			// 保存users/saveOrUpdate
 			save() {
 				this.$refs.report.validate((valid) => {

@@ -751,11 +751,18 @@
 														<span v-else="v-else">{{scope.row.PROXYNUM}}</span>
 													</template>
 												</el-table-column>
-												<el-table-column prop="V_NAMEDesc" label="委托单位" sortable width="120px">
+												<el-table-column prop="V_NAME" label="委托单位" sortable width="120px">
 													<template slot-scope="scope">
-														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAMEDesc" placeholder="请输入委托方名称">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAME" placeholder="请输入委托方名称">
 														</el-input>
-														<span v-else="v-else">{{scope.row.V_NAMEDesc}}</span>
+														<span v-else="v-else">{{scope.row.V_NAME}}</span>
+													</template>
+												</el-table-column>
+												<el-table-column prop="DEPTTYPE" label="机构属性" sortable width="120px">
+													<template slot-scope="scope">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.DEPTTYPE" placeholder="请输入委托方名称">
+														</el-input>
+														<span v-else="v-else">{{scope.row.DEPTTYPE}}</span>
 													</template>
 												</el-table-column>
 												<el-table-column prop="INSPECT_GROUP" label="专业组" sortable width="120px">

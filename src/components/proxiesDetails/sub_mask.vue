@@ -21,13 +21,13 @@
 						<div class="accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="承包方分包协议" name="1">
-									<!-- <el-row class="pb10">
+									<el-row class="pb10">
 										<el-col :span="3" class="pull-right">
-											<el-input v-model="report.VERSION" :disabled="true">
-												<template slot="prepend">版本</template>
+											<el-input v-model="report.STATEDesc" :disabled="true">
+												<template slot="prepend">状态</template>
 											</el-input>
 										</el-col>
-									</el-row> -->
+									</el-row>
 
 									<el-row>
 										<el-col :span="8">
@@ -56,8 +56,8 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="状态" prop="state">
-												<el-input v-model="report.state" :disabled="noedit"></el-input>
+											<el-form-item label="样品状态" prop="ITEM_STATUS">
+												<el-input v-model="report.ITEM_STATUS" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
                                         <el-col :span="8">
@@ -155,26 +155,6 @@
 	import Config from '../../config.js'
 	export default {
 		name: 'masks',
-		// props: {
-		// 	report: {
-		// 		type: Object,
-		// 		default: function() {
-		// 			return {
-		// 				ID:'',	//报告ID
-        //                 REPORTNUM:'',	//报告编号
-        //                 REPORTNAME:'',	//报告名称
-        //                 PROXYNUM:'',	//委托书编号
-        //                 ONHOLEPERSON:'',	//归档人
-        //                 ONHOLTIME:'',	//归档时间
-        //                 CHANGEBY:'',	//修改人
-        //                 CHANGEDATE:'',	//修改时间
-        //                 DEPTID:'',	//机构ID
-        //                 DEPARTMENT:'',	//机构
-		// 			}
-		// 		}
-		// 	},
-		// 	page: Object,
-		// },
 		data() {
 			var validateNum = (rule, value, callback) => {
 				if(value != ""){
@@ -237,6 +217,9 @@
                     V_NAME:'',//委托方名称
                     VENDOR:'',	//单位名称
                     CONTRACT_NATURE:'',//分包性质
+                    STATE:'1',//流程状态
+                    STATEDesc:'草稿',
+                    ITEM_STATUS:'',//样品状态
                     TYPE:'',	//分包协议类别
                     ITEMNAME :'',//样品名称
                     COMPDATE:'',//完成日期

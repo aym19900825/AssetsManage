@@ -348,11 +348,11 @@
 														</el-form-item>
 													</template>
 												</el-table-column>
-												<el-table-column prop="V_NAMEDesc" label="委托单位" sortable width="120px">
+												<el-table-column prop="V_NAME" label="委托单位" sortable width="120px">
 													<template slot-scope="scope">
-														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAMEDesc" placeholder="请输入委托方名称">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAME" placeholder="请输入委托方名称">
 														</el-input>
-														<span v-else="v-else">{{scope.row.V_NAMEDesc}}</span>
+														<span v-else="v-else">{{scope.row.V_NAME}}</span>
 													</template>
 												</el-table-column>
 												<el-table-column prop="PROXYNUM" label="委托书编号" sortable width="120px">
@@ -1165,8 +1165,9 @@
 				var obj = {
 					PROXY_CONTRACT_NUM: '',
 					PROXYNUM: '',
-					V_NAME:this.customid,
-					V_NAMEDesc:this.dataInfo.V_NAME,
+					// V_NAME:this.customid,请不要删掉该注释
+					// V_NAMEDesc:this.dataInfo.V_NAME,请不要删掉该注释
+					V_NAME:this.dataInfo.V_NAME,
 					INSPECT_GROUP:'',
 					PROJECT_ID:'',
 					VENDOR: '',//承检单位

@@ -141,6 +141,9 @@
 							<el-button type="success" @click="saveAndSubmit()" v-show="addtitle">保存并继续</el-button>
 							<el-button @click="close">取消</el-button>
 						</div>
+                        <div class="el-dialog__footer" v-show="!viewtitle">
+							<el-button type="primary" @click="createinspect()">生成委托书</el-button>
+						</div>
 					</el-form>
 				</div>
 			</div>
@@ -493,7 +496,30 @@
 			saveAndSubmit() {
 				this.save();
 				this.show = true;
-			},
+            },
+            createinspect(){
+                // /app/subcontrac/operate/createInspectProxy
+                var dataid = this.report.ID;
+                var url=this.basic_url + '/api-apps/app/subcontrac/operate/createInspectProxy?ID=' + dataid;
+                this.$axios.get(url, {}).then((res) => {
+                    if(res.data.resp_code == 0) {
+                        this.$message({
+                            message: '生成委托书成功',
+                            type: 'success'
+                        });
+                    }else{
+                        this.$message({
+                        message: '已经生成委托书，请勿重复生成',
+                        type: 'warning'
+                        });
+                    }
+                }).catch((err) => {
+                    this.$message({
+                        message: '网络错误，请重试',
+                        type: 'error'
+                    });
+                });
+            },
 			//时间格式化
 			dateFormat(row, column) {
 				var date = row[column.property];

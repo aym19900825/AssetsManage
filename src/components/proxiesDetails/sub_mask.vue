@@ -31,50 +31,50 @@
 
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="委托方名称" prop="REPORTNUM">
-												<el-input v-model="report.REPORTNUM" :disabled="noedit"></el-input>
+											<el-form-item label="委托方名称" prop="V_NAME ">
+												<el-input v-model="report.V_NAME " :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="分包方名称" prop="REPORTNAME">
-												<el-input v-model="report.REPORTNAME" :disabled="noedit"></el-input>
+											<el-form-item label="分包方名称" prop="DEPTIDDesc">
+												<el-input v-model="report.DEPTIDDesc" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
                                         <el-col :span="8">
-											<el-form-item label="分包性质" prop="PROXYNUM">
-												<el-input v-model="report.PROXYNUM" :disabled="noedit"></el-input>
+											<el-form-item label="分包性质" prop="CONTRACT_NATURE">
+												<el-select clearable v-model="report.CONTRACT_NATURE" filterable allow-create default-first-option placeholder="请选择" style="width:100%" :disabled="noedit">
+													<el-option label="固定" value="1"></el-option>
+													<el-option label="临时" value="2"></el-option>
+												</el-select>
 											</el-form-item>
 										</el-col>
 									</el-row>
                                     <el-row>
 										<el-col :span="8">
-											<el-form-item label="样品名称" prop="ONHOLEPERSON">
-												<el-input v-model="report.ONHOLEPERSON" :disabled="noedit"></el-input>
+											<el-form-item label="样品名称" prop="ITEMNAME">
+												<el-input v-model="report.ITEMNAME" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="状态" prop="ONHOLTIME">
-												<el-date-picker v-model="report.ONHOLTIME" type="date" placeholder="请选择日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
-												</el-date-picker>
+											<el-form-item label="状态" prop="state">
+												<el-input v-model="report.state" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
                                         <el-col :span="8">
-											<el-form-item label="检验检测项目内容" prop="ONHOLTIME">
-												<el-date-picker v-model="report.ONHOLTIME" type="date" placeholder="请选择日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
-												</el-date-picker>
+											<el-form-item label="检验检测项目内容" prop="P_REMARKS">
+												<el-input v-model="report.P_REMARKS" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
                                     <el-row>
 										<el-col :span="8">
-											<el-form-item label="检验检测技术依据" prop="ONHOLEPERSON">
-												<el-input v-model="report.ONHOLEPERSON" :disabled="noedit"></el-input>
+											<el-form-item label="检验检测技术依据" prop="BASIS">
+												<el-input v-model="report.BASIS" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="对环境和操作人员要求" prop="ONHOLTIME">
-												<el-date-picker v-model="report.ONHOLTIME" type="date" placeholder="请选择日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
-												</el-date-picker>
+											<el-form-item label="对环境和操作人员要求" prop="REQUIRES">
+												<el-input v-model="report.REQUIRES" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
                                         <el-col :span="8">
@@ -86,20 +86,19 @@
 									</el-row>
                                      <el-row>
 										<el-col :span="8">
-											<el-form-item label="完成日期" prop="ONHOLEPERSON">
-												<el-input v-model="report.ONHOLEPERSON" :disabled="noedit"></el-input>
+											<el-form-item label="完成日期" prop="COMPDATE">
+												<el-date-picker v-model="report.COMPDATE" type="date" placeholder="请选择日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
+												</el-date-picker>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="检验检测费用" prop="ONHOLTIME">
-												<el-date-picker v-model="report.ONHOLTIME" type="date" placeholder="请选择日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
-												</el-date-picker>
+											<el-form-item label="检验检测费用" prop="CHECKCOST">
+												<el-input v-model="report.CHECKCOST" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
                                         <el-col :span="8">
-											<el-form-item label="对分包报告/证书的要求" prop="ONHOLTIME">
-												<el-date-picker v-model="report.ONHOLTIME" type="date" placeholder="请选择日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
-												</el-date-picker>
+											<el-form-item label="对分包报告/证书的要求" prop="Q_TYPE">
+												<el-input v-model="report.Q_TYPE" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -227,17 +226,28 @@
 				hintshow:false,
 				statusshow1:true,
                 statusshow2:false,
+                dataid:'',
                 report:{
-                    ID:'',	//报告ID
-                    REPORTNUM:'',	//报告编号
-                    REPORTNAME:'',	//报告名称
+                    ID:'',	//分包协议ID
+                    PROXY_CONTRACT_NUM:'',	//分包协议编号
                     PROXYNUM:'',	//委托书编号
-                    ONHOLEPERSON:'',	//归档人
-                    ONHOLTIME:'',	//归档时间
+                    V_NAME:'',//委托方名称
+                    VENDOR:'',	//单位名称
+                    CONTRACT_NATURE:'',//分包性质
+                    TYPE:'',	//分包协议类别
+                    ITEMNAME :'',//样品名称
+                    COMPDATE:'',//完成日期
+                    P_REMARKS:'',	//检验/检测项目内容
+                    BASIS:'',	//检验检测项目依据
+                    REQUIRES:'',	//对环境和操作人员要求
+                    Q_TYPE:'',	//对分包报告/证书的要求
+                    CHECKCOST:'',	//检验检测费用
+                    STATUS:'',	//信息状态
+                    ENTERBY:'',//	录入人
+                    ENTERDATE:'',	//录入时间
                     CHANGEBY:'',	//修改人
                     CHANGEDATE:'',	//修改时间
-                    DEPTID:'',	//机构ID
-                    DEPARTMENT:'',	//机构
+
                 }
             }
 		},
@@ -274,35 +284,10 @@
 				this.statusshow2 = false;
 				this.show = true;
 			},
-			// 这里是修改
-			detail(dataid) {
-                console.log(dataid);
-				this.addtitle = false;
-				this.modifytitle = true;
-				this.viewtitle = false;
-				this.dept = true;
-				this.noedit = false;//表单内容
-				this.views = false;//录入修改人信息
-				this.noviews = true;//按钮
-				this.hintshow = false;
-				this.modify = true;//修订
-				this.statusshow1 = false;
-				this.statusshow2 = true;
-				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					this.report.DEPTID = res.data.deptId;//传给后台机构id
-					this.report.CHANGEBY = res.data.id;
-					// this.CATEGreportORY.CHANGEBYDesc = res.data.nickname;
-					var date = new Date();
-					this.report.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-                });
-                var url = this.basic_url +'/api-apps/app/reportOnhole/' + dataid;
+			detailgetData() {
+				var url = this.basic_url + '/api-apps/app/subcontrac/' + this.dataid;
+//			var url = this.basic_url +'/api-apps/app/inspectPro/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res.data);
 					this.report = res.data;
 					this.show = true;
 				}).catch((err) => {
@@ -310,20 +295,56 @@
 						message: '网络错误，请重试',
 						type: 'error'
 					});
+                });
+                this.show = true;
+			},	
+			
+			// 这里是修改
+			detail(dataid) {
+				this.dataid=dataid;
+				var usersUrl = this.basic_url + '/api-user/users/currentMap'
+				this.$axios.get(usersUrl, {}).then((res) => {
+					this.report.DEPTID = res.data.deptId;//传给后台机构id
+					this.report.CHANGEBY = res.data.id;
+					var date = new Date();
+					this.report.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd");
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
 				});
-				this.show = true;
-			},
-			//这是查看
-			view() {
+				this.detailgetData();
+				this.modifytitle = true;
 				this.addtitle = false;
+				this.viewtitle = false;
+				this.noviews = true;
+				this.views = false; //
+				this.edit = true;
+				this.noedit = false;
+            },
+            view(dataid){
+                this.dataid=dataid;
+				var usersUrl = this.basic_url + '/api-user/users/currentMap'
+				this.$axios.get(usersUrl, {}).then((res) => {
+					this.report.DEPTID = res.data.deptId;//传给后台机构id
+					this.report.CHANGEBY = res.data.id;
+					var date = new Date();
+					this.report.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd");
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+				this.detailgetData();
 				this.modifytitle = false;
 				this.viewtitle = true;
-				this.dept = true;
-				this.noedit = true;//表单内容
-				this.views = true;//录入修改人信息
-				this.noviews = false;//按钮
-				this.show = true;				
-			},
+				this.noviews = false;
+				this.views = false; //
+				this.edit = true;
+				this.noedit = true;
+            },
 			//点击修订按钮
 			// modifyversion(report) {
 			// 	this.$refs[report].validate((valid) => {
@@ -414,7 +435,7 @@
 			save() {
 				this.$refs.report.validate((valid) => {
 					if(valid) {
-						var url = this.basic_url + '/api-apps/app/reportOnhole/saveOrUpdate';
+						var url = this.basic_url + '/api-apps/app/subcontrac/saveOrUpdate';
 						this.$axios.post(url, this.report).then((res) => {
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
@@ -425,7 +446,7 @@
 								//重新加载数据
 								this.$emit('request');
 								// this.$emit('reset');
-								this.visible();
+								// this.visible();
 							}else{
 								this.show = true;
 								if(res.data.resp_code == 1) {

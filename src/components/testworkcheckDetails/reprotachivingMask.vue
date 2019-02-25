@@ -292,7 +292,8 @@
 				this.show = true;
 			},
 			//这是查看
-			view() {
+			view(data) {
+				this.report = data;
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;

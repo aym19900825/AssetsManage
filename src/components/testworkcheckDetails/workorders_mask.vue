@@ -767,6 +767,13 @@
 														<span v-else="v-else">{{scope.row.VENDORDesc}}</span>
 													</template>
 												</el-table-column>
+												<el-table-column prop="depttypeName" label="机构属性" sortable width="120px">
+													<template slot-scope="scope">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.depttypeName" placeholder="请输入分包方名称">
+														</el-input>
+														<span v-else="v-else">{{scope.row.depttypeName}}</span>
+													</template>
+												</el-table-column>
 												<!-- <el-table-column prop="PRODUCT_TYPE" label="产品类别" sortable width="120px">
 													<template slot-scope="scope">
 														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.PRODUCT_TYPE" placeholder="请输入分包方名称">

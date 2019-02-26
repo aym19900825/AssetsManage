@@ -169,8 +169,18 @@
 
 <script>
 	import Config from '../../config.js'
+	import approvalmask from '../workflow/approving.vue'
+	import flowhistorymask from '../workflow/flowhistory.vue'
+	import flowmapmask from '../workflow/flowmap.vue'
+	import vewPoplemask from '../workflow/vewPople.vue'
 	export default {
 		name: 'masks',
+		components: {
+			 approvalmask,
+			 flowhistorymask,
+			 flowmapmask,
+			 vewPoplemask,
+		},
 		data() {
 			var validateNum = (rule, value, callback) => {
 				if(value != ""){
@@ -364,7 +374,6 @@
 							var users='';
 							for(var i=0;i<resullt.length;i++){
 								users = users + resullt[i].username+",";
-								console.log("users----"+users);
 							}
 							if(users.indexOf(this.username) != -1){
 								this.approval=true;
@@ -374,6 +383,37 @@
 					}
 				});
             },
+            //启动流程
+			startup(){
+				var url = this.basic_url + '/api-apps/app/subcontrac/flow/'+this.dataid;
+				this.$axios.get(url, {}).then((res) => {
+					if(res.data.resp_code == 1) {
+							this.$message({
+								message:res.data.resp_msg,
+								type: 'warning'
+							});
+				    }else{
+				    	this.$message({
+								message:res.data.resp_msg,
+								type: 'success'
+							});
+						var url = this.basic_url + '/api-apps/app/subcontrac/flow/Executors/'+this.dataid;
+							this.$axios.get(url, {}).then((res) => {
+									console.log(res.data.datas);
+									var resullt=res.data.datas;
+									var users='';
+									for(var i=0;i<resullt.length;i++){
+										users = users + resullt[i].username+",";
+									}
+								if(users.indexOf(this.username) != -1){
+									this.approval=true;
+									this.start=false;
+								}
+							});
+							this.detailgetData();
+				    }
+				});
+			},
 			//审批流程
 			approvals(){
 				this.approvingData.id =this.dataid;
@@ -455,7 +495,6 @@
 					if(valid) {
 						var url = this.basic_url + '/api-apps/app/subcontrac/saveOrUpdate';
 						this.$axios.post(url, this.report).then((res) => {
-							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',
@@ -464,11 +503,9 @@
 								//重新加载数据
 								this.$emit('request');
 								// this.$emit('reset');
-								// this.visible();
 							}else{
 								this.show = true;
 								if(res.data.resp_code == 1) {
-									//res.data.resp_msg!=''后台返回提示信息
 									if( res.data.resp_msg!=''){
 									 	this.$message({
 											message: res.data.resp_msg,
@@ -513,7 +550,6 @@
 				this.show = true;
             },
             createinspect(){
-                // /app/subcontrac/operate/createInspectProxy
                 var dataid = this.report.ID;
                 var url=this.basic_url + '/api-apps/app/subcontrac/operate/createInspectProxy?ID=' + dataid;
                 this.$axios.get(url, {}).then((res) => {

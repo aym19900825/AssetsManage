@@ -69,7 +69,7 @@
 									  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
 									</el-upload> -->
 									<form method="post" id="file" action="" enctype="multipart/form-data" style="float: right; width: 100%;">
-										<el-button type="warn" round class="a-upload" style="width: 100%;">
+										<el-button type="warn" round class="a-upload" style="width: 100%;position: relative;">
 											<img v-if="headImgUrl" :src="headImgUrl" class="avatar">
 											<i v-else class="el-icon-plus avatar-uploader-icon"></i>
 											<input id="excelFile" type="file" name="uploadFile" @change="upload"/>
@@ -613,19 +613,21 @@
     display: block;
   }
  .avatar i {font-size: 50px; line-height:130px; color: #c0c4cc;}
+
+
  .a-upload input{
-    position: absolute;
+	position: absolute;
     font-size: 100px;
     opacity: 0;
     filter: alpha(opacity=0);
+    width: 100%;
     cursor: pointer;
-    width: 30%;
-    cursor: pointer;
+	height: 160px;
 	right: 10px;
-    top: 50px;
  }
  .a-upload span{
-	 display: block;
+	display: block;
+	position: relative;
  }
 
 </style>

@@ -586,6 +586,9 @@
 														<el-button title="删除" @click="deleteTempRow(scope.$index,scope.row)" type="text" size="small">
 															<i class="icon-trash red"></i>
 														</el-button>
+														<el-button title="编辑" type="text" size="small">
+															<i class="icon-pencil"></i>
+														</el-button>
 													</template>
 												</el-table-column>
 												
@@ -717,6 +720,9 @@
 													  </el-button>
 													  <el-button title="下载" type="text" size="small">
 														<i class="icon-arrow-down-circle"></i>
+													  </el-button>
+													  <el-button title="查看" type="text" size="small">
+														<i class="icon-file-text"></i>
 													  </el-button>
 													</template>
 												</el-table-column>
@@ -1813,8 +1819,8 @@
 				//basisnums为basisnum数组用逗号拼接的字符串
 				var ids = id.toString(',');
 				debugger;
-				var url = this.basic_url +"/api-merge/merge/workorder/MergeWord?filePath="+ids+"&fileName=报告测试&num="+this.workorderForm.WONUM+"&deptfullname="+this.workorderForm.DEPTIDDesc+"&recordid="+this.workorderForm.ID;
-				this.$axios.post(url, {}).then((res) => {loginlo
+				var url = this.basic_url +"/api-merge/merge/workorder/MergeWord?filePath="+ids+"&fileName=报告测试&num="+this.workorderForm.PROXYNUM+"&deptfullname="+this.workorderForm.DEPTIDDesc+"&recordid="+this.workorderForm.ID;
+				this.$axios.post(url, {}).then((res) => {
 					console.log(res);
 					if(res.data.resp_code == 0) {
 						this.$message({

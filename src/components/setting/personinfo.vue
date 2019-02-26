@@ -510,14 +510,11 @@
 							personinfo.roles = [];
 						}
 			            this.$axios.put(url, this.personinfo).then((res) => {
-							// console.log(res.data.resp_code);
-							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',
 									type: 'success'
 								});
-								//this.$emit('request')//重新加载数据
 							} 
 						}).catch((err) => {
 							this.$message({

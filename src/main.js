@@ -46,7 +46,7 @@ Vue.directive('loadmore', {
 	bind(el, binding) {
 		const selectWrap = el.querySelector('.el-table__body-wrapper');
 		// const selectWrap = el.querySelector('.el-table');
-		var scrollBeforeTop = 0;
+		// var scrollBeforeTop = 0;
 		var firstFlag = true;
 	    selectWrap.addEventListener('scroll', function() {
 			

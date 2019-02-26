@@ -532,8 +532,8 @@
 													<i class="icon-add"></i><font>新建行</font>
 												</el-button>
 												<form method="post" id="file" action="" enctype="multipart/form-data" style="float: left;margin-left: 10px;">
-													<el-button title="上传" type="success" size="mini" round  class="a-upload">
-														<i class="el-icon-upload2"></i>
+													<el-button type="success" size="mini" round  class="a-upload">
+														<i class="el-icon-upload2"></i><font>上传</font>
 														<input id="excelFile" type="file" name="uploadFile" @change="upload"/>
 													</el-button>
 												</form>

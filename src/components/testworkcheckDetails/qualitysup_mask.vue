@@ -4,9 +4,9 @@
 		<div class="mask_divbg" v-if="show">
 			<div class="mask_div">
 				<div class="mask_title_div clearfix">
-					<div class="mask_title" v-show="addtitle">添加报告审批</div>
-					<div class="mask_title" v-show="modifytitle">修改报告审批</div>
-					<div class="mask_title" v-show="viewtitle">查看报告审批</div>
+					<div class="mask_title" v-show="addtitle">添加质量监督抽查审批</div>
+					<div class="mask_title" v-show="modifytitle">修改质量监督抽查审批</div>
+					<div class="mask_title" v-show="viewtitle">查看质量监督抽查审批</div>
 					<div class="mask_anniu">
 						<span class="mask_span mask_max" @click='toggle'>
 							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -20,7 +20,7 @@
 					<el-form :model="report" inline-message :rules="rules" ref="report" label-width="100px" class="demo-adduserForm">
 						<div class="accordion" id="information">
 							<el-collapse v-model="activeNames">
-								<el-collapse-item title="报告审批" name="1">
+								<el-collapse-item title="质量监督抽查审批" name="1">
 									<el-row class="pb10">
 										<el-col :span="3" class="pull-right">
 											<el-input v-model="report.STATEDesc" :disabled="true">
@@ -322,7 +322,7 @@
 						});
 					}
 					if(valid) {
-						var url = this.basic_url + '/api-apps/app/reportApprove/saveOrUpdate';
+						var url = this.basic_url + '/api-apps/app/qualitySupApp/saveOrUpdate';
 						this.$axios.post(url, this.report).then((res) => {
 							if(res.data.resp_code == 0) {
 								if(opt == 'docUpload'){

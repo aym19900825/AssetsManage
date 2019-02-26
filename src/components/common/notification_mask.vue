@@ -255,8 +255,7 @@
 												<el-table-column prop="REMARKS" label="要求" sortable width="150px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-															<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" placeholder="请输入内容"></el-input>
-															<span v-show="!scope.row.isEditing">{{scope.row.REMARKS}}</span>
+															<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入内容"></el-input>
 														</el-form-item>
 													</template>
 												</el-table-column>

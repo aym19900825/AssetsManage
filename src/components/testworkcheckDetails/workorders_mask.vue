@@ -1661,6 +1661,7 @@
 								message:res.data.resp_msg,
 								type: 'success'
 							});
+							this.detailgetData();
 							var url = this.basic_url + '/api-apps/app/workorder/flow/Executors/'+this.dataid;
 							this.$axios.get(url, {}).then((res) => {
 								var resullt=res.data.datas;
@@ -1671,9 +1672,11 @@
 								if(users.indexOf(this.username) != -1){
 									this.approval=true;
 									this.start=false;
+								}else{
+									this.approval=false;
+									this.start=false;
 								}
 							});
-							this.detailgetData();
 				    }
 				});
 			},

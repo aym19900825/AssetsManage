@@ -507,7 +507,6 @@
 			},
 			// 保存users/saveOrUpdate
 			save(opt) {
-				console.log(docUpload);
 				this.$refs['CATEGORY'].validate((valid) => {
 					if(!valid && opt == 'docUpload'){
 						this.$message({
@@ -516,6 +515,14 @@
 						});
 					}
 					if(valid) {
+						var len = this.$refs.docTable.getFilelen();
+						if(len==0){
+							this.$message({
+								message: '请先上传模版文件，再保存！',
+								type: 'error'
+							});
+							return;
+						}
 						this.CATEGORY.STATUS = ((this.CATEGORY.STATUS == "1" || this.CATEGORY.STATUS == '活动') ? '1' : '0');
 						console.log(this.CATEGORY);
 						var url = this.basic_url + '/api-apps/app/rawDataTem/saveOrUpdate';

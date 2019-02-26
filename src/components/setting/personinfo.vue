@@ -377,6 +377,10 @@
 							type: 'success'
 						});
 						this.headImgUrl = res.data.icon;
+						var _this = this;
+						setTimeout(function(){
+							_this.$router.go(0);
+						},300);
 					}
 				})
 			},

@@ -421,7 +421,7 @@
 											    </el-table-column> -->
 
 											    <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
-											      <template slot-scope="scope">
+											      <template slot-scope="scope">deleteRow
 											         <el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'basisList')" type="text" size="small">
 											      <i class="icon-trash red"></i>
 											        </el-button>
@@ -531,18 +531,12 @@
 												<el-button style="float:left;" type="success" size="mini" round @click="addfield4" v-show="!viewtitle">
 													<i class="icon-add"></i><font>新建行</font>
 												</el-button>
-												<form method="post" id="file" action="" enctype="multipart/form-data" style="float: left;">
-													<el-button title="上传" type="text" size="small"  class="a-upload">
-														<i class="icon-arrow-up-circle"></i>
+												<form method="post" id="file" action="" enctype="multipart/form-data" style="float: left;margin-left: 10px;">
+													<el-button type="success" size="mini" round  class="a-upload">
+														<i class="el-icon-upload2"></i><font>上传</font>
 														<input id="excelFile" type="file" name="uploadFile" @change="upload"/>
 													</el-button>
 												</form>
-												<el-button title="下载" type="text" size="small">
-													<i class="icon-arrow-down-circle"></i>
-												</el-button>
-												<el-button title="删除" @click.native.prevent="deleteRow()" type="text" size="small">
-													<i class="icon-trash red"></i>
-												</el-button>
 											</div>
 											<el-table :data="workorderForm.WORKORDER_DATA_TEMPLATEList" 
 													  border 
@@ -574,16 +568,27 @@
 											      	<span v-else="v-else">{{scope.row.D_DESC}}</span>
 											      </template>
 											    </el-table-column>
-							            		<el-table-column label="模板文件大小" prop="FILESIZE">
+							            		<el-table-column label="模板文件大小" prop="FILESIZE_ORG">
 													<template slot-scope="scope">
-													 	<el-checkbox  v-if="!!scope.row.FILESIZE">{{scope.row.FILESIZE+'M'}}</el-checkbox>
+													 	<el-checkbox  v-if="!!scope.row.FILESIZE_ORG" v-model="scope.row.FILE_ORGCHECKED">{{scope.row.FILESIZE_ORG+'M'}}</el-checkbox>
 													</template>
 												</el-table-column>
-												<el-table-column label="上传文件大小" prop="FILESIZE_ORG">
+												<el-table-column label="上传文件大小" prop="FILESIZE">
 													<template slot-scope="scope">
-													 	<el-checkbox v-if="!!scope.row.FILESIZE_ORG">{{scope.row.FILESIZE_ORG+'M'}}</el-checkbox>
+													 	<el-checkbox v-if="!!scope.row.FILESIZE" v-model="scope.row.FILECHECKED">{{scope.row.FILESIZE+'M'}}</el-checkbox>
 													</template>
 												</el-table-column>
+												<el-table-column label="操作">
+													<template slot-scope="scope">
+													 	<el-button title="下载" @click="downLoadRow(scope.row)" type="text" size="small"> 
+															<i class="icon-arrow-down-circle"></i>
+														</el-button>
+														<el-button title="删除" @click="deleteTempRow(scope.$index,scope.row)" type="text" size="small">
+															<i class="icon-trash red"></i>
+														</el-button>
+													</template>
+												</el-table-column>
+												
 							            	</el-table>
 										</el-tab-pane>
 										<el-tab-pane label="检验检测设备" name="fifth">
@@ -1108,7 +1113,79 @@
 			};
 		},
 		methods: {
+			downLoadRow(row){
+				if(row.FILECHECKED){
+					var url = row.FILEPATH 
+                        + '&userid=' + this.docParm.userid
+                        + '&username=' + this.docParm.username
+                        + '&deptid=' + this.docParm.deptid
+                        + '&deptfullname=' + this.docParm.deptfullname;
+                	window.open(url);
+				}else if(row.FILE_ORGCHECKED){
+					var url = row.FILEPATH_ORG 
+                        + '&userid=' + this.docParm.userid
+                        + '&username=' + this.docParm.username
+                        + '&deptid=' + this.docParm.deptid
+                        + '&deptfullname=' + this.docParm.deptfullname;
+                	window.open(url);
+				}else{
+					this.$message({
+						message: '请选择要下载的文件',
+						type: 'error'
+					});
+				}
+			},
+			deleteTempRow(index,row){
+				if(row.FILECHECKED){
+					var url = this.file_url + '/file/deleteFile/' + row.FILEID;
+					this.$axios.delete(url,{}).then((res) => {
+						if(res.data.code == 1){
+							this.$message({
+								message: '删除成功',
+								type: 'success'
+							});
+							row.FILEID = 0;
+							row.FILECHECKED = false;
+							row.FILEPATH = '';
+							row.FILESIZE = 	'';
+						}else{
+							this.$message({
+								message: '删除失败',
+								type: 'error'
+							});
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+				}else if(row.FILE_ORGCHECKED){
+					this.$message({
+						message: '模板文件不允许删除',
+						type: 'error'
+					});
+				}else{
+					this.deleteRow(index, row, 'moduleList');
+				}
+			},
 			upload(e){
+				var list = this.workorderForm.WORKORDER_DATA_TEMPLATEList;
+				var editData = {};
+				var isEdit = false;
+				for(var i=0; i<list.length; i++){
+					if(list[i].isEditing){
+						editData = list[i];
+						isEdit = true;
+					}
+				}
+				if(!isEdit){
+					this.$message({
+						message: '请先选择或者新增行数据！',
+						type: 'error'
+					});
+					return;
+				}
 				var formData = new FormData();
 				var loading;
 				loading = Loading.service({
@@ -1138,7 +1215,6 @@
 				this.$axios.post(url, formData, config
 				).then((res)=>{
 					loading.close();
-					// this.$emit('closeLoading');
 					if(res.data.code == 0){
 						this.$message({
 							message: res.data.message,
@@ -1149,8 +1225,9 @@
 							message: '文件已成功上传至服务器',
 							type: 'success'
 						});
-						this.modulenum.FILEID = res.data.fileid;
-						this.modulenum.FILESIZE = res.data.filesize;
+						editData.FILEID = res.data.fileid;
+						editData.FILESIZE = res.data.filesize;
+						editData.FILEPATH = res.data.webUrl;
 					}
 				})
 			},
@@ -1525,7 +1602,6 @@
 				if(row.ID){
 					var url = this.basic_url + '/api-apps/app/workorder/' + TableName +'/' + row.ID;
 					this.$axios.delete(url, {}).then((res) => {
-						console.log(res);
 						if(res.data.resp_code == 0){
 							this.workorderForm[TableName+'List'].splice(index,1);
 							this.$message({
@@ -1708,6 +1784,8 @@
 					FILEID_ORG: '',
 					FILEPATH_ORG: '',
 					FILESIZE_ORG: '',
+					FILECHECKED: false,
+					FILE_ORGCHECKED: false,
 				};
 				this.workorderForm.WORKORDER_DATA_TEMPLATEList.push(obj);
 			},
@@ -1730,20 +1808,20 @@
 				//basisnum为依据编号的数组
 				var id = [];
 				for (var i = 0; i < changeUser.length; i++) {
-					id.push(changeUser[i].ID);		
+					id.push(changeUser[i].FILEID);		
 				}
 				//basisnums为basisnum数组用逗号拼接的字符串
 				var ids = id.toString(',');
 				debugger;
-				var url = "http://192.168.1.164:7880/merge/workorder/MergeWord?filePath=145,142&fileName=测试生成啊&num="+this.workorderForm.WONUM+"&deptfullname="+this.workorderForm.DEPTIDDesc+"&recordid="+this.workorderForm.ID;
-				this.$axios.post(url, {}).then((res) => {
+				var url = this.basic_url +"/api-merge/merge/workorder/MergeWord?filePath="+ids+"&fileName=报告测试&num="+this.workorderForm.WONUM+"&deptfullname="+this.workorderForm.DEPTIDDesc+"&recordid="+this.workorderForm.ID;
+				this.$axios.post(url, {}).then((res) => {loginlo
 					console.log(res);
-					// if(res.data.resp_code == 0) {
-					// 	this.$message({
-					// 		message: '生成成功',
-					// 		type: 'success'
-					// 	});
-					// }
+					if(res.data.resp_code == 0) {
+						this.$message({
+							message: '生成成功',
+							type: 'success'
+						});
+					}
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -1796,9 +1874,13 @@
 					}
 					//原始数据
 					for(var i = 0;i<res.data.WORKORDER_DATA_TEMPLATEList.length;i++){
+						res.data.WORKORDER_DATA_TEMPLATEList[i].FILECHECKED = false;
+						res.data.WORKORDER_DATA_TEMPLATEList[i].FILE_ORGCHECKED = false;
 						res.data.WORKORDER_DATA_TEMPLATEList[i].isEditing = false;
 					}
 					res.data.CJDW = Number(res.data.CJDW);
+					res.data.ITEM_PROFESSIONAL_GROUP = Number(res.data.ITEM_PROFESSIONAL_GROUP);
+					this.RVENDORSelect(res.data.CJDW);
 					this.workorderForm = res.data;
 					this.show = true;
 				}).catch((err) => {
@@ -2035,12 +2117,12 @@
 	.a-upload input{
 		position: absolute;
 		font-size: 100px;
-		right: 100px;
+		right: 0;
 		top: 0;
 		opacity: 0;
 		filter: alpha(opacity=0);
 		cursor: pointer;
-		width: 80px;
+		width: 40px;
 		cursor: pointer;
 	}
 	.upload-btn{

@@ -373,7 +373,7 @@
 														</el-form-item>	
 													</template>
 												</el-table-column>
-												<el-table-column prop="depttypeDesc" label="分包方名称" sortable width="120px">
+												<el-table-column prop="VENDORDesc" label="分包方名称" sortable width="120px">
 													<template slot-scope="scope">
 														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDORDesc" placeholder="请输入分包方名称">
 															<el-button slot="append" icon="el-icon-search" @click="getDept(scope.row)">
@@ -1014,6 +1014,7 @@
 			},
 			//取到分包方
 			deptdata(value){
+
 				console.log(value);
 				this.deptName.VENDOR = value[0];//id
 				this.deptName.VENDORDesc = value[1];//名称
@@ -1283,8 +1284,13 @@
 					res.data.R_VENDOR = Number(res.data.R_VENDOR);		
 					res.data.MAINGROUP = Number(res.data.MAINGROUP);
 					res.data.LEADER = Number(res.data.LEADER);
+					for(var i = 0;i<res.data.INSPECT_PROXY_PROJECList.length;i++){
+						res.data.INSPECT_PROXY_PROJECList[i].INSPECT_GROUP = Number(res.data.INSPECT_PROXY_PROJECList[i].INSPECT_GROUP);
+					}
 					console.log(res.data);
 					console.log(typeof(res.data.MAINGROUP));
+					this.RVENDORSelect(res.data.R_VENDOR);
+					this.getmaingroup(res.data.MAINGROUP);
 					this.dataInfo = res.data;
 					this.show = true;
 					//深拷贝数据
@@ -1754,6 +1760,8 @@
 			},
 			//承检单位带出主检组
 			RVENDORSelect(RVENDORid){
+				console.log(1234334344);
+				console.log(RVENDORid)
 				var url = this.basic_url + '/api-user/depts/findByPid/'+RVENDORid;
 					this.$axios.get(url, {}).then((res) => {
 						this.maingroup = res.data;
@@ -1918,6 +1926,7 @@
 						type: type
 					},
 				}).then((res) => {
+					console.log(res.data);
 					this.selectData = res.data;
 				});
 			},

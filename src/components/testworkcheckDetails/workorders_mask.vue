@@ -921,9 +921,9 @@
 							</el-collapse>
 						</div>
 						<div class="el-dialog__footer" v-if="!viewtitle">
-								<el-button type="primary" @click="submitForm">保存</el-button>
-								<el-button type="success" v-show="addtitle">保存并继续</el-button>
-								<el-button @click='close'>取消</el-button>
+							<el-button type="primary" @click="submitForm">保存</el-button>
+							<el-button type="success" v-show="addtitle">保存并继续</el-button>
+							<el-button @click='close'>取消</el-button>
 						</div>
 					</el-form>
 				</div>
@@ -960,7 +960,7 @@
 			<!-- 样品名称  -->
 			<sampletmask ref="samplechild" @appendname="appendname" @appendmod="appendmod" @appendsta="appendsta" @appendite="appendite"  ></sampletmask>
 			<!-- 原始模版  -->
-			<templatemask ref="templatechild" @appendnum="appendnum" @appenddes="appenddes" ></templatemask>
+			<templatemask ref="templatechild" @appendnum="appendnum" @appenddes="appenddes" @showModule ="showModule" ></templatemask>
 			<!--审批页面-->
 			<approvalmask :approvingData="approvingData" ref="approvalChild" @detail="detailgetData"  ></approvalmask>
 			<!--流程历史-->
@@ -982,6 +982,7 @@
 	import flowhistorymask from '../workflow/flowhistory.vue'
 	import flowmapmask from '../workflow/flowmap.vue'
 	import vewPoplemask from '../workflow/vewPople.vue'
+	import { Loading } from 'element-ui'
 	export default {
 		name: 'masks',
 		components: {
@@ -1030,72 +1031,73 @@
                 }
             };
 			return {
-			approvingData:{},//流程传的数据
-			dialogVisible2:false,
-			workorderForm: {
-				WORKORDER_BASISList:[],//检测依据
-				WORKORDER_PROJECTList:[],//检测项目
-				WORKORDER_CHECKPERSONList:[],//检验员信息
-				WORKORDER_DATA_TEMPLATEList:[],//原始数据模板
-				WORKORDER_REPORT_TEMPLATEList:[],//报告模板
-			},
-			basic_url: Config.dev_url,
-			loadSign:true,//加载
-			commentArr:{},
-			selMenu:[],
-			show: false,
-			modify:false,
-			isok1: true,
-			isok2: false,
-			down: true,
-			up: false,
-			addtitle:true,//添加弹出框titile
-			modifytitle:false,//修改弹出框titile
-			viewtitle: false, //查看弹出框title
-			views: false,
-			edit: true, //禁填
-			noedit:false,
-			approval:false,
-			start:false,
-			activeName: 'first', //tabs
-			activeNames: ['1','2','3','4','5','6','7'],//手风琴数量
-			labelPosition: 'right', //表格
-			// searchList: { //点击高级搜索后显示的内容
-			// 	WONUM: '',//工作任务单编号
-			// 	ITEM_NAME: '',//样品名称
-			// 	PROXYNUM: '',//委托书编号
-			// 	STATE: '',//状态
-			// 	COMPLETE_DATE: '',//完成日期
-			// 	ENTERBY: '',//录入人
-			// 	ENTERDATE: '',//录入日期
-			// },
-			search:'',
-			selectData:[],//承检单位
-			Select_ITEM_STATUS:[],//获取样品信息-样品状态
-			Select_ITEM_SOURCE:[],//获取样品信息-样品来源
-			Select_COMPLETE_MODE:[],//获取样品信息-完成方式
-			Select_ITEM_RECEPT_STATUS:[],//获取样品信息-样品接收状态
-			Select_ITEM_CHECK_STATUS:[],//获取样品信息-样品检后状态
-			Select_ITEM_MANAGEMENT:[],//获取样品信息-样品处置
-			fileList:[],//上传附件数据
-			rules: {
-				PROXYNUM: [{ required: true, validator: validateProxynum}],//委托书编号
-				PROXY_VERSION: [{ required: true, validator: validateProxyversion}],//委托书版本
-				WONUM: [{ required: true, message: '不能为空', trigger: 'blur' }],
-				ITEM_NAME: [{ required: true,validator: validateItemname}],//样品名称
-				ITEM_MODEL: [{ required: true,validator: validateItemname}],//规格型号
-				ITEMNUM: [{ required: true,validator: validateItemnum}],//样品编号
-				ITEM_STATU: [{ required: true, message: '不能为空', trigger: 'blur' }],
-				ITEM_STATUS: [{ required: true, message: '不能为空', trigger: 'blur' }],
-				ITEM_SOURCE: [{ required: true, message: '不能为空', trigger: 'change' }],
-				ITEM_QUALITY: [{ required: true, message: '不能为空', trigger: 'blur' }],
-				CHECK_BASIS: [{ required: true, message: '不能为空', trigger: 'blur' }],
-				COMPLETE_DATE: [{ required: true, message: '不能为空', trigger: 'blur' }],
-				COMPLETE_MODE: [{ required: true, message: '不能为空', trigger: 'blur' }],
-				ITEM_RECEPT_STATUS: [{ required: true, message: '不能为空', trigger: 'blur' }],
-				ITEM_PROFESSIONAL_GROUP: [{ required: true, message: '不能为空', trigger: 'blur' }],
-				STATUS: [{ required: true, message: '不能为空', trigger: 'blur' }],
-			},
+				file_url: Config.file_url,
+				approvingData:{},//流程传的数据
+				dialogVisible2:false,
+				workorderForm: {
+					WORKORDER_BASISList:[],//检测依据
+					WORKORDER_PROJECTList:[],//检测项目
+					WORKORDER_CHECKPERSONList:[],//检验员信息
+					WORKORDER_DATA_TEMPLATEList:[],//原始数据模板
+					WORKORDER_REPORT_TEMPLATEList:[],//报告模板
+				},
+				basic_url: Config.dev_url,
+				loadSign:true,//加载
+				commentArr:{},
+				selMenu:[],
+				show: false,
+				modify:false,
+				isok1: true,
+				isok2: false,
+				down: true,
+				up: false,
+				addtitle:true,//添加弹出框titile
+				modifytitle:false,//修改弹出框titile
+				viewtitle: false, //查看弹出框title
+				views: false,
+				edit: true, //禁填
+				noedit:false,
+				approval:false,
+				start:false,
+				activeName: 'first', //tabs
+				activeNames: ['1','2','3','4','5','6','7'],//手风琴数量
+				labelPosition: 'right', //表格
+				// searchList: { //点击高级搜索后显示的内容
+				// 	WONUM: '',//工作任务单编号
+				// 	ITEM_NAME: '',//样品名称
+				// 	PROXYNUM: '',//委托书编号
+				// 	STATE: '',//状态
+				// 	COMPLETE_DATE: '',//完成日期
+				// 	ENTERBY: '',//录入人
+				// 	ENTERDATE: '',//录入日期
+				// },
+				search:'',
+				selectData:[],//承检单位
+				Select_ITEM_STATUS:[],//获取样品信息-样品状态
+				Select_ITEM_SOURCE:[],//获取样品信息-样品来源
+				Select_COMPLETE_MODE:[],//获取样品信息-完成方式
+				Select_ITEM_RECEPT_STATUS:[],//获取样品信息-样品接收状态
+				Select_ITEM_CHECK_STATUS:[],//获取样品信息-样品检后状态
+				Select_ITEM_MANAGEMENT:[],//获取样品信息-样品处置
+				fileList:[],//上传附件数据
+				rules: {
+					PROXYNUM: [{ required: true, validator: validateProxynum}],//委托书编号
+					PROXY_VERSION: [{ required: true, validator: validateProxyversion}],//委托书版本
+					WONUM: [{ required: true, message: '不能为空', trigger: 'blur' }],
+					ITEM_NAME: [{ required: true,validator: validateItemname}],//样品名称
+					ITEM_MODEL: [{ required: true,validator: validateItemname}],//规格型号
+					ITEMNUM: [{ required: true,validator: validateItemnum}],//样品编号
+					ITEM_STATU: [{ required: true, message: '不能为空', trigger: 'blur' }],
+					ITEM_STATUS: [{ required: true, message: '不能为空', trigger: 'blur' }],
+					ITEM_SOURCE: [{ required: true, message: '不能为空', trigger: 'change' }],
+					ITEM_QUALITY: [{ required: true, message: '不能为空', trigger: 'blur' }],
+					CHECK_BASIS: [{ required: true, message: '不能为空', trigger: 'blur' }],
+					COMPLETE_DATE: [{ required: true, message: '不能为空', trigger: 'blur' }],
+					COMPLETE_MODE: [{ required: true, message: '不能为空', trigger: 'blur' }],
+					ITEM_RECEPT_STATUS: [{ required: true, message: '不能为空', trigger: 'blur' }],
+					ITEM_PROFESSIONAL_GROUP: [{ required: true, message: '不能为空', trigger: 'blur' }],
+					STATUS: [{ required: true, message: '不能为空', trigger: 'blur' }],
+				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
 				isEditList: false,  //年度计划列表编辑装填
@@ -1113,7 +1115,8 @@
 				isEditing: true,
 				modulenum:'',
 				username:'',
-				maingroup:[]//专业组
+				maingroup:[],//专业组
+				docParm: {}
 			};
 		},
 		methods: {
@@ -1136,14 +1139,14 @@
 					}
 				};
 				var url = '';
-				// var url = this.file_url + '/file/uploadfile?userid=' + this.docParm.userid 
-				// 		+ '&username=' + this.docParm.username
-				// 		+ '&deptid=' + this.docParm.deptid
-				// 		+ '&deptfullname=' + this.docParm.deptfullname
-				// 		+ '&recordid=' + this.docParm.recordid
-				// 		+ '&appname=' + this.docParm.appname
-				// 		+ '&appid=' + this.docParm.appid;
-				// console.log(url);
+				var url = this.file_url + '/file/uploadfile?userid=' + this.docParm.userid 
+						+ '&username=' + this.docParm.username
+						+ '&deptid=' + this.docParm.deptid
+						+ '&deptfullname=' + this.docParm.deptfullname
+						+ '&recordid=' + this.docParm.recordid
+						+ '&appname=' + this.docParm.appname
+						+ '&appid=' + this.docParm.appid;
+				console.log(url);
 				this.$axios.post(url, formData, config
 				).then((res)=>{
 					loading.close();
@@ -1158,6 +1161,8 @@
 							message: '文件已成功上传至服务器',
 							type: 'success'
 						});
+						this.modulenum.FILEID = res.data.fileid;
+						this.modulenum.FILESIZE = res.data.filesize;
 					}
 				})
 			},
@@ -1341,9 +1346,9 @@
 					'appname': '检验检测项目_原始数据模板',
 					'recordid': data.id,
 				}).then((res) => {
-					this.modulenum.FILESIZE = res.data.fileList[0].filesize;
-					this.modulenum.FILEPATH = res.data.fileList[0].filepath;
-					this.modulenum.FILEID = res.data.fileList[0].fileid;
+					this.modulenum.FILESIZE_ORG = res.data.fileList[0].filesize;
+					this.modulenum.FILEPATH_ORG = res.data.fileList[0].filepath;
+					this.modulenum.FILEID_ORG = res.data.fileList[0].fileid;
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -1662,13 +1667,21 @@
 
 			// 这里是修改
 			detail(dataid) {
-				console.log(dataid);
 				this.dataid=dataid;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 	    			this.workorderForm.DEPTID = res.data.deptId;//传给后台机构id
 					this.workorderForm.CHANGEBY = res.data.id;
 					var date = new Date();
 					this.workorderForm.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd");
+					
+					this.docParm.recordid = dataid;
+					this.docParm.appname = '工作任务单_关联原始数据模板';
+					this.docParm.appid = '39';
+
+					this.docParm.userid = res.data.id;
+					this.docParm.username = res.data.username;
+					this.docParm.deptid = res.data.deptId;
+					this.docParm.deptfullname = res.data.deptName;
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',

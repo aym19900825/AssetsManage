@@ -464,6 +464,8 @@
 			},
 			//修改检验工作处理到子组件
 			modify() {
+				console.log('this.selMenu');
+				console.log(this.selMenu.length);
 				if(this.selMenu.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
@@ -616,7 +618,6 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(res);
 					let result=res.data.datas;
 					for(let i=0;i<result.length;i++){
 						if(typeof(result[i].subDepts)!="undefined"&&result[i].subDepts.length>0){
@@ -693,7 +694,8 @@
 				this.ismin = !this.ismin;
 			},
 			childByValue:function(childValue) {
-        		// childValue就是子组件传过来的值
+				// childValue就是子组件传过来的值
+				this.selMenu = childValue;
         		this.$refs.navsheader.showClick(childValue);
       		},
 		},

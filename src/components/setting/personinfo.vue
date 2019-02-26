@@ -611,7 +611,9 @@
   }
  .avatar i {font-size: 50px; line-height:130px; color: #c0c4cc;}
 
-
+.a-upload{
+	height: 160px;
+}
  .a-upload input{
 	position: absolute;
     font-size: 100px;
@@ -621,6 +623,11 @@
     cursor: pointer;
 	height: 160px;
 	right: 10px;
+	top: 0px;
+ }
+ .a-upload img{
+	position: absolute;
+    top: 10px;
  }
  .a-upload span{
 	display: block;

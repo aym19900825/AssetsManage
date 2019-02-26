@@ -117,8 +117,8 @@
 							<!-- 表格 Begin-->
 
 							<el-table ref="table" :header-cell-style="rowClass" :data="categoryList" v-loading="loading"  element-loading-text="拼命加载中"
-    element-loading-spinner="el-icon-loading"
-    element-loading-background="rgba(F, F, F, 0.6)" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+    								element-loading-spinner="el-icon-loading"
+    								element-loading-background="rgba(F, F, F, 0.6)" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="编码" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('编码')!=-1">
@@ -296,22 +296,14 @@
 							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
 							return false;
 						}
-//						console.log($('table.el-table__body').height())
 						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
-						//console.log(this.$refs.table.$el.offsetTop)
 						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-//							console.log($('.el-table__body-wrapper table').height())
-//							console.log($('table.el-table__body').height())
 							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
 							sessionStorage.setItem('toBtm','true');
 						}
 					}else{
 						sessionStorage.setItem('toBtm','false');
 						this.page.currentPage--;
-						if($('.el-table__body-wrapper table').find('.filing').length>0){
-							$('.el-table__body-wrapper table').find('.filing').remove();
-							
-						}
 						if(this.page.currentPage < 1) {
 							this.page.currentPage=1
 							return false;
@@ -319,10 +311,9 @@
 					}
 					this.loadSign = false;
 					setTimeout(() => {
-						this.loadSign = true
+						this.loadSign = true;
 					}, 1000)
-					this.requestData()
-					
+					this.requestData();
 				}
 			},
 			tableControle(data) {
@@ -623,6 +614,9 @@
 					}
 					this.categoryList = res.data.data;
 					this.loading = false;
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}
 				}).catch((wrong) => {
 					this.$message({
 						message: '网络错误，请重试1',

@@ -1681,7 +1681,7 @@
 			approvals(){
 				this.approvingData.id =this.dataid;
 				this.approvingData.app=this.workorder;
-				 var url = this.basic_url + '/api-apps/app/'+this.workorder+'/flow/isEnd/'+this.dataid;
+				 var url = this.basic_url + '/api-apps/app/workorder/flow/isEnd/'+this.dataid;
 		    		this.$axios.get(url, {}).then((res) => {
 		    			if(res.data.resp_code == 0) {
 							this.$message({
@@ -1689,7 +1689,7 @@
 								type: 'warning'
 							});
 		    			}else{
-		    				var url = this.basic_url + '/api-apps/app/'+this.workorder+'/flow/isExecute/'+this.dataid;
+		    				var url = this.basic_url + '/api-apps/app/workorder/flow/isExecute/'+this.dataid;
 		    				this.$axios.get(url, {}).then((res) => {
 				    			if(res.data.resp_code == 1) {
 										this.$message({
@@ -1697,11 +1697,21 @@
 											type: 'warning'
 										});
 								}else{
-									this.$refs.approvalChild.visible();
+									var url = this.basic_url + '/api-apps/app/workorder/flow/customFlowValidate/'+this.dataid;
+								this.$axios.get(url, {}).then((res) => {
+				    				if(res.data.resp_code == 0) {
+										this.$message({
+											message:res.data.resp_msg,
+											type: 'warning'
+										});
+									}else{
+									 	this.$refs.approvalChild.visible();
+									}
+								})
 								}
-		    		});
-		    		}
-				});
+		    				});
+		    			}
+					});
 			},
 			//流程历史
 			flowhistory(){

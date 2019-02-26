@@ -586,62 +586,57 @@
 												</el-table-column>
 							            	</el-table>
 										</el-tab-pane>
-										<el-tab-pane label="仪器和计量器具" name="fifth">
+										<el-tab-pane label="检验检测设备" name="fifth">
 											<div class="table-func table-funcb">
-												<el-button type="primary" size="mini" round @click="basisleadbtn">
+												<el-button type="success" size="mini" round @click="addequip">
 													<i class="icon-add"></i><font>新建行</font>
 												</el-button>
 											</div>
 
 											<el-table :data="workorderForm.WORKORDER_ASSETList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.INSPECT_PROXY_BASISList', order: 'descending'}">
-												<el-table-column prop="ASSETNUM" label="设备编号" sortable width="150px">
+												<el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
+											      <template slot-scope="scope">
+											      	<i class="el-icon-check" v-show="scope.row.isEditing">
+											      	</i>
+											      	<i class="el-icon-edit" v-show="!scope.row.isEditing">
+											      	</i>
+											      </template>
+											    </el-table-column>
+												<el-table-column prop="WONUM" label="工作任务单编号" sortable width="180px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'WORKORDER_ASSETList.'+scope.$index + '.ASSETNUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ASSETNUM" placeholder="请输入">
-															   <el-button slot="append" icon="el-icon-search"></el-button>
-														</el-input>
-														<span v-else="v-else">{{scope.row.ASSETNUM}}</span>
-														</el-form-item>
-													</template>
-												</el-table-column>
-
-												<el-table-column prop="WONUM" label="工作任务单编号" sortable>
-													<template slot-scope="scope">
-														<el-form-item :prop="'WORKORDER_ASSETList.'+scope.$index + '.WONUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WONUM" placeholder="请输入">	
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.WONUM" placeholder="自动生成">	
 														</el-input>
 														<span v-else="v-else">{{scope.row.WONUM}}</span>
-														</el-form-item>
 													</template>
 												</el-table-column>
-												
-												<el-table-column prop="DESCRIPTION" label="设备名称" sortable width="120px">
+												<el-table-column prop="ASSETNUM" label="设备编号" sortable width="150px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'WORKORDER_ASSETList.'+scope.$index + '.DESCRIPTION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ASSETNUM" placeholder="请输入">
+														</el-input>
+														<span v-else="v-else">{{scope.row.ASSETNUM}}</span>
+													</template>
+												</el-table-column>
+												<el-table-column prop="DESCRIPTION" label="设备名称" sortable width="180px">
+													<template slot-scope="scope">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DESCRIPTION" placeholder="请输入">
 														</el-input>
 														<span v-else="v-else">{{scope.row.DESCRIPTION}}</span>
-														</el-form-item>
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="MODEL" label="规格型号" sortable width="120px">
+												<el-table-column prop="MODEL" label="规格型号" sortable width="150px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'WORKORDER_ASSETList.'+scope.$index + '.MODEL'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入">
 														</el-input>
 														<span v-else="v-else">{{scope.row.MODEL}}</span>
-														</el-form-item>
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="USE_PERSON" label="使用人" sortable width="120px">
+												<el-table-column prop="USE_PERSON" label="使用人" sortable width="150px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'WORKORDER_ASSETList.'+scope.$index + '.USE_PERSON'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.USE_PERSON" placeholder="请输入">
 														</el-input>
 														<span v-else="v-else">{{scope.row.USE_PERSON}}</span>
-														</el-form-item>
 													</template>
 												</el-table-column>
 												
@@ -655,16 +650,10 @@
 											</el-table>
 										</el-tab-pane>
 										<el-tab-pane label="检验报告" name="sixth">
-											<div class="table-func table-funcb">
-												<el-button type="primary" size="mini" round @click="basisleadbtn">
-													<i class="icon-add"></i><font>生成报告</font>
-												</el-button>
-											</div>
-
-											<el-table :data="workorderForm.WORKORDER_REPORTList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.INSPECT_PROXY_BASISList', order: 'descending'}">
+											<el-table :data="workorderForm.WORKORDER_REPORT_TEMPLATEList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.INSPECT_PROXY_BASISList', order: 'descending'}">
 												<el-table-column prop="REPORTNUM" label="报告编号" sortable width="150px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'WORKORDER_REPORTList.'+scope.$index + '.REPORTNUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<el-form-item :prop="'WORKORDER_REPORT_TEMPLATEList.'+scope.$index + '.REPORTNUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REPORTNUM" placeholder="请输入">
 															   <el-button slot="append" icon="el-icon-search"></el-button>
 														</el-input>
@@ -685,7 +674,7 @@
 
 												<el-table-column prop="REPORTNAME" label="报告名称" sortable>
 													<template slot-scope="scope">
-														<el-form-item :prop="'WORKORDER_REPORTList.'+scope.$index + '.REPORTNAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<el-form-item :prop="'WORKORDER_REPORT_TEMPLATEList.'+scope.$index + '.REPORTNAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REPORTNAME" placeholder="请输入">	
 														</el-input>
 														<span v-else="v-else">{{scope.row.REPORTNAME}}</span>
@@ -695,7 +684,7 @@
 												
 												<el-table-column prop="PREVIEW" label="预览" sortable width="120px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'WORKORDER_REPORTList.'+scope.$index + '.PREVIEW'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<el-form-item :prop="'WORKORDER_REPORT_TEMPLATEList.'+scope.$index + '.PREVIEW'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PREVIEW" placeholder="请输入">
 														</el-input>
 														<span v-else="v-else">{{scope.row.PREVIEW}}</span>
@@ -705,7 +694,7 @@
 
 												<el-table-column prop="VERSION" label="版本" sortable width="120px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'WORKORDER_REPORTList.'+scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<el-form-item :prop="'WORKORDER_REPORT_TEMPLATEList.'+scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入">
 														</el-input>
 														<span v-else="v-else">{{scope.row.MOVERSIONDEL}}</span>
@@ -901,9 +890,9 @@
 							</el-collapse>
 						</div>
 						<div class="el-dialog__footer" v-if="!viewtitle">
-								<el-button type="primary" @click="submitForm">保存</el-button>
-								<el-button type="success" v-show="addtitle">保存并继续</el-button>
-								<el-button @click='close'>取消</el-button>
+							<el-button type="primary" @click="submitForm">保存</el-button>
+							<el-button type="success" v-show="addtitle">保存并继续</el-button>
+							<el-button @click='close'>取消</el-button>
 						</div>
 					</el-form>
 				</div>
@@ -970,6 +959,7 @@
 	import flowhistorymask from '../workflow/flowhistory.vue'
 	import flowmapmask from '../workflow/flowmap.vue'
 	import vewPoplemask from '../workflow/vewPople.vue'
+	import { Loading } from 'element-ui'
 	import categorymask from '../common/common_mask/categorylistmask.vue'//产品类别
 	import productmask from '../common/common_mask/productlistmask.vue'//产品
 	import teststandardmask from '../common/common_mask/teststandardmask.vue'//检验依据
@@ -1035,6 +1025,9 @@
 					WORKORDER_CHECKPERSONList:[],//检验员信息
 					WORKORDER_DATA_TEMPLATEList:[],//原始数据模板
 					WORKORDER_REPORT_TEMPLATEList:[],//报告模板
+					WORKORDER_ASSETList:[],//检验检测设备
+					WORKORDER_REPORT_TEMPLATEList:[],//报告模板
+					WORKORDER_CONTRACTList:[],//分包项目
 				},
 				basic_url: Config.dev_url,
 				loadSign:true,//加载
@@ -1110,7 +1103,8 @@
 				isEditing: true,
 				modulenum:'',
 				username:'',
-				maingroup:[]//专业组
+				maingroup:[],//专业组
+				docParm: {}
 			};
 		},
 		methods: {
@@ -1133,14 +1127,14 @@
 					}
 				};
 				var url = '';
-				// var url = this.file_url + '/file/uploadfile?userid=' + this.docParm.userid 
-				// 		+ '&username=' + this.docParm.username
-				// 		+ '&deptid=' + this.docParm.deptid
-				// 		+ '&deptfullname=' + this.docParm.deptfullname
-				// 		+ '&recordid=' + this.docParm.recordid
-				// 		+ '&appname=' + this.docParm.appname
-				// 		+ '&appid=' + this.docParm.appid;
-				// console.log(url);
+				var url = this.file_url + '/file/uploadfile?userid=' + this.docParm.userid 
+						+ '&username=' + this.docParm.username
+						+ '&deptid=' + this.docParm.deptid
+						+ '&deptfullname=' + this.docParm.deptfullname
+						+ '&recordid=' + this.docParm.recordid
+						+ '&appname=' + this.docParm.appname
+						+ '&appid=' + this.docParm.appid;
+				console.log(url);
 				this.$axios.post(url, formData, config
 				).then((res)=>{
 					loading.close();
@@ -1155,6 +1149,8 @@
 							message: '文件已成功上传至服务器',
 							type: 'success'
 						});
+						this.modulenum.FILEID = res.data.fileid;
+						this.modulenum.FILESIZE = res.data.filesize;
 					}
 				})
 			},
@@ -1218,7 +1214,9 @@
 					WORKORDER_PROJECTList:[],//检测项目
 					WORKORDER_CHECKPERSONList:[],//检验员信息
 					WORKORDER_DATA_TEMPLATEList:[],//原始数据模板
-					WORKORDER_REPORTList:[],//检验报告
+					WORKORDER_ASSETList:[],//检验检测设备
+					WORKORDER_REPORT_TEMPLATEList:[],//报告模板
+					WORKORDER_CONTRACTList:[],//分包项目					
 				};
 			},
 			//表格传过来
@@ -1423,9 +1421,9 @@
 					'appname': '检验检测项目_原始数据模板',
 					'recordid': data.id,
 				}).then((res) => {
-					this.modulenum.FILESIZE = res.data.fileList[0].filesize;
-					this.modulenum.FILEPATH = res.data.fileList[0].filepath;
-					this.modulenum.FILEID = res.data.fileList[0].fileid;
+					this.modulenum.FILESIZE_ORG = res.data.fileList[0].filesize;
+					this.modulenum.FILEPATH_ORG = res.data.fileList[0].filepath;
+					this.modulenum.FILEID_ORG = res.data.fileList[0].fileid;
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -1712,7 +1710,19 @@
 					FILESIZE_ORG: '',
 				};
 				this.workorderForm.WORKORDER_DATA_TEMPLATEList.push(obj);
-				console.log(this.workorderForm.WORKORDER_DATA_TEMPLATEList);
+			},
+			//仪器和计量器具
+			addequip(){
+				var obj = {
+					ID:'',
+					ASSETNUM:'',
+					WONUM:'',
+					DESCRIPTION:'',
+					MODEL:'',
+					USE_PERSON:'',		
+					isEditing: true,	
+				};
+				this.workorderForm.WORKORDER_ASSETList.push(obj);
 			},
 			//生成报告
 			getreport(){
@@ -1800,13 +1810,21 @@
 			},	
 			// 这里是修改
 			detail(dataid) {
-				console.log(dataid);
 				this.dataid=dataid;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 	    			this.workorderForm.DEPTID = res.data.deptId;//传给后台机构id
 					this.workorderForm.CHANGEBY = res.data.id;
 					var date = new Date();
 					this.workorderForm.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd");
+					
+					this.docParm.recordid = dataid;
+					this.docParm.appname = '工作任务单_关联原始数据模板';
+					this.docParm.appid = '39';
+
+					this.docParm.userid = res.data.id;
+					this.docParm.username = res.data.username;
+					this.docParm.deptid = res.data.deptId;
+					this.docParm.deptfullname = res.data.deptName;
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',

@@ -32,7 +32,7 @@
 								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-close1"></i>取消
 								</button>
-								<button type="button" class="btn btn-primarys button-margin">
+								<button type="button" class="btn btn-primarys button-margin" @click="tasklist">
 								    <i class="icon-send"></i>生成子任务单
 								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
@@ -144,6 +144,7 @@
 				</div>
 			</div>
 			<workorders_mask :workorderForm="workorderForm" ref="child" @requests="requestData" @requestTree="getKey" v-bind:page=page></workorders_mask>
+			<sendtasklist ref="task"  v-bind:page=page></sendtasklist>
 		</div>
 	</div>
 </template>
@@ -154,6 +155,7 @@
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_header from '../common/nav_tabs.vue'
 	import workorders_mask from '../testworkcheckDetails/workorders_mask.vue'
+	import sendtasklist from '../testworkcheckDetails/sendtasklist.vue'
 	export default {
 		name: 'workorders',
 		components: {
@@ -162,6 +164,7 @@
 			navs_header,
 			navs_left,
 			workorders_mask,
+			sendtasklist
 		},
 		data() {
 			return {
@@ -414,6 +417,8 @@
 			},
 			//修改检验工作处理到子组件
 			modify() {
+				console.log('this.selMenu');
+				console.log(this.selMenu.length);
 				if(this.selMenu.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
@@ -460,6 +465,24 @@
 					}else{
 						this.$refs.child.detail(this.selMenu[0].ID);	
 					}
+				}
+			},
+			//生成子任务单
+			tasklist(){
+				if(this.selMenu.length == 0) {
+					this.$message({
+						message: '请您选择要生成子任务单的数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selMenu.length > 1) {
+					this.$message({
+						message: '不可同时生成多条子任务单',
+						type: 'warning'
+					});
+					return;
+				} else {
+					this.$refs.task.visible(this.selMenu[0].ID);	
 				}
 			},
 			//查看
@@ -566,7 +589,6 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(res);
 					let result=res.data.datas;
 					for(let i=0;i<result.length;i++){
 						if(typeof(result[i].subDepts)!="undefined"&&result[i].subDepts.length>0){

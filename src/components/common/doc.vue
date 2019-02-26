@@ -239,7 +239,6 @@ export default {
                         + '&username=' + this.docParm.username
                         + '&deptid=' + this.docParm.deptid
                         + '&deptfullname=' + this.docParm.deptfullname;
-                console.log(this.selFiles[0].filepath);
                 window.open(url); 
             }
         },

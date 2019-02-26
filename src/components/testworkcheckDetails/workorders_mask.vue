@@ -1808,20 +1808,20 @@
 				//basisnum为依据编号的数组
 				var id = [];
 				for (var i = 0; i < changeUser.length; i++) {
-					id.push(changeUser[i].ID);		
+					id.push(changeUser[i].FILEID);		
 				}
 				//basisnums为basisnum数组用逗号拼接的字符串
 				var ids = id.toString(',');
 				debugger;
-				var url = "http://192.168.1.164:7880/merge/workorder/MergeWord?filePath=145,142&fileName=测试生成啊&num="+this.workorderForm.WONUM+"&deptfullname="+this.workorderForm.DEPTIDDesc+"&recordid="+this.workorderForm.ID;
-				this.$axios.post(url, {}).then((res) => {
+				var url = this.basic_url +"/api-merge/merge/workorder/MergeWord?filePath="+ids+"&fileName=报告测试&num="+this.workorderForm.WONUM+"&deptfullname="+this.workorderForm.DEPTIDDesc+"&recordid="+this.workorderForm.ID;
+				this.$axios.post(url, {}).then((res) => {loginlo
 					console.log(res);
-					// if(res.data.resp_code == 0) {
-					// 	this.$message({
-					// 		message: '生成成功',
-					// 		type: 'success'
-					// 	});
-					// }
+					if(res.data.resp_code == 0) {
+						this.$message({
+							message: '生成成功',
+							type: 'success'
+						});
+					}
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -1879,6 +1879,8 @@
 						res.data.WORKORDER_DATA_TEMPLATEList[i].isEditing = false;
 					}
 					res.data.CJDW = Number(res.data.CJDW);
+					res.data.ITEM_PROFESSIONAL_GROUP = Number(res.data.ITEM_PROFESSIONAL_GROUP);
+					this.RVENDORSelect(res.data.CJDW);
 					this.workorderForm = res.data;
 					this.show = true;
 				}).catch((err) => {

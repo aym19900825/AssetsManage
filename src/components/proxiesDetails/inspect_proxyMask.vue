@@ -373,7 +373,7 @@
 														</el-form-item>	
 													</template>
 												</el-table-column>
-												<el-table-column prop="depttypeDesc" label="分包方名称" sortable width="120px">
+												<el-table-column prop="VENDORDesc" label="分包方名称" sortable width="120px">
 													<template slot-scope="scope">
 														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDORDesc" placeholder="请输入分包方名称">
 															<el-button slot="append" icon="el-icon-search" @click="getDept(scope.row)">
@@ -1014,6 +1014,7 @@
 			},
 			//取到分包方
 			deptdata(value){
+
 				console.log(value);
 				this.deptName.VENDOR = value[0];//id
 				this.deptName.VENDORDesc = value[1];//名称
@@ -1918,6 +1919,7 @@
 						type: type
 					},
 				}).then((res) => {
+					console.log(res.data);
 					this.selectData = res.data;
 				});
 			},

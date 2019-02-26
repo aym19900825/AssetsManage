@@ -42,7 +42,9 @@ const sample_disposal  = r => require.ensure([], () => r(require('@/components/s
 
 
 const workorders  = r => require.ensure([], () => r(require('@/components/testworkcheck/workorders')), 'workorders')//工作任务单
+const report_approve  = r => require.ensure([], () => r(require('@/components/testworkcheck/report_approve')), 'report_approve')//报告审批
 const useseal_management  = r => require.ensure([], () => r(require('@/components/testworkcheck/useseal_management')), 'useseal_management')//用印管理
+const quality_supervision  = r => require.ensure([], () => r(require('@/components/testworkcheck/quality_supervision')), 'quality_supervision')//质量监督抽查审批
 const reportarchiving  = r => require.ensure([], () => r(require('@/components/testworkcheck/reportarchiving')), 'reportarchiving')//报告归档
 const devices  = r => require.ensure([], () => r(require('@/components/devices')), 'devices')//设备管理
 const inspection_project  = r => require.ensure([], () => r(require('@/components/inspection_project')), 'inspection_project')//检验/检测项目管理
@@ -322,10 +324,20 @@ Vue.use(Router)
       name: 'workorders',
       component: workorders
     },
+    {//报告审批
+      path: '/report_approve',
+      name: 'report_approve',
+      component: report_approve
+    },
     {//用印管理
       path: '/useseal_management',
       name: 'useseal_management',
       component: useseal_management
+    },
+    {//质量监督抽查审批
+      path: '/quality_supervision',
+      name: 'quality_supervision',
+      component: quality_supervision
     },
      {//报告归档
       path: '/reportarchiving',

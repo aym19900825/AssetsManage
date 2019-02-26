@@ -6,7 +6,7 @@
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单调用 Begin-->
-			<navs_left></navs_left>
+			<navs_left ref="navleft" v-on:childByValue="childvalue"></navs_left>
 			<!--左侧菜单调用 End-->
 
 			<!--右侧内容显示 Begin-->
@@ -237,6 +237,21 @@
 						"changedate":''
 					};
 			},
+			//请求页面的button接口
+		    getbutton(childvalue){
+		    	console.log(childvalue);
+		    	var data = {
+					menuId: childvalue.id,
+					roleId: this.$store.state.roleid,
+				};
+				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
+				this.$axios.get(url, {params: data}).then((res) => {
+					console.log(res);
+					this.buttons = res.data;
+					
+				}).catch((wrong) => {})
+
+		    },
 			changeCheckedName(value){
 				this.checkedName=value
 				let str=value.toString()
@@ -249,9 +264,12 @@
 				}
 			},
 			//表格传过来
-			childByValue: function (childValue) {
+			childByValue: function (childByValue) {
 		        // childValue就是子组件传过来的
-		        this.selMenu = childValue
+		        this.selMenu = childByValue
+		    },
+		    childvalue:function (childValue) {
+		    	 this.getbutton(childValue);
 		    },
 			tableControle(data){//控制表格列显示隐藏
 			  this.checkedName = data;

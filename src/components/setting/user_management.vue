@@ -170,6 +170,18 @@
 			</div>
 		</div>
 		<usermask :user="user" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></usermask>
+		<el-dialog title="修改密码" :visible.sync="passdialog" width="30%">
+			<el-form :model="userpassword" inline-message >
+	  			<el-form-item label="新密码" prop="newPassword" label-width="100px">
+					<el-input v-model="userpassword.newPassword"></el-input>
+				</el-form-item>
+			</el-form>
+		      <span slot="footer" class="dialog-footer">
+		      	<el-button type="primary" @click="determine">确 定</el-button>
+		        <el-button @click="passdialog = false">取 消</el-button>
+		      </span>
+        </el-dialog>
+
 		<!--右侧内容显示 End-->
 	</div>
 	</div>
@@ -179,7 +191,6 @@
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_header from '../common/nav_tabs.vue'
-//	import assetsTree from '../plugin/vue-tree/tree2.vue'
 	import usermask from '../settingDetails/user_mask.vue'
 	export default {
 		name: 'user_management',
@@ -188,7 +199,6 @@
 			'navs_header': navs_header,
 			'navs_left': navs_left,
 			'usermask': usermask,
-//			'v-assetsTree': assetsTree
 		},
 		data() {
 			return {
@@ -199,6 +209,8 @@
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				loadSign: true, //加载
 				commentArr: {},
+				passdialog:false,
+				userpassword:{},
 				checkedName: [
 					'用户名',
 					'姓名',
@@ -255,8 +267,6 @@
 				selUser: [],
 				'启用': true,
 				'冻结': false,
-				'男': true,
-				'女': false,
 				userList: [],
 				search: false,
 				show: false,
@@ -517,17 +527,36 @@
 					});
 					return;
 				} else {
-					var changeUser = selData[0];
-					var id = changeUser.id;
-					var url = this.basic_url + '/api-user/users/' + id + '/resetPassword';
-					this.$axios.post(url, {}).then((res) => {
-						//resp_code == 0是后台返回的请求成功的信息
+					this.passdialog=true;
+//					this.changeUser = selData[0];
+//					var id = changeUser.id;
+//					var url = this.basic_url + '/api-user/users/' + id + '/resetPassword';
+//					this.$axios.post(url, {}).then((res) => {
+//						//resp_code == 0是后台返回的请求成功的信息
+//						if(res.data.resp_code == 0) {
+//							this.$message({
+//								message: '重置成功',
+//								type: 'success'
+//							});
+//							this.requestData();
+//						}
+//					}).catch((err) => {
+//						this.$message({
+//							message: '网络错误，请重试',
+//							type: 'error'
+//						});
+//					});
+				}
+			},
+			determine(){
+				var id = this.selUser[0].id;
+				var url = this.basic_url + '/api-user/users/' + id + '/password';
+					this.$axios.put(url,{"newPassword": this.userpassword.newPassword}).then((res) => {
 						if(res.data.resp_code == 0) {
 							this.$message({
-								message: '重置成功',
+								message: '修改成功',
 								type: 'success'
 							});
-							this.requestData();
 						}
 					}).catch((err) => {
 						this.$message({
@@ -535,8 +564,8 @@
 							type: 'error'
 						});
 					});
-				}
 			},
+
 			// 启用
 			unfreeze() {
 				var selData = this.selUser;

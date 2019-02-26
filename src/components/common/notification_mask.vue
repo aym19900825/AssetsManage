@@ -1185,9 +1185,19 @@
 											type: 'warning'
 										});
 								}else{
-									this.$refs.approvalChild.visible();
+									var url = this.basic_url + '/api-apps/app/workNot/flow/customFlowValidate/'+this.dataid;
+								this.$axios.get(url, {}).then((res) => {
+				    				if(res.data.resp_code == 0) {
+										this.$message({
+											message:res.data.resp_msg,
+											type: 'warning'
+										});
+									}else{
+									 	this.$refs.approvalChild.visible();
+									}
+								})
 								}
-		    		});
+		    				});
 		    		}
 				});
 			},

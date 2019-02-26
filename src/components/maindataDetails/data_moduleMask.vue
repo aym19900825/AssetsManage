@@ -507,6 +507,7 @@
 			},
 			// 保存users/saveOrUpdate
 			save(opt) {
+				console.log(docUpload);
 				this.$refs['CATEGORY'].validate((valid) => {
 					if(!valid && opt == 'docUpload'){
 						this.$message({
@@ -516,6 +517,7 @@
 					}
 					if(valid) {
 						this.CATEGORY.STATUS = ((this.CATEGORY.STATUS == "1" || this.CATEGORY.STATUS == '活动') ? '1' : '0');
+						console.log(this.CATEGORY);
 						var url = this.basic_url + '/api-apps/app/rawDataTem/saveOrUpdate';
 						this.$axios.post(url, this.CATEGORY).then((res) => {
 							if(res.data.resp_code == 0) {

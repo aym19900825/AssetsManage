@@ -71,13 +71,13 @@
 												<el-input v-model="user.username" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8">
-											<el-form-item label="密码" v-if="modify" label-width="100px">
+										<el-col :span="8"  v-if= "addtitle">
+											<!--<el-form-item label="密码" v-if="modify" label-width="100px">
 												<el-input type="password" v-model="user.password" :disabled="true">
 													<el-button slot="append" icon="icon-edit" @click="editpassword"></el-button>
 												</el-input>
-											</el-form-item>
-											<el-form-item label="密码" prop="password" v-else label-width="100px">
+											</el-form-item>-->
+											<el-form-item label="密码" prop="password" label-width="100px">
 												<el-input type="password" v-model="user.password" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -477,6 +477,18 @@
                     callback();
                 }
             };
+            var validatePass = (rule, value, callback) => {
+		            if (value === '') {
+		                    callback(new Error('请输入密码'));
+		                } else if (!/^.{5,16}$/g.test(value)) {
+		                    callback(new Error('密码长度不能少于5个字符且不能大于16个字符'));
+		                } else {
+		                    if (this.passwordedit.checkPass !== '') {
+		                        this.$refs.passwordedit.validateField('checkPass');
+		                    }
+		                    callback();
+		         }
+		     };
 			return {
 				basic_url: Config.dev_url,
 				user: {
@@ -548,7 +560,9 @@
 						{validator: this.Validators.isUserName, trigger: 'blur'},//引用 isUserName
 						{type: 'string', min: 4, max:20, message: '用户名不小于4位，不大于20位', trigger: 'blur'},
 					],
-					password: [{required: true,trigger: 'blur',message: '必填',}],
+					password: [
+                    	{ validator: validatePass, trigger: 'blur',required: true, }
+                	],
 					sex: [{required: true,trigger: 'blur',message: '必填'}],
 					ispermit_authorization: [{required: true,trigger: 'change',message: '必填'}], //授权
 					islogin: [{required: true,trigger: 'change',message: '必填'}], //登陆
@@ -662,7 +676,6 @@
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.user.createby = res.data.id;
 					this.user.createbyName = res.data.nickname;
-					// console.log(this.user.createbyName);
 					this.user.enterby = res.data.id
 					this.user.enterbyName = res.data.nickname;
 					var date = new Date();
@@ -741,9 +754,7 @@
 			},
 			//刪除新建行
 			deleteRow(index, row, listName){
-				console.log(row);
 				var TableName = '';
-				console.log(listName);
 				if(listName =='tableList'){
 					TableName = 'qualifications';
 				}else if(listName =='traingList'){
@@ -754,7 +765,6 @@
 				if(row.id){
 					var url = this.basic_url + '/api-user/users/' + TableName +'/' + row.id;
 					this.$axios.delete(url, {}).then((res) => {
-						console.log(res);
 						if(res.data.resp_code == 0){
 							this.user[TableName].splice(index,1);
 							this.$message({

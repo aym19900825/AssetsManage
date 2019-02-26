@@ -4,7 +4,7 @@
   		<vheader></vheader>
 		<navs_header></navs_header>
 	</div>
-    <div class="contentbg">
+    <div class="contentbg" v-loading="loading">
     	<!--左侧菜单内容显示 Begin-->
 		<div class="navbar-default navbar-static-side">
 			<div id="sidebar-collapse">
@@ -62,12 +62,19 @@
 								</el-col>
 
 								<el-col :span="8" class="pt30">
-									<el-upload class="avatar-uploader"
+									<!-- <el-upload class="avatar-uploader"
 									action="https://jsonplaceholder.typicode.com/posts/"
 									:show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload" title="上传头像">
 									  <img v-if="headImgUrl" :src="headImgUrl" class="avatar">
 									  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-									</el-upload>
+									</el-upload> -->
+									<form method="post" id="file" action="" enctype="multipart/form-data" style="float: right; width: 100%;">
+										<el-button type="warn" round class="a-upload" style="width: 100%;position: relative;">
+											<img v-if="headImgUrl" :src="headImgUrl" class="avatar">
+											<i v-else class="el-icon-plus avatar-uploader-icon"></i>
+											<input id="excelFile" type="file" name="uploadFile" @change="upload"/>
+										</el-button>
+									</form>
 								</el-col>
 							</el-row>
 							
@@ -228,7 +235,7 @@
 	import Validators from '../../core/util/validators.js'
 	import vheader from '../common/vheader.vue'
 	import navs_header from '../common/nav_tabs.vue'
-	
+	import { Loading } from 'element-ui'
 	export default {
 		name: 'personinfo',
 		components: {
@@ -237,7 +244,10 @@
 		},
 		data() {
 			return {
+				loading: false,
+				docParm:{},
 				basic_url: Config.dev_url,
+				file_url: Config.file_url,
 				editSearch: '',
 				'启用': 1,
 				'冻结': 0,
@@ -251,6 +261,7 @@
 				ismin:true,
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				headImgUrl: '',//头像上传
+				fileid: 1,
 	            labelPosition: 'top',
 	            dialogVisible: false, //对话框
 	            personinfo:{
@@ -330,27 +341,83 @@
 		},
 		
 		methods: {  
+			upload(e){
+				var formData = new FormData();
+				this.loading = true;
+				this.$emit('showLoading');
+				formData.append('files', document.getElementById('excelFile').files[0]);
+				var config = {
+					//添加请求头
+					headers: { "Content-Type": "multipart/form-data" },
+					//添加上传进度监听事件
+					onUploadProgress: e => {
+						var completeProgress = ((e.loaded / e.total * 100) | 0) + "%";
+						this.progress = completeProgress;
+					}
+				};
+				var url = this.file_url + '/file/uploadIcon?userid=' + this.docParm.userid 
+						+ '&username=' + this.docParm.username
+						+ '&deptid=' + this.docParm.deptid
+						+ '&deptfullname=' + this.docParm.deptfullname
+						+ '&recordid=1&appname=icon&appid=99&pathid=5';
+				if(this.headImgUrl!=''){
+					url += '&fileid=' + this.fileid;
+				}
+				this.$axios.post(url, formData, config
+				).then((res)=>{
+					this.loading = false;
+					if(res.data.code == 0){
+						this.$message({
+							message: res.data.message,
+							type: 'error'
+						});
+					}else{
+						this.$message({
+							message: '文件已成功上传至服务器',
+							type: 'success'
+						});
+						this.headImgUrl = res.data.icon;
+						var _this = this;
+						setTimeout(function(){
+							_this.$router.go(0);
+						},300);
+					}
+				})
+			},
 			getData(){//获取当前用户信息
 	    		var url = this.basic_url + '/api-user/users/currentMap';
 	    		this.$axios.get(url, {}).then((res) => { 
-	    			//res.data.enabled ? '启用' : '冻结';
-	    			//res.data.sex ? '男' : '女';
-	    			console.log(this.personinfo);
 	    			this.personinfo=res.data;
 	    			this.personinfo.roleId = [];
-	    			var roles =res.data.roles;
+					var roles =res.data.roles;
+					this.docParm.userid = res.data.id;
+					this.docParm.username = res.data.username;
+					this.docParm.deptid = res.data.deptId;
+					this.docParm.deptfullname = res.data.deptName;
 	    			 // console.log(roles);
 	    			for(var i = 0; i < roles.length; i++) {
 						this.personinfo.roleId.push(roles[i].id);
 					}
-	    			
+	    			this.getImgUrl();
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
 						type: 'error'
 					});
 				});
-	    	},
+			},
+			getImgUrl(){
+				var url = this.file_url + '/file/icon?appname=icon&userid=' + this.docParm.userid;
+				this.$axios.get(url, {}).then((res) => {
+					if(res.data.code==1){
+						this.headImgUrl = res.data.icon;
+						this.fileid = res.data.fileid;
+					}else{
+						this.headImgUrl = '';
+						this.fileid = 0;
+					}
+				});
+			},
 	    	handleNodeClick(data) { //获取勾选树菜单节点
 				//console.log(data);
 			},
@@ -547,6 +614,21 @@
   }
  .avatar i {font-size: 50px; line-height:130px; color: #c0c4cc;}
 
+
+ .a-upload input{
+	position: absolute;
+    font-size: 100px;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    width: 100%;
+    cursor: pointer;
+	height: 160px;
+	right: 10px;
+ }
+ .a-upload span{
+	display: block;
+	position: relative;
+ }
 
 </style>
 

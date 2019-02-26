@@ -19,7 +19,7 @@
               <span class="el-dropdown-link white">
                 <font class="roles pr10">{{username}}<br>{{GetRolesname}}</font>
                 <font class="pr10">您好</font>
-                <font><img class="userimg" /></font>
+                <font><img :src="headImgUrl==''? imgUrl:headImgUrl " class="userimg"/></font>
                 <i class="el-icon-arrow-down icon-arrow2-down"></i>
               </span>
               <el-dropdown-menu slot="dropdown" class="scrollbar" style="max-height:300px">
@@ -67,11 +67,16 @@
 
 <script>
 import Config from '../../config.js'
+import imgUrl  from '../../assets/img/female.png'
+
 export default {
 //  name: 'nav',
     data(){
         return {
             basic_url: Config.dev_url,
+            file_url: Config.file_url,
+            imgUrl: imgUrl,
+            headImgUrl: '',
             username: '',
             nickname: '',
             GetRolesname:'',
@@ -101,11 +106,20 @@ export default {
                     this.username = res.data.username;
                     this.nickname = res.data.nickname;
                     this.userid = res.data.id;
+                    this.getImgUrl();
             }).catch((err) => {
                 this.$message({
                     message: '网络错误，请重试',
                     type: 'error'
                 });
+            });
+        },
+        getImgUrl(){
+            var url = this.file_url + '/file/icon?appname=icon&userid=' + this.userid;
+            this.$axios.get(url, {}).then((res) => {
+                if(res.data.code==1){
+                    this.headImgUrl = res.data.icon;
+                }
             });
         },
        getITEM_Roles() {
@@ -268,7 +282,6 @@ a:hover .userimgs {border:2px solid #9153f1;}
 .userimg{
     width:40px;
     height:36px;
-    background-image: url(../../assets/img/female.png);
     background-size: 100%;
     background-repeat: no-repeat;
     border-radius:6px;

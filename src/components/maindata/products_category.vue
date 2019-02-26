@@ -116,7 +116,7 @@
 						<el-col :span="24">
 							<!-- 表格 Begin-->
 
-							<el-table :header-cell-style="rowClass" :data="categoryList" v-loading="loading"  element-loading-text="拼命加载中"
+							<el-table ref="table" :header-cell-style="rowClass" :data="categoryList" v-loading="loading"  element-loading-text="拼命加载中"
     element-loading-spinner="el-icon-loading"
     element-loading-background="rgba(0, 0, 0, 0.6)" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
@@ -287,6 +287,7 @@
 			},
 			//表格滚动加载
 			loadMore() {
+				//console.log(this.$refs.table.$el.offsetTop)
 				let up2down = sessionStorage.getItem('up2down');
 				if(this.loadSign) {					
 					if(up2down=='down'){
@@ -295,16 +296,22 @@
 							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
 							return false;
 						}
+//						console.log($('table.el-table__body').height())
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						//console.log(this.$refs.table.$el.offsetTop)
 						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-							$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+//							console.log($('.el-table__body-wrapper table').height())
+//							console.log($('table.el-table__body').height())
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
 							sessionStorage.setItem('toBtm','true');
 						}
 					}else{
 						sessionStorage.setItem('toBtm','false');
 						this.page.currentPage--;
-//						if($('.el-table__body-wrapper table').find('.filing').length>0){
-//							$('.el-table__body-wrapper table').find('.filing').remove();
-//						}
+						if($('.el-table__body-wrapper table').find('.filing').length>0){
+							$('.el-table__body-wrapper table').find('.filing').remove();
+							
+						}
 						if(this.page.currentPage < 1) {
 							this.page.currentPage=1
 							return false;
@@ -315,6 +322,7 @@
 						this.loadSign = true
 					}, 1000)
 					this.requestData()
+					
 				}
 			},
 			tableControle(data) {
@@ -633,7 +641,8 @@
 		},
 		mounted() {
 			this.requestData();
-			this.getCompany();			
+			this.getCompany();
+
 //			const selectWrap = document.querySelector('.el-table__body-wrapper')
 //			var that=this
 //			selectWrap.addEventListener('scroll', function(e){

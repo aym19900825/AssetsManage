@@ -1856,6 +1856,7 @@
 								message:res.data.resp_msg,
 								type: 'success'
 							});
+							this.detailgetData();
 						var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/Executors/'+this.dataid;
 							this.$axios.get(url, {}).then((res) => {
 									console.log(res.data.datas);
@@ -1867,9 +1868,11 @@
 								if(users.indexOf(this.username) != -1){
 									this.approval=true;
 									this.start=false;
+								}else{
+									this.approval=false;
+									this.start=false;
 								}
 							});
-							this.detailgetData();
 				    }
 				});
 			},
@@ -1877,27 +1880,37 @@
 			approvals(){
 				this.approvingData.id =this.dataid;
 				this.approvingData.app=this.inspectPro;
-				 var url = this.basic_url + '/api-apps/app/'+this.inspectPro+'/flow/isEnd/'+this.dataid;
-		    		this.$axios.get(url, {}).then((res) => {
-		    			if(res.data.resp_code == 0) {
-							this.$message({
-								message:res.data.resp_msg,
-								type: 'warning'
-							});
-		    			}else{
-		    				var url = this.basic_url + '/api-apps/app/'+this.inspectPro+'/flow/isExecute/'+this.dataid;
-		    				this.$axios.get(url, {}).then((res) => {
-				    			if(res.data.resp_code == 1) {
+				var url = this.basic_url + '/api-apps/app/'+this.inspectPro+'/flow/isEnd/'+this.dataid;
+	    		this.$axios.get(url, {}).then((res) => {
+	    			if(res.data.resp_code == 0) {
+						this.$message({
+							message:res.data.resp_msg,
+							type: 'warning'
+						});
+	    			}else{
+	    				var url = this.basic_url + '/api-apps/app/'+this.inspectPro+'/flow/isExecute/'+this.dataid;
+	    				this.$axios.get(url, {}).then((res) => {
+			    			if(res.data.resp_code == 1) {
+								this.$message({
+									message:res.data.resp_msg,
+									type: 'warning'
+								});
+							}else{
+								var url = this.basic_url + '/api-apps/app/'+this.inspectPro+'/flow/customFlowValidate/'+this.dataid;
+								this.$axios.get(url, {}).then((res) => {
+				    				if(res.data.resp_code == 0) {
 										this.$message({
 											message:res.data.resp_msg,
 											type: 'warning'
 										});
-								}else{
-									this.$refs.approvalChild.visible();
-								}
-		    		});
-		    		}
-				});
+									}else{
+									 	this.$refs.approvalChild.visible();
+									}
+								})
+	    					}
+						});
+					}
+	    		});
 			},
 			//流程历史
 			flowhistory(){

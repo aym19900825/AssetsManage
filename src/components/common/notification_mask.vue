@@ -255,8 +255,7 @@
 												<el-table-column prop="REMARKS" label="要求" sortable width="150px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-															<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" placeholder="请输入内容"></el-input>
-															<span v-show="!scope.row.isEditing">{{scope.row.REMARKS}}</span>
+															<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入内容"></el-input>
 														</el-form-item>
 													</template>
 												</el-table-column>
@@ -808,6 +807,7 @@
 				this.noedit = false;
 			},
 			detailgetData() {
+				console.log(123456);
 				var url = this.basic_url +'/api-apps/app/workNot/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					//依据对号控制
@@ -1149,6 +1149,7 @@
 								message:res.data.resp_msg,
 								type: 'success'
 							});
+							this.detailgetData();
 						var url = this.basic_url + '/api-apps/app/workNot/flow/Executors/'+this.dataid;
 						this.$axios.get(url, {}).then((res) => {
 								var resullt=res.data.datas;
@@ -1159,8 +1160,10 @@
 								if(users.indexOf(this.username) != -1){
 									this.approval=true;
 									this.start=false;
+								}else{
+									this.approval=false;
+									this.start=false;
 								}
-								this.detailgetData();
 						});
 							
 				    }
@@ -1186,9 +1189,19 @@
 											type: 'warning'
 										});
 								}else{
-									this.$refs.approvalChild.visible();
+									var url = this.basic_url + '/api-apps/app/workNot/flow/customFlowValidate/'+this.dataid;
+								this.$axios.get(url, {}).then((res) => {
+				    				if(res.data.resp_code == 0) {
+										this.$message({
+											message:res.data.resp_msg,
+											type: 'warning'
+										});
+									}else{
+									 	this.$refs.approvalChild.visible();
+									}
+								})
 								}
-		    		});
+		    				});
 		    		}
 				});
 			},

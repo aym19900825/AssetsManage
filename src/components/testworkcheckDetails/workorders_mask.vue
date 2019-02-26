@@ -586,6 +586,9 @@
 														<el-button title="删除" @click="deleteTempRow(scope.$index,scope.row)" type="text" size="small">
 															<i class="icon-trash red"></i>
 														</el-button>
+														<el-button title="编辑" type="text" size="small">
+															<i class="icon-pencil"></i>
+														</el-button>
 													</template>
 												</el-table-column>
 												
@@ -717,6 +720,9 @@
 													  </el-button>
 													  <el-button title="下载" type="text" size="small">
 														<i class="icon-arrow-down-circle"></i>
+													  </el-button>
+													  <el-button title="查看" type="text" size="small">
+														<i class="icon-file-text"></i>
 													  </el-button>
 													</template>
 												</el-table-column>
@@ -1661,6 +1667,7 @@
 								message:res.data.resp_msg,
 								type: 'success'
 							});
+							this.detailgetData();
 							var url = this.basic_url + '/api-apps/app/workorder/flow/Executors/'+this.dataid;
 							this.$axios.get(url, {}).then((res) => {
 								var resullt=res.data.datas;
@@ -1671,9 +1678,11 @@
 								if(users.indexOf(this.username) != -1){
 									this.approval=true;
 									this.start=false;
+								}else{
+									this.approval=false;
+									this.start=false;
 								}
 							});
-							this.detailgetData();
 				    }
 				});
 			},
@@ -1681,7 +1690,7 @@
 			approvals(){
 				this.approvingData.id =this.dataid;
 				this.approvingData.app=this.workorder;
-				 var url = this.basic_url + '/api-apps/app/'+this.workorder+'/flow/isEnd/'+this.dataid;
+				 var url = this.basic_url + '/api-apps/app/workorder/flow/isEnd/'+this.dataid;
 		    		this.$axios.get(url, {}).then((res) => {
 		    			if(res.data.resp_code == 0) {
 							this.$message({
@@ -1689,7 +1698,7 @@
 								type: 'warning'
 							});
 		    			}else{
-		    				var url = this.basic_url + '/api-apps/app/'+this.workorder+'/flow/isExecute/'+this.dataid;
+		    				var url = this.basic_url + '/api-apps/app/workorder/flow/isExecute/'+this.dataid;
 		    				this.$axios.get(url, {}).then((res) => {
 				    			if(res.data.resp_code == 1) {
 										this.$message({
@@ -1697,11 +1706,21 @@
 											type: 'warning'
 										});
 								}else{
-									this.$refs.approvalChild.visible();
+									var url = this.basic_url + '/api-apps/app/workorder/flow/customFlowValidate/'+this.dataid;
+								this.$axios.get(url, {}).then((res) => {
+				    				if(res.data.resp_code == 0) {
+										this.$message({
+											message:res.data.resp_msg,
+											type: 'warning'
+										});
+									}else{
+									 	this.$refs.approvalChild.visible();
+									}
+								})
 								}
-		    		});
-		    		}
-				});
+		    				});
+		    			}
+					});
 			},
 			//流程历史
 			flowhistory(){
@@ -1813,8 +1832,8 @@
 				//basisnums为basisnum数组用逗号拼接的字符串
 				var ids = id.toString(',');
 				debugger;
-				var url = this.basic_url +"/api-merge/merge/workorder/MergeWord?filePath="+ids+"&fileName=报告测试&num="+this.workorderForm.WONUM+"&deptfullname="+this.workorderForm.DEPTIDDesc+"&recordid="+this.workorderForm.ID;
-				this.$axios.post(url, {}).then((res) => {loginlo
+				var url = this.basic_url +"/api-merge/merge/workorder/MergeWord?filePath="+ids+"&fileName=报告测试&num="+this.workorderForm.PROXYNUM+"&deptfullname="+this.workorderForm.DEPTIDDesc+"&recordid="+this.workorderForm.ID;
+				this.$axios.post(url, {}).then((res) => {
 					console.log(res);
 					if(res.data.resp_code == 0) {
 						this.$message({

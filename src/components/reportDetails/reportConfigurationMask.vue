@@ -106,7 +106,7 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="defaultVal" label="默认值" sortable width="120px">
+												<!--<el-table-column prop="defaultVal" label="默认值" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'params.'+scope.$index + '.defaultVal'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.defaultVal" placeholder="请输入分包方名称">
@@ -114,7 +114,7 @@
 														<span v-else="v-else">{{scope.row.defaultVal}}</span>
 														</el-form-item>
 													</template>
-												</el-table-column>
+												</el-table-column>-->
 
 												<el-table-column prop="required" label="必填" sortable width="180px">
 													<template slot-scope="scope">
@@ -122,7 +122,7 @@
 													<el-select v-if="scope.row.isEditing" v-model="scope.row.required" filterable allow-create default-first-option placeholder="请选择">
 										    <el-option v-for="item in options" :key="item.value" :value="item.value" :label="item.label"></el-option>
 										    		</el-select>
-														<span v-else="v-else">{{scope.row.required}}</span>
+														<span v-else="v-else">{{scope.row.requiredDesc}}</span>
 												</el-form-item>
 													</template>
 												</el-table-column>
@@ -131,9 +131,9 @@
 													<template slot-scope="scope">
 														<el-form-item :prop="'params.'+scope.$index + '.type'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-select v-if="scope.row.isEditing" v-model="scope.row.type" filterable allow-create default-first-option placeholder="请选择">
-										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.name"></el-option>
+										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
 														</el-select>
-														<span v-else="v-else">{{scope.row.type}}</span>
+														<span v-else="v-else">{{scope.row.typeDesc}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
@@ -339,7 +339,6 @@
 			//
 			detailgetData() {
 				var url = this.basic_url + '/api-report/report/' + this.dataid;
-//			var url = this.basic_url +'/api-apps/app/inspectPro/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					for(var n = 0;n<res.data.params.length;n++){
 						res.data.params[n].isEditing = false;
@@ -490,6 +489,7 @@
 			getType(){
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=report_param_type';
 				this.$axios.get(url, {}).then((res) => {
+					console.log(111);
 					console.log(res);
 					this.selectData = res.data;
 				}).catch(error => {

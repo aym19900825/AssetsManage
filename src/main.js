@@ -46,24 +46,23 @@ Vue.directive('loadmore', {
 	bind(el, binding) {
 		const selectWrap = el.querySelector('.el-table__body-wrapper');
 		// const selectWrap = el.querySelector('.el-table');
-		// var scrollBeforeTop = 0;
+		var scrollBeforeTop = 0;
 		var firstFlag = true;
 	    selectWrap.addEventListener('scroll', function() {
 			
-//			let up2down = sessionStorage.getItem('toBtm');
-//			if(up2down=='true'){
-//				if(firstFlag){
-//					scrollBeforeTop = this.scrollTop;
-//					firstFlag = false;
-//					this.scrollTop = 2;
-//				}else{
-//					if(this.scrollTop >= scrollBeforeTop){
-//						this.scrollTop = 2;
-//						scrollBeforeTop = this.scrollTop;
-////						console.log(1);
-//					}
-//				}
-//			}
+			let up2down = sessionStorage.getItem('toBtm');
+			if(up2down=='true'){
+				if(firstFlag){
+					scrollBeforeTop = this.scrollTop;
+					firstFlag = false;
+					this.scrollTop = 2;
+				}else{
+					if(this.scrollTop >= scrollBeforeTop){
+						this.scrollTop = 2;
+						scrollBeforeTop = this.scrollTop;
+					}
+				}
+			}
 	      	let sign = 1
 	      	const scrollDistance = this.scrollHeight - this.scrollTop - this.clientHeight;
 		    if (scrollDistance <= sign) {

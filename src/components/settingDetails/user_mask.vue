@@ -905,11 +905,17 @@
 					this.user.enabled = this.user.enabled ? '活动' : '不活动';
 					this.user.ispermit = this.user.ispermit == '1' ? '是' : '否';
 					this.user.islogin = this.user.islogin == '1' ? '是' : '否';
-//					this.user.roleId = [];
-//					var roles = this.user.roles;
-//					for(var i = 0; i < roles.length; i++) {
-//						this.user.roleId.push(roles[i].id);
-//					}
+if(typeof(this.user.roleId) != 'undefind'&&this.user.roleId != null&&this.user.roleId.length > 0) {
+							this.user.roleId=[];
+							var roles = this.user.roles;
+							for(var i = 0; i < roles.length; i++) {
+								this.user.roleId.push(roles[i].id);
+							}
+					}else if(this.user.reportId==null){
+						console.log(1111);
+						this.user.roleId = [];
+						this.user.roles = [];
+					}
 					this.show = true;
 				}).catch((err) => {
 					this.$message({

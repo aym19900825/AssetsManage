@@ -205,17 +205,17 @@ export default {
 			}
 		},
 		requestData() {
-//				var data = {
-//					page: this.page.currentPage,
-//					limit: this.page.pageSize,
-//					PRO_NUM: this.searchList.PRO_NUM,
-//					PRO_NAME: this.searchList.PRO_NAME,
-//					VERSION: this.searchList.VERSION,
-//					DEPTID: this.searchList.DEPTID,
-//					// STATUS: this.searchList.STATUS,
-//				}
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+					PRO_NUM: this.searchList.PRO_NUM,
+					PRO_NAME: this.searchList.PRO_NAME,
+					VERSION: this.searchList.VERSION,
+					DEPTID: this.searchList.DEPTID,
+					// STATUS: this.searchList.STATUS,
+				}
 				var url = this.basic_url + '/api-apps/app/flow/flow/todo';
-				this.$axios.get(url, {}).then((res) => {
+				this.$axios.get(url, {params: data}).then((res) => {
 					console.log(res.data);
 					this.page.totalCount = res.data.count;
 					//总的页数

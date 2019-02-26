@@ -302,9 +302,9 @@
 					}else{
 						sessionStorage.setItem('toBtm','false');
 						this.page.currentPage--;
-						if($('.el-table__body-wrapper table').find('.filing').length>0){
-							$('.el-table__body-wrapper table').find('.filing').remove();
-						}
+//						if($('.el-table__body-wrapper table').find('.filing').length>0){
+//							$('.el-table__body-wrapper table').find('.filing').remove();
+//						}
 						if(this.page.currentPage < 1) {
 							this.page.currentPage=1
 							return false;

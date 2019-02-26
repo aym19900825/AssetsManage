@@ -63,11 +63,11 @@
 												<el-input v-model="workorderForm.PROXY_VERSION" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8">
+										<!-- <el-col :span="8">
 											<el-form-item label="父任务单编号" prop="PARENT_NUM" >
 												<el-input v-model="workorderForm.PARENT_NUM" :disabled="noedit"></el-input>
 											</el-form-item>
-										</el-col>
+										</el-col> -->
 									</el-row>
 
 									<el-row >
@@ -586,7 +586,7 @@
 												</el-table-column>
 							            	</el-table>
 										</el-tab-pane>
-										<el-tab-pane label="仪器和计量器具" name="fifth">
+										<el-tab-pane label="检验检测设备" name="fifth">
 											<div class="table-func table-funcb">
 												<el-button type="success" size="mini" round @click="addequip">
 													<i class="icon-add"></i><font>新建行</font>
@@ -1023,7 +1023,7 @@
 					WORKORDER_PROJECTList:[],//检测项目
 					WORKORDER_CHECKPERSONList:[],//检验员信息
 					WORKORDER_DATA_TEMPLATEList:[],//原始数据模板
-					WORKORDER_ASSETList:[],//仪器和计量器具
+					WORKORDER_ASSETList:[],//检验检测设备
 					WORKORDER_REPORT_TEMPLATEList:[],//报告模板
 					WORKORDER_CONTRACTList:[],//分包项目
 				},
@@ -1209,11 +1209,9 @@
 					WORKORDER_PROJECTList:[],//检测项目
 					WORKORDER_CHECKPERSONList:[],//检验员信息
 					WORKORDER_DATA_TEMPLATEList:[],//原始数据模板
-					WORKORDER_ASSETList:[],//仪器和计量器具
+					WORKORDER_ASSETList:[],//检验检测设备
 					WORKORDER_REPORT_TEMPLATEList:[],//报告模板
-					WORKORDER_CONTRACTList:[],//分包项目
-
-					
+					WORKORDER_CONTRACTList:[],//分包项目					
 				};
 			},
 			//表格传过来

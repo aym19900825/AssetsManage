@@ -89,7 +89,7 @@
 												<el-table-column prop="param" label="参数" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'params.'+scope.$index + '.param'" >
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.param" :disabled="noedit" placeholder="自动生成">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.param" :disabled="noedit">
 														</el-input>
 														<span v-else="v-else">{{scope.row.param}}</span>
 														</el-form-item>
@@ -99,7 +99,7 @@
 												<el-table-column prop="label" label="参数名称" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'params.'+scope.$index + '.label'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.label" placeholder="请输入委托方名称">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.label" placeholder="请输入参数名称">
 														</el-input>
 														<span v-else="v-else">{{scope.row.label}}</span>
 														</el-form-item>

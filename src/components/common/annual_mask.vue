@@ -641,8 +641,8 @@
 					:total="page.totalCount">
 				</el-pagination>
 				<div slot="footer" class="el-dialog__footer">
-			       <el-button @click="diaVisCustom = false">取 消</el-button>
-			       <el-button type="primary" @click="adddeptname">确 定</el-button>
+					<el-button type="primary" @click="adddeptname">确 定</el-button>
+			       	<el-button @click="diaVisCustom = false">取 消</el-button>
 			    </div>
 			</el-dialog>
 			<!-- 生产企业名称、受检企业名称 End -->

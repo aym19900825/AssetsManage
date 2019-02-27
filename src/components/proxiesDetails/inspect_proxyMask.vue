@@ -357,11 +357,9 @@
 												</el-table-column>
 												<el-table-column prop="PROXYNUM" label="委托书编号" sortable width="120px">
 													<template slot-scope="scope">
-														<!-- <el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.PROXYNUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" > -->
-														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.PROXYNUM" placeholder="请输入委托方名称">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.PROXYNUM" placeholder="自动生成">
 														</el-input>
 														<span v-else="v-else">{{scope.row.PROXYNUM}}</span>
-														<!-- </el-form-item> -->
 													</template>
 												</el-table-column>
 												<el-table-column prop="INSPECT_GROUP" label="专业组" sortable width="120px">
@@ -384,7 +382,7 @@
 												</el-table-column>
 												<el-table-column prop="depttypeName" label="机构属性" sortable width="120px">
 													<template slot-scope="scope">
-														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.depttypeName" placeholder="请输入分包方名称">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.depttypeName" placeholder="">
 														</el-input>
 														<span v-else="v-else">{{scope.row.depttypeName}}</span>
 													</template>
@@ -804,6 +802,8 @@
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				dataInfo: {
+					MAINGROUP:'',
+					LEADER:'',
 					STATUS: '1',
 					STATUSDesc:'草稿',
 					VERSION:'1',
@@ -923,7 +923,7 @@
 					REPORT_MODE: [{ required: true, message: '必填', trigger: 'change' }],//发送方式
 					REPORT_FOMAT: [{ required: true, message: '必填', trigger: 'change' }],//格式
 					MAINGROUP: [{ required: true, message: '必填', trigger: 'change' }],//主检组
-					LEADER: [{ required: true, message: '必填', trigger: 'blur' }],//主检负责人
+					LEADER: [{ required: true, message: '必填', trigger: 'change' }],//主检负责人
 //					MEMO: [{ required: true, message: '必填', trigger: 'blur' }],//备注
 					CHECK_COST:[{required: false,trigger: 'change',validator:price}],
 					ACTUALCOST:[{trigger: 'blur',validator:price}],
@@ -1001,35 +1001,14 @@
 			getDept(item) {
 				this.$refs.deptchild.visible(item);
 				this.deptindex = item;
-				// var page = this.page.currentPage;
-				// var limit = this.page.pageSize;
-				// var url = this.basic_url + '/api-user/depts/treeMap';
-				// this.$axios.get(url, {
-
-				// }).then((res) => {
-				// 	this.resourceData = res.data;
-				// 	this.dialogVisible = true;
-				// 	this.deptindex = item;
-				// });
 			},
 			//取到分包方
 			deptdata(value){
-
-				console.log(value);
-				this.deptName.VENDOR = value[0];//id
-				this.deptName.VENDORDesc = value[1];//名称
-				this.deptName.depttype = value[2];//机构属性id
-				this.deptName.depttypeName = value[3];//机构属性名称
+				this.deptindex.VENDOR = value[0];//id
+				this.deptindex.VENDORDesc = value[1];//名称
+				this.deptindex.depttype = value[2];//机构属性id
+				this.deptindex.depttypeName = value[3];//机构属性名称
 			},
-			//选择分包方名称
-			// queding() {
-			// 	console.log(123456);
-			// 	console.log(this.checkedNodes);
-			// 	this.getCheckedNodes();
-			// 	this.dialogVisible = false;				
-			// 	this.deptindex.VENDOR = this.checkedNodes[0].id;
-			// 	this.deptindex.VENDORDesc = this.checkedNodes[0].fullname;				
-			// },
 			getCheckedNodes() {
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
 			},
@@ -1043,7 +1022,7 @@
 			     setTimeout(() => {
 			       this.loadSign = true
 			     }, 1000)
-			     this.requestData()
+			     this.requestData();
 			   }
 			 },	
 			toNum(str) {
@@ -1406,13 +1385,17 @@
 							console.log(res.data.datas);
 							var resullt=res.data.datas;
 							var users='';
-							var users='';
 							for(var i=0;i<resullt.length;i++){
 								users = users + resullt[i].username+",";
 								console.log("users----"+users);
 							}
 							if(users.indexOf(this.username) != -1){
+								console.log(this.username);
 								this.approval=true;
+								this.start=false;
+							}else{
+								console.log(2);
+								this.approval=false;
 								this.start=false;
 							}
 						});
@@ -1896,7 +1879,8 @@
 							}else{
 								var url = this.basic_url + '/api-apps/app/'+this.inspectPro+'/flow/customFlowValidate/'+this.dataid;
 								this.$axios.get(url, {}).then((res) => {
-				    				if(res.data.resp_code == 0) {
+									console.log(res);
+				    				if(res.data.resp_code == 1) {
 										this.$message({
 											message:res.data.resp_msg,
 											type: 'warning'
@@ -1941,9 +1925,21 @@
 					this.selectData = res.data;
 				});
 			},
+			getuser(){//获取当前用户信息
+	            var url = this.basic_url + '/api-user/users/currentMap';
+	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+	                    this.username = res.data.username;
+	            }).catch((err) => {
+	                this.$message({
+	                    message: '网络错误，请重试',
+	                    type: 'error'
+	                });
+	            });
+        	},
 		},
 		mounted() {
 			this.getCompany();
+			this.getuser();
 			// this.RVENDORSelect($event);
 		},
 	}

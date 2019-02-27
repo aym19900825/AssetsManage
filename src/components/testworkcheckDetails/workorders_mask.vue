@@ -368,14 +368,20 @@
 										<el-row >
 											<el-col :span="8">
 												<el-form-item label="寄出时间">
-													<el-date-picker v-model="workorderForm.SEND_DATE" type="date" placeholder="请选择到站日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
+													<el-date-picker v-model="workorderForm.SEND_DATE" type="date" placeholder="请选择寄出时间" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
 													</el-date-picker>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
 												<el-form-item label="归档时间">
-													<el-date-picker v-model="workorderForm.FILE_DATE" type="date" placeholder="请选择到站日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
+													<el-date-picker v-model="workorderForm.FILE_DATE" type="date" placeholder="请选择归档时间" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
 													</el-date-picker>
+												</el-form-item>
+											</el-col>
+											<el-col :span="8">
+												<el-form-item label="报告名称">
+													<el-input placeholder="请输入生成报告名称" v-model="reportname" :disabled="noedit">
+													</el-input>
 												</el-form-item>
 											</el-col>
 										</el-row>
@@ -1115,7 +1121,8 @@
 				modulenum:'',
 				username:'',
 				maingroup:[],//专业组
-				docParm: {}
+				docParm: {},
+				reportname:'',//生成报告名称
 			};
 		},
 		methods: {
@@ -1708,7 +1715,7 @@
 								}else{
 									var url = this.basic_url + '/api-apps/app/workorder/flow/customFlowValidate/'+this.dataid;
 								this.$axios.get(url, {}).then((res) => {
-				    				if(res.data.resp_code == 0) {
+				    				if(res.data.resp_code == 1) {
 										this.$message({
 											message:res.data.resp_msg,
 											type: 'warning'
@@ -1823,30 +1830,62 @@
 			},
 			//生成报告
 			getreport(){
-				var changeUser = this.workorderForm.WORKORDER_DATA_TEMPLATEList;
-				//basisnum为依据编号的数组
-				var id = [];
-				for (var i = 0; i < changeUser.length; i++) {
-					id.push(changeUser[i].FILEID);		
-				}
-				//basisnums为basisnum数组用逗号拼接的字符串
-				var ids = id.toString(',');
-				debugger;
-				var url = this.basic_url +"/api-merge/merge/workorder/MergeWord?filePath="+ids+"&fileName=报告测试&num="+this.workorderForm.PROXYNUM+"&deptfullname="+this.workorderForm.DEPTIDDesc+"&recordid="+this.workorderForm.ID;
-				this.$axios.post(url, {}).then((res) => {
-					console.log(res);
-					if(res.data.resp_code == 0) {
+				if(this.workorderForm.WORKORDER_DATA_TEMPLATEList.length < 2){
+					this.$message({
+						message: '请新建至少两条数据',
+						type: 'warning'
+					});
+				}else if(this.workorderForm.WORKORDER_REPORT_TEMPLATEList.length>0){
+					this.$message({
+						message: '检验报告已经生成，请勿重复生成',
+						type: 'warning'
+					});
+				}else{
+					var changeUser = this.workorderForm.WORKORDER_DATA_TEMPLATEList;
+					//basisnum为依据编号的数组
+					var id = [];
+					for (var i = 0; i < changeUser.length; i++) {
+						id.push(changeUser[i].FILEID);		
+					}
+					//basisnums为basisnum数组用逗号拼接的字符串
+					var ids = id.toString(',');
+					console.log(ids);
+					if(ids == '' || ids == undefined || ids == null){
 						this.$message({
-							message: '生成成功',
-							type: 'success'
+							message: '请上传文件',
+							type: 'warning'
+						});
+					}else if(this.reportname == '' || this.reportname == undefined || this.reportname == null){
+						this.$message({
+							message: '请填写报告名称',
+							type: 'warning'
+						});
+					}else{
+						var url = this.basic_url +"/api-merge/merge/workorder/MergeWord?filePath="+ids+"&fileName="+this.reportname+"&num="+this.workorderForm.PROXYNUM+"&deptfullname="+this.workorderForm.DEPTIDDesc+"&recordid="+this.workorderForm.ID;
+						this.$axios.post(url, {}).then((res) => {
+							console.log(res);
+							var obj = {
+								REPORTNUM:res.data.datas.reportnum,
+								REPORTNAME:res.data.datas.reportname,
+								PREVIEW:'',
+								VERSION:'',
+							}
+							this.workorderForm.WORKORDER_REPORT_TEMPLATEList.push(obj);
+							console.log(this.workorderForm.WORKORDER_REPORT_TEMPLATEList);
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '生成成功',
+									type: 'success'
+								});
+							}
+						}).catch((err) => {
+							this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
 						});
 					}
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
+				}
 			},
 			//点击添加，修改按钮显示弹窗
 			visible() {
@@ -1975,6 +2014,9 @@
 							}
 							if(users.indexOf(this.username) != -1){
 								this.approval=true;
+								this.start=false;
+							}else{
+								this.approval=false;
 								this.start=false;
 							}
 						});

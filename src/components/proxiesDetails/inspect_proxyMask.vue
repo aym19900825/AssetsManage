@@ -1408,13 +1408,17 @@
 							console.log(res.data.datas);
 							var resullt=res.data.datas;
 							var users='';
-							var users='';
 							for(var i=0;i<resullt.length;i++){
 								users = users + resullt[i].username+",";
 								console.log("users----"+users);
 							}
 							if(users.indexOf(this.username) != -1){
+								console.log(this.username);
 								this.approval=true;
+								this.start=false;
+							}else{
+								console.log(2);
+								this.approval=false;
 								this.start=false;
 							}
 						});
@@ -1898,7 +1902,8 @@
 							}else{
 								var url = this.basic_url + '/api-apps/app/'+this.inspectPro+'/flow/customFlowValidate/'+this.dataid;
 								this.$axios.get(url, {}).then((res) => {
-				    				if(res.data.resp_code == 0) {
+									console.log(res);
+				    				if(res.data.resp_code == 1) {
 										this.$message({
 											message:res.data.resp_msg,
 											type: 'warning'
@@ -1943,9 +1948,21 @@
 					this.selectData = res.data;
 				});
 			},
+			getuser(){//获取当前用户信息
+	            var url = this.basic_url + '/api-user/users/currentMap';
+	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+	                    this.username = res.data.username;
+	            }).catch((err) => {
+	                this.$message({
+	                    message: '网络错误，请重试',
+	                    type: 'error'
+	                });
+	            });
+        	},
 		},
 		mounted() {
 			this.getCompany();
+			this.getuser();
 			// this.RVENDORSelect($event);
 		},
 	}

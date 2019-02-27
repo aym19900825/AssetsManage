@@ -314,10 +314,10 @@
 		methods: {
 			//表头居中
 			rowClass({ row, rowIndex}) {
-			    return 'text-align:center'
+			    return 'text-align:center';
 			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
-				return (<span><i class={data.iconClass}></i><span>{data.lable}</span></span>)
+				return (<span><i class={data.iconClass}></i><span title={data.lable}>{data.lable}</span></span>);
 			},
 			// 点击节点
 			nodeClick: function(m) {
@@ -575,7 +575,10 @@
 					ACCEPT_PERSON: this.searchList.ACCEPT_PERSON,//收样人
 					// P_NAME: this.searchList.P_NAME,//生产单位名称
 					TYPE: this.searchList.TYPE,//样品类别
-					ACCEPT_DATE: this.searchList.ACCEPT_DATE//收样日期
+					ACCEPT_DATE: this.searchList.ACCEPT_DATE,//收样日期
+					P_NUM: this.searchList.P_NUM,
+					PRO_NUM: this.searchList.PRO_NUM,
+					DEPTID: this.searchList.DEPTID
 				}
 				var url = this.basic_url + '/api-apps/app/item';
 				this.$axios.get(url, {
@@ -644,12 +647,22 @@
 				return data;
 			},
 			handleNodeClick(data) {
-				if(data.type == '1') {
-					this.companyId = data.id;
-					this.deptId = '';
-				} else {
-					this.deptId = data.id;
-					this.companyId = '';
+				if(!!data.fullname) {
+					this.searchList.P_NUM = '';
+					this.searchList.PRO_NUM = '';
+					this.searchList.DEPTID = data.id;
+				}else if(!!data.TYPE){
+					this.searchList.P_NUM = data.NUM;
+					this.searchList.PRO_NUM = '';
+					this.searchList.DEPTID = data.DEPTID;
+				}else if(!!data.PRO_NUM){
+					this.searchList.P_NUM = data.NUM;
+					this.searchList.PRO_NUM = data.PRO_NUM;
+					this.searchList.DEPTID = data.DEPTID;
+				}else{
+					this.searchList.P_NUM = '';
+					this.searchList.PRO_NUM = '';
+					this.searchList.DEPTID = '';
 				}
 				this.requestData();
 			},

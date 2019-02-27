@@ -29,7 +29,7 @@
 					</el-collapse>
 				<div class="el-dialog__footer">
 					<el-button type="primary" @click="determine">确定</el-button>
-					<el-button @click='close'>取消</el-button>
+					<el-button @click='closeinnerVisible'>取消</el-button>
 				</div>
 			</el-form>
 		</div>
@@ -69,10 +69,11 @@
 		       <el-button type="primary" @click="dailogconfirm();" >确 定</el-button>
 		    </span>
 		</el-dialog>
-		 <el-dialog :modal-append-to-body="false" title="查看报表" :visible.sync="dialogVisiblereport" width="100%" height="100%" >
+		 <!--<el-dialog :modal-append-to-body="false" title="查看报表" :visible.sync="dialogVisiblereport" width="100%" height="100%" >
+		 	product_advice.ureport.xml
 		 	<iframe :src="this.url +'/ureport/preview?_u=mysql:'+this.file" id="flowIframe" width="100%" height="100%" frameborder="0" scrolling="no" >
 		   </iframe>
-		 </el-dialog>	
+		 </el-dialog>	-->
 			</div>
 		<!--</div>-->
 	
@@ -93,7 +94,7 @@
 				selval:[],
 				dialogVisibleuser:false,//用户
 				dialogVisible: false, //对话框
-				dialogVisiblereport:false,//报表
+//				dialogVisiblereport:false,//报表
 				dataInfo: {},
 				page: {
 					currentPage: 1,
@@ -111,30 +112,8 @@
 				url:'',
 				str:'',
 				file:'',
-				 rules:  {
-					priceRemark: [
-					         { required: true, message: '请填写审核备注', trigger: 'blur' }
-					       ]
-             		}
-//				rules:  {
-//					'test12': [
-//				         { required: true, message: '请填写审核备注', trigger: 'blur' }
-//				    ],
-//				    '1': [
-//				         { required: true, message: '请填写审核备注', trigger: 'blur' }
-//				    ],
-//				    '参数': [
-//				         { required: true, message: '请填写审核备注', trigger: 'blur' }
-//				    ],
-//				    '2': [
-//				         { required: true, message: '请填写审核备注', trigger: 'blur' }
-//				    ],
-//				    '4': [
-//				         { required: true, message: '请填写审核备注', trigger: 'blur' }
-//				    ],
-//				    
-//           	}
-			};	
+				
+				};	
 			},
 		methods: {
 			//表头居中
@@ -181,6 +160,7 @@
 			//点击按钮显示弹窗
 			visible(pramList,file) {	
 				this.file=file;
+				console.log(this.file);
 				for(var i=0;i<pramList.length;i++){
 					pramList[i].width="40%"
 					
@@ -191,6 +171,10 @@
 			//点击关闭按钮
 			close() {
 				this.show = false;
+			},
+			closeinnerVisible(){
+				this.innerVisible=false;
+				this.dataInfo={};
 			},
 			addcusname(){
 				if(this.selval.length == 0){
@@ -246,6 +230,7 @@
 				}
 			},
 			determine(){
+				console.log(this.file);
 		  		var str=JSON.stringify(this.dataInfo);
 				for(var j=0;j<str.length;j++){
 					str=str.replace("\":\"",'=');
@@ -258,7 +243,8 @@
 		  		var url=this.basic_url;
     			url = url.substring(0,21);
 		  		this.url=url+"5300";
-				this.dialogVisiblereport=true;
+				var url = this.url+"/ureport/preview?_u=mysql:" +this.file
+             window.open(url); 
 			},
 			getDept() {
 				var url = this.basic_url + '/api-user/depts/treeMap';

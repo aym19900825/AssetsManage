@@ -26,6 +26,9 @@
 								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-inventory-line-callout"></i>导出
 								</button>
+								<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
+							    	<i class="icon-clipboard"></i>报表
+								</button>
 								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-send"></i>发布
 								</button>
@@ -145,6 +148,8 @@
 			</div>
 			<workorders_mask :workorderForm="workorderForm" ref="child" @requests="requestData" @requestTree="getKey" v-bind:page=page></workorders_mask>
 			<sendtasklist ref="task"  v-bind:page=page></sendtasklist>
+			<!--报表-->
+			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 		</div>
 	</div>
 </template>
@@ -156,6 +161,7 @@
 	import navs_header from '../common/nav_tabs.vue'
 	import workorders_mask from '../testworkcheckDetails/workorders_mask.vue'
 	import sendtasklist from '../testworkcheckDetails/sendtasklist.vue'
+	import reportmask from'../reportDetails/reportMask.vue'
 	export default {
 		name: 'workorders',
 		components: {
@@ -164,10 +170,12 @@
 			navs_header,
 			navs_left,
 			workorders_mask,
-			sendtasklist
+			sendtasklist,
+			reportmask
 		},
 		data() {
 			return {
+				reportData:{},//报表的数据
 				loading: false,
 				basic_url: Config.dev_url,
 				checkedName: [
@@ -346,7 +354,8 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-				workorderForm: {}//修改子组件时传递数据
+				workorderForm: {},//修改子组件时传递数据
+				workorder:'workorder',//appname
 			}
 		},
 		methods: {
@@ -466,6 +475,11 @@
 						this.$refs.child.detail(this.selMenu[0].ID);	
 					}
 				}
+			},
+			//报表
+			reportdata(){
+				this.reportData.app=this.workorder;
+				this.$refs.reportChild.visible();
 			},
 			//生成子任务单
 			tasklist(){

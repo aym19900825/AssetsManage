@@ -55,6 +55,7 @@
 		  		var url=this.basic_url;
     			url = url.substring(0,21);
 		  		this.url=url+"5300";
+		  		
 //		  		console.log(this.url +'/reportFile/page/preview/');
 //		  		var type = "3";
 //				var url = this.basic_url +'api-report/reportFile/page/preview';

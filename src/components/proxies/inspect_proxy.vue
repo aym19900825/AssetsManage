@@ -377,7 +377,7 @@
 			    return 'text-align:center'
 			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
-				return (<span><i class={data.iconClass}></i><span>{data.lable}</span></span>)
+				return (<span><i class={data.iconClass}></i><span  title={data.lable}>{data.lable}</span></span>)
 			},
 			// 点击节点
 			nodeClick: function(m) {

@@ -208,6 +208,7 @@ export default {
         },
         getData(){
             if(this.docParm.model == 'new'){
+                res.data.fileList = [];
                 return false;
             }
             var pageNum = this.page.currentPage - 1;

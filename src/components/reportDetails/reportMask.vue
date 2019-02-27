@@ -85,13 +85,13 @@
 		  	runReport(){
 		  		if(this.selreport.length == 0) {
 					this.$message({
-						message: '请您选择要修改的数据',
+						message: '请您选择要运行多个报表',
 						type: 'warning'
 					});
 					return;
 				} else if(this.selreport.length > 1) {
 					this.$message({
-						message: '不可同时修改多个数据',
+						message: '不可同时运行多个报表',
 						type: 'warning'
 					});
 					return;
@@ -101,14 +101,20 @@
 					var file=this.selreport[0].file;
 					this.appname=this.reportData.app;	
 					var url = this.basic_url + '/api-apps/app/'+this.appname+'/reportParams/'+id;
+					console.log(url);
 					this.$axios.get(url, {}).then((res) => {
+						console.log(res);
 						if(res.data.datas==null){
-							 this.$refs.reportchild.visible(file);
-							 this.close();
+//							 this.$refs.reportchild.visible(file);
+						  		var url=this.basic_url;
+				    			url = url.substring(0,21);
+						  		this.url=url+"5300";
+							 	var url = this.url+"/ureport/preview?_u=mysql:" +file
+             					window.open(url); 
+//							 this.close();
 						}else{
 							console.log(res);
 							this.$refs.reportpramchild.visible(res.data.datas,file);
-//							this.close();
 						}
 					}).catch((wrong) => {
 						this.$message({
@@ -122,8 +128,8 @@
 			requestData() {
 				this.appname=this.reportData.app;
 				var url = this.basic_url + '/api-apps/app/'+this.appname+'/report';
+				console.log(url);
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					this.reportsList = res.data.datas;
 					this.innerVisible = true;
 				}).catch((wrong) => {

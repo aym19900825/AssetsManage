@@ -26,6 +26,9 @@
 								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-inventory-line-callout"></i>导出
 								</button>
+								<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
+							    	<i class="icon-clipboard"></i>报表
+								</button>
 								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-send"></i>发布
 								</button>
@@ -145,6 +148,8 @@
 			</div>
 			<workorders_mask :workorderForm="workorderForm" ref="child" @requests="requestData" @requestTree="getKey" v-bind:page=page></workorders_mask>
 			<sendtasklist ref="task"  v-bind:page=page></sendtasklist>
+			<!--报表-->
+			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 		</div>
 	</div>
 </template>
@@ -156,6 +161,7 @@
 	import navs_header from '../common/nav_tabs.vue'
 	import workorders_mask from '../testworkcheckDetails/workorders_mask.vue'
 	import sendtasklist from '../testworkcheckDetails/sendtasklist.vue'
+	import reportmask from'../reportDetails/reportMask.vue'
 	export default {
 		name: 'workorders',
 		components: {
@@ -164,10 +170,12 @@
 			navs_header,
 			navs_left,
 			workorders_mask,
-			sendtasklist
+			sendtasklist,
+			reportmask
 		},
 		data() {
 			return {
+				reportData:{},//报表的数据
 				loading: false,
 				basic_url: Config.dev_url,
 				checkedName: [
@@ -346,7 +354,8 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-				workorderForm: {}//修改子组件时传递数据
+				workorderForm: {},//修改子组件时传递数据
+				workorder:'workorder',//appname
 			}
 		},
 		methods: {
@@ -355,7 +364,7 @@
 			    return 'text-align:center'
 			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
-				return (<span><i class={data.iconClass}></i><span>{data.lable}</span></span>)
+				return (<span><i class={data.iconClass}></i><span title={data.lable}>{data.lable}</span></span>)
 			},
 			// 点击节点
 			nodeClick: function(m) {
@@ -466,6 +475,11 @@
 						this.$refs.child.detail(this.selMenu[0].ID);	
 					}
 				}
+			},
+			//报表
+			reportdata(){
+				this.reportData.app=this.workorder;
+				this.$refs.reportChild.visible();
 			},
 			//生成子任务单
 			tasklist(){
@@ -584,11 +598,15 @@
 					COMPLETE_DATE: this.searchList.COMPLETE_DATE,
 					ENTERBY: this.searchList.ENTERBY,
 					ENTERDATE: this.searchList.ENTERDATE,
+					P_NUM: this.searchList.P_NUM,
+					PRO_NUM: this.searchList.PRO_NUM,
+					DEPTID: this.searchList.DEPTID
 				}
 				var url=this.basic_url +'/api-apps/app/workorder/tree?tree_id=WONUM&tree_pid=PARENT_NUM';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
+					this.loading = false;
 					let result=res.data.datas;
 					for(let i=0;i<result.length;i++){
 						if(typeof(result[i].subDepts)!="undefined"&&result[i].subDepts.length>0){
@@ -597,8 +615,6 @@
 						}	
 					}
 					this.userList=res.data.datas;
-					this.loading = false;
-
 				}).catch((wrong) => {})
 			},
 			//机构树
@@ -639,12 +655,22 @@
 				this.requestData();
 			},
 			handleNodeClick(data) {
-				if(data.type == '1') {
-					this.companyId = data.id;
-					this.deptId = '';
-				} else {
-					this.deptId = data.id;
-					this.companyId = '';
+				if(!!data.fullname) {
+					this.searchList.P_NUM = '';
+					this.searchList.PRO_NUM = '';
+					this.searchList.DEPTID = data.id;
+				}else if(!!data.TYPE){
+					this.searchList.P_NUM = data.NUM;
+					this.searchList.PRO_NUM = '';
+					this.searchList.DEPTID = data.DEPTID;
+				}else if(!!data.PRO_NUM){
+					this.searchList.P_NUM = data.NUM;
+					this.searchList.PRO_NUM = data.PRO_NUM;
+					this.searchList.DEPTID = data.DEPTID;
+				}else{
+					this.searchList.P_NUM = '';
+					this.searchList.PRO_NUM = '';
+					this.searchList.DEPTID = '';
 				}
 				this.requestData();
 			},

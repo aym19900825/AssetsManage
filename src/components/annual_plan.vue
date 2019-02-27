@@ -28,9 +28,9 @@
 								<button type="button" class="btn btn-primarys button-margin" @click="exportData">
 								    <i class="icon-inventory-line-callout"></i>导出
 								</button>
-									<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
-							    <i class="icon-clipboard"></i>报表
-							</button>
+								<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
+							    	<i class="icon-clipboard"></i>报表
+								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="releasebtn">
 								    <i class="icon-send"></i>发布
 								</button>
@@ -321,6 +321,7 @@
 					STATUS:'',
 					LEADER_STATUS:''
 				},
+				workplan:'workplan',//appname
 				//tree
 				resourceData: [
 					{label: '监督抽查'},
@@ -517,9 +518,9 @@
             	}
             	xhr.send();
 			},
-						//报表
+			//报表
 			reportdata(){
-				this.reportData.app=this.productType;
+				this.reportData.app=this.workplan;
 				this.$refs.reportChild.visible();
 			},
 			//发布

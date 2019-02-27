@@ -321,6 +321,7 @@
 					STATUS:'',
 					LEADER_STATUS:''
 				},
+				workplan:'workplan',//appname
 				//tree
 				resourceData: [
 					{label: '监督抽查'},
@@ -519,7 +520,7 @@
 			},
 						//报表
 			reportdata(){
-				this.reportData.app=this.productType;
+				this.reportData.app=this.workplan;
 				this.$refs.reportChild.visible();
 			},
 			//发布

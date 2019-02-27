@@ -651,18 +651,22 @@
 					this.searchList.P_NUM = '';
 					this.searchList.PRO_NUM = '';
 					this.searchList.DEPTID = data.id;
+					this.page.currentPage = 1;
 				}else if(!!data.TYPE){
 					this.searchList.P_NUM = data.NUM;
 					this.searchList.PRO_NUM = '';
 					this.searchList.DEPTID = data.DEPTID;
+					this.page.currentPage = 1;
 				}else if(!!data.PRO_NUM){
 					this.searchList.P_NUM = data.NUM;
 					this.searchList.PRO_NUM = data.PRO_NUM;
 					this.searchList.DEPTID = data.DEPTID;
+					this.page.currentPage = 1;
 				}else{
 					this.searchList.P_NUM = '';
 					this.searchList.PRO_NUM = '';
 					this.searchList.DEPTID = '';
+					this.page.currentPage = 1;
 				}
 				this.requestData();
 			},

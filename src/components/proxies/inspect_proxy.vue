@@ -696,7 +696,10 @@
 					PROXYNUM: this.searchList.PROXYNUM,
 					COMPDATE: this.searchList.COMPDATE,
 					ENTERBY: this.searchList.ENTERBY,
-					STATUS: this.searchList.STATUS
+					STATUS: this.searchList.STATUS,
+					P_NUM: this.searchList.P_NUM,
+					PRO_NUM: this.searchList.PRO_NUM,
+					DEPTID: this.searchList.DEPTID
 				}
 				var url = this.basic_url + '/api-apps/app/inspectPro';
 				this.$axios.get(url, {
@@ -761,12 +764,26 @@
 				return data;
 			},
 			handleNodeClick(data) {
-				if(data.type == '1') {
-					this.companyId = data.id;
-					this.deptId = '';
-				} else {
-					this.deptId = data.id;
-					this.companyId = '';
+				if(!!data.fullname) {
+					this.searchList.P_NUM = '';
+					this.searchList.PRO_NUM = '';
+					this.searchList.DEPTID = data.id;
+					this.page.currentPage = 1;
+				}else if(!!data.TYPE){
+					this.searchList.P_NUM = data.NUM;
+					this.searchList.PRO_NUM = '';
+					this.searchList.DEPTID = data.DEPTID;
+					this.page.currentPage = 1;
+				}else if(!!data.PRO_NUM){
+					this.searchList.P_NUM = data.NUM;
+					this.searchList.PRO_NUM = data.PRO_NUM;
+					this.searchList.DEPTID = data.DEPTID;
+					this.page.currentPage = 1;
+				}else{
+					this.searchList.P_NUM = '';
+					this.searchList.PRO_NUM = '';
+					this.searchList.DEPTID = '';
+					this.page.currentPage = 1;
 				}
 				this.requestData();
 			},

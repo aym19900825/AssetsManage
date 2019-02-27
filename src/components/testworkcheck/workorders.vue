@@ -14,9 +14,9 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+								<!-- <button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加
-                      			 </button>
+                      			 </button> -->
 								<button type="button" class="btn btn-blue button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改
 								</button>
@@ -659,18 +659,22 @@
 					this.searchList.P_NUM = '';
 					this.searchList.PRO_NUM = '';
 					this.searchList.DEPTID = data.id;
+					this.currentPage = 1;
 				}else if(!!data.TYPE){
 					this.searchList.P_NUM = data.NUM;
 					this.searchList.PRO_NUM = '';
 					this.searchList.DEPTID = data.DEPTID;
+					this.currentPage = 1;
 				}else if(!!data.PRO_NUM){
 					this.searchList.P_NUM = data.NUM;
 					this.searchList.PRO_NUM = data.PRO_NUM;
 					this.searchList.DEPTID = data.DEPTID;
+					this.currentPage = 1;
 				}else{
 					this.searchList.P_NUM = '';
 					this.searchList.PRO_NUM = '';
 					this.searchList.DEPTID = '';
+					this.currentPage = 1;
 				}
 				this.requestData();
 			},

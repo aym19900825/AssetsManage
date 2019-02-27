@@ -66,15 +66,13 @@ Vue.directive('loadmore', {
 	      	let sign = 1
 	      	const scrollDistance = this.scrollHeight - this.scrollTop - this.clientHeight;
 		    if (scrollDistance <= sign) {
-		    	sessionStorage.setItem('up2down','down');
-		        binding.value();
-		        this.scrollTop = 2;
+				sessionStorage.setItem('up2down','down');
+				binding.value();
+				this.scrollTop = 2;
 	      	}else if(this.scrollTop < sign){
-	      		sessionStorage.setItem('up2down','up');
-	      		binding.value();
-	      		this.scrollTop = 2;
-//	      		console.log(2);
-	      		
+				sessionStorage.setItem('up2down','up');
+				binding.value();
+				this.scrollTop = 2;
 	      	}else{
 	      		return false;
 	      	}

@@ -232,6 +232,7 @@
 				loadSign: true, //加载
 				commentArr: {},
 				selectData: [], //获取检验/检测方法类别
+				workNot:'workNot',//appname
 				checkedName: [
 					'工作任务通知书编号',
 					'类型',
@@ -667,9 +668,9 @@
 			exportData() {
 
 			},
-						//报表
+		    //报表
 			reportdata(){
-				this.reportData.app=this.productType;
+				this.reportData.app=this.workNot;
 				this.$refs.reportChild.visible();
 			},
 			// 打印
@@ -691,7 +692,7 @@
 			SelChange(val) {
 				this.selUser = val;
 			},
-			requestData(index) {
+			requestData() {
 				this.loading = true;
 				var data = {
 					page: this.page.currentPage,

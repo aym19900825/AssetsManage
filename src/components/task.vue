@@ -68,7 +68,7 @@
 							<el-table :data="todoList" :header-cell-style="rowClass" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'todoList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
-								<el-table-column label="数据id" sortable width="140px" prop="bizid" v-if="this.checkedName.indexOf('数据id')!=-1">
+								<!--<el-table-column label="数据id" sortable width="140px" prop="bizid" v-if="this.checkedName.indexOf('数据id')!=-1">-->
 								</el-table-column>
 								<el-table-column label="单据号" sortable prop="bizNum" v-if="this.checkedName.indexOf('单据号')!=-1">
 									<template slot-scope="scope">
@@ -119,7 +119,7 @@ export default {
       	todoList:[],
       	commentArr: {},
       	checkedName: [
-					'数据id',
+//					'数据id',
 					'App',
 					'当前环节',
 					'应用',
@@ -127,10 +127,11 @@ export default {
 					'任务状态',
 					'创建时间',
 					],
-		tableHeader: [{
-			label: '数据id',
-			prop: 'bizid'
-		},
+		tableHeader: [
+//		{
+//			label: '数据id',
+//			prop: 'bizid'
+//		},
 		{
 			label: 'App',
 			prop: 'app'

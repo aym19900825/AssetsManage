@@ -804,6 +804,8 @@
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				dataInfo: {
+					MAINGROUP:'',
+					LEADER:'',
 					STATUS: '1',
 					STATUSDesc:'草稿',
 					VERSION:'1',
@@ -923,7 +925,7 @@
 					REPORT_MODE: [{ required: true, message: '必填', trigger: 'change' }],//发送方式
 					REPORT_FOMAT: [{ required: true, message: '必填', trigger: 'change' }],//格式
 					MAINGROUP: [{ required: true, message: '必填', trigger: 'change' }],//主检组
-					LEADER: [{ required: true, message: '必填', trigger: 'blur' }],//主检负责人
+					LEADER: [{ required: true, message: '必填', trigger: 'change' }],//主检负责人
 //					MEMO: [{ required: true, message: '必填', trigger: 'blur' }],//备注
 					CHECK_COST:[{required: false,trigger: 'change',validator:price}],
 					ACTUALCOST:[{trigger: 'blur',validator:price}],
@@ -1016,10 +1018,10 @@
 			deptdata(value){
 
 				console.log(value);
-				this.deptName.VENDOR = value[0];//id
-				this.deptName.VENDORDesc = value[1];//名称
-				this.deptName.depttype = value[2];//机构属性id
-				this.deptName.depttypeName = value[3];//机构属性名称
+				this.deptindex.VENDOR = value[0];//id
+				this.deptindex.VENDORDesc = value[1];//名称
+				this.deptindex.depttype = value[2];//机构属性id
+				this.deptindex.depttypeName = value[3];//机构属性名称
 			},
 			//选择分包方名称
 			// queding() {

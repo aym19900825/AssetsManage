@@ -1823,30 +1823,51 @@
 			},
 			//生成报告
 			getreport(){
-				var changeUser = this.workorderForm.WORKORDER_DATA_TEMPLATEList;
-				//basisnum为依据编号的数组
-				var id = [];
-				for (var i = 0; i < changeUser.length; i++) {
-					id.push(changeUser[i].FILEID);		
-				}
-				//basisnums为basisnum数组用逗号拼接的字符串
-				var ids = id.toString(',');
-				debugger;
-				var url = this.basic_url +"/api-merge/merge/workorder/MergeWord?filePath="+ids+"&fileName=报告测试&num="+this.workorderForm.PROXYNUM+"&deptfullname="+this.workorderForm.DEPTIDDesc+"&recordid="+this.workorderForm.ID;
-				this.$axios.post(url, {}).then((res) => {
-					console.log(res);
-					if(res.data.resp_code == 0) {
+				if(this.workorderForm.WORKORDER_REPORT_TEMPLATEList.length>0){
+					this.$message({
+						message: '检验报告已经生成，请勿重复生成',
+						type: 'warning'
+					});
+				}else{
+					var changeUser = this.workorderForm.WORKORDER_DATA_TEMPLATEList;
+					//basisnum为依据编号的数组
+					var id = [];
+					for (var i = 0; i < changeUser.length; i++) {
+						id.push(changeUser[i].FILEID);		
+					}
+					//basisnums为basisnum数组用逗号拼接的字符串
+					var ids = id.toString(',');
+					if(ids == '' || ids == undefined || ids == null){
 						this.$message({
-							message: '生成成功',
-							type: 'success'
+							message: '请上传文件',
+							type: 'warning'
+						});
+					}else{
+						var url = this.basic_url +"/api-merge/merge/workorder/MergeWord?filePath="+ids+"&fileName=报告测试&num="+this.workorderForm.PROXYNUM+"&deptfullname="+this.workorderForm.DEPTIDDesc+"&recordid="+this.workorderForm.ID;
+						this.$axios.post(url, {}).then((res) => {
+							console.log(res);
+							var obj = {
+								REPORTNUM:res.data.datas.reportnum,
+								REPORTNAME:res.data.datas.reportname,
+								PREVIEW:'',
+								VERSION:'',
+							}
+							this.workorderForm.WORKORDER_REPORT_TEMPLATEList.push(obj);
+							console.log(this.workorderForm.WORKORDER_REPORT_TEMPLATEList);
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '生成成功',
+									type: 'success'
+								});
+							}
+						}).catch((err) => {
+							this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
 						});
 					}
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
+				}
 			},
 			//点击添加，修改按钮显示弹窗
 			visible() {

@@ -152,7 +152,7 @@
 					},
 					{
 						text: '机构属性',
-						dataIndex: 'depttypeName',
+						dataIndex: 'depttype',
 						isShow:true,
 					},
 					{

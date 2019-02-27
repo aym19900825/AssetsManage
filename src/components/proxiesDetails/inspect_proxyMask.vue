@@ -1018,10 +1018,10 @@
 			deptdata(value){
 
 				console.log(value);
-				this.deptName.VENDOR = value[0];//id
-				this.deptName.VENDORDesc = value[1];//名称
-				this.deptName.depttype = value[2];//机构属性id
-				this.deptName.depttypeName = value[3];//机构属性名称
+				this.deptindex.VENDOR = value[0];//id
+				this.deptindex.VENDORDesc = value[1];//名称
+				this.deptindex.depttype = value[2];//机构属性id
+				this.deptindex.depttypeName = value[3];//机构属性名称
 			},
 			//选择分包方名称
 			// queding() {
@@ -1291,6 +1291,7 @@
 					}
 					console.log(res.data);
 					console.log(typeof(res.data.MAINGROUP));
+					this.getCompany();
 					this.RVENDORSelect(res.data.R_VENDOR);
 					this.getmaingroup(res.data.MAINGROUP);
 					this.dataInfo = res.data;
@@ -1858,6 +1859,7 @@
 								message:res.data.resp_msg,
 								type: 'success'
 							});
+							this.detailgetData();
 						var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/Executors/'+this.dataid;
 							this.$axios.get(url, {}).then((res) => {
 									console.log(res.data.datas);
@@ -1869,9 +1871,11 @@
 								if(users.indexOf(this.username) != -1){
 									this.approval=true;
 									this.start=false;
+								}else{
+									this.approval=false;
+									this.start=false;
 								}
 							});
-							this.detailgetData();
 				    }
 				});
 			},

@@ -118,7 +118,7 @@
 					<!-- 高级查询划出 End-->
 					
 					<el-row :gutter="10">
-						<el-col :span="5" class="lefttree">
+						<el-col :span="6" class="lefttree">
 							<div class="lefttreebg">
 								<div class="left_tree_title clearfix" @click="min3max()">
 									<div class="pull-left pr20" v-if="ismin">检索分类</div>
@@ -134,7 +134,7 @@
 								</div>
 							</div>
 						</el-col>
-						<el-col :span="19" class="leftcont v-resize">
+						<el-col :span="18" class="leftcont v-resize">
 							<!-- 表格 -->
 							<tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="userList" v-on:childByValue="childvalue"></tree_grid>
 							<!-- 表格 -->
@@ -355,7 +355,7 @@
 			    return 'text-align:center'
 			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
-				return(<span><i class={data.iconClass}></i><span>{node.label}</span></span>);
+				return (<span><i class={data.iconClass}></i><span>{data.lable}</span></span>)
 			},
 			// 点击节点
 			nodeClick: function(m) {
@@ -603,22 +603,27 @@
 			},
 			//机构树
 			getKey() {
-				var url = this.basic_url + '/api-user/depts/tree';
+				let that = this;
+				// var url = this.basic_url + '/api-user/depts/tree';
+				var url = this.basic_url + '/api-apps/appCustom/tree';
 				this.$axios.get(url, {}).then((res) => {
-					this.resourceData = res.data;
+					this.resourceData = res.data.datas;
+					// this.resourceData = res.data;
 					this.treeData = this.transformTree(this.resourceData);
+					console.log(this.treeData);
 				});
 			},
-			transformTree(data){
-				for(var i=0; i<data.length; i++){
-					data[i].name = data[i].fullname;
-					if(!data[i].pid || $.isArray(data[i].subDepts)){
+			transformTree(data) {
+				for(var i = 0; i < data.length; i++) {
+					data[i].name = data[i].fullname || data[i].TYPE || data[i].pName || data[i].PRO_NAME;
+					data[i].lable = data[i].fullname || data[i].TYPE || data[i].pName || data[i].PRO_NAME;
+					if($.isArray(data[i].children)) {
 						data[i].iconClass = 'icon-file-normal';
-					}else{
+					} else {
 						data[i].iconClass = 'icon-file-text';
 					}
-					if($.isArray(data[i].subDepts)){
-						data[i].children = this.transformTree(data[i].subDepts);
+					if($.isArray(data[i].children)) {
+						data[i].subDepts = this.transformTree(data[i].children);
 					}
 				}
 				return data;

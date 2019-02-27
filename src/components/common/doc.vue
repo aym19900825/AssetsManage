@@ -113,6 +113,9 @@ export default {
         reset(){
             this.tipSaveShow = false;
         },
+        getFilelen(){
+        	return this.fileList.length;
+        },
         saveMain(){
             var _this = this;
             console.log('saveMain');

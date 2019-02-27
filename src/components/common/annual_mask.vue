@@ -475,7 +475,7 @@
 				<!-- 第二层弹出的表格 End -->
 				<div slot="footer" class="el-dialog__footer">
 			       <el-button type="primary" @click="addbasis">确 定</el-button>
-			       <el-button @click="dialogVisible = false">取 消</el-button>
+			       <el-button @click="resetBasis">取 消</el-button>
 			    </div>
 			</el-dialog>
 			<!-- 检测依据弹出框 End -->
@@ -559,7 +559,7 @@
 				<!-- 表格 End-->
 				<span slot="footer" class="el-dialog__footer">
 			       <el-button type="primary" @click="addbasis2">确 定</el-button>
-			       <el-button @click="dialogVisible2 = false">取 消</el-button>
+			       <el-button @click="resetbasis2">取 消</el-button>
 			    </span>
 			</el-dialog>
 			<!-- 检测项目与要求 End -->
@@ -641,8 +641,8 @@
 					:total="page.totalCount">
 				</el-pagination>
 				<div slot="footer" class="el-dialog__footer">
-			       <el-button @click="diaVisCustom = false">取 消</el-button>
-			       <el-button type="primary" @click="adddeptname">确 定</el-button>
+					<el-button type="primary" @click="adddeptname">确 定</el-button>
+			       	<el-button @click="diaVisCustom = false">取 消</el-button>
 			    </div>
 			</el-dialog>
 			<!-- 生产企业名称、受检企业名称 End -->
@@ -876,6 +876,11 @@
 			};
 		},
 		methods: {
+			resetBasis(){
+				this.dialogVisible = false;
+				this.resetbtn();
+				this.standardList = [];
+			},
 			//提出单位
 			getCompany() {
 				var type = "2";
@@ -1100,14 +1105,19 @@
 						this.basisList.push(JSON.parse(JSON.stringify(selData[i])));
 						// basisnum.push(changeUser[i].S_NUM);//选择的数据的编号
 					}
-					this.dialogVisible = false;
+					this.resetBasis();
 					this.$message({
 						message: '添加成功',
 						type: 'success'
 					});
 					return;
 				}
-            },
+			},
+			resetbasis2(){
+				this.projectList = [];
+				this.resetbtn();
+				this.dialogVisible2 = false;
+			},
             addbasis2(){
             	var selData = this.selUser;
 				if(selData.length == 0) {
@@ -1133,7 +1143,7 @@
 							1;
 						this.proTestList.push(JSON.parse(JSON.stringify(selData[i])));
 					}
-					this.dialogVisible2 = false;
+					this.resetbasis2();
 					this.$message({
 						message: '添加成功',
 						type: 'success'
@@ -1220,11 +1230,13 @@
 		    },
             //检测依据弹出框
             basisleadbtn(){
+				this.page.currentPage = 1;
 				this.requestBasis();
 				this.requestnum = '4';
 				this.dialogVisible = true;
 			},
 			basisleadbtn2(){
+				this.page.currentPage = 1;
 				this.requestProject();
 				this.requestnum = '5';
 				this.dialogVisible2 = true;

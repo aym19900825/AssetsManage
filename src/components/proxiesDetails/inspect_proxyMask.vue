@@ -357,11 +357,9 @@
 												</el-table-column>
 												<el-table-column prop="PROXYNUM" label="委托书编号" sortable width="120px">
 													<template slot-scope="scope">
-														<!-- <el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.PROXYNUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" > -->
-														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.PROXYNUM" placeholder="请输入委托方名称">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.PROXYNUM" placeholder="自动生成">
 														</el-input>
 														<span v-else="v-else">{{scope.row.PROXYNUM}}</span>
-														<!-- </el-form-item> -->
 													</template>
 												</el-table-column>
 												<el-table-column prop="INSPECT_GROUP" label="专业组" sortable width="120px">
@@ -384,7 +382,7 @@
 												</el-table-column>
 												<el-table-column prop="depttypeName" label="机构属性" sortable width="120px">
 													<template slot-scope="scope">
-														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.depttypeName" placeholder="请输入分包方名称">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.depttypeName" placeholder="">
 														</el-input>
 														<span v-else="v-else">{{scope.row.depttypeName}}</span>
 													</template>
@@ -1003,35 +1001,14 @@
 			getDept(item) {
 				this.$refs.deptchild.visible(item);
 				this.deptindex = item;
-				// var page = this.page.currentPage;
-				// var limit = this.page.pageSize;
-				// var url = this.basic_url + '/api-user/depts/treeMap';
-				// this.$axios.get(url, {
-
-				// }).then((res) => {
-				// 	this.resourceData = res.data;
-				// 	this.dialogVisible = true;
-				// 	this.deptindex = item;
-				// });
 			},
 			//取到分包方
 			deptdata(value){
-
-				console.log(value);
 				this.deptindex.VENDOR = value[0];//id
 				this.deptindex.VENDORDesc = value[1];//名称
 				this.deptindex.depttype = value[2];//机构属性id
 				this.deptindex.depttypeName = value[3];//机构属性名称
 			},
-			//选择分包方名称
-			// queding() {
-			// 	console.log(123456);
-			// 	console.log(this.checkedNodes);
-			// 	this.getCheckedNodes();
-			// 	this.dialogVisible = false;				
-			// 	this.deptindex.VENDOR = this.checkedNodes[0].id;
-			// 	this.deptindex.VENDORDesc = this.checkedNodes[0].fullname;				
-			// },
 			getCheckedNodes() {
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
 			},
@@ -1045,7 +1022,7 @@
 			     setTimeout(() => {
 			       this.loadSign = true
 			     }, 1000)
-			     this.requestData()
+			     this.requestData();
 			   }
 			 },	
 			toNum(str) {

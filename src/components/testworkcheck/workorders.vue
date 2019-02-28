@@ -193,27 +193,27 @@
 				],
 				columns: [
 					 {
-					 	text: '序号',
+					 	text: '工作任务单编号',
 					 	dataIndex: 'WONUM',
 					 	isShow:true,
 					 },
 					{
-						text: '机构名称',
+						text: '状态',
 						dataIndex: 'STATUS',
 						isShow:true,
 					},
 					{
-						text: '机构编码',
+						text: '样品名称',
 						dataIndex: 'ITEM_NAME',
 						isShow:true,
 					},
 					{
-						text: '上级机构',
+						text: '样品型号',
 						dataIndex: 'ITEM_MODEL',
 						isShow:true,
 					},
 					{
-						text: '机构属性',
+						text: '样品状态',
 						dataIndex: 'ITEM_STATUS',
 						isShow:true,
 					},

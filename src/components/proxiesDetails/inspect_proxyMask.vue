@@ -86,13 +86,7 @@
 												<el-input v-model="dataInfo.V_PHONE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8" >
-											<el-form-item label="承检单位" prop="R_VENDOR"  label-width="110px">
-												<el-select clearable v-model="dataInfo.R_VENDOR" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit"  @change="RVENDORSelect($event)">
-													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
-												</el-select>
-											</el-form-item>
-										</el-col>
+										
 									</el-row>
 								</el-collapse-item>
 								<el-collapse-item title="样品" name="2" >
@@ -110,37 +104,39 @@
 													<el-input v-model="dataInfo.ITEM_MODEL" :disabled="edit"></el-input>
 												</el-form-item>
 											</el-col>
-											<el-col :span="8" >
-												<el-form-item label="产品类别" prop="PRODUCT_TYPE"  label-width="110px">
-													<el-input v-model="dataInfo.PRODUCT_TYPE" :disabled="true">
-														<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addcategory('maintable')"></el-button>
+											<el-col :span="8">
+												<el-form-item label="数量" prop="ITEM_QUALITY" label-width="110px">
+													<el-input v-model.number="dataInfo.ITEM_QUALITY" :disabled="edit">
 													</el-input>
 												</el-form-item>
 											</el-col>
 										</el-row>
 										<el-row >
-											<el-col :span="8">
-												<el-form-item label="数量" prop="ITEM_QUALITY" label-width="110px">
-													<el-input v-model.number="dataInfo.ITEM_QUALITY" :disabled="edit">
-													</el-input>
-
-												</el-form-item>
-											</el-col>
 											<!--<el-col :span="8">
 												<el-form-item label="样品信息状态" prop="ITEM_STATUS">
 													<el-input v-model="dataInfo.ITEM_STATUS"></el-input>
 												</el-form-item>
 											</el-col>-->
-											<el-col :span="8">
-												<el-form-item label="保密要求" prop="ITEM_SECRECY" label-width="110px">
-													<el-input v-model="dataInfo.ITEM_SECRECY" :disabled="noedit"></el-input>
+											<el-col :span="8" >
+												<el-form-item label="承检单位" prop="R_VENDORDesc"  label-width="110px">
+													<el-input v-model="dataInfo.R_VENDORDesc" :disabled="edit"></el-input>
+												</el-form-item>
+											</el-col>
+											<el-col :span="8" >
+												<el-form-item label="产品类别" prop="PRODUCT_TYPE"  label-width="110px">
+													<el-input v-model="dataInfo.PRODUCT_TYPE" :disabled="true">
+													</el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
 												<el-form-item label="产品名称" prop="PRODUCT" label-width="110px">
 													<el-input v-model="dataInfo.PRODUCT" :disabled="true">
-														<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addproduct('maintable')"></el-button>
 													</el-input>
+												</el-form-item>
+											</el-col>
+											<el-col :span="8">
+												<el-form-item label="保密要求" prop="ITEM_SECRECY" label-width="110px">
+													<el-input v-model="dataInfo.ITEM_SECRECY" :disabled="noedit"></el-input>
 												</el-form-item>
 											</el-col>
 										</el-row>
@@ -574,9 +570,10 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="主检负责人" prop="LEADER" label-width="110px">
-												<el-select clearable v-model="dataInfo.LEADER" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit">
+												<!-- <el-select clearable v-model="dataInfo.LEADER" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit">
 													<el-option v-for="(data,index) in leaderdata" :key="index" :value="data.id" :label="data.username"></el-option>
-												</el-select>
+												</el-select> -->
+												<el-input v-model="dataInfo.LEADER" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>	
@@ -671,7 +668,7 @@
 			</el-dialog>
 			<!-- 客户联系人 End -->
 			<!-- 样品名称  -->
-			<sampletmask ref="samplechild" @appenddes="appenddes" @appendmod="appendmod" @appendqua="appendqua"></sampletmask>
+			<sampletmask ref="samplechild" @appenddes="appenddes" @appendmod="appendmod" @appendqua="appendqua" @linedata="linedata"></sampletmask>
 			<!--受检企业-->
 			<enterprisemask ref="enterprisechild" @appendname="appendname" @appendadd="appendadd" @appendzip="appendzip"@appendnames="appendnames" @appendid="appendid"></enterprisemask>
 			<!--审批页面-->
@@ -811,6 +808,7 @@
 					TYPEDesc:'检验',
 					ITEM_NAME:'',
 					VENDOR:'',
+					R_VENDORDesc:'',
 					ITEM_NAME:'',
 					ITEM_MODEL:'',
 					ITEM_QUALITY:'',
@@ -1266,9 +1264,8 @@
 					for(var i = 0;i<res.data.INSPECT_PROXY_PROJECList.length;i++){
 						res.data.INSPECT_PROXY_PROJECList[i].INSPECT_GROUP = Number(res.data.INSPECT_PROXY_PROJECList[i].INSPECT_GROUP);
 					}
-					this.RVENDORSelect(res.data.R_VENDOR);
-					this.getmaingroup(res.data.MAINGROUP);
 					this.dataInfo = res.data;
+					this.RVENDORSelect();
 					this.show = true;
 					//深拷贝数据
 					let _obj = JSON.stringify(this.dataInfo);
@@ -1638,6 +1635,15 @@
 			appendqua(value){
 				this.dataInfo.ITEM_QUALITY=value;
 			},
+			linedata(value){
+				this.dataInfo.R_VENDOR = value[0];
+				this.dataInfo.R_VENDORDesc = value[1];
+				this.dataInfo.P_NUM = value[2];
+				this.dataInfo.PRODUCT_TYPE = value[3];
+				this.dataInfo.PRO_NUM = value[4];
+				this.dataInfo.PRODUCT = value[5];
+				this.RVENDORSelect();
+			},
 			//委托单位
 			appendname(value){		
 				this.dataInfo.V_NAME = value;//名称
@@ -1739,16 +1745,15 @@
 			    	}
 			    }	
 			},
-			//承检单位带出主检组
-			RVENDORSelect(RVENDORid){
-				console.log(1234334344);
-				console.log(RVENDORid)
-				var url = this.basic_url + '/api-user/depts/findByPid/'+RVENDORid;
+			//主检组
+			RVENDORSelect(){
+				console.log(this.dataInfo.R_VENDOR);
+				var url = this.basic_url + '/api-user/depts/findByPid/'+this.dataInfo.R_VENDOR;
 					this.$axios.get(url, {}).then((res) => {
 						this.maingroup = res.data;
 					}).catch((err) => {
 						this.$message({
-							message: '网络错误，请重试7',
+							message: '网络错误，请重试',
 							type: 'error'
 						});
 					});
@@ -1940,7 +1945,6 @@
 		mounted() {
 			this.getCompany();
 			this.getuser();
-			// this.RVENDORSelect($event);
 		},
 	}
 </script>

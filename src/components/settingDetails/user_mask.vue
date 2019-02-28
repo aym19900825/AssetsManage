@@ -483,9 +483,7 @@
 		                } else if (!/^.{5,16}$/g.test(value)) {
 		                    callback(new Error('密码长度不能少于5个字符且不能大于16个字符'));
 		                } else {
-		                    if (this.passwordedit.checkPass !== '') {
-		                        this.$refs.passwordedit.validateField('checkPass');
-		                    }
+		                    
 		                    callback();
 		         }
 		     };

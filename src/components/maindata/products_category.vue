@@ -527,24 +527,24 @@
 			// 导入
 			download() {
 				var url = this.basic_url + '/api-apps/app/productType/importExcTemplete?access_token='+sessionStorage.getItem('access_token');
-           var xhr = new XMLHttpRequest();
-            xhr.open('POST', url, true);
-            xhr.responseType = "blob";
-            xhr.setRequestHeader("client_type", "DESKTOP_WEB");
-            xhr.onload = function() {
-                if (this.status == 200) {
-                    var blob = this.response;
-                    var objecturl = URL.createObjectURL(blob);
-                    window.location.href = objecturl;
-                }
-            }
-            xhr.send();
+				var xhr = new XMLHttpRequest();
+					xhr.open('POST', url, true);
+					xhr.responseType = "blob";
+					xhr.setRequestHeader("client_type", "DESKTOP_WEB");
+					xhr.onload = function() {
+						if (this.status == 200) {
+							var blob = this.response;
+							var objecturl = URL.createObjectURL(blob);
+							window.location.href = objecturl;
+						}
+					}
+					xhr.send();
 			},
 			
 			// 导出
 			exportData() {
            		var url = this.basic_url + '/api-apps/app/productType/exportExc?access_token='+sessionStorage.getItem('access_token');
-          		 var xhr = new XMLHttpRequest();
+          		var xhr = new XMLHttpRequest();
             	xhr.open('POST', url, true);
             	xhr.responseType = "blob";
             	xhr.setRequestHeader("client_type", "DESKTOP_WEB");
@@ -636,32 +636,6 @@
 		mounted() {
 			this.requestData();
 			this.getCompany();
-
-//			const selectWrap = document.querySelector('.el-table__body-wrapper')
-//			var that=this
-//			selectWrap.addEventListener('scroll', function(e){
-//				//	console.log(e);
-//				console.log(this.scrollHeight);// 滚动区域
-//				console.log(this.scrollTop);// div 到头部的距离
-//				console.log(this.clientHeight);//屏幕高度
-//				let scrollHeight = this.scrollHeight.scrollHeight; // 滚动条的总高度
-//				console.log(document.documentElement.clientHeight);// 滚动条的总高度
-//			    var scrollDistance = this.scrollHeight - this.scrollTop - this.clientHeight
-//			    let sign = 1;
-//				console.log(scrollDistance);
-//		      	if(scrollDistance <= sign){
-//		      		that.loadMore('down')
-//		      		this.scrollTop = 2;
-//		      	}else if(this.scrollTop < 1){
-//		      		that.loadMore('up')
-//		      		this.scrollTop = 2
-//		      	}else{
-//		      		return false;
-//		      	}
-//
-//			}, true);
-			
-		 	
 		}
 	}
 </script>

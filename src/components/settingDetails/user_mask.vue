@@ -483,7 +483,7 @@
 		                } else if (!/^.{5,16}$/g.test(value)) {
 		                    callback(new Error('密码长度不能少于5个字符且不能大于16个字符'));
 		                }
-		                    callback();
+		                  callback();
 		     };
 			return {
 				basic_url: Config.dev_url,

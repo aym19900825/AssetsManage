@@ -248,7 +248,7 @@
 					setTimeout(function(){
 						_this.docParm.model = 'edit';
 						_this.docParm.appname = '报告归档/检测标准';
-						_this.docParm.recordid = _this.report.id;
+						_this.docParm.recordid = _this.report.ID;
 						_this.docParm.appid = 91;
 						_this.$refs.docTable.getData();
 					},100);

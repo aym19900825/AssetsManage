@@ -121,7 +121,7 @@
 					<!-- 高级查询划出 End-->
 					
 					<el-row :gutter="10">
-						<el-col :span="6" class="lefttree">
+						<el-col :span="5" class="lefttree">
 							<div class="lefttreebg">
 								<div class="left_tree_title clearfix" @click="min3max()">
 									<div class="pull-left pr20" v-if="ismin">检索分类</div>
@@ -137,7 +137,7 @@
 								</div>
 							</div>
 						</el-col>
-						<el-col :span="18" class="leftcont v-resize">
+						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
 							<tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="userList" v-on:childByValue="childvalue"></tree_grid>
 							<!-- 表格 -->

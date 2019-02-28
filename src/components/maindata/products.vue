@@ -26,10 +26,10 @@
 							    <i class="icon-trash"></i>删除
 							</button>
 							<button type="button" class="btn btn-red button-margin" @click="physicsDel">
-								    <i class="icon-trash"></i>物理删除
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="importData">
-							    <i class="icon-upload-cloud"></i>导入
+								<i class="icon-trash"></i>物理删除
+							</button>
+							<button type="button" class="btn btn-primarys button-margin" @click="importData">
+								<i class="icon-upload-cloud"></i>导入
 							</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="exportData">
 							    <i class="icon-download-cloud"></i>导出

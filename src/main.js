@@ -45,13 +45,11 @@ Vue.config.productionTip = false
 Vue.directive('loadmore', {
 	bind(el, binding) {
 		const selectWrap = el.querySelector('.el-table__body-wrapper');
-		// const selectWrap = el.querySelector('.el-table');
 		var scrollBeforeTop = 0;
 		var firstFlag = true;
 	    selectWrap.addEventListener('scroll', function() {
-			
-			let up2down = sessionStorage.getItem('toBtm');
-			if(up2down=='true'){
+			let toBtm = sessionStorage.getItem('toBtm');
+			if(toBtm=='true'){
 				if(firstFlag){
 					scrollBeforeTop = this.scrollTop;
 					firstFlag = false;
@@ -68,7 +66,7 @@ Vue.directive('loadmore', {
 		    if (scrollDistance <= sign) {
 				sessionStorage.setItem('up2down','down');
 				binding.value();
-				this.scrollTop = 2;
+				this.scrollTop = 800;
 	      	}else if(this.scrollTop < sign){
 				sessionStorage.setItem('up2down','up');
 				binding.value();

@@ -181,6 +181,22 @@
 										</el-col>
 									</el-row>
 									<el-row>
+										<el-col :span="8" >
+											<el-form-item label="产品类别" prop="PRODUCT_TYPE"  label-width="110px">
+												<el-input v-model="samplesForm.PRODUCT_TYPE" :disabled="true">
+													<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addcategory"></el-button>
+												</el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="产品名称" prop="PRODUCT" label-width="110px">
+												<el-input v-model="samplesForm.PRODUCT" :disabled="true">
+													<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addproduct"></el-button>
+												</el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
 										<el-col :span="24">
 											<el-form-item label="备注" prop="MEMO" label-width="110px">
 												<el-input type="textarea" rows="5" v-model="samplesForm.MEMO" :disabled="noedit"></el-input>
@@ -399,14 +415,24 @@
 			    </div>
 			</el-dialog>
 			<!-- 收样人、接样人 End -->
+			<!-- 产品类别  -->
+			<categorymask ref="categorychild" @categorydata="categorydata"></categorymask>
+			<!-- 产品名称  -->
+			<productmask ref="productchild" @appenddata="appenddata"></productmask>
 		</div>
 	</div>
 </template>
 
 <script>
 	import Config from '../../config.js'
+	import categorymask from '../common/common_mask/categorylistmask.vue'//产品类别
+	import productmask from '../common/common_mask/productlistmask.vue'//产品
 	export default {
 		name: 'samples_mask',
+		components: {
+			categorymask,
+			productmask,
+		},
 		data() {
 			// var validateProxynum = (rule, value, callback) => {//委托书编号
    //              if (this.samplesForm.PROXYNUM === undefined || this.samplesForm.PROXYNUM === '' || this.samplesForm.PROXYNUM === null) {

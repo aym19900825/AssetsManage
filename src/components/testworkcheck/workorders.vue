@@ -14,9 +14,9 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+								<!-- <button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加
-                      			 </button>
+                      			 </button> -->
 								<button type="button" class="btn btn-blue button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改
 								</button>
@@ -121,7 +121,7 @@
 					<!-- 高级查询划出 End-->
 					
 					<el-row :gutter="10">
-						<el-col :span="6" class="lefttree">
+						<el-col :span="5" class="lefttree">
 							<div class="lefttreebg">
 								<div class="left_tree_title clearfix" @click="min3max()">
 									<div class="pull-left pr20" v-if="ismin">检索分类</div>
@@ -137,7 +137,7 @@
 								</div>
 							</div>
 						</el-col>
-						<el-col :span="18" class="leftcont v-resize">
+						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
 							<tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="userList" v-on:childByValue="childvalue"></tree_grid>
 							<!-- 表格 -->
@@ -193,27 +193,27 @@
 				],
 				columns: [
 					 {
-					 	text: '序号',
+					 	text: '工作任务单编号',
 					 	dataIndex: 'WONUM',
 					 	isShow:true,
 					 },
 					{
-						text: '机构名称',
+						text: '状态',
 						dataIndex: 'STATUS',
 						isShow:true,
 					},
 					{
-						text: '机构编码',
+						text: '样品名称',
 						dataIndex: 'ITEM_NAME',
 						isShow:true,
 					},
 					{
-						text: '上级机构',
+						text: '样品型号',
 						dataIndex: 'ITEM_MODEL',
 						isShow:true,
 					},
 					{
-						text: '机构属性',
+						text: '样品状态',
 						dataIndex: 'ITEM_STATUS',
 						isShow:true,
 					},
@@ -659,18 +659,22 @@
 					this.searchList.P_NUM = '';
 					this.searchList.PRO_NUM = '';
 					this.searchList.DEPTID = data.id;
+					this.currentPage = 1;
 				}else if(!!data.TYPE){
 					this.searchList.P_NUM = data.NUM;
 					this.searchList.PRO_NUM = '';
 					this.searchList.DEPTID = data.DEPTID;
+					this.currentPage = 1;
 				}else if(!!data.PRO_NUM){
 					this.searchList.P_NUM = data.NUM;
 					this.searchList.PRO_NUM = data.PRO_NUM;
 					this.searchList.DEPTID = data.DEPTID;
+					this.currentPage = 1;
 				}else{
 					this.searchList.P_NUM = '';
 					this.searchList.PRO_NUM = '';
 					this.searchList.DEPTID = '';
+					this.currentPage = 1;
 				}
 				this.requestData();
 			},

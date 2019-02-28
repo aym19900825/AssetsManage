@@ -123,7 +123,7 @@
 					<!-- 高级查询划出 End-->
 
 					<el-row :gutter="10">
-						<el-col :span="6" class="lefttree">
+						<el-col :span="5" class="lefttree">
 							<div class="lefttreebg">
 								<div class="left_tree_title clearfix" @click="min3max()">
 									<div class="pull-left pr20" v-if="ismin">组织机构</div>
@@ -139,7 +139,7 @@
 								</div>
 							</div>
 						</el-col>
-						<el-col :span="18" class="leftcont v-resize">
+						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
 							<el-table :data="inspectList" 
 									  :header-cell-style="rowClass" 
@@ -403,16 +403,37 @@
 
 			//滚动加载更多
 			loadMore() {
-				if(this.loadSign) {
-					this.loadSign = false
-					this.page.currentPage++
+				// if(this.loadSign) {
+				// 	this.loadSign = false
+				// 	this.page.currentPage++
+				// 		if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+				// 			return
+				// 		}
+				// 	setTimeout(() => {
+				// 		this.loadSign = true
+				// 	}, 1000)
+				// 	this.requestData();
+				// }
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++
 						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							return
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
 						}
+					}else{
+						this.page.currentPage--
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1
+							return false;
+						}
+					}
+					this.loadSign = false;
 					setTimeout(() => {
 						this.loadSign = true
 					}, 1000)
-					this.requestData();
+					this.requestData()
 				}
 			},
 			sizeChange(val) {
@@ -696,7 +717,10 @@
 					PROXYNUM: this.searchList.PROXYNUM,
 					COMPDATE: this.searchList.COMPDATE,
 					ENTERBY: this.searchList.ENTERBY,
-					STATUS: this.searchList.STATUS
+					STATUS: this.searchList.STATUS,
+					P_NUM: this.searchList.P_NUM,
+					PRO_NUM: this.searchList.PRO_NUM,
+					DEPTID: this.searchList.DEPTID
 				}
 				var url = this.basic_url + '/api-apps/app/inspectPro';
 				this.$axios.get(url, {
@@ -761,12 +785,26 @@
 				return data;
 			},
 			handleNodeClick(data) {
-				if(data.type == '1') {
-					this.companyId = data.id;
-					this.deptId = '';
-				} else {
-					this.deptId = data.id;
-					this.companyId = '';
+				if(!!data.fullname) {
+					this.searchList.P_NUM = '';
+					this.searchList.PRO_NUM = '';
+					this.searchList.DEPTID = data.id;
+					this.page.currentPage = 1;
+				}else if(!!data.TYPE){
+					this.searchList.P_NUM = data.NUM;
+					this.searchList.PRO_NUM = '';
+					this.searchList.DEPTID = data.DEPTID;
+					this.page.currentPage = 1;
+				}else if(!!data.PRO_NUM){
+					this.searchList.P_NUM = data.NUM;
+					this.searchList.PRO_NUM = data.PRO_NUM;
+					this.searchList.DEPTID = data.DEPTID;
+					this.page.currentPage = 1;
+				}else{
+					this.searchList.P_NUM = '';
+					this.searchList.PRO_NUM = '';
+					this.searchList.DEPTID = '';
+					this.page.currentPage = 1;
 				}
 				this.requestData();
 			},

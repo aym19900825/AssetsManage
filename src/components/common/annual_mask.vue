@@ -116,10 +116,36 @@
 								
 								<!-- 年度计划列表 Begin-->
 								<el-collapse-item title="年度计划列表" name="2" class="ml30">
-									<div class="table-func">
-										<el-button type="primary" size="mini" round v-show="!viewtitle">
+									<div style="position: absolute;top: 10px;right: 40px;">
+									<!-- <div> -->
+										<!-- <el-button type="primary" size="mini" round v-show="!viewtitle">
 											<i class="icon-upload-cloud"></i>
 											<font>导入</font>
+										</el-button> -->
+										<el-dropdown size="small" split-button type="primary" style="margin-top:1px;">
+    										导入
+											<el-dropdown-menu slot="dropdown">
+												<el-dropdown-item>
+													<div @click="download">下载模版</div>
+												</el-dropdown-item>
+												
+												<el-dropdown-item>
+													<el-upload
+													ref="upload"
+													class="upload"
+													:action="uploadUrl"
+													:limit=1
+													multiple
+													method:="post"
+													:file-list="fileList">
+														<div>上传</div>
+													</el-upload>
+												</el-dropdown-item>
+											</el-dropdown-menu>
+										</el-dropdown>
+										<el-button type="primary" size="mini" round v-show="!viewtitle" @click="exportData" style="margin-left: 10px;">
+											<i class="icon-upload-cloud"></i>
+											<font>导出</font>
 										</el-button>
 										<el-button type="success" size="mini" round  @click="addfield1" v-show="!viewtitle">
 											<i class="icon-add"></i>
@@ -150,9 +176,9 @@
 										</el-table-column>
 									    <el-table-column prop="MODEL" label="规格型号" sortable width="120px">
 									      <template slot-scope="scope">
-													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入内容">
-													</el-input>
-													<span v-else="v-else">{{scope.row.MODEL}}</span>
+												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入内容">
+												</el-input>
+												<span v-else="v-else">{{scope.row.MODEL}}</span>
 										  </template>
 									    </el-table-column>
 										<el-table-column prop="V_NAME" label="生产企业名称" sortable width="120px">
@@ -187,7 +213,6 @@
 									        <el-button type="primary" circle title="下达任务通知书" @click="assign(scope.row)" size="small" v-if="assignshow">
 									          <i class="icon-send"></i>
 									        </el-button>
-
 									      </template>
 									    </el-table-column>
 									</el-table>
@@ -876,6 +901,44 @@
 			};
 		},
 		methods: {
+			download() {
+				var url = this.basic_url + '/api-apps/app/worlplanline/importExcTemplete?access_token='+sessionStorage.getItem('access_token');
+				var xhr = new XMLHttpRequest();
+					xhr.open('POST', url, true);
+					xhr.responseType = "blob";
+					xhr.setRequestHeader("client_type", "DESKTOP_WEB");
+					xhr.onload = function() {
+						if (this.status == 200) {
+							var blob = this.response;
+							var objecturl = URL.createObjectURL(blob);
+							window.location.href = objecturl;
+						}
+					}
+					xhr.send();
+			},
+			uploadUrl(){
+                var url = this.basic_url +'/api-apps/app/worlplanline/importExc?access_token='+sessionStorage.getItem('access_token');
+                return url;
+            },
+			exportData() {
+           		var url = this.basic_url + '/api-apps/app/worlplanline/exportExc?access_token='+sessionStorage.getItem('access_token');
+          		 var xhr = new XMLHttpRequest();
+            	xhr.open('POST', url, true);
+            	xhr.responseType = "blob";
+            	xhr.setRequestHeader("client_type", "DESKTOP_WEB");
+            	xhr.onload = function() {
+                	if (this.status == 200) {
+						var filename = "worlplanline.xls";
+						var blob = this.response;
+						var link = document.createElement('a');
+						var objecturl = URL.createObjectURL(blob);
+						link.href = objecturl;
+						link.download = filename;
+						link.click();
+                	}
+            	}
+            	xhr.send();
+			},
 			resetBasis(){
 				this.dialogVisible = false;
 				this.resetbtn();

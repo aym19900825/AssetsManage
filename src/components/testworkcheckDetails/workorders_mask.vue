@@ -209,23 +209,24 @@
 													<el-input placeholder="请输入内容" v-model="workorderForm.TECHNICAL_INFORMATION" :disabled="noedit"></el-input>
 												</el-form-item>
 											</el-col>
-											<el-col :span="8">
+											<!-- <el-col :span="8">
 												<el-form-item label="分包项目">
 													<el-input placeholder="请输入内容" v-model="workorderForm.SUB_PROJECT" :disabled="noedit"></el-input>
 												</el-form-item>
-											</el-col>
+											</el-col> -->
 											<el-col :span="8">
 												<el-form-item label="特殊要求">
 													<el-input placeholder="请输入内容" v-model="workorderForm.SPECIAL_REQUIREMENTS" :disabled="noedit"></el-input>
 												</el-form-item>
 											</el-col>
-										</el-row>
-										<el-row>
+										
 											<el-col :span="8">
 												<el-form-item label="样品接收人">
 													<el-input placeholder="请输入内容" v-model="workorderForm.ITEM_RECCEPT_USER" :disabled="noedit"></el-input>
 												</el-form-item>
 											</el-col>
+										</el-row>
+										<el-row>
 											<el-col :span="8">
 												<el-form-item label="样品接收日期">
 													<el-date-picker v-model="workorderForm.ITEM_RECEPT_DATE" type="date" placeholder="请选择样品接收日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
@@ -238,9 +239,7 @@
 													</el-date-picker>
 												</el-form-item>
 											</el-col>
-										</el-row>
-
-										<el-row>
+										
 											<el-col :span="8">
 												<el-form-item label="完成方式">
 													<el-radio-group v-model="workorderForm.COMPLETE_MODE" :disabled="noedit">
@@ -248,6 +247,8 @@
 													</el-radio-group>
 												</el-form-item>
 											</el-col>
+										</el-row>
+										<el-row>
 											<el-col :span="8">
 												<el-form-item label="样品接收状态">
 													<el-radio-group v-model="workorderForm.ITEM_RECEPT_STATUS":disabled="noedit">
@@ -267,15 +268,15 @@
 														</el-select>
 													</el-form-item>
 											</el-col>
-										</el-row>
-
-										<el-row>
+										
 											<el-col :span="8">
 												<el-form-item label="样品承接日期">
 													<el-date-picker v-model="workorderForm.UNDERTAKE_DATE" type="date" placeholder="请选择完成日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
 													</el-date-picker>
 												</el-form-item>
 											</el-col>
+										</el-row>
+										<el-row>
 											<el-col :span="8">
 												<el-form-item label="样品状态" prop="ITEM_STATU">
 													<el-input v-model="workorderForm.ITEM_STATU" :disabled="noedit"></el-input>
@@ -289,9 +290,7 @@
 													<el-input-number type="number" v-model.number="workorderForm.ITEM_RETURN_QUALITY" @change="handleChangeQuality" :min="1" :max="1000" label="描述文字" style="width: 100%;" :disabled="noedit"></el-input-number>
 												</el-form-item>
 											</el-col>
-										</el-row>
-
-										<el-row>
+										
 											<el-col :span="8">
 												<el-form-item label="样品返回接收人">
 													<!-- <el-select v-model="workorderForm.RETURN_ITEM_USER" style="width: 100%">
@@ -302,6 +301,8 @@
 													</el-input>
 												</el-form-item>
 											</el-col>
+										</el-row>
+										<el-row>
 											<el-col :span="8">
 												<el-form-item label="样品返回日期">
 													<el-date-picker v-model="workorderForm.RETURN_ITEM_DATE" type="date" placeholder="请选择完成日期" value-format="yyyy-MM-dd" style="width: 100%;":disabled="noedit">
@@ -315,9 +316,7 @@
 													</el-radio-group>
 												</el-form-item>
 											</el-col>
-										</el-row>
-
-										<el-row>
+										
 											<el-col :span="8">
 												<el-form-item label="样品处置">
 													<el-select v-model="workorderForm.ITEM_MANAGEMENT" style="width: 100%" :disabled="noedit">
@@ -325,6 +324,8 @@
 													</el-select>
 												</el-form-item>
 											</el-col>
+										</el-row>
+										<el-row>
 											<el-col :span="8">
 												<el-form-item label="样品承接人">
 													<el-input v-model="workorderForm.ITEM_UNDERTAKE_USER" :disabled="edit">
@@ -1272,7 +1273,6 @@
 					ITEM_SOURCE: '',//样品来源
 					CHECK_BASIS: '',//抽样方案/判定依据
 					TECHNICAL_INFORMATION: '',//委托方提供技术资料
-					SUB_PROJECT: '',//分包项目
 					SPECIAL_REQUIREMENTS: '',//特殊要求
 					ITEM_RECCEPT_USER: '',//样品接收人
 					ITEM_RECEPT_DATE: '',//样品接收日期

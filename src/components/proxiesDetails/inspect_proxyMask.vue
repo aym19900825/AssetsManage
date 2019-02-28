@@ -113,7 +113,7 @@
 											<el-col :span="8" >
 												<el-form-item label="产品类别" prop="PRODUCT_TYPE"  label-width="110px">
 													<el-input v-model="dataInfo.PRODUCT_TYPE" :disabled="true">
-														<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addcategory('maintable')">'</el-button>
+														<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addcategory('maintable')"></el-button>
 													</el-input>
 												</el-form-item>
 											</el-col>

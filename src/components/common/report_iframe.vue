@@ -14,7 +14,8 @@
 					</span>
 				</div>
 			</div>	
-		   <iframe :src="this.url +'/ureport/preview?_u=mysql:test.ureport.xml'" id="flowIframe" width="100%" height="100%" frameborder="0" scrolling="no" >
+		   <!--<iframe :src="this.url +'/ureport/preview?_u=mysql:test.ureport.xml'" id="flowIframe" width="100%" height="100%" frameborder="0" scrolling="no" >-->
+		   	<iframe :src="this.url +'/ureport/preview?_u=mysql:'+this.file" id="flowIframe" width="100%" height="100%" frameborder="0" scrolling="no" >
 		   </iframe>
 		</div>
    	</div>
@@ -24,17 +25,18 @@
 <script>
 	import Config from '../../config.js';
 	export default {
-    props: ["modelId"],
+//  props: ["file"],
 	name: 'iframemask',
 	data() {
-    return {
-    basic_url: Config.dev_url,
-    innerVisible: false,
-    show:false,
-    url:'',
-    isok1: true,
-	isok2: false,
-    }
+	    return {
+	    basic_url: Config.dev_url,
+	    innerVisible: false,
+	    show:false,
+	    url:'',
+	    isok1: true,
+		isok2: false,
+		file:'',
+	    }
   },
    methods: {
   	//点击关闭按钮
@@ -44,26 +46,28 @@
 			open() {
 				this.show= true;
 			},
-		  	visible(modelId) {
-//		  		/console.log(modelId);
-		  		/*if(modelId!="undefined"&&modelId!="null"){
-		  			this.modelId=modelId;
-		  		}*/
+		  	visible(file) {
+		  		console.log(file);
+		  		if(file!="undefined"&&file!="null"){
+		  			this.file=file;
+		  		}
+		  		console.log(this.file);
 		  		var url=this.basic_url;
-//  			url = url.substring(0,21);
-//		  		this.url=url+"5300";
+    			url = url.substring(0,21);
+		  		this.url=url+"5300";
+		  		
 //		  		console.log(this.url +'/reportFile/page/preview/');
 //		  		var type = "3";
-				var url = this.basic_url +'api-report/reportFile/page/preview';
-				console.log(url);
-				this.$axios.post(url, {
-					params: {
-						"_report_id": 3
-					},
-				}).then((res) => {
-					console.log(res);
-			
-				});
+//				var url = this.basic_url +'api-report/reportFile/page/preview';
+//				console.log(url);
+//				this.$axios.post(url, {
+//					params: {
+//						"_report_id": 3
+//					},
+//				}).then((res) => {
+//					console.log(res);
+//			
+//				});
 				this.show= true;
 		  	},
 		    //取消

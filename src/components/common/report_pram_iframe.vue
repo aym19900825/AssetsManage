@@ -2,23 +2,34 @@
 	<div>
 		<el-dialog :modal-append-to-body="false" title="报表参数" :visible.sync="innerVisible" width="60%">
 		<div >
-			<el-form :model="dataInfo" ref="dataInfo" label-width="100px" class="demo-user">
-				<div class="accordion">
+			<el-form :model="dataInfo" ref="dataInfo" label-width="100px" >
+				
 					<!-- 报表信息 -->
 					<el-collapse>
-						<el-form-item v-for="item in pramList" :key="item.id" :label="item.label" :prop="item.prop" :style="{ width: item.width}">
-							<el-input v-model="dataInfo[item.param]"  v-if="item.type!='1'&&item.type!='4'&&item.type!='3'" ></el-input>
+						<el-form-item v-for="item in pramList" :key="item.id" :label="item.label" :prop="item.param"  :style="{ width: item.width}" :id="item.label" v-if="item.required!='0'":rules="{required: true, message: '请填写', trigger: 'blur'}">
+							<el-input v-model="dataInfo[item.param]" v-if="item.type!='1'&&item.type!='4'&&item.type!='3'">
+							</el-input> 
 							<el-date-picker v-model="dataInfo[item.param]" value-format="yyyy-MM-dd" v-if="item.type==1" >
 							</el-date-picker>
-							<el-input v-model="dataInfo[item.prop]" v-if="item.type==4||item.type==3"  :disabled="true">
+							
+							<el-input v-model="dataInfo[item.param]" v-if="item.type==4||item.type==3"  :disabled="true">
+									<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="addPeople(item.type)"></el-button>
+							</el-input>
+						</el-form-item>
+						<el-form-item v-for="item in pramList" :key="item.id" :label="item.label" :prop="item.param"  :style="{ width: item.width}" :id="item.label" v-if="item.required!='1'">
+							<el-input v-model="dataInfo[item.param]" v-if="item.type!='1'&&item.type!='4'&&item.type!='3'">
+							</el-input> 
+							<el-date-picker v-model="dataInfo[item.param]" value-format="yyyy-MM-dd" v-if="item.type==1" >
+							</el-date-picker>
+							
+							<el-input v-model="dataInfo[item.param]" v-if="item.type==4||item.type==3"  :disabled="true">
 									<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="addPeople(item.type)"></el-button>
 							</el-input>
 						</el-form-item>
 					</el-collapse>
-				</div>
 				<div class="el-dialog__footer">
-					<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
-					<el-button @click='close'>取消</el-button>
+					<el-button type="primary" @click="determine">确定</el-button>
+					<el-button @click='closeinnerVisible'>取消</el-button>
 				</div>
 			</el-form>
 		</div>
@@ -51,13 +62,18 @@
 			    </span>
 		  </el-dialog>
 		  <el-dialog :modal-append-to-body="false" title="机构" :visible.sync="dialogVisible" width="30%" >
-				<el-tree ref="tree" :data="resourceData" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
-				</el-tree>
-				<span slot="footer" class="dialog-footer">
-			       <el-button @click="dialogVisible = false">取 消</el-button>
-			       <el-button type="primary" @click="dailogconfirm();" >确 定</el-button>
-			    </span>
+			<el-tree ref="tree" :data="resourceData" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
+			</el-tree>
+			<span slot="footer" class="dialog-footer">
+		       <el-button @click="dialogVisible = false">取 消</el-button>
+		       <el-button type="primary" @click="dailogconfirm();" >确 定</el-button>
+		    </span>
 		</el-dialog>
+		 <!--<el-dialog :modal-append-to-body="false" title="查看报表" :visible.sync="dialogVisiblereport" width="100%" height="100%" >
+		 	product_advice.ureport.xml
+		 	<iframe :src="this.url +'/ureport/preview?_u=mysql:'+this.file" id="flowIframe" width="100%" height="100%" frameborder="0" scrolling="no" >
+		   </iframe>
+		 </el-dialog>	-->
 			</div>
 		<!--</div>-->
 	
@@ -78,9 +94,8 @@
 				selval:[],
 				dialogVisibleuser:false,//用户
 				dialogVisible: false, //对话框
-				dataInfo: {
-					'param': ''
-				},
+//				dialogVisiblereport:false,//报表
+				dataInfo: {},
 				page: {
 					currentPage: 1,
 					pageSize: 10,
@@ -94,7 +109,11 @@
 					children: "children",
 					label: "fullname"
 				},
-			};	
+				url:'',
+				str:'',
+				file:'',
+				
+				};	
 			},
 		methods: {
 			//表头居中
@@ -139,9 +158,12 @@
         	},
 
 			//点击按钮显示弹窗
-			visible(pramList) {	
+			visible(pramList,file) {	
+				this.file=file;
+				console.log(this.file);
 				for(var i=0;i<pramList.length;i++){
 					pramList[i].width="40%"
+					
 				}
 			    this.pramList=pramList;
 				this.innerVisible = true;
@@ -149,6 +171,10 @@
 			//点击关闭按钮
 			close() {
 				this.show = false;
+			},
+			closeinnerVisible(){
+				this.innerVisible=false;
+				this.dataInfo={};
 			},
 			addcusname(){
 				if(this.selval.length == 0){
@@ -162,9 +188,6 @@
 						type: 'warning'
 					});
 				}else{
-					console.log(this.selval[0]);
-//					this.dataInfo.V_PERSON = this.selval[0].PERSON;
-//					this.dataInfo.V_PHONE = this.selval[0].PHONE;
 					this.dialogVisibleuser = false;
 				}
 			},
@@ -198,63 +221,30 @@
 				$(".mask_div").css("top", "100px");
 			},
 
-			save(opt) {
-				var _this = this;
-				var url = this.basic_url + '/api-apps/app/asset/saveOrUpdate';
-				this.$refs['dataInfo'].validate((valid) => {
-					if(!valid && opt == 'docUpload'){
-						this.$message({
-							message: '请先正确填写信息，再进行文档上传',
-							type: 'warning'
-						});
-					}
-					if (valid) {
-						this.$axios.post(url, _this.dataInfo).then((res) => {
-							if(res.data.resp_code == 0) {
-								if(opt == 'docUpload'){
-									this.docParm.recordid = res.data.datas.id;
-									this.docParm.model = 'edit';
-									this.$refs.docTable.autoLoad();
-									this.dataInfo.ID = res.data.datas.id;
-								}else{
-									this.$message({
-										message: '保存成功',
-										type: 'success',
-									});
-									this.$emit('request');
-								}
-							}
-						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
-						});
-					} else {
-						this.show = true;
-						this.$message({
-							message: '未填写完整，请填写',
-							type: 'warning'
-						});
-	
-					}
-				});
-			},
-			saveAndUpdate(dataInfo) {
-				this.save(dataInfo);
-				
-			},
-			saveAndSubmit(dataInfo) {
-				this.save(dataInfo);
-				this.show = true;
-			},
+			
 			addPeople(item){
 				if(item==4){
 					this.getDept();
 				}else{
 					this.requestData();
 				}
-				
+			},
+			determine(){
+				console.log(this.file);
+		  		var str=JSON.stringify(this.dataInfo);
+				for(var j=0;j<str.length;j++){
+					str=str.replace("\":\"",'=');
+					str=str.replace("\{\"","");
+					str=str.replace("\"}","");
+					str=str.replace("\",\"","&");
+				}
+				this.str="&"+str;
+				this.file=this.file+this.str;
+		  		var url=this.basic_url;
+    			url = url.substring(0,21);
+		  		this.url=url+"5300";
+				var url = this.url+"/ureport/preview?_u=mysql:" +this.file
+             window.open(url); 
 			},
 			getDept() {
 				var url = this.basic_url + '/api-user/depts/treeMap';

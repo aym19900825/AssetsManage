@@ -167,7 +167,7 @@
 									<el-tabs v-model="activeName" @tab-click="handleClick">
 										<el-tab-pane label="依据" name="first">
 											<div class="table-func table-funcb">
-												<el-button type="primary" size="mini" round @click="basisleadbtn">
+												<el-button type="primary" size="mini" round @click="basisleadbtn" :dialog="view" :disabled="views">
 													<i class="icon-search"></i>
 													<font>选择</font>
 												</el-button>
@@ -209,7 +209,7 @@
 													</template>
 												</el-table-column> -->
 												<el-table-column label="附件" sortable width="120px">
-													<template slot-scope="scope">
+													<template slot-scope="scope" v-if="!views">
 														<el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="3" :on-exceed="handleExceed" :file-list="fileList">
 															<el-button size="small" type="primary" v-if="!viewtitle">点击上传</el-button>
 														</el-upload>
@@ -217,7 +217,7 @@
 												</el-table-column>
 												<el-table-column fixed="right" label="操作" width="100" >
 													<template slot-scope="scope">
-														<el-button @click="deleteRow(scope.$index, dataInfo.WORK_NOTICE_CHECKBASISList)" type="text" size="small" v-if="!viewtitle">
+														<el-button @click="deleteRow(scope.$index,scope.row,'secondList')" type="text" size="small" v-if="!viewtitle">
 															<i class="icon-trash red"></i>
 														</el-button>
 													</template>
@@ -226,7 +226,7 @@
 										</el-tab-pane>
 										<el-tab-pane label="检验检测项目" name="second">
 											<div class="table-func table-funcb">
-												<el-button type="primary" size="mini" round @click="basisleadbtn2">
+												<el-button type="primary" size="mini" round @click="basisleadbtn2" :disabled="views">
 													<i class="icon-search"></i>
 													<font>选择</font>
 												</el-button>
@@ -238,7 +238,7 @@
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.P_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="请输入内容">
-															   <el-button slot="append" icon="el-icon-search"></el-button>
+															<el-button slot="append" icon="el-icon-search"></el-button>
 														</el-input>
 														<span v-show="!scope.row.isEditing">{{scope.row.P_NUM}}</span>
 														</el-form-item>
@@ -247,8 +247,8 @@
 												<el-table-column prop="P_DESC" label="检验检测项目内容" sortable width="200px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.P_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入内容"></el-input>
-														<span v-show="!scope.row.isEditing">{{scope.row.P_DESC}}</span>
+															<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入内容"></el-input>
+															<span v-show="!scope.row.isEditing">{{scope.row.P_DESC}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
@@ -276,15 +276,15 @@
 													</template>
 												</el-table-column> -->
 												<el-table-column label="附件" sortable width="120px">
-													<template slot-scope="scope">
+													<template slot-scope="scope" v-if="!views">
 														<el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="3" :on-exceed="handleExceed" :file-list="fileList">
-															<el-button size="small" type="primary">点击上传</el-button>
+															<el-button size="small" type="primary" >点击上传</el-button>
 														</el-upload>
 													</template>
 												</el-table-column>
 												<el-table-column fixed="right" label="操作" width="100" >
 													<template slot-scope="scope">
-														<el-button @click="deleteRow(scope.$index, dataInfo.WORK_NOTICE_CHECKPROJECTList)" type="text" size="small" v-if="!viewtitle">
+														<el-button @click="deleteRow(scope.$index,scope.row,' onthebasisList')" type="text" size="small" v-if="!viewtitle" :disabled="views">
 															<i class="icon-trash red"></i>
 														</el-button>
 													</template>
@@ -382,7 +382,7 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="2">
-									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px" :disabled="views">搜索</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -401,8 +401,8 @@
 				<el-pagination background class="pull-right" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 				<span slot="footer" class="dialog-footer">
-	    			<el-button type="primary" @click="dailogconfirm">确 定</el-button>
-	    			<el-button @click="dialogVisible = false">取 消</el-button>
+	    			<el-button type="primary" @click="dailogconfirm" :disabled="views">确 定</el-button>
+	    			<el-button @click="dialogVisible = false" :disabled="views">取 消</el-button>
 	  			</span>
 			</el-dialog>
 			<!-- 产品类别  -->
@@ -708,8 +708,40 @@
 				}
 			},
 			//删除行
-			deleteRow(index, rows) { //Table-操作列中的删除行
-				rows.splice(index, 1);
+			deleteRow(index, row, listName){
+				console.log(row);
+				var TableName = '';
+				console.log(listName);
+				if(listName =='secondList'){
+					TableName = 'WORK_NOTICE_CHECKBASIS';
+				}else{
+					TableName = 'WORK_NOTICE_CHECKPROJECT';
+				}
+				if(row.ID){
+					var url = this.basic_url + '/api-apps/app/workNot/' + TableName +'/' + row.ID;
+					this.$axios.delete(url, {}).then((res) => {
+						console.log(res);
+						if(res.data.resp_code == 0){
+							this.dataInfo[TableName+'List'].splice(index,1);
+							this.$message({
+								message: '删除成功',
+								type: 'success'
+							});
+						}else{
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'error'
+							});
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+				}else{
+					this.dataInfo[TableName+'List'].splice(index,1);
+				}
 			},
 			sizeChange(val) {
 				this.page.pageSize = val;
@@ -775,6 +807,7 @@
 				this.noedit = false;
 			},
 			detailgetData() {
+				console.log(123456);
 				var url = this.basic_url +'/api-apps/app/workNot/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					//依据对号控制
@@ -847,6 +880,9 @@
 							}
 							if(users.indexOf(this.username) != -1){
 								this.approval=true;
+								this.start=false;
+							}else{
+								this.approval=false;
 								this.start=false;
 							}
 						});
@@ -1116,6 +1152,7 @@
 								message:res.data.resp_msg,
 								type: 'success'
 							});
+							this.detailgetData();
 						var url = this.basic_url + '/api-apps/app/workNot/flow/Executors/'+this.dataid;
 						this.$axios.get(url, {}).then((res) => {
 								var resullt=res.data.datas;
@@ -1126,8 +1163,10 @@
 								if(users.indexOf(this.username) != -1){
 									this.approval=true;
 									this.start=false;
+								}else{
+									this.approval=false;
+									this.start=false;
 								}
-								this.detailgetData();
 						});
 							
 				    }
@@ -1153,9 +1192,19 @@
 											type: 'warning'
 										});
 								}else{
-									this.$refs.approvalChild.visible();
+									var url = this.basic_url + '/api-apps/app/workNot/flow/customFlowValidate/'+this.dataid;
+								this.$axios.get(url, {}).then((res) => {
+				    				if(res.data.resp_code == 1) {
+										this.$message({
+											message:res.data.resp_msg,
+											type: 'warning'
+										});
+									}else{
+									 	this.$refs.approvalChild.visible();
+									}
+								})
 								}
-		    		});
+		    				});
 		    		}
 				});
 			},

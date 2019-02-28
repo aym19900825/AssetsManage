@@ -42,7 +42,9 @@ const sample_disposal  = r => require.ensure([], () => r(require('@/components/s
 
 
 const workorders  = r => require.ensure([], () => r(require('@/components/testworkcheck/workorders')), 'workorders')//工作任务单
+const report_approve  = r => require.ensure([], () => r(require('@/components/testworkcheck/report_approve')), 'report_approve')//报告审批
 const useseal_management  = r => require.ensure([], () => r(require('@/components/testworkcheck/useseal_management')), 'useseal_management')//用印管理
+const quality_supervision  = r => require.ensure([], () => r(require('@/components/testworkcheck/quality_supervision')), 'quality_supervision')//质量监督抽查审批
 const reportarchiving  = r => require.ensure([], () => r(require('@/components/testworkcheck/reportarchiving')), 'reportarchiving')//报告归档
 const devices  = r => require.ensure([], () => r(require('@/components/devices')), 'devices')//设备管理
 const inspection_project  = r => require.ensure([], () => r(require('@/components/inspection_project')), 'inspection_project')//检验/检测项目管理
@@ -54,7 +56,8 @@ const reportfile  = r => require.ensure([], () => r(require('@/components/report
 
 const inspect_proxy  = r => require.ensure([], () => r(require('@/components/proxies/inspect_proxy')), 'inspect_proxy')//检验委托书
 const check_proxy  = r => require.ensure([], () => r(require('@/components/proxies/check_proxy')), 'check_proxy')//检测委托书
-const subc_agreement  = r => require.ensure([], () => r(require('@/components/proxies/subc_agreement')), 'subc_agreement')//分包协议
+const subc_agreement  = r => require.ensure([], () => r(require('@/components/proxies/subc_agreement')), 'subc_agreement')//承包方分包协议
+const distri_subc_agreement  = r => require.ensure([], () => r(require('@/components/proxies/distri_subc_agreement')), 'distri_subc_agreement')//分包方分包协议
 
 const equipment_classify  = r => require.ensure([], () => r(require('@/components/equipments/equipment_classify')), 'equipment_classify')//设备分类
 const instruments  = r => require.ensure([], () => r(require('@/components/equipments/instruments')), 'instruments')//仪器和计量器具
@@ -70,6 +73,10 @@ const doc_keyword  = r => require.ensure([], () => r(require('@/components/docum
 const doc_authorize  = r => require.ensure([], () => r(require('@/components/document/authorize')), 'doc_authorize')//关键字授权
 const doc_root  = r => require.ensure([], () => r(require('@/components/document/doc_root')), 'doc_root')//文件目录
 const doc_list  = r => require.ensure([], () => r(require('@/components/document/doc_list')), 'doc_list')//文件列表
+const job  = r => require.ensure([], () => r(require('@/components/job/job')), 'job')//任务管理
+const jobblog  = r => require.ensure([], () => r(require('@/components/job/jobblog')), 'jobblog')//调度日志
+const jobgroup  = r => require.ensure([], () => r(require('@/components/job/jobgroup')),'jobgroup')//执行器管理
+
 
 const approving  = r => require.ensure([], () => r(require('@/components/workflow/approving')), 'approving')//审批意见
 const flowhistory  = r => require.ensure([], () => r(require('@/components/workflow/flowhistory')), 'flowhistory')//流程历史
@@ -198,10 +205,15 @@ Vue.use(Router)
       name: 'flowmap',
       component: flowmap
     },
-    {//分包协议
+    {//承包方分包协议
       path: '/subc_agreement',
       name: 'subc_agreement',
       component: subc_agreement
+    },
+    {//分包方分包协议
+      path: '/distri_subc_agreement',
+      name: 'distri_subc_agreement',
+      component: distri_subc_agreement
     },
     {//设备分类
       path: '/equipment_classify',
@@ -312,10 +324,20 @@ Vue.use(Router)
       name: 'workorders',
       component: workorders
     },
+    {//报告审批
+      path: '/report_approve',
+      name: 'report_approve',
+      component: report_approve
+    },
     {//用印管理
       path: '/useseal_management',
       name: 'useseal_management',
       component: useseal_management
+    },
+    {//质量监督抽查审批
+      path: '/quality_supervision',
+      name: 'quality_supervision',
+      component: quality_supervision
     },
      {//报告归档
       path: '/reportarchiving',
@@ -397,6 +419,21 @@ Vue.use(Router)
       path: '/flow_process',
       name: 'flow_process',
       component: flow_process
+    },
+    {//任务管理
+      path: '/job',
+      name: 'job',
+      component: job
+    },
+    {//任务管理
+      path: '/jobblog',
+      name: 'jobblog',
+      component: jobblog
+    },
+    {//任务管理
+      path: '/jobgroup',
+      name: 'jobgroup',
+      component: jobgroup
     },
 ];
 

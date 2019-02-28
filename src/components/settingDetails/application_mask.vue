@@ -365,7 +365,6 @@
 								}
 							});
 							dataInfo.reportId = reportId.substring(0,reportId.length-1);
-//							this.dataInfo.reportId='1,2';
 							dataInfo.reports = arr;
 						} else {
 							dataInfo.reportId = '';

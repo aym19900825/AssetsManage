@@ -25,11 +25,17 @@
 							<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
 							    <i class="icon-trash"></i>删除
 							</button>
+							<button type="button" class="btn btn-red button-margin" @click="physicsDel">
+							    <i class="icon-trash"></i>物理删除
+							</button>			
 							<button type="button" class="btn btn-primarys button-margin" @click="importData">
 							    <i class="icon-upload-cloud"></i>导入
 							</button>
 							<button type="button" class="btn btn-primarys button-margin" @click="exportData">
 							    <i class="icon-download-cloud"></i>导出
+							</button>
+							<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
+							    <i class="icon-clipboard"></i>报表
 							</button>
 							<button type="button" class="btn btn-primarys button-margin" @click="Printing">
 							    <i class="icon-print"></i>打印
@@ -176,6 +182,8 @@
 		</div>
 		<!--右侧内容显示 End-->
 		<instrumentsmask :detailData="selUser[0]" ref="child" @request="requestData"></instrumentsmask>
+					<!--报表-->
+			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 	</div>
 </div>
 </template>
@@ -186,6 +194,7 @@
 	import navs_header from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import instrumentsmask from '../equipmentsDetails/instrument_mask.vue'
+	import reportmask from'../reportDetails/reportMask.vue'
 	export default {
 		name: 'instruments',
 		components: {
@@ -194,9 +203,11 @@
 			navs_left,
 			instrumentsmask,
 			tableControle,
+			reportmask
 		},
 		data() {
 			return {
+				reportData:{},//报表的数据
 				loading: false,
 				loadSign: true, //加载
 				commentArr: {},
@@ -463,6 +474,58 @@
 					});
 				}
 			},
+			// 删除
+			physicsDel() {
+				var selData = this.selUser;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请您选择要删除的数据',
+						type: 'warning'
+					});
+					return;
+				} else {						
+					var url = this.basic_url + '/api-apps/app/asset/deletes/physicsDel';
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					for(var i = 0; i < changeUser.length; i++) {
+						deleteid.push(changeUser[i].ID);
+					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+					var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {
+							params: data
+						}).then((res) => { //.delete 传数据方法
+							//resp_code == 0是后台返回的请求成功的信息
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
+							this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+						});
+					}).catch(() => {
+
+					});
+				}
+			},
 			// 导入
 			importData() {
 				
@@ -490,6 +553,11 @@
 			// 打印
 			Printing() {
 				
+			},
+						//报表
+			reportdata(){
+				this.reportData.app=this.productType;
+				this.$refs.reportChild.visible();
 			},
 			
 			//时间格式化  

@@ -89,7 +89,7 @@
 												<el-table-column prop="param" label="参数" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'params.'+scope.$index + '.param'" >
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.param" :disabled="noedit" placeholder="自动生成">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.param" :disabled="noedit">
 														</el-input>
 														<span v-else="v-else">{{scope.row.param}}</span>
 														</el-form-item>
@@ -99,14 +99,14 @@
 												<el-table-column prop="label" label="参数名称" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'params.'+scope.$index + '.label'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.label" placeholder="请输入委托方名称">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.label" placeholder="请输入参数名称">
 														</el-input>
 														<span v-else="v-else">{{scope.row.label}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="defaultVal" label="默认值" sortable width="120px">
+												<!--<el-table-column prop="defaultVal" label="默认值" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'params.'+scope.$index + '.defaultVal'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.defaultVal" placeholder="请输入分包方名称">
@@ -114,27 +114,26 @@
 														<span v-else="v-else">{{scope.row.defaultVal}}</span>
 														</el-form-item>
 													</template>
-												</el-table-column>
+												</el-table-column>-->
 
 												<el-table-column prop="required" label="必填" sortable width="180px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'params.'+scope.$index + '.required'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.required" placeholder="请输入">
-															</el-input>
-														<span v-else="v-else">{{scope.row.required}}</span>
-														</el-form-item>
+												<el-form-item :prop="'params.'+scope.$index + '.required'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+													<el-select v-if="scope.row.isEditing" v-model="scope.row.required" filterable allow-create default-first-option placeholder="请选择">
+										    <el-option v-for="item in options" :key="item.value" :value="item.value" :label="item.label"></el-option>
+										    		</el-select>
+														<span v-else="v-else">{{scope.row.requiredDesc}}</span>
+												</el-form-item>
 													</template>
 												</el-table-column>
 
 												<el-table-column prop="type" label="类型" sortable width="220px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'params.'+scope.$index + '.type'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-														<!--<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.type" placeholder="请输入">
-														</el-input>-->
 														<el-select v-if="scope.row.isEditing" v-model="scope.row.type" filterable allow-create default-first-option placeholder="请选择">
 										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
-										</el-select>
-														<span v-else="v-else">{{scope.row.type}}</span>
+														</el-select>
+														<span v-else="v-else">{{scope.row.typeDesc}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
@@ -245,6 +244,13 @@
 				},
 				dataid:'',//修改和查看带过的id
 				selectData:[],
+				options: [{
+		          value: '1',
+		          label: '是'
+		        }, {
+		          value: '0',
+		          label: '否'
+		        }]
 			};
 		},
 		methods: {
@@ -305,7 +311,6 @@
 			//刪除新建行
 			deleteRow(index,rows) {//Table-操作列中的删除行
 				rows.splice(index,1);
-
 			},
 			//点击按钮显示弹窗
 			visible() {
@@ -334,7 +339,6 @@
 			//
 			detailgetData() {
 				var url = this.basic_url + '/api-report/report/' + this.dataid;
-//			var url = this.basic_url +'/api-apps/app/inspectPro/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					for(var n = 0;n<res.data.params.length;n++){
 						res.data.params[n].isEditing = false;
@@ -485,6 +489,7 @@
 			getType(){
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=report_param_type';
 				this.$axios.get(url, {}).then((res) => {
+					console.log(111);
 					console.log(res);
 					this.selectData = res.data;
 				}).catch(error => {

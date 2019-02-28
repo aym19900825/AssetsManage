@@ -24,6 +24,9 @@
 							<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
 							    <i class="icon-trash"></i>删除
 							</button>
+							<button type="button" class="btn btn-red button-margin" @click="physicsDel">
+							    <i class="icon-trash"></i>物理删除
+							</button>
 							<el-dropdown size="small" split-button type="primary" style="margin-top:1px;">
     								导入
 								<el-dropdown-menu slot="dropdown">
@@ -54,7 +57,7 @@
 							    <i class="icon-print"></i>打印
 							</button>
 							<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
-							    <i class="icon-download-cloud"></i>报表
+							    <i class="icon-clipboard"></i>报表
 							</button>
 							<button type="button" class="btn btn-primarys button-margin" @click="Configuration">
 							    <i class="icon-cpu"></i>配置关系
@@ -112,9 +115,10 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格 Begin-->
-							<el-table :header-cell-style="rowClass" :data="categoryList" v-loading="loading"  element-loading-text="拼命加载中"
-    element-loading-spinner="el-icon-loading"
-    element-loading-background="rgba(0, 0, 0, 0.6)" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+
+							<el-table ref="table" :header-cell-style="rowClass" :data="categoryList" v-loading="loading"  element-loading-text="拼命加载中"
+    								element-loading-spinner="el-icon-loading"
+    								element-loading-background="rgba(F, F, F, 0.6)" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="编码" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('编码')!=-1">
@@ -169,10 +173,11 @@
 			navs_header,
 			categorymask,
 			tableControle,
-			reportmask
+			reportmask,
 		},
 		data() {
 			return {
+				reportData:{},//报表的数据
 				scroll_old:0,
 				// up2down:'down',
 				reportData:{},//报表的数据
@@ -277,12 +282,12 @@
 						type: type
 					},
 				}).then((res) => {
-					console.log(res.data);
 					this.selectData = res.data;
 				});
 			},
 			//表格滚动加载
 			loadMore() {
+				//console.log(this.$refs.table.$el.offsetTop)
 				let up2down = sessionStorage.getItem('up2down');
 				if(this.loadSign) {					
 					if(up2down=='down'){
@@ -291,16 +296,14 @@
 							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
 							return false;
 						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
 						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-							$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
 							sessionStorage.setItem('toBtm','true');
 						}
 					}else{
 						sessionStorage.setItem('toBtm','false');
 						this.page.currentPage--;
-						if($('.el-table__body-wrapper table').find('.filing').length>0){
-							$('.el-table__body-wrapper table').find('.filing').remove();
-						}
 						if(this.page.currentPage < 1) {
 							this.page.currentPage=1
 							return false;
@@ -308,9 +311,9 @@
 					}
 					this.loadSign = false;
 					setTimeout(() => {
-						this.loadSign = true
+						this.loadSign = true;
 					}, 1000)
-					this.requestData()
+					this.requestData();
 				}
 			},
 			tableControle(data) {
@@ -319,6 +322,7 @@
 			sizeChange(val) {
 				this.page.pageSize = val;
 				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
 					sessionStorage.setItem('toBtm','true');
 				}else{
 					sessionStorage.setItem('toBtm','false');
@@ -328,6 +332,7 @@
 			currentChange(val) {
 				this.page.currentPage = val;
 				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
 					sessionStorage.setItem('toBtm','true');
 				}else{
 					sessionStorage.setItem('toBtm','false');
@@ -367,7 +372,6 @@
 				if(this.$refs['CATEGORY'] !== undefined) {
 					this.$refs['CATEGORY'].resetFields();
 				}
-
 			},
 			//添加类别
 			openAddMgr() {
@@ -458,6 +462,58 @@
 					});
 				}
 			},
+			//物理删除
+			physicsDel(){
+				var selData = this.selUser;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请您选择要删除的数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					var url = this.basic_url + '/api-apps/app/productType/physicsDel';
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					for(var i = 0; i < changeUser.length; i++) {
+						deleteid.push(changeUser[i].ID);
+					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+					var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {
+							params: data
+						}).then((res) => { //.delete 传数据方法
+							//resp_code == 0是后台返回的请求成功的信息
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
+							this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+						});
+					}).catch(() => {
+
+					});
+				}
+			},
 			handleSuccess(response, file, fileList){
 				console.log(response);
 				console.log(file);
@@ -470,26 +526,25 @@
           	
 			// 导入
 			download() {
-				console.log(1234);
 				var url = this.basic_url + '/api-apps/app/productType/importExcTemplete?access_token='+sessionStorage.getItem('access_token');
-           var xhr = new XMLHttpRequest();
-            xhr.open('POST', url, true);
-            xhr.responseType = "blob";
-            xhr.setRequestHeader("client_type", "DESKTOP_WEB");
-            xhr.onload = function() {
-                if (this.status == 200) {
-                    var blob = this.response;
-                    var objecturl = URL.createObjectURL(blob);
-                    window.location.href = objecturl;
-                }
-            }
-            xhr.send();
+				var xhr = new XMLHttpRequest();
+					xhr.open('POST', url, true);
+					xhr.responseType = "blob";
+					xhr.setRequestHeader("client_type", "DESKTOP_WEB");
+					xhr.onload = function() {
+						if (this.status == 200) {
+							var blob = this.response;
+							var objecturl = URL.createObjectURL(blob);
+							window.location.href = objecturl;
+						}
+					}
+					xhr.send();
 			},
 			
 			// 导出
 			exportData() {
            		var url = this.basic_url + '/api-apps/app/productType/exportExc?access_token='+sessionStorage.getItem('access_token');
-          		 var xhr = new XMLHttpRequest();
+          		var xhr = new XMLHttpRequest();
             	xhr.open('POST', url, true);
             	xhr.responseType = "blob";
             	xhr.setRequestHeader("client_type", "DESKTOP_WEB");
@@ -559,6 +614,9 @@
 					}
 					this.categoryList = res.data.data;
 					this.loading = false;
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}
 				}).catch((wrong) => {
 					this.$message({
 						message: '网络错误，请重试1',
@@ -577,32 +635,7 @@
 		},
 		mounted() {
 			this.requestData();
-			this.getCompany();			
-//			const selectWrap = document.querySelector('.el-table__body-wrapper')
-//			var that=this
-//			selectWrap.addEventListener('scroll', function(e){
-//				//	console.log(e);
-//				console.log(this.scrollHeight);// 滚动区域
-//				console.log(this.scrollTop);// div 到头部的距离
-//				console.log(this.clientHeight);//屏幕高度
-//				let scrollHeight = this.scrollHeight.scrollHeight; // 滚动条的总高度
-//				console.log(document.documentElement.clientHeight);// 滚动条的总高度
-//			    var scrollDistance = this.scrollHeight - this.scrollTop - this.clientHeight
-//			    let sign = 1;
-//				console.log(scrollDistance);
-//		      	if(scrollDistance <= sign){
-//		      		that.loadMore('down')
-//		      		this.scrollTop = 2;
-//		      	}else if(this.scrollTop < 1){
-//		      		that.loadMore('up')
-//		      		this.scrollTop = 2
-//		      	}else{
-//		      		return false;
-//		      	}
-//
-//			}, true);
-			
-		 	
+			this.getCompany();
 		}
 	}
 </script>

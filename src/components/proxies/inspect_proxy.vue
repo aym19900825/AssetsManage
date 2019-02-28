@@ -24,16 +24,22 @@
 								<button type="button" class="btn btn-red button-margin"  @click="delinfo">
 								    <i class="icon-trash"></i>删除
 								</button>
+								<button type="button" class="btn btn-red button-margin" @click="physicsDel">
+							    <i class="icon-trash"></i>物理删除
+							</button>			
 								<button type="button" class="btn btn-primarys button-margin">
 							    	<i class="icon-upload-cloud"></i>导入
 								</button>
 								<button type="button" class="btn btn-primarys button-margin">
 							    	<i class="icon-download-cloud"></i>导出
 								</button>
+								<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
+							    <i class="icon-clipboard"></i>报表
+							</button>
 								<button type="button" class="btn btn-primarys button-margin">
 							    	<i class="icon-print"></i>打印
 								</button>
-								<button type="button" class="btn btn-orange button-margin">
+								<button type="button" class="btn btn-orange button-margin" @click="breakoff">
 							    	<i class="icon-alert-triangle"></i>中止
 								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
@@ -196,6 +202,8 @@
 		</div>
 		<inspectmask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></inspectmask>
 		<!--右侧内容显示 End-->
+					<!--报表-->
+		<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 	</div>
 </template>
 <script>
@@ -204,6 +212,7 @@
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_header from '../common/nav_tabs.vue'
 	import inspectmask from '../proxiesDetails/inspect_proxyMask.vue'
+	import reportmask from'../reportDetails/reportMask.vue'
 
 	export default {
 		name: 'user_management',
@@ -212,6 +221,7 @@
 			'navs_left': navs_left,
 			'navs_header': navs_header,
 			'inspectmask': inspectmask,
+			reportmask
 		},
 //		created() {
 //  		this.getRouterData()
@@ -219,6 +229,7 @@
 
 		data() {
 			return {
+				reportData:{},//报表的数据
 				loading: false,
 				basic_url: Config.dev_url,
 				value: '',
@@ -366,7 +377,7 @@
 			    return 'text-align:center'
 			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
-				return (<span><i class={data.iconClass}></i><span>{node.label}</span></span>)
+				return (<span><i class={data.iconClass}></i><span  title={data.lable}>{data.lable}</span></span>)
 			},
 			// 点击节点
 			nodeClick: function(m) {
@@ -392,16 +403,37 @@
 
 			//滚动加载更多
 			loadMore() {
-				if(this.loadSign) {
-					this.loadSign = false
-					this.page.currentPage++
+				// if(this.loadSign) {
+				// 	this.loadSign = false
+				// 	this.page.currentPage++
+				// 		if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+				// 			return
+				// 		}
+				// 	setTimeout(() => {
+				// 		this.loadSign = true
+				// 	}, 1000)
+				// 	this.requestData();
+				// }
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++
 						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							return
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
 						}
+					}else{
+						this.page.currentPage--
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1
+							return false;
+						}
+					}
+					this.loadSign = false;
 					setTimeout(() => {
 						this.loadSign = true
 					}, 1000)
-					this.requestData();
+					this.requestData()
 				}
 			},
 			sizeChange(val) {
@@ -489,6 +521,44 @@
 			 view(id) {
 				this.$refs.child.view(id);
 			},
+			//中止
+			breakoff(){
+				if(this.selUser.length == 0) {
+					this.$message({
+						message: '请您选择要修中止的数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selUser.length > 1) {
+					this.$message({
+						message: '不可同时中止多个数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					var url = this.basic_url + '/api-apps/app/inspectPro/operate/stop?ID='+this.selUser[0].ID;
+					this.$axios.get(url, {
+
+					}).then((res) => {
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '操作成功',
+								type: 'success'
+							});
+						} else {
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'warning'
+							});
+						}
+					}).catch((wrong) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					})
+				}
+			},
 			getRouterData() {
       		// 只是改了query，其他都不变
 				  this.id = this.$route.query.bizId;
@@ -499,6 +569,11 @@
 				this.search = !this.search;
 				this.down = !this.down,
 					this.up = !this.up
+			},
+						//报表
+			reportdata(){
+				this.reportData.app=this.productType;
+				this.$refs.reportChild.visible();
 			},
 //			// 删除
 			delinfo() {
@@ -511,6 +586,65 @@
 					return;
 				} else {
 					var url = this.basic_url + '/api-apps/app/inspectPro/deletes';
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					for(var i = 0; i < changeUser.length; i++) {
+						if(changeUser[i].STATE!=1){
+						 	this.$message({
+								message: '您的数据中有已启动的流程，所以能删除',
+								type: 'error'
+							});
+							return;
+						}else{
+							deleteid.push(changeUser[i].ID);
+						}
+					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+					var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {
+							params: data
+						}).then((res) => { //.delete 传数据方法
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
+							this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+						});
+					}).catch(() => {
+
+					});
+				}
+			},
+					// 删除
+			physicsDel() {
+				var selData = this.selUser;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请您选择要删除的数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					var url = this.basic_url + '/api-apps/app/inspectPro/deletes/physicsDel';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -583,7 +717,10 @@
 					PROXYNUM: this.searchList.PROXYNUM,
 					COMPDATE: this.searchList.COMPDATE,
 					ENTERBY: this.searchList.ENTERBY,
-					STATUS: this.searchList.STATUS
+					STATUS: this.searchList.STATUS,
+					P_NUM: this.searchList.P_NUM,
+					PRO_NUM: this.searchList.PRO_NUM,
+					DEPTID: this.searchList.DEPTID
 				}
 				var url = this.basic_url + '/api-apps/app/inspectPro';
 				this.$axios.get(url, {
@@ -623,33 +760,51 @@
 			//机构树
 			getKey() {
 				let that = this;
-				var url = this.basic_url + '/api-user/depts/tree';
+				// var url = this.basic_url + '/api-user/depts/tree';
+				var url = this.basic_url + '/api-apps/appCustom/tree';
 				this.$axios.get(url, {}).then((res) => {
-					this.resourceData = res.data;
+					this.resourceData = res.data.datas;
+					// this.resourceData = res.data;
 					this.treeData = this.transformTree(this.resourceData);
+					console.log(this.treeData);
 				});
 			},
 			transformTree(data) {
 				for(var i = 0; i < data.length; i++) {
-					data[i].name = data[i].fullname;
-					if(!data[i].pid || $.isArray(data[i].subDepts)) {
+					data[i].name = data[i].fullname || data[i].TYPE || data[i].pName || data[i].PRO_NAME;
+					data[i].lable = data[i].fullname || data[i].TYPE || data[i].pName || data[i].PRO_NAME;
+					if($.isArray(data[i].children)) {
 						data[i].iconClass = 'icon-file-normal';
 					} else {
 						data[i].iconClass = 'icon-file-text';
 					}
-					if($.isArray(data[i].subDepts)) {
-						data[i].children = this.transformTree(data[i].subDepts);
+					if($.isArray(data[i].children)) {
+						data[i].subDepts = this.transformTree(data[i].children);
 					}
 				}
 				return data;
 			},
 			handleNodeClick(data) {
-				if(data.type == '1') {
-					this.companyId = data.id;
-					this.deptId = '';
-				} else {
-					this.deptId = data.id;
-					this.companyId = '';
+				if(!!data.fullname) {
+					this.searchList.P_NUM = '';
+					this.searchList.PRO_NUM = '';
+					this.searchList.DEPTID = data.id;
+					this.page.currentPage = 1;
+				}else if(!!data.TYPE){
+					this.searchList.P_NUM = data.NUM;
+					this.searchList.PRO_NUM = '';
+					this.searchList.DEPTID = data.DEPTID;
+					this.page.currentPage = 1;
+				}else if(!!data.PRO_NUM){
+					this.searchList.P_NUM = data.NUM;
+					this.searchList.PRO_NUM = data.PRO_NUM;
+					this.searchList.DEPTID = data.DEPTID;
+					this.page.currentPage = 1;
+				}else{
+					this.searchList.P_NUM = '';
+					this.searchList.PRO_NUM = '';
+					this.searchList.DEPTID = '';
+					this.page.currentPage = 1;
 				}
 				this.requestData();
 			},

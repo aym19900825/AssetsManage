@@ -42,7 +42,7 @@
 										</el-col>
 									</el-row>
 								</el-collapse-item>
-								<el-collapse-item title="原始数据模板单元信息" name="2">
+								<!-- <el-collapse-item title="原始数据模板单元信息" name="2">
 									<div class="table-func" v-show="noviews">
 										<el-button type="success" size="mini" round @click="addfield">
 											<i class="icon-add"></i>
@@ -143,7 +143,7 @@
 											</template>
 										</el-table-column>
 									</el-table>
-								</el-collapse-item>
+								</el-collapse-item> -->
 								<el-collapse-item title="文件" name="3">
 									<doc-table ref="docTable" :docParm = "docParm"></doc-table>
 								</el-collapse-item>
@@ -306,7 +306,7 @@
 					this.$axios.delete(url, {}).then((res) => {
 						console.log(res);
 						if(res.data.resp_code == 0){
-							this.testing_projectForm[TableName+'List'].splice(index,1);
+							this.CATEGORY[TableName+'List'].splice(index,1);
 							this.$message({
 								message: '删除成功',
 								type: 'success'
@@ -324,7 +324,7 @@
 						});
 					});
 				}else{
-					this.testing_projectForm[TableName+'List'].splice(index,1);
+					this.CATEGORY[TableName+'List'].splice(index,1);
 				}
 			},
 			//获取导入表格勾选信息
@@ -411,27 +411,24 @@
 				var _this = this;
 				var url = this.basic_url + '/api-apps/app/rawDataTem/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(23333);
-					console.log(res.data);
 					for(var i=0;i<res.data.RAW_DATA_TEMPATE_DETAILList.length;i++){
 						res.data.RAW_DATA_TEMPATE_DETAILList[i].isEditing = false;
 					}
 					this.CATEGORY = res.data;
-
+					setTimeout(function(){
+						_this.docParm.model = 'edit';
+						_this.docParm.appname = '检验检测项目_原始数据模板';
+						_this.docParm.recordid = _this.CATEGORY.ID;
+						_this.docParm.appid = 17;
+						_this.$refs.docTable.getData();
+					},100);
+					this.show = true;
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
 						type: 'error'
 					})
 				});
-				setTimeout(function(){
-					_this.docParm.model = 'edit';
-					_this.docParm.appname = '检验检测项目_原始数据模板';
-					_this.docParm.recordid = _this.CATEGORY.ID;
-					_this.docParm.appid = 17;
-					_this.$refs.docTable.getData();
-				},100);
-				this.show = true;
 			},
 			//这是查看
 			view() {
@@ -518,7 +515,16 @@
 						});
 					}
 					if(valid) {
+						var len = this.$refs.docTable.getFilelen();
+						if(len==0){
+							this.$message({
+								message: '请先上传模版文件，再保存！',
+								type: 'error'
+							});
+							return;
+						}
 						this.CATEGORY.STATUS = ((this.CATEGORY.STATUS == "1" || this.CATEGORY.STATUS == '活动') ? '1' : '0');
+						console.log(this.CATEGORY);
 						var url = this.basic_url + '/api-apps/app/rawDataTem/saveOrUpdate';
 						this.$axios.post(url, this.CATEGORY).then((res) => {
 							if(res.data.resp_code == 0) {

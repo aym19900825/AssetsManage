@@ -24,6 +24,9 @@
 								<button type="button" class="btn btn-red button-margin" @click="del">
 								    <i class="icon-trash"></i>删除
 								</button>
+									<button type="button" class="btn btn-red button-margin" @click="physicsDel">
+							    <i class="icon-trash"></i>物理删除
+							</button>			
 								<!-- <button type="button" class="btn btn-primarys button-margin" @click="importData">
 								    <i class="icon-upload-cloud"></i>导入
 								</button>-->
@@ -33,6 +36,9 @@
 								<!--<button type="button" class="btn btn-primarys button-margin" @click="Printing">
 								    <i class="icon-print"></i>打印
 								</button> -->
+							<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
+							    <i class="icon-clipboard"></i>报表
+							</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 						    		<i class="icon-search"></i>高级查询
 						    		<i class="icon-arrow1-down" v-show="down"></i>
@@ -110,6 +116,10 @@
 			</div>
 		</div>
 		<catmask  ref="child" @request="requestData" :detailData="selMenu[0]"></catmask>
+					<!--报表-->
+			<reportmask :reportData="reportData" ref="reportChild" 
+
+></reportmask>
 		<!--右侧内容显示 End-->
 	</div>
 	</div>
@@ -121,6 +131,7 @@
 	import navs_header from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import catmask from'./cat_mask.vue'
+	import reportmask from'../reportDetails/reportMask.vue'
 	export default {
 		name: 'samples',//接样
 		components: {
@@ -129,9 +140,11 @@
 			navs_left,
 			tableControle,
 			catmask,
+			reportmask,
 		},
 		data() {
 			return {
+				reportData:{},//报表的数据
 				loading: false,
 				basic_url: Config.dev_url,
 				ismin: true,
@@ -207,6 +220,12 @@
 			};
 			this.requestData();
 			},
+			//报表
+			reportdata(){
+				this.reportData.app=this.productType;
+				this.$refs.reportChild.visible();
+			},
+			
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
@@ -278,6 +297,60 @@
 						return;
 					}
 					var url = this.basic_url + '/api-apps/app/tbKeyword2/deletes';
+					var changeMenu = selData;
+					var deleteid = [];
+					for (var i = 0; i < changeMenu.length; i++) {
+						deleteid.push(changeMenu[i].id);
+					}
+                    var data = {
+						ids: deleteid.toString(',')
+					}
+					this.$confirm('确定删除数据吗？', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                    }).then(({ value }) => {
+                        this.$axios.delete(url, {params: data}).then((res) => {//.delete 传数据方法
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
+							this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+						});
+                    }).catch(() => {});
+				}
+			},
+			// 物理删除
+			physicsDel() {
+				var selData = this.selMenu;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请您选择要删除的数据',
+						type: 'warning'
+					});
+					return;
+				}else if(selData.length > 1){
+					this.$message({
+						message: '不可同时删除多条数据',
+						type: 'error'
+					});
+					return;
+				}else {
+					var sonLength = this.getKeyWords(selData[0].id);
+					if(sonLength>0){
+						this.$message({
+							message: '请先删除此类别下的关键字后再删除此数据',
+							type: 'error'
+						});
+						return;
+					}
+					var url = this.basic_url + '/api-apps/app/tbKeyword2/deletes/physicsDel';
 					var changeMenu = selData;
 					var deleteid = [];
 					for (var i = 0; i < changeMenu.length; i++) {

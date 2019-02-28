@@ -116,10 +116,36 @@
 								
 								<!-- 年度计划列表 Begin-->
 								<el-collapse-item title="年度计划列表" name="2" class="ml30">
-									<div class="table-func">
-										<el-button type="primary" size="mini" round v-show="!viewtitle">
+									<div style="position: absolute;top: 10px;right: 40px;">
+									<!-- <div> -->
+										<!-- <el-button type="primary" size="mini" round v-show="!viewtitle">
 											<i class="icon-upload-cloud"></i>
 											<font>导入</font>
+										</el-button> -->
+										<el-dropdown size="small" split-button type="primary" style="margin-top:1px;">
+    										导入
+											<el-dropdown-menu slot="dropdown">
+												<el-dropdown-item>
+													<div @click="download">下载模版</div>
+												</el-dropdown-item>
+												
+												<el-dropdown-item>
+													<el-upload
+													ref="upload"
+													class="upload"
+													:action="uploadUrl"
+													:limit=1
+													multiple
+													method:="post"
+													:file-list="fileList">
+														<div>上传</div>
+													</el-upload>
+												</el-dropdown-item>
+											</el-dropdown-menu>
+										</el-dropdown>
+										<el-button type="primary" size="mini" round v-show="!viewtitle" @click="exportData" style="margin-left: 10px;">
+											<i class="icon-upload-cloud"></i>
+											<font>导出</font>
 										</el-button>
 										<el-button type="success" size="mini" round  @click="addfield1" v-show="!viewtitle">
 											<i class="icon-add"></i>
@@ -150,9 +176,9 @@
 										</el-table-column>
 									    <el-table-column prop="MODEL" label="规格型号" sortable width="120px">
 									      <template slot-scope="scope">
-													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入内容">
-													</el-input>
-													<span v-else="v-else">{{scope.row.MODEL}}</span>
+												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入内容">
+												</el-input>
+												<span v-else="v-else">{{scope.row.MODEL}}</span>
 										  </template>
 									    </el-table-column>
 										<el-table-column prop="V_NAME" label="生产企业名称" sortable width="120px">
@@ -187,7 +213,6 @@
 									        <el-button type="primary" circle title="下达任务通知书" @click="assign(scope.row)" size="small" v-if="assignshow">
 									          <i class="icon-send"></i>
 									        </el-button>
-
 									      </template>
 									    </el-table-column>
 									</el-table>
@@ -475,7 +500,7 @@
 				<!-- 第二层弹出的表格 End -->
 				<div slot="footer" class="el-dialog__footer">
 			       <el-button type="primary" @click="addbasis">确 定</el-button>
-			       <el-button @click="dialogVisible = false">取 消</el-button>
+			       <el-button @click="resetBasis">取 消</el-button>
 			    </div>
 			</el-dialog>
 			<!-- 检测依据弹出框 End -->
@@ -559,7 +584,7 @@
 				<!-- 表格 End-->
 				<span slot="footer" class="el-dialog__footer">
 			       <el-button type="primary" @click="addbasis2">确 定</el-button>
-			       <el-button @click="dialogVisible2 = false">取 消</el-button>
+			       <el-button @click="resetbasis2">取 消</el-button>
 			    </span>
 			</el-dialog>
 			<!-- 检测项目与要求 End -->
@@ -641,8 +666,8 @@
 					:total="page.totalCount">
 				</el-pagination>
 				<div slot="footer" class="el-dialog__footer">
-			       <el-button @click="diaVisCustom = false">取 消</el-button>
-			       <el-button type="primary" @click="adddeptname">确 定</el-button>
+					<el-button type="primary" @click="adddeptname">确 定</el-button>
+			       	<el-button @click="diaVisCustom = false">取 消</el-button>
 			    </div>
 			</el-dialog>
 			<!-- 生产企业名称、受检企业名称 End -->
@@ -876,6 +901,49 @@
 			};
 		},
 		methods: {
+			download() {
+				var url = this.basic_url + '/api-apps/app/worlplanline/importExcTemplete?access_token='+sessionStorage.getItem('access_token');
+				var xhr = new XMLHttpRequest();
+					xhr.open('POST', url, true);
+					xhr.responseType = "blob";
+					xhr.setRequestHeader("client_type", "DESKTOP_WEB");
+					xhr.onload = function() {
+						if (this.status == 200) {
+							var blob = this.response;
+							var objecturl = URL.createObjectURL(blob);
+							window.location.href = objecturl;
+						}
+					}
+					xhr.send();
+			},
+			uploadUrl(){
+                var url = this.basic_url +'/api-apps/app/worlplanline/importExc?access_token='+sessionStorage.getItem('access_token');
+                return url;
+            },
+			exportData() {
+           		var url = this.basic_url + '/api-apps/app/worlplanline/exportExc?access_token='+sessionStorage.getItem('access_token');
+          		 var xhr = new XMLHttpRequest();
+            	xhr.open('POST', url, true);
+            	xhr.responseType = "blob";
+            	xhr.setRequestHeader("client_type", "DESKTOP_WEB");
+            	xhr.onload = function() {
+                	if (this.status == 200) {
+						var filename = "worlplanline.xls";
+						var blob = this.response;
+						var link = document.createElement('a');
+						var objecturl = URL.createObjectURL(blob);
+						link.href = objecturl;
+						link.download = filename;
+						link.click();
+                	}
+            	}
+            	xhr.send();
+			},
+			resetBasis(){
+				this.dialogVisible = false;
+				this.resetbtn();
+				this.standardList = [];
+			},
 			//提出单位
 			getCompany() {
 				var type = "2";
@@ -1043,7 +1111,7 @@
 					//编辑
 					this.editPlan = row;
 					this.proTestList = row.WORLPLANLINE_PROJECTList;
-						this.basisList = row.WORLPLANLINE_BASISList;
+					this.basisList = row.WORLPLANLINE_BASISList;
 				}else{
 					this.editPlan = {};
 					this.proTestList = [];
@@ -1100,14 +1168,19 @@
 						this.basisList.push(JSON.parse(JSON.stringify(selData[i])));
 						// basisnum.push(changeUser[i].S_NUM);//选择的数据的编号
 					}
-					this.dialogVisible = false;
+					this.resetBasis();
 					this.$message({
 						message: '添加成功',
 						type: 'success'
 					});
 					return;
 				}
-            },
+			},
+			resetbasis2(){
+				this.projectList = [];
+				this.resetbtn();
+				this.dialogVisible2 = false;
+			},
             addbasis2(){
             	var selData = this.selUser;
 				if(selData.length == 0) {
@@ -1133,7 +1206,7 @@
 							1;
 						this.proTestList.push(JSON.parse(JSON.stringify(selData[i])));
 					}
-					this.dialogVisible2 = false;
+					this.resetbasis2();
 					this.$message({
 						message: '添加成功',
 						type: 'success'
@@ -1220,11 +1293,13 @@
 		    },
             //检测依据弹出框
             basisleadbtn(){
+				this.page.currentPage = 1;
 				this.requestBasis();
 				this.requestnum = '4';
 				this.dialogVisible = true;
 			},
 			basisleadbtn2(){
+				this.page.currentPage = 1;
 				this.requestProject();
 				this.requestnum = '5';
 				this.dialogVisible2 = true;
@@ -1418,7 +1493,7 @@
 					};
 					// this.worlplanlist.unshift(obj);
 					this.worlplanlist.push(obj);
-					this.editPlan = this.worlplanlist[0];
+					this.editPlan = this.worlplanlist[this.worlplanlist.length-1];
 					this.basisList = [];
 					this.proTestList = [];
 					this.isEditList = true;
@@ -1560,22 +1635,21 @@
 					for(var i = 0; i<res.data.WORLPLANLINEList.length; i++){
 							res.data.WORLPLANLINEList[i].isEditing = false;
 					}
-					console.log(3333344444);
-					console.log(res.data);
 					res.data.PROP_UNIT = Number(res.data.PROP_UNIT);
-					console.log('=======================');
-					console.log(typeof(res.data.PROP_UNIT));
 					this.WORKPLAN = res.data;
-					// for(var j=0;j<this.selectData.length;j++){
-					// 	if(this.WORKPLAN.PROP_UNIT == this.selectData[j].id){
-					// 		this.WORKPLAN.PROP_UNITDesc = this.selectData[j].fullname
-					// 	}
-					// }
 					this.worlplanlist = res.data.WORLPLANLINEList;
 					var worlplanlist = res.data.WORLPLANLINEList;
 					for(var i=0, len=worlplanlist.length; i<len; i++){
 						worlplanlist[i].isEditing = false;
 						worlplanlist[i].frontId = this.frontId++;
+					}
+					if(res.data.WORLPLANLINEList.length > 0){
+						res.data.WORLPLANLINEList[0].isEditing = true;
+						this.basisList = res.data.WORLPLANLINEList[0].WORLPLANLINE_BASISList;
+						this.proTestList = res.data.WORLPLANLINEList[0].WORLPLANLINE_PROJECTList;
+					}else{
+						this.basisList = [];
+						this.proTestList = [];
 					}
 					this.basisList = res.data.WORLPLANLINEList.length > 0 ? res.data.WORLPLANLINEList[0].WORLPLANLINE_BASISList : [];
 					this.proTestList = res.data.WORLPLANLINEList.length > 0 ? res.data.WORLPLANLINEList[0].WORLPLANLINE_PROJECTList : [];
@@ -1610,8 +1684,6 @@
 				}).then((res) => {
 					this.selectData = res.data;
 				});
-				console.log(233333333);
-				console.log(this.WORKPLAN);
 				this.viewtitle = false;
 				this.addtitle = false;
 				this.modifytitle = true;

@@ -14,9 +14,9 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+								<!-- <button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加
-                      			 </button>
+                      			 </button> -->
 								<button type="button" class="btn btn-blue button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改
 								</button>
@@ -26,13 +26,16 @@
 								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-inventory-line-callout"></i>导出
 								</button>
+								<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
+							    	<i class="icon-clipboard"></i>报表
+								</button>
 								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-send"></i>发布
 								</button>
 								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-close1"></i>取消
 								</button>
-								<button type="button" class="btn btn-primarys button-margin">
+								<button type="button" class="btn btn-primarys button-margin" @click="tasklist">
 								    <i class="icon-send"></i>生成子任务单
 								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
@@ -136,56 +139,7 @@
 						</el-col>
 						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
-							<el-table :header-cell-style="rowClass" 
-									  :data="userList" 
-									  border 
-									  stripe 
-									  :height="fullHeight" 
-									  style="width: 100%;" 
-									  :default-sort="{prop:'userList', order: 'descending'}" 
-									  @selection-change="SelChange" 
-									  v-loadmore="loadMore"
-									  v-loading="loading"  
-									  element-loading-text="加载中…"
-    								  element-loading-spinner="el-icon-loading"
-    								  element-loading-background="rgba(255, 255, 255, 0.9)">
-								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
-								</el-table-column>
-								<el-table-column label="工作任务单编号" sortable width="140px" prop="WONUM" v-if="this.checkedName.indexOf('工作任务单编号')!=-1">
-									<template slot-scope="scope">
-									<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.WONUM}}
-										</p>
-									</template>	
-								</el-table-column>
-								<el-table-column label="状态" sortable width="100px" prop="STATUS" v-if="this.checkedName.indexOf('状态')!=-1">
-								</el-table-column>
-								<el-table-column label="样品名称" sortable width="180px" prop="ITEM_NAME" v-if="this.checkedName.indexOf('样品名称')!=-1">
-								</el-table-column>
-								<el-table-column label="样品型号" sortable width="180px" prop="ITEM_MODEL" v-if="this.checkedName.indexOf('样品型号')!=-1">
-								</el-table-column>
-								<el-table-column label="样品状态" sortable  width="100px" prop="ITEM_STATUS" v-if="this.checkedName.indexOf('样品状态')!=-1">
-								</el-table-column>
-								<el-table-column label="抽样方案/判定依据" sortable width="200px" prop="CHECK_BASIS" v-if="this.checkedName.indexOf('抽样方案/判定依据')!=-1">
-								</el-table-column>
-								<el-table-column label="完成日期" sortable  width="100px" :formatter="dateFormat" prop="COMPLETE_DATE" v-if="this.checkedName.indexOf('完成日期')!=-1">
-								</el-table-column>
-								<el-table-column label="完成方式" sortable  width="100px" prop="COMPLETE_MODE" v-if="this.checkedName.indexOf('完成方式')!=-1">
-								</el-table-column>
-								<el-table-column label="委托书编号" sortable  width="160px" prop="PROXYNUM" v-if="this.checkedName.indexOf('委托书编号')!=-1">
-								</el-table-column>
-								<!-- <el-table-column label="录入人" sortable width="210px" prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
-								</el-table-column> -->
-								<el-table-column label="录入时间" sortable width="210px" :formatter="dateFormat" prop="ENTERDATE" v-if="this.checkedName.indexOf('录入时间')!=-1">
-								</el-table-column>
-							</el-table>
-							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
-					            @size-change="sizeChange"
-					            @current-change="currentChange"
-					            :current-page="page.currentPage"
-					            :page-sizes="[10, 20, 30, 40]"
-					            :page-size="page.pageSize"
-					            layout="total, sizes, prev, pager, next" :total="page.totalCount">
-					        </el-pagination>
+							<tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="userList" v-on:childByValue="childvalue"></tree_grid>
 							<!-- 表格 -->
 						</el-col>
 					</el-row>
@@ -193,27 +147,107 @@
 				</div>
 			</div>
 			<workorders_mask :workorderForm="workorderForm" ref="child" @requests="requestData" @requestTree="getKey" v-bind:page=page></workorders_mask>
+			<sendtasklist ref="task"  v-bind:page=page></sendtasklist>
+			<!--报表-->
+			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 		</div>
 	</div>
 </template>
 <script>
 	import Config from '../../config.js'
+	import tree_grid from '../common/TreeGrid.vue'//树表格
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_header from '../common/nav_tabs.vue'
 	import workorders_mask from '../testworkcheckDetails/workorders_mask.vue'
+	import sendtasklist from '../testworkcheckDetails/sendtasklist.vue'
+	import reportmask from'../reportDetails/reportMask.vue'
 	export default {
 		name: 'workorders',
 		components: {
 			vheader,
+			tree_grid,
 			navs_header,
 			navs_left,
-			workorders_mask
+			workorders_mask,
+			sendtasklist,
+			reportmask
 		},
 		data() {
 			return {
+				reportData:{},//报表的数据
 				loading: false,
 				basic_url: Config.dev_url,
+				checkedName: [
+				    '工作任务单编号',
+					'状态',
+					'样品名称',
+					'样品型号',
+					'样品状态',
+					'抽样方案/判定依据',
+					'完成日期',
+					'完成方式',
+					'委托书编号',
+					'录入人',
+					'录入时间'
+				],
+				columns: [
+					 {
+					 	text: '工作任务单编号',
+					 	dataIndex: 'WONUM',
+					 	isShow:true,
+					 },
+					{
+						text: '状态',
+						dataIndex: 'STATUS',
+						isShow:true,
+					},
+					{
+						text: '样品名称',
+						dataIndex: 'ITEM_NAME',
+						isShow:true,
+					},
+					{
+						text: '样品型号',
+						dataIndex: 'ITEM_MODEL',
+						isShow:true,
+					},
+					{
+						text: '样品状态',
+						dataIndex: 'ITEM_STATUS',
+						isShow:true,
+					},
+					{
+						text: '抽样方案/判定依据',
+						dataIndex: 'CHECK_BASIS',
+						isShow:true,
+					},
+					{
+						text: '完成日期',
+						dataIndex: 'COMPLETE_DATE',
+						isShow:true,
+					},
+					{
+						text: '完成方式',
+						dataIndex: 'COMPLETE_MODE',
+						isShow:true,
+					},
+					{
+						text: '委托书编号',
+						dataIndex: 'PROXYNUM',
+						isShow:true,
+					},
+					{
+						text: '录入人',
+						dataIndex: 'ENTERBY',
+						isShow:true,
+					},
+					{
+						text: '录入时间',
+						dataIndex: 'ENTERDATE',
+						isShow:true,
+					},
+				],
 				ismin: true,
 				loadSign:true,//加载
 				commentArr:{},
@@ -320,7 +354,8 @@
 					pageSize: 10,
 					totalCount: 0
 				},
-				workorderForm: {}//修改子组件时传递数据
+				workorderForm: {},//修改子组件时传递数据
+				workorder:'workorder',//appname
 			}
 		},
 		methods: {
@@ -329,7 +364,7 @@
 			    return 'text-align:center'
 			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
-				return(<span><i class={data.iconClass}></i><span>{node.label}</span></span>);
+				return (<span><i class={data.iconClass}></i><span title={data.lable}>{data.lable}</span></span>)
 			},
 			// 点击节点
 			nodeClick: function(m) {
@@ -367,7 +402,7 @@
 		      this.page.currentPage = val;
 		      this.requestData();
 		    },
-		    	resetbtn(){
+	    	resetbtn(){
 				this.searchList =  { //点击高级搜索后显示的内容
 					WONUM: '',//工作任务单编号
 					ITEM_NAME: '',//样品名称
@@ -391,6 +426,8 @@
 			},
 			//修改检验工作处理到子组件
 			modify() {
+				console.log('this.selMenu');
+				console.log(this.selMenu.length);
 				if(this.selMenu.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
@@ -437,6 +474,29 @@
 					}else{
 						this.$refs.child.detail(this.selMenu[0].ID);	
 					}
+				}
+			},
+			//报表
+			reportdata(){
+				this.reportData.app=this.workorder;
+				this.$refs.reportChild.visible();
+			},
+			//生成子任务单
+			tasklist(){
+				if(this.selMenu.length == 0) {
+					this.$message({
+						message: '请您选择要生成子任务单的数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selMenu.length > 1) {
+					this.$message({
+						message: '不可同时生成多条子任务单',
+						type: 'warning'
+					});
+					return;
+				} else {
+					this.$refs.task.visible(this.selMenu[0].ID);	
 				}
 			},
 			//查看
@@ -531,9 +591,6 @@
 			requestData() {
 				this.loading = true;
 				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-
 					WONUM: this.searchList.WONUM,
 					ITEM_NAME: this.searchList.ITEM_NAME,
 					PROXYNUM: this.searchList.PROXYNUM,
@@ -541,53 +598,48 @@
 					COMPLETE_DATE: this.searchList.COMPLETE_DATE,
 					ENTERBY: this.searchList.ENTERBY,
 					ENTERDATE: this.searchList.ENTERDATE,
+					P_NUM: this.searchList.P_NUM,
+					PRO_NUM: this.searchList.PRO_NUM,
+					DEPTID: this.searchList.DEPTID
 				}
-				var url = this.basic_url + '/api-apps/app/workorder';
+				var url=this.basic_url +'/api-apps/app/workorder/tree?tree_id=WONUM&tree_pid=PARENT_NUM';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					this.page.totalCount = res.data.count;	
-					//总的页数
-					this.userList=res.data.data;
-					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
-					if(this.page.currentPage >= totalPage){
-						 this.loadSign = false
-					}else{
-						this.loadSign=true
-					}
-					this.commentArr[this.page.currentPage]=res.data.data
-					let newarr=[]
-					for(var i = 1; i <= totalPage; i++){
-					
-						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
-							
-							for(var j = 0; j < this.commentArr[i].length; j++){
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.userList = newarr;
 					this.loading = false;
+					let result=res.data.datas;
+					for(let i=0;i<result.length;i++){
+						if(typeof(result[i].subDepts)!="undefined"&&result[i].subDepts.length>0){
+							let subDepts=result[i].subDepts;
+							result[i].children=subDepts;
+						}	
+					}
+					this.userList=res.data.datas;
 				}).catch((wrong) => {})
 			},
 			//机构树
 			getKey() {
-				var url = this.basic_url + '/api-user/depts/tree';
+				let that = this;
+				// var url = this.basic_url + '/api-user/depts/tree';
+				var url = this.basic_url + '/api-apps/appCustom/tree';
 				this.$axios.get(url, {}).then((res) => {
-					this.resourceData = res.data;
+					this.resourceData = res.data.datas;
+					// this.resourceData = res.data;
 					this.treeData = this.transformTree(this.resourceData);
+					console.log(this.treeData);
 				});
 			},
-			transformTree(data){
-				for(var i=0; i<data.length; i++){
-					data[i].name = data[i].fullname;
-					if(!data[i].pid || $.isArray(data[i].subDepts)){
+			transformTree(data) {
+				for(var i = 0; i < data.length; i++) {
+					data[i].name = data[i].fullname || data[i].TYPE || data[i].pName || data[i].PRO_NAME;
+					data[i].lable = data[i].fullname || data[i].TYPE || data[i].pName || data[i].PRO_NAME;
+					if($.isArray(data[i].children)) {
 						data[i].iconClass = 'icon-file-normal';
-					}else{
+					} else {
 						data[i].iconClass = 'icon-file-text';
 					}
-					if($.isArray(data[i].subDepts)){
-						data[i].children = this.transformTree(data[i].subDepts);
+					if($.isArray(data[i].children)) {
+						data[i].subDepts = this.transformTree(data[i].children);
 					}
 				}
 				return data;
@@ -603,12 +655,26 @@
 				this.requestData();
 			},
 			handleNodeClick(data) {
-				if(data.type == '1') {
-					this.companyId = data.id;
-					this.deptId = '';
-				} else {
-					this.deptId = data.id;
-					this.companyId = '';
+				if(!!data.fullname) {
+					this.searchList.P_NUM = '';
+					this.searchList.PRO_NUM = '';
+					this.searchList.DEPTID = data.id;
+					this.currentPage = 1;
+				}else if(!!data.TYPE){
+					this.searchList.P_NUM = data.NUM;
+					this.searchList.PRO_NUM = '';
+					this.searchList.DEPTID = data.DEPTID;
+					this.currentPage = 1;
+				}else if(!!data.PRO_NUM){
+					this.searchList.P_NUM = data.NUM;
+					this.searchList.PRO_NUM = data.PRO_NUM;
+					this.searchList.DEPTID = data.DEPTID;
+					this.currentPage = 1;
+				}else{
+					this.searchList.P_NUM = '';
+					this.searchList.PRO_NUM = '';
+					this.searchList.DEPTID = '';
+					this.currentPage = 1;
 				}
 				this.requestData();
 			},
@@ -633,9 +699,15 @@
 				}
 				this.ismin = !this.ismin;
 			},
+			//表格传过来
+			childvalue: function (childValue) {
+		        // childValue就是子组件传过来的
+		        this.selMenu = childValue;
+		    },
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
-        		this.$refs.navsheader.showClick(childValue);
+				this.$refs.navsheader.showClick(childValue);
+				this.selMenu = childValue
       		},
 		},
 		mounted() {

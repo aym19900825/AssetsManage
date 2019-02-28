@@ -6,7 +6,7 @@
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单调用 Begin-->
-			<navs_left></navs_left>
+			<navs_left ref="navleft" v-on:childByValue="childvalue"></navs_left>
 			<!--左侧菜单调用 End-->
 
 			<!--右侧内容显示 Begin-->
@@ -27,6 +27,9 @@
 								<button type="button" class="btn btn-red button-margin" id="" @click="deluserinfo">
 						    		<i class="icon-trash"></i>删除
 								</button>
+								<button type="button" class="btn btn-red button-margin" @click="physicsDel">
+							    <i class="icon-trash"></i>物理删除
+							</button>			
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch" id="">
 						    		<i class="icon-search"></i>高级查询<i class="icon-arrow1-down" v-show="down"></i><i class="icon-arrow1-up" v-show="up"></i>
 								</button>
@@ -149,7 +152,7 @@
 					},
 					{
 						text: '机构属性',
-						dataIndex: 'type',
+						dataIndex: 'depttypeName',
 						isShow:true,
 					},
 					{
@@ -234,6 +237,21 @@
 						"changedate":''
 					};
 			},
+			//请求页面的button接口
+		    getbutton(childvalue){
+		    	console.log(childvalue);
+		    	var data = {
+					menuId: childvalue.id,
+					roleId: this.$store.state.roleid,
+				};
+				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
+				this.$axios.get(url, {params: data}).then((res) => {
+					console.log(res);
+					this.buttons = res.data;
+					
+				}).catch((wrong) => {})
+
+		    },
 			changeCheckedName(value){
 				this.checkedName=value
 				let str=value.toString()
@@ -246,9 +264,12 @@
 				}
 			},
 			//表格传过来
-			childByValue: function (childValue) {
+			childByValue: function (childByValue) {
 		        // childValue就是子组件传过来的
-		        this.selMenu = childValue
+		        this.selMenu = childByValue
+		    },
+		    childvalue:function (childValue) {
+		    	 this.getbutton(childValue);
 		    },
 			tableControle(data){//控制表格列显示隐藏
 			  this.checkedName = data;
@@ -402,6 +423,85 @@
 					}
 				}
 			},
+			// 物理删除
+			physicsDel() {
+				var selData = this.selMenu;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请您选择要删除的机构',
+						type: 'warning'
+					});
+					return;
+				} else {
+					var changeMenu = selData[0];
+					if(changeMenu.children!=null && typeof(changeMenu.children)!='undefined' && changeMenu.children.length>0){
+						this.$message({
+							message: '先删除子机构',
+							type: 'error'
+						});
+					}else {
+//						var id = changeMenu.id;
+//						var url = this.basic_url + '/api-user/depts/' + id;
+//						this.$axios.delete(url, {}).then((res) => {
+//							//resp_code == 0是后台返回的请求成功的信息
+//							if(res.data.resp_code == 0) {
+//								this.$message({
+//									message: '删除成功',
+//									type: 'success'
+//								});
+//								this.requestData();
+//							}
+//						}).catch((err) => {
+//							this.$message({
+//								message: '网络错误，请重试',
+//								type: 'error'
+//							});
+//						});
+					var url = this.basic_url + '/api-user/depts/deletes/physicsDel';
+					//changeMenu为勾选的数据
+//					var changeMenu = selData[0];
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					console.log(selData);
+					for(var i = 0; i < selData.length; i++) {
+						deleteid.push(selData[i].id);
+					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+					var data = {
+						ids: ids,
+					}
+					console.log(data);
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {
+							params: data
+						}).then((res) => { //.delete 传数据方法
+							//resp_code == 0是后台返回的请求成功的信息
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
+							this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+						});
+					}).catch(() => {
+
+					});
+					}
+				}
+			},
 			
 			//时间格式化  
 			dateFormat(row, column) {
@@ -418,9 +518,8 @@
 			requestData() {//高级查询字段
 				this.loading = true;
 				var url = this.basic_url + '/api-user/depts/treeMap';
-				this.$axios.get(url, {
-//					params: data
-				}).then((res) => {
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
 					let result=res.data
 					for(let i=0;i<result.length;i++){
 						if(typeof(result[i].subDepts)!="undefined"&&result[i].subDepts.length>0){

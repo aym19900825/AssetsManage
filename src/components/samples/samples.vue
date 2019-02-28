@@ -25,12 +25,19 @@
 								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
 								    <i class="icon-trash"></i>删除
 								</button>
+								<button type="button" class="btn btn-red button-margin" @click="physicsDel">
+							    <i class="icon-trash"></i>物理删除
+							</button>			
 								<button type="button" class="btn btn-primarys button-margin" @click="importData">
 								    <i class="icon-upload-cloud"></i>导入
 								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="exportData">
 								    <i class="icon-download-cloud"></i>导出
 								</button>
+								<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
+							    <i class="icon-clipboard"></i>报表
+							</button>
+
 								<button type="button" class="btn btn-primarys button-margin" @click="Printing">
 								    <i class="icon-print"></i>打印
 								</button>
@@ -176,6 +183,8 @@
 		</div>
 		<samplesmask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></samplesmask>
 		<!--右侧内容显示 End-->
+			<!--报表-->
+			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 	</div>
 	</div>
 </template>
@@ -186,6 +195,7 @@
 	import navs_header from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import samplesmask from'../samplesDetails/samples_mask.vue'
+	import reportmask from'../reportDetails/reportMask.vue'
 	export default {
 		name: 'samples',//接样
 		components: {
@@ -194,9 +204,11 @@
 			navs_header,
 			tableControle,
 			samplesmask,
+			reportmask
 		},
 		data() {
 			return {
+				reportData:{},//报表的数据
 				loading: false,
 				basic_url: Config.dev_url,
 				isShow: false,
@@ -302,10 +314,10 @@
 		methods: {
 			//表头居中
 			rowClass({ row, rowIndex}) {
-			    return 'text-align:center'
+			    return 'text-align:center';
 			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
-				return (<span><i class={data.iconClass}></i><span>{node.label}</span></span>)
+				return (<span><i class={data.iconClass}></i><span title={data.lable}>{data.lable}</span></span>);
 			},
 			// 点击节点
 			nodeClick: function(m) {
@@ -427,6 +439,11 @@
 				this.down = !this.down,
 					this.up = !this.up
 			},
+						//报表
+			reportdata(){
+				this.reportData.app=this.productType;
+				this.$refs.reportChild.visible();
+			},
 			// 删除
 			deluserinfo() {
 				var selData = this.selMenu;
@@ -438,6 +455,54 @@
 					return;
 				} else {
 					var url = this.basic_url + '/api-apps/app/item/deletes';
+					//changeMenu为勾选的数据
+					var changeMenu = selData;
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					for (var i = 0; i < changeMenu.length; i++) {
+						deleteid.push(changeMenu[i].ID);
+					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+                    var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除此数据吗？', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                    }).then(({ value }) => {
+                        this.$axios.delete(url, {params: data}).then((res) => {//.delete 传数据方法
+						//resp_code == 0是后台返回的请求成功的信息
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
+							this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+						});
+                    }).catch(() => {
+
+                	});
+				}
+			},
+			// 删除
+			physicsDel() {
+				var selData = this.selMenu;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请您选择要删除的数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					var url = this.basic_url + '/api-apps/app/item/deletes/physicsDel';
 					//changeMenu为勾选的数据
 					var changeMenu = selData;
 					//deleteid为id的数组
@@ -510,7 +575,10 @@
 					ACCEPT_PERSON: this.searchList.ACCEPT_PERSON,//收样人
 					// P_NAME: this.searchList.P_NAME,//生产单位名称
 					TYPE: this.searchList.TYPE,//样品类别
-					ACCEPT_DATE: this.searchList.ACCEPT_DATE//收样日期
+					ACCEPT_DATE: this.searchList.ACCEPT_DATE,//收样日期
+					P_NUM: this.searchList.P_NUM,
+					PRO_NUM: this.searchList.PRO_NUM,
+					DEPTID: this.searchList.DEPTID
 				}
 				var url = this.basic_url + '/api-apps/app/item';
 				this.$axios.get(url, {
@@ -554,34 +622,51 @@
 			//生产单位树
 			getKey() {
 				let that = this;
-				var url = this.basic_url + '/api-user/depts/tree';
+				// var url = this.basic_url + '/api-user/depts/tree';
+				var url = this.basic_url + '/api-apps/appCustom/tree';
 				this.$axios.get(url, {}).then((res) => {
-					this.resourceData = res.data;
+					this.resourceData = res.data.datas;
+					// this.resourceData = res.data;
 					this.treeData = this.transformTree(this.resourceData);
+					console.log(this.treeData);
 				});
 			},
 			transformTree(data) {
 				for(var i = 0; i < data.length; i++) {
-					data[i].name = data[i].fullname;
-					if(!data[i].pid || $.isArray(data[i].subDepts)) {
+					data[i].name = data[i].fullname || data[i].TYPE || data[i].pName || data[i].PRO_NAME;
+					data[i].lable = data[i].fullname || data[i].TYPE || data[i].pName || data[i].PRO_NAME;
+					if($.isArray(data[i].children)) {
 						data[i].iconClass = 'icon-file-normal';
 					} else {
 						data[i].iconClass = 'icon-file-text';
 					}
-					if($.isArray(data[i].subDepts)) {
-						data[i].children = this.transformTree(data[i].subDepts);
+					if($.isArray(data[i].children)) {
+						data[i].subDepts = this.transformTree(data[i].children);
 					}
 				}
 				return data;
-				
 			},
 			handleNodeClick(data) {
-				if(data.type == '1') {
-					this.companyId = data.id;
-					this.deptId = '';
-				} else {
-					this.deptId = data.id;
-					this.companyId = '';
+				if(!!data.fullname) {
+					this.searchList.P_NUM = '';
+					this.searchList.PRO_NUM = '';
+					this.searchList.DEPTID = data.id;
+					this.page.currentPage = 1;
+				}else if(!!data.TYPE){
+					this.searchList.P_NUM = data.NUM;
+					this.searchList.PRO_NUM = '';
+					this.searchList.DEPTID = data.DEPTID;
+					this.page.currentPage = 1;
+				}else if(!!data.PRO_NUM){
+					this.searchList.P_NUM = data.NUM;
+					this.searchList.PRO_NUM = data.PRO_NUM;
+					this.searchList.DEPTID = data.DEPTID;
+					this.page.currentPage = 1;
+				}else{
+					this.searchList.P_NUM = '';
+					this.searchList.PRO_NUM = '';
+					this.searchList.DEPTID = '';
+					this.page.currentPage = 1;
 				}
 				this.requestData();
 			},

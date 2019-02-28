@@ -77,6 +77,7 @@
 <script>
 import Config from '../../config.js'
 import vkeyword from '../common/keyword.vue'
+import { Loading } from 'element-ui'
 export default {
     name: 'nav_tabs',
     components: {
@@ -104,8 +105,16 @@ export default {
     },
     props: ['docParm'],
     methods: {
+        autoLoad(){
+            setTimeout(function(){
+                $('#excelFile').click();
+            },500);
+        },
         reset(){
             this.tipSaveShow = false;
+        },
+        getFilelen(){
+        	return this.fileList.length;
         },
         saveMain(){
             var _this = this;
@@ -120,7 +129,6 @@ export default {
 			this.$refs.keyword.requestData();
         },
         readAuth(row){
-
             var url = this.po_url+"/show?filename=" +row.filename
                         + '&fileid=' +  row.fileid
                         + '&userid=' +  this.docParm.userid
@@ -135,16 +143,6 @@ export default {
         uploadTip(){
             this.tipSaveShow = true;
         },
-        autoLoad(){
-            setTimeout(function(){
-                console.log($('#excelFile'));
-                $('#excelFile').click();
-            },500);
-        },
-        // testAuto(){
-        //     var _this = this;
-            
-        // },
         sizeChange(val) {
             this.page.pageSize = val;
             this.getData();
@@ -157,7 +155,21 @@ export default {
             this.selFiles = val;
         },
         upload(e){
+            if(this.docParm.appid == 17 && this.doc.length >= 1){
+                this.$message({
+                    message: '原始数据模板只能上传一个文档！',
+                    type: 'error'
+                });
+                return;
+            }
             var formData = new FormData();
+            var loading;
+            loading = Loading.service({
+                fullscreen: true,
+                text: '拼命上传中...',
+                background: 'rgba(F,F, F, 0.8)'
+            });
+            // this.$emit('showLoading');
             formData.append('files', document.getElementById('excelFile').files[0]);
             var config = {
                 //添加请求头
@@ -175,8 +187,11 @@ export default {
                     + '&recordid=' + this.docParm.recordid
                     + '&appname=' + this.docParm.appname
                     + '&appid=' + this.docParm.appid;
+            console.log(url);
             this.$axios.post(url, formData, config
             ).then((res)=>{
+                loading.close();
+                // this.$emit('closeLoading');
                 if(res.data.code == 0){
                     this.$message({
                         message: res.data.message,
@@ -193,6 +208,7 @@ export default {
         },
         getData(){
             if(this.docParm.model == 'new'){
+                res.data.fileList = [];
                 return false;
             }
             var pageNum = this.page.currentPage - 1;
@@ -227,7 +243,6 @@ export default {
                         + '&username=' + this.docParm.username
                         + '&deptid=' + this.docParm.deptid
                         + '&deptfullname=' + this.docParm.deptfullname;
-                console.log(this.selFiles[0].filepath);
                 window.open(url); 
             }
         },

@@ -31,6 +31,9 @@
 							<button type="button" class="btn btn-primarys button-margin" @click="exportData">
 							    <i class="icon-download-cloud"></i>导出
 							</button>
+							<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
+							    <i class="icon-clipboard"></i>报表
+							</button>
 							<button type="button" class="btn btn-primarys button-margin" @click="Printing">
 							    <i class="icon-print"></i>打印
 							</button>
@@ -125,6 +128,8 @@
 		</div>
 		<!--右侧内容显示 End-->
 		<detailPage :detailData="selUser[0]" ref="child" @request="requestData"></detailPage>
+					<!--报表-->
+			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 	</div>
 </div>
 </template>
@@ -135,6 +140,7 @@
 	import navs_header from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import detailPage from '../equipmentsDetails/usag_records_mask.vue'
+	import reportmask from'../reportDetails/reportMask.vue'
 	export default {
 		name: 'user_management',
 		components: {
@@ -142,10 +148,12 @@
 			navs_left,
 			navs_header,
 			tableControle,
-			detailPage
+			detailPage,
+			reportmask
 		},
 		data() {
 			return {
+				reportData:{},//报表的数据
 				loading: false,
 				basic_url: Config.dev_url,
 				dataUrl: '/api/api-user/users',
@@ -343,6 +351,11 @@
 			// 打印
 			Printing() {
 				
+			},
+			//报表
+			reportdata(){
+				this.reportData.app=this.productType;
+				this.$refs.reportChild.visible();
 			},
 			judge(data) {
 				//taxStatus 布尔值

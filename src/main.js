@@ -6,6 +6,7 @@ import App from './App'
 import router from './router'
 import echarts from 'echarts'
 import ElementUI from 'element-ui'
+import { Loading } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 //import 'element-ui/lib/theme-chalk/index.css'
 import './assets/css/reset.css'
@@ -44,21 +45,18 @@ Vue.config.productionTip = false
 Vue.directive('loadmore', {
 	bind(el, binding) {
 		const selectWrap = el.querySelector('.el-table__body-wrapper');
-		// const selectWrap = el.querySelector('.el-table');
 		var scrollBeforeTop = 0;
 		var firstFlag = true;
 	    selectWrap.addEventListener('scroll', function() {
-			
-			let up2down = sessionStorage.getItem('toBtm');
-			if(up2down=='true'){
+			let toBtm = sessionStorage.getItem('toBtm');
+			if(toBtm=='true'){
 				if(firstFlag){
 					scrollBeforeTop = this.scrollTop;
 					firstFlag = false;
+					this.scrollTop = 2;
 				}else{
-					console.log('firstFlag');
-					console.log(this.scrollTop >= scrollBeforeTop);
 					if(this.scrollTop >= scrollBeforeTop){
-						this.scrollTop = 1;
+						this.scrollTop = 2;
 						scrollBeforeTop = this.scrollTop;
 					}
 				}
@@ -66,14 +64,13 @@ Vue.directive('loadmore', {
 	      	let sign = 1
 	      	const scrollDistance = this.scrollHeight - this.scrollTop - this.clientHeight;
 		    if (scrollDistance <= sign) {
-		    	sessionStorage.setItem('up2down','down');
-		        binding.value();
-		        this.scrollTop = 2;
+				sessionStorage.setItem('up2down','down');
+				binding.value();
+				this.scrollTop = 800;
 	      	}else if(this.scrollTop < sign){
-	      		sessionStorage.setItem('up2down','up');
-	      		binding.value();
-	      		this.scrollTop = 2;
-	      		
+				sessionStorage.setItem('up2down','up');
+				binding.value();
+				this.scrollTop = 2;
 	      	}else{
 	      		return false;
 	      	}

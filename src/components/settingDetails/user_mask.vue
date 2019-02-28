@@ -478,15 +478,13 @@
                 }
             };
             var validatePass = (rule, value, callback) => {
-	            if (value === '') {
-                    callback(new Error('请输入密码'));
-                } else if (!/^.{5,16}$/g.test(value)) {
-                    callback(new Error('密码长度不能少于5个字符且不能大于16个字符'));
-                } else {
-                    if (this.passwordedit.checkPass !== '') {
-                        this.$refs.passwordedit.validateField('checkPass');
-                    }
-                    callback();
+		            if (value === '') {
+		                    callback(new Error('请输入密码'));
+		                } else if (!/^.{5,16}$/g.test(value)) {
+		                    callback(new Error('密码长度不能少于5个字符且不能大于16个字符'));
+		                } else {
+		                    
+		                    callback();
 		         }
 		     };
 			return {

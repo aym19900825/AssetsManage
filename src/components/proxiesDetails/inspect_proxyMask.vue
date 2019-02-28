@@ -1264,8 +1264,11 @@
 					for(var i = 0;i<res.data.INSPECT_PROXY_PROJECList.length;i++){
 						res.data.INSPECT_PROXY_PROJECList[i].INSPECT_GROUP = Number(res.data.INSPECT_PROXY_PROJECList[i].INSPECT_GROUP);
 					}
+					
+					this.getmaingroup(res.data.MAINGROUP);
 					this.dataInfo = res.data;
 					this.RVENDORSelect();
+					
 					this.show = true;
 					//深拷贝数据
 					let _obj = JSON.stringify(this.dataInfo);
@@ -1642,6 +1645,8 @@
 				this.dataInfo.PRODUCT_TYPE = value[3];
 				this.dataInfo.PRO_NUM = value[4];
 				this.dataInfo.PRODUCT = value[5];
+				this.dataInfo.MAINGROUP = '';
+				this.dataInfo.LEADER = '';
 				this.RVENDORSelect();
 			},
 			//委托单位
@@ -1747,28 +1752,28 @@
 			},
 			//主检组
 			RVENDORSelect(){
-				console.log(this.dataInfo.R_VENDOR);
 				var url = this.basic_url + '/api-user/depts/findByPid/'+this.dataInfo.R_VENDOR;
-					this.$axios.get(url, {}).then((res) => {
-						this.maingroup = res.data;
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
+				this.$axios.get(url, {}).then((res) => {
+					this.maingroup = res.data;
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
 					});
-				this.dataInfo.PRODUCT_TYPE = '';
-				this.dataInfo.P_NUM = '';
-				this.dataInfo.PRODUCT = '';
-				this.dataInfo.PRO_NUM = '';
-				this.dataInfo.S_NUM = '';
-				this.dataInfo.INSPECT_PROXY_BASISList = [];
-				this.dataInfo.INSPECT_PROXY_PROJECList = [];
-				this.dataInfo.MAINGROUP = '';
-				this.dataInfo.LEADER = '';
+				});
+				// this.dataInfo.PRODUCT_TYPE = '';
+				// this.dataInfo.P_NUM = '';
+				// this.dataInfo.PRODUCT = '';
+				// this.dataInfo.PRO_NUM = '';
+				// this.dataInfo.S_NUM = '';
+				// this.dataInfo.INSPECT_PROXY_BASISList = [];
+				// this.dataInfo.INSPECT_PROXY_PROJECList = [];
+				// this.dataInfo.MAINGROUP = '';
+				// this.dataInfo.LEADER = '';
 			},
 			//主检组带出主检负责人
 			getmaingroup(maingroupid){
+				this.dataInfo.LEADER = '';
 				var url = this.basic_url + '/api-user/users/usersByDept?deptId='+maingroupid;
 		   			this.$axios.get(url, {}).then((res) => {
 						this.leaderdata = res.data.data;

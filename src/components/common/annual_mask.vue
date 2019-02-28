@@ -902,7 +902,7 @@
 		},
 		methods: {
 			download() {
-				var url = this.basic_url + '/api-apps/app/worlplanline/importExcTemplete?access_token='+sessionStorage.getItem('access_token');
+				var url = this.basic_url + '/api-apps/app/workplan/importExcTemplete/WORLPLANLINE?access_token='+sessionStorage.getItem('access_token');
 				var xhr = new XMLHttpRequest();
 					xhr.open('POST', url, true);
 					xhr.responseType = "blob";
@@ -917,11 +917,11 @@
 					xhr.send();
 			},
 			uploadUrl(){
-                var url = this.basic_url +'/api-apps/app/worlplanline/importExc?access_token='+sessionStorage.getItem('access_token');
+                var url = this.basic_url +'/api-apps/app/workplan/importExc/WORLPLANLINE?access_token='+sessionStorage.getItem('access_token');
                 return url;
             },
 			exportData() {
-           		var url = 'http://192.168.1.150:7902/app/workplan/exportExc/WORLPLANLINE?access_token='+sessionStorage.getItem('access_token');
+           		var url = this.basic_url + '/api-apps/app/workplan/exportExc/WORLPLANLINE?access_token='+sessionStorage.getItem('access_token');
           		var xhr = new XMLHttpRequest();
             	xhr.open('POST', url, true);
             	xhr.responseType = "blob";

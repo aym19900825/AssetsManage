@@ -164,7 +164,8 @@
 				"WORKORDER_PROJECTLISTID":this.WORKORDER_PROJECTLISTID,
 				"WORKORDER_CONTRACTLISTID":this.WORKORDER_CONTRACTLISTID
 			};
-			var url = 'http://192.168.1.115:7902/app/workorder/operate/subtask';
+			var url = this.basic_url +'/api-apps/app/workorder/operate/subtask';
+			console.log(url);
 			this.$axios.post(url,data).then((res) => {
 				console.log(res);
 				if(res.data.resp_code == 0) {
@@ -179,6 +180,7 @@
 					type: 'error'
 				});
 			});
+			this.dialogProduct = false;
 		}
 	},	
   },

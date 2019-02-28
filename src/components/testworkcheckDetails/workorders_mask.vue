@@ -1643,7 +1643,7 @@
 				var data = {
 					"WORKORDER_CONTRACTID":row.ID.toString(),
 				};
-				var url = "http://192.168.1.115:7902/app/workorder/operate/subproject";
+				var url = this.basic_url +"/api-apps/app/workorder/operate/subproject";
 				this.$axios.post(url,data).then((res) => {
 					console.log(res);
 					if(res.data.resp_code == 0) {
@@ -1828,8 +1828,19 @@
 				};
 				this.workorderForm.WORKORDER_ASSETList.push(obj);
 			},
+			openwrite() {
+				this.$prompt('请输入报告名称', '提示', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消'
+				}).then(({ value }) => {
+					this.reportname = value;
+				}).catch(() => {
+					       
+				});
+			},
 			//生成报告
 			getreport(){
+				console.log(this.reportname);
 				if(this.workorderForm.WORKORDER_DATA_TEMPLATEList.length < 2){
 					this.$message({
 						message: '请新建至少两条数据',
@@ -1856,19 +1867,17 @@
 							type: 'warning'
 						});
 					}else if(this.reportname == '' || this.reportname == undefined || this.reportname == null){
-						this.$message({
-							message: '请填写报告名称',
-							type: 'warning'
-						});
+						this.openwrite();
 					}else{
-						var url = this.basic_url +"/api-merge/merge/workorder/MergeWord?filePath="+ids+"&fileName="+this.reportname+"&num="+this.workorderForm.PROXYNUM+"&deptfullname="+this.workorderForm.DEPTIDDesc+"&recordid="+this.workorderForm.ID;
+						console.log(this.reportname);
+						var url = this.basic_url +"/api-merge/merge/workorder/MergeWord?filePath="+ids+"&fileName="+this.reportname+"&proxynum="+this.workorderForm.PROXYNUM+"&wonum="+this.workorderForm.WONUM+"&deptfullname="+this.workorderForm.DEPTIDDesc+"&recordid="+this.workorderForm.ID;
 						this.$axios.post(url, {}).then((res) => {
 							console.log(res);
 							var obj = {
 								REPORTNUM:res.data.datas.reportnum,
 								REPORTNAME:res.data.datas.reportname,
 								PREVIEW:'',
-								VERSION:'',
+								VERSION:res.data.datas.version,
 							}
 							this.workorderForm.WORKORDER_REPORT_TEMPLATEList.push(obj);
 							console.log(this.workorderForm.WORKORDER_REPORT_TEMPLATEList);

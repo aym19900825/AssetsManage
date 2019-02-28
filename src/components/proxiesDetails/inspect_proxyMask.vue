@@ -570,10 +570,9 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="主检负责人" prop="LEADER" label-width="110px">
-												<!-- <el-select clearable v-model="dataInfo.LEADER" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit">
+												<el-select clearable v-model="dataInfo.LEADER" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit">
 													<el-option v-for="(data,index) in leaderdata" :key="index" :value="data.id" :label="data.username"></el-option>
-												</el-select> -->
-												<el-input v-model="dataInfo.LEADER" :disabled="noedit"></el-input>
+												</el-select>
 											</el-form-item>
 										</el-col>
 									</el-row>	
@@ -808,6 +807,7 @@
 					TYPEDesc:'检验',
 					ITEM_NAME:'',
 					VENDOR:'',
+					R_VENDOR:'',
 					R_VENDORDesc:'',
 					ITEM_NAME:'',
 					ITEM_MODEL:'',
@@ -815,6 +815,8 @@
 					ITEM_SECRECY:'',
 					ITEM_METHOD:'',
 					ITEM_DISPOSITION:'',
+					P_NUM:'',
+					PRO_NUM:'',
 					PRODUCT_TYPE:'',
 					PRODUCT:'',
 					COMPDATE:'',
@@ -1256,9 +1258,7 @@
 					// 分包要求
 					for(var n = 0;n<res.data.CHECK_PROXY_CONTRACTList.length;n++){
 						res.data.CHECK_PROXY_CONTRACTList[n].isEditing = false;
-
-					}
-					res.data.R_VENDOR = Number(res.data.R_VENDOR);		
+					}		
 					res.data.MAINGROUP = Number(res.data.MAINGROUP);
 					res.data.LEADER = Number(res.data.LEADER);
 					for(var i = 0;i<res.data.INSPECT_PROXY_PROJECList.length;i++){

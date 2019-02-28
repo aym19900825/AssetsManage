@@ -567,7 +567,7 @@
 										</el-col> -->
 										<el-col :span="8">
 											<el-form-item label="主检组" prop="MAINGROUP"  label-width="110px">
-											<el-select clearable v-model="dataInfo.MAINGROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit"  @change="getmaingroup">
+											<el-select clearable v-model="dataInfo.MAINGROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit"  @change="getmaingroup($event)">
 												<el-option v-for="(data,index) in maingroup" :key="index" :value="data.id" :label="data.fullname"></el-option>
 											</el-select>
 										</el-form-item>

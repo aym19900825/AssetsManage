@@ -105,13 +105,6 @@
 												</el-input>
 											</el-form-item>
 										</el-col>
-										<!--<el-col :span="8">
-											<el-form-item label="类别" prop="TYPE">
-												<el-select v-model="samplesForm.TYPE" placeholder="请选择类别" style="width: 100%;">
-													<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
-												</el-select>
-											</el-form-item>
-										</el-col>-->
 										<el-col :span="16">
 											<el-form-item label="其他资料" prop="OTHER" label-width="110px">
 												<el-input v-model="samplesForm.OTHER" :disabled="noedit"></el-input>
@@ -181,6 +174,13 @@
 										</el-col>
 									</el-row>
 									<el-row>
+										<el-col :span="8" >
+											<el-form-item label="承检单位" prop="CJDW"  label-width="110px">
+												<el-select clearable v-model="samplesForm.CJDW" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit">
+													<el-option v-for="(data,index) in selectDept" :key="index" :value="data.id" :label="data.fullname"></el-option>
+												</el-select>
+											</el-form-item>
+										</el-col>
 										<el-col :span="8" >
 											<el-form-item label="产品类别" prop="PRODUCT_TYPE"  label-width="110px">
 												<el-input v-model="samplesForm.PRODUCT_TYPE" :disabled="true">
@@ -562,12 +562,57 @@
 					OTHER: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//其它资料
 					MEMO: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//备注
 				},
+				selectDept:[],//承检单位
 			};
 		},
 		methods: {
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
+			},
+			//承检单位
+			getCompany() {
+				var type = "2";
+				var url = this.basic_url + '/api-user/depts/treeByType';
+				this.$axios.get(url, {
+					params: {
+						type: type
+					},
+				}).then((res) => {
+					this.selectDept = res.data;
+				});
+			},
+			addcategory(){//产品类别
+				if(this.samplesForm.CJDW == null || this.samplesForm.CJDW == '' || this.samplesForm.CJDW == undefined){
+					this.$message({
+						message: '请先选择承检单位',
+						type: 'warning'
+					});
+				}else{
+					this.$refs.categorychild.visible(this.samplesForm.CJDW);
+				}
+			},
+			//接到产品类别的值
+			categorydata(value){
+				this.samplesForm.P_NUM = value[0];
+				this.samplesForm.PRODUCT_TYPE  = value[1];
+				this.samplesForm.PRODUCT = '';
+				this.samplesForm.PRO_NUM = '';
+			},
+			addproduct(){//受检产品名称
+				if(this.samplesForm.P_NUM == null || this.samplesForm.P_NUM == '' || this.samplesForm.P_NUM == undefined){
+					this.$message({
+						message: '请先选择产品类别',
+						type: 'warning'
+					});
+				}else{
+					this.$refs.productchild.visible(this.samplesForm.P_NUM);
+				}
+			},
+			//接到产品的值
+			appenddata(value){
+				this.samplesForm.PRO_NUM = value[0];
+				this.samplesForm.PRODUCT = value[1];
 			},
 			reset(){
             	this.samplesForm = {
@@ -597,6 +642,11 @@
 					CHANGEBY: '',//修改人
 					CHANGEDATE: '',//修改时间
 					TYPE: '',//样品类别
+					CJDW:'',//承检单位
+					P_NUM:'',//产品类别编号
+					PRODUCT_TYPE:'',//产品类别
+					PRO_NUM:'',//产品编号
+					PRODUCT:'',//产品
 					STATUS: '1',//信息状态
 					ITEM_LINEList:[]
 				}
@@ -690,9 +740,8 @@
 					for(var i=0;i<res.data.ITEM_LINEList.length;i++){
 						res.data.ITEM_LINEList[i].isEditing = false;
 					}
+					res.data.CJDW = Number(res.data.CJDW);
 					this.samplesForm = res.data;
-					console.log(233333);
-					console.log(this.samplesForm.STATE);
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -1075,6 +1124,7 @@
 			this.getType();
 			this.requestData();
 			this.getITEM_STATUS();
+			this.getCompany();
 		},
 	}
 </script>

@@ -6,7 +6,7 @@
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
-			<navs_left></navs_left>
+			<navs_left ref="navleft" v-on:childByValue="childvalue"></navs_left>
 			<!--左侧菜单内容显示 End-->
 			<!--右侧内容显示 Begin-->
 			<div class="wrapper wrapper-content">
@@ -14,7 +14,10 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button type="button" class="btn btn-green" @click="openAddMenu" id="">
+								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+									<i :class="item.icon"></i>{{item.name}}
+								</button>
+								<!--<button type="button" class="btn btn-green" @click="openAddMenu" id="">
 	                            	<i class="icon-add"></i>添加
 	                  			 </button>
 								<button type="button" class="btn btn-blue button-margin" @click="modify">
@@ -22,8 +25,7 @@
 								</button>
 								<button type="button" class="btn btn-red button-margin" @click="delmenu">
 								    <i class="icon-trash"></i>删除
-								</button>
-
+								</button>-->
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -140,7 +142,8 @@
 					pageSize: 20,
 					totalCount: 0
 				},
-				menu: {}//修改子组件时传递数据
+				menu: {},//修改子组件时传递数据
+				buttons:[],
 			}
 		},
 		methods: {
@@ -156,13 +159,7 @@
 					}
 				}
 			},
-			childByValue: function (childValue) {
-		        // childValue就是子组件传过来的
-		        this.selMenu = childValue
-		       console.log(childValue);
-//		        this.selMenu[0].hidden ? '1' : '0'
-		        
-		    },
+			
 			sizeChange(val) {
 				this.page.pageSize = val;
 				this.requestData();
@@ -171,7 +168,18 @@
 				this.page.currentPage = val;
 				this.requestData();
 			},
-			
+			//请求点击
+		    getbtn(item){
+		    	if(item.name=="添加"){
+		         this.openAddMenu();
+		    	}else if(item.name=="修改"){
+		    	 this.modify();
+		    	}else if(item.name=="高级查询"){
+		    	 this.modestsearch();
+		    	}else if(item.name=="删除"){
+				 this.delmenu();
+				}
+		    },
 			//添加菜单
 			openAddMenu() {
 				this.menu = {
@@ -182,8 +190,6 @@
 					hidden:1,
 					css:''
 				};
-				
-//				this.$refs.child.detail();
 				this.$refs.child.visible();
 			},
 			//修改
@@ -285,7 +291,31 @@
 			},
 
 			handleNodeClick(data) {},
+			//子表格传过来的值
+			childByValue: function (childValue) {
+		        // childValue就是子组件传过来的
+		        this.selMenu = childValue
+		       console.log(childValue);
+		    },
+			//左侧菜单传来
+		    childvalue:function ( childvalue) {
+				console.log( childvalue);
+		    	 this.getbutton( childvalue);
+		    },
+			//请求页面的button接口
+		    getbutton(childvalue){
+		    	var data = {
+					menuId: childvalue.id,
+					roleId: this.$store.state.roleid,
+				};
+				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
+				this.$axios.get(url, {params: data}).then((res) => {
+					console.log(res);
+					this.buttons = res.data;
+					
+				}).catch((wrong) => {})
 
+		    },
 		},
 		mounted() {
 			this.requestData();

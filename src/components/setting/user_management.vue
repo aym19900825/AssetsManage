@@ -170,15 +170,15 @@
 			</div>
 		</div>
 		<usermask :user="user" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></usermask>
-		<el-dialog title="修改密码" :visible.sync="passdialog" width="30%">
-			<el-form :model="userpassword" inline-message >
+		<el-dialog title="修改密码" :visible.sync="passdialog" width="30%" :before-close="resetNewpwd">
+			<el-form :model="userpassword" inline-message :rules="rules" ref="newPwdForm">
 	  			<el-form-item label="新密码" prop="newPassword" label-width="100px">
 					<el-input v-model="userpassword.newPassword"></el-input>
 				</el-form-item>
 			</el-form>
 		      <span slot="footer" class="dialog-footer">
 		      	<el-button type="primary" @click="determine">确 定</el-button>
-		        <el-button @click="passdialog = false">取 消</el-button>
+		        <el-button @click="resetNewpwd">取 消</el-button>
 		      </span>
         </el-dialog>
 
@@ -202,6 +202,11 @@
 		},
 		data() {
 			return {
+				rules:{
+					newPassword:[
+						{ required: true, message: '请输入密码', trigger: 'blur' }
+					]
+				},
 				loading: false,
 				basic_url: Config.dev_url,
 				isShow: false,
@@ -210,7 +215,9 @@
 				loadSign: true, //加载
 				commentArr: {},
 				passdialog:false,
-				userpassword:{},
+				userpassword:{
+					newPassword: ''
+				},
 				checkedName: [
 					'用户名',
 					'姓名',
@@ -297,6 +304,11 @@
 			}
 		},
 		methods: {
+			resetNewpwd(){
+				this.passdialog = false;
+				// this.userpassword.newPassword = '';
+				 this.$refs['newPwdForm'].resetFields();
+			},
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    // console.log(rowIndex) //表头行标号为0
@@ -551,19 +563,24 @@
 			determine(){
 				var id = this.selUser[0].id;
 				var url = this.basic_url + '/api-user/users/' + id + '/password';
-					this.$axios.put(url,{"newPassword": this.userpassword.newPassword}).then((res) => {
-						if(res.data.resp_code == 0) {
+				this.$refs['newPwdForm'].validate((valid) => {
+					if (valid) {
+						this.$axios.put(url,{"newPassword": this.userpassword.newPassword}).then((res) => {
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '修改成功',
+									type: 'success'
+								});
+								this.resetNewpwd();
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '修改成功',
-								type: 'success'
+								message: '网络错误，请重试',
+								type: 'error'
 							});
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
-					});
+					}
+				});
 			},
 
 			// 启用

@@ -360,7 +360,9 @@
 					var labelAuth = this.authorities;
 					for(let i=0; i<selKeyW.length; i++){
 						selKeyW[i].checkedList = [];
-						selKeyW[i].keywordidDesc = selKeyW[i].keywordname
+						selKeyW[i].keywordidDesc = selKeyW[i].keywordname;
+						selKeyW[i].keywordid = selKeyW[i].id;
+						selKeyW[i].id = '';
 						for(let n=0; n<labelAuth.length; n++){
 							var item = labelAuth[n].val;
 							if(item == 'fileread'){

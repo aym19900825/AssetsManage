@@ -396,7 +396,6 @@
 	    			this.adddeptForm.changeby = res.data.nickname;
 	    			var date=new Date();
 					this.adddeptForm.changedate = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-					console.log(this.adddeptForm);
 					for(var key in this.adddeptForm){ 
 						this.adddeptForm.hasOwnProperty('_expanded');
 						this.adddeptForm.hasOwnProperty('_level');
@@ -408,14 +407,9 @@
 						delete this.adddeptForm._show;
 						
 					}
-					console.log(111);
-					console.log(this.adddeptForm);
-//					console.log(JSON.stringify(this.adddeptForm));
 					//深拷贝数据
-					let obj = JSON.stringify(this.adddeptForm);
-					console.log(obj);
-        			this.ADDDEPTFORM = JSON.parse(obj);
-					
+					// let obj = JSON.parse(JSON.stringfy(this.adddeptForm));
+        			// this.ADDDEPTFORM = JSON.parse(obj);
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试1',

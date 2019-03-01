@@ -18,7 +18,7 @@
 				</div>
 				<el-form :model="dataInfo" inline-message :rules="rules" ref="dataInfo" label-width="80px" class="demo-user">
 					<div class="mask_content">
-						<div class="accordion" id="information">
+						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基本信息" name="1">
 									<el-row class="pb10" style="margin-right: 5px;">

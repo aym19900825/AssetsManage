@@ -76,7 +76,7 @@
 					<el-row :gutter="10">
 						<el-col :span="24">
 							<tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="deptList" v-on:childByValue="childByValue"></tree_grid>
-							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
+							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0"
 							   @size-change="sizeChange" 
 							   @current-change="currentChange" 
 							   :current-page="page.currentPage" 

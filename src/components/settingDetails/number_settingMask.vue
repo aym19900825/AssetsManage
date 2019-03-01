@@ -18,7 +18,7 @@
 				</div>
 				<div class="mask_content">
 					<el-form :model="numbsetForm"  :rules="rules" ref="numbsetForm" label-width="100px" status-icon>
-						<div class="accordion">
+						<div class="content-accordion">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基础信息" name="1">
 									<el-row :gutter="20">
@@ -97,7 +97,7 @@
 							</el-collapse>
 						</div>
 
-						<div class="el-dialog__footer" v-show="noviews">
+						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click="submitForm('numbsetForm')">保存</el-button>
 							<el-button @click="cancelForm">取消</el-button>
 						</div>

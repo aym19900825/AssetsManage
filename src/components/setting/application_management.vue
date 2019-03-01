@@ -114,7 +114,7 @@
 								<el-table-column label="流程代办描述" width="180" prop="flow_todo_desc" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('流程代办描述')!=-1">
 								</el-table-column>
 							</el-table>
-							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
 							<!-- 表格 End-->
 						</el-col>

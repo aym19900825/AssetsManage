@@ -54,7 +54,7 @@
 				<el-table-column label="用户有效期" prop="user_active_date" width="150px" sortable :formatter="dateFormat">
 				</el-table-column>
 			</el-table>
-					<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+					<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 					</el-pagination>
 				<span slot="footer" class="dialog-footer">
 			       <el-button type="primary" @click="addcusname">确 定</el-button>

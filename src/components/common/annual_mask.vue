@@ -19,7 +19,7 @@
 				<div class="mask_content">
 					<!-- status-icon 验证后文本框上显示对勾图标 -->
 					<el-form inline-message :model="WORKPLAN" :rules="rules" ref="WORKPLAN">
-						<div class="accordion" id="information">
+						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames" @change="handleChange">
 								<el-collapse-item title="基本信息" name="1">
 									<el-row :gutter="5">
@@ -406,7 +406,7 @@
 								<!-- 录入人信息 End -->
 							</el-collapse>
 						</div>
-						<div class="el-dialog__footer">
+						<div class="content-footer">
 							<el-button type="primary" @click="saveAndUpdate('WORKPLAN')" v-if="!viewtitle">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit('WORKPLAN')" v-show="addtitle">保存并继续</el-button>
 							<el-button @click='close' v-if="!viewtitle">取消</el-button>
@@ -495,7 +495,7 @@
 					<el-table-column label="修改时间" width="160" prop="CHANGEDATE" sortable>
 					</el-table-column>
 				</el-table>
-				<el-pagination background class="pull-right pt10 pb10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+				<el-pagination background class="text-right pt10 pb10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 				<!-- 第二层弹出的表格 End -->
 				<div slot="footer" class="el-dialog__footer">
@@ -572,7 +572,7 @@
 					<el-table-column label="修改时间" width="160" prop="CHANGEDATE" sortable :formatter="dateFormat">
 					</el-table-column>
 				</el-table>
-				<el-pagination background class="pull-right pt10 pb10"
+				<el-pagination background class="text-right pt10 pb10"
 		            @size-change="sizeChange"
 		            @current-change="currentChange"
 		            :current-page="page.currentPage"
@@ -607,7 +607,7 @@
 					<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat">
 					</el-table-column>
 				</el-table>
-				<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 				<!-- 表格 End-->
 				<span slot="footer" class="el-dialog__footer">
@@ -634,7 +634,7 @@
 					<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat">
 					</el-table-column>
 				</el-table>
-				<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 				<span slot="footer" class="el-dialog__footer">
 			       <el-button type="primary" @click="addproname">确 定</el-button>
@@ -656,7 +656,7 @@
 					<!--<el-table-column label="信息状态" sortable width="100" prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
 					</el-table-column>-->
 				</el-table>
-				<el-pagination background class="pull-right pt10"
+				<el-pagination background class="text-right pt10"
 					@size-change="sizeChange"
 					@current-change="currentChange"
 					:current-page="page.currentPage"

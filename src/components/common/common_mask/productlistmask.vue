@@ -17,12 +17,12 @@
 				<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat">
 				</el-table-column>
 			</el-table>
-				<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
-				<span slot="footer" class="dialog-footer">
+				<div slot="footer">
 			       <el-button type="primary" @click="determine">确 定</el-button>
 			       <el-button @click="close">取 消</el-button>
-			    </span>
+			    </div>
 			</el-dialog>
 	</div>
 </template>

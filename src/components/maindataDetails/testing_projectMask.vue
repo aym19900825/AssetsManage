@@ -18,7 +18,7 @@
 				</div>
 				<div class="mask_content">
 					<el-form inline-message :model="testing_projectForm" :rules="rules" ref="testing_projectForm"  >
-						<div class="accordion">
+						<div class="content-accordion">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基本信息" name="1">
 									<el-row :gutter="20" class="pb10">
@@ -103,33 +103,35 @@
 											<font>新建行</font>
 										</el-button>
 									</div>
-									<el-table :header-cell-style="rowClass" :fit="true" :data="testing_projectForm.QUALIFICATIONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'testing_projectForm.QUALIFICATIONList', order: 'descending'}">
-										<el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
-											<template slot-scope="scope">
-												<i class="el-icon-check" v-if="scope.row.isEditing"></i>
-												<i class="el-icon-edit" v-else="v-else"></i>
-											</template>
-										</el-table-column>
-										<el-table-column prop="STEP" label="序号" sortable width="120px" label-width="150px" type="index">
-										</el-table-column>
-										<el-table-column prop="C_NAME" label="证书名称" sortable>
-											<template slot-scope="scope">
-												<el-form-item :prop="'QUALIFICATIONList.'+scope.$index + '.C_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.C_NAME" placeholder="请输入证书名称">
-														<el-button slot="append" icon="icon-search" @click="getpepole(scope.row)" :disabled="noedit"></el-button>
-													</el-input>
-													<span v-else="v-else">{{scope.row.C_NAME}}</span>
-												</el-form-item>
-											</template>
-										</el-table-column>
-										<el-table-column fixed="right" label="操作" width="120">
-											<template slot-scope="scope">
-												<el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'tableList')" type="text" size="small" v-show="!viewtitle">
-                                                 <i class="icon-trash red"></i>
-												</el-button>
-											</template>
-										</el-table-column>
-									</el-table>
+									<div class="pt10">
+										<el-table :header-cell-style="rowClass" :fit="true" :data="testing_projectForm.QUALIFICATIONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'testing_projectForm.QUALIFICATIONList', order: 'descending'}">
+											<el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
+												<template slot-scope="scope">
+													<i class="el-icon-check" v-if="scope.row.isEditing"></i>
+													<i class="el-icon-edit" v-else="v-else"></i>
+												</template>
+											</el-table-column>
+											<el-table-column prop="STEP" label="序号" sortable width="120px" label-width="150px" type="index">
+											</el-table-column>
+											<el-table-column prop="C_NAME" label="证书名称" sortable>
+												<template slot-scope="scope">
+													<el-form-item :prop="'QUALIFICATIONList.'+scope.$index + '.C_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+														<el-input v-if="scope.row.isEditing" v-model="scope.row.C_NAME" placeholder="请输入证书名称">
+															<el-button slot="append" icon="icon-search" @click="getpepole(scope.row)" :disabled="noedit"></el-button>
+														</el-input>
+														<span v-else="v-else">{{scope.row.C_NAME}}</span>
+													</el-form-item>
+												</template>
+											</el-table-column>
+											<el-table-column fixed="right" label="操作" width="120">
+												<template slot-scope="scope">
+													<el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'tableList')" type="text" size="small" v-show="!viewtitle">
+	                                                 <i class="icon-trash red"></i>
+													</el-button>
+												</template>
+											</el-table-column>
+										</el-table>
+									</div>
 								</el-collapse-item>
 								<el-collapse-item title="其他" name="3" v-show="views">
 									<el-row>
@@ -178,7 +180,7 @@
 					<el-table-column label="资质有效期" sortable prop="c_date">
 					</el-table-column>
 				</el-table>
-				<el-pagination background class="pull-right" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+				<el-pagination background class="text-right" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 				<span slot="footer" class="dialog-footer">
 	    			<el-button @click="dialogVisible = false">取 消</el-button>
@@ -206,7 +208,7 @@
 									<el-table-column label="机构" width="120" prop="DEPTIDDesc" sortable>
 									</el-table-column>
 								</el-table>
-								<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+								<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 								</el-pagination>
 								<!-- 表格 End-->
 				<span slot="footer" class="dialog-footer">

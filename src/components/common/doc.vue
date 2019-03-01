@@ -310,7 +310,7 @@ export default {
 }
 .pageLeft{
     float: right;
-    margin-top: 30px;
-    margin-bottom: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 </style>

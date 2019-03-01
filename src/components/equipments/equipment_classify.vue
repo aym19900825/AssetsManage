@@ -89,7 +89,7 @@
 						<el-col :span="24">
 							 <tree_grid :columns="columns" :tree-structure="true" :loading="loading" :data-source="categoryList" v-on:childByValue="classByValue"></tree_grid>
 
-							<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
 						</el-col>
 					</el-row>

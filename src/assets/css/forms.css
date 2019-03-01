@@ -119,6 +119,11 @@ textarea:focus,button:focus,
     background-color: #e3517c;
     border-color: #e3517c;
 }
+.btn-purple {
+    background-color: #bd51e3;
+    border-color: #bd51e3;
+}
+
 .btn-orange {
     background-color: #ec8d62;
     border-color: #ec8d62;

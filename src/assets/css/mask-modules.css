@@ -38,7 +38,7 @@
 .mask_content{
     width: 100%;
     height: 95%;
-    position: absolute;
+    /*position: absolute;*/
 	z-index: 15;
     overflow-y: auto;
 }
@@ -217,10 +217,18 @@ element.style {
     text-align: left;
     height: auto;
     }
+.content-accordion { margin-top: 15px; margin-left: 15px; margin-right: 15px; margin-bottom: 90px;}
 .content-footer{
+    width: 100%;
+    height: 70px;
+    padding-top:15px;
 	text-align: center;
-	margin-bottom: 26px;
-	margin-top: 15px;
+	-webkit-box-shadow: -12px 5px 10px 6px rgba(223,229,234,1);
+    box-shadow: -12px 5px 10px 6px rgba(223,229,234,1);
+    position: absolute;
+    z-index: 8;
+    bottom: 0px;
+    background-color: #FFFFFF;
 }  
 .el-radio{
 	line-height: 40px !important;
@@ -228,8 +236,5 @@ element.style {
 .el-form-item {
     margin-bottom: 5px !important;
 }
-
-
-
 
 

@@ -18,7 +18,7 @@
 				</div>
 				<div class="mask_content">
 					<el-form :model="roleList" :rules="rules" ref="roleList" label-width="110px" class="demo-user">
-						<div class="accordion">
+						<div class="content-accordion">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基础信息" name="1">
 									<el-row :gutter="30">
@@ -98,7 +98,7 @@
 								</el-collapse-item>
 							</el-collapse>
 						</div>
-						<div class="el-dialog__footer" v-show="noviews">
+						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click='submitForm()'>保存</el-button>
 							<el-button @click='close'>取消</el-button>
 						</div>

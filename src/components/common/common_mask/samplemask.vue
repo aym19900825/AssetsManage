@@ -2,6 +2,7 @@
 	<div>
 		<el-dialog :modal-append-to-body="false" title="样品名称" :visible.sync="dialogsample" width="80%">
 			<el-form :model="searchList" label-width="70px">
+				<el-row>
 					<el-col :span="7">
 						<el-form-item label="样品编号" prop="ITEMNUM">
 							<el-input v-model="searchList.ITEMNUM"></el-input>
@@ -224,9 +225,17 @@
 				var description=this.selval[0].DESCRIPTION;	
 				var model=this.selval[0].MODEL;
 				var quatity=this.selval[0].QUATITY;
+				var linedata = [];
+				linedata.push(this.selval[0].CJDW);//承检单位id
+				linedata.push(this.selval[0].CJDWDesc);//承检单位名称
+				linedata.push(this.selval[0].P_NUM);//产品类别编号
+				linedata.push(this.selval[0].PRODUCT_TYPE);//产品类别
+				linedata.push(this.selval[0].PRO_NUM);//产品编号
+				linedata.push(this.selval[0].PRODUCT);//产品
 				this.$emit('appenddes',description);
 				this.$emit('appendmod',model);
 				this.$emit('appendqua',quatity);
+				this.$emit('linedata',linedata);
 			}else{
 			    var name= this.selval[0].DESCRIPTION;//样品名称
 			    var model= this.selval[0].MODEL;//规格型号

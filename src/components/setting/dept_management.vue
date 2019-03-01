@@ -15,13 +15,16 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+									<i :class="item.icon"></i>{{item.name}}
+								</button>
+								<!--<button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加
                        			</button>
-                       			<!-- <button type="button" class="btn btn-green" @click="openAddMgr" id="">
+                       			 <button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加部门
                        			</button> -->
-                       			<button type="button" class="btn btn-blue button-margin" @click="modify" id="">
+                       			<!--<button type="button" class="btn btn-blue button-margin" @click="modify" id="">
 						    		<i class="icon-edit"></i>修改
 								</button>
 								<button type="button" class="btn btn-red button-margin" id="" @click="deluserinfo">
@@ -29,10 +32,10 @@
 								</button>
 								<button type="button" class="btn btn-red button-margin" @click="physicsDel">
 							    <i class="icon-trash"></i>物理删除
-							</button>			
+								</button>			
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch" id="">
 						    		<i class="icon-search"></i>高级查询<i class="icon-arrow1-down" v-show="down"></i><i class="icon-arrow1-up" v-show="up"></i>
-								</button>
+								</button>-->
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -102,8 +105,6 @@
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_header from '../common/nav_tabs.vue'
-//	import assetsTree from '../plugin/vue-tree/tree.vue'
-//	import tableControle from '../plugin/table-controle/controle.vue'
 	import deptmask from '../settingDetails/dept_mask.vue'
 
 	export default {
@@ -202,7 +203,8 @@
 				},
 				treeData: [],
 				selData: [],
-				adddeptForm: {}//修改子组件时传递数据
+				adddeptForm: {},//修改子组件时传递数据
+				buttons:[],//按钮
 			}
 		},
 		methods: {
@@ -268,8 +270,10 @@
 		        // childValue就是子组件传过来的
 		        this.selMenu = childByValue
 		    },
-		    childvalue:function (childValue) {
-		    	 this.getbutton(childValue);
+			//左侧菜单传来
+		    childvalue:function ( childvalue) {
+				console.log( childvalue);
+		    	 this.getbutton( childvalue);
 		    },
 			tableControle(data){//控制表格列显示隐藏
 			  this.checkedName = data;
@@ -312,6 +316,18 @@
 				};
 				this.requestData();
 			},
+			 //请求点击
+		    getbtn(item){
+		    	if(item.name=="添加"){
+		         this.openAddMgr();
+		    	}else if(item.name=="修改"){
+		    	 this.modify();
+		    	}else if(item.name=="高级查询"){
+		    	 this.modestsearch();
+		    	}else if(item.name=="删除"){
+				 this.deluserinfo();
+				}
+		    },
 			//添加
 			openAddMgr() {
 				this.reset();
@@ -379,85 +395,6 @@
 //							});
 //						});
 					var url = this.basic_url + '/api-user/depts/deletes';
-					//changeMenu为勾选的数据
-//					var changeMenu = selData[0];
-					//deleteid为id的数组
-					var deleteid = [];
-					var ids;
-					console.log(selData);
-					for(var i = 0; i < selData.length; i++) {
-						deleteid.push(selData[i].id);
-					}
-					//ids为deleteid数组用逗号拼接的字符串
-					ids = deleteid.toString(',');
-					var data = {
-						ids: ids,
-					}
-					console.log(data);
-					this.$confirm('确定删除此数据吗？', '提示', {
-						confirmButtonText: '确定',
-						cancelButtonText: '取消',
-					}).then(({
-						value
-					}) => {
-						this.$axios.delete(url, {
-							params: data
-						}).then((res) => { //.delete 传数据方法
-							//resp_code == 0是后台返回的请求成功的信息
-							if(res.data.resp_code == 0) {
-								this.$message({
-									message: '删除成功',
-									type: 'success'
-								});
-								this.requestData();
-							}
-						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
-						});
-					}).catch(() => {
-
-					});
-					}
-				}
-			},
-			// 物理删除
-			physicsDel() {
-				var selData = this.selMenu;
-				if(selData.length == 0) {
-					this.$message({
-						message: '请您选择要删除的机构',
-						type: 'warning'
-					});
-					return;
-				} else {
-					var changeMenu = selData[0];
-					if(changeMenu.children!=null && typeof(changeMenu.children)!='undefined' && changeMenu.children.length>0){
-						this.$message({
-							message: '先删除子机构',
-							type: 'error'
-						});
-					}else {
-//						var id = changeMenu.id;
-//						var url = this.basic_url + '/api-user/depts/' + id;
-//						this.$axios.delete(url, {}).then((res) => {
-//							//resp_code == 0是后台返回的请求成功的信息
-//							if(res.data.resp_code == 0) {
-//								this.$message({
-//									message: '删除成功',
-//									type: 'success'
-//								});
-//								this.requestData();
-//							}
-//						}).catch((err) => {
-//							this.$message({
-//								message: '网络错误，请重试',
-//								type: 'error'
-//							});
-//						});
-					var url = this.basic_url + '/api-user/depts/deletes/physicsDel';
 					//changeMenu为勾选的数据
 //					var changeMenu = selData[0];
 					//deleteid为id的数组

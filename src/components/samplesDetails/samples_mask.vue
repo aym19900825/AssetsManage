@@ -176,7 +176,7 @@
 									<el-row>
 										<el-col :span="8" >
 											<el-form-item label="承检单位" prop="CJDW"  label-width="110px">
-												<el-select clearable v-model="samplesForm.CJDW" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit">
+												<el-select clearable v-model="samplesForm.CJDW" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @change="adddept">
 													<el-option v-for="(data,index) in selectDept" :key="index" :value="data.id" :label="data.fullname"></el-option>
 												</el-select>
 											</el-form-item>
@@ -581,6 +581,13 @@
 				}).then((res) => {
 					this.selectDept = res.data;
 				});
+			},
+			//确定承检单位
+			adddept(){
+				this.samplesForm.P_NUM = '';
+				this.samplesForm.PRODUCT_TYPE  = '';
+				this.samplesForm.PRODUCT = '';
+				this.samplesForm.PRO_NUM = '';
 			},
 			addcategory(){//产品类别
 				if(this.samplesForm.CJDW == null || this.samplesForm.CJDW == '' || this.samplesForm.CJDW == undefined){

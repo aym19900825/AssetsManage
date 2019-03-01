@@ -660,15 +660,16 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					this.page.totalCount = res.data.count;
-					for(var i=0;i<res.data.data.length;i++){
-						if(res.data.data[i].TYPE  == '1'){
-							res.data.data[i].TYPE  = '监督抽查';
-						}else if(res.data.data[i].TYPE  == '3'){
-							res.data.data[i].TYPE  = '质量抽查';
+					this.page.totalCount = res.data.count || 0;
+					var list = res.data.data || [];
+					for(var i=0;i<list.length;i++){
+						if(list[i].TYPE  == '1'){
+							list[i].TYPE  = '监督抽查';
+						}else if(list[i].TYPE  == '3'){
+							list[i].TYPE  = '质量抽查';
 						}
 					}
-					this.userList = res.data.data;
+					this.userList = list;
 					this.loading = false;
 				}).catch((wrong) => {
 					this.$message({

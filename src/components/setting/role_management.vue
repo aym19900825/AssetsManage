@@ -6,7 +6,7 @@
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单调用 Begin-->
-			<navs_left></navs_left>
+				<navs_left ref="navleft" v-on:childByValue="childvalue"></navs_left>
 			<!--左侧菜单调用 End-->
 
 			<!--右侧内容显示 Begin-->
@@ -16,10 +16,10 @@
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
 				
-								<!--<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
-								</button>-->
-								 <button type="button" class="btn btn-green" @click="openAddMgr" id="">
+								</button>
+								 <!--<button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加
                       			</button>
 								<button type="button" class="btn btn-blue button-margin" @click="modify">
@@ -42,7 +42,7 @@
 						    		<i class="icon-search"></i>高级查询
 						    		<i class="icon-arrow1-down" v-show="down"></i>
 						    		<i class="icon-arrow1-up" v-show="up"></i>
-								</button> 
+								</button> -->
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -240,21 +240,7 @@
 			judge(data) {//是否停用
 				return data.inactive=="1" ? '是' : '否'
 			},
-//			//请求页面的button接口
-//		    getbutton(childByValue){
-//		    	console.log(childByValue);
-//		    	var data = {
-//					menuId: childByValue.id,
-//					roleId: this.$store.state.roleid,
-//				};
-//				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
-//				this.$axios.get(url, {params: data}).then((res) => {
-//					console.log(111)
-//					console.log(res);
-//					this.buttons = res.data;
-//				}).catch((wrong) => {})
-//
-//		    },
+			
 			 //请求点击
 		    getbtn(item){
 		    	if(item.name=="添加"){
@@ -505,17 +491,34 @@
 				}
 				return data;
 			},
-			childByValue:function(childValue) {
-        		// childValue就是子组件传过来的值
-        		console.log(childValue);
-        		// this.$refs.navsheader.showClick(childValue);
-//      		this.getbutton(childValue);
+			//左侧菜单带过来
+			childvalue:function(childvalue) {
+     			this.getbutton(childvalue);
       		},
+			  //请求页面的button接口
+		    getbutton(childvalue){
+		    	console.log(childvalue);
+		    	var data = {
+					menuId: childvalue.id,
+					roleId: this.$store.state.roleid,
+				};
+				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
+				this.$axios.get(url, {params: data}).then((res) => {
+					console.log(111)
+					console.log(res);
+					this.buttons = res.data;
+				}).catch((wrong) => {
+					this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+				})
+
+		    },
 		},
 		mounted() {
 			this.requestData();
 			this.getKey();
-//			this.getbutton();
 		},
 	}
 </script>

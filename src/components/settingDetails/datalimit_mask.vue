@@ -67,6 +67,7 @@
 				var arr = [];
 				var url = this.basic_url + '/api-user/depts/getTreeMapByRoleId/'+id;
 				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
 					this.depetData = res.data;
 					var depetData = res.data
 					for(var a = 0; a < depetData.length; a++) {

@@ -75,7 +75,7 @@ export function isUserName(rule, value, callback) {
 		} else {
 			var targ = /^[a-zA-Z][a-zA-Z0-9_]*$/;
 			if( !isLetterNumber(value)){
-				callback(new Error('用户名只能由字母开头且数字下划线组成'));
+				callback(new Error('用户名只能由字母开头可含数字下划线'));
 			}
 			callback();
 		}

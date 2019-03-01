@@ -449,11 +449,11 @@
 			<!--弹出-->
 
 			<el-dialog :modal-append-to-body="false" title="机构" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-				<el-tree ref="tree" :data="resourceData" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
+				<el-tree ref="tree" :data="resourceData" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourceProps" @check="handleClicks" check-strictly>
 				</el-tree>
 				<span slot="footer" class="dialog-footer">
-			       <el-button @click="dialogVisible = false">取 消</el-button>
-			       <el-button type="primary" @click="dailogconfirm();" >确 定</el-button>
+			       <el-button @click="resetTree">取 消</el-button>
+			       <el-button type="primary" @click="dailogconfirm" >确 定</el-button>
 			    </span>
 			</el-dialog>
 		</div>
@@ -617,6 +617,10 @@
 			};
 		},
 		methods: {
+			resetTree(){
+				this.dialogVisible = false;
+				this.resourceCheckedKey = [];
+			},
 			change(){
 				this.user.roleId=this.user.roleId.slice(0);
 			},
@@ -797,18 +801,18 @@
 			//
 			handleClicks(data,checked, indeterminate) {
 				this.getCheckboxData = data;
-           		 this.i++;
-            		if(this.i%2==0){
-                	if(checked){
-                    	this.$refs.tree.setCheckedNodes([]);
-                    	this.$refs.tree.setCheckedNodes([data]);
-                    	//交叉点击节点
-               		 }else{
-                     this.$refs.tree.setCheckedNodes([]);
-                    	//点击已经选中的节点，置空
-                	 }
-            		}
-        	},
+           		if(checked){
+					// this.$refs.tree.setCheckedNodes([]);
+					// var _this = this;
+					// setTimeout(function(){
+					// 	this.$refs.tree.setCheckedNodes([data]);
+					// },0);
+					this.$refs.tree.setCheckedNodes([data]);
+					this.$refs.tree.setCheckedKeys([data.id]);
+				}else{
+					this.$refs.tree.setCheckedNodes([]);
+				}
+			},
 
 //			handleCheckChange(data, checked, indeterminate) {
 //				this.getCheckboxData = data;
@@ -1000,9 +1004,6 @@ if(typeof(this.user.roleId) != 'undefind'&&this.user.roleId != null&&this.user.r
 				$(".mask_div").css("height", "80%");
 				$(".mask_div").css("top", "100px");
 			},
-			getCheckedNodes() { //获取树菜单节点
-				this.checkedNodes = this.$refs.tree.getCheckedNodes()
-			},
 
 			//	保存users/saveOrUpdate
 			save() {
@@ -1102,15 +1103,10 @@ if(typeof(this.user.roleId) != 'undefind'&&this.user.roleId != null&&this.user.r
 				this.editSearch = 'dept';
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
-				//				var type = "2";
 				var url = this.basic_url + '/api-user/depts/treeMap';
-				//				var url = '/api/api-user/depts/treeByType';
-				this.$axios.get(url, {
-					//					params: {
-					//						type: type
-					//					},
-				}).then((res) => {
+				this.$axios.get(url, {}).then((res) => {
 					this.resourceData = res.data;
+					this.resourceCheckedKey.push(this.user.deptId);
 					this.dialogVisible = true;
 				});
 			},
@@ -1126,9 +1122,8 @@ if(typeof(this.user.roleId) != 'undefind'&&this.user.roleId != null&&this.user.r
 			},
 
 			dailogconfirm() { //小弹出框确认按钮事件
-				this.getCheckedNodes();
+				// this.checkedNodes =  this.$refs.tree.getCheckedNodes();
 				this.placetext = false;
-				this.dialogVisible = false;
 				if(this.editSearch == 'company') {
 					this.user.companyId = this.getCheckboxData.id;
 					this.user.companyName = this.getCheckboxData.fullname;
@@ -1136,6 +1131,8 @@ if(typeof(this.user.roleId) != 'undefind'&&this.user.roleId != null&&this.user.r
 					this.user.deptId = this.getCheckboxData.id;
 					this.user.deptName = this.getCheckboxData.fullname;
 				}
+				this.dialogVisible = false;
+				this.resetTree();
 			},
 
 			handleClose(done) {

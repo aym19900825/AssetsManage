@@ -6,7 +6,7 @@
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
-			 	<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left>	
+			<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left>	
 			<!--左侧菜单内容显示 End-->
 			<div class="wrapper wrapper-content">
 				<div class="ibox-content">

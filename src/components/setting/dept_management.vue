@@ -350,7 +350,6 @@
 					return;
 				} else {
 					this.adddeptForm = this.selMenu[0]; 
-					console.log(this.adddeptForm);
 					this.$refs.child.detail();
 				}
 			},

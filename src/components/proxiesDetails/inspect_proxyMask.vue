@@ -846,7 +846,6 @@
 							PRO_VERSIONNUM:'',	//产品名称编号+版本
 							S_VERSIONNUM:'',	//检验检测依据编号+版本
 							PROJ_VERSIONNUM:'',	//检测项目编号+版本
-
 						}
 					],
 				},
@@ -1968,5 +1967,4 @@
     background: #FFF;
     padding: 5px 10px;
 }*/
-
 </style>

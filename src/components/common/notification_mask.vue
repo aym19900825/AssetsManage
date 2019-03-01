@@ -244,7 +244,7 @@
 														</el-form-item>
 													</template>
 												</el-table-column>
-												<el-table-column prop="P_DESC" label="检验检测项目内容" sortable width="200px">
+												<el-table-column prop="P_DESC" label="检验检测项目内容" sortable width="250px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.P_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 															<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入内容"></el-input>
@@ -252,7 +252,7 @@
 														</el-form-item>
 													</template>
 												</el-table-column>
-												<el-table-column prop="REMARKS" label="要求" sortable width="150px">
+												<el-table-column prop="REMARKS" label="要求" sortable width="180px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 															<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入内容"></el-input>

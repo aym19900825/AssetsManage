@@ -233,7 +233,7 @@
 			this.$emit('testbasisprover',provers);
             this.dialogVisible = false;
 			this.requestData();
-        }
+		}
     },
     loadMore () {
 	   if (this.loadSign) {
@@ -252,7 +252,7 @@
         this.page.currentPage = 1;
         this.page.pageSize = 10;
         this.requestData();
-    },
+	},
 	requestData(){
 		var data = {
             page: this.page.currentPage,

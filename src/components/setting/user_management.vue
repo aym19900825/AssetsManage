@@ -411,6 +411,7 @@
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
+					console.log(res);
 					this.buttons = res.data;
 					
 				}).catch((wrong) => {})

@@ -100,7 +100,7 @@
 		type:'',
 		page: {
 			currentPage: 1,
-			pageSize: 20,
+			pageSize: 10,
 			totalCount: 0
 		},
 		searchList: {

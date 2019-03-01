@@ -34,8 +34,8 @@
 												<el-input v-model="dataInfo.S_NUM" :disabled="noedit" placeholder="编码不填写可自动生成"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8">
-											<el-tooltip class="item" effect="dark" :content="dataInfo.S_NAME" placement="top">
+										<el-col :span="8"><!--移上去显示数据 :content="dataInfo.S_NAME"-->
+											<el-tooltip class="item" effect="dark" placement="top">
 												<el-form-item label="标准名称" prop="S_NAME">
 													<el-input v-model="dataInfo.S_NAME" :disabled="noedit"></el-input>
 												</el-form-item>
@@ -123,8 +123,8 @@
 						<el-input type="textarea" :rows="4" v-model="editDataInfo" autocomplete="off"></el-input>
 					</el-form-item>
 					<el-form-item class="text-center pt20">
-						<el-button @click="resetEditBox">取 消</el-button>
 						<el-button type="primary" @click="saveEditBox">确 定</el-button>
+						<el-button @click="resetEditBox">取 消</el-button>
 					</el-form-item>
 				</el-form>
 			</el-dialog>

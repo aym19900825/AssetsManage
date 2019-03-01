@@ -195,46 +195,55 @@
 					 {
 					 	text: '工作任务单编号',
 					 	dataIndex: 'WONUM',
+					 	width: '300',
 					 	isShow:true,
 					 },
 					{
 						text: '状态',
 						dataIndex: 'STATUS',
+					 	width: '100',
 						isShow:true,
 					},
 					{
 						text: '样品名称',
 						dataIndex: 'ITEM_NAME',
+					 	width: '200',
 						isShow:true,
 					},
 					{
 						text: '样品型号',
 						dataIndex: 'ITEM_MODEL',
+					 	width: '140',
 						isShow:true,
 					},
 					{
 						text: '样品状态',
 						dataIndex: 'ITEM_STATUS',
+					 	width: '120',
 						isShow:true,
 					},
 					{
 						text: '抽样方案/判定依据',
 						dataIndex: 'CHECK_BASIS',
+					 	width: '160',
 						isShow:true,
 					},
 					{
 						text: '完成日期',
 						dataIndex: 'COMPLETE_DATE',
+					 	width: '160',
 						isShow:true,
 					},
 					{
 						text: '完成方式',
 						dataIndex: 'COMPLETE_MODE',
+					 	width: '120',
 						isShow:true,
 					},
 					{
 						text: '委托书编号',
 						dataIndex: 'PROXYNUM',
+					 	width: '160',
 						isShow:true,
 					},
 					{
@@ -245,6 +254,7 @@
 					{
 						text: '录入时间',
 						dataIndex: 'ENTERDATE',
+					 	width: '160',
 						isShow:true,
 					},
 				],

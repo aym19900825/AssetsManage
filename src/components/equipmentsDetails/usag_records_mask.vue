@@ -20,7 +20,7 @@
                 </div>
                 <div class="mask_content">
 					<el-form :model="dataInfo" :rules="rules" ref="dataInfo" class="demo-user">
-						<div class="accordion">
+						<div class="content-accordion">
 							<!-- 设备header信息 -->
 							<el-collapse v-model="activeNames">							
 	                            <el-collapse-item title="基本信息" name="1">
@@ -194,7 +194,7 @@
 	                            </el-collapse-item>
 							</el-collapse>
 						</div>
-						<div class="el-dialog__footer" v-show="noviews">
+						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并继续</el-button>
 							<el-button @click='close'>取消</el-button>

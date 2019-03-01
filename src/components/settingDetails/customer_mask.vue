@@ -258,8 +258,18 @@
 									<!-- <el-form label-width="100px"> -->
 										<el-row :gutter="30">
 											<el-col :span="8">
-												<el-form-item label="录入人" prop="ENTERBY">
-													<el-input v-model="CUSTOMER.ENTERBY" placeholder="当前录入人" :disabled="edit"></el-input>
+												<el-form-item label="录入人" prop="ENTERBYDesc">
+													<el-input v-model="CUSTOMER.ENTERBYDesc" placeholder="当前录入人" :disabled="edit"></el-input>
+												</el-form-item>
+											</el-col>
+											<!-- <el-col :span="8">
+												<el-form-item label="录入人机构" prop="DEPTID">
+													<el-input v-model="CUSTOMER.DEPTID" :disabled="edit"></el-input>
+												</el-form-item>
+											</el-col> -->
+											<el-col :span="8" v-if="dept">
+												<el-form-item label="机构" prop="DEPTIDDesc">
+													<el-input v-model="CUSTOMER.DEPTIDDesc" placeholder="当前录入人机构" :disabled="edit"></el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
@@ -267,9 +277,11 @@
 													<el-input v-model="CUSTOMER.ENTERDATE" placeholder="当前录入时间" :disabled="edit"></el-input>
 												</el-form-item>
 											</el-col>
+										</el-row>
+										<el-row :gutter="30">
 											<el-col :span="8">
-												<el-form-item label="修改人" prop="CHANGEBY">
-													<el-input v-model="CUSTOMER.CHANGEBY" placeholder="记录当前修改人" :disabled="edit"></el-input>
+												<el-form-item label="修改人" prop="CHANGEBYDesc">
+													<el-input v-model="CUSTOMER.CHANGEBYDesc" placeholder="记录当前修改人" :disabled="edit"></el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
@@ -497,6 +509,7 @@
                     ENTERDATE:'',
                     CHANGEBY:'',
                     CHANGEDATE:'',
+                    DEPTID:'',
 					isEditing: true
                 };
                 this.CUSTOMER.CUSTOMER_PERSONList.push(obj);
@@ -561,6 +574,7 @@
 					ENTERDATE:'',
 					CHANGEBY:'',
 					CHANGEDATE:'',
+					DEPTID:'',
 					MEMO:'',
 					CUSTOMER_QUALIFICATIONList:[],
 					CUSTOMER_PERSONList:[]
@@ -583,7 +597,8 @@
 				var date = new Date();
 				this.CUSTOMER.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-	    			this.CUSTOMER.ENTERBY = res.data.nickname;
+	    			this.CUSTOMER.ENTERBY = res.data.id;
+	    			this.CUSTOMER.DEPTID = res.data.deptId;
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -614,7 +629,8 @@
 				this.statusshow1 = false;
 				this.statusshow2 = true;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-	    			this.CUSTOMER.CHANGEBY = res.data.nickname;
+	    			this.CUSTOMER.CHANGEBY = res.data.id;
+	    			this.CUSTOMER.DEPTID = res.data.deptId;
 	    			var date = new Date();
 					this.CUSTOMER.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
 				}).catch((err) => {

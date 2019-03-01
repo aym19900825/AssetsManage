@@ -15,31 +15,19 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+							<button type="button" class="btn btn-green" @click="openAddMgr" id="">
 	                        	<i class="icon-add"></i>添加
-	              			 </button>
-								<button type="button" class="btn btn-blue button-margin" @click="modify">
+	              			</button>
+							<button type="button" class="btn btn-blue button-margin" @click="modify">
 							    <i class="icon-edit"></i>修改
 							</button>
-								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
+							<button type="button" class="btn btn-purple button-margin" @click="deluserinfo">
 							    <i class="icon-trash"></i>删除
 							</button>
 							<button type="button" class="btn btn-red button-margin" @click="physicsDel">
-							    <i class="icon-trash"></i>物理删除
-							</button>			
-								<!-- <button type="button" class="btn btn-primarys button-margin" @click="importData">
-							    <i class="icon-upload-cloud"></i>导入
+							    <i class="icon-trash1"></i>彻底删除
 							</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="exportData">
-							    <i class="icon-download-cloud"></i>导出
-							</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="Printing">
-							    <i class="icon-print"></i>打印
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="Configuration">
-							    <i class="icon-cpu"></i>配置关系
-							</button> -->
-								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
+							<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 					    		<i class="icon-search"></i>高级查询
 					    		<i class="icon-arrow1-down" v-show="down"></i>
 					    		<i class="icon-arrow1-up" v-show="up"></i>
@@ -60,30 +48,25 @@
 						<el-form :model="searchList" label-width="45px">
 							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-form-item label="编码" prop="NUM">
-										<el-input v-model="searchList.NUM"></el-input>
+									<el-form-item label="所属应用ID" prop="menuId">
+										<el-input v-model="searchList.menuId"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="名称" prop="TYPE">
-										<el-input v-model="searchList.TYPE"></el-input>
+									<el-form-item label="按钮名称" prop="name">
+										<el-input v-model="searchList.name"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="版本" prop="VERSION">
-										<el-input v-model="searchList.VERSION"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="5">
-									<el-form-item label="机构" prop="DEPTID">
-										<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
+									<el-form-item label="按钮样式颜色" prop="style">
+										<el-select clearable v-model="searchList.style" filterable allow-create default-first-option placeholder="请选择">
 										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 										</el-select>
 									</el-form-item>
 								</el-col>
 								<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -92,48 +75,36 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格 Begin-->
-							<el-table :header-cell-style="rowClass" 
-									  :data="categoryList" 
-									  border 
-									  stripe 
-									  :height="fullHeight" 
-									  style="width: 100%;" 
-									  :default-sort="{prop:'categoryList', order: 'descending'}" 
-									  @selection-change="SelChange" 
-									  v-loadmore="loadMore"
-									  v-loading="loading"  
-								  	  element-loading-text="加载中…"
-								  	  element-loading-spinner="el-icon-loading"
-								  	  element-loading-background="rgba(255, 255, 255, 0.9)">
+							<el-table ref="table" :header-cell-style="rowClass" :data="categoryList" v-loading="loading"  element-loading-text="拼命加载中"
+    								element-loading-spinner="el-icon-loading"
+    								element-loading-background="rgba(F, F, F, 0.6)" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
-								<el-table-column label="编码" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('编码')!=-1">
+
+								<el-table-column label="按钮名称" width="160" sortable prop="name" v-if="this.checkedName.indexOf('按钮名称')!=-1">
 									<template slot-scope="scope">
-										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.NUM}}
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.name}}
 										</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="名称" sortable prop="TYPE" v-if="this.checkedName.indexOf('名称')!=-1">
+
+								<el-table-column label="所属应用ID" width="140" sortable prop="menuId" v-if="this.checkedName.indexOf('所属应用ID')!=-1" align="right">
 								</el-table-column>
-								<!--<el-table-column label="信息状态" width="155" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
- 								<template slot-scope="scope" >
- 									<span v-text="scope.row.STATUS=='1'?'活动':'不活动'"></span>
- 								</template>
-							</el-table-column>-->
-								<el-table-column label="版本" width="100" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1" align="right">
+								<el-table-column label="按钮图标" width="185" sortable prop="icon" v-if="this.checkedName.indexOf('按钮图标')!=-1">
 								</el-table-column>
-								<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
+								<el-table-column label="按钮样式颜色" sortable prop="style" v-if="this.checkedName.indexOf('按钮样式颜色')!=-1">
+									<template slot-scope="scope">
+										<el-button size="mini" :class="style">{{scope.row.style}}</el-button>
+									</template>
 								</el-table-column>
-								<!-- <el-table-column label="录入人" width="155" prop="ENTERBY" sortable v-if="this.checkedName.indexOf('录入人')!=-1">
-								</el-table-column> -->
-								<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
+								<el-table-column label="排序" width="100" sortable prop="sort" v-if="this.checkedName.indexOf('排序')!=-1">
 								</el-table-column>
-								<!-- <el-table-column label="修改人" width="155" prop="CHANGEBY" sortable v-if="this.checkedName.indexOf('修改人')!=-1">
-								</el-table-column> -->
-								<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
+								<el-table-column label="录入时间" width="160" prop="createTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
+								</el-table-column>
+								<el-table-column label="修改时间" width="160" prop="updateTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
 								</el-table-column>
 							</el-table>
-							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
 							<!-- 表格 End-->
 						</el-col>
@@ -141,7 +112,9 @@
 				</div>
 			</div>
 			<!--右侧内容显示 End-->
-			<categorymask :CATEGORY="CATEGORY" ref="categorymask" @request="requestData" @reset="reset" v-bind:page=page></categorymask>
+			<btnconfigmask :CATEGORY="CATEGORY" ref="btnconfigmask" @request="requestData" @reset="reset" v-bind:page=page></btnconfigmask>
+			<!--报表-->
+			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 		</div>
 	</div>
 </template>
@@ -150,34 +123,35 @@
 	import vheader from '../common/vheader.vue'
 	import navs_header from '../common/nav_tabs.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import categorymask from '../maindataDetails/product_categoryMask.vue'
+	import btnconfigmask from '../settingDetails/buttonconfigure_mask.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
+	import reportmask from'../reportDetails/reportMask.vue'
 	export default {
 		name: 'customer_management',
 		components: {
 			vheader,
 			navs_left,
 			navs_header,
-			categorymask,
+			btnconfigmask,
 			tableControle,
+			reportmask,
 		},
 		data() {
 			return {
+				reportData:{},//报表的数据
+				scroll_old:0,
+				// up2down:'down',
+				reportData:{},//报表的数据
 				basic_url: Config.dev_url,
 				loadSign: true, //鼠标滚动加载数据
 				commentArr: {},
 				loading: false,//默认加载数据时显示loading动画
+				fileList:[],
 				value: '',
-				options: [{
-					value: '1',
-					label: '活动'
-				}, {
-					value: '0',
-					label: '不活动'
-				}],
+				productType:'productType',//appname
 				searchData: {
 					page: 1,
-					limit: 10, //分页显示数
+					limit: 20, //分页显示数
 					nickname: '',
 					enabled: '',
 					searchKey: '',
@@ -186,52 +160,41 @@
 					deptId: ''
 				},
 				checkedName: [
-					'编码',
-					'名称',
-					'版本',
-					'机构',
-					// '信息状态',
-					
-					// '录入人',
+					'按钮名称',
+					'所属应用ID',
+					'按钮图标',
+					'按钮样式颜色',
+					'排序',
 					'录入时间',
-					// '修改人',
 					'修改时间'
 				],
 				tableHeader: [{
-						label: '编码',
-						prop: 'NUM'
+						label: '按钮名称',
+						prop: 'name'
+					},{
+						label: '所属应用ID',
+						prop: 'menuId'
+					},
+					
+					{
+						label: '按钮图标',
+						prop: 'icon'
 					},
 					{
-						label: '名称',
-						prop: 'TYPE'
+						label: '按钮样式颜色',
+						prop: 'style'
 					},
 					{
-						label: '版本',
-						prop: 'VERSION'
+						label: '排序',
+						prop: 'sort'
 					},
-					{
-						label: '机构',
-						prop: 'DEPARTMENTDesc'
-					},
-					// {
-					// 	label: '信息状态',
-					// 	prop: 'STATUS'
-					// },
-					// {
-					// 	label: '录入人',
-					// 	prop: 'ENTERBY'
-					// },
 					{
 						label: '录入时间',
-						prop: 'ENTERDATE'
+						prop: 'createTime'
 					},
-					// {
-					// 	label: '修改人',
-					// 	prop: 'CHANGEBY'
-					// },
 					{
 						label: '修改时间',
-						prop: 'CHANGEDATE'
+						prop: 'updateTime'
 					}
 				],
 				selUser: [],
@@ -244,17 +207,16 @@
 				ismin: true,
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
 				searchList: { //点击高级搜索后显示的内容
-					NUM:'',
-					TYPE: '',
-					VERSION:'',
-					DEPTID: '',
+					menuId:'',
+					name: '',
+					style:'',
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
 				resourceDialogisShow: false,
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
 				resourceProps: {
-					categorymaskren: "subDepts",
+					btnconfigmaskren: "subDepts",
 					label: "simplename"
 				},
 				page: { //分页显示
@@ -280,22 +242,28 @@
 						type: type
 					},
 				}).then((res) => {
-					console.log(res.data);
 					this.selectData = res.data;
 				});
 			},
 			//表格滚动加载
 			loadMore() {
+				//console.log(this.$refs.table.$el.offsetTop)
 				let up2down = sessionStorage.getItem('up2down');
 				if(this.loadSign) {					
 					if(up2down=='down'){
-						this.page.currentPage++
+						this.page.currentPage++;
 						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
 							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
 							return false;
 						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
 					}else{
-						this.page.currentPage--
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
 						if(this.page.currentPage < 1) {
 							this.page.currentPage=1
 							return false;
@@ -303,74 +271,73 @@
 					}
 					this.loadSign = false;
 					setTimeout(() => {
-						this.loadSign = true
+						this.loadSign = true;
 					}, 1000)
-					this.requestData()
+					this.requestData();
 				}
-				// if(this.loadSign) {
-				// 	this.loadSign = false
-				// 	this.page.currentPage++
-				// 		if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-				// 			return
-				// 		}
-				// 	setTimeout(() => {
-				// 		this.loadSign = true
-				// 	}, 1000)
-				// 	this.requestData()
-				// }
 			},
 			tableControle(data) {
 				this.checkedName = data;
 			},
 			sizeChange(val) {
 				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
 				this.requestData();
 			},
 			currentChange(val) {
 				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
 				this.requestData();
 			},
+			//重置
+			resetbtn(){
+				this.searchList = {
+					name:'',
+					menuId:'',
+					style: '',
+				};
+				this.requestData();
+			},
+			//搜索
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 20;
 				this.requestData();
 			},
-			resetbtn(){
-				this.searchList = { //点击高级搜索后显示的内容
-					NUM:'',
-					TYPE: '',
-					VERSION:'',
-					DEPTID: '',
-				};
-				this.requestData();
-			},
 			//清空
 			reset() {
 				this.CATEGORY = {
-					ID: '',
-					NUM: '',
-					TYPE: '',
-					STATUS: '活动',
-					VERSION: '1',
-					DEPARTMENT: '',
-					ENTERBY: '',
-					ENTERDATE: '',
-					CHANGEBY: '',
-					CHANGEDATE: ''
+					id: '',
+					name: '',
+					menuId: '',
+					icon: '',
+					style: '',
+					sort: '',
+					createTime: '',
+					updateTime: '',
 				};
 				if(this.$refs['CATEGORY'] !== undefined) {
 					this.$refs['CATEGORY'].resetFields();
 				}
-
 			},
-			//添加类别
+			//添加按钮配置
 			openAddMgr() {
 				this.reset();
-				this.$refs.categorymask.open(); // 方法1
-				this.$refs.categorymask.visible();
+				this.$refs.btnconfigmask.open(); // 方法1
+				this.$refs.btnconfigmask.visible();
 				
 			},
-			//修改类别
+			//修改按钮配置
 			modify() {
 				if(this.selUser.length == 0) {
 					this.$message({
@@ -386,13 +353,13 @@
 					return;
 				} else {
 					this.CATEGORY = this.selUser[0];
-					this.$refs.categorymask.detail();
+					this.$refs.btnconfigmask.detail();
 				}
 			},
 			//查看
 			 view(data) {
 			 	this.CATEGORY =data;
-				this.$refs.categorymask.view();
+				this.$refs.btnconfigmask.view();
 			},
 			//高级查询
 			modestsearch() {
@@ -410,7 +377,7 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/productType/deletes';
+					var url = this.basic_url + '/api-apps/app/permissions/deletes';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -452,8 +419,8 @@
 					});
 				}
 			},
-			// 物理删除
-			physicsDel() {
+			//物理删除
+			physicsDel(){
 				var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({
@@ -462,7 +429,7 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/productType/deletes/physicsDel';
+					var url = this.basic_url + '/api-apps/app/productType/physicsDel';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -504,27 +471,12 @@
 					});
 				}
 			},
-			// 导入
-			importData() {
-
+			handleSuccess(response, file, fileList){
+				console.log(response);
+				console.log(file);
+				console.log(fileList);
 			},
-			// 导出
-			exportData() {
-
-			},
-			// 打印
-			Printing() {
-
-			},
-			// 配置关系
-			Configuration() {
-				this.$router.push({
-					path: '/inspection_project'
-				});
-			},
-			judge(data) {
-				data.STATUS = data.STATUS == "1" ? '活动' : '不活动'
-			},
+		
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -541,21 +493,14 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					NUM:this.searchList.NUM,
-					TYPE: this.searchList.TYPE,
-					VERSION:this.searchList.VERSION,
-					DEPTID: this.searchList.DEPTID,
-					// PHONE: this.searchList.PHONE,
-					// CONTACT_ADDRESS: this.searchList.CONTACT_ADDRESS,
-					// STATUS: this.searchList.STATUS
+					name:this.searchList.name,
+					menuId:this.searchList.menuId,
+					style: this.searchList.style,
 				}
-				// console.log(this.searchList.DEPTID);
-				var url = this.basic_url + '/api-apps/app/productType';
+				var url = this.basic_url + '/api-user/permissions';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					// console.log(res.data);
-					
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -564,20 +509,17 @@
 					} else {
 						this.loadSign = true
 					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
-
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.categoryList = newarr;
+					this.categoryList = res.data.data;
 					this.loading = false;
-				}).catch((wrong) => {})
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试1',
+						type: 'error'
+					});
+				})
 			},
 			handleNodeClick(data) {},
 			formatter(row, column) {
@@ -586,13 +528,12 @@
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
         		this.$refs.navsheader.showClick(childValue);
-      		},
-
+      		}
 		},
 		mounted() {
 			this.requestData();
 			this.getCompany();
-		},
+		}
 	}
 </script>
 

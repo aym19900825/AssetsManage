@@ -15,7 +15,7 @@
     <el-table-column type="selection" width="55" fixed align="center">
 		</el-table-column>
     <el-table-column v-for="(column, index) in columns" :key="column.dataIndex"
-      :label="column.text" v-if="column.isShow && column.dataIndex != 'version'">
+      :label="column.text" :width="column.width" v-if="column.isShow && column.dataIndex != 'version'">
       <template slot-scope="scope">
         <span v-if="spaceIconShow(index)" v-for="(space, levelIndex) in scope.row._level" class="ms-tree-space"></span>
         <span class="button is-outlined is-primary is-small" v-if="toggleIconShow(index,scope.row)" @click="toggle(scope.$index)">
@@ -23,11 +23,14 @@
           <i v-if="scope.row._expanded" class="el-icon-caret-bottom" aria-hidden="true"></i>
         </span>
         <span v-else-if="index===0" class="ms-tree-space"></span>
-        <span v-if="index===0"@click=view(scope.row)>{{scope.row[column.dataIndex]}}</span>
-        <span v-else>{{scope.row[column.dataIndex]}}</span>          
+
+        <span v-if="index===0" title="点击查看详情" class="blue" @click="view(scope.row)">{{scope.row[column.dataIndex]}}</span>  
+        <span v-else>{{scope.row[column.dataIndex]}}</span>   
+
+
       </template>
     </el-table-column>
-    <el-table-column v-for="(column, index) in columns" :key="column.dataIndex"
+    <el-table-column v-for="(column, index) in columns" :width="column.width" :key="column.dataIndex"
       :label="column.text" v-if="column.isShow && column.dataIndex == 'version'" align="right">
       <template slot-scope="scope">
         <span v-if="spaceIconShow(index)" v-for="(space, levelIndex) in scope.row._level" class="ms-tree-space"></span>
@@ -36,7 +39,7 @@
           <i v-if="scope.row._expanded" class="el-icon-caret-bottom" aria-hidden="true"></i>
         </span>
         <span v-else-if="index===0" class="ms-tree-space"></span>
-        <span v-if="index===0"@click=view(scope.row)>{{scope.row[column.dataIndex]}}</span>
+        <span v-if="index===0" @click="view(scope.row)">{{scope.row[column.dataIndex]}}</span>
         <span v-else>{{scope.row[column.dataIndex]}}</span>          
       </template>
     </el-table-column>
@@ -137,8 +140,9 @@
 				this.selUser = val;
 				//子给父传值
 				// childByValue是在父组件on监听的方法
-        // 第二个参数this.childValue是需要传的值
-				this.$emit('childByValue', this.selUser)
+        // 第二个参数this.childValuedata是需要传的值
+        console.log(this.selUser);
+				this.$emit('classByValue', this.selUser);
 			},
     // 显示行
        showTr: function (row, index) {
@@ -154,9 +158,7 @@
         record._expanded = !record._expanded
       },
       view: function (data) {
-        console.log(data);
-         this.$emit('childByValue', data)
-        // deliver.$emit('data', this.view)
+         this.$emit('getDetail', data);
       },
     
     // 显示层级关系的空格和图标

@@ -18,7 +18,7 @@
 				</div>
 				<div class="mask_content">
 					<el-form :model="report" inline-message :rules="rules" ref="report" label-width="100px" class="demo-adduserForm">
-						<div class="accordion" id="information">
+						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="报告归档" name="1">
 									<!-- <el-row class="pb10">
@@ -96,7 +96,7 @@
 								</el-collapse-item>
 							</el-collapse>
 						</div>
-						<div class="el-dialog__footer" v-show="noviews">
+						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click="saveAndUpdate()">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit()" v-show="addtitle">保存并继续</el-button>
 							<el-button @click="close">取消</el-button>

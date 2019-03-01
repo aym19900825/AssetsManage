@@ -74,7 +74,7 @@
 			</el-table-column>
 		</el-table>
 				
-			<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+			<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 			</el-pagination>
 			<span slot="footer" class="dialog-footer">
 			   <el-button type="primary" @click="determine">确 定</el-button>
@@ -100,7 +100,7 @@
 		type:'',
 		page: {
 			currentPage: 1,
-			pageSize: 20,
+			pageSize: 10,
 			totalCount: 0
 		},
 		searchList: {
@@ -232,6 +232,9 @@
 				linedata.push(this.selval[0].PRODUCT_TYPE);//产品类别
 				linedata.push(this.selval[0].PRO_NUM);//产品编号
 				linedata.push(this.selval[0].PRODUCT);//产品
+				linedata.push(this.selval[0].P_VERSION );//产品类别版本
+				linedata.push(this.selval[0].PRO_VERSION);//产品版本
+				linedata.push(this.selval[0].ITEMNUM);//样品编号
 				this.$emit('appenddes',description);
 				this.$emit('appendmod',model);
 				this.$emit('appendqua',quatity);

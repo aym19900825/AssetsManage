@@ -28,7 +28,7 @@
 							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
 							<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
 						</div>
-						<div class="accordion" id="information">
+						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<!-- 样品信息列表 Begin-->
 								<el-collapse-item title="样品信息" name="1">
@@ -261,9 +261,8 @@
 													<!-- <el-input v-model="workorderForm.ITEM_PROFESSIONAL_GROUP" :disabled="edit">
 														<el-button slot="append" icon="el-icon-search" @click="addperson('2')" :disabled="noedit"></el-button>
 													</el-input> -->
-													<el-form-item label="样品承接人(专业组)" prop="ITEM_PROFESSIONAL_GROUP"  label-width="150px">
-														<el-select clearable v-model="workorderForm.ITEM_PROFESSIONAL_GROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit"
-														>
+													<el-form-item label="样品承接人(专业组)" prop="ITEM_PROFESSIONAL_GROUP" label-width="150px">
+														<el-select clearable v-model="workorderForm.ITEM_PROFESSIONAL_GROUP" filterable allow-create default-first-option placeholder="请选择" style="width: 100%;" :disabled="noedit">
 															<el-option v-for="(data,index) in maingroup" :key="index" :value="data.id" :label="data.fullname"></el-option>
 														</el-select>
 													</el-form-item>
@@ -286,7 +285,7 @@
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
-												<el-form-item label="样品返回数量">
+												<el-form-item label="样品返回数量" label-width="150px">
 													<el-input-number type="number" v-model.number="workorderForm.ITEM_RETURN_QUALITY" @change="handleChangeQuality" :min="1" :max="1000" label="描述文字" style="width: 100%;" :disabled="noedit"></el-input-number>
 												</el-form-item>
 											</el-col>
@@ -310,7 +309,7 @@
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
-												<el-form-item label="样品检后状态">
+												<el-form-item label="样品检后状态" label-width="150px">
 													<el-radio-group v-model="workorderForm.ITEM_CHECK_STATUS" :disabled="noedit">
 														<el-radio v-for="(data,index) in Select_ITEM_CHECK_STATUS" :key="index" :label="data.code">{{data.name}}</el-radio>
 													</el-radio-group>
@@ -907,7 +906,7 @@
 								<!-- 录入人信息 End -->
 							</el-collapse>
 						</div>
-						<div class="el-dialog__footer" v-if="!viewtitle">
+						<div class="content-footer" v-if="!viewtitle">
 							<el-button type="primary" @click="submitForm">保存</el-button>
 							<el-button type="success" v-show="addtitle">保存并继续</el-button>
 							<el-button @click='close'>取消</el-button>
@@ -933,7 +932,7 @@
 						</el-table-column>
 					</el-table>
 				</div> 
-					<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+					<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 					</el-pagination>
 					<span slot="footer" class="dialog-footer">
 				       <el-button type="primary" @click="addpersonname">确 定</el-button>
@@ -1614,24 +1613,33 @@
 				}
 				if(row.ID){
 					var url = this.basic_url + '/api-apps/app/workorder/' + TableName +'/' + row.ID;
-					this.$axios.delete(url, {}).then((res) => {
-						if(res.data.resp_code == 0){
-							this.workorderForm[TableName+'List'].splice(index,1);
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {}).then((res) => {
+							if(res.data.resp_code == 0){
+								this.workorderForm[TableName+'List'].splice(index,1);
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+							}else{
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'error'
+								});
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '删除成功',
-								type: 'success'
-							});
-						}else{
-							this.$message({
-								message: res.data.resp_msg,
+								message: '网络错误，请重试',
 								type: 'error'
 							});
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
+					}).catch(() => {
+
 					});
 				}else{
 					this.workorderForm[TableName+'List'].splice(index,1);

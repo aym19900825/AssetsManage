@@ -42,41 +42,43 @@
 			menu(id) {
 				console.log(id);
 				var _this = this;
-				this.roId=id;
-				var arr = [];
+				this.roId=id;	
+				var arr=[];	
 				var url = this.basic_url + '/api-user/menus/' + id + '/menus';
 				this.$axios.get(url, {}).then((res) => {
 					console.log(res);
 					this.menuData = res.data;
-					var menuData = res.data;//第一级
-					for(var a = 0; a < menuData.length; a++){
-						if(menuData[a].checked) {
-							arr.push(menuData[a].id);
-							if(menuData[a].children.length>0){
-								arr.pop(menuData[a].id)
-								var menuDataChild=menuData[a].children//2
-								for(var b=0;b<menuData[a].children.length;b++){
-									console.log(menuData[a].children.length);
-									if(menuData[a].children[b].checked) {
-										arr.push(menuData[a].children[b].id);
-										if(menuData[a].children[b].children.length > 0) {
-											arr.pop(menuData[a].children[b].id)
-											for(var c=0;c<menuData[a].children[b].children.length;c++){
-												if(menuData[a].children[b].children[c].checked) {
-													arr.push(menuData[a].children[b].children[c].id);
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
+					// var menuData = res.data;//第一级
+					// for(var a = 0; a < menuData.length; a++){
+					// 	if(menuData[a].checked) {
+					// 		arr.push(menuData[a].id);
+					// 		if(menuData[a].children.length>0){
+					// 			arr.pop(menuData[a].id)
+					// 			var menuDataChild=menuData[a].children//2
+					// 			for(var b=0;b<menuData[a].children.length;b++){
+					// 				console.log(menuData[a].children.length);
+					// 				if(menuData[a].children[b].checked) {
+					// 					arr.push(menuData[a].children[b].id);
+					// 					if(menuData[a].children[b].children.length > 0) {
+					// 						arr.pop(menuData[a].children[b].id)
+					// 						for(var c=0;c<menuData[a].children[b].children.length;c++){
+					// 							if(menuData[a].children[b].children[c].checked) {
+					// 								arr.push(menuData[a].children[b].children[c].id);
+					// 							}
+					// 						}
+					// 					}
+					// 				}
+					// 			}
+					// 		}
+					// 	}
+					// }
 					
-					this.$nextTick(() => {
-	 					this.setChecked(arr);
+				this.recursive(res.data,arr);
+				this.$nextTick(() => {
+					console.log(arr);
+						this.setChecked(arr);
 					});
-					this.dialogVisible = true;
+				this.dialogVisible = true;
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -84,11 +86,27 @@
 					});
 				});
 			},
+			recursive(mData,arr){
+				console.log(mData);
+				for(var a = 0; a < mData.length; a++){
+						if(mData[a].checked){
+							arr.push(mData[a].id);							
+						}
+						if(mData[a].children!=undefined){
+						this.recursive(mData[a].children,arr);
+						}else{
+						this.recursive(mData[a],arr);
+
+						}
+				}
+			return mData;
+			
+			},
+
 			setChecked(arr){
 				this.$refs.tree.setCheckedKeys(arr);
 			},
 			getCheckedAll() {
-
 				return this.flatState.filter(function(e) {
 					if(e.node.indeterminate) {
 						return e.node.indeterminate

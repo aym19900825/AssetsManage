@@ -17,7 +17,7 @@
 				</div>
 				<div class="mask_content">
 					<el-form :model="adddeptForm" :rules="rules" ref="adddeptForm" label-width="100px" id="demo-adduserForm">
-						<div class="accordion">
+						<div class="content-accordion">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="机构信息" name="1">
 									<el-row :gutter="30">
@@ -170,8 +170,7 @@
 								</el-collapse-item>
 							</el-collapse>
 						</div>
-						<div class="el-dialog__footer">
-							    
+						<div class="content-footer">
 							    <el-button type="primary" @click="saveAndUpdate">保存</el-button>
 							    <el-button type="success" @click="saveAndSubmit" v-show="addtitle">保存并继续</el-button>
 							<!--	<el-button type="primary" class="btn-primarys" @click="submitForm('adddeptForm')">提交</el-button>-->
@@ -193,38 +192,36 @@
 
 			<!--负责人 Begin-->
 			<el-dialog :modal-append-to-body="false" title="选择负责人" :visible.sync="dialogLeader" width="80%" :before-close="handleClose">
-				<div class="accordion" id="information">
-					<div class="mask_tab-block">
-						<!-- <div class="mask_tab-head clearfix">
-							<div class="accordion_title">
-								<span class="accordion-toggle">选择负责人</span>
-							</div>
-						</div> -->
-						<!-- 第二层弹出的表格 -->
-							<el-table :data="userList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-									<el-table-column type="selection" width="55" fixed>
-									</el-table-column>
-									<el-table-column label="账号" sortable width="140px" prop="username">
-									</el-table-column>
-									<el-table-column label="姓名" sortable width="200px" prop="nickname">
-									</el-table-column>
-									<el-table-column label="机构" sortable width="150px" prop="deptName">
-									</el-table-column>
-									<el-table-column label="公司" sortable width="200px" prop="companyName">
-									</el-table-column>
-									<el-table-column label="信息状态" sortable width="200px" prop="enabled" :formatter="judge">
-									</el-table-column>
-									<el-table-column label="创建时间" width="200px" prop="createTime" sortable :formatter="dateFormat">
-									</el-table-column>
-								</el-table>
-								<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-								</el-pagination>
-							<!-- 表格 -->
-					</div>
+				<div class="content-accordion" id="information">
+					<!-- <div class="mask_tab-head clearfix">
+						<div class="accordion_title">
+							<span class="accordion-toggle">选择负责人</span>
+						</div>
+					</div> -->
+					<!-- 第二层弹出的表格 -->
+						<el-table :data="userList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+								<el-table-column type="selection" width="55" fixed>
+								</el-table-column>
+								<el-table-column label="账号" sortable width="140px" prop="username">
+								</el-table-column>
+								<el-table-column label="姓名" sortable width="200px" prop="nickname">
+								</el-table-column>
+								<el-table-column label="机构" sortable width="150px" prop="deptName">
+								</el-table-column>
+								<el-table-column label="公司" sortable width="200px" prop="companyName">
+								</el-table-column>
+								<el-table-column label="信息状态" sortable width="200px" prop="enabled" :formatter="judge">
+								</el-table-column>
+								<el-table-column label="创建时间" width="200px" prop="createTime" sortable :formatter="dateFormat">
+								</el-table-column>
+							</el-table>
+							<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							</el-pagination>
+						<!-- 表格 -->
 				</div>
 				<span slot="footer" class="dialog-footer">
-			       <el-button @click="dialogLeader = false">取 消</el-button>
 			       <el-button type="primary" @click="addleader">确 定</el-button>
+			       <el-button @click="dialogLeader = false">取 消</el-button>
 			    </span>
 			</el-dialog>
 			<!--负责人 End-->

@@ -71,7 +71,7 @@
 					<el-table-column label="修改时间" width="160" prop="CHANGEDATE" sortable :formatter="dateFormat">
 					</el-table-column>
 				</el-table>
-				<el-pagination background class="pull-right pt10 pb10"
+				<el-pagination background class="text-right pt10"
 		            @size-change="sizeChange"
 		            @current-change="currentChange"
 		            :current-page="page.currentPage"
@@ -81,10 +81,10 @@
 		            :total="page.totalCount">
 		        </el-pagination>
 				<!-- 表格 End-->
-				<span slot="footer" class="el-dialog__footer">
+				<div slot="footer">
 			       <el-button type="primary" @click="addbasis">确 定</el-button>
 			       <el-button @click="dialogVisible = false">取 消</el-button>
-			    </span>
+			    </div>
 			</el-dialog>
 			<!-- 检测项目与要求 End -->
 	</div>
@@ -324,10 +324,5 @@
 </script>
 
 <style>
-.el-dialog__footer {
-	padding: 19px 20px 20px;
-	text-align: center;
-	-webkit-box-sizing: border-box;
-	box-sizing: border-box;
-}
+
 </style>

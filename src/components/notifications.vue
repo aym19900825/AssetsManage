@@ -147,7 +147,6 @@
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="工作任务通知书编号" width="180" sortable prop="N_CODE" v-if="this.checkedName.indexOf('工作任务通知书编号')!=-1">
-
 									<template slot-scope="scope">
 										<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.N_CODE}}
 										</p>
@@ -167,7 +166,6 @@
 								</el-table-column>
 								<el-table-column label="承检单位" width="150" sortable prop="CJDWDesc" v-if="this.checkedName.indexOf('承检单位')!=-1">
 								</el-table-column>
-								
 								<el-table-column label="抽样方案" width="120" prop="SOLUTION" sortable v-if="this.checkedName.indexOf('抽样方案')!=-1">
 								</el-table-column>
 								<el-table-column label="完成日期" width="130" prop="COMPDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('完成日期')!=-1">
@@ -181,7 +179,7 @@
 								<!--<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>-->
 							</el-table>
-							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
 							<!-- 表格 End-->
 						</el-col>
@@ -213,7 +211,6 @@
 			tableControle,
 			notificationsmask,
 			reportmask
-
 		},
 		data() {
 			return {
@@ -561,7 +558,7 @@
 					for(var i = 0; i < changeUser.length; i++) {
 						if(changeUser[i].STATE!=1){
 						 	this.$message({
-								message: '您的数据中有已启动的流程，所以能删除',
+								message: '您的数据中有已启动的流程，所以不能删除',
 								type: 'error'
 							});
 							return;

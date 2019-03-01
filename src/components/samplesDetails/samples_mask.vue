@@ -18,7 +18,7 @@
 				</div>
 				<div class="mask_content">
 					<el-form :model="samplesForm" :label-position="labelPosition" :rules="rules" ref="samplesForm" label-width="110px" status-icon class="demo-form-inline">
-						<div class="accordion">
+						<div class="content-accordion">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基础信息" name="1">
 									<el-row :gutter="20" class="pb10">
@@ -319,7 +319,7 @@
 						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
 							<el-button type="success" v-show="addtitle" @click='saveAndSubmit()'>保存并继续</el-button>
-							<el-button type="primary" v-show="modifytitle" @click='generate()'>生成委托书</el-button>
+							<!-- <el-button type="primary" v-show="modifytitle" @click='generate()'>生成委托书</el-button> -->
 							<el-button @click='close'>取消</el-button>
 						</div>
 					</el-form>
@@ -355,7 +355,7 @@
 							<!--<el-table-column label="信息状态" width="200px" prop="STATUS" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
 							</el-table-column>-->
 					</el-table>	
-					<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+					<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 					</el-pagination>
 				<div slot="footer" class="el-dialog__footer">
 	    			<el-button type="primary" @click="dailogconfirm()">确 定</el-button>
@@ -382,7 +382,7 @@
 					<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat">
 					</el-table-column>
 				</el-table>
-				<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 				<!-- 表格 End-->
 				<div slot="footer" class="el-dialog__footer">
@@ -407,7 +407,7 @@
 					<el-table-column label="创建时间" prop="createTime" width="100px" sortable :formatter="dateFormat">
 					</el-table-column>
 				</el-table>
-					<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+					<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 					</el-pagination>
 				<div slot="footer" class="el-dialog__footer">
 			       <el-button type="primary" @click="addPerson">确 定</el-button>
@@ -603,6 +603,7 @@
 			categorydata(value){
 				this.samplesForm.P_NUM = value[0];
 				this.samplesForm.PRODUCT_TYPE  = value[1];
+				this.samplesForm.P_VERSION = value[2];//产品类别版本
 				this.samplesForm.PRODUCT = '';
 				this.samplesForm.PRO_NUM = '';
 			},
@@ -618,8 +619,10 @@
 			},
 			//接到产品的值
 			appenddata(value){
+				console.log(value);
 				this.samplesForm.PRO_NUM = value[0];
 				this.samplesForm.PRODUCT = value[1];
+				this.samplesForm.PRO_VERSION = value[2];//产品版本
 			},
 			reset(){
             	this.samplesForm = {
@@ -665,7 +668,7 @@
 					console.log(res.data);
 					this.gridData= res.data.data;
 				});
-					this.dialogVisible = true;
+				this.dialogVisible = true;
 			},
 			dailogconfirm(type) { //小弹出框确认按钮事件
 				if(this.selval.length == 0){

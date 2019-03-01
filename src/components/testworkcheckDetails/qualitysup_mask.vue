@@ -18,7 +18,7 @@
 				</div>
 				<div class="mask_content">
 					<el-form :model="report" inline-message :rules="rules" ref="report" label-width="100px" class="demo-adduserForm">
-						<div class="accordion" id="information">
+						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="质量监督抽查审批" name="1">
 									<el-row class="pb10">
@@ -76,7 +76,7 @@
 								</el-collapse-item> -->
 							</el-collapse>
 						</div>
-						<div class="el-dialog__footer" v-show="viewtitle">
+						<div class="content-footer" v-show="viewtitle">
 							<el-button title="查看文件" type="primary" @click="saveAndUpdate()">查看</el-button>
 						</div>
 					</el-form>

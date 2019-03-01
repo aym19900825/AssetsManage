@@ -18,7 +18,7 @@
 				</div>
 				<div class="mask_content">
 					<el-form :model="user" inline-message :rules="rules" ref="user" :label-position="labelPositions" class="demo-user">
-						<div class="accordion">
+						<div class="content-accordion">
 							<el-collapse v-model="activeNames">
 								<!--<el-collapse-item title="基础信息" name="1">
 									<el-row :gutter="30">
@@ -165,7 +165,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="学历" prop="education" label-width="100px">
-												<el-select v-model="user.education" placeholder="硕士" style="width: 100%" :disabled="noedit">
+												<el-select v-model="user.education" placeholder="请选择" style="width: 100%" :disabled="noedit">
 													<el-option v-for="(item,index) in options" :key="index" :label="item.label" :value="item.value">
 													</el-option>
 												</el-select>
@@ -191,7 +191,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="角色" prop="roleId" label-width="100px">
-												<el-select v-model="user.roleId" multiple :disabled="noedit"  default-first-option value-key="item.id" @change="change" >
+												<el-select v-model="user.roleId" multiple :disabled="noedit"  default-first-option value-key="item.id" @change="change" style="width: 100%;">
 													<el-option v-for="(item,index) in selectData" :key="index" :value="item.id" :label="item.name"></el-option>
 												</el-select>
 											</el-form-item>
@@ -233,7 +233,7 @@
 															</el-form-item>
 														</template>
 													</el-table-column>
-													<el-table-column prop="c_name" label="证书名称" sortable width="200px">
+													<el-table-column prop="c_name" label="证书名称" sortable>
 														<template slot-scope="scope">
 															<el-form-item :prop="'qualifications.'+scope.$index + '.c_name'">
 																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.c_name" placeholder="请输入委托方名称">
@@ -260,7 +260,7 @@
 															</el-form-item>
 														</template>
 													</el-table-column> -->
-													<el-table-column prop="enterdate" label="录入时间" sortable>
+													<!-- <el-table-column prop="enterdate" label="录入时间" sortable>
 														<template slot-scope="scope">
 															<el-form-item :prop="'qualifications.'+scope.$index + '.enterdate'">
 																<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.enterdate" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
@@ -268,7 +268,7 @@
 																<span v-else="v-else">{{scope.row.enterdate}}</span>
 															</el-form-item>
 														</template>
-													</el-table-column>
+													</el-table-column> -->
 													<!-- <el-table-column prop="status" label="信息状态" sortable width="120px">
 														<template slot-scope="scope">
 															<el-form-item :prop="'qualifications.'+scope.$index + '.status'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
@@ -437,7 +437,7 @@
 								</el-collapse-item>
 							</el-collapse>
 						</div>
-						<div class="el-dialog__footer" v-show="noviews">
+						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
 							<el-button type="success" @click='saveAndSubmit()' v-show="addtitle">保存并继续</el-button>
 							<el-button @click='close'>取消</el-button>
@@ -478,14 +478,12 @@
                 }
             };
             var validatePass = (rule, value, callback) => {
-		            if (value === '') {
-		                    callback(new Error('请输入密码'));
-		                } else if (!/^.{5,16}$/g.test(value)) {
-		                    callback(new Error('密码长度不能少于5个字符且不能大于16个字符'));
-		                } else {
-		                    
-		                    callback();
-		         }
+	            if (value === '') {
+                    callback(new Error('请输入密码'));
+                } else if (!/^.{5,16}$/g.test(value)) {
+                    callback(new Error('密码长度不能少于5个字符且不能大于16个字符'));
+                }
+	            callback();
 		     };
 			return {
 				basic_url: Config.dev_url,
@@ -766,24 +764,33 @@
 				}
 				if(row.id){
 					var url = this.basic_url + '/api-user/users/' + TableName +'/' + row.id;
-					this.$axios.delete(url, {}).then((res) => {
-						if(res.data.resp_code == 0){
-							this.user[TableName].splice(index,1);
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {}).then((res) => {
+							if(res.data.resp_code == 0){
+								this.user[TableName].splice(index,1);
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+							}else{
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'error'
+								});
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '删除成功',
-								type: 'success'
-							});
-						}else{
-							this.$message({
-								message: res.data.resp_msg,
+								message: '网络错误，请重试',
 								type: 'error'
 							});
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
+					}).catch(() => {
+
 					});
 				}else{
 					console.log(this.user[TableName]);
@@ -1035,6 +1042,11 @@ if(typeof(this.user.roleId) != 'undefind'&&this.user.roleId != null&&this.user.r
 								});
 								this.$emit('request');
 //								this.$refs["user"].resetFields(); //清空表单验证
+							}else{
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'warning'
+								});
 							}
 						}).catch((err) => {
 							this.$message({

@@ -18,7 +18,7 @@
 				</div>
 				<div class="mask_content">
 					<el-form :model="USESEAL" inline-message :rules="rules" ref="USESEAL" label-width="110px" class="demo-adduserForm">
-						<div class="accordion" id="information">
+						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="用印管理" name="1">
 									<el-row>
@@ -111,7 +111,7 @@
 								</el-collapse-item>
 							</el-collapse>
 						</div>
-						<div class="el-dialog__footer" v-show="noviews">
+						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click="saveAndUpdate()">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit()" v-show="addtitle">保存并继续</el-button>
 							<el-button @click="close">取消</el-button>
@@ -153,7 +153,7 @@
 					<el-table-column label="公司" sortable width="200px" prop="companyName">
 					</el-table-column> -->
 				</el-table>
-				<el-pagination background class="pull-right" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+				<el-pagination background class="text-right" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 				<span slot="footer" class="dialog-footer">
 	    			<el-button type="primary" @click="confirmPerson">确 定</el-button>

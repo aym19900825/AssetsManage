@@ -18,7 +18,7 @@
 				</div>
 				<div class="mask_content">
 					<el-form inline-message :model="testing_projectForm" :rules="rules" ref="testing_projectForm"  >
-						<div class="accordion">
+						<div class="content-accordion">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基本信息" name="1">
 									<el-row :gutter="20" class="pb10">
@@ -103,33 +103,35 @@
 											<font>新建行</font>
 										</el-button>
 									</div>
-									<el-table :header-cell-style="rowClass" :fit="true" :data="testing_projectForm.QUALIFICATIONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'testing_projectForm.QUALIFICATIONList', order: 'descending'}">
-										<el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
-											<template slot-scope="scope">
-												<i class="el-icon-check" v-if="scope.row.isEditing"></i>
-												<i class="el-icon-edit" v-else="v-else"></i>
-											</template>
-										</el-table-column>
-										<el-table-column prop="STEP" label="序号" sortable width="120px" label-width="150px" type="index">
-										</el-table-column>
-										<el-table-column prop="C_NAME" label="证书名称" sortable>
-											<template slot-scope="scope">
-												<el-form-item :prop="'QUALIFICATIONList.'+scope.$index + '.C_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.C_NAME" placeholder="请输入证书名称">
-														<el-button slot="append" icon="icon-search" @click="getpepole(scope.row)" :disabled="noedit"></el-button>
-													</el-input>
-													<span v-else="v-else">{{scope.row.C_NAME}}</span>
-												</el-form-item>
-											</template>
-										</el-table-column>
-										<el-table-column fixed="right" label="操作" width="120">
-											<template slot-scope="scope">
-												<el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'tableList')" type="text" size="small" v-show="!viewtitle">
-                                                 <i class="icon-trash red"></i>
-												</el-button>
-											</template>
-										</el-table-column>
-									</el-table>
+									<div class="pt10">
+										<el-table :header-cell-style="rowClass" :fit="true" :data="testing_projectForm.QUALIFICATIONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'testing_projectForm.QUALIFICATIONList', order: 'descending'}">
+											<el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
+												<template slot-scope="scope">
+													<i class="el-icon-check" v-if="scope.row.isEditing"></i>
+													<i class="el-icon-edit" v-else="v-else"></i>
+												</template>
+											</el-table-column>
+											<el-table-column prop="STEP" label="序号" sortable width="120px" label-width="150px" type="index">
+											</el-table-column>
+											<el-table-column prop="C_NAME" label="证书名称" sortable>
+												<template slot-scope="scope">
+													<el-form-item :prop="'QUALIFICATIONList.'+scope.$index + '.C_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+														<el-input v-if="scope.row.isEditing" v-model="scope.row.C_NAME" placeholder="请输入证书名称">
+															<el-button slot="append" icon="icon-search" @click="getpepole(scope.row)" :disabled="noedit"></el-button>
+														</el-input>
+														<span v-else="v-else">{{scope.row.C_NAME}}</span>
+													</el-form-item>
+												</template>
+											</el-table-column>
+											<el-table-column fixed="right" label="操作" width="120">
+												<template slot-scope="scope">
+													<el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'tableList')" type="text" size="small" v-show="!viewtitle">
+	                                                 <i class="icon-trash red"></i>
+													</el-button>
+												</template>
+											</el-table-column>
+										</el-table>
+									</div>
 								</el-collapse-item>
 								<el-collapse-item title="其他" name="3" v-show="views">
 									<el-row>
@@ -157,7 +159,7 @@
 								</el-collapse-item>
 							</el-collapse>
 						</div>
-						<div class="el-dialog__footer" v-show="noviews">
+						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click="saveAndUpdate('testing_projectForm')">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit('testing_projectForm')" v-show="addtitle">保存并继续</el-button>
 							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('testing_projectForm')">修订</el-button>
@@ -178,7 +180,7 @@
 					<el-table-column label="资质有效期" sortable prop="c_date">
 					</el-table-column>
 				</el-table>
-				<el-pagination background class="pull-right" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+				<el-pagination background class="text-right" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 				<span slot="footer" class="dialog-footer">
 	    			<el-button @click="dialogVisible = false">取 消</el-button>
@@ -206,12 +208,12 @@
 									<el-table-column label="机构" width="120" prop="DEPTIDDesc" sortable>
 									</el-table-column>
 								</el-table>
-								<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+								<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 								</el-pagination>
 								<!-- 表格 End-->
 				<span slot="footer" class="dialog-footer">
-			       <el-button @click="dialogVisible2 = false">取 消</el-button>
 			       <el-button type="primary" @click="addwork">确 定</el-button>
+				   <el-button @click="workinstruclose">取 消</el-button>
 			    </span>
 			</el-dialog>
 			<!-- 作业指导书 End -->
@@ -430,25 +432,34 @@
 				}
 				if(row.ID){
 					var url = this.basic_url + '/api-apps/app/inspectionPro/' + TableName +'/' + row.ID;
-					this.$axios.delete(url, {}).then((res) => {
-						console.log(res);
-						if(res.data.resp_code == 0){
-							this.testing_projectForm[TableName+'List'].splice(index,1);
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {}).then((res) => {
+							console.log(res);
+							if(res.data.resp_code == 0){
+								this.testing_projectForm[TableName+'List'].splice(index,1);
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+							}else{
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'error'
+								});
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '删除成功',
-								type: 'success'
-							});
-						}else{
-							this.$message({
-								message: res.data.resp_msg,
+								message: '网络错误，请重试',
 								type: 'error'
 							});
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
+					}).catch(() => {
+
 					});
 				}else{
 					this.testing_projectForm[TableName+'List'].splice(index,1);
@@ -511,6 +522,7 @@
 			   }
 			 },
 			getwork(){
+				this.requestData();
 				this.dialogVisible2 = true;
 			},
 			getCheckedNodes() { //获取树菜单节点
@@ -847,18 +859,17 @@
 				}
 			},
 			addwork() { //小弹出框确认按钮事件
-				console.log(this.selval.length);
-				// if(this.selval.length == 0){
-				// 	this.$message({
-				// 		message: '请选择数据',
-				// 		type: 'warning'
-				// 	});
-				// }else if(this.selval.length>1){
-				// 	this.$message({
-				// 		message: '不可以同时选择多条数据',
-				// 		type: 'warning'
-				// 	});
-				// }else{
+				if(this.selval.length == 0){
+					this.$message({
+						message: '请选择数据',
+						type: 'warning'
+					});
+				}else if(this.selval.length>1){
+					this.$message({
+						message: '不可以同时选择多条数据',
+						type: 'warning'
+					});
+				}else{
 					var changeUser = this.selval;
 					var list = [];
 					//basisnum为依据编号的数组
@@ -868,22 +879,30 @@
 					}
 					//basisnums为basisnum数组用逗号拼接的字符串el-tag__close el-icon-close
 					this.testing_projectForm.DOCLINKS_NUM = basisdesc.toString(',');
-					console.log(this.testing_projectForm.DOCLINKS_NUM)
 					// list.push(basisnums);
 					// for(var i = 0;i<this.selUser.length;i++){
 					// 	this.selUser[i].ID = '';
 					// 	list.push(this.selUser[i]);
 					// }
 
-					// this.dialogVisible2 = false;
-				// }
+					this.dialogVisible2 = false;
+					this.WORK_INSTRUCTIONList = [];
+					this.page.currentPage = 1;
+					this.page.pageSize = 10;
+				}
+			},
+			workinstruclose(){
+				this.dialogVisible2 = false;
+				this.WORK_INSTRUCTIONList = [];
+				this.page.currentPage = 1;
+				this.page.pageSize = 10;
 			},
 			handleClose(done) {
 				this.$confirm('确认关闭？')
-					.then(_ => {
-						done();
-					})
-					.catch(_ => {});
+				.then(_ => {
+					done();
+				})
+				.catch(_ => {});
 			},
 			requestData(index) {
 				var data = {
@@ -918,7 +937,7 @@
 			},
 		},
 		mounted() {
-			this.requestData();
+			// this.requestData();
 			this.getCompany();
 		},
 	}

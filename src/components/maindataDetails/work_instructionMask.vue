@@ -18,7 +18,7 @@
 				</div>
 				<div class="mask_content">
 					<el-form :model="WORK_INSTRUCTION" inline-message :rules="rules" ref="WORK_INSTRUCTION" label-width="100px" class="demo-adduserForm">
-						<div class="accordion" id="information">
+						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="作业指导书" name="1">
 									<el-row class="pb10">
@@ -83,7 +83,7 @@
 								</el-collapse-item>
 							</el-collapse>
 						</div>
-						<div class="el-dialog__footer" v-show="noviews">
+						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click="saveAndUpdate('WORK_INSTRUCTION')">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit('WORK_INSTRUCTION')" v-show="addtitle">保存并继续</el-button>
 							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('WORK_INSTRUCTION')">修订</el-button>

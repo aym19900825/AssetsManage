@@ -18,7 +18,7 @@
 				</div>
 				<div class="mask_content"><!-- status-icon验证后小对号 -->
 					<el-form inline-message ref="CUSTOMER" :model="CUSTOMER" :rules="rules" class="demo-adduserForm" :label-position="labelPosition">
-						<div class="accordion" id="information">
+						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基本信息" name="1">
 									<el-row :gutter="20" class="pb10" style='display:none;'>
@@ -103,7 +103,8 @@
 								
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName" @tab-click="handleClick">
-										<el-tab-pane label="资质信息" name="first">
+										<el-tab-pane name="first">
+											<span slot="label"><i class="red">*</i> 资质信息</span>
 											<div class="table-func table-funcb" >
 												<el-button type="success" size="mini" round @click="addfield" v-show="!viewtitle">
 													<i class="icon-add"></i>
@@ -121,7 +122,7 @@
 										      </template>
 										    </el-table-column>
 
-										    <el-table-column label="序号" sortable width="120px" prop="STEP" type="index">
+										    <el-table-column label="序号" sortable width="100px" prop="STEP" type="index">
 										    </el-table-column>
 
 										    <el-table-column label="证书编号" sortable width="120px" prop="CERTIFICATE_NUM">
@@ -186,7 +187,8 @@
 										  </el-table>
 									  <!-- </el-form> -->
 										</el-tab-pane>
-										<el-tab-pane label="客户联系人" name="second">
+										<el-tab-pane name="second">
+											<span slot="label"><i class="red">*</i> 客户联系人</span>
 											<div class="table-func table-funcb">
 												<el-button type="success" size="mini" round @click="addrela" v-show="!viewtitle">
 													<i class="icon-add"></i>
@@ -258,8 +260,18 @@
 									<!-- <el-form label-width="100px"> -->
 										<el-row :gutter="30">
 											<el-col :span="8">
-												<el-form-item label="录入人" prop="ENTERBY">
-													<el-input v-model="CUSTOMER.ENTERBY" placeholder="当前录入人" :disabled="edit"></el-input>
+												<el-form-item label="录入人" prop="ENTERBYDesc">
+													<el-input v-model="CUSTOMER.ENTERBYDesc" placeholder="当前录入人" :disabled="edit"></el-input>
+												</el-form-item>
+											</el-col>
+											<!-- <el-col :span="8">
+												<el-form-item label="录入人机构" prop="DEPTID">
+													<el-input v-model="CUSTOMER.DEPTID" :disabled="edit"></el-input>
+												</el-form-item>
+											</el-col> -->
+											<el-col :span="8" v-if="dept">
+												<el-form-item label="机构" prop="DEPTIDDesc">
+													<el-input v-model="CUSTOMER.DEPTIDDesc" placeholder="当前录入人机构" :disabled="edit"></el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
@@ -267,9 +279,11 @@
 													<el-input v-model="CUSTOMER.ENTERDATE" placeholder="当前录入时间" :disabled="edit"></el-input>
 												</el-form-item>
 											</el-col>
+										</el-row>
+										<el-row :gutter="30">
 											<el-col :span="8">
-												<el-form-item label="修改人" prop="CHANGEBY">
-													<el-input v-model="CUSTOMER.CHANGEBY" placeholder="记录当前修改人" :disabled="edit"></el-input>
+												<el-form-item label="修改人" prop="CHANGEBYDesc">
+													<el-input v-model="CUSTOMER.CHANGEBYDesc" placeholder="记录当前修改人" :disabled="edit"></el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
@@ -282,7 +296,7 @@
 								</el-collapse-item>
 							</el-collapse>
 						</div>
-						<div class="el-dialog__footer" v-show="noviews">
+						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click="saveAndUpdate('CUSTOMER')">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit('CUSTOMER')" v-show="addtitle">保存并继续</el-button>
 							<el-button @click='close'>取消</el-button>
@@ -497,6 +511,7 @@
                     ENTERDATE:'',
                     CHANGEBY:'',
                     CHANGEDATE:'',
+                    DEPTID:'',
 					isEditing: true
                 };
                 this.CUSTOMER.CUSTOMER_PERSONList.push(obj);
@@ -513,25 +528,34 @@
 				}
 				if(row.ID){
 					var url = this.basic_url + '/api-apps/app/customer/' + TableName +'/' + row.ID;
-					this.$axios.delete(url, {}).then((res) => {
-						console.log(res);
-						if(res.data.resp_code == 0){
-							this.CUSTOMER[TableName+'List'].splice(index,1);
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {}).then((res) => {
+							console.log(res);
+							if(res.data.resp_code == 0){
+								this.CUSTOMER[TableName+'List'].splice(index,1);
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+							}else{
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'error'
+								});
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '删除成功',
-								type: 'success'
-							});
-						}else{
-							this.$message({
-								message: res.data.resp_msg,
+								message: '网络错误，请重试',
 								type: 'error'
 							});
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
+					}).catch(() => {
+
 					});
 				}else{
 					this.CUSTOMER[TableName+'List'].splice(index,1);
@@ -561,6 +585,7 @@
 					ENTERDATE:'',
 					CHANGEBY:'',
 					CHANGEDATE:'',
+					DEPTID:'',
 					MEMO:'',
 					CUSTOMER_QUALIFICATIONList:[],
 					CUSTOMER_PERSONList:[]
@@ -583,7 +608,8 @@
 				var date = new Date();
 				this.CUSTOMER.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-	    			this.CUSTOMER.ENTERBY = res.data.nickname;
+	    			this.CUSTOMER.ENTERBY = res.data.id;
+	    			this.CUSTOMER.DEPTID = res.data.deptId;
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -614,7 +640,8 @@
 				this.statusshow1 = false;
 				this.statusshow2 = true;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-	    			this.CUSTOMER.CHANGEBY = res.data.nickname;
+	    			this.CUSTOMER.CHANGEBY = res.data.id;
+	    			this.CUSTOMER.DEPTID = res.data.deptId;
 	    			var date = new Date();
 					this.CUSTOMER.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
 				}).catch((err) => {

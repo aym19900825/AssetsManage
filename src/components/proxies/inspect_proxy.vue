@@ -192,7 +192,7 @@
 								</el-table-column>
 							</el-table>
 							
-							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
 							<!-- 表格 -->
 						</el-col>
@@ -594,7 +594,7 @@
 					for(var i = 0; i < changeUser.length; i++) {
 						if(changeUser[i].STATE!=1){
 						 	this.$message({
-								message: '您的数据中有已启动的流程，所以能删除',
+								message: '您的数据中有已启动的流程，所以不能删除',
 								type: 'error'
 							});
 							return;
@@ -653,7 +653,7 @@
 					for(var i = 0; i < changeUser.length; i++) {
 						if(changeUser[i].STATE!=1){
 						 	this.$message({
-								message: '您的数据中有已启动的流程，所以能删除',
+								message: '您的数据中有已启动的流程，所以不能删除',
 								type: 'error'
 							});
 							return;

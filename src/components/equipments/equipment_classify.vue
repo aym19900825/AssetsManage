@@ -87,9 +87,9 @@
 					<!-- 高级查询划出 End-->
 					<el-row :gutter="0">
 						<el-col :span="24">
-							 <tree_grid :columns="columns" :tree-structure="true" :loading="loading" :data-source="categoryList" v-on:childByValue="classByValue"></tree_grid>
+							 <tree_grid :columns="columns" :tree-structure="true" :loading="loading" :data-source="categoryList" @classByValue="classByValue" @getDetail="getDetail"></tree_grid>
 
-							<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
 						</el-col>
 					</el-row>
@@ -97,7 +97,7 @@
 			</div>
 			<!--右侧内容显示 End-->
 			<categorymask :CATEGORY="CATEGORY" ref="categorymask" @request="requestData" @reset="reset" v-bind:page=page></categorymask>
-						<!--报表-->
+				<!--报表-->
 			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 		</div>
 	</div>
@@ -251,12 +251,6 @@
 				}
 
 			},
-			classByValue: function (childValue) {
-		        // childValue就是子组件传过来的
-		        this.selUser = childValue
-//		        this.selMenu[0].hidden ? '1' : '0'
-		        
-		    },
 			//添加类别
 			openAddMgr() {
 				this.reset();
@@ -283,8 +277,9 @@
 					this.$refs.categorymask.detail(this.selUser[0]);
 				}
 			},
+
 			//查看
-			 view(data) {
+			view(data) {
 			 	this.CATEGORY = data;
 				this.$refs.categorymask.view();
 			},
@@ -346,7 +341,7 @@
 					});
 				}
 			},
-			// 删除
+			// 物理删除
 			physicsDel() {
 				var selData = this.selUser;
 				if(selData.length == 0) {
@@ -398,18 +393,7 @@
 					});
 				}
 			},
-			// 导入
-			importData() {
-
-			},
-			// 导出
-			exportData() {
-
-			},
-			// 打印
-			Printing() {
-
-			},
+			
 			//报表
 			reportdata(){
 				this.reportData.app=this.productType;
@@ -484,7 +468,7 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(res);
+					// console.log(res);
 					this.categoryList = res.data.datas;
 					this.loading = false;
 				}).catch((wrong) => {
@@ -498,10 +482,23 @@
 			formatter(row, column) {
 				return row.enabled;
 			},
-			childByValue:function(childValue) {
+			childByValue(childValue) {
         		// childValue就是子组件传过来的值
+        		console.log('childvalue');
         		this.$refs.navsheader.showClick(childValue);
+        		// this.$refs.categorymask.view(childValue);
              },
+             getDetail(data){
+             	console.log('tableDetail');
+             	this.view(data);
+             },
+             classByValue(childValue) {
+		        // childValue就是子组件传过来的
+		        console.log('classByValue');
+		        this.selUser = childValue;
+//		        this.selMenu[0].hidden ? '1' : '0'
+		        
+		    },
 		},
 		mounted() {
 			this.requestData();

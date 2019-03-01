@@ -18,7 +18,7 @@
 				</div>
 				<div class="mask_content">
 					<el-form :model="dictionarieForm" :rules="rules" ref="dictionarieForm" class="demo-user">
-						<div class="accordion">
+						<div class="content-accordion">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基础信息" name="1">
 									<el-row :gutter="30">
@@ -112,7 +112,7 @@
 							</el-collapse>
 						</div>
 
-						<div class="el-dialog__footer" v-show="noviews">
+						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click='submitForm'>保存</el-button>
 							<el-button @click='close'>取消</el-button>
 						</div>
@@ -433,25 +433,34 @@
 				}
 				if(row.id){
 					var url = this.basic_url + '/api-user/dicts/' + TableName +'/' + row.id;
-					this.$axios.delete(url, {}).then((res) => {
-						console.log(res);
-						if(res.data.resp_code == 0){
-							this.dictionarieForm[TableName].splice(index,1);
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {}).then((res) => {
+							console.log(res);
+							if(res.data.resp_code == 0){
+								this.dictionarieForm[TableName].splice(index,1);
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+							}else{
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'error'
+								});
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '删除成功',
-								type: 'success'
-							});
-						}else{
-							this.$message({
-								message: res.data.resp_msg,
+								message: '网络错误，请重试',
 								type: 'error'
 							});
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
+					}).catch(() => {
+
 					});
 				}else{
 					console.log(this.dictionarieForm[TableName]);

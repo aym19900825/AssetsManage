@@ -6,7 +6,7 @@
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
-			<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left>
+			<navs_left ref="navleft" v-on:childByValue="childvalue"></navs_left>
 			<!--左侧菜单内容显示 End-->
 			<!--右侧内容显示 Begin-->
 			<div class="wrapper wrapper-content">
@@ -15,7 +15,10 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+									<i :class="item.icon"></i>{{item.name}}
+								</button>
+								<!--<button type="button" class="btn btn-green" @click="openAddMgr" id="">
 	                        	<i class="icon-add"></i>添加
 	              			 </button>
 								<button type="button" class="btn btn-blue button-margin" @click="modify">
@@ -28,7 +31,7 @@
 					    		<i class="icon-search"></i>高级查询
 					    		<i class="icon-arrow1-down" v-show="down"></i>
 					    		<i class="icon-arrow1-up" v-show="up"></i>
-							</button>
+							</button>-->
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -114,7 +117,7 @@
 								<el-table-column label="流程代办描述" width="180" prop="flow_todo_desc" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('流程代办描述')!=-1">
 								</el-table-column>
 							</el-table>
-							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
 							<!-- 表格 End-->
 						</el-col>
@@ -181,63 +184,63 @@
 					'流程代办描述'
 				],
 				tableHeader: [{
-						label: '应用英文名称',
-						prop: 'code'
-					},
-					{
-						label: '应用名称',
-						prop: 'name'
-					},
-					{
-						label: '处理类',
-						prop: 'handleclass'
-					},
-					{
-						label: '类型',
-						prop: 'type'
-					},
-					{
-						label: '应用描述',
-						prop: 'description'
-					},
-					{
-						label: '数据库表',
-						prop: 'object_id'
-					},
-					{
-						label: '模块',
-						prop: 'module'
-					},
-					{
-						label: '排序',
-						prop: 'sort'
-					},
-					{
-						label: '创建时间',
-						prop: 'createTime'
-					},
-					{
-						label: '变更时间',
-						prop: 'updateTime'
-					},
-					{
-						label: '流程',
-						prop: 'flowkey'
-					},
-					{
-						label: '流程代办单据号',
-						prop: 'flow_todo_num'
-					},
-					{
-						label: '流程代办描述',
-						prop: '流程代办描述'
-					},
+                        label: '应用英文名称',
+                        prop: 'code'
+                    },
+                    {
+                        label: '应用名称',
+                        prop: 'name'
+                    },
+                    {
+                        label: '处理类',
+                        prop: 'handleclass'
+                    },
+                    {
+                        label: '类型',
+                        prop: 'type'
+                    },
+                    {
+                        label: '应用描述',
+                        prop: 'description'
+                    },
+                    {
+                        label: '数据库表',
+                        prop: 'object_id'
+                    },
+                    {
+                        label: '模块',
+                        prop: 'module'
+                    },
+                    {
+                        label: '排序',
+                        prop: 'sort'
+                    },
+                    {
+                        label: '创建时间',
+                        prop: 'createTime'
+                    },
+                    {
+                        label: '变更时间',
+                        prop: 'updateTime'
+                    },
+                    {
+                        label: '流程',
+                        prop: 'flowkey'
+                    },
+                    {
+                        label: '流程代办单据号',
+                        prop: 'flow_todo_num'
+                    },
+                    {
+                        label: '流程代办描述',
+                        prop: '流程代办描述'
+                    },
 
-					// {
-					// 	label: '信息状态',
-					// 	prop: 'STATUS'
-					// },
-				],
+                    // {
+                    //  label: '信息状态',
+                    //  prop: 'STATUS'
+                    // },
+                ],
 				selUser: [],
 				applicationList: [],
 				search: false,
@@ -265,6 +268,7 @@
 					totalCount: 0
 				},
 				dataInfo: {},//修改子组件时传递数据
+				buttons:[],
 			}
 		},
 		methods: {
@@ -349,6 +353,20 @@
 				}
 
 			},
+			 //请求点击
+		    getbtn(item){
+		    	if(item.name=="添加"){
+		         this.openAddMgr();
+		    	}else if(item.name=="修改"){
+		    	 this.modify();
+		    	}else if(item.name=="高级查询"){
+		    	 this.modestsearch();
+		    	}else if(item.name=="删除"){
+				 this.deluserinfo();
+				}else if(item.name=="彻底删除"){
+				 this.physicsDel();
+				}
+		    },
 			//添加类别
 			openAddMgr() {
 				this.reset();
@@ -511,16 +529,42 @@
 					}
 					this.applicationList = newarr;
 					this.loading = false;
-				}).catch((wrong) => {})
+				}).catch((wrong) => {
+					this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+				})
 			},
 			handleNodeClick(data) {},
 			formatter(row, column) {
 				return row.enabled;
 			},
-			childByValue:function(childValue) {
-        		// childValue就是子组件传过来的值
-        		this.$refs.navsheader.showClick(childValue);
-      		},
+			//左侧菜单传来
+		    childvalue:function ( childvalue) {
+				console.log( childvalue);
+		    	 this.getbutton( childvalue);
+		    },
+			//请求页面的button接口
+		    getbutton(childvalue){
+		    	console.log(childvalue);
+		    	var data = {
+					menuId: childvalue.id,
+					roleId: this.$store.state.roleid,
+				};
+				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
+				this.$axios.get(url, {params: data}).then((res) => {
+					console.log(res);
+					this.buttons = res.data;
+					
+				}).catch((wrong) => {
+					this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+				})
+
+		    },
 
 		},
 		mounted() {

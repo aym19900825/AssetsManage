@@ -27,7 +27,7 @@
 							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
 							<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
 						</div>
-						   <div class="accordion">
+						   <div class="content-accordion">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="类型" name="1">
 									<el-row :gutter="20" class="pb10">
@@ -163,7 +163,7 @@
 										</el-form-item>
 									</el-row>
 								</el-collapse-item>
-								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
+								<div class="el-collapse-item pt10 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName" @tab-click="handleClick">
 										<el-tab-pane label="依据" name="first">
 											<div class="table-func table-funcb">
@@ -244,7 +244,7 @@
 														</el-form-item>
 													</template>
 												</el-table-column>
-												<el-table-column prop="P_DESC" label="检验检测项目内容" sortable width="200px">
+												<el-table-column prop="P_DESC" label="检验检测项目内容" sortable width="250px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.P_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 															<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入内容"></el-input>
@@ -252,7 +252,7 @@
 														</el-form-item>
 													</template>
 												</el-table-column>
-												<el-table-column prop="REMARKS" label="要求" sortable width="150px">
+												<el-table-column prop="REMARKS" label="要求" sortable width="180px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 															<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入内容"></el-input>
@@ -293,7 +293,7 @@
 										</el-tab-pane>
 									</el-tabs>
 								</div>
-								<el-collapse-item name="6">
+								<el-collapse-item title="完成日期及费用" name="6">
 									<el-row >
 										<el-col :span="8">
 											<el-form-item label="完成日期" prop="COMPDATE" label-width="110px">
@@ -355,18 +355,18 @@
 							</el-collapse>
 							</div>
 						</el-form>
-					<div class="el-dialog__footer" v-show="noviews">
+					<div class="content-footer" v-show="noviews">
 	                    <el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
 						<el-button type="success" v-show="addtitle" @click='saveAndSubmit()'>保存并继续</el-button>
 						<el-button @click='close'>取消</el-button>
 					</div>
-					<div class="el-dialog__footer" v-show="views">
+					<div class="content-footer" v-show="views">
 						<el-button type="success" v-if="this.dataInfo.STATE == 3" @click="build">生成委托书</el-button>
 					</div>	
 				</div>
 			</div>
 			<!-- 人员 -->
-			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose"  title="用户信息" >
+			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose" title="用户信息">
 				<el-form :model="searchList">
 							<el-row :gutter="10">
 								<el-col :span="5">
@@ -387,23 +387,23 @@
 							</el-row>
 						</el-form>
 				<el-table :header-cell-style="rowClass" :data="gridData" line-center border stripe height="400px" style="width: 100%;" :default-sort="{prop:'gridData', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-					<el-table-column type="selection" width="55" fixed>
+					<el-table-column type="selection" align="center" width="55" fixed>
 					</el-table-column>
-					<el-table-column label="ID" sortable width="50px" prop="id">
+					<el-table-column label="ID" sortable width="70px" prop="id">
 					</el-table-column>
 					<el-table-column label="姓名" sortable width="200px" prop="nickname">
 					</el-table-column>
 					<el-table-column label="机构" sortable width="200px" prop="deptName">
 					</el-table-column>
-					<el-table-column label="公司" sortable width="200px" prop="companyName">
+					<el-table-column label="公司" sortable prop="companyName">
 					</el-table-column>
 				</el-table>
-				<el-pagination background class="pull-right" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
-				<span slot="footer" class="dialog-footer">
+				<div slot="footer">
 	    			<el-button type="primary" @click="dailogconfirm" :disabled="views">确 定</el-button>
 	    			<el-button @click="dialogVisible = false" :disabled="views">取 消</el-button>
-	  			</span>
+	  			</div>
 			</el-dialog>
 			<!-- 产品类别  -->
 			<categorymask ref="categorychild" @categorydata="categorydata"></categorymask>
@@ -429,7 +429,7 @@
 
 <script>
 	import Config from '../../config.js'
-	import categorymask from '../common/common_mask/categorylistmask.vue'//产品
+	import categorymask from '../common/common_mask/categorylistmask.vue'//产品类别
 	import productmask from '../common/common_mask/productlistmask.vue'//产品
 	import enterprisemask from '../common/common_mask/enterprisemask.vue'//受检企业
 	import approvalmask from '../workflow/approving.vue'//审批页面
@@ -719,25 +719,34 @@
 				}
 				if(row.ID){
 					var url = this.basic_url + '/api-apps/app/workNot/' + TableName +'/' + row.ID;
-					this.$axios.delete(url, {}).then((res) => {
-						console.log(res);
-						if(res.data.resp_code == 0){
-							this.dataInfo[TableName+'List'].splice(index,1);
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {}).then((res) => {
+							console.log(res);
+							if(res.data.resp_code == 0){
+								this.dataInfo[TableName+'List'].splice(index,1);
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+							}else{
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'error'
+								});
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '删除成功',
-								type: 'success'
-							});
-						}else{
-							this.$message({
-								message: res.data.resp_msg,
+								message: '网络错误，请重试',
 								type: 'error'
 							});
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
+					}).catch(() => {
+
 					});
 				}else{
 					this.dataInfo[TableName+'List'].splice(index,1);

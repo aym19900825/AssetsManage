@@ -27,7 +27,7 @@
 							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
 							<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
 						</div>
-						<div class="accordion" id="information">
+						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="委托单位" name="1">
 									<el-row :gutter="5" class="pb10">
@@ -36,12 +36,12 @@
 												<template slot="prepend">版本</template>
 											</el-input>
 										</el-col>
-										<el-col :span="5" class="pull-right">
+										<el-col :span="4" class="pull-right">
 											<el-input v-model="dataInfo.STATUSDesc" :disabled="edit">
 												<template slot="prepend">状态</template>
 											</el-input>
 										</el-col>
-										<el-col :span="3" class="pull-right">
+										<el-col :span="4" class="pull-right">
 											<el-input v-model="dataInfo.TYPEDesc" :disabled="edit">
 												<template slot="prepend">类别</template>
 											</el-input>
@@ -165,21 +165,21 @@
 								<el-collapse-item title="检验" name="3">
 									<el-row>
 									<el-col :span="8">
-												<el-form-item label="完成日期" prop="COMPDATE" label-width="110px">
-													<el-date-picker v-model="dataInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
-													</el-date-picker>
-												</el-form-item>
+										<el-form-item label="完成日期" prop="COMPDATE" label-width="140px">
+											<el-date-picker v-model="dataInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
+											</el-date-picker>
+										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-												<el-form-item label="完成方式" prop="COMPMODE" label-width="110px">
-													<el-radio-group v-model="dataInfo.COMPMODE" :disabled="noedit">
-														<el-radio label="加急"></el-radio>
-														<el-radio label="正常"></el-radio>
-													</el-radio-group>
-												</el-form-item>
+										<el-form-item label="完成方式" prop="COMPMODE" label-width="110px">
+											<el-radio-group v-model="dataInfo.COMPMODE" :disabled="noedit">
+												<el-radio label="加急" class="red"></el-radio>
+												<el-radio label="正常"></el-radio>
+											</el-radio-group>
+										</el-form-item>
 									</el-col>
 									</el-row>
-										<el-form-item label="抽样方案/判定依据" prop="REMARKS" label-width="110px">
+										<el-form-item label="抽样方案/判定依据" prop="REMARKS" label-width="140px">
 											<el-input v-model="dataInfo.REMARKS" :disabled="noedit"></el-input>
 										</el-form-item>
 								</el-collapse-item>
@@ -285,7 +285,7 @@
 												<el-table-column prop="INSPECT_GROUP" label="专业组" sortable>
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.INSPECT_GROUP'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-															<el-select clearable v-model="scope.row.INSPECT_GROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @change="getmaingroup($event)" @visible-change="visablemaingroup($event)" >
+															<el-select clearable v-model="scope.row.INSPECT_GROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @visible-change="visablemaingroup($event)" >
 																<el-option v-for="data in maingroup" :key="data.id" :value="data.id" :label="data.fullname"></el-option>
 															</el-select>
 														</el-form-item>	
@@ -361,7 +361,7 @@
 												<el-table-column prop="INSPECT_GROUP" label="专业组" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.INSPECT_GROUP'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-															<el-select  clearable v-model="scope.row.INSPECT_GROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @change="getmaingroup($event)" @visible-change="visablemaingroup($event)" >
+															<el-select  clearable v-model="scope.row.INSPECT_GROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @visible-change="visablemaingroup($event)" >
 																<el-option v-for="data in maingroup" :key="data.id" :value="data.id" :label="data.fullname"></el-option>
 															</el-select>
 														</el-form-item>	
@@ -478,7 +478,7 @@
 												<el-input v-model="dataInfo.REPORT_NUM" :disabled="noedit" ></el-input>
 											</el-form-item>
 										</el-col>
-                                        <el-col :span="10">
+                                        <el-col :span="8">
 											<el-form-item label="格式" prop="REPORT_FOMAT" label-width="110px">
 												<el-radio-group v-model="dataInfo.REPORT_FOMAT" :disabled="noedit">
 													<el-radio label="认证中心"></el-radio>
@@ -527,14 +527,14 @@
 										</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="检验收费（元）" prop="CHECK_COST" label-width="110px">
+											<el-form-item label="检验收费(元)" prop="CHECK_COST" label-width="110px">
 												<el-input  v-model="dataInfo.CHECK_COST" id="cost" @blur="toPrice" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>	
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="实收费用（元）" prop="ACTUALCOST" label-width="110px">
+											<el-form-item label="实收费用(元)" prop="ACTUALCOST" label-width="110px">
 												<el-input  v-model="dataInfo.ACTUALCOST" id="actualcost"  @blur="actualPrice" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -544,7 +544,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="标准费用（元）" prop="CONTRACTCOST" label-width="110px">
+											<el-form-item label="标准费用(元)" prop="CONTRACTCOST" label-width="110px">
 												<el-input  v-model="dataInfo.CONTRACTCOST" id="stacost"  @blur="staPrice" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -563,14 +563,18 @@
 										</el-col> -->
 										<el-col :span="8">
 											<el-form-item label="主检组" prop="MAINGROUP"  label-width="110px">
-											<el-select clearable v-model="dataInfo.MAINGROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit"  @change="getmaingroup($event)">
+											<el-select clearable v-model="dataInfo.MAINGROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit"  @change="getmaingroup($event)" style="width: 100%;">
 												<el-option v-for="(data,index) in maingroup" :key="index" :value="data.id" :label="data.fullname"></el-option>
 											</el-select>
 										</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="主检负责人" prop="LEADER" label-width="110px">
+<<<<<<< HEAD
 												<el-select clearable v-model="dataInfo.LEADER" filterable allow-create default-first-option placeholder="请选择">
+=======
+												<el-select clearable v-model="dataInfo.LEADER" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" style="width: 100%;">
+>>>>>>> ed096a198f5374f5b50ebefa96e286c4c5a28e26
 													<el-option v-for="(data,index) in leaderdata" :key="index" :value="data.id" :label="data.username"></el-option>
 												</el-select>
 											</el-form-item>
@@ -622,13 +626,13 @@
 								
 							</el-collapse>
 						</div>
-						<div class="el-dialog__footer" v-show="noviews">
+						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click="saveAndUpdate">保存</el-button>
 							<el-button type="success"  v-show="addtitle" @click="saveAndSubmit">保存并继续</el-button>
 							<el-button v-show="modifytitle" type="btn btn-primarys" @click="modifyversion">修订</el-button>
 							<el-button @click='close'>取消</el-button>
 						</div>
-						<div class="el-dialog__footer" v-show="views">
+						<div class="content-footer" v-show="views">
 							<el-button type="success" v-if="this.dataInfo.STATUS == 3" @click="build">生成工作任务单</el-button>
 						</div>
 					</el-form>
@@ -658,7 +662,7 @@
 					</el-table-column>
 				</el-table>
 				
-				<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 				<span slot="footer" class="dialog-footer">
 			       <el-button type="primary" @click="addcusname">确 定</el-button>
@@ -846,7 +850,6 @@
 							PRO_VERSIONNUM:'',	//产品名称编号+版本
 							S_VERSIONNUM:'',	//检验检测依据编号+版本
 							PROJ_VERSIONNUM:'',	//检测项目编号+版本
-
 						}
 					],
 				},
@@ -1192,25 +1195,34 @@
 				}
 				if(row.ID){
 					var url = this.basic_url + '/api-apps/app/inspectPro/' + TableName +'/' + row.ID;
-					this.$axios.delete(url, {}).then((res) => {
-						console.log(res);
-						if(res.data.resp_code == 0){
-							this.dataInfo[TableName+'List'].splice(index,1);
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {}).then((res) => {
+							console.log(res);
+							if(res.data.resp_code == 0){
+								this.dataInfo[TableName+'List'].splice(index,1);
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+							}else{
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'error'
+								});
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '删除成功',
-								type: 'success'
-							});
-						}else{
-							this.$message({
-								message: res.data.resp_msg,
+								message: '网络错误，请重试',
 								type: 'error'
 							});
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
+					}).catch(() => {
+
 					});
 				}else{
 					this.dataInfo[TableName+'List'].splice(index,1);
@@ -1645,6 +1657,9 @@
 				this.dataInfo.PRODUCT_TYPE = value[3];
 				this.dataInfo.PRO_NUM = value[4];
 				this.dataInfo.PRODUCT = value[5];
+				this.dataInfo.P_VERSION = value[6];//产品类别版本
+				this.dataInfo.PRO_VERSION = value[7];//产品版本
+				this.dataInfo.ITEMNUM = value[8];//样品编号
 				this.dataInfo.MAINGROUP = '';
 				this.dataInfo.LEADER = '';
 				this.RVENDORSelect();
@@ -1968,5 +1983,4 @@
     background: #FFF;
     padding: 5px 10px;
 }*/
-
 </style>

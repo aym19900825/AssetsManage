@@ -103,7 +103,8 @@
 								
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName" @tab-click="handleClick">
-										<el-tab-pane label="资质信息" name="first">
+										<el-tab-pane name="first">
+											<span slot="label"><i class="red">*</i> 资质信息</span>
 											<div class="table-func table-funcb" >
 												<el-button type="success" size="mini" round @click="addfield" v-show="!viewtitle">
 													<i class="icon-add"></i>
@@ -121,7 +122,7 @@
 										      </template>
 										    </el-table-column>
 
-										    <el-table-column label="序号" sortable width="120px" prop="STEP" type="index">
+										    <el-table-column label="序号" sortable width="100px" prop="STEP" type="index">
 										    </el-table-column>
 
 										    <el-table-column label="证书编号" sortable width="120px" prop="CERTIFICATE_NUM">
@@ -186,7 +187,8 @@
 										  </el-table>
 									  <!-- </el-form> -->
 										</el-tab-pane>
-										<el-tab-pane label="客户联系人" name="second">
+										<el-tab-pane name="second">
+											<span slot="label"><i class="red">*</i> 客户联系人</span>
 											<div class="table-func table-funcb">
 												<el-button type="success" size="mini" round @click="addrela" v-show="!viewtitle">
 													<i class="icon-add"></i>

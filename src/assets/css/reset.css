@@ -111,6 +111,13 @@ i, cite, em, var, address, dfn {
 }
 
 
+
+/*table子表必填*/
+.required_child {color: red; position:absolute; top: -30px; left: 0px;}
+
+
+
+
 /*滚动条*/
 
 

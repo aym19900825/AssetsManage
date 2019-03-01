@@ -18,7 +18,7 @@
 				</div>
 				<div class="mask_content">
 					<el-form :model="dataInfo" :label-position="labelPositions" :rules="rules" ref="dataInfo"  inline-message  class="demo-ruleForm">
-						<div class="accordion">
+						<div class="content-accordion">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基本信息" name="1">
 									<el-row :gutter="5" class="pb10">
@@ -31,24 +31,18 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="代码" prop="code" label-width="110px">
-												<el-input v-model="dataInfo.code" :disabled="noedit">
-													</el-button>
+												<el-input v-model="dataInfo.code" :disabled="noedit"></el-button>
 												</el-input>
-
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="文件" prop="file" label-width="110px">
-												<el-input v-model="dataInfo.file" :disabled="noedit">
-													
-												</el-input>
+												<el-input v-model="dataInfo.file" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="文件名称" prop="name" label-width="110px">
-												<el-input v-model="dataInfo.name" :disabled="noedit">
-													
-												</el-input>
+												<el-input v-model="dataInfo.name" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -96,7 +90,7 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="label" label="参数名称" sortable width="120px">
+												<el-table-column prop="label" label="参数名称" sortable>
 													<template slot-scope="scope">
 														<el-form-item :prop="'params.'+scope.$index + '.label'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.label" placeholder="请输入参数名称">
@@ -137,9 +131,6 @@
 														</el-form-item>
 													</template>
 												</el-table-column>
-												
-												
-								
 												
 												<el-table-column fixed="right" label="操作" width="120">
 													<template slot-scope="scope">
@@ -187,10 +178,9 @@
 										</el-row>
 									</div>
 								</el-collapse-item>
-								
 							</el-collapse>
 						</div>
-						<div class="el-dialog__footer" v-show="noviews">
+						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click="saveAndUpdate">保存</el-button>
 							<el-button type="success"  v-show="addtitle" @click="saveAndSubmit">保存并继续</el-button>
 							<el-button @click='close'>取消</el-button>

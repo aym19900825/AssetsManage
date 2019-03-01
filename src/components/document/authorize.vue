@@ -65,7 +65,9 @@
 						</el-form>
 					</div>
 					<!-- 高级查询划出 End-->
-						<el-col class="leftcont v-resize">
+
+					<el-row :gutter="0">
+						<el-col :span="24">
 							<!-- 表格 -->
 							<el-table :data="samplesList" 
 									  border stripe 

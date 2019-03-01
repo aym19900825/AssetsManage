@@ -18,7 +18,7 @@
             <el-table-column v-for="item in chooseParam.tableHeader" :prop="item.propName" :label="item.labelName" sortable>
             </el-table-column>
         </el-table>
-        <el-pagination class="pageLeft pull-right pt10"
+        <el-pagination background class="text-right pt10"
             @size-change="sizeChange"
             @current-change="currentChange"
             :current-page="page.currentPage"
@@ -27,9 +27,9 @@
             layout="total, sizes, prev, pager, next"
             :total="page.totalCount">
         </el-pagination>
-        <div class="el-dialog__footer" style="clear: both;">
-            <el-button @click="reset">取 消</el-button>
+        <div slot="footer">
             <el-button type="primary" @click="save">确 定</el-button>
+            <el-button @click="reset">取 消</el-button>
         </div>
     </el-dialog>  
 </div>
@@ -140,9 +140,5 @@ export default {
 </script>
 
 <style scoped> 
-.pageLeft{
-    float: right;
-    margin-bottom: 20px;
-    clear: both;
-}
+
 </style>

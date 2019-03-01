@@ -16,8 +16,8 @@
 						</span>
 					</div>
 				</div>
-				<el-form :model="dataInfo" inline-message :rules="rules" ref="dataInfo" label-width="80px" class="demo-user">
-					<div class="mask_content">
+				<div class="mask_content">
+					<el-form :model="dataInfo" inline-message :rules="rules" ref="dataInfo" label-width="80px" class="demo-user">
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基本信息" name="1">
@@ -106,16 +106,15 @@
 								</el-collapse-item>
 							</el-collapse>
 						</div>
-
-						<div class="el-dialog__footer" v-show="noviews">
-								<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
-								<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并继续</el-button>
-								<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('dataInfo')">修订</el-button>
-								<!-- <el-button v-if="modify" type="success" @click="update('dataInfo')">启用</el-button> -->
-								<el-button @click="close">取消</el-button>
+						<div class="content-footer" v-show="noviews">
+							<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
+							<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并继续</el-button>
+							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('dataInfo')">修订</el-button>
+							<!-- <el-button v-if="modify" type="success" @click="update('dataInfo')">启用</el-button> -->
+							<el-button @click="close">取消</el-button>
 						</div>
-					</div>
-				</el-form>
+					</el-form>
+				</div>
 			</div>
 
 			<el-dialog :modal-append-to-body="false" title="信息" :visible.sync="dialogFormVisible" :before-close="resetEditBox">

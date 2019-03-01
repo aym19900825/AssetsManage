@@ -25,7 +25,7 @@
 							    <i class="icon-trash"></i>删除
 							</button>
 							<button type="button" class="btn btn-red button-margin" @click="physicsDel">
-							    <i class="icon-trash"></i>物理删除
+							    <i class="icon-trash"></i>彻底删除
 							</button>
 							<el-dropdown size="small" split-button type="primary" style="margin-top:1px;">
     								导入
@@ -462,7 +462,7 @@
 					});
 				}
 			},
-			//物理删除
+			//彻底删除
 			physicsDel(){
 				var selData = this.selUser;
 				if(selData.length == 0) {

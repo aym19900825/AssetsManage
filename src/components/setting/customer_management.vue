@@ -28,7 +28,7 @@
 							    <i class="icon-trash"></i>删除
 							</button>
 							<button type="button" class="btn btn-red button-margin" @click="physicsDel">
-							    <i class="icon-trash"></i>物理删除
+							    <i class="icon-trash"></i>彻底删除
 							</button>			
 							<button type="button" class="btn btn-primarys button-margin" @click="importData">
 							    <i class="icon-upload-cloud"></i>导入
@@ -346,7 +346,7 @@
 		    	 this.modestsearch();
 		    	}else if(item.name=="删除"){
 				 this.deluserinfo();
-				}else if(item.name=="物理删除"){
+				}else if(item.name=="彻底删除"){
 				 this.physicsDel();
 				}
 		    },
@@ -431,7 +431,7 @@
                 	});
 				}
 			},
-		   //物理删除
+		   //彻底删除
 			physicsDel() {
 				var selData = this.selUser;
 				if(selData.length == 0) {

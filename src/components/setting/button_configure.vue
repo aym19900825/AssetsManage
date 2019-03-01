@@ -419,7 +419,7 @@
 					});
 				}
 			},
-			//物理删除
+			//彻底删除
 			physicsDel(){
 				var selData = this.selUser;
 				if(selData.length == 0) {

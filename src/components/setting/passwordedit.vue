@@ -46,7 +46,7 @@
 						</el-form>
 					</el-collapse-item>
 				</el-collapse>
-				<div class="content-footer">
+				<div class="dialog-footer">
 				    <button class="btn btn-default btn-large" @click="tips('passwordedit')">重置</button>
 				    <button class="btn btn-primarys btn-large" @click="submitForm('passwordedit')">保存</button>
 				</div>

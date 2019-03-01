@@ -603,6 +603,7 @@
 			categorydata(value){
 				this.samplesForm.P_NUM = value[0];
 				this.samplesForm.PRODUCT_TYPE  = value[1];
+				this.samplesForm.P_VERSION = value[2];//产品类别版本
 				this.samplesForm.PRODUCT = '';
 				this.samplesForm.PRO_NUM = '';
 			},
@@ -618,8 +619,10 @@
 			},
 			//接到产品的值
 			appenddata(value){
+				console.log(value);
 				this.samplesForm.PRO_NUM = value[0];
 				this.samplesForm.PRODUCT = value[1];
+				this.samplesForm.PRO_VERSION = value[2];//产品版本
 			},
 			reset(){
             	this.samplesForm = {

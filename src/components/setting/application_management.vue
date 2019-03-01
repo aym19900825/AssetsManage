@@ -363,7 +363,7 @@
 		    	 this.modestsearch();
 		    	}else if(item.name=="删除"){
 				 this.deluserinfo();
-				}else if(item.name=="物理删除"){
+				}else if(item.name=="彻底删除"){
 				 this.physicsDel();
 				}
 		    },

@@ -515,9 +515,9 @@
 					this.buttons = res.data;
 				}).catch((wrong) => {
 					this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
+						message: '网络错误，请重试',
+						type: 'error'
+					});
 				})
 
 		    },

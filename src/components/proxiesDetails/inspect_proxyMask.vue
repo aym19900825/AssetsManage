@@ -570,11 +570,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="主检负责人" prop="LEADER" label-width="110px">
-<<<<<<< HEAD
-												<el-select clearable v-model="dataInfo.LEADER" filterable allow-create default-first-option placeholder="请选择">
-=======
 												<el-select clearable v-model="dataInfo.LEADER" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" style="width: 100%;">
->>>>>>> ed096a198f5374f5b50ebefa96e286c4c5a28e26
 													<el-option v-for="(data,index) in leaderdata" :key="index" :value="data.id" :label="data.username"></el-option>
 												</el-select>
 											</el-form-item>

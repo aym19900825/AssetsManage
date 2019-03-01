@@ -478,12 +478,12 @@
                 }
             };
             var validatePass = (rule, value, callback) => {
-		            if (value === '') {
-		                    callback(new Error('请输入密码'));
-		                } else if (!/^.{5,16}$/g.test(value)) {
-		                    callback(new Error('密码长度不能少于5个字符且不能大于16个字符'));
-		                }
-		                  callback();
+	            if (value === '') {
+                    callback(new Error('请输入密码'));
+                } else if (!/^.{5,16}$/g.test(value)) {
+                    callback(new Error('密码长度不能少于5个字符且不能大于16个字符'));
+                }
+	            callback();
 		     };
 			return {
 				basic_url: Config.dev_url,
@@ -760,24 +760,33 @@
 				}
 				if(row.id){
 					var url = this.basic_url + '/api-user/users/' + TableName +'/' + row.id;
-					this.$axios.delete(url, {}).then((res) => {
-						if(res.data.resp_code == 0){
-							this.user[TableName].splice(index,1);
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {}).then((res) => {
+							if(res.data.resp_code == 0){
+								this.user[TableName].splice(index,1);
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+							}else{
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'error'
+								});
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '删除成功',
-								type: 'success'
-							});
-						}else{
-							this.$message({
-								message: res.data.resp_msg,
+								message: '网络错误，请重试',
 								type: 'error'
 							});
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
+					}).catch(() => {
+
 					});
 				}else{
 					console.log(this.user[TableName]);

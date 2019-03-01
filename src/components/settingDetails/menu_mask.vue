@@ -17,7 +17,7 @@
 				</div>
 				<div class="mask_content">
 					<el-form :model="menu" :rules="rules" ref="menu" label-width="100px" class="demo-user">
-						<div class="accordion">
+						<div class="content-accordion">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基础信息" name="1">
 									<el-row :gutter="30">
@@ -71,26 +71,26 @@
 							</el-collapse>
 						</div>
 
-						<div class="el-dialog__footer">
+						<div class="content-footer">
 							<el-button type="primary" @click='submitForm'>保存</el-button>
 							<el-button @click='close'>取消</el-button>
 						</div>
 					</el-form>
 				</div>
 			</div>
-			<!--提示弹出框 Begin-->
-			<el-dialog :modal-append-to-body="false" title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+			<!--选择所属上级弹出框 Begin-->
+			<el-dialog :modal-append-to-body="false" title="选择所属上级" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
 				<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps">
 				</el-tree>
-				<div slot="footer" class="dialog__footer">
-			       <el-button @click="dialogVisible = false">取 消</el-button>
+				<div slot="footer">
 			       <el-button type="primary" @click="confirm();" >确 定</el-button>
+			       <el-button @click="dialogVisible = false">取 消</el-button>
 			    </div>
 			</el-dialog>
-			<!--提示弹出框 End-->
+			<!--选择所属上级弹出框 End-->
 		</div>
 
-			<!--图标弹出 Begin-->
+			<!--应用中心图标弹出 Begin-->
 	        <div class="mask" v-show="show2"></div>
 			<div class="mask_divbg" v-show="show2">
 				<div class="mask_div">
@@ -98,24 +98,25 @@
 						<div class="mask_title">应用中心图标</div>
 						<div class="mask_anniu">
 							<span class="mask_span mask_max" @click='toggle'>
-								 
 								<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
 							</span>
-							<span class="mask_span" @click='close1'>
+							<span class="mask_span" @click='close2'>
 								<i class="icon-close1"></i>
 							</span>
 						</div>
 					</div>
 					<div id="FHScrollbar" :style="{height: fullHeight}">
-						<all_icons v-on:childByValue="childByValue"></all_icons>
-						<div slot="footer" class="el-dialog__footer">
-							<el-button @click="dialogVisible = false">取 消</el-button>
+						<div class="content-accordion">
+							<all_icons v-on:childByValue="childByValue"></all_icons>
+						</div>
+						<div class="content-footer">
 							<el-button type="primary" @click="confirm2();" >确 定</el-button>
+							<el-button @click='close2'>取 消</el-button>
 						</div>
 					</div>
 				</div>
 			</div>
-			<!--图标弹出 End-->	    
+			<!--应用中心图标弹出 End-->	    
 		
 	</div>
 </template>
@@ -346,21 +347,19 @@
 				this.menu.pName = this.checkedNodes[0].name;
 
 			},
-			close1(){
+			close2(){
 				this.show2 = false;
 			},
 		
 		    childByValue: function (childValue) {
 		        // childValue就是子组件传过来的值
-		      
 		        this.sendchildValue = childValue;
 		      
 		    },
-			//图标的带值
+			//应用中心图标的带值
 			confirm2() {
 				this.menu.css = this.sendchildValue;
 				this.show2 = false;
-
 			},
 
 			handleClose(done) {

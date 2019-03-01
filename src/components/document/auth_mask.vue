@@ -218,13 +218,12 @@
 				pmRecordList: [],
 
 				usernames: [],
-				keywords: [],
+				// keywords: [],
 				selKeyW: [],
 				deptid: '',
 			};
 		},
 		methods: {
-			
 			handleAuth(value){
 				var _this = this;
 				var increaseFlag = false;
@@ -260,7 +259,6 @@
 				this.selBefore = value;
 			},
 			del(row,index){
-				console.log('del');
 				if(!row.id){
 					this.selKeyW.splice(index,1);
 				}else{
@@ -291,7 +289,8 @@
 			},
 			getChoose(data){
 				var selData = data.data;
-				this.detail('getChoose',selData[0]);
+				var opt = data.listName;
+				this.detail('getChoose',selData,opt);
 			},
 			addKeyW(){
 				this.chooseParam = {
@@ -355,10 +354,27 @@
 				this.modify=false;
 				this.show = true;
 			},
-			detail(opt,paramdata) {
-				if(opt == 'getChoose'){
-					this.dataInfo.userid = paramdata.id;
-					this.dataInfo.username = paramdata.username;
+			detail(opt,paramdata,listName) {
+				if(opt == 'getChoose' && listName == 'keywordList'){
+					var selKeyW = paramdata;
+					var labelAuth = this.authorities;
+					for(let i=0; i<selKeyW.length; i++){
+						selKeyW[i].checkedList = [];
+						selKeyW[i].keywordidDesc = selKeyW[i].keywordname
+						for(let n=0; n<labelAuth.length; n++){
+							var item = labelAuth[n].val;
+							if(item == 'fileread'){
+								selKeyW[i][item] == 1;
+								selKeyW[i].checkedList.push(labelAuth[n].label);
+							}
+						}
+						this.selKeyW.push(selKeyW[i]);
+					}
+					return;
+				}else if(opt == 'getChoose' && listName == 'user'){
+					var tmpData = paramdata[0];
+					this.dataInfo.userid = tmpData.id;
+					this.dataInfo.username = tmpData.username;
 				}else{
 					var detailData = this.detailData;
 					this.dataInfo.userid = detailData.userid;
@@ -390,8 +406,6 @@
 					this.modify = true;
 					this.show = true;
 				}).catch((wrong) => {});
-
-				
 			},
 			//点击关闭按钮
 			close() {
@@ -498,22 +512,22 @@
 					}
 				});
 			},
-			getKeyWords(){
-				var data = {
-					page: 1,
-					limit: 1000
-				}
-				var url = this.basic_url + '/api-apps/app/tbKeyword2';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					this.keywords = res.data.data;
-				}).catch((wrong) => {})
-			}
+			// getKeyWords(){
+			// 	var data = {
+			// 		page: 1,
+			// 		limit: 1000
+			// 	}
+			// 	var url = this.basic_url + '/api-apps/app/tbKeyword2';
+			// 	this.$axios.get(url, {
+			// 		params: data
+			// 	}).then((res) => {
+			// 		this.keywords = res.data.data;
+			// 	}).catch((wrong) => {})
+			// }
 		},
 		mounted() {
 			this.getUser();
-			this.getKeyWords();
+			// this.getKeyWords();
 		},
 
 	}

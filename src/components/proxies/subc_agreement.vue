@@ -71,7 +71,7 @@
 							</el-col>
 							<el-col :span="4">
 								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
+								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
@@ -152,7 +152,7 @@
 							<el-table-column label="修改时间" width="120" sortable prop="CHANGEDATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
 							</el-table-column>
 						</el-table>
-						<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
+						<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0"
 				            @size-change="sizeChange"
 				            @current-change="currentChange"
 				            :current-page="page.currentPage"
@@ -168,8 +168,8 @@
 		</div>
 		<!--右侧内容显示 End-->
 		<submask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></submask>
-			<!--报表-->
-			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
+		<!--报表-->
+		<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 	</div>
 </div>
 </template>

@@ -16,7 +16,7 @@
 				</div>
 				<div class="mask_content">
 				<el-form :model="dataInfo" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
-					<div class="accordion" id="information">
+					<div class="content-accordion" id="information">
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="基本信息" name="1">
 								<el-row :gutter="30">
@@ -99,7 +99,7 @@
 							</el-collapse-item>
 						</el-collapse>
 					</div>			
-					<div class="el-dialog__footer">
+					<div class="content-footer">
 						<el-button type="primary" @click="submitForm('dataInfo')">保存</el-button>
 						<el-button @click='close'>取消</el-button>
 					</div>
@@ -108,7 +108,7 @@
 			</div>
 		<!-- 弹出 -->
 			<el-dialog :modal-append-to-body="false" title="添加数据库表" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
-				<div class="accordion" id="information">
+				<div class="content-accordion" id="information">
 					<div class="mask_tab-block">
 						<div class="mask_tab-head clearfix">
 							<div class="accordion_title">

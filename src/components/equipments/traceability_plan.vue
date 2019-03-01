@@ -158,7 +158,7 @@
 							<el-table-column label="溯源完成日期" width="130" sortable prop="COMP_DATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('溯源完成日期')!=-1">
 							</el-table-column>
 						</el-table>
-						<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
+						<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0"
 				            @size-change="sizeChange"
 				            @current-change="currentChange"
 				            :current-page="page.currentPage"

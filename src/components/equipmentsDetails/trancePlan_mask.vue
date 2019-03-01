@@ -146,7 +146,7 @@
 						<el-table-column label="备注" width="200" sortable prop="MEMO">
 						</el-table-column>
 					</el-table>
-					<el-pagination background class="pull-right pt10"
+					<el-pagination background class="text-right pt10"
 			            @size-change="sizeChange"
 			            @current-change="currentChange"
 			            :current-page="page.currentPage"

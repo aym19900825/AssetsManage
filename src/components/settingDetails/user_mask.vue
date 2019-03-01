@@ -18,7 +18,7 @@
 				</div>
 				<div class="mask_content">
 					<el-form :model="user" inline-message :rules="rules" ref="user" :label-position="labelPositions" class="demo-user">
-						<div class="accordion">
+						<div class="content-accordion">
 							<el-collapse v-model="activeNames">
 								<!--<el-collapse-item title="基础信息" name="1">
 									<el-row :gutter="30">
@@ -437,7 +437,7 @@
 								</el-collapse-item>
 							</el-collapse>
 						</div>
-						<div class="el-dialog__footer" v-show="noviews">
+						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
 							<el-button type="success" @click='saveAndSubmit()' v-show="addtitle">保存并继续</el-button>
 							<el-button @click='close'>取消</el-button>
@@ -482,10 +482,8 @@
 		                    callback(new Error('请输入密码'));
 		                } else if (!/^.{5,16}$/g.test(value)) {
 		                    callback(new Error('密码长度不能少于5个字符且不能大于16个字符'));
-		                } else {
-		                    
-		                    callback();
-		         }
+		                }
+		                  callback();
 		     };
 			return {
 				basic_url: Config.dev_url,

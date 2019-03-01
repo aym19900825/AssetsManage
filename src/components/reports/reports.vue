@@ -101,7 +101,7 @@
 						
 							<el-table-column label="修改日期" sortable prop="updatedate" v-if="this.checkedName.indexOf('修改日期')!=-1">
 							</el-table-column>	
-						<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
+						<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0"
 				            @size-change="sizeChange"
 				            @current-change="currentChange"
 				            :current-page="page.currentPage"

@@ -17,7 +17,7 @@
 					</div>
 				</div>
 				<div class="mask_content">
-						<div class="accordion">
+						<div class="content-accordion">
 							<el-collapse v-model="activeNames">
 								<el-form :model="testingForm" inline-message :rules="rules" ref="testingForm" label-width="100px" status-icon>
 									<el-collapse-item title="基础信息" name="1">

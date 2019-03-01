@@ -27,7 +27,7 @@
 							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
 							<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
 						</div>
-						<div class="accordion" id="information">
+						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="承包方分包协议" name="1">
 									<el-row class="pb10">
@@ -93,7 +93,7 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
-                                     <el-row>
+                                    <el-row>
 										<el-col :span="8">
 											<el-form-item label="完成日期" prop="COMPDATE">
 												<el-date-picker v-model="report.COMPDATE" type="date" placeholder="请选择日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
@@ -145,23 +145,23 @@
 								</el-collapse-item>
 							</el-collapse>
 						</div>
-						<div class="el-dialog__footer" v-show="noviews">
+						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click="saveAndUpdate()">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit()" v-show="addtitle">保存并继续</el-button>
 							<el-button @click="close">取消</el-button>
 						</div>
-                        <div class="el-dialog__footer" v-show="!viewtitle">
+                        <div class="content-footer" v-show="viewtitle">
 							<el-button type="primary" @click="createinspect()">生成委托书</el-button>
 						</div>
 					</el-form>
 				</div>
 			</div>
 			<!--审批页面-->
-			<approvalmask :approvingData="approvingData" ref="approvalChild"  @detail="detailgetData"></approvalmask>
+			<approvalmask :approvingData="approvingData" ref="approvalChild" @detail="detailgetData"></approvalmask>
 			<!--流程历史-->
 			<flowhistorymask :approvingData="approvingData"  ref="flowhistoryChild" ></flowhistorymask>
 			<!--流程地图-->
-			<flowmapmask :approvingData="approvingData" ref="flowmapChild" ></flowmapmask>
+			<flowmapmask :approvingData="approvingData" ref="flowmapChild"></flowmapmask>
 			<!--当前责任人-->
 		</div>
 	</div>

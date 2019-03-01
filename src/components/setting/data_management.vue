@@ -5,13 +5,16 @@
 			<navs_header></navs_header>
 		</div>
 		<div class="contentbg">
-			<navs_left></navs_left>
+			<navs_left ref="navleft" v-on:childByValue="childvalue"></navs_left>
 			<div class="wrapper wrapper-content">
 				<div class="ibox-content">
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+									<i :class="item.icon"></i>{{item.name}}
+								</button>
+								<!--<button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加
                       			 </button>
 								<button type="button" class="btn btn-blue button-margin" @click="modify">
@@ -30,7 +33,7 @@
 								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="createtable">
 								    <i class="icon-refresh-cw"></i>生成表
-								</button>
+								</button>-->
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -165,7 +168,8 @@
 					pageSize: 20,
 					totalCount: 0
 				},
-				dataList:[]
+				dataList:[],
+				buttons:[],
 			}
 		},
 		methods: {
@@ -176,10 +180,6 @@
 			},
 			tableControle(data){
 				this.checkedName = data;
-			},
-			//配置关系
-			setrelation(){
-				this.$refs.rela.visible();
 			},
 			sizeChange(val) {
 		      this.page.pageSize = val;
@@ -200,6 +200,26 @@
 					description:''
 				};
 				this.requestData();
+			},
+			//请求点击
+		    getbtn(item){
+		    	if(item.name=="添加"){
+		         this.openAddMgr();
+		    	}else if(item.name=="修改"){
+		    	 this.modify();
+		    	}else if(item.name=="高级查询"){
+		    	 this.modestsearch();
+		    	}else if(item.name=="删除"){
+		    		this.deluserinfo();
+		    	}else if(item.name=="配置关系"){
+		    		this.setrelation();
+		    	}else if(item.name=="生成表"){
+					this.createtable();
+				}
+		    },
+			//配置关系
+			setrelation(){
+				this.$refs.rela.visible();
 			},
 			//添加数据
 			openAddMgr() {
@@ -312,7 +332,7 @@
 			SelChange(val) {
 				this.selUser = val;
 			},
-			requestData(index) {
+			requestData() {
 				this.loading = true;
 				var data = {
 					page: this.page.currentPage,
@@ -359,6 +379,26 @@
 			formatter(row, column) {
 				return row.enabled;
 			},
+			//左侧菜单传来
+		    childvalue:function ( childvalue) {
+				console.log( childvalue);
+		    	 this.getbutton( childvalue);
+		    },
+			//请求页面的button接口
+		    getbutton(childvalue){
+		    	console.log(childvalue);
+		    	var data = {
+					menuId: childvalue.id,
+					roleId: this.$store.state.roleid,
+				};
+				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
+				this.$axios.get(url, {params: data}).then((res) => {
+					console.log(res);
+					this.buttons = res.data;
+					
+				}).catch((wrong) => {})
+
+		    },
 		},
 		mounted() {
 			this.requestData();

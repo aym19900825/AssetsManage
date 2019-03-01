@@ -6,7 +6,7 @@
 	</div>
 	<div class="contentbg">
 		<!--左侧菜单内容显示 Begin-->
-		<navs_left></navs_left>
+		<navs_left ref="navleft" v-on:childByValue="childvalue"></navs_left>
 		<!--左侧菜单内容显示 End-->
 
 		<!--右侧内容显示 Begin-->
@@ -16,7 +16,10 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button type="button" class="btn btn-green" @click="openAddData" id="">
+							    <button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+									<i :class="item.icon"></i>{{item.name}}
+								</button>
+								<!--<button type="button" class="btn btn-green" @click="openAddData" id="">
                                 	<i class="icon-add"></i>添加
                       			</button>
 								<button type="button" class="btn btn-blue button-margin" @click="modify">
@@ -32,7 +35,7 @@
 						    		<i class="icon-search"></i>高级查询
 						    		<i class="icon-arrow1-down" v-show="down"></i>
 						    		<i class="icon-arrow1-up" v-show="up"></i>
-								</button>
+								</button>-->
 							</div>
 						</div>
 
@@ -102,7 +105,7 @@
 							<el-table-column label="排序" sortable width="160" align="center" prop="sort" v-if="this.checkedName.indexOf('排序')!=-1">
 							</el-table-column>
 						</el-table>
-						<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
+						<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0"
 				            @size-change="sizeChange"
 				            @current-change="currentChange"
 				            :current-page="page.currentPage"
@@ -196,7 +199,8 @@
 					totalCount: 0
 				},
 				selData: [],
-				dictionarieForm: {}//修改子组件时传递数据
+				dictionarieForm: {},//修改子组件时传递数据
+				buttons:[],//按钮
 			}
 		},
 
@@ -264,6 +268,20 @@
 				};
 				this.requestData();
 			},
+			 //请求点击
+		    getbtn(item){
+		    	if(item.name=="添加"){
+		         this.openAddData();
+		    	}else if(item.name=="修改"){
+		    	 this.modify();
+		    	}else if(item.name=="高级查询"){
+		    	 this.modestsearch();
+		    	}else if(item.name=="删除"){
+				 this.deluserinfo();
+				}else if(item.name=="彻底删除"){
+				 this.physicsDel();
+				}
+		    },
 			openAddData() {//添加数据
 				this.dictionarieForm = {
 					code:'',
@@ -451,7 +469,26 @@
 					this.loading = false;
 				}).catch((wrong) => {})
 			},
-			
+			//左侧菜单传来
+		    childvalue:function ( childvalue) {
+				console.log( childvalue);
+		    	 this.getbutton( childvalue);
+		    },
+			//请求页面的button接口
+		    getbutton(childvalue){
+		    	console.log(childvalue);
+		    	var data = {
+					menuId: childvalue.id,
+					roleId: this.$store.state.roleid,
+				};
+				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
+				this.$axios.get(url, {params: data}).then((res) => {
+					console.log(res);
+					this.buttons = res.data;
+					
+				}).catch((wrong) => {})
+
+		    },
 		},
 		
 		mounted() {

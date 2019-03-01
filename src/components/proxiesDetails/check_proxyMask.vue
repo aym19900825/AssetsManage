@@ -27,7 +27,7 @@
 							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
 							<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
 						</div>
-						<div class="accordion" id="information">
+						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="委托单位" name="1">
 									<el-row :gutter="5" class="pb10">
@@ -113,7 +113,7 @@
 											<el-col :span="8" >
 												<el-form-item label="产品类别" prop="PRODUCT_TYPE"  label-width="110px">
 													<el-input v-model="dataInfo.PRODUCT_TYPE" :disabled="true">
-														<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addcategory('maintable')">'</el-button>
+														<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addcategory('maintable')"></el-button>
 													</el-input>
 												</el-form-item>
 											</el-col>
@@ -628,13 +628,13 @@
 								
 							</el-collapse>
 						</div>
-						<div class="el-dialog__footer" v-show="noviews">
+						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click="saveAndUpdate">保存</el-button>
 							<el-button type="success"  v-show="addtitle" @click="saveAndSubmit">保存并继续</el-button>
 							<el-button v-show="modifytitle" type="btn btn-primarys" @click="modifyversion">修订</el-button>
 							<el-button @click='close'>取消</el-button>
 						</div>
-						<div class="el-dialog__footer" v-show="views">
+						<div class="content-footer" v-show="views">
 							<el-button type="success" v-if="this.dataInfo.STATUS == 3" @click="build">生成工作任务单</el-button>
 						</div>
 					</el-form>
@@ -664,7 +664,7 @@
 					</el-table-column>
 				</el-table>
 				
-				<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 				<span slot="footer" class="dialog-footer">
 			       <el-button type="primary" @click="addcusname">确 定</el-button>

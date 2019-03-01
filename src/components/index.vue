@@ -64,7 +64,7 @@
 										<el-table-column label="创建时间" sortable width="160px" prop="createTime">
 										</el-table-column>
 									</el-table>
-									<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+									<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 									</el-pagination>
 									<!-- 表格 -->
 								</div>
@@ -98,15 +98,14 @@
 											已完成: 151
 										</p>
 									</div>
-									<div class="pull-right pt40" style="width: 140px;">
-										<div class="pt40">
+									<div class="pull-right pt40" style="width: 200px;">
+										
 											<div class="wracircle" data-anim="base wracircle">
 												<div class="circle" data-anim="base left" style=""></div>
 												<div class="circle_font">
-													<p class="font20">46%</p>
+													<p class="font24">46%</p>
 													<p>工作完成率</p>
 												</div>
-											</div>
 										</div>
 									</div>
 								</div>
@@ -414,47 +413,47 @@ export default {
 /*半圆统计图效果*/
 
 .wracircle {
-	width: 140px; /* Set the size of the progress bar */
-	height: 140px;
+	width: 200px; /* Set the size of the progress bar */
+	height: 200px;
 	position: absolute; /* Enable clipping */
 	transform:rotate(270deg);
-	clip: rect(0px, 140px, 140px, 70px); /* Hide half of the progress bar */
+	clip: rect(0px, 200px, 200px, 100px); /* Hide half of the progress bar */
 }
 
 /* Set the sizes of the elements that make up the progress bar */
 .circle {
-	width: 140px;
-	height: 140px;
+	width: 200px;
+	height: 200px;
 	border: 10px solid #9399F3;
-	border-radius: 70px;
+	border-radius: 100px;
 	position: absolute;
 	z-index: 1;
-	clip: rect(0px, 70px, 140px, 0px);
+	clip: rect(0px, 100px, 200px, 0px);
 }
 .wracircle:after {
 	content: '';
-	width: 140px;
-	height: 140px;
+	width: 200px;
+	height: 200px;
 	position: absolute;
 	z-index: -1;
 	border: 10px solid #EBF4F7;
-	border-radius: 70px;
+	border-radius: 100px;
 }
 .circle_font {
 	position: absolute;
 	z-index: 6;
 	width:100%;
 	height: 55%;
-	top: 30px;
+	top: 42px;
 	right: 0px;
 	bottom: 0px;
 	text-align: center; 
 	transform:rotate(90deg);
 }
 .circle_font p {
-	font-size: 12px;
+	font-size: 13px;
 }
-.circle_font p.font20 {font-size: 20px;}
+.circle_font p.font24 {font-size: 24px;}
 /* Using the data attributes for the animation selectors. */
 /* Base settings for all animated elements */
 div[data-anim~=base] {

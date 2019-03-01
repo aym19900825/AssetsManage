@@ -95,7 +95,7 @@
 			  </el-table>
 			</el-form>
 			<!-- 表格分页 Begin-->
-			<!-- <el-pagination background class="pull-right pt10 pb10"
+			<!-- <el-pagination background class="text-right pt10 pb10"
 	            @size-change="sizeChange"
 	            @current-change="currentChange"
 	            :current-page="page.currentPage"

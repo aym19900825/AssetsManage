@@ -110,7 +110,7 @@ const validators = {
 			} else {
 				var targ = /^[a-zA-Z][a-zA-Z0-9_]*$/;
 				if( !targ.test(value)){
-					callback(new Error('只能由字母数字下划线组成'));
+					callback(new Error('只能由字母开头可含数字下划线'));
 				} else {
 					callback();
 				}

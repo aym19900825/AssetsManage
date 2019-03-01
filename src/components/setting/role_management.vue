@@ -254,7 +254,13 @@
 		    	}else if(item.name=="不活动"){
 		    		this.freezeAccount();
 		    	}else if(item.name=="删除"){
-		    		this.deluserinfo();
+		    		this.delroleinfo();
+		    	}else if(item.name=="彻底删除"){
+		    		this.physicsDel();
+		    	}else if(item.name=="权限配置"){
+		    		this.menu();
+		    	}else if(item.name=="数据范围"){
+		    		this.datalimit();
 		    	}
 		    },
 			//添加用戶

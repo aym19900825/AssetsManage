@@ -846,7 +846,6 @@
 							PRO_VERSIONNUM:'',	//产品名称编号+版本
 							S_VERSIONNUM:'',	//检验检测依据编号+版本
 							PROJ_VERSIONNUM:'',	//检测项目编号+版本
-
 						}
 					],
 				},
@@ -1192,25 +1191,34 @@
 				}
 				if(row.ID){
 					var url = this.basic_url + '/api-apps/app/inspectPro/' + TableName +'/' + row.ID;
-					this.$axios.delete(url, {}).then((res) => {
-						console.log(res);
-						if(res.data.resp_code == 0){
-							this.dataInfo[TableName+'List'].splice(index,1);
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {}).then((res) => {
+							console.log(res);
+							if(res.data.resp_code == 0){
+								this.dataInfo[TableName+'List'].splice(index,1);
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+							}else{
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'error'
+								});
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '删除成功',
-								type: 'success'
-							});
-						}else{
-							this.$message({
-								message: res.data.resp_msg,
+								message: '网络错误，请重试',
 								type: 'error'
 							});
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
+					}).catch(() => {
+
 					});
 				}else{
 					this.dataInfo[TableName+'List'].splice(index,1);
@@ -1968,5 +1976,4 @@
     background: #FFF;
     padding: 5px 10px;
 }*/
-
 </style>

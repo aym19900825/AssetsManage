@@ -665,7 +665,7 @@
 					console.log(res.data);
 					this.gridData= res.data.data;
 				});
-					this.dialogVisible = true;
+				this.dialogVisible = true;
 			},
 			dailogconfirm(type) { //小弹出框确认按钮事件
 				if(this.selval.length == 0){

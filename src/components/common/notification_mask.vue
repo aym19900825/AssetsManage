@@ -244,7 +244,7 @@
 														</el-form-item>
 													</template>
 												</el-table-column>
-												<el-table-column prop="P_DESC" label="检验检测项目内容" sortable width="200px">
+												<el-table-column prop="P_DESC" label="检验检测项目内容" sortable width="250px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.P_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 															<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入内容"></el-input>
@@ -252,7 +252,7 @@
 														</el-form-item>
 													</template>
 												</el-table-column>
-												<el-table-column prop="REMARKS" label="要求" sortable width="150px">
+												<el-table-column prop="REMARKS" label="要求" sortable width="180px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 															<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入内容"></el-input>
@@ -719,25 +719,34 @@
 				}
 				if(row.ID){
 					var url = this.basic_url + '/api-apps/app/workNot/' + TableName +'/' + row.ID;
-					this.$axios.delete(url, {}).then((res) => {
-						console.log(res);
-						if(res.data.resp_code == 0){
-							this.dataInfo[TableName+'List'].splice(index,1);
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {}).then((res) => {
+							console.log(res);
+							if(res.data.resp_code == 0){
+								this.dataInfo[TableName+'List'].splice(index,1);
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+							}else{
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'error'
+								});
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '删除成功',
-								type: 'success'
-							});
-						}else{
-							this.$message({
-								message: res.data.resp_msg,
+								message: '网络错误，请重试',
 								type: 'error'
 							});
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
+					}).catch(() => {
+
 					});
 				}else{
 					this.dataInfo[TableName+'List'].splice(index,1);

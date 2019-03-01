@@ -594,7 +594,7 @@
 					for(var i = 0; i < changeUser.length; i++) {
 						if(changeUser[i].STATE!=1){
 						 	this.$message({
-								message: '您的数据中有已启动的流程，所以能删除',
+								message: '您的数据中有已启动的流程，所以不能删除',
 								type: 'error'
 							});
 							return;
@@ -653,7 +653,7 @@
 					for(var i = 0; i < changeUser.length; i++) {
 						if(changeUser[i].STATE!=1){
 						 	this.$message({
-								message: '您的数据中有已启动的流程，所以能删除',
+								message: '您的数据中有已启动的流程，所以不能删除',
 								type: 'error'
 							});
 							return;

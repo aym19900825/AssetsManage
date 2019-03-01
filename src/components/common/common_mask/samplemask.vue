@@ -232,6 +232,9 @@
 				linedata.push(this.selval[0].PRODUCT_TYPE);//产品类别
 				linedata.push(this.selval[0].PRO_NUM);//产品编号
 				linedata.push(this.selval[0].PRODUCT);//产品
+				linedata.push(this.selval[0].P_VERSION );//产品类别版本
+				linedata.push(this.selval[0].PRO_VERSION);//产品版本
+				linedata.push(this.selval[0].ITEMNUM);//样品编号
 				this.$emit('appenddes',description);
 				this.$emit('appendmod',model);
 				this.$emit('appendqua',quatity);

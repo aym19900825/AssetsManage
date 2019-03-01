@@ -1653,6 +1653,9 @@
 				this.dataInfo.PRODUCT_TYPE = value[3];
 				this.dataInfo.PRO_NUM = value[4];
 				this.dataInfo.PRODUCT = value[5];
+				this.dataInfo.P_VERSION = value[6];//产品类别版本
+				this.dataInfo.PRO_VERSION = value[7];//产品版本
+				this.dataInfo.ITEMNUM = value[8];//样品编号
 				this.dataInfo.MAINGROUP = '';
 				this.dataInfo.LEADER = '';
 				this.RVENDORSelect();

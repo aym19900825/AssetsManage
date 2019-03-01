@@ -210,7 +210,7 @@
 		    	}else if(item.name=="高级查询"){
 		    	 this.modestsearch();
 		    	}else if(item.name=="删除"){
-		    		this.deluserinfo();
+		    		this.deldata();
 		    	}else if(item.name=="配置关系"){
 		    		this.setrelation();
 		    	}else if(item.name=="生成表"){

@@ -212,8 +212,8 @@
 								</el-pagination>
 								<!-- 表格 End-->
 				<span slot="footer" class="dialog-footer">
-			       <el-button @click="dialogVisible2 = false">取 消</el-button>
 			       <el-button type="primary" @click="addwork">确 定</el-button>
+				   <el-button @click="workinstruclose">取 消</el-button>
 			    </span>
 			</el-dialog>
 			<!-- 作业指导书 End -->
@@ -522,6 +522,7 @@
 			   }
 			 },
 			getwork(){
+				this.requestData();
 				this.dialogVisible2 = true;
 			},
 			getCheckedNodes() { //获取树菜单节点
@@ -858,18 +859,17 @@
 				}
 			},
 			addwork() { //小弹出框确认按钮事件
-				console.log(this.selval.length);
-				// if(this.selval.length == 0){
-				// 	this.$message({
-				// 		message: '请选择数据',
-				// 		type: 'warning'
-				// 	});
-				// }else if(this.selval.length>1){
-				// 	this.$message({
-				// 		message: '不可以同时选择多条数据',
-				// 		type: 'warning'
-				// 	});
-				// }else{
+				if(this.selval.length == 0){
+					this.$message({
+						message: '请选择数据',
+						type: 'warning'
+					});
+				}else if(this.selval.length>1){
+					this.$message({
+						message: '不可以同时选择多条数据',
+						type: 'warning'
+					});
+				}else{
 					var changeUser = this.selval;
 					var list = [];
 					//basisnum为依据编号的数组
@@ -879,22 +879,30 @@
 					}
 					//basisnums为basisnum数组用逗号拼接的字符串el-tag__close el-icon-close
 					this.testing_projectForm.DOCLINKS_NUM = basisdesc.toString(',');
-					console.log(this.testing_projectForm.DOCLINKS_NUM)
 					// list.push(basisnums);
 					// for(var i = 0;i<this.selUser.length;i++){
 					// 	this.selUser[i].ID = '';
 					// 	list.push(this.selUser[i]);
 					// }
 
-					// this.dialogVisible2 = false;
-				// }
+					this.dialogVisible2 = false;
+					this.WORK_INSTRUCTIONList = [];
+					this.page.currentPage = 1;
+					this.page.pageSize = 10;
+				}
+			},
+			workinstruclose(){
+				this.dialogVisible2 = false;
+				this.WORK_INSTRUCTIONList = [];
+				this.page.currentPage = 1;
+				this.page.pageSize = 10;
 			},
 			handleClose(done) {
 				this.$confirm('确认关闭？')
-					.then(_ => {
-						done();
-					})
-					.catch(_ => {});
+				.then(_ => {
+					done();
+				})
+				.catch(_ => {});
 			},
 			requestData(index) {
 				var data = {
@@ -929,7 +937,7 @@
 			},
 		},
 		mounted() {
-			this.requestData();
+			// this.requestData();
 			this.getCompany();
 		},
 	}

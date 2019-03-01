@@ -184,7 +184,6 @@
 
 		<!--右侧内容显示 End-->
 	</div>
-	</div>
 </template>
 <script>
 	import Config from '../../config.js'

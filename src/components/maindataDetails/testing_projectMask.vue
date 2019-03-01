@@ -212,8 +212,8 @@
 								</el-pagination>
 								<!-- 表格 End-->
 				<span slot="footer" class="dialog-footer">
-			       <el-button @click="dialogVisible2 = false">取 消</el-button>
 			       <el-button type="primary" @click="addwork">确 定</el-button>
+				   <el-button @click="workinstruclose">取 消</el-button>
 			    </span>
 			</el-dialog>
 			<!-- 作业指导书 End -->
@@ -522,6 +522,7 @@
 			   }
 			 },
 			getwork(){
+				this.requestData();
 				this.dialogVisible2 = true;
 			},
 			getCheckedNodes() { //获取树菜单节点
@@ -858,7 +859,6 @@
 				}
 			},
 			addwork() { //小弹出框确认按钮事件
-				console.log(this.selval.length);
 				if(this.selval.length == 0){
 					this.$message({
 						message: '请选择数据',
@@ -886,14 +886,23 @@
 					// }
 
 					this.dialogVisible2 = false;
+					this.WORK_INSTRUCTIONList = [];
+					this.page.currentPage = 1;
+					this.page.pageSize = 10;
 				}
+			},
+			workinstruclose(){
+				this.dialogVisible2 = false;
+				this.WORK_INSTRUCTIONList = [];
+				this.page.currentPage = 1;
+				this.page.pageSize = 10;
 			},
 			handleClose(done) {
 				this.$confirm('确认关闭？')
-					.then(_ => {
-						done();
-					})
-					.catch(_ => {});
+				.then(_ => {
+					done();
+				})
+				.catch(_ => {});
 			},
 			requestData(index) {
 				var data = {
@@ -928,7 +937,7 @@
 			},
 		},
 		mounted() {
-			this.requestData();
+			// this.requestData();
 			this.getCompany();
 		},
 	}

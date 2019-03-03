@@ -141,7 +141,7 @@
     								  element-loading-background="rgba(255, 255, 255, 0.9)">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
-								<el-table-column label="样品编号" sortable width="200px" prop="ITEMNUM" v-if="this.checkedName.indexOf('样品编号')!=-1">
+								<el-table-column label="样品编号" sortable width="220px" prop="ITEMNUM" v-if="this.checkedName.indexOf('样品编号')!=-1">
 									<template slot-scope="scope">
 										<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.ITEMNUM}}
 										</p>
@@ -151,7 +151,7 @@
 								</el-table-column>
 								<el-table-column label="样品类别" sortable width="200px" prop="TYPE" v-if="this.checkedName.indexOf('样品类别')!=-1">
 								</el-table-column>
-								<el-table-column label="委托单位" sortable width="200px" prop="V_NAME" v-if="this.checkedName.indexOf('委托单位')!=-1">
+								<el-table-column label="委托单位" sortable width="260px" prop="V_NAME" v-if="this.checkedName.indexOf('委托单位')!=-1">
 								</el-table-column>
 								<el-table-column label="生产单位" sortable width="200px" prop="P_NAME" v-if="this.checkedName.indexOf('生产单位')!=-1">
 								</el-table-column>

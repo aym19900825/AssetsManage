@@ -20,7 +20,7 @@
 								<button type="button" class="btn btn-blue button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改
 								</button>
-								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
+								<button type="button" class="btn btn-purple button-margin" @click="deluserinfo">
 								    <i class="icon-trash"></i>删除
 								</button>
 								<button type="button" class="btn btn-primarys button-margin">
@@ -29,12 +29,12 @@
 								<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
 							    	<i class="icon-clipboard"></i>报表
 								</button>
-								<button type="button" class="btn btn-primarys button-margin">
+								<!-- <button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-send"></i>发布
 								</button>
 								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-close1"></i>取消
-								</button>
+								</button> -->
 								<button type="button" class="btn btn-primarys button-margin" @click="tasklist">
 								    <i class="icon-send"></i>生成子任务单
 								</button>
@@ -200,8 +200,14 @@
 					 },
 					{
 						text: '状态',
-						dataIndex: 'STATUS',
+						dataIndex: 'STATEDesc',
 					 	width: '100',
+						isShow:true,
+					},
+					{
+						text: '是否为主任务单',
+						dataIndex: 'IS_MAINDesc',
+					 	width: '120',
 						isShow:true,
 					},
 					{
@@ -616,6 +622,7 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
+					console.log(res);
 					this.loading = false;
 					let result=res.data.datas;
 					for(let i=0;i<result.length;i++){

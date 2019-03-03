@@ -58,7 +58,7 @@
 									<el-row :gutter="5">
 										<el-col :span="6">
 											<el-form-item label="类别" prop="TYPE"  label-width="85px">
-												<el-select v-model="WORKPLAN.TYPE" placeholder="请选择"  :disabled="noedit">
+												<el-select v-model="WORKPLAN.TYPE" placeholder="请选择" :disabled="noedit">
 													<el-option label="监督抽查" value="1"></el-option>
 													<el-option label="质量抽查" value="3"></el-option>
 												</el-select>
@@ -116,35 +116,31 @@
 								
 								<!-- 年度计划列表 Begin-->
 								<el-collapse-item title="年度计划列表" name="2" class="ml30">
-									<div style="position: absolute;top: 10px;right: 40px;">
+									<div style="position: absolute; top:10px; right:40px;">
 									<!-- <div> -->
 										<!-- <el-button type="primary" size="mini" round v-show="!viewtitle">
 											<i class="icon-upload-cloud"></i>
 											<font>导入</font>
 										</el-button> -->
-										<el-dropdown size="small" split-button type="primary" style="margin-top:1px;">
-    										导入
+										<el-dropdown size="small">
+											<el-button round type="primary" size="mini">
+												<i class="icon-inventory-line-callin"></i> 导入<i class="el-icon-arrow-down el-icon--right"></i>
+											</el-button>
+
 											<el-dropdown-menu slot="dropdown">
 												<el-dropdown-item>
-													<div @click="download">下载模版</div>
+													<div @click="download"><i class="icon-download-cloud"></i>下载模版</div>
 												</el-dropdown-item>
-												
 												<el-dropdown-item>
-													<el-upload
-													ref="upload"
-													class="upload"
-													:action="uploadUrl"
-													:limit=1
-													multiple
-													method:="post"
-													:file-list="fileList">
-														<div>上传</div>
+													<el-upload ref="upload" class="upload" :action="uploadUrl" :limit=1 multiple method:="post" :file-list="fileList">
+														<i class="icon-upload-cloud"></i> 上传
 													</el-upload>
 												</el-dropdown-item>
 											</el-dropdown-menu>
 										</el-dropdown>
+
 										<el-button type="primary" size="mini" round v-show="!viewtitle" @click="exportData" style="margin-left: 10px;">
-											<i class="icon-upload-cloud"></i>
+											<i class="icon-inventory-line-callout"></i>
 											<font>导出</font>
 										</el-button>
 										<el-button type="success" size="mini" round  @click="addfield1" v-show="!viewtitle">
@@ -166,7 +162,7 @@
 									      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.$index + 1" disabled></el-input><span v-if="!scope.row.isEditing">{{scope.$index + 1}}</span>
 									      </template>
 									    </el-table-column>
-										<el-table-column prop="ITEM_NAME" label="产品名称" sortable width="120px">
+										<el-table-column prop="ITEM_NAME" label="产品名称" sortable width="200px">
 											<template slot-scope="scope">
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ITEM_NAME" placeholder="请输入内容" :disabled="true">
 														<el-button slot="append" icon="el-icon-search" @click="addproduct(scope.row)"></el-button>
@@ -181,7 +177,7 @@
 												<span v-else="v-else">{{scope.row.MODEL}}</span>
 										  </template>
 									    </el-table-column>
-										<el-table-column prop="V_NAME" label="生产企业名称" sortable width="120px">
+										<el-table-column prop="V_NAME" label="生产企业名称" sortable width="220px">
 											<template slot-scope="scope">
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAME" placeholder="请输入内容" :disabled="true">
 														<el-button slot="append" icon="el-icon-search" @click="prodeptbtn(scope.row)"></el-button>
@@ -199,15 +195,15 @@
 									        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容" id="cost" @blur="toPrice(scope.row)"></el-input><span v-else="v-else" id="costshow">{{scope.row.CHECKCOST}}</span>
 										  </template>
 									    </el-table-column>
-									    <el-table-column prop="REASION" label="项目提出理由" sortable width="120px">
+									    <el-table-column prop="REASION" label="项目提出理由" sortable width="220px">
 									      <template slot-scope="scope">
 									        		<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REASION" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.REASION}}</span>
 										  </template>
 									    </el-table-column>
 									    <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 									      <template slot-scope="scope">
-									        <el-button type="danger" circle title="删除" @click="delPlan(scope.$index,scope.row, 'WORLPLANLINE','worlplanlist')"  size="small" v-show="!viewtitle">
-									          <i class="icon-trash"></i>
+									        <el-button type="text" title="删除" @click="delPlan(scope.$index,scope.row, 'WORLPLANLINE','worlplanlist')"  size="small" v-show="!viewtitle">
+									          <i class="icon-trash red"></i>
 									        </el-button>
 
 									        <el-button type="primary" circle title="下达任务通知书" @click="assign(scope.row)" size="small" v-if="assignshow">
@@ -218,6 +214,7 @@
 									</el-table>
 								</el-collapse-item>
 								<!-- 年度计划列表 End -->
+
 								<!-- 检测依据、检测项目与要求 Begin-->
 								<div class="el-collapse-item pt10 pr20 pb20 ml60" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName" @tab-click="handleClick">
@@ -495,8 +492,10 @@
 					<el-table-column label="修改时间" width="160" prop="CHANGEDATE" sortable>
 					</el-table-column>
 				</el-table>
+
 				<el-pagination background class="text-right pt10 pb10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
+
 				<!-- 第二层弹出的表格 End -->
 				<div slot="footer" class="el-dialog__footer">
 			       <el-button type="primary" @click="addbasis">确 定</el-button>
@@ -588,9 +587,9 @@
 			    </span>
 			</el-dialog>
 			<!-- 检测项目与要求 End -->
+
 			<!-- 产品类别 Begin -->
 			<el-dialog :modal-append-to-body="false" title="产品类别" height="400px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
-				<!-- 第二层弹出的表格 Begin-->
 				<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="400px" style="width:100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" fixed width="55" align="center">
 					</el-table-column>
@@ -602,20 +601,21 @@
 					</el-table-column>
 					<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc">
 					</el-table-column>
-					<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
+					<el-table-column label="录入时间" width="160" prop="ENTERDATE" sortable :formatter="dateFormat">
 					</el-table-column>
-					<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat">
+					<el-table-column label="修改时间" width="160" prop="CHANGEDATE" sortable :formatter="dateFormat">
 					</el-table-column>
 				</el-table>
 				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
-				<!-- 表格 End-->
+
 				<span slot="footer" class="el-dialog__footer">
 			       <el-button type="primary" @click="addproclass">确 定</el-button>
-			       <el-button @click="dialogVisible3 = false">取 消</el-button>
+			       <el-button @click="DialogClose">取 消</el-button>
 			    </span>
 			</el-dialog>
 			<!-- 产品类别 End -->
+
 			<!-- 产品名称 Begin -->
 			<el-dialog :modal-append-to-body="false" title="产品名称" :visible.sync="dialogVisible4" width="80%" :before-close="handleClose">
 				<el-table :header-cell-style="rowClass" :data="productList" line-center border stripe height="400px" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
@@ -846,29 +846,32 @@
 				},
 				
 				rules: {
-					PROP_UNIT:[{required: true,validator: validateUnit, trigger: 'change'}],//提出单位 
-					basisList:[{required: true,validator: validateBasislist,trigger: 'change'}],//产品类别
-					DESCRIPTION:[{required: true,trigger: 'blur',validator: this.Validators.isFillTips}],
+					PROP_UNIT:[{required: true, trigger: 'change', validator: validateUnit}],//提出单位 
+					basisList:[{required: true, trigger: 'change', validator: validateBasislist}],//产品类别
+					DESCRIPTION:[{required: true, trigger: 'blur', validator: this.Validators.isFillTips}],//计划描述
 
-					TYPE:[{required: true,message: '请选择类别', trigger: 'change'}],
+					TYPE:[{required: true, message: '请选择', trigger: 'change'}],//类别
 
-					COMPACTOR:[
+					COMPACTOR:[//编制人
 						{required: true, trigger: 'blur',message: '必填' },
 						{trigger: 'blur', validator: this.Validators.isNickname},
-					],//编制人
-					C_PERSON:[
+					],
+					C_PERSON:[//审核人
 						{required: true, trigger: 'blur',message: '必填' },
 						{trigger: 'blur', validator: this.Validators.isNickname},
-					],//审核人
-					APPRPERSON:[
+					],
+					APPRPERSON:[//批准人
 						{required: true, trigger: 'blur',message: '必填' },
 						{trigger: 'blur', validator: this.Validators.isNickname},
-					],//批准人
+					],
 
 					CONTACT_ADDRESS:[{required: true,trigger:'blur',validator: validateAddress,}],
+
 					PHONE:[{required: true,trigger: 'blur',validator: validatePhone,}],
 					EMAIL:[{required: true,trigger: 'blur',validator:validateEmail,}],
-       				ITEMTYPE:[{required: true,validator: validateItemdata}],//产品类别 
+
+       				ITEMTYPE:[{required: true,validator: validateItemdata}],//产品类别
+
        				YEAR: [{type: 'string',required: true,message: '请选择年度',trigger: 'change' }],//年度
        				REPORTDATE: [{type: 'string',required: true,message: '请选择提报日期',trigger: 'change'}],//提报日期
        				//检测依据 
@@ -1235,11 +1238,20 @@
 						type: 'warning'
 					});
 				}else{
-					this.dialogVisible3 = false;
 					this.itemtypenum = this.selUser[0].NUM;
 					this.WORKPLAN.ITEMTYPE = this.selUser[0].TYPE;
 					this.$emit('request');
+					this.ResetDatasNew();//调用ResetDatasNew函数
 				}
+			},
+			DialogClose(){//点击取消按钮
+				this.ResetDatasNew();//调用ResetDatasNew函数
+			},
+			ResetDatasNew(){//点击确定或取消按钮时重置数据20190303
+				this.dialogVisible3 = false;//关闭弹出框
+				this.WORK_INSTRUCTIONList = [];//列表数据置空
+				this.page.currentPage = 1;//页码重新传值
+				this.page.pageSize = 10;//页码重新传值
 			},
 			addproduct(item){//产品名称按钮
 				if(this.WORKPLAN.ITEMTYPE)

@@ -466,7 +466,6 @@
 														</el-button>
 													</template>
 												</el-table-column>
-
 											</el-table>
 									    </el-tab-pane>
 									</el-tabs>
@@ -570,7 +569,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="主检负责人" prop="LEADER" label-width="110px">
-												<el-select clearable v-model="dataInfo.LEADER" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" style="width: 100%;">
+												<el-select clearable v-model="dataInfo.LEADER" filterable allow-create default-first-option placeholder="请选择">
 													<el-option v-for="(data,index) in leaderdata" :key="index" :value="data.id" :label="data.username"></el-option>
 												</el-select>
 											</el-form-item>

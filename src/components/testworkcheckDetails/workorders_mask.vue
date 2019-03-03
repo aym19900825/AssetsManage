@@ -686,7 +686,7 @@
 													</template>
 												</el-table-column>
 												
-												<el-table-column prop="PREVIEW" label="预览" sortable width="120px">
+												<!-- <el-table-column prop="PREVIEW" label="预览" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_REPORTList.'+scope.$index + '.PREVIEW'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PREVIEW" placeholder="请输入">
@@ -694,15 +694,15 @@
 														<span v-else="v-else">{{scope.row.PREVIEW}}</span>
 														</el-form-item>
 													</template>
-												</el-table-column>
+												</el-table-column> -->
 
 												<el-table-column prop="VERSION" label="版本" sortable width="120px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'WORKORDER_REPORTList.'+scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<!-- <el-form-item :prop="'WORKORDER_REPORTList.'+scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" > -->
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入">
 														</el-input>
 														<span v-else="v-else">{{scope.row.MOVERSIONDEL}}</span>
-														</el-form-item>
+														<!-- </el-form-item> -->
 													</template>
 												</el-table-column>
 												<el-table-column fixed="right" label="操作" width="120px">
@@ -1875,7 +1875,7 @@
 							var obj = {
 								REPORTNUM:res.data.datas.reportnum,
 								REPORTNAME:res.data.datas.reportname,
-								PREVIEW:'',
+								// PREVIEW:'',
 								VERSION:res.data.datas.version,
 							}
 							this.workorderForm.WORKORDER_REPORTList.push(obj);

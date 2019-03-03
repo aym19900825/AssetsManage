@@ -142,7 +142,7 @@
 						</el-col>
 						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
-							<tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="userList" v-on:classByValue="childvalue"></tree_grid>
+							<tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="userList" v-on:classByValue="childvalue" @getDetail="getDetail"></tree_grid>
 							<!-- 表格 -->
 						</el-col>
 					</el-row>
@@ -532,8 +532,12 @@
 					this.$refs.task.visible(this.selMenu[0].ID);	
 				}
 			},
+			getDetail(data){
+				this.view(data);
+			},
 			//查看
-			view(id) {
+			view(data) {
+				var id=data.ID;
 				this.$refs.child.view(id);
 			},
 			//代办跳转
@@ -787,6 +791,11 @@
 		        // childValue就是子组件传过来的
 		        this.selMenu = childValue;
 			},
+		// 	classByValue(childValue) {
+		// 	// childValue就是子组件传过来的
+		// 	console.log('classByValue');
+		//   this.selUser = childValue;
+		// 	},
 			//左侧菜单过来的
 		   childByValue:function(childValue) {
         		// childValue就是子组件传过来的值

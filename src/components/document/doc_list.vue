@@ -15,14 +15,17 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-							<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
+								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+									<i :class="item.icon"></i>{{item.name}}
+								</button>			
+							<!-- <button type="button" class="btn btn-primarys button-margin" @click="reportdata">
 							    <i class="icon-clipboard"></i>报表
 							</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 						    		<i class="icon-search"></i>高级查询
 						    		<i class="icon-arrow1-down" v-show="down"></i>
 						    		<i class="icon-arrow1-up" v-show="up"></i>
-								</button>
+								</button> -->
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -198,10 +201,19 @@
 					fileupload: 0,
 				},
 				fileAuthShow: false,
-				samplesForm: {}//修改子组件时传递数据
+				samplesForm: {},//修改子组件时传递数据
+				buttons:[],
 			}
 		},
 		methods: {
+			//请求点击
+		    getbtn(item){
+		    	if(item.name=="高级查询"){
+		    	 this.modestsearch();
+		    	}else if(item.name=="报表"){
+			     this.reportdata();
+				}
+		    },
 			download(row){
 				var url = row.filepath 
                         + '&userid=' + this.userParm.userid
@@ -280,58 +292,10 @@
 				this.reportData.app=this.productType;
 				this.$refs.reportChild.visible();
 			},
-			// 删除
-			deluserinfo() {
-				var selData = this.selMenu;
-				if(selData.length == 0) {
-					this.$message({
-						message: '请您选择要删除的数据',
-						type: 'warning'
-					});
-					return;
-				} else {
-					var url = this.basic_url + '/api-apps/app/item/deletes';
-					//changeMenu为勾选的数据
-					var changeMenu = selData;
-					//deleteid为id的数组
-					var deleteid = [];
-					var ids;
-					for (var i = 0; i < changeMenu.length; i++) {
-						deleteid.push(changeMenu[i].ID);
-					}
-					//ids为deleteid数组用逗号拼接的字符串
-					ids = deleteid.toString(',');
-                    var data = {
-						ids: ids,
-					}
-					this.$confirm('确定删除此数据吗？', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                    }).then(({ value }) => {
-                        this.$axios.delete(url, {params: data}).then((res) => {//.delete 传数据方法
-						//resp_code == 0是后台返回的请求成功的信息
-							if(res.data.resp_code == 0) {
-								this.$message({
-									message: '删除成功',
-									type: 'success'
-								});
-								this.requestData();
-							}
-						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
-						});
-                    }).catch(() => {
-
-                	});
-				}
-			},
 			SelChange(val) {//选中值后赋值给一个自定义的数组：selMenu
 				this.selMenu = val;
 			},
-			requestData(index) {
+			requestData() {
 				this.loading = true;
 				var data = {
 					page: this.page.currentPage,
@@ -391,8 +355,29 @@
 				this.ismin = !this.ismin;
 			},
 			childByValue:function(childValue) {
-        		this.$refs.navsheader.showClick(childValue);
-      		},
+        		// childValue就是子组件传过来的值
+				this.$refs.navsheader.showClick(childValue);
+				this.getbutton(childValue);
+			},
+			  //请求页面的button接口
+		    getbutton(childByValue){
+		    	console.log(childByValue);
+		    	var data = {
+					menuId: childByValue.id,
+					roleId: this.$store.state.roleid,
+				};
+				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
+				this.$axios.get(url, {params: data}).then((res) => {
+					console.log(res);
+					this.buttons = res.data;
+					
+				}).catch((wrong) => {
+					this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+				})
+		    },
 		},
 		mounted() {// 在页面挂载前就发起请求
 			var url = this.basic_url + '/api-user/users/currentMap';

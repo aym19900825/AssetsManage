@@ -20,12 +20,12 @@
 					<el-form :model="dataInfo" :label-position="labelPositions" :rules="rules" ref="dataInfo"  inline-message  class="demo-ruleForm">
 						<div class="text-center" v-show="viewtitle">
 							<span v-if="this.dataInfo.STATUS!=3">
-								<el-button id="start" type="success" round plain @click="startup" v-show="start"><i class="icon-start"></i> 启动流程</el-button>
-								<el-button id="approval" type="warning" round plain @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
+								<el-button id="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 启动流程</el-button>
+								<el-button id="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
 							</span>
-							<el-button type="primary" round plain @click="flowmap"><i class="icon-git-pull-request"></i> 流程地图</el-button>
-							<el-button type="primary" round plain @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
-							<el-button type="primary" round plain @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
+							<el-button type="primary" round plain size="mini" @click="flowmap"><i class="icon-git-pull-request"></i> 流程地图</el-button>
+							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
+							<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
 						</div>
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
@@ -197,7 +197,7 @@
 												<el-table-column prop="S_NUM" label="标准编号" sortable width="150px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.S_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-														<el-input v-if="scope.row.isEditing" v-model="scope.row.S_NUM" placeholder="请输入">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入">
 															   <el-button slot="append" icon="el-icon-search"></el-button>
 														</el-input>
 														<span v-else="v-else">{{scope.row.S_NUM}}</span>
@@ -208,27 +208,16 @@
 												<el-table-column prop="S_DESC" label="标准内容" sortable>
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.S_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-														<el-input v-if="scope.row.isEditing" v-model="scope.row.S_DESC" placeholder="请输入">	
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_DESC" placeholder="请输入">	
 														</el-input>
 														<span v-else="v-else">{{scope.row.S_DESC}}</span>
 														</el-form-item>
 													</template>
-												</el-table-column>
-												
-												<!--<el-table-column prop="STATUS" label="信息状态" sortable width="120px">
-													<template slot-scope="scope">
-														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.STATUS'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-														<el-input v-if="scope.row.isEditing" v-model="scope.row.STATUS" placeholder="请输入要求">
-														</el-input>
-														<span v-else="v-else">{{scope.row.STATUS}}</span>
-														</el-form-item>
-													</template>
-												</el-table-column>-->
-												
+												</el-table-column>												
 												<el-table-column prop="VERSION" label="版本" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-														<el-input v-if="scope.row.isEditing" v-model="scope.row.VERSION" placeholder="请输入">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入">
 														</el-input>
 														<span v-else="v-else">{{scope.row.VERSION}}</span>
 														</el-form-item>
@@ -237,7 +226,7 @@
 												
 												<el-table-column fixed="right" label="操作" width="120px">
 													<template slot-scope="scope">
-														<el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'basisList')" type="text" v-if="!viewtitle">
+														<el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'basisList')" type="text" size="small" v-if="!viewtitle">
 															 <i class="icon-trash red"></i>
 														</el-button>
 													</template>
@@ -256,7 +245,7 @@
 												<el-table-column prop="P_NUM" label="检验项目编号" sortable width="120px">
 													<template slot-scope="scope">
 													<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.P_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-														<el-input v-if="scope.row.isEditing" v-model="scope.row.P_NUM" placeholder="请输入">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="请输入">
 															   <el-button slot="append" icon="el-icon-search"></el-button>
 														</el-input>
 														<span v-else="v-else">{{scope.row.P_NUM}}</span>
@@ -267,7 +256,7 @@
 												<el-table-column prop="P_DESC" label="检验项目描述" sortable>
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.P_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-														<el-input v-if="scope.row.isEditing" v-model="scope.row.P_DESC" placeholder="请输入">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入">
 														</el-input>
 														<span v-else="v-else">{{scope.row.P_DESC}}</span>
 														</el-form-item>	
@@ -277,7 +266,7 @@
 												<el-table-column prop="REMARKS" label="要求" sortable>
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-															<el-input v-model="scope.row.REMARKS" placeholder="请输入">		
+															<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入">		
 															</el-input>
 														</el-form-item>	
 													</template>
@@ -295,7 +284,7 @@
 												<!--<el-table-column prop="STATUS" label="信息状态" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.STATUS'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-														<el-input v-if="scope.row.isEditing" v-model="scope.row.STATUS" placeholder="请输入要求">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入要求">
 														</el-input>
 														<span v-else="v-else">{{scope.row.STATUS}}</span>
 													</el-form-item>
@@ -305,7 +294,7 @@
 												<el-table-column prop="VERSION" label="项目版本" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-														<el-input v-if="scope.row.isEditing" v-model="scope.row.VERSION" placeholder="请输入">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入">
 														</el-input>
 														<span v-else="v-else">{{scope.row.VERSION}}</span>
 														</el-form-item>	
@@ -313,7 +302,7 @@
 												</el-table-column>
 												<el-table-column fixed="right" label="操作" width="120">
 													<template slot-scope="scope">
-														<el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'projectList')" type="text" v-if="!viewtitle">
+														<el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'projectList')" type="text" size="small" v-if="!viewtitle">
 														 <i class="icon-trash red"></i>
 														</el-button>
 													</template>
@@ -322,7 +311,7 @@
 									    </el-tab-pane>
 									    <el-tab-pane label="分包要求" name="third">
 									    	<div class="table-func table-funcb">
-												<el-button type="success" size="mini" round @click="addcheckProCont" v-show="!viewtitle">
+												<el-button type="success" size="mini" round @click="addcheckProCont"  v-show="!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建行</font>
 												</el-button>
@@ -338,7 +327,7 @@
 												<el-table-column prop="PROXY_CONTRACT_NUM" label="分包协议编号" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.PROXY_CONTRACT_NUM'" >
-														<el-input v-if="scope.row.isEditing" v-model="scope.row.PROXY_CONTRACT_NUM" :disabled="true" placeholder="自动生成">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROXY_CONTRACT_NUM" :disabled="true" placeholder="自动生成">
 														</el-input>
 														<span v-else="v-else">{{scope.row.PROXY_CONTRACT_NUM}}</span>
 														</el-form-item>
@@ -346,14 +335,14 @@
 												</el-table-column>
 												<el-table-column prop="V_NAME" label="委托单位" sortable width="120px">
 													<template slot-scope="scope">
-														<el-input :disabled="true" v-if="scope.row.isEditing" v-model="scope.row.V_NAME" placeholder="请输入委托方名称">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAME" placeholder="请输入委托方名称">
 														</el-input>
 														<span v-else="v-else">{{scope.row.V_NAME}}</span>
 													</template>
 												</el-table-column>
 												<el-table-column prop="PROXYNUM" label="委托书编号" sortable width="120px">
 													<template slot-scope="scope">
-														<el-input :disabled="true" v-if="scope.row.isEditing" v-model="scope.row.PROXYNUM" placeholder="自动生成">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.PROXYNUM" placeholder="自动生成">
 														</el-input>
 														<span v-else="v-else">{{scope.row.PROXYNUM}}</span>
 													</template>
@@ -369,7 +358,7 @@
 												</el-table-column>
 												<el-table-column prop="VENDORDesc" label="分包方名称" sortable width="120px">
 													<template slot-scope="scope">
-														<el-input :disabled="true" v-if="scope.row.isEditing" v-model="scope.row.VENDORDesc" placeholder="请输入分包方名称">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDORDesc" placeholder="请输入分包方名称">
 															<el-button slot="append" icon="el-icon-search" @click="getDept(scope.row)">
 															</el-button>
 														</el-input>
@@ -378,7 +367,7 @@
 												</el-table-column>
 												<el-table-column prop="depttypeName" label="机构属性" sortable width="120px">
 													<template slot-scope="scope">
-														<el-input :disabled="true" v-if="scope.row.isEditing" v-model="scope.row.depttypeName" placeholder="">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.depttypeName" placeholder="">
 														</el-input>
 														<span v-else="v-else">{{scope.row.depttypeName}}</span>
 													</template>
@@ -386,7 +375,7 @@
 
 												<el-table-column prop="PRODUCT_TYPE" label="产品类别" sortable width="120px">
 													<template slot-scope="scope">
-														<el-input :disabled="true" v-if="scope.row.isEditing" v-model="scope.row.PRODUCT_TYPE" placeholder="请输入分包方名称">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.PRODUCT_TYPE" placeholder="请输入分包方名称">
 															<el-button slot="append" icon="el-icon-search" @click="addcategory(scope.row)">
 															</el-button>
 														</el-input>
@@ -396,7 +385,7 @@
 
 												<el-table-column prop="PRODUCT" label="产品名称" sortable width="120px">
 													<template slot-scope="scope">
-														<el-input :disabled="true" v-if="scope.row.isEditing" v-model="scope.row.PRODUCT" placeholder="请输入分包方名称">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.PRODUCT" placeholder="请输入分包方名称">
 															<el-button slot="append" icon="el-icon-search" @click="addproduct(scope.row)">
 															</el-button>
 														</el-input>
@@ -406,7 +395,7 @@
 
 												<el-table-column prop="BASIS" label="检验检测技术依据" sortable width="150px">
 													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" v-model="scope.row.BASIS" placeholder="请输入分包方名称">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.BASIS" placeholder="请输入分包方名称">
 															<el-button slot="append" icon="el-icon-search" @click="basisleadbtn(scope.row)">
 															</el-button>
 														</el-input>
@@ -417,7 +406,7 @@
 												<el-table-column prop="P_REMARKS" label="检验项目内容" sortable width="200px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.P_REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-															<el-input v-if="scope.row.isEditing" v-model="scope.row.P_REMARKS" placeholder="请输入">
+															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入">
 																<el-button slot="append" icon="el-icon-search" @click="basisleadbtn2(scope.row)">
 																</el-button>
 															</el-input>
@@ -428,7 +417,7 @@
 												<el-table-column prop="REQUIRES" label="对环境和操作人员要求" sortable width="220px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.REQUIRES'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-														<el-input v-if="scope.row.isEditing" v-model="scope.row.REQUIRES" placeholder="请输入内容"></el-input>
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REQUIRES" placeholder="请输入内容"></el-input>
 														<span v-else="v-else">{{scope.row.REQUIRES}}</span>
 														</el-form-item>
 													</template>
@@ -436,7 +425,7 @@
 												<el-table-column prop="Q_TYPE" label="对分包报告/证书的要求" sortable width="220px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.Q_TYPE'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-														<el-input v-if="scope.row.isEditing" v-model="scope.row.Q_TYPE" placeholder="请输入内容"></el-input>
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.Q_TYPE" placeholder="请输入内容"></el-input>
 														<span v-else="v-else">{{scope.row.Q_TYPE}}</span>
 														</el-form-item>
 													</template>
@@ -445,7 +434,7 @@
 												<el-table-column prop="CHECKCOST" label="检验费用" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.CHECKCOST'" :rules="[{required: true, message: '请输入数字', trigger: 'blur'}]" >
-														<el-input v-if="scope.row.isEditing" id="testprice" @blur="testPrice(scope.row)" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input>
+														<el-input v-if="scope.row.isEditing" id="testprice" @blur="testPrice(scope.row)" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input>
 														<span v-else="v-else">{{scope.row.CHECKCOST}}</span>
 														</el-form-item>
 													</template>
@@ -453,7 +442,7 @@
 														<!--<el-table-column prop="STATUS" label="信息状态" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.STATUS'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-														<el-input v-if="scope.row.isEditing" v-model="scope.row.STATUS" placeholder="请输入要求"></el-input>
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入要求"></el-input>
 														<span v-else="v-else">{{scope.row.STATUS}}</span>
 														</el-form-item>
 													</template>
@@ -461,7 +450,7 @@
 
 												<el-table-column fixed="right" label="操作" width="120">
 													<template slot-scope="scope">
-														<el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'requestList')" type="text" v-if="!viewtitle">
+														<el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'requestList')" type="text" size="small" v-if="!viewtitle">
 															 <i class="icon-trash red"></i>
 														</el-button>
 													</template>
@@ -569,7 +558,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="主检负责人" prop="LEADER" label-width="110px">
-												<el-select clearable v-model="dataInfo.LEADER" filterable allow-create default-first-option placeholder="请选择">
+												<el-select clearable v-model="dataInfo.LEADER" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" style="width: 100%;">
 													<el-option v-for="(data,index) in leaderdata" :key="index" :value="data.id" :label="data.username"></el-option>
 												</el-select>
 											</el-form-item>
@@ -950,6 +939,7 @@
 				basisnum:'',////依据选中数据们字符串作为参数传值给项目
 				deptindex:{},//分包方名称
 				main:'',
+				sendchilddata:[],//检测依据子表已有的值
 			};
 		},
 		methods: {
@@ -1271,11 +1261,12 @@
 					for(var i = 0;i<res.data.INSPECT_PROXY_PROJECList.length;i++){
 						res.data.INSPECT_PROXY_PROJECList[i].INSPECT_GROUP = Number(res.data.INSPECT_PROXY_PROJECList[i].INSPECT_GROUP);
 					}
-					
+					for(var i = 0;i<res.data.CHECK_PROXY_CONTRACTList.length;i++){
+						res.data.CHECK_PROXY_CONTRACTList[i].INSPECT_GROUP = Number(res.data.CHECK_PROXY_CONTRACTList[i].INSPECT_GROUP);
+					}
 					this.getmaingroup(res.data.MAINGROUP);
 					this.dataInfo = res.data;
 					this.RVENDORSelect();
-					
 					this.show = true;
 					//深拷贝数据
 					let _obj = JSON.stringify(this.dataInfo);
@@ -1515,8 +1506,12 @@
 							type: 'warning'
 						});
 					}else{
-						this.$refs.standardchild.basislead(this.dataInfo.PRO_NUM);
+						console.log(this.dataInfo.PRO_NUM);
+						this.sendchilddata.push(this.dataInfo.PRO_NUM);
+						this.sendchilddata.push(this.dataInfo.INSPECT_PROXY_BASISList);
+						this.$refs.standardchild.basislead(this.sendchilddata);
 						this.main = 'main';
+						this.sendchilddata = [];
 					}
 				}else{
 					if(this.deptindex.PRO_NUM == null || this.deptindex.PRO_NUM == '' || this.deptindex.PRO_NUM == undefined){
@@ -1678,22 +1673,31 @@
 			},
 			// 保存users/saveOrUpdate
 			save() {
+				var projectgroup = "";
+				for(var i=0;i<this.dataInfo.INSPECT_PROXY_PROJECList.length;i++){
+					projectgroup = projectgroup + this.dataInfo.INSPECT_PROXY_PROJECList[i].INSPECT_GROUP+",";
+				}
+				//检验项目与要求中专业组至少有一条与主检组值相同
+				if(projectgroup.indexOf(this.dataInfo.MAINGROUP)==-1){
+					this.$message({
+						message: '检验项目与要求中专业组至少有一条与主检组值相同！',
+						type: 'warning'
+					});
+					return false;
+				}
 				this.$refs.dataInfo.validate((valid) => {
 			        if (valid) {
-						console.log(11);
+						
 						if(this.dataInfo.INSPECT_PROXY_BASISList.length<=0&&this.dataInfo.INSPECT_PROXY_PROJECList.length<=0&&this.dataInfo.CHECK_PROXY_CONTRACTList.length<=0){
-							console.log(22);
 							this.$message({
 								message: '检验依据和检验项目与要求和分包要求是必填项，请填写！',
 								type: 'warning'
 							});
 							return false;
 			        	}else{
-							console.log(33);
 //							this.dataInfo.ITEM_STATUS=this.dataInfo.ITEM_STATUS==1;
 //							this.dataInfo.MESSSTATUS= this.dataInfo.MESSSTATUS==1;//信息状态
 							var url = this.basic_url + '/api-apps/app/inspectPro/saveOrUpdate';
-							console.log(44);
 							this.$axios.post(url, this.dataInfo).then((res) => {
 								console.log(55);
 								if(res.data.resp_code == 0) {
@@ -1789,7 +1793,7 @@
 						this.leaderdata = res.data.data;
 					}).catch((err) => {
 						this.$message({
-							message: '网络错误，请重试8',
+							message: '网络错误，请重试',
 							type: 'error'
 						});
 					});		

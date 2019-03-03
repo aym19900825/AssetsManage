@@ -142,7 +142,7 @@
 						</el-col>
 						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
-							<tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="userList" v-on:childByValue="childvalue"></tree_grid>
+							<tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="userList" v-on:classByValue="childvalue"></tree_grid>
 							<!-- 表格 -->
 						</el-col>
 					</el-row>

@@ -14,10 +14,13 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
+								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+									<i :class="item.icon"></i>{{item.name}}
+								</button>
 								<!-- <button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加
                       			 </button> -->
-								<button type="button" class="btn btn-blue button-margin" @click="modify">
+								<!-- <button type="button" class="btn btn-blue button-margin" @click="modify">
 								    <i class="icon-edit"></i>修改
 								</button>
 								<button type="button" class="btn btn-purple button-margin" @click="deluserinfo">
@@ -29,12 +32,12 @@
 								<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
 							    	<i class="icon-clipboard"></i>报表
 								</button>
-								<!-- <button type="button" class="btn btn-primarys button-margin">
+								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-send"></i>发布
 								</button>
 								<button type="button" class="btn btn-primarys button-margin">
 								    <i class="icon-close1"></i>取消
-								</button> -->
+								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="tasklist">
 								    <i class="icon-send"></i>生成子任务单
 								</button>
@@ -42,7 +45,7 @@
 						    		<i class="icon-search"></i>高级查询
 						    		<i class="icon-arrow1-down" v-show="down"></i>
 						    		<i class="icon-arrow1-up" v-show="up"></i>
-								</button>
+								</button> -->
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -372,6 +375,7 @@
 				},
 				workorderForm: {},//修改子组件时传递数据
 				workorder:'workorder',//appname
+				buttons:[],
 			}
 		},
 		methods: {
@@ -435,11 +439,24 @@
 				this.page.pageSize = 10;
 				this.requestData();
 			},
-			//添加检验工作处理到子组件
-			openAddMgr() {
-				
-				this.$refs.child.visible();
-			},
+			//请求点击
+		    getbtn(item){
+		    	if(item.name=="修改"){
+		    	 this.modify();
+		    	}else if(item.name=="彻底删除"){
+		    	 this.physicsDel();
+		    	}else if(item.name=="高级查询"){
+		    	 this.modestsearch();
+		    	}else if(item.name=="导入"){
+		    	 this.download();
+		    	}else if(item.name=="删除"){
+		    	 this.deluserinfo();
+		    	}else if(item.name=="生成子任务单"){
+		    	 this.tasklist();
+		    	}else if(item.name=="报表"){
+			     this.reportdata();
+				}
+		    },
 			//修改检验工作处理到子组件
 			modify() {
 				console.log('this.selMenu');
@@ -586,11 +603,58 @@
                 	});
 				}
 			},
-			judge(data) {
-				//taxStatus 布尔值
-				return data.enabled ? '活动' : '不活动'
+			//彻底删除
+			physicsDel(){
+				var selData = this.selUser;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请您选择要删除的数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					var url = this.basic_url + '/api-apps/app/workorder/physicsDel';
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					for(var i = 0; i < changeUser.length; i++) {
+						deleteid.push(changeUser[i].ID);
+					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+					var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {
+							params: data
+						}).then((res) => { //.delete 传数据方法
+							//resp_code == 0是后台返回的请求成功的信息
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
+							this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+						});
+					}).catch(() => {
+
+					});
+				}
 			},
-			
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -632,7 +696,9 @@
 						}	
 					}
 					this.userList=res.data.datas;
-				}).catch((wrong) => {})
+				}).catch((wrong) => {
+
+				})
 			},
 			//机构树
 			getKey() {
@@ -720,12 +786,33 @@
 			childvalue: function (childValue) {
 		        // childValue就是子组件传过来的
 		        this.selMenu = childValue;
-		    },
-			childByValue:function(childValue) {
+			},
+			//左侧菜单过来的
+		   childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
 				this.$refs.navsheader.showClick(childValue);
-				this.selMenu = childValue
-      		},
+				this.getbutton(childValue);
+			},
+			  //请求页面的button接口
+		    getbutton(childByValue){
+		    	console.log(childByValue);
+		    	var data = {
+					menuId: childByValue.id,
+					roleId: this.$store.state.roleid,
+				};
+				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
+				this.$axios.get(url, {params: data}).then((res) => {
+					console.log(res);
+					this.buttons = res.data;
+					
+				}).catch((wrong) => {
+					this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+				})
+
+		    },
 		},
 		mounted() {
 			this.requestData();

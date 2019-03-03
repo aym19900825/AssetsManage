@@ -1507,11 +1507,11 @@
 						});
 					}else{
 						console.log(this.dataInfo.PRO_NUM);
-						// this.sendchilddata.push(this.dataInfo.PRO_NUM);
-						// this.sendchilddata.push(this.dataInfo.INSPECT_PROXY_BASISList);
-						this.$refs.standardchild.basislead(this.dataInfo.PRO_NUM);
+						this.sendchilddata.push(this.dataInfo.PRO_NUM);
+						this.sendchilddata.push(this.dataInfo.INSPECT_PROXY_BASISList);
+						this.$refs.standardchild.basislead(this.sendchilddata);
 						this.main = 'main';
-						// this.sendchilddata = [];
+						this.sendchilddata = [];
 					}
 				}else{
 					if(this.deptindex.PRO_NUM == null || this.deptindex.PRO_NUM == '' || this.deptindex.PRO_NUM == undefined){
@@ -1673,24 +1673,21 @@
 			},
 			// 保存users/saveOrUpdate
 			save() {
+				var projectgroup = "";
+				for(var i=0;i<this.dataInfo.INSPECT_PROXY_PROJECList.length;i++){
+					projectgroup = projectgroup + this.dataInfo.INSPECT_PROXY_PROJECList[i].INSPECT_GROUP+",";
+				}
+				//显示的是你弹出后选择的list，list循环，如果你现在选择的已经存在于chooseBasisNum
+				if(projectgroup.indexOf(this.dataInfo.MAINGROUP)==-1){
+					this.$message({
+						message: '检验项目与要求中专业组至少有一条与主检组值相同！',
+						type: 'warning'
+					});
+					return false;
+				}
 				this.$refs.dataInfo.validate((valid) => {
 			        if (valid) {
-						var projectgroup = "";
-						for(var i=0;i<this.dataInfo.INSPECT_PROXY_PROJECList.length;i++){
-							projectgroup = projectgroup + this.dataInfo.INSPECT_PROXY_PROJECList[i].INSPECT_GROUP+",";
-						}
-						//显示的是你弹出后选择的list，list循环，如果你现在选择的已经存在于chooseBasisNum
-						for(var j=1;j<value.length;j++){
-							if(projectgroup.indexOf(this.dataInfo.MAINGROUP)!=-1){
-								this.$message({
-									message: '存在已选数据,请重新勾选！',
-									type: 'warning'
-								});
-								break;
-							}else{
-								this.dataInfo.INSPECT_PROXY_BASISList.push(value[j]);
-							}
-						}
+						
 						if(this.dataInfo.INSPECT_PROXY_BASISList.length<=0&&this.dataInfo.INSPECT_PROXY_PROJECList.length<=0&&this.dataInfo.CHECK_PROXY_CONTRACTList.length<=0){
 							this.$message({
 								message: '检验依据和检验项目与要求和分包要求是必填项，请填写！',

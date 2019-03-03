@@ -1677,7 +1677,7 @@
 				for(var i=0;i<this.dataInfo.INSPECT_PROXY_PROJECList.length;i++){
 					projectgroup = projectgroup + this.dataInfo.INSPECT_PROXY_PROJECList[i].INSPECT_GROUP+",";
 				}
-				//显示的是你弹出后选择的list，list循环，如果你现在选择的已经存在于chooseBasisNum
+				//检验项目与要求中专业组至少有一条与主检组值相同
 				if(projectgroup.indexOf(this.dataInfo.MAINGROUP)==-1){
 					this.$message({
 						message: '检验项目与要求中专业组至少有一条与主检组值相同！',

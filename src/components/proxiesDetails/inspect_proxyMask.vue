@@ -466,7 +466,6 @@
 														</el-button>
 													</template>
 												</el-table-column>
-
 											</el-table>
 									    </el-tab-pane>
 									</el-tabs>

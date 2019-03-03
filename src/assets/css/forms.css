@@ -184,9 +184,9 @@ textarea:focus,button:focus,
 }
 
 .el-input-group__append button.el-button {
-    height: 33px;
+    height: inherit;/*33px*/
     font-weight: bold;
-    padding-top:8px;
+    padding-top:9px;
     padding-bottom:8px;
     padding-left: 15px;
     padding-right: 15px;
@@ -196,8 +196,7 @@ textarea:focus,button:focus,
     border-radius: 0 4px 4px 0;
     border-color: inherit;
 }
-
-
+.el-input-group__append .el-button {margin: -10px -17px;}
 .el-input-group__append button.el-button.is-disabled,.el-input-group__append button.el-button.is-disabled:hover { background-color: transparent; color: #e4e7ed; border-color: transparent;}
 .el-switch.is-disabled { opacity: .3;}
 .el-input-number.is-disabled .el-input-number__decrease, .el-input-number.is-disabled .el-input-number__increase {

@@ -16,6 +16,8 @@
 						</span>
 					</div>
 				</div>
+				
+				<!--详情页弹出框 Begin-->
 				<div class="mask_content">
 					<el-form :model="samplesForm" :label-position="labelPosition" :rules="rules" ref="samplesForm" label-width="110px" status-icon class="demo-form-inline">
 						<div class="content-accordion">
@@ -324,8 +326,10 @@
 						</div>
 					</el-form>
 				</div>
+				<!--详情页弹出框 End-->
 			</div>
-			<!--点击委托书编号弹出框 Begin-->
+
+			<!--委托书编号-弹出框 Begin-->
 			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
 				<el-table :data="gridData" height="400px" @selection-change="SelChange">
 						<el-table-column type="selection" width="55" fixed >
@@ -362,10 +366,10 @@
 	    			<el-button @click="dialogVisible = false">取 消</el-button>
 	  			</div>
 			</el-dialog>
-			<!--点击委托书编号弹出框 Begin-->
-			<!-- 产品类别 Begin -->
+			<!--委托书编号-弹出框 Begin-->
+
+			<!-- 类别-弹出框 Begin -->
 			<el-dialog :modal-append-to-body="false" title="产品类别" height="300px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
-				<!-- 第二层弹出的表格 Begin-->
 				<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" fixed width="55" align="center">
 					</el-table-column>
@@ -384,14 +388,14 @@
 				</el-table>
 				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
-				<!-- 表格 End-->
 				<div slot="footer" class="el-dialog__footer">
 			       <el-button type="primary" @click="addproclass">确 定</el-button>
 			       <el-button @click="dialogVisible3 = false">取 消</el-button>
 			    </div>
 			</el-dialog>
-			<!-- 产品类别 End -->
-			<!-- 收样人、接样人 Begin -->
+			<!-- 类别-弹出框 End -->
+
+			<!-- 收样人、接样人-弹出框 Begin -->
 			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible4" height="300px" width="80%" :before-close="handleClose">
 				<el-table :data="userList" border stripe :header-cell-style="rowClass" height="300px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" width="55" fixed align="center">
@@ -407,17 +411,21 @@
 					<el-table-column label="创建时间" prop="createTime" width="100px" sortable :formatter="dateFormat">
 					</el-table-column>
 				</el-table>
-					<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-					</el-pagination>
+
+				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+				</el-pagination>
+
 				<div slot="footer" class="el-dialog__footer">
 			       <el-button type="primary" @click="addPerson">确 定</el-button>
 			       <el-button @click="dialogVisible4 = false">取 消</el-button>
 			    </div>
 			</el-dialog>
-			<!-- 收样人、接样人 End -->
-			<!-- 产品类别  -->
+			<!-- 收样人、接样人-弹出框 End -->
+
+			<!-- 产品类别-弹出框子组件  -->
 			<categorymask ref="categorychild" @categorydata="categorydata"></categorymask>
-			<!-- 产品名称  -->
+
+			<!-- 产品名称-弹出框子组件  -->
 			<productmask ref="productchild" @appenddata="appenddata"></productmask>
 		</div>
 	</div>

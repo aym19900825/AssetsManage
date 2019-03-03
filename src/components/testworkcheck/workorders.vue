@@ -200,8 +200,14 @@
 					 },
 					{
 						text: '状态',
-						dataIndex: 'STATUS',
+						dataIndex: 'STATEDesc',
 					 	width: '100',
+						isShow:true,
+					},
+					{
+						text: '是否为主任务单',
+						dataIndex: 'IS_MAINDesc',
+					 	width: '120',
 						isShow:true,
 					},
 					{
@@ -616,6 +622,7 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
+					console.log(res);
 					this.loading = false;
 					let result=res.data.datas;
 					for(let i=0;i<result.length;i++){

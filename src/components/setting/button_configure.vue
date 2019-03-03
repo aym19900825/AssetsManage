@@ -75,7 +75,7 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格 Begin-->
-							<el-table ref="table" :header-cell-style="rowClass" :data="categoryList" v-loading="loading"  element-loading-text="拼命加载中"
+							<el-table ref="table" :header-cell-style="rowClass" :data="categoryList" v-loading="loading"  element-loading-text="加载中…"
     								element-loading-spinner="el-icon-loading"
     								element-loading-background="rgba(F, F, F, 0.6)" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
@@ -419,7 +419,7 @@
 					});
 				}
 			},
-			//物理删除
+			//彻底删除
 			physicsDel(){
 				var selData = this.selUser;
 				if(selData.length == 0) {

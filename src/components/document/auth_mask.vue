@@ -17,7 +17,7 @@
 				</div>
 				<div class="mask_content">
 					<el-form :model="dataInfo" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
-						<div class="accordion">
+						<div class="content-accordion">
 							<!-- 关键字授权信息 -->
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="关键字授权信息" name="1">
@@ -77,9 +77,9 @@
 							</el-collapse>
 						</div>
 
-						<div class="el-dialog__footer">
-							<el-button @click='close'>取消</el-button>
+						<div class="content-footer">
 							<el-button type="primary" @click='submitForm'>保存</el-button>
+							<el-button @click='close'>取消</el-button>
 						</div>
 					</el-form>
 				</div>

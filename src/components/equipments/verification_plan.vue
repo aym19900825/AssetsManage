@@ -26,7 +26,7 @@
 							    <i class="icon-trash"></i>删除
 							</button>
 								<button type="button" class="btn btn-red button-margin" @click="physicsDel">
-							    <i class="icon-trash"></i>物理删除
+							    <i class="icon-trash"></i>彻底删除
 							</button>			
 							<button type="button" class="btn btn-primarys button-margin" @click="importData">
 							    <i class="icon-upload-cloud"></i>导入

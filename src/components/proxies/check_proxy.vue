@@ -25,7 +25,7 @@
 								    <i class="icon-trash"></i>删除
 								</button>
 								<button type="button" class="btn btn-red button-margin" @click="physicsDel">
-							    <i class="icon-trash"></i>物理删除
+							    <i class="icon-trash"></i>彻底删除
 							</button>			
 								<button type="button" class="btn btn-primarys button-margin">
 							    	<i class="icon-upload-cloud"></i>导入
@@ -156,7 +156,7 @@
     								  element-loading-background="rgba(255, 255, 255, 0.9)">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
-								<el-table-column label="检测委托书编号" sortable width="130px" prop="PROXYNUM" v-if="this.checkedName.indexOf('检测委托书编号')!=-1">
+								<el-table-column label="检测委托书编号" sortable width="160px" prop="PROXYNUM" v-if="this.checkedName.indexOf('检测委托书编号')!=-1">
 									<template slot-scope="scope">
 										<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.PROXYNUM}}
 										</p>
@@ -571,7 +571,7 @@
 					});
 				}
 			},
-			// 物理删除
+			// 彻底删除
 			physicsDel() {
 				var selData = this.selUser;
 				if(selData.length == 0) {

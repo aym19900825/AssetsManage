@@ -25,7 +25,7 @@
 								    <i class="icon-trash"></i>删除
 								</button>
 								<button type="button" class="btn btn-red button-margin" @click="physicsDel">
-							    <i class="icon-trash"></i>物理删除
+							    <i class="icon-trash"></i>彻底删除
 							</button>			
 								<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
 							    <i class="icon-clipboard"></i>报表
@@ -65,7 +65,9 @@
 						</el-form>
 					</div>
 					<!-- 高级查询划出 End-->
-						<el-col class="leftcont v-resize">
+
+					<el-row :gutter="0">
+						<el-col :span="24">
 							<!-- 表格 -->
 							<el-table :data="samplesList" 
 									  border stripe 
@@ -384,7 +386,7 @@
                 	});
 				}
 			},
-			// 物理删除
+			// 彻底删除
 			physicsDel() {
 				var selData = this.selMenu;
 				if(selData.length == 0) {

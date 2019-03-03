@@ -15,7 +15,7 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+								<button type="button" class="btn btn-green" @click="openAddMgr">
                                 	<i class="icon-add"></i>添加
                       			 </button>
 								<button type="button" class="btn btn-blue button-margin" @click="modify">
@@ -25,7 +25,7 @@
 								    <i class="icon-trash"></i>删除
 								</button>
 									<button type="button" class="btn btn-red button-margin" @click="physicsDel">
-							    <i class="icon-trash"></i>物理删除
+							    <i class="icon-trash"></i>彻底删除
 							</button>			
 								<!-- <button type="button" class="btn btn-primarys button-margin" @click="importData">
 								    <i class="icon-upload-cloud"></i>导入
@@ -75,9 +75,9 @@
 					<!-- 高级查询划出 End-->
 
 					<el-row :gutter="0">
-						<el-col class="leftcont v-resize">
+						<el-col :span="24">
 							<!-- 表格 -->
-							<el-table :data="samplesList" 
+							<el-table ref="table" :header-cell-style="rowClass" :data="samplesList" 
 									  border 
 									  :height="fullHeight" 
 									  style="width: 100%;" 
@@ -115,11 +115,9 @@
 				</div>
 			</div>
 		</div>
-		<catmask  ref="child" @request="requestData" :detailData="selMenu[0]"></catmask>
-					<!--报表-->
-			<reportmask :reportData="reportData" ref="reportChild" 
-
-></reportmask>
+		<catmask ref="child" @request="requestData" :detailData="selMenu[0]"></catmask>
+			<!--报表-->
+			<reportmask :reportData="reportData" ref="reportChild"></reportmask>
 		<!--右侧内容显示 End-->
 	</div>
 	</div>
@@ -326,7 +324,7 @@
                     }).catch(() => {});
 				}
 			},
-			// 物理删除
+			// 彻底删除
 			physicsDel() {
 				var selData = this.selMenu;
 				if(selData.length == 0) {

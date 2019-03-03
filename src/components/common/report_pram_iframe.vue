@@ -65,8 +65,8 @@
 			<el-tree ref="tree" :data="resourceData" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
 			</el-tree>
 			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible = false">取 消</el-button>
 		       <el-button type="primary" @click="dailogconfirm();" >确 定</el-button>
+		       <el-button @click="dialogVisible = false">取 消</el-button>
 		    </span>
 		</el-dialog>
 		 <!--<el-dialog :modal-append-to-body="false" title="查看报表" :visible.sync="dialogVisiblereport" width="100%" height="100%" >

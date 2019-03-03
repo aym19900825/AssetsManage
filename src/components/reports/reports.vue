@@ -79,27 +79,27 @@
 								  element-loading-background="rgba(255, 255, 255, 0.9)">
 							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 							</el-table-column>
+							<el-table-column label="ID" sortable prop="id" v-if="this.checkedName.indexOf('id')!=-1">
+							</el-table-column>
 							<el-table-column label="代码" width="200" sortable prop="code" v-if="this.checkedName.indexOf('代码')!=-1">
 							</el-table-column>
 							<el-table-column label="报表名称" width="200" sortable prop="name" v-if="this.checkedName.indexOf('报表名称')!=-1">
 							</el-table-column>
-							<el-table-column label="id" sortable prop="id" v-if="this.checkedName.indexOf('id')!=-1">
-							</el-table-column>
-							<el-table-column label="报表文件" sortable prop="file" v-if="this.checkedName.indexOf('报表文件')!=-1">
+							<el-table-column label="报表文件" width="160" sortable prop="file" v-if="this.checkedName.indexOf('报表文件')!=-1">
 							</el-table-column>
 							</el-table-column>
-							<el-table-column label="备注" sortable prop="remarks"v-if="this.checkedName.indexOf('备注')!=-1">
+							<el-table-column label="备注" width="200" sortable prop="remarks"v-if="this.checkedName.indexOf('备注')!=-1">
 							</el-table-column>
-							<el-table-column label="类型" sortable prop="type"v-if="this.checkedName.indexOf('类型')!=-1">
+							<el-table-column label="类型" sortable width="140" prop="type"v-if="this.checkedName.indexOf('类型')!=-1">
 							</el-table-column>						
-							<el-table-column label="录入人" sortable prop="createby" v-if="this.checkedName.indexOf('录入人')!=-1">
+							<el-table-column label="录入人" sortable width="120" prop="createby" v-if="this.checkedName.indexOf('录入人')!=-1">
 							</el-table-column>	
-							<el-table-column label="录入时间" sortable prop="createdate" v-if="this.checkedName.indexOf('录入时间')!=-1">
+							<el-table-column label="录入时间" width="160" sortable prop="createdate" v-if="this.checkedName.indexOf('录入时间')!=-1">
 							</el-table-column>	
-							<el-table-column label="修改人" sortable prop="updateby" v-if="this.checkedName.indexOf('修改人')!=-1">
+							<el-table-column label="修改人" width="120" sortable prop="updateby" v-if="this.checkedName.indexOf('修改人')!=-1">
 							</el-table-column>	
 						
-							<el-table-column label="修改日期" sortable prop="updatedate" v-if="this.checkedName.indexOf('修改日期')!=-1">
+							<el-table-column label="修改日期" width="160" sortable prop="updatedate" v-if="this.checkedName.indexOf('修改日期')!=-1">
 							</el-table-column>	
 						<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0"
 				            @size-change="sizeChange"

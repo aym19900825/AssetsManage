@@ -48,7 +48,7 @@
 					</div>
 					<!-- 高级查询划出 End-->
 					<el-row :gutter="0">
-						<el-col class="leftcont v-resize">
+						<el-col :span="24">
 							<!-- 表格 -->
 							<el-table :data="fileList" 
 									  border 
@@ -101,10 +101,8 @@
 				</div>
 			</div>
 		</div>
-					<!--报表-->
-			<reportmask :reportData="reportData" ref="reportChild" 
-
-></reportmask>
+			<!--报表-->
+			<reportmask :reportData="reportData" ref="reportChild"></reportmask>
 		<!-- <samplesmask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></samplesmask> -->
 		<!--右侧内容显示 End-->
 	</div>

@@ -457,7 +457,7 @@
 					<span class="custom-tree-node" style=" display: block; width: 100%;">
 						<span style="display: block; float: left; margin-top: 3px;">{node.label}</span>
 						<span style="display: block;float: right;">
-							<el-button size="mini" icon="icon-trash" type="text" on-click={ () => this.remove(node, data) }></el-button>
+							<el-button size="mini" icon="icon-trash red" type="text" on-click={ () => this.remove(node, data) }></el-button>
 						</span>
 					</span>
 				);

@@ -231,12 +231,7 @@
 	import Config from '../../config.js'
 	export default {
 		name: 'collarsample_mask',
-		props: ['samplesForm','page'],
-//		props: {
-//			page: {
-//				type: Object,
-//			},
-			
+		props: ['samplesForm'],
 			
 //			samplesForm: { //接收主表单中填写的数据信息
 //				type: Object,

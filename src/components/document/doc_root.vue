@@ -15,6 +15,7 @@
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
 								<form method="post" id="file" action="" enctype="multipart/form-data" style="float: left;">
+
 									<button style="margin-right: 4px;" type="button" class="btn btn-green a-upload">
 										<i class="icon-add"></i>上传
 										<input id="excelFile" type="file" name="uploadFile" @change="upload"/>
@@ -294,10 +295,23 @@
 					'deptid': '',
 					'deptfullname': '',
 				},
-				samplesForm: {}//修改子组件时传递数据
+				samplesForm: {},//修改子组件时传递数据
+				buttons:[],
 			}
 		},
 		methods: {
+			//请求点击
+		    getbtn(item){
+		    	if(item.name=="上传"){
+		         this.upload();
+		    	}else if(item.name=="新建文件夹"){
+		    	 this.showDir();
+				}else if(item.name=="高级查询"){
+		    	 this.modestsearch();
+		    	}else if(item.name=="报表"){
+			     this.reportdata();
+				}
+		    },
 			delFile(index,row){
 				var url = this.file_url + '/file/deleteFile/' + row.fileid;
                 this.$axios.delete(url,{}).then((res) => {
@@ -683,8 +697,29 @@
 				this.ismin = !this.ismin;
 			},
 			childByValue:function(childValue) {
-        		this.$refs.navsheader.showClick(childValue);
-      		},
+        		// childValue就是子组件传过来的值
+				this.$refs.navsheader.showClick(childValue);
+				this.getbutton(childValue);
+			},
+			  //请求页面的button接口
+		    getbutton(childByValue){
+		    	console.log(childByValue);
+		    	var data = {
+					menuId: childByValue.id,
+					roleId: this.$store.state.roleid,
+				};
+				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
+				this.$axios.get(url, {params: data}).then((res) => {
+					console.log(res);
+					this.buttons = res.data;
+					
+				}).catch((wrong) => {
+					this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+				})
+		    },
 		},
 		created() {// 在页面挂载前就发起请求
 			this.getUser();

@@ -15,7 +15,10 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button type="button" class="btn btn-green" @click="openAddMgr">
+								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+									<i :class="item.icon"></i>{{item.name}}
+								</button>
+								<!-- <button type="button" class="btn btn-green" @click="openAddMgr">
                                 	<i class="icon-add"></i>添加
                       			 </button>
 								<button type="button" class="btn btn-blue button-margin" @click="modify">
@@ -26,16 +29,16 @@
 								</button>
 									<button type="button" class="btn btn-red button-margin" @click="physicsDel">
 							    <i class="icon-trash"></i>彻底删除
-							</button>			
-								<!-- <button type="button" class="btn btn-primarys button-margin" @click="importData">
+							</button>			 
+							 <button type="button" class="btn btn-primarys button-margin" @click="importData">
 								    <i class="icon-upload-cloud"></i>导入
-								</button>-->
+								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="exportData">
 								    <i class="icon-download-cloud"></i>导出
 								</button>
-								<!--<button type="button" class="btn btn-primarys button-margin" @click="Printing">
+								<button type="button" class="btn btn-primarys button-margin" @click="Printing">
 								    <i class="icon-print"></i>打印
-								</button> -->
+								</button>
 							<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
 							    <i class="icon-clipboard"></i>报表
 							</button>
@@ -44,6 +47,7 @@
 						    		<i class="icon-arrow1-down" v-show="down"></i>
 						    		<i class="icon-arrow1-up" v-show="up"></i>
 								</button>
+								 -->
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -195,9 +199,14 @@
 				samplesForm: {}, //修改子组件时传递数据
 				// 选中的数据
 				selMenu: [],
+				buttons:[],
 			}
 		},
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+				return 'text-align:center'
+			},
 			tableControle(data) {//控制表格列显示隐藏
 				this.checkedName = data;
 			},
@@ -218,13 +227,33 @@
 			};
 			this.requestData();
 			},
+			//请求点击
+		    getbtn(item){
+		    	if(item.name=="添加"){
+		         this.openAddMgr();
+		    	}else if(item.name=="修改"){
+		    	 this.modify();
+		    	}else if(item.name=="彻底删除"){
+		    	 this.physicsDel();
+		    	}else if(item.name=="高级查询"){
+		    	 this.modestsearch();
+		    	}else if(item.name=="导入"){
+		    	 this.download();
+		    	}else if(item.name=="删除"){
+		    	 this.del();
+		    	}else if(item.name=="报表"){
+			     this.reportdata();
+				}else if(item.name=="打印"){
+				   this.Printing();
+				}
+		    },
 			//报表
 			reportdata(){
 				this.reportData.app=this.productType;
 				this.$refs.reportChild.visible();
 			},
 			
-			searchinfo(index) {
+			searchinfo() {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
 				this.requestData();
@@ -401,7 +430,7 @@
 			selChange(val) {
 				this.selMenu = val;
 			},
-			requestData(index) {
+			requestData() {
 				this.loading = true;
 				var data = {
 					page: this.page.currentPage,
@@ -438,8 +467,28 @@
 			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
-        		this.$refs.navsheader.showClick(childValue);
-      		},
+				this.$refs.navsheader.showClick(childValue);
+				this.getbutton(childValue);
+			},
+			  //请求页面的button接口
+		    getbutton(childByValue){
+		    	console.log(childByValue);
+		    	var data = {
+					menuId: childByValue.id,
+					roleId: this.$store.state.roleid,
+				};
+				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
+				this.$axios.get(url, {params: data}).then((res) => {
+					console.log(res);
+					this.buttons = res.data;
+					
+				}).catch((wrong) => {
+					this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+				})
+		    },
 		},
 		mounted() {
 			this.requestData();

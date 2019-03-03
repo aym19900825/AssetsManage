@@ -1506,7 +1506,6 @@
 							type: 'warning'
 						});
 					}else{
-						console.log(this.dataInfo.PRO_NUM);
 						this.sendchilddata.push(this.dataInfo.PRO_NUM);
 						this.sendchilddata.push(this.dataInfo.INSPECT_PROXY_BASISList);
 						this.$refs.standardchild.basislead(this.sendchilddata);
@@ -1562,8 +1561,11 @@
 							type: 'warning'
 						});
 					}else{
-						this.$refs.projectchild.projectlead(this.dataInfo.S_NUM);
+						this.sendchilddata.push(this.dataInfo.S_NUM);
+						this.sendchilddata.push(this.dataInfo.INSPECT_PROXY_PROJECList);
+						this.$refs.projectchild.projectlead(this.sendchilddata);
 						this.main = 'main';
+						this.sendchilddata = [];
 					}
 				}else{
 					if(this.deptindex.S_NUM == null || this.deptindex.S_NUM == '' || this.deptindex.S_NUM == undefined){
@@ -1572,7 +1574,6 @@
 							type: 'warning'
 						});
 					}else{
-						console.log(this.deptindex.S_NUM);
 						this.$refs.projectchild.projectlead(this.deptindex.S_NUM);
 						this.main = 'table';
 					}

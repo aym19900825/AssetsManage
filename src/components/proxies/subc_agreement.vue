@@ -124,9 +124,9 @@
 							</el-table-column>
 							<el-table-column label="委托书编号" width="150" sortable prop="PROXYNUM" v-if="this.checkedName.indexOf('委托书编号')!=-1">
 							</el-table-column>
-							<el-table-column label="委托方名称" width="150" sortable prop="V_NAMEDesc" v-if="this.checkedName.indexOf('委托方名称')!=-1">
+							<el-table-column label="委托方名称" width="150" sortable prop="V_NAME" v-if="this.checkedName.indexOf('委托方名称')!=-1">
 							</el-table-column>
-							<el-table-column label="类别" width="150" sortable prop="TYPE" v-if="this.checkedName.indexOf('类别')!=-1">
+							<el-table-column label="类别" width="150" sortable prop="TYPEDesc" v-if="this.checkedName.indexOf('类别')!=-1">
 							</el-table-column>
 							<el-table-column label="状态" width="150" sortable prop="state" v-if="this.checkedName.indexOf('状态')!=-1">
 							</el-table-column>
@@ -240,11 +240,11 @@
 					},
 					{
 						label: '委托方名称',
-						prop: 'V_NAMEDesc'
+						prop: 'V_NAME'
 					},
 					{
 						label: '类别',
-						prop: 'TYPE'
+						prop: 'TYPEDesc'
 					},
 					{
 						label: '状态',

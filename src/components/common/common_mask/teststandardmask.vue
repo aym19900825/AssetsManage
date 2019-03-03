@@ -202,7 +202,7 @@
 		this.basistable = value[1];//检测依据表格中已有的数据
 		var basissnum = [];
 		for(var i = 0;i<this.basistable.length;i++){
-			basissnum = this.basistable[i].S_NUM;
+			basissnum.push(this.basistable[i].S_NUM);
 		}
 		this.basissnums = basissnum.toString(',');
 		this.requestData();//渲染数据

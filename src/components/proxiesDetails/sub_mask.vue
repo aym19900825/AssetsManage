@@ -40,15 +40,15 @@
 
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="委托方名称" prop="V_NAME ">
+											<el-form-item label="委托方名称" prop="V_NAME">
 												<el-input v-model="report.V_NAME " :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8">
+										<!-- <el-col :span="8">
 											<el-form-item label="分包方名称" prop="DEPTIDDesc">
 												<el-input v-model="report.DEPTIDDesc" :disabled="noedit"></el-input>
 											</el-form-item>
-										</el-col>
+										</el-col> -->
                                         <el-col :span="8">
 											<el-form-item label="分包性质" prop="CONTRACT_NATURE">
 												<el-select clearable v-model="report.CONTRACT_NATURE" filterable allow-create default-first-option placeholder="请选择" style="width:100%" :disabled="noedit">

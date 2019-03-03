@@ -705,7 +705,7 @@
 														<!-- </el-form-item> -->
 													</template>
 												</el-table-column>
-												<el-table-column fixed="right" label="操作" width="120px">
+												<el-table-column fixed="right" label="操作" width="150px">
 													<template slot-scope="scope">
 														 
 													  <el-button title="编辑" type="text" size="small">
@@ -718,6 +718,9 @@
 														<i class="icon-arrow-down-circle"></i>
 													  </el-button>
 													  <el-button title="查看" type="text" size="small">
+														<i class="icon-file-text"></i>
+													  </el-button>
+													  <el-button title="确定生成报告" type="text" size="small" @click="admirereport">
 														<i class="icon-file-text"></i>
 													  </el-button>
 													</template>
@@ -1113,6 +1116,7 @@
 				maingroup:[],//专业组
 				docParm: {},
 				reportname:'',//生成报告名称
+				workorderreportid:'',//存放生成报告id
 			};
 		},
 		methods: {
@@ -1378,6 +1382,17 @@
 					this.dialogVisible2 = false;
 					this.getuser();
 				}
+			},
+			//主任务单时，确定报告按钮
+			admirereport(){
+				console.log(123456);
+				var url = this.basic_url + '/api-apps/app/workorder/operate/createreportapprove?workorderreportid='+this.workorderForm.WORKORDER_REPORTList[0].ID;
+				this.$axios.get(url, {
+
+				}).then((res) => {
+					console.log(res);
+					//成功后给出提示信息并隐藏按钮
+				});
 			},
 			getCompany() {
 				var type = "2";
@@ -1871,6 +1886,7 @@
 						console.log(this.reportname);
 						var url = this.basic_url +"/api-merge/merge/workorder/MergeWord?filePath="+ids+"&fileName="+this.reportname+"&proxynum="+this.workorderForm.PROXYNUM+"&wonum="+this.workorderForm.WONUM+"&deptfullname="+this.workorderForm.DEPTIDDesc+"&recordid="+this.workorderForm.ID;
 						this.$axios.post(url, {}).then((res) => {
+							this.workorderreportid = res.data.datas.id;
 							console.log(res);
 							var obj = {
 								REPORTNUM:res.data.datas.reportnum,

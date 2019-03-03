@@ -699,7 +699,6 @@
 								type: 'error'
 							});
 				})
-
 		    },
 		},
 		mounted() {

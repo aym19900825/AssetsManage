@@ -288,13 +288,13 @@ export default {
 <style scoped>  
 .a-upload input{
     position: absolute;
-    font-size: 100px;
-    right: 100px;
+    font-size: 5px;
+    right: 115px;
     top: 0;
     opacity: 0;
     filter: alpha(opacity=0);
     cursor: pointer;
-    width: 80px;
+    width: 70px;
     cursor: pointer;
 }
 .upload-btn{

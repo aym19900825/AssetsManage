@@ -211,6 +211,8 @@
 		    	 this.modestsearch();
 		    	}else if(item.name=="删除"){
 		    		this.deldata();
+		    	}else if(item.name=="彻底删除"){
+		    		this.physicsDel();
 		    	}else if(item.name=="配置关系"){
 		    		this.setrelation();
 		    	}else if(item.name=="生成表"){

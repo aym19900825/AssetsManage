@@ -939,6 +939,7 @@
 				basisnum:'',////依据选中数据们字符串作为参数传值给项目
 				deptindex:{},//分包方名称
 				main:'',
+				sendchilddata:[],//检测依据子表已有的值
 			};
 		},
 		methods: {
@@ -1505,11 +1506,12 @@
 							type: 'warning'
 						});
 					}else{
-						var sendchilddata = [];
-						sendchilddata.push(this.dataInfo.PRO_NUM);
-						sendchilddata.push(this.dataInfo.INSPECT_PROXY_BASISList);
-						this.$refs.standardchild.basislead(sendchilddata);
+						console.log(this.dataInfo.PRO_NUM);
+						// this.sendchilddata.push(this.dataInfo.PRO_NUM);
+						// this.sendchilddata.push(this.dataInfo.INSPECT_PROXY_BASISList);
+						this.$refs.standardchild.basislead(this.dataInfo.PRO_NUM);
 						this.main = 'main';
+						// this.sendchilddata = [];
 					}
 				}else{
 					if(this.deptindex.PRO_NUM == null || this.deptindex.PRO_NUM == '' || this.deptindex.PRO_NUM == undefined){

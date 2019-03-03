@@ -282,7 +282,7 @@
             STARTETIME: this.searchList.STARTETIME,
             // STATUS: this.searchList.STATUS,
 		};
-		var url = this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.productnum+'&NUM_where_not_in='+this.basissnums;
+		var url = this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.productnum+'&S_NUM_where_not_in='+this.basissnums;
 		console.log(url);
         this.$axios.get(url, {
             

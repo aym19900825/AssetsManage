@@ -60,6 +60,14 @@
 									</el-row>
                                     <el-row>
 										<el-col :span="8">
+											<el-form-item label="委托书类型" prop="TYPE">
+												<el-select clearable v-model="report.TYPE" filterable allow-create default-first-option placeholder="请选择" style="width:100%" :disabled="noedit">
+													<el-option label="检验" value="1"></el-option>
+													<el-option label="检测" value="2"></el-option>
+												</el-select>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
 											<el-form-item label="样品名称" prop="ITEMNAME">
 												<el-input v-model="report.ITEMNAME" :disabled="noedit"></el-input>
 											</el-form-item>
@@ -69,25 +77,28 @@
 												<el-input v-model="report.ITEM_STATUS" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
-                                        <el-col :span="8">
-											<el-form-item label="检验检测项目内容" prop="P_REMARKS">
+									</el-row>
+                                    <el-row>
+                                        <el-col :span="12">
+											<el-form-item label="检验检测项目内容" prop="P_REMARKS" label-width="160px">
 												<el-input v-model="report.P_REMARKS" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									
+										<el-col :span="12">
+											<el-form-item label="检验检测技术依据" prop="BASIS" label-width="180px">
+												<el-input v-model="report.BASIS" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
                                     <el-row>
-										<el-col :span="8">
-											<el-form-item label="检验检测技术依据" prop="BASIS">
-												<el-input v-model="report.BASIS" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="对环境和操作人员要求" prop="REQUIRES">
+										<el-col :span="12">
+											<el-form-item label="对环境和操作人员要求" prop="REQUIRES" label-width="160px">
 												<el-input v-model="report.REQUIRES" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
-                                        <el-col :span="8">
-											<el-form-item label="分包方资质证明及有效期" prop="ONHOLTIME">
+                                        <el-col :span="12">
+											<el-form-item label="分包方资质证明及有效期" prop="ONHOLTIME" label-width="180px">
 												<el-date-picker v-model="report.ONHOLTIME" type="date" placeholder="请选择日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
 												</el-date-picker>
 											</el-form-item>

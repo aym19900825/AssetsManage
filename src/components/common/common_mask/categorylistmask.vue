@@ -20,10 +20,11 @@
 					</el-col>
 					<el-col :span="4">
 						<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-						<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
+						<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
 					</el-col>
 				</el-row>
 			</el-form>
+
 			<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="400px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" fixed width="55" align="center">
 					</el-table-column>
@@ -40,8 +41,10 @@
 					<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat">
 					</el-table-column>
 				</el-table>
+
 				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
+
 				<!-- 表格 End-->
 				<div slot="footer">
 			       <el-button type="primary" @click="determine">确 定</el-button>

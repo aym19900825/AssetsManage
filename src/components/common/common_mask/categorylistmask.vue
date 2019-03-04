@@ -25,7 +25,12 @@
 				</el-row>
 			</el-form>
 
-			<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="400px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+			<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="360px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange"
+					  v-loadmore="loadMore"
+					  v-loading="loading"  
+					  element-loading-text="加载中…"
+					  element-loading-spinner="el-icon-loading"
+					  element-loading-background="rgba(255, 255, 255, 0.9)">
 					<el-table-column type="selection" fixed width="55" align="center">
 					</el-table-column>
 					<el-table-column label="编码" width="155" sortable prop="NUM">
@@ -48,7 +53,7 @@
 				<!-- 表格 End-->
 				<div slot="footer">
 			       <el-button type="primary" @click="determine">确 定</el-button>
-			       <el-button @click="dialogCategory = false">取 消</el-button>
+			       <el-button @click="DialogClose">取 消</el-button>
 			    </div>
 		</el-dialog>
 	</div>
@@ -62,8 +67,9 @@
   data() {
     return {
 		basic_url: Config.dev_url,
-		productList: [],
+		loading: false,
 		loadSign:true,//加载
+		productList: [],
 		commentArr:{},
 		selUser: [],//接勾选的值
 		DEPTID:'',//当前选择的机构值
@@ -140,6 +146,7 @@
 	   }
 	},
 	requestData(){
+		this.loading = true;
 		var data = {
 			page: this.page.currentPage,
 			limit: this.page.pageSize,
@@ -169,6 +176,7 @@
 				}
 			}
 			this.categoryList = newarr;
+			this.loading = false;
 		}).catch((wrong) => {})
 	},
 	determine(){
@@ -183,14 +191,24 @@
 				type: 'warning'
 			});
 		}else{
-			this.dialogCategory = false;
+			// this.dialogCategory = false;
 			var proarr = [];
 			proarr.push(this.selUser[0].NUM);
 			proarr.push(this.selUser[0].TYPE);
 			proarr.push(this.selUser[0].VERSION);
 			this.$emit('categorydata',proarr);
 			this.requestData();
+			this.ResetDatasNew();//调用ResetDatasNew函数
 		}
+    },
+    DialogClose(){//点击取消按钮
+        this.ResetDatasNew();//调用ResetDatasNew函数
+    },
+    ResetDatasNew(){//点击确定或取消按钮时重置数据20190303
+        this.dialogCategory = false;//关闭弹出框
+        this.categoryList = [];//列表数据置空
+        this.page.currentPage = 1;//页码重新传值
+        this.page.pageSize = 10;//页码重新传值
     },
     handleClose(done) {
         this.$confirm('确认关闭？')

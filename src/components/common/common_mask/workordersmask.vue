@@ -47,12 +47,16 @@
                 </el-row>
             </el-form>
 			<!-- 高级查询划出 End-->
-			<el-table :header-cell-style="rowClass" :data="userList" border stripe height="350px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+			<el-table :header-cell-style="rowClass" :data="userList" border stripe height="360px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore"
+            v-loading="loading" 
+            element-loading-text="加载中…"
+            element-loading-spinner="el-icon-loading"
+            element-loading-background="rgba(255, 255, 255, 0.9)">
                 <el-table-column type="selection" width="55" fixed align="center">
                 </el-table-column>
-                <el-table-column label="工作任务单编号" sortable width="140px" prop="WONUM">
+                <el-table-column label="工作任务单编号" sortable width="200px" prop="WONUM">
                 </el-table-column>
-                <el-table-column label="样品名称" sortable width="180px" prop="ITEM_NAME">
+                <el-table-column label="样品名称" sortable width="220px" prop="ITEM_NAME">
                 </el-table-column>
                 <el-table-column label="样品型号" sortable width="180px" prop="ITEM_MODEL">
                 </el-table-column>
@@ -64,7 +68,7 @@
                 </el-table-column>
                 <el-table-column label="完成方式" sortable  width="100px" prop="COMPLETE_MODE">
                 </el-table-column>
-                <el-table-column label="委托书编号" sortable  width="120px" prop="PROXYNUM">
+                <el-table-column label="委托书编号" sortable  width="180px" prop="PROXYNUM">
                 </el-table-column>
                 <!-- <el-table-column label="信息状态" sortable width="100px" prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
                 </el-table-column> -->
@@ -83,7 +87,7 @@
             </el-pagination>
 			<span slot="footer" class="dialog-footer">
 			   <el-button type="primary" @click="determine">确 定</el-button>
-		       <el-button @click="close">取 消</el-button>
+		       <el-button @click="DialogClose">取 消</el-button>
 		    </span>
 		</el-dialog>
 	</div>
@@ -97,9 +101,10 @@
   data() {
     return {
 		basic_url: Config.dev_url,
+        loading: false,
+        loadSign:true,//加载
 		userList: [],
 		dialogwork: false,
-		loadSign:true,//加载
 		commentArr:{},
 		selval: [],//接勾选的值
 		page: {
@@ -180,6 +185,7 @@
 	   }
 	},
 	requestData() {
+        this.loading = true;
         var data = {
             page: this.page.currentPage,
             limit: this.page.pageSize,
@@ -196,7 +202,7 @@
         this.$axios.get(url, {
             params: data
         }).then((res) => {
-            console.log(res)
+            // console.log(res)
             this.page.totalCount = res.data.count;	
             //总的页数
             this.userList=res.data.data;
@@ -217,10 +223,8 @@
                     }
                 }
             }
-            console.log(newarr);
             this.userList = newarr;
-            console.log(this.userList);
-            
+            this.loading = false;
         }).catch((wrong) => {})
     },
 	determine(){
@@ -235,12 +239,22 @@
 				type: 'warning'
 			});
 		}else{
-			this.dialogwork = false;
 			var worknum = this.selval[0].WONUM;
 			this.$emit('appendwork',worknum);
-			this.requestData();
+            // this.dialogwork = false;
+			// this.requestData();
+            this.ResetDatasNew();//调用ResetDatasNew函数
 		}
 	},
+    DialogClose(){//点击取消按钮
+        this.ResetDatasNew();//调用ResetDatasNew函数
+    },
+    ResetDatasNew(){//点击确定或取消按钮时重置数据20190303
+        this.dialogwork = false;//关闭弹出框
+        this.userList = [];//列表数据置空
+        this.page.currentPage = 1;//页码重新传值
+        this.page.pageSize = 10;//页码重新传值
+    },
   },
   mounted() {
         this.requestData();

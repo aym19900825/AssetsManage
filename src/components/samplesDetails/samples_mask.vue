@@ -673,7 +673,7 @@
 			getProxy() {
 				var url = this.basic_url + '/api-apps/app/inspectPro';
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res.data);
+					// console.log(res.data);
 					this.gridData= res.data.data;
 				});
 				this.dialogVisible = true;

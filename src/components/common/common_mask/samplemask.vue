@@ -45,10 +45,14 @@
 					</el-col>
 				</el-row>
 			</el-form>
-		<el-table :data="samplesList" :header-cell-style="rowClass" border stripe height="400px" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+		<el-table :data="samplesList" :header-cell-style="rowClass" border stripe height="360px" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore"
+			v-loading="loading" 
+			element-loading-text="加载中…"
+			element-loading-spinner="el-icon-loading"
+			element-loading-background="rgba(255, 255, 255, 0.9)">
 			<el-table-column type="selection" width="55" fixed align="center">
 			</el-table-column>
-			<el-table-column label="样品编号" sortable width="200px" prop="ITEMNUM">
+			<el-table-column label="样品编号" sortable width="220px" prop="ITEMNUM">
 			</el-table-column>
 			<el-table-column label="样品名称" sortable width="200px" prop="DESCRIPTION">
 			</el-table-column>
@@ -78,7 +82,7 @@
 			</el-pagination>
 			<span slot="footer" class="dialog-footer">
 			   <el-button type="primary" @click="determine">确 定</el-button>
-		       <el-button @click="close">取 消</el-button>
+		       <el-button @click="DialogClose">取 消</el-button>
 		    </span>
 		</el-dialog>
 	</div>
@@ -92,9 +96,10 @@
   data() {
     return {
 		basic_url: Config.dev_url,
+		loading: false,
+		loadSign:true,//加载
 		samplesList: [],
 		dialogsample: false,
-		loadSign:true,//加载
 		commentArr:{},
 		selval: [],//接勾选的值
 		type:'',
@@ -174,6 +179,7 @@
 	   }
 	},
 	requestData(){
+		this.loading = true;
 		var data = {
 			page: this.page.currentPage,
 			limit: this.page.pageSize,
@@ -206,6 +212,7 @@
 				}
 			}
 			this.samplesList = newarr;
+			this.loading = false;
 		}).catch((wrong) => {})
 		
 	},
@@ -249,14 +256,24 @@
 				this.$emit('appendsta',state);
 				this.$emit('appendite',itemnum);
 			}
-			this.dialogsample = false;
-			this.requestData();
+			// this.dialogsample = false;
+			// this.requestData();
+			this.ResetDatasNew();//调用ResetDatasNew函数
 		}
+	},
+	DialogClose(){//点击取消按钮
+		this.ResetDatasNew();//调用ResetDatasNew函数
+	},
+	ResetDatasNew(){//点击确定或取消按钮时重置数据20190303
+		this.dialogsample = false;//关闭弹出框
+		this.samplesList = [];//列表数据置空
+		this.page.currentPage = 1;//页码重新传值
+		this.page.pageSize = 10;//页码重新传值
 	},
   },
   mounted() {
-			this.requestData();
-		},
+		this.requestData();
+	},
 }
 </script>
 

@@ -1051,7 +1051,6 @@
 					this.ResetDatasNew3();//调用ResetDatasNew函数
 				}
 			},
-<<<<<<< HEAD
 			DialogClose3(){//点击取消按钮
 				this.ResetDatasNew3();//调用ResetDatasNew函数
 			},
@@ -1060,10 +1059,9 @@
 				this.customerList = [];//列表数据置空
 				this.page.currentPage = 1;//页码重新传值
 				this.page.pageSize = 10;//页码重新传值
-=======
+			},
 			fileSuccess(){
 				this.detail(this.WORKPLAN.ID);
->>>>>>> d4e4171ce15f9472a3d2554cc4fb4b86b60c641f
 			},
 			//删除计划列表
 			delPlan(index,row,TableName,delList){

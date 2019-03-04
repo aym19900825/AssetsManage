@@ -101,11 +101,7 @@
 				<!-- 第二层弹出的表格 End -->
 				<div slot="footer">
 					<el-button type="primary" @click="addbasis">确 定</el-button>
-<<<<<<< HEAD
-			       <el-button @click="DialogClose">取 消</el-button>
-=======
 			       <el-button @click="resetBasisInfo">取 消</el-button>
->>>>>>> d4e4171ce15f9472a3d2554cc4fb4b86b60c641f
 			    </div>
 			</el-dialog>
 			<!-- 检测依据弹出框 End -->
@@ -250,21 +246,6 @@
 			this.$emit('testbasisnum',basisnums);
 			this.$emit('testbasisname',basisnames);
 			this.$emit('testbasisprover',provers);
-<<<<<<< HEAD
-            // this.dialogVisible = false;
-			this.requestData();
-			this.ResetDatasNew();//调用ResetDatasNew函数
-		}
-    },
-    DialogClose(){//点击取消按钮
-		this.ResetDatasNew();//调用ResetDatasNew函数
-	},
-	ResetDatasNew(){//点击确定或取消按钮时重置数据20190303
-		this.dialogVisible = false;//关闭弹出框
-		this.standardList = [];//列表数据置空
-		this.page.currentPage = 1;//页码重新传值
-		this.page.pageSize = 10;//页码重新传值
-=======
             this.resetBasisInfo();
 		}
 	},
@@ -274,7 +255,6 @@
 		this.standardList = [];//清空表格渲染数据
 		this.page.currentPage = 1;//页码信息重置
 		this.page.pageSize = 10;//页码信息重置
->>>>>>> d4e4171ce15f9472a3d2554cc4fb4b86b60c641f
 	},
     loadMore () {
 	   if (this.loadSign) {
@@ -307,14 +287,9 @@
             RELEASETIME: this.searchList.RELEASETIME,
             STARTETIME: this.searchList.STARTETIME,
             // STATUS: this.searchList.STATUS,
-<<<<<<< HEAD
-        };
-        var url = this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.pronum;
-=======
 		};
 		var url = this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.productnum+'&S_NUM_where_not_in='+this.basissnums;
 		console.log(url);
->>>>>>> d4e4171ce15f9472a3d2554cc4fb4b86b60c641f
         this.$axios.get(url, {
             
         }).then((res) => {

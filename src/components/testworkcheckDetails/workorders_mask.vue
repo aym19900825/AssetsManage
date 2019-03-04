@@ -251,7 +251,7 @@
 										<el-row>
 											<el-col :span="8">
 												<el-form-item label="样品接收状态">
-													<el-radio-group v-model="workorderForm.ITEM_RECEPT_STATUS":disabled="noedit">
+													<el-radio-group v-model="workorderForm.ITEM_RECEPT_STATUS" :disabled="noedit">
 														<el-radio v-for="(data,index) in Select_ITEM_RECEPT_STATUS" :key="index" :label="data.code">{{data.name}}</el-radio>
 													</el-radio-group>
 												</el-form-item>
@@ -427,7 +427,7 @@
 											    </el-table-column> -->
 
 											    <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
-											      <template slot-scope="scope">deleteRow
+											      <template slot-scope="scope">
 											         <el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'basisList')" type="text" size="small">
 											      <i class="icon-trash red"></i>
 											        </el-button>

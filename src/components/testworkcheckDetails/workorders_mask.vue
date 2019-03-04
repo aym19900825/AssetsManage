@@ -720,8 +720,8 @@
 													  <el-button title="查看" type="text" size="small">
 														<i class="icon-file-text"></i>
 													  </el-button>
-													  <el-button title="确定生成报告" type="text" size="small" @click="admirereport">
-														<i class="icon-file-text"></i>
+													  <el-button title="报告提交" type="text" size="small" @click="admirereport" v-show="btnshow">
+														<i class="icon-send"></i>
 													  </el-button>
 													</template>
 												</el-table-column>
@@ -1117,6 +1117,7 @@
 				docParm: {},
 				reportname:'',//生成报告名称
 				workorderreportid:'',//存放生成报告id
+				btnshow:true,//报告提交按钮
 			};
 		},
 		methods: {
@@ -1385,13 +1386,19 @@
 			},
 			//主任务单时，确定报告按钮
 			admirereport(){
-				console.log(123456);
 				var url = this.basic_url + '/api-apps/app/workorder/operate/createreportapprove?workorderreportid='+this.workorderForm.WORKORDER_REPORTList[0].ID;
 				this.$axios.get(url, {
-
+						
 				}).then((res) => {
 					console.log(res);
 					//成功后给出提示信息并隐藏按钮
+					if(res.data.resp_code == 0) {
+						this.$message({
+							message: '提交成功',
+							type: 'success'
+						});
+						this.btnshow = false;//隐藏报告提交按钮
+					}
 				});
 			},
 			getCompany() {
@@ -1960,6 +1967,11 @@
 						res.data.WORKORDER_DATA_TEMPLATEList[i].FILE_ORGCHECKED = false;
 						res.data.WORKORDER_DATA_TEMPLATEList[i].isEditing = false;
 					}
+					for(var i = 0;i<this.workorderForm.WORKORDER_REPORTList.length;i++){
+						if(this.workorderForm.WORKORDER_REPORTList[0].ISCREATED == '1'){
+							this.btnshow = false;
+						}
+					}
 					res.data.CJDW = Number(res.data.CJDW);
 					res.data.ITEM_PROFESSIONAL_GROUP = Number(res.data.ITEM_PROFESSIONAL_GROUP);
 					this.RVENDORSelect(res.data.CJDW);
@@ -1996,6 +2008,7 @@
 					});
 				});
 				this.detailgetData();
+				this.btnshow = true;//显示报告提交按钮
 				this.views = false;
 				this.addtitle = false;
 				this.modifytitle = true;
@@ -2008,6 +2021,7 @@
 			//这是查看
 			view(dataid) {
 				// console.log(this.username);
+				this.btnshow = true;//显示报告提交按钮
 				this.dataid=dataid;	
 				this.modifytitle = false;
 				this.addtitle = false;

@@ -458,6 +458,13 @@
 				}
 		    },
 			//修改检验工作处理到子组件
+			//表格传过来
+			childvalue:function (childValue) {
+				// childValue就是子组件传过来的
+				console.log(111);
+				this.selMenu = childValue;
+				console.log(childValue);
+			},
 			modify() {
 				console.log('this.selMenu');
 				console.log(this.selMenu.length);
@@ -786,16 +793,7 @@
 				}
 				this.ismin = !this.ismin;
 			},
-			//表格传过来
-			childvalue: function (childValue) {
-		        // childValue就是子组件传过来的
-		        this.selMenu = childValue;
-			},
-		// 	classByValue(childValue) {
-		// 	// childValue就是子组件传过来的
-		// 	console.log('classByValue');
-		//   this.selUser = childValue;
-		// 	},
+			
 			//左侧菜单过来的
 		   childByValue:function(childValue) {
         		// childValue就是子组件传过来的值

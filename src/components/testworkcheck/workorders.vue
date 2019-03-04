@@ -788,14 +788,11 @@
 			},
 			//表格传过来
 			childvalue: function (childValue) {
-		        // childValue就是子组件传过来的
-		        this.selMenu = childValue;
+				// childValue就是子组件传过来的
+				console.log(111);
+				this.selMenu = childValue;
+				console.log(childValue);
 			},
-		// 	classByValue(childValue) {
-		// 	// childValue就是子组件传过来的
-		// 	console.log('classByValue');
-		//   this.selUser = childValue;
-		// 	},
 			//左侧菜单过来的
 		   childByValue:function(childValue) {
         		// childValue就是子组件传过来的值

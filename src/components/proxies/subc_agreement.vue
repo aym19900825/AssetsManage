@@ -446,7 +446,7 @@
 					ENTERBY: this.searchList.ENTERBY,
 					ENTERDATE: this.searchList.ENTERDATE
 				}
-				var url = this.basic_url + '/api-apps/app/subcontrac';
+				var url = this.basic_url + '/api-apps/app/subcontrac?TYPE_wheres=1';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {

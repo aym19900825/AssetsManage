@@ -719,7 +719,7 @@
 					ENTERBY: this.searchList.ENTERBY,
 					STATUS: this.searchList.STATUS
 				}
-				var url = this.basic_url + '/api-apps/app/inspectPro';
+				var url = this.basic_url + '/api-apps/app/inspectPro?TYPE_wheres=2';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {

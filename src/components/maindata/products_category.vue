@@ -39,7 +39,7 @@
 							          ref="upload"
 							          class="upload"
 							          :action="uploadUrl()"
-							          :on-success="handleSuccess"
+							          :on-success="fileSuccess"
 							          :limit=1
 							          multiple
 							          method:="post"
@@ -272,6 +272,10 @@
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
+			},
+			fileSuccess(){
+				this.page.currentPage = 1;
+				this.requestData();
 			},
 			//机构值
 			getCompany() {

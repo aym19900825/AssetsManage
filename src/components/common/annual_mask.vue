@@ -122,7 +122,7 @@
 											<i class="icon-upload-cloud"></i>
 											<font>导入</font>
 										</el-button> -->
-										<el-dropdown size="small" split-button type="primary" style="margin-top:1px;">
+										<el-dropdown size="small" split-button type="primary" style="margin-top:1px;" v-show="!addtitle">
     										导入
 											<el-dropdown-menu slot="dropdown">
 												<el-dropdown-item>
@@ -133,17 +133,17 @@
 													<el-upload
 													ref="upload"
 													class="upload"
-													:action="uploadUrl"
+													:action="uploadUrl()"
+													:on-success="fileSuccess"
 													:limit=1
 													multiple
-													method:="post"
-													:file-list="fileList">
+													method:="post">
 														<div>上传</div>
 													</el-upload>
 												</el-dropdown-item>
 											</el-dropdown-menu>
 										</el-dropdown>
-										<el-button type="primary" size="mini" round v-show="!viewtitle" @click="exportData" style="margin-left: 10px;">
+										<el-button type="primary" size="mini" round v-show="!addtitle" @click="exportData" style="margin-left: 10px;">
 											<i class="icon-upload-cloud"></i>
 											<font>导出</font>
 										</el-button>
@@ -917,11 +917,11 @@
 					xhr.send();
 			},
 			uploadUrl(){
-                var url = this.basic_url +'/api-apps/app/workplan/importExc/WORLPLANLINE?access_token='+sessionStorage.getItem('access_token');
-                return url;
+				var url = this.basic_url +'/api-apps/app/workplan/importExc?table=WORLPLANLINE&access_token='+sessionStorage.getItem('access_token');
+				return url;
             },
 			exportData() {
-           		var url = this.basic_url + '/api-apps/app/workplan/exportExc/WORLPLANLINE?access_token='+sessionStorage.getItem('access_token');
+           		var url = this.basic_url + '/api-apps/app/workplan/exportExc?table=WORLPLANLINE&WP_NUM_wheres='+this.WORKPLAN.WP_NUM+'&access_token='+sessionStorage.getItem('access_token');
           		var xhr = new XMLHttpRequest();
             	xhr.open('POST', url, true);
             	xhr.responseType = "blob";
@@ -1036,7 +1036,9 @@
 					this.requestDeptname();
 				}
 			},
-			
+			fileSuccess(){
+				this.detail(this.WORKPLAN.ID);
+			},
 			//删除计划列表
 			delPlan(index,row,TableName,delList){
 				if(row.ID){
@@ -1642,7 +1644,7 @@
 				this.assignshow = true;
 				this.$axios.get(this.basic_url +'/api-apps/app/workplan/' + dataid, {}).then((res) => {
 					for(var i = 0; i<res.data.WORLPLANLINEList.length; i++){
-							res.data.WORLPLANLINEList[i].isEditing = false;
+						res.data.WORLPLANLINEList[i].isEditing = false;
 					}
 					res.data.PROP_UNIT = Number(res.data.PROP_UNIT);
 					this.WORKPLAN = res.data;
@@ -1713,7 +1715,7 @@
 				this.noviews = false;
 				this.edit = true;
 				this.noedit = true;
-
+				this.getCompany();
 				var _this = this;
 				setTimeout(function(){
 					_this.docParm.model = 'view';
@@ -1731,6 +1733,7 @@
 					// 		this.WORKPLAN.PROP_UNIT=this.selectData[j].fullname
 					// 	}
 					// }
+					res.data.PROP_UNIT = Number(res.data.PROP_UNIT);
 					this.worlplanlist = res.data.WORLPLANLINEList;
 					var worlplanlist = res.data.WORLPLANLINEList;
 					for(var i=0, len=worlplanlist.length; i<len; i++){
@@ -1740,6 +1743,16 @@
 					this.basisList = res.data.WORLPLANLINEList.length > 0 ? res.data.WORLPLANLINEList[0].WORLPLANLINE_BASISList : [];
 					this.proTestList = res.data.WORLPLANLINEList.length > 0 ? res.data.WORLPLANLINEList[0].WORLPLANLINE_PROJECTList : [];
 					this.show = true;
+
+					var type = "2";
+					var url = this.basic_url + '/api-user/depts/treeByType';
+					this.$axios.get(url, {
+						params: {
+							type: type
+						},
+					}).then((res) => {
+						this.selectData = res.data;
+					});
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',

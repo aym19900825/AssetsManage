@@ -110,6 +110,13 @@
 													<i class="icon-add"></i>
 													<font>新建行</font>
 												</el-button>
+												<form method="post" id="file" action="" enctype="multipart/form-data" style="float: right;margin-left: 10px;">
+													<el-button type="primary" size="mini" round class="a-upload">
+														<i class="el-icon-upload2"></i>
+														<font>上传</font>
+														<input id="excelFile" type="file" name="uploadFile" @change="upload"/>
+													</el-button>
+												</form>
 											</div>
 									<!-- <el-form :label-position="labelPosition" :rules="rules"> -->
 										<el-table :header-cell-style="rowClass" :fit="true" :data="CUSTOMER.CUSTOMER_QUALIFICATIONList" row-key="ID" border stripe max-height="260" highlight-current-row style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER.CUSTOMER_QUALIFICATIONList', order: 'descending'}">
@@ -156,24 +163,15 @@
 										        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.STATUS}}</span>
 										      </template>
 										    </el-table-column> -->
+											<el-table-column prop="FILESIZE" label="附件大小" sortable width="120px" v-if="!viewtitle">
+												<template slot-scope="scope">
+													<span v-if="!!scope.row.FILESIZE">{{scope.row.FILESIZE+'M'}}</span>
+												</template>
+										    </el-table-column>
+
 										    <el-table-column prop="MEMO" label="备注" sortable width="120px">
 										      <template slot-scope="scope">
 										        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.MEMO" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.MEMO}}</span>
-										      </template>
-										    </el-table-column>
-
-										    <el-table-column prop="REASION" label="附件" sortable width="120px" v-if="!viewtitle">
-										      <template slot-scope="scope">
-										        <el-upload	class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/"
-													:on-preview="handlePreview"
-													:on-remove="handleRemove"
-													:before-remove="beforeRemove"
-													multiple
-													:limit="3"
-													:on-exceed="handleExceed"
-													:file-list="fileList">
-													<el-button size="small" type="primary">点击上传</el-button>
-												</el-upload>
 										      </template>
 										    </el-table-column>
 
@@ -311,6 +309,7 @@
 
 <script>
 	import Config from '../../config.js'
+	import { Loading } from 'element-ui'
 	export default {
 		name: 'customer_masks',
 		data() {
@@ -380,6 +379,7 @@
           //       }
           //   };
 			return {
+				file_url: Config.file_url,
 				basic_url: Config.dev_url,
 				personinfo:false,
 				loadSign:true,//加载
@@ -456,6 +456,7 @@
 				hintshow:false,
 				statusshow1:true,
 				statusshow2:false,
+				docParam:{}
 			};
 		},
 		methods: {
@@ -490,6 +491,9 @@
 					ACTIVE_DATE:'',
 					STATUS:'',
 					MEMO:'',
+					FILEID: '',
+					FILENAME: '',
+					FILEPATH: '',
 					isEditing: true
                 };
                 this.CUSTOMER.CUSTOMER_QUALIFICATIONList.push(obj);
@@ -590,7 +594,28 @@
 					CUSTOMER_QUALIFICATIONList:[],
 					CUSTOMER_PERSONList:[]
 				};
-            },
+			},
+			getUser(opt){
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
+	    			this.CUSTOMER.ENTERBY = res.data.id;
+					this.CUSTOMER.DEPTID = res.data.deptId;
+					if(opt == 'detail'){
+						var date = new Date();
+						this.CUSTOMER.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
+					}
+					this.docParam = {
+						username: res.data.username,
+						userid:  res.data.id,
+						deptid: res.data.deptId,
+						deptfullname: res.data.deptName,
+					};
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+			},	
 			//点击添加，修改按钮显示弹窗
 			visible() {
 				this.reset();
@@ -607,15 +632,7 @@
 				this.statusshow2 = false;
 				var date = new Date();
 				this.CUSTOMER.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-	    			this.CUSTOMER.ENTERBY = res.data.id;
-	    			this.CUSTOMER.DEPTID = res.data.deptId;
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
+				this.getUser('visible');
 				// this.show = true;
 			},
 			getsys_depttype() {//获取机构类型
@@ -639,17 +656,7 @@
 				this.modify = true;//修订
 				this.statusshow1 = false;
 				this.statusshow2 = true;
-				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-	    			this.CUSTOMER.CHANGEBY = res.data.id;
-	    			this.CUSTOMER.DEPTID = res.data.deptId;
-	    			var date = new Date();
-					this.CUSTOMER.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
+				this.getUser('detail');
 				this.$axios.get(this.basic_url + '/api-apps/app/customer/' + dataid, {}).then((res) => {
 					console.log(res.data);
 					//资质
@@ -661,7 +668,6 @@
 						res.data.CUSTOMER_PERSONList[i].isEditing = false;
 					}
 					this.CUSTOMER = res.data;
-					//console.log(this.CUSTOMER.STATUS==1);
 					this.CUSTOMER.STATUS=this.CUSTOMER.STATUS=="1"? '活动' : '不活动';
 					this.show = true;
 				}).catch((err) => {
@@ -800,6 +806,72 @@
 						done();
 					})
 					.catch(_ => {});
+			},
+			upload(e){
+				var list = this.CUSTOMER.CUSTOMER_QUALIFICATIONList || [];
+				var editList = [];
+				for(let i=0; i<list.length; i++){
+					if(list[i].isEditing){
+						editList.push(i);
+					}
+				}
+				if(editList.length > 1){
+					this.$message({
+						message: '不可同时编辑多条数据',
+						type: 'error'
+					});
+					return;
+				}
+				if(editList.length == 0){
+					this.$message({
+						message: '请选择要上传文件的数据',
+						type: 'error'
+					});
+					return;
+				}
+				var formData = new FormData();
+				var loading;
+				loading = Loading.service({
+					fullscreen: true,
+					text: '拼命上传中...',
+					background: 'rgba(F,F, F, 0.8)'
+				});
+				// this.$emit('showLoading');
+				formData.append('files', document.getElementById('excelFile').files[0]);
+				var config = {
+					//添加请求头
+					headers: { "Content-Type": "multipart/form-data" },
+					//添加上传进度监听事件
+					onUploadProgress: e => {
+						var completeProgress = ((e.loaded / e.total * 100) | 0) + "%";
+						this.progress = completeProgress;
+					}
+				};
+				var url = this.file_url + '/file/uploadfile?userid=' + this.docParam.userid 
+						+ '&username=' + this.docParam.username
+						+ '&deptid=' + this.docParam.deptid
+						+ '&deptfullname=' + this.docParam.deptfullname
+						+ '&recordid=1&appname=客户管理&appid=2';
+				this.$axios.post(url, formData, config
+				).then((res)=>{
+					loading.close();
+					if(res.data.code == 0){
+						this.$message({
+							message: res.data.message,
+							type: 'error'
+						});
+					}else{
+						this.$message({
+							message: '文件已成功上传至服务器',
+							type: 'success'
+						});
+						var index = editList[0];
+						this.CUSTOMER.CUSTOMER_QUALIFICATIONList[index].FILEID = res.data.fileid;
+						this.CUSTOMER.CUSTOMER_QUALIFICATIONList[index].FILESIZE = res.data.filesize;
+						this.CUSTOMER.CUSTOMER_QUALIFICATIONList[index].FILEPATH = res.data.webUrl;
+						this.$set(this.CUSTOMER.CUSTOMER_QUALIFICATIONList,index,this.CUSTOMER.CUSTOMER_QUALIFICATIONList[index]); 
+					}
+				})
 			}
 		},
 		mounted() {
@@ -810,4 +882,15 @@
 
 <style scoped>
 	@import '../../assets/css/mask-modules.css';
+	.a-upload input{
+		position: absolute;
+		font-size: 5px;
+		right: 0px;
+		top: 0;
+		opacity: 0;
+		filter: alpha(opacity=0);
+		cursor: pointer;
+		width: 70px;
+		cursor: pointer;
+	}
 </style>

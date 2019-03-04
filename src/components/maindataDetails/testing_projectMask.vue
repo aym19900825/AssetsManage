@@ -374,7 +374,7 @@
 					}],
 					UNITCOST:[{required: false,trigger: 'change',validator:price}],
 				},
-				//testing_projectForm:{},//检验/检测项目数据组
+				testing_projectForm:{},//检验/检测项目数据组
 				//tree
 				gridData: [],
 				selval: [],

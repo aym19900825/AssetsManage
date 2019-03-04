@@ -142,7 +142,7 @@
 				// childByValue是在父组件on监听的方法
         // 第二个参数this.childValuedata是需要传的值
         console.log(this.selUser);
-				this.$emit('classByValue', this.selUser);
+				this.$emit('childByValue', this.selUser);
 			},
     // 显示行
        showTr: function (row, index) {

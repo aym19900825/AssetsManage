@@ -18,9 +18,25 @@
 				</div>
 				<div class="mask_content">
 					<el-form :model="USESEAL" inline-message :rules="rules" ref="USESEAL" label-width="110px" class="demo-adduserForm">
+						<div class="text-center" v-show="viewtitle">
+							<span v-if="this.USESEAL.STATE!=3">
+							<el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 启动流程</el-button>
+							<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
+							</span>
+							<el-button type="primary" round plain size="mini" @click="flowmap" ><i class="icon-git-pull-request"></i> 流程地图</el-button>
+							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
+							<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
+						</div>
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="用印管理" name="1">
+									<el-row class="pb10">
+										<el-col :span="3" class="pull-right">
+											<el-input v-model="USESEAL.STATEDesc" :disabled="true">
+												<template slot="prepend">状态</template>
+											</el-input>
+										</el-col>
+									</el-row>
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="工作任务单编号" prop="WONUM">
@@ -164,6 +180,14 @@
 			<workordermask ref="workorderchild" @appendwork="appendwork"></workordermask>
             <!-- 委托书编号  -->
 			<inspectmask ref="inspectchild" @appendpro="appendpro" @appendver="appendver"></inspectmask>
+			<!--审批页面-->
+			<approvalmask :approvingData="approvingData" ref="approvalChild" @detail="detailgetData"  ></approvalmask>
+			<!--流程历史-->
+			<flowhistorymask :approvingData="approvingData"  ref="flowhistoryChild" ></flowhistorymask>
+			<!--流程地图-->
+			<flowmapmask :approvingData="approvingData" ref="flowmapChild" ></flowmapmask>
+			<!--当前责任人-->
+			<vewPoplemask :approvingData="approvingData"  ref="vewPopleChild" ></vewPoplemask>
 		</div>
 	</div>
 </template>
@@ -171,37 +195,24 @@
 <script>
     import Config from '../../config.js'
     import workordermask from '../common/common_mask/workordersmask.vue'//工作任务单
-    import inspectmask from '../common/common_mask/inspectmask.vue'//委托书编号
+	import inspectmask from '../common/common_mask/inspectmask.vue'//委托书编号
+	import approvalmask from '../workflow/approving.vue'
+	import flowhistorymask from '../workflow/flowhistory.vue'
+	import flowmapmask from '../workflow/flowmap.vue'
+	import vewPoplemask from '../workflow/vewPople.vue'
 	export default {
         name: 'masks',
         components: {
             workordermask,
-            inspectmask
+			inspectmask,
+			approvalmask,
+			flowhistorymask,
+			flowmapmask,
+			vewPoplemask,
 		},
 		data() {
-			// var validateNum = (rule, value, callback) => {
-			// 	if(value != ""){
-		    //          if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
-		    //              callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
-		    //          }else{
-		    //              callback();
-		    //          }
-		    //      }else{
-		    //          callback();
-		    //      }
-			// };
-			// var validateType = (rule, value, callback) => {
-			// 	if(value === '') {
-			// 		callback(new Error('请填写产品类别名称'));
-			// 	} else {
-			// 		if((/^[!@#$%^&*";',.~！@#￥%……&*《》？，。?、|]+$/).test(value) == true){
-		    //              callback(new Error("请规范填写名称"));
-		    //         }else{
-		    //             callback();
-		    //         }
-			// 	}
-			// };
 			return {
+				approvingData:{},//流程数据
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				selUser: [],
@@ -230,7 +241,9 @@
 				modify:false,//修订
 				hintshow:false,
 				statusshow1:true,
-                statusshow2:false,
+				statusshow2:false,
+				approval:false,
+				start:false,
                 USESEAL:{
                     ID:'',
                     WONUM:'',
@@ -248,7 +261,9 @@
                     ENERDATE:'',
                     ENERBY:'',
                     CHANGEBY:'',
-                    CHANGEDATE:'',
+					CHANGEDATE:'',
+					STATE:'1',
+					STATEDesc:'草稿',
                 },
                 dialogPerson:false,//人员信息弹出框
                 pertips:'',//选择人员参数
@@ -261,6 +276,8 @@
 					pageSize: 20,
 					totalCount: 0
 				},
+				sealUse:'sealUse',//appname
+				dataid:'',
 			};
 		},
 		methods: {
@@ -328,8 +345,27 @@
 				this.statusshow2 = false;
 //				this.show = true;
 			},
+			detailgetData(){
+				var url = this.basic_url +'/api-apps/app/sealUse/' +this.dataid;
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+					this.USESEAL = res.data;
+					 for(var j=0;j<this.selectData.length;j++){
+                    	if(this.USESEAL.SEAL_DEPARTMENT==this.selectData[j].id){
+                        	this.USESEAL.SEAL_DEPARTMENT=this.selectData[j].fullname
+                    	}
+               		 }
+					this.show = true;
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+			},
 			// 这里是修改
-			detail(data) {
+			detail(id) {
+				this.dataid=id;
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.viewtitle = false;
@@ -346,32 +382,23 @@
 					this.USESEAL.CHANGEBY = res.data.id;
 					var date = new Date();
 					this.USESEAL.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
-					//深拷贝数据
-					let _obj = JSON.stringify(this.USESEAL);
-        			this.USESEAL = JSON.parse(_obj);
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试2',
 						type: 'error'
 					});
                 });
-                this.USESEAL = data;
-                for(var j=0;j<this.selectData.length;j++){
-                    if(this.USESEAL.SEAL_DEPARTMENT==this.selectData[j].id){
-                        this.USESEAL.SEAL_DEPARTMENT=this.selectData[j].fullname
-                    }
-                }
-                console.log(this.USESEAL);
-				this.show = true;
+                // for(var j=0;j<this.selectData.length;j++){
+                //     if(this.USESEAL.SEAL_DEPARTMENT==this.selectData[j].id){
+                //         this.USESEAL.SEAL_DEPARTMENT=this.selectData[j].fullname
+                //     }
+                // }
+                // console.log(this.USESEAL);
+				// this.show = true;
 			},
 			//这是查看
-			view(data) {
-                this.USESEAL = data;
-                for(var j=0;j<this.selectData.length;j++){
-                    if(this.USESEAL.SEAL_DEPARTMENT==this.selectData[j].id){
-                        this.USESEAL.SEAL_DEPARTMENT=this.selectData[j].fullname
-                    }
-                }
+			view(id) {		
+				this.dataid=id;
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;
@@ -379,7 +406,37 @@
 				this.noedit = true;//表单内容
 				this.views = true;//录入修改人信息
 				this.noviews = false;//按钮
-				this.show = true;				
+				this.show = true;	
+				//判断启动流程和审批的按钮是否显示
+				this.detailgetData();
+				var url = this.basic_url + '/api-apps/app/sealUse/flow/isStart/'+this.dataid;
+				this.$axios.get(url, {}).then((res) => {
+					 console.log(res);
+					if(res.data.resp_code==1){
+						this.start=true;
+						this.approval=false;
+					}else{
+						var url = this.basic_url + '/api-apps/app/sealUse/flow/Executors/'+this.dataid;
+						console.log(url);
+						this.$axios.get(url, {}).then((res) => {
+							// console.log(res.data.datas);
+							res.data.CJDW = Number(res.data.CJDW);
+							var resullt=res.data.datas;
+							var users='';
+							for(var i=0;i<resullt.length;i++){
+								users = users + resullt[i].username+",";
+								// console.log("users----"+users);
+							}
+							if(users.indexOf(this.username) != -1){
+								this.approval=true;
+								this.start=false;
+							}else{
+								this.approval=false;
+								this.start=false;
+							}
+						});
+					}
+				});			
             },
             sizeChange(val) {
 				this.page.pageSize = val;
@@ -467,7 +524,7 @@
                     ENERDATE:'',
                     ENERBY:'',
                     CHANGEBY:'',
-                    CHANGEDATE:'',
+					CHANGEDATE:'',
 				};
 				// if(this.$refs['USESEAL'] !== undefined) {
 				// 	this.$refs['USESEAL'].resetFields();
@@ -503,6 +560,95 @@
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
 				$(".mask_div").css("top", "100px");
+			},
+			//启动流程
+			startup(){
+				var url = this.basic_url + '/api-apps/app/sealUse/flow/'+this.dataid;
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+					if(res.data.resp_code == 1) {
+							this.$message({
+								message:res.data.resp_msg,
+								type: 'warning'
+							});
+				    }else{
+				    	this.$message({
+								message:res.data.resp_msg,
+								type: 'success'
+							});
+							this.detailgetData();
+							var url = this.basic_url + '/api-apps/app/sealUse/flow/Executors/'+this.dataid;
+							this.$axios.get(url, {}).then((res) => {
+								var resullt=res.data.datas;
+								var users='';
+								for(var i=0;i<resullt.length;i++){
+									users = users + resullt[i].username+",";
+								}
+								if(users.indexOf(this.username) != -1){
+									this.approval=true;
+									this.start=false;
+								}else{
+									this.approval=false;
+									this.start=false;
+								}
+							});
+				    }
+				});
+			},	
+			//审批流程
+			approvals(){
+				this.approvingData.id =this.dataid;
+				this.approvingData.app=this.reportApprove;
+				 var url = this.basic_url + '/api-apps/app/sealUse/flow/isEnd/'+this.dataid;
+		    		this.$axios.get(url, {}).then((res) => {
+		    			if(res.data.resp_code == 0) {
+							this.$message({
+								message:res.data.resp_msg,
+								type: 'warning'
+							});
+		    			}else{
+		    				var url = this.basic_url + '/api-apps/app/sealUse/flow/isExecute/'+this.dataid;
+		    				this.$axios.get(url, {}).then((res) => {
+				    			if(res.data.resp_code == 1) {
+										this.$message({
+											message:res.data.resp_msg,
+											type: 'warning'
+										});
+								}else{
+									var url = this.basic_url + '/api-apps/app/sealUse/flow/customFlowValidate/'+this.dataid;
+								this.$axios.get(url, {}).then((res) => {
+				    				if(res.data.resp_code == 1) {
+										this.$message({
+											message:res.data.resp_msg,
+											type: 'warning'
+										});
+									}else{
+									 	this.$refs.approvalChild.visible();
+									}
+								})
+								}
+		    				});
+		    			}
+					});
+			},
+			//流程历史
+			flowhistory(){
+				this.approvingData.id =this.dataid;
+				this.approvingData.app=this.sealUse;
+//				this.$refs.flowhistoryChild.open();
+				this.$refs.flowhistoryChild.getdata(this.dataid);
+			},
+			//流程地图
+			flowmap(){
+				this.approvingData.id =this.dataid;
+				this.approvingData.app=this.sealUse;
+				this.$refs.flowmapChild.getimage();
+			},
+			//当前责任人
+			viewpepole(){
+				this.approvingData.id =this.dataid;
+				this.approvingData.app=this.sealUse;
+				this.$refs.vewPopleChild.getvewPople(this.dataid);
 			},
 			// 保存users/saveOrUpdate
 			save() {

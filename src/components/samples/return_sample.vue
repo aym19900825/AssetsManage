@@ -321,7 +321,7 @@
 			    return 'text-align:center'
 			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
-				return (<span><i class={data.iconClass}></i><span>{node.label}</span></span>)
+				return (<span><i class={data.iconClass}></i><span title={data.lable}>{data.lable}</span></span>);
 			},
 			// 点击节点
 			nodeClick: function(m) {
@@ -625,8 +625,15 @@
 					ACCEPT_PERSON: this.searchList.ACCEPT_PERSON,//样品承接人
 					ITEM_STEP: this.searchList.ITEM_STEP,//样品序号
 					APPR_DATE: this.searchList.APPR_DATE,//批准日期
-					ACCEPT_DATE: this.searchList.ACCEPT_DATE//收样日期
-				}
+					ACCEPT_DATE: this.searchList.ACCEPT_DATE,//收样日期
+
+					P_NUM: this.searchList.P_NUM,
+					PRO_NUM: this.searchList.PRO_NUM,
+				};
+				if(!(!!this.searchList.DEPTID && this.searchList.DEPTID == 128)){
+					data.DEPTID = this.searchList.DEPTID;
+				};
+				
 				var url = this.basic_url + '/api-apps/app/itemreturn';
 				this.$axios.get(url, {
 					params: data
@@ -664,34 +671,48 @@
 			//样品序号树
 			getKey() {
 				let that = this;
-				var url = this.basic_url + '/api-user/depts/tree';
+				var url = this.basic_url + '/api-apps/appCustom/tree';
 				this.$axios.get(url, {}).then((res) => {
-					this.resourceData = res.data;
+					this.resourceData = res.data.datas;
 					this.treeData = this.transformTree(this.resourceData);
 				});
 			},
 			transformTree(data) {
 				for(var i = 0; i < data.length; i++) {
-					data[i].name = data[i].fullname;
-					if(!data[i].pid || $.isArray(data[i].subDepts)) {
+					data[i].name = data[i].fullname || data[i].TYPE || data[i].pName || data[i].PRO_NAME;
+					data[i].lable = data[i].fullname || data[i].TYPE || data[i].pName || data[i].PRO_NAME;
+					if($.isArray(data[i].children)) {
 						data[i].iconClass = 'icon-file-normal';
 					} else {
 						data[i].iconClass = 'icon-file-text';
 					}
-					if($.isArray(data[i].subDepts)) {
-						data[i].children = this.transformTree(data[i].subDepts);
+					if($.isArray(data[i].children)) {
+						data[i].subDepts = this.transformTree(data[i].children);
 					}
 				}
 				return data;
-				
 			},
 			handleNodeClick(data) {
-				if(data.type == '1') {
-					this.companyId = data.id;
-					this.deptId = '';
-				} else {
-					this.deptId = data.id;
-					this.companyId = '';
+				if(!!data.fullname) {
+					this.searchList.P_NUM = '';
+					this.searchList.PRO_NUM = '';
+					this.searchList.DEPTID = data.id;
+					this.page.currentPage = 1;
+				}else if(!!data.TYPE){
+					this.searchList.P_NUM = data.NUM;
+					this.searchList.PRO_NUM = '';
+					this.searchList.DEPTID = data.DEPTID;
+					this.page.currentPage = 1;
+				}else if(!!data.PRO_NUM){
+					this.searchList.P_NUM = data.NUM;
+					this.searchList.PRO_NUM = data.PRO_NUM;
+					this.searchList.DEPTID = data.DEPTID;
+					this.page.currentPage = 1;
+				}else{
+					this.searchList.P_NUM = '';
+					this.searchList.PRO_NUM = '';
+					this.searchList.DEPTID = '';
+					this.page.currentPage = 1;
 				}
 				this.requestData();
 			},

@@ -199,12 +199,16 @@
     basislead(value){
 		console.log(value);
 		this.productnum = value[0];//产品编号
-		this.basistable = value[1];//检测依据表格中已有的数据
-		var basissnum = [];
-		for(var i = 0;i<this.basistable.length;i++){
-			basissnum.push(this.basistable[i].S_NUM);
+		if(value[1]!=''&&value[1]!=null&&value[1]!=undefined){
+			this.basistable = value[1];//检测依据表格中已有的数据
+			var basissnum = [];
+			for(var i = 0;i<this.basistable.length;i++){
+				basissnum.push(this.basistable[i].S_NUM);
+			}
+			this.basissnums = basissnum.toString(',');
+		}else{
+			this.basissnums = '';
 		}
-		this.basissnums = basissnum.toString(',');
 		this.requestData();//渲染数据
 		this.dialogVisible = true;
     },

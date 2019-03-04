@@ -1524,8 +1524,10 @@
 							type: 'warning'
 						});
 					}else{
-						this.$refs.standardchild.basislead(this.deptindex.PRO_NUM);
+						this.sendchilddata.push(this.deptindex.PRO_NUM);
+						this.$refs.standardchild.basislead(this.sendchilddata);
 						this.main = 'table';
+						this.sendchilddata = [];
 					}
 				}
 			},
@@ -1579,8 +1581,10 @@
 							type: 'warning'
 						});
 					}else{
-						this.$refs.projectchild.projectlead(this.deptindex.S_NUM);
+						this.sendchilddata.push(this.deptindex.S_NUM);
+						this.$refs.projectchild.projectlead(this.sendchilddata);
 						this.main = 'table';
+						this.sendchilddata = [];
 					}
 				}
 			},
@@ -1663,6 +1667,13 @@
 			//委托单位
 			appendname(value){		
 				this.dataInfo.V_NAME = value;//名称
+				if(this.dataInfo.CHECK_PROXY_CONTRACTList == null || this.dataInfo.CHECK_PROXY_CONTRACTList==undefined||this.dataInfo.CHECK_PROXY_CONTRACTList==''){
+
+				}else{//更新子表委托单位
+					for(var i = 0;i<this.dataInfo.CHECK_PROXY_CONTRACTList.length;i++){
+						this.dataInfo.CHECK_PROXY_CONTRACTList[i].V_NAME = value;
+					}
+				}
 			},
 			appendadd(value){
 				this.dataInfo.V_ADDRESS=value;
@@ -1806,7 +1817,11 @@
 			},
 			//获取负责人和接收人
 			getCustomer(type) {
-				this.$refs.enterprisechild.visible(type);
+				if(type == 'vname'){
+					this.$refs.enterprisechild.visible(type , this.dataInfo.appendid);
+				}else{
+					this.$refs.enterprisechild.visible(type);
+				}
 			},
 			addname(){
 				var customid=this.customid;

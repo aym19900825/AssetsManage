@@ -26,7 +26,7 @@
 					</el-col>
 				</el-row>
 			</el-form>
-			<el-table :header-cell-style="rowClass" :data="customerList" line-center border stripe height="360px" style="width: 100%;" :default-sort="{prop:'customerList', order: 'descending'}"
+			<el-table ref="table" :header-cell-style="rowClass" :data="customerList" line-center border stripe height="360px" style="width: 100%;" :default-sort="{prop:'customerList', order: 'descending'}"
 				v-loadmore="loadMore"
 				v-loading="loading"  
 				element-loading-text="加载中…"
@@ -58,31 +58,34 @@
 
 <script>
 	import Config from '../../../config.js';
+	import { Loading } from 'element-ui'
 	export default {
-  name: 'customer',
+ 		 name: 'customer',
   
-  data() {
-    return {
-		basic_url: Config.dev_url,
-		loading: false,
-		loadSign:true,//加载
-		customerList: [],
-		dialogCustomer: false,
-		commentArr:{},
-		selUser: [],//接勾选的值
-		type:'',
-		searchList: {
-					NAME: '',
-					CODE: '',
-					CONTACT_ADDRESS: '',
-				},
-		page: {
-			currentPage: 1,
-			pageSize: 20,
-			totalCount: 0
+	data() {
+		return {
+			basic_url: Config.dev_url,
+			loading: false,
+			loadSign:true,//加载
+			customerList: [],
+			dialogCustomer: false,
+			commentArr:{},
+			selUser: [],//接勾选的值
+			type:'',
+			searchList: {
+						NAME: '',
+						CODE: '',
+						CONTACT_ADDRESS: '',
+					},
+			page: {
+				currentPage: 1,
+				pageSize: 20,
+				totalCount: 0
 			},
-    }
-  },
+
+			selkeys: [],
+		}
+	},
 
   methods: {
   	dateFormat(row, column) {
@@ -98,12 +101,19 @@
 	},
 	SelChange(val) {
 		this.selUser = val;
+		var _this = this;
+		//处理分页时，分页记忆失去之前数据，500必须大于setSelectRow的时间
+		setTimeout(function(){
+			_this.changePageCoreRecordData();
+		},800);
 	},
   	sizeChange(val) {
+		this.changePageCoreRecordData();
 		this.page.pageSize = val;
 		this.requestData();
 	},
 	currentChange(val) {
+		this.changePageCoreRecordData();
 		this.page.currentPage = val;
 		this.requestData();
 	},
@@ -116,8 +126,12 @@
 	close() {
 		this.dialogCustomer = false;
 	},
-  	visible(type) {
-  		this.type=type;
+  	visible(type,id) {
+		this.type=type;
+		if(!!id && type == 'vname'){
+			this.selkeys.push(id);
+		}
+		this.requestData();
 		this.dialogCustomer = true;
   	},
   	loadMore () {//滚动加载更多
@@ -129,12 +143,13 @@
 	     }
 	     setTimeout(() => {
 	       this.loadSign = true
-	     }, 1000)
+		 }, 1000)
+		 this.changePageCoreRecordData();
 	     this.requestData();
 	   }
 	},
 	requestData(){
-		this.loading = true;
+		// this.loading = true;
 		var data = {
 			page: this.page.currentPage,
 			limit: this.page.pageSize,
@@ -153,19 +168,23 @@
 			}else{
 				this.loadSign=true
 			}
-			this.commentArr[this.page.currentPage]=res.data.data
-			let newarr=[]
-			for(var i = 1; i <= totalPage; i++){
+			// this.commentArr[this.page.currentPage]=res.data.data
+			// let newarr=[]
+			// for(var i = 1; i <= totalPage; i++){
 			
-				if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
+			// 	if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
 					
-					for(var j = 0; j < this.commentArr[i].length; j++){
-						newarr.push(this.commentArr[i][j])
-					}
-				}
-			}					
-			this.customerList = newarr;
-			this.loading = false;
+			// 		for(var j = 0; j < this.commentArr[i].length; j++){
+			// 			newarr.push(this.commentArr[i][j])
+			// 		}
+			// 	}
+			// }					
+			// this.customerList = newarr;
+			this.customerList = res.data.data;
+			setTimeout(()=>{
+				this.setSelectRow();
+			}, 200)
+			// this.loading = false;
 		}).catch((wrong) => {})
 	},
 	determine(){
@@ -209,11 +228,65 @@
         this.customerList = [];//列表数据置空
         this.page.currentPage = 1;//页码重新传值
         this.page.pageSize = 10;//页码重新传值
-    },
+	},
+	//table记忆
+	changePageCoreRecordData () {
+		let idKey = 'ID';
+		let that = this;
+		if (this.selkeys.length <= 0) {
+			this.selkeys = this.selUser;
+			return;
+		}
+		let selectAllIds = [];
+		this.selkeys.forEach(row=>{
+			selectAllIds.push(row[idKey]);
+		})
+		let selectIds = [];
+		this.selUser.forEach(row=>{
+			selectIds.push(row[idKey]);
+			if (selectAllIds.indexOf(row[idKey]) < 0) {
+				that.selkeys.push(row);
+			}
+		})
+		let noSelectIds = [];
+		this.customerList.forEach(row=>{
+			if (selectIds.indexOf(row[idKey]) < 0) {
+				noSelectIds.push(row[idKey]);
+			}
+		})
+		noSelectIds.forEach(id=>{
+			if (selectAllIds.indexOf(id) >= 0) {
+				for(let i = 0; i< that.selkeys.length; i ++) {
+					if (that.selkeys[i][idKey] == id) {
+						that.selkeys.splice(i, 1);
+						break;
+					}
+				}
+			}
+		})
+	},
+	//设置选中值
+	setSelectRow() {
+		if (!this.selkeys || this.selkeys.length <= 0) {
+			return;
+		}
+		let idKey = 'ID';
+		let selectAllIds = [];
+		let that = this;
+		this.selkeys.forEach(row=>{
+			selectAllIds.push(row[idKey]);
+		})
+		this.$refs.table.clearSelection();
+		for(var i = 0; i < this.customerList.length; i++) {                    
+			if (selectAllIds.indexOf(this.customerList[i][idKey]) >= 0) {
+				this.$refs.table.toggleRowSelection(this.customerList[i], true);
+			}
+		}
+	}
   },
-  mounted() {
-			this.requestData();
-		},
+    mounted() {
+		this.requestData();
+	},
 }
 </script>
 

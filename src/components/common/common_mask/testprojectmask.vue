@@ -184,12 +184,16 @@
     },
     projectlead(value){
 		this.projectnum = value[0];
-		this.projecttable = value[1];
-		var projectpnum = [];
-		for(var i = 0;i<this.projecttable.length;i++){
-			projectpnum.push(this.projecttable[i].P_NUM);
+		if(value[1]!=''&&value[1]!=null&&value[1]!=undefined){
+			this.projecttable = value[1];
+			var projectpnum = [];
+			for(var i = 0;i<this.projecttable.length;i++){
+				projectpnum.push(this.projecttable[i].P_NUM);
+			}
+			this.projectpnums = projectpnum.toString(',');
+		}else{
+			this.projectpnums = '';
 		}
-		this.projectpnums = projectpnum.toString(',');
 		this.requestData();//渲染数据
 		this.dialogVisible = true;
     },

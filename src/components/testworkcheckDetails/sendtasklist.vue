@@ -121,18 +121,24 @@
 		this.dialogProduct = false;
 	},
   	visible(dataid) {
-		  console.log(11111);
-		this.detailgetData(dataid);
-		this.dialogProduct = true;
-	  },
-	detailgetData(dataid) {
-	var url = this.basic_url +'/api-apps/app/workorder/' + dataid;
+		this.workorderForm.ID = dataid;
+		this.showdata(dataid);
+	},
+	showdata(dataid){
+		var url = this.basic_url +'/api-apps/app/workorder/operate/subtaskList?WORKORDERID='+dataid;
+		console.log(url);
 		this.$axios.get(url, {}).then((res) => {
-			console.log(res.data);
-			this.workorderForm = res.data;
-			this.workorderForm.WORKORDER_PROJECTList = res.data.WORKORDER_PROJECTList;
-			this.workorderForm.WORKORDER_CONTRACTList = res.data.WORKORDER_CONTRACTList;
-			this.show = true;
+			console.log(111);
+			console.log(res.data);			
+			if(res.data.resp_code == 0) {
+				this.dialogProduct = true;
+			}else if(res.data.resp_code == 999){
+				this.$message({
+					message: res.data.resp_msg,
+					type: 'warning'
+				});
+				this.dialogProduct = false;
+			}
 		}).catch((err) => {
 			this.$message({
 				message: '网络错误，请重试',
@@ -154,19 +160,19 @@
 			for(var i = 0;i<this.selMenu.length;i++){
 				console.log(this.selMenu[i]=='');
 				if(this.selMenu[i].P_NUM != ''){
-					this.WORKORDER_PROJECTLISTID.push(this.selMenu[i].ID.toString());
+					this.WORKORDER_PROJECTLISTID.push(this.selMenu[i].ID);
 				}else{
-					this.WORKORDER_CONTRACTLISTID.push(this.selMenu[i].ID.toString());
+					this.WORKORDER_CONTRACTLISTID.push(this.selMenu[i].ID);
 				}
 			}
 			var data = {
 				"WORKORDERID":this.workorderForm.ID.toString(),
-				"WORKORDER_PROJECTLISTID":this.WORKORDER_PROJECTLISTID,
-				"WORKORDER_CONTRACTLISTID":this.WORKORDER_CONTRACTLISTID
+				"WORKORDER_PROJECTLISTID":this.WORKORDER_PROJECTLISTID.toString(','),
+				"WORKORDER_CONTRACTLISTID":this.WORKORDER_CONTRACTLISTID.toString(',')
 			};
 			var url = this.basic_url +'/api-apps/app/workorder/operate/subtask';
 			console.log(url);
-			this.$axios.post(url,data).then((res) => {
+			this.$axios.get(url,data).then((res) => {
 				console.log(res);
 				if(res.data.resp_code == 0) {
 					this.$message({

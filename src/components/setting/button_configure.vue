@@ -214,8 +214,8 @@
 				ismin: true,
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
 				searchList: { //点击高级搜索后显示的内容
-					menuId:'',
 					name: '',
+					menuId:''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -486,9 +486,9 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-
+					
 					name:this.searchList.name,
-					menuId:this.searchList.menuId,
+					menuId:this.searchList.menuId
 				}
 				var url = this.basic_url + '/api-user/permissions';
 				this.$axios.get(url, {

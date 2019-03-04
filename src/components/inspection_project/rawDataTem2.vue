@@ -224,7 +224,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				this.$axios.get(this.basic_url + '/api-apps/app/rawDataTem2?DEPTID=' + this.parentIds, {
+				this.$axios.get(this.basic_url + '/api-apps/app/rawDataTem?DEPTID=' + this.parentIds, {
 					params: data
 				}).then((res) => {
 					// console.log(this.parentIds);

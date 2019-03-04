@@ -180,9 +180,12 @@
 									</el-row>
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="IP地址" prop="ipaddress" label-width="100px">
+											<!-- <el-form-item label="IP地址" prop="ipaddress" label-width="100px">
 												<el-input v-model="user.ipaddress" :disabled="noedit"></el-input>
-											</el-form-item>
+											</el-form-item> -->
+											<button type="button" class="btn btn-blue button-margin" @click="configuration">
+								    			<i class="icon-edit"></i>权限设置
+											</button>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="MAC地址" prop="macaddress" label-width="100px">
@@ -766,6 +769,10 @@
 					isEditing: true
 				};
 				this.user.ips.push(obj);
+			},
+			//权限配置
+			configuration(){
+				
 			},
 			//刪除新建行
 			deleteRow(index, row, listName){

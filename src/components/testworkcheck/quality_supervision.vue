@@ -258,7 +258,7 @@
 			},
 			//查看
 			 view(data) {
-				this.$refs.qualitysup.view(data);
+				this.$refs.qualitysup.view(data.ID);
 			},
 			//高级查询
 			modestsearch() {
@@ -439,17 +439,19 @@
 					} else {
 						this.loadSign = true
 					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+					console.log(res);
+					this.USESEAL=res.data.data;
+					// this.commentArr[this.page.currentPage] = res.data.data
+					// let newarr = []
+					// for(var i = 1; i <= totalPage; i++) {
+					// 	if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
 
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.USESEAL = newarr;
+					// 		for(var j = 0; j < this.commentArr[i].length; j++) {
+					// 			newarr.push(this.commentArr[i][j])
+					// 		}
+					// 	}
+					// }
+					// this.USESEAL = newarr;
 					this.loading = false;
 				}).catch((wrong) => {})
 			},

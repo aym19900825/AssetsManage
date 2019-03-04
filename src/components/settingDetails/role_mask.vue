@@ -24,7 +24,7 @@
 									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="角色编码" prop="code">
-												<el-input v-model="roleList.code" :disabled="noedit"></el-input>
+												<el-input v-model="roleList.code" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">

@@ -1663,6 +1663,13 @@
 			//委托单位
 			appendname(value){		
 				this.dataInfo.V_NAME = value;//名称
+				if(this.dataInfo.CHECK_PROXY_CONTRACTList == null || this.dataInfo.CHECK_PROXY_CONTRACTList==undefined||this.dataInfo.CHECK_PROXY_CONTRACTList==''){
+
+				}else{//更新子表委托单位
+					for(var i = 0;i<this.dataInfo.CHECK_PROXY_CONTRACTList.length;i++){
+						this.dataInfo.CHECK_PROXY_CONTRACTList[i].V_NAME = value;
+					}
+				}
 			},
 			appendadd(value){
 				this.dataInfo.V_ADDRESS=value;

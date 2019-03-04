@@ -1602,13 +1602,8 @@
 			//更改样品数量
 			handleChangeQuality(value) {
 				console.log(value);
-			},
-			//信息状态 End
-   			judge(data) {
-				return data.STATUS ? '活动' : '不活动'
-			},
-   			
-            //刪除新建行
+			},	
+      //刪除新建行
 			deleteRow(index, row, listName){
 				console.log(row);
 				var TableName = '';

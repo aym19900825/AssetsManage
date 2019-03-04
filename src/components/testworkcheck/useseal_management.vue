@@ -290,7 +290,7 @@
 				this.requestData();
 			},
 			//搜索
-			searchinfo(index) {
+			searchinfo() {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
 				this.requestData();
@@ -338,12 +338,13 @@
 					});
 					return;
 				} else {
-					this.$refs.usesealmask.detail(this.selUser[0]);
+					this.$refs.usesealmask.detail(this.selUser[0].ID);
 				}
 			},
 			//查看
 			 view(data) {
-				this.$refs.usesealmask.view(data);
+				 console.log(data.ID);
+				this.$refs.usesealmask.view(data.ID);
 			},
 			//高级查询
 			modestsearch() {
@@ -479,15 +480,6 @@
 			Printing() {
 
 			},
-			// 配置关系
-			Configuration() {
-				this.$router.push({
-					path: '/inspection_project'
-				});
-			},
-			judge(data) {
-				data.STATUS = data.STATUS == "1" ? '活动' : '不活动'
-			},
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -499,7 +491,7 @@
 			SelChange(val) {
 				this.selUser = val;
 			},
-			requestData(index) {
+			requestData() {
 				this.loading = true;
 				var data = {
 					page: this.page.currentPage,
@@ -513,26 +505,27 @@
 				var url = this.basic_url + '/api-apps/app/sealUse';
 				this.$axios.get(url, {
 					params: data
-				}).then((res) => {					
+				}).then((res) => {	
+					console.log(res);				
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
 					if(this.page.currentPage >= totalPage) {
 						this.loadSign = false
 					} else {
-						this.loadSign = true
+						this.loadSign = true;
 					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+					this.USESEAL = res.data.data;
+					// let newarr = []
+					// for(var i = 1; i <= totalPage; i++) {
+					// 	if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
 
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.USESEAL = newarr;
+					// 		for(var j = 0; j < this.commentArr[i].length; j++) {
+					// 			newarr.push(this.commentArr[i][j])
+					// 		}
+					// 	}
+					// }
+					// this.USESEAL = newarr;
 					this.loading = false;
 				}).catch((wrong) => {})
 			},

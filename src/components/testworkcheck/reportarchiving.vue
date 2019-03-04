@@ -328,7 +328,8 @@
 			},
 			//查看
 			 view(data) {
-				this.$refs.usesealmask.view(data);
+				 console.log(data);
+				this.$refs.usesealmask.view(data.ID);
 			},
 			//高级查询
 			modestsearch() {

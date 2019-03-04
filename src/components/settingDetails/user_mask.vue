@@ -213,6 +213,13 @@
 													<i class="icon-add"></i>
 													<font>新建行</font>
 												</el-button>
+												<form method="post" id="file" action="" enctype="multipart/form-data" style="float: right;margin-left: 10px;">
+													<el-button type="primary" size="mini" round class="a-upload">
+														<i class="el-icon-upload2"></i>
+														<font>上传</font>
+														<input id="excelFile" type="file" name="uploadFile" @change="upload"/>
+													</el-button>
+												</form>
 											</div>
 											<!-- <el-form :label-position="labelPosition" :rules="rules"> -->
 												<el-table :header-cell-style="rowClass" :fig="true" :data="user.qualifications" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.qualifications', order: 'descending'}">
@@ -242,6 +249,11 @@
 															</el-form-item>
 														</template>
 													</el-table-column>
+													<el-table-column prop="FILESIZE" label="附件大小" sortable width="120px" v-if="!viewtitle">
+														<template slot-scope="scope">
+															<span v-if="!!scope.row.FILESIZE">{{scope.row.FILESIZE+'M'}}</span>
+														</template>
+													</el-table-column>
 													<el-table-column prop="c_date" label="资质有效期" sortable width="200px">
 														<template slot-scope="scope">
 															<el-form-item :prop="'qualifications.'+scope.$index + '.c_date'">
@@ -251,6 +263,7 @@
 															</el-form-item>
 														</template>
 													</el-table-column>
+													
 													<!-- <el-table-column prop="enterby" label="录入人" sortable width="120px">
 														<template slot-scope="scope">
 															<el-form-item :prop="'qualifications.'+scope.$index + '.enterbyName'">
@@ -462,6 +475,7 @@
 
 <script>
 	import Config from '../../config.js'
+	import { Loading } from 'element-ui'
 	export default {
 		name: 'masks',
 		props: {
@@ -487,6 +501,7 @@
 		     };
 			return {
 				basic_url: Config.dev_url,
+				file_url: Config.file_url,
 				user: {
 					status: '1',
 					roleId: [],
@@ -852,6 +867,12 @@
 					this.user.createbyName = res.data.nickname;
 					this.user.enterby = res.data.id
 					this.user.enterbyName = res.data.nickname;
+					this.docParam = {
+						username: res.data.username,
+						userid:  res.data.id,
+						deptid: res.data.deptId,
+						deptfullname: res.data.deptName,
+					};
 					var date = new Date();
 					this.user.createTime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err) => {
@@ -894,6 +915,12 @@
 
 				this.$axios.get(usersUrl, {}).then((res) => {
 					this.user.changeby = res.data.nickname;
+					this.docParam = {
+						username: res.data.username,
+						userid:  res.data.id,
+						deptid: res.data.deptId,
+						deptfullname: res.data.deptName,
+					};
 					var date = new Date();
 					this.user.changedate = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
 				}).catch((err) => {
@@ -1141,6 +1168,72 @@ if(typeof(this.user.roleId) != 'undefind'&&this.user.roleId != null&&this.user.r
 						done();
 					})
 					.catch(_ => {});
+			},
+			upload(e){
+				var list = this.user.qualifications || [];
+				var editList = [];
+				for(let i=0; i<list.length; i++){
+					if(list[i].isEditing){
+						editList.push(i);
+					}
+				}
+				if(editList.length > 1){
+					this.$message({
+						message: '不可同时编辑多条数据',
+						type: 'error'
+					});
+					return;
+				}
+				if(editList.length == 0){
+					this.$message({
+						message: '请选择要上传文件的数据',
+						type: 'error'
+					});
+					return;
+				}
+				var formData = new FormData();
+				var loading;
+				loading = Loading.service({
+					fullscreen: true,
+					text: '拼命上传中...',
+					background: 'rgba(F,F, F, 0.8)'
+				});
+				// this.$emit('showLoading');
+				formData.append('files', document.getElementById('excelFile').files[0]);
+				var config = {
+					//添加请求头
+					headers: { "Content-Type": "multipart/form-data" },
+					//添加上传进度监听事件
+					onUploadProgress: e => {
+						var completeProgress = ((e.loaded / e.total * 100) | 0) + "%";
+						this.progress = completeProgress;
+					}
+				};
+				var url = this.file_url + '/file/uploadfile?userid=' + this.docParam.userid 
+						+ '&username=' + this.docParam.username
+						+ '&deptid=' + this.docParam.deptid
+						+ '&deptfullname=' + this.docParam.deptfullname
+						+ '&recordid=1&appname=客户管理&appid=2';
+				this.$axios.post(url, formData, config
+				).then((res)=>{
+					loading.close();
+					if(res.data.code == 0){
+						this.$message({
+							message: res.data.message,
+							type: 'error'
+						});
+					}else{
+						this.$message({
+							message: '文件已成功上传至服务器',
+							type: 'success'
+						});
+						var index = editList[0];
+						this.user.qualifications[index].FILEID = res.data.fileid;
+						this.user.qualifications[index].FILESIZE = res.data.filesize;
+						this.user.qualifications[index].FILEPATH = res.data.webUrl;
+						this.$set(this.user.qualifications,index,this.user.qualifications[index]);
+					}
+				})
 			}
 
 		},
@@ -1153,4 +1246,15 @@ if(typeof(this.user.roleId) != 'undefind'&&this.user.roleId != null&&this.user.r
 
 <style scoped>
 	@import '../../assets/css/mask-modules.css';
+	.a-upload input{
+		position: absolute;
+		font-size: 5px;
+		right: 0px;
+		top: 0;
+		opacity: 0;
+		filter: alpha(opacity=0);
+		cursor: pointer;
+		width: 70px;
+		cursor: pointer;
+	}
 </style>

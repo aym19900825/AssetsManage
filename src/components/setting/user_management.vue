@@ -413,21 +413,7 @@
 				};
 				this.requestData();
 			},
-			//请求页面的button接口
-		    getbutton(childByValue){
-		    	console.log(childByValue);
-		    	var data = {
-					menuId: childByValue.id,
-					roleId: this.$store.state.roleid,
-				};
-				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
-				this.$axios.get(url, {params: data}).then((res) => {
-					console.log(res);
-					this.buttons = res.data;
-					
-				}).catch((wrong) => {})
-
-		    },
+			
 		    //请求点击
 		    getbtn(item){
 		    	if(item.name=="添加"){
@@ -437,15 +423,15 @@
 		    	}else if(item.name=="高级查询"){
 		    	 this.modestsearch();
 		    	}else if(item.name=="活动"){
-		    		this.unfreeze();
+		    	 this.unfreeze();
 		    	}else if(item.name=="不活动"){
-		    		this.freezeAccount();
+		    	 this.freezeAccount();
 		    	}else if(item.name=="删除"){
-		    		this.deluserinfo();
+		    	 this.deluserinfo();
 		    	}else if(item.name=="彻底删除"){
-		    		this.physicsDel();
+		    	 this.physicsDel();
 		    	}else if(item.name=="重置密码"){
-		    		this.resetPwd();
+		    	 this.resetPwd();
 		    	}
 		    },
 			//添加用戶
@@ -856,7 +842,27 @@
         		console.log(childValue);
         		this.$refs.navsheader.showClick(childValue);
         		this.getbutton(childValue);
-      		},
+			  },
+			  //请求页面的button接口
+		    getbutton(childByValue){
+		    	console.log(childByValue);
+		    	var data = {
+					menuId: childByValue.id,
+					roleId: this.$store.state.roleid,
+				};
+				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
+				this.$axios.get(url, {params: data}).then((res) => {
+					console.log(res);
+					this.buttons = res.data;
+					
+				}).catch((wrong) => {
+					this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+				})
+
+		    },
 		},
 		beforeMount() {
 			

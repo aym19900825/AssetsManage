@@ -664,10 +664,10 @@
 											</el-table>
 										</el-tab-pane>
 										<el-tab-pane label="检验报告" name="sixth">
-											<el-table :data="workorderForm.WORKORDER_REPORT_TEMPLATEList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.INSPECT_PROXY_BASISList', order: 'descending'}">
+											<el-table :data="workorderForm.WORKORDER_REPORTList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.WORKORDER_REPORTList', order: 'descending'}">
 												<el-table-column prop="REPORTNUM" label="报告编号" sortable width="150px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'WORKORDER_REPORT_TEMPLATEList.'+scope.$index + '.REPORTNUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<el-form-item :prop="'WORKORDER_REPORTList.'+scope.$index + '.REPORTNUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REPORTNUM" placeholder="请输入">
 															   <el-button slot="append" icon="el-icon-search"></el-button>
 														</el-input>
@@ -676,19 +676,9 @@
 													</template>
 												</el-table-column>
 
-												<!-- <el-table-column prop="PROXYNUM" label="委托书编号" sortable width="120px">
-													<template slot-scope="scope">
-														<el-form-item :prop="'WORKORDER_REPORTList.'+scope.$index + '.PROXYNUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROXYNUM" placeholder="请输入">
-														</el-input>
-														<span v-else="v-else">{{scope.row.PROXYNUM}}</span>
-														</el-form-item>
-													</template>
-												</el-table-column> -->
-
 												<el-table-column prop="REPORTNAME" label="报告名称" sortable>
 													<template slot-scope="scope">
-														<el-form-item :prop="'WORKORDER_REPORT_TEMPLATEList.'+scope.$index + '.REPORTNAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<el-form-item :prop="'WORKORDER_REPORTList.'+scope.$index + '.REPORTNAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REPORTNAME" placeholder="请输入">	
 														</el-input>
 														<span v-else="v-else">{{scope.row.REPORTNAME}}</span>
@@ -696,26 +686,26 @@
 													</template>
 												</el-table-column>
 												
-												<el-table-column prop="PREVIEW" label="预览" sortable width="120px">
+												<!-- <el-table-column prop="PREVIEW" label="预览" sortable width="120px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'WORKORDER_REPORT_TEMPLATEList.'+scope.$index + '.PREVIEW'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<el-form-item :prop="'WORKORDER_REPORTList.'+scope.$index + '.PREVIEW'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PREVIEW" placeholder="请输入">
 														</el-input>
 														<span v-else="v-else">{{scope.row.PREVIEW}}</span>
 														</el-form-item>
 													</template>
-												</el-table-column>
+												</el-table-column> -->
 
 												<el-table-column prop="VERSION" label="版本" sortable width="120px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'WORKORDER_REPORT_TEMPLATEList.'+scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<!-- <el-form-item :prop="'WORKORDER_REPORTList.'+scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" > -->
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入">
 														</el-input>
 														<span v-else="v-else">{{scope.row.MOVERSIONDEL}}</span>
-														</el-form-item>
+														<!-- </el-form-item> -->
 													</template>
 												</el-table-column>
-												<el-table-column fixed="right" label="操作" width="120px">
+												<el-table-column fixed="right" label="操作" width="150px">
 													<template slot-scope="scope">
 														 
 													  <el-button title="编辑" type="text" size="small">
@@ -728,6 +718,9 @@
 														<i class="icon-arrow-down-circle"></i>
 													  </el-button>
 													  <el-button title="查看" type="text" size="small">
+														<i class="icon-file-text"></i>
+													  </el-button>
+													  <el-button title="确定生成报告" type="text" size="small" @click="admirereport">
 														<i class="icon-file-text"></i>
 													  </el-button>
 													</template>
@@ -1043,7 +1036,7 @@
 					WORKORDER_DATA_TEMPLATEList:[],//原始数据模板
 					WORKORDER_REPORT_TEMPLATEList:[],//报告模板
 					WORKORDER_ASSETList:[],//检验检测设备
-					WORKORDER_REPORT_TEMPLATEList:[],//报告模板
+					WORKORDER_REPORTList:[],//报告
 					WORKORDER_CONTRACTList:[],//分包项目
 				},
 				basic_url: Config.dev_url,
@@ -1123,6 +1116,7 @@
 				maingroup:[],//专业组
 				docParm: {},
 				reportname:'',//生成报告名称
+				workorderreportid:'',//存放生成报告id
 			};
 		},
 		methods: {
@@ -1305,6 +1299,7 @@
 					WORKORDER_DATA_TEMPLATEList:[],//原始数据模板
 					WORKORDER_ASSETList:[],//检验检测设备
 					WORKORDER_REPORT_TEMPLATEList:[],//报告模板
+					WORKORDER_REPORTList:[],//报告
 					WORKORDER_CONTRACTList:[],//分包项目					
 				};
 			},
@@ -1387,6 +1382,17 @@
 					this.dialogVisible2 = false;
 					this.getuser();
 				}
+			},
+			//主任务单时，确定报告按钮
+			admirereport(){
+				console.log(123456);
+				var url = this.basic_url + '/api-apps/app/workorder/operate/createreportapprove?workorderreportid='+this.workorderForm.WORKORDER_REPORTList[0].ID;
+				this.$axios.get(url, {
+
+				}).then((res) => {
+					console.log(res);
+					//成功后给出提示信息并隐藏按钮
+				});
 			},
 			getCompany() {
 				var type = "2";
@@ -1854,7 +1860,7 @@
 						message: '请新建至少两条数据',
 						type: 'warning'
 					});
-				}else if(this.workorderForm.WORKORDER_REPORT_TEMPLATEList.length>0){
+				}else if(this.workorderForm.WORKORDER_REPORTList.length>0){
 					this.$message({
 						message: '检验报告已经生成，请勿重复生成',
 						type: 'warning'
@@ -1880,15 +1886,16 @@
 						console.log(this.reportname);
 						var url = this.basic_url +"/api-merge/merge/workorder/MergeWord?filePath="+ids+"&fileName="+this.reportname+"&proxynum="+this.workorderForm.PROXYNUM+"&wonum="+this.workorderForm.WONUM+"&deptfullname="+this.workorderForm.DEPTIDDesc+"&recordid="+this.workorderForm.ID;
 						this.$axios.post(url, {}).then((res) => {
+							this.workorderreportid = res.data.datas.id;
 							console.log(res);
 							var obj = {
 								REPORTNUM:res.data.datas.reportnum,
 								REPORTNAME:res.data.datas.reportname,
-								PREVIEW:'',
+								// PREVIEW:'',
 								VERSION:res.data.datas.version,
 							}
-							this.workorderForm.WORKORDER_REPORT_TEMPLATEList.push(obj);
-							console.log(this.workorderForm.WORKORDER_REPORT_TEMPLATEList);
+							this.workorderForm.WORKORDER_REPORTList.push(obj);
+							console.log(this.workorderForm.WORKORDER_REPORTList);
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '生成成功',

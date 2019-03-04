@@ -87,7 +87,11 @@
 				<!-- 表格 End-->
 				<div slot="footer">
 			       <el-button type="primary" @click="addbasis">确 定</el-button>
+<<<<<<< HEAD
 			       <el-button @click="DialogClose">取 消</el-button>
+=======
+			       <el-button @click="resetBasisInfo">取 消</el-button>
+>>>>>>> d4e4171ce15f9472a3d2554cc4fb4b86b60c641f
 			    </div>
 			</el-dialog>
 			<!-- 检测项目与要求 End -->
@@ -124,7 +128,10 @@
         },
         projectList: [],//检测项目与要求
 		selectData:[],
-		basisnum:''//检测依据传递过来的请求数据参数
+		basisnum:'',//检测依据传递过来的请求数据参数
+		projectnum:'',//检测依据参数
+		projecttable:[],//已选的检测项目
+		projectpnums:'',//已选的检测项目拼接的字符串
     }
   },
 
@@ -184,10 +191,16 @@
 	close() {
 		this.dialogProduct = false;
     },
-    projectlead(basisnum){
-		this.basisnum = basisnum;
+    projectlead(value){
+		this.projectnum = value[0];
+		this.projecttable = value[1];
+		var projectpnum = [];
+		for(var i = 0;i<this.projecttable.length;i++){
+			projectpnum.push(this.projecttable[i].P_NUM);
+		}
+		this.projectpnums = projectpnum.toString(',');
+		this.requestData();//渲染数据
 		this.dialogVisible = true;
-		this.requestData();
     },
     addbasis(){
         var selData = this.selUser;
@@ -225,6 +238,7 @@
 			this.$emit('testprojectnum',basisnums);
 			this.$emit('testprojectid',basisids);
 			this.$emit('testprojectprover',provers);
+<<<<<<< HEAD
             // this.dialogVisible = false;
 			this.requestData();
 			this.ResetDatasNew();//调用ResetDatasNew函数
@@ -238,6 +252,17 @@
 		this.projectList = [];//列表数据置空
 		this.page.currentPage = 1;//页码重新传值
 		this.page.pageSize = 10;//页码重新传值
+=======
+            this.resetBasisInfo();
+        }
+	},
+	resetBasisInfo(){//重置弹出框相关信息
+		this.dialogVisible = false;
+		this.resetbtn();//重置高级搜索
+		this.projectList = [];//清空表格渲染数据
+		this.page.currentPage = 1;//页码信息重置
+		this.page.pageSize = 10;//页码信息重置
+>>>>>>> d4e4171ce15f9472a3d2554cc4fb4b86b60c641f
 	},
     loadMore () {
 	   if (this.loadSign) {
@@ -273,8 +298,9 @@
             P_NAME: this.searchList.P_NAME,
             VERSION: this.searchList.VERSION,
             STATUS: this.searchList.STATUS,
-        };
-        this.$axios.get(this.basic_url +'/api-apps/app/inspectionPro2?S_NUM_where_in='+this.basisnum, {
+		};
+		console.log(this.basic_url +'/api-apps/app/inspectionPro2?S_NUM_where_in='+this.projectnum+'&P_NUM_where_not_in='+this.projectpnums);
+        this.$axios.get(this.basic_url +'/api-apps/app/inspectionPro2?S_NUM_where_in='+this.projectnum+'&P_NUM_where_not_in='+this.projectpnums, {
         
         }).then((res) => {
             this.page.totalCount = res.data.count;	

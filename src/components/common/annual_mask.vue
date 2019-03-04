@@ -132,15 +132,21 @@
 													<div @click="download"><i class="icon-download-cloud"></i>下载模版</div>
 												</el-dropdown-item>
 												<el-dropdown-item>
-													<el-upload ref="upload" class="upload" :action="uploadUrl" :limit=1 multiple method:="post" :file-list="fileList">
-														<i class="icon-upload-cloud"></i> 上传
+													<el-upload
+													ref="upload"
+													class="upload"
+													:action="uploadUrl()"
+													:on-success="fileSuccess"
+													:limit=1
+													multiple
+													method:="post">
+														<div>上传</div>
 													</el-upload>
 												</el-dropdown-item>
 											</el-dropdown-menu>
 										</el-dropdown>
-
-										<el-button type="primary" size="mini" round v-show="!viewtitle" @click="exportData" style="margin-left: 10px;">
-											<i class="icon-inventory-line-callout"></i>
+										<el-button type="primary" size="mini" round v-show="!addtitle" @click="exportData" style="margin-left: 10px;">
+											<i class="icon-upload-cloud"></i>
 											<font>导出</font>
 										</el-button>
 										<el-button type="success" size="mini" round  @click="addfield1" v-show="!viewtitle">
@@ -923,11 +929,11 @@
 					xhr.send();
 			},
 			uploadUrl(){
-                var url = this.basic_url +'/api-apps/app/workplan/importExc/WORLPLANLINE?access_token='+sessionStorage.getItem('access_token');
-                return url;
+				var url = this.basic_url +'/api-apps/app/workplan/importExc?table=WORLPLANLINE&access_token='+sessionStorage.getItem('access_token');
+				return url;
             },
 			exportData() {
-           		var url = this.basic_url + '/api-apps/app/workplan/exportExc/WORLPLANLINE?access_token='+sessionStorage.getItem('access_token');
+           		var url = this.basic_url + '/api-apps/app/workplan/exportExc?table=WORLPLANLINE&WP_NUM_wheres='+this.WORKPLAN.WP_NUM+'&access_token='+sessionStorage.getItem('access_token');
           		var xhr = new XMLHttpRequest();
             	xhr.open('POST', url, true);
             	xhr.responseType = "blob";
@@ -1045,6 +1051,7 @@
 					this.ResetDatasNew3();//调用ResetDatasNew函数
 				}
 			},
+<<<<<<< HEAD
 			DialogClose3(){//点击取消按钮
 				this.ResetDatasNew3();//调用ResetDatasNew函数
 			},
@@ -1053,6 +1060,10 @@
 				this.customerList = [];//列表数据置空
 				this.page.currentPage = 1;//页码重新传值
 				this.page.pageSize = 10;//页码重新传值
+=======
+			fileSuccess(){
+				this.detail(this.WORKPLAN.ID);
+>>>>>>> d4e4171ce15f9472a3d2554cc4fb4b86b60c641f
 			},
 			//删除计划列表
 			delPlan(index,row,TableName,delList){
@@ -1681,7 +1692,7 @@
 				this.assignshow = true;
 				this.$axios.get(this.basic_url +'/api-apps/app/workplan/' + dataid, {}).then((res) => {
 					for(var i = 0; i<res.data.WORLPLANLINEList.length; i++){
-							res.data.WORLPLANLINEList[i].isEditing = false;
+						res.data.WORLPLANLINEList[i].isEditing = false;
 					}
 					res.data.PROP_UNIT = Number(res.data.PROP_UNIT);
 					this.WORKPLAN = res.data;
@@ -1752,7 +1763,7 @@
 				this.noviews = false;
 				this.edit = true;
 				this.noedit = true;
-
+				this.getCompany();
 				var _this = this;
 				setTimeout(function(){
 					_this.docParm.model = 'view';
@@ -1770,6 +1781,7 @@
 					// 		this.WORKPLAN.PROP_UNIT=this.selectData[j].fullname
 					// 	}
 					// }
+					res.data.PROP_UNIT = Number(res.data.PROP_UNIT);
 					this.worlplanlist = res.data.WORLPLANLINEList;
 					var worlplanlist = res.data.WORLPLANLINEList;
 					for(var i=0, len=worlplanlist.length; i<len; i++){
@@ -1779,6 +1791,16 @@
 					this.basisList = res.data.WORLPLANLINEList.length > 0 ? res.data.WORLPLANLINEList[0].WORLPLANLINE_BASISList : [];
 					this.proTestList = res.data.WORLPLANLINEList.length > 0 ? res.data.WORLPLANLINEList[0].WORLPLANLINE_PROJECTList : [];
 					this.show = true;
+
+					var type = "2";
+					var url = this.basic_url + '/api-user/depts/treeByType';
+					this.$axios.get(url, {
+						params: {
+							type: type
+						},
+					}).then((res) => {
+						this.selectData = res.data;
+					});
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',

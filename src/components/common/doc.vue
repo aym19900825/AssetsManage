@@ -114,11 +114,10 @@ export default {
             this.tipSaveShow = false;
         },
         getFilelen(){
-        	return this.fileList.length;
+        	return this.doc.length;
         },
         saveMain(){
             var _this = this;
-            console.log('saveMain');
             this.$emit('saveParent','docUpload');
             this.reset();
         },

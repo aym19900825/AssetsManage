@@ -15,7 +15,10 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-							<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+							<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+								<i :class="item.icon"></i>{{item.name}}
+							</button>
+							<!-- <button type="button" class="btn btn-green" @click="openAddMgr" id="">
 	                        	<i class="icon-add"></i>添加
 	              			</button>
 							<button type="button" class="btn btn-blue button-margin" @click="modify">
@@ -26,7 +29,29 @@
 							</button>
 							<button type="button" class="btn btn-red button-margin" @click="physicsDel">
 							    <i class="icon-trash"></i>彻底删除
-							</button>
+							</button> -->
+
+							<!-- <button type="button" class="btn btn-green" v-if="">
+	                        	<i class="icon-inventory-line-callin"></i>导入
+	              			</button>
+
+							<el-dropdown size="small" v-else>
+								<el-button round type="primary" size="mini">
+									<i class="icon-inventory-line-callin"></i> 导入<i class="el-icon-arrow-down el-icon--right"></i>
+								</el-button>
+
+								<el-dropdown-menu slot="dropdown">
+									<el-dropdown-item>
+										<div @click="download"><i class="icon-download-cloud"></i>下载模版</div>
+									</el-dropdown-item>
+									<el-dropdown-item>
+										<el-upload ref="upload" class="upload" :action="uploadUrl" :limit=1 multiple method:="post" :file-list="fileList">
+											<i class="icon-upload-cloud"></i> 上传
+										</el-upload>
+									</el-dropdown-item>
+								</el-dropdown-menu>
+							</el-dropdown> -->
+
 							<el-dropdown size="small" split-button type="primary" style="margin-top:1px;">
     								导入
 								<el-dropdown-menu slot="dropdown">
@@ -39,7 +64,7 @@
 							          ref="upload"
 							          class="upload"
 							          :action="uploadUrl()"
-							          :on-success="handleSuccess"
+							          :on-success="fileSuccess"
 							          :limit=1
 							          multiple
 							          method:="post"
@@ -50,7 +75,7 @@
 						  		</el-dropdown-menu>
 							</el-dropdown>
 					
-							<button type="button" class="btn btn-primarys button-margin" @click="exportData">
+							<!-- <button type="button" class="btn btn-primarys button-margin" @click="exportData">
 							    <i class="icon-download-cloud"></i>导出
 							</button>
 							<button type="button" class="btn btn-primarys button-margin" @click="Printing">
@@ -66,7 +91,7 @@
 					    		<i class="icon-search"></i>高级查询
 					    		<i class="icon-arrow1-down" v-show="down"></i>
 					    		<i class="icon-arrow1-up" v-show="up"></i>
-							</button>
+							</button> -->
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -274,12 +299,17 @@
 				},
 				CATEGORY: {},//修改子组件时传递数据
 				selectData: [],
+				buttons:[],
 			}
 		},
 		methods: {
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
+			},
+			fileSuccess(){
+				this.page.currentPage = 1;
+				this.requestData();
 			},
 			//机构值
 			getCompany() {
@@ -381,6 +411,28 @@
 					this.$refs['CATEGORY'].resetFields();
 				}
 			},
+			//请求点击
+		    getbtn(item){
+		    	if(item.name=="添加"){
+		         this.openAddMgr();
+		    	}else if(item.name=="修改"){
+		    	 this.modify();
+		    	}else if(item.name=="彻底删除"){
+		    	 this.physicsDel();
+		    	}else if(item.name=="高级查询"){
+		    	 this.modestsearch();
+		    	}else if(item.name=="导入"){
+		    	 this.download();
+		    	}else if(item.name=="删除"){
+		    	 this.deluserinfo();
+		    	}else if(item.name=="配置关系"){
+		    	 this.Configuration();
+		    	}else if(item.name=="报表"){
+			     this.reportdata();
+				}else if(item.name=="打印"){
+				 this.Printing();
+				}
+		    },
 			//添加类别
 			openAddMgr() {
 				this.reset();
@@ -638,8 +690,28 @@
 			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
-        		this.$refs.navsheader.showClick(childValue);
-      		}
+				this.$refs.navsheader.showClick(childValue);
+				this.getbutton(childValue);
+			},
+			  //请求页面的button接口
+		    getbutton(childByValue){
+		    	console.log(childByValue);
+		    	var data = {
+					menuId: childByValue.id,
+					roleId: this.$store.state.roleid,
+				};
+				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
+				this.$axios.get(url, {params: data}).then((res) => {
+					console.log(res);
+					this.buttons = res.data;
+					
+				}).catch((wrong) => {
+					this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+				})
+		    },
 		},
 		mounted() {
 			this.requestData();

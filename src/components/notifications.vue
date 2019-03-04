@@ -18,7 +18,10 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+									<i :class="item.icon"></i>{{item.name}}
+								</button>
+								<!-- <button type="button" class="btn btn-green" @click="openAddMgr" id="">
 	                        	<i class="icon-add"></i>添加
 	              			 </button>
 								<button type="button" class="btn btn-blue button-margin" @click="modify">
@@ -46,7 +49,7 @@
 					    		<i class="icon-search"></i>高级查询
 					    		<i class="icon-arrow1-down" v-show="down"></i>
 					    		<i class="icon-arrow1-up" v-show="up"></i>
-							</button>
+							</button> -->
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -368,20 +371,10 @@
 				},
 				treeData: [],
 				selectDept: [],
+				buttons:[],
 			}
 		},
 
-		mounted() {
-			// 获取浏览器可视区域高度
-			var _this = this;
-			var clientHeight = $(window).height() - 100; //document.body.clientWidth;
-			_this.$refs.homePagess.style.height = clientHeight + 'px';
-			window.onresize = function() {
-				var clientHeight = $(window).height() - 100;
-				_this.$refs.homePagess.style.height = clientHeight + 'px';
-			};
-
-		},
 		methods: {
 			//检验/检测方法类别
 			getType() {
@@ -464,6 +457,28 @@
 				this.page.pageSize = 20;
 				this.requestData();
 			},
+			//请求点击
+		    getbtn(item){
+		    	if(item.name=="添加"){
+		         this.openAddMgr();
+		    	}else if(item.name=="修改"){
+		    	 this.modify();
+		    	}else if(item.name=="彻底删除"){
+		    	 this.physicsDel();
+		    	}else if(item.name=="高级查询"){
+		    	 this.modestsearch();
+		    	}else if(item.name=="导出"){
+		    	 this.exportData();
+		    	}else if(item.name=="删除"){
+		    	 this.delinfo();
+		    	}else if(item.name=="导入"){
+		    	 this.importData();
+		    	}else if(item.name=="报表"){
+			     this.reportdata();
+				}else if(item.name=="发布"){
+				 this.releasebtn();
+				}
+		    },
 			//添加用戶
 			openAddMgr() {
 				this.$refs.child.visible();
@@ -834,10 +849,31 @@
 			formatter(row, column) {
 				return row.enabled;
 			},
-			childByValue: function(childValue) {
-				// childValue就是子组件传过来的值
+			childByValue:function(childValue) {
+        		// childValue就是子组件传过来的值
 				this.$refs.navsheader.showClick(childValue);
-			},
+				this.getbutton(childValue);
+			  },
+			    //请求页面的button接口
+		    getbutton(childByValue){
+		    	console.log(childByValue);
+		    	var data = {
+					menuId: childByValue.id,
+					roleId: this.$store.state.roleid,
+				};
+				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
+				this.$axios.get(url, {params: data}).then((res) => {
+					console.log(res);
+					this.buttons = res.data;
+					
+				}).catch((wrong) => {
+					this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+				})
+
+		    },
 
 		},
 		beforeMount() {

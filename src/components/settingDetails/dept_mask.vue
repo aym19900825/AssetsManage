@@ -40,19 +40,19 @@
 									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="机构序号" prop="step">
-												<el-input  v-model="adddeptForm.step">
+												<el-input  v-model="adddeptForm.step" :disabled="noedit">
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="机构编码" prop="code">
-												<el-input v-model="adddeptForm.code":disabled="edit">
+												<el-input v-model="adddeptForm.code" :disabled="edit">
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="机构名称" prop="fullname">
-												<el-input v-model="adddeptForm.fullname">
+												<el-input v-model="adddeptForm.fullname" :disabled="noedit">
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -61,20 +61,20 @@
 										<el-col :span="8">
 											<el-form-item label="上级机构" prop="parent">
 												<el-input v-model="adddeptForm.parent" :disabled="edit">
-													<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
+													<el-button slot="append" icon="el-icon-search" @click="getDept" :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="机构类型" prop="depttype">
-												<el-select v-model="adddeptForm.depttype" placeholder="请选择" style="width: 100%">
+												<el-select v-model="adddeptForm.depttype" placeholder="请选择" style="width: 100%" :disabled="noedit">
 													<el-option v-for="(data,index) in Selectsys_depttype" :key="index" :value="data.code" :label="data.name"></el-option>
 												</el-select>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="机构属性" prop="type">
-												<el-select v-model="adddeptForm.type" placeholder="请选择" style="width: 100%">
+												<el-select v-model="adddeptForm.type" placeholder="请选择" style="width: 100%" :disabled="noedit">
 													<el-option v-for="(data,index) in SelectDEPT_TYPE" :key="index" :value="data.code" :label="data.name"></el-option>
 												</el-select>
 											</el-form-item>
@@ -84,7 +84,7 @@
 										<el-col :span="8">
 											<el-form-item label="是否停用" prop="inactive">
 												<el-input v-if="stopcontent" v-model="adddeptForm.inactive" :disabled="edit"></el-input>
-												<el-select v-if="stopselect" v-model="adddeptForm.inactive" placeholder="请选择" style="width: 100%">
+												<el-select v-if="stopselect" v-model="adddeptForm.inactive" placeholder="请选择" style="width: 100%" :disabled="noedit">
 													<el-option v-for="item in stopoptions" :key="item.value" :label="item.label" :value="item.value">
 													</el-option>
 												</el-select>
@@ -92,12 +92,12 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="联系地址">
-												<el-input v-model="adddeptForm.address"></el-input>
+												<el-input v-model="adddeptForm.address" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="邮政编码">
-												<el-input v-model="adddeptForm.zipcode">
+												<el-input v-model="adddeptForm.zipcode" :disabled="noedit">
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -119,12 +119,12 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="电话" prop="telephone">
-												<el-input v-model="adddeptForm.telephone"></el-input>
+												<el-input v-model="adddeptForm.telephone" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="传真" prop="fax">
-												<el-input v-model="adddeptForm.fax">
+												<el-input v-model="adddeptForm.fax" :disabled="noedit">
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -132,14 +132,14 @@
 									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="邮箱" prop="email">
-												<el-input v-model="adddeptForm.email"></el-input>
+												<el-input v-model="adddeptForm.email" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row :gutter="30">
 										<el-col :span="24">
 											<el-form-item label="备注" prop="tips">
-												<el-input :rows="3" type="textarea" v-model="adddeptForm.tips" placeholder="请输入"></el-input>
+												<el-input :rows="3" type="textarea" v-model="adddeptForm.tips" placeholder="请输入" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -414,6 +414,18 @@
 					});
 				});
                  this.show = true;
+			},
+			view(){
+				this.addtitle = false;
+				this.modifytitle = false;
+				this.viewtitle = true;
+				this.modify = true;
+				this.edit = true;
+				this.noedit = true;
+				this.stopcontent = false;
+				this.stopselect = true;
+				this.personinfo = true;
+				this.show = true;
 			},
 			//获取负责人数据
 			getPerson(){

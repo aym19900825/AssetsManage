@@ -2,10 +2,14 @@
 <template>
 	<div>
 		<el-dialog :modal-append-to-body="false" title="报表" height="400px" :visible.sync="dialogReport" width="80%" >
-			<el-table :data="reportsList" border stripe  height="400px" style="width: 100%;" :default-sort="{prop:'reportsList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+			<el-table :data="reportsList" border stripe  height="360px" style="width: 100%;" :default-sort="{prop:'reportsList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore"
+			v-loading="loading" 
+			element-loading-text="加载中…"
+			element-loading-spinner="el-icon-loading"
+			element-loading-background="rgba(255, 255, 255, 0.9)">
 				<el-table-column type="selection" width="55" >
 				</el-table-column>
-				<el-table-column label="代码11122222" width="200" sortable prop="code">
+				<el-table-column label="代码" width="200" sortable prop="code">
 				</el-table-column>
 				<el-table-column label="报表名称" width="200" sortable prop="name">
 				</el-table-column>
@@ -23,8 +27,7 @@
 				<el-table-column label="录入时间" sortable prop="createdate">
 				</el-table-column>	
 				<el-table-column label="修改人" sortable prop="updateby">
-				</el-table-column>	
-			
+				</el-table-column>
 				<el-table-column label="修改日期" sortable prop="updatedate">
 				</el-table-column>	
 			
@@ -41,7 +44,7 @@
 			<!-- 表格 End-->
 			<span slot="footer" class="el-dialog__footer">
 		        <el-button type="primary" @click="determine">确 定</el-button>
-		        <el-button @click="dialogReport = false">取 消</el-button>
+		        <el-button @click="DialogClose">取 消</el-button>
 			</span>
 	</el-dialog>
 	</div>		
@@ -56,8 +59,9 @@
   data() {
     return {
 		basic_url: Config.dev_url,
-		reportsList: [],
+		loading: false,
 		loadSign:true,//加载
+		reportsList: [],
 		commentArr:{},
 		selUser: [],//接勾选的值
         dialogReport:false,
@@ -100,7 +104,6 @@
 		this.dialogReport = false;
 	},
   	visible() {
-  		console.log('youqu');
 		this.dialogReport = true;
   	},
   	loadMore () {
@@ -117,26 +120,28 @@
 	   }
 	 },
 	getreport(){
+		this.loading = true;
 		var url = this.basic_url + '/api-report/report';
 		this.$axios.get(url, {}).then((res) => {
 			this.reportsList = res.data.datas;
+			this.loading = false;
 			this.page.totalCount = res.data.count;
 		}).catch((wrong) => {
 			this.$message({
-					message: '网络错误，请重试',
-					type: 'error'
-				});
+				message: '网络错误，请重试',
+				type: 'error'
+			});
 		})	
 	},
 	determine(){
-		console.log(this.selUser);
+		// console.log(this.selUser);
 		if(this.selUser.length == 0){
 			this.$message({
 				message: '请选择数据',
 				type: 'warning'
 			});
 		}else{
-			this.close();
+			// this.close();
 			var reportId=[];
 			var reports=[];
 			for(var i=0;i<this.selUser.length;i++){			
@@ -148,10 +153,20 @@
 //			arr.push(reports);
 			this.$emit('reportid',reportId);
 			this.$emit('reports',reports);
+			this.ResetDatasNew();//调用ResetDatasNew函数
 		}
-	}
+	},
+	DialogClose(){//点击取消按钮
+		this.ResetDatasNew();//调用ResetDatasNew函数
+	},
+	ResetDatasNew(){//点击确定或取消按钮时重置数据20190303
+		this.dialogReport = false;//关闭弹出框
+		this.reportsList = [];//列表数据置空
+		this.page.currentPage = 1;//页码重新传值
+		this.page.pageSize = 10;//页码重新传值
+	},
 },
-mounted() {
+	mounted() {
 			this.getreport();
 		},
 }		

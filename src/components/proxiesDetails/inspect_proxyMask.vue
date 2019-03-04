@@ -644,7 +644,11 @@
 			</el-dialog>
 			<!-- 客户联系人 Begin -->
 			<el-dialog :modal-append-to-body="false" title="客户联系人" :visible.sync="dialogVisibleuser" width="80%" :before-close="handleClose">
-				<el-table :header-cell-style="rowClass" :data="CUSTOMER_PERSONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @selection-change="SelChange" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER_PERSONList', order: 'descending'}" v-loadmore="loadMore">
+				<el-table :header-cell-style="rowClass" :data="CUSTOMER_PERSONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @selection-change="SelChange" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER_PERSONList', order: 'descending'}" v-loadmore="loadMore"
+			v-loading="loading" 
+			element-loading-text="加载中…"
+			element-loading-spinner="el-icon-loading"
+			element-loading-background="rgba(255, 255, 255, 0.9)">
 					<el-table-column type="selection" width="55" fixed align="center">
 					</el-table-column>
 					<el-table-column label="联系人" sortable width="150px" prop="PERSON">
@@ -661,7 +665,7 @@
 				</el-pagination>
 				<span slot="footer" class="dialog-footer">
 			       <el-button type="primary" @click="addcusname">确 定</el-button>
-			       <el-button @click="dialogVisibleuser = false">取 消</el-button>
+			       <el-button @click="DialogClose">取 消</el-button>
 			    </span>
 			</el-dialog>
 			<!-- 客户联系人 End -->
@@ -792,6 +796,7 @@
            };
 			return {
 				approvingData:{},
+				loading: false,
 				loadSign:true,//加载
 				commentArr:{},
 				falg:false,//保存验证需要的
@@ -1810,6 +1815,7 @@
 				}
 			},
 			requestData(){
+				this.loading = true;
 				var data = {
 						page: this.page.currentPage,
 						limit: this.page.pageSize,
@@ -1819,6 +1825,7 @@
 						params: data
 					}).then((res) => {
 						this.CUSTOMER_PERSONList = res.data.CUSTOMER_PERSONList;
+						this.loading = false;
 					});
 					this.dialogVisibleuser = true;
 			},
@@ -1836,10 +1843,19 @@
 				}else{
 					this.dataInfo.V_PERSON = this.selval[0].PERSON;
 					this.dataInfo.V_PHONE = this.selval[0].PHONE;
-					this.dialogVisibleuser = false;
+					// this.dialogVisibleuser = false;
+					this.ResetDatasNew();//调用ResetDatasNew函数
 				}
 			},
-			
+			DialogClose(){//点击取消按钮
+				this.ResetDatasNew();//调用ResetDatasNew函数
+			},
+			ResetDatasNew(){//点击确定或取消按钮时重置数据20190303
+				this.dialogVisibleuser = false;//关闭弹出框
+				this.CUSTOMER_PERSONList = [];//列表数据置空
+				this.page.currentPage = 1;//页码重新传值
+				this.page.pageSize = 10;//页码重新传值
+			},
 			SelChange(val) {
 				this.selval = val;
 			},

@@ -142,18 +142,18 @@
 						<el-col :span="19" class="leftcont v-resize">
 							<!-- 表格 -->
 							<el-table :data="inspectList" 
-									  :header-cell-style="rowClass" 
-									  border 
-									  stripe 
-									  :height="fullHeight" 
-									  style="width: 100%;" 
-									  :default-sort="{prop:'inspectList', order: 'descending'}" 
-									  @selection-change="SelChange" 
-									  v-loadmore="loadMore"
-									  v-loading="loading"  
-									  element-loading-text="加载中…"
-    								  element-loading-spinner="el-icon-loading"
-    								  element-loading-background="rgba(255, 255, 255, 0.9)">
+								  :header-cell-style="rowClass" 
+								  border 
+								  stripe 
+								  :height="fullHeight" 
+								  style="width: 100%;" 
+								  :default-sort="{prop:'inspectList', order: 'descending'}" 
+								  @selection-change="SelChange" 
+								  v-loadmore="loadMore"
+								  v-loading="loading"  
+								  element-loading-text="加载中…"
+								  element-loading-spinner="el-icon-loading"
+								  element-loading-background="rgba(255, 255, 255, 0.9)">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="检测委托书编号" sortable width="160px" prop="PROXYNUM" v-if="this.checkedName.indexOf('检测委托书编号')!=-1">
@@ -231,6 +231,7 @@
 			return {
 				reportData:{},//报表的数据
 				loading: false,
+				loadSign: true, //加载
 				basic_url: Config.dev_url,
 				value: '',
 				options: [{
@@ -255,7 +256,6 @@
 				],
 				isShow: false,
 				ismin: true,
-				loadSign: true, //加载
 				commentArr: {},
 				checkedName: [
 					'检测委托书编号',

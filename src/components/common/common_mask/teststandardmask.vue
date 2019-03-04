@@ -62,7 +62,11 @@
 				</div>
 				<!-- 高级查询划出 End-->
 				<!-- 第二层弹出的表格 Begin -->
-				<el-table :data="standardList" height="400px" border stripe style="width: 100%;" :default-sort="{prop:'standardList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table :data="standardList" height="360px" border stripe style="width: 100%;" :default-sort="{prop:'standardList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore"
+			v-loading="loading" 
+			element-loading-text="加载中…"
+			element-loading-spinner="el-icon-loading"
+			element-loading-background="rgba(255, 255, 255, 0.9)">
 					<el-table-column type="selection" width="55" fixed>
 					</el-table-column>
 					<el-table-column label="主键编号" width="120" sortable prop="ID">
@@ -97,7 +101,7 @@
 				<!-- 第二层弹出的表格 End -->
 				<div slot="footer">
 					<el-button type="primary" @click="addbasis">确 定</el-button>
-			       <el-button @click="dialogVisible = false">取 消</el-button>
+			       <el-button @click="DialogClose">取 消</el-button>
 			    </div>
 			</el-dialog>
 			<!-- 检测依据弹出框 End -->
@@ -113,8 +117,9 @@
   data() {
     return {
 		basic_url: Config.dev_url,
-		dialogVisible: false,
+		loading: false,
 		loadSign:true,//加载
+		dialogVisible: false,
 		commentArr:{},
 		selUser: [],//接勾选的值
 		page: {
@@ -231,10 +236,20 @@
 			this.$emit('testbasisnum',basisnums);
 			this.$emit('testbasisname',basisnames);
 			this.$emit('testbasisprover',provers);
-            this.dialogVisible = false;
+            // this.dialogVisible = false;
 			this.requestData();
+			this.ResetDatasNew();//调用ResetDatasNew函数
 		}
     },
+    DialogClose(){//点击取消按钮
+		this.ResetDatasNew();//调用ResetDatasNew函数
+	},
+	ResetDatasNew(){//点击确定或取消按钮时重置数据20190303
+		this.dialogVisible = false;//关闭弹出框
+		this.standardList = [];//列表数据置空
+		this.page.currentPage = 1;//页码重新传值
+		this.page.pageSize = 10;//页码重新传值
+	},
     loadMore () {
 	   if (this.loadSign) {
 	     this.loadSign = false
@@ -254,6 +269,7 @@
         this.requestData();
 	},
 	requestData(){
+		this.loading = true;
 		var data = {
             page: this.page.currentPage,
             limit: this.page.pageSize,
@@ -266,8 +282,6 @@
             STARTETIME: this.searchList.STARTETIME,
             // STATUS: this.searchList.STATUS,
         };
-        console.log(111111);
-        console.log(this.pronum);
         var url = this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.pronum;
         this.$axios.get(url, {
             
@@ -292,6 +306,7 @@
                 }
             }
             this.standardList = newarr;
+            this.loading = false;
         }).catch((wrong) => {})
 	},
 	determine(){

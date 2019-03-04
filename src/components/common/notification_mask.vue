@@ -368,25 +368,31 @@
 			<!-- 人员 -->
 			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose" title="用户信息">
 				<el-form :model="searchList">
-							<el-row :gutter="10">
-								<el-col :span="5">
-									<el-form-item label="用户名" prop="username" label-width="55px">
-										<el-input v-model="searchList.username">
-										</el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="5">
-									<el-form-item label="姓名" prop="nickname" label-width="45px">
-										<el-input v-model="searchList.nickname">
-										</el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="2">
-									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px" :disabled="views">搜索</el-button>
-								</el-col>
-							</el-row>
-						</el-form>
-				<el-table :header-cell-style="rowClass" :data="gridData" line-center border stripe height="400px" style="width: 100%;" :default-sort="{prop:'gridData', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+					<el-row :gutter="10">
+						<el-col :span="5">
+							<el-form-item label="用户名" prop="username" label-width="55px">
+								<el-input v-model="searchList.username">
+								</el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="5">
+							<el-form-item label="姓名" prop="nickname" label-width="45px">
+								<el-input v-model="searchList.nickname">
+								</el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="2">
+							<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px" :disabled="views">搜索</el-button>
+						</el-col>
+					</el-row>
+				</el-form>
+
+				<el-table :header-cell-style="rowClass" :data="gridData" line-center border stripe height="360px" style="width: 100%;" :default-sort="{prop:'gridData', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore"
+				v-loading="loading"  
+				element-loading-text="加载中…"
+				element-loading-spinner="el-icon-loading"
+				element-loading-background="rgba(255, 255, 255, 0.9)">
+				
 					<el-table-column type="selection" align="center" width="55" fixed>
 					</el-table-column>
 					<el-table-column label="ID" sortable width="70px" prop="id">
@@ -398,11 +404,13 @@
 					<el-table-column label="公司" sortable prop="companyName">
 					</el-table-column>
 				</el-table>
+
 				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
+
 				<div slot="footer">
 	    			<el-button type="primary" @click="dailogconfirm" :disabled="views">确 定</el-button>
-	    			<el-button @click="dialogVisible = false" :disabled="views">取 消</el-button>
+	    			<el-button @click="DialogClose" :disabled="views">取 消</el-button>
 	  			</div>
 			</el-dialog>
 			<!-- 产品类别  -->
@@ -487,8 +495,9 @@
 				}
            };
 			return {
-				approvingData:{},//流程的数据
+				loading: false,
 				loadSign:true,//加载
+				approvingData:{},//流程的数据
 				commentArr:{},
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
@@ -675,8 +684,7 @@
 			//单位
 			addCompany(type){
 				this.$refs.enterprisechild.visible(type);
-			},                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
-
+			},
 			handleNodeClick(data) { //获取勾选树菜单节点
 				//				console.log(data);
 			},
@@ -816,7 +824,6 @@
 				this.noedit = false;
 			},
 			detailgetData() {
-				console.log(123456);
 				var url = this.basic_url +'/api-apps/app/workNot/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					//依据对号控制
@@ -1051,24 +1058,28 @@
 				if(this.dataInfo.CJDW==""||this.dataInfo.CJDW=="undefined"){
 					this.$message({
 						message: '请先选择承检单位',
-						type: 'warning'
+							type: 'warning'
 						});
 				}else{
+					this.loading = true;
 					var params = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-					deptId: this.searchList.deptId,
-					nickname: this.searchList.nickname,
-					username: this.searchList.username,
-				}
-				var url = this.basic_url + '/api-user/users/usersByDept?deptId='+this.dataInfo.CJDW;
-				this.$axios.get(url, {
-					params: params
-				}).then((res) => {
-					this.gridData = res.data.data;
-				});
-				this.dialogVisible = true;	
-				this.type=type;
+						page: this.page.currentPage,
+						limit: this.page.pageSize,
+
+						deptId: this.searchList.deptId,
+						nickname: this.searchList.nickname,
+						username: this.searchList.username,
+					}
+					var url = this.basic_url + '/api-user/users/usersByDept?deptId='+this.dataInfo.CJDW;
+					this.$axios.get(url, {
+						params: params
+					}).then((res) => {
+						this.page.totalCount = res.data.count;
+						this.gridData = res.data.data;
+						this.loading = false;
+					});
+					this.dialogVisible = true;	
+					this.type=type;
 				}
 			},
 			dailogconfirm() { //选择人员确定按钮
@@ -1083,7 +1094,8 @@
 						type: 'warning'
 					});
 				}else{
-					this.dialogVisible = false;
+					// this.dialogVisible = false;
+					this.ResetDatasNew();//调用ResetDatasNew函数
 					if(this.type == 'leader') {
 						this.dataInfo.P_LEADER = this.selUser[0].id;
 						this.dataInfo.P_LEADERDesc = this.selUser[0].nickname;
@@ -1091,7 +1103,17 @@
 						this.dataInfo.ACCEPT_PERSON = this.selUser[0].id;
 						this.dataInfo.ACCEPT_PERSONDesc = this.selUser[0].nickname;
 					}
+
 				}
+			},
+			DialogClose(){//点击取消按钮
+				this.ResetDatasNew();//调用ResetDatasNew函数
+			},
+			ResetDatasNew(){//点击确定或取消按钮时重置数据20190303
+				this.dialogVisible = false;//关闭弹出框
+				this.gridData = [];//列表数据置空
+				this.page.currentPage = 1;//页码重新传值
+				this.page.pageSize = 10;//页码重新传值
 			},
 			//生成委托书
 			build(){

@@ -116,9 +116,19 @@
 						<el-col :span="24">
 							<!-- 表格 Begin-->
 
-							<el-table ref="table" :header-cell-style="rowClass" :data="categoryList" v-loading="loading" element-loading-text="加载中…"
-    								element-loading-spinner="el-icon-loading"
-    								element-loading-background="rgba(F, F, F, 0.6)" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table ref="table" :header-cell-style="rowClass"
+								:data="categoryList"
+								border
+								stripe
+								:height="fullHeight"
+								style="width: 100%;"
+    							:default-sort="{prop:'categoryList', order: 'descending'}"
+    							@selection-change="SelChange"
+    							v-loadmore="loadMore"
+								v-loading="loading"
+								element-loading-text="加载中…"
+    							element-loading-spinner="el-icon-loading"
+    							element-loading-background="rgba(255, 255, 255, 0.9)">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="编码" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('编码')!=-1">
@@ -178,9 +188,7 @@
 		data() {
 			return {
 				reportData:{},//报表的数据
-				scroll_old:0,
 				// up2down:'down',
-				reportData:{},//报表的数据
 				basic_url: Config.dev_url,
 				loadSign: true, //鼠标滚动加载数据
 				commentArr: {},
@@ -305,7 +313,7 @@
 						sessionStorage.setItem('toBtm','false');
 						this.page.currentPage--;
 						if(this.page.currentPage < 1) {
-							this.page.currentPage=1
+							this.page.currentPage=1;
 							return false;
 						}
 					}
@@ -606,11 +614,11 @@
 				}).then((res) => {
 					this.page.totalCount = res.data.count;
 					//总的页数
-					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
 					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false
+						this.loadSign = false;
 					} else {
-						this.loadSign = true
+						this.loadSign = true;
 					}
 					this.categoryList = res.data.data;
 					this.loading = false;

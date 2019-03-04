@@ -1,7 +1,11 @@
 <template>
 	<div>
 		<el-dialog :modal-append-to-body="false" title="产品名称" :visible.sync="dialogProduct" width="80%">
-			<el-table :header-cell-style="rowClass" :data="productList" line-center border stripe height="400px" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+			<el-table :header-cell-style="rowClass" :data="productList" line-center border stripe height="360px" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore"
+			v-loading="loading"  
+			element-loading-text="加载中…"
+			element-loading-spinner="el-icon-loading"
+			element-loading-background="rgba(255, 255, 255, 0.9)">
 				<el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column>
 				<el-table-column label="编码" width="155" sortable prop="PRO_NUM">
@@ -21,7 +25,7 @@
 				</el-pagination>
 				<div slot="footer">
 			       <el-button type="primary" @click="determine">确 定</el-button>
-			       <el-button @click="close">取 消</el-button>
+			       <el-button @click="DialogClose">取 消</el-button>
 			    </div>
 			</el-dialog>
 	</div>
@@ -36,9 +40,10 @@
   data() {
     return {
 		basic_url: Config.dev_url,
+		loading: false,
+		loadSign:true,//加载
 		productList: [],
 		dialogProduct: false,
-		loadSign:true,//加载
 		commentArr:{},
 		selUser: [],//接勾选的值
 		page: {
@@ -84,34 +89,35 @@
 		this.requesCategory();
 	},
 	//产品类别数据
-			requesCategory(){
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-				};
-				this.$axios.get(this.basic_url + '/api-apps/app/productType2?DEPTID='+this.WORKPLAN.PROP_UNIT, {
-					params: data
-				}).then((res) => {
-					this.page.totalCount = res.data.count;
-					//总的页数
-					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false
-					} else {
-						this.loadSign = true
+	requesCategory(){
+		this.loading = true;
+		var data = {
+			page: this.page.currentPage,
+			limit: this.page.pageSize,
+		};
+		this.$axios.get(this.basic_url + '/api-apps/app/productType2?DEPTID='+this.WORKPLAN.PROP_UNIT, {
+			params: data
+		}).then((res) => {
+			this.page.totalCount = res.data.count;
+			//总的页数
+			let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+			if(this.page.currentPage >= totalPage) {
+				this.loadSign = false
+			} else {
+				this.loadSign = true
+			}
+			this.commentArr[this.page.currentPage] = res.data.data
+			let newarr = []
+			for(var i = 1; i <= totalPage; i++) {
+				if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+					for(var j = 0; j < this.commentArr[i].length; j++) {
+						newarr.push(this.commentArr[i][j])
 					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.categoryList = newarr;
-				}).catch((wrong) => {})
-			},
+				}
+			}
+			this.categoryList = newarr;
+		}).catch((wrong) => {})
+	},
   	visible(NUM) {
 		this.NUM = NUM;
 		this.dialogProduct = true;
@@ -157,6 +163,7 @@
 				}
 			}
 			this.productList = newarr;
+			this.loading = false;
 		}).catch((wrong) => {})
 	},
 	determine(){
@@ -171,15 +178,25 @@
 				type: 'warning'
 			});
 		}else{
-			this.dialogProduct = false;
+			// this.dialogProduct = false;
 			var proarr = [];
 			proarr.push(this.selUser[0].PRO_NUM);
 			proarr.push(this.selUser[0].PRO_NAME);
 			proarr.push(this.selUser[0].VERSION);
 			this.$emit('appenddata',proarr);
 			this.requestData();
+			this.ResetDatasNew();//调用ResetDatasNew函数
 		}
 	},
+	DialogClose(){//点击取消按钮
+        this.ResetDatasNew();//调用ResetDatasNew函数
+    },
+    ResetDatasNew(){//点击确定或取消按钮时重置数据20190303
+        this.dialogProduct = false;//关闭弹出框
+        this.productList = [];//列表数据置空
+        this.page.currentPage = 1;//页码重新传值
+        this.page.pageSize = 10;//页码重新传值
+    },
   },
   mounted() {
 		// this.requestData();

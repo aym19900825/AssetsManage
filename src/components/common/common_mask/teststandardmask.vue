@@ -202,7 +202,7 @@
 		this.basistable = value[1];//检测依据表格中已有的数据
 		var basissnum = [];
 		for(var i = 0;i<this.basistable.length;i++){
-			basissnum = this.basistable[i].S_NUM;
+			basissnum.push(this.basistable[i].S_NUM);
 		}
 		this.basissnums = basissnum.toString(',');
 		this.requestData();//渲染数据
@@ -282,7 +282,7 @@
             STARTETIME: this.searchList.STARTETIME,
             // STATUS: this.searchList.STATUS,
 		};
-		var url = this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.productnum+'&NUM_where_not_in='+this.basissnums;
+		var url = this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.productnum+'&S_NUM_where_not_in='+this.basissnums;
 		console.log(url);
         this.$axios.get(url, {
             

@@ -558,7 +558,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="主检负责人" prop="LEADER" label-width="110px">
-												<el-select clearable v-model="dataInfo.LEADER" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" style="width: 100%;">
+												<el-select v-model="dataInfo.LEADER" :disabled="noedit" placeholder="请选择">
 													<el-option v-for="(data,index) in leaderdata" :key="index" :value="data.id" :label="data.username"></el-option>
 												</el-select>
 											</el-form-item>
@@ -633,7 +633,11 @@
 			</el-dialog>
 			<!-- 客户联系人 Begin -->
 			<el-dialog :modal-append-to-body="false" title="客户联系人" :visible.sync="dialogVisibleuser" width="80%" :before-close="handleClose">
-				<el-table :header-cell-style="rowClass" :data="CUSTOMER_PERSONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @selection-change="SelChange" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER_PERSONList', order: 'descending'}" v-loadmore="loadMore">
+				<el-table :header-cell-style="rowClass" :data="CUSTOMER_PERSONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @selection-change="SelChange" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER_PERSONList', order: 'descending'}" v-loadmore="loadMore"
+			v-loading="loading" 
+			element-loading-text="加载中…"
+			element-loading-spinner="el-icon-loading"
+			element-loading-background="rgba(255, 255, 255, 0.9)">
 					<el-table-column type="selection" width="55" fixed align="center">
 					</el-table-column>
 					<el-table-column label="联系人" sortable width="150px" prop="PERSON">
@@ -650,7 +654,7 @@
 				</el-pagination>
 				<span slot="footer" class="dialog-footer">
 			       <el-button type="primary" @click="addcusname">确 定</el-button>
-			       <el-button @click="dialogVisibleuser = false">取 消</el-button>
+			       <el-button @click="DialogClose">取 消</el-button>
 			    </span>
 			</el-dialog>
 			<!-- 客户联系人 End -->
@@ -781,6 +785,7 @@
            };
 			return {
 				approvingData:{},
+				loading: false,
 				loadSign:true,//加载
 				commentArr:{},
 				falg:false,//保存验证需要的
@@ -1506,7 +1511,6 @@
 							type: 'warning'
 						});
 					}else{
-						console.log(this.dataInfo.PRO_NUM);
 						this.sendchilddata.push(this.dataInfo.PRO_NUM);
 						this.sendchilddata.push(this.dataInfo.INSPECT_PROXY_BASISList);
 						this.$refs.standardchild.basislead(this.sendchilddata);
@@ -1562,8 +1566,11 @@
 							type: 'warning'
 						});
 					}else{
-						this.$refs.projectchild.projectlead(this.dataInfo.S_NUM);
+						this.sendchilddata.push(this.dataInfo.S_NUM);
+						this.sendchilddata.push(this.dataInfo.INSPECT_PROXY_PROJECList);
+						this.$refs.projectchild.projectlead(this.sendchilddata);
 						this.main = 'main';
+						this.sendchilddata = [];
 					}
 				}else{
 					if(this.deptindex.S_NUM == null || this.deptindex.S_NUM == '' || this.deptindex.S_NUM == undefined){
@@ -1572,7 +1579,6 @@
 							type: 'warning'
 						});
 					}else{
-						console.log(this.deptindex.S_NUM);
 						this.$refs.projectchild.projectlead(this.deptindex.S_NUM);
 						this.main = 'table';
 					}
@@ -1657,6 +1663,13 @@
 			//委托单位
 			appendname(value){		
 				this.dataInfo.V_NAME = value;//名称
+				if(this.dataInfo.CHECK_PROXY_CONTRACTList == null || this.dataInfo.CHECK_PROXY_CONTRACTList==undefined||this.dataInfo.CHECK_PROXY_CONTRACTList==''){
+
+				}else{//更新子表委托单位
+					for(var i = 0;i<this.dataInfo.CHECK_PROXY_CONTRACTList.length;i++){
+						this.dataInfo.CHECK_PROXY_CONTRACTList[i].V_NAME = value;
+					}
+				}
 			},
 			appendadd(value){
 				this.dataInfo.V_ADDRESS=value;
@@ -1814,6 +1827,7 @@
 				}
 			},
 			requestData(){
+				this.loading = true;
 				var data = {
 						page: this.page.currentPage,
 						limit: this.page.pageSize,
@@ -1823,6 +1837,7 @@
 						params: data
 					}).then((res) => {
 						this.CUSTOMER_PERSONList = res.data.CUSTOMER_PERSONList;
+						this.loading = false;
 					});
 					this.dialogVisibleuser = true;
 			},
@@ -1840,10 +1855,19 @@
 				}else{
 					this.dataInfo.V_PERSON = this.selval[0].PERSON;
 					this.dataInfo.V_PHONE = this.selval[0].PHONE;
-					this.dialogVisibleuser = false;
+					// this.dialogVisibleuser = false;
+					this.ResetDatasNew();//调用ResetDatasNew函数
 				}
 			},
-			
+			DialogClose(){//点击取消按钮
+				this.ResetDatasNew();//调用ResetDatasNew函数
+			},
+			ResetDatasNew(){//点击确定或取消按钮时重置数据20190303
+				this.dialogVisibleuser = false;//关闭弹出框
+				this.CUSTOMER_PERSONList = [];//列表数据置空
+				this.page.currentPage = 1;//页码重新传值
+				this.page.pageSize = 10;//页码重新传值
+			},
 			SelChange(val) {
 				this.selval = val;
 			},

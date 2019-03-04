@@ -145,7 +145,7 @@
 									</el-table>
 								</el-collapse-item> -->
 								<el-collapse-item title="文件" name="3">
-									<doc-table ref="docTable" :docParm = "docParm"></doc-table>
+									<doc-table ref="docTable" :docParm = "docParm" @saveParent="save"></doc-table>
 								</el-collapse-item>
 								<el-collapse-item title="其它" name="4" v-show="views">
 									<el-row>
@@ -174,8 +174,8 @@
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show="noviews">
-							<el-button type="primary" @click="saveAndUpdate('CATEGORY')">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit('CATEGORY')" v-show="addtitle">保存并继续</el-button>
+							<el-button type="primary" @click="saveAndUpdate">保存</el-button>
+							<el-button type="success" @click="saveAndSubmit" v-show="addtitle">保存并继续</el-button>
 							<!-- <el-button v-if="modify" type="success" @click="update('CATEGORY')">启用</el-button> -->
 							<el-button @click="close">取消</el-button>
 						</div>
@@ -304,7 +304,6 @@
 				if(row.ID){
 					var url = this.basic_url + '/api-apps/app/rawDataTem/' + TableName +'/' + row.ID;
 					this.$axios.delete(url, {}).then((res) => {
-						console.log(res);
 						if(res.data.resp_code == 0){
 							this.CATEGORY[TableName+'List'].splice(index,1);
 							this.$message({
@@ -478,6 +477,7 @@
 			//点击关闭按钮
 			close() {
 				this.show = false;
+				this.resetData();
 				this.$emit('request');//关闭弹框去掉勾选
 			},
 			open(){
@@ -516,15 +516,14 @@
 					}
 					if(valid) {
 						var len = this.$refs.docTable.getFilelen();
-						if(len==0){
+						if(opt != 'docUpload' && len==0){
 							this.$message({
 								message: '请先上传模版文件，再保存！',
 								type: 'error'
 							});
-							return;
+							return false;
 						}
 						this.CATEGORY.STATUS = ((this.CATEGORY.STATUS == "1" || this.CATEGORY.STATUS == '活动') ? '1' : '0');
-						console.log(this.CATEGORY);
 						var url = this.basic_url + '/api-apps/app/rawDataTem/saveOrUpdate';
 						this.$axios.post(url, this.CATEGORY).then((res) => {
 							if(res.data.resp_code == 0) {
@@ -537,10 +536,18 @@
 									this.docParm.model = 'edit';
 									this.$refs.docTable.autoLoad();
 									this.CATEGORY.ID = res.data.datas.id;
+									this.CATEGORY.NUM = res.data.datas.NUM;
 								}else{
-									this.$emit('request');
+									if(opt == 'save'){
+										this.show = false;
+										this.$emit('request');
+									}
+									if(opt == 'update'){
+										this.show = true;
+										this.visible();
+									}
+									this.resetData();
 									this.$emit('reset');
-									this.visible();
 								}
 							}else{
 								this.show = true;
@@ -558,6 +565,7 @@
 										});
 									}
 								}
+								this.falg = false;
 							}
 						}).catch((err) => {
 							this.$message({
@@ -565,9 +573,8 @@
 								type: 'error'
 							});
 						});
-						this.falg = true;
+						// this.falg = true;
 					} else {
-						this.show = true;
 						this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
@@ -576,19 +583,17 @@
 					}
 				});
 			},
+			resetData(){
+				this.CATEGORY = {};
+			},
 			
 			//保存
-			saveAndUpdate(CATEGORY) {
-				this.save(CATEGORY);
-				if(this.falg){
-					this.show = false;
-				}
+			saveAndUpdate() {
+				this.save('save');
 			},
 			//保存并继续
-			saveAndSubmit(CATEGORY) {
-				this.save(CATEGORY);
-				// this.visible();
-				this.show = true;
+			saveAndSubmit() {
+				this.save('update');
 			},
 			iconOperation(row, column, cell, event){//切换Table-操作列中的修改、保存
 				if(column.property ==="iconOperation"){

@@ -750,7 +750,7 @@
 					PRO_NUM: this.searchList.PRO_NUM,
 					DEPTID: this.searchList.DEPTID
 				}
-				var url = this.basic_url + '/api-apps/app/inspectPro';
+				var url = this.basic_url + '/api-apps/app/inspectPro?TYPE_wheres=1';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {

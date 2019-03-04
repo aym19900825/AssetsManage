@@ -251,7 +251,7 @@
 										<el-row>
 											<el-col :span="8">
 												<el-form-item label="样品接收状态">
-													<el-radio-group v-model="workorderForm.ITEM_RECEPT_STATUS":disabled="noedit">
+													<el-radio-group v-model="workorderForm.ITEM_RECEPT_STATUS" :disabled="noedit">
 														<el-radio v-for="(data,index) in Select_ITEM_RECEPT_STATUS" :key="index" :label="data.code">{{data.name}}</el-radio>
 													</el-radio-group>
 												</el-form-item>
@@ -427,7 +427,7 @@
 											    </el-table-column> -->
 
 											    <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
-											      <template slot-scope="scope">deleteRow
+											      <template slot-scope="scope">
 											         <el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'basisList')" type="text" size="small">
 											      <i class="icon-trash red"></i>
 											        </el-button>
@@ -705,7 +705,7 @@
 														<!-- </el-form-item> -->
 													</template>
 												</el-table-column>
-												<el-table-column fixed="right" label="操作" width="120px">
+												<el-table-column fixed="right" label="操作" width="150px">
 													<template slot-scope="scope">
 														 
 													  <el-button title="编辑" type="text" size="small">
@@ -719,6 +719,9 @@
 													  </el-button>
 													  <el-button title="查看" type="text" size="small">
 														<i class="icon-file-text"></i>
+													  </el-button>
+													  <el-button title="报告提交" type="text" size="small" @click="admirereport" v-show="btnshow">
+														<i class="icon-send"></i>
 													  </el-button>
 													</template>
 												</el-table-column>
@@ -1113,6 +1116,8 @@
 				maingroup:[],//专业组
 				docParm: {},
 				reportname:'',//生成报告名称
+				workorderreportid:'',//存放生成报告id
+				btnshow:true,//报告提交按钮
 			};
 		},
 		methods: {
@@ -1378,6 +1383,23 @@
 					this.dialogVisible2 = false;
 					this.getuser();
 				}
+			},
+			//主任务单时，确定报告按钮
+			admirereport(){
+				var url = this.basic_url + '/api-apps/app/workorder/operate/createreportapprove?workorderreportid='+this.workorderForm.WORKORDER_REPORTList[0].ID;
+				this.$axios.get(url, {
+						
+				}).then((res) => {
+					console.log(res);
+					//成功后给出提示信息并隐藏按钮
+					if(res.data.resp_code == 0) {
+						this.$message({
+							message: '提交成功',
+							type: 'success'
+						});
+						this.btnshow = false;//隐藏报告提交按钮
+					}
+				});
 			},
 			getCompany() {
 				var type = "2";
@@ -1866,6 +1888,7 @@
 						console.log(this.reportname);
 						var url = this.basic_url +"/api-merge/merge/workorder/MergeWord?filePath="+ids+"&fileName="+this.reportname+"&proxynum="+this.workorderForm.PROXYNUM+"&wonum="+this.workorderForm.WONUM+"&deptfullname="+this.workorderForm.DEPTIDDesc+"&recordid="+this.workorderForm.ID;
 						this.$axios.post(url, {}).then((res) => {
+							this.workorderreportid = res.data.datas.id;
 							console.log(res);
 							var obj = {
 								REPORTNUM:res.data.datas.reportnum,
@@ -1939,6 +1962,11 @@
 						res.data.WORKORDER_DATA_TEMPLATEList[i].FILE_ORGCHECKED = false;
 						res.data.WORKORDER_DATA_TEMPLATEList[i].isEditing = false;
 					}
+					for(var i = 0;i<this.workorderForm.WORKORDER_REPORTList.length;i++){
+						if(this.workorderForm.WORKORDER_REPORTList[0].ISCREATED == '1'){
+							this.btnshow = false;
+						}
+					}
 					res.data.CJDW = Number(res.data.CJDW);
 					res.data.ITEM_PROFESSIONAL_GROUP = Number(res.data.ITEM_PROFESSIONAL_GROUP);
 					this.RVENDORSelect(res.data.CJDW);
@@ -1975,6 +2003,7 @@
 					});
 				});
 				this.detailgetData();
+				this.btnshow = true;//显示报告提交按钮
 				this.views = false;
 				this.addtitle = false;
 				this.modifytitle = true;
@@ -1987,6 +2016,7 @@
 			//这是查看
 			view(dataid) {
 				// console.log(this.username);
+				this.btnshow = true;//显示报告提交按钮
 				this.dataid=dataid;	
 				this.modifytitle = false;
 				this.addtitle = false;

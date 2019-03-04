@@ -78,7 +78,7 @@
 					<!-- 高级查询划出 -->
 					<el-row :gutter="10">
 						<el-col :span="24">
-							<tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="deptList" v-on:childByValue="childByValue"></tree_grid>
+							<tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="deptList" v-on:classByValue="childByValue" @getDetail="getDetail"></tree_grid>
 							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0"
 							   @size-change="sizeChange" 
 							   @current-change="currentChange" 
@@ -274,7 +274,16 @@
 		    childvalue:function ( childvalue) {
 				console.log( childvalue);
 		    	 this.getbutton( childvalue);
-		    },
+			},
+			getDetail(data){
+				console.log('tableDetail');
+				this.view(data);
+			},
+			//查看
+			view(data) {
+			 	this.adddeptForm = data;
+				this.$refs.child.view();
+			},
 			tableControle(data){//控制表格列显示隐藏
 			  this.checkedName = data;
 			},

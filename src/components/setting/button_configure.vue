@@ -75,9 +75,19 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格 Begin-->
-							<el-table ref="table" :header-cell-style="rowClass" :data="categoryList" v-loading="loading"  element-loading-text="加载中…"
-    								element-loading-spinner="el-icon-loading"
-    								element-loading-background="rgba(F, F, F, 0.6)" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table ref="table" :header-cell-style="rowClass"
+								:data="categoryList"
+    							border
+    							stripe
+    							:height="fullHeight"
+    							style="width: 100%;"
+    							:default-sort="{prop:'categoryList', order: 'descending'}"
+    							@selection-change="SelChange"
+    							v-loadmore="loadMore"
+								v-loading="loading"
+								element-loading-text="加载中…"
+    							element-loading-spinner="el-icon-loading"
+						  		element-loading-background="rgba(255, 255, 255, 0.9)">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 
@@ -87,14 +97,16 @@
 										</p>
 									</template>
 								</el-table-column>
-
-								<el-table-column label="所属应用ID" width="140" sortable prop="menuId" v-if="this.checkedName.indexOf('所属应用ID')!=-1" align="right">
+								<el-table-column label="所属应用ID" width="140" sortable prop="menuId" v-if="this.checkedName.indexOf('所属应用ID')!=-1" align="center">
 								</el-table-column>
-								<el-table-column label="按钮图标" width="185" sortable prop="icon" v-if="this.checkedName.indexOf('按钮图标')!=-1">
+								<el-table-column label="按钮图标" width="125" align="right" sortable prop="icon" v-if="this.checkedName.indexOf('按钮图标')!=-1">
+									<template slot-scope="scope">
+										<i :class="scope.row.icon"></i> <!-- {{scope.row.icon}} -->
+									</template>
 								</el-table-column>
 								<el-table-column label="按钮样式颜色" sortable prop="style" v-if="this.checkedName.indexOf('按钮样式颜色')!=-1">
 									<template slot-scope="scope">
-										<el-button size="mini" :class="style">{{scope.row.style}}</el-button>
+										<button type="button" :class="'el-button el-button--style el-button--mini '+ scope.row.style">{{scope.row.style}}</button>
 									</template>
 								</el-table-column>
 								<el-table-column label="排序" width="100" sortable prop="sort" v-if="this.checkedName.indexOf('排序')!=-1">
@@ -104,8 +116,10 @@
 								<el-table-column label="修改时间" width="160" prop="updateTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
 								</el-table-column>
 							</el-table>
+
 							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
+
 							<!-- 表格 End-->
 						</el-col>
 					</el-row>

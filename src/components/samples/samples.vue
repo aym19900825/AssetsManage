@@ -604,8 +604,10 @@
 					ACCEPT_DATE: this.searchList.ACCEPT_DATE,//收样日期
 					P_NUM: this.searchList.P_NUM,
 					PRO_NUM: this.searchList.PRO_NUM,
-					DEPTID: this.searchList.DEPTID
 				}
+				if(!(!!this.searchList.DEPTID && this.searchList.DEPTID == 128)){
+					data.DEPTID = this.searchList.DEPTID;
+				};
 				var url = this.basic_url + '/api-apps/app/item';
 				this.$axios.get(url, {
 					params: data
@@ -652,9 +654,7 @@
 				var url = this.basic_url + '/api-apps/appCustom/tree';
 				this.$axios.get(url, {}).then((res) => {
 					this.resourceData = res.data.datas;
-					// this.resourceData = res.data;
 					this.treeData = this.transformTree(this.resourceData);
-					console.log(this.treeData);
 				});
 			},
 			transformTree(data) {

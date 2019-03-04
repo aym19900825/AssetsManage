@@ -651,7 +651,11 @@
 			</el-dialog>
 			<!-- 客户联系人 Begin -->
 			<el-dialog :modal-append-to-body="false" title="客户联系人" :visible.sync="dialogVisibleuser" width="80%" :before-close="handleClose">
-				<el-table :header-cell-style="rowClass" :data="CUSTOMER_PERSONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @selection-change="SelChange" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER_PERSONList', order: 'descending'}" v-loadmore="loadMore">
+				<el-table :header-cell-style="rowClass" :data="CUSTOMER_PERSONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @selection-change="SelChange" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER_PERSONList', order: 'descending'}" v-loadmore="loadMore"
+				v-loading="loading" 
+				element-loading-text="加载中…"
+				element-loading-spinner="el-icon-loading"
+				element-loading-background="rgba(255, 255, 255, 0.9)">
 					<el-table-column type="selection" width="55" fixed align="center">
 					</el-table-column>
 					<el-table-column label="联系人" sortable width="150px" prop="PERSON">
@@ -799,6 +803,7 @@
            };
 			return {
 				approvingData:{},
+				loading: false,
 				loadSign:true,//加载
 				commentArr:{},
 				falg:false,//保存验证需要的
@@ -1800,6 +1805,7 @@
 				}
 			},
 			requestData(){
+				this.loading = true;
 				var data = {
 						page: this.page.currentPage,
 						limit: this.page.pageSize,
@@ -1809,6 +1815,7 @@
 						params: data
 					}).then((res) => {
 						this.CUSTOMER_PERSONList = res.data.CUSTOMER_PERSONList;
+						this.loading = false;
 					});
 					this.dialogVisibleuser = true;
 			},

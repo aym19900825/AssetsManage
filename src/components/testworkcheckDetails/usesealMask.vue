@@ -141,23 +141,32 @@
                                 </el-col>
 							</el-row>
 						</el-form>
-				<el-table :header-cell-style="rowClass" :data="gridData" line-center border stripe height="350px" style="width: 100%;" :default-sort="{prop:'gridData', order: 'descending'}" @selection-change="SelChange">
+
+					<el-table :header-cell-style="rowClass" :data="gridData" line-center border stripe height="350px" style="width: 100%;" :default-sort="{prop:'gridData', order: 'descending'}" @selection-change="SelChange"
+					v-loadmore="loadMore"
+					v-loading="loading"  
+					element-loading-text="加载中…"
+					element-loading-spinner="el-icon-loading"
+					element-loading-background="rgba(255, 255, 255, 0.9)">
+
 					<el-table-column type="selection" width="55" fixed>
 					</el-table-column>
 					<el-table-column label="ID" sortable width="150px" prop="id">
 					</el-table-column>
 					<el-table-column label="姓名" sortable prop="nickname">
 					</el-table-column>
-					<!-- <el-table-column label="机构" sortable width="200px" prop="deptName">
+					<el-table-column label="机构" sortable width="200px" prop="deptName">
 					</el-table-column>
 					<el-table-column label="公司" sortable width="200px" prop="companyName">
-					</el-table-column> -->
+					</el-table-column>
 				</el-table>
-				<el-pagination background class="text-right" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+
+				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
+
 				<span slot="footer" class="dialog-footer">
 	    			<el-button type="primary" @click="confirmPerson">确 定</el-button>
-	    			<el-button @click="dialogPerson = false">取 消</el-button>
+	    			<el-button @click="DialogClose">取 消</el-button>
 	  			</span>
 			</el-dialog>
             <!-- 工作任务单  -->
@@ -204,6 +213,8 @@
 			return {
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
+				loading: false,
+				loadSign: true,//加载
 				selUser: [],
 				edit: true, //禁填
 				show: false,
@@ -410,6 +421,7 @@
 				this.addperson();
 			},
             addperson(pertips){
+            	this.loading = true;
                 var data = {
 					page: this.page.currentPage,
                     limit: this.page.pageSize,
@@ -420,7 +432,9 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
+					this.page.totalCount = res.data.count;
 					this.gridData = res.data.data;
+					this.loading = false;
 				});
 				this.dialogPerson = true;	
                 this.pertips = pertips;
@@ -437,17 +451,27 @@
                         type: 'warning'
                     });
                 }else{
+                    this.ResetDatasNew();//调用ResetDatasNew函数
                     if(this.pertips == 'use'){
                         this.USESEAL.USER = this.selUser[0].id;
                         this.USESEAL.USERDesc = this.selUser[0].nickname;
-                        this.dialogPerson = false;
+                        // this.dialogPerson = false;
                     }else if(this.pertips == 'back'){
                         this.USESEAL.GHUSER = this.selUser[0].id;
                         this.USESEAL.GHUSERDesc = this.selUser[0].nickname;
-                        this.dialogPerson = false;
+                        // this.dialogPerson = false;
                     }
                 }
             },
+            DialogClose(){//点击取消按钮
+				this.ResetDatasNew();//调用ResetDatasNew函数
+			},
+			ResetDatasNew(){//点击确定或取消按钮时重置数据20190303
+				this.dialogPerson = false;//关闭弹出框
+				this.gridData = [];//列表数据置空
+				this.page.currentPage = 1;//页码重新传值
+				this.page.pageSize = 10;//页码重新传值
+			},
             //清空
 			reset() {
 				this.USESEAL = {
@@ -478,6 +502,19 @@
 				this.show = false;
 				this.$emit('request');
 				this.reset();//关闭弹框去掉勾选
+			},
+			loadMore () {//滚动加载数据
+			   if (this.loadSign) {
+			     this.loadSign = false
+			     this.page.currentPage++
+			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+			       return
+			     }
+			     setTimeout(() => {
+			       this.loadSign = true
+			     }, 1000)
+			     this.requestData();
+			   }
 			},
 			open(){
 				this.show = true;

@@ -26,7 +26,13 @@
 					</el-col>
 				</el-row>
 			</el-form>
-			<el-table :header-cell-style="rowClass" :data="customerList" line-center border stripe height="400px" style="width: 100%;" :default-sort="{prop:'customerList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+			<el-table :header-cell-style="rowClass" :data="customerList" line-center border stripe height="360px" style="width: 100%;" :default-sort="{prop:'customerList', order: 'descending'}"
+				v-loadmore="loadMore"
+				v-loading="loading"  
+				element-loading-text="加载中…"
+				element-loading-spinner="el-icon-loading"
+				element-loading-background="rgba(255, 255, 255, 0.9)"
+				@selection-change="SelChange">
 				<el-table-column type="selection" width="55" fixed align="center">
 				</el-table-column>
 				<el-table-column label="统一信用代码/组织机构代码" width="200" sortable prop="CODE" >
@@ -44,7 +50,7 @@
 				</el-pagination>
 				<div slot="footer">
 			       <el-button type="primary" @click="determine">确 定</el-button>
-			       <el-button @click="close">取 消</el-button>
+			       <el-button @click="DialogClose">取 消</el-button>
 			    </div>
 			</el-dialog>
 	</div>
@@ -58,9 +64,10 @@
   data() {
     return {
 		basic_url: Config.dev_url,
+		loading: false,
+		loadSign:true,//加载
 		customerList: [],
 		dialogCustomer: false,
-		loadSign:true,//加载
 		commentArr:{},
 		selUser: [],//接勾选的值
 		type:'',
@@ -113,7 +120,7 @@
   		this.type=type;
 		this.dialogCustomer = true;
   	},
-  	loadMore () {
+  	loadMore () {//滚动加载更多
 	   if (this.loadSign) {
 	     this.loadSign = false
 	     this.page.currentPage++
@@ -127,6 +134,7 @@
 	   }
 	},
 	requestData(){
+		this.loading = true;
 		var data = {
 			page: this.page.currentPage,
 			limit: this.page.pageSize,
@@ -157,6 +165,7 @@
 				}
 			}					
 			this.customerList = newarr;
+			this.loading = false;
 		}).catch((wrong) => {})
 	},
 	determine(){
@@ -187,10 +196,20 @@
 				var names=this.selUser[0].NAME;//生产单位
 				this.$emit('appendnames',names);
 			}
-			this.dialogCustomer = false;
+			// this.dialogCustomer = false;
 			this.requestData();
+			this.ResetDatasNew();//调用ResetDatasNew函数
 		}
 	},
+	DialogClose(){//点击取消按钮
+        this.ResetDatasNew();//调用ResetDatasNew函数
+    },
+    ResetDatasNew(){//点击确定或取消按钮时重置数据20190303
+        this.dialogCustomer = false;//关闭弹出框
+        this.customerList = [];//列表数据置空
+        this.page.currentPage = 1;//页码重新传值
+        this.page.pageSize = 10;//页码重新传值
+    },
   },
   mounted() {
 			this.requestData();

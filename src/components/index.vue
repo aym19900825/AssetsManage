@@ -1,7 +1,7 @@
 <template>
 <div>
 	<div class="headerbg">
-		<vheader @clickfun='getroId' ></vheader>
+		<vheader @clickfun='getroId' ref="vheader"  @getTodoNum="getTodoNum"></vheader>
 		<navs_header ref='navsheader'></navs_header>
 	</div>
 
@@ -36,18 +36,18 @@
 							<div class="statisticsbg">
 								<div class="echart_title clearfix">
 									<div class="pull-left">
-										<h6><el-badge :value="200" :max="99" class="item">待办任务</el-badge></h6>
+										<h6><el-badge :value="toDoNum" :max="99" class="item">待办任务</el-badge></h6>
 									</div>
 									<div class="pull-right font13 blue">
 										<router-link :to="{path:'/task'}">更多<i class="el-icon-arrow-right el-icon--right"></i></router-link>
 									</div>
 								</div>
-								<div id="todoList" class="pt40" style="width: 100%; height: 220px;">
+								<div id="todoLists" class="pt40" style="width: 100%; height: 260px;">
 									<!-- 表格 -->
-									<el-table :data="todoList" :header-cell-style="rowClass" border stripe height="140" style="width: 100%;" :default-sort="{prop:'todoList', order: 'descending'}" v-loadmore="loadMore">
+									<el-table :data="todoList" :header-cell-style="rowClass" border stripe height="180" style="width: 100%;" :default-sort="{prop:'todoList', order: 'descending'}" v-loadmore="loadMore">
 										<!-- <el-table-column label="数据id" sortable width="140px" prop="bizid">
 										</el-table-column> -->
-										<el-table-column label="单据号" sortable prop="bizNum">
+										<el-table-column label="单据号" sortable width="160px" prop="bizNum">
 											<template slot-scope="scope">
 												<p class="blue" title="点击查看详情" @click=audit(scope.row)>{{scope.row.bizNum}}
 												</p>
@@ -55,9 +55,9 @@
 										</el-table-column>
 										<el-table-column label="App" sortable width="140px" prop="app">
 										</el-table-column>
-										<el-table-column label="当前环节" sortable prop="name">
+										<el-table-column label="当前环节" sortable width="160px" prop="name">
 										</el-table-column>
-										<el-table-column label="应用" sortable prop="appDesc">
+										<el-table-column label="应用" sortable width="160px" prop="appDesc">
 										</el-table-column>
 										<el-table-column label="任务状态" sortable width="100px" align="center" prop="state">
 										</el-table-column>
@@ -71,7 +71,7 @@
 							</div>
 						</el-col>
 						<el-col :span="6">
-							<div class="statisticsbg" style="height: 250px">
+							<div class="statisticsbg" style="height: 290px">
 								<div class="echart_title clearfix">
 									<div class="pull-left">
 										<h6>工作完成情况</h6>
@@ -90,16 +90,17 @@
 								</div>
 								<div class="pt40 clearfix">
 									<div class="pull-left">
-										<p class="big_numb">283</p>
+										<p class="big_numb">{{toDoNum}}</p>
 										<p class="small_font">工作总计</p>
-										<p class="middle_font pt40">
-											待办工作: 32<br />
-											执行中: 100<br />
-											已完成: 151
-										</p>
+										<div class="pt40">
+											<p class="middle_font pt40">
+												待办工作: 32<br />
+												执行中: 100<br />
+												已完成: 151
+											</p>
+										</div>
 									</div>
-									<div class="pull-right pt40" style="width: 200px;">
-										
+									<div class="pull-right" style="width: 200px; padding-top: 80px;">
 											<div class="wracircle" data-anim="base wracircle">
 												<div class="circle" data-anim="base left" style=""></div>
 												<div class="circle_font">
@@ -129,7 +130,7 @@
 										</el-dropdown-menu>
 									</el-dropdown>
 								</div>
-								<div id="main" style="width: 100%; height: 220px;"></div>
+								<div id="main" style="width: 100%; height: 260px;"></div>
 							</div>
 						</el-col>
 						<!-- <el-col :span="6">
@@ -153,7 +154,6 @@
 		</div>
 	</div>
 	<!--右侧内容显示 End-->
-  	
 </div>
 </template>
 
@@ -172,6 +172,7 @@ export default {
 
     data() {
       return {
+      	toDoNum: 0,
       	roleid:1,
       	basic_url: Config.dev_url,
         show: false,
@@ -185,12 +186,15 @@ export default {
 			currentPage: 1,
 			pageSize: 10,
 			totalCount: 0
-			},			
+		},			
 
       }
     },
   
 	methods: {
+		getTodoNum(num){
+			this.toDoNum = num;
+		},
 		//表头居中
 		rowClass({ row, rowIndex}) {
 		    return 'text-align:center'
@@ -201,7 +205,6 @@ export default {
 			this.$store.dispatch('setMenuIdAct',item.bizFirstMenuId);
 
 		},
-		
 	    sizeChange(val) {
 				this.page.pageSize = val;
 				this.requestData();
@@ -211,13 +214,14 @@ export default {
 			this.requestData();
 		},
 		requestData() {
+			this.loading = true;
 			var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-				}
+				page: this.page.currentPage,
+				limit: this.page.pageSize,
+			}
 			var url = this.basic_url + '/api-apps/app/flow/flow/todo';
 			this.$axios.get(url, {params: data}).then((res) => {
-				console.log(res.data);
+				// console.log(res.data);
 				this.page.totalCount = res.data.count;
 				//总的页数
 				let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
@@ -226,31 +230,51 @@ export default {
 				} else {
 					this.loadSign = true
 				}
-				this.commentArr[this.page.currentPage] = res.data.data
-				let newarr = []
-				for(var i = 1; i <= totalPage; i++) {
-					if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-						for(var j = 0; j < this.commentArr[i].length; j++) {
-							newarr.push(this.commentArr[i][j])
-						}
-					}
-				}
-				this.todoList = newarr;
+				// this.commentArr[this.page.currentPage] = res.data.data
+				// let newarr = []
+				// for(var i = 1; i <= totalPage; i++) {
+				// 	if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+				// 		for(var j = 0; j < this.commentArr[i].length; j++) {
+				// 			newarr.push(this.commentArr[i][j])
+				// 		}
+				// 	}
+				// }
+				this.todoList = res.data.data;
+				this.loading = false;
 			}).catch((wrong) => {
 				
 				
 			})
 		},
+		
+	
 		//滚动加载更多
 		loadMore() {
-			if(this.loadSign) {
-				this.loadSign = false
-				this.page.currentPage++
+			//console.log(this.$refs.table.$el.offsetTop)
+			let up2down = sessionStorage.getItem('up2down');
+			if(this.loadSign) {					
+				if(up2down=='down'){
+					this.page.currentPage++;
 					if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-						return
+						this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+						return false;
 					}
+//						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+					if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+						$('.el-table__body-wrapper table').append('<div class="filing" style="height:400px;width: 100%;"></div>');
+						sessionStorage.setItem('toBtm','true');
+					}
+				}else{
+					sessionStorage.setItem('toBtm','false');
+					this.page.currentPage--;
+					if(this.page.currentPage < 1) {
+						this.page.currentPage=1
+						return false;
+					}
+				}
+				this.loadSign = false;
 				setTimeout(() => {
-					this.loadSign = true
+					this.loadSign = true;
 				}, 1000)
 				this.requestData();
 			}
@@ -382,9 +406,8 @@ export default {
 				});
 	        })
 		}
-      	
+      	this.getTodoNum();
 	},
-	
 }
 
 </script>

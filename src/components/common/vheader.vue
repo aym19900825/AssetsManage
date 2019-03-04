@@ -10,7 +10,7 @@
             </li> -->
         </ul>
         <div class="nav-head pull-right nav-right">
-	            <el-badge :value="200" :max="99" class="item pt5 mr30" >
+	            <el-badge :value="toDoNumber" :max="99" class="item pt5 mr30" >
 	            	<span class="lingdang" @click="appCenter">
 	            		<i class="icon-notice"></i>
 	            	</span>
@@ -76,6 +76,7 @@ export default {
             basic_url: Config.dev_url,
             file_url: Config.file_url,
             imgUrl: imgUrl,
+            toDoNumber: 0,//获取待办任务数量
             headImgUrl: '',
             username: '',
             nickname: '',
@@ -113,6 +114,19 @@ export default {
                     type: 'error'
                 });
             });
+        },
+        getTodoNumber() {
+            var url = this.basic_url + '/api-apps/app/flow/flow/todoCounts';
+            this.$axios.get(url, {}).then((res) => {
+                this.toDoNumber = res.data.datas;
+                var url = window.location.href;
+                if(url.indexOf('index') != -1){
+                    this.$emit('getTodoNum',this.toDoNumber);
+                }
+                
+            }).catch(error => {
+                console.log('请求失败');
+            })
         },
         getImgUrl(){
             var url = this.file_url + '/file/icon?appname=icon&userid=' + this.userid;
@@ -184,6 +198,7 @@ export default {
     mounted(){
         this.getData();//调用getData
         this.getITEM_Roles();
+        this.getTodoNumber();
     }
 }
 </script>

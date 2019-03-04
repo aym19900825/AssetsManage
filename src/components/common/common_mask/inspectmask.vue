@@ -33,20 +33,24 @@
 					</el-col>
                     <el-col :span="4">
 					<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-					<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
+					<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
 				</el-col>
 				</el-row>
 			</el-form>
-			<el-table :data="inspectList" border stripe :header-cell-style="rowClass"  style="width: 100%;"height="400px" :default-sort="{prop:'inspectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore('inspect')">	
+			<el-table :data="inspectList" border stripe :header-cell-style="rowClass" style="width: 100%;" height="360px" :default-sort="{prop:'inspectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore('inspect')"
+			v-loading="loading" 
+			element-loading-text="加载中…"
+			element-loading-spinner="el-icon-loading"
+			element-loading-background="rgba(255, 255, 255, 0.9)">	
 				<el-table-column type="selection" width="55" fixed align="center">
 				</el-table-column>
-				<el-table-column label="检验委托书编号" sortable width="130px" prop="PROXYNUM">
+				<el-table-column label="检验委托书编号" sortable width="160px" prop="PROXYNUM">
 				</el-table-column>
-				<el-table-column label="委托单位名称" sortable width="140px" prop="V_NAME">
+				<el-table-column label="委托单位名称" sortable width="220px" prop="V_NAME">
 				</el-table-column>
-				<el-table-column label="生产单位名称" sortable width="140px" prop="P_NAME">
+				<el-table-column label="生产单位名称" sortable width="220px" prop="P_NAME">
 				</el-table-column>
-				<el-table-column label="样品名称" sortable width="140px" prop="ITEM_NAME">
+				<el-table-column label="样品名称" sortable width="180px" prop="ITEM_NAME">
 				</el-table-column>
 				<el-table-column label="样品型号" sortable width="140px" prop="ITEM_MODEL">
 				</el-table-column>
@@ -54,22 +58,22 @@
 				</el-table-column>
 				<el-table-column label="完成日期" width="140px" prop="COMPDATE" sortable  :formatter="dateFormat" data-type = "">
 				</el-table-column>
-				<el-table-column label="完成方式" width="100px" prop="COMPMODE" sortable>
+				<el-table-column label="完成方式" width="180px" prop="COMPMODE" sortable>
 				</el-table-column>
-				<el-table-column label="检测报告编号" width="140px" prop="REPORT_NUM" sortable>
+				<el-table-column label="检测报告编号" width="160px" prop="REPORT_NUM" sortable>
 				</el-table-column>
 				<el-table-column label="主检组" width="140px" prop="MAINGROUP" sortable>
 				</el-table-column>
-				<el-table-column label="录入时间" width="140px" prop="ENTERDATE" sortable :formatter="dateFormat">
+				<el-table-column label="录入时间" width="160px" prop="ENTERDATE" sortable :formatter="dateFormat">
 				</el-table-column>
 				<el-table-column label="版本" width="80" prop="VERSION" sortable>
 				</el-table-column>
 			</el-table>	
 			<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 			</el-pagination>
-			<span slot="footer" class="dialog-footer">
+			<span slot="footer">
 			   <el-button type="primary" @click="determine">确 定</el-button>
-		       <el-button @click="close">取 消</el-button>
+		       <el-button @click="DialogClose">取 消</el-button>
 		    </span>
 		</el-dialog>
 	</div>
@@ -83,9 +87,10 @@
   data() {
     return {
 		basic_url: Config.dev_url,
+		loading: false,
+		loadSign:true,//加载
 		inspectList: [],
 		dialoginspect: false,
-		loadSign:true,//加载
 		commentArr:{},
 		selval: [],//接勾选的值
 		page: {
@@ -161,6 +166,7 @@
 	   }
 	},
 	requestData(){
+		this.loading = true;
 		var data = {
 				page: this.page.currentPage,
 				limit: this.page.pageSize,
@@ -191,11 +197,12 @@
 					}
 				}
 				this.inspectList = newarr;
+				this.loading = false;
 			}).catch((wrong) => {
 				this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
+					message: '网络错误，请重试',
+					type: 'error'
+				});
 			})
 	},
 	determine(){
@@ -210,18 +217,29 @@
 				type: 'warning'
 			});
 		}else{
-			this.dialoginspect = false;
 			var proxynum=this.selval[0].PROXYNUM;	
 			var version=this.selval[0].VERSION;
 			this.$emit('appendpro',proxynum);
 			this.$emit('appendver',version);
-			this.requestData();
+			// this.dialoginspect = false;
+			// this.requestData();
+			this.ResetDatasNew();//调用ResetDatasNew函数
 		}
 	},
+	DialogClose(){//点击取消按钮
+		this.ResetDatasNew();//调用ResetDatasNew函数
+	},
+	ResetDatasNew(){//点击确定或取消按钮时重置数据20190303
+		this.dialoginspect = false;//关闭弹出框
+		this.inspectList = [];//列表数据置空
+		this.page.currentPage = 1;//页码重新传值
+		this.page.pageSize = 10;//页码重新传值
+	},
   },
+
   mounted() {
-			this.requestData();
-		},
+		this.requestData();
+	},
 }
 </script>
 

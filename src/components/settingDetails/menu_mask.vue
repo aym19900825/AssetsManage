@@ -32,19 +32,19 @@
 									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="菜单名称" prop="name">
-												<el-input v-model="menu.name">
+												<el-input v-model="menu.name" :disabled="noedit">
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="链接地址" prop="url">
-												<el-input v-model="menu.url">
+												<el-input v-model="menu.url" :disabled="noedit">
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="排序" prop="sort">
-												<el-input v-model="menu.sort">
+												<el-input v-model="menu.sort" :disabled="noedit">
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -197,6 +197,7 @@
 					children: "subDepts",
 					label: "name"
 				},
+				noedit:false,
 			};
 		},
 		methods: {
@@ -217,6 +218,7 @@
 			visible() {
 				this.modifytitle=false;
 				this.show = true;
+				this.noedit = false;
 			},
 			
 			// 这里是修改
@@ -231,6 +233,7 @@
 					item.hidden = false;
 				}
 				this.show = true;
+				this.noedit = false;
 			},
 			//这是查看
 			view() {
@@ -242,6 +245,7 @@
 				this.views = true;//录入修改人信息
 				this.noviews = false;//按钮
 				this.show = true;
+				this.noedit = true;
 			},
 			//点击关闭按钮
 			close() {

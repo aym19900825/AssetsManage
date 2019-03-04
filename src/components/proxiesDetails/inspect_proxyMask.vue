@@ -1560,6 +1560,8 @@
 			},
 			//检验项目放大镜
 			basisleadbtn2(val){
+				console.log(123);
+				console.log(this.dataInfo.S_NUM);
 				this.deptindex = val;
 				if(val == 'maintable'){
 					if(this.dataInfo.S_NUM == null || this.dataInfo.S_NUM == '' || this.dataInfo.S_NUM == undefined){

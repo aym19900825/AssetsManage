@@ -43,11 +43,7 @@
 				</div>
 				<!-- 高级查询划出 End-->
 				<!-- 第二层弹出的表格 Begin-->
-				<el-table  :data="projectList" height="360px" border stripe style="width: 100%;" :default-sort="{prop:'projectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore"
-			v-loading="loading" 
-			element-loading-text="加载中…"
-			element-loading-spinner="el-icon-loading"
-			element-loading-background="rgba(255, 255, 255, 0.9)">
+				<el-table  :data="projectList" height="400px" border stripe style="width: 100%;" :default-sort="{prop:'projectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" width="55" fixed>
 					</el-table-column>
 					<el-table-column label="检验/检测项编号" width="150" sortable prop="P_NUM">
@@ -87,11 +83,7 @@
 				<!-- 表格 End-->
 				<div slot="footer">
 			       <el-button type="primary" @click="addbasis">确 定</el-button>
-<<<<<<< HEAD
-			       <el-button @click="DialogClose">取 消</el-button>
-=======
 			       <el-button @click="resetBasisInfo">取 消</el-button>
->>>>>>> d4e4171ce15f9472a3d2554cc4fb4b86b60c641f
 			    </div>
 			</el-dialog>
 			<!-- 检测项目与要求 End -->
@@ -107,9 +99,8 @@
   data() {
     return {
 		basic_url: Config.dev_url,
-		loading: false,
-		loadSign:true,//加载
 		dialogVisible: false,
+		loadSign:true,//加载
 		commentArr:{},
 		selUser: [],//接勾选的值
 		page: {
@@ -238,21 +229,6 @@
 			this.$emit('testprojectnum',basisnums);
 			this.$emit('testprojectid',basisids);
 			this.$emit('testprojectprover',provers);
-<<<<<<< HEAD
-            // this.dialogVisible = false;
-			this.requestData();
-			this.ResetDatasNew();//调用ResetDatasNew函数
-        }
-    },
-    DialogClose(){//点击取消按钮
-		this.ResetDatasNew();//调用ResetDatasNew函数
-	},
-	ResetDatasNew(){//点击确定或取消按钮时重置数据20190303
-		this.dialogVisible = false;//关闭弹出框
-		this.projectList = [];//列表数据置空
-		this.page.currentPage = 1;//页码重新传值
-		this.page.pageSize = 10;//页码重新传值
-=======
             this.resetBasisInfo();
         }
 	},
@@ -262,7 +238,6 @@
 		this.projectList = [];//清空表格渲染数据
 		this.page.currentPage = 1;//页码信息重置
 		this.page.pageSize = 10;//页码信息重置
->>>>>>> d4e4171ce15f9472a3d2554cc4fb4b86b60c641f
 	},
     loadMore () {
 	   if (this.loadSign) {
@@ -283,7 +258,6 @@
         this.requestData();
     },
 	requestData(){
-		this.loading = true;
 		var data = {
             page: this.page.currentPage,
             limit: this.page.pageSize,
@@ -299,10 +273,11 @@
             VERSION: this.searchList.VERSION,
             STATUS: this.searchList.STATUS,
 		};
-		console.log(this.basic_url +'/api-apps/app/inspectionPro2?S_NUM_where_in='+this.projectnum+'&P_NUM_where_not_in='+this.projectpnums);
         this.$axios.get(this.basic_url +'/api-apps/app/inspectionPro2?S_NUM_where_in='+this.projectnum+'&P_NUM_where_not_in='+this.projectpnums, {
         
         }).then((res) => {
+            console.log(2333333);
+            console.log(res.data);
             this.page.totalCount = res.data.count;	
             //总的页数
             let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -324,7 +299,6 @@
             }
             
             this.projectList = newarr;
-            this.loading = false;
         }).catch((wrong) => {})
 	},
 	determine(){

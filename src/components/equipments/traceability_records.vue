@@ -15,9 +15,12 @@
 				<div class="fixed-table-toolbar clearfix">
 					<div class="bs-bars pull-left">
 						<div class="hidden-xs" id="roleTableToolbar" role="group">
+							<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+									<i :class="item.icon"></i>{{item.name}}
+							</button>
 							<!-- <button type="button" class="btn btn-green" @click="openAddMgr" id="">
 	                        	<i class="icon-add"></i>添加
-	              			 </button> -->
+	              			 </button> 
 							<button type="button" class="btn btn-blue button-margin" @click="modify">
 							    <i class="icon-edit"></i>修改
 							</button>
@@ -44,6 +47,7 @@
 					    		<i class="icon-arrow1-down" v-show="down"></i>
 					    		<i class="icon-arrow1-up" v-show="up"></i>
 							</button>
+							-->
 						</div>
 					</div>
 					<div class="columns columns-right btn-group pull-right">
@@ -307,8 +311,6 @@
 				companyId: '',
 				deptId: '',
 				selUser: [],
-				'启用': true,
-				'冻结': false,
 				userList: [],
 				search: false,
 				show: false,
@@ -340,6 +342,7 @@
 					totalCount: 0
 				},
 				aaaData:[],
+				buttons:[],
 			}
 		},
 		methods: {
@@ -382,20 +385,39 @@
 				}
 				return this.$moment(date).format("YYYY-MM-DD");
 			},
+			//请求点击
+		    getbtn(item){
+		    	if(item.name=="添加"){
+		         this.openAddMgr();
+		    	}else if(item.name=="修改"){
+		    	 this.modify();
+		    	}else if(item.name=="彻底删除"){
+		    	 this.physicsDel();
+		    	}else if(item.name=="高级查询"){
+		    	 this.modestsearch();
+		    	}else if(item.name=="导入"){
+		    	 this.download();
+		    	}else if(item.name=="删除"){
+		    	 this.deluserinfo();
+		    	}else if(item.name=="报表"){
+			     this.reportdata();
+				}else if(item.name=="打印"){
+				   this.Printing();
+				}
+		    },
 			//添加用戶
 			openAddMgr() {
 				this.$refs.child.visible();
 			},
 			//修改用戶
 			modify() {
-				this.aaaData = this.selUser;
-				if(this.aaaData.length == 0) {
+				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
 						type: 'warning'
 					});
 					return;
-				} else if(this.aaaData.length > 1) {
+				} else if(this.selUser.length > 1) {
 					this.$message({
 						message: '不可同时修改多个数据',
 						type: 'warning'
@@ -630,19 +652,29 @@
 			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
-        		console.log(childValue);
-        		this.$refs.navsheader.showClick(childValue);
-      		},
+				this.$refs.navsheader.showClick(childValue);
+				this.getbutton(childValue);
+			},
+			  //请求页面的button接口
+		    getbutton(childByValue){
+		    	console.log(childByValue);
+		    	var data = {
+					menuId: childByValue.id,
+					roleId: this.$store.state.roleid,
+				};
+				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
+				this.$axios.get(url, {params: data}).then((res) => {
+					console.log(res);
+					this.buttons = res.data;
+					
+				}).catch((wrong) => {
+					this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+				})
+		    },
 		},
-		mounted(){
-             // 注册scroll事件并监听  
-             let self = this;
-              $(".div-table").scroll(function(){
-                self.loadMore();
-            })
-        },
-
-
 		mounted() {
 			this.requestData();
 		},

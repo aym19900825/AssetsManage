@@ -187,36 +187,38 @@
 	    			<el-button type="primary" @click="dailogconfirm()">确 定</el-button>
 	  			</span>
 			</el-dialog>
+
 			<!-- 作业指导书 Begin -->
 			<el-dialog :modal-append-to-body="false" title="作业指导书" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
-				<!-- 第二层弹出的表格 Begin-->
-				<el-table :header-cell-style="rowClass" :data="WORK_INSTRUCTIONList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'WORK_INSTRUCTIONList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-									<el-table-column type="selection" fixed width="55" align="center">
-									</el-table-column>
-									<el-table-column label="分发号" width="155" sortable prop="NUM">
-										<template slot-scope="scope">
-											<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.NUM}}
-											</p>
-										</template>
-									</el-table-column>
-									<el-table-column label="文件名称" sortable prop="DESCRIPTION">
-									</el-table-column>
-									<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
-									</el-table-column>
-									<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
-									</el-table-column>
-									<el-table-column label="机构" width="120" prop="DEPTIDDesc" sortable>
-									</el-table-column>
-								</el-table>
-								<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-								</el-pagination>
-								<!-- 表格 End-->
+				<el-table :header-cell-style="rowClass" :data="WORK_INSTRUCTIONList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'WORK_INSTRUCTIONList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+					<el-table-column type="selection" fixed width="55" align="center">
+					</el-table-column>
+					<el-table-column label="分发号" width="155" sortable prop="NUM">
+						<template slot-scope="scope">
+							<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.NUM}}
+							</p>
+						</template>
+					</el-table-column>
+					<el-table-column label="文件名称" sortable prop="DESCRIPTION">
+					</el-table-column>
+					<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
+					</el-table-column>
+					<el-table-column label="录入时间" width="160" prop="ENTERDATE" sortable :formatter="dateFormat">
+					</el-table-column>
+					<el-table-column label="机构" width="120" prop="DEPTIDDesc" sortable>
+					</el-table-column>
+				</el-table>
+
+				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+				</el-pagination>
+
 				<span slot="footer" class="dialog-footer">
 			       <el-button type="primary" @click="addwork">确 定</el-button>
-				   <el-button @click="workinstruclose">取 消</el-button>
+				   <el-button @click="DialogClose">取 消</el-button>
 			    </span>
 			</el-dialog>
 			<!-- 作业指导书 End -->
+
 		</div>
 	</div>
 </template>
@@ -884,18 +886,17 @@
 					// 	this.selUser[i].ID = '';
 					// 	list.push(this.selUser[i]);
 					// }
-
-					this.dialogVisible2 = false;
-					this.WORK_INSTRUCTIONList = [];
-					this.page.currentPage = 1;
-					this.page.pageSize = 10;
+					this.ResetDatasNew();//调用ResetDatasNew函数
 				}
 			},
-			workinstruclose(){
-				this.dialogVisible2 = false;
-				this.WORK_INSTRUCTIONList = [];
-				this.page.currentPage = 1;
-				this.page.pageSize = 10;
+			DialogClose(){//点击取消按钮
+				this.ResetDatasNew();//调用ResetDatasNew函数
+			},
+			ResetDatasNew(){//点击确定或取消按钮时重置数据20190303
+				this.dialogVisible2 = false;//关闭弹出框
+				this.WORK_INSTRUCTIONList = [];//列表数据置空
+				this.page.currentPage = 1;//页码重新传值
+				this.page.pageSize = 10;//页码重新传值
 			},
 			handleClose(done) {
 				this.$confirm('确认关闭？')

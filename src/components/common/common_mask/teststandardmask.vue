@@ -97,7 +97,7 @@
 				<!-- 第二层弹出的表格 End -->
 				<div slot="footer">
 					<el-button type="primary" @click="addbasis">确 定</el-button>
-			       <el-button @click="dialogVisible = false">取 消</el-button>
+			       <el-button @click="resetBasisInfo">取 消</el-button>
 			    </div>
 			</el-dialog>
 			<!-- 检测依据弹出框 End -->
@@ -134,6 +134,9 @@
         standardList:[],
 		selectData:[],
 		pronum:'',
+		basisids:'',//存放勾选过的id逗号拼接的字符串
+		productnum:'',
+		basistable:[],
     }
   },
 
@@ -191,12 +194,19 @@
 	},
   	//点击关闭按钮
 	close() {
-		this.dialogProduct = false;
+		this.resetBasisInfo();
     },
-    basislead(pronum){
-		this.pronum = pronum;
+    basislead(value){
+		console.log(value);
+		this.productnum = value[0];//产品编号
+		this.basistable = value[1];//检测依据表格中已有的数据
+		var basissnum = [];
+		for(var i = 0;i<this.basistable.length;i++){
+			basissnum.push(this.basistable[i].S_NUM);
+		}
+		this.basissnums = basissnum.toString(',');
+		this.requestData();//渲染数据
 		this.dialogVisible = true;
-		this.requestData();
     },
     addbasis(){
         var selData = this.selUser;
@@ -209,7 +219,7 @@
         } else {
             var changeUser = this.selUser;
 			var list = [];
-            //basisnum为依据编号的数组
+			//basisnum为依据编号的数组
             var basisnum = [];
 			var basisname = [];
 			var prover = [];
@@ -218,7 +228,7 @@
 				basisname.push(changeUser[i].S_NAME);	
 				prover.push(changeUser[i].S_NUM+':'+changeUser[i].VERSION);			
             }
-            //basisnums为basisnum数组用逗号拼接的字符串
+			//basisnums为basisnum数组用逗号拼接的字符串
 			var basisnums = basisnum.toString(',');
 			var basisnames = basisname.toString(',');
 			var provers = prover.toString(',');
@@ -231,10 +241,16 @@
 			this.$emit('testbasisnum',basisnums);
 			this.$emit('testbasisname',basisnames);
 			this.$emit('testbasisprover',provers);
-            this.dialogVisible = false;
-			this.requestData();
+            this.resetBasisInfo();
 		}
-    },
+	},
+	resetBasisInfo(){//重置弹出框相关信息
+		this.dialogVisible = false;
+		this.resetbtn();//重置高级搜索
+		this.standardList = [];//清空表格渲染数据
+		this.page.currentPage = 1;//页码信息重置
+		this.page.pageSize = 10;//页码信息重置
+	},
     loadMore () {
 	   if (this.loadSign) {
 	     this.loadSign = false
@@ -265,10 +281,9 @@
             RELEASETIME: this.searchList.RELEASETIME,
             STARTETIME: this.searchList.STARTETIME,
             // STATUS: this.searchList.STATUS,
-        };
-        console.log(111111);
-        console.log(this.pronum);
-        var url = this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.pronum;
+		};
+		var url = this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.productnum+'&S_NUM_where_not_in='+this.basissnums;
+		console.log(url);
         this.$axios.get(url, {
             
         }).then((res) => {
@@ -320,10 +335,10 @@
             .catch(_ => {});
     }
   },
-  mounted() {
-            this.requestData();
-            this.getCompany();
-		},
+  	mounted() {
+		// this.requestData();
+		this.getCompany();
+	},
 }
 </script>
 

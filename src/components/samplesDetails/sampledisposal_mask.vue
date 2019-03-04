@@ -243,9 +243,6 @@
 	export default {
 		name: 'sampledisposal_mask',
 		props: {
-			page: {
-				type: Object,
-			},
 			samplesForm: { //接收主表单中填写的数据信息
 				type: Object,
 				default: function() {

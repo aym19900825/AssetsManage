@@ -413,21 +413,7 @@
 				};
 				this.requestData();
 			},
-			//请求页面的button接口
-		    getbutton(childByValue){
-		    	console.log(childByValue);
-		    	var data = {
-					menuId: childByValue.id,
-					roleId: this.$store.state.roleid,
-				};
-				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
-				this.$axios.get(url, {params: data}).then((res) => {
-					console.log(res);
-					this.buttons = res.data;
-					
-				}).catch((wrong) => {})
-
-		    },
+			
 		    //请求点击
 		    getbtn(item){
 		    	if(item.name=="添加"){
@@ -437,13 +423,15 @@
 		    	}else if(item.name=="高级查询"){
 		    	 this.modestsearch();
 		    	}else if(item.name=="活动"){
-		    		this.unfreeze();
+		    	 this.unfreeze();
 		    	}else if(item.name=="不活动"){
-		    		this.freezeAccount();
+		    	 this.freezeAccount();
 		    	}else if(item.name=="删除"){
-		    		this.deluserinfo();
+		    	 this.deluserinfo();
+		    	}else if(item.name=="彻底删除"){
+		    	 this.physicsDel();
 		    	}else if(item.name=="重置密码"){
-		    		this.resetPwd();
+		    	 this.resetPwd();
 		    	}
 		    },
 			//添加用戶
@@ -496,23 +484,82 @@
 						type: 'warning'
 					});
 					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时删除多个数据',
-						type: 'warning'
-					});
-					return;
 				} else {
-					var changeUser = selData[0];
-					var id = changeUser.id;
-					var url = this.basic_url + '/api-user/users/' + id;
+					var url = this.basic_url + '/api-user/users/deletes';
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					for(var i = 0; i < changeUser.length; i++) {
+						deleteid.push(changeUser[i].id);
+					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+					var data = {
+						ids: ids,
+					}
 					this.$confirm('确定删除此数据吗？', '提示', {
 						confirmButtonText: '确定',
 						cancelButtonText: '取消',
 					}).then(({
 						value
 					}) => {
-						this.$axios.delete(url, {}).then((res) => { //.delete 传数据方法
+						this.$axios.delete(url, {
+							params: data
+						}).then((res) => { //.delete 传数据方法
+							//resp_code == 0是后台返回的请求成功的信息
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
+							this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+						});
+					}).catch(() => {
+
+					});
+				}
+			},
+			// 彻底删除
+			physicsDel() {
+				var selData = this.selUser;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请您选择要删除的数据',
+						type: 'warning'
+					});
+					return;
+				}  else {
+					var url = this.basic_url + '/api-user/users/physicsDel';
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					for(var i = 0; i < changeUser.length; i++) {
+						deleteid.push(changeUser[i].id);
+					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+					var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {
+							params: data
+						}).then((res) => { //.delete 传数据方法
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
 								this.$message({
@@ -795,7 +842,27 @@
         		console.log(childValue);
         		this.$refs.navsheader.showClick(childValue);
         		this.getbutton(childValue);
-      		},
+			  },
+			  //请求页面的button接口
+		    getbutton(childByValue){
+		    	console.log(childByValue);
+		    	var data = {
+					menuId: childByValue.id,
+					roleId: this.$store.state.roleid,
+				};
+				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
+				this.$axios.get(url, {params: data}).then((res) => {
+					console.log(res);
+					this.buttons = res.data;
+					
+				}).catch((wrong) => {
+					this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+				})
+
+		    },
 		},
 		beforeMount() {
 			

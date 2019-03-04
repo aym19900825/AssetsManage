@@ -6,7 +6,7 @@
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
-			<navs_left></navs_left>
+			<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left>
 			<!--左侧菜单内容显示 End-->
 			<!--右侧内容显示 Begin-->
 			<div class="wrapper wrapper-content">
@@ -15,7 +15,10 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+									<i :class="item.icon"></i>{{item.name}}
+								</button>
+								<!-- <button type="button" class="btn btn-green" @click="openAddMgr" id="">
 	                        	<i class="icon-add"></i>添加
 	              			 </button>
 								<button type="button" class="btn btn-blue button-margin" @click="modify">
@@ -43,7 +46,7 @@
 					    		<i class="icon-search"></i>高级查询
 					    		<i class="icon-arrow1-down" v-show="down"></i>
 					    		<i class="icon-arrow1-up" v-show="up"></i>
-							</button>
+							</button> -->
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -221,6 +224,7 @@
 				},
 				CATEGORY: {},//修改子组件时传递数据
 				selectData: [],
+				buttons:[],
 			}
 		},
 		methods: {
@@ -307,6 +311,26 @@
 				}
 
 			},
+			 //请求点击
+		    getbtn(item){
+		    	if(item.name=="添加"){
+		         this.openAddMgr();
+		    	}else if(item.name=="修改"){
+		    	 this.modify();
+		    	}else if(item.name=="高级查询"){
+		    	 this.modestsearch();
+		    	}else if(item.name=="报表"){
+		    	 this.reportdata();
+		    	}else if(item.name=="导出"){
+		    	 this.exportData();
+				}else if(item.name=="打印"){
+		    	 this.Printing();
+				}else if(item.name=="删除"){
+		    	 this.deluserinfo();
+		    	}else if(item.name=="物理删除"){
+		    	 this.physicsDel();
+		    	}
+		    },
 			//添加
 			openAddMgr() {
 				this.reset();
@@ -529,7 +553,28 @@
 			handleNodeClick(data) {},
 			formatter(row, column) {
 				return row.enabled;
-			}
+			},
+			childByValue:function(childValue) {
+        		// childValue就是子组件传过来的值
+				console.log(childValue);
+				this.$refs.navsheader.showClick(childValue);
+        		this.getbutton(childValue);
+			},
+			  //请求页面的button接口
+		    getbutton(childByValue){
+		    	console.log(childByValue);
+		    	var data = {
+					menuId: childByValue.id,
+					roleId: this.$store.state.roleid,
+				};
+				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
+				this.$axios.get(url, {params: data}).then((res) => {
+					console.log(res);
+					this.buttons = res.data;
+					
+				}).catch((wrong) => {})
+
+		    },
 		},
 		mounted() {
 			this.requestData();

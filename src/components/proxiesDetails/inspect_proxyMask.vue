@@ -1806,7 +1806,11 @@
 			},
 			//获取负责人和接收人
 			getCustomer(type) {
-				this.$refs.enterprisechild.visible(type);
+				if(type == 'vname'){
+					this.$refs.enterprisechild.visible(type , this.dataInfo.appendid);
+				}else{
+					this.$refs.enterprisechild.visible(type);
+				}
 			},
 			addname(){
 				var customid=this.customid;

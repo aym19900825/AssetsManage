@@ -1118,6 +1118,7 @@
 				reportname:'',//生成报告名称
 				workorderreportid:'',//存放生成报告id
 				btnshow:true,//报告提交按钮
+				sendchilddata:[],//子表已有的值
 			};
 		},
 		methods: {
@@ -1480,7 +1481,10 @@
 						type: 'warning'
 					});
 				}else{
-					this.$refs.standardchild.basislead(this.workorderForm.PRO_NUM);
+					this.sendchilddata.push(this.workorderForm.PRO_NUM);
+					this.sendchilddata.push(this.workorderForm.WORKORDER_BASISList);
+					this.$refs.standardchild.basislead(this.sendchilddata);
+					this.sendchilddata = [];
 				}
 			},
 			//检验依据列表
@@ -1500,7 +1504,10 @@
 						type: 'warning'
 					});
 				}else{
-					this.$refs.projectchild.projectlead(this.workorderForm.S_NUM);
+					this.sendchilddata.push(this.workorderForm.S_NUM);
+					this.sendchilddata.push(this.workorderForm.WORKORDER_PROJECTList);
+					this.$refs.projectchild.projectlead(this.sendchilddata);
+					this.sendchilddata = [];
 				}
 			},
 			 //检验项目列表

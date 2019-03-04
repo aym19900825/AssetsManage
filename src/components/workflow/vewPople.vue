@@ -26,16 +26,13 @@
 	  	open() {
 					this.innerVisible = true;
 				},
-	  	getvewPople(id){
-	  		console.log(111);
+	  	getvewPople(){
 	  		this.id=this.approvingData.id;
-		    this.appname=this.approvingData.app;
+				this.appname=this.approvingData.app;
 //		    /app/{app}/flow/isStart/{id}{app}单据是否启动流程
 		    var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/isStart/'+this.id;
 		    		this.$axios.get(url, {}).then((res) => {
-		    			console.log(res);
 		    			if(res.data.resp_code == 1) {
-						console.log(res);
 							this.$message({
 								message:res.data.resp_msg,
 								type: 'warning'
@@ -43,7 +40,6 @@
 				    }else{
 				    	var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/isEnd/'+this.id;
 		    				this.$axios.get(url, {}).then((res) => {
-		    					console.log(res);
 		    					if(res.data.resp_code == 0) {
 									this.$message({
 										message:res.data.resp_msg,
@@ -52,13 +48,11 @@
 		    					}else{
 		    						var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/Executors/'+this.id;
 		    						this.$axios.get(url, {}).then((res) => {
-									console.log(res.data.datas);
 									var resullt=res.data.datas;
 									var users='';
 									for(var i=0;i<resullt.length;i++){
 										users = users + resullt[i].nickname+'，';
 									}
-									console.log(users);
 									this.user=users;			
 									this.innerVisible = true;
 									});

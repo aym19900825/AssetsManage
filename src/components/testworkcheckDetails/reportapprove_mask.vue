@@ -18,6 +18,15 @@
 				</div>
 				<div class="mask_content">
 					<el-form :model="report" inline-message :rules="rules" ref="report" label-width="100px" class="demo-adduserForm">
+						<div class="text-center" v-show="viewtitle">
+							<span v-if="this.report.STATE!=3">
+							<el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 启动流程</el-button>
+							<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
+							</span>
+							<el-button type="primary" round plain size="mini" @click="flowmap" ><i class="icon-git-pull-request"></i> 流程地图</el-button>
+							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
+							<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
+						</div>
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="报告审批" name="1">
@@ -82,6 +91,14 @@
 					</el-form>
 				</div>
 			</div>
+			<!--审批页面-->
+			<approvalmask :approvingData="approvingData" ref="approvalChild" @detail="detailgetData"  ></approvalmask>
+			<!--流程历史-->
+			<flowhistorymask :approvingData="approvingData"  ref="flowhistoryChild" ></flowhistorymask>
+			<!--流程地图-->
+			<flowmapmask :approvingData="approvingData" ref="flowmapChild" ></flowmapmask>
+			<!--当前责任人-->
+			<vewPoplemask :approvingData="approvingData"  ref="vewPopleChild" ></vewPoplemask>
 		</div>
 	</div>
 </template>
@@ -89,9 +106,19 @@
 <script>
 	import Config from '../../config.js'
 	import docTable from '../common/doc.vue'
+	import approvalmask from '../workflow/approving.vue'
+	import flowhistorymask from '../workflow/flowhistory.vue'
+	import flowmapmask from '../workflow/flowmap.vue'
+	import vewPoplemask from '../workflow/vewPople.vue'
 	export default {
 		name: 'masks',
-		components: {docTable},
+		components: {
+			docTable,
+			approvalmask,
+			flowhistorymask,
+			flowmapmask,
+			vewPoplemask,
+			},
 		data() {
 			var validateNum = (rule, value, callback) => {
 				if(value != ""){
@@ -116,6 +143,7 @@
 				}
 			};
 			return {
+				approvingData:{},//审批的数据
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				selUser: [],
@@ -155,7 +183,9 @@
 				modify:false,//修订
 				hintshow:false,
 				statusshow1:true,
-                statusshow2:false,
+				statusshow2:false,
+				start:false,
+				approval:false,
                 report:{
                     ID:'',	//报告ID
                     REPORTNUM:'',	//编码
@@ -168,7 +198,9 @@
                     // CHANGEDATE:'',	//修改时间
                     // DEPTID:'',	//机构ID
                     // DEPARTMENT:'',	//机构
-                }
+				},
+				dataid:'',
+				reportApprove:'reportApprove',//appname
             }
 		},
 		methods: {
@@ -221,8 +253,22 @@
 				this.statusshow2 = false;
 				this.show = true;
 			},
+			detailgetData(){
+				var url = this.basic_url +'/api-apps/app/reportApprove/' +this.dataid;
+				this.$axios.get(url, {}).then((res) => {
+					this.report = res.data;
+					this.show = true;
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+			},
 			// 这里是修改
 			detail(dataid) {
+				console.log(dataid);
+				this.dataid=dataid;
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.viewtitle = false;
@@ -234,6 +280,7 @@
 				this.modify = true;//修订
 				this.statusshow1 = false;
 				this.statusshow2 = true;
+				this.detailgetData();
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.report.DEPTID = res.data.deptId;//传给后台机构id
 					this.report.CHANGEBY = res.data.id;
@@ -258,21 +305,21 @@
 						type: 'error'
 					});
                 });
-                var url = this.basic_url +'/api-apps/app/reportApprove/' + dataid;
-				this.$axios.get(url, {}).then((res) => {
-					this.report = res.data;
-					this.show = true;
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
-				this.show = true;
+                // var url = this.basic_url +'/api-apps/app/reportApprove/' + dataid;
+				// this.$axios.get(url, {}).then((res) => {
+				// 	this.report = res.data;
+				// 	this.show = true;
+				// }).catch((err) => {
+				// 	this.$message({
+				// 		message: '网络错误，请重试',
+				// 		type: 'error'
+				// 	});
+				// });
+				// this.show = true;
 			},
 			//这是查看
-			view(data) {
-				this.report = data;
+			view(dataid) {
+				this.dataid = dataid;
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;
@@ -280,7 +327,36 @@
 				this.noedit = true;//表单内容
 				this.views = true;//录入修改人信息
 				this.noviews = false;//按钮
-				this.show = true;				
+				//判断启动流程和审批的按钮是否显示
+				this.detailgetData();
+				var url = this.basic_url + '/api-apps/app/reportApprove/flow/isStart/'+this.dataid;
+				this.$axios.get(url, {}).then((res) => {
+					 console.log(res);
+					if(res.data.resp_code==1){
+						this.start=true;
+						this.approval=false;
+					}else{
+						var url = this.basic_url + '/api-apps/app/reportApprove/flow/Executors/'+this.dataid;
+						console.log(url);
+						this.$axios.get(url, {}).then((res) => {
+							// console.log(res.data.datas);
+							res.data.CJDW = Number(res.data.CJDW);
+							var resullt=res.data.datas;
+							var users='';
+							for(var i=0;i<resullt.length;i++){
+								users = users + resullt[i].username+",";
+								// console.log("users----"+users);
+							}
+							if(users.indexOf(this.username) != -1){
+								this.approval=true;
+								this.start=false;
+							}else{
+								this.approval=false;
+								this.start=false;
+							}
+						});
+					}
+				});				
 			},
 			//点击关闭按钮
 			close() {
@@ -311,6 +387,95 @@
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
 				$(".mask_div").css("top", "100px");
+			},
+			//启动流程
+			startup(){
+				var url = this.basic_url + '/api-apps/app/reportApprove/flow/'+this.dataid;
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+					if(res.data.resp_code == 1) {
+							this.$message({
+								message:res.data.resp_msg,
+								type: 'warning'
+							});
+				    }else{
+				    	this.$message({
+								message:res.data.resp_msg,
+								type: 'success'
+							});
+							this.detailgetData();
+							var url = this.basic_url + '/api-apps/app/reportApprove/flow/Executors/'+this.dataid;
+							this.$axios.get(url, {}).then((res) => {
+								var resullt=res.data.datas;
+								var users='';
+								for(var i=0;i<resullt.length;i++){
+									users = users + resullt[i].username+",";
+								}
+								if(users.indexOf(this.username) != -1){
+									this.approval=true;
+									this.start=false;
+								}else{
+									this.approval=false;
+									this.start=false;
+								}
+							});
+				    }
+				});
+			},	
+			//审批流程
+			approvals(){
+				this.approvingData.id =this.dataid;
+				this.approvingData.app=this.reportApprove;
+				 var url = this.basic_url + '/api-apps/app/reportApprove/flow/isEnd/'+this.dataid;
+		    		this.$axios.get(url, {}).then((res) => {
+		    			if(res.data.resp_code == 0) {
+							this.$message({
+								message:res.data.resp_msg,
+								type: 'warning'
+							});
+		    			}else{
+		    				var url = this.basic_url + '/api-apps/app/reportApprove/flow/isExecute/'+this.dataid;
+		    				this.$axios.get(url, {}).then((res) => {
+				    			if(res.data.resp_code == 1) {
+										this.$message({
+											message:res.data.resp_msg,
+											type: 'warning'
+										});
+								}else{
+									var url = this.basic_url + '/api-apps/app/reportApprove/flow/customFlowValidate/'+this.dataid;
+								this.$axios.get(url, {}).then((res) => {
+				    				if(res.data.resp_code == 1) {
+										this.$message({
+											message:res.data.resp_msg,
+											type: 'warning'
+										});
+									}else{
+									 	this.$refs.approvalChild.visible();
+									}
+								})
+								}
+		    				});
+		    			}
+					});
+			},
+			//流程历史
+			flowhistory(){
+				this.approvingData.id =this.dataid;
+				this.approvingData.app=this.reportApprove;
+//				this.$refs.flowhistoryChild.open();
+				this.$refs.flowhistoryChild.getdata(this.dataid);
+			},
+			//流程地图
+			flowmap(){
+				this.approvingData.id =this.dataid;
+				this.approvingData.app=this.reportApprove;
+				this.$refs.flowmapChild.getimage();
+			},
+			//当前责任人
+			viewpepole(){
+				this.approvingData.id =this.dataid;
+				this.approvingData.app=this.reportApprove;
+				this.$refs.vewPopleChild.getvewPople(this.dataid);
 			},
 			// 保存users/saveOrUpdate
 			save(opt) {

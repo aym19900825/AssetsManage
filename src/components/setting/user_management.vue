@@ -744,6 +744,9 @@
 					companyId: this.companyId,
 					// deptId: this.deptId
 				}
+				if(!(!!this.searchList.deptId && this.searchList.deptId == 128)){
+					data.deptId = this.searchList.deptId;
+				}
 				var url = this.basic_url + '/api-user/users';
 				this.$axios.get(url, {
 					params: data

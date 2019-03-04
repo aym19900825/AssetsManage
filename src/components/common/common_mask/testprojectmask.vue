@@ -43,11 +43,7 @@
 				</div>
 				<!-- 高级查询划出 End-->
 				<!-- 第二层弹出的表格 Begin-->
-				<el-table  :data="projectList" height="360px" border stripe style="width: 100%;" :default-sort="{prop:'projectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore"
-			v-loading="loading" 
-			element-loading-text="加载中…"
-			element-loading-spinner="el-icon-loading"
-			element-loading-background="rgba(255, 255, 255, 0.9)">
+				<el-table  :data="projectList" height="400px" border stripe style="width: 100%;" :default-sort="{prop:'projectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" width="55" fixed>
 					</el-table-column>
 					<el-table-column label="检验/检测项编号" width="150" sortable prop="P_NUM">
@@ -103,9 +99,8 @@
   data() {
     return {
 		basic_url: Config.dev_url,
-		loading: false,
-		loadSign:true,//加载
 		dialogVisible: false,
+		loadSign:true,//加载
 		commentArr:{},
 		selUser: [],//接勾选的值
 		page: {
@@ -263,7 +258,6 @@
         this.requestData();
     },
 	requestData(){
-		this.loading = true;
 		var data = {
             page: this.page.currentPage,
             limit: this.page.pageSize,
@@ -282,6 +276,8 @@
         this.$axios.get(this.basic_url +'/api-apps/app/inspectionPro2?S_NUM_where_in='+this.projectnum+'&P_NUM_where_not_in='+this.projectpnums, {
         
         }).then((res) => {
+            console.log(2333333);
+            console.log(res.data);
             this.page.totalCount = res.data.count;	
             //总的页数
             let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -303,7 +299,6 @@
             }
             
             this.projectList = newarr;
-            this.loading = false;
         }).catch((wrong) => {})
 	},
 	determine(){

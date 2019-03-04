@@ -1051,6 +1051,7 @@
 					this.ResetDatasNew3();//调用ResetDatasNew函数
 				}
 			},
+
 			DialogClose3(){//点击取消按钮
 				this.ResetDatasNew3();//调用ResetDatasNew函数
 			},

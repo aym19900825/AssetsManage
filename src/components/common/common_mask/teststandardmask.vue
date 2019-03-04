@@ -62,11 +62,7 @@
 				</div>
 				<!-- 高级查询划出 End-->
 				<!-- 第二层弹出的表格 Begin -->
-				<el-table :data="standardList" height="360px" border stripe style="width: 100%;" :default-sort="{prop:'standardList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore"
-			v-loading="loading" 
-			element-loading-text="加载中…"
-			element-loading-spinner="el-icon-loading"
-			element-loading-background="rgba(255, 255, 255, 0.9)">
+				<el-table :data="standardList" height="400px" border stripe style="width: 100%;" :default-sort="{prop:'standardList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" width="55" fixed>
 					</el-table-column>
 					<el-table-column label="主键编号" width="120" sortable prop="ID">
@@ -117,9 +113,8 @@
   data() {
     return {
 		basic_url: Config.dev_url,
-		loading: false,
-		loadSign:true,//加载
 		dialogVisible: false,
+		loadSign:true,//加载
 		commentArr:{},
 		selUser: [],//接勾选的值
 		page: {
@@ -275,7 +270,6 @@
         this.requestData();
 	},
 	requestData(){
-		this.loading = true;
 		var data = {
             page: this.page.currentPage,
             limit: this.page.pageSize,
@@ -313,7 +307,6 @@
                 }
             }
             this.standardList = newarr;
-            this.loading = false;
         }).catch((wrong) => {})
 	},
 	determine(){

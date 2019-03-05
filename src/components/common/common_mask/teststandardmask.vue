@@ -357,20 +357,12 @@
     handleClose(done) {
         this.$confirm('确认关闭？')
             .then(_ => {
-<<<<<<< HEAD
 				this.resetBasisInfo();
             })
             .catch(_ => {
 				console.log('取消关闭');
 				$('.v-modal').hide();
 			});
-=======
-                this.resetBasisInfo();
-            })
-            .catch(_ => {
-            	 $('.v-modal').hide();
-            });
->>>>>>> dde08359a5e2417eb8176567d45ce5b97e724f98
     }
   },
   	mounted() {

@@ -497,7 +497,10 @@
 											    </el-table-column>
 							            		<el-table-column label="人员姓名" sortable prop="NAME">
 											      <template slot-scope="scope">
-											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NAME"></el-input><span v-else="v-else">{{scope.row.NAME}}</span>
+											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NAME">
+														  <el-button slot="append" icon="el-icon-search" @click="addperson(scope.row)" :disabled="noedit"></el-button>
+													</el-input>
+													<span v-else="v-else">{{scope.row.NAME}}</span>
 											      </template>
 											    </el-table-column>
 											    <el-table-column label="用户名" sortable prop="USER">
@@ -1380,6 +1383,8 @@
 						this.workorderForm.ITEM_UNDERTAKE_USER = this.selMenu[0].nickname;
 					}else if(this.numtips == 'qualityperson'){
 						this.workorderForm.PROFESSIONAL = this.selMenu[0].nickname;
+					}else{
+						this.numtips.NAME = this.selMenu[0].nickname;
 					}
 					this.dialogVisible2 = false;
 					this.getuser();

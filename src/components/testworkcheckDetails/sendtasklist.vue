@@ -4,7 +4,7 @@
 		<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 			<el-tabs v-model="activeName" @tab-click="handleClick">						
                 <el-tab-pane label="检测项目与要求" name="first">
-                    <el-table :data="workorderForm.WORKORDER_PROJECTList" border  @selection-change="SelChange"  stripe :fit="true" max-height="260" style="width: 100%;" :default-sort="{prop:'workorderbasisList', order: 'descending'}">
+                    <el-table :data="workorderForm.WORKORDER_PROJECTList" row-key="ID" border  @selection-change="proChange" height="260" stripe :fit="true" style="width: 100%;" :default-sort="{prop:'workorderForm.WORKORDER_PROJECTList', order: 'descending'}">
 						<el-table-column type="selection" width="55" fixed align="center">
 						</el-table-column>
                         <el-table-column prop="P_NUM" label="检测项目编号" sortable>
@@ -18,7 +18,7 @@
                     </el-table>
                 </el-tab-pane>
                 <el-tab-pane label="分包项目" name="second">
-                    <el-table :data="workorderForm.WORKORDER_CONTRACTList" row-key="ID" border  @selection-change="SelChange"  stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'workorderForm.WORKORDER_CONTRACTList', order: 'descending'}">
+                    <el-table :data="workorderForm.WORKORDER_CONTRACTList" row-key="ID" border  @selection-change="conChange" height="260" stripe :fit="true" style="width: 100%;" :default-sort="{prop:'workorderForm.WORKORDER_CONTRACTList', order: 'descending'}">
                         <el-table-column type="selection" width="55" fixed align="center">
 						</el-table-column>
 						<el-table-column prop="WONUM" label="工作任务单编号" sortable width="150px">
@@ -64,20 +64,20 @@
 		dialogProduct: false,
 		loadSign:true,//加载
 		commentArr:{},
-		selUser: [],//接勾选的值
 		page: {
 			currentPage: 1,
-			pageSize: 20,
+			pageSize: 10,
 			totalCount: 0
 		},
 		DEPTID:'',//当前选择的机构值
         NUM:'',//类别编号
         activeName: 'first', //tabs
         workorderForm:{
-            WORKORDER_PROJECTList:'',
-            WORKORDER_CONTRACTList:''
+            WORKORDER_PROJECTList:[],
+            WORKORDER_CONTRACTList:[]
 		},
-		selMenu: [],
+		proMenu: [],
+		conMenu: [],
 		WORKORDER_PROJECTLISTID:[],
 		WORKORDER_CONTRACTLISTID:[]
     }
@@ -105,9 +105,6 @@
 	rowClass({ row, rowIndex}) {
 	    return 'text-align:center'
 	},
-	SelChange(val) {
-		this.selUser = val;
-	},
   	sizeChange(val) {
 		this.page.pageSize = val;
 		this.requestData();
@@ -125,15 +122,18 @@
 		this.showdata(dataid);
 	},
 	showdata(dataid){
-		// var url = this.basic_url +'/api-apps/app/workorder/operate/subtaskList?WORKORDERID='+dataid;
-		var url = 'http://192.168.1.115:7902/app/workorder/operate/subtaskList?WORKORDERID'+dataid;
+		// var url = 'http://192.168.1.115:7902/app/workorder/operate/subtaskList?WORKORDERID='+dataid;
+		var url = this.basic_url +'/api-apps/app/workorder/operate/subtaskList?WORKORDERID='+dataid;
 		console.log(url);
 		this.$axios.get(url, {}).then((res) => {
 			console.log(111);
 			console.log(res.data);			
 			if(res.data.resp_code == 0) {
+				this.workorderForm.WORKORDER_PROJECTList = res.data.datas.WORKORDER_PROJECT;
+				this.workorderForm.WORKORDER_CONTRACTList = res.data.datas.WORKORDER_CONTRACT;
 				this.dialogProduct = true;
-			}else if(res.data.resp_code == 999){
+
+			}else if(res.data.resp_code == 1){
 				this.$message({
 					message: res.data.resp_msg,
 					type: 'warning'
@@ -147,32 +147,33 @@
 			});
 		});
 	},
-	SelChange(val) {
-		this.selMenu = val;
+	proChange(val) {
+		this.proMenu = val;
+	},
+	conChange(val) {
+		this.conMenu = val;
 	},
 	submit(){
-		if(this.selMenu.length == 0) {
+		if(this.conMenu.length == 0 && this.proMenu.length == 0) {
 			this.$message({
-				message: '请您选择数据',
+				message: '请选择至少一条数据',
 				type: 'warning'
 			});
 			return;
 		}else {
-			for(var i = 0;i<this.selMenu.length;i++){
-				console.log(this.selMenu[i]=='');
-				if(this.selMenu[i].P_NUM != ''){
-					this.WORKORDER_PROJECTLISTID.push(this.selMenu[i].ID);
-				}else{
-					this.WORKORDER_CONTRACTLISTID.push(this.selMenu[i].ID);
-				}
+			for(var i = 0;i<this.proMenu.length;i++){
+				this.WORKORDER_PROJECTLISTID.push(this.proMenu[i].ID);
+			}
+			for(var i = 0;i<this.conMenu.length;i++){
+				this.WORKORDER_CONTRACTLISTID.push(this.conMenu[i].ID);
 			}
 			var id = this.workorderForm.ID.toString();
 			var projectid = this.WORKORDER_PROJECTLISTID.toString(',');
 			var contractid = this.WORKORDER_CONTRACTLISTID.toString(',');
-			// var url = this.basic_url +'/api-apps/app/workorder/operate/subtask';
-			var url = 'http://192.168.1.115:7902/app/workorder/operate/subtask?WORKORDERID='+id+'&WORKORDER_PROJECTLISTID='+projectid+'WORKORDER_CONTRACTLISTID='+contractid;
+			// var url = 'http://192.168.1.115:7902/app/workorder/operate/subtask?WORKORDERID='+id+'&WORKORDER_PROJECTLISTID='+projectid+'WORKORDER_CONTRACTLISTID='+contractid;
+			var url = this.basic_url +'/api-apps/app/workorder/operate/subtask?WORKORDERID='+id+'&WORKORDER_PROJECTLISTID='+projectid+'&WORKORDER_CONTRACTLISTID='+contractid;
 			console.log(url);
-			this.$axios.get(url,data).then((res) => {
+			this.$axios.get(url,{}).then((res) => {
 				console.log(res);
 				if(res.data.resp_code == 0) {
 					this.$message({
@@ -186,7 +187,9 @@
 					type: 'error'
 				});
 			});
+			this.selMenu = [];
 			this.dialogProduct = false;
+			this.$emit('request');
 		}
 	},	
   },

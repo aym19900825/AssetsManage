@@ -413,7 +413,7 @@
 
 												<el-table-column prop="P_REMARKS" label="检验项目内容" sortable width="200px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.P_REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.P_REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'change'}]" >
 															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入">
 																<el-button slot="append" icon="el-icon-search" @click="basisleadbtn2(scope.row)">
 																</el-button>

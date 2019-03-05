@@ -79,8 +79,8 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="主任务单?" prop="IS_MAIN" >
-												<el-select clearable v-model="workorderForm.IS_MAIN" filterable allow-create default-first-option placeholder="请选择" style="width:100%" :disabled="noedit">
+											<el-form-item label="是否主任务单？" prop="IS_MAIN" >
+												<el-select clearable v-model="workorderForm.IS_MAIN" filterable allow-create default-first-option placeholder="请选择" style="width:100%" disabled>
 													<el-option label="是" value="1"></el-option>
 													<el-option label="否" value="0"></el-option>
 												</el-select>
@@ -497,7 +497,10 @@
 											    </el-table-column>
 							            		<el-table-column label="人员姓名" sortable prop="NAME">
 											      <template slot-scope="scope">
-											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NAME"></el-input><span v-else="v-else">{{scope.row.NAME}}</span>
+											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NAME">
+														  <el-button slot="append" icon="el-icon-search" @click="addperson(scope.row)" :disabled="noedit"></el-button>
+													</el-input>
+													<span v-else="v-else">{{scope.row.NAME}}</span>
 											      </template>
 											    </el-table-column>
 											    <el-table-column label="用户名" sortable prop="USER">
@@ -1380,6 +1383,8 @@
 						this.workorderForm.ITEM_UNDERTAKE_USER = this.selMenu[0].nickname;
 					}else if(this.numtips == 'qualityperson'){
 						this.workorderForm.PROFESSIONAL = this.selMenu[0].nickname;
+					}else{
+						this.numtips.NAME = this.selMenu[0].nickname;
 					}
 					this.dialogVisible2 = false;
 					this.getuser();

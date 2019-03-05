@@ -90,7 +90,9 @@ const actions = {
    setSelectedNavAct(context,selectedNav){
       context.commit('setSelectedNav',selectedNav);
    },
-  
+   setClickedNavAct(context,clickedNav){
+      context.commit('setClickedNav',clickedNav);
+   },
 };
 
 router.beforeEach(function (to, from, next) {

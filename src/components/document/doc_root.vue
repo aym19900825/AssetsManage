@@ -15,15 +15,14 @@
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
 								<form method="post" id="file" action="" enctype="multipart/form-data" style="float: left;">
-
 									<button style="margin-right: 4px;" type="button" class="btn btn-green a-upload">
 										<i class="icon-add"></i>上传
 										<input id="excelFile" type="file" name="uploadFile" @change="upload"/>
 									</button>
 								</form>
 								<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
-							    <i class="icon-clipboard"></i>报表
-							</button>
+								    <i class="icon-clipboard"></i>报表
+								</button>
 								<button type="button" class="btn btn-green" @click="showDir">
                                 	<i class="icon-add"></i>新建文件夹
                       			 </button>

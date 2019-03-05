@@ -287,16 +287,15 @@
 			},
 			openAddMgr() {//添加自动编号设置数据
 				this.numbsetForm = {
-					STATUS:'活动',//添加时默认显示信息状态
-					AUTOKEY:'',
-					PREFIX:'',
-					S_NUM:'',
-					MEMO:'',
-					DEPARTMENT:'',
-					ENTERBY:'',
-					ENTERDATE:'',
-					CHANGEBY:'',
-					CHANGEDATE:''
+					isinitbydate:'',
+					initformat:'',
+					prefix:'',
+					initnum:'',
+					increase:'',
+					issplicingdate:'',
+					splicingformat:'',
+					serialnum:'',
+					retain:'',
 				};
 				this.$refs.child.open();
 				this.$refs.child.childMethods();

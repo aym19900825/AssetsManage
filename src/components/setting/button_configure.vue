@@ -53,13 +53,13 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="6">
-									<el-form-item label="所属应用ID" prop="menuId">
-										<el-input v-model="searchList.menuId"></el-input>
+									<el-form-item label="所属应用ID" prop="menuIdDesc">
+										<el-input v-model="searchList.menuIdDesc"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -90,7 +90,7 @@
 										</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="所属应用ID" width="140" sortable prop="menuId" v-if="this.checkedName.indexOf('所属应用ID')!=-1" align="center">
+								<el-table-column label="所属应用ID" width="140" sortable prop="menuIdDesc" v-if="this.checkedName.indexOf('所属应用ID')!=-1" align="center">
 								</el-table-column>
 								<el-table-column label="按钮图标" width="125" align="right" sortable prop="icon" v-if="this.checkedName.indexOf('按钮图标')!=-1">
 									<template slot-scope="scope">
@@ -112,7 +112,6 @@
 
 							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
-
 							<!-- 表格 End-->
 						</el-col>
 					</el-row>
@@ -180,7 +179,7 @@
 						prop: 'name'
 					},{
 						label: '所属应用ID',
-						prop: 'menuId'
+						prop: 'menuIdDesc'
 					},
 					
 					{
@@ -215,7 +214,7 @@
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
 				searchList: { //点击高级搜索后显示的内容
 					name: '',
-					menuId:''
+					menuIdDesc:''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -297,7 +296,7 @@
 			resetbtn(){
 				this.searchList = {
 					name:'',
-					menuId:'',
+					menuIdDesc:'',
 				};
 				this.requestData();
 			},
@@ -312,7 +311,7 @@
 				this.CATEGORY = {
 					id: '',
 					name: '',
-					menuId: '',
+					menuIdDesc: '',
 					icon: '',
 					style: '',
 					sort: '',
@@ -488,7 +487,7 @@
 					limit: this.page.pageSize,
 					
 					name:this.searchList.name,
-					menuId:this.searchList.menuId
+					menuIdDesc:this.searchList.menuIdDesc
 				}
 				var url = this.basic_url + '/api-user/permissions';
 				this.$axios.get(url, {

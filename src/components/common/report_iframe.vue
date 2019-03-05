@@ -53,21 +53,10 @@
 		  		}
 		  		console.log(this.file);
 		  		var url=this.basic_url;
-    			url = url.substring(0,21);
+				url = url.substring(0,21);
+				var pos = url.lastIndexOf(':');
+				url=url.substring(0,pos+1); 
 		  		this.url=url+"5300";
-		  		
-//		  		console.log(this.url +'/reportFile/page/preview/');
-//		  		var type = "3";
-//				var url = this.basic_url +'api-report/reportFile/page/preview';
-//				console.log(url);
-//				this.$axios.post(url, {
-//					params: {
-//						"_report_id": 3
-//					},
-//				}).then((res) => {
-//					console.log(res);
-//			
-//				});
 				this.show= true;
 		  	},
 		    //取消

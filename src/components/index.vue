@@ -94,9 +94,9 @@
 										<p class="small_font">工作总计</p>
 										<div class="pt40">
 											<p class="middle_font pt40">
-												待办工作: 32<br />
-												执行中: 100<br />
-												已完成: 151
+												<span class="red">待办工作: 22</span>
+												<span class="textblue">执行中: 16</span>
+												<span class="green">已完成: 18</span>
 											</p>
 										</div>
 									</div>
@@ -429,7 +429,7 @@ export default {
 .big_numb { color: #333333; font-size: 28px; line-height:32px; }
 .small_font { color: #BDBDBD; font-size:10px; line-height:15px;}
 .middle_font { color: #121958; font-size: 13px;  line-height:22px;}
-
+.middle_font span {display: block;}
 
 
 

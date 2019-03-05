@@ -1532,8 +1532,10 @@
 							type: 'warning'
 						});
 					}else{
-						this.$refs.standardchild.basislead(this.deptindex.PRO_NUM);
+						this.sendchilddata.push(this.deptindex.PRO_NUM);
+						this.$refs.standardchild.basislead(this.sendchilddata);
 						this.main = 'table';
+						this.sendchilddata = [];
 					}
 				}
 			},
@@ -1566,6 +1568,8 @@
 			},
 			//检验项目放大镜
 			basisleadbtn2(val){
+				console.log(123);
+				console.log(this.dataInfo.S_NUM);
 				this.deptindex = val;
 				if(val == 'maintable'){
 					if(this.dataInfo.S_NUM == null || this.dataInfo.S_NUM == '' || this.dataInfo.S_NUM == undefined){
@@ -1587,8 +1591,10 @@
 							type: 'warning'
 						});
 					}else{
-						this.$refs.projectchild.projectlead(this.deptindex.S_NUM);
+						this.sendchilddata.push(this.deptindex.S_NUM);
+						this.$refs.projectchild.projectlead(this.sendchilddata);
 						this.main = 'table';
+						this.sendchilddata = [];
 					}
 				}
 			},

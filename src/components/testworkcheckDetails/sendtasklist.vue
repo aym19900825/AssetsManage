@@ -125,7 +125,8 @@
 		this.showdata(dataid);
 	},
 	showdata(dataid){
-		var url = this.basic_url +'/api-apps/app/workorder/operate/subtaskList?WORKORDERID='+dataid;
+		// var url = this.basic_url +'/api-apps/app/workorder/operate/subtaskList?WORKORDERID='+dataid;
+		var url = 'http://192.168.1.115:7902/app/workorder/operate/subtaskList?WORKORDERID'+dataid;
 		console.log(url);
 		this.$axios.get(url, {}).then((res) => {
 			console.log(111);
@@ -165,12 +166,11 @@
 					this.WORKORDER_CONTRACTLISTID.push(this.selMenu[i].ID);
 				}
 			}
-			var data = {
-				"WORKORDERID":this.workorderForm.ID.toString(),
-				"WORKORDER_PROJECTLISTID":this.WORKORDER_PROJECTLISTID.toString(','),
-				"WORKORDER_CONTRACTLISTID":this.WORKORDER_CONTRACTLISTID.toString(',')
-			};
-			var url = this.basic_url +'/api-apps/app/workorder/operate/subtask';
+			var id = this.workorderForm.ID.toString();
+			var projectid = this.WORKORDER_PROJECTLISTID.toString(',');
+			var contractid = this.WORKORDER_CONTRACTLISTID.toString(',');
+			// var url = this.basic_url +'/api-apps/app/workorder/operate/subtask';
+			var url = 'http://192.168.1.115:7902/app/workorder/operate/subtask?WORKORDERID='+id+'&WORKORDER_PROJECTLISTID='+projectid+'WORKORDER_CONTRACTLISTID='+contractid;
 			console.log(url);
 			this.$axios.get(url,data).then((res) => {
 				console.log(res);

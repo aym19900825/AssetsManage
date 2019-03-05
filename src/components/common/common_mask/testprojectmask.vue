@@ -184,12 +184,16 @@
     },
     projectlead(value){
 		this.projectnum = value[0];
-		this.projecttable = value[1];
-		var projectpnum = [];
-		for(var i = 0;i<this.projecttable.length;i++){
-			projectpnum.push(this.projecttable[i].P_NUM);
+		if(value[1]!=''&&value[1]!=null&&value[1]!=undefined){
+			this.projecttable = value[1];
+			var projectpnum = [];
+			for(var i = 0;i<this.projecttable.length;i++){
+				projectpnum.push(this.projecttable[i].P_NUM);
+			}
+			this.projectpnums = projectpnum.toString(',');
+		}else{
+			this.projectpnums = '';
 		}
-		this.projectpnums = projectpnum.toString(',');
 		this.requestData();//渲染数据
 		this.dialogVisible = true;
     },
@@ -273,11 +277,10 @@
             VERSION: this.searchList.VERSION,
             STATUS: this.searchList.STATUS,
 		};
+		console.log(this.basic_url +'/api-apps/app/inspectionPro2?S_NUM_where_in='+this.projectnum+'&P_NUM_where_not_in='+this.projectpnums);
         this.$axios.get(this.basic_url +'/api-apps/app/inspectionPro2?S_NUM_where_in='+this.projectnum+'&P_NUM_where_not_in='+this.projectpnums, {
         
         }).then((res) => {
-            console.log(2333333);
-            console.log(res.data);
             this.page.totalCount = res.data.count;	
             //总的页数
             let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)

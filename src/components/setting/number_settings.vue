@@ -77,29 +77,27 @@
 								  element-loading-background="rgba(255, 255, 255, 0.9)">
 							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 							</el-table-column>
-							<el-table-column label="自动编号名称" width="140" sortable prop="AUTOKEY" v-if="this.checkedName.indexOf('自动编号名称')!=-1">
+							<el-table-column label="是否初始化" width="140" sortable prop="isinitbydate" v-if="this.checkedName.indexOf('是否初始化')!=-1">
 								<template slot-scope="scope">
 									<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.AUTOKEY}}
 									</p>
 								</template>
 							</el-table-column>
-							<el-table-column label="起始数" width="140" sortable prop="S_NUM" v-if="this.checkedName.indexOf('起始数')!=-1">
+							<el-table-column label="初始化日期格式" width="140" sortable prop="initformat" v-if="this.checkedName.indexOf('初始化日期格式')!=-1">
 							</el-table-column>
-							<el-table-column label="前缀" width="140" sortable prop="PREFIX" v-if="this.checkedName.indexOf('前缀')!=-1">
+							<el-table-column label="前缀" width="100" sortable prop="prefix" v-if="this.checkedName.indexOf('前缀')!=-1">
 							</el-table-column>
-							<el-table-column label="备注" width="200" sortable prop="MEMO" v-if="this.checkedName.indexOf('备注')!=-1">
+							<el-table-column label="初始化起始数" width="180" sortable prop="initnum" v-if="this.checkedName.indexOf('初始化起始数')!=-1">
 							</el-table-column>
-							<!--<el-table-column label="信息状态" width="100" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
-							</el-table-column>-->
-							<el-table-column label="机构" sortable prop="DEPARTMENT" v-if="this.checkedName.indexOf('机构')!=-1">
+							<el-table-column label="增加量" width="80" sortable prop="increase" v-if="this.checkedName.indexOf('增加量')!=-1">
 							</el-table-column>
-							<!-- <el-table-column label="录入人" width="140" sortable prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
-							</el-table-column> -->
-							<el-table-column label="录入时间" width="100" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
+							<el-table-column label="是否拼接日期" width="180" sortable prop="issplicingdate" v-if="this.checkedName.indexOf('是否拼接日期')!=-1">
 							</el-table-column>
-							<!-- <el-table-column label="修改人" width="140" prop="CHANGEBY" sortable v-if="this.checkedName.indexOf('修改人')!=-1">
-							</el-table-column> -->
-							<el-table-column label="修改时间" width="100" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
+							<el-table-column label="拼接日期格式" width="180" sortable prop="splicingformat" v-if="this.checkedName.indexOf('拼接日期格式')!=-1">
+							</el-table-column>
+							<el-table-column label="序列号" width="100" sortable prop="serialnum" v-if="this.checkedName.indexOf('序列号')!=-1">
+							</el-table-column>
+							<el-table-column label="保留位数" sortable prop="retain" v-if="this.checkedName.indexOf('保留位数')!=-1">
 							</el-table-column>
 						</el-table>
 						<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0"
@@ -150,57 +148,52 @@
 					label: '不活动'
 				}],
 				checkedName: [//控制Table-列显示和隐藏
-					'自动编号名称',
-					'起始数',
+					'是否初始化',
+					'初始化日期格式',
 					'前缀',
-					// '信息状态',
-					'备注',
-					'机构',
-					// '录入人',
-					'录入时间',
-					// '修改人',
-					'修改时间',
+					'初始化起始数',
+					'增加量',
+					'是否拼接日期',
+					'拼接日期格式',
+					'序列号',
+					'保留位数',
 				],
 				tableHeader: [//控制Table-列头标题名称
 					{
-						label: '自动编号名称',
-						prop: 'AUTOKEY'
+						label: '是否初始化',
+						prop: 'isinitbydate'
 					},
 					{
-						label: '起始数',
-						prop: 'S_NUM'
+						label: '初始化日期格式',
+						prop: 'initformat'
 					},
 					{
 						label: '前缀',
-						prop: 'PREFIX'
-					},
-					// {
-					// 	label: '信息状态',
-					// 	prop: 'STATUS'
-					// },
-					{
-						label: '备注',
-						prop: 'MEMO'
+						prop: 'prefix'
 					},
 					{
-						label: '机构',
-						prop: 'DEPARTMENT'
+						label: '初始化起始数',
+						prop: 'initnum'
 					},
-					// {
-					// 	label: '录入人',
-					// 	prop: 'ENTERBY'
-					// },
 					{
-						label: '录入时间',
-						prop: 'ENTERDATE'
+						label: '增加量',
+						prop: 'increase'
 					},
-					// {
-					// 	label: '修改人',
-					// 	prop: 'CHANGEBY'
-					// },
 					{
-						label: '修改时间',
-						prop: 'CHANGEDATE'
+						label: '是否拼接日期',
+						prop: 'issplicingdate'
+					},
+					{
+						label: '拼接日期格式',
+						prop: 'splicingformat'
+					},
+					{
+						label: '序列号',
+						prop: 'serialnum'
+					},
+					{
+						label: '保留位数',
+						prop: 'retain'
 					}
 				],
 				loadSign:true,//加载
@@ -422,7 +415,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				}
-				var url = this.basic_url + '/api-apps/app/autokey';
+				var url = this.basic_url + '/api-user/serialnum';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {

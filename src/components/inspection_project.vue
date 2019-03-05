@@ -377,7 +377,7 @@
                 	var departName = res.data.deptName;
 					var currenturl = this.basic_url + '/api-user/depts/findByPid/' + this.departmentId;
 					this.$axios.get(currenturl, {}).then((res) => {
-						// console.log(res.data);
+						// console.log(this.departmentId);
 						this.Select_DEPTID = res.data;
 						if (this.departmentId == 128) {
 							this.formInline.DEPTID = res.data[0].id;

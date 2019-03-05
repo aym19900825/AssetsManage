@@ -63,7 +63,7 @@
 					<!-- 高级查询划出 End-->
 
 					<el-row :gutter="10">
-						<el-col :span="24" class="leftcont v-resize">
+						<el-col :span="24" class="leftcont">
 							<!-- 表格 -->
 							<el-table :data="todoList" :header-cell-style="rowClass" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'todoList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">

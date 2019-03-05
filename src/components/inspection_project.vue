@@ -36,7 +36,7 @@
 					</el-col>
 				</el-row>
 				<!--部门名称 End-->
-				<el-row :gutter="10">
+				<el-row class="relative" id="pageDiv">
 					<el-col :span="6">
 						<el-card class="box-card" :body-style="{ padding: '10px' }">
 							<div slot="header" class="title clearfix">
@@ -570,6 +570,7 @@
 		
 		mounted() {
 			this.getDEPTID();
+			this.treeDrag();//调用树和表单之间拖拽改变宽度
 			// this.getData();
 			// this.requestData();
 		},

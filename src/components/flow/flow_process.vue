@@ -111,7 +111,7 @@
 					<!-- 高级查询划出 End-->
 
 					<el-row :gutter="10">
-						<el-col :span="24" class="leftcont v-resize">
+						<el-col :span="24" class="leftcont">
 							<!-- 表格 -->
 							<el-table :data="flowmodelList" 
 									  :header-cell-style="rowClass" 

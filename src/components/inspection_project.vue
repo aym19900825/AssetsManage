@@ -36,7 +36,7 @@
 					</el-col>
 				</el-row>
 				<!--部门名称 End-->
-				<el-row :gutter="10">
+				<el-row class="relative" id="pageDiv">
 					<el-col :span="6">
 						<el-card class="box-card" :body-style="{ padding: '10px' }">
 							<div slot="header" class="title clearfix">
@@ -377,7 +377,7 @@
                 	var departName = res.data.deptName;
 					var currenturl = this.basic_url + '/api-user/depts/findByPid/' + this.departmentId;
 					this.$axios.get(currenturl, {}).then((res) => {
-						// console.log(res.data);
+						// console.log(this.departmentId);
 						this.Select_DEPTID = res.data;
 						if (this.departmentId == 128) {
 							this.formInline.DEPTID = res.data[0].id;
@@ -570,6 +570,7 @@
 		
 		mounted() {
 			this.getDEPTID();
+			this.treeDrag();//调用树和表单之间拖拽改变宽度
 			// this.getData();
 			// this.requestData();
 		},

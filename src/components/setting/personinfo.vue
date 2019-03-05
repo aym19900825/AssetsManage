@@ -209,7 +209,7 @@
 					</el-collapse>
 			
 				</el-form>
-				<div class="dialog-footer">
+				<div class="text-center pt20 pb20">
 					<button class="btn btn-default btn-large" @click="resetForm('personinfo')">重置</button>
 					<button class="btn btn-primarys btn-large" @click="submitForm('personinfo')">保存</button>
 				</div>

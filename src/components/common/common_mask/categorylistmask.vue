@@ -211,6 +211,7 @@
         this.page.pageSize = 10;//页码重新传值
     },
     handleClose(done) {
+    	console.log(done);
         this.$confirm('确认关闭？')
             .then(_ => {
                 done();

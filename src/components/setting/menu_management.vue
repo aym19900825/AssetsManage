@@ -49,7 +49,7 @@
 					</div>
 					<el-row :gutter="10">
 						<el-col :span="24">
-							 <tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="menuList" v-on:childByValue="childByValue" ></tree_grid>
+							 <tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="menuList" v-on:classByValue="childByValue" @getDetail="getDetail"></tree_grid>
 
 							<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
@@ -213,9 +213,13 @@
 					this.$refs.child.detail(this.selMenu[0]);
 				}
 			},
-			// 查看
-			 view() {
-			 	this.menu=this.selMenu;
+			getDetail(data){
+				console.log('tableDetail');
+				this.view(data);
+			},
+			//查看
+			view(data) {
+			 	this.menu = data;
 				this.$refs.child.view();
 			},
 			// 删除

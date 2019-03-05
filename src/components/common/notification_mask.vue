@@ -598,6 +598,7 @@
 				basisnum:'',////依据选中数据们字符串作为参数传值给项目
 				PRODUCT_TYPE:'',//产品类别
 				username:'',
+				sendchilddata:[],//子表已有的值
 			};
 		},
 		methods: {
@@ -1103,7 +1104,6 @@
 						this.dataInfo.ACCEPT_PERSON = this.selUser[0].id;
 						this.dataInfo.ACCEPT_PERSONDesc = this.selUser[0].nickname;
 					}
-
 				}
 			},
 			DialogClose(){//点击取消按钮
@@ -1156,6 +1156,7 @@
 			 },
 			 //检测依据列表
 			addbasis(value){
+				console.log(value);
 				this.dataInfo.S_NUM = value[0];
 				for(var i = 1;i<value.length;i++){
 					this.dataInfo.WORK_NOTICE_CHECKBASISList.push(value[i]);
@@ -1266,7 +1267,10 @@
 						type: 'warning'
 					});
 				}else{
-					this.$refs.standardchild.basislead(this.dataInfo.PRO_NUM);
+					this.sendchilddata.push(this.dataInfo.PRO_NUM);
+					this.sendchilddata.push(this.dataInfo.WORK_NOTICE_CHECKBASISList);
+					this.$refs.standardchild.basislead(this.sendchilddata);
+					this.sendchilddata = [];
 				}
 			},
 			//检测项目放大镜
@@ -1277,7 +1281,10 @@
 						type: 'warning'
 					});
 				}else{
-					this.$refs.projectchild.projectlead(this.dataInfo.S_NUM);
+					this.sendchilddata.push(this.dataInfo.S_NUM);
+					this.sendchilddata.push(this.dataInfo.WORK_NOTICE_CHECKPROJECTList);
+					this.$refs.projectchild.projectlead(this.sendchilddata);
+					this.sendchilddata = [];
 				}
 			},
 		    getuser(){//获取当前用户信息

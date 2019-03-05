@@ -60,7 +60,7 @@
 
 					<el-row :gutter="0">
 						<!-- 左侧树菜单 Begin-->
-						<!-- <el-col :span="5" class="lefttree">
+						<!-- <el-col :span="5" class="lefttree" id="left">
 							<div class="lefttreebg">
 								<div class="left_tree_title clearfix" @click="min3max()">
 									<div class="pull-left pr20" v-if="ismin">关键字分类</div>
@@ -78,7 +78,7 @@
 						</el-col> -->
 						<!-- 左侧树菜单 End-->
 						
-						<el-col class="leftcont v-resize">
+						<el-col class="leftcont">
 							<!-- 表格 -->
 							<el-table :data="samplesList" 
 									  border 
@@ -338,6 +338,7 @@
         		// childValue就是子组件传过来的值
         		this.$refs.navsheader.showClick(childValue);
       		},
+      		
 		},
 		
 		mounted() {// 在页面挂载前就发起请求

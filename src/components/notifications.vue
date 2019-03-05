@@ -115,8 +115,8 @@
 						</el-form>
 					</div>
 					<!-- 高级查询划出 End-->
-					<el-row :gutter="10">
-						<el-col :span="5" class="lefttree">
+					<el-row class="relative" id="pageDiv">
+						<el-col :span="5" class="lefttree" id="left">
 							<div class="lefttreebg">
 								<div class="left_tree_title clearfix" @click="min3max()">
 									<div class="pull-left pr20" v-if="ismin">类型</div>
@@ -132,7 +132,8 @@
 								</div>
 							</div>
 						</el-col>
-						<el-col :span="19">
+						<div id="middle"></div>
+						<el-col :span="19" id="right">
 							<!-- 表格 Begin-->
 							<el-table :data="nitificationsList" 
 									  :header-cell-style="rowClass" 
@@ -874,7 +875,37 @@
 				})
 
 		    },
-
+		     //树和表单之间拖拽改变宽度
+			treeDrag(){
+				var middleWidth=9,
+				left = document.getElementById("left"),
+				right =  document.getElementById("right"), 
+				middle =  document.getElementById("middle"); 
+				middle.style.left = left.clientWidth + 'px';
+				right.style.left = left.clientWidth + 10 + 'px';
+				middle.onmousedown = function(e) { 
+					var disX = (e || event).clientX; 
+					middle.left = middle.offsetLeft; 
+					document.onmousemove = function(e) { 
+						var iT = middle.left + ((e || event).clientX - disX); 
+						var e=e||window.event,tarnameb=e.target||e.srcElement; 
+						var maxT=document.body.clientWidth; 
+						iT < 0 && (iT = 0); 
+						iT > maxT/2 && (iT = maxT/2); 
+						middle.style.left = left.style.width = iT + "px"; 
+						right.style.width = maxT - iT -middleWidth -10 + "px"; 
+						right.style.left = iT+middleWidth+"px"; 
+						return false 
+					}; 
+					document.onmouseup = function() { 
+						document.onmousemove = null; 
+						document.onmouseup = null; 
+						middle.releaseCapture && middle.releaseCapture() 
+					}; 
+					middle.setCapture && middle.setCapture(); 
+					return false 
+				}; 
+			}
 		},
 		beforeMount() {
 			// 在页面挂载前就发起请求
@@ -884,6 +915,7 @@
 			this.getCompany();
 		},
 		mounted() {
+			this.treeDrag();//调用树和表单之间拖拽改变宽度
 			console.log(this.$route.query.bizId);
 			if(this.$route.query.bizId != undefined) {
 				this.getRouterData();
@@ -893,131 +925,5 @@
 </script>
 
 <style scoped>
-	.el-tree .el-tree-node__content>.el-tree-node__expand-icon {
-		padding: 2px;
-	}
 	
-	.el-tree .el-icon-caret-right {
-		font-size: 14px;
-		width: 17px;
-		height: 17px;
-		line-height: 12px;
-		font-weight: lighter;
-		color: #A2ABBF;
-		border-radius: 3px;
-		margin-top: -2px;
-		margin-right: 5px;
-		position: relative;
-		z-index: 30;
-	}
-	
-	.el-tree .el-icon-caret-right:before {
-		/*图标加号*/
-		font-family: 'hxqheam';
-		content: "\e9bc";
-		position: absolute;
-		z-index: 22;
-	}
-	
-	.el-tree .el-icon-caret-right:after {
-		content: "";
-		width: 10px;
-		position: absolute;
-		top: 7px;
-		right: -4px;
-		z-index: 1;
-	}
-	
-	.el-tree .el-tree-node__expand-icon.is-leaf,
-	.el-tree .el-tree-node__expand-icon.is-leaf:before {
-		border: none;
-		background: transparent;
-		content: "";
-	}
-	
-	.el-tree .el-tree-node__expand-icon.expanded {
-		/*图标加号点击后不旋转，原Element会旋转*/
-		-webkit-transform: rotate(0deg);
-		transform: rotate(0deg);
-	}
-	
-	.el-tree .el-tree-node__expand-icon.expanded:before {
-		/*图标减号*/
-		font-family: 'hxqheam';
-		content: "\e99f";
-	}
-	
-	.el-tree .el-tree-node .icon-file-normal {
-		/*文件夹合并时图标*/
-		color: #6585DF;
-		font-family: 'hxqheam';
-		content: "\e9fa";
-		font-size: 20px;
-	}
-	
-	.el-tree .el-tree-node.is-expanded>.el-tree-node__content .icon-file-normal:before {
-		/*文件夹打开时图标*/
-		font-family: 'hxqheam';
-		content: "\e9fb";
-	}
-	
-	.el-tree .el-tree-node>.el-tree-node__content .icon-file-text {
-		/*最后子级图标颜色*/
-		color: #92BDFF;
-	}
-	
-	.el-tree-node [class^="icon-"],
-	.el-tree-node [class*=" icon-"] {
-		margin-right: 5px;
-	}
-	
-	[role=group].el-tree-node__children,
-	[role=group].el-tree-node__children [role=group].el-tree-node__children,
-	[role=group].el-tree-node__children .el-tree-node__content {
-		position: relative;
-	}
-	
-	[role=group].el-tree-node__children:before,
-	[role=group].el-tree-node__children [role=group].el-tree-node__children:before,
-	[role=group].el-tree-node__children .el-tree-node__content:before {
-		content: "";
-		top: 0px;
-		position: absolute;
-		width: 9px;
-		height: 100%;
-		border-right: 1px dashed #C7CED6;
-	}
-	
-	[role=group].el-tree-node__children [role=group].el-tree-node__children:before {
-		left: 22px;
-	}
-	
-	[role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children:before {
-		left: 44px;
-	}
-	
-	[role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children:before {
-		left: 66px;
-	}
-	
-	[role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children:before {
-		left: 88px;
-	}
-	
-	[role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children [role=group].el-tree-node__children:before {
-		left: 110px;
-	}
-	
-	[role=group].el-tree-node__children .el-tree-node__content:before {
-		top: -15px;
-	}
-	
-	.el-tree>div[role=treeitem]:nth-last-child(2)>div[role=group]:before,
-	.el-tree>div[role=treeitem] div[role=treeitem]:nth-last-child(1)>div[role=group]:before {
-		display: none;
-	}
-	
-	.p15 {
-		padding: 10px 15px;
-	}
 </style>

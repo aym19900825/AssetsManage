@@ -8,7 +8,6 @@ const state={//要设置的全局访问的state对象
    navid: null,
    menuid:null,//一级菜单id
    menusid:null,//二级菜单id
-   TodoNumber:0,
    selectedNav:{
       css: 'icon-user',
       name: '首页',
@@ -26,9 +25,6 @@ const state={//要设置的全局访问的state对象
 };
 	//组件获取 state 用 vuex 的 getter
 const getters = {   //实时监听state值的变化(最新状态)
-   getTodoNumber(state) {  //承载变化的showFooter的值
-      return state.TodoNumber
-   },
    getRoleId(state) {  //承载变化的showFooter的值
       return state.roleid
    },
@@ -73,9 +69,7 @@ const mutations = {
    updateLoadingStatus (state, payload) {
       state.isLoading = payload.isLoading;
    },
-   setTodoNumber(num){
-      state.TodoNumber = num;
-   }
+  
 };
 
 //组件触发动作用 vuex 的 action
@@ -96,12 +90,7 @@ const actions = {
    setSelectedNavAct(context,selectedNav){
       context.commit('setSelectedNav',selectedNav);
    },
-   setTodoNumberv(context,clickedNavs){
-      context.commit('setClickedNav',clickedNavs);
-   },
-   setTodoNumberAct(context, num){
-      context.commit('setTodoNumber',num);
-   }
+  
 };
 
 router.beforeEach(function (to, from, next) {

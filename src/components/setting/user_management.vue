@@ -100,8 +100,8 @@
 					</div>
 					<!-- 高级查询划出 End-->
 
-					<el-row :gutter="10">
-						<el-col :span="5" class="lefttree">
+					<el-row class="relative" id="pageDiv">
+						<el-col :span="5" class="lefttree" id="left">
 							<div class="lefttreebg">
 								<div class="left_tree_title clearfix" @click="min3max()">
 									<div class="pull-left pr20" v-if="ismin">组织机构</div>
@@ -117,7 +117,8 @@
 								</div>
 							</div>
 						</el-col>
-						<el-col :span="19" class="leftcont v-resize">
+						<div id="middle"></div>
+						<el-col :span="19" class="leftcont" id="right">
 							<!-- 表格 -->
 							<el-table :data="userList" 
 									  border 
@@ -900,6 +901,9 @@
 					companyId: this.companyId,
 					// deptId: this.deptId
 				}
+				if(!(!!this.searchList.deptId && this.searchList.deptId == 128)){
+					data.deptId = this.searchList.deptId;
+				}
 				var url = this.basic_url + '/api-user/users';
 				this.$axios.get(url, {
 					params: data
@@ -1018,6 +1022,37 @@
 						});
 				})
 		    },
+		    //树和表单之间拖拽改变宽度
+			treeDrag(){
+				var middleWidth=9,
+				left = document.getElementById("left"),
+				right =  document.getElementById("right"), 
+				middle =  document.getElementById("middle"); 
+				middle.style.left = left.clientWidth + 'px';
+				right.style.left = left.clientWidth + 10 + 'px';
+				middle.onmousedown = function(e) { 
+					var disX = (e || event).clientX; 
+					middle.left = middle.offsetLeft; 
+					document.onmousemove = function(e) { 
+						var iT = middle.left + ((e || event).clientX - disX); 
+						var e=e||window.event,tarnameb=e.target||e.srcElement; 
+						var maxT=document.body.clientWidth; 
+						iT < 0 && (iT = 0); 
+						iT > maxT/2 && (iT = maxT/2); 
+						middle.style.left = left.style.width = iT + "px"; 
+						right.style.width = maxT - iT -middleWidth -230 + "px"; 
+						right.style.left = iT+middleWidth+"px"; 
+						return false 
+					}; 
+					document.onmouseup = function() { 
+						document.onmousemove = null; 
+						document.onmouseup = null; 
+						middle.releaseCapture && middle.releaseCapture() 
+					}; 
+					middle.setCapture && middle.setCapture(); 
+					return false 
+				}; 
+			}
 		},
 		beforeMount() {
 			
@@ -1027,6 +1062,7 @@
 			this.requestData();
 			this.getKey();
 			this.getCompany();
+			this.treeDrag();//调用树和表单之间拖拽改变宽度
 //			this.getbutton();
 //			this.$refs.navleft.getleft();
 		}

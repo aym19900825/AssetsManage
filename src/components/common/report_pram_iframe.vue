@@ -241,8 +241,10 @@
 				this.str="&"+str;
 				this.file=this.file+this.str;
 		  		var url=this.basic_url;
-    			url = url.substring(0,21);
-		  		this.url=url+"5300";
+					var pos = url.lastIndexOf(':');
+					url=url.substring(0,pos+1); 
+					this.url=url+"5300";
+					console.log(url);
 				var url = this.url+"/ureport/preview?_u=mysql:" +this.file
              window.open(url); 
 			},

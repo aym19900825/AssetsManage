@@ -183,9 +183,6 @@
 											<!-- <el-form-item label="IP地址" prop="ipaddress" label-width="100px">
 												<el-input v-model="user.ipaddress" :disabled="noedit"></el-input>
 											</el-form-item> -->
-											<button type="button" class="btn btn-blue button-margin" @click="configuration">
-								    			<i class="icon-edit"></i>权限设置
-											</button>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="MAC地址" prop="macaddress" label-width="100px">
@@ -472,6 +469,8 @@
 			       <el-button type="primary" @click="dailogconfirm" >确 定</el-button>
 			    </span>
 			</el-dialog>
+			
+			
 		</div>
 	</div>
 </template>
@@ -562,7 +561,7 @@
 				dialogVisible: false, //对话框
 				addtitle: true, //添加弹出框titile
 				modifytitle: false, //修改弹出框titile
-				modify: false,
+				modify:false,
 				//default-expand-all:true,
 				i:0,
 				rules: {
@@ -617,6 +616,7 @@
 					children: "children",
 					label: "fullname"
 				},
+				
 				selectData: [], //
 				getCheckboxData: {},
 				addtitle:true,
@@ -770,10 +770,7 @@
 				};
 				this.user.ips.push(obj);
 			},
-			//权限配置
-			configuration(){
-				
-			},
+			
 			//刪除新建行
 			deleteRow(index, row, listName){
 				var TableName = '';
@@ -1151,7 +1148,10 @@ if(typeof(this.user.roleId) != 'undefind'&&this.user.roleId != null&&this.user.r
 				this.$axios.get(url, {}).then((res) => {
 					this.selectData = res.data.data;
 				}).catch(error => {
-					console.log('请求失败');
+					this.$message({
+							message: '有必填项未填写，请重新填写',
+							type: 'warning',
+						});
 				})
 			},
 

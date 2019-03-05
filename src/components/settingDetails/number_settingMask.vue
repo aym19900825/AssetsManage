@@ -36,34 +36,56 @@
 												<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 												</el-option>
 											</el-select> -->
+										<!-- </el-col> -->
+									</el-row>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="是否初始化" prop="isinitbydate" label-width="110px">
+												<el-input v-model="numbsetForm.isinitbydate" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="初始化日期格式">
+												<el-input v-model="numbsetForm.initformat" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="前缀" prop="prefix">
+												<el-input v-model="numbsetForm.prefix" :disabled="noedit"></el-input>
+											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="自动编号名称" prop="AUTOKEY" label-width="110px">
-												<el-input v-model="numbsetForm.AUTOKEY" :disabled="noedit"></el-input>
+											<el-form-item label="初始化起始数" prop="initnum" label-width="110px">
+												<el-input v-model="numbsetForm.initnum" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="前缀">
-												<el-input v-model="numbsetForm.PREFIX" :disabled="noedit"></el-input>
+											<el-form-item label="增加量">
+												<el-input v-model="numbsetForm.increase" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="起始数" prop="S_NUM">
-												<el-input v-model="numbsetForm.S_NUM" :disabled="noedit"></el-input>
+											<el-form-item label="是否拼接日期" prop="issplicingdate">
+												<el-input v-model="numbsetForm.issplicingdate" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8" v-if="dept">
-												<el-form-item label="机构" label-width="110px">
-													<el-input v-model="numbsetForm.DEPARTMENT" :disabled="true"></el-input>
-												</el-form-item>
-											</el-col>
 									</el-row>
-									<el-row :gutter="30">
-										<el-col :span="24">
-											<el-form-item label="备注" label-width="110px">
-												<el-input type="textarea" v-model="numbsetForm.MEMO" :disabled="noedit"></el-input>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="拼接日期格式" prop="splicingformat" label-width="110px">
+												<el-input v-model="numbsetForm.splicingformat" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="序列号">
+												<el-input v-model="numbsetForm.serialnum" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="保留位数" prop="retain">
+												<el-input v-model="numbsetForm.retain" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -71,25 +93,25 @@
 								<el-collapse-item title="其它" name="2"  v-show="views">
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="录入人"  label-width="110px">
-												<el-input v-model="numbsetForm.ENTERBY" :disabled="true"></el-input>
+											<el-form-item label="创建人"  label-width="110px">
+												<el-input v-model="numbsetForm.createuser" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="录入时间" label-width="80px">
-												<el-input v-model="numbsetForm.ENTERDATE" :disabled="true"></el-input>
+											<el-form-item label="创建时间" label-width="80px">
+												<el-input v-model="numbsetForm.createtime" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-										<el-form-item label="修改人" label-width="80px">
-												<el-input v-model="numbsetForm.CHANGEBY" :disabled="true"></el-input>
+										<el-form-item label="变更人" label-width="80px">
+												<el-input v-model="numbsetForm.updateuser" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="修改时间"  label-width="110px">
-												<el-input v-model="numbsetForm.CHANGEDATE" :disabled="true"></el-input>
+											<el-form-item label="变更时间"  label-width="110px">
+												<el-input v-model="numbsetForm.updatetime" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>

@@ -125,7 +125,7 @@
 					</div>
 					<!-- 高级查询划出 End-->
 
-					<el-row :gutter="10" style="position: relative;" id="pageDiv">
+					<el-row class="relative" id="pageDiv">
 						<el-col :span="5" class="lefttree" id="left">
 							<div class="lefttreebg">
 								<div class="left_tree_title clearfix" @click="min3max()">
@@ -863,14 +863,14 @@
 			},
 			  //请求页面的button接口
 		    getbutton(childByValue){
-		    	console.log(childByValue);
+		    	// console.log(childByValue);
 		    	var data = {
 					menuId: childByValue.id,
 					roleId: this.$store.state.roleid,
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					console.log(res);
+					// console.log(res);
 					this.buttons = res.data;
 					
 				}).catch((wrong) => {
@@ -899,7 +899,7 @@
 						iT < 0 && (iT = 0); 
 						iT > maxT/2 && (iT = maxT/2); 
 						middle.style.left = left.style.width = iT + "px"; 
-						right.style.width = maxT - iT -middleWidth -240 + "px"; 
+						right.style.width = maxT - iT -middleWidth -230 + "px"; 
 						right.style.left = iT+middleWidth+"px"; 
 						return false 
 					}; 
@@ -922,23 +922,11 @@
 			if(this.$route.query.bizId!=undefined){
 				this.getRouterData();
 			}
-			this.treeDrag();
+			this.treeDrag();//调用树和表单之间拖拽改变宽度
 		},
 	}
 </script>
 
 <style scope>
-#middle{
-	width: 10px;
-	background: #000;
-	/* height: 200px; */
-	height: 100%;
-	position: absolute;
-}
-#middle:hover {
-    cursor: w-resize;
-}
-#right{
-	position: absolute;
-}
+
 </style>

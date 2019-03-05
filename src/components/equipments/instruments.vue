@@ -104,24 +104,25 @@
 						</el-form>
 					</div>
 				<!-- 高级查询划出 End-->
-				<el-row :gutter="0">
-					<el-col :span="5" class="lefttree">
-							<div class="lefttreebg">
-								<div class="left_tree_title clearfix" @click="min3max()">
-									<div class="pull-left pr20" v-if="ismin">设备分类</div>
-									<span class="pull-right navbar-minimalize minimalize-styl-2">
-										<i class="icon-doubleok icon-double-angle-left blue"></i>
-									</span>
-								</div>
-								<div class="left_treebg" :style="{height: fullHeight}">
-									<div class="p15" v-if="ismin">
-										<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all  :indent="22" :render-content="renderContent"  :props="resourceProps" @node-click="handleNodeClick">
-										</el-tree>
-									</div>
+				<el-row class="relative" id="pageDiv">
+					<el-col :span="5" class="lefttree" id="left">
+						<div class="lefttreebg">
+							<div class="left_tree_title clearfix" @click="min3max()">
+								<div class="pull-left pr20" v-if="ismin">设备分类</div>
+								<span class="pull-right navbar-minimalize minimalize-styl-2">
+									<i class="icon-doubleok icon-double-angle-left blue"></i>
+								</span>
+							</div>
+							<div class="left_treebg" :style="{height: fullHeight}">
+								<div class="p15" v-if="ismin">
+									<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all  :indent="22" :render-content="renderContent"  :props="resourceProps" @node-click="handleNodeClick">
+									</el-tree>
 								</div>
 							</div>
-						</el-col>
-					<el-col :span="19">
+						</div>
+					</el-col>
+					<div id="middle"></div>
+					<el-col :span="19" class="leftcont" id="right">
 						<!-- 表格 Begin-->
 						<el-table :header-cell-style="rowClass" 
 								  :data="assetList" 
@@ -729,6 +730,37 @@
 							});
 				})
 		    },
+		     //树和表单之间拖拽改变宽度
+			treeDrag(){
+				var middleWidth=9,
+				left = document.getElementById("left"),
+				right =  document.getElementById("right"), 
+				middle =  document.getElementById("middle"); 
+				middle.style.left = left.clientWidth + 'px';
+				right.style.left = left.clientWidth + 10 + 'px';
+				middle.onmousedown = function(e) { 
+					var disX = (e || event).clientX; 
+					middle.left = middle.offsetLeft; 
+					document.onmousemove = function(e) { 
+						var iT = middle.left + ((e || event).clientX - disX); 
+						var e=e||window.event,tarnameb=e.target||e.srcElement; 
+						var maxT=document.body.clientWidth; 
+						iT < 0 && (iT = 0); 
+						iT > maxT/2 && (iT = maxT/2); 
+						middle.style.left = left.style.width = iT + "px"; 
+						right.style.width = maxT - iT -middleWidth -230 + "px"; 
+						right.style.left = iT+middleWidth+"px"; 
+						return false 
+					}; 
+					document.onmouseup = function() { 
+						document.onmousemove = null; 
+						document.onmouseup = null; 
+						middle.releaseCapture && middle.releaseCapture() 
+					}; 
+					middle.setCapture && middle.setCapture(); 
+					return false 
+				}; 
+			},
       		renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
 				return (<span><i class={data.iconClass}></i><span>{node.label}</span></span>)
 			},
@@ -736,6 +768,7 @@
 		mounted(){
 			this.requestData();
             this.getKey();
+            this.treeDrag();//调用树和表单之间拖拽改变宽度
         },
 	}
 </script>

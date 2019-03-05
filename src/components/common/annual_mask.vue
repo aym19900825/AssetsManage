@@ -170,10 +170,10 @@
 									    </el-table-column>
 										<el-table-column prop="ITEM_NAME" label="产品名称" sortable width="200px">
 											<template slot-scope="scope">
-													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ITEM_NAME" placeholder="请输入内容" :disabled="true">
-														<el-button slot="append" icon="el-icon-search" @click="addproduct(scope.row)"></el-button>
-													</el-input>
-													<span v-if="!scope.row.isEditing">{{scope.row.ITEM_NAME}}</span>
+												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ITEM_NAME" placeholder="请输入内容" :disabled="true">
+													<el-button slot="append" icon="el-icon-search" @click="addproduct(scope.row)"></el-button>
+												</el-input>
+												<span v-if="!scope.row.isEditing">{{scope.row.ITEM_NAME}}</span>
 											</template>
 										</el-table-column>
 									    <el-table-column prop="MODEL" label="规格型号" sortable width="120px">
@@ -909,7 +909,9 @@
 				itemtypenum:'',//当前选择的产品类别编号，用作参数请求产品名称
 				pronamenum:'',//当前选择的产品名称编号，用作参数请求依据
 				basisnums:'',//当前选择的依据编号字符串，用作参数请求检测项目
-				noedit:false
+				noedit:false,
+				basissnums:'',//已经选过的检测依据num
+				projectpnums:'',//已经选过的检测项目num
 			};
 		},
 		methods: {
@@ -1351,16 +1353,28 @@
 		    },
             //检测依据弹出框
             basisleadbtn(){
+				var basissnum = [];
+				for(var i = 0;i<this.basisList.length;i++){
+					basissnum.push(this.basisList[i].S_NUM);
+				}
+				this.basissnums = basissnum.toString(',');
 				this.page.currentPage = 1;
 				this.requestBasis();
 				this.requestnum = '4';
 				this.dialogVisible = true;
+				this.basissnums = '';
 			},
 			basisleadbtn2(){
+				var projectpnum = [];
+				for(var i = 0;i<this.proTestList.length;i++){
+					projectpnum.push(this.proTestList[i].P_NUM);
+				}
+				this.projectpnums = projectpnum.toString(',');
 				this.page.currentPage = 1;
 				this.requestProject();
 				this.requestnum = '5';
 				this.dialogVisible2 = true;
+				this.projectpnums = '';
 			},
 			//检测依据数据
 			requestBasis(){
@@ -1375,7 +1389,7 @@
 					RELEASETIME: this.searchList.RELEASETIME,
 					STARTETIME: this.searchList.STARTETIME,
 				};
-				var url = this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.pronamenum;
+				var url = this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.pronamenum+'&S_NUM_where_not_in='+this.basissnums;
 				this.$axios.get(url, {
 					
 				}).then((res) => {
@@ -1418,7 +1432,7 @@
 					VERSION: this.searchList.VERSION,
 					STATUS: this.searchList.STATUS,
 				};
-				this.$axios.get(this.basic_url +'/api-apps/app/inspectionPro2?S_NUM_where_in='+this.basisnums, {
+				this.$axios.get(this.basic_url +'/api-apps/app/inspectionPro2?S_NUM_where_in='+this.basissnums+'&P_NUM_where_not_in='+this.projectpnums, {
 				
 				}).then((res) => {
 					this.page.totalCount = res.data.count;	

@@ -107,9 +107,9 @@
 					</div>
 					<!-- 高级查询划出 End-->
 
-					<el-row :gutter="0">
+					<el-row class="relative" id="pageDiv">
 						<!-- 左侧树菜单 Begin-->
-						<el-col :span="5" class="lefttree">
+						<el-col :span="5" class="lefttree" id="left">
 							<div class="lefttreebg">
 								<div class="left_tree_title clearfix" @click="min3max()">
 									<div class="pull-left pr20" v-if="ismin">检索分类</div>
@@ -126,8 +126,8 @@
 							</div>
 						</el-col>
 						<!-- 左侧树菜单 End-->
-						
-						<el-col :span="19" class="leftcont v-resize">
+						<div id="middle"></div>
+						<el-col :span="19" class="leftcont" id="right">
 							<!-- 表格 -->
 							<el-table :data="samplesList" 
 									  :header-cell-style="rowClass"
@@ -739,11 +739,43 @@
 							});
 				})
 		    },
+		    //树和表单之间拖拽改变宽度
+			treeDrag(){
+				var middleWidth=9,
+				left = document.getElementById("left"),
+				right =  document.getElementById("right"), 
+				middle =  document.getElementById("middle"); 
+				middle.style.left = left.clientWidth + 'px';
+				right.style.left = left.clientWidth + 10 + 'px';
+				middle.onmousedown = function(e) { 
+					var disX = (e || event).clientX; 
+					middle.left = middle.offsetLeft; 
+					document.onmousemove = function(e) { 
+						var iT = middle.left + ((e || event).clientX - disX); 
+						var e=e||window.event,tarnameb=e.target||e.srcElement; 
+						var maxT=document.body.clientWidth; 
+						iT < 0 && (iT = 0); 
+						iT > maxT/2 && (iT = maxT/2); 
+						middle.style.left = left.style.width = iT + "px"; 
+						right.style.width = maxT - iT -middleWidth -230 + "px"; 
+						right.style.left = iT+middleWidth+"px"; 
+						return false 
+					}; 
+					document.onmouseup = function() { 
+						document.onmousemove = null; 
+						document.onmouseup = null; 
+						middle.releaseCapture && middle.releaseCapture() 
+					}; 
+					middle.setCapture && middle.setCapture(); 
+					return false 
+				}; 
+			}
 		},
 		
 		mounted() {// 在页面挂载前就发起请求
 			this.requestData();
 			this.getKey();
+			this.treeDrag();//调用树和表单之间拖拽改变宽度
 //			this.$refs.navleft.getleft();
 		},
 	}

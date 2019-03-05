@@ -466,6 +466,7 @@
 				this.ismin = !this.ismin;
 			},
 			childByValue:function(childValue) {
+				console.log(childValue);
         		// childValue就是子组件传过来的值
 				this.$refs.navsheader.showClick(childValue);
 				this.getbutton(childValue);

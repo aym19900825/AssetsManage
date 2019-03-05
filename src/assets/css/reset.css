@@ -768,7 +768,7 @@ h6 {
 /*树和表单之间拖拽改变宽度#F5F8FB by Aiyamin20190305*/
 #middle{
 	width: 10px;
-	background: black;
+	background: #F5F8FB;
 	height: 100%;
 	position: absolute;
 }

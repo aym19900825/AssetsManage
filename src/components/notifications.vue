@@ -875,7 +875,7 @@
 				})
 
 		    },
-		     //树和表单之间拖拽改变宽度
+		    //树和表单之间拖拽改变宽度
 			treeDrag(){
 				var middleWidth=9,
 				left = document.getElementById("left"),

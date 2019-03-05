@@ -150,7 +150,7 @@
 
 										    <el-table-column prop="ACTIVE_DATE" label="资质有效期" sortable width="160">
 										      <template slot-scope="scope">
-										      	<el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.ACTIVE_DATE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+										      	<el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.ACTIVE_DATE'" :rules="{required: true, message: '不能为空', trigger: 'change'}">
 											      	<el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.ACTIVE_DATE'" >
 											         <el-date-picker style="width: 90%" v-show="scope.row.isEditing" v-model="scope.row.ACTIVE_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd"></el-date-picker>
 											        <span v-show="!scope.row.isEditing" >{{scope.row.ACTIVE_DATE}}</span>
@@ -751,7 +751,7 @@
 		          if (valid) {
 					if(this.CUSTOMER.CUSTOMER_QUALIFICATIONList.length==0 || this.CUSTOMER.CUSTOMER_PERSONList.length == 0){
 						this.$message({
-							message: '表格信息为必填内容',
+							message: '资质信息及客户联系人必填',
 							type: 'warning',
 						});
 						this.falg = false;

@@ -1,37 +1,60 @@
 <template>
 	<div>
 		<!-- 检测依据弹出框begin -->
-		<el-dialog :modal-append-to-body="false" title="检测依据" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
-			<!-- 高级查询划出 Begin-->
-			<div class="pb10">
-				<el-form :model="searchList" label-width="70px">
-					<el-row :gutter="10">
-						<el-col :span="6">
-							<el-form-item label="标准编号" prop="S_NUM">
-								<el-input v-model="searchList.S_NUM"></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="6">
-							<el-form-item label="标准名称" prop="S_NAME">
-								<el-input v-model="searchList.S_NAME"></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="6">
-							<el-form-item label="英文名称" prop="S_ENGNAME">
-								<el-input v-model="searchList.S_ENGNAME"></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="6">
-							<el-form-item label="版本" prop="VERSION">
-								<el-input v-model="searchList.VERSION"></el-input>
-							</el-form-item>
-						</el-col>		
-					</el-row>
-					<el-row :gutter="10">
-						<el-col :span="6">
-							<el-form-item label="机构" prop="DEPTID">
-								<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
-									<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+			<el-dialog :modal-append-to-body="false" 
+						title="检测依据" 
+						:visible.sync="dialogVisible" 
+						width="80%" 
+						:before-close="handleClose">
+				<!-- 高级查询划出 Begin-->
+				<div class="pb10">
+					<el-form :model="searchList" label-width="70px">
+						<el-row :gutter="10">
+							<el-col :span="6">
+								<el-form-item label="标准编号" prop="S_NUM">
+									<el-input v-model="searchList.S_NUM"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="6">
+								<el-form-item label="标准名称" prop="S_NAME">
+									<el-input v-model="searchList.S_NAME"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="6">
+								<el-form-item label="英文名称" prop="S_ENGNAME">
+									<el-input v-model="searchList.S_ENGNAME"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="6">
+								<el-form-item label="版本" prop="VERSION">
+									<el-input v-model="searchList.VERSION"></el-input>
+								</el-form-item>
+							</el-col>		
+						</el-row>
+						<el-row :gutter="10">
+							<el-col :span="6">
+								<el-form-item label="机构" prop="DEPTID">
+									<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
+										<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+									</el-select>
+								</el-form-item>
+							</el-col>
+							<el-col :span="6">
+								<el-form-item label="发布时间" prop="RELEASETIME">
+									<el-date-picker style="width: 100%" v-model="searchList.RELEASETIME" type="date" placeholder="发布时间" value-format="yyyy-MM-dd">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+							<el-col :span="6">
+								<el-form-item label="启用时间" prop="STARTETIME">
+									<el-date-picker style="width: 100%" v-model="searchList.STARTETIME" type="date" placeholder="启用时间" value-format="yyyy-MM-dd">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+							<!-- <el-col :span="3">
+								<el-select style="width: 120%" v-model="searchList.STATUS" placeholder="请选择信息状态">
+									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+									</el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
@@ -334,15 +357,15 @@
     handleClose(done) {
         this.$confirm('确认关闭？')
             .then(_ => {
-                this.resetBasisInfo();
+				this.resetBasisInfo();
             })
             .catch(_ => {
-            	 $('.v-modal').hide();
-            });
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
     }
   },
   	mounted() {
-		// this.requestData();
 		this.getCompany();
 	},
 }

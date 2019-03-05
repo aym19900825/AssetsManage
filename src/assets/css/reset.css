@@ -159,14 +159,24 @@ i, cite, em, var, address, dfn {
 /*字体颜色 By Heliping*/
 .white,.white a {color:#dae2ea;}
 .white a:hover {color:#ffffff;}
+
 .blue,.blue a {color:#2196F3;}
 .blue a:hover {color:#6585DF;}
 .blue { cursor:pointer; }
+
+
+.textblue,.textblue a {color:#2196F3;}
+.textblue a:hover {color:#6585DF;}
+
 .red,.red a {color:#ea4074;}
 .red a:hover {color:#E97A9B;}
 
 .gray,.gray a {color:#97A3B4;}
 .gray a:hover {color:#5B6371;}
+
+.green,.green a {color:#36d243;}
+.green a:hover {color:#67C23A;}
+
 
 
 .font13 {font-size: 13px;}
@@ -755,3 +765,16 @@ h6 {
 .el-tabs__content {overflow: visible;}
 
 
+/*树和表单之间拖拽改变宽度#F5F8FB by Aiyamin20190305*/
+#middle{
+	width: 10px;
+	background: #F5F8FB;
+	height: 100%;
+	position: absolute;
+}
+#middle:hover {
+    cursor: w-resize;
+}
+#right{
+	position: absolute;
+}

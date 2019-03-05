@@ -95,7 +95,7 @@
 								</el-table-column>
                                 <el-table-column label="报告描述" sortable prop="DESCRIPTION" v-if="this.checkedName.indexOf('报告描述')!=-1">
 								</el-table-column>
-								<el-table-column label="流程状态" sortable prop="STATE" v-if="this.checkedName.indexOf('流程状态')!=-1">
+								<el-table-column label="流程状态" sortable prop="STATEDesc" v-if="this.checkedName.indexOf('流程状态')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
@@ -473,14 +473,14 @@
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					console.log(res);
+					// console.log(res);
 					this.buttons = res.data;
 					
 				}).catch((wrong) => {
 					this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
+						message: '网络错误，请重试',
+						type: 'error'
+					});
 				})
 
 		    },

@@ -45,23 +45,16 @@
 
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
-						<el-form :model="searchList" label-width="45px">
+						<el-form :model="searchList" label-width="95px">
 							<el-row :gutter="10">
-								<el-col :span="5">
-									<el-form-item label="所属应用ID" prop="menuId">
-										<el-input v-model="searchList.menuId"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="5">
+								<el-col :span="6">
 									<el-form-item label="按钮名称" prop="name">
 										<el-input v-model="searchList.name"></el-input>
 									</el-form-item>
 								</el-col>
-								<el-col :span="5">
-									<el-form-item label="按钮样式颜色" prop="style">
-										<el-select clearable v-model="searchList.style" filterable allow-create default-first-option placeholder="请选择">
-										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
-										</el-select>
+								<el-col :span="6">
+									<el-form-item label="所属应用ID" prop="menuId">
+										<el-input v-model="searchList.menuId"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="4">
@@ -104,9 +97,9 @@
 										<i :class="scope.row.icon"></i> <!-- {{scope.row.icon}} -->
 									</template>
 								</el-table-column>
-								<el-table-column label="按钮样式颜色" sortable prop="style" v-if="this.checkedName.indexOf('按钮样式颜色')!=-1">
+								<el-table-column label="按钮颜色" sortable prop="style" v-if="this.checkedName.indexOf('按钮颜色')!=-1">
 									<template slot-scope="scope">
-										<button type="button" :class="'el-button el-button--style el-button--mini '+ scope.row.style">{{scope.row.style}}</button>
+										<button type="button" :class="'btn '+ scope.row.style">{{scope.row.style}}</button>
 									</template>
 								</el-table-column>
 								<el-table-column label="排序" width="100" sortable prop="sort" v-if="this.checkedName.indexOf('排序')!=-1">
@@ -141,7 +134,7 @@
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
 	export default {
-		name: 'customer_management',
+		name: 'button_configure',
 		components: {
 			vheader,
 			navs_left,
@@ -162,7 +155,7 @@
 				loading: false,//默认加载数据时显示loading动画
 				fileList:[],
 				value: '',
-				productType:'productType',//appname
+				permissions:'permissions',//appname
 				searchData: {
 					page: 1,
 					limit: 20, //分页显示数
@@ -177,7 +170,7 @@
 					'按钮名称',
 					'所属应用ID',
 					'按钮图标',
-					'按钮样式颜色',
+					'按钮颜色',
 					'排序',
 					'录入时间',
 					'修改时间'
@@ -195,7 +188,7 @@
 						prop: 'icon'
 					},
 					{
-						label: '按钮样式颜色',
+						label: '按钮颜色',
 						prop: 'style'
 					},
 					{
@@ -221,9 +214,8 @@
 				ismin: true,
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
 				searchList: { //点击高级搜索后显示的内容
-					menuId:'',
 					name: '',
-					style:'',
+					menuId:''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -239,7 +231,6 @@
 					totalCount: 0
 				},
 				CATEGORY: {},//修改子组件时传递数据
-				selectData: [],
 			}
 		},
 		methods: {
@@ -247,18 +238,7 @@
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
 			},
-			//机构值
-			getCompany() {
-				var type = "2";
-				var url = this.basic_url + '/api-user/depts/treeByType';
-				this.$axios.get(url, {
-					params: {
-						type: type
-					},
-				}).then((res) => {
-					this.selectData = res.data;
-				});
-			},
+			
 			//表格滚动加载
 			loadMore() {
 				//console.log(this.$refs.table.$el.offsetTop)
@@ -318,7 +298,6 @@
 				this.searchList = {
 					name:'',
 					menuId:'',
-					style: '',
 				};
 				this.requestData();
 			},
@@ -391,7 +370,7 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/permissions/deletes';
+					var url = this.basic_url + '/api-user/permissions/deletes';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -443,7 +422,7 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/productType/physicsDel';
+					var url = this.basic_url + '/api-user/permissions/physicsDel';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -507,9 +486,9 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
+					
 					name:this.searchList.name,
-					menuId:this.searchList.menuId,
-					style: this.searchList.style,
+					menuId:this.searchList.menuId
 				}
 				var url = this.basic_url + '/api-user/permissions';
 				this.$axios.get(url, {
@@ -535,7 +514,7 @@
 					});
 				})
 			},
-			handleNodeClick(data) {},
+			
 			formatter(row, column) {
 				return row.enabled;
 			},
@@ -546,7 +525,6 @@
 		},
 		mounted() {
 			this.requestData();
-			this.getCompany();
 		}
 	}
 </script>

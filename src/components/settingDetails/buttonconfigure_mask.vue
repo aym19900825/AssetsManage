@@ -53,26 +53,43 @@
 									</el-row>
 
 									<el-row>
-										<!-- <el-col :span="8">
-											<el-form-item label="类别编号" prop="NUM">
-												<el-input v-model="CATEGORY.NUM" :disabled="edit" placeholder="自动生成"></el-input>
-											</el-form-item>
-										</el-col> -->
 										<el-col :span="8">
-											<el-form-item label="编码" prop="NUM">
-												<el-input v-model="CATEGORY.NUM" :disabled="noedit"></el-input>
+											<el-form-item label="按钮名称" prop="name">
+												<el-input v-model="CATEGORY.name" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="16">
-											<el-form-item label="名称" prop="TYPE">
-												<el-input v-model="CATEGORY.TYPE" :disabled="noedit"></el-input>
+										<el-col :span="8">
+											<el-form-item label="所属应用ID" prop="menuId">
+												<el-input v-model="CATEGORY.menuId" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="按钮图标" prop="icon">
+												<el-input v-model="CATEGORY.icon" :disabled="edit">
+													<i :class="CATEGORY.icon" slot="prepend"></i>
+													<el-button slot="append" icon="el-icon-search" @click="getIcon"></el-button>
+												</el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="按钮颜色" prop="style">
+												<el-select v-model="CATEGORY.style" :disabled="noedit" style="width: 100%">
+													<el-option v-for="item in selectData" :key="item.id" :value="item.id" :label="item.name" :class="item.name"></el-option>
+												</el-select>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="排序" prop="sort">
+												<el-input v-model="CATEGORY.sort" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row>
 										<el-col :span="8" v-if="dept">
-											<el-form-item label="机构" prop="DEPTIDDesc">
-												<el-input v-model="CATEGORY.DEPTIDDesc" :disabled="edit"></el-input>
+											<el-form-item label="机构" prop="deptiddesc">
+												<el-input v-model="CATEGORY.deptiddesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -80,23 +97,23 @@
 								<el-collapse-item title="其它" name="2" v-show="views">
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="录入人" prop="ENTERBYDesc">
-												<el-input v-model="CATEGORY.ENTERBYDesc" :disabled="edit"></el-input>
+											<el-form-item label="录入人" prop="createbydesc">
+												<el-input v-model="CATEGORY.createbydesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="录入时间" prop="ENTERDATE">
-												<el-input v-model="CATEGORY.ENTERDATE" :disabled="edit"></el-input>
+											<el-form-item label="录入时间" prop="createTime">
+												<el-input v-model="CATEGORY.createTime" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改人" prop="CHANGEBYDesc">
-												<el-input v-model="CATEGORY.CHANGEBYDesc" placeholder="当前修改人" :disabled="edit"></el-input>
+											<el-form-item label="修改人" prop="updatebydesc">
+												<el-input v-model="CATEGORY.updatebydesc" placeholder="当前修改人" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改时间" prop="CHANGEDATE">
-												<el-input v-model="CATEGORY.CHANGEDATE" placeholder="当前修改时间" :disabled="edit"></el-input>
+											<el-form-item label="修改时间" prop="updateTime">
+												<el-input v-model="CATEGORY.updateTime" placeholder="当前修改时间" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -106,28 +123,59 @@
 						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click="saveAndUpdate('CATEGORY')">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit('CATEGORY')" v-show="addtitle">保存并继续</el-button>
-							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('CATEGORY')">修订</el-button>
-							<!-- <el-button v-if="modify" type="success" @click="update('CATEGORY')">启用</el-button> -->
 							<el-button @click="close">取消</el-button>
 						</div>
 					</el-form>
 				</div>
 			</div>
 		</div>
+
+		<!--应用中心图标弹出 Begin-->
+	        <div class="mask" v-show="show2"></div>
+			<div class="mask_divbg" v-show="show2">
+				<div class="mask_div">
+					<div class="mask_title_div clearfix">
+						<div class="mask_title">应用中心图标</div>
+						<div class="mask_anniu">
+							<span class="mask_span mask_max" @click='toggle'>
+								<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
+							</span>
+							<span class="mask_span" @click='close2'>
+								<i class="icon-close1"></i>
+							</span>
+						</div>
+					</div>
+					<div id="FHScrollbar" :style="{height: fullHeight}">
+						<div class="content-accordion">
+							<all_icons v-on:childByValue="childByValue"></all_icons>
+						</div>
+						<div class="content-footer">
+							<el-button type="primary" @click="confirm2();" >确 定</el-button>
+							<el-button @click='close2'>取 消</el-button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--应用中心图标弹出 End-->
 	</div>
 </template>
 
 <script>
 	import Config from '../../config.js'
+	import all_icons from '../common/all_icons.vue'//弹出框
 	export default {
 		name: 'masks',
+		components: {
+			'all_icons':all_icons,
+		},
 		props: {
 			CATEGORY: {
 				type: Object,
 				default: function() {
 					return {
 						ID: '',
-						NUM: '',
+						name: '',
+						menuId: '',
 						TYPE: '',
 						STATUS: '',
 						VERSION: '',
@@ -142,7 +190,7 @@
 			page: Object,
 		},
 		data() {
-			var validateNum = (rule, value, callback) => {
+			var validatename = (rule, value, callback) => {
 				if(value != ""){
 		             if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
 		                 callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
@@ -171,6 +219,7 @@
 				selUser: [],
 				edit: true, //禁填
 				show: false,
+				show2:false,
 				isok1: true,
 				isok2: false,
 				down: true,
@@ -178,8 +227,9 @@
 				activeNames: ['1','2'], //手风琴数量
 				dialogVisible: false, //对话框
 				selectData: [],
+				fullHeight: document.documentElement.clientHeight - 200 +'px',//获取浏览器高度
 				rules: {
-					NUM: [{required: false,trigger: 'change',validator: validateNum,}],
+					name: [{required: false,trigger: 'change',validator: validatename,}],
 					TYPE: [{required: true,trigger: 'blur',validator: validateType,}],
 				},
 				//tree
@@ -199,14 +249,33 @@
 			};
 		},
 		methods: {
+			 // 按钮图标childValue就是子组件传过来的值
+			childByValue: function (childValue) {
+		        this.sendchildValue = childValue;
+		      
+		    },
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selUser = val;
 			},
+			//图标
+			getIcon(){
+				this.show2 = true;
+			},
+			//按钮图标关闭
+			close2(){
+				this.show2 = false;
+			},
+			//按钮图标确定
+			confirm2() {
+				this.CATEGORY.icon = this.sendchildValue;
+				this.show2 = false;
+			},
+
 			//点击按钮显示弹窗
 			visible() {
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					console.log(res.data);
+					// console.log(res.data);
 					this.CATEGORY.DEPTID = res.data.deptId;
 					this.CATEGORY.ENTERBY = res.data.id;
 					// this.CATEGORY.ENTERBYDesc = res.data.nickname;
@@ -263,7 +332,7 @@
 			},
 			//这是查看
 			view() {
-				console.log(this.CATEGORY);
+				// console.log(this.CATEGORY);
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;
@@ -273,85 +342,19 @@
 				this.noviews = false;//按钮
 				this.show = true;				
 			},
-			//点击修订按钮
-			modifyversion(CATEGORY) {
-				this.$refs[CATEGORY].validate((valid) => {
-					if(valid) {
-						var category=JSON.stringify(this.category); 
-	 					var CATEGORY=JSON.stringify(this.CATEGORY);
-					 	if(category==CATEGORY){
-					  	this.$message({
-								message: '没有修改内容，不允许修订！',
-								type: 'warning'
-							});
-							return false;
-					    }else{
-							var url = this.basic_url + '/api-apps/app/productType/operate/upgraded';
-							this.$axios.post(url, this.CATEGORY).then((res) => {
-								//resp_code == 0是后台返回的请求成功的信息
-								if(res.data.resp_code == 0) {
-									this.$message({
-										message: '修订成功',
-										type: 'success'
-									});
-									//重新加载数据
-									this.$emit('request');
-									this.show = false;
-								}else{
-								this.show = true;
-								if(res.data.resp_code == 1) {
-									//res.data.resp_msg!=''后台返回提示信息
-									if( res.data.resp_msg!=''){
-									 	this.$message({
-											message: res.data.resp_msg,
-											type: 'warning'
-									 	});
-									}else{
-										this.$message({
-											message:'相同数据不可重复修订！',
-											type: 'warning'
-										});
-									}
-								}
-							}		
-							}).catch((err) => {
-								this.$message({
-									message: '网络错误，请重试',
-									type: 'error'
-								});
-							});
-						}
-					} else {
-						this.$message({
-							message: '未填写完整，请填写',
-							type: 'warning'
-						});
-					}
-				});
-			},
-			//点击更新按钮
-			update(CATEGORY) {
-				var data = {
-					id: this.CATEGORY.ID,
-				}
-				this.$axios.get(this.basic_url+ '/api-apps/app/productType/operate/updateRelate', {
-					params: data
-				}).then((res) => {
-					console.log(res.data.resp_code);
-					if(res.data.resp_code == 0) {
-						this.$message({
-							message: '更新成功',
-							type: 'success'
-						});
-					}else{
-						return;
-					}
-				}).catch((err) => {
+			//获取按钮颜色
+			getBtnColor(){
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=BTNCOLOR';
+				this.$axios.get(url, {}).then((res) => {
+					// console.log(res);
+					this.selectData = res.data;
+					
+				}).catch((wrong) => {
 					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+				})	
 			},
 			//点击关闭按钮
 			close() {
@@ -385,12 +388,10 @@
 			},
 			// 保存users/saveOrUpdate
 			save(CATEGORY) {
-				console.log(233333);
-				console.log(this.CATEGORY);
 				this.$refs[CATEGORY].validate((valid) => {
 					if(valid) {
 						this.CATEGORY.STATUS = ((this.CATEGORY.STATUS == "1" || this.CATEGORY.STATUS == '活动') ? '1' : '0');
-						var url = this.basic_url + '/api-apps/app/productType/saveOrUpdate';
+						var url = this.basic_url + '/api-user/permissions/saveOrUpdate';
 						this.$axios.post(url, this.CATEGORY).then((res) => {
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
@@ -467,7 +468,7 @@
 			},
 		},
 		mounted() {
-			
+			this.getBtnColor();
 		},
 		
 	}

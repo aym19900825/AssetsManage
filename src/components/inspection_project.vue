@@ -36,7 +36,7 @@
 					</el-col>
 				</el-row>
 				<!--部门名称 End-->
-				<el-row :gutter="10">
+				<el-row class="relative" id="pageDiv">
 					<el-col :span="6">
 						<el-card class="box-card" :body-style="{ padding: '10px' }">
 							<div slot="header" class="title clearfix">
@@ -377,7 +377,7 @@
                 	var departName = res.data.deptName;
 					var currenturl = this.basic_url + '/api-user/depts/findByPid/' + this.departmentId;
 					this.$axios.get(currenturl, {}).then((res) => {
-						// console.log(res.data);
+						// console.log(this.departmentId);
 						this.Select_DEPTID = res.data;
 						if (this.departmentId == 128) {
 							this.formInline.DEPTID = res.data[0].id;
@@ -551,6 +551,37 @@
                 }).catch(() => {
             	});
 			},
+			//树和表单之间拖拽改变宽度
+			treeDrag(){
+				var middleWidth=9,
+				left = document.getElementById("left"),
+				right =  document.getElementById("right"), 
+				middle =  document.getElementById("middle"); 
+				middle.style.left = left.clientWidth + 'px';
+				right.style.left = left.clientWidth + 10 + 'px';
+				middle.onmousedown = function(e) { 
+					var disX = (e || event).clientX; 
+					middle.left = middle.offsetLeft; 
+					document.onmousemove = function(e) { 
+						var iT = middle.left + ((e || event).clientX - disX); 
+						var e=e||window.event,tarnameb=e.target||e.srcElement; 
+						var maxT=document.body.clientWidth; 
+						iT < 0 && (iT = 0); 
+						iT > maxT/2 && (iT = maxT/2); 
+						middle.style.left = left.style.width = iT + "px"; 
+						right.style.width = maxT - iT -middleWidth -10 + "px"; 
+						right.style.left = iT+middleWidth+"px"; 
+						return false 
+					}; 
+					document.onmouseup = function() { 
+						document.onmousemove = null; 
+						document.onmouseup = null; 
+						middle.releaseCapture && middle.releaseCapture() 
+					}; 
+					middle.setCapture && middle.setCapture(); 
+					return false 
+				}; 
+			},
 			addproclass() { //小弹出框确认按钮事件
 				this.dialogVisible3 = false;
 				this.catedata.NUM = this.selData[0].NUM;
@@ -570,6 +601,7 @@
 		
 		mounted() {
 			this.getDEPTID();
+			this.treeDrag();//调用树和表单之间拖拽改变宽度
 			// this.getData();
 			// this.requestData();
 		},

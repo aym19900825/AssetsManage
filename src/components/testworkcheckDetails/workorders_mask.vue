@@ -39,11 +39,11 @@
 											</el-input>
 										</el-col>-->
 										<el-col :span="4" class="pull-right">
-											<el-input  v-model="workorderForm.STATEDesc" :disabled="edit">
+											<el-input v-model="workorderForm.STATEDesc" :disabled="edit">
 													<template slot="prepend">状态</template>
 											</el-input>
 										</el-col>
-										<el-col :span="6" class="pull-right">
+										<el-col :span="7" class="pull-right">
 											<el-input placeholder="自动生成" v-model="workorderForm.WONUM" :disabled="edit">
 													<template slot="prepend">工作任务单编号</template>
 											</el-input>
@@ -79,7 +79,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="是否主任务单？" prop="IS_MAIN" >
+											<el-form-item label="主任务单?" prop="IS_MAIN" >
 												<el-select clearable v-model="workorderForm.IS_MAIN" filterable allow-create default-first-option placeholder="请选择" style="width:100%" :disabled="noedit">
 													<el-option label="是" value="1"></el-option>
 													<el-option label="否" value="0"></el-option>
@@ -1252,7 +1252,7 @@
 					PROXYNUM: '',//委托书编号
 					PROXY_VERSION: '',//委托书版本
 					PARENT_NUM: '',//父任务单编号
-					IS_MAIN: '',//是否主任务单？
+					IS_MAIN: '',//主任务单？
 					MASTER_INSPECTOR: '',//主检员
 					CJDW:'',//承检单位
 					STATE: '',//信息状态

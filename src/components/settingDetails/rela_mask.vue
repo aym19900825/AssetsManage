@@ -136,8 +136,6 @@
 				basic_url: Config.dev_url,
 				selUser:[],
 				edit: true, //禁填
-				'男': true,
-				'女': false,
 				col_but1: true,
 				col_but2: true,
 				show: false,

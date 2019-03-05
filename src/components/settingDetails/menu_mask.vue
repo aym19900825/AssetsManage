@@ -351,16 +351,16 @@
 				this.menu.pName = this.checkedNodes[0].name;
 
 			},
-			close2(){
-				this.show2 = false;
-			},
-		
 		    childByValue: function (childValue) {
 		        // childValue就是子组件传过来的值
 		        this.sendchildValue = childValue;
 		      
 		    },
-			//应用中心图标的带值
+		    //应用中心图标关闭
+		    close2(){
+				this.show2 = false;
+			},
+			//应用中心图标确定
 			confirm2() {
 				this.menu.css = this.sendchildValue;
 				this.show2 = false;

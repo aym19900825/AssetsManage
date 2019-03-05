@@ -63,7 +63,7 @@
 					<!-- 高级查询划出 End-->
 
 					<el-row :gutter="10">
-						<el-col :span="24" class="leftcont v-resize">
+						<el-col :span="24" class="leftcont">
 							<!-- 表格 -->
 							<el-table :data="todoList" :header-cell-style="rowClass" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'todoList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
@@ -161,7 +161,7 @@ export default {
 				},
 		page: {
 				currentPage: 1,
-				pageSize: 10,
+				pageSize: 20,
 				totalCount: 0
 				},
       }
@@ -193,48 +193,36 @@ export default {
 		},
 		//滚动加载更多
 		loadMore() {
-				//console.log(this.$refs.table.$el.offsetTop)
-				let up2down = sessionStorage.getItem('up2down');
-				if(this.loadSign) {					
-					if(up2down=='down'){
-						this.page.currentPage++;
-						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-							return false;
-						}
-//						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
-						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-							$('.el-table__body-wrapper table').append('<div class="filing" style="height:400px;width: 100%;"></div>');
-							sessionStorage.setItem('toBtm','true');
-						}
-					}else{
-						sessionStorage.setItem('toBtm','false');
-						this.page.currentPage--;
-						if(this.page.currentPage < 1) {
-							this.page.currentPage=1
-							return false;
-						}
+			//console.log(this.$refs.table.$el.offsetTop)
+			let up2down = sessionStorage.getItem('up2down');
+			if(this.loadSign) {					
+				if(up2down=='down'){
+					this.page.currentPage++;
+					if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+						this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+						return false;
 					}
-					this.loadSign = false;
-					setTimeout(() => {
-						this.loadSign = true;
-					}, 1000)
-					this.requestData();
+//						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+					if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+						$('.el-table__body-wrapper table').append('<div class="filing" style="height:400px;width: 100%;"></div>');
+						sessionStorage.setItem('toBtm','true');
+					}
+				}else{
+					sessionStorage.setItem('toBtm','false');
+					this.page.currentPage--;
+					if(this.page.currentPage < 1) {
+						this.page.currentPage=1
+						return false;
+					}
 				}
-			},
-//		loadMore() {
-//			if(this.loadSign) {
-//				this.loadSign = false
-//				this.page.currentPage++
-//					if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-//						return
-//					}
-//				setTimeout(() => {
-//					this.loadSign = true
-//				}, 1000)
-//				this.requestData();
-//			}
-//		},
+				this.loadSign = false;
+				setTimeout(() => {
+					this.loadSign = true;
+				}, 1000)
+				this.requestData();
+			}
+		},
+
 		requestData() {
 			this.loading = true;
 				var data = {

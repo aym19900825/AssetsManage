@@ -18,6 +18,9 @@
 								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 								</button>
+								<button type="button" class="btn btn-blue button-margin" @click="configuration">
+								    权限设置
+								</button>
 								<!--<button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加
                       			</button>
@@ -182,6 +185,24 @@
 		        <el-button @click="resetNewpwd">取 消</el-button>
 		      </span>
         </el-dialog>
+		<!-- 权限管理 -->
+		<el-dialog :modal-append-to-body="false" title="工作任务通知书查询类别" :visible.sync="Access" width="30%" :before-close="handleClose">
+			<!--工作任务通知书查询类别-->
+			<div class="scrollbar" style="max-height: 400px;">
+				<el-tree ref="work" :data="workData" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourework"  >
+				</el-tree>
+				<!--年度计划查询类别-->
+				<el-tree ref="annual" :data="annualData" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resoureannual" >
+				</el-tree>
+				<!--设置产品类别和产品-->
+				<el-tree ref="product" :data="productData" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resoureproduct" >
+				</el-tree>
+				<span slot="footer" class="dialog-footer">
+					<el-button type="primary" @click="Accessconfirm" >确 定</el-button>
+					<el-button @click="resetTree">取 消</el-button>
+				</span>
+			</div>
+		</el-dialog>
 
 		<!--右侧内容显示 End-->
 	</div>
@@ -207,6 +228,7 @@
 						{ required: true, message: '请输入密码', trigger: 'blur' }
 					]
 				},
+				Access:false,//权限管理的弹出框
 				loading: false,
 				basic_url: Config.dev_url,
 				isShow: false,
@@ -217,6 +239,22 @@
 				passdialog:false,
 				userpassword:{
 					newPassword: ''
+				},
+				//权限弹出框的数据
+				workData:[],//工作任务单的数据
+				resourework:{
+					children: "children",
+					label: "name"
+				},
+				annualData:[],//年度树数据
+				resoureannual:{
+					children: "children",
+					label: "name"
+				},
+				productData:[],//产品的数据
+				resoureproduct:{
+					children: "children",
+					label: "fullname"
 				},
 				checkedName: [
 					'用户名',
@@ -268,7 +306,6 @@
 					// 	prop: 'createTime'
 					// }
 				],
-				leftitem:'',//点击左侧传过来的
 				companyId: '',
 				deptId: '',
 				selUser: [],
@@ -304,6 +341,15 @@
 			}
 		},
 		methods: {
+			getCheckedKeys() { 
+				console.log(this.$refs.tree.getCheckedKeys());
+				},
+			resetTree(){
+				this.Access = false;
+				this.workData = [];
+				this.annualData = [];
+				this.workData = [];
+			},
 			resetNewpwd(){
 				this.passdialog = false;
 				// this.userpassword.newPassword = '';
@@ -434,7 +480,118 @@
 		    	}else if(item.name=="重置密码"){
 		    	 this.resetPwd();
 		    	}
-		    },
+			},
+			//权限配置
+			configuration(){
+				if(this.selUser.length == 0) {
+					this.$message({
+						message: '请您选择要设置的数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selUser.length > 1) {
+					this.$message({
+						message: '不可同时设置多个数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					this.getwork(this.selUser[0].id);
+					this.getannual(this.selUser[0].id);
+					this.getproduct(this.selUser[0].id);
+					this.Access=true;
+				}
+			},
+			getwork(id){
+				var url = this.basic_url + '/api-user/menus/findMenuByRoleIdsForPM/'+id;
+				this.$axios.get(url, {}).then((res) => {
+					this.workData = res.data;
+				}).catch(error => {
+					this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+				})
+			},
+			getannual(id){
+				var url = this.basic_url + '/api-user/menus/findMenuByRoleIdsForTask/'+id;
+				this.$axios.get(url, {}).then((res) => {
+					this.annualData = res.data;
+				}).catch(error => {
+					this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+				})
+			},
+			getproduct(id){
+				var url = this.basic_url + '/api-apps/appCustom/pdTree/'+id;
+				this.$axios.get(url, {}).then((res) => {
+					this.productData = res.data.datas;
+				}).catch(error => {
+					this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+				})
+			},
+			//
+			Accessconfirm(){//确定
+			console.log(this.$refs.work.getCheckedNodes());
+			console.log(this.$refs.annual.getCheckedNodes());
+			console.log(this.$refs.product.getCheckedNodes());
+			var pmType=[];
+			var taskType=[];
+			var productType=[];
+			var product=[];
+			var work=this.$refs.work.getCheckedNodes();
+			var annual=this.$refs.annual.getCheckedNodes();
+			var products=this.$refs.product.getCheckedNodes();
+			for(var a=0;a<work.length;a++){
+				if(work[a].name!="年度计划"){
+					  pmType.push(work[a].id); 
+				}
+			}
+			for(var b=0;b<annual.length;b++){
+				if(annual[b].name!="工作任务通知书"){
+					  taskType.push(annual[b].id); 
+				}
+			}
+			for(var c=0;c<products.length;c++){
+				if(products[c].type!="dept"&&products[c].type!="producttype"){
+					  product.push(products[c].ID); 
+				}else if(products[c].type!="dept"&&products[c].type!="product"){
+					  productType.push(products[c].ID);
+				}	
+			}
+			pmType = pmType.join(',');
+			taskType = taskType.join(',');
+			product = product.join(',');
+			productType = productType.join(',');
+ 				var data = {
+ 					pmType:pmType,
+					taskType:taskType,
+					productType:productType,
+					product:product,
+				}
+			
+				var url = this.basic_url + '/api-user/users/setAuth?pmType='+pmType+"&taskType="+taskType+"&productType="+productType+"&product="+product+"&userId="+this.selUser[0].id;
+				console.log(url);
+				this.$axios.get(url, {}).then((res) => {
+					if(res.data.resp_code == 0) {
+						this.$message({
+							message: '操作成功',
+							type: 'success'
+						});
+					}
+					this.Access = false;
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+			},
 			//添加用戶
 			openAddMgr() {
 				this.$refs.child.visible();
@@ -442,7 +599,6 @@
 			},
 			//修改用戶
 			modify() {
-//				this.aaaData = this.selUser;
 				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
@@ -456,12 +612,6 @@
 					});
 					return;
 				} else {
-//					this.aaaData[0].roleId = [];
-//					var roles = this.aaaData[0].roles;
-//					for(var i = 0; i < roles.length; i++) {
-//						this.aaaData[0].roleId.push(roles[i].id);
-//					}
-//					console.log(this.aaaData[0].roleId);
 					this.user = this.selUser[0]; 
 					this.$refs.child.detail(this.selUser[0].id);
 				}
@@ -719,7 +869,13 @@
 			// 	return data.sex ? '男' : '女'
 			// },
 
-
+			handleClose(done) {
+				this.$confirm('确认关闭？')
+					.then(_ => {
+						done();
+					})
+					.catch(_ => {});
+			},
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -865,7 +1021,6 @@
 							type: 'error'
 						});
 				})
-
 		    },
 		    //树和表单之间拖拽改变宽度
 			treeDrag(){

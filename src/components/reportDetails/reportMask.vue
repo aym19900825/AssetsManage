@@ -17,7 +17,6 @@
 			</el-table-column>
 			<el-table-column label="报表文件" width="200" sortable prop="file">
 			</el-table-column>
-			</el-table-column>
 			<el-table-column label="备注" width="200" sortable prop="remarks">
 			</el-table-column>
 			<el-table-column label="类型" width="160" sortable prop="type">
@@ -102,13 +101,13 @@
 					this.$axios.get(url, {}).then((res) => {
 						console.log(res);
 						if(res.data.datas==null){
-//							 this.$refs.reportchild.visible(file);
 						  		var url=this.basic_url;
-				    			url = url.substring(0,21);
+								var pos = url.lastIndexOf(':');
+								url=url.substring(0,pos+1); 
+								console.log(url);
 						  		this.url=url+"5300";
 							 	var url = this.url+"/ureport/preview?_u=mysql:" +file
              					window.open(url); 
-//							 this.close();
 						}else{
 							console.log(res);
 							this.$refs.reportpramchild.visible(res.data.datas,file);

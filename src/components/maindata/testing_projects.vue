@@ -306,6 +306,7 @@
 				testing_projectForm: {},//修改子组件时传递数据
 				selectData: [],
 				buttons:[],
+				inspectionPro:'inspectionPro'//appname
 			}
 		},
 
@@ -590,7 +591,7 @@
 			},
 			//报表
 			reportdata(){
-				this.reportData.app=this.productType;
+				this.reportData.app=this.inspectionPro;
 				this.$refs.reportChild.visible();
 			},
 

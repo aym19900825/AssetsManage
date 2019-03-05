@@ -261,6 +261,7 @@
 				},
 				selectData: [],
 				buttons:[],
+				product:'product'//appname
 			}
 		},
 		methods: {
@@ -548,7 +549,7 @@
 			},
 			//报表
 			reportdata(){
-				this.reportData.app=this.productType;
+				this.reportData.app=this.product;
 				this.$refs.reportChild.visible();
 			},
 			judge(data) {

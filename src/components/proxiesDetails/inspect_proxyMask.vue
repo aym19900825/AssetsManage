@@ -112,26 +112,19 @@
 											</el-col>
 										</el-row>
 										<el-row >
-											<!--<el-col :span="8">
-												<el-form-item label="样品信息状态" prop="ITEM_STATUS">
-													<el-input v-model="dataInfo.ITEM_STATUS"></el-input>
-												</el-form-item>
-											</el-col>-->
-											<el-col :span="8" >
-												<el-form-item label="承检单位" prop="R_VENDORDesc"  label-width="110px">
-													<el-input v-model="dataInfo.R_VENDORDesc" :disabled="edit"></el-input>
-												</el-form-item>
-											</el-col>
-											<el-col :span="8" >
-												<el-form-item label="产品类别" prop="PRODUCT_TYPE"  label-width="110px">
-													<el-input v-model="dataInfo.PRODUCT_TYPE" :disabled="true">
-													</el-input>
+											<el-col :span="8">
+												<el-form-item label="样品信息状态" prop="ITEM_STATUS" label-width="110px">
+													<el-input v-model="dataInfo.ITEM_STATUS" :disabled="edit"></el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
-												<el-form-item label="产品名称" prop="PRODUCT" label-width="110px">
-													<el-input v-model="dataInfo.PRODUCT" :disabled="true">
-													</el-input>
+												<el-form-item label="标识" prop="ITEM_ID" label-width="110px">
+													<el-input v-model="dataInfo.ITEM_ID" :disabled="edit"></el-input>
+												</el-form-item>
+											</el-col>
+											<el-col :span="8" >
+												<el-form-item label="承检单位" prop="R_VENDORDesc"  label-width="110px">
+													<el-input v-model="dataInfo.R_VENDORDesc" :disabled="edit"></el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
@@ -192,7 +185,22 @@
 													<font>选择</font>
 												</el-button>
 											</div>
-
+											<div>
+												<el-row>
+												    <el-col :span="8" >
+														<el-form-item label="产品类别" prop="PRODUCT_TYPE"  label-width="80px">
+															<el-input v-model="dataInfo.PRODUCT_TYPE" :disabled="true">
+															</el-input>
+														</el-form-item>
+													</el-col>
+													<el-col :span="8">
+														<el-form-item label="产品名称" prop="PRODUCT" label-width="80px">
+															<el-input v-model="dataInfo.PRODUCT" :disabled="true">
+															</el-input>
+														</el-form-item>
+													</el-col>
+												</el-row>`
+											</div>
 											<el-table :data="dataInfo.INSPECT_PROXY_BASISList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.INSPECT_PROXY_BASISList', order: 'descending'}">
 												<el-table-column prop="S_NUM" label="标准编号" sortable width="150px">
 													<template slot-scope="scope">
@@ -659,7 +667,7 @@
 			</el-dialog>
 			<!-- 客户联系人 End -->
 			<!-- 样品名称  -->
-			<sampletmask ref="samplechild" @appenddes="appenddes" @appendmod="appendmod" @appendqua="appendqua" @linedata="linedata"></sampletmask>
+			<sampletmask ref="samplechild" @showData="showData" @appenddes="appenddes" @appendmod="appendmod" @appendqua="appendqua" @linedata="linedata"></sampletmask>
 			<!--受检企业-->
 			<enterprisemask ref="enterprisechild" @appendname="appendname" @appendadd="appendadd" @appendzip="appendzip"@appendnames="appendnames" @appendid="appendid"></enterprisemask>
 			<!--审批页面-->
@@ -1641,6 +1649,13 @@
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
 				$(".mask_div").css("top", "100px");
+			},
+			showData(data){
+				this.dataInfo.ITEM_NAME = data.appenddes;//名称
+				this.dataInfo.ITEM_MODEL= data.appendmod;
+				this.dataInfo.ITEM_QUALITY = data.appendqua;
+				this.dataInfo.ITEM_ID = data.itemId;
+				this.dataInfo.ITEM_STATUS = data.status;
 			},
 			//样品
 			appenddes(value){

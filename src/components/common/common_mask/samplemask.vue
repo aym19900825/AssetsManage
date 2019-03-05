@@ -232,6 +232,8 @@
 				var description=this.selval[0].DESCRIPTION;	
 				var model=this.selval[0].MODEL;
 				var quatity=this.selval[0].QUATITY;
+				var itemId=this.selval[0].PRODUCT_CODE;
+				var status=this.selval[0].STATE;
 				var linedata = [];
 				linedata.push(this.selval[0].CJDW);//承检单位id
 				linedata.push(this.selval[0].CJDWDesc);//承检单位名称
@@ -245,6 +247,14 @@
 				this.$emit('appenddes',description);
 				this.$emit('appendmod',model);
 				this.$emit('appendqua',quatity);
+				var obj = {
+					appenddes: description,
+					appendmod: model,
+					appendqua: quatity,
+					itemId: itemId,
+					status: status
+				}
+				this.$emit('showData',obj);
 				this.$emit('linedata',linedata);
 			}else{
 			    var name= this.selval[0].DESCRIPTION;//样品名称

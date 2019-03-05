@@ -496,6 +496,7 @@
 					});
 					return;
 				} else {
+					console.log(this.selUser[0].id);
 					this.getwork(this.selUser[0].id);
 					this.getannual(this.selUser[0].id);
 					this.getproduct(this.selUser[0].id);
@@ -503,8 +504,10 @@
 				}
 			},
 			getwork(id){
+				console.log(id);
 				var url = this.basic_url + '/api-user/menus/findMenuByRoleIdsForPM/'+id;
 				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
 					this.workData = res.data;
 				}).catch(error => {
 					this.$message({
@@ -516,6 +519,7 @@
 			getannual(id){
 				var url = this.basic_url + '/api-user/menus/findMenuByRoleIdsForTask/'+id;
 				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
 					this.annualData = res.data;
 				}).catch(error => {
 					this.$message({

@@ -90,7 +90,7 @@ export default {
 		var _this = this;
 		 // console.log(_this.$store.state.menuid);
 		if(_this.$store.state.menuid=="undefined"||_this.$store.state.menuid=="null"){
-			// console.log(111111);
+			console.log(111111);
 			$('.navbar-default').hide();
 			// console.log($("#wrapper-content"));
 //			$(".wrapper").css({"padding-left":"0px"})

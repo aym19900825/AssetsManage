@@ -1,7 +1,11 @@
 <template>
 	<div>
 		<!-- 检测依据弹出框begin -->
-			<el-dialog :modal-append-to-body="false" title="检测依据" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" 
+						title="检测依据" 
+						:visible.sync="dialogVisible" 
+						width="80%" 
+						:before-close="handleClose">
 				<!-- 高级查询划出 Begin-->
 				<div class="pb10">
 					<el-form :model="searchList" label-width="70px">
@@ -334,13 +338,15 @@
     handleClose(done) {
         this.$confirm('确认关闭？')
             .then(_ => {
-                done();
+				this.resetBasisInfo();
             })
-            .catch(_ => {});
+            .catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
     }
   },
   	mounted() {
-		// this.requestData();
 		this.getCompany();
 	},
 }

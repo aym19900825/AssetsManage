@@ -23,7 +23,7 @@
 							</div>
 						<el-form :inline="true" :model="formInline">
 							<el-form-item label="部门名称" prop="DEPTID">
-								<el-select v-model="formInline.DEPTID" placeholder="请选择部门" @change="requestData">
+								<el-select v-model="formInline.DEPTID" placeholder="请选择部门" @change="requestData" :disabled="nameFlag">
 									<el-option v-for="(data,index) in Select_DEPTID" :key="index" :value="data.id" :label="data.fullname"></el-option>
 								</el-select>
 
@@ -227,7 +227,8 @@
 				inspectionSta2Id: 0,//获取子表检验/检测标准ID
 				inspectionPro2Id: 0,//获取子表检验/检测项目ID
 				dialogVisible3: false, //对话框
-				parentId: 1
+				parentId: 1,
+				nameFlag: true
 			}
 		},
 		methods: {
@@ -380,6 +381,7 @@
 						// console.log(this.departmentId);
 						this.Select_DEPTID = res.data;
 						if (this.departmentId == 128) {
+							this.nameFlag = false;
 							this.formInline.DEPTID = res.data[0].id;
 						} else {
 							this.Select_DEPTID.push({
@@ -388,6 +390,7 @@
 							});
 							this.formInline.DEPTID = this.departmentId;
 						}
+						console.log(this.formInline.DEPTID);
 						this.requestData();
 					}).catch(error => {
 						console.log('请求失败');

@@ -434,10 +434,12 @@
 							res.data.CJDW = Number(res.data.CJDW);
 							var resullt=res.data.datas;
 							var users='';
+
 							for(var i=0;i<resullt.length;i++){
 								users = users + resullt[i].username+",";
 								// console.log("users----"+users);
 							}
+							console.log(this.username);
 							if(users.indexOf(this.username) != -1){
 								this.approval=true;
 								this.start=false;
@@ -621,6 +623,7 @@
 								for(var i=0;i<resullt.length;i++){
 									users = users + resullt[i].username+",";
 								}
+								console.log(this.username);
 								if(users.indexOf(this.username) != -1){
 									this.approval=true;
 									this.start=false;
@@ -777,6 +780,18 @@
 				$('.v-modal').hide();
 			});
 			},
+			//获取当前用户
+			getUser(){//获取当前用户信息
+	            var url = this.basic_url + '/api-user/users/currentMap';
+	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+	                    this.username = res.data.username;
+	            }).catch((err) => {
+	                this.$message({
+	                    message: '网络错误，请重试',
+	                    type: 'error'
+	                });
+	            });
+        	},
 		},
 		mounted() {
 			this.getCompany();

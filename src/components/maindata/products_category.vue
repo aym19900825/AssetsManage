@@ -51,47 +51,32 @@
 									</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown> -->
+							
 
-							<el-dropdown size="small" split-button type="primary">
-    								导入
+							<el-dropdown size="small">
+									<button class="btn mr5 btn-primarys">
+										<i class="icon-inventory-line-callin"></i> 导入<i class="el-icon-arrow-down el-icon--right"></i>
+									</button>
 								<el-dropdown-menu slot="dropdown">
     								<el-dropdown-item>
-    									<div @click="download">下载模版</div>
+    									<div @click="download"><i class="icon-download-cloud"></i>下载模版</div>
     								</el-dropdown-item>
     								
     								<el-dropdown-item>
-									<el-upload
-							          ref="upload"
-							          class="upload"
-							          :action="uploadUrl()"
-							          :on-success="fileSuccess"
-							          :limit=1
-							          multiple
-							          method:="post"
-									  :file-list="fileList">
-							          <div>上传</div>
-									</el-upload>
+										<el-upload
+										ref="upload"
+										class="upload"
+										:action="uploadUrl()"
+										:on-success="fileSuccess"
+										:limit=1
+										multiple
+										method:="post"
+										:file-list="fileList">
+											<i class="icon-upload-cloud"></i> 上传
+										</el-upload>
     								</el-dropdown-item>
 						  		</el-dropdown-menu>
 							</el-dropdown>
-					
-							<!-- <button type="button" class="btn btn-primarys button-margin" @click="exportData">
-							    <i class="icon-download-cloud"></i>导出
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="Printing">
-							    <i class="icon-print"></i>打印
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
-							    <i class="icon-clipboard"></i>报表
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="Configuration">
-							    <i class="icon-cpu"></i>配置关系
-							</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-					    		<i class="icon-search"></i>高级查询
-					    		<i class="icon-arrow1-down" v-show="down"></i>
-					    		<i class="icon-arrow1-up" v-show="up"></i>
-							</button> -->
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">

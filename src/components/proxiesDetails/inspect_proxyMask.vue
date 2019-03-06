@@ -113,8 +113,8 @@
 										</el-row>
 										<el-row >
 											<el-col :span="8">
-												<el-form-item label="样品信息状态" prop="ITEM_STATUS" label-width="110px">
-													<el-input v-model="dataInfo.ITEM_STATUS" :disabled="edit"></el-input>
+												<el-form-item label="样品信息状态" prop="ITEM_STATUSDesc" label-width="110px">
+													<el-input v-model="dataInfo.ITEM_STATUSDesc" :disabled="edit"></el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
@@ -343,7 +343,7 @@
 												</el-table-column>
 												<el-table-column prop="V_NAME" label="委托单位" sortable width="120px">
 													<template slot-scope="scope">
-														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAME" placeholder="请输入委托方名称">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAME">
 														</el-input>
 														<span v-else="v-else">{{scope.row.V_NAME}}</span>
 													</template>
@@ -366,7 +366,7 @@
 												</el-table-column>
 												<el-table-column prop="VENDORDesc" label="分包方名称" sortable width="120px">
 													<template slot-scope="scope">
-														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDORDesc" placeholder="请输入分包方名称">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDORDesc">
 															<el-button slot="append" icon="el-icon-search" @click="getDept(scope.row)">
 															</el-button>
 														</el-input>
@@ -383,7 +383,7 @@
 
 												<el-table-column prop="PRODUCT_TYPE" label="产品类别" sortable width="120px">
 													<template slot-scope="scope">
-														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.PRODUCT_TYPE" placeholder="请输入分包方名称">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.PRODUCT_TYPE">
 															<el-button slot="append" icon="el-icon-search" @click="addcategory(scope.row)">
 															</el-button>
 														</el-input>
@@ -393,7 +393,7 @@
 
 												<el-table-column prop="PRODUCT" label="产品名称" sortable width="120px">
 													<template slot-scope="scope">
-														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.PRODUCT" placeholder="请输入分包方名称">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.PRODUCT">
 															<el-button slot="append" icon="el-icon-search" @click="addproduct(scope.row)">
 															</el-button>
 														</el-input>
@@ -403,7 +403,7 @@
 
 												<el-table-column prop="BASIS" label="检验检测技术依据" sortable width="150px">
 													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.BASIS" placeholder="请输入分包方名称">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.BASIS" placeholder="请输入">
 															<el-button slot="append" icon="el-icon-search" @click="basisleadbtn(scope.row)">
 															</el-button>
 														</el-input>
@@ -441,9 +441,9 @@
 								
 												<el-table-column prop="CHECKCOST" label="检验费用" sortable width="120px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.CHECKCOST'" :rules="[{required: true, message: '请输入数字', trigger: 'blur'}]" >
-														<el-input v-if="scope.row.isEditing" id="testprice" @blur="testPrice(scope.row)" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input>
-														<span v-else="v-else">{{scope.row.CHECKCOST}}</span>
+														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.CHECKCOST'" :rules="[{required: true, message: '请输入数字', trigger: 'change'}]" >
+															<el-input v-if="scope.row.isEditing" id="testprice" @blur="testPrice(scope.row)" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input>
+															<span v-else="v-else">{{scope.row.CHECKCOST}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
@@ -541,7 +541,24 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="标准费用(元)" prop="CONTRACTCOST" label-width="110px">
-												<el-input  v-model="dataInfo.CONTRACTCOST" id="stacost"  @blur="staPrice" :disabled="noedit"></el-input>
+												<el-input  v-model="dataInfo.CONTRACTCOST" id="stacost"  @blur="staPrice" disabled></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="我方经办人" prop="OURAGENT"  label-width="110px">
+												<el-input v-model="dataInfo.OURAGENT" disabled></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="我方签办人" prop="OUR_SIGNATORY" label-width="110px">
+												<el-input v-model="dataInfo.OUR_SIGNATORY" disabled></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="对方签办人" prop="OPPOSITE_AGENT" label-width="110px">
+												<el-input v-model="dataInfo.OPPOSITE_AGENT" disabled></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -558,21 +575,25 @@
 											</el-form-item>
 										</el-col> -->
 										<el-col :span="8">
+											<el-form-item label="合同编号" prop="CONTRACTNUM"  label-width="110px">
+												<el-input v-model="dataInfo.CONTRACTNUM" disabled></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
 											<el-form-item label="主检组" prop="MAINGROUP"  label-width="110px">
-											<el-select clearable v-model="dataInfo.MAINGROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit"  @change="getmaingroup($event)" style="width: 100%;">
-												<el-option v-for="(data,index) in maingroup" :key="index" :value="data.id" :label="data.fullname"></el-option>
-											</el-select>
-										</el-form-item>
+												<el-select v-model="dataInfo.MAINGROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit"  @change="getmaingroup($event)" style="width: 100%;">
+													<el-option v-for="(data,index) in maingroup" :key="index" :value="data.id" :label="data.fullname"></el-option>
+												</el-select>
+											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="主检负责人" prop="LEADER" label-width="110px">
-												<el-select v-model="dataInfo.LEADER" :disabled="noedit" placeholder="请选择">
-													<el-option v-for="(data,index) in leaderdata" :key="index" :value="data.id" :label="data.username"></el-option>
+												<el-select v-model="dataInfo.LEADER" placeholder="请选择" @change="setLeader">
+													<el-option v-for="(data,index) in leaderdata" :key="data.id" :value="data.id" :label="data.username"></el-option>
 												</el-select>
 											</el-form-item>
 										</el-col>
 									</el-row>	
-									
 									<el-row>	
 										<el-col :span="24">
 											<el-form-item label="备注" prop="MEMO" label-width="110px">
@@ -693,6 +714,7 @@
 </template>
 
 <script>
+	import { Loading } from 'element-ui'
 	import Config from '../../config.js';
 	import sampletmask from '../common/common_mask/samplemask.vue'//样品名称
 	import enterprisemask from '../common/common_mask/enterprisemask.vue'//企业
@@ -982,7 +1004,13 @@
 			},
 			//金额两位小数点千位分隔符，四舍五入
 			testPrice(item){
-				var money = document.getElementById("testprice").value;
+				var money = item.CHECKCOST;
+				console.log(money);
+				var re = /^[0-9]+.?[0-9]*$/;
+				if (!re.test(money)) {
+			　　　　item.CHECKCOST = 0;
+			　　　　return;
+			　　}
 				if(money == ''){
 					return;
 				}else{
@@ -1237,6 +1265,7 @@
 					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 					this.dataInfo.TYPE = '1';
 					this.dataInfo.TYPEDesc = '检验';
+					this.dataInfo.LEADER = 0;
 					this.show = true;
 				}).catch((err) => {
 					this.$message({
@@ -1656,6 +1685,7 @@
 				this.dataInfo.ITEM_QUALITY = data.appendqua;
 				this.dataInfo.ITEM_ID = data.itemId;
 				this.dataInfo.ITEM_STATUS = data.status;
+				this.dataInfo.ITEM_STATUSDesc = data.statusDesc;
 			},
 			//样品
 			appenddes(value){
@@ -1824,16 +1854,28 @@
 			},
 			//主检组带出主检负责人
 			getmaingroup(maingroupid){
+				if(!maingroupid){
+					return;
+				}
 				this.dataInfo.LEADER = '';
 				var url = this.basic_url + '/api-user/users/usersByDept?deptId='+maingroupid;
-		   			this.$axios.get(url, {}).then((res) => {
-						this.leaderdata = res.data.data;
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
-					});		
+				this.$axios.get(url, {}).then((res) => {
+					this.leaderdata = [];
+					var list = res.data.data;
+					for(var i=0; i<list.length; i++){
+						this.leaderdata.push(list[i]);
+					}
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});		
+			},
+			setLeader(id){
+				this.$nextTick(() => {
+					this.$set(this.dataInfo,'LEADER',id);
+				})
 			},
 			//获取负责人和接收人
 			getCustomer(type) {

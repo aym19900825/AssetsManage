@@ -36,14 +36,14 @@ axios.interceptors.response.use(
   error => {
     // loading.close();
     // router.push({ path: '/' });
-    console.log(error);
-
     if (error && error.response) {
-
+      console.log(error.response.status)
       switch (error.response.status) {
         case 401:
           router.push({ path: '/' });
         case 403:
+          router.push({ path: '/' });
+        case 404:
           router.push({ path: '/' });
       }
     }

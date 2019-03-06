@@ -546,6 +546,23 @@
 										</el-col>
 									</el-row>
 									<el-row>
+										<el-col :span="8">
+											<el-form-item label="我方经办人" prop="OURAGENT"  label-width="110px">
+												<el-input v-model="dataInfo.OURAGENT" disabled></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="我方签办人" prop="OUR_SIGNATORY" label-width="110px">
+												<el-input v-model="dataInfo.OUR_SIGNATORY" disabled></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="对方签办人" prop="OPPOSITE_AGENT" label-width="110px">
+												<el-input v-model="dataInfo.OPPOSITE_AGENT" disabled></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
 										<!--<el-col :span="8">
 											<el-form-item label="信息状态" prop="MESSSTATUS">
 												<el-input v-model="dataInfo.MESSSTATUS"></el-input>
@@ -558,11 +575,16 @@
 											</el-form-item>
 										</el-col> -->
 										<el-col :span="8">
+											<el-form-item label="合同编号" prop="CONTRACTNUM"  label-width="110px">
+												<el-input v-model="dataInfo.CONTRACTNUM" disabled></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
 											<el-form-item label="主检组" prop="MAINGROUP"  label-width="110px">
-											<el-select v-model="dataInfo.MAINGROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit"  @change="getmaingroup($event)" style="width: 100%;">
-												<el-option v-for="(data,index) in maingroup" :key="index" :value="data.id" :label="data.fullname"></el-option>
-											</el-select>
-										</el-form-item>
+												<el-select v-model="dataInfo.MAINGROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit"  @change="getmaingroup($event)" style="width: 100%;">
+													<el-option v-for="(data,index) in maingroup" :key="index" :value="data.id" :label="data.fullname"></el-option>
+												</el-select>
+											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="主检负责人" prop="LEADER" label-width="110px">
@@ -572,7 +594,6 @@
 											</el-form-item>
 										</el-col>
 									</el-row>	
-									
 									<el-row>	
 										<el-col :span="24">
 											<el-form-item label="备注" prop="MEMO" label-width="110px">
@@ -693,6 +714,7 @@
 </template>
 
 <script>
+	import { Loading } from 'element-ui'
 	import Config from '../../config.js';
 	import sampletmask from '../common/common_mask/samplemask.vue'//样品名称
 	import enterprisemask from '../common/common_mask/enterprisemask.vue'//企业

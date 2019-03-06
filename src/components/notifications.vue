@@ -751,15 +751,15 @@
 				})
 			},
 
-			//机构树
-			//			getKey() {
-			//				let that = this;
-			//				var url = this.basic_url + '/api-user/depts/tree';
-			//				this.$axios.get(url, {}).then((res) => {
-			//					this.resourceData = res.data;
-			//					this.treeData = this.transformTree(this.resourceData);
-			//				});
-			//			},
+			// 机构树
+			getKey() {
+				var url = this.basic_url + '/api-user/users/findByUserAndType/2';
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+					this.resourceData = res.data;
+					this.treeData = this.transformTree(this.resourceData);
+				});
+			},
 
 			transformTree(data) {
 				for(var i = 0; i < data.length; i++) {
@@ -910,7 +910,7 @@
 		beforeMount() {
 			// 在页面挂载前就发起请求
 			this.requestData();
-			//			this.getKey();
+			this.getKey();
 			this.getType();
 			this.getCompany();
 		},

@@ -143,17 +143,15 @@
 				type: Object,
 				default: function(){
 					return {
-						ID:'',
-						STATUS:'',
-						AUTOKEY:'',
-						PREFIX:'',
-						S_NUM:'',
-						MEMO:'',
-						DEPARTMENT:'',
-						ENTERBY:'',
-						ENTERDATE:'',
-						CHANGEBY:'',
-						CHANGEDATE:'',
+						isinitbydate:'',
+						initformat:'',
+						prefix:'',
+						initnum:'',
+						increase:'',
+						issplicingdate:'',
+						splicingformat:'',
+						serialnum:'',
+						retain:'',
 					}
 				}
 			}
@@ -198,15 +196,15 @@
 				isok2: false,
 //				labelPosition: 'top',//标题在上方显示
 				rules:{
-          			AUTOKEY:[
-						{ required: true, message: '必填', trigger: 'blur'},
-						{ validator: this.Validators.isWorknumber, trigger: 'blur'}
-					],
-					PREFIX:[{ required: false, trigger: 'blur', validator: this.Validators.isEnglish}],
-          			S_NUM:[
-						{ required: true, message: '必填', trigger: 'blur'},
-						{ validator: this.Validators.isInteger, trigger: 'blur'}
-					],
+          			// AUTOKEY:[
+					// 	{ required: true, message: '必填', trigger: 'blur'},
+					// 	{ validator: this.Validators.isWorknumber, trigger: 'blur'}
+					// ],
+					// PREFIX:[{ required: false, trigger: 'blur', validator: this.Validators.isEnglish}],
+          			// S_NUM:[
+					// 	{ required: true, message: '必填', trigger: 'blur'},
+					// 	{ validator: this.Validators.isInteger, trigger: 'blur'}
+					// ],
           		
 	          	},
 	          	addtitle:true,
@@ -223,29 +221,25 @@
 			};
 		},
 		methods: {
-			
 			//form表单内容清空
 			resetNew(){
                 this.numbsetForm = {
-					STATUS:'活动',//添加时默认显示信息状态
-					AUTOKEY:'',
-					PREFIX:'',
-					S_NUM:'',
-					MEMO:'',
-					DEPARTMENT:'',
-					ENTERBY:'',
-					ENTERDATE:'',
-					CHANGEBY:'',
-					CHANGEDATE:''
+					isinitbydate:'',
+					initformat:'',
+					prefix:'',
+					initnum:'',
+					increase:'',
+					issplicingdate:'',
+					splicingformat:'',
+					serialnum:'',
+					retain:'',
 				}
             },
             childMethods() {//添加内容时从父组件带过来的
-            	//console.log(this.numbsetForm);
             	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					this.numbsetForm.DEPARTMENT=res.data.deptName;
-					this.numbsetForm.ENTERBY=res.data.nickname;
+					this.numbsetForm.createuser=res.data.nickname;
 					var date=new Date();
-					this.numbsetForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
+					this.numbsetForm.createtime = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 				}).catch((err)=>{
 					this.$message({
 						message:'网络错误，请重试',
@@ -267,9 +261,9 @@
             },
             detail() {//修改内容时从父组件带过来的
             	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					this.numbsetForm.CHANGEBY=res.data.nickname;
+					this.numbsetForm.updateuser=res.data.nickname;
 					var date=new Date();
-					this.numbsetForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					this.numbsetForm.updatetime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{
 					this.$message({
 						message:'网络错误，请重试',
@@ -342,8 +336,8 @@
 			submitForm(numbsetForm) {
 				this.$refs[numbsetForm].validate((valid) => {
 		          if (valid) {
-		          	this.numbsetForm.STATUS=((this.numbsetForm.STATUS=="1"||this.numbsetForm.STATUS=='活动') ? '1' : '0');
-					var url = this.basic_url + '/api-apps/app/autokey/saveOrUpdate';
+		          	// this.numbsetForm.STATUS=((this.numbsetForm.STATUS=="1"||this.numbsetForm.STATUS=='活动') ? '1' : '0');
+					var url = this.basic_url + '/api-user/serialnum/saveOrUpdate';
 					this.$axios.post(url, this.numbsetForm).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -377,7 +371,10 @@
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			}
 		},
 	}

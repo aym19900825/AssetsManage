@@ -295,7 +295,7 @@
 					}else{
 						this.loadSign=true
 					}
-					this.rawDataTem2Form.inspectionList=res.data.INSPECTION_REPORT_TEMPLATE2List;
+					this.rawDataTem2Form.inspectionList=res.data.RAW_DATA_TEMPATE2List;
 
 					for(var j = 0; j < this.rawDataTem2Form.inspectionList.length; j++){
 						this.rawDataTem2Form.inspectionList[j].isEditing = false;
@@ -351,7 +351,10 @@
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			},
 			formatter(row, column) {
 				return row.enabled;

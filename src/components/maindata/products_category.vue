@@ -52,7 +52,7 @@
 								</el-dropdown-menu>
 							</el-dropdown> -->
 
-							<el-dropdown size="small" split-button type="primary" style="margin-top:1px;">
+							<el-dropdown size="small" split-button type="primary">
     								导入
 								<el-dropdown-menu slot="dropdown">
     								<el-dropdown-item>
@@ -69,7 +69,7 @@
 							          multiple
 							          method:="post"
 									  :file-list="fileList">
-									          <div>上传</div>
+							          <div>上传</div>
 									</el-upload>
     								</el-dropdown-item>
 						  		</el-dropdown-menu>

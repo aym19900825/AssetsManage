@@ -130,9 +130,7 @@
 					</el-row>
 				</div>
 							<!--报表-->
-			<reportmask :reportData="reportData" ref="reportChild" 
-
-></reportmask>
+			<reportmask :reportData="reportData" ref="reportChild"></reportmask>
 			</div>
 		</div>
 		<!-- <samplesmask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></samplesmask> -->

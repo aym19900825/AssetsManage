@@ -285,11 +285,14 @@ export default {
 				menuId: item.id,
 				roleId: _this.$store.state.roleid,
 			};
-            this.$store.dispatch('setMenuIdAct',item.id);
+			this.$store.dispatch('setMenuIdAct',item.id);
+			console.log(item.id);
 			var url = _this.basic_url + '/api-user/menus/findSecondByRoleIdAndFisrtMenu';
 			_this.$axios.get(url, {params: data}).then((res) => {
+				console.log(res);
 				if(res.data!="undefined"&&res.data.length>0){
 					item = res.data[0];
+					this.$router.push({path: item[0].url});
 				}
 				
 					_this.$store.dispatch('setSelectedNavAct',item);
@@ -327,6 +330,7 @@ export default {
 						},0);
 					}
 			}).catch((wrong) => {
+
 			});
 //		    _this.$store.dispatch('setRoleIdAct',this.$store.state.roleid);
 		    _this.$store.dispatch('setNavIdAct',item.id);

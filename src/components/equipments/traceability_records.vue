@@ -343,6 +343,7 @@
 				},
 				aaaData:[],
 				buttons:[],
+				pmRecord:'pmRecord'//appname
 			}
 		},
 		methods: {
@@ -557,7 +558,7 @@
 			},
 			//报表
 			reportdata(){
-				this.reportData.app=this.productType;
+				this.reportData.app=this.pmRecord;
 				this.$refs.reportChild.visible();
 			},
 			judge(data) {

@@ -236,6 +236,7 @@
 				WORK_INSTRUCTION: {},//修改子组件时传递数据
 				selectData: [],
 				buttons:[],
+				workIns:'workIns'//appname
 			}
 		},
 		methods: {
@@ -521,7 +522,7 @@
 			},
 			            // 报表
 			reportdata(){
-				this.reportData.app=this.productType;
+				this.reportData.app=this.workIns;
 				this.$refs.reportChild.visible();
 			},
 

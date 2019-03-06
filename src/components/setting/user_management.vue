@@ -496,16 +496,25 @@
 					});
 					return;
 				} else {
-					this.getwork(this.selUser[0].id);
+					console.log(this.selUser[0].id);
 					this.getannual(this.selUser[0].id);
+					this.getwork(this.selUser[0].id);
+					
 					this.getproduct(this.selUser[0].id);
 					this.Access=true;
 				}
 			},
 			getwork(id){
+				var arr=[];	
 				var url = this.basic_url + '/api-user/menus/findMenuByRoleIdsForPM/'+id;
 				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
 					this.workData = res.data;
+					this.recursive(res.data,arr);
+					this.$nextTick(() => {
+						console.log(arr);
+							this.worksetChecked(arr);
+						});
 				}).catch(error => {
 					this.$message({
 								message: '网络错误，请重试',
@@ -514,9 +523,16 @@
 				})
 			},
 			getannual(id){
+				var arr=[];	
 				var url = this.basic_url + '/api-user/menus/findMenuByRoleIdsForTask/'+id;
 				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
 					this.annualData = res.data;
+					this.recursive(res.data,arr);
+					this.$nextTick(() => {
+						console.log(arr);
+							this.annualsetChecked(arr);
+						});
 				}).catch(error => {
 					this.$message({
 								message: '网络错误，请重试',
@@ -525,15 +541,58 @@
 				})
 			},
 			getproduct(id){
+				var arr=[];	
 				var url = this.basic_url + '/api-apps/appCustom/pdTree/'+id;
 				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
 					this.productData = res.data.datas;
+					this.recursive(res.data.datas,arr);
+					this.$nextTick(() => {
+							this.productsetChecked(arr);
+						});
 				}).catch(error => {
 					this.$message({
 								message: '网络错误，请重试',
 								type: 'error'
 							});
 				})
+			},
+			recursive(mData,arr){
+				console.log(mData.length);
+				var flag=true;
+				for(var a = 0; a < mData.length; a++){
+						if(mData[a].checked){
+							arr.push(mData[a].id);
+							if(mData[a].children!=undefined){
+								for(var b=0;b<mData[a].children.length;b++){
+									if(!mData[a].children[b].checked){
+									flag=false;
+									break;
+									}
+								}
+								if(!flag){
+									arr.pop(mData[a].id)
+								}
+							}
+						}
+						if(mData[a].children!=undefined){
+							this.recursive(mData[a].children,arr);
+						}else{
+							this.recursive(mData[a],arr);
+						}
+						
+					}
+			return mData;		
+			},
+			worksetChecked(arr){
+				this.$refs.work.setCheckedKeys(arr);
+			},
+			annualsetChecked(arr){
+				this.$refs.annual.setCheckedKeys(arr);
+			},
+			productsetChecked(arr){
+				console.log(arr);
+				this.$refs.product.setCheckedKeys(arr);
 			},
 			//
 			Accessconfirm(){//确定

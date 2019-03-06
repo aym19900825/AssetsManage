@@ -789,13 +789,17 @@
 			//机构树
 			getKey() {
 				let that = this;
-				// var url = this.basic_url + '/api-user/depts/tree';
 				var url = this.basic_url + '/api-apps/appCustom/tree';
 				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
 					this.resourceData = res.data.datas;
-					// this.resourceData = res.data;
 					this.treeData = this.transformTree(this.resourceData);
 					console.log(this.treeData);
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
 				});
 			},
 			transformTree(data) {

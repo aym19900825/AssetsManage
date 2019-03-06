@@ -326,44 +326,12 @@
 					STATUS: ''
 				},
 				//tree
-				resourceData: [{
-						label: '监督抽查'
-					},
-					{
-						label: '监督抽查复查'
-					},
-					{
-						label: '质量抽查'
-					},
-					{
-						label: '质量抽查复查'
-					},
-					{
-						label: '生产许可证'
-					},
-					{
-						label: '认定检验检测'
-					},
-					{
-						label: '鉴定试验'
-					},
-					{
-						label: '委托检验检测'
-					},
-					{
-						label: '专项抽查'
-					},
-					{
-						label: '专项抽查复查'
-					},
-					{
-						label: '其它'
-					},
-				], //数组，我这里是通过接口获取数据，
+				resourceData: [], //数组，我这里是通过接口获取数据，
 				resourceDialogisShow: false,
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
 				resourceProps: {
-					label: "label"
+					children: "subDepts",
+					label: "name"
 				},
 				page: { //分页显示
 					currentPage: 1,
@@ -753,17 +721,22 @@
 
 			// 机构树
 			getKey() {
-				var url = this.basic_url + '/api-user/users/findByUserAndType/2';
+				var url = this.basic_url + '/api-user/users/findIdsByUserAndType/2';
 				this.$axios.get(url, {}).then((res) => {
 					console.log(res);
 					this.resourceData = res.data;
 					this.treeData = this.transformTree(this.resourceData);
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
 				});
 			},
 
 			transformTree(data) {
 				for(var i = 0; i < data.length; i++) {
-					data[i].name = data[i].fullname;
+					data[i].name = data[i].name;
 					if(!data[i].pid || $.isArray(data[i].subDepts)) {
 						data[i].iconClass = 'icon-file-normal';
 					} else {

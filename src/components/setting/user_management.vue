@@ -21,6 +21,9 @@
 								<button type="button" class="btn btn-blue button-margin" @click="configuration">
 								    权限设置
 								</button>
+								<!-- <button type="button" class="btn btn-blue button-margin" @click="Checkpermissions">
+								    权限查看
+								</button> -->
 								<!--<button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加
                       			</button>
@@ -203,7 +206,10 @@
 				</span>
 			</div>
 		</el-dialog>
-
+		<!-- 查看权限 -->
+		<!-- <el-dialog :modal-append-to-body="false" title="工作任务通知书查询类别" :visible.sync="Access" width="30%" :before-close="handleClose">
+		
+		</el-dialog>	 -->
 		<!--右侧内容显示 End-->
 	</div>
 </template>
@@ -481,6 +487,18 @@
 		    	 this.resetPwd();
 		    	}
 			},
+			// Checkpermissions(){
+			// 	var url = this.basic_url + '/api-user/users/findAuth/'+this.selUser[0].id;
+			// 	this.$axios.get(url, {}).then((res) => {
+			// 		console.log(res);
+					
+			// 	}).catch(error => {
+			// 		this.$message({
+			// 					message: '网络错误，请重试',
+			// 					type: 'error'
+			// 				});
+			// 	})
+			// },
 			//权限配置
 			configuration(){
 				if(this.selUser.length == 0) {

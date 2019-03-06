@@ -14,14 +14,12 @@
 			</li>
 		</ul>
 	</div>
-
 </template>
 
 <script>
 import Config from '../../../config.js'
 export default {
 	name: 'navs',
-	
 	data(){
 		return{
 			basic_url: Config.dev_url,
@@ -32,7 +30,6 @@ export default {
             selectedNav: {}
 		}
 	},
-	
 	methods: {
 		addClickNav(item){
 			var flag = false;
@@ -42,7 +39,6 @@ export default {
 				}
 			}
 			if(!flag){
-//				this.$store.state.clickedNavs = this.$store.state.clickedNavs.slice();
 				this.$store.state.clickedNavs.push(item);
 				setTimeout(function(){
 		 			var left = $('.page-tabs').offset().left; 
@@ -88,51 +84,38 @@ export default {
 	},
 	mounted() {
 		var _this = this;
-		 // console.log(_this.$store.state.menuid);
 		if(_this.$store.state.menuid=="undefined"||_this.$store.state.menuid=="null"){
-			// console.log(111111);
 			$('.navbar-default').hide();
-			// console.log($("#wrapper-content"));
 //			$(".wrapper").css({"padding-left":"0px"})
 //			$("#wrapper-content").css({"padding-left":"0px"});
-			// console.log($("#wrapper-content"));
 		     _this.$emit('childByValue',_this.$store.state.selectedNav);
 		}else{
 		    var data = {
-			menuId: _this.$store.state.menuid,
-			roleId: _this.$store.state.roleid,
+				menuId: _this.$store.state.menuid,
+				roleId: _this.$store.state.roleid,
 			};
-		var url = _this.basic_url + '/api-user/menus/findSecondByRoleIdAndFisrtMenu';
-		_this.$axios.get(url, {params: data}).then((res) => {
-			if(res.data.length>0&&res.data!='undefined'){
-			     // console.log(_this.$route.path);
-				if(_this.$route.path!=_this.$store.state.selectedNav.url){
-					//赋值
-	//				_this.$selectedNav=res.data[0]
-					_this.$store.dispatch('setSelectedNavAct',res.data[0]);
+			var url = _this.basic_url + '/api-user/menus/findSecondByRoleIdAndFisrtMenu';
+			_this.$axios.get(url, {params: data}).then((res) => {
+				if(res.data.length>0&&res.data!='undefined'){
+					if(_this.$route.path!=_this.$store.state.selectedNav.url){
+						_this.$store.dispatch('setSelectedNavAct',res.data[0]);
+					}
+					$('.navbar-default').show();
+	//				$(".wrapper").css({"padding-left":"220px"});
+					_this.leftNavs = res.data;
+					_this.$emit('childByValue',_this.$store.state.selectedNav);
+				}else{
+					$('.navbar-default').hide();
+	//				$(".wrapper").css({"padding-left":"0px"});
+					_this.$emit('childByValue',_this.$store.state.selectedNav);
 				}
-				$('.navbar-default').show();
-//				$(".wrapper").css({"padding-left":"220px"});
-				_this.leftNavs = res.data;
-				//子传父
-				 _this.$emit('childByValue',_this.$store.state.selectedNav);
-			}else{
-				$('.navbar-default').hide();
-//				$(".wrapper").css({"padding-left":"0px"});
-				 _this.$emit('childByValue',_this.$store.state.selectedNav);
-				 
-			}
-				
-		}).catch((wrong) => {
-			_this.$message({
-				message: '网络错误，请重试左侧1',
-				type: 'error'
+			}).catch((wrong) => {
+				_this.$message({
+					message: '网络错误，请重试左侧1',
+					type: 'error'
+				});
 			});
-		});
 		}
-		
-		
-		
 	}
 }
 </script>

@@ -123,7 +123,6 @@ export default {
                 if(url.indexOf('index') != -1){
                     this.$emit('getTodoNum',this.toDoNumber);
                 }
-                
             }).catch(error => {
                 console.log('请求失败');
             })

@@ -559,15 +559,15 @@
 										</el-col> -->
 										<el-col :span="8">
 											<el-form-item label="主检组" prop="MAINGROUP"  label-width="110px">
-											<el-select clearable v-model="dataInfo.MAINGROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit"  @change="getmaingroup($event)" style="width: 100%;">
+											<el-select v-model="dataInfo.MAINGROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit"  @change="getmaingroup($event)" style="width: 100%;">
 												<el-option v-for="(data,index) in maingroup" :key="index" :value="data.id" :label="data.fullname"></el-option>
 											</el-select>
 										</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="主检负责人" prop="LEADER" label-width="110px">
-												<el-select v-model="dataInfo.LEADER" :disabled="noedit" placeholder="请选择">
-													<el-option v-for="(data,index) in leaderdata" :key="index" :value="data.id" :label="data.username"></el-option>
+												<el-select v-model="dataInfo.LEADER" placeholder="请选择" @change="setLeader">
+													<el-option v-for="(data,index) in leaderdata" :key="data.id" :value="data.id" :label="data.username"></el-option>
 												</el-select>
 											</el-form-item>
 										</el-col>
@@ -1237,6 +1237,7 @@
 					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 					this.dataInfo.TYPE = '1';
 					this.dataInfo.TYPEDesc = '检验';
+					this.dataInfo.LEADER = 0;
 					this.show = true;
 				}).catch((err) => {
 					this.$message({
@@ -1821,16 +1822,28 @@
 			},
 			//主检组带出主检负责人
 			getmaingroup(maingroupid){
+				if(!maingroupid){
+					return;
+				}
 				this.dataInfo.LEADER = '';
 				var url = this.basic_url + '/api-user/users/usersByDept?deptId='+maingroupid;
-		   			this.$axios.get(url, {}).then((res) => {
-						this.leaderdata = res.data.data;
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
-					});		
+				this.$axios.get(url, {}).then((res) => {
+					this.leaderdata = [];
+					var list = res.data.data;
+					for(var i=0; i<list.length; i++){
+						this.leaderdata.push(list[i]);
+					}
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});		
+			},
+			setLeader(id){
+				this.$nextTick(() => {
+					this.$set(this.dataInfo,'LEADER',id);
+				})
 			},
 			//获取负责人和接收人
 			getCustomer(type) {

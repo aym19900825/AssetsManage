@@ -313,6 +313,7 @@
 				},
 				samplesForm: {},//修改子组件时传递数据
 				buttons:[],
+				item:'item'//appname
 			}
 		},
 		methods: {
@@ -465,9 +466,9 @@
 				this.down = !this.down,
 					this.up = !this.up
 			},
-						//报表
+			//报表
 			reportdata(){
-				this.reportData.app=this.productType;
+				this.reportData.app=this.item;
 				this.$refs.reportChild.visible();
 			},
 			// 删除

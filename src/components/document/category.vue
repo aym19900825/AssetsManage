@@ -200,6 +200,7 @@
 				// 选中的数据
 				selMenu: [],
 				buttons:[],
+				tbKeyword2:'tbKeyword2'//appname
 			}
 		},
 		methods: {
@@ -249,7 +250,7 @@
 		    },
 			//报表
 			reportdata(){
-				this.reportData.app=this.productType;
+				this.reportData.app=this.tbKeyword2;
 				this.$refs.reportChild.visible();
 			},
 			

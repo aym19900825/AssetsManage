@@ -282,7 +282,7 @@
 												<el-table-column prop="INSPECT_GROUP" label="专业组" sortable>
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.INSPECT_GROUP'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-															<el-select clearable v-model="scope.row.INSPECT_GROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @visible-change="visablemaingroup($event)" >
+															<el-select clearable v-model="scope.row.INSPECT_GROUP" placeholder="请选择" :disabled="noedit" @visible-change="visablemaingroup($event)" >
 																<el-option v-for="data in maingroup" :key="data.id" :value="data.id" :label="data.fullname"></el-option>
 															</el-select>
 														</el-form-item>	
@@ -1802,6 +1802,8 @@
 			RVENDORSelect(){
 				var url = this.basic_url + '/api-user/depts/findByPid/'+this.dataInfo.R_VENDOR;
 				this.$axios.get(url, {}).then((res) => {
+					console.log(res.data);
+					console.log(this.maingroup);
 					this.maingroup = res.data;
 				}).catch((err) => {
 					this.$message({
@@ -1893,13 +1895,13 @@
 					this.dataInfo.V_PERSON = this.selval[0].PERSON;
 					this.dataInfo.V_PHONE = this.selval[0].PHONE;
 					// this.dialogVisibleuser = false;
-					this.ResetDatasNew();//调用ResetDatasNew函数
+					this.resetBasisInfo();//调用resetBasisInfo函数
 				}
 			},
 			DialogClose(){//点击取消按钮
-				this.ResetDatasNew();//调用ResetDatasNew函数
+				this.resetBasisInfo();//调用resetBasisInfo函数
 			},
-			ResetDatasNew(){//点击确定或取消按钮时重置数据20190303
+			resetBasisInfo(){//点击确定或取消按钮时重置数据20190303
 				this.dialogVisibleuser = false;//关闭弹出框
 				this.CUSTOMER_PERSONList = [];//列表数据置空
 				this.page.currentPage = 1;//页码重新传值

@@ -234,6 +234,7 @@
 				var quatity=this.selval[0].QUATITY;
 				var itemId=this.selval[0].PRODUCT_CODE;
 				var status=this.selval[0].STATE;
+				var statusDesc=this.selval[0].STATEDesc;
 				var linedata = [];
 				linedata.push(this.selval[0].CJDW);//承检单位id
 				linedata.push(this.selval[0].CJDWDesc);//承检单位名称

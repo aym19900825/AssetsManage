@@ -113,8 +113,8 @@
 										</el-row>
 										<el-row >
 											<el-col :span="8">
-												<el-form-item label="样品信息状态" prop="ITEM_STATUS" label-width="110px">
-													<el-input v-model="dataInfo.ITEM_STATUS" :disabled="edit"></el-input>
+												<el-form-item label="样品信息状态" prop="ITEM_STATUSDesc" label-width="110px">
+													<el-input v-model="dataInfo.ITEM_STATUSDesc" :disabled="edit"></el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
@@ -441,9 +441,9 @@
 								
 												<el-table-column prop="CHECKCOST" label="检验费用" sortable width="120px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.CHECKCOST'" :rules="[{required: true, message: '请输入数字', trigger: 'blur'}]" >
-														<el-input v-if="scope.row.isEditing" id="testprice" @blur="testPrice(scope.row)" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input>
-														<span v-else="v-else">{{scope.row.CHECKCOST}}</span>
+														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.CHECKCOST'" :rules="[{required: true, message: '请输入数字', trigger: 'change'}]" >
+															<el-input v-if="scope.row.isEditing" id="testprice" @blur="testPrice(scope.row)" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input>
+															<span v-else="v-else">{{scope.row.CHECKCOST}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
@@ -541,7 +541,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="标准费用(元)" prop="CONTRACTCOST" label-width="110px">
-												<el-input  v-model="dataInfo.CONTRACTCOST" id="stacost"  @blur="staPrice" :disabled="noedit"></el-input>
+												<el-input  v-model="dataInfo.CONTRACTCOST" id="stacost"  @blur="staPrice" disabled></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -1004,7 +1004,13 @@
 			},
 			//金额两位小数点千位分隔符，四舍五入
 			testPrice(item){
-				var money = document.getElementById("testprice").value;
+				var money = item.CHECKCOST;
+				console.log(money);
+				var re = /^[0-9]+.?[0-9]*$/;
+				if (!re.test(money)) {
+			　　　　item.CHECKCOST = 0;
+			　　　　return;
+			　　}
 				if(money == ''){
 					return;
 				}else{
@@ -1679,6 +1685,7 @@
 				this.dataInfo.ITEM_QUALITY = data.appendqua;
 				this.dataInfo.ITEM_ID = data.itemId;
 				this.dataInfo.ITEM_STATUS = data.status;
+				this.dataInfo.ITEM_STATUSDesc = data.statusDesc;
 			},
 			//样品
 			appenddes(value){

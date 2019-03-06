@@ -36,7 +36,8 @@
 										</el-col> -->
 									</el-row>
 									<el-form-item v-for="item in basicInfo" :key="item.id" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
-										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && item.prop !='A_PRICE' " :disabled="noedit"></el-input>
+										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && item.prop !='A_PRICE' && item.prop !='ASSET_STATUS'&& item.prop !='ISPERIODIC'&& item.prop !='ASSET_NUMBER'" :disabled="noedit"></el-input>
+										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && (item.prop =='ASSET_STATUS' || item.prop =='ISPERIODIC' || item.prop =='ASSET_NUMBER')" disabled></el-input>
 										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'" :disabled="noedit"></el-input>
 										<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" :disabled="noedit">
 										</el-date-picker>
@@ -508,6 +509,27 @@
 						prop: 'TECHNICAL_DATA',
 						width: '100%',
 						type: 'textarea',
+						displayType: 'inline-block'
+					},
+					{
+						label: '资产状态',
+						prop: 'ASSET_STATUS',
+						width: '30%',
+						type: 'input',
+						displayType: 'inline-block'
+					},
+					{
+						label: '资产编号',
+						prop: 'ASSET_NUMBER',
+						width: '30%',
+						type: 'input',
+						displayType: 'inline-block'
+					},
+					{
+						label: '是否定期检查',
+						prop: 'ISPERIODIC',
+						width: '30%',
+						type: 'input',
 						displayType: 'inline-block'
 					},
 				],

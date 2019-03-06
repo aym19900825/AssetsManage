@@ -262,7 +262,7 @@
 														<el-button slot="append" icon="el-icon-search" @click="addperson('2')" :disabled="noedit"></el-button>
 													</el-input> -->
 													<el-form-item label="样品承接人(专业组)" prop="ITEM_PROFESSIONAL_GROUP" label-width="150px">
-														<el-select clearable v-model="workorderForm.ITEM_PROFESSIONAL_GROUP" filterable allow-create default-first-option placeholder="请选择" style="width: 100%;" :disabled="noedit">
+														<el-select clearable v-model="workorderForm.ITEM_PROFESSIONAL_GROUP" placeholder="请选择" style="width: 100%;" :disabled="noedit">
 															<el-option v-for="(data,index) in maingroup" :key="index" :value="data.id" :label="data.fullname"></el-option>
 														</el-select>
 													</el-form-item>
@@ -1983,6 +1983,7 @@
 					res.data.ITEM_PROFESSIONAL_GROUP = Number(res.data.ITEM_PROFESSIONAL_GROUP);
 					this.RVENDORSelect(res.data.CJDW);
 					this.workorderForm = res.data;
+					console.log(res.data);
 					this.show = true;
 				}).catch((err) => {
 					this.$message({
@@ -2041,7 +2042,7 @@
 				this.detailgetData();
 				var url = this.basic_url + '/api-apps/app/workorder/flow/isStart/'+dataid;
 				this.$axios.get(url, {}).then((res) => {
-					// console.log(res);
+					console.log(res);
 					if(res.data.resp_code==1){
 						this.start=true;
 						this.approval=false;
@@ -2049,7 +2050,7 @@
 						var url = this.basic_url + '/api-apps/app/workorder/flow/Executors/'+dataid;
 						console.log(url);
 						this.$axios.get(url, {}).then((res) => {
-							// console.log(res.data.datas);
+							console.log(res);
 							res.data.CJDW = Number(res.data.CJDW);
 							var resullt=res.data.datas;
 							var users='';

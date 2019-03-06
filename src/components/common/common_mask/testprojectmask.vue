@@ -324,13 +324,13 @@
     },
     handleClose(done) {
         this.$confirm('确认关闭？')
-            .then(_ => {
-                done();
-            })
-            .catch(_ => {
-				console.log('取消关闭');
-				$('.v-modal').hide();
-			});
+        .then(_ => {
+            this.resetBasisInfo();
+        })
+        .catch(_ => {
+			console.log('取消关闭');
+			$('.v-modal').hide();
+		});
     },
     //上传文件 End
     judge(data) {

@@ -407,6 +407,7 @@
 				up: false,
 				addtitle:true,//添加弹出框titile
 				modifytitle:false,//修改弹出框titile
+				viewtitle:false,//查看弹出框titile
 				activeName: 'first', //tabs
 				activeNames: ['1','2','3'],//手风琴数量
 				labelPosition: 'right', //表单文本左对齐
@@ -445,9 +446,6 @@
 				},
 				falg:true,
 				index:0,
-				addtitle:true,
-				modifytitle:false,
-				viewtitle:false,
 				dept:false,
 				noedit:false,//表单内容
 				views:false,//录入修改人信息

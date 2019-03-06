@@ -113,8 +113,8 @@
 										</el-row>
 										<el-row >
 											<el-col :span="8">
-												<el-form-item label="样品信息状态" prop="ITEM_STATUS" label-width="110px">
-													<el-input v-model="dataInfo.ITEM_STATUS" :disabled="edit"></el-input>
+												<el-form-item label="样品信息状态" prop="ITEM_STATUSDesc" label-width="110px">
+													<el-input v-model="dataInfo.ITEM_STATUSDesc" :disabled="edit"></el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
@@ -282,7 +282,7 @@
 												<el-table-column prop="INSPECT_GROUP" label="专业组" sortable>
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.INSPECT_GROUP'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-															<el-select clearable v-model="scope.row.INSPECT_GROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @visible-change="visablemaingroup($event)" >
+															<el-select clearable v-model="scope.row.INSPECT_GROUP" placeholder="请选择" :disabled="noedit" @visible-change="visablemaingroup($event)" >
 																<el-option v-for="data in maingroup" :key="data.id" :value="data.id" :label="data.fullname"></el-option>
 															</el-select>
 														</el-form-item>	
@@ -441,9 +441,9 @@
 								
 												<el-table-column prop="CHECKCOST" label="检验费用" sortable width="120px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.CHECKCOST'" :rules="[{required: true, message: '请输入数字', trigger: 'blur'}]" >
-														<el-input v-if="scope.row.isEditing" id="testprice" @blur="testPrice(scope.row)" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input>
-														<span v-else="v-else">{{scope.row.CHECKCOST}}</span>
+														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.CHECKCOST'" :rules="[{required: true, message: '请输入数字', trigger: 'change'}]" >
+															<el-input v-if="scope.row.isEditing" id="testprice" @blur="testPrice(scope.row)" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input>
+															<span v-else="v-else">{{scope.row.CHECKCOST}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
@@ -541,7 +541,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="标准费用(元)" prop="CONTRACTCOST" label-width="110px">
-												<el-input  v-model="dataInfo.CONTRACTCOST" id="stacost"  @blur="staPrice" :disabled="noedit"></el-input>
+												<el-input  v-model="dataInfo.CONTRACTCOST" id="stacost"  @blur="staPrice" disabled></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -640,8 +640,8 @@
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show="noviews">
-							<el-button type="primary" @click="saveAndUpdate">保存</el-button>
-							<el-button type="success"  v-show="addtitle" @click="saveAndSubmit">保存并继续</el-button>
+							<el-button type="primary" @click="save('Update')">保存</el-button>
+							<el-button type="success"  v-show="addtitle" @click="save('Submit')">保存并继续</el-button>
 							<el-button v-show="modifytitle" type="btn btn-primarys" @click="modifyversion">修订</el-button>
 							<el-button @click='close'>取消</el-button>
 						</div>
@@ -818,7 +818,6 @@
 				loading: false,
 				loadSign:true,//加载
 				commentArr:{},
-				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				dataInfo: {
 					MAINGROUP:'',
@@ -968,7 +967,6 @@
 				selectData:[],//承建单位
 				leaderdata:[],//主检负责人
 				username:'',
-//				deptid:'',//机构id
 				catenum:'',//产品类别作为参数传值给依据
 				pronum:'',//产品作为参数传值给依据
 				basisnum:'',////依据选中数据们字符串作为参数传值给项目
@@ -979,7 +977,6 @@
 		},
 		methods: {
 			handleNodeClick(data) { //获取勾选树菜单节点
-				//console.log(data);
 			},
 			handleClicks(data,checked, indeterminate) {
 				this.getCheckboxData = data;
@@ -1004,7 +1001,12 @@
 			},
 			//金额两位小数点千位分隔符，四舍五入
 			testPrice(item){
-				var money = document.getElementById("testprice").value;
+				var money = item.CHECKCOST;
+				var re = /^[0-9]+.?[0-9]*$/;
+				if (!re.test(money)) {
+			　　　　item.CHECKCOST = 0;
+			　　　　return;
+			　　}
 				if(money == ''){
 					return;
 				}else{
@@ -1070,10 +1072,8 @@
 			},
 			actualPrice(){
 				var money = document.getElementById("actualcost").value;
-				// this.initactual = money;
 				var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
 				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
-				// this.dataInfo.CHECTCOST="￥" + num.join(".");
 				this.dataInfo.ACTUALCOST = num.join(".");
 			},
 			reset() {					
@@ -1104,7 +1104,6 @@
 				};	  
 				},
 			handleClick(tab, event) {
-//		        console.log(tab, event);
 		    },
 			iconOperation(row, column, cell, event) {
 				if(column.property === "iconOperation") {
@@ -1168,8 +1167,6 @@
 				var obj = {
 					PROXY_CONTRACT_NUM: '',
 					PROXYNUM: '',
-					// V_NAME:this.customid,请不要删掉该注释
-					// V_NAMEDesc:this.dataInfo.V_NAME,请不要删掉该注释
 					V_NAME:this.dataInfo.V_NAME,
 					INSPECT_GROUP:'',
 					PROJECT_ID:'',
@@ -1203,9 +1200,7 @@
 			
 			//刪除新建行
 			deleteRow(index, row, listName){
-				console.log(row);
 				var TableName = '';
-				console.log(listName);
 				if(listName =='basisList'){
 					TableName = 'INSPECT_PROXY_BASIS';
 				}else if(listName =='projectList'){
@@ -1222,7 +1217,6 @@
 						value
 					}) => {
 						this.$axios.delete(url, {}).then((res) => {
-							console.log(res);
 							if(res.data.resp_code == 0){
 								this.dataInfo[TableName+'List'].splice(index,1);
 								this.$message({
@@ -1251,10 +1245,8 @@
 			//点击按钮显示弹窗
 			visible() {
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					console.log(res);
 					this.dataInfo.DEPTID = res.data.deptId;
 					this.dataInfo.ENTERBY = res.data.id;
-					// this.dataInfo.ORGID = res.data.deptName
 					var date = new Date();
 					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 					this.dataInfo.TYPE = '1';
@@ -1279,7 +1271,6 @@
 			detailgetData() {
 			var url = this.basic_url +'/api-apps/app/inspectPro/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					// 依据
 					for(var i = 0;i<res.data.INSPECT_PROXY_BASISList.length;i++){
 						res.data.INSPECT_PROXY_BASISList[i].isEditing = false;
@@ -1416,19 +1407,15 @@
 					}else{
 						var url = this.basic_url + '/api-apps/app/inspectPro/flow/Executors/'+dataid;
 						this.$axios.get(url, {}).then((res) => {
-							console.log(res.data.datas);
 							var resullt=res.data.datas;
 							var users='';
 							for(var i=0;i<resullt.length;i++){
 								users = users + resullt[i].username+",";
-								console.log("users----"+users);
 							}
 							if(users.indexOf(this.username) != -1){
-								console.log(this.username);
 								this.approval=true;
 								this.start=false;
 							}else{
-								console.log(2);
 								this.approval=false;
 								this.start=false;
 							}
@@ -1591,8 +1578,6 @@
 			},
 			//检验项目放大镜
 			basisleadbtn2(val){
-				console.log(123);
-				console.log(this.dataInfo.S_NUM);
 				this.deptindex = val;
 				if(val == 'maintable'){
 					if(this.dataInfo.S_NUM == null || this.dataInfo.S_NUM == '' || this.dataInfo.S_NUM == undefined){
@@ -1641,7 +1626,6 @@
 			},
 			testprojectprover(value){
 				this.deptindex.PROJ_VERSIONNUM = value;
-				console.log(this.deptindex.PROJ_VERSIONNUM);
 			},
 			//点击关闭按钮
 			close() {
@@ -1679,6 +1663,7 @@
 				this.dataInfo.ITEM_QUALITY = data.appendqua;
 				this.dataInfo.ITEM_ID = data.itemId;
 				this.dataInfo.ITEM_STATUS = data.status;
+				this.dataInfo.ITEM_STATUSDesc = data.statusDesc;
 			},
 			//样品
 			appenddes(value){
@@ -1729,7 +1714,7 @@
 				this.dataInfo.P_NAME=value;
 			},
 			// 保存users/saveOrUpdate
-			save() {
+			save(parameter) {
 				var projectgroup = "";
 				for(var i=0;i<this.dataInfo.INSPECT_PROXY_PROJECList.length;i++){
 					projectgroup = projectgroup + this.dataInfo.INSPECT_PROXY_PROJECList[i].INSPECT_GROUP+",";
@@ -1744,7 +1729,6 @@
 				}
 				this.$refs.dataInfo.validate((valid) => {
 			        if (valid) {
-						
 						if(this.dataInfo.INSPECT_PROXY_BASISList.length<=0&&this.dataInfo.INSPECT_PROXY_PROJECList.length<=0&&this.dataInfo.CHECK_PROXY_CONTRACTList.length<=0){
 							this.$message({
 								message: '检验依据和检验项目与要求和分包要求是必填项，请填写！',
@@ -1752,16 +1736,18 @@
 							});
 							return false;
 			        	}else{
-//							this.dataInfo.ITEM_STATUS=this.dataInfo.ITEM_STATUS==1;
-//							this.dataInfo.MESSSTATUS= this.dataInfo.MESSSTATUS==1;//信息状态
 							var url = this.basic_url + '/api-apps/app/inspectPro/saveOrUpdate';
 							this.$axios.post(url, this.dataInfo).then((res) => {
-								console.log(55);
 								if(res.data.resp_code == 0) {
 									this.$message({
 										message: '保存成功',
 										type: 'success'
 									});
+									if(parameter=="Update"){
+										this.show = false;
+									}else{
+										this.show = true;
+									}
 									//重新加载数据
 									this.$emit('request');
 									this.reset();
@@ -1773,26 +1759,14 @@
 								});
 							});
 						}
-						this.falg = true;
 			        }else{
 			          	this.show = true;
 			            this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
 						});
-			           this.falg = false;
 			        }
 				});
-			},
-			saveAndUpdate(){
-				this.save();
-				if(this.falg){
-					this.show = false;
-				}
-			},
-			saveAndSubmit(){
-				this.save();
-				this.show = true;			
 			},
 			handleClose(done) {
 				this.$confirm('确认关闭？')
@@ -1828,6 +1802,8 @@
 			RVENDORSelect(){
 				var url = this.basic_url + '/api-user/depts/findByPid/'+this.dataInfo.R_VENDOR;
 				this.$axios.get(url, {}).then((res) => {
+					console.log(res.data);
+					console.log(this.maingroup);
 					this.maingroup = res.data;
 				}).catch((err) => {
 					this.$message({
@@ -1919,13 +1895,13 @@
 					this.dataInfo.V_PERSON = this.selval[0].PERSON;
 					this.dataInfo.V_PHONE = this.selval[0].PHONE;
 					// this.dialogVisibleuser = false;
-					this.ResetDatasNew();//调用ResetDatasNew函数
+					this.resetBasisInfo();//调用resetBasisInfo函数
 				}
 			},
 			DialogClose(){//点击取消按钮
-				this.ResetDatasNew();//调用ResetDatasNew函数
+				this.resetBasisInfo();//调用resetBasisInfo函数
 			},
-			ResetDatasNew(){//点击确定或取消按钮时重置数据20190303
+			resetBasisInfo(){//点击确定或取消按钮时重置数据20190303
 				this.dialogVisibleuser = false;//关闭弹出框
 				this.CUSTOMER_PERSONList = [];//列表数据置空
 				this.page.currentPage = 1;//页码重新传值
@@ -1949,9 +1925,8 @@
 								type: 'success'
 							});
 							this.detailgetData();
-						var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/Executors/'+this.dataid;
+						var url = this.basic_url + '/api-apps/app/inspectPro/flow/Executors/'+this.dataid;
 							this.$axios.get(url, {}).then((res) => {
-									console.log(res.data.datas);
 									var resullt=res.data.datas;
 									var users='';
 									for(var i=0;i<resullt.length;i++){
@@ -1972,7 +1947,7 @@
 			approvals(){
 				this.approvingData.id =this.dataid;
 				this.approvingData.app=this.inspectPro;
-				var url = this.basic_url + '/api-apps/app/'+this.inspectPro+'/flow/isEnd/'+this.dataid;
+				var url = this.basic_url + '/api-apps/app/inspectPro/flow/isEnd/'+this.dataid;
 	    		this.$axios.get(url, {}).then((res) => {
 	    			if(res.data.resp_code == 0) {
 						this.$message({
@@ -1980,7 +1955,7 @@
 							type: 'warning'
 						});
 	    			}else{
-	    				var url = this.basic_url + '/api-apps/app/'+this.inspectPro+'/flow/isExecute/'+this.dataid;
+	    				var url = this.basic_url + '/api-apps/app/inspectPro/flow/isExecute/'+this.dataid;
 	    				this.$axios.get(url, {}).then((res) => {
 			    			if(res.data.resp_code == 1) {
 								this.$message({
@@ -1988,9 +1963,8 @@
 									type: 'warning'
 								});
 							}else{
-								var url = this.basic_url + '/api-apps/app/'+this.inspectPro+'/flow/customFlowValidate/'+this.dataid;
+								var url = this.basic_url + '/api-apps/app/inspectPro/flow/customFlowValidate/'+this.dataid;
 								this.$axios.get(url, {}).then((res) => {
-									console.log(res);
 				    				if(res.data.resp_code == 1) {
 										this.$message({
 											message:res.data.resp_msg,
@@ -2032,7 +2006,6 @@
 						type: type
 					},
 				}).then((res) => {
-					console.log(res.data);
 					this.selectData = res.data;
 				});
 			},

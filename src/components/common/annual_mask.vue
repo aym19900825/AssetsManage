@@ -409,10 +409,10 @@
 								<!-- 录入人信息 End -->
 							</el-collapse>
 						</div>
-						<div class="content-footer">
-							<el-button type="primary" @click="saveAndUpdate('WORKPLAN')" v-if="!viewtitle">保存</el-button>
+						<div class="content-footer" v-if="!viewtitle">
+							<el-button type="primary" @click="saveAndUpdate('WORKPLAN')">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit('WORKPLAN')" v-show="addtitle">保存并继续</el-button>
-							<el-button @click='close' v-if="!viewtitle">取消</el-button>
+							<el-button @click='close'>取消</el-button>
 						</div>
 					</el-form>
 				</div>
@@ -1274,7 +1274,7 @@
 					this.pronamenum = this.selUser[0].PRO_NUM;
 					this.proindex.ITEM_NAME = this.selUser[0].PRO_NAME;
 					this.$emit('request');
-					this.resetBasisInfo4();//调用ResetDatasNew函数
+					this.resetBasisInfo4();//调用resetBasisInfo函数
 				}
 			},
 			//产品名称数据置空
@@ -1305,7 +1305,7 @@
 					// this.dialogVisible5 = false;
 					// this.$emit('request');
 					this.requestDeptname();//调用企业名称requestDeptname函数
-					this.resetBasisInfo5();//调用ResetDatasNew函数
+					this.resetBasisInfo5();//调用resetBasisInfo函数
 				}
 			},
 

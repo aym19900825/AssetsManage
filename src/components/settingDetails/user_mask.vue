@@ -191,7 +191,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="角色" prop="roleId" label-width="100px">
-												<el-select v-model="user.roleId" multiple :disabled="noedit"  default-first-option value-key="item.id" @change="selectTrigger(user.roleId)" style="width: 100%;">
+												<el-select v-model="user.roleId" multiple :disabled="noedit"  default-first-option value-key="item.id"  style="width: 100%;">
 													<el-option v-for="(item,index) in selectData" :key="index" :value="item.id" :label="item.name"></el-option>
 												</el-select>
 											</el-form-item>
@@ -382,13 +382,10 @@
 
 													<el-table-column label="序号" sortable width="120px" prop="STEP">
 													   <template slot-scope="scope">
-													      <!-- <el-form-item :prop="'ips.'+scope.$index + '.STEP'" :rules="{required: true, message: '不能为空', trigger: 'blur'}"> -->
 													         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.$index + 1" disabled></el-input>
 													         <span v-show="!scope.row.isEditing" >{{scope.row.STEP}}</span>
-													      <!-- </el-form-item> -->
 													   </template>
 													</el-table-column>
-
 													<el-table-column prop="IP_BEGIN" label="起始IP地址" sortable>
 														<template slot-scope="scope">
 															<el-form-item :prop="'ips.'+scope.$index + '.IP_BEGIN'">
@@ -451,8 +448,8 @@
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show="noviews">
-							<el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
-							<el-button type="success" @click='saveAndSubmit()' v-show="addtitle">保存并继续</el-button>
+							<el-button type="primary" @click='save("Update")'>保存</el-button>
+							<el-button type="success" @click='save("Submit")' v-show="addtitle">保存并继续</el-button>
 							<el-button @click='close'>取消</el-button>
 						</div>
 					</el-form>
@@ -630,7 +627,6 @@
 				hintshow:false,
 				statusshow1:true,
 				statusshow2:false,
-				falg:true,
 				index:0
 			};
 		},
@@ -638,24 +634,6 @@
 			resetTree(){
 				this.dialogVisible = false;
 				this.resourceCheckedKey = [];
-			},
-			selectTrigger(val){
-				val = val.join(',');
-				console.log(val);
-				if(val!=""){
-					var url =this.basic_url +'/api-user/users/validateChoosedRole/'+val+"/"+this.user.deptId;
-					this.$axios.get(url, {}).then((res) => {
-						this.$message({
-							message: res.data,
-							type: 'error'
-						})
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						})
-					})
-				}
 			},
 			editpassword(){//点击修改密码按钮跳转到修改密码页面
 		      	this.$router.push({path: '/passwordedit'})
@@ -1048,7 +1026,7 @@ if(typeof(this.user.roleId) != 'undefind'&&this.user.roleId != null&&this.user.r
 			},
 
 			//	保存users/saveOrUpdate
-			save() {
+			save(parameter) {
 				var _this = this;
 				this.$refs.user.validate((valid) => {
 					if(valid) {
@@ -1083,6 +1061,11 @@ if(typeof(this.user.roleId) != 'undefind'&&this.user.roleId != null&&this.user.r
 									message: '保存成功',
 									type: 'success',
 								});
+							if(parameter=="Update"){
+									this.show = false;
+								}else{
+									this.show = true;
+								}
 								this.$emit('request');
 //								this.$refs["user"].resetFields(); //清空表单验证
 							}else{
@@ -1106,21 +1089,6 @@ if(typeof(this.user.roleId) != 'undefind'&&this.user.roleId != null&&this.user.r
 						});
 					}
 				})
-			},
-			//保存
-			saveAndUpdate() {
-				this.save();
-				if(this.falg){
-					this.show = false;
-				}
-				this.$emit('request');
-			},
-			//保存并继续
-			saveAndSubmit() {
-				this.save();
-				this.reset();
-				//				this.show = false;
-				this.$emit('request');
 			},
 			//所属组织
 			getCompany() {

@@ -434,10 +434,12 @@
 							res.data.CJDW = Number(res.data.CJDW);
 							var resullt=res.data.datas;
 							var users='';
+
 							for(var i=0;i<resullt.length;i++){
 								users = users + resullt[i].username+",";
 								// console.log("users----"+users);
 							}
+							console.log(this.username);
 							if(users.indexOf(this.username) != -1){
 								this.approval=true;
 								this.start=false;
@@ -508,7 +510,7 @@
                         type: 'warning'
                     });
                 }else{
-                    this.ResetDatasNew();//调用ResetDatasNew函数
+                    this.resetBasisInfo();//调用resetBasisInfo函数
                     if(this.pertips == 'use'){
                         this.USESEAL.USER = this.selUser[0].id;
                         this.USESEAL.USERDesc = this.selUser[0].nickname;
@@ -521,9 +523,9 @@
                 }
             },
             DialogClose(){//点击取消按钮
-				this.ResetDatasNew();//调用ResetDatasNew函数
+				this.resetBasisInfo();//调用resetBasisInfo函数
 			},
-			ResetDatasNew(){//点击确定或取消按钮时重置数据20190303
+			resetBasisInfo(){//点击确定或取消按钮时重置数据20190303
 				this.dialogPerson = false;//关闭弹出框
 				this.gridData = [];//列表数据置空
 				this.page.currentPage = 1;//页码重新传值
@@ -621,6 +623,7 @@
 								for(var i=0;i<resullt.length;i++){
 									users = users + resullt[i].username+",";
 								}
+								console.log(this.username);
 								if(users.indexOf(this.username) != -1){
 									this.approval=true;
 									this.start=false;
@@ -777,6 +780,18 @@
 				$('.v-modal').hide();
 			});
 			},
+			//获取当前用户
+			getUser(){//获取当前用户信息
+	            var url = this.basic_url + '/api-user/users/currentMap';
+	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+	                    this.username = res.data.username;
+	            }).catch((err) => {
+	                this.$message({
+	                    message: '网络错误，请重试',
+	                    type: 'error'
+	                });
+	            });
+        	},
 		},
 		mounted() {
 			this.getCompany();

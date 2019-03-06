@@ -166,7 +166,6 @@
 			};
 			return {
 				loading: false,
-				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				selUser: [],
 				edit: true, //禁填

@@ -227,6 +227,7 @@
 				},
 				aaaData:[],
 				buttons:[],
+				asset:'asset'//appname
 			}
 		},
 		methods: {
@@ -431,7 +432,7 @@
 			},
 			//报表
 			reportdata(){
-				this.reportData.app=this.productType;
+				this.reportData.app=this.asset;
 				this.$refs.reportChild.visible();
 			},
 			//时间格式化  

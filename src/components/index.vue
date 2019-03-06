@@ -292,7 +292,7 @@ export default {
 				console.log(res);
 				if(res.data!="undefined"&&res.data.length>0){
 					item = res.data[0];
-					this.$router.push({path: item[0].url});
+					// this.$router.push({path: item[0].url});
 				}
 				
 					_this.$store.dispatch('setSelectedNavAct',item);
@@ -330,7 +330,10 @@ export default {
 						},0);
 					}
 			}).catch((wrong) => {
-
+				this.$message({
+					message: '网络错误，请重试',
+					type: 'error'
+				});
 			});
 //		    _this.$store.dispatch('setRoleIdAct',this.$store.state.roleid);
 		    _this.$store.dispatch('setNavIdAct',item.id);

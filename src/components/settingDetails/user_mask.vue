@@ -191,7 +191,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="角色" prop="roleId" label-width="100px">
-												<el-select v-model="user.roleId" multiple :disabled="noedit"  default-first-option value-key="item.id" @change="change" style="width: 100%;">
+												<el-select v-model="user.roleId" multiple :disabled="noedit"  default-first-option value-key="item.id" @change="selectTrigger(user.roleId)" style="width: 100%;">
 													<el-option v-for="(item,index) in selectData" :key="index" :value="item.id" :label="item.name"></el-option>
 												</el-select>
 											</el-form-item>
@@ -639,8 +639,23 @@
 				this.dialogVisible = false;
 				this.resourceCheckedKey = [];
 			},
-			change(){
-				this.user.roleId=this.user.roleId.slice(0);
+			selectTrigger(val){
+				val = val.join(',');
+				console.log(val);
+				if(val!=""){
+					var url =this.basic_url +'/api-user/users/validateChoosedRole/'+val+"/"+this.user.deptId;
+					this.$axios.get(url, {}).then((res) => {
+						this.$message({
+							message: res.data,
+							type: 'error'
+						})
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						})
+					})
+				}
 			},
 			editpassword(){//点击修改密码按钮跳转到修改密码页面
 		      	this.$router.push({path: '/passwordedit'})
@@ -704,10 +719,6 @@
 						type: 'error'
 					})
 				})
-
-				//				this.statusshow1 = true;
-				//				this.statusshow2 = false;
-
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.viewtitle = false;
@@ -1066,6 +1077,7 @@ if(typeof(this.user.roleId) != 'undefind'&&this.user.roleId != null&&this.user.r
 						}
 						var url = _this.basic_url + '/api-user/users/saveOrUpdate';
 						this.$axios.post(url, _this.user).then((res) => {
+							console.log(res);
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',
@@ -1078,6 +1090,7 @@ if(typeof(this.user.roleId) != 'undefind'&&this.user.roleId != null&&this.user.r
 									message: res.data.resp_msg,
 									type: 'warning'
 								});
+								this.show=true;
 							}
 						}).catch((err) => {
 							this.$message({
@@ -1085,14 +1098,12 @@ if(typeof(this.user.roleId) != 'undefind'&&this.user.roleId != null&&this.user.r
 								type: 'error'
 							});
 						});
-						this.falg = true;
 					} else {
 						this.show = true;
 						this.$message({
 							message: '有必填项未填写，请重新填写',
 							type: 'warning',
 						});
-						this.falg = false;
 					}
 				})
 			},

@@ -158,13 +158,20 @@
 				}
 				var url = this.basic_url + '/api-user/menus/granted'
 				this.$axios.post(url, data).then((res) => {
-					if(res.data.resp_code == 0) {
-					this.$message({
-						message: '操作成功',
-						type: 'success'
-					});
-				}
-					this.dialogVisible = false;
+					console.log(res);
+					if(res.data.resp_msg == "0") {
+						this.$message({
+							message: "操作成功",
+							type: 'success'
+						});
+						this.dialogVisible = false;
+					}else{
+						this.$message({
+							message: "该角色已关联用户，不能修改权限设置，请删除关联的用户后再修改权限设置",
+							type: 'error'
+						});
+						this.dialogVisible=true;
+					}
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',

@@ -106,7 +106,8 @@
 								url=url.substring(0,pos+1); 
 								console.log(url);
 						  		this.url=url+"5300";
-							 	var url = this.url+"/ureport/preview?_u=mysql:" +file
+								 var url = this.url+"/ureport/preview?_u=mysql:" +file
+								 
              					window.open(url); 
 						}else{
 							console.log(res);

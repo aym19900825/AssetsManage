@@ -191,7 +191,7 @@
                     REPORTNUM:'',	//编码
                     DESCRIPTION:'',	//报告描述
                     WONUMID:'',	//工作任务单ID
-                    STATUS:'1',	//活动/不活动
+                    STATUS:'0',	//活动/不活动
                     STATE:'1',//流程状态
                     STATEDesc:'草稿',
                     // CHANGEBY:'',	//修改人

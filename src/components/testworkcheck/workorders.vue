@@ -475,6 +475,7 @@
 					});
 					return;
 				} else {
+					console.log(this.selMenu[0].STATE);
 					if(this.selMenu[0].STATE == 3 || this.selMenu[0].STATE == 2) {
 						this.$message({
 							message: '已启动的流程，不允许修改数据，只可以查看。',

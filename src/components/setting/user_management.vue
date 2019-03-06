@@ -18,12 +18,6 @@
 								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 								</button>
-								<button type="button" class="btn btn-blue button-margin" @click="configuration">
-								    权限设置
-								</button>
-								<!-- <button type="button" class="btn btn-blue button-margin" @click="Checkpermissions">
-								    权限查看
-								</button> -->
 								<!--<button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加
                       			</button>
@@ -207,9 +201,13 @@
 			</div>
 		</el-dialog>
 		<!-- 查看权限 -->
-		<!-- <el-dialog :modal-append-to-body="false" title="工作任务通知书查询类别" :visible.sync="Access" width="30%" :before-close="handleClose">
-		
-		</el-dialog>	 -->
+		<el-dialog :modal-append-to-body="false" title="权限查看" :visible.sync="permissions" width="30%" :before-close="handleClose">
+			<!--设置产品类别和产品-->
+			<div class="scrollbar" style="max-height: 400px;">
+				<el-tree ref="permissions" :data="permissionsData" node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourepermissions" >
+				</el-tree>
+			</div>	
+		</el-dialog>	
 		<!--右侧内容显示 End-->
 	</div>
 </template>
@@ -234,6 +232,7 @@
 						{ required: true, message: '请输入密码', trigger: 'blur' }
 					]
 				},
+				permissions:false,//查看权限
 				Access:false,//权限管理的弹出框
 				loading: false,
 				basic_url: Config.dev_url,
@@ -261,6 +260,11 @@
 				resoureproduct:{
 					children: "children",
 					label: "fullname"
+				},
+				permissionsData:[],//权限查看
+				resourepermissions:{
+					children: "children",
+					label: "name"
 				},
 				checkedName: [
 					'用户名',
@@ -485,21 +489,40 @@
 		    	 this.physicsDel();
 		    	}else if(item.name=="重置密码"){
 		    	 this.resetPwd();
-		    	}
+		    	}else if(item.name=="数据配置"){
+				 this.configuration();
+				}else if(item.name=="权限查看"){
+				 this.Checkpermissions();
+				}
 			},
-			// Checkpermissions(){
-			// 	var url = this.basic_url + '/api-user/users/findAuth/'+this.selUser[0].id;
-			// 	this.$axios.get(url, {}).then((res) => {
-			// 		console.log(res);
-					
-			// 	}).catch(error => {
-			// 		this.$message({
-			// 					message: '网络错误，请重试',
-			// 					type: 'error'
-			// 				});
-			// 	})
-			// },
-			//权限配置
+			//权限查看
+			Checkpermissions(){
+				if(this.selUser.length == 0) {
+					this.$message({
+						message: '请您选择要设置的数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selUser.length > 1) {
+					this.$message({
+						message: '不可同时设置多个数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+				var url = this.basic_url + '/api-user/users/findAuth/'+this.selUser[0].id;
+				this.$axios.get(url, {}).then((res) => {
+					this.permissionsData=res.data;
+					this.permissions=true;
+				}).catch(error => {
+					this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+				})
+				}
+			},
+			//数据配置
 			configuration(){
 				if(this.selUser.length == 0) {
 					this.$message({
@@ -514,10 +537,8 @@
 					});
 					return;
 				} else {
-					console.log(this.selUser[0].id);
 					this.getannual(this.selUser[0].id);
 					this.getwork(this.selUser[0].id);
-					
 					this.getproduct(this.selUser[0].id);
 					this.Access=true;
 				}
@@ -526,11 +547,9 @@
 				var arr=[];	
 				var url = this.basic_url + '/api-user/menus/findMenuByRoleIdsForPM/'+id;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					this.workData = res.data;
 					this.recursive(res.data,arr);
 					this.$nextTick(() => {
-						console.log(arr);
 							this.worksetChecked(arr);
 						});
 				}).catch(error => {

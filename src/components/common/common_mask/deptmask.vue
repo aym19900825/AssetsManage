@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<el-dialog :modal-append-to-body="false" title="" height="400px" :visible.sync="dialogCategory" width="80%" :before-close="handleClose">
-			<tree_grid  :columns="columns" :loading="loading" :tree-structure="true" :data-source="deptList" v-on:classByValue="childByValue"></tree_grid>
+			<tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="deptList" v-on:classByValue="childByValue"></tree_grid>
             <el-pagination background class="text-right pt10"
                 @size-change="sizeChange" 
                 @current-change="currentChange" 

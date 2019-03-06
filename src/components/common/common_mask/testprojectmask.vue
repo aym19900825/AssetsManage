@@ -36,14 +36,14 @@
 							</el-col> -->
 							<el-col :span="4">
 								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
+								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
 				</div>
 				<!-- 高级查询划出 End-->
 				<!-- 第二层弹出的表格 Begin-->
-				<el-table  :data="projectList" height="400px" border stripe style="width: 100%;" :default-sort="{prop:'projectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table :data="projectList" height="400px" border stripe style="width: 100%;" :default-sort="{prop:'projectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" width="55" fixed>
 					</el-table-column>
 					<el-table-column label="检验/检测项编号" width="150" sortable prop="P_NUM">

@@ -203,7 +203,6 @@
 				down: true,
 				up: false,
 				activeNames: ['1','2'], //手风琴数量
-				dialogVisible: false, //对话框
 				selectData: [],
 				fullHeight: document.documentElement.clientHeight - 200 +'px',//获取浏览器高度
 				rules: {

@@ -872,7 +872,7 @@
 						}
 					],
 				},
-				gridData: [], //彈出框的數據
+				gridDataList: [], //彈出框的數據
 				page: {
 					currentPage: 1,
 					pageSize: 10,

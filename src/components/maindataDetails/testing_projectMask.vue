@@ -170,7 +170,7 @@
 				</div>
 			</div>
 			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
-				<el-table :data="gridData" @selection-change="SelChange" height="400px">
+				<el-table :data="gridDataList" @selection-change="SelChange" height="400px">
 					<el-table-column type="selection" width="55" fixed>
 					</el-table-column>
 					<!-- <el-table-column label="用户名" sortable width="100px" prop="user">
@@ -376,7 +376,7 @@
 				},
 				testing_projectForm:{},//检验/检测项目数据组
 				//tree
-				gridData: [],
+				gridDataList: [],
 				selval: [],
 				loadSign:true,//加载
 				commentArr:{},
@@ -842,7 +842,7 @@
 					
 				}).then((res) => {
 					this.page.totalCount = res.data.count;
-					this.gridData = res.data.data;
+					this.gridDataList = res.data.data;
 					this.dialogVisible = true;
 				});
 			},

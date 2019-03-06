@@ -102,6 +102,7 @@ export default {
 			menuId: _this.$store.state.menuid,
 			roleId: _this.$store.state.roleid,
 			};
+			console.log(data);
 		var url = _this.basic_url + '/api-user/menus/findSecondByRoleIdAndFisrtMenu';
 		_this.$axios.get(url, {params: data}).then((res) => {
 			if(res.data.length>0&&res.data!='undefined'){

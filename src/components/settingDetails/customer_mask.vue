@@ -805,7 +805,10 @@
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			},
 			upload(e){
 				var list = this.CUSTOMER.CUSTOMER_QUALIFICATIONList || [];

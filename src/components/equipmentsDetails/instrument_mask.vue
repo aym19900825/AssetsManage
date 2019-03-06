@@ -903,7 +903,10 @@
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			},
 			maxDialog(e) { //定义大弹出框一个默认大小
 				this.isok1 = false;

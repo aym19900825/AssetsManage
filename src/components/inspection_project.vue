@@ -452,7 +452,10 @@
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			},
 			formatter(row, column) {//禁止产品类别行编辑
 				return row.enabled;

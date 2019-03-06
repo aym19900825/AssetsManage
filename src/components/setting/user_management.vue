@@ -205,6 +205,8 @@
 		</el-dialog>
 
 		<!--右侧内容显示 End-->
+		<!--报表-->
+		<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 	</div>
 </template>
 <script>
@@ -213,6 +215,7 @@
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_header from '../common/nav_tabs.vue'
 	import usermask from '../settingDetails/user_mask.vue'
+	import reportmask from'../reportDetails/reportMask.vue'
 	export default {
 		name: 'user_management',
 		components: {
@@ -220,9 +223,11 @@
 			'navs_header': navs_header,
 			'navs_left': navs_left,
 			'usermask': usermask,
+			'reportmask':reportmask
 		},
 		data() {
 			return {
+				reportData:{},//报表的数据
 				rules:{
 					newPassword:[
 						{ required: true, message: '请输入密码', trigger: 'blur' }
@@ -479,7 +484,9 @@
 		    	 this.physicsDel();
 		    	}else if(item.name=="重置密码"){
 		    	 this.resetPwd();
-		    	}
+		    	}else if(item.name=="报表"){
+			     this.reportdata();
+				}
 			},
 			//权限配置
 			configuration(){
@@ -918,6 +925,11 @@
 						});
 					});
 				}
+			},
+			//报表
+			reportdata(){
+				this.reportData.app=this.workorder;
+				this.$refs.reportChild.visible();
 			},
 			judge(data) {
 				//taxStatus 布尔值

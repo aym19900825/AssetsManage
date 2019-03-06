@@ -148,6 +148,8 @@
 		</div>
 		<!--右侧内容显示 End-->
 		<customermask ref="child" @request="requestData" v-bind:page=page></customermask>
+		<!--报表-->
+		<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 	</div>
 </div>
 </template>
@@ -158,6 +160,7 @@
 	import navs_header from '../common/nav_tabs.vue'
 	import customermask from '../settingDetails/customer_mask.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
+	import reportmask from'../reportDetails/reportMask.vue'
 	export default {
 		name: 'user_management',
 		components: {
@@ -166,9 +169,11 @@
 			navs_header,
 			tableControle,
 			customermask,
+			reportmask
 		},
 		data() {
 			return {
+				reportData:{},//报表的数据
 				loading: false,
 				basic_url: Config.dev_url,
 				loadSign:true,//加载
@@ -264,6 +269,7 @@
 					totalCount: 0
 				},
 				buttons:[],//按钮
+				customer:'customer',//appname
 			}
 		},
 
@@ -348,6 +354,8 @@
 				 this.deluserinfo();
 				}else if(item.name=="彻底删除"){
 				 this.physicsDel();
+				}else if(item.name=="报表"){
+			     this.reportdata();
 				}
 		    },
 			//添加
@@ -478,6 +486,11 @@
 
                 	});
 				}
+			},
+			//报表
+			reportdata(){
+				this.reportData.app=this.customer;
+				this.$refs.reportChild.visible();
 			},
 			// 导入
 			importData() {

@@ -313,6 +313,7 @@
 				},
 				samplesForm: {},//修改子组件时传递数据
 				buttons:[],
+				itemreturn:'itemreturn'//appname
 			}
 		},
 		methods: {
@@ -487,7 +488,7 @@
 			},
 						//报表
 			reportdata(){
-				this.reportData.app=this.productType;
+				this.reportData.app=this.itemreturn;
 				this.$refs.reportChild.visible();
 			},
 			// 删除

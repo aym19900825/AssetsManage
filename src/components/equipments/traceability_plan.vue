@@ -323,6 +323,7 @@
 				aaaData:[],
 				selectData:[],
 				buttons:[],
+				pmPlan:'pmPlan'//appname
 			}
 		},
 		methods: {
@@ -554,7 +555,7 @@
 			},
 			//报表
 			reportdata(){
-				this.reportData.app=this.productType;
+				this.reportData.app=this.pmPlan;
 				this.$refs.reportChild.visible();
 			},
 			SelChange(val) {

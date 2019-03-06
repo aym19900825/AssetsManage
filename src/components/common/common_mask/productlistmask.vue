@@ -185,13 +185,13 @@
 			proarr.push(this.selUser[0].VERSION);
 			this.$emit('appenddata',proarr);
 			this.requestData();
-			this.ResetDatasNew();//调用ResetDatasNew函数
+			this.resetBasisInfo();//调用resetBasisInfo函数
 		}
 	},
 	DialogClose(){//点击取消按钮
-        this.ResetDatasNew();//调用ResetDatasNew函数
+        this.resetBasisInfo();//调用resetBasisInfo函数
     },
-    ResetDatasNew(){//点击确定或取消按钮时重置数据20190303
+    resetBasisInfo(){//点击确定或取消按钮时重置数据20190303
         this.dialogProduct = false;//关闭弹出框
         this.productList = [];//列表数据置空
         this.page.currentPage = 1;//页码重新传值

@@ -59,7 +59,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="所属应用ID" prop="menuId">
+											<el-form-item label="所属菜单ID" prop="menuId">
 												<el-input v-model="CATEGORY.menuId" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -131,32 +131,32 @@
 		</div>
 
 		<!--应用中心图标弹出 Begin-->
-	        <div class="mask" v-show="show2"></div>
-			<div class="mask_divbg" v-show="show2">
-				<div class="mask_div">
-					<div class="mask_title_div clearfix">
-						<div class="mask_title">应用中心图标</div>
-						<div class="mask_anniu">
-							<span class="mask_span mask_max" @click='toggle'>
-								<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
-							</span>
-							<span class="mask_span" @click='close2'>
-								<i class="icon-close1"></i>
-							</span>
-						</div>
+        <div class="mask" v-show="show2"></div>
+		<div class="mask_divbg" v-show="show2">
+			<div class="mask_div">
+				<div class="mask_title_div clearfix">
+					<div class="mask_title">应用中心图标</div>
+					<div class="mask_anniu">
+						<span class="mask_span mask_max" @click='toggle'>
+							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
+						</span>
+						<span class="mask_span" @click='close2'>
+							<i class="icon-close1"></i>
+						</span>
 					</div>
-					<div id="FHScrollbar" :style="{height: fullHeight}">
-						<div class="content-accordion">
-							<all_icons v-on:childByValue="childByValue"></all_icons>
-						</div>
-						<div class="content-footer">
-							<el-button type="primary" @click="confirm2();" >确 定</el-button>
-							<el-button @click='close2'>取 消</el-button>
-						</div>
+				</div>
+				<div class="mask_content" :style="{height: fullHeight}">
+					<div class="content-accordion">
+						<all_icons v-on:childByValue="childByValue"></all_icons>
+					</div>
+					<div class="content-footer">
+						<el-button type="primary" @click="confirm2();" >确 定</el-button>
+						<el-button @click='close2'>取 消</el-button>
 					</div>
 				</div>
 			</div>
-			<!--应用中心图标弹出 End-->
+		</div>
+		<!--应用中心图标弹出 End-->
 	</div>
 </template>
 
@@ -190,28 +190,6 @@
 			page: Object,
 		},
 		data() {
-			var validatename = (rule, value, callback) => {
-				if(value != ""){
-		             if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
-		                 callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
-		             }else{
-		                 callback();
-		             }
-		         }else{
-		             callback();
-		         }
-			};
-			var validateType = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('请填写按钮配置名称'));
-				} else {
-					if((/^[!@#$%^&*";',.~！@#￥%……&*《》？，。?、|]+$/).test(value) == true){
-		                 callback(new Error("请规范填写名称"));
-		            }else{
-		                callback();
-		            }
-				}
-			};
 			return {
 				loading: false,
 				falg:false,//保存验证需要的
@@ -229,8 +207,8 @@
 				selectData: [],
 				fullHeight: document.documentElement.clientHeight - 200 +'px',//获取浏览器高度
 				rules: {
-					name: [{required: false,trigger: 'change',validator: validatename,}],
-					TYPE: [{required: true,trigger: 'blur',validator: validateType,}],
+					name: [{required: true, trigger: 'change', validator: this.Validators.isSpecificKey,}],
+					menuId: [{required: true, message: '请选择', trigger: 'change' }],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据

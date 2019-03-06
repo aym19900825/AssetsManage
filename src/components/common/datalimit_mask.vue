@@ -7,7 +7,6 @@
 					<div class="mask_title">{{}}-数据限制</div>
 					<div class="mask_anniu">
 						<span class="mask_span mask_max" @click='toggle'>
-							 
 							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
 						</span>
 						<span class="mask_span" @click='close'>
@@ -17,7 +16,7 @@
 				</div>
 				<div class="mask_content">
 					<el-form :model="user" :label-position="labelPosition" :rules="rules" ref="user" label-width="100px" class="demo-user">
-						<div class="accordion" id="information">
+						<div class="content-accordion" id="information">
 							<div class="mask_tab-block">
 								<div class="accordion-body tab-content" v-show="col_but1" id="tab-content2">
 									<el-row :gutter="30">
@@ -64,9 +63,9 @@
 							</div>
 						</div>
 
-						<div class="el-dialog__footer">
-							<el-button @click='close'>取消</el-button>
+						<div class="content-footer">
 							<el-button type="primary" @click='submitForm()'>保存</el-button>
+							<el-button @click='close'>取消</el-button>
 						</div>
 					</el-form>
 				</div>
@@ -276,13 +275,13 @@
 			// 这里是修改
 			detail() {
 				this.show = true;
-				console.log(this.user);
+				// console.log(this.user);
 				var url = this.basic_url + '/api-user/users/' + userid;
 				this.$axios.get(url, {}).then((res) => {
 					this.user = res.data;
 					this.show = true;
-					console.log(this.user);
-					console.log(this.user.roles);
+					// console.log(this.user);
+					// console.log(this.user.roles);
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -328,7 +327,6 @@
 						user.roleId = user.roleId.join(',');	
 						var url = this.basic_url + '/api-user/users/saveOrUpdate';
 						this.$axios.post(url, this.user).then((res) => {
-
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',
@@ -363,7 +361,7 @@
 						type: type
 					},
 				}).then((res) => {
-					console.log(res.data.data);
+					// console.log(res.data.data);
 					this.resourceData = res.data.data;
 					this.dialogVisible = true;
 				});
@@ -399,20 +397,20 @@
 					},
 				}).then((res) => {
 					this.selectData = res.data.data;
-					console.log(res.data.data);
-					console.log(this.selectData);
+					// console.log(res.data.data);
+					// console.log(this.selectData);
 					}).catch(error =>{
 				    console.log('请求失败');
 				})
 			},
 		  	changeRole(event){
-		  		console.log(event);
-		  		console.log(111);
+		  		// console.log(event);
+		  		// console.log(111);
 		  	 	this.user.roleId=[]
 		  	 	for (var i=0;i<event.length;i++){	
 		  	 		this.user.roleId.push(event[i])
 		  	 	}		  	 	
-		  	 	console.log(this.user.roleId);
+		  	 	// console.log(this.user.roleId);
           	},
 			queding() {
 				this.getCheckedNodes();
@@ -426,16 +424,16 @@
 					this.user.deptName = this.checkedNodes[0].simplename;
 				}
 			},
-			handleClose(done) {
-				this.$confirm('确认关闭？')
-					.then(_ => {
-						done();
-					})
-					.catch(_ => {
-				console.log('取消关闭');
-				$('.v-modal').hide();
-			});
-			}
+			// handleClose(done) {
+			// 	this.$confirm('确认关闭？')
+			// 		.then(_ => {
+			// 			done();
+			// 		})
+			// 	.catch(_ => {
+			// 		console.log('取消关闭');
+			// 		$('.v-modal').hide();
+			// 	});
+			// }
 		},
 		mounted() {
 			this.getRole();

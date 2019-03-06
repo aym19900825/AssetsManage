@@ -241,14 +241,14 @@
 			},
 			//请求页面的button接口
 		    getbutton(childvalue){
-		    	console.log(childvalue);
+		    	// console.log(childvalue);
 		    	var data = {
 					menuId: childvalue.id,
 					roleId: this.$store.state.roleid,
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					console.log(res);
+					// console.log(res);
 					this.buttons = res.data;
 					
 				}).catch((wrong) => {})
@@ -272,11 +272,11 @@
 		    },
 			//左侧菜单传来
 		    childvalue:function ( childvalue) {
-				console.log( childvalue);
+				// console.log( childvalue);
 		    	 this.getbutton( childvalue);
 			},
 			getDetail(data){
-				console.log('tableDetail');
+				// console.log('tableDetail');
 				this.view(data);
 			},
 			//查看

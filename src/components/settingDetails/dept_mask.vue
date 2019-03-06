@@ -6,6 +6,7 @@
 				<div class="mask_title_div clearfix">
 					<div class="mask_title" v-show="addtitle">添加机构</div>
 					<div class="mask_title" v-show="modifytitle">修改机构</div>
+					<div class="mask_title" v-show="viewtitle">查看机构</div>
 					<div class="mask_anniu">
 						<span class="mask_span mask_max" @click='toggle'>
 							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -170,7 +171,7 @@
 								</el-collapse-item>
 							</el-collapse>
 						</div>
-						<div class="content-footer">
+						<div class="content-footer" v-show="noviews">
 							    <el-button type="primary" @click="saveAndUpdate">保存</el-button>
 							    <el-button type="success" @click="saveAndSubmit" v-show="addtitle">保存并继续</el-button>
 							<!--	<el-button type="primary" class="btn-primarys" @click="submitForm('adddeptForm')">提交</el-button>-->
@@ -184,10 +185,10 @@
 			<el-dialog :modal-append-to-body="false" title="机构" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
 				<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" default-expand-all @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
 				</el-tree>
-				<span slot="footer" class="dialog-footer">
-			       <el-button @click="dialogVisible = false">取 消</el-button>
+				<div slot="footer">
 			       <el-button type="primary" @click="queding();" >确 定</el-button>
-			    </span>
+			       <el-button @click="dialogVisible = false">取 消</el-button>
+			    </div>
 			</el-dialog>
 
 			<!--负责人 Begin-->
@@ -218,11 +219,11 @@
 							<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
 						<!-- 表格 -->
-				</div>
-				<span slot="footer" class="dialog-footer">
-			       <el-button type="primary" @click="addleader">确 定</el-button>
-			       <el-button @click="dialogLeader = false">取 消</el-button>
-			    </span>
+					</div>
+					<div slot="footer">
+				       <el-button type="primary" @click="addleader">确 定</el-button>
+				       <el-button @click="dialogLeader = false">取 消</el-button>
+				    </div>
 			</el-dialog>
 			<!--负责人 End-->
 		</div>
@@ -287,6 +288,7 @@
 				}],
 				personinfo:false,
 				showcode:true,
+				noviews:true,//按钮
 				selMenu:[],
 				selUser: [],
 				selData: [],//获取当前负责人
@@ -307,8 +309,9 @@
 				isok1: true,
 				isok2: false,
 //				labelPosition: 'top',
-				addtitle:true,
-				modifytitle:false,
+				addtitle:true,//添加弹出框titile
+				modifytitle:false,//修改弹出框titile
+				viewtitle:false,//查看弹出框titile
 				modify:false,
 				dialogLeader:false,
 				stopcontent:false,

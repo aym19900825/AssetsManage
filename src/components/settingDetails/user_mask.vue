@@ -1174,7 +1174,10 @@ if(typeof(this.user.roleId) != 'undefind'&&this.user.roleId != null&&this.user.r
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			},
 			upload(e){
 				var list = this.user.qualifications || [];

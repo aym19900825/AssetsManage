@@ -1734,7 +1734,10 @@
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			},
 			visablemaingroup:function(callback){    //只有回调参数为false时才触发 ctx.getAreaListDataSearch(vc,1)这个函数;
 			    if(callback){

@@ -37,7 +37,7 @@
 									<el-row :gutter="5" class="pt10">
 										<el-col :span="6">
 											<el-form-item label="提出单位" prop="PROP_UNIT"  label-width="85px">
-												<el-select clearable v-model="WORKPLAN.PROP_UNIT" placeholder="请选择"  :disabled="noedit">
+												<el-select clearable v-model="WORKPLAN.PROP_UNIT" placeholder="请选择" :disabled="noedit">
 													<el-option v-for="data in selectData" :key="data.id" :value="data.id" :label="data.fullname"></el-option>
 												</el-select>
 											</el-form-item>
@@ -93,7 +93,7 @@
 											 </el-form-item>
 										</el-col>
 										<el-col :span="6">
-											<el-form-item label="年度" prop="YEAR"  label-width="85px">
+											<el-form-item label="年度" prop="YEAR" label-width="85px">
 												<div class="block">
 												    <el-date-picker
 												      v-model="WORKPLAN.YEAR"
@@ -418,7 +418,7 @@
 				</div>
 			</div>
 			<!-- 检测依据弹出框begin -->
-			<el-dialog :modal-append-to-body="false" title="检测依据" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="检测依据" :visible.sync="dialogVisible" width="80%" :before-close="handleClose1">
 				<!-- 高级查询划出 Begin-->
 				<div class="pb10">
 					<el-form :model="searchList" label-width="70px">
@@ -505,13 +505,13 @@
 				<!-- 第二层弹出的表格 End -->
 				<div slot="footer">
 			       <el-button type="primary" @click="addbasis">确 定</el-button>
-			       <el-button @click="resetBasis">取 消</el-button>
+			       <el-button @click="resetBasisInfo1">取 消</el-button>
 			    </div>
 			</el-dialog>
 			<!-- 检测依据弹出框 End -->
 
 			<!-- 检测项目与要求弹出框 Begin -->
-			<el-dialog :modal-append-to-body="false" title="检测项目测试与要求" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="检测项目测试与要求" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose2">
 				<!-- 高级查询划出 Begin-->
 				<div class="pb10">
 					<el-form :model="searchList" label-width="70px">
@@ -590,13 +590,13 @@
 				<!-- 表格 End-->
 				<span slot="footer">
 			       <el-button type="primary" @click="addbasis2">确 定</el-button>
-			       <el-button @click="resetbasis2">取 消</el-button>
+			       <el-button @click="resetBasisInfo2">取 消</el-button>
 			    </span>
 			</el-dialog>
 			<!-- 检测项目与要求 End -->
 
 			<!-- 产品类别 Begin -->
-			<el-dialog :modal-append-to-body="false" title="产品类别" height="400px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="产品类别" height="400px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose3">
 				<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="400px" style="width:100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" fixed width="55" align="center">
 					</el-table-column>
@@ -617,14 +617,14 @@
 				</el-pagination>
 
 				<span slot="footer">
-			       <el-button type="primary" @click="addproclass">确 定</el-button>
-			       <el-button @click="DialogClose">取 消</el-button>
+			       <el-button type="primary" @click="addbasis3">确 定</el-button>
+			       <el-button @click="resetBasisInfo3">取 消</el-button>
 			    </span>
 			</el-dialog>
 			<!-- 产品类别 End -->
 
 			<!-- 产品名称 Begin -->
-			<el-dialog :modal-append-to-body="false" title="产品名称" :visible.sync="dialogVisible4" width="80%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="产品名称" :visible.sync="dialogVisible4" width="80%" :before-close="handleClose4">
 				<el-table :header-cell-style="rowClass" :data="productList" line-center border stripe height="400px" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" fixed width="55" align="center">
 					</el-table-column>
@@ -644,14 +644,13 @@
 				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 				<span slot="footer">
-			       <el-button type="primary" @click="addproname">确 定</el-button>
-			       <el-button @click="DialogClose2">取 消</el-button>
+			       <el-button type="primary" @click="addbasis4">确 定</el-button>
+			       <el-button @click="resetBasisInfo4">取 消</el-button>
 			    </span>
 			</el-dialog>
 			<!-- 产品名称 End -->
-
 			<!-- 生产企业名称、受检企业名称 Begin -->
-			<el-dialog :modal-append-to-body="false" :visible.sync="diaVisCustom" width="80%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible5" width="80%" :before-close="handleClose5">
 				<el-table :data="customerList" border stripe :header-cell-style="rowClass" height="400px" style="width: 100%;" :default-sort="{prop:'customerList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" width="55" fixed align="center">
 					</el-table-column>
@@ -674,8 +673,8 @@
 					:total="page.totalCount">
 				</el-pagination>
 				<div slot="footer">
-					<el-button type="primary" @click="adddeptname">确 定</el-button>
-			       	<el-button @click="DialogClose3">取 消</el-button>
+					<el-button type="primary" @click="addbasis5">确 定</el-button>
+			       	<el-button @click="resetBasisInfo5">取 消</el-button>
 			    </div>
 			</el-dialog>
 
@@ -824,7 +823,7 @@
 				dialogVisible2: false, //对话框
 				dialogVisible3: false, //对话框
 				dialogVisible4: false, //对话框
-				diaVisCustom:false,//生产企业、受检企业对话框
+				dialogVisible5: false,//生产企业、受检企业对话框
 				searchList: { //点击高级搜索后显示的内容
 					S_NUM: '',
 					S_NAME: '',
@@ -856,7 +855,7 @@
 				
 				rules: {
 					PROP_UNIT:[{required: true, trigger: 'change', validator: validateUnit}],//提出单位 
-					basisList:[{required: true, trigger: 'change', validator: validateBasislist}],//产品类别
+					basisList:[{required: true, trigger: 'change', validator: validateBasislist}],//检测依据
 					DESCRIPTION:[{required: true, trigger: 'blur', validator: this.Validators.isFillTips}],//计划描述
 
 					TYPE:[{required: true, message: '请选择', trigger: 'change'}],//类别
@@ -953,7 +952,8 @@
             	}
             	xhr.send();
 			},
-			resetBasis(){
+			//检测依据弹出框数据置空
+			resetBasisInfo1(){
 				this.dialogVisible = false;
 				this.resetbtn();
 				this.standardList = [];
@@ -1013,7 +1013,7 @@
 			prodeptbtn(item){
 				// this.requestData();
 				this.requestDeptname();
-				this.diaVisCustom = true;
+				this.dialogVisible5 = true;
 				// this.$emit('request');
 				this.proindex = item;
 				this.requestnum = '3';
@@ -1023,46 +1023,13 @@
 			getdeptbtn(item){
 				// this.requestData();
 				this.requestDeptname();
-				this.diaVisCustom = true;
+				this.dialogVisible5 = true;
 				// this.$emit('request');
 				this.deptindex = item;
 				this.requestnum = '3';
 				this.deptnum = '2';
 			},
-			//生产企业、受检企业名称
-			adddeptname(){
-				if(this.selUser.length == 0){
-					this.$message({
-						message: '请选择数据',
-						type: 'warning'
-					});
-				}else if(this.selUser.length > 1){
-					this.$message({
-						message: '不可同时选择多条数据',
-						type: 'warning'
-					});
-				}else{
-					if(this.deptnum == '1'){
-						this.proindex.V_NAME = this.selUser[0].NAME;
-					}else if(this.deptnum == '2'){
-						this.deptindex.SJ_NAME = this.selUser[0].NAME;
-					}
-					// this.diaVisCustom = false;
-					// this.$emit('request');
-					this.requestDeptname();//调用企业名称requestDeptname函数
-					this.ResetDatasNew3();//调用ResetDatasNew函数
-				}
-			},
-
-			DialogClose3(){//点击取消按钮
-				this.ResetDatasNew3();//调用ResetDatasNew函数
-			},
-			ResetDatasNew3(){//点击确定或取消按钮时重置数据20190303
-				this.diaVisCustom = false;//关闭弹出框
-				this.customerList = [];//列表数据置空
-				this.page.currentPage = 1;//页码重新传值
-				this.page.pageSize = 10;//页码重新传值
-			},
+			
 			fileSuccess(){
 				this.detail(this.WORKPLAN.ID);
 			},
@@ -1175,6 +1142,7 @@
 				}
 				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 			},
+			//检测依据弹出框
             addbasis(){
             	var selData = this.selUser;
 				if(selData.length == 0) {
@@ -1206,7 +1174,7 @@
 						this.basisList.push(JSON.parse(JSON.stringify(selData[i])));
 						// basisnum.push(changeUser[i].S_NUM);//选择的数据的编号
 					}
-					this.resetBasis();
+					this.resetBasisInfo1();
 					this.$message({
 						message: '添加成功',
 						type: 'success'
@@ -1214,13 +1182,15 @@
 					return;
 				}
 			},
-			resetbasis2(){
+			//检测项目与要求数据置空
+			resetBasisInfo2(){
 				this.projectList = [];
 				this.resetbtn();
 				this.dialogVisible2 = false;
 				this.page.currentPage = 1;//页码重新传值
 				this.page.pageSize = 10;//页码重新传值
 			},
+			//检测项目与要求弹出框
             addbasis2(){
             	var selData = this.selUser;
 				if(selData.length == 0) {
@@ -1246,7 +1216,7 @@
 							1;
 						this.proTestList.push(JSON.parse(JSON.stringify(selData[i])));
 					}
-					this.resetbasis2();
+					this.resetBasisInfo2();
 					this.$message({
 						message: '添加成功',
 						type: 'success'
@@ -1254,7 +1224,8 @@
 					return;
 				}
 			},
-			addproclass() { //小弹出框确认按钮事件
+			//产品类别
+			addbasis3() {
 				if(this.selUser.length == 0){
 					this.$message({
 						message: '请选择数据',
@@ -1269,13 +1240,11 @@
 					this.itemtypenum = this.selUser[0].NUM;
 					this.WORKPLAN.ITEMTYPE = this.selUser[0].TYPE;
 					this.$emit('request');
-					this.ResetDatasNew();//调用ResetDatasNew函数
+					this.resetBasisInfo3();//调用resetBasisInfo3函数
 				}
 			},
-			DialogClose(){//点击取消按钮
-				this.ResetDatasNew();//调用ResetDatasNew函数
-			},
-			ResetDatasNew(){//点击确定或取消按钮时重置数据20190303
+			//产品类别数据置空
+			resetBasisInfo3(){
 				this.dialogVisible3 = false;//关闭弹出框
 				this.categoryList = [];//列表数据置空
 				this.page.currentPage = 1;//页码重新传值
@@ -1288,7 +1257,8 @@
 					this.dialogVisible4 = true;
 					this.proindex = item;
 			},
-			addproname(){//产品名称弹框确定选中数据
+			//产品名称弹框确定选中数据
+			addbasis4(){
 				if(this.selUser.length == 0){
 					this.$message({
 						message: '请选择数据',
@@ -1304,19 +1274,48 @@
 					this.pronamenum = this.selUser[0].PRO_NUM;
 					this.proindex.ITEM_NAME = this.selUser[0].PRO_NAME;
 					this.$emit('request');
-					this.ResetDatasNew2();//调用ResetDatasNew函数
+					this.resetBasisInfo4();//调用ResetDatasNew函数
 				}
 			},
-			DialogClose2(){//点击产品名称取消按钮
-				this.ResetDatasNew2();//调用ResetDatasNew函数
-			},
-			ResetDatasNew2(){//点击确定或取消按钮时重置数据20190303
+			//产品名称数据置空
+			resetBasisInfo4(){
 				this.dialogVisible4 = false;//关闭产品名称弹出框
 				this.productList = [];//列表数据置空
 				this.page.currentPage = 1;//页码重新传值
 				this.page.pageSize = 10;//页码重新传值
 			},
-			
+			//生产企业、受检企业名称
+			addbasis5(){
+				if(this.selUser.length == 0){
+					this.$message({
+						message: '请选择数据',
+						type: 'warning'
+					});
+				}else if(this.selUser.length > 1){
+					this.$message({
+						message: '不可同时选择多条数据',
+						type: 'warning'
+					});
+				}else{
+					if(this.deptnum == '1'){
+						this.proindex.V_NAME = this.selUser[0].NAME;
+					}else if(this.deptnum == '2'){
+						this.deptindex.SJ_NAME = this.selUser[0].NAME;
+					}
+					// this.dialogVisible5 = false;
+					// this.$emit('request');
+					this.requestDeptname();//调用企业名称requestDeptname函数
+					this.resetBasisInfo5();//调用ResetDatasNew函数
+				}
+			},
+
+			//生产企业名称、受检企业名称数据置空
+			resetBasisInfo5(){
+				this.dialogVisible5 = false;//关闭弹出框
+				this.customerList = [];//列表数据置空
+				this.page.currentPage = 1;//页码重新传值
+				this.page.pageSize = 10;//页码重新传值
+			},
 			//产品名称数据
 			requestProname(){
 				var data = {
@@ -1454,7 +1453,6 @@
 							}
 						}
 					}
-					
 					this.projectList = newarr;
 				}).catch((wrong) => {})
 			},
@@ -1719,6 +1717,7 @@
 						res.data.WORLPLANLINEList[0].isEditing = true;
 						this.basisList = res.data.WORLPLANLINEList[0].WORLPLANLINE_BASISList;
 						this.proTestList = res.data.WORLPLANLINEList[0].WORLPLANLINE_PROJECTList;
+						this.isEditList = true;
 					}else{
 						this.basisList = [];
 						this.proTestList = [];
@@ -1857,8 +1856,20 @@
 						});
 					}
 					if (valid) {
+						if(this.isEditList){
+							this.$message({
+								message: '请先保存当前年度计划列表数据项',
+								type: 'warning'
+							});
+							return;
+						}
 						if(this.worlplanlist.length>0){
 							for(var i=0;i<this.worlplanlist.length;i++){
+								console.log(this.worlplanlist);
+								console.log(!this.worlplanlist[i].WORLPLANLINE_PROJECTList);
+								console.log(!this.worlplanlist[i].WORLPLANLINE_BASISList);
+								console.log(this.worlplanlist[i].WORLPLANLINE_PROJECTList.length == 0);
+								console.log(this.worlplanlist[i].WORLPLANLINE_BASISList.length == 0);
 								if(!this.worlplanlist[i].WORLPLANLINE_PROJECTList||!this.worlplanlist[i].WORLPLANLINE_BASISList||this.worlplanlist[i].WORLPLANLINE_PROJECTList.length == 0||this.worlplanlist[i].WORLPLANLINE_BASISList.length == 0){
 									this.$message({
 										message: '检测依据、检测项目与要求是必填项，请填写！',
@@ -1897,8 +1908,14 @@
 														message: '保存成功',
 														type: 'success'
 													});
-													this.show = false;
-													this.$emit('request');
+													if(opt == 'save'){
+														this.show = false;
+														this.$emit('request');
+													}
+													if(opt == 'update'){
+														this.show = true;
+														this.reset();
+													}
 												}
 											}else{
                                                 this.$message({
@@ -1970,19 +1987,11 @@
 			},
 			//保存
 			saveAndUpdate(WORKPLAN) {
-				this.save(WORKPLAN);
-				if(this.falg){
-					this.show = false;
-				}else{
-					this.show = true;
-				}
+				this.save('save');
 			},
 			//保存并继续
 			saveAndSubmit(WORKPLAN) {
-				this.save(WORKPLAN);
-				// this.$emit('reset');
-				this.reset();
-				// this.show = true;
+				this.save('update');
 			},
 			loadMore () {
 			   if (this.loadSign) {
@@ -2071,13 +2080,61 @@
 			
 			
 			// },
-			handleClose(done) {
-				this.$confirm('确认关闭？')
-					.then(_ => {
-						done();
-					})
-					.catch(_ => {});
-			}
+			//检测依据弹出框关闭
+			handleClose1(done) {
+		        this.$confirm('确认关闭？')
+		            .then(_ => {
+						this.resetBasisInfo1();
+		            })
+		            .catch(_ => {
+						console.log('取消关闭');
+						$('.v-modal').hide();
+					});
+		    },
+		    //检测项目与要求弹出框关闭
+		    handleClose2(done) {
+		        this.$confirm('确认关闭？')
+		            .then(_ => {
+						this.resetBasisInfo2();
+		            })
+		            .catch(_ => {
+						console.log('取消关闭');
+						$('.v-modal').hide();
+					});
+		    },
+		    //产品类别弹出框关闭
+		    handleClose3(done) {
+		        this.$confirm('确认关闭？')
+		            .then(_ => {
+						this.resetBasisInfo3();
+		            })
+		            .catch(_ => {
+						console.log('取消关闭');
+						$('.v-modal').hide();
+					});
+		    },
+		    //产品名称弹出框关闭
+		    handleClose4(done) {
+		        this.$confirm('确认关闭？')
+		            .then(_ => {
+						this.resetBasisInfo4();
+		            })
+		            .catch(_ => {
+						console.log('取消关闭');
+						$('.v-modal').hide();
+					});
+		    },
+		    //生产企业名称、受检企业名称弹出框关闭
+		    handleClose5(done) {
+		        this.$confirm('确认关闭？')
+		            .then(_ => {
+						this.resetBasisInfo5();
+		            })
+		            .catch(_ => {
+						console.log('取消关闭');
+						$('.v-modal').hide();
+					});
+		    },
 		},
 		mounted() {
 			// this.requestData();

@@ -245,7 +245,8 @@
 					url=url.substring(0,pos+1); 
 					this.url=url+"5300";
 					console.log(url);
-				var url = this.url+"/ureport/preview?_u=mysql:" +this.file
+				var url = this.url+"/ureport/preview?_u=mysql:"+this.file
+				console.log(url);
              window.open(url); 
 			},
 			getDept() {

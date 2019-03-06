@@ -554,7 +554,10 @@
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			},
 
 			visible() { //添加内容时从父组件带过来的
@@ -903,7 +906,10 @@
 				.then(_ => {
 					done();
 				})
-				.catch(_ => {});
+				.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			},
 			requestData(index) {
 				var data = {

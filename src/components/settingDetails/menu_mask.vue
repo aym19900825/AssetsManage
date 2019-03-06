@@ -371,7 +371,10 @@
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			},
 			changeval(Callbackvaule){
 				// this.menu.hidden=Callbackvaule?1:0;

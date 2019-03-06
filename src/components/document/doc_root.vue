@@ -14,28 +14,26 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<form method="post" id="file" action="" enctype="multipart/form-data" style="float: left;">
+								<form method="post" id="file" action="" enctype="multipart/form-data" style="float: left;" v-show="isUploadBtn">
 									<button style="margin-right: 4px;" type="button" class="btn btn-green a-upload">
 										<i class="icon-add"></i>上传
 										<input id="excelFile" type="file" name="uploadFile" @change="upload"/>
 									</button>
 								</form>
-								<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
-								    <i class="icon-clipboard"></i>报表
+								<!-- <button type="button" class="btn btn-primarys button-margin" @click="reportdata">
+									<i class="icon-clipboard"></i>报表
 								</button>
 								<button type="button" class="btn btn-green" @click="showDir">
                                 	<i class="icon-add"></i>新建文件夹
                       			 </button>
-								<!-- <button type="button" class="btn btn-blue button-margin" @click="modify">
-								    <i class="icon-edit"></i>修改文件夹
-								</button> -->
-								<!-- <button type="button" class="btn btn-red button-margin" @click="delDir">
-								    <i class="icon-trash"></i>删除文件夹
-								</button> -->
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 						    		<i class="icon-search"></i>高级查询
 						    		<i class="icon-arrow1-down" v-show="down"></i>
 						    		<i class="icon-arrow1-up" v-show="up"></i>
+								</button> -->
+
+								<button type="button" v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+									<i :class="item.icon"></i>{{item.name}}
 								</button>
 							</div>
 						</div>
@@ -132,9 +130,7 @@
 					</el-row>
 				</div>
 							<!--报表-->
-			<reportmask :reportData="reportData" ref="reportChild" 
-
-></reportmask>
+			<reportmask :reportData="reportData" ref="reportChild"></reportmask>
 			</div>
 		</div>
 		<!-- <samplesmask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></samplesmask> -->
@@ -155,14 +151,14 @@
 	</div>
 </template>
 <script>
+	import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
-	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_header from '../common/nav_tabs.vue'
+	import navs_left from '../common/left_navs/nav_left5.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import samplesmask from'../samplesDetails/samples_mask.vue'
 	import vueDropzone from 'vue2-dropzone'
-	import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 	import vkeyword from '../common/keyword.vue'
 	import vchoose from '../common/dataChoose.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
@@ -297,19 +293,20 @@
 				},
 				samplesForm: {},//修改子组件时传递数据
 				buttons:[],
+				isUploadBtn: false
 			}
 		},
 		methods: {
 			//请求点击
 		    getbtn(item){
 		    	if(item.name=="上传"){
-		         this.upload();
+		         	this.upload();
 		    	}else if(item.name=="新建文件夹"){
-		    	 this.showDir();
+					this.showDir();
 				}else if(item.name=="高级查询"){
-		    	 this.modestsearch();
+					this.modestsearch();
 		    	}else if(item.name=="报表"){
-			     this.reportdata();
+					this.reportdata();
 				}
 		    },
 			delFile(index,row){
@@ -590,11 +587,11 @@
 				this.page.currentPage = val;
 				this.getFileList();
 			},
-			 resetbtn(){
-			this.searchList = { //点击高级搜索后显示的内容
-			appname: '',
-			};
-			this.requestData();
+			resetbtn(){
+				this.searchList = { //点击高级搜索后显示的内容
+					appname: '',
+				};
+				// this.requestData();
 			},
 			searchinfo(index) {//高级查询
 				this.page.currentPage = 1;
@@ -622,8 +619,8 @@
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
-				this.down = !this.down,
-					this.up = !this.up
+				// this.down = !this.down,
+				// this.up = !this.up
 			},
 			//报表
 			reportdata(){
@@ -703,21 +700,30 @@
 			},
 			  //请求页面的button接口
 		    getbutton(childByValue){
-		    	console.log(childByValue);
 		    	var data = {
 					menuId: childByValue.id,
 					roleId: this.$store.state.roleid,
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					console.log(res);
-					this.buttons = res.data;
-					
+					var resData = res.data;
+					var uploadIndex = 0;
+					var uploadBtn = resData.filter((item,index)=>{
+						if(item.name == '上传'){
+							uploadIndex  = index;
+							return item;
+						}
+					});
+					if(uploadBtn.length > 0){
+						this.isUploadBtn = true;
+						resData.splice(uploadIndex, 1);
+					}
+					this.buttons = resData;
 				}).catch((wrong) => {
 					this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
+						message: '网络错误，请重试',
+						type: 'error'
+					});
 				})
 		    },
 		    //树和表单之间拖拽改变宽度
@@ -750,13 +756,11 @@
 					middle.setCapture && middle.setCapture(); 
 					return false 
 				}; 
-			}
-		},
-		created() {// 在页面挂载前就发起请求
-			this.getUser();
+			},
 		},
 		mounted() {// 在页面挂载前就发起请求
 			this.treeDrag();//调用树和表单之间拖拽改变宽度
+			this.getUser();
 		},
 	}
 </script>

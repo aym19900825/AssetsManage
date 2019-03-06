@@ -440,7 +440,10 @@
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			},
 			getCheckedNodes() { //小弹出框获取树菜单节点
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
@@ -650,7 +653,10 @@
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			}
 		},
 		mounted() {

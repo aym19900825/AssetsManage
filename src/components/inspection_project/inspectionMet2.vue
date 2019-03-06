@@ -265,6 +265,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
+				console.log(this.parentIds);
 				this.$axios.get(this.basic_url + '/api-apps/app/inspectionMet?DEPTID=' + this.parentIds, {
 					params: data
 				}).then((res) => {
@@ -393,7 +394,10 @@
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			},
 			formatter(row, column) {
 				return row.enabled;

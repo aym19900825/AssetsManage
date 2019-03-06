@@ -374,6 +374,7 @@
 					totalCount: 0
 				},
 				buttons:[],
+				inspectPro:'inspectPro'//appname
 			}
 		},
 		methods: {
@@ -751,7 +752,7 @@
 			},
 			//报表
 			reportdata(){
-				this.reportData.app=this.productType;
+				this.reportData.app=this.inspectPro;
 				this.$refs.reportChild.visible();
 			},
 			//机构树

@@ -1983,6 +1983,7 @@
 					res.data.ITEM_PROFESSIONAL_GROUP = Number(res.data.ITEM_PROFESSIONAL_GROUP);
 					this.RVENDORSelect(res.data.CJDW);
 					this.workorderForm = res.data;
+					console.log(res.data);
 					this.show = true;
 				}).catch((err) => {
 					this.$message({
@@ -2041,7 +2042,7 @@
 				this.detailgetData();
 				var url = this.basic_url + '/api-apps/app/workorder/flow/isStart/'+dataid;
 				this.$axios.get(url, {}).then((res) => {
-					// console.log(res);
+					console.log(res);
 					if(res.data.resp_code==1){
 						this.start=true;
 						this.approval=false;
@@ -2049,7 +2050,7 @@
 						var url = this.basic_url + '/api-apps/app/workorder/flow/Executors/'+dataid;
 						console.log(url);
 						this.$axios.get(url, {}).then((res) => {
-							// console.log(res.data.datas);
+							console.log(res);
 							res.data.CJDW = Number(res.data.CJDW);
 							var resullt=res.data.datas;
 							var users='';

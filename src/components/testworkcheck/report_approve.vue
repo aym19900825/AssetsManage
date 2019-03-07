@@ -133,10 +133,9 @@
 		data() {
 			return {
 				reportData:{},//报表的数据
-				loading: false,
 				basic_url: Config.dev_url,
-				loadSign: true, //鼠标滚动加载数据
 				commentArr: {},
+				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
 				value: '',
 				options: [{
@@ -459,8 +458,9 @@
 			SelChange(val) {
 				this.selUser = val;
 			},
+			//Table默认加载数据
 			requestData() {
-				this.loading = true;
+				this.loading = true;//加载动画打开
 				var data = {
 					page: this.page.currentPage,
                     limit: this.page.pageSize,
@@ -471,7 +471,6 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(res);					
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -481,20 +480,17 @@
 						this.loadSign = true
 					}
 					this.USESEAL = res.data.data;
-					// let newarr = []
-					// for(var i = 1; i <= totalPage; i++) {
-					// 	if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-
-					// 		for(var j = 0; j < this.commentArr[i].length; j++) {
-					// 			newarr.push(this.commentArr[i][j])
-					// 		}
-					// 	}
-					// }
-					// this.USESEAL = newarr;
-					this.loading = false;
-				}).catch((wrong) => {})
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试1',
+						type: 'error'
+					});
+				})
 			},
-			handleNodeClick(data) {},
 			formatter(row, column) {
 				return row.enabled;
 			},

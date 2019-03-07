@@ -273,8 +273,8 @@
                     ENERBY:'',
                     CHANGEBY:'',
 					CHANGEDATE:'',
-					STATE:'1',
-					STATEDesc:'草稿',
+					STATE:'1',//流程状态
+                    STATEDesc:'草稿',
                 },
                 dialogPerson:false,//人员信息弹出框
                 pertips:'',//选择人员参数
@@ -289,6 +289,7 @@
 				},
 				sealUse:'sealUse',//appname
 				dataid:'',
+				username:'',
 			};
 		},
 		methods: {
@@ -405,7 +406,8 @@
                 //     }
                 // }
                 // console.log(this.USESEAL);
-				// this.show = true;
+				// // this.show = true;
+				this.detailgetData();
 			},
 			//这是查看
 			view(id) {		
@@ -551,6 +553,8 @@
                     ENERBY:'',
                     CHANGEBY:'',
 					CHANGEDATE:'',
+					STATE:'1',
+					STATEDesc:'草稿',
 				};
 				// if(this.$refs['USESEAL'] !== undefined) {
 				// 	this.$refs['USESEAL'].resetFields();

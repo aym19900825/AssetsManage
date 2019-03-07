@@ -588,8 +588,8 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="主检负责人" prop="LEADER" label-width="110px">
-												<el-select v-model="dataInfo.LEADER" placeholder="请选择" @change="setLeader">
-													<el-option v-for="(data,index) in leaderdata" :key="data.id" :value="data.id" :label="data.username"></el-option>
+												<el-select v-model="dataInfo.LEADER" filterable allow-create default-first-option placeholder="请选择" @change="setLeader">
+													<el-option v-for="(data,index) in leaderdata" :key="index" :value="data.id" :label="data.username"></el-option>
 												</el-select>
 											</el-form-item>
 										</el-col>
@@ -1098,6 +1098,7 @@
 					V_ADDRESS:'',
 					V_ZIPCODE:'',
 					P_NAME:'',
+					LEADER:'',
 					INSPECT_PROXY_PROJECList: [],
 					INSPECT_PROXY_BASISList: [],
 					CHECK_PROXY_CONTRACTList: [],

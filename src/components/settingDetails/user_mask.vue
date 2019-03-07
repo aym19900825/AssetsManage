@@ -102,8 +102,8 @@
 										<el-col :span="8">
 											<el-form-item label="性別" prop="sex" label-width="100px">
 												<el-radio-group v-model="user.sex" :disabled="noedit">
-													<el-radio label="男"></el-radio>
-													<el-radio label="女"></el-radio>
+													<el-radio label="1">男</el-radio>
+													<el-radio label="0">女</el-radio>
 												</el-radio-group>
 											</el-form-item>
 										</el-col>
@@ -135,16 +135,16 @@
 										<el-col :span="8">
 											<el-form-item label="允许授权" prop="ispermit" label-width="100px">
 												<el-radio-group v-model="user.ispermit" :disabled="noedit">
-													<el-radio label="是"></el-radio>
-													<el-radio label="否"></el-radio>
+													<el-radio label="1">是</el-radio>
+													<el-radio label="2">否</el-radio>
 												</el-radio-group>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="允许登录" prop="islogin" label-width="100px">
 												<el-radio-group v-model="user.islogin" :disabled="noedit">
-													<el-radio label="是"></el-radio>
-													<el-radio label="否"></el-radio>
+													<el-radio label="1">是</el-radio>
+													<el-radio label="2">否</el-radio>
 												</el-radio-group>
 											</el-form-item>
 										</el-col>
@@ -897,6 +897,7 @@
 				var usersUrl = this.basic_url + '/api-user/users/currentMap';
 
 				this.$axios.get(usersUrl, {}).then((res) => {
+					console.log(res);
 					this.user.changeby = res.data.nickname;
 					this.docParam = {
 						username: res.data.username,
@@ -929,21 +930,15 @@
 					// 	res.data.ips[i].isEditing = false;
 					// }
 					console.log(res);
+				    res.data.sex=res.data.sex.toString();
 					this.user = res.data;
-					this.user.sex = this.user.sex=='1'? '男' : '女';
-					this.user.enabled = this.user.enabled ? '活动' : '不活动';
-					this.user.ispermit = this.user.ispermit == '1' ? '是' : '否';
-					this.user.islogin = this.user.islogin == '1' ? '是' : '否';
-if(typeof(this.user.roleId) != 'undefind'&&this.user.roleId != null&&this.user.roleId.length > 0) {
-							this.user.roleId=[];
-							var roles = this.user.roles;
-							for(var i = 0; i < roles.length; i++) {
-								this.user.roleId.push(roles[i].id);
-							}
-					}else if(this.user.reportId==null){
-						console.log(1111);
-						this.user.roleId = [];
-						this.user.roles = [];
+					console.log(res);
+					// this.user.enabled = this.user.enabled ? '活动' : '不活动';
+					this.user.roleId = this.user.roleId.split(',');
+					var arr = [];
+					var roleId = this.user.roleId;
+					for(var i=0; i< roleId.length; i++){
+						roleId[i] =  parseInt(roleId[i]);
 					}
 					this.show = true;
 				}).catch((err) => {
@@ -968,14 +963,12 @@ if(typeof(this.user.roleId) != 'undefind'&&this.user.roleId != null&&this.user.r
 				var url = this.basic_url + '/api-user/users/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
 					this.user = res.data;
-					this.user.sex = this.user.sex ? '男' : '女';
+					// this.user.sex = this.user.sex ? '男' : '女';
 					this.user.enabled = this.user.enabled ? '活动' : '不活动';
-					this.user.ispermit = this.user.ispermit == '1' ? '是' : '否';
-					this.user.islogin = this.user.islogin == '1' ? '是' : '否';
-					this.user.roleId = [];
-					var roles = this.user.roles;
-					for(var i = 0; i < roles.length; i++) {
-						this.user.roleId.push(roles[i].id);
+					this.user.roleId = this.user.roleId.split(',');
+					var roleId = this.user.roleId;
+					for(var i=0; i< roleId.length; i++){
+						roleId[i] =  parseInt(roleId[i]);
 					}
 					this.show = true;
 				}).catch((err) => {
@@ -1021,31 +1014,32 @@ if(typeof(this.user.roleId) != 'undefind'&&this.user.roleId != null&&this.user.r
 				this.$refs.user.validate((valid) => {
 					if(valid) {
 						_this.user.enabled = true;
-						_this.user.ispermit = _this.user.ispermit == '是' ? '1' : '2';
-						_this.user.islogin = _this.user.islogin == '是' ? '1' : '2';
+						// _this.user.ispermit = _this.user.ispermit == '是' ? '1' : '2';
+						// _this.user.islogin = _this.user.islogin == '是' ? '1' : '2';
 						var user = _this.user;
-						user.sex = user.sex == '男' ? 1 : 0;
-						var roleId = "";
-						if(typeof(user.roleId) != 'undefind' && user.roleId.length > 0) {
-							var arr = [];
-							user.roleId.forEach(function(item) {
-								var roles = _this.selectData;
-								for(var j = 0; j < roles.length; j++) {
-									if(roles[j].id == item) {
-										arr.push(roles[j]);
-										roleId = roleId + roles[j].id + ",";
-									}
-								}
-							});
-							user.roleId = roleId;
-							user.roles = arr;
-						} else {
-							user.roleId = '';
-							user.roles = [];
-						}
+						// user.sex = user.sex == '男' ? 1 : 0;
+						var roleId = [];
+						// if(typeof(user.roleId) != 'undefind' && user.roleId.length > 0) {
+						// 	var arr = [];
+						// 	user.roleId.forEach(function(item) {
+						// 		var roles = _this.selectData;
+						// 		for(var j = 0; j < roles.length; j++) {
+						// 			if(roles[j].id == item) {
+						// 				arr.push(roles[j]);
+						// 				roleId.push(roles[j].id);
+						// 				// roleId = roleId + roles[j].id + ",";
+						// 			}
+						// 		}
+						// 	});
+						// 	user.roleId = roleId;
+						// 	user.roles = arr;
+						// } else {
+						// 	user.roleId = '';
+						// 	user.roles = [];
+						// }
+						user.roleId = user.roleId.join(',');
 						var url = _this.basic_url + '/api-user/users/saveOrUpdate';
 						this.$axios.post(url, _this.user).then((res) => {
-							console.log(res);
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',
@@ -1064,6 +1058,7 @@ if(typeof(this.user.roleId) != 'undefind'&&this.user.roleId != null&&this.user.r
 									type: 'warning'
 								});
 								this.show=true;
+								user.roleId = user.roleId.split(',');
 							}
 						}).catch((err) => {
 							this.$message({

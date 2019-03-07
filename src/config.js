@@ -10,7 +10,7 @@ const config = {
 	//  file_url: 'http://203.93.173.179:8099',   //部署版远端访问地址
 	file_url: 'http://192.168.1.126:8099',   //公司内部
 	
-    // po_url:'http://192.168.1.126:4700'
-    po_url:'http://192.168.1.168:4700'   //Pageoffice
+    po_url:'http://192.168.1.126:4700'
+    // po_url:'http://192.168.1.168:4700'   //Pageoffice
 }
 export default config

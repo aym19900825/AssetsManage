@@ -18,41 +18,6 @@
 							<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
 								<i :class="item.icon"></i>{{item.name}}
 							</button>
-							<!-- <button type="button" class="btn btn-green" @click="openAddMgr" id="">
-	                        	<i class="icon-add"></i>添加
-	              			</button>
-							<button type="button" class="btn btn-blue button-margin" @click="modify">
-							    <i class="icon-edit"></i>修改
-							</button>
-							<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
-							    <i class="icon-trash"></i>删除
-							</button>
-							<button type="button" class="btn btn-red button-margin" @click="physicsDel">
-							    <i class="icon-trash"></i>彻底删除
-							</button> -->
-
-							<!-- <button type="button" class="btn btn-green" v-if="">
-	                        	<i class="icon-inventory-line-callin"></i>导入
-	              			</button>
-
-							<el-dropdown size="small" v-else>
-								<el-button round type="primary" size="mini">
-									<i class="icon-inventory-line-callin"></i> 导入<i class="el-icon-arrow-down el-icon--right"></i>
-								</el-button>
-
-								<el-dropdown-menu slot="dropdown">
-									<el-dropdown-item>
-										<div @click="download"><i class="icon-download-cloud"></i>下载模版</div>
-									</el-dropdown-item>
-									<el-dropdown-item>
-										<el-upload ref="upload" class="upload" :action="uploadUrl" :limit=1 multiple method:="post" :file-list="fileList">
-											<i class="icon-upload-cloud"></i> 上传
-										</el-upload>
-									</el-dropdown-item>
-								</el-dropdown-menu>
-							</el-dropdown> -->
-							
-
 							<el-dropdown size="small">
 									<button class="btn mr5 btn-primarys">
 										<i class="icon-inventory-line-callin"></i> 导入<i class="el-icon-arrow-down el-icon--right"></i>
@@ -688,8 +653,19 @@
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
 					console.log(res);
-					this.buttons = res.data;
-					
+					var resData = res.data;
+					var uploadIndex = 0;
+					var uploadBtn = resData.filter((item,index)=>{
+						if(item.name == '导入'){
+							uploadIndex  = index;
+							return item;
+						}
+					});
+					if(uploadBtn.length > 0){
+						this.isUploadBtn = true;
+						resData.splice(uploadIndex, 1);
+					}
+					this.buttons = resData;
 				}).catch((wrong) => {
 					this.$message({
 								message: '网络错误，请重试',

@@ -484,12 +484,11 @@
 				this.getFileList();
 			},
 			getFileList(){
-				var url = this.file_url + '/file/pathList';
+				var num = this.page.currentPage - 1;
+				var url = this.file_url + '/file/pathList?size=' + this.page.pageSize + '&page=' + num ;
 				this.$axios.post(url, {
 					'pathid': this.docId,
 					'deptid': this.docParm.deptid,
-					'page': this.page.currentPage - 1,
-					'size': this.page.pageSize,
 					'appname': this.searchList.appname
 				}).then((res) => {
 					this.fileList = res.data.fileList.fileList;

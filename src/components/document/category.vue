@@ -82,15 +82,16 @@
 						<el-col :span="24">
 							<!-- 表格 -->
 							<el-table ref="table" :header-cell-style="rowClass" :data="samplesList" 
-									  border 
-									  :height="fullHeight" 
-									  style="width: 100%;" 
-									  :default-sort="{prop:'samplesList', order: 'descending'}" 
-									  @selection-change="selChange"
-									  v-loading="loading"  
-								      element-loading-text="加载中…"
-    							      element-loading-spinner="el-icon-loading"
-    							      element-loading-background="rgba(255, 255, 255, 0.9)">
+									border 
+									:height="fullHeight" 
+									style="width: 100%;" 
+									:default-sort="{prop:'samplesList', order: 'descending'}" 
+									@selection-change="selChange"
+	    							v-loadmore="loadMore"
+									v-loading="loading"  
+								    element-loading-text="加载中…"
+    							    element-loading-spinner="el-icon-loading"
+    							    element-loading-background="rgba(255, 255, 255, 0.9)">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
 								</el-table-column>
 								<el-table-column label="类别" sortable prop="categoryidDesc" v-if="this.checkedName.indexOf('类别')!=-1">
@@ -108,7 +109,7 @@
 								 @size-change="sizeChange" 
 								 @current-change="currentChange" 
 								 :current-page="page.currentPage" 
-								 :page-sizes="[10, 20, 30, 40]" 
+								 :page-sizes="[10, 20, 30, 40, 100]" 
 								 :page-size="page.pageSize" 
 								 layout="total, sizes, prev, pager, next" 
 								 :total="page.totalCount">
@@ -120,8 +121,8 @@
 			</div>
 		</div>
 		<catmask ref="child" @request="requestData" :detailData="selMenu[0]"></catmask>
-			<!--报表-->
-			<reportmask :reportData="reportData" ref="reportChild"></reportmask>
+		<!--报表-->
+		<reportmask :reportData="reportData" ref="reportChild"></reportmask>
 		<!--右侧内容显示 End-->
 	</div>
 	</div>
@@ -147,10 +148,10 @@
 		data() {
 			return {
 				reportData:{},//报表的数据
-				loading: false,
 				basic_url: Config.dev_url,
+				loadSign: true, //鼠标滚动加载数据
+				loading: false,//默认加载数据时显示loading动画
 				ismin: true,
-
 				//选择显示数据
 				checkedName: [
 					'关键字',

@@ -17,7 +17,7 @@
 					<div class="bs-bars pull-left">
 						<div class="hidden-xs" id="roleTableToolbar" role="group">
 							<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
-									<i :class="item.icon"></i>{{item.name}}
+								<i :class="item.icon"></i>{{item.name}}
 							</button>
 							<!-- <button type="button" class="btn btn-green" @click="openAddMgr" id="">
 	                        	<i class="icon-add"></i>添加
@@ -115,19 +115,19 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :header-cell-style="rowClass" 
-							      :data="userList" 
-								  border 
-								  stripe 
-								  :height="fullHeight" 
-								  style="width: 100%;" 
-								  :default-sort="{prop:'userList', order: 'descending'}" 
-								  @selection-change="SelChange" 
-								  v-loadmore="loadMore"
-								  v-loading="loading"  
-								  element-loading-text="加载中…"
-    							  element-loading-spinner="el-icon-loading"
-    							  element-loading-background="rgba(255, 255, 255, 0.9)">
+						<el-table ref="table" :header-cell-style="rowClass" 
+								:data="userList" 
+								border 
+								stripe 
+								:height="fullHeight" 
+								style="width: 100%;" 
+								:default-sort="{prop:'userList', order: 'descending'}" 
+								@selection-change="SelChange" 
+								v-loadmore="loadMore"
+								v-loading="loading"  
+								element-loading-text="加载中…"
+	    						element-loading-spinner="el-icon-loading"
+	    						element-loading-background="rgba(255, 255, 255, 0.9)">
 							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 							</el-table-column>
 							<el-table-column label="溯源计划编号" width="200" sortable prop="PMNUM" v-if="this.checkedName.indexOf('溯源计划编号')!=-1">
@@ -140,9 +140,9 @@
 							</el-table-column>
 							<el-table-column label="设备编号" width="120" sortable prop="ASSETNUM" v-if="this.checkedName.indexOf('设备编号')!=-1">
 							</el-table-column>
-							<el-table-column label="设备名称" width="120" sortable prop="A_NAME" v-if="this.checkedName.indexOf('设备名称')!=-1">
+							<el-table-column label="设备名称" width="220" sortable prop="A_NAME" v-if="this.checkedName.indexOf('设备名称')!=-1">
 							</el-table-column>						
-							<el-table-column label="规格型号" width="120" sortable prop="MODEL" v-if="this.checkedName.indexOf('规格型号')!=-1">
+							<el-table-column label="规格型号" width="180" sortable prop="MODEL" v-if="this.checkedName.indexOf('规格型号')!=-1">
 							</el-table-column>
 							<el-table-column label="制造商" width="160" sortable prop="VENDOR" v-if="this.checkedName.indexOf('制造商')!=-1">
 							</el-table-column>
@@ -177,8 +177,8 @@
 		</div>
 		<!--右侧内容显示 End-->
 		<detailPage :detailData="selUser[0]" ref="child" @request="requestData"></detailPage>
-					<!--报表-->
-			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
+		<!--报表-->
+		<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 	</div>
 </div>
 </template>
@@ -203,19 +203,10 @@
 		data() {
 			return {
 				reportData:{},//报表的数据
-				loading: false,
+				loadSign: true, //鼠标滚动加载数据
+				loading: false,//默认加载数据时显示loading动画
 				basic_url: Config.dev_url,
 				dataUrl: '/api/api-user/users',
-				searchData: {
-			        page: 1,
-			        limit: 10,//分页显示数
-			        nickname: '',
-			        enabled: '',
-			        searchKey: '',
-			        searchValue: '',
-			        companyId: '',
-			        deptId: ''
-		        },
 				checkedName: [
 					'溯源计划编号',
 					'计划描述',	
@@ -285,7 +276,6 @@
 						prop: 'COMP_DATE'
 					}
 				],
-				
 				companyId: '',
 				deptId: '',
 				selUser: [],
@@ -333,19 +323,6 @@
 			},
 			tableControle(data){
 				this.checkedName = data;
-			},
-			sizeChange(val) {
-		      this.page.pageSize = val;
-		      this.requestData();
-		    },
-		    currentChange(val) {
-		      this.page.currentPage = val;
-		      this.requestData();
-		    },
-			searchinfo(index) {
-				this.page.currentPage = 1;
-				this.page.pageSize = 20;
-				this.requestData();
 			},
 			resetbtn(){
 				this.searchList = { //点击高级搜索后显示的内容
@@ -561,8 +538,61 @@
 			SelChange(val) {
 				this.selUser = val;
 			},
+			//表格滚动加载
+			loadMore() {
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++;
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
+					}else{
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1;
+							return false;
+						}
+					}
+					this.loadSign = false;
+					setTimeout(() => {
+						this.loadSign = true;
+					}, 1000)
+					this.requestData();
+				}
+			},
+			//改变页数
+			sizeChange(val) {
+				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+			//当前页数
+			currentChange(val) {
+				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+			//Table默认加载数据
 			requestData(index) {
-				this.loading = true;
+				this.loading = true;//加载动画打开
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -587,47 +617,23 @@
 						this.loadSign = true
 					}
 					this.userList =  res.data.data;
-					this.loading = false;
-					// this.userList = res.data.data;
-					// this.page.totalCount = res.data.count;
-				}).catch((wrong) => {})
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试1',
+						type: 'error'
+					});
+				})
 				
 			},
-			loadMore () {
-				let up2down = sessionStorage.getItem('up2down');
-				if(this.loadSign) {					
-					if(up2down=='down'){
-						this.page.currentPage++
-						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-							return false;
-						}
-					}else{
-						this.page.currentPage--
-						if(this.page.currentPage < 1) {
-							this.page.currentPage=1
-							return false;
-						}
-					}
-					this.loadSign = false;
-					setTimeout(() => {
-						this.loadSign = true
-					}, 1000)
-					this.requestData()
-				}
-			   // if (this.loadSign) {
-			   //   this.loadSign = false
-			   //   this.page++
-			   //   if (this.page > 10) {
-			   //     return
-			   //   }
-			   //   setTimeout(() => {
-			   //     this.loadSign = true
-			   //   }, 1000)
-			   //   console.log('到底了', this.page)
-			   // }
-			 },
-			handleNodeClick(data) {
+			
+			searchinfo(index) {
+				this.page.currentPage = 1;
+				this.page.pageSize = 20;
+				this.requestData();
 			},
 			formatter(row, column) {
 				return row.enabled;

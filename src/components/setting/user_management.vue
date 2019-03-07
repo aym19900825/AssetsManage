@@ -1004,7 +1004,6 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					deptId: this.searchList.deptId,
 					nickname: this.searchList.nickname,
 					username: this.searchList.username,
 //					searchKey: 'createTime',
@@ -1012,9 +1011,10 @@
 					companyId: this.companyId,
 					// deptId: this.deptId
 				}
-				if(!(!!this.searchList.deptId && this.searchList.deptId == 128)){
+				if(!!this.searchList.deptId  && this.searchList.deptId != 128){
 					data.deptId = this.searchList.deptId;
 				}
+				
 				var url = this.basic_url + '/api-user/users';
 				this.$axios.get(url, {
 					params: data

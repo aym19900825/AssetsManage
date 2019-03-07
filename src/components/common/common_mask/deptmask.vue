@@ -1,7 +1,10 @@
 <template>
 	<div>
 		<el-dialog :modal-append-to-body="false" title="" height="400px" :visible.sync="dialogCategory" width="80%" :before-close="handleClose">
-			<tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="deptList" v-on:classByValue="childByValue"></tree_grid>
+			<tree_grid :columns="columns" :tree-structure="true" :data-source="deptList" v-on:classByValue="childByValue" v-loading="loading" 
+                element-loading-text="加载中…"
+                element-loading-spinner="el-icon-loading"
+                element-loading-background="rgba(255, 255, 255, 0.9)"></tree_grid>
             <el-pagination background class="text-right pt10"
                 @size-change="sizeChange" 
                 @current-change="currentChange" 
@@ -33,6 +36,7 @@
     return {
 		basic_url: Config.dev_url,
 		productList: [],
+        loading: false,
 		loadSign:true,//加载
 		commentArr:{},
 		selUser: [],//接勾选的值

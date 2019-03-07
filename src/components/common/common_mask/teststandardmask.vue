@@ -119,7 +119,7 @@
 			</el-pagination>
 			<!-- 第二层弹出的表格 End -->
 			<div slot="footer">
-				<el-button type="primary" @click="addbasis">确 定</el-button>
+				<el-button type="primary" @click="addbasis">确 定123456</el-button>
 		       <el-button @click="resetBasisInfo">取 消</el-button>
 		    </div>
 		</el-dialog>
@@ -237,6 +237,7 @@
     },
     addbasis(){
         var selData = this.selUser;
+        console.log(selData);
         if(selData.length == 0) {
             this.$message({
                 message: '请选择数据',

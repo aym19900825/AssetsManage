@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<el-dialog :modal-append-to-body="false" title="样品名称" :visible.sync="dialogsample" width="80%">
+		<el-dialog :modal-append-to-body="false" title="样品名称" :visible.sync="dialogsample" width="80%" :before-close="handleClose">
 			<el-form :model="searchList" label-width="70px">
 				<el-row>
 					<el-col :span="7">
@@ -41,7 +41,7 @@
 					</el-col>
 					<el-col :span="3">
 						<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-						<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
+						<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
 					</el-col>
 				</el-row>
 			</el-form>
@@ -77,13 +77,13 @@
 			<el-table-column label="状态" sortable width="100px" prop="STATEDesc">
 			</el-table-column>
 		</el-table>
-				
 			<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 			</el-pagination>
-			<span slot="footer" class="dialog-footer">
+
+			<div slot="footer">
 			   <el-button type="primary" @click="determine">确 定</el-button>
 		       <el-button @click="resetBasisInfo">取 消</el-button>
-		    </span>
+		    </div>
 		</el-dialog>
 	</div>
 </template>
@@ -105,7 +105,7 @@
 		type:'',
 		page: {
 			currentPage: 1,
-			pageSize: 10,
+			pageSize: 20,
 			totalCount: 0
 		},
 		searchList: {
@@ -136,10 +136,22 @@
 	},
   	sizeChange(val) {
 		this.page.pageSize = val;
+		if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+			$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+			sessionStorage.setItem('toBtm','true');
+		}else{
+			sessionStorage.setItem('toBtm','false');
+		}
 		this.requestData();
 	},
 	currentChange(val) {
 		this.page.currentPage = val;
+		if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+			$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+			sessionStorage.setItem('toBtm','true');
+		}else{
+			sessionStorage.setItem('toBtm','false');
+		}
 		this.requestData();
 	},
 	searchinfo() {//高级查询
@@ -163,20 +175,39 @@
 	},
   	visible(type) {
   		this.type=type;
+  		this.page.currentPage = 1;
+  		this.requestData();
 		this.dialogsample = true;
   	},
-  	loadMore () {
-	   if (this.loadSign) {
-	     this.loadSign = false
-	     this.page.currentPage++
-	     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-	       return
-	     }
-	     setTimeout(() => {
-	       this.loadSign = true
-	     }, 1000)
-	     this.requestData();
-	   }
+  	loadMore() {
+		//console.log(this.$refs.table.$el.offsetTop)
+		let up2down = sessionStorage.getItem('up2down');
+		if(this.loadSign) {					
+			if(up2down=='down'){
+				this.page.currentPage++;
+				if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+					this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					return false;
+				}
+				let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}
+			}else{
+				sessionStorage.setItem('toBtm','false');
+				this.page.currentPage--;
+				if(this.page.currentPage < 1) {
+					this.page.currentPage=1;
+					return false;
+				}
+			}
+			this.loadSign = false;
+			setTimeout(() => {
+				this.loadSign = true;
+			}, 1000)
+			this.requestData();
+		}
 	},
 	requestData(){
 		this.loading = true;
@@ -202,16 +233,16 @@
 			} else {
 				this.loadSign = true
 			}
-			this.commentArr[this.page.currentPage] = res.data.data
-			let newarr = []
-			for(var i = 1; i <= totalPage; i++) {
-				if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-					for(var j = 0; j < this.commentArr[i].length; j++) {
-						newarr.push(this.commentArr[i][j])
-					}
-				}
-			}
-			this.samplesList = newarr;
+			// this.commentArr[this.page.currentPage] = res.data.data
+			// let newarr = []
+			// for(var i = 1; i <= totalPage; i++) {
+			// 	if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+			// 		for(var j = 0; j < this.commentArr[i].length; j++) {
+			// 			newarr.push(this.commentArr[i][j])
+			// 		}
+			// 	}
+			// }
+			this.samplesList = res.data.data;
 			this.loading = false;
 		}).catch((wrong) => {})
 		
@@ -272,13 +303,22 @@
 			this.resetBasisInfo();//调用resetBasisInfo函数
 		}
 	},
-	
 	resetBasisInfo(){//点击确定或取消按钮时重置数据20190303
 		this.dialogsample = false;//关闭弹出框
 		this.samplesList = [];//列表数据置空
 		this.page.currentPage = 1;//页码重新传值
-		this.page.pageSize = 10;//页码重新传值
+		this.page.pageSize = 20;//页码重新传值
 	},
+	handleClose(done) {
+	    this.$confirm('确认关闭？')
+	        .then(_ => {
+				this.resetBasisInfo();
+	        })
+	        .catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
+		},
   },
   mounted() {
 		this.requestData();

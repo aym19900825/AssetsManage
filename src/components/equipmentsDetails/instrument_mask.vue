@@ -17,9 +17,8 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form :model="dataInfo" :rules="rules"   ref="dataInfo" label-width="100px" class="demo-user">
+					<el-form :model="dataInfo" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
 						<div class="content-accordion">
-
 							<!-- 设备基本信息 -->
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="设备基本信息" name="1">
@@ -688,8 +687,16 @@
 			},
 			//设备保管人员情况
 			addPeople(){
-				this.getuserinfo();
-				this.dialogVisible = true;
+				var CONFIG_UNIT=this.dataInfo.CONFIG_UNIT;
+				if(CONFIG_UNIT==""||CONFIG_UNIT=="undenfiend"){
+					this.$message({
+						message: '请先选委托单位名称',
+						type: 'warning'
+					});
+				}else{
+					this.getuserinfo();
+					this.dialogVisible = true;
+				}
 			},
 			addpeoname(){
 				if(this.selUser.length == 0){
@@ -927,12 +934,12 @@
 			handleClose(done) {
 				this.$confirm('确认关闭？')
 					.then(_ => {
-						done();
+						this.resetBasisInfo();//调用resetBasisInfo函数
 					})
 					.catch(_ => {
 				console.log('取消关闭');
-				$('.v-modal').hide();
-			});
+					$('.v-modal').hide();
+				});
 			},
 			maxDialog(e) { //定义大弹出框一个默认大小
 				this.isok1 = false;

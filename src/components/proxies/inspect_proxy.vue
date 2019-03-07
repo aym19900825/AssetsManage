@@ -499,6 +499,7 @@
 			},
 			//修改
 			modify() {
+				console.log(111);
 				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
@@ -512,7 +513,8 @@
 					});
 					return;
 				} else {
-					if(this.selUser[0].STATE == 3 || this.selUser[0].STATE == 2) {
+					console.log(this.selUser[0]);
+					if(this.selUser[0].STATUS == 3 || this.selUser[0].STATUS == 2) {
 						this.$message({
 							message: '已启动的流程，不允许修改数据，只可以查看。',
 							type: 'warning'
@@ -520,7 +522,7 @@
 						this.$refs.child.view(this.selUser[0].ID);
 					}
 					//驳回
-					else if(this.selUser[0].STATE == 0) {
+					else if(this.selUser[0].STATUS == 0) {
 						var url = this.basic_url + '/api-apps/app/inspectPro/flow/isExecute/' + this.selUser[0].ID;
 						this.$axios.get(url, {}).then((res) => {
 							if(res.data.resp_code == 0) {
@@ -622,7 +624,7 @@
 					var deleteid = [];
 					var ids;
 					for(var i = 0; i < changeUser.length; i++) {
-						if(changeUser[i].STATE!=1){
+						if(changeUser[i].STATUS!=1){
 						 	this.$message({
 								message: '您的数据中有已启动的流程，所以不能删除',
 								type: 'error'

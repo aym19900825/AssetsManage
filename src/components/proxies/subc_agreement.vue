@@ -334,6 +334,7 @@
 					totalCount: 0
 				},
 				buttons:[],
+				subcontrac:'subcontrac'//appname
 			}
 		},
 		methods: {
@@ -418,7 +419,7 @@
 			},
 			//报表
 			reportdata(){
-				this.reportData.app=this.productType;
+				this.reportData.app=this.subcontrac;
 				this.$refs.reportChild.visible();
 			},
 			// 打印

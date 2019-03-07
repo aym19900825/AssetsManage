@@ -213,11 +213,10 @@
 					</el-row>
 				</div>
 			</div>
-			</div>
+		</div>
 			<annualmask ref="child" @request="requestData" v-bind:page=page></annualmask>
 			<!--报表-->
 			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
-		</div>
 	</div>
 </template>
 <script>

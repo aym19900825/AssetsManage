@@ -98,7 +98,7 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :header-cell-style="rowClass" 
+						<el-table ref="table" :header-cell-style="rowClass" 
 								  :data="projectList" 
 								  border stripe 
 								  :height="fullHeight" 
@@ -131,9 +131,9 @@
 							</el-table-column>
 							<el-table-column label="子领域" width="120" sortable prop="CHILD_FIELD" v-if="this.checkedName.indexOf('子领域')!=-1">
 							</el-table-column>
-							<el-table-column label="版本" width="70" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1" align="right">
+							<el-table-column label="版本" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1" align="right">
 							</el-table-column>
-							<el-table-column label="机构" width="180" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
+							<el-table-column label="机构" width="160" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
 							</el-table-column>
 							<!-- <el-table-column label="录入人" width="120" prop="ENTERBY" sortable  v-if="this.checkedName.indexOf('录入人')!=-1"> -->
 							</el-table-column>
@@ -186,8 +186,9 @@
 		data() {
 			return {
 				reportData:{},//报表的数据
-				loading: false,
 				basic_url: Config.dev_url,
+				loadSign: true, //鼠标滚动加载数据
+				loading: false,//默认加载数据时显示loading动画
 				value: '',
 				options: [{
 					value: '1',
@@ -196,7 +197,6 @@
 					value: '0',
 					label: '不活动'
 				}],
-				loadSign:true,//加载
 				commentArr:{},
 				checkedName: [
 					'编码',
@@ -328,42 +328,59 @@
 			//表格滚动加载
 			loadMore() {
 				let up2down = sessionStorage.getItem('up2down');
-				console.log(up2down)
-				console.log(this.loadSign)
 				if(this.loadSign) {					
 					if(up2down=='down'){
-						this.page.currentPage++
+						this.page.currentPage++;
 						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
 							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
 							return false;
 						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
 					}else{
-						this.page.currentPage--
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
 						if(this.page.currentPage < 1) {
-							this.page.currentPage=1
+							this.page.currentPage=1;
 							return false;
 						}
 					}
 					this.loadSign = false;
-					console.log('this.page.currentPage',this.page.currentPage)
 					setTimeout(() => {
-						this.loadSign = true
+						this.loadSign = true;
 					}, 1000)
-					this.requestData()
+					this.requestData();
 				}
 			},
 			tableControle(data){//控制表格列显示隐藏
 				this.checkedName = data;
 			},
-			sizeChange(val) {//分页，总页数
-		      this.page.pageSize = val;
-		      this.requestData();
-		    },
-		    currentChange(val) {//分页，当前页
-		      this.page.currentPage = val;
-		      this.requestData();
-		    },
-		    	resetbtn(){
+			//改变页数
+			sizeChange(val) {
+				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+			//当前页数
+			currentChange(val) {
+				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+	    	resetbtn(){
 				this.searchList =  { //点击高级搜索后显示的内容
 					P_NUM: '',
 					P_NAME: '',
@@ -374,12 +391,12 @@
 			},
 			searchinfo(index) {//高级查询
 				this.page.currentPage = 1;
-				this.page.pageSize = 10;
+				this.page.pageSize = 20;
 				this.requestData();
 			},
 			//清空
 			reset(){
-			this.testing_projectForm = { //数据库列表
+				this.testing_projectForm = { //数据库列表
 					VERSION: '1',
 					STATUS: '活动',
 					P_NUM: '',
@@ -396,7 +413,7 @@
 					CHANGEDATE:'',	
 				};
 				if (this.$refs['testing_projectForm']!==undefined) {
-     			this.$refs['testing_projectForm'].resetFields();	
+     				this.$refs['testing_projectForm'].resetFields();	
  				}
 			},
 			//请求点击
@@ -621,11 +638,10 @@
 				this.selMenu = val;
 			},
 			requestData(index) {
-				this.loading = true;
+				this.loading = true;//加载动画打开
 				var data = {//高级查询数据显示
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-
 					P_NUM: this.searchList.P_NUM,
 					P_NAME: this.searchList.P_NAME,
 					VERSION: this.searchList.VERSION,
@@ -637,7 +653,6 @@
 					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;
-					
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
 					if(this.page.currentPage >= totalPage){
@@ -646,12 +661,18 @@
 						this.loadSign=true
 					}
 					this.projectList = res.data.data;
-					this.loading = false;
-				}).catch((wrong) => {})
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试1',
+						type: 'error'
+					});
+				})
 			},
-			handleNodeClick(data) {
-			},
-
+			
 			formatter(row, column) {
 				return row.enabled;
 			},
@@ -662,14 +683,14 @@
 			},
 			  //请求页面的button接口
 		    getbutton(childByValue){
-		    	console.log(childByValue);
+		    	// console.log(childByValue);
 		    	var data = {
 					menuId: childByValue.id,
 					roleId: this.$store.state.roleid,
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					console.log(res);
+					// console.log(res);
 					this.buttons = res.data;
 					
 				}).catch((wrong) => {

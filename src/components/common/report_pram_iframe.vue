@@ -6,7 +6,7 @@
 				
 					<!-- 报表信息 -->
 					<el-collapse>
-						<el-form-item v-for="item in pramList" :key="item.id" :label="item.label" :prop="item.param"  :style="{ width: item.width}" :id="item.label" v-if="item.required!='0'":rules="{required: true, message: '请填写', trigger: 'blur'}">
+						<el-form-item v-for="item in pramList" :key="item.id" :label="item.label" :prop="item.param"  :style="{ width: item.width}" :id="item.label" v-if="item.required != 0" :rules="{required: true, message: '请填写', trigger: 'blur'}">
 							<el-input v-model="dataInfo[item.param]" v-if="item.type!='1'&&item.type!='4'&&item.type!='3'">
 							</el-input> 
 							<el-date-picker v-model="dataInfo[item.param]" value-format="yyyy-MM-dd" v-if="item.type==1" >

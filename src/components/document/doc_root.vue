@@ -31,7 +31,12 @@
 						    		<i class="icon-arrow1-down" v-show="down"></i>
 						    		<i class="icon-arrow1-up" v-show="up"></i>
 								</button> -->
+<<<<<<< HEAD
 								<button type="button" v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+=======
+
+								<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
+>>>>>>> 2b0e440d4cb647aa355231ab3a222dde3ad37e89
 									<i :class="item.icon"></i>{{item.name}}
 								</button>
 							</div>

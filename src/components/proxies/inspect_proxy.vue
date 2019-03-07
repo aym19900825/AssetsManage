@@ -234,7 +234,8 @@
 		data() {
 			return {
 				reportData:{},//报表的数据
-				loading: false,
+				loadSign: true, //鼠标滚动加载数据
+				loading: false, //默认加载数据时显示loading动画
 				basic_url: Config.dev_url,
 				value: '',
 				options: [{
@@ -259,7 +260,6 @@
 				],
 				isShow: false,
 				ismin: true,
-				loadSign: true, //加载
 				commentArr: {},
 				checkedName: [
 					'检验委托书编号',
@@ -368,9 +368,9 @@
 					label: "fullname"
 				},
 				treeData: [],
-				page: {
+				page: { //分页显示
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				buttons:[],
@@ -409,48 +409,55 @@
 
 			//滚动加载更多
 			loadMore() {
-				// if(this.loadSign) {
-				// 	this.loadSign = false
-				// 	this.page.currentPage++
-				// 		if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-				// 			return
-				// 		}
-				// 	setTimeout(() => {
-				// 		this.loadSign = true
-				// 	}, 1000)
-				// 	this.requestData();
-				// }
 				let up2down = sessionStorage.getItem('up2down');
 				if(this.loadSign) {					
 					if(up2down=='down'){
-						this.page.currentPage++
+						this.page.currentPage++;
 						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
 							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
 							return false;
 						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
 					}else{
-						this.page.currentPage--
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
 						if(this.page.currentPage < 1) {
-							this.page.currentPage=1
+							this.page.currentPage=1;
 							return false;
 						}
 					}
 					this.loadSign = false;
 					setTimeout(() => {
-						this.loadSign = true
+						this.loadSign = true;
 					}, 1000)
-					this.requestData()
+					this.requestData();
 				}
 			},
 			sizeChange(val) {
 				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
 				this.requestData();
 			},
 			currentChange(val) {
 				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
 				this.requestData();
 			},
-				resetbtn(){
+			resetbtn(){
 				this.searchList =  { //点击高级搜索后显示的内容
 					V_NAME:'',
 					ITEM_NAME: '',
@@ -464,7 +471,7 @@
 			},
 			searchinfo(index) {
 				this.page.currentPage = 1;
-				this.page.pageSize = 10;
+				this.page.pageSize = 20;
 				this.requestData();
 			},
 				//请求点击
@@ -739,10 +746,11 @@
 				this.selUser = val;
 			},
 			requestData(index) {
-				this.loading = true;
+				this.loading = true;//加载动画打开
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
+
 					V_NAME:this.searchList.V_NAME,
 					ITEM_NAME: this.searchList.ITEM_NAME,
 					REPORT_NUM: this.searchList.REPORT_NUM,
@@ -767,20 +775,22 @@
 					} else {
 						this.loadSign = true
 					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
+					// this.commentArr[this.page.currentPage] = res.data.data
+					// let newarr = []
+					// for(var i = 1; i <= totalPage; i++) {
 
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+					// 	if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
 
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-
-					this.inspectList = newarr;
-					this.loading = false;
+					// 		for(var j = 0; j < this.commentArr[i].length; j++) {
+					// 			newarr.push(this.commentArr[i][j])
+					// 		}
+					// 	}
+					// }
+					this.inspectList = res.data.data;
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
 				}).catch((wrong) => {
 					this.$message({
 						message: '网络错误，请重试',

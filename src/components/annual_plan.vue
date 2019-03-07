@@ -127,11 +127,10 @@
 										</el-select>
 									</el-form-item>
 								</el-col>
-								
-										<el-col :span="4">
-										<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-										<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
-									</el-col>
+									<el-col :span="4">
+									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
+								</el-col>
 							</el-row>
 						</el-form>
 					</div>
@@ -240,10 +239,10 @@
 		data() {
 			return {
 				reportData:{},//报表的数据
-				loading: false,
+				loadSign: true, //鼠标滚动加载数据
+				loading: false,//默认加载数据时显示loading动画
 				basic_url: Config.dev_url,
 				ismin: true,
-				loadSign: true, //加载
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				checkedName: [
 					'编号',
@@ -343,30 +342,6 @@
 			}
 		},
 	methods: {
-		//表格滚动加载
-		loadMore () {
-			let up2down = sessionStorage.getItem('up2down');
-			if(this.loadSign) {					
-				if(up2down=='down'){
-					this.page.currentPage++
-					if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-						this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-						return false;
-					}
-				}else{
-					this.page.currentPage--
-					if(this.page.currentPage < 1) {
-						this.page.currentPage=1
-						return false;
-					}
-				}
-				this.loadSign = false;
-				setTimeout(() => {
-					this.loadSign = true
-				}, 1000)
-				this.requestData()
-			}
-		},
 		//表头居中
 		rowClass({ row, rowIndex}) {
 		    return 'text-align:center'
@@ -388,14 +363,58 @@
 			test(){
 				console.log(this.checkedName.indexOf('账号')!=-1);
 			},
-			sizeChange(val) {//分页，总页数
-		      this.page.pageSize = val;
-		      this.requestData();
-		    },
-		    currentChange(val) {//分页，当前页
-		      this.page.currentPage = val;
-		      this.requestData();
-		    },
+			//表格滚动加载
+			loadMore() {
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++;
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
+					}else{
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1;
+							return false;
+						}
+					}
+					this.loadSign = false;
+					setTimeout(() => {
+						this.loadSign = true;
+					}, 1000)
+					this.requestData();
+				}
+			},
+			//改变页数
+			sizeChange(val) {
+				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+			//当前页数
+			currentChange(val) {
+				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
 			searchinfo(index) {//高级查询
 				this.page.currentPage = 1;
 				this.page.pageSize = 20;
@@ -718,7 +737,7 @@
 				this.selUser = val;
 			},
 			requestData(index) {
-				this.loading = true;
+				this.loading = true;//加载动画打开
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -735,7 +754,14 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					this.page.totalCount = res.data.count || 0;
+					this.page.totalCount = res.data.count;//页码赋值
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false;
+					} else {
+						this.loadSign = true;
+					}
 					var list = res.data.data || [];
 					for(var i=0;i<list.length;i++){
 						if(list[i].TYPE  == '1'){
@@ -745,7 +771,10 @@
 						}
 					}
 					this.userList = list;
-					this.loading = false;
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
 				}).catch((wrong) => {
 					this.$message({
 						message: '网络错误，请重试1',

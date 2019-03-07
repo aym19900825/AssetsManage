@@ -94,7 +94,7 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="创建人"  label-width="110px">
-												<el-input v-model="numbsetForm.createuser" :disabled="true"></el-input>
+												<el-input v-model="numbsetForm.createuserDesc" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -104,7 +104,7 @@
 										</el-col>
 										<el-col :span="8">
 										<el-form-item label="变更人" label-width="80px">
-												<el-input v-model="numbsetForm.updateuser" :disabled="true"></el-input>
+												<el-input v-model="numbsetForm.updateuserDesc" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -233,11 +233,17 @@
 					splicingformat:'',
 					serialnum:'',
 					retain:'',
+					createuser:'',
+					createuserDesc:'',
+					updateuser:'',
+					updateuserDesc:''
 				}
             },
             childMethods() {//添加内容时从父组件带过来的
             	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					this.numbsetForm.createuser=res.data.nickname;
+					console.log(res.data);
+					this.numbsetForm.createuser=res.data.id;
+					this.numbsetForm.createuserDesc=res.data.nickname;
 					var date=new Date();
 					this.numbsetForm.createtime = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 				}).catch((err)=>{
@@ -261,7 +267,9 @@
             },
             detail() {//修改内容时从父组件带过来的
             	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					this.numbsetForm.updateuser=res.data.nickname;
+					console.log(res.data);
+					this.numbsetForm.updateuser=res.data.id;
+					this.numbsetForm.updateuserDesc=res.data.nickname;
 					var date=new Date();
 					this.numbsetForm.updatetime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{

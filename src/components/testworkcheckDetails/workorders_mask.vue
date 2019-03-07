@@ -710,7 +710,6 @@
 												</el-table-column>
 												<el-table-column fixed="right" label="操作" width="150px">
 													<template slot-scope="scope">
-														 
 													  <el-button title="编辑" type="text" size="small">
 														<i class="icon-edit2"></i>
 													  </el-button>
@@ -912,7 +911,7 @@
 			</div>
 			<!--人员信息 Begin-->
 			<el-dialog :modal-append-to-body="false" title="人员信息" :visible.sync="dialogVisible2" width="80%">
-				<div class="scrollbar" style="max-height: 400px;">
+				<div class="scrollbar" style="max-height: 360px;">
 					<el-table :data="userList" border stripe :header-cell-style="rowClass"  style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore('user')">
 						<el-table-column type="selection" width="55" fixed align="center">
 						</el-table-column>
@@ -1974,15 +1973,22 @@
 						res.data.WORKORDER_DATA_TEMPLATEList[i].FILE_ORGCHECKED = false;
 						res.data.WORKORDER_DATA_TEMPLATEList[i].isEditing = false;
 					}
+					
 					for(var i = 0;i<this.workorderForm.WORKORDER_REPORTList.length;i++){
 						if(this.workorderForm.WORKORDER_REPORTList[0].ISCREATED == '1'){
 							this.btnshow = false;
 						}
 					}
+					for(var i = 0;i<this.workorderForm.WORKORDER_CONTRACTList.length;i++){
+						this.workorderForm.WORKORDER_CONTRACTList[i].INSPECT_GROUP = Number(this.workorderForm.WORKORDER_CONTRACTList[i].INSPECT_GROUP);
+					}
 					res.data.CJDW = Number(res.data.CJDW);
 					res.data.ITEM_PROFESSIONAL_GROUP = Number(res.data.ITEM_PROFESSIONAL_GROUP);
 					this.RVENDORSelect(res.data.CJDW);
 					this.workorderForm = res.data;
+					for(var i = 0;i<this.workorderForm.WORKORDER_CONTRACTList.length;i++){
+						this.workorderForm.WORKORDER_CONTRACTList[i].INSPECT_GROUP = Number(this.workorderForm.WORKORDER_CONTRACTList[i].INSPECT_GROUP);
+					}
 					console.log(res.data);
 					this.show = true;
 				}).catch((err) => {

@@ -330,38 +330,38 @@
 			</div>
 
 			<!--委托书编号-弹出框 Begin-->
-			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
-				<el-table :data="gridData" height="400px" @selection-change="SelChange">
-						<el-table-column type="selection" width="55" fixed >
-						</el-table-column>
-						<el-table-column label="检验委托书编号" sortable width="140px" prop="PROXYNUM" >
-						</el-table-column>
-						<el-table-column label="委托单位名称" sortable width="140px" prop="V_NAME">
-						</el-table-column>
-						<el-table-column label="生产单位名称" sortable width="140px" prop="P_NAME">
-						</el-table-column>
-						<el-table-column label="样品名称" sortable width="200px" prop="ITEM_NAME">
-						</el-table-column>
-						<el-table-column label="样品型号" sortable width="150px" prop="ITEM_MODEL">
-						</el-table-column>
-						<el-table-column label="样品信息状态" sortable width="200px" prop="ITEM_STATUS">
-						</el-table-column>
-						<el-table-column label="检测依据" width="200px" prop="REMARKS" sortable>
-						</el-table-column>
-						<el-table-column label="完成日期" width="200px" prop="COMPDATE" sortable :formatter="dateFormat" type="date" >
-						</el-table-column>
-						<el-table-column label="完成方式" width="200px" prop="COMPMODE" sortable >
-						</el-table-column>
-						<el-table-column label="检测报告编号" width="200px" prop="REPORT_NUM" sortable >
-						</el-table-column>
-						<el-table-column label="主检组" width="200px" prop="MAINGROUP" sortable >
-						</el-table-column>
-							<!--<el-table-column label="信息状态" width="200px" prop="STATUS" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
-							</el-table-column>-->
-					</el-table>	
+			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose1">
+				<el-table :data="gridDataList" height="400px" @selection-change="SelChange">
+					<el-table-column type="selection" width="55" fixed >
+					</el-table-column>
+					<el-table-column label="检验委托书编号" sortable width="140px" prop="PROXYNUM" >
+					</el-table-column>
+					<el-table-column label="委托单位名称" sortable width="140px" prop="V_NAME">
+					</el-table-column>
+					<el-table-column label="生产单位名称" sortable width="140px" prop="P_NAME">
+					</el-table-column>
+					<el-table-column label="样品名称" sortable width="200px" prop="ITEM_NAME">
+					</el-table-column>
+					<el-table-column label="样品型号" sortable width="150px" prop="ITEM_MODEL">
+					</el-table-column>
+					<el-table-column label="样品信息状态" sortable width="200px" prop="ITEM_STATUS">
+					</el-table-column>
+					<el-table-column label="检测依据" width="200px" prop="REMARKS" sortable>
+					</el-table-column>
+					<el-table-column label="完成日期" width="200px" prop="COMPDATE" sortable :formatter="dateFormat" type="date" >
+					</el-table-column>
+					<el-table-column label="完成方式" width="200px" prop="COMPMODE" sortable>
+					</el-table-column>
+					<el-table-column label="检测报告编号" width="200px" prop="REPORT_NUM" sortable>
+					</el-table-column>
+					<el-table-column label="主检组" width="200px" prop="MAINGROUP" sortable >
+					</el-table-column>
+					<!--<el-table-column label="信息状态" width="200px" prop="STATUS" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
+					</el-table-column>-->
+				</el-table>	
 					<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 					</el-pagination>
-				<div slot="footer" class="el-dialog__footer">
+				<div slot="footer">
 	    			<el-button type="primary" @click="dailogconfirm()">确 定</el-button>
 	    			<el-button @click="dialogVisible = false">取 消</el-button>
 	  			</div>
@@ -369,7 +369,7 @@
 			<!--委托书编号-弹出框 Begin-->
 
 			<!-- 类别-弹出框 Begin -->
-			<el-dialog :modal-append-to-body="false" title="产品类别" height="300px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="产品类别" height="300px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose2">
 				<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" fixed width="55" align="center">
 					</el-table-column>
@@ -388,7 +388,7 @@
 				</el-table>
 				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
-				<div slot="footer" class="el-dialog__footer">
+				<div slot="footer">
 			       <el-button type="primary" @click="addproclass">确 定</el-button>
 			       <el-button @click="dialogVisible3 = false">取 消</el-button>
 			    </div>
@@ -396,7 +396,7 @@
 			<!-- 类别-弹出框 End -->
 
 			<!-- 收样人、接样人-弹出框 Begin -->
-			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible4" height="300px" width="80%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible4" height="300px" width="80%" :before-close="handleClose3">
 				<el-table :data="userList" border stripe :header-cell-style="rowClass" height="300px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" width="55" fixed align="center">
 					</el-table-column>
@@ -415,7 +415,7 @@
 				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 
-				<div slot="footer" class="el-dialog__footer">
+				<div slot="footer">
 			       <el-button type="primary" @click="addPerson">确 定</el-button>
 			       <el-button @click="dialogVisible4 = false">取 消</el-button>
 			    </div>
@@ -544,7 +544,7 @@
 				categoryList:[],
 				userList:[],
 				//Tree树菜单数据
-				gridData: [], //彈出框的數據
+				gridDataList: [], //彈出框的數據
 				isEditing: false,
 				commentArr:{},//下拉加载
 				tips:'1',
@@ -674,7 +674,7 @@
 				var url = this.basic_url + '/api-apps/app/inspectPro';
 				this.$axios.get(url, {}).then((res) => {
 					// console.log(res.data);
-					this.gridData= res.data.data;
+					this.gridDataList= res.data.data;
 				});
 				this.dialogVisible = true;
 			},
@@ -695,7 +695,8 @@
 					this.samplesForm.PRODUCT_CODE=this.selval[0].ITEM_ID;//产品标识代码
 					this.samplesForm.MODEL=this.selval[0].ITEM_MODEL;
 					this.samplesForm.QUATITY=this.selval[0].ITEM_QUALITY;
-					this.dialogVisible = false;
+					// this.dialogVisible = false;
+
 				}else if(this.selval.length > 1){
 					this.$message({
 						message:'不可选择多条数据',
@@ -703,25 +704,17 @@
 					})
 				}
 			},
-
+			resetBasisInfo1(){//点击确定或取消按钮时重置数据20190303
+				this.dialogVisible = false;//关闭弹出框
+				this.categoryList = [];//列表数据置空
+				this.page.currentPage = 1;//页码重新传值
+				this.page.pageSize = 10;//页码重新传值
+			},
 			SelChange(val) {
 				this.selval = val;
 			},
-		
-			//小弹出框关闭按钮事件
-			handleClose(done) {
-				this.$confirm('确认关闭？')
-					.then(_ => {
-						done();
-					})
-					.catch(_ => {
-				console.log('取消关闭');
-				$('.v-modal').hide();
-			});
-			},
-			
 			visible() {//添加内容时从父组件带过来的
-				this.samplesForm.ACCEPT_DATE =  '2018-10-10';//收样日期
+				this.samplesForm.ACCEPT_DATE =  '';//收样日期
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.samplesForm.DEPTID = res.data.deptId;
 					this.samplesForm.ENTERBY = res.data.id;
@@ -1100,7 +1093,7 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(res);
+					// console.log(res);
 					//this.userList = res.data.data;
 					this.page.totalCount = res.data.count;
 					//总的页数
@@ -1133,16 +1126,38 @@
 					console.log('请求失败');
 				})
 			},
-			handleClose(done) { //大弹出框确定关闭按钮
+			handleClose1(done) { //大弹出框确定关闭按钮
 				this.$confirm('确认关闭？')
 					.then(_ => {
 						done();
 					})
 					.catch(_ => {
 				console.log('取消关闭');
-				$('.v-modal').hide();
-			});
-			}
+					$('.v-modal').hide();
+				});
+			},
+			//小弹出框关闭按钮事件
+			handleClose2(done) {
+				this.$confirm('确认关闭？')
+					.then(_ => {
+						done();
+					})
+					.catch(_ => {
+				console.log('取消关闭');
+					$('.v-modal').hide();
+				});
+			},
+			//小弹出框关闭按钮事件
+			handleClose3(done) {
+				this.$confirm('确认关闭？')
+					.then(_ => {
+						done();
+					})
+					.catch(_ => {
+				console.log('取消关闭');
+					$('.v-modal').hide();
+				});
+			},
 		},
 		mounted() {
 			this.getType();

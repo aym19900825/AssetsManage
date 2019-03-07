@@ -54,7 +54,10 @@
 								</el-col>
 								<el-col :span="6">
 									<el-form-item label="所属应用ID" prop="menuIdDesc">
-										<el-input v-model="searchList.menuIdDesc"></el-input>
+										<!-- <el-input v-model="searchList.menuIdDesc"></el-input> -->
+										<el-select v-model="searchList.menuIdDesc" :disabled="noedit" style="width: 100%">
+											<el-option v-for="item in selectData" :key="item.id" :value="item.id" :label="item.name" :class="item.name"></el-option>
+										</el-select>
 									</el-form-item>
 								</el-col>
 								<el-col :span="4">
@@ -146,6 +149,7 @@
 			return {
 				reportData:{},//报表的数据
 				scroll_old:0,
+				selectData: [],
 				// up2down:'down',
 				reportData:{},//报表的数据
 				basic_url: Config.dev_url,
@@ -291,6 +295,20 @@
 					sessionStorage.setItem('toBtm','false');
 				}
 				this.requestData();
+			},
+			//获取按钮颜色
+			getMenuId(){
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=BTNCOLOR';
+				this.$axios.get(url, {}).then((res) => {
+					// console.log(res);
+					this.selectData = res.data;
+					
+				}).catch((wrong) => {
+					this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+				})	
 			},
 			//重置
 			resetbtn(){
@@ -524,6 +542,7 @@
 		},
 		mounted() {
 			this.requestData();
+			this.getMenuId();
 		}
 	}
 </script>

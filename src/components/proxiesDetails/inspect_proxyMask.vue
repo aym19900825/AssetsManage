@@ -652,21 +652,21 @@
 				</div>
 			</div>
 			<!-- 分包方名称 -->
-			<el-dialog :modal-append-to-body="false" title="分包方名称" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="分包方名称" :visible.sync="dialogVisible" width="30%" :before-close="handleClose1">
 				<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" default-expand-all @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
 				</el-tree>
-				<span slot="footer" class="dialog-footer">
-			       <el-button @click="dialogVisible = false">取 消</el-button>
-			       <el-button type="primary" @click="queding();" >确 定</el-button>
-			    </span>
+				<div slot="footer">
+			       <el-button type="primary" @click="queding">确 定</el-button>
+			       <el-button @click="resetBasisInfo1">取 消</el-button>
+			    </div>
 			</el-dialog>
-			<!-- 客户联系人 Begin -->
-			<el-dialog :modal-append-to-body="false" title="客户联系人" :visible.sync="dialogVisibleuser" width="80%" :before-close="handleClose">
+			<!-- 客户联系人\姓名 Begin -->
+			<el-dialog :modal-append-to-body="false" title="客户联系人" :visible.sync="dialogVisibleuser" width="80%" :before-close="handleClose2">
 				<el-table :header-cell-style="rowClass" :data="CUSTOMER_PERSONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @selection-change="SelChange" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER_PERSONList', order: 'descending'}" v-loadmore="loadMore"
-			v-loading="loading" 
-			element-loading-text="加载中…"
-			element-loading-spinner="el-icon-loading"
-			element-loading-background="rgba(255, 255, 255, 0.9)">
+				v-loading="loading" 
+				element-loading-text="加载中…"
+				element-loading-spinner="el-icon-loading"
+				element-loading-background="rgba(255, 255, 255, 0.9)">
 					<el-table-column type="selection" width="55" fixed align="center">
 					</el-table-column>
 					<el-table-column label="联系人" sortable width="150px" prop="PERSON">
@@ -681,10 +681,11 @@
 				
 				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
-				<span slot="footer" class="dialog-footer">
+
+				<div slot="footer">
 			       <el-button type="primary" @click="addcusname">确 定</el-button>
-			       <el-button @click="DialogClose">取 消</el-button>
-			    </span>
+			       <el-button @click="resetBasisInfo2">取 消</el-button>
+			    </div>
 			</el-dialog>
 			<!-- 客户联系人 End -->
 			<!-- 样品名称  -->
@@ -706,7 +707,7 @@
 			<!-- 产品名称  -->
 			<productmask ref="productchild" @appenddata="appenddata"></productmask>
 			<!-- 检验依据  -->
-			<teststandardmask ref="standardchild" @testbasis="addbasis" @testbasisnum="testbasisnum" @testbasisname="testbasisname" @testbasisprover="testbasisprover"></teststandardmask>
+			<teststandardmask ref="standardchild" @testbasis="testbasis" @testbasisnum="testbasisnum" @testbasisname="testbasisname" @testbasisprover="testbasisprover"></teststandardmask>
 			<!-- 检验项目  -->
 			<testprojectmask ref="projectchild" @testproject="addproject" @testprojectnum="testprojectnum" @testprojectid="testprojectid" @testprojectname="testprojectname" @testprojectprover = "testprojectprover"></testprojectmask>
 		</div>
@@ -714,7 +715,7 @@
 </template>
 
 <script>
-	import { Loading } from 'element-ui'
+	// import { Loading } from 'element-ui'
 	import Config from '../../config.js';
 	import sampletmask from '../common/common_mask/samplemask.vue'//样品名称
 	import enterprisemask from '../common/common_mask/enterprisemask.vue'//企业
@@ -871,7 +872,7 @@
 						}
 					],
 				},
-				gridData: [], //彈出框的數據
+				gridDataList: [], //彈出框的數據
 				page: {
 					currentPage: 1,
 					pageSize: 10,
@@ -976,6 +977,7 @@
 			};
 		},
 		methods: {
+			testbasis(){},
 			handleNodeClick(data) { //获取勾选树菜单节点
 			},
 			handleClicks(data,checked, indeterminate) {
@@ -1424,7 +1426,7 @@
 					}
 				});
 			},
-			addcategory(val){//产品类别
+			addcategory(val){//分包方名称
 				this.deptindex = val;
 				if(val == 'maintable'){
 					if(this.dataInfo.R_VENDOR == null || this.dataInfo.R_VENDOR == '' || this.dataInfo.R_VENDOR == undefined){
@@ -1535,6 +1537,7 @@
 						this.$refs.standardchild.basislead(this.sendchilddata);
 						this.main = 'main';
 						this.sendchilddata = [];
+						this.deptindex = {};
 					}
 				}else{
 					if(this.deptindex.PRO_NUM == null || this.deptindex.PRO_NUM == '' || this.deptindex.PRO_NUM == undefined){
@@ -1571,6 +1574,7 @@
 			},
 			//分包要求检验依据名称
 			testbasisname(value){
+				console.log(this.deptindex);
 				this.deptindex.BASIS = value;
 			},
 			//检测依据编号+版本
@@ -1592,6 +1596,7 @@
 						this.$refs.projectchild.projectlead(this.sendchilddata);
 						this.main = 'main';
 						this.sendchilddata = [];
+						this.deptindex = {};
 					}
 				}else{
 					if(this.deptindex.S_NUM == null || this.deptindex.S_NUM == '' || this.deptindex.S_NUM == undefined){
@@ -1769,15 +1774,25 @@
 			        }
 				});
 			},
-			handleClose(done) {
+			handleClose1(done) {
 				this.$confirm('确认关闭？')
 					.then(_ => {
-						done();
+						this.resetBasisInfo1();
 					})
 					.catch(_ => {
 				console.log('取消关闭');
-				$('.v-modal').hide();
-			});
+					$('.v-modal').hide();
+				});
+			},
+			handleClose2(done) {
+				this.$confirm('确认关闭？')
+					.then(_ => {
+						this.resetBasisInfo2();
+					})
+					.catch(_ => {
+				console.log('取消关闭');
+					$('.v-modal').hide();
+				});
 			},
 			visablemaingroup:function(callback){    //只有回调参数为false时才触发 ctx.getAreaListDataSearch(vc,1)这个函数;
 			    if(callback){
@@ -1876,10 +1891,34 @@
 					this.$axios.get(url, {
 						params: data
 					}).then((res) => {
+						this.page.totalCount = res.data.count;
+						//总的页数
+						let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
+						if(this.page.currentPage >= totalPage){
+							 this.loadSign = false
+						}else{
+							this.loadSign=true
+						}
+
 						this.CUSTOMER_PERSONList = res.data.CUSTOMER_PERSONList;
 						this.loading = false;
 					});
 					this.dialogVisibleuser = true;
+			},
+			queding(){
+				if(this.selval.length == 0){
+					this.$message({
+						message: '请选择数据',
+						type: 'warning'
+					});
+				}else if(this.selval.length > 1){
+					this.$message({
+						message: '不可同时选择多条数据',
+						type: 'warning'
+					});
+				}else{
+					this.resetBasisInfo1();//调用resetBasisInfo函数
+				}
 			},
 			addcusname(){
 				if(this.selval.length == 0){
@@ -1896,13 +1935,16 @@
 					this.dataInfo.V_PERSON = this.selval[0].PERSON;
 					this.dataInfo.V_PHONE = this.selval[0].PHONE;
 					// this.dialogVisibleuser = false;
-					this.resetBasisInfo();//调用resetBasisInfo函数
+					this.resetBasisInfo2();//调用resetBasisInfo函数
 				}
 			},
-			DialogClose(){//点击取消按钮
-				this.resetBasisInfo();//调用resetBasisInfo函数
+			resetBasisInfo1(){//点击确定或取消按钮时重置数据20190303
+				this.dialogVisible = false;//关闭弹出框
+				this.resourceData = [];//列表数据置空
+				this.page.currentPage = 1;//页码重新传值
+				this.page.pageSize = 10;//页码重新传值
 			},
-			resetBasisInfo(){//点击确定或取消按钮时重置数据20190303
+			resetBasisInfo2(){//点击确定或取消按钮时重置数据20190303
 				this.dialogVisibleuser = false;//关闭弹出框
 				this.CUSTOMER_PERSONList = [];//列表数据置空
 				this.page.currentPage = 1;//页码重新传值

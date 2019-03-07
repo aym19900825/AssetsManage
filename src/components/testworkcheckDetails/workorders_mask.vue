@@ -704,7 +704,7 @@
 														<!-- <el-form-item :prop="'WORKORDER_REPORTList.'+scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" > -->
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入">
 														</el-input>
-														<span v-else>{{scope.row.MOVERSIONDEL}}</span>
+														<span v-else>{{scope.row.VERSION}}</span>
 														<!-- </el-form-item> -->
 													</template>
 												</el-table-column>
@@ -1897,16 +1897,29 @@
 						this.openwrite();
 					}else{
 						console.log(this.reportname);
-						var url = this.basic_url +"/api-merge/merge/workorder/MergeWord?filePath="+ids+"&fileName="+this.reportname+"&proxynum="+this.workorderForm.PROXYNUM+"&wonum="+this.workorderForm.WONUM+"&deptfullname="+this.workorderForm.DEPTIDDesc+"&recordid="+this.workorderForm.ID;
-						this.$axios.post(url, {}).then((res) => {
+						// var url = this.basic_url +"/api-merge/merge/workorder/MergeWord?filePath="+ids+"&fileName="+this.reportname+"&proxynum="+this.workorderForm.PROXYNUM+"&wonum="+this.workorderForm.WONUM+"&deptfullname="+this.workorderForm.DEPTIDDesc+"&recordid="+this.workorderForm.ID;
+						var url = this.basic_url +"/api-merge/merge/workorder/MergeWord";
+						
+						this.$axios.post(url, {
+
+								"filePath":ids,
+								"fileName":this.reportname,
+								"proxynum":this.workorderForm.PROXYNUM,
+								"wonum":this.workorderForm.WONUM,
+								"deptfullname":this.workorderForm.DEPTIDDesc,
+								"recordid":this.workorderForm.ID
+
+						}).then((res) => {
 							this.workorderreportid = res.data.datas.id;
 							console.log(res);
+							console.log()
 							var obj = {
 								REPORTNUM:res.data.datas.reportnum,
 								REPORTNAME:res.data.datas.reportname,
 								// PREVIEW:'',
 								VERSION:res.data.datas.version,
 							}
+							console.log(obj);
 							this.workorderForm.WORKORDER_REPORTList.push(obj);
 							console.log(this.workorderForm.WORKORDER_REPORTList);
 							if(res.data.resp_code == 0) {

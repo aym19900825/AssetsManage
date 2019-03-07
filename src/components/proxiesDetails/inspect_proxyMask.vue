@@ -1116,7 +1116,7 @@
 			//生成工作任务单
 			build(){
 				var dataid = this.dataInfo.ID;
-					var Url = this.basic_url + '/api-apps/app/inspectPro/operate/createWorkorder?ID='+dataid;
+					var Url = this.basic_url + '/api-apps/app/inspectPro/operate/createWorkorder?ID='+dataid+'&fileUrl='+Config.file_url;
 					this.$axios.get(Url, {}).then((res) => {
 						if(res.data.resp_code == 0) {
 							this.$message({

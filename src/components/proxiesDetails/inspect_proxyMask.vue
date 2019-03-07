@@ -707,7 +707,7 @@
 			<!-- 产品名称  -->
 			<productmask ref="productchild" @appenddata="appenddata"></productmask>
 			<!-- 检验依据  -->
-			<teststandardmask ref="standardchild" @testbasis="testbasis" @testbasisnum="testbasisnum" @testbasisname="testbasisname" @testbasisprover="testbasisprover"></teststandardmask>
+			<teststandardmask ref="standardchild" @testbasis="addbasis" @testbasisnum="testbasisnum" @testbasisname="testbasisname" @testbasisprover="testbasisprover"></teststandardmask>
 			<!-- 检验项目  -->
 			<testprojectmask ref="projectchild" @testproject="addproject" @testprojectnum="testprojectnum" @testprojectid="testprojectid" @testprojectname="testprojectname" @testprojectprover = "testprojectprover"></testprojectmask>
 		</div>
@@ -1574,7 +1574,7 @@
 			},
 			//分包要求检验依据名称
 			testbasisname(value){
-				console.log(this.deptindex);
+				console.log('testbasisname');
 				this.deptindex.BASIS = value;
 			},
 			//检测依据编号+版本
@@ -1596,7 +1596,7 @@
 						this.$refs.projectchild.projectlead(this.sendchilddata);
 						this.main = 'main';
 						this.sendchilddata = [];
-						this.deptindex = {};
+						// this.deptindex = {};
 					}
 				}else{
 					if(this.deptindex.S_NUM == null || this.deptindex.S_NUM == '' || this.deptindex.S_NUM == undefined){

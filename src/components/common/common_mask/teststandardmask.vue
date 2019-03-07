@@ -119,7 +119,7 @@
 			</el-pagination>
 			<!-- 第二层弹出的表格 End -->
 			<div slot="footer">
-				<el-button type="primary" @click="addbasis">确 定123456</el-button>
+				<el-button type="primary" @click="addbasis">确 定</el-button>
 		       <el-button @click="resetBasisInfo">取 消</el-button>
 		    </div>
 		</el-dialog>
@@ -220,7 +220,6 @@
 		this.resetBasisInfo();
     },
     basislead(value){
-		// console.log(value);
 		this.productnum = value[0];//产品编号
 		if(value[1]!=''&&value[1]!=null&&value[1]!=undefined){
 			this.basistable = value[1];//检测依据表格中已有的数据
@@ -237,7 +236,6 @@
     },
     addbasis(){
         var selData = this.selUser;
-        console.log(selData);
         if(selData.length == 0) {
             this.$message({
                 message: '请选择数据',
@@ -311,7 +309,6 @@
             // STATUS: this.searchList.STATUS,
 		};
 		var url = this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.productnum+'&S_NUM_where_not_in='+this.basissnums;
-		console.log(url);
         this.$axios.get(url, {
             
         }).then((res) => {

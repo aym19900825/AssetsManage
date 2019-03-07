@@ -158,7 +158,7 @@
 							</el-row>
 						</el-form>
 
-					<el-table :header-cell-style="rowClass" :data="gridData" line-center border stripe height="350px" style="width: 100%;" :default-sort="{prop:'gridData', order: 'descending'}" @selection-change="SelChange"
+					<el-table :header-cell-style="rowClass" :data="gridDataList" line-center border stripe height="350px" style="width: 100%;" :default-sort="{prop:'gridDataList', order: 'descending'}" @selection-change="SelChange"
 					v-loadmore="loadMore"
 					v-loading="loading"  
 					element-loading-text="加载中…"
@@ -278,7 +278,7 @@
                 },
                 dialogPerson:false,//人员信息弹出框
                 pertips:'',//选择人员参数
-                gridData: [], //人员彈出框的數據
+                gridDataList: [], //人员彈出框的數據
                 searchList:{
                     nickname:''
                 },
@@ -494,7 +494,7 @@
 					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;
-					this.gridData = res.data.data;
+					this.gridDataList = res.data.data;
 					this.loading = false;
 				});
 				this.dialogPerson = true;	
@@ -529,7 +529,7 @@
 			},
 			resetBasisInfo(){//点击确定或取消按钮时重置数据20190303
 				this.dialogPerson = false;//关闭弹出框
-				this.gridData = [];//列表数据置空
+				this.gridDataList = [];//列表数据置空
 				this.page.currentPage = 1;//页码重新传值
 				this.page.pageSize = 10;//页码重新传值
 			},

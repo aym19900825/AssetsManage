@@ -73,7 +73,7 @@
 			</el-pagination>
 			<span slot="footer">
 			   <el-button type="primary" @click="determine">确 定</el-button>
-		       <el-button @click="DialogClose">取 消</el-button>
+		       <el-button @click="resetBasisInfo">取 消</el-button>
 		    </span>
 		</el-dialog>
 	</div>
@@ -226,9 +226,7 @@
 			this.resetBasisInfo();//调用resetBasisInfo函数
 		}
 	},
-	DialogClose(){//点击取消按钮
-		this.resetBasisInfo();//调用resetBasisInfo函数
-	},
+	
 	resetBasisInfo(){//点击确定或取消按钮时重置数据20190303
 		this.dialoginspect = false;//关闭弹出框
 		this.inspectList = [];//列表数据置空

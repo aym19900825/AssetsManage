@@ -17,9 +17,8 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form :model="dataInfo" :rules="rules"   ref="dataInfo" label-width="100px" class="demo-user">
+					<el-form :model="dataInfo" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
 						<div class="content-accordion">
-
 							<!-- 设备基本信息 -->
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="设备基本信息" name="1">
@@ -54,8 +53,8 @@
 								<!-- 设备保管人员情况 -->
 								<el-collapse-item title="设备保管人员情况" name="2">
 									<el-form-item v-for="item in keeperInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
-										<el-input v-model="dataInfo[item.prop]" v-if="item.type=='input'&&item.prop =='KEEPER'" :type="item.type"  :disabled="true">
-											<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="addPeople"></el-button>
+										<el-input v-model="dataInfo[item.prop]" v-if="item.type=='input'&&item.prop =='KEEPER'" :type="item.type" :disabled="true">
+											<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addPeople"></el-button>
 										</el-input>
 										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'&&item.prop!='KEEPER'" :disabled="noedit"></el-input>
 									</el-form-item>
@@ -122,9 +121,9 @@
 				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 
-				<div slot="footer" class="el-dialog__footer" v-if="noviews">
-	    			<el-button type="primary" @click="addpeoname()">确 定</el-button>
-	    			<el-button @click="dialogVisible = false">取 消</el-button>
+				<div slot="footer" v-if="noviews">
+	    			<el-button type="primary" @click="addpeoname">确 定</el-button>
+	    			<el-button @click="resetBasisInfo">取 消</el-button>
 	  			</div>
 			</el-dialog>
 			<!--设备保管人 End-->
@@ -673,7 +672,6 @@
 			},
 			handlePrice(){
 				this.dataInfo.A_PRICE = parseFloat(this.dataInfo.A_PRICE).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-				console.log(this.dataInfo.A_PRICE);
 			},
 			//机构值
 			getCompany() {
@@ -684,14 +682,21 @@
 						type: type
 					},
 				}).then((res) => {
-					console.log(res.data);
 					this.selectData = res.data;
 				});
 			},
+			//设备保管人员情况
 			addPeople(){
-				console.log(123);
-				this.getuserinfo();
-				this.dialogVisible = true;
+				var CONFIG_UNIT=this.dataInfo.CONFIG_UNIT;
+				if(CONFIG_UNIT==""||CONFIG_UNIT=="undenfiend"){
+					this.$message({
+						message: '请先选委托单位名称',
+						type: 'warning'
+					});
+				}else{
+					this.getuserinfo();
+					this.dialogVisible = true;
+				}
 			},
 			addpeoname(){
 				if(this.selUser.length == 0){
@@ -706,9 +711,15 @@
 					});
 				}else{
 					this.dataInfo.KEEPER = this.selUser[0].nickname;
-					this.dialogVisible = false;		
-					this.getuserinfo();			
+					this.getuserinfo();
+					this.resetBasisInfo();//调用resetBasisInfo函数
 				}
+			},
+			resetBasisInfo(){//点击确定或取消按钮时重置数据20190303
+				this.dialogVisible = false;//关闭弹出框
+				this.userList = [];//列表数据置空
+				this.page.currentPage = 1;//页码重新传值
+				this.page.pageSize = 10;//页码重新传值
 			},
 			SelChange(val) {
 				this.selUser = val;
@@ -728,11 +739,11 @@
 			 },
 			 sizeChange(val) {
 				this.page.pageSize = val;
-				//				this.requestData();
+				//this.requestData();
 			},
 			currentChange(val) {
 				this.page.currentPage = val;
-				//				this.requestData();
+				//this.requestData();
 			},
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -923,12 +934,12 @@
 			handleClose(done) {
 				this.$confirm('确认关闭？')
 					.then(_ => {
-						done();
+						this.resetBasisInfo();//调用resetBasisInfo函数
 					})
 					.catch(_ => {
 				console.log('取消关闭');
-				$('.v-modal').hide();
-			});
+					$('.v-modal').hide();
+				});
 			},
 			maxDialog(e) { //定义大弹出框一个默认大小
 				this.isok1 = false;

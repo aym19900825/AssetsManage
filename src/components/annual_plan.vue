@@ -129,7 +129,7 @@
 						<div id="middle"></div>
 						<el-col :span="19" class="leftcont" id="right">
 							<!-- 表格 -->
-							<el-table :header-cell-style="rowClass" 
+							<el-table ref="table" :header-cell-style="rowClass" 
 									  :data="userList" 
 									  border 
 									  stripe 

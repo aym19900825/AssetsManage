@@ -72,7 +72,7 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格 Begin-->
-							<el-table :header-cell-style="rowClass" 
+							<el-table ref="table" :header-cell-style="rowClass" 
 									  :data="USESEAL" 
 									  border 
 									  stripe 

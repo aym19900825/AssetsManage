@@ -123,7 +123,7 @@
 			</div>
 			<!--搜索框 End-->
 			<!-- 第二层弹出的表格 Begin-->
-			<el-table :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.S_NUM.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+			<el-table ref="table" :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.S_NUM.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 				<el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column>
 				<el-table-column label="标准编码" width="155" sortable prop="S_NUM">

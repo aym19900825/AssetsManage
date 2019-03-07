@@ -217,7 +217,7 @@
 				
 				page: {
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				samplesForm: {}, //修改子组件时传递数据
@@ -280,7 +280,7 @@
 			
 			searchinfo() {
 				this.page.currentPage = 1;
-				this.page.pageSize = 10;
+				this.page.pageSize = 20;
 				this.requestData();
 			},
 			//添加样品管理

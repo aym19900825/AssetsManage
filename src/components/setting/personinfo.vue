@@ -223,7 +223,7 @@
 										</form>
 									</div>
 									<!-- <el-form :label-position="labelPosition" :rules="rules"> -->
-										<el-table :header-cell-style="rowClass" :fig="true" :data="personinfo.qualifications" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'personinfo.qualifications', order: 'descending'}">
+										<el-table ref="table" :header-cell-style="rowClass" :fig="true" :data="personinfo.qualifications" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'personinfo.qualifications', order: 'descending'}">
 											<el-table-column prop="iconOperation" fixed width="50px">
 												<template slot-scope="scope">
 													<i class="el-icon-check" v-if="scope.row.isEditing"></i>
@@ -282,7 +282,7 @@
 											<font>新建行</font>
 										</el-button>
 									</div>
-										<el-table :header-cell-style="rowClass" :fit="true" :data="personinfo.traings" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'personinfo.traings', order: 'descending'}">
+										<el-table ref="table" :header-cell-style="rowClass" :fit="true" :data="personinfo.traings" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'personinfo.traings', order: 'descending'}">
 											<el-table-column prop="iconOperation" fixed label="" width="50px">
 												<template slot-scope="scope">
 													<i class="el-icon-check" v-if="scope.row.isEditing"></i>
@@ -326,7 +326,7 @@
 											<font>新建行</font>
 										</el-button>
 									</div>
-										<el-table :header-cell-style="rowClass" :fit="true" :data="personinfo.ips" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'personinfo.ips', order: 'descending'}">
+										<el-table ref="table" :header-cell-style="rowClass" :fit="true" :data="personinfo.ips" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'personinfo.ips', order: 'descending'}">
 											<el-table-column prop="iconOperation" fixed label="" width="50px">
 												<template slot-scope="scope">
 													<i class="el-icon-check" v-if="scope.row.isEditing"></i>

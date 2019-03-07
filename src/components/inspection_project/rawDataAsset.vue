@@ -109,7 +109,7 @@
 	<!-- 检测仪器 Begin -->
 		<el-dialog :modal-append-to-body="false" title="选择基础数据——检测仪器" height="300px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
 			<!-- 第二层弹出的表格 Begin-->
-			<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+			<el-table ref="table" :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 				<el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column>
 				<el-table-column label="设备编号" width="125" sortable prop="ASSETNUM">

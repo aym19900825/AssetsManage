@@ -669,10 +669,6 @@
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-<<<<<<< HEAD
-					// console.log(res);
-					this.buttons = res.data;
-=======
 					console.log(res);
 					var resData = res.data;
 					var uploadIndex = 0;
@@ -687,7 +683,6 @@
 						resData.splice(uploadIndex, 1);
 					}
 					this.buttons = resData;
->>>>>>> 2b0e440d4cb647aa355231ab3a222dde3ad37e89
 				}).catch((wrong) => {
 					this.$message({
 						message: '网络错误，请重试',

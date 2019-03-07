@@ -133,7 +133,7 @@
 				</el-input>
 			</div>
 			<!--搜索框 End-->
-			<el-table :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.TYPE.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+			<el-table ref="table" :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.TYPE.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 				<el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column>
 				<el-table-column label="类别编码" width="155" sortable prop="NUM">

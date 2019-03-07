@@ -944,8 +944,8 @@
 					REPORT_QUALITY: [{ required: true, message: '必填', trigger: 'blur' },{ type: 'number', message: '请输入数字'}],//交委托方分数
 					REPORT_MODE: [{ required: true, message: '必填', trigger: 'change' }],//发送方式
 					REPORT_FOMAT: [{ required: true, message: '必填', trigger: 'change' }],//格式
-					MAINGROUP: [{ required: true, message: '必填', trigger: 'change' }],//主检组
-					LEADER: [{ required: true, message: '必填', trigger: 'change' }],//主检负责人
+					MAINGROUP: [{required: true, message: '必填', trigger: 'change' }],//主检组
+					LEADER: [{required: true, message: '必填', trigger: 'change' }],//主检负责人
 //					MEMO: [{ required: true, message: '必填', trigger: 'blur' }],//备注
 					CHECK_COST:[{required: false,trigger: 'change',validator:price}],
 					ACTUALCOST:[{trigger: 'blur',validator:price}],

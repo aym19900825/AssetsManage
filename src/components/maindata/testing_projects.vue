@@ -35,8 +35,7 @@
 										:on-success="fileSuccess"
 										:limit=1
 										multiple
-										method:="post"
-										:file-list="fileList">
+										method:="post">
 											<i class="icon-upload-cloud"></i> 上传
 										</el-upload>
     								</el-dropdown-item>

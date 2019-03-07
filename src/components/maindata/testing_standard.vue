@@ -36,8 +36,7 @@
 										:on-success="fileSuccess"
 										:limit=1
 										multiple
-										method:="post"
-										:file-list="fileList">
+										method:="post">
 											<i class="icon-upload-cloud"></i> 上传
 										</el-upload>
     								</el-dropdown-item>
@@ -307,6 +306,9 @@
 		},
 
 		methods: {
+			fileSuccess(){
+
+			},
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    // console.log(rowIndex) //表头行标号为0

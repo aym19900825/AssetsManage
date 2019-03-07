@@ -106,7 +106,7 @@
 						<div id="middle"></div>
 						<el-col :span="19" id="right">
 							<!-- 表格 Begin-->
-							<el-table :data="nitificationsList" 
+							<el-table ref="table" :data="nitificationsList" 
 									  :header-cell-style="rowClass" 
 									  border 
 									  stripe 

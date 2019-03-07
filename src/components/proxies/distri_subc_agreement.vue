@@ -173,20 +173,10 @@
 		},
 		data() {
 			return {
-				loadSign: true, //鼠标滚动加载数据
-				loading: false,//默认加载数据时显示loading动画
 				// dataUrl: '/api/api-user/users',
 				basic_url: Config.dev_url,
-				searchData: {
-			        page: 1,
-			        limit: 10,//分页显示数
-			        nickname: '',
-			        enabled: '',
-			        searchKey: '',
-			        searchValue: '',
-			        companyId: '',
-			        deptId: ''
-		        },
+				loadSign: true, //鼠标滚动加载数据
+				loading: false,//默认加载数据时显示loading动画
 				checkedName: [
 					'分包协议编号',
 					'委托书编号',

@@ -31,6 +31,10 @@
 						    		<i class="icon-arrow1-down" v-show="down"></i>
 						    		<i class="icon-arrow1-up" v-show="up"></i>
 								</button> -->
+<<<<<<< HEAD
+=======
+
+>>>>>>> 313ec0d72a05c89e9c06f2a5a2cf349de0150399
 								<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 								</button>
@@ -530,17 +534,16 @@
 
 			requestData(){
 				this.loading = true;
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-					appname:this.searchList.appname,
-				}
-				var url = this.file_url + '/file/pathList';
+				// var data = {
+				// 	page: this.page.currentPage,
+				// 	limit: this.page.pageSize,
+				// 	appname:this.searchList.appname,
+				// }
+				var num = this.page.currentPage - 1;
+				var url = this.file_url + '/file/pathList?size=' + this.page.pageSize +'&page=' + num;
 				this.$axios.post(url, {
 					'pathid': this.docId,
 					'deptid': this.docParm.deptid,
-					'page': this.page.currentPage - 1,
-					'size': this.page.pageSize,
 					'appname': this.searchList.appname
 				}).then((res) => {
 					this.page.totalCount = res.data.fileList.total;

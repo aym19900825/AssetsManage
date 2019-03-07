@@ -15,35 +15,9 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+								<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 								</button>
-								<!--<button type="button" class="btn btn-green" @click="openAddMgr" id="">
-                                	<i class="icon-add"></i>添加
-                      			</button>
-								<button type="button" class="btn btn-blue button-margin" @click="modify">
-								    <i class="icon-edit"></i>修改
-								</button>
-								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
-								    <i class="icon-trash"></i>删除
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="resetPwd">
-								    <i class="icon-refresh"></i>重置密码
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="unfreeze">
-								    <i class="icon-start"></i>活动
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="freezeAccount">
-								    <i class="icon-stop"></i>不活动
-								</button>
-								<button type="button" class="btn btn-primarys button-margin">
-								    <i class="icon-role-site"></i>角色分配
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-						    		<i class="icon-search"></i>高级查询
-						    		<i class="icon-arrow1-down" v-show="down"></i>
-						    		<i class="icon-arrow1-up" v-show="up"></i>
-								</button>-->
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -183,7 +157,7 @@
 		      </span>
         </el-dialog>
 		<!-- 权限管理 -->
-		<el-dialog :modal-append-to-body="false" title="工作任务通知书查询类别" :visible.sync="Access" width="30%" :before-close="handleClose">
+		<el-dialog :modal-append-to-body="false" title="数据配置" :visible.sync="Access" width="30%" :before-close="handleClose">
 			<!--工作任务通知书查询类别-->
 			<div class="scrollbar" style="max-height: 400px;">
 				<el-tree ref="work" :data="workData" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourework"  >

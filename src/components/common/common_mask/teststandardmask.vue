@@ -70,7 +70,7 @@
 								</el-date-picker>
 							</el-form-item>
 						</el-col>
-						<!-- <el-col :span="3">
+						<el-col :span="3">
 							<el-select style="width: 120%" v-model="searchList.STATUS" placeholder="请选择信息状态">
 								<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 								</el-option>

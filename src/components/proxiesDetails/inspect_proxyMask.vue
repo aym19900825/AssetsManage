@@ -691,7 +691,7 @@
 			<!-- 样品名称  -->
 			<sampletmask ref="samplechild" @showData="showData" @appenddes="appenddes" @appendmod="appendmod" @appendqua="appendqua" @linedata="linedata"></sampletmask>
 			<!--受检企业-->
-			<enterprisemask ref="enterprisechild" @appendname="appendname" @appendadd="appendadd" @appendzip="appendzip"@appendnames="appendnames" @appendid="appendid"></enterprisemask>
+			<enterprisemask ref="enterprisechild" @appendname="appendname" @appendadd="appendadd" @appendzip="appendzip" @appendnames="appendnames" @appendid="appendid"></enterprisemask>
 			<!--审批页面-->
 			<approvalmask :approvingData="approvingData" ref="approvalChild"  @detail="detailgetData"></approvalmask>
 			<!--流程历史-->

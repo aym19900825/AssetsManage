@@ -127,18 +127,18 @@
 							<!-- 表格 Begin-->
 
 							<el-table ref="table" :header-cell-style="rowClass"
-								:data="categoryList"
-								border
-								stripe
-								:height="fullHeight"
-								style="width: 100%;"
-    							:default-sort="{prop:'categoryList', order: 'descending'}"
-    							@selection-change="SelChange"
-    							v-loadmore="loadMore"
-								v-loading="loading"
-								element-loading-text="加载中…"
-    							element-loading-spinner="el-icon-loading"
-    							element-loading-background="rgba(255, 255, 255, 0.9)">
+									:data="categoryList"
+									border
+									stripe
+									:height="fullHeight"
+									style="width: 100%;"
+	    							:default-sort="{prop:'categoryList', order: 'descending'}"
+	    							@selection-change="SelChange"
+	    							v-loadmore="loadMore"
+									v-loading="loading"
+									element-loading-text="加载中…"
+	    							element-loading-spinner="el-icon-loading"
+	    							element-loading-background="rgba(255, 255, 255, 0.9)">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="编码" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('编码')!=-1">
@@ -200,22 +200,12 @@
 				reportData:{},//报表的数据
 				// up2down:'down',
 				basic_url: Config.dev_url,
-				loadSign: true, //鼠标滚动加载数据
 				commentArr: {},
+				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
 				fileList:[],
 				value: '',
 				productType:'productType',//appname
-				searchData: {
-					page: 1,
-					limit: 20, //分页显示数
-					nickname: '',
-					enabled: '',
-					searchKey: '',
-					searchValue: '',
-					companyId: '',
-					deptId: ''
-				},
 				checkedName: [
 					'编码',
 					'名称',
@@ -423,7 +413,6 @@
 				this.reset();
 				this.$refs.categorymask.open(); // 方法1
 				this.$refs.categorymask.visible();
-				
 			},
 			//修改类别
 			modify() {
@@ -661,7 +650,7 @@
 					this.loading = false;
 					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
 						$('.el-table__body-wrapper table').find('.filing').remove();
-					}
+					}//滚动加载数据判断filing
 				}).catch((wrong) => {
 					this.$message({
 						message: '网络错误，请重试1',
@@ -680,21 +669,21 @@
 			},
 			  //请求页面的button接口
 		    getbutton(childByValue){
-		    	console.log(childByValue);
+		    	// console.log(childByValue);
 		    	var data = {
 					menuId: childByValue.id,
 					roleId: this.$store.state.roleid,
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					console.log(res);
+					// console.log(res);
 					this.buttons = res.data;
 					
 				}).catch((wrong) => {
 					this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
+						message: '网络错误，请重试',
+						type: 'error'
+					});
 				})
 		    },
 		},

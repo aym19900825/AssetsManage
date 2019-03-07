@@ -15,7 +15,6 @@
 				</div>
 			</div>	
 		   <!--<iframe :src="this.url +'/ureport/preview?_u=mysql:test.ureport.xml'" id="flowIframe" width="100%" height="100%" frameborder="0" scrolling="no" >-->
-		   </iframe>
 		</div>
    	</div>
  </div>

@@ -40,7 +40,7 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="工作任务单编号" prop="WONUM">
-												<el-input v-model="USESEAL.WONUM" :disabled="true">
+												<el-input v-model="USESEAL.WONUM" :disabled="true" placeholder="自动生成">
                                                     <el-button slot="append" icon="el-icon-search" @click="addworkorder"></el-button>
                                                 </el-input>
 											</el-form-item>

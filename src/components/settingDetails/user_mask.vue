@@ -102,8 +102,8 @@
 										<el-col :span="8">
 											<el-form-item label="性別" prop="sex" label-width="100px">
 												<el-radio-group v-model="user.sex" :disabled="noedit">
-													<el-radio label="男"></el-radio>
-													<el-radio label="女"></el-radio>
+													<el-radio label="1">男</el-radio>
+													<el-radio label="0">女</el-radio>
 												</el-radio-group>
 											</el-form-item>
 										</el-col>
@@ -135,16 +135,16 @@
 										<el-col :span="8">
 											<el-form-item label="允许授权" prop="ispermit" label-width="100px">
 												<el-radio-group v-model="user.ispermit" :disabled="noedit">
-													<el-radio label="是"></el-radio>
-													<el-radio label="否"></el-radio>
+													<el-radio label="1">是</el-radio>
+													<el-radio label="2">否</el-radio>
 												</el-radio-group>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="允许登录" prop="islogin" label-width="100px">
 												<el-radio-group v-model="user.islogin" :disabled="noedit">
-													<el-radio label="是"></el-radio>
-													<el-radio label="否"></el-radio>
+													<el-radio label="1">是</el-radio>
+													<el-radio label="2">否</el-radio>
 												</el-radio-group>
 											</el-form-item>
 										</el-col>
@@ -226,7 +226,7 @@
 													<el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 														<template slot-scope="scope">
 															<i class="el-icon-check" v-if="scope.row.isEditing"></i>
-															<i class="el-icon-edit" v-else="v-else"></i>
+															<i class="el-icon-edit" v-else></i>
 														</template>
 													</el-table-column>
 													<el-table-column prop="step" label="序号" sortable width="120px" type="index">
@@ -236,7 +236,7 @@
 															<el-form-item :prop="'qualifications.'+scope.$index + '.c_num'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.c_num" placeholder="请输入委托方名称">
 																</el-input>
-																<span v-else="v-else">{{scope.row.c_num}}</span>
+																<span v-else>{{scope.row.c_num}}</span>
 															</el-form-item>
 														</template>
 													</el-table-column>
@@ -245,7 +245,7 @@
 															<el-form-item :prop="'qualifications.'+scope.$index + '.c_name'">
 																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.c_name" placeholder="请输入委托方名称">
 																</el-input>
-																<span v-else="v-else">{{scope.row.c_name}}</span>
+																<span v-else>{{scope.row.c_name}}</span>
 															</el-form-item>
 														</template>
 													</el-table-column>
@@ -259,7 +259,7 @@
 															<el-form-item :prop="'qualifications.'+scope.$index + '.c_date'">
 																<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.c_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
 																</el-date-picker>
-																<span v-else="v-else">{{scope.row.c_date}}</span>
+																<span v-else>{{scope.row.c_date}}</span>
 															</el-form-item>
 														</template>
 													</el-table-column>
@@ -269,7 +269,7 @@
 															<el-form-item :prop="'qualifications.'+scope.$index + '.enterbyName'">
 																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.enterbyName" placeholder="请输入要求">
 																</el-input>
-																<span v-else="v-else">{{scope.row.enterbyName}}</span>
+																<span v-else>{{scope.row.enterbyName}}</span>
 															</el-form-item>
 														</template>
 													</el-table-column> -->
@@ -278,7 +278,7 @@
 															<el-form-item :prop="'qualifications.'+scope.$index + '.enterdate'">
 																<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.enterdate" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
 																</el-date-picker>
-																<span v-else="v-else">{{scope.row.enterdate}}</span>
+																<span v-else>{{scope.row.enterdate}}</span>
 															</el-form-item>
 														</template>
 													</el-table-column> -->
@@ -287,7 +287,7 @@
 															<el-form-item :prop="'qualifications.'+scope.$index + '.status'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.status" placeholder="请输入要求">
 																</el-input>
-																<span v-else="v-else">{{scope.row.status}}</span>
+																<span v-else>{{scope.row.status}}</span>
 															</el-form-item>
 														</template>
 													</el-table-column> -->
@@ -296,7 +296,7 @@
 												<el-form-item :prop="'user_qualifications.'+scope.$index + '.VERSION'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入分包方名称">
 												</el-input>
-												<span v-else="v-else">{{scope.row.VERSION}}</span>
+												<span v-else>{{scope.row.VERSION}}</span>
 												</el-form-item>
 											</template>
 										</el-table-column>-->
@@ -321,7 +321,7 @@
 													<el-table-column prop="iconOperation" fixed label="" width="50px" v-if="!viewtitle">
 														<template slot-scope="scope">
 															<i class="el-icon-check" v-if="scope.row.isEditing"></i>
-															<i class="el-icon-edit" v-else="v-else"></i>
+															<i class="el-icon-edit" v-else></i>
 														</template>
 													</el-table-column>
 													<el-table-column label="序号" sortable width="120px" type="index">
@@ -333,7 +333,7 @@
 												</el-input>-->
 																<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.t_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd hh:mm:ss">
 																</el-date-picker>
-																<span v-else="v-else">{{scope.row.t_date}}</span>
+																<span v-else>{{scope.row.t_date}}</span>
 															</el-form-item>
 														</template>
 													</el-table-column>
@@ -342,7 +342,7 @@
 															<el-form-item :prop="'traings.'+scope.$index + '.t_description'">
 																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.t_description" placeholder="请输入委托方名称">
 																</el-input>
-																<span v-else="v-else">{{scope.row.t_description}}</span>
+																<span v-else>{{scope.row.t_description}}</span>
 															</el-form-item>
 														</template>
 													</el-table-column>
@@ -351,7 +351,7 @@
 															<el-form-item :prop="'traings.'+scope.$index + '.status'">
 																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.status" placeholder="请输入要求">
 																</el-input>
-																<span v-else="v-else">{{scope.row.status}}</span>
+																<span v-else>{{scope.row.status}}</span>
 															</el-form-item>
 														</template>
 													</el-table-column> -->
@@ -376,7 +376,7 @@
 													<el-table-column prop="iconOperation" fixed label="" width="50px" v-if="!viewtitle">
 														<template slot-scope="scope">
 															<i class="el-icon-check" v-if="scope.row.isEditing"></i>
-															<i class="el-icon-edit" v-else="v-else"></i>
+															<i class="el-icon-edit" v-else></i>
 														</template>
 													</el-table-column>
 
@@ -391,7 +391,7 @@
 															<el-form-item :prop="'ips.'+scope.$index + '.IP_BEGIN'">
 																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.IP_BEGIN" placeholder="请输入起始IP地址">
 																</el-input>
-																<span v-else="v-else">{{scope.row.IP_BEGIN}}</span>
+																<span v-else>{{scope.row.IP_BEGIN}}</span>
 															</el-form-item>
 														</template>
 													</el-table-column>
@@ -401,7 +401,7 @@
 															<el-form-item :prop="'ips.'+scope.$index + '.IP_END'">
 																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.IP_END" placeholder="请输入结束IP地址">
 																</el-input>
-																<span v-else="v-else">{{scope.row.IP_END}}</span>
+																<span v-else>{{scope.row.IP_END}}</span>
 															</el-form-item>
 														</template>
 													</el-table-column>
@@ -801,8 +801,6 @@
 
 					});
 				}else{
-					console.log(this.user[TableName]);
-					// this.user[TableName+'List'].splice(index,1);
 					this.user[TableName].splice(index,1);
 				}
 			},
@@ -810,11 +808,6 @@
 			handleClicks(data,checked, indeterminate) {
 				this.getCheckboxData = data;
            		if(checked){
-					// this.$refs.tree.setCheckedNodes([]);
-					// var _this = this;
-					// setTimeout(function(){
-					// 	this.$refs.tree.setCheckedNodes([data]);
-					// },0);
 					this.$refs.tree.setCheckedNodes([data]);
 					this.$refs.tree.setCheckedKeys([data.id]);
 				}else{
@@ -822,10 +815,7 @@
 				}
 			},
 
-//			handleCheckChange(data, checked, indeterminate) {
-//				this.getCheckboxData = data;
-//			},
-			//
+
 			handleNodeClick(data) { //获取勾选树菜单节点
 				//				console.log(data);
 			},
@@ -907,6 +897,7 @@
 				var usersUrl = this.basic_url + '/api-user/users/currentMap';
 
 				this.$axios.get(usersUrl, {}).then((res) => {
+					console.log(res);
 					this.user.changeby = res.data.nickname;
 					this.docParam = {
 						username: res.data.username,
@@ -939,21 +930,15 @@
 					// 	res.data.ips[i].isEditing = false;
 					// }
 					console.log(res);
+				    res.data.sex=res.data.sex.toString();
 					this.user = res.data;
-					this.user.sex = this.user.sex=='1'? '男' : '女';
-					this.user.enabled = this.user.enabled ? '活动' : '不活动';
-					this.user.ispermit = this.user.ispermit == '1' ? '是' : '否';
-					this.user.islogin = this.user.islogin == '1' ? '是' : '否';
-if(typeof(this.user.roleId) != 'undefind'&&this.user.roleId != null&&this.user.roleId.length > 0) {
-							this.user.roleId=[];
-							var roles = this.user.roles;
-							for(var i = 0; i < roles.length; i++) {
-								this.user.roleId.push(roles[i].id);
-							}
-					}else if(this.user.reportId==null){
-						console.log(1111);
-						this.user.roleId = [];
-						this.user.roles = [];
+					console.log(res);
+					// this.user.enabled = this.user.enabled ? '活动' : '不活动';
+					this.user.roleId = this.user.roleId.split(',');
+					var arr = [];
+					var roleId = this.user.roleId;
+					for(var i=0; i< roleId.length; i++){
+						roleId[i] =  parseInt(roleId[i]);
 					}
 					this.show = true;
 				}).catch((err) => {
@@ -978,14 +963,12 @@ if(typeof(this.user.roleId) != 'undefind'&&this.user.roleId != null&&this.user.r
 				var url = this.basic_url + '/api-user/users/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
 					this.user = res.data;
-					this.user.sex = this.user.sex ? '男' : '女';
+					// this.user.sex = this.user.sex ? '男' : '女';
 					this.user.enabled = this.user.enabled ? '活动' : '不活动';
-					this.user.ispermit = this.user.ispermit == '1' ? '是' : '否';
-					this.user.islogin = this.user.islogin == '1' ? '是' : '否';
-					this.user.roleId = [];
-					var roles = this.user.roles;
-					for(var i = 0; i < roles.length; i++) {
-						this.user.roleId.push(roles[i].id);
+					this.user.roleId = this.user.roleId.split(',');
+					var roleId = this.user.roleId;
+					for(var i=0; i< roleId.length; i++){
+						roleId[i] =  parseInt(roleId[i]);
 					}
 					this.show = true;
 				}).catch((err) => {
@@ -1031,31 +1014,32 @@ if(typeof(this.user.roleId) != 'undefind'&&this.user.roleId != null&&this.user.r
 				this.$refs.user.validate((valid) => {
 					if(valid) {
 						_this.user.enabled = true;
-						_this.user.ispermit = _this.user.ispermit == '是' ? '1' : '2';
-						_this.user.islogin = _this.user.islogin == '是' ? '1' : '2';
+						// _this.user.ispermit = _this.user.ispermit == '是' ? '1' : '2';
+						// _this.user.islogin = _this.user.islogin == '是' ? '1' : '2';
 						var user = _this.user;
-						user.sex = user.sex == '男' ? 1 : 0;
-						var roleId = "";
-						if(typeof(user.roleId) != 'undefind' && user.roleId.length > 0) {
-							var arr = [];
-							user.roleId.forEach(function(item) {
-								var roles = _this.selectData;
-								for(var j = 0; j < roles.length; j++) {
-									if(roles[j].id == item) {
-										arr.push(roles[j]);
-										roleId = roleId + roles[j].id + ",";
-									}
-								}
-							});
-							user.roleId = roleId;
-							user.roles = arr;
-						} else {
-							user.roleId = '';
-							user.roles = [];
-						}
+						// user.sex = user.sex == '男' ? 1 : 0;
+						var roleId = [];
+						// if(typeof(user.roleId) != 'undefind' && user.roleId.length > 0) {
+						// 	var arr = [];
+						// 	user.roleId.forEach(function(item) {
+						// 		var roles = _this.selectData;
+						// 		for(var j = 0; j < roles.length; j++) {
+						// 			if(roles[j].id == item) {
+						// 				arr.push(roles[j]);
+						// 				roleId.push(roles[j].id);
+						// 				// roleId = roleId + roles[j].id + ",";
+						// 			}
+						// 		}
+						// 	});
+						// 	user.roleId = roleId;
+						// 	user.roles = arr;
+						// } else {
+						// 	user.roleId = '';
+						// 	user.roles = [];
+						// }
+						user.roleId = user.roleId.join(',');
 						var url = _this.basic_url + '/api-user/users/saveOrUpdate';
 						this.$axios.post(url, _this.user).then((res) => {
-							console.log(res);
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',
@@ -1065,15 +1049,16 @@ if(typeof(this.user.roleId) != 'undefind'&&this.user.roleId != null&&this.user.r
 									this.show = false;
 								}else{
 									this.show = true;
+									this.$emit('request');
 								}
-								this.$emit('request');
-//								this.$refs["user"].resetFields(); //清空表单验证
+								this.$refs["user"].resetFields(); //清空表单验证
 							}else{
 								this.$message({
 									message: res.data.resp_msg,
 									type: 'warning'
 								});
 								this.show=true;
+								user.roleId = user.roleId.split(',');
 							}
 						}).catch((err) => {
 							this.$message({

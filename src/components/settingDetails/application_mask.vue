@@ -136,8 +136,8 @@
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show="noviews">
-							<el-button type="primary" @click="saveAndUpdate">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit" v-show="addtitle">保存并继续</el-button>
+							<el-button type="primary" @click="save('Update')">保存</el-button>
+							<el-button type="success" @click="save('Submit')" v-show="addtitle">保存并继续</el-button>
 							<el-button @click="close">取消</el-button>
 						</div>
 					</el-form>
@@ -215,11 +215,7 @@
 				this.dataInfo.reportId = value;
 			},
 			reports(value){
-				console.log(value);
-				console.log(value.toString());
 				this.dataInfo.report = value.toString();
-				console.log(111111);
-				console.log(this.dataInfo.report);
 			},
 			//获取导入表格勾选信息
 			SelChange(val) {
@@ -288,7 +284,6 @@
 								this.dataInfo.reportId.push(reports[i].id);
 							}
 					}else if(this.dataInfo.reportId==null){
-						console.log(1111);
 						this.dataInfo.reportId = [];
 						this.dataInfo.reports = [];
 					}
@@ -346,7 +341,7 @@
 				$(".mask_div").css("top", "100px");
 			},
 			// 保存users/saveOrUpdate
-			save() {
+			save(parameter) {
 				var _this = this;
 				this.$refs.dataInfo.validate((valid) => {
 					if(valid) {
@@ -379,10 +374,14 @@
 									message: '保存成功',
 									type: 'success'
 								});
-								//重新加载数据
-								this.$emit('request');
-//								this.$emit('reset');
-//								this.visible();
+								if(parameter=="Update"){
+									this.show = false;
+									this.$emit('request');
+								}else{
+									this.show=true;
+									this.$emit('reset');
+								}
+								this.visible();
 							}else{
 								this.show = true;
 								if(res.data.resp_code == 1) {
@@ -406,53 +405,16 @@
 								type: 'error'
 							});
 						});
-						this.falg = true;
 					} else {
-						this.show = true;
 						this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
 						});
-						this.falg = false;
 					}
 				});
 			},
-			
-			//保存
-			saveAndUpdate() {
-				this.save();
-				if(this.falg){
-					this.show = false;
-				}
-			},
-			//保存并继续
-			saveAndSubmit() {
-				this.save();
-				// this.visible();
-				this.show = true;
-			},
-			//时间格式化
-			dateFormat(row, column) {
-				var date = row[column.property];
-				if(date == undefined) {
-					return "";
-				}
-				return this.$moment(date).format("YYYY-MM-DD");
-			},
-			handleClose(done) {
-				this.$confirm('确认关闭？')
-					.then(_ => {
-						done();
-					})
-					.catch(_ => {
-				console.log('取消关闭');
-				$('.v-modal').hide();
-			});
-			},
-			//报表参数类型
-//			getreport(){ 
-//				this.$refs.reportmask.visible();
-//			},
+		
+			//报表参数类
 			getreport(){
 				var url = this.basic_url + '/api-report/report';
 				this.$axios.get(url, {}).then((res) => {

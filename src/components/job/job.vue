@@ -13,7 +13,7 @@
 			<div class="wrapper wrapper-content">
 				<el-row :gutter="10">
 					<el-col :span="24">
-						<iframe src="http://192.168.1.169:8888/jobinfo" id="flowIframe" width="100%" :height="fullHeight"  frameborder="0" scrolling="no" >
+						<iframe :src="this.url" id="flowIframe" width="100%" :height="fullHeight"  frameborder="0" scrolling="no" >
 				   		</iframe>
 				   	</el-col>
 				</el-row>
@@ -341,10 +341,13 @@
 				return row.enabled;
 			}
 		},
-//		mounted() {
-//			var url="http://192.168.1.169:8888/jobinfo";
-//			widow.open(url);
-//		},
+		mounted() {
+			var url=this.basic_url;
+				url = url.substring(0,21);
+				var pos = url.lastIndexOf(':');
+				url=url.substring(0,pos+1); 
+		  		this.url=url+"8800/jobinfo";
+		},
 //		created(){
 //		   	var url="http://192.168.1.169:8888/jobinfo";
 //		   	window.open(url);

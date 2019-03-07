@@ -15,41 +15,9 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+								<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 								</button>
-								<!-- <button type="button" class="btn btn-green" @click="openAddMgr">
-                                	<i class="icon-add"></i>添加
-                      			 </button>
-								<button type="button" class="btn btn-blue button-margin" @click="modify">
-								    <i class="icon-edit"></i>修改
-								</button>
-								<button type="button" class="btn btn-purple button-margin"  @click="delinfo">
-								    <i class="icon-trash"></i>删除
-								</button>
-								<button type="button" class="btn btn-red button-margin" @click="physicsDel">
-							    <i class="icon-trash"></i>彻底删除
-							</button>			
-								<button type="button" class="btn btn-primarys button-margin">
-							    	<i class="icon-upload-cloud"></i>导入
-								</button>
-								<button type="button" class="btn btn-primarys button-margin">
-							    	<i class="icon-download-cloud"></i>导出
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
-							    <i class="icon-clipboard"></i>报表
-							</button>
-								<button type="button" class="btn btn-primarys button-margin">
-							    	<i class="icon-print"></i>打印
-								</button>
-								<button type="button" class="btn btn-orange button-margin" @click="breakoff">
-							    	<i class="icon-alert-triangle"></i>中止
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-						    		<i class="icon-search"></i>高级查询
-						    		<i class="icon-arrow1-down" v-show="down"></i>
-						    		<i class="icon-arrow1-up" v-show="up"></i>
-								</button> -->
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">

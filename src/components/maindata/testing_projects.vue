@@ -15,7 +15,7 @@
 				<div class="fixed-table-toolbar clearfix">
 					<div class="bs-bars pull-left">
 						<div class="hidden-xs" id="roleTableToolbar" role="group">
-							<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+							<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 							</button>
 							<el-dropdown size="small">
@@ -35,8 +35,7 @@
 										:on-success="fileSuccess"
 										:limit=1
 										multiple
-										method:="post"
-										:file-list="fileList">
+										method:="post">
 											<i class="icon-upload-cloud"></i> 上传
 										</el-upload>
     								</el-dropdown-item>
@@ -134,8 +133,6 @@
 							<el-table-column label="版本" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1" align="right">
 							</el-table-column>
 							<el-table-column label="机构" width="160" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
-							</el-table-column>
-							<!-- <el-table-column label="录入人" width="120" prop="ENTERBY" sortable  v-if="this.checkedName.indexOf('录入人')!=-1"> -->
 							</el-table-column>
 							<el-table-column label="录入时间" width="100" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 							</el-table-column>

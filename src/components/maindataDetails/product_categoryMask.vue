@@ -27,37 +27,9 @@
 												<template slot="prepend">版本</template>
 											</el-input>
 										</el-col>
-										<!--<el-col :span="5" class="pull-right" v-if="modify">
-											<el-input v-model="CATEGORY.STATUS=='1'?'活动':'不活动'" :disabled="true">
-												<template slot="prepend">信息状态</template>
-											</el-input>
-										</el-col>
-										<el-col :span="5" class="pull-right" v-else>
-											<el-input v-model="CATEGORY.STATUS" :disabled="true">
-												<template slot="prepend">信息状态</template>
-											</el-input>
-										</el-col>-->
-										<!--<template slot-scope="scope">
-												<label>信息状态</label>
-	 									       <span v-text="scope.STATUS=='1'?'活动':'不活动'"></span>-->
-										<!--<span>{{scope.STATUS}}</span>
-	 									       	
-	 									       </span>
-	 								        </template>-->
-
-										<!-- <el-select v-model="CATEGORY.STATUS" placeholder="请选择信息状态">
-												<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-												</el-option>
-											</el-select> -->
-										</el-col>
 									</el-row>
 
 									<el-row>
-										<!-- <el-col :span="8">
-											<el-form-item label="类别编号" prop="NUM">
-												<el-input v-model="CATEGORY.NUM" :disabled="edit" placeholder="自动生成"></el-input>
-											</el-form-item>
-										</el-col> -->
 										<el-col :span="8">
 											<el-form-item label="编码" prop="NUM">
 												<el-input v-model="CATEGORY.NUM" :disabled="noedit"></el-input>

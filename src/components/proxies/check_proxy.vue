@@ -145,7 +145,7 @@
 						<div id="middle"></div>
 						<el-col :span="19" class="leftcont" id="right">
 							<!-- 表格 -->
-							<el-table :data="inspectList" 
+							<el-table ref="table" :data="inspectList" 
 								  :header-cell-style="rowClass" 
 								  border 
 								  stripe 

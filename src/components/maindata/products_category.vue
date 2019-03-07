@@ -15,8 +15,8 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-							<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
-								<i :class="item.icon"></i>{{item.name}}
+							<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
+									<i :class="item.icon"></i>{{item.name}}
 							</button>
 							<el-dropdown size="small">
 									<button class="btn mr5 btn-primarys">
@@ -115,10 +115,10 @@
 								<el-table-column label="名称" sortable prop="TYPE" v-if="this.checkedName.indexOf('名称')!=-1">
 								</el-table-column>
 								<!--<el-table-column label="信息状态" width="155" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
- 								<template slot-scope="scope" >
- 									<span v-text="scope.row.STATUS=='1'?'活动':'不活动'"></span>
- 								</template>
-							</el-table-column>-->
+	 								<template slot-scope="scope" >
+	 									<span v-text="scope.row.STATUS=='1'?'活动':'不活动'"></span>
+	 								</template>
+								</el-table-column>-->
 								<el-table-column label="版本" width="100" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1" align="right">
 								</el-table-column>
 								<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
@@ -128,9 +128,9 @@
 								<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
 								</el-table-column>
 							</el-table>
-							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-							</el-pagination>
 							<!-- 表格 End-->
+							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40, 100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							</el-pagination>
 						</el-col>
 					</el-row>
 				</div>
@@ -296,6 +296,36 @@
 			},
 			tableControle(data) {
 				this.checkedName = data;
+			},
+			//表格滚动加载
+			loadMore() {
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++;
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
+					} else {
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1;
+							return false;
+						}
+					}
+					this.loadSign = false;
+					setTimeout(() => {
+						this.loadSign = true;
+					}, 1000)
+					this.requestData();
+				}
 			},
 			sizeChange(val) {
 				this.page.pageSize = val;
@@ -539,7 +569,6 @@
 					}
 					xhr.send();
 			},
-			
 			// 导出
 			exportData() {
            		var url = this.basic_url + '/api-apps/app/productType/exportExc?access_token='+sessionStorage.getItem('access_token');
@@ -590,7 +619,7 @@
 				this.selUser = val;
 			},
 			requestData(index) {
-				this.loading = true;
+				this.loading = true;//加载动画打开
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -612,7 +641,7 @@
 						this.loadSign = true;
 					}
 					this.categoryList = res.data.data;
-					this.loading = false;
+					this.loading = false;//加载动画关闭
 					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
 						$('.el-table__body-wrapper table').find('.filing').remove();
 					}//滚动加载数据判断filing
@@ -623,7 +652,6 @@
 					});
 				})
 			},
-			handleNodeClick(data) {},
 			formatter(row, column) {
 				return row.enabled;
 			},

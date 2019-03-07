@@ -534,9 +534,6 @@
 										</el-tab-pane>
 										<el-tab-pane label="原始数据模板" name="fourth">
 											<div class="table-func table-funcb">
-												<el-button style="float:left;" type="success" size="mini" round @click="getreport" v-show="modifytitle">
-													<i class="icon-add"></i><font>生成报告</font>
-												</el-button>
 												<el-button style="float:left;" type="success" size="mini" round @click="addfield4" v-show="!viewtitle">
 													<i class="icon-add"></i><font>新建行</font>
 												</el-button>
@@ -548,13 +545,13 @@
 												</form>
 											</div>
 											<el-table :data="workorderForm.WORKORDER_DATA_TEMPLATEList" 
-													  border 
-													  stripe 
-													  :fit="true" 
-													  max-height="260" 
-													  style="width: 100%;" 
-													  @cell-click="iconOperation" 
-													  :default-sort="{prop:'WORKORDER_DATA_TEMPLATEList', order: 'descending'}">
+												  border 
+												  stripe 
+												  :fit="true" 
+												  max-height="260" 
+												  style="width: 100%;" 
+												  @cell-click="iconOperation" 
+												  :default-sort="{prop:'WORKORDER_DATA_TEMPLATEList', order: 'descending'}">
 												<el-table-column prop="iconOperation" fixed width="50px">
 											      <template slot-scope="scope">
 											      	<i class="el-icon-check" v-show="scope.row.isEditing">
@@ -704,7 +701,7 @@
 														<!-- <el-form-item :prop="'WORKORDER_REPORTList.'+scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" > -->
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入">
 														</el-input>
-														<span v-else>{{scope.row.MOVERSIONDEL}}</span>
+														<span v-else>{{scope.row.VERSION}}</span>
 														<!-- </el-form-item> -->
 													</template>
 												</el-table-column>
@@ -862,8 +859,14 @@
 													<el-input type="textarea" :row="3" v-model="workorderForm.MEMO" :disabled="noedit"></el-input>
 												</el-form-item>
 											</el-col>
+											<el-col :span="24" class="text-center">
+												<el-button style="float:left;" type="success" size="mini" round @click="getreport" v-show="modifytitle">
+													<i class="icon-wordbook"></i><font>生成报告</font>
+												</el-button>
+											</el-col>
 										</el-row>
 									</div>
+
 								</div>
 								
 								<!-- 录入人信息 Begin-->
@@ -1897,16 +1900,29 @@
 						this.openwrite();
 					}else{
 						console.log(this.reportname);
-						var url = this.basic_url +"/api-merge/merge/workorder/MergeWord?filePath="+ids+"&fileName="+this.reportname+"&proxynum="+this.workorderForm.PROXYNUM+"&wonum="+this.workorderForm.WONUM+"&deptfullname="+this.workorderForm.DEPTIDDesc+"&recordid="+this.workorderForm.ID;
-						this.$axios.post(url, {}).then((res) => {
+						// var url = this.basic_url +"/api-merge/merge/workorder/MergeWord?filePath="+ids+"&fileName="+this.reportname+"&proxynum="+this.workorderForm.PROXYNUM+"&wonum="+this.workorderForm.WONUM+"&deptfullname="+this.workorderForm.DEPTIDDesc+"&recordid="+this.workorderForm.ID;
+						var url = this.basic_url +"/api-merge/merge/workorder/MergeWord";
+						
+						this.$axios.post(url, {
+
+								"filePath":ids,
+								"fileName":this.reportname,
+								"proxynum":this.workorderForm.PROXYNUM,
+								"wonum":this.workorderForm.WONUM,
+								"deptfullname":this.workorderForm.DEPTIDDesc,
+								"recordid":this.workorderForm.ID
+
+						}).then((res) => {
 							this.workorderreportid = res.data.datas.id;
 							console.log(res);
+							console.log()
 							var obj = {
 								REPORTNUM:res.data.datas.reportnum,
 								REPORTNAME:res.data.datas.reportname,
 								// PREVIEW:'',
 								VERSION:res.data.datas.version,
 							}
+							console.log(obj);
 							this.workorderForm.WORKORDER_REPORTList.push(obj);
 							console.log(this.workorderForm.WORKORDER_REPORTList);
 							if(res.data.resp_code == 0) {

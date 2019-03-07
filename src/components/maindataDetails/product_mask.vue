@@ -95,8 +95,8 @@
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show="noviews">
-							<el-button type="primary" @click="saveAndUpdate('PRODUCT')">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit('PRODUCT')" v-show="addtitle">保存并继续</el-button>
+							<el-button type="primary" @click="save('Update')">保存</el-button>
+							<el-button type="success" @click="save('Submit')" v-show="addtitle">保存并继续</el-button>
 							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('PRODUCT')">修订</el-button>
 							<!-- <el-button v-if="modify" type="success" @click="update('PRODUCT')">启用</el-button> -->
 							<el-button @click='close'>取消</el-button>
@@ -155,7 +155,6 @@
 				}
 			};
 			return {
-				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				value: '',
 				options: [{
@@ -319,10 +318,8 @@
 				this.show = true;				
 			},
 			// 保存users/saveOrUpdate
-			save(PRODUCT) {
-				console.log('=====');
-				console.log(this.PRODUCT);
-				this.$refs[PRODUCT].validate((valid) => {
+			save(parameter) {
+				this.$refs.PRODUCT.validate((valid) => {
 					if(valid) {
 						this.PRODUCT.STATUS = ((this.PRODUCT.STATUS == "1" || this.PRODUCT.STATUS == '活动') ? '1' : '0');
 						var url = this.basic_url + '/api-apps/app/product/saveOrUpdate';
@@ -334,10 +331,14 @@
 									message: '保存成功',
 									type: 'success'
 								});
-								//重新加载数据
-								this.$emit('request');
-								// this.$emit('reset');
-								// this.visible();
+								if(parameter=="Update"){
+									this.show = false;
+									this.$emit('request');
+								}else{
+									this.show = true;
+									this.visible()
+								}
+								this.$refs["PRODUCT"].resetFields(); //清空表单验证
 							}else{
 								this.show = true;
 								if(res.data.resp_code == 1) {
@@ -362,31 +363,18 @@
 								type: 'error'
 							});
 						});
-						this.falg=true;
 					} else {
 						this.show = true;
 						this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
 						});
-						this.falg=false;
 					}
 				});
 			},
-			saveAndUpdate(PRODUCT) {
-				this.save(PRODUCT);
-				if(this.falg){
-					this.show = false;
-				}
-			},
-			saveAndSubmit(PRODUCT) {
-				this.save(PRODUCT);
-				this.hintshow = false;
-				this.show = true;
-			},
 			//点击修订按钮
-			modifyversion(PRODUCT) {
-				this.$refs[PRODUCT].validate((valid) => {
+			modifyversion() {
+				this.$refs.PRODUCT.validate((valid) => {
 					if(valid) {
 					var product = JSON.stringify(this.product); 
  					var PRODUCT = JSON.stringify(this.PRODUCT);

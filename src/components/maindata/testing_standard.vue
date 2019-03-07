@@ -16,7 +16,7 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+								<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 								</button>
 								<el-dropdown size="small">
@@ -36,8 +36,7 @@
 										:on-success="fileSuccess"
 										:limit=1
 										multiple
-										method:="post"
-										:file-list="fileList">
+										method:="post">
 											<i class="icon-upload-cloud"></i> 上传
 										</el-upload>
     								</el-dropdown-item>
@@ -307,6 +306,9 @@
 		},
 
 		methods: {
+			fileSuccess(){
+
+			},
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    // console.log(rowIndex) //表头行标号为0

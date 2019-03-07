@@ -18,35 +18,30 @@
 							<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 							</button>
-							<!-- <button type="button" class="btn btn-green" @click="openAddMgr">
-	                        	<i class="icon-add"></i>添加
-	              			 </button>
-							<button type="button" class="btn btn-blue button-margin" @click="modify">
-							    <i class="icon-edit"></i>修改
-							</button>
-							<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
-							    <i class="icon-trash"></i>删除
-							</button>
-								<button type="button" class="btn btn-red button-margin" @click="physicsDel">
-								    <i class="icon-trash"></i>彻底删除
-								</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="importData">
-							    <i class="icon-upload-cloud"></i>导入
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="exportData">
-							    <i class="icon-download-cloud"></i>导出
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
-							    <i class="icon-file-text1"></i>报表
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="Printing">
-							    <i class="icon-print"></i>打印
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-					    		<i class="icon-search"></i>高级查询
-					    		<i class="icon-arrow1-down" v-show="down"></i>
-					    		<i class="icon-arrow1-up" v-show="up"></i>
-							</button> -->
+							<el-dropdown size="small">
+									<button class="btn mr5 btn-primarys">
+										<i class="icon-inventory-line-callin"></i> 导入<i class="el-icon-arrow-down el-icon--right"></i>
+									</button>
+								<el-dropdown-menu slot="dropdown">
+    								<el-dropdown-item>
+    									<div @click="download"><i class="icon-download-cloud"></i>下载模版</div>
+    								</el-dropdown-item>
+    								
+    								<el-dropdown-item>
+										<el-upload
+										ref="upload"
+										class="upload"
+										:action="uploadUrl()"
+										:on-success="fileSuccess"
+										:limit=1
+										multiple
+										method:="post"
+										:file-list="fileList">
+											<i class="icon-upload-cloud"></i> 上传
+										</el-upload>
+    								</el-dropdown-item>
+						  		</el-dropdown-menu>
+							</el-dropdown>
 						</div>
 					</div>
 					<div class="columns columns-right btn-group pull-right">
@@ -103,7 +98,7 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :header-cell-style="rowClass" 
+						<el-table ref="table" :header-cell-style="rowClass" 
 								  :data="projectList" 
 								  border stripe 
 								  :height="fullHeight" 
@@ -136,9 +131,9 @@
 							</el-table-column>
 							<el-table-column label="子领域" width="120" sortable prop="CHILD_FIELD" v-if="this.checkedName.indexOf('子领域')!=-1">
 							</el-table-column>
-							<el-table-column label="版本" width="70" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1" align="right">
+							<el-table-column label="版本" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1" align="right">
 							</el-table-column>
-							<el-table-column label="机构" width="180" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
+							<el-table-column label="机构" width="160" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
 							</el-table-column>
 							<!-- <el-table-column label="录入人" width="120" prop="ENTERBY" sortable  v-if="this.checkedName.indexOf('录入人')!=-1"> -->
 							</el-table-column>
@@ -191,8 +186,9 @@
 		data() {
 			return {
 				reportData:{},//报表的数据
-				loading: false,
 				basic_url: Config.dev_url,
+				loadSign: true, //鼠标滚动加载数据
+				loading: false,//默认加载数据时显示loading动画
 				value: '',
 				options: [{
 					value: '1',
@@ -201,7 +197,6 @@
 					value: '0',
 					label: '不活动'
 				}],
-				loadSign:true,//加载
 				commentArr:{},
 				checkedName: [
 					'编码',
@@ -333,42 +328,59 @@
 			//表格滚动加载
 			loadMore() {
 				let up2down = sessionStorage.getItem('up2down');
-				console.log(up2down)
-				console.log(this.loadSign)
 				if(this.loadSign) {					
 					if(up2down=='down'){
-						this.page.currentPage++
+						this.page.currentPage++;
 						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
 							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
 							return false;
 						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
 					}else{
-						this.page.currentPage--
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
 						if(this.page.currentPage < 1) {
-							this.page.currentPage=1
+							this.page.currentPage=1;
 							return false;
 						}
 					}
 					this.loadSign = false;
-					console.log('this.page.currentPage',this.page.currentPage)
 					setTimeout(() => {
-						this.loadSign = true
+						this.loadSign = true;
 					}, 1000)
-					this.requestData()
+					this.requestData();
 				}
 			},
 			tableControle(data){//控制表格列显示隐藏
 				this.checkedName = data;
 			},
-			sizeChange(val) {//分页，总页数
-		      this.page.pageSize = val;
-		      this.requestData();
-		    },
-		    currentChange(val) {//分页，当前页
-		      this.page.currentPage = val;
-		      this.requestData();
-		    },
-		    	resetbtn(){
+			//改变页数
+			sizeChange(val) {
+				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+			//当前页数
+			currentChange(val) {
+				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+	    	resetbtn(){
 				this.searchList =  { //点击高级搜索后显示的内容
 					P_NUM: '',
 					P_NAME: '',
@@ -379,12 +391,12 @@
 			},
 			searchinfo(index) {//高级查询
 				this.page.currentPage = 1;
-				this.page.pageSize = 10;
+				this.page.pageSize = 20;
 				this.requestData();
 			},
 			//清空
 			reset(){
-			this.testing_projectForm = { //数据库列表
+				this.testing_projectForm = { //数据库列表
 					VERSION: '1',
 					STATUS: '活动',
 					P_NUM: '',
@@ -401,7 +413,7 @@
 					CHANGEDATE:'',	
 				};
 				if (this.$refs['testing_projectForm']!==undefined) {
-     			this.$refs['testing_projectForm'].resetFields();	
+     				this.$refs['testing_projectForm'].resetFields();	
  				}
 			},
 			//请求点击
@@ -561,9 +573,26 @@
                 	});
 				}
 			},
+			uploadUrl(){
+                var url = this.basic_url +'/api-apps/app/productType/importExc?access_token='+sessionStorage.getItem('access_token');
+                return url;
+            },
+          	
 			// 导入
-			importData() {
-				
+			download() {
+				var url = this.basic_url + '/api-apps/app/productType/importExcTemplete?access_token='+sessionStorage.getItem('access_token');
+				var xhr = new XMLHttpRequest();
+					xhr.open('POST', url, true);
+					xhr.responseType = "blob";
+					xhr.setRequestHeader("client_type", "DESKTOP_WEB");
+					xhr.onload = function() {
+						if (this.status == 200) {
+							var blob = this.response;
+							var objecturl = URL.createObjectURL(blob);
+							window.location.href = objecturl;
+						}
+					}
+					xhr.send();
 			},
 			// 导出
 			exportData() {
@@ -609,11 +638,10 @@
 				this.selMenu = val;
 			},
 			requestData(index) {
-				this.loading = true;
+				this.loading = true;//加载动画打开
 				var data = {//高级查询数据显示
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-
 					P_NUM: this.searchList.P_NUM,
 					P_NAME: this.searchList.P_NAME,
 					VERSION: this.searchList.VERSION,
@@ -625,7 +653,6 @@
 					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;
-					
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
 					if(this.page.currentPage >= totalPage){
@@ -634,12 +661,18 @@
 						this.loadSign=true
 					}
 					this.projectList = res.data.data;
-					this.loading = false;
-				}).catch((wrong) => {})
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试1',
+						type: 'error'
+					});
+				})
 			},
-			handleNodeClick(data) {
-			},
-
+			
 			formatter(row, column) {
 				return row.enabled;
 			},
@@ -650,14 +683,14 @@
 			},
 			  //请求页面的button接口
 		    getbutton(childByValue){
-		    	console.log(childByValue);
+		    	// console.log(childByValue);
 		    	var data = {
 					menuId: childByValue.id,
 					roleId: this.$store.state.roleid,
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					console.log(res);
+					// console.log(res);
 					this.buttons = res.data;
 					
 				}).catch((wrong) => {

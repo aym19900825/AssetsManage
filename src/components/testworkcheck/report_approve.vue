@@ -273,7 +273,42 @@
 					return;
 				} else {
 					console.log(this.selUser[0]);
-					this.$refs.reportapprove.detail(this.selUser[0].ID);
+					console.log(this.selUser[0]);
+					console.log(this.selUser[0].STATE);
+					if(this.selUser[0].STATE == 3 || this.selUser[0].STATE == 2) {
+						this.$message({
+							message: '已启动的流程，不允许修改数据，只可以查看。',
+							type: 'warning'
+						});
+						this.$refs.reportapprove.view(this.selUser[0].ID);
+					}
+					//驳回
+					else if(this.selUser[0].STATE == 0) {
+						var url = this.basic_url + '/api-apps/app/workorder/flow/isExecute/' + this.selUser[0].ID;
+						this.$axios.get(url, {}).then((res) => {
+							if(res.data.resp_code == 0) {
+								var url = this.basic_url + '/api-apps/app/reportOnhole/flow/isPromoterNode/' + this.selMenu[0].ID;
+								this.$axios.get(url, {}).then((res) => {
+									if(res.data.resp_code == 0) {
+										this.$refs.child.detail(this.selMenu[0].ID);
+									} else {
+										this.$message({
+											message: res.data.resp_msg,
+											type: 'warning'
+										});
+									}
+								});
+							} else {
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'warning'
+									});
+							}
+						});
+					}else{
+						this.$refs.reportapprove.detail(this.selUser[0].ID);	
+					}
+					// this.$refs.reportapprove.detail(this.selUser[0].ID);
 				}
 			},
 			//查看

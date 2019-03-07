@@ -219,7 +219,8 @@
 		data() {
 			return {
 				reportData:{},//报表的数据
-				loading: false,
+				loadSign: true, //鼠标滚动加载数据
+				loading: false,//默认加载数据时显示loading动画
 				basic_url: Config.dev_url,
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
 				value: '',
@@ -230,7 +231,6 @@
 					value: '选项2',
 					label: '不活动'
 				}],
-				loadSign: true, //加载
 				commentArr: {},
 				selectData: [], //获取检验/检测方法类别
 				workNot:'workNot',//appname
@@ -374,39 +374,59 @@
 					this.selectDept = res.data;
 				});
 			},
-			//滚动加载
+			//表格滚动加载
 			loadMore() {
 				let up2down = sessionStorage.getItem('up2down');
 				if(this.loadSign) {					
 					if(up2down=='down'){
-						this.page.currentPage++
+						this.page.currentPage++;
 						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
 							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
 							return false;
 						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
 					}else{
-						this.page.currentPage--
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
 						if(this.page.currentPage < 1) {
-							this.page.currentPage=1
+							this.page.currentPage=1;
 							return false;
 						}
 					}
 					this.loadSign = false;
 					setTimeout(() => {
-						this.loadSign = true
+						this.loadSign = true;
 					}, 1000)
-					this.requestData()
+					this.requestData();
 				}
 			},
 			tableControle(data) {
 				this.checkedName = data;
 			},
+			//改变页数
 			sizeChange(val) {
 				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
 				this.requestData();
 			},
+			//当前页数
 			currentChange(val) {
 				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
 				this.requestData();
 			},
 			resetbtn(){
@@ -674,7 +694,7 @@
 				this.selUser = val;
 			},
 			requestData() {
-				this.loading = true;
+				this.loading = true;//加载动画打开
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -698,19 +718,11 @@
 					} else {
 						this.loadSign = true
 					}
-					// this.commentArr[this.page.currentPage] = res.data.data
-					// let newarr = []
-					// for(var i = 1; i <= totalPage; i++) {
-
-					// 	if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-
-					// 		for(var j = 0; j < this.commentArr[i].length; j++) {
-					// 			newarr.push(this.commentArr[i][j])
-					// 		}
-					// 	}
-					// }
 					this.nitificationsList = res.data.data;
-					this.loading = false;
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
 				}).catch((wrong) => {
 					this.$message({
 						message: '网络错误，请重试1',

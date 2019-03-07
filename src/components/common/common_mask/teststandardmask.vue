@@ -78,7 +78,7 @@
 						</el-col> -->
 						<el-col :span="4">
 							<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-							<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
+							<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
 						</el-col>
 					</el-row>
 				</el-form>
@@ -220,7 +220,6 @@
 		this.resetBasisInfo();
     },
     basislead(value){
-		console.log(value);
 		this.productnum = value[0];//产品编号
 		if(value[1]!=''&&value[1]!=null&&value[1]!=undefined){
 			this.basistable = value[1];//检测依据表格中已有的数据
@@ -310,7 +309,6 @@
             // STATUS: this.searchList.STATUS,
 		};
 		var url = this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.productnum+'&S_NUM_where_not_in='+this.basissnums;
-		console.log(url);
         this.$axios.get(url, {
             
         }).then((res) => {
@@ -363,8 +361,8 @@
 				console.log('取消关闭');
 				$('.v-modal').hide();
 			});
-    }
-  },
+		}
+	},
   	mounted() {
 		this.getCompany();
 	},

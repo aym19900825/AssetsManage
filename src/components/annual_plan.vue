@@ -67,74 +67,73 @@
 						</div>
 					</div>
 					<!-- 高级查询划出 Begin-->
-				<div v-show="search">
-					<el-form :model="searchList" label-width="70px">
-						<el-row :gutter="10">
-							<el-col :span="5">
-								<el-form-item label="编号" prop="WP_NUM">
-									<el-input v-model="searchList.WP_NUM"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="5">
-								<el-form-item label="描述" prop="DESCRIPTION">
-									<el-input v-model="searchList.DESCRIPTION"></el-input>
-								</el-form-item>
-							</el-col>
-							
-							<el-col :span="5">
-								<el-form-item label="年度" prop="YEAR" label-width="45px">
-									<el-input v-model="searchList.YEAR"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="5">
-								 <el-form-item label="录入时间" prop="ENTERDATE">
-									<div class="block">
-									    <el-date-picker
-									      v-model="searchList.ENTERDATE"
-									      type="date"
-									      placeholder="录入时间" style="width: 100%"   value-format="yyyy-MM-dd">
-									    </el-date-picker>
-								  	</div>
-								</el-form-item>
-							</el-col>
-						</el-row>
-						<el-row :gutter="10">
-							<el-col :span="5">
-								<el-form-item label="编辑状态" prop="STATUS">
-									<el-select v-model="searchList.STATUS" placeholder="请选择" style="width: 100%" clearable>
-									    <el-option label="草稿" value="1"></el-option>
-									    <el-option label="审批中" value="2"></el-option>
-									    <el-option label="驳回" value="0"></el-option>
-									    <el-option label="已发布" value="3"></el-option>
-									    <el-option label="已取消" value="4"></el-option>
-									</el-select>
-								</el-form-item>
-							</el-col>
-							<el-col :span="5">
-								<el-form-item label="执行状态" prop="LEADER_STATUS">
-									<el-select v-model="searchList.LEADER_STATUS" placeholder="请选择" style="width: 100%" clearable>
-										<el-option label="未开始" value="1"></el-option>
-										<el-option label="进行中" value="2"></el-option>
-										<el-option label="已完成" value="3"></el-option>
-									</el-select>
-								</el-form-item>
-							</el-col>
-							<el-col :span="5">
-								<el-form-item label="类型" prop="TYPE" label-width="45px">
-									<el-select clearable v-model="searchList.TYPE" filterable allow-create default-first-option placeholder="请选择" style="width:100%">
-									    <el-option label="监督抽查" value="1"></el-option>
-							      		<el-option label="质量抽查" value="3"></el-option>
-									</el-select>
-								</el-form-item>
-							</el-col>
-							
-                                    <el-col :span="4">
+					<div v-show="search">
+						<el-form :model="searchList" label-width="70px">
+							<el-row :gutter="10">
+								<el-col :span="5">
+									<el-form-item label="编号" prop="WP_NUM">
+										<el-input v-model="searchList.WP_NUM"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="5">
+									<el-form-item label="描述" prop="DESCRIPTION">
+										<el-input v-model="searchList.DESCRIPTION"></el-input>
+									</el-form-item>
+								</el-col>
+								
+								<el-col :span="5">
+									<el-form-item label="年度" prop="YEAR" label-width="45px">
+										<el-input v-model="searchList.YEAR"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="5">
+									<el-form-item label="录入时间" prop="ENTERDATE">
+										<div class="block">
+											<el-date-picker
+											v-model="searchList.ENTERDATE"
+											type="date"
+											placeholder="录入时间" style="width: 100%"   value-format="yyyy-MM-dd">
+											</el-date-picker>
+										</div>
+									</el-form-item>
+								</el-col>
+							</el-row>
+							<el-row :gutter="10">
+								<el-col :span="5">
+									<el-form-item label="编辑状态" prop="STATUS">
+										<el-select v-model="searchList.STATUS" placeholder="请选择" style="width: 100%" clearable>
+											<el-option label="草稿" value="1"></el-option>
+											<el-option label="审批中" value="2"></el-option>
+											<el-option label="驳回" value="0"></el-option>
+											<el-option label="已发布" value="3"></el-option>
+											<el-option label="已取消" value="4"></el-option>
+										</el-select>
+									</el-form-item>
+								</el-col>
+								<el-col :span="5">
+									<el-form-item label="执行状态" prop="LEADER_STATUS">
+										<el-select v-model="searchList.LEADER_STATUS" placeholder="请选择" style="width: 100%" clearable>
+											<el-option label="未开始" value="1"></el-option>
+											<el-option label="进行中" value="2"></el-option>
+											<el-option label="已完成" value="3"></el-option>
+										</el-select>
+									</el-form-item>
+								</el-col>
+								<el-col :span="5">
+									<el-form-item label="类型" prop="TYPE" label-width="45px">
+										<el-select clearable v-model="searchList.TYPE" filterable allow-create default-first-option placeholder="请选择" style="width:100%">
+											<el-option label="监督抽查" value="1"></el-option>
+											<el-option label="质量抽查" value="3"></el-option>
+										</el-select>
+									</el-form-item>
+								</el-col>
+									<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
 								</el-col>
-						</el-row>
-					</el-form>
-				</div>
+							</el-row>
+						</el-form>
+					</div>
 				<!-- 高级查询划出 End-->
 					<el-row class="relative" id="pageDiv">
 						<el-col :span="5" class="lefttree" id="left">
@@ -211,13 +210,12 @@
 							<!-- 表格 -->
 						</el-col>
 					</el-row>
-					</div>
 				</div>
 			</div>
+		</div>
 			<annualmask ref="child" @request="requestData" v-bind:page=page></annualmask>
 			<!--报表-->
 			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
-		</div>
 	</div>
 </template>
 <script>
@@ -241,10 +239,10 @@
 		data() {
 			return {
 				reportData:{},//报表的数据
-				loading: false,
+				loadSign: true, //鼠标滚动加载数据
+				loading: false,//默认加载数据时显示loading动画
 				basic_url: Config.dev_url,
 				ismin: true,
-				loadSign: true, //加载
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				checkedName: [
 					'编号',
@@ -344,30 +342,6 @@
 			}
 		},
 	methods: {
-		//表格滚动加载
-		loadMore () {
-			let up2down = sessionStorage.getItem('up2down');
-			if(this.loadSign) {					
-				if(up2down=='down'){
-					this.page.currentPage++
-					if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-						this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-						return false;
-					}
-				}else{
-					this.page.currentPage--
-					if(this.page.currentPage < 1) {
-						this.page.currentPage=1
-						return false;
-					}
-				}
-				this.loadSign = false;
-				setTimeout(() => {
-					this.loadSign = true
-				}, 1000)
-				this.requestData()
-			}
-		},
 		//表头居中
 		rowClass({ row, rowIndex}) {
 		    return 'text-align:center'
@@ -389,14 +363,58 @@
 			test(){
 				console.log(this.checkedName.indexOf('账号')!=-1);
 			},
-			sizeChange(val) {//分页，总页数
-		      this.page.pageSize = val;
-		      this.requestData();
-		    },
-		    currentChange(val) {//分页，当前页
-		      this.page.currentPage = val;
-		      this.requestData();
-		    },
+			//表格滚动加载
+			loadMore() {
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++;
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
+					}else{
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1;
+							return false;
+						}
+					}
+					this.loadSign = false;
+					setTimeout(() => {
+						this.loadSign = true;
+					}, 1000)
+					this.requestData();
+				}
+			},
+			//改变页数
+			sizeChange(val) {
+				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+			//当前页数
+			currentChange(val) {
+				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
 			searchinfo(index) {//高级查询
 				this.page.currentPage = 1;
 				this.page.pageSize = 20;
@@ -719,7 +737,7 @@
 				this.selUser = val;
 			},
 			requestData(index) {
-				this.loading = true;
+				this.loading = true;//加载动画打开
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -736,7 +754,14 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					this.page.totalCount = res.data.count || 0;
+					this.page.totalCount = res.data.count;//页码赋值
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false;
+					} else {
+						this.loadSign = true;
+					}
 					var list = res.data.data || [];
 					for(var i=0;i<list.length;i++){
 						if(list[i].TYPE  == '1'){
@@ -746,7 +771,10 @@
 						}
 					}
 					this.userList = list;
-					this.loading = false;
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
 				}).catch((wrong) => {
 					this.$message({
 						message: '网络错误，请重试1',

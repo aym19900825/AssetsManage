@@ -19,35 +19,30 @@
 								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 								</button>
-								<!-- <button type="button" class="btn btn-green" @click="openAddMgr" id="">
-	                        	<i class="icon-add"></i>添加
-	              			 </button>
-								<button type="button" class="btn btn-blue button-margin" @click="modify">
-							    <i class="icon-edit"></i>修改
-							</button>
-								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
-							    <i class="icon-trash"></i>删除
-							</button>
-								<button type="button" class="btn btn-red button-margin" @click="physicsDel">
-								    <i class="icon-trash"></i>彻底删除
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="importData">
-							    <i class="icon-upload-cloud"></i>导入
-							</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="exportData">
-							    <i class="icon-download-cloud"></i>导出
-							</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="Printing">
-							    <i class="icon-print"></i>打印
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
-							    <i class="icon-file-text1"></i>报表
-							</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-					    		<i class="icon-search"></i>高级查询
-					    		<i class="icon-arrow1-down" v-show="down"></i>
-					    		<i class="icon-arrow1-up" v-show="up"></i>
-							</button> -->
+								<el-dropdown size="small">
+									<button class="btn mr5 btn-primarys">
+										<i class="icon-inventory-line-callin"></i> 导入<i class="el-icon-arrow-down el-icon--right"></i>
+									</button>
+								<el-dropdown-menu slot="dropdown">
+    								<el-dropdown-item>
+    									<div @click="download"><i class="icon-download-cloud"></i>下载模版</div>
+    								</el-dropdown-item>
+    								
+    								<el-dropdown-item>
+										<el-upload
+										ref="upload"
+										class="upload"
+										:action="uploadUrl()"
+										:on-success="fileSuccess"
+										:limit=1
+										multiple
+										method:="post"
+										:file-list="fileList">
+											<i class="icon-upload-cloud"></i> 上传
+										</el-upload>
+    								</el-dropdown-item>
+						  		</el-dropdown-menu>
+							</el-dropdown>
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -124,7 +119,7 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格 Begin-->
-							<el-table :header-cell-style="rowClass" 
+							<el-table ref="table" :header-cell-style="rowClass" 
 									  :data="standardList" 
 									  border 
 									  stripe 
@@ -199,8 +194,9 @@
 		data() {
 			return {
 				reportData:{},//报表的数据
-				loading: false,
 				basic_url: Config.dev_url,
+				loadSign: true, //鼠标滚动加载数据
+				loading: false,//默认加载数据时显示loading动画
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
 				value: '',
 				options: [{
@@ -210,16 +206,7 @@
 					value: '0',
 					label: '不活动'
 				}],
-				loadSign: true, //加载
 				commentArr: {},
-				searchData: {
-					page: 1,
-					limit: 10, //分页显示数
-					searchKey: '',
-					searchValue: '',
-					companyId: '',
-					deptId: ''
-				},
 				checkedName: [
 					// '主键编号',
 					'标准编号',
@@ -338,39 +325,59 @@
 					this.selectData = res.data;
 				});
 			},
+			//表格滚动加载
 			loadMore() {
 				let up2down = sessionStorage.getItem('up2down');
 				if(this.loadSign) {					
 					if(up2down=='down'){
-						this.page.currentPage++
+						this.page.currentPage++;
 						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
 							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
 							return false;
 						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
 					}else{
-						this.page.currentPage--
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
 						if(this.page.currentPage < 1) {
-							this.page.currentPage=1
+							this.page.currentPage=1;
 							return false;
 						}
 					}
 					this.loadSign = false;
-					console.log('this.page.currentPage',this.page.currentPage)
 					setTimeout(() => {
-						this.loadSign = true
+						this.loadSign = true;
 					}, 1000)
-					this.requestData()
+					this.requestData();
 				}
 			},
 			tableControle(data) {
 				this.checkedName = data;
 			},
+			//改变页数
 			sizeChange(val) {
 				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
 				this.requestData();
 			},
+			//当前页数
 			currentChange(val) {
 				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
 				this.requestData();
 			},
 			resetbtn(){
@@ -387,12 +394,11 @@
 			},
 			searchinfo(index) {
 				this.page.currentPage = 1;
-				this.page.pageSize = 10;
+				this.page.pageSize = 20;
 				this.requestData();
 			},
 			//清空
 			reset() {
-				
 				this.dataInfo = {
 					// ID: '',
 					VERSION: '1',
@@ -575,9 +581,26 @@
 					});
 				}
 			},
+			uploadUrl(){
+                var url = this.basic_url +'/api-apps/app/productType/importExc?access_token='+sessionStorage.getItem('access_token');
+                return url;
+            },
+          	
 			// 导入
-			importData() {
-
+			download() {
+				var url = this.basic_url + '/api-apps/app/productType/importExcTemplete?access_token='+sessionStorage.getItem('access_token');
+				var xhr = new XMLHttpRequest();
+					xhr.open('POST', url, true);
+					xhr.responseType = "blob";
+					xhr.setRequestHeader("client_type", "DESKTOP_WEB");
+					xhr.onload = function() {
+						if (this.status == 200) {
+							var blob = this.response;
+							var objecturl = URL.createObjectURL(blob);
+							window.location.href = objecturl;
+						}
+					}
+					xhr.send();
 			},
 			// 导出
 			exportData() {
@@ -622,8 +645,9 @@
 			SelChange(val) { //选中值后赋值给一个自定义的数组：selUser
 				this.selUser = val;
 			},
-			requestData() { //高级查询字段
-				this.loading = true;
+			//Table默认加载数据
+			requestData() {
+				this.loading = true;//加载动画打开
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -649,8 +673,16 @@
 						this.loadSign = true
 					}
 					this.standardList = res.data.data;
-					this.loading = false;
-				}).catch((wrong) => {})
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试1',
+						type: 'error'
+					});
+				})
 
 			},
 			handleNodeClick(data) {},
@@ -672,8 +704,19 @@
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
 					console.log(res);
-					this.buttons = res.data;
-					
+					var resData = res.data;
+					var uploadIndex = 0;
+					var uploadBtn = resData.filter((item,index)=>{
+						if(item.name == '导入'){
+							uploadIndex  = index;
+							return item;
+						}
+					});
+					if(uploadBtn.length > 0){
+						this.isUploadBtn = true;
+						resData.splice(uploadIndex, 1);
+					}
+					this.buttons = resData;	
 				}).catch((wrong) => {
 					this.$message({
 								message: '网络错误，请重试',

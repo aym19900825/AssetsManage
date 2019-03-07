@@ -38,14 +38,14 @@ axios.interceptors.response.use(
     // router.push({ path: '/' });
     if (error && error.response) {
       console.log(error.response.status)
-      switch (error.response.status) {
-        case 401:
-          router.push({ path: '/' });
-        case 403:
-          router.push({ path: '/' });
-        case 404:
-          router.push({ path: '/' });
-      }
+      // switch (error.response.status) {
+      //   case 401:
+      //     router.push({ path: '/' });
+      //   case 403:
+      //     router.push({ path: '/' });
+      //   case 404:
+      //     router.push({ path: '/' });
+      // }
     }
     return Promise.reject(error.response.data);
   },

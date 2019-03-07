@@ -88,9 +88,9 @@
 			<el-dialog :modal-append-to-body="false" title="设备分类" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
 				<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" default-expand-all @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
 				</el-tree>
-				<span slot="footer" class="dialog-footer">
-			       <el-button @click="dialogVisible = false">取 消</el-button>
-			       <el-button type="primary" @click="queding();" >确 定</el-button>
+				<span slot="footer">
+			       <el-button type="primary" @click="queding" >确 定</el-button>
+			       <el-button @click="resetBasisInfo">取 消</el-button>
 			    </span>
 			</el-dialog>
 		</div>
@@ -229,10 +229,17 @@
 					})
 				}else{					
 					this.placetext = false;
-					this.dialogVisible = false;				
+					// this.dialogVisible = false;	
 					this.CATEGORY.PARENT = this.checkedNodes[0].CLASSIFY_NUM;
 					this.CATEGORY.PARENTDesc = this.checkedNodes[0].CLASSIFY_DESCRIPTION;
+					this.resetBasisInfo();//调用resetBasisInfo函数
 				}				
+			},
+			resetBasisInfo(){//点击确定或取消按钮时重置数据20190303
+				this.dialogVisible = false;//关闭弹出框
+				this.resourceData = [];//列表数据置空
+				this.page.currentPage = 1;//页码重新传值
+				this.page.pageSize = 10;//页码重新传值
 			},
 			handleNodeClick(data) { //获取勾选树菜单节点
 				//console.log(data);

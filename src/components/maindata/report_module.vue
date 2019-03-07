@@ -85,7 +85,7 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格 Begin-->
-							<el-table :header-cell-style="rowClass" 
+							<el-table ref="table" :header-cell-style="rowClass" 
 									  :data="categoryList" 
 									  border 
 									  stripe 
@@ -148,9 +148,9 @@
 		data() {
 			return {
 				reportData:{},//报表的数据
-				loading: false,
 				basic_url: Config.dev_url,
-				loadSign: true, //加载
+				loadSign: true, //鼠标滚动加载数据
+				loading: false,//默认加载数据时显示loading动画
 				commentArr: {},
 				value: '',
 				options: [{
@@ -160,16 +160,7 @@
 					value: '0',
 					label: '不活动'
 				}],
-				searchData: {
-					page: 1,
-					limit: 10, //分页显示数
-					nickname: '',
-					enabled: '',
-					searchKey: '',
-					searchValue: '',
-					companyId: '',
-					deptId: ''
-				},
+				
 				checkedName: [
 					'编码',
 					'模板描述',
@@ -250,38 +241,57 @@
 				let up2down = sessionStorage.getItem('up2down');
 				if(this.loadSign) {					
 					if(up2down=='down'){
-						this.page.currentPage++
+						this.page.currentPage++;
 						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
 							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
 							return false;
 						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
 					}else{
-						this.page.currentPage--
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
 						if(this.page.currentPage < 1) {
-							this.page.currentPage=1
+							this.page.currentPage=1;
 							return false;
 						}
 					}
 					this.loadSign = false;
-					console.log('this.page.currentPage',this.page.currentPage)
 					setTimeout(() => {
-						this.loadSign = true
+						this.loadSign = true;
 					}, 1000)
-					this.requestData()
+					this.requestData();
 				}
 			},
 			tableControle(data) {
 				this.checkedName = data;
 			},
+			//改变页数
 			sizeChange(val) {
 				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
 				this.requestData();
 			},
+			//当前页数
 			currentChange(val) {
 				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
 				this.requestData();
 			},
-				resetbtn(){
+			resetbtn(){
 				this.searchList =  { //点击高级搜索后显示的内容
 					TYPE: '',
 					DEPTID: '',
@@ -476,8 +486,26 @@
 				}
 			},
 			// 导入
-			importData() {
-
+			uploadUrl(){
+                var url = this.basic_url +'/api-apps/app/productType/importExc?access_token='+sessionStorage.getItem('access_token');
+                return url;
+            },
+          	
+			// 导入
+			download() {
+				var url = this.basic_url + '/api-apps/app/productType/importExcTemplete?access_token='+sessionStorage.getItem('access_token');
+				var xhr = new XMLHttpRequest();
+					xhr.open('POST', url, true);
+					xhr.responseType = "blob";
+					xhr.setRequestHeader("client_type", "DESKTOP_WEB");
+					xhr.onload = function() {
+						if (this.status == 200) {
+							var blob = this.response;
+							var objecturl = URL.createObjectURL(blob);
+							window.location.href = objecturl;
+						}
+					}
+					xhr.send();
 			},
 			// 导出
 			exportData() {
@@ -503,7 +531,7 @@
 			Printing() {
 
 			},
-			            // 报表
+			// 报表
 			reportdata(){
 				this.reportData.app=this.productType;
 				this.$refs.reportChild.visible();
@@ -524,7 +552,7 @@
 				this.selUser = val;
 			},
 			requestData() {
-				this.loading = true;
+				this.loading = true;//加载动画打开
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -544,10 +572,17 @@
 						this.loadSign = true
 					}
 					this.categoryList = res.data.data;
-					this.loading = false;
-				}).catch((wrong) => {})
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试1',
+						type: 'error'
+					});
+				})
 			},
-			handleNodeClick(data) {},
 			formatter(row, column) {
 				return row.enabled;
 			},
@@ -558,7 +593,7 @@
 			  },
 			    //请求页面的button接口
 		    getbutton(childByValue){
-		    	console.log(childByValue);
+		    	// console.log(childByValue);
 		    	var data = {
 					menuId: childByValue.id,
 					roleId: this.$store.state.roleid,
@@ -566,8 +601,19 @@
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
 					console.log(res);
-					this.buttons = res.data;
-					
+					var resData = res.data;
+					var uploadIndex = 0;
+					var uploadBtn = resData.filter((item,index)=>{
+						if(item.name == '导入'){
+							uploadIndex  = index;
+							return item;
+						}
+					});
+					if(uploadBtn.length > 0){
+						this.isUploadBtn = true;
+						resData.splice(uploadIndex, 1);
+					}
+					this.buttons = resData;
 				}).catch((wrong) => {
 					this.$message({
 								message: '网络错误，请重试',

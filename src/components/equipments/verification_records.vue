@@ -251,6 +251,7 @@
 					totalCount: 0
 				},
 				buttons:[],
+				checkRecord:'checkRecord'//appname
 			}
 		},
 		methods: {
@@ -461,7 +462,7 @@
 			},
 			//报表
 			reportdata(){
-				this.reportData.app=this.productType;
+				this.reportData.app=this.checkRecord;
 				this.$refs.reportChild.visible();
 			},
 			//时间格式化  

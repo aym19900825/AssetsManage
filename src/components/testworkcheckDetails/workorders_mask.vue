@@ -304,7 +304,7 @@
 										<el-row>
 											<el-col :span="8">
 												<el-form-item label="样品返回日期">
-													<el-date-picker v-model="workorderForm.RETURN_ITEM_DATE" type="date" placeholder="请选择完成日期" value-format="yyyy-MM-dd" style="width: 100%;":disabled="noedit">
+													<el-date-picker v-model="workorderForm.RETURN_ITEM_DATE" type="date" placeholder="请选择完成日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
 													</el-date-picker>
 												</el-form-item>
 											</el-col>
@@ -448,14 +448,14 @@
 													<template slot-scope="scope">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="请输入">	
 														</el-input>
-														<span v-else="v-else">{{scope.row.P_NUM}}</span>
+														<span v-else>{{scope.row.P_NUM}}</span>
 													</template>
 												</el-table-column>
 												<el-table-column prop="P_DESC" label="检测项目名称" sortable>
 													<template slot-scope="scope">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入">	
 														</el-input>
-														<span v-else="v-else">{{scope.row.P_DESC}}</span>
+														<span v-else>{{scope.row.P_DESC}}</span>
 													</template>
 												</el-table-column>
 							            		<el-table-column prop="REMARKS" label="要求" sortable>
@@ -468,7 +468,7 @@
 													<template slot-scope="scope">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入">	
 														</el-input>
-														<span v-else="v-else">{{scope.row.VERSION}}</span>
+														<span v-else>{{scope.row.VERSION}}</span>
 													</template>
 												</el-table-column>
 											      <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
@@ -500,27 +500,27 @@
 											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NAME">
 														  <el-button slot="append" icon="el-icon-search" @click="addperson(scope.row)" :disabled="noedit"></el-button>
 													</el-input>
-													<span v-else="v-else">{{scope.row.NAME}}</span>
+													<span v-else>{{scope.row.NAME}}</span>
 											      </template>
 											    </el-table-column>
 											    <el-table-column label="用户名" sortable prop="USER">
 											      <template slot-scope="scope">
-											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.USER"></el-input><span v-else="v-else">{{scope.row.USER}}</span>
+											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.USER"></el-input><span v-else>{{scope.row.USER}}</span>
 											      </template>
 											    </el-table-column>
 												<el-table-column label="是否是负责人" sortable prop="ISMAINPERSON">
 											      <template slot-scope="scope">
-											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ISMAINPERSON"></el-input><span v-else="v-else">{{scope.row.ISMAINPERSON}}</span>
+											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ISMAINPERSON"></el-input><span v-else>{{scope.row.ISMAINPERSON}}</span>
 											      </template>
 											    </el-table-column>
 											    <el-table-column label="机构" sortable prop="DEPARTMENT">
 											      <template slot-scope="scope">
-											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DEPARTMENT"></el-input><span v-else="v-else">{{scope.row.DEPARTMENT}}</span>
+											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DEPARTMENT"></el-input><span v-else>{{scope.row.DEPARTMENT}}</span>
 											      </template>
 											    </el-table-column>
 											    <el-table-column label="电话" sortable prop="TELPHONE">
 											      <template slot-scope="scope">
-											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.TELPHONE"></el-input><span v-else="v-else">{{scope.row.TELPHONE}}</span>
+											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.TELPHONE"></el-input><span v-else>{{scope.row.TELPHONE}}</span>
 											      </template>
 											    </el-table-column>
 							            		<el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
@@ -568,13 +568,13 @@
 											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.D_NUM" :disabled="edit">
 											      		<el-button slot="append" icon="el-icon-search" @click="templateNumber(scope.row) "></el-button>
 											      	</el-input>
-											      	<span v-else="v-else">{{scope.row.D_NUM}}</span>
+											      	<span v-else>{{scope.row.D_NUM}}</span>
 											      </template>
 											    </el-table-column>
 											    <el-table-column label="模板描述" sortable prop="D_DESC">
 											      <template slot-scope="scope">
 											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.D_DESC" :disabled="edit"></el-input>
-											      	<span v-else="v-else">{{scope.row.D_DESC}}</span>
+											      	<span v-else>{{scope.row.D_DESC}}</span>
 											      </template>
 											    </el-table-column>
 							            		<el-table-column label="模板文件大小" prop="FILESIZE_ORG">
@@ -623,21 +623,21 @@
 													<template slot-scope="scope">
 														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.WONUM" placeholder="自动生成">	
 														</el-input>
-														<span v-else="v-else">{{scope.row.WONUM}}</span>
+														<span v-else>{{scope.row.WONUM}}</span>
 													</template>
 												</el-table-column>
 												<el-table-column prop="ASSETNUM" label="设备编号" sortable width="150px">
 													<template slot-scope="scope">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ASSETNUM" placeholder="请输入">
 														</el-input>
-														<span v-else="v-else">{{scope.row.ASSETNUM}}</span>
+														<span v-else>{{scope.row.ASSETNUM}}</span>
 													</template>
 												</el-table-column>
 												<el-table-column prop="DESCRIPTION" label="设备名称" sortable width="180px">
 													<template slot-scope="scope">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DESCRIPTION" placeholder="请输入">
 														</el-input>
-														<span v-else="v-else">{{scope.row.DESCRIPTION}}</span>
+														<span v-else>{{scope.row.DESCRIPTION}}</span>
 													</template>
 												</el-table-column>
 
@@ -645,7 +645,7 @@
 													<template slot-scope="scope">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入">
 														</el-input>
-														<span v-else="v-else">{{scope.row.MODEL}}</span>
+														<span v-else>{{scope.row.MODEL}}</span>
 													</template>
 												</el-table-column>
 
@@ -653,7 +653,7 @@
 													<template slot-scope="scope">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.USE_PERSON" placeholder="请输入">
 														</el-input>
-														<span v-else="v-else">{{scope.row.USE_PERSON}}</span>
+														<span v-else>{{scope.row.USE_PERSON}}</span>
 													</template>
 												</el-table-column>
 												
@@ -674,7 +674,7 @@
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REPORTNUM" placeholder="请输入">
 															   <el-button slot="append" icon="el-icon-search"></el-button>
 														</el-input>
-														<span v-else="v-else">{{scope.row.REPORTNUM}}</span>
+														<span v-else>{{scope.row.REPORTNUM}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
@@ -684,7 +684,7 @@
 														<el-form-item :prop="'WORKORDER_REPORTList.'+scope.$index + '.REPORTNAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REPORTNAME" placeholder="请输入">	
 														</el-input>
-														<span v-else="v-else">{{scope.row.REPORTNAME}}</span>
+														<span v-else>{{scope.row.REPORTNAME}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
@@ -694,7 +694,7 @@
 														<el-form-item :prop="'WORKORDER_REPORTList.'+scope.$index + '.PREVIEW'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PREVIEW" placeholder="请输入">
 														</el-input>
-														<span v-else="v-else">{{scope.row.PREVIEW}}</span>
+														<span v-else>{{scope.row.PREVIEW}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column> -->
@@ -704,13 +704,12 @@
 														<!-- <el-form-item :prop="'WORKORDER_REPORTList.'+scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" > -->
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入">
 														</el-input>
-														<span v-else="v-else">{{scope.row.MOVERSIONDEL}}</span>
+														<span v-else>{{scope.row.MOVERSIONDEL}}</span>
 														<!-- </el-form-item> -->
 													</template>
 												</el-table-column>
 												<el-table-column fixed="right" label="操作" width="150px">
 													<template slot-scope="scope">
-														 
 													  <el-button title="编辑" type="text" size="small">
 														<i class="icon-edit2"></i>
 													  </el-button>
@@ -736,35 +735,35 @@
 													<template slot-scope="scope">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WONUM">
 														</el-input>
-														<span v-else="v-else">{{scope.row.WONUM}}</span>
+														<span v-else>{{scope.row.WONUM}}</span>
 													</template>
 												</el-table-column>
 												<el-table-column prop="PROXY_CONTRACT_NUM" label="分包协议编号" sortable width="120px">
 													<template slot-scope="scope">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROXY_CONTRACT_NUM">
 														</el-input>
-														<span v-else="v-else">{{scope.row.PROXY_CONTRACT_NUM}}</span>
+														<span v-else>{{scope.row.PROXY_CONTRACT_NUM}}</span>
 													</template>
 												</el-table-column>
 												<el-table-column prop="PROXYNUM" label="委托书编号" sortable width="120px">
 													<template slot-scope="scope">
 														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.PROXYNUM" placeholder="请输入委托方名称">
 														</el-input>
-														<span v-else="v-else">{{scope.row.PROXYNUM}}</span>
+														<span v-else>{{scope.row.PROXYNUM}}</span>
 													</template>
 												</el-table-column>
 												<el-table-column prop="V_NAME" label="委托单位" sortable width="120px">
 													<template slot-scope="scope">
 														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAME" placeholder="请输入委托方名称">
 														</el-input>
-														<span v-else="v-else">{{scope.row.V_NAME}}</span>
+														<span v-else>{{scope.row.V_NAME}}</span>
 													</template>
 												</el-table-column>
 												<el-table-column prop="DEPTTYPE" label="机构属性" sortable width="120px">
 													<template slot-scope="scope">
 														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.DEPTTYPE" placeholder="请输入委托方名称">
 														</el-input>
-														<span v-else="v-else">{{scope.row.DEPTTYPE}}</span>
+														<span v-else>{{scope.row.DEPTTYPE}}</span>
 													</template>
 												</el-table-column>
 												<el-table-column prop="INSPECT_GROUP" label="专业组" sortable width="120px">
@@ -780,7 +779,7 @@
 															<el-button slot="append" icon="el-icon-search" @click="getDept(scope.row)">
 															</el-button>
 														</el-input>
-														<span v-else="v-else">{{scope.row.VENDORDesc}}</span>
+														<span v-else>{{scope.row.VENDORDesc}}</span>
 													</template>
 												</el-table-column>
 												<!-- <el-table-column prop="PRODUCT_TYPE" label="产品类别" sortable width="120px">
@@ -789,7 +788,7 @@
 															<el-button slot="append" icon="el-icon-search" @click="addcategory(scope.row)">
 															</el-button>
 														</el-input>
-														<span v-else="v-else">{{scope.row.PRODUCT_TYPE}}</span>
+														<span v-else>{{scope.row.PRODUCT_TYPE}}</span>
 													</template>
 												</el-table-column>
 												<el-table-column prop="PRODUCT" label="产品名称" sortable width="120px">
@@ -798,7 +797,7 @@
 															<el-button slot="append" icon="el-icon-search" @click="addproduct(scope.row)">
 															</el-button>
 														</el-input>
-														<span v-else="v-else">{{scope.row.PRODUCT}}</span>
+														<span v-else>{{scope.row.PRODUCT}}</span>
 													</template>
 												</el-table-column>
 												<el-table-column prop="BASIS" label="检验检测技术依据" sortable width="150px">
@@ -807,7 +806,7 @@
 															<el-button slot="append" icon="el-icon-search" @click="basisleadbtn(scope.row)">
 															</el-button>
 														</el-input>
-														<span v-else="v-else">{{scope.row.BASIS}}</span>
+														<span v-else>{{scope.row.BASIS}}</span>
 													</template>
 												</el-table-column> -->
 
@@ -818,7 +817,7 @@
 																<el-button slot="append" icon="el-icon-search" @click="basisleadbtn2(scope.row)">
 																</el-button>
 															</el-input>
-														<span v-else="v-else">{{scope.row.P_REMARKS}}</span>
+														<span v-else>{{scope.row.P_REMARKS}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
@@ -826,7 +825,7 @@
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.REQUIRES'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REQUIRES" placeholder="请输入内容"></el-input>
-														<span v-else="v-else">{{scope.row.REQUIRES}}</span>
+														<span v-else>{{scope.row.REQUIRES}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
@@ -834,7 +833,7 @@
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.Q_TYPE'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.Q_TYPE" placeholder="请输入内容"></el-input>
-														<span v-else="v-else">{{scope.row.Q_TYPE}}</span>
+														<span v-else>{{scope.row.Q_TYPE}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
@@ -842,7 +841,7 @@
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.CHECKCOST'" :rules="[{required: true, message: '请输入数字', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" id="testprice" @blur="testPrice(scope.row)" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input>
-														<span v-else="v-else">{{scope.row.CHECKCOST}}</span>
+														<span v-else>{{scope.row.CHECKCOST}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
@@ -912,7 +911,7 @@
 			</div>
 			<!--人员信息 Begin-->
 			<el-dialog :modal-append-to-body="false" title="人员信息" :visible.sync="dialogVisible2" width="80%">
-				<div class="scrollbar" style="max-height: 400px;">
+				<div class="scrollbar" style="max-height: 360px;">
 					<el-table :data="userList" border stripe :header-cell-style="rowClass"  style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore('user')">
 						<el-table-column type="selection" width="55" fixed align="center">
 						</el-table-column>
@@ -1974,15 +1973,23 @@
 						res.data.WORKORDER_DATA_TEMPLATEList[i].FILE_ORGCHECKED = false;
 						res.data.WORKORDER_DATA_TEMPLATEList[i].isEditing = false;
 					}
+					
 					for(var i = 0;i<this.workorderForm.WORKORDER_REPORTList.length;i++){
 						if(this.workorderForm.WORKORDER_REPORTList[0].ISCREATED == '1'){
 							this.btnshow = false;
 						}
 					}
+					for(var i = 0;i<this.workorderForm.WORKORDER_CONTRACTList.length;i++){
+						this.workorderForm.WORKORDER_CONTRACTList[i].INSPECT_GROUP = Number(this.workorderForm.WORKORDER_CONTRACTList[i].INSPECT_GROUP);
+					}
 					res.data.CJDW = Number(res.data.CJDW);
 					res.data.ITEM_PROFESSIONAL_GROUP = Number(res.data.ITEM_PROFESSIONAL_GROUP);
 					this.RVENDORSelect(res.data.CJDW);
 					this.workorderForm = res.data;
+					for(var i = 0;i<this.workorderForm.WORKORDER_CONTRACTList.length;i++){
+						this.workorderForm.WORKORDER_CONTRACTList[i].INSPECT_GROUP = Number(this.workorderForm.WORKORDER_CONTRACTList[i].INSPECT_GROUP);
+					}
+					console.log(res.data);
 					this.show = true;
 				}).catch((err) => {
 					this.$message({
@@ -2041,7 +2048,7 @@
 				this.detailgetData();
 				var url = this.basic_url + '/api-apps/app/workorder/flow/isStart/'+dataid;
 				this.$axios.get(url, {}).then((res) => {
-					// console.log(res);
+					console.log(res);
 					if(res.data.resp_code==1){
 						this.start=true;
 						this.approval=false;
@@ -2049,7 +2056,7 @@
 						var url = this.basic_url + '/api-apps/app/workorder/flow/Executors/'+dataid;
 						console.log(url);
 						this.$axios.get(url, {}).then((res) => {
-							// console.log(res.data.datas);
+							console.log(res);
 							res.data.CJDW = Number(res.data.CJDW);
 							var resullt=res.data.datas;
 							var users='';

@@ -41,7 +41,7 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="编码" prop="REPORTNUM">
-												<el-input v-model="report.REPORTNUM" :disabled="noedit"></el-input>
+												<el-input v-model="report.REPORTNUM" :disabled="true" placeholder="自动生成"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="16">
@@ -191,7 +191,7 @@
                     REPORTNUM:'',	//编码
                     DESCRIPTION:'',	//报告描述
                     WONUMID:'',	//工作任务单ID
-                    STATUS:'1',	//活动/不活动
+                    STATUS:'0',	//活动/不活动
                     STATE:'1',//流程状态
                     STATEDesc:'草稿',
                     // CHANGEBY:'',	//修改人

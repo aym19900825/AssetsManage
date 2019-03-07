@@ -291,6 +291,7 @@
 				},
 				selectData: [],
 				buttons:[],
+				checkPlan:'checkPlan'//appname
 			}
 		},
 		methods: {
@@ -532,7 +533,7 @@
 			},
 			//报表
 			reportdata(){
-				this.reportData.app=this.productType;
+				this.reportData.app=this.checkPlan;
 				this.$refs.reportChild.visible();
 			},
 			//时间格式化  

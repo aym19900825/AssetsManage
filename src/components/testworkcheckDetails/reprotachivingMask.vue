@@ -30,7 +30,7 @@
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="报告归档" name="1">
-									<el-row :gutter="20">
+									<el-row :gutter="20" class="pb10">
 										<el-col :span="4" class="pull-right">
 												<el-input  v-model="report.STATEDesc" :disabled="edit">
 														<template slot="prepend">状态</template>
@@ -40,7 +40,7 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="报告编号" prop="REPORTNUM">
-												<el-input v-model="report.REPORTNUM" :disabled="noedit"></el-input>
+												<el-input v-model="report.REPORTNUM" :disabled="true" placeholder="自动生成"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">

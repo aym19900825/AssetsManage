@@ -129,7 +129,7 @@
 						<div id="middle"></div>
 						<el-col :span="19" class="leftcont" id="right">
 							<!-- 表格 -->
-							<el-table :data="samplesList"
+							<el-table ref="table" :data="samplesList"
 							          :header-cell-style="rowClass" 
 									  border 
 									  stripe 
@@ -185,8 +185,8 @@
 		<samplesmask :samplesForm="samplesForm" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></samplesmask>
 		<!--右侧内容显示 End-->
 
-			<!--报表-->
-			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
+		<!--报表-->
+		<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 	</div>
 	</div>
 </template>
@@ -211,11 +211,11 @@
 		data() {
 			return {
 				reportData:{},//报表的数据
-				loading: false,
 				basic_url: Config.dev_url,
 				isShow: false,
 				ismin: true,
-				loadSign: true, //加载
+				loadSign: true, //鼠标滚动加载数据
+				loading: false,//默认加载数据时显示loading动画
 				commentArr: {},
 				checkedName: [
 					'样品编号',
@@ -313,6 +313,7 @@
 				},
 				samplesForm: {},//修改子组件时传递数据
 				buttons:[],
+				itemreturn:'itemreturn'//appname
 			}
 		},
 		methods: {
@@ -347,50 +348,58 @@
 
 			
 			//表格滚动加载
-			loadMore () {
-			   let up2down = sessionStorage.getItem('up2down');
+			loadMore() {
+				let up2down = sessionStorage.getItem('up2down');
 				if(this.loadSign) {					
 					if(up2down=='down'){
-						this.page.currentPage++
+						this.page.currentPage++;
 						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
 							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
 							return false;
 						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
 					}else{
-						this.page.currentPage--
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
 						if(this.page.currentPage < 1) {
-							this.page.currentPage=1
+							this.page.currentPage=1;
 							return false;
 						}
 					}
 					this.loadSign = false;
 					setTimeout(() => {
-						this.loadSign = true
+						this.loadSign = true;
 					}, 1000)
-					this.requestData()
+					this.requestData();
 				}
-			   // if (this.loadSign) {
-			   //   this.loadSign = false
-			   //   this.page.currentPage++
-			   //   if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			   //     return
-			   //   }
-			   //   setTimeout(() => {
-			   //     this.loadSign = true
-			   //   }, 1000)
-			   //   this.requestData()
-//			     console.log('到底了', this.page.currentPage)
-			   // }
-			 },
+			},
 			tableControle(data) {//控制表格列显示隐藏
 				this.checkedName = data;
 			},
-			sizeChange(val) {//分页，总页数
+			//改变页数
+			sizeChange(val) {
 				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
 				this.requestData();
 			},
-			currentChange(val) {//分页，当前页
+			//当前页数
+			currentChange(val) {
 				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
 				this.requestData();
 			},
 			searchinfo(index) {//高级查询
@@ -487,7 +496,7 @@
 			},
 						//报表
 			reportdata(){
-				this.reportData.app=this.productType;
+				this.reportData.app=this.itemreturn;
 				this.$refs.reportChild.visible();
 			},
 			// 删除
@@ -615,8 +624,9 @@
 			SelChange(val) {//选中值后赋值给一个自定义的数组：selMenu
 				this.selMenu = val;
 			},
+			//Table默认加载数据
 			requestData(index) {
-				this.loading = true;
+				this.loading = true;//加载动画打开
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -626,19 +636,16 @@
 					ITEM_STEP: this.searchList.ITEM_STEP,//样品序号
 					APPR_DATE: this.searchList.APPR_DATE,//批准日期
 					ACCEPT_DATE: this.searchList.ACCEPT_DATE,//收样日期
-
 					P_NUM: this.searchList.P_NUM,
 					PRO_NUM: this.searchList.PRO_NUM,
 				};
 				if(!(!!this.searchList.DEPTID && this.searchList.DEPTID == 128)){
 					data.DEPTID = this.searchList.DEPTID;
 				};
-				
 				var url = this.basic_url + '/api-apps/app/itemreturn';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -647,20 +654,11 @@
 					} else {
 						this.loadSign = true
 					}
-
-					// this.commentArr[this.page.currentPage] = res.data.data
-					// let newarr = []
-					// for(var i = 1; i <= totalPage; i++) {
-
-					// 	if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-
-					// 		for(var j = 0; j < this.commentArr[i].length; j++) {
-					// 			newarr.push(this.commentArr[i][j])
-					// 		}
-					// 	}
-					// }
 					this.samplesList = res.data.data;
-					this.loading = false;
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
 				}).catch((wrong) => {})
 				
 			},

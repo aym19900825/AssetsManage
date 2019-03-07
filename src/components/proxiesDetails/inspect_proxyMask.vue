@@ -208,7 +208,7 @@
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入">
 															   <el-button slot="append" icon="el-icon-search"></el-button>
 														</el-input>
-														<span v-else="v-else">{{scope.row.S_NUM}}</span>
+														<span v-else>{{scope.row.S_NUM}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
@@ -218,7 +218,7 @@
 														<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.S_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_DESC" placeholder="请输入">	
 														</el-input>
-														<span v-else="v-else">{{scope.row.S_DESC}}</span>
+														<span v-else>{{scope.row.S_DESC}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>												
@@ -227,7 +227,7 @@
 														<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入">
 														</el-input>
-														<span v-else="v-else">{{scope.row.VERSION}}</span>
+														<span v-else>{{scope.row.VERSION}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
@@ -256,7 +256,7 @@
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="请输入">
 															   <el-button slot="append" icon="el-icon-search"></el-button>
 														</el-input>
-														<span v-else="v-else">{{scope.row.P_NUM}}</span>
+														<span v-else>{{scope.row.P_NUM}}</span>
 													</el-form-item>	
 													</template>
 												</el-table-column>
@@ -266,7 +266,7 @@
 														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.P_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入">
 														</el-input>
-														<span v-else="v-else">{{scope.row.P_DESC}}</span>
+														<span v-else>{{scope.row.P_DESC}}</span>
 														</el-form-item>	
 													</template>
 												</el-table-column>
@@ -294,7 +294,7 @@
 														<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.STATUS'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入要求">
 														</el-input>
-														<span v-else="v-else">{{scope.row.STATUS}}</span>
+														<span v-else>{{scope.row.STATUS}}</span>
 													</el-form-item>
 													</template>
 												</el-table-column>-->
@@ -304,7 +304,7 @@
 														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入">
 														</el-input>
-														<span v-else="v-else">{{scope.row.VERSION}}</span>
+														<span v-else>{{scope.row.VERSION}}</span>
 														</el-form-item>	
 													</template>
 												</el-table-column>
@@ -328,7 +328,7 @@
 											<el-table :data="dataInfo.CHECK_PROXY_CONTRACTList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.CHECK_PROXY_CONTRACTList', order: 'descending'}">
 
 												<el-table-column prop="iconOperation" fixed label="" width="50px" v-if="!viewtitle">
-													<template slot-scope="scope"><i class="el-icon-check" v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else="v-else"></i></template>
+													<template slot-scope="scope"><i class="el-icon-check" v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else></i></template>
 												</el-table-column>
 
 
@@ -337,7 +337,7 @@
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.PROXY_CONTRACT_NUM'" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROXY_CONTRACT_NUM" :disabled="true" placeholder="自动生成">
 														</el-input>
-														<span v-else="v-else">{{scope.row.PROXY_CONTRACT_NUM}}</span>
+														<span v-else>{{scope.row.PROXY_CONTRACT_NUM}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
@@ -345,14 +345,14 @@
 													<template slot-scope="scope">
 														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAME">
 														</el-input>
-														<span v-else="v-else">{{scope.row.V_NAME}}</span>
+														<span v-else>{{scope.row.V_NAME}}</span>
 													</template>
 												</el-table-column>
 												<el-table-column prop="PROXYNUM" label="委托书编号" sortable width="120px">
 													<template slot-scope="scope">
 														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.PROXYNUM" placeholder="自动生成">
 														</el-input>
-														<span v-else="v-else">{{scope.row.PROXYNUM}}</span>
+														<span v-else>{{scope.row.PROXYNUM}}</span>
 													</template>
 												</el-table-column>
 												<el-table-column prop="INSPECT_GROUP" label="专业组" sortable width="120px">
@@ -370,14 +370,14 @@
 															<el-button slot="append" icon="el-icon-search" @click="getDept(scope.row)">
 															</el-button>
 														</el-input>
-														<span v-else="v-else">{{scope.row.VENDORDesc}}</span>
+														<span v-else>{{scope.row.VENDORDesc}}</span>
 													</template>
 												</el-table-column>
 												<el-table-column prop="depttypeName" label="机构属性" sortable width="120px">
 													<template slot-scope="scope">
 														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.depttypeName" placeholder="">
 														</el-input>
-														<span v-else="v-else">{{scope.row.depttypeName}}</span>
+														<span v-else>{{scope.row.depttypeName}}</span>
 													</template>
 												</el-table-column>
 
@@ -387,7 +387,7 @@
 															<el-button slot="append" icon="el-icon-search" @click="addcategory(scope.row)">
 															</el-button>
 														</el-input>
-														<span v-else="v-else">{{scope.row.PRODUCT_TYPE}}</span>
+														<span v-else>{{scope.row.PRODUCT_TYPE}}</span>
 													</template>
 												</el-table-column>
 
@@ -397,7 +397,7 @@
 															<el-button slot="append" icon="el-icon-search" @click="addproduct(scope.row)">
 															</el-button>
 														</el-input>
-														<span v-else="v-else">{{scope.row.PRODUCT}}</span>
+														<span v-else>{{scope.row.PRODUCT}}</span>
 													</template>
 												</el-table-column>
 
@@ -407,7 +407,7 @@
 															<el-button slot="append" icon="el-icon-search" @click="basisleadbtn(scope.row)">
 															</el-button>
 														</el-input>
-														<span v-else="v-else">{{scope.row.BASIS}}</span>
+														<span v-else>{{scope.row.BASIS}}</span>
 													</template>
 												</el-table-column>
 
@@ -418,7 +418,7 @@
 																<el-button slot="append" icon="el-icon-search" @click="basisleadbtn2(scope.row)">
 																</el-button>
 															</el-input>
-														<span v-else="v-else">{{scope.row.P_REMARKS}}</span>
+														<span v-else>{{scope.row.P_REMARKS}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
@@ -426,7 +426,7 @@
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.REQUIRES'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REQUIRES" placeholder="请输入内容"></el-input>
-														<span v-else="v-else">{{scope.row.REQUIRES}}</span>
+														<span v-else>{{scope.row.REQUIRES}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
@@ -434,7 +434,7 @@
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.Q_TYPE'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.Q_TYPE" placeholder="请输入内容"></el-input>
-														<span v-else="v-else">{{scope.row.Q_TYPE}}</span>
+														<span v-else>{{scope.row.Q_TYPE}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
@@ -443,7 +443,7 @@
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.CHECKCOST'" :rules="[{required: true, message: '请输入数字', trigger: 'change'}]" >
 															<el-input v-if="scope.row.isEditing" id="testprice" @blur="testPrice(scope.row)" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input>
-															<span v-else="v-else">{{scope.row.CHECKCOST}}</span>
+															<span v-else>{{scope.row.CHECKCOST}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
@@ -451,7 +451,7 @@
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.STATUS'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入要求"></el-input>
-														<span v-else="v-else">{{scope.row.STATUS}}</span>
+														<span v-else>{{scope.row.STATUS}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>-->
@@ -588,8 +588,8 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="主检负责人" prop="LEADER" label-width="110px">
-												<el-select v-model="dataInfo.LEADER" placeholder="请选择" @change="setLeader">
-													<el-option v-for="(data,index) in leaderdata" :key="data.id" :value="data.id" :label="data.username"></el-option>
+												<el-select v-model="dataInfo.LEADER" filterable allow-create default-first-option placeholder="请选择" @change="setLeader">
+													<el-option v-for="(data,index) in leaderdata" :key="index" :value="data.id" :label="data.username"></el-option>
 												</el-select>
 											</el-form-item>
 										</el-col>
@@ -640,8 +640,8 @@
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show="noviews">
-							<el-button type="primary" @click="saveAndUpdate">保存</el-button>
-							<el-button type="success"  v-show="addtitle" @click="saveAndSubmit">保存并继续</el-button>
+							<el-button type="primary" @click="save('Update')">保存</el-button>
+							<el-button type="success"  v-show="addtitle" @click="save('Submit')">保存并继续</el-button>
 							<el-button v-show="modifytitle" type="btn btn-primarys" @click="modifyversion">修订</el-button>
 							<el-button @click='close'>取消</el-button>
 						</div>
@@ -652,21 +652,21 @@
 				</div>
 			</div>
 			<!-- 分包方名称 -->
-			<el-dialog :modal-append-to-body="false" title="分包方名称" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="分包方名称" :visible.sync="dialogVisible" width="30%" :before-close="handleClose1">
 				<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" default-expand-all @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
 				</el-tree>
-				<span slot="footer" class="dialog-footer">
-			       <el-button @click="dialogVisible = false">取 消</el-button>
-			       <el-button type="primary" @click="queding();" >确 定</el-button>
-			    </span>
+				<div slot="footer">
+			       <el-button type="primary" @click="queding">确 定</el-button>
+			       <el-button @click="resetBasisInfo1">取 消</el-button>
+			    </div>
 			</el-dialog>
-			<!-- 客户联系人 Begin -->
-			<el-dialog :modal-append-to-body="false" title="客户联系人" :visible.sync="dialogVisibleuser" width="80%" :before-close="handleClose">
+			<!-- 客户联系人\姓名 Begin -->
+			<el-dialog :modal-append-to-body="false" title="客户联系人" :visible.sync="dialogVisibleuser" width="80%" :before-close="handleClose2">
 				<el-table :header-cell-style="rowClass" :data="CUSTOMER_PERSONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @selection-change="SelChange" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER_PERSONList', order: 'descending'}" v-loadmore="loadMore"
-			v-loading="loading" 
-			element-loading-text="加载中…"
-			element-loading-spinner="el-icon-loading"
-			element-loading-background="rgba(255, 255, 255, 0.9)">
+				v-loading="loading" 
+				element-loading-text="加载中…"
+				element-loading-spinner="el-icon-loading"
+				element-loading-background="rgba(255, 255, 255, 0.9)">
 					<el-table-column type="selection" width="55" fixed align="center">
 					</el-table-column>
 					<el-table-column label="联系人" sortable width="150px" prop="PERSON">
@@ -681,10 +681,11 @@
 				
 				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
-				<span slot="footer" class="dialog-footer">
+
+				<div slot="footer">
 			       <el-button type="primary" @click="addcusname">确 定</el-button>
-			       <el-button @click="DialogClose">取 消</el-button>
-			    </span>
+			       <el-button @click="resetBasisInfo2">取 消</el-button>
+			    </div>
 			</el-dialog>
 			<!-- 客户联系人 End -->
 			<!-- 样品名称  -->
@@ -714,7 +715,7 @@
 </template>
 
 <script>
-	import { Loading } from 'element-ui'
+	// import { Loading } from 'element-ui'
 	import Config from '../../config.js';
 	import sampletmask from '../common/common_mask/samplemask.vue'//样品名称
 	import enterprisemask from '../common/common_mask/enterprisemask.vue'//企业
@@ -818,7 +819,6 @@
 				loading: false,
 				loadSign:true,//加载
 				commentArr:{},
-				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				dataInfo: {
 					MAINGROUP:'',
@@ -872,7 +872,7 @@
 						}
 					],
 				},
-				gridData: [], //彈出框的數據
+				gridDataList: [], //彈出框的數據
 				page: {
 					currentPage: 1,
 					pageSize: 10,
@@ -944,8 +944,8 @@
 					REPORT_QUALITY: [{ required: true, message: '必填', trigger: 'blur' },{ type: 'number', message: '请输入数字'}],//交委托方分数
 					REPORT_MODE: [{ required: true, message: '必填', trigger: 'change' }],//发送方式
 					REPORT_FOMAT: [{ required: true, message: '必填', trigger: 'change' }],//格式
-					MAINGROUP: [{ required: true, message: '必填', trigger: 'change' }],//主检组
-					LEADER: [{ required: true, message: '必填', trigger: 'change' }],//主检负责人
+					MAINGROUP: [{required: true, message: '必填', trigger: 'change' }],//主检组
+					LEADER: [{required: true, message: '必填', trigger: 'change' }],//主检负责人
 //					MEMO: [{ required: true, message: '必填', trigger: 'blur' }],//备注
 					CHECK_COST:[{required: false,trigger: 'change',validator:price}],
 					ACTUALCOST:[{trigger: 'blur',validator:price}],
@@ -968,7 +968,6 @@
 				selectData:[],//承建单位
 				leaderdata:[],//主检负责人
 				username:'',
-//				deptid:'',//机构id
 				catenum:'',//产品类别作为参数传值给依据
 				pronum:'',//产品作为参数传值给依据
 				basisnum:'',////依据选中数据们字符串作为参数传值给项目
@@ -978,8 +977,8 @@
 			};
 		},
 		methods: {
+			testbasis(){},
 			handleNodeClick(data) { //获取勾选树菜单节点
-				//console.log(data);
 			},
 			handleClicks(data,checked, indeterminate) {
 				this.getCheckboxData = data;
@@ -1005,7 +1004,6 @@
 			//金额两位小数点千位分隔符，四舍五入
 			testPrice(item){
 				var money = item.CHECKCOST;
-				console.log(money);
 				var re = /^[0-9]+.?[0-9]*$/;
 				if (!re.test(money)) {
 			　　　　item.CHECKCOST = 0;
@@ -1076,10 +1074,8 @@
 			},
 			actualPrice(){
 				var money = document.getElementById("actualcost").value;
-				// this.initactual = money;
 				var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
 				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
-				// this.dataInfo.CHECTCOST="￥" + num.join(".");
 				this.dataInfo.ACTUALCOST = num.join(".");
 			},
 			reset() {					
@@ -1104,13 +1100,13 @@
 					V_ADDRESS:'',
 					V_ZIPCODE:'',
 					P_NAME:'',
+					LEADER:'',
 					INSPECT_PROXY_PROJECList: [],
 					INSPECT_PROXY_BASISList: [],
 					CHECK_PROXY_CONTRACTList: [],
 				};	  
 				},
 			handleClick(tab, event) {
-//		        console.log(tab, event);
 		    },
 			iconOperation(row, column, cell, event) {
 				if(column.property === "iconOperation") {
@@ -1174,8 +1170,6 @@
 				var obj = {
 					PROXY_CONTRACT_NUM: '',
 					PROXYNUM: '',
-					// V_NAME:this.customid,请不要删掉该注释
-					// V_NAMEDesc:this.dataInfo.V_NAME,请不要删掉该注释
 					V_NAME:this.dataInfo.V_NAME,
 					INSPECT_GROUP:'',
 					PROJECT_ID:'',
@@ -1209,9 +1203,7 @@
 			
 			//刪除新建行
 			deleteRow(index, row, listName){
-				console.log(row);
 				var TableName = '';
-				console.log(listName);
 				if(listName =='basisList'){
 					TableName = 'INSPECT_PROXY_BASIS';
 				}else if(listName =='projectList'){
@@ -1228,7 +1220,6 @@
 						value
 					}) => {
 						this.$axios.delete(url, {}).then((res) => {
-							console.log(res);
 							if(res.data.resp_code == 0){
 								this.dataInfo[TableName+'List'].splice(index,1);
 								this.$message({
@@ -1257,10 +1248,8 @@
 			//点击按钮显示弹窗
 			visible() {
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					console.log(res);
 					this.dataInfo.DEPTID = res.data.deptId;
 					this.dataInfo.ENTERBY = res.data.id;
-					// this.dataInfo.ORGID = res.data.deptName
 					var date = new Date();
 					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 					this.dataInfo.TYPE = '1';
@@ -1285,7 +1274,6 @@
 			detailgetData() {
 			var url = this.basic_url +'/api-apps/app/inspectPro/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					// 依据
 					for(var i = 0;i<res.data.INSPECT_PROXY_BASISList.length;i++){
 						res.data.INSPECT_PROXY_BASISList[i].isEditing = false;
@@ -1422,19 +1410,15 @@
 					}else{
 						var url = this.basic_url + '/api-apps/app/inspectPro/flow/Executors/'+dataid;
 						this.$axios.get(url, {}).then((res) => {
-							console.log(res.data.datas);
 							var resullt=res.data.datas;
 							var users='';
 							for(var i=0;i<resullt.length;i++){
 								users = users + resullt[i].username+",";
-								console.log("users----"+users);
 							}
 							if(users.indexOf(this.username) != -1){
-								console.log(this.username);
 								this.approval=true;
 								this.start=false;
 							}else{
-								console.log(2);
 								this.approval=false;
 								this.start=false;
 							}
@@ -1442,7 +1426,7 @@
 					}
 				});
 			},
-			addcategory(val){//产品类别
+			addcategory(val){//分包方名称
 				this.deptindex = val;
 				if(val == 'maintable'){
 					if(this.dataInfo.R_VENDOR == null || this.dataInfo.R_VENDOR == '' || this.dataInfo.R_VENDOR == undefined){
@@ -1553,6 +1537,7 @@
 						this.$refs.standardchild.basislead(this.sendchilddata);
 						this.main = 'main';
 						this.sendchilddata = [];
+						this.deptindex = {};
 					}
 				}else{
 					if(this.deptindex.PRO_NUM == null || this.deptindex.PRO_NUM == '' || this.deptindex.PRO_NUM == undefined){
@@ -1589,6 +1574,7 @@
 			},
 			//分包要求检验依据名称
 			testbasisname(value){
+				console.log('testbasisname');
 				this.deptindex.BASIS = value;
 			},
 			//检测依据编号+版本
@@ -1597,8 +1583,6 @@
 			},
 			//检验项目放大镜
 			basisleadbtn2(val){
-				console.log(123);
-				console.log(this.dataInfo.S_NUM);
 				this.deptindex = val;
 				if(val == 'maintable'){
 					if(this.dataInfo.S_NUM == null || this.dataInfo.S_NUM == '' || this.dataInfo.S_NUM == undefined){
@@ -1612,6 +1596,7 @@
 						this.$refs.projectchild.projectlead(this.sendchilddata);
 						this.main = 'main';
 						this.sendchilddata = [];
+						// this.deptindex = {};
 					}
 				}else{
 					if(this.deptindex.S_NUM == null || this.deptindex.S_NUM == '' || this.deptindex.S_NUM == undefined){
@@ -1647,7 +1632,6 @@
 			},
 			testprojectprover(value){
 				this.deptindex.PROJ_VERSIONNUM = value;
-				console.log(this.deptindex.PROJ_VERSIONNUM);
 			},
 			//点击关闭按钮
 			close() {
@@ -1736,7 +1720,7 @@
 				this.dataInfo.P_NAME=value;
 			},
 			// 保存users/saveOrUpdate
-			save() {
+			save(parameter) {
 				var projectgroup = "";
 				for(var i=0;i<this.dataInfo.INSPECT_PROXY_PROJECList.length;i++){
 					projectgroup = projectgroup + this.dataInfo.INSPECT_PROXY_PROJECList[i].INSPECT_GROUP+",";
@@ -1751,7 +1735,6 @@
 				}
 				this.$refs.dataInfo.validate((valid) => {
 			        if (valid) {
-						
 						if(this.dataInfo.INSPECT_PROXY_BASISList.length<=0&&this.dataInfo.INSPECT_PROXY_PROJECList.length<=0&&this.dataInfo.CHECK_PROXY_CONTRACTList.length<=0){
 							this.$message({
 								message: '检验依据和检验项目与要求和分包要求是必填项，请填写！',
@@ -1759,16 +1742,18 @@
 							});
 							return false;
 			        	}else{
-//							this.dataInfo.ITEM_STATUS=this.dataInfo.ITEM_STATUS==1;
-//							this.dataInfo.MESSSTATUS= this.dataInfo.MESSSTATUS==1;//信息状态
 							var url = this.basic_url + '/api-apps/app/inspectPro/saveOrUpdate';
 							this.$axios.post(url, this.dataInfo).then((res) => {
-								console.log(55);
 								if(res.data.resp_code == 0) {
 									this.$message({
 										message: '保存成功',
 										type: 'success'
 									});
+									if(parameter=="Update"){
+										this.show = false;
+									}else{
+										this.show = true;
+									}
 									//重新加载数据
 									this.$emit('request');
 									this.reset();
@@ -1780,36 +1765,34 @@
 								});
 							});
 						}
-						this.falg = true;
 			        }else{
 			          	this.show = true;
 			            this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
 						});
-			           this.falg = false;
 			        }
 				});
 			},
-			saveAndUpdate(){
-				this.save();
-				if(this.falg){
-					this.show = false;
-				}
-			},
-			saveAndSubmit(){
-				this.save();
-				this.show = true;			
-			},
-			handleClose(done) {
+			handleClose1(done) {
 				this.$confirm('确认关闭？')
 					.then(_ => {
-						done();
+						this.resetBasisInfo1();
 					})
 					.catch(_ => {
 				console.log('取消关闭');
-				$('.v-modal').hide();
-			});
+					$('.v-modal').hide();
+				});
+			},
+			handleClose2(done) {
+				this.$confirm('确认关闭？')
+					.then(_ => {
+						this.resetBasisInfo2();
+					})
+					.catch(_ => {
+				console.log('取消关闭');
+					$('.v-modal').hide();
+				});
 			},
 			visablemaingroup:function(callback){    //只有回调参数为false时才触发 ctx.getAreaListDataSearch(vc,1)这个函数;
 			    if(callback){
@@ -1908,10 +1891,34 @@
 					this.$axios.get(url, {
 						params: data
 					}).then((res) => {
+						this.page.totalCount = res.data.count;
+						//总的页数
+						let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
+						if(this.page.currentPage >= totalPage){
+							 this.loadSign = false
+						}else{
+							this.loadSign=true
+						}
+
 						this.CUSTOMER_PERSONList = res.data.CUSTOMER_PERSONList;
 						this.loading = false;
 					});
 					this.dialogVisibleuser = true;
+			},
+			queding(){
+				if(this.selval.length == 0){
+					this.$message({
+						message: '请选择数据',
+						type: 'warning'
+					});
+				}else if(this.selval.length > 1){
+					this.$message({
+						message: '不可同时选择多条数据',
+						type: 'warning'
+					});
+				}else{
+					this.resetBasisInfo1();//调用resetBasisInfo函数
+				}
 			},
 			addcusname(){
 				if(this.selval.length == 0){
@@ -1928,13 +1935,16 @@
 					this.dataInfo.V_PERSON = this.selval[0].PERSON;
 					this.dataInfo.V_PHONE = this.selval[0].PHONE;
 					// this.dialogVisibleuser = false;
-					this.resetBasisInfo();//调用resetBasisInfo函数
+					this.resetBasisInfo2();//调用resetBasisInfo函数
 				}
 			},
-			DialogClose(){//点击取消按钮
-				this.resetBasisInfo();//调用resetBasisInfo函数
+			resetBasisInfo1(){//点击确定或取消按钮时重置数据20190303
+				this.dialogVisible = false;//关闭弹出框
+				this.resourceData = [];//列表数据置空
+				this.page.currentPage = 1;//页码重新传值
+				this.page.pageSize = 10;//页码重新传值
 			},
-			resetBasisInfo(){//点击确定或取消按钮时重置数据20190303
+			resetBasisInfo2(){//点击确定或取消按钮时重置数据20190303
 				this.dialogVisibleuser = false;//关闭弹出框
 				this.CUSTOMER_PERSONList = [];//列表数据置空
 				this.page.currentPage = 1;//页码重新传值
@@ -1958,9 +1968,8 @@
 								type: 'success'
 							});
 							this.detailgetData();
-						var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/Executors/'+this.dataid;
+						var url = this.basic_url + '/api-apps/app/inspectPro/flow/Executors/'+this.dataid;
 							this.$axios.get(url, {}).then((res) => {
-									console.log(res.data.datas);
 									var resullt=res.data.datas;
 									var users='';
 									for(var i=0;i<resullt.length;i++){
@@ -1981,7 +1990,7 @@
 			approvals(){
 				this.approvingData.id =this.dataid;
 				this.approvingData.app=this.inspectPro;
-				var url = this.basic_url + '/api-apps/app/'+this.inspectPro+'/flow/isEnd/'+this.dataid;
+				var url = this.basic_url + '/api-apps/app/inspectPro/flow/isEnd/'+this.dataid;
 	    		this.$axios.get(url, {}).then((res) => {
 	    			if(res.data.resp_code == 0) {
 						this.$message({
@@ -1989,7 +1998,7 @@
 							type: 'warning'
 						});
 	    			}else{
-	    				var url = this.basic_url + '/api-apps/app/'+this.inspectPro+'/flow/isExecute/'+this.dataid;
+	    				var url = this.basic_url + '/api-apps/app/inspectPro/flow/isExecute/'+this.dataid;
 	    				this.$axios.get(url, {}).then((res) => {
 			    			if(res.data.resp_code == 1) {
 								this.$message({
@@ -1997,9 +2006,8 @@
 									type: 'warning'
 								});
 							}else{
-								var url = this.basic_url + '/api-apps/app/'+this.inspectPro+'/flow/customFlowValidate/'+this.dataid;
+								var url = this.basic_url + '/api-apps/app/inspectPro/flow/customFlowValidate/'+this.dataid;
 								this.$axios.get(url, {}).then((res) => {
-									console.log(res);
 				    				if(res.data.resp_code == 1) {
 										this.$message({
 											message:res.data.resp_msg,
@@ -2041,7 +2049,6 @@
 						type: type
 					},
 				}).then((res) => {
-					console.log(res.data);
 					this.selectData = res.data;
 				});
 			},

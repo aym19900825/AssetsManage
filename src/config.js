@@ -11,6 +11,6 @@ const config = {
 	file_url: 'http://192.168.1.126:8099',   //公司内部
 	
     // po_url:'http://192.168.1.126:4700'
-    po_url:'http://192.168.1.168:4700'
+    po_url:'http://192.168.1.168:4700'   //Pageoffice
 }
 export default config

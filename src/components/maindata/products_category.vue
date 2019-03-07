@@ -18,41 +18,6 @@
 							<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
 								<i :class="item.icon"></i>{{item.name}}
 							</button>
-							<!-- <button type="button" class="btn btn-green" @click="openAddMgr" id="">
-	                        	<i class="icon-add"></i>添加
-	              			</button>
-							<button type="button" class="btn btn-blue button-margin" @click="modify">
-							    <i class="icon-edit"></i>修改
-							</button>
-							<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
-							    <i class="icon-trash"></i>删除
-							</button>
-							<button type="button" class="btn btn-red button-margin" @click="physicsDel">
-							    <i class="icon-trash"></i>彻底删除
-							</button> -->
-
-							<!-- <button type="button" class="btn btn-green" v-if="">
-	                        	<i class="icon-inventory-line-callin"></i>导入
-	              			</button>
-
-							<el-dropdown size="small" v-else>
-								<el-button round type="primary" size="mini">
-									<i class="icon-inventory-line-callin"></i> 导入<i class="el-icon-arrow-down el-icon--right"></i>
-								</el-button>
-
-								<el-dropdown-menu slot="dropdown">
-									<el-dropdown-item>
-										<div @click="download"><i class="icon-download-cloud"></i>下载模版</div>
-									</el-dropdown-item>
-									<el-dropdown-item>
-										<el-upload ref="upload" class="upload" :action="uploadUrl" :limit=1 multiple method:="post" :file-list="fileList">
-											<i class="icon-upload-cloud"></i> 上传
-										</el-upload>
-									</el-dropdown-item>
-								</el-dropdown-menu>
-							</el-dropdown> -->
-							
-
 							<el-dropdown size="small">
 									<button class="btn mr5 btn-primarys">
 										<i class="icon-inventory-line-callin"></i> 导入<i class="el-icon-arrow-down el-icon--right"></i>
@@ -127,18 +92,18 @@
 							<!-- 表格 Begin-->
 
 							<el-table ref="table" :header-cell-style="rowClass"
-								:data="categoryList"
-								border
-								stripe
-								:height="fullHeight"
-								style="width: 100%;"
-    							:default-sort="{prop:'categoryList', order: 'descending'}"
-    							@selection-change="SelChange"
-    							v-loadmore="loadMore"
-								v-loading="loading"
-								element-loading-text="加载中…"
-    							element-loading-spinner="el-icon-loading"
-    							element-loading-background="rgba(255, 255, 255, 0.9)">
+									:data="categoryList"
+									border
+									stripe
+									:height="fullHeight"
+									style="width: 100%;"
+	    							:default-sort="{prop:'categoryList', order: 'descending'}"
+	    							@selection-change="SelChange"
+	    							v-loadmore="loadMore"
+									v-loading="loading"
+									element-loading-text="加载中…"
+	    							element-loading-spinner="el-icon-loading"
+	    							element-loading-background="rgba(255, 255, 255, 0.9)">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="编码" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('编码')!=-1">
@@ -200,22 +165,12 @@
 				reportData:{},//报表的数据
 				// up2down:'down',
 				basic_url: Config.dev_url,
-				loadSign: true, //鼠标滚动加载数据
 				commentArr: {},
+				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
 				fileList:[],
 				value: '',
 				productType:'productType',//appname
-				searchData: {
-					page: 1,
-					limit: 20, //分页显示数
-					nickname: '',
-					enabled: '',
-					searchKey: '',
-					searchValue: '',
-					companyId: '',
-					deptId: ''
-				},
 				checkedName: [
 					'编码',
 					'名称',
@@ -423,7 +378,6 @@
 				this.reset();
 				this.$refs.categorymask.open(); // 方法1
 				this.$refs.categorymask.visible();
-				
 			},
 			//修改类别
 			modify() {
@@ -661,7 +615,7 @@
 					this.loading = false;
 					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
 						$('.el-table__body-wrapper table').find('.filing').remove();
-					}
+					}//滚动加载数据判断filing
 				}).catch((wrong) => {
 					this.$message({
 						message: '网络错误，请重试1',
@@ -680,7 +634,7 @@
 			},
 			  //请求页面的button接口
 		    getbutton(childByValue){
-		    	console.log(childByValue);
+		    	// console.log(childByValue);
 		    	var data = {
 					menuId: childByValue.id,
 					roleId: this.$store.state.roleid,
@@ -688,13 +642,24 @@
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
 					console.log(res);
-					this.buttons = res.data;
-					
+					var resData = res.data;
+					var uploadIndex = 0;
+					var uploadBtn = resData.filter((item,index)=>{
+						if(item.name == '导入'){
+							uploadIndex  = index;
+							return item;
+						}
+					});
+					if(uploadBtn.length > 0){
+						this.isUploadBtn = true;
+						resData.splice(uploadIndex, 1);
+					}
+					this.buttons = resData;
 				}).catch((wrong) => {
 					this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
+						message: '网络错误，请重试',
+						type: 'error'
+					});
 				})
 		    },
 		},

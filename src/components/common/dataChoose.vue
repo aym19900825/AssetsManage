@@ -48,7 +48,7 @@ export default {
             //分页显示
             page: {
                 currentPage: 1,
-                pageSize: 10,
+                pageSize: 20,
                 totalCount: 0
             },
             selData: [],
@@ -105,7 +105,7 @@ export default {
             this.list = [];
             this.page = {
                 currentPage: 1,
-                pageSize: 10,
+                pageSize: 20,
                 totalCount: 0
             };
             this.selData = [];

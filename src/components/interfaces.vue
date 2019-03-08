@@ -2,7 +2,7 @@
 <div>
 	<div class="headerbg">
 		<vheader></vheader>
-		<navs_header></navs_header>
+		<navs_tabs></navs_tabs>
 	</div>
 	<div class="contentbg">
 		<!--左侧菜单内容显示 Begin-->
@@ -100,14 +100,14 @@
 	import Config from '../config.js'
 	import vheader from './common/vheader.vue'
 	import navs_left from './common/left_navs/nav_left2.vue'
-	import navs_header from './common/nav_tabs.vue'
+	import navs_tabs from './common/nav_tabs.vue'
 	import tableControle from './plugin/table-controle/controle.vue'
 	export default {
 		name: 'user_management',
 		components: {
 			vheader,
 			navs_left,
-			navs_header,
+			navs_tabs,
 			tableControle,
 		},
 		data() {
@@ -226,7 +226,7 @@
 				userData:[],
 				page: {//分页显示
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				aaaData:[],

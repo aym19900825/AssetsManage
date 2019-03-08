@@ -2,7 +2,7 @@
 <div>
 	<div class="headerbg">
 		<vheader @clickfun='getroId' ref="vheader"  @getTodoNum="getTodoNum"></vheader>
-		<navs_header ref='navsheader'></navs_header>
+		<navs_tabs ref='navsTabs'></navs_tabs>
 	</div>
 
     <div class="contentbg">
@@ -42,9 +42,14 @@
 										<router-link :to="{path:'/task'}">更多<i class="el-icon-arrow-right el-icon--right"></i></router-link>
 									</div>
 								</div>
-								<div id="todoLists" class="pt40" style="width: 100%; height: 260px;">
+								<div id="todoLists" class="pt40" style="width:100%; height:260px;">
 									<!-- 表格 -->
-									<el-table :data="todoList" :header-cell-style="rowClass" border stripe height="180" style="width: 100%;" :default-sort="{prop:'todoList', order: 'descending'}" v-loadmore="loadMore">
+									<el-table ref="table" :data="todoList" :header-cell-style="rowClass" border stripe height="180" style="width: 100%;" :default-sort="{prop:'todoList', order: 'descending'}"
+										v-loadmore="loadMore"
+										v-loading="loading"
+										element-loading-text="加载中…"
+										element-loading-spinner="el-icon-loading"
+										element-loading-background="rgba(255, 255, 255, 0.9)">
 										<!-- <el-table-column label="数据id" sortable width="140px" prop="bizid">
 										</el-table-column> -->
 										<el-table-column label="单据号" sortable width="160px" prop="bizNum">
@@ -160,14 +165,14 @@
 <script>
 import Config from '../config.js'
 import vheader from './common/vheader.vue'
-import navs_header from './common/nav_tabs.vue'
+import navs_tabs from './common/nav_tabs.vue'
 import  'echarts/theme/macarons.js'
 
 export default {
 	name: 'index',
 		components: {
 			vheader,
-			navs_header,
+			navs_tabs,
 		},
 
     data() {
@@ -175,16 +180,18 @@ export default {
       	toDoNum: 0,
       	roleid:1,
       	basic_url: Config.dev_url,
+      	loadSign: true, //鼠标滚动加载数据
+      	loading: false,//默认加载数据时显示loading动画
         show: false,
 		fullHeight: document.documentElement.clientHeight - 100+'px',//获取浏览器高度
 		applistdata: [],
 		todoList:[],
 		searchList: {
-				createTime:'',	
-			},
+			createTime:'',	
+		},
 		page: {
 			currentPage: 1,
-			pageSize: 10,
+			pageSize: 20,
 			totalCount: 0
 		},			
 
@@ -205,16 +212,9 @@ export default {
 			this.$store.dispatch('setMenuIdAct',item.bizFirstMenuId);
 
 		},
-	    sizeChange(val) {
-				this.page.pageSize = val;
-				this.requestData();
-		},
-		currentChange(val) {
-			this.page.currentPage = val;
-			this.requestData();
-		},
+		//Table默认加载数据
 		requestData() {
-			this.loading = true;
+			this.loading = true;//加载动画打开
 			var data = {
 				page: this.page.currentPage,
 				limit: this.page.pageSize,
@@ -230,27 +230,18 @@ export default {
 				} else {
 					this.loadSign = true
 				}
-				// this.commentArr[this.page.currentPage] = res.data.data
-				// let newarr = []
-				// for(var i = 1; i <= totalPage; i++) {
-				// 	if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-				// 		for(var j = 0; j < this.commentArr[i].length; j++) {
-				// 			newarr.push(this.commentArr[i][j])
-				// 		}
-				// 	}
-				// }
 				this.todoList = res.data.data;
-				this.loading = false;
+				this.loading = false;//加载动画关闭
+				if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+					$('.el-table__body-wrapper table').find('.filing').remove();
+				}//滚动加载数据判断filing
 			}).catch((wrong) => {
 				
 				
 			})
 		},
-		
-	
-		//滚动加载更多
+		//表格滚动加载
 		loadMore() {
-			//console.log(this.$refs.table.$el.offsetTop)
 			let up2down = sessionStorage.getItem('up2down');
 			if(this.loadSign) {					
 				if(up2down=='down'){
@@ -259,16 +250,16 @@ export default {
 						this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
 						return false;
 					}
-//						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+					let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
 					if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-						$('.el-table__body-wrapper table').append('<div class="filing" style="height:400px;width: 100%;"></div>');
+						$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
 						sessionStorage.setItem('toBtm','true');
 					}
 				}else{
 					sessionStorage.setItem('toBtm','false');
 					this.page.currentPage--;
 					if(this.page.currentPage < 1) {
-						this.page.currentPage=1
+						this.page.currentPage=1;
 						return false;
 					}
 				}
@@ -279,6 +270,28 @@ export default {
 				this.requestData();
 			}
 		},
+		//改变页数
+		sizeChange(val) {
+			this.page.pageSize = val;
+			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+				sessionStorage.setItem('toBtm','true');
+			}else{
+				sessionStorage.setItem('toBtm','false');
+			}
+			this.requestData();
+		},
+		//当前页数
+		currentChange(val) {
+			this.page.currentPage = val;
+			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+				sessionStorage.setItem('toBtm','true');
+			}else{
+				sessionStorage.setItem('toBtm','false');
+			}
+			this.requestData();
+		},
 		goto(item){
 	        var _this = this;
 	        var data = {
@@ -286,10 +299,10 @@ export default {
 				roleId: _this.$store.state.roleid,
 			};
 			this.$store.dispatch('setMenuIdAct',item.id);
-			console.log(item.id);
+			// console.log(item.id);
 			var url = _this.basic_url + '/api-user/menus/findSecondByRoleIdAndFisrtMenu';
 			_this.$axios.get(url, {params: data}).then((res) => {
-				console.log(res);
+				// console.log(res);
 				if(res.data!="undefined"&&res.data.length>0){
 					item = res.data[0];
 					// this.$router.push({path: item[0].url});
@@ -338,7 +351,8 @@ export default {
 //		    _this.$store.dispatch('setRoleIdAct',this.$store.state.roleid);
 		    _this.$store.dispatch('setNavIdAct',item.id);
 		},
-		initEchart(){//引入饼状图图表
+		//引入饼状图图表
+		initEchart(){
 			var myChart = this.$echarts.init(document.getElementById('main'),'macarons');
 	        // 指定图表的配置项和数据
 	        var option = {
@@ -383,7 +397,7 @@ export default {
 		this.requestData();
 		//一级菜单
 		this.initEchart();//调用饼状图图表函数名称
-		this.$refs.navsheader.showClick({
+		this.$refs.navsTabs.showClick({
                 css: 'icon-user',
                 name: '首页',
                 url: '/index'})

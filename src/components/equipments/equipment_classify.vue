@@ -2,7 +2,7 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header ref="navsheader"></navs_header>
+			<navs_tabs ref="navsTabs"></navs_tabs>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
@@ -111,7 +111,7 @@
 <script>
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
-	import navs_header from '../common/nav_tabs.vue'
+	import navs_tabs from '../common/nav_tabs.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import categorymask from '../equipmentsDetails/equipmentClassify_mask.vue'
     import tree_grid from '../common/TreeGrid.vue'//树表格
@@ -121,7 +121,7 @@
 		components: {
 			vheader,
 			navs_left,
-			navs_header,
+			navs_tabs,
 			categorymask,
 			tree_grid,
 			reportmask
@@ -354,7 +354,7 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/assetClass/deletes/physicsDel';
+					var url = this.basic_url + '/api-apps/app/assetClass/physicsDel';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -515,7 +515,7 @@
 			childByValue(childValue) {
 				// childValue就是子组件传过来的值
 				// console.log('childvalue');
-				this.$refs.navsheader.showClick(childValue);
+				this.$refs.navsTabs.showClick(childValue);
 				this.getbutton(childValue);
 			},
 			 //请求页面的button接口

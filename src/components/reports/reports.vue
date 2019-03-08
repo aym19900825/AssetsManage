@@ -2,7 +2,7 @@
 <div>
 	<div class="headerbg">
 		<vheader></vheader>
-		<navs_header ref="navsheader"></navs_header>
+		<navs_tabs ref="navsTabs"></navs_tabs>
 	</div>
 	<div class="contentbg">
 		<!--左侧菜单内容显示 Begin-->
@@ -86,9 +86,9 @@
 							</el-table-column>
 							<el-table-column label="代码" width="200" sortable prop="code" v-if="this.checkedName.indexOf('代码')!=-1">
 							</el-table-column>
-							<el-table-column label="报表名称" width="200" sortable prop="name" v-if="this.checkedName.indexOf('报表名称')!=-1">
+							<el-table-column label="报表名称" width="220" sortable prop="name" v-if="this.checkedName.indexOf('报表名称')!=-1">
 							</el-table-column>
-							<el-table-column label="报表文件" width="160" sortable prop="file" v-if="this.checkedName.indexOf('报表文件')!=-1">
+							<el-table-column label="报表文件" width="230" sortable prop="file" v-if="this.checkedName.indexOf('报表文件')!=-1">
 							</el-table-column>
 							<el-table-column label="备注" width="200" sortable prop="remarks"v-if="this.checkedName.indexOf('备注')!=-1">
 							</el-table-column>
@@ -126,7 +126,7 @@
 	import Config from '../../config.js';
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import navs_header from '../common/nav_tabs.vue'
+	import navs_tabs from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import reportmask from '../reportDetails/reportConfigurationMask.vue'
 	export default {
@@ -134,7 +134,7 @@
 		components: {
 			vheader,
 			navs_left,
-			navs_header,
+			navs_tabs,
 			tableControle,
 			reportmask
 		},
@@ -460,7 +460,7 @@
 			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
-				this.$refs.navsheader.showClick(childValue);
+				this.$refs.navsTabs.showClick(childValue);
 				this.getbutton(childValue);
 			},
 			//请求页面的button接口

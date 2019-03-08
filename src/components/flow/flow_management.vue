@@ -1,8 +1,8 @@
 <template>
 <div>
 	<div class="headerbg">
-			<vheader></vheader>
-			<navs_header ref="navsheader"></navs_header>
+		<vheader></vheader>
+		<navs_tabs ref="navsTabs"></navs_tabs>
 	</div>
 	<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
@@ -114,7 +114,7 @@
 					<el-row :gutter="10">
 						<el-col :span="24" class="leftcont">
 							<!-- 表格 -->
-							<el-table :data="flowmodelList" 
+							<el-table ref="table" :data="flowmodelList" 
 							          :header-cell-style="rowClass" 
 									  border 
 									  stripe 
@@ -135,11 +135,11 @@
 										</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="类型" sortable width="140px" prop="category" v-if="this.checkedName.indexOf('类型')!=-1">
+								<el-table-column label="模型名称" sortable prop="name" v-if="this.checkedName.indexOf('模型名称')!=-1">
 								</el-table-column>
 								<el-table-column label="模型标识" sortable width="140px" prop="key" v-if="this.checkedName.indexOf('模型标识')!=-1">
 								</el-table-column>
-								<el-table-column label="模型名称" sortable width="140px" prop="name" v-if="this.checkedName.indexOf('模型名称')!=-1">
+								<el-table-column label="类型" sortable width="140px" prop="category" v-if="this.checkedName.indexOf('类型')!=-1">
 								</el-table-column>
 								<el-table-column label="模型版本" sortable width="140px" prop="version" v-if="this.checkedName.indexOf('模型版本')!=-1">
 								</el-table-column>
@@ -155,8 +155,8 @@
 				</div>
 			</div>
 		</div>
-		<flowmanmask  ref="child" @request="requestData" ></flowmanmask>
-		<iframemask  ref="childIframe" ></iframemask>
+		<flowmanmask ref="child" @request="requestData" ></flowmanmask>
+		<iframemask ref="childIframe" ></iframemask>
 	</div>		
 </div>	
 </template>
@@ -165,14 +165,14 @@
 import Config from '../../config.js'
 import vheader from '../common/vheader.vue'
 import navs_left from '../common/left_navs/nav_left5.vue'
-import navs_header from '../common/nav_tabs.vue'
+import navs_tabs from '../common/nav_tabs.vue'
 import flowmanmask from '../flowDetails/flow_manMask.vue'
 import iframemask from '../flowDetails/ifram.vue'
 export default {
 	name: 'task',
 		components: {
 			vheader,
-			navs_header,
+			navs_tabs,
 			navs_left,
 			flowmanmask,
 			iframemask
@@ -180,20 +180,21 @@ export default {
 
     data() {
       return {
-		loading: false,
       	basic_url: Config.dev_url,
+		loadSign: true, //鼠标滚动加载数据
+		loading: false,//默认加载数据时显示loading动画
       	fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
       	search: false,
       	flowmodelList:[],
       	commentArr: {},
       	checkedName: [
-					'编号',
-					'类型',
-					'模型标识',
-					'模型名称',
-					'模型版本',
-					'创建时间'
-					],
+			'编号',
+			'类型',
+			'模型标识',
+			'模型名称',
+			'模型版本',
+			'创建时间'
+		],
 		tableHeader: [{
 			label: '编号',
 			prop: 'id'
@@ -220,125 +221,140 @@ export default {
 		}
 		],
 		searchList: {
-					createTime:'',	
-				},
+				createTime:'',	
+			},
 		page: {
-				currentPage: 1,
-				pageSize: 10,
-				totalCount: 0
-				},
-				buttons:[],			
-      }
-    },
+			currentPage: 1,
+			pageSize: 20,
+			totalCount: 0
+			},
+			buttons:[],			
+		}
+	},
   
 	methods: {
 		//表头居中
 		rowClass({ row, rowIndex}) {
-			    return 'text-align:center'
+		    return 'text-align:center'
 		},
 		//点击的数据
 		SelChange(val) {
-				this.selUser = val;
+			this.selUser = val;
 	    },
-	    sizeChange(val) {
-				this.page.pageSize = val;
-				this.requestData();
-		},
-		currentChange(val) {
-			this.page.currentPage = val;
-			this.requestData();
-		},
-		//滚动加载更多
+		//表格滚动加载
 		loadMore() {
-			if(this.loadSign) {
-				this.loadSign = false
-				this.page.currentPage++
+			let up2down = sessionStorage.getItem('up2down');
+			if(this.loadSign) {					
+				if(up2down=='down'){
+					this.page.currentPage++;
 					if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-						return
+						this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+						return false;
 					}
+					let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+					if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+						$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+						sessionStorage.setItem('toBtm','true');
+					}
+				}else{
+					sessionStorage.setItem('toBtm','false');
+					this.page.currentPage--;
+					if(this.page.currentPage < 1) {
+						this.page.currentPage=1;
+						return false;
+					}
+				}
+				this.loadSign = false;
 				setTimeout(() => {
-					this.loadSign = true
+					this.loadSign = true;
 				}, 1000)
 				this.requestData();
 			}
 		},
+		//改变页数
+		sizeChange(val) {
+			this.page.pageSize = val;
+			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+				sessionStorage.setItem('toBtm','true');
+			}else{
+				sessionStorage.setItem('toBtm','false');
+			}
+			this.requestData();
+		},
+		//当前页数
+		currentChange(val) {
+			this.page.currentPage = val;
+			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+				sessionStorage.setItem('toBtm','true');
+			}else{
+				sessionStorage.setItem('toBtm','false');
+			}
+			this.requestData();
+		},
 		//请求点击
-		    getbtn(item){
-		    	if(item.name=="添加"){
-		         this.openAddMgr();
-		    	}else if(item.name=="修改"){
-		    	 this.modify();
-		    	}else if(item.name=="彻底删除"){
-		    	 this.physicsDel();
-		    	}else if(item.name=="高级查询"){
-		    	 this.modestsearch();
-		    	}else if(item.name=="导入"){
-		    	 this.download();
-		    	}else if(item.name=="删除"){
-		    	 this.deluserinfo();
-					}
-		    },
+	    getbtn(item){
+	    	if(item.name=="添加"){
+	         this.openAddMgr();
+	    	}else if(item.name=="修改"){
+	    	 this.modify();
+	    	}else if(item.name=="彻底删除"){
+	    	 this.physicsDel();
+	    	}else if(item.name=="高级查询"){
+	    	 this.modestsearch();
+	    	}else if(item.name=="导入"){
+	    	 this.download();
+	    	}else if(item.name=="删除"){
+				this.deluserinfo();
+			}
+	    },
 		//添加
 		openAddMgr() {
-//		    this.$refs.child.resetNew();
 			this.$refs.child.visible();
-			
 		},
+		//Table默认加载数据
 		requestData() {
-//				var data = {
-//					page: this.page.currentPage,
-//					limit: this.page.pageSize,
-//					PRO_NUM: this.searchList.PRO_NUM,
-//					PRO_NAME: this.searchList.PRO_NAME,
-//					VERSION: this.searchList.VERSION,
-//					DEPTID: this.searchList.DEPTID,
-//					// STATUS: this.searchList.STATUS,
-//				}
-				this.loading = true;
-				var url = this.basic_url + '/api-flow/flow/model';
-				this.$axios.get(url, {}).then((res) => {
-					this.page.totalCount = res.data.count;
-					//总的页数
-					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
-					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false
-					} else {
-						this.loadSign = true
-					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.flowmodelList = newarr;
-					this.loading = false;
-				}).catch((wrong) => {
-					
-					
-				})
+			this.loading = true;//加载动画打开
+			var url = this.basic_url + '/api-flow/flow/model';
+			this.$axios.get(url, {}).then((res) => {
+				this.page.totalCount = res.data.count;
+				//总的页数
+				let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
+				if(this.page.currentPage >= totalPage) {
+					this.loadSign = false
+				} else {
+					this.loadSign = true
+				}
+				this.flowmodelList = res.data.data;
+				this.loading = false;//加载动画关闭
+				if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+					$('.el-table__body-wrapper table').find('.filing').remove();
+				}//滚动加载数据判断filing
+			}).catch((wrong) => {
+				this.$message({
+					message: '网络错误，请重试1',
+					type: 'error'
+				});
+			})
 		},
 		//修改（编辑）
 		editor(){
 			if(this.selUser.length == 0) {
-					this.$message({
-						message: '请您选择要修改的流程',
-						type: 'warning'
-					});
-					return;
-				} else if(this.selUser.length > 1) {
-					this.$message({
-						message: '不可同时修改多个流程',
-						type: 'warning'
-					});
-					return;
-				} else {
-					console.log(this.selUser[0]);
-					this.$refs.childIframe.visible(this.selUser[0].id);
-				}
+				this.$message({
+					message: '请您选择要修改的流程',
+					type: 'warning'
+				});
+				return;
+			} else if(this.selUser.length > 1) {
+				this.$message({
+					message: '不可同时修改多个流程',
+					type: 'warning'
+				});
+				return;
+			} else {
+				this.$refs.childIframe.visible(this.selUser[0].id);
+			}
 		},
 		//删除
 		delinfo(){
@@ -358,24 +374,23 @@ export default {
 				} else {
 					var changeMenu = selData[0];
 					var id=changeMenu.id
-					console.log(id);
-						var url = this.basic_url + '/api-flow/flow/model/'+id;
-						this.$axios.delete(url, {}).then((res) => { //.delete 传数据方法
-							//resp_code == 0是后台返回的请求成功的信息
-							if(res.data.resp_code == 0) {
-								this.$message({
-									message: '删除成功',
-									type: 'success'
-								});
-								this.requestData();
-							}
-						}).catch((err) => {
+					var url = this.basic_url + '/api-flow/flow/model/'+id;
+					this.$axios.delete(url, {}).then((res) => { //.delete 传数据方法
+						//resp_code == 0是后台返回的请求成功的信息
+						if(res.data.resp_code == 0) {
 							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
+								message: '删除成功',
+								type: 'success'
 							});
+							this.requestData();
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
 						});
-					}
+					});
+				}
 			
 		},
 		//发布
@@ -393,59 +408,52 @@ export default {
 					});
 					return;
 				} else {
-					console.log(this.selUser[0]);
-					console.log(this.selUser[0].deploymentId);
 					var id=this.selUser[0].id;
 					var url = this.basic_url + '/api-flow/flow/model/'+id+'/deploy';
-					console.log(url);
 					this.$axios.get(url, {}).then((res) => {
-						console.log(res);
-							if(res.data.resp_code == 0) {
-								this.$message({
-									message: 'res.data.resp_msg',
-									type: 'success'
-								});
-								this.requestData();
-							}else{
-								this.$message({
-									message: 'res.data.resp_msg',
-									type: 'warning'
-								});
-							}
-						}).catch((err) => {
+						if(res.data.resp_code == 0) {
 							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
+								message: 'res.data.resp_msg',
+								type: 'success'
 							});
+							this.requestData();
+						}else{
+							this.$message({
+								message: 'res.data.resp_msg',
+								type: 'warning'
+							});
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
 						});
+					});
 				}
 		},
 
 		childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
-				this.$refs.navsheader.showClick(childValue);
+				this.$refs.navsTabs.showClick(childValue);
 				this.getbutton(childValue);
 			},
 			//请求页面的button接口
 			getbutton(childByValue){
-				console.log(childByValue);
 				var data = {
 				menuId: childByValue.id,
 				roleId: this.$store.state.roleid,
 			};
 			var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 			this.$axios.get(url, {params: data}).then((res) => {
-				console.log(res);
 				this.buttons = res.data;
-				
 			}).catch((wrong) => {
 				this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
+					message: '网络错误，请重试',
+					type: 'error'
+				});
 			})
-			},
-},
+		},
+	},
 	  mounted(){
 	  	this.requestData();
 	},

@@ -2,7 +2,7 @@
 <div>
 	<div class="headerbg">
 		<vheader></vheader>
-		<navs_header ref="navsheader"></navs_header>
+		<navs_tabs ref="navsTabs"></navs_tabs>
 	</div>
 	<div class="contentbg">
 		<!--左侧菜单调用 Begin-->
@@ -161,7 +161,7 @@
 <script>
 	import Config from '../config.js'
 	import vheader from './common/vheader.vue'
-	import navs_header from './common/nav_tabs.vue'
+	import navs_tabs from './common/nav_tabs.vue'
 	import navs_left from './common/left_navs/nav_left5.vue'
 	import product2child from './inspection_project/product2.vue'//产品名称
 	import inspectionSta2child from './inspection_project/inspectionSta2.vue'//检验/检测标准
@@ -176,7 +176,7 @@
 		components: {
 			vheader,
 			navs_left,
-			navs_header,
+			navs_tabs,
 			product2child,//产品名称
 			inspectionSta2child,//检验/检测标准
 			inspectionPro2child,//检验/检测项目
@@ -557,37 +557,7 @@
                 }).catch(() => {
             	});
 			},
-			//树和表单之间拖拽改变宽度
-			treeDrag(){
-				var middleWidth=9,
-				left = document.getElementById("left"),
-				right =  document.getElementById("right"), 
-				middle =  document.getElementById("middle"); 
-				middle.style.left = left.clientWidth + 'px';
-				right.style.left = left.clientWidth + 10 + 'px';
-				middle.onmousedown = function(e) { 
-					var disX = (e || event).clientX; 
-					middle.left = middle.offsetLeft; 
-					document.onmousemove = function(e) { 
-						var iT = middle.left + ((e || event).clientX - disX); 
-						var e=e||window.event,tarnameb=e.target||e.srcElement; 
-						var maxT=document.body.clientWidth; 
-						iT < 0 && (iT = 0); 
-						iT > maxT/2 && (iT = maxT/2); 
-						middle.style.left = left.style.width = iT + "px"; 
-						right.style.width = maxT - iT -middleWidth -10 + "px"; 
-						right.style.left = iT+middleWidth+"px"; 
-						return false 
-					}; 
-					document.onmouseup = function() { 
-						document.onmousemove = null; 
-						document.onmouseup = null; 
-						middle.releaseCapture && middle.releaseCapture() 
-					}; 
-					middle.setCapture && middle.setCapture(); 
-					return false 
-				}; 
-			},
+			
 			addproclass() { //小弹出框确认按钮事件
 				this.dialogVisible3 = false;
 				this.catedata.NUM = this.selData[0].NUM;
@@ -601,13 +571,12 @@
 			},
 			// childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
-        		// this.$refs.navsheader.showClick(childValue);
+        		// this.$refs.navsTabs.showClick(childValue);
       		// },
 		},
 		
 		mounted() {
 			this.getDEPTID();
-			this.treeDrag();//调用树和表单之间拖拽改变宽度
 			// this.getData();
 			// this.requestData();
 		},

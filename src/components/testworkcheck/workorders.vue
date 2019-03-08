@@ -2,7 +2,7 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header ref="navsheader"></navs_header>
+			<navs_tabs ref="navsTabs"></navs_tabs>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
@@ -132,7 +132,7 @@
 	import tree_grid from '../common/TreeGrid.vue'//树表格
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import navs_header from '../common/nav_tabs.vue'
+	import navs_tabs from '../common/nav_tabs.vue'
 	import workorders_mask from '../testworkcheckDetails/workorders_mask.vue'
 	import sendtasklist from '../testworkcheckDetails/sendtasklist.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
@@ -141,7 +141,7 @@
 		components: {
 			vheader,
 			tree_grid,
-			navs_header,
+			navs_tabs,
 			navs_left,
 			workorders_mask,
 			sendtasklist,
@@ -346,7 +346,7 @@
 				treeData: [],
 				page: {
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				workorderForm: {},//修改子组件时传递数据
@@ -766,33 +766,29 @@
 			//表格传过来
 			childvalue: function (childValue) {
 				// childValue就是子组件传过来的
-				console.log(111);
 				this.selMenu = childValue;
-				console.log(childValue);
 			},
 			//左侧菜单过来的
 		   childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
-				this.$refs.navsheader.showClick(childValue);
+				this.$refs.navsTabs.showClick(childValue);
 				this.getbutton(childValue);
 			},
 			  //请求页面的button接口
 		    getbutton(childByValue){
-		    	console.log(childByValue);
 		    	var data = {
 					menuId: childByValue.id,
 					roleId: this.$store.state.roleid,
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					console.log(res);
 					this.buttons = res.data;
 					
 				}).catch((wrong) => {
 					this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
+						message: '网络错误，请重试',
+						type: 'error'
+					});
 				})
 
 		    },

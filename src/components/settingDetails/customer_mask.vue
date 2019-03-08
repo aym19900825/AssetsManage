@@ -441,7 +441,7 @@
 				resourceData: [], //数组，我这里是通过接口获取数据
 				page: {//分页显示
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				falg:true,

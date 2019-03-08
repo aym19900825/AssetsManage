@@ -2,7 +2,7 @@
 <div>
 	<div class="headerbg">
 			<vheader></vheader>
-		<navs_header></navs_header>
+		<navs_tabs></navs_tabs>
 	</div>
 
 	<div class="contentbg">
@@ -62,13 +62,13 @@
 import Config from '../../config.js'
 import vheader from '../common/vheader.vue'
 import navs from '../common/left_navs/nav_left.vue'
-import navs_header from '../common/nav_tabs.vue'
+import navs_tabs from '../common/nav_tabs.vue'
 
 export default {
 	name: 'passwordedit',
 	components: {
 		vheader,
-		navs_header,
+		navs_tabs,
 		navs
 	},
 	data() {

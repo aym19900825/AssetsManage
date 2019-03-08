@@ -2,7 +2,7 @@
 <div>
 	<div class="headerbg">
 		<vheader></vheader>
-		<navs_header></navs_header>
+		<navs_tabs></navs_tabs>
 	</div>
 	<div class="contentbg">
 		<!--右侧内容显示 Begin-->
@@ -154,14 +154,14 @@
 <script>
 	import Config from '../config.js'
 	import vheader from './common/vheader.vue'
-	import navs_header from './common/nav_tabs.vue'
+	import navs_tabs from './common/nav_tabs.vue'
 	import productType2 from './inspection_project/productType2.vue'
 	import product2 from './inspection_project/product2.vue'
 	export default {
 		name: 'inspection_project',
 		components: {
 			vheader,
-			navs_header,
+			navs_tabs,
 			productType2,//产品类别
 			product2,//产品名称
 		},
@@ -210,7 +210,7 @@
 				search: '',//搜索
 				page: {//分页显示
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				}
 			}

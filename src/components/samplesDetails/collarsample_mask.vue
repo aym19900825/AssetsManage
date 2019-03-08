@@ -412,7 +412,7 @@
 				samplenumList:[],//样品序号
 				page: {
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				samplesList:[],//样品编号

@@ -2,7 +2,7 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header></navs_header>
+			<navs_tabs></navs_tabs>
 		</div>
 		<div class="contentbg">
 			<navs_left ref="navleft" v-on:childByValue="childvalue"></navs_left>
@@ -66,7 +66,7 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格begin-->
-							<el-table :data="dataList" 
+							<el-table ref="table" :data="dataList" 
 									  border 
 									  stripe  
 									  :header-cell-style="rowClass" 
@@ -108,7 +108,7 @@
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import navs_header from '../common/nav_tabs.vue'
+	import navs_tabs from '../common/nav_tabs.vue'
 	import datamask from '../settingDetails/data_mask.vue'
 	import relamask from '../settingDetails/rela_mask.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
@@ -116,7 +116,7 @@
 		name: 'data_management',
 		components: {
 			'vheader': vheader,
-			'navs_header': navs_header,
+			'navs_tabs': navs_tabs,
 			'navs_left': navs_left,
 			'datamask': datamask,
 			'relamask': relamask,

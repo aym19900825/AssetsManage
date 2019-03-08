@@ -2,7 +2,7 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header ref="navsheader"></navs_header>
+			<navs_tabs ref="navsTabs"></navs_tabs>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
@@ -130,7 +130,7 @@
 <script>
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
-	import navs_header from '../common/nav_tabs.vue'
+	import navs_tabs from '../common/nav_tabs.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import btnconfigmask from '../settingDetails/buttonconfigure_mask.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
@@ -140,7 +140,7 @@
 		components: {
 			vheader,
 			navs_left,
-			navs_header,
+			navs_tabs,
 			btnconfigmask,
 			tableControle,
 			reportmask,
@@ -153,22 +153,12 @@
 				// up2down:'down',
 				reportData:{},//报表的数据
 				basic_url: Config.dev_url,
-				loadSign: true, //鼠标滚动加载数据
 				commentArr: {},
+				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
 				fileList:[],
 				value: '',
 				permissions:'permissions',//appname
-				searchData: {
-					page: 1,
-					limit: 20, //分页显示数
-					nickname: '',
-					enabled: '',
-					searchKey: '',
-					searchValue: '',
-					companyId: '',
-					deptId: ''
-				},
 				checkedName: [
 					'按钮名称',
 					'所属应用ID',
@@ -537,7 +527,7 @@
 			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
-        		this.$refs.navsheader.showClick(childValue);
+        		this.$refs.navsTabs.showClick(childValue);
       		}
 		},
 		mounted() {

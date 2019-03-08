@@ -25,7 +25,7 @@ export default {
       tableData:[],
       page: {
         currentPage: 1,
-        pageSize: 10,
+        pageSize: 20,
         totalCount: 0
       },
       selData: []

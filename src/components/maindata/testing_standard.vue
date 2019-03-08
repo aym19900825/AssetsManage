@@ -2,7 +2,7 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header  ref="navsheader"></navs_header>
+			<navs_tabs  ref="navsTabs"></navs_tabs>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
@@ -36,7 +36,8 @@
 										:on-success="fileSuccess"
 										:limit=1
 										multiple
-										method:="post">
+										method:="post"
+										:file-list="fileList">
 											<i class="icon-upload-cloud"></i> 上传
 										</el-upload>
     								</el-dropdown-item>
@@ -176,7 +177,7 @@
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import navs_header from '../common/nav_tabs.vue'
+	import navs_tabs from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import standardmask from '../maindataDetails/testing_standardMask.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
@@ -184,7 +185,7 @@
 		name: 'testing_standard',
 		components: {
 			vheader,
-			navs_header,
+			navs_tabs,
 			tableControle,
 			navs_left,
 			standardmask,
@@ -541,7 +542,7 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/inspectionSta/deletes/physicsDel';
+					var url = this.basic_url + '/api-apps/app/inspectionSta/physicsDel';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -693,7 +694,7 @@
 			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
-				this.$refs.navsheader.showClick(childValue);
+				this.$refs.navsTabs.showClick(childValue);
 				this.getbutton(childValue);
 			},
 			  //请求页面的button接口

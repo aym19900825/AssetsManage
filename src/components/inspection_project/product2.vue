@@ -185,7 +185,7 @@
 				search: '',//搜索
 				page: {//分页显示
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 

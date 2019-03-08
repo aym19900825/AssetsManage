@@ -537,68 +537,77 @@
 												<el-button style="float:left;" type="success" size="mini" round @click="addfield4" v-show="!viewtitle">
 													<i class="icon-add"></i><font>新建行</font>
 												</el-button>
-												<form method="post" id="file" action="" enctype="multipart/form-data" style="float: left;margin-left: 10px;">
+												<form method="post" id="file" action="" enctype="multipart/form-data" style="float: left; margin-left: 10px; position: relative;">
 													<el-button type="success" size="mini" round  class="a-upload">
 														<i class="el-icon-upload2"></i><font>上传</font>
 														<input id="excelFile" type="file" name="uploadFile" @change="upload"/>
 													</el-button>
 												</form>
 											</div>
-											<el-table :data="workorderForm.WORKORDER_DATA_TEMPLATEList" 
-												  border 
-												  stripe 
-												  :fit="true" 
-												  max-height="260" 
-												  style="width: 100%;" 
-												  @cell-click="iconOperation" 
-												  :default-sort="{prop:'WORKORDER_DATA_TEMPLATEList', order: 'descending'}">
-												<el-table-column prop="iconOperation" fixed width="50px">
-											      <template slot-scope="scope">
-											      	<i class="el-icon-check" v-show="scope.row.isEditing">
-											      	</i>
-											      	<i class="el-icon-edit" v-show="!scope.row.isEditing">
-											      	</i>
-											      </template>
-											    </el-table-column>
-												<el-table-column label="模板编号" sortable prop="D_NUM">
-											      <template slot-scope="scope">
-											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.D_NUM" :disabled="edit">
-											      		<el-button slot="append" icon="el-icon-search" @click="templateNumber(scope.row) "></el-button>
-											      	</el-input>
-											      	<span v-else>{{scope.row.D_NUM}}</span>
-											      </template>
-											    </el-table-column>
-											    <el-table-column label="模板描述" sortable prop="D_DESC">
-											      <template slot-scope="scope">
-											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.D_DESC" :disabled="edit"></el-input>
-											      	<span v-else>{{scope.row.D_DESC}}</span>
-											      </template>
-											    </el-table-column>
-							            		<el-table-column label="模板文件大小" prop="FILESIZE_ORG">
-													<template slot-scope="scope">
-													 	<el-checkbox  v-if="!!scope.row.FILESIZE_ORG" v-model="scope.row.FILE_ORGCHECKED">{{scope.row.FILESIZE_ORG+'M'}}</el-checkbox>
-													</template>
-												</el-table-column>
-												<el-table-column label="上传文件大小" prop="FILESIZE">
-													<template slot-scope="scope">
-													 	<el-checkbox v-if="!!scope.row.FILESIZE" v-model="scope.row.FILECHECKED">{{scope.row.FILESIZE+'M'}}</el-checkbox>
-													</template>
-												</el-table-column>
-												<el-table-column label="操作">
-													<template slot-scope="scope">
-													 	<el-button title="下载" @click="downLoadRow(scope.row)" type="text" size="small"> 
-															<i class="icon-arrow-down-circle"></i>
-														</el-button>
-														<el-button title="删除" @click="deleteTempRow(scope.$index,scope.row)" type="text" size="small">
-															<i class="icon-trash red"></i>
-														</el-button>
-														<el-button title="编辑" type="text" size="small">
-															<i class="icon-pencil"></i>
-														</el-button>
-													</template>
-												</el-table-column>
-												
-							            	</el-table>
+											<el-row>
+												<el-col :span="24">
+													<el-table :data="workorderForm.WORKORDER_DATA_TEMPLATEList" 
+														  border 
+														  stripe 
+														  :fit="true" 
+														  max-height="260" 
+														  style="width: 100%;" 
+														  @cell-click="iconOperation" 
+														  :default-sort="{prop:'WORKORDER_DATA_TEMPLATEList', order: 'descending'}">
+														<el-table-column prop="iconOperation" fixed width="50px">
+													      <template slot-scope="scope">
+													      	<i class="el-icon-check" v-show="scope.row.isEditing">
+													      	</i>
+													      	<i class="el-icon-edit" v-show="!scope.row.isEditing">
+													      	</i>
+													      </template>
+													    </el-table-column>
+														<el-table-column label="模板编号" sortable prop="D_NUM">
+													      <template slot-scope="scope">
+													      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.D_NUM" :disabled="edit">
+													      		<el-button slot="append" icon="el-icon-search" @click="templateNumber(scope.row) "></el-button>
+													      	</el-input>
+													      	<span v-else>{{scope.row.D_NUM}}</span>
+													      </template>
+													    </el-table-column>
+													    <el-table-column label="模板描述" sortable prop="D_DESC">
+													      <template slot-scope="scope">
+													      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.D_DESC" :disabled="edit"></el-input>
+													      	<span v-else>{{scope.row.D_DESC}}</span>
+													      </template>
+													    </el-table-column>
+									            		<el-table-column label="模板文件大小" prop="FILESIZE_ORG">
+															<template slot-scope="scope">
+															 	<el-checkbox v-if="!!scope.row.FILESIZE_ORG" v-model="scope.row.FILE_ORGCHECKED">{{scope.row.FILESIZE_ORG+'M'}}</el-checkbox>
+																<!-- <span v-if="scope.row.FILESIZE_ORG == -1">0kb</span> -->
+															</template>
+														</el-table-column>
+														<el-table-column label="上传文件大小" prop="FILESIZE">
+															<template slot-scope="scope">
+															 	<el-checkbox v-if="!!scope.row.FILESIZE" v-model="scope.row.FILECHECKED">{{scope.row.FILESIZE+'M'}}</el-checkbox>
+															</template>
+														</el-table-column>
+														<el-table-column label="操作">
+															<template slot-scope="scope">
+															 	<el-button title="下载" @click="downLoadRow(scope.row)" type="text" size="small"> 
+																	<i class="icon-arrow-down-circle"></i>
+																</el-button>
+																<el-button title="删除" @click="deleteTempRow(scope.$index,scope.row)" type="text" size="small">
+																	<i class="icon-trash red"></i>
+																</el-button>
+																<el-button title="编辑" type="text" size="small">
+																	<i class="icon-pencil"></i>
+																</el-button>
+															</template>
+														</el-table-column>
+									            	</el-table>
+												</el-col>
+							            		<el-col :span="24" class="text-right pt10">
+													<el-button type="primary" size="small" round @click="getreport" v-show="modifytitle">
+														<i class="icon-wordbook"></i><font> 生成报告</font>
+													</el-button>
+												</el-col>
+											</el-row>
 										</el-tab-pane>
 										<el-tab-pane label="检验检测设备" name="fifth">
 											<div class="table-func table-funcb">
@@ -858,11 +867,6 @@
 												<el-form-item label="备注" prop="MEMO" label-width="45px">
 													<el-input type="textarea" :row="3" v-model="workorderForm.MEMO" :disabled="noedit"></el-input>
 												</el-form-item>
-											</el-col>
-											<el-col :span="24" class="text-center">
-												<el-button style="float:left;" type="success" size="mini" round @click="getreport" v-show="modifytitle">
-													<i class="icon-wordbook"></i><font>生成报告</font>
-												</el-button>
 											</el-col>
 										</el-row>
 									</div>

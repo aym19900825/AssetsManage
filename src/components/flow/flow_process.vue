@@ -2,7 +2,7 @@
 <div>
 	<div class="headerbg">
 			<vheader></vheader>
-			<navs_header ref="navsheader"></navs_header>
+			<navs_tabs ref="navsTabs"></navs_tabs>
 	</div>
 	<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
@@ -113,7 +113,7 @@
 					<el-row :gutter="10">
 						<el-col :span="24" class="leftcont">
 							<!-- 表格 -->
-							<el-table :data="flowmodelList" 
+							<el-table ref="table" :data="flowmodelList" 
 									  :header-cell-style="rowClass" 
 									  border 
 									  stripe 
@@ -128,25 +128,25 @@
     								  element-loading-background="rgba(255, 255, 255, 0.9)">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
-								<el-table-column label="流程定义ID" sortable width="130px" prop="id" v-if="this.checkedName.indexOf('流程定义ID')!=-1">
+								<el-table-column label="流程定义ID" sortable width="200px" prop="id" v-if="this.checkedName.indexOf('流程定义ID')!=-1">
 									<template slot-scope="scope">
 										<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.id}}
 										</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="类型" sortable width="140px" prop="category" v-if="this.checkedName.indexOf('类型')!=-1">
+								<el-table-column label="流程名称" sortable width="140px" prop="name" v-if="this.checkedName.indexOf('流程名称')!=-1">
 								</el-table-column>
 								<el-table-column label="流程标识" sortable width="140px" prop="key" v-if="this.checkedName.indexOf('流程标识')!=-1">
 								</el-table-column>
-								<el-table-column label="流程名称" sortable width="140px" prop="name" v-if="this.checkedName.indexOf('流程名称')!=-1">
+								<el-table-column label="类型" sortable width="140px" prop="category" v-if="this.checkedName.indexOf('类型')!=-1">
 								</el-table-column>
 								<el-table-column label="部署id" sortable width="100px" prop="deploymentId" v-if="this.checkedName.indexOf('部署id')!=-1">
 								</el-table-column>
-								<el-table-column label="流程图资源" width="200px" prop="diagramResourceName" sortable  v-if="this.checkedName.indexOf('流程图资源')!=-1">
+								<el-table-column label="流程图资源" width="220px" prop="diagramResourceName" sortable  v-if="this.checkedName.indexOf('流程图资源')!=-1">
 								</el-table-column>
-								<el-table-column label="版本" width="100px" prop="version" sortable  v-if="this.checkedName.indexOf('版本')!=-1">
+								<el-table-column label="版本" prop="version" sortable  v-if="this.checkedName.indexOf('版本')!=-1">
 								</el-table-column>
-								<el-table-column label="资源名称" sortable width="140px" prop="resourceName" v-if="this.checkedName.indexOf('资源名称')!=-1">
+								<el-table-column label="资源名称" sortable width="200px" prop="resourceName" v-if="this.checkedName.indexOf('资源名称')!=-1">
 								</el-table-column>
 							</el-table>
 							
@@ -166,34 +166,35 @@
 import Config from '../../config.js'
 import vheader from '../common/vheader.vue'
 import navs_left from '../common/left_navs/nav_left5.vue'
-import navs_header from '../common/nav_tabs.vue'
+import navs_tabs from '../common/nav_tabs.vue'
 
 export default {
 	name: 'task',
 		components: {
 			vheader,
-			navs_header,
+			navs_tabs,
 			navs_left
 		},
 
     data() {
       return {
-		loading: false,
       	basic_url: Config.dev_url,
       	fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
+		loadSign: true, //鼠标滚动加载数据
+		loading: false,//默认加载数据时显示loading动画
       	search: false,
       	flowmodelList:[],
       	commentArr: {},
       	checkedName: [
-					'流程定义ID',
-					'类型',
-					'流程标识',
-					'流程名称',
-					'部署id',
-					'流程图资源',
-					'版本',
-					'资源名称'
-					],
+			'流程定义ID',
+			'类型',
+			'流程标识',
+			'流程名称',
+			'部署id',
+			'流程图资源',
+			'版本',
+			'资源名称'
+		],
 		tableHeader: [{
 			label: '流程定义ID',
 			prop: 'id'
@@ -228,91 +229,108 @@ export default {
 		}
 		],
 		searchList: {
-					createTime:'',	
-				},
+			createTime:'',
+		},
 		page: {
-				currentPage: 1,
-				pageSize: 10,
-				totalCount: 0
-				},			
+			currentPage: 1,
+			pageSize: 20,
+			totalCount: 0
+		},
       }
     },
   
 	methods: {
 		//表头居中
 		rowClass({ row, rowIndex}) {
-			    return 'text-align:center'
+			return 'text-align:center'
 		},
 		//点击的数据
 		SelChange(val) {
-				this.selUser = val;
+			this.selUser = val;
 	    },
-	    sizeChange(val) {
-				this.page.pageSize = val;
-				this.requestData();
-		},
-		currentChange(val) {
-			this.page.currentPage = val;
-			this.requestData();
-		},
-		//滚动加载更多
+		//表格滚动加载
 		loadMore() {
-			if(this.loadSign) {
-				this.loadSign = false
-				this.page.currentPage++
+			let up2down = sessionStorage.getItem('up2down');
+			if(this.loadSign) {					
+				if(up2down=='down'){
+					this.page.currentPage++;
 					if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-						return
+						this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+						return false;
 					}
+					let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+					if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+						$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+						sessionStorage.setItem('toBtm','true');
+					}
+				}else{
+					sessionStorage.setItem('toBtm','false');
+					this.page.currentPage--;
+					if(this.page.currentPage < 1) {
+						this.page.currentPage=1;
+						return false;
+					}
+				}
+				this.loadSign = false;
 				setTimeout(() => {
-					this.loadSign = true
+					this.loadSign = true;
 				}, 1000)
 				this.requestData();
 			}
 		},
+		//改变页数
+		sizeChange(val) {
+			this.page.pageSize = val;
+			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+				sessionStorage.setItem('toBtm','true');
+			}else{
+				sessionStorage.setItem('toBtm','false');
+			}
+			this.requestData();
+		},
+		//当前页数
+		currentChange(val) {
+			this.page.currentPage = val;
+			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+				sessionStorage.setItem('toBtm','true');
+			}else{
+				sessionStorage.setItem('toBtm','false');
+			}
+			this.requestData();
+		},
+		//Table默认加载数据
 		requestData() {
-//				var data = {
-//					page: this.page.currentPage,
-//					limit: this.page.pageSize,
-//					PRO_NUM: this.searchList.PRO_NUM,
-//					PRO_NAME: this.searchList.PRO_NAME,
-//					VERSION: this.searchList.VERSION,
-//					DEPTID: this.searchList.DEPTID,
-//					// STATUS: this.searchList.STATUS,
-//				}
-				this.loading = true;
-				var url = this.basic_url + '/api-flow/flow/process';
-				this.$axios.get(url, {}).then((res) => {
-					console.log(res.data);
-					this.page.totalCount = res.data.count;
-					//总的页数
-					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
-					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false
-					} else {
-						this.loadSign = true
-					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.flowmodelList = newarr;
-					this.loading = false;
-				}).catch((wrong) => {
-					
-					
-				})
+			this.loading = true;//加载动画打开
+			var url = this.basic_url + '/api-flow/flow/process';
+			this.$axios.get(url, {}).then((res) => {
+				this.page.totalCount = res.data.count;//页码赋值
+				//总的页数
+				let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
+				if(this.page.currentPage >= totalPage) {
+					this.loadSign = false
+				} else {
+					this.loadSign = true
+				}
+				this.flowmodelList = res.data.data;
+				this.loading = false;//加载动画关闭
+				if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+					$('.el-table__body-wrapper table').find('.filing').remove();
+				}//滚动加载数据判断filing
+			}).catch((wrong) => {
+				this.$message({
+					message: '网络错误，请重试1',
+					type: 'error'
+				});
+			})
 		},
 		childByValue:function(childValue) {
-        		// childValue就是子组件传过来的值
-        		this.$refs.navsheader.showClick(childValue);
+    		// childValue就是子组件传过来的值
+    		this.$refs.navsTabs.showClick(childValue);
       	},
-},
-	  mounted(){
+	},
+	mounted(){
 	  	this.requestData();
 	},
 }

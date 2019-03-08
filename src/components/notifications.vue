@@ -2,7 +2,7 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header ref="navsheader"></navs_header>
+			<navs_tabs ref="navsTabs"></navs_tabs>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
@@ -127,7 +127,7 @@
 										</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="类型" width="100" sortable prop="TYPEDesc" v-if="this.checkedName.indexOf('类型')!=-1">
+								<el-table-column label="类型" width="140" sortable prop="TYPEDesc" v-if="this.checkedName.indexOf('类型')!=-1">
 								</el-table-column>
 								<el-table-column label="下达日期" width="130" sortable prop="XD_DATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('下达日期')!=-1">
 								</el-table-column>
@@ -171,7 +171,7 @@
 <script>
 	import Config from '../config.js'
 	import vheader from './common/vheader.vue'
-	import navs_header from './common/nav_tabs.vue'
+	import navs_tabs from './common/nav_tabs.vue'
 	import navs_left from './common/left_navs/nav_left5.vue'
 	import tableControle from './plugin/table-controle/controle.vue'
 	import notificationsmask from './common/notification_mask.vue'
@@ -181,7 +181,7 @@
 		name: 'notifications',
 		components: {
 			vheader,
-			navs_header,
+			navs_tabs,
 			navs_left,
 			tableControle,
 			notificationsmask,
@@ -583,7 +583,7 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/workNot/deletes/physicsDel';
+					var url = this.basic_url + '/api-apps/app/workNot/physicsDel';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -808,7 +808,7 @@
 			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
-				this.$refs.navsheader.showClick(childValue);
+				this.$refs.navsTabs.showClick(childValue);
 				this.getbutton(childValue);
 			  },
 			    //请求页面的button接口

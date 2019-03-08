@@ -2,7 +2,7 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header ref="navsheader"></navs_header>
+			<navs_tabs ref="navsTabs"></navs_tabs>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
@@ -140,7 +140,7 @@
 <script>
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
-	import navs_header from '../common/nav_tabs.vue'
+	import navs_tabs from '../common/nav_tabs.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import instructionmask from '../maindataDetails/work_instructionMask.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
@@ -150,7 +150,7 @@
 		components: {
 			vheader,
 			navs_left,
-			navs_header,
+			navs_tabs,
 			instructionmask,
 			tableControle,
 			reportmask
@@ -456,7 +456,7 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/workIns/deletes/physicsDel';
+					var url = this.basic_url + '/api-apps/app/workIns/physicsDel';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -587,7 +587,7 @@
 			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
-				this.$refs.navsheader.showClick(childValue);
+				this.$refs.navsTabs.showClick(childValue);
 				this.getbutton(childValue);
 			  },
 			    //请求页面的button接口

@@ -2,7 +2,7 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header></navs_header>
+			<navs_tabs></navs_tabs>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
@@ -50,7 +50,6 @@
 					<el-row :gutter="10">
 						<el-col :span="24">
 							 <tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="menuList" v-on:classByValue="childByValue" @getDetail="getDetail"></tree_grid>
-
 							<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
 						</el-col>
@@ -67,14 +66,14 @@
 	import tree_grid from '../common/TreeGrid.vue'//树表格
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import navs_header from '../common/nav_tabs.vue'
+	import navs_tabs from '../common/nav_tabs.vue'
 	import assetsTree from '../plugin/vue-tree/tree.vue'
 	import menumask from '../settingDetails/menu_mask.vue'//弹出框
 	export default {
 		name: 'menu_management',
 		components: {
 			'vheader': vheader,
-			'navs_header': navs_header,
+			'navs_tabs': navs_tabs,
 			'navs_left': navs_left,
 			'menumask': menumask,
 			'v-assetsTree': assetsTree,

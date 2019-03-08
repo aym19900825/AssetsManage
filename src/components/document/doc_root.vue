@@ -2,7 +2,7 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header ref="navsheader"></navs_header>
+			<navs_tabs ref="navsTabs"></navs_tabs>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
@@ -17,7 +17,7 @@
 								<form method="post" id="file" action="" enctype="multipart/form-data" style="float: left;" v-show="isUploadBtn">
 									<button style="margin-right: 4px;" type="button" class="btn btn-green a-upload">
 										<i class="icon-add"></i>上传
-										<input id="excelFile" type="file" name="uploadFile" @change="upload"/>
+										<input id="excelFile" type="file" name="uploadFile" @change="upload" />
 									</button>
 								</form>
 								<!-- <button type="button" class="btn btn-primarys button-margin" @click="reportdata">
@@ -31,10 +31,6 @@
 						    		<i class="icon-arrow1-down" v-show="down"></i>
 						    		<i class="icon-arrow1-up" v-show="up"></i>
 								</button> -->
-<<<<<<< HEAD
-=======
-
->>>>>>> 313ec0d72a05c89e9c06f2a5a2cf349de0150399
 								<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 								</button>
@@ -159,7 +155,7 @@
 	import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
-	import navs_header from '../common/nav_tabs.vue'
+	import navs_tabs from '../common/nav_tabs.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import samplesmask from'../samplesDetails/samples_mask.vue'
@@ -171,7 +167,7 @@
 		name: 'samples',//接样
 		components: {
 			vheader,
-			navs_header,
+			navs_tabs,
 			navs_left,
 			tableControle,
 			samplesmask,
@@ -763,7 +759,7 @@
 			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
-				this.$refs.navsheader.showClick(childValue);
+				this.$refs.navsTabs.showClick(childValue);
 				this.getbutton(childValue);
 			},
 			  //请求页面的button接口
@@ -840,11 +836,12 @@
     top: 0;
     opacity: 0;
     filter: alpha(opacity=0);
-    cursor: pointer;
     width: 65px;
     left: 0px;
-    height: 40px;
+    height: 30px;
+    z-index: 999;
 }
+.a-upload input,.a-upload input[type="file"] { cursor: pointer; font-size:0px; font-size:20px \9;}
 .upload-btn{
     color: #fff;
     background-color: #286090;

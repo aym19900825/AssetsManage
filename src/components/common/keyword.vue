@@ -75,7 +75,7 @@ export default {
             file_url: Config.file_url,
             page: {
                 currentPage: 1,
-                pageSize: 10,
+                pageSize: 20,
                 totalCount: 0
             },
             searchList: {
@@ -125,7 +125,7 @@ export default {
             this.param.visible = false;
             this.page = {
                 currentPage: 1,
-                pageSize: 10,
+                pageSize: 20,
                 totalCount: 0
             };
         },

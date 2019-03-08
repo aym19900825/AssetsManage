@@ -2,7 +2,7 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-				<navs_header  ref="navsheader"></navs_header>
+			<navs_tabs ref="navsTabs"></navs_tabs>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
@@ -107,6 +107,7 @@
 							<!-- 表格 -->
 							<el-table ref="table" :header-cell-style="rowClass" :data="samplesList" 
 									border 
+									stripe
 									:height="fullHeight" 
 									style="width: 100%;" 
 									:default-sort="{prop:'samplesList', order: 'descending'}" 
@@ -154,15 +155,15 @@
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import navs_header from '../common/nav_tabs.vue'
+	import navs_tabs from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
-	import catmask from'./cat_mask.vue'
+	import catmask from'../documentDetails/cat_mask.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
 	export default {
 		name: 'samples',//接样
 		components: {
 			vheader,
-			navs_header,
+			navs_tabs,
 			navs_left,
 			tableControle,
 			catmask,
@@ -174,6 +175,7 @@
 				basic_url: Config.dev_url,
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
+				fileList:[],
 				ismin: true,
 				//选择显示数据
 				checkedName: [
@@ -214,7 +216,6 @@
 					'categoryidDesc': '',
 					'keywordname': ''
 				},
-				
 				page: {
 					currentPage: 1,
 					pageSize: 20,
@@ -232,16 +233,63 @@
 			rowClass({ row, rowIndex}) {
 				return 'text-align:center'
 			},
+			fileSuccess(){
+				this.page.currentPage = 1;
+				this.requestData();
+			},
 			tableControle(data) {//控制表格列显示隐藏
 				this.checkedName = data;
 			},
-			//分页
+			//表格滚动加载
+			loadMore() {
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++;
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
+					}else{
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1;
+							return false;
+						}
+					}
+					this.loadSign = false;
+					setTimeout(() => {
+						this.loadSign = true;
+					}, 1000)
+					this.requestData();
+				}
+			},
+			//改变页数
 			sizeChange(val) {
 				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
 				this.requestData();
 			},
+			//当前页数
 			currentChange(val) {
 				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
 				this.requestData();
 			},
 			//高级查询
@@ -402,7 +450,7 @@
 						});
 						return;
 					}
-					var url = this.basic_url + '/api-apps/app/tbKeyword2/deletes/physicsDel';
+					var url = this.basic_url + '/api-apps/app/tbKeyword2/physicsDel';
 					var changeMenu = selData;
 					var deleteid = [];
 					for (var i = 0; i < changeMenu.length; i++) {
@@ -431,6 +479,11 @@
 						});
                     }).catch(() => {});
 				}
+			},
+			handleSuccess(response, file, fileList){
+				console.log(response);
+				console.log(file);
+				console.log(fileList);
 			},
 			uploadUrl(){
                 var url = this.basic_url +'/api-apps/app/productType/importExc?access_token='+sessionStorage.getItem('access_token');
@@ -476,8 +529,9 @@
 			selChange(val) {
 				this.selMenu = val;
 			},
+			//Table默认加载数据
 			requestData() {
-				this.loading = true;
+				this.loading = true;//加载动画打开
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -488,10 +542,25 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					this.page.totalCount = res.data.count;
+					this.page.totalCount = res.data.count;//页码赋值
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false;
+					} else {
+						this.loadSign = true;
+					}
 					this.samplesList = res.data.data;
-					this.loading = false;
-				}).catch((wrong) => {});
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试1',
+						type: 'error'
+					});
+				});
 			},
 			min3max() { //左侧菜单正常和变小切换
 				if($(".lefttree").hasClass("el-col-5")) {
@@ -513,7 +582,7 @@
 			},
 			childByValue(childValue) {
         		// childValue就是子组件传过来的值
-				this.$refs.navsheader.showClick(childValue);
+				this.$refs.navsTabs.showClick(childValue);
 				this.getbutton(childValue);
 			},
 			  //请求页面的button接口

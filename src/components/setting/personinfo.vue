@@ -2,7 +2,7 @@
 <div>
 	<div class="headerbg">
   		<vheader></vheader>
-		<navs_header></navs_header>
+		<navs_tabs></navs_tabs>
 	</div>
     <div class="contentbg" v-loading="loading">
     	<!--左侧菜单内容显示 Begin-->
@@ -399,13 +399,13 @@
 	import Config from '../../config.js'
 	import Validators from '../../core/util/validators.js'
 	import vheader from '../common/vheader.vue'
-	import navs_header from '../common/nav_tabs.vue'
+	import navs_tabs from '../common/nav_tabs.vue'
 	import { Loading } from 'element-ui'
 	export default {
 		name: 'personinfo',
 		components: {
 			vheader,
-			navs_header,
+			navs_tabs,
 		},
 		data() {
 			return {

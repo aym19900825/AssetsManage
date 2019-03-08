@@ -12,7 +12,7 @@
 
 		<!--右侧内容显示 Begin-->
 		<div class="wrapper wrapper-content">
-			<EasyScrollbar>
+			<!-- <EasyScrollbar> -->
 				<div id="wrapper" :style="{height: fullHeight}">
 					<div id="information" style="height: inherit;">
 						<div class="ibox-content">
@@ -112,7 +112,7 @@
 						</div>
 					</div>
 				</div>
-			</EasyScrollbar>
+			<!-- </EasyScrollbar> -->
 		</div>
 		<!--右侧内容显示 End-->
 	</div>

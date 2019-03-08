@@ -23,11 +23,13 @@ import vueGridLayout from 'vue-grid-layout'
 // import 'dropzone/dist/min/dropzone.min.css'
 
 import vueztree from 'vue-ztree-2.0/dist/vue-ztree-2.0.umd.min.js'
-import EasyScroll from 'easyscroll'//自定义滚动条
+// import EasyScroll from 'easyscroll'//自定义滚动条
 import common from './assets/js/common.js'
 import store from './store.js'
 import 'babel-polyfill'
 import Validators from './core/util/validators.js'
+import Print from 'vue-print-nb'
+
 
 //import './jquery/dist/jquery.min.js'
 //import 'bootstrap/dist/css/bootstrap.min.css'
@@ -84,6 +86,8 @@ Vue.prototype.common = common
 Vue.prototype.Validators = Validators
 Vue.use(ElementUI)
 Vue.use(vueztree)
+Vue.use(Print)
+
 // Vue.use(EasyScroll)//自定义滚动条
 //Vue.use(infiniteScroll)
 

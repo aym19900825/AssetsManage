@@ -77,27 +77,27 @@
 							  element-loading-background="rgba(255, 255, 255, 0.9)">
 							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 							</el-table-column>
-							<el-table-column label="是否初始化" width="140" sortable prop="isinitbydate" v-if="this.checkedName.indexOf('是否初始化')!=-1">
+							<el-table-column label="序列号" width="100" sortable prop="serialnum" v-if="this.checkedName.indexOf('序列号')!=-1">
 								<template slot-scope="scope">
-									<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.AUTOKEY}}
+									<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.serialnum}}
 									</p>
 								</template>
 							</el-table-column>
-							<el-table-column label="初始化日期格式" width="140" sortable prop="initformat" v-if="this.checkedName.indexOf('初始化日期格式')!=-1">
-							</el-table-column>
 							<el-table-column label="前缀" width="100" sortable prop="prefix" v-if="this.checkedName.indexOf('前缀')!=-1">
 							</el-table-column>
-							<el-table-column label="初始化起始数" width="180" sortable prop="initnum" v-if="this.checkedName.indexOf('初始化起始数')!=-1">
+							<el-table-column label="初始化起始数" width="180" sortable align="right" prop="initnum" v-if="this.checkedName.indexOf('初始化起始数')!=-1">
 							</el-table-column>
-							<el-table-column label="增加量" width="80" sortable prop="increase" v-if="this.checkedName.indexOf('增加量')!=-1">
+							<el-table-column label="是否初始化" width="140" sortable align="center" prop="isinitbydateDesc" v-if="this.checkedName.indexOf('是否初始化')!=-1">
 							</el-table-column>
-							<el-table-column label="是否拼接日期" width="180" sortable prop="issplicingdate" v-if="this.checkedName.indexOf('是否拼接日期')!=-1">
+							<el-table-column label="初始化日期格式" width="140" sortable align="center" prop="initformat" v-if="this.checkedName.indexOf('初始化日期格式')!=-1">
 							</el-table-column>
-							<el-table-column label="拼接日期格式" width="180" sortable prop="splicingformat" v-if="this.checkedName.indexOf('拼接日期格式')!=-1">
+							<el-table-column label="增加量" width="100" sortable align="right" prop="increase" v-if="this.checkedName.indexOf('增加量')!=-1">
 							</el-table-column>
-							<el-table-column label="序列号" width="100" sortable prop="serialnum" v-if="this.checkedName.indexOf('序列号')!=-1">
+							<el-table-column label="是否拼接日期" width="120" sortable align="center" prop="issplicingdateDesc" v-if="this.checkedName.indexOf('是否拼接日期')!=-1">
 							</el-table-column>
-							<el-table-column label="保留位数" sortable prop="retain" v-if="this.checkedName.indexOf('保留位数')!=-1">
+							<el-table-column label="拼接日期格式" width="180" sortable align="center" prop="splicingformat" v-if="this.checkedName.indexOf('拼接日期格式')!=-1">
+							</el-table-column>
+							<el-table-column label="保留位数" sortable align="right" prop="retain" v-if="this.checkedName.indexOf('保留位数')!=-1">
 							</el-table-column>
 						</el-table>
 						<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0"

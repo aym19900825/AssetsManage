@@ -233,9 +233,14 @@
 			rowClass({ row, rowIndex}) {
 				return 'text-align:center'
 			},
-			fileSuccess(){
+			fileSuccess(){//上传成功后返回数据
 				this.page.currentPage = 1;
 				this.requestData();
+			},
+			handleSuccess(response, file, fileList){//上传文件列表
+				console.log(response);
+				console.log(file);
+				console.log(fileList);
 			},
 			tableControle(data) {//控制表格列显示隐藏
 				this.checkedName = data;
@@ -479,11 +484,6 @@
 						});
                     }).catch(() => {});
 				}
-			},
-			handleSuccess(response, file, fileList){
-				console.log(response);
-				console.log(file);
-				console.log(fileList);
 			},
 			uploadUrl(){
                 var url = this.basic_url +'/api-apps/app/productType/importExc?access_token='+sessionStorage.getItem('access_token');

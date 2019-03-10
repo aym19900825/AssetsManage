@@ -35,7 +35,12 @@
 										<el-col :span="8">
 											<el-form-item label="是否停用" prop="inactive">
 												<!--<el-input v-if="stopshow" v-model="roleList.inactive" :disabled="edit"></el-input>-->
-												<el-select  v-model="roleList.inactive" placeholder="请选择" style="width: 100%" :disabled="noedit">
+												<el-select v-if="roleList.name == '管理员'" v-model="roleList.inactive" placeholder="请选择" style="width: 100%" :disabled="edit">
+													<el-option v-for="item in stopoptions" :key="item.value" :label="item.label" :value="item.value">
+													</el-option>
+												</el-select>
+
+												<el-select v-else v-model="roleList.inactive" placeholder="请选择" style="width: 100%" :disabled="noedit">
 													<el-option v-for="item in stopoptions" :key="item.value" :label="item.label" :value="item.value">
 													</el-option>
 												</el-select>

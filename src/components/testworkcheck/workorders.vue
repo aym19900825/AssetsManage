@@ -586,7 +586,7 @@
 			},
 			//彻底删除
 			physicsDel(){
-				var selData = this.selUser;
+				var selData = this.selMenu;
 				if(selData.length == 0) {
 					this.$message({
 						message: '请您选择要删除的数据',
